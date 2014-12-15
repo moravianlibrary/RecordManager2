@@ -1,0 +1,91 @@
+<OAI-PMH xmlns="http://www.openarchives.org/OAI/2.0/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/ http://www.openarchives.org/OAI/2.0/OAI-PMH.xsd">
+	<responseDate>2014-12-08T17:16:44Z</responseDate>
+	<request verb="GetRecord" identifier="oai:aleph.mzk.cz:MZK01-001204492"
+		metadataPrefix="marc21">http://aleph.mzk.cz/OAI</request>
+	<GetRecord>
+		<record>
+			<header>
+				<identifier>oai:aleph.mzk.cz:MZK01-001204492</identifier>
+				<datestamp>2014-08-21T18:21:23Z</datestamp>
+				<setSpec>MZKALL</setSpec>
+			</header>
+			<metadata>
+				<marc:record xmlns:marc="http://www.loc.gov/MARC21/slim"
+					xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+					xsi:schemaLocation="http://www.loc.gov/MARC21/slim http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd">
+					<marc:leader>ncm a22 2a 4500</marc:leader>
+					<marc:controlfield tag="001">001204492</marc:controlfield>
+					<marc:controlfield tag="003">CZ BrMZK</marc:controlfield>
+					<marc:controlfield tag="005">20121106160645.0</marc:controlfield>
+					<marc:controlfield tag="007">qu</marc:controlfield>
+					<marc:controlfield tag="008">120405s1952 xr |||||||||||||||||cze d</marc:controlfield>
+					<marc:datafield tag="040" ind1=" " ind2=" ">
+						<marc:subfield code="a">BOA001</marc:subfield>
+						<marc:subfield code="b">cze</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="072" ind1=" " ind2="7">
+						<marc:subfield code="a">784</marc:subfield>
+						<marc:subfield code="x">Vokální hudba</marc:subfield>
+						<marc:subfield code="2">Konspekt</marc:subfield>
+						<marc:subfield code="9">9</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="100" ind1="1" ind2=" ">
+						<marc:subfield code="a">Elbert, Karol,</marc:subfield>
+						<marc:subfield code="d">1911-1997</marc:subfield>
+						<marc:subfield code="7">ola2002161261</marc:subfield>
+						<marc:subfield code="4">cmp</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="245" ind1="1" ind2="0">
+						<marc:subfield code="a">Až budeme mašírovat</marc:subfield>
+						<marc:subfield code="h">[hudebnina] :</marc:subfield>
+						<marc:subfield code="b">vojenská pochodová píseň : zpěv a klavír /</marc:subfield>
+						<marc:subfield code="c">Karol Elbert ; text Otto Kaušitz</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="260" ind1=" " ind2=" ">
+						<marc:subfield code="a">Praha :</marc:subfield>
+						<marc:subfield code="b">Ústřední dům armády,</marc:subfield>
+						<marc:subfield code="c">1952</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="300" ind1=" " ind2=" ">
+						<marc:subfield code="a">1 sv. (nestránkován)</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="490" ind1="1" ind2=" ">
+						<marc:subfield code="a">Lidová armáda zpívá, hraje a tančí ;</marc:subfield>
+						<marc:subfield code="v">č. 135</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="700" ind1="1" ind2=" ">
+						<marc:subfield code="a">Kaušitz, Oto,</marc:subfield>
+						<marc:subfield code="d">1909-1982</marc:subfield>
+						<marc:subfield code="7">ola2008455922</marc:subfield>
+						<marc:subfield code="4">lyr</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="830" ind1=" " ind2="0">
+						<marc:subfield code="a">Lidová armáda zpívá, hraje a tančí</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="910" ind1=" " ind2=" ">
+						<marc:subfield code="a">BOA001</marc:subfield>
+						<marc:subfield code="b">Mus4-0306.919</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="990" ind1=" " ind2=" ">
+						<marc:subfield code="a">MU</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="991" ind1=" " ind2=" ">
+						<marc:subfield code="b">201204</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="996" ind1="7" ind2=" ">
+						<marc:subfield code="b">2619571468</marc:subfield>
+						<marc:subfield code="c">Mus4-0306.919</marc:subfield>
+						<marc:subfield code="l">SK5</marc:subfield>
+						<marc:subfield code="r">SKL</marc:subfield>
+						<marc:subfield code="n">0</marc:subfield>
+						<marc:subfield code="w">001238034</marc:subfield>
+						<marc:subfield code="a">1</marc:subfield>
+						<marc:subfield code="e">BOA001</marc:subfield>
+						<marc:subfield code="s">A</marc:subfield>
+					</marc:datafield>
+				</marc:record>
+			</metadata>
+		</record>
+	</GetRecord>
+</OAI-PMH>
