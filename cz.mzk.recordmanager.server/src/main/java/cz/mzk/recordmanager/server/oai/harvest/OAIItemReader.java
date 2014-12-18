@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.batch.core.ExitStatus;
 import org.springframework.batch.core.StepExecution;
 import org.springframework.batch.core.StepExecutionListener;
+import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.item.ExecutionContext;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemStream;
@@ -14,31 +15,23 @@ import org.springframework.batch.item.NonTransientResourceException;
 import org.springframework.batch.item.ParseException;
 import org.springframework.batch.item.UnexpectedInputException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import cz.mzk.recordmanager.server.model.OAIHarvestConfiguration;
+import cz.mzk.recordmanager.server.oai.dao.OAIHarvestConfigurationDAO;
 import cz.mzk.recordmanager.server.oai.model.OAIListRecords;
 import cz.mzk.recordmanager.server.oai.model.OAIRecord;
 
 @Component
-@Scope("step")
+@StepScope
 public class OAIItemReader implements ItemReader<List<OAIRecord>>, ItemStream, StepExecutionListener {
 
-	// configuration
-	private String url;
-
-	private String metadataPrefix;
-
-	private String set;
-
-	private Date from;
-
-	private Date until;
+	@Autowired
+	protected OAIHarvestConfigurationDAO configDao;
 
 	// state
 	private String resumptionToken;
 
-	@Autowired
 	private OAIHarvester harvester;
 	
 	@Override
@@ -76,12 +69,11 @@ public class OAIItemReader implements ItemReader<List<OAIRecord>>, ItemStream, S
 
 	@Override
 	public void beforeStep(StepExecution stepExecution) {
-		url = stepExecution.getJobParameters().getString("url");
-		metadataPrefix = stepExecution.getJobParameters().getString("metadataPrefix");
-		set = stepExecution.getJobParameters().getString("set");
-		from = stepExecution.getJobParameters().getDate("from");
-		until = stepExecution.getJobParameters().getDate("until");
-		harvester = new OAIHarvester(url, metadataPrefix, set, from, until);
+		Long confId = stepExecution.getJobParameters().getLong("configurationId");
+		OAIHarvestConfiguration conf = configDao.get(confId);
+		Date from = null;
+		Date until = null;
+		harvester = new OAIHarvester(conf.getUrl(), conf.getMetadataPrefix(), conf.getSet(), from, until);
 	}
 
 }

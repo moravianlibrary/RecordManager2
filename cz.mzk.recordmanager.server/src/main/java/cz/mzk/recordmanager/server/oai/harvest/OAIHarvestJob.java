@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
+import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,19 +23,31 @@ public class OAIHarvestJob {
     private StepBuilderFactory steps;
 
     @Bean
-    public Job job() {
-        return jobs.get("oaiHarvestJob").start(step1()).build();
+    public Job oaiHarvestJob(JobBuilderFactory jobs, Step step1) {
+        return jobs.get("oaiHarvestJob")
+				.flow(step1)
+				.end()
+				.build();
     }
     
     @Bean
-    protected Step step1() {
-    	OAIItemReader reader = new OAIItemReader();
-    	OAIItemWriter writer = new OAIItemWriter();
+    public Step step1(StepBuilderFactory stepBuilderFactory, OAIItemReader reader,
+    		OAIItemWriter writer) {
         return steps.get("step1")
             .<List<OAIRecord>, List<OAIRecord>> chunk(1)
             .reader(reader)
             .writer(writer)
             .build();
+    }
+    
+    @Bean
+    public OAIItemReader reader() {
+    	return new OAIItemReader();
+    }
+    
+    @Bean
+    public OAIItemWriter writer() {
+    	return new OAIItemWriter();
     }
 
 }
