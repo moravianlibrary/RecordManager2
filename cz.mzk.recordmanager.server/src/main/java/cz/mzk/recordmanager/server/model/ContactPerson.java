@@ -7,7 +7,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name=OAIHarvestConfiguration.TABLE_NAME)
+@Table(name=ContactPerson.TABLE_NAME)
 public class ContactPerson extends AbstractDomainObject {
 	
 	public static final String TABLE_NAME = "contact_person";

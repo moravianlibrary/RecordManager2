@@ -13,7 +13,6 @@ import org.springframework.context.annotation.Configuration;
 import cz.mzk.recordmanager.server.oai.model.OAIRecord;
 
 @Configuration
-//@EnableBatchProcessing
 public class OAIHarvestJob {
 	
 	@Autowired

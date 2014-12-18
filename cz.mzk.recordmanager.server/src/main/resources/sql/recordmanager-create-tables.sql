@@ -1,3 +1,9 @@
+CREATE TABLE recordmanager_key (
+  name                 VARCHAR(128),
+  val                  DECIMAL(10),
+  PRIMARY KEY (name)
+);
+
 CREATE TABLE library (
   id                   DECIMAL(10),
   name                 VARCHAR(128),
@@ -29,11 +35,11 @@ CREATE TABLE oai_harvest_conf (
   FOREIGN KEY (contact_person_id) REFERENCES contact_person(id)
 );
 
-CREATE TABLE metadata_record (
+CREATE TABLE harvested_record (
   id                   DECIMAL(10),
   oai_harvest_conf_id  DECIMAL(10),
   oai_record_id        VARCHAR(128),
-  raw_record           VARCHAR(128),
+  raw_record           BLOB,
   PRIMARY KEY (id),
   FOREIGN KEY (oai_harvest_conf_id)        REFERENCES oai_harvest_conf(id)
 );
