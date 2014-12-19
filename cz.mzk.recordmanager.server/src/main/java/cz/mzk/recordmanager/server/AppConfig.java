@@ -1,8 +1,10 @@
 package cz.mzk.recordmanager.server;
 
 import javax.sql.DataSource;
+
 import org.springframework.batch.core.configuration.JobRegistry;
 import org.springframework.batch.core.configuration.annotation.BatchConfigurer;
+import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.configuration.support.DefaultJobLoader;
 import org.springframework.batch.core.configuration.support.JobRegistryBeanPostProcessor;
 import org.springframework.batch.core.configuration.support.MapJobRegistry;
@@ -18,13 +20,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.ImportResource;
 import org.springframework.transaction.PlatformTransactionManager;
 
 import cz.mzk.recordmanager.server.oai.harvest.OAIHarvestJob;
 
 @Configuration
+@EnableBatchProcessing(modular=true)
 @Import(OAIHarvestJob.class)
-public class Config implements BatchConfigurer {
+@ImportResource("classpath:appCtx-recordmanager-server.xml")
+public class AppConfig implements BatchConfigurer {
 
 	@Autowired
 	private PlatformTransactionManager transactionManager;
@@ -56,6 +61,7 @@ public class Config implements BatchConfigurer {
 	}
 
 	@Override
+	@Bean
 	public JobExplorer getJobExplorer() throws Exception {
 		JobExplorerFactoryBean jobExplorerFactoryBean = new JobExplorerFactoryBean();
 		jobExplorerFactoryBean.setDataSource(dataSource);
@@ -64,6 +70,7 @@ public class Config implements BatchConfigurer {
 	}
 
 	@Override
+	@Bean
 	public JobLauncher getJobLauncher() throws Exception {
 		SimpleJobLauncher jobLauncher = new SimpleJobLauncher();
 		jobLauncher.setJobRepository(getJobRepository());
@@ -72,11 +79,13 @@ public class Config implements BatchConfigurer {
 	}
 
 	@Override
+	@Bean
 	public PlatformTransactionManager getTransactionManager() throws Exception {
 		return transactionManager;
 	}
 
 	@Override
+	@Bean
 	public JobRepository getJobRepository() throws Exception {
 		JobRepositoryFactoryBean jobRepository = new JobRepositoryFactoryBean();
 		jobRepository.setDataSource(dataSource);

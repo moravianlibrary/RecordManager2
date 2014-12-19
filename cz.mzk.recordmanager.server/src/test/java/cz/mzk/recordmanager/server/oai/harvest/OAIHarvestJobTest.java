@@ -10,13 +10,15 @@ import org.springframework.batch.core.configuration.JobRegistry;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.support.AnnotationConfigContextLoader;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.testng.annotations.Test;
 
-@ContextConfiguration(locations = { "classpath:appCtx-recordmanager-server-test.xml" })
-@Import({OAIHarvestJob.class})
+import cz.mzk.recordmanager.server.AppConfig;
+import cz.mzk.recordmanager.server.AppConfigDev;
+
+@ContextConfiguration(classes={AppConfigDev.class, AppConfig.class}, loader=AnnotationConfigContextLoader.class)
 public class OAIHarvestJobTest extends AbstractTestNGSpringContextTests {
 	
 	@Autowired
