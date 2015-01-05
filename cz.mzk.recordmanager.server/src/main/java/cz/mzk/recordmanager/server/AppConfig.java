@@ -5,7 +5,9 @@ import javax.sql.DataSource;
 import org.springframework.batch.core.configuration.JobRegistry;
 import org.springframework.batch.core.configuration.annotation.BatchConfigurer;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
+import org.springframework.batch.core.configuration.support.ApplicationContextFactory;
 import org.springframework.batch.core.configuration.support.DefaultJobLoader;
+import org.springframework.batch.core.configuration.support.GenericApplicationContextFactory;
 import org.springframework.batch.core.configuration.support.JobRegistryBeanPostProcessor;
 import org.springframework.batch.core.configuration.support.MapJobRegistry;
 import org.springframework.batch.core.explore.JobExplorer;
@@ -97,6 +99,11 @@ public class AppConfig implements BatchConfigurer {
 	
     private JobRegistry getJobRegistry() {
         return new MapJobRegistry();
+    }
+    
+    @Bean
+    public ApplicationContextFactory moreJobs() {
+    	return new GenericApplicationContextFactory(OAIHarvestJob.class);
     }
 
 }

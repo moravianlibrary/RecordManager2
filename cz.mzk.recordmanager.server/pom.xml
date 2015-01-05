@@ -98,6 +98,14 @@
 			<version>6.8.8</version>
 			<scope>test</scope>
 		</dependency>
+		
+		<dependency>
+			<groupId>org.dbunit</groupId>
+			<artifactId>dbunit</artifactId>
+			<version>2.5.0</version>
+			<type>jar</type>
+			<scope>test</scope>
+		</dependency>
 
 	</dependencies>
 
