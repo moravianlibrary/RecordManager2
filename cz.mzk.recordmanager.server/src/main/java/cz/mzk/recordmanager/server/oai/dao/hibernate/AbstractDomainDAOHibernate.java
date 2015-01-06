@@ -11,7 +11,7 @@ import cz.mzk.recordmanager.server.oai.dao.DomainDAO;
 public class AbstractDomainDAOHibernate<ID extends Serializable, T> implements DomainDAO<ID, T> {
 
 	@Autowired
-	private SessionFactory sessionFactory;
+	protected SessionFactory sessionFactory;
 	
 	private final Class<T> persistenceClass = getClassForPersistence();
 	

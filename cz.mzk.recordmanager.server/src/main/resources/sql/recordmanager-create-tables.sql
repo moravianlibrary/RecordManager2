@@ -39,6 +39,7 @@ CREATE TABLE harvested_record (
   id                   DECIMAL(10),
   oai_harvest_conf_id  DECIMAL(10),
   oai_record_id        VARCHAR(128),
+  deleted              TIMESTAMP,
   raw_record           BLOB,
   PRIMARY KEY (id),
   FOREIGN KEY (oai_harvest_conf_id)        REFERENCES oai_harvest_conf(id)
