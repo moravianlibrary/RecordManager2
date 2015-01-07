@@ -7,6 +7,10 @@
 	<packaging>pom</packaging>
 	<name>RecordManager</name>
 
+	<properties>
+		<maven-compiler-plugin.version>2.4</maven-compiler-plugin.version>
+	</properties>
+
 	<build>
 		<plugins>
 			<plugin>
@@ -24,6 +28,7 @@
 	<modules>
 		<module>cz.mzk.recordmanager.server</module>
 		<module>cz.mzk.recordmanager.api</module>
+		<module>cz.mzk.recordmanager.cmdline</module>
 	</modules>
 
 </project>

@@ -20,7 +20,7 @@ import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 public class AppConfigDev {
 	
 	private List<String> resources = Arrays.asList(
-			"sql/recordmanager-create-tables.sql",
+			"sql/recordmanager-create-tables-derby.sql",
 			"org/springframework/batch/core/schema-derby.sql",
 			"sql/recordmanager-insert-test.sql"
 	);

@@ -29,7 +29,7 @@ import cz.mzk.recordmanager.server.oai.harvest.OAIHarvestJob;
 @Configuration
 @EnableBatchProcessing(modular=true)
 @ImportResource("classpath:appCtx-recordmanager-server.xml")
-public class AppConfig implements BatchConfigurer {
+public class AppConfig /*implements BatchConfigurer*/ {
 
 	@Autowired
 	private PlatformTransactionManager transactionManager;
@@ -60,7 +60,7 @@ public class AppConfig implements BatchConfigurer {
         return jobOperator;
 	}
 
-	@Override
+	//@Override
 	@Bean
 	public JobExplorer getJobExplorer() throws Exception {
 		JobExplorerFactoryBean jobExplorerFactoryBean = new JobExplorerFactoryBean();
@@ -69,7 +69,7 @@ public class AppConfig implements BatchConfigurer {
 		return (JobExplorer) jobExplorerFactoryBean.getObject();
 	}
 
-	@Override
+	//@Override
 	@Bean
 	public JobLauncher getJobLauncher() throws Exception {
 		SimpleJobLauncher jobLauncher = new SimpleJobLauncher();
@@ -78,13 +78,13 @@ public class AppConfig implements BatchConfigurer {
 		return jobLauncher;
 	}
 
-	@Override
+	//@Override
 	@Bean
 	public PlatformTransactionManager getTransactionManager() throws Exception {
 		return transactionManager;
 	}
 
-	@Override
+	//@Override
 	@Bean
 	public JobRepository getJobRepository() throws Exception {
 		JobRepositoryFactoryBean jobRepository = new JobRepositoryFactoryBean();

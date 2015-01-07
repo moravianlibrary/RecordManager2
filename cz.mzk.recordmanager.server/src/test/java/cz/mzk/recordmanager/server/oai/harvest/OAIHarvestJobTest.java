@@ -8,16 +8,12 @@ import org.springframework.batch.core.JobParameter;
 import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.configuration.JobRegistry;
 import org.springframework.batch.core.launch.JobLauncher;
-import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.annotations.Test;
 
 import cz.mzk.recordmanager.server.AbstractTest;
 
 public class OAIHarvestJobTest extends AbstractTest {
-
-	@Autowired
-	private JobRepository jobRepository;
 
 	@Autowired
 	private JobRegistry jobRegistry;

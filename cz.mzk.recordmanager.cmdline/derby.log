@@ -1,0 +1,13 @@
+----------------------------------------------------------------
+Wed Jan 07 08:26:28 CET 2015:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.11.1.1 - (1616546): instance a816c00e-014a-c349-992b-000005acb0d8 
+on database directory memory:/home/xrosecky/workspace/java/cz.mzk.recordmanager/cz.mzk.recordmanager.cmdline/recordmanager with class loader sun.misc.Launcher$AppClassLoader@4ca8cd58 
+Loaded from file:/home/xrosecky/workspace/java/cz.mzk.recordmanager/cz.mzk.recordmanager.cmdline/target/lib/derby-10.11.1.1.jar
+java.vendor=Oracle Corporation
+java.runtime.version=1.7.0_65-b32
+user.dir=/home/xrosecky/workspace/java/cz.mzk.recordmanager/cz.mzk.recordmanager.cmdline
+os.name=Linux
+os.arch=amd64
+os.version=3.13.0-43-generic
+derby.system.home=null
+Database Class Loader started - derby.database.classpath=''

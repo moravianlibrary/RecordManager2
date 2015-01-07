@@ -13,6 +13,8 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.hibernate.annotations.Type;
+
 @Entity
 @Table(name=HarvestedRecord.TABLE_NAME)
 public class HarvestedRecord extends AbstractDomainObject {
@@ -32,7 +34,7 @@ public class HarvestedRecord extends AbstractDomainObject {
 	
 	@Basic(fetch = FetchType.LAZY)
 	@Column(name="raw_record")
-	@Lob
+	//@Type(type="org.hibernate.type.BinaryType") 
 	private byte[] rawRecord;
 
 	public OAIHarvestConfiguration getHarvestedFrom() {
