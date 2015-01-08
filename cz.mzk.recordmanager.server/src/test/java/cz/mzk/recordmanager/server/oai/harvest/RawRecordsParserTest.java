@@ -19,7 +19,7 @@ public class RawRecordsParserTest {
 		Assert.assertNotNull(result.getRequest());
 		Assert.assertNotNull(result.getRequest().getVerb());
 		Assert.assertNotNull(result.getRequest().getResumptionToken());
-		Assert.assertEquals(result.getNextResumptionToken(), "201408211302186999999999999999MZK01-VDK:MZK01-VDK");
+		Assert.assertEquals(result.getNextResumptionToken(), null);
 		Assert.assertTrue(result.getRecords().size() > 0);
 	}
 
