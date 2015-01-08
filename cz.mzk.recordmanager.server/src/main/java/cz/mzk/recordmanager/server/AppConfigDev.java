@@ -5,8 +5,10 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
+import org.easymock.EasyMock;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.core.io.ClassPathResource;
@@ -14,6 +16,8 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.jdbc.datasource.init.DataSourceInitializer;
 import org.springframework.jdbc.datasource.init.DatabasePopulator;
 import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
+
+import cz.mzk.recordmanager.server.util.HttpClient;
 
 @Configuration
 @PropertySource(value={"classpath:database.test.properties", "classpath:database.test.local.properties"}, ignoreResourceNotFound=true)
@@ -48,6 +52,12 @@ public class AppConfigDev {
 		DataSourceInitializer init = dataSourceInitializer(dataSource);
 		init.afterPropertiesSet();
 		return dataSource;
+	}
+	
+	@Bean
+	@Primary
+	public HttpClient mockedHttpClient() {
+		return EasyMock.createStrictMock(HttpClient.class);
 	}
 	
 	private DatabasePopulator databasePopulator() {

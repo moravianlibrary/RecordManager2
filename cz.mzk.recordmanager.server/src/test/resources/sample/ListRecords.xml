@@ -2830,6 +2830,6 @@ http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd">
 				</marc:record>
 			</metadata>
 		</record>
-		<resumptionToken>201408211302186999999999999999MZK01-VDK:MZK01-VDK</resumptionToken>
+		<!--<resumptionToken>201408211302186999999999999999MZK01-VDK:MZK01-VDK</resumptionToken>-->
 	</ListRecords>
 </OAI-PMH> 

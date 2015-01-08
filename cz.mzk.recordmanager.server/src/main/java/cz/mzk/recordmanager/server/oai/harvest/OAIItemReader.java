@@ -36,11 +36,19 @@ public class OAIItemReader implements ItemReader<List<OAIRecord>>, ItemStream, S
 	// state
 	private String resumptionToken;
 	
+	private boolean finished = false;
+	
 	@Override
 	public List<OAIRecord> read() throws Exception, UnexpectedInputException,
 			ParseException, NonTransientResourceException {
+		if (finished) {
+			return null;
+		}
 		OAIListRecords listRecords = harvester.listRecords(resumptionToken);
 		resumptionToken = listRecords.getNextResumptionToken();
+		if (resumptionToken == null) {
+			finished = true;
+		}
 		if (listRecords.getRecords().isEmpty()) {
 			return null;
 		} else {
