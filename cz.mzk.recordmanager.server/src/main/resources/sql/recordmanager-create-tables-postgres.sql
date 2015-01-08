@@ -35,11 +35,17 @@ CREATE TABLE oai_harvest_conf (
   FOREIGN KEY (contact_person_id) REFERENCES contact_person(id)
 );
 
+CREATE TABLE format (
+  format               VARCHAR(12) PRIMARY KEY,
+  description          VARCHAR(255)
+);
+
 CREATE TABLE harvested_record (
   id                   DECIMAL(10),
   oai_harvest_conf_id  DECIMAL(10),
   oai_record_id        VARCHAR(128),
   deleted              TIMESTAMP,
+  format               VARCHAR(12) NOT NULL,
   raw_record           BYTEA,
   PRIMARY KEY (id),
   FOREIGN KEY (oai_harvest_conf_id)        REFERENCES oai_harvest_conf(id)

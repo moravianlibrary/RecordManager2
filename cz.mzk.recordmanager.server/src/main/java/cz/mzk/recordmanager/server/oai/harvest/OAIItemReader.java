@@ -1,6 +1,5 @@
 package cz.mzk.recordmanager.server.oai.harvest;
 
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.batch.core.ExitStatus;
@@ -27,12 +26,15 @@ import cz.mzk.recordmanager.server.oai.model.OAIRecord;
 public class OAIItemReader implements ItemReader<List<OAIRecord>>, ItemStream, StepExecutionListener {
 
 	@Autowired
-	protected OAIHarvestConfigurationDAO configDao;
+	private OAIHarvestConfigurationDAO configDao;
+	
+	@Autowired
+	private OAIHarvesterFactory harvesterFactory;
 
+	private OAIHarvester harvester; 
+	
 	// state
 	private String resumptionToken;
-
-	private OAIHarvester harvester;
 	
 	@Override
 	public List<OAIRecord> read() throws Exception, UnexpectedInputException,
@@ -71,9 +73,10 @@ public class OAIItemReader implements ItemReader<List<OAIRecord>>, ItemStream, S
 	public void beforeStep(StepExecution stepExecution) {
 		Long confId = stepExecution.getJobParameters().getLong("configurationId");
 		OAIHarvestConfiguration conf = configDao.get(confId);
-		Date from = null;
-		Date until = null;
-		harvester = new OAIHarvester(conf.getUrl(), conf.getMetadataPrefix(), conf.getSet(), from, until);
+		OAIHarvesterParams params = new OAIHarvesterParams();
+		params.setUrl(conf.getUrl());
+		params.setMetadataPrefix(conf.getMetadataPrefix());
+		harvester = harvesterFactory.create(params);
 	}
 
 }

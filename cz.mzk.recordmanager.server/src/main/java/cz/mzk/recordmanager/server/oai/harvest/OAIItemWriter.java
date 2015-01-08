@@ -40,6 +40,11 @@ public class OAIItemWriter implements ItemWriter<List<OAIRecord>>,
 
 	@Autowired
 	protected OAIHarvestConfigurationDAO configDao;
+	
+	@Autowired
+	protected OAIFormatResolver formatResolver;
+	
+	private String format;
 
 	private OAIHarvestConfiguration configuration;
 	
@@ -66,6 +71,7 @@ public class OAIItemWriter implements ItemWriter<List<OAIRecord>>,
 			rec = new HarvestedRecord();
 			rec.setOaiRecordId(record.getHeader().getIdentifier());
 			rec.setHarvestedFrom(configuration);
+			rec.setFormat(format);
 		}
 		if (record.getHeader().isDeleted()) {
 			rec.setDeleted(new Date());
@@ -94,6 +100,7 @@ public class OAIItemWriter implements ItemWriter<List<OAIRecord>>,
 		Long confId = stepExecution.getJobParameters().getLong(
 				"configurationId");
 		configuration = configDao.get(confId);
+		format = formatResolver.resolve(configuration.getMetadataPrefix());
 		try {
 		TransformerFactory transformerFactory = TransformerFactory
 				.newInstance();

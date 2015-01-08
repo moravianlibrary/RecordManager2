@@ -3,7 +3,6 @@ package cz.mzk.recordmanager.server;
 import javax.sql.DataSource;
 
 import org.springframework.batch.core.configuration.JobRegistry;
-import org.springframework.batch.core.configuration.annotation.BatchConfigurer;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.configuration.support.ApplicationContextFactory;
 import org.springframework.batch.core.configuration.support.DefaultJobLoader;
@@ -25,11 +24,15 @@ import org.springframework.context.annotation.ImportResource;
 import org.springframework.transaction.PlatformTransactionManager;
 
 import cz.mzk.recordmanager.server.oai.harvest.OAIHarvestJob;
+import cz.mzk.recordmanager.server.oai.harvest.OAIHarvesterFactory;
+import cz.mzk.recordmanager.server.oai.harvest.OAIHarvesterFactoryImpl;
+import cz.mzk.recordmanager.server.util.ApacheHttpClient;
+import cz.mzk.recordmanager.server.util.HttpClient;
 
 @Configuration
 @EnableBatchProcessing(modular=true)
 @ImportResource("classpath:appCtx-recordmanager-server.xml")
-public class AppConfig /*implements BatchConfigurer*/ {
+public class AppConfig {
 
 	@Autowired
 	private PlatformTransactionManager transactionManager;
@@ -39,63 +42,68 @@ public class AppConfig /*implements BatchConfigurer*/ {
 
 	@Bean
 	public DefaultJobLoader defaultJobLoader() {
-		return new DefaultJobLoader(getJobRegistry());
+		return new DefaultJobLoader(jobRegistry());
 	}
 
 	@Bean
 	public JobRegistryBeanPostProcessor jobRegistryBeanPostProcessor()
 			throws Exception {
 		JobRegistryBeanPostProcessor jobRegistryBeanPostProcessor = new JobRegistryBeanPostProcessor();
-		jobRegistryBeanPostProcessor.setJobRegistry(getJobRegistry());
+		jobRegistryBeanPostProcessor.setJobRegistry(jobRegistry());
 		return jobRegistryBeanPostProcessor;
 	}
 
 	@Bean
 	public JobOperator jobOperator() throws Exception {
 		SimpleJobOperator jobOperator = new SimpleJobOperator();
-        jobOperator.setJobRepository(getJobRepository());
-        jobOperator.setJobRegistry(getJobRegistry());
-        jobOperator.setJobLauncher(getJobLauncher());
-        jobOperator.setJobExplorer(getJobExplorer());
+        jobOperator.setJobRepository(jobRepository());
+        jobOperator.setJobRegistry(jobRegistry());
+        jobOperator.setJobLauncher(jobLauncher());
+        jobOperator.setJobExplorer(jobExplorer());
         return jobOperator;
 	}
 
-	//@Override
 	@Bean
-	public JobExplorer getJobExplorer() throws Exception {
+	public JobExplorer jobExplorer() throws Exception {
 		JobExplorerFactoryBean jobExplorerFactoryBean = new JobExplorerFactoryBean();
 		jobExplorerFactoryBean.setDataSource(dataSource);
 		jobExplorerFactoryBean.afterPropertiesSet();
 		return (JobExplorer) jobExplorerFactoryBean.getObject();
 	}
 
-	//@Override
 	@Bean
-	public JobLauncher getJobLauncher() throws Exception {
+	public JobLauncher jobLauncher() throws Exception {
 		SimpleJobLauncher jobLauncher = new SimpleJobLauncher();
-		jobLauncher.setJobRepository(getJobRepository());
+		jobLauncher.setJobRepository(jobRepository());
 		jobLauncher.afterPropertiesSet();
 		return jobLauncher;
 	}
 
-	//@Override
 	@Bean
-	public PlatformTransactionManager getTransactionManager() throws Exception {
+	public PlatformTransactionManager transactionManager() throws Exception {
 		return transactionManager;
 	}
 
-	//@Override
 	@Bean
-	public JobRepository getJobRepository() throws Exception {
+	public JobRepository jobRepository() throws Exception {
 		JobRepositoryFactoryBean jobRepository = new JobRepositoryFactoryBean();
 		jobRepository.setDataSource(dataSource);
 		jobRepository.setTransactionManager(transactionManager);
-		jobRepository.setDatabaseType("derby");
 		jobRepository.afterPropertiesSet();
 		return (JobRepository) jobRepository.getObject();
 	}
 	
-    private JobRegistry getJobRegistry() {
+	@Bean
+    public OAIHarvesterFactory oaiHarvesterFactory() {
+		return new OAIHarvesterFactoryImpl();
+	}
+	
+	@Bean
+	public HttpClient httpClient() {
+		return new ApacheHttpClient();
+	}
+	
+    private JobRegistry jobRegistry() {
         return new MapJobRegistry();
     }
     

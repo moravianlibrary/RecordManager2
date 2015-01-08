@@ -3,10 +3,13 @@ package cz.mzk.recordmanager.server.util;
 import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
+
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+
+import com.google.common.io.Closeables;
 
 // Thread safe
 public class ApacheHttpClient implements HttpClient, Closeable {
@@ -68,8 +71,8 @@ public class ApacheHttpClient implements HttpClient, Closeable {
 		
 		@Override
 		public void close() throws IOException {
-			response.close();
-			delegate.close();
+			Closeables.closeQuietly(delegate);
+			Closeables.close(response, true);
 		}
 
 	}

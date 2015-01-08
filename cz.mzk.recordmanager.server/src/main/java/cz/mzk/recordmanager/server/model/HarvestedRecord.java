@@ -7,13 +7,10 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-
-import org.hibernate.annotations.Type;
 
 @Entity
 @Table(name=HarvestedRecord.TABLE_NAME)
@@ -32,9 +29,11 @@ public class HarvestedRecord extends AbstractDomainObject {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date deleted;
 	
+	@Column(name="format")
+	private String format;
+	
 	@Basic(fetch = FetchType.LAZY)
-	@Column(name="raw_record")
-	//@Type(type="org.hibernate.type.BinaryType") 
+	@Column(name="raw_record") 
 	private byte[] rawRecord;
 
 	public OAIHarvestConfiguration getHarvestedFrom() {
@@ -59,6 +58,14 @@ public class HarvestedRecord extends AbstractDomainObject {
 
 	public void setDeleted(Date deleted) {
 		this.deleted = deleted;
+	}
+
+	public String getFormat() {
+		return format;
+	}
+
+	public void setFormat(String format) {
+		this.format = format;
 	}
 
 	public byte[] getRawRecord() {

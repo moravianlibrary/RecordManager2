@@ -9,6 +9,8 @@
 
 	<properties>
 		<maven-compiler-plugin.version>2.4</maven-compiler-plugin.version>
+		<java.source.version>1.7</java.source.version>
+		<java.source.target.version>1.7</java.source.target.version>
 	</properties>
 
 	<build>

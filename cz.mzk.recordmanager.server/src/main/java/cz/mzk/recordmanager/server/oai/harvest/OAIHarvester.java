@@ -2,7 +2,6 @@ package cz.mzk.recordmanager.server.oai.harvest;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,7 +15,6 @@ import org.slf4j.LoggerFactory;
 import com.google.common.base.Preconditions;
 
 import cz.mzk.recordmanager.server.oai.model.OAIListRecords;
-import cz.mzk.recordmanager.server.util.ApacheHttpClient;
 import cz.mzk.recordmanager.server.util.HttpClient;
 import cz.mzk.recordmanager.server.util.UrlUtils;
 
@@ -24,33 +22,15 @@ public class OAIHarvester {
 
 	private static Logger logger = LoggerFactory.getLogger(OAIHarvester.class);
 
-	private HttpClient httpClient = new ApacheHttpClient();
+	private final HttpClient httpClient;
 
-	private final String url;
+	private final OAIHarvesterParams parameters;
 
-	private final String metadataPrefix;
-
-	private final String set;
-
-	private final Date from;
-
-	private final Date until;
-
-	public OAIHarvester(String url, String metadataPrefix, String set) {
-		this(url, metadataPrefix, set, null, null);
-	}
-
-	public OAIHarvester(String url, String metadataPrefix, String set,
-			Date from, Date until) {
-		super();
-		Preconditions.checkNotNull(url, "url");
-		Preconditions.checkNotNull(metadataPrefix, "metadataPrefix");
-		this.url = url;
-		this.metadataPrefix = metadataPrefix;
-		this.set = set;
-		this.from = from;
-		this.until = until;
-
+	public OAIHarvester(HttpClient httpClient, OAIHarvesterParams parameters) {
+		Preconditions.checkArgument(parameters.getUrl() != null, "missing url in parameters");
+		Preconditions.checkArgument(parameters.getMetadataPrefix() != null, "missing metadataPrefix in parameters");
+		this.parameters = parameters;
+		this.httpClient = httpClient;
 	}
 
 	public OAIListRecords listRecords(String resumptionToken) {
@@ -72,15 +52,15 @@ public class OAIHarvester {
 	private String createUrl(String resumptionToken) {
 		Map<String, String> params = new HashMap<String, String>();
 		if (resumptionToken == null) {
-			params.put("metadataPrefix", metadataPrefix);
-			if (set != null) {
-				params.put("set", set);
+			params.put("metadataPrefix", parameters.getMetadataPrefix());
+			if (parameters.getSet() != null) {
+				params.put("set", parameters.getSet());
 			}
 		} else {
 			params.put("resumptionToken", resumptionToken);
 		}
 		params.put("verb", "ListRecords");
-		return UrlUtils.buildUrl(url, params);
+		return UrlUtils.buildUrl(parameters.getUrl(), params);
 	}
 
 }
