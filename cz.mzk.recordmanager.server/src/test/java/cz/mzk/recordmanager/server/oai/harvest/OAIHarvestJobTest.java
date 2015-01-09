@@ -29,14 +29,18 @@ public class OAIHarvestJobTest extends AbstractTest {
 	
 	@Test
 	public void execute() throws Exception {
-		InputStream response = this.getClass().getResourceAsStream("/sample/ListRecords.xml");
-		expect(httpClient.executeGet("http://aleph.mzk.cz/OAI?verb=ListRecords&metadataPrefix=marc21")).andReturn(response);
+		reset(httpClient);
+		InputStream response1 = this.getClass().getResourceAsStream("/sample/ListRecords1.xml");
+		InputStream response2 = this.getClass().getResourceAsStream("/sample/ListRecords2.xml");
+		expect(httpClient.executeGet("http://aleph.mzk.cz/OAI?verb=ListRecords&metadataPrefix=marc21")).andReturn(response1);
+		expect(httpClient.executeGet("http://aleph.mzk.cz/OAI?verb=ListRecords&resumptionToken=201408211302186999999999999999MZK01-VDK%3AMZK01-VDK")).andReturn(response2);
 		replay(httpClient);
 		Job job = jobRegistry.getJob("oaiHarvestJob");
 		Map<String, JobParameter> params = new HashMap<String, JobParameter>();
 		params.put("configurationId", new JobParameter(300L));
 		JobParameters jobParams = new JobParameters(params);
 		jobLauncher.run(job, jobParams);
+		dbUnitHelper.dump("dbunit.xml");
 	}
 
 }

@@ -39,8 +39,7 @@ public class OAIItemReader implements ItemReader<List<OAIRecord>>, ItemStream, S
 	private boolean finished = false;
 	
 	@Override
-	public List<OAIRecord> read() throws Exception, UnexpectedInputException,
-			ParseException, NonTransientResourceException {
+	public List<OAIRecord> read() {
 		if (finished) {
 			return null;
 		}

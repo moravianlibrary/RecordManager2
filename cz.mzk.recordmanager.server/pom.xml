@@ -98,6 +98,12 @@
 			<version>1.7.7</version>
 		</dependency>
 
+		<dependency>
+			<groupId>info.freelibrary</groupId>
+			<artifactId>freelib-marc4j</artifactId>
+			<version>2.6.3</version>
+		</dependency>
+
 		<!-- Tests -->
 		<dependency>
 			<groupId>org.testng</groupId>

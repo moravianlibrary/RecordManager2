@@ -1,6 +1,4 @@
-package cz.mzk.recordmanager.server.oai.harvest;
-
-import java.util.List;
+package cz.mzk.recordmanager.server.dedup;
 
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
@@ -10,43 +8,43 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import cz.mzk.recordmanager.server.oai.model.OAIRecord;
+import cz.mzk.recordmanager.server.model.HarvestedRecord;
 
 @Configuration
-public class OAIHarvestJob {
+public class DedupKeysGeneratorJobConfig {
 	
 	@Autowired
     private JobBuilderFactory jobs;
 
     @Autowired
     private StepBuilderFactory steps;
-
+    
     @Bean
-    public Job oaiHarvestJob(JobBuilderFactory jobs, Step step1) {
-        return jobs.get("oaiHarvestJob")
-				.flow(step1)
+    public Job dedupKeysGeneratorJob(JobBuilderFactory jobs, Step step) {
+        return jobs.get("dedupKeysGeneratorJob")
+				.flow(step)
 				.end()
 				.build();
     }
     
     @Bean
-    public Step step1(StepBuilderFactory stepBuilderFactory, OAIItemReader reader,
-    		OAIItemWriter writer) {
-        return steps.get("step1")
-            .<List<OAIRecord>, List<OAIRecord>> chunk(1)
+    public Step step(StepBuilderFactory stepBuilderFactory, DedupKeysGeneratorReader reader,
+    		DedupKeysGeneratorWriter writer) {
+        return steps.get("step")
+            .<HarvestedRecord, HarvestedRecord> chunk(1)
             .reader(reader)
             .writer(writer)
             .build();
     }
-    
-    @Bean
-    public OAIItemReader reader() {
-    	return new OAIItemReader();
+	
+	@Bean
+    public DedupKeysGeneratorReader reader() {
+    	return new DedupKeysGeneratorReader();
     }
     
     @Bean
-    public OAIItemWriter writer() {
-    	return new OAIItemWriter();
+    public DedupKeysGeneratorWriter writer() {
+    	return new DedupKeysGeneratorWriter();
     }
 
 }

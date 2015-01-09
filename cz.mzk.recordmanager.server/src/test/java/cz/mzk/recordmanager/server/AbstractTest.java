@@ -18,6 +18,9 @@ public class AbstractTest extends AbstractTestNGSpringContextTests {
 	@Autowired
 	private SessionFactory sessionFactory;
 	
+	@Autowired
+	protected DBUnitHelper dbUnitHelper;
+	
 	@BeforeMethod
 	public void setUp() {
 		Session session = sessionFactory.openSession();

@@ -50,3 +50,9 @@ CREATE TABLE harvested_record (
   PRIMARY KEY (id),
   FOREIGN KEY (oai_harvest_conf_id)        REFERENCES oai_harvest_conf(id)
 );
+
+CREATE TABLE dedup_keys (
+  id                   DECIMAL(10),
+  isbn                 VARCHAR(32),
+  title                VARCHAR(255)
+);

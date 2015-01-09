@@ -23,7 +23,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.transaction.PlatformTransactionManager;
 
-import cz.mzk.recordmanager.server.oai.harvest.OAIHarvestJob;
+import cz.mzk.recordmanager.server.dedup.DedupKeysGeneratorJobConfig;
+import cz.mzk.recordmanager.server.oai.harvest.OAIHarvestJobConfig;
 import cz.mzk.recordmanager.server.oai.harvest.OAIHarvesterFactory;
 import cz.mzk.recordmanager.server.oai.harvest.OAIHarvesterFactoryImpl;
 import cz.mzk.recordmanager.server.util.ApacheHttpClient;
@@ -109,7 +110,7 @@ public class AppConfig {
     
     @Bean
     public ApplicationContextFactory moreJobs() {
-    	return new GenericApplicationContextFactory(OAIHarvestJob.class);
+    	return new GenericApplicationContextFactory(OAIHarvestJobConfig.class, DedupKeysGeneratorJobConfig.class);
     }
 
 }
