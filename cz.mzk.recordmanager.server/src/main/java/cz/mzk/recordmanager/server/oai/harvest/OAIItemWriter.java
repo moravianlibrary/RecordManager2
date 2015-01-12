@@ -22,6 +22,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.w3c.dom.Element;
 
+import cz.mzk.recordmanager.server.dedup.DedupKeyParserException;
+import cz.mzk.recordmanager.server.dedup.DelegatingDedupKeysParser;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.model.OAIHarvestConfiguration;
 import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordDAO;
@@ -43,6 +45,9 @@ public class OAIItemWriter implements ItemWriter<List<OAIRecord>>,
 	
 	@Autowired
 	protected OAIFormatResolver formatResolver;
+	
+	@Autowired
+	protected DelegatingDedupKeysParser dedupKeysParser;
 	
 	private String format;
 
@@ -79,6 +84,11 @@ public class OAIItemWriter implements ItemWriter<List<OAIRecord>>,
 		} else {
 			Element element = record.getMetadata().getElement();
 			rec.setRawRecord(asByteArray(element));
+		}
+		try {
+			dedupKeysParser.parse(rec);
+		} catch (DedupKeyParserException dkpe) {
+			logger.error("Dedup keys could not be generated for {}, exception thrown.", record, dkpe);
 		}
 		recordDao.persist(rec);
 	}

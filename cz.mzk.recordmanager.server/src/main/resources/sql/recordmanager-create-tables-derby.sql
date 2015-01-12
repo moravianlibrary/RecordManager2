@@ -46,14 +46,11 @@ CREATE TABLE harvested_record (
   oai_record_id        VARCHAR(128),
   deleted              TIMESTAMP,
   format               VARCHAR(12) NOT NULL,
+  isbn                 VARCHAR(32),
+  title                VARCHAR(255),
   raw_record           BLOB,
   PRIMARY KEY (id),
   FOREIGN KEY (oai_harvest_conf_id) REFERENCES oai_harvest_conf(id),
   FOREIGN KEY (format)              REFERENCES format(format)
 );
 
-CREATE TABLE dedup_keys (
-  id                   DECIMAL(10),
-  isbn                 VARCHAR(32),
-  title                VARCHAR(255)
-);

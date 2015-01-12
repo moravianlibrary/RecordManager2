@@ -1,0 +1,153 @@
+<marc:record xmlns:marc="http://www.loc.gov/MARC21/slim"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.loc.gov/MARC21/slim
+http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd">
+	<marc:leader>     nam a22      a 4500</marc:leader>
+	<marc:controlfield tag="001">nkc20142639106</marc:controlfield>
+	<marc:controlfield tag="003">CZ PrNK</marc:controlfield>
+	<marc:controlfield tag="005">20150105084543.0</marc:controlfield>
+	<marc:controlfield tag="007">ta</marc:controlfield>
+	<marc:controlfield tag="008">141120s2014    xr abi e      001 0 cze  </marc:controlfield>
+	<marc:datafield tag="015" ind1=" " ind2=" ">
+		<marc:subfield code="a">cnb002639106</marc:subfield>
+	</marc:datafield>
+	<marc:datafield tag="020" ind1=" " ind2=" ">
+		<marc:subfield code="a">978-80-905393-2-7</marc:subfield>
+		<marc:subfield code="q">(váz.)</marc:subfield>
+	</marc:datafield>
+	<marc:datafield tag="040" ind1=" " ind2=" ">
+		<marc:subfield code="a">BOA001</marc:subfield>
+		<marc:subfield code="b">cze</marc:subfield>
+		<marc:subfield code="d">OLA001</marc:subfield>
+	</marc:datafield>
+	<marc:datafield tag="043" ind1=" " ind2=" ">
+		<marc:subfield code="a">e-xr---</marc:subfield>
+	</marc:datafield>
+	<marc:datafield tag="072" ind1=" " ind2="7">
+		<marc:subfield code="a">913(437)</marc:subfield>
+		<marc:subfield code="x">Geografie Česka a Slovenska, reálie, cestování</marc:subfield>
+		<marc:subfield code="2">Konspekt</marc:subfield>
+		<marc:subfield code="9">7</marc:subfield>
+	</marc:datafield>
+	<marc:datafield tag="080" ind1=" " ind2=" ">
+		<marc:subfield code="a">911.375</marc:subfield>
+		<marc:subfield code="2">MRF</marc:subfield>
+	</marc:datafield>
+	<marc:datafield tag="080" ind1=" " ind2=" ">
+		<marc:subfield code="a">911.373</marc:subfield>
+		<marc:subfield code="2">MRF</marc:subfield>
+	</marc:datafield>
+	<marc:datafield tag="080" ind1=" " ind2=" ">
+		<marc:subfield code="a">908(437.3)</marc:subfield>
+		<marc:subfield code="2">MRF</marc:subfield>
+	</marc:datafield>
+	<marc:datafield tag="080" ind1=" " ind2=" ">
+		<marc:subfield code="a">(048.8)</marc:subfield>
+		<marc:subfield code="2">MRF</marc:subfield>
+	</marc:datafield>
+	<marc:datafield tag="245" ind1="0" ind2="0">
+		<marc:subfield code="a">Česká republika :</marc:subfield>
+		<marc:subfield code="b">města a obce České republiky : tradice, historie, památky, turistika, současnost /</marc:subfield>
+		<marc:subfield code="c">[redakce Veronika Ševčíková, Lenka Kovářová]</marc:subfield>
+	</marc:datafield>
+	<marc:datafield tag="246" ind1="3" ind2="0">
+		<marc:subfield code="a">Města a obce České republiky</marc:subfield>
+	</marc:datafield>
+	<marc:datafield tag="250" ind1=" " ind2=" ">
+		<marc:subfield code="a">2., rozš. vyd.</marc:subfield>
+	</marc:datafield>
+	<marc:datafield tag="260" ind1=" " ind2=" ">
+		<marc:subfield code="a">Rožnov pod Radhoštěm :</marc:subfield>
+		<marc:subfield code="b">Proxima Bohemia,</marc:subfield>
+		<marc:subfield code="c">2014</marc:subfield>
+	</marc:datafield>
+	<marc:datafield tag="300" ind1=" " ind2=" ">
+		<marc:subfield code="a">1519 s. :</marc:subfield>
+		<marc:subfield code="b">il. (převážně barev.), mapy, erby ;</marc:subfield>
+		<marc:subfield code="c">31 cm</marc:subfield>
+	</marc:datafield>
+	<marc:datafield tag="500" ind1=" " ind2=" ">
+		<marc:subfield code="a">Obsahuje rejstřík</marc:subfield>
+	</marc:datafield>
+	<marc:datafield tag="650" ind1="0" ind2="7">
+		<marc:subfield code="a">města</marc:subfield>
+		<marc:subfield code="7">ph115399</marc:subfield>
+		<marc:subfield code="z">Česko</marc:subfield>
+		<marc:subfield code="2">czenas</marc:subfield>
+	</marc:datafield>
+	<marc:datafield tag="650" ind1="0" ind2="7">
+		<marc:subfield code="a">obce</marc:subfield>
+		<marc:subfield code="7">ph123545</marc:subfield>
+		<marc:subfield code="z">Česko</marc:subfield>
+		<marc:subfield code="2">czenas</marc:subfield>
+	</marc:datafield>
+	<marc:datafield tag="650" ind1="0" ind2="9">
+		<marc:subfield code="a">cities and towns</marc:subfield>
+		<marc:subfield code="z">Czechia</marc:subfield>
+		<marc:subfield code="2">eczenas</marc:subfield>
+	</marc:datafield>
+	<marc:datafield tag="650" ind1="0" ind2="9">
+		<marc:subfield code="a">municipalities</marc:subfield>
+		<marc:subfield code="z">Czechia</marc:subfield>
+		<marc:subfield code="2">eczenas</marc:subfield>
+	</marc:datafield>
+	<marc:datafield tag="651" ind1=" " ind2="7">
+		<marc:subfield code="a">Česko</marc:subfield>
+		<marc:subfield code="7">ge128065</marc:subfield>
+		<marc:subfield code="x">vlastivěda</marc:subfield>
+		<marc:subfield code="2">czenas</marc:subfield>
+	</marc:datafield>
+	<marc:datafield tag="651" ind1=" " ind2="9">
+		<marc:subfield code="a">Czechia</marc:subfield>
+		<marc:subfield code="x">history and geography</marc:subfield>
+		<marc:subfield code="2">eczenas</marc:subfield>
+	</marc:datafield>
+	<marc:datafield tag="655" ind1=" " ind2="7">
+		<marc:subfield code="a">přehledy</marc:subfield>
+		<marc:subfield code="7">fd133202</marc:subfield>
+		<marc:subfield code="2">czenas</marc:subfield>
+	</marc:datafield>
+	<marc:datafield tag="655" ind1=" " ind2="9">
+		<marc:subfield code="a">surveys</marc:subfield>
+		<marc:subfield code="2">eczenas</marc:subfield>
+	</marc:datafield>
+	<marc:datafield tag="700" ind1="1" ind2=" ">
+		<marc:subfield code="a">Ševčíková, Veronika</marc:subfield>
+		<marc:subfield code="7">jo2012735774</marc:subfield>
+		<marc:subfield code="4">edt</marc:subfield>
+	</marc:datafield>
+	<marc:datafield tag="700" ind1="1" ind2=" ">
+		<marc:subfield code="a">Kovářová, Lenka</marc:subfield>
+		<marc:subfield code="7">jo2014851575</marc:subfield>
+		<marc:subfield code="4">edt</marc:subfield>
+	</marc:datafield>
+	<marc:datafield tag="910" ind1="2" ind2=" ">
+		<marc:subfield code="a">BOA001</marc:subfield>
+		<marc:subfield code="b">4-1337.539</marc:subfield>
+	</marc:datafield>
+	<marc:datafield tag="928" ind1="1" ind2=" ">
+		<marc:subfield code="a">Proxima Bohemia</marc:subfield>
+	</marc:datafield>
+	<marc:datafield tag="990" ind1=" " ind2=" ">
+		<marc:subfield code="a">BK</marc:subfield>
+	</marc:datafield>
+	<marc:datafield tag="995" ind1=" " ind2=" ">
+		<marc:subfield code="a">01</marc:subfield>
+	</marc:datafield>
+	<marc:datafield tag="991" ind1=" " ind2=" ">
+		<marc:subfield code="b">201501</marc:subfield>
+		<marc:subfield code="c">NOV</marc:subfield>
+		<marc:subfield code="e">n</marc:subfield>
+	</marc:datafield>
+	<marc:datafield tag="996" ind1="2" ind2=" ">
+		<marc:subfield code="b">2610613840</marc:subfield>
+		<marc:subfield code="c">4-1337.539</marc:subfield>
+		<marc:subfield code="l">UK1</marc:subfield>
+		<marc:subfield code="n">0</marc:subfield>
+		<marc:subfield code="p">p.v.</marc:subfield>
+		<marc:subfield code="w">001475092</marc:subfield>
+		<marc:subfield code="a">1</marc:subfield>
+		<marc:subfield code="e">BOA001</marc:subfield>
+		<marc:subfield code="s">ZP</marc:subfield>
+	</marc:datafield>
+</marc:record>
