@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.util.Collections;
 import java.util.List;
 
+import org.marc4j.MarcException;
 import org.marc4j.MarcXmlReader;
 import org.marc4j.marc.InvalidMARCException;
 import org.marc4j.marc.Record;
@@ -34,8 +35,8 @@ public class MarcXmlDedupKeyParser implements DedupKeysParser {
 			Record rec = reader.next();
 			String isbn = getIsbn(rec);
 			record.setIsbn(isbn);
-		} catch (InvalidMARCException ime) {
-			throw new DedupKeyParserException("Dedup keys can't be parsed", ime);
+		} catch (MarcException me) {
+			throw new DedupKeyParserException("Dedup keys can't be parsed", me);
 		}
 		return record;
 	}
