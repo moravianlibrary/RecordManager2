@@ -64,11 +64,11 @@
 			<version>18.0</version>
 		</dependency>
 
-		<!-- Stax -->
+		<!-- MARC4J -->
 		<dependency>
-			<groupId>stax</groupId>
-			<artifactId>stax</artifactId>
-			<version>1.2.0</version>
+			<groupId>info.freelibrary</groupId>
+			<artifactId>freelib-marc4j</artifactId>
+			<version>2.6.3</version>
 		</dependency>
 
 		<!-- Derby -->
@@ -92,16 +92,18 @@
 			<version>1.7.7</version>
 		</dependency>
 
+		<!--
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-simple</artifactId>
 			<version>1.7.7</version>
 		</dependency>
+		-->
 
 		<dependency>
-			<groupId>info.freelibrary</groupId>
-			<artifactId>freelib-marc4j</artifactId>
-			<version>2.6.3</version>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<version>1.1.2</version>
 		</dependency>
 
 		<!-- Tests -->

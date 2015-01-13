@@ -19,14 +19,29 @@ public class MarcXmlDedupKeyParserTest extends AbstractTest {
 	private MarcXmlDedupKeyParser parser;
 	
 	@Test
-	public void parse() throws Exception {
-		InputStream is = this.getClass().getResourceAsStream("/sample/MarcXmlRecord.xml");
+	public void parseCorrectRecord() throws Exception {
+		InputStream is = this.getClass().getResourceAsStream("/records/marcxml/MZK01-001439241.xml");
 		HarvestedRecord record = new HarvestedRecord();
 		record.setFormat("marc21-xml");
 		byte[] rawRecord = ByteStreams.toByteArray(is);
 		record.setRawRecord(rawRecord);
 		parser.parse(record);
 		Assert.assertEquals(record.getIsbn(), EXPECTED_ISBN);
+	}
+	
+	@Test
+	public void parseBadRecord() throws Exception {
+		InputStream is = this.getClass().getResourceAsStream("/records/marcxml/MZK01-000153226.xml");
+		HarvestedRecord record = new HarvestedRecord();
+		record.setFormat("marc21-xml");
+		byte[] rawRecord = ByteStreams.toByteArray(is);
+		record.setRawRecord(rawRecord);
+		try {
+			parser.parse(record);
+			Assert.fail();
+		} catch (DedupKeyParserException ex) {
+			// expected
+		}
 	}
 
 }

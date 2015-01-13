@@ -53,3 +53,5 @@ CREATE TABLE harvested_record (
   PRIMARY KEY (id),
   FOREIGN KEY (oai_harvest_conf_id)        REFERENCES oai_harvest_conf(id)
 );
+
+CREATE UNIQUE INDEX harvested_record_sec_key ON harvested_record(oai_harvest_conf_id, oai_record_id);

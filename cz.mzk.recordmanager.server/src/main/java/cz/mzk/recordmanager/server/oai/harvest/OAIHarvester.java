@@ -41,6 +41,7 @@ public class OAIHarvester {
 			Unmarshaller unmarshaller = jc.createUnmarshaller();
 			OAIListRecords records = (OAIListRecords) unmarshaller
 					.unmarshal(is);
+			logger.info("Finished harvesting of url: {}", url);
 			return records;
 		} catch (IOException ioe) {
 			throw new RuntimeException(ioe);

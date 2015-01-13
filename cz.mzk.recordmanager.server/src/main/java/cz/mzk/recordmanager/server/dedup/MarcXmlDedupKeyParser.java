@@ -7,7 +7,6 @@ import java.util.List;
 
 import org.marc4j.MarcException;
 import org.marc4j.MarcXmlReader;
-import org.marc4j.marc.InvalidMARCException;
 import org.marc4j.marc.Record;
 import org.springframework.stereotype.Component;
 

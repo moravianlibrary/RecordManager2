@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<marc:record xmlns:marc="http://www.loc.gov/MARC21/slim"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.loc.gov/MARC21/slim
+http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd">
+	<marc:leader>     nam a22     2a 4500</marc:leader>
+	<marc:controlfield tag="001">000153226</marc:controlfield>
+	<marc:controlfield tag="003">CZ BrMZK</marc:controlfield>
+	<marc:controlfield tag="005">19970107143423.0</marc:controlfield>
+	<marc:controlfield tag="008">970107s1989    xr     f            cze d</marc:controlfield>
+	<marc:datafield tag="040" ind1=" " ind2=" ">
+		<marc:subfield code="a">BOA001</marc:subfield>
+		<marc:subfield code="b">cze</marc:subfield>
+	</marc:datafield>
+	<marc:datafield tag="080" ind1=" " ind2=" ">
+		<marc:subfield code="a">372.867.7(075.3):377.5</marc:subfield>
+		<marc:subfield code="2">MRF</marc:subfield>
+	</marc:datafield>
+	<marc:datafield tag="100" ind1="1" ind2=" ">
+		<marc:subfield code="a">Rada, Zdeněk</marc:subfield>
+		<marc:subfield code="7">jx20050714027</marc:subfield>
+	</marc:datafield>
+	<marc:datafield tag="245" ind1="1" ind2="0">
+		<marc:subfield code="a">Zušlechťování textilií III pro 4. ročník SPŠ textilní, studijní obor zušlechťování textilií /</marc:subfield>
+		<marc:subfield code="c">Zdeněk Rada, Zdeněk Pohl</marc:subfield>
+	</marc:datafield>
+	<marc:datafield tag="250" ind1=" " ind2=" ">
+		<marc:subfield code="a">1. vyd.</marc:subfield>
+	</marc:datafield>
+	<marc:controlfield tag="260">:$$bSPN,$$c1989</marc:controlfield>
+	<marc:datafield tag="300" ind1=" " ind2=" ">
+		<marc:subfield code="a">363 s.</marc:subfield>
+	</marc:datafield>
+	<marc:datafield tag="490" ind1="1" ind2=" ">
+		<marc:subfield code="a">Učebnice pro střední školy</marc:subfield>
+	</marc:datafield>
+	<marc:datafield tag="700" ind1="1" ind2=" ">
+		<marc:subfield code="a">Pohl, Zdeněk</marc:subfield>
+		<marc:subfield code="7">jx20061115011</marc:subfield>
+	</marc:datafield>
+	<marc:datafield tag="830" ind1=" " ind2="0">
+		<marc:subfield code="a">Učebnice pro střední školy</marc:subfield>
+	</marc:datafield>
+	<marc:datafield tag="910" ind1=" " ind2=" ">
+		<marc:subfield code="a">BOA001</marc:subfield>
+		<marc:subfield code="b">PK-N-0027.634</marc:subfield>
+	</marc:datafield>
+	<marc:datafield tag="964" ind1=" " ind2=" ">
+		<marc:subfield code="a">Textilie - zušlechťování - učebnice - školy odborné střední</marc:subfield>
+	</marc:datafield>
+	<marc:datafield tag="990" ind1=" " ind2=" ">
+		<marc:subfield code="a">BK</marc:subfield>
+	</marc:datafield>
+	<marc:datafield tag="996" ind1="7" ind2=" ">
+		<marc:subfield code="b">3119951595</marc:subfield>
+		<marc:subfield code="c">PK-N-0027.634</marc:subfield>
+		<marc:subfield code="l">SK3</marc:subfield>
+		<marc:subfield code="r">SKL</marc:subfield>
+		<marc:subfield code="n">3</marc:subfield>
+		<marc:subfield code="w">000153226</marc:subfield>
+		<marc:subfield code="a">1</marc:subfield>
+		<marc:subfield code="e">BOA001</marc:subfield>
+		<marc:subfield code="s">A</marc:subfield>
+	</marc:datafield>
+</marc:record>
+			
