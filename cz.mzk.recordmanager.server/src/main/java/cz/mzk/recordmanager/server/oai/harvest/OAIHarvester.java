@@ -25,20 +25,26 @@ public class OAIHarvester {
 	private final HttpClient httpClient;
 
 	private final OAIHarvesterParams parameters;
+	
+	private final Unmarshaller unmarshaller;
 
 	public OAIHarvester(HttpClient httpClient, OAIHarvesterParams parameters) {
 		Preconditions.checkArgument(parameters.getUrl() != null, "missing url in parameters");
 		Preconditions.checkArgument(parameters.getMetadataPrefix() != null, "missing metadataPrefix in parameters");
 		this.parameters = parameters;
 		this.httpClient = httpClient;
+		try {
+			JAXBContext jaxbContext = JAXBContext.newInstance(OAIListRecords.class);
+			this.unmarshaller = jaxbContext.createUnmarshaller();
+		} catch (JAXBException je) {
+			throw new RuntimeException(je);
+		}
 	}
 
 	public OAIListRecords listRecords(String resumptionToken) {
 		String url = createUrl(resumptionToken);
 		logger.info("About to harvest url: {}", url);
 		try (InputStream is = httpClient.executeGet(url)) {
-			JAXBContext jc = JAXBContext.newInstance(OAIListRecords.class);
-			Unmarshaller unmarshaller = jc.createUnmarshaller();
 			OAIListRecords records = (OAIListRecords) unmarshaller
 					.unmarshal(is);
 			logger.info("Finished harvesting of url: {}", url);

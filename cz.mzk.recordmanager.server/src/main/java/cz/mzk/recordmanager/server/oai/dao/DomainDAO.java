@@ -9,6 +9,8 @@ public interface DomainDAO<ID extends Serializable, T> {
 	
 	public T get(ID id);
 	
+	public T load(ID id);
+	
 	public T persist(T object);
 	
 	public void delete(T object);

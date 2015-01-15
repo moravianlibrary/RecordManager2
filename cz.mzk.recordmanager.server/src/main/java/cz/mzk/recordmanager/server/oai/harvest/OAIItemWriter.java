@@ -34,7 +34,7 @@ import cz.mzk.recordmanager.server.oai.model.OAIRecord;
 @StepScope
 public class OAIItemWriter implements ItemWriter<List<OAIRecord>>,
 		StepExecutionListener {
-	
+
 	private static Logger logger = LoggerFactory.getLogger(OAIItemWriter.class);
 
 	@Autowired
@@ -42,17 +42,17 @@ public class OAIItemWriter implements ItemWriter<List<OAIRecord>>,
 
 	@Autowired
 	protected OAIHarvestConfigurationDAO configDao;
-	
+
 	@Autowired
 	protected OAIFormatResolver formatResolver;
-	
+
 	@Autowired
 	protected DelegatingDedupKeysParser dedupKeysParser;
-	
+
 	private String format;
 
 	private OAIHarvestConfiguration configuration;
-	
+
 	private Transformer transformer;
 
 	@Override
@@ -62,7 +62,8 @@ public class OAIItemWriter implements ItemWriter<List<OAIRecord>>,
 				try {
 					write(record);
 				} catch (TransformerException te) {
-					logger.warn("TransformerException when storing {}: ", record, te);
+					logger.warn("TransformerException when storing {}: ",
+							record, te);
 				}
 			}
 		}
@@ -88,7 +89,9 @@ public class OAIItemWriter implements ItemWriter<List<OAIRecord>>,
 		try {
 			dedupKeysParser.parse(rec);
 		} catch (DedupKeyParserException dkpe) {
-			logger.error("Dedup keys could not be generated for {}, exception thrown.", record, dkpe);
+			logger.error(
+					"Dedup keys could not be generated for {}, exception thrown.",
+					record, dkpe);
 		}
 		recordDao.persist(rec);
 	}
@@ -112,8 +115,8 @@ public class OAIItemWriter implements ItemWriter<List<OAIRecord>>,
 		configuration = configDao.get(confId);
 		format = formatResolver.resolve(configuration.getMetadataPrefix());
 		try {
-		TransformerFactory transformerFactory = TransformerFactory
-				.newInstance();
+			TransformerFactory transformerFactory = TransformerFactory
+					.newInstance();
 			transformer = transformerFactory.newTransformer();
 		} catch (TransformerConfigurationException tce) {
 			throw new RuntimeException(tce);

@@ -5,9 +5,17 @@ import org.marc4j.marc.Record;
 import org.marc4j.marc.Subfield;
 import org.marc4j.marc.VariableField;
 
-public class MarcHelper {
+public class MarcRecordImpl implements MarcRecord {
 
-	public static String getField(Record record, String tag, char subfield) {
+	protected final Record record;
+	
+	public MarcRecordImpl(Record record) {
+		super();
+		this.record = record;
+	}
+
+	@Override
+	public String getField(String tag, char subfield) {
 		VariableField field = record.getVariableField(tag);
 		if (field instanceof DataField) {
 			DataField df = (DataField) field;
@@ -18,5 +26,5 @@ public class MarcHelper {
 		}
 		return null;
 	}
-	
+
 }

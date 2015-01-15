@@ -13,7 +13,7 @@ import cz.mzk.recordmanager.server.model.HarvestedRecord;
 
 public class MarcXmlDedupKeyParserTest extends AbstractTest {
 	
-	private static final String EXPECTED_ISBN = "978-80-905393-2-7";
+	private static final String EXPECTED_ISBN = "9788090539327";
 	
 	@Autowired
 	private MarcXmlDedupKeyParser parser;
@@ -29,19 +29,14 @@ public class MarcXmlDedupKeyParserTest extends AbstractTest {
 		Assert.assertEquals(record.getIsbn(), EXPECTED_ISBN);
 	}
 	
-	@Test
+	@Test(expectedExceptions=DedupKeyParserException.class)
 	public void parseBadRecord() throws Exception {
 		InputStream is = this.getClass().getResourceAsStream("/records/marcxml/MZK01-000153226.xml");
 		HarvestedRecord record = new HarvestedRecord();
 		record.setFormat("marc21-xml");
 		byte[] rawRecord = ByteStreams.toByteArray(is);
 		record.setRawRecord(rawRecord);
-		try {
-			parser.parse(record);
-			Assert.fail();
-		} catch (DedupKeyParserException ex) {
-			// expected
-		}
+		parser.parse(record);
 	}
 
 }

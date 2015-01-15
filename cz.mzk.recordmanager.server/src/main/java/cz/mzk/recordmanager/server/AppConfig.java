@@ -21,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.transaction.PlatformTransactionManager;
 
 import cz.mzk.recordmanager.server.dedup.DedupKeysGeneratorJobConfig;
@@ -102,6 +103,11 @@ public class AppConfig {
 	@Bean
 	public HttpClient httpClient() {
 		return new ApacheHttpClient();
+	}
+	
+	@Bean
+	public JdbcTemplate jdbcTemplate() {
+		return new JdbcTemplate(dataSource);
 	}
 	
     private JobRegistry jobRegistry() {

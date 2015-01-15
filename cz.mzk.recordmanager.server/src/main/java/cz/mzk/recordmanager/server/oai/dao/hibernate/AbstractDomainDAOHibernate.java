@@ -20,6 +20,12 @@ public class AbstractDomainDAOHibernate<ID extends Serializable, T> implements D
 	public T get(ID id) {
 		return (T) sessionFactory.getCurrentSession().get(persistenceClass, id);
 	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public T load(ID id) {
+		return (T) sessionFactory.getCurrentSession().load(persistenceClass, id);
+	}
 
 	@Override
 	public T persist(T entity) {

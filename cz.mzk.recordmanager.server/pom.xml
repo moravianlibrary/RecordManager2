@@ -71,6 +71,13 @@
 			<version>2.6.3</version>
 		</dependency>
 
+		<!-- ISBN validation -->
+		<dependency>
+			<groupId>commons-validator</groupId>
+			<artifactId>commons-validator</artifactId>
+			<version>1.4.0</version>
+		</dependency>
+
 		<!-- Derby -->
 		<dependency>
 			<groupId>org.apache.derby</groupId>
@@ -92,13 +99,8 @@
 			<version>1.7.7</version>
 		</dependency>
 
-		<!--
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-simple</artifactId>
-			<version>1.7.7</version>
-		</dependency>
-		-->
+		<!-- <dependency> <groupId>org.slf4j</groupId> <artifactId>slf4j-simple</artifactId> 
+			<version>1.7.7</version> </dependency> -->
 
 		<dependency>
 			<groupId>ch.qos.logback</groupId>

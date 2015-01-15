@@ -2,8 +2,6 @@ package cz.mzk.recordmanager.server.oai.harvest;
 
 import java.util.Date;
 
-import com.google.common.base.Preconditions;
-
 public class OAIHarvesterParams {
 
 	private String url;
