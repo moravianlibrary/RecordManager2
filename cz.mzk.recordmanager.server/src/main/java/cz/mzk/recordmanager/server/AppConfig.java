@@ -2,8 +2,12 @@ package cz.mzk.recordmanager.server;
 
 import javax.sql.DataSource;
 
+import org.hibernate.SessionFactory;
 import org.springframework.batch.core.configuration.JobRegistry;
+import org.springframework.batch.core.configuration.annotation.DefaultBatchConfigurer;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
+import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
+import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.configuration.support.ApplicationContextFactory;
 import org.springframework.batch.core.configuration.support.DefaultJobLoader;
 import org.springframework.batch.core.configuration.support.GenericApplicationContextFactory;
@@ -21,26 +25,31 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
+import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.orm.hibernate4.HibernateTransactionManager;
 import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import cz.mzk.recordmanager.server.dedup.DedupKeysGeneratorJobConfig;
 import cz.mzk.recordmanager.server.oai.harvest.OAIHarvestJobConfig;
 import cz.mzk.recordmanager.server.oai.harvest.OAIHarvesterFactory;
 import cz.mzk.recordmanager.server.oai.harvest.OAIHarvesterFactoryImpl;
 import cz.mzk.recordmanager.server.util.ApacheHttpClient;
+import cz.mzk.recordmanager.server.util.HibernateSessionSynchronizer;
 import cz.mzk.recordmanager.server.util.HttpClient;
 
 @Configuration
 @EnableBatchProcessing(modular=true)
+@EnableTransactionManagement
 @ImportResource("classpath:appCtx-recordmanager-server.xml")
-public class AppConfig {
-
-	@Autowired
-	private PlatformTransactionManager transactionManager;
+public class AppConfig extends DefaultBatchConfigurer {
 
 	@Autowired
 	private DataSource dataSource;
+	
+	@Autowired
+	private SessionFactory sessionFactory;
 
 	@Bean
 	public DefaultJobLoader defaultJobLoader() {
@@ -82,15 +91,17 @@ public class AppConfig {
 	}
 
 	@Bean
-	public PlatformTransactionManager transactionManager() throws Exception {
-		return transactionManager;
+	public PlatformTransactionManager transactionManager() {
+		HibernateTransactionManager manager = new HibernateTransactionManager();
+		manager.setSessionFactory(sessionFactory);
+		return manager;
 	}
 
 	@Bean
 	public JobRepository jobRepository() throws Exception {
 		JobRepositoryFactoryBean jobRepository = new JobRepositoryFactoryBean();
 		jobRepository.setDataSource(dataSource);
-		jobRepository.setTransactionManager(transactionManager);
+		jobRepository.setTransactionManager(transactionManager());
 		jobRepository.afterPropertiesSet();
 		return (JobRepository) jobRepository.getObject();
 	}
@@ -110,7 +121,8 @@ public class AppConfig {
 		return new JdbcTemplate(dataSource);
 	}
 	
-    private JobRegistry jobRegistry() {
+	@Bean
+    public JobRegistry jobRegistry() {
         return new MapJobRegistry();
     }
     
@@ -118,5 +130,15 @@ public class AppConfig {
     public ApplicationContextFactory moreJobs() {
     	return new GenericApplicationContextFactory(OAIHarvestJobConfig.class, DedupKeysGeneratorJobConfig.class);
     }
+    
+    @Bean
+    public HibernateSessionSynchronizer hibernateSessionSynchronizer() {
+    	return new HibernateSessionSynchronizer();
+    }
+    
+    @Override
+	public PlatformTransactionManager getTransactionManager() {
+		return transactionManager();
+	}
 
 }

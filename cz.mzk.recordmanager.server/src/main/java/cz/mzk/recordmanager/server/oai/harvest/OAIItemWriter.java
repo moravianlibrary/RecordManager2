@@ -29,6 +29,8 @@ import cz.mzk.recordmanager.server.model.OAIHarvestConfiguration;
 import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordDAO;
 import cz.mzk.recordmanager.server.oai.dao.OAIHarvestConfigurationDAO;
 import cz.mzk.recordmanager.server.oai.model.OAIRecord;
+import cz.mzk.recordmanager.server.util.HibernateSessionSynchronizer;
+import cz.mzk.recordmanager.server.util.HibernateSessionSynchronizer.SessionBinder;
 
 @Component
 @StepScope
@@ -48,6 +50,9 @@ public class OAIItemWriter implements ItemWriter<List<OAIRecord>>,
 
 	@Autowired
 	protected DelegatingDedupKeysParser dedupKeysParser;
+
+	@Autowired
+	private HibernateSessionSynchronizer sync;
 
 	private String format;
 
@@ -70,30 +75,32 @@ public class OAIItemWriter implements ItemWriter<List<OAIRecord>>,
 	}
 
 	protected void write(OAIRecord record) throws TransformerException {
-		String recordId = record.getHeader().getIdentifier();
-		HarvestedRecord rec = recordDao.findByIdAndHarvestConfiguration(
-				recordId, configuration);
-		if (rec == null) {
-			rec = new HarvestedRecord();
-			rec.setOaiRecordId(record.getHeader().getIdentifier());
-			rec.setHarvestedFrom(configuration);
-			rec.setFormat(format);
+		try (SessionBinder session = sync.register()) {
+			String recordId = record.getHeader().getIdentifier();
+			HarvestedRecord rec = recordDao.findByIdAndHarvestConfiguration(
+					recordId, configuration);
+			if (rec == null) {
+				rec = new HarvestedRecord();
+				rec.setOaiRecordId(record.getHeader().getIdentifier());
+				rec.setHarvestedFrom(configuration);
+				rec.setFormat(format);
+			}
+			if (record.getHeader().isDeleted()) {
+				rec.setDeleted(new Date());
+				rec.setRawRecord(null);
+			} else {
+				Element element = record.getMetadata().getElement();
+				rec.setRawRecord(asByteArray(element));
+			}
+			try {
+				dedupKeysParser.parse(rec);
+			} catch (DedupKeyParserException dkpe) {
+				logger.error(
+						"Dedup keys could not be generated for {}, exception thrown.",
+						record, dkpe);
+			}
+			recordDao.persist(rec);
 		}
-		if (record.getHeader().isDeleted()) {
-			rec.setDeleted(new Date());
-			rec.setRawRecord(null);
-		} else {
-			Element element = record.getMetadata().getElement();
-			rec.setRawRecord(asByteArray(element));
-		}
-		try {
-			dedupKeysParser.parse(rec);
-		} catch (DedupKeyParserException dkpe) {
-			logger.error(
-					"Dedup keys could not be generated for {}, exception thrown.",
-					record, dkpe);
-		}
-		recordDao.persist(rec);
 	}
 
 	protected byte[] asByteArray(Element element) throws TransformerException {
@@ -110,16 +117,18 @@ public class OAIItemWriter implements ItemWriter<List<OAIRecord>>,
 
 	@Override
 	public void beforeStep(StepExecution stepExecution) {
-		Long confId = stepExecution.getJobParameters().getLong(
-				"configurationId");
-		configuration = configDao.get(confId);
-		format = formatResolver.resolve(configuration.getMetadataPrefix());
-		try {
-			TransformerFactory transformerFactory = TransformerFactory
-					.newInstance();
-			transformer = transformerFactory.newTransformer();
-		} catch (TransformerConfigurationException tce) {
-			throw new RuntimeException(tce);
+		try (SessionBinder session = sync.register()) {
+			Long confId = stepExecution.getJobParameters().getLong(
+					"configurationId");
+			configuration = configDao.get(confId);
+			format = formatResolver.resolve(configuration.getMetadataPrefix());
+			try {
+				TransformerFactory transformerFactory = TransformerFactory
+						.newInstance();
+				transformer = transformerFactory.newTransformer();
+			} catch (TransformerConfigurationException tce) {
+				throw new RuntimeException(tce);
+			}
 		}
 	}
 

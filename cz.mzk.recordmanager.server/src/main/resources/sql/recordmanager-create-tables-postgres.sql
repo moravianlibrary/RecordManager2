@@ -46,6 +46,7 @@ CREATE TABLE harvested_record (
   id                   DECIMAL(10) PRIMARY KEY,
   oai_harvest_conf_id  DECIMAL(10),
   oai_record_id        VARCHAR(128),
+  updated              TIMESTAMP,
   deleted              TIMESTAMP,
   format               VARCHAR(12) NOT NULL,
   isbn                 VARCHAR(32),
