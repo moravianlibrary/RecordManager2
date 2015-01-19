@@ -48,20 +48,18 @@ public class OAIItemReader implements ItemReader<List<OAIRecord>>, ItemStream,
 
 	@Override
 	public List<OAIRecord> read() {
-		try (SessionBinder session = sync.register()) {
-			if (finished) {
-				return null;
-			}
-			OAIListRecords listRecords = harvester.listRecords(resumptionToken);
-			resumptionToken = listRecords.getNextResumptionToken();
-			if (resumptionToken == null) {
-				finished = true;
-			}
-			if (listRecords.getRecords().isEmpty()) {
-				return null;
-			} else {
-				return listRecords.getRecords();
-			}
+		if (finished) {
+			return null;
+		}
+		OAIListRecords listRecords = harvester.listRecords(resumptionToken);
+		resumptionToken = listRecords.getNextResumptionToken();
+		if (resumptionToken == null) {
+			finished = true;
+		}
+		if (listRecords.getRecords().isEmpty()) {
+			return null;
+		} else {
+			return listRecords.getRecords();
 		}
 	}
 

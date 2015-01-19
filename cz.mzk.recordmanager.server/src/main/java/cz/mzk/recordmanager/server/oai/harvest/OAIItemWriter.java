@@ -75,32 +75,30 @@ public class OAIItemWriter implements ItemWriter<List<OAIRecord>>,
 	}
 
 	protected void write(OAIRecord record) throws TransformerException {
-		try (SessionBinder session = sync.register()) {
-			String recordId = record.getHeader().getIdentifier();
-			HarvestedRecord rec = recordDao.findByIdAndHarvestConfiguration(
-					recordId, configuration);
-			if (rec == null) {
-				rec = new HarvestedRecord();
-				rec.setOaiRecordId(record.getHeader().getIdentifier());
-				rec.setHarvestedFrom(configuration);
-				rec.setFormat(format);
-			}
-			if (record.getHeader().isDeleted()) {
-				rec.setDeleted(new Date());
-				rec.setRawRecord(null);
-			} else {
-				Element element = record.getMetadata().getElement();
-				rec.setRawRecord(asByteArray(element));
-			}
-			try {
-				dedupKeysParser.parse(rec);
-			} catch (DedupKeyParserException dkpe) {
-				logger.error(
-						"Dedup keys could not be generated for {}, exception thrown.",
-						record, dkpe);
-			}
-			recordDao.persist(rec);
+		String recordId = record.getHeader().getIdentifier();
+		HarvestedRecord rec = recordDao.findByIdAndHarvestConfiguration(
+				recordId, configuration);
+		if (rec == null) {
+			rec = new HarvestedRecord();
+			rec.setOaiRecordId(record.getHeader().getIdentifier());
+			rec.setHarvestedFrom(configuration);
+			rec.setFormat(format);
 		}
+		if (record.getHeader().isDeleted()) {
+			rec.setDeleted(new Date());
+			rec.setRawRecord(null);
+		} else {
+			Element element = record.getMetadata().getElement();
+			rec.setRawRecord(asByteArray(element));
+		}
+		try {
+			dedupKeysParser.parse(rec);
+		} catch (DedupKeyParserException dkpe) {
+			logger.error(
+					"Dedup keys could not be generated for {}, exception thrown.",
+					record, dkpe);
+		}
+		recordDao.persist(rec);
 	}
 
 	protected byte[] asByteArray(Element element) throws TransformerException {

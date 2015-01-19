@@ -1,13 +1,17 @@
 package cz.mzk.recordmanager.server;
 
 import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.sql.Connection;
 
 import javax.sql.DataSource;
 
 import org.dbunit.database.DatabaseConnection;
 import org.dbunit.database.IDatabaseConnection;
+import org.dbunit.dataset.xml.FlatXmlDataSet;
+import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.dbunit.dataset.xml.FlatXmlWriter;
+import org.dbunit.operation.DatabaseOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -24,6 +28,18 @@ public class DBUnitHelper {
 					new FileOutputStream(outputFile));
 			datasetWriter.setDocType("dataset.dtd");
 			datasetWriter.write(conn.createDataSet());
+		}
+	}
+
+	public void init(String resourceFile) throws Exception {
+		try (Connection connection = dataSource.getConnection()) {
+			IDatabaseConnection conn = new DatabaseConnection(connection);
+			InputStream is = DBUnitHelper.class.getClassLoader()
+					.getResourceAsStream(resourceFile);
+			FlatXmlDataSetBuilder builder = new FlatXmlDataSetBuilder();
+			builder.setColumnSensing(true);
+			FlatXmlDataSet dataset = builder.build(is);
+			DatabaseOperation.CLEAN_INSERT.execute(conn, dataset);
 		}
 	}
 

@@ -17,7 +17,7 @@ CREATE TABLE contact_person (
   name                 VARCHAR(128),
   email                VARCHAR(128),
   phone                VARCHAR(32),
-  FOREIGN KEY (library_id) REFERENCES library(id)
+  CONSTRAINT contact_person_library_id_fk FOREIGN KEY (library_id) REFERENCES library(id)
 );
 
 CREATE TABLE oai_harvest_conf (
@@ -27,8 +27,8 @@ CREATE TABLE oai_harvest_conf (
   set_spec             VARCHAR(128),
   metadata_prefix      VARCHAR(128),
   contact_person_id    DECIMAL(10),
-  FOREIGN KEY (library_id)        REFERENCES library(id),
-  FOREIGN KEY (contact_person_id) REFERENCES contact_person(id)
+  CONSTRAINT oai_harvest_conf_library_id_fk        FOREIGN KEY (library_id)        REFERENCES library(id),
+  CONSTRAINT oai_harvest_conf_contact_person_id_fk FOREIGN KEY (contact_person_id) REFERENCES contact_person(id)
 );
 
 CREATE TABLE format (
@@ -53,7 +53,7 @@ CREATE TABLE harvested_record (
   title                VARCHAR(255),
   dedup_record_id      DECIMAL(10),
   raw_record           BLOB,
-  FOREIGN KEY (oai_harvest_conf_id) REFERENCES oai_harvest_conf(id),
-  FOREIGN KEY (format)              REFERENCES format(format),
-  FOREIGN KEY (dedup_record_id)     REFERENCES dedup_record(id)
+  CONSTRAINT harvested_record_oai_harvest_conf_id_fk FOREIGN KEY (oai_harvest_conf_id) REFERENCES oai_harvest_conf(id),
+  CONSTRAINT harvested_record_format_fk              FOREIGN KEY (format)              REFERENCES format(format),
+  CONSTRAINT harvested_record_dedup_record_id_fk     FOREIGN KEY (dedup_record_id)     REFERENCES dedup_record(id)
 );

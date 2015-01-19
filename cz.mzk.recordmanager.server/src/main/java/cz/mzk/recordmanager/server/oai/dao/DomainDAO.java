@@ -14,5 +14,7 @@ public interface DomainDAO<ID extends Serializable, T> {
 	public T persist(T object);
 	
 	public void delete(T object);
+	
+	public void flush();
 
 }

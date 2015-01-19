@@ -31,7 +31,7 @@ import org.springframework.orm.hibernate4.HibernateTransactionManager;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import cz.mzk.recordmanager.server.dedup.DedupKeysGeneratorJobConfig;
+import cz.mzk.recordmanager.server.dedup.DedupRecordsJobConfig;
 import cz.mzk.recordmanager.server.oai.harvest.OAIHarvestJobConfig;
 import cz.mzk.recordmanager.server.oai.harvest.OAIHarvesterFactory;
 import cz.mzk.recordmanager.server.oai.harvest.OAIHarvesterFactoryImpl;
@@ -128,7 +128,7 @@ public class AppConfig extends DefaultBatchConfigurer {
     
     @Bean
     public ApplicationContextFactory moreJobs() {
-    	return new GenericApplicationContextFactory(OAIHarvestJobConfig.class, DedupKeysGeneratorJobConfig.class);
+    	return new GenericApplicationContextFactory(OAIHarvestJobConfig.class, DedupRecordsJobConfig.class);
     }
     
     @Bean

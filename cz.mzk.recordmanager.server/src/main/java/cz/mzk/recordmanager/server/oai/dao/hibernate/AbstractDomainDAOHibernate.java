@@ -52,4 +52,9 @@ public class AbstractDomainDAOHibernate<ID extends Serializable, T> implements D
 				  clazz.getGenericSuperclass()).getActualTypeArguments()[1];
 	}
 
+	@Override
+	public void flush() {
+		sessionFactory.getCurrentSession().flush();
+	}
+
 }
