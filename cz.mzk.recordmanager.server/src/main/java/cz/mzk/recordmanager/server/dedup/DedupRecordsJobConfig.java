@@ -55,9 +55,9 @@ public class DedupRecordsJobConfig {
 		JdbcPagingItemReader<Long> reader = new JdbcPagingItemReader<Long>();
 		SqlPagingQueryProviderFactoryBean pqpf = new SqlPagingQueryProviderFactoryBean();
 		pqpf.setDataSource(dataSource);
-		pqpf.setSelectClause("SELECT id");
-		pqpf.setFromClause("FROM harvested_record");
-		pqpf.setWhereClause("WHERE dedup_record_id IS NULL");
+		pqpf.setSelectClause("SELECT hr.id");
+		pqpf.setFromClause("FROM harvested_record hr LEFT JOIN record_link rl ON hr.id = rl.harvested_record_id");
+		pqpf.setWhereClause("WHERE rl.harvested_record_id IS NULL");
 		pqpf.setSortKey("id");
 		reader.setRowMapper(new LongValueRowMapper());
 		reader.setPageSize(100);

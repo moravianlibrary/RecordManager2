@@ -57,3 +57,9 @@ CREATE TABLE harvested_record (
   CONSTRAINT harvested_record_format_fk              FOREIGN KEY (format)              REFERENCES format(format),
   CONSTRAINT harvested_record_dedup_record_id_fk     FOREIGN KEY (dedup_record_id)     REFERENCES dedup_record(id)
 );
+
+CREATE TABLE record_link (
+  harvested_record_id  DECIMAL(10),
+  dedup_record_id      DECIMAL(10),
+  CONSTRAINT record_link_PK PRIMARY KEY (harvested_record_id, dedup_record_id) 
+);

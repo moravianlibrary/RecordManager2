@@ -42,10 +42,6 @@ public class HarvestedRecord extends AbstractDomainObject {
 	@Column(name="title")
 	private String title;
 	
-	@ManyToOne(optional=true)
-	@JoinColumn(name="dedup_record_id", nullable=true)
-	private DedupRecord dedupRecord;
-	
 	@Basic(fetch = FetchType.LAZY)
 	@Column(name="raw_record") 
 	private byte[] rawRecord;
@@ -104,14 +100,6 @@ public class HarvestedRecord extends AbstractDomainObject {
 
 	public void setTitle(String title) {
 		this.title = title;
-	}
-
-	public DedupRecord getDedupRecord() {
-		return dedupRecord;
-	}
-
-	public void setDedupRecord(DedupRecord dedupRecord) {
-		this.dedupRecord = dedupRecord;
 	}
 
 	public byte[] getRawRecord() {
