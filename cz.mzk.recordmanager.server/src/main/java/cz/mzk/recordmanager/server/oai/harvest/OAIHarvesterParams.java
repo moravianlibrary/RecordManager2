@@ -9,6 +9,8 @@ public class OAIHarvesterParams {
 	private String metadataPrefix;
 
 	private String set;
+	
+	private String granularity;
 
 	private Date from;
 
@@ -37,6 +39,14 @@ public class OAIHarvesterParams {
 	public void setSet(String set) {
 		this.set = set;
 	}
+	
+	public String getGranularity() {
+		return granularity;
+	}
+
+	public void setGranularity(String granularity) {
+		this.granularity = granularity;
+	}
 
 	public Date getFrom() {
 		return from;
@@ -53,5 +63,14 @@ public class OAIHarvesterParams {
 	public void setUntil(Date until) {
 		this.until = until;
 	}
+
+	@Override
+	public String toString() {
+		return "OAIHarvesterParams [url=" + url + ", metadataPrefix="
+				+ metadataPrefix + ", set=" + set + ", granularity="
+				+ granularity + ", from=" + from + ", until=" + until + "]";
+	}
+	
+	
 
 }

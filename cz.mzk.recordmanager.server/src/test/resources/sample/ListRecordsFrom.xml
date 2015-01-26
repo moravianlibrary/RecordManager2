@@ -1,0 +1,914 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<OAI-PMH xmlns="http://www.openarchives.org/OAI/2.0/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/
+http://www.openarchives.org/OAI/2.0/OAI-PMH.xsd">
+	<responseDate>2015-01-23T11:47:21Z</responseDate>
+	<request verb="ListRecords" from="2015-01-01T00:00:00Z"
+		metadataPrefix="marc21">http://aleph.mzk.cz/OAI</request>
+	<ListRecords>
+		<record>
+			<header>
+				<identifier>oai:aleph.mzk.cz:MZK01-000113478</identifier>
+				<datestamp>2015-01-01T14:42:39Z</datestamp>
+				<setSpec>MZKALL</setSpec>
+			</header>
+			<metadata>
+				<marc:record xmlns:marc="http://www.loc.gov/MARC21/slim"
+					xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+					xsi:schemaLocation="http://www.loc.gov/MARC21/slim
+http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd">
+					<marc:leader>     nam a22     2a 4500</marc:leader>
+					<marc:controlfield tag="001">000113478</marc:controlfield>
+					<marc:controlfield tag="003">CZ BrMZK</marc:controlfield>
+					<marc:controlfield tag="005">19970103143423.0</marc:controlfield>
+					<marc:controlfield tag="008">970103s1991    xr     f            cze d</marc:controlfield>
+					<marc:datafield tag="015" ind1=" " ind2=" ">
+						<marc:subfield code="a">cnb000067543</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="035" ind1=" " ind2=" ">
+						<marc:subfield code="a">(OCoLC)85634971</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="040" ind1=" " ind2=" ">
+						<marc:subfield code="a">BOA001</marc:subfield>
+						<marc:subfield code="b">cze</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="080" ind1=" " ind2=" ">
+						<marc:subfield code="a">681.3.07(075.8)</marc:subfield>
+						<marc:subfield code="2">MRF</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="080" ind1=" " ind2=" ">
+						<marc:subfield code="a">681.3.066(075.8)</marc:subfield>
+						<marc:subfield code="2">MRF</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="100" ind1="1" ind2=" ">
+						<marc:subfield code="a">Staudek, Jan,</marc:subfield>
+						<marc:subfield code="d">1945-</marc:subfield>
+						<marc:subfield code="7">jk01120964</marc:subfield>
+						<marc:subfield code="4">com</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="245" ind1="1" ind2="0">
+						<marc:subfield code="a">Operační a databázové systémy /</marc:subfield>
+						<marc:subfield code="c">Jan Staudek, Jaroslav Pokorný, Jan Brodský</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="250" ind1=" " ind2=" ">
+						<marc:subfield code="a">1. vyd.</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="260" ind1=" " ind2=" ">
+						<marc:subfield code="a">Brno :</marc:subfield>
+						<marc:subfield code="b">Vysoké učení technické,</marc:subfield>
+						<marc:subfield code="c">1991</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="300" ind1=" " ind2=" ">
+						<marc:subfield code="a">162 s.</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="700" ind1="1" ind2=" ">
+						<marc:subfield code="a">Pokorný, Jaroslav,</marc:subfield>
+						<marc:subfield code="d">1948-</marc:subfield>
+						<marc:subfield code="7">skuk0001118</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="700" ind1="1" ind2=" ">
+						<marc:subfield code="a">Brodský, Jan,</marc:subfield>
+						<marc:subfield code="d">1947-</marc:subfield>
+						<marc:subfield code="7">jo2003197094</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="910" ind1=" " ind2=" ">
+						<marc:subfield code="a">BOA001</marc:subfield>
+						<marc:subfield code="b">TK-A-0248.009</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="990" ind1=" " ind2=" ">
+						<marc:subfield code="a">BK</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="996" ind1="7" ind2=" ">
+						<marc:subfield code="b">2629962950</marc:subfield>
+						<marc:subfield code="c">TK-A-0248.009</marc:subfield>
+						<marc:subfield code="l">PP2</marc:subfield>
+						<marc:subfield code="r">DEN</marc:subfield>
+						<marc:subfield code="n">11</marc:subfield>
+						<marc:subfield code="w">000113478</marc:subfield>
+						<marc:subfield code="a">1</marc:subfield>
+						<marc:subfield code="e">BOA001</marc:subfield>
+						<marc:subfield code="s">A</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="996" ind1="7" ind2=" ">
+						<marc:subfield code="b">2629967554</marc:subfield>
+						<marc:subfield code="c">TK-A-0248.009</marc:subfield>
+						<marc:subfield code="l">PP2</marc:subfield>
+						<marc:subfield code="r">DEN</marc:subfield>
+						<marc:subfield code="n">2</marc:subfield>
+						<marc:subfield code="w">000113478</marc:subfield>
+						<marc:subfield code="a">1</marc:subfield>
+						<marc:subfield code="e">BOA001</marc:subfield>
+						<marc:subfield code="s">A</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="996" ind1="7" ind2=" ">
+						<marc:subfield code="b">2629980583</marc:subfield>
+						<marc:subfield code="c">TK-A-0248.009</marc:subfield>
+						<marc:subfield code="l">PP2</marc:subfield>
+						<marc:subfield code="r">DEN</marc:subfield>
+						<marc:subfield code="n">4</marc:subfield>
+						<marc:subfield code="w">000113478</marc:subfield>
+						<marc:subfield code="a">1</marc:subfield>
+						<marc:subfield code="e">BOA001</marc:subfield>
+						<marc:subfield code="s">A</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="996" ind1="7" ind2=" ">
+						<marc:subfield code="b">2629989967</marc:subfield>
+						<marc:subfield code="c">TK-A-0248.009</marc:subfield>
+						<marc:subfield code="l">PP2</marc:subfield>
+						<marc:subfield code="r">DEN</marc:subfield>
+						<marc:subfield code="n">5</marc:subfield>
+						<marc:subfield code="w">000113478</marc:subfield>
+						<marc:subfield code="a">1</marc:subfield>
+						<marc:subfield code="e">BOA001</marc:subfield>
+						<marc:subfield code="s">A</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="996" ind1="0" ind2=" ">
+						<marc:subfield code="b">2629991816</marc:subfield>
+						<marc:subfield code="c">TK-A-0248.009</marc:subfield>
+						<marc:subfield code="l">PP2</marc:subfield>
+						<marc:subfield code="r">DEN</marc:subfield>
+						<marc:subfield code="n">4</marc:subfield>
+						<marc:subfield code="p">970000 ztr. 987.307/1995</marc:subfield>
+						<marc:subfield code="w">000113478</marc:subfield>
+						<marc:subfield code="a">1</marc:subfield>
+						<marc:subfield code="q">0</marc:subfield>
+						<marc:subfield code="e">BOA001</marc:subfield>
+						<marc:subfield code="s">V</marc:subfield>
+					</marc:datafield>
+				</marc:record>
+			</metadata>
+		</record>
+		<record>
+			<header>
+				<identifier>oai:aleph.mzk.cz:MZK01-000115005</identifier>
+				<datestamp>2015-01-01T14:46:44Z</datestamp>
+				<setSpec>MZKALL</setSpec>
+			</header>
+			<metadata>
+				<marc:record xmlns:marc="http://www.loc.gov/MARC21/slim"
+					xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+					xsi:schemaLocation="http://www.loc.gov/MARC21/slim
+http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd">
+					<marc:leader>     nam a22     2a 4500</marc:leader>
+					<marc:controlfield tag="001">000115005</marc:controlfield>
+					<marc:controlfield tag="003">CZ BrMZK</marc:controlfield>
+					<marc:controlfield tag="005">19970103143423.0</marc:controlfield>
+					<marc:controlfield tag="008">970103s1992    xr     f            cze d</marc:controlfield>
+					<marc:datafield tag="015" ind1=" " ind2=" ">
+						<marc:subfield code="a">cnb000065792</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="035" ind1=" " ind2=" ">
+						<marc:subfield code="a">(OCoLC)85679404</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="040" ind1=" " ind2=" ">
+						<marc:subfield code="a">BOA001</marc:subfield>
+						<marc:subfield code="b">cze</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="080" ind1=" " ind2=" ">
+						<marc:subfield code="a">801.316.4:69=85=30</marc:subfield>
+						<marc:subfield code="2">MRF</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="080" ind1=" " ind2=" ">
+						<marc:subfield code="a">69(038)</marc:subfield>
+						<marc:subfield code="2">MRF</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="245" ind1="0" ind2="0">
+						<marc:subfield code="a">Česko-německý stavební slovník /</marc:subfield>
+						<marc:subfield code="c">zprac. Antonie Kejvanová</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="250" ind1=" " ind2=" ">
+						<marc:subfield code="a">1. vyd.</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="260" ind1=" " ind2=" ">
+						<marc:subfield code="a">Praha :</marc:subfield>
+						<marc:subfield code="b">SNTL-Nakladatelství technické literatury,</marc:subfield>
+						<marc:subfield code="c">1992</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="300" ind1=" " ind2=" ">
+						<marc:subfield code="a">499 s.</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="700" ind1="1" ind2=" ">
+						<marc:subfield code="a">Kejvanová, Antonie</marc:subfield>
+						<marc:subfield code="7">jx20040120001</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="910" ind1=" " ind2=" ">
+						<marc:subfield code="a">BOA001</marc:subfield>
+						<marc:subfield code="b">TK-0250.612</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="990" ind1=" " ind2=" ">
+						<marc:subfield code="a">BK</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="996" ind1="6" ind2=" ">
+						<marc:subfield code="b">115005-10</marc:subfield>
+						<marc:subfield code="c">TK-0250.612</marc:subfield>
+						<marc:subfield code="l">PP2</marc:subfield>
+						<marc:subfield code="r">DEN</marc:subfield>
+						<marc:subfield code="n">0</marc:subfield>
+						<marc:subfield code="w">000115005</marc:subfield>
+						<marc:subfield code="a">1</marc:subfield>
+						<marc:subfield code="e">BOA001</marc:subfield>
+						<marc:subfield code="s">P</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="996" ind1="6" ind2=" ">
+						<marc:subfield code="b">2629960588</marc:subfield>
+						<marc:subfield code="c">TK-0250.612</marc:subfield>
+						<marc:subfield code="l">TK1</marc:subfield>
+						<marc:subfield code="r">STM7</marc:subfield>
+						<marc:subfield code="n">0</marc:subfield>
+						<marc:subfield code="h">69 ČES</marc:subfield>
+						<marc:subfield code="w">000115005</marc:subfield>
+						<marc:subfield code="a">0</marc:subfield>
+						<marc:subfield code="e">BOA001</marc:subfield>
+						<marc:subfield code="s">P</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="996" ind1="7" ind2=" ">
+						<marc:subfield code="b">2629980747</marc:subfield>
+						<marc:subfield code="c">TK-0250.612</marc:subfield>
+						<marc:subfield code="l">PP2</marc:subfield>
+						<marc:subfield code="r">DEN</marc:subfield>
+						<marc:subfield code="n">9</marc:subfield>
+						<marc:subfield code="w">000115005</marc:subfield>
+						<marc:subfield code="a">1</marc:subfield>
+						<marc:subfield code="e">BOA001</marc:subfield>
+						<marc:subfield code="s">A</marc:subfield>
+					</marc:datafield>
+				</marc:record>
+			</metadata>
+		</record>
+		<record>
+			<header>
+				<identifier>oai:aleph.mzk.cz:MZK01-000115170</identifier>
+				<datestamp>2015-01-01T14:47:16Z</datestamp>
+				<setSpec>MZKALL</setSpec>
+			</header>
+			<metadata>
+				<marc:record xmlns:marc="http://www.loc.gov/MARC21/slim"
+					xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+					xsi:schemaLocation="http://www.loc.gov/MARC21/slim
+http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd">
+					<marc:leader>     nam a22     2a 4500</marc:leader>
+					<marc:controlfield tag="001">000115170</marc:controlfield>
+					<marc:controlfield tag="003">CZ BrMZK</marc:controlfield>
+					<marc:controlfield tag="005">20080331075227.0</marc:controlfield>
+					<marc:controlfield tag="007">ta</marc:controlfield>
+					<marc:controlfield tag="008">010907s1992    xr     f            cze d</marc:controlfield>
+					<marc:datafield tag="015" ind1=" " ind2=" ">
+						<marc:subfield code="a">cnb000075401</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="035" ind1=" " ind2=" ">
+						<marc:subfield code="a">(OCoLC)85637369</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="040" ind1=" " ind2=" ">
+						<marc:subfield code="a">BOA001</marc:subfield>
+						<marc:subfield code="b">cze</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="080" ind1="9" ind2=" ">
+						<marc:subfield code="a">621.77(075)</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="100" ind1="1" ind2=" ">
+						<marc:subfield code="a">Novotný, Karel,</marc:subfield>
+						<marc:subfield code="d">1938-</marc:subfield>
+						<marc:subfield code="7">mzk2004148401</marc:subfield>
+						<marc:subfield code="4">aut</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="245" ind1="1" ind2="0">
+						<marc:subfield code="a">Speciální technologie I :</marc:subfield>
+						<marc:subfield code="b">plošné a objemové tváření /</marc:subfield>
+						<marc:subfield code="c">Karel Novotný, Zdeněk Macháček</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="250" ind1=" " ind2=" ">
+						<marc:subfield code="a">2. vyd.</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="260" ind1=" " ind2=" ">
+						<marc:subfield code="a">Brno :</marc:subfield>
+						<marc:subfield code="b">Vysoké učení technické,</marc:subfield>
+						<marc:subfield code="c">1992</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="300" ind1=" " ind2=" ">
+						<marc:subfield code="a">171 s.</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="490" ind1="1" ind2=" ">
+						<marc:subfield code="a">Učební texty vysokých škol</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="504" ind1=" " ind2=" ">
+						<marc:subfield code="a">Obsahuje bibliografii</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="700" ind1="1" ind2=" ">
+						<marc:subfield code="a">Macháček, Zdeněk</marc:subfield>
+						<marc:subfield code="7">jk01072964</marc:subfield>
+						<marc:subfield code="4">aut</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="810" ind1="2" ind2=" ">
+						<marc:subfield code="a">Vysoké učení technické v Brně.</marc:subfield>
+						<marc:subfield code="t">Učební texty vysokých škol</marc:subfield>
+						<marc:subfield code="0">s</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="910" ind1=" " ind2=" ">
+						<marc:subfield code="a">BOA001</marc:subfield>
+						<marc:subfield code="b">TK-A-0249.856</marc:subfield>
+						<marc:subfield code="b">4-0979.349</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="920" ind1=" " ind2=" ">
+						<marc:subfield code="a">000377014</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="964" ind1=" " ind2=" ">
+						<marc:subfield code="a">Tváření plošné - technologie speciální - učebnice - školy vysoké</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="964" ind1=" " ind2=" ">
+						<marc:subfield code="a">Tváření objemové - technologie speciální - učebnice - školy vysoké</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="990" ind1=" " ind2=" ">
+						<marc:subfield code="a">BK</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="996" ind1="7" ind2=" ">
+						<marc:subfield code="b">2619793308</marc:subfield>
+						<marc:subfield code="c">4-0979.349</marc:subfield>
+						<marc:subfield code="l">SK7</marc:subfield>
+						<marc:subfield code="r">SKL</marc:subfield>
+						<marc:subfield code="n">15</marc:subfield>
+						<marc:subfield code="w">000115170</marc:subfield>
+						<marc:subfield code="a">1</marc:subfield>
+						<marc:subfield code="e">BOA001</marc:subfield>
+						<marc:subfield code="s">A</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="996" ind1="7" ind2=" ">
+						<marc:subfield code="b">2629961546</marc:subfield>
+						<marc:subfield code="c">TK-A-0249.856</marc:subfield>
+						<marc:subfield code="l">PP2</marc:subfield>
+						<marc:subfield code="r">DEN</marc:subfield>
+						<marc:subfield code="n">12</marc:subfield>
+						<marc:subfield code="w">000115170</marc:subfield>
+						<marc:subfield code="a">1</marc:subfield>
+						<marc:subfield code="e">BOA001</marc:subfield>
+						<marc:subfield code="s">A</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="996" ind1="7" ind2=" ">
+						<marc:subfield code="b">2629980758</marc:subfield>
+						<marc:subfield code="c">TK-A-0249.856</marc:subfield>
+						<marc:subfield code="l">PP2</marc:subfield>
+						<marc:subfield code="r">DEN</marc:subfield>
+						<marc:subfield code="n">13</marc:subfield>
+						<marc:subfield code="w">000115170</marc:subfield>
+						<marc:subfield code="a">1</marc:subfield>
+						<marc:subfield code="e">BOA001</marc:subfield>
+						<marc:subfield code="s">A</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="996" ind1="0" ind2=" ">
+						<marc:subfield code="b">2629987871</marc:subfield>
+						<marc:subfield code="c">TK-A-0249.856</marc:subfield>
+						<marc:subfield code="l">PP2</marc:subfield>
+						<marc:subfield code="r">DEN</marc:subfield>
+						<marc:subfield code="n">1</marc:subfield>
+						<marc:subfield code="p">110105 Ztr.169/10</marc:subfield>
+						<marc:subfield code="w">000115170</marc:subfield>
+						<marc:subfield code="a">1</marc:subfield>
+						<marc:subfield code="q">0</marc:subfield>
+						<marc:subfield code="e">BOA001</marc:subfield>
+						<marc:subfield code="s">V</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="996" ind1="7" ind2=" ">
+						<marc:subfield code="b">2629988365</marc:subfield>
+						<marc:subfield code="c">TK-A-0249.856</marc:subfield>
+						<marc:subfield code="l">PP2</marc:subfield>
+						<marc:subfield code="r">DEN</marc:subfield>
+						<marc:subfield code="n">6</marc:subfield>
+						<marc:subfield code="w">000115170</marc:subfield>
+						<marc:subfield code="a">1</marc:subfield>
+						<marc:subfield code="e">BOA001</marc:subfield>
+						<marc:subfield code="s">A</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="996" ind1="0" ind2=" ">
+						<marc:subfield code="b">2629992286</marc:subfield>
+						<marc:subfield code="c">TK-A-0249.856</marc:subfield>
+						<marc:subfield code="l">PP2</marc:subfield>
+						<marc:subfield code="r">DEN</marc:subfield>
+						<marc:subfield code="n">0</marc:subfield>
+						<marc:subfield code="p">040608 ztr. 341/04</marc:subfield>
+						<marc:subfield code="w">000115170</marc:subfield>
+						<marc:subfield code="a">1</marc:subfield>
+						<marc:subfield code="q">0</marc:subfield>
+						<marc:subfield code="e">BOA001</marc:subfield>
+						<marc:subfield code="s">V</marc:subfield>
+					</marc:datafield>
+				</marc:record>
+			</metadata>
+		</record>
+		<record>
+			<header>
+				<identifier>oai:aleph.mzk.cz:MZK01-000115259</identifier>
+				<datestamp>2015-01-01T14:49:24Z</datestamp>
+				<setSpec>MZKALL</setSpec>
+			</header>
+			<metadata>
+				<marc:record xmlns:marc="http://www.loc.gov/MARC21/slim"
+					xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+					xsi:schemaLocation="http://www.loc.gov/MARC21/slim
+http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd">
+					<marc:leader>     nam a22      a 4500</marc:leader>
+					<marc:controlfield tag="001">nkc20142597353</marc:controlfield>
+					<marc:controlfield tag="003">CZ PrNK</marc:controlfield>
+					<marc:controlfield tag="005">20150101165953.0</marc:controlfield>
+					<marc:controlfield tag="007">ta</marc:controlfield>
+					<marc:controlfield tag="008">140623s2014    xr     e      001 0dcze  </marc:controlfield>
+					<marc:datafield tag="015" ind1=" " ind2=" ">
+						<marc:subfield code="a">cnb002597353</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="020" ind1=" " ind2=" ">
+						<marc:subfield code="a">978-80-246-2557-7</marc:subfield>
+						<marc:subfield code="q">(brož.)</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="035" ind1=" " ind2=" ">
+						<marc:subfield code="a">(OCoLC)897868476</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="040" ind1=" " ind2=" ">
+						<marc:subfield code="a">ABA001</marc:subfield>
+						<marc:subfield code="b">cze</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="041" ind1="0" ind2=" ">
+						<marc:subfield code="a">cze</marc:subfield>
+						<marc:subfield code="b">eng</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="072" ind1=" " ind2="7">
+						<marc:subfield code="a">13</marc:subfield>
+						<marc:subfield code="x">Filozofie ducha</marc:subfield>
+						<marc:subfield code="2">Konspekt</marc:subfield>
+						<marc:subfield code="9">5</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="080" ind1=" " ind2=" ">
+						<marc:subfield code="a">2-264</marc:subfield>
+						<marc:subfield code="2">MRF</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="080" ind1=" " ind2=" ">
+						<marc:subfield code="a">398.21</marc:subfield>
+						<marc:subfield code="2">MRF</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="080" ind1=" " ind2=" ">
+						<marc:subfield code="a">82-343</marc:subfield>
+						<marc:subfield code="2">MRF</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="080" ind1=" " ind2=" ">
+						<marc:subfield code="a">165.212</marc:subfield>
+						<marc:subfield code="2">MRF</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="080" ind1=" " ind2=" ">
+						<marc:subfield code="a">2-12/-17-264-027.14</marc:subfield>
+						<marc:subfield code="2">MRF</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="080" ind1=" " ind2=" ">
+						<marc:subfield code="a">7.04</marc:subfield>
+						<marc:subfield code="2">MRF</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="080" ind1=" " ind2=" ">
+						<marc:subfield code="a">159.954/.955</marc:subfield>
+						<marc:subfield code="2">MRF</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="080" ind1=" " ind2=" ">
+						<marc:subfield code="a">93/94</marc:subfield>
+						<marc:subfield code="2">MRF</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="080" ind1=" " ind2=" ">
+						<marc:subfield code="a">2-1</marc:subfield>
+						<marc:subfield code="2">MRF</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="080" ind1=" " ind2=" ">
+						<marc:subfield code="a">(048.8)</marc:subfield>
+						<marc:subfield code="2">MRF</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="100" ind1="1" ind2=" ">
+						<marc:subfield code="a">Novotný, David Jan,</marc:subfield>
+						<marc:subfield code="d">1947-</marc:subfield>
+						<marc:subfield code="7">jk01090652</marc:subfield>
+						<marc:subfield code="4">aut</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="245" ind1="1" ind2="0">
+						<marc:subfield code="a">Úvahy o mýtu /</marc:subfield>
+						<marc:subfield code="c">David Jan Novotný</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="250" ind1=" " ind2=" ">
+						<marc:subfield code="a">Vyd. 1.</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="260" ind1=" " ind2=" ">
+						<marc:subfield code="a">Praha :</marc:subfield>
+						<marc:subfield code="b">Karolinum,</marc:subfield>
+						<marc:subfield code="c">2014</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="300" ind1=" " ind2=" ">
+						<marc:subfield code="a">260 s. ;</marc:subfield>
+						<marc:subfield code="c">21 cm</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="504" ind1=" " ind2=" ">
+						<marc:subfield code="a">Obsahuje bibliografii, bibliografické odkazy a rejstřík</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="546" ind1=" " ind2=" ">
+						<marc:subfield code="a">Anglické resumé</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="550" ind1=" " ind2=" ">
+						<marc:subfield code="a">Vydavatel: Univerzita Karlova v Praze</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="650" ind1="0" ind2="7">
+						<marc:subfield code="a">mýty</marc:subfield>
+						<marc:subfield code="7">ph123146</marc:subfield>
+						<marc:subfield code="2">czenas</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="650" ind1="0" ind2="7">
+						<marc:subfield code="a">symboly</marc:subfield>
+						<marc:subfield code="7">ph126351</marc:subfield>
+						<marc:subfield code="2">czenas</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="650" ind1="0" ind2="7">
+						<marc:subfield code="a">archetypy (psychologie)</marc:subfield>
+						<marc:subfield code="7">ph118505</marc:subfield>
+						<marc:subfield code="2">czenas</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="650" ind1="0" ind2="7">
+						<marc:subfield code="a">náměty, témata a motivy</marc:subfield>
+						<marc:subfield code="7">ph138485</marc:subfield>
+						<marc:subfield code="2">czenas</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="650" ind1="0" ind2="7">
+						<marc:subfield code="a">tvůrčí myšlení</marc:subfield>
+						<marc:subfield code="7">ph116508</marc:subfield>
+						<marc:subfield code="2">czenas</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="650" ind1="0" ind2="7">
+						<marc:subfield code="a">dějiny</marc:subfield>
+						<marc:subfield code="7">ph114390</marc:subfield>
+						<marc:subfield code="x">mytologické aspekty</marc:subfield>
+						<marc:subfield code="2">czenas</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="650" ind1="0" ind2="9">
+						<marc:subfield code="a">myths</marc:subfield>
+						<marc:subfield code="2">eczenas</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="650" ind1="0" ind2="9">
+						<marc:subfield code="a">symbols</marc:subfield>
+						<marc:subfield code="2">eczenas</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="650" ind1="0" ind2="9">
+						<marc:subfield code="a">archetypes</marc:subfield>
+						<marc:subfield code="2">eczenas</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="650" ind1="0" ind2="9">
+						<marc:subfield code="a">themes and motives</marc:subfield>
+						<marc:subfield code="2">eczenas</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="650" ind1="0" ind2="9">
+						<marc:subfield code="a">creative thinking</marc:subfield>
+						<marc:subfield code="2">eczenas</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="650" ind1="0" ind2="9">
+						<marc:subfield code="a">history</marc:subfield>
+						<marc:subfield code="x">mythological aspects</marc:subfield>
+						<marc:subfield code="2">eczenas</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="655" ind1=" " ind2="7">
+						<marc:subfield code="a">monografie</marc:subfield>
+						<marc:subfield code="7">fd132842</marc:subfield>
+						<marc:subfield code="2">czenas</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="655" ind1=" " ind2="9">
+						<marc:subfield code="a">monographs</marc:subfield>
+						<marc:subfield code="2">eczenas</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="710" ind1="2" ind2=" ">
+						<marc:subfield code="a">Univerzita Karlova</marc:subfield>
+						<marc:subfield code="7">kn20010710036</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="910" ind1="2" ind2=" ">
+						<marc:subfield code="a">BOA001</marc:subfield>
+						<marc:subfield code="b">2-1337.682</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="928" ind1="1" ind2=" ">
+						<marc:subfield code="a">Karolinum - nakladatelství Univerzity Karlovy v Praze</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="990" ind1=" " ind2=" ">
+						<marc:subfield code="a">BK</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="995" ind1=" " ind2=" ">
+						<marc:subfield code="a">01</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="991" ind1=" " ind2=" ">
+						<marc:subfield code="b">201412</marc:subfield>
+						<marc:subfield code="c">NOV</marc:subfield>
+						<marc:subfield code="e">n</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="996" ind1="6" ind2=" ">
+						<marc:subfield code="b">2610614142</marc:subfield>
+						<marc:subfield code="c">2-1337.682</marc:subfield>
+						<marc:subfield code="l">SK1</marc:subfield>
+						<marc:subfield code="r">SKL</marc:subfield>
+						<marc:subfield code="n">0</marc:subfield>
+						<marc:subfield code="p">p.v.</marc:subfield>
+						<marc:subfield code="w">001476506</marc:subfield>
+						<marc:subfield code="a">1</marc:subfield>
+						<marc:subfield code="e">BOA001</marc:subfield>
+						<marc:subfield code="s">P</marc:subfield>
+					</marc:datafield>
+				</marc:record>
+			</metadata>
+		</record>
+		<record>
+			<header>
+				<identifier>oai:aleph.mzk.cz:MZK01-001422571</identifier>
+				<datestamp>2015-01-02T01:30:59Z</datestamp>
+				<setSpec>MZKALL</setSpec>
+			</header>
+			<metadata>
+				<marc:record xmlns:marc="http://www.loc.gov/MARC21/slim"
+					xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+					xsi:schemaLocation="http://www.loc.gov/MARC21/slim
+http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd">
+					<marc:leader>     nam a22      a 4500</marc:leader>
+					<marc:controlfield tag="001">nkc20142613790</marc:controlfield>
+					<marc:controlfield tag="003">CZ PrNK</marc:controlfield>
+					<marc:controlfield tag="005">20150101170043.0</marc:controlfield>
+					<marc:controlfield tag="007">ta</marc:controlfield>
+					<marc:controlfield tag="008">140818s2014    xr ach e      001 0 cze  </marc:controlfield>
+					<marc:datafield tag="015" ind1=" " ind2=" ">
+						<marc:subfield code="a">cnb002613790</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="020" ind1=" " ind2=" ">
+						<marc:subfield code="a">978-80-247-5023-1</marc:subfield>
+						<marc:subfield code="q">(brož.)</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="035" ind1=" " ind2=" ">
+						<marc:subfield code="a">(OCoLC)894844558</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="040" ind1=" " ind2=" ">
+						<marc:subfield code="a">OLA001</marc:subfield>
+						<marc:subfield code="b">cze</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="041" ind1="0" ind2=" ">
+						<marc:subfield code="a">cze</marc:subfield>
+						<marc:subfield code="b">cze</marc:subfield>
+						<marc:subfield code="b">eng</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="043" ind1=" " ind2=" ">
+						<marc:subfield code="a">e-be---</marc:subfield>
+						<marc:subfield code="a">e-xr---</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="045" ind1=" " ind2=" ">
+						<marc:subfield code="a">t1y1</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="072" ind1=" " ind2="7">
+						<marc:subfield code="a">611</marc:subfield>
+						<marc:subfield code="x">Anatomie člověka a srovnávací anatomie</marc:subfield>
+						<marc:subfield code="2">Konspekt</marc:subfield>
+						<marc:subfield code="9">14</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="080" ind1=" " ind2=" ">
+						<marc:subfield code="a">616-051</marc:subfield>
+						<marc:subfield code="2">MRF</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="080" ind1=" " ind2=" ">
+						<marc:subfield code="a">611</marc:subfield>
+						<marc:subfield code="2">MRF</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="080" ind1=" " ind2=" ">
+						<marc:subfield code="a">572.7</marc:subfield>
+						<marc:subfield code="2">MRF</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="080" ind1=" " ind2=" ">
+						<marc:subfield code="a">61(091)</marc:subfield>
+						<marc:subfield code="2">MRF</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="080" ind1=" " ind2=" ">
+						<marc:subfield code="a">371.3</marc:subfield>
+						<marc:subfield code="2">MRF</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="080" ind1=" " ind2=" ">
+						<marc:subfield code="a">(493)</marc:subfield>
+						<marc:subfield code="2">MRF</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="080" ind1=" " ind2=" ">
+						<marc:subfield code="a">(437.3)</marc:subfield>
+						<marc:subfield code="2">MRF</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="080" ind1=" " ind2=" ">
+						<marc:subfield code="a">(048.8:082)</marc:subfield>
+						<marc:subfield code="2">MRF</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="080" ind1=" " ind2=" ">
+						<marc:subfield code="a">(082.2)</marc:subfield>
+						<marc:subfield code="2">MRF</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="245" ind1="0" ind2="0">
+						<marc:subfield code="a">Anatomie od Vesalia po současnost :</marc:subfield>
+						<marc:subfield code="b">1514-2014 /</marc:subfield>
+						<marc:subfield code="c">[editoři Miloš Grim, Ondřej Naňka, Karel Černý ; autoři Hana Brichová ... et al.]</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="250" ind1=" " ind2=" ">
+						<marc:subfield code="a">1. vyd.</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="260" ind1=" " ind2=" ">
+						<marc:subfield code="a">Praha :</marc:subfield>
+						<marc:subfield code="b">Grada,</marc:subfield>
+						<marc:subfield code="c">2014</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="300" ind1=" " ind2=" ">
+						<marc:subfield code="a">xiv, 272 s. :</marc:subfield>
+						<marc:subfield code="b">il. (převážně barev.), portréty, faksim. ;</marc:subfield>
+						<marc:subfield code="c">30 cm</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="500" ind1=" " ind2=" ">
+						<marc:subfield code="a">&quot;Publikace k 500. výročí narození Andrea Vesalia&quot;</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="500" ind1=" " ind2=" ">
+						<marc:subfield code="a">Na obálce nad názvem: Univerzita Karlova v Praze, 1. lékařská fakulta, Česká anatomická společnost</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="504" ind1=" " ind2=" ">
+						<marc:subfield code="a">Obsahuje bibliografie, bibliografické odkazy a rejstřík</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="546" ind1=" " ind2=" ">
+						<marc:subfield code="a">České a anglická resumé</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="600" ind1="1" ind2="7">
+						<marc:subfield code="a">Vesalius, Andrea,</marc:subfield>
+						<marc:subfield code="d">1514-1564</marc:subfield>
+						<marc:subfield code="7">jn19990008772</marc:subfield>
+						<marc:subfield code="2">czenas</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="648" ind1=" " ind2="4">
+						<marc:subfield code="a">1514-2014</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="648" ind1=" " ind2="4">
+						<marc:subfield code="a">1514-1564</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="648" ind1=" " ind2="7">
+						<marc:subfield code="a">16.-21. stol.</marc:subfield>
+						<marc:subfield code="7">ch757033</marc:subfield>
+						<marc:subfield code="2">czenas</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="648" ind1=" " ind2="7">
+						<marc:subfield code="a">17.-21. stol.</marc:subfield>
+						<marc:subfield code="7">ch757027</marc:subfield>
+						<marc:subfield code="2">czenas</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="650" ind1="0" ind2="7">
+						<marc:subfield code="a">lékaři</marc:subfield>
+						<marc:subfield code="7">ph122495</marc:subfield>
+						<marc:subfield code="z">Belgie</marc:subfield>
+						<marc:subfield code="y">16. stol.</marc:subfield>
+						<marc:subfield code="2">czenas</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="650" ind1="0" ind2="7">
+						<marc:subfield code="a">lékaři</marc:subfield>
+						<marc:subfield code="7">ph122495</marc:subfield>
+						<marc:subfield code="y">16.-21. stol.</marc:subfield>
+						<marc:subfield code="2">czenas</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="650" ind1="0" ind2="7">
+						<marc:subfield code="a">anatomie člověka</marc:subfield>
+						<marc:subfield code="7">ph118421</marc:subfield>
+						<marc:subfield code="2">czenas</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="650" ind1="0" ind2="7">
+						<marc:subfield code="a">morfologie člověka</marc:subfield>
+						<marc:subfield code="7">ph122986</marc:subfield>
+						<marc:subfield code="2">czenas</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="650" ind1="0" ind2="7">
+						<marc:subfield code="a">dějiny lékařství</marc:subfield>
+						<marc:subfield code="7">ph484341</marc:subfield>
+						<marc:subfield code="y">16.-21. stol.</marc:subfield>
+						<marc:subfield code="2">czenas</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="650" ind1="0" ind2="7">
+						<marc:subfield code="a">dějiny lékařství</marc:subfield>
+						<marc:subfield code="7">ph484341</marc:subfield>
+						<marc:subfield code="z">Česko</marc:subfield>
+						<marc:subfield code="y">16.-21. stol.</marc:subfield>
+						<marc:subfield code="2">czenas</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="650" ind1="0" ind2="7">
+						<marc:subfield code="a">studium a výuka</marc:subfield>
+						<marc:subfield code="7">ph136700</marc:subfield>
+						<marc:subfield code="z">Česko</marc:subfield>
+						<marc:subfield code="y">17.-21. stol.</marc:subfield>
+						<marc:subfield code="2">czenas</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="650" ind1="0" ind2="9">
+						<marc:subfield code="a">physicians</marc:subfield>
+						<marc:subfield code="z">Belgium</marc:subfield>
+						<marc:subfield code="y">16th century</marc:subfield>
+						<marc:subfield code="2">eczenas</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="650" ind1="0" ind2="9">
+						<marc:subfield code="a">physicians</marc:subfield>
+						<marc:subfield code="y">16th-21st centuries</marc:subfield>
+						<marc:subfield code="2">eczenas</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="650" ind1="0" ind2="9">
+						<marc:subfield code="a">human anatomy</marc:subfield>
+						<marc:subfield code="2">eczenas</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="650" ind1="0" ind2="9">
+						<marc:subfield code="a">human morphology</marc:subfield>
+						<marc:subfield code="2">eczenas</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="650" ind1="0" ind2="9">
+						<marc:subfield code="a">history of medicine</marc:subfield>
+						<marc:subfield code="y">16th-21st centuries</marc:subfield>
+						<marc:subfield code="2">eczenas</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="650" ind1="0" ind2="9">
+						<marc:subfield code="a">history of medicine</marc:subfield>
+						<marc:subfield code="z">Czechia</marc:subfield>
+						<marc:subfield code="y">16th-21st centuries</marc:subfield>
+						<marc:subfield code="2">eczenas</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="650" ind1="0" ind2="9">
+						<marc:subfield code="a">study and teaching</marc:subfield>
+						<marc:subfield code="z">Czechia</marc:subfield>
+						<marc:subfield code="y">17th-21st centuries</marc:subfield>
+						<marc:subfield code="2">eczenas</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="655" ind1=" " ind2="7">
+						<marc:subfield code="a">kolektivní monografie</marc:subfield>
+						<marc:subfield code="7">fd501537</marc:subfield>
+						<marc:subfield code="2">czenas</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="655" ind1=" " ind2="7">
+						<marc:subfield code="a">jubilejní publikace</marc:subfield>
+						<marc:subfield code="7">fd131839</marc:subfield>
+						<marc:subfield code="2">czenas</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="655" ind1=" " ind2="9">
+						<marc:subfield code="a">collective monographs</marc:subfield>
+						<marc:subfield code="2">eczenas</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="655" ind1=" " ind2="9">
+						<marc:subfield code="a">jubilee books</marc:subfield>
+						<marc:subfield code="2">eczenas</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="700" ind1="1" ind2=" ">
+						<marc:subfield code="a">Grim, Miloš,</marc:subfield>
+						<marc:subfield code="d">1941-</marc:subfield>
+						<marc:subfield code="7">jn20000602504</marc:subfield>
+						<marc:subfield code="4">aut</marc:subfield>
+						<marc:subfield code="4">edt</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="700" ind1="1" ind2=" ">
+						<marc:subfield code="a">Naňka, Ondřej,</marc:subfield>
+						<marc:subfield code="d">1972-</marc:subfield>
+						<marc:subfield code="7">mzk2006348905</marc:subfield>
+						<marc:subfield code="4">aut</marc:subfield>
+						<marc:subfield code="4">edt</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="700" ind1="1" ind2=" ">
+						<marc:subfield code="a">Černý, Karel,</marc:subfield>
+						<marc:subfield code="d">1974-</marc:subfield>
+						<marc:subfield code="7">jo2002106622</marc:subfield>
+						<marc:subfield code="4">aut</marc:subfield>
+						<marc:subfield code="4">edt</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="700" ind1="1" ind2=" ">
+						<marc:subfield code="a">Brichová, Hana,</marc:subfield>
+						<marc:subfield code="d">1939-</marc:subfield>
+						<marc:subfield code="7">jo2002101394</marc:subfield>
+						<marc:subfield code="4">aut</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="710" ind1="2" ind2=" ">
+						<marc:subfield code="a">Univerzita Karlova.</marc:subfield>
+						<marc:subfield code="b">Lékařská fakulta, 1.</marc:subfield>
+						<marc:subfield code="7">kn20010709366</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="710" ind1="2" ind2=" ">
+						<marc:subfield code="a">Česká anatomická společnost</marc:subfield>
+						<marc:subfield code="7">ko2002147947</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="910" ind1="2" ind2=" ">
+						<marc:subfield code="a">BOA001</marc:subfield>
+						<marc:subfield code="b">4-1332.266</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="928" ind1="1" ind2=" ">
+						<marc:subfield code="a">Grada Publishing</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="990" ind1=" " ind2=" ">
+						<marc:subfield code="a">BK</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="995" ind1=" " ind2=" ">
+						<marc:subfield code="a">01</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="991" ind1=" " ind2=" ">
+						<marc:subfield code="b">201410</marc:subfield>
+						<marc:subfield code="c">NOV</marc:subfield>
+						<marc:subfield code="e">n</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="996" ind1="6" ind2=" ">
+						<marc:subfield code="b">2610605299</marc:subfield>
+						<marc:subfield code="c">4-1332.266</marc:subfield>
+						<marc:subfield code="l">SK7</marc:subfield>
+						<marc:subfield code="r">SKL</marc:subfield>
+						<marc:subfield code="n">0</marc:subfield>
+						<marc:subfield code="p">p.v.</marc:subfield>
+						<marc:subfield code="w">001458263</marc:subfield>
+						<marc:subfield code="a">1</marc:subfield>
+						<marc:subfield code="e">BOA001</marc:subfield>
+						<marc:subfield code="s">P</marc:subfield>
+					</marc:datafield>
+				</marc:record>
+			</metadata>
+		</record>
+	</ListRecords>
+</OAI-PMH> 

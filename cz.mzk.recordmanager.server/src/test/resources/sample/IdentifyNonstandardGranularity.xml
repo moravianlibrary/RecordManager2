@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OAI-PMH xmlns="http://www.openarchives.org/OAI/2.0/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/ http://www.openarchives.org/OAI/2.0/OAI-PMH.xsd">
+	<responseDate>2015-01-26T00:00:00Z</responseDate>
+	<request verb="Identify">http://oai.medvik.cz/medvik2cpk/oai</request>
+	<Identify>
+		<repositoryName>Katalog MEDVIK</repositoryName>
+		<baseURL>http://oai.medvik.cz/medvik2cpk/oai</baseURL>
+		<protocolVersion>2.0</protocolVersion>
+		<adminEmail>medvik@nlk.cz</adminEmail>
+		<earliestDatestamp>1900-01-01</earliestDatestamp>
+		<deletedRecord>persistent</deletedRecord>
+		<granularity>YYYY-MM-DD</granularity>
+	</Identify>
+</OAI-PMH>

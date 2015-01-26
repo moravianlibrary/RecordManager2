@@ -26,6 +26,7 @@ CREATE TABLE oai_harvest_conf (
   url                  VARCHAR(128),
   set_spec             VARCHAR(128),
   metadata_prefix      VARCHAR(128),
+  granularity          VARCHAR(30),
   contact_person_id    DECIMAL(10),
   CONSTRAINT oai_harvest_conf_library_id_fk        FOREIGN KEY (library_id)        REFERENCES library(id),
   CONSTRAINT oai_harvest_conf_contact_person_id_fk FOREIGN KEY (contact_person_id) REFERENCES contact_person(id)

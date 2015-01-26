@@ -1,0 +1,394 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<OAI-PMH xmlns="http://www.openarchives.org/OAI/2.0/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/
+http://www.openarchives.org/OAI/2.0/OAI-PMH.xsd">
+	<responseDate>2015-01-23T11:49:26Z</responseDate>
+	<request verb="ListRecords" until="2015-01-01T00:00:00Z"
+		metadataPrefix="marc21">http://aleph.mzk.cz/OAI</request>
+	<ListRecords>
+		<record>
+			<header>
+				<identifier>oai:aleph.mzk.cz:MZK01-000000116</identifier>
+				<datestamp>2014-12-27T20:11:38Z</datestamp>
+				<setSpec>MZKALL</setSpec>
+			</header>
+			<metadata>
+				<marc:record xmlns:marc="http://www.loc.gov/MARC21/slim"
+					xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+					xsi:schemaLocation="http://www.loc.gov/MARC21/slim
+http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd">
+					<marc:leader>     nam a22     2a 4500</marc:leader>
+					<marc:controlfield tag="001">000000116</marc:controlfield>
+					<marc:controlfield tag="003">CZ BrMZK</marc:controlfield>
+					<marc:controlfield tag="005">20080317144103.0</marc:controlfield>
+					<marc:controlfield tag="007">ta</marc:controlfield>
+					<marc:controlfield tag="008">950101s1991    xr     f            cze d</marc:controlfield>
+					<marc:datafield tag="040" ind1=" " ind2=" ">
+						<marc:subfield code="a">BOA001</marc:subfield>
+						<marc:subfield code="b">cze</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="041" ind1="1" ind2=" ">
+						<marc:subfield code="a">cze</marc:subfield>
+						<marc:subfield code="b">ger</marc:subfield>
+						<marc:subfield code="b">rus</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="080" ind1="9" ind2=" ">
+						<marc:subfield code="a">808.2-56</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="100" ind1="1" ind2=" ">
+						<marc:subfield code="a">Flídrová, Helena,</marc:subfield>
+						<marc:subfield code="d">1941-</marc:subfield>
+						<marc:subfield code="7">jk01031434</marc:subfield>
+						<marc:subfield code="4">aut</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="245" ind1="1" ind2="0">
+						<marc:subfield code="a">Sociolingvistické a psycholingvistické aspekty dialogu a polylogu v ruštině /</marc:subfield>
+						<marc:subfield code="c">Helena Flídrová</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="250" ind1=" " ind2=" ">
+						<marc:subfield code="a">1. vyd.</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="260" ind1=" " ind2=" ">
+						<marc:subfield code="a">Praha :</marc:subfield>
+						<marc:subfield code="b">Státní pedagogické nakladatelství,</marc:subfield>
+						<marc:subfield code="c">1991</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="300" ind1=" " ind2=" ">
+						<marc:subfield code="a">174 s.</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="490" ind1="1" ind2=" ">
+						<marc:subfield code="a">Acta Universitatis Palackianae Olomucensis. Facultas philosophica ;</marc:subfield>
+						<marc:subfield code="v">Suppl. 29/1989</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="504" ind1=" " ind2=" ">
+						<marc:subfield code="a">Obsahuje bibliografii</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="546" ind1=" " ind2=" ">
+						<marc:subfield code="a">Německé a ruské resumé</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="830" ind1=" " ind2="0">
+						<marc:subfield code="a">Acta Universitatis Palackianae Olomucensis.</marc:subfield>
+						<marc:subfield code="p">Facultas philosophica</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="910" ind1=" " ind2=" ">
+						<marc:subfield code="a">BOA001</marc:subfield>
+						<marc:subfield code="b">2-0966.152</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="964" ind1=" " ind2=" ">
+						<marc:subfield code="a">Ruština - polylogy - dialogy</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="990" ind1=" " ind2=" ">
+						<marc:subfield code="a">BK</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="996" ind1="6" ind2=" ">
+						<marc:subfield code="b">2619905610</marc:subfield>
+						<marc:subfield code="c">2-0966.152</marc:subfield>
+						<marc:subfield code="l">SK0</marc:subfield>
+						<marc:subfield code="r">SKL</marc:subfield>
+						<marc:subfield code="n">11</marc:subfield>
+						<marc:subfield code="p">UN1 ;</marc:subfield>
+						<marc:subfield code="w">000000116</marc:subfield>
+						<marc:subfield code="a">1</marc:subfield>
+						<marc:subfield code="e">BOA001</marc:subfield>
+						<marc:subfield code="s">P</marc:subfield>
+					</marc:datafield>
+				</marc:record>
+			</metadata>
+		</record>
+		<record>
+			<header>
+				<identifier>oai:aleph.mzk.cz:MZK01-000000117</identifier>
+				<datestamp>2014-12-27T20:11:38Z</datestamp>
+				<setSpec>MZKALL</setSpec>
+			</header>
+			<metadata>
+				<marc:record xmlns:marc="http://www.loc.gov/MARC21/slim"
+					xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+					xsi:schemaLocation="http://www.loc.gov/MARC21/slim
+http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd">
+					<marc:leader>     nam a22      a 4500</marc:leader>
+					<marc:controlfield tag="001">000000145</marc:controlfield>
+					<marc:controlfield tag="003">CZ BrMZK</marc:controlfield>
+					<marc:controlfield tag="005">19940304143423.0</marc:controlfield>
+					<marc:controlfield tag="008">940224s1993    xx     f            und d</marc:controlfield>
+					<marc:datafield tag="020" ind1=" " ind2=" ">
+						<marc:subfield code="c">30.00</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="040" ind1=" " ind2=" ">
+						<marc:subfield code="a">BOA001</marc:subfield>
+						<marc:subfield code="b">cze</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="100" ind1="1" ind2=" ">
+						<marc:subfield code="a">Agréus, Lars</marc:subfield>
+						<marc:subfield code="4">aut</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="245" ind1="1" ind2="4">
+						<marc:subfield code="a">The Abdominal Symptom Study /</marc:subfield>
+						<marc:subfield code="c">Lars Agréus</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="260" ind1=" " ind2=" ">
+						<marc:subfield code="a">Uppsala :</marc:subfield>
+						<marc:subfield code="b">Uppsala University,</marc:subfield>
+						<marc:subfield code="c">1993</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="541" ind1=" " ind2=" ">
+						<marc:subfield code="a">Brno, Přírodovědecká fakulta MU</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="910" ind1=" " ind2=" ">
+						<marc:subfield code="a">BOA001</marc:subfield>
+						<marc:subfield code="b">M2-0996.741</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="990" ind1=" " ind2=" ">
+						<marc:subfield code="a">BK</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="996" ind1="7" ind2=" ">
+						<marc:subfield code="b">2610005974</marc:subfield>
+						<marc:subfield code="c">M2-0996.741</marc:subfield>
+						<marc:subfield code="l">SK8</marc:subfield>
+						<marc:subfield code="r">DEN</marc:subfield>
+						<marc:subfield code="n">0</marc:subfield>
+						<marc:subfield code="p">vým</marc:subfield>
+						<marc:subfield code="w">000000145</marc:subfield>
+						<marc:subfield code="a">1</marc:subfield>
+						<marc:subfield code="e">BOA001</marc:subfield>
+						<marc:subfield code="s">A</marc:subfield>
+					</marc:datafield>
+				</marc:record>
+			</metadata>
+		</record>
+		<record>
+			<header>
+				<identifier>oai:aleph.mzk.cz:MZK01-000000146</identifier>
+				<datestamp>2014-12-27T20:11:40Z</datestamp>
+				<setSpec>MZKALL</setSpec>
+			</header>
+			<metadata>
+				<marc:record xmlns:marc="http://www.loc.gov/MARC21/slim"
+					xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+					xsi:schemaLocation="http://www.loc.gov/MARC21/slim
+http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd">
+					<marc:leader>     nam a22     2a 4500</marc:leader>
+					<marc:controlfield tag="001">000000146</marc:controlfield>
+					<marc:controlfield tag="003">CZ BrMZK</marc:controlfield>
+					<marc:controlfield tag="005">20141217101215.0</marc:controlfield>
+					<marc:controlfield tag="007">ta</marc:controlfield>
+					<marc:controlfield tag="008">940530s1987    xr a   f            cze d</marc:controlfield>
+					<marc:datafield tag="040" ind1=" " ind2=" ">
+						<marc:subfield code="a">BOA001</marc:subfield>
+						<marc:subfield code="b">cze</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="100" ind1="1" ind2=" ">
+						<marc:subfield code="a">Sekora, Ondřej,</marc:subfield>
+						<marc:subfield code="d">1899-1967</marc:subfield>
+						<marc:subfield code="7">jk01110710</marc:subfield>
+						<marc:subfield code="4">ill</marc:subfield>
+						<marc:subfield code="4">aut</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="245" ind1="1" ind2="0">
+						<marc:subfield code="a">Knížka Ferdy Mravence :</marc:subfield>
+						<marc:subfield code="b">(Ferda Mravenec, Ferda Mravenec v cizích službách, Ferda v mraveništi) : četba pro žáky základních škol /</marc:subfield>
+						<marc:subfield code="c">napsal a nakreslil Ondřej Sekora</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="250" ind1=" " ind2=" ">
+						<marc:subfield code="a">Dotisk 8. vyd.</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="260" ind1=" " ind2=" ">
+						<marc:subfield code="a">Praha :</marc:subfield>
+						<marc:subfield code="b">Albatros,</marc:subfield>
+						<marc:subfield code="c">1987</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="300" ind1=" " ind2=" ">
+						<marc:subfield code="a">179 s.</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="490" ind1="1" ind2=" ">
+						<marc:subfield code="a">Klub mladých čtenářů</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="521" ind1="8" ind2=" ">
+						<marc:subfield code="a">Pro čtenáře od 6 let</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="830" ind1=" " ind2="0">
+						<marc:subfield code="a">Klub mladých čtenářů (Albatros)</marc:subfield>
+						<marc:subfield code="0">s</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="910" ind1=" " ind2=" ">
+						<marc:subfield code="a">BOA001</marc:subfield>
+						<marc:subfield code="b">4-0936.929</marc:subfield>
+						<marc:subfield code="b">PK-N-0027.304</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="920" ind1=" " ind2=" ">
+						<marc:subfield code="a">000023366</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="990" ind1=" " ind2=" ">
+						<marc:subfield code="a">BK</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="996" ind1="3" ind2=" ">
+						<marc:subfield code="b">2619805301</marc:subfield>
+						<marc:subfield code="c">4-0936.929</marc:subfield>
+						<marc:subfield code="l">SK7</marc:subfield>
+						<marc:subfield code="r">SKL</marc:subfield>
+						<marc:subfield code="n">4</marc:subfield>
+						<marc:subfield code="w">000000146</marc:subfield>
+						<marc:subfield code="a">1</marc:subfield>
+						<marc:subfield code="e">BOA001</marc:subfield>
+						<marc:subfield code="s">N</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="996" ind1="7" ind2=" ">
+						<marc:subfield code="b">3119998734</marc:subfield>
+						<marc:subfield code="c">PK-N-0027.304</marc:subfield>
+						<marc:subfield code="l">SK3</marc:subfield>
+						<marc:subfield code="r">SKL</marc:subfield>
+						<marc:subfield code="n">4</marc:subfield>
+						<marc:subfield code="w">000000146</marc:subfield>
+						<marc:subfield code="a">1</marc:subfield>
+						<marc:subfield code="e">BOA001</marc:subfield>
+						<marc:subfield code="s">A</marc:subfield>
+					</marc:datafield>
+				</marc:record>
+			</metadata>
+		</record>
+		<record>
+			<header>
+				<identifier>oai:aleph.mzk.cz:MZK01-000000148</identifier>
+				<datestamp>2014-12-27T20:11:40Z</datestamp>
+				<setSpec>MZKALL</setSpec>
+			</header>
+			<metadata>
+				<marc:record xmlns:marc="http://www.loc.gov/MARC21/slim"
+					xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+					xsi:schemaLocation="http://www.loc.gov/MARC21/slim
+http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd">
+					<marc:leader>     nam a22     2a 4500</marc:leader>
+					<marc:controlfield tag="001">000000148</marc:controlfield>
+					<marc:controlfield tag="003">CZ BrMZK</marc:controlfield>
+					<marc:controlfield tag="005">20140414092732.0</marc:controlfield>
+					<marc:controlfield tag="008">940812s1858    xr     f            cze d</marc:controlfield>
+					<marc:datafield tag="040" ind1=" " ind2=" ">
+						<marc:subfield code="a">BOA001</marc:subfield>
+						<marc:subfield code="b">cze</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="100" ind1="1" ind2=" ">
+						<marc:subfield code="a">Bíba, Vincenc Dominik,</marc:subfield>
+						<marc:subfield code="d">1820-1906</marc:subfield>
+						<marc:subfield code="7">jk01011999</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="245" ind1="1" ind2="0">
+						<marc:subfield code="a">Cvičení slohová pro hlavní a obecné školy</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="260" ind1=" " ind2=" ">
+						<marc:subfield code="a">Praha,</marc:subfield>
+						<marc:subfield code="c">1858</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="910" ind1=" " ind2=" ">
+						<marc:subfield code="a">BOA001</marc:subfield>
+						<marc:subfield code="b">1-0178.332</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="990" ind1=" " ind2=" ">
+						<marc:subfield code="a">BK</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="993" ind1=" " ind2=" ">
+						<marc:subfield code="a">Y</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="996" ind1="6" ind2=" ">
+						<marc:subfield code="b">2619851653</marc:subfield>
+						<marc:subfield code="c">1-0178.332</marc:subfield>
+						<marc:subfield code="l">SK6</marc:subfield>
+						<marc:subfield code="r">SKL</marc:subfield>
+						<marc:subfield code="n">0</marc:subfield>
+						<marc:subfield code="w">000000148</marc:subfield>
+						<marc:subfield code="a">1</marc:subfield>
+						<marc:subfield code="e">BOA001</marc:subfield>
+						<marc:subfield code="s">P</marc:subfield>
+					</marc:datafield>
+				</marc:record>
+			</metadata>
+		</record>
+		<record>
+			<header>
+				<identifier>oai:aleph.mzk.cz:MZK01-000000149</identifier>
+				<datestamp>2014-12-27T20:11:40Z</datestamp>
+				<setSpec>MZKALL</setSpec>
+			</header>
+			<metadata>
+				<marc:record xmlns:marc="http://www.loc.gov/MARC21/slim"
+					xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+					xsi:schemaLocation="http://www.loc.gov/MARC21/slim
+http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd">
+					<marc:leader>     nam a22      a 4500</marc:leader>
+					<marc:controlfield tag="001">000000149</marc:controlfield>
+					<marc:controlfield tag="003">CZ BrMZK</marc:controlfield>
+					<marc:controlfield tag="005">20140916080313.0</marc:controlfield>
+					<marc:controlfield tag="008">940117s1993    xr     f            cze d</marc:controlfield>
+					<marc:datafield tag="020" ind1=" " ind2=" ">
+						<marc:subfield code="c">100.00</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="040" ind1=" " ind2=" ">
+						<marc:subfield code="a">BOA001</marc:subfield>
+						<marc:subfield code="b">cze</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="080" ind1=" " ind2=" ">
+						<marc:subfield code="a">82-84(082)=850</marc:subfield>
+						<marc:subfield code="2">MRF</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="100" ind1="1" ind2=" ">
+						<marc:subfield code="a">Chromý, Zdeněk,</marc:subfield>
+						<marc:subfield code="d">1941-</marc:subfield>
+						<marc:subfield code="7">jn20001227036</marc:subfield>
+						<marc:subfield code="4">com</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="245" ind1="1" ind2="0">
+						<marc:subfield code="a">Abeceda moudrosti /</marc:subfield>
+						<marc:subfield code="c">Sest.: Zdeněk Chromý</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="260" ind1=" " ind2=" ">
+						<marc:subfield code="a">Brno :</marc:subfield>
+						<marc:subfield code="b">Proxima,</marc:subfield>
+						<marc:subfield code="c">1993</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="300" ind1=" " ind2=" ">
+						<marc:subfield code="a">478 s.</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="500" ind1=" " ind2=" ">
+						<marc:subfield code="a">Bibliogr. s. 472-478</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="655" ind1=" " ind2="7">
+						<marc:subfield code="a">citáty</marc:subfield>
+						<marc:subfield code="7">fd131832</marc:subfield>
+						<marc:subfield code="2">czenas</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="910" ind1=" " ind2=" ">
+						<marc:subfield code="a">BOA001</marc:subfield>
+						<marc:subfield code="b">2-0995.621</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="990" ind1=" " ind2=" ">
+						<marc:subfield code="a">BK</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="996" ind1="1" ind2=" ">
+						<marc:subfield code="b">2610004685</marc:subfield>
+						<marc:subfield code="c">2-0995.621</marc:subfield>
+						<marc:subfield code="l">SK0</marc:subfield>
+						<marc:subfield code="r">SKL</marc:subfield>
+						<marc:subfield code="n">0</marc:subfield>
+						<marc:subfield code="p">p.v. ; 0 rev. 2002</marc:subfield>
+						<marc:subfield code="w">000000149</marc:subfield>
+						<marc:subfield code="a">1</marc:subfield>
+						<marc:subfield code="q">0</marc:subfield>
+						<marc:subfield code="e">BOA001</marc:subfield>
+						<marc:subfield code="s">Z</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="996" ind1="6" ind2=" ">
+						<marc:subfield code="b">2610604424</marc:subfield>
+						<marc:subfield code="c">2-0995.621</marc:subfield>
+						<marc:subfield code="l">SK0</marc:subfield>
+						<marc:subfield code="r">SKL</marc:subfield>
+						<marc:subfield code="n">1</marc:subfield>
+						<marc:subfield code="p">dar</marc:subfield>
+						<marc:subfield code="w">000000149</marc:subfield>
+						<marc:subfield code="a">1</marc:subfield>
+						<marc:subfield code="e">BOA001</marc:subfield>
+						<marc:subfield code="s">P</marc:subfield>
+					</marc:datafield>
+				</marc:record>
+			</metadata>
+		</record>
+	</ListRecords>
+</OAI-PMH> 

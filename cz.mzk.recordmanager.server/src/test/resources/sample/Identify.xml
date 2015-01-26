@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<OAI-PMH xmlns="http://www.openarchives.org/OAI/2.0/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/
+http://www.openarchives.org/OAI/2.0/OAI-PMH.xsd">
+	<responseDate>2015-01-22T14:43:19Z</responseDate>
+	<request>http://aleph.mzk.cz/OAI</request>
+	<Identify>
+		<repositoryName>MZK Brno</repositoryName>
+		<baseURL>http://oai.mzk.cz/OAI</baseURL>
+		<protocolVersion>2.0</protocolVersion>
+		<adminEmail>petra@mzk.cz</adminEmail>
+		<earliestDatestamp>2014-12-27T20:11:38Z</earliestDatestamp>
+		<deletedRecord>transient</deletedRecord>
+		<granularity>YYYY-MM-DDThh:mm:ssZ</granularity>
+		<description>
+			<oai-identifier xmlns="http://www.openarchives.org/OAI/2.0/oai-identifier"
+				xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+				xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai-identifier             http://www.openarchives.org/OAI/2.0/oai-identifier.xsd">
+				<scheme>oai</scheme>
+				<repositoryIdentifier>aleph.mzk.cz</repositoryIdentifier>
+				<delimiter>:</delimiter>
+				<sampleIdentifier>oai:aleph.mzk.cz:MZK01-000000001</sampleIdentifier>
+			</oai-identifier>
+		</description>
+	</Identify>
+</OAI-PMH> 

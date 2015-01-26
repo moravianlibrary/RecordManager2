@@ -2,6 +2,8 @@ package cz.mzk.recordmanager.server.oai.harvest;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,6 +16,8 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
 
+import cz.mzk.recordmanager.server.oai.model.OAIIdentify;
+import cz.mzk.recordmanager.server.oai.model.OAIIdentifyRequest;
 import cz.mzk.recordmanager.server.oai.model.OAIListRecords;
 import cz.mzk.recordmanager.server.util.HttpClient;
 import cz.mzk.recordmanager.server.util.UrlUtils;
@@ -55,6 +59,23 @@ public class OAIHarvester {
 			throw new RuntimeException(je);
 		}
 	}
+	
+	public OAIIdentify identify() {
+		String url = createIdentifyURL();
+		logger.info("About send Identify request for url: {}", url);
+		try (InputStream is = httpClient.executeGet(url)) {
+			JAXBContext jaxbContext = JAXBContext.newInstance(OAIIdentifyRequest.class);
+			Unmarshaller identifyUnmarshaller = jaxbContext.createUnmarshaller();
+			OAIIdentifyRequest identifyReq = (OAIIdentifyRequest) identifyUnmarshaller
+					.unmarshal(is);
+			logger.info("Finished Identify request for url: {}", url);
+			return identifyReq != null ? identifyReq.getIdentify() : null;
+		} catch (IOException ioe) {
+			throw new RuntimeException(ioe);
+		} catch (JAXBException je) {
+			throw new RuntimeException(je);
+		}
+	}
 
 	private String createUrl(String resumptionToken) {
 		Map<String, String> params = new HashMap<String, String>();
@@ -63,11 +84,39 @@ public class OAIHarvester {
 			if (parameters.getSet() != null) {
 				params.put("set", parameters.getSet());
 			}
+			if (parameters.getFrom() != null) {
+				params.put("from", formatDate(parameters.getFrom()));
+			}
+			if (parameters.getUntil() != null) {
+				params.put("until", formatDate(parameters.getUntil()));
+			}
+			
 		} else {
 			params.put("resumptionToken", resumptionToken);
 		}
+		
 		params.put("verb", "ListRecords");
 		return UrlUtils.buildUrl(parameters.getUrl(), params);
+	}
+	
+	private String createIdentifyURL() {
+		Map<String, String> params = new HashMap<String, String>();
+		params.put("verb", "Identify");
+		return UrlUtils.buildUrl(parameters.getUrl(), params);
+	}
+	
+	/**
+	 * format {@link Date} according to stored date/time granularity
+	 * @param date
+	 * @return formated date
+	 */
+	private String formatDate (final Date date) {
+		String format = "yyyy-MM-dd'T'HH:mm:ss'Z'";
+		if (parameters.getGranularity() != null && parameters.getGranularity().length() < 11) {
+			format = "yyyy-MM-dd";
+		}
+		SimpleDateFormat sdf = new SimpleDateFormat(format);
+		return sdf.format(date);
 	}
 
 }

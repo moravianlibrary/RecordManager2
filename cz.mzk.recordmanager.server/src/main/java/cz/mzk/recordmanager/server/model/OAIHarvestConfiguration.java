@@ -24,6 +24,9 @@ public class OAIHarvestConfiguration extends AbstractDomainObject {
 	@Column(name="set_spec")
 	private String set;
 	
+	@Column(name="granularity")
+	private String granularity;
+
 	@Column(name="metadata_prefix")
 	private String metadataPrefix;
 
@@ -55,6 +58,14 @@ public class OAIHarvestConfiguration extends AbstractDomainObject {
 	public void setSet(String set) {
 		this.set = set;
 	}
+	
+	public String getGranularity() {
+		return granularity;
+	}
+
+	public void setGranularity(String granularity) {
+		this.granularity = granularity;
+	}
 
 	public String getMetadataPrefix() {
 		return metadataPrefix;
@@ -63,5 +74,4 @@ public class OAIHarvestConfiguration extends AbstractDomainObject {
 	public void setMetadataPrefix(String metadataPrefix) {
 		this.metadataPrefix = metadataPrefix;
 	}
-
 }

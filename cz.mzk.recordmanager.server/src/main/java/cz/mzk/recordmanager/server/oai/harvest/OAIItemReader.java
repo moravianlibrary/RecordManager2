@@ -1,6 +1,6 @@
 package cz.mzk.recordmanager.server.oai.harvest;
 
-import java.io.Closeable;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.batch.core.ExitStatus;
@@ -17,8 +17,10 @@ import org.springframework.transaction.support.TransactionTemplate;
 
 import cz.mzk.recordmanager.server.model.OAIHarvestConfiguration;
 import cz.mzk.recordmanager.server.oai.dao.OAIHarvestConfigurationDAO;
+import cz.mzk.recordmanager.server.oai.model.OAIIdentify;
 import cz.mzk.recordmanager.server.oai.model.OAIListRecords;
 import cz.mzk.recordmanager.server.oai.model.OAIRecord;
+import cz.mzk.recordmanager.server.util.Constants;
 import cz.mzk.recordmanager.server.util.HibernateSessionSynchronizer;
 import cz.mzk.recordmanager.server.util.HibernateSessionSynchronizer.SessionBinder;
 
@@ -46,11 +48,16 @@ public class OAIItemReader implements ItemReader<List<OAIRecord>>, ItemStream,
 
 	private boolean finished = false;
 
+	private Long confId;
+	
 	@Override
 	public List<OAIRecord> read() {
 		if (finished) {
 			return null;
+		} else if (resumptionToken == null) {
+			processIdentify();
 		}
+		
 		OAIListRecords listRecords = harvester.listRecords(resumptionToken);
 		resumptionToken = listRecords.getNextResumptionToken();
 		if (resumptionToken == null) {
@@ -87,14 +94,37 @@ public class OAIItemReader implements ItemReader<List<OAIRecord>>, ItemStream,
 	@Override
 	public void beforeStep(final StepExecution stepExecution) {
 		try (SessionBinder session = sync.register()) {
-			Long confId = stepExecution.getJobParameters().getLong(
-					"configurationId");
+			confId = stepExecution.getJobParameters().getLong(
+					Constants.JOB_PARAM_CONF_ID);
 			OAIHarvestConfiguration conf = configDao.get(confId);
+
 			OAIHarvesterParams params = new OAIHarvesterParams();
 			params.setUrl(conf.getUrl());
 			params.setMetadataPrefix(conf.getMetadataPrefix());
+			params.setGranularity(conf.getGranularity());
+			Date fromDate = stepExecution.getJobParameters().getDate(Constants.JOB_PARAM_FROM_DATE);
+			if (fromDate != null) {
+				params.setFrom(fromDate);
+			}
+			Date untilDate = stepExecution.getJobParameters().getDate(Constants.JOB_PARAM_UNTIL_DATE);
+			if (untilDate != null) {
+				params.setUntil(untilDate);
+			}
 			harvester = harvesterFactory.create(params);
 		}
 	}
-
+	
+	/**
+	 * process Identify request and update stored {@link OAIHarvestConfiguration}
+	 */
+	private void processIdentify() {
+		OAIIdentify identify = harvester.identify();
+		if (identify.getGranularity() != null) {
+			OAIHarvestConfiguration conf = configDao.get(confId);
+			conf.setGranularity(identify.getGranularity());
+			configDao.persist(conf);
+		}
+		
+		
+	}
 }
