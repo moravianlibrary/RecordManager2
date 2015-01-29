@@ -2,6 +2,8 @@ package cz.mzk.recordmanager.server.dedup;
 
 import javax.sql.DataSource;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
@@ -20,6 +22,8 @@ import cz.mzk.recordmanager.server.springbatch.HibernateChunkListener;
 
 @Configuration
 public class DedupRecordsJobConfig {
+	
+	private static Logger logger = LoggerFactory.getLogger(DedupRecordsJobConfig.class);
 	
 	@Autowired
     private JobBuilderFactory jobs;
@@ -41,8 +45,8 @@ public class DedupRecordsJobConfig {
     @Bean
     public Step step(StepBuilderFactory stepBuilderFactory, ItemReader<Long> reader, ItemProcessor<Long, HarvestedRecord> processor,
     		DedupRecordsWriter writer) {
-		return steps.get("step")
-            .<Long, HarvestedRecord> chunk(1)
+		return steps.get("dedupRecordsStep")
+            .<Long, HarvestedRecord> chunk(20)
             .reader(reader)
             .processor(processor)
             .writer(writer)
@@ -60,9 +64,10 @@ public class DedupRecordsJobConfig {
 		pqpf.setWhereClause("WHERE rl.harvested_record_id IS NULL");
 		pqpf.setSortKey("id");
 		reader.setRowMapper(new LongValueRowMapper());
-		reader.setPageSize(100);
+		reader.setPageSize(20);
     	reader.setQueryProvider(pqpf.getObject());
     	reader.setDataSource(dataSource);
+    	reader.afterPropertiesSet();
     	return reader;
     }
 	

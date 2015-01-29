@@ -25,6 +25,7 @@ public class OAIHarvestJobConfig {
     @Bean
     public Job oaiHarvestJob(JobBuilderFactory jobs, Step step1) {
         return jobs.get("oaiHarvestJob")
+        		.validator(new OAIHarvestJobParametersValidator())
 				.flow(step1)
 				.end()
 				.build();

@@ -52,11 +52,9 @@ CREATE TABLE harvested_record (
   format               VARCHAR(12) NOT NULL,
   isbn                 VARCHAR(32),
   title                VARCHAR(255),
-  dedup_record_id      DECIMAL(10),
   raw_record           BLOB,
   CONSTRAINT harvested_record_oai_harvest_conf_id_fk FOREIGN KEY (oai_harvest_conf_id) REFERENCES oai_harvest_conf(id),
-  CONSTRAINT harvested_record_format_fk              FOREIGN KEY (format)              REFERENCES format(format),
-  CONSTRAINT harvested_record_dedup_record_id_fk     FOREIGN KEY (dedup_record_id)     REFERENCES dedup_record(id)
+  CONSTRAINT harvested_record_format_fk              FOREIGN KEY (format)              REFERENCES format(format)
 );
 
 CREATE TABLE record_link (

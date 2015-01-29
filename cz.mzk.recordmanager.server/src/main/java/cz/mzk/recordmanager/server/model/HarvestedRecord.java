@@ -109,5 +109,10 @@ public class HarvestedRecord extends AbstractDomainObject {
 	public void setRawRecord(byte[] rawRecord) {
 		this.rawRecord = rawRecord;
 	}
+	
+	@Override
+	public String toString() {
+		return String.format("HarvestedRecord[id=%s]", getId());
+	}
 
 }

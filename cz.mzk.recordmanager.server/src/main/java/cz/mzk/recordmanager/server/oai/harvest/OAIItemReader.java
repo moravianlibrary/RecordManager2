@@ -54,8 +54,6 @@ public class OAIItemReader implements ItemReader<List<OAIRecord>>, ItemStream,
 	public List<OAIRecord> read() {
 		if (finished) {
 			return null;
-		} else if (resumptionToken == null) {
-			processIdentify();
 		}
 		
 		OAIListRecords listRecords = harvester.listRecords(resumptionToken);
@@ -97,7 +95,6 @@ public class OAIItemReader implements ItemReader<List<OAIRecord>>, ItemStream,
 			confId = stepExecution.getJobParameters().getLong(
 					Constants.JOB_PARAM_CONF_ID);
 			OAIHarvestConfiguration conf = configDao.get(confId);
-
 			OAIHarvesterParams params = new OAIHarvesterParams();
 			params.setUrl(conf.getUrl());
 			params.setMetadataPrefix(conf.getMetadataPrefix());
@@ -111,20 +108,17 @@ public class OAIItemReader implements ItemReader<List<OAIRecord>>, ItemStream,
 				params.setUntil(untilDate);
 			}
 			harvester = harvesterFactory.create(params);
+			processIdentify(conf);
 		}
 	}
 	
 	/**
 	 * process Identify request and update stored {@link OAIHarvestConfiguration}
 	 */
-	private void processIdentify() {
+	private void processIdentify(OAIHarvestConfiguration conf) {
 		OAIIdentify identify = harvester.identify();
-		if (identify.getGranularity() != null) {
-			OAIHarvestConfiguration conf = configDao.get(confId);
-			conf.setGranularity(identify.getGranularity());
-			configDao.persist(conf);
-		}
-		
-		
+		conf.setGranularity(identify.getGranularity());
+		configDao.persist(conf);
 	}
+
 }

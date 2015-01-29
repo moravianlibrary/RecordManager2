@@ -38,6 +38,7 @@ public class DedupRecordsWriter implements ItemWriter<HarvestedRecord>  {
 	@Override
 	public void write(List<? extends HarvestedRecord> records) throws Exception {
 		for (HarvestedRecord record : records) {
+			logger.debug("About to process record: {}", record);
 			DedupRecord deduped = dedupRecordLocator.locate(record);
 			if (deduped == null) {
 				deduped = new DedupRecord();

@@ -1,5 +1,7 @@
 package cz.mzk.recordmanager.server.springbatch;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.ChunkListener;
 import org.springframework.batch.core.scope.context.ChunkContext;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +10,8 @@ import cz.mzk.recordmanager.server.util.HibernateSessionSynchronizer;
 import cz.mzk.recordmanager.server.util.HibernateSessionSynchronizer.SessionBinder;
 
 public class HibernateChunkListener implements ChunkListener {
+	
+	private static Logger logger = LoggerFactory.getLogger(HibernateChunkListener.class);
 
 	@Autowired
 	private HibernateSessionSynchronizer sync;

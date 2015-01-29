@@ -32,4 +32,9 @@ public class DedupRecord extends AbstractDomainObject {
 		this.title = title;
 	}
 	
+	@Override
+	public String toString() {
+		return String.format("DedupRecord[id=%s]", getId());
+	}
+	
 }

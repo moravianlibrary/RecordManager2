@@ -1,6 +1,7 @@
 package cz.mzk.recordmanager.server.model;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import javax.persistence.Embeddable;
 import javax.persistence.Embedded;
@@ -9,6 +10,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import com.google.common.base.Preconditions;
 
@@ -54,6 +57,9 @@ public class RecordLink {
 	@Id
 	private RecordLinkId id;
 	
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date created = new Date();
+	
 	public RecordLink(HarvestedRecord harvestedRecord, DedupRecord dedupRecord) {
 		this.id = new RecordLinkId(harvestedRecord, dedupRecord);
 	}
@@ -64,6 +70,14 @@ public class RecordLink {
 
 	public DedupRecord getDedupRecord() {
 		return id.getDedupRecord();
+	}
+
+	public Date getCreated() {
+		return created;
+	}
+
+	public void setCreated(Date created) {
+		this.created = created;
 	}
 
 }

@@ -11,7 +11,7 @@ import org.testng.annotations.Test;
 import cz.mzk.recordmanager.server.AbstractTest;
 import cz.mzk.recordmanager.server.DBUnitHelper;
 
-public class DedupKeysGeneratorJobTest extends AbstractTest {
+public class DedupRecordsJobTest extends AbstractTest {
 	
 	@Autowired
 	private JobRegistry jobRegistry;
@@ -29,6 +29,7 @@ public class DedupKeysGeneratorJobTest extends AbstractTest {
 
 	@Test
 	public void execute() throws Exception {
+		before();
 		Job job = jobRegistry.getJob("dedupRecordsJob");
 		JobParameters jobParams = new JobParameters();
 		jobLauncher.run(job, jobParams);
