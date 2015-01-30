@@ -60,5 +60,6 @@ CREATE TABLE harvested_record (
 CREATE TABLE record_link (
   harvested_record_id  DECIMAL(10),
   dedup_record_id      DECIMAL(10),
+  created              TIMESTAMP,
   CONSTRAINT record_link_PK PRIMARY KEY (harvested_record_id, dedup_record_id) 
 );
