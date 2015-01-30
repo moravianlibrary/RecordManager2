@@ -2,11 +2,12 @@ package cz.mzk.recordmanager.server.marc;
 
 import java.io.InputStream;
 
-import org.marc4j.MarcXmlHandler;
 import org.marc4j.RecordStack;
 import org.marc4j.marc.Record;
 import org.springframework.stereotype.Component;
 import org.xml.sax.InputSource;
+
+import cz.mzk.recordmanager.server.marc.marc4j.MarcXmlHandler;
 
 @Component
 public class MarcXmlParserImpl implements MarcXmlParser {
