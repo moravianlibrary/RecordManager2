@@ -1,85 +1,49 @@
 package cz.mzk.recordmanager.cmdline;
 
-import java.text.SimpleDateFormat;
-import java.util.Comparator;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.commons.cli.BasicParser;
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.CommandLineParser;
-import org.apache.commons.cli.HelpFormatter;
-import org.apache.commons.cli.Option;
-import org.apache.commons.cli.Options;
-import org.apache.commons.cli.ParseException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobParameter;
 import org.springframework.batch.core.JobParameters;
-import org.springframework.batch.core.configuration.JobRegistry;
-import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.orm.hibernate4.SessionFactoryUtils;
 import org.springframework.orm.hibernate4.SessionHolder;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 
+import cz.mzk.recordmanager.server.springbatch.JobExecutor;
 import cz.mzk.recordmanager.server.util.Constants;
 
 public class CmdlineApplication {
 
-	private static final String JOB_HARVEST	= "harvest";
-	private static final String JOB_HELP	= "help";
 	
-	private static final String CLI_PARAM_JOB				= "job";
-	private static final String CLI_PARAM_HARVEST_CONFIG_ID = "configID";
-	private static final String CLI_PARAM_FROM_TIMESTAMP	= "from";
-	private static final String CLI_PARAM_UNTIL_TIMESTAMP	= "until";
+	private static final String JOB_HELP         = "help";
+	private static final String CLI_PARAM_JOB    = "job";
+	
+	private static String jobName;
+	
 	
 	public static void main(String[] args) throws Exception {
 		
-		final Options options = generateOptions();
+		JobParameters params = null;
+		try {
+			params = createJobParams(args);
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+			jobName = JOB_HELP;
+		}
 		
-		CommandLineParser parser = new BasicParser();
-		CommandLine cmdLine = parser.parse(options, args);
+		if (jobName.equals(JOB_HELP)) {
+			printHelp();
+			return;
+	    }
 
-		if (cmdLine == null) {
-			throw new ParseException("Command line arguments parsing failed");
-		}
-		
-		final String job = cmdLine.getOptionValue(CLI_PARAM_JOB);
-		if (job == null) {
-			printHelp(options);
-			throw new IllegalArgumentException("No job specified");
-		}
-		
-		switch(job) {
-			case JOB_HARVEST: 
-				Long numConfID = processConfigID(cmdLine.getOptionValue(CLI_PARAM_HARVEST_CONFIG_ID));
-				if (numConfID == null) {
-					return;
-				}
-				Date sdfFrom = processDateTime(cmdLine.getOptionValue(CLI_PARAM_FROM_TIMESTAMP));
-				Date sdfUntil = processDateTime(cmdLine.getOptionValue(CLI_PARAM_UNTIL_TIMESTAMP));
-				harvest(numConfID, sdfFrom, sdfUntil); 
-				break; 
-			
-			case JOB_HELP:  
-				/* FALLTHROUGH */
-			default: printHelp(options);
-		}
+		performJob(params);
 		
 	}
 	
-	/**
-	 * Perform harvest job
-	 * @param confID identifier of oai_harvest_conf
-	 * @param dateFrom timestamp
-	 * @param dateUntil timestamp
-	 * @throws Exception
-	 */
-	private static void harvest(Long confID, Date dateFrom, Date dateUntil) throws Exception {
+	private static void performJob(final JobParameters jobParams) throws Exception {
 		try (AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext()) {
 			applicationContext.register(AppConfigCmdline.class);
 			applicationContext.refresh();
@@ -91,103 +55,73 @@ public class CmdlineApplication {
 				session = sessionFactory.openSession();
 				TransactionSynchronizationManager.bindResource(sessionFactory,
 						new SessionHolder(session));
-				JobRegistry jobRegistry = applicationContext
-						.getBean(JobRegistry.class);
-				JobLauncher jobLauncher = applicationContext.getBean(
-						"jobLauncher", JobLauncher.class);
-				Job job = jobRegistry.getJob(Constants.JOB_ID_HARVEST);
-				Map<String, JobParameter> params = new HashMap<String, JobParameter>();
-				params.put(Constants.JOB_PARAM_CONF_ID, new JobParameter(confID));
-				if (dateFrom != null) {
-					params.put(Constants.JOB_PARAM_FROM_DATE, new JobParameter(dateFrom));
-				}
-				if (dateUntil != null) {
-					params.put(Constants.JOB_PARAM_UNTIL_DATE, new JobParameter(dateFrom));
-				}
-				JobParameters jobParams = new JobParameters(params);
-				jobLauncher.run(job, jobParams);
-				SessionHolder holder = (SessionHolder) TransactionSynchronizationManager
-						.getResource(sessionFactory);
-				session = holder.getSession();
-				session.flush();
-				TransactionSynchronizationManager
-						.unbindResource(sessionFactory);
+
+				JobExecutor executor = applicationContext
+						.getBean(JobExecutor.class);
+				executor.execute(jobName, jobParams);
+
 			} finally {
 				SessionFactoryUtils.closeSession(session);
 			}
 		}
 	}
 	
-	/**
-	 * generate Options for command line interface
-	 * @return {@link Options}
-	 */
-	private static Options generateOptions() {
-		Option optJob = new Option( "j", CLI_PARAM_JOB, true, "job type (harvest|help)");
-		optJob.setRequired(true);
-		
-		Options options = new Options();
-		options.addOption(optJob);
-		options.addOption( "i", CLI_PARAM_HARVEST_CONFIG_ID, true, "numeric identifier of configuration" );
-		options.addOption( "f", CLI_PARAM_FROM_TIMESTAMP, true, "Timestamp of begin (format: YYYY-MM-DDThh:mm:ssZ)" );
-		options.addOption( "u", CLI_PARAM_UNTIL_TIMESTAMP, true, "Timestamp of end (format: YYYY-MM-DDThh:mm:ssZ)" );
-		
-		return options;
-	}
-	
-	/**
-	 * @param strConfID
-	 * @return Long or null if error occurs
-	 */
-	private static Long processConfigID(final String strConfID) {
-		if (strConfID == null) {
-			System.err.println("Missing harvest configuration ID");
-			return null;
-		}
-		
-		Long numConfID = null;
-		try {
-			 numConfID = new Long(strConfID);
-		} catch (NumberFormatException e) {
-			System.err.println("Invalid number format: " + strConfID);
-			return null;
-		}
-		return numConfID;
-	}
-	
-	/**
-	 * creates SimpleDateFormat in format "YYYY-MM-DDThh:mm:ssZ" from given string
-	 * @param strDate
-	 * @return {@link SimpleDateFormat} or null if error occurs
-	 * @throws java.text.ParseException 
-	 */
-	private static Date processDateTime(final String strDate) throws java.text.ParseException {
-		if (strDate == null) {
-			return null;
-		}
+	private static void printHelp() {
+		System.out.println("Recordmanager2 command line interface.\n");
+		System.out
+				.println("USAGE:\njava -Dlogback.configurationFile=logback.xml -DCONFIG_DIR=. "
+						+ "-jar target/cz.mzk.recordmanager.cmdline-1.0.0-SNAPSHOT.jar -param1 value1 -param2 value2\n");
 
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
-		return sdf.parse(strDate);
+		System.out.println("Parameters:\n");
+		System.out.println(String.format(
+				"%-20sname of a job. Available: %s|help", CLI_PARAM_JOB,
+				Constants.JOB_ID_HARVEST));
+		System.out.println(String.format("%-20s%s",
+				Constants.JOB_PARAM_CONF_ID, "identifier of a job (LONG)"));
+		System.out.println(String.format("%-20s%s",
+				Constants.JOB_PARAM_FROM_DATE, "from date (DATE)"));
+		System.out.println(String.format("%-20s%s",
+				Constants.JOB_PARAM_UNTIL_DATE, "until date (DATE)"));
 	}
 	
-	private static void printHelp(final Options options) {
-		String header = "Recordmanager2 command line interface.\n\n";
-		HelpFormatter formatter = new HelpFormatter();
-		
-		formatter.setOptionComparator(new Comparator<Option>() {
-
-			private static final String PREFERED_ORDER = "jifu";
-			
-			@Override
-			public int compare(Option o1, Option o2) {
-				return PREFERED_ORDER.indexOf(o1.getOpt()) - PREFERED_ORDER.indexOf(o2.getOpt());
+	/**
+	 * create {@link JobParameters} object from command line arguments
+	 * @param args
+	 * @return
+	 */
+	private static JobParameters createJobParams(String[] args) {
+		Map<String, JobParameter> pMap = new HashMap<String, JobParameter>();
+		String paramName = null;
+		for (int i = 0; i < args.length; i++) {
+			if (i % 2 == 0) {
+				//expected parameter name
+				if (args[i].startsWith("-")) {
+					paramName = args[i].substring(1);
+				} else {
+					throw new IllegalArgumentException("Expected parameter name at place of " + args[i]);
+				}
+			} else {
+				//parameter value
+				if (args[i].startsWith("-")) {
+					throw new IllegalArgumentException("Paramenter \"" + paramName + "\" has no value.");
+				}
+				if (paramName.equals(CLI_PARAM_JOB)) {
+					jobName = args[i];
+				} else {
+					pMap.put(paramName, new JobParameter(args[i]));
+				}
+				paramName = null;
 			}
-			
-		});
+		}
 		
-		formatter.printHelp("java -Dlogback.configurationFile=logback.xml -DCONFIG_DIR=. " 
-				+ "-jar target/cz.mzk.recordmanager.cmdline-1.0.0-SNAPSHOT.jar", header, options, "", true);
+		if (paramName != null) {
+			throw new IllegalArgumentException("Paramenter \"" + paramName + "\" has no value.");
+		}
 		
+		if (jobName == null) {
+			throw new IllegalArgumentException("Missing job name.");
+		}
+		return new JobParameters(pMap);
 	}
 	
 }
