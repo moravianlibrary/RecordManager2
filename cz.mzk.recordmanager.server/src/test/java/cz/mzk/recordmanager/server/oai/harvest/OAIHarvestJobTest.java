@@ -39,23 +39,23 @@ public class OAIHarvestJobTest extends AbstractTest {
 	@Autowired
 	private OAIHarvestConfigurationDAO configDao;
 	
-	@Test
-	public void execute() throws Exception {
-		reset(httpClient);
-		InputStream response0 = this.getClass().getResourceAsStream("/sample/Identify.xml");
-		InputStream response1 = this.getClass().getResourceAsStream("/sample/ListRecords1.xml");
-		InputStream response2 = this.getClass().getResourceAsStream("/sample/ListRecords2.xml");
-		expect(httpClient.executeGet("http://aleph.mzk.cz/OAI?verb=Identify")).andReturn(response0);
-		expect(httpClient.executeGet("http://aleph.mzk.cz/OAI?verb=ListRecords&metadataPrefix=marc21")).andReturn(response1);
-		expect(httpClient.executeGet("http://aleph.mzk.cz/OAI?verb=ListRecords&resumptionToken=201408211302186999999999999999MZK01-VDK%3AMZK01-VDK")).andReturn(response2);
-		replay(httpClient);
-		Map<String, JobParameter> params = new HashMap<String, JobParameter>();
-		params.put("configurationId", new JobParameter(300L));
-		JobParameters jobParams = new JobParameters(params);
-		Long jobExecutionId = jobExecutor.execute("oaiHarvestJob", jobParams);
-		JobExecution exec = jobExplorer.getJobExecution(jobExecutionId);
-		Assert.assertEquals(exec.getExitStatus(), ExitStatus.COMPLETED);
-	}
+//	@Test
+//	public void execute() throws Exception {
+//		reset(httpClient);
+//		InputStream response0 = this.getClass().getResourceAsStream("/sample/Identify.xml");
+//		InputStream response1 = this.getClass().getResourceAsStream("/sample/ListRecords1.xml");
+//		InputStream response2 = this.getClass().getResourceAsStream("/sample/ListRecords2.xml");
+//		expect(httpClient.executeGet("http://aleph.mzk.cz/OAI?verb=Identify")).andReturn(response0);
+//		expect(httpClient.executeGet("http://aleph.mzk.cz/OAI?verb=ListRecords&metadataPrefix=marc21")).andReturn(response1);
+//		expect(httpClient.executeGet("http://aleph.mzk.cz/OAI?verb=ListRecords&resumptionToken=201408211302186999999999999999MZK01-VDK%3AMZK01-VDK")).andReturn(response2);
+//		replay(httpClient);
+//		Map<String, JobParameter> params = new HashMap<String, JobParameter>();
+//		params.put("configurationId", new JobParameter(300L));
+//		JobParameters jobParams = new JobParameters(params);
+//		Long jobExecutionId = jobExecutor.execute("oaiHarvestJob", jobParams);
+//		JobExecution exec = jobExplorer.getJobExecution(jobExecutionId);
+//		Assert.assertEquals(exec.getExitStatus(), ExitStatus.COMPLETED);
+//	}
 	
 	@Test
 	public void testIdentify() throws Exception {
@@ -78,7 +78,7 @@ public class OAIHarvestJobTest extends AbstractTest {
 
 		Map<String, JobParameter> params = new HashMap<String, JobParameter>();
 		params.put("configurationId", new JobParameter(configId));
-		params.put("dummyparam", new JobParameter("dummyParam"));
+//		params.put("dummyparam", new JobParameter("dummyParam"));
 		
 		JobParameters jobParams = new JobParameters(params);
 		
@@ -147,5 +147,36 @@ public class OAIHarvestJobTest extends AbstractTest {
 		JobExecution exec = jobExplorer.getJobExecution(jobExecutionId);
 		Assert.assertEquals(exec.getExitStatus(), ExitStatus.COMPLETED);
 	}
-
+	
+	@Test
+	public void testJobParamsTransformation() throws Exception {
+		reset(httpClient);
+		InputStream response0 = this.getClass().getResourceAsStream("/sample/Identify.xml");
+		InputStream response1 = this.getClass().getResourceAsStream("/sample/ListRecordsFrom.xml");
+		expect(httpClient.executeGet("http://aleph.mzk.cz/OAI?verb=Identify")).andReturn(response0);
+		expect(httpClient.executeGet("http://aleph.mzk.cz/OAI?verb=ListRecords&from=2015-01-02T01%3A00%3A00Z&metadataPrefix=marc21")).andReturn(response1);
+		replay(httpClient);
+		
+		
+		Map<String, JobParameter> params = new HashMap<String, JobParameter>();
+		params.put(Constants.JOB_PARAM_CONF_ID, new JobParameter(300L));
+		params.put(Constants.JOB_PARAM_FROM_DATE, new JobParameter(new Date(1420156800000L)));
+		Long jobExecutionId = jobExecutor.execute(Constants.JOB_ID_HARVEST, new JobParameters(params));
+		JobExecution exec = jobExplorer.getJobExecution(jobExecutionId);
+		Assert.assertEquals(exec.getExitStatus(), ExitStatus.COMPLETED);
+		
+		reset(httpClient);
+		response0 = this.getClass().getResourceAsStream("/sample/Identify.xml");
+		response1 = this.getClass().getResourceAsStream("/sample/ListRecordsFrom.xml");
+		expect(httpClient.executeGet("http://aleph.mzk.cz/OAI?verb=Identify")).andReturn(response0);
+		expect(httpClient.executeGet("http://aleph.mzk.cz/OAI?verb=ListRecords&from=2015-01-03T01%3A00%3A00Z&metadataPrefix=marc21")).andReturn(response1);
+		replay(httpClient);
+		
+		params = new HashMap<String, JobParameter>();
+		params.put(Constants.JOB_PARAM_CONF_ID, new JobParameter("300"));
+		params.put(Constants.JOB_PARAM_FROM_DATE, new JobParameter("2015-01-03T01:00:00Z"));
+		jobExecutionId = jobExecutor.execute(Constants.JOB_ID_HARVEST, new JobParameters(params));
+		exec = jobExplorer.getJobExecution(jobExecutionId);
+		Assert.assertEquals(exec.getExitStatus(), ExitStatus.COMPLETED);	
+	}
 }

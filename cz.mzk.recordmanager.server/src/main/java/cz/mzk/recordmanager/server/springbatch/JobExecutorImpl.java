@@ -1,15 +1,21 @@
 package cz.mzk.recordmanager.server.springbatch;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.ExitStatus;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobExecution;
+import org.springframework.batch.core.JobParameter;
 import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.JobParametersIncrementer;
+import org.springframework.batch.core.JobParametersInvalidException;
 import org.springframework.batch.core.JobParametersValidator;
 import org.springframework.batch.core.configuration.JobRegistry;
 import org.springframework.batch.core.explore.JobExplorer;
@@ -64,13 +70,15 @@ public class JobExecutorImpl implements JobExecutor {
 	public Long execute(String jobName, JobParameters params) {
 		try {
 			final Job job = jobRegistry.getJob(jobName);
+			JobParameters transformedParams = transformJobParameters(params,
+					job.getJobParametersValidator());
 			JobParametersIncrementer incrementer = job
 					.getJobParametersIncrementer();
 			if (incrementer != null) {
-				params = incrementer.getNext(params);
+				params = incrementer.getNext(transformedParams);
 			}
-			job.getJobParametersValidator().validate(params);
-			JobExecution exec = jobLauncher.run(job, params);
+			job.getJobParametersValidator().validate(transformedParams);
+			JobExecution exec = jobLauncher.run(job, transformedParams);
 			return exec.getId();
 		} catch (Exception ex) {
 			throw new RuntimeException(String.format(
@@ -95,5 +103,99 @@ public class JobExecutorImpl implements JobExecutor {
 					jobExecutionId), nsje);
 		}
 	}
+
+	/**
+	 * transform parameters values from String to required type; 
+	 * @param inParams input {@link JobParameter}
+	 * @param inValidator input {@link JobParametersValidator}
+	 * @return transformed {@link JobParameter} with defined types 
+	 * @throws JobParametersInvalidException when one of parameters can't be converted to required type
+	 */
+	private JobParameters transformJobParameters(final JobParameters inParams, 
+			final JobParametersValidator inValidator) throws JobParametersInvalidException {
+		
+		if (!(inValidator instanceof IntrospectiveJobParametersValidator)) {
+			throw new IllegalArgumentException(
+					"Job %s does not support introspection.");
+		}
+		
+		IntrospectiveJobParametersValidator insValidator = (IntrospectiveJobParametersValidator) inValidator;
+		
+		final Map<String, JobParameter> inParamMap = inParams.getParameters();
+		final Map<String, JobParameter> transformedMap = new HashMap <String, JobParameter>();
+		
+		Map<String, JobParameterDeclaration> paramDeclMap = new HashMap<String, JobParameterDeclaration>();
+		for (JobParameterDeclaration declaration: insValidator.getParameters()) {
+			paramDeclMap.put(declaration.getName(), declaration);
+		}
+		
+		for (String key : inParamMap.keySet()) {
+			JobParameterDeclaration declaration = paramDeclMap.get(key);
+			if (declaration == null) {
+				throw new JobParametersInvalidException("Unknown parameter: " + key);
+			}
+			Object originalValue = inParamMap.get(key).getValue();
+
+			switch (declaration.getType()) {
+			case DATE:
+				if (originalValue instanceof Date) {
+					transformedMap.put(key, new JobParameter(
+							(Date) originalValue));
+				} else {
+					try {
+						transformedMap.put(key, new JobParameter(
+								processDateTime((String) originalValue)));
+					} catch (ParseException e) {
+						throw new JobParametersInvalidException("Parameter "
+								+ key + " isn't in valid format.");
+					}
+				}
+				break;
+				
+			case DOUBLE:
+				if (originalValue instanceof Double) {
+					transformedMap.put(key, new JobParameter(
+							(Double) originalValue));
+				} else {
+					transformedMap.put(
+							key,
+							new JobParameter(Double
+									.valueOf((String) originalValue)));
+				}
+				break;
+				
+			case LONG:
+				if (originalValue instanceof Long) {
+					transformedMap.put(key, new JobParameter(
+							(Long) originalValue));
+				} else {
+					transformedMap.put(
+							key,
+							new JobParameter(Long
+									.valueOf((String) originalValue)));
+				}
+				break;
+				
+			case STRING:
+				if (originalValue instanceof String) {
+					transformedMap.put(key, new JobParameter(
+							(String) originalValue));
+				} else {
+					transformedMap.put(
+							key,
+							new JobParameter(originalValue.toString()));
+				}
+			default:
+				break;
+			}
+		}
+		return new JobParameters(transformedMap);
+	}
+	
+	private Date processDateTime(final String strDate) throws ParseException {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+		return sdf.parse(strDate);
+	}
+	
 
 }
