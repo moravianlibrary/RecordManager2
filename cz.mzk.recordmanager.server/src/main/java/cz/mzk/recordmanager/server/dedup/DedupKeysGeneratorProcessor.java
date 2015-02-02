@@ -7,11 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordDAO;
-import cz.mzk.recordmanager.server.oai.harvest.OAIHarvester;
 
 public class DedupKeysGeneratorProcessor implements ItemProcessor<Long, HarvestedRecord> {
 	
-	private static Logger logger = LoggerFactory.getLogger(OAIHarvester.class);
+	private static Logger logger = LoggerFactory.getLogger(DedupKeysGeneratorProcessor.class);
 
 	@Autowired
 	private HarvestedRecordDAO harvestedRecordDao;

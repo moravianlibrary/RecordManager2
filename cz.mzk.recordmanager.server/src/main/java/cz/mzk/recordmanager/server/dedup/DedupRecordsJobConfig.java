@@ -8,11 +8,12 @@ import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
-import org.springframework.batch.item.ItemProcessor;
+import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.database.JdbcPagingItemReader;
 import org.springframework.batch.item.database.support.SqlPagingQueryProviderFactoryBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -35,26 +36,26 @@ public class DedupRecordsJobConfig {
     private DataSource dataSource;
     
     @Bean
-    public Job dedupRecordsJob(JobBuilderFactory jobs, Step step) {
+    public Job dedupRecordsJob(@Qualifier("dedupRecordsJob:step") Step step) {
         return jobs.get("dedupRecordsJob")
 				.flow(step)
 				.end()
 				.build();
     }
     
-    @Bean
-    public Step step(StepBuilderFactory stepBuilderFactory, ItemReader<Long> reader, ItemProcessor<Long, HarvestedRecord> processor,
-    		DedupRecordsWriter writer) {
+    @Bean(name="dedupRecordsJob:step")
+    public Step step() throws Exception {
 		return steps.get("dedupRecordsStep")
             .<Long, HarvestedRecord> chunk(20)
-            .reader(reader)
-            .processor(processor)
-            .writer(writer)
+            .reader(reader())
+            .processor(processor())
+            .writer(writer())
             .listener(hibernateChunkListener())
             .build();
     }
 	
-	@Bean
+    @Bean(name="dedupRecordsJob:reader")
+	@StepScope
     public ItemReader<Long> reader() throws Exception {
 		JdbcPagingItemReader<Long> reader = new JdbcPagingItemReader<Long>();
 		SqlPagingQueryProviderFactoryBean pqpf = new SqlPagingQueryProviderFactoryBean();
@@ -70,13 +71,15 @@ public class DedupRecordsJobConfig {
     	reader.afterPropertiesSet();
     	return reader;
     }
-	
-	@Bean
+    
+    @Bean(name="dedupRecordsJob:processor")
+	@StepScope
 	public DedupKeysGeneratorProcessor processor() {
 		return new DedupKeysGeneratorProcessor();
 	}
     
-    @Bean
+    @Bean(name="dedupRecordsJob:writer")
+	@StepScope
     public DedupRecordsWriter writer() {
     	return new DedupRecordsWriter();
     }
