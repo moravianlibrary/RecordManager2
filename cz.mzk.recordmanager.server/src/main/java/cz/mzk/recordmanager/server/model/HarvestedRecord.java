@@ -25,6 +25,10 @@ public class HarvestedRecord extends AbstractDomainObject {
 	@Column(name="oai_record_id")
 	private String oaiRecordId;
 	
+	@Column(name="harvested")
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date harvested = new Date();
+	
 	@Column(name="updated")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date updated;
@@ -62,6 +66,14 @@ public class HarvestedRecord extends AbstractDomainObject {
 		this.oaiRecordId = oaiRecordId;
 	}
 	
+	public Date getHarvested() {
+		return harvested;
+	}
+
+	public void setHarvested(Date harvested) {
+		this.harvested = harvested;
+	}
+
 	public Date getUpdated() {
 		return updated;
 	}

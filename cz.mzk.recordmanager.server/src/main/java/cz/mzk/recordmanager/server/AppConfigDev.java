@@ -29,7 +29,8 @@ public class AppConfigDev {
 			"sql/recordmanager-create-tables-derby.sql",
 			"org/springframework/batch/core/schema-derby.sql",
 			"sql/recordmanager-insert.sql",
-			"sql/recordmanager-insert-test.sql"
+			"sql/recordmanager-insert-test.sql",
+			"sql/recordmanager-create-views.sql"
 	);
 	
 	@Bean
