@@ -1,7 +1,5 @@
 package cz.mzk.recordmanager.server.springbatch;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -24,6 +22,8 @@ import org.springframework.batch.core.launch.NoSuchJobException;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import cz.mzk.recordmanager.server.oai.harvest.OAIHarvesterUtils;
 
 @Component
 public class JobExecutorImpl implements JobExecutor {
@@ -142,10 +142,10 @@ public class JobExecutorImpl implements JobExecutor {
 					transformedMap.put(key, new JobParameter(
 							(Date) originalValue));
 				} else {
-					try {
-						transformedMap.put(key, new JobParameter(
-								processDateTime((String) originalValue)));
-					} catch (ParseException e) {
+					Date date = OAIHarvesterUtils.stringToDate((String) originalValue);
+					if (date != null) {
+						transformedMap.put(key, new JobParameter(date));
+					} else {
 						throw new JobParametersInvalidException("Parameter "
 								+ key + " isn't in valid format.");
 					}
@@ -191,11 +191,5 @@ public class JobExecutorImpl implements JobExecutor {
 		}
 		return new JobParameters(transformedMap);
 	}
-	
-	private Date processDateTime(final String strDate) throws ParseException {
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
-		return sdf.parse(strDate);
-	}
-	
 
 }

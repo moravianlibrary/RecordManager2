@@ -3,7 +3,6 @@ package cz.mzk.recordmanager.server.oai.harvest;
 import java.util.Date;
 import java.util.List;
 
-import org.joda.time.DateTime;
 import org.joda.time.Period;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
@@ -69,9 +68,9 @@ public class OAIHarvestJobConfig {
     
     @Bean(name="oaiHarvestJob:partioner")
     @StepScope
-    public DateIntervalPartitioner partioner(@Value("#{jobParameters[from]}") Date from,
-    		@Value("#{jobParameters[from]}") Date to) {
-    	return new DateIntervalPartitioner(new DateTime(from), new DateTime(to),
+    public DateIntervalPartitioner partioner(@Value("#{jobParameters[fromDate]}") Date from,
+    		@Value("#{jobParameters[untilDate]}") Date to) {
+    	return new DateIntervalPartitioner(from, to,
     			Period.months(1), "to", "from");
     }
     

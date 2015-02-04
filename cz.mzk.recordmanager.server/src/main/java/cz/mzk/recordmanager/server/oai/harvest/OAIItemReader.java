@@ -99,14 +99,28 @@ public class OAIItemReader implements ItemReader<List<OAIRecord>>, ItemStream,
 			params.setUrl(conf.getUrl());
 			params.setMetadataPrefix(conf.getMetadataPrefix());
 			params.setGranularity(conf.getGranularity());
-			Date fromDate = stepExecution.getJobParameters().getDate(Constants.JOB_PARAM_FROM_DATE);
+			ExecutionContext context = stepExecution.getExecutionContext();
+
+			Date fromDate = stepExecution.getJobParameters().getDate(
+					Constants.JOB_PARAM_FROM_DATE);
+			if (context.containsKey(Constants.JOB_PARAM_FROM_DATE)) {
+				fromDate = OAIHarvesterUtils.stringToDate(context
+						.getString(Constants.JOB_PARAM_FROM_DATE));
+			}
 			if (fromDate != null) {
 				params.setFrom(fromDate);
 			}
-			Date untilDate = stepExecution.getJobParameters().getDate(Constants.JOB_PARAM_UNTIL_DATE);
+			
+			Date untilDate = stepExecution.getJobParameters().getDate(
+					Constants.JOB_PARAM_UNTIL_DATE);
+			if (context.containsKey(Constants.JOB_PARAM_UNTIL_DATE)) {
+				untilDate = OAIHarvesterUtils.stringToDate(context
+						.getString(Constants.JOB_PARAM_UNTIL_DATE));
+			}
 			if (untilDate != null) {
 				params.setUntil(untilDate);
 			}
+			
 			harvester = harvesterFactory.create(params);
 			processIdentify(conf);
 		}
@@ -120,5 +134,6 @@ public class OAIItemReader implements ItemReader<List<OAIRecord>>, ItemStream,
 		conf.setGranularity(identify.getGranularity());
 		configDao.persist(conf);
 	}
+	
 
 }
