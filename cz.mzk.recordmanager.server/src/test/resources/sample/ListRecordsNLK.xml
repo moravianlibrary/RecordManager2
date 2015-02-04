@@ -5,7 +5,7 @@
 	<request verb="ListRecords" metadataPrefix="marc21" from="2015-01-26">http://oai.medvik.cz/medvik2cpk/oai</request>
 	<ListRecords>
 		<record>
-			<header xmlns:xs="http://www.w3.org/2001/XMLSchema" status="deleted">
+			<header xmlns:xs="http://www.w3.org/2001/XMLSchema">
 				<identifier>oai:medvik.cz:196741</identifier>
 				<datestamp>2015-01-26T07:48:38Z</datestamp>
 				<setSpec>1</setSpec>
@@ -139,7 +139,7 @@
 			</metadata>
 		</record>
 		<record>
-			<header xmlns:xs="http://www.w3.org/2001/XMLSchema" status="deleted">
+			<header xmlns:xs="http://www.w3.org/2001/XMLSchema">
 				<identifier>oai:medvik.cz:196743</identifier>
 				<datestamp>2015-01-26T08:20:00Z</datestamp>
 				<setSpec>1</setSpec>
@@ -271,7 +271,7 @@
 			</metadata>
 		</record>
 		<record>
-			<header xmlns:xs="http://www.w3.org/2001/XMLSchema" status="deleted">
+			<header xmlns:xs="http://www.w3.org/2001/XMLSchema">
 				<identifier>oai:medvik.cz:196738</identifier>
 				<datestamp>2015-01-26T08:27:23Z</datestamp>
 				<setSpec>1</setSpec>

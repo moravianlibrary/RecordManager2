@@ -87,6 +87,8 @@ public class OAIItemWriter implements ItemWriter<List<OAIRecord>>,
 		if (record.getHeader().isDeleted()) {
 			rec.setDeleted(new Date());
 			rec.setRawRecord(null);
+			recordDao.persist(rec);
+			return;
 		} else {
 			Element element = record.getMetadata().getElement();
 			rec.setRawRecord(asByteArray(element));

@@ -19,7 +19,9 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import cz.mzk.recordmanager.server.AbstractTest;
+import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.model.OAIHarvestConfiguration;
+import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordDAO;
 import cz.mzk.recordmanager.server.oai.dao.OAIHarvestConfigurationDAO;
 import cz.mzk.recordmanager.server.springbatch.JobExecutor;
 import cz.mzk.recordmanager.server.util.Constants;
@@ -38,6 +40,9 @@ public class OAIHarvestJobTest extends AbstractTest {
 	
 	@Autowired
 	private OAIHarvestConfigurationDAO configDao;
+	
+	@Autowired
+	private HarvestedRecordDAO recordDao;
 	
 //	@Test
 //	public void execute() throws Exception {
@@ -178,5 +183,31 @@ public class OAIHarvestJobTest extends AbstractTest {
 		jobExecutionId = jobExecutor.execute(Constants.JOB_ID_HARVEST, new JobParameters(params));
 		exec = jobExplorer.getJobExecution(jobExecutionId);
 		Assert.assertEquals(exec.getExitStatus(), ExitStatus.COMPLETED);	
+	}
+	
+	@Test
+	public void testDeleteRecord() throws Exception {
+		reset(httpClient);
+		InputStream response0 = this.getClass().getResourceAsStream("/sample/IdentifyNonstandardGranularity.xml");
+		InputStream response1 = this.getClass().getResourceAsStream("/sample/ListRecordsNLKdeleted1.xml");
+		InputStream response2 = this.getClass().getResourceAsStream("/sample/ListRecordsNLKdeleted2.xml");
+		expect(httpClient.executeGet("http://oai.medvik.cz/medvik2cpk/oai?verb=Identify")).andReturn(response0);
+		expect(httpClient.executeGet("http://oai.medvik.cz/medvik2cpk/oai?verb=ListRecords&metadataPrefix=marc21")).andReturn(response1);
+		expect(httpClient.executeGet("http://oai.medvik.cz/medvik2cpk/oai?verb=ListRecords&resumptionToken=xaiutmvy00003")).andReturn(response2);
+		replay(httpClient);
+		
+		Map<String, JobParameter> params = new HashMap<String, JobParameter>();
+		final Long confID = 301L;
+		params = new HashMap<String, JobParameter>();
+		params.put(Constants.JOB_PARAM_CONF_ID, new JobParameter(confID));
+		Long jobExecutionId = jobExecutor.execute(Constants.JOB_ID_HARVEST, new JobParameters(params));
+		JobExecution exec = jobExplorer.getJobExecution(jobExecutionId);
+		Assert.assertEquals(exec.getExitStatus(), ExitStatus.COMPLETED);
+		
+		OAIHarvestConfiguration config = configDao.get(confID);
+		HarvestedRecord record = recordDao.findByIdAndHarvestConfiguration("oai:medvik.cz:111111", config);
+		Assert.assertNotNull(record, "Record not stored.");
+		Assert.assertNotNull(record.getDeleted());
+		
 	}
 }

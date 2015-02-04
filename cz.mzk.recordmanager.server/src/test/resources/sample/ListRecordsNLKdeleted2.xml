@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OAI-PMH xmlns="http://www.openarchives.org/OAI/2.0/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/ http://www.openarchives.org/OAI/2.0/OAI-PMH.xsd">
+	<responseDate>2015-01-26T00:00:00Z</responseDate>
+	<request verb="ListRecords" metadataPrefix="marc21" from="2015-01-26">http://oai.medvik.cz/medvik2cpk/oai</request>
+	<ListRecords>
+		<record>
+			<header status="deleted">
+				<identifier>oai:medvik.cz:111111</identifier>
+				<datestamp>2015-01-09T15:16:21Z</datestamp>
+				<setSpec>1</setSpec>
+			</header>
+		</record>
+	</ListRecords>
+</OAI-PMH>

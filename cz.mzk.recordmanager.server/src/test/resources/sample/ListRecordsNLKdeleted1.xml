@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OAI-PMH xmlns="http://www.openarchives.org/OAI/2.0/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/ http://www.openarchives.org/OAI/2.0/OAI-PMH.xsd">
+	<responseDate>2015-01-26T00:00:00Z</responseDate>
+	<request verb="ListRecords" metadataPrefix="marc21" from="2015-01-26">http://oai.medvik.cz/medvik2cpk/oai</request>
+	<ListRecords>
+		<record>
+			<header xmlns:xs="http://www.w3.org/2001/XMLSchema">
+				<identifier>oai:medvik.cz:111111</identifier>
+				<datestamp>2015-01-26T08:27:23Z</datestamp>
+				<setSpec>1</setSpec>
+			</header>
+			<metadata>
+				<record xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+					xmlns="http://www.loc.gov/MARC21/slim"
+					xsi:schemaLocation="http://www.loc.gov/MARC21/slim http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd">
+					<leader>00000nam a2200000 a 4500</leader>
+					<controlfield tag="001">MED00185334</controlfield>
+					<controlfield tag="003">CZ-PrNML</controlfield>
+					<controlfield tag="005">20150126082701.0</controlfield>
+					<controlfield tag="007">ta</controlfield>
+					<controlfield tag="008">150126s2014    xr oda e      000 0|cze||</controlfield>
+					<datafield tag="015" ind1=" " ind2=" ">
+						<subfield code="a">cnb002647103</subfield>
+					</datafield>
+					<datafield tag="020" ind1=" " ind2=" ">
+						<subfield code="a">978-80-7418-213-6</subfield>
+						<subfield code="q">(Key Publishing :</subfield>
+						<subfield code="q">brož.)</subfield>
+					</datafield>
+					<datafield tag="020" ind1=" " ind2=" ">
+						<subfield code="a">978-80-87475-42-3</subfield>
+						<subfield code="q">(The European Society for History of Law :</subfield>
+						<subfield code="q">brož.)</subfield>
+					</datafield>
+					<datafield tag="040" ind1=" " ind2=" ">
+						<subfield code="a">OLA001</subfield>
+						<subfield code="b">cze</subfield>
+						<subfield code="d">ABE015</subfield>
+						<subfield code="e">AACR2</subfield>
+					</datafield>
+					<datafield tag="041" ind1="1" ind2=" ">
+						<subfield code="a">cze</subfield>
+						<subfield code="b">eng</subfield>
+						<subfield code="a">slo</subfield>
+					</datafield>
+					<datafield tag="044" ind1=" " ind2=" ">
+						<subfield code="a">xr</subfield>
+					</datafield>
+					<datafield tag="072" ind1=" " ind2="7">
+						<subfield code="a">343</subfield>
+						<subfield code="x">Trestní právo</subfield>
+						<subfield code="2">Konspekt</subfield>
+						<subfield code="9">16</subfield>
+					</datafield>
+					<datafield tag="080" ind1=" " ind2=" ">
+						<subfield code="a">343.54</subfield>
+						<subfield code="2">MRF</subfield>
+					</datafield>
+					<datafield tag="080" ind1=" " ind2=" ">
+						<subfield code="a">34(091)</subfield>
+						<subfield code="2">MRF</subfield>
+					</datafield>
+					<datafield tag="080" ind1=" " ind2=" ">
+						<subfield code="a">343.3/.7(091)</subfield>
+						<subfield code="2">MRF</subfield>
+					</datafield>
+					<datafield tag="080" ind1=" " ind2=" ">
+						<subfield code="a">(437.3)</subfield>
+						<subfield code="2">MRF</subfield>
+					</datafield>
+					<datafield tag="080" ind1=" " ind2=" ">
+						<subfield code="a">(437.6)</subfield>
+						<subfield code="2">MRF</subfield>
+					</datafield>
+					<datafield tag="080" ind1=" " ind2=" ">
+						<subfield code="a">(048.8:082)</subfield>
+						<subfield code="2">MRF</subfield>
+					</datafield>
+					<datafield tag="100" ind1="1" ind2=" ">
+						<subfield code="a">Schelle, Karel,</subfield>
+						<subfield code="d">1952-</subfield>
+						<subfield code="7">jn99240001045</subfield>
+						<subfield code="4">aut</subfield>
+					</datafield>
+					<datafield tag="245" ind1="1" ind2="0">
+						<subfield code="a">Sexuální trestné činy včera a dnes /</subfield>
+						<subfield code="c">Karel Schelle, Jaromír Tauchen a kolektiv</subfield>
+					</datafield>
+					<datafield tag="250" ind1=" " ind2=" ">
+						<subfield code="a">Vyd. 1.</subfield>
+					</datafield>
+					<datafield tag="260" ind1=" " ind2=" ">
+						<subfield code="a">Ostrava :</subfield>
+						<subfield code="b">Key Publishing ;</subfield>
+						<subfield code="a">Brno :</subfield>
+						<subfield code="b">European Society for History of Law,</subfield>
+						<subfield code="c">2014</subfield>
+					</datafield>
+					<datafield tag="300" ind1=" " ind2=" ">
+						<subfield code="a">448 s. :</subfield>
+						<subfield code="b">il. (převážně barev.) ;</subfield>
+						<subfield code="c">24 cm</subfield>
+					</datafield>
+					<datafield tag="490" ind1="1" ind2=" ">
+						<subfield code="a">Monografie</subfield>
+					</datafield>
+					<datafield tag="500" ind1=" " ind2=" ">
+						<subfield code="a">Terminologický latinsko-český slovník</subfield>
+					</datafield>
+					<datafield tag="504" ind1=" " ind2=" ">
+						<subfield code="a">Obsahuje bibliografii a bibliografické odkazy</subfield>
+					</datafield>
+					<datafield tag="546" ind1=" " ind2=" ">
+						<subfield code="a">Část. slovenský text, anglická resumé</subfield>
+					</datafield>
+					<datafield tag="650" ind1="0" ind2="7">
+						<subfield code="a">sexuální trestné činy</subfield>
+						<subfield code="7">ph125513</subfield>
+						<subfield code="2">czenas</subfield>
+					</datafield>
+					<datafield tag="650" ind1="0" ind2="7">
+						<subfield code="a">dějiny kriminality</subfield>
+						<subfield code="7">ph489104</subfield>
+						<subfield code="2">czenas</subfield>
+					</datafield>
+					<datafield tag="650" ind1="0" ind2="7">
+						<subfield code="a">právní dějiny</subfield>
+						<subfield code="7">ph164957</subfield>
+						<subfield code="2">czenas</subfield>
+					</datafield>
+					<datafield tag="650" ind1="0" ind2="7">
+						<subfield code="a">sexuální trestné činy</subfield>
+						<subfield code="7">ph125513</subfield>
+						<subfield code="z">Česko</subfield>
+						<subfield code="2">czenas</subfield>
+					</datafield>
+					<datafield tag="650" ind1="0" ind2="7">
+						<subfield code="a">sexuální trestné činy</subfield>
+						<subfield code="7">ph125513</subfield>
+						<subfield code="z">Slovensko</subfield>
+						<subfield code="2">czenas</subfield>
+					</datafield>
+					<datafield tag="650" ind1="0" ind2="0">
+						<subfield code="a">sex crimes</subfield>
+						<subfield code="2">eczenas</subfield>
+					</datafield>
+					<datafield tag="650" ind1="0" ind2="0">
+						<subfield code="a">history of crime</subfield>
+						<subfield code="2">eczenas</subfield>
+					</datafield>
+					<datafield tag="650" ind1="0" ind2="0">
+						<subfield code="a">history of law</subfield>
+						<subfield code="2">eczenas</subfield>
+					</datafield>
+					<datafield tag="650" ind1="0" ind2="0">
+						<subfield code="a">sex crimes</subfield>
+						<subfield code="z">Czechia</subfield>
+						<subfield code="2">eczenas</subfield>
+					</datafield>
+					<datafield tag="650" ind1="0" ind2="0">
+						<subfield code="a">sex crimes</subfield>
+						<subfield code="z">Slovakia</subfield>
+						<subfield code="2">eczenas</subfield>
+					</datafield>
+					<datafield tag="655" ind1=" " ind2="7">
+						<subfield code="a">kolektivní monografie</subfield>
+						<subfield code="7">fd501537</subfield>
+						<subfield code="2">czenas</subfield>
+					</datafield>
+					<datafield tag="655" ind1=" " ind2="0">
+						<subfield code="a">collective monographs</subfield>
+						<subfield code="2">eczenas</subfield>
+					</datafield>
+					<datafield tag="700" ind1="1" ind2=" ">
+						<subfield code="a">Tauchen, Jaromír,</subfield>
+						<subfield code="d">1981-</subfield>
+						<subfield code="7">_AN081222</subfield>
+						<subfield code="4">aut</subfield>
+					</datafield>
+					<datafield tag="830" ind1=" " ind2="0">
+						<subfield code="a">Monografie (Key Publishing : European Society for History of Law)</subfield>
+					</datafield>
+					<datafield tag="910" ind1=" " ind2=" ">
+						<subfield code="a">ABE015</subfield>
+						<subfield code="b">K 10678</subfield>
+						<subfield code="y">0</subfield>
+					</datafield>
+					<datafield tag="990" ind1=" " ind2=" ">
+						<subfield code="a">20150121075433</subfield>
+						<subfield code="b">ABE015</subfield>
+						<subfield code="c">Palka Roman</subfield>
+					</datafield>
+					<datafield tag="991" ind1=" " ind2=" ">
+						<subfield code="a">20150126082853</subfield>
+						<subfield code="b">ABE015</subfield>
+						<subfield code="c">Vinklátová Gabriela</subfield>
+					</datafield>
+					<datafield tag="999" ind1=" " ind2=" ">
+						<subfield code="a">min</subfield>
+					</datafield>
+				</record>
+			</metadata>
+		</record>
+		<resumptionToken expirationDate="2015-02-05T10:15:12Z"
+			completeListSize="3595" cursor="1500">xaiutmvy00003</resumptionToken>
+	</ListRecords>
+</OAI-PMH>
