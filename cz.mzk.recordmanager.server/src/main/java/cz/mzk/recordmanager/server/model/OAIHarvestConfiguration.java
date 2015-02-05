@@ -2,6 +2,8 @@ package cz.mzk.recordmanager.server.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -25,7 +27,8 @@ public class OAIHarvestConfiguration extends AbstractDomainObject {
 	private String set;
 	
 	@Column(name="granularity")
-	private String granularity;
+	@Enumerated(EnumType.STRING)
+	private OAIGranularity granularity;
 
 	@Column(name="metadata_prefix")
 	private String metadataPrefix;
@@ -59,11 +62,11 @@ public class OAIHarvestConfiguration extends AbstractDomainObject {
 		this.set = set;
 	}
 	
-	public String getGranularity() {
+	public OAIGranularity getGranularity() {
 		return granularity;
 	}
 
-	public void setGranularity(String granularity) {
+	public void setGranularity(OAIGranularity granularity) {
 		this.granularity = granularity;
 	}
 

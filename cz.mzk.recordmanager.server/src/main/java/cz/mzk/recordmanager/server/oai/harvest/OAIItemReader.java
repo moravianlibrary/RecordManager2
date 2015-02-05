@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.support.TransactionTemplate;
 
+import cz.mzk.recordmanager.server.model.OAIGranularity;
 import cz.mzk.recordmanager.server.model.OAIHarvestConfiguration;
 import cz.mzk.recordmanager.server.oai.dao.OAIHarvestConfigurationDAO;
 import cz.mzk.recordmanager.server.oai.model.OAIIdentify;
@@ -104,7 +105,7 @@ public class OAIItemReader implements ItemReader<List<OAIRecord>>, ItemStream,
 			Date fromDate = stepExecution.getJobParameters().getDate(
 					Constants.JOB_PARAM_FROM_DATE);
 			if (context.containsKey(Constants.JOB_PARAM_FROM_DATE)) {
-				fromDate = OAIHarvesterUtils.stringToDate(context
+				fromDate = OAIGranularity.stringToDate(context
 						.getString(Constants.JOB_PARAM_FROM_DATE));
 			}
 			if (fromDate != null) {
@@ -114,7 +115,7 @@ public class OAIItemReader implements ItemReader<List<OAIRecord>>, ItemStream,
 			Date untilDate = stepExecution.getJobParameters().getDate(
 					Constants.JOB_PARAM_UNTIL_DATE);
 			if (context.containsKey(Constants.JOB_PARAM_UNTIL_DATE)) {
-				untilDate = OAIHarvesterUtils.stringToDate(context
+				untilDate = OAIGranularity.stringToDate(context
 						.getString(Constants.JOB_PARAM_UNTIL_DATE));
 			}
 			if (untilDate != null) {
@@ -123,6 +124,9 @@ public class OAIItemReader implements ItemReader<List<OAIRecord>>, ItemStream,
 			
 			harvester = harvesterFactory.create(params);
 			processIdentify(conf);
+			conf = configDao.get(confId);
+			params.setGranularity(conf.getGranularity());
+			harvester = harvesterFactory.create(params);
 		}
 	}
 	
@@ -131,7 +135,7 @@ public class OAIItemReader implements ItemReader<List<OAIRecord>>, ItemStream,
 	 */
 	private void processIdentify(OAIHarvestConfiguration conf) {
 		OAIIdentify identify = harvester.identify();
-		conf.setGranularity(identify.getGranularity());
+		conf.setGranularity(OAIGranularity.stringToOAIGranularity(identify.getGranularity()));
 		configDao.persist(conf);
 	}
 	

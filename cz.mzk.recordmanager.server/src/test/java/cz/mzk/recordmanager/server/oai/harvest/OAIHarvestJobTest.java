@@ -20,6 +20,7 @@ import org.testng.annotations.Test;
 
 import cz.mzk.recordmanager.server.AbstractTest;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
+import cz.mzk.recordmanager.server.model.OAIGranularity;
 import cz.mzk.recordmanager.server.model.OAIHarvestConfiguration;
 import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordDAO;
 import cz.mzk.recordmanager.server.oai.dao.OAIHarvestConfigurationDAO;
@@ -94,8 +95,7 @@ public class OAIHarvestJobTest extends AbstractTest {
 		final OAIHarvestConfiguration updatedOaiConfig = configDao.get(configId);
 
 		// is granularity correctly read from Identify?
-		final String expectedGranularity = "YYYY-MM-DDThh:mm:ssZ";
-		Assert.assertEquals(updatedOaiConfig.getGranularity(), expectedGranularity);
+		Assert.assertEquals(updatedOaiConfig.getGranularity(), OAIGranularity.SECOND);
 	}
 	
 	@Test 
@@ -176,7 +176,7 @@ public class OAIHarvestJobTest extends AbstractTest {
 		expect(httpClient.executeGet("http://aleph.mzk.cz/OAI?verb=Identify")).andReturn(response0);
 		expect(httpClient.executeGet("http://aleph.mzk.cz/OAI?verb=ListRecords&from=2015-01-03T01%3A00%3A00Z&metadataPrefix=marc21")).andReturn(response1);
 		replay(httpClient);
-		
+
 		params = new HashMap<String, JobParameter>();
 		params.put(Constants.JOB_PARAM_CONF_ID, new JobParameter("300"));
 		params.put(Constants.JOB_PARAM_FROM_DATE, new JobParameter("2015-01-03T01:00:00Z"));

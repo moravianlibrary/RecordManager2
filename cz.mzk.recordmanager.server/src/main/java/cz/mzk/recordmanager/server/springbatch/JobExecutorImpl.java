@@ -23,7 +23,7 @@ import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import cz.mzk.recordmanager.server.oai.harvest.OAIHarvesterUtils;
+import cz.mzk.recordmanager.server.model.OAIGranularity;
 
 @Component
 public class JobExecutorImpl implements JobExecutor {
@@ -142,7 +142,7 @@ public class JobExecutorImpl implements JobExecutor {
 					transformedMap.put(key, new JobParameter(
 							(Date) originalValue));
 				} else {
-					Date date = OAIHarvesterUtils.stringToDate((String) originalValue);
+					Date date = OAIGranularity.stringToDate((String) originalValue);
 					if (date != null) {
 						transformedMap.put(key, new JobParameter(date));
 					} else {

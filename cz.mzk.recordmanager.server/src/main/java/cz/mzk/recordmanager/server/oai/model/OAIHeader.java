@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -22,6 +23,9 @@ public class OAIHeader {
 	
 	@XmlElement(name="deleted")
 	private boolean deleted;
+	
+	@XmlAttribute(name="status")
+	private String status;
 	
 	public OAIHeader() {	
 	}
@@ -47,13 +51,21 @@ public class OAIHeader {
 	}
 
 	public boolean isDeleted() {
-		return deleted;
+		return status != null && status.equalsIgnoreCase("deleted");
 	}
 
 	public void setDeleted(boolean deleted) {
 		this.deleted = deleted;
 	}
 	
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
 	public String toString() {
 		return String.format("OAIHeader[identifier='%s', datestamp='%s']", identifier, datestamp);
 	}

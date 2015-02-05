@@ -2,6 +2,8 @@ package cz.mzk.recordmanager.server.oai.harvest;
 
 import java.util.Date;
 
+import cz.mzk.recordmanager.server.model.OAIGranularity;
+
 public class OAIHarvesterParams {
 
 	private String url;
@@ -10,7 +12,7 @@ public class OAIHarvesterParams {
 
 	private String set;
 	
-	private String granularity;
+	private OAIGranularity granularity;
 
 	private Date from;
 
@@ -40,11 +42,11 @@ public class OAIHarvesterParams {
 		this.set = set;
 	}
 	
-	public String getGranularity() {
+	public OAIGranularity getGranularity() {
 		return granularity;
 	}
 
-	public void setGranularity(String granularity) {
+	public void setGranularity(OAIGranularity granularity) {
 		this.granularity = granularity;
 	}
 

@@ -2,8 +2,6 @@ package cz.mzk.recordmanager.server.oai.harvest;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -85,12 +83,11 @@ public class OAIHarvester {
 				params.put("set", parameters.getSet());
 			}
 			if (parameters.getFrom() != null) {
-				params.put("from", formatDate(parameters.getFrom()));
+				params.put("from", parameters.getGranularity().dateToString(parameters.getFrom()));
 			}
 			if (parameters.getUntil() != null) {
-				params.put("until", formatDate(parameters.getUntil()));
+				params.put("until", parameters.getGranularity().dateToString(parameters.getUntil()));
 			}
-			
 		} else {
 			params.put("resumptionToken", resumptionToken);
 		}
@@ -104,19 +101,4 @@ public class OAIHarvester {
 		params.put("verb", "Identify");
 		return UrlUtils.buildUrl(parameters.getUrl(), params);
 	}
-	
-	/**
-	 * format {@link Date} according to stored date/time granularity
-	 * @param date
-	 * @return formated date
-	 */
-	private String formatDate (final Date date) {
-		String format = "yyyy-MM-dd'T'HH:mm:ss'Z'";
-		if (parameters.getGranularity() != null && parameters.getGranularity().length() < 11) {
-			format = "yyyy-MM-dd";
-		}
-		SimpleDateFormat sdf = new SimpleDateFormat(format);
-		return sdf.format(date);
-	}
-
 }
