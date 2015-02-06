@@ -18,6 +18,7 @@ import org.springframework.context.annotation.Configuration;
 import cz.mzk.recordmanager.server.oai.model.OAIRecord;
 import cz.mzk.recordmanager.server.springbatch.DateIntervalPartitioner;
 import cz.mzk.recordmanager.server.springbatch.HibernateChunkListener;
+import cz.mzk.recordmanager.server.util.Constants;
 
 @Configuration
 public class OAIHarvestJobConfig {
@@ -71,7 +72,7 @@ public class OAIHarvestJobConfig {
     public DateIntervalPartitioner partioner(@Value("#{jobParameters[fromDate]}") Date from,
     		@Value("#{jobParameters[untilDate]}") Date to) {
     	return new DateIntervalPartitioner(from, to,
-    			Period.months(1), "to", "from");
+    			Period.months(1), Constants.JOB_PARAM_UNTIL_DATE, Constants.JOB_PARAM_FROM_DATE);
     }
     
     @Bean(name="oaiHarvestJob:reader")

@@ -50,30 +50,13 @@ public class DateIntervalPartitioner implements Partitioner {
 			}
 			
 			ExecutionContext partition = new ExecutionContext();
-			partition.put(Constants.JOB_PARAM_FROM_DATE, formatDate(nextFrom));
-			partition.put(Constants.JOB_PARAM_UNTIL_DATE, formatDate(nextTo));
+			partition.put(fromKey, nextFrom.toDate());
+			partition.put(toKey, nextTo.toDate());
 			partitions.put(Integer.toString(index), partition);
 			nextFrom = nextTo;
 			index++;
 		}
 		return partitions;
 		
-	}
-	
-	private String formatDate(final DateTime inDate) {
-		StringBuilder builder = new StringBuilder();
-		builder.append(inDate.getYear());
-		builder.append("-");
-		builder.append(String.format("%02d", inDate.getMonthOfYear()));
-		builder.append("-");
-		builder.append(String.format("%02d", inDate.getDayOfMonth()));
-		builder.append("T");
-		builder.append(String.format("%02d", inDate.getHourOfDay()));
-		builder.append(":");
-		builder.append(String.format("%02d", inDate.getMinuteOfHour()));
-		builder.append(":");
-		builder.append(String.format("%02d", inDate.secondOfMinute().get()));
-		builder.append("Z");
-		return builder.toString();
 	}
 }

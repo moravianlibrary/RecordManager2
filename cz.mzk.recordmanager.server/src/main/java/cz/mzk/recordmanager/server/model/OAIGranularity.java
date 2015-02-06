@@ -59,7 +59,6 @@ public enum OAIGranularity {
 		for (OAIGranularity gran: new OAIGranularity[]{SECOND, DAY}) {
 			try {
 				SimpleDateFormat sdf = new SimpleDateFormat(gran.getparseableFormat());
-				System.out.println("CONVERTED " + strDate + " " + gran);
 				return sdf.parse(strDate);
 			} catch (ParseException e) {}
 		}

@@ -105,8 +105,10 @@ public class OAIItemReader implements ItemReader<List<OAIRecord>>, ItemStream,
 			Date fromDate = stepExecution.getJobParameters().getDate(
 					Constants.JOB_PARAM_FROM_DATE);
 			if (context.containsKey(Constants.JOB_PARAM_FROM_DATE)) {
-				fromDate = OAIGranularity.stringToDate(context
-						.getString(Constants.JOB_PARAM_FROM_DATE));
+				Object obj = context.get(Constants.JOB_PARAM_FROM_DATE);
+				if (obj instanceof Date) {
+					fromDate = (Date) obj;
+				} 
 			}
 			if (fromDate != null) {
 				params.setFrom(fromDate);
@@ -115,8 +117,10 @@ public class OAIItemReader implements ItemReader<List<OAIRecord>>, ItemStream,
 			Date untilDate = stepExecution.getJobParameters().getDate(
 					Constants.JOB_PARAM_UNTIL_DATE);
 			if (context.containsKey(Constants.JOB_PARAM_UNTIL_DATE)) {
-				untilDate = OAIGranularity.stringToDate(context
-						.getString(Constants.JOB_PARAM_UNTIL_DATE));
+				Object obj = context.get(Constants.JOB_PARAM_UNTIL_DATE);
+				if (obj instanceof Date) {
+					untilDate = (Date) obj;
+				} 
 			}
 			if (untilDate != null) {
 				params.setUntil(untilDate);
