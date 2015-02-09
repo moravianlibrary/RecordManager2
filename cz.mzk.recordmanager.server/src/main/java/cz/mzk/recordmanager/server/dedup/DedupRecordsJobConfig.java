@@ -19,7 +19,6 @@ import org.springframework.context.annotation.Configuration;
 
 import cz.mzk.recordmanager.server.jdbc.LongValueRowMapper;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
-import cz.mzk.recordmanager.server.springbatch.HibernateChunkListener;
 
 @Configuration
 public class DedupRecordsJobConfig {
@@ -50,7 +49,6 @@ public class DedupRecordsJobConfig {
             .reader(reader())
             .processor(processor())
             .writer(writer())
-            .listener(hibernateChunkListener())
             .build();
     }
 	
@@ -82,11 +80,6 @@ public class DedupRecordsJobConfig {
 	@StepScope
     public DedupRecordsWriter writer() {
     	return new DedupRecordsWriter();
-    }
-    
-    @Bean
-    public HibernateChunkListener hibernateChunkListener() {
-    	return new HibernateChunkListener();
     }
 
 }

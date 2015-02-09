@@ -10,8 +10,6 @@ import org.joda.time.Period;
 import org.springframework.batch.core.partition.support.Partitioner;
 import org.springframework.batch.item.ExecutionContext;
 
-import cz.mzk.recordmanager.server.util.Constants;
-
 public class DateIntervalPartitioner implements Partitioner {
 
 	private final DateTime from;

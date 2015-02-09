@@ -24,7 +24,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import cz.mzk.recordmanager.server.jdbc.LongValueRowMapper;
-import cz.mzk.recordmanager.server.springbatch.HibernateChunkListener;
 
 @Configuration
 public class IndexRecordsToSolrJobConfig {
@@ -53,11 +52,10 @@ public class IndexRecordsToSolrJobConfig {
     @Bean(name="indexRecordsToSolrJob:step")
     public Step step() throws Exception {
 		return steps.get("indexRecordsToSolrJobStep")
-            .<Long, SolrInputDocument> chunk(20)
-            .reader(reader(DATE_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION))
-            .processor(processor())
-            .writer(writer())
-            .listener(hibernateChunkListener())
+            .<Long, SolrInputDocument> chunk(20) //
+            .reader(reader(DATE_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION)) //
+            .processor(processor()) //
+            .writer(writer()) //
             .build();
     }
 	
@@ -93,11 +91,6 @@ public class IndexRecordsToSolrJobConfig {
     @StepScope
     public SolrIndexWriter writer() {
     	return new SolrIndexWriter();
-    }
-    
-    @Bean
-    public HibernateChunkListener hibernateChunkListener() {
-    	return new HibernateChunkListener();
     }
 
 }

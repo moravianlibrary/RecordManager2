@@ -17,17 +17,29 @@ import org.springframework.context.annotation.Configuration;
 
 import cz.mzk.recordmanager.server.oai.model.OAIRecord;
 import cz.mzk.recordmanager.server.springbatch.DateIntervalPartitioner;
-import cz.mzk.recordmanager.server.springbatch.HibernateChunkListener;
 import cz.mzk.recordmanager.server.util.Constants;
 
 @Configuration
 public class OAIHarvestJobConfig {
+	
+	private static final Date DATE_OVERRIDEN_BY_EXPRESSION = null;
+	
+	private static final Long LONG_OVERRIDEN_BY_EXPRESSION = null;
 	
 	@Autowired
     private JobBuilderFactory jobs;
 
     @Autowired
     private StepBuilderFactory steps;
+    
+    @Bean
+    public Job oaiPartitionedHarvestJob(@Qualifier("oaiHarvestJob:partitionedStep") Step step) {
+        return jobs.get("oaiPartitionedHarvestJob") //
+        		.validator(new OAIHarvestJobParametersValidator()) //
+				.flow(step) //
+				.end() //
+				.build();
+    }
 
     @Bean
     public Job oaiHarvestJob(@Qualifier("oaiHarvestJob:step") Step step) {
@@ -42,16 +54,15 @@ public class OAIHarvestJobConfig {
     public Step step() {
         return steps.get("step1") //
             .<List<OAIRecord>, List<OAIRecord>> chunk(1) //
-            .reader(reader()) //
+            .reader(reader(LONG_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION)) //
             .writer(writer()) //
-            .listener(hibernateChunkListener()) //
             .build();
     }
     
     @Bean(name="oaiHarvestJob:partitionedStep")
     public Step partitionedStep() {
     	return steps.get("step") //
-    			.partitioner("slave", partioner(null, null)) //
+    			.partitioner("slave", partioner(DATE_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION)) //
     			.gridSize(10) //
     			.step(slaveStep()) //
     			.build();
@@ -61,9 +72,8 @@ public class OAIHarvestJobConfig {
     public Step slaveStep() {
         return steps.get("step1") //
             .<List<OAIRecord>, List<OAIRecord>> chunk(1) //
-            .reader(reader()) //
+            .reader(reader(LONG_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION)) //
             .writer(writer()) //
-            .listener(hibernateChunkListener()) //
             .build();
     }
     
@@ -77,19 +87,16 @@ public class OAIHarvestJobConfig {
     
     @Bean(name="oaiHarvestJob:reader")
     @StepScope
-    public OAIItemReader reader() {
-    	return new OAIItemReader();
+    public OAIItemReader reader(@Value("#{jobParameters[configurationId]}") Long configId, 
+    		@Value("#{stepExecutionContext[fromDate]?:jobParameters[fromDate]}") Date from,
+    		@Value("#{stepExecutionContext[untilDate]?:jobParameters[untilDate]}") Date to) {
+    	return new OAIItemReader(configId, from, to);
     }
     
     @Bean(name="oaiHarvestJob:writer")
     @StepScope
     public OAIItemWriter writer() {
     	return new OAIItemWriter();
-    }
-    
-    @Bean
-    public HibernateChunkListener hibernateChunkListener() {
-    	return new HibernateChunkListener();
     }
 
 }

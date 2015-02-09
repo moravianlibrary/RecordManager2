@@ -21,7 +21,6 @@ import cz.mzk.recordmanager.server.oai.dao.OAIHarvestConfigurationDAO;
 import cz.mzk.recordmanager.server.oai.model.OAIIdentify;
 import cz.mzk.recordmanager.server.oai.model.OAIListRecords;
 import cz.mzk.recordmanager.server.oai.model.OAIRecord;
-import cz.mzk.recordmanager.server.util.Constants;
 import cz.mzk.recordmanager.server.util.HibernateSessionSynchronizer;
 import cz.mzk.recordmanager.server.util.HibernateSessionSynchronizer.SessionBinder;
 
@@ -44,13 +43,25 @@ public class OAIItemReader implements ItemReader<List<OAIRecord>>, ItemStream,
 
 	private OAIHarvester harvester;
 
+	// configuration
+	private Long confId;
+	
+	private Date fromDate;
+	
+	private Date untilDate;
+	
 	// state
 	private String resumptionToken;
 
 	private boolean finished = false;
-
-	private Long confId;
 	
+	public OAIItemReader(Long confId, Date fromDate, Date untilDate) {
+		super();
+		this.confId = confId;
+		this.fromDate = fromDate;
+		this.untilDate = untilDate;
+	}
+
 	@Override
 	public List<OAIRecord> read() {
 		if (finished) {
@@ -92,46 +103,20 @@ public class OAIItemReader implements ItemReader<List<OAIRecord>>, ItemStream,
 
 	@Override
 	public void beforeStep(final StepExecution stepExecution) {
-		try (SessionBinder session = sync.register()) {
-			confId = stepExecution.getJobParameters().getLong(
-					Constants.JOB_PARAM_CONF_ID);
+		//try (SessionBinder session = sync.register()) {
 			OAIHarvestConfiguration conf = configDao.get(confId);
 			OAIHarvesterParams params = new OAIHarvesterParams();
 			params.setUrl(conf.getUrl());
 			params.setMetadataPrefix(conf.getMetadataPrefix());
 			params.setGranularity(conf.getGranularity());
-			ExecutionContext context = stepExecution.getExecutionContext();
-
-			Date fromDate = stepExecution.getJobParameters().getDate(
-					Constants.JOB_PARAM_FROM_DATE);
-			if (context.containsKey(Constants.JOB_PARAM_FROM_DATE)) {
-				Object obj = context.get(Constants.JOB_PARAM_FROM_DATE);
-				if (obj instanceof Date) {
-					fromDate = (Date) obj;
-				} 
-			}
-			if (fromDate != null) {
-				params.setFrom(fromDate);
-			}
-			
-			Date untilDate = stepExecution.getJobParameters().getDate(
-					Constants.JOB_PARAM_UNTIL_DATE);
-			if (context.containsKey(Constants.JOB_PARAM_UNTIL_DATE)) {
-				Object obj = context.get(Constants.JOB_PARAM_UNTIL_DATE);
-				if (obj instanceof Date) {
-					untilDate = (Date) obj;
-				} 
-			}
-			if (untilDate != null) {
-				params.setUntil(untilDate);
-			}
-			
+			params.setFrom(fromDate);
+			params.setUntil(untilDate);
 			harvester = harvesterFactory.create(params);
 			processIdentify(conf);
 			conf = configDao.get(confId);
 			params.setGranularity(conf.getGranularity());
 			harvester = harvesterFactory.create(params);
-		}
+		//}
 	}
 	
 	/**
@@ -143,5 +128,4 @@ public class OAIItemReader implements ItemReader<List<OAIRecord>>, ItemStream,
 		configDao.persist(conf);
 	}
 	
-
 }
