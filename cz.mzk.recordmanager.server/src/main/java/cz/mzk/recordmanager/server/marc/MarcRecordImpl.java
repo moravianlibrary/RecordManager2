@@ -9,6 +9,7 @@ import org.marc4j.marc.ControlField;
 import org.marc4j.marc.DataField;
 import org.marc4j.marc.Record;
 import org.marc4j.marc.Subfield;
+
 import cz.mzk.recordmanager.server.util.MetadataUtils;
 
 public class MarcRecordImpl implements MarcRecord {
@@ -54,14 +55,20 @@ public class MarcRecordImpl implements MarcRecord {
 		return null;
 	}
 	
+	public List<String> getFields(String tag, String separator, char... subfields) {
+		return getFields(tag, MatchAllDataFieldMatcher.INSTANCE, separator, subfields);
+	}
+	
 	@Override
-	public List<String> getFields(String tag, String separator,
+	public List<String> getFields(String tag, DataFieldMatcher matcher, String separator,
 			char... subfields) {
 		List<DataField> fields = dataFields.get(tag);
 		List<String> result = new ArrayList<String>(fields.size());
 		for (DataField field : fields) {
-			String content = parseSubfields(field ,separator, subfields);
-			result.add(content);
+			if (matcher.matches(field)) {
+				String content = parseSubfields(field ,separator, subfields);
+				result.add(content);
+			}
 		}
 		return result;
 	}

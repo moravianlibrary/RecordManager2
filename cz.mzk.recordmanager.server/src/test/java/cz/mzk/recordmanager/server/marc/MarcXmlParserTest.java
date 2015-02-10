@@ -3,6 +3,7 @@ package cz.mzk.recordmanager.server.marc;
 import java.io.InputStream;
 import java.util.List;
 
+import org.marc4j.marc.DataField;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -30,9 +31,20 @@ public class MarcXmlParserTest extends AbstractTest {
 				+ "České republiky : tradice, historie, památky, "
 				+ "turistika, současnost /";
 		Assert.assertEquals(marc.getTitle(), expectedTitle);
+		
 		List<String> fields650 = marc.getFields("650", " ", new char[] {'a', 'z'});
 		Assert.assertEquals(fields650.size(), 4);
 		Assert.assertTrue(fields650.contains("obce Česko"));
+		
+		DataFieldMatcher matcher = new DataFieldMatcher() {
+
+			@Override
+			public boolean matches(DataField field) {
+				return field.getIndicator1() == ' ' && field.getIndicator2() == '7';
+			}
+			
+		};
+		marc.getFields("072", matcher, " ", 'x');
 	}
 
 	@Test
