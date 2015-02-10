@@ -1,7 +1,8 @@
 package cz.mzk.recordmanager.server.marc;
 
-public interface MarcRecord {
+import cz.mzk.recordmanager.server.metadata.MetadataRecord;
+
+public interface MarcRecord extends MetadataRecord {
 
 	public String getField(String tag, char subfield);
-
 }

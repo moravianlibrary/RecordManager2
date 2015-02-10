@@ -15,6 +15,7 @@ import cz.mzk.recordmanager.server.marc.InvalidMarcException;
 import cz.mzk.recordmanager.server.marc.MarcRecord;
 import cz.mzk.recordmanager.server.marc.MarcXmlParser;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
+import cz.mzk.recordmanager.server.util.MetadataUtils;
 
 @Component
 public class MarcXmlDedupKeyParser implements DedupKeysParser {
@@ -38,6 +39,7 @@ public class MarcXmlDedupKeyParser implements DedupKeysParser {
 		try {
 			MarcRecord rec = parser.parseRecord(is);
 			record.setIsbn(getIsbn(rec));
+			record.setTitle(MetadataUtils.normalize(rec.getTitle()));
 		} catch (InvalidMarcException ime) {
 			throw new DedupKeyParserException("Record can't be parsed", ime);
 		}
@@ -51,5 +53,4 @@ public class MarcXmlDedupKeyParser implements DedupKeysParser {
 		}
 		return isbnValidator.validate(isbn);
 	}
-
 }

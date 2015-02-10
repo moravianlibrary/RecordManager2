@@ -14,6 +14,7 @@ import cz.mzk.recordmanager.server.model.HarvestedRecord;
 public class MarcXmlDedupKeyParserTest extends AbstractTest {
 	
 	private static final String EXPECTED_ISBN = "9788090539327";
+	private static final String EXPECTED_TITLE = "ceskarepublikamestaaobceceskerepublikytradicehistoriepamatkyturistikasoucasnost";
 	
 	@Autowired
 	private MarcXmlDedupKeyParser parser;
@@ -27,6 +28,7 @@ public class MarcXmlDedupKeyParserTest extends AbstractTest {
 		record.setRawRecord(rawRecord);
 		parser.parse(record);
 		Assert.assertEquals(record.getIsbn(), EXPECTED_ISBN);
+		Assert.assertEquals(record.getTitle(), EXPECTED_TITLE);
 	}
 	
 	@Test(expectedExceptions=DedupKeyParserException.class)
