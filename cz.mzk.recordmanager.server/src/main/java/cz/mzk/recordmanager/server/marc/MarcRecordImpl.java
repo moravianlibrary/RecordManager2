@@ -9,15 +9,18 @@ import org.marc4j.marc.ControlField;
 import org.marc4j.marc.DataField;
 import org.marc4j.marc.Record;
 import org.marc4j.marc.Subfield;
-import org.marc4j.marc.VariableField;
-
 import cz.mzk.recordmanager.server.util.MetadataUtils;
 
 public class MarcRecordImpl implements MarcRecord {
 
+	private static final String DEFAULT_SEPARATOR = " ";
+	
+	private static final String EMPTY_STRING = "";
+	
 	protected final Record record;
 	
 	protected final Map<String, List<DataField>> dataFields;
+	
 	protected final List<ControlField> controlFields;
 	
 	public MarcRecordImpl(Record record) {
@@ -36,20 +39,33 @@ public class MarcRecordImpl implements MarcRecord {
 			dataFields.put(field.getTag(), list);
 		}
 	}
+	
+	@Override
+	public String getField(String tag, char... subfields) {
+		return getField(tag, DEFAULT_SEPARATOR, subfields);
+	}
 
 	@Override
-	public String getField(String tag, char subfield) {
-		VariableField field = record.getVariableField(tag);
-		if (field instanceof DataField) {
-			DataField df = (DataField) field;
-			Subfield sf = df.getSubfield(subfield);
-			if (sf != null) {
-				return sf.getData();
-			}
+	public String getField(String tag, String separator, char... subfields) {
+		List<DataField> fields = dataFields.get(tag);
+		if (fields != null && fields.size() > 0) {
+			return parseSubfields((DataField) fields.get(0), separator, subfields);
 		}
 		return null;
 	}
-
+	
+	@Override
+	public List<String> getFields(String tag, String separator,
+			char... subfields) {
+		List<DataField> fields = dataFields.get(tag);
+		List<String> result = new ArrayList<String>(fields.size());
+		for (DataField field : fields) {
+			String content = parseSubfields(field ,separator, subfields);
+			result.add(content);
+		}
+		return result;
+	}
+	
 	/**
 	 * @return 245a:245b.245n.245p
 	 */
@@ -75,6 +91,20 @@ public class MarcRecordImpl implements MarcRecord {
 			builder.append(subfields.get(i).getData());
 		}
 		return builder.toString();
+	}
+	
+	protected String parseSubfields(DataField df, String separator, char... subfields) {
+		StringBuilder sb = new StringBuilder();
+		String sep = EMPTY_STRING;
+		for (char subfield : subfields) {
+			Subfield sf = df.getSubfield(subfield);
+			if (sf != null) {
+				sb.append(sep);
+				sb.append(sf.getData());
+				sep = separator;
+			}
+		}
+		return sb.toString();
 	}
 	
 	/**

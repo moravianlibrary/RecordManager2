@@ -1,6 +1,7 @@
 package cz.mzk.recordmanager.server.marc;
 
 import java.io.InputStream;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.Assert;
@@ -29,6 +30,9 @@ public class MarcXmlParserTest extends AbstractTest {
 				+ "České republiky : tradice, historie, památky, "
 				+ "turistika, současnost /";
 		Assert.assertEquals(marc.getTitle(), expectedTitle);
+		List<String> fields650 = marc.getFields("650", " ", new char[] {'a', 'z'});
+		Assert.assertEquals(fields650.size(), 4);
+		Assert.assertTrue(fields650.contains("obce Česko"));
 	}
 
 	@Test

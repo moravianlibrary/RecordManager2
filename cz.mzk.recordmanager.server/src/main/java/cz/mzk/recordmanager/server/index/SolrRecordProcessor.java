@@ -12,8 +12,6 @@ import cz.mzk.recordmanager.server.oai.dao.DedupRecordDAO;
 import cz.mzk.recordmanager.server.oai.dao.RecordLinkDAO;
 
 public class SolrRecordProcessor implements ItemProcessor<Long, SolrInputDocument> {
-
-	private static final String ID_FIELD = "id";
 	
 	@Autowired
 	private DedupRecordDAO dedupRecordDao;
@@ -21,14 +19,14 @@ public class SolrRecordProcessor implements ItemProcessor<Long, SolrInputDocumen
 	@Autowired
 	private RecordLinkDAO recordLinkDao;
 	
+	@Autowired
+	private DelegatingSolrRecordMapper mapper;
+	
 	@Override
 	public SolrInputDocument process(Long dedupRecordId) throws Exception {
-		DedupRecord record = dedupRecordDao.load(dedupRecordId);
-		List<HarvestedRecord> records = recordLinkDao.getHarvestedRecords(record);
-		// FIXME: implementation
-		SolrInputDocument document = new SolrInputDocument();
-		document.addField(ID_FIELD, record.getId());
-		return document;
+		DedupRecord dedupRecord = dedupRecordDao.load(dedupRecordId);
+		List<HarvestedRecord> records = recordLinkDao.getHarvestedRecords(dedupRecord);
+		return mapper.map(dedupRecord, records);
 	}
 
 }
