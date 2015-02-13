@@ -37,6 +37,7 @@ public class DedupRecordsJobConfig {
     @Bean
     public Job dedupRecordsJob(@Qualifier("dedupRecordsJob:step") Step step) {
         return jobs.get("dedupRecordsJob")
+        		.validator(new DedupRecordsJobParametersValidator())
 				.flow(step)
 				.end()
 				.build();
