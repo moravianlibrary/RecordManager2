@@ -18,6 +18,7 @@ import org.springframework.jdbc.datasource.init.DatabasePopulator;
 import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+import cz.mzk.recordmanager.server.index.SolrServerFactory;
 import cz.mzk.recordmanager.server.util.HttpClient;
 
 @Configuration
@@ -62,6 +63,12 @@ public class AppConfigDev {
 	public HttpClient mockedHttpClient() {
 		return EasyMock.createStrictMock(HttpClient.class);
 	}
+	
+	@Bean
+	@Primary
+    public SolrServerFactory mockedSolrServerFactory() {
+    	return EasyMock.createMock(SolrServerFactory.class);
+    }
 	
 	private DatabasePopulator databasePopulator() {
 	    final ResourceDatabasePopulator populator = new ResourceDatabasePopulator();

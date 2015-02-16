@@ -6,8 +6,6 @@ import org.hibernate.SessionFactory;
 import org.springframework.batch.core.configuration.JobRegistry;
 import org.springframework.batch.core.configuration.annotation.DefaultBatchConfigurer;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
-import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
-import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.configuration.support.ApplicationContextFactory;
 import org.springframework.batch.core.configuration.support.DefaultJobLoader;
 import org.springframework.batch.core.configuration.support.GenericApplicationContextFactory;
@@ -25,7 +23,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
-import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.orm.hibernate4.HibernateTransactionManager;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -33,6 +30,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import cz.mzk.recordmanager.server.dedup.DedupRecordsJobConfig;
 import cz.mzk.recordmanager.server.index.IndexRecordsToSolrJobConfig;
+import cz.mzk.recordmanager.server.index.SolrServerFactory;
+import cz.mzk.recordmanager.server.index.SolrServerFactoryImpl;
 import cz.mzk.recordmanager.server.oai.harvest.OAIHarvestJobConfig;
 import cz.mzk.recordmanager.server.oai.harvest.OAIHarvesterFactory;
 import cz.mzk.recordmanager.server.oai.harvest.OAIHarvesterFactoryImpl;
@@ -137,6 +136,13 @@ public class AppConfig extends DefaultBatchConfigurer {
     public HibernateSessionSynchronizer hibernateSessionSynchronizer() {
     	return new HibernateSessionSynchronizer();
     }
+  
+    /*
+    @Bean
+    public SolrServerFactory solrServerFactory() {
+    	return new SolrServerFactoryImpl();
+    }
+    */
     
     @Override
 	public PlatformTransactionManager getTransactionManager() {

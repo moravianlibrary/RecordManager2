@@ -32,6 +32,8 @@ public class IndexRecordsToSolrJobConfig {
 	
 	private static final Date DATE_OVERRIDEN_BY_EXPRESSION = null;
 	
+	private static final String STRING_OVERRIDEN_BY_EXPRESSION = null;
+	
 	@Autowired
     private JobBuilderFactory jobs;
 
@@ -55,7 +57,7 @@ public class IndexRecordsToSolrJobConfig {
             .<Long, SolrInputDocument> chunk(20) //
             .reader(reader(DATE_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION)) //
             .processor(processor()) //
-            .writer(writer()) //
+            .writer(writer(STRING_OVERRIDEN_BY_EXPRESSION)) //
             .build();
     }
 	
@@ -89,8 +91,8 @@ public class IndexRecordsToSolrJobConfig {
     
     @Bean(name="indexRecordsToSolrJob:writer")
     @StepScope
-    public SolrIndexWriter writer() {
-    	return new SolrIndexWriter();
+    public SolrIndexWriter writer(@Value("#{jobParameters[solrUrl]}") String solrUrl) {
+    	return new SolrIndexWriter(solrUrl);
     }
 
 }

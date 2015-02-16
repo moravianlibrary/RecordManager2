@@ -3,17 +3,26 @@ package cz.mzk.recordmanager.server.index;
 import java.util.List;
 
 import org.apache.solr.client.solrj.SolrServer;
-import org.apache.solr.client.solrj.impl.HttpSolrServer;
 import org.apache.solr.common.SolrInputDocument;
 import org.springframework.batch.core.ExitStatus;
 import org.springframework.batch.core.StepExecution;
 import org.springframework.batch.core.StepExecutionListener;
 import org.springframework.batch.item.ItemWriter;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class SolrIndexWriter implements ItemWriter<SolrInputDocument>, StepExecutionListener {
 
+	@Autowired
+	private SolrServerFactory factory;
+	
+	private String solrUrl;
+	
 	private SolrServer server;
 	
+	public SolrIndexWriter(String solrUrl) {
+		this.solrUrl = solrUrl;
+	}
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public void write(List<? extends SolrInputDocument> documents) throws Exception {
@@ -22,11 +31,7 @@ public class SolrIndexWriter implements ItemWriter<SolrInputDocument>, StepExecu
 
 	@Override
 	public void beforeStep(StepExecution stepExecution) {
-		String solrServerUrl = stepExecution.getJobParameters().getString("solrUrl");
-		if (solrServerUrl == null) {
-			throw new IllegalStateException("Missing job parameter: solrUrl");
-		}
-		server = new HttpSolrServer(solrServerUrl);
+		server = factory.create(solrUrl);
 	}
 
 	@Override

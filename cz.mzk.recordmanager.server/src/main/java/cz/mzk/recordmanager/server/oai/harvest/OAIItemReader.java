@@ -45,16 +45,16 @@ public class OAIItemReader implements ItemReader<List<OAIRecord>>, ItemStream,
 
 	// configuration
 	private Long confId;
-	
+
 	private Date fromDate;
-	
+
 	private Date untilDate;
-	
+
 	// state
 	private String resumptionToken;
 
 	private boolean finished = false;
-	
+
 	public OAIItemReader(Long confId, Date fromDate, Date untilDate) {
 		super();
 		this.confId = confId;
@@ -67,7 +67,7 @@ public class OAIItemReader implements ItemReader<List<OAIRecord>>, ItemStream,
 		if (finished) {
 			return null;
 		}
-		
+
 		OAIListRecords listRecords = harvester.listRecords(resumptionToken);
 		resumptionToken = listRecords.getNextResumptionToken();
 		if (resumptionToken == null) {
@@ -103,29 +103,29 @@ public class OAIItemReader implements ItemReader<List<OAIRecord>>, ItemStream,
 
 	@Override
 	public void beforeStep(final StepExecution stepExecution) {
-		//try (SessionBinder session = sync.register()) {
-			OAIHarvestConfiguration conf = configDao.get(confId);
-			OAIHarvesterParams params = new OAIHarvesterParams();
-			params.setUrl(conf.getUrl());
-			params.setMetadataPrefix(conf.getMetadataPrefix());
-			params.setGranularity(conf.getGranularity());
-			params.setFrom(fromDate);
-			params.setUntil(untilDate);
-			harvester = harvesterFactory.create(params);
-			processIdentify(conf);
-			conf = configDao.get(confId);
-			params.setGranularity(conf.getGranularity());
-			harvester = harvesterFactory.create(params);
-		//}
+		OAIHarvestConfiguration conf = configDao.get(confId);
+		OAIHarvesterParams params = new OAIHarvesterParams();
+		params.setUrl(conf.getUrl());
+		params.setMetadataPrefix(conf.getMetadataPrefix());
+		params.setGranularity(conf.getGranularity());
+		params.setFrom(fromDate);
+		params.setUntil(untilDate);
+		harvester = harvesterFactory.create(params);
+		processIdentify(conf);
+		conf = configDao.get(confId);
+		params.setGranularity(conf.getGranularity());
+		harvester = harvesterFactory.create(params);
 	}
-	
+
 	/**
-	 * process Identify request and update stored {@link OAIHarvestConfiguration}
+	 * process Identify request and update stored
+	 * {@link OAIHarvestConfiguration}
 	 */
 	private void processIdentify(OAIHarvestConfiguration conf) {
 		OAIIdentify identify = harvester.identify();
-		conf.setGranularity(OAIGranularity.stringToOAIGranularity(identify.getGranularity()));
+		conf.setGranularity(OAIGranularity.stringToOAIGranularity(identify
+				.getGranularity()));
 		configDao.persist(conf);
 	}
-	
+
 }
