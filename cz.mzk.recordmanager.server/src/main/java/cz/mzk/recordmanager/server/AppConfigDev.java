@@ -6,6 +6,7 @@ import java.util.List;
 import javax.sql.DataSource;
 
 import org.easymock.EasyMock;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -47,12 +48,13 @@ public class AppConfigDev {
 	}
 	
 	@Bean
-	public DataSource dataSource() {
+	public DataSource dataSource(@Value("${jdbc.driverClassName}") String driverClassName, @Value("${jdbc.url}") String url, 
+			@Value("${jdbc.username}") String username, @Value("${jdbc.password}") String password) {
 		DriverManagerDataSource dataSource = new DriverManagerDataSource();
-		dataSource.setDriverClassName("org.apache.derby.jdbc.EmbeddedDriver");
-		dataSource.setUrl("jdbc:derby:memory:recordmanager;create=true");
-		dataSource.setPassword("recordmanager");
-		dataSource.setUsername("recordmanager");
+		dataSource.setDriverClassName(driverClassName);
+		dataSource.setUrl(url);
+		dataSource.setPassword(username);
+		dataSource.setUsername(password);
 		DataSourceInitializer init = dataSourceInitializer(dataSource);
 		init.afterPropertiesSet();
 		return dataSource;
