@@ -137,12 +137,10 @@ public class AppConfig extends DefaultBatchConfigurer {
     	return new HibernateSessionSynchronizer();
     }
   
-    /*
     @Bean
     public SolrServerFactory solrServerFactory() {
     	return new SolrServerFactoryImpl();
     }
-    */
     
     @Override
 	public PlatformTransactionManager getTransactionManager() {
