@@ -63,7 +63,7 @@ public class IndexRecordsToSolrJobConfig {
 	
     @Bean(name="indexRecordsToSolrJob:reader")
 	@StepScope
-    public ItemReader<Long> reader(@Value("#{jobParameters[from]}") Date from, @Value("#{jobParameters[from]}") Date to) throws Exception {
+    public ItemReader<Long> reader(@Value("#{jobParameters[from]}") Date from, @Value("#{jobParameters[to]}") Date to) throws Exception {
 		JdbcPagingItemReader<Long> reader = new JdbcPagingItemReader<Long>();
 		SqlPagingQueryProviderFactoryBean pqpf = new SqlPagingQueryProviderFactoryBean();
 		pqpf.setDataSource(dataSource);

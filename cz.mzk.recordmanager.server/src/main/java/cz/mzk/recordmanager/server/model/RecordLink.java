@@ -33,6 +33,9 @@ public class RecordLink {
 		@ManyToOne(optional = false)
 		@JoinColumn(name = "dedup_record_id", nullable = false)
 		private DedupRecord dedupRecord;
+		
+		public RecordLinkId() {
+		}
 
 		public RecordLinkId(HarvestedRecord harvestedRecord,
 				DedupRecord dedupRecord) {
@@ -59,6 +62,9 @@ public class RecordLink {
 	
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date created = new Date();
+	
+	public RecordLink() {
+	}
 	
 	public RecordLink(HarvestedRecord harvestedRecord, DedupRecord dedupRecord) {
 		this.id = new RecordLinkId(harvestedRecord, dedupRecord);

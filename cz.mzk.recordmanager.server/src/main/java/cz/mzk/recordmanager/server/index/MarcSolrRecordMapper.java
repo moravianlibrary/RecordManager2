@@ -24,6 +24,9 @@ public class MarcSolrRecordMapper implements SolrRecordMapper {
 	@Override
 	public SolrInputDocument map(DedupRecord dedupRecord,
 			List<HarvestedRecord> records) {
+		if (records.isEmpty()) {
+			return null;
+		}
 		HarvestedRecord record = records.get(0);
 		SolrInputDocument document = parse(record);
 		document.addField(ID_FIELD, dedupRecord.getId());

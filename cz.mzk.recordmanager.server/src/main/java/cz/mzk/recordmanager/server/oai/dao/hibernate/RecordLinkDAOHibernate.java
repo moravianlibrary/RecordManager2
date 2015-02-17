@@ -2,7 +2,10 @@ package cz.mzk.recordmanager.server.oai.dao.hibernate;
 
 import java.util.List;
 
+import org.hibernate.Criteria;
 import org.hibernate.Session;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Component;
 
 import cz.mzk.recordmanager.server.model.DedupRecord;
@@ -28,11 +31,10 @@ public class RecordLinkDAOHibernate extends
 	@SuppressWarnings("unchecked")
 	public List<HarvestedRecord> getHarvestedRecords(DedupRecord master) {
 		Session session = sessionFactory.getCurrentSession();
-		return (List<HarvestedRecord>) session
-				.createQuery(
-						"from DedupRecord where id.dedupRecord = ?")
-				.setParameter(0, master)
-				.list();
+		Criteria crit = session.createCriteria(RecordLink.class);
+		crit.add(Restrictions.eqOrIsNull("id.dedupRecord", master));
+		crit.setProjection(Projections.property("id.harvestedRecord"));
+		return (List<HarvestedRecord>) crit.list();
 	}
 
 }

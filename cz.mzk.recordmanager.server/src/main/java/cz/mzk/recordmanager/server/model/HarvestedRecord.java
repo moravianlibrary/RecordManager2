@@ -18,7 +18,7 @@ public class HarvestedRecord extends AbstractDomainObject {
 	
 	public static final String TABLE_NAME = "harvested_record";
 	
-	@ManyToOne(optional=false)
+	@ManyToOne(optional=false, fetch=FetchType.LAZY)
 	@JoinColumn(name="oai_harvest_conf_id", nullable=false)
 	private OAIHarvestConfiguration harvestedFrom;
 	
