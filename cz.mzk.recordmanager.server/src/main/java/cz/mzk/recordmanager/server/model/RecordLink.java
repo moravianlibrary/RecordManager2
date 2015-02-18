@@ -2,6 +2,7 @@ package cz.mzk.recordmanager.server.model;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Objects;
 
 import javax.persistence.Embeddable;
 import javax.persistence.Embedded;
@@ -53,6 +54,24 @@ public class RecordLink {
 		public DedupRecord getDedupRecord() {
 			return dedupRecord;
 		}
+		
+		@Override
+		public int hashCode() {
+			return Objects.hash(harvestedRecord, dedupRecord);
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if (this == obj) {
+				return true;
+			}
+			if (obj == null || getClass() != obj.getClass()) {
+				return false;
+			}
+			RecordLinkId other = (RecordLinkId) obj;
+			return Objects.equals(this.getHarvestedRecord(), other.getHarvestedRecord()) &&
+					Objects.equals(this.getDedupRecord(), other.getDedupRecord());
+		}
 
 	}
 	
@@ -84,6 +103,23 @@ public class RecordLink {
 
 	public void setCreated(Date created) {
 		this.created = created;
+	}
+	
+	@Override
+	public int hashCode() {
+		return Objects.hash(id);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null || getClass() != obj.getClass()) {
+			return false;
+		}
+		RecordLink other = (RecordLink) obj;
+		return Objects.equals(this.id, other.id);
 	}
 
 }

@@ -1,5 +1,7 @@
 package cz.mzk.recordmanager.server.model;
 
+import java.util.Objects;
+
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -30,6 +32,23 @@ public class AbstractDomainObject {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null || getClass() != obj.getClass()) {
+			return false;
+		}
+		AbstractDomainObject other = (AbstractDomainObject) obj;
+		return Objects.equals(this.getId(), other.getId());
 	}
 
 }
