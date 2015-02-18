@@ -32,6 +32,7 @@ public class MarcScriptFactoryTest extends AbstractTest {
 		Assert.assertEquals(entries.get("author"), null);
 		Assert.assertEquals(entries.get("published"), "Rožnov pod Radhoštěm : Proxima Bohemia, 2014");
 		Assert.assertEquals(entries.get("title"), "Česká republika : města a obce České republiky : tradice, historie, památky, turistika, současnost / [redakce Veronika Ševčíková, Lenka Kovářová]");
+		Assert.assertEquals(entries.get("format"), "Book");
 	}
 
 }

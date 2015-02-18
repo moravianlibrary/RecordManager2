@@ -25,5 +25,9 @@ public class MarcDSL {
 		String subFields = matcher.group(2);
 		return record.getField(fieldTag, subFields.toCharArray());
 	}
+	
+	public String getFormat(String arg) {
+		return record.getFormat();
+	}
 
 }

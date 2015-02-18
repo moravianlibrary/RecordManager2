@@ -22,12 +22,22 @@ public class MarcRecordImpl implements MarcRecord {
 	
 	protected final Map<String, List<DataField>> dataFields;
 	
-	protected final List<ControlField> controlFields;
+	protected final Map<String, List<ControlField>> controlFields;
 	
 	public MarcRecordImpl(Record record) {
 		super();
 		this.record = record;
-		this.controlFields = record.getControlFields();
+		this.controlFields = new HashMap<String, List<ControlField>>();
+		for (ControlField field: record.getControlFields()) {
+			List<ControlField> list;
+			if (controlFields.containsKey(field.getTag())) {
+				list = controlFields.get(field.getTag());
+			} else {
+				list = new ArrayList<ControlField>();
+			}
+			list.add(field);
+			controlFields.put(field.getTag(), list);
+		}
 		this.dataFields = new HashMap<String, List<DataField>>();
 		for (DataField field: record.getDataFields()) {
 			List<DataField> list;
@@ -140,6 +150,8 @@ public class MarcRecordImpl implements MarcRecord {
 		return fieldList.isEmpty() ? null : fieldList.get(0);
 	}
 	
+	
+	
 	/**
 	 * get all subfields of {@link DataField} with corresponding codes
 	 * @param field
@@ -162,5 +174,216 @@ public class MarcRecordImpl implements MarcRecord {
 	
 	protected boolean isControlTag(final String tag) {
 		return tag.startsWith("00");
+	}
+	
+	public String getFormat() {
+		boolean onlineResource = false;
+		for (ControlField field : controlFields.get("007")) {
+			String data = field.getData();
+			if (data.length() < 2) {
+				continue;
+			}
+			char code1 = Character.toUpperCase(data.charAt(0));
+			char code2 = Character.toUpperCase(data.charAt(1));
+
+			switch (code1) {
+			case 'A':
+				switch (code2) {
+				case 'D':
+					return "Atlas";
+				default:
+					return "Map";
+				}
+			case 'C':
+				switch (code2) {
+				case 'A':
+					return "TapeCartridge";
+				case 'B':
+					return "ChipCartridge";
+				case 'C':
+					return "DiscCartridge";
+				case 'F':
+					return "TapeCassette";
+				case 'H':
+					return "TapeReel";
+				case 'J':
+					return "FloppyDisk";
+				case 'M':
+				case 'O':
+					return "CDROM";
+				case 'R':
+					// Do not return - this will cause anything with an
+					// 856 field to be labeled as "Electronic"
+					onlineResource = true;
+					break;
+				default:
+					return "Electronic";
+				}
+				break;
+			case 'D':
+				return "Globe";
+			case 'F':
+				return "Braille";
+			case 'G':
+				switch (code2) {
+				case 'C':
+				case 'D':
+					return "Filmstrip";
+				case 'T':
+					return "Transparency";
+				default:
+					return "Slide";
+				}
+			case 'H':
+				return "Microfilm";
+			case 'K':
+				switch (code2) {
+				case 'C':
+					return "Collage";
+				case 'D':
+					return "Drawing";
+				case 'E':
+					return "Painting";
+				case 'F':
+					return "Print";
+				case 'G':
+					return "Photonegative";
+				case 'J':
+					return "Print";
+				case 'L':
+					return "TechnicalDrawing";
+				case 'O':
+					return "FlashCard";
+				case 'N':
+					return "Chart";
+				default:
+					return "Photo";
+				}
+			case 'M':
+				switch (code2) {
+				case 'F':
+					return "VideoCassette";
+				case 'R':
+					return "Filmstrip";
+				default:
+					return "MotionPicture";
+				}
+			case 'O':
+				return "Kit";
+			case 'Q':
+				return "MusicalScore";
+			case 'R':
+				return "SensorImage";
+			case 'S':
+				switch (code2) {
+				case 'D':
+					if (data.length() > 14) {
+						return Character.toUpperCase(data.charAt(13)) == 'D' ? "CD" : "SoundDisc";
+					}
+					break;
+				case 'S':
+					return "SoundCassette";
+				default:
+					return "SoundRecording";
+				}
+			case 'V':
+				if (data.length() < 5) {
+					break;
+				}
+				switch (Character.toUpperCase(data.charAt(4))) {
+				case 'S':
+					return "BluRay";
+				case 'V':
+					return "DVD";
+				}
+				switch (code2) {
+				case 'C':
+					return "VideoCartridge";
+				case 'D':
+					return "VideoDisc";
+				case 'F':
+					return "VideoCassette";
+				case 'R':
+					return "VideoReel";
+				default:
+					return "Video";
+				}
+			}
+		}
+
+		char leaderCode = record.getLeader().getTypeOfRecord();
+		
+		switch (Character.toUpperCase(leaderCode)) {
+		case 'C':
+		case 'D':
+			return "MusicalScore";
+		case 'E':
+		case 'F':
+			return "Map";
+		case 'G':
+			return "Slide";
+		case 'I':
+			return "SoundRecording";
+		case 'J':
+			return "MusicRecording";
+		case 'K':
+			return "Photo";
+		case 'M':
+			return "Electronic";
+		case 'O':
+		case 'P':
+			return "Kit";
+		case 'R':
+			return "PhysicalObject";
+		case 'T':
+			return "Manuscript";
+		}
+		
+		leaderCode = record.getLeader().getImplDefined1()[0];
+		
+		switch (Character.toUpperCase(leaderCode)) {
+		// Monograph
+		case 'M':
+			if (onlineResource) {
+				return "eBook";
+			} else {
+				return "Book";
+			}
+		// Serial
+		case 'S':
+			// Look in 008 to determine what type of Continuing Resource
+			for (ControlField innerField : controlFields.get("008")) {
+				if (innerField.getData().length() < 23) {
+					continue;
+				}
+				char innerCode = innerField.getData().charAt(22);
+				switch (Character.toUpperCase(innerCode)) {
+				case 'N':
+					return onlineResource ? "eNewspaper" : "Newspaper";
+				case 'P':
+					return onlineResource ? "eJournal" : "Journal";
+				default:
+					return onlineResource ? "eSerial" : "Serial";
+				}
+			}
+			break;
+		case 'A':
+			// Component part in monograph
+			return onlineResource ? "eBookSection" : "BookSection";
+		case 'B':
+			// Component part in serial
+			return onlineResource ? "eArticle" : "Article";
+		case 'C':
+			// Collection
+			return "Collection";
+		case 'D':
+			// Component part in collection (sub unit)
+			return "SubUnit";
+		case 'I':
+			// Integrating resource
+			return "ContinuouslyUpdatedResource";
+		}
+		return "Other";
+			
 	}
 }
