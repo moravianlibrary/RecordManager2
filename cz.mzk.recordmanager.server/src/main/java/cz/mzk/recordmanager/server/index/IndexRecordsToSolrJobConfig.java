@@ -30,6 +30,14 @@ public class IndexRecordsToSolrJobConfig {
 	
 	private static Logger logger = LoggerFactory.getLogger(IndexRecordsToSolrJobConfig.class);
 	
+	public static final String JOB_ID = "indexRecordsToSolrJob";
+	
+	public static final String DATE_FROM_JOB_PARAM = "from";
+	
+	public static final String DATE_TO_JOB_PARAM = "to";
+	
+	public static final String SOLR_URL_JOB_PARAM = "solrUrl";
+	
 	private static final Date DATE_OVERRIDEN_BY_EXPRESSION = null;
 	
 	private static final String STRING_OVERRIDEN_BY_EXPRESSION = null;
@@ -45,7 +53,8 @@ public class IndexRecordsToSolrJobConfig {
     
     @Bean
     public Job indexRecordsToSolrJob(@Qualifier("indexRecordsToSolrJob:step") Step step) {
-        return jobs.get("indexRecordsToSolrJob")
+        return jobs.get(JOB_ID)
+        		.validator(new IndexRecordsToSolrJobParametersValidator())
 				.flow(step)
 				.end()
 				.build();
@@ -63,7 +72,8 @@ public class IndexRecordsToSolrJobConfig {
 	
     @Bean(name="indexRecordsToSolrJob:reader")
 	@StepScope
-    public ItemReader<Long> reader(@Value("#{jobParameters[from]}") Date from, @Value("#{jobParameters[to]}") Date to) throws Exception {
+    public ItemReader<Long> reader(@Value("#{jobParameters[" + DATE_FROM_JOB_PARAM  + "]}") Date from,
+    		@Value("#{jobParameters[" + DATE_TO_JOB_PARAM + "]}") Date to) throws Exception {
     	if (from != null && to == null) {
     		to = new Date();
     	}
@@ -98,7 +108,7 @@ public class IndexRecordsToSolrJobConfig {
     
     @Bean(name="indexRecordsToSolrJob:writer")
     @StepScope
-    public SolrIndexWriter writer(@Value("#{jobParameters[solrUrl]}") String solrUrl) {
+    public SolrIndexWriter writer(@Value("#{jobParameters[" + SOLR_URL_JOB_PARAM + "]}") String solrUrl) {
     	return new SolrIndexWriter(solrUrl);
     }
 
