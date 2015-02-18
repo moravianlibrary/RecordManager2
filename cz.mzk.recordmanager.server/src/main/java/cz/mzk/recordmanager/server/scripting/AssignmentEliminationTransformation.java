@@ -48,9 +48,9 @@ public class AssignmentEliminationTransformation implements ASTTransformation {
 		    	if (left instanceof VariableExpression && op.getType() == Types.ASSIGN) {
 		    		VariableExpression var = (VariableExpression) left;
 		    		String variable = var.getName();
-		    		logger.debug("Field {} is overriden, setting to null in {}", variable, source.getName());
 		    		variables.add(variable);
 		    		if (variablesToExclude.contains(variable)) {
+		    			logger.debug("Field {} is overriden, setting to null in {}", variable, source.getName());
 		    			exp.setRightExpression(CONSTANT_NULL);
 		    		}
 		    	}

@@ -24,6 +24,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import cz.mzk.recordmanager.server.jdbc.LongValueRowMapper;
+import cz.mzk.recordmanager.server.springbatch.JobFailureListener;
 
 @Configuration
 public class IndexRecordsToSolrJobConfig {
@@ -55,6 +56,7 @@ public class IndexRecordsToSolrJobConfig {
     public Job indexRecordsToSolrJob(@Qualifier("indexRecordsToSolrJob:step") Step step) {
         return jobs.get(JOB_ID)
         		.validator(new IndexRecordsToSolrJobParametersValidator())
+        		.listener(JobFailureListener.INSTANCE)
 				.flow(step)
 				.end()
 				.build();

@@ -1,6 +1,7 @@
 package cz.mzk.recordmanager.server.marc;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -73,6 +74,9 @@ public class MarcRecordImpl implements MarcRecord {
 	public List<String> getFields(String tag, DataFieldMatcher matcher, String separator,
 			char... subfields) {
 		List<DataField> fields = dataFields.get(tag);
+		if (fields == null) {
+			return Collections.emptyList();
+		}
 		List<String> result = new ArrayList<String>(fields.size());
 		for (DataField field : fields) {
 			if (matcher.matches(field)) {

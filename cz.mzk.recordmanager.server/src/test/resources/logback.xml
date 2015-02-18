@@ -8,6 +8,8 @@
 	</appender>
 
 	<logger name="cz.mzk.recordmanager" level="DEBUG" />
+	
+	<logger name="org.springframework" level="TRACE" />
 
 	<root level="ERROR">
 		<appender-ref ref="STDOUT" />
