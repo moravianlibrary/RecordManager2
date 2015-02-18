@@ -64,21 +64,28 @@ public class IndexRecordsToSolrJobConfig {
     @Bean(name="indexRecordsToSolrJob:reader")
 	@StepScope
     public ItemReader<Long> reader(@Value("#{jobParameters[from]}") Date from, @Value("#{jobParameters[to]}") Date to) throws Exception {
+    	if (from != null && to == null) {
+    		to = new Date();
+    	}
 		JdbcPagingItemReader<Long> reader = new JdbcPagingItemReader<Long>();
 		SqlPagingQueryProviderFactoryBean pqpf = new SqlPagingQueryProviderFactoryBean();
 		pqpf.setDataSource(dataSource);
 		pqpf.setSelectClause("SELECT dedup_record_id");
 		pqpf.setFromClause("FROM dedup_record_last_update");
-		pqpf.setWhereClause("WHERE last_update BETWEEN :from AND :to");
+		if (from != null && to != null) {
+			pqpf.setWhereClause("WHERE last_update BETWEEN :from AND :to");
+		}
 		pqpf.setSortKey("dedup_record_id");
 		reader.setRowMapper(new LongValueRowMapper());
 		reader.setPageSize(20);
     	reader.setQueryProvider(pqpf.getObject());
     	reader.setDataSource(dataSource);
-    	Map<String, Object> parameterValues = new HashMap<String, Object>();
-    	parameterValues.put("from", from);
-    	parameterValues.put("to", to);
-		reader.setParameterValues(parameterValues);
+    	if (from != null && to != null) {
+    		Map<String, Object> parameterValues = new HashMap<String, Object>();
+    		parameterValues.put("from", from);
+    		parameterValues.put("to", to);
+    		reader.setParameterValues(parameterValues);
+    	}
     	reader.afterPropertiesSet();
     	return reader;
     }

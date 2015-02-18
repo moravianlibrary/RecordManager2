@@ -3,6 +3,7 @@ package cz.mzk.recordmanager.server.index;
 import java.util.List;
 
 import org.apache.solr.client.solrj.SolrServer;
+import org.apache.solr.client.solrj.response.UpdateResponse;
 import org.apache.solr.common.SolrInputDocument;
 import org.springframework.batch.core.ExitStatus;
 import org.springframework.batch.core.StepExecution;
@@ -26,7 +27,7 @@ public class SolrIndexWriter implements ItemWriter<SolrInputDocument>, StepExecu
 	@SuppressWarnings("unchecked")
 	@Override
 	public void write(List<? extends SolrInputDocument> documents) throws Exception {
-		server.add((List<SolrInputDocument>) documents);
+		UpdateResponse response = server.add((List<SolrInputDocument>) documents);
 	}
 
 	@Override

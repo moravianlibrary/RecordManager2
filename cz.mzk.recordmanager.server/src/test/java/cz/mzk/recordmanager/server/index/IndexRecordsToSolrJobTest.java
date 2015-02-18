@@ -1,5 +1,7 @@
 package cz.mzk.recordmanager.server.index;
 
+import static org.easymock.EasyMock.and;
+import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.reset;
@@ -14,6 +16,8 @@ import java.util.Map;
 
 import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.response.UpdateResponse;
+import org.apache.solr.common.SolrInputDocument;
+import org.easymock.Capture;
 import org.easymock.EasyMock;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobParameter;
@@ -58,7 +62,8 @@ public class IndexRecordsToSolrJobTest extends AbstractTest {
 		reset(solrServerFactory);
 		reset(mockedSolrServer);
 		expect(solrServerFactory.create(SOLR_URL)).andReturn(mockedSolrServer);
-		expect(mockedSolrServer.add(anyObject(Collection.class))).andReturn(new UpdateResponse());
+		Capture<Collection<SolrInputDocument>> documents = EasyMock.newCapture();
+		expect(mockedSolrServer.add(and(capture(documents), (Collection<SolrInputDocument>) anyObject(Collection.class)))).andReturn(new UpdateResponse());
 		replay(solrServerFactory, mockedSolrServer);
 		
 		Job job = jobRegistry.getJob("indexRecordsToSolrJob");
