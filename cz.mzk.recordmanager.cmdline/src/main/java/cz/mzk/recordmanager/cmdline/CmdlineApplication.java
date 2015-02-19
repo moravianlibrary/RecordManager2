@@ -12,6 +12,7 @@ import org.springframework.orm.hibernate4.SessionFactoryUtils;
 import org.springframework.orm.hibernate4.SessionHolder;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 
+import cz.mzk.recordmanager.server.AppConfig;
 import cz.mzk.recordmanager.server.springbatch.JobExecutor;
 import cz.mzk.recordmanager.server.util.Constants;
 
@@ -45,7 +46,7 @@ public class CmdlineApplication {
 	
 	private static void performJob(final JobParameters jobParams) throws Exception {
 		try (AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext()) {
-			applicationContext.register(AppConfigCmdline.class);
+			applicationContext.register(AppConfigCmdline.class, AppConfig.class);
 			applicationContext.refresh();
 			applicationContext.start();
 			SessionFactory sessionFactory = applicationContext
