@@ -1,5 +1,9 @@
 package cz.mzk.recordmanager.server.dedup;
 
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Arrays;
+
 import javax.sql.DataSource;
 
 import org.slf4j.Logger;
@@ -17,8 +21,11 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import com.google.common.io.CharStreams;
+
 import cz.mzk.recordmanager.server.jdbc.LongValueRowMapper;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
+import cz.mzk.recordmanager.server.springbatch.SqlCommandTasklet;
 
 @Configuration
 public class DedupRecordsJobConfig {
@@ -34,18 +41,36 @@ public class DedupRecordsJobConfig {
     @Autowired
     private DataSource dataSource;
     
+    private String updateDedupRecordSql = CharStreams.toString(new InputStreamReader(getClass() //
+    		.getClassLoader().getResourceAsStream("job/dedupRecordsJob/deleteRecordLink.sql"), "UTF-8"));
+    
+    private String deleteRecordLinkSql = CharStreams.toString(new InputStreamReader(getClass() //
+    		.getClassLoader().getResourceAsStream("job/dedupRecordsJob/updateDedupRecord.sql"), "UTF-8"));
+    
+    public DedupRecordsJobConfig() throws IOException {
+    }
+    
     @Bean
-    public Job dedupRecordsJob(@Qualifier("dedupRecordsJob:step") Step step) {
+    public Job dedupRecordsJob(@Qualifier("dedupRecordsJob:deleteStep") Step deleteStep,
+    		@Qualifier("dedupRecordsJob:updateStep") Step updateStep) {
         return jobs.get("dedupRecordsJob")
         		.validator(new DedupRecordsJobParametersValidator())
-				.flow(step)
+        		.flow(deleteStep)
+				.next(updateStep)
 				.end()
 				.build();
     }
     
-    @Bean(name="dedupRecordsJob:step")
-    public Step step() throws Exception {
+    @Bean(name="dedupRecordsJob:deleteStep")
+    public Step deleteStep() throws Exception {
 		return steps.get("dedupRecordsStep")
+				.tasklet(new SqlCommandTasklet(Arrays.asList(updateDedupRecordSql, deleteRecordLinkSql)))
+				.build();
+    }
+    
+    @Bean(name="dedupRecordsJob:updateStep")
+    public Step step() throws Exception {
+		return steps.get("dedupRecordsUpdateStep")
             .<Long, HarvestedRecord> chunk(20)
             .reader(reader())
             .processor(processor())
