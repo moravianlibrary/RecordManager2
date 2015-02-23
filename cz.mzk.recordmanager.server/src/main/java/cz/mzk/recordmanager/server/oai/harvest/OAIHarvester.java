@@ -3,7 +3,9 @@ package cz.mzk.recordmanager.server.oai.harvest;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -76,7 +78,8 @@ public class OAIHarvester {
 	}
 
 	private String createUrl(String resumptionToken) {
-		Map<String, String> params = new HashMap<String, String>();
+		Map<String, String> params = new LinkedHashMap<String, String>();
+		params.put("verb", "ListRecords");
 		if (resumptionToken == null) {
 			params.put("metadataPrefix", parameters.getMetadataPrefix());
 			if (parameters.getSet() != null) {
@@ -91,8 +94,6 @@ public class OAIHarvester {
 		} else {
 			params.put("resumptionToken", resumptionToken);
 		}
-		
-		params.put("verb", "ListRecords");
 		return UrlUtils.buildUrl(parameters.getUrl(), params);
 	}
 	

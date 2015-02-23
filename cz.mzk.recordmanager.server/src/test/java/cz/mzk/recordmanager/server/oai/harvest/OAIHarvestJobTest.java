@@ -104,7 +104,7 @@ public class OAIHarvestJobTest extends AbstractTest {
 		InputStream response0 = this.getClass().getResourceAsStream("/sample/Identify.xml");
 		InputStream response1 = this.getClass().getResourceAsStream("/sample/ListRecordsFrom.xml");
 		expect(httpClient.executeGet("http://aleph.mzk.cz/OAI?verb=Identify")).andReturn(response0);
-		expect(httpClient.executeGet("http://aleph.mzk.cz/OAI?verb=ListRecords&from=2015-01-01T01%3A00%3A00Z&metadataPrefix=marc21")).andReturn(response1);
+		expect(httpClient.executeGet("http://aleph.mzk.cz/OAI?verb=ListRecords&metadataPrefix=marc21&from=2015-01-01T01%3A00%3A00Z")).andReturn(response1);
 		replay(httpClient);
 		
 		Map<String, JobParameter> params = new HashMap<String, JobParameter>();
@@ -141,7 +141,7 @@ public class OAIHarvestJobTest extends AbstractTest {
 		InputStream response0 = this.getClass().getResourceAsStream("/sample/IdentifyNonstandardGranularity.xml");
 		InputStream response1 = this.getClass().getResourceAsStream("/sample/ListRecordsNLK.xml");
 		expect(httpClient.executeGet("http://oai.medvik.cz/medvik2cpk/oai?verb=Identify")).andReturn(response0);
-		expect(httpClient.executeGet("http://oai.medvik.cz/medvik2cpk/oai?verb=ListRecords&from=2015-01-01&metadataPrefix=marc21")).andReturn(response1);
+		expect(httpClient.executeGet("http://oai.medvik.cz/medvik2cpk/oai?verb=ListRecords&metadataPrefix=marc21&from=2015-01-01")).andReturn(response1);
 		replay(httpClient);
 
 		Map<String, JobParameter> params = new HashMap<String, JobParameter>();
@@ -159,7 +159,7 @@ public class OAIHarvestJobTest extends AbstractTest {
 		InputStream response0 = this.getClass().getResourceAsStream("/sample/Identify.xml");
 		InputStream response1 = this.getClass().getResourceAsStream("/sample/ListRecordsFrom.xml");
 		expect(httpClient.executeGet("http://aleph.mzk.cz/OAI?verb=Identify")).andReturn(response0);
-		expect(httpClient.executeGet("http://aleph.mzk.cz/OAI?verb=ListRecords&from=2015-01-02T01%3A00%3A00Z&metadataPrefix=marc21")).andReturn(response1);
+		expect(httpClient.executeGet("http://aleph.mzk.cz/OAI?verb=ListRecords&metadataPrefix=marc21&from=2015-01-02T01%3A00%3A00Z")).andReturn(response1);
 		replay(httpClient);
 		
 		
@@ -174,7 +174,7 @@ public class OAIHarvestJobTest extends AbstractTest {
 		response0 = this.getClass().getResourceAsStream("/sample/Identify.xml");
 		response1 = this.getClass().getResourceAsStream("/sample/ListRecordsFrom.xml");
 		expect(httpClient.executeGet("http://aleph.mzk.cz/OAI?verb=Identify")).andReturn(response0);
-		expect(httpClient.executeGet("http://aleph.mzk.cz/OAI?verb=ListRecords&from=2015-01-03T01%3A00%3A00Z&metadataPrefix=marc21")).andReturn(response1);
+		expect(httpClient.executeGet("http://aleph.mzk.cz/OAI?verb=ListRecords&metadataPrefix=marc21&from=2015-01-03T01%3A00%3A00Z")).andReturn(response1);
 		replay(httpClient);
 
 		params = new HashMap<String, JobParameter>();

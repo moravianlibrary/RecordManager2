@@ -17,6 +17,7 @@ import org.springframework.context.annotation.Configuration;
 
 import cz.mzk.recordmanager.server.oai.model.OAIRecord;
 import cz.mzk.recordmanager.server.springbatch.DateIntervalPartitioner;
+import cz.mzk.recordmanager.server.springbatch.JobFailureListener;
 import cz.mzk.recordmanager.server.util.Constants;
 
 @Configuration
@@ -36,6 +37,7 @@ public class OAIHarvestJobConfig {
     public Job oaiPartitionedHarvestJob(@Qualifier("oaiHarvestJob:partitionedStep") Step step) {
         return jobs.get("oaiPartitionedHarvestJob") //
         		.validator(new OAIHarvestJobParametersValidator()) //
+        		.listener(JobFailureListener.INSTANCE) //
 				.flow(step) //
 				.end() //
 				.build();
@@ -45,6 +47,7 @@ public class OAIHarvestJobConfig {
     public Job oaiHarvestJob(@Qualifier("oaiHarvestJob:step") Step step) {
         return jobs.get("oaiHarvestJob") //
         		.validator(new OAIHarvestJobParametersValidator()) //
+        		.listener(JobFailureListener.INSTANCE) //
 				.flow(step) //
 				.end() //
 				.build();
