@@ -1,5 +1,6 @@
 package cz.mzk.recordmanager.server.dedup;
 
+import java.util.Date;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -55,6 +56,9 @@ public class DedupRecordsWriter implements ItemWriter<HarvestedRecord>  {
 		if (currentLink == null || !currentLink.getDedupRecord().equals(deduped)) {
 			logger.debug("creating record link between {} and {}", record, deduped);
 			if (currentLink != null) {
+				DedupRecord previousDedupRecord = currentLink.getDedupRecord();
+				previousDedupRecord.setUpdated(new Date());
+				dedupRecordDao.persist(previousDedupRecord);
 				recordLinkDao.delete(currentLink);
 			}
 			RecordLink newLink = new RecordLink(record, deduped);

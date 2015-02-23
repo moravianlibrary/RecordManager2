@@ -40,7 +40,8 @@ CREATE TABLE format (
 CREATE TABLE dedup_record (
   id                   DECIMAL(10) PRIMARY KEY,
   isbn                 VARCHAR(32),
-  title                VARCHAR(255)
+  title                VARCHAR(255),
+  updated              TIMESTAMP
 );
 
 CREATE TABLE harvested_record (

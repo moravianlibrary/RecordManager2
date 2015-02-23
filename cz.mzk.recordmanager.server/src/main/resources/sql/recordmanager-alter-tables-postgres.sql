@@ -1,3 +1,8 @@
+-- 19. 2. 2015 - xrosecky
+ALTER TABLE dedup_record ADD updated TIMESTAMP;
+
+DROP VIEW dedup_record_last_update;
+
 CREATE VIEW dedup_record_last_update AS
 SELECT
   dr.id dedup_record_id,

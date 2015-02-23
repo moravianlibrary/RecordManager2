@@ -53,28 +53,39 @@ public class IndexRecordsToSolrJobConfig {
     private DataSource dataSource;
     
     @Bean
-    public Job indexRecordsToSolrJob(@Qualifier("indexRecordsToSolrJob:step") Step step) {
+    public Job indexRecordsToSolrJob(@Qualifier("indexRecordsToSolrJob:updateRecordsStep") Step updateRecordsStep,
+    		@Qualifier("indexRecordsToSolrJob:deleteOrphanedRecordsStep") Step deleteOrphanedRecordsStep) {
         return jobs.get(JOB_ID)
         		.validator(new IndexRecordsToSolrJobParametersValidator())
         		.listener(JobFailureListener.INSTANCE)
-				.flow(step)
+				.flow(updateRecordsStep)
+				.next(deleteOrphanedRecordsStep)
 				.end()
 				.build();
     }
     
-    @Bean(name="indexRecordsToSolrJob:step")
-    public Step step() throws Exception {
-		return steps.get("indexRecordsToSolrJobStep")
+    @Bean(name="indexRecordsToSolrJob:updateRecordsStep")
+    public Step updateRecordsStep() throws Exception {
+		return steps.get("updateRecordsJobStep")
             .<Long, SolrInputDocument> chunk(20) //
-            .reader(reader(DATE_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION)) //
-            .processor(processor()) //
-            .writer(writer(STRING_OVERRIDEN_BY_EXPRESSION)) //
+            .reader(updatedRecordsReader(DATE_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION)) //
+            .processor(updatedRecordsProcessor()) //
+            .writer(updatedRecordsWriter(STRING_OVERRIDEN_BY_EXPRESSION)) //
+            .build();
+    }
+    
+    @Bean(name="indexRecordsToSolrJob:deleteOrphanedRecordsStep")
+    public Step deleteOrphanedRecordsStep() throws Exception {
+		return steps.get("deleteOrphanedRecordsJobStep")
+            .<Long, Long> chunk(20) //
+            .reader(orphanedRecordsReader(DATE_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION)) //
+            .writer(orphanedRecordsWriter(STRING_OVERRIDEN_BY_EXPRESSION)) //
             .build();
     }
 	
-    @Bean(name="indexRecordsToSolrJob:reader")
+    @Bean(name="indexRecordsToSolrJob:updatedRecordsReader")
 	@StepScope
-    public ItemReader<Long> reader(@Value("#{jobParameters[" + DATE_FROM_JOB_PARAM  + "]}") Date from,
+    public ItemReader<Long> updatedRecordsReader(@Value("#{jobParameters[" + DATE_FROM_JOB_PARAM  + "]}") Date from,
     		@Value("#{jobParameters[" + DATE_TO_JOB_PARAM + "]}") Date to) throws Exception {
     	if (from != null && to == null) {
     		to = new Date();
@@ -102,16 +113,52 @@ public class IndexRecordsToSolrJobConfig {
     	return reader;
     }
 	
-    @Bean(name="indexRecordsToSolrJob:processor")
+    @Bean(name="indexRecordsToSolrJob:updatedRecordsProcessor")
 	@StepScope
-	public SolrRecordProcessor processor() {
+	public SolrRecordProcessor updatedRecordsProcessor() {
 		return new SolrRecordProcessor();
 	}
     
-    @Bean(name="indexRecordsToSolrJob:writer")
+    @Bean(name="indexRecordsToSolrJob:updatedRecordsWriter")
     @StepScope
-    public SolrIndexWriter writer(@Value("#{jobParameters[" + SOLR_URL_JOB_PARAM + "]}") String solrUrl) {
+    public SolrIndexWriter updatedRecordsWriter(@Value("#{jobParameters[" + SOLR_URL_JOB_PARAM + "]}") String solrUrl) {
     	return new SolrIndexWriter(solrUrl);
+    }
+    
+    @Bean(name="indexRecordsToSolrJob:orphanedRecordsReader")
+	@StepScope
+    public ItemReader<Long> orphanedRecordsReader(@Value("#{jobParameters[" + DATE_FROM_JOB_PARAM  + "]}") Date from,
+    		@Value("#{jobParameters[" + DATE_TO_JOB_PARAM + "]}") Date to) throws Exception {
+    	if (from != null && to == null) {
+    		to = new Date();
+    	}
+		JdbcPagingItemReader<Long> reader = new JdbcPagingItemReader<Long>();
+		SqlPagingQueryProviderFactoryBean pqpf = new SqlPagingQueryProviderFactoryBean();
+		pqpf.setDataSource(dataSource);
+		pqpf.setSelectClause("SELECT dedup_record_id");
+		pqpf.setFromClause("FROM dedup_record_orphaned");
+		if (from != null && to != null) {
+			pqpf.setWhereClause("WHERE orphaned BETWEEN :from AND :to");
+		}
+		pqpf.setSortKey("dedup_record_id");
+		reader.setRowMapper(new LongValueRowMapper());
+		reader.setPageSize(20);
+    	reader.setQueryProvider(pqpf.getObject());
+    	reader.setDataSource(dataSource);
+    	if (from != null && to != null) {
+    		Map<String, Object> parameterValues = new HashMap<String, Object>();
+    		parameterValues.put("from", from);
+    		parameterValues.put("to", to);
+    		reader.setParameterValues(parameterValues);
+    	}
+    	reader.afterPropertiesSet();
+    	return reader;
+    }
+    
+    @Bean(name="indexRecordsToSolrJob:orphanedRecordsWriter")
+    @StepScope
+    public OrphanedRecordsWriter orphanedRecordsWriter(@Value("#{jobParameters[" + SOLR_URL_JOB_PARAM + "]}") String solrUrl) {
+    	return new OrphanedRecordsWriter(solrUrl);
     }
 
 }

@@ -19,12 +19,15 @@ import org.apache.solr.client.solrj.response.UpdateResponse;
 import org.apache.solr.common.SolrInputDocument;
 import org.easymock.Capture;
 import org.easymock.EasyMock;
+import org.springframework.batch.core.ExitStatus;
 import org.springframework.batch.core.Job;
+import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobParameter;
 import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.configuration.JobRegistry;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -61,7 +64,7 @@ public class IndexRecordsToSolrJobTest extends AbstractTest {
 	public void execute() throws Exception {
 		reset(solrServerFactory);
 		reset(mockedSolrServer);
-		expect(solrServerFactory.create(SOLR_URL)).andReturn(mockedSolrServer);
+		expect(solrServerFactory.create(SOLR_URL)).andReturn(mockedSolrServer).anyTimes();
 		Capture<Collection<SolrInputDocument>> documents = EasyMock.newCapture();
 		expect(mockedSolrServer.add(and(capture(documents), (Collection<SolrInputDocument>) anyObject(Collection.class)))).andReturn(new UpdateResponse());
 		replay(solrServerFactory, mockedSolrServer);
@@ -72,7 +75,8 @@ public class IndexRecordsToSolrJobTest extends AbstractTest {
 		params.put("to", new JobParameter(dateFormat.parse("1. 1. 2016")));
 		params.put("solrUrl", new JobParameter(SOLR_URL));
 		JobParameters jobParams = new JobParameters(params);
-		jobLauncher.run(job, jobParams);
+		JobExecution execution = jobLauncher.run(job, jobParams);
+		Assert.assertEquals(execution.getExitStatus(), ExitStatus.COMPLETED);
 		verify(solrServerFactory, mockedSolrServer);
 	}
 

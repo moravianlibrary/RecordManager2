@@ -14,7 +14,9 @@ import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.embedded.EmbeddedSolrServer;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.core.CoreContainer;
+import org.springframework.batch.core.ExitStatus;
 import org.springframework.batch.core.Job;
+import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobParameter;
 import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.configuration.JobRegistry;
@@ -55,14 +57,15 @@ public class IndexRecordsToEmbeddedSolrJobTest extends AbstractTest {
 	public void execute() throws Exception {
 		reset(solrServerFactory);
 		EmbeddedSolrServer server = createEmbeddedSolrServer();
-		expect(solrServerFactory.create(SOLR_URL)).andReturn(server);
+		expect(solrServerFactory.create(SOLR_URL)).andReturn(server).anyTimes();
 		replay(solrServerFactory);
 		try {
 			Job job = jobRegistry.getJob("indexRecordsToSolrJob");
 			Map<String, JobParameter> params = new HashMap<String, JobParameter>();
 			params.put("solrUrl", new JobParameter(SOLR_URL));
 			JobParameters jobParams = new JobParameters(params);
-			jobLauncher.run(job, jobParams);
+			JobExecution execution = jobLauncher.run(job, jobParams);
+			Assert.assertEquals(execution.getExitStatus(), ExitStatus.COMPLETED);
 			server.commit();
 			SolrQuery query = new SolrQuery();
 			query.set("q", "id:60");
