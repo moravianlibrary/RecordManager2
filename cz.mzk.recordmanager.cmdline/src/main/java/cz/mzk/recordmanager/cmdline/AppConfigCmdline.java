@@ -10,7 +10,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
 @Configuration
-@PropertySource(value={"file:${CONFIG_DIR}/database.properties", "file:${CONFIG_DIR}/database.local.properties"}, ignoreResourceNotFound=true)
+@PropertySource(value={"file:${CONFIG_DIR:.}/database.properties", "file:${CONFIG_DIR:.}/database.local.properties"}, ignoreResourceNotFound=true)
 public class AppConfigCmdline {
 	
 	@Autowired
