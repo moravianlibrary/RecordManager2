@@ -4,4 +4,5 @@ public interface MetadataRecord {
 	
 	public String getTitle();
 	public String getFormat();
+	public Long getPublicationYear();
 }

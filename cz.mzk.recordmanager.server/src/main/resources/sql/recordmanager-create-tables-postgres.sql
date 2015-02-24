@@ -41,6 +41,8 @@ CREATE TABLE dedup_record (
   id                   DECIMAL(10) PRIMARY KEY,
   isbn                 VARCHAR(32),
   title                VARCHAR(255),
+  publication_year     DECIMAL(4),
+  physical_format      VARCHAR(255),
   updated              TIMESTAMP
 );
 
@@ -54,6 +56,8 @@ CREATE TABLE harvested_record (
   format               VARCHAR(12) NOT NULL,
   isbn                 VARCHAR(32),
   title                VARCHAR(255),
+  publication_year     DECIMAL(4),
+  physical_format      VARCHAR(255),
   raw_record           BYTEA,
   FOREIGN KEY (oai_harvest_conf_id) REFERENCES oai_harvest_conf(id),
   FOREIGN KEY (format)              REFERENCES format(format)

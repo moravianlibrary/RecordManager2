@@ -3,14 +3,11 @@ package cz.mzk.recordmanager.server.marc;
 import java.io.InputStream;
 import java.util.List;
 
-import org.marc4j.marc.DataField;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import cz.mzk.recordmanager.server.AbstractTest;
-import cz.mzk.recordmanager.server.marc.MarcRecord;
-import cz.mzk.recordmanager.server.marc.MarcXmlParser;
 
 /**
  * Test various marcxml samples
@@ -36,7 +33,10 @@ public class MarcXmlParserTest extends AbstractTest {
 				'z' });
 		Assert.assertEquals(fields650.size(), 4);
 		Assert.assertTrue(fields650.contains("obce Česko"));
+		Assert.assertEquals(marc.getPublicationYear(), new Long(2014));
+		Assert.assertEquals(marc.getFormat(), "Book");
 
+		
 		DataFieldMatcher matcher = field -> field.getIndicator1() == ' '
 				&& field.getIndicator2() == '7';
 		marc.getFields("072", matcher, " ", 'x');
@@ -51,6 +51,8 @@ public class MarcXmlParserTest extends AbstractTest {
 		Assert.assertEquals(marc.getField("020", 'a'), "80-200-0358-4");
 		final String expectedTitle = "Česká nedělní postila = Postilla "
 				+ "de tempore Bohemica : vyloženie svatých čtení nedělních /";
+		Assert.assertEquals(marc.getPublicationYear(), new Long(1992));
+		Assert.assertEquals(marc.getFormat(), "Book");
 		Assert.assertEquals(marc.getTitle(), expectedTitle);
 	}
 
@@ -65,6 +67,8 @@ public class MarcXmlParserTest extends AbstractTest {
 		Assert.assertNotNull(marc);
 		Assert.assertEquals(marc.getField("020", 'a'), "3-540-08474-6");
 		Assert.assertEquals(marc.getField("HGS", 'a'), "0");
+		Assert.assertEquals(marc.getPublicationYear(), new Long(1978));
+		Assert.assertEquals(marc.getFormat(), "Book");
 		final String expectedTitle = "Cardiomyopathy and myocardial biopsy /";
 		Assert.assertEquals(marc.getTitle(), expectedTitle);
 	}

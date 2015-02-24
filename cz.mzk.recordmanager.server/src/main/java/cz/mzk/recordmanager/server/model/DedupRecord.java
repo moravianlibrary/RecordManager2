@@ -20,6 +20,12 @@ public class DedupRecord extends AbstractDomainObject {
 	@Column(name="title")
 	private String title;
 	
+	@Column(name="publication_year")
+	private Long publicationYear;
+	
+	@Column(name="physical_format")
+	private String physicalFormat;
+	
 	@Column(name="updated")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date updated = new Date();
@@ -38,6 +44,22 @@ public class DedupRecord extends AbstractDomainObject {
 
 	public void setTitle(String title) {
 		this.title = title;
+	}
+
+	public Long getPublicationYear() {
+		return publicationYear;
+	}
+
+	public void setPublicationYear(Long publicationYear) {
+		this.publicationYear = publicationYear;
+	}
+
+	public String getPhysicalFormat() {
+		return physicalFormat;
+	}
+
+	public void setPhysicalFormat(String physicalFormat) {
+		this.physicalFormat = physicalFormat;
 	}
 
 	public Date getUpdated() {

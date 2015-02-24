@@ -9,28 +9,35 @@ import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Component;
 
+@Component
 public class SqlCommandTasklet implements Tasklet {
 
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
 	
 	private List<String> commands;
+
+	public SqlCommandTasklet() {
+		
+	}
 	
-	public SqlCommandTasklet(String command) {
+	public void setCommand(String command) {
 		this.commands = Collections.singletonList(command);
 	}
 	
-	public SqlCommandTasklet(List<String> commands) {
+	public void setCommands(List<String> commands) {
 		this.commands = commands;
 	}
-
+	
 	@Override
 	public RepeatStatus execute(StepContribution contribution,
 			ChunkContext chunkContext) throws Exception {
 		for (String sql : commands) {
 			jdbcTemplate.execute(sql);
 		}
+		this.commands = Collections.emptyList();
 		return RepeatStatus.FINISHED;
 	}
 

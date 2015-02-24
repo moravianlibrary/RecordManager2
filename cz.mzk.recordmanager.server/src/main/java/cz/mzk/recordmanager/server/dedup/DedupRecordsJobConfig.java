@@ -38,6 +38,9 @@ public class DedupRecordsJobConfig {
     @Autowired
     private StepBuilderFactory steps;
     
+    @Autowired 
+    private SqlCommandTasklet sqlTasklet;
+    
     @Autowired
     private DataSource dataSource;
     
@@ -63,8 +66,9 @@ public class DedupRecordsJobConfig {
     
     @Bean(name="dedupRecordsJob:deleteStep")
     public Step deleteStep() throws Exception {
+    	sqlTasklet.setCommand(deleteRecordLinkSql);
 		return steps.get("dedupRecordsStep")
-				.tasklet(new SqlCommandTasklet(Arrays.asList(updateDedupRecordSql, deleteRecordLinkSql)))
+				.tasklet(sqlTasklet)
 				.build();
     }
     
@@ -86,7 +90,7 @@ public class DedupRecordsJobConfig {
 		pqpf.setDataSource(dataSource);
 		pqpf.setSelectClause("SELECT hr.id");
 		pqpf.setFromClause("FROM harvested_record hr LEFT JOIN record_link rl ON hr.id = rl.harvested_record_id");
-		pqpf.setWhereClause("WHERE rl.harvested_record_id IS NULL");
+		pqpf.setWhereClause("WHERE rl.harvested_record_id IS NULL AND hr.deleted IS NULL");
 		pqpf.setSortKey("id");
 		reader.setRowMapper(new LongValueRowMapper());
 		reader.setPageSize(20);

@@ -12,6 +12,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+
 @Entity
 @Table(name=HarvestedRecord.TABLE_NAME)
 public class HarvestedRecord extends AbstractDomainObject {
@@ -45,6 +46,12 @@ public class HarvestedRecord extends AbstractDomainObject {
 	
 	@Column(name="title")
 	private String title;
+	
+	@Column(name="publication_year")
+	private Long publicationYear;
+	
+	@Column(name="physical_format")
+	private String physicalFormat;
 	
 	@Basic(fetch = FetchType.LAZY)
 	@Column(name="raw_record") 
@@ -112,6 +119,22 @@ public class HarvestedRecord extends AbstractDomainObject {
 
 	public void setTitle(String title) {
 		this.title = title;
+	}
+
+	public Long getPublicationYear() {
+		return publicationYear;
+	}
+
+	public void setPublicationYear(Long publicationYear) {
+		this.publicationYear = publicationYear;
+	}
+
+	public String getPhysicalFormat() {
+		return physicalFormat;
+	}
+
+	public void setPhysicalFormat(String physicalFormat) {
+		this.physicalFormat = physicalFormat;
 	}
 
 	public byte[] getRawRecord() {

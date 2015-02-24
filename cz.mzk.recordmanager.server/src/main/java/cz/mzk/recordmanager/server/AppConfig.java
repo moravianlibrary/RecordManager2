@@ -35,6 +35,7 @@ import cz.mzk.recordmanager.server.index.SolrServerFactoryImpl;
 import cz.mzk.recordmanager.server.oai.harvest.OAIHarvestJobConfig;
 import cz.mzk.recordmanager.server.oai.harvest.OAIHarvesterFactory;
 import cz.mzk.recordmanager.server.oai.harvest.OAIHarvesterFactoryImpl;
+import cz.mzk.recordmanager.server.springbatch.SqlCommandTasklet;
 import cz.mzk.recordmanager.server.util.ApacheHttpClient;
 import cz.mzk.recordmanager.server.util.HibernateSessionSynchronizer;
 import cz.mzk.recordmanager.server.util.HttpClient;
@@ -140,6 +141,11 @@ public class AppConfig extends DefaultBatchConfigurer {
     @Bean
     public SolrServerFactory solrServerFactory() {
     	return new SolrServerFactoryImpl();
+    }
+    
+    @Bean
+    public SqlCommandTasklet sqlCommandTasklet() {
+    	return new SqlCommandTasklet();
     }
     
     @Override

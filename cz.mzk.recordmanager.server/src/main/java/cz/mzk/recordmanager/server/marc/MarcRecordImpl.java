@@ -182,7 +182,10 @@ public class MarcRecordImpl implements MarcRecord {
 	
 	public String getFormat() {
 		boolean onlineResource = false;
-		for (ControlField field : controlFields.get("007")) {
+		List<ControlField> cfl = controlFields.containsKey("007") ? 
+				controlFields.get("007") : new ArrayList<ControlField>();
+				
+		for (ControlField field : cfl) {
 			String data = field.getData();
 			if (data.length() < 2) {
 				continue;
@@ -356,7 +359,9 @@ public class MarcRecordImpl implements MarcRecord {
 		// Serial
 		case 'S':
 			// Look in 008 to determine what type of Continuing Resource
-			for (ControlField innerField : controlFields.get("008")) {
+			List<ControlField> innerCfl = controlFields.containsKey("008") ? 
+					controlFields.get("008") : new ArrayList<ControlField>();
+			for (ControlField innerField : innerCfl) {
 				if (innerField.getData().length() < 23) {
 					continue;
 				}
@@ -389,5 +394,15 @@ public class MarcRecordImpl implements MarcRecord {
 		}
 		return "Other";
 			
+	}
+
+	@Override
+	public Long getPublicationYear() {
+		String year = getField("260", 'c');
+		try {
+			return Long.parseLong(year);
+		} catch (NumberFormatException e) {}
+		return null;
+		
 	}
 }
