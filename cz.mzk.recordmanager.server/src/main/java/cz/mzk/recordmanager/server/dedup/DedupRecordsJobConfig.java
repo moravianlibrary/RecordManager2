@@ -2,8 +2,6 @@ package cz.mzk.recordmanager.server.dedup;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Arrays;
-
 import javax.sql.DataSource;
 
 import org.slf4j.Logger;
@@ -38,17 +36,14 @@ public class DedupRecordsJobConfig {
     @Autowired
     private StepBuilderFactory steps;
     
-    @Autowired 
-    private SqlCommandTasklet sqlTasklet;
-    
     @Autowired
     private DataSource dataSource;
     
     private String updateDedupRecordSql = CharStreams.toString(new InputStreamReader(getClass() //
-    		.getClassLoader().getResourceAsStream("job/dedupRecordsJob/deleteRecordLink.sql"), "UTF-8"));
+    		.getClassLoader().getResourceAsStream("job/dedupRecordsJob/updateDedupRecord.sql"), "UTF-8"));
     
     private String deleteRecordLinkSql = CharStreams.toString(new InputStreamReader(getClass() //
-    		.getClassLoader().getResourceAsStream("job/dedupRecordsJob/updateDedupRecord.sql"), "UTF-8"));
+    		.getClassLoader().getResourceAsStream("job/dedupRecordsJob/deleteRecordLink.sql"), "UTF-8"));
     
     public DedupRecordsJobConfig() throws IOException {
     }
@@ -66,9 +61,8 @@ public class DedupRecordsJobConfig {
     
     @Bean(name="dedupRecordsJob:deleteStep")
     public Step deleteStep() throws Exception {
-    	sqlTasklet.setCommand(deleteRecordLinkSql);
 		return steps.get("dedupRecordsStep")
-				.tasklet(sqlTasklet)
+				.tasklet(new SqlCommandTasklet(updateDedupRecordSql))
 				.build();
     }
     
