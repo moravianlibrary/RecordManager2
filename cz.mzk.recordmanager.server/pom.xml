@@ -16,6 +16,13 @@
 
 	<dependencies>
 
+		<!-- Project dependencies -->
+		<dependency>
+			<groupId>cz.mzk</groupId>
+			<artifactId>cz.mzk.recordmanager.api</artifactId>
+			<version>1.0.0-SNAPSHOT</version>
+		</dependency>
+
 		<!-- Spring -->
 		<dependency>
 			<groupId>org.springframework</groupId>
