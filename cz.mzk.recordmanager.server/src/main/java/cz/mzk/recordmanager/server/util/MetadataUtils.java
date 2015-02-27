@@ -15,4 +15,12 @@ public class MetadataUtils {
 				.replaceAll("\\W", "")
 				.toLowerCase();
 	}
+	
+	public static String normalizeAndShorten(final String input, int length) {
+		String normalized = normalize(input);
+		if (normalized == null) {
+			return null;
+		}
+		return normalized.substring(0, Math.min(length, normalized.length()));
+	}
 }

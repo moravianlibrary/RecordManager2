@@ -29,6 +29,8 @@ public class MarcXmlDedupKeyParserTest extends AbstractTest {
 		parser.parse(record);
 		Assert.assertEquals(record.getIsbn(), EXPECTED_ISBN);
 		Assert.assertEquals(record.getTitle(), EXPECTED_TITLE);
+		Assert.assertEquals(record.getPhysicalFormat(), "Book");
+		Assert.assertEquals(record.getPublicationYear(), new Long(2014));
 	}
 	
 	@Test(expectedExceptions=DedupKeyParserException.class)

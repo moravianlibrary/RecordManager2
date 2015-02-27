@@ -21,6 +21,8 @@ import cz.mzk.recordmanager.server.util.MetadataUtils;
 public class MarcXmlDedupKeyParser implements DedupKeysParser {
 
 	private final static String FORMAT = "marc21-xml";
+	
+	private final static int EFFECTIVE_TITLE_LENGTH = 255;
 
 	private final ISBNValidator isbnValidator = ISBNValidator.getInstance(true);
 
@@ -39,7 +41,12 @@ public class MarcXmlDedupKeyParser implements DedupKeysParser {
 		try {
 			MarcRecord rec = parser.parseRecord(is);
 			record.setIsbn(getIsbn(rec));
-			record.setTitle(MetadataUtils.normalize(rec.getTitle()));
+			record.setTitle(
+					MetadataUtils.normalizeAndShorten(
+							rec.getTitle(),
+							EFFECTIVE_TITLE_LENGTH));
+			record.setPhysicalFormat(rec.getFormat());
+			record.setPublicationYear(rec.getPublicationYear());
 		} catch (InvalidMarcException ime) {
 			throw new DedupKeyParserException("Record can't be parsed", ime);
 		}
