@@ -4,10 +4,14 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
+
 import org.apache.commons.lang.StringUtils;
+import org.hibernate.dialect.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
@@ -28,9 +32,33 @@ public class DedupRecordLocatorImpl implements DedupRecordLocator {
 	@Autowired
 	private DedupRecordDAO dedupRecordDao;
 	
-	private String query = "SELECT * FROM dedup_record WHERE isbn = ? OR title = ?";
+	@Autowired
+	private Environment environment;
+	
+	private boolean useLevenshteinDistance;
+	
+	private static String queryWithLevenshtein = "SELECT * FROM dedup_record dr WHERE dr.isbn = ? OR levenshtein(dr.title,?) < ?";
+	
+	private static String basicQuery = "SELECT * FROM dedup_record dr WHERE dr.isbn = ? OR dr.title = ?";
 
 	private static final int TITLE_MATCH_TRESHOLD = 50;
+	
+	@PostConstruct
+	public void initialize()  {
+		String hibernateDialect = environment.getProperty("hibernate.dialect");
+		try {
+			Object obj = Class.forName(hibernateDialect).newInstance();
+			if (obj instanceof Dialect) {
+				Dialect dialect = (Dialect) obj;
+				if (dialect.getFunctions().get("levenshtein") != null) {
+					useLevenshteinDistance = true;
+					return;
+				}
+			}
+		} catch (Exception e) {}
+		useLevenshteinDistance = false;
+	}
+	
 	
 	private static enum DedupRecordRowMapper implements RowMapper<DedupRecord> {
 
@@ -52,8 +80,22 @@ public class DedupRecordLocatorImpl implements DedupRecordLocator {
 	@Override
 	public DedupRecord locate(HarvestedRecord record) {
 		DedupRecord result = null;
-		List<DedupRecord> records = jdbcTemplate.query(query, new Object[]{ record.getIsbn(), record.getTitle() }, DedupRecordRowMapper.INSTANCE);
-		for (DedupRecord rec: records) {
+		List<DedupRecord> candidateRecords;
+		if (useLevenshteinDistance) {
+			//TODO compute distance dynamically 
+			Integer allowedDistance = new Integer(10); 
+			candidateRecords = jdbcTemplate.query(
+						queryWithLevenshtein, 
+						new Object[] { record.getIsbn(), record.getTitle(), allowedDistance },
+						DedupRecordRowMapper.INSTANCE);
+		} else {
+			candidateRecords = jdbcTemplate.query(
+						basicQuery,
+						new Object[] { record.getIsbn(), record.getTitle() },
+						DedupRecordRowMapper.INSTANCE);
+		}
+		
+		for (DedupRecord rec: candidateRecords) {
 			if (matchRecords(record, rec)) {
 				return rec;
 			}
