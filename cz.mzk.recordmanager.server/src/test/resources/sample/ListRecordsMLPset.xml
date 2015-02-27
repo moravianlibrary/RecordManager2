@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<OAI-PMH xmlns="http://www.openarchives.org/OAI/2.0/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/ http://www.openarchives.org/OAI/2.0/OAI-PMH.xsd">
+	<responseDate>2015-02-26T11:08:19Z</responseDate>
+	<request verb="ListRecords" metadataPrefix="marc21" set="complete">http://web2.mlp.cz/oai</request>
+	<ListRecords>
+		<record>
+			<header>
+				<identifier>oai:www.mlp.cz:1</identifier>
+				<datestamp>2013-09-19T09:43:13Z</datestamp>
+				<setSpec>until98</setSpec>
+				<setSpec>complete</setSpec>
+			</header>
+			<metadata>
+				<marc:record xmlns:marc="http://www.loc.gov/MARC21/slim"
+					xmlns="http://www.openarchives.org/OAI/2.0/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+					type="Bibliographic"
+					xsi:schemaLocation="http://www.loc.gov/MARC21/slim
+				http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd">
+					<marc:leader>00000nam a2200000 a 4500</marc:leader>
+					<marc:controlfield tag="001">1</marc:controlfield>
+					<marc:controlfield tag="003">CZ-PrNK</marc:controlfield>
+					<marc:controlfield tag="005">19910201000000.0</marc:controlfield>
+					<marc:controlfield tag="008">910201s1990----xr-----|------------cze--</marc:controlfield>
+					<marc:datafield ind1=" " ind2=" " tag="020">
+						<marc:subfield code="a">80-7017-204-5</marc:subfield>
+					</marc:datafield>
+					<marc:datafield ind1=" " ind2=" " tag="040">
+						<marc:subfield code="a">ABG001</marc:subfield>
+						<marc:subfield code="b">cze</marc:subfield>
+						<marc:subfield code="c">ABG001</marc:subfield>
+					</marc:datafield>
+					<marc:datafield ind1="1" ind2=" " tag="100">
+						<marc:subfield code="a">Šoltész, Štěpán,</marc:subfield>
+						<marc:subfield code="d">1889-1975</marc:subfield>
+						<marc:subfield code="4">aut</marc:subfield>
+					</marc:datafield>
+					<marc:datafield ind1="1" ind2="0" tag="245">
+						<marc:subfield code="a">Dějiny křesťanské církve /</marc:subfield>
+						<marc:subfield code="c">Štěpán Šoltész</marc:subfield>
+					</marc:datafield>
+					<marc:datafield ind1=" " ind2=" " tag="250">
+						<marc:subfield code="a">4. vyd</marc:subfield>
+					</marc:datafield>
+					<marc:datafield ind1=" " ind2=" " tag="260">
+						<marc:subfield code="a">Praha :</marc:subfield>
+						<marc:subfield code="b">Ústřední církevní
+							nakladatelství,</marc:subfield>
+						<marc:subfield code="c">1990</marc:subfield>
+					</marc:datafield>
+					<marc:datafield ind1=" " ind2=" " tag="300">
+						<marc:subfield code="a">158 s. ;</marc:subfield>
+						<marc:subfield code="c">8°</marc:subfield>
+					</marc:datafield>
+					<marc:datafield ind1="9" ind2=" " tag="520">
+						<marc:subfield code="a">Dějiny křesťanské církve
+							zachycují její hlavní vývojová období.</marc:subfield>
+					</marc:datafield>
+					<marc:datafield ind1="0" ind2=" " tag="653">
+						<marc:subfield code="a">forma: text</marc:subfield>
+						<marc:subfield code="a">nosič: papír</marc:subfield>
+						<marc:subfield code="a">způsob vydávání: monografie</marc:subfield>
+						<marc:subfield code="a">úroveň zpracování: jednoduchá</marc:subfield>
+						<marc:subfield code="a">dějiny křesťanství</marc:subfield>
+						<marc:subfield code="a">církevní dějiny</marc:subfield>
+					</marc:datafield>
+					<marc:datafield ind1=" " ind2="4" tag="655">
+						<marc:subfield code="a">studie</marc:subfield>
+					</marc:datafield>
+					<marc:datafield ind1=" " ind2=" " tag="910">
+						<marc:subfield code="a">ABG001</marc:subfield>
+						<marc:subfield code="b">L 4543</marc:subfield>
+					</marc:datafield>
+				</marc:record>
+			</metadata>
+		</record>
+	</ListRecords>
+</OAI-PMH>

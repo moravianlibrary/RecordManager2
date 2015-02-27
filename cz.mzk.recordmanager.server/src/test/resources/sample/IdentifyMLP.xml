@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<OAI-PMH xmlns="http://www.openarchives.org/OAI/2.0/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/ http://www.openarchives.org/OAI/2.0/OAI-PMH.xsd">
+	<responseDate>2015-02-26T11:12:46Z</responseDate>
+	<request verb="Identify">http://web2.mlp.cz/oai</request>
+	<Identify>
+		<repositoryName>Municipal Library of Prague</repositoryName>
+		<baseURL>web2.mlp.cz/cgi/oai</baseURL>
+		<protocolVersion>2.0</protocolVersion>
+		<adminEmail>krpatad@mlp.cz</adminEmail>
+		<earliestDatestamp>1997-12-31T23:00:00Z</earliestDatestamp>
+		<deletedRecord>no</deletedRecord>
+		<granularity>YYYY-MM-DDThh:mm:ssZ</granularity>
+		<description>
+			<oai-identifier xmlns="http://www.openarchives.org/OAI/2.0/oai-identifier"
+				xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+				xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai-identifier http://www.openarchives.org/OAI/2.0/oai-identifier.xsd">
+				<scheme>oai</scheme>
+				<repositoryIdentifier>www.mlp.cz</repositoryIdentifier>
+				<delimiter>:</delimiter>
+				<sampleIdentifier>oai:www.mlp.cz:72238</sampleIdentifier>
+			</oai-identifier>
+		</description>
+	</Identify>
+</OAI-PMH>

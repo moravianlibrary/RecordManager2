@@ -108,6 +108,7 @@ public class OAIItemReader implements ItemReader<List<OAIRecord>>, ItemStream,
 		params.setUrl(conf.getUrl());
 		params.setMetadataPrefix(conf.getMetadataPrefix());
 		params.setGranularity(conf.getGranularity());
+		params.setSet(conf.getSet());
 		params.setFrom(fromDate);
 		params.setUntil(untilDate);
 		harvester = harvesterFactory.create(params);

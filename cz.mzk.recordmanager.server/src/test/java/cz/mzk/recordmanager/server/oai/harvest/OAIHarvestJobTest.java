@@ -16,6 +16,7 @@ import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.explore.JobExplorer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.Assert;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import cz.mzk.recordmanager.server.AbstractTest;
@@ -45,23 +46,10 @@ public class OAIHarvestJobTest extends AbstractTest {
 	@Autowired
 	private HarvestedRecordDAO recordDao;
 	
-//	@Test
-//	public void execute() throws Exception {
-//		reset(httpClient);
-//		InputStream response0 = this.getClass().getResourceAsStream("/sample/Identify.xml");
-//		InputStream response1 = this.getClass().getResourceAsStream("/sample/ListRecords1.xml");
-//		InputStream response2 = this.getClass().getResourceAsStream("/sample/ListRecords2.xml");
-//		expect(httpClient.executeGet("http://aleph.mzk.cz/OAI?verb=Identify")).andReturn(response0);
-//		expect(httpClient.executeGet("http://aleph.mzk.cz/OAI?verb=ListRecords&metadataPrefix=marc21")).andReturn(response1);
-//		expect(httpClient.executeGet("http://aleph.mzk.cz/OAI?verb=ListRecords&resumptionToken=201408211302186999999999999999MZK01-VDK%3AMZK01-VDK")).andReturn(response2);
-//		replay(httpClient);
-//		Map<String, JobParameter> params = new HashMap<String, JobParameter>();
-//		params.put("configurationId", new JobParameter(300L));
-//		JobParameters jobParams = new JobParameters(params);
-//		Long jobExecutionId = jobExecutor.execute("oaiHarvestJob", jobParams);
-//		JobExecution exec = jobExplorer.getJobExecution(jobExecutionId);
-//		Assert.assertEquals(exec.getExitStatus(), ExitStatus.COMPLETED);
-//	}
+	@BeforeMethod
+	public void initLocator() throws Exception {
+		dbUnitHelper.init("dbunit/OAIHarvestTest.xml");
+	}
 	
 	@Test
 	public void testIdentify() throws Exception {
@@ -74,18 +62,9 @@ public class OAIHarvestJobTest extends AbstractTest {
 		expect(httpClient.executeGet("http://aleph.mzk.cz/OAI?verb=ListRecords&resumptionToken=201408211302186999999999999999MZK01-VDK%3AMZK01-VDK")).andReturn(response2);
 		replay(httpClient);
 
-		// prepare oaiConfig
 		final Long configId = 300L;
-		OAIHarvestConfiguration oaiConfig = configDao.get(configId);
-		oaiConfig.setGranularity(null);
-		configDao.persist(oaiConfig);
-		
-		oaiConfig = configDao.get(configId);
-
 		Map<String, JobParameter> params = new HashMap<String, JobParameter>();
 		params.put("configurationId", new JobParameter(configId));
-//		params.put("dummyparam", new JobParameter("dummyParam"));
-		
 		JobParameters jobParams = new JobParameters(params);
 		
 		Long jobExecutionId = jobExecutor.execute("oaiHarvestJob", jobParams);
@@ -208,6 +187,22 @@ public class OAIHarvestJobTest extends AbstractTest {
 		HarvestedRecord record = recordDao.findByIdAndHarvestConfiguration("oai:medvik.cz:111111", config);
 		Assert.assertNotNull(record, "Record not stored.");
 		Assert.assertNotNull(record.getDeleted());
+	}
+	
+	@Test
+	public void testHarvestSpecificSet() throws Exception {
+		reset(httpClient);
+		InputStream response0 = this.getClass().getResourceAsStream("/sample/IdentifyMLP.xml");
+		InputStream response1 = this.getClass().getResourceAsStream("/sample/ListRecordsMLPset.xml");
+		expect(httpClient.executeGet("http://web2.mlp.cz/cgi/oai?verb=Identify")).andReturn(response0);
+		expect(httpClient.executeGet("http://web2.mlp.cz/cgi/oai?verb=ListRecords&metadataPrefix=marc21&set=complete")).andReturn(response1);
+		replay(httpClient);
 		
+		Map<String, JobParameter> params = new HashMap<String, JobParameter>();
+		params.put(Constants.JOB_PARAM_CONF_ID, new JobParameter(303L));
+		
+		Long jobExecutionId = jobExecutor.execute(Constants.JOB_ID_HARVEST, new JobParameters(params));
+		JobExecution exec = jobExplorer.getJobExecution(jobExecutionId);
+		Assert.assertEquals(exec.getExitStatus(), ExitStatus.COMPLETED);
 	}
 }
