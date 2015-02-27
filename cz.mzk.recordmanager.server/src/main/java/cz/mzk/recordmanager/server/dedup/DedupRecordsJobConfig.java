@@ -2,6 +2,7 @@ package cz.mzk.recordmanager.server.dedup;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
+
 import javax.sql.DataSource;
 
 import org.slf4j.Logger;
@@ -11,6 +12,7 @@ import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepScope;
+import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.database.JdbcPagingItemReader;
 import org.springframework.batch.item.database.support.SqlPagingQueryProviderFactoryBean;
@@ -62,7 +64,7 @@ public class DedupRecordsJobConfig {
     @Bean(name="dedupRecordsJob:deleteStep")
     public Step deleteStep() throws Exception {
 		return steps.get("dedupRecordsStep")
-				.tasklet(new SqlCommandTasklet(updateDedupRecordSql))
+				.tasklet(updateDedupRecordTasklet())
 				.build();
     }
     
@@ -104,6 +106,12 @@ public class DedupRecordsJobConfig {
 	@StepScope
     public DedupRecordsWriter writer() {
     	return new DedupRecordsWriter();
+    }
+    
+    @Bean(name="dedupRecordsJob:updateDedupRecordTasklet")
+	@StepScope
+    public Tasklet updateDedupRecordTasklet() {
+    	return new SqlCommandTasklet(updateDedupRecordSql);
     }
 
 }
