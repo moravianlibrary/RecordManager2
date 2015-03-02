@@ -24,3 +24,12 @@ FROM
 WHERE
   NOT EXISTS(SELECT 1 FROM record_link rl WHERE rl.dedup_record_id = dr.id)
 ;
+
+-- 2. 3. 2015 - xrosecky
+ALTER TABLE harvested_record ADD publication_year  DECIMAL(4),
+                             ADD physical_format   VARCHAR(255)
+;
+
+ALTER TABLE dedup_record ADD publication_year  DECIMAL(4),
+                         ADD physical_format   VARCHAR(255)
+;
