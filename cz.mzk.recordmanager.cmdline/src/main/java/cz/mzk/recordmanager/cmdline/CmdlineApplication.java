@@ -12,21 +12,22 @@ import org.springframework.orm.hibernate4.SessionFactoryUtils;
 import org.springframework.orm.hibernate4.SessionHolder;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 
+import cz.mzk.recordmanager.api.model.batch.BatchJobExecutionDTO;
+import cz.mzk.recordmanager.api.service.BatchService;
 import cz.mzk.recordmanager.server.AppConfig;
 import cz.mzk.recordmanager.server.springbatch.JobExecutor;
 import cz.mzk.recordmanager.server.util.Constants;
 
 public class CmdlineApplication {
 
-	
-	private static final String JOB_HELP         = "help";
-	private static final String CLI_PARAM_JOB    = "job";
-	
+	private static final String JOB_HELP = "help";
+	private static final String JOB_RESTART = "restart";
+	private static final String CLI_PARAM_JOB = "job";
+
 	private static String jobName;
-	
-	
+
 	public static void main(String[] args) throws Exception {
-		
+
 		JobParameters params = null;
 		try {
 			params = createJobParams(args);
@@ -34,19 +35,19 @@ public class CmdlineApplication {
 			System.out.println(e.getMessage());
 			jobName = JOB_HELP;
 		}
-		
+
 		if (jobName.equals(JOB_HELP)) {
 			printHelp();
-			return;
-	    }
-
-		performJob(params);
-		
+		} else {
+			performJob(params);
+		}
 	}
-	
-	private static void performJob(final JobParameters jobParams) throws Exception {
+
+	private static void performJob(final JobParameters jobParams)
+			throws Exception {
 		try (AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext()) {
-			applicationContext.register(AppConfigCmdline.class, AppConfig.class);
+			applicationContext
+					.register(AppConfigCmdline.class, AppConfig.class);
 			applicationContext.refresh();
 			applicationContext.start();
 			SessionFactory sessionFactory = applicationContext
@@ -56,17 +57,24 @@ public class CmdlineApplication {
 				session = sessionFactory.openSession();
 				TransactionSynchronizationManager.bindResource(sessionFactory,
 						new SessionHolder(session));
-
-				JobExecutor executor = applicationContext
-						.getBean(JobExecutor.class);
-				executor.execute(jobName, jobParams);
-
+				if (!jobName.equals(JOB_RESTART)) {
+					JobExecutor executor = applicationContext
+							.getBean(JobExecutor.class);
+					executor.execute(jobName, jobParams);
+				} else {
+					BatchService batchService = applicationContext
+							.getBean(BatchService.class);
+					for (BatchJobExecutionDTO jobExecution : batchService
+							.getRunningJobExecutions()) {
+						batchService.restart(jobExecution);
+					}
+				}
 			} finally {
 				SessionFactoryUtils.closeSession(session);
 			}
 		}
 	}
-	
+
 	private static void printHelp() {
 		System.out.println("Recordmanager2 command line interface.\n");
 		System.out
@@ -84,9 +92,10 @@ public class CmdlineApplication {
 		System.out.println(String.format("%-20s%s",
 				Constants.JOB_PARAM_UNTIL_DATE, "until date (DATE)"));
 	}
-	
+
 	/**
 	 * create {@link JobParameters} object from command line arguments
+	 * 
 	 * @param args
 	 * @return
 	 */
@@ -95,16 +104,18 @@ public class CmdlineApplication {
 		String paramName = null;
 		for (int i = 0; i < args.length; i++) {
 			if (i % 2 == 0) {
-				//expected parameter name
+				// expected parameter name
 				if (args[i].startsWith("-")) {
 					paramName = args[i].substring(1);
 				} else {
-					throw new IllegalArgumentException("Expected parameter name at place of " + args[i]);
+					throw new IllegalArgumentException(
+							"Expected parameter name at place of " + args[i]);
 				}
 			} else {
-				//parameter value
+				// parameter value
 				if (args[i].startsWith("-")) {
-					throw new IllegalArgumentException("Paramenter \"" + paramName + "\" has no value.");
+					throw new IllegalArgumentException("Paramenter \""
+							+ paramName + "\" has no value.");
 				}
 				if (paramName.equals(CLI_PARAM_JOB)) {
 					jobName = args[i];
@@ -114,15 +125,16 @@ public class CmdlineApplication {
 				paramName = null;
 			}
 		}
-		
+
 		if (paramName != null) {
-			throw new IllegalArgumentException("Paramenter \"" + paramName + "\" has no value.");
+			throw new IllegalArgumentException("Paramenter \"" + paramName
+					+ "\" has no value.");
 		}
-		
+
 		if (jobName == null) {
 			throw new IllegalArgumentException("Missing job name.");
 		}
 		return new JobParameters(pMap);
 	}
-	
+
 }
