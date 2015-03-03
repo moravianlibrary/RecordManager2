@@ -98,8 +98,8 @@ public class DedupRecordsJobConfig {
     
     @Bean(name="dedupRecordsJob:processor")
 	@StepScope
-	public DedupKeysGeneratorProcessor processor() {
-		return new DedupKeysGeneratorProcessor();
+	public UpdateHarvestedRecordProcessor processor() {
+		return new UpdateHarvestedRecordProcessor();
 	}
     
     @Bean(name="dedupRecordsJob:writer")

@@ -28,6 +28,7 @@ import org.springframework.orm.hibernate4.HibernateTransactionManager;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+import cz.mzk.recordmanager.server.dedup.UpdateHarvestedRecordsJobConfig;
 import cz.mzk.recordmanager.server.dedup.DedupRecordsJobConfig;
 import cz.mzk.recordmanager.server.index.IndexRecordsToSolrJobConfig;
 import cz.mzk.recordmanager.server.index.SolrServerFactory;
@@ -130,7 +131,7 @@ public class AppConfig extends DefaultBatchConfigurer {
     @Bean
     public ApplicationContextFactory moreJobs() {
     	return new GenericApplicationContextFactory(OAIHarvestJobConfig.class, DedupRecordsJobConfig.class,
-    			IndexRecordsToSolrJobConfig.class, DeleteAllHarvestsJobConfig.class);
+    			IndexRecordsToSolrJobConfig.class, DeleteAllHarvestsJobConfig.class, UpdateHarvestedRecordsJobConfig.class);
     }
     
     @Bean
