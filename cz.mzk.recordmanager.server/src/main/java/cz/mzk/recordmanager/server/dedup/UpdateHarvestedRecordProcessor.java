@@ -20,12 +20,14 @@ public class UpdateHarvestedRecordProcessor implements ItemProcessor<Long, Harve
 
 	@Override
 	public HarvestedRecord process(Long id) throws Exception {
-		if (harvestedRecordDao == null) {
-			throw new NullPointerException("harvestedRecordDao");
-		}
 		logger.debug("About to fetch harvested record with id={}", id);
 		HarvestedRecord record = harvestedRecordDao.get(id);
-		dedupKeysParser.parse(record);
+		try {
+			dedupKeysParser.parse(record);
+		} catch (DedupKeyParserException dkpe) {
+			logger.error(String.format("Exception thrown during parsing dedup keys of %s", record), dkpe);
+			return null;
+		}
 		return record;
 	}
 
