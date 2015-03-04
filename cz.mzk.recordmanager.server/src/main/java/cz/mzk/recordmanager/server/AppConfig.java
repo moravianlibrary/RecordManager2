@@ -37,6 +37,9 @@ import cz.mzk.recordmanager.server.oai.harvest.DeleteAllHarvestsJobConfig;
 import cz.mzk.recordmanager.server.oai.harvest.OAIHarvestJobConfig;
 import cz.mzk.recordmanager.server.oai.harvest.OAIHarvesterFactory;
 import cz.mzk.recordmanager.server.oai.harvest.OAIHarvesterFactoryImpl;
+import cz.mzk.recordmanager.server.scripting.CachingMappingResolver;
+import cz.mzk.recordmanager.server.scripting.ClasspathMappingResolver;
+import cz.mzk.recordmanager.server.scripting.MappingResolver;
 import cz.mzk.recordmanager.server.util.ApacheHttpClient;
 import cz.mzk.recordmanager.server.util.HibernateSessionSynchronizer;
 import cz.mzk.recordmanager.server.util.HttpClient;
@@ -142,6 +145,11 @@ public class AppConfig extends DefaultBatchConfigurer {
     @Bean
     public SolrServerFactory solrServerFactory() {
     	return new SolrServerFactoryImpl();
+    }
+    
+    @Bean
+    public MappingResolver propertyResolver() {
+    	return new CachingMappingResolver(new ClasspathMappingResolver());
     }
     
     @Override

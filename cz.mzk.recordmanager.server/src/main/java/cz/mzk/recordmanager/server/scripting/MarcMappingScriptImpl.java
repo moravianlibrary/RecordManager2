@@ -14,16 +14,19 @@ public class MarcMappingScriptImpl implements MarcMappingScript {
 	
 	private final List<DelegatingScript> scripts;
 	
-	public MarcMappingScriptImpl(Binding binding, List<DelegatingScript> scripts) {
+	private final MappingResolver propertyResolver;
+	
+	public MarcMappingScriptImpl(Binding binding, List<DelegatingScript> scripts, MappingResolver propertyResolver) {
 		super();
 		this.scripts = scripts;
 		this.binding = binding;
+		this.propertyResolver = propertyResolver;
 	}
 
 	@Override
 	public Map<String, Object> parse(MarcRecord record) {
 		binding.getVariables().clear();
-		MarcDSL delegate = new MarcDSL(record);
+		MarcDSL delegate = new MarcDSL(record, propertyResolver);
 		for (DelegatingScript script : scripts) {
 			script.setDelegate(delegate);
 			script.run();

@@ -1,6 +1,7 @@
 package cz.mzk.recordmanager.server.scripting;
 
 import java.io.InputStream;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,7 @@ public class MarcScriptFactoryTest extends AbstractTest {
 	@Autowired
 	private MarcScriptFactory factory;
 
+	@SuppressWarnings("unchecked")
 	@Test
 	public void test() {
 		MarcRecord record = parser.parseRecord(this.getClass()
@@ -33,6 +35,12 @@ public class MarcScriptFactoryTest extends AbstractTest {
 		Assert.assertEquals(entries.get("published"), "Rožnov pod Radhoštěm : Proxima Bohemia, 2014");
 		Assert.assertEquals(entries.get("title"), "Česká republika : města a obce České republiky : tradice, historie, památky, turistika, současnost / [redakce Veronika Ševčíková, Lenka Kovářová]");
 		Assert.assertEquals(entries.get("format"), "Book");
+		Assert.assertNotNull(entries.get("language"));
+		Assert.assertTrue(entries.get("language") instanceof List<?>);
+		List<String> languages = (List<String>) entries.get("language");
+		Assert.assertEquals(languages.size(), 1);
+		Assert.assertEquals(languages.get(0), "Czech");
+		System.out.println(entries);
 	}
 
 }

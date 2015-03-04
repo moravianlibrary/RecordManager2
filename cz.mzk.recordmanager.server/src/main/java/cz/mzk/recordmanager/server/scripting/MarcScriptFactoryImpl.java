@@ -6,6 +6,7 @@ import groovy.util.DelegatingScript;
 import java.io.InputStream;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import cz.mzk.recordmanager.server.marc.MarcRecord;
@@ -13,6 +14,9 @@ import cz.mzk.recordmanager.server.marc.MarcRecord;
 @Component
 public class MarcScriptFactoryImpl extends AbstractScriptFactory<MarcRecord> implements MarcScriptFactory {
 
+	@Autowired
+	private MappingResolver propertyResolver;
+	
 	@Override
 	public MarcMappingScript create(InputStream... scriptsSource) {
 		return (MarcMappingScript) super.create(scriptsSource);
@@ -20,7 +24,7 @@ public class MarcScriptFactoryImpl extends AbstractScriptFactory<MarcRecord> imp
 
 	@Override
 	protected MarcMappingScript create(Binding binding, List<DelegatingScript> scripts) {
-		return new MarcMappingScriptImpl(binding, scripts);
+		return new MarcMappingScriptImpl(binding, scripts, propertyResolver);
 	}
 
 }

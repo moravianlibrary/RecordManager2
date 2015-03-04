@@ -53,6 +53,16 @@ public class MarcRecordImpl implements MarcRecord {
 	}
 	
 	@Override
+	public String getControlField(String tag) {
+		List<ControlField> fields = controlFields.get(tag);
+		if (fields == null) {
+			return null;
+		} else {
+			return fields.get(0).getData();
+		}
+	}
+	
+	@Override
 	public String getField(String tag, char... subfields) {
 		return getField(tag, DEFAULT_SEPARATOR, subfields);
 	}

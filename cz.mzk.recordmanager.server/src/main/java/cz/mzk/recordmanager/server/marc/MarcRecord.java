@@ -6,6 +6,8 @@ import cz.mzk.recordmanager.server.metadata.MetadataRecord;
 
 public interface MarcRecord extends MetadataRecord {
 
+	public String getControlField(String tag);
+	
 	/**
 	 * Get subfields of first field separated by separator
 	 * 
