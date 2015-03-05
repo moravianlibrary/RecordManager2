@@ -97,6 +97,11 @@ public class MarcRecordImpl implements MarcRecord {
 		return result;
 	}
 	
+	@Override
+	public Map<String, List<DataField>> getAllFields() {
+		return Collections.unmodifiableMap(dataFields);
+	}
+	
 	/**
 	 * @return 245a:245b.245n.245p
 	 */

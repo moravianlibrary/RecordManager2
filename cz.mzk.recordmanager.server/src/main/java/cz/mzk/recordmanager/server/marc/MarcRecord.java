@@ -1,6 +1,9 @@
 package cz.mzk.recordmanager.server.marc;
 
 import java.util.List;
+import java.util.Map;
+
+import org.marc4j.marc.DataField;
 
 import cz.mzk.recordmanager.server.metadata.MetadataRecord;
 
@@ -49,5 +52,7 @@ public interface MarcRecord extends MetadataRecord {
 	 * @return
 	 */
 	public List<String> getFields(String tag, DataFieldMatcher matcher, String separator, char... subfields);
+	
+	public Map<String, List<DataField>> getAllFields();
 	
 }

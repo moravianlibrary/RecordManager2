@@ -33,14 +33,13 @@ public class MarcScriptFactoryTest extends AbstractTest {
 		Map<String, Object> entries = script.parse(record);
 		Assert.assertEquals(entries.get("author"), null);
 		Assert.assertEquals(entries.get("published"), "Rožnov pod Radhoštěm : Proxima Bohemia, 2014");
-		Assert.assertEquals(entries.get("title"), "Česká republika : města a obce České republiky : tradice, historie, památky, turistika, současnost / [redakce Veronika Ševčíková, Lenka Kovářová]");
+		Assert.assertEquals(entries.get("title"), "Česká republika : města a obce České republiky : tradice, historie, památky, turistika, současnost /");
 		Assert.assertEquals(entries.get("format"), "Book");
 		Assert.assertNotNull(entries.get("language"));
 		Assert.assertTrue(entries.get("language") instanceof List<?>);
 		List<String> languages = (List<String>) entries.get("language");
 		Assert.assertEquals(languages.size(), 1);
 		Assert.assertEquals(languages.get(0), "Czech");
-		System.out.println(entries);
 	}
 
 }

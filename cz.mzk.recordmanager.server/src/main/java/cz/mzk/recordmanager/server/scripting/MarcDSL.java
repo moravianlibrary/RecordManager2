@@ -2,27 +2,37 @@ package cz.mzk.recordmanager.server.scripting;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.marc4j.marc.DataField;
+import org.marc4j.marc.Subfield;
+
 import cz.mzk.recordmanager.server.marc.MarcRecord;
+import cz.mzk.recordmanager.server.scripting.function.MarcRecordFunction;
 
 public class MarcDSL {
 
 	private final static String EMPTY_SEPARATOR = "";
+	
+	private final static Pattern FIELD_PATTERN = Pattern
+			.compile("([0-9]{3})([a-zA-Z0-9]*)");
 
 	private final MarcRecord record;
 
 	private final MappingResolver propertyResolver;
+	
+	private final Map<String, MarcRecordFunction> functions;
 
-	private final Pattern FIELD_PATTERN = Pattern
-			.compile("([0-9]{3})([a-zA-Z0-9]*)");
-
-	public MarcDSL(MarcRecord record, MappingResolver propertyResolver) {
+	public MarcDSL(MarcRecord record, MappingResolver propertyResolver, Map<String, MarcRecordFunction> functions) {
 		super();
 		this.record = record;
 		this.propertyResolver = propertyResolver;
+		this.functions = functions;
 	}
 
 	public String getField(String tag) {
@@ -89,8 +99,116 @@ public class MarcDSL {
 		return translated;
 	}
 
-	public String getFormat(String arg) {
+    /*
+     * Get all fields starting with the 100 and ending with the 839
+     * This will ignore any "code" fields and only use textual fields
+     */
+	public String getAllFields() {
+		Map<String, List<DataField>> allFields = record.getAllFields();
+		StringBuffer buffer = new StringBuffer();
+        for (Entry<String, List<DataField>> entry : allFields.entrySet()) {
+        	int tag = -1;
+        	try {
+        		tag = Integer.parseInt(entry.getKey());
+        	} catch (NumberFormatException nfe) {
+        		continue;
+        	}
+            if ((tag < 100) || (tag >= 840)) {
+            	continue;
+            }
+            List<DataField> fields = entry.getValue();
+			for (DataField field : fields) {
+                List<Subfield> subfields = field.getSubfields();
+                Iterator<Subfield> subfieldsIter = subfields.iterator();
+                while (subfieldsIter.hasNext()) {
+                    Subfield subfield = (Subfield) subfieldsIter.next();
+                    if (buffer.length() > 0) {
+                        buffer.append(" " + subfield.getData());
+                    } else {
+                        buffer.append(subfield.getData());
+                    }
+                }
+            }
+        }
+        return buffer.toString();
+	}
+	
+    /**
+     * Get the title (245ab) from a record, without non-filing chars as
+     * specified in 245 2nd indicator, and lowercased. 
+     * @param record - the marc record object
+     * @return 245a and 245b values concatenated, with trailing punct removed,
+     *         and with non-filing characters omitted. Null returned if no
+     *         title can be found. 
+     * 
+     * @see SolrIndexer#getTitle
+     */
+    public String getSortableTitle() {
+    	List<DataField> titleFields = record.getAllFields().get("245");
+    	if (titleFields == null || titleFields.isEmpty()) {
+    		return "";
+    	}
+        DataField titleField = titleFields.get(0);
+        if (titleField == null)
+            return "";
+          
+        int nonFilingInt = getInd2AsInt(titleField);
+        
+        String title = record.getTitle();
+        title = title.toLowerCase();
+        
+        //Skip non-filing chars, if possible. 
+        if (title.length() > nonFilingInt )  {
+          title = title.substring(nonFilingInt);          
+        }
+        
+        if ( title.length() == 0) {
+          return null;
+        }                
+        
+        return title;
+    }
+
+	public String getFormat() {
 		return record.getFormat();
 	}
+
+	/*
+	public String getPublishDate() {
+		return null; // FIXME
+	}
+	
+	public String getPublishDateForSorting() {
+		return null; // FIXME
+	}
+	*/
+	
+	public List<String> getEAN() {
+		return record.getFields("024", field -> field.getIndicator1() == '3', EMPTY_SEPARATOR, 'a');
+	}
+	
+	public String isIllustrated() {
+		return null; // FIXME
+	}
+	
+	public String getBoundingBox() {
+		return null; // FIXME
+	}
+
+	public Object methodMissing(String methodName, Object args) {
+		MarcRecordFunction func = functions.get(methodName);
+		if (func == null) {
+			throw new IllegalArgumentException(String.format("missing function: %s", methodName));
+		}
+		return func.apply(record, args);
+	}
+	
+    protected int getInd2AsInt(DataField df) {
+        char ind2char = df.getIndicator2();
+        int result = 0;
+        if (Character.isDigit(ind2char))
+            result = Integer.valueOf(String.valueOf(ind2char));
+        return result;
+    }
 
 }
