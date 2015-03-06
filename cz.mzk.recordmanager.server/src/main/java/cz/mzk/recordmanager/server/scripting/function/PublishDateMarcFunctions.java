@@ -8,11 +8,11 @@ import cz.mzk.recordmanager.server.marc.MarcRecord;
 public class PublishDateMarcFunctions implements MarcRecordFunctions {
 
 	public String getPublishDate(MarcRecord record) {
-		return null;
+		return null; // FIXME
 	}
 
 	public String getPublishDateForSorting(MarcRecord record) {
-		return null;
+		return null; // FIXME
 	}
 
 }

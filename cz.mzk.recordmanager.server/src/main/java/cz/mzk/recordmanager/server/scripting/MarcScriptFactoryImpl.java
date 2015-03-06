@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,6 +23,42 @@ import cz.mzk.recordmanager.server.scripting.function.MarcRecordFunctions;
 @Component
 public class MarcScriptFactoryImpl extends AbstractScriptFactory<MarcRecord>
 		implements MarcScriptFactory, InitializingBean {
+
+	private static class MarcRecordFunctionImpl implements MarcRecordFunction {
+
+		private final MarcRecordFunctions target;
+
+		private final Method method;
+
+		public MarcRecordFunctionImpl(MarcRecordFunctions target, Method method) {
+			super();
+			this.target = target;
+			this.method = method;
+		}
+
+		@Override
+		public Object apply(MarcRecord record, Object args) {
+			Object arg = record;
+			try {
+				if (args instanceof Object[] && ((Object[]) args).length >= 1) {
+					Object[] argsAsArray = (Object[]) args; 
+					Object[] arguments = new Object[argsAsArray.length + 1];
+					arguments[0] = record;
+					for (int i = 1; i != arguments.length; i++) {
+						arguments[i] = argsAsArray[i - 1];
+					}
+					return method.invoke(target, arguments);
+				} else {
+					return method.invoke(target, record);
+				}
+			} catch (IllegalAccessException | IllegalArgumentException
+					| InvocationTargetException ex) {
+				throw new RuntimeException(String.format(
+						"Exception thrown when calling method: [%s], arguments: [%s]", method, arg), ex);
+			}
+		}
+
+	}
 
 	@Autowired
 	private MappingResolver propertyResolver;
@@ -46,27 +83,11 @@ public class MarcScriptFactoryImpl extends AbstractScriptFactory<MarcRecord>
 	@Override
 	public void afterPropertiesSet() throws Exception {
 		functions = new HashMap<>();
-		for (final MarcRecordFunctions funcs : functionsList) {
-			for (Method method : funcs.getClass().getMethods()) {
+		for (final MarcRecordFunctions target : functionsList) {
+			for (Method method : target.getClass().getMethods()) {
 				if (Modifier.isPublic(method.getModifiers())) {
-					MarcRecordFunction func = new MarcRecordFunction() {
-
-						@Override
-						public Object apply(MarcRecord record, Object... args) {
-							try {
-								if (method.getParameterCount() == 1) {
-									return method.invoke(funcs, record);
-								} else {
-									return method.invoke(funcs, new Object[]{record, args});
-								}
-							} catch (IllegalAccessException
-									| IllegalArgumentException
-									| InvocationTargetException e) {
-								throw new RuntimeException(e);
-							}
-						}
-
-					};
+					MarcRecordFunction func = new MarcRecordFunctionImpl(
+							target, method);
 					functions.put(method.getName(), func);
 				}
 			}
