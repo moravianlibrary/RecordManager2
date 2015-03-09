@@ -7,7 +7,7 @@ import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.Arrays;
+import java.lang.reflect.Parameter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -66,7 +66,7 @@ public class MarcScriptFactoryImpl extends AbstractScriptFactory<MarcRecord>
 	@Autowired
 	private List<MarcRecordFunctions> functionsList;
 
-	private Map<String, MarcRecordFunction> functions;
+	private Map<String, MarcRecordFunction> functions = new HashMap<>();;
 
 	@Override
 	public MarcMappingScript create(InputStream... scriptsSource) {
@@ -82,16 +82,21 @@ public class MarcScriptFactoryImpl extends AbstractScriptFactory<MarcRecord>
 
 	@Override
 	public void afterPropertiesSet() throws Exception {
-		functions = new HashMap<>();
 		for (final MarcRecordFunctions target : functionsList) {
 			for (Method method : target.getClass().getMethods()) {
-				if (Modifier.isPublic(method.getModifiers())) {
+				if (isFunction(method)) {
 					MarcRecordFunction func = new MarcRecordFunctionImpl(
 							target, method);
 					functions.put(method.getName(), func);
 				}
 			}
 		}
+	}
+
+	public boolean isFunction(Method method) {
+		Parameter[] parameters = method.getParameters();
+		return Modifier.isPublic(method.getModifiers()) &&
+				parameters.length > 0 && parameters[0].getType().isAssignableFrom(MarcRecord.class);
 	}
 
 }
