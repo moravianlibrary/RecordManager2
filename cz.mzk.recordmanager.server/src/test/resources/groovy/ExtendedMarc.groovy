@@ -1,3 +1,3 @@
-author = getField "100ad"
-published = getField "260abc"
+author = getFirstField "100ad"
+published = getFirstField "260abc"
 format = getFormat()

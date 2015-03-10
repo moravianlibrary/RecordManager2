@@ -62,4 +62,4 @@ bbox_geo_str = getBoundingBox()
 // deprecated
 title_display = getFields "245abnp"
 
-published = getFirstField "260a"
+//published = getFirstField "260a"

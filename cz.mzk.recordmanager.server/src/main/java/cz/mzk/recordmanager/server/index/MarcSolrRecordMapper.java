@@ -2,6 +2,8 @@ package cz.mzk.recordmanager.server.index;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -20,17 +22,37 @@ import cz.mzk.recordmanager.server.scripting.MarcScriptFactory;
 
 @Component
 public class MarcSolrRecordMapper implements SolrRecordMapper, InitializingBean {
-	
+
 	private static final String ID_FIELD = "id";
-	
+
 	@Autowired
 	private MarcXmlParser marcXmlParser;
-	
+
 	@Autowired
 	private MarcScriptFactory marcScriptFactory;
-	
+
+	private List<String> fieldsWithDash = Arrays.asList( //
+			"author2-role", //
+			"author-letter", //
+			"callnumber-a", //
+			"callnumber-first", //
+			"callnumber-first-code", //
+			"callnumber-subject", //
+			"callnumber-subject-code", //
+			"callnumber-label", //
+			"dewey-hundreds", //
+			"dewey-tens", //
+			"dewey-ones", //
+			"dewey-full", //
+			"dewey-sort", //
+			"dewey-sort-browse", //
+			"dewey-raw" //
+	);
+
+	private final Map<String, String> remappedFields = new HashMap<String, String>();
+
 	private MarcMappingScript mappingScript;
-	
+
 	@Override
 	public SolrInputDocument map(DedupRecord dedupRecord,
 			List<HarvestedRecord> records) {
@@ -42,7 +64,7 @@ public class MarcSolrRecordMapper implements SolrRecordMapper, InitializingBean 
 		document.addField(ID_FIELD, dedupRecord.getId());
 		return document;
 	}
-	
+
 	protected SolrInputDocument parse(HarvestedRecord record) {
 		InputStream is = new ByteArrayInputStream(record.getRawRecord());
 		SolrInputDocument document = new SolrInputDocument();
@@ -50,20 +72,26 @@ public class MarcSolrRecordMapper implements SolrRecordMapper, InitializingBean 
 		MarcMappingScript script = getMappingScript(record);
 		Map<String, Object> fields = script.parse(rec);
 		for (Entry<String, Object> field : fields.entrySet()) {
-			String fName = field.getKey();
+			String fName = remappedFields.getOrDefault(field.getKey(),
+					field.getKey());
 			Object fValue = field.getValue();
 			document.addField(fName, fValue);
 		}
 		return document;
 	}
-	
+
 	protected MarcMappingScript getMappingScript(HarvestedRecord record) {
 		return mappingScript;
 	}
 
 	@Override
 	public void afterPropertiesSet() throws Exception {
-		mappingScript = marcScriptFactory.create(getClass().getResourceAsStream("/marc/groovy/Base.groovy"));
+		for (String field : fieldsWithDash) {
+			String fName = field.replace('-', '_');
+			remappedFields.put(fName, field);
+		}
+		mappingScript = marcScriptFactory.create(getClass()
+				.getResourceAsStream("/marc/groovy/BaseMarc.groovy"));
 	}
 
 }

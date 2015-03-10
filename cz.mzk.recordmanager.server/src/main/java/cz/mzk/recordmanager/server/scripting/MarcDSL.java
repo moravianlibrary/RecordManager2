@@ -35,7 +35,7 @@ public class MarcDSL {
 		this.functions = functions;
 	}
 
-	public String getField(String tag) {
+	public String getFirstField(String tag) {
 		Matcher matcher = FIELD_PATTERN.matcher(tag);
 		if (!matcher.matches()) {
 			throw new IllegalArgumentException("Tag can't be parsed: " + tag);
@@ -171,20 +171,6 @@ public class MarcDSL {
 
 	public String getFormat() {
 		return record.getFormat();
-	}
-
-	/*
-	public String getPublishDate() {
-		return null; // FIXME
-	}
-	
-	public String getPublishDateForSorting() {
-		return null; // FIXME
-	}
-	*/
-	
-	public List<String> getEAN() {
-		return record.getFields("024", field -> field.getIndicator1() == '3', EMPTY_SEPARATOR, 'a');
 	}
 	
 	public String isIllustrated() {
