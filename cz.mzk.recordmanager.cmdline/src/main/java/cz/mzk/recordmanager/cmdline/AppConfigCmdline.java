@@ -21,8 +21,8 @@ public class AppConfigCmdline {
 		DriverManagerDataSource dataSource = new DriverManagerDataSource();
 		dataSource.setDriverClassName(environment.getProperty("jdbc.driverClassName"));
 		dataSource.setUrl(environment.getProperty("jdbc.url"));
-		dataSource.setPassword(environment.getProperty("jdbc.username"));
-		dataSource.setUsername(environment.getProperty("jdbc.password"));
+		dataSource.setUsername(environment.getProperty("jdbc.username"));
+		dataSource.setPassword(environment.getProperty("jdbc.password"));
 		return dataSource;
 	}
 
