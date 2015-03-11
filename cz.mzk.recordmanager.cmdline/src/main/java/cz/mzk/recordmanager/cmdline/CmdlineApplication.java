@@ -60,7 +60,10 @@ public class CmdlineApplication {
 				if (!jobName.equals(JOB_RESTART)) {
 					JobExecutor executor = applicationContext
 							.getBean(JobExecutor.class);
-					executor.execute(jobName, jobParams);
+					Runnable runnable = () -> executor.execute(jobName, jobParams);
+					Thread thread = new Thread(runnable);
+					thread.start();
+					thread.join();
 				} else {
 					BatchService batchService = applicationContext
 							.getBean(BatchService.class);
