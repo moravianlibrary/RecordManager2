@@ -37,12 +37,9 @@ CREATE TABLE format (
   description          VARCHAR(255)
 );
 
+CREATE SEQUENCE dedup_record_seq_id MINVALUE 1;
 CREATE TABLE dedup_record (
-  id                   DECIMAL(10) PRIMARY KEY,
-  isbn                 VARCHAR(32),
-  title                VARCHAR(255),
-  publication_year     DECIMAL(4),
-  physical_format      VARCHAR(255),
+  id                   DECIMAL(10) DEFAULT NEXTVAL('"dedup_record_seq_id"')  PRIMARY KEY,
   updated              TIMESTAMP
 );
 
@@ -64,8 +61,8 @@ CREATE TABLE harvested_record (
 );
 
 CREATE TABLE record_link (
-  harvested_record_id  DECIMAL(10),
-  dedup_record_id      DECIMAL(10),
+  harvested_record_id  DECIMAL(10) REFERENCES harvested_record(id),
+  dedup_record_id      DECIMAL(10) REFERENCES dedup_record(id),
   created              TIMESTAMP,
   CONSTRAINT record_link_PK PRIMARY KEY (harvested_record_id, dedup_record_id) 
 );

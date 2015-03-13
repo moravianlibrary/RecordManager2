@@ -14,8 +14,6 @@ public class DedupRecordDAOTest extends AbstractTest {
 	@Test
 	public void test() {
 		DedupRecord record = new DedupRecord();
-		record.setIsbn("978-80-904832-7-9");
-		record.setTitle("test");
 		dedupRecordDao.persist(record);
 	}
 

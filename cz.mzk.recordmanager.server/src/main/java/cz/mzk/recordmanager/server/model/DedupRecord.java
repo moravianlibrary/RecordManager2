@@ -12,55 +12,12 @@ import javax.persistence.TemporalType;
 @Table(name=DedupRecord.TABLE_NAME)
 public class DedupRecord extends AbstractDomainObject {
 
+//	TODO consider usage of database sequence in id
 	public static final String TABLE_NAME = "dedup_record";
 
-	@Column(name="isbn")
-	private String isbn;
-
-	@Column(name="title")
-	private String title;
-	
-	@Column(name="publication_year")
-	private Long publicationYear;
-	
-	@Column(name="physical_format")
-	private String physicalFormat;
-	
 	@Column(name="updated")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date updated = new Date();
-
-	public String getIsbn() {
-		return isbn;
-	}
-
-	public void setIsbn(String isbn) {
-		this.isbn = isbn;
-	}
-
-	public String getTitle() {
-		return title;
-	}
-
-	public void setTitle(String title) {
-		this.title = title;
-	}
-
-	public Long getPublicationYear() {
-		return publicationYear;
-	}
-
-	public void setPublicationYear(Long publicationYear) {
-		this.publicationYear = publicationYear;
-	}
-
-	public String getPhysicalFormat() {
-		return physicalFormat;
-	}
-
-	public void setPhysicalFormat(String physicalFormat) {
-		this.physicalFormat = physicalFormat;
-	}
 
 	public Date getUpdated() {
 		return updated;

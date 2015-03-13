@@ -5,8 +5,6 @@ import java.io.InputStreamReader;
 
 import javax.sql.DataSource;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
@@ -23,14 +21,11 @@ import org.springframework.context.annotation.Configuration;
 
 import com.google.common.io.CharStreams;
 
-import cz.mzk.recordmanager.server.jdbc.LongValueRowMapper;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.springbatch.SqlCommandTasklet;
 
 @Configuration
 public class DedupRecordsJobConfig {
-	
-	private static Logger logger = LoggerFactory.getLogger(DedupRecordsJobConfig.class);
 	
 	@Autowired
     private JobBuilderFactory jobs;
@@ -71,24 +66,32 @@ public class DedupRecordsJobConfig {
     @Bean(name="dedupRecordsJob:updateStep")
     public Step step() throws Exception {
 		return steps.get("dedupRecordsUpdateStep")
-            .<Long, HarvestedRecord> chunk(20)
+            .<HarvestedRecord, HarvestedRecord> chunk(100)
             .reader(reader())
-            .processor(processor())
             .writer(writer())
             .build();
     }
+    
+    @Bean(name="dedupRecordsJob:finalUpdateStep")
+    public Step finalUpdateStep() throws Exception {
+		return steps.get("dedupRecordsFinalUpdateStep")
+				.tasklet(updateDedupRecordTasklet())
+				.build();
+    }
+    
 	
     @Bean(name="dedupRecordsJob:reader")
 	@StepScope
-    public ItemReader<Long> reader() throws Exception {
-		JdbcPagingItemReader<Long> reader = new JdbcPagingItemReader<Long>();
+    public ItemReader<HarvestedRecord> reader() throws Exception {
+		JdbcPagingItemReader<HarvestedRecord> reader = new JdbcPagingItemReader<HarvestedRecord>();
 		SqlPagingQueryProviderFactoryBean pqpf = new SqlPagingQueryProviderFactoryBean();
 		pqpf.setDataSource(dataSource);
-		pqpf.setSelectClause("SELECT hr.id");
-		pqpf.setFromClause("FROM harvested_record hr LEFT JOIN record_link rl ON hr.id = rl.harvested_record_id");
-		pqpf.setWhereClause("WHERE rl.harvested_record_id IS NULL AND hr.deleted IS NULL");
+		pqpf.setSelectClause("SELECT id,isbn,title,publication_year,physical_format");
+		pqpf.setFromClause("FROM harvested_record hr");
+		//TODO && updated > last updated
+		pqpf.setWhereClause("WHERE hr.updated IS NULL");
 		pqpf.setSortKey("id");
-		reader.setRowMapper(new LongValueRowMapper());
+		reader.setRowMapper(HarvestedRecordLimitedRowMapper.INSTANCE);
 		reader.setPageSize(20);
     	reader.setQueryProvider(pqpf.getObject());
     	reader.setDataSource(dataSource);
