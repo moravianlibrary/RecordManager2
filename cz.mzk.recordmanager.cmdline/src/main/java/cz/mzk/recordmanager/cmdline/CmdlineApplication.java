@@ -57,20 +57,27 @@ public class CmdlineApplication {
 				session = sessionFactory.openSession();
 				TransactionSynchronizationManager.bindResource(sessionFactory,
 						new SessionHolder(session));
-				if (!jobName.equals(JOB_RESTART)) {
+				if (jobName.equals(JOB_RESTART)) {
+					BatchService batchService = applicationContext
+							.getBean(BatchService.class);
+					if (jobParams.getParameters().containsKey("jobExecutionId")) {
+						Long jobExecutionId = Long.valueOf(jobParams.getString("jobExecutionId"));
+						BatchJobExecutionDTO jobExecution = batchService.getJobExecution(jobExecutionId);
+						batchService.restart(jobExecution);
+					} else {
+						for (BatchJobExecutionDTO jobExecution : batchService
+								.getRunningJobExecutions()) {
+							batchService.restart(jobExecution);
+						}
+					}
+				} else {
 					JobExecutor executor = applicationContext
 							.getBean(JobExecutor.class);
-					Runnable runnable = () -> executor.execute(jobName, jobParams);
+					Runnable runnable = () -> executor.execute(jobName,
+							jobParams);
 					Thread thread = new Thread(runnable);
 					thread.start();
 					thread.join();
-				} else {
-					BatchService batchService = applicationContext
-							.getBean(BatchService.class);
-					for (BatchJobExecutionDTO jobExecution : batchService
-							.getRunningJobExecutions()) {
-						batchService.restart(jobExecution);
-					}
 				}
 			} finally {
 				SessionFactoryUtils.closeSession(session);
@@ -86,11 +93,9 @@ public class CmdlineApplication {
 
 		System.out.println("Parameters:\n");
 		System.out.println(String.format(
-				"%-20sname of a job. Available: %s|%s|%s|%s|help", 
-				CLI_PARAM_JOB,
-				Constants.JOB_ID_HARVEST,
-				Constants.JOB_ID_HARVEST_PART,
-				Constants.JOB_ID_DEDUP,
+				"%-20sname of a job. Available: %s|%s|%s|%s|help",
+				CLI_PARAM_JOB, Constants.JOB_ID_HARVEST,
+				Constants.JOB_ID_HARVEST_PART, Constants.JOB_ID_DEDUP,
 				Constants.JOB_ID_SOLR_INDEX));
 		System.out.println(String.format("%-20s%s",
 				Constants.JOB_PARAM_CONF_ID, "identifier of a job (LONG)"));

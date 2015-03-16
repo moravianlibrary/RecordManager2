@@ -36,6 +36,16 @@ public class BatchServiceImpl implements BatchService {
 		return dtos;
 	}
 	
+	@Override
+	public BatchJobExecutionDTO getJobExecution(long id) {
+		BatchJobExecution exec = batchJobExecutionDao.get(id);
+		if (exec == null) {
+			throw new IllegalArgumentException(String.format(
+					"No batch job execution with id=%s does not exist", id));
+		}
+		return dtoTranslator.translate(exec);
+	}
+	
 	@Transactional(propagation=Propagation.NOT_SUPPORTED)
 	public void restart(BatchJobExecutionDTO jobExecution) {
 		jobExecutor.restart(jobExecution.getId());
