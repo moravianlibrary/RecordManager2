@@ -82,17 +82,19 @@ public class OAIHarvestJobConfig {
     
     @Bean(name="oaiHarvestJob:partioner")
     @StepScope
-    public DateIntervalPartitioner partioner(@Value("#{jobParameters[fromDate]}") Date from,
-    		@Value("#{jobParameters[untilDate]}") Date to) {
+    public DateIntervalPartitioner partioner(@Value("#{jobParameters[" + Constants.JOB_PARAM_FROM_DATE + "]}") Date from,
+    		@Value("#{jobParameters[" + Constants.JOB_PARAM_UNTIL_DATE + "]}") Date to) {
     	return new DateIntervalPartitioner(from, to,
     			Period.months(1), Constants.JOB_PARAM_UNTIL_DATE, Constants.JOB_PARAM_FROM_DATE);
     }
     
     @Bean(name="oaiHarvestJob:reader")
     @StepScope
-    public OAIItemReader reader(@Value("#{jobParameters[configurationId]}") Long configId, 
-    		@Value("#{stepExecutionContext[fromDate]?:jobParameters[fromDate]}") Date from,
-    		@Value("#{stepExecutionContext[untilDate]?:jobParameters[untilDate]}") Date to) {
+    public OAIItemReader reader(@Value("#{jobParameters[" + Constants.JOB_PARAM_CONF_ID + "]}") Long configId, 
+    		@Value("#{stepExecutionContext[" + Constants.JOB_PARAM_FROM_DATE + "] "
+    				+ "?:jobParameters[ " + Constants.JOB_PARAM_FROM_DATE +"]}") Date from,
+    		@Value("#{stepExecutionContext[" + Constants.JOB_PARAM_UNTIL_DATE+"]"
+    				+ "?:jobParameters[" + Constants.JOB_PARAM_UNTIL_DATE +"]}") Date to) {
     	return new OAIItemReader(configId, from, to);
     }
     

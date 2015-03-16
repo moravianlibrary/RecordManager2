@@ -86,14 +86,20 @@ public class CmdlineApplication {
 
 		System.out.println("Parameters:\n");
 		System.out.println(String.format(
-				"%-20sname of a job. Available: %s|help", CLI_PARAM_JOB,
-				Constants.JOB_ID_HARVEST));
+				"%-20sname of a job. Available: %s|%s|%s|%s|help", 
+				CLI_PARAM_JOB,
+				Constants.JOB_ID_HARVEST,
+				Constants.JOB_ID_HARVEST_PART,
+				Constants.JOB_ID_DEDUP,
+				Constants.JOB_ID_SOLR_INDEX));
 		System.out.println(String.format("%-20s%s",
 				Constants.JOB_PARAM_CONF_ID, "identifier of a job (LONG)"));
 		System.out.println(String.format("%-20s%s",
 				Constants.JOB_PARAM_FROM_DATE, "from date (DATE)"));
 		System.out.println(String.format("%-20s%s",
 				Constants.JOB_PARAM_UNTIL_DATE, "until date (DATE)"));
+		System.out.println(String.format("%-20s%s",
+				Constants.JOB_PARAM_SOLR_URL, "URL of solr instance (String)"));
 	}
 
 	/**

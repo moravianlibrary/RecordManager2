@@ -8,6 +8,7 @@ public class Constants {
 	public static final String JOB_ID_SOLR_INDEX		= "indexRecordsToSolrJob";
 	
 	public static final String JOB_PARAM_CONF_ID 		= "configurationId";
-	public static final String JOB_PARAM_FROM_DATE 		= "fromDate";
-	public static final String JOB_PARAM_UNTIL_DATE 	= "untilDate";
+	public static final String JOB_PARAM_FROM_DATE 		= "from";
+	public static final String JOB_PARAM_UNTIL_DATE 	= "to";
+	public static final String JOB_PARAM_SOLR_URL		= "solrUrl";
 }

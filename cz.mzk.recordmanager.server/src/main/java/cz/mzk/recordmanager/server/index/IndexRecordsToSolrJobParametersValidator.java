@@ -9,6 +9,7 @@ import org.springframework.batch.core.JobParameter.ParameterType;
 
 import cz.mzk.recordmanager.server.springbatch.DefaultJobParametersValidator;
 import cz.mzk.recordmanager.server.springbatch.JobParameterDeclaration;
+import cz.mzk.recordmanager.server.util.Constants;
 
 public class IndexRecordsToSolrJobParametersValidator extends
 DefaultJobParametersValidator {
@@ -16,9 +17,9 @@ DefaultJobParametersValidator {
 	@Override
 	public Collection<JobParameterDeclaration> getParameters() {
 		return Arrays.asList(
-				param(IndexRecordsToSolrJobConfig.DATE_FROM_JOB_PARAM, ParameterType.DATE, false), //
-				param(IndexRecordsToSolrJobConfig.DATE_TO_JOB_PARAM, ParameterType.DATE, false), //
-				param(IndexRecordsToSolrJobConfig.SOLR_URL_JOB_PARAM, ParameterType.STRING, true) //
+				param(Constants.JOB_PARAM_FROM_DATE, ParameterType.DATE, false), //
+				param(Constants.JOB_PARAM_UNTIL_DATE, ParameterType.DATE, false), //
+				param(Constants.JOB_PARAM_SOLR_URL, ParameterType.STRING, true) //
 				);
 	}
 

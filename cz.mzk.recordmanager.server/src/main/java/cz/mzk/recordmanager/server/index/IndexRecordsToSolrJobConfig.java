@@ -25,19 +25,12 @@ import org.springframework.context.annotation.Configuration;
 
 import cz.mzk.recordmanager.server.jdbc.LongValueRowMapper;
 import cz.mzk.recordmanager.server.springbatch.JobFailureListener;
+import cz.mzk.recordmanager.server.util.Constants;
 
 @Configuration
 public class IndexRecordsToSolrJobConfig {
 	
 	private static Logger logger = LoggerFactory.getLogger(IndexRecordsToSolrJobConfig.class);
-	
-	public static final String JOB_ID = "indexRecordsToSolrJob";
-	
-	public static final String DATE_FROM_JOB_PARAM = "from";
-	
-	public static final String DATE_TO_JOB_PARAM = "to";
-	
-	public static final String SOLR_URL_JOB_PARAM = "solrUrl";
 	
 	private static final Date DATE_OVERRIDEN_BY_EXPRESSION = null;
 	
@@ -55,7 +48,7 @@ public class IndexRecordsToSolrJobConfig {
     @Bean
     public Job indexRecordsToSolrJob(@Qualifier("indexRecordsToSolrJob:updateRecordsStep") Step updateRecordsStep,
     		@Qualifier("indexRecordsToSolrJob:deleteOrphanedRecordsStep") Step deleteOrphanedRecordsStep) {
-        return jobs.get(JOB_ID)
+        return jobs.get(Constants.JOB_ID_SOLR_INDEX)
         		.validator(new IndexRecordsToSolrJobParametersValidator())
         		.listener(JobFailureListener.INSTANCE)
 				.flow(updateRecordsStep)
@@ -85,8 +78,8 @@ public class IndexRecordsToSolrJobConfig {
 	
     @Bean(name="indexRecordsToSolrJob:updatedRecordsReader")
 	@StepScope
-    public ItemReader<Long> updatedRecordsReader(@Value("#{jobParameters[" + DATE_FROM_JOB_PARAM  + "]}") Date from,
-    		@Value("#{jobParameters[" + DATE_TO_JOB_PARAM + "]}") Date to) throws Exception {
+    public ItemReader<Long> updatedRecordsReader(@Value("#{jobParameters[" + Constants.JOB_PARAM_FROM_DATE  + "]}") Date from,
+    		@Value("#{jobParameters[" + Constants.JOB_PARAM_UNTIL_DATE + "]}") Date to) throws Exception {
     	if (from != null && to == null) {
     		to = new Date();
     	}
@@ -121,14 +114,14 @@ public class IndexRecordsToSolrJobConfig {
     
     @Bean(name="indexRecordsToSolrJob:updatedRecordsWriter")
     @StepScope
-    public SolrIndexWriter updatedRecordsWriter(@Value("#{jobParameters[" + SOLR_URL_JOB_PARAM + "]}") String solrUrl) {
+    public SolrIndexWriter updatedRecordsWriter(@Value("#{jobParameters[" + Constants.JOB_PARAM_SOLR_URL + "]}") String solrUrl) {
     	return new SolrIndexWriter(solrUrl);
     }
     
     @Bean(name="indexRecordsToSolrJob:orphanedRecordsReader")
 	@StepScope
-    public ItemReader<Long> orphanedRecordsReader(@Value("#{jobParameters[" + DATE_FROM_JOB_PARAM  + "]}") Date from,
-    		@Value("#{jobParameters[" + DATE_TO_JOB_PARAM + "]}") Date to) throws Exception {
+    public ItemReader<Long> orphanedRecordsReader(@Value("#{jobParameters[" + Constants.JOB_PARAM_FROM_DATE  + "]}") Date from,
+    		@Value("#{jobParameters[" + Constants.JOB_PARAM_UNTIL_DATE + "]}") Date to) throws Exception {
     	if (from != null && to == null) {
     		to = new Date();
     	}
@@ -157,7 +150,7 @@ public class IndexRecordsToSolrJobConfig {
     
     @Bean(name="indexRecordsToSolrJob:orphanedRecordsWriter")
     @StepScope
-    public OrphanedRecordsWriter orphanedRecordsWriter(@Value("#{jobParameters[" + SOLR_URL_JOB_PARAM + "]}") String solrUrl) {
+    public OrphanedRecordsWriter orphanedRecordsWriter(@Value("#{jobParameters[" + Constants.JOB_PARAM_SOLR_URL + "]}") String solrUrl) {
     	return new OrphanedRecordsWriter(solrUrl);
     }
 
