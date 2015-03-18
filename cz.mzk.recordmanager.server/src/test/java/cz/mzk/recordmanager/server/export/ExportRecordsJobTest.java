@@ -29,8 +29,8 @@ public class ExportRecordsJobTest extends AbstractTest {
 	@Autowired
 	private DBUnitHelper dbUnitHelper;
 	
-	private static final String TEST_FILE_1 = "src/test/resources/export1.txt";
-	private static final String TEST_FILE_2 = "src/test/resources/export_iso2709.txt";
+	private static final String TEST_FILE_1 = "target/test/export1.txt";
+	private static final String TEST_FILE_2 = "target/test/export_iso2709.txt";
 	
 	@BeforeMethod
 	public void init() throws Exception {
