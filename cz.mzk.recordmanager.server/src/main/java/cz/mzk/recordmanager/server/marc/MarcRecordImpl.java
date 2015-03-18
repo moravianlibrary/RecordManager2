@@ -5,12 +5,16 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import org.apache.commons.lang.NotImplementedException;
 import org.marc4j.marc.ControlField;
 import org.marc4j.marc.DataField;
 import org.marc4j.marc.Record;
 import org.marc4j.marc.Subfield;
 
+import cz.mzk.recordmanager.server.export.ExportFormat;
 import cz.mzk.recordmanager.server.util.MetadataUtils;
 
 public class MarcRecordImpl implements MarcRecord {
@@ -414,10 +418,45 @@ public class MarcRecordImpl implements MarcRecord {
 	@Override
 	public Long getPublicationYear() {
 		String year = getField("260", 'c');
+		Pattern pattern = Pattern.compile("\\d{4}");
+		Matcher matcher = pattern.matcher(year);
 		try {
-			return Long.parseLong(year);
+			if (matcher.find()) {
+				return Long.parseLong(matcher.group(0));
+			}
 		} catch (NumberFormatException e) {}
 		return null;
 		
+	}
+
+	@Override
+	public String export(ExportFormat exportFormat) {
+		ExportFormat usedFormat = exportFormat == null ? ExportFormat.XML_MARC : exportFormat;
+		switch (usedFormat) {
+		case LINE_MARC:
+			return exportToLineMarc();
+		case ALEPH_MARC:
+			return exportToAlephMarc();
+		case ISO_2709:
+			return exportToIso2709();
+		default:
+			return exportToXML();
+		}
+	}
+	
+	protected String exportToLineMarc() {
+		return record.toString();
+	}
+	
+	protected String exportToAlephMarc() {
+		throw new NotImplementedException("Not implemented yet.");
+	}
+	
+	protected String exportToIso2709() {
+		throw new NotImplementedException("Not implemented yet.");
+	}
+	
+	protected String exportToXML() {
+		throw new NotImplementedException("Not implemented yet.");
 	}
 }

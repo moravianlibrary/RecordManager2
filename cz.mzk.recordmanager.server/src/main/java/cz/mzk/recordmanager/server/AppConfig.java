@@ -30,6 +30,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import cz.mzk.recordmanager.server.dedup.UpdateHarvestedRecordsJobConfig;
 import cz.mzk.recordmanager.server.dedup.DedupRecordsJobConfig;
+import cz.mzk.recordmanager.server.export.ExportRecordsJobConfig;
 import cz.mzk.recordmanager.server.index.IndexRecordsToSolrJobConfig;
 import cz.mzk.recordmanager.server.index.SolrServerFactory;
 import cz.mzk.recordmanager.server.index.SolrServerFactoryImpl;
@@ -45,14 +46,14 @@ import cz.mzk.recordmanager.server.util.HibernateSessionSynchronizer;
 import cz.mzk.recordmanager.server.util.HttpClient;
 
 @Configuration
-@EnableBatchProcessing(modular=true)
+@EnableBatchProcessing(modular = true)
 @EnableTransactionManagement
 @ImportResource("classpath:appCtx-recordmanager-server.xml")
 public class AppConfig extends DefaultBatchConfigurer {
 
 	@Autowired
 	private DataSource dataSource;
-	
+
 	@Autowired
 	private SessionFactory sessionFactory;
 
@@ -72,11 +73,11 @@ public class AppConfig extends DefaultBatchConfigurer {
 	@Bean
 	public JobOperator jobOperator() throws Exception {
 		SimpleJobOperator jobOperator = new SimpleJobOperator();
-        jobOperator.setJobRepository(jobRepository());
-        jobOperator.setJobRegistry(jobRegistry());
-        jobOperator.setJobLauncher(jobLauncher());
-        jobOperator.setJobExplorer(jobExplorer());
-        return jobOperator;
+		jobOperator.setJobRepository(jobRepository());
+		jobOperator.setJobRegistry(jobRegistry());
+		jobOperator.setJobLauncher(jobLauncher());
+		jobOperator.setJobExplorer(jobExplorer());
+		return jobOperator;
 	}
 
 	@Bean
@@ -110,49 +111,52 @@ public class AppConfig extends DefaultBatchConfigurer {
 		jobRepository.afterPropertiesSet();
 		return (JobRepository) jobRepository.getObject();
 	}
-	
+
 	@Bean
-    public OAIHarvesterFactory oaiHarvesterFactory() {
+	public OAIHarvesterFactory oaiHarvesterFactory() {
 		return new OAIHarvesterFactoryImpl();
 	}
-	
+
 	@Bean
 	public HttpClient httpClient() {
 		return new ApacheHttpClient();
 	}
-	
+
 	@Bean
 	public JdbcTemplate jdbcTemplate() {
 		return new JdbcTemplate(dataSource);
 	}
-	
+
 	@Bean
-    public JobRegistry jobRegistry() {
-        return new MapJobRegistry();
-    }
-    
-    @Bean
-    public ApplicationContextFactory moreJobs() {
-    	return new GenericApplicationContextFactory(OAIHarvestJobConfig.class, DedupRecordsJobConfig.class,
-    			IndexRecordsToSolrJobConfig.class, DeleteAllHarvestsJobConfig.class, UpdateHarvestedRecordsJobConfig.class);
-    }
-    
-    @Bean
-    public HibernateSessionSynchronizer hibernateSessionSynchronizer() {
-    	return new HibernateSessionSynchronizer();
-    }
-  
-    @Bean
-    public SolrServerFactory solrServerFactory() {
-    	return new SolrServerFactoryImpl();
-    }
-    
-    @Bean
-    public MappingResolver propertyResolver() {
-    	return new CachingMappingResolver(new ClasspathMappingResolver());
-    }
-    
-    @Override
+	public JobRegistry jobRegistry() {
+		return new MapJobRegistry();
+	}
+
+	@Bean
+	public ApplicationContextFactory moreJobs() {
+		return new GenericApplicationContextFactory(OAIHarvestJobConfig.class,
+				DedupRecordsJobConfig.class, IndexRecordsToSolrJobConfig.class,
+				DeleteAllHarvestsJobConfig.class,
+				UpdateHarvestedRecordsJobConfig.class,
+				ExportRecordsJobConfig.class);
+	}
+
+	@Bean
+	public HibernateSessionSynchronizer hibernateSessionSynchronizer() {
+		return new HibernateSessionSynchronizer();
+	}
+
+	@Bean
+	public SolrServerFactory solrServerFactory() {
+		return new SolrServerFactoryImpl();
+	}
+
+	@Bean
+	public MappingResolver propertyResolver() {
+		return new CachingMappingResolver(new ClasspathMappingResolver());
+	}
+
+	@Override
 	public PlatformTransactionManager getTransactionManager() {
 		return transactionManager();
 	}
