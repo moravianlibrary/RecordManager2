@@ -13,7 +13,6 @@ import java.util.regex.Pattern;
 import org.apache.commons.lang.NotImplementedException;
 import org.marc4j.MarcStreamWriter;
 import org.marc4j.MarcWriter;
-import org.marc4j.MarcXmlReader;
 import org.marc4j.marc.ControlField;
 import org.marc4j.marc.DataField;
 import org.marc4j.marc.Record;
@@ -27,7 +26,9 @@ public class MarcRecordImpl implements MarcRecord {
 	private static final String DEFAULT_SEPARATOR = " ";
 	
 	private static final String EMPTY_STRING = "";
-	
+
+	private static final Pattern YEAR_PATTERN = Pattern.compile("\\d{4}");
+
 	protected final Record record;
 	
 	protected final Map<String, List<DataField>> dataFields;
@@ -423,15 +424,16 @@ public class MarcRecordImpl implements MarcRecord {
 	@Override
 	public Long getPublicationYear() {
 		String year = getField("260", 'c');
-		Pattern pattern = Pattern.compile("\\d{4}");
-		Matcher matcher = pattern.matcher(year);
+		if (year == null) {
+			return null;
+		}
+		Matcher matcher = YEAR_PATTERN.matcher(year);
 		try {
 			if (matcher.find()) {
 				return Long.parseLong(matcher.group(0));
 			}
 		} catch (NumberFormatException e) {}
 		return null;
-		
 	}
 
 	@Override
