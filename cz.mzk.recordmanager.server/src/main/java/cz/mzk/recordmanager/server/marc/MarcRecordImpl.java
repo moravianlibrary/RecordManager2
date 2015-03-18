@@ -1,5 +1,7 @@
 package cz.mzk.recordmanager.server.marc;
 
+import java.io.ByteArrayOutputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -9,6 +11,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang.NotImplementedException;
+import org.marc4j.MarcStreamWriter;
+import org.marc4j.MarcWriter;
+import org.marc4j.MarcXmlReader;
 import org.marc4j.marc.ControlField;
 import org.marc4j.marc.DataField;
 import org.marc4j.marc.Record;
@@ -453,7 +458,11 @@ public class MarcRecordImpl implements MarcRecord {
 	}
 	
 	protected String exportToIso2709() {
-		throw new NotImplementedException("Not implemented yet.");
+		OutputStream stream = new ByteArrayOutputStream();
+		MarcWriter writer = new MarcStreamWriter(stream);
+		writer.write(record);
+		writer.close();
+		return stream.toString();
 	}
 	
 	protected String exportToXML() {

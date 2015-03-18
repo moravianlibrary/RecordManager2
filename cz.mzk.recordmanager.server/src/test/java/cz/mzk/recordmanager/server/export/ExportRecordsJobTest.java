@@ -30,6 +30,7 @@ public class ExportRecordsJobTest extends AbstractTest {
 	private DBUnitHelper dbUnitHelper;
 	
 	private static final String TEST_FILE_1 = "src/test/resources/export1.txt";
+	private static final String TEST_FILE_2 = "src/test/resources/export_iso2709.txt";
 	
 	@BeforeMethod
 	public void init() throws Exception {
@@ -38,8 +39,10 @@ public class ExportRecordsJobTest extends AbstractTest {
 	
 	@BeforeClass
 	public void cleanUp() {
-		File file = new File(TEST_FILE_1);
-		file.delete();
+		for (String filename : new String[]{ TEST_FILE_1, TEST_FILE_2 }) {
+			File file = new File(filename);
+			file.delete();
+		}
 	}
 	
 	@Test
@@ -49,6 +52,17 @@ public class ExportRecordsJobTest extends AbstractTest {
 		params.put(Constants.JOB_PARAM_CONF_ID, new JobParameter(300L));
 		params.put(Constants.JOB_PARAM_OUT_FILE, new JobParameter(TEST_FILE_1));
 		params.put(Constants.JOB_PARAM_FORMAT, new JobParameter("line"));
+		JobParameters jobParams = new JobParameters(params);
+		jobLauncher.run(job, jobParams);
+	}
+	
+	@Test
+	public void testExportISO2709() throws Exception {
+		Job job = jobRegistry.getJob(Constants.JOB_ID_EXPORT);
+		Map<String, JobParameter> params = new HashMap<String, JobParameter>();
+		params.put(Constants.JOB_PARAM_CONF_ID, new JobParameter(300L));
+		params.put(Constants.JOB_PARAM_OUT_FILE, new JobParameter(TEST_FILE_2));
+		params.put(Constants.JOB_PARAM_FORMAT, new JobParameter("iso"));
 		JobParameters jobParams = new JobParameters(params);
 		jobLauncher.run(job, jobParams);
 	}
