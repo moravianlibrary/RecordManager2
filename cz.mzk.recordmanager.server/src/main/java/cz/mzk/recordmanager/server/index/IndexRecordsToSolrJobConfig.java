@@ -35,7 +35,9 @@ public class IndexRecordsToSolrJobConfig {
 	private static final Date DATE_OVERRIDEN_BY_EXPRESSION = null;
 	
 	private static final String STRING_OVERRIDEN_BY_EXPRESSION = null;
-	
+
+	private static final int PAGE_SIZE = 5000;
+
 	@Autowired
     private JobBuilderFactory jobs;
 
@@ -93,7 +95,7 @@ public class IndexRecordsToSolrJobConfig {
 		}
 		pqpf.setSortKey("dedup_record_id");
 		reader.setRowMapper(new LongValueRowMapper());
-		reader.setPageSize(20);
+		reader.setPageSize(PAGE_SIZE);
     	reader.setQueryProvider(pqpf.getObject());
     	reader.setDataSource(dataSource);
     	if (from != null && to != null) {
