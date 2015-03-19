@@ -65,8 +65,10 @@ public class IndexRecordsToSolrJobTest extends AbstractTest {
 		reset(solrServerFactory);
 		reset(mockedSolrServer);
 		expect(solrServerFactory.create(SOLR_URL)).andReturn(mockedSolrServer).anyTimes();
-		Capture<Collection<SolrInputDocument>> documents = EasyMock.newCapture();
-		expect(mockedSolrServer.add(and(capture(documents), (Collection<SolrInputDocument>) anyObject(Collection.class)))).andReturn(new UpdateResponse());
+		Capture<Collection<SolrInputDocument>> documents1 = EasyMock.newCapture();
+		Capture<Collection<SolrInputDocument>> documents2 = EasyMock.newCapture();
+		expect(mockedSolrServer.add(and(capture(documents1), (Collection<SolrInputDocument>) anyObject(Collection.class)))).andReturn(new UpdateResponse());
+		expect(mockedSolrServer.add(and(capture(documents2), (Collection<SolrInputDocument>) anyObject(Collection.class)))).andReturn(new UpdateResponse());
 		replay(solrServerFactory, mockedSolrServer);
 		
 		Job job = jobRegistry.getJob("indexRecordsToSolrJob");
