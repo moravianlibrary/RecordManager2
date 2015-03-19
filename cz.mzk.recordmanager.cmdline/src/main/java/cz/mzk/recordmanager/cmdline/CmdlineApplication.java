@@ -67,7 +67,8 @@ public class CmdlineApplication {
 					} else {
 						for (BatchJobExecutionDTO jobExecution : batchService
 								.getRunningJobExecutions()) {
-							batchService.restart(jobExecution);
+							Runnable runnable = () -> batchService.restart(jobExecution);
+							executeInThread(runnable);
 						}
 					}
 				} else {
@@ -75,14 +76,18 @@ public class CmdlineApplication {
 							.getBean(JobExecutor.class);
 					Runnable runnable = () -> executor.execute(jobName,
 							jobParams);
-					Thread thread = new Thread(runnable);
-					thread.start();
-					thread.join();
+					executeInThread(runnable);
 				}
 			} finally {
 				SessionFactoryUtils.closeSession(session);
 			}
 		}
+	}
+
+	private static void executeInThread(Runnable runnable) throws InterruptedException {
+		Thread thread = new Thread(runnable);
+		thread.start();
+		thread.join();
 	}
 
 	private static void printHelp() {
