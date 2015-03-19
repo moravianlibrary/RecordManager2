@@ -36,6 +36,8 @@ public class IndexRecordsToSolrJobConfig {
 	
 	private static final String STRING_OVERRIDEN_BY_EXPRESSION = null;
 
+	private static final int CHUNK_SIZE = 1000;
+
 	private static final int PAGE_SIZE = 5000;
 
 	@Autowired
@@ -62,7 +64,7 @@ public class IndexRecordsToSolrJobConfig {
     @Bean(name="indexRecordsToSolrJob:updateRecordsStep")
     public Step updateRecordsStep() throws Exception {
 		return steps.get("updateRecordsJobStep")
-            .<Long, SolrInputDocument> chunk(20) //
+            .<Long, SolrInputDocument> chunk(CHUNK_SIZE) //
             .reader(updatedRecordsReader(DATE_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION)) //
             .processor(updatedRecordsProcessor()) //
             .writer(updatedRecordsWriter(STRING_OVERRIDEN_BY_EXPRESSION)) //

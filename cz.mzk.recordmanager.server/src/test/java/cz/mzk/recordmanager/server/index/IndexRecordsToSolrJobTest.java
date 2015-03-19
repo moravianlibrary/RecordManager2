@@ -1,6 +1,7 @@
 package cz.mzk.recordmanager.server.index;
 
 import static org.easymock.EasyMock.and;
+import static org.easymock.EasyMock.anyInt;
 import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
@@ -66,9 +67,9 @@ public class IndexRecordsToSolrJobTest extends AbstractTest {
 		reset(mockedSolrServer);
 		expect(solrServerFactory.create(SOLR_URL)).andReturn(mockedSolrServer).anyTimes();
 		Capture<Collection<SolrInputDocument>> documents1 = EasyMock.newCapture();
-		Capture<Collection<SolrInputDocument>> documents2 = EasyMock.newCapture();
-		expect(mockedSolrServer.add(and(capture(documents1), (Collection<SolrInputDocument>) anyObject(Collection.class)))).andReturn(new UpdateResponse());
-		expect(mockedSolrServer.add(and(capture(documents2), (Collection<SolrInputDocument>) anyObject(Collection.class)))).andReturn(new UpdateResponse());
+		//Capture<Collection<SolrInputDocument>> documents2 = EasyMock.newCapture();
+		expect(mockedSolrServer.add(and(capture(documents1), (Collection<SolrInputDocument>) anyObject(Collection.class)), anyInt())).andReturn(new UpdateResponse());
+		//expect(mockedSolrServer.add(and(capture(documents2), (Collection<SolrInputDocument>) anyObject(Collection.class)), anyInt())).andReturn(new UpdateResponse());
 		replay(solrServerFactory, mockedSolrServer);
 		
 		Job job = jobRegistry.getJob("indexRecordsToSolrJob");
