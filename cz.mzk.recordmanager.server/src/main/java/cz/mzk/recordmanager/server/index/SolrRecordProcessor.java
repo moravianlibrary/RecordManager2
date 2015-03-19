@@ -35,9 +35,9 @@ public class SolrRecordProcessor implements ItemProcessor<Long, SolrInputDocumen
 			throw new IllegalArgumentException("records is empty");
 		}
 		try {
-		return mapper.map(dedupRecord, records);
+			return mapper.map(dedupRecord, records);
 		} catch (Exception ex) {
-			logger.error(String.format("Exception thrown when indexing dedup_record with id=%s"), dedupRecordId);
+			logger.error(String.format("Exception thrown when indexing dedup_record with id=%s", dedupRecordId), ex);
 			return null;
 		}
 	}
