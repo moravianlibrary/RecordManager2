@@ -17,7 +17,9 @@ public class SolrIndexWriter implements ItemWriter<SolrInputDocument>, StepExecu
 	private SolrServerFactory factory;
 	
 	private String solrUrl;
-	
+
+	private int commitWithinMs = 10000;
+
 	private SolrServer server;
 	
 	public SolrIndexWriter(String solrUrl) {
@@ -27,7 +29,15 @@ public class SolrIndexWriter implements ItemWriter<SolrInputDocument>, StepExecu
 	@SuppressWarnings("unchecked")
 	@Override
 	public void write(List<? extends SolrInputDocument> documents) throws Exception {
-		UpdateResponse response = server.add((List<SolrInputDocument>) documents);
+		UpdateResponse response = server.add((List<SolrInputDocument>) documents, commitWithinMs);
+	}
+
+	public int getCommitWithinMs() {
+		return commitWithinMs;
+	}
+
+	public void setCommitWithinMs(int commitWithinMs) {
+		this.commitWithinMs = commitWithinMs;
 	}
 
 	@Override
