@@ -33,7 +33,7 @@ public class ExportRecordsProcessor implements ItemProcessor<Long, String> {
 			MarcRecord marcRecord = marcXmlParser.parseRecord(is);
 			return marcRecord.export(exportFormat);
 		} 
-		return "";
+		return null;
 	}
 
 }
