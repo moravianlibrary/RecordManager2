@@ -13,7 +13,7 @@ import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.oai.dao.DedupRecordDAO;
 import cz.mzk.recordmanager.server.oai.dao.RecordLinkDAO;
 
-public class SolrRecordProcessor implements ItemProcessor<Long, SolrInputDocument> {
+public class SolrRecordProcessor implements ItemProcessor<DedupRecord, SolrInputDocument> {
 	
 	private static Logger logger = LoggerFactory.getLogger(SolrRecordProcessor.class);
 	
@@ -27,9 +27,8 @@ public class SolrRecordProcessor implements ItemProcessor<Long, SolrInputDocumen
 	private DelegatingSolrRecordMapper mapper;
 	
 	@Override
-	public SolrInputDocument process(Long dedupRecordId) throws Exception {
-		logger.debug("About to process dedup_record with id={}", dedupRecordId);
-		DedupRecord dedupRecord = dedupRecordDao.get(dedupRecordId);
+	public SolrInputDocument process(DedupRecord dedupRecord) throws Exception {
+		logger.debug("About to process dedup_record with id={}", dedupRecord.getId());
 		List<HarvestedRecord> records = recordLinkDao.getHarvestedRecords(dedupRecord);
 		if (records.isEmpty()) {
 			throw new IllegalArgumentException("records is empty");
@@ -37,7 +36,7 @@ public class SolrRecordProcessor implements ItemProcessor<Long, SolrInputDocumen
 		try {
 			return mapper.map(dedupRecord, records);
 		} catch (Exception ex) {
-			logger.error(String.format("Exception thrown when indexing dedup_record with id=%s", dedupRecordId), ex);
+			logger.error(String.format("Exception thrown when indexing dedup_record with id=%s", dedupRecord.getId()), ex);
 			return null;
 		}
 	}
