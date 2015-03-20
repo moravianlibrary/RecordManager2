@@ -461,7 +461,7 @@ public class MarcRecordImpl implements MarcRecord {
 	
 	protected String exportToIso2709() {
 		OutputStream stream = new ByteArrayOutputStream();
-		MarcWriter writer = new MarcStreamWriter(stream);
+		MarcWriter writer = new MarcStreamWriter(stream, "UTF-8", true);
 		writer.write(record);
 		writer.close();
 		return stream.toString();
