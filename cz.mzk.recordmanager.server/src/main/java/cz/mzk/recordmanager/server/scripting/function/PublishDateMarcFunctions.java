@@ -41,7 +41,7 @@ public class PublishDateMarcFunctions implements MarcRecordFunctions {
 
 	// 1989,1990,1991
 	private static final Pattern LIST_YEAR_PATTERN = Pattern
-			.compile("^([0-9]{4})(,[0-9]{4})+$");
+			.compile("^([0-9]{4})(,[0-9]{4})+[,]{0,1}$");
 
 	public Set<Integer> parseRanges(Collection<String> ranges) {
 		Set<Integer> result = new TreeSet<>();
