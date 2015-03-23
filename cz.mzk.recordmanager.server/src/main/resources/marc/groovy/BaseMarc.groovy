@@ -4,6 +4,8 @@ ctrlnum = getFirstField "035a"
 recordtype = "marc"
 allfields = getAllFields()
 
+fullrecord = getFullrecord()
+
 language = translate("mzk_language.map", getLanguages() , null)
 format = getFormat()
 

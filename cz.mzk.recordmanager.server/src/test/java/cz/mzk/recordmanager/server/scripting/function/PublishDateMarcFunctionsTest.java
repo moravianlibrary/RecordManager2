@@ -53,6 +53,12 @@ public class PublishDateMarcFunctionsTest extends AbstractTest {
 	}
 
 	@Test
+	public void parseListRangeWithEndingComma() {
+		Set<Integer> result = functions.parseRanges(Collections.singletonList("1945,1946,1947,1948,"));
+		Assert.assertEquals(result, Sets.newHashSet(1945, 1946, 1947, 1948));
+	}
+
+	@Test
 	public void parseField008SingleYear() {
 		String input = "140526s2014----xr-----e-l----001-0-cze--";
 		Set<Integer> result = functions.parsePublishDateFrom008(input);

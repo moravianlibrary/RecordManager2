@@ -23,7 +23,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import cz.mzk.recordmanager.server.jdbc.DedupRecordRowMapper;
 import cz.mzk.recordmanager.server.jdbc.LongValueRowMapper;
+import cz.mzk.recordmanager.server.model.DedupRecord;
 import cz.mzk.recordmanager.server.springbatch.JobFailureListener;
 import cz.mzk.recordmanager.server.util.Constants;
 
@@ -35,6 +37,8 @@ public class IndexRecordsToSolrJobConfig {
 	private static final Date DATE_OVERRIDEN_BY_EXPRESSION = null;
 	
 	private static final String STRING_OVERRIDEN_BY_EXPRESSION = null;
+
+	private static final int CHUNK_SIZE = 1000;
 
 	private static final int PAGE_SIZE = 5000;
 
@@ -62,7 +66,7 @@ public class IndexRecordsToSolrJobConfig {
     @Bean(name="indexRecordsToSolrJob:updateRecordsStep")
     public Step updateRecordsStep() throws Exception {
 		return steps.get("updateRecordsJobStep")
-            .<Long, SolrInputDocument> chunk(20) //
+            .<DedupRecord, SolrInputDocument> chunk(CHUNK_SIZE) //
             .reader(updatedRecordsReader(DATE_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION)) //
             .processor(updatedRecordsProcessor()) //
             .writer(updatedRecordsWriter(STRING_OVERRIDEN_BY_EXPRESSION)) //
@@ -80,12 +84,12 @@ public class IndexRecordsToSolrJobConfig {
 	
     @Bean(name="indexRecordsToSolrJob:updatedRecordsReader")
 	@StepScope
-    public ItemReader<Long> updatedRecordsReader(@Value("#{jobParameters[" + Constants.JOB_PARAM_FROM_DATE  + "]}") Date from,
+    public ItemReader<DedupRecord> updatedRecordsReader(@Value("#{jobParameters[" + Constants.JOB_PARAM_FROM_DATE  + "]}") Date from,
     		@Value("#{jobParameters[" + Constants.JOB_PARAM_UNTIL_DATE + "]}") Date to) throws Exception {
     	if (from != null && to == null) {
     		to = new Date();
     	}
-		JdbcPagingItemReader<Long> reader = new JdbcPagingItemReader<Long>();
+		JdbcPagingItemReader<DedupRecord> reader = new JdbcPagingItemReader<DedupRecord>();
 		SqlPagingQueryProviderFactoryBean pqpf = new SqlPagingQueryProviderFactoryBean();
 		pqpf.setDataSource(dataSource);
 		pqpf.setSelectClause("SELECT dedup_record_id");
@@ -94,7 +98,7 @@ public class IndexRecordsToSolrJobConfig {
 			pqpf.setWhereClause("WHERE last_update BETWEEN :from AND :to");
 		}
 		pqpf.setSortKey("dedup_record_id");
-		reader.setRowMapper(new LongValueRowMapper());
+		reader.setRowMapper(new DedupRecordRowMapper());
 		reader.setPageSize(PAGE_SIZE);
     	reader.setQueryProvider(pqpf.getObject());
     	reader.setDataSource(dataSource);

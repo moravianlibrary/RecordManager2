@@ -32,7 +32,7 @@ public class RecordLinkDAOHibernate extends
 	public List<HarvestedRecord> getHarvestedRecords(DedupRecord master) {
 		Session session = sessionFactory.getCurrentSession();
 		Criteria crit = session.createCriteria(RecordLink.class);
-		crit.add(Restrictions.eqOrIsNull("id.dedupRecord", master));
+		crit.add(Restrictions.eq("id.dedupRecord", master));
 		crit.setProjection(Projections.property("id.harvestedRecord"));
 		return (List<HarvestedRecord>) crit.list();
 	}
