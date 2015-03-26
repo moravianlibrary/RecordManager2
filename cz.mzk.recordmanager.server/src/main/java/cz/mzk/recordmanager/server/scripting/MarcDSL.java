@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
 import org.marc4j.marc.DataField;
 import org.marc4j.marc.Subfield;
 
-import cz.mzk.recordmanager.server.export.ExportFormat;
+import cz.mzk.recordmanager.server.export.IOFormat;
 import cz.mzk.recordmanager.server.marc.MarcRecord;
 import cz.mzk.recordmanager.server.scripting.function.MarcRecordFunction;
 
@@ -175,7 +175,7 @@ public class MarcDSL {
 	}
 
 	public String getFullrecord() {
-		return record.export(ExportFormat.ISO_2709);
+		return record.export(IOFormat.ISO_2709);
 	}
 
 	public String isIllustrated() {
