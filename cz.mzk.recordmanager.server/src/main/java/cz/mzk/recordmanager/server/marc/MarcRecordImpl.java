@@ -18,7 +18,7 @@ import org.marc4j.marc.DataField;
 import org.marc4j.marc.Record;
 import org.marc4j.marc.Subfield;
 
-import cz.mzk.recordmanager.server.export.ExportFormat;
+import cz.mzk.recordmanager.server.export.IOFormat;
 import cz.mzk.recordmanager.server.util.MetadataUtils;
 
 public class MarcRecordImpl implements MarcRecord {
@@ -437,8 +437,8 @@ public class MarcRecordImpl implements MarcRecord {
 	}
 
 	@Override
-	public String export(ExportFormat exportFormat) {
-		ExportFormat usedFormat = exportFormat == null ? ExportFormat.XML_MARC : exportFormat;
+	public String export(IOFormat iOFormat) {
+		IOFormat usedFormat = iOFormat == null ? IOFormat.XML_MARC : iOFormat;
 		switch (usedFormat) {
 		case LINE_MARC:
 			return exportToLineMarc();
@@ -469,5 +469,15 @@ public class MarcRecordImpl implements MarcRecord {
 	
 	protected String exportToXML() {
 		throw new NotImplementedException("Not implemented yet.");
+	}
+
+	@Override
+	public String getUniqueId() {
+		// TODO override this implementation in institution specific classes
+		String id = getControlField("001");
+		if (id == null) {
+			id = getField("995", 'a');
+		}
+		return id;
 	}
 }

@@ -13,7 +13,7 @@ import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordDAO;
 
 public class ExportRecordsProcessor implements ItemProcessor<Long, String> {
 
-	private ExportFormat exportFormat;
+	private IOFormat iOFormat;
 	
 	@Autowired
 	private HarvestedRecordDAO harvestedRecordDao;
@@ -21,8 +21,8 @@ public class ExportRecordsProcessor implements ItemProcessor<Long, String> {
 	@Autowired
 	private MarcXmlParser marcXmlParser;
 	
-	public ExportRecordsProcessor(ExportFormat format) {
-		this.exportFormat = format;
+	public ExportRecordsProcessor(IOFormat format) {
+		this.iOFormat = format;
 	}
 	
 	@Override
@@ -31,7 +31,7 @@ public class ExportRecordsProcessor implements ItemProcessor<Long, String> {
 		if (record != null) {
 			InputStream is = new ByteArrayInputStream(record.getRawRecord());
 			MarcRecord marcRecord = marcXmlParser.parseRecord(is);
-			return marcRecord.export(exportFormat);
+			return marcRecord.export(iOFormat);
 		} 
 		return null;
 	}

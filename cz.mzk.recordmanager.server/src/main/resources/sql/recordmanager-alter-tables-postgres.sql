@@ -33,3 +33,6 @@ ALTER TABLE harvested_record ADD publication_year  DECIMAL(4),
 ALTER TABLE dedup_record ADD publication_year  DECIMAL(4),
                          ADD physical_format   VARCHAR(255)
 ;
+
+-- 26. 3. 2015 - mertam
+ALTER TABLE harvested_record ADD unique_id VARCHAR(100) UNIQUE;

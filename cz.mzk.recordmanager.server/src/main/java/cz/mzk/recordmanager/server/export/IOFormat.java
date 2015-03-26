@@ -1,9 +1,9 @@
 package cz.mzk.recordmanager.server.export;
 
-public enum ExportFormat {
+public enum IOFormat {
 	LINE_MARC, ALEPH_MARC, ISO_2709, XML_MARC;
 	
-	public static ExportFormat stringToExportFormat(String strParam) {
+	public static IOFormat stringToExportFormat(String strParam) {
 		if (strParam == null) {
 			return XML_MARC;
 		}
