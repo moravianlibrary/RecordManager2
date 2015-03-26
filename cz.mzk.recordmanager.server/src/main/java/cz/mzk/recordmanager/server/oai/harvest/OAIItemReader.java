@@ -41,6 +41,9 @@ public class OAIItemReader implements ItemReader<List<OAIRecord>>, ItemStream,
 	@Autowired
 	private HibernateSessionSynchronizer sync;
 
+	@Autowired
+	private HibernateSessionSynchronizer hibernateSync;
+
 	private OAIHarvester harvester;
 
 	// configuration
@@ -103,19 +106,21 @@ public class OAIItemReader implements ItemReader<List<OAIRecord>>, ItemStream,
 
 	@Override
 	public void beforeStep(final StepExecution stepExecution) {
-		OAIHarvestConfiguration conf = configDao.get(confId);
-		OAIHarvesterParams params = new OAIHarvesterParams();
-		params.setUrl(conf.getUrl());
-		params.setMetadataPrefix(conf.getMetadataPrefix());
-		params.setGranularity(conf.getGranularity());
-		params.setSet(conf.getSet());
-		params.setFrom(fromDate);
-		params.setUntil(untilDate);
-		harvester = harvesterFactory.create(params);
-		processIdentify(conf);
-		conf = configDao.get(confId);
-		params.setGranularity(conf.getGranularity());
-		harvester = harvesterFactory.create(params);
+		try (SessionBinder sess = hibernateSync.register()) {
+			OAIHarvestConfiguration conf = configDao.get(confId);
+			OAIHarvesterParams params = new OAIHarvesterParams();
+			params.setUrl(conf.getUrl());
+			params.setMetadataPrefix(conf.getMetadataPrefix());
+			params.setGranularity(conf.getGranularity());
+			params.setSet(conf.getSet());
+			params.setFrom(fromDate);
+			params.setUntil(untilDate);
+			harvester = harvesterFactory.create(params);
+			processIdentify(conf);
+			conf = configDao.get(confId);
+			params.setGranularity(conf.getGranularity());
+			harvester = harvesterFactory.create(params);
+		}
 	}
 
 	/**
