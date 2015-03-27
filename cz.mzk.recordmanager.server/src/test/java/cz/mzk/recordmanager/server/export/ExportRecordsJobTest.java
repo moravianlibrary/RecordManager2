@@ -4,6 +4,10 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.replay;
+import static org.easymock.EasyMock.reset;
+
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobParameter;
 import org.springframework.batch.core.JobParameters;
@@ -16,6 +20,7 @@ import org.testng.annotations.Test;
 
 import cz.mzk.recordmanager.server.AbstractTest;
 import cz.mzk.recordmanager.server.DBUnitHelper;
+import cz.mzk.recordmanager.server.marc.MarcRecordImpl;
 import cz.mzk.recordmanager.server.util.Constants;
 
 public class ExportRecordsJobTest extends AbstractTest {
@@ -31,6 +36,7 @@ public class ExportRecordsJobTest extends AbstractTest {
 	
 	private static final String TEST_FILE_1 = "src/test/resources/export1.txt";
 	private static final String TEST_FILE_2 = "src/test/resources/export_iso2709.txt";
+	private static final String TEST_FILE_3 = "src/test/resources/export_aleph.txt";
 	
 	@BeforeMethod
 	public void init() throws Exception {
@@ -39,7 +45,7 @@ public class ExportRecordsJobTest extends AbstractTest {
 	
 	@BeforeClass
 	public void cleanUp() {
-		for (String filename : new String[]{ TEST_FILE_1, TEST_FILE_2 }) {
+		for (String filename : new String[]{ TEST_FILE_1, TEST_FILE_2, TEST_FILE_3 }) {
 			File file = new File(filename);
 			file.delete();
 		}
@@ -63,6 +69,17 @@ public class ExportRecordsJobTest extends AbstractTest {
 		params.put(Constants.JOB_PARAM_CONF_ID, new JobParameter(300L));
 		params.put(Constants.JOB_PARAM_OUT_FILE, new JobParameter(TEST_FILE_2));
 		params.put(Constants.JOB_PARAM_FORMAT, new JobParameter("iso"));
+		JobParameters jobParams = new JobParameters(params);
+		jobLauncher.run(job, jobParams);
+	}
+	
+	@Test
+	public void testExportAleph() throws Exception {
+		Job job = jobRegistry.getJob(Constants.JOB_ID_EXPORT);
+		Map<String, JobParameter> params = new HashMap<String, JobParameter>();
+		params.put(Constants.JOB_PARAM_CONF_ID, new JobParameter(300L));
+		params.put(Constants.JOB_PARAM_OUT_FILE, new JobParameter(TEST_FILE_3));
+		params.put(Constants.JOB_PARAM_FORMAT, new JobParameter("aleph"));
 		JobParameters jobParams = new JobParameters(params);
 		jobLauncher.run(job, jobParams);
 	}

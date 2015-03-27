@@ -5,6 +5,7 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -454,7 +455,38 @@ public class MarcRecordImpl implements MarcRecord {
 	}
 	
 	protected String exportToAlephMarc() {
-		throw new NotImplementedException("Not implemented yet.");
+		StringBuilder out = new StringBuilder();
+		
+		out.append(record.getControlNumber().toString());
+		out.append(" LDR   L ");
+		out.append(record.getLeader().toString());
+		out.append('\n');
+		
+		for (ControlField field: record.getControlFields()) {
+			out.append(record.getControlNumber().toString());
+			out.append(" ");
+			out.append(field.getTag());
+			out.append("   L ");
+			out.append(field.getData());
+			out.append("\n");
+		}
+		
+		for (DataField field: record.getDataFields()) {
+			out.append(record.getControlNumber().toString());
+			out.append(" ");
+			out.append(field.getTag());
+			out.append(field.getIndicator1());
+			out.append(field.getIndicator2());
+			out.append(" L ");
+			for (Subfield sfield: field.getSubfields()){
+				out.append("$$");
+				out.append(sfield.getCode());
+				out.append(sfield.getData());
+			}			
+			out.append("\n");
+		}		
+		
+		return out.toString();
 	}
 	
 	protected String exportToIso2709() {
