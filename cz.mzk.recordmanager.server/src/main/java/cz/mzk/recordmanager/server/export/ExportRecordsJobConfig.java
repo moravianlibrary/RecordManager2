@@ -94,20 +94,22 @@ public class ExportRecordsJobConfig {
 	@StepScope
 	public ExportRecordsProcessor exportRecordsProcessor(
 			@Value("#{jobParameters[" + Constants.JOB_PARAM_FORMAT + "]}") String strFormat) {
-		ExportFormat exportFormat = ExportFormat
+		IOFormat iOFormat = IOFormat
 				.stringToExportFormat(strFormat);
-		return new ExportRecordsProcessor(exportFormat);
+		return new ExportRecordsProcessor(iOFormat);
 	}
 
 	@Bean(name = "exportRecordsJob:exportRecordsWriter")
 	@StepScope
 	public FlatFileItemWriter<String> exportRecordsWriter(@Value("#{jobParameters["
-			+ Constants.JOB_PARAM_OUT_FILE + "]}") String filename) {
+			+ Constants.JOB_PARAM_OUT_FILE + "]}") String filename) throws Exception {
 		FlatFileItemWriter<String> fileWritter = new FlatFileItemWriter<String>();
 		fileWritter.setAppendAllowed(true);
 		fileWritter.setShouldDeleteIfExists(true);
+		fileWritter.setEncoding("UTF-8");
 		fileWritter.setLineAggregator(new PassThroughLineAggregator<String>());
 		fileWritter.setResource(new FileSystemResource(filename));
+		fileWritter.afterPropertiesSet();
 		return fileWritter;
 	}
 

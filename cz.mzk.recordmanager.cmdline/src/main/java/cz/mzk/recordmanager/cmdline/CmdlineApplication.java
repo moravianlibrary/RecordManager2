@@ -67,7 +67,8 @@ public class CmdlineApplication {
 					} else {
 						for (BatchJobExecutionDTO jobExecution : batchService
 								.getRunningJobExecutions()) {
-							batchService.restart(jobExecution);
+							Runnable runnable = () -> batchService.restart(jobExecution);
+							executeInThread(runnable);
 						}
 					}
 				} else {
@@ -75,14 +76,18 @@ public class CmdlineApplication {
 							.getBean(JobExecutor.class);
 					Runnable runnable = () -> executor.execute(jobName,
 							jobParams);
-					Thread thread = new Thread(runnable);
-					thread.start();
-					thread.join();
+					executeInThread(runnable);
 				}
 			} finally {
 				SessionFactoryUtils.closeSession(session);
 			}
 		}
+	}
+
+	private static void executeInThread(Runnable runnable) throws InterruptedException {
+		Thread thread = new Thread(runnable);
+		thread.start();
+		thread.join();
 	}
 
 	private static void printHelp() {
@@ -93,10 +98,10 @@ public class CmdlineApplication {
 
 		System.out.println("Parameters:\n");
 		System.out.println(String.format(
-				"%-20sname of a job. Available: %s|%s|%s|%s|help",
+				"%-20sname of a job. Available: %s|%s|%s|%s|%s|help",
 				CLI_PARAM_JOB, Constants.JOB_ID_HARVEST,
 				Constants.JOB_ID_HARVEST_PART, Constants.JOB_ID_DEDUP,
-				Constants.JOB_ID_SOLR_INDEX));
+				Constants.JOB_ID_SOLR_INDEX, Constants.JOB_ID_EXPORT));
 		System.out.println(String.format("%-20s%s",
 				Constants.JOB_PARAM_CONF_ID, "identifier of a job (LONG)"));
 		System.out.println(String.format("%-20s%s",
@@ -105,6 +110,10 @@ public class CmdlineApplication {
 				Constants.JOB_PARAM_UNTIL_DATE, "until date (DATE)"));
 		System.out.println(String.format("%-20s%s",
 				Constants.JOB_PARAM_SOLR_URL, "URL of solr instance (String)"));
+		System.out.println(String.format("%-20s%s",
+				Constants.JOB_PARAM_FORMAT, "Metadata format (String). Available: line|aleph|iso|xml"));
+		System.out.println(String.format("%-20s%s",
+				Constants.JOB_PARAM_OUT_FILE, "Target file used for export (String)."));
 	}
 
 	/**

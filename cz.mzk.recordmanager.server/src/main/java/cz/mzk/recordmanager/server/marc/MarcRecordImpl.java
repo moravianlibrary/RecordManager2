@@ -14,13 +14,12 @@ import java.util.regex.Pattern;
 import org.apache.commons.lang.NotImplementedException;
 import org.marc4j.MarcStreamWriter;
 import org.marc4j.MarcWriter;
-import org.marc4j.MarcXmlReader;
 import org.marc4j.marc.ControlField;
 import org.marc4j.marc.DataField;
 import org.marc4j.marc.Record;
 import org.marc4j.marc.Subfield;
 
-import cz.mzk.recordmanager.server.export.ExportFormat;
+import cz.mzk.recordmanager.server.export.IOFormat;
 import cz.mzk.recordmanager.server.util.MetadataUtils;
 
 public class MarcRecordImpl implements MarcRecord {
@@ -28,7 +27,9 @@ public class MarcRecordImpl implements MarcRecord {
 	private static final String DEFAULT_SEPARATOR = " ";
 	
 	private static final String EMPTY_STRING = "";
-	
+
+	private static final Pattern YEAR_PATTERN = Pattern.compile("\\d{4}");
+
 	protected final Record record;
 	
 	protected final Map<String, List<DataField>> dataFields;
@@ -424,20 +425,21 @@ public class MarcRecordImpl implements MarcRecord {
 	@Override
 	public Long getPublicationYear() {
 		String year = getField("260", 'c');
-		Pattern pattern = Pattern.compile("\\d{4}");
-		Matcher matcher = pattern.matcher(year);
+		if (year == null) {
+			return null;
+		}
+		Matcher matcher = YEAR_PATTERN.matcher(year);
 		try {
 			if (matcher.find()) {
 				return Long.parseLong(matcher.group(0));
 			}
 		} catch (NumberFormatException e) {}
 		return null;
-		
 	}
 
 	@Override
-	public String export(ExportFormat exportFormat) {
-		ExportFormat usedFormat = exportFormat == null ? ExportFormat.XML_MARC : exportFormat;
+	public String export(IOFormat iOFormat) {
+		IOFormat usedFormat = iOFormat == null ? IOFormat.XML_MARC : iOFormat;
 		switch (usedFormat) {
 		case LINE_MARC:
 			return exportToLineMarc();
@@ -491,7 +493,7 @@ public class MarcRecordImpl implements MarcRecord {
 	
 	protected String exportToIso2709() {
 		OutputStream stream = new ByteArrayOutputStream();
-		MarcWriter writer = new MarcStreamWriter(stream);
+		MarcWriter writer = new MarcStreamWriter(stream, "UTF-8", true);
 		writer.write(record);
 		writer.close();
 		return stream.toString();
@@ -499,5 +501,15 @@ public class MarcRecordImpl implements MarcRecord {
 	
 	protected String exportToXML() {
 		throw new NotImplementedException("Not implemented yet.");
+	}
+
+	@Override
+	public String getUniqueId() {
+		// TODO override this implementation in institution specific classes
+		String id = getControlField("001");
+		if (id == null) {
+			id = getField("995", 'a');
+		}
+		return id;
 	}
 }

@@ -4,10 +4,6 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.replay;
-import static org.easymock.EasyMock.reset;
-
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobParameter;
 import org.springframework.batch.core.JobParameters;
@@ -34,9 +30,9 @@ public class ExportRecordsJobTest extends AbstractTest {
 	@Autowired
 	private DBUnitHelper dbUnitHelper;
 	
-	private static final String TEST_FILE_1 = "src/test/resources/export1.txt";
-	private static final String TEST_FILE_2 = "src/test/resources/export_iso2709.txt";
-	private static final String TEST_FILE_3 = "src/test/resources/export_aleph.txt";
+	private static final String TEST_FILE_1 = "target/test/export1.txt";
+	private static final String TEST_FILE_2 = "target/test/export_iso2709.txt";
+    private static final String TEST_FILE_3 = "target/test/export_aleph.txt";
 	
 	@BeforeMethod
 	public void init() throws Exception {

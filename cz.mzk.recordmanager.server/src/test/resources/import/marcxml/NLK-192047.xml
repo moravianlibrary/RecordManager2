@@ -1,0 +1,73 @@
+<record xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://www.loc.gov/MARC21/slim"
+	xsi:schemaLocation="http://www.loc.gov/MARC21/slim http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd">
+	<leader>00759nam  2200253 a 4500</leader>
+	<controlfield tag="001">19790455</controlfield>
+	<controlfield tag="003">CZ-PrNML</controlfield>
+	<controlfield tag="005">20141219080110.0</controlfield>
+	<controlfield tag="008">940304s1978    gw                  eng||</controlfield>
+	<datafield tag="020" ind1=" " ind2=" ">
+		<subfield code="a">3-540-08474-6</subfield>
+	</datafield>
+	<datafield tag="040" ind1=" " ind2=" ">
+		<subfield code="a">Šafránková</subfield>
+		<subfield code="b">cze</subfield>
+		<subfield code="c">ABA008</subfield>
+		<subfield code="d">NiederlováPetra</subfield>
+		<subfield code="e">AACR2</subfield>
+	</datafield>
+	<datafield tag="041" ind1="0" ind2=" ">
+		<subfield code="a">eng</subfield>
+	</datafield>
+	<datafield tag="044" ind1=" " ind2=" ">
+		<subfield code="a">gw</subfield>
+		<subfield code="c">DE</subfield>
+	</datafield>
+	<datafield tag="245" ind1="1" ind2="0">
+		<subfield code="a">Cardiomyopathy and myocardial biopsy /</subfield>
+		<subfield code="c">edited by Martin Kaltenbach, Franz Loogen, E.G.J. Olsen</subfield>
+	</datafield>
+	<datafield tag="250" ind1=" " ind2=" ">
+		<subfield code="a">1st ed., repr.</subfield>
+	</datafield>
+	<datafield tag="260" ind1=" " ind2=" ">
+		<subfield code="a">Berlin :</subfield>
+		<subfield code="b">Springer,</subfield>
+		<subfield code="c">1978</subfield>
+	</datafield>
+	<datafield tag="300" ind1=" " ind2=" ">
+		<subfield code="a">xv, 337 s.</subfield>
+	</datafield>
+	<datafield tag="500" ind1=" " ind2=" ">
+		<subfield code="a">Literatura na konci kapitol</subfield>
+	</datafield>
+	<datafield tag="500" ind1=" " ind2=" ">
+		<subfield code="a">Rejstřík s. 335-337</subfield>
+	</datafield>
+	<datafield tag="700" ind1="1" ind2=" ">
+		<subfield code="a">Kaltenbach, Martin</subfield>
+		<subfield code="4">edt</subfield>
+	</datafield>
+	<datafield tag="700" ind1="1" ind2=" ">
+		<subfield code="a">Loogen, Franz</subfield>
+		<subfield code="4">edt</subfield>
+	</datafield>
+	<datafield tag="700" ind1="1" ind2=" ">
+		<subfield code="a">Olsen, Eckhardt G.J.</subfield>
+		<subfield code="4">edt</subfield>
+	</datafield>
+	<datafield tag="910" ind1=" " ind2=" ">
+		<subfield code="a">ABC048</subfield>
+		<subfield code="b">B 2696</subfield>
+		<subfield code="y">0</subfield>
+	</datafield>
+	<datafield tag="974" ind1=" " ind2=" ">
+		<subfield code="f">FOND</subfield>
+	</datafield>
+	<datafield tag="HGS" ind1=" " ind2=" ">
+		<subfield code="a">0</subfield>
+		<subfield code="b">0</subfield>
+		<subfield code="c">0</subfield>
+		<subfield code="d">0</subfield>
+	</datafield>
+</record>

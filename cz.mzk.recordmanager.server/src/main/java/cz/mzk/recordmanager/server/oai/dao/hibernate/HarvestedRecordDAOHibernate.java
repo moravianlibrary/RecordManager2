@@ -23,4 +23,13 @@ public class HarvestedRecordDAOHibernate extends
 				.uniqueResult();
 	}
 
+	@Override
+	public HarvestedRecord findByUniqueId(String uniqueId) {
+		Session session = sessionFactory.getCurrentSession();
+		return (HarvestedRecord) session
+				.createQuery("from HarvestedRecord where unique_id = ?")
+				.setParameter(0, uniqueId)
+				.uniqueResult();
+	}
+
 }

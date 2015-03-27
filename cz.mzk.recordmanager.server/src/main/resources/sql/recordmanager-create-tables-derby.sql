@@ -50,6 +50,7 @@ CREATE TABLE harvested_record (
   id                   DECIMAL(10) PRIMARY KEY,
   oai_harvest_conf_id  DECIMAL(10),
   oai_record_id        VARCHAR(128),
+  unique_id            VARCHAR(100) UNIQUE,
   harvested            TIMESTAMP,
   updated              TIMESTAMP,
   deleted              TIMESTAMP,
