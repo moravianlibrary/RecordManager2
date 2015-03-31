@@ -5,7 +5,6 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -14,6 +13,7 @@ import java.util.regex.Pattern;
 import org.apache.commons.lang.NotImplementedException;
 import org.marc4j.MarcStreamWriter;
 import org.marc4j.MarcWriter;
+import org.marc4j.MarcXmlWriter;
 import org.marc4j.marc.ControlField;
 import org.marc4j.marc.DataField;
 import org.marc4j.marc.Record;
@@ -511,5 +511,33 @@ public class MarcRecordImpl implements MarcRecord {
 			id = getField("995", 'a');
 		}
 		return id;
+	}
+
+	@Override
+	public List<String> getISSNs() {
+		// TODO Auto-generated method stub
+		// https://github.com/moravianlibrary/RecordManager/blob/experimental_dedup/classes/MarcRecord.php#L888
+		return null;
+	}
+
+	@Override
+	public String getSeriesISSN() {
+		// TODO Auto-generated method stub
+		// https://github.com/moravianlibrary/RecordManager/blob/experimental_dedup/classes/MarcRecord.php#L909
+		return null;
+	}
+
+	@Override
+	public Long getPageCount() {
+		// TODO Auto-generated method stub
+		// https://github.com/moravianlibrary/RecordManager/blob/experimental_dedup/classes/MarcRecord.php#L1195
+		return null;
+	}
+
+	@Override
+	public List<String> getISBNs() {
+		// TODO Auto-generated method stub
+		// https://github.com/moravianlibrary/RecordManager/blob/experimental_dedup/classes/MarcRecord.php#L860
+		return null;
 	}
 }
