@@ -11,9 +11,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang.NotImplementedException;
+import org.apache.commons.validator.routines.ISBNValidator;
 import org.marc4j.MarcStreamWriter;
 import org.marc4j.MarcWriter;
-import org.marc4j.MarcXmlWriter;
 import org.marc4j.marc.ControlField;
 import org.marc4j.marc.DataField;
 import org.marc4j.marc.Record;
@@ -29,12 +29,15 @@ public class MarcRecordImpl implements MarcRecord {
 	private static final String EMPTY_STRING = "";
 
 	private static final Pattern YEAR_PATTERN = Pattern.compile("\\d{4}");
-
+	private static final Pattern PAGECOUNT_PATTERN = Pattern.compile("\\d+");
+	
 	protected final Record record;
 	
 	protected final Map<String, List<DataField>> dataFields;
 	
 	protected final Map<String, List<ControlField>> controlFields;
+	
+	private final ISBNValidator isbnValidator = ISBNValidator.getInstance(true);
 	
 	public MarcRecordImpl(Record record) {
 		super();
@@ -514,30 +517,48 @@ public class MarcRecordImpl implements MarcRecord {
 	}
 
 	@Override
-	public List<String> getISSNs() {
-		// TODO Auto-generated method stub
-		// https://github.com/moravianlibrary/RecordManager/blob/experimental_dedup/classes/MarcRecord.php#L888
-		return null;
+	public List<String> getISSNs() {	
+		List<String> issns = new ArrayList<String>();
+		
+		for(String issn: getFields("022", 'a')){
+			issns.add(issn.replace("-", ""));
+		}
+		
+		return issns.isEmpty() ? null : issns;
+		
 	}
 
 	@Override
-	public String getSeriesISSN() {
-		// TODO Auto-generated method stub
-		// https://github.com/moravianlibrary/RecordManager/blob/experimental_dedup/classes/MarcRecord.php#L909
-		return null;
+	public String getSeriesISSN() {	
+		return getField("490", 'x');
 	}
 
 	@Override
-	public Long getPageCount() {
-		// TODO Auto-generated method stub
-		// https://github.com/moravianlibrary/RecordManager/blob/experimental_dedup/classes/MarcRecord.php#L1195
+	public Long getPageCount() {		
+		String count = getField("300", 'a');
+		if(count == null){
+			return null;
+		}	
+		
+		Matcher matcher = PAGECOUNT_PATTERN.matcher(count);
+		try {
+			if (matcher.find()) {
+				return Long.parseLong(matcher.group(0));
+			}
+		} catch (NumberFormatException e) {}
 		return null;
 	}
-
+	
 	@Override
 	public List<String> getISBNs() {
-		// TODO Auto-generated method stub
-		// https://github.com/moravianlibrary/RecordManager/blob/experimental_dedup/classes/MarcRecord.php#L860
-		return null;
+		List<String> isbns = new ArrayList<String>();
+		
+		for(String isbn: getFields("020", 'a')){	
+			isbn = isbnValidator.validate(isbn);
+			if(isbn == null) continue;
+			if(!isbns.contains(isbn)) isbns.add(isbn);
+		}
+		
+		return isbns.isEmpty() ? null : isbns;
 	}
 }
