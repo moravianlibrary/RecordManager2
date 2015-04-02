@@ -64,6 +64,20 @@ CREATE TABLE harvested_record (
   CONSTRAINT harvested_record_format_fk              FOREIGN KEY (format)              REFERENCES format(format)
 );
 
+CREATE TABLE authority_record (
+  id                   DECIMAL(10) PRIMARY KEY,
+  oai_harvest_conf_id  DECIMAL(10),
+  oai_record_id        VARCHAR(128),
+  authority_type       VARCHAR(128),
+  harvested            TIMESTAMP,
+  updated              TIMESTAMP,
+  deleted              TIMESTAMP,
+  format               VARCHAR(12) NOT NULL,
+  raw_record           BLOB,
+  CONSTRAINT authority_record_oai_harvest_conf_id_fk FOREIGN KEY (oai_harvest_conf_id) REFERENCES oai_harvest_conf(id),
+  CONSTRAINT authority_record_format_fk              FOREIGN KEY (format)              REFERENCES format(format)
+);
+
 CREATE TABLE record_link (
   harvested_record_id  DECIMAL(10),
   dedup_record_id      DECIMAL(10),

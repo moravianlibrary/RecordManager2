@@ -3,6 +3,7 @@ package cz.mzk.recordmanager.server;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.sql.Connection;
+import java.sql.Statement;
 
 import javax.sql.DataSource;
 
@@ -14,6 +15,9 @@ import org.dbunit.dataset.xml.FlatXmlWriter;
 import org.dbunit.operation.DatabaseOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import cz.mzk.recordmanager.server.model.AuthorityRecord;
+import cz.mzk.recordmanager.server.model.HarvestedRecord;
 
 @Component
 public class DBUnitHelper {
@@ -39,8 +43,17 @@ public class DBUnitHelper {
 			FlatXmlDataSetBuilder builder = new FlatXmlDataSetBuilder();
 			builder.setColumnSensing(true);
 			FlatXmlDataSet dataset = builder.build(is);
+			truncateTables();
 			DatabaseOperation.CLEAN_INSERT.execute(conn, dataset);
 		}
 	}
+	
+	protected void truncateTables() throws Exception {
+		Statement statement = dataSource.getConnection().createStatement();
+		statement.execute("truncate table " + AuthorityRecord.TABLE_NAME);
+		statement.execute("truncate table " + HarvestedRecord.TABLE_NAME);
+	}
+	
+	
 
 }

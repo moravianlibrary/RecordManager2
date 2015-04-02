@@ -53,6 +53,16 @@ public class OAIHarvestJobConfig {
 				.build();
     }
     
+    @Bean
+    public Job oaiHarvestAuthorityJob(@Qualifier("oaiHarvestJob:authStep") Step step) {
+        return jobs.get("oaiHarvestAuthorityJob") //
+        		.validator(new OAIHarvestJobParametersValidator()) //
+        		.listener(JobFailureListener.INSTANCE) //
+				.flow(step) //
+				.end() //
+				.build();
+    }
+    
     @Bean(name="oaiHarvestJob:step")
     public Step step() {
         return steps.get("step1") //
@@ -80,6 +90,15 @@ public class OAIHarvestJobConfig {
             .build();
     }
     
+    @Bean(name="oaiHarvestJob:authStep")
+    public Step authorityStep() {
+        return steps.get("step2") //
+            .<List<OAIRecord>, List<OAIRecord>> chunk(1) //
+            .reader(reader(LONG_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION)) //
+            .writer(authWriter()) //
+            .build();
+    }
+    
     @Bean(name="oaiHarvestJob:partioner")
     @StepScope
     public DateIntervalPartitioner partioner(@Value("#{jobParameters[" + Constants.JOB_PARAM_FROM_DATE + "]}") Date from,
@@ -102,6 +121,12 @@ public class OAIHarvestJobConfig {
     @StepScope
     public OAIItemWriter writer() {
     	return new OAIItemWriter();
+    }
+    
+    @Bean(name="oaiHarvestJob:authwriter")
+    @StepScope
+    public OAIAuthItemWriter authWriter() {
+    	return new OAIAuthItemWriter();
     }
 
 }
