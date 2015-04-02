@@ -70,7 +70,7 @@ CREATE TABLE authority_record (
   updated              TIMESTAMP,
   deleted              TIMESTAMP,
   format               VARCHAR(12) NOT NULL,
-  raw_record           BLOB,
+  raw_record           BYTEA,
   FOREIGN KEY (oai_harvest_conf_id) REFERENCES oai_harvest_conf(id),
   FOREIGN KEY (format)              REFERENCES format(format)
 );
