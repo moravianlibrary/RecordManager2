@@ -18,16 +18,16 @@ public class HarvestedRecordDAOHibernate extends
 		Session session = sessionFactory.getCurrentSession();
 		return (HarvestedRecord) session
 				.createQuery(
-						"from HarvestedRecord where oaiRecordId = ? and harvestedFrom = ?")
+						"from HarvestedRecord where recordId = ? and harvestedFrom = ?")
 				.setParameter(0, recordId).setParameter(1, configuration)
 				.uniqueResult();
 	}
 
 	@Override
-	public HarvestedRecord findByUniqueId(String uniqueId) {
+	public HarvestedRecord findByRecordId(String uniqueId) {
 		Session session = sessionFactory.getCurrentSession();
 		return (HarvestedRecord) session
-				.createQuery("from HarvestedRecord where unique_id = ?")
+				.createQuery("from HarvestedRecord where record_id = ?")
 				.setParameter(0, uniqueId)
 				.uniqueResult();
 	}

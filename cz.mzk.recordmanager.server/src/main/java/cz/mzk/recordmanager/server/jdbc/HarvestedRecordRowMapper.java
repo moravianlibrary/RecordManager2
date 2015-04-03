@@ -18,7 +18,7 @@ public class HarvestedRecordRowMapper implements RowMapper<HarvestedRecord> {
 	public HarvestedRecord mapRow(ResultSet rs, int rowNum) throws SQLException {
 		HarvestedRecord record = new HarvestedRecord();
 		record.setId(rs.getLong("id"));
-		record.setOaiRecordId(rs.getString("oai_record_id"));
+		record.setRecordId(rs.getString("record_id"));
 		record.setRawRecord(rs.getBytes("raw_record"));
 		record.setFormat(rs.getString("format"));
 		record.setIsbn(rs.getString("isbn"));

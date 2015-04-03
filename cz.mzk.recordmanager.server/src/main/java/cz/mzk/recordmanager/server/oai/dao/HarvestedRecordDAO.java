@@ -6,6 +6,6 @@ import cz.mzk.recordmanager.server.model.OAIHarvestConfiguration;
 public interface HarvestedRecordDAO extends DomainDAO<Long, HarvestedRecord> {
 	
 	public HarvestedRecord findByIdAndHarvestConfiguration(String recordId, OAIHarvestConfiguration configuration);
-	public HarvestedRecord findByUniqueId(String uniqueId);
+	public HarvestedRecord findByRecordId(String oaiRecordId);
 
 }

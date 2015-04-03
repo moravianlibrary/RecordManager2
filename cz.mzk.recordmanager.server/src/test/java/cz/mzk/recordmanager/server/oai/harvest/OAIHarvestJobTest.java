@@ -184,7 +184,7 @@ public class OAIHarvestJobTest extends AbstractTest {
 		Assert.assertEquals(exec.getExitStatus(), ExitStatus.COMPLETED);
 		
 		OAIHarvestConfiguration config = configDao.get(confID);
-		HarvestedRecord record = recordDao.findByIdAndHarvestConfiguration("oai:medvik.cz:111111", config);
+		HarvestedRecord record = recordDao.findByIdAndHarvestConfiguration("111111", config);
 		Assert.assertNotNull(record, "Record not stored.");
 		Assert.assertNotNull(record.getDeleted());
 	}

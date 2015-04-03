@@ -2,7 +2,7 @@ CREATE VIEW harvested_record_view AS
 SELECT
   id,
   oai_harvest_conf_id,
-  oai_record_id,
+  record_id,
   deleted,
   format,
   isbn,

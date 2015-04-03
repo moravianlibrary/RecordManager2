@@ -64,7 +64,7 @@ public class ImportRecordsJobTest extends AbstractTest {
 		JobParameters jobParams = new JobParameters(params);
 		jobLauncher.run(job, jobParams);
 
-		HarvestedRecord insertedRecord =  harvestedRecordDao.findByUniqueId("000000146");
+		HarvestedRecord insertedRecord =  harvestedRecordDao.findByRecordId("000000146");
 		Assert.assertNotNull(insertedRecord);
 	}
 	
@@ -78,7 +78,7 @@ public class ImportRecordsJobTest extends AbstractTest {
 		JobParameters jobParams = new JobParameters(params);
 		jobLauncher.run(job, jobParams);
 		
-		HarvestedRecord insertedRecord =  harvestedRecordDao.findByUniqueId("19790455");
+		HarvestedRecord insertedRecord =  harvestedRecordDao.findByRecordId("19790455");
 		Assert.assertNotNull(insertedRecord);
 	}
 	
@@ -92,9 +92,9 @@ public class ImportRecordsJobTest extends AbstractTest {
 		JobParameters jobParams = new JobParameters(params);
 		jobLauncher.run(job, jobParams);
 		
-		Assert.assertNotNull(harvestedRecordDao.findByUniqueId("kpw0120405"));
-		Assert.assertNotNull(harvestedRecordDao.findByUniqueId("kpw0120531"));
-		Assert.assertNotNull(harvestedRecordDao.findByUniqueId("kpw0120435"));
+		Assert.assertNotNull(harvestedRecordDao.findByRecordId("kpw0120405"));
+		Assert.assertNotNull(harvestedRecordDao.findByRecordId("kpw0120531"));
+		Assert.assertNotNull(harvestedRecordDao.findByRecordId("kpw0120435"));
 	}
 	
 	@Test
@@ -107,11 +107,11 @@ public class ImportRecordsJobTest extends AbstractTest {
 		JobParameters jobParams = new JobParameters(params);
 		jobLauncher.run(job, jobParams);
 		
-		Assert.assertNotNull(harvestedRecordDao.findByUniqueId("000000117"));
-		Assert.assertNotNull(harvestedRecordDao.findByUniqueId("000000121"));
-		Assert.assertNotNull(harvestedRecordDao.findByUniqueId("000000120"));
-		Assert.assertNotNull(harvestedRecordDao.findByUniqueId("000000130"));
-		Assert.assertNotNull(harvestedRecordDao.findByUniqueId("000000132"));
-		Assert.assertNotNull(harvestedRecordDao.findByUniqueId("000000134"));
+		Assert.assertNotNull(harvestedRecordDao.findByRecordId("000000117"));
+		Assert.assertNotNull(harvestedRecordDao.findByRecordId("000000121"));
+		Assert.assertNotNull(harvestedRecordDao.findByRecordId("000000120"));
+		Assert.assertNotNull(harvestedRecordDao.findByRecordId("000000130"));
+		Assert.assertNotNull(harvestedRecordDao.findByRecordId("000000132"));
+		Assert.assertNotNull(harvestedRecordDao.findByRecordId("000000134"));
 	}
 }

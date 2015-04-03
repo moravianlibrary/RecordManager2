@@ -36,3 +36,7 @@ ALTER TABLE dedup_record ADD publication_year  DECIMAL(4),
 
 -- 26. 3. 2015 - mertam
 ALTER TABLE harvested_record ADD unique_id VARCHAR(100) UNIQUE;
+
+-- 3. 4. 2015 - tomascejpek
+ALTER TABLE harvested_record DROP unique_id;
+ALTER TABLE harvested_record RENAME oai_record_id TO record_id;

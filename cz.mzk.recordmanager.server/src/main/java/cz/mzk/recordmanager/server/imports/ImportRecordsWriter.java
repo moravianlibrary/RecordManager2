@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import cz.mzk.recordmanager.server.dedup.DelegatingDedupKeysParser;
-import cz.mzk.recordmanager.server.index.IndexRecordsToSolrJobConfig;
 import cz.mzk.recordmanager.server.marc.MarcRecord;
 import cz.mzk.recordmanager.server.marc.MarcRecordImpl;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
@@ -61,7 +60,7 @@ public class ImportRecordsWriter implements ItemWriter<List<Record>> {
 					marcWriter.close();
 					
 					MarcRecord marc = new MarcRecordImpl(currentRecord);
-					hr.setUniqueId(marc.getUniqueId());
+					hr.setRecordId(marc.getUniqueId());
 					hr.setRawRecord(outStream.toByteArray());
 					hr.setHarvestedFrom(harvestConfiguration);
 //					TODO detect format

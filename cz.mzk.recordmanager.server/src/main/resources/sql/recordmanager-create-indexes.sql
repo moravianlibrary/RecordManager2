@@ -1,4 +1,4 @@
-CREATE INDEX harvested_record_sec_key ON harvested_record(oai_harvest_conf_id, oai_record_id);
+CREATE INDEX harvested_record_sec_key ON harvested_record(oai_harvest_conf_id, record_id);
 
 -- INDEXES used for deduplication
 CREATE INDEX record_link_dedup_record_id    ON record_link USING btree (dedup_record_id);

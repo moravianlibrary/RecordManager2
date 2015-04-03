@@ -23,11 +23,8 @@ public class HarvestedRecord extends AbstractDomainObject {
 	@JoinColumn(name="oai_harvest_conf_id", nullable=false)
 	private OAIHarvestConfiguration harvestedFrom;
 	
-	@Column(name="oai_record_id")
-	private String oaiRecordId;
-	
-	@Column(name="unique_id")
-	private String uniqueId;
+	@Column(name="record_id")
+	private String recordId;
 	
 	@Column(name="harvested")
 	@Temporal(TemporalType.TIMESTAMP)
@@ -68,22 +65,14 @@ public class HarvestedRecord extends AbstractDomainObject {
 		this.harvestedFrom = harvestedFrom;
 	}
 
-	public String getOaiRecordId() {
-		return oaiRecordId;
+	public String getRecordId() {
+		return recordId;
 	}
 
-	public void setOaiRecordId(String oaiRecordId) {
-		this.oaiRecordId = oaiRecordId;
+	public void setRecordId(String oaiRecordId) {
+		this.recordId = oaiRecordId;
 	}
-	
-	public String getUniqueId() {
-		return uniqueId;
-	}
-	
-	public void setUniqueId(String uniqueId) {
-		this.uniqueId = uniqueId;
-	}
-	
+		
 	public Date getHarvested() {
 		return harvested;
 	}
