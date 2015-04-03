@@ -2,6 +2,7 @@ package cz.mzk.recordmanager.server.marc;
 
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -118,7 +119,7 @@ public class MarcRecordImplTest extends AbstractTest {
     	data.clear();
     	
     	mri = MarcRecordFactory.recordFactory(data);
-    	Assert.assertEquals(mri.getISSNs(), null);
+    	Assert.assertEquals(mri.getISSNs(), Collections.emptyList());
     	data.clear();
     }
 	
@@ -177,7 +178,7 @@ public class MarcRecordImplTest extends AbstractTest {
     	data.clear();
     	
     	mri = MarcRecordFactory.recordFactory(data);
-    	Assert.assertEquals(mri.getISBNs(), null);
+    	Assert.assertEquals(mri.getISBNs(), Collections.emptyList());
     	data.clear();
     }
 	

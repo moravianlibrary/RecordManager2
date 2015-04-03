@@ -524,7 +524,7 @@ public class MarcRecordImpl implements MarcRecord {
 			issns.add(issn.replace("-", ""));
 		}
 		
-		return issns.isEmpty() ? null : issns;
+		return issns.isEmpty() ? Collections.emptyList() : issns;
 		
 	}
 
@@ -559,6 +559,6 @@ public class MarcRecordImpl implements MarcRecord {
 			if(!isbns.contains(isbn)) isbns.add(isbn);
 		}
 		
-		return isbns.isEmpty() ? null : isbns;
+		return isbns.isEmpty() ? Collections.emptyList() : isbns;
 	}
 }
