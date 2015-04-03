@@ -1,0 +1,361 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<OAI-PMH xmlns="http://www.openarchives.org/OAI/2.0/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/
+http://www.openarchives.org/OAI/2.0/OAI-PMH.xsd">
+	<responseDate>2015-03-31T11:40:37Z</responseDate>
+	<request verb="ListRecords" metadataPrefix="marc21" set="AUT">http://aleph.nkp.cz/OAI</request>
+	<ListRecords>
+		<record>
+			<header>
+				<identifier>oai:aleph-nkp.cz:AUT10-000000001</identifier>
+				<datestamp>2012-06-30T22:26:40Z</datestamp>
+				<setSpec>AUT</setSpec>
+			</header>
+			<metadata>
+				<marc:record xmlns:marc="http://www.loc.gov/MARC21/slim"
+					xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+					xsi:schemaLocation="http://www.loc.gov/MARC21/slim
+http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd">
+					<marc:leader>     nz  a22     n  4500</marc:leader>
+					<marc:controlfield tag="001">jk01010001</marc:controlfield>
+					<marc:controlfield tag="003">CZ PrNK</marc:controlfield>
+					<marc:controlfield tag="005">20050204143850.0</marc:controlfield>
+					<marc:controlfield tag="008">000622|n|acnnnaabn           n a|a      </marc:controlfield>
+					<marc:datafield tag="040" ind1=" " ind2=" ">
+						<marc:subfield code="a">Jaroslav Kunc</marc:subfield>
+						<marc:subfield code="b">cze</marc:subfield>
+						<marc:subfield code="c">ABA001</marc:subfield>
+						<marc:subfield code="d">ABA001</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="100" ind1="1" ind2=" ">
+						<marc:subfield code="a">Abraham, Jiří,</marc:subfield>
+						<marc:subfield code="d">1931-</marc:subfield>
+						<marc:subfield code="7">jk01010001</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="670" ind1=" " ind2=" ">
+						<marc:subfield code="a">PNP-LA</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="678" ind1="0" ind2=" ">
+						<marc:subfield code="a">Narozen 14.12.1931 v Osvračíně. MUDr., odborný asistent na klinice dětské neurologie fakulty dětského lékařství University Karlovy v Praze, práce z oboru.</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="906" ind1=" " ind2=" ">
+						<marc:subfield code="a">im19980101</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="909" ind1=" " ind2=" ">
+						<marc:subfield code="a">CZ</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="950" ind1="0" ind2=" ">
+						<marc:subfield code="a">definitivní</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="998" ind1=" " ind2=" ">
+						<marc:subfield code="a">http://aleph.nkp.cz/F/?func=direct&amp;doc_number=000000001&amp;local_base=AUT</marc:subfield>
+					</marc:datafield>
+				</marc:record>
+			</metadata>
+		</record>
+		<record>
+			<header>
+				<identifier>oai:aleph-nkp.cz:AUT10-000000006</identifier>
+				<datestamp>2012-06-30T22:26:40Z</datestamp>
+				<setSpec>AUT</setSpec>
+			</header>
+			<metadata>
+				<marc:record xmlns:marc="http://www.loc.gov/MARC21/slim"
+					xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+					xsi:schemaLocation="http://www.loc.gov/MARC21/slim
+http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd">
+					<marc:leader>     nz  a22     n  4500</marc:leader>
+					<marc:controlfield tag="001">jk01010009</marc:controlfield>
+					<marc:controlfield tag="003">CZ PrNK</marc:controlfield>
+					<marc:controlfield tag="005">20050204143512.0</marc:controlfield>
+					<marc:controlfield tag="008">980211|n|acnnnaabn           n a|a      </marc:controlfield>
+					<marc:datafield tag="040" ind1=" " ind2=" ">
+						<marc:subfield code="a">Jaroslav Kunc</marc:subfield>
+						<marc:subfield code="b">cze</marc:subfield>
+						<marc:subfield code="c">ABA001</marc:subfield>
+						<marc:subfield code="d">ABA001</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="100" ind1="1" ind2=" ">
+						<marc:subfield code="a">Absolon, Vilibald,</marc:subfield>
+						<marc:subfield code="d">1843-1882</marc:subfield>
+						<marc:subfield code="7">jk01010009</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="670" ind1=" " ind2=" ">
+						<marc:subfield code="a">PNP-LA</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="678" ind1="0" ind2=" ">
+						<marc:subfield code="a">Narozen roku 1843 ve Fryštáku, zemřel 22.7.1882 v Boskovicích. MUDr., zámecký a obvodní lékař v Boskovicích, časopisecké články.</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="906" ind1=" " ind2=" ">
+						<marc:subfield code="a">im19980101</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="909" ind1=" " ind2=" ">
+						<marc:subfield code="a">CZ</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="950" ind1="0" ind2=" ">
+						<marc:subfield code="a">definitivní</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="998" ind1=" " ind2=" ">
+						<marc:subfield code="a">http://aleph.nkp.cz/F/?func=direct&amp;doc_number=000000006&amp;local_base=AUT</marc:subfield>
+					</marc:datafield>
+				</marc:record>
+			</metadata>
+		</record>
+		<record>
+			<header>
+				<identifier>oai:aleph-nkp.cz:AUT10-000000007</identifier>
+				<datestamp>2012-06-30T22:26:40Z</datestamp>
+				<setSpec>AUT</setSpec>
+			</header>
+			<metadata>
+				<marc:record xmlns:marc="http://www.loc.gov/MARC21/slim"
+					xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+					xsi:schemaLocation="http://www.loc.gov/MARC21/slim
+http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd">
+					<marc:leader>     cz  a22     n  4500</marc:leader>
+					<marc:controlfield tag="001">jk01010010</marc:controlfield>
+					<marc:controlfield tag="003">CZ PrNK</marc:controlfield>
+					<marc:controlfield tag="005">20110330114625.0</marc:controlfield>
+					<marc:controlfield tag="008">980211|n|acnnnaabn           n a|a      </marc:controlfield>
+					<marc:datafield tag="040" ind1=" " ind2=" ">
+						<marc:subfield code="a">Jaroslav Kunc</marc:subfield>
+						<marc:subfield code="b">cze</marc:subfield>
+						<marc:subfield code="c">ABA001</marc:subfield>
+						<marc:subfield code="d">ABA001</marc:subfield>
+						<marc:subfield code="d">UOG001</marc:subfield>
+						<marc:subfield code="d">ABA001</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="100" ind1="1" ind2=" ">
+						<marc:subfield code="a">Abžoltovská-Klichová, Vlastimila,</marc:subfield>
+						<marc:subfield code="d">1904-1995</marc:subfield>
+						<marc:subfield code="7">jk01010010</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="400" ind1="1" ind2=" ">
+						<marc:subfield code="w">u</marc:subfield>
+						<marc:subfield code="a">Abžoltovská, Vlastimila,</marc:subfield>
+						<marc:subfield code="d">1904-1995</marc:subfield>
+						<marc:subfield code="0">o</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="670" ind1=" " ind2=" ">
+						<marc:subfield code="a">PNP-LA</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="670" ind1=" " ind2=" ">
+						<marc:subfield code="a">www(Informační systém abART, cit. 30. 3. 2011)</marc:subfield>
+						<marc:subfield code="b">rok úmrtí</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="678" ind1="0" ind2=" ">
+						<marc:subfield code="a">Narozena 1.10.1904 v Olšance na Volyňsku - Ukrajina, zemřela v roce 1995. Úřednice Ústřední rady odborů, překladatelka z ruštiny.</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="906" ind1=" " ind2=" ">
+						<marc:subfield code="a">im19980101</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="906" ind1=" " ind2=" ">
+						<marc:subfield code="a">oz20040623</marc:subfield>
+						<marc:subfield code="b">vipr</marc:subfield>
+						<marc:subfield code="c">Záhlaví - data</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="906" ind1=" " ind2=" ">
+						<marc:subfield code="a">op20041001</marc:subfield>
+						<marc:subfield code="b">mdvo</marc:subfield>
+						<marc:subfield code="c">Formální oprava</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="906" ind1=" " ind2=" ">
+						<marc:subfield code="a">no20110330</marc:subfield>
+						<marc:subfield code="b">xjomo</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="906" ind1=" " ind2=" ">
+						<marc:subfield code="a">oz20110330</marc:subfield>
+						<marc:subfield code="b">lisi</marc:subfield>
+						<marc:subfield code="c">Záhlaví - datum úmrtí, viz - datum úmrtí, biografická poznámka - doplnění, zdroj - další výskyt</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="909" ind1=" " ind2=" ">
+						<marc:subfield code="a">CZ</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="950" ind1="0" ind2=" ">
+						<marc:subfield code="a">definitivní</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="991" ind1="0" ind2=" ">
+						<marc:subfield code="a">Abžoltovská-Klichová, Vlastimila,</marc:subfield>
+						<marc:subfield code="d">1904-</marc:subfield>
+						<marc:subfield code="7">jk01010010</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="991" ind1="0" ind2=" ">
+						<marc:subfield code="a">Abžoltovská-Klichová, Vlastimila,</marc:subfield>
+						<marc:subfield code="d">nar. 1904</marc:subfield>
+						<marc:subfield code="7">jk01010010</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="998" ind1=" " ind2=" ">
+						<marc:subfield code="a">http://aleph.nkp.cz/F/?func=direct&amp;doc_number=000000007&amp;local_base=AUT</marc:subfield>
+					</marc:datafield>
+				</marc:record>
+			</metadata>
+		</record>
+		<record>
+			<header>
+				<identifier>oai:aleph-nkp.cz:AUT10-000000004</identifier>
+				<datestamp>2012-06-30T22:26:40Z</datestamp>
+				<setSpec>AUT</setSpec>
+			</header>
+			<metadata>
+				<marc:record xmlns:marc="http://www.loc.gov/MARC21/slim"
+					xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+					xsi:schemaLocation="http://www.loc.gov/MARC21/slim
+http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd">
+					<marc:leader>     cz  a22     n  4500</marc:leader>
+					<marc:controlfield tag="001">jk01010004</marc:controlfield>
+					<marc:controlfield tag="003">CZ PrNK</marc:controlfield>
+					<marc:controlfield tag="005">20050204143230.0</marc:controlfield>
+					<marc:controlfield tag="008">980211|n|acnnnaabn           n a|a      </marc:controlfield>
+					<marc:datafield tag="040" ind1=" " ind2=" ">
+						<marc:subfield code="a">Jaroslav Kunc</marc:subfield>
+						<marc:subfield code="b">cze</marc:subfield>
+						<marc:subfield code="c">ABA001</marc:subfield>
+						<marc:subfield code="d">ABA001</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="100" ind1="1" ind2=" ">
+						<marc:subfield code="a">Absolon, Josef,</marc:subfield>
+						<marc:subfield code="d">nar. 1889</marc:subfield>
+						<marc:subfield code="7">jk01010004</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="670" ind1=" " ind2=" ">
+						<marc:subfield code="a">PNP-LA</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="678" ind1="0" ind2=" ">
+						<marc:subfield code="a">Narozen roku 1889 v Odrlicích na Moravě. Kněz v Milovanech u Čermné, básník.</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="906" ind1=" " ind2=" ">
+						<marc:subfield code="a">im19980101</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="906" ind1=" " ind2=" ">
+						<marc:subfield code="a">oz20031208</marc:subfield>
+						<marc:subfield code="b">vipr</marc:subfield>
+						<marc:subfield code="c">Záhlaví - data</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="909" ind1=" " ind2=" ">
+						<marc:subfield code="a">CZ</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="950" ind1="0" ind2=" ">
+						<marc:subfield code="a">definitivní</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="991" ind1="0" ind2=" ">
+						<marc:subfield code="a">Absolon, Josef,</marc:subfield>
+						<marc:subfield code="d">1889-</marc:subfield>
+						<marc:subfield code="7">jk01010004</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="998" ind1=" " ind2=" ">
+						<marc:subfield code="a">http://aleph.nkp.cz/F/?func=direct&amp;doc_number=000000004&amp;local_base=AUT</marc:subfield>
+					</marc:datafield>
+				</marc:record>
+			</metadata>
+		</record>
+		<record>
+			<header>
+				<identifier>oai:aleph-nkp.cz:AUT10-000000003</identifier>
+				<datestamp>2012-06-30T22:26:40Z</datestamp>
+				<setSpec>AUT</setSpec>
+			</header>
+			<metadata>
+				<marc:record xmlns:marc="http://www.loc.gov/MARC21/slim"
+					xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+					xsi:schemaLocation="http://www.loc.gov/MARC21/slim
+http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd">
+					<marc:leader>     nz  a22     n  4500</marc:leader>
+					<marc:controlfield tag="001">jk01010003</marc:controlfield>
+					<marc:controlfield tag="003">CZ PrNK</marc:controlfield>
+					<marc:controlfield tag="005">19980211000000.0</marc:controlfield>
+					<marc:controlfield tag="008">980211|n|acnnnaabn           n a|a      </marc:controlfield>
+					<marc:datafield tag="040" ind1=" " ind2=" ">
+						<marc:subfield code="a">Jaroslav Kunc</marc:subfield>
+						<marc:subfield code="b">cze</marc:subfield>
+						<marc:subfield code="c">ABA001</marc:subfield>
+						<marc:subfield code="d">ABA001</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="100" ind1="1" ind2=" ">
+						<marc:subfield code="a">Abraham, Pavel,</marc:subfield>
+						<marc:subfield code="d">1957-</marc:subfield>
+						<marc:subfield code="7">jk01010003</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="670" ind1=" " ind2=" ">
+						<marc:subfield code="a">PNP-LA</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="678" ind1="0" ind2=" ">
+						<marc:subfield code="a">Narozen roku 1957. Student filosofické fakulty university v Brně, básně v časopisech.</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="906" ind1=" " ind2=" ">
+						<marc:subfield code="a">im19980101</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="909" ind1=" " ind2=" ">
+						<marc:subfield code="a">CZ</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="950" ind1="0" ind2=" ">
+						<marc:subfield code="a">definitivní</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="998" ind1=" " ind2=" ">
+						<marc:subfield code="a">http://aleph.nkp.cz/F/?func=direct&amp;doc_number=000000003&amp;local_base=AUT</marc:subfield>
+					</marc:datafield>
+				</marc:record>
+			</metadata>
+		</record>
+		<record>
+			<header>
+				<identifier>oai:aleph-nkp.cz:AUT10-000000005</identifier>
+				<datestamp>2012-06-30T22:26:40Z</datestamp>
+				<setSpec>AUT</setSpec>
+			</header>
+			<metadata>
+				<marc:record xmlns:marc="http://www.loc.gov/MARC21/slim"
+					xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+					xsi:schemaLocation="http://www.loc.gov/MARC21/slim
+http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd">
+					<marc:leader>     cz  a22     n  4500</marc:leader>
+					<marc:controlfield tag="001">jk01010005</marc:controlfield>
+					<marc:controlfield tag="003">CZ PrNK</marc:controlfield>
+					<marc:controlfield tag="005">20090303110540.0</marc:controlfield>
+					<marc:controlfield tag="008">000622|n|acnnnaabn           n a|a      </marc:controlfield>
+					<marc:datafield tag="040" ind1=" " ind2=" ">
+						<marc:subfield code="a">Jaroslav Kunc</marc:subfield>
+						<marc:subfield code="b">cze</marc:subfield>
+						<marc:subfield code="c">ABA001</marc:subfield>
+						<marc:subfield code="d">ABA001</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="100" ind1="1" ind2=" ">
+						<marc:subfield code="a">Absolon, Karel,</marc:subfield>
+						<marc:subfield code="d">1877-1960</marc:subfield>
+						<marc:subfield code="7">jk01010005</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="670" ind1=" " ind2=" ">
+						<marc:subfield code="a">PNP-LA</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="670" ind1=" " ind2=" ">
+						<marc:subfield code="a">Všeobecná encyklopedie v osmi svazcích: Diderot</marc:subfield>
+						<marc:subfield code="b">datum narození</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="678" ind1="0" ind2=" ">
+						<marc:subfield code="a">Narozen 16.6.1877 v Boskovicích, zemřel 6.10.1960 v Brně. PhDr., profesor geografie, antropolog, archeolog, speleolog, publikace v oboru.</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="906" ind1=" " ind2=" ">
+						<marc:subfield code="a">im19980101</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="906" ind1=" " ind2=" ">
+						<marc:subfield code="a">oz20021219</marc:subfield>
+						<marc:subfield code="b">jazi</marc:subfield>
+						<marc:subfield code="c">Záhlaví - data; Biografická poznámka - oprava</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="909" ind1=" " ind2=" ">
+						<marc:subfield code="a">CZ</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="950" ind1="0" ind2=" ">
+						<marc:subfield code="a">definitivní</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="991" ind1="0" ind2=" ">
+						<marc:subfield code="a">Absolon, Karel,</marc:subfield>
+						<marc:subfield code="d">1887-1960</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="998" ind1=" " ind2=" ">
+						<marc:subfield code="a">http://aleph.nkp.cz/F/?func=direct&amp;doc_number=000000005&amp;local_base=AUT</marc:subfield>
+					</marc:datafield>
+				</marc:record>
+			</metadata>
+		</record>
+	</ListRecords>
+</OAI-PMH> 
