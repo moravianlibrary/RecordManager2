@@ -36,7 +36,10 @@ public class OAIHarvestConfiguration extends AbstractDomainObject {
 	@ManyToOne(optional=false)
 	@JoinColumn(name="contact_person_id")
 	private ContactPerson contact;
-	
+
+	@Column(name="id_prefix")
+	private String idPrefix;
+
 	public Library getLibrary() {
 		return library;
 	}
@@ -77,4 +80,13 @@ public class OAIHarvestConfiguration extends AbstractDomainObject {
 	public void setMetadataPrefix(String metadataPrefix) {
 		this.metadataPrefix = metadataPrefix;
 	}
+
+	public String getIdPrefix() {
+		return idPrefix;
+	}
+
+	public void setIdPrefix(String idPrefix) {
+		this.idPrefix = idPrefix;
+	}
+
 }
