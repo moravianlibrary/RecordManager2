@@ -40,3 +40,6 @@ ALTER TABLE harvested_record ADD unique_id VARCHAR(100) UNIQUE;
 -- 3. 4. 2015 - tomascejpek
 ALTER TABLE harvested_record DROP unique_id;
 ALTER TABLE harvested_record RENAME oai_record_id TO record_id;
+
+-- 7. 4. 2015 - xrosecky
+ALTER TABLE harvested_record ADD COLUMN id_prefix VARCHAR(10);

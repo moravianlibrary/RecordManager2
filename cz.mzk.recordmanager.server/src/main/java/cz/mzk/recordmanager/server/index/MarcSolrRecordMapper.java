@@ -2,6 +2,7 @@ package cz.mzk.recordmanager.server.index;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -62,6 +63,11 @@ public class MarcSolrRecordMapper implements SolrRecordMapper, InitializingBean 
 		HarvestedRecord record = records.get(0);
 		SolrInputDocument document = parse(record);
 		document.addField(ID_FIELD, dedupRecord.getId());
+		List<String> localIds = new ArrayList<String>();
+		for (HarvestedRecord rec : records) {
+			// FIXME: better parsing of id
+			localIds.add(rec.getHarvestedFrom().getIdPrefix() + "." + rec.getRecordId());
+		}
 		return document;
 	}
 
