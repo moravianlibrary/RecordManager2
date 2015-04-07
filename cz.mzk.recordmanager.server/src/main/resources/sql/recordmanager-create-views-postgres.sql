@@ -7,7 +7,7 @@ SELECT
   format,
   isbn,
   title,
-  encode(raw_record, 'escape') AS raw_record
+  convert_from(raw_record, 'UTF8') AS raw_record
 FROM
   harvested_record
 ;
