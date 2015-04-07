@@ -3,11 +3,14 @@ package cz.mzk.recordmanager.server.marc;
 import java.util.List;
 import java.util.Map;
 
+import org.marc4j.marc.ControlField;
 import org.marc4j.marc.DataField;
+import org.marc4j.marc.Leader;
+import org.marc4j.marc.Subfield;
 
-import cz.mzk.recordmanager.server.metadata.MetadataRecord;
+import cz.mzk.recordmanager.server.export.IOFormat;
 
-public interface MarcRecord extends MetadataRecord {
+public interface MarcRecord {
 	
 	public static final String EMPTY_SEPARATOR = "";
 
@@ -79,5 +82,35 @@ public interface MarcRecord extends MetadataRecord {
 	}
 	
 	public Map<String, List<DataField>> getAllFields();
+	
+	/**
+	 * return all {@link DataField} having given tag
+	 * @param tag
+	 * @return
+	 */
+	public List<DataField> getDataFields(String tag);
+	
+	/**
+	 * return all {@link ControlField} having given tag
+	 * @param tag
+	 * @return
+	 */
+	public List<ControlField> getControlFields(String tag);
+	
+	/**
+	 * return record {@link Leader}
+	 * @return
+	 */
+	public Leader getLeader();
+	
+	/**
+	 * get all subfields of {@link DataField} with corresponding codes
+	 * @param field
+	 * @param codes
+	 * @return {@link List} of matching {@link Subfield} objects
+	 */
+	public List<Subfield> getSubfields(DataField field, char[] codes);
+	
+	public String export(IOFormat iOFormat);
 	
 }

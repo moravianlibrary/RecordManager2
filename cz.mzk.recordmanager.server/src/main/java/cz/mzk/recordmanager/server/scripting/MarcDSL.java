@@ -14,10 +14,14 @@ import org.marc4j.marc.Subfield;
 
 import cz.mzk.recordmanager.server.export.IOFormat;
 import cz.mzk.recordmanager.server.marc.MarcRecord;
+import cz.mzk.recordmanager.server.metadata.MetadataMarcRecord;
+import cz.mzk.recordmanager.server.metadata.MetadataRecord;
 import cz.mzk.recordmanager.server.scripting.function.MarcRecordFunction;
 
 public class MarcDSL {
-
+	
+	private MetadataRecord marcMetadataRecord;
+	
 	private final static String EMPTY_SEPARATOR = "";
 	
 	private final static Pattern FIELD_PATTERN = Pattern
@@ -28,12 +32,13 @@ public class MarcDSL {
 	private final MappingResolver propertyResolver;
 	
 	private final Map<String, MarcRecordFunction> functions;
-
+	
 	public MarcDSL(MarcRecord record, MappingResolver propertyResolver, Map<String, MarcRecordFunction> functions) {
 		super();
 		this.record = record;
 		this.propertyResolver = propertyResolver;
 		this.functions = functions;
+		this.marcMetadataRecord = new MetadataMarcRecord(record);
 	}
 
 	public String getFirstField(String tag) {
@@ -155,7 +160,7 @@ public class MarcDSL {
           
         int nonFilingInt = getInd2AsInt(titleField);
         
-        String title = record.getTitle();
+        String title = marcMetadataRecord.getTitle();
         title = title.toLowerCase();
         
         //Skip non-filing chars, if possible. 
@@ -171,11 +176,11 @@ public class MarcDSL {
     }
 
 	public String getFormat() {
-		return record.getFormat();
+		return marcMetadataRecord.getFormat();
 	}
 
 	public String getFullrecord() {
-		return record.export(IOFormat.ISO_2709);
+		return marcMetadataRecord.export(IOFormat.ISO_2709);
 	}
 
 	public String isIllustrated() {

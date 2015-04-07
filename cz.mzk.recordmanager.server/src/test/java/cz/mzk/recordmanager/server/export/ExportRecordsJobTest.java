@@ -16,7 +16,6 @@ import org.testng.annotations.Test;
 
 import cz.mzk.recordmanager.server.AbstractTest;
 import cz.mzk.recordmanager.server.DBUnitHelper;
-import cz.mzk.recordmanager.server.marc.MarcRecordImpl;
 import cz.mzk.recordmanager.server.util.Constants;
 
 public class ExportRecordsJobTest extends AbstractTest {
@@ -33,10 +32,11 @@ public class ExportRecordsJobTest extends AbstractTest {
 	private static final String TEST_FILE_1 = "target/test/export1.txt";
 	private static final String TEST_FILE_2 = "target/test/export_iso2709.txt";
     private static final String TEST_FILE_3 = "target/test/export_aleph.txt";
+    private static final String TEST_FILE_4 = "target/test/export.txt";
 	
 	@BeforeMethod
 	public void init() throws Exception {
-		dbUnitHelper.init("dbunit/DedupRecordLocator.xml");
+		dbUnitHelper.init("dbunit/ExportRecords.xml");
 	}
 	
 	@BeforeClass
@@ -79,5 +79,19 @@ public class ExportRecordsJobTest extends AbstractTest {
 		JobParameters jobParams = new JobParameters(params);
 		jobLauncher.run(job, jobParams);
 	}
+	
+//	/**
+//	 * test export marc record with alphabetic field identifier
+//	 */
+//	@Test 
+//	public void testExportRecordsMarcAlpnaKey() throws Exception {
+//		Job job = jobRegistry.getJob(Constants.JOB_ID_EXPORT);
+//		Map<String, JobParameter> params = new HashMap<String, JobParameter>();
+//		params.put(Constants.JOB_PARAM_CONF_ID, new JobParameter(301L));
+//		params.put(Constants.JOB_PARAM_OUT_FILE, new JobParameter(TEST_FILE_4));
+//		params.put(Constants.JOB_PARAM_FORMAT, new JobParameter("xml"));
+//		JobParameters jobParams = new JobParameters(params);
+//		jobLauncher.run(job, jobParams);
+//	}
 	
 }

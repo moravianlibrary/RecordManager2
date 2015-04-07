@@ -9,6 +9,7 @@ import org.testng.annotations.Test;
 import com.google.common.io.ByteStreams;
 
 import cz.mzk.recordmanager.server.AbstractTest;
+import cz.mzk.recordmanager.server.marc.InvalidMarcException;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
 
 public class MarcXmlDedupKeyParserTest extends AbstractTest {
@@ -33,7 +34,7 @@ public class MarcXmlDedupKeyParserTest extends AbstractTest {
 		Assert.assertEquals(record.getPublicationYear(), new Long(2014));
 	}
 	
-	@Test(expectedExceptions=DedupKeyParserException.class)
+	@Test(expectedExceptions=InvalidMarcException.class)
 	public void parseBadRecord() throws Exception {
 		InputStream is = this.getClass().getResourceAsStream("/records/marcxml/MZK01-000153226.xml");
 		HarvestedRecord record = new HarvestedRecord();

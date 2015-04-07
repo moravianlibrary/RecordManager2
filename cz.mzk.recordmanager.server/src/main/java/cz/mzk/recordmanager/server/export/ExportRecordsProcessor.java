@@ -1,22 +1,18 @@
 package cz.mzk.recordmanager.server.export;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import cz.mzk.recordmanager.server.marc.MarcRecord;
 import cz.mzk.recordmanager.server.marc.MarcXmlParser;
-import cz.mzk.recordmanager.server.model.HarvestedRecord;
-import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordDAO;
+import cz.mzk.recordmanager.server.metadata.MetadataRecord;
+import cz.mzk.recordmanager.server.metadata.MetadataRecordFactory;
 
 public class ExportRecordsProcessor implements ItemProcessor<Long, String> {
 
 	private IOFormat iOFormat;
 	
 	@Autowired
-	private HarvestedRecordDAO harvestedRecordDao;
+	private MetadataRecordFactory metadataFactory;
 	
 	@Autowired
 	private MarcXmlParser marcXmlParser;
@@ -27,13 +23,8 @@ public class ExportRecordsProcessor implements ItemProcessor<Long, String> {
 	
 	@Override
 	public String process(Long recordId) throws Exception {
-		HarvestedRecord record = harvestedRecordDao.get(recordId);
-		if (record != null) {
-			InputStream is = new ByteArrayInputStream(record.getRawRecord());
-			MarcRecord marcRecord = marcXmlParser.parseRecord(is);
-			return marcRecord.export(iOFormat);
-		} 
-		return null;
+		MetadataRecord record = metadataFactory.getMetadataRecord(recordId);
+		return record != null ? record.export(iOFormat) : "";
 	}
 
 }

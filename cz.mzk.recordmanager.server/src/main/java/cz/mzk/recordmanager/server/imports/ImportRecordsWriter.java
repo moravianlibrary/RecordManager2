@@ -16,6 +16,8 @@ import org.springframework.stereotype.Component;
 import cz.mzk.recordmanager.server.dedup.DelegatingDedupKeysParser;
 import cz.mzk.recordmanager.server.marc.MarcRecord;
 import cz.mzk.recordmanager.server.marc.MarcRecordImpl;
+import cz.mzk.recordmanager.server.metadata.MetadataRecord;
+import cz.mzk.recordmanager.server.metadata.MetadataRecordFactory;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.model.OAIHarvestConfiguration;
 import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordDAO;
@@ -35,6 +37,9 @@ public class ImportRecordsWriter implements ItemWriter<List<Record>> {
 	
 	@Autowired
 	private HarvestedRecordDAO harvestedRecordDao;
+	
+	@Autowired
+	private MetadataRecordFactory metadataFactory;
 	
 	private OAIHarvestConfiguration harvestConfiguration;
 	
@@ -60,7 +65,8 @@ public class ImportRecordsWriter implements ItemWriter<List<Record>> {
 					marcWriter.close();
 					
 					MarcRecord marc = new MarcRecordImpl(currentRecord);
-					hr.setRecordId(marc.getUniqueId());
+					MetadataRecord metadata = metadataFactory.getMetadataRecord(marc);
+					hr.setRecordId(metadata.getUniqueId());
 					hr.setRawRecord(outStream.toByteArray());
 					hr.setHarvestedFrom(harvestConfiguration);
 //					TODO detect format

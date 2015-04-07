@@ -104,7 +104,7 @@ public class ExportRecordsJobConfig {
 	public FlatFileItemWriter<String> exportRecordsWriter(@Value("#{jobParameters["
 			+ Constants.JOB_PARAM_OUT_FILE + "]}") String filename) throws Exception {
 		FlatFileItemWriter<String> fileWritter = new FlatFileItemWriter<String>();
-		fileWritter.setAppendAllowed(true);
+		fileWritter.setAppendAllowed(false);
 		fileWritter.setShouldDeleteIfExists(true);
 		fileWritter.setEncoding("UTF-8");
 		fileWritter.setLineAggregator(new PassThroughLineAggregator<String>());
