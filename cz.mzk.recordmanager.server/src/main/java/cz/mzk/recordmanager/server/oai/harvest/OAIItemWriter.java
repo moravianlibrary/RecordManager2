@@ -26,6 +26,7 @@ import org.w3c.dom.Element;
 
 import cz.mzk.recordmanager.server.dedup.DedupKeyParserException;
 import cz.mzk.recordmanager.server.dedup.DelegatingDedupKeysParser;
+import cz.mzk.recordmanager.server.marc.InvalidMarcException;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.model.OAIHarvestConfiguration;
 import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordDAO;
@@ -73,6 +74,8 @@ public class OAIItemWriter implements ItemWriter<List<OAIRecord>>,
 				} catch (TransformerException te) {
 					logger.warn("TransformerException when storing {}: ",
 							record, te);
+				} catch (InvalidMarcException ime) {
+					logger.warn("Attempt to harvest invalid MARC {}", record.getHeader().getIdentifier());
 				}
 			}
 		}
