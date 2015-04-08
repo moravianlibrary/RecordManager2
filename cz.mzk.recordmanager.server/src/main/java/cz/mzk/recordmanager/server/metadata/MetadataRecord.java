@@ -3,6 +3,7 @@ package cz.mzk.recordmanager.server.metadata;
 import java.util.List;
 
 import cz.mzk.recordmanager.server.export.IOFormat;
+import cz.mzk.recordmanager.server.model.HarvestedRecordFormat;
 
 public interface MetadataRecord {
 	
@@ -25,14 +26,14 @@ public interface MetadataRecord {
 	
 	/**
 	 * get all ISBNs assigned to record
-	 * @return List<String> or null
+	 * @return List<String>
 	 */
 	
 	public List<String> getISBNs();
 	
 	/**
 	 * get all ISSNs assigned to record
-	 * @return List<String> or null
+	 * @return List<String>
 	 */
 	
 	public List<String> getISSNs();
@@ -48,5 +49,11 @@ public interface MetadataRecord {
 	 * @return page count or null
 	 */
 	public Long getPageCount();
+	
+	/**
+	 * return list of detected formats
+	 * @return List<RecordFormat>
+	 */
+	public List<HarvestedRecordFormat> getDetectedFormatList();
 	
 }

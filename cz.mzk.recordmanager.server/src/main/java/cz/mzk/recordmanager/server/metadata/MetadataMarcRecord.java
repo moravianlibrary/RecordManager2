@@ -13,6 +13,7 @@ import org.marc4j.marc.Subfield;
 
 import cz.mzk.recordmanager.server.export.IOFormat;
 import cz.mzk.recordmanager.server.marc.MarcRecord;
+import cz.mzk.recordmanager.server.model.HarvestedRecordFormat;
 import cz.mzk.recordmanager.server.util.MetadataUtils;
 
 public class MetadataMarcRecord implements MetadataRecord {
@@ -346,6 +347,11 @@ public class MetadataMarcRecord implements MetadataRecord {
 	@Override
 	public String export(IOFormat iOFormat) {
 		return underlayingMarc.export(iOFormat);
+	}
+
+	@Override
+	public List<HarvestedRecordFormat> getDetectedFormatList() {
+		return Collections.emptyList();
 	}
 		
 }
