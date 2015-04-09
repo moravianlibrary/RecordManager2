@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import cz.mzk.recordmanager.server.dedup.DelegatingDedupKeysParser;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
+import cz.mzk.recordmanager.server.model.HarvestedRecord.HarvestedRecordId;
 import cz.mzk.recordmanager.server.model.OAIHarvestConfiguration;
 import cz.mzk.recordmanager.server.oai.dao.OAIHarvestConfigurationDAO;
 
@@ -38,17 +39,14 @@ public class ImportRecordsProcessor implements ItemProcessor<List<Record>, List<
 	public List<HarvestedRecord> process(List<Record> inRecords) throws Exception {
 		List<HarvestedRecord> result = new ArrayList<HarvestedRecord>();
 		for (Record currentRecord : inRecords) {
-			HarvestedRecord hr = new HarvestedRecord();
 			ByteArrayOutputStream outStream = new ByteArrayOutputStream();
 			MarcWriter marcWriter = new MarcXmlWriter(outStream, true);
 			marcWriter.write(currentRecord);
+			HarvestedRecordId id = new HarvestedRecordId(harvestConfiguration, null);
+			HarvestedRecord hr = new HarvestedRecord(id);
 			hr.setRawRecord(outStream.toByteArray());
-			hr.setHarvestedFrom(harvestConfiguration);
-			
 		}
 		return null;
 	}
-	
-	
 
 }

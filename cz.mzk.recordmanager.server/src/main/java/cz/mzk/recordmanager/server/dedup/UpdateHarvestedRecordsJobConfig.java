@@ -18,6 +18,7 @@ import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.item.database.JdbcPagingItemReader;
+import org.springframework.batch.item.database.Order;
 import org.springframework.batch.item.database.support.SqlPagingQueryProviderFactoryBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -25,8 +26,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import cz.mzk.recordmanager.server.jdbc.LongValueRowMapper;
+import com.google.common.collect.ImmutableMap;
+
+import cz.mzk.recordmanager.server.export.HarvestedRecordIdRowMapper;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
+import cz.mzk.recordmanager.server.model.HarvestedRecord.HarvestedRecordId;
 import cz.mzk.recordmanager.server.springbatch.IntrospectiveJobParametersValidator;
 import cz.mzk.recordmanager.server.springbatch.JobFailureListener;
 import cz.mzk.recordmanager.server.springbatch.JobParameterDeclaration;
@@ -78,7 +82,7 @@ public class UpdateHarvestedRecordsJobConfig {
     @Bean(name="updateHarvestedRecords:step")
     public Step updateRecordsStep() throws Exception {
 		return steps.get("dedupKeysGeneratorJobStep")
-            .<Long, HarvestedRecord> chunk(20) //
+            .<HarvestedRecordId, HarvestedRecord> chunk(20) //
             .reader(reader(LONG_OVERRIDEN_BY_EXPRESSION)) //
             .processor(processor()) //
             .writer(writer()) //
@@ -87,17 +91,17 @@ public class UpdateHarvestedRecordsJobConfig {
 
     @Bean(name="updateHarvestedRecords:reader")
 	@StepScope
-    public ItemReader<Long> reader(@Value("#{jobParameters[" + OAI_HARVEST_CONF_ID  + "]}") Long oaiHarvestConfId) throws Exception {
-		JdbcPagingItemReader<Long> reader = new JdbcPagingItemReader<Long>();
+    public ItemReader<HarvestedRecordId> reader(@Value("#{jobParameters[" + OAI_HARVEST_CONF_ID  + "]}") Long oaiHarvestConfId) throws Exception {
+		JdbcPagingItemReader<HarvestedRecordId> reader = new JdbcPagingItemReader<HarvestedRecordId>();
 		SqlPagingQueryProviderFactoryBean pqpf = new SqlPagingQueryProviderFactoryBean();
 		pqpf.setDataSource(dataSource);
-		pqpf.setSelectClause("SELECT hr.id");
+		pqpf.setSelectClause("SELECT oai_harvest_conf_id, record_id");
 		pqpf.setFromClause("FROM harvested_record hr");
 		if (oaiHarvestConfId != null) {
 			pqpf.setWhereClause("WHERE oai_harvest_conf_id = :oai_harvest_conf_id");
 		}
-		pqpf.setSortKey("id");
-		reader.setRowMapper(new LongValueRowMapper());
+		pqpf.setSortKeys(ImmutableMap.of("oai_harvest_conf_id", Order.ASCENDING, "record_id", Order.ASCENDING));
+		reader.setRowMapper(new HarvestedRecordIdRowMapper());
 		reader.setPageSize(20);
     	reader.setQueryProvider(pqpf.getObject());
     	reader.setDataSource(dataSource);
@@ -112,7 +116,7 @@ public class UpdateHarvestedRecordsJobConfig {
 
     @Bean(name="updateHarvestedRecords:processor")
 	@StepScope
-    public ItemProcessor<Long, HarvestedRecord> processor() throws Exception {
+    public ItemProcessor<HarvestedRecordId, HarvestedRecord> processor() throws Exception {
     	return new UpdateHarvestedRecordProcessor();
     }
 

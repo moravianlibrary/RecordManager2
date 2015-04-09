@@ -3,9 +3,6 @@ package cz.mzk.recordmanager.server.oai.harvest;
 import java.io.ByteArrayOutputStream;
 import java.util.Date;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
@@ -28,6 +25,7 @@ import cz.mzk.recordmanager.server.dedup.DedupKeyParserException;
 import cz.mzk.recordmanager.server.dedup.DelegatingDedupKeysParser;
 import cz.mzk.recordmanager.server.marc.InvalidMarcException;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
+import cz.mzk.recordmanager.server.model.HarvestedRecord.HarvestedRecordId;
 import cz.mzk.recordmanager.server.model.OAIHarvestConfiguration;
 import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordDAO;
 import cz.mzk.recordmanager.server.oai.dao.OAIHarvestConfigurationDAO;
@@ -39,8 +37,6 @@ import cz.mzk.recordmanager.server.util.HibernateSessionSynchronizer.SessionBind
 @StepScope
 public class OAIItemWriter implements ItemWriter<List<OAIRecord>>,
 		StepExecutionListener {
-
-	private static final Pattern OAI_PATTERN = Pattern.compile("oai:[^:]+:(.+)");
 	
 	private static Logger logger = LoggerFactory.getLogger(OAIItemWriter.class);
 
@@ -82,17 +78,12 @@ public class OAIItemWriter implements ItemWriter<List<OAIRecord>>,
 	}
 
 	protected void write(OAIRecord record) throws TransformerException {
-		Matcher matcher = OAI_PATTERN.matcher(record.getHeader().getIdentifier());
-		String recordId = null;
-		if(matcher.find()) recordId = matcher.group(1);
-		//String recordId = record.getHeader().getIdentifier();
+		String recordId = record.getHeader().getIdentifier();
 		HarvestedRecord rec = recordDao.findByIdAndHarvestConfiguration(
 				recordId, configuration);
 		if (rec == null) {
-			rec = new HarvestedRecord();
-			matcher = OAI_PATTERN.matcher(record.getHeader().getIdentifier());
-			if(matcher.find()) rec.setRecordId(matcher.group(1));
-			rec.setHarvestedFrom(configuration);
+			HarvestedRecordId id = new HarvestedRecordId(configuration, recordId);
+			rec = new HarvestedRecord(id);
 			rec.setFormat(format);
 		}
 		if (record.getHeader().isDeleted()) {

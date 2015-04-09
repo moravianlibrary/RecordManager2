@@ -56,6 +56,7 @@ CREATE TABLE harvested_record (
   title                VARCHAR(255),
   publication_year     DECIMAL(4),
   physical_format      VARCHAR(255),
+  dedup_record_id      DECIMAL(10),
   raw_record           BYTEA,
   FOREIGN KEY (oai_harvest_conf_id) REFERENCES oai_harvest_conf(id),
   FOREIGN KEY (format)              REFERENCES format(format)

@@ -10,18 +10,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import cz.mzk.recordmanager.server.model.DedupRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
-import cz.mzk.recordmanager.server.oai.dao.DedupRecordDAO;
-import cz.mzk.recordmanager.server.oai.dao.RecordLinkDAO;
+import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordDAO;
 
 public class SolrRecordProcessor implements ItemProcessor<DedupRecord, SolrInputDocument> {
 	
 	private static Logger logger = LoggerFactory.getLogger(SolrRecordProcessor.class);
-	
+
 	@Autowired
-	private DedupRecordDAO dedupRecordDao;
-	
-	@Autowired
-	private RecordLinkDAO recordLinkDao;
+	private HarvestedRecordDAO harvestedRecordDao;
 	
 	@Autowired
 	private DelegatingSolrRecordMapper mapper;
@@ -29,7 +25,7 @@ public class SolrRecordProcessor implements ItemProcessor<DedupRecord, SolrInput
 	@Override
 	public SolrInputDocument process(DedupRecord dedupRecord) throws Exception {
 		logger.debug("About to process dedup_record with id={}", dedupRecord.getId());
-		List<HarvestedRecord> records = recordLinkDao.getHarvestedRecords(dedupRecord);
+		List<HarvestedRecord> records = harvestedRecordDao.getByDedupRecord(dedupRecord);
 		if (records.isEmpty()) {
 			throw new IllegalArgumentException("records is empty");
 		}

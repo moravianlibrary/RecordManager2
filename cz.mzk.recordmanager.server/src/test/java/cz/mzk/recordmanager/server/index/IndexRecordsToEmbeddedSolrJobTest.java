@@ -68,9 +68,9 @@ public class IndexRecordsToEmbeddedSolrJobTest extends AbstractTest {
 			Assert.assertEquals(execution.getExitStatus(), ExitStatus.COMPLETED);
 			server.commit();
 			SolrQuery query = new SolrQuery();
-			query.set("q", "id:60");
+			query.set("q", "id:*");
 			QueryResponse response = server.query(query);
-			Assert.assertEquals(response.getResults().size(), 1);
+			Assert.assertEquals(response.getResults().size(), 10);
 		} finally {
 			server.shutdown();
 		}

@@ -48,7 +48,6 @@ CREATE TABLE dedup_record (
 );
 
 CREATE TABLE harvested_record (
-  id                   DECIMAL(10) PRIMARY KEY,
   oai_harvest_conf_id  DECIMAL(10),
   record_id            VARCHAR(128),
   harvested            TIMESTAMP,
@@ -59,7 +58,9 @@ CREATE TABLE harvested_record (
   title                VARCHAR(255),
   publication_year     DECIMAL(4),
   physical_format      VARCHAR(255),
+  dedup_record_id      DECIMAL(10),
   raw_record           BLOB,
+  CONSTRAINT harvested_record_pk PRIMARY KEY (oai_harvest_conf_id, record_id),
   CONSTRAINT harvested_record_oai_harvest_conf_id_fk FOREIGN KEY (oai_harvest_conf_id) REFERENCES oai_harvest_conf(id),
   CONSTRAINT harvested_record_format_fk              FOREIGN KEY (format)              REFERENCES format(format)
 );
@@ -79,8 +80,9 @@ CREATE TABLE authority_record (
 );
 
 CREATE TABLE record_link (
-  harvested_record_id  DECIMAL(10),
-  dedup_record_id      DECIMAL(10),
-  created              TIMESTAMP,
-  CONSTRAINT record_link_PK PRIMARY KEY (harvested_record_id, dedup_record_id) 
+  hr_oai_harvest_conf_id  DECIMAL(10),
+  hr_record_id            VARCHAR(128),
+  dedup_record_id         DECIMAL(10),
+  created                 TIMESTAMP,
+  CONSTRAINT record_link_pk PRIMARY KEY (hr_oai_harvest_conf_id, hr_record_id, dedup_record_id) 
 );

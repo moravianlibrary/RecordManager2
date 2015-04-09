@@ -12,6 +12,7 @@ import org.springframework.batch.core.configuration.annotation.StepBuilderFactor
 import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.database.JdbcPagingItemReader;
+import org.springframework.batch.item.database.Order;
 import org.springframework.batch.item.database.support.SqlPagingQueryProviderFactoryBean;
 import org.springframework.batch.item.file.FlatFileItemWriter;
 import org.springframework.batch.item.file.transform.PassThroughLineAggregator;
@@ -22,7 +23,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.FileSystemResource;
 
-import cz.mzk.recordmanager.server.jdbc.LongValueRowMapper;
+import com.google.common.collect.ImmutableMap;
+
+import cz.mzk.recordmanager.server.model.HarvestedRecord.HarvestedRecordId;
 import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordDAO;
 import cz.mzk.recordmanager.server.springbatch.JobFailureListener;
 import cz.mzk.recordmanager.server.util.Constants;
@@ -60,7 +63,7 @@ public class ExportRecordsJobConfig {
 	@Bean(name = "exportRecordsJob:exportRecordsStep")
 	public Step exportRecordsStep() throws Exception {
 		return steps.get("updateRecordsJobStep")
-				.<Long, String> chunk(20)//
+				.<HarvestedRecordId, String> chunk(20)//
 				.reader(exportRecordsReader(LONG_OVERRIDEN_BY_EXPRESSION)) //
 				.processor(exportRecordsProcessor(STRING_OVERRIDEN_BY_EXPRESSION)) //
 				.writer(exportRecordsWriter(STRING_OVERRIDEN_BY_EXPRESSION)) //
@@ -69,20 +72,20 @@ public class ExportRecordsJobConfig {
 
 	@Bean(name = "exportRecordsJob:exportRecordsReader")
 	@StepScope
-	public ItemReader<Long> exportRecordsReader(@Value("#{jobParameters["
+	public ItemReader<HarvestedRecordId> exportRecordsReader(@Value("#{jobParameters["
 			+ Constants.JOB_PARAM_CONF_ID + "]}") Long configId)
 			throws Exception {
-		JdbcPagingItemReader<Long> reader = new JdbcPagingItemReader<Long>();
+		JdbcPagingItemReader<HarvestedRecordId> reader = new JdbcPagingItemReader<HarvestedRecordId>();
 		SqlPagingQueryProviderFactoryBean pqpf = new SqlPagingQueryProviderFactoryBean();
 		pqpf.setDataSource(dataSource);
-		pqpf.setSelectClause("SELECT id");
+		pqpf.setSelectClause("SELECT oai_harvest_conf_id, record_id");
 		pqpf.setFromClause("FROM harvested_record");
 		pqpf.setWhereClause("WHERE oai_harvest_conf_id = :conf_id");
-		pqpf.setSortKey("id");
+		pqpf.setSortKeys(ImmutableMap.of("oai_harvest_conf_id", Order.ASCENDING, "record_id", Order.ASCENDING));
 		Map<String, Object> parameterValues = new HashMap<String, Object>();
 		parameterValues.put("conf_id", configId);
 		reader.setParameterValues(parameterValues);
-		reader.setRowMapper(new LongValueRowMapper());
+		reader.setRowMapper(new HarvestedRecordIdRowMapper());
 		reader.setPageSize(20);
 		reader.setQueryProvider(pqpf.getObject());
 		reader.setDataSource(dataSource);

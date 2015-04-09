@@ -19,6 +19,7 @@ import cz.mzk.recordmanager.server.marc.MarcRecordImpl;
 import cz.mzk.recordmanager.server.metadata.MetadataRecord;
 import cz.mzk.recordmanager.server.metadata.MetadataRecordFactory;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
+import cz.mzk.recordmanager.server.model.HarvestedRecord.HarvestedRecordId;
 import cz.mzk.recordmanager.server.model.OAIHarvestConfiguration;
 import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordDAO;
 import cz.mzk.recordmanager.server.oai.dao.OAIHarvestConfigurationDAO;
@@ -58,20 +59,17 @@ public class ImportRecordsWriter implements ItemWriter<List<Record>> {
 		for (List<Record> records : items) {
 			for (Record currentRecord : records) {
 				try {
-					HarvestedRecord hr = new HarvestedRecord();
+					MarcRecord marc = new MarcRecordImpl(currentRecord);
+					MetadataRecord metadata = metadataFactory.getMetadataRecord(marc);
+					HarvestedRecordId id = new HarvestedRecordId(harvestConfiguration, metadata.getUniqueId());
+					HarvestedRecord hr = new HarvestedRecord(id );
 					ByteArrayOutputStream outStream = new ByteArrayOutputStream();
 					MarcWriter marcWriter = new MarcXmlWriter(outStream, true);
 					marcWriter.write(currentRecord);
 					marcWriter.close();
-					
-					MarcRecord marc = new MarcRecordImpl(currentRecord);
-					MetadataRecord metadata = metadataFactory.getMetadataRecord(marc);
-					hr.setRecordId(metadata.getUniqueId());
 					hr.setRawRecord(outStream.toByteArray());
-					hr.setHarvestedFrom(harvestConfiguration);
 //					TODO detect format
 					hr.setFormat("marc21-xml");
-					
 					dedupKeysParser.parse(hr);
 					harvestedRecordDao.persist(hr);
 				} catch (Exception e) {

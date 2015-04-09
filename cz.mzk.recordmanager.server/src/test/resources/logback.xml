@@ -2,14 +2,14 @@
 
 	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
 		<encoder>
-			<pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger - %msg%n
+			<pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n
 			</pattern>
 		</encoder>
 	</appender>
 
-	<logger name="cz.mzk.recordmanager" level="DEBUG" />
+	<logger name="cz.mzk.recordmanager" level="TRACE" />
 	
-	<logger name="org.springframework" level="TRACE" />
+	<logger name="org.springframework" level="ERROR" />
 
 	<root level="ERROR">
 		<appender-ref ref="STDOUT" />

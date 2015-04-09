@@ -4,8 +4,7 @@ SELECT
   MAX(CASE WHEN dr.updated > hr.harvested THEN dr.updated ELSE hr.harvested END) last_update
 FROM
   dedup_record dr JOIN 
-  record_link rl ON rl.dedup_record_id = dr.id JOIN
-  harvested_record hr ON hr.id = rl.harvested_record_id
+  harvested_record hr ON hr.dedup_record_id = dr.id 
 GROUP BY
   dr.id
 ;

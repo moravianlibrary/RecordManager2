@@ -10,13 +10,17 @@ import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.item.database.JdbcPagingItemReader;
+import org.springframework.batch.item.database.Order;
 import org.springframework.batch.item.database.support.SqlPagingQueryProviderFactoryBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import cz.mzk.recordmanager.server.jdbc.LongValueRowMapper;
+import com.google.common.collect.ImmutableMap;
+
+import cz.mzk.recordmanager.server.export.HarvestedRecordIdRowMapper;
+import cz.mzk.recordmanager.server.model.HarvestedRecord.HarvestedRecordId;
 import cz.mzk.recordmanager.server.springbatch.JobFailureListener;
 import cz.mzk.recordmanager.server.util.Constants;
 
@@ -44,7 +48,7 @@ public class RegenerateDedupKeysJobConfig {
     @Bean(name=Constants.JOB_ID_REGEN_DEDUP_KEYS +":regenarateDedupKeysStep")
 	public Step regenerateDedupKeysStep() throws Exception {
 		return steps.get("regenarateDedupKeysStep")
-				.<Long, Long> chunk(20)//
+				.<HarvestedRecordId, HarvestedRecordId> chunk(20)//
 				.reader(reader())//
 				.writer(writer()) //
 				.build();
@@ -52,14 +56,14 @@ public class RegenerateDedupKeysJobConfig {
     
     @Bean(name=Constants.JOB_ID_REGEN_DEDUP_KEYS +":regenarateDedupKeysReader")
 	@StepScope
-    public ItemReader<Long> reader() throws Exception {
-		JdbcPagingItemReader<Long> reader = new JdbcPagingItemReader<Long>();
+    public ItemReader<HarvestedRecordId> reader() throws Exception {
+		JdbcPagingItemReader<HarvestedRecordId> reader = new JdbcPagingItemReader<HarvestedRecordId>();
 		SqlPagingQueryProviderFactoryBean pqpf = new SqlPagingQueryProviderFactoryBean();
 		pqpf.setDataSource(dataSource);
-		pqpf.setSelectClause("SELECT id");
+		pqpf.setSelectClause("SELECT oai_harvest_conf_id, recordId");
 		pqpf.setFromClause("FROM harvested_record hr");
-		pqpf.setSortKey("id");
-		reader.setRowMapper(new LongValueRowMapper());
+		pqpf.setSortKeys(ImmutableMap.of("oai_harvest_conf_id", Order.ASCENDING, "record_id", Order.ASCENDING));
+		reader.setRowMapper(new HarvestedRecordIdRowMapper());
 		reader.setPageSize(20);
     	reader.setQueryProvider(pqpf.getObject());
     	reader.setDataSource(dataSource);
@@ -69,7 +73,7 @@ public class RegenerateDedupKeysJobConfig {
     
     @Bean(name=Constants.JOB_ID_REGEN_DEDUP_KEYS +":regenarateDedupKeysWriter")
 	@StepScope
-	public ItemWriter<Long> writer() throws Exception {
+	public ItemWriter<HarvestedRecordId> writer() throws Exception {
 		return new RegenerateDedupKeysWriter();
 	}
 }

@@ -9,6 +9,7 @@ import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -28,7 +29,10 @@ public class RecordLink {
 		private static final long serialVersionUID = 1L;
 
 		@ManyToOne(optional = false)
-		@JoinColumn(name = "harvested_record_id", nullable = false)
+		@JoinColumns({
+				@JoinColumn(name = "oai_harvest_conf_id", nullable = false),
+				@JoinColumn(name = "record_id", nullable = false)}
+				)
 		private HarvestedRecord harvestedRecord;
 
 		@ManyToOne(optional = false)

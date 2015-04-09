@@ -66,7 +66,7 @@ public class MarcSolrRecordMapper implements SolrRecordMapper, InitializingBean 
 		List<String> localIds = new ArrayList<String>();
 		for (HarvestedRecord rec : records) {
 			// FIXME: better parsing of id
-			localIds.add(rec.getHarvestedFrom().getIdPrefix() + "." + rec.getRecordId());
+			localIds.add(rec.getHarvestedFrom().getIdPrefix() + "." + rec.getId().getRecordId());
 		}
 		return document;
 	}
