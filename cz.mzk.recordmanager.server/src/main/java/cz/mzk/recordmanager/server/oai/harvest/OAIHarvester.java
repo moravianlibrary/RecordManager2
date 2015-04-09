@@ -5,7 +5,6 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.TreeMap;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -16,15 +15,26 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
 
+import cz.mzk.recordmanager.server.oai.model.OAIGetRecord;
 import cz.mzk.recordmanager.server.oai.model.OAIIdentify;
 import cz.mzk.recordmanager.server.oai.model.OAIIdentifyRequest;
-import cz.mzk.recordmanager.server.oai.model.OAIListRecords;
+import cz.mzk.recordmanager.server.oai.model.OAIListIdentifiers;
+import cz.mzk.recordmanager.server.oai.model.OAIRoot;
+import cz.mzk.recordmanager.server.oai.model.OAIRecord;
 import cz.mzk.recordmanager.server.util.HttpClient;
 import cz.mzk.recordmanager.server.util.UrlUtils;
 
 public class OAIHarvester {
 
 	private static Logger logger = LoggerFactory.getLogger(OAIHarvester.class);
+	
+	private static final String OAI_VERB_LIST_RECORDS = "ListRecords";
+	
+	private static final String OAI_VERB_LIST_IDENTIFIERS = "ListIdentifiers";
+	
+	private static final String OAI_VERB_GET_RECORD = "GetRecord";
+	
+	private static final String OAI_VERB_IDENTIFY = "Identify";
 
 	private final HttpClient httpClient;
 
@@ -38,21 +48,50 @@ public class OAIHarvester {
 		this.parameters = parameters;
 		this.httpClient = httpClient;
 		try {
-			JAXBContext jaxbContext = JAXBContext.newInstance(OAIListRecords.class);
+			JAXBContext jaxbContext = JAXBContext.newInstance(OAIRoot.class);
 			this.unmarshaller = jaxbContext.createUnmarshaller();
 		} catch (JAXBException je) {
 			throw new RuntimeException(je);
 		}
 	}
 
-	public OAIListRecords listRecords(String resumptionToken) {
-		String url = createUrl(resumptionToken);
+	public OAIRoot listRecords(String resumptionToken) {
+		String url = createUrl(resumptionToken, OAI_VERB_LIST_RECORDS, null);
 		logger.info("About to harvest url: {}", url);
 		try (InputStream is = httpClient.executeGet(url)) {
-			OAIListRecords records = (OAIListRecords) unmarshaller
+			OAIRoot oaiRoot = (OAIRoot) unmarshaller
 					.unmarshal(is);
 			logger.info("Finished harvesting of url: {}", url);
-			return records;
+			return oaiRoot;
+		} catch (IOException ioe) {
+			throw new RuntimeException(ioe);
+		} catch (JAXBException je) {
+			throw new RuntimeException(je);
+		}
+	}
+	
+	public OAIListIdentifiers listIdentifiers(String resumptionToken) {
+		String url = createUrl(resumptionToken, OAI_VERB_LIST_IDENTIFIERS, null);
+		logger.info("About list identifiers from url: {}", url);
+		try (InputStream is = httpClient.executeGet(url)) {
+			OAIRoot oaiRoot = (OAIRoot) unmarshaller.unmarshal(is);
+			logger.info("Finished listing identifiers from url: {}", url);
+			return oaiRoot.getListIdentifiers();
+		} catch (IOException ioe) {
+			throw new RuntimeException(ioe);
+		} catch (JAXBException je) {
+			throw new RuntimeException(je);
+		}
+	}
+	
+	public OAIGetRecord getRecord(String identifier) {
+		String url = createUrl(null, OAI_VERB_GET_RECORD, identifier);
+		logger.info("About getRecord from url: {}", url);
+		try (InputStream is = httpClient.executeGet(url)) {
+			OAIRoot oaiRoot = (OAIRoot) unmarshaller
+					.unmarshal(is);
+			logger.info("Finished getting of record from url: {}", url);
+			return oaiRoot.getGetRecord();
 		} catch (IOException ioe) {
 			throw new RuntimeException(ioe);
 		} catch (JAXBException je) {
@@ -77,9 +116,9 @@ public class OAIHarvester {
 		}
 	}
 
-	private String createUrl(String resumptionToken) {
+	private String createUrl(String resumptionToken, String verb, String recordIdentifier) {
 		Map<String, String> params = new LinkedHashMap<String, String>();
-		params.put("verb", "ListRecords");
+		params.put("verb", verb);
 		if (resumptionToken == null) {
 			params.put("metadataPrefix", parameters.getMetadataPrefix());
 			if (parameters.getSet() != null) {
@@ -94,12 +133,15 @@ public class OAIHarvester {
 		} else {
 			params.put("resumptionToken", resumptionToken);
 		}
+		if (recordIdentifier != null) {
+			params.put("identifier", recordIdentifier);
+		}
 		return UrlUtils.buildUrl(parameters.getUrl(), params);
 	}
 	
 	private String createIdentifyURL() {
 		Map<String, String> params = new HashMap<String, String>();
-		params.put("verb", "Identify");
+		params.put("verb", OAI_VERB_IDENTIFY);
 		return UrlUtils.buildUrl(parameters.getUrl(), params);
 	}
 }

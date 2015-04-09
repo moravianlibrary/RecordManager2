@@ -63,6 +63,16 @@ public class OAIHarvestJobConfig {
 				.build();
     }
     
+    @Bean
+    public Job oaiHarvestOneByOneJob(@Qualifier("oaiHarvestJob:harvestOneByOneStep") Step step) {
+        return jobs.get(Constants.JOB_ID_HARVEST_ONE_BY_ONE) //
+        		.validator(new OAIHarvestJobParametersValidator()) //
+        		.listener(JobFailureListener.INSTANCE) //
+				.flow(step) //
+				.end() //
+				.build();
+    }
+    
     @Bean(name="oaiHarvestJob:step")
     public Step step() {
         return steps.get("step1") //
@@ -86,6 +96,15 @@ public class OAIHarvestJobConfig {
         return steps.get("step1") //
             .<List<OAIRecord>, List<OAIRecord>> chunk(1) //
             .reader(reader(LONG_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION)) //
+            .writer(writer()) //
+            .build();
+    }
+    
+    @Bean(name="oaiHarvestJob:harvestOneByOneStep")
+    public Step harvestOneByOneStep() {
+        return steps.get("step3") //
+            .<List<OAIRecord>, List<OAIRecord>> chunk(1) //
+            .reader(oneByOneItemReader(LONG_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION)) //
             .writer(writer()) //
             .build();
     }
@@ -127,6 +146,16 @@ public class OAIHarvestJobConfig {
     @StepScope
     public OAIAuthItemWriter authWriter() {
     	return new OAIAuthItemWriter();
+    }
+    
+    @Bean(name="oaiHarvestJob:oneByOneReader")
+    @StepScope    
+    public OAIOneByOneItemReader oneByOneItemReader(@Value("#{jobParameters[" + Constants.JOB_PARAM_CONF_ID + "]}") Long configId, 
+    		@Value("#{stepExecutionContext[" + Constants.JOB_PARAM_FROM_DATE + "] "
+    				+ "?:jobParameters[ " + Constants.JOB_PARAM_FROM_DATE +"]}") Date from,
+    		@Value("#{stepExecutionContext[" + Constants.JOB_PARAM_UNTIL_DATE+"]"
+    				+ "?:jobParameters[" + Constants.JOB_PARAM_UNTIL_DATE +"]}") Date to) {
+    	return new OAIOneByOneItemReader(configId, from, to);
     }
 
 }

@@ -8,17 +8,17 @@ import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import cz.mzk.recordmanager.server.oai.model.OAIListRecords;
+import cz.mzk.recordmanager.server.oai.model.OAIRoot;
 
 public class RawRecordsParserTest {
 	
 	@Test
 	public void parse() throws Exception {
 		Jaxb2Marshaller marshaller = new Jaxb2Marshaller();
-		marshaller.setClassesToBeBound(OAIListRecords.class);
+		marshaller.setClassesToBeBound(OAIRoot.class);
 		marshaller.afterPropertiesSet();
 		InputStream is = this.getClass().getResourceAsStream("/sample/ListRecords1.xml");
-		OAIListRecords result = (OAIListRecords) marshaller.unmarshal(new StreamSource(is));
+		OAIRoot result = (OAIRoot) marshaller.unmarshal(new StreamSource(is));
 		Assert.assertNotNull(result.getRequest());
 		Assert.assertNotNull(result.getRequest().getVerb());
 		Assert.assertNotNull(result.getRequest().getResumptionToken());

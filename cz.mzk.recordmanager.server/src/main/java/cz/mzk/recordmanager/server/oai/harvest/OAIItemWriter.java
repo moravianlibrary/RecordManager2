@@ -92,7 +92,6 @@ public class OAIItemWriter implements ItemWriter<List<OAIRecord>>,
 			rec = new HarvestedRecord();
 			matcher = OAI_PATTERN.matcher(record.getHeader().getIdentifier());
 			if(matcher.find()) rec.setRecordId(matcher.group(1));
-//			rec.setOaiRecordId(record.getHeader().getIdentifier());
 			rec.setHarvestedFrom(configuration);
 			rec.setFormat(format);
 		}

@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<OAI-PMH xmlns="http://www.openarchives.org/OAI/2.0/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/
+http://www.openarchives.org/OAI/2.0/OAI-PMH.xsd">
+	<responseDate>2015-04-09T11:13:12Z</responseDate>
+	<request verb="GetRecord" identifier="oai:aleph.mzk.cz:MZK01-000000152"
+		metadataPrefix="marc21">http://aleph.mzk.cz/OAI</request>
+	<GetRecord>
+		<record>
+			<header>
+				<identifier>oai:aleph.mzk.cz:MZK01-100000152</identifier>
+				<datestamp>2014-12-27T20:11:40Z</datestamp>
+				<setSpec>MZKALL</setSpec>
+			</header>
+			<metadata>
+				<marc:record xmlns:marc="http://www.loc.gov/MARC21/slim"
+					xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+					xsi:schemaLocation="http://www.loc.gov/MARC21/slim
+http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd">
+					<marc:leader>     nam a22      a 4500</marc:leader>
+					<marc:controlfield tag="001">000000152</marc:controlfield>
+					<marc:controlfield tag="003">CZ BrMZK</marc:controlfield>
+					<marc:controlfield tag="005">19940802143423.0</marc:controlfield>
+					<marc:controlfield tag="007">t</marc:controlfield>
+					<marc:controlfield tag="008">940503s1994    xr     f d    000 m cze d</marc:controlfield>
+					<marc:datafield tag="020" ind1=" " ind2=" ">
+						<marc:subfield code="a">80-900908-7-7</marc:subfield>
+						<marc:subfield code="c">120.00</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="040" ind1=" " ind2=" ">
+						<marc:subfield code="a">BOA001</marc:subfield>
+						<marc:subfield code="b">cze</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="080" ind1=" " ind2=" ">
+						<marc:subfield code="a">801.321.1:677</marc:subfield>
+						<marc:subfield code="2">MRF</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="080" ind1=" " ind2=" ">
+						<marc:subfield code="a">801.321.1:646</marc:subfield>
+						<marc:subfield code="2">MRF</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="100" ind1="1" ind2=" ">
+						<marc:subfield code="a">Teršl, Stanislav</marc:subfield>
+						<marc:subfield code="7">mzk2010474104</marc:subfield>
+						<marc:subfield code="4">aut</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="245" ind1="1" ind2="0">
+						<marc:subfield code="a">Abeceda textilu a odívání /</marc:subfield>
+						<marc:subfield code="c">Stanislav Teršl.</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="260" ind1=" " ind2=" ">
+						<marc:subfield code="a">Praha :</marc:subfield>
+						<marc:subfield code="b">NORIS,</marc:subfield>
+						<marc:subfield code="c">1994</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="300" ind1=" " ind2=" ">
+						<marc:subfield code="a">279 s. :</marc:subfield>
+						<marc:subfield code="b">obr., fotogr., tab.</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="653" ind1="0" ind2=" ">
+						<marc:subfield code="a">výkladové slovníky textilní</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="910" ind1=" " ind2=" ">
+						<marc:subfield code="a">BOA001</marc:subfield>
+						<marc:subfield code="b">2-0998.642</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="962" ind1=" " ind2=" ">
+						<marc:subfield code="a">801.32</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="964" ind1=" " ind2=" ">
+						<marc:subfield code="a">Odívání - slovníky výkladové</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="964" ind1=" " ind2=" ">
+						<marc:subfield code="a">Slovníky výkladové - textil - odívání</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="964" ind1=" " ind2=" ">
+						<marc:subfield code="a">Textil - slovníky výkladové</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="990" ind1=" " ind2=" ">
+						<marc:subfield code="a">BK</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="996" ind1="7" ind2=" ">
+						<marc:subfield code="b">2610008337</marc:subfield>
+						<marc:subfield code="c">2-0998.642</marc:subfield>
+						<marc:subfield code="l">SK0</marc:subfield>
+						<marc:subfield code="r">SKL</marc:subfield>
+						<marc:subfield code="n">19</marc:subfield>
+						<marc:subfield code="p">kup</marc:subfield>
+						<marc:subfield code="w">000000152</marc:subfield>
+						<marc:subfield code="a">1</marc:subfield>
+						<marc:subfield code="e">BOA001</marc:subfield>
+						<marc:subfield code="s">A</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="996" ind1="6" ind2=" ">
+						<marc:subfield code="b">2610008685</marc:subfield>
+						<marc:subfield code="c">2-0998.642</marc:subfield>
+						<marc:subfield code="l">SK0</marc:subfield>
+						<marc:subfield code="r">SKL</marc:subfield>
+						<marc:subfield code="n">2</marc:subfield>
+						<marc:subfield code="p">kup</marc:subfield>
+						<marc:subfield code="w">000000152</marc:subfield>
+						<marc:subfield code="a">1</marc:subfield>
+						<marc:subfield code="e">BOA001</marc:subfield>
+						<marc:subfield code="s">P</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="996" ind1="7" ind2=" ">
+						<marc:subfield code="b">2610009166</marc:subfield>
+						<marc:subfield code="c">2-0998.642</marc:subfield>
+						<marc:subfield code="l">SK0</marc:subfield>
+						<marc:subfield code="r">SKL</marc:subfield>
+						<marc:subfield code="n">2</marc:subfield>
+						<marc:subfield code="p">kup</marc:subfield>
+						<marc:subfield code="w">000000152</marc:subfield>
+						<marc:subfield code="a">1</marc:subfield>
+						<marc:subfield code="e">BOA001</marc:subfield>
+						<marc:subfield code="s">A</marc:subfield>
+					</marc:datafield>
+				</marc:record>
+			</metadata>
+		</record>
+	</GetRecord>
+</OAI-PMH> 

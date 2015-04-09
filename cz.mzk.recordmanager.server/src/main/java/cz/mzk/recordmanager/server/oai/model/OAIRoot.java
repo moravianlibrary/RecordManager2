@@ -10,13 +10,19 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(name="OAI-PMH")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class OAIListRecords {
+public class OAIRoot {
 	
 	@XmlElement(name="request")
 	private OAIRequest request;
 	
 	@XmlElement(name = "ListRecords")	
 	private OAIRecords records;
+	
+	@XmlElement(name = "ListIdentifiers")	
+	private OAIListIdentifiers listIdentifiers;
+	
+	@XmlElement(name = "GetRecord")	
+	private OAIGetRecord getRecord;
 	
 	public OAIRequest getRequest() {
 		return request;
@@ -28,6 +34,14 @@ public class OAIListRecords {
 
 	public void setRecords(OAIRecords records) {
 		this.records = records;
+	}
+	
+	public OAIListIdentifiers getListIdentifiers() {
+		return listIdentifiers;
+	}
+	
+	public OAIGetRecord getGetRecord() {
+		return getRecord;
 	}
 	
 	public List<OAIRecord> getRecords() {

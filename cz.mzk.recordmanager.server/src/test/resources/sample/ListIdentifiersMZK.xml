@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<OAI-PMH xmlns="http://www.openarchives.org/OAI/2.0/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/
+http://www.openarchives.org/OAI/2.0/OAI-PMH.xsd">
+	<responseDate>2015-04-09T11:06:33Z</responseDate>
+	<request verb="ListIdentifiers" metadataPrefix="marc21">http://aleph.mzk.cz/OAI</request>
+	<ListIdentifiers>
+		<header>
+			<identifier>oai:aleph.mzk.cz:MZK01-100000151</identifier>
+			<datestamp>2014-12-27T20:11:40Z</datestamp>
+			<setSpec>MZKALL</setSpec>
+		</header>
+		<header>
+			<identifier>oai:aleph.mzk.cz:MZK01-100000152</identifier>
+			<datestamp>2014-12-27T20:11:40Z</datestamp>
+			<setSpec>MZKALL</setSpec>
+		</header>
+	</ListIdentifiers>
+</OAI-PMH> 
