@@ -60,7 +60,7 @@ public class RegenerateDedupKeysJobConfig {
 		JdbcPagingItemReader<HarvestedRecordId> reader = new JdbcPagingItemReader<HarvestedRecordId>();
 		SqlPagingQueryProviderFactoryBean pqpf = new SqlPagingQueryProviderFactoryBean();
 		pqpf.setDataSource(dataSource);
-		pqpf.setSelectClause("SELECT oai_harvest_conf_id, recordId");
+		pqpf.setSelectClause("SELECT oai_harvest_conf_id, record_id");
 		pqpf.setFromClause("FROM harvested_record hr");
 		pqpf.setSortKeys(ImmutableMap.of("oai_harvest_conf_id", Order.ASCENDING, "record_id", Order.ASCENDING));
 		reader.setRowMapper(new HarvestedRecordIdRowMapper());
