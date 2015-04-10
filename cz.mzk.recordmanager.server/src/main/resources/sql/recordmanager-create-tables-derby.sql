@@ -78,11 +78,3 @@ CREATE TABLE authority_record (
   CONSTRAINT authority_record_oai_harvest_conf_id_fk FOREIGN KEY (oai_harvest_conf_id) REFERENCES oai_harvest_conf(id),
   CONSTRAINT authority_record_format_fk              FOREIGN KEY (format)              REFERENCES format(format)
 );
-
-CREATE TABLE record_link (
-  hr_oai_harvest_conf_id  DECIMAL(10),
-  hr_record_id            VARCHAR(128),
-  dedup_record_id         DECIMAL(10),
-  created                 TIMESTAMP,
-  CONSTRAINT record_link_pk PRIMARY KEY (hr_oai_harvest_conf_id, hr_record_id, dedup_record_id) 
-);

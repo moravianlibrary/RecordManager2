@@ -16,5 +16,5 @@ SELECT
 FROM
   dedup_record dr
 WHERE
-  NOT EXISTS(SELECT 1 FROM record_link rl WHERE rl.dedup_record_id = dr.id)
+  NOT EXISTS(SELECT 1 FROM harvested_record hr WHERE hr.dedup_record_id = dr.id)
 ;

@@ -33,7 +33,6 @@ public class DeleteAllHarvestsJobConfig {
     private StepBuilderFactory steps;
     
     private List<String> deleteSqlScripts = Arrays.asList(
-    		"DELETE FROM record_link", //
     		"DELETE FROM dedup_record", //
     		"DELETE FROM harvested_record" //
     );
