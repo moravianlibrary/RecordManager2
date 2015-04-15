@@ -53,7 +53,7 @@ geographic_facet = getFields "600z:610z:611z:630z:648z:650z:651a:651z:655z"
 url = getFields "856u"
 
 ean_str_mv = getEAN()
-
+cpk_detected_format_txtF_mv = getRecordType()
 illustrated = isIllustrated()
 
 bbox_geo = getBoundingBox()
