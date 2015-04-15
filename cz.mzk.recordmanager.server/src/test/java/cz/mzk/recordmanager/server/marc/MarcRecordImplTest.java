@@ -12,6 +12,7 @@ import org.testng.annotations.Test;
 import cz.mzk.recordmanager.server.AbstractTest;
 import cz.mzk.recordmanager.server.metadata.MetadataRecord;
 import cz.mzk.recordmanager.server.metadata.MetadataRecordFactory;
+import cz.mzk.recordmanager.server.model.HarvestedRecordFormat;
 import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordDAO;
 
 public class MarcRecordImplTest extends AbstractTest {
@@ -228,6 +229,192 @@ public class MarcRecordImplTest extends AbstractTest {
 		metadataRecord = metadataFactory.getMetadataRecord(mri);
 		Assert.assertEquals(metadataRecord.getISBNs(), Collections.EMPTY_LIST);
 		data.clear();
+	}
+	
+	@Test
+	public void getDetectedFormatListTest() throws Exception {
+		MarcRecordImpl mri;
+		MetadataRecord metadataRecord;
+		List<String> data = new ArrayList<String>();
+		List<HarvestedRecordFormat> hrf = new ArrayList<HarvestedRecordFormat>();
+		
+		// Books
+		data.add("000 00000000");
+		data.add("007 t");
+		hrf.add(HarvestedRecordFormat.BOOKS);
+		mri = MarcRecordFactory.recordFactory(data);
+		metadataRecord = metadataFactory.getMetadataRecord(mri);
+		Assert.assertEquals(metadataRecord.getDetectedFormatList().toString(), hrf.toString());
+		data.clear();
+		hrf.clear();
+		
+		// Periodicals
+		data.add("000 0000000i");
+		hrf.add(HarvestedRecordFormat.PERIODICALS);
+		mri = MarcRecordFactory.recordFactory(data);
+		metadataRecord = metadataFactory.getMetadataRecord(mri);
+		Assert.assertEquals(metadataRecord.getDetectedFormatList().toString(), hrf.toString());
+		data.clear();
+		hrf.clear();
+		
+		// Articles
+		data.add("000 0000000a");
+		hrf.add(HarvestedRecordFormat.ARTICLES);
+		mri = MarcRecordFactory.recordFactory(data);
+		metadataRecord = metadataFactory.getMetadataRecord(mri);
+		Assert.assertEquals(metadataRecord.getDetectedFormatList().toString(), hrf.toString());
+		data.clear();
+		hrf.clear();
+		
+		// Maps
+		data.add("000 000000000");
+		data.add("245 $hkartografický dokument");
+		hrf.add(HarvestedRecordFormat.MAPS);
+		mri = MarcRecordFactory.recordFactory(data);
+		metadataRecord = metadataFactory.getMetadataRecord(mri);
+		Assert.assertEquals(metadataRecord.getDetectedFormatList().toString(), hrf.toString());
+		data.clear();
+		hrf.clear();
+		
+		// Musical
+		data.add("000 00000000");
+		data.add("336 $bntv");
+		hrf.add(HarvestedRecordFormat.MUSICAL_SCORES);
+		mri = MarcRecordFactory.recordFactory(data);
+		metadataRecord = metadataFactory.getMetadataRecord(mri);
+		Assert.assertEquals(metadataRecord.getDetectedFormatList().toString(), hrf.toString());
+		data.clear();
+		hrf.clear();
+
+		// Vusial documents
+		data.add("000 00000000");
+		data.add("338 $bgasd");
+		hrf.add(HarvestedRecordFormat.VISUAL_DOCUMENTS);
+		mri = MarcRecordFactory.recordFactory(data);
+		metadataRecord = metadataFactory.getMetadataRecord(mri);
+		Assert.assertEquals(metadataRecord.getDetectedFormatList().toString(), hrf.toString());
+		data.clear();
+		hrf.clear();
+		
+		// Manuscripts
+		data.add("000 00000000");
+		data.add("245 $hrukOpis");
+		hrf.add(HarvestedRecordFormat.MANUSCRIPTS);
+		mri = MarcRecordFactory.recordFactory(data);
+		metadataRecord = metadataFactory.getMetadataRecord(mri);
+		Assert.assertEquals(metadataRecord.getDetectedFormatList().toString(), hrf.toString());
+		data.clear();
+		hrf.clear();
+		
+		// Microforms
+		data.add("000 0000000");
+		data.add("337 $bh");
+		hrf.add(HarvestedRecordFormat.MICROFORMS);
+		mri = MarcRecordFactory.recordFactory(data);
+		metadataRecord = metadataFactory.getMetadataRecord(mri);
+		Assert.assertEquals(metadataRecord.getDetectedFormatList().toString(), hrf.toString());
+		data.clear();
+		hrf.clear();
+		
+		//Large prints
+		data.add("000 00000000");
+		data.add("007 db");
+		hrf.add(HarvestedRecordFormat.LARGE_PRINTS);
+		mri = MarcRecordFactory.recordFactory(data);
+		metadataRecord = metadataFactory.getMetadataRecord(mri);
+		Assert.assertEquals(metadataRecord.getDetectedFormatList().toString(), hrf.toString());
+		data.clear();
+		hrf.clear();
+		
+		// Braill
+		data.add("000 00000000");
+		data.add("007 fb");
+		data.add("245 $hhmatové písmo");
+		hrf.add(HarvestedRecordFormat.BRAILL);
+		mri = MarcRecordFactory.recordFactory(data);
+		metadataRecord = metadataFactory.getMetadataRecord(mri);		
+		Assert.assertEquals(metadataRecord.getDetectedFormatList().toString(), hrf.toString());
+		data.clear();
+		hrf.clear();
+		
+		// Electronic
+		data.add("000 000000m");
+		data.add("006 plllllq");
+		hrf.add(HarvestedRecordFormat.ELECTRONIC_SOURCE);
+		mri = MarcRecordFactory.recordFactory(data);
+		metadataRecord = metadataFactory.getMetadataRecord(mri);		
+		Assert.assertEquals(metadataRecord.getDetectedFormatList().toString(), hrf.toString());
+		data.clear();
+		hrf.clear();
+		
+		// Audio
+		data.add("000 000000i");
+		data.add("300 $fanalog$advd");
+		hrf.add(HarvestedRecordFormat.AUDIO_DVD);
+		mri = MarcRecordFactory.recordFactory(data);
+		metadataRecord = metadataFactory.getMetadataRecord(mri);		
+		Assert.assertEquals(metadataRecord.getDetectedFormatList().toString(), hrf.toString());
+		data.clear();
+		hrf.clear();
+		
+		// Video
+		data.add("000 000000000");
+		data.add("007 vlllv");
+		hrf.add(HarvestedRecordFormat.VIDEO_DVD);
+		mri = MarcRecordFactory.recordFactory(data);
+		metadataRecord = metadataFactory.getMetadataRecord(mri);		
+		Assert.assertEquals(metadataRecord.getDetectedFormatList().toString(), hrf.toString());
+		data.clear();
+		hrf.clear();
+				
+		// Kit
+		data.add("000 00000000");
+		data.add("006 o");
+		data.add("007 o");
+		hrf.add(HarvestedRecordFormat.KIT);
+		mri = MarcRecordFactory.recordFactory(data);
+		metadataRecord = metadataFactory.getMetadataRecord(mri);		
+		Assert.assertEquals(metadataRecord.getDetectedFormatList().toString(), hrf.toString());
+		data.clear();
+		hrf.clear();
+		
+		// Object
+		data.add("000 00000000");
+		data.add("008 zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzd");
+		hrf.add(HarvestedRecordFormat.OBJECT);
+		mri = MarcRecordFactory.recordFactory(data);
+		metadataRecord = metadataFactory.getMetadataRecord(mri);		
+		Assert.assertEquals(metadataRecord.getDetectedFormatList().toString(), hrf.toString());
+		data.clear();
+		hrf.clear();
+		
+		// Mix document
+		data.add("000 000000p");
+		hrf.add(HarvestedRecordFormat.MIX_DOCUMENT);
+		mri = MarcRecordFactory.recordFactory(data);
+		metadataRecord = metadataFactory.getMetadataRecord(mri);		
+		Assert.assertEquals(metadataRecord.getDetectedFormatList().toString(), hrf.toString());
+		data.clear();
+		hrf.clear();
+		
+		// Unspecified
+		data.add("000 00000000");
+		data.add("337 $bx");
+		hrf.add(HarvestedRecordFormat.UNSPECIFIED);
+		mri = MarcRecordFactory.recordFactory(data);
+		metadataRecord = metadataFactory.getMetadataRecord(mri);		
+		Assert.assertEquals(metadataRecord.getDetectedFormatList().toString(), hrf.toString());
+		data.clear();
+		hrf.clear();
+		
+		// Nothing
+		data.add("000 00000000");
+		hrf.add(HarvestedRecordFormat.UNSPECIFIED);
+		mri = MarcRecordFactory.recordFactory(data);
+		metadataRecord = metadataFactory.getMetadataRecord(mri);		
+		Assert.assertEquals(metadataRecord.getDetectedFormatList().toString(), hrf.toString());
+		data.clear();
+		hrf.clear();
 	}
 
 }
