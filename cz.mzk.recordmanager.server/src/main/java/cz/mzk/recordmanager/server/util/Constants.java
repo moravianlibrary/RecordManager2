@@ -6,6 +6,7 @@ public class Constants {
 	public static final String JOB_ID_HARVEST_PART		= "oaiPartitionedHarvestJob";
 	public static final String JOB_ID_HARVEST_AUTH		= "oaiHarvestAuthorityJob";
 	public static final String JOB_ID_HARVEST_ONE_BY_ONE = "oaiHarvestOneByOneJob";
+	public static final String JOB_ID_HARVEST_SINGLE	= "oaiHarvestSingleRecordJob";
 	public static final String JOB_ID_DEDUP				= "dedupRecordsJob";
 	public static final String JOB_ID_SOLR_INDEX		= "indexRecordsToSolrJob";
 	public static final String JOB_ID_EXPORT			= "exportRecordsJob";
@@ -20,4 +21,10 @@ public class Constants {
 	
 	public static final String JOB_PARAM_OUT_FILE		= "outFile";
 	public static final String JOB_PARAM_IN_FILE		= "inFile";
+	
+	public static final String JOB_PARAM_RECORD_ID		= "recordId";
+	/* need some changing paramteter :-/ - 
+	 * A job instance already exists and is complete for p arameters={}. 
+	 * If you want to run this job again, change the parameters. */
+	public static final String JOB_PARAM_HACK			= "h";
 }
