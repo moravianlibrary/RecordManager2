@@ -18,6 +18,7 @@ import cz.mzk.recordmanager.server.marc.MarcRecord;
 import cz.mzk.recordmanager.server.marc.MarcXmlParser;
 import cz.mzk.recordmanager.server.model.DedupRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
+import cz.mzk.recordmanager.server.model.OAIHarvestConfiguration;
 import cz.mzk.recordmanager.server.scripting.MarcMappingScript;
 import cz.mzk.recordmanager.server.scripting.MarcScriptFactory;
 
@@ -25,6 +26,10 @@ import cz.mzk.recordmanager.server.scripting.MarcScriptFactory;
 public class MarcSolrRecordMapper implements SolrRecordMapper, InitializingBean {
 
 	private static final String ID_FIELD = "id";
+	
+	private static final String INSTITUTION_FIELD = "institution";
+	
+	private static final String UNKNOWN_INSTITUTION = "unknown";
 
 	@Autowired
 	private MarcXmlParser marcXmlParser;
@@ -63,6 +68,7 @@ public class MarcSolrRecordMapper implements SolrRecordMapper, InitializingBean 
 		HarvestedRecord record = records.get(0);
 		SolrInputDocument document = parse(record);
 		document.addField(ID_FIELD, dedupRecord.getId());
+		document.addField(INSTITUTION_FIELD, getInstituitonOfRecord(record));
 		List<String> localIds = new ArrayList<String>();
 		for (HarvestedRecord rec : records) {
 			// FIXME: better parsing of id
@@ -98,6 +104,16 @@ public class MarcSolrRecordMapper implements SolrRecordMapper, InitializingBean 
 		}
 		mappingScript = marcScriptFactory.create(getClass()
 				.getResourceAsStream("/marc/groovy/BaseMarc.groovy"));
+	}
+	
+	protected String getInstituitonOfRecord(HarvestedRecord hr) {
+		OAIHarvestConfiguration config = hr.getHarvestedFrom();
+		if (config != null 
+				&& config.getLibrary() != null 
+				&& config.getLibrary().getName() != null) {
+			return config.getLibrary().getName();
+		}
+		return UNKNOWN_INSTITUTION;
 	}
 
 }
