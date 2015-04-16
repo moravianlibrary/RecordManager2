@@ -224,9 +224,9 @@ public class OAIHarvestJobTest extends AbstractTest {
 		Long jobExecutionId = jobExecutor.execute(Constants.JOB_ID_HARVEST_ONE_BY_ONE, new JobParameters(params));
 		JobExecution exec = jobExplorer.getJobExecution(jobExecutionId);
 		Assert.assertEquals(exec.getExitStatus(), ExitStatus.COMPLETED);
-		dbUnitHelper.dump("/tmp/dump.xml");
+		
 		Assert.assertNotNull(recordDao.findByIdAndHarvestConfiguration("oai:aleph.mzk.cz:MZK01-100000151", 300L));
-		Assert.assertNotNull(recordDao.findByIdAndHarvestConfiguration("oai:aleph.mzk.cz:MZK01-100000151", 300L));
+		Assert.assertNotNull(recordDao.findByIdAndHarvestConfiguration("oai:aleph.mzk.cz:MZK01-100000152", 300L));
 		
 	}
 }

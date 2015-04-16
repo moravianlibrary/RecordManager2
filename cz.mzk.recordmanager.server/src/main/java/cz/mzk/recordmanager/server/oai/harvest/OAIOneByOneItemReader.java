@@ -1,9 +1,10 @@
 package cz.mzk.recordmanager.server.oai.harvest;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
 import org.springframework.batch.core.ExitStatus;
 import org.springframework.batch.core.StepExecution;
@@ -49,8 +50,12 @@ public class OAIOneByOneItemReader implements ItemReader<List<OAIRecord>>,
 
 	// state
 	private String resumptionToken;
+	
+	private Queue<OAIHeader> pendingHeadersQueue = new LinkedList<OAIHeader>();
 
 	private boolean finished = false;
+	
+    private static final int COMMIT_INTERVAL = 50;
 	
 	public OAIOneByOneItemReader(Long confId, Date fromDate, Date untilDate) {
 		super();
@@ -67,7 +72,6 @@ public class OAIOneByOneItemReader implements ItemReader<List<OAIRecord>>,
 			params.setUrl(conf.getUrl());
 			params.setMetadataPrefix(conf.getMetadataPrefix());
 			params.setGranularity(conf.getGranularity());
-			params.setSet(conf.getSet());
 			params.setFrom(fromDate);
 			params.setUntil(untilDate);
 			harvester = harvesterFactory.create(params);
@@ -84,33 +88,42 @@ public class OAIOneByOneItemReader implements ItemReader<List<OAIRecord>>,
 		return null;
 	}
 
+	/**
+	 * reads content of pendingHeadersQueue queue and processes records.
+	 */
 	@Override
 	public List<OAIRecord> read() {
+		prepareHeadersQueue();
 		List<OAIRecord> result = new ArrayList<OAIRecord>();
-		for (OAIHeader header : readNextIdentifiers()) {
-			OAIGetRecord getRecord = harvester.getRecord(header.getIdentifier());
-			if (getRecord != null && getRecord.getRecord() != null) {
-				result.add(getRecord.getRecord());
+		for (int i = 0; i < Math.min(COMMIT_INTERVAL,pendingHeadersQueue.size()); i++) {
+			OAIHeader header = pendingHeadersQueue.poll();
+			OAIGetRecord oaiGetRecord = harvester.getRecord(header.getIdentifier());
+			if (oaiGetRecord != null && oaiGetRecord.getRecord() != null) {
+				result.add(oaiGetRecord.getRecord());
 			}
 		}
+		
 		return result.isEmpty() ? null : result;
 	}
 	
-	protected List<OAIHeader> readNextIdentifiers() {
-		if (finished) {
-			return Collections.emptyList();
-		}
-
-		OAIListIdentifiers listIdentifiers = harvester.listIdentifiers(resumptionToken);
-		resumptionToken = listIdentifiers.getNextResumptionToken();
-		if (resumptionToken == null) {
-			finished = true;
-		}
-		if (listIdentifiers.getHeaders().isEmpty()) {
-			return Collections.emptyList();
-		} else {
-			return listIdentifiers.getHeaders();
-		}
+	/**
+	 * prepares pendingHeadersQueue. Calls ListIdentfiers verb via OAI if there aren't
+	 * any pending headers left. 
+	 */
+	protected void prepareHeadersQueue() {
+		if (pendingHeadersQueue.isEmpty()) {
+			if (finished) {
+				return;
+			}
+			OAIListIdentifiers listIdentifiers = harvester.listIdentifiers(resumptionToken);
+			for (OAIHeader currentHeader: listIdentifiers.getHeaders()) {
+				pendingHeadersQueue.add(currentHeader);
+			}
+			resumptionToken = listIdentifiers.getNextResumptionToken();
+			if (resumptionToken == null) {
+				finished = true;
+			}
+		}		
 	}  
 	
 	/**
