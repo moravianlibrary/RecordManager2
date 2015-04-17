@@ -2,15 +2,16 @@ package cz.mzk.recordmanager.server.util;
 
 public class Constants {
 
-	public static final String JOB_ID_HARVEST			= "oaiHarvestJob";
-	public static final String JOB_ID_HARVEST_PART		= "oaiPartitionedHarvestJob";
-	public static final String JOB_ID_HARVEST_AUTH		= "oaiHarvestAuthorityJob";
-	public static final String JOB_ID_HARVEST_ONE_BY_ONE = "oaiHarvestOneByOneJob";
-	public static final String JOB_ID_DEDUP				= "dedupRecordsJob";
-	public static final String JOB_ID_SOLR_INDEX		= "indexRecordsToSolrJob";
-	public static final String JOB_ID_EXPORT			= "exportRecordsJob";
-	public static final String JOB_ID_IMPORT			= "importRecordsJob";
-	public static final String JOB_ID_REGEN_DEDUP_KEYS	= "regenerateDedupKeysJob";
+	public static final String JOB_ID_HARVEST						= "oaiHarvestJob";
+	public static final String JOB_ID_HARVEST_PART					= "oaiPartitionedHarvestJob";
+	public static final String JOB_ID_HARVEST_AUTH					= "oaiHarvestAuthorityJob";
+	public static final String JOB_ID_HARVEST_ONE_BY_ONE 			= "oaiHarvestOneByOneJob";
+	public static final String JOB_ID_DEDUP							= "dedupRecordsJob";
+	public static final String JOB_ID_SOLR_INDEX					= "indexRecordsToSolrJob";
+	public static final String JOB_ID_SOLR_INDEX_LOCAL_RECORDS		= "indexLocalRecordsToSolrJob";
+	public static final String JOB_ID_EXPORT						= "exportRecordsJob";
+	public static final String JOB_ID_IMPORT						= "importRecordsJob";
+	public static final String JOB_ID_REGEN_DEDUP_KEYS				= "regenerateDedupKeysJob";
 	
 	public static final String JOB_PARAM_CONF_ID 		= "configurationId";
 	public static final String JOB_PARAM_FROM_DATE 		= "from";
@@ -20,4 +21,5 @@ public class Constants {
 	
 	public static final String JOB_PARAM_OUT_FILE		= "outFile";
 	public static final String JOB_PARAM_IN_FILE		= "inFile";
+	
 }

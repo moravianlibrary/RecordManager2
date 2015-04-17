@@ -33,6 +33,7 @@ import cz.mzk.recordmanager.server.dedup.UpdateHarvestedRecordsJobConfig;
 import cz.mzk.recordmanager.server.dedup.DedupRecordsJobConfig;
 import cz.mzk.recordmanager.server.export.ExportRecordsJobConfig;
 import cz.mzk.recordmanager.server.imports.ImportRecordJobConfig;
+import cz.mzk.recordmanager.server.index.IndexLocalRecordsToSolrJobConfig;
 import cz.mzk.recordmanager.server.index.IndexRecordsToSolrJobConfig;
 import cz.mzk.recordmanager.server.index.SolrServerFactory;
 import cz.mzk.recordmanager.server.index.SolrServerFactoryImpl;
@@ -144,7 +145,8 @@ public class AppConfig extends DefaultBatchConfigurer {
 				UpdateHarvestedRecordsJobConfig.class,
 				RegenerateDedupKeysJobConfig.class,
 				ImportRecordJobConfig.class,
-				ExportRecordsJobConfig.class
+				ExportRecordsJobConfig.class,
+				IndexLocalRecordsToSolrJobConfig.class
 			);
 	}
 

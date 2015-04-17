@@ -76,6 +76,14 @@ public class MarcSolrRecordMapper implements SolrRecordMapper, InitializingBean 
 		}
 		return document;
 	}
+	
+	@Override
+	public SolrInputDocument map(HarvestedRecord record) {
+		SolrInputDocument document = parse(record);
+		document.addField(ID_FIELD, record.getHarvestedFrom().getIdPrefix() + "." + record.getId().getRecordId());
+		document.addField(INSTITUTION_FIELD, getInstituitonOfRecord(record));
+		return document;
+	}
 
 	protected SolrInputDocument parse(HarvestedRecord record) {
 		InputStream is = new ByteArrayInputStream(record.getRawRecord());
