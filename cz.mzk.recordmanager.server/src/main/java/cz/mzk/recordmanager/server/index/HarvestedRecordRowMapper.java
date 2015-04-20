@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecord.HarvestedRecordId;
+import cz.mzk.recordmanager.server.model.OAIHarvestConfiguration;
 import cz.mzk.recordmanager.server.oai.dao.OAIHarvestConfigurationDAO;
 
 @Component
@@ -21,8 +22,10 @@ public class HarvestedRecordRowMapper implements
 	@Override
 	public HarvestedRecord mapRow(ResultSet rs, int rowNum)
 			throws SQLException {
-		HarvestedRecordId id = new HarvestedRecordId(oaiHarvestConfDao.load(rs.getLong("oai_harvest_conf_id")), rs.getString("record_id"));
+		OAIHarvestConfiguration harvestedFrom = oaiHarvestConfDao.load(rs.getLong("oai_harvest_conf_id"));
+		HarvestedRecordId id = new HarvestedRecordId(harvestedFrom, rs.getString("record_id"));
 		HarvestedRecord record = new HarvestedRecord(id);
+		record.setHarvestedFrom(harvestedFrom);
 		record.setUpdated(rs.getDate("updated"));
 		record.setRawRecord(rs.getBytes("raw_record"));
 		record.setFormat(rs.getString("format"));

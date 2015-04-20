@@ -29,6 +29,12 @@ public class MarcSolrRecordMapper implements SolrRecordMapper, InitializingBean 
 	
 	private static final String INSTITUTION_FIELD = "institution";
 	
+	private static final String LOCAL_IDS_FIELD = "local_ids_str_mv";
+	
+	private static final String MERGED_FIELD = "merged_boolean";
+	
+	private static final String MERGED_CHILD_FIELD = "merged_child_boolean";
+	
 	private static final String UNKNOWN_INSTITUTION = "unknown";
 
 	@Autowired
@@ -69,19 +75,22 @@ public class MarcSolrRecordMapper implements SolrRecordMapper, InitializingBean 
 		SolrInputDocument document = parse(record);
 		document.addField(ID_FIELD, dedupRecord.getId());
 		document.addField(INSTITUTION_FIELD, getInstituitonOfRecord(record));
+		document.addField(MERGED_FIELD, 1);
 		List<String> localIds = new ArrayList<String>();
 		for (HarvestedRecord rec : records) {
-			// FIXME: better parsing of id
-			localIds.add(rec.getHarvestedFrom().getIdPrefix() + "." + rec.getId().getRecordId());
+			localIds.add(getId(rec));
 		}
+		document.addField(LOCAL_IDS_FIELD, localIds);
 		return document;
 	}
 	
 	@Override
 	public SolrInputDocument map(HarvestedRecord record) {
 		SolrInputDocument document = parse(record);
-		document.addField(ID_FIELD, record.getHarvestedFrom().getIdPrefix() + "." + record.getId().getRecordId());
+		String id = getId(record); 
+		document.addField(ID_FIELD, id);
 		document.addField(INSTITUTION_FIELD, getInstituitonOfRecord(record));
+		document.addField(MERGED_CHILD_FIELD, 1);
 		return document;
 	}
 
@@ -104,6 +113,12 @@ public class MarcSolrRecordMapper implements SolrRecordMapper, InitializingBean 
 		return mappingScript;
 	}
 
+	protected String getId(HarvestedRecord record) {
+		String prefix = record.getHarvestedFrom().getIdPrefix();
+		String id = ((prefix != null) ? prefix + "." : "") + record.getId().getRecordId();
+		return id;
+	}
+	
 	@Override
 	public void afterPropertiesSet() throws Exception {
 		for (String field : fieldsWithDash) {
