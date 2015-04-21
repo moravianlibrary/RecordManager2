@@ -80,7 +80,10 @@ public class MarcRecordImpl implements MarcRecord {
 	public String getField(String tag, String separator, char... subfields) {
 		List<DataField> fields = dataFields.get(tag);
 		if (fields != null && fields.size() > 0) {
-			return parseSubfields((DataField) fields.get(0), separator, subfields);
+			String content = parseSubfields((DataField) fields.get(0), separator, subfields);
+			if (content != null && !content.trim().isEmpty()) {
+				return content;
+			}
 		}
 		return null;
 	}
@@ -99,8 +102,10 @@ public class MarcRecordImpl implements MarcRecord {
 		List<String> result = new ArrayList<String>(fields.size());
 		for (DataField field : fields) {
 			if (matcher.matches(field)) {
-				String content = parseSubfields(field ,separator, subfields);
-				result.add(content);
+				String content = parseSubfields(field, separator, subfields);
+				if (content != null && !content.trim().isEmpty()) {
+					result.add(content);
+				}
 			}
 		}
 		return result;

@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<marc:record xmlns:marc="http://www.loc.gov/MARC21/slim"
+	xmlns="http://www.openarchives.org/OAI/2.0/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.loc.gov/MARC21/slim http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd">
+	<marc:leader>     nam a22      a 4500</marc:leader>
+	<marc:controlfield tag="001">000087310</marc:controlfield>
+	<marc:controlfield tag="003">CZ BrMZK</marc:controlfield>
+	<marc:controlfield tag="005">20100715071151.0</marc:controlfield>
+	<marc:controlfield tag="007">ta</marc:controlfield>
+	<marc:controlfield tag="008">960815s1996    xr a   f            cze d</marc:controlfield>
+	<marc:datafield ind1=" " ind2=" " tag="015">
+		<marc:subfield code="a">cnb000165689</marc:subfield>
+	</marc:datafield>
+	<marc:datafield ind1=" " ind2=" " tag="020">
+		<marc:subfield code="a">80-7041-613-0</marc:subfield>
+	</marc:datafield>
+	<marc:datafield ind1=" " ind2=" " tag="035">
+		<marc:subfield code="a">(OCoLC)38453798</marc:subfield>
+	</marc:datafield>
+	<marc:datafield ind1=" " ind2=" " tag="040">
+		<marc:subfield code="a">BOA001</marc:subfield>
+		<marc:subfield code="b">cze</marc:subfield>
+	</marc:datafield>
+	<marc:datafield ind1=" " ind2=" " tag="080">
+		<marc:subfield code="a">797.2(075.8)</marc:subfield>
+		<marc:subfield code="2">MRF</marc:subfield>
+	</marc:datafield>
+	<marc:datafield ind1="1" ind2=" " tag="100">
+		<marc:subfield code="a">Roztočil, Tomáš,</marc:subfield>
+		<marc:subfield code="c">didaktika plavání</marc:subfield>
+		<marc:subfield code="4">aut</marc:subfield>
+		<marc:subfield code="p">plavání</marc:subfield>
+	</marc:datafield>
+	<marc:datafield ind1="1" ind2="0" tag="245">
+		<marc:subfield code="a">Technika a didaktika plavání :</marc:subfield>
+		<marc:subfield code="b">(učební texty pro posluchače oboru tělesná výchova) /</marc:subfield>
+		<marc:subfield code="c">Tomáš Roztočil, Jiří Švec</marc:subfield>
+	</marc:datafield>
+	<marc:datafield ind1=" " ind2=" " tag="250">
+		<marc:subfield code="a">1. vyd.</marc:subfield>
+	</marc:datafield>
+	<marc:datafield ind1=" " ind2=" " tag="260">
+		<marc:subfield code="a">Hradec Králové :</marc:subfield>
+		<marc:subfield code="b">Gaudeamus,</marc:subfield>
+		<marc:subfield code="c">1996</marc:subfield>
+	</marc:datafield>
+	<marc:datafield ind1=" " ind2=" " tag="300">
+		<marc:subfield code="a">71 s. :</marc:subfield>
+		<marc:subfield code="b">il. ;</marc:subfield>
+		<marc:subfield code="c">21 cm</marc:subfield>
+	</marc:datafield>
+	<marc:datafield ind1=" " ind2=" " tag="500">
+		<marc:subfield code="a">Určeno pro posl. Vys. šk. pedag. v Hradci Králové</marc:subfield>
+	</marc:datafield>
+	<marc:datafield ind1=" " ind2=" " tag="504">
+		<marc:subfield code="a">Obsahuje bibliografii</marc:subfield>
+	</marc:datafield>
+	<marc:datafield ind1="0" ind2=" " tag="653">
+		<marc:subfield code="a">plavání</marc:subfield>
+	</marc:datafield>
+	<marc:datafield ind1="1" ind2=" " tag="700">
+		<marc:subfield code="a">Švec, Jiří</marc:subfield>
+		<marc:subfield code="7">jx20040413060</marc:subfield>
+		<marc:subfield code="4">aut</marc:subfield>
+	</marc:datafield>
+	<marc:datafield ind1="2" ind2=" " tag="710">
+		<marc:subfield code="a">Vysoká škola pedagogická v Hradci Králové</marc:subfield>
+		<marc:subfield code="7">kn20010709407</marc:subfield>
+	</marc:datafield>
+	<marc:datafield ind1=" " ind2=" " tag="910">
+		<marc:subfield code="a">BOA001</marc:subfield>
+		<marc:subfield code="b">2-1023.386</marc:subfield>
+		<marc:subfield code="b">PK-0126.371</marc:subfield>
+	</marc:datafield>
+	<marc:datafield ind1=" " ind2=" " tag="920">
+		<marc:subfield code="a">000105202</marc:subfield>
+	</marc:datafield>
+	<marc:datafield ind1=" " ind2=" " tag="964">
+		<marc:subfield code="a">Plavání</marc:subfield>
+		<marc:subfield code="x">učebnice</marc:subfield>
+		<marc:subfield code="x">školy vysoké</marc:subfield>
+	</marc:datafield>
+	<marc:datafield ind1=" " ind2=" " tag="990">
+		<marc:subfield code="a">BK</marc:subfield>
+	</marc:datafield>
+	<marc:datafield ind1="7" ind2=" " tag="996">
+		<marc:subfield code="b">2610039989</marc:subfield>
+		<marc:subfield code="c">2-1023.386</marc:subfield>
+		<marc:subfield code="l">SK0</marc:subfield>
+		<marc:subfield code="r">SKL</marc:subfield>
+		<marc:subfield code="n">32</marc:subfield>
+		<marc:subfield code="p">p.v.</marc:subfield>
+		<marc:subfield code="w">000087310</marc:subfield>
+		<marc:subfield code="a">1</marc:subfield>
+		<marc:subfield code="e">BOA001</marc:subfield>
+		<marc:subfield code="s">A</marc:subfield>
+	</marc:datafield>
+	<marc:datafield ind1="7" ind2=" " tag="996">
+		<marc:subfield code="b">3119005734</marc:subfield>
+		<marc:subfield code="c">PK-0126.371</marc:subfield>
+		<marc:subfield code="l">SK3</marc:subfield>
+		<marc:subfield code="r">SKL</marc:subfield>
+		<marc:subfield code="n">33</marc:subfield>
+		<marc:subfield code="p">kup</marc:subfield>
+		<marc:subfield code="w">000087310</marc:subfield>
+		<marc:subfield code="a">1</marc:subfield>
+		<marc:subfield code="e">BOA001</marc:subfield>
+		<marc:subfield code="s">A</marc:subfield>
+	</marc:datafield>
+	<marc:datafield ind1="7" ind2=" " tag="996">
+		<marc:subfield code="b">3119005735</marc:subfield>
+		<marc:subfield code="c">PK-0126.371</marc:subfield>
+		<marc:subfield code="l">SK3</marc:subfield>
+		<marc:subfield code="r">SKL</marc:subfield>
+		<marc:subfield code="n">28</marc:subfield>
+		<marc:subfield code="p">kup</marc:subfield>
+		<marc:subfield code="w">000087310</marc:subfield>
+		<marc:subfield code="a">1</marc:subfield>
+		<marc:subfield code="e">BOA001</marc:subfield>
+		<marc:subfield code="s">A</marc:subfield>
+	</marc:datafield>
+</marc:record>
