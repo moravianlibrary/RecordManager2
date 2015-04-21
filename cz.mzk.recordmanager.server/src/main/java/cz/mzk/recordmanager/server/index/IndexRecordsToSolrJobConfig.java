@@ -27,7 +27,7 @@ import org.springframework.context.annotation.Configuration;
 import com.google.common.collect.ImmutableMap;
 
 import cz.mzk.recordmanager.server.jdbc.DedupRecordRowMapper;
-import cz.mzk.recordmanager.server.jdbc.LongValueRowMapper;
+import cz.mzk.recordmanager.server.jdbc.StringValueRowMapper;
 import cz.mzk.recordmanager.server.model.DedupRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.springbatch.JobFailureListener;
@@ -62,11 +62,13 @@ public class IndexRecordsToSolrJobConfig {
     public Job indexAllRecordsToSolrJob(
     		@Qualifier("indexRecordsToSolrJob:updateRecordsStep") Step updateRecordsStep,
     		@Qualifier("indexRecordsToSolrJob:deleteOrphanedRecordsStep") Step deleteOrphanedRecordsStep,
+    		@Qualifier("indexLocalRecordsToSolrJob:deleteOrphanedHarvestedRecordsStep") Step deleteOrphanedHarvestedRecordsStep,
     		@Qualifier("indexLocalRecordsToSolrJob:updateHarvestedRecordsStep") Step updateHarvestedRecordsStep) {
         return jobs.get(Constants.JOB_ID_SOLR_INDEX_ALL_RECORDS)
         		.validator(new IndexRecordsToSolrJobParametersValidator())
         		.listener(JobFailureListener.INSTANCE)
-        		.flow(updateHarvestedRecordsStep)
+        		.flow(deleteOrphanedHarvestedRecordsStep)
+        		.next(updateHarvestedRecordsStep)
 				.next(updateRecordsStep)
 				.next(deleteOrphanedRecordsStep)
 				.end()
@@ -109,7 +111,7 @@ public class IndexRecordsToSolrJobConfig {
     @Bean(name="indexRecordsToSolrJob:deleteOrphanedRecordsStep")
     public Step deleteOrphanedRecordsStep() throws Exception {
 		return steps.get("deleteOrphanedRecordsJobStep")
-            .<Long, Long> chunk(20) //
+            .<String, String> chunk(20) //
             .reader(orphanedRecordsReader(DATE_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION)) //
             .writer(orphanedRecordsWriter(STRING_OVERRIDEN_BY_EXPRESSION)) //
             .build();
@@ -159,12 +161,12 @@ public class IndexRecordsToSolrJobConfig {
     
     @Bean(name="indexRecordsToSolrJob:orphanedRecordsReader")
 	@StepScope
-    public ItemReader<Long> orphanedRecordsReader(@Value("#{jobParameters[" + Constants.JOB_PARAM_FROM_DATE  + "]}") Date from,
+    public ItemReader<String> orphanedRecordsReader(@Value("#{jobParameters[" + Constants.JOB_PARAM_FROM_DATE  + "]}") Date from,
     		@Value("#{jobParameters[" + Constants.JOB_PARAM_UNTIL_DATE + "]}") Date to) throws Exception {
     	if (from != null && to == null) {
     		to = new Date();
     	}
-		JdbcPagingItemReader<Long> reader = new JdbcPagingItemReader<Long>();
+		JdbcPagingItemReader<String> reader = new JdbcPagingItemReader<String>();
 		SqlPagingQueryProviderFactoryBean pqpf = new SqlPagingQueryProviderFactoryBean();
 		pqpf.setDataSource(dataSource);
 		pqpf.setSelectClause("SELECT dedup_record_id");
@@ -173,7 +175,7 @@ public class IndexRecordsToSolrJobConfig {
 			pqpf.setWhereClause("WHERE orphaned BETWEEN :from AND :to");
 		}
 		pqpf.setSortKey("dedup_record_id");
-		reader.setRowMapper(new LongValueRowMapper());
+		reader.setRowMapper(new StringValueRowMapper());
 		reader.setPageSize(20);
     	reader.setQueryProvider(pqpf.getObject());
     	reader.setDataSource(dataSource);
@@ -194,6 +196,48 @@ public class IndexRecordsToSolrJobConfig {
     }
     
     // local records
+    @Bean(name="indexLocalRecordsToSolrJob:deleteOrphanedHarvestedRecordsStep") 
+    public Step deleteOrphanedHarvestedRecordsStep() throws Exception {
+    	return steps.get("deleteOrphanedHarvestedRecordsStep")
+                .<String, String> chunk(20) //
+                .reader(orphanedHarvestedRecordsReader(DATE_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION)) //
+                .writer(orphanedRecordsWriter(STRING_OVERRIDEN_BY_EXPRESSION)) //
+                .build();
+    }
+    
+    @Bean(name="indexRecordsToSolrJob:orphanedRecordsReader")
+	@StepScope
+    public ItemReader<String> orphanedHarvestedRecordsReader(@Value("#{jobParameters[" + Constants.JOB_PARAM_FROM_DATE  + "]}") Date from,
+    		@Value("#{jobParameters[" + Constants.JOB_PARAM_UNTIL_DATE + "]}") Date to) throws Exception {
+    	if (from != null && to == null) {
+    		to = new Date();
+    	}
+		JdbcPagingItemReader<String> reader = new JdbcPagingItemReader<String>();
+		SqlPagingQueryProviderFactoryBean pqpf = new SqlPagingQueryProviderFactoryBean();
+		pqpf.setDataSource(dataSource);
+		pqpf.setSelectClause("SELECT oai_harvest_conf_id, record_id, hc.id_prefix || '.' || hr.record_id solr_id");
+		pqpf.setFromClause("FROM harvested_record hr JOIN oai_harvest_conf hc ON hr.oai_harvest_conf_id = hc.id");
+		if (from != null && to != null) {
+			pqpf.setWhereClause("WHERE orphaned BETWEEN :from AND :to");
+		} else {
+			pqpf.setWhereClause("WHERE hr.deleted IS NOT NULL");
+		}
+		pqpf.setSortKeys(ImmutableMap.of("oai_harvest_conf_id",
+				Order.ASCENDING, "record_id", Order.ASCENDING));
+		reader.setRowMapper(new StringValueRowMapper());
+		reader.setPageSize(20);
+    	reader.setQueryProvider(pqpf.getObject());
+    	reader.setDataSource(dataSource);
+    	if (from != null && to != null) {
+    		Map<String, Object> parameterValues = new HashMap<String, Object>();
+    		parameterValues.put("from", from);
+    		parameterValues.put("to", to);
+    		reader.setParameterValues(parameterValues);
+    	}
+    	reader.afterPropertiesSet();
+    	return reader;
+    }
+    
     @Bean(name="indexLocalRecordsToSolrJob:updateHarvestedRecordsStep")
     public Step updateHarvestedRecordsStep() throws Exception {
 		return steps.get("updateHarvestedRecordsStep")
