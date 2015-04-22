@@ -218,7 +218,7 @@ public class IndexRecordsToSolrJobConfig {
 		pqpf.setSelectClause("SELECT oai_harvest_conf_id, record_id, hc.id_prefix || '.' || hr.record_id solr_id");
 		pqpf.setFromClause("FROM harvested_record hr JOIN oai_harvest_conf hc ON hr.oai_harvest_conf_id = hc.id");
 		if (from != null && to != null) {
-			pqpf.setWhereClause("WHERE orphaned BETWEEN :from AND :to");
+			pqpf.setWhereClause("WHERE hr.deleted BETWEEN :from AND :to");
 		} else {
 			pqpf.setWhereClause("WHERE hr.deleted IS NOT NULL");
 		}
