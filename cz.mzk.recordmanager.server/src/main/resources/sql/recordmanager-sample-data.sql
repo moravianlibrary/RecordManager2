@@ -6,6 +6,7 @@ INSERT INTO library (id, name, url, catalog_url, city) VALUES (102, 'MKP', 'www.
 INSERT INTO library (id, name, url, catalog_url, city) VALUES (103, 'KJM', 'kjm.cz', 'http://katalog.kjm.cz:8080/Carmen/', 'Brno');
 INSERT INTO library (id, name, url, catalog_url, city) VALUES (104, 'NKP', 'nkp.cz', 'aleph.nkp.cz', 'Praha');
 INSERT INTO library (id, name, url, catalog_url, city) VALUES (105, 'VPK', 'vpk.cz', 'vpk.cz', 'Praha');
+INSERT INTO library (id, name, url, catalog_url, city) VALUES (106, 'TRE', 'katalogknih.cz', 'vufind.katalogknih.c', 'Česká Třebová');
 
 INSERT INTO format(format, description) VALUES('marc21-xml', 'MARC21 XML');
 INSERT INTO format(format, description) VALUES('xml-marc', 'MARC21 XML');
@@ -16,4 +17,5 @@ INSERT INTO oai_harvest_conf (id, library_id, url, set_spec, granularity, metada
 INSERT INTO oai_harvest_conf (id, library_id, url, set_spec, granularity, metadata_prefix, contact_person_id) VALUES (303, 103, 'http://katalog.kjm.cz/l.dll', NULL, 'DAY', 'marc21', 200);
 INSERT INTO oai_harvest_conf (id, library_id, url, set_spec, granularity, metadata_prefix, contact_person_id) VALUES (304, 104, 'http://aleph.nkp.cz/OAI', 'NKC', 'SECOND', 'marc21', 200);
 INSERT INTO oai_harvest_conf (id, library_id, url, set_spec, granularity, metadata_prefix, contact_person_id) VALUES (305, 105, 'http://sc.vpk.cz/cgi-bin/oai2', NULL, NULL, 'marc21', 200);
+INSERT INTO oai_harvest_conf (id, library_id, url, set_spec, granularity, metadata_prefix, contact_person_id) VALUES (306, 106, NULL, NULL, NULL, 'marc21', 200);
 INSERT INTO oai_harvest_conf (id, library_id, url, set_spec, metadata_prefix, contact_person_id) VALUES (400, 100, 'http://aleph.nkp.cz/OAI', 'AUT', 'marc21', 200);
