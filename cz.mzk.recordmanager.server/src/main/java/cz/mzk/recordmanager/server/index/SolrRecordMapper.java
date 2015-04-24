@@ -11,4 +11,6 @@ public interface SolrRecordMapper {
 	
 	public SolrInputDocument map(DedupRecord record, List<HarvestedRecord> records);
 
+	public SolrInputDocument map(HarvestedRecord record);
+
 }

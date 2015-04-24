@@ -16,7 +16,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-
 import com.google.common.base.Preconditions;
 
 
@@ -86,6 +85,12 @@ public class HarvestedRecord {
 			HarvestedRecordId other = (HarvestedRecordId) obj;
 			return Objects.equals(this.getHarvestedFromId(), other.getHarvestedFromId())
 					&& Objects.equals(this.getRecordId(), other.getRecordId());
+		}
+
+		@Override
+		public String toString() {
+			return String.format("%s[harvestedFromId=%s, recordId=%s]",
+					getClass().getSimpleName(), harvestedFromId, recordId);
 		}
 
 	}

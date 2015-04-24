@@ -32,4 +32,10 @@ public class DelegatingSolrRecordMapper implements SolrRecordMapper {
 		return result;
 	}
 
+	@Override
+	public SolrInputDocument map(HarvestedRecord record) {
+		SolrInputDocument result = solrRecordMapper.map(record);
+		return result;
+	}
+
 }

@@ -10,7 +10,7 @@ import org.springframework.batch.core.StepExecutionListener;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class OrphanedRecordsWriter implements ItemWriter<Long>, StepExecutionListener {
+public class OrphanedRecordsWriter implements ItemWriter<String>, StepExecutionListener {
 	
 	@Autowired
 	private SolrServerFactory factory;
@@ -24,10 +24,10 @@ public class OrphanedRecordsWriter implements ItemWriter<Long>, StepExecutionLis
 	}
 
 	@Override
-	public void write(List<? extends Long> items) throws Exception {
+	public void write(List<? extends String> items) throws Exception {
 		List<String> ids = new ArrayList<String>(items.size());
-		for (Long id : items) {
-			ids.add(Long.toString(id));
+		for (String id : items) {
+			ids.add(id);
 		}
 		server.deleteById(ids);
 	}
