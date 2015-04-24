@@ -27,6 +27,8 @@ public class OAIHarvestJobConfig {
 	
 	private static final Long LONG_OVERRIDEN_BY_EXPRESSION = null;
 	
+	private static final String STRING_OVERRIDEN_BY_EXPRESSION = null;
+	
 	@Autowired
     private JobBuilderFactory jobs;
 
@@ -77,7 +79,7 @@ public class OAIHarvestJobConfig {
     public Step step() {
         return steps.get("step1") //
             .<List<OAIRecord>, List<OAIRecord>> chunk(1) //
-            .reader(reader(LONG_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION)) //
+            .reader(reader(LONG_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION, STRING_OVERRIDEN_BY_EXPRESSION)) //
             .writer(writer()) //
             .build();
     }
@@ -95,7 +97,7 @@ public class OAIHarvestJobConfig {
     public Step slaveStep() {
         return steps.get("step1") //
             .<List<OAIRecord>, List<OAIRecord>> chunk(1) //
-            .reader(reader(LONG_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION)) //
+            .reader(reader(LONG_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION, STRING_OVERRIDEN_BY_EXPRESSION)) //
             .writer(writer()) //
             .build();
     }
@@ -113,7 +115,7 @@ public class OAIHarvestJobConfig {
     public Step authorityStep() {
         return steps.get("step2") //
             .<List<OAIRecord>, List<OAIRecord>> chunk(1) //
-            .reader(reader(LONG_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION)) //
+            .reader(reader(LONG_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION, STRING_OVERRIDEN_BY_EXPRESSION)) //
             .writer(authWriter()) //
             .build();
     }
@@ -132,8 +134,10 @@ public class OAIHarvestJobConfig {
     		@Value("#{stepExecutionContext[" + Constants.JOB_PARAM_FROM_DATE + "] "
     				+ "?:jobParameters[ " + Constants.JOB_PARAM_FROM_DATE +"]}") Date from,
     		@Value("#{stepExecutionContext[" + Constants.JOB_PARAM_UNTIL_DATE+"]"
-    				+ "?:jobParameters[" + Constants.JOB_PARAM_UNTIL_DATE +"]}") Date to) {
-    	return new OAIItemReader(configId, from, to);
+    				+ "?:jobParameters[" + Constants.JOB_PARAM_UNTIL_DATE +"]}") Date to,
+    		@Value("#{stepExecutionContext[" + Constants.JOB_PARAM_RESUMPTION_TOKEN+"]"
+    	    		+ "?:jobParameters[" + Constants.JOB_PARAM_RESUMPTION_TOKEN +"]}") String resumptionToken) {
+    	return new OAIItemReader(configId, from, to, resumptionToken);
     }
     
     @Bean(name="oaiHarvestJob:writer")

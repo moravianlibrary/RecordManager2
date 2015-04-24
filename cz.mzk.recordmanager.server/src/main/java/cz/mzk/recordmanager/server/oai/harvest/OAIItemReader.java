@@ -58,11 +58,12 @@ public class OAIItemReader implements ItemReader<List<OAIRecord>>, ItemStream,
 
 	private boolean finished = false;
 
-	public OAIItemReader(Long confId, Date fromDate, Date untilDate) {
+	public OAIItemReader(Long confId, Date fromDate, Date untilDate, String resumptionToken) {
 		super();
 		this.confId = confId;
 		this.fromDate = fromDate;
 		this.untilDate = untilDate;
+		this.resumptionToken = resumptionToken;
 	}
 
 	@Override
