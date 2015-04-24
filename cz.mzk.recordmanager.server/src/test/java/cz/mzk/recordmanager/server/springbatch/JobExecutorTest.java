@@ -24,7 +24,7 @@ public class JobExecutorTest extends AbstractTest {
 	@Test
 	public void getParametersOfJob() {
 		Collection<JobParameterDeclaration> params = jobExecutor.getParametersOfJob("oaiHarvestJob");
-		Assert.assertEquals(params.size(), 3);
+		Assert.assertEquals(params.size(), 4);
 	}
 
 }

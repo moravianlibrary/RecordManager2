@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -18,6 +19,8 @@ import org.springframework.jdbc.core.RowMapper;
 import cz.mzk.recordmanager.server.jdbc.LongValueRowMapper;
 import cz.mzk.recordmanager.server.model.DedupRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
+import cz.mzk.recordmanager.server.oai.dao.DedupRecordDAO;
+import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordDAO;
 
 public class DedupRecordsWriter implements ItemWriter<HarvestedRecord>  {
 	
@@ -25,6 +28,12 @@ public class DedupRecordsWriter implements ItemWriter<HarvestedRecord>  {
 	
 	@Autowired
 	private HarvestedRecordDedupMatcher recordMatcher;
+	
+	@Autowired
+	private HarvestedRecordDAO harvestedRecordDao;
+	
+	@Autowired 
+	private DedupRecordDAO dedupRecordDao;
 	
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
@@ -71,7 +80,17 @@ public class DedupRecordsWriter implements ItemWriter<HarvestedRecord>  {
 	public void write(List<? extends HarvestedRecord> records) throws Exception {
 		for (HarvestedRecord record : records) {
 			logger.debug("About to process record: {}", record);
-			processRecord(record);			
+//			processRecord(record);
+			// TEMPORARY WORKARROUND 
+			if (record.getDedupRecord() == null) {
+				DedupRecord dr = new DedupRecord();
+				dr.setUpdated(new Date());
+				dr = dedupRecordDao.persist(dr);
+				
+				HarvestedRecord oldRecord = harvestedRecordDao.get(record.getId());
+				oldRecord.setDedupRecord(dr);
+				harvestedRecordDao.persist(oldRecord);
+			}
 		}
 	}
 	
@@ -79,39 +98,39 @@ public class DedupRecordsWriter implements ItemWriter<HarvestedRecord>  {
 	 * process each record passed to writer;
 	 * @param record
 	 */
-	protected void processRecord(HarvestedRecord record) {
-		DedupRecord result = null;
-		
-		// search for possible HarvestedRecord candidates
-		List<HarvestedRecord> candidateRecords = jdbcTemplate.query(
-			FIND_CANDIDATES_QUERY,
-			new Object[] { record.getId(), record.getIsbn(), record.getTitle() + "%" },
-			HarvestedRecordLimitedRowMapper.INSTANCE
-			);
-		
-		List<HarvestedRecord> hrToBeUpdated = new ArrayList<HarvestedRecord>();
-
-		for (HarvestedRecord candidate: candidateRecords) {
-			if (recordMatcher.matchRecords(record, candidate)) {
-				List <DedupRecord> list = jdbcTemplate.query(
-						FIND_EXISTING_DEDUP_RECORD_QUERY, 
-						new Object[] { candidate.getId() }, 
-						DedupRecordRowMapper.INSTANCE
-						);
-				if (list.isEmpty()) {
-					hrToBeUpdated.add(candidate);
-				} else {
-					result = list.get(0);
-				}
-				locateCount++;
-				break;
-			}
-		}
-		hrToBeUpdated.add(record);
-		updateLinks(hrToBeUpdated, result);
-		totalCount++;
-		logProgress();
-	}
+//	protected void processRecord(HarvestedRecord record) {
+//		DedupRecord result = null;
+//		
+//		// search for possible HarvestedRecord candidates
+//		List<HarvestedRecord> candidateRecords = jdbcTemplate.query(
+//			FIND_CANDIDATES_QUERY,
+//			new Object[] { record.getId(), record.getIsbn(), record.getTitle() + "%" },
+//			HarvestedRecordLimitedRowMapper.INSTANCE
+//			);
+//		
+//		List<HarvestedRecord> hrToBeUpdated = new ArrayList<HarvestedRecord>();
+//
+//		for (HarvestedRecord candidate: candidateRecords) {
+//			if (recordMatcher.matchRecords(record, candidate)) {
+//				List <DedupRecord> list = jdbcTemplate.query(
+//						FIND_EXISTING_DEDUP_RECORD_QUERY, 
+//						new Object[] { candidate.getId() }, 
+//						DedupRecordRowMapper.INSTANCE
+//						);
+//				if (list.isEmpty()) {
+//					hrToBeUpdated.add(candidate);
+//				} else {
+//					result = list.get(0);
+//				}
+//				locateCount++;
+//				break;
+//			}
+//		}
+//		hrToBeUpdated.add(record);
+//		updateLinks(hrToBeUpdated, result);
+//		totalCount++;
+//		logProgress();
+//	}
 	
 	/**
 	 * create record_link for each pair of {@link DedupRecord} and {@link HarvestedRecord} in database.
