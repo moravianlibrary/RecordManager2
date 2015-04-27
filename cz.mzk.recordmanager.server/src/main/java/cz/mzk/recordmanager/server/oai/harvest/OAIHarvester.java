@@ -10,6 +10,7 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,10 +18,9 @@ import com.google.common.base.Preconditions;
 
 import cz.mzk.recordmanager.server.oai.model.OAIGetRecord;
 import cz.mzk.recordmanager.server.oai.model.OAIIdentify;
-import cz.mzk.recordmanager.server.oai.model.OAIIdentifyRequest;
 import cz.mzk.recordmanager.server.oai.model.OAIListIdentifiers;
+import cz.mzk.recordmanager.server.oai.model.OAIListRecords;
 import cz.mzk.recordmanager.server.oai.model.OAIRoot;
-import cz.mzk.recordmanager.server.oai.model.OAIRecord;
 import cz.mzk.recordmanager.server.util.HttpClient;
 import cz.mzk.recordmanager.server.util.UrlUtils;
 
@@ -55,68 +55,124 @@ public class OAIHarvester {
 		}
 	}
 
-	public OAIRoot listRecords(String resumptionToken) {
+	/**
+	 * send ListRecords request
+	 * @param resumptionToken
+	 * @return {@link OAIListRecords}
+	 */
+	public OAIListRecords listRecords(String resumptionToken) {
 		String url = createUrl(resumptionToken, OAI_VERB_LIST_RECORDS, null);
-		logger.info("About to harvest url: {}", url);
+		OAIRoot rootElement = sendOaiRequest(url, "About to harvest url: {}", "Finished harvesting of url: {}");
+		return rootElement.getListRecords();
+	}
+	
+	/**
+	 * send ListIdentifiers request
+	 * @param resumptionToken
+	 * @return {@link OAIListIdentifiers}
+	 */
+	public OAIListIdentifiers listIdentifiers(String resumptionToken) {
+		String url = createUrl(resumptionToken, OAI_VERB_LIST_IDENTIFIERS, null);
+		OAIRoot rootElement = sendOaiRequest(url, "", "Finished listing identifiers from url: {}");
+		return rootElement.getListIdentifiers();
+	}
+	
+	/**
+	 * send GetRecordRequest
+	 * @param identifier
+	 * @return {@link OAIGetRecord}
+	 */
+	public OAIGetRecord getRecord(String identifier) {
+		String url = createUrl(null, OAI_VERB_GET_RECORD, identifier);
+		OAIRoot rootElement = sendOaiRequest(url, "",  "Finished getting of record from url: {}");
+		return rootElement.getGetRecord();
+	}
+	
+	/**
+	 * send Identify request
+	 * @return {@link OAIIdentify}
+	 */
+	public OAIIdentify identify() {
+		String url = createIdentifyURL();
+		OAIRoot rootElement = sendOaiRequest(url, "About send Identify request for url: {}", "Finished Identify request for url: {}");
+		return rootElement.getIdentify();
+	}
+	
+	
+	/**
+	 * Send OAI request and unmarshall response.
+	 * If request failes, content of document is logged and 
+	 * request is performed once again
+	 * @param url
+	 * @param preLogMessage message used for logging purposes, URL is injected via {} notation
+	 * @param postLogMessage message used for logging purposes, URL is injected via {} notation
+	 * @return {@link OAIRoot}
+	 */
+	protected OAIRoot sendOaiRequest(String url, String preLogMessage, String postLogMessage) {
+		OAIRoot rootElement;
+		try {
+			rootElement = sendOaiRequestThrowing(url, preLogMessage, postLogMessage);
+			return rootElement;
+		} catch (OaiErrorException e) {
+			logger.warn(e.getMessage());
+		}
+		logger.info("OAI request failed, trying once again");
+		try {
+			rootElement = sendOaiRequestThrowing(url, preLogMessage, postLogMessage);
+			return rootElement;
+		} catch (OaiErrorException oex) {
+			throw new RuntimeException(oex);
+		}
+	}
+
+	/**
+	 * Send OAI request and unmarshall response 
+	 * @param url
+	 * @param preLogMessage message used for logging purposes, URL is injected via {} notation
+	 * @param postLogMessage message used for logging purposes, URL is injected via {} notation
+	 * @return {@link OAIRoot}
+	 * @throws OaiErrorException 
+	 */
+	protected OAIRoot sendOaiRequestThrowing(String url, String preLogMessage, String postLogMessage) throws OaiErrorException {
+		if (!preLogMessage.isEmpty()) {
+			logger.info(preLogMessage, url);
+		}
+		String rawMessage = "";
 		try (InputStream is = httpClient.executeGet(url)) {
-			OAIRoot oaiRoot = (OAIRoot) unmarshaller
-					.unmarshal(is);
-			logger.info("Finished harvesting of url: {}", url);
+			if (is.markSupported()) {
+				is.mark(Integer.MAX_VALUE);
+				rawMessage = IOUtils.toString(is);
+				is.reset();
+			}
+			OAIRoot oaiRoot = (OAIRoot) unmarshaller.unmarshal(is);
+			if (!postLogMessage.isEmpty()) {
+				logger.info(postLogMessage, url);
+			}
+			if (oaiRoot.getOaiError() != null) {
+				throw new OaiErrorException(oaiRoot.getOaiError());
+			}
 			return oaiRoot;
 		} catch (IOException ioe) {
 			throw new RuntimeException(ioe);
 		} catch (JAXBException je) {
-			throw new RuntimeException(je);
+			StringBuilder exceptionStr = new StringBuilder();
+			exceptionStr.append("Problem with harvested document");
+			if (!rawMessage.isEmpty()) {
+				exceptionStr.append(rawMessage);
+			}
+			OaiErrorException oex = new OaiErrorException(exceptionStr.toString(), je);
+			throw oex;
 		}
 	}
 	
-	public OAIListIdentifiers listIdentifiers(String resumptionToken) {
-		String url = createUrl(resumptionToken, OAI_VERB_LIST_IDENTIFIERS, null);
-		logger.info("About list identifiers from url: {}", url);
-		try (InputStream is = httpClient.executeGet(url)) {
-			OAIRoot oaiRoot = (OAIRoot) unmarshaller.unmarshal(is);
-			logger.info("Finished listing identifiers from url: {}", url);
-			return oaiRoot.getListIdentifiers();
-		} catch (IOException ioe) {
-			throw new RuntimeException(ioe);
-		} catch (JAXBException je) {
-			throw new RuntimeException(je);
-		}
-	}
-	
-	public OAIGetRecord getRecord(String identifier) {
-		String url = createUrl(null, OAI_VERB_GET_RECORD, identifier);
-		logger.info("About getRecord from url: {}", url);
-		try (InputStream is = httpClient.executeGet(url)) {
-			OAIRoot oaiRoot = (OAIRoot) unmarshaller
-					.unmarshal(is);
-			logger.info("Finished getting of record from url: {}", url);
-			return oaiRoot.getGetRecord();
-		} catch (IOException ioe) {
-			throw new RuntimeException(ioe);
-		} catch (JAXBException je) {
-			throw new RuntimeException(je);
-		}
-	}
-	
-	public OAIIdentify identify() {
-		String url = createIdentifyURL();
-		logger.info("About send Identify request for url: {}", url);
-		try (InputStream is = httpClient.executeGet(url)) {
-			JAXBContext jaxbContext = JAXBContext.newInstance(OAIIdentifyRequest.class);
-			Unmarshaller identifyUnmarshaller = jaxbContext.createUnmarshaller();
-			OAIIdentifyRequest identifyReq = (OAIIdentifyRequest) identifyUnmarshaller
-					.unmarshal(is);
-			logger.info("Finished Identify request for url: {}", url);
-			return identifyReq != null ? identifyReq.getIdentify() : null;
-		} catch (IOException ioe) {
-			throw new RuntimeException(ioe);
-		} catch (JAXBException je) {
-			throw new RuntimeException(je);
-		}
-	}
-
-	private String createUrl(String resumptionToken, String verb, String recordIdentifier) {
+	/**
+	 * Create URL for OAI request from given arguments and stored parmeters
+	 * @param resumptionToken
+	 * @param verb
+	 * @param recordIdentifier
+	 * @return
+	 */
+	protected String createUrl(String resumptionToken, String verb, String recordIdentifier) {
 		Map<String, String> params = new LinkedHashMap<String, String>();
 		params.put("verb", verb);
 		if (resumptionToken == null) {
@@ -139,7 +195,11 @@ public class OAIHarvester {
 		return UrlUtils.buildUrl(parameters.getUrl(), params);
 	}
 	
-	private String createIdentifyURL() {
+	/**
+	 * create URL for Identify request
+	 * @return url
+	 */
+	protected String createIdentifyURL() {
 		Map<String, String> params = new HashMap<String, String>();
 		params.put("verb", OAI_VERB_IDENTIFY);
 		return UrlUtils.buildUrl(parameters.getUrl(), params);

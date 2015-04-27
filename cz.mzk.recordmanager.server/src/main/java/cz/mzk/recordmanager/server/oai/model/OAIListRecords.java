@@ -8,7 +8,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-public class OAIRecords {
+public class OAIListRecords {
 
 	@XmlElement(name="record")
 	private List<OAIRecord> records = new ArrayList<OAIRecord>();
