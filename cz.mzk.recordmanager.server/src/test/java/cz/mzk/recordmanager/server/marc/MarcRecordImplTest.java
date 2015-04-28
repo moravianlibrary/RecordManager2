@@ -348,9 +348,9 @@ public class MarcRecordImplTest extends AbstractTest {
 		hrf.clear();
 		
 		// Audio
-		data.add("000 000000i");
-		data.add("300 $fanalog$advd");
-		hrf.add(HarvestedRecordFormat.AUDIO_DVD);
+		data.add("000 00000000");
+		data.add("300 $fanaloaSg$amagnetofonová kazeta");
+		hrf.add(HarvestedRecordFormat.AUDIO_CASSETTE);
 		mri = MarcRecordFactory.recordFactory(data);
 		metadataRecord = metadataFactory.getMetadataRecord(mri);		
 		Assert.assertEquals(metadataRecord.getDetectedFormatList().toString(), hrf.toString());
