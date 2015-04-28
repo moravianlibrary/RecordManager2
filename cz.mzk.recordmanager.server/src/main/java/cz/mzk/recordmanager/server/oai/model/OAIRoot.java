@@ -1,8 +1,5 @@
 package cz.mzk.recordmanager.server.oai.model;
 
-import java.util.Collections;
-import java.util.List;
-
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -16,7 +13,7 @@ public class OAIRoot {
 	private OAIRequest request;
 	
 	@XmlElement(name = "ListRecords")	
-	private OAIRecords records;
+	private OAIListRecords listRecords;
 	
 	@XmlElement(name = "ListIdentifiers")	
 	private OAIListIdentifiers listIdentifiers;
@@ -24,6 +21,20 @@ public class OAIRoot {
 	@XmlElement(name = "GetRecord")	
 	private OAIGetRecord getRecord;
 	
+	@XmlElement(name = "Identify")	
+	private OAIIdentify identify;
+	
+	@XmlElement(name="error")
+	private String oaiError;
+	
+	public OAIIdentify getIdentify() {
+		return identify;
+	}
+
+	public void setIdentify(OAIIdentify identify) {
+		this.identify = identify;
+	}
+
 	public OAIRequest getRequest() {
 		return request;
 	}
@@ -32,8 +43,8 @@ public class OAIRoot {
 		this.request = request;
 	}
 
-	public void setRecords(OAIRecords records) {
-		this.records = records;
+	public void setRecords(OAIListRecords records) {
+		this.listRecords = records;
 	}
 	
 	public OAIListIdentifiers getListIdentifiers() {
@@ -44,12 +55,16 @@ public class OAIRoot {
 		return getRecord;
 	}
 	
-	public List<OAIRecord> getRecords() {
-		return (records != null) ? records.getRecords() : Collections.<OAIRecord>emptyList();
+	public OAIListRecords getListRecords() {
+		return listRecords;
 	}
-	
-	public String getNextResumptionToken() {
-		return (records != null) ? records.getNextResumptionToken() : null;
+
+	public String getOaiError() {
+		return oaiError;
+	}
+
+	public void setOaiError(String oaiError) {
+		this.oaiError = oaiError;
 	}
 
 	public String toString() {
