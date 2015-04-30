@@ -17,7 +17,7 @@ author_additional = getFields "505r"
 
 title = getFirstField "245abnp"
 title_sub = getFirstField "245b"
-title_full = getFields "245abdefghijklmnopqrstuvwxyz0123456789"
+title_full = getFirstField "245abdefghijklmnopqrstuvwxyz0123456789"
 title_auth = getFirstField "245ab"
 title_alt = getFields "130adfgklnpst:240a:246a:730adfgklnpst:740a"
 title_old = getFields "780ast"

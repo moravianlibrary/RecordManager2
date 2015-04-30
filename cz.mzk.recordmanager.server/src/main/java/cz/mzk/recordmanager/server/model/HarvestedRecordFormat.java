@@ -22,6 +22,7 @@ public enum HarvestedRecordFormat {
 	VIDEO_BLURAY,
 	VIDEO_VHS,
 	VIDEO_DVD,
+	VIDEO_CD,
 	VIDEO_OTHER,
 	KIT,
 	OBJECT,

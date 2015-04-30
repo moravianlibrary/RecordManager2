@@ -428,7 +428,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 		
 		if(ldr06.matches("(?i)[ef]")) return true;
 		if(f006_00.matches("(?i)[ef]")) return true;
-		if(f245h.matches("(?i)kartografický\\sdokument")) return true;
+		if(f245h.matches("(?i).*kartografický\\sdokument.*")) return true;
 		if(f007_00.matches("(?i)a")) return true;
 		if(f336b.matches("(?i)cr.*")) return true;
 		
@@ -448,7 +448,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 		if(f336b == null) f336b = "";
 
 		if(ldr06.matches("(?i)[cd]"))return true;
-		if(f006_00.matches("(?i)[cd]") && f245h.equalsIgnoreCase("hudebnina")){
+		if(f006_00.matches("(?i)[cd]") && f245h.matches("(?i).*hudebnina.*")){
 			return true;
 		}
 		if(f336b.equalsIgnoreCase("tcm")) return true;
@@ -482,7 +482,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 		
 		if(ldr06.matches("(?i)[kg]")) return true;		
 		if(f007_00.matches("(?i)[kg]")) return true;
-		if(f245h.equalsIgnoreCase("grafika")) return true;
+		if(f245h.matches("(?i).*grafika.*")) return true;
 		if(f006_00.matches("(?i)[kg]")) return true;
 		if(f336b.matches("(?i)sti|tci|cri|crt")) return true;
 		if(f337b.matches("(?i)g")) return true;
@@ -502,7 +502,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 				
 		if(ldr06.matches("(?i)[tdf]")) return true;
 		if(f006_00.matches("(?i)[tdf]")) return true;
-		if(f245h.equalsIgnoreCase("rukopis")) return true;
+		if(f245h.matches("(?i).*rukopis.*")) return true;
 		
 		return false;
 	}
@@ -529,7 +529,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 		if(ldr06.matches("(?i)[acdpt]") && f008_23.matches("(?i)[abc]")) return true;
 		if(ldr06.matches("(?i)[efk]") && f008_29.matches("(?i)b")) return true;
 		if(f007_00.matches("(?i)h")) return true;
-		if(f245h.equalsIgnoreCase("MIKRODOKUMENT")) return true;
+		if(f245h.matches("(?i).*mikrodokument.*")) return true;
 		if(f337b.matches("(?i)h")) return true;
 		if(f338b.matches("(?i)h.*")) return true;
 		
@@ -600,7 +600,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 		if(ldr06.matches("(?i)[acdpt]") && f006_06.matches("(?i)f")){
 			return true;
 		}
-		if(f007_00.matches("(?i)f") && f007_01.matches("(?i)b") && f245h.matches("(?i)hmatové\\spísmo")){
+		if(f007_00.matches("(?i)f") && f007_01.matches("(?i)b") && f245h.matches("(?i).*hmatové\\spísmo.*")){
 			return true;
 		}
 		if(ldr06.matches("(?i)[efk]")&& f008_29.matches("(?i)f")){
@@ -635,13 +635,16 @@ public class MetadataMarcRecord implements MetadataRecord {
 	    String f245h = underlayingMarc.getField("245", 'h');		
 		if(f245h == null) f245h = "";
 		
+		String f300a = underlayingMarc.getField("300", 'a');
+		if(f300a == null) f300a = "";
+		
 		String f336b = underlayingMarc.getField("336", 'b');
 		if(f336b == null) f336b = "";
 		
 		String f338b = underlayingMarc.getField("338", 'b');
 		if(f338b == null) f338b = "";
 		
-		if(f245h.matches("(?i)elektronický\\szdroj")){
+		if(f245h.matches("(?i).*elektronický\\szdroj.*")){
 			return true;
 		}
 		if(ldr06.matches("(?i)[acdijpt]") && f008_23.matches("(?i)[soq]")){
@@ -660,7 +663,9 @@ public class MetadataMarcRecord implements MetadataRecord {
 		if(ldr06.matches("(?i)m") && f006_00.matches("(?i)m")){
 			return true;
 		}
+		if(ldr06.matches("(?i)m") && f245h.matches("(?i).*multim[eé]dium.*") && f300a.matches("(?i).*cd-rom.*")) return true;
 		if(f007_00.matches("(?i)c")) return true;
+		if(f300a.matches("(?i).*disketa.*")) return true;
 		if(f336b.matches("(?i)cod|cop")) return true;
 		if(f338b.matches("(?i)cr|ck|cb|cd|ce|ca|cf|ch|cz")) return true;
 		
@@ -681,8 +686,8 @@ public class MetadataMarcRecord implements MetadataRecord {
 		String f245h = underlayingMarc.getField("245", 'h');		
 		if(f245h == null) f245h = "";
 		
-		List<DataField> f300 = underlayingMarc.getDataFields("300");
-		List<DataField> f500 = underlayingMarc.getDataFields("500");
+		String f300 = underlayingMarc.getDataFields("300").toString();
+		String f500 = underlayingMarc.getDataFields("500").toString();
 		
 		String f300a = underlayingMarc.getField("300", 'a');
 		if(f300a == null) f300a = "";
@@ -697,54 +702,35 @@ public class MetadataMarcRecord implements MetadataRecord {
 		if(f338b == null) f338b = "";
 				
 		// AUDIO_CD
-		// zvukov(aáeé|ych|ých)\sdes(ka|ky|ek) AND (digital  or 12 cm)
-		boolean b1 = false, b2 = false;
-		for(DataField df: f300){
-			for (Subfield sf: df.getSubfields()){
-				if(sf.getData().matches("(?i)kompaktn[ií]\\sdisk")) return HarvestedRecordFormat.AUDIO_CD;
-				if(sf.getData().matches("(?i)zvukov[eéaá]\\sCD")) return HarvestedRecordFormat.AUDIO_CD;
-				if(sf.getData().matches("(?i)zvukov([aáeé]|ych|ých)\\sdes(ka|ky|ek)")) b1 = true;
-				if(sf.getData().matches("(?i)(digital|12\\scm)")) b2 = true;
-			}
+		if(f300.matches("(?i).*kompaktn[ií]\\sdisk.*")) return HarvestedRecordFormat.AUDIO_CD;
+		if(f500.matches("(?i).*kompaktn[ií]\\sdisk.*")) return HarvestedRecordFormat.AUDIO_CD;
+		if(f300.matches("(?i).*zvukov[eéaá]\\sCD.*")) return HarvestedRecordFormat.AUDIO_CD;
+		if(f300a.matches("(?i).*cd.*")) {
+			if(!f300a.matches("(?i)cd-rom")) return HarvestedRecordFormat.AUDIO_CD;
 		}
-		if(b1 && b2) return HarvestedRecordFormat.AUDIO_CD;
-		
-		for(DataField df: f500){
-			for (Subfield sf: df.getSubfields()){
-				if(sf.getData().matches("(?i)kompaktn[ií]\\sdisk")) return HarvestedRecordFormat.AUDIO_CD;
-			}
-		}
-		
+		if(f300.matches("(?i).*zvukov([aáeé]|ych|ých)\\sdes(ka|ky|ek).*") && f300.matches("(?i).*(digital|12\\scm).*")) return HarvestedRecordFormat.AUDIO_CD;
+
 		// AUDIO_DVD
-		if(ldr06.matches("(?i)[ij]") && f300a.matches("(?i)dvd")) return HarvestedRecordFormat.AUDIO_DVD;
+		if(ldr06.matches("(?i)[ij]") && f300a.matches("(?i).*dvd.*")) return HarvestedRecordFormat.AUDIO_DVD;
 		
 		// AUDIO_LP
-		// zvukov(aáeé|ych|ých)\sdes(ka|ky|ek) AND (analog)
-		b1 = false; b2 = false;
-		for(DataField df: f300){
-			for (Subfield sf: df.getSubfields()){
-				if(sf.getData().matches("(?i)gramofonov([aáeé]|ych|ých)\\sdes(ka|ky|ek)")) return HarvestedRecordFormat.AUDIO_LP;				
-				if(sf.getData().matches("(?i)zvukov([aáeé]|ych|ých)\\sdes(ka|ky|ek)")) b1 = true;
-				if(sf.getData().matches("(?i)analog")) b2 = true;
-			}
-		}
-		if(b1 && b2) return HarvestedRecordFormat.AUDIO_LP;
+		if(f300.matches("(?i).*gramofonov([aáeé]|ych|ých)\\sdes(ka|ky|ek).*")) return HarvestedRecordFormat.AUDIO_LP;
+		if(f300.matches("(?i).*zvukov([aáeé]|ych|ých)\\sdes(ka|ky|ek).*") && f300.matches("(?i).*analog.*")) return HarvestedRecordFormat.AUDIO_LP;
+		if(f300a.matches("(?i).*lp.*")) return HarvestedRecordFormat.AUDIO_LP;
+		if(f300a.matches("(?i).*sp.*")) return HarvestedRecordFormat.AUDIO_LP;
 		
 		// AUDIO_CASSETTE
 		if(ldr06.matches("(?i)[ij]") && f007_00.matches("(?i)s")) return HarvestedRecordFormat.AUDIO_CASSETTE;
 		if(f007_00.matches("(?i)s") && f338b.matches("(?i)ss")) return HarvestedRecordFormat.AUDIO_CASSETTE;
 		if(f007_00.matches("(?i)s") && f007_01.matches("(?i)[zgeiqt]")) return HarvestedRecordFormat.AUDIO_CASSETTE;
-			
-		for(DataField df: f300){
-			for (Subfield sf: df.getSubfields()){
-				if(sf.getData().matches("(?i)zvukov(a|á|e|é|ych|ých)\\skaze(ta|ty|t)")) return HarvestedRecordFormat.AUDIO_CASSETTE;
-				if(sf.getData().matches("(?i).*(mc|kz|mgk).*")) return HarvestedRecordFormat.AUDIO_CASSETTE;
-			}
-		}
+		if(f300.matches("(?i).*zvukov(a|á|e|é|ych|ých)\\skaze(ta|ty|t).*")) return HarvestedRecordFormat.AUDIO_CASSETTE;
+		if(f300.matches("(?i).*(mc|kz|mgk).*")) return HarvestedRecordFormat.AUDIO_CASSETTE;
+		if(f300.matches("(?i).*magnetofonov(a|á|e|é|ych|ých)\\skaze(ta|ty|t).*")) return HarvestedRecordFormat.AUDIO_CASSETTE;
 		
+		// AUDIO_OTHER
 		if(ldr06.matches("(?i)[ij]")) return HarvestedRecordFormat.AUDIO_OTHER;
 		if(f007_00.matches("(?i)s")) return HarvestedRecordFormat.AUDIO_OTHER;
-		if(f245h.matches("(?i)zvukový\\száznam")) return HarvestedRecordFormat.AUDIO_OTHER;
+		if(f245h.matches("(?i).*zvukový\\száznam.*")) return HarvestedRecordFormat.AUDIO_OTHER;
 		if(f337b.matches("(?i)s")) return HarvestedRecordFormat.AUDIO_OTHER;
 		if(f006_00.matches("(?i)[ij]")) return HarvestedRecordFormat.AUDIO_OTHER;
 		if(f338b.matches("(?i)s.*")) return HarvestedRecordFormat.AUDIO_OTHER;
@@ -771,7 +757,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 	    String f245h = underlayingMarc.getField("245", 'h');		
 		if(f245h == null) f245h = "";
 		
-		List<DataField> f300 = underlayingMarc.getDataFields("300");
+		String f300 = underlayingMarc.getDataFields("300").toString();
 		
 		String f300a = underlayingMarc.getField("300", 'a');
 		if(f300a == null) f300a = "";
@@ -786,30 +772,24 @@ public class MetadataMarcRecord implements MetadataRecord {
 		if(f338b == null) f338b = "";
 		
 		// Bluray
-		if(ldr06.matches("(?i)g")){
-			for(DataField df: f300){
-				for (Subfield sf: df.getSubfields()){
-					if(sf.getData().matches("(?i)blu.*ray")) return HarvestedRecordFormat.VIDEO_BLURAY;
-				}
-			}
-		}
+		if(ldr06.matches("(?i)g") && f300.matches("(?i).*blu.*ray.*")) return HarvestedRecordFormat.VIDEO_BLURAY;
 		
 		// VHS
-		for(DataField df: f300){
-			for (Subfield sf: df.getSubfields()){
-				if(sf.getData().matches("(?i)vhs")) return HarvestedRecordFormat.VIDEO_VHS;
-			}
-		}
+		if(f300.matches("(?i).*vhs.*")) return HarvestedRecordFormat.VIDEO_VHS;
 		if(f007_00.matches("(?i)v") && f007_04.matches("(?i)b")) return HarvestedRecordFormat.VIDEO_VHS;
+		if(f300a.matches("(?i).*videokazeta.*")) return HarvestedRecordFormat.VIDEO_VHS;
 		
 		// DVD
-		if(ldr06.matches("(?i)g") && f300a.matches("(?i)dvd")) return HarvestedRecordFormat.VIDEO_DVD;	
+		if(ldr06.matches("(?i)g") && f300a.matches("(?i).*dvd.*")) return HarvestedRecordFormat.VIDEO_DVD;
 		if(f007_00.matches("(?i)v") && f007_04.matches("(?i)v")) return HarvestedRecordFormat.VIDEO_DVD;
+		
+		// CD
+		if(ldr06.matches("(?i)g") && f300a.matches("(?i).*cd.*")) return HarvestedRecordFormat.VIDEO_CD;
 		
 		// others
 		if(ldr06.matches("(?i)g")) return HarvestedRecordFormat.VIDEO_OTHER;
-		
-		if(f245h.matches("(?i)videozáznam")) return HarvestedRecordFormat.VIDEO_OTHER;
+		if(f007_00.matches("(?i)[vm]")) return HarvestedRecordFormat.VIDEO_OTHER;
+		if(f245h.matches("(?i).*videozáznam.*")) return HarvestedRecordFormat.VIDEO_OTHER;
 		if(f337b.matches("(?i)v")) return HarvestedRecordFormat.VIDEO_OTHER;
 		if(ldr06.matches("(?i)g") && f008_33.matches("(?i)[mv]")) return HarvestedRecordFormat.VIDEO_OTHER;
 		if(f006_00.matches("(?i)g") && f006_16.matches("(?i)[mv]")) return HarvestedRecordFormat.VIDEO_OTHER;
