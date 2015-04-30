@@ -10,10 +10,10 @@ import cz.mzk.recordmanager.server.marc.MarcRecord;
 import cz.mzk.recordmanager.server.marc.MarcXmlParser;
 import cz.mzk.recordmanager.server.metadata.MetadataRecordFactory;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
-import cz.mzk.recordmanager.server.model.HarvestedRecord.HarvestedRecordId;
+import cz.mzk.recordmanager.server.model.HarvestedRecord.HarvestedRecordUniqueId;
 import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordDAO;
 
-public class ExportRecordsProcessor implements ItemProcessor<HarvestedRecordId, String> {
+public class ExportRecordsProcessor implements ItemProcessor<HarvestedRecordUniqueId, String> {
 
 	private IOFormat iOFormat;
 	
@@ -31,7 +31,7 @@ public class ExportRecordsProcessor implements ItemProcessor<HarvestedRecordId, 
 	}
 	
 	@Override
-	public String process(HarvestedRecordId recordId) throws Exception {
+	public String process(HarvestedRecordUniqueId recordId) throws Exception {
 		HarvestedRecord record = harvestedRecordDao.get(recordId);
 		if (record != null) {
 			InputStream is = new ByteArrayInputStream(record.getRawRecord());

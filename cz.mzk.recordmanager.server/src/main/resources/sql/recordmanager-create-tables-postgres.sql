@@ -58,8 +58,18 @@ CREATE TABLE harvested_record (
   physical_format      VARCHAR(255),
   dedup_record_id      DECIMAL(10),
   raw_record           BYTEA,
+  UNIQUE (oai_harvest_conf_id, record_id),
   FOREIGN KEY (oai_harvest_conf_id) REFERENCES oai_harvest_conf(id),
   FOREIGN KEY (format)              REFERENCES format(format)
+);
+
+CREATE TABLE isbn (
+  id                   DECIMAL(10) PRIMARY KEY,
+  harvested_record_id  DECIMAL(10),
+  isbn                 DECIMAL(13),
+  order_in_record      DECIMAL(4),
+  note                 VARCHAR(100),
+  FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id)
 );
 
 CREATE TABLE authority_record (

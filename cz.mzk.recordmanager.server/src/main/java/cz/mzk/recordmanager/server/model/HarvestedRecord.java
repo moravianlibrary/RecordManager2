@@ -1,32 +1,36 @@
 package cz.mzk.recordmanager.server.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+
 import com.google.common.base.Preconditions;
 
 
 @Entity
 @Table(name=HarvestedRecord.TABLE_NAME)
-public class HarvestedRecord {
+public class HarvestedRecord extends AbstractDomainObject {
 	
 	public static final String TABLE_NAME = "harvested_record";
 	
 	@Embeddable
-	public static class HarvestedRecordId implements Serializable {
+	public static class HarvestedRecordUniqueId implements Serializable {
 
 		private static final long serialVersionUID = 1L;
 		
@@ -37,10 +41,10 @@ public class HarvestedRecord {
 		private String recordId;
 
 		// for hibernate
-		private HarvestedRecordId() {
+		private HarvestedRecordUniqueId() {
 		}
 		
-		public HarvestedRecordId(OAIHarvestConfiguration harvestedFrom,
+		public HarvestedRecordUniqueId(OAIHarvestConfiguration harvestedFrom,
 				String recordId) {
 			super();
 			Preconditions.checkNotNull(harvestedFrom, "harvestedFrom");
@@ -49,7 +53,7 @@ public class HarvestedRecord {
 			this.recordId = recordId;
 		}
 		
-		public HarvestedRecordId(Long harvestedFromId,
+		public HarvestedRecordUniqueId(Long harvestedFromId,
 				String recordId) {
 			super();
 			Preconditions.checkNotNull(harvestedFromId, "harvestedFromId");
@@ -82,7 +86,7 @@ public class HarvestedRecord {
 			if (getClass() != obj.getClass()) {
 				return false;
 			}
-			HarvestedRecordId other = (HarvestedRecordId) obj;
+			HarvestedRecordUniqueId other = (HarvestedRecordUniqueId) obj;
 			return Objects.equals(this.getHarvestedFromId(), other.getHarvestedFromId())
 					&& Objects.equals(this.getRecordId(), other.getRecordId());
 		}
@@ -95,9 +99,8 @@ public class HarvestedRecord {
 
 	}
 	
-	@Id
 	@Embedded
-	private HarvestedRecordId id;
+	private HarvestedRecordUniqueId uniqueId;
 	
 	@ManyToOne(optional=false, fetch=FetchType.LAZY)
 	@JoinColumn(name="oai_harvest_conf_id", nullable=false, updatable=false, insertable=false)
@@ -121,6 +124,10 @@ public class HarvestedRecord {
 	@Column(name="isbn")
 	private String isbn;
 	
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name="harvested_record_id", referencedColumnName="id")
+	private List<Isbn> isbns = new ArrayList<Isbn>();
+
 	@Column(name="title")
 	private String title;
 	
@@ -141,17 +148,17 @@ public class HarvestedRecord {
 	private HarvestedRecord() {
 	}
 	
-	public HarvestedRecord(HarvestedRecordId id) {
+	public HarvestedRecord(HarvestedRecordUniqueId id) {
 		super();
-		this.id = id;
+		this.uniqueId = id;
 	}
 
-	public HarvestedRecordId getId() {
-		return id;
+	public HarvestedRecordUniqueId getUniqueId() {
+		return uniqueId;
 	}
 
-	public void setId(HarvestedRecordId id) {
-		this.id = id;
+	public void setId(HarvestedRecordUniqueId id) {
+		this.uniqueId = id;
 	}
 
 	public OAIHarvestConfiguration getHarvestedFrom() {
@@ -209,6 +216,14 @@ public class HarvestedRecord {
 	public void setTitle(String title) {
 		this.title = title;
 	}
+	
+	public List<Isbn> getIsbns() {
+		return isbns;
+	}
+
+	public void setIsbns(List<Isbn> isbns) {
+		this.isbns = isbns;
+	}
 
 	public Long getPublicationYear() {
 		return publicationYear;
@@ -244,7 +259,7 @@ public class HarvestedRecord {
 
 	@Override
 	public String toString() {
-		return String.format("HarvestedRecord[id=%s]", getId());
+		return String.format("HarvestedRecord[id=%s, uniqueId=%s]", getId(), getUniqueId());
 	}
 
 }

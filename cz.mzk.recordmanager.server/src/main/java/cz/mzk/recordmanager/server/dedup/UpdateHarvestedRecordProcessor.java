@@ -6,10 +6,10 @@ import org.springframework.batch.item.ItemProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
-import cz.mzk.recordmanager.server.model.HarvestedRecord.HarvestedRecordId;
+import cz.mzk.recordmanager.server.model.HarvestedRecord.HarvestedRecordUniqueId;
 import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordDAO;
 
-public class UpdateHarvestedRecordProcessor implements ItemProcessor<HarvestedRecordId, HarvestedRecord> {
+public class UpdateHarvestedRecordProcessor implements ItemProcessor<HarvestedRecordUniqueId, HarvestedRecord> {
 	
 	private static Logger logger = LoggerFactory.getLogger(UpdateHarvestedRecordProcessor.class);
 
@@ -20,7 +20,7 @@ public class UpdateHarvestedRecordProcessor implements ItemProcessor<HarvestedRe
 	protected DelegatingDedupKeysParser dedupKeysParser;
 
 	@Override
-	public HarvestedRecord process(HarvestedRecordId id) throws Exception {
+	public HarvestedRecord process(HarvestedRecordUniqueId id) throws Exception {
 		logger.debug("About to fetch harvested record with id={}", id);
 		HarvestedRecord record = harvestedRecordDao.get(id);
 		try {

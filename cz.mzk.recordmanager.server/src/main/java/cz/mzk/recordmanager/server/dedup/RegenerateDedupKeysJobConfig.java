@@ -20,7 +20,7 @@ import org.springframework.context.annotation.Configuration;
 import com.google.common.collect.ImmutableMap;
 
 import cz.mzk.recordmanager.server.export.HarvestedRecordIdRowMapper;
-import cz.mzk.recordmanager.server.model.HarvestedRecord.HarvestedRecordId;
+import cz.mzk.recordmanager.server.model.HarvestedRecord.HarvestedRecordUniqueId;
 import cz.mzk.recordmanager.server.springbatch.JobFailureListener;
 import cz.mzk.recordmanager.server.util.Constants;
 
@@ -48,7 +48,7 @@ public class RegenerateDedupKeysJobConfig {
     @Bean(name=Constants.JOB_ID_REGEN_DEDUP_KEYS +":regenarateDedupKeysStep")
 	public Step regenerateDedupKeysStep() throws Exception {
 		return steps.get("regenarateDedupKeysStep")
-				.<HarvestedRecordId, HarvestedRecordId> chunk(20)//
+				.<HarvestedRecordUniqueId, HarvestedRecordUniqueId> chunk(20)//
 				.reader(reader())//
 				.writer(writer()) //
 				.build();
@@ -56,8 +56,8 @@ public class RegenerateDedupKeysJobConfig {
     
     @Bean(name=Constants.JOB_ID_REGEN_DEDUP_KEYS +":regenarateDedupKeysReader")
 	@StepScope
-    public ItemReader<HarvestedRecordId> reader() throws Exception {
-		JdbcPagingItemReader<HarvestedRecordId> reader = new JdbcPagingItemReader<HarvestedRecordId>();
+    public ItemReader<HarvestedRecordUniqueId> reader() throws Exception {
+		JdbcPagingItemReader<HarvestedRecordUniqueId> reader = new JdbcPagingItemReader<HarvestedRecordUniqueId>();
 		SqlPagingQueryProviderFactoryBean pqpf = new SqlPagingQueryProviderFactoryBean();
 		pqpf.setDataSource(dataSource);
 		pqpf.setSelectClause("SELECT oai_harvest_conf_id, record_id");
@@ -73,7 +73,7 @@ public class RegenerateDedupKeysJobConfig {
     
     @Bean(name=Constants.JOB_ID_REGEN_DEDUP_KEYS +":regenarateDedupKeysWriter")
 	@StepScope
-	public ItemWriter<HarvestedRecordId> writer() throws Exception {
+	public ItemWriter<HarvestedRecordUniqueId> writer() throws Exception {
 		return new RegenerateDedupKeysWriter();
 	}
 }

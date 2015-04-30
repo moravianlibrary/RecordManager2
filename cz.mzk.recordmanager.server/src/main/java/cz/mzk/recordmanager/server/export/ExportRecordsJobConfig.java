@@ -25,7 +25,7 @@ import org.springframework.core.io.FileSystemResource;
 
 import com.google.common.collect.ImmutableMap;
 
-import cz.mzk.recordmanager.server.model.HarvestedRecord.HarvestedRecordId;
+import cz.mzk.recordmanager.server.model.HarvestedRecord.HarvestedRecordUniqueId;
 import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordDAO;
 import cz.mzk.recordmanager.server.springbatch.JobFailureListener;
 import cz.mzk.recordmanager.server.util.Constants;
@@ -63,7 +63,7 @@ public class ExportRecordsJobConfig {
 	@Bean(name = "exportRecordsJob:exportRecordsStep")
 	public Step exportRecordsStep() throws Exception {
 		return steps.get("updateRecordsJobStep")
-				.<HarvestedRecordId, String> chunk(20)//
+				.<HarvestedRecordUniqueId, String> chunk(20)//
 				.reader(exportRecordsReader(LONG_OVERRIDEN_BY_EXPRESSION)) //
 				.processor(exportRecordsProcessor(STRING_OVERRIDEN_BY_EXPRESSION)) //
 				.writer(exportRecordsWriter(STRING_OVERRIDEN_BY_EXPRESSION)) //
@@ -72,10 +72,10 @@ public class ExportRecordsJobConfig {
 
 	@Bean(name = "exportRecordsJob:exportRecordsReader")
 	@StepScope
-	public ItemReader<HarvestedRecordId> exportRecordsReader(@Value("#{jobParameters["
+	public ItemReader<HarvestedRecordUniqueId> exportRecordsReader(@Value("#{jobParameters["
 			+ Constants.JOB_PARAM_CONF_ID + "]}") Long configId)
 			throws Exception {
-		JdbcPagingItemReader<HarvestedRecordId> reader = new JdbcPagingItemReader<HarvestedRecordId>();
+		JdbcPagingItemReader<HarvestedRecordUniqueId> reader = new JdbcPagingItemReader<HarvestedRecordUniqueId>();
 		SqlPagingQueryProviderFactoryBean pqpf = new SqlPagingQueryProviderFactoryBean();
 		pqpf.setDataSource(dataSource);
 		pqpf.setSelectClause("SELECT oai_harvest_conf_id, record_id");

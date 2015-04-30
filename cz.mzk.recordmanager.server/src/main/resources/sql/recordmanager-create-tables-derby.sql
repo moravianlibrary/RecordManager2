@@ -48,6 +48,7 @@ CREATE TABLE dedup_record (
 );
 
 CREATE TABLE harvested_record (
+  id                   DECIMAL(10),
   oai_harvest_conf_id  DECIMAL(10),
   record_id            VARCHAR(128),
   harvested            TIMESTAMP,
@@ -60,9 +61,19 @@ CREATE TABLE harvested_record (
   physical_format      VARCHAR(255),
   dedup_record_id      DECIMAL(10),
   raw_record           BLOB,
-  CONSTRAINT harvested_record_pk PRIMARY KEY (oai_harvest_conf_id, record_id),
+  CONSTRAINT harvested_record_pk                     PRIMARY KEY (id),
+  CONSTRAINT harvester_record_unique_id              UNIQUE (oai_harvest_conf_id, record_id),
   CONSTRAINT harvested_record_oai_harvest_conf_id_fk FOREIGN KEY (oai_harvest_conf_id) REFERENCES oai_harvest_conf(id),
   CONSTRAINT harvested_record_format_fk              FOREIGN KEY (format)              REFERENCES format(format)
+);
+
+CREATE TABLE isbn (
+  id                   DECIMAL(10) PRIMARY KEY,
+  harvested_record_id  DECIMAL(10),
+  isbn                 DECIMAL(13),
+  order_in_record      DECIMAL(4),
+  note                 VARCHAR(100),
+  CONSTRAINT isbn_fk   FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id)
 );
 
 CREATE TABLE authority_record (

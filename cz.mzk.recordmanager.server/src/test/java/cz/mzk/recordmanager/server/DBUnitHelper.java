@@ -18,6 +18,7 @@ import org.springframework.stereotype.Component;
 
 import cz.mzk.recordmanager.server.model.AuthorityRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
+import cz.mzk.recordmanager.server.model.Isbn;
 
 @Component
 public class DBUnitHelper {
@@ -51,7 +52,8 @@ public class DBUnitHelper {
 	protected void truncateTables() throws Exception {
 		Statement statement = dataSource.getConnection().createStatement();
 		statement.execute("truncate table " + AuthorityRecord.TABLE_NAME);
-		statement.execute("truncate table " + HarvestedRecord.TABLE_NAME);
+		statement.execute("truncate table " + Isbn.TABLE_NAME);
+		statement.execute("delete from " + HarvestedRecord.TABLE_NAME);
 	}
 	
 	

@@ -11,12 +11,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
-import cz.mzk.recordmanager.server.model.HarvestedRecord.HarvestedRecordId;
+import cz.mzk.recordmanager.server.model.HarvestedRecord.HarvestedRecordUniqueId;
 import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordDAO;
 
 @Component
 @StepScope
-public class RegenerateDedupKeysWriter implements ItemWriter<HarvestedRecordId> {
+public class RegenerateDedupKeysWriter implements ItemWriter<HarvestedRecordUniqueId> {
 
 	private static Logger logger = LoggerFactory.getLogger(RegenerateDedupKeysWriter.class);
 	
@@ -31,8 +31,8 @@ public class RegenerateDedupKeysWriter implements ItemWriter<HarvestedRecordId> 
 	private long startTime = 0L;
 	
 	@Override
-	public void write(List<? extends HarvestedRecordId> ids) throws Exception {
-		for (HarvestedRecordId id : ids) {
+	public void write(List<? extends HarvestedRecordUniqueId> ids) throws Exception {
+		for (HarvestedRecordUniqueId id : ids) {
 			HarvestedRecord rec = harvestedRecordDao.get(id);
 			dedupKeysParser.parse(rec);
 			harvestedRecordDao.persist(rec);

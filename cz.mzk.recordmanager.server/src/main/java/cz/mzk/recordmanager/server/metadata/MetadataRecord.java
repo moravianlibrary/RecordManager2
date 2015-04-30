@@ -4,10 +4,16 @@ import java.util.List;
 
 import cz.mzk.recordmanager.server.export.IOFormat;
 import cz.mzk.recordmanager.server.model.HarvestedRecordFormat;
+import cz.mzk.recordmanager.server.model.Isbn;
 
 public interface MetadataRecord {
 	
-	public String getTitle();
+	/**
+	 * get all titles of record, first is the most important 
+	 * @return List<String>
+	 */
+	public List<String> getTitle();
+	
 	public String getFormat();
 	public Long getPublicationYear();
 	
@@ -29,7 +35,7 @@ public interface MetadataRecord {
 	 * @return List<String>
 	 */
 	
-	public List<String> getISBNs();
+	public List<Isbn> getISBNs();
 	
 	/**
 	 * get all ISSNs assigned to record

@@ -9,14 +9,20 @@ import org.apache.commons.validator.routines.ISBNValidator;
 import org.marc4j.marc.ControlField;
 import org.marc4j.marc.DataField;
 import org.marc4j.marc.Subfield;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import cz.mzk.recordmanager.server.dedup.DedupRecordsWriter;
 import cz.mzk.recordmanager.server.export.IOFormat;
 import cz.mzk.recordmanager.server.marc.MarcRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecordFormat;
+import cz.mzk.recordmanager.server.model.Isbn;
 import cz.mzk.recordmanager.server.util.MetadataUtils;
 
 public class MetadataMarcRecord implements MetadataRecord {
 
+	private static Logger logger = LoggerFactory.getLogger(MetadataMarcRecord.class);
+	
 	protected MarcRecord underlayingMarc;
 	
 	protected final ISBNValidator isbnValidator = ISBNValidator.getInstance(true);
@@ -75,13 +81,33 @@ public class MetadataMarcRecord implements MetadataRecord {
 	}
 	
 	@Override
-	public List<String> getISBNs() {
-		List<String> isbns = new ArrayList<String>();
-		
-		for(String isbn: underlayingMarc.getFields("020", 'a')){	
-			isbn = isbnValidator.validate(isbn);
-			if(isbn == null) continue;
-			if(!isbns.contains(isbn)) isbns.add(isbn);
+	public List<Isbn> getISBNs() {
+		List<Isbn> isbns = new ArrayList<Isbn>();
+		Long isbnCounter = 0L;
+
+		for(DataField field: underlayingMarc.getDataFields("020")){
+			Subfield subfieldA = field.getSubfield('a');
+			if (subfieldA == null) {
+				continue;
+			}
+			
+			Isbn isbn = new Isbn();
+			String isbnStr = isbnValidator.validate(subfieldA.getData());
+			
+			try {
+				if (isbnStr == null) {
+					throw new NumberFormatException();
+				}
+				Long isbn13 = Long.valueOf(isbnStr);
+				isbn.setIsbn(isbn13);
+			} catch (NumberFormatException nfe) {
+				logger.info(String.format("Invalid ISBN: %s", subfieldA.getData()));
+				continue;
+			}
+			
+			isbn.setNote("");
+			isbn.setOrderInRecord(++isbnCounter);
+			isbns.add(isbn);
 		}
 		
 		return isbns;
@@ -301,11 +327,22 @@ public class MetadataMarcRecord implements MetadataRecord {
 			
 	}
 
+	/**
+	 * get publication year from fields 264c, 260c or 008
+	 */
 	@Override
 	public Long getPublicationYear() {
-		String year = underlayingMarc.getField("260", 'c');
+		
+		String year = underlayingMarc.getField("264", 'c');
 		if (year == null) {
-			return null;
+			year = underlayingMarc.getField("260", 'c');
+		}
+		if (year == null) {
+			year = underlayingMarc.getControlField("008");
+			if (year == null || year.length() < 11) {
+				return null;
+			}
+			year = year.substring(7, 10);
 		}
 		Matcher matcher = YEAR_PATTERN.matcher(year);
 		try {
@@ -317,30 +354,48 @@ public class MetadataMarcRecord implements MetadataRecord {
 	}
 		
 	/**
-	 * @return 245a:245b.245n.245p
+	 * get title of record
+	 * 
+	 * @return all 245a:245b.245n.245p and 240a:240b.240n.240p. If no title is
+	 *         found, list containing empty string is returned
 	 */
 	@Override
-	public String getTitle() {
+	public List<String> getTitle() {
 		final char titleSubfields[] = new char[]{'a','b','n','p'};
 		final char punctiation[] = new char[]{':', '.', '.' };
-		final DataField field = underlayingMarc.getDataFields("245").get(0);
-		final List<Subfield> subfields = underlayingMarc.getSubfields(field, titleSubfields);
-
-		StringBuilder builder = new StringBuilder();
-		for (int i = 0; i < titleSubfields.length; i++) {
-			if (i >= subfields.size() || subfields.get(i).getCode() != titleSubfields[i]) {
-				return builder.toString();
-			}
-			if (i > 0) {
-				if (MetadataUtils.hasTrailingPunctuation(builder.toString())) {
-					builder.append(" ");
-				} else {
-					builder.append(punctiation[i-1]);
+		List<String> result = new ArrayList<String>();
+		
+		
+		for (String key: new String[]{"245", "240"}) {
+			for (DataField field :underlayingMarc.getDataFields(key)) {
+				
+				final List<Subfield> subfields = underlayingMarc.getSubfields(field, titleSubfields);
+				StringBuilder builder = new StringBuilder();		
+				
+				for (int i = 0; i < titleSubfields.length; i++) {
+					if (i >= subfields.size() || subfields.get(i).getCode() != titleSubfields[i]) {
+						continue;
+					}
+					if (i > 0 && i < subfields.size()) {
+						if (MetadataUtils.hasTrailingPunctuation(builder.toString())) {
+							builder.append(" ");
+						} else {
+							builder.append(punctiation[i-1]);
+						}
+					}
+					builder.append(subfields.get(i).getData());
+				}
+				
+				if (builder.length() > 0) {
+					result.add(builder.toString());
 				}
 			}
-			builder.append(subfields.get(i).getData());
 		}
-		return builder.toString();
+		
+		if (result.isEmpty()) {
+			result.add("");
+		}
+		return result;
 	}
 
 	@Override

@@ -8,7 +8,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
-import cz.mzk.recordmanager.server.model.HarvestedRecord.HarvestedRecordId;
+import cz.mzk.recordmanager.server.model.HarvestedRecord.HarvestedRecordUniqueId;
 import cz.mzk.recordmanager.server.oai.dao.OAIHarvestConfigurationDAO;
 
 @Component
@@ -19,7 +19,7 @@ public class HarvestedRecordLimitedRowMapper implements RowMapper<HarvestedRecor
 
 	@Override
 	public HarvestedRecord mapRow(ResultSet rs, int rowNum) throws SQLException {
-		HarvestedRecordId id = new HarvestedRecordId(oaiHarvestConfigurationDao.load(
+		HarvestedRecordUniqueId id = new HarvestedRecordUniqueId(oaiHarvestConfigurationDao.load(
 				rs.getLong("OAI_HARVEST_CONF_ID")), 
 				rs.getString("RECORD_ID"));
 		HarvestedRecord harvestedRecord = new HarvestedRecord(id);
