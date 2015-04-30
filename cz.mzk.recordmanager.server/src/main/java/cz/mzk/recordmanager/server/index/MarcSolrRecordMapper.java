@@ -115,7 +115,7 @@ public class MarcSolrRecordMapper implements SolrRecordMapper, InitializingBean 
 
 	protected String getId(HarvestedRecord record) {
 		String prefix = record.getHarvestedFrom().getIdPrefix();
-		String id = ((prefix != null) ? prefix + "." : "") + record.getId().getRecordId();
+		String id = ((prefix != null) ? prefix + "." : "") + record.getUniqueId().getRecordId();
 		return id;
 	}
 	

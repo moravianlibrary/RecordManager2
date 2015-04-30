@@ -30,7 +30,7 @@ import com.google.common.collect.ImmutableMap;
 
 import cz.mzk.recordmanager.server.export.HarvestedRecordIdRowMapper;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
-import cz.mzk.recordmanager.server.model.HarvestedRecord.HarvestedRecordId;
+import cz.mzk.recordmanager.server.model.HarvestedRecord.HarvestedRecordUniqueId;
 import cz.mzk.recordmanager.server.springbatch.IntrospectiveJobParametersValidator;
 import cz.mzk.recordmanager.server.springbatch.JobFailureListener;
 import cz.mzk.recordmanager.server.springbatch.JobParameterDeclaration;
@@ -82,7 +82,7 @@ public class UpdateHarvestedRecordsJobConfig {
     @Bean(name="updateHarvestedRecords:step")
     public Step updateRecordsStep() throws Exception {
 		return steps.get("dedupKeysGeneratorJobStep")
-            .<HarvestedRecordId, HarvestedRecord> chunk(20) //
+            .<HarvestedRecordUniqueId, HarvestedRecord> chunk(20) //
             .reader(reader(LONG_OVERRIDEN_BY_EXPRESSION)) //
             .processor(processor()) //
             .writer(writer()) //
@@ -91,8 +91,8 @@ public class UpdateHarvestedRecordsJobConfig {
 
     @Bean(name="updateHarvestedRecords:reader")
 	@StepScope
-    public ItemReader<HarvestedRecordId> reader(@Value("#{jobParameters[" + OAI_HARVEST_CONF_ID  + "]}") Long oaiHarvestConfId) throws Exception {
-		JdbcPagingItemReader<HarvestedRecordId> reader = new JdbcPagingItemReader<HarvestedRecordId>();
+    public ItemReader<HarvestedRecordUniqueId> reader(@Value("#{jobParameters[" + OAI_HARVEST_CONF_ID  + "]}") Long oaiHarvestConfId) throws Exception {
+		JdbcPagingItemReader<HarvestedRecordUniqueId> reader = new JdbcPagingItemReader<HarvestedRecordUniqueId>();
 		SqlPagingQueryProviderFactoryBean pqpf = new SqlPagingQueryProviderFactoryBean();
 		pqpf.setDataSource(dataSource);
 		pqpf.setSelectClause("SELECT oai_harvest_conf_id, record_id");
@@ -116,7 +116,7 @@ public class UpdateHarvestedRecordsJobConfig {
 
     @Bean(name="updateHarvestedRecords:processor")
 	@StepScope
-    public ItemProcessor<HarvestedRecordId, HarvestedRecord> processor() throws Exception {
+    public ItemProcessor<HarvestedRecordUniqueId, HarvestedRecord> processor() throws Exception {
     	return new UpdateHarvestedRecordProcessor();
     }
 

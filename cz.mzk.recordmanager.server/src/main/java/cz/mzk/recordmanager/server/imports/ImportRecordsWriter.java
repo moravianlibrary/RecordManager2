@@ -19,7 +19,7 @@ import cz.mzk.recordmanager.server.marc.MarcRecordImpl;
 import cz.mzk.recordmanager.server.metadata.MetadataRecord;
 import cz.mzk.recordmanager.server.metadata.MetadataRecordFactory;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
-import cz.mzk.recordmanager.server.model.HarvestedRecord.HarvestedRecordId;
+import cz.mzk.recordmanager.server.model.HarvestedRecord.HarvestedRecordUniqueId;
 import cz.mzk.recordmanager.server.model.OAIHarvestConfiguration;
 import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordDAO;
 import cz.mzk.recordmanager.server.oai.dao.OAIHarvestConfigurationDAO;
@@ -61,7 +61,7 @@ public class ImportRecordsWriter implements ItemWriter<List<Record>> {
 				try {
 					MarcRecord marc = new MarcRecordImpl(currentRecord);
 					MetadataRecord metadata = metadataFactory.getMetadataRecord(marc);
-					HarvestedRecordId id = new HarvestedRecordId(harvestConfiguration, metadata.getUniqueId());
+					HarvestedRecordUniqueId id = new HarvestedRecordUniqueId(harvestConfiguration, metadata.getUniqueId());
 					HarvestedRecord hr = new HarvestedRecord(id );
 					ByteArrayOutputStream outStream = new ByteArrayOutputStream();
 					MarcWriter marcWriter = new MarcXmlWriter(outStream, true);

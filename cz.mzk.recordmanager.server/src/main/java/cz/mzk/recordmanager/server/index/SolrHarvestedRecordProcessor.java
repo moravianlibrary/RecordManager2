@@ -17,11 +17,11 @@ public class SolrHarvestedRecordProcessor implements ItemProcessor<HarvestedReco
 
 	@Override
 	public SolrInputDocument process(HarvestedRecord record) throws Exception {
-		logger.debug("About to process harvestedRecord with id={}", record.getId());
+		logger.debug("About to process harvestedRecord with id={}", record.getUniqueId());
 		try {
 			return mapper.map(record);
 		} catch (Exception ex) {
-			logger.error(String.format("Exception thrown when indexing dedup_record with id=%s", record.getId()), ex);
+			logger.error(String.format("Exception thrown when indexing dedup_record with id=%s", record.getUniqueId()), ex);
 			return null;
 		}
 	}

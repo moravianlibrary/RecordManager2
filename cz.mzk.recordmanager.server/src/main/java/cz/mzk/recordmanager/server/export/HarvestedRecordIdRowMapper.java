@@ -5,13 +5,13 @@ import java.sql.SQLException;
 
 import org.springframework.jdbc.core.RowMapper;
 
-import cz.mzk.recordmanager.server.model.HarvestedRecord.HarvestedRecordId;
+import cz.mzk.recordmanager.server.model.HarvestedRecord.HarvestedRecordUniqueId;
 
-public class HarvestedRecordIdRowMapper implements RowMapper<HarvestedRecordId> {
+public class HarvestedRecordIdRowMapper implements RowMapper<HarvestedRecordUniqueId> {
 
 	@Override
-	public HarvestedRecordId mapRow(ResultSet rs, int rowNum) throws SQLException {
-		HarvestedRecordId id = new HarvestedRecordId(rs.getLong("oai_harvest_conf_id"),
+	public HarvestedRecordUniqueId mapRow(ResultSet rs, int rowNum) throws SQLException {
+		HarvestedRecordUniqueId id = new HarvestedRecordUniqueId(rs.getLong("oai_harvest_conf_id"),
 				rs.getString("record_id"));
 		return id;
 	}

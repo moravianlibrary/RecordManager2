@@ -87,7 +87,7 @@ public class DedupRecordsWriter implements ItemWriter<HarvestedRecord>  {
 				dr.setUpdated(new Date());
 				dr = dedupRecordDao.persist(dr);
 				
-				HarvestedRecord oldRecord = harvestedRecordDao.get(record.getId());
+				HarvestedRecord oldRecord = harvestedRecordDao.get(record.getUniqueId());
 				oldRecord.setDedupRecord(dr);
 				harvestedRecordDao.persist(oldRecord);
 			}
@@ -143,7 +143,7 @@ public class DedupRecordsWriter implements ItemWriter<HarvestedRecord>  {
 		for(HarvestedRecord currentHr : hrList) {
 			List<Long> id = jdbcTemplate.query(
 					CALL_UPDATE_PROCEDURE, 
-					new Object[] {prevId, currentHr.getId()},
+					new Object[] {prevId, currentHr.getUniqueId()},
 					new LongValueRowMapper()
 			);
 			prevId = id != null ? id.get(0) : prevId;

@@ -7,13 +7,13 @@ import org.springframework.stereotype.Component;
 
 import cz.mzk.recordmanager.server.model.DedupRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
-import cz.mzk.recordmanager.server.model.HarvestedRecord.HarvestedRecordId;
+import cz.mzk.recordmanager.server.model.HarvestedRecord.HarvestedRecordUniqueId;
 import cz.mzk.recordmanager.server.model.OAIHarvestConfiguration;
 import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordDAO;
 
 @Component
 public class HarvestedRecordDAOHibernate extends
-		AbstractDomainDAOHibernate<HarvestedRecordId, HarvestedRecord> implements
+		AbstractDomainDAOHibernate<Long, HarvestedRecord> implements
 		HarvestedRecordDAO {
 
 	@Override
@@ -22,7 +22,7 @@ public class HarvestedRecordDAOHibernate extends
 		Session session = sessionFactory.getCurrentSession();
 		return (HarvestedRecord) session
 				.createQuery(
-						"from HarvestedRecord where id.recordId = ? and id.harvestedFromId = ?")
+						"from HarvestedRecord where uniqueId.recordId = ? and uniqueId.harvestedFromId = ?")
 				.setParameter(0, recordId).setParameter(1, configuration.getId())
 				.uniqueResult();
 	}
@@ -33,7 +33,7 @@ public class HarvestedRecordDAOHibernate extends
 		Session session = sessionFactory.getCurrentSession();
 		return (HarvestedRecord) session
 				.createQuery(
-						"from HarvestedRecord where id.recordId = ? and id.harvestedFromId = ?")
+						"from HarvestedRecord where uniqueId.recordId = ? and uniqueId.harvestedFromId = ?")
 				.setParameter(0, recordId).setParameter(1, configurationId)
 				.uniqueResult();
 	}
@@ -42,7 +42,7 @@ public class HarvestedRecordDAOHibernate extends
 	public HarvestedRecord findByRecordId(String uniqueId) {
 		Session session = sessionFactory.getCurrentSession();
 		return (HarvestedRecord) session
-				.createQuery("from HarvestedRecord where id.recordId = ?")
+				.createQuery("from HarvestedRecord where uniqueId.recordId = ?")
 				.setParameter(0, uniqueId)
 				.uniqueResult();
 	}
@@ -55,6 +55,11 @@ public class HarvestedRecordDAOHibernate extends
 				.createQuery("from HarvestedRecord where dedupRecord = ?")
 				.setParameter(0, dedupRecord)
 				.list();
+	}
+
+	@Override
+	public HarvestedRecord get(HarvestedRecordUniqueId uniqueId) {
+		return findByIdAndHarvestConfiguration(uniqueId.getRecordId(), uniqueId.getHarvestedFromId());
 	}
 
 }

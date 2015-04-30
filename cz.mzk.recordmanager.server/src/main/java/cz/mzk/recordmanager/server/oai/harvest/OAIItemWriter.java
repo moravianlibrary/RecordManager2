@@ -25,7 +25,7 @@ import cz.mzk.recordmanager.server.dedup.DedupKeyParserException;
 import cz.mzk.recordmanager.server.dedup.DelegatingDedupKeysParser;
 import cz.mzk.recordmanager.server.marc.InvalidMarcException;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
-import cz.mzk.recordmanager.server.model.HarvestedRecord.HarvestedRecordId;
+import cz.mzk.recordmanager.server.model.HarvestedRecord.HarvestedRecordUniqueId;;
 import cz.mzk.recordmanager.server.model.OAIHarvestConfiguration;
 import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordDAO;
 import cz.mzk.recordmanager.server.oai.dao.OAIHarvestConfigurationDAO;
@@ -82,7 +82,7 @@ public class OAIItemWriter implements ItemWriter<List<OAIRecord>>,
 		HarvestedRecord rec = recordDao.findByIdAndHarvestConfiguration(
 				recordId, configuration);
 		if (rec == null) {
-			HarvestedRecordId id = new HarvestedRecordId(configuration, recordId);
+			HarvestedRecordUniqueId id = new HarvestedRecordUniqueId(configuration, recordId);
 			rec = new HarvestedRecord(id);
 			rec.setFormat(format);
 		}
@@ -102,6 +102,7 @@ public class OAIItemWriter implements ItemWriter<List<OAIRecord>>,
 					"Dedup keys could not be generated for {}, exception thrown.",
 					record, dkpe);
 		}
+
 		recordDao.persist(rec);
 	}
 

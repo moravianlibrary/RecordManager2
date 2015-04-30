@@ -55,11 +55,9 @@ public class OAIHarvestJobTest extends AbstractTest {
 	public void testIdentify() throws Exception {
 		reset(httpClient);
 		InputStream response0 = this.getClass().getResourceAsStream("/sample/Identify.xml");
-		InputStream response1 = this.getClass().getResourceAsStream("/sample/ListRecords1.xml");
-		InputStream response2 = this.getClass().getResourceAsStream("/sample/ListRecords2.xml");
+		InputStream response1 = this.getClass().getResourceAsStream("/sample/ListRecords2.xml");
 		expect(httpClient.executeGet("http://aleph.mzk.cz/OAI?verb=Identify")).andReturn(response0);
 		expect(httpClient.executeGet("http://aleph.mzk.cz/OAI?verb=ListRecords&metadataPrefix=marc21")).andReturn(response1);
-		expect(httpClient.executeGet("http://aleph.mzk.cz/OAI?verb=ListRecords&resumptionToken=201408211302186999999999999999MZK01-VDK%3AMZK01-VDK")).andReturn(response2);
 		replay(httpClient);
 
 		final Long configId = 300L;
@@ -81,7 +79,7 @@ public class OAIHarvestJobTest extends AbstractTest {
 	public void testHarvestFromDate() throws Exception {
 		reset(httpClient);
 		InputStream response0 = this.getClass().getResourceAsStream("/sample/Identify.xml");
-		InputStream response1 = this.getClass().getResourceAsStream("/sample/ListRecordsFrom.xml");
+		InputStream response1 = this.getClass().getResourceAsStream("/sample/ListRecords2.xml");
 		expect(httpClient.executeGet("http://aleph.mzk.cz/OAI?verb=Identify")).andReturn(response0);
 		expect(httpClient.executeGet("http://aleph.mzk.cz/OAI?verb=ListRecords&metadataPrefix=marc21&from=2015-01-01T01%3A00%3A00Z")).andReturn(response1);
 		replay(httpClient);
@@ -93,6 +91,7 @@ public class OAIHarvestJobTest extends AbstractTest {
 		Long jobExecutionId = jobExecutor.execute("oaiHarvestJob", new JobParameters(params));
 		JobExecution exec = jobExplorer.getJobExecution(jobExecutionId);
 		Assert.assertEquals(exec.getExitStatus(), ExitStatus.COMPLETED);
+		dbUnitHelper.dump("/tmp/asdf.xml");
 	}
 
 	

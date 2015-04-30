@@ -11,7 +11,7 @@ import com.google.common.io.ByteStreams;
 import cz.mzk.recordmanager.server.AbstractTest;
 import cz.mzk.recordmanager.server.marc.InvalidMarcException;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
-import cz.mzk.recordmanager.server.model.HarvestedRecord.HarvestedRecordId;
+import cz.mzk.recordmanager.server.model.HarvestedRecord.HarvestedRecordUniqueId;
 
 public class MarcXmlDedupKeyParserTest extends AbstractTest {
 	
@@ -24,7 +24,7 @@ public class MarcXmlDedupKeyParserTest extends AbstractTest {
 	@Test
 	public void parseCorrectRecord() throws Exception {
 		InputStream is = this.getClass().getResourceAsStream("/records/marcxml/MZK01-001439241.xml");
-		HarvestedRecordId id = new HarvestedRecordId(1L, "1");
+		HarvestedRecordUniqueId id = new HarvestedRecordUniqueId(1L, "1");
 		HarvestedRecord record = new HarvestedRecord(id );
 		record.setFormat("marc21-xml");
 		byte[] rawRecord = ByteStreams.toByteArray(is);
@@ -39,7 +39,7 @@ public class MarcXmlDedupKeyParserTest extends AbstractTest {
 	@Test(expectedExceptions=InvalidMarcException.class)
 	public void parseBadRecord() throws Exception {
 		InputStream is = this.getClass().getResourceAsStream("/records/marcxml/MZK01-000153226.xml");
-		HarvestedRecordId id = new HarvestedRecordId(1L, "1");
+		HarvestedRecordUniqueId id = new HarvestedRecordUniqueId(1L, "1");
 		HarvestedRecord record = new HarvestedRecord(id);
 		record.setFormat("marc21-xml");
 		byte[] rawRecord = ByteStreams.toByteArray(is);

@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 import cz.mzk.recordmanager.server.marc.MarcRecord;
 import cz.mzk.recordmanager.server.marc.MarcXmlParser;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
-import cz.mzk.recordmanager.server.model.HarvestedRecord.HarvestedRecordId;
+import cz.mzk.recordmanager.server.model.HarvestedRecord.HarvestedRecordUniqueId;
 import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordDAO;
 
 @Component
@@ -30,7 +30,7 @@ public class MetadataRecordFactory {
 		return getMetadataRecord(rec);
 	}
 	
-	public MetadataRecord getMetadataRecord(HarvestedRecordId recordId) {
+	public MetadataRecord getMetadataRecord(HarvestedRecordUniqueId recordId) {
 		return getMetadataRecord(harvestedRecordDao.get(recordId));
 	}
 	
