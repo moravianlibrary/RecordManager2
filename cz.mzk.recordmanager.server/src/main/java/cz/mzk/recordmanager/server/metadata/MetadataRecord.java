@@ -7,7 +7,12 @@ import cz.mzk.recordmanager.server.model.HarvestedRecordFormat;
 
 public interface MetadataRecord {
 	
-	public String getTitle();
+	/**
+	 * get all titles of record, first is the most important 
+	 * @return List<String>
+	 */
+	public List<String> getTitle();
+	
 	public String getFormat();
 	public Long getPublicationYear();
 	

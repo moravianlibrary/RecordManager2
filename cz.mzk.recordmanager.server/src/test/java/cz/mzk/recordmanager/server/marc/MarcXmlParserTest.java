@@ -33,7 +33,7 @@ public class MarcXmlParserTest extends AbstractTest {
 		final String expectedTitle = "Česká republika : města a obce "
 				+ "České republiky : tradice, historie, památky, "
 				+ "turistika, současnost /";
-		Assert.assertEquals(metadataRecord.getTitle(), expectedTitle);
+		Assert.assertEquals(metadataRecord.getTitle().get(0), expectedTitle);
 
 		List<String> fields650 = marc.getFields("650", " ", new char[] { 'a',
 				'z' });
@@ -60,7 +60,7 @@ public class MarcXmlParserTest extends AbstractTest {
 				+ "de tempore Bohemica : vyloženie svatých čtení nedělních /";
 		Assert.assertEquals(metadataRecord.getPublicationYear(), new Long(1992));
 		Assert.assertEquals(metadataRecord.getFormat(), "Book");
-		Assert.assertEquals(metadataRecord.getTitle(), expectedTitle);
+		Assert.assertEquals(metadataRecord.getTitle().get(0), expectedTitle);
 	}
 
 	/**
@@ -78,7 +78,7 @@ public class MarcXmlParserTest extends AbstractTest {
 		Assert.assertEquals(metadataRecord.getPublicationYear(), new Long(1978));
 		Assert.assertEquals(metadataRecord.getFormat(), "Book");
 		final String expectedTitle = "Cardiomyopathy and myocardial biopsy /";
-		Assert.assertEquals(metadataRecord.getTitle(), expectedTitle);
+		Assert.assertEquals(metadataRecord.getTitle().get(0), expectedTitle);
 	}
 
 }

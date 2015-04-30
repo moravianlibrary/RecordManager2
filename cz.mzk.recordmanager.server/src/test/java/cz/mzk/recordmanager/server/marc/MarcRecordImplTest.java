@@ -138,6 +138,14 @@ public class MarcRecordImplTest extends AbstractTest {
 		metadataRecord = metadataFactory.getMetadataRecord(mri);
 		Assert.assertNull(metadataRecord.getPublicationYear());
 		data.clear();
+		
+		data.add("264 $c<1977->");
+		data.add("260 $c<1978->");
+		mri = MarcRecordFactory.recordFactory(data);
+		metadataRecord = metadataFactory.getMetadataRecord(mri);
+		Assert.assertEquals(metadataRecord.getPublicationYear().longValue(),
+				1977);
+		data.clear();
 	}
 
 	@Test
