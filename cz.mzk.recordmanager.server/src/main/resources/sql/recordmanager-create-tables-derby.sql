@@ -67,6 +67,15 @@ CREATE TABLE harvested_record (
   CONSTRAINT harvested_record_format_fk              FOREIGN KEY (format)              REFERENCES format(format)
 );
 
+CREATE TABLE isbn (
+  id                   DECIMAL(10) PRIMARY KEY,
+  harvested_record_id  DECIMAL(10),
+  isbn                 DECIMAL(13),
+  order_in_record      DECIMAL(4),
+  note                 VARCHAR(100),
+  CONSTRAINT isbn_fk   FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id)
+);
+
 CREATE TABLE authority_record (
   id                   DECIMAL(10) PRIMARY KEY,
   oai_harvest_conf_id  DECIMAL(10),

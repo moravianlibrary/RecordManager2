@@ -4,6 +4,7 @@ import java.util.List;
 
 import cz.mzk.recordmanager.server.export.IOFormat;
 import cz.mzk.recordmanager.server.model.HarvestedRecordFormat;
+import cz.mzk.recordmanager.server.model.Isbn;
 
 public interface MetadataRecord {
 	
@@ -34,7 +35,7 @@ public interface MetadataRecord {
 	 * @return List<String>
 	 */
 	
-	public List<String> getISBNs();
+	public List<Isbn> getISBNs();
 	
 	/**
 	 * get all ISSNs assigned to record

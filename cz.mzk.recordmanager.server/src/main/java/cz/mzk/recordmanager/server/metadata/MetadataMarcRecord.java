@@ -9,14 +9,20 @@ import org.apache.commons.validator.routines.ISBNValidator;
 import org.marc4j.marc.ControlField;
 import org.marc4j.marc.DataField;
 import org.marc4j.marc.Subfield;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import cz.mzk.recordmanager.server.dedup.DedupRecordsWriter;
 import cz.mzk.recordmanager.server.export.IOFormat;
 import cz.mzk.recordmanager.server.marc.MarcRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecordFormat;
+import cz.mzk.recordmanager.server.model.Isbn;
 import cz.mzk.recordmanager.server.util.MetadataUtils;
 
 public class MetadataMarcRecord implements MetadataRecord {
 
+	private static Logger logger = LoggerFactory.getLogger(MetadataMarcRecord.class);
+	
 	protected MarcRecord underlayingMarc;
 	
 	protected final ISBNValidator isbnValidator = ISBNValidator.getInstance(true);
@@ -75,13 +81,33 @@ public class MetadataMarcRecord implements MetadataRecord {
 	}
 	
 	@Override
-	public List<String> getISBNs() {
-		List<String> isbns = new ArrayList<String>();
-		
-		for(String isbn: underlayingMarc.getFields("020", 'a')){	
-			isbn = isbnValidator.validate(isbn);
-			if(isbn == null) continue;
-			if(!isbns.contains(isbn)) isbns.add(isbn);
+	public List<Isbn> getISBNs() {
+		List<Isbn> isbns = new ArrayList<Isbn>();
+		Long isbnCounter = 0L;
+
+		for(DataField field: underlayingMarc.getDataFields("020")){
+			Subfield subfieldA = field.getSubfield('a');
+			if (subfieldA == null) {
+				continue;
+			}
+			
+			Isbn isbn = new Isbn();
+			String isbnStr = isbnValidator.validate(subfieldA.getData());
+			
+			try {
+				if (isbnStr == null) {
+					throw new NumberFormatException();
+				}
+				Long isbn13 = Long.valueOf(isbnStr);
+				isbn.setIsbn(isbn13);
+			} catch (NumberFormatException nfe) {
+				logger.info(String.format("Invalid ISBN: %s", subfieldA.getData()));
+				continue;
+			}
+			
+			isbn.setNote("");
+			isbn.setOrderInRecord(++isbnCounter);
+			isbns.add(isbn);
 		}
 		
 		return isbns;

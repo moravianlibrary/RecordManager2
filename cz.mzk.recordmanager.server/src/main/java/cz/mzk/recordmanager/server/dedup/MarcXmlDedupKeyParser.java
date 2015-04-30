@@ -33,7 +33,7 @@ public class MarcXmlDedupKeyParser implements DedupKeysParser {
 		Preconditions.checkArgument(FORMAT.equals(record.getFormat()));
 		MetadataRecord metadata = metadataFactory.getMetadataRecord(record);
 
-		record.setIsbn(metadata.getISBNs().isEmpty() ? null : metadata.getISBNs().get(0));
+		record.setIsbns(metadata.getISBNs());
 		record.setTitle(
 				MetadataUtils.normalizeAndShorten(
 						metadata.getTitle().get(0),
