@@ -25,7 +25,7 @@ public class BoundingBoxMarcFunctionsTest extends AbstractTest {
 		Assert.assertEquals(result, "14.171111111111111 49.92916666666667 14.79 50.217222222222226");
 	}
 	
-	@Test // |a a  |b 6000000  |d E1023922  |e E1784848  |f N0023252  |g S0474141 
+	@Test 
 	public void testAustralia() throws Exception {
 		List<String> data = new ArrayList<String>();
 		data.add("034 $aa $b6000000 $dE1023922  $eE1784848 $fN0023252 $gS0474141");
