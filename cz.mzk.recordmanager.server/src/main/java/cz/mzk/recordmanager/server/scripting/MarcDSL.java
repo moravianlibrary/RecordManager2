@@ -161,7 +161,7 @@ public class MarcDSL {
           
         int nonFilingInt = getInd2AsInt(titleField);
         
-        String title = marcMetadataRecord.getTitle().get(0);
+        String title = marcMetadataRecord.getTitle().get(0).getTitleStr();
         title = title.toLowerCase();
         
         //Skip non-filing chars, if possible. 

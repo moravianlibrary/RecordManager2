@@ -10,6 +10,7 @@ import org.testng.annotations.Test;
 import cz.mzk.recordmanager.server.AbstractTest;
 import cz.mzk.recordmanager.server.metadata.MetadataRecord;
 import cz.mzk.recordmanager.server.metadata.MetadataRecordFactory;
+import cz.mzk.recordmanager.server.model.Title;
 
 /**
  * Test various marcxml samples
@@ -30,9 +31,11 @@ public class MarcXmlParserTest extends AbstractTest {
 		MetadataRecord metadataRecord = metadataFactory.getMetadataRecord(marc);
 		Assert.assertNotNull(marc);
 		Assert.assertEquals(marc.getField("040", 'a'), "BOA001");
-		final String expectedTitle = "Česká republika : města a obce "
+		Title expectedTitle = new Title();
+		expectedTitle.setTitleStr("Česká republika : města a obce "
 				+ "České republiky : tradice, historie, památky, "
-				+ "turistika, současnost /";
+				+ "turistika, současnost /");
+		expectedTitle.setOrderInRecord(1L);
 		Assert.assertEquals(metadataRecord.getTitle().get(0), expectedTitle);
 
 		List<String> fields650 = marc.getFields("650", " ", new char[] { 'a',
@@ -56,11 +59,13 @@ public class MarcXmlParserTest extends AbstractTest {
 		MetadataRecord metadataRecord = metadataFactory.getMetadataRecord(marc);
 		Assert.assertNotNull(marc);
 		Assert.assertEquals(marc.getField("020", 'a'), "80-200-0358-4");
-		final String expectedTitle = "Česká nedělní postila = Postilla "
-				+ "de tempore Bohemica : vyloženie svatých čtení nedělních /";
+		Title expectedTitle = new Title();
+		expectedTitle.setTitleStr("Česká nedělní postila = Postilla "
+				+ "de tempore Bohemica : vyloženie svatých čtení nedělních /");
+		expectedTitle.setOrderInRecord(1L);
+		Assert.assertEquals(metadataRecord.getTitle().get(0), expectedTitle);
 		Assert.assertEquals(metadataRecord.getPublicationYear(), new Long(1992));
 		Assert.assertEquals(metadataRecord.getFormat(), "Book");
-		Assert.assertEquals(metadataRecord.getTitle().get(0), expectedTitle);
 	}
 
 	/**
@@ -77,7 +82,9 @@ public class MarcXmlParserTest extends AbstractTest {
 		Assert.assertEquals(marc.getField("HGS", 'a'), "0");
 		Assert.assertEquals(metadataRecord.getPublicationYear(), new Long(1978));
 		Assert.assertEquals(metadataRecord.getFormat(), "Book");
-		final String expectedTitle = "Cardiomyopathy and myocardial biopsy /";
+		Title expectedTitle = new Title();
+		expectedTitle.setTitleStr("Cardiomyopathy and myocardial biopsy /");
+		expectedTitle.setOrderInRecord(1L);
 		Assert.assertEquals(metadataRecord.getTitle().get(0), expectedTitle);
 	}
 

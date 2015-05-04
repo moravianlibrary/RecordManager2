@@ -12,11 +12,11 @@ import org.marc4j.marc.Subfield;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import cz.mzk.recordmanager.server.dedup.DedupRecordsWriter;
 import cz.mzk.recordmanager.server.export.IOFormat;
 import cz.mzk.recordmanager.server.marc.MarcRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecordFormat;
 import cz.mzk.recordmanager.server.model.Isbn;
+import cz.mzk.recordmanager.server.model.Title;
 import cz.mzk.recordmanager.server.util.MetadataUtils;
 
 public class MetadataMarcRecord implements MetadataRecord {
@@ -360,12 +360,12 @@ public class MetadataMarcRecord implements MetadataRecord {
 	 *         found, list containing empty string is returned
 	 */
 	@Override
-	public List<String> getTitle() {
+	public List<Title> getTitle() {
 		final char titleSubfields[] = new char[]{'a','b','n','p'};
 		final char punctiation[] = new char[]{':', '.', '.' };
-		List<String> result = new ArrayList<String>();
+		List<Title> result = new ArrayList<Title>();
 		
-		
+		Long titleOrder = 0L;
 		for (String key: new String[]{"245", "240"}) {
 			for (DataField field :underlayingMarc.getDataFields(key)) {
 				
@@ -387,13 +387,19 @@ public class MetadataMarcRecord implements MetadataRecord {
 				}
 				
 				if (builder.length() > 0) {
-					result.add(builder.toString());
+					Title title = new Title();
+					title.setTitleStr(builder.toString());
+					title.setOrderInRecord(++titleOrder);
+					result.add(title);
 				}
 			}
 		}
 		
 		if (result.isEmpty()) {
-			result.add("");
+			Title title = new Title();
+			title.setTitleStr("");
+			title.setOrderInRecord(1L);
+			result.add(title);
 		}
 		return result;
 	}

@@ -76,6 +76,14 @@ CREATE TABLE isbn (
   CONSTRAINT isbn_fk   FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id)
 );
 
+CREATE TABLE title (
+  id                   DECIMAL(10) PRIMARY KEY,
+  harvested_record_id  DECIMAL(10),
+  title                VARCHAR(255),
+  order_in_record      DECIMAL(4),
+  CONSTRAINT title_fk   FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id)
+);
+
 CREATE TABLE authority_record (
   id                   DECIMAL(10) PRIMARY KEY,
   oai_harvest_conf_id  DECIMAL(10),

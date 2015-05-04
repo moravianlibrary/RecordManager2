@@ -20,36 +20,37 @@ public class HarvestedRecordDedupMatcherImpl implements
 	
 	@Override
 	public  boolean matchRecords(final HarvestedRecord record1, final HarvestedRecord record2) {
-		boolean isbnMatch = false;
-		boolean titleMatch = false;
-		
-		if (record1.getPublicationYear() != null 
-				&& record2.getPublicationYear() != null 
-				&& !record1.getPublicationYear().equals(record2.getPublicationYear())) {
-			logger.debug("Publication year mismatch, original: {} deduplicated: {}", record1, record2);
-			return false;
-		}
-				
-		if (record1.getPhysicalFormat() != null 
-				&& record2.getPhysicalFormat() != null 
-				&& !record1.getPhysicalFormat().equals(record2.getPhysicalFormat())) {
-			logger.debug("Format mismatch, original: {} deduplicated: {}", record1, record2);
-			return false;
-		}
-		
-		if (record1.getIsbn() != null && record2.getIsbn() != null) {
-			isbnMatch = record1.getIsbn().equals(record2.getIsbn());
-		}
-		
-		if (record1.getTitle() != null && record2.getTitle() != null) {
-			if (levensteinTitleMatch(record1.getTitle(), record2.getTitle()) > TITLE_MATCH_TRESHOLD) {
-				titleMatch = true;
-			}
-		}
-		
-		if (titleMatch || isbnMatch) {
-			return true;
-		}
+		//TODO unused???
+//		boolean isbnMatch = false;
+//		boolean titleMatch = false;
+//		
+//		if (record1.getPublicationYear() != null 
+//				&& record2.getPublicationYear() != null 
+//				&& !record1.getPublicationYear().equals(record2.getPublicationYear())) {
+//			logger.debug("Publication year mismatch, original: {} deduplicated: {}", record1, record2);
+//			return false;
+//		}
+//				
+//		if (record1.getPhysicalFormat() != null 
+//				&& record2.getPhysicalFormat() != null 
+//				&& !record1.getPhysicalFormat().equals(record2.getPhysicalFormat())) {
+//			logger.debug("Format mismatch, original: {} deduplicated: {}", record1, record2);
+//			return false;
+//		}
+//		
+//		if (record1.getIsbn() != null && record2.getIsbn() != null) {
+//			isbnMatch = record1.getIsbn().equals(record2.getIsbn());
+//		}
+//		
+//		if (record1.getTitle() != null && record2.getTitle() != null) {
+//			if (levensteinTitleMatch(record1.getTitle(), record2.getTitle()) > TITLE_MATCH_TRESHOLD) {
+//				titleMatch = true;
+//			}
+//		}
+//		
+//		if (titleMatch || isbnMatch) {
+//			return true;
+//		}
 		
 		return deepMatchRecords(record1, record2);
 	}

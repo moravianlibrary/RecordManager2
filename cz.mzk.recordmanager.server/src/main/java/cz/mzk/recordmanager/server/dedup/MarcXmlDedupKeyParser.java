@@ -1,5 +1,6 @@
 package cz.mzk.recordmanager.server.dedup;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -11,6 +12,7 @@ import com.google.common.base.Preconditions;
 import cz.mzk.recordmanager.server.metadata.MetadataRecord;
 import cz.mzk.recordmanager.server.metadata.MetadataRecordFactory;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
+import cz.mzk.recordmanager.server.model.Title;
 import cz.mzk.recordmanager.server.util.MetadataUtils;
 
 @Component
@@ -34,10 +36,24 @@ public class MarcXmlDedupKeyParser implements DedupKeysParser {
 		MetadataRecord metadata = metadataFactory.getMetadataRecord(record);
 
 		record.setIsbns(metadata.getISBNs());
+		List<Title> titles = new ArrayList<>();
+		String depricatedTitle = "";
+		for (Title title: metadata.getTitle()) {
+			if (!title.getTitleStr().isEmpty())  {
+				depricatedTitle = title.getTitleStr();
+			}
+			title.setTitleStr(MetadataUtils.normalizeAndShorten(
+						title.getTitleStr(),
+						EFFECTIVE_TITLE_LENGTH));
+			titles.add(title);
+		}
+		
+		
 		record.setTitle(
 				MetadataUtils.normalizeAndShorten(
-						metadata.getTitle().get(0),
+						depricatedTitle,
 						EFFECTIVE_TITLE_LENGTH));
+		record.setTitles(titles);
 		record.setPhysicalFormat(metadata.getFormat());
 		record.setPublicationYear(metadata.getPublicationYear());
 

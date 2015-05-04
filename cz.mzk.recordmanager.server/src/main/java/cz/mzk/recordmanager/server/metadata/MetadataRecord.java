@@ -5,14 +5,15 @@ import java.util.List;
 import cz.mzk.recordmanager.server.export.IOFormat;
 import cz.mzk.recordmanager.server.model.HarvestedRecordFormat;
 import cz.mzk.recordmanager.server.model.Isbn;
+import cz.mzk.recordmanager.server.model.Title;
 
 public interface MetadataRecord {
 	
 	/**
 	 * get all titles of record, first is the most important 
-	 * @return List<String>
+	 * @return List<Title>
 	 */
-	public List<String> getTitle();
+	public List<Title> getTitle();
 	
 	public String getFormat();
 	public Long getPublicationYear();
