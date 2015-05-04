@@ -13,6 +13,7 @@ import cz.mzk.recordmanager.server.AbstractTest;
 import cz.mzk.recordmanager.server.metadata.MetadataRecord;
 import cz.mzk.recordmanager.server.metadata.MetadataRecordFactory;
 import cz.mzk.recordmanager.server.model.HarvestedRecordFormat;
+import cz.mzk.recordmanager.server.model.Title;
 import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordDAO;
 
 public class MarcRecordImplTest extends AbstractTest {
@@ -146,6 +147,51 @@ public class MarcRecordImplTest extends AbstractTest {
 		Assert.assertEquals(metadataRecord.getPublicationYear().longValue(),
 				1977);
 		data.clear();
+		
+		data.add("008 950928s1981----xr ||||e||||||||||||cze||");
+		mri = MarcRecordFactory.recordFactory(data);
+		metadataRecord = metadataFactory.getMetadataRecord(mri);
+		Assert.assertEquals(metadataRecord.getPublicationYear().longValue(), 1981);
+		data.clear();
+	}
+	
+	@Test
+	public void getTitleTest() throws Exception{
+		MarcRecordImpl mri;
+		MetadataRecord metadataRecord;
+		List<String> data = new ArrayList<String>();
+
+		data.add("245 $nn$aa$pp$bb");
+		data.add("240 $aa$nn$bb$pp");
+		data.add("240 $aDeutsche Bibliographie.$pWöchentliches Verzeichnis."
+				+ "$nReihe B,$pBeilage, Erscheinungen ausserhalb des Verlags"
+				+ "buchhandels :$bAmtsblatt der Deutschen Bibliothek.$kadasd");
+		mri = MarcRecordFactory.recordFactory(data);
+		metadataRecord = metadataFactory.getMetadataRecord(mri);
+		Title expectedTitle1 = new Title();
+		expectedTitle1.setTitleStr("napb");
+		expectedTitle1.setOrderInRecord(1L);
+		Title expectedTitle2 = new Title();
+		expectedTitle2.setTitleStr("anbp");
+		expectedTitle2.setOrderInRecord(2L);
+		Title expectedTitle3 = new Title();
+		expectedTitle3.setTitleStr("Deutsche Bibliographie.Wöchentliches Verzeichnis."
+				+ "Reihe B, Beilage, Erscheinungen ausserhalb des Verlags"
+				+ "buchhandels : Amtsblatt der Deutschen Bibliothek.");
+		expectedTitle3.setOrderInRecord(3L);
+		
+		Assert.assertEquals(3, metadataRecord.getTitle().size());
+		Assert.assertEquals(metadataRecord.getTitle().get(0),expectedTitle1);
+		Assert.assertEquals(metadataRecord.getTitle().get(1),expectedTitle2);
+		Assert.assertEquals(metadataRecord.getTitle().get(2),expectedTitle3);
+		data.clear();
+
+		mri = MarcRecordFactory.recordFactory(data);
+		metadataRecord = metadataFactory.getMetadataRecord(mri);
+		Assert.assertEquals(1, metadataRecord.getTitle().size());
+		Assert.assertTrue(metadataRecord.getTitle().get(0).getTitleStr().isEmpty());
+		data.clear();
+		
 	}
 
 	@Test
@@ -215,30 +261,6 @@ public class MarcRecordImplTest extends AbstractTest {
 		Assert.assertEquals(metadataRecord.getPageCount(), null);
 		data.clear();
 	}
-
-	//TODO rewrite test
-//	@Test
-//	public void getISBNsTest() throws Exception {
-//		MarcRecordImpl mri;
-//		MetadataRecord metadataRecord;
-//		List<String> data = new ArrayList<String>();
-//
-//		data.add("020 $a9788086026923");
-//		data.add("020 $a9788086026923");
-//		data.add("020 $a978-80-7250-482-4");
-//		data.add("020 $a80-200-0980-9");
-//		data.add("020 $a456");
-//		mri = MarcRecordFactory.recordFactory(data);
-//		metadataRecord = metadataFactory.getMetadataRecord(mri);
-//		Assert.assertEquals(metadataRecord.getISBNs().toString(),
-//				"[9788086026923, 9788072504824, 9788020009807]");
-//		data.clear();
-//
-//		mri = MarcRecordFactory.recordFactory(data);
-//		metadataRecord = metadataFactory.getMetadataRecord(mri);
-//		Assert.assertEquals(metadataRecord.getISBNs(), Collections.EMPTY_LIST);
-//		data.clear();
-//	}
 	
 	@Test
 	public void getDetectedFormatListTest() throws Exception {

@@ -12,6 +12,9 @@ import org.marc4j.marc.Subfield;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.primitives.Chars;
+
+import cz.mzk.recordmanager.server.dedup.DedupRecordsWriter;
 import cz.mzk.recordmanager.server.export.IOFormat;
 import cz.mzk.recordmanager.server.marc.MarcRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecordFormat;
@@ -339,11 +342,12 @@ public class MetadataMarcRecord implements MetadataRecord {
 		}
 		if (year == null) {
 			year = underlayingMarc.getControlField("008");
-			if (year == null || year.length() < 11) {
+			if (year == null || year.length() < 12) {
 				return null;
 			}
-			year = year.substring(7, 10);
+			year = year.substring(7, 11);
 		}
+
 		Matcher matcher = YEAR_PATTERN.matcher(year);
 		try {
 			if (matcher.find()) {
@@ -362,28 +366,20 @@ public class MetadataMarcRecord implements MetadataRecord {
 	@Override
 	public List<Title> getTitle() {
 		final char titleSubfields[] = new char[]{'a','b','n','p'};
-		final char punctiation[] = new char[]{':', '.', '.' };
 		List<Title> result = new ArrayList<Title>();
 		
 		Long titleOrder = 0L;
 		for (String key: new String[]{"245", "240"}) {
 			for (DataField field :underlayingMarc.getDataFields(key)) {
+				StringBuilder builder = new StringBuilder();
 				
-				final List<Subfield> subfields = underlayingMarc.getSubfields(field, titleSubfields);
-				StringBuilder builder = new StringBuilder();		
-				
-				for (int i = 0; i < titleSubfields.length; i++) {
-					if (i >= subfields.size() || subfields.get(i).getCode() != titleSubfields[i]) {
-						continue;
+				for(Subfield subfield: field.getSubfields()){
+					if (MetadataUtils.hasTrailingPunctuation(builder.toString())) {
+						builder.append(" ");
 					}
-					if (i > 0 && i < subfields.size()) {
-						if (MetadataUtils.hasTrailingPunctuation(builder.toString())) {
-							builder.append(" ");
-						} else {
-							builder.append(punctiation[i-1]);
-						}
+					if(Chars.contains(titleSubfields, subfield.getCode())){
+						builder.append(subfield.getData());
 					}
-					builder.append(subfields.get(i).getData());
 				}
 				
 				if (builder.length() > 0) {
