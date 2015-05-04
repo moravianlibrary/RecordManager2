@@ -11,6 +11,7 @@ import com.google.common.io.ByteStreams;
 import cz.mzk.recordmanager.server.AbstractTest;
 import cz.mzk.recordmanager.server.marc.InvalidMarcException;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
+import cz.mzk.recordmanager.server.model.Title;
 import cz.mzk.recordmanager.server.model.HarvestedRecord.HarvestedRecordUniqueId;
 
 public class MarcXmlDedupKeyParserTest extends AbstractTest {
@@ -32,7 +33,8 @@ public class MarcXmlDedupKeyParserTest extends AbstractTest {
 		parser.parse(record);
 		Assert.assertTrue(record.getIsbns().size() > 0);
 		Assert.assertEquals(record.getIsbns().get(0).getIsbn(), EXPECTED_ISBN);
-		Assert.assertEquals(record.getTitle(), EXPECTED_TITLE);
+		Assert.assertEquals(record.getTitles().size(), 1);
+		Assert.assertEquals(record.getTitles().get(0).getTitleStr(), EXPECTED_TITLE);
 		Assert.assertEquals(record.getPhysicalFormat(), "Book");
 		Assert.assertEquals(record.getPublicationYear(), new Long(2014));
 	}

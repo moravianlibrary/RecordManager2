@@ -25,8 +25,6 @@ public class HarvestedRecordRowMapper implements RowMapper<HarvestedRecord> {
 		HarvestedRecord record = new HarvestedRecord(id);
 		record.setRawRecord(rs.getBytes("raw_record"));
 		record.setFormat(rs.getString("format"));
-		record.setIsbn(rs.getString("isbn"));
-		record.setTitle(rs.getString("title"));
 		return record;
 	}
 

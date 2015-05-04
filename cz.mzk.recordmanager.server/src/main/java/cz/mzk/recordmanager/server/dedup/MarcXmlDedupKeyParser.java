@@ -37,22 +37,13 @@ public class MarcXmlDedupKeyParser implements DedupKeysParser {
 
 		record.setIsbns(metadata.getISBNs());
 		List<Title> titles = new ArrayList<>();
-		String depricatedTitle = "";
 		for (Title title: metadata.getTitle()) {
-			if (!title.getTitleStr().isEmpty())  {
-				depricatedTitle = title.getTitleStr();
-			}
 			title.setTitleStr(MetadataUtils.normalizeAndShorten(
 						title.getTitleStr(),
 						EFFECTIVE_TITLE_LENGTH));
 			titles.add(title);
 		}
 		
-		
-		record.setTitle(
-				MetadataUtils.normalizeAndShorten(
-						depricatedTitle,
-						EFFECTIVE_TITLE_LENGTH));
 		record.setTitles(titles);
 		record.setPhysicalFormat(metadata.getFormat());
 		record.setPublicationYear(metadata.getPublicationYear());
