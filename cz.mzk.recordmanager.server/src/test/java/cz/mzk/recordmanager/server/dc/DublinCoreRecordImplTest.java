@@ -14,6 +14,7 @@ public class DublinCoreRecordImplTest extends AbstractTest {
 	  DublinCoreRecord rec = new DublinCoreRecordImpl();
 	  String date = rec.getFirstDate();
 	  Assert.assertEquals(null,date);
+	  Assert.assertTrue(rec.getDates().isEmpty());
 	  
 	  String testDate = "1984";
       String testDate2 = "2015";
@@ -40,6 +41,7 @@ public class DublinCoreRecordImplTest extends AbstractTest {
 
 	  String title = rec.getFirstTitle();
 	  Assert.assertEquals(null,title);
+	  Assert.assertTrue(rec.getTitles().isEmpty());
 	  
 /*	  System.out.println("Když nenastavíme title, máme: "+title);*/
 	  

@@ -1,9 +1,9 @@
 package cz.mzk.recordmanager.server.dc;
 
-	import java.io.InputStream;
+import java.io.InputStream;
 
-	public interface DublinCoreParser {
+public interface DublinCoreParser {
 
-		public DublinCoreRecord parseRecord(InputStream is);
+	public DublinCoreRecord parseRecord(InputStream is);
 
-	}
+}

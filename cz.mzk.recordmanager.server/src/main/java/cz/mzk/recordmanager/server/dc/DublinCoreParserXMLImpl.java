@@ -13,19 +13,16 @@ public class DublinCoreParserXMLImpl implements DublinCoreParser {
 	@Override
 	public DublinCoreRecord parseRecord(InputStream is) {
 		try {
-		 DublinCoreXMLHandler handler = new DublinCoreXMLHandler();
-		 SAXParserFactory factory=SAXParserFactory.newInstance();
-		 SAXParser parser=factory.newSAXParser();
-		 parser.parse(is,handler);
+			DublinCoreXMLHandler handler = new DublinCoreXMLHandler();
+			SAXParserFactory factory = SAXParserFactory.newInstance();
+			SAXParser parser = factory.newSAXParser();
+			parser.parse(is, handler);
 
-		 return handler.getRecord();
-		}
-		catch  (Exception e) {
+			return handler.getRecord();
+		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
-				
+
 	}
 
-	
-	
 }

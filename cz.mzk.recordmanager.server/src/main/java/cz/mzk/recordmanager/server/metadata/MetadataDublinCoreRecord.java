@@ -1,7 +1,6 @@
 package cz.mzk.recordmanager.server.metadata;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -11,29 +10,34 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import cz.mzk.recordmanager.server.dc.DublinCoreRecord;
-import cz.mzk.recordmanager.server.dc.DublinCoreRecordImpl;
 import cz.mzk.recordmanager.server.export.IOFormat;
-import cz.mzk.recordmanager.server.marc.MarcRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecordFormat;
 import cz.mzk.recordmanager.server.model.Isbn;
 
 public class MetadataDublinCoreRecord implements MetadataRecord {
 
-	private static Logger logger = LoggerFactory.getLogger(MetadataDublinCoreRecord.class);
-	
-    protected DublinCoreRecord dcRecord;
-    
-    protected final ISBNValidator isbnValidator = ISBNValidator.getInstance(true);
-    
+	private static Logger logger = LoggerFactory
+			.getLogger(MetadataDublinCoreRecord.class);
+
+	protected DublinCoreRecord dcRecord;
+
+	protected final ISBNValidator isbnValidator = ISBNValidator
+			.getInstance(true);
+
 	protected static final Pattern YEAR_PATTERN = Pattern.compile("\\d{4}");
-	
+	protected static final Pattern DC_ISBN_PATTERN = Pattern
+			.compile("isbn:(.*)");
+	protected static final Pattern DC_ISSN_PATTERN = Pattern
+			.compile("issn:(*)");
+
 	public MetadataDublinCoreRecord(DublinCoreRecord dcRecord) {
 		if (dcRecord == null) {
-			throw new IllegalArgumentException("Creating MetadataDublinCoreRecord with NULL underlying dcRecord.");
+			throw new IllegalArgumentException(
+					"Creating MetadataDublinCoreRecord with NULL underlying dcRecord.");
 		}
 		this.dcRecord = dcRecord;
 	}
-	
+
 	@Override
 	public List<String> getTitle() {
 		return dcRecord.getTitles();
@@ -41,20 +45,22 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 
 	@Override
 	public String getFormat() {
-		 List<String> type = dcRecord.getTypes();
-			for(String f: type) {
-			    if (f.equals("model:monograph")) {
-			    	return "Book";
-			    } else if (f.equals("model:periodical")) {
-			    	return "Journal";
-			    }
-		    }
+		List<String> type = dcRecord.getTypes();
+		for (String f : type) {
+			//Kramerius specific
+			if (f.equals("model:monograph")) {
+				return "Book";
+			//Kramerius specific
+			} else if (f.equals("model:periodical")) {
+				return "Journal";
+			}
+		}
 		return null;
 	}
 
 	@Override
 	public Long getPublicationYear() {
-		//expecting year in date (should work for Kramerius)
+		// expecting year in date (should work for Kramerius)
 		String year = dcRecord.getFirstDate();
 		if (year == null) {
 			return null;
@@ -64,7 +70,8 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 			if (matcher.find()) {
 				return Long.parseLong(matcher.group(0));
 			}
-		} catch (NumberFormatException e) {}
+		} catch (NumberFormatException e) {
+		}
 		return null;
 	}
 
@@ -76,44 +83,42 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 
 	@Override
 	public String getUniqueId() {
-		//expecting unique id in first identifier
+		// expecting unique id in first identifier
 		return this.dcRecord.getFirstIdentifier();
 	}
 
 	@Override
 	public List<Isbn> getISBNs() {
-		/* go through all identifiers
-		 * look for isbn:*
-		 * validate isbn
-		 * return isbn list
+		/*
+		 * go through all identifiers look for isbn:* validate isbn return isbn
+		 * list
 		 */
 		List<String> identifiers = dcRecord.getIdentifiers();
 		List<Isbn> isbns = new ArrayList<Isbn>();
 		Isbn isbn = new Isbn();
-		Pattern p = Pattern.compile("isbn:(.*)");
+		Pattern p = DC_ISBN_PATTERN;
 		Matcher m;
 		Long isbnCounter = 0L;
-	
-		
-		for(String f: identifiers) {
-			
-		    m = p.matcher(f);
-		    if (m.find()) {
-		    	try {
-		    	String isbnStr = m.group(1);		    	
-		    	isbnStr = isbnValidator.validate(isbnStr);
-		    	isbn.setIsbn(Long.valueOf(isbnStr));
-		    	
-		    	isbn.setNote("");
-				isbn.setOrderInRecord(++isbnCounter);
-		    	
-		    	isbns.add(isbn);
-		    	} catch (NumberFormatException nfe) {
-						logger.info(String.format("Invalid ISBN: %s", m.group(1)));
-						continue;
-		    	}
-		    }
-	    }
+
+		for (String f : identifiers) {
+
+			m = p.matcher(f);
+			if (m.find()) {
+				try {
+					String isbnStr = m.group(1);
+					isbnStr = isbnValidator.validate(isbnStr);
+					isbn.setIsbn(Long.valueOf(isbnStr));
+
+					isbn.setNote("");
+					isbn.setOrderInRecord(++isbnCounter);
+
+					isbns.add(isbn);
+				} catch (NumberFormatException nfe) {
+					logger.info(String.format("Invalid ISBN: %s", m.group(1)));
+					continue;
+				}
+			}
+		}
 		return isbns;
 	}
 
@@ -121,17 +126,17 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 	public List<String> getISSNs() {
 		List<String> identifiers = dcRecord.getIdentifiers();
 		List<String> issns = new ArrayList<String>();
-		Pattern p = Pattern.compile("issn:(*)");
+		Pattern p = DC_ISSN_PATTERN;
 		Matcher m;
-		
-		for(String f: identifiers) {
-		    m = p.matcher(f);
-		    if (m.find()) {
-		    	String issn = m.group(1);
-		    	System.out.println("nalezeno issn: " + issn);
-		    	issns.add(issn);
-		    }
-	    }
+
+		for (String f : identifiers) {
+			m = p.matcher(f);
+			if (m.find()) {
+				String issn = m.group(1);
+				System.out.println("nalezeno issn: " + issn);
+				issns.add(issn);
+			}
+		}
 		return issns;
 	}
 
@@ -147,34 +152,38 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 		return null;
 	}
 
-	protected boolean isBook(){				
+	protected boolean isBook() {
 		List<String> type = dcRecord.getTypes();
-		for(String f: type) {
-		    if (f.equals("model:monograph")) {
-		    	return true;
-		    }
+		for (String f : type) {
+			// Kramerius specific
+			if (f.equals("model:monograph")) {
+				return true;
+			}
 		}
 		return false;
 	}
-	
-	protected boolean isPeriodical(){				
+
+	protected boolean isPeriodical() {
 		List<String> type = dcRecord.getTypes();
-		for(String f: type) {
-		    if (f.equals("model:periodical")) {
-		    	return true;
-		    }
+		for (String f : type) {
+			// Kramerius specific
+			if (f.equals("model:periodical")) {
+				return true;
+			}
 		}
 		return false;
 	}
-	
+
 	@Override
 	public List<HarvestedRecordFormat> getDetectedFormatList() {
-		
+
 		List<HarvestedRecordFormat> hrf = new ArrayList<HarvestedRecordFormat>();
-		
-		if(isBook()) hrf.add(HarvestedRecordFormat.BOOKS);
-		if(isPeriodical()) hrf.add(HarvestedRecordFormat.PERIODICALS);
-		
+
+		if (isBook())
+			hrf.add(HarvestedRecordFormat.BOOKS);
+		if (isPeriodical())
+			hrf.add(HarvestedRecordFormat.PERIODICALS);
+
 		return null;
 	}
 
