@@ -127,6 +127,10 @@ public class HarvestedRecord extends AbstractDomainObject {
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name="harvested_record_id", referencedColumnName="id")
 	private List<Isbn> isbns = new ArrayList<Isbn>();
+	
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name="harvested_record_id", referencedColumnName="id")
+	private List<Title> titles = new ArrayList<Title>();
 
 	@Column(name="title")
 	private String title;
@@ -225,6 +229,14 @@ public class HarvestedRecord extends AbstractDomainObject {
 		this.isbns = isbns;
 	}
 
+	public List<Title> getTitles() {
+		return titles;
+	}
+
+	public void setTitles(List<Title> titles) {
+		this.titles = titles;
+	}
+	
 	public Long getPublicationYear() {
 		return publicationYear;
 	}
