@@ -14,7 +14,6 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.primitives.Chars;
 
-import cz.mzk.recordmanager.server.dedup.DedupRecordsWriter;
 import cz.mzk.recordmanager.server.export.IOFormat;
 import cz.mzk.recordmanager.server.marc.MarcRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecordFormat;

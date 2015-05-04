@@ -168,6 +168,7 @@ public class MarcRecordImplTest extends AbstractTest {
 				+ "buchhandels :$bAmtsblatt der Deutschen Bibliothek.$kadasd");
 		mri = MarcRecordFactory.recordFactory(data);
 		metadataRecord = metadataFactory.getMetadataRecord(mri);
+		
 		Title expectedTitle1 = new Title();
 		expectedTitle1.setTitleStr("napb");
 		expectedTitle1.setOrderInRecord(1L);
