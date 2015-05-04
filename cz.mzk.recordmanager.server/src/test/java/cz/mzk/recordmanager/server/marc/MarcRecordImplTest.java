@@ -146,6 +146,38 @@ public class MarcRecordImplTest extends AbstractTest {
 		Assert.assertEquals(metadataRecord.getPublicationYear().longValue(),
 				1977);
 		data.clear();
+		
+		data.add("008 00000001980");
+		mri = MarcRecordFactory.recordFactory(data);
+		metadataRecord = metadataFactory.getMetadataRecord(mri);
+		Assert.assertEquals(metadataRecord.getPublicationYear().longValue(), 1980);
+		data.clear();
+	}
+	
+	@Test
+	public void getTitleTest() throws Exception{
+		MarcRecordImpl mri;
+		MetadataRecord metadataRecord;
+		List<String> data = new ArrayList<String>();
+
+		data.add("245 $nn$aa$pp$bb");
+		data.add("240 $aa$nn$bb$pp");
+		data.add("240 $aDeutsche Bibliographie.$pWöchentliches Verzeichnis."
+				+ "$nReihe B,$pBeilage, Erscheinungen ausserhalb des Verlags"
+				+ "buchhandels :$bAmtsblatt der Deutschen Bibliothek.$kadasd");
+		mri = MarcRecordFactory.recordFactory(data);
+		metadataRecord = metadataFactory.getMetadataRecord(mri);
+		Assert.assertEquals(metadataRecord.getTitle().toString(),
+				"[napb, anbp, Deutsche Bibliographie.Wöchentliches Verzeichnis."
+				+ "Reihe B, Beilage, Erscheinungen ausserhalb des Verlags"
+				+ "buchhandels : Amtsblatt der Deutschen Bibliothek.]");
+		data.clear();
+
+		mri = MarcRecordFactory.recordFactory(data);
+		metadataRecord = metadataFactory.getMetadataRecord(mri);
+		Assert.assertEquals(metadataRecord.getTitle().toString(), "[]");
+		data.clear();
+		
 	}
 
 	@Test
