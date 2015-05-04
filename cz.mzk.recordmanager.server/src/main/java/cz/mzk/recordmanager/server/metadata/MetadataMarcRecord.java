@@ -16,8 +16,10 @@ import com.google.common.primitives.Chars;
 
 import cz.mzk.recordmanager.server.export.IOFormat;
 import cz.mzk.recordmanager.server.marc.MarcRecord;
+import cz.mzk.recordmanager.server.model.Cnb;
 import cz.mzk.recordmanager.server.model.HarvestedRecordFormat;
 import cz.mzk.recordmanager.server.model.Isbn;
+import cz.mzk.recordmanager.server.model.Issn;
 import cz.mzk.recordmanager.server.model.Title;
 import cz.mzk.recordmanager.server.util.MetadataUtils;
 
@@ -50,15 +52,15 @@ public class MetadataMarcRecord implements MetadataRecord {
 	}
 
 	@Override
-	public List<String> getISSNs() {	
-		List<String> issns = new ArrayList<String>();
-		
-		for(String issn: underlayingMarc.getFields("022", 'a')){
-			issns.add(issn.replace("-", ""));
-		}
-		
-		return issns;
-		
+	public List<Issn> getISSNs() {	
+        // TODO implementation
+		return new ArrayList<Issn>();
+	}
+	
+	@Override
+	public List<Cnb> getCNBs() {
+		// TODO implementation
+		return new ArrayList<Cnb>();
 	}
 
 	@Override

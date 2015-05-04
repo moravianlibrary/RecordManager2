@@ -72,6 +72,31 @@ CREATE TABLE isbn (
   FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id)
 );
 
+CREATE TABLE issn (
+  id                   DECIMAL(10) PRIMARY KEY,
+  harvested_record_id  DECIMAL(10),
+  issn                 VARCHAR(9),
+  order_in_record      DECIMAL(4),
+  note                 VARCHAR(100),
+  CONSTRAINT isbn_fk   FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id)
+);
+
+CREATE TABLE cnb (
+  id                   DECIMAL(10) PRIMARY KEY,
+  harvested_record_id  DECIMAL(10),
+  cnb                  DECIMAL(20),
+  CONSTRAINT isbn_fk   FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id)
+);
+
+CREATE TABLE issn (
+  id                   DECIMAL(10) PRIMARY KEY,
+  harvested_record_id  DECIMAL(10),
+  issn                 VARCHAR(9),
+  order_in_record      DECIMAL(4),
+  note                 VARCHAR(100),
+  FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id)
+);
+
 CREATE TABLE title (
   id                   DECIMAL(10) PRIMARY KEY,
   harvested_record_id  DECIMAL(10),

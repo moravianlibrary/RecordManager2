@@ -130,6 +130,14 @@ public class HarvestedRecord extends AbstractDomainObject {
 	
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name="harvested_record_id", referencedColumnName="id")
+	private List<Issn> issns = new ArrayList<Issn>();
+	
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name="harvested_record_id", referencedColumnName="id")
+	private List<Cnb> cnb = new ArrayList<Cnb>();
+	
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name="harvested_record_id", referencedColumnName="id")
 	private List<Title> titles = new ArrayList<Title>();
 
 	@Column(name="title")

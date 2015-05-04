@@ -3,8 +3,10 @@ package cz.mzk.recordmanager.server.metadata;
 import java.util.List;
 
 import cz.mzk.recordmanager.server.export.IOFormat;
+import cz.mzk.recordmanager.server.model.Cnb;
 import cz.mzk.recordmanager.server.model.HarvestedRecordFormat;
 import cz.mzk.recordmanager.server.model.Isbn;
+import cz.mzk.recordmanager.server.model.Issn;
 import cz.mzk.recordmanager.server.model.Title;
 
 public interface MetadataRecord {
@@ -43,7 +45,13 @@ public interface MetadataRecord {
 	 * @return List<String>
 	 */
 	
-	public List<String> getISSNs();
+	public List<Issn> getISSNs();
+	
+	/**
+	 * get all CNBs assigned to record
+	 * @return
+	 */
+	public List<Cnb> getCNBs();
 	
 	/**
 	 * get series ISSN
