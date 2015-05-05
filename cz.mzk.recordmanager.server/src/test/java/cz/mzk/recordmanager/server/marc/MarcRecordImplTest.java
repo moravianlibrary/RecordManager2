@@ -13,6 +13,7 @@ import cz.mzk.recordmanager.server.AbstractTest;
 import cz.mzk.recordmanager.server.metadata.MetadataRecord;
 import cz.mzk.recordmanager.server.metadata.MetadataRecordFactory;
 import cz.mzk.recordmanager.server.model.HarvestedRecordFormat;
+import cz.mzk.recordmanager.server.model.Isbn;
 import cz.mzk.recordmanager.server.model.Title;
 import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordDAO;
 
@@ -194,7 +195,7 @@ public class MarcRecordImplTest extends AbstractTest {
 		data.clear();
 		
 	}
-
+	
 	@Test
 	public void getISSNsTest() throws Exception {
 		// TODO rewrite to changed interface
@@ -248,6 +249,44 @@ public class MarcRecordImplTest extends AbstractTest {
 		mri = MarcRecordFactory.recordFactory(data);
 		metadataRecord = metadataFactory.getMetadataRecord(mri);
 		Assert.assertEquals(metadataRecord.getPageCount(), null);
+		data.clear();
+	}
+	
+	@Test
+	public void getISBNsTest() throws Exception {
+		MarcRecordImpl mri;
+		MetadataRecord metadataRecord;
+		List<String> data = new ArrayList<String>();
+		List<Isbn> isbnlist = new ArrayList<Isbn>();
+
+		data.add("020 $a9788086026923 (váz)");
+		Isbn isbn = new Isbn();
+		isbn.setIsbn(9788086026923L);
+		isbn.setOrderInRecord(1L);
+		isbn.setNote("váz");
+		isbnlist.add(isbn);
+		data.add("020 $a978-80-7250-482-4$q(váz)$q(q1)$qq2");
+		isbn = new Isbn();
+		isbn.setIsbn(9788072504824L);
+		isbn.setOrderInRecord(2L);
+		isbn.setNote("váz q1 q2");
+		isbnlist.add(isbn);
+		data.add("020 $a80-200-0980-9");
+		isbn = new Isbn();
+		isbn.setIsbn(9788020009807L);
+		isbn.setOrderInRecord(3L);
+		isbnlist.add(isbn);
+		data.add("020 $a456");
+		
+		mri = MarcRecordFactory.recordFactory(data);
+		metadataRecord = metadataFactory.getMetadataRecord(mri);
+		Assert.assertEquals(metadataRecord.getISBNs().toString(),
+				isbnlist.toString());
+		data.clear();
+
+		mri = MarcRecordFactory.recordFactory(data);
+		metadataRecord = metadataFactory.getMetadataRecord(mri);
+		Assert.assertEquals(metadataRecord.getISBNs(), Collections.EMPTY_LIST);
 		data.clear();
 	}
 	

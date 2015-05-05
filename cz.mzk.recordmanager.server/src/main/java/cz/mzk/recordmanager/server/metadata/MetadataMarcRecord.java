@@ -33,6 +33,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 
 	protected static final Pattern PAGECOUNT_PATTERN = Pattern.compile("\\d+");
 	protected static final Pattern YEAR_PATTERN = Pattern.compile("\\d{4}");
+	protected static final Pattern ISBN_PATTERN = Pattern.compile("(?i)([\\dx-]*)(.*)");
 	
 	public MetadataMarcRecord(MarcRecord underlayingMarc) {
 		if (underlayingMarc == null) {
@@ -96,20 +97,42 @@ public class MetadataMarcRecord implements MetadataRecord {
 			}
 			
 			Isbn isbn = new Isbn();
-			String isbnStr = isbnValidator.validate(subfieldA.getData());
-			
+
+			Matcher matcher = ISBN_PATTERN.matcher(subfieldA.getData());
 			try {
-				if (isbnStr == null) {
-					throw new NumberFormatException();
+				if (matcher.find()) {
+					String isbnStr = isbnValidator.validate(matcher.group(1));
+					
+					try {
+						if (isbnStr == null) {
+							throw new NumberFormatException();
+						}
+						Long isbn13 = Long.valueOf(isbnStr);
+						isbn.setIsbn(isbn13);
+					} catch (NumberFormatException nfe) {
+						logger.info(String.format("Invalid ISBN: %s", subfieldA.getData()));
+						continue;
+					}
 				}
-				Long isbn13 = Long.valueOf(isbnStr);
-				isbn.setIsbn(isbn13);
-			} catch (NumberFormatException nfe) {
-				logger.info(String.format("Invalid ISBN: %s", subfieldA.getData()));
-				continue;
-			}
+			} catch (NumberFormatException e) {}
 			
-			isbn.setNote("");
+			StringBuilder builder = new StringBuilder();
+			if(matcher.group(2).trim() != null){ 
+				String s = matcher.group(2).trim();
+				if(s.matches("\\(.+\\)")) {
+					builder.append(s.substring(1, s.length()-1));
+				}
+				else builder.append(s);
+				builder.append(" ");
+			}
+			for(Subfield subfieldQ: field.getSubfields('q')){
+				if(subfieldQ.getData().matches("\\(.+\\)")) {
+					builder.append(subfieldQ.getData().substring(1, subfieldQ.getData().length()-1));
+				}
+				else builder.append(subfieldQ.getData());
+				builder.append(" ");
+			}
+			isbn.setNote(builder.toString().trim());
 			isbn.setOrderInRecord(++isbnCounter);
 			isbns.add(isbn);
 		}
