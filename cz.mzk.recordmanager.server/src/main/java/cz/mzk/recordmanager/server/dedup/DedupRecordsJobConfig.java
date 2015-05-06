@@ -89,7 +89,7 @@ public class DedupRecordsJobConfig {
 		JdbcPagingItemReader<HarvestedRecord> reader = new JdbcPagingItemReader<HarvestedRecord>();
 		SqlPagingQueryProviderFactoryBean pqpf = new SqlPagingQueryProviderFactoryBean();
 		pqpf.setDataSource(dataSource);
-		pqpf.setSelectClause("SELECT oai_harvest_conf_id,record_id,publication_year,physical_format,format");
+		pqpf.setSelectClause("SELECT oai_harvest_conf_id,record_id,publication_year,format");
 		pqpf.setFromClause("FROM harvested_record hr");
 		//TODO && updated > last updated
 		pqpf.setWhereClause("WHERE hr.updated IS NULL");

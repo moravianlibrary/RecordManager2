@@ -9,12 +9,9 @@ import java.util.Objects;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.ElementCollection;
 import javax.persistence.Embeddable;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
@@ -168,9 +165,6 @@ public class HarvestedRecord extends AbstractDomainObject {
 	   inverseJoinColumns = @JoinColumn(name = "harvested_record_format_id "))
 	private List<HarvestedRecordFormat> physicalFormats = new ArrayList<>();
 	
-	@Column(name="physical_format")
-	private String physicalFormat;
-	
 	@Basic(fetch = FetchType.LAZY)
 	@Column(name="raw_record") 
 	private byte[] rawRecord;
@@ -257,14 +251,6 @@ public class HarvestedRecord extends AbstractDomainObject {
 
 	public void setPublicationYear(Long publicationYear) {
 		this.publicationYear = publicationYear;
-	}
-
-	public String getPhysicalFormat() {
-		return physicalFormat;
-	}
-
-	public void setPhysicalFormat(String physicalFormat) {
-		this.physicalFormat = physicalFormat;
 	}
 
 	public byte[] getRawRecord() {

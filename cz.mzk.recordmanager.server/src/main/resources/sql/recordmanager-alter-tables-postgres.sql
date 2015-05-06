@@ -103,3 +103,8 @@ CREATE SEQUENCE harvested_record_id_seq START 1;
 UPDATE harvested_record SET id = nextval('harvested_record_id_seq');
 ALTER TABLE harvested_record DROP CONSTRAINT harvested_record_pk;
 ALTER TABLE harvested_record ADD CONSTRAINT harvested_record_pk PRIMARY KEY (id);
+
+-- 6. 5. 2015 - mertam
+ALTER TABLE harvested_record DROP COLUMN title;
+ALTER TABLE harvested_record DROP COLUMN isbn;
+ALTER TABLE harvested_record DROP COLUMN physical_format; 

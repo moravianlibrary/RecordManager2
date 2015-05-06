@@ -40,10 +40,6 @@ CREATE TABLE format (
 
 CREATE TABLE dedup_record (
   id                   DECIMAL(10) PRIMARY KEY,
-  isbn                 VARCHAR(32),
-  title                VARCHAR(255),
-  publication_year     DECIMAL(4),
-  physical_format      VARCHAR(255),
   updated              TIMESTAMP
 );
 
@@ -55,10 +51,7 @@ CREATE TABLE harvested_record (
   updated              TIMESTAMP,
   deleted              TIMESTAMP,
   format               VARCHAR(12) NOT NULL,
-  isbn                 VARCHAR(32),
-  title                VARCHAR(255),
   publication_year     DECIMAL(4),
-  physical_format      VARCHAR(255),
   dedup_record_id      DECIMAL(10),
   raw_record           BLOB,
   CONSTRAINT harvested_record_pk                     PRIMARY KEY (id),
