@@ -17,7 +17,6 @@ public interface MetadataRecord {
 	 */
 	public List<Title> getTitle();
 	
-	public String getFormat();
 	public Long getPublicationYear();
 	
 	/**

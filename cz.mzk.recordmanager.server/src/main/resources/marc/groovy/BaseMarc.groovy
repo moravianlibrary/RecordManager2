@@ -6,7 +6,6 @@ allfields = getAllFields()
 fullrecord = getFullrecord()
 
 language = translate("mzk_language.map", getLanguages(), null)
-format = getFormat()
 
 author = getFirstField "100abcd"
 author_fuller = getFirstField "100q"

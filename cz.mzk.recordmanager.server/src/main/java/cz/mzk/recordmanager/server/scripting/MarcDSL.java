@@ -176,10 +176,6 @@ public class MarcDSL {
         return title;
     }
 
-	public String getFormat() {
-		return marcMetadataRecord.getFormat();
-	}
-
 	public String getFullrecord() {
 		return marcMetadataRecord.export(IOFormat.ISO_2709);
 	}

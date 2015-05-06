@@ -1,6 +1,7 @@
 package cz.mzk.recordmanager.server.scripting;
 
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -12,6 +13,7 @@ import org.testng.annotations.Test;
 import cz.mzk.recordmanager.server.AbstractTest;
 import cz.mzk.recordmanager.server.marc.MarcRecord;
 import cz.mzk.recordmanager.server.marc.MarcXmlParser;
+import cz.mzk.recordmanager.server.model.HarvestedRecordFormat.HarvestedRecordFormatEnum;
 
 public class MarcScriptFactoryTest extends AbstractTest {
 
@@ -35,7 +37,9 @@ public class MarcScriptFactoryTest extends AbstractTest {
 		Assert.assertEquals(entries.get("author"), null);
 		Assert.assertEquals(entries.get("published"), "Rožnov pod Radhoštěm : Proxima Bohemia, 2014");
 		Assert.assertEquals(entries.get("title"), "Česká republika : města a obce České republiky : tradice, historie, památky, turistika, současnost /");
-		Assert.assertEquals(entries.get("format"), "Book");
+		List<HarvestedRecordFormatEnum> detectedFormats = new ArrayList<>();
+		detectedFormats.add(HarvestedRecordFormatEnum.BOOKS);
+		Assert.assertEquals(entries.get("cpk_detected_format_txtF_mv"), detectedFormats) ;
 		Assert.assertNotNull(entries.get("language"));
 		Assert.assertTrue(entries.get("language") instanceof List<?>);
 		List<String> languages = (List<String>) entries.get("language");
