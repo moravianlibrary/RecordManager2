@@ -88,7 +88,7 @@ CREATE TABLE issn (
 CREATE TABLE cnb (
   id                   DECIMAL(10) PRIMARY KEY,
   harvested_record_id  DECIMAL(10),
-  cnb                  DECIMAL(20),
+  cnb                  VARCHAR(20),
   CONSTRAINT cnb_fk   FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id)
 );
 

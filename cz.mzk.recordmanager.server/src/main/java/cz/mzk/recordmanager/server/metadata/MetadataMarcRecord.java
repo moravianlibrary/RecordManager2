@@ -34,7 +34,8 @@ public class MetadataMarcRecord implements MetadataRecord {
 
 	protected static final Pattern PAGECOUNT_PATTERN = Pattern.compile("\\d+");
 	protected static final Pattern YEAR_PATTERN = Pattern.compile("\\d{4}");
-	protected static final Pattern ISBN_PATTERN = Pattern.compile("(?i)([\\dx-]*)(.*)");
+	protected static final Pattern ISBN_PATTERN = Pattern.compile("([\\dxX-]*)(.*)");
+	protected static final Pattern ISSN_PATTERN = Pattern.compile("(\\d{4}-\\d{3}[\\dxX])(.*)");
 	
 	public MetadataMarcRecord(MarcRecord underlayingMarc) {
 		if (underlayingMarc == null) {
@@ -53,16 +54,69 @@ public class MetadataMarcRecord implements MetadataRecord {
 		return id;
 	}
 
+	
+	
 	@Override
 	public List<Issn> getISSNs() {	
-        // TODO implementation
-		return new ArrayList<Issn>();
+        List<Issn> issns = new ArrayList<Issn>();
+        Long issnCounter = 0L;
+        
+        for(DataField field: underlayingMarc.getDataFields("022")){
+        	Subfield subfieldA = field.getSubfield('a');
+        	if(subfieldA == null){
+        		continue;
+        	}
+        	Issn issn = new Issn();
+        	
+        	Matcher matcher = ISSN_PATTERN.matcher(subfieldA.getData());
+			try {
+				if(matcher.find()) {
+					if(!issn.issnValidator(matcher.group(1))){
+						throw new NumberFormatException();
+					}					
+					issn.setIssn(matcher.group(1));
+					
+					StringBuilder builder = new StringBuilder();
+					if(matcher.group(2).trim() != null){ 
+						String s = matcher.group(2).trim();
+						if(s.matches("\\(.+\\)")) {
+							builder.append(s.substring(1, s.length()-1));
+						}
+						else builder.append(s);
+						builder.append(" ");
+					}
+					
+					issn.setNote(builder.toString().trim());
+					issn.setOrderInRecord(++issnCounter);
+					issns.add(issn);
+				}
+				
+			} catch (NumberFormatException e) {
+				logger.info(String.format("Invalid ISSN: %s", subfieldA.getData()));
+				continue;
+			}
+        
+			
+        }        
+        
+		return issns;
 	}
 	
 	@Override
 	public List<Cnb> getCNBs() {
-		// TODO implementation
-		return new ArrayList<Cnb>();
+		List<Cnb> cnbs = new ArrayList<Cnb>();
+		
+		for(DataField field: underlayingMarc.getDataFields("015")){
+        	for(Subfield subfieldA: field.getSubfields('a')){
+        		if(subfieldA != null){
+        			Cnb cnb = new Cnb();        	
+        			cnb.setCnb(subfieldA.getData());			
+        			cnbs.add(cnb);
+        		}
+        	}
+		}
+        
+		return cnbs;
 	}
 
 	@Override

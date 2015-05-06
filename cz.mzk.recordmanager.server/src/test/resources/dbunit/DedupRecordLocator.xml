@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <dataset>
-  <RECORDMANAGER_KEY NAME="recordmanager" VAL="6"/>
+  <RECORDMANAGER_KEY NAME="recordmanager" VAL="600"/>
   <LIBRARY ID="100" NAME="MZK" URL="www.mzk.cz" CATALOG_URL="vufind.mzk.cz" CITY="Brno"/>
   <CONTACT_PERSON ID="200" LIBRARY_ID="100" NAME="Jan Novak" EMAIL="jan.novak@neexistuje.cz" PHONE="728 123 456"/>
   <OAI_HARVEST_CONF ID="300" LIBRARY_ID="100" URL="http://aleph.mzk.cz/OAI" METADATA_PREFIX="marc21" CONTACT_PERSON_ID="200"/>
