@@ -12,7 +12,7 @@ import org.testng.annotations.Test;
 import cz.mzk.recordmanager.server.AbstractTest;
 import cz.mzk.recordmanager.server.metadata.MetadataRecord;
 import cz.mzk.recordmanager.server.metadata.MetadataRecordFactory;
-import cz.mzk.recordmanager.server.model.HarvestedRecordFormat;
+import cz.mzk.recordmanager.server.model.HarvestedRecordFormat.HarvestedRecordFormatEnum;
 import cz.mzk.recordmanager.server.model.Isbn;
 import cz.mzk.recordmanager.server.model.Title;
 import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordDAO;
@@ -295,12 +295,12 @@ public class MarcRecordImplTest extends AbstractTest {
 		MarcRecordImpl mri;
 		MetadataRecord metadataRecord;
 		List<String> data = new ArrayList<String>();
-		List<HarvestedRecordFormat> hrf = new ArrayList<HarvestedRecordFormat>();
+		List<HarvestedRecordFormatEnum> hrf = new ArrayList<HarvestedRecordFormatEnum>();
 		
 		// Books
 		data.add("000 00000000");
 		data.add("007 t");
-		hrf.add(HarvestedRecordFormat.BOOKS);
+		hrf.add(HarvestedRecordFormatEnum.BOOKS);
 		mri = MarcRecordFactory.recordFactory(data);
 		metadataRecord = metadataFactory.getMetadataRecord(mri);
 		Assert.assertEquals(metadataRecord.getDetectedFormatList().toString(), hrf.toString());
@@ -309,7 +309,7 @@ public class MarcRecordImplTest extends AbstractTest {
 		
 		// Periodicals
 		data.add("000 0000000i");
-		hrf.add(HarvestedRecordFormat.PERIODICALS);
+		hrf.add(HarvestedRecordFormatEnum.PERIODICALS);
 		mri = MarcRecordFactory.recordFactory(data);
 		metadataRecord = metadataFactory.getMetadataRecord(mri);
 		Assert.assertEquals(metadataRecord.getDetectedFormatList().toString(), hrf.toString());
@@ -318,7 +318,7 @@ public class MarcRecordImplTest extends AbstractTest {
 		
 		// Articles
 		data.add("000 0000000a");
-		hrf.add(HarvestedRecordFormat.ARTICLES);
+		hrf.add(HarvestedRecordFormatEnum.ARTICLES);
 		mri = MarcRecordFactory.recordFactory(data);
 		metadataRecord = metadataFactory.getMetadataRecord(mri);
 		Assert.assertEquals(metadataRecord.getDetectedFormatList().toString(), hrf.toString());
@@ -328,7 +328,7 @@ public class MarcRecordImplTest extends AbstractTest {
 		// Maps
 		data.add("000 000000000");
 		data.add("245 $hkartografický dokument");
-		hrf.add(HarvestedRecordFormat.MAPS);
+		hrf.add(HarvestedRecordFormatEnum.MAPS);
 		mri = MarcRecordFactory.recordFactory(data);
 		metadataRecord = metadataFactory.getMetadataRecord(mri);
 		Assert.assertEquals(metadataRecord.getDetectedFormatList().toString(), hrf.toString());
@@ -338,7 +338,7 @@ public class MarcRecordImplTest extends AbstractTest {
 		// Musical
 		data.add("000 00000000");
 		data.add("336 $bntv");
-		hrf.add(HarvestedRecordFormat.MUSICAL_SCORES);
+		hrf.add(HarvestedRecordFormatEnum.MUSICAL_SCORES);
 		mri = MarcRecordFactory.recordFactory(data);
 		metadataRecord = metadataFactory.getMetadataRecord(mri);
 		Assert.assertEquals(metadataRecord.getDetectedFormatList().toString(), hrf.toString());
@@ -348,7 +348,7 @@ public class MarcRecordImplTest extends AbstractTest {
 		// Vusial documents
 		data.add("000 00000000");
 		data.add("338 $bgasd");
-		hrf.add(HarvestedRecordFormat.VISUAL_DOCUMENTS);
+		hrf.add(HarvestedRecordFormatEnum.VISUAL_DOCUMENTS);
 		mri = MarcRecordFactory.recordFactory(data);
 		metadataRecord = metadataFactory.getMetadataRecord(mri);
 		Assert.assertEquals(metadataRecord.getDetectedFormatList().toString(), hrf.toString());
@@ -358,7 +358,7 @@ public class MarcRecordImplTest extends AbstractTest {
 		// Manuscripts
 		data.add("000 00000000");
 		data.add("245 $hrukOpis");
-		hrf.add(HarvestedRecordFormat.MANUSCRIPTS);
+		hrf.add(HarvestedRecordFormatEnum.MANUSCRIPTS);
 		mri = MarcRecordFactory.recordFactory(data);
 		metadataRecord = metadataFactory.getMetadataRecord(mri);
 		Assert.assertEquals(metadataRecord.getDetectedFormatList().toString(), hrf.toString());
@@ -368,7 +368,7 @@ public class MarcRecordImplTest extends AbstractTest {
 		// Microforms
 		data.add("000 0000000");
 		data.add("337 $bh");
-		hrf.add(HarvestedRecordFormat.MICROFORMS);
+		hrf.add(HarvestedRecordFormatEnum.MICROFORMS);
 		mri = MarcRecordFactory.recordFactory(data);
 		metadataRecord = metadataFactory.getMetadataRecord(mri);
 		Assert.assertEquals(metadataRecord.getDetectedFormatList().toString(), hrf.toString());
@@ -378,7 +378,7 @@ public class MarcRecordImplTest extends AbstractTest {
 		//Large prints
 		data.add("000 00000000");
 		data.add("007 db");
-		hrf.add(HarvestedRecordFormat.LARGE_PRINTS);
+		hrf.add(HarvestedRecordFormatEnum.LARGE_PRINTS);
 		mri = MarcRecordFactory.recordFactory(data);
 		metadataRecord = metadataFactory.getMetadataRecord(mri);
 		Assert.assertEquals(metadataRecord.getDetectedFormatList().toString(), hrf.toString());
@@ -389,7 +389,7 @@ public class MarcRecordImplTest extends AbstractTest {
 		data.add("000 00000000");
 		data.add("007 fb");
 		data.add("245 $hhmatové písmo");
-		hrf.add(HarvestedRecordFormat.BRAILL);
+		hrf.add(HarvestedRecordFormatEnum.BRAILL);
 		mri = MarcRecordFactory.recordFactory(data);
 		metadataRecord = metadataFactory.getMetadataRecord(mri);		
 		Assert.assertEquals(metadataRecord.getDetectedFormatList().toString(), hrf.toString());
@@ -399,7 +399,7 @@ public class MarcRecordImplTest extends AbstractTest {
 		// Electronic
 		data.add("000 000000m");
 		data.add("006 plllllq");
-		hrf.add(HarvestedRecordFormat.ELECTRONIC_SOURCE);
+		hrf.add(HarvestedRecordFormatEnum.ELECTRONIC_SOURCE);
 		mri = MarcRecordFactory.recordFactory(data);
 		metadataRecord = metadataFactory.getMetadataRecord(mri);		
 		Assert.assertEquals(metadataRecord.getDetectedFormatList().toString(), hrf.toString());
@@ -409,7 +409,7 @@ public class MarcRecordImplTest extends AbstractTest {
 		// Audio
 		data.add("000 00000000");
 		data.add("300 $fanaloaSg$amagnetofonová kazeta");
-		hrf.add(HarvestedRecordFormat.AUDIO_CASSETTE);
+		hrf.add(HarvestedRecordFormatEnum.AUDIO_CASSETTE);
 		mri = MarcRecordFactory.recordFactory(data);
 		metadataRecord = metadataFactory.getMetadataRecord(mri);		
 		Assert.assertEquals(metadataRecord.getDetectedFormatList().toString(), hrf.toString());
@@ -419,7 +419,7 @@ public class MarcRecordImplTest extends AbstractTest {
 		// Video
 		data.add("000 000000000");
 		data.add("007 vlllv");
-		hrf.add(HarvestedRecordFormat.VIDEO_DVD);
+		hrf.add(HarvestedRecordFormatEnum.VIDEO_DVD);
 		mri = MarcRecordFactory.recordFactory(data);
 		metadataRecord = metadataFactory.getMetadataRecord(mri);		
 		Assert.assertEquals(metadataRecord.getDetectedFormatList().toString(), hrf.toString());
@@ -430,7 +430,7 @@ public class MarcRecordImplTest extends AbstractTest {
 		data.add("000 00000000");
 		data.add("006 o");
 		data.add("007 o");
-		hrf.add(HarvestedRecordFormat.KIT);
+		hrf.add(HarvestedRecordFormatEnum.KIT);
 		mri = MarcRecordFactory.recordFactory(data);
 		metadataRecord = metadataFactory.getMetadataRecord(mri);		
 		Assert.assertEquals(metadataRecord.getDetectedFormatList().toString(), hrf.toString());
@@ -440,7 +440,7 @@ public class MarcRecordImplTest extends AbstractTest {
 		// Object
 		data.add("000 00000000");
 		data.add("008 zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzd");
-		hrf.add(HarvestedRecordFormat.OBJECT);
+		hrf.add(HarvestedRecordFormatEnum.OBJECT);
 		mri = MarcRecordFactory.recordFactory(data);
 		metadataRecord = metadataFactory.getMetadataRecord(mri);		
 		Assert.assertEquals(metadataRecord.getDetectedFormatList().toString(), hrf.toString());
@@ -449,7 +449,7 @@ public class MarcRecordImplTest extends AbstractTest {
 		
 		// Mix document
 		data.add("000 000000p");
-		hrf.add(HarvestedRecordFormat.MIX_DOCUMENT);
+		hrf.add(HarvestedRecordFormatEnum.MIX_DOCUMENT);
 		mri = MarcRecordFactory.recordFactory(data);
 		metadataRecord = metadataFactory.getMetadataRecord(mri);		
 		Assert.assertEquals(metadataRecord.getDetectedFormatList().toString(), hrf.toString());
@@ -459,7 +459,7 @@ public class MarcRecordImplTest extends AbstractTest {
 		// Unspecified
 		data.add("000 00000000");
 		data.add("337 $bx");
-		hrf.add(HarvestedRecordFormat.UNSPECIFIED);
+		hrf.add(HarvestedRecordFormatEnum.UNSPECIFIED);
 		mri = MarcRecordFactory.recordFactory(data);
 		metadataRecord = metadataFactory.getMetadataRecord(mri);		
 		Assert.assertEquals(metadataRecord.getDetectedFormatList().toString(), hrf.toString());
@@ -468,7 +468,7 @@ public class MarcRecordImplTest extends AbstractTest {
 		
 		// Nothing
 		data.add("000 00000000");
-		hrf.add(HarvestedRecordFormat.UNSPECIFIED);
+		hrf.add(HarvestedRecordFormatEnum.UNSPECIFIED);
 		mri = MarcRecordFactory.recordFactory(data);
 		metadataRecord = metadataFactory.getMetadataRecord(mri);		
 		Assert.assertEquals(metadataRecord.getDetectedFormatList().toString(), hrf.toString());

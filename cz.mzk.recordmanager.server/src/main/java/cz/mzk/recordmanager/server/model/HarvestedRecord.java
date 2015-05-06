@@ -9,11 +9,15 @@ import java.util.Objects;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Embeddable;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -121,9 +125,6 @@ public class HarvestedRecord extends AbstractDomainObject {
 	@Column(name="format")
 	private String format;
 	
-	@Column(name="isbn")
-	private String isbn;
-	
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name="harvested_record_id", referencedColumnName="id")
 	private List<Isbn> isbns = new ArrayList<Isbn>();
@@ -139,12 +140,17 @@ public class HarvestedRecord extends AbstractDomainObject {
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name="harvested_record_id", referencedColumnName="id")
 	private List<Title> titles = new ArrayList<Title>();
-
-	@Column(name="title")
-	private String title;
 	
 	@Column(name="publication_year")
 	private Long publicationYear;
+	
+
+	@OneToMany
+	@JoinTable(
+	   name = "harvested_record_format_link", 
+	   joinColumns = @JoinColumn(name = "harvested_record_id "), 
+	   inverseJoinColumns = @JoinColumn(name = "harvested_record_format_id "))
+	private List<HarvestedRecordFormat> physicalFormats = new ArrayList<>();
 	
 	@Column(name="physical_format")
 	private String physicalFormat;
@@ -212,22 +218,6 @@ public class HarvestedRecord extends AbstractDomainObject {
 	public void setFormat(String format) {
 		this.format = format;
 	}
-
-	public String getIsbn() {
-		return isbn;
-	}
-
-	public void setIsbn(String isbn) {
-		this.isbn = isbn;
-	}
-
-	public String getTitle() {
-		return title;
-	}
-
-	public void setTitle(String title) {
-		this.title = title;
-	}
 	
 	public List<Isbn> getIsbns() {
 		return isbns;
@@ -275,6 +265,14 @@ public class HarvestedRecord extends AbstractDomainObject {
 
 	public void setDedupRecord(DedupRecord dedupRecord) {
 		this.dedupRecord = dedupRecord;
+	}
+
+	public List<HarvestedRecordFormat> getPhysicalFormats() {
+		return physicalFormats;
+	}
+
+	public void setPhysicalFormats(List<HarvestedRecordFormat> physicalFormats) {
+		this.physicalFormats = physicalFormats;
 	}
 
 	@Override

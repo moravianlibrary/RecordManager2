@@ -16,7 +16,7 @@ import cz.mzk.recordmanager.server.export.IOFormat;
 import cz.mzk.recordmanager.server.marc.MarcRecord;
 import cz.mzk.recordmanager.server.metadata.MetadataMarcRecord;
 import cz.mzk.recordmanager.server.metadata.MetadataRecord;
-import cz.mzk.recordmanager.server.model.HarvestedRecordFormat;
+import cz.mzk.recordmanager.server.model.HarvestedRecordFormat.HarvestedRecordFormatEnum;
 import cz.mzk.recordmanager.server.scripting.function.MarcRecordFunction;
 
 public class MarcDSL {
@@ -184,7 +184,7 @@ public class MarcDSL {
 		return marcMetadataRecord.export(IOFormat.ISO_2709);
 	}
 	
-	public List<HarvestedRecordFormat> getRecordType(){
+	public List<HarvestedRecordFormatEnum> getRecordType(){
 		return marcMetadataRecord.getDetectedFormatList();
 	}
 

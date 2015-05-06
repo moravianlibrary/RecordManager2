@@ -12,7 +12,9 @@ import com.google.common.base.Preconditions;
 import cz.mzk.recordmanager.server.metadata.MetadataRecord;
 import cz.mzk.recordmanager.server.metadata.MetadataRecordFactory;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
+import cz.mzk.recordmanager.server.model.HarvestedRecordFormat.HarvestedRecordFormatEnum;
 import cz.mzk.recordmanager.server.model.Title;
+import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordFormatDAO;
 import cz.mzk.recordmanager.server.util.MetadataUtils;
 
 @Component
@@ -24,6 +26,9 @@ public class MarcXmlDedupKeyParser implements DedupKeysParser {
 	
 	@Autowired 
 	private MetadataRecordFactory metadataFactory;
+	
+	@Autowired 
+	private HarvestedRecordFormatDAO harvestedRecordFormatDAO;
 
 	@Override
 	public List<String> getSupportedFormats() {
@@ -47,6 +52,8 @@ public class MarcXmlDedupKeyParser implements DedupKeysParser {
 		record.setTitles(titles);
 		record.setPhysicalFormat(metadata.getFormat());
 		record.setPublicationYear(metadata.getPublicationYear());
+		List<HarvestedRecordFormatEnum> formatEnums = metadata.getDetectedFormatList();
+		record.setPhysicalFormats(harvestedRecordFormatDAO.getFormatsFromEnums(formatEnums));
 
 		return record;
 	}

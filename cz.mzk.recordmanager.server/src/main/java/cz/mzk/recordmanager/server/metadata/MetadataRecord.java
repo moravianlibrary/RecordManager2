@@ -4,7 +4,7 @@ import java.util.List;
 
 import cz.mzk.recordmanager.server.export.IOFormat;
 import cz.mzk.recordmanager.server.model.Cnb;
-import cz.mzk.recordmanager.server.model.HarvestedRecordFormat;
+import cz.mzk.recordmanager.server.model.HarvestedRecordFormat.HarvestedRecordFormatEnum;
 import cz.mzk.recordmanager.server.model.Isbn;
 import cz.mzk.recordmanager.server.model.Issn;
 import cz.mzk.recordmanager.server.model.Title;
@@ -69,6 +69,6 @@ public interface MetadataRecord {
 	 * return list of detected formats
 	 * @return List<RecordFormat>
 	 */
-	public List<HarvestedRecordFormat> getDetectedFormatList();
+	public List<HarvestedRecordFormatEnum> getDetectedFormatList();
 	
 }
