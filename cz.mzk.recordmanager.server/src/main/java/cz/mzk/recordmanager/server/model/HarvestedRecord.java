@@ -27,6 +27,22 @@ import com.google.common.base.Preconditions;
 @Table(name=HarvestedRecord.TABLE_NAME)
 public class HarvestedRecord extends AbstractDomainObject {
 	
+	public List<Issn> getIssns() {
+		return issns;
+	}
+
+	public void setIssns(List<Issn> issns) {
+		this.issns = issns;
+	}
+
+	public List<Cnb> getCnb() {
+		return cnb;
+	}
+
+	public void setCnb(List<Cnb> cnb) {
+		this.cnb = cnb;
+	}
+
 	public static final String TABLE_NAME = "harvested_record";
 	
 	@Embeddable

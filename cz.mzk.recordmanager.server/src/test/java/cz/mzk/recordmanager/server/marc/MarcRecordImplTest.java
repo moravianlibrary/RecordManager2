@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.hibernate.mapping.Array;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
@@ -12,8 +13,10 @@ import org.testng.annotations.Test;
 import cz.mzk.recordmanager.server.AbstractTest;
 import cz.mzk.recordmanager.server.metadata.MetadataRecord;
 import cz.mzk.recordmanager.server.metadata.MetadataRecordFactory;
+import cz.mzk.recordmanager.server.model.Cnb;
 import cz.mzk.recordmanager.server.model.HarvestedRecordFormat;
 import cz.mzk.recordmanager.server.model.Isbn;
+import cz.mzk.recordmanager.server.model.Issn;
 import cz.mzk.recordmanager.server.model.Title;
 import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordDAO;
 
@@ -198,32 +201,69 @@ public class MarcRecordImplTest extends AbstractTest {
 	
 	@Test
 	public void getISSNsTest() throws Exception {
-		// TODO rewrite to changed interface
-//		MarcRecordImpl mri;
-//		MetadataRecord metadataRecord;
-//		List<String> data = new ArrayList<String>();
-//
-//		data.add("022 $a2336-4815");
-//		data.add("022 $a1234-5678");
-//		mri = MarcRecordFactory.recordFactory(data);
-//		metadataRecord = metadataFactory.getMetadataRecord(mri);
-//		Assert.assertEquals(metadataRecord.getISSNs().toString(),
-//				"[23364815, 12345678]");
-//		data.clear();
-//
-//		mri = MarcRecordFactory.recordFactory(data);
-//		metadataRecord = metadataFactory.getMetadataRecord(mri);
-//		Assert.assertEquals(metadataRecord.getISSNs(), Collections.EMPTY_LIST);
-//		data.clear();
+		MarcRecordImpl mri;
+		MetadataRecord metadataRecord;
+		List<String> data = new ArrayList<String>();
+		List<Issn> issns = new ArrayList<Issn>();
+		Long issnCounter = 0L;
+		
+		data.add("022 $a2336-4815");
+		Issn issn = new Issn();
+		issn.setIssn("2336-4815");
+		issn.setOrderInRecord(++issnCounter);
+		issn.setNote("");
+		issns.add(issn);
+		data.add("022 $a1214-4029 (pozn)");
+		issn = new Issn();
+		issn.setIssn("1214-4029");
+		issn.setOrderInRecord(++issnCounter);
+		issn.setNote("pozn");
+		issns.add(issn);
+		data.add("022 $a0231-858X");
+		issn = new Issn();
+		issn.setIssn("0231-858X");
+		issn.setOrderInRecord(++issnCounter);
+		issn.setNote("");
+		issns.add(issn);
+		mri = MarcRecordFactory.recordFactory(data);
+		metadataRecord = metadataFactory.getMetadataRecord(mri);
+		Assert.assertEquals(metadataRecord.getISSNs().toString(),
+				issns.toString());
+		data.clear();
+
+		mri = MarcRecordFactory.recordFactory(data);
+		metadataRecord = metadataFactory.getMetadataRecord(mri);
+		Assert.assertEquals(metadataRecord.getISSNs(), Collections.EMPTY_LIST);
+		data.clear();
 	}
 	
 	@Test
-	void getCNBsTest() {
-		// TODO implementation
+	public void getCNBsTest() throws Exception {
+		MarcRecordImpl mri;
+		MetadataRecord metadataRecord;
+		List<String> data = new ArrayList<String>();
+		List<Cnb> cnbs = new ArrayList<Cnb>();
+	
+		data.add("015 $acnb001816378");
+		Cnb cnb = new Cnb();
+		cnb.setCnb("cnb001816378");
+		cnbs.add(cnb);
+		data.add("015 $acnb001723289$acnb001723290");
+		cnb = new Cnb();
+		cnb.setCnb("cnb001723289");
+		cnbs.add(cnb);
+		cnb = new Cnb();
+		cnb.setCnb("cnb001723290");
+		cnbs.add(cnb);
+		mri = MarcRecordFactory.recordFactory(data);
+		metadataRecord = metadataFactory.getMetadataRecord(mri);
+		Assert.assertEquals(metadataRecord.getCNBs().toString(),
+				cnbs.toString());
+		data.clear();
 	}
 
 	@Test
-	void getPageCountTest() throws Exception {
+	public void getPageCountTest() throws Exception {
 		MarcRecordImpl mri;
 		MetadataRecord metadataRecord;
 		List<String> data = new ArrayList<String>();
@@ -276,7 +316,6 @@ public class MarcRecordImplTest extends AbstractTest {
 		isbn.setIsbn(9788020009807L);
 		isbn.setOrderInRecord(3L);
 		isbnlist.add(isbn);
-		data.add("020 $a456");
 		
 		mri = MarcRecordFactory.recordFactory(data);
 		metadataRecord = metadataFactory.getMetadataRecord(mri);

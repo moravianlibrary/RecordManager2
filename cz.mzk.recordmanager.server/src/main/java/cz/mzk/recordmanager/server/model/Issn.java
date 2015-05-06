@@ -1,5 +1,8 @@
 package cz.mzk.recordmanager.server.model;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -9,6 +12,7 @@ import javax.persistence.Table;
 public class Issn extends AbstractDomainObject {
 	
 	public static final String TABLE_NAME = "issn";
+	protected static final Pattern ISSN_PATTERN = Pattern.compile("\\d{4}-\\d{3}[\\dxX]");
 	
 	@Column(name="issn")
 	private String issn;
@@ -41,6 +45,25 @@ public class Issn extends AbstractDomainObject {
 
 	public void setNote(String note) {
 		this.note = note;
+	}
+	
+	public boolean issnValidator(String issn){
+		Matcher matcher = ISSN_PATTERN.matcher(issn);
+		if(!matcher.find()){
+			return false;
+		}
+		issn = issn.replaceAll("-", "");
+		
+		int sum = 0;
+		for(int i = 0; i < 8; i++){
+			if(issn.charAt(i) == 'X'){
+				sum += 10 * (8-i);
+				continue;
+			}
+			sum += Integer.parseInt(Character.toString(issn.charAt(i))) * (8-i);
+		}
+		if(sum % 11 == 0) return true;
+		else return false;		
 	}
 
 	@Override
@@ -75,5 +98,9 @@ public class Issn extends AbstractDomainObject {
 		return true;
 	}
 
-	
+	@Override
+	public String toString() {
+		return "Issn [issn=" + issn + ", orderInRecord=" + orderInRecord
+				+ ", note=" + note + "]";
+	}	
 }
