@@ -11,8 +11,11 @@ import org.slf4j.LoggerFactory;
 
 import cz.mzk.recordmanager.server.dc.DublinCoreRecord;
 import cz.mzk.recordmanager.server.export.IOFormat;
-import cz.mzk.recordmanager.server.model.HarvestedRecordFormat;
+import cz.mzk.recordmanager.server.model.Cnb;
 import cz.mzk.recordmanager.server.model.Isbn;
+import cz.mzk.recordmanager.server.model.Issn;
+import cz.mzk.recordmanager.server.model.Title;
+import cz.mzk.recordmanager.server.model.HarvestedRecordFormat.HarvestedRecordFormatEnum;
 
 public class MetadataDublinCoreRecord implements MetadataRecord {
 
@@ -25,10 +28,14 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 			.getInstance(true);
 
 	protected static final Pattern YEAR_PATTERN = Pattern.compile("\\d{4}");
+	protected static final Pattern ISSN_PATTERN = Pattern.compile("(\\d{4}-\\d{3}[\\dxX])(.*)");
+	
+	protected static final Pattern DC_UUID_PATTERN = Pattern.compile("(uuid:.*)");
 	protected static final Pattern DC_ISBN_PATTERN = Pattern
 			.compile("isbn:(.*)");
 	protected static final Pattern DC_ISSN_PATTERN = Pattern
 			.compile("issn:(*)");
+
 
 	public MetadataDublinCoreRecord(DublinCoreRecord dcRecord) {
 		if (dcRecord == null) {
@@ -39,10 +46,31 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 	}
 
 	@Override
-	public List<String> getTitle() {
-		return dcRecord.getTitles();
+	public List<Title> getTitle() {
+		List<Title> result = new ArrayList<Title>();
+		List<String> dcTitles = dcRecord.getTitles();
+		Long titleOrder = 0L;
+		
+		for (String s: dcTitles) {
+			Title title = new Title();
+			title.setTitleStr(s);
+			
+			title.setOrderInRecord(++titleOrder);
+			result.add(title);
+		}
+		
+		/*returns "" if no title is found - same as MARC implementation*/
+		if (result.isEmpty()) {
+			Title title = new Title();
+			title.setTitleStr("");
+			title.setOrderInRecord(1L);
+			result.add(title);
+		}
+		
+		return result;
 	}
 
+	/* <MJ.> -- method removed from supertype
 	@Override
 	public String getFormat() {
 		List<String> type = dcRecord.getTypes();
@@ -57,6 +85,7 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 		}
 		return null;
 	}
+*/
 
 	@Override
 	public Long getPublicationYear() {
@@ -123,25 +152,47 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 	}
 
 	@Override
-	public List<String> getISSNs() {
+	public List<Issn> getISSNs() {
 		List<String> identifiers = dcRecord.getIdentifiers();
-		List<String> issns = new ArrayList<String>();
+		List<Issn> issns = new ArrayList<Issn>();
+		Long issnCounter = 0L;
+		
 		Pattern p = DC_ISSN_PATTERN;
 		Matcher m;
 
 		for (String f : identifiers) {
+			
 			m = p.matcher(f);
 			if (m.find()) {
-				String issn = m.group(1);
-				System.out.println("nalezeno issn: " + issn);
-				issns.add(issn);
+				Issn issn = new Issn();
+				String dcIssn = m.group(1);
+				Matcher matcher = ISSN_PATTERN.matcher(dcIssn);
+				
+				try {
+					if(matcher.find()) {
+						if(!issn.issnValidator(matcher.group(1))){
+							throw new NumberFormatException();
+						}					
+						issn.setIssn(matcher.group(1));
+						
+						
+						issn.setNote("");
+						issn.setOrderInRecord(++issnCounter);
+						issns.add(issn);
+					}
+					
+				} catch (NumberFormatException e) {
+					logger.info(String.format("Invalid ISSN: %s", dcIssn));
+					continue;
+				}
+
 			}
 		}
 		return issns;
 	}
 
 	@Override
-	public String getSeriesISSN() {
+	public String getISSNSeries() {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -175,15 +226,54 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 	}
 
 	@Override
-	public List<HarvestedRecordFormat> getDetectedFormatList() {
+	public List<HarvestedRecordFormatEnum> getDetectedFormatList() {
+		List<HarvestedRecordFormatEnum> hrf = new ArrayList<HarvestedRecordFormatEnum>();
 
-		List<HarvestedRecordFormat> hrf = new ArrayList<HarvestedRecordFormat>();
+		if(isBook()) hrf.add(HarvestedRecordFormatEnum.BOOKS);
+		if(isPeriodical()) hrf.add(HarvestedRecordFormatEnum.PERIODICALS);
 
-		if (isBook())
-			hrf.add(HarvestedRecordFormat.BOOKS);
-		if (isPeriodical())
-			hrf.add(HarvestedRecordFormat.PERIODICALS);
+		return null;
+	}
 
+	@Override
+	public List<Cnb> getCNBs() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getISSNSeriesOrder() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Long getWeight(Long baseWeight) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Long getScale() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getUUId() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getAuthorAuthKey() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getAuthorString() {
+		// TODO Auto-generated method stub
 		return null;
 	}
 
