@@ -14,6 +14,7 @@ import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -27,6 +28,22 @@ import com.google.common.base.Preconditions;
 @Table(name=HarvestedRecord.TABLE_NAME)
 public class HarvestedRecord extends AbstractDomainObject {
 	
+	public List<Issn> getIssns() {
+		return issns;
+	}
+
+	public void setIssns(List<Issn> issns) {
+		this.issns = issns;
+	}
+
+	public List<Cnb> getCnb() {
+		return cnb;
+	}
+
+	public void setCnb(List<Cnb> cnb) {
+		this.cnb = cnb;
+	}
+
 	public static final String TABLE_NAME = "harvested_record";
 	
 	@Embeddable
@@ -121,21 +138,50 @@ public class HarvestedRecord extends AbstractDomainObject {
 	@Column(name="format")
 	private String format;
 	
-	@Column(name="isbn")
-	private String isbn;
-	
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name="harvested_record_id", referencedColumnName="id")
 	private List<Isbn> isbns = new ArrayList<Isbn>();
-
-	@Column(name="title")
-	private String title;
+	
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name="harvested_record_id", referencedColumnName="id")
+	private List<Issn> issns = new ArrayList<Issn>();
+	
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name="harvested_record_id", referencedColumnName="id")
+	private List<Cnb> cnb = new ArrayList<Cnb>();
+	
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name="harvested_record_id", referencedColumnName="id")
+	private List<Title> titles = new ArrayList<Title>();
+	
+	// TODO consider moving dedup keys to separate table
+	@Column(name="author_auth_key")
+	private String authorAuthKey;
+	
+	@Column(name="author_string")
+	private String authorString;
+	
+	@Column(name="issn_series")
+	private String issnSeries;
+	
+	@Column(name="issn_series_order")
+	private String issnSeriesOrder;
+	
+	@Column(name="uuid")
+	private String uuid;
+	
+	@Column(name="scale")
+	private Long scale;
 	
 	@Column(name="publication_year")
 	private Long publicationYear;
-	
-	@Column(name="physical_format")
-	private String physicalFormat;
+
+	@OneToMany
+	@JoinTable(
+	   name = "harvested_record_format_link", 
+	   joinColumns = @JoinColumn(name = "harvested_record_id "), 
+	   inverseJoinColumns = @JoinColumn(name = "harvested_record_format_id "))
+	private List<HarvestedRecordFormat> physicalFormats = new ArrayList<>();
 	
 	@Basic(fetch = FetchType.LAZY)
 	@Column(name="raw_record") 
@@ -144,6 +190,9 @@ public class HarvestedRecord extends AbstractDomainObject {
 	@ManyToOne(optional=true, fetch=FetchType.LAZY)
 	@JoinColumn(name="dedup_record_id", nullable=true)
 	private DedupRecord dedupRecord;
+	
+	@Column(name="weight")
+	private Long weight;
 	
 	private HarvestedRecord() {
 	}
@@ -200,22 +249,6 @@ public class HarvestedRecord extends AbstractDomainObject {
 	public void setFormat(String format) {
 		this.format = format;
 	}
-
-	public String getIsbn() {
-		return isbn;
-	}
-
-	public void setIsbn(String isbn) {
-		this.isbn = isbn;
-	}
-
-	public String getTitle() {
-		return title;
-	}
-
-	public void setTitle(String title) {
-		this.title = title;
-	}
 	
 	public List<Isbn> getIsbns() {
 		return isbns;
@@ -225,20 +258,20 @@ public class HarvestedRecord extends AbstractDomainObject {
 		this.isbns = isbns;
 	}
 
+	public List<Title> getTitles() {
+		return titles;
+	}
+
+	public void setTitles(List<Title> titles) {
+		this.titles = titles;
+	}
+	
 	public Long getPublicationYear() {
 		return publicationYear;
 	}
 
 	public void setPublicationYear(Long publicationYear) {
 		this.publicationYear = publicationYear;
-	}
-
-	public String getPhysicalFormat() {
-		return physicalFormat;
-	}
-
-	public void setPhysicalFormat(String physicalFormat) {
-		this.physicalFormat = physicalFormat;
 	}
 
 	public byte[] getRawRecord() {
@@ -255,6 +288,70 @@ public class HarvestedRecord extends AbstractDomainObject {
 
 	public void setDedupRecord(DedupRecord dedupRecord) {
 		this.dedupRecord = dedupRecord;
+	}
+
+	public List<HarvestedRecordFormat> getPhysicalFormats() {
+		return physicalFormats;
+	}
+
+	public void setPhysicalFormats(List<HarvestedRecordFormat> physicalFormats) {
+		this.physicalFormats = physicalFormats;
+	}
+
+	public Long getWeight() {
+		return weight;
+	}
+
+	public void setWeight(Long weight) {
+		this.weight = weight;
+	}
+
+	public String getAuthorAuthKey() {
+		return authorAuthKey;
+	}
+
+	public void setAuthorAuthKey(String authorAuthKey) {
+		this.authorAuthKey = authorAuthKey;
+	}
+
+	public String getAuthorString() {
+		return authorString;
+	}
+
+	public void setAuthorString(String authorString) {
+		this.authorString = authorString;
+	}
+
+	public String getIssnSeries() {
+		return issnSeries;
+	}
+
+	public void setIssnSeries(String issnSeries) {
+		this.issnSeries = issnSeries;
+	}
+
+	public String getIssnSeriesOrder() {
+		return issnSeriesOrder;
+	}
+
+	public void setIssnSeriesOrder(String issnSeriesOrder) {
+		this.issnSeriesOrder = issnSeriesOrder;
+	}
+
+	public String getUuid() {
+		return uuid;
+	}
+
+	public void setUuid(String uuid) {
+		this.uuid = uuid;
+	}
+
+	public Long getScale() {
+		return scale;
+	}
+
+	public void setScale(Long scale) {
+		this.scale = scale;
 	}
 
 	@Override

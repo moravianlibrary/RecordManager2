@@ -17,8 +17,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import cz.mzk.recordmanager.server.model.AuthorityRecord;
+import cz.mzk.recordmanager.server.model.Cnb;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
+import cz.mzk.recordmanager.server.model.HarvestedRecordFormat;
 import cz.mzk.recordmanager.server.model.Isbn;
+import cz.mzk.recordmanager.server.model.Issn;
+import cz.mzk.recordmanager.server.model.Title;
 
 @Component
 public class DBUnitHelper {
@@ -53,6 +57,10 @@ public class DBUnitHelper {
 		Statement statement = dataSource.getConnection().createStatement();
 		statement.execute("truncate table " + AuthorityRecord.TABLE_NAME);
 		statement.execute("truncate table " + Isbn.TABLE_NAME);
+		statement.execute("truncate table " + Title.TABLE_NAME);
+		statement.execute("truncate table " + Issn.TABLE_NAME);
+		statement.execute("truncate table " + Cnb.TABLE_NAME);
+		statement.execute("truncate table " + HarvestedRecordFormat.LINK_TABLE_NAME);
 		statement.execute("delete from " + HarvestedRecord.TABLE_NAME);
 	}
 	

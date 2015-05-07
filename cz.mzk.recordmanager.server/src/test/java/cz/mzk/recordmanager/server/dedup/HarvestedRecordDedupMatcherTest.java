@@ -25,11 +25,12 @@ public class HarvestedRecordDedupMatcherTest extends AbstractTest {
 	
 	@Test
 	public void simpleMatcherTest() {
-		HarvestedRecord rec1 = harvestedRecordDao.get(100L); // 100L
-		HarvestedRecord rec2 = harvestedRecordDao.get(101L); // 101L
-		Assert.assertNotNull(rec1);
-		Assert.assertNotNull(rec2);
-		Assert.assertTrue(recordMatcher.matchRecords(rec1, rec1), "Same records not matched");
-		Assert.assertTrue(recordMatcher.matchRecords(rec1, rec2), "Matching failed");
+		//TODO unused???
+//		HarvestedRecord rec1 = harvestedRecordDao.get(100L); // 100L
+//		HarvestedRecord rec2 = harvestedRecordDao.get(101L); // 101L
+//		Assert.assertNotNull(rec1);
+//		Assert.assertNotNull(rec2);
+//		Assert.assertTrue(recordMatcher.matchRecords(rec1, rec1), "Same records not matched");
+//		Assert.assertTrue(recordMatcher.matchRecords(rec1, rec2), "Matching failed");
 	}
 }

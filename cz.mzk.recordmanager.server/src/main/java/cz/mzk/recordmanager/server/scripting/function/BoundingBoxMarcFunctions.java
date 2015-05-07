@@ -22,7 +22,7 @@ public class BoundingBoxMarcFunctions implements MarcRecordFunctions {
 	private static final String SOUTH = "s";
 
 	private static final Pattern PATTERN = Pattern
-			.compile("/^([eEwWnNsS])(\\d{3})(\\d{2})(\\d{2})/");
+			.compile("([eEwWnNsS]{1})(\\d{3})(\\d{2})(\\d{2})");
 
 	public String getBoundingBox(MarcRecord record) {
 		List<DataField> fields = record.getAllFields().get("034");
@@ -40,7 +40,7 @@ public class BoundingBoxMarcFunctions implements MarcRecordFunctions {
 		double south = coordinateToDecimal(origSouth);
 		double longitude = Double.NaN;
 		double latitude = Double.NaN;
-		if (!Double.isNaN(west) && !!Double.isNaN(north)) {
+		if (!Double.isNaN(west) && !Double.isNaN(north)) {
 			if (!Double.isNaN(east)) {
 				longitude = (west + east) / 2.0;
 			} else {
@@ -83,6 +83,7 @@ public class BoundingBoxMarcFunctions implements MarcRecordFunctions {
 		if (value == null || value.isEmpty()) {
 			return (float) Double.NaN;
 		}
+		value = value.trim();
 		Matcher matcher = PATTERN.matcher(value);
 		if (!matcher.matches()) {
 			return Double.parseDouble(value);

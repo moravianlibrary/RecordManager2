@@ -3,18 +3,20 @@ package cz.mzk.recordmanager.server.metadata;
 import java.util.List;
 
 import cz.mzk.recordmanager.server.export.IOFormat;
-import cz.mzk.recordmanager.server.model.HarvestedRecordFormat;
+import cz.mzk.recordmanager.server.model.Cnb;
+import cz.mzk.recordmanager.server.model.HarvestedRecordFormat.HarvestedRecordFormatEnum;
 import cz.mzk.recordmanager.server.model.Isbn;
+import cz.mzk.recordmanager.server.model.Issn;
+import cz.mzk.recordmanager.server.model.Title;
 
 public interface MetadataRecord {
 	
 	/**
 	 * get all titles of record, first is the most important 
-	 * @return List<String>
+	 * @return List<Title>
 	 */
-	public List<String> getTitle();
+	public List<Title> getTitle();
 	
-	public String getFormat();
 	public Long getPublicationYear();
 	
 	/**
@@ -42,13 +44,25 @@ public interface MetadataRecord {
 	 * @return List<String>
 	 */
 	
-	public List<String> getISSNs();
+	public List<Issn> getISSNs();
+	
+	/**
+	 * get all CNBs assigned to record
+	 * @return
+	 */
+	public List<Cnb> getCNBs();
 	
 	/**
 	 * get series ISSN
 	 * @return String or null
 	 */
-	public String getSeriesISSN();
+	public String getISSNSeries();
+	
+	/**
+	 * get ISSN series order
+	 * @return
+	 */
+	public String getISSNSeriesOrder();
 	
 	/**
 	 * get count of pages
@@ -57,9 +71,40 @@ public interface MetadataRecord {
 	public Long getPageCount();
 	
 	/**
+	 * get weight of record
+	 * @param baseWeight
+	 * @return Long
+	 */
+	public Long getWeight(Long baseWeight);
+	
+	/**
 	 * return list of detected formats
 	 * @return List<RecordFormat>
 	 */
-	public List<HarvestedRecordFormat> getDetectedFormatList();
+	public List<HarvestedRecordFormatEnum> getDetectedFormatList();
+	
+	/**
+	 * return scale of document (significant for maps only)
+	 * @return Long or null
+	 */
+	public Long getScale();
+	
+	/**
+	 * return UUID of ducument
+	 * @return
+	 */
+	public String getUUId();
+	
+	/**
+	 * get authority key for main author
+	 * @return
+	 */
+	public String getAuthorAuthKey();
+	
+	/**
+	 * get string representing main author
+	 * @return
+	 */
+	public String getAuthorString();
 	
 }
