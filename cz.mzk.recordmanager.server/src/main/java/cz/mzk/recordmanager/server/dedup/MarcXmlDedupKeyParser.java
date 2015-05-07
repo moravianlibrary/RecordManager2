@@ -58,11 +58,11 @@ public class MarcXmlDedupKeyParser implements DedupKeysParser {
 		List<HarvestedRecordFormatEnum> formatEnums = metadata.getDetectedFormatList();
 		record.setPhysicalFormats(harvestedRecordFormatDAO.getFormatsFromEnums(formatEnums));
 		record.setAuthorAuthKey(metadata.getAuthorAuthKey());
-		record.setAuthorString(metadata.getAuthorString());
+		record.setAuthorString(MetadataUtils.normalize(metadata.getAuthorString()));
 		record.setScale(metadata.getScale());
 		record.setUuid(metadata.getUUId());
-		record.setIssnSeries(metadata.getISSNSeries());
-		record.setIssnSeriesOrder(metadata.getISSNSeriesOrder());
+		record.setIssnSeries(MetadataUtils.normalize(metadata.getISSNSeries()));
+		record.setIssnSeriesOrder(MetadataUtils.normalize(metadata.getISSNSeriesOrder()));
 		return record;
 	}
 }
