@@ -156,7 +156,6 @@ public class HarvestedRecord extends AbstractDomainObject {
 	
 	@Column(name="publication_year")
 	private Long publicationYear;
-	
 
 	@OneToMany
 	@JoinTable(
@@ -172,6 +171,9 @@ public class HarvestedRecord extends AbstractDomainObject {
 	@ManyToOne(optional=true, fetch=FetchType.LAZY)
 	@JoinColumn(name="dedup_record_id", nullable=true)
 	private DedupRecord dedupRecord;
+	
+	@Column(name="weight")
+	private Long weight;
 	
 	private HarvestedRecord() {
 	}
@@ -275,6 +277,14 @@ public class HarvestedRecord extends AbstractDomainObject {
 
 	public void setPhysicalFormats(List<HarvestedRecordFormat> physicalFormats) {
 		this.physicalFormats = physicalFormats;
+	}
+
+	public Long getWeight() {
+		return weight;
+	}
+
+	public void setWeight(Long weight) {
+		this.weight = weight;
 	}
 
 	@Override

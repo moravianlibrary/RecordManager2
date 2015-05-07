@@ -71,6 +71,13 @@ public interface MetadataRecord {
 	public Long getPageCount();
 	
 	/**
+	 * get weight of record
+	 * @param baseWeight
+	 * @return Long
+	 */
+	public Long getWeight(Long baseWeight);
+	
+	/**
 	 * return list of detected formats
 	 * @return List<RecordFormat>
 	 */

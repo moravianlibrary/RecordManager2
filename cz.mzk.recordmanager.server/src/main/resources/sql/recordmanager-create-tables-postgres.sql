@@ -29,6 +29,7 @@ CREATE TABLE oai_harvest_conf (
   granularity          VARCHAR(30),
   contact_person_id    DECIMAL(10),
   id_prefix            VARCHAR(10),
+  base_weight          DECIMAL(10),
   FOREIGN KEY (library_id)        REFERENCES library(id),
   FOREIGN KEY (contact_person_id) REFERENCES contact_person(id)
 );
@@ -54,6 +55,7 @@ CREATE TABLE harvested_record (
   format               VARCHAR(12) NOT NULL,
   publication_year     DECIMAL(4),
   dedup_record_id      DECIMAL(10),
+  weight               DECIMAL(10),
   raw_record           BYTEA,
   UNIQUE (oai_harvest_conf_id, record_id),
   FOREIGN KEY (oai_harvest_conf_id) REFERENCES oai_harvest_conf(id),
@@ -84,7 +86,6 @@ CREATE TABLE cnb (
   cnb                  VARCHAR(20),
   FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id)
 );
-
 
 CREATE TABLE title (
   id                   DECIMAL(10) PRIMARY KEY,
