@@ -30,7 +30,7 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 	protected static final Pattern YEAR_PATTERN = Pattern.compile("\\d{4}");
 	protected static final Pattern ISSN_PATTERN = Pattern.compile("(\\d{4}-\\d{3}[\\dxX])(.*)");
 	
-	protected static final Pattern DC_UUID_PATTERN = Pattern.compile("(uuid:.*)");
+	protected static final Pattern DC_UUID_PATTERN = Pattern.compile("uuid:(.*)",Pattern.CASE_INSENSITIVE);
 	protected static final Pattern DC_ISBN_PATTERN = Pattern
 			.compile("isbn:(.*)");
 	protected static final Pattern DC_ISSN_PATTERN = Pattern
@@ -119,7 +119,7 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 	@Override
 	public List<Isbn> getISBNs() {
 		/*
-		 * go through all identifiers look for isbn:* validate isbn return isbn
+		 * go through all identifiers, look for isbn:.*, validate isbn, return isbn
 		 * list
 		 */
 		List<String> identifiers = dcRecord.getIdentifiers();
@@ -261,8 +261,19 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 
 	@Override
 	public String getUUId() {
-		// TODO Auto-generated method stub
-		return null;
+		List<String> identifiers = dcRecord.getIdentifiers();
+		String uuid = new String();
+		
+		Pattern p = DC_UUID_PATTERN;
+		Matcher m;
+
+		for (String f : identifiers) {
+			m = p.matcher(f);
+			if (m.find()) {			
+				uuid = m.group(1);
+			}
+		}
+		return uuid;
 	}
 
 	@Override
