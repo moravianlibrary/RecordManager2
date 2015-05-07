@@ -39,6 +39,9 @@ public class OAIHarvestConfiguration extends AbstractDomainObject {
 
 	@Column(name="id_prefix")
 	private String idPrefix;
+	
+	@Column(name="base_weight")
+	private Long baseWeight;
 
 	public Library getLibrary() {
 		return library;
@@ -87,6 +90,14 @@ public class OAIHarvestConfiguration extends AbstractDomainObject {
 
 	public void setIdPrefix(String idPrefix) {
 		this.idPrefix = idPrefix;
+	}
+
+	public Long getBaseWeight() {
+		return baseWeight;
+	}
+
+	public void setBaseWeight(Long baseWeight) {
+		this.baseWeight = baseWeight;
 	}
 
 }

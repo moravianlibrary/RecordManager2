@@ -1,9 +1,12 @@
 package cz.mzk.recordmanager.server.metadata;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import javax.swing.text.StyledEditorKit.UnderlineAction;
 
 import org.apache.commons.validator.routines.ISBNValidator;
 import org.marc4j.marc.ControlField;
@@ -69,25 +72,12 @@ public class MetadataMarcRecord implements MetadataRecord {
         	
         	Matcher matcher = ISSN_PATTERN.matcher(subfieldA.getData());
 			try {
+				System.out.println();
 				if(matcher.find()) {
 					if(!issn.issnValidator(matcher.group(1))){
 						throw new NumberFormatException();
 					}					
 					issn.setIssn(matcher.group(1));
-					
-					StringBuilder builder = new StringBuilder();
-					if(matcher.group(2).trim() != null){ 
-						String s = matcher.group(2).trim();
-						if(s.matches("\\(.+\\)")) {
-							builder.append(s.substring(1, s.length()-1));
-						}
-						else builder.append(s);
-						builder.append(" ");
-					}
-					
-					issn.setNote(builder.toString().trim());
-					issn.setOrderInRecord(++issnCounter);
-					issns.add(issn);
 				}
 				
 			} catch (NumberFormatException e) {
@@ -95,7 +85,19 @@ public class MetadataMarcRecord implements MetadataRecord {
 				continue;
 			}
         
+			StringBuilder builder = new StringBuilder();
+			if(matcher.group(2).trim() != null){ 
+				String s = matcher.group(2).trim();
+				if(s.matches("\\(.+\\)")) {
+					builder.append(s.substring(1, s.length()-1));
+				}
+				else builder.append(s);
+				builder.append(" ");
+			}
 			
+			issn.setNote(builder.toString().trim());
+			issn.setOrderInRecord(++issnCounter);
+			issns.add(issn);
         }        
         
 		return issns;
@@ -993,6 +995,83 @@ public class MetadataMarcRecord implements MetadataRecord {
 		if(hrf.isEmpty()) hrf.add(HarvestedRecordFormat.UNSPECIFIED);
 		
 		return hrf;
+	}
+
+	@Override
+	public Long getWeight(Long baseWeight) {
+		Long weight = baseWeight;
+		String[] fields1xx = new String[]{"100", "110", "111", "130"};
+		String[] fields6xx = new String[]{"600", "610", "611", "630", "648", "650", "651", "653", "654", "655",
+				"656", "657", "658", "662", "690", "691", "692", "693", "694", "695", "696", "697", "698", "699"};
+		String[] fields7xx = new String[]{"700", "710", "711", "720", "730", "740", "751", "752", "753", "754", "760", 
+				"762", "765", "767", "770", "772", "773", "774", "775", "776", "777", "780", "785", "786", "787"};
+		
+		if(underlayingMarc.getDataFields("245").isEmpty()){
+			return 0L;
+		}
+
+		String ldr17 = Character.toString(underlayingMarc.getLeader().getImplDefined2()[0]);
+		if(ldr17.matches("1")) weight -= 1;
+		else if(ldr17.matches("[2-4]")) weight -= 2;
+		else if(ldr17.matches("[05-9]")) weight -= 3;		
+		if(underlayingMarc.getControlField("008") == null) weight -= 1;
+		if(underlayingMarc.getDataFields("300").isEmpty()) weight -= 1;
+		
+        boolean f245Ind1 = false;
+		for (String key: fields1xx){
+			if(!underlayingMarc.getDataFields(key).isEmpty()){;
+				for(DataField dataField: underlayingMarc.getDataFields("245")){
+					if(dataField.getIndicator1() == 0) f245Ind1 = true;
+				}
+				break;
+			}
+		}
+		if(!f245Ind1){
+			weight -= 1;
+		}
+		
+		if(!underlayingMarc.getDataFields("080").isEmpty() || !underlayingMarc.getDataFields("072").isEmpty()){
+			weight += 1;
+		}
+		if(!underlayingMarc.getDataFields("964").isEmpty()) weight += 1;
+		else{
+			for(String key: fields6xx){
+				if(!underlayingMarc.getDataFields(key).isEmpty()){
+					weight += 1;
+					break;
+				}
+			}
+		}
+		
+		if(!getISBNs().isEmpty() || !getISSNs().isEmpty() || !getCNBs().isEmpty()){
+			weight += 1;
+		}
+		
+		boolean exist7in1xx = false;
+		for(String key: fields1xx){
+			if(underlayingMarc.getField(key, '7') != null){
+				weight += 1;
+				exist7in1xx = true;
+				break;
+			}
+		}
+		if(!exist7in1xx){
+			for(String key: fields7xx){
+				if(underlayingMarc.getField(key, '7') != null){
+					weight += 1;
+					break;
+				}
+			}
+		}
+		
+		for(String subfield: underlayingMarc.getFields("040", 'e')){
+			if(subfield.matches("(?i)rda")){
+				weight += 1;
+				break;
+			}
+		}
+		
+		return weight;
 	}
 		
 }

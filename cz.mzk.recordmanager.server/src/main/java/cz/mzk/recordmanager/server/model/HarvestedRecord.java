@@ -173,6 +173,9 @@ public class HarvestedRecord extends AbstractDomainObject {
 	@JoinColumn(name="dedup_record_id", nullable=true)
 	private DedupRecord dedupRecord;
 	
+	@Column(name="weight")
+	private Long weight;
+	
 	private HarvestedRecord() {
 	}
 	
@@ -291,6 +294,14 @@ public class HarvestedRecord extends AbstractDomainObject {
 
 	public void setDedupRecord(DedupRecord dedupRecord) {
 		this.dedupRecord = dedupRecord;
+	}
+
+	public Long getWeight() {
+		return weight;
+	}
+
+	public void setWeight(Long weight) {
+		this.weight = weight;
 	}
 
 	@Override

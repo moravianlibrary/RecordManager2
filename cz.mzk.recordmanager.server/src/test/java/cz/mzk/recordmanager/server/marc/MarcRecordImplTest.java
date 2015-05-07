@@ -330,6 +330,28 @@ public class MarcRecordImplTest extends AbstractTest {
 	}
 	
 	@Test
+	public void getWeightTest() throws Exception{
+		MarcRecordImpl mri;
+		MetadataRecord metadataRecord;
+		List<String> data = new ArrayList<String>();
+		
+		data.add("000 01234567890123456a");
+		data.add("008 asd");
+		data.add("020 $a80-200-0980-9");
+		data.add("040 $erda");
+		data.add("080 456");
+		data.add("100 $aasd");
+		data.add("245 00$asasd");
+		data.add("300 $asd");
+		data.add("752 $7asd");
+		data.add("964 $asd");
+		mri = MarcRecordFactory.recordFactory(data);
+		metadataRecord = metadataFactory.getMetadataRecord(mri);
+		Assert.assertEquals(metadataRecord.getWeight(0L).longValue(), 4L);
+		data.clear();
+	}
+	
+	@Test
 	public void getDetectedFormatListTest() throws Exception {
 		MarcRecordImpl mri;
 		MetadataRecord metadataRecord;

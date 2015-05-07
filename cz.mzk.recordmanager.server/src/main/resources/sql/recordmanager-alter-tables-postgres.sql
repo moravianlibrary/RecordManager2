@@ -103,3 +103,7 @@ CREATE SEQUENCE harvested_record_id_seq START 1;
 UPDATE harvested_record SET id = nextval('harvested_record_id_seq');
 ALTER TABLE harvested_record DROP CONSTRAINT harvested_record_pk;
 ALTER TABLE harvested_record ADD CONSTRAINT harvested_record_pk PRIMARY KEY (id);
+
+-- 7. 5. 2015 - tomascejpek
+ALTER TABLE harvested_record ADD COLUMN weight DECIMAL(10);
+ALTER TABLE oai_harvest_conf ADD COLUMN base_weight DECIMAL(10);

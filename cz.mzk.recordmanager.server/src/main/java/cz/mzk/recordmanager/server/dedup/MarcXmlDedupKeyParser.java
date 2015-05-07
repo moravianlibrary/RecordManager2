@@ -47,6 +47,7 @@ public class MarcXmlDedupKeyParser implements DedupKeysParser {
 		record.setIssns(metadata.getISSNs());
 		record.setCnb(metadata.getCNBs());
 		record.setTitles(titles);
+		if(record.getHarvestedFrom() != null) record.setWeight(metadata.getWeight(record.getHarvestedFrom().getBaseWeight()));
 		record.setPhysicalFormat(metadata.getFormat());
 		record.setPublicationYear(metadata.getPublicationYear());
 
