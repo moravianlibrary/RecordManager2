@@ -34,7 +34,7 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 	protected static final Pattern DC_ISBN_PATTERN = Pattern
 			.compile("isbn:(.*)");
 	protected static final Pattern DC_ISSN_PATTERN = Pattern
-			.compile("issn:(*)");
+			.compile("issn:(.*)");
 
 
 	public MetadataDublinCoreRecord(DublinCoreRecord dcRecord) {
@@ -232,7 +232,7 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 		if(isBook()) hrf.add(HarvestedRecordFormatEnum.BOOKS);
 		if(isPeriodical()) hrf.add(HarvestedRecordFormatEnum.PERIODICALS);
 
-		return null;
+		return hrf;
 	}
 
 	@Override
