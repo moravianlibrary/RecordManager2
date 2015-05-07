@@ -12,7 +12,9 @@ import com.google.common.base.Preconditions;
 import cz.mzk.recordmanager.server.metadata.MetadataRecord;
 import cz.mzk.recordmanager.server.metadata.MetadataRecordFactory;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
+import cz.mzk.recordmanager.server.model.HarvestedRecordFormat.HarvestedRecordFormatEnum;
 import cz.mzk.recordmanager.server.model.Title;
+import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordFormatDAO;
 import cz.mzk.recordmanager.server.util.MetadataUtils;
 
 @Component
@@ -24,6 +26,9 @@ public class MarcXmlDedupKeyParser implements DedupKeysParser {
 	
 	@Autowired 
 	private MetadataRecordFactory metadataFactory;
+	
+	@Autowired 
+	private HarvestedRecordFormatDAO harvestedRecordFormatDAO;
 
 	@Override
 	public List<String> getSupportedFormats() {
@@ -36,20 +41,23 @@ public class MarcXmlDedupKeyParser implements DedupKeysParser {
 		MetadataRecord metadata = metadataFactory.getMetadataRecord(record);
 
 		record.setIsbns(metadata.getISBNs());
-		List<Title> titles = new ArrayList<>();
+		List<Title> existingTitles = record.getTitles();
 		for (Title title: metadata.getTitle()) {
 			title.setTitleStr(MetadataUtils.normalizeAndShorten(
 						title.getTitleStr(),
 						EFFECTIVE_TITLE_LENGTH));
-			titles.add(title);
+			if (!existingTitles.contains(title)) {
+				existingTitles.add(title);
+			}
 		}
+		record.setTitles(existingTitles);
 		
 		record.setIssns(metadata.getISSNs());
 		record.setCnb(metadata.getCNBs());
-		record.setTitles(titles);
 		if(record.getHarvestedFrom() != null) record.setWeight(metadata.getWeight(record.getHarvestedFrom().getBaseWeight()));
-		record.setPhysicalFormat(metadata.getFormat());
 		record.setPublicationYear(metadata.getPublicationYear());
+		List<HarvestedRecordFormatEnum> formatEnums = metadata.getDetectedFormatList();
+		record.setPhysicalFormats(harvestedRecordFormatDAO.getFormatsFromEnums(formatEnums));
 
 		return record;
 	}

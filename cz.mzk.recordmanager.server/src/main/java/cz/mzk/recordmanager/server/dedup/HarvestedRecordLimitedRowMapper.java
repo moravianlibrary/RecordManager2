@@ -24,7 +24,6 @@ public class HarvestedRecordLimitedRowMapper implements RowMapper<HarvestedRecor
 				rs.getString("RECORD_ID"));
 		HarvestedRecord harvestedRecord = new HarvestedRecord(id);
 		harvestedRecord.setPublicationYear(rs.getLong("PUBLICATION_YEAR"));
-		harvestedRecord.setPhysicalFormat(rs.getString("PHYSICAL_FORMAT"));
 		harvestedRecord.setFormat(rs.getString("FORMAT"));
 		return harvestedRecord;
 	}

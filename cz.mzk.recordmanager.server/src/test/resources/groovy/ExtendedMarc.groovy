@@ -1,3 +1,3 @@
 author = getFirstField "100ad"
 published = getFirstField "260abc"
-format = getFormat()
+cpk_detected_format_txtF_mv = getRecordType()

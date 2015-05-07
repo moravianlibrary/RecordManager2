@@ -9,7 +9,6 @@ import java.util.regex.Pattern;
 import javax.swing.text.StyledEditorKit.UnderlineAction;
 
 import org.apache.commons.validator.routines.ISBNValidator;
-import org.marc4j.marc.ControlField;
 import org.marc4j.marc.DataField;
 import org.marc4j.marc.Subfield;
 import org.slf4j.Logger;
@@ -20,7 +19,7 @@ import com.google.common.primitives.Chars;
 import cz.mzk.recordmanager.server.export.IOFormat;
 import cz.mzk.recordmanager.server.marc.MarcRecord;
 import cz.mzk.recordmanager.server.model.Cnb;
-import cz.mzk.recordmanager.server.model.HarvestedRecordFormat;
+import cz.mzk.recordmanager.server.model.HarvestedRecordFormat.HarvestedRecordFormatEnum;
 import cz.mzk.recordmanager.server.model.Isbn;
 import cz.mzk.recordmanager.server.model.Issn;
 import cz.mzk.recordmanager.server.model.Title;
@@ -194,220 +193,6 @@ public class MetadataMarcRecord implements MetadataRecord {
 		}
 		
 		return isbns;
-	}
-	
-	public String getFormat() {
-		boolean onlineResource = false;
-		List<ControlField> cfl = underlayingMarc.getControlFields("007");
-				
-		for (ControlField field : cfl) {
-			String data = field.getData();
-			if (data.length() < 2) {
-				continue;
-			}
-			char code1 = Character.toUpperCase(data.charAt(0));
-			char code2 = Character.toUpperCase(data.charAt(1));
-
-			switch (code1) {
-			case 'A':
-				switch (code2) {
-				case 'D':
-					return "Atlas";
-				default:
-					return "Map";
-				}
-			case 'C':
-				switch (code2) {
-				case 'A':
-					return "TapeCartridge";
-				case 'B':
-					return "ChipCartridge";
-				case 'C':
-					return "DiscCartridge";
-				case 'F':
-					return "TapeCassette";
-				case 'H':
-					return "TapeReel";
-				case 'J':
-					return "FloppyDisk";
-				case 'M':
-				case 'O':
-					return "CDROM";
-				case 'R':
-					// Do not return - this will cause anything with an
-					// 856 field to be labeled as "Electronic"
-					onlineResource = true;
-					break;
-				default:
-					return "Electronic";
-				}
-				break;
-			case 'D':
-				return "Globe";
-			case 'F':
-				return "Braille";
-			case 'G':
-				switch (code2) {
-				case 'C':
-				case 'D':
-					return "Filmstrip";
-				case 'T':
-					return "Transparency";
-				default:
-					return "Slide";
-				}
-			case 'H':
-				return "Microfilm";
-			case 'K':
-				switch (code2) {
-				case 'C':
-					return "Collage";
-				case 'D':
-					return "Drawing";
-				case 'E':
-					return "Painting";
-				case 'F':
-					return "Print";
-				case 'G':
-					return "Photonegative";
-				case 'J':
-					return "Print";
-				case 'L':
-					return "TechnicalDrawing";
-				case 'O':
-					return "FlashCard";
-				case 'N':
-					return "Chart";
-				default:
-					return "Photo";
-				}
-			case 'M':
-				switch (code2) {
-				case 'F':
-					return "VideoCassette";
-				case 'R':
-					return "Filmstrip";
-				default:
-					return "MotionPicture";
-				}
-			case 'O':
-				return "Kit";
-			case 'Q':
-				return "MusicalScore";
-			case 'R':
-				return "SensorImage";
-			case 'S':
-				switch (code2) {
-				case 'D':
-					if (data.length() > 14) {
-						return Character.toUpperCase(data.charAt(13)) == 'D' ? "CD" : "SoundDisc";
-					}
-					break;
-				case 'S':
-					return "SoundCassette";
-				default:
-					return "SoundRecording";
-				}
-			case 'V':
-				if (data.length() < 5) {
-					break;
-				}
-				switch (Character.toUpperCase(data.charAt(4))) {
-				case 'S':
-					return "BluRay";
-				case 'V':
-					return "DVD";
-				}
-				switch (code2) {
-				case 'C':
-					return "VideoCartridge";
-				case 'D':
-					return "VideoDisc";
-				case 'F':
-					return "VideoCassette";
-				case 'R':
-					return "VideoReel";
-				default:
-					return "Video";
-				}
-			}
-		}
-
-		char leaderCode = underlayingMarc.getLeader().getTypeOfRecord();
-		
-		switch (Character.toUpperCase(leaderCode)) {
-		case 'C':
-		case 'D':
-			return "MusicalScore";
-		case 'E':
-		case 'F':
-			return "Map";
-		case 'G':
-			return "Slide";
-		case 'I':
-			return "SoundRecording";
-		case 'J':
-			return "MusicRecording";
-		case 'K':
-			return "Photo";
-		case 'M':
-			return "Electronic";
-		case 'O':
-		case 'P':
-			return "Kit";
-		case 'R':
-			return "PhysicalObject";
-		case 'T':
-			return "Manuscript";
-		}
-		
-		leaderCode = underlayingMarc.getLeader().getImplDefined1()[0];
-		
-		switch (Character.toUpperCase(leaderCode)) {
-		// Monograph
-		case 'M':
-			if (onlineResource) {
-				return "eBook";
-			} else {
-				return "Book";
-			}
-		// Serial
-		case 'S':
-			// Look in 008 to determine what type of Continuing Resource
-			List<ControlField> innerCfl = underlayingMarc.getControlFields("008");		
-			for (ControlField innerField : innerCfl) {
-				if (innerField.getData().length() < 23) {
-					continue;
-				}
-				char innerCode = innerField.getData().charAt(22);
-				switch (Character.toUpperCase(innerCode)) {
-				case 'N':
-					return onlineResource ? "eNewspaper" : "Newspaper";
-				case 'P':
-					return onlineResource ? "eJournal" : "Journal";
-				default:
-					return onlineResource ? "eSerial" : "Serial";
-				}
-			}
-			break;
-		case 'A':
-			// Component part in monograph
-			return onlineResource ? "eBookSection" : "BookSection";
-		case 'B':
-			// Component part in serial
-			return onlineResource ? "eArticle" : "Article";
-		case 'C':
-			// Collection
-			return "Collection";
-		case 'D':
-			// Component part in collection (sub unit)
-			return "SubUnit";
-		case 'I':
-			// Integrating resource
-			return "ContinuouslyUpdatedResource";
-		}
-		return "Other";
-			
 	}
 
 	/**
@@ -781,7 +566,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 		return false;
 	}
 	
-	protected HarvestedRecordFormat getAudioFormat(){
+	protected HarvestedRecordFormatEnum getAudioFormat(){
 		String ldr06 = Character.toString(underlayingMarc.getLeader().getTypeOfRecord());
 		
 		String f006 = underlayingMarc.getControlField("006");
@@ -810,45 +595,45 @@ public class MetadataMarcRecord implements MetadataRecord {
 		if(f338b == null) f338b = "";
 				
 		// AUDIO_CD
-		if(f300.matches("(?i).*kompaktn[ií]\\sdisk.*")) return HarvestedRecordFormat.AUDIO_CD;
-		if(f500.matches("(?i).*kompaktn[ií]\\sdisk.*")) return HarvestedRecordFormat.AUDIO_CD;
-		if(f300.matches("(?i).*zvukov[eéaá]\\sCD.*")) return HarvestedRecordFormat.AUDIO_CD;
+		if(f300.matches("(?i).*kompaktn[ií]\\sdisk.*")) return HarvestedRecordFormatEnum.AUDIO_CD;
+		if(f500.matches("(?i).*kompaktn[ií]\\sdisk.*")) return HarvestedRecordFormatEnum.AUDIO_CD;
+		if(f300.matches("(?i).*zvukov[eéaá]\\sCD.*")) return HarvestedRecordFormatEnum.AUDIO_CD;
 		if(f300a.matches("(?i).*cd.*")) {
-			if(!f300a.matches("(?i)cd-rom")) return HarvestedRecordFormat.AUDIO_CD;
+			if(!f300a.matches("(?i)cd-rom")) return HarvestedRecordFormatEnum.AUDIO_CD;
 		}
-		if(f300.matches("(?i).*zvukov([aáeé]|ych|ých)\\sdes(ka|ky|ek).*") && f300.matches("(?i).*(digital|12\\scm).*")) return HarvestedRecordFormat.AUDIO_CD;
+		if(f300.matches("(?i).*zvukov([aáeé]|ych|ých)\\sdes(ka|ky|ek).*") && f300.matches("(?i).*(digital|12\\scm).*")) return HarvestedRecordFormatEnum.AUDIO_CD;
 
 		// AUDIO_DVD
-		if(ldr06.matches("(?i)[ij]") && f300a.matches("(?i).*dvd.*")) return HarvestedRecordFormat.AUDIO_DVD;
+		if(ldr06.matches("(?i)[ij]") && f300a.matches("(?i).*dvd.*")) return HarvestedRecordFormatEnum.AUDIO_DVD;
 		
 		// AUDIO_LP
-		if(f300.matches("(?i).*gramofonov([aáeé]|ych|ých)\\sdes(ka|ky|ek).*")) return HarvestedRecordFormat.AUDIO_LP;
-		if(f300.matches("(?i).*zvukov([aáeé]|ych|ých)\\sdes(ka|ky|ek).*") && f300.matches("(?i).*analog.*")) return HarvestedRecordFormat.AUDIO_LP;
-		if(f300a.matches("(?i).*lp.*")) return HarvestedRecordFormat.AUDIO_LP;
-		if(f300a.matches("(?i).*sp.*")) return HarvestedRecordFormat.AUDIO_LP;
+		if(f300.matches("(?i).*gramofonov([aáeé]|ych|ých)\\sdes(ka|ky|ek).*")) return HarvestedRecordFormatEnum.AUDIO_LP;
+		if(f300.matches("(?i).*zvukov([aáeé]|ych|ých)\\sdes(ka|ky|ek).*") && f300.matches("(?i).*analog.*")) return HarvestedRecordFormatEnum.AUDIO_LP;
+		if(f300a.matches("(?i).*lp.*")) return HarvestedRecordFormatEnum.AUDIO_LP;
+		if(f300a.matches("(?i).*sp.*")) return HarvestedRecordFormatEnum.AUDIO_LP;
 		
 		// AUDIO_CASSETTE
-		if(ldr06.matches("(?i)[ij]") && f007_00.matches("(?i)s")) return HarvestedRecordFormat.AUDIO_CASSETTE;
-		if(f007_00.matches("(?i)s") && f338b.matches("(?i)ss")) return HarvestedRecordFormat.AUDIO_CASSETTE;
-		if(f007_00.matches("(?i)s") && f007_01.matches("(?i)[zgeiqt]")) return HarvestedRecordFormat.AUDIO_CASSETTE;
-		if(f300.matches("(?i).*zvukov(a|á|e|é|ych|ých)\\skaze(ta|ty|t).*")) return HarvestedRecordFormat.AUDIO_CASSETTE;
-		if(f300.matches("(?i).*(mc|kz|mgk).*")) return HarvestedRecordFormat.AUDIO_CASSETTE;
-		if(f300.matches("(?i).*magnetofonov(a|á|e|é|ych|ých)\\skaze(ta|ty|t).*")) return HarvestedRecordFormat.AUDIO_CASSETTE;
+		if(ldr06.matches("(?i)[ij]") && f007_00.matches("(?i)s")) return HarvestedRecordFormatEnum.AUDIO_CASSETTE;
+		if(f007_00.matches("(?i)s") && f338b.matches("(?i)ss")) return HarvestedRecordFormatEnum.AUDIO_CASSETTE;
+		if(f007_00.matches("(?i)s") && f007_01.matches("(?i)[zgeiqt]")) return HarvestedRecordFormatEnum.AUDIO_CASSETTE;
+		if(f300.matches("(?i).*zvukov(a|á|e|é|ych|ých)\\skaze(ta|ty|t).*")) return HarvestedRecordFormatEnum.AUDIO_CASSETTE;
+		if(f300.matches("(?i).*(mc|kz|mgk).*")) return HarvestedRecordFormatEnum.AUDIO_CASSETTE;
+		if(f300.matches("(?i).*magnetofonov(a|á|e|é|ych|ých)\\skaze(ta|ty|t).*")) return HarvestedRecordFormatEnum.AUDIO_CASSETTE;
 		
 		// AUDIO_OTHER
-		if(ldr06.matches("(?i)[ij]")) return HarvestedRecordFormat.AUDIO_OTHER;
-		if(f007_00.matches("(?i)s")) return HarvestedRecordFormat.AUDIO_OTHER;
-		if(f245h.matches("(?i).*zvukový\\száznam.*")) return HarvestedRecordFormat.AUDIO_OTHER;
-		if(f337b.matches("(?i)s")) return HarvestedRecordFormat.AUDIO_OTHER;
-		if(f006_00.matches("(?i)[ij]")) return HarvestedRecordFormat.AUDIO_OTHER;
-		if(f338b.matches("(?i)s.*")) return HarvestedRecordFormat.AUDIO_OTHER;
-		if(f007_00.matches("(?i)i")) return HarvestedRecordFormat.AUDIO_OTHER;
-		if(f336b.matches("(?i)spw|snd")) return HarvestedRecordFormat.AUDIO_OTHER;
+		if(ldr06.matches("(?i)[ij]")) return HarvestedRecordFormatEnum.AUDIO_OTHER;
+		if(f007_00.matches("(?i)s")) return HarvestedRecordFormatEnum.AUDIO_OTHER;
+		if(f245h.matches("(?i).*zvukový\\száznam.*")) return HarvestedRecordFormatEnum.AUDIO_OTHER;
+		if(f337b.matches("(?i)s")) return HarvestedRecordFormatEnum.AUDIO_OTHER;
+		if(f006_00.matches("(?i)[ij]")) return HarvestedRecordFormatEnum.AUDIO_OTHER;
+		if(f338b.matches("(?i)s.*")) return HarvestedRecordFormatEnum.AUDIO_OTHER;
+		if(f007_00.matches("(?i)i")) return HarvestedRecordFormatEnum.AUDIO_OTHER;
+		if(f336b.matches("(?i)spw|snd")) return HarvestedRecordFormatEnum.AUDIO_OTHER;
 		
 		return null;
 	}
 	
-	protected HarvestedRecordFormat getVideoDocument(){
+	protected HarvestedRecordFormatEnum getVideoDocument(){
 		String ldr06 = Character.toString(underlayingMarc.getLeader().getTypeOfRecord());
 		
 		String f006 = underlayingMarc.getControlField("006");
@@ -880,31 +665,31 @@ public class MetadataMarcRecord implements MetadataRecord {
 		if(f338b == null) f338b = "";
 		
 		// Bluray
-		if(ldr06.matches("(?i)g") && f300.matches("(?i).*blu.*ray.*")) return HarvestedRecordFormat.VIDEO_BLURAY;
+		if(ldr06.matches("(?i)g") && f300.matches("(?i).*blu.*ray.*")) return HarvestedRecordFormatEnum.VIDEO_BLURAY;
 		
 		// VHS
-		if(f300.matches("(?i).*vhs.*")) return HarvestedRecordFormat.VIDEO_VHS;
-		if(f007_00.matches("(?i)v") && f007_04.matches("(?i)b")) return HarvestedRecordFormat.VIDEO_VHS;
-		if(f300a.matches("(?i).*videokazeta.*")) return HarvestedRecordFormat.VIDEO_VHS;
+		if(f300.matches("(?i).*vhs.*")) return HarvestedRecordFormatEnum.VIDEO_VHS;
+		if(f007_00.matches("(?i)v") && f007_04.matches("(?i)b")) return HarvestedRecordFormatEnum.VIDEO_VHS;
+		if(f300a.matches("(?i).*videokazeta.*")) return HarvestedRecordFormatEnum.VIDEO_VHS;
 		
 		// DVD
-		if(ldr06.matches("(?i)g") && f300a.matches("(?i).*dvd.*")) return HarvestedRecordFormat.VIDEO_DVD;
-		if(f007_00.matches("(?i)v") && f007_04.matches("(?i)v")) return HarvestedRecordFormat.VIDEO_DVD;
+		if(ldr06.matches("(?i)g") && f300a.matches("(?i).*dvd.*")) return HarvestedRecordFormatEnum.VIDEO_DVD;
+		if(f007_00.matches("(?i)v") && f007_04.matches("(?i)v")) return HarvestedRecordFormatEnum.VIDEO_DVD;
 		
 		// CD
-		if(ldr06.matches("(?i)g") && f300a.matches("(?i).*cd.*")) return HarvestedRecordFormat.VIDEO_CD;
+		if(ldr06.matches("(?i)g") && f300a.matches("(?i).*cd.*")) return HarvestedRecordFormatEnum.VIDEO_CD;
 		
 		// others
-		if(ldr06.matches("(?i)g")) return HarvestedRecordFormat.VIDEO_OTHER;
-		if(f007_00.matches("(?i)[vm]")) return HarvestedRecordFormat.VIDEO_OTHER;
-		if(f245h.matches("(?i).*videozáznam.*")) return HarvestedRecordFormat.VIDEO_OTHER;
-		if(f337b.matches("(?i)v")) return HarvestedRecordFormat.VIDEO_OTHER;
-		if(ldr06.matches("(?i)g") && f008_33.matches("(?i)[mv]")) return HarvestedRecordFormat.VIDEO_OTHER;
-		if(f006_00.matches("(?i)g") && f006_16.matches("(?i)[mv]")) return HarvestedRecordFormat.VIDEO_OTHER;
-		if(f338b.matches("(?i)v.*")) return HarvestedRecordFormat.VIDEO_OTHER;
-		if(f336b.matches("(?i)tdi|tdm")) return HarvestedRecordFormat.VIDEO_OTHER;
+		if(ldr06.matches("(?i)g")) return HarvestedRecordFormatEnum.VIDEO_OTHER;
+		if(f007_00.matches("(?i)[vm]")) return HarvestedRecordFormatEnum.VIDEO_OTHER;
+		if(f245h.matches("(?i).*videozáznam.*")) return HarvestedRecordFormatEnum.VIDEO_OTHER;
+		if(f337b.matches("(?i)v")) return HarvestedRecordFormatEnum.VIDEO_OTHER;
+		if(ldr06.matches("(?i)g") && f008_33.matches("(?i)[mv]")) return HarvestedRecordFormatEnum.VIDEO_OTHER;
+		if(f006_00.matches("(?i)g") && f006_16.matches("(?i)[mv]")) return HarvestedRecordFormatEnum.VIDEO_OTHER;
+		if(f338b.matches("(?i)v.*")) return HarvestedRecordFormatEnum.VIDEO_OTHER;
+		if(f336b.matches("(?i)tdi|tdm")) return HarvestedRecordFormatEnum.VIDEO_OTHER;
 		
-		if(f338b.matches("(?i)vr|vz|vc|mc|mf|mr|mo|mz")) return HarvestedRecordFormat.VIDEO_OTHER;
+		if(f338b.matches("(?i)vr|vz|vc|mc|mf|mr|mo|mz")) return HarvestedRecordFormatEnum.VIDEO_OTHER;
 		
 		return null;
 	}
@@ -970,29 +755,29 @@ public class MetadataMarcRecord implements MetadataRecord {
 	}
 	
 	@Override
-	public List<HarvestedRecordFormat> getDetectedFormatList() {
-		List<HarvestedRecordFormat> hrf = new ArrayList<HarvestedRecordFormat>();
+	public List<HarvestedRecordFormatEnum> getDetectedFormatList() {
+		List<HarvestedRecordFormatEnum> hrf = new ArrayList<HarvestedRecordFormatEnum>();
 		
-		if(isBook()) hrf.add(HarvestedRecordFormat.BOOKS);
-		if(isPeriodical()) hrf.add(HarvestedRecordFormat.PERIODICALS);
-		if(isArticle()) hrf.add(HarvestedRecordFormat.ARTICLES);
-		if(isMap()) hrf.add(HarvestedRecordFormat.MAPS);
-		if(isMusicalScores()) hrf.add(HarvestedRecordFormat.MUSICAL_SCORES);
-		if(isVisualDocument()) hrf.add(HarvestedRecordFormat.VISUAL_DOCUMENTS);
-		if(isManuscript()) hrf.add(HarvestedRecordFormat.MANUSCRIPTS);
-		if(isMicroform()) hrf.add(HarvestedRecordFormat.MICROFORMS);
-		if(isLargePrint()) hrf.add(HarvestedRecordFormat.LARGE_PRINTS);
-		if(isBraill()) hrf.add(HarvestedRecordFormat.BRAILL);
-		if(isElectronicSource()) hrf.add(HarvestedRecordFormat.ELECTRONIC_SOURCE);
-		HarvestedRecordFormat audio = getAudioFormat();
+		if(isBook()) hrf.add(HarvestedRecordFormatEnum.BOOKS);
+		if(isPeriodical()) hrf.add(HarvestedRecordFormatEnum.PERIODICALS);
+		if(isArticle()) hrf.add(HarvestedRecordFormatEnum.ARTICLES);
+		if(isMap()) hrf.add(HarvestedRecordFormatEnum.MAPS);
+		if(isMusicalScores()) hrf.add(HarvestedRecordFormatEnum.MUSICAL_SCORES);
+		if(isVisualDocument()) hrf.add(HarvestedRecordFormatEnum.VISUAL_DOCUMENTS);
+		if(isManuscript()) hrf.add(HarvestedRecordFormatEnum.MANUSCRIPTS);
+		if(isMicroform()) hrf.add(HarvestedRecordFormatEnum.MICROFORMS);
+		if(isLargePrint()) hrf.add(HarvestedRecordFormatEnum.LARGE_PRINTS);
+		if(isBraill()) hrf.add(HarvestedRecordFormatEnum.BRAILL);
+		if(isElectronicSource()) hrf.add(HarvestedRecordFormatEnum.ELECTRONIC_SOURCE);
+		HarvestedRecordFormatEnum audio = getAudioFormat();
 		if(audio != null) hrf.add(audio);
-		HarvestedRecordFormat video = getVideoDocument();
+		HarvestedRecordFormatEnum video = getVideoDocument();
 		if(video != null) hrf.add(video);
-		if(isKit()) hrf.add(HarvestedRecordFormat.KIT);
-		if(isObject()) hrf.add(HarvestedRecordFormat.OBJECT);
-		if(isMixDocument()) hrf.add(HarvestedRecordFormat.MIX_DOCUMENT);
-		if(isUnspecified()) hrf.add(HarvestedRecordFormat.UNSPECIFIED);		
-		if(hrf.isEmpty()) hrf.add(HarvestedRecordFormat.UNSPECIFIED);
+		if(isKit()) hrf.add(HarvestedRecordFormatEnum.KIT);
+		if(isObject()) hrf.add(HarvestedRecordFormatEnum.OBJECT);
+		if(isMixDocument()) hrf.add(HarvestedRecordFormatEnum.MIX_DOCUMENT);
+		if(isUnspecified()) hrf.add(HarvestedRecordFormatEnum.UNSPECIFIED);		
+		if(hrf.isEmpty()) hrf.add(HarvestedRecordFormatEnum.UNSPECIFIED);
 		
 		return hrf;
 	}

@@ -41,10 +41,6 @@ CREATE TABLE format (
 
 CREATE TABLE dedup_record (
   id                   DECIMAL(10) PRIMARY KEY,
-  isbn                 VARCHAR(32),
-  title                VARCHAR(255),
-  publication_year     DECIMAL(4),
-  physical_format      VARCHAR(255),
   updated              TIMESTAMP
 );
 
@@ -56,10 +52,7 @@ CREATE TABLE harvested_record (
   updated              TIMESTAMP,
   deleted              TIMESTAMP,
   format               VARCHAR(12) NOT NULL,
-  isbn                 VARCHAR(32),
-  title                VARCHAR(255),
   publication_year     DECIMAL(4),
-  physical_format      VARCHAR(255),
   dedup_record_id      DECIMAL(10),
   weight               DECIMAL(10),
   raw_record           BLOB,
@@ -99,7 +92,20 @@ CREATE TABLE title (
   harvested_record_id  DECIMAL(10),
   title                VARCHAR(255),
   order_in_record      DECIMAL(4),
-  CONSTRAINT title_fk   FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id)
+  CONSTRAINT title_fk  FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id)
+);
+
+CREATE TABLE harvested_record_format (
+  id                   DECIMAL(10) PRIMARY KEY,
+  name                 VARCHAR(50) UNIQUE
+);
+
+CREATE TABLE harvested_record_format_link (
+  harvested_record_id            DECIMAL(10),
+  harvested_record_format_id     DECIMAL(10),
+  CONSTRAINT record_link_pk           PRIMARY KEY (harvested_record_id, harvested_record_format_id), 
+  CONSTRAINT format_link_hr_id_fk     FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id),
+  CONSTRAINT format_link_hr_format_fk FOREIGN KEY (harvested_record_format_id) REFERENCES harvested_record_format(id)
 );
 
 CREATE TABLE authority_record (

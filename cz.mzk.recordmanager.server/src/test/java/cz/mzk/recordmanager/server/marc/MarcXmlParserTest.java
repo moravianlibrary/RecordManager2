@@ -10,6 +10,7 @@ import org.testng.annotations.Test;
 import cz.mzk.recordmanager.server.AbstractTest;
 import cz.mzk.recordmanager.server.metadata.MetadataRecord;
 import cz.mzk.recordmanager.server.metadata.MetadataRecordFactory;
+import cz.mzk.recordmanager.server.model.HarvestedRecordFormat.HarvestedRecordFormatEnum;
 import cz.mzk.recordmanager.server.model.Title;
 
 /**
@@ -43,8 +44,8 @@ public class MarcXmlParserTest extends AbstractTest {
 		Assert.assertEquals(fields650.size(), 4);
 		Assert.assertTrue(fields650.contains("obce Česko"));
 		Assert.assertEquals(metadataRecord.getPublicationYear(), new Long(2014));
-		Assert.assertEquals(metadataRecord.getFormat(), "Book");
-
+		Assert.assertEquals(metadataRecord.getDetectedFormatList().size(), 1);
+		Assert.assertEquals(metadataRecord.getDetectedFormatList().get(0), HarvestedRecordFormatEnum.BOOKS);
 		
 		DataFieldMatcher matcher = field -> field.getIndicator1() == ' '
 				&& field.getIndicator2() == '7';
@@ -65,7 +66,8 @@ public class MarcXmlParserTest extends AbstractTest {
 		expectedTitle.setOrderInRecord(1L);
 		Assert.assertEquals(metadataRecord.getTitle().get(0), expectedTitle);
 		Assert.assertEquals(metadataRecord.getPublicationYear(), new Long(1992));
-		Assert.assertEquals(metadataRecord.getFormat(), "Book");
+		Assert.assertEquals(metadataRecord.getDetectedFormatList().size(), 1);
+		Assert.assertEquals(metadataRecord.getDetectedFormatList().get(0), HarvestedRecordFormatEnum.BOOKS);
 	}
 
 	/**
@@ -81,7 +83,8 @@ public class MarcXmlParserTest extends AbstractTest {
 		Assert.assertEquals(marc.getField("020", 'a'), "3-540-08474-6");
 		Assert.assertEquals(marc.getField("HGS", 'a'), "0");
 		Assert.assertEquals(metadataRecord.getPublicationYear(), new Long(1978));
-		Assert.assertEquals(metadataRecord.getFormat(), "Book");
+		Assert.assertEquals(metadataRecord.getDetectedFormatList().size(), 1);
+		Assert.assertEquals(metadataRecord.getDetectedFormatList().get(0), HarvestedRecordFormatEnum.BOOKS);
 		Title expectedTitle = new Title();
 		expectedTitle.setTitleStr("Cardiomyopathy and myocardial biopsy /");
 		expectedTitle.setOrderInRecord(1L);

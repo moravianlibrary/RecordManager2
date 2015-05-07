@@ -91,7 +91,6 @@ public class OAIHarvestJobTest extends AbstractTest {
 		Long jobExecutionId = jobExecutor.execute("oaiHarvestJob", new JobParameters(params));
 		JobExecution exec = jobExplorer.getJobExecution(jobExecutionId);
 		Assert.assertEquals(exec.getExitStatus(), ExitStatus.COMPLETED);
-		dbUnitHelper.dump("/tmp/asdf.xml");
 	}
 
 	
