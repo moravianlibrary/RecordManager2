@@ -904,13 +904,30 @@ public class MetadataMarcRecord implements MetadataRecord {
 
 	@Override
 	public String getAuthorAuthKey() {
-		// TODO Auto-generated method stub
+		String f100s7 = underlayingMarc.getField("100", '7');
+		if(f100s7 != null){
+			return f100s7;
+		}
+		
+		String f700s7 = underlayingMarc.getField("700", '7');
+		if(f700s7 != null){
+			return f700s7;
+		}
 		return null;
+		
 	}
 
 	@Override
 	public String getAuthorString() {
-		// TODO Auto-generated method stub
+		String f100a = underlayingMarc.getField("100", 'a');
+		if(f100a != null){
+			return f100a;
+		}
+		
+		String f700a = underlayingMarc.getField("700", 'a');
+		if(f700a != null){
+			return f700a;
+		}
 		return null;
 	}
 

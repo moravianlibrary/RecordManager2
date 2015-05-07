@@ -262,7 +262,7 @@ public class MarcRecordImplTest extends AbstractTest {
 	}
 
 	@Test
-	void getPageCountTest() throws Exception {
+	public void getPageCountTest() throws Exception {
 		MarcRecordImpl mri;
 		MetadataRecord metadataRecord;
 		List<String> data = new ArrayList<String>();
@@ -348,6 +348,44 @@ public class MarcRecordImplTest extends AbstractTest {
 		mri = MarcRecordFactory.recordFactory(data);
 		metadataRecord = metadataFactory.getMetadataRecord(mri);
 		Assert.assertEquals(metadataRecord.getWeight(0L).longValue(), 4L);
+		data.clear();
+	}
+	
+	@Test
+	public void getAuthorAuthStringTest() throws Exception{
+		MarcRecordImpl mri;
+		MetadataRecord metadataRecord;
+		List<String> data = new ArrayList<String>();
+		
+		data.add("100 $aEliska");
+		mri = MarcRecordFactory.recordFactory(data);
+		metadataRecord = metadataFactory.getMetadataRecord(mri);
+		Assert.assertEquals(metadataRecord.getAuthorString(), "Eliska");
+		data.clear();
+		
+		data.add("700 $aEliska");
+		mri = MarcRecordFactory.recordFactory(data);
+		metadataRecord = metadataFactory.getMetadataRecord(mri);
+		Assert.assertEquals(metadataRecord.getAuthorString(), "Eliska");
+		data.clear();
+	}
+	
+	@Test
+	public void getAuthorAuthKeyTest() throws Exception{
+		MarcRecordImpl mri;
+		MetadataRecord metadataRecord;
+		List<String> data = new ArrayList<String>();
+		
+		data.add("100 $7aaa");
+		mri = MarcRecordFactory.recordFactory(data);
+		metadataRecord = metadataFactory.getMetadataRecord(mri);
+		Assert.assertEquals(metadataRecord.getAuthorAuthKey(), "aaa");
+		data.clear();
+		
+		data.add("700 $7bbb");
+		mri = MarcRecordFactory.recordFactory(data);
+		metadataRecord = metadataFactory.getMetadataRecord(mri);
+		Assert.assertEquals(metadataRecord.getAuthorAuthKey(), "bbb");
 		data.clear();
 	}
 	
