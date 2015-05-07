@@ -514,5 +514,93 @@ public class MarcRecordImplTest extends AbstractTest {
 		data.clear();
 		hrf.clear();
 	}
+	
+	@Test
+	public void getScaleTest() throws Exception {
+		MarcRecordImpl mri;
+		MetadataRecord metadataRecord;
+		List<String> data = new ArrayList<String>();
+		
+		data.add("255 $aMěřítko 1:250 000");
+		mri = MarcRecordFactory.recordFactory(data);
+		metadataRecord = metadataFactory.getMetadataRecord(mri);
+		Assert.assertTrue(metadataRecord.getScale().equals(250000L));
+		data.clear();
+		
+		data.add("255 $aMěřítko 1:50^000");
+		mri = MarcRecordFactory.recordFactory(data);
+		metadataRecord = metadataFactory.getMetadataRecord(mri);
+		Assert.assertTrue(metadataRecord.getScale().equals(50000L));
+		data.clear();
+		
+		data.add("255 $$$aMěřítko 1:30^000 (14°59'v.d.-15°33'v.d./50°40's.š.-50°25's.š.)");
+		mri = MarcRecordFactory.recordFactory(data);
+		metadataRecord = metadataFactory.getMetadataRecord(mri);
+		Assert.assertTrue(metadataRecord.getScale().equals(30000L));
+		data.clear();
+		
+		data.add("255 $aMěřítko neuvedeno");
+		mri = MarcRecordFactory.recordFactory(data);
+		metadataRecord = metadataFactory.getMetadataRecord(mri);
+		Assert.assertNull(metadataRecord.getScale());
+		data.clear();
+		
+		data.add("255 $aMěřítko 1:20^000 a 1:150^000");
+		mri = MarcRecordFactory.recordFactory(data);
+		metadataRecord = metadataFactory.getMetadataRecord(mri);
+		Assert.assertTrue(metadataRecord.getScale().equals(20000L));
+		data.clear();
+		
+		data.add("255 $aMěřítko 1:150000");
+		mri = MarcRecordFactory.recordFactory(data);
+		metadataRecord = metadataFactory.getMetadataRecord(mri);
+		Assert.assertTrue(metadataRecord.getScale().equals(150000L));
+		data.clear();
+	}
 
+	@Test
+	public void getUUIDtest() throws Exception {
+		MarcRecordImpl mri;
+		MetadataRecord metadataRecord;
+		List<String> data = new ArrayList<String>();
+		
+		data.add("856 $uhttp://kramerius.nkp.cz/kramerius/handle/ABA001/1339741$yDigitalizovaný dokument");
+		mri = MarcRecordFactory.recordFactory(data);
+		metadataRecord = metadataFactory.getMetadataRecord(mri);
+		Assert.assertNull(metadataRecord.getUUId());
+		data.clear();
+
+		data.add("856 $uhttp://kramerius4.nkp.cz/search/handle/uuid:1b891670-00e4-11e4-89c6-005056827e51$yDigitalizovaný dokument");
+		mri = MarcRecordFactory.recordFactory(data);
+		metadataRecord = metadataFactory.getMetadataRecord(mri);
+		Assert.assertEquals(metadataRecord.getUUId(), "1b891670-00e4-11e4-89c6-005056827e51");
+		data.clear();
+		
+		data.add("856 $uhttp://kramerius4.nkp.cz/search/handle/uuid:abbc47e0-421f-11e4-8113-005056827e52$yDigitalizovaný dokument");
+		mri = MarcRecordFactory.recordFactory(data);
+		metadataRecord = metadataFactory.getMetadataRecord(mri);
+		Assert.assertEquals(metadataRecord.getUUId(), "abbc47e0-421f-11e4-8113-005056827e52");
+		data.clear();
+	}
+	
+	@Test
+	public void getSeriesISSNtests() throws Exception {
+		MarcRecordImpl mri;
+		MetadataRecord metadataRecord;
+		List<String> data = new ArrayList<String>();
+		
+		data.add("490 $aVědecké spisy Vysokého učení technického v Brně. PhD Thesis,$x1213-4198 ;$vsv. 744");
+		mri = MarcRecordFactory.recordFactory(data);
+		metadataRecord = metadataFactory.getMetadataRecord(mri);
+		Assert.assertEquals(metadataRecord.getISSNSeries(), "1213-4198 ;");
+		Assert.assertEquals(metadataRecord.getISSNSeriesOrder(), "sv. 744");
+		data.clear();
+		
+		data.add("490 $aEkonomika, právo, politika,$x1213-3299 ;$vč. 97/2012");
+		mri = MarcRecordFactory.recordFactory(data);
+		metadataRecord = metadataFactory.getMetadataRecord(mri);
+		Assert.assertEquals(metadataRecord.getISSNSeries(), "1213-3299 ;");
+		Assert.assertEquals(metadataRecord.getISSNSeriesOrder(), "č. 97/2012");
+		data.clear();
+	}
 }

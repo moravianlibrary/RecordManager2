@@ -56,7 +56,13 @@ public interface MetadataRecord {
 	 * get series ISSN
 	 * @return String or null
 	 */
-	public String getSeriesISSN();
+	public String getISSNSeries();
+	
+	/**
+	 * get ISSN series order
+	 * @return
+	 */
+	public String getISSNSeriesOrder();
 	
 	/**
 	 * get count of pages
@@ -69,5 +75,17 @@ public interface MetadataRecord {
 	 * @return List<RecordFormat>
 	 */
 	public List<HarvestedRecordFormatEnum> getDetectedFormatList();
+	
+	/**
+	 * return scale of document (significant for maps only)
+	 * @return Long or null
+	 */
+	public Long getScale();
+	
+	/**
+	 * return UUID of ducument
+	 * @return
+	 */
+	public String getUUId();
 	
 }

@@ -34,6 +34,8 @@ public class MetadataMarcRecord implements MetadataRecord {
 	protected static final Pattern YEAR_PATTERN = Pattern.compile("\\d{4}");
 	protected static final Pattern ISBN_PATTERN = Pattern.compile("([\\dxX-]*)(.*)");
 	protected static final Pattern ISSN_PATTERN = Pattern.compile("(\\d{4}-\\d{3}[\\dxX])(.*)");
+	protected static final Pattern SCALE_PATTERN = Pattern.compile("\\d+[\\ \\^]*\\d+");
+	protected static final Pattern UUID_PATTERN = Pattern.compile("uuid:[\\w-]+");
 	
 	public MetadataMarcRecord(MarcRecord underlayingMarc) {
 		if (underlayingMarc == null) {
@@ -118,9 +120,15 @@ public class MetadataMarcRecord implements MetadataRecord {
 	}
 
 	@Override
-	public String getSeriesISSN() {	
+	public String getISSNSeries() {
 		return underlayingMarc.getField("490", 'x');
 	}
+	
+	@Override
+	public String getISSNSeriesOrder() {
+		return underlayingMarc.getField("490", 'v');
+	}
+		
 
 	@Override
 	public Long getPageCount() {		
@@ -779,5 +787,42 @@ public class MetadataMarcRecord implements MetadataRecord {
 		
 		return hrf;
 	}
+
+	@Override
+	public Long getScale() {
+		String scaleStr = underlayingMarc.getField("255", 'a');
+		if (scaleStr == null) {
+			return null;
+		}
+		Matcher matcher = SCALE_PATTERN.matcher(scaleStr);
+		if (matcher.find()) {
+			String strValue = matcher.group(0).replaceAll("[\\ \\^]+", "");
+			try {
+				return Long.valueOf(strValue);
+			} catch (NumberFormatException nfe) {
+				return null;
+			}
+		}
+		return null;
+	}
+
+	@Override
+	public String getUUId() {
+		String baseStr = underlayingMarc.getField("856", 'u');
+		if (baseStr == null) {
+			return null;
+		}
+
+		Matcher matcher = UUID_PATTERN.matcher(baseStr);
+		if (matcher.find()) {
+			String uuidStr = matcher.group(0);
+			if (uuidStr != null && uuidStr.length() > 5) {
+				return uuidStr.substring(5);
+			}
+		}
 		
+		return null;
+	}
+
+
 }
