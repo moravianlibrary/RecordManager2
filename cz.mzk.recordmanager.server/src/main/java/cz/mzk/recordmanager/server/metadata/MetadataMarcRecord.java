@@ -784,7 +784,9 @@ public class MetadataMarcRecord implements MetadataRecord {
 
 	@Override
 	public Long getWeight(Long baseWeight) {
-		Long weight = baseWeight;
+		Long weight = 0L;
+		if(baseWeight != null) weight = baseWeight;
+		
 		String[] fields1xx = new String[]{"100", "110", "111", "130"};
 		String[] fields6xx = new String[]{"600", "610", "611", "630", "648", "650", "651", "653", "654", "655",
 				"656", "657", "658", "662", "690", "691", "692", "693", "694", "695", "696", "697", "698", "699"};
