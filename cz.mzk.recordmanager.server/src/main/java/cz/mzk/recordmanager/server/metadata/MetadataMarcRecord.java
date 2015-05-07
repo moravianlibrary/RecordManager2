@@ -823,7 +823,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 		return null;
 	}
 
-@Override
+    @Override
 	public Long getWeight(Long baseWeight) {
 		Long weight = 0L;
 		if(baseWeight != null) weight = baseWeight;
@@ -900,6 +900,18 @@ public class MetadataMarcRecord implements MetadataRecord {
 		}
 		
 		return weight;
+	}
+
+	@Override
+	public String getAuthorAuthKey() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getAuthorString() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 

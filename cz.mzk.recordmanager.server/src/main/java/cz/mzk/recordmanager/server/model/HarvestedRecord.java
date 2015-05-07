@@ -154,6 +154,25 @@ public class HarvestedRecord extends AbstractDomainObject {
 	@JoinColumn(name="harvested_record_id", referencedColumnName="id")
 	private List<Title> titles = new ArrayList<Title>();
 	
+	// TODO consider moving dedup keys to separate table
+	@Column(name="author_auth_key")
+	private String authorAuthKey;
+	
+	@Column(name="author_string")
+	private String authorString;
+	
+	@Column(name="issn_series")
+	private String issnSeries;
+	
+	@Column(name="issn_series_order")
+	private String issnSeriesOrder;
+	
+	@Column(name="uuid")
+	private String uuid;
+	
+	@Column(name="scale")
+	private Long scale;
+	
 	@Column(name="publication_year")
 	private Long publicationYear;
 
@@ -285,6 +304,54 @@ public class HarvestedRecord extends AbstractDomainObject {
 
 	public void setWeight(Long weight) {
 		this.weight = weight;
+	}
+
+	public String getAuthorAuthKey() {
+		return authorAuthKey;
+	}
+
+	public void setAuthorAuthKey(String authorAuthKey) {
+		this.authorAuthKey = authorAuthKey;
+	}
+
+	public String getAuthorString() {
+		return authorString;
+	}
+
+	public void setAuthorString(String authorString) {
+		this.authorString = authorString;
+	}
+
+	public String getIssnSeries() {
+		return issnSeries;
+	}
+
+	public void setIssnSeries(String issnSeries) {
+		this.issnSeries = issnSeries;
+	}
+
+	public String getIssnSeriesOrder() {
+		return issnSeriesOrder;
+	}
+
+	public void setIssnSeriesOrder(String issnSeriesOrder) {
+		this.issnSeriesOrder = issnSeriesOrder;
+	}
+
+	public String getUuid() {
+		return uuid;
+	}
+
+	public void setUuid(String uuid) {
+		this.uuid = uuid;
+	}
+
+	public Long getScale() {
+		return scale;
+	}
+
+	public void setScale(Long scale) {
+		this.scale = scale;
 	}
 
 	@Override

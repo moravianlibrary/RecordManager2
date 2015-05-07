@@ -1,6 +1,5 @@
 package cz.mzk.recordmanager.server.dedup;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -58,7 +57,12 @@ public class MarcXmlDedupKeyParser implements DedupKeysParser {
 		record.setPublicationYear(metadata.getPublicationYear());
 		List<HarvestedRecordFormatEnum> formatEnums = metadata.getDetectedFormatList();
 		record.setPhysicalFormats(harvestedRecordFormatDAO.getFormatsFromEnums(formatEnums));
-
+		record.setAuthorAuthKey(metadata.getAuthorAuthKey());
+		record.setAuthorString(metadata.getAuthorString());
+		record.setScale(metadata.getScale());
+		record.setUuid(metadata.getUUId());
+		record.setIssnSeries(metadata.getISSNSeries());
+		record.setIssnSeriesOrder(metadata.getISSNSeriesOrder());
 		return record;
 	}
 }

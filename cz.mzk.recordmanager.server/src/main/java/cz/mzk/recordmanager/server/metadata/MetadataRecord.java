@@ -95,4 +95,16 @@ public interface MetadataRecord {
 	 */
 	public String getUUId();
 	
+	/**
+	 * get authority key for main author
+	 * @return
+	 */
+	public String getAuthorAuthKey();
+	
+	/**
+	 * get string representing main author
+	 * @return
+	 */
+	public String getAuthorString();
+	
 }
