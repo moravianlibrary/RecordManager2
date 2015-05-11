@@ -70,6 +70,7 @@ public class ImportRecordsWriter implements ItemWriter<List<Record>> {
 					hr.setRawRecord(outStream.toByteArray());
 //					TODO detect format
 					hr.setFormat("marc21-xml");
+					hr.setHarvestedFrom(harvestConfiguration);
 					dedupKeysParser.parse(hr);
 					harvestedRecordDao.persist(hr);
 				} catch (Exception e) {
