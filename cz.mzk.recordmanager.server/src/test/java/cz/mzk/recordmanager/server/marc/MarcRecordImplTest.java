@@ -663,4 +663,23 @@ public class MarcRecordImplTest extends AbstractTest {
 		Assert.assertEquals(metadataRecord.getISSNSeriesOrder(), "č. 97/2012");
 		data.clear();
 	}
+	
+	@Test
+	public void getClusterIdTest() throws Exception{
+		MarcRecordImpl mri;
+		MetadataRecord metadataRecord;
+		List<String> data = new ArrayList<String>();
+		
+		data.add("001 0011");
+		mri = MarcRecordFactory.recordFactory(data);
+		metadataRecord = metadataFactory.getMetadataRecord(mri);
+		Assert.assertEquals(metadataRecord.getClusterId("MZK"), null);
+		data.clear();
+		
+		data.add("001 011");
+		mri = MarcRecordFactory.recordFactory(data);
+		metadataRecord = metadataFactory.getMetadataRecord(mri);
+		Assert.assertEquals(metadataRecord.getClusterId("MZK"), "011");
+		data.clear();
+	}
 }

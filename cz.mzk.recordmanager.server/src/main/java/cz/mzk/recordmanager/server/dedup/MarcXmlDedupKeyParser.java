@@ -20,7 +20,7 @@ import cz.mzk.recordmanager.server.util.MetadataUtils;
 public class MarcXmlDedupKeyParser implements DedupKeysParser {
 
 	private final static String FORMAT = "marc21-xml";
-	
+
 	private final static int EFFECTIVE_TITLE_LENGTH = 255;
 	
 	@Autowired 
@@ -63,6 +63,11 @@ public class MarcXmlDedupKeyParser implements DedupKeysParser {
 		record.setUuid(metadata.getUUId());
 		record.setIssnSeries(MetadataUtils.normalize(metadata.getISSNSeries()));
 		record.setIssnSeriesOrder(MetadataUtils.normalize(metadata.getISSNSeriesOrder()));
+		if(record.getHarvestedFrom() != null){
+			if(record.getHarvestedFrom().getClusterIdEnabled()){
+				record.setClusterId(metadata.getClusterId(record.getHarvestedFrom().getLibrary().getName()));
+			}
+		}
 		return record;
 	}
 }

@@ -178,6 +178,9 @@ public class HarvestedRecord extends AbstractDomainObject {
 	@Column(name="weight")
 	private Long weight;
 	
+	@Column(name="cluster_id")
+	private String clusterId;
+	
 	private HarvestedRecord() {
 	}
 	
@@ -352,6 +355,14 @@ public class HarvestedRecord extends AbstractDomainObject {
 
 	public void setCnb(List<Cnb> cnb) {
 		this.cnb = cnb;
+	}
+
+	public String getClusterId() {
+		return clusterId;
+	}
+
+	public void setClusterId(String clusterId) {
+		this.clusterId = clusterId;
 	}
 
 	@Override
