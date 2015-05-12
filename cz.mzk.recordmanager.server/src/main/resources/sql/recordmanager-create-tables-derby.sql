@@ -30,6 +30,7 @@ CREATE TABLE oai_harvest_conf (
   contact_person_id    DECIMAL(10),
   id_prefix            VARCHAR(10),
   base_weight          DECIMAL(10),
+  cluster_id_enabled   BOOLEAN DEFAULT FALSE,
   CONSTRAINT oai_harvest_conf_library_id_fk        FOREIGN KEY (library_id)        REFERENCES library(id),
   CONSTRAINT oai_harvest_conf_contact_person_id_fk FOREIGN KEY (contact_person_id) REFERENCES contact_person(id)
 );
@@ -61,6 +62,7 @@ CREATE TABLE harvested_record (
   uuid                 VARCHAR(100),
   scale                DECIMAL(10),
   weight               DECIMAL(10),
+  cluster_id           VARCHAR(20),
   raw_record           BLOB,
   CONSTRAINT harvested_record_pk                     PRIMARY KEY (id),
   CONSTRAINT harvester_record_unique_id              UNIQUE (oai_harvest_conf_id, record_id),
@@ -73,7 +75,7 @@ CREATE TABLE isbn (
   harvested_record_id  DECIMAL(10),
   isbn                 DECIMAL(13),
   order_in_record      DECIMAL(4),
-  note                 VARCHAR(100),
+  note                 VARCHAR(150),
   CONSTRAINT isbn_fk   FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id)
 );
 
@@ -89,7 +91,7 @@ CREATE TABLE issn (
 CREATE TABLE cnb (
   id                   DECIMAL(10) PRIMARY KEY,
   harvested_record_id  DECIMAL(10),
-  cnb                  VARCHAR(20),
+  cnb                  VARCHAR(100),
   CONSTRAINT cnb_fk   FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id)
 );
 

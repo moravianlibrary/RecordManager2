@@ -42,6 +42,9 @@ public class OAIHarvestConfiguration extends AbstractDomainObject {
 	
 	@Column(name="base_weight")
 	private Long baseWeight;
+	
+	@Column(name="cluster_id_enabled")
+	private boolean clusterIdEnabled;
 
 	public Library getLibrary() {
 		return library;
@@ -98,6 +101,14 @@ public class OAIHarvestConfiguration extends AbstractDomainObject {
 
 	public void setBaseWeight(Long baseWeight) {
 		this.baseWeight = baseWeight;
+	}
+
+	public boolean getClusterIdEnabled() {
+		return clusterIdEnabled;
+	}
+
+	public void setClusterIdEnabled(boolean clusterIdEnabled) {
+		this.clusterIdEnabled = clusterIdEnabled;
 	}
 
 }

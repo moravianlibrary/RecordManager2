@@ -112,3 +112,7 @@ ALTER TABLE harvested_record DROP COLUMN physical_format;
 -- 7. 5. 2015 - tomascejpek
 ALTER TABLE harvested_record ADD COLUMN weight DECIMAL(10);
 ALTER TABLE oai_harvest_conf ADD COLUMN base_weight DECIMAL(10);
+
+-- 12. 5. 2015 - tomascejpek
+ALTER TABLE harvested_record ADD COLUMN cluster_id VARCHAR(20);
+ALTER TABLE oai_harvest_conf ADD COLUMN cluster_id_enabled BOOLEAN DEFAULT(FALSE);
