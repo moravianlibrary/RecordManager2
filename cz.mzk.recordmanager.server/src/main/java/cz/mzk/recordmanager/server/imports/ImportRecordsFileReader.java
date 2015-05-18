@@ -6,9 +6,12 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang.NotImplementedException;
+import org.apache.commons.lang3.NotImplementedException;
+import org.marc4j.MarcException;
 import org.marc4j.MarcReader;
 import org.marc4j.marc.Record;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.NonTransientResourceException;
 import org.springframework.batch.item.ParseException;
@@ -20,6 +23,8 @@ import cz.mzk.recordmanager.server.marc.marc4j.MarcXmlReader;
 
 public class ImportRecordsFileReader implements ItemReader<List<Record>> {
 
+	private static Logger logger = LoggerFactory.getLogger(ImportRecordsFileReader.class);
+	
 	private MarcReader reader;
 	
 	private IOFormat format;
@@ -39,7 +44,11 @@ public class ImportRecordsFileReader implements ItemReader<List<Record>> {
 			ParseException, NonTransientResourceException {
 		List<Record> batch = new ArrayList<Record>();
 		while (reader.hasNext()) {
-			batch.add(reader.next());
+			try {
+				batch.add(reader.next());
+			} catch (MarcException e) {
+				logger.warn(e.getMessage());
+			}
 			if (batch.size() >= batchSize) {
 				break;
 			}
