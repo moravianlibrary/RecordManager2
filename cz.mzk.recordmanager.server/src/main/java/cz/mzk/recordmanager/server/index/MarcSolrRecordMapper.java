@@ -35,6 +35,8 @@ public class MarcSolrRecordMapper implements SolrRecordMapper, InitializingBean 
 	
 	private static final String MERGED_CHILD_FIELD = "merged_child_boolean";
 	
+	private static final String WEIGHT = "weight_str";
+	
 	private static final String UNKNOWN_INSTITUTION = "unknown";
 
 	@Autowired
@@ -76,6 +78,7 @@ public class MarcSolrRecordMapper implements SolrRecordMapper, InitializingBean 
 		document.addField(ID_FIELD, dedupRecord.getId());
 		document.addField(INSTITUTION_FIELD, getInstituitonOfRecord(record));
 		document.addField(MERGED_FIELD, 1);
+		document.addField(WEIGHT, record.getWeight());
 		List<String> localIds = new ArrayList<String>();
 		for (HarvestedRecord rec : records) {
 			localIds.add(getId(rec));
@@ -91,6 +94,7 @@ public class MarcSolrRecordMapper implements SolrRecordMapper, InitializingBean 
 		document.addField(ID_FIELD, id);
 		document.addField(INSTITUTION_FIELD, getInstituitonOfRecord(record));
 		document.addField(MERGED_CHILD_FIELD, 1);
+		document.addField(WEIGHT, record.getWeight());
 		return document;
 	}
 

@@ -19,7 +19,7 @@ INSERT INTO oai_harvest_conf (id, library_id, url, set_spec, granularity, metada
 INSERT INTO oai_harvest_conf (id, library_id, url, set_spec, granularity, metadata_prefix, contact_person_id, base_weight) VALUES (304, 104, 'http://aleph.nkp.cz/OAI', 'NKC', 'SECOND', 'marc21', 200, 13);
 INSERT INTO oai_harvest_conf (id, library_id, url, set_spec, granularity, metadata_prefix, contact_person_id, base_weight) VALUES (305, 105, 'http://sc.vpk.cz/cgi-bin/oai2', NULL, NULL, 'marc21', 200, NULL);
 INSERT INTO oai_harvest_conf (id, library_id, url, set_spec, granularity, metadata_prefix, contact_person_id, base_weight) VALUES (306, 106, NULL, NULL, NULL, 'marc21', 200, 8);
-INSERT INTO oai_harvest_conf (id, library_id, url, set_spec, granularity, metadata_prefix, contact_person_id, base_weight) VALUES (307, 107, 'http://aleph.techlib.cz/OAI', NULL, NULL, 'marc21', 200, NULL);
+INSERT INTO oai_harvest_conf (id, library_id, url, set_spec, granularity, metadata_prefix, contact_person_id, base_weight) VALUES (307, 107, 'http://aleph.techlib.cz/OAI', NULL, NULL, 'marc21', 200, 10);
 INSERT INTO oai_harvest_conf (id, library_id, url, set_spec, metadata_prefix, contact_person_id, base_weight) VALUES (400, 100, 'http://aleph.nkp.cz/OAI', 'AUT', 'marc21', 200, NULL);
 
 INSERT INTO harvested_record_format(id, name) VALUES (1, 'BOOKS'); 
