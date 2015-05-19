@@ -30,11 +30,13 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 	protected static final Pattern YEAR_PATTERN = Pattern.compile("\\d{4}");
 	protected static final Pattern ISSN_PATTERN = Pattern.compile("(\\d{4}-\\d{3}[\\dxX])(.*)");
 	
-	protected static final Pattern DC_UUID_PATTERN = Pattern.compile("uuid:(.*)",Pattern.CASE_INSENSITIVE);
+	protected static final Pattern DC_UUID_PATTERN = Pattern.compile("^uuid:(.*)",Pattern.CASE_INSENSITIVE);
 	protected static final Pattern DC_ISBN_PATTERN = Pattern
-			.compile("isbn:(.*)");
+			.compile("isbn:(.*),Pattern.CASE_INSENSITIVE");
 	protected static final Pattern DC_ISSN_PATTERN = Pattern
-			.compile("issn:(.*)");
+			.compile("issn:(.*)",Pattern.CASE_INSENSITIVE);
+	protected static final Pattern DC_CNB_PATTERN = Pattern
+			.compile("^ccnb:(.*)",Pattern.CASE_INSENSITIVE);
 
 
 	public MetadataDublinCoreRecord(DublinCoreRecord dcRecord) {
@@ -134,7 +136,7 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 			m = p.matcher(f);
 			if (m.find()) {
 				try {
-					String isbnStr = m.group(1);
+					String isbnStr = m.group(1).trim();
 					isbnStr = isbnValidator.validate(isbnStr);
 					isbn.setIsbn(Long.valueOf(isbnStr));
 
@@ -170,10 +172,10 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 				
 				try {
 					if(matcher.find()) {
-						if(!issn.issnValidator(matcher.group(1))){
+						if(!issn.issnValidator(matcher.group(1).trim())){
 							throw new NumberFormatException();
 						}					
-						issn.setIssn(matcher.group(1));
+						issn.setIssn(matcher.group(1).trim());
 						
 						
 						issn.setNote("");
@@ -237,8 +239,21 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 
 	@Override
 	public List<Cnb> getCNBs() {
-		// TODO Auto-generated method stub
-		return null;
+		List<String> identifiers = dcRecord.getIdentifiers();
+		List<Cnb> cnbs = new ArrayList<Cnb>();
+		
+		Pattern p = DC_CNB_PATTERN;
+		Matcher m;
+
+		for (String f : identifiers) {
+			m = p.matcher(f);
+			if (m.find()) {			
+				Cnb cnb = new Cnb();        	
+    			cnb.setCnb(m.group(1).trim());			
+    			cnbs.add(cnb);
+			}
+		}
+		return cnbs;
 	}
 
 	@Override
@@ -270,7 +285,7 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 		for (String f : identifiers) {
 			m = p.matcher(f);
 			if (m.find()) {			
-				uuid = m.group(1);
+				uuid = m.group(1).trim();
 			}
 		}
 		return uuid;
@@ -284,6 +299,12 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 
 	@Override
 	public String getAuthorString() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getClusterId(String name) {
 		// TODO Auto-generated method stub
 		return null;
 	}
