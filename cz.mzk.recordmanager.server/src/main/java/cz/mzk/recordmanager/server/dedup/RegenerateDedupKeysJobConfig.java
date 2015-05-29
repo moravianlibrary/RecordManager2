@@ -1,12 +1,20 @@
 package cz.mzk.recordmanager.server.dedup;
 
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Collection;
+import java.util.Collections;
+
 import javax.sql.DataSource;
 
 import org.springframework.batch.core.Job;
+import org.springframework.batch.core.JobParameters;
+import org.springframework.batch.core.JobParametersInvalidException;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepScope;
+import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.item.database.JdbcPagingItemReader;
@@ -18,10 +26,14 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.google.common.collect.ImmutableMap;
+import com.google.common.io.CharStreams;
 
 import cz.mzk.recordmanager.server.export.HarvestedRecordIdRowMapper;
 import cz.mzk.recordmanager.server.model.HarvestedRecord.HarvestedRecordUniqueId;
+import cz.mzk.recordmanager.server.springbatch.IntrospectiveJobParametersValidator;
 import cz.mzk.recordmanager.server.springbatch.JobFailureListener;
+import cz.mzk.recordmanager.server.springbatch.JobParameterDeclaration;
+import cz.mzk.recordmanager.server.springbatch.SqlCommandTasklet;
 import cz.mzk.recordmanager.server.util.Constants;
 
 @Configuration
@@ -37,13 +49,30 @@ public class RegenerateDedupKeysJobConfig {
     @Autowired
     private DataSource dataSource;
     
+    private String dropOldDedupKeysSql = CharStreams.toString(new InputStreamReader(getClass() //
+    		.getClassLoader().getResourceAsStream("job/regenerateDedupKeysJob/dropDedupKeys.sql"), "UTF-8"));
+    
+    public RegenerateDedupKeysJobConfig() throws IOException {
+    }
+    
     @Bean
 	public Job RegenerateDedupKeysJob(
+			@Qualifier(Constants.JOB_ID_REGEN_DEDUP_KEYS+":dropOldDedupKeysStep") Step dropOldDedupKeysStep,
 			@Qualifier(Constants.JOB_ID_REGEN_DEDUP_KEYS+":regenarateDedupKeysStep") Step regenDedupKeysStep) {
 		return jobs.get(Constants.JOB_ID_REGEN_DEDUP_KEYS)
-				.listener(JobFailureListener.INSTANCE).flow(regenDedupKeysStep)
-				.end().build();
+				.validator(new RegenerateDedupKeysJobParameters())
+				.listener(JobFailureListener.INSTANCE)
+				.start(dropOldDedupKeysStep)
+				.next(regenDedupKeysStep)
+				.build();
 	}
+    
+    @Bean(name=Constants.JOB_ID_REGEN_DEDUP_KEYS +":dropOldDedupKeysStep")
+    public Step prepareTempCnbnTableStep() {
+    	return steps.get("dropOldDedupKeysStep")
+				.tasklet(dropOldDedupKeysTasklet())
+				.build();
+    }
     
     @Bean(name=Constants.JOB_ID_REGEN_DEDUP_KEYS +":regenarateDedupKeysStep")
 	public Step regenerateDedupKeysStep() throws Exception {
@@ -76,4 +105,26 @@ public class RegenerateDedupKeysJobConfig {
 	public ItemWriter<HarvestedRecordUniqueId> writer() throws Exception {
 		return new RegenerateDedupKeysWriter();
 	}
+    
+    @Bean(name=Constants.JOB_ID_REGEN_DEDUP_KEYS +":dropOldDedupKeysTasklet")
+	@StepScope
+    public Tasklet dropOldDedupKeysTasklet() {
+    	return new SqlCommandTasklet(dropOldDedupKeysSql);
+    } 
+    
+    public class RegenerateDedupKeysJobParameters implements IntrospectiveJobParametersValidator {
+
+		@Override
+		public void validate(JobParameters parameters)
+				throws JobParametersInvalidException {
+			return;
+		}
+
+		@Override
+		public Collection<JobParameterDeclaration> getParameters() {
+			return Collections.emptyList();
+
+		}
+    }
 }
+

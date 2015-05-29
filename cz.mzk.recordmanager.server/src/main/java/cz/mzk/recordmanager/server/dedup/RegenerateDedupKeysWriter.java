@@ -3,6 +3,8 @@ package cz.mzk.recordmanager.server.dedup;
 import java.util.Calendar;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.configuration.annotation.StepScope;
@@ -26,19 +28,26 @@ public class RegenerateDedupKeysWriter implements ItemWriter<HarvestedRecordUniq
 	@Autowired
 	protected DelegatingDedupKeysParser dedupKeysParser;
 	
-	private static final int LOG_PERIOD = 1000;
+	private static final int LOG_PERIOD = 10000;
 	private int totalCount  = 0;
 	private long startTime = 0L;
+	
+	@PostConstruct
+	public void initialize() {
+		startTime = Calendar.getInstance().getTimeInMillis();
+	}
 	
 	@Override
 	public void write(List<? extends HarvestedRecordUniqueId> ids) throws Exception {
 		for (HarvestedRecordUniqueId id : ids) {
-			HarvestedRecord rec = harvestedRecordDao.get(id);
-			dedupKeysParser.parse(rec);
+			HarvestedRecord rec = harvestedRecordDao.get(id);			
+			rec = dedupKeysParser.parse(rec);
 			harvestedRecordDao.persist(rec);
+			++totalCount;
+			logProgress();
 		}
 	}
-
+	
 	protected void logProgress() {
 		if (totalCount % LOG_PERIOD == 0) {
 			long elapsedSecs = (Calendar.getInstance().getTimeInMillis() - startTime) / 1000;
