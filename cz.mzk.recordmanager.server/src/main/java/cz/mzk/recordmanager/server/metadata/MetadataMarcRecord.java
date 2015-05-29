@@ -26,8 +26,6 @@ public class MetadataMarcRecord implements MetadataRecord {
 
 	private static Logger logger = LoggerFactory.getLogger(MetadataMarcRecord.class);
 	
-	private final static String MZK_NAME = "MZK";
-	
 	protected MarcRecord underlayingMarc;
 	
 	protected final ISBNValidator isbnValidator = ISBNValidator.getInstance(true);
@@ -934,14 +932,8 @@ public class MetadataMarcRecord implements MetadataRecord {
 	}
 
 	@Override
-	public String getClusterId(String name) {
-		String f001 = underlayingMarc.getControlField("001");
-		switch(name){
-			case MZK_NAME:
-				if(!f001.matches("00.*")) return f001;
-				break;
-		}
-		
+	public String getClusterId() {
+		// implemented only in selected specialization
 		return null;
 	}
 

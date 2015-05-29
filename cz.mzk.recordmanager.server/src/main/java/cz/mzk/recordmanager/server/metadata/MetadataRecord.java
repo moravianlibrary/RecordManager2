@@ -108,9 +108,8 @@ public interface MetadataRecord {
 	public String getAuthorString();
 	
 	/**
-	 * 
-	 * @param name
+	 * get cluster id of record
 	 * @return
 	 */
-	public String getClusterId(String name);
+	public String getClusterId();
 }
