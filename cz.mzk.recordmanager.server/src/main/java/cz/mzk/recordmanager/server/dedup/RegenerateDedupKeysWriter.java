@@ -12,13 +12,14 @@ import org.springframework.batch.item.ItemWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import cz.mzk.recordmanager.server.marc.InvalidMarcException;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecord.HarvestedRecordUniqueId;
 import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordDAO;
 
 @Component
 @StepScope
-public class RegenerateDedupKeysWriter implements ItemWriter<HarvestedRecordUniqueId> {
+public class RegenerateDedupKeysWriter implements ItemWriter<Long> {
 
 	private static Logger logger = LoggerFactory.getLogger(RegenerateDedupKeysWriter.class);
 	
@@ -38,13 +39,21 @@ public class RegenerateDedupKeysWriter implements ItemWriter<HarvestedRecordUniq
 	}
 	
 	@Override
-	public void write(List<? extends HarvestedRecordUniqueId> ids) throws Exception {
-		for (HarvestedRecordUniqueId id : ids) {
-			HarvestedRecord rec = harvestedRecordDao.get(id);			
-			rec = dedupKeysParser.parse(rec);
-			harvestedRecordDao.persist(rec);
-			++totalCount;
-			logProgress();
+	public void write(List<? extends Long> ids) {
+		for (Long id : ids) {
+			HarvestedRecord rec = harvestedRecordDao.get(id);	
+			if (rec.getDeleted() != null) {
+				continue;
+			}
+			try {
+				rec = dedupKeysParser.parse(rec);
+				harvestedRecordDao.persist(rec);
+				++totalCount;
+				logProgress();
+			} catch (InvalidMarcException ime) {
+				logger.warn("Invalid Marc in record: " + rec.getId());
+			}
+			
 		}
 	}
 	

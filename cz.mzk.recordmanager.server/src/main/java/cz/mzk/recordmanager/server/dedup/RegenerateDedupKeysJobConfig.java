@@ -18,18 +18,15 @@ import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.item.database.JdbcPagingItemReader;
-import org.springframework.batch.item.database.Order;
 import org.springframework.batch.item.database.support.SqlPagingQueryProviderFactoryBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import com.google.common.collect.ImmutableMap;
 import com.google.common.io.CharStreams;
 
-import cz.mzk.recordmanager.server.export.HarvestedRecordIdRowMapper;
-import cz.mzk.recordmanager.server.model.HarvestedRecord.HarvestedRecordUniqueId;
+import cz.mzk.recordmanager.server.jdbc.LongValueRowMapper;
 import cz.mzk.recordmanager.server.springbatch.IntrospectiveJobParametersValidator;
 import cz.mzk.recordmanager.server.springbatch.JobFailureListener;
 import cz.mzk.recordmanager.server.springbatch.JobParameterDeclaration;
@@ -77,7 +74,7 @@ public class RegenerateDedupKeysJobConfig {
     @Bean(name=Constants.JOB_ID_REGEN_DEDUP_KEYS +":regenarateDedupKeysStep")
 	public Step regenerateDedupKeysStep() throws Exception {
 		return steps.get("regenarateDedupKeysStep")
-				.<HarvestedRecordUniqueId, HarvestedRecordUniqueId> chunk(20)//
+				.<Long, Long> chunk(100)//
 				.reader(reader())//
 				.writer(writer()) //
 				.build();
@@ -85,15 +82,15 @@ public class RegenerateDedupKeysJobConfig {
     
     @Bean(name=Constants.JOB_ID_REGEN_DEDUP_KEYS +":regenarateDedupKeysReader")
 	@StepScope
-    public ItemReader<HarvestedRecordUniqueId> reader() throws Exception {
-		JdbcPagingItemReader<HarvestedRecordUniqueId> reader = new JdbcPagingItemReader<HarvestedRecordUniqueId>();
+    public ItemReader<Long> reader() throws Exception {
+		JdbcPagingItemReader<Long> reader = new JdbcPagingItemReader<Long>();
 		SqlPagingQueryProviderFactoryBean pqpf = new SqlPagingQueryProviderFactoryBean();
 		pqpf.setDataSource(dataSource);
-		pqpf.setSelectClause("SELECT oai_harvest_conf_id, record_id");
+		pqpf.setSelectClause("SELECT id");
 		pqpf.setFromClause("FROM harvested_record hr");
-		pqpf.setSortKeys(ImmutableMap.of("oai_harvest_conf_id", Order.ASCENDING, "record_id", Order.ASCENDING));
-		reader.setRowMapper(new HarvestedRecordIdRowMapper());
-		reader.setPageSize(20);
+		pqpf.setSortKey("id");
+		reader.setRowMapper(new LongValueRowMapper());
+		reader.setPageSize(100);
     	reader.setQueryProvider(pqpf.getObject());
     	reader.setDataSource(dataSource);
     	reader.afterPropertiesSet();
@@ -102,14 +99,14 @@ public class RegenerateDedupKeysJobConfig {
     
     @Bean(name=Constants.JOB_ID_REGEN_DEDUP_KEYS +":regenarateDedupKeysWriter")
 	@StepScope
-	public ItemWriter<HarvestedRecordUniqueId> writer() throws Exception {
+	public ItemWriter<Long> writer() throws Exception {
 		return new RegenerateDedupKeysWriter();
 	}
     
     @Bean(name=Constants.JOB_ID_REGEN_DEDUP_KEYS +":dropOldDedupKeysTasklet")
 	@StepScope
     public Tasklet dropOldDedupKeysTasklet() {
-    	return new SqlCommandTasklet(dropOldDedupKeysSql);
+    	return new SqlCommandTasklet(dropOldDedupKeysSql.split(";"));
     } 
     
     public class RegenerateDedupKeysJobParameters implements IntrospectiveJobParametersValidator {
