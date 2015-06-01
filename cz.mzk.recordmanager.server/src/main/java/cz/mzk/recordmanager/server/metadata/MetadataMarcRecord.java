@@ -32,10 +32,11 @@ public class MetadataMarcRecord implements MetadataRecord {
 
 	protected static final Pattern PAGECOUNT_PATTERN = Pattern.compile("\\d+");
 	protected static final Pattern YEAR_PATTERN = Pattern.compile("\\d{4}");
-	protected static final Pattern ISBN_PATTERN = Pattern.compile("([\\dxX-]*)(.*)");
+	protected static final Pattern ISBN_PATTERN = Pattern.compile("([\\dxX\\s\\-]*)(.*)");
 	protected static final Pattern ISSN_PATTERN = Pattern.compile("(\\d{4}-\\d{3}[\\dxX])(.*)");
 	protected static final Pattern SCALE_PATTERN = Pattern.compile("\\d+[\\ \\^]*\\d+");
 	protected static final Pattern UUID_PATTERN = Pattern.compile("uuid:[\\w-]+");
+	protected static final String ISBN_CLEAR_REGEX = "[^0-9Xx]";
 	
 	public MetadataMarcRecord(MarcRecord underlayingMarc) {
 		if (underlayingMarc == null) {
@@ -162,8 +163,11 @@ public class MetadataMarcRecord implements MetadataRecord {
 			Matcher matcher = ISBN_PATTERN.matcher(subfieldA.getData());
 			try {
 				if (matcher.find()) {
-					String isbnStr = isbnValidator.validate(matcher.group(1));
-					
+					String g1 = matcher.group(1);
+					if (g1 == null) {
+						continue;
+					}
+					String isbnStr = isbnValidator.validate(g1.replaceAll(ISBN_CLEAR_REGEX,""));
 					try {
 						if (isbnStr == null) {
 							throw new NumberFormatException();
