@@ -36,7 +36,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 	protected static final Pattern ISSN_PATTERN = Pattern.compile("(\\d{4}-\\d{3}[\\dxX])(.*)");
 	protected static final Pattern SCALE_PATTERN = Pattern.compile("\\d+[\\ \\^]*\\d+");
 	protected static final Pattern UUID_PATTERN = Pattern.compile("uuid:[\\w-]+");
-	protected static final String ISBN_CLEAR_REGEX = "[^0-9Xx]";
+	protected static final String ISBN_CLEAR_REGEX = "[^0-9^X^x]";
 	
 	public MetadataMarcRecord(MarcRecord underlayingMarc) {
 		if (underlayingMarc == null) {
@@ -161,25 +161,25 @@ public class MetadataMarcRecord implements MetadataRecord {
 			Isbn isbn = new Isbn();
 
 			Matcher matcher = ISBN_PATTERN.matcher(subfieldA.getData());
-			try {
-				if (matcher.find()) {
-					String g1 = matcher.group(1);
-					if (g1 == null) {
-						continue;
-					}
-					String isbnStr = isbnValidator.validate(g1.replaceAll(ISBN_CLEAR_REGEX,""));
-					try {
-						if (isbnStr == null) {
-							throw new NumberFormatException();
-						}
-						Long isbn13 = Long.valueOf(isbnStr);
-						isbn.setIsbn(isbn13);
-					} catch (NumberFormatException nfe) {
-						logger.info(String.format("Invalid ISBN: %s", subfieldA.getData()));
-						continue;
-					}
+
+			if (matcher.find()) {
+				String g1 = matcher.group(1);
+				if (g1 == null) {
+					continue;
 				}
-			} catch (NumberFormatException e) {}
+				String isbnStr = isbnValidator.validate(g1.replaceAll(ISBN_CLEAR_REGEX,"").replaceAll("x", "X"));
+				try {
+					if (isbnStr == null) {
+						throw new NumberFormatException();
+					}
+					Long isbn13 = Long.valueOf(isbnStr);
+					isbn.setIsbn(isbn13);
+				} catch (NumberFormatException nfe) {
+					logger.info(String.format("Invalid ISBN: %s", subfieldA.getData()));
+					continue;
+				}
+			}
+
 			
 			StringBuilder builder = new StringBuilder();
 			if(matcher.group(2).trim() != null){ 
