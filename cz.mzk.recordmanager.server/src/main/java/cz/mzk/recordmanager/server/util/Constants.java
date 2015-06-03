@@ -24,4 +24,8 @@ public class Constants {
 	public static final String JOB_PARAM_OUT_FILE		= "outFile";
 	public static final String JOB_PARAM_IN_FILE		= "inFile";
 	
+	public static final String PREFIX_MKZ				= "mzk";
+	public static final String PREFIX_NKP				= "nkp";
+	public static final String PREFIX_NTK				= "ntk";
+	
 }

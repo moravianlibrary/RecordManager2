@@ -58,8 +58,8 @@ CREATE TABLE harvested_record (
   publication_year     DECIMAL(4),
   author_auth_key      VARCHAR(50),
   author_string        VARCHAR(200),
-  issn_series          VARCHAR(100),
-  issn_series_order    VARCHAR(100),
+  issn_series          VARCHAR(300),
+  issn_series_order    VARCHAR(300),
   uuid                 VARCHAR(100),
   scale                DECIMAL(10),
   weight               DECIMAL(10),
@@ -75,7 +75,7 @@ CREATE TABLE isbn (
   harvested_record_id  DECIMAL(10),
   isbn                 DECIMAL(13),
   order_in_record      DECIMAL(4),
-  note                 VARCHAR(150),
+  note                 VARCHAR(300),
   FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id)
 );
 
