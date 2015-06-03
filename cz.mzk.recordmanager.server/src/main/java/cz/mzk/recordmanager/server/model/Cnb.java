@@ -25,4 +25,22 @@ public class Cnb extends AbstractDomainObject {
 	public String toString() {
 		return "Cnb [cnb=" + cnb + "]";
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Cnb other = (Cnb) obj;
+		if (cnb == null) {
+			if (other.cnb != null)
+				return false;
+		} else if (!cnb.equals(other.cnb)) {
+			return false; 
+		}
+		return true;
+	}
 }
