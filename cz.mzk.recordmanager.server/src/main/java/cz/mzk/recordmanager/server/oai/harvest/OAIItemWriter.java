@@ -78,7 +78,7 @@ public class OAIItemWriter implements ItemWriter<List<OAIRecord>>,
 	}
 
 	protected void write(OAIRecord record) throws TransformerException {
-		String recordId = record.getHeader().getIdentifier();
+		String recordId = extractIdentifier(record.getHeader().getIdentifier());
 		HarvestedRecord rec = recordDao.findByIdAndHarvestConfiguration(
 				recordId, configuration);
 		if (rec == null) {
@@ -134,6 +134,18 @@ public class OAIItemWriter implements ItemWriter<List<OAIRecord>>,
 				throw new RuntimeException(tce);
 			}
 		}
+	}
+	
+	protected String extractIdentifier(String oaiIdentifier) {
+		if (oaiIdentifier == null) {
+			return null;
+		}
+		
+		String[] parts = oaiIdentifier.split(":");
+		if (parts.length == 3) {
+			return parts[2];
+		}
+		return oaiIdentifier;
 	}
 
 }
