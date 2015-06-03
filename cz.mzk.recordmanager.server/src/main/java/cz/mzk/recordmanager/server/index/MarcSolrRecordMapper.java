@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,19 +26,7 @@ import cz.mzk.recordmanager.server.scripting.MarcScriptFactory;
 @Component
 public class MarcSolrRecordMapper implements SolrRecordMapper, InitializingBean {
 
-	private static final String ID_FIELD = "id";
-	
-	private static final String INSTITUTION_FIELD = "institution";
-	
-	private static final String LOCAL_IDS_FIELD = "local_ids_str_mv";
-	
-	private static final String MERGED_FIELD = "merged_boolean";
-	
-	private static final String MERGED_CHILD_FIELD = "merged_child_boolean";
-	
-	private static final String WEIGHT = "weight_str";
-	
-	private static final String UNKNOWN_INSTITUTION = "unknown";
+	private final static String FORMAT = "marc21-xml";
 
 	@Autowired
 	private MarcXmlParser marcXmlParser;
@@ -68,6 +57,11 @@ public class MarcSolrRecordMapper implements SolrRecordMapper, InitializingBean 
 	private MarcMappingScript mappingScript;
 
 	@Override
+	public List<String> getSupportedFormats() {
+		return Collections.singletonList(FORMAT);
+	}
+
+	@Override
 	public SolrInputDocument map(DedupRecord dedupRecord,
 			List<HarvestedRecord> records) {
 		if (records.isEmpty()) {
@@ -75,15 +69,15 @@ public class MarcSolrRecordMapper implements SolrRecordMapper, InitializingBean 
 		}
 		HarvestedRecord record = records.get(0);
 		SolrInputDocument document = parse(record);
-		document.addField(ID_FIELD, dedupRecord.getId());
-		document.addField(INSTITUTION_FIELD, getInstituitonOfRecord(record));
-		document.addField(MERGED_FIELD, 1);
-		document.addField(WEIGHT, record.getWeight());
+		document.addField(SolrFieldConstants.ID_FIELD, dedupRecord.getId());
+		document.addField(SolrFieldConstants.INSTITUTION_FIELD, getInstitutionOfRecord(record));
+		document.addField(SolrFieldConstants.MERGED_FIELD, 1);
+		document.addField(SolrFieldConstants.WEIGHT, record.getWeight());
 		List<String> localIds = new ArrayList<String>();
 		for (HarvestedRecord rec : records) {
 			localIds.add(getId(rec));
 		}
-		document.addField(LOCAL_IDS_FIELD, localIds);
+		document.addField(SolrFieldConstants.LOCAL_IDS_FIELD, localIds);
 		return document;
 	}
 	
@@ -91,10 +85,10 @@ public class MarcSolrRecordMapper implements SolrRecordMapper, InitializingBean 
 	public SolrInputDocument map(HarvestedRecord record) {
 		SolrInputDocument document = parse(record);
 		String id = getId(record); 
-		document.addField(ID_FIELD, id);
-		document.addField(INSTITUTION_FIELD, getInstituitonOfRecord(record));
-		document.addField(MERGED_CHILD_FIELD, 1);
-		document.addField(WEIGHT, record.getWeight());
+		document.addField(SolrFieldConstants.ID_FIELD, id);
+		document.addField(SolrFieldConstants.INSTITUTION_FIELD, getInstitutionOfRecord(record));
+		document.addField(SolrFieldConstants.MERGED_CHILD_FIELD, 1);
+		document.addField(SolrFieldConstants.WEIGHT, record.getWeight());
 		return document;
 	}
 
@@ -133,14 +127,14 @@ public class MarcSolrRecordMapper implements SolrRecordMapper, InitializingBean 
 				.getResourceAsStream("/marc/groovy/BaseMarc.groovy"));
 	}
 	
-	protected String getInstituitonOfRecord(HarvestedRecord hr) {
+	protected String getInstitutionOfRecord(HarvestedRecord hr) {
 		OAIHarvestConfiguration config = hr.getHarvestedFrom();
 		if (config != null 
 				&& config.getLibrary() != null 
 				&& config.getLibrary().getName() != null) {
 			return config.getLibrary().getName();
 		}
-		return UNKNOWN_INSTITUTION;
+		return SolrFieldConstants.UNKNOWN_INSTITUTION;
 	}
 
 }

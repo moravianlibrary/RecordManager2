@@ -8,7 +8,9 @@ import cz.mzk.recordmanager.server.model.DedupRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
 
 public interface SolrRecordMapper {
-	
+
+	public List<String> getSupportedFormats();
+
 	public SolrInputDocument map(DedupRecord record, List<HarvestedRecord> records);
 
 	public SolrInputDocument map(HarvestedRecord record);
