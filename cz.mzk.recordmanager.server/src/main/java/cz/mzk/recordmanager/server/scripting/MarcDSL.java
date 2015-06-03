@@ -2,10 +2,12 @@ package cz.mzk.recordmanager.server.scripting;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -71,13 +73,24 @@ public class MarcDSL {
 	public List<String> getLanguages() {
 		List<String> languages = new ArrayList<String>();
 		String f008 = record.getControlField("008");
-		if (f008.length() > 38) {
+		if (f008 != null && f008.length() > 38) {
 			languages.add(f008.substring(35, 38));
 		}
 		languages.addAll(record.getFields("041", EMPTY_SEPARATOR, 'a'));
 		languages.addAll(record.getFields("041", EMPTY_SEPARATOR, 'd'));
 		languages.addAll(record.getFields("041", EMPTY_SEPARATOR, 'e'));
 		return languages;
+	}
+	
+	public String getCountry(){
+		String f008 = record.getControlField("008");
+		if (f008 != null && f008.length() > 18) {
+			return f008.substring(15, 18).trim();
+		}
+		String s = getFirstField("044a");
+		if(s != null) return getFirstField("044a").trim();
+		
+		return "";
 	}
 
 	public String translate(String file, String input, String defaultValue)
@@ -206,6 +219,62 @@ public class MarcDSL {
         if (Character.isDigit(ind2char))
             result = Integer.valueOf(String.valueOf(ind2char));
         return result;
+    }
+    
+    public List<String> getPublisher(){
+    	List<String> publishers = new ArrayList<String>();
+    	for(DataField dataField: record.getDataFields("264")){
+    		if(dataField.getIndicator2() == '1'){
+    			publishers.addAll(getFieldsTrim("264b"));
+    		}
+    	}
+    	publishers.addAll(getFieldsTrim("260b:928a:978abcdg"));
+    	
+    	return publishers;
+    }
+
+    public Set<String> getFieldsTrim(String tags){
+    	Set<String> result = new HashSet<String>();
+    	for(String data: getFields(tags)){
+    		data = data.replaceAll("[,;:\\s]+$", "");
+    		result.add(data);
+    	}
+    	return result;
+    }
+    
+    public Set<String> getFieldsUnique(String tags){
+    	Set<String> result = new HashSet<String>();
+    	for(String data: getFields(tags)){
+    		result.add(data);
+    	}
+    	return result;
+    }
+ 
+    public Set<String> getSubject(String tags){
+    	Set<String> subjects = new HashSet<String>();
+
+    	for(String subject: getFields(tags)){
+    		String up = subject.substring(0,1).toUpperCase() + subject.substring(1);
+    		subjects.add(up);
+    	}
+    	return subjects;
+    }
+
+    public Set<String> getISBNISSNISMN(){
+    	Set<String> result = new HashSet<String>();
+    	
+    	for(DataField df: record.getDataFields("024")){
+    		if(df.getIndicator1() == '2'){
+    			result.addAll(getFields("024az"));
+    		}
+    	}
+    	result.addAll(getFields("020az:022az:787xz:902a"));    	
+    	
+    	return result;
+    }
+    
+    public String getId001(){
+    	return record.getControlField("001");
     }
 
 }
