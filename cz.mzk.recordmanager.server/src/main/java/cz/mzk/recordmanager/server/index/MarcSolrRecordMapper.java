@@ -2,7 +2,6 @@ package cz.mzk.recordmanager.server.index;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
@@ -19,7 +18,6 @@ import cz.mzk.recordmanager.server.marc.MarcRecord;
 import cz.mzk.recordmanager.server.marc.MarcXmlParser;
 import cz.mzk.recordmanager.server.model.DedupRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
-import cz.mzk.recordmanager.server.model.OAIHarvestConfiguration;
 import cz.mzk.recordmanager.server.scripting.MarcMappingScript;
 import cz.mzk.recordmanager.server.scripting.MarcScriptFactory;
 
@@ -69,26 +67,12 @@ public class MarcSolrRecordMapper implements SolrRecordMapper, InitializingBean 
 		}
 		HarvestedRecord record = records.get(0);
 		SolrInputDocument document = parse(record);
-		document.addField(SolrFieldConstants.ID_FIELD, dedupRecord.getId());
-		document.addField(SolrFieldConstants.INSTITUTION_FIELD, getInstitutionOfRecord(record));
-		document.addField(SolrFieldConstants.MERGED_FIELD, 1);
-		document.addField(SolrFieldConstants.WEIGHT, record.getWeight());
-		List<String> localIds = new ArrayList<String>();
-		for (HarvestedRecord rec : records) {
-			localIds.add(getId(rec));
-		}
-		document.addField(SolrFieldConstants.LOCAL_IDS_FIELD, localIds);
 		return document;
 	}
 	
 	@Override
 	public SolrInputDocument map(HarvestedRecord record) {
 		SolrInputDocument document = parse(record);
-		String id = getId(record); 
-		document.addField(SolrFieldConstants.ID_FIELD, id);
-		document.addField(SolrFieldConstants.INSTITUTION_FIELD, getInstitutionOfRecord(record));
-		document.addField(SolrFieldConstants.MERGED_CHILD_FIELD, 1);
-		document.addField(SolrFieldConstants.WEIGHT, record.getWeight());
 		return document;
 	}
 
@@ -111,12 +95,6 @@ public class MarcSolrRecordMapper implements SolrRecordMapper, InitializingBean 
 		return mappingScript;
 	}
 
-	protected String getId(HarvestedRecord record) {
-		String prefix = record.getHarvestedFrom().getIdPrefix();
-		String id = ((prefix != null) ? prefix + "." : "") + record.getUniqueId().getRecordId();
-		return id;
-	}
-	
 	@Override
 	public void afterPropertiesSet() throws Exception {
 		for (String field : fieldsWithDash) {
@@ -125,16 +103,6 @@ public class MarcSolrRecordMapper implements SolrRecordMapper, InitializingBean 
 		}
 		mappingScript = marcScriptFactory.create(getClass()
 				.getResourceAsStream("/marc/groovy/BaseMarc.groovy"));
-	}
-	
-	protected String getInstitutionOfRecord(HarvestedRecord hr) {
-		OAIHarvestConfiguration config = hr.getHarvestedFrom();
-		if (config != null 
-				&& config.getLibrary() != null 
-				&& config.getLibrary().getName() != null) {
-			return config.getLibrary().getName();
-		}
-		return SolrFieldConstants.UNKNOWN_INSTITUTION;
 	}
 
 }
