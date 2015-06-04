@@ -181,6 +181,10 @@ public class HarvestedRecord extends AbstractDomainObject {
 	@Column(name="cluster_id")
 	private String clusterId;
 	
+	@Column(name="pages")
+	private Long pages;
+	
+	
 	private HarvestedRecord() {
 	}
 	
@@ -363,6 +367,14 @@ public class HarvestedRecord extends AbstractDomainObject {
 
 	public void setClusterId(String clusterId) {
 		this.clusterId = clusterId;
+	}
+
+	public Long getPages() {
+		return pages;
+	}
+
+	public void setPages(Long pages) {
+		this.pages = pages;
 	}
 
 	@Override

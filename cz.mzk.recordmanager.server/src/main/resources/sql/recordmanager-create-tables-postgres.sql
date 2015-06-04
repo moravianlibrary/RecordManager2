@@ -64,6 +64,7 @@ CREATE TABLE harvested_record (
   scale                DECIMAL(10),
   weight               DECIMAL(10),
   cluster_id           VARCHAR(20),
+  pages                DECIMAL(10),
   raw_record           BYTEA,
   UNIQUE (oai_harvest_conf_id, record_id),
   FOREIGN KEY (oai_harvest_conf_id) REFERENCES oai_harvest_conf(id),
