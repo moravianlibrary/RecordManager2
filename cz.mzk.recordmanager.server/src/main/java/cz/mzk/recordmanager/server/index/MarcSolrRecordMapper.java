@@ -18,8 +18,8 @@ import cz.mzk.recordmanager.server.marc.MarcRecord;
 import cz.mzk.recordmanager.server.marc.MarcXmlParser;
 import cz.mzk.recordmanager.server.model.DedupRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
-import cz.mzk.recordmanager.server.scripting.MarcMappingScript;
-import cz.mzk.recordmanager.server.scripting.MarcScriptFactory;
+import cz.mzk.recordmanager.server.scripting.marc.MarcMappingScript;
+import cz.mzk.recordmanager.server.scripting.marc.MarcScriptFactory;
 
 @Component
 public class MarcSolrRecordMapper implements SolrRecordMapper, InitializingBean {

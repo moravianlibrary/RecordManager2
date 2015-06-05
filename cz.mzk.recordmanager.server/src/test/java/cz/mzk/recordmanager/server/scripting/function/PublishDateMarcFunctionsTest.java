@@ -10,6 +10,7 @@ import org.testng.annotations.Test;
 import com.google.common.collect.Sets;
 
 import cz.mzk.recordmanager.server.AbstractTest;
+import cz.mzk.recordmanager.server.scripting.marc.function.PublishDateMarcFunctions;
 
 public class PublishDateMarcFunctionsTest extends AbstractTest {
 

@@ -14,6 +14,8 @@ import cz.mzk.recordmanager.server.AbstractTest;
 import cz.mzk.recordmanager.server.marc.MarcRecord;
 import cz.mzk.recordmanager.server.marc.MarcXmlParser;
 import cz.mzk.recordmanager.server.model.HarvestedRecordFormat.HarvestedRecordFormatEnum;
+import cz.mzk.recordmanager.server.scripting.marc.MarcMappingScript;
+import cz.mzk.recordmanager.server.scripting.marc.MarcScriptFactory;
 
 public class MarcScriptFactoryTest extends AbstractTest {
 
