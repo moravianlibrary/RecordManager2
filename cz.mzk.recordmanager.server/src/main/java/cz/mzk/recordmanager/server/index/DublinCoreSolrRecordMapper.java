@@ -5,9 +5,6 @@ import java.io.InputStream;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
-
-import org.apache.solr.common.SolrInputDocument;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -38,34 +35,26 @@ public class DublinCoreSolrRecordMapper implements SolrRecordMapper, Initializin
 	}
 
 	@Override
-	public SolrInputDocument map(DedupRecord dedupRecord,
+	public Map<String, Object> map(DedupRecord dedupRecord,
 			List<HarvestedRecord> records) {
 		if (records.isEmpty()) {
 			return null;
 		}
 		HarvestedRecord record = records.get(0);
-		SolrInputDocument document = parse(record);
-		return document;
+		return parse(record);
 	}
 
 	@Override
-	public SolrInputDocument map(HarvestedRecord record) {
-		SolrInputDocument document = parse(record);
-		return document;
+	public Map<String, Object> map(HarvestedRecord record) {
+		return parse(record);
 	}
 
-	protected SolrInputDocument parse(HarvestedRecord record) {
+	protected Map<String, Object> parse(HarvestedRecord record) {
 		InputStream is = new ByteArrayInputStream(record.getRawRecord());
-		SolrInputDocument document = new SolrInputDocument();
 		DublinCoreMappingScript script = getMappingScript(record);
 		DublinCoreRecord rec = parser.parseRecord(is);
 		Map<String, Object> fields = script.parse(rec);
-		for (Entry<String, Object> field : fields.entrySet()) {
-			String fName = field.getKey();
-			Object fValue = field.getValue();
-			document.addField(fName, fValue);
-		}
-		return document;
+		return fields;
 	}
 
 	protected DublinCoreMappingScript getMappingScript(HarvestedRecord record) {

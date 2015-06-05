@@ -2,14 +2,10 @@ package cz.mzk.recordmanager.server.index;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
-import org.apache.solr.common.SolrInputDocument;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -32,26 +28,6 @@ public class MarcSolrRecordMapper implements SolrRecordMapper, InitializingBean 
 	@Autowired
 	private MarcScriptFactory marcScriptFactory;
 
-	private List<String> fieldsWithDash = Arrays.asList( //
-			"author2-role", //
-			"author-letter", //
-			"callnumber-a", //
-			"callnumber-first", //
-			"callnumber-first-code", //
-			"callnumber-subject", //
-			"callnumber-subject-code", //
-			"callnumber-label", //
-			"dewey-hundreds", //
-			"dewey-tens", //
-			"dewey-ones", //
-			"dewey-full", //
-			"dewey-sort", //
-			"dewey-sort-browse", //
-			"dewey-raw" //
-	);
-
-	private final Map<String, String> remappedFields = new HashMap<String, String>();
-
 	private MarcMappingScript mappingScript;
 
 	@Override
@@ -60,35 +36,25 @@ public class MarcSolrRecordMapper implements SolrRecordMapper, InitializingBean 
 	}
 
 	@Override
-	public SolrInputDocument map(DedupRecord dedupRecord,
+	public Map<String, Object> map(DedupRecord dedupRecord,
 			List<HarvestedRecord> records) {
 		if (records.isEmpty()) {
 			return null;
 		}
 		HarvestedRecord record = records.get(0);
-		SolrInputDocument document = parse(record);
-		return document;
-	}
-	
-	@Override
-	public SolrInputDocument map(HarvestedRecord record) {
-		SolrInputDocument document = parse(record);
-		return document;
+		return parse(record);
 	}
 
-	protected SolrInputDocument parse(HarvestedRecord record) {
+	@Override
+	public Map<String, Object> map(HarvestedRecord record) {
+		return parse(record);
+	}
+
+	protected Map<String, Object> parse(HarvestedRecord record) {
 		InputStream is = new ByteArrayInputStream(record.getRawRecord());
-		SolrInputDocument document = new SolrInputDocument();
 		MarcRecord rec = marcXmlParser.parseRecord(is);
 		MarcMappingScript script = getMappingScript(record);
-		Map<String, Object> fields = script.parse(rec);
-		for (Entry<String, Object> field : fields.entrySet()) {
-			String fName = remappedFields.getOrDefault(field.getKey(),
-					field.getKey());
-			Object fValue = field.getValue();
-			document.addField(fName, fValue);
-		}
-		return document;
+		return script.parse(rec);
 	}
 
 	protected MarcMappingScript getMappingScript(HarvestedRecord record) {
@@ -97,10 +63,6 @@ public class MarcSolrRecordMapper implements SolrRecordMapper, InitializingBean 
 
 	@Override
 	public void afterPropertiesSet() throws Exception {
-		for (String field : fieldsWithDash) {
-			String fName = field.replace('-', '_');
-			remappedFields.put(fName, field);
-		}
 		mappingScript = marcScriptFactory.create(getClass()
 				.getResourceAsStream("/marc/groovy/BaseMarc.groovy"));
 	}

@@ -20,7 +20,7 @@ public class SolrRecordProcessor implements ItemProcessor<DedupRecord, SolrInput
 	private HarvestedRecordDAO harvestedRecordDao;
 	
 	@Autowired
-	private DelegatingSolrRecordMapper mapper;
+	private SolrInputDocumentFactory factory;
 	
 	@Override
 	public SolrInputDocument process(DedupRecord dedupRecord) throws Exception {
@@ -30,7 +30,7 @@ public class SolrRecordProcessor implements ItemProcessor<DedupRecord, SolrInput
 			throw new IllegalArgumentException("records is empty");
 		}
 		try {
-			return mapper.map(dedupRecord, records);
+			return factory.create(dedupRecord, records);
 		} catch (Exception ex) {
 			logger.error(String.format("Exception thrown when indexing dedup_record with id=%s", dedupRecord.getId()), ex);
 			return null;
