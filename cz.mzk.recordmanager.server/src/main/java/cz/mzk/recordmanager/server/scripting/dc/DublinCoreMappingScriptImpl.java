@@ -8,7 +8,7 @@ import java.util.Map;
 
 import cz.mzk.recordmanager.server.dc.DublinCoreRecord;
 import cz.mzk.recordmanager.server.scripting.MappingResolver;
-import cz.mzk.recordmanager.server.scripting.dc.function.DublinCoreRecordFunction;
+import cz.mzk.recordmanager.server.scripting.function.RecordFunction;
 
 public class DublinCoreMappingScriptImpl implements DublinCoreMappingScript {
 
@@ -18,10 +18,10 @@ public class DublinCoreMappingScriptImpl implements DublinCoreMappingScript {
 	
 	private final MappingResolver propertyResolver;
 
-	private final Map<String, DublinCoreRecordFunction> functions;
+	private final Map<String, RecordFunction<DublinCoreRecord>> functions;
 	
 	public DublinCoreMappingScriptImpl(Binding binding, List<DelegatingScript> scripts, 
-			MappingResolver propertyResolver, Map<String, DublinCoreRecordFunction> functions) {
+			MappingResolver propertyResolver, Map<String, RecordFunction<DublinCoreRecord>> functions) {
 		super();
 		this.scripts = scripts;
 		this.binding = binding;

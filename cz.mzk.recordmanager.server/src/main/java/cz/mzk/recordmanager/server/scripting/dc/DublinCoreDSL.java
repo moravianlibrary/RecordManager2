@@ -6,7 +6,7 @@ import java.util.Map;
 import cz.mzk.recordmanager.server.dc.DublinCoreRecord;
 import cz.mzk.recordmanager.server.scripting.Mapping;
 import cz.mzk.recordmanager.server.scripting.MappingResolver;
-import cz.mzk.recordmanager.server.scripting.dc.function.DublinCoreRecordFunction;
+import cz.mzk.recordmanager.server.scripting.function.RecordFunction;
 
 public class DublinCoreDSL {
 	
@@ -14,11 +14,11 @@ public class DublinCoreDSL {
 	
 	private final MappingResolver propertyResolver;
 	
-	private final Map<String, DublinCoreRecordFunction> functions;
+	private final Map<String, RecordFunction<DublinCoreRecord>> functions;
 
 	public DublinCoreDSL(DublinCoreRecord record,
 			MappingResolver propertyResolver,
-			Map<String, DublinCoreRecordFunction> functions) {
+			Map<String, RecordFunction<DublinCoreRecord>> functions) {
 		super();
 		this.record = record;
 		this.propertyResolver = propertyResolver;
@@ -40,7 +40,7 @@ public class DublinCoreDSL {
 	}
 	
 	public Object methodMissing(String methodName, Object args) {
-		DublinCoreRecordFunction func = functions.get(methodName);
+		RecordFunction<DublinCoreRecord> func = functions.get(methodName);
 		if (func == null) {
 			throw new IllegalArgumentException(String.format("missing function: %s", methodName));
 		}
