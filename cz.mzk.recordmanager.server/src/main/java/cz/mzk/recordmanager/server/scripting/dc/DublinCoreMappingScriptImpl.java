@@ -13,13 +13,13 @@ import cz.mzk.recordmanager.server.scripting.function.RecordFunction;
 public class DublinCoreMappingScriptImpl implements DublinCoreMappingScript {
 
 	private final Binding binding;
-	
+
 	private final List<DelegatingScript> scripts;
-	
+
 	private final MappingResolver propertyResolver;
 
 	private final Map<String, RecordFunction<DublinCoreRecord>> functions;
-	
+
 	public DublinCoreMappingScriptImpl(Binding binding, List<DelegatingScript> scripts, 
 			MappingResolver propertyResolver, Map<String, RecordFunction<DublinCoreRecord>> functions) {
 		super();
