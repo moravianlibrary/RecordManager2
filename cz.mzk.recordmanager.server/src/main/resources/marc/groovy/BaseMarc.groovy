@@ -52,12 +52,17 @@ geographic_facet = getFields "600z:610z:611z:630z:648z:650z:651a:651z:655z"
 
 url = getFields "856u"
 
+titleSeries_search_txt_mv = getTitleSeries()
+authorCorporation_search_txt_mv = getFieldsUnique "100abcdq7:110abc7:111aceq7:700abcdq7:710abc7:711aceq7:800abcdq7:810abc7:811aceq7:975abcdq7:976abc7:978abcdg7"
+subjectKeywords_search_txt_mv = getFieldsUnique "072x:600abcdfgqklmprstxyz7:610abcklmprstxyz7:611aceqklmprstxyz7:630afpxyz7:648axyz7:650avxyz7:651avxyz7:653a:655avxyz7:964abcdefg:967abc"
 issnIsbnIsmn_search_str_mv = getISBNISSNISMN()
 sourceTitle_search_txt_mv = getFieldsUnique "773adtkxz9"
 callNumber_search_txt_mv = getFieldsUnique "910b:996ch"
 publisher_search_str_mv = getFieldsTrim "260b:264b:928a:978abcdg7"
 id001_search_str = getId001()
 cnb_search_str = getFirstField "015az"
+city_search_txt_mv = translate("mzk_city.map", getCity(), "Unknown")
+institution_search_txt_mv = translate("mzk_institution.map", getFields("910a"), "Unknown")
 
 ean_str_mv = getEAN()
 cpk_detected_format_txtF_mv = getRecordType()
@@ -70,7 +75,6 @@ publisher_str_mv = getPublisher()
 series_facet_str_mv = getFieldsTrim "440a:490a:800abcdflnpqstv:810abnpst:811acdenpqst:830anps"
 author_facet_str_mv = getFields "100abcdq:110abc:111acdegq:700abcdq:710abc:711acdegq:975abcdq:976abc:978abcdgq"
 period_facet_str_mv = getPeriod()
-
 
 bbox_geo = getBoundingBox()
 bbox_geo_str = getBoundingBox()

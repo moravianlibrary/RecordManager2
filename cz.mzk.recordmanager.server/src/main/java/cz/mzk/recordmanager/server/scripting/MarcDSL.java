@@ -236,7 +236,7 @@ public class MarcDSL {
     public Set<String> getFieldsTrim(String tags){
     	Set<String> result = new HashSet<String>();
     	for(String data: getFields(tags)){
-    		data = data.replaceAll("[,;:\\s]+$", "");
+    		data = data.replaceAll("[,;:/\\s]+$", "");
     		result.add(data);
     	}
     	return result;
@@ -276,5 +276,27 @@ public class MarcDSL {
     public String getId001(){
     	return record.getControlField("001");
     }
-
+    
+    public List<String> getCity(){
+    	List<String> result = new ArrayList<String>();
+    	for(String institution: getFields("910a")){
+    		result.add(institution.substring(0, 2));
+    	}
+    	return result;
+    }
+    
+    public Set<String> getTitleSeries(){
+    	Set<String> result = new HashSet<String>();
+    	result.addAll(getFieldsTrim("130adfgklnpst7:210a:222ab:240adklmprs:242ap:245abnp:246anp:247afp:"
+    			+ "440a:490anp:700klmnoprst7:710klmnoprst7:711klmnoprst7:730adklmprs7:740anp:765ts9:"
+    			+ "773kt:780st:785st:787st:800klmnoprst7:810klmnoprst7:811klmnoprst7:830aklmnoprst7"));
+    	for(DataField df: record.getDataFields("505")){
+    		if(df.getIndicator2() == '0'){
+    			result.addAll(getFieldsTrim("505t"));
+    		}
+    	}
+    	
+    	return result;
+    }
+    
 }
