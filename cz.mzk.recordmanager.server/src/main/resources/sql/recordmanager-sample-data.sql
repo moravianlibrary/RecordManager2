@@ -11,6 +11,7 @@ INSERT INTO library (id, name, url, catalog_url, city) VALUES (107, 'NTK', 'tech
 
 INSERT INTO format(format, description) VALUES('marc21-xml', 'MARC21 XML');
 INSERT INTO format(format, description) VALUES('xml-marc', 'MARC21 XML');
+INSERT INTO format(format, description) VALUES('dublinCore', 'Dublin Core');
 
 INSERT INTO oai_harvest_conf (id, library_id, url, set_spec, metadata_prefix, contact_person_id, base_weight) VALUES (300, 100, 'http://aleph.mzk.cz/OAI', NULL, 'marc21', 200, 13);
 INSERT INTO oai_harvest_conf (id, library_id, url, set_spec, granularity, metadata_prefix, contact_person_id, base_weight) VALUES (301, 101, 'http://oai.medvik.cz/medvik2cpk/oai', NULL, 'DAY', 'xml-marc', 200, 14);

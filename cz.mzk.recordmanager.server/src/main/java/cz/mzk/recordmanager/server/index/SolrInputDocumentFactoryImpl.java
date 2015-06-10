@@ -1,0 +1,121 @@
+package cz.mzk.recordmanager.server.index;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+
+import org.apache.solr.common.SolrInputDocument;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import cz.mzk.recordmanager.server.model.DedupRecord;
+import cz.mzk.recordmanager.server.model.HarvestedRecord;
+import cz.mzk.recordmanager.server.model.OAIHarvestConfiguration;
+
+@Component
+public class SolrInputDocumentFactoryImpl implements SolrInputDocumentFactory, InitializingBean {
+
+	private static Logger logger = LoggerFactory.getLogger(SolrInputDocumentFactoryImpl.class);
+
+	private List<String> fieldsWithDash = Arrays.asList( //
+			"author2-role", //
+			"author-letter", //
+			"callnumber-a", //
+			"callnumber-first", //
+			"callnumber-first-code", //
+			"callnumber-subject", //
+			"callnumber-subject-code", //
+			"callnumber-label", //
+			"dewey-hundreds", //
+			"dewey-tens", //
+			"dewey-ones", //
+			"dewey-full", //
+			"dewey-sort", //
+			"dewey-sort-browse", //
+			"dewey-raw" //
+	);
+
+	private final Map<String, String> remappedFields = new HashMap<String, String>();
+
+	@Autowired
+	private DelegatingSolrRecordMapper mapper;
+
+	@Override
+	public SolrInputDocument create(HarvestedRecord record) {
+		try {
+			SolrInputDocument document = parse(record);
+			String id = getId(record);
+			document.addField(SolrFieldConstants.ID_FIELD, id);
+			document.addField(SolrFieldConstants.INSTITUTION_FIELD, getInstitutionOfRecord(record));
+			document.addField(SolrFieldConstants.MERGED_CHILD_FIELD, 1);
+			document.addField(SolrFieldConstants.WEIGHT, record.getWeight());
+			return document;
+		} catch (Exception ex) {
+			logger.error(String.format("Exception thrown when indexing dedup_record with id=%s", record.getUniqueId()), ex);
+			return null;
+		}
+	}
+
+	public SolrInputDocument create(DedupRecord dedupRecord, List<HarvestedRecord> records) {
+		if (records.isEmpty()) {
+			return null;
+		}
+		HarvestedRecord record = records.get(0);
+		SolrInputDocument document = parse(record);
+		document.addField(SolrFieldConstants.ID_FIELD, dedupRecord.getId());
+		document.addField(SolrFieldConstants.MERGED_FIELD, 1);
+		document.addField(SolrFieldConstants.WEIGHT, records.get(0).getWeight());
+		List<String> localIds = new ArrayList<String>();
+		for (HarvestedRecord rec : records) {
+			localIds.add(getId(rec));
+		}
+		document.addField(SolrFieldConstants.LOCAL_IDS_FIELD, localIds);
+		if (logger.isTraceEnabled()) {
+			logger.info("Mapping of dedupRecord with id = {} finished", dedupRecord.getId());
+		}
+		return document;
+	}
+
+	protected SolrInputDocument parse(HarvestedRecord record) {
+		Map<String, Object> fields = mapper.map(record);
+		SolrInputDocument document = new SolrInputDocument();
+		for (Entry<String, Object> field : fields.entrySet()) {
+			String fName = remappedFields.getOrDefault(field.getKey(),
+					field.getKey());
+			Object fValue = field.getValue();
+			document.addField(fName, fValue);
+		}
+		return document;
+	}
+
+	protected String getId(HarvestedRecord record) {
+		String prefix = record.getHarvestedFrom().getIdPrefix();
+		String id = ((prefix != null) ? prefix + "." : "") + record.getUniqueId().getRecordId();
+		return id;
+	}
+
+	protected String getInstitutionOfRecord(HarvestedRecord hr) {
+		OAIHarvestConfiguration config = hr.getHarvestedFrom();
+		if (config != null
+				&& config.getLibrary() != null
+				&& config.getLibrary().getName() != null) {
+			return config.getLibrary().getName();
+		}
+		return SolrFieldConstants.UNKNOWN_INSTITUTION;
+	}
+
+	@Override
+	public void afterPropertiesSet() throws Exception {
+		for (String field : fieldsWithDash) {
+			String fName = field.replace('-', '_');
+			remappedFields.put(fName, field);
+		}
+	}
+
+}

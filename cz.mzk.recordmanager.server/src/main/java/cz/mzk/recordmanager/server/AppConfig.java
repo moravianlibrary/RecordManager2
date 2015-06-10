@@ -38,6 +38,7 @@ import cz.mzk.recordmanager.server.index.SolrServerFactory;
 import cz.mzk.recordmanager.server.index.SolrServerFactoryImpl;
 import cz.mzk.recordmanager.server.oai.harvest.DeleteAllHarvestsJobConfig;
 import cz.mzk.recordmanager.server.oai.harvest.OAIHarvestJobConfig;
+import cz.mzk.recordmanager.server.oai.harvest.OAIHarvestSingleRecordJobConfig;
 import cz.mzk.recordmanager.server.oai.harvest.OAIHarvesterFactory;
 import cz.mzk.recordmanager.server.oai.harvest.OAIHarvesterFactoryImpl;
 import cz.mzk.recordmanager.server.scripting.CachingMappingResolver;
@@ -138,6 +139,7 @@ public class AppConfig extends DefaultBatchConfigurer {
 	public ApplicationContextFactory moreJobs() {
 		return new GenericApplicationContextFactory(
 				OAIHarvestJobConfig.class,
+				OAIHarvestSingleRecordJobConfig.class,
 				DedupRecordsJobConfig.class,
 				IndexRecordsToSolrJobConfig.class,
 				DeleteAllHarvestsJobConfig.class,

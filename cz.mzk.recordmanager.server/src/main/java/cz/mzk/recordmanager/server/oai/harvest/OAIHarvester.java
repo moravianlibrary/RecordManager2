@@ -177,7 +177,7 @@ public class OAIHarvester {
 		params.put("verb", verb);
 		if (resumptionToken == null) {
 			params.put("metadataPrefix", parameters.getMetadataPrefix());
-			if (parameters.getSet() != null) {
+			if (parameters.getSet() != null && !verb.equals(OAI_VERB_GET_RECORD)) {
 				params.put("set", parameters.getSet());
 			}
 			if (parameters.getFrom() != null) {

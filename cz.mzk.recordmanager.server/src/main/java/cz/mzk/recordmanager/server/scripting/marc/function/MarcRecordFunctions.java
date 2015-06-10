@@ -1,4 +1,4 @@
-package cz.mzk.recordmanager.server.scripting.function;
+package cz.mzk.recordmanager.server.scripting.marc.function;
 
 /**
  * Marker interface to mark classes containg function used by MarcDSL script

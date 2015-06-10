@@ -1,4 +1,4 @@
-package cz.mzk.recordmanager.server.scripting.function;
+package cz.mzk.recordmanager.server.scripting.marc.function;
 
 import java.util.ArrayList;
 import java.util.Collection;

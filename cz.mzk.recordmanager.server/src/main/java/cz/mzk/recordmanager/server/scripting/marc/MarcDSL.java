@@ -1,4 +1,4 @@
-package cz.mzk.recordmanager.server.scripting;
+package cz.mzk.recordmanager.server.scripting.marc;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -19,7 +19,9 @@ import cz.mzk.recordmanager.server.marc.MarcRecord;
 import cz.mzk.recordmanager.server.metadata.MetadataMarcRecord;
 import cz.mzk.recordmanager.server.metadata.MetadataRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecordFormat.HarvestedRecordFormatEnum;
-import cz.mzk.recordmanager.server.scripting.function.MarcRecordFunction;
+import cz.mzk.recordmanager.server.scripting.Mapping;
+import cz.mzk.recordmanager.server.scripting.MappingResolver;
+import cz.mzk.recordmanager.server.scripting.function.RecordFunction;
 
 public class MarcDSL {
 	
@@ -34,9 +36,9 @@ public class MarcDSL {
 
 	private final MappingResolver propertyResolver;
 	
-	private final Map<String, MarcRecordFunction> functions;
-	
-	public MarcDSL(MarcRecord record, MappingResolver propertyResolver, Map<String, MarcRecordFunction> functions) {
+	private final Map<String, RecordFunction<MarcRecord>> functions;
+
+	public MarcDSL(MarcRecord record, MappingResolver propertyResolver, Map<String, RecordFunction<MarcRecord>> functions) {
 		super();
 		this.record = record;
 		this.propertyResolver = propertyResolver;
@@ -206,7 +208,7 @@ public class MarcDSL {
 	}
 
 	public Object methodMissing(String methodName, Object args) {
-		MarcRecordFunction func = functions.get(methodName);
+		RecordFunction<MarcRecord> func = functions.get(methodName);
 		if (func == null) {
 			throw new IllegalArgumentException(String.format("missing function: %s", methodName));
 		}
