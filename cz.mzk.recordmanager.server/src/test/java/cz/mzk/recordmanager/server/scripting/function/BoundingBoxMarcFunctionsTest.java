@@ -10,6 +10,7 @@ import org.testng.annotations.Test;
 import cz.mzk.recordmanager.server.AbstractTest;
 import cz.mzk.recordmanager.server.marc.MarcRecord;
 import cz.mzk.recordmanager.server.marc.MarcRecordFactory;
+import cz.mzk.recordmanager.server.scripting.marc.function.BoundingBoxMarcFunctions;
 
 public class BoundingBoxMarcFunctionsTest extends AbstractTest {
 

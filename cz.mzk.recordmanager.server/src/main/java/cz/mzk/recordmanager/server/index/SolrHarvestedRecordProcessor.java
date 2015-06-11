@@ -13,13 +13,13 @@ public class SolrHarvestedRecordProcessor implements ItemProcessor<HarvestedReco
 	private static Logger logger = LoggerFactory.getLogger(SolrHarvestedRecordProcessor.class);
 	
 	@Autowired
-	private DelegatingSolrRecordMapper mapper;
+	private SolrInputDocumentFactory factory;
 
 	@Override
 	public SolrInputDocument process(HarvestedRecord record) throws Exception {
 		logger.debug("About to process harvestedRecord with id={}", record.getUniqueId());
 		try {
-			return mapper.map(record);
+			return factory.create(record);
 		} catch (Exception ex) {
 			logger.error(String.format("Exception thrown when indexing dedup_record with id=%s", record.getUniqueId()), ex);
 			return null;

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="http://invenio.nusl.cz/css/oai2.xsl.v1.0" ?>
+<OAI-PMH xmlns="http://www.openarchives.org/OAI/2.0/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/ http://www.openarchives.org/OAI/2.0/OAI-PMH.xsd">
+<responseDate>2015-04-30T00:45:57Z</responseDate><request verb="GetRecord" metadataPrefix="oai_dc" identifier="oai:invenio.nusl.cz:2">http://invenio.nusl.cz/oai2d</request><GetRecord>
+<record><header><identifier>oai:invenio.nusl.cz:2</identifier><datestamp>2014-07-10T15:37:44Z</datestamp><setSpec>openaire</setSpec><setSpec>DRIVER</setSpec><setSpec>global</setSpec><setSpec>opengrey</setSpec></header><metadata><oai_dc:dc xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd" xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" >
+<dc:title>Praha do Evropy - jako Mnichov?</dc:title>
+<dc:title>Prague into Europe – as Munich?</dc:title>
+<dc:creator>Moučka, Jan</dc:creator>
+<dc:subject>ecology; suburbanizace; dopravní obslužnost; příměstská doprava; urban planning; urbanismus; architecture; regionální rozvoj</dc:subject>
+<dc:description>Cílem článku je zejména poukázat na 'nemoci' Prahy, které mohou nastat v nových liberálních ekonomických a sociálních podmínkách, ukázat na zkušenostech z analogického města - Mnichova -  některé možnosti zmírnění jejich průběhu. Dále zjistit důsledky 'nemocí' jimiž Praha prošla v minulých desítiletích a které se jasně projevují ve srovnání s Mnichovem. Cílem článku je dále zjistit reservy které Praha má a jak by jejich využití umožnilo předcházet větším obtížím - za takovou reservu považuje hlavně dosud extensívně využitý, ale zanedbaný suburbánní prostor pražské aglomerace. Rukopis článku byl v r. 1991 předán redakci časopisu Územní plánování a urbanismus, vydávaný TERPLAN Praha. Rukopis nebyl redakcí přijat s odůvodněním, "že již o Německu bylo publikováno dost".    Z pohledu roku 2010 článek ukazuje, že v českém výzkumu výstavby a architektury bylo komplexní povědomí o problematice stavu českého osídlení, i po 40 letech isolace od světového dění.</dc:description>
+<dc:date>1993</dc:date>
+<dc:type>info:eu-repo/semantics/preprint</dc:type>
+<dc:identifier>http://www.nusl.cz/ntk/nusl-2</dc:identifier>
+<dc:language>cze</dc:language>
+<dc:format>application/pdf</dc:format>
+<dc:rights>info:eu-repo/semantics/openAccess</dc:rights>
+<dc:rights>This work is protected under the Copyright Act No. 121/2000 Coll.</dc:rights>
+<dc:rights>License: Creative Commons Attribution-NoDerivs 3.0 Czech Republic</dc:rights>
+</oai_dc:dc>
+</metadata></record></GetRecord>
+</OAI-PMH>
+

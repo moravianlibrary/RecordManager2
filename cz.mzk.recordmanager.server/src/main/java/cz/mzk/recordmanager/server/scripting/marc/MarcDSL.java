@@ -1,11 +1,13 @@
-package cz.mzk.recordmanager.server.scripting;
+package cz.mzk.recordmanager.server.scripting.marc;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -17,7 +19,9 @@ import cz.mzk.recordmanager.server.marc.MarcRecord;
 import cz.mzk.recordmanager.server.metadata.MetadataMarcRecord;
 import cz.mzk.recordmanager.server.metadata.MetadataRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecordFormat.HarvestedRecordFormatEnum;
-import cz.mzk.recordmanager.server.scripting.function.MarcRecordFunction;
+import cz.mzk.recordmanager.server.scripting.Mapping;
+import cz.mzk.recordmanager.server.scripting.MappingResolver;
+import cz.mzk.recordmanager.server.scripting.function.RecordFunction;
 
 public class MarcDSL {
 	
@@ -32,9 +36,9 @@ public class MarcDSL {
 
 	private final MappingResolver propertyResolver;
 	
-	private final Map<String, MarcRecordFunction> functions;
-	
-	public MarcDSL(MarcRecord record, MappingResolver propertyResolver, Map<String, MarcRecordFunction> functions) {
+	private final Map<String, RecordFunction<MarcRecord>> functions;
+
+	public MarcDSL(MarcRecord record, MappingResolver propertyResolver, Map<String, RecordFunction<MarcRecord>> functions) {
 		super();
 		this.record = record;
 		this.propertyResolver = propertyResolver;
@@ -71,13 +75,24 @@ public class MarcDSL {
 	public List<String> getLanguages() {
 		List<String> languages = new ArrayList<String>();
 		String f008 = record.getControlField("008");
-		if (f008.length() > 38) {
+		if (f008 != null && f008.length() > 38) {
 			languages.add(f008.substring(35, 38));
 		}
 		languages.addAll(record.getFields("041", EMPTY_SEPARATOR, 'a'));
 		languages.addAll(record.getFields("041", EMPTY_SEPARATOR, 'd'));
 		languages.addAll(record.getFields("041", EMPTY_SEPARATOR, 'e'));
 		return languages;
+	}
+	
+	public String getCountry(){
+		String f008 = record.getControlField("008");
+		if (f008 != null && f008.length() > 18) {
+			return f008.substring(15, 18).trim();
+		}
+		String s = getFirstField("044a");
+		if(s != null) return getFirstField("044a").trim();
+		
+		return "";
 	}
 
 	public String translate(String file, String input, String defaultValue)
@@ -193,7 +208,7 @@ public class MarcDSL {
 	}
 
 	public Object methodMissing(String methodName, Object args) {
-		MarcRecordFunction func = functions.get(methodName);
+		RecordFunction<MarcRecord> func = functions.get(methodName);
 		if (func == null) {
 			throw new IllegalArgumentException(String.format("missing function: %s", methodName));
 		}
@@ -207,5 +222,83 @@ public class MarcDSL {
             result = Integer.valueOf(String.valueOf(ind2char));
         return result;
     }
+    
+    public List<String> getPublisher(){
+    	List<String> publishers = new ArrayList<String>();
+    	for(DataField dataField: record.getDataFields("264")){
+    		if(dataField.getIndicator2() == '1'){
+    			publishers.addAll(getFieldsTrim("264b"));
+    		}
+    	}
+    	publishers.addAll(getFieldsTrim("260b:928a:978abcdg"));
+    	
+    	return publishers;
+    }
 
+    public Set<String> getFieldsTrim(String tags){
+    	Set<String> result = new HashSet<String>();
+    	for(String data: getFields(tags)){
+    		data = data.replaceAll("[,;:/\\s]+$", "");
+    		result.add(data);
+    	}
+    	return result;
+    }
+    
+    public Set<String> getFieldsUnique(String tags){
+    	Set<String> result = new HashSet<String>();
+    	for(String data: getFields(tags)){
+    		result.add(data);
+    	}
+    	return result;
+    }
+ 
+    public Set<String> getSubject(String tags){
+    	Set<String> subjects = new HashSet<String>();
+
+    	for(String subject: getFields(tags)){
+    		String up = subject.substring(0,1).toUpperCase() + subject.substring(1);
+    		subjects.add(up);
+    	}
+    	return subjects;
+    }
+
+    public Set<String> getISBNISSNISMN(){
+    	Set<String> result = new HashSet<String>();
+    	
+    	for(DataField df: record.getDataFields("024")){
+    		if(df.getIndicator1() == '2'){
+    			result.addAll(getFields("024az"));
+    		}
+    	}
+    	result.addAll(getFields("020az:022az:787xz:902a"));    	
+    	
+    	return result;
+    }
+    
+    public String getId001(){
+    	return record.getControlField("001");
+    }
+    
+    public List<String> getCity(){
+    	List<String> result = new ArrayList<String>();
+    	for(String institution: getFields("910a")){
+    		result.add(institution.substring(0, 2));
+    	}
+    	return result;
+    }
+    
+    public Set<String> getTitleSeries(){
+    	Set<String> result = new HashSet<String>();
+    	result.addAll(getFieldsTrim("130adfgklnpst7:210a:222ab:240adklmprs:242ap:245abnp:246anp:247afp:"
+    			+ "440a:490anp:700klmnoprst7:710klmnoprst7:711klmnoprst7:730adklmprs7:740anp:765ts9:"
+    			+ "773kt:780st:785st:787st:800klmnoprst7:810klmnoprst7:811klmnoprst7:830aklmnoprst7"));
+    	for(DataField df: record.getDataFields("505")){
+    		if(df.getIndicator2() == '0'){
+    			result.addAll(getFieldsTrim("505t"));
+    		}
+    	}
+    	
+    	return result;
+    }
+    
 }

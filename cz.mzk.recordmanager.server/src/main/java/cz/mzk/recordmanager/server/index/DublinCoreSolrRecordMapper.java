@@ -5,30 +5,29 @@ import java.io.InputStream;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import cz.mzk.recordmanager.server.marc.MarcRecord;
-import cz.mzk.recordmanager.server.marc.MarcXmlParser;
+import cz.mzk.recordmanager.server.dc.DublinCoreParser;
+import cz.mzk.recordmanager.server.dc.DublinCoreRecord;
 import cz.mzk.recordmanager.server.model.DedupRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
-import cz.mzk.recordmanager.server.scripting.marc.MarcMappingScript;
-import cz.mzk.recordmanager.server.scripting.marc.MarcScriptFactory;
+import cz.mzk.recordmanager.server.scripting.dc.DublinCoreMappingScript;
+import cz.mzk.recordmanager.server.scripting.dc.DublinCoreScriptFactory;
 
 @Component
-public class MarcSolrRecordMapper implements SolrRecordMapper, InitializingBean {
+public class DublinCoreSolrRecordMapper implements SolrRecordMapper, InitializingBean {
 
-	private final static String FORMAT = "marc21-xml";
-
-	@Autowired
-	private MarcXmlParser marcXmlParser;
+	private final static String FORMAT = "dublinCore";
 
 	@Autowired
-	private MarcScriptFactory marcScriptFactory;
+	private DublinCoreScriptFactory dublinCoreScriptFactory;
 
-	private MarcMappingScript mappingScript;
+	@Autowired
+	private DublinCoreParser parser;
+
+	private DublinCoreMappingScript mappingScript;
 
 	@Override
 	public List<String> getSupportedFormats() {
@@ -52,18 +51,19 @@ public class MarcSolrRecordMapper implements SolrRecordMapper, InitializingBean 
 
 	protected Map<String, Object> parse(HarvestedRecord record) {
 		InputStream is = new ByteArrayInputStream(record.getRawRecord());
-		MarcRecord rec = marcXmlParser.parseRecord(is);
-		MarcMappingScript script = getMappingScript(record);
-		return script.parse(rec);
+		DublinCoreMappingScript script = getMappingScript(record);
+		DublinCoreRecord rec = parser.parseRecord(is);
+		Map<String, Object> fields = script.parse(rec);
+		return fields;
 	}
 
-	protected MarcMappingScript getMappingScript(HarvestedRecord record) {
+	protected DublinCoreMappingScript getMappingScript(HarvestedRecord record) {
 		return mappingScript;
 	}
 
 	@Override
 	public void afterPropertiesSet() throws Exception {
-		mappingScript = marcScriptFactory.create(getClass()
+		mappingScript = dublinCoreScriptFactory.create(getClass()
 				.getResourceAsStream("/marc/groovy/BaseMarc.groovy"));
 	}
 
