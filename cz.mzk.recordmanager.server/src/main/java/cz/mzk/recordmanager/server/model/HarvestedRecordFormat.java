@@ -36,10 +36,10 @@ public class HarvestedRecordFormat {
 		VIDEO_DVD(21L),
 		VIDEO_CD(22L),
 		VIDEO_OTHER(23L),
-		KIT(24L),
-		OBJECT(25L),
-		MIX_DOCUMENT(26L),
-		UNSPECIFIED(100L);
+		OTHER_KIT(24L),
+		OTHER_OBJECT(25L),
+		OTHER_MIX_DOCUMENT(26L),
+		OTHER_UNSPECIFIED(100L);
 		
 		private Long numValue;
 		
@@ -55,7 +55,7 @@ public class HarvestedRecordFormat {
 			try {
 				return HarvestedRecordFormatEnum.valueOf(input.toUpperCase());
 			} catch (IllegalArgumentException iax) {
-				return HarvestedRecordFormatEnum.UNSPECIFIED;
+				return HarvestedRecordFormatEnum.OTHER_UNSPECIFIED;
 			}
 		}
 	}

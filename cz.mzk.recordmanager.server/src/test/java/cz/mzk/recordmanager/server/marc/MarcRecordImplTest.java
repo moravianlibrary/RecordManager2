@@ -529,7 +529,7 @@ public class MarcRecordImplTest extends AbstractTest {
 		data.add("000 00000000");
 		data.add("006 o");
 		data.add("007 o");
-		hrf.add(HarvestedRecordFormatEnum.KIT);
+		hrf.add(HarvestedRecordFormatEnum.OTHER_KIT);
 		mri = MarcRecordFactory.recordFactory(data);
 		metadataRecord = metadataFactory.getMetadataRecord(mri);		
 		Assert.assertEquals(metadataRecord.getDetectedFormatList().toString(), hrf.toString());
@@ -539,7 +539,7 @@ public class MarcRecordImplTest extends AbstractTest {
 		// Object
 		data.add("000 00000000");
 		data.add("008 zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzd");
-		hrf.add(HarvestedRecordFormatEnum.OBJECT);
+		hrf.add(HarvestedRecordFormatEnum.OTHER_OBJECT);
 		mri = MarcRecordFactory.recordFactory(data);
 		metadataRecord = metadataFactory.getMetadataRecord(mri);		
 		Assert.assertEquals(metadataRecord.getDetectedFormatList().toString(), hrf.toString());
@@ -548,7 +548,7 @@ public class MarcRecordImplTest extends AbstractTest {
 		
 		// Mix document
 		data.add("000 000000p");
-		hrf.add(HarvestedRecordFormatEnum.MIX_DOCUMENT);
+		hrf.add(HarvestedRecordFormatEnum.OTHER_MIX_DOCUMENT);
 		mri = MarcRecordFactory.recordFactory(data);
 		metadataRecord = metadataFactory.getMetadataRecord(mri);		
 		Assert.assertEquals(metadataRecord.getDetectedFormatList().toString(), hrf.toString());
@@ -558,7 +558,7 @@ public class MarcRecordImplTest extends AbstractTest {
 		// Unspecified
 		data.add("000 00000000");
 		data.add("337 $bx");
-		hrf.add(HarvestedRecordFormatEnum.UNSPECIFIED);
+		hrf.add(HarvestedRecordFormatEnum.OTHER_UNSPECIFIED);
 		mri = MarcRecordFactory.recordFactory(data);
 		metadataRecord = metadataFactory.getMetadataRecord(mri);		
 		Assert.assertEquals(metadataRecord.getDetectedFormatList().toString(), hrf.toString());
@@ -567,7 +567,7 @@ public class MarcRecordImplTest extends AbstractTest {
 		
 		// Nothing
 		data.add("000 00000000");
-		hrf.add(HarvestedRecordFormatEnum.UNSPECIFIED);
+		hrf.add(HarvestedRecordFormatEnum.OTHER_UNSPECIFIED);
 		mri = MarcRecordFactory.recordFactory(data);
 		metadataRecord = metadataFactory.getMetadataRecord(mri);		
 		Assert.assertEquals(metadataRecord.getDetectedFormatList().toString(), hrf.toString());

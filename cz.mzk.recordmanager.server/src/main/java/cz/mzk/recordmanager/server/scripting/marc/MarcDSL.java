@@ -31,6 +31,8 @@ public class MarcDSL {
 	
 	private final static Pattern FIELD_PATTERN = Pattern
 			.compile("([0-9]{3})([a-zA-Z0-9]*)");
+	
+	private static final Pattern RECORDTYPE_PATTERN = Pattern.compile("^(AUDIO|VIDEO|OTHER)_(.*)$");
 
 	private final MarcRecord record;
 
@@ -195,8 +197,20 @@ public class MarcDSL {
 		return marcMetadataRecord.export(IOFormat.ISO_2709);
 	}
 	
-	public List<HarvestedRecordFormatEnum> getRecordType(){
-		return marcMetadataRecord.getDetectedFormatList();
+	public List<String> getRecordType(){
+		List<String> result = new ArrayList<String>();
+		
+		for(HarvestedRecordFormatEnum format: marcMetadataRecord.getDetectedFormatList()){
+			Matcher matcher = RECORDTYPE_PATTERN.matcher(format.name());
+			if(matcher.matches()){
+				result.add("0/"+matcher.group(1)+"/");
+				result.add("1/"+matcher.group(1)+"/"+matcher.group(2)+"/");
+			}
+			else {
+				result.add("0/"+format+"/");
+			}
+		}
+		return result;
 	}
 
 	public String isIllustrated() {
@@ -279,14 +293,6 @@ public class MarcDSL {
     	return record.getControlField("001");
     }
     
-    public List<String> getCity(){
-    	List<String> result = new ArrayList<String>();
-    	for(String institution: getFields("910a")){
-    		result.add(institution.substring(0, 2));
-    	}
-    	return result;
-    }
-    
     public Set<String> getTitleSeries(){
     	Set<String> result = new HashSet<String>();
     	result.addAll(getFieldsTrim("130adfgklnpst7:210a:222ab:240adklmprs:242ap:245abnp:246anp:247afp:"
@@ -300,5 +306,5 @@ public class MarcDSL {
     	
     	return result;
     }
-    
+
 }

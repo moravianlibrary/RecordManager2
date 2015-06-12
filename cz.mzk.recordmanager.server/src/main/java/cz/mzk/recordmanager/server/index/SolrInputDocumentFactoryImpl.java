@@ -42,7 +42,7 @@ public class SolrInputDocumentFactoryImpl implements SolrInputDocumentFactory, I
 	);
 
 	private final Map<String, String> remappedFields = new HashMap<String, String>();
-
+		
 	@Autowired
 	private DelegatingSolrRecordMapper mapper;
 
@@ -52,7 +52,7 @@ public class SolrInputDocumentFactoryImpl implements SolrInputDocumentFactory, I
 			SolrInputDocument document = parse(record);
 			String id = getId(record);
 			document.addField(SolrFieldConstants.ID_FIELD, id);
-			document.addField(SolrFieldConstants.INSTITUTION_FIELD, getInstitutionOfRecord(record));
+			document.addField(SolrFieldConstants.INSTITUTION_FIELD, getInstitution(record));
 			document.addField(SolrFieldConstants.MERGED_CHILD_FIELD, 1);
 			document.addField(SolrFieldConstants.WEIGHT, record.getWeight());
 			return document;
@@ -69,6 +69,7 @@ public class SolrInputDocumentFactoryImpl implements SolrInputDocumentFactory, I
 		HarvestedRecord record = records.get(0);
 		SolrInputDocument document = parse(record);
 		document.addField(SolrFieldConstants.ID_FIELD, dedupRecord.getId());
+		document.addField(SolrFieldConstants.INSTITUTION_FIELD, getInstitution(record));
 		document.addField(SolrFieldConstants.MERGED_FIELD, 1);
 		document.addField(SolrFieldConstants.WEIGHT, records.get(0).getWeight());
 		List<String> localIds = new ArrayList<String>();
@@ -108,6 +109,26 @@ public class SolrInputDocumentFactoryImpl implements SolrInputDocumentFactory, I
 			return config.getLibrary().getName();
 		}
 		return SolrFieldConstants.UNKNOWN_INSTITUTION;
+	}
+	
+	protected String getCityOfRecord(HarvestedRecord hr) {
+		OAIHarvestConfiguration config = hr.getHarvestedFrom();
+		if (config != null
+				&& config.getLibrary() != null
+				&& config.getLibrary().getCity() != null) {
+			return config.getLibrary().getCity();
+		}
+		return SolrFieldConstants.UNKNOWN_INSTITUTION;
+	}
+	
+	protected List<String> getInstitution(HarvestedRecord record){
+		List<String> result = new ArrayList<String>();
+		String city = getCityOfRecord(record);
+		String name = getInstitutionOfRecord(record);
+		result.add("0/"+city+"/");
+		result.add("1/"+city+"/"+name+"/");
+
+		return result;
 	}
 
 	@Override
