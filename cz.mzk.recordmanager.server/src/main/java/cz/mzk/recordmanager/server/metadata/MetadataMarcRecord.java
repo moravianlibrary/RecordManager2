@@ -783,11 +783,11 @@ public class MetadataMarcRecord implements MetadataRecord {
 		if(audio != null) hrf.add(audio);
 		HarvestedRecordFormatEnum video = getVideoDocument();
 		if(video != null) hrf.add(video);
-		if(isKit()) hrf.add(HarvestedRecordFormatEnum.KIT);
-		if(isObject()) hrf.add(HarvestedRecordFormatEnum.OBJECT);
-		if(isMixDocument()) hrf.add(HarvestedRecordFormatEnum.MIX_DOCUMENT);
-		if(isUnspecified()) hrf.add(HarvestedRecordFormatEnum.UNSPECIFIED);		
-		if(hrf.isEmpty()) hrf.add(HarvestedRecordFormatEnum.UNSPECIFIED);
+		if(isKit()) hrf.add(HarvestedRecordFormatEnum.OTHER_KIT);
+		if(isObject()) hrf.add(HarvestedRecordFormatEnum.OTHER_OBJECT);
+		if(isMixDocument()) hrf.add(HarvestedRecordFormatEnum.OTHER_MIX_DOCUMENT);
+		if(isUnspecified()) hrf.add(HarvestedRecordFormatEnum.OTHER_UNSPECIFIED);		
+		if(hrf.isEmpty()) hrf.add(HarvestedRecordFormatEnum.OTHER_UNSPECIFIED);
 		
 		return hrf;
 	}

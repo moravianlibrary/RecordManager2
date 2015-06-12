@@ -61,8 +61,6 @@ callNumber_search_txt_mv = getFieldsUnique "910b:996ch"
 publisher_search_str_mv = getFieldsTrim "260b:264b:928a:978abcdg7"
 id001_search_str = getId001()
 cnb_search_str = getFirstField "015az"
-city_search_txt_mv = translate("mzk_city.map", getCity(), "Unknown")
-institution_search_txt_mv = translate("mzk_institution.map", getFields("910a"), "Unknown")
 
 ean_str_mv = getEAN()
 cpk_detected_format_txtF_mv = getRecordType()
