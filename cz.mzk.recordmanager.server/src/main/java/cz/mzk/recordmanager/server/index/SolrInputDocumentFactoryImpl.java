@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.solr.common.SolrInputDocument;
 import org.slf4j.Logger;
@@ -22,6 +24,8 @@ import cz.mzk.recordmanager.server.model.OAIHarvestConfiguration;
 public class SolrInputDocumentFactoryImpl implements SolrInputDocumentFactory, InitializingBean {
 
 	private static Logger logger = LoggerFactory.getLogger(SolrInputDocumentFactoryImpl.class);
+	
+	private static final Pattern OAI_RECORD_ID_PATTERN = Pattern.compile("oai:[\\w|.]+:([\\w|-]+)");
 
 	private List<String> fieldsWithDash = Arrays.asList( //
 			"author2-role", //
@@ -50,9 +54,11 @@ public class SolrInputDocumentFactoryImpl implements SolrInputDocumentFactory, I
 	public SolrInputDocument create(HarvestedRecord record) {
 		try {
 			SolrInputDocument document = parse(record);
-			String id = getId(record);
-			document.addField(SolrFieldConstants.ID_FIELD, id);
-			document.addField(SolrFieldConstants.INSTITUTION_FIELD, getInstitution(record));
+			if (!document.containsKey(SolrFieldConstants.ID_FIELD)) {
+				String id = getId(record);
+				document.addField(SolrFieldConstants.ID_FIELD, id);
+			}
+			document.addField(SolrFieldConstants.INSTITUTION_FIELD, getInstitutionOfRecord(record));
 			document.addField(SolrFieldConstants.MERGED_CHILD_FIELD, 1);
 			document.addField(SolrFieldConstants.WEIGHT, record.getWeight());
 			return document;
@@ -97,7 +103,12 @@ public class SolrInputDocumentFactoryImpl implements SolrInputDocumentFactory, I
 
 	protected String getId(HarvestedRecord record) {
 		String prefix = record.getHarvestedFrom().getIdPrefix();
-		String id = ((prefix != null) ? prefix + "." : "") + record.getUniqueId().getRecordId();
+		String suffix = record.getUniqueId().getRecordId();
+		Matcher matcher = OAI_RECORD_ID_PATTERN.matcher(suffix);
+		if (matcher.matches()) {
+			suffix = matcher.group(1);
+		}
+		String id = ((prefix != null) ? prefix + "." : "") + suffix;
 		return id;
 	}
 
