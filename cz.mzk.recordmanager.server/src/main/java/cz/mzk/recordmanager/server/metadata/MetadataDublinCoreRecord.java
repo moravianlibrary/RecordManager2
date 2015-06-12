@@ -304,7 +304,7 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 	}
 
 	@Override
-	public String getClusterId(String name) {
+	public String getClusterId() {
 		// TODO Auto-generated method stub
 		return null;
 	}

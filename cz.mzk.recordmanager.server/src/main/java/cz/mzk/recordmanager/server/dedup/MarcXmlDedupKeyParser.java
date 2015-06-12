@@ -61,13 +61,11 @@ public class MarcXmlDedupKeyParser implements DedupKeysParser {
 		record.setAuthorString(MetadataUtils.normalize(metadata.getAuthorString()));
 		record.setScale(metadata.getScale());
 		record.setUuid(metadata.getUUId());
+		record.setPages(metadata.getPageCount());
 		record.setIssnSeries(MetadataUtils.normalize(metadata.getISSNSeries()));
 		record.setIssnSeriesOrder(MetadataUtils.normalize(metadata.getISSNSeriesOrder()));
-		if(record.getHarvestedFrom() != null){
-			if(record.getHarvestedFrom().getClusterIdEnabled()){
-				record.setClusterId(metadata.getClusterId(record.getHarvestedFrom().getLibrary().getName()));
-			}
-		}
+		record.setClusterId(metadata.getClusterId());
+	
 		return record;
 	}
 }
