@@ -8,6 +8,7 @@ INSERT INTO library (id, name, url, catalog_url, city) VALUES (104, 'NKP', 'nkp.
 INSERT INTO library (id, name, url, catalog_url, city) VALUES (105, 'VPK', 'vpk.cz', 'vpk.cz', 'Praha');
 INSERT INTO library (id, name, url, catalog_url, city) VALUES (106, 'TRE', 'katalogknih.cz', 'vufind.katalogknih.c', 'Česká Třebová');
 INSERT INTO library (id, name, url, catalog_url, city) VALUES (107, 'NTK', 'techlib.cz', 'aleph.techlib.cz', 'Praha');
+INSERT INTO library (id, name, url, catalog_url, city) VALUES (108, 'KVKL', 'http://www.kvkli.cz/', 'pac.kvkli.cz/arl-li/', 'Liberec');
 
 INSERT INTO format(format, description) VALUES('marc21-xml', 'MARC21 XML');
 INSERT INTO format(format, description) VALUES('xml-marc', 'MARC21 XML');
@@ -20,7 +21,9 @@ INSERT INTO oai_harvest_conf (id,library_id,url,set_spec,metadata_prefix,granula
 INSERT INTO oai_harvest_conf (id,library_id,url,set_spec,metadata_prefix,granularity,contact_person_id,id_prefix,base_weight,cluster_id_enabled) VALUES (304,104,'http://aleph.nkp.cz/OAI','NKC','marc21','SECOND',200,'nkp',14,false);
 INSERT INTO oai_harvest_conf (id,library_id,url,set_spec,metadata_prefix,granularity,contact_person_id,id_prefix,base_weight,cluster_id_enabled) VALUES (305,105,'http://sc.vpk.cz/cgi-bin/oai2',null,'marc21',null,200,'vpk',14,false);
 INSERT INTO oai_harvest_conf (id,library_id,url,set_spec,metadata_prefix,granularity,contact_person_id,id_prefix,base_weight,cluster_id_enabled) VALUES (307,107,'http://aleph.techlib.cz/OAI',null,'marc21','SECOND',200,'ntk',14,false);
+INSERT INTO oai_harvest_conf (id,library_id,url,set_spec,metadata_prefix,granularity,contact_person_id,id_prefix,base_weight,cluster_id_enabled) VALUES (306,106,NULL,NULL,'marc21',NULL,200,'TRE',11,false);
 INSERT INTO oai_harvest_conf (id,library_id,url,set_spec,metadata_prefix,granularity,contact_person_id,id_prefix,base_weight,cluster_id_enabled) VALUES (400,100,'http://aleph.nkp.cz/OAI','AUT','marc21',null,200,null,null,false);
+INSERT INTO oai_harvest_conf (id,library_id,url,set_spec,metadata_prefix,granularity,contact_person_id,id_prefix,base_weight,cluster_id_enabled) VALUES (308,108,NULL,NULL,'marc21',NULL,200,'KVKL',14,false);
 
 
 INSERT INTO harvested_record_format(id, name) VALUES (1, 'BOOKS'); 
