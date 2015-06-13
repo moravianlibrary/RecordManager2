@@ -405,12 +405,6 @@ public class DedupRecordsJobConfig {
 		return new DedupSimpleKeysStepWriter();
 	}
 
-	@Bean(name = "dedupRecordsJob:processor")
-	@StepScope
-	public UpdateHarvestedRecordProcessor processor() {
-		return new UpdateHarvestedRecordProcessor();
-	}
-
 	@Bean(name = "dedupRecordsJob:writer")
 	@StepScope
 	public DedupRecordsWriter writer() {

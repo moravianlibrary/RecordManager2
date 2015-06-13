@@ -78,10 +78,10 @@ public class ExportRecordsJobConfig {
 		JdbcPagingItemReader<HarvestedRecordUniqueId> reader = new JdbcPagingItemReader<HarvestedRecordUniqueId>();
 		SqlPagingQueryProviderFactoryBean pqpf = new SqlPagingQueryProviderFactoryBean();
 		pqpf.setDataSource(dataSource);
-		pqpf.setSelectClause("SELECT oai_harvest_conf_id, record_id");
+		pqpf.setSelectClause("SELECT import_conf_id, record_id");
 		pqpf.setFromClause("FROM harvested_record");
-		pqpf.setWhereClause("WHERE oai_harvest_conf_id = :conf_id");
-		pqpf.setSortKeys(ImmutableMap.of("oai_harvest_conf_id", Order.ASCENDING, "record_id", Order.ASCENDING));
+		pqpf.setWhereClause("WHERE import_conf_id = :conf_id");
+		pqpf.setSortKeys(ImmutableMap.of("import_conf_id", Order.ASCENDING, "record_id", Order.ASCENDING));
 		Map<String, Object> parameterValues = new HashMap<String, Object>();
 		parameterValues.put("conf_id", configId);
 		reader.setParameterValues(parameterValues);

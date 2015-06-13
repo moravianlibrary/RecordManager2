@@ -11,7 +11,7 @@ public class HarvestedRecordIdRowMapper implements RowMapper<HarvestedRecordUniq
 
 	@Override
 	public HarvestedRecordUniqueId mapRow(ResultSet rs, int rowNum) throws SQLException {
-		HarvestedRecordUniqueId id = new HarvestedRecordUniqueId(rs.getLong("oai_harvest_conf_id"),
+		HarvestedRecordUniqueId id = new HarvestedRecordUniqueId(rs.getLong("import_conf_id"),
 				rs.getString("record_id"));
 		return id;
 	}
