@@ -41,6 +41,16 @@ CREATE TABLE oai_harvest_conf (
   CONSTRAINT oai_harvest_conf_import_conf_fk FOREIGN KEY (import_conf_id) REFERENCES import_conf(id)
 );
 
+CREATE TABLE kramerius_conf (
+  id                   DECIMAL(10) PRIMARY KEY,
+  import_conf_id       DECIMAL(10),
+  url                  VARCHAR(128),
+  model                VARCHAR(128),
+  query_rows           DECIMAL(10),
+  metadata_stream      VARCHAR(128),
+  CONSTRAINT kramerius_conf_import_conf_fk FOREIGN KEY (import_conf_id) REFERENCES import_conf(id)
+);
+
 CREATE TABLE format (
   format               VARCHAR(12) PRIMARY KEY,
   description          VARCHAR(255)
