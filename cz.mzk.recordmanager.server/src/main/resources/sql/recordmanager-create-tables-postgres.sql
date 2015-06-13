@@ -20,19 +20,25 @@ CREATE TABLE contact_person (
   FOREIGN KEY (library_id) REFERENCES library(id)
 );
 
-CREATE TABLE oai_harvest_conf (
+CREATE TABLE import_conf (
   id                   DECIMAL(10) PRIMARY KEY,
   library_id           DECIMAL(10),
-  url                  VARCHAR(128),
-  set_spec             VARCHAR(128),
-  metadata_prefix      VARCHAR(128),
-  granularity          VARCHAR(30),
   contact_person_id    DECIMAL(10),
   id_prefix            VARCHAR(10),
   base_weight          DECIMAL(10),
   cluster_id_enabled   BOOLEAN DEFAULT FALSE,
-  FOREIGN KEY (library_id)        REFERENCES library(id),
-  FOREIGN KEY (contact_person_id) REFERENCES contact_person(id)
+  CONSTRAINT import_conf_library_id_fk        FOREIGN KEY (library_id)        REFERENCES library(id),
+  CONSTRAINT import_conf_contact_person_id_fk FOREIGN KEY (contact_person_id) REFERENCES contact_person(id)
+);
+
+CREATE TABLE oai_harvest_conf (
+  id                   DECIMAL(10) PRIMARY KEY,
+  import_conf_id       DECIMAL(10),
+  url                  VARCHAR(128),
+  set_spec             VARCHAR(128),
+  metadata_prefix      VARCHAR(128),
+  granularity          VARCHAR(30),
+  CONSTRAINT oai_harvest_conf_import_conf_fk FOREIGN KEY (import_conf_id) REFERENCES import_conf(id)
 );
 
 CREATE TABLE format (
@@ -48,7 +54,7 @@ CREATE TABLE dedup_record (
 
 CREATE TABLE harvested_record (
   id                   DECIMAL(10) PRIMARY KEY,
-  oai_harvest_conf_id  DECIMAL(10),
+  import_conf_id       DECIMAL(10),
   record_id            VARCHAR(128),
   harvested            TIMESTAMP,
   updated              TIMESTAMP,
@@ -66,8 +72,8 @@ CREATE TABLE harvested_record (
   cluster_id           VARCHAR(20),
   pages                DECIMAL(10),
   raw_record           BYTEA,
-  UNIQUE (oai_harvest_conf_id, record_id),
-  FOREIGN KEY (oai_harvest_conf_id) REFERENCES oai_harvest_conf(id),
+  UNIQUE (import_conf_id, record_id),
+  FOREIGN KEY (import_conf_id) REFERENCES import_conf(id),
   FOREIGN KEY (format)              REFERENCES format(format)
 );
 
