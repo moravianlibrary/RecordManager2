@@ -305,22 +305,68 @@ public class MarcRecordImplTest extends AbstractTest {
 		isbn.setNote("váz");
 		isbnlist.add(isbn);
 		data.add("020 $a978-80-7250-482-4$q(váz)$q(q1)$qq2");
+		
 		isbn = new Isbn();
 		isbn.setIsbn(9788072504824L);
 		isbn.setOrderInRecord(2L);
 		isbn.setNote("váz q1 q2");
 		isbnlist.add(isbn);
 		data.add("020 $a80-200-0980-9");
+		
 		isbn = new Isbn();
 		isbn.setIsbn(9788020009807L);
 		isbn.setOrderInRecord(3L);
 		isbnlist.add(isbn);
 		data.add("020 $a456");
 		
+		isbn = new Isbn();
+		isbn.setIsbn(9782011668554L);
+		isbn.setOrderInRecord(4L);
+		isbnlist.add(isbn);
+		data.add("020 $a2-01-16-6855-7");
+		
+		isbn = new Isbn();
+		isbn.setIsbn(9782980406003L);
+		isbn.setOrderInRecord(5L);
+		isbnlist.add(isbn);
+		data.add("020 $a2-9804060-07");
+		
+		isbn = new Isbn();
+		isbn.setIsbn(9783925967214L);
+		isbn.setOrderInRecord(6L);
+		isbnlist.add(isbn);
+		data.add("020 $a3-925 967-21-4");
+		
+		isbn = new Isbn();
+		isbn.setIsbn(9783925967214L);
+		isbn.setOrderInRecord(7L);
+		isbnlist.add(isbn);
+		data.add("020 $a  3-925 967-21-4");
+		
+		isbn = new Isbn();
+		isbn.setIsbn(9780521376679L);
+		isbn.setOrderInRecord(9L);
+		isbnlist.add(isbn);
+		data.add("020 $a052137667x");
+		
+		isbn = new Isbn();
+		isbn.setIsbn(9783596263936L);
+		isbn.setOrderInRecord(10L);
+		isbnlist.add(isbn);
+		data.add("020 $a3-596-26393-x");
+		
+		isbn = new Isbn();
+		isbn.setIsbn(9783596263936L);
+		isbn.setOrderInRecord(10L);
+		isbnlist.add(isbn);
+		data.add("020 $a5-268-01286-x");
+		
 		mri = MarcRecordFactory.recordFactory(data);
 		metadataRecord = metadataFactory.getMetadataRecord(mri);
-		Assert.assertEquals(metadataRecord.getISBNs().toString(),
-				isbnlist.toString());
+		Assert.assertEquals(metadataRecord.getISBNs().size(), isbnlist.size());
+		for (int i = 0; i < isbnlist.size(); i++) {
+			Assert.assertEquals(metadataRecord.getISBNs().get(i), isbnlist.get(i), "ISBN on position " + i + " differs.");
+		}
 		data.clear();
 
 		mri = MarcRecordFactory.recordFactory(data);
@@ -673,13 +719,7 @@ public class MarcRecordImplTest extends AbstractTest {
 		data.add("001 0011");
 		mri = MarcRecordFactory.recordFactory(data);
 		metadataRecord = metadataFactory.getMetadataRecord(mri);
-		Assert.assertEquals(metadataRecord.getClusterId("MZK"), null);
-		data.clear();
-		
-		data.add("001 011");
-		mri = MarcRecordFactory.recordFactory(data);
-		metadataRecord = metadataFactory.getMetadataRecord(mri);
-		Assert.assertEquals(metadataRecord.getClusterId("MZK"), "011");
-		data.clear();
+		Assert.assertEquals(metadataRecord.getClusterId(), null);
+
 	}
 }

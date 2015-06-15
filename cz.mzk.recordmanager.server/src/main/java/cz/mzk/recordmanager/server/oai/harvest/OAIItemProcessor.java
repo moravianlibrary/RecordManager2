@@ -1,8 +1,10 @@
 package cz.mzk.recordmanager.server.oai.harvest;
 
 import java.io.ByteArrayOutputStream;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
@@ -10,20 +12,15 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.ExitStatus;
 import org.springframework.batch.core.StepExecution;
 import org.springframework.batch.core.StepExecutionListener;
 import org.springframework.batch.core.configuration.annotation.StepScope;
-import org.springframework.batch.item.ItemWriter;
+import org.springframework.batch.item.ItemProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.w3c.dom.Element;
 
-import cz.mzk.recordmanager.server.dedup.DedupKeyParserException;
-import cz.mzk.recordmanager.server.dedup.DelegatingDedupKeysParser;
-import cz.mzk.recordmanager.server.marc.InvalidMarcException;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecord.HarvestedRecordUniqueId;
 import cz.mzk.recordmanager.server.model.OAIHarvestConfiguration;
@@ -35,10 +32,7 @@ import cz.mzk.recordmanager.server.util.HibernateSessionSynchronizer.SessionBind
 
 @Component
 @StepScope
-public class OAIItemWriter implements ItemWriter<List<OAIRecord>>,
-		StepExecutionListener {
-	
-	private static Logger logger = LoggerFactory.getLogger(OAIItemWriter.class);
+public class OAIItemProcessor implements ItemProcessor<List<OAIRecord>, List<HarvestedRecord>>, StepExecutionListener {
 
 	@Autowired
 	protected HarvestedRecordDAO recordDao;
@@ -50,34 +44,24 @@ public class OAIItemWriter implements ItemWriter<List<OAIRecord>>,
 	protected OAIFormatResolver formatResolver;
 
 	@Autowired
-	protected DelegatingDedupKeysParser dedupKeysParser;
-
-	@Autowired
 	private HibernateSessionSynchronizer sync;
 
 	private String format;
-
+	
 	private OAIHarvestConfiguration configuration;
 
 	private Transformer transformer;
-
+	
 	@Override
-	public void write(List<? extends List<OAIRecord>> items) throws Exception {
-		for (List<OAIRecord> records : items) {
-			for (OAIRecord record : records) {
-				try {
-					write(record);
-				} catch (TransformerException te) {
-					logger.warn("TransformerException when storing {}: ",
-							record, te);
-				} catch (InvalidMarcException ime) {
-					logger.warn("Attempt to harvest invalid MARC {}", record.getHeader().getIdentifier());
-				}
-			}
+	public List<HarvestedRecord> process(List<OAIRecord> arg0) throws Exception {
+		List<HarvestedRecord> result = new ArrayList<>();
+		for (OAIRecord oaiRec: arg0) {
+			result.add(createHarvestedRecord(oaiRec));
 		}
+		return result;
 	}
-
-	protected void write(OAIRecord record) throws TransformerException {
+	
+	protected HarvestedRecord createHarvestedRecord(OAIRecord record) throws TransformerException {
 		String recordId = extractIdentifier(record.getHeader().getIdentifier());
 		HarvestedRecord rec = recordDao.findByIdAndHarvestConfiguration(
 				recordId, configuration);
@@ -90,30 +74,15 @@ public class OAIItemWriter implements ItemWriter<List<OAIRecord>>,
 		if (record.getHeader().isDeleted()) {
 			rec.setDeleted(new Date());
 			rec.setRawRecord(new byte[0]);
-			recordDao.persist(rec);
-			return;
+			return rec;
 		} else {
 			Element element = record.getMetadata().getElement();
 			rec.setRawRecord(asByteArray(element));
 		}
-		try {
-			dedupKeysParser.parse(rec);
-		} catch (DedupKeyParserException dkpe) {
-			logger.error(
-					"Dedup keys could not be generated for {}, exception thrown.",
-					record, dkpe);
-		}
 
-		recordDao.persist(rec);
+		return rec;
 	}
-
-	protected byte[] asByteArray(Element element) throws TransformerException {
-		ByteArrayOutputStream bos = new ByteArrayOutputStream();
-		StreamResult result = new StreamResult(bos);
-		transformer.transform(new DOMSource(element), result);
-		return bos.toByteArray();
-	}
-
+	
 	@Override
 	public ExitStatus afterStep(StepExecution stepExecution) {
 		return null;
@@ -134,6 +103,13 @@ public class OAIItemWriter implements ItemWriter<List<OAIRecord>>,
 				throw new RuntimeException(tce);
 			}
 		}
+	}
+	
+	protected byte[] asByteArray(Element element) throws TransformerException {
+		ByteArrayOutputStream bos = new ByteArrayOutputStream();
+		StreamResult result = new StreamResult(bos);
+		transformer.transform(new DOMSource(element), result);
+		return bos.toByteArray();
 	}
 	
 	protected String extractIdentifier(String oaiIdentifier) {

@@ -63,6 +63,7 @@ CREATE TABLE harvested_record (
   scale                DECIMAL(10),
   weight               DECIMAL(10),
   cluster_id           VARCHAR(20),
+  pages                DECIMAL(10),
   raw_record           BLOB,
   CONSTRAINT harvested_record_pk                     PRIMARY KEY (id),
   CONSTRAINT harvester_record_unique_id              UNIQUE (oai_harvest_conf_id, record_id),
