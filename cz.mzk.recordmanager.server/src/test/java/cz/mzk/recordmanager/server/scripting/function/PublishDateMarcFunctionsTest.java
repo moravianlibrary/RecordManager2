@@ -70,7 +70,7 @@ public class PublishDateMarcFunctionsTest extends AbstractTest {
 	public void parseField008UncertainRange() {
 		String input = "130902c19uu9999au-ac---------000-0-ger--";
 		Set<Integer> result = functions.parsePublishDateFrom008(input);
-		Assert.assertEquals(result.size(), 121);
+		Assert.assertEquals(result.size(), 0);
 	}
 
 }

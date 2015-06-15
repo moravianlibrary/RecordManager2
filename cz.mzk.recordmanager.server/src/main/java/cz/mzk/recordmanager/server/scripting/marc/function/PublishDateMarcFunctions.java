@@ -1,6 +1,7 @@
 package cz.mzk.recordmanager.server.scripting.marc.function;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
@@ -9,6 +10,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.IntStream;
 
+import org.marc4j.marc.DataField;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -23,9 +25,7 @@ public class PublishDateMarcFunctions implements MarcRecordFunctions {
 	private static Logger logger = LoggerFactory
 			.getLogger(PublishDateMarcFunctions.class);
 
-	private static final int INVALID_YEAR = 0;
-
-	private static final int MAX_YEAR = 2020;
+	private static final int MAX_YEAR = Calendar.getInstance().get(Calendar.YEAR);;
 
 	// 2004
 	private static final Pattern SINGLE_YEAR_PATTERN = Pattern
@@ -43,6 +43,10 @@ public class PublishDateMarcFunctions implements MarcRecordFunctions {
 	private static final Pattern LIST_YEAR_PATTERN = Pattern
 			.compile("^([0-9]{4})(,[0-9]{4})+[,]{0,1}$");
 
+	// [1991] or asi 1991
+	private static final Pattern FOUR_DIGIT_YEAR_PATTERN = Pattern
+			.compile("\\d{4}");
+	
 	public Set<Integer> parseRanges(Collection<String> ranges) {
 		Set<Integer> result = new TreeSet<>();
 		for (String range : ranges) {
@@ -68,6 +72,10 @@ public class PublishDateMarcFunctions implements MarcRecordFunctions {
 				for (String year : years) {
 					result.add(Integer.parseInt(year));
 				}
+			} else if ((matcher = FOUR_DIGIT_YEAR_PATTERN.matcher(range)).find()){
+				int year = Integer.parseInt(matcher.group(0));
+				if(year == 9999) year = MAX_YEAR;
+				result.add(year);
 			} else {
 				logger.warn("Range '{}' not matched", range);
 			}
@@ -76,46 +84,74 @@ public class PublishDateMarcFunctions implements MarcRecordFunctions {
 	}
 
 	public Set<Integer> getPublishDate(MarcRecord record) {
-        Set<Integer> years = getPublishDateFromItems(record, "996", 'y');
-        if (!years.isEmpty()) {
-            return years;
-        }
+		Set<Integer> years = new TreeSet<Integer>();
+		
+		for(DataField datafield: record.getDataFields("264")){
+			if(datafield.getIndicator2() == '1'){
+				years.addAll(getPublishDateFromItem(datafield.getSubfield('c').getData()));
+			}
+		}
+		years.addAll(getPublishDateFromItems(record, "260", 'c'));
+		years.addAll(getPublishDateFromItems(record, "773", '9'));
+		years.addAll(getPublishDateFromItems(record, "996", 'y'));
+
         String field008 = record.getControlField("008");
-        return parsePublishDateFrom008(field008);
+        years.addAll(parsePublishDateFrom008(field008));
+	    
+        return years;
 	}
 
 	public Set<Integer> parsePublishDateFrom008(String field008) {
 		Set<Integer> result = Sets.newHashSet();
-		if (field008 == null || field008.length() < 16) {
+		if (field008 == null || field008.length() < 12) {
             return result;
         }
 		char type = field008.charAt(6);
-		int from = toYear(field008.substring(7, 11), '0');
-		int to = toYear(field008.substring(11, 15).trim(), '9');
-		if (type == 'e' || to == INVALID_YEAR) {
-			to = from;
-		}
-		if (to == INVALID_YEAR) {
+		if(type == 'b' || type == 'n'){
 			return result;
 		}
-		if (to > MAX_YEAR) {
-            to = MAX_YEAR;
-        }
-		for (int year = from; year <= to; year++) {
-			result.add(year);
+		String fromString = field008.substring(7, 11);
+		int from = 0;
+		if((SINGLE_YEAR_PATTERN.matcher(fromString)).matches()){
+			from = Integer.parseInt(fromString);
 		}
+		else return result;
+		if(type == 'e' || type == 'i' || type == 'k' || type == 's' || type == 'u'){
+			result.add(from);
+		}		
+		if(field008.length() < 16){
+			return result;
+		}
+		
+		String toString = field008.substring(11, 15).trim();
+		int to = 0;
+		if((SINGLE_YEAR_PATTERN.matcher(toString)).matches()){
+			to = Integer.parseInt(toString);
+		}
+		else return result;
+		
+		if(type == 'd' || type == 'm' || type == 'q' || type == 'c'){
+			if (to > MAX_YEAR) {
+	            to = MAX_YEAR;
+	        }
+			for (int year = from; year <= to; year++) {
+				result.add(year);
+			}
+		}
+		if(type == 'p' || type == 'r' || type == 't'){		
+			result.add(from);
+			result.add(to);
+		}
+		
 		return result;
 	}
 
-	private int toYear(String year, char replaceWith) {
-		try {
-			String fixed = year.replace('u', replaceWith).replace('?', replaceWith).replace(' ', replaceWith);
-			return Integer.parseInt(fixed);
-		} catch (NumberFormatException nfe) {
-			return INVALID_YEAR;
-		}
+	private Set<Integer> getPublishDateFromItem(String data) {
+		List<String> ranges = new ArrayList<String>();
+		ranges.add(data);
+		return parseRanges(ranges);
 	}
-
+	
 	private Set<Integer> getPublishDateFromItems(MarcRecord record, String tag, char subfield) {
 		List<String> ranges = record.getFields(tag, "", subfield) ;
 		return parseRanges(ranges);
