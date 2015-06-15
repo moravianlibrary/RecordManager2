@@ -607,9 +607,9 @@ public class MetadataMarcRecord implements MetadataRecord {
 		// AUDIO_CD
 		if(f300.matches("(?i).*kompaktn[ií]\\sdisk.*")) return HarvestedRecordFormatEnum.AUDIO_CD;
 		if(f500.matches("(?i).*kompaktn[ií]\\sdisk.*")) return HarvestedRecordFormatEnum.AUDIO_CD;
-		if(f300.matches("(?i).*zvukov[eéaá]\\sCD.*")) return HarvestedRecordFormatEnum.AUDIO_CD;
-		if(f300a.matches("(?i).*cd.*")) {
-			if(!f300a.matches("(?i)cd-rom")) return HarvestedRecordFormatEnum.AUDIO_CD;
+		if(f300.matches("((?i).*zvukov[eéaá])\\sCD.*")) return HarvestedRecordFormatEnum.AUDIO_CD;
+		if(f300a.matches(".*CD.*")) {
+			if(!f300a.matches(".*CD-ROM.*")) return HarvestedRecordFormatEnum.AUDIO_CD;
 		}
 		if(f300.matches("(?i).*zvukov([aáeé]|ych|ých)\\sdes(ka|ky|ek).*") && f300.matches("(?i).*(digital|12\\scm).*")) return HarvestedRecordFormatEnum.AUDIO_CD;
 
@@ -619,8 +619,8 @@ public class MetadataMarcRecord implements MetadataRecord {
 		// AUDIO_LP
 		if(f300.matches("(?i).*gramofonov([aáeé]|ych|ých)\\sdes(ka|ky|ek).*")) return HarvestedRecordFormatEnum.AUDIO_LP;
 		if(f300.matches("(?i).*zvukov([aáeé]|ych|ých)\\sdes(ka|ky|ek).*") && f300.matches("(?i).*analog.*")) return HarvestedRecordFormatEnum.AUDIO_LP;
-		if(f300a.matches("(?i).*lp.*")) return HarvestedRecordFormatEnum.AUDIO_LP;
-		if(f300a.matches("(?i).*sp.*")) return HarvestedRecordFormatEnum.AUDIO_LP;
+		if(f300a.matches(".*LP.*")) return HarvestedRecordFormatEnum.AUDIO_LP;
+		if(f300a.matches(".*SP.*")) return HarvestedRecordFormatEnum.AUDIO_LP;
 		
 		// AUDIO_CASSETTE
 		if(ldr06.matches("(?i)[ij]") && f007_00.matches("(?i)s")) return HarvestedRecordFormatEnum.AUDIO_CASSETTE;
