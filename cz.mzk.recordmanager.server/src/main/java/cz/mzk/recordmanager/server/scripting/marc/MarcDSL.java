@@ -25,7 +25,7 @@ import cz.mzk.recordmanager.server.scripting.function.RecordFunction;
 
 public class MarcDSL {
 	
-	private MetadataRecord marcMetadataRecord;
+	private MetadataMarcRecord marcMetadataRecord;
 	
 	private final static String EMPTY_SEPARATOR = "";
 	
@@ -214,10 +214,6 @@ public class MarcDSL {
 	}
 
 	public String isIllustrated() {
-		return null; // FIXME
-	}
-	
-	public String getBoundingBox() {
 		return null; // FIXME
 	}
 
