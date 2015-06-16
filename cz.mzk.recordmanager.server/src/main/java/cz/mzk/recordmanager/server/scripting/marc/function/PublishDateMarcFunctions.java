@@ -77,7 +77,7 @@ public class PublishDateMarcFunctions implements MarcRecordFunctions {
 				if(year == 9999) year = MAX_YEAR;
 				result.add(year);
 			} else {
-				logger.warn("Range '{}' not matched", range);
+//				logger.warn("Range '{}' not matched", range);
 			}
 		}
 		return result;
@@ -88,7 +88,9 @@ public class PublishDateMarcFunctions implements MarcRecordFunctions {
 		
 		for(DataField datafield: record.getDataFields("264")){
 			if(datafield.getIndicator2() == '1'){
-				years.addAll(getPublishDateFromItem(datafield.getSubfield('c').getData()));
+				if(datafield.getSubfield('c') != null){
+					years.addAll(getPublishDateFromItem(datafield.getSubfield('c').getData()));
+				}
 			}
 		}
 		years.addAll(getPublishDateFromItems(record, "260", 'c'));
