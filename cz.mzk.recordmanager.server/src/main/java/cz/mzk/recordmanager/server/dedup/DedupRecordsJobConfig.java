@@ -33,6 +33,7 @@ import cz.mzk.recordmanager.server.jdbc.LongValueRowMapper;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordDAO;
 import cz.mzk.recordmanager.server.springbatch.SqlCommandTasklet;
+import cz.mzk.recordmanager.server.springbatch.StepProgressListener;
 import cz.mzk.recordmanager.server.util.Constants;
 
 @Configuration
@@ -171,14 +172,14 @@ public class DedupRecordsJobConfig {
 	public Step prepareTempClusterIdTableStep() {
 		return steps.get("prepareTempClusterIdStep")
 				.tasklet(prepareTempClusterIdTasklet())
-				.listener(new StepProgressListener("prepareTempClusterIdStep"))
+				.listener(new StepProgressListener())
 				.build();
 	}
 
 	@Bean(name = Constants.JOB_ID_DEDUP + ":dedupClusterIdsStep")
 	public Step dedupClusterIdsStep() throws Exception {
 		return steps.get("dedupClusterIdsStep")
-				.listener(new StepProgressListener("dedupClusterIdsStep"))
+				.listener(new StepProgressListener())
 				.<List<Long>, List<HarvestedRecord>> chunk(100)
 				.reader(dedupClusterIdReader())
 				.processor(dedupSimpleKeysStepProsessor())
@@ -205,14 +206,14 @@ public class DedupRecordsJobConfig {
 	@Bean(name = Constants.JOB_ID_DEDUP + ":prepareTempIsbnTableStep")
 	public Step prepareTempIsbnTableStep() {
 		return steps.get("prepareTempIsbnTableStep")
-				.listener(new StepProgressListener("prepareTempIsbnTableStep"))
+				.listener(new StepProgressListener())
 				.tasklet(prepareTempIsbnTableTasklet()).build();
 	}
 
 	@Bean(name = Constants.JOB_ID_DEDUP + ":dedupSimpleKeysIsbnStep")
 	public Step dedupSimpleKeysIsbnStep() throws Exception {
 		return steps.get("dedupSimpleKeysIsbnStep")
-				.listener(new StepProgressListener("dedupSimpleKeysIsbnStep"))
+				.listener(new StepProgressListener())
 				.<List<Long>, List<HarvestedRecord>> chunk(100)
 				.reader(dedupSimpleKeysIsbnReader())
 				.processor(dedupSimpleKeysStepProsessor())
@@ -239,14 +240,14 @@ public class DedupRecordsJobConfig {
 	public Step prepareTempCnbnTableStep() {
 		return steps.get("prepareTempCnbTableStep")
 				.tasklet(prepareTempCnbTableTasklet())
-				.listener(new StepProgressListener(":prepareTempCnbTableStep"))
+				.listener(new StepProgressListener())
 				.build();
 	}
 
 	@Bean(name = Constants.JOB_ID_DEDUP + ":dedupSimpleKeysCnbStep")
 	public Step dedupSimpleKeysCnbStep() throws Exception {
 		return steps.get("dedupSimpleKeysISBNStep")
-				.listener(new StepProgressListener("dedupSimpleKeysCnbStep"))
+				.listener(new StepProgressListener())
 				.<List<Long>, List<HarvestedRecord>> chunk(100)
 				.reader(dedupSimpleKeysCnbReader())
 				.processor(dedupSimpleKeysStepProsessor())
@@ -274,14 +275,14 @@ public class DedupRecordsJobConfig {
 	public Step prepareTmpTitleAuthStep() {
 		return steps.get("prepareTmpTitleAuthStep")
 				.tasklet(prepareTmpTitleAuthStepTasklet())
-				.listener(new StepProgressListener("prepareTmpTitleAuthStep"))
+				.listener(new StepProgressListener())
 				.build();
 	}
 
 	@Bean(name = Constants.JOB_ID_DEDUP + ":dedupTitleAuthStep")
 	public Step dedupTitleAuthStep() throws Exception {
 		return steps.get("dedupTitleAuthStep")
-				.listener(new StepProgressListener("dedupTitleAuthStep"))
+				.listener(new StepProgressListener())
 				.<List<Long>, List<HarvestedRecord>> chunk(100)
 				.reader(dedupTitleAuthReader())
 				.processor(dedupTitleAuthProcessor())
@@ -310,7 +311,7 @@ public class DedupRecordsJobConfig {
 		return steps
 				.get("prepareDedupRestOfRecordsStep")
 				.tasklet(dedupRestOfRecordsSqlTasklet())
-				.listener(new StepProgressListener("prepareDedupRestOfRecordsStep"))
+				.listener(new StepProgressListener())
 				.build();
 	}
 
@@ -329,7 +330,7 @@ public class DedupRecordsJobConfig {
 	@Bean(name = Constants.JOB_ID_DEDUP + ":dedupRestOfRecordsStep")
 	public Step dedupRestOfRecordsStep() throws Exception {
 		return steps.get("dedupRestOfRecordsStep")
-				.listener(new StepProgressListener("dedupRestOfRecordsStep"))
+				.listener(new StepProgressListener())
 				.<Long, Long> chunk(1).reader(dedupRestOfRecordsReader())
 				.writer(dedupRestOfRecordsWriter()).build();
 	}

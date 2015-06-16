@@ -1,4 +1,4 @@
-package cz.mzk.recordmanager.server.dedup;
+package cz.mzk.recordmanager.server.springbatch;
 
 import java.util.Calendar;
 
@@ -11,25 +11,22 @@ import org.springframework.batch.core.StepExecutionListener;
 public class StepProgressListener implements StepExecutionListener {
 
 	private static Logger logger = LoggerFactory.getLogger(StepProgressListener.class);
-	
-	private String stepName;
-	
+
 	long startTime = 0L;
-	
-	public StepProgressListener(String stepName) {
-		this.stepName = stepName;
+
+	public StepProgressListener() {
 	}
-	
+
 	@Override
 	public void beforeStep(StepExecution stepExecution) {
 		startTime = Calendar.getInstance().getTimeInMillis();
-		logger.info(String.format("Step %s started.", stepName));
+		logger.info(String.format("Step %s started.", stepExecution.getStepName()));
 	}
 
 	@Override
 	public ExitStatus afterStep(StepExecution stepExecution) {
 		long elapsedSecs = (Calendar.getInstance().getTimeInMillis() - startTime) / 1000;
-		logger.info(String.format("Step %s finished with status %s. Execution took %d seconds", stepName, stepExecution.getStatus(), elapsedSecs));
+		logger.info(String.format("Step %s finished with status %s. Execution took %d seconds", stepExecution.getStepName(), stepExecution.getStatus(), elapsedSecs));
 		return null;
 	}
 
