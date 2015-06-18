@@ -26,18 +26,17 @@ public class MetadataMarcRecord implements MetadataRecord {
 
 	private static Logger logger = LoggerFactory.getLogger(MetadataMarcRecord.class);
 	
-	private final static String MZK_NAME = "MZK";
-	
 	protected MarcRecord underlayingMarc;
 	
 	protected final ISBNValidator isbnValidator = ISBNValidator.getInstance(true);
 
 	protected static final Pattern PAGECOUNT_PATTERN = Pattern.compile("\\d+");
 	protected static final Pattern YEAR_PATTERN = Pattern.compile("\\d{4}");
-	protected static final Pattern ISBN_PATTERN = Pattern.compile("([\\dxX-]*)(.*)");
+	protected static final Pattern ISBN_PATTERN = Pattern.compile("([\\dxX\\s\\-]*)(.*)");
 	protected static final Pattern ISSN_PATTERN = Pattern.compile("(\\d{4}-\\d{3}[\\dxX])(.*)");
 	protected static final Pattern SCALE_PATTERN = Pattern.compile("\\d+[\\ \\^]*\\d+");
 	protected static final Pattern UUID_PATTERN = Pattern.compile("uuid:[\\w-]+");
+	protected static final String ISBN_CLEAR_REGEX = "[^0-9^X^x]";
 	
 	public MetadataMarcRecord(MarcRecord underlayingMarc) {
 		if (underlayingMarc == null) {
@@ -162,22 +161,25 @@ public class MetadataMarcRecord implements MetadataRecord {
 			Isbn isbn = new Isbn();
 
 			Matcher matcher = ISBN_PATTERN.matcher(subfieldA.getData());
-			try {
-				if (matcher.find()) {
-					String isbnStr = isbnValidator.validate(matcher.group(1));
-					
-					try {
-						if (isbnStr == null) {
-							throw new NumberFormatException();
-						}
-						Long isbn13 = Long.valueOf(isbnStr);
-						isbn.setIsbn(isbn13);
-					} catch (NumberFormatException nfe) {
-						logger.info(String.format("Invalid ISBN: %s", subfieldA.getData()));
-						continue;
-					}
+
+			if (matcher.find()) {
+				String g1 = matcher.group(1);
+				if (g1 == null) {
+					continue;
 				}
-			} catch (NumberFormatException e) {}
+				String isbnStr = isbnValidator.validate(g1.replaceAll(ISBN_CLEAR_REGEX,"").replaceAll("x", "X"));
+				try {
+					if (isbnStr == null) {
+						throw new NumberFormatException();
+					}
+					Long isbn13 = Long.valueOf(isbnStr);
+					isbn.setIsbn(isbn13);
+				} catch (NumberFormatException nfe) {
+					logger.info(String.format("Invalid ISBN: %s", subfieldA.getData()));
+					continue;
+				}
+			}
+
 			
 			StringBuilder builder = new StringBuilder();
 			if(matcher.group(2).trim() != null){ 
@@ -605,9 +607,9 @@ public class MetadataMarcRecord implements MetadataRecord {
 		// AUDIO_CD
 		if(f300.matches("(?i).*kompaktn[ií]\\sdisk.*")) return HarvestedRecordFormatEnum.AUDIO_CD;
 		if(f500.matches("(?i).*kompaktn[ií]\\sdisk.*")) return HarvestedRecordFormatEnum.AUDIO_CD;
-		if(f300.matches("(?i).*zvukov[eéaá]\\sCD.*")) return HarvestedRecordFormatEnum.AUDIO_CD;
-		if(f300a.matches("(?i).*cd.*")) {
-			if(!f300a.matches("(?i)cd-rom")) return HarvestedRecordFormatEnum.AUDIO_CD;
+		if(f300.matches("((?i).*zvukov[eéaá])\\sCD.*")) return HarvestedRecordFormatEnum.AUDIO_CD;
+		if(f300a.matches(".*CD.*")) {
+			if(!f300a.matches(".*CD-ROM.*")) return HarvestedRecordFormatEnum.AUDIO_CD;
 		}
 		if(f300.matches("(?i).*zvukov([aáeé]|ych|ých)\\sdes(ka|ky|ek).*") && f300.matches("(?i).*(digital|12\\scm).*")) return HarvestedRecordFormatEnum.AUDIO_CD;
 
@@ -617,8 +619,8 @@ public class MetadataMarcRecord implements MetadataRecord {
 		// AUDIO_LP
 		if(f300.matches("(?i).*gramofonov([aáeé]|ych|ých)\\sdes(ka|ky|ek).*")) return HarvestedRecordFormatEnum.AUDIO_LP;
 		if(f300.matches("(?i).*zvukov([aáeé]|ych|ých)\\sdes(ka|ky|ek).*") && f300.matches("(?i).*analog.*")) return HarvestedRecordFormatEnum.AUDIO_LP;
-		if(f300a.matches("(?i).*lp.*")) return HarvestedRecordFormatEnum.AUDIO_LP;
-		if(f300a.matches("(?i).*sp.*")) return HarvestedRecordFormatEnum.AUDIO_LP;
+		if(f300a.matches(".*LP.*")) return HarvestedRecordFormatEnum.AUDIO_LP;
+		if(f300a.matches(".*SP.*")) return HarvestedRecordFormatEnum.AUDIO_LP;
 		
 		// AUDIO_CASSETTE
 		if(ldr06.matches("(?i)[ij]") && f007_00.matches("(?i)s")) return HarvestedRecordFormatEnum.AUDIO_CASSETTE;
@@ -781,11 +783,11 @@ public class MetadataMarcRecord implements MetadataRecord {
 		if(audio != null) hrf.add(audio);
 		HarvestedRecordFormatEnum video = getVideoDocument();
 		if(video != null) hrf.add(video);
-		if(isKit()) hrf.add(HarvestedRecordFormatEnum.KIT);
-		if(isObject()) hrf.add(HarvestedRecordFormatEnum.OBJECT);
-		if(isMixDocument()) hrf.add(HarvestedRecordFormatEnum.MIX_DOCUMENT);
-		if(isUnspecified()) hrf.add(HarvestedRecordFormatEnum.UNSPECIFIED);		
-		if(hrf.isEmpty()) hrf.add(HarvestedRecordFormatEnum.UNSPECIFIED);
+		if(isKit()) hrf.add(HarvestedRecordFormatEnum.OTHER_KIT);
+		if(isObject()) hrf.add(HarvestedRecordFormatEnum.OTHER_OBJECT);
+		if(isMixDocument()) hrf.add(HarvestedRecordFormatEnum.OTHER_MIX_DOCUMENT);
+		if(isUnspecified()) hrf.add(HarvestedRecordFormatEnum.OTHER_UNSPECIFIED);		
+		if(hrf.isEmpty()) hrf.add(HarvestedRecordFormatEnum.OTHER_UNSPECIFIED);
 		
 		return hrf;
 	}
@@ -934,14 +936,8 @@ public class MetadataMarcRecord implements MetadataRecord {
 	}
 
 	@Override
-	public String getClusterId(String name) {
-		String f001 = underlayingMarc.getControlField("001");
-		switch(name){
-			case MZK_NAME:
-				if(!f001.matches("00.*")) return f001;
-				break;
-		}
-		
+	public String getClusterId() {
+		// implemented only in selected specialization
 		return null;
 	}
 

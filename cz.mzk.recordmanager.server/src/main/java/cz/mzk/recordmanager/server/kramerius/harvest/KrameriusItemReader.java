@@ -59,23 +59,19 @@ public class KrameriusItemReader implements ItemReader<List<HarvestedRecord>>,
 
 	private Date untilDate;
 	
-	//state
-	private String krameriusStart;
+
 	private Integer start;
 	
 	private boolean finished = false;
 	
-	public KrameriusItemReader(Long confId, Date fromDate, Date untilDate, String krameriusStart) {
+	public KrameriusItemReader(Long confId, Date fromDate, Date untilDate) {
 		super();
 		this.confId = confId;
 		this.fromDate = fromDate;
 		this.untilDate = untilDate;
-		this.krameriusStart = krameriusStart;
-		if (krameriusStart == null) {
-			start=0;
-		} else {
-			this.start = Integer.valueOf(krameriusStart);
-		}
+	
+		start=0;
+		
 		System.out.println("--------------------------------- confID = " + confId +"--------------------------");
 	}
 	
@@ -118,12 +114,11 @@ public class KrameriusItemReader implements ItemReader<List<HarvestedRecord>>,
 		System.out.println("porovnavame start: "+start + " a harvester.numFound():"+ kHarvester.getNumFound());
 		if (start<kHarvester.getNumFound()) {
 			start=start+20; // melo by se parametrizovat..
-			krameriusStart=start.toString();
 		} else {
 			finished = true; 
 		}
 		//return metadata
-		System.out.println("*********************************** reader konci s krameriusStart = " +krameriusStart+ " a finished je :"+finished+" ***************************");
+		System.out.println("*********************************** reader konci s start = " +start+ " a finished je :"+finished+" ***************************");
 		return records;
 	}
 	

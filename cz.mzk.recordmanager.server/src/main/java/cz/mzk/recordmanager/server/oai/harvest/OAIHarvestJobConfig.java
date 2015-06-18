@@ -9,12 +9,14 @@ import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepScope;
+import org.springframework.batch.item.ItemWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.oai.model.OAIRecord;
 import cz.mzk.recordmanager.server.springbatch.DateIntervalPartitioner;
 import cz.mzk.recordmanager.server.springbatch.JobFailureListener;
@@ -75,12 +77,13 @@ public class OAIHarvestJobConfig {
 				.build();
     }
     
-    @Bean(name="oaiHarvestJob:step")
+	@Bean(name="oaiHarvestJob:step")
     public Step step() {
         return steps.get("step1") //
-            .<List<OAIRecord>, List<OAIRecord>> chunk(1) //
+            .<List<OAIRecord>, List<HarvestedRecord>> chunk(1) //
             .reader(reader(LONG_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION, STRING_OVERRIDEN_BY_EXPRESSION)) //
-            .writer(writer()) //
+            .processor(oaiItemProcessor())
+            .writer(harvestedRecordWriter()) //
             .build();
     }
     
@@ -144,6 +147,18 @@ public class OAIHarvestJobConfig {
     @StepScope
     public OAIItemWriter writer() {
     	return new OAIItemWriter();
+    }
+    
+    @Bean(name="oaiHarvestJob:HarvestedRecordWriter")
+    @StepScope
+    public ItemWriter<List<HarvestedRecord>> harvestedRecordWriter() {
+    	return new HarvestedRecordWriter();
+    }
+    
+    @Bean(name="oaiHarvestJob:processor")
+    @StepScope
+    public OAIItemProcessor oaiItemProcessor() {
+    	return new OAIItemProcessor();
     }
     
     @Bean(name="oaiHarvestJob:authwriter")

@@ -51,7 +51,7 @@ public class KrameriusHarvestJobConfig {
     public Step step() {
         return steps.get("step") //
             .<List<HarvestedRecord>, List<HarvestedRecord>> chunk(1) //
-            .reader(reader(LONG_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION, STRING_OVERRIDEN_BY_EXPRESSION)) //
+            .reader(reader(LONG_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION)) //
             .writer(writer()) //
             .build();
     }
@@ -62,10 +62,8 @@ public class KrameriusHarvestJobConfig {
     		@Value("#{stepExecutionContext[" + Constants.JOB_PARAM_FROM_DATE + "] "
     				+ "?:jobParameters[ " + Constants.JOB_PARAM_FROM_DATE +"]}") Date from,
     		@Value("#{stepExecutionContext[" + Constants.JOB_PARAM_UNTIL_DATE+"]"
-    				+ "?:jobParameters[" + Constants.JOB_PARAM_UNTIL_DATE +"]}") Date to,
-    		@Value("#{stepExecutionContext[" + Constants.JOB_PARAM_KRAMERIUS_START+"]"
-    	    		+ "?:jobParameters[" + Constants.JOB_PARAM_KRAMERIUS_START +"]}") String krameriusStart) {
-    	return new KrameriusItemReader(configId, from, to, krameriusStart);
+    				+ "?:jobParameters[" + Constants.JOB_PARAM_UNTIL_DATE +"]}") Date to) {
+    	return new KrameriusItemReader(configId, from, to);
     }
     
     @Bean(name="krameriusHarvestJob:writer")
