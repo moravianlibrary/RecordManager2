@@ -37,7 +37,7 @@ public class Constants {
 
 public static final String JOB_PARAM_RECORD_ID		= "recordId";
 	/* need some changing paramteter :-/ - 
-	 * A job instance already exists and is complete for p arameters={}. 
+	 * A job instance already exists and is complete for parameters={}. 
 	 * If you want to run this job again, change the parameters. */
 	public static final String JOB_PARAM_HACK			= "h";
 }	
