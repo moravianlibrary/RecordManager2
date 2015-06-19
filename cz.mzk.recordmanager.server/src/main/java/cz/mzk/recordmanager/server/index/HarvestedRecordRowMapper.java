@@ -9,23 +9,23 @@ import org.springframework.stereotype.Component;
 
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecord.HarvestedRecordUniqueId;
-import cz.mzk.recordmanager.server.model.OAIHarvestConfiguration;
-import cz.mzk.recordmanager.server.oai.dao.OAIHarvestConfigurationDAO;
+import cz.mzk.recordmanager.server.model.ImportConfiguration;
+import cz.mzk.recordmanager.server.oai.dao.ImportConfigurationDAO;
 
 @Component
 public class HarvestedRecordRowMapper implements
 		RowMapper<HarvestedRecord> {
 	
 	@Autowired
-	private OAIHarvestConfigurationDAO oaiHarvestConfDao;
+	private ImportConfigurationDAO importConfDao;
 
 	@Override
 	public HarvestedRecord mapRow(ResultSet rs, int rowNum)
 			throws SQLException {
-		OAIHarvestConfiguration harvestedFrom = oaiHarvestConfDao.load(rs.getLong("oai_harvest_conf_id"));
-		HarvestedRecordUniqueId id = new HarvestedRecordUniqueId(harvestedFrom, rs.getString("record_id"));
+		ImportConfiguration importConfig = importConfDao.load(rs.getLong("import_conf_id"));
+		HarvestedRecordUniqueId id = new HarvestedRecordUniqueId(importConfig, rs.getString("record_id"));
 		HarvestedRecord record = new HarvestedRecord(id);
-		record.setHarvestedFrom(harvestedFrom);
+		record.setHarvestedFrom(importConfig);
 		record.setUpdated(rs.getDate("updated"));
 		record.setRawRecord(rs.getBytes("raw_record"));
 		record.setFormat(rs.getString("format"));

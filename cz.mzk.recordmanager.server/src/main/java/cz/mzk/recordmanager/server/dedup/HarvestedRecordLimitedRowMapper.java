@@ -20,7 +20,7 @@ public class HarvestedRecordLimitedRowMapper implements RowMapper<HarvestedRecor
 	@Override
 	public HarvestedRecord mapRow(ResultSet rs, int rowNum) throws SQLException {
 		HarvestedRecordUniqueId id = new HarvestedRecordUniqueId(oaiHarvestConfigurationDao.load(
-				rs.getLong("OAI_HARVEST_CONF_ID")), 
+				rs.getLong("IMPORT_CONF_ID")), 
 				rs.getString("RECORD_ID"));
 		HarvestedRecord harvestedRecord = new HarvestedRecord(id);
 		harvestedRecord.setPublicationYear(rs.getLong("PUBLICATION_YEAR"));

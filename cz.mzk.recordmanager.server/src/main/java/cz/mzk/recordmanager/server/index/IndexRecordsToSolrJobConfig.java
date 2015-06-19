@@ -215,14 +215,14 @@ public class IndexRecordsToSolrJobConfig {
 		JdbcPagingItemReader<String> reader = new JdbcPagingItemReader<String>();
 		SqlPagingQueryProviderFactoryBean pqpf = new SqlPagingQueryProviderFactoryBean();
 		pqpf.setDataSource(dataSource);
-		pqpf.setSelectClause("SELECT oai_harvest_conf_id, record_id, hc.id_prefix || '.' || hr.record_id solr_id");
-		pqpf.setFromClause("FROM harvested_record hr JOIN oai_harvest_conf hc ON hr.oai_harvest_conf_id = hc.id");
+		pqpf.setSelectClause("SELECT import_conf_id, record_id, hc.id_prefix || '.' || hr.record_id solr_id");
+		pqpf.setFromClause("FROM harvested_record hr JOIN import_conf ic ON hr.import_conf_id = ic.id");
 		if (from != null && to != null) {
 			pqpf.setWhereClause("WHERE hr.deleted BETWEEN :from AND :to");
 		} else {
 			pqpf.setWhereClause("WHERE hr.deleted IS NOT NULL");
 		}
-		pqpf.setSortKeys(ImmutableMap.of("oai_harvest_conf_id",
+		pqpf.setSortKeys(ImmutableMap.of("import_conf_id",
 				Order.ASCENDING, "record_id", Order.ASCENDING));
 		reader.setRowMapper(new StringValueRowMapper());
 		reader.setPageSize(20);
@@ -265,7 +265,7 @@ public class IndexRecordsToSolrJobConfig {
 		if (from != null && to != null) {
 			pqpf.setWhereClause("WHERE updated BETWEEN :from AND :to");
 		}
-		pqpf.setSortKeys(ImmutableMap.of("oai_harvest_conf_id",
+		pqpf.setSortKeys(ImmutableMap.of("import_conf_id",
 				Order.ASCENDING, "record_id", Order.ASCENDING));
 		reader.setRowMapper(harvestedRecordRowMapper);
 		reader.setPageSize(PAGE_SIZE);

@@ -14,7 +14,7 @@ import cz.mzk.recordmanager.server.metadata.institutions.MzkMetadataMarcRecord;
 import cz.mzk.recordmanager.server.metadata.institutions.NkpMarcMetadataRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecord.HarvestedRecordUniqueId;
-import cz.mzk.recordmanager.server.model.OAIHarvestConfiguration;
+import cz.mzk.recordmanager.server.model.ImportConfiguration;
 import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordDAO;
 import cz.mzk.recordmanager.server.util.Constants;
 
@@ -35,7 +35,7 @@ public class MetadataRecordFactory {
 			return null;
 		}
 
-		OAIHarvestConfiguration configuration = record.getHarvestedFrom();
+		ImportConfiguration configuration = record.getHarvestedFrom();
 		InputStream is = new ByteArrayInputStream(record.getRawRecord());
 		
 		String prefix = "";

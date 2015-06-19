@@ -18,7 +18,7 @@ import org.springframework.stereotype.Component;
 
 import cz.mzk.recordmanager.server.model.DedupRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
-import cz.mzk.recordmanager.server.model.OAIHarvestConfiguration;
+import cz.mzk.recordmanager.server.model.ImportConfiguration;
 
 @Component
 public class SolrInputDocumentFactoryImpl implements SolrInputDocumentFactory, InitializingBean {
@@ -113,7 +113,7 @@ public class SolrInputDocumentFactoryImpl implements SolrInputDocumentFactory, I
 	}
 
 	protected String getInstitutionOfRecord(HarvestedRecord hr) {
-		OAIHarvestConfiguration config = hr.getHarvestedFrom();
+		ImportConfiguration config = hr.getHarvestedFrom();
 		if (config != null
 				&& config.getLibrary() != null
 				&& config.getLibrary().getName() != null) {
@@ -123,7 +123,7 @@ public class SolrInputDocumentFactoryImpl implements SolrInputDocumentFactory, I
 	}
 	
 	protected String getCityOfRecord(HarvestedRecord hr) {
-		OAIHarvestConfiguration config = hr.getHarvestedFrom();
+		ImportConfiguration config = hr.getHarvestedFrom();
 		if (config != null
 				&& config.getLibrary() != null
 				&& config.getLibrary().getCity() != null) {
