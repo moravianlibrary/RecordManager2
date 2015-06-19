@@ -464,7 +464,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 		if(f006_00.matches("(?i)[acdpt]") && f006_06.matches("(?i)d")){
 			return true;
 		}
-		if(f006_00.matches("(?i)[efk]") && f006_12.matches("(?i)[d)")){
+		if(f006_00.matches("(?i)[efk]") && f006_12.matches("(?i)d")){
 			return true;
 		}
 		if(f007_00.matches("(?i)d") && f007_01.matches("(?i)b")){
