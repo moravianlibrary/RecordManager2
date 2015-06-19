@@ -60,6 +60,12 @@ public class PublishDateMarcFunctionsTest extends AbstractTest {
 	}
 
 	@Test
+	public void parseFourDigitYear(){
+		Set<Integer> result = functions.parseRanges(Collections.singletonList("asi [1945]"));
+		Assert.assertEquals(result, Sets.newHashSet(1945));
+	}
+	
+	@Test
 	public void parseField008SingleYear() {
 		String input = "140526s2014----xr-----e-l----001-0-cze--";
 		Set<Integer> result = functions.parsePublishDateFrom008(input);

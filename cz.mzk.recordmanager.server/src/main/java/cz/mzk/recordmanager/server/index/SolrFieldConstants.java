@@ -13,6 +13,8 @@ public class SolrFieldConstants {
 	public static final String MERGED_CHILD_FIELD = "merged_child_boolean";
 
 	public static final String WEIGHT = "weight_str";
+	
+	public static final String CITY_INSTITUTION_CS = "city_institution_cs_search_txt_mv";
 
 	public static final String UNKNOWN_INSTITUTION = "unknown";
 
