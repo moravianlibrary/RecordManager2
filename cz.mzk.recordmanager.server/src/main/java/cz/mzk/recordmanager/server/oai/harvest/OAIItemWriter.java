@@ -84,8 +84,11 @@ public class OAIItemWriter implements ItemWriter<List<OAIRecord>>,
 		if (rec == null) {
 			HarvestedRecordUniqueId id = new HarvestedRecordUniqueId(configuration, recordId);
 			rec = new HarvestedRecord(id);
+			rec.setUpdated(rec.getHarvested());
 			rec.setHarvestedFrom(configuration);
 			rec.setFormat(format);
+		} else {
+			rec.setUpdated(new Date());
 		}
 		if (record.getHeader().isDeleted()) {
 			rec.setDeleted(new Date());
