@@ -23,60 +23,67 @@ import cz.mzk.recordmanager.server.util.Constants;
 @Configuration
 public class KrameriusHarvestJobConfig {
 
-	
 	private static final Date DATE_OVERRIDEN_BY_EXPRESSION = null;
-	
-	private static final Long LONG_OVERRIDEN_BY_EXPRESSION = null; 
-	
-	
-	@Autowired
-    private JobBuilderFactory jobs;
 
-    @Autowired
-    private StepBuilderFactory steps;
-    
-    @Bean
-    public Job krameriusHarvestJob(@Qualifier("krameriusHarvestJob:step") Step step) {
-        return jobs.get("krameriusHarvestJob") //
-        		.validator(new KrameriusHarvestJobParametersValidator()) //
-        		.listener(JobFailureListener.INSTANCE) //
+	private static final Long LONG_OVERRIDEN_BY_EXPRESSION = null;
+
+	@Autowired
+	private JobBuilderFactory jobs;
+
+	@Autowired
+	private StepBuilderFactory steps;
+
+	@Bean
+	public Job krameriusHarvestJob(
+			@Qualifier("krameriusHarvestJob:step") Step step) {
+		return jobs.get("krameriusHarvestJob") //
+				.validator(new KrameriusHarvestJobParametersValidator()) //
+				.listener(JobFailureListener.INSTANCE) //
 				.flow(step) //
 				.end() //
 				.build();
-    }
-    
-    @Bean(name="krameriusHarvestJob:step")
-    public Step step() {
-        return steps.get("step") //
-            .<List<HarvestedRecord>, List<HarvestedRecord>> chunk(1) //
-            .reader(reader(LONG_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION)) //
-            .processor(krameriusItemProcessor())
-            .writer(harvestedRecordWriter()) //
-            .build();
-    }
-    
-    @Bean(name="krameriusHarvestJob:reader")
-    @StepScope
-    public KrameriusItemReader reader(@Value("#{jobParameters[" + Constants.JOB_PARAM_CONF_ID + "]}") Long configId, 
-    		@Value("#{stepExecutionContext[" + Constants.JOB_PARAM_FROM_DATE + "] "
-    				+ "?:jobParameters[ " + Constants.JOB_PARAM_FROM_DATE +"]}") Date from,
-    		@Value("#{stepExecutionContext[" + Constants.JOB_PARAM_UNTIL_DATE+"]"
-    				+ "?:jobParameters[" + Constants.JOB_PARAM_UNTIL_DATE +"]}") Date to) {
-    	return new KrameriusItemReader(configId, from, to);
-    }
-    
-    // HarvestedRecordWriter from cz.mzk.recordmanager.server.oai is used
-    @Bean(name="krameriusHarvestJob:writer")
-    @StepScope
-    public ItemWriter<List<HarvestedRecord>> harvestedRecordWriter() {
-    	return new HarvestedRecordWriter();
-    }
-    
-    @Bean(name="krameriusHarvestJob:processor")
-    @StepScope
-    public KrameriusItemProcessor krameriusItemProcessor() {
-    	return new KrameriusItemProcessor();
-    }
+	}
 
-	
+	@Bean(name = "krameriusHarvestJob:step")
+	public Step step() {
+		return steps
+				.get("step")
+				//
+				.<List<HarvestedRecord>, List<HarvestedRecord>> chunk(1)
+				//
+				.reader(reader(LONG_OVERRIDEN_BY_EXPRESSION,
+						DATE_OVERRIDEN_BY_EXPRESSION,
+						DATE_OVERRIDEN_BY_EXPRESSION))
+				//
+				.processor(krameriusItemProcessor())
+				.writer(harvestedRecordWriter()) //
+				.build();
+	}
+
+	@Bean(name = "krameriusHarvestJob:reader")
+	@StepScope
+	public KrameriusItemReader reader(@Value("#{jobParameters["
+			+ Constants.JOB_PARAM_CONF_ID + "]}") Long configId,
+			@Value("#{stepExecutionContext[" + Constants.JOB_PARAM_FROM_DATE
+					+ "] " + "?:jobParameters[ "
+					+ Constants.JOB_PARAM_FROM_DATE + "]}") Date from,
+			@Value("#{stepExecutionContext[" + Constants.JOB_PARAM_UNTIL_DATE
+					+ "]" + "?:jobParameters[" + Constants.JOB_PARAM_UNTIL_DATE
+					+ "]}") Date to) {
+		return new KrameriusItemReader(configId, from, to);
+	}
+
+	// HarvestedRecordWriter from cz.mzk.recordmanager.server.oai is used
+	@Bean(name = "krameriusHarvestJob:writer")
+	@StepScope
+	public ItemWriter<List<HarvestedRecord>> harvestedRecordWriter() {
+		return new HarvestedRecordWriter();
+	}
+
+	@Bean(name = "krameriusHarvestJob:processor")
+	@StepScope
+	public KrameriusItemProcessor krameriusItemProcessor() {
+		return new KrameriusItemProcessor();
+	}
+
 }

@@ -14,7 +14,7 @@ import cz.mzk.recordmanager.server.springbatch.JobParameterDeclaration;
 import cz.mzk.recordmanager.server.util.Constants;
 
 public class KrameriusHarvestJobParametersValidator extends
-DefaultJobParametersValidator { 
+		DefaultJobParametersValidator {
 
 	@Override
 	public void validate(JobParameters parameters)
@@ -24,11 +24,13 @@ DefaultJobParametersValidator {
 
 	@Override
 	public Collection<JobParameterDeclaration> getParameters() {
-		return Arrays.asList(
-				param(Constants.JOB_PARAM_CONF_ID, ParameterType.LONG, true), //
-				param(Constants.JOB_PARAM_FROM_DATE, ParameterType.DATE, false), //
-				param(Constants.JOB_PARAM_UNTIL_DATE, ParameterType.DATE, false)
-				);
+		return Arrays
+				.asList(param(Constants.JOB_PARAM_CONF_ID, ParameterType.LONG,
+						true), //
+						param(Constants.JOB_PARAM_FROM_DATE,
+								ParameterType.DATE, false), //
+						param(Constants.JOB_PARAM_UNTIL_DATE,
+								ParameterType.DATE, false));
 	}
-	
+
 }

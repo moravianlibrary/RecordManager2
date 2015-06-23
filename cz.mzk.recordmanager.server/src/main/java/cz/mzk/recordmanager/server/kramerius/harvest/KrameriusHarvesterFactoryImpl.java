@@ -9,10 +9,10 @@ public class KrameriusHarvesterFactoryImpl implements KrameriusHarvesterFactory 
 
 	@Autowired
 	private HttpClient httpClient;
-	
+
 	@Override
-	public KrameriusHarvester create(OAIHarvesterParams parameters, Long confId) {
-		// TODO Auto-generated method stub
+	public KrameriusHarvester create(KrameriusHarvesterParams parameters,
+			Long confId) {
 		return new KrameriusHarvester(httpClient, parameters, confId);
 	}
 

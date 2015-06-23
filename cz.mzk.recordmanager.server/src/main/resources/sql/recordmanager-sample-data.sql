@@ -25,6 +25,11 @@ INSERT INTO import_conf (id,library_id,contact_person_id,id_prefix,base_weight,c
 INSERT INTO import_conf (id,library_id,contact_person_id,id_prefix,base_weight,cluster_id_enabled) VALUES (306,106,200,'TRE',11,false);
 INSERT INTO import_conf (id,library_id,contact_person_id,id_prefix,base_weight,cluster_id_enabled) VALUES (308,108,200,'KVKL',14,false);
 INSERT INTO import_conf (id,library_id,contact_person_id,id_prefix,base_weight,cluster_id_enabled) VALUES (400,104,200,null,null,false);
+INSERT INTO import_conf (id,library_id,contact_person_id,id_prefix,base_weight,cluster_id_enabled) VALUES (99001,100,200,'kram-mzk',null,false);
+INSERT INTO import_conf (id,library_id,contact_person_id,id_prefix,base_weight,cluster_id_enabled) VALUES (99002,107,200,'kram-ntk',null,false);
+INSERT INTO import_conf (id,library_id,contact_person_id,id_prefix,base_weight,cluster_id_enabled) VALUES (99003,100,200,'kram-knav',null,false);
+INSERT INTO import_conf (id,library_id,contact_person_id,id_prefix,base_weight,cluster_id_enabled) VALUES (99004,104,200,'kram-nkp',null,false);
+
 
 INSERT INTO oai_harvest_conf (id,import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (500,300,'http://aleph.mzk.cz/OAI',null,'marc21','SECOND');
 INSERT INTO oai_harvest_conf (id,import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (501,301,'http://oai.medvik.cz/medvik2cpk/oai',null,'xml-marc','DAY');
@@ -36,6 +41,11 @@ INSERT INTO oai_harvest_conf (id,import_conf_id,url,set_spec,metadata_prefix,gra
 INSERT INTO oai_harvest_conf (id,import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (506,306,NULL,NULL,'marc21',NULL);
 INSERT INTO oai_harvest_conf (id,import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (508,308,NULL,NULL,'marc21',NULL);
 INSERT INTO oai_harvest_conf (id,import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (600,300,'http://aleph.nkp.cz/OAI','AUT','marc21',null);
+
+INSERT INTO kramerius_conf (id,import_conf_id,url,model,query_rows,metadata_stream) VALUES (1,99001,'http://kramerius.mzk.cz/search/api/v5.0','monograph',20,'DC');
+INSERT INTO kramerius_conf (id,import_conf_id,url,model,query_rows,metadata_stream) VALUES (2,99002,'http://k4.techlib.cz/search/api/v5.0','monograph',20,'DC');
+INSERT INTO kramerius_conf (id,import_conf_id,url,model,query_rows,metadata_stream) VALUES (3,99003,'http://kramerius.lib.cas.cz/search/api/v5.0','monograph',20,'DC');
+INSERT INTO kramerius_conf (id,import_conf_id,url,model,query_rows,metadata_stream) VALUES (4,99004,'http://kramerius4.nkp.cz/search/api/v5.0','monograph',20,'DC');
 
 INSERT INTO harvested_record_format(id, name) VALUES (1, 'BOOKS'); 
 INSERT INTO harvested_record_format(id, name) VALUES (2, 'PERIODICALS');

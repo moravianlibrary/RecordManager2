@@ -1,9 +1,10 @@
 package cz.mzk.recordmanager.server.kramerius.harvest;
 
-import cz.mzk.recordmanager.server.oai.harvest.OAIHarvesterParams;
+import cz.mzk.recordmanager.server.kramerius.harvest.KrameriusHarvesterParams;
 
 public interface KrameriusHarvesterFactory {
-	
-	public KrameriusHarvester create(OAIHarvesterParams parameters,  Long confId) ;
+
+	public KrameriusHarvester create(KrameriusHarvesterParams parameters,
+			Long confId);
 
 }
