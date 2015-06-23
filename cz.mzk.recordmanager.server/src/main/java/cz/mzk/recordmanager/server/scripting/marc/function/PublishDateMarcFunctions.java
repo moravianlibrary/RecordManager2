@@ -25,7 +25,7 @@ public class PublishDateMarcFunctions implements MarcRecordFunctions {
 	private static Logger logger = LoggerFactory
 			.getLogger(PublishDateMarcFunctions.class);
 
-	private static final int MAX_YEAR = Calendar.getInstance().get(Calendar.YEAR);;
+	private static final int MAX_YEAR = Calendar.getInstance().get(Calendar.YEAR);
 
 	// 2004
 	private static final Pattern SINGLE_YEAR_PATTERN = Pattern

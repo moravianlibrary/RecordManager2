@@ -19,6 +19,8 @@ import org.springframework.stereotype.Component;
 import cz.mzk.recordmanager.server.model.DedupRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.model.OAIHarvestConfiguration;
+import cz.mzk.recordmanager.server.scripting.MappingResolver;
+import cz.mzk.recordmanager.server.scripting.marc.MarcDSL;
 
 @Component
 public class SolrInputDocumentFactoryImpl implements SolrInputDocumentFactory, InitializingBean {
@@ -49,6 +51,9 @@ public class SolrInputDocumentFactoryImpl implements SolrInputDocumentFactory, I
 		
 	@Autowired
 	private DelegatingSolrRecordMapper mapper;
+	
+	@Autowired
+	private MappingResolver propertyResolver;
 
 	@Override
 	public SolrInputDocument create(HarvestedRecord record) {
@@ -78,6 +83,7 @@ public class SolrInputDocumentFactoryImpl implements SolrInputDocumentFactory, I
 		document.addField(SolrFieldConstants.INSTITUTION_FIELD, getInstitution(record));
 		document.addField(SolrFieldConstants.MERGED_FIELD, 1);
 		document.addField(SolrFieldConstants.WEIGHT, records.get(0).getWeight());
+		document.addField(SolrFieldConstants.CITY_INSTITUTION_CS, getCityInstitutionForSearching(record));
 		List<String> localIds = new ArrayList<String>();
 		for (HarvestedRecord rec : records) {
 			localIds.add(getId(rec));
@@ -139,6 +145,17 @@ public class SolrInputDocumentFactoryImpl implements SolrInputDocumentFactory, I
 		result.add("0/"+city+"/");
 		result.add("1/"+city+"/"+name+"/");
 
+		return result;
+	}
+	
+	protected List<String> getCityInstitutionForSearching(HarvestedRecord hr){
+		List<String> result = new ArrayList<String>();
+		result.add(getCityOfRecord(hr));
+		MarcDSL marcdsl = new MarcDSL(propertyResolver);
+		try{
+			result.add(marcdsl.translate("mzk_institution.map", getInstitutionOfRecord(hr), null));
+		}catch(Exception ex){}
+		
 		return result;
 	}
 

@@ -30,10 +30,10 @@ public class BoundingBoxMarcFunctions implements MarcRecordFunctions {
 			return null;
 		}
 		DataField field = fields.get(0);
-		String origWest = field.getSubfield('d').getData();
-		String origEast = field.getSubfield('e').getData();
-		String origNorth = field.getSubfield('f').getData();
-		String origSouth = field.getSubfield('g').getData();
+		String origWest = (field.getSubfield('d') == null) ? null : field.getSubfield('d').getData();
+		String origEast = (field.getSubfield('e') == null) ? null : field.getSubfield('e').getData();
+		String origNorth = (field.getSubfield('f') == null) ? null : field.getSubfield('f').getData();
+		String origSouth = (field.getSubfield('g') == null) ? null : field.getSubfield('g').getData();
 		double west = coordinateToDecimal(origWest);
 		double east = coordinateToDecimal(origEast);
 		double north = coordinateToDecimal(origNorth);

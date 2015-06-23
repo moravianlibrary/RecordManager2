@@ -17,7 +17,6 @@ import org.marc4j.marc.Subfield;
 import cz.mzk.recordmanager.server.export.IOFormat;
 import cz.mzk.recordmanager.server.marc.MarcRecord;
 import cz.mzk.recordmanager.server.metadata.MetadataMarcRecord;
-import cz.mzk.recordmanager.server.metadata.MetadataRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecordFormat.HarvestedRecordFormatEnum;
 import cz.mzk.recordmanager.server.scripting.Mapping;
 import cz.mzk.recordmanager.server.scripting.MappingResolver;
@@ -46,6 +45,13 @@ public class MarcDSL {
 		this.propertyResolver = propertyResolver;
 		this.functions = functions;
 		this.marcMetadataRecord = new MetadataMarcRecord(record);
+	}
+	
+	public MarcDSL(MappingResolver propertyResolver){
+		super();
+		this.record = null;
+		this.propertyResolver = propertyResolver;
+		this.functions = null;
 	}
 
 	public String getFirstField(String tag) {
@@ -256,9 +262,7 @@ public class MarcDSL {
     
     public Set<String> getFieldsUnique(String tags){
     	Set<String> result = new HashSet<String>();
-    	for(String data: getFields(tags)){
-    		result.add(data);
-    	}
+    	result.addAll(getFields(tags));
     	return result;
     }
  
