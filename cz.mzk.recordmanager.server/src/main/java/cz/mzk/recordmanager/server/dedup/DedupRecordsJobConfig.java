@@ -48,10 +48,11 @@ public class DedupRecordsJobConfig {
 	private static final String TMP_TABLE_AUTH_TITLE = "tmp_auth_keys";
 
 	private static final String TMP_TABLE_REST_OF_IDS_INTERVALS = "tmp_rest_of_ids_intervals";
+	
+	private static final String TMP_TABLE_CNB_CLUSTERS = "tmp_cnb_clusters";
 
 	private static final int REST_OF_RECORDS_COMMIT_INTERVAL = 10000;
 
-	private static final int UNBOUNDED = Integer.MAX_VALUE;
 
 	@Autowired
 	private JobBuilderFactory jobs;
@@ -100,6 +101,12 @@ public class DedupRecordsJobConfig {
 					.getClassLoader().getResourceAsStream(
 							"job/dedupRecordsJob/prepareTempAuthKeyTable.sql"),
 					"UTF-8"));
+	
+	private String prepareTempCnbClustersSql = CharStreams
+			.toString(new InputStreamReader(getClass() //
+					.getClassLoader().getResourceAsStream(
+							"job/dedupRecordsJob/prepareTempCnbClustersTable.sql"),
+					"UTF-8"));
 
 	private static final String PREPARE_REST_OF_RECORDS_TABLE_PROCEDURE = "prepare_rest_of_ids_table";
 
@@ -123,6 +130,8 @@ public class DedupRecordsJobConfig {
 			@Qualifier(Constants.JOB_ID_DEDUP + ":dedupSimpleKeysCnbStep") Step dedupSimpleKeysCnbStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":prepareTmpTitleAuthStep") Step prepareTmpTitleAuthStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":dedupTitleAuthStep") Step dedupTitleAuthStep,
+			@Qualifier(Constants.JOB_ID_DEDUP + ":prepareTempCnbClustersTableStep") Step prepareTempCnbClustersTableStep,
+			@Qualifier(Constants.JOB_ID_DEDUP + ":dedupCnbClustersStep") Step dedupCnbClustersStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":prepareDedupRestOfRecordsStep") Step prepareDedupRestOfRecordsStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":dedupRestOfRecordsStep") Step dedupRestOfRecordsStep) {
 		return jobs.get(Constants.JOB_ID_DEDUP)
@@ -135,6 +144,8 @@ public class DedupRecordsJobConfig {
 				.next(dedupSimpleKeysCnbStep)
 				.next(prepareTmpTitleAuthStep)
 				.next(dedupTitleAuthStep)
+				.next(prepareTempCnbClustersTableStep)
+				.next(dedupCnbClustersStep)
 				.next(prepareDedupRestOfRecordsStep)
 				.next(dedupRestOfRecordsStep)
 				// .next(dropTempTablesStep)
@@ -373,6 +384,46 @@ public class DedupRecordsJobConfig {
 		};
 	}
 
+/*
+ * Deduplicate same CNB 
+ */
+	@Bean(name = "prepareTempTablesStep:prepareTempCnbClustersTableTasklet")
+	@StepScope
+	public Tasklet prepareCbnClustersTasklet() {
+		return new SqlCommandTasklet(prepareTempCnbClustersSql);
+	}
+	
+	@Bean(name = Constants.JOB_ID_DEDUP + ":prepareTempCnbClustersTableStep")
+	public Step prepareTempCnbClustersTableStep() {
+		return steps.get("prepareTempCnbClustersTableStep")
+				.tasklet(prepareCbnClustersTasklet())
+				.listener(new StepProgressListener())
+				.build();
+	}
+	
+	@Bean(name = "dedupCnbClustersStep:reader")
+	@StepScope
+	public ItemReader<List<Long>> dedupCnbClustersReader() throws Exception {
+		return dedupSimpleKeysReader(TMP_TABLE_CNB_CLUSTERS);
+	}
+	
+	@Bean(name = "dedupCnbClustersStep:processor")
+	@StepScope
+	public ItemProcessor<List<Long>, List<HarvestedRecord>> dedupCnbClustersProcessor() {
+		return new DedupCnbClustersProcessor();
+	}
+
+	@Bean(name = Constants.JOB_ID_DEDUP + ":dedupCnbClustersStep")
+	public Step dedupCnbClustersStep() throws Exception {
+		return steps.get("dedupCnbClustersTableStep")
+				.listener(new StepProgressListener())
+				.<List<Long>, List<HarvestedRecord>> chunk(100)
+				.reader(dedupCnbClustersReader())
+				.processor(dedupCnbClustersProcessor())
+				.writer(dedupSimpleKeysStepWriter())
+				.build();
+	}
+	
 
 /*
  * Generic components

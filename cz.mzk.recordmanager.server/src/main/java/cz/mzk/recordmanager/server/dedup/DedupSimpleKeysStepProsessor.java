@@ -54,7 +54,7 @@ public class DedupSimpleKeysStepProsessor implements
 
 		for (int i = 0; i < hrList.size(); i++) {
 			HarvestedRecord outerRec = hrList.get(i);
-			for (int j = i; j < hrList.size(); j++) {
+			for (int j = i + 1; j < hrList.size(); j++) {
 				HarvestedRecord innerRec = hrList.get(j);
 				
 				if (matchRecords(outerRec,innerRec)) {

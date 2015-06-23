@@ -1,6 +1,8 @@
 package cz.mzk.recordmanager.server.dedup;
 
+import cz.mzk.recordmanager.server.model.Cnb;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
+import cz.mzk.recordmanager.server.model.Isbn;
 
 
 /**
@@ -25,11 +27,31 @@ public class DedupTitleAuthItemProcessor extends DedupSimpleKeysStepProsessor {
 		
 		Long aDiff = pagesA * (PAGES_MATCH_PERCENTAGE / 100);
 		Long bDiff = pagesB * (PAGES_MATCH_PERCENTAGE / 100);
-		if ((pagesA >= pagesB - bDiff && pagesA <= pagesB + bDiff) 
-				|| (pagesB >= pagesA - aDiff && pagesB <= pagesA + aDiff)) {
-			return true;
+		if (!(pagesA >= pagesB - bDiff && pagesA <= pagesB + bDiff) 
+				&& !(pagesB >= pagesA - aDiff && pagesB <= pagesA + aDiff)) {
+			return false;
 		}
-		return false;
+		
+		//return false if there is at least one different CNB
+		for (Cnb aCnb: hrA.getCnb()) {
+			for (Cnb bCnb: hrB.getCnb()) {
+				if (aCnb.getCnb() != null && bCnb.getCnb() != null 
+						&& !aCnb.getCnb().equals(bCnb.getCnb())) {
+					return false;
+				}
+			}
+		}
+		
+		//return false if there is at least one different ISBN
+		for (Isbn aIsbn: hrA.getIsbns()) {
+			for (Isbn bIsbn: hrB.getIsbns()) {
+				if (aIsbn.getIsbn() != null && bIsbn.getIsbn() != null 
+						&& !aIsbn.getIsbn().equals(bIsbn.getIsbn())) {
+					return false;
+				}
+			}
+		}
+		return true;
 	}
 }
 
