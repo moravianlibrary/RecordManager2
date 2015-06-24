@@ -7,7 +7,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = KrameriusConfiguration.TABLE_NAME)
-@PrimaryKeyJoinColumn(name = "import_conf_id", referencedColumnName = "id")
+@PrimaryKeyJoinColumn(name="import_conf_id")
 public class KrameriusConfiguration extends ImportConfiguration {
 	
 	public static final String TABLE_NAME = "kramerius_conf";

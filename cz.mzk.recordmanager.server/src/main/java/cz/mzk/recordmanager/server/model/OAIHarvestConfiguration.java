@@ -9,7 +9,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name=OAIHarvestConfiguration.TABLE_NAME)
-@PrimaryKeyJoinColumn(name = "import_conf_id", referencedColumnName = "id")
+@PrimaryKeyJoinColumn(name="import_conf_id")
 public class OAIHarvestConfiguration extends ImportConfiguration {
 	
 	public static final String TABLE_NAME = "oai_harvest_conf";

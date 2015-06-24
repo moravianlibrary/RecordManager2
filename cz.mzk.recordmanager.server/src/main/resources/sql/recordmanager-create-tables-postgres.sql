@@ -32,8 +32,7 @@ CREATE TABLE import_conf (
 );
 
 CREATE TABLE oai_harvest_conf (
-  id                   DECIMAL(10) PRIMARY KEY,
-  import_conf_id       DECIMAL(10),
+  import_conf_id       DECIMAL(10) PRIMARY KEY,
   url                  VARCHAR(128),
   set_spec             VARCHAR(128),
   metadata_prefix      VARCHAR(128),
@@ -42,8 +41,7 @@ CREATE TABLE oai_harvest_conf (
 );
 
 CREATE TABLE kramerius_conf (
-  id                   DECIMAL(10) PRIMARY KEY,
-  import_conf_id       DECIMAL(10),
+  import_conf_id       DECIMAL(10)  PRIMARY KEY,
   url                  VARCHAR(128),
   model                VARCHAR(128),
   query_rows           DECIMAL(10),
@@ -144,6 +142,6 @@ CREATE TABLE authority_record (
   deleted              TIMESTAMP,
   format               VARCHAR(12) NOT NULL,
   raw_record           BYTEA,
-  FOREIGN KEY (oai_harvest_conf_id) REFERENCES oai_harvest_conf(id),
+  FOREIGN KEY (oai_harvest_conf_id) REFERENCES oai_harvest_conf(import_conf_id),
   FOREIGN KEY (format)              REFERENCES format(format)
 );
