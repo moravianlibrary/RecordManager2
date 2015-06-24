@@ -2,12 +2,14 @@ package cz.mzk.recordmanager.server.util;
 
 public class Constants {
 
-	public static final String JOB_ID_HARVEST						= "oaiHarvestJob";
-	public static final String JOB_ID_HARVEST_PART					= "oaiPartitionedHarvestJob";
-	public static final String JOB_ID_HARVEST_AUTH					= "oaiHarvestAuthorityJob";
-	public static final String JOB_ID_HARVEST_ONE_BY_ONE 			= "oaiHarvestOneByOneJob";
-    public static final String JOB_ID_HARVEST_SINGLE	            = "oaiHarvestSingleRecordJob";	
-    public static final String JOB_ID_DEDUP							= "dedupRecordsJob";
+
+	public static final String JOB_ID_HARVEST			= "oaiHarvestJob";
+	public static final String JOB_ID_HARVEST_PART		= "oaiPartitionedHarvestJob";
+	public static final String JOB_ID_HARVEST_AUTH		= "oaiHarvestAuthorityJob";
+	public static final String JOB_ID_HARVEST_ONE_BY_ONE = "oaiHarvestOneByOneJob";
+	public static final String JOB_ID_HARVEST_KRAMERIUS = "krameriusHarvestJob";
+	public static final String JOB_ID_HARVEST_SINGLE	= "oaiHarvestSingleRecordJob";
+	public static final String JOB_ID_DEDUP				= "dedupRecordsJob";
 	public static final String JOB_ID_SOLR_INDEX_ALL_RECORDS		= "indexAllRecordsToSolrJob";
 	public static final String JOB_ID_SOLR_INDEX					= "indexRecordsToSolrJob";
 	public static final String JOB_ID_SOLR_INDEX_LOCAL_RECORDS		= "indexLocalRecordsToSolrJob";
@@ -32,10 +34,11 @@ public class Constants {
 	public static final String PREFIX_MKZ				= "mzk";
 	public static final String PREFIX_NKP				= "nkp";
 	public static final String PREFIX_NTK				= "ntk";
-	
+
 public static final String JOB_PARAM_RECORD_ID		= "recordId";
 	/* need some changing paramteter :-/ - 
-	 * A job instance already exists and is complete for p arameters={}. 
+	 * A job instance already exists and is complete for parameters={}. 
 	 * If you want to run this job again, change the parameters. */
 	public static final String JOB_PARAM_HACK			= "h";
-}
+}	
+

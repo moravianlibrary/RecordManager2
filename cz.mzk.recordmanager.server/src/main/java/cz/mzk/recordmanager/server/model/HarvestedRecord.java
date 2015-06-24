@@ -35,7 +35,7 @@ public class HarvestedRecord extends AbstractDomainObject {
 
 		private static final long serialVersionUID = 1L;
 		
-		@Column(name="oai_harvest_conf_id")
+		@Column(name="import_conf_id")
 		private Long harvestedFromId;
 
 		@Column(name="record_id")
@@ -45,7 +45,7 @@ public class HarvestedRecord extends AbstractDomainObject {
 		private HarvestedRecordUniqueId() {
 		}
 		
-		public HarvestedRecordUniqueId(OAIHarvestConfiguration harvestedFrom,
+		public HarvestedRecordUniqueId(ImportConfiguration harvestedFrom,
 				String recordId) {
 			super();
 			Preconditions.checkNotNull(harvestedFrom, "harvestedFrom");
@@ -104,8 +104,8 @@ public class HarvestedRecord extends AbstractDomainObject {
 	private HarvestedRecordUniqueId uniqueId;
 	
 	@ManyToOne(optional=false, fetch=FetchType.LAZY)
-	@JoinColumn(name="oai_harvest_conf_id", nullable=false, updatable=false, insertable=false)
-	private OAIHarvestConfiguration harvestedFrom;
+	@JoinColumn(name="import_conf_id", nullable=false, updatable=false, insertable=false)
+	private ImportConfiguration harvestedFrom;
 
 	@Column(name="harvested")
 	@Temporal(TemporalType.TIMESTAMP)
@@ -201,11 +201,11 @@ public class HarvestedRecord extends AbstractDomainObject {
 		this.uniqueId = id;
 	}
 
-	public OAIHarvestConfiguration getHarvestedFrom() {
+	public ImportConfiguration getHarvestedFrom() {
 		return harvestedFrom;
 	}
 
-	public void setHarvestedFrom(OAIHarvestConfiguration harvestedFrom) {
+	public void setHarvestedFrom(ImportConfiguration harvestedFrom) {
 		this.harvestedFrom = harvestedFrom;
 	}
 

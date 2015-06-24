@@ -28,7 +28,7 @@ public class Library extends AbstractDomainObject {
 	private String city;
 	
 	@OneToMany(cascade=CascadeType.ALL, mappedBy="library", orphanRemoval=true)
-	private List<OAIHarvestConfiguration> oaiHarvestConfigurations = new ArrayList<OAIHarvestConfiguration>();
+	private List<ImportConfiguration> inputConfigurations = new ArrayList<ImportConfiguration>();
 	
 	@OneToMany(cascade=CascadeType.ALL, mappedBy="library", orphanRemoval=true)
 	private List<ContactPerson> contacts = new ArrayList<ContactPerson>();
@@ -65,8 +65,8 @@ public class Library extends AbstractDomainObject {
 		this.city = city;
 	}
 
-	public List<OAIHarvestConfiguration> getOaiHarvestConfigurations() {
-		return oaiHarvestConfigurations;
+	public List<ImportConfiguration> getOaiHarvestConfigurations() {
+		return inputConfigurations;
 	}
 	
 	public List<ContactPerson> getContacts() {

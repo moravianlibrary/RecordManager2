@@ -54,7 +54,7 @@ public class ImportRecordsWriter implements ItemWriter<List<Record>> {
 	@Override
 	public void write(List<? extends List<Record>> items) throws Exception {
 		if (harvestConfiguration == null) {
-			harvestConfiguration = oaiHarvestConfigurationDao.get(configurationId);
+			harvestConfiguration = oaiHarvestConfigurationDao.get(configurationId);			
 		}
 		for (List<Record> records : items) {
 			for (Record currentRecord : records) {
