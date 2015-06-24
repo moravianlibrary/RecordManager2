@@ -122,3 +122,45 @@ ALTER TABLE harvested_record ADD COLUMN pages DECIMAL(10);
 
 -- 12. 6. 2015 mertam 
 ALTER TABLE oai_harvest_conf ADD COLUMN id_prefix VARCHAR(10);
+
+-- 24. 6. 2015 - xrosecky
+CREATE TABLE import_conf (
+  id                   DECIMAL(10) PRIMARY KEY,
+  library_id           DECIMAL(10),
+  contact_person_id    DECIMAL(10),
+  id_prefix            VARCHAR(10),
+  base_weight          DECIMAL(10),
+  cluster_id_enabled   BOOLEAN DEFAULT FALSE,
+  CONSTRAINT import_conf_library_id_fk        FOREIGN KEY (library_id)        REFERENCES library(id),
+  CONSTRAINT import_conf_contact_person_id_fk FOREIGN KEY (contact_person_id) REFERENCES contact_person(id)
+);
+
+CREATE TABLE kramerius_conf (
+  import_conf_id       DECIMAL(10)  PRIMARY KEY,
+  url                  VARCHAR(128),
+  model                VARCHAR(128),
+  query_rows           DECIMAL(10),
+  metadata_stream      VARCHAR(128),
+  CONSTRAINT kramerius_conf_import_conf_fk FOREIGN KEY (import_conf_id) REFERENCES import_conf(id)
+);
+
+INSERT INTO import_conf(id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled)
+  SELECT id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled FROM oai_harvest_conf;
+
+ALTER TABLE oai_harvest_conf ADD COLUMN import_conf_id DECIMAL(10);
+UPDATE oai_harvest_conf SET import_conf_id = id;
+ALTER TABLE oai_harvest_conf DROP CONSTRAINT oai_harvest_conf_pkey;
+
+ALTER TABLE harvested_record DROP CONSTRAINT harvested_record_oai_harvest_conf_id_fkey;
+ALTER TABLE harvested_record RENAME oai_harvest_conf_id TO import_conf_id;
+ALTER TABLE harvested_record ADD CONSTRAINT harvested_record_import_conf_id_fk FOREIGN KEY (import_conf_id) REFERENCES import_conf(id);
+
+ALTER TABLE authority_record DROP CONSTRAINT authority_record_oai_harvest_conf_id_fkey;
+ALTER TABLE authority_record RENAME oai_harvest_conf_id TO import_conf_id;
+ALTER TABLE authority_record ADD CONSTRAINT authority_record_import_conf_id_fk FOREIGN KEY (import_conf_id) REFERENCES import_conf(id);
+
+ALTER TABLE oai_harvest_conf DROP COLUMN library_id;
+ALTER TABLE oai_harvest_conf DROP COLUMN id;
+ALTER TABLE oai_harvest_conf DROP COLUMN contact_person_id;
+ALTER TABLE oai_harvest_conf DROP COLUMN base_weight;
+ALTER TABLE oai_harvest_conf DROP COLUMN cluster_id_enabled;
