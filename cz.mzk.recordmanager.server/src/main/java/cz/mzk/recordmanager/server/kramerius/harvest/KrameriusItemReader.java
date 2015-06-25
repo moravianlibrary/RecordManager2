@@ -1,7 +1,5 @@
 package cz.mzk.recordmanager.server.kramerius.harvest;
 
-import java.io.UnsupportedEncodingException;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -13,12 +11,11 @@ import org.springframework.batch.item.ExecutionContext;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemStream;
 import org.springframework.batch.item.ItemStreamException;
-import org.springframework.batch.item.NonTransientResourceException;
-import org.springframework.batch.item.ParseException;
-import org.springframework.batch.item.UnexpectedInputException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.support.TransactionTemplate;
+
+import com.google.common.collect.Iterables;
 
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.model.KrameriusConfiguration;
@@ -55,7 +52,7 @@ public class KrameriusItemReader implements ItemReader<List<HarvestedRecord>>,
 	private Date fromDate;
 	private Date untilDate;
 
-	private Integer start;
+	private String nextPid = null;
 
 	private boolean finished = false;
 
@@ -64,8 +61,6 @@ public class KrameriusItemReader implements ItemReader<List<HarvestedRecord>>,
 		this.confId = confId;
 		this.fromDate = fromDate;
 		this.untilDate = untilDate;
-
-		start = 0;
 	}
 
 	@Override
@@ -75,8 +70,10 @@ public class KrameriusItemReader implements ItemReader<List<HarvestedRecord>>,
 		}
 
 		// get uuids
-		List<String> uuids = kHarvester.getUuids(start);
-
+		List<String> uuids = kHarvester.getUuids(nextPid);
+		String previousPid = nextPid;
+		nextPid = Iterables.getLast(uuids, null);
+		
 		// get metadata
 		List<HarvestedRecord> records = kHarvester.getRecords(uuids);
 
@@ -95,10 +92,15 @@ public class KrameriusItemReader implements ItemReader<List<HarvestedRecord>>,
 
 //		System.out.println("porovnavame start: " + start
 //				+ " a harvester.numFound():" + kHarvester.getNumFound());
+		/*
 		Long queryRows = conf.getQueryRows();
 		if (start < kHarvester.getNumFound()) {
 			start = start + queryRows.intValue();
 		} else {
+			finished = true;
+		}
+		*/
+		if (uuids.isEmpty() || (previousPid != null && previousPid.equals(nextPid))) {
 			finished = true;
 		}
 		// return metadata
@@ -127,10 +129,14 @@ public class KrameriusItemReader implements ItemReader<List<HarvestedRecord>>,
 
 	@Override
 	public void open(ExecutionContext ctx) throws ItemStreamException {
+		if (ctx.containsKey("nextPid")) {
+			nextPid = ctx.getString("nextPid");
+		}
 	}
 
 	@Override
 	public void update(ExecutionContext ctx) throws ItemStreamException {
+		ctx.putString("nextPid", nextPid);
 	}
 
 	@Override

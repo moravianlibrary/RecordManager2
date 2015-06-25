@@ -3,12 +3,10 @@ package cz.mzk.recordmanager.server.kramerius.harvest;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
 import org.apache.commons.io.IOUtils;
 import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.SolrQuery.ORDER;
 import org.apache.solr.client.solrj.SolrRequest;
 import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.impl.HttpSolrServer;
@@ -17,8 +15,10 @@ import org.apache.solr.client.solrj.request.QueryRequest;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
+import org.apache.solr.common.util.NamedList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecord.HarvestedRecordUniqueId;
 import cz.mzk.recordmanager.server.solr.SolrServerFactory;
@@ -31,10 +31,10 @@ public class KrameriusHarvester {
 			.getLogger(KrameriusHarvester.class);
 
 	private static String PID_FIELD = "PID";
+	
+	private static int MAX_TIME_ALLOWED = 100_000;
 
 	private Long harvestedFrom;
-
-	private Long numFound = 0L;
 
 	private KrameriusHarvesterParams params;
 
@@ -50,11 +50,10 @@ public class KrameriusHarvester {
 		this.harvestedFrom = harvestedFrom;
 	}
 
-	public List<String> getUuids(Integer krameriusStart) {
+	public List<String> getUuids(String nextPid) {
 		List<String> uuids = new ArrayList<String>();
 
-		SolrDocumentList documents = sendRequest(krameriusStart, "PID");
-		numFound = documents.getNumFound();
+		SolrDocumentList documents = sendRequest(nextPid);
 
 		for (SolrDocument document : documents) {
 			for (Object pid : document.getFieldValues(PID_FIELD)) {
@@ -121,10 +120,8 @@ public class KrameriusHarvester {
 		return records;
 	}
 
-	public SolrDocumentList sendRequest(Integer start, String... fields) {
+	public SolrDocumentList sendRequest(String nextPid) {
 		SolrDocumentList documents = new SolrDocumentList();
-		int numProcessed = 0;
-		long numFound = 0;
 
 		SolrServer solr = solrServerFactory.create(params.getUrl());
 
@@ -132,42 +129,34 @@ public class KrameriusHarvester {
 			((HttpSolrServer) solr).setParser(new XMLResponseParser());
 		}
 		SolrQuery query = new SolrQuery();
-
-		// creates map of SOLR query parameters and formats them into string,
-		// which is set as SolrQuery's query.
-		Map<String, String> queryMap = new HashMap<String, String>();
-		queryMap.put("fedora.model", params.getModel()); // w/ KrameriusParams
+		query.setQuery("*:*");
+		if (nextPid != null) {
+			query.add("fq", SolrUtils.createFieldQuery(PID_FIELD, SolrUtils.createRange(nextPid, null)));
+		}
+		query.add("fq", SolrUtils.createFieldQuery("fedora.model", params.getModel()));
 		if (params.getFrom() != null || params.getUntil() != null) {
-			String range = SolrUtils.createSolrDateRange(
+			String range = SolrUtils.createDateRange(
 					params.getFrom(), params.getUntil());
-			queryMap.put("modified_date", range);
+			query.add("fq", SolrUtils.createFieldQuery("modified_date", range));
 		}
-		
-		query.setQuery(SolrUtils.createQueryString(queryMap));
-		logger.info("query: {}", query.getQuery());
-		query.setFields(fields);
-
-		if (start != null) {
-			query.setStart(start);
-		}
-		query.setRows((params.getQueryRows() != null) ? params.getQueryRows().intValue() : 10);
+		logger.info("nextPid: {}", nextPid);
+		query.setFields(PID_FIELD);
+		query.setSort(PID_FIELD, ORDER.asc);
+		query.setRows((params.getQueryRows() != null) ? params.getQueryRows().intValue() : 100);
+		query.setTimeAllowed(MAX_TIME_ALLOWED);
 
 		SolrRequest request = new QueryRequest(query);
 		request.setPath("/search");
+		logger.info("Params: {}", request.getParams());
 
 		try {
-			QueryResponse response = new QueryResponse(solr.request(request), solr);
+			NamedList<Object> req = solr.request(request);
+			QueryResponse response = new QueryResponse(req, solr);
 			documents = response.getResults();
-			numFound = documents.getNumFound();
-			numProcessed += response.getResults().size();
 		} catch (Exception ex) {
 			throw new RuntimeException(ex); // FIXME
 		}
 		return documents;
-	}
-
-	public Long getNumFound() {
-		return this.numFound;
 	}
 
 }
