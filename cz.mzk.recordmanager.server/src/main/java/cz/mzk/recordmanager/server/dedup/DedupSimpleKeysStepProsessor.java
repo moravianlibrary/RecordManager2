@@ -3,8 +3,10 @@ package cz.mzk.recordmanager.server.dedup;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,7 +36,12 @@ public class DedupSimpleKeysStepProsessor implements
 	@Override
 	public List<HarvestedRecord> process(List<Long> idList) throws Exception {
 		List<HarvestedRecord> hrList = new ArrayList<>();
+		// count of DedupRecord in current batch
 		Map<DedupRecord, Integer> dedupMap = new HashMap<>();
+		// Map of records that shoul be updated after processing of batch
+		// used in merging two different DedupRecords into one
+		Map<DedupRecord, Set<DedupRecord>> updateDedupRecordsMap = new HashMap<>();
+		
 		for(Long id: idList) {
 			HarvestedRecord currentHr = harvestedRecordDao.get(id);
 			if (currentHr == null) {
@@ -60,20 +67,29 @@ public class DedupSimpleKeysStepProsessor implements
 				if (matchRecords(outerRec,innerRec)) {
 					//merge records, both already have assigned DedupRecord
 					if (outerRec.getDedupRecord() != null && innerRec.getDedupRecord() != null) {
-						if (outerRec.getDedupRecord().equals(innerRec.getDedupRecord())) {
-							// nothing to do
+						if (sameDedupRecords(outerRec.getDedupRecord(), innerRec.getDedupRecord())) {
+							// equal dedupRecord, nothing to do
 						} else {
-							// find DedupRecord with more occurrences
+
 							DedupRecord moreFrequented = dedupMap.get(outerRec.getDedupRecord()) >= dedupMap.get(innerRec.getDedupRecord()) ? 
 									outerRec.getDedupRecord() : innerRec.getDedupRecord();
-							DedupRecord lessFrequented = moreFrequented.equals(outerRec) ? 
-									outerRec.getDedupRecord() : innerRec.getDedupRecord();
+							DedupRecord lessFrequented = sameDedupRecords(moreFrequented, outerRec.getDedupRecord()) ? 
+									innerRec.getDedupRecord() : outerRec.getDedupRecord();
 							
 							outerRec.setDedupRecord(moreFrequented);
 							innerRec.setDedupRecord(moreFrequented);
 							dedupMap.put(moreFrequented, dedupMap.get(moreFrequented) + 1);
 							dedupMap.put(lessFrequented, dedupMap.get(lessFrequented) - 1);
-							//TODO update all records with this dedup record
+							
+							// all occurrences of lessFrequented in database should be updated to moreFrequented later
+							if (harvestedRecordDao.getByDedupRecord(lessFrequented) != null) {
+								Set<DedupRecord> tmpSet = updateDedupRecordsMap.get(moreFrequented);
+								if (tmpSet == null) {
+									tmpSet = new HashSet<>();
+								}
+								tmpSet.add(lessFrequented);
+								updateDedupRecordsMap.put(moreFrequented, tmpSet);
+							}
 						}
 						continue;
 					}
@@ -103,6 +119,11 @@ public class DedupSimpleKeysStepProsessor implements
 			}
 		}
 		
+		if (!updateDedupRecordsMap.isEmpty()) {
+			// TODO handle update
+			System.out.println(updateDedupRecordsMap);
+		}
+		
 		
 		return hrList;
 	}
@@ -117,6 +138,14 @@ public class DedupSimpleKeysStepProsessor implements
 	 */
 	protected boolean matchRecords(HarvestedRecord hrA, HarvestedRecord hrB) {
 		return true;
+	}
+	
+	protected boolean sameDedupRecords(DedupRecord d1, DedupRecord d2) {
+		if (d1 == null || d1.getId() == null || d2 == null || d2.getId() == null) {
+			return false;
+		}
+		
+		return d1.getId().equals(d2.getId());
 	}
 	
 }
