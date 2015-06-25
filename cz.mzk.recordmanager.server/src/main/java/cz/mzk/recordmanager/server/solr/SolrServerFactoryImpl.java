@@ -1,4 +1,4 @@
-package cz.mzk.recordmanager.server.index;
+package cz.mzk.recordmanager.server.solr;
 
 import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.impl.HttpSolrServer;

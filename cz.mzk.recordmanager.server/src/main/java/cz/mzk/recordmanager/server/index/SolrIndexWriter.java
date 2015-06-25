@@ -13,6 +13,8 @@ import org.springframework.batch.core.StepExecutionListener;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import cz.mzk.recordmanager.server.solr.SolrServerFactory;
+
 public class SolrIndexWriter implements ItemWriter<SolrInputDocument>, StepExecutionListener {
 
 	private static Logger logger = LoggerFactory.getLogger(SolrRecordProcessor.class);

@@ -9,7 +9,7 @@ import org.apache.http.client.utils.URIBuilder;
 import com.google.common.base.Preconditions;
 
 public class UrlUtils {
-	
+
 	public static String buildUrl(String baseUrl, Map<String, String> query) {
 		Preconditions.checkNotNull(baseUrl, "baseUrl");
 		try {

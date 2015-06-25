@@ -10,6 +10,8 @@ import org.springframework.batch.core.StepExecutionListener;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import cz.mzk.recordmanager.server.solr.SolrServerFactory;
+
 public class OrphanedRecordsWriter implements ItemWriter<String>, StepExecutionListener {
 	
 	@Autowired

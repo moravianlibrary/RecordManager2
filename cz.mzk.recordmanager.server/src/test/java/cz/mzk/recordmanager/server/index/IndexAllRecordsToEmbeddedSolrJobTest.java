@@ -26,6 +26,7 @@ import org.testng.annotations.Test;
 
 import cz.mzk.recordmanager.server.AbstractTest;
 import cz.mzk.recordmanager.server.DBUnitHelper;
+import cz.mzk.recordmanager.server.solr.SolrServerFactory;
 import cz.mzk.recordmanager.server.util.Constants;
 
 public class IndexAllRecordsToEmbeddedSolrJobTest extends AbstractTest {

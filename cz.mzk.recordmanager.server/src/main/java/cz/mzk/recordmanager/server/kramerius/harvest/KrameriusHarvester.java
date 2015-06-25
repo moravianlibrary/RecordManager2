@@ -2,64 +2,63 @@ package cz.mzk.recordmanager.server.kramerius.harvest;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrRequest;
-import org.apache.solr.client.solrj.SolrServerException;
+import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.impl.HttpSolrServer;
-import org.apache.solr.client.solrj.impl.HttpSolrServer.RemoteSolrException;
 import org.apache.solr.client.solrj.impl.XMLResponseParser;
 import org.apache.solr.client.solrj.request.QueryRequest;
 import org.apache.solr.client.solrj.response.QueryResponse;
+import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecord.HarvestedRecordUniqueId;
+import cz.mzk.recordmanager.server.solr.SolrServerFactory;
 import cz.mzk.recordmanager.server.util.HttpClient;
+import cz.mzk.recordmanager.server.util.SolrUtils;
 
 public class KrameriusHarvester {
 
 	private static Logger logger = LoggerFactory
 			.getLogger(KrameriusHarvester.class);
+
+	private static String PID_FIELD = "PID";
+
 	private Long harvestedFrom;
+
 	private Long numFound = 0L;
+
 	private KrameriusHarvesterParams params;
+
 	private HttpClient httpClient;
 
-	public KrameriusHarvester(HttpClient httpClient,
+	private SolrServerFactory solrServerFactory;
+
+	public KrameriusHarvester(HttpClient httpClient, SolrServerFactory solrServerFactory,
 			KrameriusHarvesterParams parameters, Long harvestedFrom) {
 		this.httpClient = httpClient;
+		this.solrServerFactory = solrServerFactory;
 		this.params = parameters;
 		this.harvestedFrom = harvestedFrom;
 	}
 
 	public List<String> getUuids(Integer krameriusStart) {
-		SolrDocumentList documents;
 		List<String> uuids = new ArrayList<String>();
 
-		documents = sendRequest(krameriusStart, "PID");
+		SolrDocumentList documents = sendRequest(krameriusStart, "PID");
 		numFound = documents.getNumFound();
 
-		for (int i = 0; i < documents.size(); ++i) {
-
-			// library method works with Object
-
-			// asi by slo udelat i s predpokladem, ze v kazdem zaznamu je jen
-			// jedno PID..
-			for (Object obj : documents.get(i).getFieldValues("PID")) {
-				uuids.add(obj.toString());
+		for (SolrDocument document : documents) {
+			for (Object pid : document.getFieldValues(PID_FIELD)) {
+				uuids.add(pid.toString());
 			}
 		}
 		return uuids;
@@ -107,7 +106,7 @@ public class KrameriusHarvester {
 
 		String resultingUrl = baseUrl + kramAPIItem + uuid + kramAPIStream
 				+ kramStreamType;
-		System.out.println("created URL: " + resultingUrl);
+		logger.trace("created URL: {}", resultingUrl);
 		return resultingUrl;
 	}
 
@@ -127,103 +126,44 @@ public class KrameriusHarvester {
 		int numProcessed = 0;
 		long numFound = 0;
 
-		HttpSolrServer solr = new HttpSolrServer(params.getUrl());
+		SolrServer solr = solrServerFactory.create(params.getUrl());
 
-		solr.setParser(new XMLResponseParser());
-		SolrQuery squery = new SolrQuery();
+		if (solr instanceof HttpSolrServer) {
+			((HttpSolrServer) solr).setParser(new XMLResponseParser());
+		}
+		SolrQuery query = new SolrQuery();
 
 		// creates map of SOLR query parameters and formats them into string,
 		// which is set as SolrQuery's query.
 		Map<String, String> queryMap = new HashMap<String, String>();
-
 		queryMap.put("fedora.model", params.getModel()); // w/ KrameriusParams
-		// queryMap.put("fedora.model", "monograph"); // w/ OAIParams
-
-		queryMap.put("modified_date",
-				createSolrDateRange(params.getFrom(), params.getUntil()));
-		squery.setQuery(createQueryString(queryMap));
-
-		squery.setFields(fields);
+		if (params.getFrom() != null || params.getUntil() != null) {
+			String range = SolrUtils.createSolrDateRange(
+					params.getFrom(), params.getUntil());
+			queryMap.put("modified_date", range);
+		}
+		
+		query.setQuery(SolrUtils.createQueryString(queryMap));
+		logger.info("query: {}", query.getQuery());
+		query.setFields(fields);
 
 		if (start != null) {
-			squery.setStart(start);
+			query.setStart(start);
 		}
+		query.setRows((params.getQueryRows() != null) ? params.getQueryRows().intValue() : 10);
 
-		// squery.setRows(20); // w/ OAIParams
-
-		// w/ KramParams
-		Long queryRows = params.getQueryRows();
-		if (queryRows == null) {
-			squery.setRows(10);
-		} else {
-			squery.setRows(queryRows.intValue()); // possible overflow (but
-													// using so large value
-													// doesn't make sense..)
-		}
-
-		SolrRequest request = new QueryRequest(squery);
+		SolrRequest request = new QueryRequest(query);
 		request.setPath("/search");
 
 		try {
-			QueryResponse rsp = new QueryResponse(solr.request(request), solr);
-			documents = rsp.getResults();
+			QueryResponse response = new QueryResponse(solr.request(request), solr);
+			documents = response.getResults();
 			numFound = documents.getNumFound();
-			numProcessed += rsp.getResults().size();
-			// System.out.println("nalezeny dokumenty, celkem nalezeno:"
-			// + numFound + " a zpracovano je :" + numProcessed);
-
-		} catch (RemoteSolrException rse) {
-			// TODO
-			throw new RuntimeException(rse);
-		} catch (SolrServerException se) {
-			// TODO
-		} catch (IOException e) {
-			// TODO
+			numProcessed += response.getResults().size();
+		} catch (Exception ex) {
+			throw new RuntimeException(ex); // FIXME
 		}
-
 		return documents;
-	}
-
-	public String createQueryString(Map<String, String> query) {
-		String queryString = "";
-
-		Iterator<String> iterator = query.keySet().iterator();
-		while (iterator.hasNext()) {
-			String key = (String) iterator.next();
-			String value = query.get(key);
-
-			queryString += key + ":" + value;
-			if (iterator.hasNext()) {
-				queryString += " AND ";
-			}
-		}
-		return queryString;
-	}
-
-	public String createSolrDateRange(Date from, Date until) {
-		String dateRange = "";
-		// 'Z' on the end is necessary.. could not find a way how to put one
-		// letter timezone and other letters than Z do not seem to work with
-		// SOLR via Kramerius API anyway
-		DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
-
-		// no from date specified - fall back to time 0
-		if (from == null) {
-			Calendar cal = Calendar.getInstance();
-			cal.setTimeInMillis(0);
-			from = cal.getTime();
-		}
-
-		// no until date specified - fall back to current time
-		if (until == null) {
-			Calendar cal = Calendar.getInstance();
-			until = cal.getTime();
-		}
-
-		dateRange = String.format("[%s TO %s]", df.format(from),
-				df.format(until));
-
-		return dateRange;
 	}
 
 	public Long getNumFound() {
