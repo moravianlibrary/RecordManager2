@@ -31,7 +31,7 @@ public class KrameriusHarvester {
 			.getLogger(KrameriusHarvester.class);
 
 	private static String PID_FIELD = "PID";
-	
+
 	private static int MAX_TIME_ALLOWED = 100_000;
 
 	private Long harvestedFrom;

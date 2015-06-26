@@ -1,0 +1,15 @@
+<oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
+	<dc:title>Numerické metody řešení problémů proudění I</dc:title>
+	<dc:creator>Kozel Karel</dc:creator>
+	<dc:subject>udc:532.5</dc:subject>
+	<dc:publisher>ČVUT</dc:publisher>
+	<dc:date>2001</dc:date>
+	<dc:type>model:monograph</dc:type>
+	<dc:identifier>uuid:00931210-02b6-11e5-b939-0800200c9a66</dc:identifier>
+	<dc:identifier>contract:F2053</dc:identifier>
+	<dc:identifier>isbn:80-01-02384-2</dc:identifier>
+	<dc:language>cze</dc:language>
+	<dc:rights>policy:private</dc:rights>
+</oai_dc:dc>
