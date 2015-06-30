@@ -64,7 +64,7 @@ public class DublinCoreSolrRecordMapper implements SolrRecordMapper, Initializin
 	@Override
 	public void afterPropertiesSet() throws Exception {
 		mappingScript = dublinCoreScriptFactory.create(getClass()
-				.getResourceAsStream("/marc/groovy/BaseMarc.groovy"));
+				.getResourceAsStream("/dc/groovy/BaseDC.groovy"));
 	}
 
 }
