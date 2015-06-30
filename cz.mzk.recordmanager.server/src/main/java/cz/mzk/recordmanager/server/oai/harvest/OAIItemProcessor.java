@@ -66,11 +66,16 @@ public class OAIItemProcessor implements ItemProcessor<List<OAIRecord>, List<Har
 		HarvestedRecord rec = recordDao.findByIdAndHarvestConfiguration(
 				recordId, configuration);
 		if (rec == null) {
+			// create new record
 			HarvestedRecordUniqueId id = new HarvestedRecordUniqueId(configuration, recordId);
 			rec = new HarvestedRecord(id);
 			rec.setHarvestedFrom(configuration);
 			rec.setFormat(format);
+		} else {
+			// update existing record
+			rec.setUpdated(new Date());
 		}
+		
 		if (record.getHeader().isDeleted()) {
 			rec.setDeleted(new Date());
 			rec.setRawRecord(new byte[0]);
