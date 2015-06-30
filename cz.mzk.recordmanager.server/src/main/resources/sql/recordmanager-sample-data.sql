@@ -9,6 +9,8 @@ INSERT INTO library (id, name, url, catalog_url, city) VALUES (105, 'VPK', 'vpk.
 INSERT INTO library (id, name, url, catalog_url, city) VALUES (106, 'TRE', 'katalogknih.cz', 'vufind.katalogknih.c', 'Česká Třebová');
 INSERT INTO library (id, name, url, catalog_url, city) VALUES (107, 'NTK', 'techlib.cz', 'aleph.techlib.cz', 'Praha');
 INSERT INTO library (id, name, url, catalog_url, city) VALUES (108, 'KVKL', 'http://www.kvkli.cz/', 'pac.kvkli.cz/arl-li/', 'Liberec');
+INSERT INTO library (id, name, url, catalog_url, city) VALUES (109, 'VPK', 'vpk.cz', 'vpk.cz', 'Liberec');
+
 
 INSERT INTO format(format, description) VALUES('marc21-xml', 'MARC21 XML');
 INSERT INTO format(format, description) VALUES('xml-marc', 'MARC21 XML');
@@ -22,8 +24,9 @@ INSERT INTO import_conf (id,library_id,contact_person_id,id_prefix,base_weight,c
 INSERT INTO import_conf (id,library_id,contact_person_id,id_prefix,base_weight,cluster_id_enabled) VALUES (304,104,200,'nkp',14,true);
 INSERT INTO import_conf (id,library_id,contact_person_id,id_prefix,base_weight,cluster_id_enabled) VALUES (305,105,200,'vpk',14,false);
 INSERT INTO import_conf (id,library_id,contact_person_id,id_prefix,base_weight,cluster_id_enabled) VALUES (307,107,200,'ntk',14,false);
-INSERT INTO import_conf (id,library_id,contact_person_id,id_prefix,base_weight,cluster_id_enabled) VALUES (306,106,200,'TRE',11,false);
-INSERT INTO import_conf (id,library_id,contact_person_id,id_prefix,base_weight,cluster_id_enabled) VALUES (308,108,200,'KVKL',14,false);
+INSERT INTO import_conf (id,library_id,contact_person_id,id_prefix,base_weight,cluster_id_enabled) VALUES (306,106,200,'tre',11,false);
+INSERT INTO import_conf (id,library_id,contact_person_id,id_prefix,base_weight,cluster_id_enabled) VALUES (308,108,200,'kvkl',14,false);
+INSERT INTO import_conf (id,library_id,contact_person_id,id_prefix,base_weight,cluster_id_enabled) VALUES (309,109,200,'vpk',14,false);
 INSERT INTO import_conf (id,library_id,contact_person_id,id_prefix,base_weight,cluster_id_enabled) VALUES (400,104,200,null,null,false);
 INSERT INTO import_conf (id,library_id,contact_person_id,id_prefix,base_weight,cluster_id_enabled) VALUES (99001,100,200,'kram-mzk',null,false);
 INSERT INTO import_conf (id,library_id,contact_person_id,id_prefix,base_weight,cluster_id_enabled) VALUES (99002,107,200,'kram-ntk',null,false);
@@ -40,7 +43,8 @@ INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granul
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (307,'http://aleph.techlib.cz/OAI',null,'marc21','SECOND');
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (306,NULL,NULL,'marc21',NULL);
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (308,NULL,NULL,'marc21',NULL);
-INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (300,'http://aleph.nkp.cz/OAI','AUT','marc21',null);
+INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (307,'http://sc.vpk.cz/cgi-bin/oai2',null,'marc21','SECOND');
+INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (400,'http://aleph.nkp.cz/OAI','AUT','marc21',null);
 
 INSERT INTO kramerius_conf (import_conf_id,url,model,query_rows,metadata_stream) VALUES (1,99001,'http://kramerius.mzk.cz/search/api/v5.0','monograph',20,'DC');
 INSERT INTO kramerius_conf (import_conf_id,url,model,query_rows,metadata_stream) VALUES (2,99002,'http://k4.techlib.cz/search/api/v5.0','monograph',20,'DC');
