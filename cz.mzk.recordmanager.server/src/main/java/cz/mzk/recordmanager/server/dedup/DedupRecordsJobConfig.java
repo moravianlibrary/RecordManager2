@@ -52,6 +52,10 @@ public class DedupRecordsJobConfig {
 	private static final String TMP_TABLE_CNB_CLUSTERS = "tmp_cnb_clusters";
 	
 	private static final String TMP_TABLE_UUID_CLUSTERS = "tmp_uuid_clusters";
+	
+	private static final String PREPARE_REST_OF_RECORDS_TABLE_PROCEDURE = "prepare_rest_of_ids_table";
+
+	private static final String PREPARE_REST_OF_RECORDS_COMMIT_OFFSETS_PROCEDURE = "dedup_rest_of_records_offset";
 
 	private static final int REST_OF_RECORDS_COMMIT_INTERVAL = 10000;
 
@@ -68,6 +72,12 @@ public class DedupRecordsJobConfig {
 	@Autowired
 	private HarvestedRecordDAO harvestedRecordDao;
 
+	private String initDeduplicationSql = CharStreams
+			.toString(new InputStreamReader(getClass() //
+					.getClassLoader().getResourceAsStream(
+							"job/dedupRecordsJob/initDeduplication.sql"),
+					"UTF-8"));
+	
 	private String updateDedupRecordSql = CharStreams
 			.toString(new InputStreamReader(getClass() //
 					.getClassLoader().getResourceAsStream(
@@ -116,10 +126,6 @@ public class DedupRecordsJobConfig {
 							"job/dedupRecordsJob/prepareTempUuidClustersTable.sql"),
 					"UTF-8"));
 
-	private static final String PREPARE_REST_OF_RECORDS_TABLE_PROCEDURE = "prepare_rest_of_ids_table";
-
-	private static final String PREPARE_REST_OF_RECORDS_COMMIT_OFFSETS_PROCEDURE = "dedup_rest_of_records_offset";
-
 	public DedupRecordsJobConfig() throws IOException {
 	}
 
@@ -130,6 +136,7 @@ public class DedupRecordsJobConfig {
 			// deleteStep,
 			// @Qualifier("dedupRecordsJob:updateStep") Step updateStep) {
 			// @Qualifier("dedupRecordsJob:deleteStep") Step deleteStep,
+			@Qualifier(Constants.JOB_ID_DEDUP + ":initStep") Step initStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":prepareTempClusterIdStep") Step prepareTempClusterIdStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":dedupClusterIdsStep") Step dedupClusterIdsStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":prepareTempIsbnTableStep") Step prepareTempIsbnTableStep,
@@ -146,7 +153,8 @@ public class DedupRecordsJobConfig {
 			@Qualifier(Constants.JOB_ID_DEDUP + ":dedupRestOfRecordsStep") Step dedupRestOfRecordsStep) {
 		return jobs.get(Constants.JOB_ID_DEDUP)
 				.validator(new DedupRecordsJobParametersValidator())
-				.start(prepareTempClusterIdStep)
+				.start(initStep)
+				.next(prepareTempClusterIdStep)
 				.next(dedupClusterIdsStep)
 				.next(prepareTempIsbnTableStep)
 				.next(dedupSimpleKeysISBNStep)
@@ -180,6 +188,28 @@ public class DedupRecordsJobConfig {
 	// .build();
 	// }
 	//
+	
+	/*
+	 *
+	 * @return
+	 */
+	/*
+	 * initialize deduplication
+	 */
+	@Bean(name="prepareTempTablesStep:initTasklet")
+	@StepScope
+	public Tasklet initTasklet() {
+		return new SqlCommandTasklet(initDeduplicationSql);
+	}
+	
+	@Bean(name = Constants.JOB_ID_DEDUP + ":initStep")
+	public Step initStep() {
+		return steps.get("initTasklet")
+				.tasklet(prepareTempClusterIdTasklet())
+				.listener(new StepProgressListener())
+				.build();
+	}
+	
 
 	/*
 	 * dedupClusterIdsStep Deduplicate records using cluster id
