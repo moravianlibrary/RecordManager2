@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import cz.mzk.recordmanager.server.dedup.DedupKeyParserException;
 import cz.mzk.recordmanager.server.dedup.DelegatingDedupKeysParser;
+import cz.mzk.recordmanager.server.marc.InvalidMarcException;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordDAO;
 
@@ -35,6 +36,8 @@ public class HarvestedRecordWriter implements ItemWriter<List<HarvestedRecord>> 
 						logger.error(
 								"Dedup keys could not be generated for {}, exception thrown.",
 								hr, dkpe);
+					} catch (InvalidMarcException ime) {
+						logger.warn("Skipping record due to invalid MARC {}", hr.getUniqueId());
 					}
 				}
 				recordDao.persist(hr);
