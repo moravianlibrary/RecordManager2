@@ -43,7 +43,7 @@ INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granul
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (307,'http://aleph.techlib.cz/OAI',null,'marc21','SECOND');
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (306,NULL,NULL,'marc21',NULL);
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (308,NULL,NULL,'marc21',NULL);
-INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (307,'http://sc.vpk.cz/cgi-bin/oai2',null,'marc21','SECOND');
+INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (309,'http://sc.vpk.cz/cgi-bin/oai2',null,'marc21','SECOND');
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (400,'http://aleph.nkp.cz/OAI','AUT','marc21',null);
 
 INSERT INTO kramerius_conf (import_conf_id,url,model,query_rows,metadata_stream) VALUES (1,99001,'http://kramerius.mzk.cz/search/api/v5.0','monograph',20,'DC');
