@@ -1,13 +1,15 @@
 package cz.mzk.recordmanager.server.springbatch;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.batch.core.BatchStatus;
 import org.springframework.batch.core.ExitStatus;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobExecution;
@@ -16,7 +18,6 @@ import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.JobParametersIncrementer;
 import org.springframework.batch.core.JobParametersInvalidException;
 import org.springframework.batch.core.JobParametersValidator;
-import org.springframework.batch.core.StepExecution;
 import org.springframework.batch.core.configuration.JobRegistry;
 import org.springframework.batch.core.explore.JobExplorer;
 import org.springframework.batch.core.launch.JobLauncher;
@@ -26,6 +27,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import cz.mzk.recordmanager.server.model.OAIGranularity;
+import cz.mzk.recordmanager.server.util.Constants;
 
 @Component
 public class JobExecutorImpl implements JobExecutor {
@@ -50,6 +52,12 @@ public class JobExecutorImpl implements JobExecutor {
 		return jobRegistry.getJobNames();
 	}
 
+	/**
+	 * set of jobs that can be run multiple times with same parameters
+	 */
+	private static final Set<String> REPEATEABLE_JOBS = new HashSet<>(
+			Arrays.asList(Constants.JOB_ID_DEDUP));
+	
 	@Override
 	public Collection<JobParameterDeclaration> getParametersOfJob(String jobName) {
 		try {
@@ -74,6 +82,11 @@ public class JobExecutorImpl implements JobExecutor {
 			final Job job = jobRegistry.getJob(jobName);
 			JobParameters transformedParams = transformJobParameters(params,
 					job.getJobParametersValidator());
+			if (REPEATEABLE_JOBS.contains(jobName)) {
+				Map<String,JobParameter> paramMap = transformedParams.getParameters();
+				paramMap.put(Constants.JOB_PARAM_TIMESTAMP, new JobParameter(new Date()));
+				transformedParams = new JobParameters(paramMap);
+			}
 			JobParametersIncrementer incrementer = job
 					.getJobParametersIncrementer();
 			if (incrementer != null) {
@@ -191,6 +204,7 @@ public class JobExecutorImpl implements JobExecutor {
 				break;
 			}
 		}
+		
 		return new JobParameters(transformedMap);
 	}
 
