@@ -18,6 +18,7 @@ import org.springframework.stereotype.Component;
 
 import cz.mzk.recordmanager.server.model.AuthorityRecord;
 import cz.mzk.recordmanager.server.model.Cnb;
+import cz.mzk.recordmanager.server.model.DownloadImportConfiguration;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecordFormat;
 import cz.mzk.recordmanager.server.model.ImportConfiguration;
@@ -67,6 +68,7 @@ public class DBUnitHelper {
 		statement.execute("delete from " + HarvestedRecord.TABLE_NAME);
 		statement.execute("delete from " + OAIHarvestConfiguration.TABLE_NAME);
 		statement.execute("delete from " + KrameriusConfiguration.TABLE_NAME);
+		statement.execute("delete from " + DownloadImportConfiguration.TABLE_NAME);
 		statement.execute("delete from " + ImportConfiguration.TABLE_NAME);
 	}
 	
