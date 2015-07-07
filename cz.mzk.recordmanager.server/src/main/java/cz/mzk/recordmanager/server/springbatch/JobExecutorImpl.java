@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.batch.runtime.BatchStatus;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.ExitStatus;
@@ -70,6 +72,11 @@ public class JobExecutorImpl implements JobExecutor {
 
 	@Override
 	public Long execute(String jobName, JobParameters params) {
+		return execute(jobName, params, false);
+	}
+
+	@Override
+	public Long execute(String jobName, JobParameters params, boolean forceRestart) {
 		try {
 			final Job job = jobRegistry.getJob(jobName);
 			JobParameters transformedParams = transformJobParameters(params,
@@ -81,8 +88,14 @@ public class JobExecutorImpl implements JobExecutor {
 				params = incrementer.getNext(transformedParams);
 			}
 			job.getJobParametersValidator().validate(transformedParams);
-			JobExecution exec = jobLauncher.run(job, transformedParams);
-			return exec.getId();
+			JobExecution lastExec = jobRepository.getLastJobExecution(jobName, transformedParams);
+			if (forceRestart && lastExec != null && !lastExec.getStatus().equals(BatchStatus.COMPLETED)) {
+				restart(lastExec.getId());
+				return lastExec.getJobId();
+			} else {
+				JobExecution exec = jobLauncher.run(job, transformedParams);
+				return exec.getId();
+			}
 		} catch (Exception ex) {
 			throw new RuntimeException(String.format(
 					"Job %s with parameters %s could not be started.", jobName,

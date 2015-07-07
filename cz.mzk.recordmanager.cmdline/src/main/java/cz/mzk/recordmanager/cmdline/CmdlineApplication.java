@@ -77,7 +77,7 @@ public class CmdlineApplication {
 					JobExecutor executor = applicationContext
 							.getBean(JobExecutor.class);
 					Runnable runnable = () -> executor.execute(jobName,
-							jobParams);
+							jobParams, true);
 					executeInThread(runnable);
 				}
 			} finally {
