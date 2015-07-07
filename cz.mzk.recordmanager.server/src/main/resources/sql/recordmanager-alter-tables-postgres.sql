@@ -164,3 +164,25 @@ ALTER TABLE oai_harvest_conf DROP COLUMN id;
 ALTER TABLE oai_harvest_conf DROP COLUMN contact_person_id;
 ALTER TABLE oai_harvest_conf DROP COLUMN base_weight;
 ALTER TABLE oai_harvest_conf DROP COLUMN cluster_id_enabled;
+
+-- 7. 7. 2015 - xrosecky
+CREATE TABLE download_import_conf (
+  import_conf_id       DECIMAL(10)  PRIMARY KEY,
+  url                  VARCHAR(128),
+  CONSTRAINT download_conf_import_conf_fk FOREIGN KEY (import_conf_id) REFERENCES import_conf(id)
+);
+
+CREATE TABLE antikvariaty (
+  id                   DECIMAL(10) PRIMARY KEY,
+  updated              TIMESTAMP,
+  url                  VARCHAR(500),
+  title                VARCHAR(255),
+  pub_year             DECIMAL(5)
+);
+
+CREATE TABLE antikvariaty_catids (
+  id_from_catalogue   VARCHAR(100),
+  antikvariaty_id     DECIMAL(10),
+  CONSTRAINT antikvariaty_catids_pk PRIMARY KEY (id_from_catalogue, antikvariaty_id),
+  CONSTRAINT antikvariaty_catids_fk FOREIGN KEY (antikvariaty_id) REFERENCES antikvariaty(id)
+);
