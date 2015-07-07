@@ -15,6 +15,7 @@ public class Constants {
 	public static final String JOB_ID_SOLR_INDEX_LOCAL_RECORDS		= "indexLocalRecordsToSolrJob";
 	public static final String JOB_ID_EXPORT						= "exportRecordsJob";
 	public static final String JOB_ID_IMPORT						= "importRecordsJob";
+	public static final String JOB_ID_IMPORT_ANTIKVARIATY			= "antikvariatyImportRecordsJob";
 	public static final String JOB_ID_REGEN_DEDUP_KEYS				= "regenerateDedupKeysJob";
 	
 	public static final String JOB_PARAM_CONF_ID 		= "configurationId";

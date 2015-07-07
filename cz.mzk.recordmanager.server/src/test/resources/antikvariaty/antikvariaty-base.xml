@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<records>
+	<record>
+		<identifier>1</identifier>
+		<datestamp>2014-06-27T22:13:17Z</datestamp>
+		<title>Kdo, co je pan Gabriel?.</title>
+		<author>Binar, Ivan</author>
+		<date>1978</date>
+		<url>http://muj-antikvariat.cz/kniha/kdo-co-je-pan-gabriel-binar-ivan-1978
+		</url>
+		<isbn>0-88781-060-8 (brož.)</isbn>
+		<ctlno>(CZ PrNK)zb00026</ctlno>
+		<itm_cnt>1</itm_cnt>
+		<price_low>650</price_low>
+		<price_high>650</price_high>
+	</record>
+	<record>
+		<identifier>3</identifier>
+		<datestamp>2015-06-19T22:13:28Z</datestamp>
+		<title>Kdo dřív : [román o R. Amundsenovi a R. F. Scottovi].</title>
+		<author>Holt, Kåre</author>
+		<date>1980</date>
+		<url>http://muj-antikvariat.cz/kniha/kdo-driv-holt-kare-1980</url>
+		<nbn>cnb000139973</nbn>
+		<ctlno>(CZ PrNK)bk198100189</ctlno>
+		<itm_cnt>10</itm_cnt>
+		<price_low>30</price_low>
+		<price_high>120</price_high>
+	</record>
+	<record>
+		<identifier>4</identifier>
+		<datestamp>2015-06-27T22:13:17Z</datestamp>
+		<title>Kdo financoval nástup Hitlera k moci : 1919-1933.</title>
+		<author>Pool, James</author>
+		<date>1998</date>
+		<url>http://muj-antikvariat.cz/kniha/kdo-financoval-nastup-hitlera-k-moci-pool-james-1998
+		</url>
+		<isbn>80-85809-51-6 (váz.)</isbn>
+		<nbn>cnb000528547</nbn>
+		<ctlno>(CZ PrNK)cpk19980528547</ctlno>
+		<itm_cnt>18</itm_cnt>
+		<price_low>18</price_low>
+		<price_high>160</price_high>
+	</record>
+</records>
