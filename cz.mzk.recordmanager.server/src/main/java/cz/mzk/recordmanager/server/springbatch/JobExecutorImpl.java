@@ -132,7 +132,7 @@ public class JobExecutorImpl implements JobExecutor {
 			paramDeclMap.put(declaration.getName(), declaration);
 		}
 		
-		//No need for declare 'repear' parameter in job validator
+		//No need for declare 'repeat' parameter in job validator
 		if (paramDeclMap.get(Constants.JOB_PARAM_REPEAT) == null) {
 			paramDeclMap.put(Constants.JOB_PARAM_REPEAT, new JobParameterDeclaration(Constants.JOB_PARAM_REPEAT, ParameterType.LONG, false));
 		}
