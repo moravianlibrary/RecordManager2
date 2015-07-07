@@ -199,7 +199,7 @@ public class JobExecutorImpl implements JobExecutor {
 		}
 		
 		JobParameter repeatParam = transformedMap.get(Constants.JOB_PARAM_REPEAT);
-		if ((new Long(1)).equals(repeatParam.getValue())) {
+		if (repeatParam != null && (new Long(1)).equals(repeatParam.getValue())) {
 			transformedMap.put(Constants.JOB_PARAM_TIMESTAMP, new JobParameter(new Date()));
 		}
 		transformedMap.remove(Constants.JOB_PARAM_REPEAT);
