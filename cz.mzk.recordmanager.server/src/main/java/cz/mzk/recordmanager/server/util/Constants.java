@@ -23,6 +23,7 @@ public class Constants {
 	public static final String JOB_PARAM_SOLR_URL		= "solrUrl";
 	public static final String JOB_PARAM_FORMAT			= "format";
 	public static final String JOB_PARAM_RESUMPTION_TOKEN = "resumptionToken";
+	public static final String JOB_PARAM_REPEAT    		= "repeat";
 	
 	public static final String JOB_PARAM_OUT_FILE		= "outFile";
 	public static final String JOB_PARAM_IN_FILE		= "inFile";
