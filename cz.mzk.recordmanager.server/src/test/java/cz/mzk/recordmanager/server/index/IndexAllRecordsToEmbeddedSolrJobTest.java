@@ -47,7 +47,6 @@ public class IndexAllRecordsToEmbeddedSolrJobTest extends AbstractTest {
 
 	@BeforeMethod
 	public void before() throws Exception {
-		System.out.println("init");
 		dbUnitHelper.init("dbunit/IndexRecordsToSolrJobTest.xml");
 	}
 	
@@ -70,7 +69,7 @@ public class IndexAllRecordsToEmbeddedSolrJobTest extends AbstractTest {
 			query.set("q", "id:*");
 			query.setRows(100);
 			QueryResponse response = server.query(query);
-			//Assert.assertEquals(response.getResults().size(), 39);
+			Assert.assertEquals(response.getResults().size(), 77);
 		} finally {
 			server.shutdown();
 		}

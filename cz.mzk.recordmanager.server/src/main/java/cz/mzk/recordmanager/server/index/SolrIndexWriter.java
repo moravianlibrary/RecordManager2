@@ -15,7 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import cz.mzk.recordmanager.server.solr.SolrServerFactory;
 
-public class SolrIndexWriter implements ItemWriter<SolrInputDocument>, StepExecutionListener {
+public class SolrIndexWriter implements ItemWriter<List<SolrInputDocument>>, StepExecutionListener {
 
 	private static Logger logger = LoggerFactory.getLogger(SolrRecordProcessor.class);
 
@@ -31,13 +31,16 @@ public class SolrIndexWriter implements ItemWriter<SolrInputDocument>, StepExecu
 	public SolrIndexWriter(String solrUrl) {
 		this.solrUrl = solrUrl;
 	}
-
-	@SuppressWarnings("unchecked")
+	
 	@Override
-	public void write(List<? extends SolrInputDocument> documents) throws Exception {
-		logger.info("About to index {} documents to Solr", documents.size());
-		UpdateResponse response = server.add((List<SolrInputDocument>) documents, commitWithinMs);
-		logger.info("Indexing of {} documents to Solr finished", documents.size());
+	public void write(List<? extends List<SolrInputDocument>> items)
+			throws Exception {
+		int totalSize = 0;
+		for (List<SolrInputDocument> docList: items) {
+			totalSize += docList.size();
+			UpdateResponse response = server.add(docList, commitWithinMs);
+		}
+		logger.info("Indexing of {} documents to Solr finished", totalSize);
 	}
 
 	public int getCommitWithinMs() {
@@ -57,5 +60,4 @@ public class SolrIndexWriter implements ItemWriter<SolrInputDocument>, StepExecu
 	public ExitStatus afterStep(StepExecution stepExecution) {
 		return null;
 	}
-
 }

@@ -306,5 +306,29 @@ public class MarcDSL {
     	
     	return result;
     }
+    
+    public List<String> getHoldings996() {
+    	List<String> result = new ArrayList<>();
+    	Map<String, List<DataField>> allFields = record.getAllFields();
+    	
+    	List<DataField> list996 = allFields.get("996");
+    	if (list996 == null) {
+    		return result;
+    	}
+    	for (DataField dataField: list996) {
+    		StringBuilder currentSb = new StringBuilder();
+    		// 996 with '0' in subfield 'q'
+    		if (dataField.getSubfield('q') != null && dataField.getSubfields('q').equals("0")) {
+    			continue;
+    		}
+    		for (Subfield subfield: dataField.getSubfields()) {
+    			currentSb.append('$');
+    			currentSb.append(subfield.getCode());
+    			currentSb.append(subfield.getData());
+    		}
+    		result.add(currentSb.toString());
+    	}
+    	return result;
+    }
 
 }

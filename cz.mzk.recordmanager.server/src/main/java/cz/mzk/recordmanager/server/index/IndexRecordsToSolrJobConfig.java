@@ -2,6 +2,7 @@ package cz.mzk.recordmanager.server.index;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.sql.DataSource;
@@ -68,7 +69,6 @@ public class IndexRecordsToSolrJobConfig {
         		.validator(new IndexRecordsToSolrJobParametersValidator())
         		.listener(JobFailureListener.INSTANCE)
         		.flow(deleteOrphanedHarvestedRecordsStep)
-        		.next(updateHarvestedRecordsStep)
 				.next(updateRecordsStep)
 				.next(deleteOrphanedRecordsStep)
 				.end()
@@ -101,7 +101,7 @@ public class IndexRecordsToSolrJobConfig {
     @Bean(name="indexRecordsToSolrJob:updateRecordsStep")
     public Step updateRecordsStep() throws Exception {
 		return steps.get("updateRecordsJobStep")
-            .<DedupRecord, SolrInputDocument> chunk(CHUNK_SIZE) //
+            .<DedupRecord, List<SolrInputDocument>> chunk(CHUNK_SIZE) //
             .reader(updatedRecordsReader(DATE_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION)) //
             .processor(updatedRecordsProcessor()) //
             .writer(updatedRecordsWriter(STRING_OVERRIDEN_BY_EXPRESSION)) //
@@ -241,7 +241,7 @@ public class IndexRecordsToSolrJobConfig {
     @Bean(name="indexLocalRecordsToSolrJob:updateHarvestedRecordsStep")
     public Step updateHarvestedRecordsStep() throws Exception {
 		return steps.get("updateHarvestedRecordsStep")
-            .<HarvestedRecord, SolrInputDocument> chunk(CHUNK_SIZE) //
+            .<HarvestedRecord, List<SolrInputDocument>> chunk(CHUNK_SIZE) //
             .reader(updatedHarvestedRecordsReader(DATE_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION)) //
             .processor(updatedHarvestedRecordsProcessor()) //
             .writer(updatedHarvestedRecordsWriter(STRING_OVERRIDEN_BY_EXPRESSION)) //

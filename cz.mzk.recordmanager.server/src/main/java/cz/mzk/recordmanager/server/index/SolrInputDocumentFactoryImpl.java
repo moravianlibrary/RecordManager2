@@ -10,6 +10,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.solr.common.SolrInputDocument;
+import org.apache.solr.common.SolrInputField;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
@@ -18,9 +19,10 @@ import org.springframework.stereotype.Component;
 
 import cz.mzk.recordmanager.server.model.DedupRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
+import cz.mzk.recordmanager.server.model.ImportConfiguration;
+import cz.mzk.recordmanager.server.oai.dao.AntikvariatyRecordDAO;
 import cz.mzk.recordmanager.server.scripting.MappingResolver;
 import cz.mzk.recordmanager.server.scripting.marc.MarcDSL;
-import cz.mzk.recordmanager.server.model.ImportConfiguration;
 
 @Component
 public class SolrInputDocumentFactoryImpl implements SolrInputDocumentFactory, InitializingBean {
@@ -54,6 +56,9 @@ public class SolrInputDocumentFactoryImpl implements SolrInputDocumentFactory, I
 	
 	@Autowired
 	private MappingResolver propertyResolver;
+	
+	@Autowired
+	private AntikvariatyRecordDAO antikvariatyRecordDao;
 
 	@Override
 	public SolrInputDocument create(HarvestedRecord record) {
@@ -73,26 +78,49 @@ public class SolrInputDocumentFactoryImpl implements SolrInputDocumentFactory, I
 		}
 	}
 
-	public SolrInputDocument create(DedupRecord dedupRecord, List<HarvestedRecord> records) {
+	public List<SolrInputDocument> create(DedupRecord dedupRecord, List<HarvestedRecord> records) {
 		if (records.isEmpty()) {
 			return null;
 		}
+		
+		List<SolrInputDocument> documentList = new ArrayList<>();
+		for (HarvestedRecord currentRec: records) {
+			SolrInputDocument solrDoc = create(currentRec);
+			documentList.add(solrDoc);
+		}
+		
 		HarvestedRecord record = records.get(0);
-		SolrInputDocument document = parse(record);
-		document.addField(SolrFieldConstants.ID_FIELD, dedupRecord.getId());
-		document.addField(SolrFieldConstants.INSTITUTION_FIELD, getInstitution(record));
-		document.addField(SolrFieldConstants.MERGED_FIELD, 1);
-		document.addField(SolrFieldConstants.WEIGHT, records.get(0).getWeight());
-		document.addField(SolrFieldConstants.CITY_INSTITUTION_CS, getCityInstitutionForSearching(record));
+		SolrInputDocument mergedDocument = parse(record);
+		mergedDocument.addField(SolrFieldConstants.ID_FIELD, dedupRecord.getId());
+		mergedDocument.addField(SolrFieldConstants.INSTITUTION_FIELD, getInstitution(record));
+		mergedDocument.addField(SolrFieldConstants.MERGED_FIELD, 1);
+		mergedDocument.addField(SolrFieldConstants.WEIGHT, records.get(0).getWeight());
+		mergedDocument.addField(SolrFieldConstants.CITY_INSTITUTION_CS, getCityInstitutionForSearching(record));
+		mergedDocument.addField(SolrFieldConstants.EXTERNAL_LINKS_FIELD, getExternalLinks(dedupRecord));
+		
 		List<String> localIds = new ArrayList<String>();
 		for (HarvestedRecord rec : records) {
 			localIds.add(getId(rec));
 		}
-		document.addField(SolrFieldConstants.LOCAL_IDS_FIELD, localIds);
+		mergedDocument.addField(SolrFieldConstants.LOCAL_IDS_FIELD, localIds);
+		
+		// merge holdings from all records
+		List<String> allHoldings996 = new ArrayList<>();
+		for (SolrInputDocument doc: documentList) {
+			SolrInputField docHoldings = doc.getField(SolrFieldConstants.HOLDINGS_996_FIELD);
+			if (docHoldings != null && docHoldings.getValue() != null) {
+				allHoldings996.addAll((List<String>) docHoldings.getValue());
+			}
+			
+		}
+		mergedDocument.remove(SolrFieldConstants.HOLDINGS_996_FIELD);
+		mergedDocument.addField(SolrFieldConstants.HOLDINGS_996_FIELD, allHoldings996);
+		documentList.add(mergedDocument);
+
 		if (logger.isTraceEnabled()) {
 			logger.info("Mapping of dedupRecord with id = {} finished", dedupRecord.getId());
 		}
-		return document;
+		return documentList;
 	}
 
 	protected SolrInputDocument parse(HarvestedRecord record) {
@@ -102,6 +130,18 @@ public class SolrInputDocumentFactoryImpl implements SolrInputDocumentFactory, I
 			String fName = remappedFields.getOrDefault(field.getKey(),
 					field.getKey());
 			Object fValue = field.getValue();
+			String id = getId(record);
+			if (fName.equals(SolrFieldConstants.HOLDINGS_996_FIELD)) {
+				//add ids to holdings_996_field
+				
+				@SuppressWarnings("unchecked")
+				List<String> holdings = (List<String>) fValue;
+				List<String> updatedHoldings = new ArrayList<>();
+				for (String oldHolding: holdings) {
+					updatedHoldings.add(oldHolding + "$z" + id);
+				}
+				fValue = updatedHoldings;
+			}
 			document.addField(fName, fValue);
 		}
 		return document;
@@ -165,6 +205,17 @@ public class SolrInputDocumentFactoryImpl implements SolrInputDocumentFactory, I
 			String fName = field.replace('-', '_');
 			remappedFields.put(fName, field);
 		}
+	}
+	
+	protected List<String> getExternalLinks(DedupRecord dr) {
+		List<String> result = new ArrayList<>();
+		
+		String antikvariatyURL = antikvariatyRecordDao.getLinkToAntikvariaty(dr);
+		if (antikvariatyURL != null) {
+			result.add("antikvariaty:" + antikvariatyURL);
+		}
+		
+		return result;
 	}
 
 }

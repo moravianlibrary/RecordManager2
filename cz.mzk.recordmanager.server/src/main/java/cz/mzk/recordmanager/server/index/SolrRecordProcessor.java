@@ -12,7 +12,7 @@ import cz.mzk.recordmanager.server.model.DedupRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordDAO;
 
-public class SolrRecordProcessor implements ItemProcessor<DedupRecord, SolrInputDocument> {
+public class SolrRecordProcessor implements ItemProcessor<DedupRecord, List<SolrInputDocument>> {
 	
 	private static Logger logger = LoggerFactory.getLogger(SolrRecordProcessor.class);
 
@@ -23,7 +23,7 @@ public class SolrRecordProcessor implements ItemProcessor<DedupRecord, SolrInput
 	private SolrInputDocumentFactory factory;
 	
 	@Override
-	public SolrInputDocument process(DedupRecord dedupRecord) throws Exception {
+	public List<SolrInputDocument> process(DedupRecord dedupRecord) throws Exception {
 		logger.debug("About to process dedup_record with id={}", dedupRecord.getId());
 		List<HarvestedRecord> records = harvestedRecordDao.getByDedupRecord(dedupRecord);
 		if (records.isEmpty()) {

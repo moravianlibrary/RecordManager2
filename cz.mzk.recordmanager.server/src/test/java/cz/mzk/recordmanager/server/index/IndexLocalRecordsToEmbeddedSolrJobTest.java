@@ -47,7 +47,6 @@ public class IndexLocalRecordsToEmbeddedSolrJobTest extends AbstractTest {
 
 	@BeforeMethod
 	public void before() throws Exception {
-		System.out.println("init");
 		dbUnitHelper.init("dbunit/IndexRecordsToSolrJobTest.xml");
 	}
 	

@@ -11,6 +11,6 @@ public interface SolrInputDocumentFactory {
 
 	public SolrInputDocument create(HarvestedRecord record);
 
-	public SolrInputDocument create(DedupRecord dedupRecord, List<HarvestedRecord> records);
+	public List<SolrInputDocument> create(DedupRecord dedupRecord, List<HarvestedRecord> records);
 
 }
