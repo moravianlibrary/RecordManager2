@@ -1,5 +1,6 @@
 package cz.mzk.recordmanager.server.index;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -22,10 +23,11 @@ import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.model.ImportConfiguration;
 import cz.mzk.recordmanager.server.oai.dao.AntikvariatyRecordDAO;
 import cz.mzk.recordmanager.server.scripting.MappingResolver;
-import cz.mzk.recordmanager.server.scripting.marc.MarcDSL;
 
 @Component
 public class SolrInputDocumentFactoryImpl implements SolrInputDocumentFactory, InitializingBean {
+
+	private static final String MZK_INSTITUTION_MAP = "mzk_institution.map";
 
 	private static Logger logger = LoggerFactory.getLogger(SolrInputDocumentFactoryImpl.class);
 	
@@ -184,18 +186,18 @@ public class SolrInputDocumentFactoryImpl implements SolrInputDocumentFactory, I
 		String name = getInstitutionOfRecord(record);
 		result.add("0/"+city+"/");
 		result.add("1/"+city+"/"+name+"/");
-
 		return result;
 	}
 	
 	protected List<String> getCityInstitutionForSearching(HarvestedRecord hr){
 		List<String> result = new ArrayList<String>();
 		result.add(getCityOfRecord(hr));
-		MarcDSL marcdsl = new MarcDSL(propertyResolver);
-		try{
-			result.add(marcdsl.translate("mzk_institution.map", getInstitutionOfRecord(hr), null));
-		}catch(Exception ex){}
-		
+		try {
+			result.add(propertyResolver.resolve(MZK_INSTITUTION_MAP).get(getInstitutionOfRecord(hr)));
+		} catch (IOException ioe){
+			throw new IllegalArgumentException(
+					String.format("Mapping for %s can't be open", MZK_INSTITUTION_MAP));
+		}
 		return result;
 	}
 

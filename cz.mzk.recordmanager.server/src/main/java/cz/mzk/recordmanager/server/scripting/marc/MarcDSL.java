@@ -46,13 +46,6 @@ public class MarcDSL {
 		this.functions = functions;
 		this.marcMetadataRecord = new MetadataMarcRecord(record);
 	}
-	
-	public MarcDSL(MappingResolver propertyResolver){
-		super();
-		this.record = null;
-		this.propertyResolver = propertyResolver;
-		this.functions = null;
-	}
 
 	public String getFirstField(String tag) {
 		Matcher matcher = FIELD_PATTERN.matcher(tag);
