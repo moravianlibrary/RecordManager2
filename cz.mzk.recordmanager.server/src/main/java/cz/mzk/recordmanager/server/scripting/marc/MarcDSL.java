@@ -1,6 +1,5 @@
 package cz.mzk.recordmanager.server.scripting.marc;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -18,31 +17,28 @@ import cz.mzk.recordmanager.server.export.IOFormat;
 import cz.mzk.recordmanager.server.marc.MarcRecord;
 import cz.mzk.recordmanager.server.metadata.MetadataMarcRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecordFormat.HarvestedRecordFormatEnum;
-import cz.mzk.recordmanager.server.scripting.Mapping;
+import cz.mzk.recordmanager.server.scripting.BaseDSL;
 import cz.mzk.recordmanager.server.scripting.MappingResolver;
 import cz.mzk.recordmanager.server.scripting.function.RecordFunction;
 
-public class MarcDSL {
-	
+public class MarcDSL extends BaseDSL {
+
 	private MetadataMarcRecord marcMetadataRecord;
-	
+
 	private final static String EMPTY_SEPARATOR = "";
-	
+
 	private final static Pattern FIELD_PATTERN = Pattern
 			.compile("([0-9]{3})([a-zA-Z0-9]*)");
-	
+
 	private static final Pattern RECORDTYPE_PATTERN = Pattern.compile("^(AUDIO|VIDEO|OTHER)_(.*)$");
 
 	private final MarcRecord record;
 
-	private final MappingResolver propertyResolver;
-	
 	private final Map<String, RecordFunction<MarcRecord>> functions;
 
 	public MarcDSL(MarcRecord record, MappingResolver propertyResolver, Map<String, RecordFunction<MarcRecord>> functions) {
-		super();
+		super(propertyResolver);
 		this.record = record;
-		this.propertyResolver = propertyResolver;
 		this.functions = functions;
 		this.marcMetadataRecord = new MetadataMarcRecord(record);
 	}
@@ -94,32 +90,6 @@ public class MarcDSL {
 		if(s != null) return getFirstField("044a").trim();
 		
 		return "";
-	}
-
-	public String translate(String file, String input, String defaultValue)
-			throws IOException {
-		Mapping mapping = propertyResolver.resolve(file);
-		String result = (String) mapping.get(input);
-		if (result == null) {
-			result = defaultValue;
-		}
-		return result;
-	}
-
-	public List<String> translate(String file, List<String> inputs,
-			String defaultValue) throws IOException {
-		List<String> translated = new ArrayList<String>();
-		Mapping mapping = propertyResolver.resolve(file);
-		for (String input : inputs) {
-			String result = (String) mapping.get(input);
-			if (result == null) {
-				result = defaultValue;
-			}
-			if (result != null) {
-				translated.add(result);
-			}
-		}
-		return translated;
 	}
 
     /*
