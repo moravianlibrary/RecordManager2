@@ -10,6 +10,7 @@ import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+
 import org.apache.solr.common.SolrInputDocument;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,10 +18,10 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import cz.mzk.recordmanager.server.index.enrich.DedupRecordEnricher;
 import cz.mzk.recordmanager.server.model.DedupRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.model.ImportConfiguration;
-import cz.mzk.recordmanager.server.oai.dao.AntikvariatyRecordDAO;
 import cz.mzk.recordmanager.server.scripting.MappingResolver;
 import cz.mzk.recordmanager.server.util.SolrUtils;
 
@@ -60,7 +61,7 @@ public class SolrInputDocumentFactoryImpl implements SolrInputDocumentFactory, I
 	private MappingResolver propertyResolver;
 	
 	@Autowired
-	private AntikvariatyRecordDAO antikvariatyRecordDao;
+	private List<DedupRecordEnricher> dedupRecordEnrichers;
 
 	@Override
 	public SolrInputDocument create(HarvestedRecord record) {
@@ -95,7 +96,7 @@ public class SolrInputDocumentFactoryImpl implements SolrInputDocumentFactory, I
 		mergedDocument.addField(SolrFieldConstants.MERGED_FIELD, 1);
 		mergedDocument.addField(SolrFieldConstants.WEIGHT, record.getWeight());
 		mergedDocument.addField(SolrFieldConstants.CITY_INSTITUTION_CS, getCityInstitutionForSearching(record));
-		mergedDocument.addField(SolrFieldConstants.EXTERNAL_LINKS_FIELD, getExternalLinks(dedupRecord));
+		dedupRecordEnrichers.forEach(enricher -> enricher.enrich(dedupRecord, mergedDocument));
 		
 		List<String> localIds = records.stream().map(rec -> getId(record)).collect(Collectors.toCollection(ArrayList::new));
 		mergedDocument.addField(SolrFieldConstants.LOCAL_IDS_FIELD, localIds);
@@ -195,17 +196,6 @@ public class SolrInputDocumentFactoryImpl implements SolrInputDocumentFactory, I
 			String fName = field.replace('-', '_');
 			remappedFields.put(fName, field);
 		}
-	}
-	
-	protected List<String> getExternalLinks(DedupRecord dr) {
-		List<String> result = new ArrayList<>();
-		
-		String antikvariatyURL = antikvariatyRecordDao.getLinkToAntikvariaty(dr);
-		if (antikvariatyURL != null) {
-			result.add("antikvariaty:" + antikvariatyURL);
-		}
-		
-		return result;
 	}
 
 }
