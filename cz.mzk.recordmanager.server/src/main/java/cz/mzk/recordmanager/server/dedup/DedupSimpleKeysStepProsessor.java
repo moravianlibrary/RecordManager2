@@ -42,6 +42,7 @@ public class DedupSimpleKeysStepProsessor implements
 		// used in merging two different DedupRecords into one
 		Map<DedupRecord, Set<DedupRecord>> updateDedupRecordsMap = new HashMap<>();
 		
+		
 		for(Long id: idList) {
 			HarvestedRecord currentHr = harvestedRecordDao.get(id);
 			if (currentHr == null) {
@@ -119,9 +120,15 @@ public class DedupSimpleKeysStepProsessor implements
 			}
 		}
 		
-		if (!updateDedupRecordsMap.isEmpty()) {
-			// TODO handle update
-			System.out.println(updateDedupRecordsMap);
+		
+		// walk through map and update references 
+		for (Map.Entry<DedupRecord, Set<DedupRecord>> entry : updateDedupRecordsMap.entrySet()) {
+			System.out.println(entry);
+		    for (DedupRecord updatedDR: entry.getValue()) {
+		    	for(HarvestedRecord toBeUpdated: harvestedRecordDao.getByDedupRecord(updatedDR)) {
+		    		toBeUpdated.setDedupRecord(entry.getKey());
+		    	}
+		    }
 		}
 		
 		
