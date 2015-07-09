@@ -1,5 +1,7 @@
 package cz.mzk.recordmanager.server.index.enrich;
 
+import java.util.List;
+
 import org.apache.solr.common.SolrInputDocument;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -15,7 +17,8 @@ public class AntikvariatyDedupRecordEnricher implements DedupRecordEnricher {
 	private AntikvariatyRecordDAO antikvariatyRecordDao;
 
 	@Override
-	public void enrich(DedupRecord record, SolrInputDocument mergedDocument) {
+	public void enrich(DedupRecord record, SolrInputDocument mergedDocument,
+			List<SolrInputDocument> localRecords) {
 		String antikvariatyURL = antikvariatyRecordDao.getLinkToAntikvariaty(record);
 		if (antikvariatyURL != null) {
 			mergedDocument.addField(SolrFieldConstants.EXTERNAL_LINKS_FIELD, antikvariatyURL);

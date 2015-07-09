@@ -81,7 +81,6 @@ public class SolrInputDocumentFactoryImpl implements SolrInputDocumentFactory, I
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	public List<SolrInputDocument> create(DedupRecord dedupRecord, List<HarvestedRecord> records) {
 		if (records.isEmpty()) {
 			return null;
@@ -96,19 +95,11 @@ public class SolrInputDocumentFactoryImpl implements SolrInputDocumentFactory, I
 		mergedDocument.addField(SolrFieldConstants.MERGED_FIELD, 1);
 		mergedDocument.addField(SolrFieldConstants.WEIGHT, record.getWeight());
 		mergedDocument.addField(SolrFieldConstants.CITY_INSTITUTION_CS, getCityInstitutionForSearching(record));
-		dedupRecordEnrichers.forEach(enricher -> enricher.enrich(dedupRecord, mergedDocument));
 		
 		List<String> localIds = records.stream().map(rec -> getId(record)).collect(Collectors.toCollection(ArrayList::new));
 		mergedDocument.addField(SolrFieldConstants.LOCAL_IDS_FIELD, localIds);
 		
-		// merge holdings from all records
-		List<String> allHoldings996 = new ArrayList<>();
-		documentList.stream() //
-			.map(doc -> doc.getField(SolrFieldConstants.HOLDINGS_996_FIELD)) //
-			.filter(field -> field != null && field.getValue() != null) //
-			.forEach(field -> allHoldings996.addAll((List<String>) field.getValue()));
-		mergedDocument.remove(SolrFieldConstants.HOLDINGS_996_FIELD);
-		mergedDocument.addField(SolrFieldConstants.HOLDINGS_996_FIELD, allHoldings996);
+		dedupRecordEnrichers.forEach(enricher -> enricher.enrich(dedupRecord, mergedDocument, documentList));
 		documentList.add(mergedDocument);
 
 		if (logger.isTraceEnabled()) {
