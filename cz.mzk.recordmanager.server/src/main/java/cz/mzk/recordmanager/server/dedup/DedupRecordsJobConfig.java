@@ -205,7 +205,7 @@ public class DedupRecordsJobConfig {
 	@Bean(name = Constants.JOB_ID_DEDUP + ":initStep")
 	public Step initStep() {
 		return steps.get("initTasklet")
-				.tasklet(prepareTempClusterIdTasklet())
+				.tasklet(initTasklet())
 				.listener(new StepProgressListener())
 				.build();
 	}
