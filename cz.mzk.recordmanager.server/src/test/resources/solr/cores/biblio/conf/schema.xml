@@ -241,6 +241,8 @@
    <dynamicField name="*_boolean" type="boolean" indexed="true" stored="true" required="false" />
    <dynamicField name="*_autocomplete" type="text_autocomplete" indexed="true" stored="true" multiValued="true" omitNorms="true" omitTermFreqAndPositions="true"/>
    <dynamicField name="*_geo"  type="geo" indexed="true" stored="true" multiValued="true" />
+   <dynamicField name="*_display"  type="string" indexed="false" stored="true" multiValued="false" />
+   <dynamicField name="*_display_mv"  type="string" indexed="false" stored="true" multiValued="true" />
  </fields>
  <uniqueKey>id</uniqueKey>
  <defaultSearchField>allfields</defaultSearchField>
