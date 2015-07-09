@@ -20,6 +20,7 @@ import cz.mzk.recordmanager.server.model.HarvestedRecordFormat.HarvestedRecordFo
 import cz.mzk.recordmanager.server.scripting.BaseDSL;
 import cz.mzk.recordmanager.server.scripting.MappingResolver;
 import cz.mzk.recordmanager.server.scripting.function.RecordFunction;
+import cz.mzk.recordmanager.server.util.SolrUtils;
 
 public class MarcDSL extends BaseDSL {
 
@@ -166,17 +167,15 @@ public class MarcDSL extends BaseDSL {
 		return marcMetadataRecord.export(IOFormat.ISO_2709);
 	}
 	
-	public List<String> getRecordType(){
+	public List<String> getRecordType() {
 		List<String> result = new ArrayList<String>();
-		
-		for(HarvestedRecordFormatEnum format: marcMetadataRecord.getDetectedFormatList()){
+		for (HarvestedRecordFormatEnum format: marcMetadataRecord.getDetectedFormatList()) {
 			Matcher matcher = RECORDTYPE_PATTERN.matcher(format.name());
-			if(matcher.matches()){
-				result.add("0/"+matcher.group(1)+"/");
-				result.add("1/"+matcher.group(1)+"/"+matcher.group(2)+"/");
+			if (matcher.matches()) {
+				result.addAll(SolrUtils.createHierarchicFacetValues(matcher.group(1), matcher.group(2)));
 			}
 			else {
-				result.add("0/"+format+"/");
+				result.addAll(SolrUtils.createHierarchicFacetValues(format.name()));
 			}
 		}
 		return result;

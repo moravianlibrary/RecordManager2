@@ -23,6 +23,7 @@ import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.model.ImportConfiguration;
 import cz.mzk.recordmanager.server.oai.dao.AntikvariatyRecordDAO;
 import cz.mzk.recordmanager.server.scripting.MappingResolver;
+import cz.mzk.recordmanager.server.util.SolrUtils;
 
 @Component
 public class SolrInputDocumentFactoryImpl implements SolrInputDocumentFactory, InitializingBean {
@@ -181,14 +182,11 @@ public class SolrInputDocumentFactoryImpl implements SolrInputDocumentFactory, I
 	}
 	
 	protected List<String> getInstitution(HarvestedRecord record){
-		List<String> result = new ArrayList<String>();
 		String city = getCityOfRecord(record);
 		String name = getInstitutionOfRecord(record);
-		result.add("0/"+city+"/");
-		result.add("1/"+city+"/"+name+"/");
-		return result;
+		return SolrUtils.createHierarchicFacetValues(city, name);
 	}
-	
+
 	protected List<String> getCityInstitutionForSearching(HarvestedRecord hr){
 		List<String> result = new ArrayList<String>();
 		result.add(getCityOfRecord(hr));
