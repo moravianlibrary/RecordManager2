@@ -9,9 +9,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
+import java.util.stream.Collectors;
 import org.apache.solr.common.SolrInputDocument;
-import org.apache.solr.common.SolrInputField;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
@@ -81,41 +80,32 @@ public class SolrInputDocumentFactoryImpl implements SolrInputDocumentFactory, I
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	public List<SolrInputDocument> create(DedupRecord dedupRecord, List<HarvestedRecord> records) {
 		if (records.isEmpty()) {
 			return null;
 		}
 		
-		List<SolrInputDocument> documentList = new ArrayList<>();
-		for (HarvestedRecord currentRec: records) {
-			SolrInputDocument solrDoc = create(currentRec);
-			documentList.add(solrDoc);
-		}
+		List<SolrInputDocument> documentList = records.stream().map(rec -> create(rec)).collect(Collectors.toCollection(ArrayList::new));
 		
 		HarvestedRecord record = records.get(0);
 		SolrInputDocument mergedDocument = parse(record);
 		mergedDocument.addField(SolrFieldConstants.ID_FIELD, dedupRecord.getId());
 		mergedDocument.addField(SolrFieldConstants.INSTITUTION_FIELD, getInstitution(record));
 		mergedDocument.addField(SolrFieldConstants.MERGED_FIELD, 1);
-		mergedDocument.addField(SolrFieldConstants.WEIGHT, records.get(0).getWeight());
+		mergedDocument.addField(SolrFieldConstants.WEIGHT, record.getWeight());
 		mergedDocument.addField(SolrFieldConstants.CITY_INSTITUTION_CS, getCityInstitutionForSearching(record));
 		mergedDocument.addField(SolrFieldConstants.EXTERNAL_LINKS_FIELD, getExternalLinks(dedupRecord));
 		
-		List<String> localIds = new ArrayList<String>();
-		for (HarvestedRecord rec : records) {
-			localIds.add(getId(rec));
-		}
+		List<String> localIds = records.stream().map(rec -> getId(record)).collect(Collectors.toCollection(ArrayList::new));
 		mergedDocument.addField(SolrFieldConstants.LOCAL_IDS_FIELD, localIds);
 		
 		// merge holdings from all records
 		List<String> allHoldings996 = new ArrayList<>();
-		for (SolrInputDocument doc: documentList) {
-			SolrInputField docHoldings = doc.getField(SolrFieldConstants.HOLDINGS_996_FIELD);
-			if (docHoldings != null && docHoldings.getValue() != null) {
-				allHoldings996.addAll((List<String>) docHoldings.getValue());
-			}
-			
-		}
+		documentList.stream() //
+			.map(doc -> doc.getField(SolrFieldConstants.HOLDINGS_996_FIELD)) //
+			.filter(field -> field != null && field.getValue() != null) //
+			.forEach(field -> allHoldings996.addAll((List<String>) field.getValue()));
 		mergedDocument.remove(SolrFieldConstants.HOLDINGS_996_FIELD);
 		mergedDocument.addField(SolrFieldConstants.HOLDINGS_996_FIELD, allHoldings996);
 		documentList.add(mergedDocument);
