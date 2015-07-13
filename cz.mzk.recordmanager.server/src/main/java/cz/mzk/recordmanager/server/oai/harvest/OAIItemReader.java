@@ -20,7 +20,6 @@ import cz.mzk.recordmanager.server.model.OAIHarvestConfiguration;
 import cz.mzk.recordmanager.server.oai.dao.OAIHarvestConfigurationDAO;
 import cz.mzk.recordmanager.server.oai.model.OAIIdentify;
 import cz.mzk.recordmanager.server.oai.model.OAIListRecords;
-import cz.mzk.recordmanager.server.oai.model.OAIRoot;
 import cz.mzk.recordmanager.server.oai.model.OAIRecord;
 import cz.mzk.recordmanager.server.util.HibernateSessionSynchronizer;
 import cz.mzk.recordmanager.server.util.HibernateSessionSynchronizer.SessionBinder;
@@ -75,7 +74,7 @@ public class OAIItemReader implements ItemReader<List<OAIRecord>>, ItemStream,
 
 		OAIListRecords listRecords = harvester.listRecords(resumptionToken);
 		resumptionToken = listRecords.getNextResumptionToken();
-		if (resumptionToken == null) {
+		if (resumptionToken == null || resumptionToken.isEmpty()) {
 			finished = true;
 		}
 		if (listRecords.getRecords().isEmpty()) {
