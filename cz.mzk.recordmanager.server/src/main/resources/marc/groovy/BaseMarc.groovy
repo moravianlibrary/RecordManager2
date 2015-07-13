@@ -80,7 +80,7 @@ bbox_geo_str = getBoundingBox()
 statuses = getStatuses()
 
 // deprecated
-title_display = getFields "245abnp"
+title_display = getFirstField "245abnp"
 
 //published = getFirstField "260a"
 
