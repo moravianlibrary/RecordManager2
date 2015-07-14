@@ -38,7 +38,9 @@ public class SolrIndexWriter implements ItemWriter<List<SolrInputDocument>>, Ste
 		int totalSize = 0;
 		for (List<SolrInputDocument> docList: items) {
 			totalSize += docList.size();
-			UpdateResponse response = server.add(docList, commitWithinMs);
+			if (!docList.isEmpty()) {
+				server.add(docList, commitWithinMs);
+			}
 		}
 		logger.info("Indexing of {} documents to Solr finished", totalSize);
 	}

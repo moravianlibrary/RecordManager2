@@ -23,7 +23,10 @@ public class SolrHarvestedRecordProcessor implements ItemProcessor<HarvestedReco
 		logger.debug("About to process harvestedRecord with id={}", record.getUniqueId());
 		try {
 			List<SolrInputDocument> result = new ArrayList<>();
-			result.add(factory.create(record));
+			//filter deleted records
+			if (record.getDeleted() == null) { 
+				result.add(factory.create(record));
+			}
 			return result;
 		} catch (Exception ex) {
 			logger.error(String.format("Exception thrown when indexing dedup_record with id=%s", record.getUniqueId()), ex);

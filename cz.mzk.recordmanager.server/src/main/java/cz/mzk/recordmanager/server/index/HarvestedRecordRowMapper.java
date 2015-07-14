@@ -27,6 +27,7 @@ public class HarvestedRecordRowMapper implements
 		HarvestedRecord record = new HarvestedRecord(id);
 		record.setHarvestedFrom(importConfig);
 		record.setUpdated(rs.getDate("updated"));
+		record.setDeleted(rs.getDate("deleted"));
 		record.setRawRecord(rs.getBytes("raw_record"));
 		record.setFormat(rs.getString("format"));
 		return record;
