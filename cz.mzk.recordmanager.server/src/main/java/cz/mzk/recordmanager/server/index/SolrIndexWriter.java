@@ -3,7 +3,7 @@ package cz.mzk.recordmanager.server.index;
 import java.util.List;
 
 import org.apache.solr.client.solrj.SolrServer;
-import org.apache.solr.client.solrj.response.UpdateResponse;
+import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.common.SolrInputDocument;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,11 +36,15 @@ public class SolrIndexWriter implements ItemWriter<List<SolrInputDocument>>, Ste
 	public void write(List<? extends List<SolrInputDocument>> items)
 			throws Exception {
 		int totalSize = 0;
-		for (List<SolrInputDocument> docList: items) {
-			totalSize += docList.size();
-			if (!docList.isEmpty()) {
-				server.add(docList, commitWithinMs);
+		try {
+			for (List<SolrInputDocument> docList: items) {
+				totalSize += docList.size();
+				if (!docList.isEmpty()) {
+					server.add(docList, commitWithinMs);
+				}
 			}
+		} catch (SolrServerException sse) {
+			logger.error(sse.toString());
 		}
 		logger.info("Indexing of {} documents to Solr finished", totalSize);
 	}
