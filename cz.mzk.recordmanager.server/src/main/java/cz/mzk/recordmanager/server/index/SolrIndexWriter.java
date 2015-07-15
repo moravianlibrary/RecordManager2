@@ -43,8 +43,8 @@ public class SolrIndexWriter implements ItemWriter<List<SolrInputDocument>>, Ste
 					server.add(docList, commitWithinMs);
 				}
 			}
-		} catch (SolrServerException sse) {
-			logger.error(sse.toString());
+		} catch (Exception e) {
+			logger.error(e.toString());
 		}
 		logger.info("Indexing of {} documents to Solr finished", totalSize);
 	}
