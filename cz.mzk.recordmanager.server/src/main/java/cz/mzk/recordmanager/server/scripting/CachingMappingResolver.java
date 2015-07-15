@@ -4,6 +4,13 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * 
+ * Mapping resolver that caches translation/mapping files
+ * 
+ * @author xrosecky
+ *
+ */
 public class CachingMappingResolver implements MappingResolver {
 	
 	private final MappingResolver delegate;

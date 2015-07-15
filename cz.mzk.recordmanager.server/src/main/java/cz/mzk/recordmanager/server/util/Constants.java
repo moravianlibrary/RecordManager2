@@ -39,7 +39,7 @@ public class Constants {
 	public static final String PREFIX_NKP				= "nkp";
 	public static final String PREFIX_NTK				= "ntk";
 
-public static final String JOB_PARAM_RECORD_ID		= "recordId";
+	public static final String JOB_PARAM_RECORD_ID		= "recordId";
 	/* need some changing paramteter :-/ - 
 	 * A job instance already exists and is complete for parameters={}. 
 	 * If you want to run this job again, change the parameters. */

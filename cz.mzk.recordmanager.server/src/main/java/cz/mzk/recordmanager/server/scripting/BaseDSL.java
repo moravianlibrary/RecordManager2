@@ -4,6 +4,18 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 
+ * Abstract class for DSL (domain specific language) for description of
+ * mapping between metadata records and Solr fields. Example of mapping:
+ * 
+ * language = translate("mzk_language.map", getLanguages(), null)
+ * country_txt = translate("mzk_country.map", getCountry(), null)
+ * 
+ * 
+ * @author xrosecky
+ *
+ */
 public abstract class BaseDSL {
 
 	private final MappingResolver propertyResolver;

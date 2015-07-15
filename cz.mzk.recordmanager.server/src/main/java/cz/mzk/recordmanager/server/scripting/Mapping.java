@@ -9,6 +9,15 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * 
+ * Map for translation of values before indexing to Solr.
+ * 
+ * @see cz.mzk.recordmanager.server.scripting.MappingResolver
+ * 
+ * @author xrosecky
+ * 
+ */
 public class Mapping {
 	
 	private static final Charset UTF_8_CHARSET = Charset.forName("UTF-8");
@@ -29,17 +38,22 @@ public class Mapping {
 		}
 		this.mapping = Collections.unmodifiableMap(map);
 	}
-	
-	public String trim(String string) {
+
+	/**
+	 * Translate the given key to corresponding value.
+	 * 
+	 * 
+	 */
+	public String get(String key) {
+		return mapping.get(key);
+	}
+
+	private String trim(String string) {
 		string = string.trim();
 		if (string.startsWith("\"") && string.endsWith("\"")) {
 			string = string.substring(1, string.length() - 1);
 		}
 		return string;
-	}
-
-	public String get(String key) {
-		return mapping.get(key);
 	}
 
 }

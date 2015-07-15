@@ -1,9 +1,10 @@
 package cz.mzk.recordmanager.server.index;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.solr.client.solrj.SolrServer;
-import org.apache.solr.client.solrj.SolrServerException;
+import org.apache.solr.client.solrj.response.UpdateResponse;
 import org.apache.solr.common.SolrInputDocument;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,20 +34,16 @@ public class SolrIndexWriter implements ItemWriter<List<SolrInputDocument>>, Ste
 	}
 	
 	@Override
-	public void write(List<? extends List<SolrInputDocument>> items)
-			throws Exception {
-		int totalSize = 0;
+	public void write(List<? extends List<SolrInputDocument>> items) {
+		List<SolrInputDocument> documents = new ArrayList<SolrInputDocument>();
+		items.stream().forEach(it -> documents.addAll(it));
+		logger.info("About to index {} documents to Solr", documents.size());
 		try {
-			for (List<SolrInputDocument> docList: items) {
-				totalSize += docList.size();
-				if (!docList.isEmpty()) {
-					server.add(docList, commitWithinMs);
-				}
-			}
-		} catch (Exception e) {
-			logger.error(e.toString());
+			UpdateResponse response = server.add(documents, commitWithinMs);
+		} catch (Exception ex) {
+			logger.error("Exception thrown when indexing documents to Solr", ex);
 		}
-		logger.info("Indexing of {} documents to Solr finished", totalSize);
+		logger.info("Indexing of {} documents to Solr finished", documents.size());
 	}
 
 	public int getCommitWithinMs() {
