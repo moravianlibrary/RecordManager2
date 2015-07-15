@@ -55,8 +55,6 @@ public class IndexRecordsToSolrJobTest extends AbstractTest {
 	
 	private SolrServer mockedSolrServer = EasyMock.createMock(SolrServer.class);
 	
-	private static final int DEDUP_RECORD_COUNT = 37;
-	
 	@BeforeMethod
 	public void before() throws Exception {
 		dbUnitHelper.init("dbunit/IndexRecordsToSolrJobTest.xml");
@@ -68,11 +66,7 @@ public class IndexRecordsToSolrJobTest extends AbstractTest {
 		reset(solrServerFactory);
 		reset(mockedSolrServer);
 		expect(solrServerFactory.create(SOLR_URL)).andReturn(mockedSolrServer).anyTimes();
-
-		// mock capture for each expected message
-		for (int i = 0; i <= DEDUP_RECORD_COUNT; i++) {
-			expect(mockedSolrServer.add(and(capture(EasyMock.newCapture()), (Collection<SolrInputDocument>) anyObject(Collection.class)), anyInt())).andReturn(new UpdateResponse());
-		}
+		expect(mockedSolrServer.add(and(capture(EasyMock.newCapture()), (Collection<SolrInputDocument>) anyObject(Collection.class)), anyInt())).andReturn(new UpdateResponse());
 		replay(solrServerFactory, mockedSolrServer);
 		
 		Job job = jobRegistry.getJob("indexRecordsToSolrJob");
