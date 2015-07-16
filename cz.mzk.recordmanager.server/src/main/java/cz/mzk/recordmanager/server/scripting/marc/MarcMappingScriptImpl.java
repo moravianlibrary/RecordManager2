@@ -3,6 +3,7 @@ package cz.mzk.recordmanager.server.scripting.marc;
 import groovy.lang.Binding;
 import groovy.util.DelegatingScript;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -40,7 +41,8 @@ public class MarcMappingScriptImpl implements MarcMappingScript {
 		@SuppressWarnings("unchecked")
 		Map<String, Object> entries = (Map<String, Object>) binding
 				.getVariables();
-		return entries;
+		Map<String, Object> copy = new HashMap<>(entries);
+		return copy;
 	}
 	
 }

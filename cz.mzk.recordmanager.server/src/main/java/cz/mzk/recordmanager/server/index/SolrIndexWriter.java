@@ -2,6 +2,7 @@ package cz.mzk.recordmanager.server.index;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Future;
 
 import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.response.UpdateResponse;
@@ -16,7 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import cz.mzk.recordmanager.server.solr.SolrServerFactory;
 
-public class SolrIndexWriter implements ItemWriter<List<SolrInputDocument>>, StepExecutionListener {
+public class SolrIndexWriter implements ItemWriter<Future<List<SolrInputDocument>>>, StepExecutionListener {
 
 	private static Logger logger = LoggerFactory.getLogger(SolrRecordProcessor.class);
 
@@ -32,18 +33,24 @@ public class SolrIndexWriter implements ItemWriter<List<SolrInputDocument>>, Ste
 	public SolrIndexWriter(String solrUrl) {
 		this.solrUrl = solrUrl;
 	}
-	
+
 	@Override
-	public void write(List<? extends List<SolrInputDocument>> items) {
-		List<SolrInputDocument> documents = new ArrayList<SolrInputDocument>();
-		items.stream().forEach(it -> documents.addAll(it));
-		logger.info("About to index {} documents to Solr", documents.size());
+	public void write(List<? extends Future<List<SolrInputDocument>>> items)
+			throws Exception {
 		try {
+			List<SolrInputDocument> documents = new ArrayList<SolrInputDocument>();
+			for (Future<List<SolrInputDocument>> item : items) {
+				List<SolrInputDocument> docs = item.get();
+				if (docs != null) {
+					documents.addAll(docs);
+				}
+			}
+			logger.info("About to index {} documents to Solr", documents.size());
 			UpdateResponse response = server.add(documents, commitWithinMs);
+			logger.info("Indexing of {} documents to Solr finished", documents.size());
 		} catch (Exception ex) {
 			logger.error("Exception thrown when indexing documents to Solr", ex);
 		}
-		logger.info("Indexing of {} documents to Solr finished", documents.size());
 	}
 
 	public int getCommitWithinMs() {
@@ -63,4 +70,5 @@ public class SolrIndexWriter implements ItemWriter<List<SolrInputDocument>>, Ste
 	public ExitStatus afterStep(StepExecution stepExecution) {
 		return null;
 	}
+
 }
