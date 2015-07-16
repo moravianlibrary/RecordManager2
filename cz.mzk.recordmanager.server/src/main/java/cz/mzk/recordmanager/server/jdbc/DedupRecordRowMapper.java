@@ -9,10 +9,16 @@ import cz.mzk.recordmanager.server.model.DedupRecord;
 
 public class DedupRecordRowMapper implements RowMapper<DedupRecord>  {
 
+	private final String columnName;
+
+	public DedupRecordRowMapper(String columnName) {
+		this.columnName = columnName;
+	}
+
 	@Override
 	public DedupRecord mapRow(ResultSet rs, int rowNum) throws SQLException {
 		DedupRecord record = new DedupRecord();
-		record.setId(rs.getLong("dedup_record_id"));
+		record.setId(rs.getLong(columnName));
 		return record;
 	}
 
