@@ -29,7 +29,9 @@ public class Constants {
 	public static final String JOB_PARAM_OUT_FILE		= "outFile";
 	public static final String JOB_PARAM_IN_FILE		= "inFile";
 	
-	public static final String JOB_PARAM_TIMESTAMP		= "timestamp"; 
+	public static final String JOB_PARAM_TIMESTAMP		= "timestamp";
+	
+	public static final String JOB_PARAM_NUMBER_OF_INDEXING_THREADS = "indexingThreads";
 	
 	public static final String METADATA_FORMAT_MARC21      = "marc21-xml";
 	public static final String METADATA_FORMAT_XML_MARC    = "xml-marc";
