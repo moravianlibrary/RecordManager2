@@ -8,3 +8,11 @@ SELECT
 FROM
   harvested_record
 ;
+
+CREATE MATERIALIZED VIEW dedup_record_last_update_mat AS
+SELECT
+  dedup_record_id,
+  last_update
+FROM
+  dedup_record_last_update
+;

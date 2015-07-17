@@ -1,7 +1,7 @@
 CREATE VIEW dedup_record_last_update AS
 SELECT
   dr.id dedup_record_id,
-  MAX(CASE WHEN dr.updated > hr.harvested THEN dr.updated ELSE hr.harvested END) last_update
+  MAX(CASE WHEN dr.updated > hr.updated THEN dr.updated ELSE hr.updated END) last_update
 FROM
   dedup_record dr JOIN 
   harvested_record hr ON hr.dedup_record_id = dr.id 

@@ -186,3 +186,18 @@ CREATE TABLE antikvariaty_catids (
   CONSTRAINT antikvariaty_catids_pk PRIMARY KEY (id_from_catalogue, antikvariaty_id),
   CONSTRAINT antikvariaty_catids_fk FOREIGN KEY (antikvariaty_id) REFERENCES antikvariaty(id)
 );
+
+-- 17. 7. 2015 - xrosecky
+CREATE INDEX harvested_record_dedup_record_id_updated_idx ON harvested_record(dedup_record_id, updated);
+DROP INDEX harvested_record_dedup_record_idx;
+
+CREATE VIEW dedup_record_last_update AS
+SELECT
+  dr.id dedup_record_id,
+  MAX(CASE WHEN dr.updated > hr.updated THEN dr.updated ELSE hr.updated END) last_update
+FROM
+  dedup_record dr JOIN 
+  harvested_record hr ON hr.dedup_record_id = dr.id 
+GROUP BY
+  dr.id
+;

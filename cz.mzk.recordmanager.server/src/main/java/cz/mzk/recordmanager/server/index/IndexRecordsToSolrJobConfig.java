@@ -54,13 +54,6 @@ public class IndexRecordsToSolrJobConfig {
 	
 	private static final int CONCURRENCY_LIMIT = 8;
 
-	private static final String DEDUP_RECORDS_RANGE_WHERE_CLAUSULE =
-			"(" +
-			"  EXISTS(SELECT 1 FROM harvested_record hr WHERE hr.dedup_record_id = dedup_record.id AND hr.updated BETWEEN :from AND :to)" +
-			"  OR " +
-			"  (dedup_record.updated BETWEEN :from AND :to AND EXISTS(SELECT 1 FROM harvested_record WHERE harvested_record.dedup_record_id = dedup_record.id))" +
-			")";
-
 	@Autowired
     private JobBuilderFactory jobs;
 
@@ -143,25 +136,21 @@ public class IndexRecordsToSolrJobConfig {
 	@StepScope
 	public ItemReader<DedupRecord> updatedRecordsReader(
 			@Value("#{jobParameters[" + Constants.JOB_PARAM_FROM_DATE + "]}") Date from,
-			@Value("#{jobParameters[" + Constants.JOB_PARAM_UNTIL_DATE + "]}") Date to) throws Exception {
+			@Value("#{jobParameters[" + Constants.JOB_PARAM_UNTIL_DATE + "]}") Date to)
+			throws Exception {
 		if (from != null && to == null) {
 			to = new Date();
-		}
-		if (from == null && to != null) {
-			from = new Date(Long.MIN_VALUE);
 		}
 		JdbcPagingItemReader<DedupRecord> reader = new JdbcPagingItemReader<DedupRecord>();
 		SqlPagingQueryProviderFactoryBean pqpf = new SqlPagingQueryProviderFactoryBean();
 		pqpf.setDataSource(dataSource);
-		pqpf.setSelectClause("SELECT id");
-		pqpf.setFromClause("FROM dedup_record");
-		if (from == null && to == null) {
-			pqpf.setWhereClause("WHERE EXISTS(SELECT 1 FROM harvested_record WHERE harvested_record.dedup_record_id = dedup_record.id)");
-		} else {
-			pqpf.setWhereClause(DEDUP_RECORDS_RANGE_WHERE_CLAUSULE);
+		pqpf.setSelectClause("SELECT dedup_record_id");
+		pqpf.setFromClause("FROM dedup_record_last_update");
+		if (from != null && to != null) {
+			pqpf.setWhereClause("WHERE last_update BETWEEN :from AND :to");
 		}
-		pqpf.setSortKey("id");
-		reader.setRowMapper(new DedupRecordRowMapper("id"));
+		pqpf.setSortKey("dedup_record_id");
+		reader.setRowMapper(new DedupRecordRowMapper("dedup_record_id"));
 		reader.setPageSize(PAGE_SIZE);
 		reader.setQueryProvider(pqpf.getObject());
 		reader.setDataSource(dataSource);
