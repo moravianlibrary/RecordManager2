@@ -110,15 +110,10 @@ public class IndexRecordsToSolrJobConfig {
     // dedup records
 	@Bean(name="indexRecordsToSolrJob:updateRecordsStep")
 	public Step updateRecordsStep() throws Exception {
-		AsyncItemProcessor<DedupRecord, List<SolrInputDocument>> processor = new AsyncItemProcessor<>();
-		processor.setDelegate(new DelegatingHibernateProcessor<>(sessionFactory, updatedRecordsProcessor()));
-		SimpleAsyncTaskExecutor taskExecutor = new SimpleAsyncTaskExecutor("solrIndexer");
-		taskExecutor.setConcurrencyLimit(CONCURRENCY_LIMIT);
-		processor.setTaskExecutor(taskExecutor);
 		return steps.get("updateRecordsJobStep")
 			.<DedupRecord, Future<List<SolrInputDocument>>> chunk(CHUNK_SIZE) //
 			.reader(updatedRecordsReader(DATE_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION)) //
-			.processor(processor) //
+			.processor(asyncUpdatedRecordsProcessor()) //
 			.writer(updatedRecordsWriter(STRING_OVERRIDEN_BY_EXPRESSION)) //
 			.build();
 	}
@@ -163,19 +158,30 @@ public class IndexRecordsToSolrJobConfig {
 		reader.afterPropertiesSet();
 		return reader;
 	}
-	
+
     @Bean(name="indexRecordsToSolrJob:updatedRecordsProcessor")
 	@StepScope
 	public SolrRecordProcessor updatedRecordsProcessor() {
 		return new SolrRecordProcessor();
 	}
-    
+
+	@Bean(name = "indexRecordsToSolrJob:asyncUpdatedRecordsProcessor")
+	@StepScope
+	public AsyncItemProcessor<DedupRecord, List<SolrInputDocument>> asyncUpdatedRecordsProcessor() {
+		AsyncItemProcessor<DedupRecord, List<SolrInputDocument>> processor = new AsyncItemProcessor<>();
+		processor.setDelegate(new DelegatingHibernateProcessor<>(sessionFactory, updatedRecordsProcessor()));
+		SimpleAsyncTaskExecutor taskExecutor = new SimpleAsyncTaskExecutor("solrIndexer");
+		taskExecutor.setConcurrencyLimit(CONCURRENCY_LIMIT);
+		processor.setTaskExecutor(taskExecutor);
+		return processor;
+	}
+
     @Bean(name="indexRecordsToSolrJob:updatedRecordsWriter")
     @StepScope
     public SolrIndexWriter updatedRecordsWriter(@Value("#{jobParameters[" + Constants.JOB_PARAM_SOLR_URL + "]}") String solrUrl) {
     	return new SolrIndexWriter(solrUrl);
     }
-    
+
     @Bean(name="indexRecordsToSolrJob:orphanedRecordsReader")
 	@StepScope
     public ItemReader<String> orphanedRecordsReader(@Value("#{jobParameters[" + Constants.JOB_PARAM_FROM_DATE  + "]}") Date from,
@@ -205,13 +211,13 @@ public class IndexRecordsToSolrJobConfig {
     	reader.afterPropertiesSet();
     	return reader;
     }
-    
+
     @Bean(name="indexRecordsToSolrJob:orphanedRecordsWriter")
     @StepScope
     public OrphanedRecordsWriter orphanedRecordsWriter(@Value("#{jobParameters[" + Constants.JOB_PARAM_SOLR_URL + "]}") String solrUrl) {
     	return new OrphanedRecordsWriter(solrUrl);
     }
-    
+
     // local records
     @Bean(name="indexLocalRecordsToSolrJob:deleteOrphanedHarvestedRecordsStep") 
     public Step deleteOrphanedHarvestedRecordsStep() throws Exception {
@@ -257,15 +263,10 @@ public class IndexRecordsToSolrJobConfig {
 
 	@Bean(name="indexLocalRecordsToSolrJob:updateHarvestedRecordsStep")
 	public Step updateHarvestedRecordsStep() throws Exception {
-		AsyncItemProcessor<HarvestedRecord, List<SolrInputDocument>> processor = new AsyncItemProcessor<>();
-		processor.setDelegate(new DelegatingHibernateProcessor<>(sessionFactory, updatedHarvestedRecordsProcessor()));
-		SimpleAsyncTaskExecutor taskExecutor = new SimpleAsyncTaskExecutor("solrIndexer");
-		taskExecutor.setConcurrencyLimit(CONCURRENCY_LIMIT);
-		processor.setTaskExecutor(taskExecutor);
 		return steps.get("updateHarvestedRecordsStep")
 			.<HarvestedRecord, Future<List<SolrInputDocument>>> chunk(CHUNK_SIZE) //
 			.reader(updatedHarvestedRecordsReader(DATE_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION)) //
-			.processor(processor) //
+			.processor(asyncUpdatedHarvestedRecordsProcessor()) //
 			.writer(updatedHarvestedRecordsWriter(STRING_OVERRIDEN_BY_EXPRESSION)) //
 			.build();
 	}
@@ -308,7 +309,18 @@ public class IndexRecordsToSolrJobConfig {
 	public SolrHarvestedRecordProcessor updatedHarvestedRecordsProcessor() {
 		return new SolrHarvestedRecordProcessor();
 	}
-	
+
+	@Bean(name = "indexLocalRecordsToSolrJob:asyncUpdatedHarvestedRecordsReader")
+	@StepScope
+	public AsyncItemProcessor<HarvestedRecord, List<SolrInputDocument>> asyncUpdatedHarvestedRecordsProcessor() {
+		AsyncItemProcessor<HarvestedRecord, List<SolrInputDocument>> processor = new AsyncItemProcessor<>();
+		processor.setDelegate(new DelegatingHibernateProcessor<>(sessionFactory, updatedHarvestedRecordsProcessor()));
+		SimpleAsyncTaskExecutor taskExecutor = new SimpleAsyncTaskExecutor("solrIndexer");
+		taskExecutor.setConcurrencyLimit(CONCURRENCY_LIMIT);
+		processor.setTaskExecutor(taskExecutor);
+		return processor;
+	}
+
 	@Bean(name="indexLocalRecordsToSolrJob:updatedHarvestedRecordsWriter")
 	@StepScope
 	public SolrIndexWriter updatedHarvestedRecordsWriter(@Value("#{jobParameters[" + Constants.JOB_PARAM_SOLR_URL + "]}") String solrUrl) {
