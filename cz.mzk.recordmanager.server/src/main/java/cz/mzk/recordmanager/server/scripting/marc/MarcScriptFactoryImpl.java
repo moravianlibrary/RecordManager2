@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 import cz.mzk.recordmanager.server.marc.MarcRecord;
 import cz.mzk.recordmanager.server.scripting.AbstractScriptFactory;
 import cz.mzk.recordmanager.server.scripting.MappingResolver;
+import cz.mzk.recordmanager.server.scripting.MappingScript;
 import cz.mzk.recordmanager.server.scripting.function.RecordFunction;
 import cz.mzk.recordmanager.server.scripting.function.RecordFunctionsFactory;
 import cz.mzk.recordmanager.server.scripting.marc.function.MarcRecordFunctions;
@@ -34,12 +35,12 @@ public class MarcScriptFactoryImpl extends AbstractScriptFactory<MarcRecord>
 	private Map<String, RecordFunction<MarcRecord>> functions;
 
 	@Override
-	public MarcMappingScript create(InputStream... scriptsSource) {
-		return (MarcMappingScript) super.create(scriptsSource);
+	public MappingScript<MarcRecord> create(InputStream... scriptsSource) {
+		return (MappingScript<MarcRecord>) super.create(scriptsSource);
 	}
 
 	@Override
-	protected MarcMappingScript create(Binding binding,
+	protected MappingScript<MarcRecord> create(Binding binding,
 			List<DelegatingScript> scripts) {
 		return new MarcMappingScriptImpl(binding, scripts, propertyResolver,
 				functions);

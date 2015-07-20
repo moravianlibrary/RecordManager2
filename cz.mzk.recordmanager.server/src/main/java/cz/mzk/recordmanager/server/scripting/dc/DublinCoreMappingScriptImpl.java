@@ -8,9 +8,10 @@ import java.util.Map;
 
 import cz.mzk.recordmanager.server.dc.DublinCoreRecord;
 import cz.mzk.recordmanager.server.scripting.MappingResolver;
+import cz.mzk.recordmanager.server.scripting.MappingScript;
 import cz.mzk.recordmanager.server.scripting.function.RecordFunction;
 
-public class DublinCoreMappingScriptImpl implements DublinCoreMappingScript {
+public class DublinCoreMappingScriptImpl implements MappingScript<DublinCoreRecord> {
 
 	private final Binding binding;
 

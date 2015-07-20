@@ -28,6 +28,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.task.SimpleAsyncTaskExecutor;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import com.google.common.collect.ImmutableMap;
 
@@ -172,8 +173,10 @@ public class IndexRecordsToSolrJobConfig {
 	public AsyncItemProcessor<DedupRecord, List<SolrInputDocument>> asyncUpdatedRecordsProcessor() {
 		AsyncItemProcessor<DedupRecord, List<SolrInputDocument>> processor = new AsyncItemProcessor<>();
 		processor.setDelegate(new DelegatingHibernateProcessor<>(sessionFactory, updatedRecordsProcessor()));
-		SimpleAsyncTaskExecutor taskExecutor = new SimpleAsyncTaskExecutor("solrIndexer");
-		taskExecutor.setConcurrencyLimit(CONCURRENCY_LIMIT);
+		ThreadPoolTaskExecutor taskExecutor = new ThreadPoolTaskExecutor();
+		taskExecutor.setCorePoolSize(CONCURRENCY_LIMIT);
+		taskExecutor.setThreadGroupName("IndexingThread");
+		taskExecutor.afterPropertiesSet();
 		processor.setTaskExecutor(taskExecutor);
 		return processor;
 	}

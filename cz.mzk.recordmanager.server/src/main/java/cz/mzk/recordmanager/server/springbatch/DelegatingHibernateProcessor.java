@@ -29,6 +29,7 @@ public class DelegatingHibernateProcessor<I, O> implements ItemProcessor<I, O> {
 			return delegate.process(item);
 		} finally {
 			SessionFactoryUtils.closeSession(session);
+			TransactionSynchronizationManager.unbindResource(sessionFactory);
 		}
 	}
 

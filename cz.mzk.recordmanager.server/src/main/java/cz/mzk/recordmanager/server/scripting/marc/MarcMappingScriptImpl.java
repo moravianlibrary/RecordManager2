@@ -9,9 +9,10 @@ import java.util.Map;
 
 import cz.mzk.recordmanager.server.marc.MarcRecord;
 import cz.mzk.recordmanager.server.scripting.MappingResolver;
+import cz.mzk.recordmanager.server.scripting.MappingScript;
 import cz.mzk.recordmanager.server.scripting.function.RecordFunction;
 
-public class MarcMappingScriptImpl implements MarcMappingScript {
+public class MarcMappingScriptImpl implements MappingScript<MarcRecord> {
 
 	private final Binding binding;
 	

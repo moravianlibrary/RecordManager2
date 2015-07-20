@@ -14,7 +14,7 @@ import cz.mzk.recordmanager.server.marc.MarcRecord;
 import cz.mzk.recordmanager.server.marc.MarcXmlParser;
 import cz.mzk.recordmanager.server.model.DedupRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
-import cz.mzk.recordmanager.server.scripting.marc.MarcMappingScript;
+import cz.mzk.recordmanager.server.scripting.MappingScript;
 import cz.mzk.recordmanager.server.scripting.marc.MarcScriptFactory;
 
 @Component
@@ -28,7 +28,7 @@ public class MarcSolrRecordMapper implements SolrRecordMapper, InitializingBean 
 	@Autowired
 	private MarcScriptFactory marcScriptFactory;
 
-	private MarcMappingScript mappingScript;
+	private MappingScript<MarcRecord> mappingScript;
 
 	@Override
 	public List<String> getSupportedFormats() {
@@ -53,11 +53,11 @@ public class MarcSolrRecordMapper implements SolrRecordMapper, InitializingBean 
 	protected Map<String, Object> parse(HarvestedRecord record) {
 		InputStream is = new ByteArrayInputStream(record.getRawRecord());
 		MarcRecord rec = marcXmlParser.parseRecord(is);
-		MarcMappingScript script = getMappingScript(record);
+		MappingScript<MarcRecord> script = getMappingScript(record);
 		return script.parse(rec);
 	}
 
-	protected MarcMappingScript getMappingScript(HarvestedRecord record) {
+	protected MappingScript<MarcRecord> getMappingScript(HarvestedRecord record) {
 		return mappingScript;
 	}
 

@@ -22,6 +22,6 @@ public interface MappingScriptFactory<T> {
 	 * @param scripts
 	 * @return
 	 */
-	public MappingScript<T> create(InputStream... scripts);
+	public MappingScript<T>create(InputStream... scripts);
 
 }

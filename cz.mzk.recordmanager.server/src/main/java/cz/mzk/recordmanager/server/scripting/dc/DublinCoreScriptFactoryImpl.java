@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 import cz.mzk.recordmanager.server.dc.DublinCoreRecord;
 import cz.mzk.recordmanager.server.scripting.AbstractScriptFactory;
 import cz.mzk.recordmanager.server.scripting.MappingResolver;
+import cz.mzk.recordmanager.server.scripting.MappingScript;
 import cz.mzk.recordmanager.server.scripting.dc.function.DublinCoreRecordFunctions;
 import cz.mzk.recordmanager.server.scripting.function.RecordFunction;
 import cz.mzk.recordmanager.server.scripting.function.RecordFunctionsFactory;
@@ -35,13 +36,13 @@ public class DublinCoreScriptFactoryImpl extends AbstractScriptFactory<DublinCor
 	private Map<String, RecordFunction<DublinCoreRecord>> functions = new HashMap<>();
 
 	@Override
-	public DublinCoreMappingScript create(InputStream... scriptsSource) {
-		return (DublinCoreMappingScript) super.create(scriptsSource);
+	public MappingScript<DublinCoreRecord> create(InputStream... scriptsSource) {
+		return (MappingScript<DublinCoreRecord>) super.create(scriptsSource);
 	}
 
 	@Override
-	protected DublinCoreMappingScript create(Binding binding,
-			List<DelegatingScript> scripts) {
+	protected MappingScript<DublinCoreRecord> create(final Binding binding,
+			final List<DelegatingScript> scripts) {
 		return new DublinCoreMappingScriptImpl(binding, scripts, propertyResolver,
 				functions);
 	}

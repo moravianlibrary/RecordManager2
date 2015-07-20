@@ -14,7 +14,6 @@ import cz.mzk.recordmanager.server.AbstractTest;
 import cz.mzk.recordmanager.server.marc.MarcRecord;
 import cz.mzk.recordmanager.server.marc.MarcXmlParser;
 import cz.mzk.recordmanager.server.model.HarvestedRecordFormat.HarvestedRecordFormatEnum;
-import cz.mzk.recordmanager.server.scripting.marc.MarcMappingScript;
 import cz.mzk.recordmanager.server.scripting.marc.MarcScriptFactory;
 
 public class MarcScriptFactoryTest extends AbstractTest {
@@ -34,7 +33,7 @@ public class MarcScriptFactoryTest extends AbstractTest {
 				"/groovy/ExtendedMarc.groovy");
 		InputStream is2 = getClass().getResourceAsStream(
 				"/groovy/BaseMarc.groovy");
-		MarcMappingScript script = factory.create(is1, is2);
+		MappingScript<MarcRecord> script = factory.create(is1, is2);
 		Map<String, Object> entries = script.parse(record);
 		Assert.assertEquals(entries.get("author"), null);
 		Assert.assertEquals(entries.get("published"), "Rožnov pod Radhoštěm : Proxima Bohemia, 2014");
@@ -57,7 +56,7 @@ public class MarcScriptFactoryTest extends AbstractTest {
 				"/groovy/ExtendedMarc.groovy");
 		InputStream is2 = getClass().getResourceAsStream(
 				"/groovy/BaseMarc.groovy");
-		MarcMappingScript script = factory.create(is1, is2);
+		MappingScript<MarcRecord> script = factory.create(is1, is2);
 		Map<String, Object> entries = script.parse(record);
 		Collection<?> author2Roles = (Collection<?>) entries.get("author2_role");
 		Assert.assertTrue(author2Roles.isEmpty());

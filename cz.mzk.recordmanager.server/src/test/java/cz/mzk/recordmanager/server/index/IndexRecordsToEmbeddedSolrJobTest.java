@@ -66,7 +66,10 @@ public class IndexRecordsToEmbeddedSolrJobTest extends AbstractTest {
 			server.commit();
 			SolrQuery query = new SolrQuery();
 			query.set("q", "id:*");
+			//query.set("fl", "id");
+			//query.set("q", "id:MZK.MZK01-000000126");
 			QueryResponse response = server.query(query);
+			System.out.println(response.getResults());
 			Assert.assertEquals(response.getResults().size(), 10);
 		} finally {
 			server.shutdown();

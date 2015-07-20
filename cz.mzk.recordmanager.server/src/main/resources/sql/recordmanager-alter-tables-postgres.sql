@@ -191,7 +191,7 @@ CREATE TABLE antikvariaty_catids (
 CREATE INDEX harvested_record_dedup_record_id_updated_idx ON harvested_record(dedup_record_id, updated);
 DROP INDEX harvested_record_dedup_record_idx;
 
-CREATE VIEW dedup_record_last_update AS
+CREATE OR REPLACE VIEW dedup_record_last_update AS
 SELECT
   dr.id dedup_record_id,
   MAX(CASE WHEN dr.updated > hr.updated THEN dr.updated ELSE hr.updated END) last_update

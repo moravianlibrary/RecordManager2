@@ -10,7 +10,6 @@ import org.testng.annotations.Test;
 import cz.mzk.recordmanager.server.AbstractTest;
 import cz.mzk.recordmanager.server.dc.DublinCoreRecord;
 import cz.mzk.recordmanager.server.dc.DublinCoreRecordImpl;
-import cz.mzk.recordmanager.server.scripting.dc.DublinCoreMappingScript;
 import cz.mzk.recordmanager.server.scripting.dc.DublinCoreScriptFactory;
 
 public class DublinCoreScriptFactoryTest extends AbstractTest {
@@ -22,7 +21,7 @@ public class DublinCoreScriptFactoryTest extends AbstractTest {
 	public void test() {
 		InputStream is1 = getClass().getResourceAsStream(
 				"/groovy/BaseDublinCore.groovy");
-		DublinCoreMappingScript script = factory.create(is1);
+		MappingScript<DublinCoreRecord> script = factory.create(is1);
 		DublinCoreRecord record = new DublinCoreRecordImpl();
 		record.addTitle("test");
 		Map<String, Object> entries = script.parse(record);

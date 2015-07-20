@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -13,7 +14,7 @@ import cz.mzk.recordmanager.server.dc.DublinCoreParser;
 import cz.mzk.recordmanager.server.dc.DublinCoreRecord;
 import cz.mzk.recordmanager.server.model.DedupRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
-import cz.mzk.recordmanager.server.scripting.dc.DublinCoreMappingScript;
+import cz.mzk.recordmanager.server.scripting.MappingScript;
 import cz.mzk.recordmanager.server.scripting.dc.DublinCoreScriptFactory;
 
 @Component
@@ -27,7 +28,7 @@ public class DublinCoreSolrRecordMapper implements SolrRecordMapper, Initializin
 	@Autowired
 	private DublinCoreParser parser;
 
-	private DublinCoreMappingScript mappingScript;
+	private MappingScript<DublinCoreRecord> mappingScript;
 
 	@Override
 	public List<String> getSupportedFormats() {
@@ -51,13 +52,13 @@ public class DublinCoreSolrRecordMapper implements SolrRecordMapper, Initializin
 
 	protected Map<String, Object> parse(HarvestedRecord record) {
 		InputStream is = new ByteArrayInputStream(record.getRawRecord());
-		DublinCoreMappingScript script = getMappingScript(record);
+		MappingScript<DublinCoreRecord> script = getMappingScript(record);
 		DublinCoreRecord rec = parser.parseRecord(is);
 		Map<String, Object> fields = script.parse(rec);
 		return fields;
 	}
 
-	protected DublinCoreMappingScript getMappingScript(HarvestedRecord record) {
+	protected MappingScript<DublinCoreRecord> getMappingScript(HarvestedRecord record) {
 		return mappingScript;
 	}
 
