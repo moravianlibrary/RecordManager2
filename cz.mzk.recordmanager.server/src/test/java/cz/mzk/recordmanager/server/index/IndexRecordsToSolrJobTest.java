@@ -34,6 +34,7 @@ import org.testng.annotations.Test;
 import cz.mzk.recordmanager.server.AbstractTest;
 import cz.mzk.recordmanager.server.DBUnitHelper;
 import cz.mzk.recordmanager.server.solr.SolrServerFactory;
+import cz.mzk.recordmanager.server.util.Constants;
 
 public class IndexRecordsToSolrJobTest extends AbstractTest {
 	
@@ -74,6 +75,7 @@ public class IndexRecordsToSolrJobTest extends AbstractTest {
 		params.put("from", new JobParameter(dateFormat.parse("1. 1. 2010")));
 		params.put("to", new JobParameter(dateFormat.parse("1. 1. 2016")));
 		params.put("solrUrl", new JobParameter(SOLR_URL));
+		params.put(Constants.JOB_PARAM_NUMBER_OF_INDEXING_THREADS, new JobParameter((long) 2));
 		JobParameters jobParams = new JobParameters(params);
 		JobExecution execution = jobLauncher.run(job, jobParams);
 		Assert.assertEquals(execution.getExitStatus(), ExitStatus.COMPLETED);

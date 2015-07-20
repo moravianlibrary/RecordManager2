@@ -116,7 +116,7 @@ public class IndexRecordsToSolrJobConfig {
 		return steps.get("updateRecordsJobStep")
 			.<DedupRecord, Future<List<SolrInputDocument>>> chunk(CHUNK_SIZE) //
 			.reader(updatedRecordsReader(DATE_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION)) //
-			.processor(asyncUpdatedRecordsProcessor()) //
+			.processor(asyncUpdatedRecordsProcessor(INTEGER_OVERRIDEN_BY_EXPRESSION)) //
 			.writer(updatedRecordsWriter(STRING_OVERRIDEN_BY_EXPRESSION)) //
 			.build();
 	}
@@ -170,11 +170,12 @@ public class IndexRecordsToSolrJobConfig {
 
 	@Bean(name = "indexRecordsToSolrJob:asyncUpdatedRecordsProcessor")
 	@StepScope
-	public AsyncItemProcessor<DedupRecord, List<SolrInputDocument>> asyncUpdatedRecordsProcessor() {
+	public AsyncItemProcessor<DedupRecord, List<SolrInputDocument>> asyncUpdatedRecordsProcessor(
+			@Value("#{jobParameters[" + Constants.JOB_PARAM_NUMBER_OF_INDEXING_THREADS + "]}") Integer indexingThreads) {
 		AsyncItemProcessor<DedupRecord, List<SolrInputDocument>> processor = new AsyncItemProcessor<>();
 		processor.setDelegate(new DelegatingHibernateProcessor<>(sessionFactory, updatedRecordsProcessor()));
 		ThreadPoolTaskExecutor taskExecutor = new ThreadPoolTaskExecutor();
-		taskExecutor.setCorePoolSize(CONCURRENCY_LIMIT);
+		taskExecutor.setCorePoolSize((indexingThreads != null) ? indexingThreads : CONCURRENCY_LIMIT);
 		taskExecutor.setThreadGroupName("IndexingThread");
 		taskExecutor.afterPropertiesSet();
 		processor.setTaskExecutor(taskExecutor);
@@ -321,8 +322,10 @@ public class IndexRecordsToSolrJobConfig {
 			@Value("#{jobParameters[" + Constants.JOB_PARAM_NUMBER_OF_INDEXING_THREADS + "]}") Integer indexingThreads) {
 		AsyncItemProcessor<HarvestedRecord, List<SolrInputDocument>> processor = new AsyncItemProcessor<>();
 		processor.setDelegate(new DelegatingHibernateProcessor<>(sessionFactory, updatedHarvestedRecordsProcessor()));
-		SimpleAsyncTaskExecutor taskExecutor = new SimpleAsyncTaskExecutor("solrIndexer"); 
-		taskExecutor.setConcurrencyLimit((indexingThreads != null) ? indexingThreads : CONCURRENCY_LIMIT);
+		ThreadPoolTaskExecutor taskExecutor = new ThreadPoolTaskExecutor();
+		taskExecutor.setCorePoolSize((indexingThreads != null) ? indexingThreads : CONCURRENCY_LIMIT);
+		taskExecutor.setThreadGroupName("IndexingThread");
+		taskExecutor.afterPropertiesSet();
 		processor.setTaskExecutor(taskExecutor);
 		return processor;
 	}

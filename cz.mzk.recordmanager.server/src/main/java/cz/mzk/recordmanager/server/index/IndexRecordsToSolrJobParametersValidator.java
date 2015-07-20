@@ -20,7 +20,7 @@ DefaultJobParametersValidator {
 				param(Constants.JOB_PARAM_FROM_DATE, ParameterType.DATE, false), //
 				param(Constants.JOB_PARAM_UNTIL_DATE, ParameterType.DATE, false), //
 				param(Constants.JOB_PARAM_SOLR_URL, ParameterType.STRING, true), //
-				param(Constants.JOB_PARAM_NUMBER_OF_INDEXING_THREADS, ParameterType.STRING, false) //
+				param(Constants.JOB_PARAM_NUMBER_OF_INDEXING_THREADS, ParameterType.LONG, false) //
 				);
 	}
 
