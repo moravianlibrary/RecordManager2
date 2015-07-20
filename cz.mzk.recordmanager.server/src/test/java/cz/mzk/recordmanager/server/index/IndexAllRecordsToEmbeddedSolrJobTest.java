@@ -60,7 +60,7 @@ public class IndexAllRecordsToEmbeddedSolrJobTest extends AbstractTest {
 		try {
 			Job job = jobRegistry.getJob(Constants.JOB_ID_SOLR_INDEX_ALL_RECORDS);
 			Map<String, JobParameter> params = new HashMap<String, JobParameter>();
-			params.put("solrUrl", new JobParameter(SOLR_URL));
+			params.put(Constants.JOB_PARAM_SOLR_URL, new JobParameter(SOLR_URL));
 			JobParameters jobParams = new JobParameters(params);
 			JobExecution execution = jobLauncher.run(job, jobParams);
 			Assert.assertEquals(execution.getExitStatus(), ExitStatus.COMPLETED);

@@ -11,6 +11,7 @@ import java.util.Map;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.embedded.EmbeddedSolrServer;
 import org.apache.solr.client.solrj.response.QueryResponse;
+import org.apache.solr.common.SolrDocument;
 import org.apache.solr.core.CoreContainer;
 import org.springframework.batch.core.ExitStatus;
 import org.springframework.batch.core.Job;
@@ -27,6 +28,7 @@ import org.testng.annotations.Test;
 import cz.mzk.recordmanager.server.AbstractTest;
 import cz.mzk.recordmanager.server.DBUnitHelper;
 import cz.mzk.recordmanager.server.solr.SolrServerFactory;
+import cz.mzk.recordmanager.server.util.Constants;
 
 public class IndexRecordsToEmbeddedSolrJobTest extends AbstractTest {
 
@@ -49,8 +51,8 @@ public class IndexRecordsToEmbeddedSolrJobTest extends AbstractTest {
 		dbUnitHelper.init("dbunit/IndexRecordsToSolrJobTest.xml");
 	}
 
-	@Test
 	@SuppressWarnings("unchecked")
+	@Test
 	public void execute() throws Exception {
 		reset(solrServerFactory);
 		EmbeddedSolrServer server = createEmbeddedSolrServer();
@@ -59,18 +61,47 @@ public class IndexRecordsToEmbeddedSolrJobTest extends AbstractTest {
 		try {
 			Job job = jobRegistry.getJob("indexRecordsToSolrJob");
 			Map<String, JobParameter> params = new HashMap<String, JobParameter>();
-			params.put("solrUrl", new JobParameter(SOLR_URL));
+			params.put(Constants.JOB_PARAM_SOLR_URL, new JobParameter(SOLR_URL));
 			JobParameters jobParams = new JobParameters(params);
 			JobExecution execution = jobLauncher.run(job, jobParams);
 			Assert.assertEquals(execution.getExitStatus(), ExitStatus.COMPLETED);
 			server.commit();
-			SolrQuery query = new SolrQuery();
-			query.set("q", "id:*");
-			//query.set("fl", "id");
-			//query.set("q", "id:MZK.MZK01-000000126");
-			QueryResponse response = server.query(query);
-			System.out.println(response.getResults());
-			Assert.assertEquals(response.getResults().size(), 10);
+			
+			{
+				SolrQuery allDocsQuery = new SolrQuery();
+				allDocsQuery.set("q", "id:*");
+				allDocsQuery.set("rows", 10000);
+				QueryResponse allDocsResponse = server.query(allDocsQuery);
+				Assert.assertEquals(allDocsResponse.getResults().size(), 77);
+			}
+
+			{
+				SolrQuery docQuery = new SolrQuery();
+				docQuery.set("q", "id:MZK.MZK01-000000126");
+				QueryResponse docResponse = server.query(docQuery);
+				Assert.assertEquals(docResponse.getResults().size(), 1);
+				SolrDocument document = docResponse.getResults().get(0);
+				Assert.assertEquals(document.get("author"), "Grisham, John, 1955-");
+				Assert.assertEquals(document.get("title"), "--a je čas zabíjet /");
+			}
+			
+			{
+				SolrQuery docQuery = new SolrQuery();
+				docQuery.set("q", "id:MZK.MZK01-000000119");
+				QueryResponse docResponse = server.query(docQuery);
+				Assert.assertEquals(docResponse.getResults().size(), 1);
+				SolrDocument document = docResponse.getResults().get(0);
+				Assert.assertEquals(document.get("author"), "Andrić, Ivo, 1892-1975");
+				Assert.assertEquals(document.get("title"), "Most přes Drinu");
+			}
+			
+			{
+				SolrQuery deletedDocQuery = new SolrQuery();
+				deletedDocQuery.set("q", "id:MZK.MZK01-000000200");
+				QueryResponse docResponse = server.query(deletedDocQuery);
+				Assert.assertEquals(docResponse.getResults().size(), 0);
+			}
+			
 		} finally {
 			server.shutdown();
 		}
