@@ -1,9 +1,15 @@
 package cz.mzk.recordmanager.server.index;
 
+import static cz.mzk.recordmanager.server.springbatch.JobParameterDeclaration.param;
+
+import java.util.Arrays;
+import java.util.Collection;
+
 import org.apache.solr.client.solrj.SolrServer;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.StepContribution;
+import org.springframework.batch.core.JobParameter.ParameterType;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepScope;
@@ -17,7 +23,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import cz.mzk.recordmanager.server.solr.SolrServerFactory;
+import cz.mzk.recordmanager.server.springbatch.DefaultJobParametersValidator;
 import cz.mzk.recordmanager.server.springbatch.JobFailureListener;
+import cz.mzk.recordmanager.server.springbatch.JobParameterDeclaration;
 import cz.mzk.recordmanager.server.util.Constants;
 
 @Configuration
@@ -36,9 +44,22 @@ public class DeleteAllRecordsFromSolrJobConfig {
 	@Autowired
 	private StepBuilderFactory steps;
 
+	public static class DeleteAllRecordsFromSolrJobParametersValidator extends DefaultJobParametersValidator {
+
+		@Override
+		public Collection<JobParameterDeclaration> getParameters() {
+			return Arrays.asList(
+					param(Constants.JOB_PARAM_SOLR_URL, ParameterType.STRING, true), //
+					param(Constants.JOB_PARAM_SOLR_QUERY, ParameterType.STRING, false) //
+			);
+		}
+
+	}
+
 	@Bean
 	public Job deleteAllRecordsFromSolrJob(@Qualifier("deleteAllRecordsFromSolrJob:deleteStep") Step deleteStep) {
 		return jobs.get(Constants.JOB_ID_DELETE_ALL_RECORDS_FROM_SOLR) //
+				.validator(new DeleteAllRecordsFromSolrJobParametersValidator()) //
 				.listener(JobFailureListener.INSTANCE) //
 				.flow(deleteStep) //
 				.end() //
