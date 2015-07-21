@@ -17,11 +17,13 @@ public class Constants {
 	public static final String JOB_ID_IMPORT						= "importRecordsJob";
 	public static final String JOB_ID_IMPORT_ANTIKVARIATY			= "antikvariatyImportRecordsJob";
 	public static final String JOB_ID_REGEN_DEDUP_KEYS				= "regenerateDedupKeysJob";
+	public static final String JOB_ID_DELETE_ALL_RECORDS_FROM_SOLR	= "deleteAllRecordsFromSolrJob";
 	
 	public static final String JOB_PARAM_CONF_ID 		= "configurationId";
 	public static final String JOB_PARAM_FROM_DATE 		= "from";
 	public static final String JOB_PARAM_UNTIL_DATE 	= "to";
 	public static final String JOB_PARAM_SOLR_URL		= "solrUrl";
+	public static final String JOB_PARAM_SOLR_QUERY		= "query";
 	public static final String JOB_PARAM_FORMAT			= "format";
 	public static final String JOB_PARAM_RESUMPTION_TOKEN = "resumptionToken";
 	public static final String JOB_PARAM_REPEAT    		= "repeat";
