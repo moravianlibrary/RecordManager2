@@ -75,7 +75,6 @@ public class IndexRecordsToSolrJobTest extends AbstractTest {
 		params.put(Constants.JOB_PARAM_FROM_DATE, new JobParameter(dateFormat.parse("1. 1. 2010"), true));
 		params.put(Constants.JOB_PARAM_UNTIL_DATE, new JobParameter(dateFormat.parse("1. 1. 2016"), true));
 		params.put(Constants.JOB_PARAM_SOLR_URL, new JobParameter(SOLR_URL, true));
-		params.put(Constants.JOB_PARAM_NUMBER_OF_INDEXING_THREADS, new JobParameter((long) 2, false));
 		JobParameters jobParams = new JobParameters(params);
 		JobExecution execution = jobLauncher.run(job, jobParams);
 		Assert.assertEquals(execution.getExitStatus(), ExitStatus.COMPLETED);
