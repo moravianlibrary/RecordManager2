@@ -5,10 +5,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.batch.runtime.BatchStatus;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.batch.core.BatchStatus;
 import org.springframework.batch.core.ExitStatus;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobExecution;
@@ -81,18 +80,23 @@ public class JobExecutorImpl implements JobExecutor {
 			final Job job = jobRegistry.getJob(jobName);
 			JobParameters transformedParams = transformJobParameters(params,
 					job.getJobParametersValidator());
-			
-			JobParametersIncrementer incrementer = job
-					.getJobParametersIncrementer();
-			if (incrementer != null) {
-				params = incrementer.getNext(transformedParams);
-			}
 			job.getJobParametersValidator().validate(transformedParams);
 			JobExecution lastExec = jobRepository.getLastJobExecution(jobName, transformedParams);
 			if (forceRestart && lastExec != null && !lastExec.getStatus().equals(BatchStatus.COMPLETED)) {
 				restart(lastExec.getId());
 				return lastExec.getJobId();
 			} else {
+				logger.debug("Last execution: {}", lastExec);
+				if (lastExec != null && lastExec.getStatus().equals(BatchStatus.COMPLETED)) {
+					logger.debug("Job was already executed and completed");
+					JobParametersIncrementer incrementer = job
+							.getJobParametersIncrementer();
+					if (incrementer != null) {
+						logger.debug("About to increment parameters");
+						transformedParams = incrementer.getNext(transformedParams);
+					}
+				}
+				logger.debug("About to execute job");
 				JobExecution exec = jobLauncher.run(job, transformedParams);
 				return exec.getId();
 			}

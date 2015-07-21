@@ -7,6 +7,8 @@ import java.util.Collection;
 
 import org.apache.solr.client.solrj.SolrServer;
 import org.springframework.batch.core.Job;
+import org.springframework.batch.core.JobParameters;
+import org.springframework.batch.core.JobParametersIncrementer;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.StepContribution;
 import org.springframework.batch.core.JobParameter.ParameterType;
@@ -26,6 +28,7 @@ import cz.mzk.recordmanager.server.solr.SolrServerFactory;
 import cz.mzk.recordmanager.server.springbatch.DefaultJobParametersValidator;
 import cz.mzk.recordmanager.server.springbatch.JobFailureListener;
 import cz.mzk.recordmanager.server.springbatch.JobParameterDeclaration;
+import cz.mzk.recordmanager.server.springbatch.UUIDIncrementer;
 import cz.mzk.recordmanager.server.util.Constants;
 
 @Configuration
@@ -60,6 +63,7 @@ public class DeleteAllRecordsFromSolrJobConfig {
 	public Job deleteAllRecordsFromSolrJob(@Qualifier("deleteAllRecordsFromSolrJob:deleteStep") Step deleteStep) {
 		return jobs.get(Constants.JOB_ID_DELETE_ALL_RECORDS_FROM_SOLR) //
 				.validator(new DeleteAllRecordsFromSolrJobParametersValidator()) //
+				.incrementer(new UUIDIncrementer()) //
 				.listener(JobFailureListener.INSTANCE) //
 				.flow(deleteStep) //
 				.end() //
