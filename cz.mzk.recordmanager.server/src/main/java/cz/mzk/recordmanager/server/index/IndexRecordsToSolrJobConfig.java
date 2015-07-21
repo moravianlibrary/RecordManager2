@@ -27,8 +27,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
-
+import org.springframework.core.task.TaskExecutor;
 import com.google.common.collect.ImmutableMap;
 
 import cz.mzk.recordmanager.server.jdbc.DedupRecordRowMapper;
@@ -37,6 +36,7 @@ import cz.mzk.recordmanager.server.model.DedupRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.springbatch.DelegatingHibernateProcessor;
 import cz.mzk.recordmanager.server.springbatch.JobFailureListener;
+import cz.mzk.recordmanager.server.springbatch.UUIDIncrementer;
 import cz.mzk.recordmanager.server.util.Constants;
 
 @Configuration
@@ -48,13 +48,9 @@ public class IndexRecordsToSolrJobConfig {
 
 	private static final String STRING_OVERRIDEN_BY_EXPRESSION = null;
 
-	private static final Integer INTEGER_OVERRIDEN_BY_EXPRESSION = null;
-
 	private static final int CHUNK_SIZE = 1000;
 
 	private static final int PAGE_SIZE = 5000;
-	
-	private static final int CONCURRENCY_LIMIT = 8;
 
 	@Autowired
     private JobBuilderFactory jobs;
@@ -71,6 +67,9 @@ public class IndexRecordsToSolrJobConfig {
 	@Autowired
 	private SessionFactory sessionFactory;
 
+	@Autowired
+	private TaskExecutor taskExecutor;
+
 	@Bean
 	public Job indexAllRecordsToSolrJob(
 			@Qualifier("indexRecordsToSolrJob:updateRecordsStep") Step updateRecordsStep,
@@ -79,6 +78,7 @@ public class IndexRecordsToSolrJobConfig {
 			@Qualifier("indexLocalRecordsToSolrJob:updateHarvestedRecordsStep") Step updateHarvestedRecordsStep) {
 		return jobs.get(Constants.JOB_ID_SOLR_INDEX_ALL_RECORDS)
         		.validator(new IndexRecordsToSolrJobParametersValidator())
+        		.incrementer(UUIDIncrementer.INSTANCE)
         		.listener(JobFailureListener.INSTANCE)
         		.flow(deleteOrphanedHarvestedRecordsStep)
 				.next(updateRecordsStep)
@@ -115,7 +115,7 @@ public class IndexRecordsToSolrJobConfig {
 		return steps.get("updateRecordsJobStep")
 			.<DedupRecord, Future<List<SolrInputDocument>>> chunk(CHUNK_SIZE) //
 			.reader(updatedRecordsReader(DATE_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION)) //
-			.processor(asyncUpdatedRecordsProcessor(INTEGER_OVERRIDEN_BY_EXPRESSION)) //
+			.processor(asyncUpdatedRecordsProcessor()) //
 			.writer(updatedRecordsWriter(STRING_OVERRIDEN_BY_EXPRESSION)) //
 			.build();
 	}
@@ -157,6 +157,7 @@ public class IndexRecordsToSolrJobConfig {
 			parameterValues.put("to", to);
 			reader.setParameterValues(parameterValues);
 		}
+		reader.setSaveState(true);
 		reader.afterPropertiesSet();
 		return reader;
 	}
@@ -169,14 +170,9 @@ public class IndexRecordsToSolrJobConfig {
 
 	@Bean(name = "indexRecordsToSolrJob:asyncUpdatedRecordsProcessor")
 	@StepScope
-	public AsyncItemProcessor<DedupRecord, List<SolrInputDocument>> asyncUpdatedRecordsProcessor(
-			@Value("#{jobParameters[" + Constants.JOB_PARAM_NUMBER_OF_INDEXING_THREADS + "]}") Integer indexingThreads) {
+	public AsyncItemProcessor<DedupRecord, List<SolrInputDocument>> asyncUpdatedRecordsProcessor() {
 		AsyncItemProcessor<DedupRecord, List<SolrInputDocument>> processor = new AsyncItemProcessor<>();
 		processor.setDelegate(new DelegatingHibernateProcessor<>(sessionFactory, updatedRecordsProcessor()));
-		ThreadPoolTaskExecutor taskExecutor = new ThreadPoolTaskExecutor();
-		taskExecutor.setCorePoolSize((indexingThreads != null) ? indexingThreads : CONCURRENCY_LIMIT);
-		taskExecutor.setThreadGroupName("IndexingThread");
-		taskExecutor.afterPropertiesSet();
 		processor.setTaskExecutor(taskExecutor);
 		return processor;
 	}
@@ -271,7 +267,7 @@ public class IndexRecordsToSolrJobConfig {
 		return steps.get("updateHarvestedRecordsStep")
 			.<HarvestedRecord, Future<List<SolrInputDocument>>> chunk(CHUNK_SIZE) //
 			.reader(updatedHarvestedRecordsReader(DATE_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION)) //
-			.processor(asyncUpdatedHarvestedRecordsProcessor(INTEGER_OVERRIDEN_BY_EXPRESSION)) //
+			.processor(asyncUpdatedHarvestedRecordsProcessor()) //
 			.writer(updatedHarvestedRecordsWriter(STRING_OVERRIDEN_BY_EXPRESSION)) //
 			.build();
 	}
@@ -317,14 +313,9 @@ public class IndexRecordsToSolrJobConfig {
 
 	@Bean(name = "indexLocalRecordsToSolrJob:asyncUpdatedHarvestedRecordsReader")
 	@StepScope
-	public AsyncItemProcessor<HarvestedRecord, List<SolrInputDocument>> asyncUpdatedHarvestedRecordsProcessor(
-			@Value("#{jobParameters[" + Constants.JOB_PARAM_NUMBER_OF_INDEXING_THREADS + "]}") Integer indexingThreads) {
+	public AsyncItemProcessor<HarvestedRecord, List<SolrInputDocument>> asyncUpdatedHarvestedRecordsProcessor() {
 		AsyncItemProcessor<HarvestedRecord, List<SolrInputDocument>> processor = new AsyncItemProcessor<>();
 		processor.setDelegate(new DelegatingHibernateProcessor<>(sessionFactory, updatedHarvestedRecordsProcessor()));
-		ThreadPoolTaskExecutor taskExecutor = new ThreadPoolTaskExecutor();
-		taskExecutor.setCorePoolSize((indexingThreads != null) ? indexingThreads : CONCURRENCY_LIMIT);
-		taskExecutor.setThreadGroupName("IndexingThread");
-		taskExecutor.afterPropertiesSet();
 		processor.setTaskExecutor(taskExecutor);
 		return processor;
 	}
