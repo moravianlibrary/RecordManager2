@@ -28,7 +28,9 @@ public class MarcSolrRecordMapper implements SolrRecordMapper, InitializingBean 
 	@Autowired
 	private MarcScriptFactory marcScriptFactory;
 
-	private MappingScript<MarcRecord> mappingScript;
+	private MappingScript<MarcRecord> dedupRecordMappingScript;
+
+	private MappingScript<MarcRecord> harvestedRecordMappingScript;
 
 	@Override
 	public List<String> getSupportedFormats() {
@@ -42,29 +44,37 @@ public class MarcSolrRecordMapper implements SolrRecordMapper, InitializingBean 
 			return null;
 		}
 		HarvestedRecord record = records.get(0);
-		return parse(record);
+		return parseAsDedupRecord(record);
 	}
 
 	@Override
 	public Map<String, Object> map(HarvestedRecord record) {
-		return parse(record);
+		return parseAsLocalRecord(record);
 	}
 
-	protected Map<String, Object> parse(HarvestedRecord record) {
+	protected Map<String, Object> parseAsDedupRecord(HarvestedRecord record) {
 		InputStream is = new ByteArrayInputStream(record.getRawRecord());
 		MarcRecord rec = marcXmlParser.parseRecord(is);
 		MappingScript<MarcRecord> script = getMappingScript(record);
 		return script.parse(rec);
 	}
 
+	protected Map<String, Object> parseAsLocalRecord(HarvestedRecord record) {
+		InputStream is = new ByteArrayInputStream(record.getRawRecord());
+		MarcRecord rec = marcXmlParser.parseRecord(is);
+		return harvestedRecordMappingScript.parse(rec);
+	}
+
 	protected MappingScript<MarcRecord> getMappingScript(HarvestedRecord record) {
-		return mappingScript;
+		return dedupRecordMappingScript;
 	}
 
 	@Override
 	public void afterPropertiesSet() throws Exception {
-		mappingScript = marcScriptFactory.create(getClass()
+		dedupRecordMappingScript = marcScriptFactory.create(getClass()
 				.getResourceAsStream("/marc/groovy/BaseMarc.groovy"));
+		harvestedRecordMappingScript = marcScriptFactory.create(getClass()
+				.getResourceAsStream("/marc/groovy/HarvestedRecordBaseMarc.groovy"));
 	}
 
 }

@@ -38,7 +38,7 @@ public class SolrRecordProcessor implements ItemProcessor<DedupRecord, List<Solr
 			// don't index deleted records
 			List<SolrInputDocument> result = factory.create(
 					dedupRecord,
-					records.parallelStream()
+					records.stream()
 						.filter(p -> p.getDeleted() == null)
 						.collect(Collectors.toCollection(ArrayList::new))
 					);
