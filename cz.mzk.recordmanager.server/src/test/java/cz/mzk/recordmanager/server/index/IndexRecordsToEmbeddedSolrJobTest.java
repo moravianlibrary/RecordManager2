@@ -77,7 +77,7 @@ public class IndexRecordsToEmbeddedSolrJobTest extends AbstractTest {
 
 			{
 				SolrQuery docQuery = new SolrQuery();
-				docQuery.set("q", "id:MZK.MZK01-000000126");
+				docQuery.set("q", "id:64");
 				QueryResponse docResponse = server.query(docQuery);
 				Assert.assertEquals(docResponse.getResults().size(), 1);
 				SolrDocument document = docResponse.getResults().get(0);
@@ -87,7 +87,7 @@ public class IndexRecordsToEmbeddedSolrJobTest extends AbstractTest {
 			
 			{
 				SolrQuery docQuery = new SolrQuery();
-				docQuery.set("q", "id:MZK.MZK01-000000119");
+				docQuery.set("q", "id:91");
 				QueryResponse docResponse = server.query(docQuery);
 				Assert.assertEquals(docResponse.getResults().size(), 1);
 				SolrDocument document = docResponse.getResults().get(0);
@@ -97,7 +97,7 @@ public class IndexRecordsToEmbeddedSolrJobTest extends AbstractTest {
 			
 			{
 				SolrQuery deletedDocQuery = new SolrQuery();
-				deletedDocQuery.set("q", "id:MZK.MZK01-000000200");
+				deletedDocQuery.set("q", "id:99");
 				QueryResponse docResponse = server.query(deletedDocQuery);
 				Assert.assertEquals(docResponse.getResults().size(), 0);
 			}

@@ -66,7 +66,7 @@ public class SolrInputDocumentFactoryImpl implements SolrInputDocumentFactory, I
 	@Override
 	public SolrInputDocument create(HarvestedRecord record) {
 		try {
-			SolrInputDocument document = parse(record);
+			SolrInputDocument document = parse(getId(record), mapper.map(record));
 			if (!document.containsKey(SolrFieldConstants.ID_FIELD)) {
 				String id = getId(record);
 				document.addField(SolrFieldConstants.ID_FIELD, id);
@@ -89,7 +89,7 @@ public class SolrInputDocumentFactoryImpl implements SolrInputDocumentFactory, I
 		List<SolrInputDocument> documentList = records.stream().map(rec -> create(rec)).collect(Collectors.toCollection(ArrayList::new));
 		
 		HarvestedRecord record = records.get(0);
-		SolrInputDocument mergedDocument = parse(record);
+		SolrInputDocument mergedDocument = parse(getId(records.get(0)), mapper.map(dedupRecord, records));
 		mergedDocument.addField(SolrFieldConstants.ID_FIELD, dedupRecord.getId());
 		mergedDocument.addField(SolrFieldConstants.INSTITUTION_FIELD, getInstitution(record));
 		mergedDocument.addField(SolrFieldConstants.MERGED_FIELD, 1);
@@ -108,14 +108,12 @@ public class SolrInputDocumentFactoryImpl implements SolrInputDocumentFactory, I
 		return documentList;
 	}
 
-	protected SolrInputDocument parse(HarvestedRecord record) {
-		Map<String, Object> fields = mapper.map(record);
+	protected SolrInputDocument parse(String id, Map<String, Object> fields) {
 		SolrInputDocument document = new SolrInputDocument();
 		for (Entry<String, Object> field : fields.entrySet()) {
 			String fName = remappedFields.getOrDefault(field.getKey(),
 					field.getKey());
 			Object fValue = field.getValue();
-			String id = getId(record);
 			if (fName.equals(SolrFieldConstants.HOLDINGS_996_FIELD)) {
 				//add ids to holdings_996_field
 				

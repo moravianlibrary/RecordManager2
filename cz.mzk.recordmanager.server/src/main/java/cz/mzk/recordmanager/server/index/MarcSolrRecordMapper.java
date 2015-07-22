@@ -56,7 +56,8 @@ public class MarcSolrRecordMapper implements SolrRecordMapper, InitializingBean 
 		InputStream is = new ByteArrayInputStream(record.getRawRecord());
 		MarcRecord rec = marcXmlParser.parseRecord(is);
 		MappingScript<MarcRecord> script = getMappingScript(record);
-		return script.parse(rec);
+		Map<String, Object> result = script.parse(rec);
+		return result;
 	}
 
 	protected Map<String, Object> parseAsLocalRecord(HarvestedRecord record) {
