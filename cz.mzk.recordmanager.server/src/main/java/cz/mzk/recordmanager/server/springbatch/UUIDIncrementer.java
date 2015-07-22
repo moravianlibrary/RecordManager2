@@ -6,7 +6,9 @@ import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.JobParametersBuilder;
 import org.springframework.batch.core.JobParametersIncrementer;
 
-public class UUIDIncrementer implements JobParametersIncrementer {
+public enum UUIDIncrementer implements JobParametersIncrementer {
+
+	INSTANCE;
 
 	@Override
 	public JobParameters getNext(JobParameters parameters) {

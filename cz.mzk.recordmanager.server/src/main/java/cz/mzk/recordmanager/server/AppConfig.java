@@ -20,11 +20,14 @@ import org.springframework.batch.core.launch.support.SimpleJobOperator;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.repository.support.JobRepositoryFactoryBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
+import org.springframework.core.task.TaskExecutor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.orm.hibernate4.HibernateTransactionManager;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
@@ -172,6 +175,14 @@ public class AppConfig extends DefaultBatchConfigurer {
 	@Bean
 	public MappingResolver propertyResolver() {
 		return new CachingMappingResolver(new ClasspathMappingResolver());
+	}
+
+	@Bean
+	public TaskExecutor taskExecutor(@Value(value = "${recordmanager.threadPoolSize}") int threadPoolSize) {
+		ThreadPoolTaskExecutor taskExecutor = new ThreadPoolTaskExecutor();
+		taskExecutor.setCorePoolSize(threadPoolSize);
+		taskExecutor.afterPropertiesSet();
+		return taskExecutor;
 	}
 
 	@Override

@@ -75,9 +75,11 @@ public class SolrInputDocumentFactoryImpl implements SolrInputDocumentFactory, I
 	@Override
 	public SolrInputDocument create(HarvestedRecord record) {
 		try {
-			SolrInputDocument document = parse(record);
+			Map<String, Object> fields = mapper.map(record);
+			String id = getId(record);
+			updateHoldings(id, fields);
+			SolrInputDocument document = asSolrDocument(fields);
 			if (!document.containsKey(SolrFieldConstants.ID_FIELD)) {
-				String id = getId(record);
 				document.addField(SolrFieldConstants.ID_FIELD, id);
 			}
 			document.addField(SolrFieldConstants.INSTITUTION_FIELD, getInstitutionOfRecord(record));
@@ -98,7 +100,7 @@ public class SolrInputDocumentFactoryImpl implements SolrInputDocumentFactory, I
 		List<SolrInputDocument> documentList = records.stream().map(rec -> create(rec)).collect(Collectors.toCollection(ArrayList::new));
 		
 		HarvestedRecord record = records.get(0);
-		SolrInputDocument mergedDocument = parse(record);
+		SolrInputDocument mergedDocument = asSolrDocument(mapper.map(dedupRecord, records));
 		mergedDocument.addField(SolrFieldConstants.ID_FIELD, dedupRecord.getId());
 		mergedDocument.addField(SolrFieldConstants.MERGED_FIELD, 1);
 		mergedDocument.addField(SolrFieldConstants.WEIGHT, record.getWeight());
@@ -119,25 +121,24 @@ public class SolrInputDocumentFactoryImpl implements SolrInputDocumentFactory, I
 		return documentList;
 	}
 
-	protected SolrInputDocument parse(HarvestedRecord record) {
-		Map<String, Object> fields = mapper.map(record);
+	@SuppressWarnings("unchecked")
+	protected void updateHoldings(String id, Map<String, Object> fields) {
+		List<String> holdings = (List<String>) fields.get(SolrFieldConstants.HOLDINGS_996_FIELD);
+		if (holdings != null) {
+			List<String> updatedHoldings = new ArrayList<>();
+			for (String oldHolding: holdings) {
+				updatedHoldings.add(oldHolding + "$z" + id);
+				}
+			fields.put(SolrFieldConstants.HOLDINGS_996_FIELD, updatedHoldings);
+		}
+	}
+
+	protected SolrInputDocument asSolrDocument(Map<String, Object> fields) {
 		SolrInputDocument document = new SolrInputDocument();
 		for (Entry<String, Object> field : fields.entrySet()) {
 			String fName = remappedFields.getOrDefault(field.getKey(),
 					field.getKey());
 			Object fValue = field.getValue();
-			String id = getId(record);
-			if (fName.equals(SolrFieldConstants.HOLDINGS_996_FIELD)) {
-				//add ids to holdings_996_field
-				
-				@SuppressWarnings("unchecked")
-				List<String> holdings = (List<String>) fValue;
-				List<String> updatedHoldings = new ArrayList<>();
-				for (String oldHolding: holdings) {
-					updatedHoldings.add(oldHolding + "$z" + id);
-				}
-				fValue = updatedHoldings;
-			}
 			document.addField(fName, fValue);
 		}
 		return document;
