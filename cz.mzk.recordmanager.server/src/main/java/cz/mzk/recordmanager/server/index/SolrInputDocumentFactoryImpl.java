@@ -3,12 +3,21 @@ package cz.mzk.recordmanager.server.index;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.EnumSet;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
+import java.util.function.BiConsumer;
+import java.util.function.BinaryOperator;
+import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import org.apache.solr.common.SolrInputDocument;
@@ -85,19 +94,21 @@ public class SolrInputDocumentFactoryImpl implements SolrInputDocumentFactory, I
 		if (records.isEmpty()) {
 			return null;
 		}
-		
+
 		List<SolrInputDocument> documentList = records.stream().map(rec -> create(rec)).collect(Collectors.toCollection(ArrayList::new));
 		
 		HarvestedRecord record = records.get(0);
 		SolrInputDocument mergedDocument = parse(record);
 		mergedDocument.addField(SolrFieldConstants.ID_FIELD, dedupRecord.getId());
-		mergedDocument.addField(SolrFieldConstants.INSTITUTION_FIELD, getInstitution(record));
 		mergedDocument.addField(SolrFieldConstants.MERGED_FIELD, 1);
 		mergedDocument.addField(SolrFieldConstants.WEIGHT, record.getWeight());
 		mergedDocument.addField(SolrFieldConstants.CITY_INSTITUTION_CS, getCityInstitutionForSearching(record));
 		
-		List<String> localIds = records.stream().map(rec -> getId(record)).collect(Collectors.toCollection(ArrayList::new));
+		List<String> localIds = records.stream().map(rec -> getId(rec)).collect(Collectors.toCollection(ArrayList::new));
 		mergedDocument.addField(SolrFieldConstants.LOCAL_IDS_FIELD, localIds);
+		
+		Set<String> institutions = records.stream().map(rec -> getInstitution(rec)).collect(new UniqueCollector<String>());
+		mergedDocument.addField(SolrFieldConstants.INSTITUTION_FIELD, institutions);
 		
 		dedupRecordEnrichers.forEach(enricher -> enricher.enrich(dedupRecord, mergedDocument, documentList));
 		documentList.add(mergedDocument);
@@ -187,6 +198,35 @@ public class SolrInputDocumentFactoryImpl implements SolrInputDocumentFactory, I
 			String fName = field.replace('-', '_');
 			remappedFields.put(fName, field);
 		}
+	}
+	
+	protected class UniqueCollector<T> implements Collector<List<T>, Set<T>, Set<T>>{
+
+		@Override
+		public Supplier<Set<T>> supplier() {
+			return HashSet::new;
+		}
+
+		@Override
+		public BiConsumer<Set<T>, List<T>> accumulator() {
+			return (accum, input) -> input.forEach(cur -> accum.add(cur));
+		}
+
+		@Override
+		public BinaryOperator<Set<T>> combiner() {
+			return (x,y) -> {x.addAll(y); return x;}; 
+		}
+
+		@Override
+		public Function<Set<T>, Set<T>> finisher() {
+			return accumulator -> accumulator;
+		}
+
+		@Override
+		public Set<java.util.stream.Collector.Characteristics> characteristics() {
+			return EnumSet.of(Characteristics.UNORDERED);
+		}
+		
 	}
 
 }
