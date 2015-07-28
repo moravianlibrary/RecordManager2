@@ -35,6 +35,7 @@ public class Constants {
 	
 	public static final String METADATA_FORMAT_MARC21      = "marc21-xml";
 	public static final String METADATA_FORMAT_XML_MARC    = "xml-marc";
+	public static final String METADATA_FORMAT_MARC_CPK    = "marccpk";
 	public static final String METADATA_FORMAT_DUBLIN_CORE = "dublinCore";
 	
 	public static final String PREFIX_MKZ				= "mzk";
