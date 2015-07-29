@@ -20,5 +20,7 @@ public interface HarvestedRecordDAO extends DomainDAO<Long, HarvestedRecord> {
 	public HarvestedRecord findByRecordId(String oaiRecordId);
 
 	public List<HarvestedRecord> getByDedupRecord(DedupRecord dedupRecord);
+	
+	public List<HarvestedRecord> getByHarvestConfiguration(ImportConfiguration configuration);
 
 }

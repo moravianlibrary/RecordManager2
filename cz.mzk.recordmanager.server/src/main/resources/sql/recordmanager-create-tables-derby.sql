@@ -171,3 +171,12 @@ CREATE TABLE antikvariaty_catids (
   CONSTRAINT antikvariaty_catids_pk PRIMARY KEY (id_from_catalogue, antikvariaty_id),
   CONSTRAINT antikvariaty_catids_fk FOREIGN KEY (antikvariaty_id) REFERENCES antikvariaty(id)
 );
+
+CREATE TABLE fulltext_monography (
+  id			DECIMAL(10) PRIMARY KEY,
+  harvested_record_id	DECIMAL(10),
+  order_in_monography	DECIMAL(10),
+  uuid_page		VARCHAR(30),
+  fulltext		BLOB,
+  CONSTRAINT fulltext_monography_harvested_record_id_fk FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id)
+);

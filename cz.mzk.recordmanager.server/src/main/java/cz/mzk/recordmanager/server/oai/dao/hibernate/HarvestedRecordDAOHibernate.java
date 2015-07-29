@@ -62,4 +62,13 @@ public class HarvestedRecordDAOHibernate extends
 		return findByIdAndHarvestConfiguration(uniqueId.getRecordId(), uniqueId.getHarvestedFromId());
 	}
 
+	/* <MJ.> */
+	@Override
+	public List<HarvestedRecord> getByHarvestConfiguration(ImportConfiguration configuration) {
+		Session session = sessionFactory.getCurrentSession();
+		return (List<HarvestedRecord>) session
+				.createQuery("from HarvestedRecord where import_conf_id = ?")
+				.setParameter(0, configuration.getId())
+				.list();
+	}
 }

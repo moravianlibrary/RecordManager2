@@ -37,6 +37,7 @@ import cz.mzk.recordmanager.server.export.ExportRecordsJobConfig;
 import cz.mzk.recordmanager.server.imports.ImportRecordJobConfig;
 import cz.mzk.recordmanager.server.index.DeleteAllRecordsFromSolrJobConfig;
 import cz.mzk.recordmanager.server.index.IndexRecordsToSolrJobConfig;
+import cz.mzk.recordmanager.server.kramerius.fulltext.KrameriusFulltextJobConfig;
 import cz.mzk.recordmanager.server.kramerius.harvest.KrameriusHarvestJobConfig;
 import cz.mzk.recordmanager.server.kramerius.harvest.KrameriusHarvesterFactory;
 import cz.mzk.recordmanager.server.kramerius.harvest.KrameriusHarvesterFactoryImpl;
@@ -151,6 +152,7 @@ public class AppConfig extends DefaultBatchConfigurer {
 		return new GenericApplicationContextFactory(
 				OAIHarvestJobConfig.class,
 				OAIHarvestSingleRecordJobConfig.class,
+				KrameriusFulltextJobConfig.class,
 				KrameriusHarvestJobConfig.class,
 				DedupRecordsJobConfig.class,
 				IndexRecordsToSolrJobConfig.class,

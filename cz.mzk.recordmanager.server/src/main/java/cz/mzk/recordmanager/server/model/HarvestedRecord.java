@@ -138,6 +138,10 @@ public class HarvestedRecord extends AbstractDomainObject {
 	@JoinColumn(name="harvested_record_id", referencedColumnName="id")
 	private List<Title> titles = new ArrayList<Title>();
 	
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name="harvested_record_id", referencedColumnName="id")
+	private List<FulltextMonography> fulltextMonography = new ArrayList<>();
+
 	// TODO consider moving dedup keys to separate table
 	@Column(name="author_auth_key")
 	private String authorAuthKey;
@@ -377,9 +381,18 @@ public class HarvestedRecord extends AbstractDomainObject {
 		this.pages = pages;
 	}
 
+	public List<FulltextMonography> getFulltextMonography() {
+		return fulltextMonography;
+	}
+
+	public void setFulltextMonography(List<FulltextMonography> fulltextMonography) {
+		this.fulltextMonography = fulltextMonography;
+	}
+	
 	@Override
 	public String toString() {
 		return String.format("HarvestedRecord[id=%s, uniqueId=%s]", getId(), getUniqueId());
 	}
 
+	
 }
