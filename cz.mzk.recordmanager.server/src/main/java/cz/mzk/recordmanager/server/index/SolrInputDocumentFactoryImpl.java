@@ -83,6 +83,7 @@ public class SolrInputDocumentFactoryImpl implements SolrInputDocumentFactory, I
 				document.addField(SolrFieldConstants.ID_FIELD, id);
 			}
 			document.addField(SolrFieldConstants.INSTITUTION_FIELD, getInstitutionOfRecord(record));
+			document.addField(SolrFieldConstants.CITY_INSTITUTION_CS, getCityInstitutionForSearching(record));
 			document.addField(SolrFieldConstants.MERGED_CHILD_FIELD, 1);
 			document.addField(SolrFieldConstants.WEIGHT, record.getWeight());
 			return document;
@@ -97,7 +98,7 @@ public class SolrInputDocumentFactoryImpl implements SolrInputDocumentFactory, I
 			return null;
 		}
 
-		List<SolrInputDocument> documentList = records.stream().map(rec -> create(rec)).collect(Collectors.toCollection(ArrayList::new));
+		List<SolrInputDocument> childs = records.stream().map(rec -> create(rec)).collect(Collectors.toCollection(ArrayList::new));
 		
 		HarvestedRecord record = records.get(0);
 		SolrInputDocument mergedDocument = asSolrDocument(mapper.map(dedupRecord, records));
@@ -112,13 +113,13 @@ public class SolrInputDocumentFactoryImpl implements SolrInputDocumentFactory, I
 		Set<String> institutions = records.stream().map(rec -> getInstitution(rec)).collect(new UniqueCollector<String>());
 		mergedDocument.addField(SolrFieldConstants.INSTITUTION_FIELD, institutions);
 		
-		dedupRecordEnrichers.forEach(enricher -> enricher.enrich(dedupRecord, mergedDocument, documentList));
-		documentList.add(mergedDocument);
+		dedupRecordEnrichers.forEach(enricher -> enricher.enrich(dedupRecord, mergedDocument, childs));
+		mergedDocument.addChildDocuments(childs);
 
 		if (logger.isTraceEnabled()) {
 			logger.info("Mapping of dedupRecord with id = {} finished", dedupRecord.getId());
 		}
-		return documentList;
+		return Collections.singletonList(mergedDocument);
 	}
 
 	@SuppressWarnings("unchecked")

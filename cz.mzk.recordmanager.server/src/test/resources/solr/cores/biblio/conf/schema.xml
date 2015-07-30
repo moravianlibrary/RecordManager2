@@ -114,6 +114,8 @@
  <fields>
    <!-- Required by Solr 4.x -->
    <field name="_version_" type="long" indexed="true" stored="true"/>
+   <!-- Block join support -->
+   <field name="_root_" type="string" indexed="true" stored="true" multiValued="false" required="false"/>
    <!-- Core Fields  -->
    <field name="id" type="string" indexed="true" stored="true"/>
    <field name="fullrecord" type="string" indexed="false" stored="true"/>
