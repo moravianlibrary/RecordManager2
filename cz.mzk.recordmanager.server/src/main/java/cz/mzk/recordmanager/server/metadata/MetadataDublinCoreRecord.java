@@ -14,6 +14,8 @@ import cz.mzk.recordmanager.server.export.IOFormat;
 import cz.mzk.recordmanager.server.model.Cnb;
 import cz.mzk.recordmanager.server.model.Isbn;
 import cz.mzk.recordmanager.server.model.Issn;
+import cz.mzk.recordmanager.server.model.Language;
+import cz.mzk.recordmanager.server.model.Oclc;
 import cz.mzk.recordmanager.server.model.Title;
 import cz.mzk.recordmanager.server.model.HarvestedRecordFormat.HarvestedRecordFormatEnum;
 
@@ -305,6 +307,18 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 
 	@Override
 	public String getClusterId() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Oclc> getOclcs() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Language> getLanguages() {
 		// TODO Auto-generated method stub
 		return null;
 	}

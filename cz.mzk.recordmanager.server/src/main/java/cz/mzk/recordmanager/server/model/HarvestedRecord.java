@@ -138,6 +138,14 @@ public class HarvestedRecord extends AbstractDomainObject {
 	@JoinColumn(name="harvested_record_id", referencedColumnName="id")
 	private List<Title> titles = new ArrayList<Title>();
 	
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name="harvested_record_id", referencedColumnName="id")
+	private List<Oclc> oclcs = new ArrayList<Oclc>();
+	
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name="harvested_record_id", referencedColumnName="id")
+	private List<Language> languages = new ArrayList<Language>();
+	
 	// TODO consider moving dedup keys to separate table
 	@Column(name="author_auth_key")
 	private String authorAuthKey;
@@ -375,6 +383,24 @@ public class HarvestedRecord extends AbstractDomainObject {
 
 	public void setPages(Long pages) {
 		this.pages = pages;
+	}
+	
+	
+
+	public List<Oclc> getOclcs() {
+		return oclcs;
+	}
+
+	public void setOclcs(List<Oclc> oclcs) {
+		this.oclcs = oclcs;
+	}
+
+	public List<Language> getLanguages() {
+		return languages;
+	}
+
+	public void setLanguages(List<Language> languages) {
+		this.languages = languages;
 	}
 
 	@Override

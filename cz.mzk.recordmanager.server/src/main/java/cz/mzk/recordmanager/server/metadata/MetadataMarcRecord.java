@@ -1,11 +1,14 @@
 package cz.mzk.recordmanager.server.metadata;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.validator.routines.ISBNValidator;
+import org.marc4j.marc.ControlField;
 import org.marc4j.marc.DataField;
 import org.marc4j.marc.Subfield;
 import org.slf4j.Logger;
@@ -19,6 +22,8 @@ import cz.mzk.recordmanager.server.model.Cnb;
 import cz.mzk.recordmanager.server.model.HarvestedRecordFormat.HarvestedRecordFormatEnum;
 import cz.mzk.recordmanager.server.model.Isbn;
 import cz.mzk.recordmanager.server.model.Issn;
+import cz.mzk.recordmanager.server.model.Language;
+import cz.mzk.recordmanager.server.model.Oclc;
 import cz.mzk.recordmanager.server.model.Title;
 import cz.mzk.recordmanager.server.util.MetadataUtils;
 
@@ -36,6 +41,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 	protected static final Pattern ISSN_PATTERN = Pattern.compile("(\\d{4}-\\d{3}[\\dxX])(.*)");
 	protected static final Pattern SCALE_PATTERN = Pattern.compile("\\d+[\\ \\^]*\\d+");
 	protected static final Pattern UUID_PATTERN = Pattern.compile("uuid:[\\w-]+");
+	protected static final Pattern OCLC_PATTERN= Pattern.compile("(\\(ocolc\\))(.*)", Pattern.CASE_INSENSITIVE);
 	protected static final String ISBN_CLEAR_REGEX = "[^0-9^X^x]";
 	
 	public MetadataMarcRecord(MarcRecord underlayingMarc) {
@@ -939,6 +945,67 @@ public class MetadataMarcRecord implements MetadataRecord {
 	public String getClusterId() {
 		// implemented only in selected specialization
 		return null;
+	}
+
+	@Override
+	public List<Oclc> getOclcs() {
+		
+		List<Oclc> result = new ArrayList<>();
+		for (DataField df: underlayingMarc.getDataFields("035")) {
+			Subfield subA = df.getSubfield('a');
+			if (subA == null) {
+				continue;
+			}
+			
+			Matcher matcher = OCLC_PATTERN.matcher(subA.getData());
+			if (matcher.matches() && matcher.groupCount() >= 2) {
+				Oclc oclc = new Oclc();
+				oclc.setOclcStr(matcher.group(2));
+				result.add(oclc);
+			}
+			
+		}
+		return result;
+	}
+
+	@Override
+	public List<Language> getLanguages() {
+		
+		Set<Language> result = new HashSet<>();
+		for (DataField df: underlayingMarc.getDataFields("041")) {
+			for (Subfield subA: df.getSubfields('a')) {
+				Language lang = new Language();
+				if (subA.getData().toLowerCase().equals("cze")) {
+					lang.setLangStr("cze");
+				} else if (subA.getData().toLowerCase().equals("eng")) {
+					lang.setLangStr("eng"); 
+				} else {
+					lang.setLangStr("oth");
+				}
+				result.add(lang);
+			}
+			
+		}
+		
+		if (result.isEmpty()) {
+			String cf = underlayingMarc.getControlField("008");
+			if (cf != null && cf.length() > 39) {
+				String substr = cf.substring(35, 38);
+				Language lang = null;
+				if (substr.toLowerCase().equals("cze")) {
+					lang = new Language();
+					lang.setLangStr("cze");
+				} else if (substr.toLowerCase().equals("eng")) {
+					lang = new Language();
+					lang.setLangStr("eng"); 
+				}
+				if (lang != null) {
+					result.add(lang);
+				}
+			}
+		}
+		
+		return new ArrayList<Language>(result);
 	}
 
 

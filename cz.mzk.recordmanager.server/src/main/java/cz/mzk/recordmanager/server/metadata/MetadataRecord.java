@@ -7,6 +7,8 @@ import cz.mzk.recordmanager.server.model.Cnb;
 import cz.mzk.recordmanager.server.model.HarvestedRecordFormat.HarvestedRecordFormatEnum;
 import cz.mzk.recordmanager.server.model.Isbn;
 import cz.mzk.recordmanager.server.model.Issn;
+import cz.mzk.recordmanager.server.model.Language;
+import cz.mzk.recordmanager.server.model.Oclc;
 import cz.mzk.recordmanager.server.model.Title;
 
 public interface MetadataRecord {
@@ -112,4 +114,16 @@ public interface MetadataRecord {
 	 * @return
 	 */
 	public String getClusterId();
+	
+	/**
+	 * get list of {@link Oclc}
+	 * @return
+	 */
+	public List<Oclc> getOclcs();
+	
+	/**
+	 * get list o {@link Language}
+	 * @return
+	 */
+	public List<Language> getLanguages();
 }

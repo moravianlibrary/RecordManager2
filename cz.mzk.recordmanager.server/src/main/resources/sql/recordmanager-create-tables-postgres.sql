@@ -124,6 +124,20 @@ CREATE TABLE title (
   FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id)
 );
 
+CREATE TABLE oclc (
+  id                   DECIMAL(10) PRIMARY KEY,
+  harvested_record_id  DECIMAL(10),
+  oclc                 VARCHAR(20),
+  CONSTRAINT oclc_fk  FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id)
+);
+
+CREATE TABLE language (
+  id                   DECIMAL(10) PRIMARY KEY,
+  harvested_record_id  DECIMAL(10),
+  lang                 VARCHAR(5),
+  CONSTRAINT language_fk  FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id)
+);
+
 CREATE TABLE harvested_record_format (
   id                   DECIMAL(10) PRIMARY KEY,
   name                 VARCHAR(50) UNIQUE
