@@ -32,6 +32,11 @@ public class HarvestedRecordWriter implements ItemWriter<List<HarvestedRecord>> 
 				if (hr.getDeleted() == null) {
 					try {
 						dedupKeysParser.parse(hr);
+						if (hr.getHarvestedFrom().isFilteringEnabled() && !hr.getShouldBeProcessed()) {
+							logger.debug("Filtered record: " + hr.getUniqueId());
+							return;
+						}
+						
 					} catch (DedupKeyParserException dkpe) {
 						logger.error(
 								"Dedup keys could not be generated for {}, exception thrown.",

@@ -126,4 +126,10 @@ public interface MetadataRecord {
 	 * @return
 	 */
 	public List<Language> getLanguages();
+	
+	/**
+	 * Decide whether this record should be stored during importing/harvesting
+	 * @return true if record should be stored, false otherwise
+	 */
+	public boolean matchFilter();
 }

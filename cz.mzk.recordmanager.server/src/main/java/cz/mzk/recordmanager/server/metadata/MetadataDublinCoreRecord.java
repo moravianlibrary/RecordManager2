@@ -323,4 +323,10 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 		return null;
 	}
 
+	@Override
+	public boolean matchFilter() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
 }
