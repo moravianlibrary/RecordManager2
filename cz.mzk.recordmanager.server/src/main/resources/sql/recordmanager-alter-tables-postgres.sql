@@ -222,3 +222,6 @@ ALTER TABLE import_conf ADD COLUMN filtering_enabled boolean;
 
 --3. 8. 2015 - mertam; set default filtering values
 UPDATE import_conf SET filtering_enabled = false;
+
+CREATE INDEX oclc_harvested_record_idx ON oclc(harvested_record_id); 
+CREATE INDEX language_harvested_record_idx ON language(harvested_record_id); 
