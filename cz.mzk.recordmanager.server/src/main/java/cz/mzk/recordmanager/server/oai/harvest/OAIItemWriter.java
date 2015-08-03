@@ -101,6 +101,12 @@ public class OAIItemWriter implements ItemWriter<List<OAIRecord>>,
 		}
 		try {
 			dedupKeysParser.parse(rec);
+			
+			if (configuration.isFilteringEnabled() && !rec.getShouldBeProcessed()) {
+				logger.debug("Filtered record: " + rec.getUniqueId());
+				return;
+			}
+			
 		} catch (DedupKeyParserException dkpe) {
 			logger.error(
 					"Dedup keys could not be generated for {}, exception thrown.",

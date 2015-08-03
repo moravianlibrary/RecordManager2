@@ -1008,5 +1008,11 @@ public class MetadataMarcRecord implements MetadataRecord {
 		return new ArrayList<Language>(result);
 	}
 
+	@Override
+	public boolean matchFilter() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
 
 }

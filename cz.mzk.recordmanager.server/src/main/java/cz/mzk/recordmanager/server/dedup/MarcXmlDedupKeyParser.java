@@ -38,7 +38,7 @@ public class MarcXmlDedupKeyParser implements DedupKeysParser {
 	public HarvestedRecord parse(HarvestedRecord record) {
 		Preconditions.checkArgument(FORMAT.equals(record.getFormat()));
 		MetadataRecord metadata = metadataFactory.getMetadataRecord(record);
-
+		
 		record.setIsbns(metadata.getISBNs());
 		List<Title> existingTitles = record.getTitles();
 		for (Title title: metadata.getTitle()) {
@@ -67,7 +67,9 @@ public class MarcXmlDedupKeyParser implements DedupKeysParser {
 		record.setOclcs(metadata.getOclcs());
 		record.setLanguages(metadata.getLanguages());
 		record.setClusterId(metadata.getClusterId());
-	
+		record.setShouldBeProcessed(metadata.matchFilter());
+		
+		
 		return record;
 	}
 }

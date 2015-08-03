@@ -31,6 +31,9 @@ public abstract class ImportConfiguration extends AbstractDomainObject {
 	
 	@Column(name="cluster_id_enabled")
 	private boolean clusterIdEnabled;
+	
+	@Column(name="filtering_enabled")
+	private boolean filteringEnabled;
 
 	public Library getLibrary() {
 		return library;
@@ -71,7 +74,13 @@ public abstract class ImportConfiguration extends AbstractDomainObject {
 	public void setClusterIdEnabled(boolean clusterIdEnabled) {
 		this.clusterIdEnabled = clusterIdEnabled;
 	}
-	
-	
-	
+
+	public boolean isFilteringEnabled() {
+		return filteringEnabled;
+	}
+
+	public void setFilteringEnabled(boolean filteringEnabled) {
+		this.filteringEnabled = filteringEnabled;
+	}
+
 }

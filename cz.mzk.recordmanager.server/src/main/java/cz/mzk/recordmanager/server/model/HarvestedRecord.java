@@ -20,6 +20,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 import com.google.common.base.Preconditions;
 
@@ -191,6 +192,12 @@ public class HarvestedRecord extends AbstractDomainObject {
 	
 	@Column(name="pages")
 	private Long pages;
+	
+	/**
+	 * indicator variable used for filtering reasons
+	 */
+	@Transient
+	private boolean shouldBeProcessed = true;
 	
 	
 	private HarvestedRecord() {
@@ -401,6 +408,14 @@ public class HarvestedRecord extends AbstractDomainObject {
 
 	public void setLanguages(List<Language> languages) {
 		this.languages = languages;
+	}
+
+	public boolean getShouldBeProcessed() {
+		return shouldBeProcessed;
+	}
+
+	public void setShouldBeProcessed(boolean shouldBeProcessed) {
+		this.shouldBeProcessed = shouldBeProcessed;
 	}
 
 	@Override

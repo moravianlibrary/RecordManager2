@@ -216,3 +216,6 @@ CREATE TABLE language (
   lang                 VARCHAR(5),
   CONSTRAINT language_fk  FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id)
 );
+
+
+ALTER TABLE import_conf ADD COLUMN filtering_enabled boolean;
