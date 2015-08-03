@@ -219,3 +219,6 @@ CREATE TABLE language (
 
 
 ALTER TABLE import_conf ADD COLUMN filtering_enabled boolean;
+
+--3. 8. 2015 - mertam; set default filtering values
+UPDATE import_conf SET filtering_enabled = false;

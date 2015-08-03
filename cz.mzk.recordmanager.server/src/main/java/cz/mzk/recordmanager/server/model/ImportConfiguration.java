@@ -33,7 +33,7 @@ public abstract class ImportConfiguration extends AbstractDomainObject {
 	private boolean clusterIdEnabled;
 	
 	@Column(name="filtering_enabled")
-	private boolean filteringEnabled;
+	private boolean filteringEnabled = false;
 
 	public Library getLibrary() {
 		return library;
