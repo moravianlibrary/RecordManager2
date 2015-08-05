@@ -1,10 +1,12 @@
 package cz.mzk.recordmanager.server.index;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Future;
 
 import org.apache.solr.client.solrj.SolrServer;
+import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.UpdateResponse;
 import org.apache.solr.common.SolrInputDocument;
 import org.slf4j.Logger;
@@ -46,10 +48,25 @@ public class SolrIndexWriter implements ItemWriter<Future<List<SolrInputDocument
 				}
 			}
 			logger.info("About to index {} documents to Solr", documents.size());
-			UpdateResponse response = server.add(documents, commitWithinMs);
+			try {
+				UpdateResponse response = server.add(documents, commitWithinMs);
+			} catch (SolrServerException | IOException ex) {
+				logger.error("Exception thrown during solr indexing, fallbacking to index one record at time", ex);
+				fallbackIndex(documents);
+			}
 			logger.info("Indexing of {} documents to Solr finished", documents.size());
 		} catch (Exception ex) {
 			logger.error("Exception thrown when indexing documents to Solr", ex);
+		}
+	}
+
+	private void fallbackIndex(List<SolrInputDocument> documents) {
+		for (SolrInputDocument document : documents) {
+			try {
+				UpdateResponse response = server.add(document, commitWithinMs);
+			} catch (SolrServerException | IOException ex) {
+				logger.error(String.format("Exception thrown during indexing record: %s", document), ex);
+			}
 		}
 	}
 
