@@ -1,5 +1,6 @@
 package cz.mzk.recordmanager.server.scripting.marc.function;
 
+import java.text.MessageFormat;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -24,7 +25,25 @@ public class BoundingBoxMarcFunctions implements MarcRecordFunctions {
 	private static final Pattern PATTERN = Pattern
 			.compile("([eEwWnNsS]{1})(\\d{3})(\\d{2})(\\d{2})");
 
+	public String getBoundingBoxAsPolygon(MarcRecord record) {
+		double points[] =  parseBoundingBox(record);
+		if (points == null) {
+			return null;
+		}
+		return MessageFormat.format("POLYGON(({0} {1}, {2} {1}, {2} {3}, {0} {3}, {0} {1}))",
+				points[0], points[1], points[2], points[3]);
+	}
+
 	public String getBoundingBox(MarcRecord record) {
+		double points[] =  parseBoundingBox(record);
+		if (points == null) {
+			return null;
+		}
+		return String.format("%s %s %s %s",
+				points[0], points[1], points[2], points[3]);
+	}
+
+	protected double[] parseBoundingBox(MarcRecord record) {
 		List<DataField> fields = record.getAllFields().get("034");
 		if (fields == null || fields.isEmpty()) {
 			return null;
@@ -66,8 +85,8 @@ public class BoundingBoxMarcFunctions implements MarcRecordFunctions {
 							origWest, origEast, origNorth, origSouth);
 				} else {
 					if (west < east && south < north) {
-						return String.format("%s %s %s %s", west, south, east,
-								north);
+						return new double[]{ west, south, east,
+								north};
 					} else {
 						logger.warn(
 								"INVALID RECORD missig coordinate w={} e={} n={} s={}",
