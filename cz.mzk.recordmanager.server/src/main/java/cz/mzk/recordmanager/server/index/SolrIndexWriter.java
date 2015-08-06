@@ -8,6 +8,7 @@ import java.util.concurrent.Future;
 import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.UpdateResponse;
+import org.apache.solr.common.SolrException;
 import org.apache.solr.common.SolrInputDocument;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,7 +51,7 @@ public class SolrIndexWriter implements ItemWriter<Future<List<SolrInputDocument
 			logger.info("About to index {} documents to Solr", documents.size());
 			try {
 				UpdateResponse response = server.add(documents, commitWithinMs);
-			} catch (SolrServerException | IOException ex) {
+			} catch (SolrException | SolrServerException | IOException ex) {
 				logger.error("Exception thrown during solr indexing, fallbacking to index one record at time", ex);
 				fallbackIndex(documents);
 			}
@@ -64,7 +65,7 @@ public class SolrIndexWriter implements ItemWriter<Future<List<SolrInputDocument
 		for (SolrInputDocument document : documents) {
 			try {
 				UpdateResponse response = server.add(document, commitWithinMs);
-			} catch (SolrServerException | IOException ex) {
+			} catch (SolrException | SolrServerException | IOException ex) {
 				logger.error(String.format("Exception thrown during indexing record: %s", document), ex);
 			}
 		}
