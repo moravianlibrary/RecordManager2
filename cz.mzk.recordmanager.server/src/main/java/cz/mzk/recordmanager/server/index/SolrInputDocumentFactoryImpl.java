@@ -82,7 +82,7 @@ public class SolrInputDocumentFactoryImpl implements SolrInputDocumentFactory, I
 			if (!document.containsKey(SolrFieldConstants.ID_FIELD)) {
 				document.addField(SolrFieldConstants.ID_FIELD, id);
 			}
-			document.addField(SolrFieldConstants.INSTITUTION_FIELD, getInstitutionOfRecord(record));
+			document.addField(SolrFieldConstants.LOCAL_INSTITUTION_FIELD, getInstitutionOfRecord(record));
 			document.addField(SolrFieldConstants.CITY_INSTITUTION_CS, getCityInstitutionForSearching(record));
 			document.addField(SolrFieldConstants.MERGED_CHILD_FIELD, 1);
 			document.addField(SolrFieldConstants.WEIGHT, record.getWeight());

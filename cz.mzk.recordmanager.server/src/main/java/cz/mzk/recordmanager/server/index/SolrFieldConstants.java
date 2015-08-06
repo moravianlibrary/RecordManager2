@@ -4,6 +4,8 @@ public class SolrFieldConstants {
 
 	public static final String ID_FIELD = "id";
 
+	public static final String LOCAL_INSTITUTION_FIELD = "local_institution_facet_str_mv";
+
 	public static final String INSTITUTION_FIELD = "institution";
 
 	public static final String LOCAL_IDS_FIELD = "local_ids_str_mv";

@@ -19,3 +19,4 @@ isbn_display_mv = getFields "020a"
 nbn_display = getFirstField "015a"
 
 url = getFields "856u"
+local_statuses_facet_str_mv = getStatuses()
