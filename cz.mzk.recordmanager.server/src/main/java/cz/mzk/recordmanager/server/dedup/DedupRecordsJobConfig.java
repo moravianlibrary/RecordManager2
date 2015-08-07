@@ -6,15 +6,20 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.concurrent.Future;
 
 import javax.sql.DataSource;
 
+import org.hibernate.SessionFactory;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.core.step.tasklet.Tasklet;
+import org.springframework.batch.integration.async.AsyncItemProcessor;
+import org.springframework.batch.integration.async.AsyncItemWriter;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
@@ -24,6 +29,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.task.TaskExecutor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 
@@ -32,6 +38,7 @@ import com.google.common.io.CharStreams;
 import cz.mzk.recordmanager.server.jdbc.LongValueRowMapper;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordDAO;
+import cz.mzk.recordmanager.server.springbatch.DelegatingHibernateProcessor;
 import cz.mzk.recordmanager.server.springbatch.SqlCommandTasklet;
 import cz.mzk.recordmanager.server.springbatch.StepProgressListener;
 import cz.mzk.recordmanager.server.util.Constants;
@@ -51,13 +58,25 @@ public class DedupRecordsJobConfig {
 	
 	private static final String TMP_TABLE_CNB_CLUSTERS = "tmp_cnb_clusters";
 	
+	private static final String TMP_TABLE_OCLC_CLUSTERS = "tmp_oclc_clusters";
+	
 	private static final String TMP_TABLE_UUID_CLUSTERS = "tmp_uuid_clusters";
+	
+	private static final String TMP_TABLE_SIMILARITY_IDS = "tmp_similarity_ids";
 	
 	private static final String PREPARE_REST_OF_RECORDS_TABLE_PROCEDURE = "prepare_rest_of_ids_table";
 
 	private static final String PREPARE_REST_OF_RECORDS_COMMIT_OFFSETS_PROCEDURE = "dedup_rest_of_records_offset";
 
 	private static final int REST_OF_RECORDS_COMMIT_INTERVAL = 10000;
+	
+	private static final int INFINITY = Integer.MAX_VALUE;
+	
+	@Autowired
+	private SessionFactory sessionFactory;
+
+	@Autowired
+	private TaskExecutor taskExecutor;
 
 
 	@Autowired
@@ -119,12 +138,25 @@ public class DedupRecordsJobConfig {
 					.getClassLoader().getResourceAsStream(
 							"job/dedupRecordsJob/prepareTempCnbClustersTable.sql"),
 					"UTF-8"));
+
+	private String prepareTempOclcClustersSql = CharStreams
+			.toString(new InputStreamReader(getClass() //
+					.getClassLoader().getResourceAsStream(
+							"job/dedupRecordsJob/prepareTempOclcClustersTable.sql"),
+					"UTF-8"));
 	
 	private String prepareTempUuidClustersSql = CharStreams
 			.toString(new InputStreamReader(getClass() //
 					.getClassLoader().getResourceAsStream(
 							"job/dedupRecordsJob/prepareTempUuidClustersTable.sql"),
 					"UTF-8"));
+	
+	private String prepareDedupSimmilarityTableSql = CharStreams
+			.toString(new InputStreamReader(getClass() //
+					.getClassLoader().getResourceAsStream(
+							"job/dedupRecordsJob/prepareDedupSimmilarityTable.sql"),
+					"UTF-8"));
+	
 
 	public DedupRecordsJobConfig() throws IOException {
 	}
@@ -147,8 +179,13 @@ public class DedupRecordsJobConfig {
 			@Qualifier(Constants.JOB_ID_DEDUP + ":dedupTitleAuthStep") Step dedupTitleAuthStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":prepareTempCnbClustersTableStep") Step prepareTempCnbClustersTableStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":dedupCnbClustersStep") Step dedupCnbClustersStep,
+			@Qualifier(Constants.JOB_ID_DEDUP + ":prepareTempOclcClustersTableStep") Step prepareTempOclcClustersTableStep,
+			@Qualifier(Constants.JOB_ID_DEDUP + ":dedupOclcClustersStep") Step dedupOclcClustersStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":prepareTempUuidClustersTableStep") Step prepareTempUuidClustersTableStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":dedupUuidClustersStep") Step dedupUuidClustersStep,
+			@Qualifier(Constants.JOB_ID_DEDUP + ":prepareDedupSimmilarityTableStep") Step prepareDedupSimmilarityTableStep,
+			@Qualifier(Constants.JOB_ID_DEDUP + ":prepareDedupSimmilarTitlesStep") Step prepareDedupSimmilarTitles,
+			@Qualifier(Constants.JOB_ID_DEDUP + ":processSimilaritesResultsStep") Step processSimilaritesResultsStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":prepareDedupRestOfRecordsStep") Step prepareDedupRestOfRecordsStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":dedupRestOfRecordsStep") Step dedupRestOfRecordsStep) {
 		return jobs.get(Constants.JOB_ID_DEDUP)
@@ -164,8 +201,13 @@ public class DedupRecordsJobConfig {
 				.next(dedupTitleAuthStep)
 				.next(prepareTempCnbClustersTableStep)
 				.next(dedupCnbClustersStep)
+				.next(prepareTempOclcClustersTableStep)
+				.next(dedupOclcClustersStep)
 				.next(prepareTempUuidClustersTableStep)
 				.next(dedupUuidClustersStep)
+				.next(prepareDedupSimmilarityTableStep)
+				.next(prepareDedupSimmilarTitles)
+				.next(processSimilaritesResultsStep)
 				.next(prepareDedupRestOfRecordsStep)
 				.next(dedupRestOfRecordsStep)
 				// .next(dropTempTablesStep)
@@ -452,7 +494,7 @@ public class DedupRecordsJobConfig {
 	@Bean(name = "dedupCnbClustersStep:processor")
 	@StepScope
 	public ItemProcessor<List<Long>, List<HarvestedRecord>> dedupCnbClustersProcessor() {
-		return new DedupCnbClustersProcessor();
+		return new DedupIdentifierClustersProcessor();
 	}
 
 	@Bean(name = Constants.JOB_ID_DEDUP + ":dedupCnbClustersStep")
@@ -462,6 +504,46 @@ public class DedupRecordsJobConfig {
 				.<List<Long>, List<HarvestedRecord>> chunk(100)
 				.reader(dedupCnbClustersReader())
 				.processor(dedupCnbClustersProcessor())
+				.writer(dedupSimpleKeysStepWriter())
+				.build();
+	}
+	
+/*
+ * Dedup same Oclc
+ */
+	@Bean(name = "prepareTempTablesStep:prepareTempOclcClustersTableTasklet")
+	@StepScope
+	public Tasklet prepareOclcClustersTasklet() {
+		return new SqlCommandTasklet(prepareTempOclcClustersSql);
+	}
+	
+	@Bean(name = Constants.JOB_ID_DEDUP + ":prepareTempOclcClustersTableStep")
+	public Step prepareTempOclcClustersTableStep() {
+		return steps.get("prepareTempOclcClustersTableStep")
+				.tasklet(prepareOclcClustersTasklet())
+				.listener(new StepProgressListener())
+				.build();
+	}
+	
+	@Bean(name = "dedupOclcClustersStep:reader")
+	@StepScope
+	public ItemReader<List<Long>> dedupOclcClustersReader() throws Exception {
+		return dedupSimpleKeysReader(TMP_TABLE_OCLC_CLUSTERS);
+	}
+	
+	@Bean(name = "dedupOclcClustersStep:processor")
+	@StepScope
+	public ItemProcessor<List<Long>, List<HarvestedRecord>> dedupOclcClustersProcessor() {
+		return new DedupIdentifierClustersProcessor();
+	}
+
+	@Bean(name = Constants.JOB_ID_DEDUP + ":dedupOclcClustersStep")
+	public Step dedupOclcClustersStep() throws Exception {
+		return steps.get("dedupOclcClustersTableStep")
+				.listener(new StepProgressListener())
+				.<List<Long>, List<HarvestedRecord>> chunk(100)
+				.reader(dedupOclcClustersReader())
+				.processor(dedupOclcClustersProcessor())
 				.writer(dedupSimpleKeysStepWriter())
 				.build();
 	}
@@ -500,6 +582,89 @@ public class DedupRecordsJobConfig {
 				.build();
 	}
 	
+	
+	
+	
+/*
+ * Prepare title similarities deduplication
+ */
+	
+	@Bean(name = Constants.JOB_ID_DEDUP + ":prepareDedupSimmilarityTableStep")
+	public Step prepareDedupSimmilarityTableStep() {
+		return steps.get("prepareDedupSimmilarityTableStep")
+				.tasklet(prepareDedupSimmilarityTable())
+				.listener(new StepProgressListener())
+				.build();
+	}
+	
+	@Bean(name = "prepareDedupSimmilarityTableStep:prepareDedupSimmilarityTableTasklet")
+	@StepScope
+	public Tasklet prepareDedupSimmilarityTable() {
+		return new SqlCommandTasklet(prepareDedupSimmilarityTableSql);
+	}
+	
+	@Bean(name="prepareDedupSimmilarTitlesStep:yearReader")
+	public ItemReader<List<TitleForDeduplication>> yearReader() {
+		return new TitleByYearReader();
+	}
+	
+	@Bean(name="prepareDedupSimmilarTitlesStep:titleProcessor")
+	public ItemProcessor<List<TitleForDeduplication>,List<Set<Long>>> titleProcessor() {
+		return new SimilarTitleProcessor();
+	}
+	
+	@Bean(name = Constants.JOB_ID_DEDUP + ":prepareDedupSimmilarTitlesStep")
+	public Step prepareDedupSimmilarTitles() throws Exception {
+		return steps.get("prepareDedupSimmilarTitlesStep")
+				.listener(new StepProgressListener())
+				.<List<TitleForDeduplication>, Future<List<Set<Long>>>> chunk(10)
+				.reader(yearReader())
+				.processor(asyncSimmilarityProcessor())
+				.writer(asyncSimmilarityWriter())
+				.build();
+	}
+	
+	@Bean(name ="prepareDedupSimmilarTitlesStep:asynprepareDedupSimmilarTitlesProcessor")
+	@StepScope
+	public AsyncItemProcessor<List<TitleForDeduplication>, List<Set<Long>>> asyncSimmilarityProcessor() {
+		AsyncItemProcessor<List<TitleForDeduplication>, List<Set<Long>>> processor = new AsyncItemProcessor<>();
+		processor.setDelegate(new DelegatingHibernateProcessor<>(sessionFactory, titleProcessor()));
+		processor.setTaskExecutor(taskExecutor);
+		return processor;
+	}
+
+	
+	@Bean(name="prepareDedupSimmilarTitlesStep:asyncSimmilarityWriter")
+	@StepScope
+	public AsyncItemWriter<List<Set<Long>>> asyncSimmilarityWriter() throws Exception {
+		AsyncItemWriter<List<Set<Long>>> writer = new AsyncItemWriter<List<Set<Long>>>();
+		writer.setDelegate(simpleSimmilarityWriter());
+		writer.afterPropertiesSet();
+		return writer;
+	
+	}
+	
+	@Bean(name="prepareDedupSimmilarTitlesStep:simpleSimmilarityWriter")
+	@StepScope
+	public ItemWriter<List<Set<Long>>> simpleSimmilarityWriter() {
+		return new TitleSimilarityWriter();
+	}
+
+/*
+ * 
+ * process computed similarities results
+ */
+	
+	@Bean(name = Constants.JOB_ID_DEDUP + ":processSimilaritesResultsStep")
+	public Step processSimilaritesResultsStep() throws Exception {
+		return steps.get("processSimilaritesResultsStep")
+				.listener(new StepProgressListener())
+				.<List<Long>, List<HarvestedRecord>> chunk(100)
+				.reader(dedupSimpleKeysReader(TMP_TABLE_SIMILARITY_IDS))
+				.processor(dedupSimpleKeysStepProsessor())
+				.writer(dedupSimpleKeysStepWriter())
+				.build();
+	}
 	
 	
 	

@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import cz.mzk.recordmanager.server.model.DedupRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
@@ -22,6 +23,7 @@ import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordDAO;
  * Generic implementation of of ItemProcessor 
  *
  */
+@Component
 public class DedupSimpleKeysStepProsessor implements
 		ItemProcessor<List<Long>, List<HarvestedRecord>> {
 
