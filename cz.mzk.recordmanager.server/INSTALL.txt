@@ -1,0 +1,7 @@
+To initialize database run:
+  1) cz.mzk.recordmanager.server/src/main/resources/sql/spring-batch-create-tables-postgres.sql
+  2) cz.mzk.recordmanager.server/src/main/resources/sql/recordmanager-create-tables-postgres.sql
+  3) cz.mzk.recordmanager.server/src/main/resources/sql/recordmanager-create-views.sql
+  4) cz.mzk.recordmanager.server/src/main/resources/sql/recordmanager-create-materialized-views-postgres.sql
+  5) cz.mzk.recordmanager.server/src/main/resources/sql/recordmanager-create-indexes.sql
+  6) cz.mzk.recordmanager.server/src/main/resources/sql/recordmanager-sample-data.sql
