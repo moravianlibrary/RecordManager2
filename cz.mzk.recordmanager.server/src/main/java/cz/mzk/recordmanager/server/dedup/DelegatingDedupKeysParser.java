@@ -9,6 +9,7 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import cz.mzk.recordmanager.server.metadata.MetadataRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
 
 @Component
@@ -34,6 +35,17 @@ public class DelegatingDedupKeysParser implements DedupKeysParser,
 					record.getFormat()));
 		}
 		return parser.parse(record);
+	}
+	
+	@Override
+	public HarvestedRecord parse(HarvestedRecord record, MetadataRecord metadataRecord) {
+		DedupKeysParser parser = parserByFormat.get(record.getFormat());
+		if (parser == null) {
+			throw new IllegalArgumentException(String.format(
+					"Record with unsupported format passed: %s",
+					record.getFormat()));
+		}
+		return parser.parse(record, metadataRecord);
 	}
 
 	@Override
