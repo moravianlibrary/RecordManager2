@@ -19,8 +19,8 @@ public class AuthorityRecord extends AbstractDomainObject {
 	public static final String TABLE_NAME = "authority_record";
 	
 	@ManyToOne(optional=false, fetch=FetchType.LAZY)
-	@JoinColumn(name="oai_harvest_conf_id", nullable=false)
-	private OAIHarvestConfiguration harvestedFrom;
+	@JoinColumn(name="import_conf_id", nullable=false)
+	private ImportConfiguration harvestedFrom;
 	
 	@Column(name="harvested")
 	@Temporal(TemporalType.TIMESTAMP)
@@ -34,8 +34,8 @@ public class AuthorityRecord extends AbstractDomainObject {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date deleted;
 	
-	@Column(name="authority_type")
-	private String authorityType;
+	@Column(name="authority_code")
+	private String authorityCode;
 	
 	@Column(name="oai_record_id")
 	private String oaiRecordId;
@@ -47,11 +47,11 @@ public class AuthorityRecord extends AbstractDomainObject {
 	@Column(name="raw_record") 
 	private byte[] rawRecord;
 
-	public OAIHarvestConfiguration getHarvestedFrom() {
+	public ImportConfiguration getHarvestedFrom() {
 		return harvestedFrom;
 	}
 
-	public void setHarvestedFrom(OAIHarvestConfiguration harvestedFrom) {
+	public void setHarvestedFrom(ImportConfiguration harvestedFrom) {
 		this.harvestedFrom = harvestedFrom;
 	}
 
@@ -79,12 +79,12 @@ public class AuthorityRecord extends AbstractDomainObject {
 		this.deleted = deleted;
 	}
 
-	public String getAuthorityType() {
-		return authorityType;
+	public String getAuthorityCode() {
+		return authorityCode;
 	}
 
-	public void setAuthorityType(String authorityType) {
-		this.authorityType = authorityType;
+	public void setAuthorityCode(String authorityType) {
+		this.authorityCode = authorityType;
 	}
 
 	public String getOaiRecordId() {

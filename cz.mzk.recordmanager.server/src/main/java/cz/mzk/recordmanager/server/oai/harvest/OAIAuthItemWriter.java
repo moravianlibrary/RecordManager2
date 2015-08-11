@@ -1,6 +1,8 @@
 package cz.mzk.recordmanager.server.oai.harvest;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import java.util.Date;
 import java.util.List;
 
@@ -11,6 +13,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import org.marc4j.MarcReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.ExitStatus;
@@ -23,6 +26,8 @@ import org.springframework.stereotype.Component;
 import org.w3c.dom.Element;
 
 import cz.mzk.recordmanager.server.dedup.DelegatingDedupKeysParser;
+import cz.mzk.recordmanager.server.marc.MarcRecord;
+import cz.mzk.recordmanager.server.marc.MarcXmlParser;
 import cz.mzk.recordmanager.server.model.AuthorityRecord;
 import cz.mzk.recordmanager.server.model.OAIHarvestConfiguration;
 import cz.mzk.recordmanager.server.oai.dao.AuthorityRecordDAO;
@@ -52,6 +57,9 @@ public class OAIAuthItemWriter implements ItemWriter<List<OAIRecord>>,
 
 	@Autowired
 	private HibernateSessionSynchronizer sync;
+	
+	@Autowired
+	private MarcXmlParser marcXmlParser;
 
 	private String format;
 
@@ -91,6 +99,7 @@ public class OAIAuthItemWriter implements ItemWriter<List<OAIRecord>>,
 		} else {
 			Element element = record.getMetadata().getElement();
 			authRec.setRawRecord(asByteArray(element));
+			authRec.setAuthorityCode(getAuthorityCode(authRec.getRawRecord()));
 		}
 		
 		recordDao.persist(authRec);
@@ -123,6 +132,19 @@ public class OAIAuthItemWriter implements ItemWriter<List<OAIRecord>>,
 				throw new RuntimeException(tce);
 			}
 		}
+	}
+	
+	protected String getAuthorityCode(byte rawRecord[]) {
+		if (rawRecord == null) {
+			return null;
+		}
+		InputStream is = new ByteArrayInputStream(rawRecord);
+		MarcRecord marc = marcXmlParser.parseRecord(is);
+		if (marc == null) {
+			return null;
+		}
+		
+		return marc.getField("100", '7');
 	}
 
 }

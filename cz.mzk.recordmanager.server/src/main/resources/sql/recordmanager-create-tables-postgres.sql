@@ -155,18 +155,17 @@ CREATE TABLE harvested_record_format_link (
 
 CREATE TABLE authority_record (
   id                   DECIMAL(10) PRIMARY KEY,
-  oai_harvest_conf_id  DECIMAL(10),
+  import_conf_id       DECIMAL(10),
   oai_record_id        VARCHAR(128),
-  authority_type       VARCHAR(128),
+  authority_code       VARCHAR(128),
   harvested            TIMESTAMP,
   updated              TIMESTAMP,
   deleted              TIMESTAMP,
   format               VARCHAR(12) NOT NULL,
   raw_record           BYTEA,
-  FOREIGN KEY (oai_harvest_conf_id) REFERENCES oai_harvest_conf(import_conf_id),
+  FOREIGN KEY (import_conf_id)      REFERENCES import_conf(id),
   FOREIGN KEY (format)              REFERENCES format(format)
 );
-
 
 CREATE TABLE antikvariaty (
   id                   DECIMAL(10) PRIMARY KEY,
