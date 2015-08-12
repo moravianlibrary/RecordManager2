@@ -33,9 +33,10 @@ public class ExportRecordsProcessor implements ItemProcessor<HarvestedRecordUniq
 	@Override
 	public String process(HarvestedRecordUniqueId recordId) throws Exception {
 		HarvestedRecord record = harvestedRecordDao.get(recordId);
-		if (record != null) {
+		if (record != null && record.getRawRecord().length != 0) {
 			InputStream is = new ByteArrayInputStream(record.getRawRecord());
 			MarcRecord marcRecord = marcXmlParser.parseRecord(is);
+			marcRecord.addOAIField(record.getUniqueId().getRecordId());
 			return marcRecord.export(iOFormat);
 		} 
 		return null;

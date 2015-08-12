@@ -16,10 +16,12 @@ import org.marc4j.MarcWriter;
 import org.marc4j.marc.ControlField;
 import org.marc4j.marc.DataField;
 import org.marc4j.marc.Leader;
+import org.marc4j.marc.MarcFactory;
 import org.marc4j.marc.Record;
 import org.marc4j.marc.Subfield;
 
 import cz.mzk.recordmanager.server.export.IOFormat;
+import cz.mzk.recordmanager.server.marc.marc4j.MarcFactoryImpl;
 
 public class MarcRecordImpl implements MarcRecord {
 
@@ -264,7 +266,16 @@ public class MarcRecordImpl implements MarcRecord {
 		return record.getLeader() == null ? new LeaderImpl() : record.getLeader();
 	}
 
-
-
+	@Override
+	public void addOAIField(String id) {
+		if(getDataFields("OAI") == Collections.EMPTY_LIST){
+			MarcFactory factory = MarcFactoryImpl.newInstance();
+			DataField dataField = factory.newDataField("OAI", ' ', ' ');
+			Subfield subfield = factory.newSubfield('a', id);
+			dataField.addSubfield(subfield);
+		
+			record.addVariableField(dataField);		
+		}
+	}
 
 }

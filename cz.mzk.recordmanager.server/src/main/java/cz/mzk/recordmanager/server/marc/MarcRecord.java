@@ -112,5 +112,7 @@ public interface MarcRecord {
 	public List<Subfield> getSubfields(DataField field, char[] codes);
 	
 	public String export(IOFormat iOFormat);
+
+	public void addOAIField(String id);
 	
 }
