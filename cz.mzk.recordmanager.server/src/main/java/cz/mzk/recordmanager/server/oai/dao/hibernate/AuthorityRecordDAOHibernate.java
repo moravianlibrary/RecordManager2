@@ -1,9 +1,14 @@
 package cz.mzk.recordmanager.server.oai.dao.hibernate;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.hibernate.Session;
 import org.springframework.stereotype.Component;
 
 import cz.mzk.recordmanager.server.model.AuthorityRecord;
+import cz.mzk.recordmanager.server.model.DedupRecord;
 import cz.mzk.recordmanager.server.model.ImportConfiguration;
 import cz.mzk.recordmanager.server.oai.dao.AuthorityRecordDAO;
 
@@ -22,5 +27,28 @@ public class AuthorityRecordDAOHibernate extends
 				.setParameter(0, recordId)
 				.setParameter(1, configuration)
 				.uniqueResult();
+	}
+
+	@Override
+	public List<AuthorityRecord> findByDedupRecord(DedupRecord dedupRecord) {
+		Session session = sessionFactory.getCurrentSession();
+		
+		@SuppressWarnings("unchecked")
+		List<BigDecimal>  authIds = (List<BigDecimal>) session
+				.createSQLQuery(
+						"SELECT distinct ar.id "
+						+ "FROM harvested_record hr "
+						+ "INNER join authority_record ar "
+						+ "ON hr.author_auth_key = ar.authority_code "
+						+ "WHERE hr.dedup_record_id = ?")
+				.setParameter(0, dedupRecord.getId())
+				.setMaxResults(1)
+				.list();
+		
+		List<AuthorityRecord> result = new ArrayList<>();
+		for (BigDecimal authId: authIds) {
+			result.add(get(authId.longValue()));
+		}
+		return result;
 	}
 }

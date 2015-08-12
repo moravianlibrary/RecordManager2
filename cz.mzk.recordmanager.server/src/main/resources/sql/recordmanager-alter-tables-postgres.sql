@@ -225,3 +225,9 @@ UPDATE import_conf SET filtering_enabled = false;
 
 CREATE INDEX oclc_harvested_record_idx ON oclc(harvested_record_id); 
 CREATE INDEX language_harvested_record_idx ON language(harvested_record_id); 
+
+-- 12. 8. 2015 - mertam; changes in auth_record table
+ALTER TABLE authority_record RENAME COLUMN oai_harvest_conf_id TO import_conf_id
+ALTER TABLE authority_record RENAME COLUMN authority_type TO authority_code
+ALTER TABLE authority_record ADD CONSTRAINT authority_code_unique UNIQUE(authority_code)
+CREATE INDEX authority_code_idx ON authority_record(authority_code)

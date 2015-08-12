@@ -144,7 +144,7 @@ public class OAIAuthItemWriter implements ItemWriter<List<OAIRecord>>,
 			return null;
 		}
 		
-		return marc.getField("100", '7');
+		return marc.getControlField("001");
 	}
 
 }

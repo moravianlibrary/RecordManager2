@@ -163,8 +163,9 @@ CREATE TABLE authority_record (
   deleted              TIMESTAMP,
   format               VARCHAR(12) NOT NULL,
   raw_record           BYTEA,
-  FOREIGN KEY (import_conf_id)      REFERENCES import_conf(id),
-  FOREIGN KEY (format)              REFERENCES format(format)
+  CONSTRAINT authority_record_import_conf_fk  FOREIGN KEY (import_conf_id)      REFERENCES import_conf(id),
+  CONSTRAINT authority_record_format_fk       FOREIGN KEY (format)              REFERENCES format(format),
+  CONSTRAINT authority_code_unique UNIQUE(authority_code)
 );
 
 CREATE TABLE antikvariaty (
