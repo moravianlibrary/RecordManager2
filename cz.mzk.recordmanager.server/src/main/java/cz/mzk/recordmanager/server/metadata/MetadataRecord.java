@@ -132,4 +132,10 @@ public interface MetadataRecord {
 	 * @return true if record should be stored, false otherwise
 	 */
 	public boolean matchFilter();
+	
+	/**
+	 * get record id
+	 * @return
+	 */
+	public String getOAIRecordId();
 }

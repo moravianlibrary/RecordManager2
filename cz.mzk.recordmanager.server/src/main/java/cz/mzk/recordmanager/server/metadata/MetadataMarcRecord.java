@@ -1014,5 +1014,12 @@ public class MetadataMarcRecord implements MetadataRecord {
 		return true;
 	}
 
+	@Override
+	public String getOAIRecordId() {
+		String oai = underlayingMarc.getField("OAI", 'a');
+		if(oai != null) return oai;
+		return null;
+	}
+
 
 }

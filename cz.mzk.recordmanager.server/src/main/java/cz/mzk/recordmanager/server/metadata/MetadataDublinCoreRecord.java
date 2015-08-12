@@ -329,4 +329,10 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 		return true;
 	}
 
+	@Override
+	public String getOAIRecordId() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
