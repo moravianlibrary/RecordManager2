@@ -4,11 +4,14 @@ import info.freelibrary.marc4j.impl.SubfieldImpl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.marc4j.marc.DataField;
 import org.marc4j.marc.IllegalAddException;
 import org.marc4j.marc.InvalidMARCException;
 import org.marc4j.marc.Subfield;
+
+import com.google.common.collect.ImmutableSet;
 
 /**
  * customized {@link DataField} implementation. Allows usage of alphanumeric MARC fields
@@ -22,6 +25,8 @@ public class DataFieldImpl extends info.freelibrary.marc4j.impl.VariableFieldImp
 
     private List<Subfield> mySubfields = new ArrayList<Subfield>();
 
+    private static final Set<String> RESERVED_DATA_FIELDS = ImmutableSet.of("002", "003", "007");
+    
     DataFieldImpl() {
     	
     }
@@ -50,7 +55,7 @@ public class DataFieldImpl extends info.freelibrary.marc4j.impl.VariableFieldImp
 
         if (aTag.length() == 3) {
 
-                if (aTag.startsWith("00")) {
+                if (aTag.startsWith("00") && !RESERVED_DATA_FIELDS.contains(aTag)) {
                     throw new InvalidMARCException(aTag +
                             " is not a valid DataField tag");
                 }

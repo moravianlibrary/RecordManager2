@@ -180,6 +180,7 @@ public class MarcXmlHandler extends org.marc4j.MarcXmlHandler {
 			queue.push(record);
 			break;
 		case LEADER_ID:
+			while(sb.length() < 24) sb.append(" ");
 			Leader leader = factory.newLeader(sb.toString());
 			record.setLeader(leader);
 			break;

@@ -18,7 +18,12 @@ public class AlphaNumericControlFieldImpl extends VariableFieldImpl implements C
 
     private String myData;
 
-    private static final Set<String> RESERVED_CONTROL_FIELDS = ImmutableSet.of("FMT", "LDR");
+    private static final Set<String> RESERVED_CONTROL_FIELDS = ImmutableSet.of("DNK", "DOK", 
+    		"FMT", "LDR", "NSS", "SIG", "SYS", "UST", "VVS", "VVV", "ZPT", "0FS", "---", 
+    		"0 8", "020", "022", "024", "035", "048", "082", "245", "246", "250", "300", 
+    		"310", "362", "490", "500", "504", "505", "515", "521", "546", "610", "648", 
+    		"653", "700", "710", "780", "856", "902", "962", "967", "984", "990", "991", 
+    		"992", "993", "994", "^pD", "^pG", "^pL", "^pN", "^pP", "^pS", "^pZ");
 
     /**
      * Creates a new <code>ControlField</code>.
