@@ -109,6 +109,10 @@ public class TitleClusterer {
 					// ignore different authors
 					continue;
 				}
+				if (!comparePages(currentTitle.getPages(), tmpTitle.getPages())) {
+					// ignore different pages
+					continue;
+				} 
 
 				int match = StringUtils.simmilarTitleMatchPercentage(
 						currentTitle.getTitle(), tmpTitle.getTitle(),
@@ -121,7 +125,7 @@ public class TitleClusterer {
 
 	}
 		
-	private void writeResult(Long id1, Long id2) {
+	protected final void writeResult(Long id1, Long id2) {
 		Long gid1 = mapping.get(id1);
 		Long gid2 = mapping.get(id2);
 		// two new clusters
@@ -157,6 +161,28 @@ public class TitleClusterer {
 		if (gid1 != gid2) {
 			clusters.remove(gid2);
 		}
+	}
+	
+	/**
+	 * 
+	 * @param pages1
+	 * @param pages2
+	 * @return true if false if pages, true if at least one is null or they are in safe interval
+	 */
+	protected boolean comparePages(Long pages1, Long pages2) {
+		if (pages1 == null || pages2 == null) {
+			return true;
+		}
+		
+		Long min = Math.min(pages1, pages2);
+		Long max = Math.max(pages1, pages2);
+		
+		double safeIntervalLegth = Math.ceil(min.doubleValue() * .05);
+		if (safeIntervalLegth > 10) {
+			safeIntervalLegth = 10;
+		}
+
+		return (max >= (min - safeIntervalLegth) && max <= (min + safeIntervalLegth));
 	}
     
     

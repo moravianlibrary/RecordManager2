@@ -21,7 +21,7 @@ public class TitleDAOHibernate extends AbstractDomainDAOHibernate<Long, Title>
 	public List<TitleForDeduplication> getTitleForDeduplicationByYear(Long year, int minPages, int maxPages, String lang) {
 		Session session = sessionFactory.getCurrentSession();
 		return (List<TitleForDeduplication>)
-				session.createSQLQuery("SELECT id,harvested_record_id,title,isbn,cnb,author_string "
+				session.createSQLQuery("SELECT id,harvested_record_id,title,isbn,cnb,author_string,pages "
 						+ "FROM titles_for_simmilarity_searching_view "
 						+ "WHERE publication_year = ? and pages BETWEEN ? and ? AND lang = ?")
 				.setResultTransformer(new ResultTransformer() {
@@ -35,6 +35,7 @@ public class TitleDAOHibernate extends AbstractDomainDAOHibernate<Long, Title>
 							case "harvested_record_id": title.setHarvestedRecordId(((BigDecimal)tuple[i]).longValue()); break;
 							case "title": title.setTitle((String)tuple[i]); break;
 							case "author_string": title.setAuthorStr((String)tuple[i]); break;
+							case "pages": title.setPages(((BigDecimal)tuple[i]).longValue()); break;
 							case "isbn":
 								if (tuple[i] != null) {
 									title.setIsbn(((BigDecimal)tuple[i]).toString()); break;

@@ -13,6 +13,8 @@ public class TitleForDeduplication {
 	private String cnb;
 	
 	private String authorStr;
+	
+	private Long pages;
 
 	public String getIsbn() {
 		return isbn;
@@ -62,11 +64,20 @@ public class TitleForDeduplication {
 		this.authorStr = authorStr;
 	}
 
+	public Long getPages() {
+		return pages;
+	}
+
+	public void setPages(Long pages) {
+		this.pages = pages;
+	}
+
 	@Override
 	public String toString() {
 		return "TitleForDeduplication [id=" + id + ", harvestedRecordId="
-				+ harvestedRecordId + ", title=" + title + "]";
+				+ harvestedRecordId + ", title=" + title + ", isbn=" + isbn
+				+ ", cnb=" + cnb + ", authorStr=" + authorStr + ", pages="
+				+ pages + "]";
 	}
-	
 	
 }
