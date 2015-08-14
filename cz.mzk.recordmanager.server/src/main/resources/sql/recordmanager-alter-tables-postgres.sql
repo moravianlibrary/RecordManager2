@@ -231,3 +231,6 @@ ALTER TABLE authority_record RENAME COLUMN oai_harvest_conf_id TO import_conf_id
 ALTER TABLE authority_record RENAME COLUMN authority_type TO authority_code
 ALTER TABLE authority_record ADD CONSTRAINT authority_code_unique UNIQUE(authority_code)
 CREATE INDEX authority_code_idx ON authority_record(authority_code)
+
+-- 14. 8. 2015 mertam; 
+ALTER TABLE import_conf ADD COLUMN interception_enabled BOOLEAN DEFAULT FALSE;

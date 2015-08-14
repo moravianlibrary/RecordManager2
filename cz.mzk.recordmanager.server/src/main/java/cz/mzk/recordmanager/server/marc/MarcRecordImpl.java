@@ -10,9 +10,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang3.NotImplementedException;
 import org.marc4j.MarcStreamWriter;
 import org.marc4j.MarcWriter;
+import org.marc4j.MarcXmlWriter;
 import org.marc4j.marc.ControlField;
 import org.marc4j.marc.DataField;
 import org.marc4j.marc.Leader;
@@ -248,7 +248,11 @@ public class MarcRecordImpl implements MarcRecord {
 	}
 	
 	protected String exportToXML() {
-		throw new NotImplementedException("Not implemented yet.");
+		OutputStream stream = new ByteArrayOutputStream();
+		MarcXmlWriter writer = new MarcXmlWriter(stream, "UTF-8");
+		writer.write(record);
+		writer.close();
+		return stream.toString();
 	}
 
 	@Override

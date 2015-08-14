@@ -187,7 +187,7 @@ public class OAIHarvestJobConfig {
     @StepScope
     public OAIItemProcessor oaiItemProcessor() {
     	return new OAIItemProcessor();
-    }
+    }   
     
     @Bean(name="oaiHarvestJob:authwriter")
     @StepScope

@@ -35,6 +35,9 @@ public abstract class ImportConfiguration extends AbstractDomainObject {
 	@Column(name="filtering_enabled")
 	private boolean filteringEnabled = false;
 
+	@Column(name="interception_enabled")
+	private boolean interceptionEnabled = false;
+
 	public Library getLibrary() {
 		return library;
 	}
@@ -83,4 +86,12 @@ public abstract class ImportConfiguration extends AbstractDomainObject {
 		this.filteringEnabled = filteringEnabled;
 	}
 
+	public boolean isInterceptionEnabled() {
+		return interceptionEnabled;
+	}
+
+	public void setInterceptionEnabled(boolean interceptionEnabled) {
+		this.interceptionEnabled = interceptionEnabled;
+	}
+	
 }

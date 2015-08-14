@@ -42,6 +42,7 @@ public class Constants {
 	public static final String PREFIX_NKP				= "nkp";
 	public static final String PREFIX_NTK				= "ntk";
 	public static final String PREFIX_TRE				= "tre";
+	public static final String PREFIX_CASLIN			= "caslin";
 
 	public static final String JOB_PARAM_RECORD_ID		= "recordId";
 	/* need some changing paramteter :-/ - 
