@@ -16,7 +16,6 @@ import cz.mzk.recordmanager.server.model.Cnb;
 import cz.mzk.recordmanager.server.model.HarvestedRecordFormat.HarvestedRecordFormatEnum;
 import cz.mzk.recordmanager.server.model.Isbn;
 import cz.mzk.recordmanager.server.model.Issn;
-import cz.mzk.recordmanager.server.model.Language;
 import cz.mzk.recordmanager.server.model.Title;
 import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordDAO;
 
@@ -501,30 +500,10 @@ public class MarcRecordImplTest extends AbstractTest {
 		data.clear();
 		hrf.clear();
 		
-		// Manuscripts
-		data.add("000 00000000");
-		data.add("245 $hrukOpis");
-		hrf.add(HarvestedRecordFormatEnum.MANUSCRIPTS);
-		mri = MarcRecordFactory.recordFactory(data);
-		metadataRecord = metadataFactory.getMetadataRecord(mri);
-		Assert.assertEquals(metadataRecord.getDetectedFormatList().toString(), hrf.toString());
-		data.clear();
-		hrf.clear();
-		
 		// Microforms
 		data.add("000 0000000");
 		data.add("337 $bh");
 		hrf.add(HarvestedRecordFormatEnum.MICROFORMS);
-		mri = MarcRecordFactory.recordFactory(data);
-		metadataRecord = metadataFactory.getMetadataRecord(mri);
-		Assert.assertEquals(metadataRecord.getDetectedFormatList().toString(), hrf.toString());
-		data.clear();
-		hrf.clear();
-		
-		//Large prints
-		data.add("000 00000000");
-		data.add("007 db");
-		hrf.add(HarvestedRecordFormatEnum.LARGE_PRINTS);
 		mri = MarcRecordFactory.recordFactory(data);
 		metadataRecord = metadataFactory.getMetadataRecord(mri);
 		Assert.assertEquals(metadataRecord.getDetectedFormatList().toString(), hrf.toString());

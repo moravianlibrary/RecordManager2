@@ -8,7 +8,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.validator.routines.ISBNValidator;
-import org.marc4j.marc.ControlField;
 import org.marc4j.marc.DataField;
 import org.marc4j.marc.Subfield;
 import org.slf4j.Logger;
@@ -400,22 +399,6 @@ public class MetadataMarcRecord implements MetadataRecord {
 		return false;		
 	}
 	
-	protected boolean isManuscript(){
-		String ldr06 = Character.toString(underlayingMarc.getLeader().getTypeOfRecord());
-		
-		String f006 = underlayingMarc.getControlField("006");
-		String f006_00 = (f006 != null) && (f006.length() > 0) ? Character.toString(f006.charAt(0)) : "";
-		
-		String f245h = underlayingMarc.getField("245", 'h');		
-		if(f245h == null) f245h = "";
-				
-		if(ldr06.matches("(?i)[tdf]")) return true;
-		if(f006_00.matches("(?i)[tdf]")) return true;
-		if(f245h.matches("(?i).*rukopis.*")) return true;
-		
-		return false;
-	}
-	
 	protected boolean isMicroform(){
 		String ldr06 = Character.toString(underlayingMarc.getLeader().getTypeOfRecord());
 				
@@ -444,44 +427,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 		
 		return false;
 	}
-	
-	protected boolean isLargePrint () {
-		String ldr06 = Character.toString(underlayingMarc.getLeader().getTypeOfRecord());
 		
-	    String f006 = underlayingMarc.getControlField("006");
-		String f006_00 = (f006 != null) && (f006.length() > 0) ? Character.toString(f006.charAt(0)) : "";
-		String f006_06 = (f006 != null) && (f006.length() > 6) ? Character.toString(f006.charAt(6)) : "";
-	    String f006_12 = (f006 != null) && (f006.length() > 12) ? Character.toString(f006.charAt(12)) : "";
-	    
-	    String f007 = underlayingMarc.getControlField("007");
-	    String f007_00 = (f007 != null) && (f007.length() > 0) ? Character.toString(f007.charAt(0)) : "";
-		String f007_01 = (f007 != null) && (f007.length() > 1) ? Character.toString(f007.charAt(1)) : "";
-	    
-		String f008 = underlayingMarc.getControlField("008");
-	    String f008_23 = (f008 != null) && (f008.length() > 23) ? Character.toString(f008.charAt(23)) : "";
-	    String f008_29 = (f008 != null) && (f008.length() > 29) ? Character.toString(f008.charAt(29)) : "";
-
-		if(ldr06.matches("(?i)[acdpt]") && f008_23.matches("(?i)d")){
-			return true;
-		}
-		if(ldr06.matches("(?i)[efk]") && f008_29.matches("(?i)d")){
-			return true;
-		}
-		if(f006_00.matches("(?i)[acdpt]") && f006_06.matches("(?i)d")){
-			return true;
-		}
-		if(f006_00.matches("(?i)[efk]") && f006_12.matches("(?i)d")){
-			return true;
-		}
-		if(f007_00.matches("(?i)d") && f007_01.matches("(?i)b")){
-			return true;
-		}
-		if(f007_00.matches("(?i)t") && f007_01.matches("(?i)b")){
-			return true;
-		}
-		return false;
-	}
-	
 	protected boolean isBraill(){
 		String ldr06 = Character.toString(underlayingMarc.getLeader().getTypeOfRecord());
 		
@@ -780,9 +726,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 		if(isMap()) hrf.add(HarvestedRecordFormatEnum.MAPS);
 		if(isMusicalScores()) hrf.add(HarvestedRecordFormatEnum.MUSICAL_SCORES);
 		if(isVisualDocument()) hrf.add(HarvestedRecordFormatEnum.VISUAL_DOCUMENTS);
-		if(isManuscript()) hrf.add(HarvestedRecordFormatEnum.MANUSCRIPTS);
 		if(isMicroform()) hrf.add(HarvestedRecordFormatEnum.MICROFORMS);
-		if(isLargePrint()) hrf.add(HarvestedRecordFormatEnum.LARGE_PRINTS);
 		if(isBraill()) hrf.add(HarvestedRecordFormatEnum.BRAILL);
 		if(isElectronicSource()) hrf.add(HarvestedRecordFormatEnum.ELECTRONIC_SOURCE);
 		HarvestedRecordFormatEnum audio = getAudioFormat();
