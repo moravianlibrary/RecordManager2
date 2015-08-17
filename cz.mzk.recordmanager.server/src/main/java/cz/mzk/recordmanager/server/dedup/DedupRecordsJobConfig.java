@@ -702,12 +702,6 @@ public class DedupRecordsJobConfig {
 		return new DedupSimpleKeysStepWriter();
 	}
 
-	@Bean(name = "dedupRecordsJob:writer")
-	@StepScope
-	public DedupRecordsWriter writer() {
-		return new DedupRecordsWriter();
-	}
-
 	@Bean(name = "dedupRecordsJob:updateDedupRecordTasklet")
 	@StepScope
 	public Tasklet updateDedupRecordTasklet() {
