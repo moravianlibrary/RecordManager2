@@ -81,7 +81,7 @@ public class ExportRecordsJobConfig {
 		pqpf.setSelectClause("SELECT import_conf_id, record_id");
 		pqpf.setFromClause("FROM harvested_record");
 		pqpf.setWhereClause("WHERE import_conf_id = :conf_id");
-		pqpf.setSortKeys(ImmutableMap.of("import_conf_id", Order.ASCENDING, "record_id", Order.ASCENDING));
+		pqpf.setSortKey("record_id");
 		Map<String, Object> parameterValues = new HashMap<String, Object>();
 		parameterValues.put("conf_id", configId);
 		reader.setParameterValues(parameterValues);
