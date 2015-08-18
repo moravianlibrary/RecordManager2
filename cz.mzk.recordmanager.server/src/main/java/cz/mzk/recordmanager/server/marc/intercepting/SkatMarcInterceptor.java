@@ -84,6 +84,7 @@ public class SkatMarcInterceptor extends DefaultMarcInterceptor {
 								marcFactory.newSubfield('d', joinedContent));
 					}
 					
+					newDf.addSubfield(marcFactory.newSubfield('s', "NZ"));
 					newRecord.addVariableField(newDf);
 				} else {
 					newRecord.addVariableField(df);
