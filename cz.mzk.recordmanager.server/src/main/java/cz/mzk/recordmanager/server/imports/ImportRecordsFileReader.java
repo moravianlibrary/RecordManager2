@@ -18,6 +18,7 @@ import org.springframework.batch.item.ParseException;
 import org.springframework.batch.item.UnexpectedInputException;
 
 import cz.mzk.recordmanager.server.export.IOFormat;
+import cz.mzk.recordmanager.server.marc.marc4j.MarcAlephStreamReader;
 import cz.mzk.recordmanager.server.marc.marc4j.MarcISO2709StreamReader;
 import cz.mzk.recordmanager.server.marc.marc4j.MarcXmlReader;
 
@@ -61,7 +62,7 @@ public class ImportRecordsFileReader implements ItemReader<List<Record>> {
 		case LINE_MARC:
 			throw new NotImplementedException("Not implemented yet.");
 		case ALEPH_MARC:
-			throw new NotImplementedException("Not implemented yet.");
+			return new MarcAlephStreamReader(inStream);
 		case ISO_2709:
 			return new MarcISO2709StreamReader(inStream, "UTF-8");
 		default:
