@@ -11,6 +11,7 @@ import cz.mzk.recordmanager.server.dc.DublinCoreRecord;
 import cz.mzk.recordmanager.server.marc.MarcRecord;
 import cz.mzk.recordmanager.server.marc.MarcXmlParser;
 import cz.mzk.recordmanager.server.metadata.institutions.MzkMetadataMarcRecord;
+import cz.mzk.recordmanager.server.metadata.institutions.MzkNormsMetadataMarcRecord;
 import cz.mzk.recordmanager.server.metadata.institutions.NkpMarcMetadataRecord;
 import cz.mzk.recordmanager.server.metadata.institutions.TreMetadataMarcRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
@@ -59,6 +60,8 @@ public class MetadataRecordFactory {
 				return new NkpMarcMetadataRecord(marcRec);
 			case Constants.PREFIX_TRE:
 				return new TreMetadataMarcRecord(marcRec);
+			case Constants.PREFIX_MZKNORMS:
+				return new MzkNormsMetadataMarcRecord(marcRec);
 			default:
 				return new MetadataMarcRecord(marcRec);
 			}

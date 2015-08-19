@@ -12,8 +12,6 @@ author2_display_mv = getFields "110ab:111ab:700abcd:710ab:711ab"
 
 publishDate_display = getFirstField "260c"
 
-format_display_mv = getRecordType()
-
 ean_display_mv = getEAN()
 isbn_display_mv = getFields "020a"
 nbn_display = getFirstField "015a"

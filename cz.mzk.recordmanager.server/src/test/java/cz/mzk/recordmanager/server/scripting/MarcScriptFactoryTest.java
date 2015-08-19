@@ -38,9 +38,6 @@ public class MarcScriptFactoryTest extends AbstractTest {
 		Assert.assertEquals(entries.get("author"), null);
 		Assert.assertEquals(entries.get("published"), "Rožnov pod Radhoštěm : Proxima Bohemia, 2014");
 		Assert.assertEquals(entries.get("title"), "Česká republika : města a obce České republiky : tradice, historie, památky, turistika, současnost /");
-		List<String> detectedFormats = new ArrayList<>();
-		detectedFormats.add("0/"+HarvestedRecordFormatEnum.BOOKS.name()+"/");
-		Assert.assertEquals(entries.get("cpk_detected_format_txtF_mv"), detectedFormats) ;
 		Assert.assertNotNull(entries.get("language"));
 		Assert.assertTrue(entries.get("language") instanceof List<?>);
 		List<String> languages = (List<String>) entries.get("language");
