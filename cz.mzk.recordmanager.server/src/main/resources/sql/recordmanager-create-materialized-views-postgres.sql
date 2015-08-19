@@ -12,7 +12,7 @@ SELECT unique_ids.id,
     c.cnb,
     language.lang
   FROM
-    (SELECT DISTINCT ON (hr2.dedup_record_id) hr2.dedup_record_id,hr2.id,hr2.publication_year,hr2.pages,hr2.author_string, t.w
+    (SELECT DISTINCT ON (hr2.dedup_record_id) hr2.dedup_record_id,hr2.id,hr2.publication_year,hr2.pages,hr2.author_string, t.w, hr2.updated
     FROM (
       SELECT dedup_record_id, MAX(weight) AS w
         FROM harvested_record
@@ -23,6 +23,7 @@ SELECT unique_ids.id,
   INNER JOIN language on unique_ids.id = language.harvested_record_id
   LEFT OUTER JOIN isbn i on unique_ids.id = i.harvested_record_id
   LEFT OUTER JOIN cnb c on unique_ids.id = c.harvested_record_id
+  WHERE unique_ids.updated > all(select * from last_dedup_time)
 UNION
 SELECT 
     nhr.id,
