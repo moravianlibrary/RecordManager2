@@ -5,7 +5,6 @@ recordtype = "marc"
 allfields = getAllFields()
 
 language = translate("mzk_language.map", getLanguages() , null)
-cpk_detected_format_txtF_mv = getRecordType()
 
 author = getFirstField "100abcd"
 author_fuller = getFirstField "100q"

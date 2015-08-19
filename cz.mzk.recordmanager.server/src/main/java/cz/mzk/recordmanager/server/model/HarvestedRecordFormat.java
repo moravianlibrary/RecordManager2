@@ -37,6 +37,7 @@ public class HarvestedRecordFormat {
 		OTHER_KIT(24L),
 		OTHER_OBJECT(25L),
 		OTHER_MIX_DOCUMENT(26L),
+		NORMS(27L),
 		OTHER_UNSPECIFIED(100L);
 		
 		private Long numValue;

@@ -19,6 +19,8 @@ INSERT INTO library (id, name, url, catalog_url, city) VALUES (115, 'VKOL', 'vko
 INSERT INTO library (id, name, url, catalog_url, city) VALUES (116, 'CASLIN', 'caslin.cz', 'aleph.nkp.cz', 'Praha');
 INSERT INTO library (id, name, url, catalog_url, city) VALUES (117, 'NKP2', 'nkp.cz', 'aleph.nkp.cz', 'Praha');
 INSERT INTO library (id, name, url, catalog_url, city) VALUES (118, 'SFXJIB', 'jib.cz', 'http://www.jib.cz', 'Praha');
+INSERT INTO library (id, name, url, catalog_url, city) VALUES (119, 'ANL', 'nkp.cz', 'aleph.nkp.cz', NULL);
+INSERT INTO library (id, name, url, catalog_url, city) VALUES (120, 'MZKNORMS', 'mzk.cz', 'aleph.mzk.cz', NULL);
 
 INSERT INTO format(format, description) VALUES('marc21-xml', 'MARC21 XML');
 INSERT INTO format(format, description) VALUES('xml-marc', 'MARC21 XML');
@@ -44,6 +46,8 @@ INSERT INTO import_conf (id,library_id,contact_person_id,id_prefix,base_weight,c
 INSERT INTO import_conf (id,library_id,contact_person_id,id_prefix,base_weight,cluster_id_enabled,filtering_enabled,interception_enabled) VALUES (316,116,200,'caslin',14,false,false,false);
 INSERT INTO import_conf (id,library_id,contact_person_id,id_prefix,base_weight,cluster_id_enabled,filtering_enabled,interception_enabled) VALUES (317,117,200,'nkp2',14,false,false,false);
 INSERT INTO import_conf (id,library_id,contact_person_id,id_prefix,base_weight,cluster_id_enabled,filtering_enabled,interception_enabled) VALUES (318,118,200,'sfxjib',14,false,false,false);
+INSERT INTO import_conf (id,library_id,contact_person_id,id_prefix,base_weight,cluster_id_enabled,filtering_enabled,interception_enabled) VALUES (319,119,200,'anl',14,false,false,false);
+INSERT INTO import_conf (id,library_id,contact_person_id,id_prefix,base_weight,cluster_id_enabled,filtering_enabled,interception_enabled) VALUES (320,120,200,'mzknorms',14,false,false,false);
 INSERT INTO import_conf (id,library_id,contact_person_id,id_prefix,base_weight,cluster_id_enabled,filtering_enabled,interception_enabled) VALUES (400,104,200,null,null,false,false,false);
 INSERT INTO import_conf (id,library_id,contact_person_id,id_prefix,base_weight,cluster_id_enabled,filtering_enabled,interception_enabled) VALUES (99001,100,200,'kram-mzk',null,false,false,false);
 INSERT INTO import_conf (id,library_id,contact_person_id,id_prefix,base_weight,cluster_id_enabled,filtering_enabled,interception_enabled) VALUES (99002,107,200,'kram-ntk',null,false,false,false);
@@ -70,6 +74,8 @@ INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granul
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (316,'http://aleph.nkp.cz/OAI','SKC','marc21',NULL);
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (317,'http://aleph.nkp.cz/OAI','NKC-CPK','marc21',NULL);
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (318,NULL,NULL,'marc21',NULL);
+INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (319,NULL,NULL,'marc21',NULL);
+INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (320,'http://aleph.mzk.cz/OAI','MZK04','marc21',NULL);
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (400,'http://aleph.nkp.cz/OAI','AUT','marc21',null);
  
 
@@ -106,4 +112,5 @@ INSERT INTO harvested_record_format(id, name) VALUES (23, 'VIDEO_OTHER');
 INSERT INTO harvested_record_format(id, name) VALUES (24, 'OTHER_KIT');
 INSERT INTO harvested_record_format(id, name) VALUES (25, 'OTHER_OBJECT');
 INSERT INTO harvested_record_format(id, name) VALUES (26, 'OTHER_MIX_DOCUMENT');
+INSERT INTO harvested_record_format(id, name) VALUES (27, 'NORMS');
 INSERT INTO harvested_record_format(id, name) VALUES (100, 'OTHER_UNSPECIFIED');

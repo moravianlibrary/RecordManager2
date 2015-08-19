@@ -63,7 +63,6 @@ id001_search_str = getId001()
 cnb_search_str = getFirstField "015az"
 
 ean_str_mv = getEAN()
-cpk_detected_format_txtF_mv = getRecordType()
 illustrated = isIllustrated()
 subject_facet_str_mv = getSubject "600abcdfglnpqstyz:610abcdfgklnpstyz:611abcdefgklnpqstyz:630adfgklnpstyz2:648a:650avxyz:651avxyz:653a:964abcdefg:967abc"
 source_title_facet_str = getFirstField "773t"
