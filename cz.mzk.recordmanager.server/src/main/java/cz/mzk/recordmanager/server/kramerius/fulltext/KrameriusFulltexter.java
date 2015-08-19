@@ -1,6 +1,8 @@
 package cz.mzk.recordmanager.server.kramerius.fulltext;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.URL;
@@ -13,6 +15,8 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
+
+import cz.mzk.recordmanager.server.model.FulltextMonography;
 
 
 @Component
@@ -138,6 +142,54 @@ public class KrameriusFulltexter {
 		return ocr;
 	}
 	
+	public byte[] getOCRBytes(String pageUuid) {
+		/* vytvorit odkaz do API pro UUID stranky */
+		String ocrUrl = kramApiUrl +"/item/" + pageUuid + "/streams/TEXT_OCR";
+		System.out.println("Zkousim stahnout OCR z ["+ocrUrl+"] ....");
+		byte[] ocr = null; /*TODO check */
+		
+		
+		try {
+			ocr = readUrlBytes(ocrUrl);
+			System.out.println("****OCR from "+ocrUrl+"*****");
+	//		System.out.println(ocr);
+		} catch (Exception e) {
+			System.err.println("Exception -- downloading of OCR from " + ocrUrl + " failed:" + e.getMessage());
+		}
+		
+		return ocr;
+	}
+	
+	
+	/* dostat fulltext monography objekty:
+	 * dostane uuid
+	 * ziska stranky
+	 * ke kazde strance dostane OCR
+	 * 	ulozi root uuid, pageuuid, OCR, order do fulltext monography
+	 * vrati fulltextmonography
+	 */
+	
+	public List<FulltextMonography> getFulltextObjects(String rootUuid) {
+		List<String> pagesUuids = getPagesUuids(rootUuid);
+		List<FulltextMonography> fms = new ArrayList<FulltextMonography>();
+		
+		Long pageOrder=0L;
+		for (String pageUuid : pagesUuids) {
+			pageOrder++;
+			byte[] ocr = getOCRBytes(pageUuid);
+			
+			FulltextMonography fm = new FulltextMonography();
+			fm.setFulltext(ocr);
+			fm.setOrder(pageOrder);
+			System.out.println("pageuuid ktere je mozna moc dlouhe: "+pageUuid);
+			fm.setUuidPage(pageUuid);
+			
+			fms.add(fm);
+		}
+		
+		return fms;
+	}
+	
 	
 	/* reads JSON from specified (complete) url */
 	public JSONArray readKrameriusJSON(String url) throws JSONException, Exception {	
@@ -162,6 +214,25 @@ public class KrameriusFulltexter {
 	    } finally {
 	        if (reader != null)
 	            reader.close();
+	    }
+	}
+	
+	private static byte[] readUrlBytes(String urlString) throws Exception {	    
+	    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+	    InputStream is = null;
+	    try {
+	      URL url = new URL(urlString);
+	      is = url.openStream ();
+	      byte[] byteChunk = new byte[4096]; // Or whatever size you want to read in at a time.
+	      int n;
+
+	      while ( (n = is.read(byteChunk)) > 0 ) {
+	        baos.write(byteChunk, 0, n);
+	      }
+	      return baos.toByteArray();
+	    }
+	    finally {
+	      if (is != null) { is.close(); }
 	    }
 	}
 	

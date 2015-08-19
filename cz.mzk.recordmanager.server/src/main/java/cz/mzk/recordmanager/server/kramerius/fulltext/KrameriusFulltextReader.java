@@ -51,6 +51,9 @@ ItemStream, StepExecutionListener {
 	public KrameriusFulltextReader(Long confId) {
 		super();
 		this.confId = confId;
+		
+		
+		
 	}
 	
 	@Override
