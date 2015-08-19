@@ -125,7 +125,6 @@ public class DedupSimpleKeysStepProsessor implements
 		
 		// walk through map and update references 
 		for (Map.Entry<DedupRecord, Set<DedupRecord>> entry : updateDedupRecordsMap.entrySet()) {
-			System.out.println(entry);
 		    for (DedupRecord updatedDR: entry.getValue()) {
 		    	for(HarvestedRecord toBeUpdated: harvestedRecordDao.getByDedupRecord(updatedDR)) {
 		    		toBeUpdated.setDedupRecord(entry.getKey());

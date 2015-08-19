@@ -22,7 +22,7 @@ public class TitleSimilarityWriter implements ItemWriter<List<Set<Long>>> {
 			for (Set<Long> idSet: item) {
 				if (idSet.size() > 1) {
 					String[] ids = idSet.stream().map(e -> e.toString()).toArray(String[]::new);
-					commands.add("INSERT INTO tmp_similarity_ids (id_array) VALUES ('" + String.join(",", ids) + "');");
+					commands.add("INSERT INTO tmp_similarity_ids (row_id,id_array) VALUES (nextval('tmp_table_id_seq'),('" + String.join(",", ids) + "'));");
 				}
 			}
 		}

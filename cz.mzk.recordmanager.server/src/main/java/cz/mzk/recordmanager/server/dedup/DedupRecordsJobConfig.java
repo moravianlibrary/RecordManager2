@@ -678,9 +678,9 @@ public class DedupRecordsJobConfig {
 		JdbcPagingItemReader<List<Long>> reader = new JdbcPagingItemReader<>();
 		SqlPagingQueryProviderFactoryBean pqpf = new SqlPagingQueryProviderFactoryBean();
 		pqpf.setDataSource(dataSource);
-		pqpf.setSelectClause("SELECT id_array");
+		pqpf.setSelectClause("SELECT row_id,id_array");
 		pqpf.setFromClause("FROM " + tablename);
-		pqpf.setSortKey("id_array");
+		pqpf.setSortKey("row_id");
 		reader.setRowMapper(new ArrayLongMapper());
 		reader.setPageSize(100);
 		reader.setQueryProvider(pqpf.getObject());
