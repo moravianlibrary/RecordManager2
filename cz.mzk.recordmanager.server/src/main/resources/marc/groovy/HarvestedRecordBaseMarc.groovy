@@ -20,3 +20,5 @@ nbn_display = getFirstField "015a"
 
 url = getFields "856u"
 local_statuses_facet_str_mv = getStatuses()
+
+holdings_996_str_mv = getHoldings996()
