@@ -503,7 +503,7 @@ public class MarcRecordImplTest extends AbstractTest {
 		// Microforms
 		data.add("000 0000000");
 		data.add("337 $bh");
-		hrf.add(HarvestedRecordFormatEnum.MICROFORMS);
+		hrf.add(HarvestedRecordFormatEnum.OTHER_MICROFORMS);
 		mri = MarcRecordFactory.recordFactory(data);
 		metadataRecord = metadataFactory.getMetadataRecord(mri);
 		Assert.assertEquals(metadataRecord.getDetectedFormatList().toString(), hrf.toString());
@@ -514,7 +514,7 @@ public class MarcRecordImplTest extends AbstractTest {
 		data.add("000 00000000");
 		data.add("007 fb");
 		data.add("245 $hhmatové písmo");
-		hrf.add(HarvestedRecordFormatEnum.BRAILL);
+		hrf.add(HarvestedRecordFormatEnum.OTHER_BRAILL);
 		mri = MarcRecordFactory.recordFactory(data);
 		metadataRecord = metadataFactory.getMetadataRecord(mri);		
 		Assert.assertEquals(metadataRecord.getDetectedFormatList().toString(), hrf.toString());

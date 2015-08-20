@@ -41,6 +41,8 @@ import cz.mzk.recordmanager.server.util.SolrUtils;
 public class SolrInputDocumentFactoryImpl implements SolrInputDocumentFactory, InitializingBean {
 
 	private static final String MZK_INSTITUTION_MAP = "mzk_institution.map";
+	private static final String INSTITUTION_LIBRARY = "Library";
+	private static final String INSTITUTION_OTHERS = "Others";
 
 	private static Logger logger = LoggerFactory.getLogger(SolrInputDocumentFactoryImpl.class);
 	
@@ -187,9 +189,20 @@ public class SolrInputDocumentFactoryImpl implements SolrInputDocumentFactory, I
 	}
 	
 	protected List<String> getInstitution(HarvestedRecord record){
-		String city = getCityOfRecord(record);
-		String name = getInstitutionOfRecord(record);
-		return SolrUtils.createHierarchicFacetValues(city, name);
+		if(record.getHarvestedFrom() != null){
+			if(record.getHarvestedFrom().isLibrary()){
+				String city = getCityOfRecord(record);
+				String name = getInstitutionOfRecord(record);
+				return SolrUtils.createHierarchicFacetValues(INSTITUTION_LIBRARY, city, name);
+			}
+			else{
+				String name = getInstitutionOfRecord(record);
+				return SolrUtils.createHierarchicFacetValues(INSTITUTION_OTHERS, name);
+			}
+		}
+		
+		return SolrUtils.createHierarchicFacetValues(SolrFieldConstants.UNKNOWN_INSTITUTION);
+		
 	}
 
 	protected List<String> getCityInstitutionForSearching(HarvestedRecord hr){

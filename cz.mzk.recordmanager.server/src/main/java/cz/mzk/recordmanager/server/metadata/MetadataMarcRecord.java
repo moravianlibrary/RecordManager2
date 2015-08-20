@@ -726,8 +726,8 @@ public class MetadataMarcRecord implements MetadataRecord {
 		if(isMap()) hrf.add(HarvestedRecordFormatEnum.MAPS);
 		if(isMusicalScores()) hrf.add(HarvestedRecordFormatEnum.MUSICAL_SCORES);
 		if(isVisualDocument()) hrf.add(HarvestedRecordFormatEnum.VISUAL_DOCUMENTS);
-		if(isMicroform()) hrf.add(HarvestedRecordFormatEnum.MICROFORMS);
-		if(isBraill()) hrf.add(HarvestedRecordFormatEnum.BRAILL);
+		if(isMicroform()) hrf.add(HarvestedRecordFormatEnum.OTHER_MICROFORMS);
+		if(isBraill()) hrf.add(HarvestedRecordFormatEnum.OTHER_BRAILL);
 		if(isElectronicSource()) hrf.add(HarvestedRecordFormatEnum.ELECTRONIC_SOURCE);
 		HarvestedRecordFormatEnum audio = getAudioFormat();
 		if(audio != null) hrf.add(audio);
