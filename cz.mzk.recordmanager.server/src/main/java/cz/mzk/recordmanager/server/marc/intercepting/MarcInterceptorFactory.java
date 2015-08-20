@@ -22,8 +22,8 @@ public class MarcInterceptorFactory {
 		
 		
 		String prefix = configuration.getIdPrefix();
-		Record record = parseRecord(rawRecord);
 		try {
+			Record record = parseRecord(rawRecord);
 			switch (prefix){
 			case Constants.PREFIX_CASLIN: return new SkatMarcInterceptor(record);
 			case Constants.PREFIX_MZKNORMS: return new MzkNormsMarcInterceptor(record);
