@@ -234,3 +234,6 @@ CREATE INDEX authority_code_idx ON authority_record(authority_code)
 
 -- 14. 8. 2015 mertam; 
 ALTER TABLE import_conf ADD COLUMN interception_enabled BOOLEAN DEFAULT FALSE;
+
+-- 20. 8. 2015 tomascejpek
+ALTER TABLE import_conf ADD COLUMN is_library BOOLEAN DEFAULT FALSE;
