@@ -85,7 +85,10 @@ public class OAIItemProcessor implements ItemProcessor<List<OAIRecord>, List<Har
 			byte[] recordContent = asByteArray(record.getMetadata().getElement());
 			if (configuration.isInterceptionEnabled()) {
 				MarcRecordInterceptor interceptor = marcInterceptorFactory.getInterceptor(configuration,recordContent);
-				recordContent = interceptor.intercept();
+				if (interceptor != null) {
+					//in case of invalid MARC is error processed later
+					recordContent = interceptor.intercept();
+				}
 			}
 			rec.setRawRecord(recordContent);
 		}
