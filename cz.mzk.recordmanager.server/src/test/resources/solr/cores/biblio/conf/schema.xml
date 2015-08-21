@@ -131,7 +131,7 @@
    <field name="collection" type="string" indexed="true" stored="true" multiValued="true"/>
    <field name="building" type="string" indexed="true" stored="true" multiValued="true"/>
    <!-- Generic Fields -->
-   <field name="language" type="string" indexed="true" stored="true" multiValued="true"/>
+   <field name="language" type="string" indexed="false" stored="true" multiValued="true" docValues="true"/>
    <field name="format" type="string" indexed="true" stored="true" multiValued="true"/>
    <field name="author" type="textProper" indexed="true" stored="true" termVectors="true"/>
    <field name="author-letter" type="string" indexed="true" stored="true"/>
@@ -147,7 +147,7 @@
    <field name="physical" type="string" indexed="true" stored="true" multiValued="true"/>
    <field name="publisher" type="textProper" indexed="true" stored="true" multiValued="true"/>
    <field name="publisherStr" type="string" indexed="true" stored="false" multiValued="true"/>
-   <field name="publishDate" type="string" indexed="true" stored="true" multiValued="true"/>
+   <field name="publishDate" type="string" indexed="false" stored="true" multiValued="true" docValues="true"/>
    <field name="publishDateSort" type="string" indexed="true" stored="false"/>
    <field name="edition" type="string" indexed="true" stored="true"/>
    <field name="description" type="text" indexed="true" stored="true"/>
@@ -188,7 +188,7 @@
    <field name="series2" type="text" indexed="true" stored="true" multiValued="true"/>
    <field name="topic" type="text" indexed="true" stored="true" multiValued="true"/>
    <field name="topic_unstemmed" type="textProper" indexed="true" stored="false" multiValued="true"/>
-   <field name="topic_facet" type="textFacet" indexed="true" stored="true" multiValued="true"/>
+   <field name="topic_facet" type="string" indexed="false" stored="true" multiValued="true" docValues="true"/>
    <field name="topic_browse" type="string" indexed="true" stored="false" multiValued="true"/>
    <field name="author_browse" type="string" indexed="true" stored="false" multiValued="true"/>
    <field name="genre" type="text" indexed="true" stored="true" multiValued="true"/>
@@ -230,10 +230,10 @@
    <dynamicField name="*_date_mv" type="date" indexed="true" stored="true" multiValued="true"/>
    <dynamicField name="*_isn" type="isn" indexed="true" stored="true"/>
    <dynamicField name="*_isn_mv" type="isn" indexed="true" stored="true" multiValued="true"/>
-   <dynamicField name="*_str" type="string" indexed="true" stored="true"/>
-   <dynamicField name="*_str_mv" type="string" indexed="true" stored="true" multiValued="true"/>
-   <dynamicField name="*_txt" type="text" indexed="true" stored="true"/>
-   <dynamicField name="*_txt_mv" type="text" indexed="true" stored="true" multiValued="true"/>
+   <dynamicField name="*_str" type="string" indexed="false" stored="true" docValues="true"/>
+   <dynamicField name="*_str_mv" type="string" indexed="false" stored="true" multiValued="true" docValues="true"/>
+   <dynamicField name="*_txt" type="text" indexed="false" stored="true" docValues="false"/>
+   <dynamicField name="*_txt_mv" type="text" indexed="false" stored="true" multiValued="true" docValues="false"/>
    <dynamicField name="*_txtF" type="textFacet" indexed="true" stored="true"/>
    <dynamicField name="*_txtF_mv" type="textFacet" indexed="true" stored="true" multiValued="true"/>
    <dynamicField name="*_txtP" type="textProper" indexed="true" stored="true"/>
