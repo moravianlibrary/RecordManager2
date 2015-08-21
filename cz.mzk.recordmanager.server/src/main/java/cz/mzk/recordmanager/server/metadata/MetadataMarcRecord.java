@@ -127,12 +127,20 @@ public class MetadataMarcRecord implements MetadataRecord {
 
 	@Override
 	public String getISSNSeries() {
-		return underlayingMarc.getField("490", 'x');
+		String result = underlayingMarc.getField("490", 'x'); 
+		if (result != null) {
+			return result.substring(0, Math.min(result.length(), 300));
+		}
+		return null;
 	}
 	
 	@Override
 	public String getISSNSeriesOrder() {
-		return underlayingMarc.getField("490", 'v');
+		String result = underlayingMarc.getField("490", 'v'); 
+		if (result != null) {
+			return result.substring(0, Math.min(result.length(), 300));
+		}
+		return null;
 	}
 		
 
