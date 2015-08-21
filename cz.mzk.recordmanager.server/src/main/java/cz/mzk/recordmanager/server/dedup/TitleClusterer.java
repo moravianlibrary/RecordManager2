@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import cz.mzk.recordmanager.server.model.Title;
+import cz.mzk.recordmanager.server.util.DeduplicationUtils;
 import cz.mzk.recordmanager.server.util.StringUtils;
 
 public class TitleClusterer {
@@ -109,7 +110,7 @@ public class TitleClusterer {
 					// ignore different authors
 					continue;
 				}
-				if (!comparePages(currentTitle.getPages(), tmpTitle.getPages())) {
+				if (!DeduplicationUtils.comparePages(currentTitle.getPages(), tmpTitle.getPages(), .05, 10)) {
 					// ignore different pages
 					continue;
 				} 
@@ -163,27 +164,7 @@ public class TitleClusterer {
 		}
 	}
 	
-	/**
-	 * 
-	 * @param pages1
-	 * @param pages2
-	 * @return true if false if pages, true if at least one is null or they are in safe interval
-	 */
-	protected boolean comparePages(Long pages1, Long pages2) {
-		if (pages1 == null || pages2 == null) {
-			return true;
-		}
-		
-		Long min = Math.min(pages1, pages2);
-		Long max = Math.max(pages1, pages2);
-		
-		double safeIntervalLegth = Math.ceil(min.doubleValue() * .05);
-		if (safeIntervalLegth > 10) {
-			safeIntervalLegth = 10;
-		}
 
-		return (max >= (min - safeIntervalLegth) && max <= (min + safeIntervalLegth));
-	}
     
     
     protected enum TempIdSingleton {

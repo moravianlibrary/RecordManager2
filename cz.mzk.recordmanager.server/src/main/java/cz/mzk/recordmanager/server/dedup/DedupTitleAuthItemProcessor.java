@@ -1,8 +1,12 @@
 package cz.mzk.recordmanager.server.dedup;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import cz.mzk.recordmanager.server.model.Cnb;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.model.Isbn;
+import cz.mzk.recordmanager.server.util.DeduplicationUtils;
 
 
 /**
@@ -22,13 +26,22 @@ public class DedupTitleAuthItemProcessor extends DedupSimpleKeysStepProsessor {
 			return false;
 		}
 		
+		Set<String> aTitles = new HashSet<>();
+		Set<String> bTitles = new HashSet<>();		
+		hrA.getTitles().stream().filter(t -> t.getTitleStr() != null && !t.getTitleStr().isEmpty()).forEach(t -> aTitles.add(t.getTitleStr()));
+		hrB.getTitles().stream().filter(t -> t.getTitleStr() != null && !t.getTitleStr().isEmpty()).forEach(t -> bTitles.add(t.getTitleStr()));
+		Set<String> intersection = new HashSet<>(aTitles);
+		intersection.retainAll(bTitles);
+		
+		
+		if (intersection.stream().allMatch(s -> s.length() < 16)) {
+			return false;
+		}
+		
 		Long pagesA = hrA.getPages();
 		Long pagesB = hrB.getPages();
 		
-		Long aDiff = pagesA * (PAGES_MATCH_PERCENTAGE / 100);
-		Long bDiff = pagesB * (PAGES_MATCH_PERCENTAGE / 100);
-		if (!(pagesA >= pagesB - bDiff && pagesA <= pagesB + bDiff) 
-				&& !(pagesB >= pagesA - aDiff && pagesB <= pagesA + aDiff)) {
+		if (!DeduplicationUtils.comparePages(pagesA, pagesB, .05, 10)) {
 			return false;
 		}
 		
@@ -51,6 +64,8 @@ public class DedupTitleAuthItemProcessor extends DedupSimpleKeysStepProsessor {
 				}
 			}
 		}
+		
+		
 		return true;
 	}
 }
