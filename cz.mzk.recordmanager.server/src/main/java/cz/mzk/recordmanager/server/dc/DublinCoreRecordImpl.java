@@ -24,12 +24,12 @@ public class DublinCoreRecordImpl implements DublinCoreRecord {
 	private List<String> type;
 
 	public DublinCoreRecordImpl() {
-		creator = new ArrayList();
-		date = new ArrayList();
-		format = new ArrayList();
-		identifier = new ArrayList();
-		title = new ArrayList();
-		type = new ArrayList();
+		creator = new ArrayList<>();
+		date = new ArrayList<>();
+		format = new ArrayList<>();
+		identifier = new ArrayList<>();
+		title = new ArrayList<>();
+		type = new ArrayList<>();
 
 	}
 
