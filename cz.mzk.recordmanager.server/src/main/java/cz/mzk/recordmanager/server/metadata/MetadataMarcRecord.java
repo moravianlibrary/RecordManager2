@@ -301,12 +301,8 @@ public class MetadataMarcRecord implements MetadataRecord {
 		String f006 = underlayingMarc.getControlField("006");
 	    String f006_00 = (f006 != null) && (f006.length() > 0) ? Character.toString(f006.charAt(0)) : "";
 		
-	    String f007 = underlayingMarc.getControlField("007");
-	    String f007_00 = (f007 != null) && (f007.length() > 0) ? Character.toString(f007.charAt(0)) : "";
-		
-		if(ldr06.matches("(?i)[at]") && ldr07.matches("(?i)[cdm]"))	return true;		
-		if(f007_00.matches("(?i)t")) return true;		
-		if(f006_00.matches("(?i)[at]")) return true;
+		if(ldr06.matches("(?i)[at]") && ldr07.matches("(?i)[cdm]"))	return true;				
+		if(f006_00.matches("(?i)[a]")) return true;
 		
 		return false;		
 	}
@@ -735,7 +731,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 		if(isMusicalScores()) hrf.add(HarvestedRecordFormatEnum.MUSICAL_SCORES);
 		if(isVisualDocument()) hrf.add(HarvestedRecordFormatEnum.VISUAL_DOCUMENTS);
 		if(isMicroform()) hrf.add(HarvestedRecordFormatEnum.OTHER_MICROFORMS);
-		if(isBraill()) hrf.add(HarvestedRecordFormatEnum.OTHER_BRAILL);
+		if(isBraill()) hrf.add(HarvestedRecordFormatEnum.OTHER_BRAILLE);
 		if(isElectronicSource()) hrf.add(HarvestedRecordFormatEnum.ELECTRONIC_SOURCE);
 		HarvestedRecordFormatEnum audio = getAudioFormat();
 		if(audio != null) hrf.add(audio);
