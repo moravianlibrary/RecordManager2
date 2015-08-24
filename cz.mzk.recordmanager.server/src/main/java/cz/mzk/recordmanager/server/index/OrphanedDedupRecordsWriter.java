@@ -30,7 +30,7 @@ public class OrphanedDedupRecordsWriter implements ItemWriter<String>, StepExecu
 	@Override
 	public void write(List<? extends String> items) throws Exception {
 		for (String id : items) {
-			String query = MessageFormat.format("'{'!child of=merged_boolean:true'}'id:{0} OR id:{0}", id);
+			String query = MessageFormat.format("('{'!child of=merged_boolean:true'}'id:{0}) OR id:{0}", id);
 			server.deleteByQuery(query, commitWithinMs);
 		}
 	}
