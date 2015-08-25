@@ -95,7 +95,7 @@ INSERT INTO harvested_record_format(id, name) VALUES (6, 'VISUAL_DOCUMENTS');
 INSERT INTO harvested_record_format(id, name) VALUES (7, 'MANUSCRIPTS');
 INSERT INTO harvested_record_format(id, name) VALUES (8, 'OTHER_MICROFORMS');
 INSERT INTO harvested_record_format(id, name) VALUES (9, 'LARGE_PRINTS'); 
-INSERT INTO harvested_record_format(id, name) VALUES (10, 'OTHER_BRAILL');
+INSERT INTO harvested_record_format(id, name) VALUES (10, 'OTHER_BRAILLE');
 INSERT INTO harvested_record_format(id, name) VALUES (11, 'ELECTRONIC_SOURCE'); 
 INSERT INTO harvested_record_format(id, name) VALUES (12, 'AUDIO_DOCUMENTS'); 
 INSERT INTO harvested_record_format(id, name) VALUES (13, 'AUDIO_CD');

@@ -73,15 +73,12 @@ public class IndexRecordsToSolrJobConfig {
 	@Bean
 	public Job indexAllRecordsToSolrJob(
 			@Qualifier("indexRecordsToSolrJob:updateRecordsStep") Step updateRecordsStep,
-			@Qualifier("indexRecordsToSolrJob:deleteOrphanedRecordsStep") Step deleteOrphanedRecordsStep,
-			@Qualifier("indexLocalRecordsToSolrJob:deleteOrphanedHarvestedRecordsStep") Step deleteOrphanedHarvestedRecordsStep,
-			@Qualifier("indexLocalRecordsToSolrJob:updateHarvestedRecordsStep") Step updateHarvestedRecordsStep) {
+			@Qualifier("indexRecordsToSolrJob:deleteOrphanedRecordsStep") Step deleteOrphanedRecordsStep) {
 		return jobs.get(Constants.JOB_ID_SOLR_INDEX_ALL_RECORDS)
-        		.validator(new IndexRecordsToSolrJobParametersValidator())
-        		.incrementer(UUIDIncrementer.INSTANCE)
-        		.listener(JobFailureListener.INSTANCE)
-        		.flow(deleteOrphanedHarvestedRecordsStep)
-				.next(updateRecordsStep)
+				.validator(new IndexRecordsToSolrJobParametersValidator())
+				.incrementer(UUIDIncrementer.INSTANCE)
+				.listener(JobFailureListener.INSTANCE)
+				.flow(updateRecordsStep)
 				.next(deleteOrphanedRecordsStep)
 				.end()
 				.build();
@@ -213,11 +210,11 @@ public class IndexRecordsToSolrJobConfig {
     	return reader;
     }
 
-    @Bean(name="indexRecordsToSolrJob:orphanedRecordsWriter")
-    @StepScope
-    public OrphanedRecordsWriter orphanedRecordsWriter(@Value("#{jobParameters[" + Constants.JOB_PARAM_SOLR_URL + "]}") String solrUrl) {
-    	return new OrphanedRecordsWriter(solrUrl);
-    }
+	@Bean(name="indexRecordsToSolrJob:orphanedRecordsWriter")
+	@StepScope
+	public OrphanedDedupRecordsWriter orphanedRecordsWriter(@Value("#{jobParameters[" + Constants.JOB_PARAM_SOLR_URL + "]}") String solrUrl) {
+		return new OrphanedDedupRecordsWriter(solrUrl);
+	}
 
     // local records
     @Bean(name="indexLocalRecordsToSolrJob:deleteOrphanedHarvestedRecordsStep") 

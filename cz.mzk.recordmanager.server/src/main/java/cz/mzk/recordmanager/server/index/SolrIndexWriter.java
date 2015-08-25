@@ -48,6 +48,9 @@ public class SolrIndexWriter implements ItemWriter<Future<List<SolrInputDocument
 					documents.addAll(docs);
 				}
 			}
+			if (documents.isEmpty()) {
+				return;
+			}
 			logger.info("About to index {} documents to Solr", documents.size());
 			try {
 				UpdateResponse response = server.add(documents, commitWithinMs);

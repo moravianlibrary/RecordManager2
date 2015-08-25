@@ -105,7 +105,11 @@ public class BoundingBoxMarcFunctions implements MarcRecordFunctions {
 		value = value.trim();
 		Matcher matcher = PATTERN.matcher(value);
 		if (!matcher.matches()) {
-			return Double.parseDouble(value);
+			try {
+				return Double.parseDouble(value);
+			} catch (NumberFormatException nfe) {
+				return Double.NaN;
+			}
 		}
 		int hours = Integer.valueOf(matcher.group(2));
 		int minutes = Integer.valueOf(matcher.group(3));
