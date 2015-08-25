@@ -43,6 +43,8 @@ public class MetadataMarcRecord implements MetadataRecord {
 	protected static final Pattern OCLC_PATTERN= Pattern.compile("(\\(ocolc\\))(.*)", Pattern.CASE_INSENSITIVE);
 	protected static final String ISBN_CLEAR_REGEX = "[^0-9^X^x]";
 	
+	protected static final Long MAX_PAGES = 10_000_000L;
+	
 	public MetadataMarcRecord(MarcRecord underlayingMarc) {
 		if (underlayingMarc == null) {
 			throw new IllegalArgumentException("Creating MetadataMarcRecord with NULL underlayingMarc.");
@@ -154,7 +156,8 @@ public class MetadataMarcRecord implements MetadataRecord {
 		Matcher matcher = PAGECOUNT_PATTERN.matcher(count);
 		try {
 			if (matcher.find()) {
-				return Long.parseLong(matcher.group(0));
+				Long pages = Long.parseLong(matcher.group(0));
+				return  pages < MAX_PAGES ? pages : MAX_PAGES;
 			}
 		} catch (NumberFormatException e) {}
 		return null;
