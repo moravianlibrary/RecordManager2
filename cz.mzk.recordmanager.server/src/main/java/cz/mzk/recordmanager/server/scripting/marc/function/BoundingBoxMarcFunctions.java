@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import cz.mzk.recordmanager.server.marc.MarcRecord;
+import cz.mzk.recordmanager.server.scripting.marc.MarcFunctionContext;
 
 @Component
 public class BoundingBoxMarcFunctions implements MarcRecordFunctions {
@@ -25,13 +26,22 @@ public class BoundingBoxMarcFunctions implements MarcRecordFunctions {
 	private static final Pattern PATTERN = Pattern
 			.compile("([eEwWnNsS]{1})(\\d{3})(\\d{2})(\\d{2})");
 
-	public String getBoundingBoxAsPolygon(MarcRecord record) {
-		double points[] =  parseBoundingBox(record);
+	public String getBoundingBoxAsPolygon(MarcRecord rec) {
+		double points[] =  parseBoundingBox(rec);
 		if (points == null) {
 			return null;
 		}
 		return MessageFormat.format("POLYGON(({0} {1}, {2} {1}, {2} {3}, {0} {3}, {0} {1}))",
 				points[0], points[1], points[2], points[3]);
+	}
+
+	public String getBoundingBoxAsPolygon(MarcFunctionContext ctx) {
+		MarcRecord record = ctx.record();
+		return getBoundingBoxAsPolygon(record);
+	}
+
+	public String getBoundingBox(MarcFunctionContext ctx) {
+		return getBoundingBox(ctx.record());
 	}
 
 	public String getBoundingBox(MarcRecord record) {

@@ -10,6 +10,7 @@ import org.marc4j.marc.Subfield;
 import org.springframework.stereotype.Component;
 
 import cz.mzk.recordmanager.server.marc.MarcRecord;
+import cz.mzk.recordmanager.server.scripting.marc.MarcFunctionContext;
 
 @Component
 public class GetStatusesMarcFunctions implements MarcRecordFunctions {
@@ -26,7 +27,8 @@ public class GetStatusesMarcFunctions implements MarcRecordFunctions {
 	protected final static String LIMITED = "o";
 	protected final static String TEMPORARY = "d";
 
-	public List<String> getStatuses(MarcRecord record) {
+	public List<String> getStatuses(MarcFunctionContext ctx) {
+		MarcRecord record = ctx.record();
 		List<String> statuses = new ArrayList<String>();
 		statuses.addAll(getStatuses(record, "996"));
 		statuses.add(getStatusFrom856(record, "856"));		

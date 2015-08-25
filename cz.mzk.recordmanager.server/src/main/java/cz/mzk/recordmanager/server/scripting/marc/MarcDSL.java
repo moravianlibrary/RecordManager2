@@ -29,13 +29,16 @@ public class MarcDSL extends BaseDSL {
 	private final static Pattern FIELD_PATTERN = Pattern
 			.compile("([0-9]{3})([a-zA-Z0-9]*)");
 	
+	private final MarcFunctionContext context;
+
 	private final MarcRecord record;
 
-	private final Map<String, RecordFunction<MarcRecord>> functions;
+	private final Map<String, RecordFunction<MarcFunctionContext>> functions;
 
-	public MarcDSL(MarcRecord record, MappingResolver propertyResolver, Map<String, RecordFunction<MarcRecord>> functions) {
+	public MarcDSL(MarcFunctionContext context, MappingResolver propertyResolver, Map<String, RecordFunction<MarcFunctionContext>> functions) {
 		super(propertyResolver);
-		this.record = record;
+		this.context = context;
+		this.record = context.record();
 		this.functions = functions;
 		this.marcMetadataRecord = new MetadataMarcRecord(record);
 	}
@@ -126,7 +129,7 @@ public class MarcDSL extends BaseDSL {
     /**
      * Get the title (245ab) from a record, without non-filing chars as
      * specified in 245 2nd indicator, and lowercased. 
-     * @param record - the marc record object
+     * @param context - the marc record object
      * @return 245a and 245b values concatenated, with trailing punct removed,
      *         and with non-filing characters omitted. Null returned if no
      *         title can be found. 
@@ -168,11 +171,11 @@ public class MarcDSL extends BaseDSL {
 	}
 
 	public Object methodMissing(String methodName, Object args) {
-		RecordFunction<MarcRecord> func = functions.get(methodName);
+		RecordFunction<MarcFunctionContext> func = functions.get(methodName);
 		if (func == null) {
 			throw new IllegalArgumentException(String.format("missing function: %s", methodName));
 		}
-		return func.apply(record, args);
+		return func.apply(context, args);
 	}
 	
     protected int getInd2AsInt(DataField df) {

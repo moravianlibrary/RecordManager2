@@ -7,12 +7,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import cz.mzk.recordmanager.server.marc.MarcRecord;
 import cz.mzk.recordmanager.server.scripting.MappingResolver;
 import cz.mzk.recordmanager.server.scripting.MappingScript;
 import cz.mzk.recordmanager.server.scripting.function.RecordFunction;
 
-public class MarcMappingScriptImpl implements MappingScript<MarcRecord> {
+public class MarcMappingScriptImpl implements MappingScript<MarcFunctionContext> {
 
 	private final Binding binding;
 	
@@ -20,10 +19,10 @@ public class MarcMappingScriptImpl implements MappingScript<MarcRecord> {
 	
 	private final MappingResolver propertyResolver;
 
-	private final Map<String, RecordFunction<MarcRecord>> functions;
+	private final Map<String, RecordFunction<MarcFunctionContext>> functions;
 	
 	public MarcMappingScriptImpl(Binding binding, List<DelegatingScript> scripts, 
-			MappingResolver propertyResolver, Map<String, RecordFunction<MarcRecord>> functions) {
+			MappingResolver propertyResolver, Map<String, RecordFunction<MarcFunctionContext>> functions) {
 		super();
 		this.scripts = scripts;
 		this.binding = binding;
@@ -32,9 +31,9 @@ public class MarcMappingScriptImpl implements MappingScript<MarcRecord> {
 	}
 
 	@Override
-	public Map<String, Object> parse(MarcRecord record) {
+	public Map<String, Object> parse(MarcFunctionContext ctx) {
 		binding.getVariables().clear();
-		MarcDSL delegate = new MarcDSL(record, propertyResolver, functions);
+		MarcDSL delegate = new MarcDSL(ctx, propertyResolver, functions);
 		for (DelegatingScript script : scripts) {
 			script.setDelegate(delegate);
 			script.run();

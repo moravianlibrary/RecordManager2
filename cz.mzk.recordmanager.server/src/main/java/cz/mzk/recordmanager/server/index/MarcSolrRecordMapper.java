@@ -15,6 +15,7 @@ import cz.mzk.recordmanager.server.marc.MarcXmlParser;
 import cz.mzk.recordmanager.server.model.DedupRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.scripting.MappingScript;
+import cz.mzk.recordmanager.server.scripting.marc.MarcFunctionContext;
 import cz.mzk.recordmanager.server.scripting.marc.MarcScriptFactory;
 
 @Component
@@ -28,9 +29,9 @@ public class MarcSolrRecordMapper implements SolrRecordMapper, InitializingBean 
 	@Autowired
 	private MarcScriptFactory marcScriptFactory;
 
-	private MappingScript<MarcRecord> dedupRecordMappingScript;
+	private MappingScript<MarcFunctionContext> dedupRecordMappingScript;
 
-	private MappingScript<MarcRecord> harvestedRecordMappingScript;
+	private MappingScript<MarcFunctionContext> harvestedRecordMappingScript;
 
 	@Override
 	public List<String> getSupportedFormats() {
@@ -55,18 +56,20 @@ public class MarcSolrRecordMapper implements SolrRecordMapper, InitializingBean 
 	protected Map<String, Object> parseAsDedupRecord(HarvestedRecord record) {
 		InputStream is = new ByteArrayInputStream(record.getRawRecord());
 		MarcRecord rec = marcXmlParser.parseRecord(is);
-		MappingScript<MarcRecord> script = getMappingScript(record);
-		Map<String, Object> result = script.parse(rec);
+		MappingScript<MarcFunctionContext> script = getMappingScript(record);
+		MarcFunctionContext ctx = new MarcFunctionContext(rec);
+		Map<String, Object> result = script.parse(ctx);
 		return result;
 	}
 
 	protected Map<String, Object> parseAsLocalRecord(HarvestedRecord record) {
 		InputStream is = new ByteArrayInputStream(record.getRawRecord());
 		MarcRecord rec = marcXmlParser.parseRecord(is);
-		return harvestedRecordMappingScript.parse(rec);
+		MarcFunctionContext ctx = new MarcFunctionContext(rec);
+		return harvestedRecordMappingScript.parse(ctx);
 	}
 
-	protected MappingScript<MarcRecord> getMappingScript(HarvestedRecord record) {
+	protected MappingScript<MarcFunctionContext> getMappingScript(HarvestedRecord record) {
 		return dedupRecordMappingScript;
 	}
 
