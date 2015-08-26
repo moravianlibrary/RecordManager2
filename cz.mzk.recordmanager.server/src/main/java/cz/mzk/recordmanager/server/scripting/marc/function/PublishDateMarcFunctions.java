@@ -172,7 +172,9 @@ public class PublishDateMarcFunctions implements MarcRecordFunctions {
 	}
 
 	public String getPublishDateForSorting(MarcFunctionContext ctx) {
-		return null; // FIXME
+		Set<Integer> years = getPublishDate(ctx);
+		if(!years.isEmpty()) return years.iterator().next().toString();
+		return null;
 	}
 
 }
