@@ -72,7 +72,7 @@ public class ImportRecordsJobTest extends AbstractTest {
 		JobParameters jobParams = new JobParameters(params);
 		jobLauncher.run(job, jobParams);
 
-		HarvestedRecord insertedRecord =  harvestedRecordDao.findByRecordId("000000146");
+		HarvestedRecord insertedRecord =  harvestedRecordDao.findByIdAndHarvestConfiguration("000000146", 300L);
 		Assert.assertNotNull(insertedRecord);
 	}
 	
@@ -86,7 +86,7 @@ public class ImportRecordsJobTest extends AbstractTest {
 		JobParameters jobParams = new JobParameters(params);
 		jobLauncher.run(job, jobParams);
 		
-		HarvestedRecord insertedRecord =  harvestedRecordDao.findByRecordId("19790455");
+		HarvestedRecord insertedRecord =  harvestedRecordDao.findByIdAndHarvestConfiguration("19790455", 300L);
 		Assert.assertNotNull(insertedRecord);
 	}
 	
@@ -100,7 +100,7 @@ public class ImportRecordsJobTest extends AbstractTest {
 		JobParameters jobParams = new JobParameters(params);
 		jobLauncher.run(job, jobParams);
 		
-		Assert.assertNotNull(harvestedRecordDao.findByRecordId("000004171"));
+		Assert.assertNotNull(harvestedRecordDao.findByIdAndHarvestConfiguration("000004171", 300L));
 	}
 	
 	@Test
@@ -126,9 +126,9 @@ public class ImportRecordsJobTest extends AbstractTest {
 		JobParameters jobParams = new JobParameters(params);
 		jobLauncher.run(job, jobParams);
 		
-		Assert.assertNotNull(harvestedRecordDao.findByRecordId("kpw0120405"));
-		Assert.assertNotNull(harvestedRecordDao.findByRecordId("kpw0120531"));
-		Assert.assertNotNull(harvestedRecordDao.findByRecordId("kpw0120435"));
+		Assert.assertNotNull(harvestedRecordDao.findByIdAndHarvestConfiguration("kpw0120405", 300L));
+		Assert.assertNotNull(harvestedRecordDao.findByIdAndHarvestConfiguration("kpw0120531", 300L));
+		Assert.assertNotNull(harvestedRecordDao.findByIdAndHarvestConfiguration("kpw0120435", 300L));
 	}
 	
 	@Test
@@ -141,12 +141,12 @@ public class ImportRecordsJobTest extends AbstractTest {
 		JobParameters jobParams = new JobParameters(params);
 		jobLauncher.run(job, jobParams);
 		
-		Assert.assertNotNull(harvestedRecordDao.findByRecordId("000000117"));
-		Assert.assertNotNull(harvestedRecordDao.findByRecordId("000000121"));
-		Assert.assertNotNull(harvestedRecordDao.findByRecordId("000000120"));
-		Assert.assertNotNull(harvestedRecordDao.findByRecordId("000000130"));
-		Assert.assertNotNull(harvestedRecordDao.findByRecordId("000000132"));
-		Assert.assertNotNull(harvestedRecordDao.findByRecordId("000000134"));
+		Assert.assertNotNull(harvestedRecordDao.findByIdAndHarvestConfiguration("000000117", 300L));
+		Assert.assertNotNull(harvestedRecordDao.findByIdAndHarvestConfiguration("000000121", 300L));
+		Assert.assertNotNull(harvestedRecordDao.findByIdAndHarvestConfiguration("000000120", 300L));
+		Assert.assertNotNull(harvestedRecordDao.findByIdAndHarvestConfiguration("000000130", 300L));
+		Assert.assertNotNull(harvestedRecordDao.findByIdAndHarvestConfiguration("000000132", 300L));
+		Assert.assertNotNull(harvestedRecordDao.findByIdAndHarvestConfiguration("000000134", 300L));
 	}
 	
 	@Test
@@ -159,11 +159,11 @@ public class ImportRecordsJobTest extends AbstractTest {
 		JobParameters jobParams = new JobParameters(params);
 		jobLauncher.run(job, jobParams);
 		
-		Assert.assertNotNull(harvestedRecordDao.findByRecordId("000000116"));
-		Assert.assertNotNull(harvestedRecordDao.findByRecordId("000000117"));
-		Assert.assertNotNull(harvestedRecordDao.findByRecordId("000000119"));
-		Assert.assertNotNull(harvestedRecordDao.findByRecordId("000000120"));
-		Assert.assertNotNull(harvestedRecordDao.findByRecordId("000000121"));
+		Assert.assertNotNull(harvestedRecordDao.findByIdAndHarvestConfiguration("000000116", 300L));
+		Assert.assertNotNull(harvestedRecordDao.findByIdAndHarvestConfiguration("000000117", 300L));
+		Assert.assertNotNull(harvestedRecordDao.findByIdAndHarvestConfiguration("000000119", 300L));
+		Assert.assertNotNull(harvestedRecordDao.findByIdAndHarvestConfiguration("000000120", 300L));
+		Assert.assertNotNull(harvestedRecordDao.findByIdAndHarvestConfiguration("000000121", 300L));
 	}
 	
 	@Test
