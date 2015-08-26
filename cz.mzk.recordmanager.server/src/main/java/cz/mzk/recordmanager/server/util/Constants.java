@@ -44,7 +44,9 @@ public class Constants {
 	public static final String PREFIX_TRE				= "tre";
 	public static final String PREFIX_CASLIN			= "caslin";
 	public static final String PREFIX_MZKNORMS			= "mzknorms";
-
+	public static final String PREFIX_SFXJIBMZK			= "sfxjibmzk";
+	public static final String PREFIX_SFXJIBNLK			= "sfxjibnlk";
+	
 	public static final String JOB_PARAM_RECORD_ID		= "recordId";
 	/* need some changing paramteter :-/ - 
 	 * A job instance already exists and is complete for parameters={}. 
