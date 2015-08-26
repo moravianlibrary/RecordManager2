@@ -41,6 +41,8 @@ public class ImportRecordsJobTest extends AbstractTest {
 	private String testFileISO2;
 	private String testFileAleph1;
 	private String testFileAleph2;
+	private String testFileLine1;
+	private String testFileLine2;
 	
 	@BeforeClass
 	public void init() {
@@ -51,6 +53,8 @@ public class ImportRecordsJobTest extends AbstractTest {
 		testFileXML2 = this.getClass().getResource("/import/marcxml/KKFB-records.xml").getFile();
 		testFileAleph1 = this.getClass().getResource("/import/marcaleph/MZK01-000004171.txt").getFile();
 		testFileAleph2 = this.getClass().getResource("/import/marcaleph/MZK-records.txt").getFile();
+		testFileLine1 = this.getClass().getResource("/import/marcline/MZK01-000000116.mrc").getFile();
+		testFileLine2 = this.getClass().getResource("/import/marcline/MZK-records.mrc").getFile();
 	}
 	
 	@BeforeMethod
@@ -97,6 +101,19 @@ public class ImportRecordsJobTest extends AbstractTest {
 		jobLauncher.run(job, jobParams);
 		
 		Assert.assertNotNull(harvestedRecordDao.findByRecordId("000004171"));
+	}
+	
+	@Test
+	public void testSimpleImportMarcLine() throws Exception {
+		Job job = jobRegistry.getJob(Constants.JOB_ID_IMPORT);
+		Map<String, JobParameter> params = new HashMap<String, JobParameter>();
+		params.put(Constants.JOB_PARAM_CONF_ID, new JobParameter(300L));
+		params.put(Constants.JOB_PARAM_IN_FILE, new JobParameter(testFileLine1));
+		params.put(Constants.JOB_PARAM_FORMAT, new JobParameter("line"));
+		JobParameters jobParams = new JobParameters(params);
+		jobLauncher.run(job, jobParams);
+		
+		Assert.assertNotNull(harvestedRecordDao.findByIdAndHarvestConfiguration("000000116", 300L));
 	}
 	
 	@Test
@@ -147,5 +164,22 @@ public class ImportRecordsJobTest extends AbstractTest {
 		Assert.assertNotNull(harvestedRecordDao.findByRecordId("000000119"));
 		Assert.assertNotNull(harvestedRecordDao.findByRecordId("000000120"));
 		Assert.assertNotNull(harvestedRecordDao.findByRecordId("000000121"));
+	}
+	
+	@Test
+	public void testMultipleImportMarcLine() throws Exception {
+		Job job = jobRegistry.getJob(Constants.JOB_ID_IMPORT);
+		Map<String, JobParameter> params = new HashMap<String, JobParameter>();
+		params.put(Constants.JOB_PARAM_CONF_ID, new JobParameter(300L));
+		params.put(Constants.JOB_PARAM_IN_FILE, new JobParameter(testFileLine2));
+		params.put(Constants.JOB_PARAM_FORMAT, new JobParameter("line"));
+		JobParameters jobParams = new JobParameters(params);
+		jobLauncher.run(job, jobParams);
+		
+		Assert.assertNotNull(harvestedRecordDao.findByIdAndHarvestConfiguration("000000116", 300L));
+		Assert.assertNotNull(harvestedRecordDao.findByIdAndHarvestConfiguration("000000117", 300L));
+		Assert.assertNotNull(harvestedRecordDao.findByIdAndHarvestConfiguration("000000119", 300L));
+		Assert.assertNotNull(harvestedRecordDao.findByIdAndHarvestConfiguration("000000120", 300L));
+		Assert.assertNotNull(harvestedRecordDao.findByIdAndHarvestConfiguration("000000121", 300L));
 	}
 }
