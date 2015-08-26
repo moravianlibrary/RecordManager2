@@ -76,7 +76,7 @@ public class MarcAlephStreamReader implements MarcReader{
     		StringBuilder rec = new StringBuilder();
     		String newLine;
 			while((newLine = br.readLine()) != null){
-				if(newLine == "") continue;
+				if(newLine == "" || newLine.isEmpty()) continue;
 	    		if(LDR_PATTERN.matcher(newLine).find()){
 	    			if(rec.length() != 0){
 	    				queue.push(rec.toString());
