@@ -1,5 +1,6 @@
 package cz.mzk.recordmanager.server.scripting.dc;
 
+import java.io.UnsupportedEncodingException;
 import java.util.Map;
 
 import cz.mzk.recordmanager.server.dc.DublinCoreRecord;
@@ -23,6 +24,14 @@ public class DublinCoreDSL extends BaseDSL {
 
 	public String getFirstTitle() {
 		return record.getFirstTitle();
+	}
+	
+	public String getFullRecord() {
+		String result = "";
+		try {
+			result = record.getRawRecord() == null ? "" : new String(record.getRawRecord(), "UTF-8");
+		} catch (UnsupportedEncodingException e) {}
+		return result;
 	}
 
 	public Object methodMissing(String methodName, Object args) {
