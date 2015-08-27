@@ -51,4 +51,15 @@ public class AuthorityRecordDAOHibernate extends
 		}
 		return result;
 	}
+
+	@Override
+	public AuthorityRecord findByAuthKey(String AuthKey) {
+		Session session = sessionFactory.getCurrentSession();
+		
+		return (AuthorityRecord) session
+				.createQuery(
+						"FROM AuthorityRecord WHERE authorityCode = ?")
+				.setParameter(0, AuthKey)
+				.uniqueResult();
+	}
 }

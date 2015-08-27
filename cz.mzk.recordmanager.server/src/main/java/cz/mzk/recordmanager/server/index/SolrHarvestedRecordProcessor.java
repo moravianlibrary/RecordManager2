@@ -29,7 +29,12 @@ public class SolrHarvestedRecordProcessor implements ItemProcessor<HarvestedReco
 			if (record.getDeleted() != null) {
 				return Collections.emptyList();
 			}
-			return Collections.singletonList(factory.create(record));
+			SolrInputDocument doc = factory.create(record);
+			if (doc != null) {
+				doc.removeField(SolrFieldConstants.AUTHOR_AUTHORITY_DUMMY_FIELD);
+				doc.removeField(SolrFieldConstants.AUTHOR_DUMMY_FIELD);
+			}
+			return Collections.singletonList(doc);
 		} catch (Exception ex) {
 			logger.error(String.format("Exception thrown when indexing dedup_record with id=%s", record.getUniqueId()), ex);
 			return null;
