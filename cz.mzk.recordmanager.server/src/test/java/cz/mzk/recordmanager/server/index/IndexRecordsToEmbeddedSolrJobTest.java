@@ -102,6 +102,19 @@ public class IndexRecordsToEmbeddedSolrJobTest extends AbstractTest {
 				Assert.assertEquals(docResponse.getResults().size(), 0);
 			}
 			
+			{
+				SolrQuery authQuery = new SolrQuery();
+				authQuery.set("q", "id:73");
+				QueryResponse docResponse = server.query(authQuery);
+				Assert.assertEquals(docResponse.getResults().size(), 1);
+				SolrDocument document = docResponse.getResults().get(0);
+				// check whether author_search field contains alternative name from authority record
+				Assert.assertTrue(
+						document.getFieldValues("author_search").stream() //
+								.anyMatch(s -> s.equals("Imaginarni, Karel, 1900-2000")), 
+						"Authority enrichment failed.");
+			}
+			
 		} finally {
 			server.shutdown();
 		}
