@@ -12,7 +12,6 @@ public class Constants {
 	public static final String JOB_ID_DEDUP				= "dedupRecordsJob";
 	public static final String JOB_ID_SOLR_INDEX_ALL_RECORDS		= "indexAllRecordsToSolrJob";
 	public static final String JOB_ID_SOLR_INDEX					= "indexRecordsToSolrJob";
-	public static final String JOB_ID_SOLR_INDEX_LOCAL_RECORDS		= "indexLocalRecordsToSolrJob";
 	public static final String JOB_ID_EXPORT						= "exportRecordsJob";
 	public static final String JOB_ID_IMPORT						= "importRecordsJob";
 	public static final String JOB_ID_IMPORT_ANTIKVARIATY			= "antikvariatyImportRecordsJob";
