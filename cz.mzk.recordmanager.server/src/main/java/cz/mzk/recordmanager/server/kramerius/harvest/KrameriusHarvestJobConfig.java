@@ -43,6 +43,21 @@ public class KrameriusHarvestJobConfig {
 				.end() //
 				.build();
 	}
+	
+	/* doesn't use deep paging optimization, works for NDK
+	 * Kramerius API doesn't respond when there are too many documents and sorting is enabled 
+	 */
+	@Bean
+	public Job krameriusHarvestNoSortingJob(
+			@Qualifier("krameriusHarvestNoSortingJob:noSortingStep") Step step) {
+		return jobs.get("krameriusHarvestNoSortingJob") //
+				.validator(new KrameriusHarvestJobParametersValidator()) //
+				.listener(JobFailureListener.INSTANCE) //
+				.flow(step) //
+				.end() //
+				.build();
+	}
+	
 
 	@Bean(name = "krameriusHarvestJob:step")
 	public Step step() {
@@ -52,6 +67,22 @@ public class KrameriusHarvestJobConfig {
 				.<List<HarvestedRecord>, List<HarvestedRecord>> chunk(1)
 				//
 				.reader(reader(LONG_OVERRIDEN_BY_EXPRESSION,
+						DATE_OVERRIDEN_BY_EXPRESSION,
+						DATE_OVERRIDEN_BY_EXPRESSION))
+				//
+				.processor(krameriusItemProcessor())
+				.writer(harvestedRecordWriter()) //
+				.build();
+	}
+	
+	@Bean(name = "krameriusHarvestNoSortingJob:noSortingStep")
+	public Step noSortingStep() {
+		return steps
+				.get("step")
+				//
+				.<List<HarvestedRecord>, List<HarvestedRecord>> chunk(1)
+				//
+				.reader(noSortingReader(LONG_OVERRIDEN_BY_EXPRESSION,
 						DATE_OVERRIDEN_BY_EXPRESSION,
 						DATE_OVERRIDEN_BY_EXPRESSION))
 				//
@@ -71,6 +102,19 @@ public class KrameriusHarvestJobConfig {
 					+ "]" + "?:jobParameters[" + Constants.JOB_PARAM_UNTIL_DATE
 					+ "]}") Date to) {
 		return new KrameriusItemReader(configId, from, to);
+	}
+	
+	@Bean(name = "krameriusHarvestNoSortingJob:noSortingReader")
+	@StepScope
+	public KrameriusItemReaderNoSorting noSortingReader(@Value("#{jobParameters["
+			+ Constants.JOB_PARAM_CONF_ID + "]}") Long configId,
+			@Value("#{stepExecutionContext[" + Constants.JOB_PARAM_FROM_DATE
+					+ "] " + "?:jobParameters[ "
+					+ Constants.JOB_PARAM_FROM_DATE + "]}") Date from,
+			@Value("#{stepExecutionContext[" + Constants.JOB_PARAM_UNTIL_DATE
+					+ "]" + "?:jobParameters[" + Constants.JOB_PARAM_UNTIL_DATE
+					+ "]}") Date to) {
+		return new KrameriusItemReaderNoSorting(configId, from, to);
 	}
 
 	// HarvestedRecordWriter from cz.mzk.recordmanager.server.oai is used

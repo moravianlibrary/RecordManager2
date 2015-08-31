@@ -3,7 +3,10 @@ package cz.mzk.recordmanager.server.kramerius.harvest;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import org.apache.commons.io.IOUtils;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrQuery.ORDER;
@@ -159,4 +162,5 @@ public class KrameriusHarvester {
 		return documents;
 	}
 
+	
 }
