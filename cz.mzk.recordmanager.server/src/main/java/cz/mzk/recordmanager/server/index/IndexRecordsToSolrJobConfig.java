@@ -95,16 +95,6 @@ public class IndexRecordsToSolrJobConfig {
 				.end()
 				.build();
     }
-    
-    @Bean
-    public Job indexLocalRecordsToSolrJob(@Qualifier("indexLocalRecordsToSolrJob:updateHarvestedRecordsStep") Step updateHarvestedRecordsStep) {
-        return jobs.get(Constants.JOB_ID_SOLR_INDEX_LOCAL_RECORDS)
-        		.validator(new IndexRecordsToSolrJobParametersValidator())
-        		.listener(JobFailureListener.INSTANCE)
-				.flow(updateHarvestedRecordsStep)
-				.end()
-				.build();
-    }
 
     // dedup records
 	@Bean(name="indexRecordsToSolrJob:updateRecordsStep")
@@ -215,16 +205,6 @@ public class IndexRecordsToSolrJobConfig {
 	public OrphanedDedupRecordsWriter orphanedRecordsWriter(@Value("#{jobParameters[" + Constants.JOB_PARAM_SOLR_URL + "]}") String solrUrl) {
 		return new OrphanedDedupRecordsWriter(solrUrl);
 	}
-
-    // local records
-    @Bean(name="indexLocalRecordsToSolrJob:deleteOrphanedHarvestedRecordsStep") 
-    public Step deleteOrphanedHarvestedRecordsStep() throws Exception {
-    	return steps.get("deleteOrphanedHarvestedRecordsStep")
-                .<String, String> chunk(20) //
-                .reader(orphanedHarvestedRecordsReader(DATE_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION)) //
-                .writer(orphanedRecordsWriter(STRING_OVERRIDEN_BY_EXPRESSION)) //
-                .build();
-    }
     
     @Bean(name="indexRecordsToSolrJob:orphanedRecordsReader")
 	@StepScope
@@ -258,69 +238,5 @@ public class IndexRecordsToSolrJobConfig {
     	reader.afterPropertiesSet();
     	return reader;
     }
-
-	@Bean(name="indexLocalRecordsToSolrJob:updateHarvestedRecordsStep")
-	public Step updateHarvestedRecordsStep() throws Exception {
-		return steps.get("updateHarvestedRecordsStep")
-			.<HarvestedRecord, Future<List<SolrInputDocument>>> chunk(CHUNK_SIZE) //
-			.reader(updatedHarvestedRecordsReader(DATE_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION)) //
-			.processor(asyncUpdatedHarvestedRecordsProcessor()) //
-			.writer(updatedHarvestedRecordsWriter(STRING_OVERRIDEN_BY_EXPRESSION)) //
-			.build();
-	}
-	
-	@Bean(name = "indexLocalRecordsToSolrJob:updatedHarvestedRecordsReader")
-	@StepScope
-	public ItemReader<HarvestedRecord> updatedHarvestedRecordsReader(
-			@Value("#{jobParameters[" + Constants.JOB_PARAM_FROM_DATE + "]}") Date from,
-			@Value("#{jobParameters[" + Constants.JOB_PARAM_UNTIL_DATE + "]}") Date to)
-			throws Exception {
-		if (from != null && to == null) {
-			to = new Date();
-		}
-		JdbcPagingItemReader<HarvestedRecord> reader = new JdbcPagingItemReader<HarvestedRecord>();
-		SqlPagingQueryProviderFactoryBean pqpf = new SqlPagingQueryProviderFactoryBean();
-		pqpf.setDataSource(dataSource);
-		pqpf.setSelectClause("SELECT *");
-		pqpf.setFromClause("FROM harvested_record");
-		if (from != null && to != null) {
-			pqpf.setWhereClause("WHERE updated BETWEEN :from AND :to");
-		}
-		pqpf.setSortKeys(ImmutableMap.of("import_conf_id",
-				Order.ASCENDING, "record_id", Order.ASCENDING));
-		reader.setRowMapper(harvestedRecordRowMapper);
-		reader.setPageSize(PAGE_SIZE);
-		reader.setQueryProvider(pqpf.getObject());
-		reader.setDataSource(dataSource);
-		if (from != null && to != null) {
-			Map<String, Object> parameterValues = new HashMap<String, Object>();
-			parameterValues.put("from", from);
-			parameterValues.put("to", to);
-			reader.setParameterValues(parameterValues);
-		}
-		reader.afterPropertiesSet();
-		return reader;
-	}
-
-	@Bean(name = "indexLocalRecordsToSolrJob:updatedHarvestedRecordsProcessor")
-	@StepScope
-	public SolrHarvestedRecordProcessor updatedHarvestedRecordsProcessor() {
-		return new SolrHarvestedRecordProcessor();
-	}
-
-	@Bean(name = "indexLocalRecordsToSolrJob:asyncUpdatedHarvestedRecordsReader")
-	@StepScope
-	public AsyncItemProcessor<HarvestedRecord, List<SolrInputDocument>> asyncUpdatedHarvestedRecordsProcessor() {
-		AsyncItemProcessor<HarvestedRecord, List<SolrInputDocument>> processor = new AsyncItemProcessor<>();
-		processor.setDelegate(new DelegatingHibernateProcessor<>(sessionFactory, updatedHarvestedRecordsProcessor()));
-		processor.setTaskExecutor(taskExecutor);
-		return processor;
-	}
-
-	@Bean(name="indexLocalRecordsToSolrJob:updatedHarvestedRecordsWriter")
-	@StepScope
-	public SolrIndexWriter updatedHarvestedRecordsWriter(@Value("#{jobParameters[" + Constants.JOB_PARAM_SOLR_URL + "]}") String solrUrl) {
-		return new SolrIndexWriter(solrUrl);
-	}
 
 }
