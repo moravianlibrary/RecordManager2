@@ -1,7 +1,8 @@
 DROP TABLE IF EXISTS tmp_auth_keys;
 
 CREATE TABLE tmp_auth_keys AS
-SELECT 
+SELECT
+  nextval('tmp_table_id_seq') as row_id,
   title,
   hrl.harvested_record_format_id,
   array_to_string(array_agg(hr.id), ',') as id_array,
@@ -13,4 +14,4 @@ FROM harvested_record hr
 GROUP BY t.title,hr.publication_year,hr.author_auth_key,hrl.harvested_record_format_id
 HAVING count(hr.id) > 1 AND count(hr.id) > count(hr.dedup_record_id);
 
-CREATE INDEX tmp_auth_keys_idx ON tmp_auth_keys(id_array);
+CREATE INDEX tmp_auth_keys_idx ON tmp_auth_keys(row_id);

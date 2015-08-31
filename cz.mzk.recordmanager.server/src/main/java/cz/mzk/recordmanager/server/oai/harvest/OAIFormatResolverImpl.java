@@ -13,6 +13,7 @@ public class OAIFormatResolverImpl implements OAIFormatResolver {
 	{
 		formats.put("marc21", "marc21-xml");
 		formats.put("xml-marc", "marc21-xml");
+		formats.put("marccpk", "marc21-xml");
 		formats.put("oai_dc", "dublinCore");
 	}
 	

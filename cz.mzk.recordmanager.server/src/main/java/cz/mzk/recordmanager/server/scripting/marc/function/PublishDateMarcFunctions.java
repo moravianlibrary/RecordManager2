@@ -18,6 +18,7 @@ import org.springframework.stereotype.Component;
 import com.google.common.collect.Sets;
 
 import cz.mzk.recordmanager.server.marc.MarcRecord;
+import cz.mzk.recordmanager.server.scripting.marc.MarcFunctionContext;
 
 @Component
 public class PublishDateMarcFunctions implements MarcRecordFunctions {
@@ -83,7 +84,8 @@ public class PublishDateMarcFunctions implements MarcRecordFunctions {
 		return result;
 	}
 
-	public Set<Integer> getPublishDate(MarcRecord record) {
+	public Set<Integer> getPublishDate(MarcFunctionContext ctx) {
+		MarcRecord record = ctx.record();
 		Set<Integer> years = new TreeSet<Integer>();
 		
 		for(DataField datafield: record.getDataFields("264")){
@@ -93,9 +95,9 @@ public class PublishDateMarcFunctions implements MarcRecordFunctions {
 				}
 			}
 		}
-		years.addAll(getPublishDateFromItems(record, "260", 'c'));
-		years.addAll(getPublishDateFromItems(record, "773", '9'));
-		years.addAll(getPublishDateFromItems(record, "996", 'y'));
+		years.addAll(getPublishDateFromItems(ctx, "260", 'c'));
+		years.addAll(getPublishDateFromItems(ctx, "773", '9'));
+		years.addAll(getPublishDateFromItems(ctx, "996", 'y'));
 
         String field008 = record.getControlField("008");
         years.addAll(parsePublishDateFrom008(field008));
@@ -154,7 +156,8 @@ public class PublishDateMarcFunctions implements MarcRecordFunctions {
 		return parseRanges(ranges);
 	}
 	
-	private Set<Integer> getPublishDateFromItems(MarcRecord record, String tag, char subfield) {
+	private Set<Integer> getPublishDateFromItems(MarcFunctionContext ctx, String tag, char subfield) {
+		MarcRecord record = ctx.record();
 		List<String> ranges = record.getFields(tag, "", subfield) ;
 		return parseRanges(ranges);
 	}
@@ -168,8 +171,10 @@ public class PublishDateMarcFunctions implements MarcRecordFunctions {
 		return result;
 	}
 
-	public String getPublishDateForSorting(MarcRecord record) {
-		return null; // FIXME
+	public String getPublishDateForSorting(MarcFunctionContext ctx) {
+		Set<Integer> years = getPublishDate(ctx);
+		if(!years.isEmpty()) return years.iterator().next().toString();
+		return null;
 	}
 
 }

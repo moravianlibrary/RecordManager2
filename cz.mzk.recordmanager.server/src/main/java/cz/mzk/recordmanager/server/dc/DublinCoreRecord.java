@@ -72,5 +72,9 @@ public interface DublinCoreRecord {
 
 	public List<String> getTypes();
 	/* gets list of all types */
+	
+	public byte[] getRawRecord();
+	
+	public void setRawRecord(byte[] rawRecord);
 
 }

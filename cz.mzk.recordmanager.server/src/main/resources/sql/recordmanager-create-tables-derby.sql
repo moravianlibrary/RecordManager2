@@ -27,6 +27,9 @@ CREATE TABLE import_conf (
   id_prefix            VARCHAR(10),
   base_weight          DECIMAL(10),
   cluster_id_enabled   BOOLEAN DEFAULT FALSE,
+  filtering_enabled    BOOLEAN DEFAULT FALSE,
+  interception_enabled BOOLEAN DEFAULT FALSE,
+  is_library           BOOLEAN DEFAULT FALSE,
   CONSTRAINT import_conf_library_id_fk        FOREIGN KEY (library_id)        REFERENCES library(id),
   CONSTRAINT import_conf_contact_person_id_fk FOREIGN KEY (contact_person_id) REFERENCES contact_person(id)
 );
@@ -130,6 +133,20 @@ CREATE TABLE title (
   CONSTRAINT title_fk  FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id)
 );
 
+CREATE TABLE oclc (
+  id                   DECIMAL(10) PRIMARY KEY,
+  harvested_record_id  DECIMAL(10),
+  oclc                 VARCHAR(20),
+  CONSTRAINT oclc_fk  FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id)
+);
+
+CREATE TABLE language (
+  id                   DECIMAL(10) PRIMARY KEY,
+  harvested_record_id  DECIMAL(10),
+  lang                 VARCHAR(5),
+  CONSTRAINT language_fk  FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id)
+);
+
 CREATE TABLE harvested_record_format (
   id                   DECIMAL(10) PRIMARY KEY,
   name                 VARCHAR(50) UNIQUE
@@ -145,16 +162,17 @@ CREATE TABLE harvested_record_format_link (
 
 CREATE TABLE authority_record (
   id                   DECIMAL(10) PRIMARY KEY,
-  oai_harvest_conf_id  DECIMAL(10),
+  import_conf_id       DECIMAL(10),
   oai_record_id        VARCHAR(128),
-  authority_type       VARCHAR(128),
+  authority_code       VARCHAR(128),
   harvested            TIMESTAMP,
   updated              TIMESTAMP,
   deleted              TIMESTAMP,
   format               VARCHAR(12) NOT NULL,
   raw_record           BLOB,
-  CONSTRAINT authority_record_oai_harvest_conf_id_fk FOREIGN KEY (oai_harvest_conf_id) REFERENCES oai_harvest_conf(import_conf_id),
-  CONSTRAINT authority_record_format_fk              FOREIGN KEY (format)              REFERENCES format(format)
+  FOREIGN KEY (import_conf_id)      REFERENCES import_conf(id),
+  FOREIGN KEY (format)              REFERENCES format(format),
+  CONSTRAINT authority_code_unique UNIQUE(authority_code)
 );
 
 CREATE TABLE antikvariaty (

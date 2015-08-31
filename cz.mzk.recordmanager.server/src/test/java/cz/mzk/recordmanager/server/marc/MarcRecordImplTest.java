@@ -444,7 +444,7 @@ public class MarcRecordImplTest extends AbstractTest {
 		
 		// Books
 		data.add("000 00000000");
-		data.add("007 t");
+		data.add("006 a");
 		hrf.add(HarvestedRecordFormatEnum.BOOKS);
 		mri = MarcRecordFactory.recordFactory(data);
 		metadataRecord = metadataFactory.getMetadataRecord(mri);
@@ -500,30 +500,10 @@ public class MarcRecordImplTest extends AbstractTest {
 		data.clear();
 		hrf.clear();
 		
-		// Manuscripts
-		data.add("000 00000000");
-		data.add("245 $hrukOpis");
-		hrf.add(HarvestedRecordFormatEnum.MANUSCRIPTS);
-		mri = MarcRecordFactory.recordFactory(data);
-		metadataRecord = metadataFactory.getMetadataRecord(mri);
-		Assert.assertEquals(metadataRecord.getDetectedFormatList().toString(), hrf.toString());
-		data.clear();
-		hrf.clear();
-		
 		// Microforms
 		data.add("000 0000000");
 		data.add("337 $bh");
-		hrf.add(HarvestedRecordFormatEnum.MICROFORMS);
-		mri = MarcRecordFactory.recordFactory(data);
-		metadataRecord = metadataFactory.getMetadataRecord(mri);
-		Assert.assertEquals(metadataRecord.getDetectedFormatList().toString(), hrf.toString());
-		data.clear();
-		hrf.clear();
-		
-		//Large prints
-		data.add("000 00000000");
-		data.add("007 db");
-		hrf.add(HarvestedRecordFormatEnum.LARGE_PRINTS);
+		hrf.add(HarvestedRecordFormatEnum.OTHER_MICROFORMS);
 		mri = MarcRecordFactory.recordFactory(data);
 		metadataRecord = metadataFactory.getMetadataRecord(mri);
 		Assert.assertEquals(metadataRecord.getDetectedFormatList().toString(), hrf.toString());
@@ -534,7 +514,7 @@ public class MarcRecordImplTest extends AbstractTest {
 		data.add("000 00000000");
 		data.add("007 fb");
 		data.add("245 $hhmatové písmo");
-		hrf.add(HarvestedRecordFormatEnum.BRAILL);
+		hrf.add(HarvestedRecordFormatEnum.OTHER_BRAILLE);
 		mri = MarcRecordFactory.recordFactory(data);
 		metadataRecord = metadataFactory.getMetadataRecord(mri);		
 		Assert.assertEquals(metadataRecord.getDetectedFormatList().toString(), hrf.toString());
@@ -720,6 +700,61 @@ public class MarcRecordImplTest extends AbstractTest {
 		mri = MarcRecordFactory.recordFactory(data);
 		metadataRecord = metadataFactory.getMetadataRecord(mri);
 		Assert.assertEquals(metadataRecord.getClusterId(), null);
+
+	}
+	
+	@Test
+	public void getOclcsTest() throws Exception{
+		MarcRecordImpl mri;
+		MetadataRecord metadataRecord;
+		List<String> data = new ArrayList<>();
+		
+		final String oclc1 = "11608569";
+		final String oclc2 = "ocn123456789";
+		data.add("035 $a(OCoLC)" + oclc1);
+		data.add("035 $a(OCoLC)" + oclc2);
+		
+		mri = MarcRecordFactory.recordFactory(data);
+		metadataRecord = metadataFactory.getMetadataRecord(mri);
+		Assert.assertEquals(metadataRecord.getOclcs().size(), 2);
+		Assert.assertEquals(metadataRecord.getOclcs().get(0).getOclcStr(), oclc1);
+		Assert.assertEquals(metadataRecord.getOclcs().get(1).getOclcStr(), oclc2);
+	}
+	
+	@Test
+	public void getLanguagesTest() throws Exception{
+		MarcRecordImpl mri;
+		MetadataRecord metadataRecord;
+		List<String> data = new ArrayList<>();
+		data.add("041 $aeng$acze");
+		
+		mri = MarcRecordFactory.recordFactory(data);
+		metadataRecord = metadataFactory.getMetadataRecord(mri);
+		Assert.assertEquals(metadataRecord.getLanguages().size(), 2);
+		
+		data = new ArrayList<>();
+		data.add("041 $abel");
+		
+		mri = MarcRecordFactory.recordFactory(data);
+		metadataRecord = metadataFactory.getMetadataRecord(mri);
+		Assert.assertEquals(metadataRecord.getLanguages().size(), 1);
+		Assert.assertEquals(metadataRecord.getLanguages().get(0).getLangStr(), "oth");
+		
+		data = new ArrayList<>();
+		data.add("008 960925s1891    gw ||||| |||||||||||eng|d");		
+		
+		mri = MarcRecordFactory.recordFactory(data);
+		metadataRecord = metadataFactory.getMetadataRecord(mri);
+		Assert.assertEquals(metadataRecord.getLanguages().size(), 1);
+		Assert.assertEquals(metadataRecord.getLanguages().get(0).getLangStr(), "eng");
+		
+		data = new ArrayList<>();
+		data.add("008 960925s1891    gw ||||| |||||||||||bel|d");		
+		
+		mri = MarcRecordFactory.recordFactory(data);
+		metadataRecord = metadataFactory.getMetadataRecord(mri);
+		Assert.assertEquals(metadataRecord.getLanguages().size(), 0);
+		
 
 	}
 }

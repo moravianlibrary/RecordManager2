@@ -11,7 +11,11 @@ import cz.mzk.recordmanager.server.dc.DublinCoreRecord;
 import cz.mzk.recordmanager.server.marc.MarcRecord;
 import cz.mzk.recordmanager.server.marc.MarcXmlParser;
 import cz.mzk.recordmanager.server.metadata.institutions.MzkMetadataMarcRecord;
+import cz.mzk.recordmanager.server.metadata.institutions.MzkNormsMetadataMarcRecord;
 import cz.mzk.recordmanager.server.metadata.institutions.NkpMarcMetadataRecord;
+import cz.mzk.recordmanager.server.metadata.institutions.SfxjibMzkMetadataMarcRecord;
+import cz.mzk.recordmanager.server.metadata.institutions.SfxjibNlkMetadataMarcRecord;
+import cz.mzk.recordmanager.server.metadata.institutions.TreMetadataMarcRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecord.HarvestedRecordUniqueId;
 import cz.mzk.recordmanager.server.model.ImportConfiguration;
@@ -47,7 +51,8 @@ public class MetadataRecordFactory {
 		String recordFormat = record.getFormat();
 		
         if (Constants.METADATA_FORMAT_MARC21.equals(recordFormat) 
-        		|| Constants.METADATA_FORMAT_XML_MARC.equals(recordFormat)) {
+        		|| Constants.METADATA_FORMAT_XML_MARC.equals(recordFormat)
+        		|| Constants.METADATA_FORMAT_MARC_CPK.equals(recordFormat)) {
         	
     		MarcRecord marcRec = marcXmlParser.parseRecord(is);
 			switch (prefix) {
@@ -55,6 +60,14 @@ public class MetadataRecordFactory {
 				return new MzkMetadataMarcRecord(marcRec);
 			case Constants.PREFIX_NKP:
 				return new NkpMarcMetadataRecord(marcRec);
+			case Constants.PREFIX_TRE:
+				return new TreMetadataMarcRecord(marcRec);
+			case Constants.PREFIX_MZKNORMS:
+				return new MzkNormsMetadataMarcRecord(marcRec);
+			case Constants.PREFIX_SFXJIBMZK:
+				return new SfxjibMzkMetadataMarcRecord(marcRec);
+			case Constants.PREFIX_SFXJIBNLK:
+				return new SfxjibNlkMetadataMarcRecord(marcRec);
 			default:
 				return new MetadataMarcRecord(marcRec);
 			}

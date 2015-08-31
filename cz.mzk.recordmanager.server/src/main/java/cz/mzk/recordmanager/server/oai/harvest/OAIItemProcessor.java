@@ -15,12 +15,13 @@ import javax.xml.transform.stream.StreamResult;
 import org.springframework.batch.core.ExitStatus;
 import org.springframework.batch.core.StepExecution;
 import org.springframework.batch.core.StepExecutionListener;
-import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.w3c.dom.Element;
 
+import cz.mzk.recordmanager.server.marc.intercepting.MarcInterceptorFactory;
+import cz.mzk.recordmanager.server.marc.intercepting.MarcRecordInterceptor;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecord.HarvestedRecordUniqueId;
 import cz.mzk.recordmanager.server.model.OAIHarvestConfiguration;
@@ -31,7 +32,6 @@ import cz.mzk.recordmanager.server.util.HibernateSessionSynchronizer;
 import cz.mzk.recordmanager.server.util.HibernateSessionSynchronizer.SessionBinder;
 
 @Component
-@StepScope
 public class OAIItemProcessor implements ItemProcessor<List<OAIRecord>, List<HarvestedRecord>>, StepExecutionListener {
 
 	@Autowired
@@ -45,6 +45,9 @@ public class OAIItemProcessor implements ItemProcessor<List<OAIRecord>, List<Har
 
 	@Autowired
 	private HibernateSessionSynchronizer sync;
+	
+	@Autowired 
+	private MarcInterceptorFactory marcInterceptorFactory;
 
 	private String format;
 	
@@ -79,8 +82,15 @@ public class OAIItemProcessor implements ItemProcessor<List<OAIRecord>, List<Har
 			rec.setRawRecord(new byte[0]);
 			return rec;
 		} else {
-			Element element = record.getMetadata().getElement();
-			rec.setRawRecord(asByteArray(element));
+			byte[] recordContent = asByteArray(record.getMetadata().getElement());
+			if (configuration.isInterceptionEnabled()) {
+				MarcRecordInterceptor interceptor = marcInterceptorFactory.getInterceptor(configuration,recordContent);
+				if (interceptor != null) {
+					//in case of invalid MARC is error processed later
+					recordContent = interceptor.intercept();
+				}
+			}
+			rec.setRawRecord(recordContent);
 		}
 
 		return rec;

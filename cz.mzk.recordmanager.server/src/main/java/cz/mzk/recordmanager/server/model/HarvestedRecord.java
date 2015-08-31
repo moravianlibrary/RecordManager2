@@ -1,5 +1,6 @@
 package cz.mzk.recordmanager.server.model;
 
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -20,6 +21,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 import com.google.common.base.Preconditions;
 
@@ -140,7 +142,16 @@ public class HarvestedRecord extends AbstractDomainObject {
 	
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name="harvested_record_id", referencedColumnName="id")
+	private List<Oclc> oclcs = new ArrayList<Oclc>();
+	
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name="harvested_record_id", referencedColumnName="id")
+	private List<Language> languages = new ArrayList<Language>();
+	
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name="harvested_record_id", referencedColumnName="id")
 	private List<FulltextMonography> fulltextMonography = new ArrayList<>();
+
 
 	// TODO consider moving dedup keys to separate table
 	@Column(name="author_auth_key")
@@ -187,6 +198,12 @@ public class HarvestedRecord extends AbstractDomainObject {
 	
 	@Column(name="pages")
 	private Long pages;
+	
+	/**
+	 * indicator variable used for filtering reasons
+	 */
+	@Transient
+	private boolean shouldBeProcessed = true;
 	
 	
 	private HarvestedRecord() {
@@ -379,6 +396,32 @@ public class HarvestedRecord extends AbstractDomainObject {
 
 	public void setPages(Long pages) {
 		this.pages = pages;
+	}
+	
+	
+
+	public List<Oclc> getOclcs() {
+		return oclcs;
+	}
+
+	public void setOclcs(List<Oclc> oclcs) {
+		this.oclcs = oclcs;
+	}
+
+	public List<Language> getLanguages() {
+		return languages;
+	}
+
+	public void setLanguages(List<Language> languages) {
+		this.languages = languages;
+	}
+
+	public boolean getShouldBeProcessed() {
+		return shouldBeProcessed;
+	}
+
+	public void setShouldBeProcessed(boolean shouldBeProcessed) {
+		this.shouldBeProcessed = shouldBeProcessed;
 	}
 
 	public List<FulltextMonography> getFulltextMonography() {

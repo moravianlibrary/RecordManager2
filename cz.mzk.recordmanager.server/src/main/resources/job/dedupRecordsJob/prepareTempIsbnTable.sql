@@ -2,6 +2,7 @@ DROP TABLE IF EXISTS tmp_simmilar_books_isbn;
 
 CREATE TABLE tmp_simmilar_books_isbn AS
 SELECT
+  nextval('tmp_table_id_seq') as row_id,
   i.isbn,
   t.title,
   hr.publication_year,
@@ -17,4 +18,4 @@ WHERE t.order_in_record = 1 AND i.order_in_record = 1
 GROUP BY i.isbn,t.title,hr.publication_year,hrl.harvested_record_format_id
 HAVING count(hr.id) > 1 AND count(hr.id) > count(hr.dedup_record_id);
 		
-CREATE INDEX tmp_isbn_idx ON tmp_simmilar_books_isbn(id_array);
+CREATE INDEX tmp_isbn_idx ON tmp_simmilar_books_isbn(row_id);

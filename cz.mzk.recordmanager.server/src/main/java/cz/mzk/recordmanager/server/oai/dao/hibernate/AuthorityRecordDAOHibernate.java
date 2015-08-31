@@ -4,7 +4,7 @@ import org.hibernate.Session;
 import org.springframework.stereotype.Component;
 
 import cz.mzk.recordmanager.server.model.AuthorityRecord;
-import cz.mzk.recordmanager.server.model.OAIHarvestConfiguration;
+import cz.mzk.recordmanager.server.model.ImportConfiguration;
 import cz.mzk.recordmanager.server.oai.dao.AuthorityRecordDAO;
 
 @Component
@@ -14,13 +14,24 @@ public class AuthorityRecordDAOHibernate extends
 
 	@Override
 	public AuthorityRecord findByIdAndHarvestConfiguration(String recordId,
-			OAIHarvestConfiguration configuration) {
+			ImportConfiguration configuration) {
 		Session session = sessionFactory.getCurrentSession();
 		return (AuthorityRecord) session
 				.createQuery(
 						"FROM AuthorityRecord WHERE oaiRecordId = ? and harvestedFrom = ?")
 				.setParameter(0, recordId)
 				.setParameter(1, configuration)
+				.uniqueResult();
+	}
+
+	@Override
+	public AuthorityRecord findByAuthKey(String AuthKey) {
+		Session session = sessionFactory.getCurrentSession();
+		
+		return (AuthorityRecord) session
+				.createQuery(
+						"FROM AuthorityRecord WHERE authorityCode = ?")
+				.setParameter(0, AuthKey)
 				.uniqueResult();
 	}
 }

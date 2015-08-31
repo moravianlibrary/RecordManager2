@@ -89,7 +89,7 @@ public class OAIHarvestJobConfig {
     
     @Bean(name="oaiHarvestJob:partitionedStep")
     public Step partitionedStep() {
-    	return steps.get("step") //
+    	return steps.get("partitionedStep") //
     			.partitioner("slave", partioner(DATE_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION)) //
     			.gridSize(10) //
     			.step(slaveStep()) //
@@ -98,25 +98,27 @@ public class OAIHarvestJobConfig {
     
     @Bean(name="oaiHarvestJob:slaveStep")
     public Step slaveStep() {
-        return steps.get("step1") //
-            .<List<OAIRecord>, List<OAIRecord>> chunk(1) //
-            .reader(reader(LONG_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION, STRING_OVERRIDEN_BY_EXPRESSION)) //
-            .writer(writer()) //
-            .build();
+        return steps.get("slaveStep") //
+        		 .<List<OAIRecord>, List<HarvestedRecord>> chunk(1) //
+                 .reader(reader(LONG_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION, STRING_OVERRIDEN_BY_EXPRESSION)) //
+                 .processor(oaiItemProcessor())
+                 .writer(harvestedRecordWriter()) //
+                 .build();
     }
     
     @Bean(name="oaiHarvestJob:harvestOneByOneStep")
     public Step harvestOneByOneStep() {
-        return steps.get("step3") //
-            .<List<OAIRecord>, List<OAIRecord>> chunk(1) //
-            .reader(oneByOneItemReader(LONG_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION)) //
-            .writer(writer()) //
-            .build();
+        return steps.get("harvestOneByOneStep") //
+        		 .<List<OAIRecord>, List<HarvestedRecord>> chunk(1) //
+                 .reader(oneByOneItemReader(LONG_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION)) //
+                 .processor(oaiItemProcessor())
+                 .writer(harvestedRecordWriter()) //
+                 .build();
     }
     
     @Bean(name="oaiHarvestJob:authStep")
     public Step authorityStep() {
-        return steps.get("step2") //
+        return steps.get("authStep") //
             .<List<OAIRecord>, List<OAIRecord>> chunk(1) //
             .reader(reader(LONG_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION, STRING_OVERRIDEN_BY_EXPRESSION)) //
             .writer(authWriter()) //
@@ -130,7 +132,39 @@ public class OAIHarvestJobConfig {
     	return new DateIntervalPartitioner(from, to,
     			Period.months(1), Constants.JOB_PARAM_UNTIL_DATE, Constants.JOB_PARAM_FROM_DATE);
     }
+       
+    @Bean 
+    public Job oaiHarvestSingleRecordJob(@Qualifier("oaiHarvestSingleRecordJob:harvestSingleRecordStep") Step step) {
+       return jobs.get(Constants.JOB_ID_HARVEST_SINGLE)	//
+    		   .validator(new OAIHarvestSingleRecordJobParametersValidator()) //
+    		   .listener(JobFailureListener.INSTANCE) //
+    		   .flow(step) //
+    		   .end() //
+    		   .build();
+    }
     
+    
+    
+    @Bean(name="oaiHarvestSingleRecordJob:harvestSingleRecordStep")
+    public Step harvestSingleStep() {
+    	return steps.get("harvestSingleRecordStep") //
+      			.startLimit(1) //
+    			.<List<OAIRecord>, List<HarvestedRecord>> chunk(1) //
+    			.reader(singleReader(LONG_OVERRIDEN_BY_EXPRESSION, STRING_OVERRIDEN_BY_EXPRESSION) ) //
+    			.processor(oaiItemProcessor()) //
+    			.writer(harvestedRecordWriter()) //
+    			.build();
+    	
+    }
+    
+    
+    @Bean(name="oaiHarvestSingleRecordJob:reader")
+    @StepScope
+    public OAIItemSingleReader singleReader(@Value("#{jobParameters[" + Constants.JOB_PARAM_CONF_ID + "]}") Long configId, 
+    								  @Value("#{jobParameters[" + Constants.JOB_PARAM_RECORD_ID + "]}") String recordId) {
+    	return new OAIItemSingleReader(configId, recordId);
+    }
+
     @Bean(name="oaiHarvestJob:reader")
     @StepScope
     public OAIItemReader reader(@Value("#{jobParameters[" + Constants.JOB_PARAM_CONF_ID + "]}") Long configId, 
@@ -143,12 +177,6 @@ public class OAIHarvestJobConfig {
     	return new OAIItemReader(configId, from, to, resumptionToken);
     }
     
-    @Bean(name="oaiHarvestJob:writer")
-    @StepScope
-    public OAIItemWriter writer() {
-    	return new OAIItemWriter();
-    }
-    
     @Bean(name="oaiHarvestJob:HarvestedRecordWriter")
     @StepScope
     public ItemWriter<List<HarvestedRecord>> harvestedRecordWriter() {
@@ -159,7 +187,7 @@ public class OAIHarvestJobConfig {
     @StepScope
     public OAIItemProcessor oaiItemProcessor() {
     	return new OAIItemProcessor();
-    }
+    }   
     
     @Bean(name="oaiHarvestJob:authwriter")
     @StepScope

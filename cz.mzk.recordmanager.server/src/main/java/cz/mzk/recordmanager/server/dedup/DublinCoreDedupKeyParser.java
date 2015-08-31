@@ -39,9 +39,16 @@ public class DublinCoreDedupKeyParser implements DedupKeysParser {
 		Preconditions.checkArgument(FORMAT.equals(record.getFormat()));
 		MetadataRecord metadata = metadataFactory.getMetadataRecord(record);
 
-		record.setIsbns(metadata.getISBNs());
+		return parse(record, metadata);
+	}
+
+	@Override
+	public HarvestedRecord parse(HarvestedRecord record,
+			MetadataRecord metadataRecord) throws DedupKeyParserException {
+		
+		record.setIsbns(metadataRecord.getISBNs());
 		List<Title> existingTitles = record.getTitles();
-		for (Title title: metadata.getTitle()) {
+		for (Title title: metadataRecord.getTitle()) {
 			title.setTitleStr(MetadataUtils.normalizeAndShorten(
 						title.getTitleStr(),
 						EFFECTIVE_TITLE_LENGTH));
@@ -51,18 +58,18 @@ public class DublinCoreDedupKeyParser implements DedupKeysParser {
 		}
 		record.setTitles(existingTitles);
 		
-		record.setIssns(metadata.getISSNs());
-		record.setCnb(metadata.getCNBs());
-		if(record.getHarvestedFrom() != null) record.setWeight(metadata.getWeight(record.getHarvestedFrom().getBaseWeight()));
-		record.setPublicationYear(metadata.getPublicationYear());
-		List<HarvestedRecordFormatEnum> formatEnums = metadata.getDetectedFormatList();
+		record.setIssns(metadataRecord.getISSNs());
+		record.setCnb(metadataRecord.getCNBs());
+		if(record.getHarvestedFrom() != null) record.setWeight(metadataRecord.getWeight(record.getHarvestedFrom().getBaseWeight()));
+		record.setPublicationYear(metadataRecord.getPublicationYear());
+		List<HarvestedRecordFormatEnum> formatEnums = metadataRecord.getDetectedFormatList();
 		record.setPhysicalFormats(harvestedRecordFormatDAO.getFormatsFromEnums(formatEnums));
-		record.setAuthorAuthKey(metadata.getAuthorAuthKey());
-		record.setAuthorString(MetadataUtils.normalize(metadata.getAuthorString()));
-		record.setScale(metadata.getScale());
-		record.setUuid(metadata.getUUId());
-		record.setIssnSeries(MetadataUtils.normalize(metadata.getISSNSeries()));
-		record.setIssnSeriesOrder(MetadataUtils.normalize(metadata.getISSNSeriesOrder()));
+		record.setAuthorAuthKey(metadataRecord.getAuthorAuthKey());
+		record.setAuthorString(MetadataUtils.normalize(metadataRecord.getAuthorString()));
+		record.setScale(metadataRecord.getScale());
+		record.setUuid(metadataRecord.getUUId());
+		record.setIssnSeries(MetadataUtils.normalize(metadataRecord.getISSNSeries()));
+		record.setIssnSeriesOrder(MetadataUtils.normalize(metadataRecord.getISSNSeriesOrder()));
 		return record;
 	}
 }

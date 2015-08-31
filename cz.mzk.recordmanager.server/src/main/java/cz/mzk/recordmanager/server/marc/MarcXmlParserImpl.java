@@ -27,4 +27,19 @@ public class MarcXmlParserImpl implements MarcXmlParser {
 		}
 	}
 
+	@Override
+	public Record parseUnderlyingRecord(InputStream is) {
+		try {
+			RecordStack queue = new RecordStack();
+			MarcXmlHandler handler = new MarcXmlHandler(queue);
+			org.marc4j.MarcXmlParser parser = new org.marc4j.MarcXmlParser(
+					handler);
+			parser.parse(new InputSource(is));
+			Record record = queue.pop();
+			return record;
+		} catch (org.marc4j.MarcException me) {
+			throw new InvalidMarcException(me.getMessage(), me);
+		}
+	}
+
 }

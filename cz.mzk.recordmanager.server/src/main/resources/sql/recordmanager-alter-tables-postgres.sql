@@ -201,3 +201,39 @@ FROM
 GROUP BY
   dr.id
 ;
+
+-- 31. 7. 2015 - mertam
+CREATE TABLE oclc (
+  id                   DECIMAL(10) PRIMARY KEY,
+  harvested_record_id  DECIMAL(10),
+  oclc                 VARCHAR(20),
+  CONSTRAINT oclc_fk  FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id)
+);
+
+CREATE TABLE language (
+  id                   DECIMAL(10) PRIMARY KEY,
+  harvested_record_id  DECIMAL(10),
+  lang                 VARCHAR(5),
+  CONSTRAINT language_fk  FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id)
+);
+
+
+ALTER TABLE import_conf ADD COLUMN filtering_enabled boolean;
+
+--3. 8. 2015 - mertam; set default filtering values
+UPDATE import_conf SET filtering_enabled = false;
+
+CREATE INDEX oclc_harvested_record_idx ON oclc(harvested_record_id); 
+CREATE INDEX language_harvested_record_idx ON language(harvested_record_id); 
+
+-- 12. 8. 2015 - mertam; changes in auth_record table
+ALTER TABLE authority_record RENAME COLUMN oai_harvest_conf_id TO import_conf_id
+ALTER TABLE authority_record RENAME COLUMN authority_type TO authority_code
+ALTER TABLE authority_record ADD CONSTRAINT authority_code_unique UNIQUE(authority_code)
+CREATE INDEX authority_code_idx ON authority_record(authority_code)
+
+-- 14. 8. 2015 mertam; 
+ALTER TABLE import_conf ADD COLUMN interception_enabled BOOLEAN DEFAULT FALSE;
+
+-- 20. 8. 2015 tomascejpek
+ALTER TABLE import_conf ADD COLUMN is_library BOOLEAN DEFAULT FALSE;

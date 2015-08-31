@@ -224,6 +224,8 @@
       regenerator="org.mycompany.mypackage.MyRegenerator"
       />
     -->
+    <cache name="perSegFilter" class="solr.search.LRUCache"
+      size="10" initialSize="0" autowarmCount="10" />
 
    <!-- An optimization that attempts to use a filter to satisfy a search.
          If the requested sort does not include score, then the filterCache

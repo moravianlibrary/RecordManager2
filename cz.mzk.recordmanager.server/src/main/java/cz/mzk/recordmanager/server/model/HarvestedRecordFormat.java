@@ -19,10 +19,8 @@ public class HarvestedRecordFormat {
 		MAPS(4L), 
 		MUSICAL_SCORES(5L), 
 		VISUAL_DOCUMENTS(6L), 
-		MANUSCRIPTS(7L),
-		MICROFORMS(8L), 
-		LARGE_PRINTS(9L), 
-		BRAILL(10L), 
+		OTHER_MICROFORMS(8L),
+		OTHER_BRAILLE(10L), 
 		ELECTRONIC_SOURCE(11L), 
 		AUDIO_DOCUMENTS(12L), 
 		AUDIO_CD(13L), 
@@ -39,6 +37,7 @@ public class HarvestedRecordFormat {
 		OTHER_KIT(24L),
 		OTHER_OBJECT(25L),
 		OTHER_MIX_DOCUMENT(26L),
+		NORMS(27L),
 		OTHER_UNSPECIFIED(100L);
 		
 		private Long numValue;

@@ -22,14 +22,16 @@ public class DublinCoreRecordImpl implements DublinCoreRecord {
 	private List<String> subject;
 	private List<String> title;
 	private List<String> type;
+	
+	private byte[] rawRecord = new byte[0];
 
 	public DublinCoreRecordImpl() {
-		creator = new ArrayList();
-		date = new ArrayList();
-		format = new ArrayList();
-		identifier = new ArrayList();
-		title = new ArrayList();
-		type = new ArrayList();
+		creator = new ArrayList<>();
+		date = new ArrayList<>();
+		format = new ArrayList<>();
+		identifier = new ArrayList<>();
+		title = new ArrayList<>();
+		type = new ArrayList<>();
 
 	}
 
@@ -145,6 +147,17 @@ public class DublinCoreRecordImpl implements DublinCoreRecord {
 			return this.type;
 		}
 		return Collections.emptyList();
+	}
+
+	@Override
+	public byte[] getRawRecord() {
+		return rawRecord;
+	}
+
+	@Override
+	public void setRawRecord(byte[] rawRecord) {
+		this.rawRecord = rawRecord;
+		
 	}
 
 }

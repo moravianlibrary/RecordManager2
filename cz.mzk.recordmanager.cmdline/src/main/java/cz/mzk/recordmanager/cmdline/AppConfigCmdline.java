@@ -1,5 +1,7 @@
 package cz.mzk.recordmanager.cmdline;
 
+import java.beans.PropertyVetoException;
+
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +11,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.core.env.Environment;
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import com.mchange.v2.c3p0.ComboPooledDataSource;
 
 @Configuration
 @PropertySource(value={"file:${CONFIG_DIR:.}/database.properties", "file:${CONFIG_DIR:.}/database.local.properties"}, ignoreResourceNotFound=true)
@@ -25,11 +27,11 @@ public class AppConfigCmdline {
 
 	@Bean
 	public DataSource dataSource(@Value("${jdbc.driverClassName}") String driverClassName, @Value("${jdbc.url}") String url, 
-			@Value("${jdbc.username}") String username, @Value("${jdbc.password}") String password) {
-		DriverManagerDataSource dataSource = new DriverManagerDataSource();
-		dataSource.setDriverClassName(driverClassName);
-		dataSource.setUrl(url);
-		dataSource.setUsername(username);
+			@Value("${jdbc.username}") String username, @Value("${jdbc.password}") String password) throws PropertyVetoException {
+		ComboPooledDataSource dataSource = new ComboPooledDataSource();
+		dataSource.setDriverClass(driverClassName);
+		dataSource.setJdbcUrl(url);
+		dataSource.setUser(username);
 		dataSource.setPassword(password);
 		return dataSource;
 	}

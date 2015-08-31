@@ -1,7 +1,9 @@
 package cz.mzk.recordmanager.server.metadata;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -19,6 +21,8 @@ import cz.mzk.recordmanager.server.model.Cnb;
 import cz.mzk.recordmanager.server.model.HarvestedRecordFormat.HarvestedRecordFormatEnum;
 import cz.mzk.recordmanager.server.model.Isbn;
 import cz.mzk.recordmanager.server.model.Issn;
+import cz.mzk.recordmanager.server.model.Language;
+import cz.mzk.recordmanager.server.model.Oclc;
 import cz.mzk.recordmanager.server.model.Title;
 import cz.mzk.recordmanager.server.util.MetadataUtils;
 
@@ -36,7 +40,10 @@ public class MetadataMarcRecord implements MetadataRecord {
 	protected static final Pattern ISSN_PATTERN = Pattern.compile("(\\d{4}-\\d{3}[\\dxX])(.*)");
 	protected static final Pattern SCALE_PATTERN = Pattern.compile("\\d+[\\ \\^]*\\d+");
 	protected static final Pattern UUID_PATTERN = Pattern.compile("uuid:[\\w-]+");
+	protected static final Pattern OCLC_PATTERN= Pattern.compile("(\\(ocolc\\))(.*)", Pattern.CASE_INSENSITIVE);
 	protected static final String ISBN_CLEAR_REGEX = "[^0-9^X^x]";
+	
+	protected static final Long MAX_PAGES = 10_000_000L;
 	
 	public MetadataMarcRecord(MarcRecord underlayingMarc) {
 		if (underlayingMarc == null) {
@@ -122,12 +129,20 @@ public class MetadataMarcRecord implements MetadataRecord {
 
 	@Override
 	public String getISSNSeries() {
-		return underlayingMarc.getField("490", 'x');
+		String result = underlayingMarc.getField("490", 'x'); 
+		if (result != null) {
+			return result.substring(0, Math.min(result.length(), 300));
+		}
+		return null;
 	}
 	
 	@Override
 	public String getISSNSeriesOrder() {
-		return underlayingMarc.getField("490", 'v');
+		String result = underlayingMarc.getField("490", 'v'); 
+		if (result != null) {
+			return result.substring(0, Math.min(result.length(), 300));
+		}
+		return null;
 	}
 		
 
@@ -141,7 +156,8 @@ public class MetadataMarcRecord implements MetadataRecord {
 		Matcher matcher = PAGECOUNT_PATTERN.matcher(count);
 		try {
 			if (matcher.find()) {
-				return Long.parseLong(matcher.group(0));
+				Long pages = Long.parseLong(matcher.group(0));
+				return  pages < MAX_PAGES ? pages : MAX_PAGES;
 			}
 		} catch (NumberFormatException e) {}
 		return null;
@@ -288,12 +304,8 @@ public class MetadataMarcRecord implements MetadataRecord {
 		String f006 = underlayingMarc.getControlField("006");
 	    String f006_00 = (f006 != null) && (f006.length() > 0) ? Character.toString(f006.charAt(0)) : "";
 		
-	    String f007 = underlayingMarc.getControlField("007");
-	    String f007_00 = (f007 != null) && (f007.length() > 0) ? Character.toString(f007.charAt(0)) : "";
-		
-		if(ldr06.matches("(?i)[at]") && ldr07.matches("(?i)[cdm]"))	return true;		
-		if(f007_00.matches("(?i)t")) return true;		
-		if(f006_00.matches("(?i)[at]")) return true;
+		if(ldr06.matches("(?i)[at]") && ldr07.matches("(?i)[cdm]"))	return true;				
+		if(f006_00.matches("(?i)[a]")) return true;
 		
 		return false;		
 	}
@@ -394,22 +406,6 @@ public class MetadataMarcRecord implements MetadataRecord {
 		return false;		
 	}
 	
-	protected boolean isManuscript(){
-		String ldr06 = Character.toString(underlayingMarc.getLeader().getTypeOfRecord());
-		
-		String f006 = underlayingMarc.getControlField("006");
-		String f006_00 = (f006 != null) && (f006.length() > 0) ? Character.toString(f006.charAt(0)) : "";
-		
-		String f245h = underlayingMarc.getField("245", 'h');		
-		if(f245h == null) f245h = "";
-				
-		if(ldr06.matches("(?i)[tdf]")) return true;
-		if(f006_00.matches("(?i)[tdf]")) return true;
-		if(f245h.matches("(?i).*rukopis.*")) return true;
-		
-		return false;
-	}
-	
 	protected boolean isMicroform(){
 		String ldr06 = Character.toString(underlayingMarc.getLeader().getTypeOfRecord());
 				
@@ -438,44 +434,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 		
 		return false;
 	}
-	
-	protected boolean isLargePrint () {
-		String ldr06 = Character.toString(underlayingMarc.getLeader().getTypeOfRecord());
 		
-	    String f006 = underlayingMarc.getControlField("006");
-		String f006_00 = (f006 != null) && (f006.length() > 0) ? Character.toString(f006.charAt(0)) : "";
-		String f006_06 = (f006 != null) && (f006.length() > 6) ? Character.toString(f006.charAt(6)) : "";
-	    String f006_12 = (f006 != null) && (f006.length() > 12) ? Character.toString(f006.charAt(12)) : "";
-	    
-	    String f007 = underlayingMarc.getControlField("007");
-	    String f007_00 = (f007 != null) && (f007.length() > 0) ? Character.toString(f007.charAt(0)) : "";
-		String f007_01 = (f007 != null) && (f007.length() > 1) ? Character.toString(f007.charAt(1)) : "";
-	    
-		String f008 = underlayingMarc.getControlField("008");
-	    String f008_23 = (f008 != null) && (f008.length() > 23) ? Character.toString(f008.charAt(23)) : "";
-	    String f008_29 = (f008 != null) && (f008.length() > 29) ? Character.toString(f008.charAt(29)) : "";
-
-		if(ldr06.matches("(?i)[acdpt]") && f008_23.matches("(?i)d")){
-			return true;
-		}
-		if(ldr06.matches("(?i)[efk]") && f008_29.matches("(?i)d")){
-			return true;
-		}
-		if(f006_00.matches("(?i)[acdpt]") && f006_06.matches("(?i)d")){
-			return true;
-		}
-		if(f006_00.matches("(?i)[efk]") && f006_12.matches("(?i)d")){
-			return true;
-		}
-		if(f007_00.matches("(?i)d") && f007_01.matches("(?i)b")){
-			return true;
-		}
-		if(f007_00.matches("(?i)t") && f007_01.matches("(?i)b")){
-			return true;
-		}
-		return false;
-	}
-	
 	protected boolean isBraill(){
 		String ldr06 = Character.toString(underlayingMarc.getLeader().getTypeOfRecord());
 		
@@ -605,13 +564,13 @@ public class MetadataMarcRecord implements MetadataRecord {
 		if(f338b == null) f338b = "";
 				
 		// AUDIO_CD
-		if(f300.matches("(?i).*kompaktn[ií]\\sdisk.*")) return HarvestedRecordFormatEnum.AUDIO_CD;
-		if(f500.matches("(?i).*kompaktn[ií]\\sdisk.*")) return HarvestedRecordFormatEnum.AUDIO_CD;
+		if(f300.matches("(?i).*kompaktn[ií](ch)?\\sdisk(ů)?.*")) return HarvestedRecordFormatEnum.AUDIO_CD;
+		if(f500.matches("(?i).*kompaktn[ií](ch)?\\sdisk(ů)?.*")) return HarvestedRecordFormatEnum.AUDIO_CD;
 		if(f300.matches("((?i).*zvukov[eéaá])\\sCD.*")) return HarvestedRecordFormatEnum.AUDIO_CD;
 		if(f300a.matches(".*CD.*")) {
 			if(!f300a.matches(".*CD-ROM.*")) return HarvestedRecordFormatEnum.AUDIO_CD;
 		}
-		if(f300.matches("(?i).*zvukov([aáeé]|ych|ých)\\sdes(ka|ky|ek).*") && f300.matches("(?i).*(digital|12\\scm).*")) return HarvestedRecordFormatEnum.AUDIO_CD;
+		if(f300.matches("(?i).*zvukov([aáeé]|ych|ých)\\sdes(ka|ky|ek).*") && f300.matches("(?i).*(digital|12\\s*cm).*")) return HarvestedRecordFormatEnum.AUDIO_CD;
 
 		// AUDIO_DVD
 		if(ldr06.matches("(?i)[ij]") && f300a.matches("(?i).*dvd.*")) return HarvestedRecordFormatEnum.AUDIO_DVD;
@@ -680,11 +639,12 @@ public class MetadataMarcRecord implements MetadataRecord {
 		// VHS
 		if(f300.matches("(?i).*vhs.*")) return HarvestedRecordFormatEnum.VIDEO_VHS;
 		if(f007_00.matches("(?i)v") && f007_04.matches("(?i)b")) return HarvestedRecordFormatEnum.VIDEO_VHS;
-		if(f300a.matches("(?i).*videokazeta.*")) return HarvestedRecordFormatEnum.VIDEO_VHS;
+		if(f300a.matches("(?i).*videokazet[ay]?.*")) return HarvestedRecordFormatEnum.VIDEO_VHS;
 		
 		// DVD
 		if(ldr06.matches("(?i)g") && f300a.matches("(?i).*dvd.*")) return HarvestedRecordFormatEnum.VIDEO_DVD;
 		if(f007_00.matches("(?i)v") && f007_04.matches("(?i)v")) return HarvestedRecordFormatEnum.VIDEO_DVD;
+		if(f300a.matches(".*DVD[ -]?vide[oa].*")) return HarvestedRecordFormatEnum.VIDEO_DVD;
 		
 		// CD
 		if(ldr06.matches("(?i)g") && f300a.matches("(?i).*cd.*")) return HarvestedRecordFormatEnum.VIDEO_CD;
@@ -774,10 +734,8 @@ public class MetadataMarcRecord implements MetadataRecord {
 		if(isMap()) hrf.add(HarvestedRecordFormatEnum.MAPS);
 		if(isMusicalScores()) hrf.add(HarvestedRecordFormatEnum.MUSICAL_SCORES);
 		if(isVisualDocument()) hrf.add(HarvestedRecordFormatEnum.VISUAL_DOCUMENTS);
-		if(isManuscript()) hrf.add(HarvestedRecordFormatEnum.MANUSCRIPTS);
-		if(isMicroform()) hrf.add(HarvestedRecordFormatEnum.MICROFORMS);
-		if(isLargePrint()) hrf.add(HarvestedRecordFormatEnum.LARGE_PRINTS);
-		if(isBraill()) hrf.add(HarvestedRecordFormatEnum.BRAILL);
+		if(isMicroform()) hrf.add(HarvestedRecordFormatEnum.OTHER_MICROFORMS);
+		if(isBraill()) hrf.add(HarvestedRecordFormatEnum.OTHER_BRAILLE);
 		if(isElectronicSource()) hrf.add(HarvestedRecordFormatEnum.ELECTRONIC_SOURCE);
 		HarvestedRecordFormatEnum audio = getAudioFormat();
 		if(audio != null) hrf.add(audio);
@@ -938,6 +896,80 @@ public class MetadataMarcRecord implements MetadataRecord {
 	@Override
 	public String getClusterId() {
 		// implemented only in selected specialization
+		return null;
+	}
+
+	@Override
+	public List<Oclc> getOclcs() {
+		
+		List<Oclc> result = new ArrayList<>();
+		for (DataField df: underlayingMarc.getDataFields("035")) {
+			Subfield subA = df.getSubfield('a');
+			if (subA == null) {
+				continue;
+			}
+			
+			Matcher matcher = OCLC_PATTERN.matcher(subA.getData());
+			if (matcher.matches() && matcher.groupCount() >= 2) {
+				Oclc oclc = new Oclc();
+				oclc.setOclcStr(matcher.group(2));
+				result.add(oclc);
+			}
+			
+		}
+		return result;
+	}
+
+	@Override
+	public List<Language> getLanguages() {
+		
+		Set<Language> result = new HashSet<>();
+		for (DataField df: underlayingMarc.getDataFields("041")) {
+			for (Subfield subA: df.getSubfields('a')) {
+				Language lang = new Language();
+				if (subA.getData().toLowerCase().equals("cze")) {
+					lang.setLangStr("cze");
+				} else if (subA.getData().toLowerCase().equals("eng")) {
+					lang.setLangStr("eng"); 
+				} else {
+					lang.setLangStr("oth");
+				}
+				result.add(lang);
+			}
+			
+		}
+		
+		if (result.isEmpty()) {
+			String cf = underlayingMarc.getControlField("008");
+			if (cf != null && cf.length() > 39) {
+				String substr = cf.substring(35, 38);
+				Language lang = null;
+				if (substr.toLowerCase().equals("cze")) {
+					lang = new Language();
+					lang.setLangStr("cze");
+				} else if (substr.toLowerCase().equals("eng")) {
+					lang = new Language();
+					lang.setLangStr("eng"); 
+				}
+				if (lang != null) {
+					result.add(lang);
+				}
+			}
+		}
+		
+		return new ArrayList<Language>(result);
+	}
+
+	@Override
+	public boolean matchFilter() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
+	@Override
+	public String getOAIRecordId() {
+		String oai = underlayingMarc.getField("OAI", 'a');
+		if(oai != null) return oai;
 		return null;
 	}
 

@@ -13,7 +13,6 @@ public class Constants {
 	public static final String JOB_ID_DEDUP				= "dedupRecordsJob";
 	public static final String JOB_ID_SOLR_INDEX_ALL_RECORDS		= "indexAllRecordsToSolrJob";
 	public static final String JOB_ID_SOLR_INDEX					= "indexRecordsToSolrJob";
-	public static final String JOB_ID_SOLR_INDEX_LOCAL_RECORDS		= "indexLocalRecordsToSolrJob";
 	public static final String JOB_ID_EXPORT						= "exportRecordsJob";
 	public static final String JOB_ID_IMPORT						= "importRecordsJob";
 	public static final String JOB_ID_IMPORT_ANTIKVARIATY			= "antikvariatyImportRecordsJob";
@@ -36,12 +35,18 @@ public class Constants {
 	
 	public static final String METADATA_FORMAT_MARC21      = "marc21-xml";
 	public static final String METADATA_FORMAT_XML_MARC    = "xml-marc";
+	public static final String METADATA_FORMAT_MARC_CPK    = "marccpk";
 	public static final String METADATA_FORMAT_DUBLIN_CORE = "dublinCore";
 	
 	public static final String PREFIX_MKZ				= "mzk";
 	public static final String PREFIX_NKP				= "nkp";
 	public static final String PREFIX_NTK				= "ntk";
-
+	public static final String PREFIX_TRE				= "tre";
+	public static final String PREFIX_CASLIN			= "caslin";
+	public static final String PREFIX_MZKNORMS			= "mzknorms";
+	public static final String PREFIX_SFXJIBMZK			= "sfxjibmzk";
+	public static final String PREFIX_SFXJIBNLK			= "sfxjibnlk";
+	
 	public static final String JOB_PARAM_RECORD_ID		= "recordId";
 	/* need some changing paramteter :-/ - 
 	 * A job instance already exists and is complete for parameters={}. 

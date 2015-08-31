@@ -16,11 +16,9 @@ import org.marc4j.marc.Subfield;
 import cz.mzk.recordmanager.server.export.IOFormat;
 import cz.mzk.recordmanager.server.marc.MarcRecord;
 import cz.mzk.recordmanager.server.metadata.MetadataMarcRecord;
-import cz.mzk.recordmanager.server.model.HarvestedRecordFormat.HarvestedRecordFormatEnum;
 import cz.mzk.recordmanager.server.scripting.BaseDSL;
 import cz.mzk.recordmanager.server.scripting.MappingResolver;
 import cz.mzk.recordmanager.server.scripting.function.RecordFunction;
-import cz.mzk.recordmanager.server.util.SolrUtils;
 
 public class MarcDSL extends BaseDSL {
 
@@ -30,16 +28,17 @@ public class MarcDSL extends BaseDSL {
 
 	private final static Pattern FIELD_PATTERN = Pattern
 			.compile("([0-9]{3})([a-zA-Z0-9]*)");
-
-	private static final Pattern RECORDTYPE_PATTERN = Pattern.compile("^(AUDIO|VIDEO|OTHER)_(.*)$");
+	
+	private final MarcFunctionContext context;
 
 	private final MarcRecord record;
 
-	private final Map<String, RecordFunction<MarcRecord>> functions;
+	private final Map<String, RecordFunction<MarcFunctionContext>> functions;
 
-	public MarcDSL(MarcRecord record, MappingResolver propertyResolver, Map<String, RecordFunction<MarcRecord>> functions) {
+	public MarcDSL(MarcFunctionContext context, MappingResolver propertyResolver, Map<String, RecordFunction<MarcFunctionContext>> functions) {
 		super(propertyResolver);
-		this.record = record;
+		this.context = context;
+		this.record = context.record();
 		this.functions = functions;
 		this.marcMetadataRecord = new MetadataMarcRecord(record);
 	}
@@ -130,7 +129,7 @@ public class MarcDSL extends BaseDSL {
     /**
      * Get the title (245ab) from a record, without non-filing chars as
      * specified in 245 2nd indicator, and lowercased. 
-     * @param record - the marc record object
+     * @param context - the marc record object
      * @return 245a and 245b values concatenated, with trailing punct removed,
      *         and with non-filing characters omitted. Null returned if no
      *         title can be found. 
@@ -167,30 +166,16 @@ public class MarcDSL extends BaseDSL {
 		return marcMetadataRecord.export(IOFormat.ISO_2709);
 	}
 	
-	public List<String> getRecordType() {
-		List<String> result = new ArrayList<String>();
-		for (HarvestedRecordFormatEnum format: marcMetadataRecord.getDetectedFormatList()) {
-			Matcher matcher = RECORDTYPE_PATTERN.matcher(format.name());
-			if (matcher.matches()) {
-				result.addAll(SolrUtils.createHierarchicFacetValues(matcher.group(1), matcher.group(2)));
-			}
-			else {
-				result.addAll(SolrUtils.createHierarchicFacetValues(format.name()));
-			}
-		}
-		return result;
-	}
-
 	public String isIllustrated() {
 		return null; // FIXME
 	}
 
 	public Object methodMissing(String methodName, Object args) {
-		RecordFunction<MarcRecord> func = functions.get(methodName);
+		RecordFunction<MarcFunctionContext> func = functions.get(methodName);
 		if (func == null) {
 			throw new IllegalArgumentException(String.format("missing function: %s", methodName));
 		}
-		return func.apply(record, args);
+		return func.apply(context, args);
 	}
 	
     protected int getInd2AsInt(DataField df) {

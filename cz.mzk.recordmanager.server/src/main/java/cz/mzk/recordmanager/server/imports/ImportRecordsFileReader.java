@@ -6,7 +6,6 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang3.NotImplementedException;
 import org.marc4j.MarcException;
 import org.marc4j.MarcReader;
 import org.marc4j.marc.Record;
@@ -18,7 +17,9 @@ import org.springframework.batch.item.ParseException;
 import org.springframework.batch.item.UnexpectedInputException;
 
 import cz.mzk.recordmanager.server.export.IOFormat;
+import cz.mzk.recordmanager.server.marc.marc4j.MarcAlephStreamReader;
 import cz.mzk.recordmanager.server.marc.marc4j.MarcISO2709StreamReader;
+import cz.mzk.recordmanager.server.marc.marc4j.MarcLineStreamReader;
 import cz.mzk.recordmanager.server.marc.marc4j.MarcXmlReader;
 
 public class ImportRecordsFileReader implements ItemReader<List<Record>> {
@@ -59,9 +60,9 @@ public class ImportRecordsFileReader implements ItemReader<List<Record>> {
 	protected MarcReader getMarcReader(InputStream inStream) {
 		switch (format) {
 		case LINE_MARC:
-			throw new NotImplementedException("Not implemented yet.");
+			return new MarcLineStreamReader(inStream);
 		case ALEPH_MARC:
-			throw new NotImplementedException("Not implemented yet.");
+			return new MarcAlephStreamReader(inStream);
 		case ISO_2709:
 			return new MarcISO2709StreamReader(inStream, "UTF-8");
 		default:

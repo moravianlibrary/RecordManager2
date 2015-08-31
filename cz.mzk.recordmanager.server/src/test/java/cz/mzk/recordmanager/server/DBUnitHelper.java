@@ -25,7 +25,9 @@ import cz.mzk.recordmanager.server.model.ImportConfiguration;
 import cz.mzk.recordmanager.server.model.Isbn;
 import cz.mzk.recordmanager.server.model.Issn;
 import cz.mzk.recordmanager.server.model.KrameriusConfiguration;
+import cz.mzk.recordmanager.server.model.Language;
 import cz.mzk.recordmanager.server.model.OAIHarvestConfiguration;
+import cz.mzk.recordmanager.server.model.Oclc;
 import cz.mzk.recordmanager.server.model.Title;
 
 @Component
@@ -64,6 +66,8 @@ public class DBUnitHelper {
 		statement.execute("truncate table " + Title.TABLE_NAME);
 		statement.execute("truncate table " + Issn.TABLE_NAME);
 		statement.execute("truncate table " + Cnb.TABLE_NAME);
+		statement.execute("truncate table " + Language.TABLE_NAME);
+		statement.execute("truncate table " + Oclc.TABLE_NAME);
 		statement.execute("truncate table " + HarvestedRecordFormat.LINK_TABLE_NAME);
 		statement.execute("delete from " + HarvestedRecord.TABLE_NAME);
 		statement.execute("delete from " + OAIHarvestConfiguration.TABLE_NAME);

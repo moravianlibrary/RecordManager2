@@ -72,7 +72,7 @@ public class IndexRecordsToEmbeddedSolrJobTest extends AbstractTest {
 				allDocsQuery.set("q", "id:*");
 				allDocsQuery.set("rows", 10000);
 				QueryResponse allDocsResponse = server.query(allDocsQuery);
-				Assert.assertEquals(allDocsResponse.getResults().size(), 77);
+				Assert.assertEquals(allDocsResponse.getResults().size(), 79);
 			}
 
 			{
@@ -100,6 +100,32 @@ public class IndexRecordsToEmbeddedSolrJobTest extends AbstractTest {
 				deletedDocQuery.set("q", "id:99");
 				QueryResponse docResponse = server.query(deletedDocQuery);
 				Assert.assertEquals(docResponse.getResults().size(), 0);
+			}
+			
+			{
+				SolrQuery authQuery = new SolrQuery();
+				authQuery.set("q", "id:73");
+				QueryResponse docResponse = server.query(authQuery);
+				Assert.assertEquals(docResponse.getResults().size(), 1);
+				SolrDocument document = docResponse.getResults().get(0);
+				// check whether author_search field contains alternative name from authority record
+				Assert.assertTrue(
+						document.getFieldValues("author_search").stream() //
+								.anyMatch(s -> s.equals("Imaginarni, Karel, 1900-2000")), 
+						"Authority enrichment failed.");
+			}
+			
+			{
+				SolrQuery dcQuery = new SolrQuery();
+				dcQuery.set("q", "id:100");
+				QueryResponse docResponse = server.query(dcQuery);
+				Assert.assertEquals(docResponse.getResults().size(), 1);
+				SolrDocument document = docResponse.getResults().get(0);
+				Assert.assertTrue(document.containsKey("recordtype"), "Record type missing in DC record.");
+				Assert.assertEquals(document.getFieldValue("recordtype"), "dublinCore");
+				Assert.assertTrue(document.containsKey("fullrecord"), "Full record missing in DC record.");
+				String fullRecord = (String) document.getFieldValue("fullrecord");
+				Assert.assertTrue(fullRecord.length() > 0);
 			}
 			
 		} finally {

@@ -20,7 +20,7 @@ import org.testng.annotations.Test;
 
 import cz.mzk.recordmanager.server.AbstractTest;
 import cz.mzk.recordmanager.server.model.AuthorityRecord;
-import cz.mzk.recordmanager.server.model.OAIHarvestConfiguration;
+import cz.mzk.recordmanager.server.model.ImportConfiguration;
 import cz.mzk.recordmanager.server.oai.dao.AuthorityRecordDAO;
 import cz.mzk.recordmanager.server.oai.dao.OAIHarvestConfigurationDAO;
 import cz.mzk.recordmanager.server.springbatch.JobExecutor;
@@ -44,7 +44,7 @@ public class OAIHarvestAuthorityJobTest extends AbstractTest{
 	@Autowired
 	private OAIHarvestConfigurationDAO oaiHarvestedConfigurationDao;
 	
-	private OAIHarvestConfiguration oaiConfiguration;
+	private ImportConfiguration oaiConfiguration;
 	
 	@BeforeMethod
 	public void initLocator() throws Exception {
@@ -72,9 +72,12 @@ public class OAIHarvestAuthorityJobTest extends AbstractTest{
 		
 		AuthorityRecord authRec = authorityRecordDao.findByIdAndHarvestConfiguration("oai:aleph-nkp.cz:AUT10-000000001", oaiConfiguration);
 		Assert.assertNotNull(authRec);
+		Assert.assertEquals(authRec.getAuthorityCode(), "jk01010001");
 		authRec = authorityRecordDao.findByIdAndHarvestConfiguration("oai:aleph-nkp.cz:AUT10-000000006", oaiConfiguration);
+		Assert.assertEquals(authRec.getAuthorityCode(), "jk01010009");
 		Assert.assertNotNull(authRec);
 		authRec = authorityRecordDao.findByIdAndHarvestConfiguration("oai:aleph-nkp.cz:AUT10-000000007", oaiConfiguration);
+		Assert.assertEquals(authRec.getAuthorityCode(), "jk01010010");
 		Assert.assertNotNull(authRec);
 	}
 }

@@ -3,12 +3,21 @@ package cz.mzk.recordmanager.server.index;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.EnumSet;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
+import java.util.function.BiConsumer;
+import java.util.function.BinaryOperator;
+import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import org.apache.solr.common.SolrInputDocument;
@@ -19,8 +28,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import cz.mzk.recordmanager.server.index.enrich.DedupRecordEnricher;
+import cz.mzk.recordmanager.server.metadata.MetadataRecord;
+import cz.mzk.recordmanager.server.metadata.MetadataRecordFactory;
 import cz.mzk.recordmanager.server.model.DedupRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
+import cz.mzk.recordmanager.server.model.HarvestedRecordFormat.HarvestedRecordFormatEnum;
 import cz.mzk.recordmanager.server.model.ImportConfiguration;
 import cz.mzk.recordmanager.server.scripting.MappingResolver;
 import cz.mzk.recordmanager.server.util.SolrUtils;
@@ -29,10 +41,13 @@ import cz.mzk.recordmanager.server.util.SolrUtils;
 public class SolrInputDocumentFactoryImpl implements SolrInputDocumentFactory, InitializingBean {
 
 	private static final String MZK_INSTITUTION_MAP = "mzk_institution.map";
+	private static final String INSTITUTION_LIBRARY = "Library";
+	private static final String INSTITUTION_OTHERS = "Others";
 
 	private static Logger logger = LoggerFactory.getLogger(SolrInputDocumentFactoryImpl.class);
 	
 	private static final Pattern OAI_RECORD_ID_PATTERN = Pattern.compile("oai:[\\w|.]+:([\\w|-]+)");
+	private static final Pattern RECORDTYPE_PATTERN = Pattern.compile("^(AUDIO|VIDEO|OTHER)_(.*)$");
 
 	private List<String> fieldsWithDash = Arrays.asList( //
 			"author2-role", //
@@ -63,6 +78,9 @@ public class SolrInputDocumentFactoryImpl implements SolrInputDocumentFactory, I
 	@Autowired
 	private List<DedupRecordEnricher> dedupRecordEnrichers;
 
+	@Autowired
+	private MetadataRecordFactory metadataFactory;
+	
 	@Override
 	public SolrInputDocument create(HarvestedRecord record) {
 		try {
@@ -73,9 +91,12 @@ public class SolrInputDocumentFactoryImpl implements SolrInputDocumentFactory, I
 			if (!document.containsKey(SolrFieldConstants.ID_FIELD)) {
 				document.addField(SolrFieldConstants.ID_FIELD, id);
 			}
-			document.addField(SolrFieldConstants.INSTITUTION_FIELD, getInstitutionOfRecord(record));
+			document.addField(SolrFieldConstants.LOCAL_INSTITUTION_FIELD, getInstitutionOfRecord(record));
+			document.addField(SolrFieldConstants.CITY_INSTITUTION_CS, getCityInstitutionForSearching(record));
 			document.addField(SolrFieldConstants.MERGED_CHILD_FIELD, 1);
 			document.addField(SolrFieldConstants.WEIGHT, record.getWeight());
+			document.addField(SolrFieldConstants.RECORD_FORMAT_DISPLAY, getRecordType(record));
+			
 			return document;
 		} catch (Exception ex) {
 			logger.error(String.format("Exception thrown when indexing dedup_record with id=%s", record.getUniqueId()), ex);
@@ -87,27 +108,30 @@ public class SolrInputDocumentFactoryImpl implements SolrInputDocumentFactory, I
 		if (records.isEmpty()) {
 			return null;
 		}
-		
-		List<SolrInputDocument> documentList = records.stream().map(rec -> create(rec)).collect(Collectors.toCollection(ArrayList::new));
+
+		List<SolrInputDocument> childs = records.stream().map(rec -> create(rec)).collect(Collectors.toCollection(ArrayList::new));
 		
 		HarvestedRecord record = records.get(0);
 		SolrInputDocument mergedDocument = asSolrDocument(mapper.map(dedupRecord, records));
 		mergedDocument.addField(SolrFieldConstants.ID_FIELD, dedupRecord.getId());
-		mergedDocument.addField(SolrFieldConstants.INSTITUTION_FIELD, getInstitution(record));
 		mergedDocument.addField(SolrFieldConstants.MERGED_FIELD, 1);
 		mergedDocument.addField(SolrFieldConstants.WEIGHT, record.getWeight());
 		mergedDocument.addField(SolrFieldConstants.CITY_INSTITUTION_CS, getCityInstitutionForSearching(record));
 		
-		List<String> localIds = records.stream().map(rec -> getId(record)).collect(Collectors.toCollection(ArrayList::new));
+		List<String> localIds = records.stream().map(rec -> getId(rec)).collect(Collectors.toCollection(ArrayList::new));
 		mergedDocument.addField(SolrFieldConstants.LOCAL_IDS_FIELD, localIds);
 		
-		dedupRecordEnrichers.forEach(enricher -> enricher.enrich(dedupRecord, mergedDocument, documentList));
-		documentList.add(mergedDocument);
+		Set<String> institutions = records.stream().map(rec -> getInstitution(rec)).collect(new UniqueCollector<String>());
+		mergedDocument.addField(SolrFieldConstants.INSTITUTION_FIELD, institutions);
+		mergedDocument.addField(SolrFieldConstants.RECORD_FORMAT, getRecordType(record));
+		
+		dedupRecordEnrichers.forEach(enricher -> enricher.enrich(dedupRecord, mergedDocument, childs));
+		mergedDocument.addChildDocuments(childs);
 
 		if (logger.isTraceEnabled()) {
 			logger.info("Mapping of dedupRecord with id = {} finished", dedupRecord.getId());
 		}
-		return documentList;
+		return Collections.singletonList(mergedDocument);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -165,9 +189,20 @@ public class SolrInputDocumentFactoryImpl implements SolrInputDocumentFactory, I
 	}
 	
 	protected List<String> getInstitution(HarvestedRecord record){
-		String city = getCityOfRecord(record);
-		String name = getInstitutionOfRecord(record);
-		return SolrUtils.createHierarchicFacetValues(city, name);
+		if(record.getHarvestedFrom() != null){
+			if(record.getHarvestedFrom().isLibrary()){
+				String city = getCityOfRecord(record);
+				String name = getInstitutionOfRecord(record);
+				return SolrUtils.createHierarchicFacetValues(INSTITUTION_LIBRARY, city, name);
+			}
+			else{
+				String name = getInstitutionOfRecord(record);
+				return SolrUtils.createHierarchicFacetValues(INSTITUTION_OTHERS, name);
+			}
+		}
+		
+		return SolrUtils.createHierarchicFacetValues(SolrFieldConstants.UNKNOWN_INSTITUTION);
+		
 	}
 
 	protected List<String> getCityInstitutionForSearching(HarvestedRecord hr){
@@ -188,6 +223,52 @@ public class SolrInputDocumentFactoryImpl implements SolrInputDocumentFactory, I
 			String fName = field.replace('-', '_');
 			remappedFields.put(fName, field);
 		}
+	}
+	
+	protected class UniqueCollector<T> implements Collector<List<T>, Set<T>, Set<T>>{
+
+		@Override
+		public Supplier<Set<T>> supplier() {
+			return HashSet::new;
+		}
+
+		@Override
+		public BiConsumer<Set<T>, List<T>> accumulator() {
+			return (accum, input) -> input.forEach(cur -> accum.add(cur));
+		}
+
+		@Override
+		public BinaryOperator<Set<T>> combiner() {
+			return (x,y) -> {x.addAll(y); return x;}; 
+		}
+
+		@Override
+		public Function<Set<T>, Set<T>> finisher() {
+			return accumulator -> accumulator;
+		}
+
+		@Override
+		public Set<java.util.stream.Collector.Characteristics> characteristics() {
+			return EnumSet.of(Characteristics.UNORDERED);
+		}
+		
+	}
+	
+	protected List<String> getRecordType(HarvestedRecord record){
+		MetadataRecord metadata = metadataFactory.getMetadataRecord(record);
+		
+		List<String> result = new ArrayList<String>();
+		for (HarvestedRecordFormatEnum format: metadata.getDetectedFormatList()) {
+			Matcher matcher = RECORDTYPE_PATTERN.matcher(format.name());
+			if (matcher.matches()) {
+				result.addAll(SolrUtils.createHierarchicFacetValues(matcher.group(1), matcher.group(2)));
+			}
+			else {
+				result.addAll(SolrUtils.createHierarchicFacetValues(format.name()));
+			}
+		}
+		return result;
+				
 	}
 
 }

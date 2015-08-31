@@ -61,7 +61,9 @@ public class ImportRecordsWriter implements ItemWriter<List<Record>> {
 				try {
 					MarcRecord marc = new MarcRecordImpl(currentRecord);
 					MetadataRecord metadata = metadataFactory.getMetadataRecord(marc);
-					HarvestedRecordUniqueId id = new HarvestedRecordUniqueId(harvestConfiguration, metadata.getUniqueId());
+					String recordId = metadata.getOAIRecordId();
+					if(recordId == null) recordId = metadata.getUniqueId();
+					HarvestedRecordUniqueId id = new HarvestedRecordUniqueId(harvestConfiguration, recordId);
 					HarvestedRecord hr = new HarvestedRecord(id );
 					ByteArrayOutputStream outStream = new ByteArrayOutputStream();
 					MarcWriter marcWriter = new MarcXmlWriter(outStream, true);
@@ -70,8 +72,14 @@ public class ImportRecordsWriter implements ItemWriter<List<Record>> {
 					hr.setRawRecord(outStream.toByteArray());
 //					TODO detect format
 					hr.setFormat("marc21-xml");
-					hr.setHarvestedFrom(harvestConfiguration);
-					dedupKeysParser.parse(hr);
+					hr.setHarvestedFrom(harvestConfiguration);					
+					dedupKeysParser.parse(hr, metadata);
+					
+					if (harvestConfiguration.isFilteringEnabled() && !hr.getShouldBeProcessed()) {
+						logger.debug("Filtered record: " + hr.getUniqueId());
+						continue;
+					}
+					
 					harvestedRecordDao.persist(hr);
 				} catch (Exception e) {
 					logger.warn("Error occured in processing record");

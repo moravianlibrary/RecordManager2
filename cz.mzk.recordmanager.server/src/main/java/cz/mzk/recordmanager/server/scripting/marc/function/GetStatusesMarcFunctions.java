@@ -10,6 +10,7 @@ import org.marc4j.marc.Subfield;
 import org.springframework.stereotype.Component;
 
 import cz.mzk.recordmanager.server.marc.MarcRecord;
+import cz.mzk.recordmanager.server.scripting.marc.MarcFunctionContext;
 
 @Component
 public class GetStatusesMarcFunctions implements MarcRecordFunctions {
@@ -21,7 +22,13 @@ public class GetStatusesMarcFunctions implements MarcRecordFunctions {
 	protected final static String ONLINE = "online";
 	protected final static Pattern ONLINE_PATTERN = Pattern.compile("(?i).*"+ONLINE+".*");
 	
-	public List<String> getStatuses(MarcRecord record) {
+	protected final static String UNKNOWN = "nz";
+	protected final static String UNSPECIFIED = "n";
+	protected final static String LIMITED = "o";
+	protected final static String TEMPORARY = "d";
+
+	public List<String> getStatuses(MarcFunctionContext ctx) {
+		MarcRecord record = ctx.record();
 		List<String> statuses = new ArrayList<String>();
 		statuses.addAll(getStatuses(record, "996"));
 		statuses.add(getStatusFrom856(record, "856"));		
@@ -45,6 +52,10 @@ public class GetStatusesMarcFunctions implements MarcRecordFunctions {
 		List<String> statuses = new ArrayList<String>();
 		boolean present = false;
 		boolean absent = false;
+		boolean unknown = false;
+		boolean unspecified = false;
+		boolean limited = false;
+		boolean temporary = false;
 		for (DataField field : fields) {
 			Subfield s = field.getSubfield('s');
 			if (s == null) {
@@ -58,6 +69,18 @@ public class GetStatusesMarcFunctions implements MarcRecordFunctions {
 			case PRESENT:
 				present = true;
 				break;
+			case UNKNOWN:
+				unknown = true;
+				break;
+			case UNSPECIFIED:
+				unspecified = true;
+				break;
+			case LIMITED:
+				limited = true;
+				break;
+			case TEMPORARY:
+				temporary = true;
+				break;
 			}
 		}
 		if (absent) {
@@ -65,6 +88,18 @@ public class GetStatusesMarcFunctions implements MarcRecordFunctions {
 		}
 		if (present) {
 			statuses.add("present");
+		}
+		if (unknown) {
+			statuses.add("unknown");
+		}
+		if (unspecified) {
+			statuses.add("unspecified");
+		}
+		if (limited) {
+			statuses.add("limited");
+		}
+		if (temporary) {
+			statuses.add("temporary");
 		}
 		return statuses;
 	}
