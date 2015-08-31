@@ -564,13 +564,13 @@ public class MetadataMarcRecord implements MetadataRecord {
 		if(f338b == null) f338b = "";
 				
 		// AUDIO_CD
-		if(f300.matches("(?i).*kompaktn[ií]\\sdisk.*")) return HarvestedRecordFormatEnum.AUDIO_CD;
-		if(f500.matches("(?i).*kompaktn[ií]\\sdisk.*")) return HarvestedRecordFormatEnum.AUDIO_CD;
+		if(f300.matches("(?i).*kompaktn[ií](ch)?\\sdisk(ů)?.*")) return HarvestedRecordFormatEnum.AUDIO_CD;
+		if(f500.matches("(?i).*kompaktn[ií](ch)?\\sdisk(ů)?.*")) return HarvestedRecordFormatEnum.AUDIO_CD;
 		if(f300.matches("((?i).*zvukov[eéaá])\\sCD.*")) return HarvestedRecordFormatEnum.AUDIO_CD;
 		if(f300a.matches(".*CD.*")) {
 			if(!f300a.matches(".*CD-ROM.*")) return HarvestedRecordFormatEnum.AUDIO_CD;
 		}
-		if(f300.matches("(?i).*zvukov([aáeé]|ych|ých)\\sdes(ka|ky|ek).*") && f300.matches("(?i).*(digital|12\\scm).*")) return HarvestedRecordFormatEnum.AUDIO_CD;
+		if(f300.matches("(?i).*zvukov([aáeé]|ych|ých)\\sdes(ka|ky|ek).*") && f300.matches("(?i).*(digital|12\\s*cm).*")) return HarvestedRecordFormatEnum.AUDIO_CD;
 
 		// AUDIO_DVD
 		if(ldr06.matches("(?i)[ij]") && f300a.matches("(?i).*dvd.*")) return HarvestedRecordFormatEnum.AUDIO_DVD;
@@ -639,11 +639,12 @@ public class MetadataMarcRecord implements MetadataRecord {
 		// VHS
 		if(f300.matches("(?i).*vhs.*")) return HarvestedRecordFormatEnum.VIDEO_VHS;
 		if(f007_00.matches("(?i)v") && f007_04.matches("(?i)b")) return HarvestedRecordFormatEnum.VIDEO_VHS;
-		if(f300a.matches("(?i).*videokazeta.*")) return HarvestedRecordFormatEnum.VIDEO_VHS;
+		if(f300a.matches("(?i).*videokazet[ay]?.*")) return HarvestedRecordFormatEnum.VIDEO_VHS;
 		
 		// DVD
 		if(ldr06.matches("(?i)g") && f300a.matches("(?i).*dvd.*")) return HarvestedRecordFormatEnum.VIDEO_DVD;
 		if(f007_00.matches("(?i)v") && f007_04.matches("(?i)v")) return HarvestedRecordFormatEnum.VIDEO_DVD;
+		if(f300a.matches(".*DVD[ -]?vide[oa].*")) return HarvestedRecordFormatEnum.VIDEO_DVD;
 		
 		// CD
 		if(ldr06.matches("(?i)g") && f300a.matches("(?i).*cd.*")) return HarvestedRecordFormatEnum.VIDEO_CD;
