@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -28,16 +29,16 @@ import cz.mzk.recordmanager.server.solr.SolrServerFactory;
 import cz.mzk.recordmanager.server.util.HttpClient;
 import cz.mzk.recordmanager.server.util.SolrUtils;
 
-public class KrameriusHarvester {
+public class KrameriusHarvesterNoSorting {
 
 	private static Logger logger = LoggerFactory
 			.getLogger(KrameriusHarvester.class);
 
 	private static String PID_FIELD = "PID";
 
-	private static int MAX_TIME_ALLOWED = 100_000;
-
 	private Long harvestedFrom;
+
+	private Long numFound = 0L;
 
 	private KrameriusHarvesterParams params;
 
@@ -45,7 +46,7 @@ public class KrameriusHarvester {
 
 	private SolrServerFactory solrServerFactory;
 
-	public KrameriusHarvester(HttpClient httpClient, SolrServerFactory solrServerFactory,
+	public KrameriusHarvesterNoSorting(HttpClient httpClient, SolrServerFactory solrServerFactory,
 			KrameriusHarvesterParams parameters, Long harvestedFrom) {
 		this.httpClient = httpClient;
 		this.solrServerFactory = solrServerFactory;
@@ -53,10 +54,11 @@ public class KrameriusHarvester {
 		this.harvestedFrom = harvestedFrom;
 	}
 
-	public List<String> getUuids(String nextPid) {
+	public List<String> getUuids(Integer krameriusStart) {
 		List<String> uuids = new ArrayList<String>();
 
-		SolrDocumentList documents = sendRequest(nextPid);
+		SolrDocumentList documents = sendRequest(krameriusStart, "PID");
+		numFound = documents.getNumFound();
 
 		for (SolrDocument document : documents) {
 			for (Object pid : document.getFieldValues(PID_FIELD)) {
@@ -123,8 +125,10 @@ public class KrameriusHarvester {
 		return records;
 	}
 
-	public SolrDocumentList sendRequest(String nextPid) {
+	public SolrDocumentList sendRequest(Integer start, String... fields) {
 		SolrDocumentList documents = new SolrDocumentList();
+		int numProcessed = 0;
+		long numFound = 0;
 
 		SolrServer solr = solrServerFactory.create(params.getUrl());
 
@@ -132,35 +136,55 @@ public class KrameriusHarvester {
 			((HttpSolrServer) solr).setParser(new XMLResponseParser());
 		}
 		SolrQuery query = new SolrQuery();
-		query.setQuery("*:*");
-		if (nextPid != null) {
-			query.add("fq", SolrUtils.createFieldQuery(PID_FIELD, SolrUtils.createRange(nextPid, null)));
-		}
-		query.add("fq", SolrUtils.createFieldQuery("fedora.model", params.getModel()));
+
+		// creates map of SOLR query parameters and formats them into string,
+		// which is set as SolrQuery's query.
+		Map<String, String> queryMap = new HashMap<String, String>();
+		queryMap.put("fedora.model", params.getModel()); // w/ KrameriusParams
 		if (params.getFrom() != null || params.getUntil() != null) {
 			String range = SolrUtils.createDateRange(
 					params.getFrom(), params.getUntil());
-			query.add("fq", SolrUtils.createFieldQuery("modified_date", range));
+			queryMap.put("modified_date", range);
 		}
-		logger.info("nextPid: {}", nextPid);
-		query.setFields(PID_FIELD);
-		query.setSort(PID_FIELD, ORDER.asc);
-		query.setRows((params.getQueryRows() != null) ? params.getQueryRows().intValue() : 100);
-		query.setTimeAllowed(MAX_TIME_ALLOWED);
+		
+		query.setQuery(createQueryString(queryMap));
+		logger.info("query: {}", query.getQuery());
+		query.setFields(fields);
+
+		if (start != null) {
+			query.setStart(start);
+		}
+		query.setRows((params.getQueryRows() != null) ? params.getQueryRows().intValue() : 10);
 
 		SolrRequest request = new QueryRequest(query);
 		request.setPath("/search");
-		logger.info("Params: {}", request.getParams());
 
 		try {
-			NamedList<Object> req = solr.request(request);
-			QueryResponse response = new QueryResponse(req, solr);
+			QueryResponse response = new QueryResponse(solr.request(request), solr);
 			documents = response.getResults();
+			numFound = documents.getNumFound();
+			numProcessed += response.getResults().size();
 		} catch (Exception ex) {
 			throw new RuntimeException(ex); // FIXME
 		}
 		return documents;
 	}
 
+	public Long getNumFound() {
+		return this.numFound;
+	}
 	
+	public static String createQueryString(Map<String, String> query) {
+		StringBuilder queryString = new StringBuilder();
+		Iterator<String> iterator = query.keySet().iterator();
+		while (iterator.hasNext()) {
+			String key = (String) iterator.next();
+			String value = query.get(key);
+			queryString.append(key + ":" + value);
+			if (iterator.hasNext()) {
+				queryString.append(" AND ");
+			}
+		}
+		return queryString.toString();
+	}
 }
