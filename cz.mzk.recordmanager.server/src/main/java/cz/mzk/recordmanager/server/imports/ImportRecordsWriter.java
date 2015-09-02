@@ -74,7 +74,8 @@ public class ImportRecordsWriter implements ItemWriter<List<Record>> {
 					hr.setRawRecord(outStream.toByteArray());
 //					TODO detect format
 					hr.setFormat("marc21-xml");
-					hr.setHarvestedFrom(harvestConfiguration);					
+					hr.setHarvestedFrom(harvestConfiguration);
+					harvestedRecordDao.persist(hr);
 					dedupKeysParser.parse(hr, metadata);
 					
 					if (harvestConfiguration.isFilteringEnabled() && !hr.getShouldBeProcessed()) {

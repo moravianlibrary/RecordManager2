@@ -921,35 +921,31 @@ public class MetadataMarcRecord implements MetadataRecord {
 	}
 
 	@Override
-	public List<Language> getLanguages() {
-		
-		Set<Language> result = new HashSet<>();
+	public List<String> getLanguages() {
+		Set<String> result = new HashSet<>();
 		for (DataField df: underlayingMarc.getDataFields("041")) {
 			for (Subfield subA: df.getSubfields('a')) {
-				Language lang = new Language();
+				String lang = null;
 				if (subA.getData().toLowerCase().equals("cze")) {
-					lang.setLangStr("cze");
+					lang = "cze";
 				} else if (subA.getData().toLowerCase().equals("eng")) {
-					lang.setLangStr("eng"); 
+					lang = "eng"; 
 				} else {
-					lang.setLangStr("oth");
+					lang = "oth";
 				}
 				result.add(lang);
 			}
-			
 		}
 		
 		if (result.isEmpty()) {
 			String cf = underlayingMarc.getControlField("008");
 			if (cf != null && cf.length() > 39) {
 				String substr = cf.substring(35, 38);
-				Language lang = null;
+				String lang = null;
 				if (substr.toLowerCase().equals("cze")) {
-					lang = new Language();
-					lang.setLangStr("cze");
+					lang = "cze";
 				} else if (substr.toLowerCase().equals("eng")) {
-					lang = new Language();
-					lang.setLangStr("eng"); 
+					lang = "eng"; 
 				}
 				if (lang != null) {
 					result.add(lang);
@@ -957,7 +953,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 			}
 		}
 		
-		return new ArrayList<Language>(result);
+		return new ArrayList<String>(result);
 	}
 
 	@Override

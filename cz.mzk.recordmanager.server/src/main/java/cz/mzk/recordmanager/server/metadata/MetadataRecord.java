@@ -125,7 +125,7 @@ public interface MetadataRecord {
 	 * get list o {@link Language}
 	 * @return
 	 */
-	public List<Language> getLanguages();
+	public List<String> getLanguages();
 	
 	/**
 	 * Decide whether this record should be stored during importing/harvesting

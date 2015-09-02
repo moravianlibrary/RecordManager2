@@ -26,11 +26,14 @@ public class HarvestedRecordWriter implements ItemWriter<List<HarvestedRecord>> 
 	protected DelegatingDedupKeysParser dedupKeysParser;
 	
 	@Override
-	public void write(List<? extends List<HarvestedRecord>> arg0) throws Exception {
-		for (List<HarvestedRecord> list: arg0) {
+	public void write(List<? extends List<HarvestedRecord>> records) throws Exception {
+		for (List<HarvestedRecord> list: records) {
 			for (HarvestedRecord hr: list) {
 				if (hr.getDeleted() == null) {
 					try {
+						if (hr.getId() == null) {
+							recordDao.persist(hr);
+						}
 						dedupKeysParser.parse(hr);
 						if (hr.getHarvestedFrom().isFilteringEnabled() && !hr.getShouldBeProcessed()) {
 							logger.debug("Filtered record: " + hr.getUniqueId());

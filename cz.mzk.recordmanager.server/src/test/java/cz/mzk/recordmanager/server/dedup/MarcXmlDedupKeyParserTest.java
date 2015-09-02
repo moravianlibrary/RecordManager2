@@ -36,6 +36,7 @@ public class MarcXmlDedupKeyParserTest extends AbstractTest {
 		record.setFormat("marc21-xml");
 		byte[] rawRecord = ByteStreams.toByteArray(is);
 		record.setRawRecord(rawRecord);
+		record.setId(1L);
 		parser.parse(record);
 		Assert.assertTrue(record.getIsbns().size() > 0);
 		Assert.assertEquals(record.getIsbns().get(0).getIsbn(), EXPECTED_ISBN);

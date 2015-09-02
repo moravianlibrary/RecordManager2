@@ -1,56 +1,101 @@
 package cz.mzk.recordmanager.server.model;
 
+import java.io.Serializable;
+import java.util.Objects;
+
 import javax.persistence.Column;
+import javax.persistence.Embeddable;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
+import com.google.common.base.Preconditions;
+
 @Entity
 @Table(name=Language.TABLE_NAME)
-public class Language extends AbstractDomainObject {
+public class Language {
 	
 	public static final String TABLE_NAME = "language";
 	
-	@Column(name="lang")
-	private String langStr;
+	@Embeddable
+	private static class LanguageId implements Serializable {
 
-	public String getLangStr() {
-		return langStr;
+		private static final long serialVersionUID = 1L;
+
+		@Column(name="harvested_record_id")
+		private long harvestedRecordId;
+
+		@Column(name="lang")
+		private String langStr;
+
+		public LanguageId(long harvestedRecordId, String langStr) {
+			super();
+			this.harvestedRecordId = harvestedRecordId;
+			this.langStr = langStr;
+		}
+
+		public Long getHarvestedRecordId() {
+			return harvestedRecordId;
+		}
+
+		public String getLangStr() {
+			return langStr;
+		}
+
+		@Override
+		public int hashCode() {
+			return Objects.hash(harvestedRecordId, langStr);
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if (this == obj) {
+				return true;
+			}
+			if (obj == null || getClass() != obj.getClass()) {
+				return false;
+			}
+			LanguageId other = (LanguageId) obj;
+			return Objects.equals(this.getHarvestedRecordId(), other.getHarvestedRecordId()) &&
+					Objects.equals(this.getLangStr(), other.getLangStr());
+		}
+
 	}
 
-	public void setLangStr(String langStr) {
-		this.langStr = langStr;
+	@EmbeddedId
+	private LanguageId id;
+
+	public Language(HarvestedRecord record, String language) {
+		super();
+		Preconditions.checkNotNull(record, "record");
+		Preconditions.checkNotNull(language, "language");
+		this.id = new LanguageId(record.getId(), language);
+	}
+
+	public String getLangStr() {
+		return id.getLangStr();
 	}
 
 	@Override
 	public String toString() {
-		return "Language [langStr=" + langStr + "]";
+		return "Language [langStr=" + id.getLangStr() + "]";
 	}
 
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = super.hashCode();
-		result = prime * result + ((langStr == null) ? 0 : langStr.hashCode());
-		return result;
+		return id.hashCode();
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (!super.equals(obj))
+		}
+		if (obj == null || getClass() != obj.getClass()) {
 			return false;
-		if (getClass() != obj.getClass())
-			return false;
+		}
 		Language other = (Language) obj;
-		if (langStr == null) {
-			if (other.langStr != null)
-				return false;
-		} else if (!langStr.equals(other.langStr))
-			return false;
-		return true;
+		return this.id.equals(other.id);
 	}
-	
-	
 
 }

@@ -1,6 +1,7 @@
 package cz.mzk.recordmanager.server.metadata;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -320,9 +321,8 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 	}
 
 	@Override
-	public List<Language> getLanguages() {
-		// TODO Auto-generated method stub
-		return null;
+	public List<String> getLanguages() {
+		return Collections.emptyList();
 	}
 
 	@Override
