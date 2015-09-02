@@ -1,6 +1,7 @@
 package cz.mzk.recordmanager.server.kramerius.harvest;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.batch.core.ExitStatus;
@@ -55,6 +56,7 @@ public class KrameriusItemProcessor implements
 			rec.setHarvestedFrom(configuration);
 			rec.setFormat(format);
 		}
+		rec.setUpdated(new Date());
 		rec.setRawRecord(hrIncomplete.getRawRecord());
 		return rec;
 	}

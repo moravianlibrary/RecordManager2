@@ -64,7 +64,8 @@ public class ImportRecordsWriter implements ItemWriter<List<Record>> {
 					String recordId = metadata.getOAIRecordId();
 					if(recordId == null) recordId = metadata.getUniqueId();
 					HarvestedRecordUniqueId id = new HarvestedRecordUniqueId(harvestConfiguration, recordId);
-					HarvestedRecord hr = new HarvestedRecord(id );
+					HarvestedRecord hr = new HarvestedRecord(id);
+					hr.setUpdated(new Date());
 					ByteArrayOutputStream outStream = new ByteArrayOutputStream();
 					MarcWriter marcWriter = new MarcXmlWriter(outStream, true);
 					marcWriter.write(currentRecord);
