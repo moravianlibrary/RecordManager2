@@ -7,6 +7,6 @@ SELECT
 FROM harvested_record WHERE cluster_id IN 
   (SELECT cluster_id FROM harvested_record WHERE dedup_record_id is NULL OR updated > (SELECT time FROM last_dedup_time) GROUP BY cluster_id) 
 GROUP BY cluster_id
-HAVING COUNT(harvested_record.id) > 1;
+HAVING COUNT(harvested_record.id) > 1 AND max(harvested_record.updated) > (SELECT time FROM last_dedup_time);
   
 CREATE INDEX tmp_cluster_idx ON tmp_cluster_ids(row_id);

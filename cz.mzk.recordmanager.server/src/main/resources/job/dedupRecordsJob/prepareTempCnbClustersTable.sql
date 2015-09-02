@@ -10,6 +10,6 @@ SELECT
 FROM harvested_record hr
   INNER JOIN cnb c ON hr.id = c.harvested_record_id
 GROUP BY c.cnb 
-HAVING COUNT(cnb) > 1 AND count(distinct COALESCE(hr.dedup_record_id,1)) >= count(hr.dedup_record_id);
+HAVING COUNT(cnb) > 1 AND count(distinct COALESCE(hr.dedup_record_id,1)) >= count(hr.dedup_record_id) AND max(hr.updated) > (SELECT time FROM last_dedup_time);
 
 CREATE INDEX tmp_cnb_clusters_idx ON tmp_cnb_clusters(row_id);
