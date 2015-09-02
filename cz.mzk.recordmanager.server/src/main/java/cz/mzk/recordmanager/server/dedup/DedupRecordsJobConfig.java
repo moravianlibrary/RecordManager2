@@ -37,7 +37,6 @@ import com.google.common.io.CharStreams;
 
 import cz.mzk.recordmanager.server.jdbc.LongValueRowMapper;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
-import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordDAO;
 import cz.mzk.recordmanager.server.springbatch.DelegatingHibernateProcessor;
 import cz.mzk.recordmanager.server.springbatch.SqlCommandTasklet;
 import cz.mzk.recordmanager.server.springbatch.StepProgressListener;
@@ -88,25 +87,10 @@ public class DedupRecordsJobConfig {
 	@Autowired
 	private DataSource dataSource;
 
-	@Autowired
-	private HarvestedRecordDAO harvestedRecordDao;
-
 	private String initDeduplicationSql = CharStreams
 			.toString(new InputStreamReader(getClass() //
 					.getClassLoader().getResourceAsStream(
 							"job/dedupRecordsJob/initDeduplication.sql"),
-					"UTF-8"));
-	
-	private String updateDedupRecordSql = CharStreams
-			.toString(new InputStreamReader(getClass() //
-					.getClassLoader().getResourceAsStream(
-							"job/dedupRecordsJob/updateDedupRecord.sql"),
-					"UTF-8"));
-
-	private String deleteRecordLinkSql = CharStreams
-			.toString(new InputStreamReader(getClass() //
-					.getClassLoader().getResourceAsStream(
-							"job/dedupRecordsJob/deleteRecordLink.sql"),
 					"UTF-8"));
 
 	private String prepareTempIsbnTableSql = CharStreams
@@ -700,12 +684,6 @@ public class DedupRecordsJobConfig {
 	public ItemWriter<List<HarvestedRecord>> dedupSimpleKeysStepWriter()
 			throws Exception {
 		return new DedupSimpleKeysStepWriter();
-	}
-
-	@Bean(name = "dedupRecordsJob:updateDedupRecordTasklet")
-	@StepScope
-	public Tasklet updateDedupRecordTasklet() {
-		return new SqlCommandTasklet(updateDedupRecordSql);
 	}
 
 	public class ArrayLongMapper implements RowMapper<List<Long>> {
