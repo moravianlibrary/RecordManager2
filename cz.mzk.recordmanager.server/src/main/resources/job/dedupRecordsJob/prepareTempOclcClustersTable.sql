@@ -10,6 +10,6 @@ SELECT
 FROM harvested_record hr
   INNER JOIN oclc o ON hr.id = o.harvested_record_id
 GROUP BY o.oclc 
-HAVING COUNT(oclc) > 1 AND count(distinct COALESCE(hr.dedup_record_id,1)) >= count(hr.dedup_record_id);
+HAVING COUNT(oclc) > 1 AND count(distinct COALESCE(hr.dedup_record_id,1)) >= count(hr.dedup_record_id) AND max(hr.updated) > (SELECT time FROM last_dedup_time);
 
 CREATE INDEX tmp_oclc_clusters_idx ON tmp_oclc_clusters(row_id);

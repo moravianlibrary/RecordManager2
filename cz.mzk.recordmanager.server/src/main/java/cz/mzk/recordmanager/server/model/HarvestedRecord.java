@@ -114,7 +114,7 @@ public class HarvestedRecord extends AbstractDomainObject {
 	
 	@Column(name="updated")
 	@Temporal(TemporalType.TIMESTAMP)
-	private Date updated;
+	private Date updated = new Date();
 	
 	@Column(name="deleted")
 	@Temporal(TemporalType.TIMESTAMP)

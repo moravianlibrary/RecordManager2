@@ -9,6 +9,6 @@ SELECT
   count(hr.dedup_record_id) dedup_count
 FROM harvested_record hr
 GROUP BY hr.uuid
-HAVING COUNT(uuid) > 1 AND count(distinct COALESCE(hr.dedup_record_id,1)) >= count(hr.dedup_record_id);
+HAVING COUNT(uuid) > 1 AND count(distinct COALESCE(hr.dedup_record_id,1)) >= count(hr.dedup_record_id) AND max(hr.updated) > (SELECT time FROM last_dedup_time);
 
 CREATE INDEX tmp_uuid_clusters_idx ON tmp_uuid_clusters(row_id);

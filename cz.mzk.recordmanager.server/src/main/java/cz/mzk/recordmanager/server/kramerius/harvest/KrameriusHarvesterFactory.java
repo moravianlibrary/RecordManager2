@@ -7,4 +7,7 @@ public interface KrameriusHarvesterFactory {
 	public KrameriusHarvester create(KrameriusHarvesterParams parameters,
 			Long confId);
 
+	public KrameriusHarvesterNoSorting createNoSorting(KrameriusHarvesterParams parameters,
+			Long confId);
+	
 }
