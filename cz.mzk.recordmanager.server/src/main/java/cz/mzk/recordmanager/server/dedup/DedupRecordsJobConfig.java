@@ -37,7 +37,6 @@ import com.google.common.io.CharStreams;
 
 import cz.mzk.recordmanager.server.jdbc.LongValueRowMapper;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
-import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordDAO;
 import cz.mzk.recordmanager.server.springbatch.DelegatingHibernateProcessor;
 import cz.mzk.recordmanager.server.springbatch.SqlCommandTasklet;
 import cz.mzk.recordmanager.server.springbatch.StepProgressListener;
@@ -88,25 +87,10 @@ public class DedupRecordsJobConfig {
 	@Autowired
 	private DataSource dataSource;
 
-	@Autowired
-	private HarvestedRecordDAO harvestedRecordDao;
-
 	private String initDeduplicationSql = CharStreams
 			.toString(new InputStreamReader(getClass() //
 					.getClassLoader().getResourceAsStream(
 							"job/dedupRecordsJob/initDeduplication.sql"),
-					"UTF-8"));
-	
-	private String updateDedupRecordSql = CharStreams
-			.toString(new InputStreamReader(getClass() //
-					.getClassLoader().getResourceAsStream(
-							"job/dedupRecordsJob/updateDedupRecord.sql"),
-					"UTF-8"));
-
-	private String deleteRecordLinkSql = CharStreams
-			.toString(new InputStreamReader(getClass() //
-					.getClassLoader().getResourceAsStream(
-							"job/dedupRecordsJob/deleteRecordLink.sql"),
 					"UTF-8"));
 
 	private String prepareTempIsbnTableSql = CharStreams
@@ -157,6 +141,12 @@ public class DedupRecordsJobConfig {
 							"job/dedupRecordsJob/prepareDedupSimmilarityTable.sql"),
 					"UTF-8"));
 	
+	private String cleanupSql = CharStreams
+			.toString(new InputStreamReader(getClass() //
+					.getClassLoader().getResourceAsStream(
+							"job/dedupRecordsJob/cleanup.sql"),
+					"UTF-8"));
+	
 
 	public DedupRecordsJobConfig() throws IOException {
 	}
@@ -187,7 +177,8 @@ public class DedupRecordsJobConfig {
 			@Qualifier(Constants.JOB_ID_DEDUP + ":prepareDedupSimmilarTitlesStep") Step prepareDedupSimmilarTitles,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":processSimilaritesResultsStep") Step processSimilaritesResultsStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":prepareDedupRestOfRecordsStep") Step prepareDedupRestOfRecordsStep,
-			@Qualifier(Constants.JOB_ID_DEDUP + ":dedupRestOfRecordsStep") Step dedupRestOfRecordsStep) {
+			@Qualifier(Constants.JOB_ID_DEDUP + ":dedupRestOfRecordsStep") Step dedupRestOfRecordsStep,
+			@Qualifier(Constants.JOB_ID_DEDUP + ":cleanupStep") Step cleanupStep) {
 		return jobs.get(Constants.JOB_ID_DEDUP)
 				.validator(new DedupRecordsJobParametersValidator())
 				.start(initStep)
@@ -210,7 +201,7 @@ public class DedupRecordsJobConfig {
 				.next(processSimilaritesResultsStep)
 				.next(prepareDedupRestOfRecordsStep)
 				.next(dedupRestOfRecordsStep)
-				// .next(dropTempTablesStep)
+				.next(cleanupStep)
 				.build();
 	}
 
@@ -667,6 +658,26 @@ public class DedupRecordsJobConfig {
 	}
 	
 	
+/*
+ * 
+ * cleanup
+ */
+	
+	
+	@Bean(name = Constants.JOB_ID_DEDUP + ":cleanupStep")
+	public Step cleanupStep() {
+		return steps.get("cleanupStep")
+				.tasklet(cleanupTasklet())
+				.listener(new StepProgressListener())
+				.build();
+	}
+	
+	@Bean(name = "cleanupStap:cleanupTasklet")
+	@StepScope
+	public Tasklet cleanupTasklet() {
+		return new SqlCommandTasklet(cleanupSql);
+	}
+	
 	
 	
 	
@@ -700,12 +711,6 @@ public class DedupRecordsJobConfig {
 	public ItemWriter<List<HarvestedRecord>> dedupSimpleKeysStepWriter()
 			throws Exception {
 		return new DedupSimpleKeysStepWriter();
-	}
-
-	@Bean(name = "dedupRecordsJob:updateDedupRecordTasklet")
-	@StepScope
-	public Tasklet updateDedupRecordTasklet() {
-		return new SqlCommandTasklet(updateDedupRecordSql);
 	}
 
 	public class ArrayLongMapper implements RowMapper<List<Long>> {

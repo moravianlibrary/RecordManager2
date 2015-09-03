@@ -1,12 +1,13 @@
 CREATE VIEW dedup_record_last_update AS
 SELECT
   dr.id dedup_record_id,
-  MAX(CASE WHEN dr.updated > hr.updated THEN dr.updated ELSE hr.updated END) last_update
+  CASE
+    WHEN dr.updated > (SELECT MAX(updated) FROM harvested_record hr WHERE hr.dedup_record_id = dr.id) 
+       THEN dr.updated
+       ELSE (SELECT MAX(updated) FROM harvested_record hr WHERE hr.dedup_record_id = dr.id) 
+   END last_update
 FROM
-  dedup_record dr JOIN 
-  harvested_record hr ON hr.dedup_record_id = dr.id 
-GROUP BY
-  dr.id
+  dedup_record dr
 ;
 
 CREATE VIEW dedup_record_orphaned AS

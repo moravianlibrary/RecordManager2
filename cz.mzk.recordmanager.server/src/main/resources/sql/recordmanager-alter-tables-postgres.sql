@@ -237,3 +237,9 @@ ALTER TABLE import_conf ADD COLUMN interception_enabled BOOLEAN DEFAULT FALSE;
 
 -- 20. 8. 2015 tomascejpek
 ALTER TABLE import_conf ADD COLUMN is_library BOOLEAN DEFAULT FALSE;
+
+-- 2. 9. 2015 xrosecky
+ALTER TABLE language DROP CONSTRAINT language_pkey;
+ALTER TABLE language DROP COLUMN id;
+DELETE FROM language WHERE harvested_record_id IS NULL;
+ALTER TABLE language ADD CONSTRAINT language_pk PRIMARY KEY (harvested_record_id, lang);

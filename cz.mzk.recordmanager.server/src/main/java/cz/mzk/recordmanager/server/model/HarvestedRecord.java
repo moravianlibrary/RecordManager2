@@ -1,11 +1,14 @@
 package cz.mzk.recordmanager.server.model;
 
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
@@ -17,6 +20,7 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
+import javax.persistence.MapKey;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -115,7 +119,7 @@ public class HarvestedRecord extends AbstractDomainObject {
 	
 	@Column(name="updated")
 	@Temporal(TemporalType.TIMESTAMP)
-	private Date updated;
+	private Date updated = harvested;
 	
 	@Column(name="deleted")
 	@Temporal(TemporalType.TIMESTAMP)
@@ -125,33 +129,32 @@ public class HarvestedRecord extends AbstractDomainObject {
 	private String format;
 	
 	@OneToMany(cascade = CascadeType.ALL)
-	@JoinColumn(name="harvested_record_id", referencedColumnName="id")
+	@JoinColumn(name="harvested_record_id", referencedColumnName="id", nullable=false)
 	private List<Isbn> isbns = new ArrayList<Isbn>();
 	
 	@OneToMany(cascade = CascadeType.ALL)
-	@JoinColumn(name="harvested_record_id", referencedColumnName="id")
+	@JoinColumn(name="harvested_record_id", referencedColumnName="id", nullable=false)
 	private List<Issn> issns = new ArrayList<Issn>();
 	
 	@OneToMany(cascade = CascadeType.ALL)
-	@JoinColumn(name="harvested_record_id", referencedColumnName="id")
+	@JoinColumn(name="harvested_record_id", referencedColumnName="id", nullable=false)
 	private List<Cnb> cnb = new ArrayList<Cnb>();
 	
 	@OneToMany(cascade = CascadeType.ALL)
-	@JoinColumn(name="harvested_record_id", referencedColumnName="id")
+	@JoinColumn(name="harvested_record_id", referencedColumnName="id", nullable=false)
 	private List<Title> titles = new ArrayList<Title>();
 	
 	@OneToMany(cascade = CascadeType.ALL)
-	@JoinColumn(name="harvested_record_id", referencedColumnName="id")
+	@JoinColumn(name="harvested_record_id", referencedColumnName="id", nullable=false)
 	private List<Oclc> oclcs = new ArrayList<Oclc>();
-	
-	@OneToMany(cascade = CascadeType.ALL)
-	@JoinColumn(name="harvested_record_id", referencedColumnName="id")
-	private List<Language> languages = new ArrayList<Language>();
 	
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name="harvested_record_id", referencedColumnName="id")
 	private List<FulltextMonography> fulltextMonography = new ArrayList<>();
 
+	@OneToMany(mappedBy="id.harvestedRecordId", cascade = CascadeType.ALL)
+	@MapKey(name="id.langStr")
+	private Map<String, Language> languages = new HashMap<>();
 
 	// TODO consider moving dedup keys to separate table
 	@Column(name="author_auth_key")
@@ -397,8 +400,6 @@ public class HarvestedRecord extends AbstractDomainObject {
 	public void setPages(Long pages) {
 		this.pages = pages;
 	}
-	
-	
 
 	public List<Oclc> getOclcs() {
 		return oclcs;
@@ -408,12 +409,23 @@ public class HarvestedRecord extends AbstractDomainObject {
 		this.oclcs = oclcs;
 	}
 
-	public List<Language> getLanguages() {
-		return languages;
+	public Set<String> getLanguages() {
+		return languages.keySet();
 	}
-
-	public void setLanguages(List<Language> languages) {
-		this.languages = languages;
+	
+	public void setLanguages(List<String> newLangs) {
+		for (String newLang : newLangs) {
+			if (!languages.containsKey(newLang)) {
+				languages.put(newLang, new Language(this, newLang));
+			}
+		}
+		Iterator<String> iter = languages.keySet().iterator();
+		while (iter.hasNext()) {
+			String lang = iter.next();
+			if (!newLangs.contains(lang)) {
+				iter.remove();
+			}
+		}
 	}
 
 	public boolean getShouldBeProcessed() {
@@ -437,5 +449,4 @@ public class HarvestedRecord extends AbstractDomainObject {
 		return String.format("HarvestedRecord[id=%s, uniqueId=%s]", getId(), getUniqueId());
 	}
 
-	
 }

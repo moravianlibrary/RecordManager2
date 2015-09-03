@@ -141,9 +141,9 @@ CREATE TABLE oclc (
 );
 
 CREATE TABLE language (
-  id                   DECIMAL(10) PRIMARY KEY,
   harvested_record_id  DECIMAL(10),
   lang                 VARCHAR(5),
+  CONSTRAINT language_pk PRIMARY KEY (harvested_record_id, lang),
   CONSTRAINT language_fk  FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id)
 );
 

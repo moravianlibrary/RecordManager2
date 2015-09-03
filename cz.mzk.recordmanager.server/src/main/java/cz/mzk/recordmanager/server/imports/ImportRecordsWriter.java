@@ -1,6 +1,7 @@
 package cz.mzk.recordmanager.server.imports;
 
 import java.io.ByteArrayOutputStream;
+import java.util.Date;
 import java.util.List;
 
 import org.marc4j.MarcWriter;
@@ -16,6 +17,8 @@ import org.springframework.stereotype.Component;
 import cz.mzk.recordmanager.server.dedup.DelegatingDedupKeysParser;
 import cz.mzk.recordmanager.server.marc.MarcRecord;
 import cz.mzk.recordmanager.server.marc.MarcRecordImpl;
+import cz.mzk.recordmanager.server.marc.intercepting.MarcInterceptorFactory;
+import cz.mzk.recordmanager.server.marc.intercepting.MarcRecordInterceptor;
 import cz.mzk.recordmanager.server.metadata.MetadataRecord;
 import cz.mzk.recordmanager.server.metadata.MetadataRecordFactory;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
@@ -42,6 +45,9 @@ public class ImportRecordsWriter implements ItemWriter<List<Record>> {
 	@Autowired
 	private MetadataRecordFactory metadataFactory;
 	
+	@Autowired 
+	private MarcInterceptorFactory marcInterceptorFactory;
+	
 	private OAIHarvestConfiguration harvestConfiguration;
 	
 	private Long configurationId;
@@ -63,16 +69,28 @@ public class ImportRecordsWriter implements ItemWriter<List<Record>> {
 					MetadataRecord metadata = metadataFactory.getMetadataRecord(marc);
 					String recordId = metadata.getOAIRecordId();
 					if(recordId == null) recordId = metadata.getUniqueId();
-					HarvestedRecordUniqueId id = new HarvestedRecordUniqueId(harvestConfiguration, recordId);
-					HarvestedRecord hr = new HarvestedRecord(id );
+					HarvestedRecord hr = harvestedRecordDao.findByIdAndHarvestConfiguration(recordId, configurationId);
+					if(hr == null){
+						HarvestedRecordUniqueId id = new HarvestedRecordUniqueId(harvestConfiguration, recordId);
+						hr = new HarvestedRecord(id);
+//						TODO detect format
+						hr.setFormat("marc21-xml");
+						hr.setHarvestedFrom(harvestConfiguration);
+					}
+					hr.setUpdated(new Date());
 					ByteArrayOutputStream outStream = new ByteArrayOutputStream();
 					MarcWriter marcWriter = new MarcXmlWriter(outStream, true);
 					marcWriter.write(currentRecord);
 					marcWriter.close();
-					hr.setRawRecord(outStream.toByteArray());
-//					TODO detect format
-					hr.setFormat("marc21-xml");
-					hr.setHarvestedFrom(harvestConfiguration);					
+					byte[] recordContent = outStream.toByteArray();
+					if (harvestConfiguration.isInterceptionEnabled()) {
+						MarcRecordInterceptor interceptor = marcInterceptorFactory.getInterceptor(harvestConfiguration,recordContent);
+						if (interceptor != null) {
+							recordContent = interceptor.intercept();
+						}
+					}
+					hr.setRawRecord(recordContent);
+					harvestedRecordDao.persist(hr);
 					dedupKeysParser.parse(hr, metadata);
 					
 					if (harvestConfiguration.isFilteringEnabled() && !hr.getShouldBeProcessed()) {

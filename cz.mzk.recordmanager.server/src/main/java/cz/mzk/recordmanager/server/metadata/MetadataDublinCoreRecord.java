@@ -1,6 +1,7 @@
 package cz.mzk.recordmanager.server.metadata;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -179,14 +180,11 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 						if(!issn.issnValidator(matcher.group(1).trim())){
 							throw new NumberFormatException();
 						}					
-						issn.setIssn(matcher.group(1).trim());
-						
-						
+						issn.setIssn(matcher.group(1).trim());						
 						issn.setNote("");
 						issn.setOrderInRecord(++issnCounter);
 						issns.add(issn);
-					}
-					
+					}			
 				} catch (NumberFormatException e) {
 					logger.info(String.format("Invalid ISSN: %s", dcIssn));
 					continue;
@@ -198,14 +196,8 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 	}
 
 	@Override
-	public String getISSNSeries() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public Long getPageCount() {
-		// TODO Auto-generated method stub
+		// getting page count from dc:format via regexp is not accurate enough ... leaving with null
 		return null;
 	}
 
@@ -261,20 +253,26 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 	}
 
 	@Override
+	public String getISSNSeries() {
+		// difficult do identify.. leaving with null
+		return null;
+	}
+	
+	@Override
 	public String getISSNSeriesOrder() {
-		// TODO Auto-generated method stub
+		// no way how to get.. leaving with null
 		return null;
 	}
 
 	@Override
 	public Long getWeight(Long baseWeight) {
-		// TODO Auto-generated method stub
+		// leaving with null
 		return null;
 	}
 
 	@Override
 	public Long getScale() {
-		// TODO Auto-generated method stub
+		// leaving with null
 		return null;
 	}
 
@@ -297,14 +295,13 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 
 	@Override
 	public String getAuthorAuthKey() {
-		// TODO Auto-generated method stub
+		// can't get authority key from DC .. leaving with null
 		return null;
 	}
 
 	@Override
 	public String getAuthorString() {
-		// TODO Auto-generated method stub
-		return null;
+		return dcRecord.getFirstCreator();
 	}
 
 	@Override
@@ -320,9 +317,8 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 	}
 
 	@Override
-	public List<Language> getLanguages() {
-		// TODO Auto-generated method stub
-		return null;
+	public List<String> getLanguages() {
+		return Collections.emptyList();
 	}
 
 	@Override

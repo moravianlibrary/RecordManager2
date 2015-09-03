@@ -738,7 +738,7 @@ public class MarcRecordImplTest extends AbstractTest {
 		mri = MarcRecordFactory.recordFactory(data);
 		metadataRecord = metadataFactory.getMetadataRecord(mri);
 		Assert.assertEquals(metadataRecord.getLanguages().size(), 1);
-		Assert.assertEquals(metadataRecord.getLanguages().get(0).getLangStr(), "oth");
+		Assert.assertTrue(metadataRecord.getLanguages().contains("oth"));
 		
 		data = new ArrayList<>();
 		data.add("008 960925s1891    gw ||||| |||||||||||eng|d");		
@@ -746,7 +746,7 @@ public class MarcRecordImplTest extends AbstractTest {
 		mri = MarcRecordFactory.recordFactory(data);
 		metadataRecord = metadataFactory.getMetadataRecord(mri);
 		Assert.assertEquals(metadataRecord.getLanguages().size(), 1);
-		Assert.assertEquals(metadataRecord.getLanguages().get(0).getLangStr(), "eng");
+		Assert.assertTrue(metadataRecord.getLanguages().get(0).contains("eng"));
 		
 		data = new ArrayList<>();
 		data.add("008 960925s1891    gw ||||| |||||||||||bel|d");		

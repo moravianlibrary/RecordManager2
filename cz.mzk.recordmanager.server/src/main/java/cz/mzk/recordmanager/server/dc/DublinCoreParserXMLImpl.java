@@ -8,6 +8,9 @@ import javax.xml.parsers.SAXParserFactory;
 
 import org.apache.commons.io.IOUtils;
 import org.springframework.stereotype.Component;
+import org.xml.sax.SAXParseException;
+
+import cz.mzk.recordmanager.server.marc.InvalidMarcException;
 
 @Component
 public class DublinCoreParserXMLImpl implements DublinCoreParser {
@@ -25,6 +28,8 @@ public class DublinCoreParserXMLImpl implements DublinCoreParser {
 			DublinCoreRecord dcRecord = handler.getRecord();
 			dcRecord.setRawRecord(input);
 			return handler.getRecord();
+		} catch (SAXParseException se) {
+			throw new InvalidDcException (se.getMessage(), se);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}

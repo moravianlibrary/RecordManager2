@@ -27,6 +27,7 @@ public class MarcInterceptorFactory {
 			switch (prefix){
 			case Constants.PREFIX_CASLIN: return new SkatMarcInterceptor(record);
 			case Constants.PREFIX_MZKNORMS: return new MzkNormsMarcInterceptor(record);
+			case Constants.PREFIX_NLK: return new NlkMarcInterceptor(record);
 			default: return new DefaultMarcInterceptor(record);
 			}
 		} catch (InvalidMarcException ime) {
