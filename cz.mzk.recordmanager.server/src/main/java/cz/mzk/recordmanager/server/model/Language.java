@@ -28,6 +28,10 @@ public class Language {
 		@Column(name="lang")
 		private String langStr;
 
+		// for hibernate
+		private LanguageId(){
+		}
+		
 		public LanguageId(long harvestedRecordId, String langStr) {
 			super();
 			this.harvestedRecordId = harvestedRecordId;
@@ -65,6 +69,9 @@ public class Language {
 	@EmbeddedId
 	private LanguageId id;
 
+	private Language(){
+	}
+	
 	public Language(HarvestedRecord record, String language) {
 		super();
 		Preconditions.checkNotNull(record, "record");
