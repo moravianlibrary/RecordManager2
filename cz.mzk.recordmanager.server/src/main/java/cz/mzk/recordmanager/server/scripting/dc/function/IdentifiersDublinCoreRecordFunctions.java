@@ -14,6 +14,7 @@ public class IdentifiersDublinCoreRecordFunctions implements
 		DublinCoreRecordFunctions {
 
 	private static final Pattern ISBN_PATTERN = Pattern.compile("isbn|ISBN:([\\d]+)");
+	private static final Pattern ISSN_PATTERN = Pattern.compile("(\\d{4}-\\d{3}[\\dxX])(.*)");
 
 	public List<String> getISBNs(DublinCoreRecord record) {
 		List<String> isbns = new ArrayList<String>();
@@ -26,4 +27,14 @@ public class IdentifiersDublinCoreRecordFunctions implements
 		return isbns;
 	}
 
+	public List<String> getISSNs(DublinCoreRecord record) {
+		List<String> issns = new ArrayList<String>();
+		for (String ident : record.getIdentifiers()) {
+			Matcher matcher = ISSN_PATTERN.matcher(ident);
+			if (matcher.matches()) {
+				issns.add(matcher.group(1));
+			}
+		}
+		return issns;
+	}
 }
