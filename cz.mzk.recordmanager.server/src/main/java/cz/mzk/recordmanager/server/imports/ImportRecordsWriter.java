@@ -64,17 +64,20 @@ public class ImportRecordsWriter implements ItemWriter<List<Record>> {
 					MetadataRecord metadata = metadataFactory.getMetadataRecord(marc);
 					String recordId = metadata.getOAIRecordId();
 					if(recordId == null) recordId = metadata.getUniqueId();
-					HarvestedRecordUniqueId id = new HarvestedRecordUniqueId(harvestConfiguration, recordId);
-					HarvestedRecord hr = new HarvestedRecord(id);
+					HarvestedRecord hr = harvestedRecordDao.findByIdAndHarvestConfiguration(recordId, configurationId);
+					if(hr == null){
+						HarvestedRecordUniqueId id = new HarvestedRecordUniqueId(harvestConfiguration, recordId);
+						hr = new HarvestedRecord(id);
+//						TODO detect format
+						hr.setFormat("marc21-xml");
+						hr.setHarvestedFrom(harvestConfiguration);
+					}
 					hr.setUpdated(new Date());
 					ByteArrayOutputStream outStream = new ByteArrayOutputStream();
 					MarcWriter marcWriter = new MarcXmlWriter(outStream, true);
 					marcWriter.write(currentRecord);
 					marcWriter.close();
 					hr.setRawRecord(outStream.toByteArray());
-//					TODO detect format
-					hr.setFormat("marc21-xml");
-					hr.setHarvestedFrom(harvestConfiguration);
 					harvestedRecordDao.persist(hr);
 					dedupKeysParser.parse(hr, metadata);
 					
