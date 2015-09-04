@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 
 import cz.mzk.recordmanager.server.marc.MarcRecord;
 import cz.mzk.recordmanager.server.scripting.marc.MarcFunctionContext;
+import cz.mzk.recordmanager.server.util.Constants;
 
 @Component
 public class GetStatusesMarcFunctions implements MarcRecordFunctions {
@@ -31,14 +32,14 @@ public class GetStatusesMarcFunctions implements MarcRecordFunctions {
 		MarcRecord record = ctx.record();
 		List<String> statuses = new ArrayList<String>();
 		statuses.addAll(getStatuses(record, "996"));
-		statuses.add(getStatusFrom856(record, "856"));		
+		statuses.add(getStatusFrom856(record, "856"));	
 		return statuses;
 	}
 
 	private String getStatusFrom856(MarcRecord record, String statusField) {
 		for(DataField field: record.getDataFields(statusField)){
 			if(field.getIndicator1() == '4' && (field.getIndicator2() == '0' || field.getIndicator2() =='1')){			
-				return ONLINE;
+				return "1/" + ONLINE + "/" + Constants.DOCUMENT_AVAILABILITY_UNKNOWN;
 			}
 		}
 		return null;
@@ -84,22 +85,22 @@ public class GetStatusesMarcFunctions implements MarcRecordFunctions {
 			}
 		}
 		if (absent) {
-			statuses.add("absent");
+			statuses.add("0/absent");
 		}
 		if (present) {
-			statuses.add("present");
+			statuses.add("0/present");
 		}
 		if (unknown) {
-			statuses.add("unknown");
+			statuses.add("0/unknown");
 		}
 		if (unspecified) {
-			statuses.add("unspecified");
+			statuses.add("0/unspecified");
 		}
 		if (limited) {
-			statuses.add("limited");
+			statuses.add("0/limited");
 		}
 		if (temporary) {
-			statuses.add("temporary");
+			statuses.add("0/temporary");
 		}
 		return statuses;
 	}

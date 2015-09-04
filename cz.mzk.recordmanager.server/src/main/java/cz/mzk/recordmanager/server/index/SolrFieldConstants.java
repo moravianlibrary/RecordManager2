@@ -36,6 +36,7 @@ public class SolrFieldConstants {
 	
 	public static final String URL = "url";
 	
+	public static final String LOCAL_STATUSES_FACET = "local_statuses_facet_str_mv";
 	/**
 	 * dummy fields used for processing purposes only, shouldn't be indexed. Fields are deleted in AuthorityEnricher. 
 	 */

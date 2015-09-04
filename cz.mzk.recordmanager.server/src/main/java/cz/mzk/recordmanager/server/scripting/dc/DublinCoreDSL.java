@@ -129,5 +129,13 @@ public class DublinCoreDSL extends BaseDSL {
 		}
 		return func.apply(record, args);
 	}
+	
+	public String getStatuses() {
+		switch (getRights()) {
+		case Constants.DOCUMENT_AVAILABILITY_ONLINE: return "1/online/" + Constants.DOCUMENT_AVAILABILITY_ONLINE;
+		case Constants.DOCUMENT_AVAILABILITY_PROTECTED: return "1/online/" + Constants.DOCUMENT_AVAILABILITY_PROTECTED;
+		default: return "1/online/" + Constants.DOCUMENT_AVAILABILITY_UNKNOWN;
+		}
+	}
 
 }

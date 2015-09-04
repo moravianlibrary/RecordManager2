@@ -76,7 +76,8 @@ period_facet_str_mv = getPeriod()
 bbox_geo = getBoundingBoxAsPolygon()
 bbox_geo_str = getBoundingBox()
 
-statuses = getStatuses()
+// no need for this field?
+//statuses = getStatuses()
 
 // deprecated
 title_display = getFirstField "245abnp"

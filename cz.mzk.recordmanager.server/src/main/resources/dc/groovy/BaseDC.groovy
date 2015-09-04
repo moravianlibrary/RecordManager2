@@ -18,6 +18,7 @@ publisher = getPublishers()
 
 topic = getSubjects()
 
+local_statuses_facet_str_mv = getStatuses()
 fullrecord = getFullRecord()
 
 authors_dummy = ""
