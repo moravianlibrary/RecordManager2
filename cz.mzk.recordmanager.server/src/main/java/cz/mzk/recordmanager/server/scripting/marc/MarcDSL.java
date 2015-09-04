@@ -19,6 +19,7 @@ import cz.mzk.recordmanager.server.metadata.MetadataMarcRecord;
 import cz.mzk.recordmanager.server.scripting.BaseDSL;
 import cz.mzk.recordmanager.server.scripting.MappingResolver;
 import cz.mzk.recordmanager.server.scripting.function.RecordFunction;
+import cz.mzk.recordmanager.server.util.Constants;
 
 public class MarcDSL extends BaseDSL {
 
@@ -274,6 +275,14 @@ public class MarcDSL extends BaseDSL {
     			currentSb.append(subfield.getData());
     		}
     		result.add(currentSb.toString());
+    	}
+    	return result;
+    }
+    
+    public List<String> getUrls() {
+    	List<String> result = new ArrayList<>();
+    	for (String fieldValue: getFields("856u")) {
+    		result.add(Constants.DOCUMENT_AVAILABILITY_UNKNOWN + "|" + fieldValue);
     	}
     	return result;
     }

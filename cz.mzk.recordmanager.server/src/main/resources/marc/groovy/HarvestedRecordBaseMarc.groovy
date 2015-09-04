@@ -16,7 +16,7 @@ ean_display_mv = getEAN()
 isbn_display_mv = getFields "020a"
 nbn_display = getFirstField "015a"
 
-url = getFields "856u"
+url = getUrls()
 local_statuses_facet_str_mv = getStatuses()
 
 holdings_996_str_mv = getHoldings996()

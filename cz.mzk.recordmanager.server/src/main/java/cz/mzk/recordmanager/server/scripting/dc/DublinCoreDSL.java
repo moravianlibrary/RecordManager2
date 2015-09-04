@@ -1,6 +1,5 @@
 package cz.mzk.recordmanager.server.scripting.dc;
 
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.Map;
@@ -8,9 +7,9 @@ import java.util.Map;
 import cz.mzk.recordmanager.server.dc.DublinCoreRecord;
 import cz.mzk.recordmanager.server.metadata.MetadataDublinCoreRecord;
 import cz.mzk.recordmanager.server.scripting.BaseDSL;
-import cz.mzk.recordmanager.server.scripting.Mapping;
 import cz.mzk.recordmanager.server.scripting.MappingResolver;
 import cz.mzk.recordmanager.server.scripting.function.RecordFunction;
+import cz.mzk.recordmanager.server.util.Constants;
 
 public class DublinCoreDSL extends BaseDSL {
 
@@ -40,6 +39,15 @@ public class DublinCoreDSL extends BaseDSL {
 		} catch (UnsupportedEncodingException e) {}
 		return result;
 	}
+	
+	public String getRights() {
+		List<String> rights = record.getRights();
+		if (rights == null || rights.isEmpty()) {
+			return Constants.DOCUMENT_AVAILABILITY_UNKNOWN;
+		}
+		return rights.stream().anyMatch(s -> s.matches(".*public.*")) ? Constants.DOCUMENT_AVAILABILITY_ONLINE : Constants.DOCUMENT_AVAILABILITY_PROTECTED;
+	}
+	
 	public List<String> getOtherTitles() {
 		List<String> titles = record.getTitles();
 //		System.out.print("--titles---------------" + titles.toString());
@@ -97,11 +105,6 @@ public class DublinCoreDSL extends BaseDSL {
 		/* more to come..*/
 //		System.out.println("getAllFields: " + result);
 		return result;
-	}
-	
-	public String getFullrecord() {
-		//TODO <MJ.> decide how should export work
-		return getAllFields();		
 	}
 	
 	public String getDescriptionText() {

@@ -34,12 +34,19 @@ public class SolrFieldConstants {
 	
 	public static final String AUTHOR_FIELD_SEARCH = "author_search";
 	
+	public static final String URL = "url";
+	
 	/**
 	 * dummy fields used for processing purposes only, shouldn't be indexed. Fields are deleted in AuthorityEnricher. 
 	 */
 	public static final String AUTHOR_AUTHORITY_DUMMY_FIELD = "authority_dummy_field";
 	
 	public static final String AUTHOR_DUMMY_FIELD = "authors_dummy";
+	
+	/**
+	 * dummy field for passing kramerius policy
+	 */
+	public static final String KRAMERIUS_DUMMY_RIGTHS = "kramerius_dummy_rights";
 	
 
 }

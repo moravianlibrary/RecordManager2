@@ -34,7 +34,10 @@ import cz.mzk.recordmanager.server.model.DedupRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecordFormat.HarvestedRecordFormatEnum;
 import cz.mzk.recordmanager.server.model.ImportConfiguration;
+import cz.mzk.recordmanager.server.model.KrameriusConfiguration;
+import cz.mzk.recordmanager.server.oai.dao.KrameriusConfigurationDAO;
 import cz.mzk.recordmanager.server.scripting.MappingResolver;
+import cz.mzk.recordmanager.server.util.Constants;
 import cz.mzk.recordmanager.server.util.SolrUtils;
 
 @Component
@@ -81,6 +84,11 @@ public class SolrInputDocumentFactoryImpl implements SolrInputDocumentFactory, I
 	@Autowired
 	private MetadataRecordFactory metadataFactory;
 	
+	@Autowired 
+	private KrameriusConfigurationDAO krameriusConfiguationDao;
+	
+	private Map<Long,String> krameriusBaseLinkMap = new HashMap<>();
+	
 	@Override
 	public SolrInputDocument create(HarvestedRecord record) {
 		try {
@@ -91,6 +99,13 @@ public class SolrInputDocumentFactoryImpl implements SolrInputDocumentFactory, I
 			if (!document.containsKey(SolrFieldConstants.ID_FIELD)) {
 				document.addField(SolrFieldConstants.ID_FIELD, id);
 			}
+			
+			String krameriusUrl = generateKrameriusUrl(record, document);
+			if (krameriusUrl != null) {
+				document.remove(SolrFieldConstants.URL);
+				document.addField(SolrFieldConstants.URL, krameriusUrl);
+			}
+			
 			document.addField(SolrFieldConstants.LOCAL_INSTITUTION_FIELD, getInstitutionOfRecord(record));
 			document.addField(SolrFieldConstants.CITY_INSTITUTION_CS, getCityInstitutionForSearching(record));
 			document.addField(SolrFieldConstants.MERGED_CHILD_FIELD, 1);
@@ -128,6 +143,8 @@ public class SolrInputDocumentFactoryImpl implements SolrInputDocumentFactory, I
 		dedupRecordEnrichers.forEach(enricher -> enricher.enrich(dedupRecord, mergedDocument, childs));
 		mergedDocument.addChildDocuments(childs);
 
+		mergedDocument.remove(SolrFieldConstants.KRAMERIUS_DUMMY_RIGTHS);
+		
 		if (logger.isTraceEnabled()) {
 			logger.info("Mapping of dedupRecord with id = {} finished", dedupRecord.getId());
 		}
@@ -271,4 +288,32 @@ public class SolrInputDocumentFactoryImpl implements SolrInputDocumentFactory, I
 				
 	}
 
+	/**
+	 * generate link to Kramerius in standard format "policy code"|"url"
+	 * removes field KRAMERIUS_DUMMY_RIGTHS from document
+	 * @param record
+	 * @param document
+	 * @return
+	 */
+	protected String generateKrameriusUrl(final HarvestedRecord record, final SolrInputDocument document) {
+		String kramUrl = null;
+		if (Constants.METADATA_FORMAT_DUBLIN_CORE.equals(record.getFormat())) {
+			Long importConfId = record.getHarvestedFrom().getId();
+			if (!krameriusBaseLinkMap.containsKey(importConfId)) {
+				KrameriusConfiguration kramConf = krameriusConfiguationDao.get(importConfId);
+				if (kramConf.getUrl() != null) {
+					String kramUrlBase = Pattern.compile("api/v\\d\\.\\d").matcher(kramConf.getUrl()).replaceAll("");
+					krameriusBaseLinkMap.put(importConfId, kramUrlBase);
+				}
+			}
+	
+			if (krameriusBaseLinkMap.containsKey(importConfId)) {
+				String policy = (String) document.getFieldValue(SolrFieldConstants.KRAMERIUS_DUMMY_RIGTHS);
+				kramUrl = policy + "|" + krameriusBaseLinkMap.get(importConfId) + "i.jsp?pid=" + record.getUniqueId().getRecordId();
+			}
+		}
+
+		document.remove(SolrFieldConstants.KRAMERIUS_DUMMY_RIGTHS);
+		return kramUrl;
+	}
 }

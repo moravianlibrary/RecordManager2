@@ -2,7 +2,6 @@ recordtype = "dublinCore"
 title = getFirstTitle()
 
 allfields = getAllFields()
-fullrecord = getFullrecord()
 
 author = getFirstCreator()
 author_search = getFirstCreator()
@@ -23,3 +22,4 @@ fullrecord = getFullRecord()
 
 authors_dummy = ""
 authority_dummy_field = ""
+kramerius_dummy_rights = getRights()

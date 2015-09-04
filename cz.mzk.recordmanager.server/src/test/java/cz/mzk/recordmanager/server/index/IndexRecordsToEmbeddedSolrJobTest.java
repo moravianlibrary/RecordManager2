@@ -128,6 +128,31 @@ public class IndexRecordsToEmbeddedSolrJobTest extends AbstractTest {
 				Assert.assertTrue(fullRecord.length() > 0);
 			}
 			
+			{
+				// check for url
+				SolrQuery dcQuery = new SolrQuery();
+				dcQuery.set("q", "id:96");
+				QueryResponse docResponse = server.query(dcQuery);
+				Assert.assertEquals(docResponse.getResults().size(), 1);
+				SolrDocument document = docResponse.getResults().get(0);
+				Assert.assertTrue(
+						document.getFieldValues("url").stream()
+							.anyMatch(url -> url.equals("unknown|http://krameriusndktest.mzk.cz/search/handle/uuid:f1401080-de25-11e2-9923-005056827e52"))
+				);
+			}
+			
+			{
+				// check for Kramerius url
+				SolrQuery dcQuery = new SolrQuery();
+				dcQuery.set("q", "id:100");
+				QueryResponse docResponse = server.query(dcQuery);
+				Assert.assertEquals(docResponse.getResults().size(), 1);
+				SolrDocument document = docResponse.getResults().get(0);
+				Assert.assertTrue(
+						document.getFieldValues("url").stream()
+							.anyMatch(url -> url.equals("online|http://kramerius.mzk.cz/search/i.jsp?pid=UUID:039764f8-d6db-11e0-b2cd-0050569d679d"))
+				);
+			}
 		} finally {
 			server.shutdown();
 		}
