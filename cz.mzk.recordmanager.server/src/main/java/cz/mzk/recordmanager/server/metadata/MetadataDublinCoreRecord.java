@@ -34,8 +34,12 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 	protected static final Pattern ISSN_PATTERN = Pattern.compile("(\\d{4}-\\d{3}[\\dxX])(.*)");
 	
 	protected static final Pattern DC_UUID_PATTERN = Pattern.compile("^uuid:(.*)",Pattern.CASE_INSENSITIVE);
-	protected static final Pattern DC_ISBN_PATTERN = Pattern
+/*	protected static final Pattern DC_ISBN_PATTERN = Pattern
 			.compile("isbn:(.*),Pattern.CASE_INSENSITIVE");
+*/
+	protected static final Pattern DC_ISBN_PATTERN = Pattern
+			.compile("isbn:\\s*([\\dxX-]*)",Pattern.CASE_INSENSITIVE);
+	
 	protected static final Pattern DC_ISSN_PATTERN = Pattern
 			.compile("issn:(.*)",Pattern.CASE_INSENSITIVE);
 	protected static final Pattern DC_CNB_PATTERN = Pattern
@@ -223,6 +227,20 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 		return false;
 	}
 
+	/* there may be more than one rights value in Kramerius, but only one "policy:.*" */
+	public String getPolicy(){
+		List<String> rights = dcRecord.getRights();
+		String policy = "unknown";
+		for (String f : rights) {
+			if (f.equals("policy:public")) {
+				return "public";
+			} else if (f.equals("policy:private")) {
+				return "private";
+			}
+		}
+		return policy;
+	}
+	
 	@Override
 	public List<HarvestedRecordFormatEnum> getDetectedFormatList() {
 		List<HarvestedRecordFormatEnum> hrf = new ArrayList<HarvestedRecordFormatEnum>();

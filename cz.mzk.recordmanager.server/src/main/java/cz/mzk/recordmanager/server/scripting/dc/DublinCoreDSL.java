@@ -1,14 +1,15 @@
 package cz.mzk.recordmanager.server.scripting.dc;
 
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import cz.mzk.recordmanager.server.dc.DublinCoreRecord;
 import cz.mzk.recordmanager.server.metadata.MetadataDublinCoreRecord;
+import cz.mzk.recordmanager.server.model.Isbn;
+import cz.mzk.recordmanager.server.model.Issn;
 import cz.mzk.recordmanager.server.scripting.BaseDSL;
-import cz.mzk.recordmanager.server.scripting.Mapping;
 import cz.mzk.recordmanager.server.scripting.MappingResolver;
 import cz.mzk.recordmanager.server.scripting.function.RecordFunction;
 
@@ -40,6 +41,7 @@ public class DublinCoreDSL extends BaseDSL {
 		} catch (UnsupportedEncodingException e) {}
 		return result;
 	}
+	
 	public List<String> getOtherTitles() {
 		List<String> titles = record.getTitles();
 //		System.out.print("--titles---------------" + titles.toString());
@@ -61,7 +63,7 @@ public class DublinCoreDSL extends BaseDSL {
 	public List<String> getOtherCreators() {
 		List<String> creators = record.getCreators();
 		List<String> contributors = record.getContributors();
-		if (!creators.isEmpty() && creators.size()>1) {
+		if (!creators.isEmpty()) {
 			creators.remove(0); //removes first creator who goes to different field
 		}
 		if (!contributors.isEmpty()) {
@@ -95,7 +97,7 @@ public class DublinCoreDSL extends BaseDSL {
 		if (!record.getPublishers().isEmpty()) {result = result + record.getPublishers().toString();}
 		if (!record.getDates().isEmpty()) {result = result + record.getDates().toString();}
 		/* more to come..*/
-//		System.out.println("getAllFields: " + result);
+		System.out.println("getAllFields: " + result);
 		return result;
 	}
 	
@@ -117,6 +119,38 @@ public class DublinCoreDSL extends BaseDSL {
 		}
 		return result;
 		
+	}
+	
+	public String getPolicy() {
+		return dcMetadataRecord.getPolicy();
+	}
+	
+	public List<String> getISBNs() {
+		List<Isbn> isbns = dcMetadataRecord.getISBNs();
+		List<String> isbnsS = new ArrayList<String>();
+		
+	    for (Isbn n: isbns) {
+	    	String isbn = n.getIsbn().toString();
+	    	isbnsS.add(isbn);
+	    }
+	    return isbnsS;    
+	}
+	
+	public List<String> getISSNs() {
+		List<Issn> issns = dcMetadataRecord.getISSNs();
+		List<String> issnsS = new ArrayList<String>();
+		
+	    for (Issn n: issns) {
+	    	String issn = n.getIssn().toString();
+	    	issnsS.add(issn);
+	    }
+	    return issnsS;    
+	}
+	
+	public String getCompleteFulltext () {
+		String fulltext="";
+//TODO		record.get
+		return fulltext;
 	}
 
 	public Object methodMissing(String methodName, Object args) {
