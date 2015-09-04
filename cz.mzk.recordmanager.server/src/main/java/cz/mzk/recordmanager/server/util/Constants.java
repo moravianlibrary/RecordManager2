@@ -45,11 +45,12 @@ public class Constants {
 	public static final String PREFIX_MZKNORMS			= "mzknorms";
 	public static final String PREFIX_SFXJIBMZK			= "sfxjibmzk";
 	public static final String PREFIX_SFXJIBNLK			= "sfxjibnlk";
-	
+	public static final String PREFIX_NLK				= "nlk";
+
 	public static final String DOCUMENT_AVAILABILITY_ONLINE     = "online";
 	public static final String DOCUMENT_AVAILABILITY_PROTECTED  = "protected";
 	public static final String DOCUMENT_AVAILABILITY_UNKNOWN    = "unknown";
-	
+
 	public static final String JOB_PARAM_RECORD_ID		= "recordId";
 	/* need some changing paramteter :-/ - 
 	 * A job instance already exists and is complete for parameters={}. 

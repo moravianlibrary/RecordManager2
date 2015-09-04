@@ -17,6 +17,8 @@ import org.springframework.stereotype.Component;
 import cz.mzk.recordmanager.server.dedup.DelegatingDedupKeysParser;
 import cz.mzk.recordmanager.server.marc.MarcRecord;
 import cz.mzk.recordmanager.server.marc.MarcRecordImpl;
+import cz.mzk.recordmanager.server.marc.intercepting.MarcInterceptorFactory;
+import cz.mzk.recordmanager.server.marc.intercepting.MarcRecordInterceptor;
 import cz.mzk.recordmanager.server.metadata.MetadataRecord;
 import cz.mzk.recordmanager.server.metadata.MetadataRecordFactory;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
@@ -42,6 +44,9 @@ public class ImportRecordsWriter implements ItemWriter<List<Record>> {
 	
 	@Autowired
 	private MetadataRecordFactory metadataFactory;
+	
+	@Autowired 
+	private MarcInterceptorFactory marcInterceptorFactory;
 	
 	private OAIHarvestConfiguration harvestConfiguration;
 	
@@ -77,7 +82,14 @@ public class ImportRecordsWriter implements ItemWriter<List<Record>> {
 					MarcWriter marcWriter = new MarcXmlWriter(outStream, true);
 					marcWriter.write(currentRecord);
 					marcWriter.close();
-					hr.setRawRecord(outStream.toByteArray());
+					byte[] recordContent = outStream.toByteArray();
+					if (harvestConfiguration.isInterceptionEnabled()) {
+						MarcRecordInterceptor interceptor = marcInterceptorFactory.getInterceptor(harvestConfiguration,recordContent);
+						if (interceptor != null) {
+							recordContent = interceptor.intercept();
+						}
+					}
+					hr.setRawRecord(recordContent);
 					harvestedRecordDao.persist(hr);
 					dedupKeysParser.parse(hr, metadata);
 					
