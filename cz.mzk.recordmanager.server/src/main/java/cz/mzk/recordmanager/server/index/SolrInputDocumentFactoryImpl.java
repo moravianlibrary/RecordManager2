@@ -3,6 +3,7 @@ package cz.mzk.recordmanager.server.index;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.EnumSet;
 import java.util.HashMap;
@@ -100,11 +101,8 @@ public class SolrInputDocumentFactoryImpl implements SolrInputDocumentFactory, I
 				document.addField(SolrFieldConstants.ID_FIELD, id);
 			}
 			
-			String krameriusUrl = generateKrameriusUrl(record, document);
-			if (krameriusUrl != null) {
-				document.remove(SolrFieldConstants.URL);
-				document.addField(SolrFieldConstants.URL, krameriusUrl);
-			}
+			generateUrls(record, document);
+
 			
 			document.addField(SolrFieldConstants.LOCAL_INSTITUTION_FIELD, getInstitutionOfRecord(record));
 			document.addField(SolrFieldConstants.CITY_INSTITUTION_CS, getCityInstitutionForSearching(record));
@@ -289,13 +287,24 @@ public class SolrInputDocumentFactoryImpl implements SolrInputDocumentFactory, I
 	}
 
 	/**
-	 * generate link to Kramerius in standard format "policy code"|"url"
+	 * generate links in standard format "institution code"|"policy code"|"url"
 	 * removes field KRAMERIUS_DUMMY_RIGTHS from document
 	 * @param record
 	 * @param document
 	 * @return
 	 */
-	protected String generateKrameriusUrl(final HarvestedRecord record, final SolrInputDocument document) {
+	protected void generateUrls(final HarvestedRecord record, final SolrInputDocument document) {
+		String institutionCode = record.getHarvestedFrom().getIdPrefix();
+		Set<String> urls = new HashSet<>();
+		if (document.containsKey(SolrFieldConstants.URL)) {
+			for (Object obj: document.getFieldValues(SolrFieldConstants.URL)) {
+				if (obj instanceof String) {
+					urls.add((String)obj);
+				}
+			}
+		}
+		
+		//handle Kramerius url
 		String kramUrl = null;
 		if (Constants.METADATA_FORMAT_DUBLIN_CORE.equals(record.getFormat())) {
 			Long importConfId = record.getHarvestedFrom().getId();
@@ -309,11 +318,17 @@ public class SolrInputDocumentFactoryImpl implements SolrInputDocumentFactory, I
 	
 			if (krameriusBaseLinkMap.containsKey(importConfId)) {
 				String policy = (String) document.getFieldValue(SolrFieldConstants.KRAMERIUS_DUMMY_RIGTHS);
+				// FIXME probably not best way of generating urls
 				kramUrl = policy + "|" + krameriusBaseLinkMap.get(importConfId) + "i.jsp?pid=" + record.getUniqueId().getRecordId();
+				urls.add(kramUrl);
 			}
 		}
-
+		
 		document.remove(SolrFieldConstants.KRAMERIUS_DUMMY_RIGTHS);
-		return kramUrl;
+		document.remove(SolrFieldConstants.URL);
+		
+		Set<String> result = new HashSet<>();
+		urls.stream().forEach(url -> result.add(institutionCode + "|" + url));
+		document.addField(SolrFieldConstants.URL, result);
 	}
 }
