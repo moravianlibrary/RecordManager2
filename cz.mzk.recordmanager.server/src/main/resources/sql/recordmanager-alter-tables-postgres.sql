@@ -246,3 +246,4 @@ ALTER TABLE language ADD CONSTRAINT language_pk PRIMARY KEY (harvested_record_id
 
 -- 6. 9. 2015 mertam 
 UPDATE import_conf set id_prefix = 'unmz' where id = 320
+update oai_harvest_conf set set_spec = 'CPK' where import_conf_id = 307
