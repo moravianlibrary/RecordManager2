@@ -3,7 +3,6 @@ package cz.mzk.recordmanager.server.index;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.EnumSet;
 import java.util.HashMap;
@@ -319,7 +318,7 @@ public class SolrInputDocumentFactoryImpl implements SolrInputDocumentFactory, I
 			if (krameriusBaseLinkMap.containsKey(importConfId)) {
 				String policy = (String) document.getFieldValue(SolrFieldConstants.KRAMERIUS_DUMMY_RIGTHS);
 				// FIXME probably not best way of generating urls
-				kramUrl = policy + "|" + krameriusBaseLinkMap.get(importConfId) + "i.jsp?pid=" + record.getUniqueId().getRecordId();
+				kramUrl = policy + "|" + krameriusBaseLinkMap.get(importConfId) + "i.jsp?pid=" + record.getUniqueId().getRecordId() + "|";
 				urls.add(kramUrl);
 			}
 		}

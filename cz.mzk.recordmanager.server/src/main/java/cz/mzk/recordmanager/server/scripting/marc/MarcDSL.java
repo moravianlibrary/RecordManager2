@@ -281,9 +281,43 @@ public class MarcDSL extends BaseDSL {
     
     public List<String> getUrls() {
     	List<String> result = new ArrayList<>();
-    	for (String fieldValue: getFields("856u")) {
-    		result.add(Constants.DOCUMENT_AVAILABILITY_UNKNOWN + "|" + fieldValue);
+    	
+    	for (DataField df: record.getDataFields("856")) {
+    		if (df.getSubfield('u') == null) {
+    			continue;
+    		}
+    		String link = df.getSubfield('u').getData();
+    		String comment = "";
+    		
+    		String sub3 = null,subY = null,subZ = null;
+    		
+    		if (df.getSubfield('3') != null) {
+    			sub3 = df.getSubfield('3').getData();
+    		}
+    		if (df.getSubfield('y') != null) {
+    			subY = df.getSubfield('y').getData();
+    		}
+    		if (df.getSubfield('z') != null) {
+    			subZ = df.getSubfield('z').getData();
+    		}
+    		
+    		if (sub3 != null) {
+    			comment = sub3;
+    			if (subZ != null) {
+    				comment += " (" + subZ + ")";
+    			}
+    		} else if (subY != null) {
+    			comment = subY;
+    			if (subZ != null) {
+    				comment += " (" + subZ + ")";
+    			}
+    		} else if (subZ != null) {
+    			comment = subZ;
+    		}
+    		
+    		result.add(Constants.DOCUMENT_AVAILABILITY_UNKNOWN + "|" + link + "|" + comment);
     	}
+    	
     	return result;
     }
 
