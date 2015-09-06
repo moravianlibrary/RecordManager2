@@ -132,8 +132,13 @@ public class OAIItemProcessor implements ItemProcessor<List<OAIRecord>, List<Har
 		
 		String[] parts = oaiIdentifier.split(":");
 		if (parts.length == 3) {
+			// workaround for norms from MZK
+			if (parts[2].matches("^MZK04-\\d{9}")) {
+				return parts[2].replace("MZK04-", "");
+			}
 			return parts[2];
 		}
+		
 		return oaiIdentifier;
 	}
 

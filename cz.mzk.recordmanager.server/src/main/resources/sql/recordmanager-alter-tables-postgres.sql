@@ -243,3 +243,6 @@ ALTER TABLE language DROP CONSTRAINT language_pkey;
 ALTER TABLE language DROP COLUMN id;
 DELETE FROM language WHERE harvested_record_id IS NULL;
 ALTER TABLE language ADD CONSTRAINT language_pk PRIMARY KEY (harvested_record_id, lang);
+
+-- 6. 9. 2015 mertam 
+UPDATE import_conf set id_prefix = 'unmz' where id = 320
