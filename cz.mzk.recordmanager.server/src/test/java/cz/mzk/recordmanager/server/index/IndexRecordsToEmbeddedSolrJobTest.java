@@ -135,7 +135,6 @@ public class IndexRecordsToEmbeddedSolrJobTest extends AbstractTest {
 				QueryResponse docResponse = server.query(dcQuery);
 				Assert.assertEquals(docResponse.getResults().size(), 1);
 				SolrDocument document = docResponse.getResults().get(0);
-				System.out.println(document.getFieldValue("url"));
 				Assert.assertTrue(
 						document.getFieldValues("url").stream()
 							.anyMatch(url -> url.equals("MZK|unknown|http://krameriusndktest.mzk.cz/search/handle/uuid:f1401080-de25-11e2-9923-005056827e52|Digitalizovaný dokument"))
