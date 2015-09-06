@@ -32,17 +32,19 @@ public class GetStatusesMarcFunctions implements MarcRecordFunctions {
 		MarcRecord record = ctx.record();
 		List<String> statuses = new ArrayList<String>();
 		statuses.addAll(getStatuses(record, "996"));
-		statuses.add(getStatusFrom856(record, "856"));	
+		statuses.addAll(getStatusFrom856(record, "856"));	
 		return statuses;
 	}
 
-	private String getStatusFrom856(MarcRecord record, String statusField) {
+	private List<String> getStatusFrom856(MarcRecord record, String statusField) {
+		List<String> result = new ArrayList<>();
 		for(DataField field: record.getDataFields(statusField)){
-			if(field.getIndicator1() == '4' && (field.getIndicator2() == '0' || field.getIndicator2() =='1')){			
-				return "1/" + ONLINE + "/" + Constants.DOCUMENT_AVAILABILITY_UNKNOWN;
+			if(field.getIndicator1() == '4' && (field.getIndicator2() == '0' || field.getIndicator2() =='1')){
+				result.add("0/online/");
+				result.add("1/" + ONLINE + "/" + Constants.DOCUMENT_AVAILABILITY_UNKNOWN + "/");
 			}
 		}
-		return null;
+		return result;
 	}
 
 	private List<String> getStatuses(MarcRecord record, String statusField) {
@@ -85,22 +87,22 @@ public class GetStatusesMarcFunctions implements MarcRecordFunctions {
 			}
 		}
 		if (absent) {
-			statuses.add("0/absent");
+			statuses.add("0/absent/");
 		}
 		if (present) {
-			statuses.add("0/present");
+			statuses.add("0/present/");
 		}
 		if (unknown) {
-			statuses.add("0/unknown");
+			statuses.add("0/unknown/");
 		}
 		if (unspecified) {
-			statuses.add("0/unspecified");
+			statuses.add("0/unspecified/");
 		}
 		if (limited) {
-			statuses.add("0/limited");
+			statuses.add("0/limited/");
 		}
 		if (temporary) {
-			statuses.add("0/temporary");
+			statuses.add("0/temporary/");
 		}
 		return statuses;
 	}

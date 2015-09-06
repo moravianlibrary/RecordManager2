@@ -55,7 +55,8 @@ public class AvailabilityFacetEnricher implements DedupRecordEnricher {
 		
 		if (addOnlineToAll) {
 			boolean hasOnlineStatus = false;
-			String onlineFacetStatus = "1/online/" + Constants.DOCUMENT_AVAILABILITY_ONLINE;
+			String onlineFacetStatusParent = "0/online/";
+			String onlineFacetStatus = "1/online/" + Constants.DOCUMENT_AVAILABILITY_ONLINE + "/";
 			for (SolrInputDocument doc: localRecords) {
 				Collection<Object> statuses = doc.getFieldValues(SolrFieldConstants.LOCAL_STATUSES_FACET);
 				for (Object status: statuses) {
@@ -64,6 +65,7 @@ public class AvailabilityFacetEnricher implements DedupRecordEnricher {
 					}
 				}
 				if (!hasOnlineStatus) {
+					statuses.add(onlineFacetStatusParent);
 					statuses.add(onlineFacetStatus);
 					doc.removeField(SolrFieldConstants.LOCAL_STATUSES_FACET);
 					doc.addField(SolrFieldConstants.LOCAL_STATUSES_FACET, statuses);
@@ -71,6 +73,9 @@ public class AvailabilityFacetEnricher implements DedupRecordEnricher {
 				
 			}
 		}
+		
+		// remove status facets from merged document
+		mergedDocument.remove(SolrFieldConstants.LOCAL_STATUSES_FACET);
 		
 	}
 

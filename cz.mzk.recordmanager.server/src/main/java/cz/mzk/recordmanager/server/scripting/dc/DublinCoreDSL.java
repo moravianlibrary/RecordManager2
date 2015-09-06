@@ -1,6 +1,7 @@
 package cz.mzk.recordmanager.server.scripting.dc;
 
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -130,12 +131,14 @@ public class DublinCoreDSL extends BaseDSL {
 		return func.apply(record, args);
 	}
 	
-	public String getStatuses() {
+	public List<String> getStatuses() {
+		List<String> result = new ArrayList<>();
 		switch (getRights()) {
-		case Constants.DOCUMENT_AVAILABILITY_ONLINE: return "1/online/" + Constants.DOCUMENT_AVAILABILITY_ONLINE;
-		case Constants.DOCUMENT_AVAILABILITY_PROTECTED: return "1/online/" + Constants.DOCUMENT_AVAILABILITY_PROTECTED;
-		default: return "1/online/" + Constants.DOCUMENT_AVAILABILITY_UNKNOWN;
+		case Constants.DOCUMENT_AVAILABILITY_ONLINE: result.add("1/online/" + Constants.DOCUMENT_AVAILABILITY_ONLINE + "/");
+		case Constants.DOCUMENT_AVAILABILITY_PROTECTED: result.add("1/online/" + Constants.DOCUMENT_AVAILABILITY_PROTECTED + "/");
+		default: result.add("1/online/" + Constants.DOCUMENT_AVAILABILITY_UNKNOWN + "/");
 		}
+		return result;
 	}
 
 }
