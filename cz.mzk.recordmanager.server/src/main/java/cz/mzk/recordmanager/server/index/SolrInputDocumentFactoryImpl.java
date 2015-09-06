@@ -139,8 +139,6 @@ public class SolrInputDocumentFactoryImpl implements SolrInputDocumentFactory, I
 		
 		dedupRecordEnrichers.forEach(enricher -> enricher.enrich(dedupRecord, mergedDocument, childs));
 		mergedDocument.addChildDocuments(childs);
-
-		mergedDocument.remove(SolrFieldConstants.KRAMERIUS_DUMMY_RIGTHS);
 		
 		if (logger.isTraceEnabled()) {
 			logger.info("Mapping of dedupRecord with id = {} finished", dedupRecord.getId());

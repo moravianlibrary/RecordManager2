@@ -23,6 +23,9 @@ public class UrlEnricher implements DedupRecordEnricher {
 			.forEach(rec -> urls.addAll(rec.getFieldValues(SolrFieldConstants.URL)));
 		mergedDocument.remove(SolrFieldConstants.URL);
 		mergedDocument.addField(SolrFieldConstants.URL, urls);
+		
+		mergedDocument.remove(SolrFieldConstants.KRAMERIUS_DUMMY_RIGTHS);
+		
 	}
 
 }

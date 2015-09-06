@@ -48,7 +48,7 @@ public class SolrFieldConstants {
 	
 	
 	/**
-	 * dummy field for passing kramerius policy
+	 * dummy field for passing kramerius policy, removed in UrlEnricher
 	 */
 	public static final String KRAMERIUS_DUMMY_RIGTHS = "kramerius_dummy_rights";
 	
