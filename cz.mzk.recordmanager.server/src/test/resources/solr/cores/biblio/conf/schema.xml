@@ -227,6 +227,7 @@
    <field name="nbn" type="string" indexed="false" stored="true" multiValued="false"/>
    <field name="author_search" type="textProper" indexed="true" stored="true" multiValued="true"/>
    <field name="barcodes" type="string" indexed="true" stored="true" multiValued="true"/>
+   <field name="sfx_links" type="string" indexed="false" stored="true" multiValued="true"/>
    <!-- Dynamic fields for customization without schema modification -->
    <dynamicField name="*_date" type="date" indexed="true" stored="true"/>
    <dynamicField name="*_date_mv" type="date" indexed="true" stored="true" multiValued="true"/>

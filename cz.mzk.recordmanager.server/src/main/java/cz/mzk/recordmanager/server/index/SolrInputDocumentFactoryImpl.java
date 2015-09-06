@@ -330,4 +330,24 @@ public class SolrInputDocumentFactoryImpl implements SolrInputDocumentFactory, I
 		urls.stream().forEach(url -> result.add(institutionCode + "|" + url));
 		document.addField(SolrFieldConstants.URL, result);
 	}
+	
+	
+	/**
+	 * add institution prefix to sfx links
+	 * @param record
+	 * @param document
+	 */
+	protected void generateSfxLinks(final HarvestedRecord record, final SolrInputDocument document) {
+		String institutionCode = record.getHarvestedFrom().getIdPrefix();
+		Set<String> links = new HashSet<>();
+		if (document.containsKey(SolrFieldConstants.SFX_LINK_FIELDS)) {
+			for (Object obj: document.getFieldValues(SolrFieldConstants.SFX_LINK_FIELDS)) {
+				if (obj instanceof String) {
+					links.add(institutionCode + "|" + (String)obj);
+				}
+			}
+		}
+		document.remove(SolrFieldConstants.SFX_LINK_FIELDS);
+		document.addField(SolrFieldConstants.SFX_LINK_FIELDS, links);
+	}
 }

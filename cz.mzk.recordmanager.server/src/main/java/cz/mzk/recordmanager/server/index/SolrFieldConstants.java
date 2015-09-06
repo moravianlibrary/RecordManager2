@@ -37,12 +37,15 @@ public class SolrFieldConstants {
 	public static final String URL = "url";
 	
 	public static final String LOCAL_STATUSES_FACET = "local_statuses_facet_str_mv";
+	
+	public static final String SFX_LINK_FIELDS = "sfx_links";
 	/**
 	 * dummy fields used for processing purposes only, shouldn't be indexed. Fields are deleted in AuthorityEnricher. 
 	 */
 	public static final String AUTHOR_AUTHORITY_DUMMY_FIELD = "authority_dummy_field";
 	
 	public static final String AUTHOR_DUMMY_FIELD = "authors_dummy";
+	
 	
 	/**
 	 * dummy field for passing kramerius policy

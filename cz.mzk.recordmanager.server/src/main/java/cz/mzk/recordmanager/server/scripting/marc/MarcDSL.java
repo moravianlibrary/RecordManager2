@@ -320,5 +320,24 @@ public class MarcDSL extends BaseDSL {
     	
     	return result;
     }
+    
+    public List<String> getSfxIds() {
+    	List<String> result = new ArrayList<>();
+    	for (DataField df: record.getDataFields("856")) {
+    		String subS = "", subX="";
+    		
+    		if (df.getSubfield('s') != null) {
+    			subS = df.getSubfield('s').getData();
+    		}
+    		if (df.getSubfield('x') != null) {
+    			subX = df.getSubfield('x').getData();
+    		}
+    		
+    		if (!subS.isEmpty()) {
+    			result.add(subS + "|" + subX);
+    		}
+    	}
+    	return result;
+    }
 
 }
