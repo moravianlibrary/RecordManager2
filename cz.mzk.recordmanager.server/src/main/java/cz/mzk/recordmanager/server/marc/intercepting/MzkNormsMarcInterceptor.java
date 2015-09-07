@@ -3,6 +3,7 @@ package cz.mzk.recordmanager.server.marc.intercepting;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeSet;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.marc4j.marc.ControlField;
@@ -40,9 +41,10 @@ public class MzkNormsMarcInterceptor extends DefaultMarcInterceptor{
 		}
 		
 		Map<String, List<DataField>> dfMap = marc.getAllFields();
-		for(String tag: dfMap.keySet()){			
+		for(String tag: new TreeSet<String>(dfMap.keySet())){ // sorted tags
 			for(DataField df: dfMap.get(tag)){
-				// kill fields 910 and 540
+				// kill fields 996, 910 and 540
+				if(df.getTag().equals("996")) continue;
 				if(df.getTag().equals("910")) continue;
 				if(df.getTag().equals("540")){
 					if(df.getSubfield('a').getData().contains("Normy lze objednat u pultu ve Studovně novin "
