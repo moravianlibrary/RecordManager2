@@ -38,7 +38,7 @@ public class SolrFieldConstants {
 	
 	public static final String LOCAL_STATUSES_FACET = "local_statuses_facet_str_mv";
 	
-	public static final String SFX_LINK_FIELDS = "sfx_links";
+	public static final String SFX_LINKS_FIELD = "sfx_links";
 	/**
 	 * dummy fields used for processing purposes only, shouldn't be indexed. Fields are deleted in AuthorityEnricher. 
 	 */

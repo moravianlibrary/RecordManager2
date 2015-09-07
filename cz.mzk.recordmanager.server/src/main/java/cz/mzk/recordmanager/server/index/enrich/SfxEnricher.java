@@ -16,12 +16,12 @@ public class SfxEnricher implements DedupRecordEnricher {
 			List<SolrInputDocument> localRecords) {
 		
 		Collection<Object> sfxLinks = new HashSet<>();
-		localRecords.stream().forEach(doc -> sfxLinks.addAll(doc.getFieldValues(SolrFieldConstants.SFX_LINK_FIELDS)));
+		localRecords.stream().forEach(doc -> sfxLinks.addAll(doc.getFieldValues(SolrFieldConstants.SFX_LINKS_FIELD)));
 		
-		mergedDocument.remove(SolrFieldConstants.SFX_LINK_FIELDS);
-		mergedDocument.addField(SolrFieldConstants.SFX_LINK_FIELDS, sfxLinks);
+		mergedDocument.remove(SolrFieldConstants.SFX_LINKS_FIELD);
+		mergedDocument.addField(SolrFieldConstants.SFX_LINKS_FIELD, sfxLinks);
 		
-		localRecords.stream().forEach(doc -> doc.remove(SolrFieldConstants.SFX_LINK_FIELDS));
+		localRecords.stream().forEach(doc -> doc.remove(SolrFieldConstants.SFX_LINKS_FIELD));
 
 	}
 
