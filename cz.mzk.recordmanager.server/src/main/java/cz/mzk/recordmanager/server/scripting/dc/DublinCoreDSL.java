@@ -133,10 +133,11 @@ public class DublinCoreDSL extends BaseDSL {
 	
 	public List<String> getStatuses() {
 		List<String> result = new ArrayList<>();
+		result.add("0/online/");
 		switch (getRights()) {
-		case Constants.DOCUMENT_AVAILABILITY_ONLINE: result.add("1/online/" + Constants.DOCUMENT_AVAILABILITY_ONLINE + "/");
-		case Constants.DOCUMENT_AVAILABILITY_PROTECTED: result.add("1/online/" + Constants.DOCUMENT_AVAILABILITY_PROTECTED + "/");
-		default: result.add("1/online/" + Constants.DOCUMENT_AVAILABILITY_UNKNOWN + "/");
+		case Constants.DOCUMENT_AVAILABILITY_ONLINE: result.add("1/online/" + Constants.DOCUMENT_AVAILABILITY_ONLINE + "/");break;
+		case Constants.DOCUMENT_AVAILABILITY_PROTECTED: result.add("1/online/" + Constants.DOCUMENT_AVAILABILITY_PROTECTED + "/");break;
+		default: result.add("1/online/" + Constants.DOCUMENT_AVAILABILITY_UNKNOWN + "/");break;
 		}
 		return result;
 	}
