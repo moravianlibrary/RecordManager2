@@ -113,6 +113,5 @@ public interface MarcRecord {
 	
 	public String export(IOFormat iOFormat);
 
-	public void addOAIField(String id);
-	
+	public void addDataField(String tag, char ind1, char ind2, String... subfields);
 }
