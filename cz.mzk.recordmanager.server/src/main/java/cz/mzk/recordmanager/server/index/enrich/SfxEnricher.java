@@ -5,10 +5,12 @@ import java.util.HashSet;
 import java.util.List;
 
 import org.apache.solr.common.SolrInputDocument;
+import org.springframework.stereotype.Component;
 
 import cz.mzk.recordmanager.server.index.SolrFieldConstants;
 import cz.mzk.recordmanager.server.model.DedupRecord;
 
+@Component
 public class SfxEnricher implements DedupRecordEnricher {
 
 	@Override
