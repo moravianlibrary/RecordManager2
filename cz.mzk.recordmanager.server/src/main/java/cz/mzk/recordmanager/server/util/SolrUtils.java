@@ -37,6 +37,16 @@ public class SolrUtils {
 		return createRange(fromStr, untilStr);
 	}
 
+	/**
+	 *
+	 * Create hierarchic facet values, ie. for input Brno, MZK returns:
+	 *
+	 * 0/Brno/
+	 * 1/Brno/MZK/
+	 *
+	 * @param values
+	 * @return hierarchic facet values
+	 */
 	public static List<String> createHierarchicFacetValues(String...values) {
 		List<String> result = new ArrayList<>(values.length);
 		for (int i = 0; i != values.length; i++) {

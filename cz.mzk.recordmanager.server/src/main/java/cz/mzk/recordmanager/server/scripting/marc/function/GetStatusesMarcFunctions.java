@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 import cz.mzk.recordmanager.server.marc.MarcRecord;
 import cz.mzk.recordmanager.server.scripting.marc.MarcFunctionContext;
 import cz.mzk.recordmanager.server.util.Constants;
+import cz.mzk.recordmanager.server.util.SolrUtils;
 
 @Component
 public class GetStatusesMarcFunctions implements MarcRecordFunctions {
@@ -38,10 +39,9 @@ public class GetStatusesMarcFunctions implements MarcRecordFunctions {
 
 	private List<String> getStatusFrom856(MarcRecord record, String statusField) {
 		List<String> result = new ArrayList<>();
-		for(DataField field: record.getDataFields(statusField)){
-			if(field.getIndicator1() == '4' && (field.getIndicator2() == '0' || field.getIndicator2() =='1')){
-				result.add("0/online/");
-				result.add("1/" + ONLINE + "/" + Constants.DOCUMENT_AVAILABILITY_UNKNOWN + "/");
+		for (DataField field: record.getDataFields(statusField)) {
+			if (field.getIndicator1() == '4' && (field.getIndicator2() == '0' || field.getIndicator2() =='1')) {
+				result.addAll(SolrUtils.createHierarchicFacetValues(ONLINE, Constants.DOCUMENT_AVAILABILITY_UNKNOWN));
 			}
 		}
 		return result;
