@@ -1,22 +1,22 @@
 package cz.mzk.recordmanager.server.scripting.dc;
 
-import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
+import java.nio.charset.Charset;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
 import cz.mzk.recordmanager.server.dc.DublinCoreRecord;
-import cz.mzk.recordmanager.server.metadata.MetadataDublinCoreRecord;
 import cz.mzk.recordmanager.server.scripting.BaseDSL;
 import cz.mzk.recordmanager.server.scripting.MappingResolver;
 import cz.mzk.recordmanager.server.scripting.function.RecordFunction;
 import cz.mzk.recordmanager.server.util.Constants;
+import cz.mzk.recordmanager.server.util.SolrUtils;
 
 public class DublinCoreDSL extends BaseDSL {
 
-	private final DublinCoreRecord record;
-	private MetadataDublinCoreRecord dcMetadataRecord;
+	private final Charset UTF8_CHARSET = Charset.forName("UTF-8");
 	
+	private final DublinCoreRecord record;
 	
 	private final Map<String, RecordFunction<DublinCoreRecord>> functions;
 
@@ -26,7 +26,6 @@ public class DublinCoreDSL extends BaseDSL {
 		super(propertyResolver);
 		this.record = record;
 		this.functions = functions;
-		this.dcMetadataRecord = new MetadataDublinCoreRecord(record);
 	}
 
 	public String getFirstTitle() {
@@ -34,11 +33,7 @@ public class DublinCoreDSL extends BaseDSL {
 	}
 	
 	public String getFullRecord() {
-		String result = "";
-		try {
-			result = record.getRawRecord() == null ? "" : new String(record.getRawRecord(), "UTF-8");
-		} catch (UnsupportedEncodingException e) {}
-		return result;
+		return record.getRawRecord() == null ? "" : new String(record.getRawRecord(), UTF8_CHARSET);
 	}
 	
 	public String getRights() {
@@ -51,16 +46,7 @@ public class DublinCoreDSL extends BaseDSL {
 	
 	public List<String> getOtherTitles() {
 		List<String> titles = record.getTitles();
-//		System.out.print("--titles---------------" + titles.toString());
-		if (!titles.isEmpty()) {
-			titles.remove(0); //removes first title which goes to different field
-		}
-		if (titles.isEmpty()) {
-//			System.out.println(" >>>>>>>>>>>>>>> other titles empty");
-			return null;
-		}
-//		System.out.println(" >>>>>>>>>>>>>>> " + titles.toString());
-		return titles;
+		return (titles.size() <= 1) ? Collections.emptyList() : titles.subList(1, titles.size());
 	}
 	
 	public String getFirstCreator() {
@@ -132,14 +118,7 @@ public class DublinCoreDSL extends BaseDSL {
 	}
 	
 	public List<String> getStatuses() {
-		List<String> result = new ArrayList<>();
-		result.add("0/online/");
-		switch (getRights()) {
-		case Constants.DOCUMENT_AVAILABILITY_ONLINE: result.add("1/online/" + Constants.DOCUMENT_AVAILABILITY_ONLINE + "/");break;
-		case Constants.DOCUMENT_AVAILABILITY_PROTECTED: result.add("1/online/" + Constants.DOCUMENT_AVAILABILITY_PROTECTED + "/");break;
-		default: result.add("1/online/" + Constants.DOCUMENT_AVAILABILITY_UNKNOWN + "/");break;
-		}
-		return result;
+		return SolrUtils.createHierarchicFacetValues(Constants.DOCUMENT_AVAILABILITY_ONLINE, getRights());
 	}
 
 }
