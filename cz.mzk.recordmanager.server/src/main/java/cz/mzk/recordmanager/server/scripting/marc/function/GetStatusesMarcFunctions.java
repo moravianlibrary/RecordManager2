@@ -28,6 +28,7 @@ public class GetStatusesMarcFunctions implements MarcRecordFunctions {
 	protected final static String UNSPECIFIED = "n";
 	protected final static String LIMITED = "o";
 	protected final static String TEMPORARY = "d";
+	protected final static String FREESTACK = "0";
 
 	public List<String> getStatuses(MarcFunctionContext ctx) {
 		MarcRecord record = ctx.record();
@@ -59,13 +60,14 @@ public class GetStatusesMarcFunctions implements MarcRecordFunctions {
 		boolean unspecified = false;
 		boolean limited = false;
 		boolean temporary = false;
+		boolean freestack = false;
 		for (DataField field : fields) {
 			Subfield s = field.getSubfield('s');
 			if (s == null) {
 				continue;
 			}
-			String status = s.getData().toLowerCase();
-			switch (status) {
+			String statusInS = s.getData().toLowerCase();
+			switch (statusInS) {
 			case ABSENT:
 				absent = true;
 				break;
@@ -85,24 +87,38 @@ public class GetStatusesMarcFunctions implements MarcRecordFunctions {
 				temporary = true;
 				break;
 			}
+			
+			s = field.getSubfield('a');
+			if (s == null) {
+				continue;
+			}
+			String statusInA = s.getData().toLowerCase();
+			switch (statusInA) {
+			case FREESTACK:
+				freestack = true;
+				break;
+			}
 		}
 		if (absent) {
-			statuses.add("0/absent/");
+			statuses.addAll(SolrUtils.createHierarchicFacetValues("absent"));
 		}
 		if (present) {
-			statuses.add("0/present/");
+			statuses.addAll(SolrUtils.createHierarchicFacetValues("present"));
 		}
 		if (unknown) {
-			statuses.add("0/unknown/");
+			statuses.addAll(SolrUtils.createHierarchicFacetValues("unknown"));
 		}
 		if (unspecified) {
-			statuses.add("0/unspecified/");
+			statuses.addAll(SolrUtils.createHierarchicFacetValues("unspecified"));
 		}
 		if (limited) {
-			statuses.add("0/limited/");
+			statuses.addAll(SolrUtils.createHierarchicFacetValues("limited"));
 		}
 		if (temporary) {
-			statuses.add("0/temporary/");
+			statuses.addAll(SolrUtils.createHierarchicFacetValues("temporary"));
+		}
+		if (freestack) {
+			statuses.addAll(SolrUtils.createHierarchicFacetValues("freestack"));
 		}
 		return statuses;
 	}
