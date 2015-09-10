@@ -2,6 +2,8 @@ package cz.mzk.recordmanager.server.index;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -13,6 +15,7 @@ import org.springframework.stereotype.Component;
 import cz.mzk.recordmanager.server.dc.DublinCoreParser;
 import cz.mzk.recordmanager.server.dc.DublinCoreRecord;
 import cz.mzk.recordmanager.server.model.DedupRecord;
+import cz.mzk.recordmanager.server.model.FulltextMonography;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.scripting.MappingScript;
 import cz.mzk.recordmanager.server.scripting.dc.DublinCoreScriptFactory;
@@ -52,9 +55,14 @@ public class DublinCoreSolrRecordMapper implements SolrRecordMapper, Initializin
 
 	protected Map<String, Object> parse(HarvestedRecord record) {
 		InputStream is = new ByteArrayInputStream(record.getRawRecord());
+		// nacist fulltextmonography, dostat string
+		System.out.println("*** jsem na miste kde se nacitaji fulltexty ***");
+		String fulltext = getFulltextsFromRecord(record);
 		MappingScript<DublinCoreRecord> script = getMappingScript(record);
 		DublinCoreRecord rec = parser.parseRecord(is);
 		Map<String, Object> fields = script.parse(rec);
+		// pridat fulltextMonographyFullString do fields
+		fields.put("fulltext", fulltext);
 		return fields;
 	}
 
@@ -68,4 +76,39 @@ public class DublinCoreSolrRecordMapper implements SolrRecordMapper, Initializin
 				.getResourceAsStream("/dc/groovy/BaseDC.groovy"));
 	}
 
+	public String getFulltextsFromRecord (HarvestedRecord record)  {
+		List<FulltextMonography> pages = record.getFulltextMonography();
+		String text ="";
+		int i = 0;
+	
+	//	System.out.println("--- zacinam nacitat Fulltext ---");
+	
+		for (FulltextMonography page : pages) {
+			i++;
+	//		System.out.println("--- nacitam stranku cislo "+i+" ---");
+			String uuid = page.getUuidPage();
+			byte[] bytes = page.getFulltext();
+			
+	//		System.out.println("---- stranka ma uuid: "+uuid);
+			try {
+				if (bytes!=null) {
+					System.out.println("---- stranka ma text ----");
+	//				System.out.println(new String(bytes,"UTF-8"));
+					text = text + new String(bytes,"UTF-8");
+				} else {
+					System.out.println("---- stranka nema text ----");	
+				}
+			} catch (UnsupportedEncodingException e) {
+				System.out.println("--- chycena vyjimka UsnupportedEncodingException ---");
+			}
+			
+		}
+		
+	//	System.out.println("--- Kompletní text ----");
+	//	System.out.println(text);
+
+		
+		return text;
+	}
+	
 }
