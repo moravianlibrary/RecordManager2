@@ -187,7 +187,7 @@ public class MarcDSL extends BaseDSL {
         return result;
     }
     
-    public List<String> getPublisher(){
+    public List<String> getPublisherStrMv(){
     	List<String> publishers = new ArrayList<String>();
     	for(DataField dataField: record.getDataFields("264")){
     		if(dataField.getIndicator2() == '1'){
@@ -195,6 +195,18 @@ public class MarcDSL extends BaseDSL {
     		}
     	}
     	publishers.addAll(getFieldsTrim("260b:928a:978abcdg"));
+    	
+    	return publishers;
+    }
+    
+    public List<String> getPublisher(){
+    	List<String> publishers = new ArrayList<String>();
+    	for(DataField dataField: record.getDataFields("264")){
+    		if(dataField.getIndicator2() == '1'){
+    			publishers.addAll(getFieldsTrim("264b"));
+    		}
+    	}
+    	publishers.addAll(getFieldsTrim("260b"));
     	
     	return publishers;
     }
