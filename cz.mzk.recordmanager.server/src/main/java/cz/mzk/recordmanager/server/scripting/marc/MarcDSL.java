@@ -340,4 +340,16 @@ public class MarcDSL extends BaseDSL {
     	return result;
     }
 
+    public Long getLoanRelevance(){
+		Long count = 0L;
+    	
+    	for(DataField df: record.getDataFields("996")){
+    		if(df.getSubfield('n') != null)
+    		try {
+    			count += Long.valueOf(df.getSubfield('n').getData());
+    		} catch (NumberFormatException nfe) {
+    		}			
+		}
+    	return count; 
+    }
 }
