@@ -148,7 +148,7 @@
    <field name="publisher" type="textProper" indexed="true" stored="true" multiValued="true"/>
    <field name="publisherStr" type="string" indexed="true" stored="false" multiValued="true"/>
    <field name="publishDate" type="string" indexed="false" stored="true" multiValued="true" docValues="true"/>
-   <field name="publishDateSort" type="string" indexed="true" stored="false"/>
+   <field name="publishDateSort" type="string" indexed="true" stored="false" sortMissingLast="true" omitNorms="true"/>
    <field name="edition" type="string" indexed="true" stored="true"/>
    <field name="description" type="text" indexed="true" stored="true"/>
    <field name="contents" type="text" indexed="true" stored="true" multiValued="true"/>
