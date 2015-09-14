@@ -17,7 +17,7 @@ public class LoanRelevanceEnricher implements DedupRecordEnricher{
 			List<SolrInputDocument> localRecords) {
 		Long count = 0L;
 		
-		Object recordFormat = mergedDocument.getFieldValue(SolrFieldConstants.RECORD_FORMAT).toString();
+		Object recordFormat = mergedDocument.getFieldValue(SolrFieldConstants.RECORD_FORMAT);
 		if(recordFormat != null && !recordFormat.toString().contains(HarvestedRecordFormatEnum.PERIODICALS.name())){
 			for(SolrInputDocument localRecord: localRecords){
 				if(localRecord.getFieldValue(SolrFieldConstants.LOAN_RELEVANCE_FIELD) != null){
