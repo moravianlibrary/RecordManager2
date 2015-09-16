@@ -48,7 +48,11 @@ public class Constants {
 	public static final String PREFIX_SFXJIBMZK			= "sfxjibmzk";
 	public static final String PREFIX_SFXJIBNLK			= "sfxjibnlk";
 	public static final String PREFIX_NLK				= "nlk";
-
+	public static final String PREFIX_KRAM_MZK			= "kram-mzk";
+	public static final String PREFIX_KRAM_NTK			= "kram-ntk";
+	public static final String PREFIX_KRAM_KNAV			= "kram-knav";
+	public static final String PREFIX_KRAM_NKP			= "kram-nkp";
+	
 	public static final String DOCUMENT_AVAILABILITY_ONLINE     = "online";
 	public static final String DOCUMENT_AVAILABILITY_PROTECTED  = "protected";
 	public static final String DOCUMENT_AVAILABILITY_UNKNOWN    = "unknown";

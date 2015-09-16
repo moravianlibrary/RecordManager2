@@ -10,6 +10,7 @@ import cz.mzk.recordmanager.server.dc.DublinCoreParser;
 import cz.mzk.recordmanager.server.dc.DublinCoreRecord;
 import cz.mzk.recordmanager.server.marc.MarcRecord;
 import cz.mzk.recordmanager.server.marc.MarcXmlParser;
+import cz.mzk.recordmanager.server.metadata.institutions.KramDefaultMetadataDublinCoreRecord;
 import cz.mzk.recordmanager.server.metadata.institutions.MzkMetadataMarcRecord;
 import cz.mzk.recordmanager.server.metadata.institutions.MzkNormsMetadataMarcRecord;
 import cz.mzk.recordmanager.server.metadata.institutions.NkpMarcMetadataRecord;
@@ -75,7 +76,16 @@ public class MetadataRecordFactory {
         
         if (Constants.METADATA_FORMAT_DUBLIN_CORE.equals(recordFormat)) {
         	DublinCoreRecord dcRec = dcParser.parseRecord(is);
-			return getMetadataRecord(dcRec);
+        	switch(prefix){
+			case Constants.PREFIX_KRAM_MZK:
+			case Constants.PREFIX_KRAM_NTK:
+			case Constants.PREFIX_KRAM_KNAV:
+			case Constants.PREFIX_KRAM_NKP:
+				return new KramDefaultMetadataDublinCoreRecord(dcRec);
+			default:
+				return getMetadataRecord(dcRec);
+        	}
+			
         }
         
         return null;
