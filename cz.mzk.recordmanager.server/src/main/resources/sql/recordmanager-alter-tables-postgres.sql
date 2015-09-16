@@ -247,3 +247,18 @@ ALTER TABLE language ADD CONSTRAINT language_pk PRIMARY KEY (harvested_record_id
 -- 6. 9. 2015 mertam 
 UPDATE import_conf set id_prefix = 'unmz' where id = 320
 update oai_harvest_conf set set_spec = 'CPK' where import_conf_id = 307
+
+-- 16. 9. 2015 mertam
+CREATE TABLE skat_keys (
+  skat_record_id      DECIMAL(10),
+  sigla               VARCHAR(20),
+  local_record_id     VARCHAR(128),
+  manually_merged     BOOLEAN DEFAULT FALSE,
+  CONSTRAINT skat_keys_pk PRIMARY KEY(skat_record_id,sigla,local_record_id)
+)
+
+CREATE TABLE sigla (
+  import_conf_id       DECIMAL(10),
+  sigla                VARCHAR(20),
+  CONSTRAINT sigla_pk PRIMARY KEY(import_conf_id,sigla)
+);

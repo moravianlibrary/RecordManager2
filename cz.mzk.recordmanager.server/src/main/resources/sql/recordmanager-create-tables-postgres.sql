@@ -34,6 +34,12 @@ CREATE TABLE import_conf (
   CONSTRAINT import_conf_contact_person_id_fk FOREIGN KEY (contact_person_id) REFERENCES contact_person(id)
 );
 
+CREATE TABLE sigla (
+  import_conf_id       DECIMAL(10),
+  sigla                VARCHAR(20),
+  CONSTRAINT sigla_pk PRIMARY KEY(import_conf_id,sigla)
+);
+
 CREATE TABLE oai_harvest_conf (
   import_conf_id       DECIMAL(10) PRIMARY KEY,
   url                  VARCHAR(128),
@@ -184,3 +190,11 @@ CREATE TABLE antikvariaty_catids (
   CONSTRAINT antikvariaty_catids_pk PRIMARY KEY (id_from_catalogue, antikvariaty_id),
   CONSTRAINT antikvariaty_catids_fk FOREIGN KEY (antikvariaty_id) REFERENCES antikvariaty(id)
 );
+
+CREATE TABLE skat_keys (
+  skat_record_id      DECIMAL(10),
+  sigla               VARCHAR(20),
+  local_record_id     VARCHAR(128),
+  manually_merged     BOOLEAN DEFAULT FALSE,
+  CONSTRAINT skat_keys_pk PRIMARY KEY(skat_record_id,sigla,local_record_id)
+)
