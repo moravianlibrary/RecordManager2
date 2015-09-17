@@ -37,7 +37,8 @@ CREATE TABLE import_conf (
 CREATE TABLE sigla (
   import_conf_id       DECIMAL(10),
   sigla                VARCHAR(20),
-  CONSTRAINT sigla_pk PRIMARY KEY(import_conf_id,sigla)
+  CONSTRAINT sigla_pk PRIMARY KEY(import_conf_id,sigla),
+  CONSTRAINT sigla_import_conf_fk FOREIGN KEY (import_conf_id) REFERENCES import_conf(id)
 );
 
 CREATE TABLE oai_harvest_conf (

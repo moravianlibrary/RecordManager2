@@ -262,3 +262,6 @@ CREATE TABLE sigla (
   sigla                VARCHAR(20),
   CONSTRAINT sigla_pk PRIMARY KEY(import_conf_id,sigla)
 );
+
+-- 17.9.2015 mertam
+alter table sigla add CONSTRAINT sigla_import_conf_fk FOREIGN KEY (import_conf_id) REFERENCES import_conf(id)

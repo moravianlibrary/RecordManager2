@@ -26,24 +26,29 @@ public class GenerateSkatKeysProcessor implements ItemProcessor<Long, List<SkatK
 	
 	@Override
 	public List<SkatKey> process(Long item) throws Exception {
+		List<SkatKey> result = new ArrayList<>();
 		HarvestedRecord hr = harvestedRecordDao.get(item);
 		if (hr.getRawRecord() == null) {
-			return null;
+			return result;
 		}
-	
+		
+		MarcRecord marc = null;
 		InputStream is = new ByteArrayInputStream(hr.getRawRecord());
-		MarcRecord marc = marcXmlParser.parseRecord(is);
-
-		List<SkatKey> result = new ArrayList<>();
-		for (DataField df: marc.getDataFields("910")) {
-			if (df.getSubfield('a') == null) {
+		try {
+			marc = marcXmlParser.parseRecord(is);
+		} catch (Exception e) {
+			return result;
+		}
+		
+		for (DataField df: marc.getDataFields("996")) {
+			if (df.getSubfield('e') == null) {
 				continue;
 			}
-			if (df.getSubfield('x') == null) {
+			if (df.getSubfield('w') == null) {
 				continue;
 			}
-			String sigla = df.getSubfield('a').getData();
-			String recordId = df.getSubfield('x').getData();
+			String sigla = df.getSubfield('e').getData();
+			String recordId = df.getSubfield('w').getData();
 			
 			SkatKey key = new SkatKey(new SkatKeyCompositeId(hr.getId(), sigla, recordId));
 			result.add(key);
