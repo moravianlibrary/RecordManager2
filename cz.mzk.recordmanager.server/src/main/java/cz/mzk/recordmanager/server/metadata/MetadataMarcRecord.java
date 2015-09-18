@@ -969,5 +969,10 @@ public class MetadataMarcRecord implements MetadataRecord {
 		return null;
 	}
 
+	@Override
+	public String getRaw001Id() {
+		return underlayingMarc.getControlField("001");
+	}
 
+	
 }

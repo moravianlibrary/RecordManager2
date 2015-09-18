@@ -138,4 +138,10 @@ public interface MetadataRecord {
 	 * @return
 	 */
 	public String getOAIRecordId();
+	
+	/**
+	 * return raw identifier from field 001
+	 * @return
+	 */
+	public String getRaw001Id();
 }

@@ -85,6 +85,7 @@ CREATE TABLE harvested_record (
   id                   DECIMAL(10),
   import_conf_id       DECIMAL(10),
   record_id            VARCHAR(128),
+  raw_001_id           VARCHAR(128),
   harvested            TIMESTAMP,
   updated              TIMESTAMP,
   deleted              TIMESTAMP,
