@@ -116,3 +116,25 @@ INSERT INTO harvested_record_format(id, name) VALUES (25, 'OTHER_OBJECT');
 INSERT INTO harvested_record_format(id, name) VALUES (26, 'OTHER_MIX_DOCUMENT');
 INSERT INTO harvested_record_format(id, name) VALUES (27, 'NORMS');
 INSERT INTO harvested_record_format(id, name) VALUES (100, 'OTHER_UNSPECIFIED');
+
+
+INSERT INTO sigla (import_conf_id, sigla) VALUES (300, 'BOA001');
+INSERT INTO sigla (import_conf_id, sigla) VALUES (302, 'ABA008');
+INSERT INTO sigla (import_conf_id, sigla) VALUES (302, 'ABG001');
+INSERT INTO sigla (import_conf_id, sigla) VALUES (303, 'BOG001');
+INSERT INTO sigla (import_conf_id, sigla) VALUES (304, 'ABA001');
+INSERT INTO sigla (import_conf_id, sigla) VALUES (304, 'ABA003');
+INSERT INTO sigla (import_conf_id, sigla) VALUES (304, 'ABA004');
+INSERT INTO sigla (import_conf_id, sigla) VALUES (304, 'ABA018');
+INSERT INTO sigla (import_conf_id, sigla) VALUES (304, 'ABA019');
+INSERT INTO sigla (import_conf_id, sigla) VALUES (304, 'ABA025');
+INSERT INTO sigla (import_conf_id, sigla) VALUES (306, 'UOG505');
+INSERT INTO sigla (import_conf_id, sigla) VALUES (307, 'ABA013');
+INSERT INTO sigla (import_conf_id, sigla) VALUES (307, 'ABA031');
+INSERT INTO sigla (import_conf_id, sigla) VALUES (308, 'LIA001');
+INSERT INTO sigla (import_conf_id, sigla) VALUES (311, 'TAG001');
+INSERT INTO sigla (import_conf_id, sigla) VALUES (312, 'HBG001');
+INSERT INTO sigla (import_conf_id, sigla) VALUES (313, 'HKA001');
+INSERT INTO sigla (import_conf_id, sigla) VALUES (314, 'ULG001');
+INSERT INTO sigla (import_conf_id, sigla) VALUES (315, 'OLA001');
+INSERT INTO sigla (import_conf_id, sigla) VALUES (321, 'ABA013');
