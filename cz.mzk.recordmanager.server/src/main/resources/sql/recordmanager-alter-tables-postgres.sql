@@ -268,3 +268,19 @@ alter table sigla add CONSTRAINT sigla_import_conf_fk FOREIGN KEY (import_conf_i
 
 --18.9.2015 mertam 
 ALTER TABLE harvested_record ADD COLUMN raw_001_id VARCHAR(128); 
+
+-- 21.9.2015 mertam 
+ALTER TABLE isbn DROP CONSTRAINT isbn_harvested_record_id_fkey;
+ALTER TABLE isbn ADD FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE;
+ALTER TABLE issn DROP CONSTRAINT issn_harvested_record_id_fkey;
+ALTER TABLE issn ADD FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE;
+ALTER TABLE cnb DROP CONSTRAINT cnb_harvested_record_id_fkey;
+ALTER TABLE cnb ADD FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE;
+ALTER TABLE title DROP CONSTRAINT title_harvested_record_id_fkey;
+ALTER TABLE title ADD FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE;
+ALTER TABLE oclc DROP CONSTRAINT oclc_fk;
+ALTER TABLE oclc ADD FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE;
+ALTER TABLE language DROP CONSTRAINT language_fk;
+ALTER TABLE language ADD FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE;
+ALTER TABLE harvested_record_format_link DROP CONSTRAINT format_link_hr_id_fk;
+ALTER TABLE harvested_record_format_link ADD FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE;

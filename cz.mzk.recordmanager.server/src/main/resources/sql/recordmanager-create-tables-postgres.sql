@@ -108,7 +108,7 @@ CREATE TABLE isbn (
   isbn                 DECIMAL(13),
   order_in_record      DECIMAL(4),
   note                 VARCHAR(300),
-  FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id)
+  FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE
 );
 
 CREATE TABLE issn (
@@ -117,14 +117,14 @@ CREATE TABLE issn (
   issn                 VARCHAR(9),
   order_in_record      DECIMAL(4),
   note                 VARCHAR(100),
-  FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id)
+  FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE
 );
 
 CREATE TABLE cnb (
   id                   DECIMAL(10) PRIMARY KEY,
   harvested_record_id  DECIMAL(10),
   cnb                  VARCHAR(100),
-  FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id)
+  FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE
 );
 
 CREATE TABLE title (
@@ -132,21 +132,21 @@ CREATE TABLE title (
   harvested_record_id  DECIMAL(10),
   title                VARCHAR(255),
   order_in_record      DECIMAL(4),
-  FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id)
+  FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE
 );
 
 CREATE TABLE oclc (
   id                   DECIMAL(10) PRIMARY KEY,
   harvested_record_id  DECIMAL(10),
   oclc                 VARCHAR(20),
-  CONSTRAINT oclc_fk  FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id)
+  FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE
 );
 
 CREATE TABLE language (
   harvested_record_id  DECIMAL(10),
   lang                 VARCHAR(5),
-  CONSTRAINT language_pk PRIMARY KEY (harvested_record_id, lang),
-  CONSTRAINT language_fk  FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id)
+  PRIMARY KEY (harvested_record_id, lang),
+  FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE
 );
 
 CREATE TABLE harvested_record_format (
@@ -158,8 +158,8 @@ CREATE TABLE harvested_record_format_link (
   harvested_record_id            DECIMAL(10),
   harvested_record_format_id     DECIMAL(10),
   CONSTRAINT record_link_pk           PRIMARY KEY (harvested_record_id, harvested_record_format_id), 
-  CONSTRAINT format_link_hr_id_fk     FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id),
-  CONSTRAINT format_link_hr_format_fk FOREIGN KEY (harvested_record_format_id) REFERENCES harvested_record_format(id)
+  FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE,
+  FOREIGN KEY (harvested_record_format_id) REFERENCES harvested_record_format(id)
 );
 
 
