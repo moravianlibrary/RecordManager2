@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.sql.DataSource;
 
@@ -141,7 +142,7 @@ public class MiscellaneousJobsConfig {
 	public Step generateSkatKeysStep() throws Exception {
 		return steps.get("generateSkatKeysStep")
 				.listener(new StepProgressListener())
-				.<Long, List<SkatKey>> chunk(1000)
+				.<Long, Set<SkatKey>> chunk(1000)
 				.reader(generateSkatKeysReader())
 				.processor(generateSkatKeysProcessor())
 				.writer(generateSkatKeysWriter())
