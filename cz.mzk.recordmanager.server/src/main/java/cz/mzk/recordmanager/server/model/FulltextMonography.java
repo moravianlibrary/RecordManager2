@@ -19,6 +19,12 @@ public class FulltextMonography extends AbstractDomainObject {
 	@Column(name="fulltext")
 	private byte[] fulltext;
 
+	@Column(name="page")
+	private String page;
+	
+	@Column(name="is_private")
+	private boolean isPrivate;
+	
 	public String getUuidPage() {
 		return uuidPage;
 	}
@@ -43,6 +49,20 @@ public class FulltextMonography extends AbstractDomainObject {
 		this.fulltext = fulltext;
 	}
 	
-	
+	public String getPage() {
+		return page;
+	}
+
+	public void setPage(String page) {
+		this.page = page;
+	}
+
+	public boolean isPrivate() {
+		return isPrivate;
+	}
+
+	public void setPrivate(boolean isPrivate) {
+		this.isPrivate = isPrivate;
+	}
 	
 }

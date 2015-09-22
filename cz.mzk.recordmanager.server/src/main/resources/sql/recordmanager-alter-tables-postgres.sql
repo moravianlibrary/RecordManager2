@@ -243,3 +243,17 @@ ALTER TABLE language DROP CONSTRAINT language_pkey;
 ALTER TABLE language DROP COLUMN id;
 DELETE FROM language WHERE harvested_record_id IS NULL;
 ALTER TABLE language ADD CONSTRAINT language_pk PRIMARY KEY (harvested_record_id, lang);
+
+--14.9. 2015 mjtecka
+CREATE TABLE fulltext_monography
+(
+  id numeric(10,0) NOT NULL,
+  harvested_record_id numeric(10,0),
+  uuid_page character varying(42),
+  is_private boolean, 
+  order_in_monography numeric(10,0),
+  page character varying(20),
+  fulltext bytea,
+  CONSTRAINT fulltext_monography_pkey PRIMARY KEY (id),
+  CONSTRAINT fulltext_monography_harvested_record_id_fk FOREIGN KEY (harvested_record_id)
+);

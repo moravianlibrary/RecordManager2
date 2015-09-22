@@ -96,7 +96,7 @@ ItemStream, StepExecutionListener {
 			UnexpectedInputException, ParseException,
 			NonTransientResourceException {
 		
-		kf.printUUIDs(confId);
+//		kf.printUUIDs(confId);
 		List<String> topUuids = kf.getUuids(confId);
 		
 		for (String uuid : topUuids) {

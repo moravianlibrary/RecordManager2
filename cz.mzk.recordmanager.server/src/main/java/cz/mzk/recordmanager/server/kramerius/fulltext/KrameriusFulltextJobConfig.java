@@ -1,7 +1,6 @@
 package cz.mzk.recordmanager.server.kramerius.fulltext;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.sql.DataSource;
@@ -12,7 +11,6 @@ import org.springframework.batch.core.configuration.annotation.JobBuilderFactory
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.item.ItemReader;
-import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.item.database.JdbcPagingItemReader;
 import org.springframework.batch.item.database.Order;
 import org.springframework.batch.item.database.support.SqlPagingQueryProviderFactoryBean;
@@ -67,7 +65,7 @@ public class KrameriusFulltextJobConfig {
 				//
 				.<HarvestedRecord, HarvestedRecord> chunk(1)
 				//
-				.reader(reader(LONG_OVERRIDEN_BY_EXPRESSION))
+				.reader(reader(LONG_OVERRIDEN_BY_EXPRESSION, LONG_OVERRIDEN_BY_EXPRESSION, LONG_OVERRIDEN_BY_EXPRESSION))
 				//
 				.processor(krameriusFulltextProcessor(LONG_OVERRIDEN_BY_EXPRESSION))
 				.writer(krameriusFulltextWriter())
@@ -78,19 +76,31 @@ public class KrameriusFulltextJobConfig {
 	@Bean(name = "krameriusFulltextJob:reader")
 	@StepScope
 	public ItemReader<HarvestedRecord> reader(@Value("#{jobParameters["
-			+ Constants.JOB_PARAM_CONF_ID + "]}") Long configId) throws Exception {
+			+ Constants.JOB_PARAM_CONF_ID + "]}") Long configId, 
+			@Value("#{jobParameters[" + Constants.JOB_PARAM_FULLTEXT_FIRST + "]}") Long firstId,
+			@Value("#{jobParameters[" + Constants.JOB_PARAM_FULLTEXT_LAST + "]}") Long lastId) throws Exception {
 		
-		System.out.println("==============spousti se reader===============");
 		JdbcPagingItemReader<HarvestedRecord> reader = new JdbcPagingItemReader<HarvestedRecord>();
 		SqlPagingQueryProviderFactoryBean pqpf = new SqlPagingQueryProviderFactoryBean();
 		pqpf.setDataSource(dataSource);
 		pqpf.setSelectClause("SELECT *");
 		pqpf.setFromClause("FROM harvested_record");
-		if (configId != null) {
-			pqpf.setWhereClause("WHERE import_conf_id = :configId");
+		
+		String whereClause = "WHERE import_conf_id = :configId";
+		if (firstId!=null) {
+			whereClause += " AND id >= :firstId";
 		}
+		if (lastId!=null) {
+			whereClause += " AND id <= :lastId";
+		}
+		
+		System.out.println ("xxxxxxxx WHERE CLAUSE xxxxxxx: " + whereClause);
+		if (configId != null) {
+			pqpf.setWhereClause(whereClause);
+		}
+				
 		pqpf.setSortKeys(ImmutableMap.of("import_conf_id",
-				Order.ASCENDING, "record_id", Order.ASCENDING));
+				Order.ASCENDING, "id", Order.ASCENDING));
 		reader.setRowMapper(harvestedRecordRowMapper);
 		reader.setPageSize(PAGE_SIZE);
 		reader.setQueryProvider(pqpf.getObject());
@@ -98,6 +108,8 @@ public class KrameriusFulltextJobConfig {
 		if (configId != null) {
 			Map<String, Object> parameterValues = new HashMap<String, Object>();
 			parameterValues.put("configId", configId);
+			parameterValues.put("firstId", firstId);
+			parameterValues.put("lastId", lastId);
 			reader.setParameterValues(parameterValues);
 		}
 		reader.afterPropertiesSet();

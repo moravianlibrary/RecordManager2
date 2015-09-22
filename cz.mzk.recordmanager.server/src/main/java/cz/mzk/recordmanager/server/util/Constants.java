@@ -26,6 +26,8 @@ public class Constants {
 	public static final String JOB_PARAM_SOLR_QUERY		= "query";
 	public static final String JOB_PARAM_FORMAT			= "format";
 	public static final String JOB_PARAM_RESUMPTION_TOKEN = "resumptionToken";
+	public static final String JOB_PARAM_FULLTEXT_FIRST	= "firstId";
+	public static final String JOB_PARAM_FULLTEXT_LAST  = "lastId";
 	public static final String JOB_PARAM_REPEAT    		= "repeat";
 	
 	public static final String JOB_PARAM_OUT_FILE		= "outFile";

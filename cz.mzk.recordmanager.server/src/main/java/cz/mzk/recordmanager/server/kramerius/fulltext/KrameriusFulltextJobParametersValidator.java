@@ -26,7 +26,9 @@ DefaultJobParametersValidator {
 	public Collection<JobParameterDeclaration> getParameters() {
 		return Arrays
 				.asList(param(Constants.JOB_PARAM_CONF_ID, ParameterType.LONG,
-						true));
+						true), //
+						param(Constants.JOB_PARAM_FULLTEXT_FIRST, ParameterType.LONG, false), //
+					    param(Constants.JOB_PARAM_FULLTEXT_LAST, ParameterType.LONG, false));
 	}
 	
 	

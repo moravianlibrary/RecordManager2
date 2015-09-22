@@ -193,8 +193,10 @@ CREATE TABLE antikvariaty_catids (
 CREATE TABLE fulltext_monography (
   id			DECIMAL(10) PRIMARY KEY,
   harvested_record_id	DECIMAL(10),
+  uuid_page		VARCHAR(42),
+  is_private		BOOLEAN DEFAULT TRUE,
   order_in_monography	DECIMAL(10),
-  uuid_page		VARCHAR(30),
+  page 			VARCHAR(20),
   fulltext		BLOB,
   CONSTRAINT fulltext_monography_harvested_record_id_fk FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id)
 );
