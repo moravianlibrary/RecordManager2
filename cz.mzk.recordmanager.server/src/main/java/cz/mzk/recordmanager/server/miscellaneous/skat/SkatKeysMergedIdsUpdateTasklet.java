@@ -64,39 +64,41 @@ public class SkatKeysMergedIdsUpdateTasklet implements Tasklet {
 	@Override
 	public RepeatStatus execute(StepContribution contribution,
 			ChunkContext chunkContext) throws Exception {
-
-		long setNo = 0L;
-		long recordsNo = 0L;
 		
-		String baseUrl = prepareAlephBaseUrl();			
-		logger.info("Getting set info from Aleph: " + baseUrl);
-		
-		try (InputStream is = httpClient.executeGet(baseUrl)) {
-			String rawResponse = IOUtils.toString(is);
+		for (String basePrefix: prepareMonthPrefixes()) {
 			
-			System.out.println(rawResponse);
-			Matcher baseMatcher = BASE_RESPONSE_PATTERN.matcher(rawResponse);
+			long setNo = 0L;
+			long recordsNo = 0L;
 			
-			if (!baseMatcher.matches()) {
-				logger.error("Response parsing failed, exiting...");
-				return RepeatStatus.FINISHED;
+			String baseUrl = prepareAlephBaseUrl(basePrefix);			
+			logger.info("Getting set info from Aleph: " + baseUrl);
+			
+			try (InputStream is = httpClient.executeGet(baseUrl)) {
+				String rawResponse = IOUtils.toString(is);
+				
+				System.out.println(rawResponse);
+				Matcher baseMatcher = BASE_RESPONSE_PATTERN.matcher(rawResponse);
+				
+				if (!baseMatcher.matches()) {
+					logger.error("No usable data in response...");
+					continue;
+				}
+				
+				setNo = Long.valueOf(baseMatcher.group(1));
+				recordsNo = Long.valueOf(baseMatcher.group(2));
+			} catch (IOException ioe) {
+				logger.error("Response failed...");
+				continue;
+			};
+			
+			if (setNo == 0 || recordsNo == 0) {
+				logger.info("Nothing to do...");
 			}
 			
-			setNo = Long.valueOf(baseMatcher.group(1));
-			recordsNo = Long.valueOf(baseMatcher.group(2));
-		} catch (IOException ioe) {
-			logger.error("Response failed, exiting...: ");
-			return RepeatStatus.FINISHED;
-		};
-		
-		if (setNo == 0 || recordsNo == 0) {
-			logger.info("Nothing to do, exiting...");
-			return RepeatStatus.FINISHED;
+			downloadMergedSkatKeys(setNo, recordsNo);
 		}
-		
-		downloadMergedSkatKeys(setNo, recordsNo);
+
 		pushToDatabase();
-		
 		return RepeatStatus.FINISHED;
 	}
 	
@@ -150,14 +152,52 @@ public class SkatKeysMergedIdsUpdateTasklet implements Tasklet {
 	}
 	
 	
-	protected String prepareAlephBaseUrl() {
+	/**
+	 * return string representation of all ia prefixes from 'fromDate'
+	 *  up to current month.
+	 * @return
+	 */
+	protected List<String> prepareMonthPrefixes() {
+		List<String> result = new ArrayList<>();
+		
+		//setup lower and upper bound
+		int currentYear = Calendar.getInstance().get(Calendar.YEAR);
+		int currentMonth = Calendar.getInstance().get(Calendar.MONTH) + 1;
+		
+		int startYear = 2000;
+		int startMonth = 1;
+		if (fromDate != null) {
+			Calendar cal = Calendar.getInstance();
+			cal.setTime(fromDate);
+			startYear = cal.get(Calendar.YEAR);
+			startMonth = cal.get(Calendar.MONTH) + 1;
+		}
+		
+		for (int year = startYear; year <= currentYear; year++) {
+			for (int month = 1; month <= 12; month++) {
+				if (year == currentYear && month > currentMonth) {
+					continue;
+				}
+				if (year == startYear && month < startMonth) {
+					continue;
+				}
+				
+				for (int partOfMonth = 0; partOfMonth <= 3; partOfMonth++) {
+					result.add(String.format("sl%d%02d%d*", year, month, partOfMonth));
+				}
+			}
+		}
+		return result;
+	}
+	
+	protected String prepareAlephBaseUrl(String iaPrefix) {
 		String url = "http://aleph.nkp.cz/X";
 		
 		Map<String,String> params = new HashMap<>();
 		params.put("op", "find");
 		params.put("find_code", "wrd");
 		params.put("base", "SKC");
-		params.put("request", "ia=" + getAlephIaPrefix());
+		params.put("request", "ia=" + iaPrefix);
 		
 		return UrlUtils.buildUrl(url, params);
 	}
@@ -174,28 +214,11 @@ public class SkatKeysMergedIdsUpdateTasklet implements Tasklet {
 		return UrlUtils.buildUrl(url, params);
 	}
 	
-	protected static String prepareSetEntry(long total, long offset, long countPerRequest) {
+	protected String prepareSetEntry(long total, long offset, long countPerRequest) {
 		
 		long min = offset;
 		long max = total < offset + countPerRequest ? total : offset + countPerRequest;
 		
 		return String.format("%09d-%09d", min, max);
-	}
-
-	
-	/**
-	 * return 'ia' prefix obtained from 'fromDate'
-	 * 
-	 * @return
-	 */
-	protected String getAlephIaPrefix() {
-		if (fromDate == null) {
-			return "sl20*";
-		}
-	    Calendar cal = Calendar.getInstance();
-	    cal.setTime(fromDate);
-	    int year = cal.get(Calendar.YEAR);
-	    int month = cal.get(Calendar.MONTH) + 1;
-	    return String.format("sl%04d%02d*",year,month);
 	}
 }
