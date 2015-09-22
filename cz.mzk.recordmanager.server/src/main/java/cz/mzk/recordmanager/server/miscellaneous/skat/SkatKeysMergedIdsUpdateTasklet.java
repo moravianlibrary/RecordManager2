@@ -75,8 +75,6 @@ public class SkatKeysMergedIdsUpdateTasklet implements Tasklet {
 			
 			try (InputStream is = httpClient.executeGet(baseUrl)) {
 				String rawResponse = IOUtils.toString(is);
-				
-				System.out.println(rawResponse);
 				Matcher baseMatcher = BASE_RESPONSE_PATTERN.matcher(rawResponse);
 				
 				if (!baseMatcher.matches()) {

@@ -2,10 +2,8 @@ package cz.mzk.recordmanager.server.miscellaneous.skat;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import org.marc4j.marc.DataField;
