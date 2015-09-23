@@ -16,6 +16,7 @@ import cz.mzk.recordmanager.server.metadata.institutions.MzkNormsMetadataMarcRec
 import cz.mzk.recordmanager.server.metadata.institutions.NkpMarcMetadataRecord;
 import cz.mzk.recordmanager.server.metadata.institutions.SfxjibMzkMetadataMarcRecord;
 import cz.mzk.recordmanager.server.metadata.institutions.SfxjibNlkMetadataMarcRecord;
+import cz.mzk.recordmanager.server.metadata.institutions.SfxjibNlkPeriodicalsMetadataMarcRecord;
 import cz.mzk.recordmanager.server.metadata.institutions.TreMetadataMarcRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecord.HarvestedRecordUniqueId;
@@ -69,6 +70,8 @@ public class MetadataRecordFactory {
 				return new SfxjibMzkMetadataMarcRecord(marcRec);
 			case Constants.PREFIX_SFXJIBNLK:
 				return new SfxjibNlkMetadataMarcRecord(marcRec);
+			case Constants.PREFIX_SFXJIBNLK_PERIODICALS:
+				return new SfxjibNlkPeriodicalsMetadataMarcRecord(marcRec);
 			default:
 				return new MetadataMarcRecord(marcRec);
 			}
