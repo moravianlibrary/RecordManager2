@@ -11,6 +11,7 @@ import org.springframework.batch.core.BatchStatus;
 import org.springframework.batch.core.ExitStatus;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobExecution;
+import org.springframework.batch.core.JobInstance;
 import org.springframework.batch.core.JobParameter;
 import org.springframework.batch.core.JobParameter.ParameterType;
 import org.springframework.batch.core.JobParameters;
@@ -78,7 +79,7 @@ public class JobExecutorImpl implements JobExecutor {
 	public Long execute(String jobName, JobParameters params, boolean forceRestart) {
 		try {
 			final Job job = jobRegistry.getJob(jobName);
-			JobParameters transformedParams = transformJobParameters(params,
+			JobParameters transformedParams = transformJobParameters(jobName, params,
 					job.getJobParametersValidator());
 			job.getJobParametersValidator().validate(transformedParams);
 			JobExecution lastExec = jobRepository.getLastJobExecution(jobName, transformedParams);
@@ -131,7 +132,7 @@ public class JobExecutorImpl implements JobExecutor {
 	 * @return transformed {@link JobParameter} with defined types 
 	 * @throws JobParametersInvalidException when one of parameters can't be converted to required type
 	 */
-	private JobParameters transformJobParameters(final JobParameters inParams, 
+	private JobParameters transformJobParameters(final String jobName, final JobParameters inParams, 
 			final JobParametersValidator inValidator) throws JobParametersInvalidException {
 		
 		if (!(inValidator instanceof IntrospectiveJobParametersValidator)) {
@@ -215,13 +216,64 @@ public class JobExecutorImpl implements JobExecutor {
 			}
 		}
 		
+		// compute incremental 'from' 
+		if (transformedMap.containsKey(Constants.JOB_PARAM_INCREMENTAL)) {
+			JobParameter param = transformedMap.get(Constants.JOB_PARAM_INCREMENTAL);
+			if (param.getValue().equals(1L)) {
+				Long importConfId = null;
+				if (transformedMap.containsKey(Constants.JOB_PARAM_CONF_ID)) {
+					JobParameter tempParam = transformedMap.get(Constants.JOB_PARAM_CONF_ID);
+					if (tempParam.getType().equals(JobParameter.ParameterType.LONG)) {
+						importConfId = (Long) tempParam.getValue();
+					}
+				}
+				
+				Date incrementalFrom = getIncrementalStartingDate(jobName, importConfId);
+				if (incrementalFrom != null) {
+					if (transformedMap.containsKey(Constants.JOB_PARAM_FROM_DATE)) {
+						logger.warn("Overriding given 'from' parameter.");
+					}
+					transformedMap.put(Constants.JOB_PARAM_FROM_DATE, new JobParameter(incrementalFrom));
+					logger.info("Detected incremental 'from' parameter: " + incrementalFrom);
+				}
+			}
+		}
+		
 		JobParameter repeatParam = transformedMap.get(Constants.JOB_PARAM_REPEAT);
 		if (repeatParam != null && (new Long(1)).equals(repeatParam.getValue())) {
 			transformedMap.put(Constants.JOB_PARAM_TIMESTAMP, new JobParameter(new Date()));
 		}
 		transformedMap.remove(Constants.JOB_PARAM_REPEAT);
-		
 		return new JobParameters(transformedMap);
+	}
+	
+	/**
+	 * get last date when job having given name was successfully completed
+	 * @param jobName
+	 * @param importConfId
+	 * @return
+	 */
+	private Date getIncrementalStartingDate(String jobName, Long importConfId) {
+		Date maxEndTime = null;
+		for (JobInstance ins: jobExplorer.getJobInstances(jobName, 0, 100000)) {
+			for (JobExecution exec: jobExplorer.getJobExecutions(ins)) {
+				// consider competed jobs only
+				if (!ExitStatus.COMPLETED.equals(exec.getExitStatus())) {
+					continue;
+				}
+				// consider jobs having equal importConfiguration only
+				Long execImportConf = exec.getJobParameters().getLong(Constants.JOB_PARAM_CONF_ID, 0L);
+				if (importConfId != null && !importConfId.equals(execImportConf)) {
+					continue;
+				}
+				
+				Date currentEndTime = exec.getEndTime();
+				if (maxEndTime == null || currentEndTime.after(maxEndTime)) {
+					maxEndTime = currentEndTime;
+				}
+			}
+		}
+		return maxEndTime;
 	}
 
 }
