@@ -32,7 +32,14 @@ public class KrameriusFulltextWriter implements ItemWriter<HarvestedRecord>,Step
 			System.out.println("\\\\ mame confId: "+confId);
 			HarvestedRecord rec = recordDao.findByIdAndHarvestConfiguration(
 					hr.getUniqueId().getRecordId(), confId);
-			rec.setFulltextMonography(hr.getFulltextMonography());
+			
+			//delete old List of FulltextMonography from rec
+			System.out.println("----preparing to delete fulltext monography pages ----");
+			recordDao.deleteFulltextMonography(rec);
+			
+			//add new List of FulltextMonography to rec
+			System.out.println("----setting new fulltext monography pages ----");
+			rec.setFulltextMonography(hr.getFulltextMonography()); // tady je zakopany pes - puvodni fulltext monography zustane v DB, jen ztrati identifikator
 			
 			recordDao.persist(rec);
 		}
