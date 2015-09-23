@@ -53,12 +53,7 @@ public class SkatKeysMergedIdsUpdateTasklet implements Tasklet {
 	private Set<String> downloadedKeys = new HashSet<>();
 	
 	public SkatKeysMergedIdsUpdateTasklet(Date fromDate) {
-		if (fromDate.equals(new Date(0))) {
-			this.fromDate = null;
-		} else {
-			this.fromDate = fromDate;
-		}
-		
+		this.fromDate = fromDate;
 	}
 	
 	@Override
@@ -94,9 +89,10 @@ public class SkatKeysMergedIdsUpdateTasklet implements Tasklet {
 			}
 			
 			downloadMergedSkatKeys(setNo, recordsNo);
+			pushToDatabase();
 		}
 
-		pushToDatabase();
+		
 		return RepeatStatus.FINISHED;
 	}
 	
@@ -124,26 +120,17 @@ public class SkatKeysMergedIdsUpdateTasklet implements Tasklet {
 	}
 	
 	protected void pushToDatabase() {
-		List<String> currentBatch = new ArrayList<>();
 		for (String currentKey: downloadedKeys) {
-			currentBatch.add(currentKey);
-			if (currentBatch.size() > 99) {
-				push(currentBatch);
-				currentBatch = new ArrayList<>();
-			}
+			push(currentKey);
 		}
-		
-		if (!currentBatch.isEmpty()) {
-			push(currentBatch);
-		}
+		downloadedKeys.clear();
 	}
 	
-	protected void push(List<String> batch) {
+	protected void push(String recordId) {
 		String query = "UPDATE skat_keys "
 				+ "SET manually_merged = TRUE "
 				+ "WHERE skat_record_id IN "
-				+ "(SELECT id FROM harvested_record WHERE record_id in "
-				+ "('" + String.join("','", batch) + "')"
+				+ "(SELECT id FROM harvested_record WHERE record_id = '" + recordId + "'"
 				+ ")";
 		Session session = sessionFactory.getCurrentSession();
 		session.createSQLQuery(query).executeUpdate();
