@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.TreeSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -133,7 +134,7 @@ public class SolrInputDocumentFactoryImpl implements SolrInputDocumentFactory, I
 		List<String> localIds = childs.stream().map(rec -> (String) rec.getFieldValue("id")).collect(Collectors.toCollection(ArrayList::new));
 		mergedDocument.addField(SolrFieldConstants.LOCAL_IDS_FIELD, localIds);
 		
-		Set<String> institutions = records.stream().map(rec -> getInstitution(rec)).collect(new UniqueCollector<String>());
+		Set<String> institutions = records.stream().map(rec -> getInstitution(rec)).flatMap(it -> it.stream()).collect(Collectors.toCollection(HashSet::new));
 		mergedDocument.addField(SolrFieldConstants.INSTITUTION_FIELD, institutions);
 		mergedDocument.addField(SolrFieldConstants.RECORD_FORMAT, getRecordType(record));
 		
@@ -201,13 +202,13 @@ public class SolrInputDocumentFactoryImpl implements SolrInputDocumentFactory, I
 	}
 	
 	protected List<String> getInstitution(HarvestedRecord record){
-		if(record.getHarvestedFrom() != null){
-			if(record.getHarvestedFrom().isLibrary()){
+		if(record.getHarvestedFrom() != null) {
+			if (record.getHarvestedFrom().isLibrary()) {
 				String city = getCityOfRecord(record);
 				String name = getInstitutionOfRecord(record);
 				return SolrUtils.createHierarchicFacetValues(INSTITUTION_LIBRARY, city, name);
 			}
-			else{
+			else {
 				String name = getInstitutionOfRecord(record);
 				return SolrUtils.createHierarchicFacetValues(INSTITUTION_OTHERS, name);
 			}
@@ -236,36 +237,7 @@ public class SolrInputDocumentFactoryImpl implements SolrInputDocumentFactory, I
 			remappedFields.put(fName, field);
 		}
 	}
-	
-	protected class UniqueCollector<T> implements Collector<List<T>, Set<T>, Set<T>>{
 
-		@Override
-		public Supplier<Set<T>> supplier() {
-			return HashSet::new;
-		}
-
-		@Override
-		public BiConsumer<Set<T>, List<T>> accumulator() {
-			return (accum, input) -> input.forEach(cur -> accum.add(cur));
-		}
-
-		@Override
-		public BinaryOperator<Set<T>> combiner() {
-			return (x,y) -> {x.addAll(y); return x;}; 
-		}
-
-		@Override
-		public Function<Set<T>, Set<T>> finisher() {
-			return accumulator -> accumulator;
-		}
-
-		@Override
-		public Set<java.util.stream.Collector.Characteristics> characteristics() {
-			return EnumSet.of(Characteristics.UNORDERED);
-		}
-		
-	}
-	
 	protected List<String> getRecordType(HarvestedRecord record){
 		MetadataRecord metadata = metadataFactory.getMetadataRecord(record);
 		
