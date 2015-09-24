@@ -86,9 +86,9 @@ public class SolrInputDocumentFactoryImpl implements SolrInputDocumentFactory, I
 	
 	@Autowired 
 	private KrameriusConfigurationDAO krameriusConfiguationDao;
-	
+
 	private Map<Long,String> krameriusBaseLinkMap = new HashMap<>();
-	
+
 	@Override
 	public SolrInputDocument create(HarvestedRecord record) {
 		try {
@@ -122,6 +122,7 @@ public class SolrInputDocumentFactoryImpl implements SolrInputDocumentFactory, I
 		}
 
 		List<SolrInputDocument> childs = records.stream().map(rec -> create(rec)).collect(Collectors.toCollection(ArrayList::new));
+		SolrUtils.sortByWeight(childs);
 		
 		HarvestedRecord record = records.get(0);
 		SolrInputDocument mergedDocument = asSolrDocument(mapper.map(dedupRecord, records));
@@ -129,8 +130,7 @@ public class SolrInputDocumentFactoryImpl implements SolrInputDocumentFactory, I
 		mergedDocument.addField(SolrFieldConstants.MERGED_FIELD, 1);
 		mergedDocument.addField(SolrFieldConstants.WEIGHT, record.getWeight());
 		mergedDocument.addField(SolrFieldConstants.CITY_INSTITUTION_CS, getCityInstitutionForSearching(record));
-		
-		List<String> localIds = records.stream().map(rec -> getId(rec)).collect(Collectors.toCollection(ArrayList::new));
+		List<String> localIds = childs.stream().map(rec -> (String) rec.getFieldValue("id")).collect(Collectors.toCollection(ArrayList::new));
 		mergedDocument.addField(SolrFieldConstants.LOCAL_IDS_FIELD, localIds);
 		
 		Set<String> institutions = records.stream().map(rec -> getInstitution(rec)).collect(new UniqueCollector<String>());
