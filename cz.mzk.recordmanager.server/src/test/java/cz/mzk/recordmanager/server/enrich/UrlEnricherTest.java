@@ -9,7 +9,7 @@ import org.testng.annotations.Test;
 
 import cz.mzk.recordmanager.server.AbstractTest;
 import cz.mzk.recordmanager.server.index.SolrFieldConstants;
-import cz.mzk.recordmanager.server.index.enrich.UrlEnricher;
+import cz.mzk.recordmanager.server.index.enrich.UrlDedupRecordEnricher;
 import cz.mzk.recordmanager.server.model.DedupRecord;
 
 public class UrlEnricherTest extends AbstractTest{
@@ -34,7 +34,7 @@ public class UrlEnricherTest extends AbstractTest{
 		result.add("MZK|unknown|http://tre.cz|");
 		result.add("MZK|protected|http://brno.cz|");	
 
-		UrlEnricher ue = new UrlEnricher();
+		UrlDedupRecordEnricher ue = new UrlDedupRecordEnricher();
 		ue.enrich(dr, merged, local);
 		
 		Assert.assertEquals(merged.getFieldValues(SolrFieldConstants.URL).toString(),
@@ -55,7 +55,7 @@ public class UrlEnricherTest extends AbstractTest{
 		result.add("TRE|online|http://mzk.cz|");
 		result.add("MZK|online|http://mzk.cz|");
 
-		UrlEnricher ue = new UrlEnricher();
+		UrlDedupRecordEnricher ue = new UrlDedupRecordEnricher();
 		ue.enrich(dr, merged, local);
 		
 		Assert.assertEquals(merged.getFieldValues(SolrFieldConstants.URL).toString(),
@@ -78,7 +78,7 @@ public class UrlEnricherTest extends AbstractTest{
 		result.add("unknown|unknown|http://mzk.cz|text");
 		result.add("unknown|unknown|http://brno.cz|");
 
-		UrlEnricher ue = new UrlEnricher();
+		UrlDedupRecordEnricher ue = new UrlDedupRecordEnricher();
 		ue.enrich(dr, merged, local);
 		
 		Assert.assertEquals(merged.getFieldValues(SolrFieldConstants.URL).toString(),
@@ -97,7 +97,7 @@ public class UrlEnricherTest extends AbstractTest{
 		result.add("TRE|unknown|http://mzk.cz|");
 		result.add("MZK|protected|http://mzk.cz|");	
 
-		UrlEnricher ue = new UrlEnricher();
+		UrlDedupRecordEnricher ue = new UrlDedupRecordEnricher();
 		ue.enrich(dr, merged, local);
 		
 		Assert.assertEquals(merged.getFieldValues(SolrFieldConstants.URL).toString(),

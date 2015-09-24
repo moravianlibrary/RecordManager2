@@ -4,21 +4,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.TreeSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-import java.util.function.BiConsumer;
-import java.util.function.BinaryOperator;
-import java.util.function.Function;
-import java.util.function.Supplier;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import org.apache.solr.common.SolrInputDocument;
@@ -29,16 +22,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import cz.mzk.recordmanager.server.index.enrich.DedupRecordEnricher;
+import cz.mzk.recordmanager.server.index.enrich.HarvestedRecordEnricher;
 import cz.mzk.recordmanager.server.metadata.MetadataRecord;
 import cz.mzk.recordmanager.server.metadata.MetadataRecordFactory;
 import cz.mzk.recordmanager.server.model.DedupRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecordFormat.HarvestedRecordFormatEnum;
 import cz.mzk.recordmanager.server.model.ImportConfiguration;
-import cz.mzk.recordmanager.server.model.KrameriusConfiguration;
-import cz.mzk.recordmanager.server.oai.dao.KrameriusConfigurationDAO;
 import cz.mzk.recordmanager.server.scripting.MappingResolver;
-import cz.mzk.recordmanager.server.util.Constants;
 import cz.mzk.recordmanager.server.util.SolrUtils;
 
 @Component
@@ -83,12 +74,10 @@ public class SolrInputDocumentFactoryImpl implements SolrInputDocumentFactory, I
 	private List<DedupRecordEnricher> dedupRecordEnrichers;
 
 	@Autowired
-	private MetadataRecordFactory metadataFactory;
-	
-	@Autowired 
-	private KrameriusConfigurationDAO krameriusConfiguationDao;
+	private List<HarvestedRecordEnricher> harvestedRecordEnrichers;
 
-	private Map<Long,String> krameriusBaseLinkMap = new HashMap<>();
+	@Autowired
+	private MetadataRecordFactory metadataFactory;
 
 	@Override
 	public SolrInputDocument create(HarvestedRecord record) {
@@ -101,7 +90,7 @@ public class SolrInputDocumentFactoryImpl implements SolrInputDocumentFactory, I
 				document.addField(SolrFieldConstants.ID_FIELD, id);
 			}
 			
-			generateUrls(record, document);
+			harvestedRecordEnrichers.forEach(enricher -> enricher.enrich(record, document));
 			generateSfxLinks(record, document);
 			
 			document.addField(SolrFieldConstants.LOCAL_INSTITUTION_FIELD, getInstitution(record));
@@ -254,53 +243,6 @@ public class SolrInputDocumentFactoryImpl implements SolrInputDocumentFactory, I
 		return result;
 				
 	}
-
-	/**
-	 * generate links in standard format "institution code"|"policy code"|"url"
-	 * removes field KRAMERIUS_DUMMY_RIGTHS from document
-	 * @param record
-	 * @param document
-	 * @return
-	 */
-	protected void generateUrls(final HarvestedRecord record, final SolrInputDocument document) {
-		String institutionCode = record.getHarvestedFrom().getIdPrefix();
-		Set<String> urls = new HashSet<>();
-		if (document.containsKey(SolrFieldConstants.URL)) {
-			for (Object obj: document.getFieldValues(SolrFieldConstants.URL)) {
-				if (obj instanceof String) {
-					urls.add((String)obj);
-				}
-			}
-		}
-		
-		//handle Kramerius url
-		String kramUrl = null;
-		if (Constants.METADATA_FORMAT_DUBLIN_CORE.equals(record.getFormat())) {
-			Long importConfId = record.getHarvestedFrom().getId();
-			if (!krameriusBaseLinkMap.containsKey(importConfId)) {
-				KrameriusConfiguration kramConf = krameriusConfiguationDao.get(importConfId);
-				if (kramConf.getUrl() != null) {
-					String kramUrlBase = Pattern.compile("api/v\\d\\.\\d").matcher(kramConf.getUrl()).replaceAll("");
-					krameriusBaseLinkMap.put(importConfId, kramUrlBase);
-				}
-			}
-	
-			if (krameriusBaseLinkMap.containsKey(importConfId)) {
-				String policy = (String) document.getFieldValue(SolrFieldConstants.KRAMERIUS_DUMMY_RIGTHS);
-				// FIXME probably not best way of generating urls
-				kramUrl = policy + "|" + krameriusBaseLinkMap.get(importConfId) + "i.jsp?pid=" + record.getUniqueId().getRecordId() + "|";
-				urls.add(kramUrl);
-			}
-		}
-		
-		document.remove(SolrFieldConstants.KRAMERIUS_DUMMY_RIGTHS);
-		document.remove(SolrFieldConstants.URL);
-		
-		Set<String> result = new HashSet<>();
-		urls.stream().forEach(url -> result.add(institutionCode + "|" + url));
-		document.addField(SolrFieldConstants.URL, result);
-	}
-	
 	
 	/**
 	 * add institution prefix to sfx links

@@ -12,7 +12,7 @@ import cz.mzk.recordmanager.server.index.SolrFieldConstants;
 import cz.mzk.recordmanager.server.model.DedupRecord;
 
 @Component
-public class UrlEnricher implements DedupRecordEnricher {
+public class UrlDedupRecordEnricher implements DedupRecordEnricher {
 
 	private static final String ONLINE = "online";
 	private static final String UNKNOWN = "unknown";
