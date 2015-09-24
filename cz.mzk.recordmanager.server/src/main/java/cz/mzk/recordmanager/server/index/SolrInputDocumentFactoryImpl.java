@@ -91,7 +91,6 @@ public class SolrInputDocumentFactoryImpl implements SolrInputDocumentFactory, I
 			}
 			
 			harvestedRecordEnrichers.forEach(enricher -> enricher.enrich(record, document));
-			generateSfxLinks(record, document);
 			
 			document.addField(SolrFieldConstants.LOCAL_INSTITUTION_FIELD, getInstitution(record));
 			document.addField(SolrFieldConstants.CITY_INSTITUTION_CS, getCityInstitutionForSearching(record));
@@ -219,14 +218,6 @@ public class SolrInputDocumentFactoryImpl implements SolrInputDocumentFactory, I
 		return result;
 	}
 
-	@Override
-	public void afterPropertiesSet() throws Exception {
-		for (String field : fieldsWithDash) {
-			String fName = field.replace('-', '_');
-			remappedFields.put(fName, field);
-		}
-	}
-
 	protected List<String> getRecordType(HarvestedRecord record){
 		MetadataRecord metadata = metadataFactory.getMetadataRecord(record);
 		
@@ -241,25 +232,14 @@ public class SolrInputDocumentFactoryImpl implements SolrInputDocumentFactory, I
 			}
 		}
 		return result;
-				
 	}
-	
-	/**
-	 * add institution prefix to sfx links
-	 * @param record
-	 * @param document
-	 */
-	protected void generateSfxLinks(final HarvestedRecord record, final SolrInputDocument document) {
-		String institutionCode = record.getHarvestedFrom().getIdPrefix();
-		Set<String> links = new HashSet<>();
-		if (document.containsKey(SolrFieldConstants.SFX_LINKS_FIELD)) {
-			for (Object obj: document.getFieldValues(SolrFieldConstants.SFX_LINKS_FIELD)) {
-				if (obj instanceof String) {
-					links.add(institutionCode + "|" + (String)obj);
-				}
-			}
+
+	@Override
+	public void afterPropertiesSet() throws Exception {
+		for (String field : fieldsWithDash) {
+			String fName = field.replace('-', '_');
+			remappedFields.put(fName, field);
 		}
-		document.remove(SolrFieldConstants.SFX_LINKS_FIELD);
-		document.addField(SolrFieldConstants.SFX_LINKS_FIELD, links);
 	}
+
 }
