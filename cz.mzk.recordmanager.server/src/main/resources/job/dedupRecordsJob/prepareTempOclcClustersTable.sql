@@ -9,6 +9,10 @@ SELECT
   count(hr.dedup_record_id) dedup_count
 FROM harvested_record hr
   INNER JOIN oclc o ON hr.id = o.harvested_record_id
+  WHERE hr.id NOT IN (
+    SELECT hrfl.harvested_record_id FROM harvested_record_format_link hrfl 
+    INNER JOIN harvested_record_format hrf ON hrf.id = hrfl.harvested_record_format_id
+    WHERE hrf.name = 'PERIODICALS')
 GROUP BY o.oclc 
 HAVING COUNT(oclc) > 1 AND count(distinct COALESCE(hr.dedup_record_id,1)) >= count(hr.dedup_record_id) AND max(hr.updated) > (SELECT time FROM last_dedup_time);
 
