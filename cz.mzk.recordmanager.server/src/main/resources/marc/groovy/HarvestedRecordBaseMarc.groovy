@@ -10,7 +10,7 @@ title_sub_display = getFirstField "245b"
 author_display = getFirstField "100abcd"
 author2_display_mv = getFields "110ab:111ab:700abcd:710ab:711ab"
 
-publishDate_display = getFirstField "260c"
+publishDate_display = getPublishDateDisplay()
 
 ean_display_mv = getEAN()
 isbn_display_mv = getFields "020a"
