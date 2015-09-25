@@ -8,6 +8,7 @@ import java.util.Map;
 import cz.mzk.recordmanager.server.dc.DublinCoreRecord;
 import cz.mzk.recordmanager.server.scripting.BaseDSL;
 import cz.mzk.recordmanager.server.scripting.MappingResolver;
+import cz.mzk.recordmanager.server.scripting.StopWordsResolver;
 import cz.mzk.recordmanager.server.scripting.function.RecordFunction;
 import cz.mzk.recordmanager.server.util.Constants;
 import cz.mzk.recordmanager.server.util.SolrUtils;
@@ -21,9 +22,9 @@ public class DublinCoreDSL extends BaseDSL {
 	private final Map<String, RecordFunction<DublinCoreRecord>> functions;
 
 	public DublinCoreDSL(DublinCoreRecord record,
-			MappingResolver propertyResolver,
+			MappingResolver propertyResolver, StopWordsResolver stopWordsResolver,
 			Map<String, RecordFunction<DublinCoreRecord>> functions) {
-		super(propertyResolver);
+		super(propertyResolver, stopWordsResolver);
 		this.record = record;
 		this.functions = functions;
 	}

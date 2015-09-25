@@ -3,6 +3,8 @@ package cz.mzk.recordmanager.server.scripting;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * 
@@ -20,9 +22,12 @@ public abstract class BaseDSL {
 
 	private final MappingResolver propertyResolver;
 
-	public BaseDSL(MappingResolver propertyResolver) {
+	private final StopWordsResolver stopWordsResolver;
+
+	public BaseDSL(MappingResolver propertyResolver, StopWordsResolver stopWordsResolver) {
 		super();
 		this.propertyResolver = propertyResolver;
+		this.stopWordsResolver = stopWordsResolver;
 	}
 
 	public String translate(String file, String input, String defaultValue)
@@ -49,6 +54,11 @@ public abstract class BaseDSL {
 			}
 		}
 		return translated;
+	}
+
+	public List<String> filter(String stopWordsFile, List<String> values) throws IOException {
+		Set<String> stopWords = stopWordsResolver.resolve(stopWordsFile);
+		return values.stream().filter(value -> !stopWords.contains(value)).collect(Collectors.toCollection(ArrayList::new));
 	}
 
 }

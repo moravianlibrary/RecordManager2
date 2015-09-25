@@ -18,6 +18,7 @@ import cz.mzk.recordmanager.server.marc.MarcRecord;
 import cz.mzk.recordmanager.server.metadata.MetadataMarcRecord;
 import cz.mzk.recordmanager.server.scripting.BaseDSL;
 import cz.mzk.recordmanager.server.scripting.MappingResolver;
+import cz.mzk.recordmanager.server.scripting.StopWordsResolver;
 import cz.mzk.recordmanager.server.scripting.function.RecordFunction;
 import cz.mzk.recordmanager.server.util.Constants;
 
@@ -36,8 +37,9 @@ public class MarcDSL extends BaseDSL {
 
 	private final Map<String, RecordFunction<MarcFunctionContext>> functions;
 
-	public MarcDSL(MarcFunctionContext context, MappingResolver propertyResolver, Map<String, RecordFunction<MarcFunctionContext>> functions) {
-		super(propertyResolver);
+	public MarcDSL(MarcFunctionContext context, MappingResolver propertyResolver, StopWordsResolver stopWordsResolver,
+			Map<String, RecordFunction<MarcFunctionContext>> functions) {
+		super(propertyResolver, stopWordsResolver);
 		this.context = context;
 		this.record = context.record();
 		this.functions = functions;

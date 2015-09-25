@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 import cz.mzk.recordmanager.server.scripting.AbstractScriptFactory;
 import cz.mzk.recordmanager.server.scripting.MappingResolver;
 import cz.mzk.recordmanager.server.scripting.MappingScript;
+import cz.mzk.recordmanager.server.scripting.StopWordsResolver;
 import cz.mzk.recordmanager.server.scripting.function.RecordFunction;
 import cz.mzk.recordmanager.server.scripting.function.RecordFunctionsFactory;
 import cz.mzk.recordmanager.server.scripting.marc.function.MarcRecordFunctions;
@@ -29,6 +30,9 @@ public class MarcScriptFactoryImpl extends AbstractScriptFactory<MarcFunctionCon
 	private MappingResolver propertyResolver;
 
 	@Autowired
+	private StopWordsResolver stopWordsResolver;
+
+	@Autowired
 	private List<MarcRecordFunctions> functionsList;
 
 	private Map<String, RecordFunction<MarcFunctionContext>> functions;
@@ -42,7 +46,7 @@ public class MarcScriptFactoryImpl extends AbstractScriptFactory<MarcFunctionCon
 	protected MappingScript<MarcFunctionContext> create(Binding binding,
 			List<DelegatingScript> scripts) {
 		return new MarcMappingScriptImpl(binding, scripts, propertyResolver,
-				functions);
+				stopWordsResolver, functions);
 	}
 
 	@Override

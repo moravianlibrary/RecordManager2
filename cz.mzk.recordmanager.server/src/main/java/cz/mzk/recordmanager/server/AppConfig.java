@@ -46,8 +46,11 @@ import cz.mzk.recordmanager.server.oai.harvest.OAIHarvestJobConfig;
 import cz.mzk.recordmanager.server.oai.harvest.OAIHarvesterFactory;
 import cz.mzk.recordmanager.server.oai.harvest.OAIHarvesterFactoryImpl;
 import cz.mzk.recordmanager.server.scripting.CachingMappingResolver;
+import cz.mzk.recordmanager.server.scripting.CachingStopWordsResolver;
 import cz.mzk.recordmanager.server.scripting.ClasspathMappingResolver;
+import cz.mzk.recordmanager.server.scripting.ClasspathStopWordsResolver;
 import cz.mzk.recordmanager.server.scripting.MappingResolver;
+import cz.mzk.recordmanager.server.scripting.StopWordsResolver;
 import cz.mzk.recordmanager.server.solr.SolrServerFactory;
 import cz.mzk.recordmanager.server.solr.SolrServerFactoryImpl;
 import cz.mzk.recordmanager.server.util.ApacheHttpClient;
@@ -175,6 +178,11 @@ public class AppConfig extends DefaultBatchConfigurer {
 	@Bean
 	public MappingResolver propertyResolver() {
 		return new CachingMappingResolver(new ClasspathMappingResolver());
+	}
+
+	@Bean
+	public StopWordsResolver stopWordsResolver() {
+		return new CachingStopWordsResolver(new ClasspathStopWordsResolver());
 	}
 
 	@Bean

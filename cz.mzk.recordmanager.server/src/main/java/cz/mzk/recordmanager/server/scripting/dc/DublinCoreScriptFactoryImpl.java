@@ -16,6 +16,7 @@ import cz.mzk.recordmanager.server.dc.DublinCoreRecord;
 import cz.mzk.recordmanager.server.scripting.AbstractScriptFactory;
 import cz.mzk.recordmanager.server.scripting.MappingResolver;
 import cz.mzk.recordmanager.server.scripting.MappingScript;
+import cz.mzk.recordmanager.server.scripting.StopWordsResolver;
 import cz.mzk.recordmanager.server.scripting.dc.function.DublinCoreRecordFunctions;
 import cz.mzk.recordmanager.server.scripting.function.RecordFunction;
 import cz.mzk.recordmanager.server.scripting.function.RecordFunctionsFactory;
@@ -29,6 +30,9 @@ public class DublinCoreScriptFactoryImpl extends AbstractScriptFactory<DublinCor
 
 	@Autowired
 	private MappingResolver propertyResolver;
+
+	@Autowired
+	private StopWordsResolver stopWordsResolver;
 
 	@Autowired(required=false)
 	private List<DublinCoreRecordFunctions> functionsList;
@@ -44,7 +48,7 @@ public class DublinCoreScriptFactoryImpl extends AbstractScriptFactory<DublinCor
 	protected MappingScript<DublinCoreRecord> create(final Binding binding,
 			final List<DelegatingScript> scripts) {
 		return new DublinCoreMappingScriptImpl(binding, scripts, propertyResolver,
-				functions);
+				stopWordsResolver, functions);
 	}
 
 	@Override
