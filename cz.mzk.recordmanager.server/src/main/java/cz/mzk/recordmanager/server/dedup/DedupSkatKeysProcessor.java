@@ -32,7 +32,6 @@ public class DedupSkatKeysProcessor extends DedupSimpleKeysStepProsessor impleme
 	
 	@Override
 	public List<HarvestedRecord> process(List<Long> item) throws Exception {
-		System.out.println(item);
 		if (item == null || item.size() < 3) {
 			return Collections.emptyList();
 		}
@@ -47,7 +46,6 @@ public class DedupSkatKeysProcessor extends DedupSimpleKeysStepProsessor impleme
 		List<Title> expectedTitles = skatRec.getTitles();
 		
 		Set<HarvestedRecord> toBeMerged = new HashSet<>();
-		System.out.println(ordinaryRecords);
 		
 		// separate records that should be actually merged
 		// decision is based on similarity of titles
@@ -60,7 +58,6 @@ public class DedupSkatKeysProcessor extends DedupSimpleKeysStepProsessor impleme
 				}
 			}
 		}
-		System.out.println(toBeMerged);
 		
 		if (toBeMerged.isEmpty()) {
 			return Collections.emptyList();

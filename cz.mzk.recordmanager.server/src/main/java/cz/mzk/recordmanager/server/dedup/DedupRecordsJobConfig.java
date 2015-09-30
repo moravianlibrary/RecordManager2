@@ -73,7 +73,6 @@ public class DedupRecordsJobConfig {
 
 	private static final int REST_OF_RECORDS_COMMIT_INTERVAL = 10000;
 	
-	private static final int INFINITY = Integer.MAX_VALUE;
 	
 	@Autowired
 	private SessionFactory sessionFactory;
