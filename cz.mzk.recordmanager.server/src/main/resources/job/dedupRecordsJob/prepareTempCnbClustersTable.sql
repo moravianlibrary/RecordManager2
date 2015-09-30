@@ -9,10 +9,6 @@ SELECT
   count(hr.dedup_record_id) dedup_count
 FROM harvested_record hr
   INNER JOIN cnb c ON hr.id = c.harvested_record_id
-WHERE hr.id not in (
-  SELECT hrfl.harvested_record_id FROM harvested_record_format_link hrfl 
-  INNER JOIN harvested_record_format hrf ON hrf.id = hrfl.harvested_record_format_id
-  WHERE hrf.name = 'PERIODICALS')
 GROUP BY c.cnb 
 HAVING COUNT(cnb) > 1 AND count(distinct COALESCE(hr.dedup_record_id,1)) >= count(hr.dedup_record_id) AND max(hr.updated) > (SELECT time FROM last_dedup_time);
 

@@ -292,7 +292,7 @@ public class DedupRecordsJobConfig {
 				.listener(new StepProgressListener())
 				.<List<Long>, List<HarvestedRecord>> chunk(100)
 				.reader(dedupClusterIdReader())
-				.processor(dedupSimpleKeysStepProsessor())
+				.processor(dedupSkatKeysProcessor())
 				.writer(dedupSimpleKeysStepWriter())
 				.build();
 	}
@@ -659,7 +659,7 @@ public class DedupRecordsJobConfig {
 					.listener(new StepProgressListener())
 					.<List<Long>, List<HarvestedRecord>> chunk(100)
 					.reader(dedupSimpleKeysSkatRestReader())
-					.processor(dedupSimpleKeysStepProsessor())
+					.processor(dedupSkatKeysProcessor())
 					.writer(dedupSimpleKeysStepWriter())
 					.build();
 		}
@@ -809,6 +809,17 @@ public class DedupRecordsJobConfig {
 			throws Exception {
 		return new DedupSimpleKeysStepWriter();
 	}
+	
+	
+	/**
+	 * Record processor for deduplication of records based on Skat data
+	 * @return
+	 */
+	@Bean(name = "dedupSkatKeys:processor")
+	@StepScope
+	public ItemProcessor<List<Long>, List<HarvestedRecord>> dedupSkatKeysProcessor() {
+		return new DedupSkatKeysProcessor();
+	}
 
 	public class ArrayLongMapper implements RowMapper<List<Long>> {
 
@@ -824,6 +835,5 @@ public class DedupRecordsJobConfig {
 
 			return hrs;
 		}
-
 	}
 }
