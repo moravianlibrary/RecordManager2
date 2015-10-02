@@ -257,3 +257,10 @@ CREATE TABLE fulltext_monography
   CONSTRAINT fulltext_monography_pkey PRIMARY KEY (id),
   CONSTRAINT fulltext_monography_harvested_record_id_fk FOREIGN KEY (harvested_record_id)
 );
+
+--24.9. 2015 mjtecka
+ALTER TABLE kramerius_conf ADD COLUMN auth_token varchar(128);
+
+--25.9. 2015 mjtecka
+ALTER TABLE kramerius_conf ADD COLUMN download_private_fulltexts boolean DEFAULT FALSE;
+

@@ -49,6 +49,8 @@ CREATE TABLE kramerius_conf (
   model                VARCHAR(128),
   query_rows           DECIMAL(10),
   metadata_stream      VARCHAR(128),
+  auth_token 	       VARCHAR(128);
+  download_private_fulltexts BOOLEAN DEFAULT FALSE,
   CONSTRAINT kramerius_conf_import_conf_fk FOREIGN KEY (import_conf_id) REFERENCES import_conf(id)
 );
 

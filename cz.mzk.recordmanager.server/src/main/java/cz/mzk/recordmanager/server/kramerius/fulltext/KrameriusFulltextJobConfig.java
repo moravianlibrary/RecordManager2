@@ -73,6 +73,11 @@ public class KrameriusFulltextJobConfig {
 	}
 	
 	
+	/* reads document uuids for given config (may be limited by database id)
+	 * returns ItemReader for HarvestedRecord(s)
+	 * 
+	 */
+	
 	@Bean(name = "krameriusFulltextJob:reader")
 	@StepScope
 	public ItemReader<HarvestedRecord> reader(@Value("#{jobParameters["

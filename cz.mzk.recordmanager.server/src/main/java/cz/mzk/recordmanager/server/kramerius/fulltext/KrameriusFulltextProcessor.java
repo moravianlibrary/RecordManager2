@@ -42,7 +42,9 @@ public class KrameriusFulltextProcessor implements ItemProcessor<HarvestedRecord
 	@Override
 	public void beforeStep(StepExecution stepExecution) {
 		try (SessionBinder sess = hibernateSync.register()) {
+			kf.setAuthToken(configDao.get(confId).getAuthToken());
 			kf.setKramApiUrl(configDao.get(confId).getUrl());
+			kf.setDownloadPrivateFulltexts(configDao.get(confId).isDownloadPrivateFulltexts());
 		}
 	}
 

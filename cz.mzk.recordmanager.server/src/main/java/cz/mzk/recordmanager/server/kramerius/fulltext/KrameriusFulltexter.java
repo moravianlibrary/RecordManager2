@@ -5,9 +5,17 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.net.Authenticator;
+import java.net.HttpURLConnection;
+import java.net.PasswordAuthentication;
 import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -17,19 +25,28 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
+import org.apache.commons.codec.binary.Base64;
 
+import cz.mzk.recordmanager.server.kramerius.harvest.KrameriusHarvesterParams;
 import cz.mzk.recordmanager.server.model.FulltextMonography;
+import cz.mzk.recordmanager.server.model.KrameriusConfiguration;
+import cz.mzk.recordmanager.server.oai.dao.KrameriusConfigurationDAO;
+import cz.mzk.recordmanager.server.util.HibernateSessionSynchronizer;
+import cz.mzk.recordmanager.server.util.HibernateSessionSynchronizer.SessionBinder;
 
 @Component
 public class KrameriusFulltexter {
-
+	
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
-
+		
 	private String kramApiUrl;
-
+	private String authToken;
+	private boolean downloadPrivateFulltexts = false;  //defaults to false, processor may set up true
+	
 	private static Logger logger = LoggerFactory
 			.getLogger(KrameriusFulltexter.class);
+
 
 	/*
 	 * gets list of ALL uuids from harvested_records for selected confId
@@ -193,16 +210,16 @@ public class KrameriusFulltexter {
 		return ocr;
 	}
 
-	public byte[] getOCRBytes(String pageUuid) {
+	public byte[] getOCRBytes(String pageUuid, boolean isPrivate) {
 		/* vytvorit odkaz do API pro UUID stranky */
 		String ocrUrl = kramApiUrl + "/item/" + pageUuid + "/streams/TEXT_OCR";
 		System.out.println("Zkousim stahnout OCR z [" + ocrUrl + "] ....");
 		byte[] ocr = null; /* TODO check */
 
 		try {
-			ocr = readUrlBytes(ocrUrl);
+			ocr = readUrlBytes(ocrUrl, isPrivate, authToken, downloadPrivateFulltexts);
 			System.out.println("****OCR from " + ocrUrl + "*****");
-			// System.out.println(ocr);
+			//System.out.println(ocr);
 		} catch (Exception e) {
 			System.err.println("Exception -- downloading of OCR from " + ocrUrl
 					+ " failed:" + e.getMessage());
@@ -222,9 +239,11 @@ public class KrameriusFulltexter {
 			pageOrder++;
 			String pageUuid = fm.getUuidPage();
 				
-			//TODO temporary condition... doesn't work with private docs at the moment
-			if (!fm.isPrivate()) {
-				byte[] ocr = getOCRBytes(pageUuid);
+			/*really try to get OCR only if page is not private(=is public), or download of private fulltext 
+			 * is allowed and authToken is set)
+			 */
+			if (!fm.isPrivate() || (downloadPrivateFulltexts && authToken!=null)) {
+				byte[] ocr = getOCRBytes(pageUuid, fm.isPrivate());
 				fm.setFulltext(ocr);
 			}
 			fm.setOrder(pageOrder);
@@ -266,22 +285,73 @@ public class KrameriusFulltexter {
 	}
 
 	// used for reading OCR stream - returns byte[]
-	private static byte[] readUrlBytes(String urlString) {
+	private static byte[] readUrlBytes(String urlString, boolean isPrivate, String authToken, boolean allowHarvestingOfPrivateFulltexts) {
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		InputStream is = null;
+		HttpURLConnection yc;
 		try {
+//			Authenticator.setDefault(new CustomAuthenticator());
+			
 			URL url = new URL(urlString);
-			is = url.openStream();
+/*			is = url.openStream();		
+*/
+	//??		URLConnection connection = url.openConnection();
+	//		String login = "username:password";
+	//		String encodedLogin = new Base64Encoder().encodeBuffer(login.getBytes());
+			yc = (HttpURLConnection) url.openConnection();
+			
+			System.out.println("nastaveni stahovani private (z databaze) je: "+allowHarvestingOfPrivateFulltexts);
+			System.out.println("nastaveni promennych: isPrivate:"+isPrivate+" allowHarvestingOfPrivateFulltexts:"+allowHarvestingOfPrivateFulltexts+" authToken:"+ authToken);
+			/* use auth token only when page is private, indexing is allowed and token is set*/
+			if (isPrivate && allowHarvestingOfPrivateFulltexts && authToken != null) {
+//				authToken=authToken.trim(); // to be sure?
+				yc.setRequestProperty("Authorization", " Basic " + authToken);
+				System.out.println("nastavuju authorization: basic");
+			}
+			
+//			yc.setRequestProperty("Accept", "*/*");
+//			yc.setRequestProperty("Accept-Charset", "UTF-8");
+			System.out.println("[][][][][][][][] Kramerius Fulltexter ma nastaveny token: " + authToken + " [][][][][][][][]");
+
+			System.out.println("ready to connect...");
+			yc.connect();
+			System.out.println("connected.. maybe");
+			System.out.println("timeout "+yc.getConnectTimeout());
+
+			try {
+			Object c = yc.getContent();
+			System.out.println("Content c (obj to string) ="+c.toString());
+			System.out.println("just testing how exceptions work...");
+			} catch (IOException e) {
+				logger.warn(e.getMessage());
+				for (Map.Entry<String, List<String>> k : yc.getHeaderFields().entrySet()) {
+				    System.out.println(k.toString());
+				}
+				BufferedReader in = new BufferedReader(new InputStreamReader(yc.getErrorStream()));
+				String line = null;
+				while((line = in.readLine()) != null) {
+				  System.out.println(line);
+				}
+
+			}
+
+			is = yc.getInputStream();
+			
 			byte[] byteChunk = new byte[4096];
 			int n;
-
+			
 			while ((n = is.read(byteChunk)) > 0) {
 				baos.write(byteChunk, 0, n);
 			}
 			return baos.toByteArray();
 		} catch (IOException e) {
+	
+			StringWriter sw = new StringWriter();
+			e.printStackTrace(new PrintWriter(sw));
+			String exceptionAsString = sw.toString();
 			logger.warn(e.getMessage());
-
+			System.out.println(exceptionAsString);
+			
 		} finally {
 			if (is != null) {
 				try {
@@ -302,4 +372,27 @@ public class KrameriusFulltexter {
 	public String getKramApiUrl() {
 		return this.kramApiUrl;
 	}
+
+
+	public String getAuthToken() {
+		return authToken;
+	}
+
+
+	public void setAuthToken(String authToken) {
+		this.authToken = authToken;
+	}
+
+	public boolean isDownloadPrivateFulltexts() {
+		return downloadPrivateFulltexts;
+	}
+
+	public void setDownloadPrivateFulltexts(boolean downloadPrivateFulltexts) {
+		this.downloadPrivateFulltexts = downloadPrivateFulltexts;
+	}
+
+	
+
+	
+	
 }
