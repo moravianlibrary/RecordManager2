@@ -17,6 +17,7 @@ author_additional = getFields "505r"
 
 title = getFirstField "245abnp"
 title_sub = getFirstField "245b"
+title_short = getFirstField "245a"
 title_full = getFirstField "245abdefghijklmnopqrstuvwxyz0123456789"
 title_auth = getFirstField "245ab"
 title_alt = getFields "130adfgklnpst:240a:246a:730adfgklnpst:740a"
@@ -26,8 +27,8 @@ title_sort = getSortableTitle()
 series = getFields "440ap:800abcdfpqt:830ap"
 series2 = getFields "490a"
 
-publisher = getFields "260b"
-publishDate_display = getFirstField "260c"
+publisher = getPublisher()
+publishDate_display = getPublishDateDisplay()
 placeOfPublication_txt_mv = getFieldsTrim "260a:264a"
 publishDate = getPublishDate()
 publishDateSort = getPublishDateForSorting()
@@ -68,7 +69,7 @@ subject_facet_str_mv = getSubject "600abcdfglnpqstyz:610abcdfgklnpstyz:611abcdef
 source_title_facet_str = getFirstField "773t"
 genre_facet_str = getFirstField "655avxyz"
 conspectus_facet_str_mv = getFields "072x"
-publisher_str_mv = getPublisher()
+publisher_str_mv = filter("publisher.txt", getPublisherStrMv())
 series_facet_str_mv = getFieldsTrim "440a:490a:800abcdflnpqstv:810abnpst:811acdenpqst:830anps"
 author_facet_str_mv = getFields "100abcdq:110abc:111acdegq:700abcdq:710abc:711acdegq:975abcdq:976abc:978abcdgq"
 period_facet_str_mv = getPeriod()
@@ -76,7 +77,8 @@ period_facet_str_mv = getPeriod()
 bbox_geo = getBoundingBoxAsPolygon()
 bbox_geo_str = getBoundingBox()
 
-statuses = getStatuses()
+// no need for this field?
+//statuses = getStatuses()
 
 // deprecated
 title_display = getFirstField "245abnp"

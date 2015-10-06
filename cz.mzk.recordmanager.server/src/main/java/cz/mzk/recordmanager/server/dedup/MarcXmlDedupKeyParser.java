@@ -75,6 +75,7 @@ public class MarcXmlDedupKeyParser implements DedupKeysParser {
 		record.setLanguages(metadataRecord.getLanguages());
 		record.setClusterId(metadataRecord.getClusterId());
 		record.setShouldBeProcessed(metadataRecord.matchFilter());
+		record.setRaw001Id(metadataRecord.getRaw001Id());
 		return record;
 	}
 

@@ -18,7 +18,9 @@ import cz.mzk.recordmanager.server.marc.MarcRecord;
 import cz.mzk.recordmanager.server.metadata.MetadataMarcRecord;
 import cz.mzk.recordmanager.server.scripting.BaseDSL;
 import cz.mzk.recordmanager.server.scripting.MappingResolver;
+import cz.mzk.recordmanager.server.scripting.StopWordsResolver;
 import cz.mzk.recordmanager.server.scripting.function.RecordFunction;
+import cz.mzk.recordmanager.server.util.Constants;
 
 public class MarcDSL extends BaseDSL {
 
@@ -35,8 +37,9 @@ public class MarcDSL extends BaseDSL {
 
 	private final Map<String, RecordFunction<MarcFunctionContext>> functions;
 
-	public MarcDSL(MarcFunctionContext context, MappingResolver propertyResolver, Map<String, RecordFunction<MarcFunctionContext>> functions) {
-		super(propertyResolver);
+	public MarcDSL(MarcFunctionContext context, MappingResolver propertyResolver, StopWordsResolver stopWordsResolver,
+			Map<String, RecordFunction<MarcFunctionContext>> functions) {
+		super(propertyResolver, stopWordsResolver);
 		this.context = context;
 		this.record = context.record();
 		this.functions = functions;
@@ -186,7 +189,7 @@ public class MarcDSL extends BaseDSL {
         return result;
     }
     
-    public List<String> getPublisher(){
+    public List<String> getPublisherStrMv(){
     	List<String> publishers = new ArrayList<String>();
     	for(DataField dataField: record.getDataFields("264")){
     		if(dataField.getIndicator2() == '1'){
@@ -194,6 +197,18 @@ public class MarcDSL extends BaseDSL {
     		}
     	}
     	publishers.addAll(getFieldsTrim("260b:928a:978abcdg"));
+    	
+    	return publishers;
+    }
+    
+    public List<String> getPublisher(){
+    	List<String> publishers = new ArrayList<String>();
+    	for(DataField dataField: record.getDataFields("264")){
+    		if(dataField.getIndicator2() == '1'){
+    			publishers.addAll(getFieldsTrim("264b"));
+    		}
+    	}
+    	publishers.addAll(getFieldsTrim("260b"));
     	
     	return publishers;
     }
@@ -277,5 +292,78 @@ public class MarcDSL extends BaseDSL {
     	}
     	return result;
     }
+    
+    public List<String> getUrls() {
+    	List<String> result = new ArrayList<>();
+    	
+    	for (DataField df: record.getDataFields("856")) {
+    		if (df.getSubfield('u') == null) {
+    			continue;
+    		}
+    		String link = df.getSubfield('u').getData();
+    		String comment = "";
+    		
+    		String sub3 = null,subY = null,subZ = null;
+    		
+    		if (df.getSubfield('3') != null) {
+    			sub3 = df.getSubfield('3').getData();
+    		}
+    		if (df.getSubfield('y') != null) {
+    			subY = df.getSubfield('y').getData();
+    		}
+    		if (df.getSubfield('z') != null) {
+    			subZ = df.getSubfield('z').getData();
+    		}
+    		
+    		if (sub3 != null) {
+    			comment = sub3;
+    			if (subZ != null) {
+    				comment += " (" + subZ + ")";
+    			}
+    		} else if (subY != null) {
+    			comment = subY;
+    			if (subZ != null) {
+    				comment += " (" + subZ + ")";
+    			}
+    		} else if (subZ != null) {
+    			comment = subZ;
+    		}
+    		
+    		result.add(Constants.DOCUMENT_AVAILABILITY_UNKNOWN + "|" + link + "|" + comment);
+    	}
+    	
+    	return result;
+    }
+    
+    public List<String> getSfxIds() {
+    	List<String> result = new ArrayList<>();
+    	for (DataField df: record.getDataFields("866")) {
+    		String subS = "", subX="";
+    		
+    		if (df.getSubfield('s') != null) {
+    			subS = df.getSubfield('s').getData();
+    		}
+    		if (df.getSubfield('x') != null) {
+    			subX = df.getSubfield('x').getData();
+    		}
+    		
+    		if (!subS.isEmpty()) {
+    			result.add(subS + "|" + subX);
+    		}
+    	}
+    	return result;
+    }
 
+    public Long getLoanRelevance(){
+		Long count = 0L;
+    	
+    	for(DataField df: record.getDataFields("996")){
+    		if(df.getSubfield('n') != null)
+    		try {
+    			count += Long.valueOf(df.getSubfield('n').getData());
+    		} catch (NumberFormatException nfe) {
+    		}			
+		}
+    	return count; 
+    }
 }

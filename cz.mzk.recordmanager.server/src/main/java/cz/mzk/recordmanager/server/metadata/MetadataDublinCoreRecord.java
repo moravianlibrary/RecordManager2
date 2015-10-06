@@ -347,7 +347,13 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 
 	@Override
 	public String getOAIRecordId() {
-		// TODO Auto-generated method stub
+		// TODO Nothing to return
+		return null;
+	}
+
+	@Override
+	public String getRaw001Id() {
+		// TODO Nothing to return
 		return null;
 	}
 

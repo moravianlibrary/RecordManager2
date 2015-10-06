@@ -3,10 +3,15 @@ package cz.mzk.recordmanager.server.util;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
 import org.apache.solr.client.solrj.util.ClientUtils;
+import org.apache.solr.common.SolrInputDocument;
+
+import cz.mzk.recordmanager.server.index.SolrFieldConstants;
 
 public class SolrUtils {
 
@@ -15,6 +20,27 @@ public class SolrUtils {
 	private static final String RANGE_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss'Z'";
 
 	private static final char HIERARCHIC_FACET_SEPARATOR = '/';
+
+	private static enum WEIGHT_DOC_COMPARATOR implements Comparator<SolrInputDocument> {
+		INSTANCE;
+
+		@Override
+		public int compare(SolrInputDocument first, SolrInputDocument second) {
+			int firstWeight = getWeight(first);
+			int secondWeight = getWeight(second);
+			return secondWeight - firstWeight;
+		}
+
+		private int getWeight(SolrInputDocument document) {
+			int weight = 0;
+			Object value = document.getFieldValue(SolrFieldConstants.WEIGHT);
+			if (value != null && value instanceof Integer) {
+				weight = (Integer) value;
+			}
+			return weight;
+		}
+
+	}
 
 	public static String createFieldQuery(String field, String value) {
 		return String.format("%s:%s", field, value);
@@ -37,6 +63,20 @@ public class SolrUtils {
 		return createRange(fromStr, untilStr);
 	}
 
+	public static void sortByWeight(List<SolrInputDocument> childs) {
+		Collections.sort(childs, WEIGHT_DOC_COMPARATOR.INSTANCE);
+	}
+
+	/**
+	 *
+	 * Create hierarchic facet values, ie. for input Brno, MZK returns:
+	 *
+	 * 0/Brno/
+	 * 1/Brno/MZK/
+	 *
+	 * @param values
+	 * @return hierarchic facet values
+	 */
 	public static List<String> createHierarchicFacetValues(String...values) {
 		List<String> result = new ArrayList<>(values.length);
 		for (int i = 0; i != values.length; i++) {

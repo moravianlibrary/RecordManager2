@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import cz.mzk.recordmanager.server.solr.SolrServerFactory;
 
-public class OrphanedDedupRecordsWriter implements ItemWriter<String>, StepExecutionListener {
+public class OrphanedDedupRecordsWriter implements ItemWriter<Long>, StepExecutionListener {
 
 	@Autowired
 	private SolrServerFactory factory;
@@ -28,9 +28,9 @@ public class OrphanedDedupRecordsWriter implements ItemWriter<String>, StepExecu
 	}
 
 	@Override
-	public void write(List<? extends String> items) throws Exception {
-		for (String id : items) {
-			String query = MessageFormat.format("('{'!child of=merged_boolean:true'}'id:{0}) OR id:{0}", id);
+	public void write(List<? extends Long> items) throws Exception {
+		for (Long id : items) {
+			String query = MessageFormat.format("('{'!child of=merged_boolean:true'}'id:{0}) OR id:{0}", id.toString());
 			server.deleteByQuery(query, commitWithinMs);
 		}
 	}

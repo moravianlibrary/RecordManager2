@@ -41,13 +41,17 @@ import cz.mzk.recordmanager.server.kramerius.fulltext.KrameriusFulltextJobConfig
 import cz.mzk.recordmanager.server.kramerius.harvest.KrameriusHarvestJobConfig;
 import cz.mzk.recordmanager.server.kramerius.harvest.KrameriusHarvesterFactory;
 import cz.mzk.recordmanager.server.kramerius.harvest.KrameriusHarvesterFactoryImpl;
+import cz.mzk.recordmanager.server.miscellaneous.MiscellaneousJobsConfig;
 import cz.mzk.recordmanager.server.oai.harvest.DeleteAllHarvestsJobConfig;
 import cz.mzk.recordmanager.server.oai.harvest.OAIHarvestJobConfig;
 import cz.mzk.recordmanager.server.oai.harvest.OAIHarvesterFactory;
 import cz.mzk.recordmanager.server.oai.harvest.OAIHarvesterFactoryImpl;
 import cz.mzk.recordmanager.server.scripting.CachingMappingResolver;
+import cz.mzk.recordmanager.server.scripting.CachingStopWordsResolver;
 import cz.mzk.recordmanager.server.scripting.ClasspathMappingResolver;
+import cz.mzk.recordmanager.server.scripting.ClasspathStopWordsResolver;
 import cz.mzk.recordmanager.server.scripting.MappingResolver;
+import cz.mzk.recordmanager.server.scripting.StopWordsResolver;
 import cz.mzk.recordmanager.server.solr.SolrServerFactory;
 import cz.mzk.recordmanager.server.solr.SolrServerFactoryImpl;
 import cz.mzk.recordmanager.server.util.ApacheHttpClient;
@@ -158,7 +162,8 @@ public class AppConfig extends DefaultBatchConfigurer {
 				RegenerateDedupKeysJobConfig.class,
 				ImportRecordJobConfig.class,
 				ExportRecordsJobConfig.class,
-				DeleteAllRecordsFromSolrJobConfig.class
+				DeleteAllRecordsFromSolrJobConfig.class,
+				MiscellaneousJobsConfig.class
 			);
 	}
 
@@ -175,6 +180,11 @@ public class AppConfig extends DefaultBatchConfigurer {
 	@Bean
 	public MappingResolver propertyResolver() {
 		return new CachingMappingResolver(new ClasspathMappingResolver());
+	}
+
+	@Bean
+	public StopWordsResolver stopWordsResolver() {
+		return new CachingStopWordsResolver(new ClasspathStopWordsResolver());
 	}
 
 	@Bean

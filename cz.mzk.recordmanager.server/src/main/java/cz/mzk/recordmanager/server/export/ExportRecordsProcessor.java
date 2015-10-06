@@ -26,6 +26,8 @@ public class ExportRecordsProcessor implements ItemProcessor<HarvestedRecordUniq
 	@Autowired
 	private HarvestedRecordDAO harvestedRecordDao;
 	
+	private static final String OAI_FIELD = "OAI";
+	
 	public ExportRecordsProcessor(IOFormat format) {
 		this.iOFormat = format;
 	}
@@ -36,7 +38,9 @@ public class ExportRecordsProcessor implements ItemProcessor<HarvestedRecordUniq
 		if (record != null && record.getRawRecord().length != 0) {
 			InputStream is = new ByteArrayInputStream(record.getRawRecord());
 			MarcRecord marcRecord = marcXmlParser.parseRecord(is);
-			marcRecord.addOAIField(record.getUniqueId().getRecordId());
+			if(marcRecord.getDataFields(OAI_FIELD).isEmpty()){
+				marcRecord.addDataField(OAI_FIELD, ' ', ' ', new String[]{"a", record.getUniqueId().getRecordId()});
+			}
 			return marcRecord.export(iOFormat);
 		} 
 		return null;

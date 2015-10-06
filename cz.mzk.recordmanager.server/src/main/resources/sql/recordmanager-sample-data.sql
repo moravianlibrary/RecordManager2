@@ -20,6 +20,11 @@ INSERT INTO library (id, name, url, catalog_url, city) VALUES (116, 'CASLIN', 'c
 INSERT INTO library (id, name, url, catalog_url, city) VALUES (117, 'NKP2', 'nkp.cz', 'aleph.nkp.cz', 'Praha');
 INSERT INTO library (id, name, url, catalog_url, city) VALUES (119, 'ANL', 'nkp.cz', 'aleph.nkp.cz', NULL);
 INSERT INTO library (id, name, url, catalog_url, city) VALUES (120, 'MZKNORMS', 'mzk.cz', 'aleph.mzk.cz', NULL);
+INSERT INTO library (id, name, url, catalog_url, city) VALUES (121, 'SLK', 'nkp.cz', 'aleph.nkp.cz', 'Praha');
+INSERT INTO library (id, name, url, catalog_url, city) VALUES (122, 'KPSYS', '', '', 'KPSYS');
+INSERT INTO library (id, name, url, catalog_url, city) VALUES (123, 'CNB', 'nkp.cz', 'aleph.nkp.cz', 'Praha');
+INSERT INTO library (id, name, url, catalog_url, city) VALUES (125, 'KKL', 'nkp.cz', 'aleph.nkp.cz', 'Praha');
+INSERT INTO library (id, name, url, catalog_url, city) VALUES (126, 'STT', 'nkp.cz', 'aleph.nkp.cz', 'Praha');
 
 INSERT INTO format(format, description) VALUES('marc21-xml', 'MARC21 XML');
 INSERT INTO format(format, description) VALUES('xml-marc', 'MARC21 XML');
@@ -42,10 +47,16 @@ INSERT INTO import_conf (id,library_id,contact_person_id,id_prefix,base_weight,c
 INSERT INTO import_conf (id,library_id,contact_person_id,id_prefix,base_weight,cluster_id_enabled,filtering_enabled,interception_enabled,is_library) VALUES (313,113,200,'svkhk',14,false,false,false,true);
 INSERT INTO import_conf (id,library_id,contact_person_id,id_prefix,base_weight,cluster_id_enabled,filtering_enabled,interception_enabled,is_library) VALUES (314,114,200,'svkul',14,false,false,false,true);
 INSERT INTO import_conf (id,library_id,contact_person_id,id_prefix,base_weight,cluster_id_enabled,filtering_enabled,interception_enabled,is_library) VALUES (315,115,200,'vkol',14,true,false,false,true);
-INSERT INTO import_conf (id,library_id,contact_person_id,id_prefix,base_weight,cluster_id_enabled,filtering_enabled,interception_enabled,is_library) VALUES (316,116,200,'caslin',11,false,false,false,false);
+INSERT INTO import_conf (id,library_id,contact_person_id,id_prefix,base_weight,cluster_id_enabled,filtering_enabled,interception_enabled,is_library) VALUES (316,116,200,'caslin',11,false,false,true,false);
 INSERT INTO import_conf (id,library_id,contact_person_id,id_prefix,base_weight,cluster_id_enabled,filtering_enabled,interception_enabled,is_library) VALUES (317,117,200,'nkp2',14,false,false,false,true);
 INSERT INTO import_conf (id,library_id,contact_person_id,id_prefix,base_weight,cluster_id_enabled,filtering_enabled,interception_enabled,is_library) VALUES (319,119,200,'anl',14,false,false,false,false);
-INSERT INTO import_conf (id,library_id,contact_person_id,id_prefix,base_weight,cluster_id_enabled,filtering_enabled,interception_enabled,is_library) VALUES (320,120,200,'mzknorms',10,false,false,true,false);
+INSERT INTO import_conf (id,library_id,contact_person_id,id_prefix,base_weight,cluster_id_enabled,filtering_enabled,interception_enabled,is_library) VALUES (320,120,200,'unmz',10,false,false,true,false);
+INSERT INTO import_conf (id,library_id,contact_person_id,id_prefix,base_weight,cluster_id_enabled,filtering_enabled,interception_enabled,is_library) VALUES (321,121,200,'slk',10,false,false,false,true);
+INSERT INTO import_conf (id,library_id,contact_person_id,id_prefix,base_weight,cluster_id_enabled,filtering_enabled,interception_enabled,is_library) VALUES (322,122,200,'kpsys',12,false,false,false,true);
+INSERT INTO import_conf (id,library_id,contact_person_id,id_prefix,base_weight,cluster_id_enabled,filtering_enabled,interception_enabled,is_library) VALUES (323,123,200,'cnb',11,false,false,false,false);
+INSERT INTO import_conf (id,library_id,contact_person_id,id_prefix,base_weight,cluster_id_enabled,filtering_enabled,interception_enabled,is_library) VALUES (324,100,200,'mzk03',13,true,false,false,true);
+INSERT INTO import_conf (id,library_id,contact_person_id,id_prefix,base_weight,cluster_id_enabled,filtering_enabled,interception_enabled,is_library) VALUES (325,125,200,'kkl',11,false,false,false,false);
+INSERT INTO import_conf (id,library_id,contact_person_id,id_prefix,base_weight,cluster_id_enabled,filtering_enabled,interception_enabled,is_library) VALUES (326,126,200,'stt',11,false,false,false,false);
 INSERT INTO import_conf (id,library_id,contact_person_id,id_prefix,base_weight,cluster_id_enabled,filtering_enabled,interception_enabled,is_library) VALUES (400,104,200,null,null,false,false,false,true);
 INSERT INTO import_conf (id,library_id,contact_person_id,id_prefix,base_weight,cluster_id_enabled,filtering_enabled,interception_enabled,is_library) VALUES (99001,100,200,'kram-mzk',null,false,false,false,true);
 INSERT INTO import_conf (id,library_id,contact_person_id,id_prefix,base_weight,cluster_id_enabled,filtering_enabled,interception_enabled,is_library) VALUES (99002,107,200,'kram-ntk',null,false,false,false,true);
@@ -54,15 +65,16 @@ INSERT INTO import_conf (id,library_id,contact_person_id,id_prefix,base_weight,c
 INSERT INTO import_conf (id,library_id,contact_person_id,id_prefix,base_weight,cluster_id_enabled,filtering_enabled,interception_enabled,is_library) VALUES (500,110,200,'antik',null,false,false,false,false);
 INSERT INTO import_conf (id,library_id,contact_person_id,id_prefix,base_weight,cluster_id_enabled,filtering_enabled,interception_enabled,is_library) VALUES (1300,100,200,'sfxjibmzk',8,false,false,false,true);
 INSERT INTO import_conf (id,library_id,contact_person_id,id_prefix,base_weight,cluster_id_enabled,filtering_enabled,interception_enabled,is_library) VALUES (1301,101,200,'sfxjibnlk',8,false,false,false,true);
+INSERT INTO import_conf (id,library_id,contact_person_id,id_prefix,base_weight,cluster_id_enabled,filtering_enabled,interception_enabled,is_library) VALUES (1302,101,200,'sfxnlkper',8,false,false,false,true);
 
-INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (300,'http://aleph.mzk.cz/OAI',null,'marc21','SECOND');
+INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (300,'http://aleph.mzk.cz/OAI','MZK01-CPK','marc21','SECOND');
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (301,'http://oai.medvik.cz/medvik2cpk/oai',null,'xml-marc','DAY');
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (302,'http://web2.mlp.cz/cgi/oai','complete','marc21',null);
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (303,'http://katalog.kjm.cz/l.dll',null,'marc21','DAY');
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (304,'http://aleph.nkp.cz/OAI','NKC','marc21','SECOND');
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (305,'http://sc.vpk.cz/cgi-bin/oai2',null,'marc21',null);
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (306,'http://82.144.144.53:7070/cgi-bin/koha/oai.pl','CPK','marccpk',NULL);
-INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (307,'http://aleph.techlib.cz/OAI',null,'marc21','SECOND');
+INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (307,'http://aleph.techlib.cz/OAI','CPK','marc21','SECOND');
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (308,NULL,NULL,'marc21',NULL);
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (309,'http://sc.vpk.cz/cgi-bin/oai2',null,'marc21','SECOND');
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (311,'http://www.vkta.cz/Clavius/l.dll','CPK','marc21',NULL);
@@ -74,9 +86,16 @@ INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granul
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (317,'http://aleph.nkp.cz/OAI','NKC-CPK','marc21',NULL);
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (319,NULL,NULL,'marc21',NULL);
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (320,'http://aleph.mzk.cz/OAI','MZK04','marc21',NULL);
+INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (321,NULL,NULL,'marc21',NULL);
+INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (322,'http://portaro.eu/pracovni/api/oai','0','marc21',NULL);
+INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (323,'http://aleph.nkp.cz/OAI','CNB','marc21',NULL);
+INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (324,'http://aleph.mzk.cz/OAI','MZK03-CPK','marc21','SECOND');
+INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (325,NULL,NULL,'marc21',NULL);
+INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (326,NULL,NULL,'marc21',NULL);
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (400,'http://aleph.nkp.cz/OAI','AUT','marc21',null);
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (1300,NULL,NULL,'marc21',NULL);
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (1301,NULL,NULL,'marc21',NULL); 
+INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (1302,NULL,NULL,'marc21',NULL);
 
 INSERT INTO kramerius_conf (import_conf_id,url,model,query_rows,metadata_stream) VALUES (99001,'http://kramerius.mzk.cz/search/api/v5.0','monograph',20,'DC');
 INSERT INTO kramerius_conf (import_conf_id,url,model,query_rows,metadata_stream) VALUES (99002,'http://k4.techlib.cz/search/api/v5.0','monograph',20,'DC');
@@ -113,3 +132,27 @@ INSERT INTO harvested_record_format(id, name) VALUES (25, 'OTHER_OBJECT');
 INSERT INTO harvested_record_format(id, name) VALUES (26, 'OTHER_MIX_DOCUMENT');
 INSERT INTO harvested_record_format(id, name) VALUES (27, 'NORMS');
 INSERT INTO harvested_record_format(id, name) VALUES (100, 'OTHER_UNSPECIFIED');
+
+
+INSERT INTO sigla (import_conf_id, sigla) VALUES (300, 'BOA001');
+INSERT INTO sigla (import_conf_id, sigla) VALUES (302, 'ABA008');
+INSERT INTO sigla (import_conf_id, sigla) VALUES (302, 'ABG001');
+INSERT INTO sigla (import_conf_id, sigla) VALUES (303, 'BOG001');
+INSERT INTO sigla (import_conf_id, sigla) VALUES (304, 'ABA001');
+INSERT INTO sigla (import_conf_id, sigla) VALUES (304, 'ABA003');
+INSERT INTO sigla (import_conf_id, sigla) VALUES (304, 'ABA004');
+INSERT INTO sigla (import_conf_id, sigla) VALUES (304, 'ABA018');
+INSERT INTO sigla (import_conf_id, sigla) VALUES (304, 'ABA019');
+INSERT INTO sigla (import_conf_id, sigla) VALUES (304, 'ABA025');
+INSERT INTO sigla (import_conf_id, sigla) VALUES (306, 'UOG505');
+INSERT INTO sigla (import_conf_id, sigla) VALUES (307, 'ABA013');
+INSERT INTO sigla (import_conf_id, sigla) VALUES (307, 'ABA031');
+INSERT INTO sigla (import_conf_id, sigla) VALUES (308, 'LIA001');
+INSERT INTO sigla (import_conf_id, sigla) VALUES (311, 'TAG001');
+INSERT INTO sigla (import_conf_id, sigla) VALUES (312, 'HBG001');
+INSERT INTO sigla (import_conf_id, sigla) VALUES (313, 'HKA001');
+INSERT INTO sigla (import_conf_id, sigla) VALUES (314, 'ULG001');
+INSERT INTO sigla (import_conf_id, sigla) VALUES (315, 'OLA001');
+INSERT INTO sigla (import_conf_id, sigla) VALUES (321, 'ABA013');
+INSERT INTO sigla (import_conf_id, sigla) VALUES (324, 'BOA001');
+INSERT INTO sigla (import_conf_id, sigla) VALUES (325, 'ABA003');

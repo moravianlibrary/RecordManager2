@@ -9,6 +9,7 @@ import java.util.Map;
 import cz.mzk.recordmanager.server.dc.DublinCoreRecord;
 import cz.mzk.recordmanager.server.scripting.MappingResolver;
 import cz.mzk.recordmanager.server.scripting.MappingScript;
+import cz.mzk.recordmanager.server.scripting.StopWordsResolver;
 import cz.mzk.recordmanager.server.scripting.function.RecordFunction;
 
 public class DublinCoreMappingScriptImpl implements MappingScript<DublinCoreRecord> {
@@ -19,21 +20,24 @@ public class DublinCoreMappingScriptImpl implements MappingScript<DublinCoreReco
 
 	private final MappingResolver propertyResolver;
 
+	private final StopWordsResolver stopWordsResolver;
+
 	private final Map<String, RecordFunction<DublinCoreRecord>> functions;
 
 	public DublinCoreMappingScriptImpl(Binding binding, List<DelegatingScript> scripts, 
-			MappingResolver propertyResolver, Map<String, RecordFunction<DublinCoreRecord>> functions) {
+			MappingResolver propertyResolver, StopWordsResolver stopWordsResolver, Map<String, RecordFunction<DublinCoreRecord>> functions) {
 		super();
 		this.scripts = scripts;
 		this.binding = binding;
 		this.propertyResolver = propertyResolver;
+		this.stopWordsResolver = stopWordsResolver;
 		this.functions = functions;
 	}
 
 	@Override
 	public Map<String, Object> parse(DublinCoreRecord record) {
 		binding.getVariables().clear();
-		DublinCoreDSL delegate = new DublinCoreDSL(record, propertyResolver, functions);
+		DublinCoreDSL delegate = new DublinCoreDSL(record, propertyResolver, stopWordsResolver, functions);
 		for (DelegatingScript script : scripts) {
 			script.setDelegate(delegate);
 			script.run();

@@ -109,6 +109,9 @@ public class HarvestedRecord extends AbstractDomainObject {
 	@Embedded
 	private HarvestedRecordUniqueId uniqueId;
 	
+	@Column(name="raw_001_id")
+	private String raw001Id;
+	
 	@ManyToOne(optional=false, fetch=FetchType.LAZY)
 	@JoinColumn(name="import_conf_id", nullable=false, updatable=false, insertable=false)
 	private ImportConfiguration harvestedFrom;
@@ -444,6 +447,15 @@ public class HarvestedRecord extends AbstractDomainObject {
 		this.fulltextMonography = fulltextMonography;
 	}
 	
+
+	public String getRaw001Id() {
+		return raw001Id;
+	}
+
+	public void setRaw001Id(String raw001Id) {
+		this.raw001Id = raw001Id;
+	}
+
 	@Override
 	public String toString() {
 		return String.format("HarvestedRecord[id=%s, uniqueId=%s]", getId(), getUniqueId());

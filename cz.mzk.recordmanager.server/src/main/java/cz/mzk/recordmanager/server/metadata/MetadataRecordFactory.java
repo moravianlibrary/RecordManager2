@@ -10,11 +10,13 @@ import cz.mzk.recordmanager.server.dc.DublinCoreParser;
 import cz.mzk.recordmanager.server.dc.DublinCoreRecord;
 import cz.mzk.recordmanager.server.marc.MarcRecord;
 import cz.mzk.recordmanager.server.marc.MarcXmlParser;
+import cz.mzk.recordmanager.server.metadata.institutions.KramDefaultMetadataDublinCoreRecord;
 import cz.mzk.recordmanager.server.metadata.institutions.MzkMetadataMarcRecord;
 import cz.mzk.recordmanager.server.metadata.institutions.MzkNormsMetadataMarcRecord;
 import cz.mzk.recordmanager.server.metadata.institutions.NkpMarcMetadataRecord;
 import cz.mzk.recordmanager.server.metadata.institutions.SfxjibMzkMetadataMarcRecord;
 import cz.mzk.recordmanager.server.metadata.institutions.SfxjibNlkMetadataMarcRecord;
+import cz.mzk.recordmanager.server.metadata.institutions.SfxjibNlkPeriodicalsMetadataMarcRecord;
 import cz.mzk.recordmanager.server.metadata.institutions.TreMetadataMarcRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecord.HarvestedRecordUniqueId;
@@ -68,6 +70,8 @@ public class MetadataRecordFactory {
 				return new SfxjibMzkMetadataMarcRecord(marcRec);
 			case Constants.PREFIX_SFXJIBNLK:
 				return new SfxjibNlkMetadataMarcRecord(marcRec);
+			case Constants.PREFIX_SFXJIBNLK_PERIODICALS:
+				return new SfxjibNlkPeriodicalsMetadataMarcRecord(marcRec);
 			default:
 				return new MetadataMarcRecord(marcRec);
 			}
@@ -75,7 +79,16 @@ public class MetadataRecordFactory {
         
         if (Constants.METADATA_FORMAT_DUBLIN_CORE.equals(recordFormat)) {
         	DublinCoreRecord dcRec = dcParser.parseRecord(is);
-			return getMetadataRecord(dcRec);
+        	switch(prefix){
+			case Constants.PREFIX_KRAM_MZK:
+			case Constants.PREFIX_KRAM_NTK:
+			case Constants.PREFIX_KRAM_KNAV:
+			case Constants.PREFIX_KRAM_NKP:
+				return new KramDefaultMetadataDublinCoreRecord(dcRec);
+			default:
+				return getMetadataRecord(dcRec);
+        	}
+			
         }
         
         return null;

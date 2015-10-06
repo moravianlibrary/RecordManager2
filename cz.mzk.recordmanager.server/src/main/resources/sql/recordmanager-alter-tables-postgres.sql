@@ -244,6 +244,10 @@ ALTER TABLE language DROP COLUMN id;
 DELETE FROM language WHERE harvested_record_id IS NULL;
 ALTER TABLE language ADD CONSTRAINT language_pk PRIMARY KEY (harvested_record_id, lang);
 
+-- 6. 9. 2015 mertam 
+UPDATE import_conf set id_prefix = 'unmz' where id = 320
+update oai_harvest_conf set set_spec = 'CPK' where import_conf_id = 307
+
 --14.9. 2015 mjtecka
 CREATE TABLE fulltext_monography
 (
@@ -256,7 +260,44 @@ CREATE TABLE fulltext_monography
   fulltext bytea,
   CONSTRAINT fulltext_monography_pkey PRIMARY KEY (id),
   CONSTRAINT fulltext_monography_harvested_record_id_fk FOREIGN KEY (harvested_record_id)
+); 
+
+-- 16. 9. 2015 mertam
+CREATE TABLE skat_keys (
+  skat_record_id      DECIMAL(10),
+  sigla               VARCHAR(20),
+  local_record_id     VARCHAR(128),
+  manually_merged     BOOLEAN DEFAULT FALSE,
+  CONSTRAINT skat_keys_pk PRIMARY KEY(skat_record_id,sigla,local_record_id)
+)
+
+CREATE TABLE sigla (
+  import_conf_id       DECIMAL(10),
+  sigla                VARCHAR(20),
+  CONSTRAINT sigla_pk PRIMARY KEY(import_conf_id,sigla)
 );
+
+-- 17.9.2015 mertam
+alter table sigla add CONSTRAINT sigla_import_conf_fk FOREIGN KEY (import_conf_id) REFERENCES import_conf(id)
+
+--18.9.2015 mertam 
+ALTER TABLE harvested_record ADD COLUMN raw_001_id VARCHAR(128); 
+
+-- 21.9.2015 mertam 
+ALTER TABLE isbn DROP CONSTRAINT isbn_harvested_record_id_fkey;
+ALTER TABLE isbn ADD FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE;
+ALTER TABLE issn DROP CONSTRAINT issn_harvested_record_id_fkey;
+ALTER TABLE issn ADD FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE;
+ALTER TABLE cnb DROP CONSTRAINT cnb_harvested_record_id_fkey;
+ALTER TABLE cnb ADD FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE;
+ALTER TABLE title DROP CONSTRAINT title_harvested_record_id_fkey;
+ALTER TABLE title ADD FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE;
+ALTER TABLE oclc DROP CONSTRAINT oclc_fk;
+ALTER TABLE oclc ADD FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE;
+ALTER TABLE language DROP CONSTRAINT language_fk;
+ALTER TABLE language ADD FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE;
+ALTER TABLE harvested_record_format_link DROP CONSTRAINT format_link_hr_id_fk;
+ALTER TABLE harvested_record_format_link ADD FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE;
 
 --24.9. 2015 mjtecka
 ALTER TABLE kramerius_conf ADD COLUMN auth_token varchar(128);

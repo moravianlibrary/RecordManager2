@@ -9,6 +9,7 @@ import java.util.Map;
 
 import cz.mzk.recordmanager.server.scripting.MappingResolver;
 import cz.mzk.recordmanager.server.scripting.MappingScript;
+import cz.mzk.recordmanager.server.scripting.StopWordsResolver;
 import cz.mzk.recordmanager.server.scripting.function.RecordFunction;
 
 public class MarcMappingScriptImpl implements MappingScript<MarcFunctionContext> {
@@ -19,21 +20,24 @@ public class MarcMappingScriptImpl implements MappingScript<MarcFunctionContext>
 	
 	private final MappingResolver propertyResolver;
 
+	private final StopWordsResolver stopWordsResolver;
+
 	private final Map<String, RecordFunction<MarcFunctionContext>> functions;
 	
 	public MarcMappingScriptImpl(Binding binding, List<DelegatingScript> scripts, 
-			MappingResolver propertyResolver, Map<String, RecordFunction<MarcFunctionContext>> functions) {
+			MappingResolver propertyResolver, StopWordsResolver stopWordsResolver, Map<String, RecordFunction<MarcFunctionContext>> functions) {
 		super();
 		this.scripts = scripts;
 		this.binding = binding;
 		this.propertyResolver = propertyResolver;
+		this.stopWordsResolver = stopWordsResolver;
 		this.functions = functions;
 	}
 
 	@Override
 	public Map<String, Object> parse(MarcFunctionContext ctx) {
 		binding.getVariables().clear();
-		MarcDSL delegate = new MarcDSL(ctx, propertyResolver, functions);
+		MarcDSL delegate = new MarcDSL(ctx, propertyResolver, stopWordsResolver, functions);
 		for (DelegatingScript script : scripts) {
 			script.setDelegate(delegate);
 			script.run();

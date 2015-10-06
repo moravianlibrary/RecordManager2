@@ -11,6 +11,8 @@ import org.springframework.stereotype.Component;
 
 import cz.mzk.recordmanager.server.marc.MarcRecord;
 import cz.mzk.recordmanager.server.scripting.marc.MarcFunctionContext;
+import cz.mzk.recordmanager.server.util.Constants;
+import cz.mzk.recordmanager.server.util.SolrUtils;
 
 @Component
 public class GetStatusesMarcFunctions implements MarcRecordFunctions {
@@ -26,22 +28,24 @@ public class GetStatusesMarcFunctions implements MarcRecordFunctions {
 	protected final static String UNSPECIFIED = "n";
 	protected final static String LIMITED = "o";
 	protected final static String TEMPORARY = "d";
+	protected final static String FREESTACK = "0";
 
 	public List<String> getStatuses(MarcFunctionContext ctx) {
 		MarcRecord record = ctx.record();
 		List<String> statuses = new ArrayList<String>();
 		statuses.addAll(getStatuses(record, "996"));
-		statuses.add(getStatusFrom856(record, "856"));		
+		statuses.addAll(getStatusFrom856(record, "856"));	
 		return statuses;
 	}
 
-	private String getStatusFrom856(MarcRecord record, String statusField) {
-		for(DataField field: record.getDataFields(statusField)){
-			if(field.getIndicator1() == '4' && (field.getIndicator2() == '0' || field.getIndicator2() =='1')){			
-				return ONLINE;
+	private List<String> getStatusFrom856(MarcRecord record, String statusField) {
+		List<String> result = new ArrayList<>();
+		for (DataField field: record.getDataFields(statusField)) {
+			if (field.getIndicator1() == '4' && (field.getIndicator2() == '0' || field.getIndicator2() =='1')) {
+				result.addAll(SolrUtils.createHierarchicFacetValues(ONLINE, Constants.DOCUMENT_AVAILABILITY_UNKNOWN));
 			}
 		}
-		return null;
+		return result;
 	}
 
 	private List<String> getStatuses(MarcRecord record, String statusField) {
@@ -56,13 +60,14 @@ public class GetStatusesMarcFunctions implements MarcRecordFunctions {
 		boolean unspecified = false;
 		boolean limited = false;
 		boolean temporary = false;
+		boolean freestack = false;
 		for (DataField field : fields) {
 			Subfield s = field.getSubfield('s');
 			if (s == null) {
 				continue;
 			}
-			String status = s.getData().toLowerCase();
-			switch (status) {
+			String statusInS = s.getData().toLowerCase();
+			switch (statusInS) {
 			case ABSENT:
 				absent = true;
 				break;
@@ -82,24 +87,38 @@ public class GetStatusesMarcFunctions implements MarcRecordFunctions {
 				temporary = true;
 				break;
 			}
+			
+			s = field.getSubfield('a');
+			if (s == null) {
+				continue;
+			}
+			String statusInA = s.getData().toLowerCase();
+			switch (statusInA) {
+			case FREESTACK:
+				freestack = true;
+				break;
+			}
 		}
 		if (absent) {
-			statuses.add("absent");
+			statuses.addAll(SolrUtils.createHierarchicFacetValues("absent"));
 		}
 		if (present) {
-			statuses.add("present");
+			statuses.addAll(SolrUtils.createHierarchicFacetValues("present"));
 		}
 		if (unknown) {
-			statuses.add("unknown");
+			statuses.addAll(SolrUtils.createHierarchicFacetValues("unknown"));
 		}
 		if (unspecified) {
-			statuses.add("unspecified");
+			statuses.addAll(SolrUtils.createHierarchicFacetValues("unspecified"));
 		}
 		if (limited) {
-			statuses.add("limited");
+			statuses.addAll(SolrUtils.createHierarchicFacetValues("limited"));
 		}
 		if (temporary) {
-			statuses.add("temporary");
+			statuses.addAll(SolrUtils.createHierarchicFacetValues("temporary"));
+		}
+		if (freestack) {
+			statuses.addAll(SolrUtils.createHierarchicFacetValues("freestack"));
 		}
 		return statuses;
 	}

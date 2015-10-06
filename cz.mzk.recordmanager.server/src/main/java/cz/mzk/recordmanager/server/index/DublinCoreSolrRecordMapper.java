@@ -8,12 +8,15 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import cz.mzk.recordmanager.server.dc.DublinCoreParser;
 import cz.mzk.recordmanager.server.dc.DublinCoreRecord;
+import cz.mzk.recordmanager.server.kramerius.fulltext.KrameriusFulltexter;
 import cz.mzk.recordmanager.server.model.DedupRecord;
 import cz.mzk.recordmanager.server.model.FulltextMonography;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
@@ -21,8 +24,12 @@ import cz.mzk.recordmanager.server.scripting.MappingScript;
 import cz.mzk.recordmanager.server.scripting.dc.DublinCoreScriptFactory;
 
 @Component
-public class DublinCoreSolrRecordMapper implements SolrRecordMapper, InitializingBean {
+public class DublinCoreSolrRecordMapper implements SolrRecordMapper,
+		InitializingBean {
 
+	private static Logger logger = LoggerFactory
+			.getLogger(DublinCoreSolrRecordMapper.class);
+	
 	private final static String FORMAT = "dublinCore";
 
 	@Autowired
@@ -55,18 +62,19 @@ public class DublinCoreSolrRecordMapper implements SolrRecordMapper, Initializin
 
 	protected Map<String, Object> parse(HarvestedRecord record) {
 		InputStream is = new ByteArrayInputStream(record.getRawRecord());
-		// nacist fulltextmonography, dostat string
-		System.out.println("*** jsem na miste kde se nacitaji fulltexty ***");
+
+		// loading fulltext
 		String fulltext = getFulltextsFromRecord(record);
 		MappingScript<DublinCoreRecord> script = getMappingScript(record);
 		DublinCoreRecord rec = parser.parseRecord(is);
 		Map<String, Object> fields = script.parse(rec);
-		// pridat fulltextMonographyFullString do fields
+		// adding fulltext to SOLR fields..
 		fields.put("fulltext", fulltext);
 		return fields;
 	}
 
-	protected MappingScript<DublinCoreRecord> getMappingScript(HarvestedRecord record) {
+	protected MappingScript<DublinCoreRecord> getMappingScript(
+			HarvestedRecord record) {
 		return mappingScript;
 	}
 
@@ -76,39 +84,33 @@ public class DublinCoreSolrRecordMapper implements SolrRecordMapper, Initializin
 				.getResourceAsStream("/dc/groovy/BaseDC.groovy"));
 	}
 
-	public String getFulltextsFromRecord (HarvestedRecord record)  {
+	public String getFulltextsFromRecord(HarvestedRecord record) {
 		List<FulltextMonography> pages = record.getFulltextMonography();
-		String text ="";
+		String text = "";
 		int i = 0;
-	
-	//	System.out.println("--- zacinam nacitat Fulltext ---");
-	
+
 		for (FulltextMonography page : pages) {
 			i++;
-	//		System.out.println("--- nacitam stranku cislo "+i+" ---");
 			String uuid = page.getUuidPage();
 			byte[] bytes = page.getFulltext();
-			
-	//		System.out.println("---- stranka ma uuid: "+uuid);
+
 			try {
-				if (bytes!=null) {
-					System.out.println("---- stranka ma text ----");
-	//				System.out.println(new String(bytes,"UTF-8"));
-					text = text + new String(bytes,"UTF-8");
+				if (bytes != null) {
+					logger.debug("Page with uuid ["+ uuid +"] has text and was added to indexed fulltext String");
+					text = text + new String(bytes, "UTF-8");
 				} else {
-					System.out.println("---- stranka nema text ----");	
+					logger.debug("Page with uuid ["+ uuid +"] has NO text and was NOT added to indexed fulltext String");
 				}
 			} catch (UnsupportedEncodingException e) {
-				System.out.println("--- chycena vyjimka UsnupportedEncodingException ---");
+				logger.warn("UsnupportedEncodingException: "+ e.getMessage());
 			}
-			
-		}
-		
-	//	System.out.println("--- Kompletní text ----");
-	//	System.out.println(text);
 
-		
+		}
+
+		// logger.debug("Complete text:");
+		// logger.debug(text);
+
 		return text;
 	}
-	
+
 }

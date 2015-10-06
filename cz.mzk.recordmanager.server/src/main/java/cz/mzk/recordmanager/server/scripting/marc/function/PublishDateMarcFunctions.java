@@ -176,5 +176,22 @@ public class PublishDateMarcFunctions implements MarcRecordFunctions {
 		if(!years.isEmpty()) return years.iterator().next().toString();
 		return null;
 	}
+	
+	public String getPublishDateDisplay(MarcFunctionContext ctx) {
+		for (String tag: new String[]{"260","264"}) {
+			for (DataField df: ctx.record().getDataFields(tag)) {
+				if (tag.equals("264") && df.getIndicator2() != '1') {
+					continue;
+				}
+				if(df.getSubfield('c') != null) {
+					String subC = df.getSubfield('c').getData(); 
+					if(SINGLE_YEAR_PATTERN.matcher(subC).matches()) {
+						return subC;
+					}
+				}
+			}
+		}
+		return null;
+	}
 
 }

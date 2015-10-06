@@ -271,15 +271,10 @@ public class MarcRecordImpl implements MarcRecord {
 	}
 
 	@Override
-	public void addOAIField(String id) {
-		if(getDataFields("OAI") == Collections.EMPTY_LIST){
-			MarcFactory factory = MarcFactoryImpl.newInstance();
-			DataField dataField = factory.newDataField("OAI", ' ', ' ');
-			Subfield subfield = factory.newSubfield('a', id);
-			dataField.addSubfield(subfield);
-		
-			record.addVariableField(dataField);		
-		}
+	public void addDataField(String tag, char ind1, char ind2, String... subfields) {
+		MarcFactory factory = MarcFactoryImpl.newInstance();
+		DataField df = factory.newDataField(tag, ind1, ind2, subfields);
+		record.addVariableField(df);
 	}
 
 }
