@@ -62,20 +62,16 @@ public class KrameriusFulltextJobConfig {
 	public Step step() throws Exception {
 		return steps
 				.get("step")
-				//
 				.<HarvestedRecord, HarvestedRecord> chunk(1)
-				//
 				.reader(reader(LONG_OVERRIDEN_BY_EXPRESSION, LONG_OVERRIDEN_BY_EXPRESSION, LONG_OVERRIDEN_BY_EXPRESSION))
-				//
 				.processor(krameriusFulltextProcessor(LONG_OVERRIDEN_BY_EXPRESSION))
 				.writer(krameriusFulltextWriter())
 				.build();
 	}
 	
 	
-	/* reads document uuids for given config (may be limited by database id)
+	/* reads document uuids for given config (may be limited by database HarvestedRecord ids)
 	 * returns ItemReader for HarvestedRecord(s)
-	 * 
 	 */
 	
 	@Bean(name = "krameriusFulltextJob:reader")
@@ -99,7 +95,6 @@ public class KrameriusFulltextJobConfig {
 			whereClause += " AND id <= :lastId";
 		}
 		
-		System.out.println ("xxxxxxxx WHERE CLAUSE xxxxxxx: " + whereClause);
 		if (configId != null) {
 			pqpf.setWhereClause(whereClause);
 		}

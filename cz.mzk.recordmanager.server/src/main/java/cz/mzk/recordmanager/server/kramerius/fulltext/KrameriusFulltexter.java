@@ -48,25 +48,15 @@ public class KrameriusFulltexter {
 			.getLogger(KrameriusFulltexter.class);
 
 
-	/*
-	 * gets list of ALL uuids from harvested_records for selected confId
-	 */
-	//TODO - musi umet brat harvested record pro dane id po castech... od + offset
-	public List<String> getUuids(Long confId) {
-		String sql = "SELECT record_id FROM harvested_record WHERE import_conf_id ="
-				+ confId;
-		List<String> uuids = (List<String>) jdbcTemplate.queryForList(sql,
-				String.class);
-
-		return uuids;
-	}
-
+	/* gets basic page metadata from JSON received from Kramerius API (for specified rootUuid) 
+	 * returns list of FulltextMonographies
+	*/
 	public List<FulltextMonography> getPagesMetadata(String rootUuid) {
 		JSONArray pagesJson; /* check it */
 		List<FulltextMonography> pagesMetadataList = new ArrayList<FulltextMonography>();
 		
 		String pagesListUrl = kramApiUrl + "/item/" + rootUuid + "/children";
-		// System.out.println("jdu na URL pro children: " + pagesListUrl);
+		logger.debug("Going to read pages metadata from: " + pagesListUrl);
 		
 		try {
 			pagesJson = readKrameriusJSON(pagesListUrl);
@@ -75,21 +65,17 @@ public class KrameriusFulltexter {
 			pagesJson = new JSONArray();
 		}
 		
-		// System.out.println("--------------------------");
-		// System.out.println("JSON object"+pagesJson.toString());
-
-		/* pro kazdy JSONObject v poli vzit page id, vytahnout a vlozit do listu */
+		/* for each JSONObject in array - extract page id, page number, policy & check model*/
 		for (int i = 0; i < pagesJson.length(); i++) {
 			FulltextMonography ftm = new FulltextMonography();
 			
 				JSONObject obj = pagesJson.getJSONObject(i);
-				System.out.println("jsem ve FOR, i=" + i + " ");
 
-				// model MUST equal "page"	
+				// model MUST equal "page" or it will be ignored
 				String model = (String) obj.get("model");
 				if (!model.equals("page")) {
-					System.out.println("---model neni page, model je [" + model
-						+ "]---" + (String) obj.get("pid"));
+					logger.debug("Model is not \"page\", Model is  \"" + model
+						+ "\" for uuid:" + (String) obj.get("pid"));
 					continue;
 				}
 
@@ -99,22 +85,15 @@ public class KrameriusFulltexter {
 				} else {
 					ftm.setPrivate(true);
 				}
-			
-//			if (!policy.equals("public")) {
-//				System.out.println("---policy neni public, policy je ["
-//						+ policy + "]---" + (String) obj.get("pid"));
-//				continue;
-//			}
 
 				String pid = (String) obj.get("pid");
 				ftm.setUuidPage(pid);
-				System.out.println("naslo se tohle PID: " + pid);
 			
 			try {
 				JSONObject details = (JSONObject) obj.get("details");
 				String page = (String) details.get("pagenumber");
 				page.trim();
-				//			String page= (String) obj.get("title"); //same information is stored in description->pagenumber -- sometimes it is not :-)
+				//String page= (String) obj.get("title"); //information in "title" is sometimes malformed in Kramerius' JSON
 				ftm.setPage(page);
 			} catch (Exception e) {
 				logger.warn(e.getMessage());
@@ -126,109 +105,42 @@ public class KrameriusFulltexter {
 		
 	}
 	
-	
 
-	/*
-	 * returns List of all pages uuids for specified document uuid
-	 * 
-	 * gets document uuid gets documents' children via API
-	 * http://k4.techlib.cz/search/api/v5.0/item/uuid:d3cf7ce9-1891-4e39-bb35-3b38b6eb0d60/children
-	 * retrieves & returns list of pages
+	/* create OCR URL, download OCR and return it as String
 	 */
-	@Deprecated
-	public List<String> getPagesUuids(String rootUuid) {
-		JSONArray pagesJson; /* check it */
-		List<String> pagesUuidList = new ArrayList<String>();
+//	public String getOCR(String pageUuid) {
+//		/* vytvorit odkaz do API pro UUID stranky */
+//		String ocrUrl = kramApiUrl + "/item/" + pageUuid + "/streams/TEXT_OCR";
+//		logger.debug("Trying to download OCR from [" + ocrUrl + "] ....");
+//		String ocr = new String(); 
+//
+//		try {
+//			ocr = readUrl(ocrUrl);
+//		} catch (Exception e) {
+//			logger.warn("Exception -- downloading of OCR from " + ocrUrl
+//		}
+//		return ocr;
+//	}
 
-		String pagesListUrl = kramApiUrl + "/item/" + rootUuid + "/children";
-		// System.out.println("jdu na URL pro children: " + pagesListUrl);
-
-		try {
-			pagesJson = readKrameriusJSON(pagesListUrl);
-		} catch (JSONException e) {
-			logger.warn(e.getMessage());
-			pagesJson = new JSONArray();
-		}
-
-		// System.out.println("--------------------------");
-		// System.out.println("JSON object"+pagesJson.toString());
-
-		/* pro kazdy JSONObject v poli vzit page id, vytahnout a vlozit do listu */
-		for (int i = 0; i < pagesJson.length(); i++) {
-			JSONObject obj = pagesJson.getJSONObject(i);
-			System.out.println("jsem ve FOR, i=" + i + " ");
-
-			/*
-			 * TODO tady by se mohlo filtrovat na privacy/model/datanode slo by
-			 * to i na strance, ale je to zbytecny dalsi dotaz
-			 */
-			String model = (String) obj.get("model");
-			if (!model.equals("page")) {
-				System.out.println("---model neni page, model je [" + model
-						+ "]---" + (String) obj.get("pid"));
-				continue;
-			}
-
-			String policy = (String) obj.get("policy");
-			if (!policy.equals("public")) {
-				System.out.println("---policy neni public, policy je ["
-						+ policy + "]---" + (String) obj.get("pid"));
-				continue;
-			}
-
-			String pid = (String) obj.get("pid");
-			pagesUuidList.add(pid);
-			System.out.println("naslo se tohle PID: " + pid);
-		}
-
-		return pagesUuidList;
-	}
-
-	/*
-	 * TODO popis: pro kazdou stranku proverit jestli se ma stahovat a jak -
-	 * pokud to jde tak stahnout a ulozit do DB pro kazde uuid: otevrit
-	 * http://k4
-	 * .techlib.cz/search/api/v5.0/item/uuid:7480c224-fda2-11e1-985e-001
-	 * b63bd97ba zkontrolovat: model, policy:public/private, stahnout OCR
-	 * (auth/neauth) - podle policy vytvorit objekt (podle modelu?)
+	/* create OCR URL, download OCR and return it as byte[]
 	 */
-
-	public String getOCR(String pageUuid) {
-		/* vytvorit odkaz do API pro UUID stranky */
-		String ocrUrl = kramApiUrl + "/item/" + pageUuid + "/streams/TEXT_OCR";
-		System.out.println("Zkousim stahnout OCR z [" + ocrUrl + "] ....");
-		String ocr = new String(); /* TODO check */
-
-		try {
-			ocr = readUrl(ocrUrl);
-			System.out.println("****OCR from " + ocrUrl + "*****");
-			System.out.println(ocr);
-		} catch (Exception e) {
-			System.err.println("Exception -- downloading of OCR from " + ocrUrl
-					+ " failed:" + e.getMessage());
-		}
-		return ocr;
-	}
-
 	public byte[] getOCRBytes(String pageUuid, boolean isPrivate) {
 		/* vytvorit odkaz do API pro UUID stranky */
 		String ocrUrl = kramApiUrl + "/item/" + pageUuid + "/streams/TEXT_OCR";
-		System.out.println("Zkousim stahnout OCR z [" + ocrUrl + "] ....");
+		logger.debug("Trying to download OCR from [" + ocrUrl + "] ....");
 		byte[] ocr = null; /* TODO check */
 
 		try {
 			ocr = readUrlBytes(ocrUrl, isPrivate, authToken, downloadPrivateFulltexts);
-			System.out.println("****OCR from " + ocrUrl + "*****");
-			//System.out.println(ocr);
 		} catch (Exception e) {
-			System.err.println("Exception -- downloading of OCR from " + ocrUrl
+			logger.warn("Exception -- downloading of OCR from " + ocrUrl
 					+ " failed:" + e.getMessage());
 		}
 		return ocr;
 	}
 
 
-	/* gets some page metadata read from JSON
+	/* gets some page metadata read from JSON for given rootUuid,
 	 * loads OCR, modifies FulltextMonography and returns them in list
 	 */
 	public List<FulltextMonography> getFulltextObjects(String rootUuid) {
@@ -290,50 +202,36 @@ public class KrameriusFulltexter {
 		InputStream is = null;
 		HttpURLConnection yc;
 		try {
-//			Authenticator.setDefault(new CustomAuthenticator());
+
 			
 			URL url = new URL(urlString);
-/*			is = url.openStream();		
-*/
-	//??		URLConnection connection = url.openConnection();
-	//		String login = "username:password";
-	//		String encodedLogin = new Base64Encoder().encodeBuffer(login.getBytes());
 			yc = (HttpURLConnection) url.openConnection();
 			
-			System.out.println("nastaveni stahovani private (z databaze) je: "+allowHarvestingOfPrivateFulltexts);
-			System.out.println("nastaveni promennych: isPrivate:"+isPrivate+" allowHarvestingOfPrivateFulltexts:"+allowHarvestingOfPrivateFulltexts+" authToken:"+ authToken);
 			/* use auth token only when page is private, indexing is allowed and token is set*/
 			if (isPrivate && allowHarvestingOfPrivateFulltexts && authToken != null) {
-//				authToken=authToken.trim(); // to be sure?
 				yc.setRequestProperty("Authorization", " Basic " + authToken);
-				System.out.println("nastavuju authorization: basic");
 			}
 			
 //			yc.setRequestProperty("Accept", "*/*");
 //			yc.setRequestProperty("Accept-Charset", "UTF-8");
-			System.out.println("[][][][][][][][] Kramerius Fulltexter ma nastaveny token: " + authToken + " [][][][][][][][]");
 
-			System.out.println("ready to connect...");
 			yc.connect();
-			System.out.println("connected.. maybe");
-			System.out.println("timeout "+yc.getConnectTimeout());
 
-			try {
-			Object c = yc.getContent();
-			System.out.println("Content c (obj to string) ="+c.toString());
-			System.out.println("just testing how exceptions work...");
-			} catch (IOException e) {
-				logger.warn(e.getMessage());
-				for (Map.Entry<String, List<String>> k : yc.getHeaderFields().entrySet()) {
-				    System.out.println(k.toString());
-				}
-				BufferedReader in = new BufferedReader(new InputStreamReader(yc.getErrorStream()));
-				String line = null;
-				while((line = in.readLine()) != null) {
-				  System.out.println(line);
-				}
-
-			}
+//			try {
+//			Object c = yc.getContent();
+//			System.out.println("Content c (obj to string) ="+c.toString());
+////			System.out.println("just testing how exceptions work...");
+//			} catch (IOException e) {
+//				logger.warn(e.getMessage());
+//				for (Map.Entry<String, List<String>> k : yc.getHeaderFields().entrySet()) {
+//				    System.out.println(k.toString());
+//				}
+//				BufferedReader in = new BufferedReader(new InputStreamReader(yc.getErrorStream()));
+//				String line = null;
+//				while((line = in.readLine()) != null) {
+//				  System.out.println(line);
+//				}
+//			}
 
 			is = yc.getInputStream();
 			
@@ -345,13 +243,11 @@ public class KrameriusFulltexter {
 			}
 			return baos.toByteArray();
 		} catch (IOException e) {
-	
 			StringWriter sw = new StringWriter();
 			e.printStackTrace(new PrintWriter(sw));
 			String exceptionAsString = sw.toString();
-			logger.warn(e.getMessage());
-			System.out.println(exceptionAsString);
-			
+			logger.error(e.getMessage());
+			logger.error(exceptionAsString);
 		} finally {
 			if (is != null) {
 				try {
@@ -391,8 +287,4 @@ public class KrameriusFulltexter {
 		this.downloadPrivateFulltexts = downloadPrivateFulltexts;
 	}
 
-	
-
-	
-	
 }
