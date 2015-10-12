@@ -13,12 +13,11 @@ import org.slf4j.LoggerFactory;
 import cz.mzk.recordmanager.server.dc.DublinCoreRecord;
 import cz.mzk.recordmanager.server.export.IOFormat;
 import cz.mzk.recordmanager.server.model.Cnb;
+import cz.mzk.recordmanager.server.model.HarvestedRecordFormat.HarvestedRecordFormatEnum;
 import cz.mzk.recordmanager.server.model.Isbn;
 import cz.mzk.recordmanager.server.model.Issn;
-import cz.mzk.recordmanager.server.model.Language;
 import cz.mzk.recordmanager.server.model.Oclc;
 import cz.mzk.recordmanager.server.model.Title;
-import cz.mzk.recordmanager.server.model.HarvestedRecordFormat.HarvestedRecordFormatEnum;
 
 public class MetadataDublinCoreRecord implements MetadataRecord {
 
@@ -336,6 +335,12 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 	@Override
 	public String getRaw001Id() {
 		// TODO Nothing to return
+		return null;
+	}
+
+	@Override
+	public Boolean isDeleted() {
+		// TODO Auto-generated method stub
 		return null;
 	}
 
