@@ -91,7 +91,7 @@ public class ImportRecordsWriter implements ItemWriter<List<Record>> {
 					}
 					if(metadata.isDeleted()) {
 						hr.setDeleted(new Date());
-						hr.setRawRecord(null);
+						hr.setRawRecord(new byte[0]);
 					}
 					else {
 						hr.setDeleted(null);
