@@ -24,7 +24,7 @@ import cz.mzk.recordmanager.server.util.StringUtils;
  */
 
 @Component
-public class DedupSkatKeysProcessor extends DedupSimpleKeysStepProsessor implements
+public class DedupSkatKeysProcessor extends DedupSimpleKeysStepProcessor implements
 		ItemProcessor<List<Long>, List<HarvestedRecord>> {
 
 	@Autowired

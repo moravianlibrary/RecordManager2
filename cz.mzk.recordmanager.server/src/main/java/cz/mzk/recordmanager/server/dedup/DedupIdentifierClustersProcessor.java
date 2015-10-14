@@ -11,7 +11,7 @@ import cz.mzk.recordmanager.server.util.StringUtils;
  * SimpleKeysStepProcessor subclass for processing records having same identifier.
  *
  */
-public class DedupIdentifierClustersProcessor extends DedupSimpleKeysStepProsessor {
+public class DedupIdentifierClustersProcessor extends DedupSimpleKeysStepProcessor {
 
 	private static final int TITLE_MATCH_BOUNDARY = 70;
 	

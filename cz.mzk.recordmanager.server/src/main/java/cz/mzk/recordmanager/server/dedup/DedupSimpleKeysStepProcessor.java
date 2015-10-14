@@ -26,7 +26,7 @@ import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordDAO;
  *
  */
 @Component
-public class DedupSimpleKeysStepProsessor implements
+public class DedupSimpleKeysStepProcessor implements
 		ItemProcessor<List<Long>, List<HarvestedRecord>> {
 
 	@Autowired
@@ -35,7 +35,7 @@ public class DedupSimpleKeysStepProsessor implements
 	@Autowired
 	private DedupRecordDAO dedupRecordDAO;
 	
-	private static Logger logger = LoggerFactory.getLogger(DedupSimpleKeysStepProsessor.class);
+	private static Logger logger = LoggerFactory.getLogger(DedupSimpleKeysStepProcessor.class);
 	
 	@Override
 	public List<HarvestedRecord> process(List<Long> idList) throws Exception {

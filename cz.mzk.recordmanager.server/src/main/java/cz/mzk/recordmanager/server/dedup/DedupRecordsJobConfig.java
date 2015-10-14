@@ -799,7 +799,7 @@ public class DedupRecordsJobConfig {
 	@Bean(name = "dedupSimpleKeys:processor")
 	@StepScope
 	public ItemProcessor<List<Long>, List<HarvestedRecord>> dedupSimpleKeysStepProsessor() {
-		return new DedupSimpleKeysStepProsessor();
+		return new DedupSimpleKeysStepProcessor();
 	}
 
 	@Bean(name = "dedupSimpleKeys:writer")
