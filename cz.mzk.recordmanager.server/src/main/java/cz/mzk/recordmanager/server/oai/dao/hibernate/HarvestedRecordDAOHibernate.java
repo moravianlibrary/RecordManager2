@@ -2,7 +2,10 @@ package cz.mzk.recordmanager.server.oai.dao.hibernate;
 
 import java.util.List;
 
+import org.hibernate.Criteria;
 import org.hibernate.Session;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Component;
 
 import cz.mzk.recordmanager.server.model.DedupRecord;
@@ -51,6 +54,16 @@ public class HarvestedRecordDAOHibernate extends
 	@Override
 	public HarvestedRecord get(HarvestedRecordUniqueId uniqueId) {
 		return findByIdAndHarvestConfiguration(uniqueId.getRecordId(), uniqueId.getHarvestedFromId());
+	}
+
+	@Override
+	public boolean existsByDedupRecord(DedupRecord dedupRecord) {
+		Session session = sessionFactory.getCurrentSession();
+		Criteria crit = session.createCriteria(HarvestedRecord.class);
+		crit.add(Restrictions.eq("dedupRecord", dedupRecord));
+		crit.setProjection(Projections.id());
+		crit.setMaxResults(1);
+		return crit.uniqueResult() != null;
 	}
 
 }

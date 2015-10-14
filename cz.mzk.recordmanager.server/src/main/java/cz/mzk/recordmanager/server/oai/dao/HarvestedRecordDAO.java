@@ -17,4 +17,6 @@ public interface HarvestedRecordDAO extends DomainDAO<Long, HarvestedRecord> {
 
 	public List<HarvestedRecord> getByDedupRecord(DedupRecord dedupRecord);
 
+	public boolean existsByDedupRecord(DedupRecord dedupRecord);
+
 }
