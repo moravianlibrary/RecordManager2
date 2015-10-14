@@ -39,15 +39,6 @@ public class HarvestedRecordDAOHibernate extends
 	}
 	
 	@Override
-	public HarvestedRecord findByRecordId(String uniqueId) {
-		Session session = sessionFactory.getCurrentSession();
-		return (HarvestedRecord) session
-				.createQuery("from HarvestedRecord where uniqueId.recordId = ?")
-				.setParameter(0, uniqueId)
-				.uniqueResult();
-	}
-	
-	@Override
 	@SuppressWarnings("unchecked")
 	public List<HarvestedRecord> getByDedupRecord(DedupRecord dedupRecord) {
 		Session session = sessionFactory.getCurrentSession();
