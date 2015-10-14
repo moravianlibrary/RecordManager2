@@ -84,12 +84,7 @@ public class DedupSimpleKeysStepProcessor implements
 							
 							// all occurrences of lessFrequented in database should be updated to moreFrequented later
 							if (harvestedRecordDao.existsByDedupRecord(lessFrequented)) {
-								Set<DedupRecord> tmpSet = updateDedupRecordsMap.get(moreFrequented);
-								if (tmpSet == null) {
-									tmpSet = new HashSet<>();
-								}
-								tmpSet.add(lessFrequented);
-								updateDedupRecordsMap.put(moreFrequented, tmpSet);
+								updateDedupRecordsMap.computeIfAbsent(moreFrequented, key -> new HashSet<>()).add(lessFrequented);
 							}
 						}
 						continue;
