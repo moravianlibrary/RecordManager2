@@ -58,7 +58,7 @@ public class MetadataRecordFactory {
         	
     		MarcRecord marcRec = marcXmlParser.parseRecord(is);
 			switch (prefix) {
-			case Constants.PREFIX_MKZ:
+			case Constants.PREFIX_MZK:
 				return new MzkMetadataMarcRecord(marcRec);
 			case Constants.PREFIX_NKP:
 				return new NkpMarcMetadataRecord(marcRec);
