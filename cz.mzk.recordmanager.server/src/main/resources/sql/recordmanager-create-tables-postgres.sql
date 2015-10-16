@@ -199,4 +199,4 @@ CREATE TABLE skat_keys (
   local_record_id     VARCHAR(128),
   manually_merged     BOOLEAN DEFAULT FALSE,
   CONSTRAINT skat_keys_pk PRIMARY KEY(skat_record_id,sigla,local_record_id)
-)
+);
