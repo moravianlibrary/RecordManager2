@@ -89,7 +89,14 @@ public class ImportRecordsWriter implements ItemWriter<List<Record>> {
 							recordContent = interceptor.intercept();
 						}
 					}
-					hr.setRawRecord(recordContent);
+					if(metadata.isDeleted()) {
+						hr.setDeleted(new Date());
+						hr.setRawRecord(new byte[0]);
+					}
+					else {
+						hr.setDeleted(null);
+						hr.setRawRecord(recordContent);
+					}
 					harvestedRecordDao.persist(hr);
 					dedupKeysParser.parse(hr, metadata);
 					

@@ -13,7 +13,7 @@ import cz.mzk.recordmanager.server.util.DeduplicationUtils;
  * ItemProcessor implementation for DedupTitleAuthStep
  *
  */
-public class DedupTitleAuthItemProcessor extends DedupSimpleKeysStepProsessor {
+public class DedupTitleAuthItemProcessor extends DedupSimpleKeysStepProcessor {
 	
 	public static final int PAGES_MATCH_PERCENTAGE = 90;
 	

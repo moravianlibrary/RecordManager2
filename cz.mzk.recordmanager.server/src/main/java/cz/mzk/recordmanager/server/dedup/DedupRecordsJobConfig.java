@@ -1,7 +1,6 @@
 package cz.mzk.recordmanager.server.dedup;
 
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -33,14 +32,13 @@ import org.springframework.core.task.TaskExecutor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 
-import com.google.common.io.CharStreams;
-
 import cz.mzk.recordmanager.server.jdbc.LongValueRowMapper;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.springbatch.DelegatingHibernateProcessor;
 import cz.mzk.recordmanager.server.springbatch.SqlCommandTasklet;
 import cz.mzk.recordmanager.server.springbatch.StepProgressListener;
 import cz.mzk.recordmanager.server.util.Constants;
+import cz.mzk.recordmanager.server.util.ResourceUtils;
 
 @Configuration
 public class DedupRecordsJobConfig {
@@ -67,10 +65,6 @@ public class DedupRecordsJobConfig {
 	
 	private static final String TMP_TABLE_SKAT_KEYS_REST = "tmp_skat_keys_rest";
 	
-	private static final String PREPARE_REST_OF_RECORDS_TABLE_PROCEDURE = "prepare_rest_of_ids_table";
-
-	private static final String PREPARE_REST_OF_RECORDS_COMMIT_OFFSETS_PROCEDURE = "dedup_rest_of_records_offset";
-
 	private static final int REST_OF_RECORDS_COMMIT_INTERVAL = 10000;
 	
 	
@@ -90,89 +84,37 @@ public class DedupRecordsJobConfig {
 	@Autowired
 	private DataSource dataSource;
 
-	private String initDeduplicationSql = CharStreams
-			.toString(new InputStreamReader(getClass() //
-					.getClassLoader().getResourceAsStream(
-							"job/dedupRecordsJob/initDeduplication.sql"),
-					"UTF-8"));
+	private String initDeduplicationSql = ResourceUtils.asString("job/dedupRecordsJob/initDeduplication.sql"); 
 
-	private String prepareTempIsbnTableSql = CharStreams
-			.toString(new InputStreamReader(getClass() //
-					.getClassLoader().getResourceAsStream(
-							"job/dedupRecordsJob/prepareTempIsbnTable.sql"),
-					"UTF-8"));
+	private String prepareTempIsbnTableSql = ResourceUtils.asString("job/dedupRecordsJob/prepareTempIsbnTable.sql");
 
-	private String prepareTempCnbTableSql = CharStreams
-			.toString(new InputStreamReader(getClass() //
-					.getClassLoader().getResourceAsStream(
-							"job/dedupRecordsJob/prepareTempCnbTable.sql"),
-					"UTF-8"));
+	private String prepareTempCnbTableSql = ResourceUtils.asString("job/dedupRecordsJob/prepareTempCnbTable.sql"); 
 
-	private String prepareTempClusterIdSql = CharStreams
-			.toString(new InputStreamReader(getClass() //
-					.getClassLoader().getResourceAsStream(
-							"job/dedupRecordsJob/prepareTempClusterId.sql"),
-					"UTF-8"));
+	private String prepareTempClusterIdSql = ResourceUtils.asString("job/dedupRecordsJob/prepareTempClusterId.sql");
 
-	private String prepareTempAuthKeyTableSql = CharStreams
-			.toString(new InputStreamReader(getClass() //
-					.getClassLoader().getResourceAsStream(
-							"job/dedupRecordsJob/prepareTempAuthKeyTable.sql"),
-					"UTF-8"));
-	
-	private String prepareTempCnbClustersSql = CharStreams
-			.toString(new InputStreamReader(getClass() //
-					.getClassLoader().getResourceAsStream(
-							"job/dedupRecordsJob/prepareTempCnbClustersTable.sql"),
-					"UTF-8"));
+	private String prepareTempAuthKeyTableSql = ResourceUtils.asString("job/dedupRecordsJob/prepareTempAuthKeyTable.sql");
 
-	private String prepareTempOclcClustersSql = CharStreams
-			.toString(new InputStreamReader(getClass() //
-					.getClassLoader().getResourceAsStream(
-							"job/dedupRecordsJob/prepareTempOclcClustersTable.sql"),
-					"UTF-8"));
-	
-	private String prepareTempUuidClustersSql = CharStreams
-			.toString(new InputStreamReader(getClass() //
-					.getClassLoader().getResourceAsStream(
-							"job/dedupRecordsJob/prepareTempUuidClustersTable.sql"),
-					"UTF-8"));
-	
-	private String prepareDedupSimmilarityTableSql = CharStreams
-			.toString(new InputStreamReader(getClass() //
-					.getClassLoader().getResourceAsStream(
-							"job/dedupRecordsJob/prepareDedupSimmilarityTable.sql"),
-					"UTF-8"));
-	
-	private String prepareTempSkatKeysManuallyMerged = CharStreams
-			.toString(new InputStreamReader(getClass() //
-					.getClassLoader().getResourceAsStream(
-							"job/dedupRecordsJob/prepareTempSkatManuallyMergedTable.sql"),
-					"UTF-8"));
-	
-	private String prepareTempSkatKeysRest = CharStreams
-			.toString(new InputStreamReader(getClass() //
-					.getClassLoader().getResourceAsStream(
-							"job/dedupRecordsJob/prepareTempSkatRestTable.sql"),
-					"UTF-8"));
-	
-	private String cleanupSql = CharStreams
-			.toString(new InputStreamReader(getClass() //
-					.getClassLoader().getResourceAsStream(
-							"job/dedupRecordsJob/cleanup.sql"),
-					"UTF-8"));
-	
+	private String prepareTempCnbClustersSql = ResourceUtils.asString("job/dedupRecordsJob/prepareTempCnbClustersTable.sql");
+
+	private String prepareTempOclcClustersSql = ResourceUtils.asString("job/dedupRecordsJob/prepareTempOclcClustersTable.sql");
+
+	private String prepareTempUuidClustersSql = ResourceUtils.asString("job/dedupRecordsJob/prepareTempUuidClustersTable.sql");
+
+	private String prepareDedupSimmilarityTableSql = ResourceUtils.asString("job/dedupRecordsJob/prepareDedupSimmilarityTable.sql");
+
+	private String prepareTempSkatKeysManuallyMerged = ResourceUtils.asString("job/dedupRecordsJob/prepareTempSkatManuallyMergedTable.sql");
+
+	private String prepareTempSkatKeysRest = ResourceUtils.asString("job/dedupRecordsJob/prepareTempSkatRestTable.sql");
+
+	private String uniqueRecordsDedupSql = ResourceUtils.asString("job/dedupRecordsJob/UniqueRecordsDedup.sql");
+
+	private String cleanupSql = ResourceUtils.asString("job/dedupRecordsJob/cleanup.sql");
 
 	public DedupRecordsJobConfig() throws IOException {
 	}
 
 	@Bean
 	public Job dedupRecordsJob(
-			// public Job
-			// dedupRecordsJob(@Qualifier("dedupRecordsJob:deleteStep") Step
-			// deleteStep,
-			// @Qualifier("dedupRecordsJob:updateStep") Step updateStep) {
-			// @Qualifier("dedupRecordsJob:deleteStep") Step deleteStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":initStep") Step initStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":prepareTempClusterIdStep") Step prepareTempClusterIdStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":dedupClusterIdsStep") Step dedupClusterIdsStep,
@@ -195,7 +137,6 @@ public class DedupRecordsJobConfig {
 			@Qualifier(Constants.JOB_ID_DEDUP + ":prepareDedupSimmilarityTableStep") Step prepareDedupSimmilarityTableStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":prepareDedupSimmilarTitlesStep") Step prepareDedupSimmilarTitles,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":processSimilaritesResultsStep") Step processSimilaritesResultsStep,
-			@Qualifier(Constants.JOB_ID_DEDUP + ":prepareDedupRestOfRecordsStep") Step prepareDedupRestOfRecordsStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":dedupRestOfRecordsStep") Step dedupRestOfRecordsStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":cleanupStep") Step cleanupStep) {
 		return jobs.get(Constants.JOB_ID_DEDUP)
@@ -222,36 +163,11 @@ public class DedupRecordsJobConfig {
 				.next(prepareDedupSimmilarityTableStep)
 				.next(prepareDedupSimmilarTitles)
 				.next(processSimilaritesResultsStep)
-				.next(prepareDedupRestOfRecordsStep)
 				.next(dedupRestOfRecordsStep)
 				.next(cleanupStep)
 				.build();
 	}
 
-	// @Bean(name="dedupRecordsJob:deleteStep")
-	// public Step deleteStep() throws Exception {
-	// return steps.get("dedupRecordsStep")
-	// .tasklet(updateDedupRecordTasklet())
-	// .build();
-	// }
-	//
-	// @Bean(name="dedupRecordsJob:updateStep")
-	// public Step step() throws Exception {
-	// return steps.get("dedupRecordsUpdateStep")
-	// .<HarvestedRecord, HarvestedRecord> chunk(100)
-	// .reader(reader())
-	// .writer(writer())
-	// .build();
-	// }
-	//
-	
-	/*
-	 *
-	 * @return
-	 */
-	/*
-	 * initialize deduplication
-	 */
 	@Bean(name="prepareTempTablesStep:initTasklet")
 	@StepScope
 	public Tasklet initTasklet() {
@@ -267,10 +183,9 @@ public class DedupRecordsJobConfig {
 	}
 	
 
-	/*
+	/**
 	 * dedupClusterIdsStep Deduplicate records using cluster id
 	 */
-
 	@Bean(name = "prepareTempTablesStep:prepareTempClusterIdTasklet")
 	@StepScope
 	public Tasklet prepareTempClusterIdTasklet() {
@@ -302,11 +217,11 @@ public class DedupRecordsJobConfig {
 		return dedupSimpleKeysReader(TMP_TABLE_CLUSTER);
 	}
 
-/*
- * dedupSimpleKeysSkatManuallyMergedStep Deduplicate all records, that were manually
- * merged in Skat
- * 
- */
+	/**
+	 * dedupSimpleKeysSkatManuallyMergedStep Deduplicate all records, that were manually
+	 * merged in Skat
+	 * 
+	 */
 	@Bean(name = "prepareTempSkatKeysManuallyMergedStep:prepareTempSkatKeysManuallyMergedTasklet")
 	@StepScope
 	public Tasklet prepareTempSkatKeysManuallyMergedTasklet() {
@@ -339,10 +254,10 @@ public class DedupRecordsJobConfig {
 	}
 
 	
-/*
- * dedupSimpleKeysIsbnStep Deduplicate all books having equal publication
- * year, ISBN and title
- */
+	/**
+	 * dedupSimpleKeysIsbnStep Deduplicate all books having equal publication
+	 * year, ISBN and title
+	 */
 	@Bean(name = "prepareTempTablesStep:prepareTempIsbnTableTasklet")
 	@StepScope
 	public Tasklet prepareTempIsbnTableTasklet() {
@@ -372,10 +287,10 @@ public class DedupRecordsJobConfig {
 		return dedupSimpleKeysReader(TMP_TABLE_ISBN);
 	}
 
-/*
- * dedupSimpleKeysCnbStep Deduplicate all books having equal publication
- * year, CNB and title
- */
+	/**
+	 * dedupSimpleKeysCnbStep Deduplicate all books having equal publication
+	 * year, CNB and title
+	 */
 	@Bean(name = "prepareTempTablesStep:prepareTempCnbTableTasklet")
 	@StepScope
 	public Tasklet prepareTempCnbTableTasklet() {
@@ -407,10 +322,10 @@ public class DedupRecordsJobConfig {
 		return dedupSimpleKeysReader(TMP_TABLE_CNB);
 	}
 
-/*
- * dedupTitleAuthStep Deduplicate all books having same title, author key,
- * publication year and page count in tolerance
- */
+	/**
+	 * dedupTitleAuthStep Deduplicate all books having same title, author key,
+	 * publication year and page count in tolerance
+	 */
 	@Bean(name = "prepareTempTablesStep:prepareTmpTitkeAuthStepTasklet")
 	@StepScope
 	public Tasklet prepareTmpTitleAuthStepTasklet() {
@@ -447,81 +362,22 @@ public class DedupRecordsJobConfig {
 		return new DedupTitleAuthItemProcessor();
 	}
 
-/*
- * Deduplicate rest of records. Final step of deduplication.
- * All HarvesteRecords without DedupRecord are assigned unique DedupRecord
- * 
- */
-	@Bean(name = Constants.JOB_ID_DEDUP + ":prepareDedupRestOfRecordsStep")
-	public Step prepareDedupRestOfRecordsStep() {
-		return steps
-				.get("prepareDedupRestOfRecordsStep")
-				.tasklet(dedupRestOfRecordsSqlTasklet())
-				.listener(new StepProgressListener())
-				.build();
-	}
-
-	@Bean(name = "prepareTempTablesStep:dedupRestTasklet")
+	@Bean(name = "dedupRestOfRecordsStep:dedupRestTasklet")
 	@StepScope
 	public Tasklet dedupRestOfRecordsSqlTasklet() {
-		List<String> commands = new ArrayList<>();
-		commands.add(String.format("select %s()",
-				PREPARE_REST_OF_RECORDS_TABLE_PROCEDURE));
-		commands.add(String.format("select %s(%s)",
-				PREPARE_REST_OF_RECORDS_COMMIT_OFFSETS_PROCEDURE,
-				REST_OF_RECORDS_COMMIT_INTERVAL));
-		return new SqlCommandTasklet(commands);
+		return new UniqueRecordsDedupTasklet(uniqueRecordsDedupSql);
 	}
 
 	@Bean(name = Constants.JOB_ID_DEDUP + ":dedupRestOfRecordsStep")
 	public Step dedupRestOfRecordsStep() throws Exception {
 		return steps.get("dedupRestOfRecordsStep")
-				.listener(new StepProgressListener())
-				.<Long, Long> chunk(1).reader(dedupRestOfRecordsReader())
-				.writer(dedupRestOfRecordsWriter()).build();
+				.tasklet(dedupRestOfRecordsSqlTasklet())
+				.build();
 	}
 
-	@Bean(name = "dedupRestOfRecordsStep:reader")
-	@StepScope
-	public ItemReader<Long> dedupRestOfRecordsReader() throws Exception {
-		JdbcPagingItemReader<Long> reader = new JdbcPagingItemReader<>();
-		SqlPagingQueryProviderFactoryBean pqpf = new SqlPagingQueryProviderFactoryBean();
-		pqpf.setDataSource(dataSource);
-		pqpf.setSelectClause("SELECT interval");
-		pqpf.setFromClause("FROM " + TMP_TABLE_REST_OF_IDS_INTERVALS);
-		pqpf.setSortKey("interval");
-		reader.setRowMapper(new LongValueRowMapper());
-		reader.setPageSize(1);
-		reader.setQueryProvider(pqpf.getObject());
-		reader.setDataSource(dataSource);
-		reader.afterPropertiesSet();
-		return reader;
-	}
-
-	@Bean(name = "dedupRestOfRecordsStep:writer")
-	@StepScope
-	public ItemWriter<Long> dedupRestOfRecordsWriter() throws Exception {
-		return new ItemWriter<Long>() {
-
-			@Autowired
-			private JdbcTemplate jdbcTemplate;
-
-			@Override
-			public void write(List<? extends Long> arg0) throws Exception {
-				for (Long l : arg0) {
-					jdbcTemplate
-							.query("select dedup_rest_of_records(?,?)",
-									new Object[] {
-											REST_OF_RECORDS_COMMIT_INTERVAL, l },
-									new LongValueRowMapper());
-				}
-			}
-		};
-	}
-
-/*
- * Deduplicate same CNB 
- */
+	/**
+	 * 	Deduplicate same CNB 
+	 */
 	@Bean(name = "prepareTempTablesStep:prepareTempCnbClustersTableTasklet")
 	@StepScope
 	public Tasklet prepareCbnClustersTasklet() {
@@ -559,9 +415,9 @@ public class DedupRecordsJobConfig {
 				.build();
 	}
 	
-/*
- * Dedup same Oclc
- */
+	/**
+	 * Dedup same Oclc
+	 */
 	@Bean(name = "prepareTempTablesStep:prepareTempOclcClustersTableTasklet")
 	@StepScope
 	public Tasklet prepareOclcClustersTasklet() {
@@ -598,10 +454,10 @@ public class DedupRecordsJobConfig {
 				.writer(dedupSimpleKeysStepWriter())
 				.build();
 	}
-/*
- * Deduplicate same UUID
- */
 
+	/**
+	 * Deduplicate same UUID
+	*/
 	@Bean(name = "prepareTempTablesStep:prepareTempUuidClustersTableTasklet")
 	@StepScope
 	public Tasklet prepareUuidClustersTasklet() {
@@ -632,50 +488,46 @@ public class DedupRecordsJobConfig {
 				.writer(dedupSimpleKeysStepWriter())
 				.build();
 	}
-	
-/*
- * dedupSimpleKeysSkatManuallyMergedStep Deduplicate all records, that were NOT manually
- * merged in Skat
- * 
- */
-		@Bean(name = "prepareTempSkatKeysRestStep:prepareTempSkatKeysRestTasklet")
-		@StepScope
-		public Tasklet prepareTempSkatKeysRestTasklet() {
-			return new SqlCommandTasklet(prepareTempSkatKeysRest);
-		}
+
+	/**
+	 * dedupSimpleKeysSkatManuallyMergedStep Deduplicate all records, that were NOT manually
+	 * merged in Skat
+	 * 
+	 */
+	@Bean(name = "prepareTempSkatKeysRestStep:prepareTempSkatKeysRestTasklet")
+	@StepScope
+	public Tasklet prepareTempSkatKeysRestTasklet() {
+		return new SqlCommandTasklet(prepareTempSkatKeysRest);
+	}
 		
-		@Bean(name = Constants.JOB_ID_DEDUP + ":prepareTempSkatKeysRestStep")
-		public Step prepareTempSkatKeysRestStep() {
-			return steps.get("prepareTempSkatKeysRestStep")
-					.tasklet(prepareTempSkatKeysRestTasklet())
-					.listener(new StepProgressListener())
-					.build();
-		}
+	@Bean(name = Constants.JOB_ID_DEDUP + ":prepareTempSkatKeysRestStep")
+	public Step prepareTempSkatKeysRestStep() {
+		return steps.get("prepareTempSkatKeysRestStep")
+				.tasklet(prepareTempSkatKeysRestTasklet())
+				.listener(new StepProgressListener())
+				.build();
+	}
 		
-		@Bean(name = Constants.JOB_ID_DEDUP + ":dedupSimpleKeysSkatRestStep")
-		public Step dedupSimpleKeysSkatRestStep() throws Exception {
-			return steps.get("dedupSimpleKeysSkatRestStep")
-					.listener(new StepProgressListener())
-					.<List<Long>, List<HarvestedRecord>> chunk(100)
-					.reader(dedupSimpleKeysSkatRestReader())
-					.processor(dedupSkatKeysProcessor())
-					.writer(dedupSimpleKeysStepWriter())
-					.build();
-		}
+	@Bean(name = Constants.JOB_ID_DEDUP + ":dedupSimpleKeysSkatRestStep")
+	public Step dedupSimpleKeysSkatRestStep() throws Exception {
+		return steps.get("dedupSimpleKeysSkatRestStep")
+				.listener(new StepProgressListener())
+				.<List<Long>, List<HarvestedRecord>> chunk(100)
+				.reader(dedupSimpleKeysSkatRestReader())
+				.processor(dedupSkatKeysProcessor())
+				.writer(dedupSimpleKeysStepWriter())
+				.build();
+	}
 		
-		@Bean(name = "dedupSimpleKeysSkatRestStep:reader")
-		@StepScope
-		public ItemReader<List<Long>> dedupSimpleKeysSkatRestReader() throws Exception {
-			return dedupSimpleKeysReader(TMP_TABLE_SKAT_KEYS_REST);
-		}
+	@Bean(name = "dedupSimpleKeysSkatRestStep:reader")
+	@StepScope
+	public ItemReader<List<Long>> dedupSimpleKeysSkatRestReader() throws Exception {
+		return dedupSimpleKeysReader(TMP_TABLE_SKAT_KEYS_REST);
+	}	
 	
-	
-	
-	
-/*
- * Prepare title similarities deduplication
- */
-	
+	/**
+	 * Prepare title similarities deduplication
+	 */
 	@Bean(name = Constants.JOB_ID_DEDUP + ":prepareDedupSimmilarityTableStep")
 	public Step prepareDedupSimmilarityTableStep() {
 		return steps.get("prepareDedupSimmilarityTableStep")
@@ -737,11 +589,9 @@ public class DedupRecordsJobConfig {
 		return new TitleSimilarityWriter();
 	}
 
-/*
- * 
- * process computed similarities results
- */
-	
+	/**
+	 * Process computed similarities results
+	 */
 	@Bean(name = Constants.JOB_ID_DEDUP + ":processSimilaritesResultsStep")
 	public Step processSimilaritesResultsStep() throws Exception {
 		return steps.get("processSimilaritesResultsStep")
@@ -752,14 +602,10 @@ public class DedupRecordsJobConfig {
 				.writer(dedupSimpleKeysStepWriter())
 				.build();
 	}
-	
-	
-/*
- * 
- * cleanup
- */
-	
-	
+
+	/**
+	 * Cleanup
+	 */	
 	@Bean(name = Constants.JOB_ID_DEDUP + ":cleanupStep")
 	public Step cleanupStep() {
 		return steps.get("cleanupStep")
@@ -773,13 +619,10 @@ public class DedupRecordsJobConfig {
 	public Tasklet cleanupTasklet() {
 		return new SqlCommandTasklet(cleanupSql);
 	}
-	
-	
-	
-	
-/*
- * Generic components
- */
+
+	/**
+	 * Generic components
+	*/
 	public ItemReader<List<Long>> dedupSimpleKeysReader(String tablename)
 			throws Exception {
 		JdbcPagingItemReader<List<Long>> reader = new JdbcPagingItemReader<>();
@@ -799,7 +642,7 @@ public class DedupRecordsJobConfig {
 	@Bean(name = "dedupSimpleKeys:processor")
 	@StepScope
 	public ItemProcessor<List<Long>, List<HarvestedRecord>> dedupSimpleKeysStepProsessor() {
-		return new DedupSimpleKeysStepProsessor();
+		return new DedupSimpleKeysStepProcessor();
 	}
 
 	@Bean(name = "dedupSimpleKeys:writer")
@@ -835,4 +678,5 @@ public class DedupRecordsJobConfig {
 			return hrs;
 		}
 	}
+
 }

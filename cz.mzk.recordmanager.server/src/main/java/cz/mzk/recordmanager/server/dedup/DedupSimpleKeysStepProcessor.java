@@ -14,6 +14,8 @@ import org.springframework.batch.item.ItemProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.google.common.collect.HashMultiset;
+import com.google.common.collect.Multiset;
 import cz.mzk.recordmanager.server.model.DedupRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.oai.dao.DedupRecordDAO;
@@ -24,7 +26,7 @@ import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordDAO;
  *
  */
 @Component
-public class DedupSimpleKeysStepProsessor implements
+public class DedupSimpleKeysStepProcessor implements
 		ItemProcessor<List<Long>, List<HarvestedRecord>> {
 
 	@Autowired
@@ -33,13 +35,13 @@ public class DedupSimpleKeysStepProsessor implements
 	@Autowired
 	private DedupRecordDAO dedupRecordDAO;
 	
-	private static Logger logger = LoggerFactory.getLogger(DedupSimpleKeysStepProsessor.class);
+	private static Logger logger = LoggerFactory.getLogger(DedupSimpleKeysStepProcessor.class);
 	
 	@Override
 	public List<HarvestedRecord> process(List<Long> idList) throws Exception {
 		List<HarvestedRecord> hrList = new ArrayList<>();
 		// count of DedupRecord in current batch
-		Map<DedupRecord, Integer> dedupMap = new HashMap<>();
+		Multiset<DedupRecord> dedupMap = HashMultiset.create();
 		// Map of records that shoul be updated after processing of batch
 		// used in merging two different DedupRecords into one
 		Map<DedupRecord, Set<DedupRecord>> updateDedupRecordsMap = new HashMap<>();
@@ -53,11 +55,7 @@ public class DedupSimpleKeysStepProsessor implements
 			} 
 			DedupRecord currentDr = currentHr.getDedupRecord();
 			if (currentDr != null) {
-				if (dedupMap.containsKey(currentDr)) {
-					dedupMap.put(currentDr, dedupMap.get(currentDr) + 1);
-				} else {
-					dedupMap.put(currentDr, new Integer(1));
-				}
+				dedupMap.add(currentDr);
 			}
 			hrList.add(currentHr);
 		}
@@ -74,24 +72,19 @@ public class DedupSimpleKeysStepProsessor implements
 							// equal dedupRecord, nothing to do
 						} else {
 
-							DedupRecord moreFrequented = dedupMap.get(outerRec.getDedupRecord()) >= dedupMap.get(innerRec.getDedupRecord()) ? 
+							DedupRecord moreFrequented = dedupMap.count(outerRec.getDedupRecord()) >= dedupMap.count(innerRec.getDedupRecord()) ? 
 									outerRec.getDedupRecord() : innerRec.getDedupRecord();
 							DedupRecord lessFrequented = sameDedupRecords(moreFrequented, outerRec.getDedupRecord()) ? 
 									innerRec.getDedupRecord() : outerRec.getDedupRecord();
 							
 							outerRec.setDedupRecord(moreFrequented);
 							innerRec.setDedupRecord(moreFrequented);
-							dedupMap.put(moreFrequented, dedupMap.get(moreFrequented) + 1);
-							dedupMap.put(lessFrequented, dedupMap.get(lessFrequented) - 1);
+							dedupMap.add(moreFrequented);
+							dedupMap.remove(lessFrequented);
 							
 							// all occurrences of lessFrequented in database should be updated to moreFrequented later
-							if (harvestedRecordDao.getByDedupRecord(lessFrequented) != null) {
-								Set<DedupRecord> tmpSet = updateDedupRecordsMap.get(moreFrequented);
-								if (tmpSet == null) {
-									tmpSet = new HashSet<>();
-								}
-								tmpSet.add(lessFrequented);
-								updateDedupRecordsMap.put(moreFrequented, tmpSet);
+							if (harvestedRecordDao.existsByDedupRecord(lessFrequented)) {
+								updateDedupRecordsMap.computeIfAbsent(moreFrequented, key -> new HashSet<>()).add(lessFrequented);
 							}
 						}
 						continue;
@@ -106,7 +99,7 @@ public class DedupSimpleKeysStepProsessor implements
 						outerRec.setDedupRecord(newDr);
 						innerRec.setDedupRecord(newDr);
 						
-						dedupMap.put(newDr, new Integer(2));
+						dedupMap.setCount(newDr, 2);
 						continue;
 					}
 					
@@ -116,7 +109,7 @@ public class DedupSimpleKeysStepProsessor implements
 					outerRec.setDedupRecord(dr);
 					innerRec.setDedupRecord(dr);
 					
-					dedupMap.put(dr, dedupMap.get(dr) + 1);
+					dedupMap.add(dr);
 					
 				}
 			}

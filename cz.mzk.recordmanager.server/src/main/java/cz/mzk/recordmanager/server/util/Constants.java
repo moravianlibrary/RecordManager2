@@ -42,7 +42,7 @@ public class Constants {
 	public static final String METADATA_FORMAT_MARC_CPK    = "marccpk";
 	public static final String METADATA_FORMAT_DUBLIN_CORE = "dublinCore";
 	
-	public static final String PREFIX_MKZ				= "mzk";
+	public static final String PREFIX_MZK				= "mzk";
 	public static final String PREFIX_NKP				= "nkp";
 	public static final String PREFIX_NTK				= "ntk";
 	public static final String PREFIX_TRE				= "tre";

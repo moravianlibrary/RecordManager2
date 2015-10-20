@@ -116,6 +116,8 @@ public class MarcISO2709StreamReader implements MarcReader {
             throw new MarcException("Premature end of file encountered", e);
         } catch (IOException e) {
             throw new MarcException("an error occured reading input", e);
+        } catch (NegativeArraySizeException e){
+        	throw new MarcException("wrong record length");
         }
     }
 
@@ -223,6 +225,8 @@ public class MarcISO2709StreamReader implements MarcReader {
             }
         } catch (IOException e) {
             throw new MarcException("an error occured reading input", e);
+        } catch (NumberFormatException e){
+        	throw new MarcException();
         }
     }
 

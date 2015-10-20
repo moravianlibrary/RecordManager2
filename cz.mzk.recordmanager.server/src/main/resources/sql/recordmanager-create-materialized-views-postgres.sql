@@ -40,4 +40,4 @@ SELECT
   INNER JOIN language on nhr.id = language.harvested_record_id
   LEFT OUTER JOIN isbn i on nhr.id = i.harvested_record_id
   LEFT OUTER JOIN cnb c on nhr.id = c.harvested_record_id
-  WHERE dedup_record_id IS NULL
+  WHERE dedup_record_id IS NULL;

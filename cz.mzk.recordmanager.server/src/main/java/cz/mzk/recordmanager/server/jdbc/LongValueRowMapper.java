@@ -9,7 +9,8 @@ public class LongValueRowMapper implements RowMapper<Long> {
 
 	@Override
 	public Long mapRow(ResultSet rs, int rowNum) throws SQLException {
-		return rs.getLong(1);
+		long val = rs.getLong(1);
+		return (rs.wasNull()) ? null : val; 
 	}
 
 }

@@ -227,10 +227,10 @@ CREATE INDEX oclc_harvested_record_idx ON oclc(harvested_record_id);
 CREATE INDEX language_harvested_record_idx ON language(harvested_record_id); 
 
 -- 12. 8. 2015 - mertam; changes in auth_record table
-ALTER TABLE authority_record RENAME COLUMN oai_harvest_conf_id TO import_conf_id
-ALTER TABLE authority_record RENAME COLUMN authority_type TO authority_code
-ALTER TABLE authority_record ADD CONSTRAINT authority_code_unique UNIQUE(authority_code)
-CREATE INDEX authority_code_idx ON authority_record(authority_code)
+ALTER TABLE authority_record RENAME COLUMN oai_harvest_conf_id TO import_conf_id;
+ALTER TABLE authority_record RENAME COLUMN authority_type TO authority_code;
+ALTER TABLE authority_record ADD CONSTRAINT authority_code_unique UNIQUE(authority_code);
+CREATE INDEX authority_code_idx ON authority_record(authority_code);
 
 -- 14. 8. 2015 mertam; 
 ALTER TABLE import_conf ADD COLUMN interception_enabled BOOLEAN DEFAULT FALSE;
@@ -245,8 +245,8 @@ DELETE FROM language WHERE harvested_record_id IS NULL;
 ALTER TABLE language ADD CONSTRAINT language_pk PRIMARY KEY (harvested_record_id, lang);
 
 -- 6. 9. 2015 mertam 
-UPDATE import_conf set id_prefix = 'unmz' where id = 320
-update oai_harvest_conf set set_spec = 'CPK' where import_conf_id = 307
+UPDATE import_conf set id_prefix = 'unmz' where id = 320;
+update oai_harvest_conf set set_spec = 'CPK' where import_conf_id = 307;
 
 --14.9. 2015 mjtecka
 CREATE TABLE fulltext_monography
@@ -269,7 +269,7 @@ CREATE TABLE skat_keys (
   local_record_id     VARCHAR(128),
   manually_merged     BOOLEAN DEFAULT FALSE,
   CONSTRAINT skat_keys_pk PRIMARY KEY(skat_record_id,sigla,local_record_id)
-)
+);
 
 CREATE TABLE sigla (
   import_conf_id       DECIMAL(10),

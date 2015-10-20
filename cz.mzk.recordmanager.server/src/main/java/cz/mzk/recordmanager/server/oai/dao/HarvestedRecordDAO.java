@@ -14,9 +14,6 @@ public interface HarvestedRecordDAO extends DomainDAO<Long, HarvestedRecord> {
 	public HarvestedRecord findByIdAndHarvestConfiguration(String recordId, Long configurationId);
 
 	public HarvestedRecord get(HarvestedRecordUniqueId uniqueId);
-	
-	@Deprecated
-	public HarvestedRecord findByRecordId(String oaiRecordId);
 
 	public List<HarvestedRecord> getByDedupRecord(DedupRecord dedupRecord);
 	
@@ -24,5 +21,9 @@ public interface HarvestedRecordDAO extends DomainDAO<Long, HarvestedRecord> {
 	
 	/*<MJ.>*/
 	public int deleteFulltextMonography(HarvestedRecord harvestedRecord);
+
+	public boolean existsByDedupRecord(DedupRecord dedupRecord);
+
+	public HarvestedRecord findByRecordId(String uniqueId);
 
 }

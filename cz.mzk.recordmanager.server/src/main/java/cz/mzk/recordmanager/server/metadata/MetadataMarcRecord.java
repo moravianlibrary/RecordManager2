@@ -21,7 +21,6 @@ import cz.mzk.recordmanager.server.model.Cnb;
 import cz.mzk.recordmanager.server.model.HarvestedRecordFormat.HarvestedRecordFormatEnum;
 import cz.mzk.recordmanager.server.model.Isbn;
 import cz.mzk.recordmanager.server.model.Issn;
-import cz.mzk.recordmanager.server.model.Language;
 import cz.mzk.recordmanager.server.model.Oclc;
 import cz.mzk.recordmanager.server.model.Title;
 import cz.mzk.recordmanager.server.util.MetadataUtils;
@@ -44,6 +43,8 @@ public class MetadataMarcRecord implements MetadataRecord {
 	protected static final String ISBN_CLEAR_REGEX = "[^0-9^X^x]";
 	
 	protected static final Long MAX_PAGES = 10_000_000L;
+	
+	protected static final String DELETED_TAG = "YES";
 	
 	public MetadataMarcRecord(MarcRecord underlayingMarc) {
 		if (underlayingMarc == null) {
@@ -972,6 +973,13 @@ public class MetadataMarcRecord implements MetadataRecord {
 	@Override
 	public String getRaw001Id() {
 		return underlayingMarc.getControlField("001");
+	}
+
+	@Override
+	public Boolean isDeleted() {
+		String deleted = underlayingMarc.getField("DEL", 'a');
+		if(deleted != null && deleted.equals(DELETED_TAG)) return true;
+		else return false;
 	}
 
 	

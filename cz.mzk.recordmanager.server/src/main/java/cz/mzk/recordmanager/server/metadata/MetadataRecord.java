@@ -144,4 +144,11 @@ public interface MetadataRecord {
 	 * @return
 	 */
 	public String getRaw001Id();
+	
+	
+	/**
+	 * return true if record is deleted from field DEL
+	 * @return
+	 */
+	public Boolean isDeleted();
 }
