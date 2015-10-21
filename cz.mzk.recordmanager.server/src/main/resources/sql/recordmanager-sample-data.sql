@@ -163,3 +163,4 @@ INSERT INTO sigla (import_conf_id, sigla) VALUES (315, 'OLA001');
 INSERT INTO sigla (import_conf_id, sigla) VALUES (321, 'ABA013');
 INSERT INTO sigla (import_conf_id, sigla) VALUES (324, 'BOA001');
 INSERT INTO sigla (import_conf_id, sigla) VALUES (325, 'ABA003');
+INSERT INTO sigla (import_conf_id, sigla) VALUES (328, 'CBA001');
