@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,6 +41,14 @@ public class DublinCoreSolrRecordMapper implements SolrRecordMapper,
 
 	private MappingScript<DublinCoreRecord> mappingScript;
 
+	// line ending with '-', following line starts with letter
+	// '¬' is sometimes seen in Kramerius OCR on place of hyphen
+	protected static final Pattern TEXT_HYPHENATED_WORDS = Pattern.compile("[-,¬]\\s*\\n(\\p{L})");
+	// newline without hyphen
+	protected static final Pattern TEXT_NEWLINES = Pattern.compile("\\s*\\n\\s*");
+	// tabelators
+	protected static final Pattern TEXT_TAB = Pattern.compile("\\s*\\t\\s*");
+	
 	@Override
 	public List<String> getSupportedFormats() {
 		return Collections.singletonList(FORMAT);
@@ -87,17 +96,18 @@ public class DublinCoreSolrRecordMapper implements SolrRecordMapper,
 	public String getFulltextsFromRecord(HarvestedRecord record) {
 		List<FulltextMonography> pages = record.getFulltextMonography();
 		String text = "";
-		int i = 0;
 
 		for (FulltextMonography page : pages) {
-			i++;
 			String uuid = page.getUuidPage();
 			byte[] bytes = page.getFulltext();
 
 			try {
 				if (bytes != null) {
+					String fulltextPage = new String (bytes, "UTF-8");
+					fulltextPage = modifyFulltextPage(fulltextPage);					
+					text = text + fulltextPage;
 					logger.debug("Page with uuid ["+ uuid +"] has text and was added to indexed fulltext String");
-					text = text + new String(bytes, "UTF-8");
+
 				} else {
 					logger.debug("Page with uuid ["+ uuid +"] has NO text and was NOT added to indexed fulltext String");
 				}
@@ -111,6 +121,14 @@ public class DublinCoreSolrRecordMapper implements SolrRecordMapper,
 		// logger.debug(text);
 
 		return text;
+	}
+	
+	public String modifyFulltextPage(String fulltextPage) {
+		fulltextPage = TEXT_HYPHENATED_WORDS.matcher(fulltextPage).replaceAll("$1");
+		fulltextPage = TEXT_NEWLINES.matcher(fulltextPage).replaceAll(" ");
+		fulltextPage = TEXT_TAB.matcher(fulltextPage).replaceAll(" ");
+				
+		return fulltextPage;
 	}
 
 }
