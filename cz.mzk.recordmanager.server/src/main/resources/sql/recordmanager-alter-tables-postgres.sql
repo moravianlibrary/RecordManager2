@@ -284,3 +284,6 @@ ALTER TABLE language DROP CONSTRAINT language_fk;
 ALTER TABLE language ADD FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE;
 ALTER TABLE harvested_record_format_link DROP CONSTRAINT format_link_hr_id_fk;
 ALTER TABLE harvested_record_format_link ADD FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE;
+
+-- 21.10.2015 tomascejpek
+ALTER TABLE format ALTER COLUMN format TYPE VARCHAR(15);
