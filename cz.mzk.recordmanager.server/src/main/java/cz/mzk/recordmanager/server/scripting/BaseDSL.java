@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /**
@@ -56,9 +58,27 @@ public abstract class BaseDSL {
 		return translated;
 	}
 
+	public List<String> replaceAll(String regex, String replacement, List<String> input) {
+		Pattern pattern = Pattern.compile(regex);
+		return input.stream().map(it -> replace(pattern, replacement, it, true)).collect(Collectors.toCollection(ArrayList::new));
+	}
+
+	public List<String> replaceFirst(String regex, String replacement, List<String> input) {
+		Pattern pattern = Pattern.compile(regex);
+		return input.stream().map(it -> replace(pattern, replacement, it, false)).collect(Collectors.toCollection(ArrayList::new));
+	}
+
 	public List<String> filter(String stopWordsFile, List<String> values) throws IOException {
 		Set<String> stopWords = stopWordsResolver.resolve(stopWordsFile);
 		return values.stream().filter(value -> !stopWords.contains(value)).collect(Collectors.toCollection(ArrayList::new));
+	}
+
+	private String replace(Pattern pattern, String replacement, String input, boolean all) {
+		Matcher matcher = pattern.matcher(input);
+		if (matcher.find()) {
+			return (all) ? matcher.replaceAll(replacement) : matcher.replaceFirst(replacement);
+		}
+		return input;
 	}
 
 }
