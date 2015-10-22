@@ -194,6 +194,7 @@ public class KrameriusFulltexter {
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		InputStream is = null;
 		HttpURLConnection yc;
+		int responseCode = 0;
 		try {
 
 			URL url = new URL(urlString);
@@ -209,6 +210,7 @@ public class KrameriusFulltexter {
 			}
 
 			yc.connect();
+			responseCode = yc.getResponseCode();
 			is = yc.getInputStream();
 
 			byte[] byteChunk = new byte[4096];
@@ -219,11 +221,23 @@ public class KrameriusFulltexter {
 			}
 			return baos.toByteArray();
 		} catch (IOException e) {
-			StringWriter sw = new StringWriter();
-			e.printStackTrace(new PrintWriter(sw));
-			String exceptionAsString = sw.toString();
-			logger.error(e.getMessage());
-			logger.error(exceptionAsString);
+
+			switch (responseCode) {
+			case 404:
+				logger.warn("HTTP response 404 from: " + urlString);
+				break;
+			case 500:
+				logger.warn("HTTP response 500 from: " + urlString);
+				break;
+			default:
+				StringWriter sw = new StringWriter();
+				e.printStackTrace(new PrintWriter(sw));
+				String exceptionAsString = sw.toString();
+				logger.error(e.getMessage());
+				logger.error(exceptionAsString);
+				break;
+			}
+			
 		} finally {
 			if (is != null) {
 				try {
