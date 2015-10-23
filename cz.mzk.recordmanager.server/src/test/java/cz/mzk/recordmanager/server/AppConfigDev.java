@@ -19,6 +19,12 @@ import org.springframework.jdbc.datasource.init.DatabasePopulator;
 import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+import cz.mzk.recordmanager.server.scripting.CachingMappingResolver;
+import cz.mzk.recordmanager.server.scripting.CachingStopWordsResolver;
+import cz.mzk.recordmanager.server.scripting.ClasspathMappingResolver;
+import cz.mzk.recordmanager.server.scripting.ClasspathStopWordsResolver;
+import cz.mzk.recordmanager.server.scripting.MappingResolver;
+import cz.mzk.recordmanager.server.scripting.StopWordsResolver;
 import cz.mzk.recordmanager.server.solr.SolrServerFactory;
 import cz.mzk.recordmanager.server.util.HttpClient;
 
@@ -71,6 +77,16 @@ public class AppConfigDev {
     public SolrServerFactory mockedSolrServerFactory() {
     	return EasyMock.createMock(SolrServerFactory.class);
     }
+	
+	@Bean
+	public MappingResolver propertyResolver() {
+		return new CachingMappingResolver(new ClasspathMappingResolver());
+	}
+
+	@Bean
+	public StopWordsResolver stopWordsResolver() {
+		return new CachingStopWordsResolver(new ClasspathStopWordsResolver());
+	}
 	
 	private DatabasePopulator databasePopulator() {
 	    final ResourceDatabasePopulator populator = new ResourceDatabasePopulator();

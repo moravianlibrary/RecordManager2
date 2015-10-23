@@ -1,19 +1,21 @@
 package cz.mzk.recordmanager.server.scripting;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class CachingStopWordsResolver implements StopWordsResolver {
 
-	private final StopWordsResolver delegate;
+	private final List<StopWordsResolver> delegates;
 
 	private final Map<String, Set<String>> stopWordsMap = new ConcurrentHashMap<String, Set<String>>(16, 0.9f, 1);
-
-	public CachingStopWordsResolver(StopWordsResolver delegate) {
+	
+	public CachingStopWordsResolver(StopWordsResolver... delegates) {
 		super();
-		this.delegate = delegate;
+		this.delegates = Arrays.asList(delegates);
 	}
 
 	@Override
@@ -22,7 +24,17 @@ public class CachingStopWordsResolver implements StopWordsResolver {
 		if (stopWords != null) {
 			return stopWords;
 		}
-		stopWords = delegate.resolve(file);
+		for (StopWordsResolver delegate : delegates) {
+			try {
+				stopWords = delegate.resolve(file);
+				break;
+			} catch (IllegalArgumentException iae) {
+				continue;
+			}
+		}
+		if (stopWords == null) {
+			throw new IllegalArgumentException(String.format("File %s not found", file));
+		}
 		stopWordsMap.put(file, stopWords);
 		return stopWords;
 	}

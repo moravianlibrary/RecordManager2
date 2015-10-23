@@ -176,16 +176,6 @@ public class AppConfig extends DefaultBatchConfigurer {
 	}
 
 	@Bean
-	public MappingResolver propertyResolver() {
-		return new CachingMappingResolver(new ClasspathMappingResolver());
-	}
-
-	@Bean
-	public StopWordsResolver stopWordsResolver() {
-		return new CachingStopWordsResolver(new ClasspathStopWordsResolver());
-	}
-
-	@Bean
 	public TaskExecutor taskExecutor(@Value(value = "${recordmanager.threadPoolSize}") int threadPoolSize) {
 		ThreadPoolTaskExecutor taskExecutor = new ThreadPoolTaskExecutor();
 		taskExecutor.setCorePoolSize(threadPoolSize);
