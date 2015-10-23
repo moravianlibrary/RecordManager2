@@ -229,8 +229,8 @@
    <dynamicField name="*_isn_mv" type="isn" indexed="true" stored="true" multiValued="true"/>
    <dynamicField name="*_str" type="string" indexed="false" stored="true" docValues="true"/>
    <dynamicField name="*_str_mv" type="string" indexed="false" stored="true" multiValued="true" docValues="true"/>
-   <dynamicField name="*_txt" type="text" indexed="false" stored="true" docValues="false"/>
-   <dynamicField name="*_txt_mv" type="text" indexed="false" stored="true" multiValued="true" docValues="false"/>
+   <dynamicField name="*_txt" type="text" indexed="true" stored="true" docValues="false"/>
+   <dynamicField name="*_txt_mv" type="text" indexed="true" stored="true" multiValued="true" docValues="false"/>
    <dynamicField name="*_txtF" type="textFacet" indexed="true" stored="true"/>
    <dynamicField name="*_txtF_mv" type="textFacet" indexed="true" stored="true" multiValued="true"/>
    <dynamicField name="*_txtP" type="textProper" indexed="true" stored="true"/>
