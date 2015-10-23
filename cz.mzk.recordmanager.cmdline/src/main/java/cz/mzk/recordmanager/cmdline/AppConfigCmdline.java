@@ -2,6 +2,7 @@ package cz.mzk.recordmanager.cmdline;
 
 import java.beans.PropertyVetoException;
 import java.io.File;
+
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,10 @@ import org.springframework.core.env.Environment;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 
+import cz.mzk.recordmanager.server.ClasspathResourceProvider;
+import cz.mzk.recordmanager.server.DelegatingResourceProvider;
+import cz.mzk.recordmanager.server.FileSystemResourceProvider;
+import cz.mzk.recordmanager.server.ResourceProvider;
 import cz.mzk.recordmanager.server.scripting.CachingMappingResolver;
 import cz.mzk.recordmanager.server.scripting.CachingStopWordsResolver;
 import cz.mzk.recordmanager.server.scripting.ClasspathMappingResolver;
@@ -59,6 +64,14 @@ public class AppConfigCmdline {
 		return new CachingStopWordsResolver( //
 				new FileSystemStopWordsResolver(new File(configDir, "stopwords")), //
 				new ClasspathStopWordsResolver() //
+		);
+	}
+
+	@Bean
+	public ResourceProvider resourceProvider(@Value("${CONFIG_DIR}") File configDir) {
+		return new DelegatingResourceProvider( //
+				new FileSystemResourceProvider(configDir), //
+				new ClasspathResourceProvider() //
 		);
 	}
 

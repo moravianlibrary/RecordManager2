@@ -87,7 +87,12 @@ public class AppConfigDev {
 	public StopWordsResolver stopWordsResolver() {
 		return new CachingStopWordsResolver(new ClasspathStopWordsResolver());
 	}
-	
+
+	@Bean
+	public ResourceProvider resourceProvider() {
+		return new ClasspathResourceProvider();
+	}
+
 	private DatabasePopulator databasePopulator() {
 	    final ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
 	    for (String resource : resources) {

@@ -10,6 +10,7 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import cz.mzk.recordmanager.server.ResourceProvider;
 import cz.mzk.recordmanager.server.marc.MarcRecord;
 import cz.mzk.recordmanager.server.marc.MarcXmlParser;
 import cz.mzk.recordmanager.server.model.DedupRecord;
@@ -28,6 +29,9 @@ public class MarcSolrRecordMapper implements SolrRecordMapper, InitializingBean 
 
 	@Autowired
 	private MarcScriptFactory marcScriptFactory;
+
+	@Autowired
+	private ResourceProvider resourceProvider;
 
 	private MappingScript<MarcFunctionContext> dedupRecordMappingScript;
 
@@ -75,10 +79,10 @@ public class MarcSolrRecordMapper implements SolrRecordMapper, InitializingBean 
 
 	@Override
 	public void afterPropertiesSet() throws Exception {
-		dedupRecordMappingScript = marcScriptFactory.create(getClass()
-				.getResourceAsStream("/marc/groovy/BaseMarc.groovy"));
-		harvestedRecordMappingScript = marcScriptFactory.create(getClass()
-				.getResourceAsStream("/marc/groovy/HarvestedRecordBaseMarc.groovy"));
+		dedupRecordMappingScript = marcScriptFactory.create( //
+				resourceProvider.getResource("/marc/groovy/BaseMarc.groovy"));
+		harvestedRecordMappingScript = marcScriptFactory.create( //
+				resourceProvider.getResource("/marc/groovy/HarvestedRecordBaseMarc.groovy"));
 	}
 
 }
