@@ -276,7 +276,7 @@ public class MarcRecordImplTest extends AbstractTest {
 		data.add("300 $a1 zvuková deska (78:24)");
 		mri = MarcRecordFactory.recordFactory(data);
 		metadataRecord = metadataFactory.getMetadataRecord(mri);
-		Assert.assertEquals(metadataRecord.getPageCount().longValue(), 1);
+		Assert.assertEquals(metadataRecord.getPageCount().longValue(), 78);
 		data.clear();
 
 		data.add("300 $a[14] s.");

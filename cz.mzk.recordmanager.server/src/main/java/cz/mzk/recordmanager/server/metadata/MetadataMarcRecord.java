@@ -33,7 +33,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 	
 	protected final ISBNValidator isbnValidator = ISBNValidator.getInstance(true);
 
-	protected static final Pattern PAGECOUNT_PATTERN = Pattern.compile("\\d+");
+	protected static final Pattern PAGECOUNT_PATTERN = Pattern.compile("(\\d+)");
 	protected static final Pattern YEAR_PATTERN = Pattern.compile("\\d{4}");
 	protected static final Pattern ISBN_PATTERN = Pattern.compile("([\\dxX\\s\\-]*)(.*)");
 	protected static final Pattern ISSN_PATTERN = Pattern.compile("(\\d{4}-\\d{3}[\\dxX])(.*)");
@@ -152,16 +152,22 @@ public class MetadataMarcRecord implements MetadataRecord {
 		String count = underlayingMarc.getField("300", 'a');
 		if(count == null){
 			return null;
-		}	
+		}
 		
+		Long maxPages = -1L;
 		Matcher matcher = PAGECOUNT_PATTERN.matcher(count);
-		try {
-			if (matcher.find()) {
+		while (matcher.find()) {
+			try {
 				Long pages = Long.parseLong(matcher.group(0));
-				return  pages < MAX_PAGES ? pages : MAX_PAGES;
-			}
-		} catch (NumberFormatException e) {}
-		return null;
+				maxPages = pages > maxPages ? pages : maxPages;
+			} catch (NumberFormatException e) {}
+		}
+
+		if (maxPages < 1L) {
+			return null;
+		}
+
+		return maxPages < MAX_PAGES ? maxPages : MAX_PAGES;
 	}
 	
 	@Override
