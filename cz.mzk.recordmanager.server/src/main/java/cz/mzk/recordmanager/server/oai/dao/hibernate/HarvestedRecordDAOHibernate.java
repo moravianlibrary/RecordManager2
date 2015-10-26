@@ -40,15 +40,16 @@ public class HarvestedRecordDAOHibernate extends
 				.setParameter(0, recordId).setParameter(1, configurationId)
 				.uniqueResult();
 	}
-	
+
 	@Override
-	@SuppressWarnings("unchecked")
 	public List<HarvestedRecord> getByDedupRecord(DedupRecord dedupRecord) {
-		Session session = sessionFactory.getCurrentSession();
-		return (List<HarvestedRecord>) session
-				.createQuery("from HarvestedRecord where dedupRecord = ?")
-				.setParameter(0, dedupRecord)
-				.list();
+		return getByDedupRecord(dedupRecord, false);
+	}
+
+	@Override
+	public List<HarvestedRecord> getByDedupRecordWithDeleted(
+			DedupRecord dedupRecord) {
+		return getByDedupRecord(dedupRecord, true);
 	}
 
 	@Override
@@ -64,6 +65,17 @@ public class HarvestedRecordDAOHibernate extends
 		crit.setProjection(Projections.id());
 		crit.setMaxResults(1);
 		return crit.uniqueResult() != null;
+	}
+
+	@SuppressWarnings("unchecked")
+	protected List<HarvestedRecord> getByDedupRecord(DedupRecord dedupRecord, boolean alsoDeleted) {
+		Session session = sessionFactory.getCurrentSession();
+		Criteria crit = session.createCriteria(HarvestedRecord.class);
+		crit.add(Restrictions.eq("dedupRecord", dedupRecord));
+		if (!alsoDeleted) {
+			crit.add(Restrictions.isNull("deleted"));
+		}
+		return crit.list();
 	}
 
 }

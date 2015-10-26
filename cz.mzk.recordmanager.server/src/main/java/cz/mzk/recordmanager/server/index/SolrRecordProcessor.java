@@ -1,9 +1,6 @@
 package cz.mzk.recordmanager.server.index;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
-
 import org.apache.solr.common.SolrInputDocument;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
@@ -35,13 +32,7 @@ public class SolrRecordProcessor implements ItemProcessor<DedupRecord, List<Solr
 			if (records.isEmpty()) {
 				throw new IllegalArgumentException("records is empty");
 			}
-			// don't index deleted records
-			List<SolrInputDocument> result = factory.create(
-					dedupRecord,
-					records.stream()
-						.filter(p -> p.getDeleted() == null)
-						.collect(Collectors.toCollection(ArrayList::new))
-					);
+			List<SolrInputDocument> result = factory.create(dedupRecord, records);
 			logger.debug("Processing of dedup_record with id={} finished", dedupRecord.getId());
 			return result;
 		} catch (Exception ex) {
