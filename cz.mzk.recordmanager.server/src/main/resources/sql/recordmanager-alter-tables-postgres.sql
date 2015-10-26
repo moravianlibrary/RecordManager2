@@ -287,3 +287,8 @@ ALTER TABLE harvested_record_format_link ADD FOREIGN KEY (harvested_record_id) R
 
 -- 21.10.2015 tomascejpek
 ALTER TABLE format ALTER COLUMN format TYPE VARCHAR(15);
+
+-- 26.10.2015 tomascejpek
+UPDATE import_conf SET id_prefix = 'openlib' WHERE id = 327;
+UPDATE import_conf SET interception_enabled = true WHERE id = 327;
+UPDATE library SET name = 'OPENLIB' WHERE id = 127;
