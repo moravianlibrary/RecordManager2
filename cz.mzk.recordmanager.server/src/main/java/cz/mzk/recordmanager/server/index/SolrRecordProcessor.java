@@ -26,7 +26,7 @@ public class SolrRecordProcessor implements ItemProcessor<DedupRecord, List<Solr
 		try {
 			List<HarvestedRecord> records = harvestedRecordDao.getByDedupRecord(dedupRecord);
 			if (records.isEmpty()) {
-				throw new IllegalArgumentException("records is empty");
+				return null;
 			}
 			List<SolrInputDocument> result = factory.create(dedupRecord, records);
 			logger.debug("Processing of dedup_record with id={} finished", dedupRecord.getId());
