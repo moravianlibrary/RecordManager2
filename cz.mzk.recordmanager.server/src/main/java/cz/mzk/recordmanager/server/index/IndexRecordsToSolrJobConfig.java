@@ -89,6 +89,7 @@ public class IndexRecordsToSolrJobConfig {
 	@Bean
 	public Job indexIndividualRecordsToSolrJob(@Qualifier("indexRecordsToSolrJob:indexIndividualRecordsStep") Step step) {
 		return jobs.get(Constants.JOB_ID_SOLR_INDEX_INDIVIDUAL_RECORDS)
+				.validator(new IndexIndividualRecordsToSolrJobParametersValidator())
 				.incrementer(UUIDIncrementer.INSTANCE)
 				.listener(JobFailureListener.INSTANCE)
 				.flow(step)
