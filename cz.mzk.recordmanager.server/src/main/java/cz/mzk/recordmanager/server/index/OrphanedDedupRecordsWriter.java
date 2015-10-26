@@ -10,6 +10,7 @@ import org.springframework.batch.core.StepExecutionListener;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import cz.mzk.recordmanager.server.solr.SolrServerFacade;
 import cz.mzk.recordmanager.server.solr.SolrServerFactory;
 
 public class OrphanedDedupRecordsWriter implements ItemWriter<Long>, StepExecutionListener {
@@ -17,9 +18,9 @@ public class OrphanedDedupRecordsWriter implements ItemWriter<Long>, StepExecuti
 	@Autowired
 	private SolrServerFactory factory;
 
-	private String solrUrl;
+	private SolrServerFacade server;
 
-	private SolrServer server;
+	private String solrUrl;
 
 	private int commitWithinMs = 10000;
 

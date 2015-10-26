@@ -4,6 +4,7 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.reset;
 import static org.easymock.EasyMock.verify;
+import static org.easymock.EasyMock.expectLastCall;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -23,6 +24,7 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import cz.mzk.recordmanager.server.AbstractTest;
+import cz.mzk.recordmanager.server.solr.SolrServerFacade;
 import cz.mzk.recordmanager.server.solr.SolrServerFactory;
 import cz.mzk.recordmanager.server.util.Constants;
 
@@ -39,15 +41,15 @@ public class DeleteAllRecordsFromSolrJobTest extends AbstractTest {
 	@Autowired
 	private SolrServerFactory solrServerFactory;
 
-	private SolrServer mockedSolrServer = EasyMock.createMock(SolrServer.class);
+	private SolrServerFacade mockedSolrServer = EasyMock.createMock(SolrServerFacade.class);
 
 	@Test
 	public void executeWitouthQuery() throws Exception {
 		reset(solrServerFactory);
 		reset(mockedSolrServer);
 		expect(solrServerFactory.create(SOLR_URL)).andReturn(mockedSolrServer).anyTimes();
-		expect(mockedSolrServer.deleteByQuery("*:*")).andReturn(new UpdateResponse());
-		expect(mockedSolrServer.commit()).andReturn(new UpdateResponse());
+		mockedSolrServer.deleteByQuery("*:*");
+		mockedSolrServer.commit();
 		replay(solrServerFactory, mockedSolrServer);
 		Job job = jobRegistry.getJob("deleteAllRecordsFromSolrJob");
 		Map<String, JobParameter> params = new HashMap<String, JobParameter>();
@@ -64,8 +66,8 @@ public class DeleteAllRecordsFromSolrJobTest extends AbstractTest {
 		reset(solrServerFactory);
 		reset(mockedSolrServer);
 		expect(solrServerFactory.create(SOLR_URL)).andReturn(mockedSolrServer).anyTimes();
-		expect(mockedSolrServer.deleteByQuery(query)).andReturn(new UpdateResponse());
-		expect(mockedSolrServer.commit()).andReturn(new UpdateResponse());
+		mockedSolrServer.deleteByQuery(query);
+		mockedSolrServer.commit();
 		replay(solrServerFactory, mockedSolrServer);
 		Job job = jobRegistry.getJob("deleteAllRecordsFromSolrJob");
 		Map<String, JobParameter> params = new HashMap<String, JobParameter>();

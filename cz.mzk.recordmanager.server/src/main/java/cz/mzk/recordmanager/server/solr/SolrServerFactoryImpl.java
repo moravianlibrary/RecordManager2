@@ -1,13 +1,12 @@
 package cz.mzk.recordmanager.server.solr;
 
-import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.impl.HttpSolrServer;
 
 public class SolrServerFactoryImpl implements SolrServerFactory {
 
 	@Override
-	public SolrServer create(String url) {
-		return new HttpSolrServer(url);
+	public SolrServerFacade create(String url) {
+		return new SolrServerFacadeImpl(new HttpSolrServer(url));
 	}
 
 }

@@ -32,6 +32,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import cz.mzk.recordmanager.server.AbstractTest;
+import cz.mzk.recordmanager.server.solr.SolrServerFacadeImpl;
 import cz.mzk.recordmanager.server.solr.SolrServerFactory;
 import cz.mzk.recordmanager.server.util.Constants;
 
@@ -62,7 +63,7 @@ public class IndexRecordsToSolrJobTest extends AbstractTest {
 	public void execute() throws Exception {
 		reset(solrServerFactory);
 		reset(mockedSolrServer);
-		expect(solrServerFactory.create(SOLR_URL)).andReturn(mockedSolrServer).anyTimes();
+		expect(solrServerFactory.create(SOLR_URL)).andReturn(new SolrServerFacadeImpl(mockedSolrServer)).anyTimes();
 		expect(mockedSolrServer.add(and(capture(EasyMock.newCapture()), (Collection<SolrInputDocument>) anyObject(Collection.class)), anyInt())).andReturn(new UpdateResponse());
 		replay(solrServerFactory, mockedSolrServer);
 		

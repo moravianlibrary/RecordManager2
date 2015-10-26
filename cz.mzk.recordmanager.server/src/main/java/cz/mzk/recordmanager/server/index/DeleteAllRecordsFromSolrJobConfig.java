@@ -22,6 +22,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import cz.mzk.recordmanager.server.solr.SolrServerFacade;
 import cz.mzk.recordmanager.server.solr.SolrServerFactory;
 import cz.mzk.recordmanager.server.springbatch.DefaultJobParametersValidator;
 import cz.mzk.recordmanager.server.springbatch.JobFailureListener;
@@ -86,7 +87,7 @@ public class DeleteAllRecordsFromSolrJobConfig {
 			@Override
 			public RepeatStatus execute(StepContribution contribution,
 					ChunkContext chunkContext) throws Exception {
-				SolrServer server = factory.create(solrUrl);
+				SolrServerFacade server = factory.create(solrUrl);
 				server.deleteByQuery(query);
 				server.commit();
 				return RepeatStatus.FINISHED;

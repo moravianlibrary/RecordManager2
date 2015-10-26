@@ -2,7 +2,6 @@ package cz.mzk.recordmanager.server.index;
 
 import java.util.List;
 
-import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.common.SolrInputDocument;
 import org.springframework.batch.core.StepContribution;
 import org.springframework.batch.core.scope.context.ChunkContext;
@@ -15,6 +14,7 @@ import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.model.ImportConfiguration;
 import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordDAO;
 import cz.mzk.recordmanager.server.oai.dao.ImportConfigurationDAO;
+import cz.mzk.recordmanager.server.solr.SolrServerFacade;
 import cz.mzk.recordmanager.server.solr.SolrServerFactory;
 
 public class IndexIndividualRecordsTasklet implements Tasklet {
@@ -35,6 +35,8 @@ public class IndexIndividualRecordsTasklet implements Tasklet {
 
 	private final List<String> recordIds;
 
+	private int commitWithinMs = 10000;
+
 	public IndexIndividualRecordsTasklet(String solrUrl, List<String> recordIds) {
 		super();
 		this.solrUrl = solrUrl;
@@ -44,7 +46,7 @@ public class IndexIndividualRecordsTasklet implements Tasklet {
 	@Override
 	public RepeatStatus execute(StepContribution contribution,
 			ChunkContext chunkContext) throws Exception {
-		SolrServer solrServer = solrServerFactory.create(solrUrl);
+		SolrServerFacade solrServer = solrServerFactory.create(solrUrl);
 		for (String recordIdWithPrefix : recordIds) {
 			String[] components = recordIdWithPrefix.split("\\.", 2);
 			String prefix = components[0];
@@ -63,7 +65,7 @@ public class IndexIndividualRecordsTasklet implements Tasklet {
 			}
 			List<HarvestedRecord> records = harvestedRecordDao.getByDedupRecord(dedupRecord);
 			List<SolrInputDocument> documents = solrInputDocumentFactory.create(dedupRecord, records);
-			solrServer.add(documents);
+			solrServer.add(documents, commitWithinMs);
 		}
 		solrServer.commit();
 		return RepeatStatus.FINISHED;

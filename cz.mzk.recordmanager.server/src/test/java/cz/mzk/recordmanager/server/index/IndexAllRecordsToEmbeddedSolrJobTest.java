@@ -25,6 +25,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import cz.mzk.recordmanager.server.AbstractTest;
+import cz.mzk.recordmanager.server.solr.SolrServerFacadeImpl;
 import cz.mzk.recordmanager.server.solr.SolrServerFactory;
 import cz.mzk.recordmanager.server.util.Constants;
 
@@ -50,7 +51,7 @@ public class IndexAllRecordsToEmbeddedSolrJobTest extends AbstractTest {
 	public void execute() throws Exception {
 		reset(solrServerFactory);
 		EmbeddedSolrServer server = createEmbeddedSolrServer();
-		expect(solrServerFactory.create(SOLR_URL)).andReturn(server).anyTimes();
+		expect(solrServerFactory.create(SOLR_URL)).andReturn(new SolrServerFacadeImpl(server)).anyTimes();
 		replay(solrServerFactory);
 		try {
 			Job job = jobRegistry.getJob(Constants.JOB_ID_SOLR_INDEX_ALL_RECORDS);

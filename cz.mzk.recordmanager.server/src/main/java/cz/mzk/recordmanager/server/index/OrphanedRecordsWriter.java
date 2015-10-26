@@ -3,23 +3,23 @@ package cz.mzk.recordmanager.server.index;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.solr.client.solrj.SolrServer;
 import org.springframework.batch.core.ExitStatus;
 import org.springframework.batch.core.StepExecution;
 import org.springframework.batch.core.StepExecutionListener;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import cz.mzk.recordmanager.server.solr.SolrServerFacade;
 import cz.mzk.recordmanager.server.solr.SolrServerFactory;
 
 public class OrphanedRecordsWriter implements ItemWriter<String>, StepExecutionListener {
 	
 	@Autowired
 	private SolrServerFactory factory;
-	
+
+	private SolrServerFacade server;
+
 	private String solrUrl;
-	
-	private SolrServer server;
 	
 	public OrphanedRecordsWriter(String solrUrl) {
 		this.solrUrl = solrUrl;

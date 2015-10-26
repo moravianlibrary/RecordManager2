@@ -1,14 +1,9 @@
 package cz.mzk.recordmanager.server.index;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Future;
 
-import org.apache.solr.client.solrj.SolrServer;
-import org.apache.solr.client.solrj.SolrServerException;
-import org.apache.solr.client.solrj.response.UpdateResponse;
-import org.apache.solr.common.SolrException;
 import org.apache.solr.common.SolrInputDocument;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,6 +13,7 @@ import org.springframework.batch.core.StepExecutionListener;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import cz.mzk.recordmanager.server.solr.SolrServerFacade;
 import cz.mzk.recordmanager.server.solr.SolrServerFactory;
 
 public class SolrIndexWriter implements ItemWriter<Future<List<SolrInputDocument>>>, StepExecutionListener {
@@ -26,13 +22,13 @@ public class SolrIndexWriter implements ItemWriter<Future<List<SolrInputDocument
 
 	@Autowired
 	private SolrServerFactory factory;
-	
+
+	private SolrServerFacade server;
+
 	private String solrUrl;
 
 	private int commitWithinMs = 10000;
 
-	private SolrServer server;
-	
 	public SolrIndexWriter(String solrUrl) {
 		this.solrUrl = solrUrl;
 	}
@@ -52,25 +48,9 @@ public class SolrIndexWriter implements ItemWriter<Future<List<SolrInputDocument
 				return;
 			}
 			logger.info("About to index {} documents to Solr", documents.size());
-			try {
-				UpdateResponse response = server.add(documents, commitWithinMs);
-			} catch (SolrException | SolrServerException | IOException ex) {
-				logger.error("Exception thrown during solr indexing, fallbacking to index one record at time", ex);
-				fallbackIndex(documents);
-			}
-			logger.info("Indexing of {} documents to Solr finished", documents.size());
+			server.add(documents, commitWithinMs);
 		} catch (Exception ex) {
 			logger.error("Exception thrown when indexing documents to Solr", ex);
-		}
-	}
-
-	private void fallbackIndex(List<SolrInputDocument> documents) {
-		for (SolrInputDocument document : documents) {
-			try {
-				UpdateResponse response = server.add(document, commitWithinMs);
-			} catch (SolrException | SolrServerException | IOException ex) {
-				logger.error(String.format("Exception thrown during indexing record: %s", document), ex);
-			}
 		}
 	}
 

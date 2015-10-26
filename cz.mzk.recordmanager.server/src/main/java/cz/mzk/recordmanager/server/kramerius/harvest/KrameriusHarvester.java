@@ -3,27 +3,23 @@ package cz.mzk.recordmanager.server.kramerius.harvest;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
 import org.apache.commons.io.IOUtils;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrQuery.ORDER;
 import org.apache.solr.client.solrj.SolrRequest;
-import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.impl.HttpSolrServer;
 import org.apache.solr.client.solrj.impl.XMLResponseParser;
 import org.apache.solr.client.solrj.request.QueryRequest;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
-import org.apache.solr.common.util.NamedList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecord.HarvestedRecordUniqueId;
+import cz.mzk.recordmanager.server.solr.SolrServerFacade;
 import cz.mzk.recordmanager.server.solr.SolrServerFactory;
 import cz.mzk.recordmanager.server.util.HttpClient;
 import cz.mzk.recordmanager.server.util.SolrUtils;
@@ -126,7 +122,7 @@ public class KrameriusHarvester {
 	public SolrDocumentList sendRequest(String nextPid) {
 		SolrDocumentList documents = new SolrDocumentList();
 
-		SolrServer solr = solrServerFactory.create(params.getUrl());
+		SolrServerFacade solr = solrServerFactory.create(params.getUrl());
 
 		if (solr instanceof HttpSolrServer) {
 			((HttpSolrServer) solr).setParser(new XMLResponseParser());
@@ -153,8 +149,7 @@ public class KrameriusHarvester {
 		logger.info("Params: {}", request.getParams());
 
 		try {
-			NamedList<Object> req = solr.request(request);
-			QueryResponse response = new QueryResponse(req, solr);
+			QueryResponse response = solr.query(request);
 			documents = response.getResults();
 		} catch (Exception ex) {
 			throw new RuntimeException(ex); // FIXME
