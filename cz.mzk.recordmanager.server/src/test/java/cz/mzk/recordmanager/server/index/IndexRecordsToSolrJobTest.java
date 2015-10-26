@@ -32,7 +32,6 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import cz.mzk.recordmanager.server.AbstractTest;
-import cz.mzk.recordmanager.server.DBUnitHelper;
 import cz.mzk.recordmanager.server.solr.SolrServerFactory;
 import cz.mzk.recordmanager.server.util.Constants;
 
@@ -51,11 +50,8 @@ public class IndexRecordsToSolrJobTest extends AbstractTest {
 	@Autowired
 	private SolrServerFactory solrServerFactory;
 
-	@Autowired
-	private DBUnitHelper dbUnitHelper;
-	
 	private SolrServer mockedSolrServer = EasyMock.createMock(SolrServer.class);
-	
+
 	@BeforeMethod
 	public void before() throws Exception {
 		dbUnitHelper.init("dbunit/IndexRecordsToSolrJobTest.xml");

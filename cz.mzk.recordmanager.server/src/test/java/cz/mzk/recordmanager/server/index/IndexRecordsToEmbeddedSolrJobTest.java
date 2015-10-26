@@ -47,7 +47,6 @@ public class IndexRecordsToEmbeddedSolrJobTest extends AbstractTest {
 		dbUnitHelper.init("dbunit/IndexRecordsToSolrJobTest.xml");
 	}
 
-	@SuppressWarnings("unchecked")
 	@Test
 	public void execute() throws Exception {
 		reset(solrServerFactory);

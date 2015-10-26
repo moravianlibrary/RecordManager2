@@ -25,7 +25,6 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import cz.mzk.recordmanager.server.AbstractTest;
-import cz.mzk.recordmanager.server.DBUnitHelper;
 import cz.mzk.recordmanager.server.solr.SolrServerFactory;
 import cz.mzk.recordmanager.server.util.Constants;
 
@@ -41,9 +40,6 @@ public class IndexAllRecordsToEmbeddedSolrJobTest extends AbstractTest {
 	private SolrServerFactory solrServerFactory;
 
 	private static final String SOLR_URL = "http://localhost:8080/solr";
-	
-	@Autowired
-	private DBUnitHelper dbUnitHelper;
 
 	@BeforeMethod
 	public void before() throws Exception {
@@ -51,7 +47,6 @@ public class IndexAllRecordsToEmbeddedSolrJobTest extends AbstractTest {
 	}
 	
 	@Test
-	@SuppressWarnings("unchecked")
 	public void execute() throws Exception {
 		reset(solrServerFactory);
 		EmbeddedSolrServer server = createEmbeddedSolrServer();
