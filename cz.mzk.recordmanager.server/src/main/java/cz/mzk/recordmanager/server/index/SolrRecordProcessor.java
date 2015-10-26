@@ -2,7 +2,6 @@ package cz.mzk.recordmanager.server.index;
 
 import java.util.List;
 import org.apache.solr.common.SolrInputDocument;
-import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.item.ItemProcessor;
@@ -12,17 +11,14 @@ import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordDAO;
 
 public class SolrRecordProcessor implements ItemProcessor<DedupRecord, List<SolrInputDocument>> {
-	
+
 	private static Logger logger = LoggerFactory.getLogger(SolrRecordProcessor.class);
 
 	@Autowired
 	private HarvestedRecordDAO harvestedRecordDao;
-	
-	@Autowired
-	private SolrInputDocumentFactory factory;
 
 	@Autowired
-	private SessionFactory sessionFactory;
+	private SolrInputDocumentFactory factory;
 
 	@Override
 	public List<SolrInputDocument> process(DedupRecord dedupRecord) throws Exception {
