@@ -59,7 +59,7 @@ public class IndexRecordsToEmbeddedSolrJobTest extends AbstractTest {
 		expect(solrServerFactory.create(SOLR_URL)).andReturn(server).anyTimes();
 		replay(solrServerFactory);
 		try {
-			Job job = jobRegistry.getJob("indexRecordsToSolrJob");
+			Job job = jobRegistry.getJob("indexAllRecordsToSolrJob");
 			Map<String, JobParameter> params = new HashMap<String, JobParameter>();
 			params.put(Constants.JOB_PARAM_SOLR_URL, new JobParameter(SOLR_URL));
 			JobParameters jobParams = new JobParameters(params);

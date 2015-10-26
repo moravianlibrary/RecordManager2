@@ -70,7 +70,7 @@ public class IndexRecordsToSolrJobTest extends AbstractTest {
 		expect(mockedSolrServer.add(and(capture(EasyMock.newCapture()), (Collection<SolrInputDocument>) anyObject(Collection.class)), anyInt())).andReturn(new UpdateResponse());
 		replay(solrServerFactory, mockedSolrServer);
 		
-		Job job = jobRegistry.getJob("indexRecordsToSolrJob");
+		Job job = jobRegistry.getJob("indexAllRecordsToSolrJob");
 		Map<String, JobParameter> params = new HashMap<String, JobParameter>();
 		params.put(Constants.JOB_PARAM_FROM_DATE, new JobParameter(dateFormat.parse("1. 1. 2010"), true));
 		params.put(Constants.JOB_PARAM_UNTIL_DATE, new JobParameter(dateFormat.parse("1. 1. 2016"), true));

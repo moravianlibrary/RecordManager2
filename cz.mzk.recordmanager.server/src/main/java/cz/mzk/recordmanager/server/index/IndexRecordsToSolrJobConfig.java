@@ -83,18 +83,6 @@ public class IndexRecordsToSolrJobConfig {
 				.end()
 				.build();
 	}
-	
-	@Bean
-	public Job indexRecordsToSolrJob(@Qualifier("indexRecordsToSolrJob:updateRecordsStep") Step updateRecordsStep,
-			@Qualifier("indexRecordsToSolrJob:deleteOrphanedRecordsStep") Step deleteOrphanedRecordsStep) {
-		return jobs.get(Constants.JOB_ID_SOLR_INDEX)
-				.validator(new IndexRecordsToSolrJobParametersValidator())
-				.listener(JobFailureListener.INSTANCE)
-				.flow(updateRecordsStep)
-				.next(deleteOrphanedRecordsStep)
-				.end()
-				.build();
-    }
 
     // dedup records
 	@Bean(name="indexRecordsToSolrJob:updateRecordsStep")
