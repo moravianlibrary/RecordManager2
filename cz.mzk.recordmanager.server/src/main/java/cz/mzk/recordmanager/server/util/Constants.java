@@ -12,6 +12,7 @@ public class Constants {
 	public static final String JOB_ID_DEDUP				= "dedupRecordsJob";
 	public static final String JOB_ID_SOLR_INDEX_ALL_RECORDS		= "indexAllRecordsToSolrJob";
 	public static final String JOB_ID_SOLR_INDEX					= "indexRecordsToSolrJob";
+	public static final String JOB_ID_SOLR_INDEX_INDIVIDUAL_RECORDS	= "indexIndividualRecordsToSolrJob";
 	public static final String JOB_ID_EXPORT						= "exportRecordsJob";
 	public static final String JOB_ID_IMPORT						= "importRecordsJob";
 	public static final String JOB_ID_IMPORT_ANTIKVARIATY			= "antikvariatyImportRecordsJob";
@@ -28,6 +29,7 @@ public class Constants {
 	public static final String JOB_PARAM_RESUMPTION_TOKEN = "resumptionToken";
 	public static final String JOB_PARAM_REPEAT    		= "repeat";
 	public static final String JOB_PARAM_INCREMENTAL	= "incremental";
+	public static final String JOB_PARAM_RECORD_IDS		= "recordIds";
 	
 	public static final String JOB_PARAM_OUT_FILE		= "outFile";
 	public static final String JOB_PARAM_IN_FILE		= "inFile";

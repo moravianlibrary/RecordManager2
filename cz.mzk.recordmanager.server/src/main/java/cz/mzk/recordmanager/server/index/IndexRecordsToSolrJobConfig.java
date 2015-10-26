@@ -1,5 +1,6 @@
 package cz.mzk.recordmanager.server.index;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -17,6 +18,7 @@ import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepScope;
+import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.integration.async.AsyncItemProcessor;
 import org.springframework.batch.item.database.JdbcPagingItemReader;
 import org.springframework.batch.item.database.Order;
@@ -84,6 +86,16 @@ public class IndexRecordsToSolrJobConfig {
 				.build();
 	}
 
+	@Bean
+	public Job indexIndividualRecordsToSolrJob(@Qualifier("indexRecordsToSolrJob:indexIndividualRecordsStep") Step step) {
+		return jobs.get(Constants.JOB_ID_SOLR_INDEX_INDIVIDUAL_RECORDS)
+				.incrementer(UUIDIncrementer.INSTANCE)
+				.listener(JobFailureListener.INSTANCE)
+				.flow(step)
+				.end()
+				.build();
+	}
+
 	@Bean(name="indexRecordsToSolrJob:updateRecordsStep")
 	public Step updateRecordsStep() throws Exception {
 		return steps.get("updateRecordsJobStep")
@@ -101,6 +113,21 @@ public class IndexRecordsToSolrJobConfig {
 			.reader(orphanedRecordsReader(DATE_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION)) //
 			.writer(orphanedRecordsWriter(STRING_OVERRIDEN_BY_EXPRESSION)) //
 			.build();
+	}
+
+	@Bean(name="indexRecordsToSolrJob:indexIndividualRecordsStep")
+	public Step indexIndividualRecordsStep() throws Exception {
+		return steps.get("indexIndividualRecordsStep")
+				.tasklet(indexIndividualRecordsTasklet(STRING_OVERRIDEN_BY_EXPRESSION, STRING_OVERRIDEN_BY_EXPRESSION))
+				.build();
+	}
+
+	@Bean(name="indexRecordsToSolrJob:indexIndividualRecordsTasklet")
+	@StepScope
+	public Tasklet indexIndividualRecordsTasklet(@Value("#{jobParameters[" + Constants.JOB_PARAM_SOLR_URL + "]}") String serverUrl,
+			@Value("#{jobParameters[" + Constants.JOB_PARAM_RECORD_IDS + "]}") String recordIds) throws Exception {
+		List<String> records = Arrays.asList(recordIds.split(","));
+		return new IndexIndividualRecordsTasklet(serverUrl, records);
 	}
 
 	@Bean(name = "indexRecordsToSolrJob:updatedRecordsReader")
@@ -156,6 +183,7 @@ public class IndexRecordsToSolrJobConfig {
     public SolrIndexWriter updatedRecordsWriter(@Value("#{jobParameters[" + Constants.JOB_PARAM_SOLR_URL + "]}") String solrUrl) {
     	return new SolrIndexWriter(solrUrl);
     }
+
 
 	@Bean(name="indexRecordsToSolrJob:orphanedRecordsReader")
 	@StepScope
