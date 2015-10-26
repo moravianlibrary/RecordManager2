@@ -1,6 +1,5 @@
 package cz.mzk.recordmanager.server.index;
 
-import java.util.Collections;
 import java.util.List;
 
 import org.apache.solr.client.solrj.SolrServer;
@@ -62,9 +61,11 @@ public class IndexIndividualRecordsTasklet implements Tasklet {
 			if (dedupRecord == null) {
 				throw new IllegalArgumentException(String.format("Harvested record %s is not deduplicated, run dedup first.", recordIdWithPrefix));
 			}
-			List<SolrInputDocument> documents = solrInputDocumentFactory.create(dedupRecord, Collections.singletonList(rec));
+			List<HarvestedRecord> records = harvestedRecordDao.getByDedupRecord(dedupRecord);
+			List<SolrInputDocument> documents = solrInputDocumentFactory.create(dedupRecord, records);
 			solrServer.add(documents);
 		}
+		solrServer.commit();
 		return RepeatStatus.FINISHED;
 	}
 
