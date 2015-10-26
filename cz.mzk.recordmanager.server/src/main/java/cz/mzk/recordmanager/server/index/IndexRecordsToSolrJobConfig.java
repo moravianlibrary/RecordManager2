@@ -84,7 +84,6 @@ public class IndexRecordsToSolrJobConfig {
 				.build();
 	}
 
-    // dedup records
 	@Bean(name="indexRecordsToSolrJob:updateRecordsStep")
 	public Step updateRecordsStep() throws Exception {
 		return steps.get("updateRecordsJobStep")
@@ -216,7 +215,7 @@ public class IndexRecordsToSolrJobConfig {
 		}
 		pqpf.setSortKeys(ImmutableMap.of("import_conf_id", Order.ASCENDING,
 				"record_id", Order.ASCENDING));
-		reader.setRowMapper(new StringValueRowMapper());
+		reader.setRowMapper(new StringValueRowMapper(3));
 		reader.setPageSize(PAGE_SIZE);
 		reader.setQueryProvider(pqpf.getObject());
 		reader.setDataSource(dataSource);
