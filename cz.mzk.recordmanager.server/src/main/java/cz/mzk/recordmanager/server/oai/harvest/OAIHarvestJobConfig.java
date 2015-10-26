@@ -20,6 +20,7 @@ import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.oai.model.OAIRecord;
 import cz.mzk.recordmanager.server.springbatch.DateIntervalPartitioner;
 import cz.mzk.recordmanager.server.springbatch.JobFailureListener;
+import cz.mzk.recordmanager.server.springbatch.UUIDIncrementer;
 import cz.mzk.recordmanager.server.util.Constants;
 
 @Configuration
@@ -132,19 +133,18 @@ public class OAIHarvestJobConfig {
     	return new DateIntervalPartitioner(from, to,
     			Period.months(1), Constants.JOB_PARAM_UNTIL_DATE, Constants.JOB_PARAM_FROM_DATE);
     }
-       
-    @Bean 
-    public Job oaiHarvestSingleRecordJob(@Qualifier("oaiHarvestSingleRecordJob:harvestSingleRecordStep") Step step) {
-       return jobs.get(Constants.JOB_ID_HARVEST_SINGLE)	//
-    		   .validator(new OAIHarvestSingleRecordJobParametersValidator()) //
-    		   .listener(JobFailureListener.INSTANCE) //
-    		   .flow(step) //
-    		   .end() //
-    		   .build();
+
+	@Bean
+	public Job oaiHarvestSingleRecordJob(@Qualifier("oaiHarvestSingleRecordJob:harvestSingleRecordStep") Step step) {
+		return jobs.get(Constants.JOB_ID_HARVEST_SINGLE)	//
+				.validator(new OAIHarvestSingleRecordJobParametersValidator()) //
+				.incrementer(UUIDIncrementer.INSTANCE)
+				.listener(JobFailureListener.INSTANCE) //
+				.flow(step) //
+				.end() //
+				.build();
     }
-    
-    
-    
+
     @Bean(name="oaiHarvestSingleRecordJob:harvestSingleRecordStep")
     public Step harvestSingleStep() {
     	return steps.get("harvestSingleRecordStep") //

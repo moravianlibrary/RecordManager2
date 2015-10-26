@@ -24,8 +24,7 @@ public class OAIHarvestSingleRecordJobParametersValidator extends
 	public Collection<JobParameterDeclaration> getParameters() {
 		return Arrays.asList(
 				param(Constants.JOB_PARAM_CONF_ID, ParameterType.LONG, true), //
-				param(Constants.JOB_PARAM_RECORD_ID, ParameterType.STRING, true), //
-				param(Constants.JOB_PARAM_HACK, ParameterType.STRING, false)//
+				param(Constants.JOB_PARAM_RECORD_ID, ParameterType.STRING, true) //
 				);
 	}
 
