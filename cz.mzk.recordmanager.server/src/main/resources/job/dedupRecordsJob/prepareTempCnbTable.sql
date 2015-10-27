@@ -7,15 +7,15 @@ SELECT
   t.title,
   hr.publication_year,
   hrl.harvested_record_format_id,
-  array_to_string(array_agg(hr.id), ',')  id_array,
-  count(*) total_count,
-  count(hr.dedup_record_id) dedup_count
+  array_to_string(array_agg(hr.id), ',')  id_array
 FROM harvested_record hr 
   INNER JOIN cnb c ON hr.id = c.harvested_record_id 
   INNER JOIN title t ON hr.id = t.harvested_record_id
   INNER JOIN harvested_record_format_link hrl on hr.id = hrl.harvested_record_id
 WHERE t.order_in_record = 1
 GROUP BY c.cnb,t.title,hr.publication_year,hrl.harvested_record_format_id
-HAVING count(hr.id) > 1 AND count(hr.id) > count(hr.dedup_record_id) AND max(hr.updated) > (SELECT time FROM last_dedup_time);
+HAVING COUNT(DISTINCT hr.id) > 1 
+  AND count(DISTINCT dedup_record_id) + sum(case when dedup_record_id is null then 1 else 0 end) != 1
+  AND max(hr.updated) > ALL(SELECT time FROM last_dedup_time);
 		
 CREATE INDEX tmp_cbn_idx ON tmp_simmilar_books_cnb(row_id);
