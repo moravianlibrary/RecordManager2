@@ -22,6 +22,7 @@ import org.testng.Assert;
 
 import cz.mzk.recordmanager.server.AbstractTest;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
+import cz.mzk.recordmanager.server.solr.SolrServerFacadeImpl;
 import cz.mzk.recordmanager.server.solr.SolrServerFactory;
 import cz.mzk.recordmanager.server.util.HttpClient;
 
@@ -46,7 +47,7 @@ public class AbstractKrameriusTest extends AbstractTest {
 		replay(httpClient);
 		
 		reset(solrServerFactory);
-		expect(solrServerFactory.create(SOLR_URL)).andReturn(mockedSolrServer).anyTimes();
+		expect(solrServerFactory.create(SOLR_URL)).andReturn(new SolrServerFacadeImpl(mockedSolrServer)).anyTimes();
 		replay(solrServerFactory);
 		
 		reset(mockedSolrServer);
