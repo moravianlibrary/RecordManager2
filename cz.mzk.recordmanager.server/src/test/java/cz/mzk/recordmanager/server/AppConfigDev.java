@@ -1,10 +1,14 @@
 package cz.mzk.recordmanager.server;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
 import javax.sql.DataSource;
 
+import org.apache.solr.client.solrj.embedded.EmbeddedSolrServer;
+import org.apache.solr.core.CoreContainer;
 import org.easymock.EasyMock;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -77,7 +81,16 @@ public class AppConfigDev {
     public SolrServerFactory mockedSolrServerFactory() {
     	return EasyMock.createMock(SolrServerFactory.class);
     }
-	
+
+	@Bean(destroyMethod = "shutdown")
+	public EmbeddedSolrServer embeddedSolrServer() throws IOException {
+		File solrHome = new File("src/test/resources/solr/cores/");
+		File configFile = new File(solrHome, "solr.xml");
+		CoreContainer container = CoreContainer.createAndLoad(
+				solrHome.getCanonicalPath(), configFile);
+		return new EmbeddedSolrServer(container, "biblio");
+	}
+
 	@Bean
 	public MappingResolver propertyResolver() {
 		return new CachingMappingResolver(new ClasspathMappingResolver());

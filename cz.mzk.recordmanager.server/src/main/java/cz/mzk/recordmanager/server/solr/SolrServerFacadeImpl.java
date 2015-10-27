@@ -2,8 +2,10 @@ package cz.mzk.recordmanager.server.solr;
 
 import java.io.IOException;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
+import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrRequest;
 import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.SolrServerException;
@@ -22,9 +24,16 @@ public class SolrServerFacadeImpl implements SolrServerFacade {
 
 	protected final SolrServer server;
 
+	protected final SolrIndexingExceptionHandler exceptionHandler;
+
 	public SolrServerFacadeImpl(SolrServer server) {
+		this(server, RethrowingSolrIndexingExceptionHandler.INSTANCE);
+	}
+
+	public SolrServerFacadeImpl(SolrServer server, SolrIndexingExceptionHandler exceptionHandler) {
 		super();
 		this.server = server;
+		this.exceptionHandler = exceptionHandler;
 	}
 
 	@Override
@@ -33,8 +42,9 @@ public class SolrServerFacadeImpl implements SolrServerFacade {
 		try {
 			server.add(documents, commitWithinMs);
 		} catch (SolrException | SolrServerException | IOException ex) {
-			logger.error("Exception thrown during solr indexing, fallbacking to index one record at time", ex);
-			fallbackIndex(documents, commitWithinMs);
+			if (exceptionHandler.handle(ex, documents)) {
+				fallbackIndex(documents, commitWithinMs);
+			}
 		}
 	}
 
@@ -47,6 +57,10 @@ public class SolrServerFacadeImpl implements SolrServerFacade {
 	public QueryResponse query(final SolrRequest request) throws SolrServerException, IOException {
 		NamedList<Object> req = server.request(request);
 		return new QueryResponse(req, server);
+	}
+
+	public QueryResponse query(SolrQuery query) throws SolrServerException {
+		return server.query(query);
 	}
 
 	@Override
@@ -64,12 +78,12 @@ public class SolrServerFacadeImpl implements SolrServerFacade {
 		server.deleteByQuery(query, commitWithinMs);
 	}
 
-	private void fallbackIndex(Collection<SolrInputDocument> documents, int commitWithinMs) {
+	private void fallbackIndex(Collection<SolrInputDocument> documents, int commitWithinMs) throws SolrServerException {
 		for (SolrInputDocument document : documents) {
 			try {
 				server.add(document, commitWithinMs);
 			} catch (SolrException | SolrServerException | IOException ex) {
-				logger.error(String.format("Exception thrown during indexing record: %s", document), ex);
+				exceptionHandler.handle(ex, Collections.singletonList(document));
 			}
 		}
 	}

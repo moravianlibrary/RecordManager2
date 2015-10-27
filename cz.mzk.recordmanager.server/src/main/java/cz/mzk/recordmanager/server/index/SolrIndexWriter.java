@@ -13,6 +13,7 @@ import org.springframework.batch.core.StepExecutionListener;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import cz.mzk.recordmanager.server.solr.LoggingSolrIndexingExceptionHandler;
 import cz.mzk.recordmanager.server.solr.SolrServerFacade;
 import cz.mzk.recordmanager.server.solr.SolrServerFactory;
 
@@ -64,7 +65,7 @@ public class SolrIndexWriter implements ItemWriter<Future<List<SolrInputDocument
 
 	@Override
 	public void beforeStep(StepExecution stepExecution) {
-		server = factory.create(solrUrl);
+		server = factory.create(solrUrl, LoggingSolrIndexingExceptionHandler.INSTANCE);
 	}
 
 	@Override

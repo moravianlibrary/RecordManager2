@@ -1,16 +1,13 @@
 package cz.mzk.recordmanager.server.index;
 
+import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.reset;
 import static org.easymock.EasyMock.verify;
-import static org.easymock.EasyMock.expectLastCall;
-
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.solr.client.solrj.SolrServer;
-import org.apache.solr.client.solrj.response.UpdateResponse;
 import org.easymock.EasyMock;
 import org.springframework.batch.core.ExitStatus;
 import org.springframework.batch.core.Job;
@@ -47,7 +44,7 @@ public class DeleteAllRecordsFromSolrJobTest extends AbstractTest {
 	public void executeWitouthQuery() throws Exception {
 		reset(solrServerFactory);
 		reset(mockedSolrServer);
-		expect(solrServerFactory.create(SOLR_URL)).andReturn(mockedSolrServer).anyTimes();
+		expect(solrServerFactory.create(eq(SOLR_URL))).andReturn(mockedSolrServer).anyTimes();
 		mockedSolrServer.deleteByQuery("*:*");
 		mockedSolrServer.commit();
 		replay(solrServerFactory, mockedSolrServer);
@@ -65,7 +62,7 @@ public class DeleteAllRecordsFromSolrJobTest extends AbstractTest {
 		String query = "id:MZK.MZK01-000000117";
 		reset(solrServerFactory);
 		reset(mockedSolrServer);
-		expect(solrServerFactory.create(SOLR_URL)).andReturn(mockedSolrServer).anyTimes();
+		expect(solrServerFactory.create(eq(SOLR_URL))).andReturn(mockedSolrServer).anyTimes();
 		mockedSolrServer.deleteByQuery(query);
 		mockedSolrServer.commit();
 		replay(solrServerFactory, mockedSolrServer);

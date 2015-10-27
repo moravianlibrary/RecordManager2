@@ -14,6 +14,7 @@ import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.model.ImportConfiguration;
 import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordDAO;
 import cz.mzk.recordmanager.server.oai.dao.ImportConfigurationDAO;
+import cz.mzk.recordmanager.server.solr.LoggingSolrIndexingExceptionHandler;
 import cz.mzk.recordmanager.server.solr.SolrServerFacade;
 import cz.mzk.recordmanager.server.solr.SolrServerFactory;
 
@@ -46,7 +47,7 @@ public class IndexIndividualRecordsTasklet implements Tasklet {
 	@Override
 	public RepeatStatus execute(StepContribution contribution,
 			ChunkContext chunkContext) throws Exception {
-		SolrServerFacade solrServer = solrServerFactory.create(solrUrl);
+		SolrServerFacade solrServer = solrServerFactory.create(solrUrl, LoggingSolrIndexingExceptionHandler.INSTANCE);
 		for (String recordIdWithPrefix : recordIds) {
 			String[] components = recordIdWithPrefix.split("\\.", 2);
 			String prefix = components[0];

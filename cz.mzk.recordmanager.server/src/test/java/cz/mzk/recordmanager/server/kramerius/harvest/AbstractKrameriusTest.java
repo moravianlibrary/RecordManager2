@@ -10,8 +10,8 @@ import static org.easymock.EasyMock.reset;
 import java.io.InputStream;
 import java.util.List;
 
-import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.request.QueryRequest;
+import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.util.NamedList;
@@ -22,7 +22,7 @@ import org.testng.Assert;
 
 import cz.mzk.recordmanager.server.AbstractTest;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
-import cz.mzk.recordmanager.server.solr.SolrServerFacadeImpl;
+import cz.mzk.recordmanager.server.solr.SolrServerFacade;
 import cz.mzk.recordmanager.server.solr.SolrServerFactory;
 import cz.mzk.recordmanager.server.util.HttpClient;
 
@@ -36,7 +36,7 @@ public class AbstractKrameriusTest extends AbstractTest {
 	@Autowired
 	private SolrServerFactory solrServerFactory;
 
-	private SolrServer mockedSolrServer = EasyMock.createMock(SolrServer.class);
+	private SolrServerFacade mockedSolrServer = EasyMock.createMock(SolrServerFacade.class);
 
 	protected void init() throws Exception {
 		reset(httpClient);
@@ -47,7 +47,7 @@ public class AbstractKrameriusTest extends AbstractTest {
 		replay(httpClient);
 		
 		reset(solrServerFactory);
-		expect(solrServerFactory.create(SOLR_URL)).andReturn(new SolrServerFacadeImpl(mockedSolrServer)).anyTimes();
+		expect(solrServerFactory.create(SOLR_URL)).andReturn(mockedSolrServer).anyTimes();
 		replay(solrServerFactory);
 		
 		reset(mockedSolrServer);
@@ -61,10 +61,10 @@ public class AbstractKrameriusTest extends AbstractTest {
 		documents.add(doc2);
 		NamedList<Object> solrResponse1 = new NamedList<Object>();
 		solrResponse1.add("response", documents);
-		expect(mockedSolrServer.request(and(capture(capturedQueryRequest), anyObject(QueryRequest.class)))).andReturn(solrResponse1);
+		expect(mockedSolrServer.query(and(capture(capturedQueryRequest), anyObject(QueryRequest.class)))).andReturn(new QueryResponse(solrResponse1, null));
 		NamedList<Object> solrResponse2 = new NamedList<Object>();
 		solrResponse2.add("response", new SolrDocumentList());
-		expect(mockedSolrServer.request(and(capture(capturedQueryRequest), anyObject(QueryRequest.class)))).andReturn(solrResponse2);
+		expect(mockedSolrServer.query(and(capture(capturedQueryRequest), anyObject(QueryRequest.class)))).andReturn(new QueryResponse(solrResponse2, null));
 		replay(mockedSolrServer);
 		
 		KrameriusHarvesterParams parameters = new KrameriusHarvesterParams();
