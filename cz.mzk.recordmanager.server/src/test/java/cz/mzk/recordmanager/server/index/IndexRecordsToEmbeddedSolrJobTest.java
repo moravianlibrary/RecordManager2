@@ -49,7 +49,6 @@ public class IndexRecordsToEmbeddedSolrJobTest extends AbstractSolrTest {
 		JobParameters jobParams = new JobParameters(params);
 		JobExecution execution = jobLauncher.run(job, jobParams);
 		Assert.assertEquals(execution.getExitStatus(), ExitStatus.COMPLETED);
-		server.commit();
 
 		{
 			SolrQuery allDocsQuery = new SolrQuery();

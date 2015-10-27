@@ -1,9 +1,11 @@
 package cz.mzk.recordmanager.server.index;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Future;
 
+import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.common.SolrInputDocument;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -70,6 +72,11 @@ public class SolrIndexWriter implements ItemWriter<Future<List<SolrInputDocument
 
 	@Override
 	public ExitStatus afterStep(StepExecution stepExecution) {
+		try {
+			server.commit();
+		} catch (SolrServerException | IOException ex) {
+			throw new RuntimeException("Final commit failed", ex);
+		}
 		return null;
 	}
 
