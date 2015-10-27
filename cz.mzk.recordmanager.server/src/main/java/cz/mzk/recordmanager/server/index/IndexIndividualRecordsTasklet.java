@@ -11,9 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import cz.mzk.recordmanager.server.model.DedupRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
-import cz.mzk.recordmanager.server.model.ImportConfiguration;
 import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordDAO;
-import cz.mzk.recordmanager.server.oai.dao.ImportConfigurationDAO;
 import cz.mzk.recordmanager.server.solr.LoggingSolrIndexingExceptionHandler;
 import cz.mzk.recordmanager.server.solr.SolrServerFacade;
 import cz.mzk.recordmanager.server.solr.SolrServerFactory;
@@ -25,9 +23,6 @@ public class IndexIndividualRecordsTasklet implements Tasklet {
 
 	@Autowired
 	private HarvestedRecordDAO harvestedRecordDao;
-
-	@Autowired
-	private ImportConfigurationDAO importConfigurationDao;
 
 	@Autowired
 	private SolrInputDocumentFactory solrInputDocumentFactory;
@@ -48,21 +43,14 @@ public class IndexIndividualRecordsTasklet implements Tasklet {
 	public RepeatStatus execute(StepContribution contribution,
 			ChunkContext chunkContext) throws Exception {
 		SolrServerFacade solrServer = solrServerFactory.create(solrUrl, LoggingSolrIndexingExceptionHandler.INSTANCE);
-		for (String recordIdWithPrefix : recordIds) {
-			String[] components = recordIdWithPrefix.split("\\.", 2);
-			String prefix = components[0];
-			String recordId = components[1];
-			ImportConfiguration configuration = importConfigurationDao.findByIdPrefix(prefix);
-			if (configuration == null) {
-				throw new IllegalArgumentException(String.format("Import configuration with prefix %s not found", prefix));
-			}
-			HarvestedRecord rec = harvestedRecordDao.findByIdAndHarvestConfiguration(recordId, configuration);
+		for (String solrId : recordIds) {
+			HarvestedRecord rec = harvestedRecordDao.findBySolrId(solrId);
 			if (rec == null) {
-				throw new IllegalArgumentException(String.format("Harvested record %s not found", recordIdWithPrefix));
+				throw new IllegalArgumentException(String.format("Harvested record %s not found", solrId));
 			}
 			DedupRecord dedupRecord = rec.getDedupRecord();
 			if (dedupRecord == null) {
-				throw new IllegalArgumentException(String.format("Harvested record %s is not deduplicated, run dedup first.", recordIdWithPrefix));
+				throw new IllegalArgumentException(String.format("Harvested record %s is not deduplicated, run dedup first.", solrId));
 			}
 			List<HarvestedRecord> records = harvestedRecordDao.getByDedupRecord(dedupRecord);
 			List<SolrInputDocument> documents = solrInputDocumentFactory.create(dedupRecord, records);

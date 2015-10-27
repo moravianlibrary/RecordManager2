@@ -41,6 +41,18 @@ public class HarvestedRecordDAOHibernate extends
 				.uniqueResult();
 	}
 
+	public HarvestedRecord findBySolrId(String solrId) {
+		String[] parts = solrId.split("\\.", 2);
+		String prefix = parts[0];
+		String id = parts[1];
+		Session session = sessionFactory.getCurrentSession();
+		return (HarvestedRecord) session //
+				.createQuery("from HarvestedRecord where uniqueId.recordId = ? and harvestedFrom.idPrefix = ?") // 
+				.setParameter(0, id) //
+				.setParameter(1, prefix) //
+				.uniqueResult();
+	}
+
 	@Override
 	public List<HarvestedRecord> getByDedupRecord(DedupRecord dedupRecord) {
 		return getByDedupRecord(dedupRecord, false);
