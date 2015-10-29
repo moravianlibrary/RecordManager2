@@ -1,8 +1,6 @@
 package cz.mzk.recordmanager.server.scripting;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -14,13 +12,13 @@ import java.util.concurrent.ConcurrentHashMap;
  *
  */
 public class CachingMappingResolver implements MappingResolver {
-	
-	private final List<MappingResolver> delegates;
-	
+
+	private final MappingResolver delegate;
+
 	private Map<String, Mapping> mappings = new ConcurrentHashMap<String, Mapping>();
 
-	public CachingMappingResolver(MappingResolver... delegates) {
-		this.delegates = Arrays.asList(delegates);
+	public CachingMappingResolver(MappingResolver delegate) {
+		this.delegate = delegate;
 	}
 
 	@Override
@@ -29,14 +27,7 @@ public class CachingMappingResolver implements MappingResolver {
 		if (mapping != null) {
 			return mapping;
 		}
-		for (MappingResolver delegate : delegates) {
-			try {
-				mapping = delegate.resolve(file);
-				break;
-			} catch (IllegalArgumentException iae) {
-				continue;
-			}
-		}
+		mapping = delegate.resolve(file);
 		if (mapping == null) {
 			throw new IllegalArgumentException(String.format("File %s not found", file));
 		}

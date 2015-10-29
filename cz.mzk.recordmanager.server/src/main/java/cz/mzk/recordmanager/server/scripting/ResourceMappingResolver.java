@@ -3,21 +3,23 @@ package cz.mzk.recordmanager.server.scripting;
 import java.io.IOException;
 import java.io.InputStream;
 
-/**
- * 
- * Mapping resolver that reads translation files from classpath from mapping package.
- * 
- * @author xrosecky
- *
- */
-public class ClasspathMappingResolver implements MappingResolver {
+import cz.mzk.recordmanager.server.ResourceProvider;
 
-	private final String root = "mapping/";
+public class ResourceMappingResolver implements MappingResolver {
+
+	private final String root = "/mapping/";
+
+	private final ResourceProvider provider;
+
+	public ResourceMappingResolver(ResourceProvider provider) {
+		super();
+		this.provider = provider;
+	}
 
 	@Override
 	public Mapping resolve(String file) throws IOException {
 		String path = root + file;
-		InputStream is = getClass().getClassLoader().getResourceAsStream(path);
+		InputStream is = provider.getResource(path);
 		if (is == null) {
 			throw new IllegalArgumentException(
 					String.format("Mapping '%s' not found", path));

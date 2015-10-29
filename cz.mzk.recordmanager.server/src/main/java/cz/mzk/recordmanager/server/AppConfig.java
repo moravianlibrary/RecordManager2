@@ -45,6 +45,12 @@ import cz.mzk.recordmanager.server.oai.harvest.DeleteAllHarvestsJobConfig;
 import cz.mzk.recordmanager.server.oai.harvest.OAIHarvestJobConfig;
 import cz.mzk.recordmanager.server.oai.harvest.OAIHarvesterFactory;
 import cz.mzk.recordmanager.server.oai.harvest.OAIHarvesterFactoryImpl;
+import cz.mzk.recordmanager.server.scripting.CachingMappingResolver;
+import cz.mzk.recordmanager.server.scripting.CachingStopWordsResolver;
+import cz.mzk.recordmanager.server.scripting.MappingResolver;
+import cz.mzk.recordmanager.server.scripting.ResourceMappingResolver;
+import cz.mzk.recordmanager.server.scripting.ResourceStopWordsResolver;
+import cz.mzk.recordmanager.server.scripting.StopWordsResolver;
 import cz.mzk.recordmanager.server.solr.SolrServerFactory;
 import cz.mzk.recordmanager.server.solr.SolrServerFactoryImpl;
 import cz.mzk.recordmanager.server.util.ApacheHttpClient;
@@ -62,6 +68,9 @@ public class AppConfig extends DefaultBatchConfigurer {
 
 	@Autowired
 	private SessionFactory sessionFactory;
+
+	@Autowired
+	private ResourceProvider resourceProvider;
 
 	@Bean
 	public DefaultJobLoader defaultJobLoader() {
@@ -180,6 +189,16 @@ public class AppConfig extends DefaultBatchConfigurer {
 	@Override
 	public PlatformTransactionManager getTransactionManager() {
 		return transactionManager();
+	}
+
+	@Bean
+	public MappingResolver propertyResolver() {
+		return new CachingMappingResolver(new ResourceMappingResolver(resourceProvider));
+	}
+
+	@Bean
+	public StopWordsResolver stopWordsResolver() {
+		return new CachingStopWordsResolver(new ResourceStopWordsResolver(resourceProvider));
 	}
 
 }
