@@ -1,7 +1,9 @@
 package cz.mzk.recordmanager.server.dedup;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import cz.mzk.recordmanager.server.model.Cnb;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
@@ -22,6 +24,7 @@ public class DedupTitleAuthItemProcessor extends DedupSimpleKeysStepProcessor {
 	 */
 	@Override
 	protected boolean matchRecords(HarvestedRecord hrA, HarvestedRecord hrB) {
+		
 		if (hrA == null || hrA.getPages() == null || hrB == null || hrB.getPages() == null) {
 			return false;
 		}
@@ -32,7 +35,6 @@ public class DedupTitleAuthItemProcessor extends DedupSimpleKeysStepProcessor {
 		hrB.getTitles().stream().filter(t -> t.getTitleStr() != null && !t.getTitleStr().isEmpty()).forEach(t -> bTitles.add(t.getTitleStr()));
 		Set<String> intersection = new HashSet<>(aTitles);
 		intersection.retainAll(bTitles);
-		
 		
 		if (intersection.stream().allMatch(s -> s.length() < 16)) {
 			return false;
@@ -45,26 +47,25 @@ public class DedupTitleAuthItemProcessor extends DedupSimpleKeysStepProcessor {
 			return false;
 		}
 		
-		//return false if there is at least one different CNB
-		for (Cnb aCnb: hrA.getCnb()) {
-			for (Cnb bCnb: hrB.getCnb()) {
-				if (aCnb.getCnb() != null && bCnb.getCnb() != null 
-						&& !aCnb.getCnb().equals(bCnb.getCnb())) {
-					return false;
-				}
-			}
+//		return false if both records have at least one CNB but intersection is empty
+		List<Cnb> hraCnbs = hrA.getCnb();
+		List<Cnb> hrbCnbs = hrB.getCnb();
+		if (!hraCnbs.isEmpty() && !hrbCnbs.isEmpty()) {
+			Set<String> hraCnbSet = hraCnbs.stream().map(i -> i.getCnb()).collect(Collectors.toSet());
+			if (hrbCnbs.stream().map(i -> i.getCnb()).filter(p -> hraCnbSet.contains(p)).count() == 0) {
+				return false;
+			} 
 		}
 		
-		//return false if there is at least one different ISBN
-		for (Isbn aIsbn: hrA.getIsbns()) {
-			for (Isbn bIsbn: hrB.getIsbns()) {
-				if (aIsbn.getIsbn() != null && bIsbn.getIsbn() != null 
-						&& !aIsbn.getIsbn().equals(bIsbn.getIsbn())) {
-					return false;
-				}
-			}
+//		return false if both records have at least one ISBN but intersection is empty		
+		List<Isbn> hraIsbn = hrA.getIsbns();
+		List<Isbn> hrbIsbn = hrB.getIsbns();
+		if (!hraIsbn.isEmpty() && !hrbIsbn.isEmpty()) {
+			Set<Long> hraIsbnSet = hraIsbn.stream().map(i -> i.getIsbn()).collect(Collectors.toSet());
+			if (hrbIsbn.stream().mapToLong(i -> i.getIsbn()).filter(p -> hraIsbnSet.contains(p)).count() == 0) {
+				return false;
+			}	
 		}
-		
 		
 		return true;
 	}
