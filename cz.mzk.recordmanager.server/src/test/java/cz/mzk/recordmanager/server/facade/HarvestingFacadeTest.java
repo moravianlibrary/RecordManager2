@@ -43,8 +43,8 @@ public class HarvestingFacadeTest extends AbstractTest {
 		replay(httpClient);
 		
 		OAIHarvestConfiguration conf = oaiHarvestConfigurationDao.get(300L);
-		harvestingFacade.harvest(conf);
-		harvestingFacade.harvest(conf);
+		harvestingFacade.incrementalHarvest(conf);
+		harvestingFacade.incrementalHarvest(conf);
 	}
 
 	public InputStream reply(String url) {

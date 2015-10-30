@@ -22,8 +22,7 @@ import cz.mzk.recordmanager.server.util.ResourceUtils;
 @Component
 public class HarvestingFacadeImpl implements HarvestingFacade {
 
-	private static Logger logger = LoggerFactory
-			.getLogger(HarvestingFacadeImpl.class);
+	private static Logger logger = LoggerFactory.getLogger(HarvestingFacadeImpl.class);
 
 	private final String lastCompletedHarvestQuery = ResourceUtils.asString("sql/query/LastCompletedHarvestQuery.sql");
 
@@ -34,18 +33,23 @@ public class HarvestingFacadeImpl implements HarvestingFacade {
 	private JobExecutor jobExecutor;
 
 	@Override
-	public void harvest(OAIHarvestConfiguration conf) { 
-		Date lastHarvest = jdbcTemplate.queryForObject(lastCompletedHarvestQuery, //
-				ImmutableMap.of("jobName", Constants.JOB_ID_HARVEST, Constants.JOB_PARAM_CONF_ID, conf.getId()), Date.class);
+	public void incrementalHarvest(OAIHarvestConfiguration conf) {
+		Date lastHarvest = getLastHarvest(conf);
 		Map<String, JobParameter> parameters = new HashMap<>();
 		parameters.put(Constants.JOB_PARAM_CONF_ID, new JobParameter(conf.getId()));
 		if (lastHarvest != null) {
-			logger.trace("Harvesting from {}", lastHarvest);
+			logger.trace("Starting harvest from {}", lastHarvest);
 			parameters.put(Constants.JOB_PARAM_FROM_DATE, new JobParameter(lastHarvest));
 		}
 		parameters.put(Constants.JOB_PARAM_UNTIL_DATE, new JobParameter(new Date()));
 		JobParameters params = new JobParameters(parameters);
 		jobExecutor.execute(Constants.JOB_ID_HARVEST, params);
+	}
+
+	@Override
+	public Date getLastHarvest(OAIHarvestConfiguration conf) {
+		return jdbcTemplate.queryForObject(lastCompletedHarvestQuery, //
+				ImmutableMap.of("jobName", Constants.JOB_ID_HARVEST, Constants.JOB_PARAM_CONF_ID, conf.getId()), Date.class);
 	}
 
 }
