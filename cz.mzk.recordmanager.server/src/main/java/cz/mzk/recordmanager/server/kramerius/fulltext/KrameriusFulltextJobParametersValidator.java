@@ -30,6 +30,5 @@ DefaultJobParametersValidator {
 						param(Constants.JOB_PARAM_FULLTEXT_FIRST, ParameterType.LONG, false), //
 					    param(Constants.JOB_PARAM_FULLTEXT_LAST, ParameterType.LONG, false));
 	}
-	
-	
+
 }

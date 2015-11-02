@@ -18,9 +18,6 @@ public interface HarvestedRecordDAO extends DomainDAO<Long, HarvestedRecord> {
 	public List<HarvestedRecord> getByDedupRecord(DedupRecord dedupRecord);
 	
 	public List<HarvestedRecord> getByHarvestConfiguration(ImportConfiguration configuration);
-	
-	/*<MJ.>*/
-	public int deleteFulltextMonography(HarvestedRecord harvestedRecord);
 
 	public boolean existsByDedupRecord(DedupRecord dedupRecord);
 

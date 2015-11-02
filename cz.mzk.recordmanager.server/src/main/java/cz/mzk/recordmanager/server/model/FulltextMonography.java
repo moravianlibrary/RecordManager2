@@ -1,7 +1,9 @@
 package cz.mzk.recordmanager.server.model;
 
+import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Table;
 
 @Entity
@@ -16,6 +18,7 @@ public class FulltextMonography extends AbstractDomainObject {
 	@Column(name="order_in_monography")
 	private Long order;
 	
+	@Basic(fetch = FetchType.LAZY)
 	@Column(name="fulltext")
 	private byte[] fulltext;
 

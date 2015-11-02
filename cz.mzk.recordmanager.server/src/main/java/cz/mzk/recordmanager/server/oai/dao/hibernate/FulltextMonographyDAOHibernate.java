@@ -6,8 +6,8 @@ import cz.mzk.recordmanager.server.model.FulltextMonography;
 import cz.mzk.recordmanager.server.oai.dao.FulltextMonographyDAO;
 
 @Component
-public class FulltextMonographyDAOHibernate extends AbstractDomainDAOHibernate<Long, FulltextMonography> implements
-FulltextMonographyDAO {
+public class FulltextMonographyDAOHibernate extends
+		AbstractDomainDAOHibernate<Long, FulltextMonography> implements
+		FulltextMonographyDAO {
 
-	
 }

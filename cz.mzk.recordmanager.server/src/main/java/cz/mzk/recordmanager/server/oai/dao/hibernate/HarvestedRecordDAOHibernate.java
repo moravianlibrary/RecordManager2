@@ -75,16 +75,6 @@ public class HarvestedRecordDAOHibernate extends
 				.setParameter(0, configuration.getId())
 				.list();
 	}
-	
-	/* <MJ.> */
-	public int deleteFulltextMonography(HarvestedRecord harvestedRecord) {
-		Session session = sessionFactory.getCurrentSession();
-		//System.out.println("-----trying to delete fulltext monographies for record ("+ harvestedRecord.getId()+"): "+harvestedRecord.getUniqueId().getRecordId());
-		return (int) session
-				.createQuery("delete FulltextMonography where harvested_record_id = ?")
-				.setParameter(0, harvestedRecord.getId())
-				.executeUpdate();
-	}
 
 	@Override
 	public boolean existsByDedupRecord(DedupRecord dedupRecord) {

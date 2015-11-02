@@ -3,6 +3,8 @@ package cz.mzk.recordmanager.server.util;
 import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Collections;
+import java.util.Map;
 
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -16,7 +18,7 @@ public class ApacheHttpClient implements HttpClient, Closeable {
 
 	private final CloseableHttpClient httpClient;
 	
-	private static class ApacheHttpClientInputStream extends InputStream implements Closeable {
+	public static class ApacheHttpClientInputStream extends InputStream implements Closeable {
 
 		private final CloseableHttpResponse response;
 		
@@ -83,14 +85,26 @@ public class ApacheHttpClient implements HttpClient, Closeable {
 
 	@Override
 	public InputStream executeGet(String url) throws IOException {
-		CloseableHttpResponse result = httpClient.execute(new HttpGet(url));
-		InputStream is = result.getEntity().getContent();
-		return new ApacheHttpClientInputStream(result, is);
+		return executeGet(url, Collections.emptyMap());
 	}
 
 	@Override
 	public void close() throws IOException {
 		httpClient.close();
+	}
+
+	@Override
+	public ApacheHttpClientInputStream executeGet(String url, Map<String, String> headers)
+			throws IOException {
+		HttpGet get = new HttpGet(url);
+		headers.forEach((key, value) -> get.addHeader(key, value));
+		CloseableHttpResponse result = httpClient.execute(get);
+		int statusCode = result.getStatusLine().getStatusCode();
+		if (statusCode != 200) {
+			throw new IOException(String.format("Bad status code: %s", statusCode));
+		}
+		InputStream is = result.getEntity().getContent();
+		return new ApacheHttpClientInputStream(result, is);
 	}
 
 }

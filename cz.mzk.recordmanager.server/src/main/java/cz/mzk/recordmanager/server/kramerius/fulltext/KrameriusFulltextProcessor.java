@@ -17,6 +17,7 @@ import cz.mzk.recordmanager.server.dc.DublinCoreRecord;
 import cz.mzk.recordmanager.server.metadata.MetadataDublinCoreRecord;
 import cz.mzk.recordmanager.server.model.FulltextMonography;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
+import cz.mzk.recordmanager.server.model.KrameriusConfiguration;
 import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordDAO;
 import cz.mzk.recordmanager.server.oai.dao.KrameriusConfigurationDAO;
 import cz.mzk.recordmanager.server.util.HibernateSessionSynchronizer;
@@ -25,29 +26,29 @@ import cz.mzk.recordmanager.server.util.HibernateSessionSynchronizer.SessionBind
 public class KrameriusFulltextProcessor implements
 		ItemProcessor<HarvestedRecord, HarvestedRecord>, StepExecutionListener {
 
-	@Autowired
-	KrameriusFulltexter kf;
+	private static Logger logger = LoggerFactory
+			.getLogger(KrameriusFulltextProcessor.class);
 
+	@Autowired
+	private KrameriusFulltexterFactory krameriusFulltexterFactory;
+
+	private KrameriusFulltexter fulltexter;
+	
 	@Autowired
 	private KrameriusConfigurationDAO configDao;
 
 	@Autowired
-	HarvestedRecordDAO recordDao;
+	private HarvestedRecordDAO recordDao;
 
 	@Autowired
 	private HibernateSessionSynchronizer sync;
 
 	@Autowired
-	private HibernateSessionSynchronizer hibernateSync;
-
-	@Autowired
 	private DublinCoreParser parser;
-
-	private static Logger logger = LoggerFactory
-			.getLogger(KrameriusFulltextProcessor.class);
 
 	// configuration
 	private Long confId;
+	
 	private boolean downloadPrivateFulltexts;
 
 	public KrameriusFulltextProcessor(Long confId) {
@@ -57,19 +58,14 @@ public class KrameriusFulltextProcessor implements
 
 	@Override
 	public void beforeStep(StepExecution stepExecution) {
-		try (SessionBinder sess = hibernateSync.register()) {
-			downloadPrivateFulltexts = configDao.get(confId)
-					.isDownloadPrivateFulltexts();
-
-			kf.setAuthToken(configDao.get(confId).getAuthToken());
-			kf.setKramApiUrl(configDao.get(confId).getUrl());
-			kf.setDownloadPrivateFulltexts(downloadPrivateFulltexts);
+		try (SessionBinder sess = sync.register()) {
+			KrameriusConfiguration config = configDao.get(confId);
+			fulltexter = krameriusFulltexterFactory.create(config);
 		}
 	}
 
 	@Override
 	public ExitStatus afterStep(StepExecution stepExecution) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -93,7 +89,7 @@ public class KrameriusFulltextProcessor implements
 			logger.debug("Processor: privacy condition fulfilled, reading pages");
 
 			String rootUuid = rec.getUniqueId().getRecordId();
-			List<FulltextMonography> pages = kf.getFulltextObjects(rootUuid);
+			List<FulltextMonography> pages = fulltexter.getFulltextObjects(rootUuid);
 
 			rec.setFulltextMonography(pages);
 		} else {

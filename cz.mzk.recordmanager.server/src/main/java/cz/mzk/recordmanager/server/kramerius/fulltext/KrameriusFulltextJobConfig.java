@@ -34,7 +34,6 @@ public class KrameriusFulltextJobConfig {
 
 	private static final int PAGE_SIZE = 2;
 
-
 	@Autowired
 	private JobBuilderFactory jobs;
 

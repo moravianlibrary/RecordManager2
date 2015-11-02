@@ -17,7 +17,7 @@ import org.springframework.stereotype.Component;
 
 import cz.mzk.recordmanager.server.dc.DublinCoreParser;
 import cz.mzk.recordmanager.server.dc.DublinCoreRecord;
-import cz.mzk.recordmanager.server.kramerius.fulltext.KrameriusFulltexter;
+import cz.mzk.recordmanager.server.kramerius.fulltext.KrameriusFulltexterImpl;
 import cz.mzk.recordmanager.server.model.DedupRecord;
 import cz.mzk.recordmanager.server.model.FulltextMonography;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
