@@ -29,10 +29,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.task.TaskExecutor;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 
-import cz.mzk.recordmanager.server.jdbc.LongValueRowMapper;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.springbatch.DelegatingHibernateProcessor;
 import cz.mzk.recordmanager.server.springbatch.SqlCommandTasklet;
@@ -50,8 +48,6 @@ public class DedupRecordsJobConfig {
 	private static final String TMP_TABLE_CLUSTER = "tmp_cluster_ids";
 
 	private static final String TMP_TABLE_AUTH_TITLE = "tmp_auth_keys";
-
-	private static final String TMP_TABLE_REST_OF_IDS_INTERVALS = "tmp_rest_of_ids_intervals";
 	
 	private static final String TMP_TABLE_CNB_CLUSTERS = "tmp_cnb_clusters";
 	
@@ -65,7 +61,15 @@ public class DedupRecordsJobConfig {
 	
 	private static final String TMP_TABLE_SKAT_KEYS_REST = "tmp_skat_keys_rest";
 	
-	private static final int REST_OF_RECORDS_COMMIT_INTERVAL = 10000;
+	private static final String TMP_TABLE_PERIODICALS_ISSN = "tmp_simmilar_periodicals_issn";
+	
+	private static final String TMP_TABLE_PERIODICALS_CNB = "tmp_simmilar_periodicals_cnb";
+	
+	private static final String TMP_TABLE_PERIODICALS_CNB_CLUSTERS = "tmp_periodicals_cnb_clusters";
+	
+	private static final String TMP_TABLE_PERIODICALS_ISSN_CLUSTERS = "tmp_periodicals_issn_clusters";
+	
+	private static final String TMP_TABLE_PERIODICALS_OCLC_CLUSTERS = "tmp_periodicals_oclc_clusters";
 	
 	
 	@Autowired
@@ -107,7 +111,17 @@ public class DedupRecordsJobConfig {
 	private String prepareTempSkatKeysRest = ResourceUtils.asString("job/dedupRecordsJob/prepareTempSkatRestTable.sql");
 
 	private String uniqueRecordsDedupSql = ResourceUtils.asString("job/dedupRecordsJob/UniqueRecordsDedup.sql");
+	
+	private String prepareTempPeriodicalsIssnTableSql = ResourceUtils.asString("job/dedupRecordsJob/prepareTempPeriodicalsIssnTable.sql");
 
+	private String prepareTempPeriodicalsCnbTableSql = ResourceUtils.asString("job/dedupRecordsJob/prepareTempPeriodicalsCnbTable.sql");
+	
+	private String prepareTempPeriodicalsCnbClustersSql = ResourceUtils.asString("job/dedupRecordsJob/prepareTempPeriodicalsCnbClustersTable.sql");
+	
+	private String prepareTempPeriodicalsIssnClustersSql = ResourceUtils.asString("job/dedupRecordsJob/prepareTempPeriodicalsIssnClustersTable.sql");
+	
+	private String prepareTempPeriodicalsOclcClustersSql = ResourceUtils.asString("job/dedupRecordsJob/prepareTempPeriodicalsOclcClustersTable.sql");
+	
 	private String cleanupSql = ResourceUtils.asString("job/dedupRecordsJob/cleanup.sql");
 
 	public DedupRecordsJobConfig() throws IOException {
@@ -137,6 +151,16 @@ public class DedupRecordsJobConfig {
 			@Qualifier(Constants.JOB_ID_DEDUP + ":prepareDedupSimmilarityTableStep") Step prepareDedupSimmilarityTableStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":prepareDedupSimmilarTitlesStep") Step prepareDedupSimmilarTitles,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":processSimilaritesResultsStep") Step processSimilaritesResultsStep,
+			@Qualifier(Constants.JOB_ID_DEDUP + ":prepareDedupPeriodicalsIssnStep") Step prepareDedupPeriodicalsIssnStep,
+			@Qualifier(Constants.JOB_ID_DEDUP + ":dedupPeriodicalsIssnStep") Step dedupPeriodicalsIssnStep,
+			@Qualifier(Constants.JOB_ID_DEDUP + ":prepareDedupPeriodicalsCnbStep") Step prepareDedupPeriodicalsCnbStep,
+			@Qualifier(Constants.JOB_ID_DEDUP + ":dedupPeriodicalsCnbStep") Step dedupPeriodicalsCnbStep,
+			@Qualifier(Constants.JOB_ID_DEDUP + ":preparePeriodicalsCnbClustersStep") Step preparePeriodicalsCnbClustersStep,
+			@Qualifier(Constants.JOB_ID_DEDUP + ":dedupPeriodicalsCnbClustersStep") Step dedupPeriodicalsCnbClustersStep,
+			@Qualifier(Constants.JOB_ID_DEDUP + ":preparePeriodicalsIssnClustersStep") Step preparePeriodicalsIssnClustersStep,
+			@Qualifier(Constants.JOB_ID_DEDUP + ":dedupPeriodicalsIssnClustersStep") Step dedupPeriodicalsIssnClustersStep,
+			@Qualifier(Constants.JOB_ID_DEDUP + ":preparePeriodicalsOclcClustersStep") Step preparePeriodicalsOclcClustersStep,
+			@Qualifier(Constants.JOB_ID_DEDUP + ":dedupPeriodicalsOclcClustersStep") Step dedupPeriodicalsOclcClustersStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":dedupRestOfRecordsStep") Step dedupRestOfRecordsStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":cleanupStep") Step cleanupStep) {
 		return jobs.get(Constants.JOB_ID_DEDUP)
@@ -156,8 +180,22 @@ public class DedupRecordsJobConfig {
 				.next(dedupCnbClustersStep)
 				.next(prepareTempOclcClustersTableStep)
 				.next(dedupOclcClustersStep)
+				
+				.next(prepareDedupPeriodicalsIssnStep)
+				.next(dedupPeriodicalsIssnStep)
+				.next(prepareDedupPeriodicalsCnbStep)
+				.next(dedupPeriodicalsCnbStep)
 				.next(prepareTempUuidClustersTableStep)
+		
 				.next(dedupUuidClustersStep)
+		
+				.next(preparePeriodicalsCnbClustersStep)
+				.next(dedupPeriodicalsCnbClustersStep)
+				.next(preparePeriodicalsIssnClustersStep)
+				.next(dedupPeriodicalsIssnClustersStep)
+				.next(preparePeriodicalsOclcClustersStep)
+				.next(dedupPeriodicalsOclcClustersStep)
+				
 				.next(prepareTempSkatKeysRestStep)
 				.next(dedupSimpleKeysSkatRestStep)
 				.next(prepareDedupSimmilarityTableStep)
@@ -397,12 +435,6 @@ public class DedupRecordsJobConfig {
 	public ItemReader<List<Long>> dedupCnbClustersReader() throws Exception {
 		return dedupSimpleKeysReader(TMP_TABLE_CNB_CLUSTERS);
 	}
-	
-	@Bean(name = "dedupCnbClustersStep:processor")
-	@StepScope
-	public ItemProcessor<List<Long>, List<HarvestedRecord>> dedupCnbClustersProcessor() {
-		return new DedupIdentifierClustersProcessor();
-	}
 
 	@Bean(name = Constants.JOB_ID_DEDUP + ":dedupCnbClustersStep")
 	public Step dedupCnbClustersStep() throws Exception {
@@ -410,7 +442,7 @@ public class DedupRecordsJobConfig {
 				.listener(new StepProgressListener())
 				.<List<Long>, List<HarvestedRecord>> chunk(100)
 				.reader(dedupCnbClustersReader())
-				.processor(dedupCnbClustersProcessor())
+				.processor(generalDedupClustersProcessor())
 				.writer(dedupSimpleKeysStepWriter())
 				.build();
 	}
@@ -437,12 +469,6 @@ public class DedupRecordsJobConfig {
 	public ItemReader<List<Long>> dedupOclcClustersReader() throws Exception {
 		return dedupSimpleKeysReader(TMP_TABLE_OCLC_CLUSTERS);
 	}
-	
-	@Bean(name = "dedupOclcClustersStep:processor")
-	@StepScope
-	public ItemProcessor<List<Long>, List<HarvestedRecord>> dedupOclcClustersProcessor() {
-		return new DedupIdentifierClustersProcessor();
-	}
 
 	@Bean(name = Constants.JOB_ID_DEDUP + ":dedupOclcClustersStep")
 	public Step dedupOclcClustersStep() throws Exception {
@@ -450,7 +476,7 @@ public class DedupRecordsJobConfig {
 				.listener(new StepProgressListener())
 				.<List<Long>, List<HarvestedRecord>> chunk(100)
 				.reader(dedupOclcClustersReader())
-				.processor(dedupOclcClustersProcessor())
+				.processor(generalDedupClustersProcessor())
 				.writer(dedupSimpleKeysStepWriter())
 				.build();
 	}
@@ -602,6 +628,193 @@ public class DedupRecordsJobConfig {
 				.writer(dedupSimpleKeysStepWriter())
 				.build();
 	}
+	
+	/**
+	 * Deduplicate periodicals using ISSN and title
+	 */
+	
+	@Bean(name = "prepareDedupPeriodicalsIssnStep:prepareDedupPeriodicalsIssnTasklet")
+	@StepScope
+	public Tasklet prepareDedupPeriodicalsIssnTasklet() {
+		return new SqlCommandTasklet(prepareTempPeriodicalsIssnTableSql);
+	}
+	
+	@Bean(name = Constants.JOB_ID_DEDUP + ":prepareDedupPeriodicalsIssnStep")
+	public Step prepareDedupPeriodicalsIssnStep() {
+		return steps.get("prepareDedupPeriodicalsIssnStep")
+				.tasklet(prepareDedupPeriodicalsIssnTasklet())
+				.listener(new StepProgressListener())
+				.build();
+	}
+	
+	@Bean(name = "dedupPeriodicalsIssnStep:reader")
+	@StepScope
+	public ItemReader<List<Long>> dedupPeriodicalsIssnReader() throws Exception {
+		return dedupSimpleKeysReader(TMP_TABLE_PERIODICALS_ISSN);
+	}
+	
+	@Bean(name = "dedupPeriodicalsIssnStep:processor")
+	@StepScope
+	public ItemProcessor<List<Long>, List<HarvestedRecord>> dedupPeriodicalsIssnProcessor() {
+		return new DedupSimpleKeysStepProcessor();
+	}
+
+	@Bean(name = Constants.JOB_ID_DEDUP + ":dedupPeriodicalsIssnStep")
+	public Step dedupPeriodicalsIssnStep() throws Exception {
+		return steps.get("dedupPeriodicalsIssnStep")
+				.listener(new StepProgressListener())
+				.<List<Long>, List<HarvestedRecord>> chunk(100)
+				.reader(dedupPeriodicalsIssnReader())
+				.processor(dedupPeriodicalsIssnProcessor())
+				.writer(dedupSimpleKeysStepWriter())
+				.build();
+	}
+	
+	/**
+	 * Deduplicate periodicals using CNB and title
+	 */
+	
+	@Bean(name = "prepareDedupPeriodicalsCnbStep:prepareDedupPeriodicalsCnbTasklet")
+	@StepScope
+	public Tasklet prepareDedupPeriodicalsCnbTasklet() {
+		return new SqlCommandTasklet(prepareTempPeriodicalsCnbTableSql);
+	}
+	
+	@Bean(name = Constants.JOB_ID_DEDUP + ":prepareDedupPeriodicalsCnbStep")
+	public Step prepareDedupPeriodicalsCnbStep() {
+		return steps.get("prepareDedupPeriodicalsCnbStep")
+				.tasklet(prepareDedupPeriodicalsCnbTasklet())
+				.listener(new StepProgressListener())
+				.build();
+	}
+	
+	@Bean(name = "dedupPeriodicalsCnbStep:reader")
+	@StepScope
+	public ItemReader<List<Long>> dedupPeriodicalsCnbReader() throws Exception {
+		return dedupSimpleKeysReader(TMP_TABLE_PERIODICALS_CNB);
+	}
+	
+	@Bean(name = "dedupPeriodicalsCnbStep:processor")
+	@StepScope
+	public ItemProcessor<List<Long>, List<HarvestedRecord>> dedupPeriodicalsCnbProcessor() {
+		return new DedupSimpleKeysStepProcessor();
+	}
+
+	@Bean(name = Constants.JOB_ID_DEDUP + ":dedupPeriodicalsCnbStep")
+	public Step dedupPeriodicalsCnbStep() throws Exception {
+		return steps.get("dedupPeriodicalsCnbStep")
+				.listener(new StepProgressListener())
+				.<List<Long>, List<HarvestedRecord>> chunk(100)
+				.reader(dedupPeriodicalsCnbReader())
+				.processor(dedupPeriodicalsCnbProcessor())
+				.writer(dedupSimpleKeysStepWriter())
+				.build();
+	}
+	
+	/**
+	 * Deduplicate periodicals using Cnb clusters
+	 */
+	
+	@Bean(name = "preparePeriodicalsCnbClustersStep:preparePeriodicalsCnbClustersTasklet")
+	@StepScope
+	public Tasklet preparePeriodicalsCnbClustersTasklet() {
+		return new SqlCommandTasklet(prepareTempPeriodicalsCnbClustersSql);
+	}
+	
+	@Bean(name = Constants.JOB_ID_DEDUP + ":preparePeriodicalsCnbClustersStep")
+	public Step preparePeriodicalsCnbClustersStep() {
+		return steps.get("preparePeriodicalsCnbClustersStep")
+				.tasklet(preparePeriodicalsCnbClustersTasklet())
+				.listener(new StepProgressListener())
+				.build();
+	}
+	
+	@Bean(name = "dedupPeriodicalsCnbClustersStep:reader")
+	@StepScope
+	public ItemReader<List<Long>> dedupPeriodicalsCnbClustersStepReader() throws Exception {
+		return dedupSimpleKeysReader(TMP_TABLE_PERIODICALS_CNB_CLUSTERS);
+	}
+
+	@Bean(name = Constants.JOB_ID_DEDUP + ":dedupPeriodicalsCnbClustersStep")
+	public Step dedupPeriodicalsCnbClustersStep() throws Exception {
+		return steps.get("dedupPeriodicalsCnbClustersStep")
+				.listener(new StepProgressListener())
+				.<List<Long>, List<HarvestedRecord>> chunk(100)
+				.reader(dedupPeriodicalsCnbClustersStepReader())
+				.processor(generalDedupClustersProcessor())
+				.writer(dedupSimpleKeysStepWriter())
+				.build();
+	}
+	
+	/**
+	 * Deduplicate periodicals using Issn clusters
+	 */
+	
+	@Bean(name = "preparePeriodicalsIssnClustersStep:preparePeriodicalsIssnClustersTasklet")
+	@StepScope
+	public Tasklet preparePeriodicalsIssnClustersTasklet() {
+		return new SqlCommandTasklet(prepareTempPeriodicalsIssnClustersSql);
+	}
+	
+	@Bean(name = Constants.JOB_ID_DEDUP + ":preparePeriodicalsIssnClustersStep")
+	public Step preparePeriodicalsIssnClustersStep() {
+		return steps.get("preparePeriodicalsIssnClustersStep")
+				.tasklet(preparePeriodicalsIssnClustersTasklet())
+				.listener(new StepProgressListener())
+				.build();
+	}
+	
+	@Bean(name = "dedupPeriodicalsIssnClustersStep:reader")
+	@StepScope
+	public ItemReader<List<Long>> dedupPeriodicalsIssnClustersStepReader() throws Exception {
+		return dedupSimpleKeysReader(TMP_TABLE_PERIODICALS_ISSN_CLUSTERS);
+	}
+
+	@Bean(name = Constants.JOB_ID_DEDUP + ":dedupPeriodicalsIssnClustersStep")
+	public Step dedupPeriodicalsIssnClustersStep() throws Exception {
+		return steps.get("dedupPeriodicalsIssnClustersStep")
+				.listener(new StepProgressListener())
+				.<List<Long>, List<HarvestedRecord>> chunk(100)
+				.reader(dedupPeriodicalsIssnClustersStepReader())
+				.processor(generalDedupClustersProcessor())
+				.writer(dedupSimpleKeysStepWriter())
+				.build();
+	}
+	
+	/**
+	 * Deduplicate periodicals using Oclc clusters
+	 */
+	
+	@Bean(name = "preparePeriodicalsOclcClustersStep:preparePeriodicalsOclcClustersTasklet")
+	@StepScope
+	public Tasklet preparePeriodicalsOclcClustersTasklet() {
+		return new SqlCommandTasklet(prepareTempPeriodicalsOclcClustersSql);
+	}
+	
+	@Bean(name = Constants.JOB_ID_DEDUP + ":preparePeriodicalsOclcClustersStep")
+	public Step preparePeriodicalsOclcClustersStep() {
+		return steps.get("preparePeriodicalsOclcClustersStep")
+				.tasklet(preparePeriodicalsOclcClustersTasklet())
+				.listener(new StepProgressListener())
+				.build();
+	}
+	
+	@Bean(name = "dedupPeriodicalsOclcClustersStep:reader")
+	@StepScope
+	public ItemReader<List<Long>> dedupPeriodicalsOclcClustersStepReader() throws Exception {
+		return dedupSimpleKeysReader(TMP_TABLE_PERIODICALS_OCLC_CLUSTERS);
+	}
+
+	@Bean(name = Constants.JOB_ID_DEDUP + ":dedupPeriodicalsOclcClustersStep")
+	public Step dedupPeriodicalsOclcClustersStep() throws Exception {
+		return steps.get("dedupPeriodicalsOclcClustersStep")
+				.listener(new StepProgressListener())
+				.<List<Long>, List<HarvestedRecord>> chunk(100)
+				.reader(dedupPeriodicalsOclcClustersStepReader())
+				.processor(generalDedupClustersProcessor())
+				.writer(dedupSimpleKeysStepWriter())
+				.build();
+	}
 
 	/**
 	 * Cleanup
@@ -652,6 +865,15 @@ public class DedupRecordsJobConfig {
 		return new DedupSimpleKeysStepWriter();
 	}
 	
+	
+	/**
+	 * general processor for deduplication of clusters based on identifier (ISBN,ISSN,CNB,OCLC)
+	 */
+	@Bean(name = "generalDedupClustersProcessor")
+	@StepScope
+	public ItemProcessor<List<Long>, List<HarvestedRecord>> generalDedupClustersProcessor() {
+		return new DedupIdentifierClustersProcessor();
+	}
 	
 	/**
 	 * Record processor for deduplication of records based on Skat data

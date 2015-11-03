@@ -24,6 +24,10 @@ SELECT unique_ids.id,
   LEFT OUTER JOIN isbn i on unique_ids.id = i.harvested_record_id
   LEFT OUTER JOIN cnb c on unique_ids.id = c.harvested_record_id
   WHERE unique_ids.updated > all(select * from last_dedup_time)
+    AND unique_ids.id NOT IN (
+      SELECT hrfl.harvested_record_id FROM harvested_record_format_link hrfl 
+      INNER JOIN harvested_record_format hrf ON hrf.id = hrfl.harvested_record_format_id
+      WHERE hrf.name = 'PERIODICALS')
 UNION
 SELECT 
     nhr.id,
@@ -40,4 +44,8 @@ SELECT
   INNER JOIN language on nhr.id = language.harvested_record_id
   LEFT OUTER JOIN isbn i on nhr.id = i.harvested_record_id
   LEFT OUTER JOIN cnb c on nhr.id = c.harvested_record_id
-  WHERE dedup_record_id IS NULL;
+  WHERE dedup_record_id IS NULL
+    AND nhr.id NOT IN (
+      SELECT hrfl.harvested_record_id FROM harvested_record_format_link hrfl 
+      INNER JOIN harvested_record_format hrf ON hrf.id = hrfl.harvested_record_format_id
+      WHERE hrf.name = 'PERIODICALS')

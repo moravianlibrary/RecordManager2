@@ -19,11 +19,9 @@ public class DedupIdentifierClustersProcessor extends DedupSimpleKeysStepProcess
 	
 	
 	/**
-	 * On the input are two {@link HarvestedRecord}s, having same CNB and common format.
+	 * On the input are two {@link HarvestedRecord}s, having same identifier (CNB,ISBN,ISSN,OCLC) and common format.
 	 * 
-	 * Records should match if:
-	 *   their titles are similar enough (TITLE_MATCH_BOUNDARY)
-	 *   their publication years don't differ
+	 * Records should match if their titles are similar enough (TITLE_MATCH_BOUNDARY)
 	 *   
 	 */
 	@Override
@@ -43,11 +41,6 @@ public class DedupIdentifierClustersProcessor extends DedupSimpleKeysStepProcess
 		}
 		
 		if (!titlesMatching) {
-			return false;
-		}
-		
-		if (hrA.getPublicationYear() != null 
-				&& !hrA.getPublicationYear().equals(hrB.getPublicationYear())) {
 			return false;
 		}
 		

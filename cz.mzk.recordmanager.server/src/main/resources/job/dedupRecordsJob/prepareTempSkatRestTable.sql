@@ -9,6 +9,10 @@ SELECT
 FROM skat_keys sk 
   INNER JOIN sigla s ON sk.sigla = s.sigla
   INNER JOIN harvested_record hr ON hr.import_conf_id = s.import_conf_id AND hr.raw_001_id = sk.local_record_id
+WHERE hr.id NOT IN (
+  SELECT hrfl.harvested_record_id FROM harvested_record_format_link hrfl 
+  INNER JOIN harvested_record_format hrf ON hrf.id = hrfl.harvested_record_format_id
+  WHERE hrf.name = 'PERIODICALS')
 GROUP BY sk.skat_record_id
 HAVING max(hr.updated) > ANY(SELECT time from last_dedup_time) AND bool_or(sk.manually_merged) IS NOT true AND count(hr.id) > 1;
 
