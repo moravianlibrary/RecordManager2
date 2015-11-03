@@ -27,6 +27,13 @@ public class MarcDSL extends BaseDSL {
 	private MetadataMarcRecord marcMetadataRecord;
 
 	private final static String EMPTY_SEPARATOR = "";
+	private final static String SPACE_SEPARATOR = " ";
+	private final static String END_PUNCTUATION = "[:,=;/.]+$";
+	private final static String LEAD_SPACE = "^ *";
+	private final static String PACK_SPACES = " +";
+	private final static String NUMBERS = "([0-9])[\\.,]([0-9])";
+	private final static String SUPPRESS = "<<[^<{2}]*>>";
+	private final static String TO_BLANK = "['\\[\\]\"`!()\\-{};:.,?/\\@*%=^_|~]";
 
 	private final static Pattern FIELD_PATTERN = Pattern
 			.compile("([0-9]{3})([a-zA-Z0-9]*)");
@@ -147,10 +154,12 @@ public class MarcDSL extends BaseDSL {
         DataField titleField = titleFields.get(0);
         if (titleField == null)
             return "";
-          
+
         int nonFilingInt = getInd2AsInt(titleField);
         
         String title = marcMetadataRecord.getTitle().get(0).getTitleStr();
+        title = title.replaceAll(END_PUNCTUATION, EMPTY_SEPARATOR);
+        title = title.replaceAll(NUMBERS, "$1$2");
         title = title.toLowerCase();
         
         //Skip non-filing chars, if possible. 
@@ -162,6 +171,10 @@ public class MarcDSL extends BaseDSL {
           return null;
         }                
         
+        title = title.replaceAll(SUPPRESS, EMPTY_SEPARATOR);
+        title = title.replaceAll(TO_BLANK, SPACE_SEPARATOR);
+        title = title.replaceAll(LEAD_SPACE, EMPTY_SEPARATOR);
+        title = title.replaceAll(PACK_SPACES, SPACE_SEPARATOR);
         return title;
     }
 
