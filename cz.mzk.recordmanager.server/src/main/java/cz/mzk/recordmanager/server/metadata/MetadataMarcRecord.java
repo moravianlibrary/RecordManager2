@@ -649,7 +649,6 @@ public class MetadataMarcRecord implements MetadataRecord {
 		if(f300a.matches("(?i).*videokazet[ay]?.*")) return HarvestedRecordFormatEnum.VIDEO_VHS;
 		
 		// DVD
-		if(ldr06.matches("(?i)g") && f300a.matches("(?i).*dvd.*")) return HarvestedRecordFormatEnum.VIDEO_DVD;
 		if(f007_00.matches("(?i)v") && f007_04.matches("(?i)v")) return HarvestedRecordFormatEnum.VIDEO_DVD;
 		if(f300a.matches(".*DVD[ -]?vide[oa].*")) return HarvestedRecordFormatEnum.VIDEO_DVD;
 		
@@ -657,7 +656,6 @@ public class MetadataMarcRecord implements MetadataRecord {
 		if(ldr06.matches("(?i)g") && f300a.matches("(?i).*cd.*")) return HarvestedRecordFormatEnum.VIDEO_CD;
 		
 		// others
-		if(ldr06.matches("(?i)g")) return HarvestedRecordFormatEnum.VIDEO_OTHER;
 		if(f007_00.matches("(?i)[vm]")) return HarvestedRecordFormatEnum.VIDEO_OTHER;
 		if(f245h.matches("(?i).*videozáznam.*")) return HarvestedRecordFormatEnum.VIDEO_OTHER;
 		if(f337b.matches("(?i)v")) return HarvestedRecordFormatEnum.VIDEO_OTHER;
