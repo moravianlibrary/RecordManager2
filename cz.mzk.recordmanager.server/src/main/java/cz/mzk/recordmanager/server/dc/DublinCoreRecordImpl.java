@@ -5,7 +5,6 @@ import java.util.List;
 
 public class DublinCoreRecordImpl implements DublinCoreRecord {
 
-	/* <MJ.> - only variables needed for Kramerius dedup keys are implemented */
 	private List<String> contributor = new ArrayList<>();
 	private List<String> coverage = new ArrayList<>();
 	private List<String> creator = new ArrayList<>();

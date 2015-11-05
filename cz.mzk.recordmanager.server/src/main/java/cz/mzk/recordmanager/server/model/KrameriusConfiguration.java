@@ -24,6 +24,12 @@ public class KrameriusConfiguration extends ImportConfiguration {
 	@Column(name="metadata_stream")
 	private String metadataStream;
 
+	@Column(name="auth_token")
+	private String authToken;
+	
+	@Column(name="download_private_fulltexts")
+	private boolean downloadPrivateFulltexts;
+	
 	public String getUrl() {
 		return url;
 	}
@@ -54,6 +60,22 @@ public class KrameriusConfiguration extends ImportConfiguration {
 
 	public void setMetadataStream(String metadataStream) {
 		this.metadataStream = metadataStream;
+	}
+
+	public String getAuthToken() {
+		return authToken;
+	}
+
+	public void setAuthToken(String authToken) {
+		this.authToken = authToken;
+	}
+
+	public boolean isDownloadPrivateFulltexts() {
+		return downloadPrivateFulltexts;
+	}
+
+	public void setDownloadPrivateFulltexts(boolean downloadPrivateFulltexts) {
+		this.downloadPrivateFulltexts = downloadPrivateFulltexts;
 	}
 	
 	

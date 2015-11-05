@@ -54,7 +54,9 @@ public class DBUnitHelper {
 	}
 	
 	protected void truncateTables() throws Exception {
-		ScriptUtils.executeSqlScript(dataSource.getConnection(), DELETE_TABLES);
+		try (Connection conn = dataSource.getConnection()) {
+			ScriptUtils.executeSqlScript(conn, DELETE_TABLES);
+		}
 	}
 
 }

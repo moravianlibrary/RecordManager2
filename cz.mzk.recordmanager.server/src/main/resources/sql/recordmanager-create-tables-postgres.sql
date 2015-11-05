@@ -56,6 +56,8 @@ CREATE TABLE kramerius_conf (
   model                VARCHAR(128),
   query_rows           DECIMAL(10),
   metadata_stream      VARCHAR(128),
+  auth_token 	       VARCHAR(128),
+  download_private_fulltexts BOOLEAN DEFAULT FALSE,
   CONSTRAINT kramerius_conf_import_conf_fk FOREIGN KEY (import_conf_id) REFERENCES import_conf(id)
 );
 
@@ -192,6 +194,17 @@ CREATE TABLE antikvariaty_catids (
   CONSTRAINT antikvariaty_catids_pk PRIMARY KEY (id_from_catalogue, antikvariaty_id),
   CONSTRAINT antikvariaty_catids_fk FOREIGN KEY (antikvariaty_id) REFERENCES antikvariaty(id)
 );
+
+CREATE TABLE fulltext_monography (
+  id                  DECIMAL(10) PRIMARY KEY,
+  harvested_record_id DECIMAL(10),
+  uuid_page           VARCHAR(42),
+  is_private          BOOLEAN, 
+  order_in_monography DECIMAL(10),
+  page                VARCHAR(20),
+  fulltext            BYTEA,
+  CONSTRAINT fulltext_monography_harvested_record_id_fk FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id)
+); 
 
 CREATE TABLE skat_keys (
   skat_record_id      DECIMAL(10),
