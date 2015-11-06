@@ -5,8 +5,6 @@ import static cz.mzk.recordmanager.server.springbatch.JobParameterDeclaration.pa
 import java.util.Arrays;
 import java.util.Collection;
 
-import org.springframework.batch.core.JobParameters;
-import org.springframework.batch.core.JobParametersInvalidException;
 import org.springframework.batch.core.JobParameter.ParameterType;
 
 import cz.mzk.recordmanager.server.springbatch.DefaultJobParametersValidator;
@@ -14,21 +12,15 @@ import cz.mzk.recordmanager.server.springbatch.JobParameterDeclaration;
 import cz.mzk.recordmanager.server.util.Constants;
 
 public class KrameriusFulltextJobParametersValidator extends
-DefaultJobParametersValidator {
-
-	@Override
-	public void validate(JobParameters parameters)
-			throws JobParametersInvalidException {
-		super.validate(parameters);
-	}
+	DefaultJobParametersValidator {
 
 	@Override
 	public Collection<JobParameterDeclaration> getParameters() {
-		return Arrays
-				.asList(param(Constants.JOB_PARAM_CONF_ID, ParameterType.LONG,
-						true), //
-						param(Constants.JOB_PARAM_FULLTEXT_FIRST, ParameterType.LONG, false), //
-					    param(Constants.JOB_PARAM_FULLTEXT_LAST, ParameterType.LONG, false));
+		return Arrays.asList(
+				param(Constants.JOB_PARAM_CONF_ID, ParameterType.LONG,true), //
+				param(Constants.JOB_PARAM_FULLTEXT_FIRST, ParameterType.LONG, false), //
+				param(Constants.JOB_PARAM_FULLTEXT_LAST, ParameterType.LONG, false) //
+			);
 	}
 
 }

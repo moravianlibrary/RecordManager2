@@ -25,6 +25,7 @@ import com.google.common.collect.ImmutableMap;
 import cz.mzk.recordmanager.server.index.HarvestedRecordRowMapper;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.springbatch.JobFailureListener;
+import cz.mzk.recordmanager.server.springbatch.UUIDIncrementer;
 import cz.mzk.recordmanager.server.util.Constants;
 
 @Configuration
@@ -51,6 +52,7 @@ public class KrameriusFulltextJobConfig {
 			@Qualifier("krameriusFulltextJob:step") Step step) {
 		return jobs.get("krameriusFulltextJob") //
 				.validator(new KrameriusFulltextJobParametersValidator()) //
+				.incrementer(UUIDIncrementer.INSTANCE) //
 				.listener(JobFailureListener.INSTANCE) //
 				.flow(step) //
 				.end() //
