@@ -10,74 +10,45 @@ import org.springframework.stereotype.Component;
 import cz.mzk.recordmanager.server.index.SolrFieldConstants;
 import cz.mzk.recordmanager.server.model.DedupRecord;
 import cz.mzk.recordmanager.server.util.Constants;
+import cz.mzk.recordmanager.server.util.SolrUtils;
 
 @Component
 public class AvailabilityFacetEnricher implements DedupRecordEnricher {
 
-	
 	private final Pattern GLOBAL_AVAILABILITY_INSTITUTION_PATTERN = Pattern.compile("^sfx.*");
-	
+
+	private final List<String> ONLINE_STATUSES = SolrUtils.createHierarchicFacetValues("online", Constants.DOCUMENT_AVAILABILITY_ONLINE);
+
 	@Override
 	public void enrich(DedupRecord record, SolrInputDocument mergedDocument,
 			List<SolrInputDocument> localRecords) {
-		
-		
-		boolean addOnlineToAll = false;
-		// add 'online' to all records if:
-		//  a) at least one local record is from sfx*
-		//  b) at least one local record has url with online availability 
-		for (SolrInputDocument doc: localRecords) {
-			// a)
-			Object id = doc.getFieldValue(SolrFieldConstants.ID_FIELD);
-			if (id instanceof String) {
-				if (GLOBAL_AVAILABILITY_INSTITUTION_PATTERN.matcher((String) id).matches()) {
-					addOnlineToAll = true;
-					break;
-				}
-			}
-			
-			// b)
-			Collection<Object> urls = doc.getFieldValues(SolrFieldConstants.URL);
-			if (urls == null) {
-				continue;
-			}
-			for (Object url: urls) {
-				if (url instanceof String) {
-					String[] splited = ((String) url).split("\\|");
-					if (splited.length == 3 && Constants.DOCUMENT_AVAILABILITY_ONLINE.equalsIgnoreCase(splited[1])) {
-						addOnlineToAll = true;
-						break;
-					}
-					
-				}
-			}
+		boolean online = localRecords.stream().anyMatch(rec -> isOnline(rec));
+		if (online) {
+			localRecords.forEach(doc -> doc.setField(SolrFieldConstants.LOCAL_STATUSES_FACET, ONLINE_STATUSES));
 		}
-		
-		if (addOnlineToAll) {
-			boolean hasOnlineStatus = false;
-			String onlineFacetStatusParent = "0/online/";
-			String onlineFacetStatus = "1/online/" + Constants.DOCUMENT_AVAILABILITY_ONLINE + "/";
-			for (SolrInputDocument doc: localRecords) {
-				Collection<Object> statuses = doc.getFieldValues(SolrFieldConstants.LOCAL_STATUSES_FACET);
-				for (Object status: statuses) {
-					if (status instanceof String) {
-						hasOnlineStatus |= ((String) status).equalsIgnoreCase(onlineFacetStatus);
-					}
-				}
-				if (!hasOnlineStatus) {
-					statuses.add(onlineFacetStatusParent);
-					statuses.add(onlineFacetStatus);
-					doc.removeField(SolrFieldConstants.LOCAL_STATUSES_FACET);
-					doc.addField(SolrFieldConstants.LOCAL_STATUSES_FACET, statuses);
-				}
-				
-			}
-		}
-		
 		// remove status facets from merged document
 		mergedDocument.remove(SolrFieldConstants.LOCAL_STATUSES_FACET);
-		
 	}
 
+	protected boolean isOnline(SolrInputDocument doc) {
+		// Is from SFX?
+		String id = (String) doc.getFieldValue(SolrFieldConstants.ID_FIELD);
+		if (GLOBAL_AVAILABILITY_INSTITUTION_PATTERN.matcher(id).matches()) {
+			return true;
+		}
+
+		// contains online URL?
+		Collection<Object> urls = doc.getFieldValues(SolrFieldConstants.URL);
+		if (urls == null) {
+			return false;
+		}
+		for (Object url : urls) {
+			String[] splited = ((String) url).split("\\|");
+			if (Constants.DOCUMENT_AVAILABILITY_ONLINE.equalsIgnoreCase(splited[1])) {
+				return true;
+			}
+		}
+		return false;
+	}
 
 }

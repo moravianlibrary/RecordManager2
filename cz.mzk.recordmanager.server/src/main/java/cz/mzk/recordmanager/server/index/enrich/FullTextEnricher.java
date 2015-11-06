@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import cz.mzk.recordmanager.server.index.DelegatingSolrRecordMapper;
+import cz.mzk.recordmanager.server.index.SolrFieldConstants;
 import cz.mzk.recordmanager.server.model.DedupRecord;
 import cz.mzk.recordmanager.server.oai.dao.FulltextMonographyDAO;
 
@@ -41,7 +42,7 @@ public class FullTextEnricher implements DedupRecordEnricher {
 		StringBuilder txt = new StringBuilder();
 		text.stream().forEach(it -> txt.append(modifyFulltextPage(it)));
 		logger.info("Enriching record {} with fulltext: {}", record, txt.toString());
-		mergedDocument.setField("fulltext", txt.toString());
+		mergedDocument.setField(SolrFieldConstants.FULLTEXT_FIELD, txt.toString());
 	}
 
 	private String modifyFulltextPage(String fulltextPage) {

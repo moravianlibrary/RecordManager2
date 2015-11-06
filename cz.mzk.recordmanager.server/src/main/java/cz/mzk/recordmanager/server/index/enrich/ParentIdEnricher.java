@@ -14,9 +14,7 @@ public class ParentIdEnricher implements DedupRecordEnricher {
 	@Override
 	public void enrich(DedupRecord record, SolrInputDocument mergedDocument,
 			List<SolrInputDocument> localRecords) {
-
 		Long parentId = record.getId();
-
 		for (SolrInputDocument currentDoc: localRecords) {
 			currentDoc.addField(SolrFieldConstants.PARENT_ID, parentId.toString());
 		}

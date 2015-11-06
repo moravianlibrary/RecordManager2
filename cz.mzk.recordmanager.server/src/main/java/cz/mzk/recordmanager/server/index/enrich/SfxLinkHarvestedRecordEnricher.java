@@ -24,12 +24,11 @@ public class SfxLinkHarvestedRecordEnricher implements HarvestedRecordEnricher {
 		if (document.containsKey(SolrFieldConstants.SFX_LINKS_FIELD)) {
 			for (Object obj: document.getFieldValues(SolrFieldConstants.SFX_LINKS_FIELD)) {
 				if (obj instanceof String) {
-					links.add(institutionCode + "|" + (String)obj);
+					links.add(institutionCode + "|" + (String) obj);
 				}
 			}
 		}
-		document.remove(SolrFieldConstants.SFX_LINKS_FIELD);
-		document.addField(SolrFieldConstants.SFX_LINKS_FIELD, links);
+		document.setField(SolrFieldConstants.SFX_LINKS_FIELD, links);
 	}
 
 }

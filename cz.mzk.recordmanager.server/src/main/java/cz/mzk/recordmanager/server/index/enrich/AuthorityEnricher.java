@@ -2,7 +2,6 @@ package cz.mzk.recordmanager.server.index.enrich;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
