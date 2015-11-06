@@ -14,7 +14,7 @@ import cz.mzk.recordmanager.server.marc.MarcRecord;
 import cz.mzk.recordmanager.server.scripting.marc.MarcFunctionContext;
 
 @Component
-public class BoundingBoxMarcFunctions implements MarcRecordFunctions {
+public strictfp class BoundingBoxMarcFunctions implements MarcRecordFunctions {
 
 	private static Logger logger = LoggerFactory
 			.getLogger(BoundingBoxMarcFunctions.class);
