@@ -47,7 +47,7 @@ public class KrameriusFulltexterSolrTest extends AbstractTest {
 		pageA.addField(KrameriusSolrConstants.PID_FIELD, "uuid:00931210-02b6-11e5-b939-0800200c9a66");
 		pageA.addField(KrameriusSolrConstants.FULLTEXT_FIELD, "stranka A");
 		pageA.addField(KrameriusSolrConstants.PAGE_NUMBER_FIELD, "[A]");
-		pageA.addField(KrameriusSolrConstants.PAGE_ORDER_FIELD, "A");
+		pageA.addField(KrameriusSolrConstants.PAGE_ORDER_FIELD, "1A");
 
 		SolrDocument page1 = new SolrDocument();
 		page1.addField(KrameriusSolrConstants.PID_FIELD, "uuid:0095bca0-614f-11e2-bcfd-0800200c9a66");

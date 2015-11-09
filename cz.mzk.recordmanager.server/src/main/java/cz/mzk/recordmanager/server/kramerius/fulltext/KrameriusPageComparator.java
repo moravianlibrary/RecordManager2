@@ -13,8 +13,8 @@ public enum KrameriusPageComparator implements Comparator<SolrDocument> {
 	public int compare(SolrDocument doc1, SolrDocument doc2) {
 		String page1 = getPage(doc1);
 		String page2 = getPage(doc2);
-		boolean page1IsNumber = NumberUtils.isNumber(page1);
-		boolean page2IsNumber = NumberUtils.isNumber(page2);
+		boolean page1IsNumber = NumberUtils.isParsable(page1);
+		boolean page2IsNumber = NumberUtils.isParsable(page2);
 		if (!page1IsNumber && !page2IsNumber) {
 			return page1.compareTo(page2);
 		} else if (page1IsNumber && !page2IsNumber) {
@@ -22,8 +22,8 @@ public enum KrameriusPageComparator implements Comparator<SolrDocument> {
 		} else if (!page1IsNumber && page2IsNumber) {
 			return -1;
 		} else {
-			int page1Number = Integer.valueOf(page1);
-			int page2Number = Integer.valueOf(page2);
+			int page1Number = Integer.parseInt(page1);
+			int page2Number = Integer.parseInt(page2);
 			return page1Number - page2Number;
 		}
 	}
