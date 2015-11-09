@@ -7,7 +7,7 @@ author = getFirstCreator()
 author_search = getFirstCreator()
 author2 = getOtherCreators()
 
-ibsn = getISBNs()
+isbn = getISBNs()
 issn = getISSNs()
 
 //description = getDescriptionText()
@@ -17,6 +17,7 @@ publishDate = getFirstDate()
 publisher = getPublishers()
 
 topic = getSubjects()
+policy_txt = getPolicy()
 
 local_statuses_facet_str_mv = getStatuses()
 fullrecord = getFullRecord()

@@ -5,7 +5,8 @@ import java.io.InputStream;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -18,8 +19,12 @@ import cz.mzk.recordmanager.server.scripting.MappingScript;
 import cz.mzk.recordmanager.server.scripting.dc.DublinCoreScriptFactory;
 
 @Component
-public class DublinCoreSolrRecordMapper implements SolrRecordMapper, InitializingBean {
+public class DublinCoreSolrRecordMapper implements SolrRecordMapper,
+		InitializingBean {
 
+	private static Logger logger = LoggerFactory
+			.getLogger(DublinCoreSolrRecordMapper.class);
+	
 	private final static String FORMAT = "dublinCore";
 
 	@Autowired
@@ -29,7 +34,7 @@ public class DublinCoreSolrRecordMapper implements SolrRecordMapper, Initializin
 	private DublinCoreParser parser;
 
 	private MappingScript<DublinCoreRecord> mappingScript;
-
+	
 	@Override
 	public List<String> getSupportedFormats() {
 		return Collections.singletonList(FORMAT);
@@ -58,7 +63,8 @@ public class DublinCoreSolrRecordMapper implements SolrRecordMapper, Initializin
 		return fields;
 	}
 
-	protected MappingScript<DublinCoreRecord> getMappingScript(HarvestedRecord record) {
+	protected MappingScript<DublinCoreRecord> getMappingScript(
+			HarvestedRecord record) {
 		return mappingScript;
 	}
 

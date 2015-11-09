@@ -18,6 +18,7 @@ DELETE FROM download_import_conf;
 DELETE FROM cnb;
 DELETE FROM authority_record;
 DELETE FROM antikvariaty_catids;
+DELETE FROM fulltext_monography;
 DELETE FROM harvested_record;
 DELETE FROM import_conf;
 DELETE FROM contact_person;

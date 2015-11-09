@@ -150,6 +150,10 @@ public class HarvestedRecord extends AbstractDomainObject {
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name="harvested_record_id", referencedColumnName="id", nullable=false)
 	private List<Oclc> oclcs = new ArrayList<Oclc>();
+	
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name="harvested_record_id", referencedColumnName="id")
+	private List<FulltextMonography> fulltextMonography = new ArrayList<>();
 
 	@OneToMany(mappedBy="id.harvestedRecordId", cascade = CascadeType.ALL)
 	@MapKey(name="id.langStr")
@@ -434,6 +438,15 @@ public class HarvestedRecord extends AbstractDomainObject {
 	public void setShouldBeProcessed(boolean shouldBeProcessed) {
 		this.shouldBeProcessed = shouldBeProcessed;
 	}
+
+	public List<FulltextMonography> getFulltextMonography() {
+		return fulltextMonography;
+	}
+
+	public void setFulltextMonography(List<FulltextMonography> fulltextMonography) {
+		this.fulltextMonography = fulltextMonography;
+	}
+	
 
 	public String getRaw001Id() {
 		return raw001Id;

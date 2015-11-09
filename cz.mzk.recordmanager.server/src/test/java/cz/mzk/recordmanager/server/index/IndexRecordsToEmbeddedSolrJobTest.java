@@ -136,6 +136,23 @@ public class IndexRecordsToEmbeddedSolrJobTest extends AbstractSolrTest {
 						.anyMatch(url -> url.equals("KRAM-MZK|online|http://kramerius.mzk.cz/search/i.jsp?pid=UUID:039764f8-d6db-11e0-b2cd-0050569d679d|"))
 			);
 		}
+
+		{
+			// check for indexed fulltext
+			SolrQuery dcQuery = new SolrQuery();
+			dcQuery.set("q", "id:100 AND fulltext:indexace");
+			QueryResponse docResponse = server.query(dcQuery);
+			Assert.assertEquals(docResponse.getResults().size(), 1);
+		}
+
+		{
+			// check for indexed fulltext
+			SolrQuery dcQuery = new SolrQuery();
+			dcQuery.set("q", "id:100 AND fulltext:neexistuje");
+			QueryResponse docResponse = server.query(dcQuery);
+			Assert.assertEquals(docResponse.getResults().size(), 0);
+		}
+
 	}
 
 }

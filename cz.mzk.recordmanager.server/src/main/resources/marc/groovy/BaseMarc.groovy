@@ -16,6 +16,7 @@ author_letter = getFirstField "100a"
 author2 = getFields "110ab:111ab:700abcd:710ab:711ab"
 author2_role = getFields "700e:710e"
 author_additional = getFields "505r"
+author_sort_str = getAuthorForSorting()
 
 title = getFirstField "245abnp"
 title_sub = getFirstField "245b"

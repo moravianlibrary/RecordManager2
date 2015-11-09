@@ -379,4 +379,17 @@ public class MarcDSL extends BaseDSL {
 		}
     	return count; 
     }
+
+    public String getAuthorForSorting(){
+		List<String> authors = getFields("100abcd:110abcd:111abcd:700abcd:710abcd:711abcd");
+		if(authors == null || authors.isEmpty()) return null;
+		String author = authors.get(0);
+		author = author.toLowerCase();
+		author = author.replaceAll(END_PUNCTUATION, EMPTY_SEPARATOR);
+		author = author.replaceAll(SUPPRESS, EMPTY_SEPARATOR);
+		author = author.replaceAll(TO_BLANK, SPACE_SEPARATOR);
+		author = author.replaceAll(LEAD_SPACE, EMPTY_SEPARATOR);
+		author = author.replaceAll(PACK_SPACES, SPACE_SEPARATOR);
+		return author;
+    }
 }

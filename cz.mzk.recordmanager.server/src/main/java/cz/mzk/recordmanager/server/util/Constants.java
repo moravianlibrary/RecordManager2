@@ -8,6 +8,7 @@ public class Constants {
 	public static final String JOB_ID_HARVEST_AUTH		= "oaiHarvestAuthorityJob";
 	public static final String JOB_ID_HARVEST_ONE_BY_ONE = "oaiHarvestOneByOneJob";
 	public static final String JOB_ID_HARVEST_KRAMERIUS = "krameriusHarvestJob";
+	public static final String JOB_ID_FULLTEXT_KRAMERIUS = "krameriusFulltextJob";
 	public static final String JOB_ID_HARVEST_SINGLE	= "oaiHarvestSingleRecordJob";
 	public static final String JOB_ID_DEDUP				= "dedupRecordsJob";
 	public static final String JOB_ID_SOLR_INDEX_ALL_RECORDS		= "indexAllRecordsToSolrJob";
@@ -27,6 +28,8 @@ public class Constants {
 	public static final String JOB_PARAM_SOLR_QUERY		= "query";
 	public static final String JOB_PARAM_FORMAT			= "format";
 	public static final String JOB_PARAM_RESUMPTION_TOKEN = "resumptionToken";
+	public static final String JOB_PARAM_FULLTEXT_FIRST	= "firstId";
+	public static final String JOB_PARAM_FULLTEXT_LAST  = "lastId";
 	public static final String JOB_PARAM_REPEAT    		= "repeat";
 	public static final String JOB_PARAM_INCREMENTAL	= "incremental";
 	public static final String JOB_PARAM_RECORD_IDS		= "recordIds";

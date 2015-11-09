@@ -35,10 +35,10 @@ public class FieldMerger {
 		for (String field : fields) {
 			Set<Object> values = new HashSet<>();
 			source.stream()
-					.filter(rec -> rec.getFieldValue(field) != null)
-					.forEach(rec -> values.addAll(rec.getFieldValues(field)));
-			target.remove(field);
-			target.addField(field, values);
+					.map(rec -> rec.getFieldValues(field))
+					.filter(rec -> rec != null)
+					.forEach(rec -> values.addAll(rec));
+			target.setField(field, values);
 		}
 	}
 

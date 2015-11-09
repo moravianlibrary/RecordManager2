@@ -248,6 +248,20 @@ ALTER TABLE language ADD CONSTRAINT language_pk PRIMARY KEY (harvested_record_id
 UPDATE import_conf set id_prefix = 'unmz' where id = 320;
 update oai_harvest_conf set set_spec = 'CPK' where import_conf_id = 307;
 
+--14.9. 2015 mjtecka
+CREATE TABLE fulltext_monography
+(
+  id numeric(10,0) NOT NULL,
+  harvested_record_id numeric(10,0),
+  uuid_page character varying(42),
+  is_private boolean, 
+  order_in_monography numeric(10,0),
+  page character varying(20),
+  fulltext bytea,
+  CONSTRAINT fulltext_monography_pkey PRIMARY KEY (id),
+  CONSTRAINT fulltext_monography_harvested_record_id_fk FOREIGN KEY (harvested_record_id)
+); 
+
 -- 16. 9. 2015 mertam
 CREATE TABLE skat_keys (
   skat_record_id      DECIMAL(10),
@@ -292,3 +306,9 @@ ALTER TABLE format ALTER COLUMN format TYPE VARCHAR(15);
 UPDATE import_conf SET id_prefix = 'openlib' WHERE id = 327;
 UPDATE import_conf SET interception_enabled = true WHERE id = 327;
 UPDATE library SET name = 'OPENLIB' WHERE id = 127;
+
+-- 5. 11. 2015 mjtecka
+ALTER TABLE kramerius_conf ADD COLUMN auth_token varchar(128);
+
+-- 5. 11. 2015 mjtecka
+ALTER TABLE kramerius_conf ADD COLUMN download_private_fulltexts boolean DEFAULT FALSE;

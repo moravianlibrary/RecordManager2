@@ -10,3 +10,5 @@ CREATE INDEX oclc_harvested_record_idx ON oclc(harvested_record_id);
 CREATE INDEX language_harvested_record_idx ON language(harvested_record_id);
 
 CREATE INDEX authority_code_idx ON authority_record(authority_code);
+
+CREATE INDEX fulltext_monography_harvested_record_idx ON fulltext_monography(harvested_record_id);

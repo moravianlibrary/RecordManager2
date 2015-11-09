@@ -18,9 +18,13 @@ public interface HarvestedRecordDAO extends DomainDAO<Long, HarvestedRecord> {
 	public HarvestedRecord get(HarvestedRecordUniqueId uniqueId);
 
 	public List<HarvestedRecord> getByDedupRecord(DedupRecord dedupRecord);
+	
+	public List<HarvestedRecord> getByHarvestConfiguration(ImportConfiguration configuration);
 
 	public List<HarvestedRecord> getByDedupRecordWithDeleted(DedupRecord dedupRecord);
 
 	public boolean existsByDedupRecord(DedupRecord dedupRecord);
+
+	public HarvestedRecord findByRecordId(String uniqueId);
 
 }
