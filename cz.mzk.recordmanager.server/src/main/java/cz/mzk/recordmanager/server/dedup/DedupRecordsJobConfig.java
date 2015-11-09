@@ -31,6 +31,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.jdbc.core.RowMapper;
 
+import cz.mzk.recordmanager.server.dedup.clustering.TitleClusterable;
+import cz.mzk.recordmanager.server.dedup.clustering.TitleForDeduplication;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.springbatch.DelegatingHibernateProcessor;
 import cz.mzk.recordmanager.server.springbatch.SqlCommandTasklet;
@@ -70,6 +72,8 @@ public class DedupRecordsJobConfig {
 	private static final String TMP_TABLE_PERIODICALS_ISSN_CLUSTERS = "tmp_periodicals_issn_clusters";
 	
 	private static final String TMP_TABLE_PERIODICALS_OCLC_CLUSTERS = "tmp_periodicals_oclc_clusters";
+	
+	private static final String TMP_TABLE_PERIODICALS_SIMILARITY_IDS = "tmp_periodicals_similarity_ids";
 	
 	
 	@Autowired
@@ -122,6 +126,9 @@ public class DedupRecordsJobConfig {
 	
 	private String prepareTempPeriodicalsOclcClustersSql = ResourceUtils.asString("job/dedupRecordsJob/prepareTempPeriodicalsOclcClustersTable.sql");
 	
+	private String prepareTempPeriodicalsYearClustersSql = ResourceUtils.asString("job/dedupRecordsJob/prepareTempPeriodicalsYearCluster.sql");
+	
+	
 	private String cleanupSql = ResourceUtils.asString("job/dedupRecordsJob/cleanup.sql");
 
 	public DedupRecordsJobConfig() throws IOException {
@@ -151,6 +158,7 @@ public class DedupRecordsJobConfig {
 			@Qualifier(Constants.JOB_ID_DEDUP + ":prepareDedupSimmilarityTableStep") Step prepareDedupSimmilarityTableStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":prepareDedupSimmilarTitlesStep") Step prepareDedupSimmilarTitles,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":processSimilaritesResultsStep") Step processSimilaritesResultsStep,
+			
 			@Qualifier(Constants.JOB_ID_DEDUP + ":prepareDedupPeriodicalsIssnStep") Step prepareDedupPeriodicalsIssnStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":dedupPeriodicalsIssnStep") Step dedupPeriodicalsIssnStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":prepareDedupPeriodicalsCnbStep") Step prepareDedupPeriodicalsCnbStep,
@@ -161,6 +169,12 @@ public class DedupRecordsJobConfig {
 			@Qualifier(Constants.JOB_ID_DEDUP + ":dedupPeriodicalsIssnClustersStep") Step dedupPeriodicalsIssnClustersStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":preparePeriodicalsOclcClustersStep") Step preparePeriodicalsOclcClustersStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":dedupPeriodicalsOclcClustersStep") Step dedupPeriodicalsOclcClustersStep,
+
+
+			@Qualifier(Constants.JOB_ID_DEDUP + ":preparePeriodicalsYearClustersStep") Step preparePeriodicalsYearClustersStep,
+			@Qualifier(Constants.JOB_ID_DEDUP + ":prepareDedupPeriodicalsYearClustersStep") Step prepareDedupPeriodicalsYearClustersStep,
+			@Qualifier(Constants.JOB_ID_DEDUP + ":processPeriodicalsSimilaritesResultsStep") Step processPeriodicalsSimilaritesResultsStep,
+			
 			@Qualifier(Constants.JOB_ID_DEDUP + ":dedupRestOfRecordsStep") Step dedupRestOfRecordsStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":cleanupStep") Step cleanupStep) {
 		return jobs.get(Constants.JOB_ID_DEDUP)
@@ -201,6 +215,11 @@ public class DedupRecordsJobConfig {
 				.next(prepareDedupSimmilarityTableStep)
 				.next(prepareDedupSimmilarTitles)
 				.next(processSimilaritesResultsStep)
+
+				.next(preparePeriodicalsYearClustersStep)
+				.next(prepareDedupPeriodicalsYearClustersStep)
+				.next(processPeriodicalsSimilaritesResultsStep)
+
 				.next(dedupRestOfRecordsStep)
 				.next(cleanupStep)
 				.build();
@@ -575,7 +594,7 @@ public class DedupRecordsJobConfig {
 	
 	@Bean(name="prepareDedupSimmilarTitlesStep:titleProcessor")
 	public ItemProcessor<List<TitleForDeduplication>,List<Set<Long>>> titleProcessor() {
-		return new SimilarTitleProcessor();
+		return new SimilarTitleProcessor<TitleForDeduplication>();
 	}
 	
 	@Bean(name = Constants.JOB_ID_DEDUP + ":prepareDedupSimmilarTitlesStep")
@@ -612,7 +631,7 @@ public class DedupRecordsJobConfig {
 	@Bean(name="prepareDedupSimmilarTitlesStep:simpleSimmilarityWriter")
 	@StepScope
 	public ItemWriter<List<Set<Long>>> simpleSimmilarityWriter() {
-		return new TitleSimilarityWriter();
+		return new TitleSimilarityWriter(TMP_TABLE_SIMILARITY_IDS);
 	}
 
 	/**
@@ -815,6 +834,85 @@ public class DedupRecordsJobConfig {
 				.writer(dedupSimpleKeysStepWriter())
 				.build();
 	}
+	
+	/**
+	 * Deduplicate periodicals by year
+	 */
+	
+	@Bean(name = "preparePeriodicalsYearClustersStep:preparePeriodicalsYearClustersTasklet")
+	@StepScope
+	public Tasklet preparePeriodicalsYearClustersTasklet() {
+		return new SqlCommandTasklet(prepareTempPeriodicalsYearClustersSql);
+	}
+	
+	@Bean(name = Constants.JOB_ID_DEDUP + ":preparePeriodicalsYearClustersStep")
+	public Step preparePeriodicalsYearClustersStep() {
+		return steps.get("preparePeriodicalsYearClustersStep")
+				.tasklet(preparePeriodicalsYearClustersTasklet())
+				.listener(new StepProgressListener())
+				.build();
+	}
+	
+	@Bean(name="preparePeriodicalsYearClustersStep:yearReader")
+	public ItemReader<List<TitleClusterable>> preparePeriodicalsYearClustersStepReader() {
+		return new PeriodicalsTitleByYearReader(1850,2015);
+	}
+	
+	@Bean(name="preparePeriodicalsYearClustersStep:titleProcessor")
+	public ItemProcessor<List<TitleClusterable>,List<Set<Long>>> preparePeriodicalsYearClustersStepProcessor() {
+		return new SimilarTitleProcessor<TitleClusterable>();
+	}
+	
+	@Bean(name="preparePeriodicalsYearClustersStep:writer")
+	@StepScope
+	public ItemWriter<List<Set<Long>>> preparePeriodicalsYearClustersStepWriter() {
+		return new TitleSimilarityWriter(TMP_TABLE_PERIODICALS_SIMILARITY_IDS);
+	}
+	
+	@Bean(name = Constants.JOB_ID_DEDUP + ":prepareDedupPeriodicalsYearClustersStep")
+	public Step preparePeriodicalsDedupSimmilarTitles() throws Exception {
+		return steps.get("prepareDedupPeriodicalsYearClustersStep")
+				.listener(new StepProgressListener())
+				.<List<TitleClusterable>, Future<List<Set<Long>>>> chunk(10)
+				.reader(preparePeriodicalsYearClustersStepReader())
+				.processor(asyncPeriodicalsSimilarityProcessor())
+				.writer(asyncPeriodicalsSimmilarityWriter())
+				.build();
+	}
+	
+	@Bean(name ="prepareDedupPeriodicalsYearClustersStep:asynprepareDedupSimmilarTitlesProcessor")
+	@StepScope
+	public AsyncItemProcessor<List<TitleClusterable>, List<Set<Long>>> asyncPeriodicalsSimilarityProcessor() {
+		AsyncItemProcessor<List<TitleClusterable>, List<Set<Long>>> processor = new AsyncItemProcessor<>();
+		processor.setDelegate(new DelegatingHibernateProcessor<>(sessionFactory, preparePeriodicalsYearClustersStepProcessor()));
+		processor.setTaskExecutor(taskExecutor);
+		return processor;
+	}
+
+	
+	@Bean(name="prepareDedupPeriodicalsYearClustersStep:asyncSimmilarityWriter")
+	@StepScope
+	public AsyncItemWriter<List<Set<Long>>> asyncPeriodicalsSimmilarityWriter() throws Exception {
+		AsyncItemWriter<List<Set<Long>>> writer = new AsyncItemWriter<List<Set<Long>>>();
+		writer.setDelegate(preparePeriodicalsYearClustersStepWriter());
+		writer.afterPropertiesSet();
+		return writer;
+	}
+	
+	/**
+	 * Process computed similarities results for periodicals
+	 */
+	@Bean(name = Constants.JOB_ID_DEDUP + ":processPeriodicalsSimilaritesResultsStep")
+	public Step processPeriodicalsSimilaritesResultsStep() throws Exception {
+		return steps.get("processPeriodicalsSimilaritesResultsStep")
+				.listener(new StepProgressListener())
+				.<List<Long>, List<HarvestedRecord>> chunk(100)
+				.reader(dedupSimpleKeysReader(TMP_TABLE_PERIODICALS_SIMILARITY_IDS))
+				.processor(dedupSimpleKeysStepProsessor())
+				.writer(dedupSimpleKeysStepWriter())
+				.build();
+	}
+	
 
 	/**
 	 * Cleanup

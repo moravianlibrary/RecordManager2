@@ -1,4 +1,4 @@
-package cz.mzk.recordmanager.server.dedup;
+package cz.mzk.recordmanager.server.dedup.clustering;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -12,18 +12,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import cz.mzk.recordmanager.server.model.Title;
-import cz.mzk.recordmanager.server.util.DeduplicationUtils;
-import cz.mzk.recordmanager.server.util.StringUtils;
 
-public class TitleClusterer {
+public class Cluster<T extends Clusterable>  {
 	
-	private static Logger logger = LoggerFactory.getLogger(TitleClusterer.class);
+	private static Logger logger = LoggerFactory.getLogger(Cluster.class);
 
-	private final int TITLE_MATCH_PERCENTAGE = 70;
+	private final int RECORD_MATCH_PERCENTAGE = 70;
 	
-	private final int TITLE_PREFIX_BOUNDARY = 8;
-	
-	private final List<TitleForDeduplication> inputList;
+	private final List<T> inputList;
 	
 	private Map<Long, Long> mapping = new ConcurrentHashMap<>();
 	
@@ -35,18 +31,18 @@ public class TitleClusterer {
 	/**
 	 * @param inputList
 	 */
-	public TitleClusterer(List<TitleForDeduplication> inputList) {
+	public Cluster(List<T> inputList) {
 		this.inputList = inputList;
 	}
 	
 	public void initCluster() {
-    	logger.info(String.format("Creating title cluster from %d records.", inputList.size()));
+    	logger.info(String.format("Creating cluster from %d records.", inputList.size()));
     	startTime = Calendar.getInstance().getTimeInMillis();
     	
     	createClusters(inputList, mapping, clusters);
     	
     	long elapsedSecs = (Calendar.getInstance().getTimeInMillis() - startTime) / 1000;
-    	logger.info(String.format("Title cluster created, building took %d seconds", elapsedSecs));
+    	logger.info(String.format("Cluster created, building took %d seconds", elapsedSecs));
     	isInitialized = true;
 	}
 	
@@ -81,45 +77,14 @@ public class TitleClusterer {
 		return new ArrayList<Set<Long>>(clusters.values());
 	}
     	
-	public void createClusters(List<TitleForDeduplication> input,
+	public void createClusters(List<T> input,
 			Map<Long, Long> mapping, Map<Long, Set<Long>> clusters) {
 		for (int i = 0; i < input.size(); i++) {
-			TitleForDeduplication currentTitle = input.get(i);
+			T currentT = input.get(i);
 			for (int j = i + 1; j < input.size(); j++) {
-				TitleForDeduplication tmpTitle = input.get(j);
-				if (currentTitle.getTitle().equals(tmpTitle.getTitle())) {
-					// ignore same titles, these are deduplicated in previous
-					// steps
-					continue;
-				}
-				if (currentTitle.getIsbn() != null
-						&& tmpTitle.getIsbn() != null
-						&& !currentTitle.getIsbn().equals(tmpTitle.getIsbn())) {
-					// ignore different ISBNs
-					continue;
-				}
-				if (currentTitle.getCnb() != null && tmpTitle.getCnb() != null
-						&& !currentTitle.getCnb().equals(tmpTitle.getCnb())) {
-					// ignore different CNBs
-					continue;
-				}
-				if (currentTitle.getAuthorStr() != null
-						&& tmpTitle.getAuthorStr() != null
-						&& !currentTitle.getAuthorStr().equals(
-								tmpTitle.getAuthorStr())) {
-					// ignore different authors
-					continue;
-				}
-				if (!DeduplicationUtils.comparePages(currentTitle.getPages(), tmpTitle.getPages(), .05, 10)) {
-					// ignore different pages
-					continue;
-				} 
-
-				int match = StringUtils.simmilarTitleMatchPercentage(
-						currentTitle.getTitle(), tmpTitle.getTitle(),
-						TITLE_MATCH_PERCENTAGE, TITLE_PREFIX_BOUNDARY);
-				if (match > TITLE_MATCH_PERCENTAGE) {
-					writeResult(currentTitle.getId(), tmpTitle.getId());
+				T tmpT = input.get(j);
+				if (currentT.computeSimilarityPercentage(tmpT) > RECORD_MATCH_PERCENTAGE) {
+					writeResult(currentT.getId(), tmpT.getId());
 				}
 			}
 		}
@@ -164,9 +129,6 @@ public class TitleClusterer {
 		}
 	}
 	
-
-    
-    
     protected enum TempIdSingleton {
     	VALUE;
   

@@ -7,7 +7,8 @@ import org.hibernate.Session;
 import org.hibernate.transform.ResultTransformer;
 import org.springframework.stereotype.Component;
 
-import cz.mzk.recordmanager.server.dedup.TitleForDeduplication;
+import cz.mzk.recordmanager.server.dedup.clustering.TitleClusterable;
+import cz.mzk.recordmanager.server.dedup.clustering.TitleForDeduplication;
 import cz.mzk.recordmanager.server.model.Title;
 import cz.mzk.recordmanager.server.oai.dao.TitleDAO;
 
@@ -60,5 +61,35 @@ public class TitleDAOHibernate extends AbstractDomainDAOHibernate<Long, Title>
 				.setParameter(2, maxPages)
 				.setParameter(3, lang)
 				.list();
+	}
+	
+	@Override
+	@SuppressWarnings("unchecked")
+	public List<TitleClusterable> getPeriodicalsTitleForDeduplication(Long year) {
+		Session session = sessionFactory.getCurrentSession();
+		return (List<TitleClusterable>)
+				session.createSQLQuery("SELECT harvested_record_id,title FROM tmp_periodicals_years WHERE publication_year = ?")
+					.setResultTransformer(new ResultTransformer() {
+			
+						@Override
+						public Object transformTuple(Object[] tuple, String[] aliases) {
+							TitleClusterable titleClusterable = new TitleClusterable();
+							for (int i = 0; i < tuple.length; i++) {
+								switch (aliases[i]) {
+								case "harvested_record_id": titleClusterable.setId(((BigDecimal)tuple[i]).longValue()); break;
+								case "title": titleClusterable.setTitle((String)tuple[i]); break;
+								}
+							}
+							return titleClusterable;
+						}
+						
+						@SuppressWarnings("rawtypes")
+						@Override
+						public List transformList(List collection) {
+							return collection;
+						}
+					})
+					.setParameter(0, year)
+					.list();
 	}
 }

@@ -1,0 +1,20 @@
+package cz.mzk.recordmanager.server.dedup.clustering;
+
+
+/**
+ * Class implementing this interface can be used for simmiliarity clustering
+ *
+ */
+public interface Clusterable {
+
+	public Long getId();
+	
+	/**
+	 * 
+	 * @param other
+	 * @return integer representation of percentage matching between object [0, 100] 
+	 */
+	public int computeSimilarityPercentage(Clusterable other);
+	
+	
+}

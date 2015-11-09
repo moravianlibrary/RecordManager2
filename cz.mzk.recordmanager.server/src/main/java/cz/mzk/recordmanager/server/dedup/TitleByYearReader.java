@@ -11,6 +11,7 @@ import org.springframework.batch.item.UnexpectedInputException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import cz.mzk.recordmanager.server.dedup.clustering.TitleForDeduplication;
 import cz.mzk.recordmanager.server.oai.dao.TitleDAO;
 
 @Component

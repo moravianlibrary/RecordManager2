@@ -5,15 +5,18 @@ import java.util.Set;
 
 import org.springframework.batch.item.ItemProcessor;
 
-public class SimilarTitleProcessor implements
-		ItemProcessor<List<TitleForDeduplication>, List<Set<Long>>> {
+import cz.mzk.recordmanager.server.dedup.clustering.Cluster;
+import cz.mzk.recordmanager.server.dedup.clustering.Clusterable;
+
+public class SimilarTitleProcessor<T extends Clusterable> implements
+		ItemProcessor<List<T>, List<Set<Long>>> {
 
 	
 	@Override
-	public List<Set<Long>> process(List<TitleForDeduplication> titles)
+	public List<Set<Long>> process(List<T> titles)
 			throws Exception {
 		
-		TitleClusterer clusterer = new TitleClusterer(titles);
+		Cluster<T>  clusterer = new Cluster<>(titles);
 		clusterer.initCluster();
 		return clusterer.getClusters();
 
