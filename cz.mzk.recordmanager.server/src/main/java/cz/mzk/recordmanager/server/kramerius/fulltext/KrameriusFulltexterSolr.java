@@ -69,7 +69,9 @@ public class KrameriusFulltexterSolr implements KrameriusFulltexter {
 			String fulltext = (String) document.getFieldValue(FULLTEXT_FIELD);
 			String pageNum = (String) document.getFieldValue(PAGE_NUMBER_FIELD);
 			page.setUuidPage(uuid);
-			page.setFulltext(fulltext.getBytes(Charsets.UTF_8));
+			if (fulltext != null) {
+				page.setFulltext(fulltext.getBytes(Charsets.UTF_8));
+			}
 			page.setOrder(order);
 			page.setPage(pageNum);
 			pages.add(page);
