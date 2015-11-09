@@ -6,6 +6,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 import cz.mzk.recordmanager.server.model.KrameriusConfiguration;
+import cz.mzk.recordmanager.server.solr.SolrServerFactory;
 
 @Component
 public class KrameriusFulltexterFactoryImpl implements KrameriusFulltexterFactory {
@@ -13,14 +14,28 @@ public class KrameriusFulltexterFactoryImpl implements KrameriusFulltexterFactor
 	@Autowired
 	private ApplicationContext appCtx;
 
+	@Autowired
+	private SolrServerFactory solrFactory;
+
 	@Override
 	public KrameriusFulltexter create(KrameriusConfiguration config) {
-		KrameriusFulltexter fulltexter = new KrameriusFulltexterImpl(config.getUrl(), 
-				config.getAuthToken(), config.isDownloadPrivateFulltexts());
+		KrameriusFulltexter fulltexter = null;
+		switch (config.getFulltextHarvestType()) {
+			case "solr":
+				fulltexter = new KrameriusFulltexterSolr(solrFactory.create(config.getUrl()));
+				break;
+			default:
+				fulltexter = new KrameriusFulltexterFedora(config.getUrl(),
+					config.getAuthToken(), config.isDownloadPrivateFulltexts());
+		}
+		init(fulltexter);
+		return fulltexter;
+	}
+
+	private void init(KrameriusFulltexter fulltexter) {
 		AutowireCapableBeanFactory factory = appCtx.getAutowireCapableBeanFactory();
 		factory.autowireBean(fulltexter);
 		factory.initializeBean(fulltexter, "fulltexter");
-		return fulltexter;
 	}
 
 }

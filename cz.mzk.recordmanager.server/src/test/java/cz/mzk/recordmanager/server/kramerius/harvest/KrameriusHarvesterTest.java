@@ -17,6 +17,7 @@ public class KrameriusHarvesterTest extends AbstractKrameriusTest {
 
 	@Autowired
 	private SolrServerFactory solrServerFactory;
+
 	@Test
 	public void downloadRecord() throws Exception {
 		init();
