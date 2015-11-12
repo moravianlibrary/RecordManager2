@@ -32,7 +32,7 @@ import org.springframework.core.task.TaskExecutor;
 import org.springframework.jdbc.core.RowMapper;
 
 import cz.mzk.recordmanager.server.dedup.clustering.TitleClusterable;
-import cz.mzk.recordmanager.server.dedup.clustering.TitleForDeduplication;
+import cz.mzk.recordmanager.server.dedup.clustering.NonperiodicalTitleClusterable;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.springbatch.DelegatingHibernateProcessor;
 import cz.mzk.recordmanager.server.springbatch.SqlCommandTasklet;
@@ -74,6 +74,8 @@ public class DedupRecordsJobConfig {
 	private static final String TMP_TABLE_PERIODICALS_OCLC_CLUSTERS = "tmp_periodicals_oclc_clusters";
 	
 	private static final String TMP_TABLE_PERIODICALS_SIMILARITY_IDS = "tmp_periodicals_similarity_ids";
+	
+	private static final String TMP_TABLE_PERIODICALS_SFX = "tmp_periodicals_sfx";
 	
 	
 	@Autowired
@@ -127,6 +129,8 @@ public class DedupRecordsJobConfig {
 	private String prepareTempPeriodicalsOclcClustersSql = ResourceUtils.asString("job/dedupRecordsJob/prepareTempPeriodicalsOclcClustersTable.sql");
 	
 	private String prepareTempPeriodicalsYearClustersSql = ResourceUtils.asString("job/dedupRecordsJob/prepareTempPeriodicalsYearCluster.sql");
+	
+	private String prepareTempPeriodicalsSfxSql = ResourceUtils.asString("job/dedupRecordsJob/prepareDedupSfxStep.sql");
 	
 	
 	private String cleanupSql = ResourceUtils.asString("job/dedupRecordsJob/cleanup.sql");
@@ -588,20 +592,20 @@ public class DedupRecordsJobConfig {
 	}
 	
 	@Bean(name="prepareDedupSimmilarTitlesStep:yearReader")
-	public ItemReader<List<TitleForDeduplication>> yearReader() {
+	public ItemReader<List<NonperiodicalTitleClusterable>> yearReader() {
 		return new TitleByYearReader();
 	}
 	
 	@Bean(name="prepareDedupSimmilarTitlesStep:titleProcessor")
-	public ItemProcessor<List<TitleForDeduplication>,List<Set<Long>>> titleProcessor() {
-		return new SimilarTitleProcessor<TitleForDeduplication>();
+	public ItemProcessor<List<NonperiodicalTitleClusterable>,List<Set<Long>>> titleProcessor() {
+		return new SimilarTitleProcessor<NonperiodicalTitleClusterable>();
 	}
 	
 	@Bean(name = Constants.JOB_ID_DEDUP + ":prepareDedupSimmilarTitlesStep")
 	public Step prepareDedupSimmilarTitles() throws Exception {
 		return steps.get("prepareDedupSimmilarTitlesStep")
 				.listener(new StepProgressListener())
-				.<List<TitleForDeduplication>, Future<List<Set<Long>>>> chunk(10)
+				.<List<NonperiodicalTitleClusterable>, Future<List<Set<Long>>>> chunk(10)
 				.reader(yearReader())
 				.processor(asyncSimmilarityProcessor())
 				.writer(asyncSimmilarityWriter())
@@ -610,8 +614,8 @@ public class DedupRecordsJobConfig {
 	
 	@Bean(name ="prepareDedupSimmilarTitlesStep:asynprepareDedupSimmilarTitlesProcessor")
 	@StepScope
-	public AsyncItemProcessor<List<TitleForDeduplication>, List<Set<Long>>> asyncSimmilarityProcessor() {
-		AsyncItemProcessor<List<TitleForDeduplication>, List<Set<Long>>> processor = new AsyncItemProcessor<>();
+	public AsyncItemProcessor<List<NonperiodicalTitleClusterable>, List<Set<Long>>> asyncSimmilarityProcessor() {
+		AsyncItemProcessor<List<NonperiodicalTitleClusterable>, List<Set<Long>>> processor = new AsyncItemProcessor<>();
 		processor.setDelegate(new DelegatingHibernateProcessor<>(sessionFactory, titleProcessor()));
 		processor.setTaskExecutor(taskExecutor);
 		return processor;
@@ -912,6 +916,35 @@ public class DedupRecordsJobConfig {
 				.writer(dedupSimpleKeysStepWriter())
 				.build();
 	}
+	
+	/**
+	 * Deduplicate periodicals from for SFX-NLK
+	 */
+	@Bean(name = "preparePeriodicalsSfxTasklet:preparePeriodicalsSfxTasklet")
+	@StepScope
+	public Tasklet preparePeriodicalsSfxNlkTasklet() {
+		return new SqlCommandTasklet(prepareTempPeriodicalsSfxSql);
+	}
+	
+	@Bean(name = Constants.JOB_ID_DEDUP + ":preparePeriodicalsSfxNlkStep")
+	public Step preparePeriodicalsSfxNlk() {
+		return steps.get("preparePeriodicalsNlkStep")
+				.tasklet(preparePeriodicalsYearClustersTasklet())
+				.listener(new StepProgressListener())
+				.build();
+	}
+	
+	@Bean(name = Constants.JOB_ID_DEDUP + ":dedupPeriodicalsSfxStep")
+	public Step dedupPeriodicalsSfxStep() throws Exception {
+		return steps.get("dedupPeriodicalsSfxStep")
+				.listener(new StepProgressListener())
+				.<List<Long>, List<HarvestedRecord>> chunk(100)
+				.reader(dedupSimpleKeysReader(TMP_TABLE_PERIODICALS_SFX))
+				.processor(dedupSimpleKeysStepProsessor())
+				.writer(dedupSimpleKeysStepWriter())
+				.build();
+	}
+	
 	
 
 	/**
