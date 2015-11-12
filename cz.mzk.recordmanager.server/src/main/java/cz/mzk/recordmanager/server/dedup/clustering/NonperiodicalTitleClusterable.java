@@ -2,7 +2,11 @@ package cz.mzk.recordmanager.server.dedup.clustering;
 
 import cz.mzk.recordmanager.server.util.DeduplicationUtils;
 
-public class TitleForDeduplication extends TitleClusterable {
+public class NonperiodicalTitleClusterable extends TitleClusterable {
+	
+	private final int PAGING_PERCENTAGE_BOUDNARY = 5;
+	
+	private final int MAX_PAGING_DIFFERENCE = 10;
 	
 	private Long harvestedRecordId;
 	
@@ -56,7 +60,7 @@ public class TitleForDeduplication extends TitleClusterable {
 
 	@Override
 	public String toString() {
-		return "TitleForDeduplication [id=" + this.getId() + ", harvestedRecordId="
+		return "NonperiodicalTitleClusterable [id=" + this.getId() + ", harvestedRecordId="
 				+ harvestedRecordId + ", title=" + this.getTitle() + ", isbn=" + isbn
 				+ ", cnb=" + cnb + ", authorStr=" + authorStr + ", pages="
 				+ pages + "]";
@@ -64,10 +68,10 @@ public class TitleForDeduplication extends TitleClusterable {
 
 	@Override
 	public int computeSimilarityPercentage(Clusterable other) {
-		if (other == null || !(other instanceof TitleForDeduplication)) {
+		if (other == null || !(other instanceof NonperiodicalTitleClusterable)) {
 			return 0;
 		}
-		TitleForDeduplication otherTitle = (TitleForDeduplication) other;
+		NonperiodicalTitleClusterable otherTitle = (NonperiodicalTitleClusterable) other;
 		
 		if (this.getTitle().equals(otherTitle.getTitle())) {
 			// ignore same titles, these are deduplicated in previous
@@ -93,7 +97,7 @@ public class TitleForDeduplication extends TitleClusterable {
 			return 0;
 		}
 
-		if (!DeduplicationUtils.comparePages(this.getPages(), otherTitle.getPages(), .05, 10)) {
+		if (!DeduplicationUtils.comparePages(this.getPages(), otherTitle.getPages(), PAGING_PERCENTAGE_BOUDNARY , MAX_PAGING_DIFFERENCE)) {
 			// ignore different pages
 			return 0;
 		} 

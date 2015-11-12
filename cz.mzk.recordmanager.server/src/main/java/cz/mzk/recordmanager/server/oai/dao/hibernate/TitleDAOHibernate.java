@@ -8,7 +8,7 @@ import org.hibernate.transform.ResultTransformer;
 import org.springframework.stereotype.Component;
 
 import cz.mzk.recordmanager.server.dedup.clustering.TitleClusterable;
-import cz.mzk.recordmanager.server.dedup.clustering.TitleForDeduplication;
+import cz.mzk.recordmanager.server.dedup.clustering.NonperiodicalTitleClusterable;
 import cz.mzk.recordmanager.server.model.Title;
 import cz.mzk.recordmanager.server.oai.dao.TitleDAO;
 
@@ -19,9 +19,9 @@ public class TitleDAOHibernate extends AbstractDomainDAOHibernate<Long, Title>
 	
 	@Override
 	@SuppressWarnings("unchecked")
-	public List<TitleForDeduplication> getTitleForDeduplicationByYear(Long year, int minPages, int maxPages, String lang) {
+	public List<NonperiodicalTitleClusterable> getTitleForDeduplicationByYear(Long year, int minPages, int maxPages, String lang) {
 		Session session = sessionFactory.getCurrentSession();
-		return (List<TitleForDeduplication>)
+		return (List<NonperiodicalTitleClusterable>)
 				session.createSQLQuery("SELECT id,harvested_record_id,title,isbn,cnb,author_string,pages "
 						+ "FROM titles_for_simmilarity_searching_view "
 						+ "WHERE publication_year = ? and pages BETWEEN ? and ? AND lang = ?")
@@ -29,7 +29,7 @@ public class TitleDAOHibernate extends AbstractDomainDAOHibernate<Long, Title>
 
 					@Override
 					public Object transformTuple(Object[] tuple, String[] aliases) {
-						TitleForDeduplication title = new TitleForDeduplication();
+						NonperiodicalTitleClusterable title = new NonperiodicalTitleClusterable();
 						for (int i = 0; i < tuple.length; i++) {
 							switch (aliases[i]) {
 							case "id": title.setId(((BigDecimal)tuple[i]).longValue()); break;

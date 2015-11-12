@@ -43,7 +43,7 @@ public class DedupTitleAuthItemProcessor extends DedupSimpleKeysStepProcessor {
 		Long pagesA = hrA.getPages();
 		Long pagesB = hrB.getPages();
 		
-		if (!DeduplicationUtils.comparePages(pagesA, pagesB, .05, 10)) {
+		if (!DeduplicationUtils.comparePages(pagesA, pagesB, 5, 10)) {
 			return false;
 		}
 		

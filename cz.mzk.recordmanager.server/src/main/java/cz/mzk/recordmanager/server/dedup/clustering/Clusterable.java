@@ -2,7 +2,7 @@ package cz.mzk.recordmanager.server.dedup.clustering;
 
 
 /**
- * Class implementing this interface can be used for simmiliarity clustering
+ * Class implementing this interface can be used for similarity clustering
  *
  */
 public interface Clusterable {

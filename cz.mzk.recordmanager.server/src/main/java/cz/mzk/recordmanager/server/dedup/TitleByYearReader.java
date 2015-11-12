@@ -11,11 +11,11 @@ import org.springframework.batch.item.UnexpectedInputException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import cz.mzk.recordmanager.server.dedup.clustering.TitleForDeduplication;
+import cz.mzk.recordmanager.server.dedup.clustering.NonperiodicalTitleClusterable;
 import cz.mzk.recordmanager.server.oai.dao.TitleDAO;
 
 @Component
-public class TitleByYearReader implements ItemReader<List<TitleForDeduplication>> {
+public class TitleByYearReader implements ItemReader<List<NonperiodicalTitleClusterable>> {
 
 	
 	@Autowired
@@ -44,7 +44,7 @@ public class TitleByYearReader implements ItemReader<List<TitleForDeduplication>
 	}
 	
 	@Override
-	public List<TitleForDeduplication> read() throws Exception, UnexpectedInputException,
+	public List<NonperiodicalTitleClusterable> read() throws Exception, UnexpectedInputException,
 			ParseException, NonTransientResourceException {
 		
 		if (currentYear > MAX_YEAR) {
@@ -57,7 +57,7 @@ public class TitleByYearReader implements ItemReader<List<TitleForDeduplication>
 		}
 		
 		Triple<Integer, Integer, String> interval = paggingIntervals.get(paggingIndex++);
-		List<TitleForDeduplication> result = titleDao.getTitleForDeduplicationByYear(currentYear, interval.getLeft(), interval.getMiddle(), interval.getRight());
+		List<NonperiodicalTitleClusterable> result = titleDao.getTitleForDeduplicationByYear(currentYear, interval.getLeft(), interval.getMiddle(), interval.getRight());
 		
 		return result;
 	}

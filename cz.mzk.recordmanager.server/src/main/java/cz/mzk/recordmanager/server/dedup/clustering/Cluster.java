@@ -3,6 +3,7 @@ package cz.mzk.recordmanager.server.dedup.clustering;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -10,8 +11,6 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import cz.mzk.recordmanager.server.model.Title;
 
 public class Cluster<T extends Clusterable>  {
 	
@@ -21,16 +20,14 @@ public class Cluster<T extends Clusterable>  {
 	
 	private final List<T> inputList;
 	
-	private Map<Long, Long> mapping = new ConcurrentHashMap<>();
+	private Map<Long, Long> mapping = new HashMap<>();
 	
-	private Map<Long, Set<Long>> clusters = new ConcurrentHashMap<>();
+	private Map<Long, Set<Long>> clusters = new HashMap<>();
 	
 	boolean isInitialized = false;
 	
 	private long startTime = 0L;
-	/**
-	 * @param inputList
-	 */
+
 	public Cluster(List<T> inputList) {
 		this.inputList = inputList;
 	}
@@ -51,7 +48,7 @@ public class Cluster<T extends Clusterable>  {
 	}
 	
 	/**
-	 * return set of titles that are similar enough to given {@link Title}
+	 * return set of titles that are similar enough to given {@link Clusterable}
 	 * @param title
 	 * @return
 	 */
@@ -77,7 +74,7 @@ public class Cluster<T extends Clusterable>  {
 		return new ArrayList<Set<Long>>(clusters.values());
 	}
     	
-	public void createClusters(List<T> input,
+	protected void createClusters(List<T> input,
 			Map<Long, Long> mapping, Map<Long, Set<Long>> clusters) {
 		for (int i = 0; i < input.size(); i++) {
 			T currentT = input.get(i);
