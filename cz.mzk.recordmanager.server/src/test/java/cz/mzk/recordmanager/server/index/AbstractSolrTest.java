@@ -9,10 +9,12 @@ import static org.easymock.EasyMock.resetToNice;
 import org.apache.solr.client.solrj.embedded.EmbeddedSolrServer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.annotations.BeforeMethod;
+
 import cz.mzk.recordmanager.server.AbstractTest;
 import cz.mzk.recordmanager.server.solr.SolrIndexingExceptionHandler;
 import cz.mzk.recordmanager.server.solr.SolrServerFacadeImpl;
 import cz.mzk.recordmanager.server.solr.SolrServerFactory;
+import cz.mzk.recordmanager.server.solr.SolrServerFactoryImpl.Mode;
 
 public class AbstractSolrTest extends AbstractTest {
 
@@ -29,7 +31,7 @@ public class AbstractSolrTest extends AbstractTest {
 		server.deleteByQuery("*:*");
 		server.commit();
 		resetToNice(solrServerFactory);
-		expect(solrServerFactory.create(eq(SOLR_URL), anyObject(SolrIndexingExceptionHandler.class))).andReturn(new SolrServerFacadeImpl(server)).anyTimes();
+		expect(solrServerFactory.create(eq(SOLR_URL), anyObject(Mode.class), anyObject(SolrIndexingExceptionHandler.class))).andReturn(new SolrServerFacadeImpl(server)).anyTimes();
 		expect(solrServerFactory.create(eq(SOLR_URL))).andReturn(new SolrServerFacadeImpl(server)).anyTimes();
 		replay(solrServerFactory);
 	}

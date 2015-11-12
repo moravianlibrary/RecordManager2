@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.apache.commons.io.IOUtils;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrQuery.ORDER;
@@ -20,6 +21,7 @@ import org.slf4j.LoggerFactory;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecord.HarvestedRecordUniqueId;
 import cz.mzk.recordmanager.server.solr.SolrServerFacade;
+import cz.mzk.recordmanager.server.solr.SolrServerFactoryImpl.Mode;
 import cz.mzk.recordmanager.server.solr.SolrServerFactory;
 import cz.mzk.recordmanager.server.util.HttpClient;
 import cz.mzk.recordmanager.server.util.SolrUtils;
@@ -122,7 +124,7 @@ public class KrameriusHarvester {
 	public SolrDocumentList sendRequest(String nextPid) {
 		SolrDocumentList documents = new SolrDocumentList();
 
-		SolrServerFacade solr = solrServerFactory.create(params.getUrl());
+		SolrServerFacade solr = solrServerFactory.create(params.getUrl(), Mode.KRAMERIUS);
 
 		if (solr instanceof HttpSolrServer) {
 			((HttpSolrServer) solr).setParser(new XMLResponseParser());
