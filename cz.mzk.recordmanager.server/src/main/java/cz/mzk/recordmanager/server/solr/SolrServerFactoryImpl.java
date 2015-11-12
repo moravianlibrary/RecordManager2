@@ -44,7 +44,7 @@ public class SolrServerFactoryImpl implements SolrServerFactory {
 
 	@Override
 	public SolrServerFacade create(String url, Mode mode) {
-		return create(url, Mode.DEFAULT, RethrowingSolrIndexingExceptionHandler.INSTANCE);
+		return create(url, mode, RethrowingSolrIndexingExceptionHandler.INSTANCE);
 	}
 
 }
