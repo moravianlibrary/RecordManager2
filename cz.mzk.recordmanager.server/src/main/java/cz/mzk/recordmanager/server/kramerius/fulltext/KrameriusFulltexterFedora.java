@@ -21,10 +21,10 @@ import com.google.common.io.ByteStreams;
 import cz.mzk.recordmanager.server.model.FulltextMonography;
 import cz.mzk.recordmanager.server.util.HttpClient;
 
-public class KrameriusFulltexterImpl implements KrameriusFulltexter {
+public class KrameriusFulltexterFedora implements KrameriusFulltexter {
 
 	private static Logger logger = LoggerFactory
-			.getLogger(KrameriusFulltexterImpl.class);
+			.getLogger(KrameriusFulltexterFedora.class);
 
 	@Autowired
 	private HttpClient httpClient;
@@ -36,7 +36,7 @@ public class KrameriusFulltexterImpl implements KrameriusFulltexter {
 	// defaults to false, processor may set up true
 	private boolean downloadPrivateFulltexts = false;
 
-	public KrameriusFulltexterImpl(String kramApiUrl, String authToken,
+	public KrameriusFulltexterFedora(String kramApiUrl, String authToken,
 			boolean downloadPrivateFulltexts) {
 		super();
 		this.kramApiUrl = kramApiUrl;

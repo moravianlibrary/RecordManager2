@@ -15,6 +15,7 @@ import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordDAO;
 import cz.mzk.recordmanager.server.solr.LoggingSolrIndexingExceptionHandler;
 import cz.mzk.recordmanager.server.solr.SolrServerFacade;
 import cz.mzk.recordmanager.server.solr.SolrServerFactory;
+import cz.mzk.recordmanager.server.solr.SolrServerFactoryImpl.Mode;
 
 public class IndexIndividualRecordsTasklet implements Tasklet {
 
@@ -42,7 +43,7 @@ public class IndexIndividualRecordsTasklet implements Tasklet {
 	@Override
 	public RepeatStatus execute(StepContribution contribution,
 			ChunkContext chunkContext) throws Exception {
-		SolrServerFacade solrServer = solrServerFactory.create(solrUrl, LoggingSolrIndexingExceptionHandler.INSTANCE);
+		SolrServerFacade solrServer = solrServerFactory.create(solrUrl, Mode.DEFAULT, LoggingSolrIndexingExceptionHandler.INSTANCE);
 		for (String solrId : recordIds) {
 			HarvestedRecord rec = harvestedRecordDao.findBySolrId(solrId);
 			if (rec == null) {

@@ -312,3 +312,6 @@ ALTER TABLE kramerius_conf ADD COLUMN auth_token varchar(128);
 
 -- 5. 11. 2015 mjtecka
 ALTER TABLE kramerius_conf ADD COLUMN download_private_fulltexts boolean DEFAULT FALSE;
+
+-- 9. 11. 2015 xrosecky
+ALTER TABLE kramerius_conf ADD COLUMN fulltext_harvest_type VARCHAR(128) DEFAULT 'fedora';

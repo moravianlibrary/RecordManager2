@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import cz.mzk.recordmanager.server.solr.LoggingSolrIndexingExceptionHandler;
 import cz.mzk.recordmanager.server.solr.SolrServerFacade;
 import cz.mzk.recordmanager.server.solr.SolrServerFactory;
+import cz.mzk.recordmanager.server.solr.SolrServerFactoryImpl.Mode;
 
 public class SolrIndexWriter implements ItemWriter<Future<List<SolrInputDocument>>>, StepExecutionListener {
 
@@ -67,7 +68,7 @@ public class SolrIndexWriter implements ItemWriter<Future<List<SolrInputDocument
 
 	@Override
 	public void beforeStep(StepExecution stepExecution) {
-		server = factory.create(solrUrl, LoggingSolrIndexingExceptionHandler.INSTANCE);
+		server = factory.create(solrUrl, Mode.DEFAULT, LoggingSolrIndexingExceptionHandler.INSTANCE);
 	}
 
 	@Override

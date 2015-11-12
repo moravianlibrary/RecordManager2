@@ -3,6 +3,7 @@ package cz.mzk.recordmanager.server.kramerius.harvest;
 import static org.easymock.EasyMock.and;
 import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.capture;
+import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.reset;
@@ -24,6 +25,7 @@ import cz.mzk.recordmanager.server.AbstractTest;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.solr.SolrServerFacade;
 import cz.mzk.recordmanager.server.solr.SolrServerFactory;
+import cz.mzk.recordmanager.server.solr.SolrServerFactoryImpl.Mode;
 import cz.mzk.recordmanager.server.util.HttpClient;
 
 public class AbstractKrameriusTest extends AbstractTest {
@@ -47,7 +49,7 @@ public class AbstractKrameriusTest extends AbstractTest {
 		replay(httpClient);
 		
 		reset(solrServerFactory);
-		expect(solrServerFactory.create(SOLR_URL)).andReturn(mockedSolrServer).anyTimes();
+		expect(solrServerFactory.create(eq(SOLR_URL), eq(Mode.KRAMERIUS))).andReturn(mockedSolrServer).anyTimes();
 		replay(solrServerFactory);
 		
 		reset(mockedSolrServer);

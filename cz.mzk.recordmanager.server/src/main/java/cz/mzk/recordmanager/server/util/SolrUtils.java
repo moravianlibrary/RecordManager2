@@ -42,8 +42,16 @@ public class SolrUtils {
 
 	}
 
+	public static String escape(String val) {
+		return ClientUtils.escapeQueryChars(val);
+	}
+
 	public static String createFieldQuery(String field, String value) {
 		return String.format("%s:%s", field, value);
+	}
+
+	public static String createEscapedFieldQuery(String field, String value) {
+		return String.format("%s:%s", field, escape(value));
 	}
 
 	public static String createRange(String from, String to) {

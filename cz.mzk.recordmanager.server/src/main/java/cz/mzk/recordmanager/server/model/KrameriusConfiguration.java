@@ -29,7 +29,10 @@ public class KrameriusConfiguration extends ImportConfiguration {
 	
 	@Column(name="download_private_fulltexts")
 	private boolean downloadPrivateFulltexts;
-	
+
+	@Column(name="fulltext_harvest_type")
+	private String fulltextHarvestType = "fedora";
+
 	public String getUrl() {
 		return url;
 	}
@@ -77,6 +80,13 @@ public class KrameriusConfiguration extends ImportConfiguration {
 	public void setDownloadPrivateFulltexts(boolean downloadPrivateFulltexts) {
 		this.downloadPrivateFulltexts = downloadPrivateFulltexts;
 	}
-	
-	
+
+	public String getFulltextHarvestType() {
+		return fulltextHarvestType;
+	}
+
+	public void setFulltextHarvestType(String fulltextHarvestType) {
+		this.fulltextHarvestType = fulltextHarvestType;
+	}
+
 }

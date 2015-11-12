@@ -101,7 +101,7 @@ public class KrameriusFulltextJobConfig {
 		}
 				
 		pqpf.setSortKeys(ImmutableMap.of("import_conf_id",
-				Order.ASCENDING, "id", Order.ASCENDING));
+				Order.ASCENDING, "record_id", Order.ASCENDING));
 		reader.setRowMapper(harvestedRecordRowMapper);
 		reader.setPageSize(PAGE_SIZE);
 		reader.setQueryProvider(pqpf.getObject());
