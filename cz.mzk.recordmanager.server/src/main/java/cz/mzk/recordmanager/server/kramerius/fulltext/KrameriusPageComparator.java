@@ -9,6 +9,8 @@ public enum KrameriusPageComparator implements Comparator<SolrDocument> {
 
 	INSTANCE;
 
+	private static final String DEFAULT_PAGE = "";
+
 	@Override
 	public int compare(SolrDocument doc1, SolrDocument doc2) {
 		String page1 = getPage(doc1);
@@ -30,6 +32,9 @@ public enum KrameriusPageComparator implements Comparator<SolrDocument> {
 
 	private String getPage(SolrDocument doc) {
 		String page = (String) doc.getFieldValue(KrameriusSolrConstants.PAGE_ORDER_FIELD);
+		if (page == null) {
+			page = DEFAULT_PAGE;
+		}
 		return page;
 	}
 
