@@ -315,3 +315,6 @@ ALTER TABLE kramerius_conf ADD COLUMN download_private_fulltexts boolean DEFAULT
 
 -- 9. 11. 2015 xrosecky
 ALTER TABLE kramerius_conf ADD COLUMN fulltext_harvest_type VARCHAR(128) DEFAULT 'fedora';
+
+-- 13.11.2015 mjtecka
+ALTER TABLE fulltext_monography ALTER COLUMN uuid_page TYPE VARCHAR(50);

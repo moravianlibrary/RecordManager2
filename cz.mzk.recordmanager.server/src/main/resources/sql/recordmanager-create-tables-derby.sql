@@ -204,7 +204,7 @@ CREATE TABLE antikvariaty_catids (
 CREATE TABLE fulltext_monography (
   id                  DECIMAL(10) PRIMARY KEY,
   harvested_record_id DECIMAL(10),
-  uuid_page           VARCHAR(42),
+  uuid_page           VARCHAR(50),
   is_private          BOOLEAN, 
   order_in_monography DECIMAL(10),
   page                VARCHAR(20),
