@@ -9,10 +9,8 @@ FROM (
   WHERE title IN (SELECT t.title FROM harvested_record hr INNER JOIN title t ON hr.id = t.harvested_record_id WHERE import_conf_id = 1302)
 ) AS safe_titles
 INNER JOIN harvested_record hr2 ON hr2.id = safe_titles.harvested_record_id
-WHERE hr2.id IN (
-  SELECT hrfl.harvested_record_id FROM harvested_record_format_link hrfl 
-  INNER JOIN harvested_record_format hrf ON hrf.id = hrfl.harvested_record_format_id
-  WHERE hrf.name = 'PERIODICALS')
+LEFT OUTER JOIN tmp_periodicals_ids tpi ON hr.id = tpi.id
+WHERE tps.id IS NOT NULL
 GROUP BY safe_titles.title
 HAVING count(safe_titles.title) > 1
   AND count(DISTINCT hr2.dedup_record_id) + sum(case when hr2.dedup_record_id IS NULL THEN 1 else 0 END) != 1

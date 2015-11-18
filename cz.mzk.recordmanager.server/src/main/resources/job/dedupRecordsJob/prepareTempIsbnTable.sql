@@ -11,13 +11,11 @@ SELECT
 FROM harvested_record hr 
   INNER JOIN isbn i ON hr.id = i.harvested_record_id 
   INNER JOIN title t ON hr.id = t.harvested_record_id
-  INNER JOIN harvested_record_format_link hrl on hr.id = hrl.harvested_record_id
+  INNER JOIN harvested_record_format_link hrl ON hr.id = hrl.harvested_record_id
+  LEFT OUTER JOIN tmp_periodicals_ids tpi ON hr.id = tpi.id
 WHERE t.order_in_record = 1 
-  AND i.order_in_record = 1 
-  AND hr.id NOT IN (
-    SELECT hrfl.harvested_record_id FROM harvested_record_format_link hrfl 
-    INNER JOIN harvested_record_format hrf ON hrf.id = hrfl.harvested_record_format_id
-    WHERE hrf.name = 'PERIODICALS')
+  AND i.order_in_record = 1
+  AND tpi.id IS NULL
 GROUP BY i.isbn,t.title,hr.publication_year,hrl.harvested_record_format_id
 HAVING COUNT(DISTINCT hr.id) > 1 
   AND count(DISTINCT dedup_record_id) + sum(case when dedup_record_id is null then 1 else 0 end) != 1

@@ -7,10 +7,8 @@ SELECT
   array_to_string(array_agg(hr.id), ',')  id_array
 FROM harvested_record hr
   INNER JOIN issn i ON hr.id = i.harvested_record_id
-WHERE hr.id IN (
-  SELECT hrfl.harvested_record_id FROM harvested_record_format_link hrfl 
-  INNER JOIN harvested_record_format hrf ON hrf.id = hrfl.harvested_record_format_id
-  WHERE hrf.name = 'PERIODICALS')
+  LEFT OUTER JOIN tmp_periodicals_ids tpi ON hr.id = tpi.id
+WHERE tpi.id IS NOT NULL
 GROUP BY i.issn
 HAVING COUNT(DISTINCT hr.id) > 1 
   AND count(DISTINCT dedup_record_id) + sum(case when dedup_record_id is null then 1 else 0 end) != 1
