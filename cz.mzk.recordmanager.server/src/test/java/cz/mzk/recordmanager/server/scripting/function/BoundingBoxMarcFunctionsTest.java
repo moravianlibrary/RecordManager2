@@ -50,7 +50,6 @@ public class BoundingBoxMarcFunctionsTest extends AbstractTest {
 		data.add("034 $aa $b200000 $dE0115843 $eE0185426 $fN0510158 $gN0483256");
 		MarcRecord record = MarcRecordFactory.recordFactory(data);
 		String result = functions.getBoundingBoxAsPolygon(record);
-		System.out.println(result);
 		Assert.assertEquals(result, "POLYGON((11.979 48.549, 18.907 48.549, 18.907 51.033, 11.979 51.033, 11.979 48.549))");
 	}
 

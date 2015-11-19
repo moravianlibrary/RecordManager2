@@ -2,6 +2,7 @@ package cz.mzk.recordmanager.server.scripting.marc.function;
 
 import java.text.MessageFormat;
 import java.util.List;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -31,8 +32,12 @@ public strictfp class BoundingBoxMarcFunctions implements MarcRecordFunctions {
 		if (points == null) {
 			return null;
 		}
-		return MessageFormat.format("POLYGON(({0} {1}, {2} {1}, {2} {3}, {0} {3}, {0} {1}))",
-				points[0], points[1], points[2], points[3]);
+		
+		// different Locale settings can lead to different values - hard setting Locale.US, which produces desired format
+		MessageFormat mf = new MessageFormat("POLYGON(({0} {1}, {2} {1}, {2} {3}, {0} {3}, {0} {1}))");
+		Object[] arguments = {points[0], points[1], points[2], points[3]};
+		mf.setLocale(Locale.US);
+		return mf.format(arguments );
 	}
 
 	public String getBoundingBoxAsPolygon(MarcFunctionContext ctx) {
