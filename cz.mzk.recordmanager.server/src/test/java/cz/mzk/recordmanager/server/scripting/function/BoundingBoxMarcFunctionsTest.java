@@ -1,6 +1,5 @@
 package cz.mzk.recordmanager.server.scripting.function;
 
-import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
