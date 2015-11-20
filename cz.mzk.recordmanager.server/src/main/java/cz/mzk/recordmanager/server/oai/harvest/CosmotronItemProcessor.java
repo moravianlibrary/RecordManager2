@@ -230,8 +230,8 @@ public class CosmotronItemProcessor implements ItemProcessor<List<OAIRecord>, Li
 	}
 	
 	protected String parseIdFrom773(String s){
-		s = s.replaceAll("cbvk_us_cat\\*", "CbvkUsCat/");
-		s = s.replaceAll("li_us_cat\\*", "LiUsCat/");
+		s = Character.toUpperCase(s.charAt(0)) + s.substring(1);
+		s = s.replaceAll("_us_cat\\*", "UsCat/");
 		return s;
 	}
 	
