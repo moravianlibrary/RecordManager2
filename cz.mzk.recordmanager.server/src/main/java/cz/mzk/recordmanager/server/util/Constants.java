@@ -8,6 +8,7 @@ public class Constants {
 	public static final String JOB_ID_HARVEST_AUTH		= "oaiHarvestAuthorityJob";
 	public static final String JOB_ID_HARVEST_ONE_BY_ONE = "oaiHarvestOneByOneJob";
 	public static final String JOB_ID_HARVEST_KRAMERIUS = "krameriusHarvestJob";
+	public static final String JOB_ID_HARVEST_COSMOTRON = "cosmotronHarvestJob";
 	public static final String JOB_ID_FULLTEXT_KRAMERIUS = "krameriusFulltextJob";
 	public static final String JOB_ID_HARVEST_SINGLE	= "oaiHarvestSingleRecordJob";
 	public static final String JOB_ID_DEDUP				= "dedupRecordsJob";
@@ -36,6 +37,7 @@ public class Constants {
 	
 	public static final String JOB_PARAM_OUT_FILE		= "outFile";
 	public static final String JOB_PARAM_IN_FILE		= "inFile";
+	public static final String JOB_PARAM_DELETED_OUT_FILE = "deletedOutFile";
 	
 	public static final String JOB_PARAM_TIMESTAMP		= "timestamp";
 	

@@ -43,6 +43,7 @@ import cz.mzk.recordmanager.server.kramerius.harvest.KrameriusHarvestJobConfig;
 import cz.mzk.recordmanager.server.kramerius.harvest.KrameriusHarvesterFactory;
 import cz.mzk.recordmanager.server.kramerius.harvest.KrameriusHarvesterFactoryImpl;
 import cz.mzk.recordmanager.server.miscellaneous.MiscellaneousJobsConfig;
+import cz.mzk.recordmanager.server.oai.harvest.CosmotronHarvestJobConfig;
 import cz.mzk.recordmanager.server.oai.harvest.DeleteAllHarvestsJobConfig;
 import cz.mzk.recordmanager.server.oai.harvest.OAIHarvestJobConfig;
 import cz.mzk.recordmanager.server.oai.harvest.OAIHarvesterFactory;
@@ -165,6 +166,7 @@ public class AppConfig extends DefaultBatchConfigurer {
 				OAIHarvestJobConfig.class,
 				KrameriusFulltextJobConfig.class,
 				KrameriusHarvestJobConfig.class,
+				CosmotronHarvestJobConfig.class,
 				DedupRecordsJobConfig.class,
 				IndexRecordsToSolrJobConfig.class,
 				DeleteAllHarvestsJobConfig.class,

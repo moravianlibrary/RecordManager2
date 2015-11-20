@@ -5,6 +5,7 @@ DELETE FROM batch_step_execution;
 DELETE FROM batch_job_execution;
 DELETE FROM batch_job_instance;
 
+DELETE FROM cosmotron_996;
 DELETE FROM title;
 DELETE FROM sigla;
 DELETE FROM oclc;

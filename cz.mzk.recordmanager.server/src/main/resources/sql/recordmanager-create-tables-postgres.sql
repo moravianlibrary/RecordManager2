@@ -214,3 +214,15 @@ CREATE TABLE skat_keys (
   manually_merged     BOOLEAN DEFAULT FALSE,
   CONSTRAINT skat_keys_pk PRIMARY KEY(skat_record_id,sigla,local_record_id)
 );
+
+CREATE TABLE cosmotron_996 (
+  id                   DECIMAL(10) PRIMARY KEY,
+  harvested_record_id  DECIMAL(10),
+  import_conf_id       DECIMAL(10),
+  record_id            VARCHAR(128),
+  harvested            TIMESTAMP,
+  updated              TIMESTAMP,
+  deleted              TIMESTAMP,
+  raw_record           BYTEA,
+  FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE
+ );
