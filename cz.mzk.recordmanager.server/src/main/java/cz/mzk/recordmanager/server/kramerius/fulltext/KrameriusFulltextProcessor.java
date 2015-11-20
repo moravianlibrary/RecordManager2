@@ -18,6 +18,7 @@ import cz.mzk.recordmanager.server.metadata.MetadataDublinCoreRecord;
 import cz.mzk.recordmanager.server.model.FulltextMonography;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.model.KrameriusConfiguration;
+import cz.mzk.recordmanager.server.oai.dao.FulltextMonographyDAO;
 import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordDAO;
 import cz.mzk.recordmanager.server.oai.dao.KrameriusConfigurationDAO;
 import cz.mzk.recordmanager.server.util.HibernateSessionSynchronizer;
@@ -40,6 +41,9 @@ public class KrameriusFulltextProcessor implements
 	@Autowired
 	private HarvestedRecordDAO recordDao;
 
+	@Autowired
+	private FulltextMonographyDAO fmDao;
+	
 	@Autowired
 	private HibernateSessionSynchronizer sync;
 
@@ -94,6 +98,13 @@ public class KrameriusFulltextProcessor implements
 			List<FulltextMonography> pages = fulltexter
 					.getFulltextObjects(rootUuid);
 
+			//delete old FulltextMonography from database before adding new ones
+			if (!rec.getFulltextMonography().isEmpty()) {
+				for (FulltextMonography fm: rec.getFulltextMonography()) {
+					fmDao.delete(fm);
+				}
+			}
+			
 			rec.setFulltextMonography(pages);
 		} else {
 			logger.debug("Processor: privacy condition is NOT fulfilled, skipping record");
