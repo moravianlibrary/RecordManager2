@@ -101,6 +101,7 @@ public class ApacheHttpClient implements HttpClient, Closeable {
 		CloseableHttpResponse result = httpClient.execute(get);
 		int statusCode = result.getStatusLine().getStatusCode();
 		if (statusCode != 200) {
+			result.close();
 			throw new IOException(String.format("Bad status code: %s", statusCode));
 		}
 		InputStream is = result.getEntity().getContent();
