@@ -33,7 +33,7 @@ public class KrameriusFulltextProcessor implements
 	private KrameriusFulltexterFactory krameriusFulltexterFactory;
 
 	private KrameriusFulltexter fulltexter;
-	
+
 	@Autowired
 	private KrameriusConfigurationDAO configDao;
 
@@ -48,7 +48,7 @@ public class KrameriusFulltextProcessor implements
 
 	// configuration
 	private Long confId;
-	
+
 	private boolean downloadPrivateFulltexts;
 
 	public KrameriusFulltextProcessor(Long confId) {
@@ -60,6 +60,8 @@ public class KrameriusFulltextProcessor implements
 	public void beforeStep(StepExecution stepExecution) {
 		try (SessionBinder sess = sync.register()) {
 			KrameriusConfiguration config = configDao.get(confId);
+			downloadPrivateFulltexts = configDao.get(confId)
+					.isDownloadPrivateFulltexts();
 			fulltexter = krameriusFulltexterFactory.create(config);
 		}
 	}
@@ -89,7 +91,8 @@ public class KrameriusFulltextProcessor implements
 			logger.debug("Processor: privacy condition fulfilled, reading pages");
 
 			String rootUuid = rec.getUniqueId().getRecordId();
-			List<FulltextMonography> pages = fulltexter.getFulltextObjects(rootUuid);
+			List<FulltextMonography> pages = fulltexter
+					.getFulltextObjects(rootUuid);
 
 			rec.setFulltextMonography(pages);
 		} else {

@@ -1,5 +1,7 @@
 package cz.mzk.recordmanager.server.kramerius.fulltext;
 
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -31,6 +33,8 @@ import cz.mzk.recordmanager.server.util.Constants;
 @Configuration
 public class KrameriusFulltextJobConfig {
 
+	private static final Date DATE_OVERRIDEN_BY_EXPRESSION = null;
+	
 	public static final Long LONG_OVERRIDEN_BY_EXPRESSION = null;
 
 	private static final int PAGE_SIZE = 2;
@@ -64,14 +68,14 @@ public class KrameriusFulltextJobConfig {
 		return steps
 				.get("step")
 				.<HarvestedRecord, HarvestedRecord> chunk(1)
-				.reader(reader(LONG_OVERRIDEN_BY_EXPRESSION, LONG_OVERRIDEN_BY_EXPRESSION, LONG_OVERRIDEN_BY_EXPRESSION))
+				.reader(reader(LONG_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION))
 				.processor(krameriusFulltextProcessor(LONG_OVERRIDEN_BY_EXPRESSION))
 				.writer(krameriusFulltextWriter())
 				.build();
 	}
 	
 	
-	/* reads document uuids for given config (may be limited by database HarvestedRecord ids)
+	/* reads document uuids for given config (may be limited by update date)
 	 * returns ItemReader for HarvestedRecord(s)
 	 */
 	
@@ -79,8 +83,15 @@ public class KrameriusFulltextJobConfig {
 	@StepScope
 	public ItemReader<HarvestedRecord> reader(@Value("#{jobParameters["
 			+ Constants.JOB_PARAM_CONF_ID + "]}") Long configId, 
-			@Value("#{jobParameters[" + Constants.JOB_PARAM_FULLTEXT_FIRST + "]}") Long firstId,
-			@Value("#{jobParameters[" + Constants.JOB_PARAM_FULLTEXT_LAST + "]}") Long lastId) throws Exception {
+			@Value("#{stepExecutionContext[" + Constants.JOB_PARAM_FROM_DATE
+					+ "] " + "?:jobParameters[ "
+					+ Constants.JOB_PARAM_FROM_DATE + "]}") Date from,
+			@Value("#{stepExecutionContext[" + Constants.JOB_PARAM_UNTIL_DATE
+					+ "]" + "?:jobParameters[" + Constants.JOB_PARAM_UNTIL_DATE
+					+ "]}") Date to) throws Exception {
+		
+		Timestamp fromStamp= null;
+		Timestamp toStamp = null; 
 		
 		JdbcPagingItemReader<HarvestedRecord> reader = new JdbcPagingItemReader<HarvestedRecord>();
 		SqlPagingQueryProviderFactoryBean pqpf = new SqlPagingQueryProviderFactoryBean();
@@ -89,11 +100,13 @@ public class KrameriusFulltextJobConfig {
 		pqpf.setFromClause("FROM harvested_record");
 		
 		String whereClause = "WHERE import_conf_id = :configId";
-		if (firstId!=null) {
-			whereClause += " AND id >= :firstId";
+		if (from!=null) {
+			fromStamp = new Timestamp(from.getTime());
+			whereClause += " AND updated >= :from";
 		}
-		if (lastId!=null) {
-			whereClause += " AND id <= :lastId";
+		if (to!=null) {
+			toStamp = new Timestamp(to.getTime());
+			whereClause += " AND updated <= :to";
 		}
 		
 		if (configId != null) {
@@ -109,8 +122,8 @@ public class KrameriusFulltextJobConfig {
 		if (configId != null) {
 			Map<String, Object> parameterValues = new HashMap<String, Object>();
 			parameterValues.put("configId", configId);
-			parameterValues.put("firstId", firstId);
-			parameterValues.put("lastId", lastId);
+			parameterValues.put("from", fromStamp );
+			parameterValues.put("to", toStamp);
 			reader.setParameterValues(parameterValues);
 		}
 		reader.afterPropertiesSet();
