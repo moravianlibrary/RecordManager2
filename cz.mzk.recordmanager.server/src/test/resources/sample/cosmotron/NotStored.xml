@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<OAI-PMH xmlns="http://www.openarchives.org/OAI/2.0/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/
+         http://www.openarchives.org/OAI/2.0/OAI-PMH.xsd">
+	<responseDate>2015-11-13T09:18:40Z</responseDate>
+	<request verb="ListRecords" metadataPrefix="oai_marcxml_cpk"
+		set="CPK">http://katalog.cbvk.cz/i2/i2.ws.oai.cls</request>
+	<ListRecords>
+		<record>
+			<header>
+				<identifier>oai:katalog.cbvk.cz:CbvkUsCat/m0000003</identifier>
+				<datestamp>2014-10-20T13:36:54Z</datestamp>
+				<setSpec>CPK</setSpec>
+			</header>
+			<metadata>
+				<marc:record xmlns:marc="http://www.loc.gov/MARC21/slim"
+					xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+					xsi:schemaLocation="http://www.loc.gov/MARC21/slim
+		  http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd">
+					<marc:leader>00000nam a22     3a 4500</marc:leader>
+					<marc:controlfield tag="001">m0000003</marc:controlfield>
+					<marc:controlfield tag="003">CZ-CbJVK</marc:controlfield>
+					<marc:controlfield tag="005">20120717122706.1</marc:controlfield>
+					<marc:controlfield tag="007">ta</marc:controlfield>
+					<marc:controlfield tag="008">021101s2002----xr-                 cze-|</marc:controlfield>
+					<marc:datafield tag="015" ind1=" " ind2=" ">
+						<marc:subfield code="a">cnb001188518</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="020" ind1=" " ind2=" ">
+						<marc:subfield code="a">80-7329-013-8</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="035" ind1=" " ind2=" ">
+						<marc:subfield code="a">(OCoLC)53269308</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="040" ind1=" " ind2=" ">
+						<marc:subfield code="a">OSA001</marc:subfield>
+						<marc:subfield code="b">cze</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="080" ind1=" " ind2=" ">
+						<marc:subfield code="a">316.482</marc:subfield>
+						<marc:subfield code="2">MRF</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="080" ind1=" " ind2=" ">
+						<marc:subfield code="a">323.1</marc:subfield>
+						<marc:subfield code="2">MRF</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="080" ind1=" " ind2=" ">
+						<marc:subfield code="a">323.2</marc:subfield>
+						<marc:subfield code="2">MRF</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="080" ind1=" " ind2=" ">
+						<marc:subfield code="a">94(53)</marc:subfield>
+						<marc:subfield code="2">MRF</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="080" ind1=" " ind2=" ">
+						<marc:subfield code="a">94(569.4)</marc:subfield>
+						<marc:subfield code="2">MRF</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="100" ind1="1" ind2=" ">
+						<marc:subfield code="a">Olšer, Břetislav,</marc:subfield>
+						<marc:subfield code="d">1947-</marc:subfield>
+						<marc:subfield code="4">aut</marc:subfield>
+						<marc:subfield code="7">cbvk_us_auth*m0119172</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="245" ind1="1" ind2="0">
+						<marc:subfield code="a">--a Bůh osiřel /</marc:subfield>
+						<marc:subfield code="c">Břetislav Olšer</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="250" ind1=" " ind2=" ">
+						<marc:subfield code="a">Vyd. 1.</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="260" ind1=" " ind2=" ">
+						<marc:subfield code="a">Ostrava :</marc:subfield>
+						<marc:subfield code="b">REPRONIS,</marc:subfield>
+						<marc:subfield code="c">2002</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="300" ind1=" " ind2=" ">
+						<marc:subfield code="a">383 s.</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="504" ind1=" " ind2=" ">
+						<marc:subfield code="a">Obsahuje bibliografii</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="650" ind1=" " ind2="7">
+						<marc:subfield code="7">cbvk_us_auth*v0000877</marc:subfield>
+						<marc:subfield code="a">Arabové</marc:subfield>
+						<marc:subfield code="2">czenas</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="650" ind1=" " ind2="7">
+						<marc:subfield code="7">cbvk_us_auth*v0005091</marc:subfield>
+						<marc:subfield code="a">etnické vztahy</marc:subfield>
+						<marc:subfield code="2">czenas</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="650" ind1=" " ind2="7">
+						<marc:subfield code="7">cbvk_us_auth*v0005088</marc:subfield>
+						<marc:subfield code="a">etnické konflikty</marc:subfield>
+						<marc:subfield code="2">czenas</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="650" ind1=" " ind2="7">
+						<marc:subfield code="7">cbvk_us_auth*v0026273</marc:subfield>
+						<marc:subfield code="a">Židé</marc:subfield>
+						<marc:subfield code="2">czenas</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="651" ind1=" " ind2="7">
+						<marc:subfield code="7">cbvk_us_auth*g0001326</marc:subfield>
+						<marc:subfield code="a">Izrael</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="651" ind1=" " ind2="7">
+						<marc:subfield code="7">cbvk_us_auth*g0002520</marc:subfield>
+						<marc:subfield code="a">Palestina</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="655" ind1=" " ind2="7">
+						<marc:subfield code="7">cbvk_us_auth*f0000679</marc:subfield>
+						<marc:subfield code="a">literatura faktu</marc:subfield>
+						<marc:subfield code="2">czenas</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="655" ind1=" " ind2="7">
+						<marc:subfield code="a">monografie</marc:subfield>
+						<marc:subfield code="2">czenas</marc:subfield>
+						<marc:subfield code="7">cbvk_us_auth*f0000762</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="773" ind1="0" ind2="8">
+						<marc:subfield code="w">12345</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="852" ind1=" " ind2=" ">
+						<marc:subfield code="c">32</marc:subfield>
+						<marc:subfield code="b">N</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="887" ind1=" " ind2=" ">
+						<marc:subfield code="a">03/002</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="910" ind1=" " ind2=" ">
+						<marc:subfield code="a">CBA001</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="981" ind1=" " ind2=" ">
+						<marc:subfield code="b">187.00</marc:subfield>
+					</marc:datafield>
+				</marc:record>
+			</metadata>
+		</record>
+	</ListRecords>
+</OAI-PMH>

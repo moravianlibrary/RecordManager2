@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<OAI-PMH xmlns="http://www.openarchives.org/OAI/2.0/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/
+         http://www.openarchives.org/OAI/2.0/OAI-PMH.xsd">
+	<responseDate>2015-11-13T09:18:40Z</responseDate>
+	<request verb="ListRecords">http://katalog.cbvk.cz/i2/i2.ws.oai.cls</request>
+	<ListRecords>
+		<record>
+			<header status="deleted">
+				<identifier>oai:katalog.cbvk.cz:CbvkUsCat/0000003</identifier>
+				<datestamp>2014-10-20T13:36:54Z</datestamp>
+				<setSpec>CPK</setSpec>
+			</header>
+		</record>
+	</ListRecords>
+</OAI-PMH>
