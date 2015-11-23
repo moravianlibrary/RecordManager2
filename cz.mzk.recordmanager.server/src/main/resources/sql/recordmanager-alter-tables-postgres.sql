@@ -331,3 +331,6 @@ CREATE TABLE cosmotron_996 (
   raw_record           BYTEA,
   FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE
 );
+
+-- 23. 11. 2015 xrosecky
+ALTER TABLE import_conf ADD COLUMN harvest_frequency CHAR(1) DEFAULT 'U';

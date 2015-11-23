@@ -30,6 +30,7 @@ CREATE TABLE import_conf (
   filtering_enabled    BOOLEAN DEFAULT FALSE,
   interception_enabled BOOLEAN DEFAULT FALSE,
   is_library           BOOLEAN DEFAULT FALSE,
+  harvest_frequency    CHAR(1) DEFAULT 'U',
   CONSTRAINT import_conf_library_id_fk        FOREIGN KEY (library_id)        REFERENCES library(id),
   CONSTRAINT import_conf_contact_person_id_fk FOREIGN KEY (contact_person_id) REFERENCES contact_person(id)
 );
