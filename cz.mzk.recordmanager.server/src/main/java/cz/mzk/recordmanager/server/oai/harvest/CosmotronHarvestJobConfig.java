@@ -44,7 +44,7 @@ public class CosmotronHarvestJobConfig {
     public Job CosmotronHarvestJob(
     		@Qualifier(Constants.JOB_ID_HARVEST_COSMOTRON+":cosmoStep") Step cosmoStep) {
         return jobs.get(Constants.JOB_ID_HARVEST_COSMOTRON) //
-        		.validator(new OAIHarvestJobParametersValidator()) //
+        		.validator(new CosmotronHarvestJobParametersValidator()) //
         		.listener(JobFailureListener.INSTANCE) //
 				.flow(cosmoStep) //
 				.end()
@@ -56,7 +56,7 @@ public class CosmotronHarvestJobConfig {
         return steps.get("step1") //
             .<List<OAIRecord>, List<HarvestedRecord>> chunk(1) //
             .reader(reader(LONG_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION, STRING_OVERRIDEN_BY_EXPRESSION)) //
-            .processor(cosmotronItemProcessor())
+            .processor(cosmotronItemProcessor(STRING_OVERRIDEN_BY_EXPRESSION))
             .writer(harvestedRecordWriter()) //
             .build();
     }  
@@ -81,7 +81,8 @@ public class CosmotronHarvestJobConfig {
     
     @Bean(name=Constants.JOB_ID_HARVEST_COSMOTRON+":processor")
     @StepScope
-    public CosmotronItemProcessor cosmotronItemProcessor() {
-    	return new CosmotronItemProcessor();
+    public CosmotronItemProcessor cosmotronItemProcessor(
+    		@Value("#{jobParameters[" + Constants.JOB_PARAM_DELETED_OUT_FILE + "]}") String deletedOutFile) {
+    	return new CosmotronItemProcessor(deletedOutFile);
     }  
 }

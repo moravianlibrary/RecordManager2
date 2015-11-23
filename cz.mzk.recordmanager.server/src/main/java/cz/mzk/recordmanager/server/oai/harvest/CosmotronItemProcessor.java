@@ -3,6 +3,7 @@ package cz.mzk.recordmanager.server.oai.harvest;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -80,6 +81,17 @@ public class CosmotronItemProcessor implements ItemProcessor<List<OAIRecord>, Li
 	private Map<String, HarvestedRecord> results;
 	
 	private Map<String, List<Cosmotron996>> temp996;
+
+	PrintWriter writer;
+
+	public CosmotronItemProcessor(){
+	}
+
+	public CosmotronItemProcessor(String deletedOutFile) {
+		super();
+		temp996 = new HashMap<>();
+		createWriter(deletedOutFile);
+	}
 
 	@Override
 	public List<HarvestedRecord> process(List<OAIRecord> arg0) throws Exception {
@@ -164,8 +176,9 @@ public class CosmotronItemProcessor implements ItemProcessor<List<OAIRecord>, Li
 						rec = update996(parentHr, new996, false);
 					}
 				}				
-				else{
-					return null; // delete record
+				else{ // not stored records - 77308$w && not 996
+					if(writer != null) writer.println(mr.export(IOFormat.LINE_MARC));
+					return null;
 				}
 			}
 			else{ // not field 773
@@ -192,12 +205,12 @@ public class CosmotronItemProcessor implements ItemProcessor<List<OAIRecord>, Li
 	
 	@Override
 	public ExitStatus afterStep(StepExecution stepExecution) {
+		if(writer != null) writer.close();
 		return null;
 	}
 
 	@Override
 	public void beforeStep(StepExecution stepExecution) {
-		temp996 = new HashMap<>();
 		try (SessionBinder session = sync.register()) {
 			Long confId = stepExecution.getJobParameters().getLong(
 					"configurationId");
@@ -328,5 +341,13 @@ public class CosmotronItemProcessor implements ItemProcessor<List<OAIRecord>, Li
 			result.add(c996);
 		}
 		return result;		
+	}
+
+	private void createWriter(String deletedOutFile){
+		try {
+			if(deletedOutFile != null) writer = new PrintWriter(deletedOutFile, "UTF-8");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }
