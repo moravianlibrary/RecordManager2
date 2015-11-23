@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<OAI-PMH xmlns="http://www.openarchives.org/OAI/2.0/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/
+         http://www.openarchives.org/OAI/2.0/OAI-PMH.xsd">
+	<responseDate>2015-11-13T09:18:40Z</responseDate>
+	<request verb="ListRecords" metadataPrefix="oai_marcxml_cpk"
+		set="CPK">http://katalog.cbvk.cz/i2/i2.ws.oai.cls</request>
+	<ListRecords>
+		<record>
+			<header>
+				<identifier>oai:katalog.cbvk.cz:CbvkUsCat/0000003</identifier>
+				<datestamp>2014-10-20T13:36:54Z</datestamp>
+				<setSpec>CPK</setSpec>
+			</header>
+			<metadata>
+				<marc:record xmlns:marc="http://www.loc.gov/MARC21/slim"
+					xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+					xsi:schemaLocation="http://www.loc.gov/MARC21/slim
+		  http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd">
+					<marc:leader>00000nam a22     3a 4500</marc:leader>
+					<marc:controlfield tag="001">m0000003</marc:controlfield>
+					<marc:controlfield tag="003">CZ-CbJVK</marc:controlfield>
+					<marc:controlfield tag="005">20120717122706.1</marc:controlfield>
+					<marc:controlfield tag="007">ta</marc:controlfield>
+					<marc:controlfield tag="008">021101s2002----xr-                 cze-|</marc:controlfield>
+					<marc:datafield tag="015" ind1=" " ind2=" ">
+						<marc:subfield code="a">cnb001188518</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="020" ind1=" " ind2=" ">
+						<marc:subfield code="a">80-7329-013-8</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="773" ind1="0" ind2="8">
+						<marc:subfield code="w">cbvk_us_cat*m0000002</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="996" ind1=" " ind2=" ">
+						<marc:subfield code="b">3</marc:subfield>
+					</marc:datafield>
+				</marc:record>
+			</metadata>
+		</record>
+		<record>
+			<header>
+				<identifier>oai:katalog.cbvk.cz:CbvkUsCat/0000004</identifier>
+				<datestamp>2014-10-20T13:36:54Z</datestamp>
+				<setSpec>CPK</setSpec>
+			</header>
+			<metadata>
+				<marc:record xmlns:marc="http://www.loc.gov/MARC21/slim"
+					xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+					xsi:schemaLocation="http://www.loc.gov/MARC21/slim
+		  http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd">
+					<marc:leader>00000nam a22     3a 4500</marc:leader>
+					<marc:controlfield tag="001">m0000003</marc:controlfield>
+					<marc:controlfield tag="003">CZ-CbJVK</marc:controlfield>
+					<marc:controlfield tag="005">20120717122706.1</marc:controlfield>
+					<marc:controlfield tag="007">ta</marc:controlfield>
+					<marc:controlfield tag="008">021101s2002----xr-                 cze-|</marc:controlfield>
+					<marc:datafield tag="015" ind1=" " ind2=" ">
+						<marc:subfield code="a">cnb001188518</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="020" ind1=" " ind2=" ">
+						<marc:subfield code="a">80-7329-013-8</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="773" ind1="0" ind2="8">
+						<marc:subfield code="w">cbvk_us_cat*m0000002</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="996" ind1=" " ind2=" ">
+						<marc:subfield code="b">4</marc:subfield>
+					</marc:datafield>
+				</marc:record>
+			</metadata>
+		</record>
+		<record>
+			<header>
+				<identifier>oai:katalog.cbvk.cz:CbvkUsCat/0000005</identifier>
+				<datestamp>2014-10-20T13:36:54Z</datestamp>
+				<setSpec>CPK</setSpec>
+			</header>
+			<metadata>
+				<marc:record xmlns:marc="http://www.loc.gov/MARC21/slim"
+					xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+					xsi:schemaLocation="http://www.loc.gov/MARC21/slim
+		  http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd">
+					<marc:leader>00000nam a22     3a 4500</marc:leader>
+					<marc:controlfield tag="001">m0000003</marc:controlfield>
+					<marc:controlfield tag="003">CZ-CbJVK</marc:controlfield>
+					<marc:controlfield tag="005">20120717122706.1</marc:controlfield>
+					<marc:controlfield tag="007">ta</marc:controlfield>
+					<marc:controlfield tag="008">021101s2002----xr-                 cze-|</marc:controlfield>
+					<marc:datafield tag="015" ind1=" " ind2=" ">
+						<marc:subfield code="a">cnb001188518</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="020" ind1=" " ind2=" ">
+						<marc:subfield code="a">80-7329-013-8</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="773" ind1="0" ind2="8">
+						<marc:subfield code="w">cbvk_us_cat*m0000002</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="996" ind1=" " ind2=" ">
+						<marc:subfield code="b">5</marc:subfield>
+					</marc:datafield>
+				</marc:record>
+			</metadata>
+		</record>
+		<record>
+			<header>
+				<identifier>oai:katalog.cbvk.cz:CbvkUsCat/m0000002</identifier>
+				<datestamp>2014-10-20T13:36:54Z</datestamp>
+				<setSpec>CPK</setSpec>
+			</header>
+			<metadata>
+				<marc:record xmlns:marc="http://www.loc.gov/MARC21/slim"
+					xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+					xsi:schemaLocation="http://www.loc.gov/MARC21/slim
+		  http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd">
+					<marc:leader>00000nam a22     3a 4500</marc:leader>
+					<marc:controlfield tag="001">m0000003</marc:controlfield>
+					<marc:controlfield tag="003">CZ-CbJVK</marc:controlfield>
+					<marc:controlfield tag="005">20120717122706.1</marc:controlfield>
+					<marc:controlfield tag="007">ta</marc:controlfield>
+					<marc:controlfield tag="008">021101s2002----xr-                 cze-|</marc:controlfield>
+					<marc:datafield tag="015" ind1=" " ind2=" ">
+						<marc:subfield code="a">cnb001188518</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="020" ind1=" " ind2=" ">
+						<marc:subfield code="a">80-7329-013-8</marc:subfield>
+					</marc:datafield>
+				</marc:record>
+			</metadata>
+		</record>
+	</ListRecords>
+</OAI-PMH>

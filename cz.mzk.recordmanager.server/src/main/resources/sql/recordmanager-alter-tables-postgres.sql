@@ -318,3 +318,19 @@ ALTER TABLE kramerius_conf ADD COLUMN fulltext_harvest_type VARCHAR(128) DEFAULT
 
 -- 13.11.2015 mjtecka
 ALTER TABLE fulltext_monography ALTER COLUMN uuid_page TYPE VARCHAR(50);
+
+-- 23.11.2015 tomascejpek
+CREATE TABLE cosmotron_996 (
+  id                   DECIMAL(10) PRIMARY KEY,
+  harvested_record_id  DECIMAL(10),
+  import_conf_id       DECIMAL(10),
+  record_id            VARCHAR(128),
+  harvested            TIMESTAMP,
+  updated              TIMESTAMP,
+  deleted              TIMESTAMP,
+  raw_record           BYTEA,
+  FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE
+);
+
+-- 23. 11. 2015 xrosecky
+ALTER TABLE import_conf ADD COLUMN harvest_frequency CHAR(1) DEFAULT 'U';

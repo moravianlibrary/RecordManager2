@@ -30,6 +30,7 @@ CREATE TABLE import_conf (
   filtering_enabled    BOOLEAN DEFAULT FALSE,
   interception_enabled BOOLEAN DEFAULT FALSE,
   is_library           BOOLEAN DEFAULT FALSE,
+  harvest_frequency    CHAR(1) DEFAULT 'U',
   CONSTRAINT import_conf_library_id_fk        FOREIGN KEY (library_id)        REFERENCES library(id),
   CONSTRAINT import_conf_contact_person_id_fk FOREIGN KEY (contact_person_id) REFERENCES contact_person(id)
 );
@@ -220,3 +221,15 @@ CREATE TABLE skat_keys (
   CONSTRAINT skat_keys_pk PRIMARY KEY(skat_record_id,sigla,local_record_id)
 );
 
+CREATE TABLE cosmotron_996 (
+  id                   DECIMAL(10) PRIMARY KEY,
+  harvested_record_id  DECIMAL(10),
+  record_id            VARCHAR(128),
+  import_conf_id       DECIMAL(10),
+  harvested            TIMESTAMP,
+  updated              TIMESTAMP,
+  deleted              TIMESTAMP,
+  raw_record           BLOB,
+  CONSTRAINT cosmotron_996_fk FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id),
+  CONSTRAINT cosmotron_996_import_conf_id FOREIGN KEY (import_conf_id) REFERENCES import_conf(id)
+ );

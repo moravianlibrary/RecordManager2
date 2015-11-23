@@ -154,6 +154,10 @@ public class HarvestedRecord extends AbstractDomainObject {
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name="harvested_record_id", referencedColumnName="id")
 	private List<FulltextMonography> fulltextMonography = new ArrayList<>();
+	
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name="harvested_record_id", referencedColumnName="id")
+	private List<Cosmotron996> cosmotron = new ArrayList<Cosmotron996>();
 
 	@OneToMany(mappedBy="id.harvestedRecordId", cascade = CascadeType.ALL)
 	@MapKey(name="id.langStr")
@@ -459,6 +463,14 @@ public class HarvestedRecord extends AbstractDomainObject {
 	@Override
 	public String toString() {
 		return String.format("HarvestedRecord[id=%s, uniqueId=%s]", getId(), getUniqueId());
+	}
+
+	public List<Cosmotron996> getCosmotron() {
+		return cosmotron;
+	}
+
+	public void setCosmotron(List<Cosmotron996> cosmotron) {
+		this.cosmotron = cosmotron;
 	}
 
 }

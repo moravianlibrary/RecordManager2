@@ -7,6 +7,8 @@ import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import org.hibernate.annotations.Parameter;
+import org.hibernate.annotations.Type;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -40,7 +42,16 @@ public abstract class ImportConfiguration extends AbstractDomainObject {
 
 	@Column(name="is_library")
 	private boolean isLibrary = false;
-	
+
+	@Type(
+		type="cz.mzk.recordmanager.server.hibernate.CharEnumUserType",
+		parameters= {
+			@Parameter(name="enumClassName", value="cz.mzk.recordmanager.server.model.HarvestFrequency"),
+		}
+	)
+	@Column(name="harvest_frequency")
+	private HarvestFrequency harvestFrequency = HarvestFrequency.UNSPECIFIED;
+
 	public Library getLibrary() {
 		return library;
 	}
@@ -104,5 +115,13 @@ public abstract class ImportConfiguration extends AbstractDomainObject {
 	public void setLibrary(boolean isLibrary) {
 		this.isLibrary = isLibrary;
 	}
-	
+
+	public HarvestFrequency getHarvestFrequency() {
+		return harvestFrequency;
+	}
+
+	public void setHarvestFrequency(HarvestFrequency harvestFrequency) {
+		this.harvestFrequency = harvestFrequency;
+	}
+
 }

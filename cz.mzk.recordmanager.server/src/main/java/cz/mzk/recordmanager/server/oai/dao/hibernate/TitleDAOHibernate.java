@@ -23,7 +23,7 @@ public class TitleDAOHibernate extends AbstractDomainDAOHibernate<Long, Title>
 		Session session = sessionFactory.getCurrentSession();
 		return (List<NonperiodicalTitleClusterable>)
 				session.createSQLQuery("SELECT id,harvested_record_id,title,isbn,cnb,author_string,pages "
-						+ "FROM titles_for_simmilarity_searching_view "
+						+ "FROM tmp_titles_for_simmilarity_searching "
 						+ "WHERE publication_year = ? and pages BETWEEN ? and ? AND lang = ?")
 				.setResultTransformer(new ResultTransformer() {
 

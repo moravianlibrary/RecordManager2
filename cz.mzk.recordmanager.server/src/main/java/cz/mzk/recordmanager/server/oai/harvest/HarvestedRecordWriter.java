@@ -29,6 +29,7 @@ public class HarvestedRecordWriter implements ItemWriter<List<HarvestedRecord>> 
 	public void write(List<? extends List<HarvestedRecord>> records) throws Exception {
 		for (List<HarvestedRecord> list: records) {
 			for (HarvestedRecord hr: list) {
+				if(hr == null) continue;
 				if (hr.getDeleted() == null) {
 					try {
 						if (hr.getId() == null) {
