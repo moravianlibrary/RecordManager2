@@ -45,6 +45,7 @@ import cz.mzk.recordmanager.server.oai.dao.Cosmotron996DAO;
 import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordDAO;
 import cz.mzk.recordmanager.server.oai.dao.OAIHarvestConfigurationDAO;
 import cz.mzk.recordmanager.server.oai.model.OAIRecord;
+import cz.mzk.recordmanager.server.util.Constants;
 import cz.mzk.recordmanager.server.util.HibernateSessionSynchronizer;
 import cz.mzk.recordmanager.server.util.HibernateSessionSynchronizer.SessionBinder;
 
@@ -244,7 +245,7 @@ public class CosmotronItemProcessor implements ItemProcessor<List<OAIRecord>, Li
 	
 	protected String parseIdFrom773(String s){
 		s = Character.toUpperCase(s.charAt(0)) + s.substring(1);
-		s = s.replaceAll("_us_cat\\*", "UsCat/");
+		s = s.replaceAll("_us_cat\\*", "UsCat"+Constants.COSMOTRON_RECORD_ID_CHAR);
 		return s;
 	}
 	
@@ -259,7 +260,7 @@ public class CosmotronItemProcessor implements ItemProcessor<List<OAIRecord>, Li
 		
 		String[] parts = oaiIdentifier.split(":");
 		if (parts.length == 3) {
-			return parts[2];
+			return parts[2].replaceAll("/", Constants.COSMOTRON_RECORD_ID_CHAR);
 		}
 		
 		return oaiIdentifier;

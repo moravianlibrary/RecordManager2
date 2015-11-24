@@ -122,7 +122,7 @@ public class CosmotronHarvestJobTest extends AbstractTest {
 		JobExecution exec = jobExplorer.getJobExecution(jobExecutionId);
 		Assert.assertEquals(exec.getExitStatus(), ExitStatus.COMPLETED);
 		
-		HarvestedRecord record = recordDao.findByIdAndHarvestConfiguration("CbvkUsCat/0000003", confID);
+		HarvestedRecord record = recordDao.findByIdAndHarvestConfiguration("CbvkUsCat"+Constants.COSMOTRON_RECORD_ID_CHAR+"0000003", confID);
 		Assert.assertNotNull(record, "Record not stored.");
 		Assert.assertNotNull(record.getDeleted());
 	}
@@ -143,7 +143,7 @@ public class CosmotronHarvestJobTest extends AbstractTest {
 		JobExecution exec = jobExplorer.getJobExecution(jobExecutionId);
 		Assert.assertEquals(exec.getExitStatus(), ExitStatus.COMPLETED);
 		
-		Assert.assertNull(recordDao.findByIdAndHarvestConfiguration("CbvkUsCat/m0000003", confID));
+		Assert.assertNull(recordDao.findByIdAndHarvestConfiguration("CbvkUsCat"+Constants.COSMOTRON_RECORD_ID_CHAR+"m0000003", confID));
 	}
 	
 	@Test 
@@ -166,9 +166,9 @@ public class CosmotronHarvestJobTest extends AbstractTest {
 		Assert.assertEquals(exec.getExitStatus(), ExitStatus.COMPLETED);
 		
 		OAIHarvestConfiguration config = configDao.get(confID);
-		HarvestedRecord hr = recordDao.findByIdAndHarvestConfiguration("CbvkUsCat/m0000002", config);
+		HarvestedRecord hr = recordDao.findByIdAndHarvestConfiguration("CbvkUsCat"+Constants.COSMOTRON_RECORD_ID_CHAR+"m0000002", config);
 		Assert.assertNotNull(hr);
-		Assert.assertNotNull(cosmotronDao.findByIdAndHarvestConfiguration("CbvkUsCat/0000003", config));
+		Assert.assertNotNull(cosmotronDao.findByIdAndHarvestConfiguration("CbvkUsCat"+Constants.COSMOTRON_RECORD_ID_CHAR+"0000003", config));
 		
 		InputStream is = new ByteArrayInputStream(hr.getRawRecord());
 		Record record = marcXmlParser.parseUnderlyingRecord(is);
@@ -195,8 +195,8 @@ public class CosmotronHarvestJobTest extends AbstractTest {
 		Assert.assertEquals(exec.getExitStatus(), ExitStatus.COMPLETED);
 		
 		OAIHarvestConfiguration config = configDao.get(confID);
-		Assert.assertNotNull(recordDao.findByIdAndHarvestConfiguration("CbvkUsCat/m0000002", config));
-		Cosmotron996 cosmo = cosmotronDao.findByIdAndHarvestConfiguration("CbvkUsCat/0000003", config);
+		Assert.assertNotNull(recordDao.findByIdAndHarvestConfiguration("CbvkUsCat"+Constants.COSMOTRON_RECORD_ID_CHAR+"m0000002", config));
+		Cosmotron996 cosmo = cosmotronDao.findByIdAndHarvestConfiguration("CbvkUsCat"+Constants.COSMOTRON_RECORD_ID_CHAR+"0000003", config);
 		Assert.assertNotNull(cosmo);
 		Assert.assertNotNull(cosmo.getDeleted());
 	}
@@ -220,8 +220,8 @@ public class CosmotronHarvestJobTest extends AbstractTest {
 		Assert.assertEquals(exec.getExitStatus(), ExitStatus.COMPLETED);
 		
 		OAIHarvestConfiguration config = configDao.get(confID);
-		Assert.assertNotNull(recordDao.findByIdAndHarvestConfiguration("CbvkUsCat/m0000002", config));
-		Cosmotron996 cosmo = cosmotronDao.findByIdAndHarvestConfiguration("CbvkUsCat/0000003", config);
+		Assert.assertNotNull(recordDao.findByIdAndHarvestConfiguration("CbvkUsCat"+Constants.COSMOTRON_RECORD_ID_CHAR+"m0000002", config));
+		Cosmotron996 cosmo = cosmotronDao.findByIdAndHarvestConfiguration("CbvkUsCat"+Constants.COSMOTRON_RECORD_ID_CHAR+"0000003", config);
 		Assert.assertNotNull(cosmo);
 		
 		InputStream is = new ByteArrayInputStream(cosmo.getRawRecord());
@@ -249,7 +249,7 @@ public class CosmotronHarvestJobTest extends AbstractTest {
 		Assert.assertEquals(exec.getExitStatus(), ExitStatus.COMPLETED);
 		
 		OAIHarvestConfiguration config = configDao.get(confID);
-		HarvestedRecord hr = recordDao.findByIdAndHarvestConfiguration("CbvkUsCat/m0000002", config);
+		HarvestedRecord hr = recordDao.findByIdAndHarvestConfiguration("CbvkUsCat"+Constants.COSMOTRON_RECORD_ID_CHAR+"m0000002", config);
 		Assert.assertNotNull(hr);
 		
 		InputStream is = new ByteArrayInputStream(hr.getRawRecord());
@@ -275,11 +275,11 @@ public class CosmotronHarvestJobTest extends AbstractTest {
 		Assert.assertEquals(exec.getExitStatus(), ExitStatus.COMPLETED);
 		
 		OAIHarvestConfiguration config = configDao.get(confID);
-		HarvestedRecord hr = recordDao.findByIdAndHarvestConfiguration("CbvkUsCat/m0000002", config);
+		HarvestedRecord hr = recordDao.findByIdAndHarvestConfiguration("CbvkUsCat"+Constants.COSMOTRON_RECORD_ID_CHAR+"m0000002", config);
 		Assert.assertNotNull(hr);
-		Assert.assertNotNull(cosmotronDao.findByIdAndHarvestConfiguration("CbvkUsCat/0000003", config));
-		Assert.assertNotNull(cosmotronDao.findByIdAndHarvestConfiguration("CbvkUsCat/0000004", config));
-		Assert.assertNotNull(cosmotronDao.findByIdAndHarvestConfiguration("CbvkUsCat/0000005", config));
+		Assert.assertNotNull(cosmotronDao.findByIdAndHarvestConfiguration("CbvkUsCat"+Constants.COSMOTRON_RECORD_ID_CHAR+"0000003", config));
+		Assert.assertNotNull(cosmotronDao.findByIdAndHarvestConfiguration("CbvkUsCat"+Constants.COSMOTRON_RECORD_ID_CHAR+"0000004", config));
+		Assert.assertNotNull(cosmotronDao.findByIdAndHarvestConfiguration("CbvkUsCat"+Constants.COSMOTRON_RECORD_ID_CHAR+"0000005", config));
 		
 		InputStream is = new ByteArrayInputStream(hr.getRawRecord());
 		Record record = marcXmlParser.parseUnderlyingRecord(is);
