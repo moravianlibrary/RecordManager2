@@ -149,8 +149,12 @@ public class KrameriusFulltexterFedora implements KrameriusFulltexter {
 
 	/* reads JSON from specified (complete) url */
 	public JSONArray readKrameriusJSON(String url) throws JSONException, IOException {
-		String result = readUrl(url);
-		return new JSONArray(result);
+		try {
+			String result = readUrl(url);
+			return new JSONArray(result);
+		} catch (IOException e) {
+			throw new JSONException("IOException - could not read JSON on specified URL: " +url);
+		}
 	}
 
 	// used for reading JSON's contents - returns String

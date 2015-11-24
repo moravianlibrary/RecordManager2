@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import cz.mzk.recordmanager.server.dc.DublinCoreParser;
 import cz.mzk.recordmanager.server.dc.DublinCoreRecord;
+import cz.mzk.recordmanager.server.dc.InvalidDcException;
 import cz.mzk.recordmanager.server.metadata.MetadataDublinCoreRecord;
 import cz.mzk.recordmanager.server.model.FulltextMonography;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
@@ -80,15 +81,24 @@ public class KrameriusFulltextProcessor implements
 		logger.debug("Processing Harvested Record: " + item.toString()
 				+ " uniqueId: " + item.getUniqueId());
 
-		InputStream is = new ByteArrayInputStream(item.getRawRecord());
-		// get Kramerius policy from record
-		DublinCoreRecord dcRecord = parser.parseRecord(is);
-		MetadataDublinCoreRecord mdrc = new MetadataDublinCoreRecord(dcRecord);
-		String policy = mdrc.getPolicy();
-
+		String policy;
 		// read complete HarvestedRecord using DAO
 		HarvestedRecord rec = recordDao.findByIdAndHarvestConfiguration(item
 				.getUniqueId().getRecordId(), confId);
+		
+		
+		InputStream is = new ByteArrayInputStream(rec.getRawRecord());
+		// get Kramerius policy from record
+		try {
+		DublinCoreRecord dcRecord = parser.parseRecord(is);
+		MetadataDublinCoreRecord mdrc = new MetadataDublinCoreRecord(dcRecord);
+		policy = mdrc.getPolicy();
+		} catch ( InvalidDcException e) {
+			logger.warn("InvalidDcException for record with id:" + item.getUniqueId());
+			logger.warn(e.getMessage());
+			//doesn't do anything, just returns rec from DAO and writes a message into log
+			return rec;
+		}
 
 		// modify read HarvestedRecord only if following condition is fulfilled
 		if (policy.equals("public") || downloadPrivateFulltexts) {
