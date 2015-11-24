@@ -184,10 +184,7 @@ public class PublishDateMarcFunctions implements MarcRecordFunctions {
 					continue;
 				}
 				if(df.getSubfield('c') != null) {
-					String subC = df.getSubfield('c').getData(); 
-					if(SINGLE_YEAR_PATTERN.matcher(subC).matches()) {
-						return subC;
-					}
+					return df.getSubfield('c').getData();
 				}
 			}
 		}
