@@ -2,7 +2,9 @@ package cz.mzk.recordmanager.server.oai.dao.hibernate;
 
 import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
+import java.util.List;
 
+import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -25,6 +27,13 @@ public class AbstractDomainDAOHibernate<ID extends Serializable, T> implements D
 	@Override
 	public T load(ID id) {
 		return (T) sessionFactory.getCurrentSession().load(persistenceClass, id);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<T> findAll() {
+		Criteria crit = sessionFactory.getCurrentSession().createCriteria(persistenceClass);
+		return (List<T>) crit.list();
 	}
 
 	@Override

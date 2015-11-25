@@ -14,11 +14,17 @@ public class ResourceUtils {
 		if (is == null) {
 			throw new IllegalArgumentException(String.format("Resource %s not found", resource));
 		}
-		try (InputStreamReader isr = new InputStreamReader(is, StandardCharsets.UTF_8)) {
-			return CharStreams.toString(isr);
+		try {
+			return asString(is);
 		} catch (IOException ioe) {
 			throw new RuntimeException(
 					String.format("IOException thrown when reading resource %s", resource), ioe);
+		}
+	}
+
+	public static String asString(InputStream is) throws IOException {
+		try (InputStreamReader isr = new InputStreamReader(is, StandardCharsets.UTF_8)) {
+			return CharStreams.toString(isr);
 		}
 	}
 

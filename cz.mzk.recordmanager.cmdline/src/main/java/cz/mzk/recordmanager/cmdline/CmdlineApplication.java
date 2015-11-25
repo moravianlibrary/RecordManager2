@@ -17,6 +17,7 @@ import org.springframework.transaction.support.TransactionSynchronizationManager
 import cz.mzk.recordmanager.api.model.batch.BatchJobExecutionDTO;
 import cz.mzk.recordmanager.api.service.BatchService;
 import cz.mzk.recordmanager.server.AppConfig;
+import cz.mzk.recordmanager.server.automatization.ScriptRunner;
 import cz.mzk.recordmanager.server.springbatch.JobExecutor;
 import cz.mzk.recordmanager.server.util.ResourceUtils;
 
@@ -26,6 +27,7 @@ public class CmdlineApplication {
 
 	private static final String JOB_HELP = "help";
 	private static final String JOB_RESTART = "restart";
+	private static final String RUN_SCRIPT = "script";
 	private static final String CLI_PARAM_JOB = "job";
 
 	private static String jobName;
@@ -79,6 +81,13 @@ public class CmdlineApplication {
 						executeInThread(runnable);
 				}
 			}
+		} else if (jobName.equals(RUN_SCRIPT)) {
+			ScriptRunner scriptRunner = applicationContext.getBean(ScriptRunner.class);
+			if (!jobParams.getParameters().containsKey("script")) {
+				throw new IllegalArgumentException("Parameter script is missing");
+			}
+			String scriptPath = jobParams.getString("script");
+			scriptRunner.run(scriptPath);
 		} else {
 			JobExecutor executor = applicationContext.getBean(JobExecutor.class);
 			Runnable runnable = () -> executor.execute(jobName, jobParams, true);
