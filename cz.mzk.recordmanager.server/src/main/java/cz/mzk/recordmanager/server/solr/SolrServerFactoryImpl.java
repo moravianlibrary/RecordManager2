@@ -1,5 +1,6 @@
 package cz.mzk.recordmanager.server.solr;
 
+import org.apache.http.client.HttpClient;
 import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.impl.HttpSolrServer;
 import org.apache.solr.client.solrj.impl.XMLResponseParser;
@@ -10,30 +11,31 @@ public class SolrServerFactoryImpl implements SolrServerFactory {
 
 		DEFAULT {
 			@Override
-			public void init(SolrServer solr) {
+			public SolrServer create(String url) {
+				return new HttpSolrServer(url);
 			}
 		},
 
 		KRAMERIUS {
 			@Override
-			public void init(SolrServer solr) {
-				if (solr instanceof HttpSolrServer) {
-					((HttpSolrServer) solr).setParser(new XMLResponseParser());
-				}
+			public SolrServer create(String url) {
+				HttpClient client  = new KrameriusHttpClient();
+				HttpSolrServer solr = new HttpSolrServer(url, client);
+				solr.setParser(new XMLResponseParser());
+				return solr;
 			}
 		};
 
-		public abstract void init(SolrServer solr);
+		public abstract SolrServer create(String url);
 
 	}
 
 	@Override
-	public SolrServerFacade create(String url, Mode mode,SolrIndexingExceptionHandler exceptionHandler) {
-		HttpSolrServer server = new HttpSolrServer(url);
+	public SolrServerFacade create(String url, Mode mode, SolrIndexingExceptionHandler exceptionHandler) {
 		if (mode == null) {
 			mode = Mode.DEFAULT;
 		}
-		mode.init((SolrServer) server);
+		SolrServer server = mode.create(url);
 		return new SolrServerFacadeImpl(server, exceptionHandler);
 	}
 
