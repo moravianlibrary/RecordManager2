@@ -14,10 +14,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import cz.mzk.recordmanager.server.dc.DublinCoreParser;
 import cz.mzk.recordmanager.server.dc.DublinCoreRecord;
+import cz.mzk.recordmanager.server.dc.InvalidDcException;
 import cz.mzk.recordmanager.server.metadata.MetadataDublinCoreRecord;
 import cz.mzk.recordmanager.server.model.FulltextMonography;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.model.KrameriusConfiguration;
+import cz.mzk.recordmanager.server.oai.dao.FulltextMonographyDAO;
 import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordDAO;
 import cz.mzk.recordmanager.server.oai.dao.KrameriusConfigurationDAO;
 import cz.mzk.recordmanager.server.util.HibernateSessionSynchronizer;
@@ -33,13 +35,16 @@ public class KrameriusFulltextProcessor implements
 	private KrameriusFulltexterFactory krameriusFulltexterFactory;
 
 	private KrameriusFulltexter fulltexter;
-	
+
 	@Autowired
 	private KrameriusConfigurationDAO configDao;
 
 	@Autowired
 	private HarvestedRecordDAO recordDao;
 
+	@Autowired
+	private FulltextMonographyDAO fmDao;
+	
 	@Autowired
 	private HibernateSessionSynchronizer sync;
 
@@ -48,7 +53,7 @@ public class KrameriusFulltextProcessor implements
 
 	// configuration
 	private Long confId;
-	
+
 	private boolean downloadPrivateFulltexts;
 
 	public KrameriusFulltextProcessor(Long confId) {
@@ -60,6 +65,8 @@ public class KrameriusFulltextProcessor implements
 	public void beforeStep(StepExecution stepExecution) {
 		try (SessionBinder sess = sync.register()) {
 			KrameriusConfiguration config = configDao.get(confId);
+			downloadPrivateFulltexts = configDao.get(confId)
+					.isDownloadPrivateFulltexts();
 			fulltexter = krameriusFulltexterFactory.create(config);
 		}
 	}
@@ -74,23 +81,40 @@ public class KrameriusFulltextProcessor implements
 		logger.debug("Processing Harvested Record: " + item.toString()
 				+ " uniqueId: " + item.getUniqueId());
 
-		InputStream is = new ByteArrayInputStream(item.getRawRecord());
-		// get Kramerius policy from record
-		DublinCoreRecord dcRecord = parser.parseRecord(is);
-		MetadataDublinCoreRecord mdrc = new MetadataDublinCoreRecord(dcRecord);
-		String policy = mdrc.getPolicy();
-
+		String policy;
 		// read complete HarvestedRecord using DAO
 		HarvestedRecord rec = recordDao.findByIdAndHarvestConfiguration(item
 				.getUniqueId().getRecordId(), confId);
+		
+		
+		InputStream is = new ByteArrayInputStream(rec.getRawRecord());
+		// get Kramerius policy from record
+		try {
+		DublinCoreRecord dcRecord = parser.parseRecord(is);
+		MetadataDublinCoreRecord mdrc = new MetadataDublinCoreRecord(dcRecord);
+		policy = mdrc.getPolicy();
+		} catch ( InvalidDcException e) {
+			logger.warn("InvalidDcException for record with id:" + item.getUniqueId());
+			logger.warn(e.getMessage());
+			//doesn't do anything, just returns rec from DAO and writes a message into log
+			return rec;
+		}
 
 		// modify read HarvestedRecord only if following condition is fulfilled
 		if (policy.equals("public") || downloadPrivateFulltexts) {
 			logger.debug("Processor: privacy condition fulfilled, reading pages");
 
 			String rootUuid = rec.getUniqueId().getRecordId();
-			List<FulltextMonography> pages = fulltexter.getFulltextObjects(rootUuid);
+			List<FulltextMonography> pages = fulltexter
+					.getFulltextObjects(rootUuid);
 
+			//delete old FulltextMonography from database before adding new ones
+			if (!rec.getFulltextMonography().isEmpty()) {
+				for (FulltextMonography fm: rec.getFulltextMonography()) {
+					fmDao.delete(fm);
+				}
+			}
+			
 			rec.setFulltextMonography(pages);
 		} else {
 			logger.debug("Processor: privacy condition is NOT fulfilled, skipping record");

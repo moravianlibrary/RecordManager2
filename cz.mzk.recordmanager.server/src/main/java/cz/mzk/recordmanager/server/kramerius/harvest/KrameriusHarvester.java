@@ -126,9 +126,9 @@ public class KrameriusHarvester {
 
 		SolrServerFacade solr = solrServerFactory.create(params.getUrl(), Mode.KRAMERIUS);
 
-		if (solr instanceof HttpSolrServer) {
-			((HttpSolrServer) solr).setParser(new XMLResponseParser());
-		}
+//		if (solr instanceof HttpSolrServer) {
+//			((HttpSolrServer) solr).setParser(new XMLResponseParser());
+//		}
 		SolrQuery query = new SolrQuery();
 		query.setQuery("*:*");
 		if (nextPid != null) {

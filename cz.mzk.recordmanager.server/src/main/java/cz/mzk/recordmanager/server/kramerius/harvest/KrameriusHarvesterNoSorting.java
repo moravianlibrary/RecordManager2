@@ -24,6 +24,7 @@ import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecord.HarvestedRecordUniqueId;
 import cz.mzk.recordmanager.server.solr.SolrServerFacade;
 import cz.mzk.recordmanager.server.solr.SolrServerFactory;
+import cz.mzk.recordmanager.server.solr.SolrServerFactoryImpl.Mode;
 import cz.mzk.recordmanager.server.util.HttpClient;
 import cz.mzk.recordmanager.server.util.SolrUtils;
 
@@ -128,11 +129,11 @@ public class KrameriusHarvesterNoSorting {
 		int numProcessed = 0;
 		long numFound = 0;
 
-		SolrServerFacade solr = solrServerFactory.create(params.getUrl());
+		SolrServerFacade solr = solrServerFactory.create(params.getUrl(), Mode.KRAMERIUS);
 
-		if (solr instanceof HttpSolrServer) {
-			((HttpSolrServer) solr).setParser(new XMLResponseParser());
-		}
+//		if (solr instanceof HttpSolrServer) {
+//			((HttpSolrServer) solr).setParser(new XMLResponseParser());
+//		}
 		SolrQuery query = new SolrQuery();
 
 		// creates map of SOLR query parameters and formats them into string,
