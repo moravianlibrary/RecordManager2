@@ -22,6 +22,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.FileSystemResource;
 
+import cz.mzk.recordmanager.server.jdbc.Cosmotron996RowMapper;
+import cz.mzk.recordmanager.server.model.Cosmotron996;
 import cz.mzk.recordmanager.server.model.HarvestedRecord.HarvestedRecordUniqueId;
 import cz.mzk.recordmanager.server.springbatch.JobFailureListener;
 import cz.mzk.recordmanager.server.util.Constants;
@@ -53,12 +55,33 @@ public class ExportRecordsJobConfig {
 				.build();
 	}
 
+	@Bean
+	public Job exportCosmotron996Job(
+			@Qualifier(Constants.JOB_ID_EXPORT_COSMOTRON_996+":exportCosmotron996Step") Step exportCosmotron996Step) {
+		return jobs.get(Constants.JOB_ID_EXPORT_COSMOTRON_996)
+				.validator(new ExportRecordsJobParametersValidator())
+				.listener(JobFailureListener.INSTANCE)
+				.flow(exportCosmotron996Step)
+				.end()
+				.build();
+	}
+
 	@Bean(name = "exportRecordsJob:exportRecordsStep")
 	public Step exportRecordsStep() throws Exception {
 		return steps.get("updateRecordsJobStep")
 				.<HarvestedRecordUniqueId, String> chunk(20)//
 				.reader(exportRecordsReader(LONG_OVERRIDEN_BY_EXPRESSION)) //
 				.processor(exportRecordsProcessor(STRING_OVERRIDEN_BY_EXPRESSION)) //
+				.writer(exportRecordsWriter(STRING_OVERRIDEN_BY_EXPRESSION)) //
+				.build();
+	}
+
+	@Bean(name = Constants.JOB_ID_EXPORT_COSMOTRON_996+":exportCosmotron996Step")
+	public Step exportCosmotron996Step() throws Exception {
+		return steps.get("updateRecordsJobStep")
+				.<Cosmotron996, String> chunk(20)//
+				.reader(exportCosmotron996Reader(LONG_OVERRIDEN_BY_EXPRESSION)) //
+				.processor(exportCosmotron996Processor(STRING_OVERRIDEN_BY_EXPRESSION)) //
 				.writer(exportRecordsWriter(STRING_OVERRIDEN_BY_EXPRESSION)) //
 				.build();
 	}
@@ -86,6 +109,29 @@ public class ExportRecordsJobConfig {
 		return reader;
 	}
 
+	@Bean(name = Constants.JOB_ID_EXPORT_COSMOTRON_996+":exportCosmotron996Reader")
+	@StepScope
+	public ItemReader<Cosmotron996> exportCosmotron996Reader(@Value("#{jobParameters["
+			+ Constants.JOB_PARAM_CONF_ID + "]}") Long configId)
+			throws Exception {
+		JdbcPagingItemReader<Cosmotron996> reader = new JdbcPagingItemReader<Cosmotron996>();
+		SqlPagingQueryProviderFactoryBean pqpf = new SqlPagingQueryProviderFactoryBean();
+		pqpf.setDataSource(dataSource);
+		pqpf.setSelectClause("SELECT *");
+		pqpf.setFromClause("FROM cosmotron_996");
+		pqpf.setWhereClause("WHERE import_conf_id = :conf_id");
+		pqpf.setSortKey("record_id");
+		Map<String, Object> parameterValues = new HashMap<String, Object>();
+		parameterValues.put("conf_id", configId);
+		reader.setParameterValues(parameterValues);
+		reader.setRowMapper(new Cosmotron996RowMapper());
+		reader.setPageSize(20);
+		reader.setQueryProvider(pqpf.getObject());
+		reader.setDataSource(dataSource);
+		reader.afterPropertiesSet();
+		return reader;
+	}
+
 	@Bean(name = "exportRecordsJob:exportRecordsProcesor")
 	@StepScope
 	public ExportRecordsProcessor exportRecordsProcessor(
@@ -93,6 +139,15 @@ public class ExportRecordsJobConfig {
 		IOFormat iOFormat = IOFormat
 				.stringToExportFormat(strFormat);
 		return new ExportRecordsProcessor(iOFormat);
+	}
+
+	@Bean(name = Constants.JOB_ID_EXPORT_COSMOTRON_996+":exportCosmotron996Procesor")
+	@StepScope
+	public ExportCosmotron996Processor exportCosmotron996Processor(
+			@Value("#{jobParameters[" + Constants.JOB_PARAM_FORMAT + "]}") String strFormat) {
+		IOFormat iOFormat = IOFormat
+				.stringToExportFormat(strFormat);
+		return new ExportCosmotron996Processor(iOFormat);
 	}
 
 	@Bean(name = "exportRecordsJob:exportRecordsWriter")
