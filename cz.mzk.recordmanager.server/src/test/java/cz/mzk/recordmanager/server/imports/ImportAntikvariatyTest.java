@@ -1,6 +1,5 @@
 package cz.mzk.recordmanager.server.imports;
 
-
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.reset;
@@ -28,8 +27,7 @@ import cz.mzk.recordmanager.server.util.Constants;
 import cz.mzk.recordmanager.server.util.HttpClient;
 
 public class ImportAntikvariatyTest extends AbstractTest {
-	
-	
+
 	@Autowired
 	private JobRegistry jobRegistry;
 
@@ -44,7 +42,6 @@ public class ImportAntikvariatyTest extends AbstractTest {
 	
 	@Autowired
 	private HttpClient httpClient;
-	
 	
 	@BeforeMethod
 	public void initDb() throws Exception {
@@ -75,6 +72,10 @@ public class ImportAntikvariatyTest extends AbstractTest {
 		Assert.assertNotNull(toBeChangedRecord);
 		Assert.assertTrue(toBeChangedRecord.getCatalogueIds().size() == 1);
 		Assert.assertEquals(toBeChangedRecord.getCatalogueIds().get(0),"zb00026");
+		Assert.assertNotNull(toBeChangedRecord.getUpdated());
+		Assert.assertNotNull(toBeChangedRecord.getTitle());
+		Assert.assertNotNull(toBeChangedRecord.getUrl());
+		Assert.assertNotNull(toBeChangedRecord.getPublicationYear());
 		
 		
 		reset(httpClient);
@@ -89,14 +90,11 @@ public class ImportAntikvariatyTest extends AbstractTest {
 		jobParams = new JobParameters(params);
 		jobLauncher.run(job, jobParams);
 		
-		
 		AntikvariatyRecord updatedRecord = antikDao.get(1L);
 		Assert.assertNotNull(updatedRecord);
 		Assert.assertTrue(updatedRecord.getCatalogueIds().size() == 1);
 		Assert.assertEquals(updatedRecord.getCatalogueIds().get(0),"xxxxxxxxxxxxxxx");
 		Assert.assertTrue(updatedRecord.getUpdated().compareTo(toBeChangedRecord.getUpdated()) > 0);
-		
-		
 	}
 
 }

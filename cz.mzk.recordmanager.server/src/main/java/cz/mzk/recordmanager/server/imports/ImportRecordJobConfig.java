@@ -15,13 +15,13 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
 import cz.mzk.recordmanager.server.model.AntikvariatyRecord;
 import cz.mzk.recordmanager.server.springbatch.JobFailureListener;
 import cz.mzk.recordmanager.server.util.Constants;
 
 @Configuration
 public class ImportRecordJobConfig {
+
 	@Autowired
 	private JobBuilderFactory jobs;
 
@@ -74,25 +74,26 @@ public class ImportRecordJobConfig {
 				.listener(JobFailureListener.INSTANCE).flow(importRecordsStep)
 				.end().build();
 	}
-	
+
 	@Bean(name=Constants.JOB_ID_IMPORT_ANTIKVARIATY +":importRecordsStep")
 	public Step importAntikvariatyRecordsStep() throws Exception {
 		return steps.get("antikvariaty:importRecordsStep")
-				.<List<AntikvariatyRecord>, List<AntikvariatyRecord>> chunk(10)//
-				.reader(importAntikvariatyReader())//
+				.<AntikvariatyRecord, AntikvariatyRecord> chunk(10)//
+				.reader(importAntikvariatyReader(LONG_OVERRIDEN_BY_EXPRESSION))//
 				.writer(importAntikvariatyWriter()) //
 				.build();
 	}
-	
+
 	@Bean(name=Constants.JOB_ID_IMPORT_ANTIKVARIATY + ":reader")
 	@StepScope
-	public AntikvariatyRecordsReader importAntikvariatyReader() throws Exception {
-		return new AntikvariatyRecordsReader();
+	public ItemReader<AntikvariatyRecord> importAntikvariatyReader(@Value("#{jobParameters[" + Constants.JOB_PARAM_CONF_ID + "]}") Long configId) throws Exception {
+		return new AntikvariatyRecordsReader(configId);
 	}
-	
+
 	@Bean(name=Constants.JOB_ID_IMPORT_ANTIKVARIATY + ":writer")
 	@StepScope
-	public ItemWriter<List<AntikvariatyRecord>> importAntikvariatyWriter() {
+	public ItemWriter<AntikvariatyRecord> importAntikvariatyWriter() {
 		return new AntikvariatyRecordsWriter();
 	}
+
 }

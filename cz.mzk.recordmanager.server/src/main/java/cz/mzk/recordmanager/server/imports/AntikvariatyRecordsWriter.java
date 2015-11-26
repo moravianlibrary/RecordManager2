@@ -9,17 +9,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import cz.mzk.recordmanager.server.model.AntikvariatyRecord;
 import cz.mzk.recordmanager.server.oai.dao.AntikvariatyRecordDAO;
 
-public class AntikvariatyRecordsWriter implements ItemWriter<List<AntikvariatyRecord>>{
+public class AntikvariatyRecordsWriter implements ItemWriter<AntikvariatyRecord>{
 
 	@Autowired
 	private AntikvariatyRecordDAO antikvariatyRecordDao;
 	
 	@Override
-	public void write(List<? extends List<AntikvariatyRecord>> items)
+	public void write(List<? extends AntikvariatyRecord> items)
 			throws Exception {
 		
-		for (List<AntikvariatyRecord> currentList: items) {
-			for (AntikvariatyRecord newRecord: currentList) {
+			for (AntikvariatyRecord newRecord: items) {
 				
 				Long recId = newRecord.getId();
 				if (recId == null) {
@@ -40,7 +39,6 @@ public class AntikvariatyRecordsWriter implements ItemWriter<List<AntikvariatyRe
 					antikvariatyRecordDao.persist(newRecord);
 				}
 			}
-		}
 		
 	}
 
