@@ -1,9 +1,10 @@
 import org.springframework.beans.factory.annotation.Autowired;
 
 import cz.mzk.recordmanager.server.facade.HarvestingFacade;
+import cz.mzk.recordmanager.server.model.HarvestFrequency;
 import cz.mzk.recordmanager.server.oai.dao.OAIHarvestConfigurationDAO;
 
-public class Harvest implements Runnable {
+public class DailyHarvest implements Runnable {
 
 	@Autowired
 	private HarvestingFacade harvestingFacade;
@@ -14,7 +15,9 @@ public class Harvest implements Runnable {
 	@Override
 	public void run() {
 		oaiHarvestConfigurationDAO.findAll().each { conf ->
-			harvestingFacade.incrementalHarvest(conf)
+			if (conf.harvestFrequency == HarvestFrequency.DAILY) {
+				harvestingFacade.incrementalHarvest(conf)
+			}
 		}
 	}
 
