@@ -296,7 +296,7 @@ public class CosmotronItemProcessor implements ItemProcessor<List<OAIRecord>, Li
 		
 		List<Cosmotron996> all996 = hr.getCosmotron();
 		
-		if(all996 == null) return hr;
+		if(all996 == null || all996.isEmpty()) return hr;
 		
 		InputStream is = new ByteArrayInputStream(hr.getRawRecord());
 		Record record = marcXmlParser.parseUnderlyingRecord(is);

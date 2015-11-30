@@ -78,7 +78,12 @@ public class CosmotronHarvestJobTest extends AbstractTest {
 		JobExecution exec = jobExplorer.getJobExecution(jobExecutionId);
 		Assert.assertEquals(exec.getExitStatus(), ExitStatus.COMPLETED);
 		
-		Assert.assertNotNull(recordDao.findByIdAndHarvestConfiguration("MZK01-000213478", confID));
+		HarvestedRecord hr = recordDao.findByIdAndHarvestConfiguration("MZK01-000213478", confID);
+		Assert.assertNotNull(hr);
+		InputStream is = new ByteArrayInputStream(hr.getRawRecord());
+		Record record = marcXmlParser.parseUnderlyingRecord(is);
+		MarcRecord marcRecord = new MarcRecordImpl(record);
+		Assert.assertEquals(marcRecord.getDataFields("996").size(), 5);
 	}
 
 	@Test
