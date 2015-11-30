@@ -69,7 +69,7 @@ public class DedupSimpleKeysStepWriter implements
 		}
 		
 		DedupRecord dr = hr.getDedupRecord();
-		if (dr != null && dr.getUpdated() == null) {
+		if (dr == null || dr.getUpdated() == null) {
 			return true;
 		}
 		
