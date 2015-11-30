@@ -1,5 +1,5 @@
 WITH records AS (
-  SELECT id harvested_record_id, nextval('dedup_record_id_seq') dedup_record_id, NOW() updated
+  SELECT id harvested_record_id, nextval('dedup_record_seq_id') dedup_record_id, NOW() updated
   FROM harvested_record
   WHERE dedup_record_id IS NULL AND id > ?
   ORDER BY id
