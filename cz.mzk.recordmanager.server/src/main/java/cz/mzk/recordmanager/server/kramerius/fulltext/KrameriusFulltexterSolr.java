@@ -54,7 +54,10 @@ public class KrameriusFulltexterSolr implements KrameriusFulltexter {
 			SolrDocumentList documents = response.getResults();
 			return asPages(documents);
 		} catch (Exception ex) {
-			throw new RuntimeException(ex); // FIXME
+			logger.error("Harvesting of fulltext for uuid: {} FAILED", rootUuid);
+
+			return null; //<MJ.>
+			//throw new RuntimeException(ex); // FIXME
 		}
 	}
 
@@ -65,9 +68,16 @@ public class KrameriusFulltexterSolr implements KrameriusFulltexter {
 		for (SolrDocument document : documents) {
 			order++;
 			FulltextMonography page = new FulltextMonography();
+			
 			String uuid = (String) document.getFieldValue(PID_FIELD);
+			logger.debug("Harvesting fulltext from Kramerius for page uuid: {}", uuid);
 			String fulltext = (String) document.getFieldValue(FULLTEXT_FIELD);
 			String pageNum = (String) document.getFieldValue(PAGE_NUMBER_FIELD);
+			
+			pageNum = pageNum==null ? String.valueOf(order) : pageNum;
+			//TODO data sometimes contain garbage values - this should be considered temporary solution
+			pageNum = pageNum.length() > 50 ? pageNum.substring(0, 50) : pageNum; 
+			
 			page.setUuidPage(uuid);
 			if (fulltext != null) {
 				page.setFulltext(fulltext.getBytes(Charsets.UTF_8));

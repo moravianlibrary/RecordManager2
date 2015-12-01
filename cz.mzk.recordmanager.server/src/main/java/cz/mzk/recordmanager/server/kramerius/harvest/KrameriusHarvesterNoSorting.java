@@ -78,7 +78,8 @@ public class KrameriusHarvesterNoSorting {
 		unparsedHr = new HarvestedRecord(id);
 
 		String url = createUrl(uuid);
-
+		
+		logger.info("Harvesting record from: "+url);
 		try (InputStream is = httpClient.executeGet(url)) {
 			if (is.markSupported()) {
 				is.mark(Integer.MAX_VALUE);
@@ -86,10 +87,10 @@ public class KrameriusHarvesterNoSorting {
 			}
 
 			unparsedHr.setRawRecord(IOUtils.toByteArray(is));
-			// unparsedHr.setFormat("dublinCore"); // TODO - make it
-			// configurable // may be deleted?
 		} catch (IOException ioe) {
-
+			logger.error("Harvesting record from: " + url + " caused IOException!");
+			logger.error(ioe.getMessage());
+			return null;
 			// TODO - catch IO Exception properly
 		}
 
@@ -117,8 +118,12 @@ public class KrameriusHarvesterNoSorting {
 		List<HarvestedRecord> records = new ArrayList<HarvestedRecord>();
 
 		for (String s : uuids) {
-			HarvestedRecord r = this.downloadRecord(s);
-			records.add(r);
+			HarvestedRecord r = this.downloadRecord(s);			
+			if (r !=null) {
+				records.add(r);
+			} else {
+				logger.debug("Skipping HarvestedRecord with uuid: " + s + " [null value returned]");
+			}
 		}
 
 		return records;
