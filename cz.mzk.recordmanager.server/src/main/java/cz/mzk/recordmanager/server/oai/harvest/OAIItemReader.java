@@ -6,13 +6,11 @@ import java.util.List;
 import org.springframework.batch.core.ExitStatus;
 import org.springframework.batch.core.StepExecution;
 import org.springframework.batch.core.StepExecutionListener;
-import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.item.ExecutionContext;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemStream;
 import org.springframework.batch.item.ItemStreamException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.transaction.support.TransactionTemplate;
 
 import cz.mzk.recordmanager.server.model.OAIGranularity;
@@ -24,8 +22,6 @@ import cz.mzk.recordmanager.server.oai.model.OAIRecord;
 import cz.mzk.recordmanager.server.util.HibernateSessionSynchronizer;
 import cz.mzk.recordmanager.server.util.HibernateSessionSynchronizer.SessionBinder;
 
-@Component
-@StepScope
 public class OAIItemReader implements ItemReader<List<OAIRecord>>, ItemStream,
 		StepExecutionListener {
 
@@ -37,9 +33,6 @@ public class OAIItemReader implements ItemReader<List<OAIRecord>>, ItemStream,
 
 	@Autowired
 	private TransactionTemplate template;
-
-	@Autowired
-	private HibernateSessionSynchronizer sync;
 
 	@Autowired
 	private HibernateSessionSynchronizer hibernateSync;
