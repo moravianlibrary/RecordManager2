@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.JobParameter;
 import org.springframework.batch.core.JobParameters;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Component;
 
@@ -31,8 +32,21 @@ public class IndexingFacadeImpl implements IndexingFacade {
 	@Autowired
 	private JobExecutor jobExecutor;
 
+	@Value(value = "${solr.url:#{null}}")
+	private String defaultSolrUrl;
+
+	public void index() {
+		index(null);
+	}
+
 	@Override
 	public void index(String solrUrl) {
+		if (solrUrl == null) {
+			if (defaultSolrUrl == null || defaultSolrUrl.isEmpty()) {
+				throw new IllegalArgumentException("Parameter solrUrl is required, no default given");
+			}
+			solrUrl = defaultSolrUrl;
+		}
 		Date lastIndexed = getLastIndexed(solrUrl);
 		Map<String, JobParameter> parameters = new HashMap<>();
 		parameters.put(Constants.JOB_PARAM_SOLR_URL, new JobParameter(solrUrl));

@@ -8,8 +8,6 @@ import cz.mzk.recordmanager.server.oai.dao.OAIHarvestConfigurationDAO;
 
 public class DailyScriptExample implements Runnable {
 
-	private static final String SOLR_URL = "http://localhost:8983/solr/biblio";
-
 	@Autowired
 	private HarvestingFacade harvestingFacade;
 
@@ -30,7 +28,7 @@ public class DailyScriptExample implements Runnable {
 			}
 		}
 		dedupFacade.deduplicate();
-		indexingFacade.index(SOLR_URL);
+		indexingFacade.index();
 	}
 
 }
