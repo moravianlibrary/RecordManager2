@@ -10,7 +10,7 @@ import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.solr.SolrServerFactory;
 import cz.mzk.recordmanager.server.util.HttpClient;
 
-public class KrameriusHarvesterTest extends AbstractKrameriusTest {
+public class KrameriusHarvesterNoSortingTest extends AbstractKrameriusTest {
 
 	@Autowired
 	private HttpClient httpClient;
@@ -25,8 +25,8 @@ public class KrameriusHarvesterTest extends AbstractKrameriusTest {
 		KrameriusHarvesterParams parameters = new KrameriusHarvesterParams();
 		parameters.setUrl("http://k4.techlib.cz/search/api/v5.0");
 		parameters.setMetadataStream("DC");
-		KrameriusHarvester harvester = new KrameriusHarvester(httpClient, solrServerFactory, parameters, 1L);
-		List<String> uuids = harvester.getUuids(null);
+		KrameriusHarvesterNoSorting harvester = new KrameriusHarvesterNoSorting(httpClient, solrServerFactory, parameters, 1L);
+		List<String> uuids = harvester.getUuids(0);
 		for (String uuid : uuids) {
 			HarvestedRecord record = harvester.downloadRecord(uuid);
 			Assert.assertNotNull(record);
@@ -42,18 +42,18 @@ public class KrameriusHarvesterTest extends AbstractKrameriusTest {
 		KrameriusHarvesterParams parameters = new KrameriusHarvesterParams();
 		parameters.setUrl("http://k4.techlib.cz/search/api/v5.0");
 		parameters.setMetadataStream("DC");
-		KrameriusHarvester harvester = new KrameriusHarvester(httpClient, solrServerFactory, parameters, 1L);
+		KrameriusHarvesterNoSorting harvester = new KrameriusHarvesterNoSorting(httpClient, solrServerFactory, parameters, 1L);
 		
 		//1st response with IOException => uuid list is empty
 		List<String> uuids = harvester.getUuids(null);
 		Assert.assertTrue(uuids.isEmpty());
 		
 		//2nd response with SolrServerException => uuid list is empty
-		uuids = harvester.getUuids(null);
+		uuids = harvester.getUuids(0);
 		Assert.assertTrue(uuids.isEmpty());
 
 		//3rd response is => OK
-		uuids = harvester.getUuids(null);
+		uuids = harvester.getUuids(0);
 		Assert.assertFalse(uuids.isEmpty());
 
 		//1st DC download - server responds with IOException, download returns null;

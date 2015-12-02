@@ -1,7 +1,5 @@
 package cz.mzk.recordmanager.server.kramerius.harvest;
 
-import java.io.UnsupportedEncodingException;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -13,9 +11,6 @@ import org.springframework.batch.item.ExecutionContext;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemStream;
 import org.springframework.batch.item.ItemStreamException;
-import org.springframework.batch.item.NonTransientResourceException;
-import org.springframework.batch.item.ParseException;
-import org.springframework.batch.item.UnexpectedInputException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.support.TransactionTemplate;
@@ -80,27 +75,13 @@ public class KrameriusItemReaderNoSorting implements ItemReader<List<HarvestedRe
 		// get metadata
 		List<HarvestedRecord> records = kHarvester.getRecords(uuids);
 
-		for (HarvestedRecord r : records) {
-
-//			String s;
-//			try {
-//				s = new String(r.getRawRecord(), "UTF-8");
-//			} catch (UnsupportedEncodingException e) {
-//				e.printStackTrace();
-//			}
-//			System.out.println(s);
-		}
-
-		// decide if continue (docNum vs start)
-
-//		System.out.println("porovnavame start: " + start
-//				+ " a harvester.numFound():" + kHarvester.getNumFound());
 		Long queryRows = conf.getQueryRows();
 		if (start < kHarvester.getNumFound()) {
 			start = start + queryRows.intValue();
 		} else {
 			finished = true;
 		}
+		
 		// return metadata
 		return records;
 	}

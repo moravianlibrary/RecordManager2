@@ -11,6 +11,7 @@ import java.util.Map;
 import org.apache.commons.io.IOUtils;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrRequest;
+import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.HttpSolrServer;
 import org.apache.solr.client.solrj.impl.XMLResponseParser;
 import org.apache.solr.client.solrj.request.QueryRequest;
@@ -31,7 +32,7 @@ import cz.mzk.recordmanager.server.util.SolrUtils;
 public class KrameriusHarvesterNoSorting {
 
 	private static Logger logger = LoggerFactory
-			.getLogger(KrameriusHarvester.class);
+			.getLogger(KrameriusHarvesterNoSorting.class);
 
 	private static String PID_FIELD = "PID";
 
@@ -168,9 +169,15 @@ public class KrameriusHarvesterNoSorting {
 			documents = response.getResults();
 			numFound = documents.getNumFound();
 			numProcessed += response.getResults().size();
-		} catch (Exception ex) {
-			throw new RuntimeException(ex); // FIXME
-		}
+		 } catch (SolrServerException sse) {
+				logger.error("Harvesting list of uuids from Kramerius API: caused SolrServerException for model: %s, url:%s, when processed:%s of %s", params.getModel(), params.getUrl(), numProcessed, numFound);
+				logger.error(sse.getMessage());
+				return new SolrDocumentList();
+			} catch (IOException ioe) {
+				logger.error("Harvesting list of uuids from Kramerius API: caused IOException for model: %s, url:%s, when processed:%s of %s", params.getModel(), params.getUrl(), numProcessed, numFound);
+				logger.error(ioe.getMessage());
+				return new SolrDocumentList();
+			}
 		return documents;
 	}
 

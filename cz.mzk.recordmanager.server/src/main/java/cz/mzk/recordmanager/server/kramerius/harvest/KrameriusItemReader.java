@@ -77,32 +77,10 @@ public class KrameriusItemReader implements ItemReader<List<HarvestedRecord>>,
 		// get metadata
 		List<HarvestedRecord> records = kHarvester.getRecords(uuids);
 
-		for (HarvestedRecord r : records) {
-
-//			String s;
-//			try {
-//				s = new String(r.getRawRecord(), "UTF-8");
-//			} catch (UnsupportedEncodingException e) {
-//				e.printStackTrace();
-//			}
-//			System.out.println(s);
-		}
-
-		// decide if continue (docNum vs start)
-
-//		System.out.println("porovnavame start: " + start
-//				+ " a harvester.numFound():" + kHarvester.getNumFound());
-		/*
-		Long queryRows = conf.getQueryRows();
-		if (start < kHarvester.getNumFound()) {
-			start = start + queryRows.intValue();
-		} else {
-			finished = true;
-		}
-		*/
 		if (uuids.isEmpty() || (previousPid != null && previousPid.equals(nextPid))) {
 			finished = true;
 		}
+		
 		// return metadata
 		return records;
 	}

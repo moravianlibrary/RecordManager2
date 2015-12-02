@@ -9,6 +9,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrQuery.ORDER;
 import org.apache.solr.client.solrj.SolrRequest;
+import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.HttpSolrServer;
 import org.apache.solr.client.solrj.impl.XMLResponseParser;
 import org.apache.solr.client.solrj.request.QueryRequest;
@@ -133,9 +134,6 @@ public class KrameriusHarvester {
 
 		SolrServerFacade solr = solrServerFactory.create(params.getUrl(), Mode.KRAMERIUS);
 
-//		if (solr instanceof HttpSolrServer) {
-//			((HttpSolrServer) solr).setParser(new XMLResponseParser());
-//		}
 		SolrQuery query = new SolrQuery();
 		query.setQuery("*:*");
 		if (nextPid != null) {
@@ -160,8 +158,14 @@ public class KrameriusHarvester {
 		try {
 			QueryResponse response = solr.query(request);
 			documents = response.getResults();
-		} catch (Exception ex) {
-			throw new RuntimeException(ex); // FIXME
+		 } catch (SolrServerException sse) {
+			logger.error("Harvesting list of uuids from Kramerius API: caused SolrServerException for model: %s, url:%s and nextPid:%s", params.getModel(), params.getUrl(), nextPid);
+			logger.error(sse.getMessage());
+			return new SolrDocumentList();
+		} catch (IOException ioe) {
+			logger.error("Harvesting list of uuids from Kramerius API: caused IOException for model: %s, url:%s and nextPid:%s", params.getModel(), params.getUrl(), nextPid);
+			logger.error(ioe.getMessage());
+			return new SolrDocumentList();
 		}
 		return documents;
 	}
