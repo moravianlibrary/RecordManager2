@@ -16,39 +16,21 @@ public class DublinCoreParserXMLImplTest extends AbstractTest {
 
 	@Test
 	public void testDCRecordK4NTK() {
-		// System.out.println("test K4NTK- parser");
 		InputStream is = this
 				.getClass()
 				.getResourceAsStream(
 						"/records/dublincore/K4NTK-uuid-d3cf7ce9-1891-4e39-bb35-3b38b6eb0d60.xml");
-		/* System.out.println("načetl se soubor.."); */
 		DublinCoreRecord dc = parser.parseRecord(is);
-		/*
-		 * System.out.println("v zaznamu je title: "+dc.getFirstTitle());
-		 * System.out.println("v záznamu je creator: "+dc.getFirstCreator());
-		 * System
-		 * .out.println("v záznamu je identifier: "+dc.getFirstIdentifier());
-		 */
 		Assert.assertNotNull(dc);
-
 	}
 
 	@Test
 	public void testDCRecordK4MZK() {
-		System.out.println("test K4MZK- parser");
 		InputStream is = this
 				.getClass()
 				.getResourceAsStream(
 						"/records/dublincore/K4MZK-uuid-c28962c9-a67a-11e1-ac9a-0050569d679d.xml");
-		/* System.out.println("načetl se soubor.."); */
 		DublinCoreRecord dc = parser.parseRecord(is);
-
-		/*
-		 * System.out.println("v záznamu je title: "+dc.getFirstTitle());
-		 * System.out.println("v záznamu je creator: "+dc.getFirstCreator());
-		 * System
-		 * .out.println("v záznamu je identifier: "+dc.getFirstIdentifier());
-		 */
 		Assert.assertNotNull(dc);
 
 	}
@@ -59,17 +41,32 @@ public class DublinCoreParserXMLImplTest extends AbstractTest {
 		/* file contains complete oai-pmh metadata structure */
 		InputStream is = this.getClass().getResourceAsStream(
 				"/records/dublincore/NuslNTK-nusl2-oaipmh.xml");
-		System.out.println("načetl se soubor..");
 		DublinCoreRecord dc = parser.parseRecord(is);
-
-		/*
-		 * System.out.println("v zaznamu je title: "+dc.getFirstTitle());
-		 * System.out.println("v záznamu je creator: "+dc.getFirstCreator());
-		 * System
-		 * .out.println("v záznamu je identifier: "+dc.getFirstIdentifier());
-		 */
 		Assert.assertNotNull(dc);
 
 	}
 
+	//test of record which is actually not Dublin Core
+	@Test(expectedExceptions = InvalidDcException.class)
+	public void testBadDCRecord() {
+		InputStream is = this
+				.getClass()
+				.getResourceAsStream(
+						"/records/marcxml/KFBZ-kpw0120405.xml");
+		DublinCoreRecord dc = parser.parseRecord(is);
+
+	}
+	
+	//test of file which is not even XML 
+	@Test(expectedExceptions = InvalidDcException.class)
+	public void testNotXMLDCRecord() {
+		InputStream is = this
+				.getClass()
+				.getResourceAsStream(
+						"/sample/kramerius/children.json");
+		DublinCoreRecord dc = parser.parseRecord(is);
+
+	}
+	
+	
 }
