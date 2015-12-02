@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import cz.mzk.recordmanager.server.dc.InvalidDcException;
 import cz.mzk.recordmanager.server.dedup.DedupKeyParserException;
 import cz.mzk.recordmanager.server.dedup.DelegatingDedupKeysParser;
 import cz.mzk.recordmanager.server.marc.InvalidMarcException;
@@ -48,7 +49,10 @@ public class HarvestedRecordWriter implements ItemWriter<List<HarvestedRecord>> 
 								hr, dkpe);
 					} catch (InvalidMarcException ime) {
 						logger.warn("Skipping record due to invalid MARC {}", hr.getUniqueId());
+					} catch (InvalidDcException dce) {
+						logger.warn("Skipping record due to invalid DublinCore {}", hr.getUniqueId());
 					}
+					
 				}
 				recordDao.persist(hr);
 				
