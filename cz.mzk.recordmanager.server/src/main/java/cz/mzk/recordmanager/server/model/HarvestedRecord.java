@@ -48,7 +48,7 @@ public class HarvestedRecord extends AbstractDomainObject {
 		private String recordId;
 
 		// for hibernate
-		private HarvestedRecordUniqueId() {
+		protected HarvestedRecordUniqueId() {
 		}
 		
 		public HarvestedRecordUniqueId(ImportConfiguration harvestedFrom,
@@ -216,7 +216,7 @@ public class HarvestedRecord extends AbstractDomainObject {
 	private boolean shouldBeProcessed = true;
 	
 	
-	private HarvestedRecord() {
+	protected HarvestedRecord() {
 	}
 	
 	public HarvestedRecord(HarvestedRecordUniqueId id) {
