@@ -27,8 +27,12 @@ public class BlobToStringValueRowMapper implements RowMapper<String> {
 
 	@Override
 	public String mapRow(ResultSet rs, int rowNum) throws SQLException {
-		Blob blob = rs.getBlob(columnIndex);
-		try (InputStream is = blob.getBinaryStream()) {
+
+// <MJ.> using of Blob caused this Exception http://stackoverflow.com/questions/2069541/postgresql-jdbc-and-streaming-blobs
+//		Blob blob = rs.getBlob(columnIndex);
+//		try (InputStream is = blob.getBinaryStream()) {
+
+		try (InputStream is = rs.getBinaryStream(columnIndex)) {
 			return CharStreams.toString(new InputStreamReader(is, Charsets.UTF_8));
 		} catch (IOException ioe) {
 			throw new SQLException(ioe.getMessage(), ioe);
