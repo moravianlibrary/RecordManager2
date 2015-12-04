@@ -55,9 +55,9 @@ public class KrameriusFulltexterSolr implements KrameriusFulltexter {
 			return asPages(documents);
 		} catch (Exception ex) {
 			logger.error("Harvesting of fulltext for uuid: {} FAILED", rootUuid);
+			logger.error(ex.getMessage());
 
-			return null; //<MJ.>
-			//throw new RuntimeException(ex); // FIXME
+			return new ArrayList<FulltextMonography>();
 		}
 	}
 
