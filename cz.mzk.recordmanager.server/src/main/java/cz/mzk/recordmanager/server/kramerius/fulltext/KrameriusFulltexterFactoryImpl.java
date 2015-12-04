@@ -22,7 +22,7 @@ public class KrameriusFulltexterFactoryImpl implements KrameriusFulltexterFactor
 		KrameriusFulltexter fulltexter = null;
 		switch (config.getFulltextHarvestType()) {
 			case "solr":
-				fulltexter = new KrameriusFulltexterSolr(solrFactory.create(config.getUrl()));
+				fulltexter = new KrameriusFulltexterSolr(solrFactory.create(config.getUrlSolr()));
 				break;
 			default:
 				fulltexter = new KrameriusFulltexterFedora(config.getUrl(),
