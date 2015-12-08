@@ -37,6 +37,7 @@ import cz.mzk.recordmanager.server.dedup.RegenerateDedupKeysJobConfig;
 import cz.mzk.recordmanager.server.export.ExportRecordsJobConfig;
 import cz.mzk.recordmanager.server.imports.ImportRecordJobConfig;
 import cz.mzk.recordmanager.server.index.DeleteAllRecordsFromSolrJobConfig;
+import cz.mzk.recordmanager.server.index.IndexHarvestedRecordsToSolrJobConfig;
 import cz.mzk.recordmanager.server.index.IndexRecordsToSolrJobConfig;
 import cz.mzk.recordmanager.server.kramerius.fulltext.KrameriusFulltextJobConfig;
 import cz.mzk.recordmanager.server.kramerius.harvest.KrameriusHarvestJobConfig;
@@ -174,7 +175,8 @@ public class AppConfig extends DefaultBatchConfigurer {
 				ImportRecordJobConfig.class,
 				ExportRecordsJobConfig.class,
 				DeleteAllRecordsFromSolrJobConfig.class,
-				MiscellaneousJobsConfig.class
+				MiscellaneousJobsConfig.class,
+				IndexHarvestedRecordsToSolrJobConfig.class
 			);
 	}
 

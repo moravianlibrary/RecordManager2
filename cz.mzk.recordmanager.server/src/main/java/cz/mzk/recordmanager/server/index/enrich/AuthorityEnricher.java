@@ -43,21 +43,17 @@ public class AuthorityEnricher implements DedupRecordEnricher {
 
 		// extract all existing authors from local records
 		localRecords.stream()
+			.filter(r -> r.containsKey(SolrFieldConstants.AUTHOR_DUMMY_FIELD)) //
 	    	.forEach(r -> r.getFieldValues(SolrFieldConstants.AUTHOR_DUMMY_FIELD) //
 	    			.stream().filter(s -> (s instanceof String)).forEach(s -> authorsSort.add((String) s)) //
 	    );
 		
 		// extract all authority keys from local records
 		localRecords.stream()
+			.filter(r -> r.containsKey(SolrFieldConstants.AUTHOR_AUTHORITY_DUMMY_FIELD)) //
 		    .forEach(r -> r.getFieldValues(SolrFieldConstants.AUTHOR_AUTHORITY_DUMMY_FIELD) //
 		    	.stream().filter(s -> (s instanceof String)).forEach(s -> authorityKeysSet.add((String) s)) //
 		);
-		
-		// remove dummy fields from all records
-		localRecords.stream().forEach(r -> r.removeField(SolrFieldConstants.AUTHOR_AUTHORITY_DUMMY_FIELD));
-		localRecords.stream().forEach(r -> r.removeField(SolrFieldConstants.AUTHOR_DUMMY_FIELD));
-		mergedDocument.removeField(SolrFieldConstants.AUTHOR_AUTHORITY_DUMMY_FIELD);
-		mergedDocument.removeField(SolrFieldConstants.AUTHOR_DUMMY_FIELD);
 		
 		for (Object currentAuthKey: authorityKeysSet) {
 			if (!(currentAuthKey instanceof String)) {

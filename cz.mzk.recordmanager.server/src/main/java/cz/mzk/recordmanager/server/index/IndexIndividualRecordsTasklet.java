@@ -16,6 +16,7 @@ import cz.mzk.recordmanager.server.solr.LoggingSolrIndexingExceptionHandler;
 import cz.mzk.recordmanager.server.solr.SolrServerFacade;
 import cz.mzk.recordmanager.server.solr.SolrServerFactory;
 import cz.mzk.recordmanager.server.solr.SolrServerFactoryImpl.Mode;
+import cz.mzk.recordmanager.server.util.SolrUtils;
 
 public class IndexIndividualRecordsTasklet implements Tasklet {
 
@@ -55,6 +56,7 @@ public class IndexIndividualRecordsTasklet implements Tasklet {
 			}
 			List<HarvestedRecord> records = harvestedRecordDao.getByDedupRecord(dedupRecord);
 			List<SolrInputDocument> documents = solrInputDocumentFactory.create(dedupRecord, records);
+			documents = SolrUtils.removeHiddenFields(documents);
 			solrServer.add(documents, commitWithinMs);
 		}
 		solrServer.commit();

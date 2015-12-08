@@ -25,6 +25,7 @@ public class HarvestedRecordRowMapper implements
 		ImportConfiguration importConfig = importConfDao.load(rs.getLong("import_conf_id"));
 		HarvestedRecordUniqueId id = new HarvestedRecordUniqueId(importConfig, rs.getString("record_id"));
 		HarvestedRecord record = new HarvestedRecord(id);
+		record.setId(rs.getLong("id"));
 		record.setHarvestedFrom(importConfig);
 		record.setUpdated(rs.getDate("updated"));
 		record.setDeleted(rs.getDate("deleted"));

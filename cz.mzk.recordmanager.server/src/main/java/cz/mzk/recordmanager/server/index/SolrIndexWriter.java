@@ -2,6 +2,7 @@ package cz.mzk.recordmanager.server.index;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.Future;
 
@@ -19,6 +20,7 @@ import cz.mzk.recordmanager.server.solr.LoggingSolrIndexingExceptionHandler;
 import cz.mzk.recordmanager.server.solr.SolrServerFacade;
 import cz.mzk.recordmanager.server.solr.SolrServerFactory;
 import cz.mzk.recordmanager.server.solr.SolrServerFactoryImpl.Mode;
+import cz.mzk.recordmanager.server.util.SolrUtils;
 
 public class SolrIndexWriter implements ItemWriter<Future<List<SolrInputDocument>>>, StepExecutionListener {
 
@@ -45,6 +47,7 @@ public class SolrIndexWriter implements ItemWriter<Future<List<SolrInputDocument
 			for (Future<List<SolrInputDocument>> item : items) {
 				List<SolrInputDocument> docs = item.get();
 				if (docs != null) {
+					docs = SolrUtils.removeHiddenFields(docs);
 					documents.addAll(docs);
 				}
 			}
