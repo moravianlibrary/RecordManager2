@@ -33,7 +33,14 @@ public class BlobToStringValueRowMapper implements RowMapper<String> {
 //		try (InputStream is = blob.getBinaryStream()) {
 
 		try (InputStream is = rs.getBinaryStream(columnIndex)) {
+			
+			//sometimes there is no OCR, only structure => causes NullPointerException
+			if (is == null) {
+				return new String();
+			}
+			
 			return CharStreams.toString(new InputStreamReader(is, Charsets.UTF_8));
+
 		} catch (IOException ioe) {
 			throw new SQLException(ioe.getMessage(), ioe);
 		}
