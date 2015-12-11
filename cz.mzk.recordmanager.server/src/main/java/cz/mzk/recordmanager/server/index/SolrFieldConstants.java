@@ -44,18 +44,18 @@ public class SolrFieldConstants {
 
 	public static final String FULLTEXT_FIELD = "fulltext";
 
+	public static final String SOLR_HIDDEN_FIELD_PREFIX = "_hidden";
+
 	/**
 	 * dummy fields used for processing purposes only, shouldn't be indexed. Fields are deleted in AuthorityEnricher. 
 	 */
-	public static final String AUTHOR_AUTHORITY_DUMMY_FIELD = "authority_dummy_field";
-	
-	public static final String AUTHOR_DUMMY_FIELD = "authors_dummy";
-	
+	public static final String AUTHOR_AUTHORITY_DUMMY_FIELD = "_hidden_authority_dummy_field";
+
+	public static final String AUTHOR_DUMMY_FIELD = "_hidden_authors_dummy";
 	
 	/**
 	 * dummy field for passing kramerius policy, removed in UrlEnricher
 	 */
 	public static final String KRAMERIUS_DUMMY_RIGTHS = "kramerius_dummy_rights";
-	
 
 }

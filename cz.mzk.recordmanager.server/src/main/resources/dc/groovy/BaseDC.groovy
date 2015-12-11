@@ -22,6 +22,6 @@ policy_txt = getPolicy()
 local_statuses_facet_str_mv = getStatuses()
 fullrecord = getFullRecord()
 
-authors_dummy = ""
-authority_dummy_field = ""
+_hidden_authors_dummy = ""
+_hidden_authority_dummy_field = ""
 kramerius_dummy_rights = getRights()

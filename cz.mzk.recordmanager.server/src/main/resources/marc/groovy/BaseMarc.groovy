@@ -8,7 +8,7 @@ allfields = getAllFields()
 fullrecord = getFullrecord()
 
 language = translate("mzk_language.map", getLanguages(), null)
-country_txt = translate("mzk_country.map", getCountry(), null)
+country_str = translate("mzk_country.map", getCountry(), null)
 
 author = getFirstField "100abcd"
 author_fuller = getFirstField "100q"

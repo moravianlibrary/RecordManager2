@@ -12,7 +12,8 @@ public class SolrServerFactoryImpl implements SolrServerFactory {
 		DEFAULT {
 			@Override
 			public SolrServer create(String url) {
-				return new HttpSolrServer(url);
+				HttpSolrServer solr = new HttpSolrServer(url);
+				return solr;
 			}
 		},
 

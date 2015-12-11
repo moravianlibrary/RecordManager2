@@ -30,6 +30,7 @@ import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecordFormat.HarvestedRecordFormatEnum;
 import cz.mzk.recordmanager.server.model.ImportConfiguration;
 import cz.mzk.recordmanager.server.scripting.MappingResolver;
+import cz.mzk.recordmanager.server.util.MetadataUtils;
 import cz.mzk.recordmanager.server.util.SolrUtils;
 
 @Component
@@ -192,7 +193,7 @@ public class SolrInputDocumentFactoryImpl implements SolrInputDocumentFactory, I
 	protected List<String> getInstitution(HarvestedRecord record){
 		if(record.getHarvestedFrom() != null) {
 			if (record.getHarvestedFrom().isLibrary()) {
-				String city = getCityOfRecord(record);
+				String city = MetadataUtils.normalize(getCityOfRecord(record));
 				String name = getInstitutionOfRecord(record);
 				return SolrUtils.createHierarchicFacetValues(INSTITUTION_LIBRARY, city, name);
 			}

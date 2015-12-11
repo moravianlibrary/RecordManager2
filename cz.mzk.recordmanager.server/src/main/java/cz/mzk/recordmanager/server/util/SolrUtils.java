@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import org.apache.solr.client.solrj.util.ClientUtils;
@@ -73,6 +74,27 @@ public class SolrUtils {
 
 	public static void sortByWeight(List<SolrInputDocument> childs) {
 		Collections.sort(childs, WEIGHT_DOC_COMPARATOR.INSTANCE);
+	}
+
+	public static List<SolrInputDocument> removeHiddenFields(List<SolrInputDocument> documents) {
+		for (SolrInputDocument document : documents) {
+			removeHiddenFields(document);
+		}
+		return documents;
+	}
+
+	public static SolrInputDocument removeHiddenFields(SolrInputDocument document) {
+		Iterator<String> iter = document.getFieldNames().iterator();
+		while (iter.hasNext()) {
+			String field = iter.next();
+			if (field.startsWith(SolrFieldConstants.SOLR_HIDDEN_FIELD_PREFIX)) {
+				iter.remove();
+			}
+		}
+		if (document.hasChildDocuments()) {
+			removeHiddenFields(document.getChildDocuments());
+		}
+		return document;
 	}
 
 	/**

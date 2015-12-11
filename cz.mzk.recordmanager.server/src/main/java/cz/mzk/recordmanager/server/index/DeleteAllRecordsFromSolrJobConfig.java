@@ -5,7 +5,6 @@ import static cz.mzk.recordmanager.server.springbatch.JobParameterDeclaration.pa
 import java.util.Arrays;
 import java.util.Collection;
 
-import org.apache.solr.client.solrj.SolrServer;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.StepContribution;

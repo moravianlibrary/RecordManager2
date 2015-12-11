@@ -6,9 +6,7 @@ import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.ArrayDeque;
 import java.util.Arrays;
-import java.util.Deque;
 import java.util.regex.Pattern;
 
 import org.marc4j.Constants;
@@ -20,13 +18,9 @@ import org.marc4j.marc.Record;
 
 public class MarcAlephStreamReader implements MarcReader{
 
-    private DataInputStream input = null;
-
-    private Record record;
+	private BufferedReader br;
 
     private MarcFactory factory;
-
-    private Deque<String> queue = null;
     
     private static final Pattern LDR_PATTERN = Pattern.compile("^[^ ]* LDR.*$");
     
@@ -37,16 +31,15 @@ public class MarcAlephStreamReader implements MarcReader{
      */
     public MarcAlephStreamReader(InputStream input) {
     	this(input, null);
-    	splitRecords(this.input);
     }
 
 	/**
      * Constructs an instance with the specified input stream.
      */
     public MarcAlephStreamReader(InputStream input, String encoding) {
-        this.input =
+    	br = new BufferedReader(new InputStreamReader(
                 new DataInputStream((input.markSupported()) ? input
-                        : new BufferedInputStream(input));
+                        : new BufferedInputStream(input))));
         factory = MarcFactoryImpl.newInstance();
     }
 
@@ -54,7 +47,12 @@ public class MarcAlephStreamReader implements MarcReader{
      * Returns true if the iteration has more records, false otherwise.
      */
     public boolean hasNext() {
-    	return !queue.isEmpty();
+    	try {
+			return br.ready();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return false;
     }
 
     /**
@@ -63,44 +61,29 @@ public class MarcAlephStreamReader implements MarcReader{
      * @return Record - the record object
      */
     public Record next() {
-        record = factory.newRecord();
-        String stringRecord = queue.pop();
-        parseRecord(record, stringRecord);
-        return record;
+        return nextRecord();
     }
     
-    private void splitRecords(InputStream input) {
-    	BufferedReader br = new BufferedReader(new InputStreamReader(input));
-    	queue = new ArrayDeque<String>();
+    private Record nextRecord() {
     	try {
-    		StringBuilder rec = new StringBuilder();
+    		Record rec = null;
     		String newLine;
 			while((newLine = br.readLine()) != null){
-				if(newLine == "" || newLine.isEmpty()) continue;
-	    		if(LDR_PATTERN.matcher(newLine).find()){
-	    			if(rec.length() != 0){
-	    				queue.push(rec.toString());
-	    			}
-	    			rec = new StringBuilder();
-	    			rec.append(newLine);
-	    			rec.append("\n");
-	    		}
-	    		else{
-	    			rec.append(newLine);
-	    			rec.append("\n");
-	    		}
-
+				if(newLine == "" || newLine.isEmpty()) return rec;
+	    		if(LDR_PATTERN.matcher(newLine).find()) rec = factory.newRecord();
+	    		parseLine(rec, newLine);
 	    	}
-			queue.push(rec.toString());
+			return rec;
 		} catch (IOException e) {
 			e.printStackTrace();
-		}   	
-		
+		}
+
+    	return null;
 	}
 
-    private void parseRecord(Record record, String strRecord) {
+    private void parseLine(Record record, String newLine) {
     	
-    	String arrayRec[] = strRecord.split("\n");
+    	String arrayRec[] = newLine.split("\n");
     	int idLength = arrayRec[0].indexOf(" ");
     	int indexData = idLength+9;
 		String f001 = arrayRec[0].substring(0, idLength);

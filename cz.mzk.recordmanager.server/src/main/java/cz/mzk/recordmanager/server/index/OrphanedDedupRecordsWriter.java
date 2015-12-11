@@ -3,7 +3,6 @@ package cz.mzk.recordmanager.server.index;
 import java.text.MessageFormat;
 import java.util.List;
 
-import org.apache.solr.client.solrj.SolrServer;
 import org.springframework.batch.core.ExitStatus;
 import org.springframework.batch.core.StepExecution;
 import org.springframework.batch.core.StepExecutionListener;
