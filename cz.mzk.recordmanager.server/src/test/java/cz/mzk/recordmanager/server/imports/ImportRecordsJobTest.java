@@ -53,6 +53,8 @@ public class ImportRecordsJobTest extends AbstractTest {
 	private String testFileLine2;
 	private String testFilePatents1;
 	private String testFilePatents2;
+	private String testFileOai;
+	private String testFolderOai;
 	
 	@BeforeClass
 	public void init() {
@@ -67,6 +69,8 @@ public class ImportRecordsJobTest extends AbstractTest {
 		testFileLine2 = this.getClass().getResource("/import/marcline/MZK-records.mrc").getFile();
 		testFilePatents1 = this.getClass().getResource("/import/patents/201546-B6-305523.xml").getFile();
 		testFilePatents2 = this.getClass().getResource("/import/patents/PatentsRecords.xml").getFile();
+		testFileOai = this.getClass().getResource("/import/oai/ANL01.000000502.ANL-CPK.xml").getFile();
+		testFolderOai = this.getClass().getResource("/import/oai/").getFile();
 	}
 	
 	@BeforeMethod
@@ -225,5 +229,31 @@ public class ImportRecordsJobTest extends AbstractTest {
 		
 		Assert.assertNotNull(harvestedRecordDao.findByIdAndHarvestConfiguration("201546-B6-305523", 300L));
 		Assert.assertNotNull(harvestedRecordDao.findByIdAndHarvestConfiguration("201546-B6-305524", 300L));
+	}
+
+	// import oai format
+	@Test
+	public void testSingleFileImportOai() throws Exception {
+		Job job = jobRegistry.getJob(Constants.JOB_ID_IMPORT_OAI);
+		Map<String, JobParameter> params = new HashMap<String, JobParameter>();
+		params.put(Constants.JOB_PARAM_CONF_ID, new JobParameter(300L));
+		params.put(Constants.JOB_PARAM_IN_FILE, new JobParameter(testFileOai));
+		JobParameters jobParams = new JobParameters(params);
+		jobLauncher.run(job, jobParams);
+
+		Assert.assertNotNull(harvestedRecordDao.findByIdAndHarvestConfiguration("000000502", 300L));
+	}
+
+	@Test
+	public void testMultipleFilesImportOai() throws Exception {
+		Job job = jobRegistry.getJob(Constants.JOB_ID_IMPORT_OAI);
+		Map<String, JobParameter> params = new HashMap<String, JobParameter>();
+		params.put(Constants.JOB_PARAM_CONF_ID, new JobParameter(300L));
+		params.put(Constants.JOB_PARAM_IN_FILE, new JobParameter(testFolderOai));
+		JobParameters jobParams = new JobParameters(params);
+		jobLauncher.run(job, jobParams);
+
+		Assert.assertNotNull(harvestedRecordDao.findByIdAndHarvestConfiguration("000000502", 300L));
+		Assert.assertNotNull(harvestedRecordDao.findByIdAndHarvestConfiguration("000000503", 300L));
 	}
 }
