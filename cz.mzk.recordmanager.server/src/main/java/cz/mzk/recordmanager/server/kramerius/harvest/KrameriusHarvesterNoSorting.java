@@ -57,7 +57,7 @@ public class KrameriusHarvesterNoSorting {
 	public List<String> getUuids(Integer krameriusStart) {
 		List<String> uuids = new ArrayList<String>();
 
-		SolrDocumentList documents = sendRequest(krameriusStart, "PID");
+		SolrDocumentList documents = sendRequest(krameriusStart, PID_FIELD);
 		numFound = documents.getNumFound();
 
 		for (SolrDocument document : documents) {
@@ -92,7 +92,6 @@ public class KrameriusHarvesterNoSorting {
 			logger.error("Harvesting record from: " + url + " caused IOException!");
 			logger.error(ioe.getMessage());
 			return null;
-			// TODO - catch IO Exception properly
 		}
 
 		// return unparsed(!) HarvestedRecord (most of variables are not set
@@ -137,9 +136,6 @@ public class KrameriusHarvesterNoSorting {
 
 		SolrServerFacade solr = solrServerFactory.create(params.getUrl(), Mode.KRAMERIUS);
 
-//		if (solr instanceof HttpSolrServer) {
-//			((HttpSolrServer) solr).setParser(new XMLResponseParser());
-//		}
 		SolrQuery query = new SolrQuery();
 
 		// creates map of SOLR query parameters and formats them into string,

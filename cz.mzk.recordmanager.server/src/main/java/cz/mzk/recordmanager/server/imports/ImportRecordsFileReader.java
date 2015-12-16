@@ -21,6 +21,7 @@ import cz.mzk.recordmanager.server.marc.marc4j.MarcAlephStreamReader;
 import cz.mzk.recordmanager.server.marc.marc4j.MarcISO2709StreamReader;
 import cz.mzk.recordmanager.server.marc.marc4j.MarcLineStreamReader;
 import cz.mzk.recordmanager.server.marc.marc4j.MarcXmlReader;
+import cz.mzk.recordmanager.server.marc.marc4j.PatentsXmlStreamReader;
 
 public class ImportRecordsFileReader implements ItemReader<List<Record>> {
 
@@ -65,6 +66,8 @@ public class ImportRecordsFileReader implements ItemReader<List<Record>> {
 			return new MarcAlephStreamReader(inStream);
 		case ISO_2709:
 			return new MarcISO2709StreamReader(inStream, "UTF-8");
+		case XML_PATENTS:
+			return new PatentsXmlStreamReader(inStream);
 		default:
 			return new MarcXmlReader(inStream);
 		}

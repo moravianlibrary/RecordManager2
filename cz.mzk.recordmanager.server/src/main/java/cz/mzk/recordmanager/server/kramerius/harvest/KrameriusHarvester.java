@@ -83,15 +83,11 @@ public class KrameriusHarvester {
 				is.mark(Integer.MAX_VALUE);
 				is.reset();
 			}
-
 			unparsedHr.setRawRecord(IOUtils.toByteArray(is));
-			// unparsedHr.setFormat("dublinCore"); // TODO - make it
-			// configurable // may be deleted?
 		} catch (IOException ioe) {
 			logger.error("Harvesting record from: " + url + " caused IOException!");
 			logger.error(ioe.getMessage());
 			return null;
-			// TODO - catch IO Exception properly
 		}
 
 		// return unparsed(!) HarvestedRecord (most of variables are not set

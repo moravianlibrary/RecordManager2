@@ -16,8 +16,6 @@ public class SolrFieldConstants {
 
 	public static final String WEIGHT = "weight_str";
 	
-	public static final String CITY_INSTITUTION_CS = "city_institution_cs_search_txt_mv";
-	
 	public static final String HOLDINGS_996_FIELD = "holdings_996_str_mv";
 	
 	public static final String EXTERNAL_LINKS_FIELD = "external_links_str_mv";
@@ -45,6 +43,8 @@ public class SolrFieldConstants {
 	public static final String FULLTEXT_FIELD = "fulltext";
 
 	public static final String SOLR_HIDDEN_FIELD_PREFIX = "_hidden";
+
+	public static final String FIELD_996b = "996b";
 
 	/**
 	 * dummy fields used for processing purposes only, shouldn't be indexed. Fields are deleted in AuthorityEnricher. 

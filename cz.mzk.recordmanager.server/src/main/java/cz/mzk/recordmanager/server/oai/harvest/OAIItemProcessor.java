@@ -136,7 +136,10 @@ public class OAIItemProcessor implements ItemProcessor<List<OAIRecord>, List<Har
 			}
 			return parts[2];
 		}
-		
+		if(parts.length == 2){
+			// for ANL, KKL, STT, SLK
+			if(parts[0].matches("aleph-publish")) return parts[1];
+		}
 		return oaiIdentifier;
 	}
 
