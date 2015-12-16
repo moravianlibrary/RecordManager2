@@ -1,6 +1,5 @@
 package cz.mzk.recordmanager.server.index;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -36,7 +35,6 @@ import cz.mzk.recordmanager.server.util.SolrUtils;
 @Component
 public class SolrInputDocumentFactoryImpl implements SolrInputDocumentFactory, InitializingBean {
 
-	private static final String MZK_INSTITUTION_MAP = "mzk_institution.map";
 	private static final String INSTITUTION_LIBRARY = "Library";
 	private static final String INSTITUTION_OTHERS = "Others";
 
@@ -94,7 +92,6 @@ public class SolrInputDocumentFactoryImpl implements SolrInputDocumentFactory, I
 			harvestedRecordEnrichers.forEach(enricher -> enricher.enrich(record, document));
 			
 			document.addField(SolrFieldConstants.LOCAL_INSTITUTION_FIELD, getInstitution(record));
-			document.addField(SolrFieldConstants.CITY_INSTITUTION_CS, getCityInstitutionForSearching(record));
 			document.addField(SolrFieldConstants.MERGED_CHILD_FIELD, 1);
 			document.addField(SolrFieldConstants.WEIGHT, record.getWeight());
 			document.addField(SolrFieldConstants.RECORD_FORMAT_DISPLAY, getRecordType(record));
@@ -119,7 +116,6 @@ public class SolrInputDocumentFactoryImpl implements SolrInputDocumentFactory, I
 		mergedDocument.addField(SolrFieldConstants.ID_FIELD, dedupRecord.getId());
 		mergedDocument.addField(SolrFieldConstants.MERGED_FIELD, 1);
 		mergedDocument.addField(SolrFieldConstants.WEIGHT, record.getWeight());
-		mergedDocument.addField(SolrFieldConstants.CITY_INSTITUTION_CS, getCityInstitutionForSearching(record));
 		List<String> localIds = childs.stream().map(rec -> (String) rec.getFieldValue("id")).collect(Collectors.toCollection(ArrayList::new));
 		mergedDocument.addField(SolrFieldConstants.LOCAL_IDS_FIELD, localIds);
 		
@@ -205,18 +201,6 @@ public class SolrInputDocumentFactoryImpl implements SolrInputDocumentFactory, I
 		
 		return SolrUtils.createHierarchicFacetValues(SolrFieldConstants.UNKNOWN_INSTITUTION);
 		
-	}
-
-	protected List<String> getCityInstitutionForSearching(HarvestedRecord hr){
-		List<String> result = new ArrayList<String>();
-		result.add(getCityOfRecord(hr));
-		try {
-			result.add(propertyResolver.resolve(MZK_INSTITUTION_MAP).get(getInstitutionOfRecord(hr)));
-		} catch (IOException ioe){
-			throw new IllegalArgumentException(
-					String.format("Mapping for %s can't be open", MZK_INSTITUTION_MAP));
-		}
-		return result;
 	}
 
 	protected List<String> getRecordType(HarvestedRecord record){
