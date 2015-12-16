@@ -1,5 +1,6 @@
 package cz.mzk.recordmanager.server.index;
 
+import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -14,6 +15,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import org.apache.solr.common.SolrInputDocument;
+import org.marc4j.marc.DataField;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
@@ -22,6 +24,8 @@ import org.springframework.stereotype.Component;
 
 import cz.mzk.recordmanager.server.index.enrich.DedupRecordEnricher;
 import cz.mzk.recordmanager.server.index.enrich.HarvestedRecordEnricher;
+import cz.mzk.recordmanager.server.marc.MarcRecord;
+import cz.mzk.recordmanager.server.marc.MarcXmlParser;
 import cz.mzk.recordmanager.server.metadata.MetadataRecord;
 import cz.mzk.recordmanager.server.metadata.MetadataRecordFactory;
 import cz.mzk.recordmanager.server.model.DedupRecord;
@@ -78,6 +82,9 @@ public class SolrInputDocumentFactoryImpl implements SolrInputDocumentFactory, I
 	@Autowired
 	private MetadataRecordFactory metadataFactory;
 
+	@Autowired
+	private MarcXmlParser marcXmlParser;
+
 	@Override
 	public SolrInputDocument create(HarvestedRecord record) {
 		try {
@@ -95,6 +102,7 @@ public class SolrInputDocumentFactoryImpl implements SolrInputDocumentFactory, I
 			document.addField(SolrFieldConstants.MERGED_CHILD_FIELD, 1);
 			document.addField(SolrFieldConstants.WEIGHT, record.getWeight());
 			document.addField(SolrFieldConstants.RECORD_FORMAT_DISPLAY, getRecordType(record));
+			document.addField(SolrFieldConstants.FIELD_996b, get996b(record));
 			
 			return document;
 		} catch (Exception ex) {
@@ -216,6 +224,25 @@ public class SolrInputDocumentFactoryImpl implements SolrInputDocumentFactory, I
 				result.addAll(SolrUtils.createHierarchicFacetValues(format.name()));
 			}
 		}
+		return result;
+	}
+
+	protected List<String> get996b(HarvestedRecord hr){
+		String prefix = hr.getHarvestedFrom().getIdPrefix();
+		List<String> result = new ArrayList<>();
+		List<String> skip = Arrays.asList("SVK50", "NKC50", "MZK50", "HKA50");
+		if(hr.getRawRecord() != null){
+			if(hr.getFormat().equals("marc21-xml")){
+				MarcRecord record = marcXmlParser.parseRecord(new ByteArrayInputStream(hr.getRawRecord()));
+				for(DataField df: record.getDataFields("996")){
+					if(skip.contains(df.getSubfield('j'))) continue;
+					if(df.getSubfield('b') != null){
+						result.add(prefix+"."+df.getSubfield('b').getData());
+					}
+				}
+			}
+		}
+
 		return result;
 	}
 
