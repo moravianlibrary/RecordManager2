@@ -340,3 +340,7 @@ UPDATE oai_harvest_conf SET url='http://opac.moderniknihovna.cz/cgi-bin/koha/oai
 
 -- 3. 12. 2015 tomascejpek
 UPDATE oai_harvest_conf SET set_spec='CPK1' WHERE import_conf_id=328;
+
+-- 7. 12. 2015 mertam
+UPDATE harvested_record ADD COLUMN dedup_keys_hash CHAR(40);
+UPDATE harvested_record ADD COLUMN next_dedup_flag BOOLEAN DEFAULT TRUE;

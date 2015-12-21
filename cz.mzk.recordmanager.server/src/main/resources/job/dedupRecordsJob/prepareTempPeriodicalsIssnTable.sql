@@ -15,6 +15,6 @@ WHERE tpi.id IS NOT NULL
 GROUP BY i.issn,t.title
 HAVING COUNT(DISTINCT hr.id) > 1 
   AND count(DISTINCT dedup_record_id) + sum(case when dedup_record_id is null then 1 else 0 end) != 1
-  AND max(hr.updated) > ALL(SELECT time FROM last_dedup_time);
+  AND bool_or(next_dedup_flag) IS TRUE;
   
 CREATE INDEX tmp_simmilar_periodicals_issn_idx ON tmp_simmilar_periodicals_issn(row_id);

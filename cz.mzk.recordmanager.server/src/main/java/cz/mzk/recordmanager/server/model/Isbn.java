@@ -44,6 +44,36 @@ public class Isbn extends AbstractDomainObject {
 	}
 
 	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + ((isbn == null) ? 0 : isbn.hashCode());
+		result = prime * result
+				+ ((orderInRecord == null) ? 0 : orderInRecord.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (getClass() != obj.getClass())
+			return false;
+		Isbn other = (Isbn) obj;
+		if (isbn == null) {
+			if (other.isbn != null)
+				return false;
+		} else if (!isbn.equals(other.isbn))
+			return false;
+		if (orderInRecord == null) {
+			if (other.orderInRecord != null)
+				return false;
+		} else if (!orderInRecord.equals(other.orderInRecord))
+			return false;
+		return true;
+	}
+
+	@Override
 	public String toString() {
 		return "Isbn [isbn=" + isbn + ", orderInRecord=" + orderInRecord
 				+ ", note=" + note + "]";

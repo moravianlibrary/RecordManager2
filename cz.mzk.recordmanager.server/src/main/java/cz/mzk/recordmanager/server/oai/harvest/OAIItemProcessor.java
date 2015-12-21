@@ -74,6 +74,13 @@ public class OAIItemProcessor implements ItemProcessor<List<OAIRecord>, List<Har
 			rec.setFormat(format);
 		}
 		rec.setUpdated(new Date());
+		if (record.getHeader().getDatestamp() != null) {
+			rec.setHarvested(record.getHeader().getDatestamp());
+		}
+		if (record.getHeader().getDatestamp() != null) {
+			rec.setTemporalOldOaiTimestamp(rec.getOaiTimestamp());
+			rec.setOaiTimestamp(record.getHeader().getDatestamp());
+		}
 		
 		if (record.getHeader().isDeleted()) {
 			rec.setDeleted(new Date());
@@ -139,5 +146,6 @@ public class OAIItemProcessor implements ItemProcessor<List<OAIRecord>, List<Har
 		
 		return oaiIdentifier;
 	}
+	
 
 }

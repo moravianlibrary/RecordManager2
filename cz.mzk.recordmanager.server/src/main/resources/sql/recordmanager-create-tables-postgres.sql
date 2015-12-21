@@ -88,6 +88,7 @@ CREATE TABLE harvested_record (
   harvested            TIMESTAMP,
   updated              TIMESTAMP,
   deleted              TIMESTAMP,
+  oai_timestamp        TIMESTAMP,
   format               VARCHAR(12) NOT NULL,
   dedup_record_id      DECIMAL(10),
   publication_year     DECIMAL(4),
@@ -100,7 +101,8 @@ CREATE TABLE harvested_record (
   weight               DECIMAL(10),
   cluster_id           VARCHAR(20),
   pages                DECIMAL(10),
-  raw_record           BYTEA,
+  dedup_keys_hash      CHAR(40),
+  next_dedup_flag      BOOLEAN DEFAULT TRUE,
   UNIQUE (import_conf_id, record_id),
   FOREIGN KEY (import_conf_id) REFERENCES import_conf(id),
   FOREIGN KEY (format)              REFERENCES format(format)

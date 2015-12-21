@@ -345,18 +345,18 @@ public class MarcRecordImplTest extends AbstractTest {
 		
 		isbn = new Isbn();
 		isbn.setIsbn(9780521376679L);
-		isbn.setOrderInRecord(9L);
+		isbn.setOrderInRecord(8L);
 		isbnlist.add(isbn);
 		data.add("020 $a052137667x");
 		
 		isbn = new Isbn();
 		isbn.setIsbn(9783596263936L);
-		isbn.setOrderInRecord(10L);
+		isbn.setOrderInRecord(9L);
 		isbnlist.add(isbn);
 		data.add("020 $a3-596-26393-x");
 		
 		isbn = new Isbn();
-		isbn.setIsbn(9783596263936L);
+		isbn.setIsbn(9785268012866L);
 		isbn.setOrderInRecord(10L);
 		isbnlist.add(isbn);
 		data.add("020 $a5-268-01286-x");
