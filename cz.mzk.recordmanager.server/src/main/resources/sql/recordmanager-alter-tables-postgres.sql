@@ -341,6 +341,13 @@ UPDATE oai_harvest_conf SET url='http://opac.moderniknihovna.cz/cgi-bin/koha/oai
 -- 3. 12. 2015 tomascejpek
 UPDATE oai_harvest_conf SET set_spec='CPK1' WHERE import_conf_id=328;
 
--- 7. 12. 2015 mertam
-UPDATE harvested_record ADD COLUMN dedup_keys_hash CHAR(40);
-UPDATE harvested_record ADD COLUMN next_dedup_flag BOOLEAN DEFAULT TRUE;
+-- 14. 12. 2015 tomascejpek
+UPDATE import_conf SET id_prefix='vktatest' WHERE id=329;
+
+-- 17. 12. 2015 tomascejpek
+UPDATE import_conf SET harvest_frequency='D' WHERE id IN (300,301,304,306,307,311,312,313,314,315,316,320,323,324)
+
+-- 17. 12. 2015 mertam
+ALTER TABLE harvested_record ADD COLUMN dedup_keys_hash CHAR(40);
+ALTER TABLE harvested_record ADD COLUMN next_dedup_flag BOOLEAN DEFAULT TRUE;
+ALTER TABLE harvested_record ADD COLUMN oai_timestamp TIMESTAMP;

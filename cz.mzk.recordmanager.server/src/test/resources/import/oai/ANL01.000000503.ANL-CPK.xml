@@ -1,0 +1,100 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+<OAI-PMH xmlns="http://www.openarchives.org/OAI/2.0/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/ http://www.openarchives.org/OAI/2.0/OAI-PMH.xsd">
+	<ListRecords>
+		<record>
+			<header>
+				<identifier>aleph-publish:000000503</identifier>
+			</header>
+			<metadata>
+				<record xmlns="http://www.loc.gov/MARC21/slim" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+					xsi:schemaLocation="http://www.loc.gov/MARC21/slim
+http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd">
+					<leader>     naa a22      a 4500</leader>
+					<controlfield tag="LDR">     naa a22      a 4500</controlfield>
+					<controlfield tag="001">20010911 08200200</controlfield>
+					<controlfield tag="003">CZ PrNK</controlfield>
+					<controlfield tag="005">20110411183211.0</controlfield>
+					<controlfield tag="008">010724e20010721xr           u      cze</controlfield>
+					<datafield tag="040" ind1=" " ind2=" ">
+						<subfield code="a">CBA001</subfield>
+						<subfield code="b">cze</subfield>
+						<subfield code="d">ABA001</subfield>
+						<subfield code="9">2</subfield>
+					</datafield>
+					<datafield tag="043" ind1=" " ind2=" ">
+						<subfield code="a">e-xr---</subfield>
+						<subfield code="b">e-xr-jc</subfield>
+						<subfield code="2">czenas</subfield>
+					</datafield>
+					<datafield tag="080" ind1=" " ind2=" ">
+						<subfield code="a">(437.319)</subfield>
+						<subfield code="2">undef</subfield>
+					</datafield>
+					<datafield tag="080" ind1=" " ind2=" ">
+						<subfield code="a">061.4</subfield>
+						<subfield code="2">undef</subfield>
+					</datafield>
+					<datafield tag="080" ind1=" " ind2=" ">
+						<subfield code="a">069</subfield>
+						<subfield code="2">undef</subfield>
+					</datafield>
+					<datafield tag="080" ind1=" " ind2=" ">
+						<subfield code="a">77</subfield>
+						<subfield code="2">undef</subfield>
+					</datafield>
+					<datafield tag="100" ind1="1" ind2=" ">
+						<subfield code="a">Málek, Tomáš</subfield>
+						<subfield code="4">aut</subfield>
+					</datafield>
+					<datafield tag="245" ind1="1" ind2="0">
+						<subfield code="a">Výstava ukáže město sto let starou optikou /</subfield>
+						<subfield code="c">Tomáš Málek ; foto: archiv Okresního muzea v Jindřichově Hradci</subfield>
+					</datafield>
+					<datafield tag="500" ind1=" " ind2=" ">
+						<subfield code="a">Akce: Jindřichův Hradec vna fotografiích v proměnách 20. století. [Výstava dobových fotografií.] Jindřichův Hradec. (CZ). léto 2001</subfield>
+					</datafield>
+					<datafield tag="610" ind1="2" ind2="7">
+						<subfield code="a">Okresní muzeum (Jindřichův Hradec, Česko)</subfield>
+						<subfield code="7">kn20020322345</subfield>
+						<subfield code="2">czenas</subfield>
+					</datafield>
+					<datafield tag="650" ind1="0" ind2="7">
+						<subfield code="a">fotografie</subfield>
+						<subfield code="7">ph114585</subfield>
+						<subfield code="z">Česko</subfield>
+						<subfield code="y">20. stol.</subfield>
+						<subfield code="2">czenas</subfield>
+					</datafield>
+					<datafield tag="650" ind1="0" ind2="7">
+						<subfield code="a">výstavy</subfield>
+						<subfield code="7">ph116705</subfield>
+						<subfield code="z">Jindřichův Hradec (Česko)</subfield>
+						<subfield code="y">2001</subfield>
+						<subfield code="2">czenas</subfield>
+					</datafield>
+					<datafield tag="653" ind1="0" ind2=" ">
+						<subfield code="a">fotografické negativní desky</subfield>
+						<subfield code="a">fotografie měst</subfield>
+						<subfield code="a">muzejní sbírky</subfield>
+						<subfield code="a">stol. 20.</subfield>
+						<subfield code="a">výstavy dobových fotografií</subfield>
+					</datafield>
+					<datafield tag="773" ind1="0" ind2=" ">
+						<subfield code="t">Mladá fronta Dnes</subfield>
+						<subfield code="g">Roč. 12, č. 168 (20010721), příloha Jižní Čechy Dnes, s. D/3 : il.</subfield>
+						<subfield code="q">12:168</subfield>
+						<subfield code="9">20010721</subfield>
+					</datafield>
+					<datafield tag="910" ind1=" " ind2=" ">
+						<subfield code="a">CBA001</subfield>
+						<subfield code="x">20010911-08200200</subfield>
+					</datafield>
+					<datafield tag="998" ind1=" " ind2=" ">
+						<subfield code="a">http://aleph.nkp.cz/F/?func=direct&amp;doc_number=000000503&amp;local_base=ANL</subfield>
+					</datafield>
+				</record>
+			</metadata>
+		</record>
+	</ListRecords>
+</OAI-PMH>
