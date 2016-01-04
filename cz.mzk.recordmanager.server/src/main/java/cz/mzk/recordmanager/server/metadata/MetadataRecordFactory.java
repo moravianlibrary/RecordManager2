@@ -56,8 +56,8 @@ public class MetadataRecordFactory {
         if (Constants.METADATA_FORMAT_MARC21.equals(recordFormat) 
         		|| Constants.METADATA_FORMAT_XML_MARC.equals(recordFormat)
         		|| Constants.METADATA_FORMAT_MARC_CPK.equals(recordFormat)
-        		|| Constants.METADATA_FORMAR_OAI_MARCXML_CPK.equals(recordFormat)) {
-        	
+        		|| Constants.METADATA_FORMAT_OAI_MARCXML_CPK.equals(recordFormat)
+        		|| Constants.METADATA_FORMAT_MARC21E.equals(recordFormat)) {
     		MarcRecord marcRec = marcXmlParser.parseRecord(is);
 			switch (prefix) {
 			case Constants.PREFIX_MZK:

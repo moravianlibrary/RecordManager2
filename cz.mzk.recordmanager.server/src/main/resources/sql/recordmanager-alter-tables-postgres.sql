@@ -354,3 +354,4 @@ ALTER TABLE harvested_record ADD COLUMN oai_timestamp TIMESTAMP;
 
 -- 4. 1. 2016 tomascejpek
 UPDATE oai_harvest_conf SET url='http://web2.mlp.cz/cgi/oaie' WHERE import_conf_id=302;
+UPDATE oai_harvest_conf SET metadata_prefix='marc21e' WHERE import_conf_id=302;
