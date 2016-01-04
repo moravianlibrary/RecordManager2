@@ -233,8 +233,9 @@ CREATE TABLE cosmotron_996 (
  CREATE TABLE obalkyknih_toc (
   id                   DECIMAL(10) PRIMARY KEY,
   book_id              DECIMAL(10),
+  nbn                  VARCHAR(32),
   oclc                 VARCHAR(32),
   ean                  VARCHAR(32),
   isbn                 VARCHAR(32),
-  toc                  VARCHAR(32672)
+  toc                  VARCHAR(1048576)
 );

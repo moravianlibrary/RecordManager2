@@ -356,16 +356,19 @@ ALTER TABLE harvested_record ADD COLUMN oai_timestamp TIMESTAMP;
 UPDATE oai_harvest_conf SET url='http://web2.mlp.cz/cgi/oaie' WHERE import_conf_id=302;
 UPDATE oai_harvest_conf SET metadata_prefix='marc21e' WHERE import_conf_id=302;
 
+-- 4. 1. 2016 xrosecky 
 CREATE TABLE obalkyknih_toc (
   id                   DECIMAL(10) PRIMARY KEY,
   book_id              DECIMAL(10),
+  nbn                  VARCHAR(32),
   oclc                 VARCHAR(32),
   ean                  VARCHAR(32),
   isbn                 VARCHAR(32),
-  toc                  VARCHAR(32672)
+  toc                  VARCHAR(1048576)
 );
 
 CREATE INDEX obalkyknih_toc_book_idx ON obalkyknih_toc(book_id);
 CREATE INDEX obalkyknih_toc_oclc_idx ON obalkyknih_toc(oclc);
 CREATE INDEX obalkyknih_toc_ean_idx ON obalkyknih_toc(ean);
 CREATE INDEX obalkyknih_toc_isbn_idx ON obalkyknih_toc(isbn);
+CREATE INDEX obalkyknih_toc_nbn_idx ON obalkyknih_toc(nbn);
