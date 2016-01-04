@@ -35,6 +35,7 @@ public class ObalkyKnihHarvestJobConfig {
 	public Job obalkyKnihHarvestJob(
 			@Qualifier(Constants.JOB_ID_HARVEST_OBALKY_KNIH + ":step") Step step) {
 		return jobs.get(Constants.JOB_ID_HARVEST_OBALKY_KNIH) //
+				.validator(new ObalkyKnihHarvestJobParametersValidator())
 				.incrementer(UUIDIncrementer.INSTANCE) //
 				.listener(JobFailureListener.INSTANCE) //
 				.flow(step) //
