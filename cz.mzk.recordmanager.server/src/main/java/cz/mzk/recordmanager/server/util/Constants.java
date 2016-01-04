@@ -24,6 +24,7 @@ public class Constants {
 	public static final String JOB_ID_REGEN_DEDUP_KEYS				= "regenerateDedupKeysJob";
 	public static final String JOB_ID_DELETE_ALL_RECORDS_FROM_SOLR	= "deleteAllRecordsFromSolrJob";
 	public static final String JOB_ID_GENERATE_SKAT_DEDUP_KEYS		= "generateSkatDedupKeys";
+	public static final String JOB_ID_HARVEST_OBALKY_KNIH		= "obalkyKnihHarvestJob";
 	
 	public static final String JOB_PARAM_CONF_ID 		= "configurationId";
 	public static final String JOB_PARAM_FROM_DATE 		= "from";

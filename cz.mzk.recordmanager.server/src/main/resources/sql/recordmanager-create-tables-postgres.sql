@@ -229,3 +229,12 @@ CREATE TABLE cosmotron_996 (
   raw_record           BYTEA,
   FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE
  );
+
+ CREATE TABLE obalkyknih_toc (
+  id                   DECIMAL(10) PRIMARY KEY,
+  book_id              DECIMAL(10),
+  oclc                 VARCHAR(32),
+  ean                  VARCHAR(32),
+  isbn                 VARCHAR(32),
+  toc                  VARCHAR(32672)
+);

@@ -235,4 +235,14 @@ CREATE TABLE cosmotron_996 (
   raw_record           BLOB,
   CONSTRAINT cosmotron_996_fk FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id),
   CONSTRAINT cosmotron_996_import_conf_id FOREIGN KEY (import_conf_id) REFERENCES import_conf(id)
- );
+);
+
+CREATE TABLE obalkyknih_toc (
+  id                   DECIMAL(10) PRIMARY KEY,
+  book_id              DECIMAL(10),
+  nbn                  VARCHAR(32),
+  oclc                 VARCHAR(32),
+  ean                  VARCHAR(32),
+  isbn                 VARCHAR(32),
+  toc                  VARCHAR(32672)
+);
