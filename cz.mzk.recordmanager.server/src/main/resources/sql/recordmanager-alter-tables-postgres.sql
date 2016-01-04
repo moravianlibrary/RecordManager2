@@ -351,3 +351,6 @@ UPDATE import_conf SET harvest_frequency='D' WHERE id IN (300,301,304,306,307,31
 ALTER TABLE harvested_record ADD COLUMN dedup_keys_hash CHAR(40);
 ALTER TABLE harvested_record ADD COLUMN next_dedup_flag BOOLEAN DEFAULT TRUE;
 ALTER TABLE harvested_record ADD COLUMN oai_timestamp TIMESTAMP;
+
+-- 4. 1. 2016 tomascejpek
+UPDATE oai_harvest_conf SET url='http://web2.mlp.cz/cgi/oaie' WHERE import_conf_id=302;
