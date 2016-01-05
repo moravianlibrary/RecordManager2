@@ -8,4 +8,6 @@ public interface ObalkyKnihTOCDAO extends DomainDAO<Long, ObalkyKnihTOC>  {
 
 	public List<ObalkyKnihTOC> findByExample(ObalkyKnihTOC example, boolean includeNullProperties, String... excludeProperties);
 
+	public List<ObalkyKnihTOC> findByIsbn(Long isbn);
+
 }

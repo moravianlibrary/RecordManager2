@@ -15,6 +15,7 @@ import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 
 import cz.mzk.recordmanager.server.model.ObalkyKnihTOC;
 import cz.mzk.recordmanager.server.util.HttpClient;
+import cz.mzk.recordmanager.server.util.MetadataUtils;
 
 public class ObalkyKnihRecordsReader implements ItemReader<ObalkyKnihTOC> {
 
@@ -24,8 +25,6 @@ public class ObalkyKnihRecordsReader implements ItemReader<ObalkyKnihTOC> {
 	private static final String OBALKY_KNIH_TOC_URL = "http://www.obalkyknih.cz/api/toc.xml";
 
 	private static final String OCLC_PREFIX = "(OCoLC)";
-
-	private final ISBNValidator isbnValidator = ISBNValidator.getInstance(true);
 
 	private StaxEventItemReader<ObalkyKnihTOC> reader;
 
@@ -90,10 +89,7 @@ public class ObalkyKnihRecordsReader implements ItemReader<ObalkyKnihTOC> {
 			toc.setOclc(toc.getOclc().replace(OCLC_PREFIX, ""));
 		}
 		if (toc.getIsbnStr() != null) {
-			String isbn = isbnValidator.validate(toc.getIsbnStr());
-			if (isbn != null) {
-				toc.setIsbn(Long.valueOf(isbn));
-			}
+				toc.setIsbn(MetadataUtils.toISBN13(toc.getIsbnStr()));
 		}
 	}
 

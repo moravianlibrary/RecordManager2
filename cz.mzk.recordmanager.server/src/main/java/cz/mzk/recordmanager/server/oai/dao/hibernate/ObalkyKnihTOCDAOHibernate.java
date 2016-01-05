@@ -30,4 +30,10 @@ public class ObalkyKnihTOCDAOHibernate extends
 		return (List<ObalkyKnihTOC>) crit.add(exam).list();
 	}
 
+	@Override
+	@SuppressWarnings("unchecked")
+	public List<ObalkyKnihTOC> findByIsbn(Long isbn) {
+		return sessionFactory.getCurrentSession().createQuery("from ObalkyKnihTOC where bibInfo.isbn = ?").setParameter(0, isbn).list();
+	}
+
 }
