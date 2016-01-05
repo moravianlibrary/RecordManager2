@@ -6,6 +6,6 @@ import cz.mzk.recordmanager.server.model.ObalkyKnihTOC;
 
 public interface ObalkyKnihTOCDAO extends DomainDAO<Long, ObalkyKnihTOC>  {
 
-	public List<ObalkyKnihTOC> findByExample(ObalkyKnihTOC example);
+	public List<ObalkyKnihTOC> findByExample(ObalkyKnihTOC example, boolean includeNullProperties, String... excludeProperties);
 
 }

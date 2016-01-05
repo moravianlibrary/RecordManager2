@@ -1,17 +1,16 @@
 package cz.mzk.recordmanager.server.model;
 
-import java.util.Objects;
-
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
-import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 @Entity
 @Table(name=ObalkyKnihTOC.TABLE_NAME)
@@ -36,15 +35,19 @@ public class ObalkyKnihTOC extends AbstractDomainObject {
 		@XmlElement(name="ean")
 		public String ean;
 
-		@Column(name="isbn")
 		@XmlElement(name="isbn")
-		public String isbn;
+		@Transient
+		public String isbnStr;
+
+		@Column(name="isbn")
+		@XmlTransient
+		public Long isbn;
 
 	}
 
 	@Column(name="book_id")
 	@XmlElement(name="book_id")
-	private long bookId;
+	private Long bookId;
 
 	@Embedded
 	@XmlElement(name="bibinfo")
@@ -55,11 +58,11 @@ public class ObalkyKnihTOC extends AbstractDomainObject {
 	private String toc;
 
 
-	public long getBookId() {
+	public Long getBookId() {
 		return bookId;
 	}
 
-	public void setBookId(long bookId) {
+	public void setBookId(Long bookId) {
 		this.bookId = bookId;
 	}
 
@@ -87,12 +90,20 @@ public class ObalkyKnihTOC extends AbstractDomainObject {
 		this.bibInfo.ean = ean;
 	}
 
-	public String getIsbn() {
+	public Long getIsbn() {
 		return bibInfo.isbn;
 	}
 
-	public void setIsbn(String isbn) {
+	public void setIsbn(Long isbn) {
 		this.bibInfo.isbn = isbn;
+	}
+
+	public String getIsbnStr() {
+		return bibInfo.isbnStr;
+	}
+
+	public void setIsbn(String isbnStr) {
+		this.bibInfo.isbnStr = isbnStr;
 	}
 
 	public String getToc() {

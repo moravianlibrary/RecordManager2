@@ -372,3 +372,5 @@ CREATE INDEX obalkyknih_toc_oclc_idx ON obalkyknih_toc(oclc);
 CREATE INDEX obalkyknih_toc_ean_idx ON obalkyknih_toc(ean);
 CREATE INDEX obalkyknih_toc_isbn_idx ON obalkyknih_toc(isbn);
 CREATE INDEX obalkyknih_toc_nbn_idx ON obalkyknih_toc(nbn);
+
+ALTER TABLE obalkyknih_toc ALTER COLUMN isbn TYPE DECIMAL(13) USING isbn::numeric(13,0);

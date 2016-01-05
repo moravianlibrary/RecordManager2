@@ -25,7 +25,7 @@ public class ObalkyKnihTOCDAOTest extends AbstractTest {
 		List<ObalkyKnihTOC> tocs = obalkyKnihTOCDao.findAll();
 		Assert.assertEquals(tocs.size(), 1);
 		ObalkyKnihTOC toc = tocs.get(0);
-		Assert.assertEquals(toc.getBookId(), 60L);
+		Assert.assertEquals(toc.getBookId(), (Long) 60L);
 		Assert.assertEquals(toc.getNbn(), "NBN-123");
 		Assert.assertEquals(toc.getToc(), "Bozena Nemcova Babicka");
 	}

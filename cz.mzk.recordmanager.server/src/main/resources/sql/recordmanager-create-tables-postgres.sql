@@ -236,6 +236,6 @@ CREATE TABLE cosmotron_996 (
   nbn                  VARCHAR(32),
   oclc                 VARCHAR(32),
   ean                  VARCHAR(32),
-  isbn                 VARCHAR(32),
+  isbn                 DECIMAL(13),
   toc                  VARCHAR(1048576)
 );

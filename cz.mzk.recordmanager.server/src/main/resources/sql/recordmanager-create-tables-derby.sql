@@ -243,6 +243,6 @@ CREATE TABLE obalkyknih_toc (
   nbn                  VARCHAR(32),
   oclc                 VARCHAR(32),
   ean                  VARCHAR(32),
-  isbn                 VARCHAR(32),
+  isbn                 DECIMAL(13),
   toc                  VARCHAR(32672)
 );

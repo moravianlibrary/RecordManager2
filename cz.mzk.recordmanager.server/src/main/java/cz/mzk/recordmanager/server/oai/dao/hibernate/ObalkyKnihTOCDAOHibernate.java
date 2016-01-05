@@ -16,8 +16,16 @@ public class ObalkyKnihTOCDAOHibernate extends
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public List<ObalkyKnihTOC> findByExample(ObalkyKnihTOC example) {
+	public List<ObalkyKnihTOC> findByExample(ObalkyKnihTOC example, boolean includeNullProperties, String... excludeProperties) {
 		Example exam = Example.create(example);
+		if (includeNullProperties) {
+			exam.setPropertySelector(Example.AllPropertySelector.INSTANCE);
+		}
+		if (excludeProperties != null) {
+			for (String excludeProperty : excludeProperties) {
+				exam.excludeProperty(excludeProperty);
+			}
+		}
 		Criteria crit = sessionFactory.getCurrentSession().createCriteria(ObalkyKnihTOC.class);
 		return (List<ObalkyKnihTOC>) crit.add(exam).list();
 	}

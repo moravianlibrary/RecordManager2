@@ -23,4 +23,5 @@ public class MetadataUtils {
 		}
 		return normalized.substring(0, Math.min(length, normalized.length()));
 	}
+
 }

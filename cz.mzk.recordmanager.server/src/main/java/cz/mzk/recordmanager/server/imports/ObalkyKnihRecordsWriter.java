@@ -16,7 +16,7 @@ public class ObalkyKnihRecordsWriter implements ItemWriter<ObalkyKnihTOC> {
 	@Override
 	public void write(List<? extends ObalkyKnihTOC> items) throws Exception {
 		for (ObalkyKnihTOC item : items) {
-			List<ObalkyKnihTOC> tocs = obalkyKnihTOCDao.findByExample(item);
+			List<ObalkyKnihTOC> tocs = obalkyKnihTOCDao.findByExample(item, true, "toc");
 			if (tocs.isEmpty()) {
 				obalkyKnihTOCDao.persist(item);
 			} else {
