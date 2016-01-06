@@ -53,7 +53,7 @@ public class ImportObalkyKnihTest extends AbstractTest {
 		jobLauncher.run(job, jobParams);
 
 		List<ObalkyKnihTOC> tocs = obalkyKnihTOCDao.findAll();
-		Assert.assertEquals(tocs.size(), 3);
+		Assert.assertEquals(tocs.size(), 5);
 		for (ObalkyKnihTOC toc : tocs) {
 			Assert.assertNotNull(toc.getNbn());
 			Assert.assertNotNull(toc.getIsbn());

@@ -1,5 +1,6 @@
 package cz.mzk.recordmanager.server.index.enrich;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -7,6 +8,7 @@ import org.apache.solr.common.SolrInputDocument;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import cz.mzk.recordmanager.api.model.query.ObalkyKnihTOCQuery;
 import cz.mzk.recordmanager.server.index.SolrFieldConstants;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.model.ObalkyKnihTOC;
@@ -25,14 +27,20 @@ public class ObalkyKnihTocHarvestedRecordEnricher implements HarvestedRecordEnri
 		if (isbns == null) {
 			return;
 		}
+		List<Long> isbnList = new ArrayList<Long>();
 		for (Object isbnAsObject : isbns) {
 			Long isbn = MetadataUtils.toISBN13((String) isbnAsObject);
-			List<ObalkyKnihTOC> tocs = obalkyKnihTOCDao.findByIsbn(isbn);
-			if (!tocs.isEmpty()) {
-				for (ObalkyKnihTOC toc : tocs) {
-					document.addField(SolrFieldConstants.TOC, toc.getToc());
-				}
+			if (isbn != null) {
+				isbnList.add(isbn);
 			}
+		}
+		if (isbnList.isEmpty()) {
+			return;
+		}
+		ObalkyKnihTOCQuery query = new ObalkyKnihTOCQuery();
+		query.setIsbns(isbnList);
+		for (ObalkyKnihTOC toc : obalkyKnihTOCDao.query(query)) {
+			document.addField(SolrFieldConstants.TOC, toc.getToc());
 		}
 	}
 

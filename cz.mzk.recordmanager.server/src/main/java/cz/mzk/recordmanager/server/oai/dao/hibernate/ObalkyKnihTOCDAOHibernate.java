@@ -4,8 +4,12 @@ import java.util.List;
 
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Example;
+import org.hibernate.criterion.Junction;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Component;
 
+import cz.mzk.recordmanager.api.model.query.LogicalOperator;
+import cz.mzk.recordmanager.api.model.query.ObalkyKnihTOCQuery;
 import cz.mzk.recordmanager.server.model.ObalkyKnihTOC;
 import cz.mzk.recordmanager.server.oai.dao.ObalkyKnihTOCDAO;
 
@@ -34,6 +38,27 @@ public class ObalkyKnihTOCDAOHibernate extends
 	@SuppressWarnings("unchecked")
 	public List<ObalkyKnihTOC> findByIsbn(Long isbn) {
 		return sessionFactory.getCurrentSession().createQuery("from ObalkyKnihTOC where bibInfo.isbn = ?").setParameter(0, isbn).list();
+	}
+
+	@Override
+	@SuppressWarnings("unchecked")
+	public List<ObalkyKnihTOC> query(ObalkyKnihTOCQuery query) {
+		Criteria crit = sessionFactory.getCurrentSession().createCriteria(ObalkyKnihTOC.class);
+		Junction oper = (query.getLogicalOperator() == LogicalOperator.AND) ? Restrictions.conjunction() : Restrictions.disjunction();
+		crit.add(oper);
+		if (query.getEans() != null && !query.getEans().isEmpty()) {
+			oper.add(Restrictions.in("bibInfo.ean", query.getEans()));
+		}
+		if (query.getIsbns() != null && !query.getIsbns().isEmpty()) {
+			oper.add(Restrictions.in("bibInfo.isbn", query.getIsbns()));
+		}
+		if (query.getOclcs() != null && !query.getOclcs().isEmpty()) {
+			oper.add(Restrictions.in("bibInfo.oclc", query.getOclcs()));
+		}
+		if (query.getNbns() != null && !query.getNbns().isEmpty()) {
+			oper.add(Restrictions.in("bibInfo.nbn", query.getNbns()));
+		}
+		return (List<ObalkyKnihTOC>) crit.list();
 	}
 
 }
