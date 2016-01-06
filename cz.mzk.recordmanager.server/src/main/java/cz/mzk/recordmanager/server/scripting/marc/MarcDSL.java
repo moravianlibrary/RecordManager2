@@ -392,4 +392,8 @@ public class MarcDSL extends BaseDSL {
 		author = author.replaceAll(PACK_SPACES, SPACE_SEPARATOR);
 		return author;
     }
+    
+    public String getCitationRecordType(){
+    	return marcMetadataRecord.getCitationFormat().getCitationType();
+    }
 }

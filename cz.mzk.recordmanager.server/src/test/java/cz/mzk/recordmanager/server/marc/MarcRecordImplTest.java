@@ -10,6 +10,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import cz.mzk.recordmanager.server.AbstractTest;
+import cz.mzk.recordmanager.server.metadata.CitationRecordType;
 import cz.mzk.recordmanager.server.metadata.MetadataRecord;
 import cz.mzk.recordmanager.server.metadata.MetadataRecordFactory;
 import cz.mzk.recordmanager.server.model.Cnb;
@@ -756,5 +757,173 @@ public class MarcRecordImplTest extends AbstractTest {
 		Assert.assertEquals(metadataRecord.getLanguages().size(), 0);
 		
 
+	}
+	
+	@Test
+	public void getCitationFormatAcademicWork() throws Exception{
+		MarcRecordImpl mri;
+		MetadataRecord metadataRecord;
+		List<String> data = new ArrayList<String>();
+		
+		data.add("502 $atest");
+		mri = MarcRecordFactory.recordFactory(data);
+		metadataRecord = metadataFactory.getMetadataRecord(mri);
+		Assert.assertEquals(metadataRecord.getCitationFormat(), CitationRecordType.ACADEMIC_WORK);
+		data.clear();
+	}
+	
+	@Test
+	public void getCitationFormatBook() throws Exception{
+		MarcRecordImpl mri;
+		MetadataRecord metadataRecord;
+		List<String> data = new ArrayList<String>();
+		
+		data.add("000 000000ac");
+		mri = MarcRecordFactory.recordFactory(data);
+		metadataRecord = metadataFactory.getMetadataRecord(mri);
+		Assert.assertEquals(metadataRecord.getCitationFormat(), CitationRecordType.BOOK);
+		data.clear();
+	}
+	
+	@Test
+	public void getCitationFormatElectronicBook() throws Exception{
+		MarcRecordImpl mri;
+		MetadataRecord metadataRecord;
+		List<String> data = new ArrayList<String>();
+		
+		data.add("000 000000td");
+		data.add("856 41$atest");
+		mri = MarcRecordFactory.recordFactory(data);
+		metadataRecord = metadataFactory.getMetadataRecord(mri);
+		Assert.assertEquals(metadataRecord.getCitationFormat(), CitationRecordType.ELECTRONIC_BOOK);
+		data.clear();
+	}
+	
+	@Test
+	public void getCitationFormatPeriodical() throws Exception{
+		MarcRecordImpl mri;
+		MetadataRecord metadataRecord;
+		List<String> data = new ArrayList<String>();
+		
+		data.add("000 0000000i");
+		mri = MarcRecordFactory.recordFactory(data);
+		metadataRecord = metadataFactory.getMetadataRecord(mri);
+		Assert.assertEquals(metadataRecord.getCitationFormat(), CitationRecordType.PERIODICAL);
+		data.clear();
+	}
+	
+	@Test
+	public void getCitationFormatElectronicPeriodical() throws Exception{
+		MarcRecordImpl mri;
+		MetadataRecord metadataRecord;
+		List<String> data = new ArrayList<String>();
+		
+		data.add("000 0000000s");
+		data.add("856 41$atest");
+		mri = MarcRecordFactory.recordFactory(data);
+		metadataRecord = metadataFactory.getMetadataRecord(mri);
+		Assert.assertEquals(metadataRecord.getCitationFormat(), CitationRecordType.ELECTRONIC_PERIODICAL);
+		data.clear();
+	}
+	
+	@Test
+	public void getCitationFormatContribution() throws Exception{
+		MarcRecordImpl mri;
+		MetadataRecord metadataRecord;
+		List<String> data = new ArrayList<String>();
+		
+		data.add("000 000000000");
+		data.add("773 $asborník");
+		mri = MarcRecordFactory.recordFactory(data);
+		metadataRecord = metadataFactory.getMetadataRecord(mri);
+		Assert.assertEquals(metadataRecord.getCitationFormat(), CitationRecordType.CONTRIBUTION_PROCEEDINGS);
+		data.clear();
+	}
+	
+	@Test
+	public void getCitationFormatElectronicContribution() throws Exception{
+		MarcRecordImpl mri;
+		MetadataRecord metadataRecord;
+		List<String> data = new ArrayList<String>();
+		
+		data.add("000 000000000");
+		data.add("773 $aproceedings");
+		data.add("856 41$atest");
+		mri = MarcRecordFactory.recordFactory(data);
+		metadataRecord = metadataFactory.getMetadataRecord(mri);
+		Assert.assertEquals(metadataRecord.getCitationFormat(), CitationRecordType.ELECTRONIC_CONTRIBUTION_PROCEEDINGS);
+		data.clear();
+	}
+	
+	@Test
+	public void getCitationFormatArticle() throws Exception{
+		MarcRecordImpl mri;
+		MetadataRecord metadataRecord;
+		List<String> data = new ArrayList<String>();
+		
+		data.add("000 0000000a");
+		mri = MarcRecordFactory.recordFactory(data);
+		metadataRecord = metadataFactory.getMetadataRecord(mri);
+		Assert.assertEquals(metadataRecord.getCitationFormat(), CitationRecordType.ARTICLE);
+		data.clear();
+	}
+	
+	@Test
+	public void getCitationFormatElectronicArticles() throws Exception{
+		MarcRecordImpl mri;
+		MetadataRecord metadataRecord;
+		List<String> data = new ArrayList<String>();
+		
+		data.add("000 0000000b");
+		data.add("856 41$atest");
+		mri = MarcRecordFactory.recordFactory(data);
+		metadataRecord = metadataFactory.getMetadataRecord(mri);
+		Assert.assertEquals(metadataRecord.getCitationFormat(), CitationRecordType.ELECTRONIC_ARTICLE);
+		data.clear();
+	}
+	
+	@Test
+	public void getCitationFormatMap() throws Exception{
+		MarcRecordImpl mri;
+		MetadataRecord metadataRecord;
+		List<String> data = new ArrayList<String>();
+		
+		data.add("000 000000e");
+		mri = MarcRecordFactory.recordFactory(data);
+		metadataRecord = metadataFactory.getMetadataRecord(mri);
+		Assert.assertEquals(metadataRecord.getCitationFormat(), CitationRecordType.MAPS);
+		data.clear();
+		
+		data.add("000 000000f");
+		mri = MarcRecordFactory.recordFactory(data);
+		metadataRecord = metadataFactory.getMetadataRecord(mri);
+		Assert.assertEquals(metadataRecord.getCitationFormat(), CitationRecordType.MAPS);
+		data.clear();
+	}
+	
+	@Test
+	public void getCitationFormatOthers() throws Exception{
+		MarcRecordImpl mri;
+		MetadataRecord metadataRecord;
+		List<String> data = new ArrayList<String>();
+		
+		data.add("000 000000c");
+		mri = MarcRecordFactory.recordFactory(data);
+		metadataRecord = metadataFactory.getMetadataRecord(mri);
+		Assert.assertEquals(metadataRecord.getCitationFormat(), CitationRecordType.OTHERS);
+		data.clear();
+	}
+	
+	@Test
+	public void getCitationFormatError() throws Exception{
+		MarcRecordImpl mri;
+		MetadataRecord metadataRecord;
+		List<String> data = new ArrayList<String>();
+		
+		data.add("000 00000000");
+		mri = MarcRecordFactory.recordFactory(data);
+		metadataRecord = metadataFactory.getMetadataRecord(mri);
+		Assert.assertEquals(metadataRecord.getCitationFormat(), CitationRecordType.ERROR);
+		data.clear();
 	}
 }
