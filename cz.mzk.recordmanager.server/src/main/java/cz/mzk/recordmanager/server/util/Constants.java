@@ -22,6 +22,7 @@ public class Constants {
 	public static final String JOB_ID_IMPORT_ANTIKVARIATY			= "antikvariatyImportRecordsJob";
 	public static final String JOB_ID_IMPORT_OAI					= "importOaiRecordsJob";
 	public static final String JOB_ID_REGEN_DEDUP_KEYS				= "regenerateDedupKeysJob";
+	public static final String JOB_ID_REGEN_MISSING_DEDUP_KEYS		= "regenerateMissingDedupKeysJob";
 	public static final String JOB_ID_DELETE_ALL_RECORDS_FROM_SOLR	= "deleteAllRecordsFromSolrJob";
 	public static final String JOB_ID_GENERATE_SKAT_DEDUP_KEYS		= "generateSkatDedupKeys";
 	public static final String JOB_ID_HARVEST_OBALKY_KNIH		= "obalkyKnihHarvestJob";
