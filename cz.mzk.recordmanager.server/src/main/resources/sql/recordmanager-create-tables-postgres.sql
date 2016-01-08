@@ -103,6 +103,7 @@ CREATE TABLE harvested_record (
   pages                DECIMAL(10),
   dedup_keys_hash      CHAR(40),
   next_dedup_flag      BOOLEAN DEFAULT TRUE,
+  raw_record           BYTEA,
   UNIQUE (import_conf_id, record_id),
   FOREIGN KEY (import_conf_id) REFERENCES import_conf(id),
   FOREIGN KEY (format)              REFERENCES format(format)
