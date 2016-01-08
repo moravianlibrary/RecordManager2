@@ -1,7 +1,6 @@
 package cz.mzk.recordmanager.server.scripting.marc.function.mzk;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.List;
@@ -73,7 +72,7 @@ public class MzkStatusFunctions implements MarcRecordFunctions {
 
 	}
 
-	public Set<String> getMzkStatuses(MarcFunctionContext ctx) {
+	public Set<String> getMZKStatuses(MarcFunctionContext ctx) {
 		EnumSet<AvailabilityStatus> statuses = EnumSet.noneOf(AvailabilityStatus.class);
 		ctx.record().getDataFields(STATUS_FIELD).forEach(field -> {
 			for (AvailabilityStatus status : AvailabilityStatus.values()) {

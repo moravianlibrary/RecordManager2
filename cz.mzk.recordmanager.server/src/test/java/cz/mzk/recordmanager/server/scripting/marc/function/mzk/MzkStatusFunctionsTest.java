@@ -23,7 +23,7 @@ public class MzkStatusFunctionsTest extends AbstractTest {
 	public void presentStatus() throws Exception {
 		List<String> data = new ArrayList<String>();
 		data.add("996 $b2610651530 $c4-1355.961 $lMZK $rSklad / do 1 hodiny $n0$p p.v. $w001533248 $u000010$a1 $eBOA001 $jMZK50 $sP");
-		Set<String> statuses = statusFunctions.getMzkStatuses(new MarcFunctionContext(MarcRecordFactory.recordFactory(data)));
+		Set<String> statuses = statusFunctions.getMZKStatuses(new MarcFunctionContext(MarcRecordFactory.recordFactory(data)));
 		Assert.assertEquals(statuses, ImmutableSet.<String>of("present"));
 	}
 
