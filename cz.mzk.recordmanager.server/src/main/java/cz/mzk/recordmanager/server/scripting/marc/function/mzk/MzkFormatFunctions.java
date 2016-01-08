@@ -3,6 +3,7 @@ package cz.mzk.recordmanager.server.scripting.marc.function.mzk;
 import java.util.List;
 
 import org.marc4j.marc.DataField;
+import org.marc4j.marc.Leader;
 import org.marc4j.marc.Subfield;
 import org.springframework.stereotype.Component;
 
@@ -78,7 +79,14 @@ public class MzkFormatFunctions implements MarcRecordFunctions {
 
 			@Override
 			public boolean match(MarcFunctionContext ctx) {
-				String field000 = ctx.record().getControlField("000");
+				Leader leader = ctx.record().getLeader();
+				if (leader == null) {
+					return false;
+				}
+				String field000 = leader.toString();
+				if (field000 == null || field000.length() < 8) {
+					return false;
+				}
 				String format = field000.substring(5, 8);
 				return (format.equals("nai") || format.equals("cai"));
 			}
@@ -109,7 +117,13 @@ public class MzkFormatFunctions implements MarcRecordFunctions {
 			}
 		}
 
-		String leader = ctx.record().getControlField("000");
+		if (ctx.record().getLeader() == null) {
+			return UNKNOWN_FORMAT;
+		}
+		String leader = ctx.record().getLeader().toString();
+		if (leader == null || leader.length() < 7) {
+			return UNKNOWN_FORMAT;
+		}
 
 		// check the Leader at position 6
 		char leaderBit6 = Character.toUpperCase(leader.charAt(6));

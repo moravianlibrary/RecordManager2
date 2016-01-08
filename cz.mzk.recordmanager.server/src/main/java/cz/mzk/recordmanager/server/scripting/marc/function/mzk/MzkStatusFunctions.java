@@ -45,13 +45,13 @@ public class MzkStatusFunctions implements MarcRecordFunctions {
 		ABSENT {
 			@Override
 			public boolean check(DataField df) {
-				return check(df, 's', "p");
+				return check(df, 's', "a");
 			}
 		},
 		PRESENT {
 			@Override
 			public boolean check(DataField df) {
-				return check(df, 's', "a");
+				return check(df, 's', "p");
 			}
 		},
 		FREE_STACK {
@@ -98,7 +98,7 @@ public class MzkStatusFunctions implements MarcRecordFunctions {
 		if (isOnline(ctx)) {
 			result.add(ONLINE_STATUS);
 		}
-		return Collections.emptySet();
+		return result;
 	}
 
 	protected boolean isEod(MarcFunctionContext ctx) {
