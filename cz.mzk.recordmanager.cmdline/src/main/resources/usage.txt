@@ -6,20 +6,58 @@ java -Dlogback.configurationFile=logback.xml -DCONFIG_DIR=. -jar target/cz.mzk.r
 
 Parameters:
 
-job       name of a job. Available:
-		oaiHarvestJob
-		oaiPartitionedHarvestJob
-		dedupRecordsJob
-		indexRecordsToSolrJob
-		indexAllRecordsToSolrJob
-		regenerateDedupKeysJob
-		exportRecordsJob
-		importRecordsJob
-		help
-configurationIdidentifier of a job (LONG)
-from      from date (DATE)
-to        until date (DATE)
-solrUrl   URL of solr instance (String)
-format    Metadata format (String). Available: line|aleph|iso|xml
-outFile   Target file used for export (String).
-inFile    Target file used for import (String).
+Data import jobs:
+   		
+	oaiHarvestJob -- Harvest records over OAI (cofigurationId, from, to, resumptionToken)
+
+	oaiPartitionedHarvestJob -- Harvest records over OAI per month (cofigurationId, from, to, resumptionToken)
+
+	oaiHarvestOneByOneJob -- Harvest records over OAI using GetRecord (cofigurationId, from, to)
+
+	oaiHarvestAuthorityJob -- Harvest authority records over OAI
+
+	importRecordsJob -- Import records from file (format, inFile)
+
+	importOaiRecordsJob -- ???
+
+	cosmotronHarvestJob -- ???
+
+Deduplication jobs:
+
+	dedupRecordsJob -- deduplicate new records in database
+
+	regenerateDedupKeysJob -- drop old deduplication keys and generate new
+
+	regenerateMissingDedupKeysJob -- generate deduplication keys for records who doesn't have any
+
+	generateSkatDedupKeys -- generate deduplication keys from new Skat records
+
+Indexing jobs:
+
+	indexAllRecordsToSolrJob -- index all records in database to Solr
+
+	indexRecordsToSolrJob -- ???
+
+	indexIndividualRecordsToSolrJob -- ???
+
+	deleteAllRecordsFromSolrJob -- drop Solr index
+
+Miscellaneous jobs:
+
+	exportRecordsJob -- export records from database into file (configurationId, format, outFile)
+
+	obalkyKnihHarvestJob -- ???
+
+	exportCosmotron996Job -- ???
+
+	help -- view this help
+
+Parameters: 
+
+configurationId -- identifier of a job (LONG)
+from            -- from date (DATE)
+to              -- until date (DATE)
+solrUrl         -- URL of solr instance (String)
+format          -- Metadata format (String). Available: line|aleph|iso|xml
+outFile         -- Target file used for export (String).
+inFile          -- Target file used for import (String).
