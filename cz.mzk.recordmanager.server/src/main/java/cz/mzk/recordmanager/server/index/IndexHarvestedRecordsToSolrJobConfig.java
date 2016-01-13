@@ -38,8 +38,9 @@ public class IndexHarvestedRecordsToSolrJobConfig {
 
 	private static final String STRING_OVERRIDEN_BY_EXPRESSION = null;
 
-	private static final int CHUNK_SIZE = 1000;
-
+//	private static final int CHUNK_SIZE = 1000;
+	private static final int CHUNK_SIZE = 1;
+	
 	private static final int PAGE_SIZE = 5000;
 
 	@Autowired

@@ -9,4 +9,6 @@ public interface KrameriusFulltexter {
 
 	public List<FulltextMonography> getFulltextObjects(String rootUuid) throws IOException;
 
+	public List<FulltextMonography> getFulltextForRoot(String rootUuid) throws IOException;
+
 }

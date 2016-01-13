@@ -12,6 +12,8 @@ import org.springframework.batch.core.StepExecutionListener;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.sun.tools.internal.xjc.ModelLoader;
+
 import cz.mzk.recordmanager.server.dc.DublinCoreParser;
 import cz.mzk.recordmanager.server.dc.DublinCoreRecord;
 import cz.mzk.recordmanager.server.dc.InvalidDcException;
@@ -53,6 +55,7 @@ public class KrameriusFulltextProcessor implements
 
 	// configuration
 	private Long confId;
+	private String model;
 
 	private boolean downloadPrivateFulltexts;
 
@@ -65,6 +68,8 @@ public class KrameriusFulltextProcessor implements
 	public void beforeStep(StepExecution stepExecution) {
 		try (SessionBinder sess = sync.register()) {
 			KrameriusConfiguration config = configDao.get(confId);
+			
+			model = configDao.get(confId).getModel();
 			downloadPrivateFulltexts = configDao.get(confId)
 					.isDownloadPrivateFulltexts();
 			fulltexter = krameriusFulltexterFactory.create(config);
@@ -105,9 +110,17 @@ public class KrameriusFulltextProcessor implements
 			logger.debug("Processor: privacy condition fulfilled, reading pages");
 
 			String rootUuid = rec.getUniqueId().getRecordId();
-			List<FulltextMonography> pages = fulltexter
+			
+			List<FulltextMonography> pages;
+			if (model.equals("periodical")) {
+				logger.info("Using fultexter \"for root\" for uuid "+rootUuid+".");
+			    pages = fulltexter.getFulltextForRoot(rootUuid);	
+			} else {
+				logger.info("Using fultexter \"for parent\" for uuid "+rootUuid+".");
+				 pages = fulltexter
 					.getFulltextObjects(rootUuid);
-
+			}
+				
 			// if we got empty list in pages => do nothing, return original record
 			if (pages.isEmpty()) {
 				return rec;

@@ -14,6 +14,7 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+
 import com.google.common.base.Charsets;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.io.ByteStreams;
@@ -191,6 +192,13 @@ public class KrameriusFulltexterFedora implements KrameriusFulltexter {
 
 	protected void setHttpClient(HttpClient httpClient) {
 		this.httpClient = httpClient;
+	}
+
+	@Override
+	public List<FulltextMonography> getFulltextForRoot(String rootUuid)
+			throws IOException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	

@@ -50,7 +50,7 @@ public class IndexRecordsToSolrJobConfig {
 
 	private static final String STRING_OVERRIDEN_BY_EXPRESSION = null;
 
-	private static final int CHUNK_SIZE = 750;
+	private static final int CHUNK_SIZE = 50;
 
 	private static final int PAGE_SIZE = 5000;
 

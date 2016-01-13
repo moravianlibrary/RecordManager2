@@ -84,6 +84,7 @@ public class SolrServerFacadeImpl implements SolrServerFacade {
 	private void fallbackIndex(Collection<SolrInputDocument> documents, int commitWithinMs) throws SolrServerException {
 		for (SolrInputDocument document : documents) {
 			try {
+				logger.info("Indexing document with fallbackIndex method!");
 				server.add(document, commitWithinMs);
 			} catch (SolrException | SolrServerException | IOException ex) {
 				exceptionHandler.handle(ex, Collections.singletonList(document));

@@ -88,5 +88,31 @@ public class KrameriusFulltexterSolr implements KrameriusFulltexter {
 		}
 		return pages;
 	}
+	
+	@Override
+	public List<FulltextMonography> getFulltextForRoot(String rootUuid)
+			throws IOException {
+		logger.debug("About to harvest fulltext from Kramerius for {}", rootUuid);
+		SolrQuery query = new SolrQuery();
+		
+		//<MJ.> here is the change - all pages for given root, should work for serials;-)
+		String queryString = SolrUtils.createEscapedFieldQuery("root_pid", rootUuid) + " AND " +
+				SolrUtils.createEscapedFieldQuery(FEDORA_MODEL_FIELD, FEDORA_MODEL_PAGE);
+		query.setQuery(queryString);
+		query.set("fl", FL_FIELDS);
+		query.setRows(MAX_PAGES);
+		SolrRequest request = new QueryRequest(query);
+		request.setPath("/solr");
+		try {
+			QueryResponse response = solr.query(request);
+			SolrDocumentList documents = response.getResults();
+			return asPages(documents);
+		} catch (Exception ex) {
+			logger.error("Harvesting of fulltext for uuid: {} FAILED", rootUuid);
+			logger.error(ex.getMessage());
+
+			return new ArrayList<FulltextMonography>();
+		}
+	}
 
 }

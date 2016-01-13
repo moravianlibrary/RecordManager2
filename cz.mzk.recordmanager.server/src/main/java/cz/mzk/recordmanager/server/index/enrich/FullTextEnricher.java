@@ -1,5 +1,6 @@
 package cz.mzk.recordmanager.server.index.enrich;
 
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -44,6 +45,13 @@ public class FullTextEnricher implements DedupRecordEnricher {
 		text.stream().forEach(it -> txt.append(modifyFulltextPage(it)));
 		//logger.info("Enriching record {} with fulltext: {}", record, txt.toString());
 		logger.info("Enriching record {} with fulltext begining with: {}...", record,  StringUtils.substring(txt.toString(), 0, 30));
+		
+		try {
+			final byte[] utf8Bytes = txt.toString().getBytes("UTF-8");
+			logger.info("Total size of fulltext is :"+utf8Bytes.length);
+		} catch (UnsupportedEncodingException e) {
+			logger.info("Can't calculate size of fulltext - UnsupportedEncodingException caught.");
+		}
 		mergedDocument.setField(SolrFieldConstants.FULLTEXT_FIELD, txt.toString());
 	}
 
