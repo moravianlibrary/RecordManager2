@@ -362,4 +362,10 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 		return null;
 	}
 
+	@Override
+	public CitationRecordType getCitationFormat() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

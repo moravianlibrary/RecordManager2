@@ -12,17 +12,12 @@ import cz.mzk.recordmanager.server.dc.InvalidDcException;
 import cz.mzk.recordmanager.server.metadata.MetadataRecord;
 import cz.mzk.recordmanager.server.metadata.MetadataRecordFactory;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
-import cz.mzk.recordmanager.server.model.Title;
-import cz.mzk.recordmanager.server.model.HarvestedRecordFormat.HarvestedRecordFormatEnum;
 import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordFormatDAO;
-import cz.mzk.recordmanager.server.util.MetadataUtils;
 
 @Component
-public class DublinCoreDedupKeyParser implements DedupKeysParser {
+public class DublinCoreDedupKeyParser extends HashingDedupKeyParser {
 
 	private final static String FORMAT = "dublinCore";
-	
-	private final static int EFFECTIVE_TITLE_LENGTH = 255;
 	
 	@Autowired 
 	private MetadataRecordFactory metadataFactory;
@@ -46,34 +41,4 @@ public class DublinCoreDedupKeyParser implements DedupKeysParser {
 		}
 	}
 
-	@Override
-	public HarvestedRecord parse(HarvestedRecord record,
-			MetadataRecord metadataRecord) throws DedupKeyParserException {
-		
-		record.setIsbns(metadataRecord.getISBNs());
-		List<Title> existingTitles = record.getTitles();
-		for (Title title: metadataRecord.getTitle()) {
-			title.setTitleStr(MetadataUtils.normalizeAndShorten(
-						title.getTitleStr(),
-						EFFECTIVE_TITLE_LENGTH));
-			if (!existingTitles.contains(title)) {
-				existingTitles.add(title);
-			}
-		}
-		record.setTitles(existingTitles);
-		
-		record.setIssns(metadataRecord.getISSNs());
-		record.setCnb(metadataRecord.getCNBs());
-		if(record.getHarvestedFrom() != null) record.setWeight(metadataRecord.getWeight(record.getHarvestedFrom().getBaseWeight()));
-		record.setPublicationYear(metadataRecord.getPublicationYear());
-		List<HarvestedRecordFormatEnum> formatEnums = metadataRecord.getDetectedFormatList();
-		record.setPhysicalFormats(harvestedRecordFormatDAO.getFormatsFromEnums(formatEnums));
-		record.setAuthorAuthKey(metadataRecord.getAuthorAuthKey());
-		record.setAuthorString(MetadataUtils.normalize(metadataRecord.getAuthorString()));
-		record.setScale(metadataRecord.getScale());
-		record.setUuid(metadataRecord.getUUId());
-		record.setIssnSeries(MetadataUtils.normalize(metadataRecord.getISSNSeries()));
-		record.setIssnSeriesOrder(MetadataUtils.normalize(metadataRecord.getISSNSeriesOrder()));
-		return record;
-	}
 }

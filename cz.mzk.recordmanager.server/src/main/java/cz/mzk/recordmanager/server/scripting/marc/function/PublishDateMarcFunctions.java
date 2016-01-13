@@ -120,7 +120,7 @@ public class PublishDateMarcFunctions implements MarcRecordFunctions {
 			from = Integer.parseInt(fromString);
 		}
 		else return result;
-		if(type == 'e' || type == 'i' || type == 'k' || type == 's' || type == 'u'){
+		if(type == 'e' || type == 'i' || type == 'k' || type == 's' || type == 'u' || type == 'm'){
 			result.add(from);
 		}		
 		if(field008.length() < 16){
@@ -134,7 +134,7 @@ public class PublishDateMarcFunctions implements MarcRecordFunctions {
 		}
 		else return result;
 		
-		if(type == 'd' || type == 'm' || type == 'q' || type == 'c'){
+		if(type == 'd' || type == 'q' || type == 'c'){
 			if (to > MAX_YEAR) {
 	            to = MAX_YEAR;
 	        }

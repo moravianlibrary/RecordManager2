@@ -22,8 +22,10 @@ public class Constants {
 	public static final String JOB_ID_IMPORT_ANTIKVARIATY			= "antikvariatyImportRecordsJob";
 	public static final String JOB_ID_IMPORT_OAI					= "importOaiRecordsJob";
 	public static final String JOB_ID_REGEN_DEDUP_KEYS				= "regenerateDedupKeysJob";
+	public static final String JOB_ID_REGEN_MISSING_DEDUP_KEYS		= "regenerateMissingDedupKeysJob";
 	public static final String JOB_ID_DELETE_ALL_RECORDS_FROM_SOLR	= "deleteAllRecordsFromSolrJob";
 	public static final String JOB_ID_GENERATE_SKAT_DEDUP_KEYS		= "generateSkatDedupKeys";
+	public static final String JOB_ID_HARVEST_OBALKY_KNIH		= "obalkyKnihHarvestJob";
 	
 	public static final String JOB_PARAM_CONF_ID 		= "configurationId";
 	public static final String JOB_PARAM_FROM_DATE 		= "from";
@@ -47,7 +49,8 @@ public class Constants {
 	public static final String METADATA_FORMAT_MARC21      = "marc21-xml";
 	public static final String METADATA_FORMAT_XML_MARC    = "xml-marc";
 	public static final String METADATA_FORMAT_MARC_CPK    = "marccpk";
-	public static final String METADATA_FORMAR_OAI_MARCXML_CPK = "oai_marcxml_cpk";
+	public static final String METADATA_FORMAT_OAI_MARCXML_CPK = "oai_marcxml_cpk";
+	public static final String METADATA_FORMAT_MARC21E     = "marc21e";
 	public static final String METADATA_FORMAT_DUBLIN_CORE = "dublinCore";
 	
 	public static final String PREFIX_MZK				= "mzk";

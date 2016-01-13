@@ -137,6 +137,10 @@ public class DedupRecordsJobConfig {
 
 	public DedupRecordsJobConfig() throws IOException {
 	}
+	
+	/**
+	 * Dedup Job definition
+	 */
 
 	@Bean
 	public Job dedupRecordsJob(
@@ -228,8 +232,23 @@ public class DedupRecordsJobConfig {
 				.next(cleanupStep)
 				.build();
 	}
-
-	@Bean(name="prepareTempTablesStep:initTasklet")
+	
+//	/**
+//	 * Dedup all records job definition
+//	 * @return
+//	 */
+//	@Bean
+//	public Job dedupAllRecordsJob() {
+//		return jobs.get(Constants.JOB_ID_DEDUP_ALL)
+//				.validator(new DedupRecordsJobParametersValidator())
+//				.start(initStep)
+//				.build();
+//	}
+	
+	/**
+	 * Init deduplication
+	 */
+	@Bean(name="initTasklet")
 	@StepScope
 	public Tasklet initTasklet() {
 		return new SqlCommandTasklet(initDeduplicationSql);

@@ -26,5 +26,7 @@ public interface HarvestedRecordDAO extends DomainDAO<Long, HarvestedRecord> {
 	public boolean existsByDedupRecord(DedupRecord dedupRecord);
 
 	public HarvestedRecord findByRecordId(String uniqueId);
+	
+	public void dropDedupKeys(HarvestedRecord hr);
 
 }

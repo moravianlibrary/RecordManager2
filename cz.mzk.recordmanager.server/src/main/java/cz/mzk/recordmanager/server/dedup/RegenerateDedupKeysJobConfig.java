@@ -64,6 +64,16 @@ public class RegenerateDedupKeysJobConfig {
 				.build();
 	}
     
+    @Bean
+	public Job RegenerateMissingDedupKeysJob(
+			@Qualifier(Constants.JOB_ID_REGEN_DEDUP_KEYS+":regenarateDedupKeysStep") Step regenDedupKeysStep) {
+		return jobs.get(Constants.JOB_ID_REGEN_MISSING_DEDUP_KEYS)
+				.validator(new RegenerateDedupKeysJobParameters())
+				.listener(JobFailureListener.INSTANCE)
+				.start(regenDedupKeysStep)
+				.build();
+	}
+    
     @Bean(name=Constants.JOB_ID_REGEN_DEDUP_KEYS +":dropOldDedupKeysStep")
     public Step prepareTempCnbnTableStep() {
     	return steps.get("dropOldDedupKeysStep")
@@ -88,6 +98,7 @@ public class RegenerateDedupKeysJobConfig {
 		pqpf.setDataSource(dataSource);
 		pqpf.setSelectClause("SELECT id");
 		pqpf.setFromClause("FROM harvested_record hr");
+		pqpf.setWhereClause("dedup_keys_hash is null");
 		pqpf.setSortKey("id");
 		reader.setRowMapper(new LongValueRowMapper());
 		reader.setPageSize(100);

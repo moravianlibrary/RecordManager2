@@ -5,13 +5,10 @@ SELECT hr_limited.id as harvested_record_id,hr_limited.publication_year,t.title,
   SELECT DISTINCT ON (hr2.dedup_record_id) hr2.dedup_record_id,hr2.id,hr2.publication_year,hr2.updated
     FROM (
       SELECT dedup_record_id, MAX(weight) AS w
-        FROM harvested_record
-        WHERE publication_year IS NOT NULL
-        AND id IN (
-          SELECT hrfl.harvested_record_id FROM harvested_record_format_link hrfl 
-          INNER JOIN harvested_record_format hrf ON hrf.id = hrfl.harvested_record_format_id
-          WHERE hrf.name = 'PERIODICALS')
-        GROUP BY dedup_record_id
+        FROM harvested_record inner_hr
+        LEFT OUTER JOIN tmp_periodicals_ids inner_tpi ON inner_hr.id = inner_tpi.id
+        WHERE inner_hr.publication_year IS NOT NULL
+        GROUP BY inner_hr.dedup_record_id
         ) t 
         INNER JOIN harvested_record hr2 ON hr2.dedup_record_id = t.dedup_record_id AND t.w = hr2.weight
 ) as hr_limited

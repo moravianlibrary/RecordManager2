@@ -347,3 +347,33 @@ ALTER TABLE kramerius_conf ADD COLUMN url_solr character varying(128);
 -- 14. 12. 2015 tomascejpek
 UPDATE import_conf SET id_prefix='vktatest' WHERE id=329;
 
+-- 17. 12. 2015 tomascejpek
+UPDATE import_conf SET harvest_frequency='D' WHERE id IN (300,301,304,306,307,311,312,313,314,315,316,320,323,324)
+
+-- 17. 12. 2015 mertam
+ALTER TABLE harvested_record ADD COLUMN dedup_keys_hash CHAR(40);
+ALTER TABLE harvested_record ADD COLUMN next_dedup_flag BOOLEAN DEFAULT TRUE;
+ALTER TABLE harvested_record ADD COLUMN oai_timestamp TIMESTAMP;
+
+-- 4. 1. 2016 tomascejpek
+UPDATE oai_harvest_conf SET url='http://web2.mlp.cz/cgi/oaie' WHERE import_conf_id=302;
+UPDATE oai_harvest_conf SET metadata_prefix='marc21e' WHERE import_conf_id=302;
+
+-- 4. 1. 2016 xrosecky 
+CREATE TABLE obalkyknih_toc (
+  id                   DECIMAL(10) PRIMARY KEY,
+  book_id              DECIMAL(10),
+  nbn                  VARCHAR(32),
+  oclc                 VARCHAR(32),
+  ean                  VARCHAR(32),
+  isbn                 VARCHAR(32),
+  toc                  VARCHAR(1048576)
+);
+
+CREATE INDEX obalkyknih_toc_book_idx ON obalkyknih_toc(book_id);
+CREATE INDEX obalkyknih_toc_oclc_idx ON obalkyknih_toc(oclc);
+CREATE INDEX obalkyknih_toc_ean_idx ON obalkyknih_toc(ean);
+CREATE INDEX obalkyknih_toc_isbn_idx ON obalkyknih_toc(isbn);
+CREATE INDEX obalkyknih_toc_nbn_idx ON obalkyknih_toc(nbn);
+
+ALTER TABLE obalkyknih_toc ALTER COLUMN isbn TYPE DECIMAL(13) USING isbn::numeric(13,0);

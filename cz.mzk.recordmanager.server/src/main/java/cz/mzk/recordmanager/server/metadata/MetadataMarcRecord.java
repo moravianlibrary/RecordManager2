@@ -985,6 +985,53 @@ public class MetadataMarcRecord implements MetadataRecord {
 		if(deleted != null && deleted.equals(DELETED_TAG)) return true;
 		else return false;
 	}
-
+	
+	public CitationRecordType getCitationFormat(){
+		String ldr06 = Character.toString(underlayingMarc.getLeader().getTypeOfRecord()).toLowerCase();
+		String ldr07 = Character.toString(underlayingMarc.getLeader().getImplDefined1()[0]).toLowerCase();
+		
+		Boolean exists85641 = false;
+		for(DataField df: underlayingMarc.getDataFields("856")){
+			if(df.getIndicator1() == '4' && df.getIndicator2() == '1'){
+				exists85641 = true;
+			}
+		}
+		
+		if(!underlayingMarc.getDataFields("502").isEmpty()){
+			return CitationRecordType.ACADEMIC_WORK;
+		}
+		
+		if(ldr06.matches("[at]") && ldr07.matches("[cdm]")){
+			if(exists85641) return CitationRecordType.ELECTRONIC_BOOK;
+			else return CitationRecordType.BOOK;
+		}
+		
+		if(ldr07.matches("[is]")){
+			if(exists85641) return CitationRecordType.ELECTRONIC_PERIODICAL;
+			else return CitationRecordType.PERIODICAL;
+		}
+		
+		Boolean matches = false;
+		for(DataField df: underlayingMarc.getDataFields("773")){
+			if(df.toString().matches("(?i).*sborník.*|.*proceedings.*|.*almanach.*")){
+				matches = true;
+			}
+		}
+		if(matches){
+			if(exists85641) return CitationRecordType.ELECTRONIC_CONTRIBUTION_PROCEEDINGS;
+			else return CitationRecordType.CONTRIBUTION_PROCEEDINGS;
+		}
+		
+		if(ldr07.matches("[ab]")){
+			if(exists85641) return CitationRecordType.ELECTRONIC_ARTICLE;
+			else return CitationRecordType.ARTICLE;
+		}
+		
+		if(ldr06.matches("[ef]")) return CitationRecordType.MAPS;
+		
+		if(ldr06.matches("[cdkgijopr]")) return CitationRecordType.OTHERS;
+		
+		return CitationRecordType.ERROR;
+	}
 	
 }

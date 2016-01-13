@@ -151,4 +151,10 @@ public interface MetadataRecord {
 	 * @return
 	 */
 	public Boolean isDeleted();
+	
+	/**
+	 * return record format for citation
+	 * @return
+	 */
+	public CitationRecordType getCitationFormat();
 }

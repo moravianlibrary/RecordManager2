@@ -9,7 +9,7 @@ import cz.mzk.recordmanager.server.marc.MarcRecord;
 import cz.mzk.recordmanager.server.scripting.marc.MarcFunctionContext;
 
 @Component
-public class GetPeriodMarcFunction implements MarcRecordFunctions{
+public class GetPeriodMarcFunction implements MarcRecordFunctions {
 
 	/**
      * get the era field values from 045a as a Set of Strings

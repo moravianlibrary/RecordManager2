@@ -221,6 +221,7 @@
    <field name="barcodes" type="string" indexed="true" stored="true" multiValued="true"/>
    <field name="sfx_links" type="string" indexed="false" stored="true" multiValued="true"/>
    <field name="996b" type="string" indexed="true" stored="true" multiValued="true"/>
+   <field name="citation_record_type" type="string" indexed="true" stored="true" multiValued="false"/>
    <!-- Doesn't need to be stored after successful testing -->
    <field name="loanRelevance" type="integer"  indexed="true"  stored="true"/>
    <!-- Dynamic fields for customization without schema modification -->

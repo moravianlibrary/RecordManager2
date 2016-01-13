@@ -128,6 +128,10 @@ public class HarvestedRecord extends AbstractDomainObject {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date deleted;
 	
+	@Column(name="oai_timestamp")
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date oaiTimestamp;
+	
 	@Column(name="format")
 	private String format;
 	
@@ -159,7 +163,7 @@ public class HarvestedRecord extends AbstractDomainObject {
 	@JoinColumn(name="harvested_record_id", referencedColumnName="id")
 	private List<Cosmotron996> cosmotron = new ArrayList<Cosmotron996>();
 
-	@OneToMany(mappedBy="id.harvestedRecordId", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy="id.harvestedRecordId", cascade = CascadeType.ALL, orphanRemoval=true)
 	@MapKey(name="id.langStr")
 	private Map<String, Language> languages = new HashMap<>();
 
@@ -209,14 +213,32 @@ public class HarvestedRecord extends AbstractDomainObject {
 	@Column(name="pages")
 	private Long pages;
 	
+	@Column(name="dedup_keys_hash")
+	private String dedupKeysHash = "";
+	
+	@Column(name="next_dedup_flag")
+	private boolean nextDedupFlag = true;
+	
 	/**
 	 * indicator variable used for filtering reasons
 	 */
 	@Transient
 	private boolean shouldBeProcessed = true;
 	
+	/**
+	 * Temporal indicator variable used for deduplication 
+	 */
+	@Transient
+	private Date temporalOldOaiTimestamp;
 	
-	protected HarvestedRecord() {
+	/**
+	 * Temporal indicator variable used for deduplication
+	 */
+	@Transient
+	private String temporalDedupHash;
+	
+	
+	public HarvestedRecord() {
 	}
 	
 	public HarvestedRecord(HarvestedRecordUniqueId id) {
@@ -473,4 +495,43 @@ public class HarvestedRecord extends AbstractDomainObject {
 		this.cosmotron = cosmotron;
 	}
 
+	public String getDedupKeysHash() {
+		return dedupKeysHash;
+	}
+
+	public void setDedupKeysHash(String dedupKeysHash) {
+		this.dedupKeysHash = dedupKeysHash;
+	}
+
+	public boolean isNextDedupFlag() {
+		return nextDedupFlag;
+	}
+
+	public void setNextDedupFlag(boolean nextDedupFlag) {
+		this.nextDedupFlag = nextDedupFlag;
+	}
+
+	public Date getOaiTimestamp() {
+		return oaiTimestamp;
+	}
+
+	public void setOaiTimestamp(Date oaiTimestamp) {
+		this.oaiTimestamp = oaiTimestamp;
+	}
+
+	public Date getTemporalOldOaiTimestamp() {
+		return temporalOldOaiTimestamp;
+	}
+
+	public void setTemporalOldOaiTimestamp(Date oldOaiTimestamp) {
+		this.temporalOldOaiTimestamp = oldOaiTimestamp;
+	}
+	
+	public String getTemporalDedupHash() {
+		return temporalDedupHash;
+	}
+
+	public void setTemporalDedupHash(String temporalDedupHash) {
+		this.temporalDedupHash = temporalDedupHash;
+	}
 }

@@ -89,6 +89,7 @@ CREATE TABLE harvested_record (
   harvested            TIMESTAMP,
   updated              TIMESTAMP,
   deleted              TIMESTAMP,
+  oai_timestamp        TIMESTAMP,
   format               VARCHAR(12) NOT NULL,
   dedup_record_id      DECIMAL(10),
   publication_year     DECIMAL(4),
@@ -101,6 +102,8 @@ CREATE TABLE harvested_record (
   weight               DECIMAL(10),
   cluster_id           VARCHAR(20),
   pages                DECIMAL(10),
+  dedup_keys_hash      CHAR(40),
+  next_dedup_flag      BOOLEAN DEFAULT TRUE,
   raw_record           BYTEA,
   UNIQUE (import_conf_id, record_id),
   FOREIGN KEY (import_conf_id) REFERENCES import_conf(id),
@@ -228,3 +231,13 @@ CREATE TABLE cosmotron_996 (
   raw_record           BYTEA,
   FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE
  );
+
+ CREATE TABLE obalkyknih_toc (
+  id                   DECIMAL(10) PRIMARY KEY,
+  book_id              DECIMAL(10),
+  nbn                  VARCHAR(32),
+  oclc                 VARCHAR(32),
+  ean                  VARCHAR(32),
+  isbn                 DECIMAL(13),
+  toc                  VARCHAR(1048576)
+);

@@ -235,7 +235,7 @@ public class SolrInputDocumentFactoryImpl implements SolrInputDocumentFactory, I
 			if(hr.getFormat().equals("marc21-xml")){
 				MarcRecord record = marcXmlParser.parseRecord(new ByteArrayInputStream(hr.getRawRecord()));
 				for(DataField df: record.getDataFields("996")){
-					if(skip.contains(df.getSubfield('j'))) continue;
+					if(df.getSubfield('j') != null && skip.contains(df.getSubfield('j').getData())) continue;
 					if(df.getSubfield('b') != null){
 						result.add(prefix+"."+df.getSubfield('b').getData());
 					}

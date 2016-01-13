@@ -69,11 +69,12 @@ public class AntikvariatyRecordsReader implements ItemReader<AntikvariatyRecord>
 	protected void initializeReader() throws Exception {
 		DownloadImportConfiguration config = configDao.get(configId);
 		if (config == null) {
-			throw new IllegalArgumentException(String.format("Configuration with id '%s' not found.", configId.toString()));
+			throw new IllegalArgumentException(String.format("Configuration with id=%s not found.", configId));
 		}
 		String url = config.getUrl();
-		if (url == null) {
-			throw new IllegalArgumentException(String.format("Missing url."));
+		if (url == null || url.isEmpty()) {
+			throw new IllegalArgumentException(
+					String.format("Missing url in DownloadImportConfiguration with id=%s.", configId));
 		}
 		try {
 			reader = new StaxEventItemReader<AntikvariatyRecord>();
