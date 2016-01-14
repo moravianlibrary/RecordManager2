@@ -53,6 +53,10 @@ public class MarcDSL extends BaseDSL {
 		this.marcMetadataRecord = new MetadataMarcRecord(record);
 	}
 
+	public MarcRecord getRecord() {
+		return record;
+	}
+
 	public String getFirstField(String tag) {
 		Matcher matcher = FIELD_PATTERN.matcher(tag);
 		if (!matcher.matches()) {

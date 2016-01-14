@@ -2,6 +2,7 @@ package cz.mzk.recordmanager.server.scripting;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -32,6 +33,9 @@ public abstract class BaseDSL {
 
 	public String translate(String file, String input, String defaultValue)
 			throws IOException {
+		if (input == null) {
+			return defaultValue;
+		}
 		Mapping mapping = propertyResolver.resolve(file);
 		String result = (String) mapping.get(input);
 		if (result == null) {
@@ -42,6 +46,9 @@ public abstract class BaseDSL {
 
 	public List<String> translate(String file, List<String> inputs,
 			String defaultValue) throws IOException {
+		if (inputs == null) {
+			return Collections.emptyList();
+		}
 		List<String> translated = new ArrayList<String>();
 		Mapping mapping = propertyResolver.resolve(file);
 		for (String input : inputs) {
