@@ -162,7 +162,7 @@ public class OAIHarvestJobConfig {
 	@Bean(name="oaiHarvestJob:afterHarvestStep")
 	public Step afterHarvestStep() {
 		return steps.get("afterHarvestStep") //
-				.tasklet(afterHarvestTasklet(LONG_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION))
+				.tasklet(afterHarvestTasklet()) //
 				.build();
 	}
 
@@ -215,12 +215,8 @@ public class OAIHarvestJobConfig {
 
 	@Bean(name="oaiHarvestJob:afterHarvestTasklet")
 	@StepScope
-	public Tasklet afterHarvestTasklet(@Value("#{jobParameters[" + Constants.JOB_PARAM_CONF_ID + "]}") Long configId,
-			@Value("#{stepExecutionContext[" + Constants.JOB_PARAM_FROM_DATE + "] "
-					+ "?:jobParameters[ " + Constants.JOB_PARAM_FROM_DATE +"]}") Date from,
-					@Value("#{stepExecutionContext[" + Constants.JOB_PARAM_UNTIL_DATE+"]"
-							+ "?:jobParameters[" + Constants.JOB_PARAM_UNTIL_DATE +"]}") Date to) {
-		return new AfterHarvestTasklet(configId, from, to);
+	public Tasklet afterHarvestTasklet() {
+		return new AfterHarvestTasklet();
 	}
 
 }

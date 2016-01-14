@@ -8,6 +8,8 @@ public interface HarvestingFacade {
 
 	public void incrementalHarvest(OAIHarvestConfiguration conf);
 
+	public void fullHarvest(OAIHarvestConfiguration conf);
+
 	public Date getLastHarvest(OAIHarvestConfiguration conf);
 
 }

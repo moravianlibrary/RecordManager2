@@ -42,6 +42,17 @@ public class HarvestingFacadeImpl implements HarvestingFacade {
 			parameters.put(Constants.JOB_PARAM_FROM_DATE, new JobParameter(lastHarvest));
 		}
 		parameters.put(Constants.JOB_PARAM_UNTIL_DATE, new JobParameter(new Date()));
+		parameters.put(Constants.JOB_PARAM_START_TIME, new JobParameter(new Date()));
+		JobParameters params = new JobParameters(parameters);
+		jobExecutor.execute(Constants.JOB_ID_HARVEST, params);
+	}
+
+	@Override
+	public void fullHarvest(OAIHarvestConfiguration conf) {
+		Map<String, JobParameter> parameters = new HashMap<>();
+		parameters.put(Constants.JOB_PARAM_CONF_ID, new JobParameter(conf.getId()));
+		parameters.put(Constants.JOB_PARAM_START_TIME, new JobParameter(new Date()));
+		parameters.put(Constants.JOB_PARAM_REHARVEST, new JobParameter(1L));
 		JobParameters params = new JobParameters(parameters);
 		jobExecutor.execute(Constants.JOB_ID_HARVEST, params);
 	}

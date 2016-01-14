@@ -39,7 +39,9 @@ public class Constants {
 	public static final String JOB_PARAM_REPEAT    		= "repeat";
 	public static final String JOB_PARAM_INCREMENTAL	= "incremental";
 	public static final String JOB_PARAM_RECORD_IDS		= "recordIds";
-	
+	public static final String JOB_PARAM_START_TIME		= "startTime";
+	public static final String JOB_PARAM_REHARVEST		= "reharvest";
+
 	public static final String JOB_PARAM_OUT_FILE		= "outFile";
 	public static final String JOB_PARAM_IN_FILE		= "inFile";
 	public static final String JOB_PARAM_DELETED_OUT_FILE = "deletedOutFile";
