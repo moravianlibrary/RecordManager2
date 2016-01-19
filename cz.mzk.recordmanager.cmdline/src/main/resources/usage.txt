@@ -42,6 +42,10 @@ Indexing jobs:
 
 	deleteAllRecordsFromSolrJob -- drop Solr index
 
+Running scripts jobs:
+
+	script -- run script given as 'scriptname' param. Scrips are loaded from 'config/automatization/'
+
 Miscellaneous jobs:
 
 	exportRecordsJob -- export records from database into file (configurationId, format, outFile)

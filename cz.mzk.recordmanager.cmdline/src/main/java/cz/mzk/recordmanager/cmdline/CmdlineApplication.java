@@ -83,10 +83,10 @@ public class CmdlineApplication {
 			}
 		} else if (jobName.equals(RUN_SCRIPT)) {
 			ScriptRunner scriptRunner = applicationContext.getBean(ScriptRunner.class);
-			if (!jobParams.getParameters().containsKey("script")) {
+			if (!jobParams.getParameters().containsKey("scriptname")) {
 				throw new IllegalArgumentException("Parameter script is missing");
 			}
-			String scriptPath = jobParams.getString("script");
+			String scriptPath = jobParams.getString("scriptname");
 			scriptRunner.run(scriptPath);
 		} else {
 			JobExecutor executor = applicationContext.getBean(JobExecutor.class);
