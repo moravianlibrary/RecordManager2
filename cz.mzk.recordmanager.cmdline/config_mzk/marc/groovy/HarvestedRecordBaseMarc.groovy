@@ -61,7 +61,7 @@ topic = getFields "600:610:630:650"
 genre = getFields "655"
 geographic = getFields "651"
 
-topic_facet = getFields "600x:610x:611x:630x:648x:650a:650x:651x:655x"
+topic_facet = getMZKTopicFacets()
 genre_facet = getFields "600v:610v:611v:630v:648v:650v:651v:655a:655v"
 geographic_facet = getFields "600z:610z:611z:630z:648z:650z:651a:651z:655z"
 
@@ -92,8 +92,6 @@ subcategory_txtF = getRecord().getDataFields("072").findAll{ df -> df?.getSubfie
   .collect{ df -> df?.getSubfield('x' as char)?.getData() }.find{ true };
 base_txtF_mv = getMZKBases()
 barcode_str_mv = getFields "996b"
-sysno_str = "" // custom, getSysno()
-publishDate = "" // custom, getPublishDate()
-author_title_str = "" // custom, getAuthorAndTitle()
+sysno_str = getMZKSysno()
+author_title_str = getMZKAuthorAndTitle()
 udc_str_mv = getFields "080a"
-topic_facet = "" // custom, getTopicFacets()
