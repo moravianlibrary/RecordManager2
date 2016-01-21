@@ -16,7 +16,8 @@ public class GenerateSkatKeysJobParameterValidator extends DefaultJobParametersV
 	@Override
 	public Collection<JobParameterDeclaration> getParameters() {
 		return Arrays.asList(
-				param(Constants.JOB_PARAM_INCREMENTAL, ParameterType.LONG, false) //
+				param(Constants.JOB_PARAM_INCREMENTAL, ParameterType.LONG, false), //
+				param(Constants.JOB_PARAM_FROM_DATE, ParameterType.DATE, false) //
 				);
 	}
 

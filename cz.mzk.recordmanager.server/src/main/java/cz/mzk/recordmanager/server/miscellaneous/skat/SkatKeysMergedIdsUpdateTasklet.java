@@ -130,10 +130,12 @@ public class SkatKeysMergedIdsUpdateTasklet implements Tasklet {
 		String query = "UPDATE skat_keys "
 				+ "SET manually_merged = TRUE "
 				+ "WHERE skat_record_id IN "
-				+ "(SELECT id FROM harvested_record WHERE record_id = '" + recordId + "'"
+				+ "(SELECT id FROM harvested_record WHERE record_id = ?"
 				+ ")";
 		Session session = sessionFactory.getCurrentSession();
-		session.createSQLQuery(query).executeUpdate();
+		session.createSQLQuery(query)
+			.setString(0, recordId)
+			.executeUpdate();
 	}
 	
 	
