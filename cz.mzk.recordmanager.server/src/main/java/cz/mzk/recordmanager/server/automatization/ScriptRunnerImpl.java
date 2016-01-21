@@ -23,7 +23,7 @@ public class ScriptRunnerImpl implements ScriptRunner {
 	@Autowired
 	private ResourceProvider provider;
 
-	private final String root = "/automatization/";
+	private final String root = "/config/automatization/";
 
 	@Override
 	public void run(String scriptPath) {
