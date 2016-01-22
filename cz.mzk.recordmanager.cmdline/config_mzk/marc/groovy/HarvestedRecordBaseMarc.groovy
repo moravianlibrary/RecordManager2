@@ -55,8 +55,6 @@ isbn = getFields "020a"
 isbn_display_mv = getFields "020a"
 issn = getFields "022a:440x:490x:730x:776x:780x:785x"
 
-callnumber_str_mv = getFields "910b"
-
 topic = getFields "600:610:630:650"
 genre = getFields "655"
 geographic = getFields "651"
@@ -78,8 +76,7 @@ fulltext = "" // custom, getFullText()
 topic = getMZKKeywords()
 relevancy_str = getMZKRelevancy()
 
-// callnumber = getFields("910b")
-callnumber_str_mv = getFields("910b")
+callnumber_str_mv = getFields "910b"
 callnumber_second_str_mv = getFields("996h").collect{it -> it.replace(' ', '|')}
 
 // source = "MZK"
