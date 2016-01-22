@@ -16,6 +16,7 @@ import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.model.SkatKey;
 import cz.mzk.recordmanager.server.model.SkatKey.SkatKeyCompositeId;
 import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordDAO;
+import cz.mzk.recordmanager.server.oai.dao.SkatKeyDAO;
 
 public class GenerateSkatKeysProcessor implements ItemProcessor<Long, Set<SkatKey>> {
 
@@ -23,14 +24,17 @@ public class GenerateSkatKeysProcessor implements ItemProcessor<Long, Set<SkatKe
 	private HarvestedRecordDAO harvestedRecordDao;
 	
 	@Autowired
+	private SkatKeyDAO skatKeyDao;
+	
+	@Autowired
 	private MarcXmlParser marcXmlParser;
 	
 	@Override
 	public Set<SkatKey> process(Long item) throws Exception {
-		Set<SkatKey> result = new HashSet<>();
+		Set<SkatKey> parsedKeys = new HashSet<>();
 		HarvestedRecord hr = harvestedRecordDao.get(item);
 		if (hr.getRawRecord() == null) {
-			return result;
+			return parsedKeys;
 		}
 		
 		MarcRecord marc = null;
@@ -38,7 +42,7 @@ public class GenerateSkatKeysProcessor implements ItemProcessor<Long, Set<SkatKe
 		try {
 			marc = marcXmlParser.parseRecord(is);
 		} catch (Exception e) {
-			return result;
+			return parsedKeys;
 		}
 		
 		for (DataField df: marc.getDataFields("996")) {
@@ -57,11 +61,25 @@ public class GenerateSkatKeysProcessor implements ItemProcessor<Long, Set<SkatKe
 			}
 			
 			SkatKey key = new SkatKey(new SkatKeyCompositeId(hr.getId(), sigla, recordId));
-			result.add(key);
+			parsedKeys.add(key);
 		}
 		
-		//ignore records having not enough information
-		return result.size() < 2 ? Collections.emptySet() : result;
+		// ignore records having not enough information
+		if (parsedKeys.size() < 2) {
+			return Collections.emptySet();
+		}
+
+		// find already existing keys
+		Set<SkatKey> existingKeys = new HashSet<>(skatKeyDao.getSkatKeysForRecord(item));
+		Set<SkatKey> newKeys = new HashSet<>();
+		for(SkatKey current: parsedKeys) {
+			if (existingKeys.contains(current)) {
+				continue;
+			}
+			newKeys.add(current);
+		}
+
+		return newKeys;
 	}
 
 }
