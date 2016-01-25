@@ -26,6 +26,8 @@ public class HarvestingFacadeImpl implements HarvestingFacade {
 
 	private final String lastCompletedHarvestQuery = ResourceUtils.asString("sql/query/LastCompletedHarvestQuery.sql");
 
+	private final String lastJobExecutionQuery = ResourceUtils.asString("sql/query/LastJobExecutionQuery.sql");
+
 	@Autowired
 	private NamedParameterJdbcTemplate jdbcTemplate;
 
@@ -61,6 +63,17 @@ public class HarvestingFacadeImpl implements HarvestingFacade {
 	public Date getLastHarvest(OAIHarvestConfiguration conf) {
 		return jdbcTemplate.queryForObject(lastCompletedHarvestQuery, //
 				ImmutableMap.of("jobName", Constants.JOB_ID_HARVEST, Constants.JOB_PARAM_CONF_ID, conf.getId()), Date.class);
+	}
+
+	@Override
+	public void obalkyKnihHarvest() {
+		jobExecutor.execute(Constants.JOB_ID_HARVEST_OBALKY_KNIH, new JobParameters());
+	}
+
+	@Override
+	public Date getLastObalkyKnihHarvest() {
+		return jdbcTemplate.queryForObject(lastJobExecutionQuery, //
+				ImmutableMap.of("jobName", Constants.JOB_ID_HARVEST_OBALKY_KNIH), Date.class);
 	}
 
 }

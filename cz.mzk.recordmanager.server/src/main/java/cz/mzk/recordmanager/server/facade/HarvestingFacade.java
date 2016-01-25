@@ -12,4 +12,8 @@ public interface HarvestingFacade {
 
 	public Date getLastHarvest(OAIHarvestConfiguration conf);
 
+	public void obalkyKnihHarvest();
+
+	public Date getLastObalkyKnihHarvest();
+
 }
