@@ -36,6 +36,8 @@ public class SolrFieldConstants {
 
 	public static final String ISBN = "isbn";
 
+	public static final String NBN = "nbn_display";
+
 	public static final String LOCAL_STATUSES_FACET = "local_statuses_facet_str_mv";
 	
 	public static final String SFX_LINKS_FIELD = "sfx_links";
