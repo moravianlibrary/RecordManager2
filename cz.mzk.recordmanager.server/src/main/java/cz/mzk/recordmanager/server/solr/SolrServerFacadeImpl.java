@@ -41,6 +41,9 @@ public class SolrServerFacadeImpl implements SolrServerFacade {
 			throws IOException, SolrServerException {
 		try {
 			server.add(documents, commitWithinMs);
+		} catch (OutOfMemoryError err) {
+			logger.warn("Out of memory error occured! Trying to use one by one indexing.");
+			fallbackIndex(documents, commitWithinMs);
 		} catch (SolrException | SolrServerException | IOException ex) {
 			if (exceptionHandler.handle(ex, documents)) {
 				fallbackIndex(documents, commitWithinMs);

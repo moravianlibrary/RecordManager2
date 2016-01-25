@@ -8,9 +8,11 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.reset;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
+import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.request.QueryRequest;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocument;
@@ -18,6 +20,7 @@ import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.util.NamedList;
 import org.easymock.Capture;
 import org.easymock.EasyMock;
+import org.springframework.aop.ThrowsAdvice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.Assert;
 
@@ -79,5 +82,40 @@ public class AbstractKrameriusTest extends AbstractTest {
 			Assert.assertNotNull(record);
 		}
 	}
-
+	
+	protected void initHttpClientWithException() throws Exception {
+		reset(httpClient);
+		InputStream response2 = this.getClass().getResourceAsStream("/sample/kramerius/DownloadItem2.xml");
+		expect(httpClient.executeGet("http://k4.techlib.cz/search/api/v5.0/item/uuid:00931210-02b6-11e5-b939-0800200c9a66/streams/DC")).andThrow(new IOException("Bad status code: 500"));
+		expect(httpClient.executeGet("http://k4.techlib.cz/search/api/v5.0/item/uuid:0095bca0-614f-11e2-bcfd-0800200c9a66/streams/DC")).andReturn(response2);
+		replay(httpClient);
+	}
+		
+		
+	protected void initSolrServerWithException() throws Exception {
+		reset(solrServerFactory);
+		expect(solrServerFactory.create(eq(SOLR_URL), eq(Mode.KRAMERIUS))).andReturn(mockedSolrServer).anyTimes();
+		replay(solrServerFactory);
+		
+		reset(mockedSolrServer);
+		Capture<QueryRequest> capturedQueryRequest = EasyMock.newCapture();
+		SolrDocumentList documents = new SolrDocumentList();
+		SolrDocument doc1 = new SolrDocument();
+		doc1.addField("PID", "uuid:00931210-02b6-11e5-b939-0800200c9a66");
+		SolrDocument doc2 = new SolrDocument();
+		doc2.addField("PID", "uuid:0095bca0-614f-11e2-bcfd-0800200c9a66");
+		documents.add(doc1);
+		documents.add(doc2);
+		NamedList<Object> solrResponse1 = new NamedList<Object>();
+		solrResponse1.add("response", documents);
+		//1st response - IOException
+		expect(mockedSolrServer.query(and(capture(capturedQueryRequest), anyObject(QueryRequest.class)))).andThrow(new IOException("Bad status code: 500"));
+		//2nd response - SolrServerException
+		expect(mockedSolrServer.query(and(capture(capturedQueryRequest), anyObject(QueryRequest.class)))).andThrow(new SolrServerException("Something bad happened to poor SOLR"));
+		//3rd response - OK
+		expect(mockedSolrServer.query(and(capture(capturedQueryRequest), anyObject(QueryRequest.class)))).andReturn(new QueryResponse(solrResponse1, null));	
+		replay(mockedSolrServer);
+	}
+	
+	
 }

@@ -3,6 +3,7 @@ package cz.mzk.recordmanager.server.index.enrich;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.solr.common.SolrInputDocument;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,7 +42,8 @@ public class FullTextEnricher implements DedupRecordEnricher {
 		}
 		StringBuilder txt = new StringBuilder();
 		text.stream().forEach(it -> txt.append(modifyFulltextPage(it)));
-		logger.info("Enriching record {} with fulltext: {}", record, txt.toString());
+		//logger.info("Enriching record {} with fulltext: {}", record, txt.toString());
+		logger.info("Enriching record {} with fulltext begining with: {}...", record,  StringUtils.substring(txt.toString(), 0, 30));
 		mergedDocument.setField(SolrFieldConstants.FULLTEXT_FIELD, txt.toString());
 	}
 

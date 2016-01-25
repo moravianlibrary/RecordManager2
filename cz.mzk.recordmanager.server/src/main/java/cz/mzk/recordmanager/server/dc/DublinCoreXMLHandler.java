@@ -99,8 +99,6 @@ public class DublinCoreXMLHandler extends DefaultHandler {
 				break;
 			}
 		}
-		// Remove last added element
-//		this.elementStack.pop();
 
 	}
 
@@ -114,31 +112,14 @@ public class DublinCoreXMLHandler extends DefaultHandler {
 			sb.append(ch, start, length);
 		}
 		
-//		String value = new String(ch, start, length).trim();
-
-//		if (value.length() == 0) {
-//			return; // ignore white space
-//		}
-
-		// handle the value based on to which element it belongs
-//		if ("dc:title".equals(currentElement())) {
-//			this.dcRecord.addTitle(value);
-//		} else if ("dc:creator".equals(currentElement())) {
-//			this.dcRecord.addCreator(value);
-//		} else if ("dc:identifier".equals(currentElement())) {
-//			this.dcRecord.addIdentifier(value);
-//		} else if ("dc:type".equals(currentElement())) {
-//			this.dcRecord.addType(value);
-//		} else if ("dc:date".equals(currentElement())) {
-//			this.dcRecord.addDate(value);
-//		}
 	}
 
-//	private String currentElement() {
-//		return (String) this.elementStack.peek();
-//	}
 
 	public DublinCoreRecord getRecord() {
+		//check we have any data before returning!
+		if (dcRecord==null) {
+			throw new InvalidDcException("InvalidDcException: dcRecord is empty!");
+		}
 		return this.dcRecord;
 	}
 

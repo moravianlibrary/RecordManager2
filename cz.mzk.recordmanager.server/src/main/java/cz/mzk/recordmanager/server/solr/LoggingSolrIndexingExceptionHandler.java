@@ -15,7 +15,9 @@ public enum LoggingSolrIndexingExceptionHandler implements SolrIndexingException
 	@Override
 	public boolean handle(Exception ex, Collection<SolrInputDocument> documents) {
 		if (documents.size() == 1) {
-			logger.error(String.format("Exception thrown during indexing record: %s", documents.iterator().next()), ex);
+			//logger.error(String.format("Exception thrown during indexing record: %s", documents.iterator().next()), ex);
+			logger.error(String.format("Exception thrown during indexing record: %s", ex));
+
 		}
 		return true; // fallback to index one record at time
 	}

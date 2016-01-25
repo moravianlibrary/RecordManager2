@@ -90,9 +90,9 @@ public class KrameriusFulltextProcessor implements
 		InputStream is = new ByteArrayInputStream(rec.getRawRecord());
 		// get Kramerius policy from record
 		try {
-		DublinCoreRecord dcRecord = parser.parseRecord(is);
-		MetadataDublinCoreRecord mdrc = new MetadataDublinCoreRecord(dcRecord);
-		policy = mdrc.getPolicy();
+			DublinCoreRecord dcRecord = parser.parseRecord(is);
+			MetadataDublinCoreRecord mdrc = new MetadataDublinCoreRecord(dcRecord);
+			policy = mdrc.getPolicy();
 		} catch ( InvalidDcException e) {
 			logger.warn("InvalidDcException for record with id:" + item.getUniqueId());
 			logger.warn(e.getMessage());
@@ -108,6 +108,11 @@ public class KrameriusFulltextProcessor implements
 			List<FulltextMonography> pages = fulltexter
 					.getFulltextObjects(rootUuid);
 
+			// if we got empty list in pages => do nothing, return original record
+			if (pages.isEmpty()) {
+				return rec;
+			}
+			
 			//delete old FulltextMonography from database before adding new ones
 			if (!rec.getFulltextMonography().isEmpty()) {
 				for (FulltextMonography fm: rec.getFulltextMonography()) {

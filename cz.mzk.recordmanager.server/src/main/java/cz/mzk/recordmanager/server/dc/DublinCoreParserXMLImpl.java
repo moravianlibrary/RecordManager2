@@ -30,6 +30,9 @@ public class DublinCoreParserXMLImpl implements DublinCoreParser {
 			return handler.getRecord();
 		} catch (SAXParseException se) {
 			throw new InvalidDcException (se.getMessage(), se);
+		} catch (InvalidDcException dce) {
+			//InvalidDcException is thrown by handler, when record is empty (not DC etc.)
+			throw dce;
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}

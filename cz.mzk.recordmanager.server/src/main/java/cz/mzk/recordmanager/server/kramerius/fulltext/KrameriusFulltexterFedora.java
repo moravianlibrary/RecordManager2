@@ -69,33 +69,34 @@ public class KrameriusFulltexterFedora implements KrameriusFulltexter {
 		for (int i = 0; i < pagesJson.length(); i++) {
 			FulltextMonography ftm = new FulltextMonography();
 
-			JSONObject obj = pagesJson.getJSONObject(i);
-
-			// model MUST equal "page" or it will be ignored
-			String model = (String) obj.get("model");
-			if (!model.equals("page")) {
-				logger.debug("Model is not \"page\", Model is  \"" + model
-						+ "\" for uuid:" + (String) obj.get("pid"));
-				continue;
-			}
-
-			String policy = (String) obj.get("policy");
-			ftm.setPrivate(!policy.equals("public"));
-
-			String pid = (String) obj.get("pid");
-			ftm.setUuidPage(pid);
-
 			try {
+				JSONObject obj = pagesJson.getJSONObject(i);
+	
+				// model MUST equal "page" or it will be ignored
+				String model = (String) obj.get("model");
+				if (!model.equals("page")) {
+					logger.debug("Model is not \"page\", Model is  \"" + model
+							+ "\" for uuid:" + (String) obj.get("pid"));
+					continue;
+				}
+	
+				String policy = (String) obj.get("policy");
+				ftm.setPrivate(!policy.equals("public"));
+	
+				String pid = (String) obj.get("pid");
+				ftm.setUuidPage(pid);
+			
 				JSONObject details = (JSONObject) obj.get("details");
 				String page = (String) details.get("pagenumber");
 				// String page= (String) obj.get("title"); //information in
 				// "title" is sometimes malformed in Kramerius' JSON
 				ftm.setPage(page.trim());
-			} catch (Exception e) {
-				logger.warn(e.getMessage());
+				
+				pagesMetadataList.add(ftm);
+			} catch (JSONException e) {
+				logger.error(e.getMessage());
 			}
 
-			pagesMetadataList.add(ftm);
 		}
 		return pagesMetadataList;
 
@@ -184,4 +185,14 @@ public class KrameriusFulltexterFedora implements KrameriusFulltexter {
 		}
 	}
 
+	protected HttpClient getHttpClient() {
+		return httpClient;
+	}
+
+	protected void setHttpClient(HttpClient httpClient) {
+		this.httpClient = httpClient;
+	}
+
+	
+	
 }

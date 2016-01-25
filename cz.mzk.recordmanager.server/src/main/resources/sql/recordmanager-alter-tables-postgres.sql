@@ -341,6 +341,9 @@ UPDATE oai_harvest_conf SET url='http://opac.moderniknihovna.cz/cgi-bin/koha/oai
 -- 3. 12. 2015 tomascejpek
 UPDATE oai_harvest_conf SET set_spec='CPK1' WHERE import_conf_id=328;
 
+-- 4.12. 2015 mjtecka
+ALTER TABLE kramerius_conf ADD COLUMN url_solr character varying(128);
+
 -- 14. 12. 2015 tomascejpek
 UPDATE import_conf SET id_prefix='vktatest' WHERE id=329;
 
