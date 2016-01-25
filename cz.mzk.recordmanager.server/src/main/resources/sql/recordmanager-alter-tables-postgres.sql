@@ -378,4 +378,5 @@ CREATE INDEX obalkyknih_toc_nbn_idx ON obalkyknih_toc(nbn);
 
 ALTER TABLE obalkyknih_toc ALTER COLUMN isbn TYPE DECIMAL(13) USING isbn::numeric(13,0);
 
+-- 25. 1. 2016 xrosecky
 ALTER TABLE oai_harvest_conf ADD COLUMN extract_id_regex VARCHAR(128);
