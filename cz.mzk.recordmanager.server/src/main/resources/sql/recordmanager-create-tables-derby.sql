@@ -48,6 +48,7 @@ CREATE TABLE oai_harvest_conf (
   set_spec             VARCHAR(128),
   metadata_prefix      VARCHAR(128),
   granularity          VARCHAR(30),
+  extract_id_regex     VARCHAR(128),
   CONSTRAINT oai_harvest_conf_import_conf_fk FOREIGN KEY (import_conf_id) REFERENCES import_conf(id)
 );
 

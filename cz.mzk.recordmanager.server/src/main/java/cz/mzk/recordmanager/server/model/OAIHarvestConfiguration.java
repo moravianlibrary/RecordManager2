@@ -27,6 +27,9 @@ public class OAIHarvestConfiguration extends ImportConfiguration {
 	@Column(name="metadata_prefix")
 	private String metadataPrefix;
 
+	@Column(name="extract_id_regex")
+	private String regex;
+
 	public String getUrl() {
 		return url;
 	}
@@ -57,6 +60,14 @@ public class OAIHarvestConfiguration extends ImportConfiguration {
 
 	public void setMetadataPrefix(String metadataPrefix) {
 		this.metadataPrefix = metadataPrefix;
+	}
+
+	public String getRegex() {
+		return regex;
+	}
+
+	public void setRegex(String regex) {
+		this.regex = regex;
 	}
 
 }
