@@ -10,4 +10,10 @@ public interface IndexingFacade {
 
 	public Date getLastIndexed(String solrUrl);
 
+	public void indexHarvestedRecords();
+
+	public void indexHarvestedRecords(String solrUrl);
+
+	public Date getLastIndexedHarvestedRecords(String solrUrl);
+
 }

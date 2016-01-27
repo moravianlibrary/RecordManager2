@@ -24,7 +24,7 @@ public class IndexingFacadeImpl implements IndexingFacade {
 
 	private static Logger logger = LoggerFactory.getLogger(IndexingFacadeImpl.class);
 
-	private final String lastCompletedHarvestQuery = ResourceUtils.asString("sql/query/LastIndexedQuery.sql");
+	private final String lastIndexedQuery = ResourceUtils.asString("sql/query/LastIndexedQuery.sql");
 
 	@Autowired
 	private NamedParameterJdbcTemplate jdbcTemplate;
@@ -41,13 +41,41 @@ public class IndexingFacadeImpl implements IndexingFacade {
 
 	@Override
 	public void index(String solrUrl) {
+		executeIndexJob(Constants.JOB_ID_SOLR_INDEX_ALL_RECORDS, solrUrl);
+	}
+
+	@Override
+	public Date getLastIndexed(String solrUrl) {
+		return getLastIndexed(Constants.JOB_ID_SOLR_INDEX_ALL_RECORDS, solrUrl);
+	}
+
+	public void indexHarvestedRecords() {
+		indexHarvestedRecords(null);
+	}
+
+	@Override
+	public void indexHarvestedRecords(String solrUrl) {
+		executeIndexJob(Constants.JOB_ID_SOLR_INDEX_HARVESTED_RECORDS, solrUrl);
+	}
+
+	@Override
+	public Date getLastIndexedHarvestedRecords(String solrUrl) {
+		return getLastIndexed(Constants.JOB_ID_SOLR_INDEX_HARVESTED_RECORDS, solrUrl);
+	}
+
+	private Date getLastIndexed(String jobName, String solrUrl) {
+		return jdbcTemplate.queryForObject(lastIndexedQuery, //
+				ImmutableMap.of("jobName", jobName, "solrUrl", solrUrl), Date.class);
+	}
+
+	private void executeIndexJob(String jobName, String solrUrl) {
 		if (solrUrl == null) {
 			if (defaultSolrUrl == null || defaultSolrUrl.isEmpty()) {
 				throw new IllegalArgumentException("Parameter solrUrl is required, no default given");
 			}
 			solrUrl = defaultSolrUrl;
 		}
-		Date lastIndexed = getLastIndexed(solrUrl);
+		Date lastIndexed = getLastIndexed(jobName, solrUrl);
 		Map<String, JobParameter> parameters = new HashMap<>();
 		parameters.put(Constants.JOB_PARAM_SOLR_URL, new JobParameter(solrUrl));
 		if (lastIndexed != null) {
@@ -56,13 +84,7 @@ public class IndexingFacadeImpl implements IndexingFacade {
 		}
 		parameters.put(Constants.JOB_PARAM_UNTIL_DATE, new JobParameter(new Date()));
 		JobParameters params = new JobParameters(parameters);
-		jobExecutor.execute(Constants.JOB_ID_SOLR_INDEX_ALL_RECORDS, params);
-	}
-
-	@Override
-	public Date getLastIndexed(String solrUrl) {
-		return jdbcTemplate.queryForObject(lastCompletedHarvestQuery, //
-				ImmutableMap.of("solrUrl", solrUrl), Date.class);
+		jobExecutor.execute(jobName, params);
 	}
 
 }
