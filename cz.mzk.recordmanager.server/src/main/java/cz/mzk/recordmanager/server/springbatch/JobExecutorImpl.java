@@ -71,12 +71,12 @@ public class JobExecutorImpl implements JobExecutor {
 	}
 
 	@Override
-	public Long execute(String jobName, JobParameters params) {
+	public JobExecution execute(String jobName, JobParameters params) {
 		return execute(jobName, params, false);
 	}
 
 	@Override
-	public Long execute(String jobName, JobParameters params, boolean forceRestart) {
+	public JobExecution execute(String jobName, JobParameters params, boolean forceRestart) {
 		try {
 			final Job job = jobRegistry.getJob(jobName);
 			JobParameters transformedParams = transformJobParameters(jobName, params,
@@ -84,8 +84,7 @@ public class JobExecutorImpl implements JobExecutor {
 			job.getJobParametersValidator().validate(transformedParams);
 			JobExecution lastExec = jobRepository.getLastJobExecution(jobName, transformedParams);
 			if (forceRestart && lastExec != null && !lastExec.getStatus().equals(BatchStatus.COMPLETED)) {
-				restart(lastExec.getId());
-				return lastExec.getJobId();
+				return restart(lastExec.getId());
 			} else {
 				logger.debug("Last execution: {}", lastExec);
 				if (lastExec != null && lastExec.getStatus().equals(BatchStatus.COMPLETED)) {
@@ -99,7 +98,8 @@ public class JobExecutorImpl implements JobExecutor {
 				}
 				logger.debug("About to execute job");
 				JobExecution exec = jobLauncher.run(job, transformedParams);
-				return exec.getId();
+				JobExecution status = jobExplorer.getJobExecution(exec.getId());
+				return status;
 			}
 		} catch (Exception ex) {
 			throw new RuntimeException(String.format(
@@ -109,7 +109,7 @@ public class JobExecutorImpl implements JobExecutor {
 	}
 
 	@Override
-	public void restart(Long jobExecutionId) {
+	public JobExecution restart(Long jobExecutionId) {
 		JobExecution execution = jobExplorer.getJobExecution(jobExecutionId);
 		execution.setExitStatus(ExitStatus.FAILED);
 		execution.setEndTime(new Date());
@@ -117,7 +117,7 @@ public class JobExecutorImpl implements JobExecutor {
 		try {
 			Job job = jobRegistry.getJob(execution.getJobInstance()
 					.getJobName());
-			execute(job.getName(), execution.getJobParameters());
+			return execute(job.getName(), execution.getJobParameters());
 		} catch (NoSuchJobException nsje) {
 			throw new RuntimeException(String.format(
 					"Job execution with id=%s could not be restarted.",

@@ -21,8 +21,7 @@ public class DeleteAllHarvestsJobTest extends AbstractTest  {
 	
 	@Test
 	public void execute() throws Exception {
-		Long jobExecutionId = jobExecutor.execute("deleteAllHarvestsJob", new JobParameters());
-		JobExecution exec = jobExplorer.getJobExecution(jobExecutionId);
+		JobExecution exec = jobExecutor.execute("deleteAllHarvestsJob", new JobParameters());
 		Assert.assertEquals(exec.getExitStatus(), ExitStatus.COMPLETED);
 	}
 

@@ -66,6 +66,9 @@ public class OAIItemReader implements ItemReader<List<OAIRecord>>, ItemStream,
 		}
 
 		OAIListRecords listRecords = harvester.listRecords(resumptionToken);
+		if (listRecords == null) {
+			return null;
+		}
 		resumptionToken = listRecords.getNextResumptionToken();
 		if (resumptionToken == null || resumptionToken.isEmpty()) {
 			finished = true;

@@ -31,9 +31,6 @@ public class OAIHarvestAuthorityJobTest extends AbstractTest{
 	
 	@Autowired
 	private JobExecutor jobExecutor;
-
-	@Autowired
-	private JobExplorer jobExplorer;
 	
 	@Autowired
 	private HttpClient httpClient;
@@ -66,8 +63,7 @@ public class OAIHarvestAuthorityJobTest extends AbstractTest{
 		params.put("configurationId", new JobParameter(configId));
 		JobParameters jobParams = new JobParameters(params);
 		
-		Long jobExecutionId = jobExecutor.execute(Constants.JOB_ID_HARVEST_AUTH, jobParams);
-		JobExecution exec = jobExplorer.getJobExecution(jobExecutionId);
+		JobExecution exec = jobExecutor.execute(Constants.JOB_ID_HARVEST_AUTH, jobParams);
 		Assert.assertEquals(exec.getExitStatus(), ExitStatus.COMPLETED);
 		
 		AuthorityRecord authRec = authorityRecordDao.findByIdAndHarvestConfiguration("oai:aleph-nkp.cz:AUT10-000000001", oaiConfiguration);

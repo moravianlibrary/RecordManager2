@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Set;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -15,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
+import com.google.common.collect.ImmutableSet;
 
 import cz.mzk.recordmanager.server.oai.model.OAIGetRecord;
 import cz.mzk.recordmanager.server.oai.model.OAIIdentify;
@@ -27,7 +29,11 @@ import cz.mzk.recordmanager.server.util.UrlUtils;
 public class OAIHarvester {
 
 	private static Logger logger = LoggerFactory.getLogger(OAIHarvester.class);
-	
+
+	private final Set<String> IGNORED_EXCEPTIONS = ImmutableSet.of( //
+			"no record match the search criteria" // Thrown by Aleph on empty result set
+	);
+
 	private static final String OAI_VERB_LIST_RECORDS = "ListRecords";
 	
 	private static final String OAI_VERB_LIST_IDENTIFIERS = "ListIdentifiers";
@@ -148,7 +154,7 @@ public class OAIHarvester {
 			if (!postLogMessage.isEmpty()) {
 				logger.info(postLogMessage, url);
 			}
-			if (oaiRoot.getOaiError() != null) {
+			if (oaiRoot.getOaiError() != null && !IGNORED_EXCEPTIONS.contains(oaiRoot.getOaiError())) {
 				throw new OaiErrorException(oaiRoot.getOaiError());
 			}
 			return oaiRoot;
