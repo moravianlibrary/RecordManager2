@@ -29,18 +29,9 @@ public class ObalkyKnihTocHarvestedRecordEnricher implements HarvestedRecordEnri
 		if (isbns.isEmpty() && nbns.isEmpty()) {
 			return;
 		}
-		List<Long> isbnList = new ArrayList<Long>();
-		for (Object isbnAsObject : isbns) {
-			Long isbn = MetadataUtils.toISBN13((String) isbnAsObject);
-			if (isbn != null) {
-				isbnList.add(isbn);
-			}
-		}
-		if (isbnList.isEmpty()) {
-			return;
-		}
 		ObalkyKnihTOCQuery query = new ObalkyKnihTOCQuery();
-		query.setIsbns(isbnList);
+		query.setIsbns(isbns);
+		query.setNbns(nbns);
 		for (ObalkyKnihTOC toc : obalkyKnihTOCDao.query(query)) {
 			document.addField(SolrFieldConstants.TOC, toc.getToc());
 		}
