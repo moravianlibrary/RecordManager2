@@ -55,11 +55,21 @@ public class OAIHarvestJobConfig {
         		.validator(new OAIHarvestJobParametersValidator()) //
         		.listener(JobFailureListener.INSTANCE) //
 				.flow(step1) //
-				.next(step2) //
 				.end() //
 				.build();
     }
-    
+
+	@Bean
+	public Job oaiReharvestJob(@Qualifier("oaiHarvestJob:step") Step step1, @Qualifier("oaiHarvestJob:afterHarvestStep") Step step2) {
+		return jobs.get(Constants.JOB_ID_REHARVEST) //
+				.validator(new OAIHarvestJobParametersValidator()) //
+				.listener(JobFailureListener.INSTANCE) //
+				.flow(step1) //
+				.next(step2) //
+				.end() //
+				.build();
+	}
+
     @Bean
     public Job oaiHarvestAuthorityJob(@Qualifier("oaiHarvestJob:authStep") Step step) {
         return jobs.get("oaiHarvestAuthorityJob") //

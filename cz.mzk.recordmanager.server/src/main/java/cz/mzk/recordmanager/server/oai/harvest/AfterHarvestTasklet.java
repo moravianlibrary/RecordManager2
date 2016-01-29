@@ -28,9 +28,8 @@ public class AfterHarvestTasklet implements Tasklet {
 			ChunkContext chunkContext) throws Exception {
 		JobParameters params = chunkContext.getStepContext().getStepExecution().getJobExecution()
 				.getJobParameters();
-		Long reharvest = params.getLong(Constants.JOB_PARAM_REHARVEST);
 		Date started = params.getDate(Constants.JOB_PARAM_START_TIME);
-		if (reharvest == null || reharvest == 0L || started == null) {
+		if (started == null) {
 			return RepeatStatus.FINISHED;
 		}
 		Long configId = params.getLong(Constants.JOB_PARAM_CONF_ID);

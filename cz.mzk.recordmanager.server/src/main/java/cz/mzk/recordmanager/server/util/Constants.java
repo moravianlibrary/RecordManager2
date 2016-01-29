@@ -4,6 +4,7 @@ public class Constants {
 
 
 	public static final String JOB_ID_HARVEST			= "oaiHarvestJob";
+	public static final String JOB_ID_REHARVEST			= "oaiReharvestJob";
 	public static final String JOB_ID_HARVEST_PART		= "oaiPartitionedHarvestJob";
 	public static final String JOB_ID_HARVEST_AUTH		= "oaiHarvestAuthorityJob";
 	public static final String JOB_ID_HARVEST_ONE_BY_ONE = "oaiHarvestOneByOneJob";
@@ -40,7 +41,6 @@ public class Constants {
 	public static final String JOB_PARAM_INCREMENTAL	= "incremental";
 	public static final String JOB_PARAM_RECORD_IDS		= "recordIds";
 	public static final String JOB_PARAM_START_TIME		= "startTime";
-	public static final String JOB_PARAM_REHARVEST		= "reharvest";
 
 	public static final String JOB_PARAM_OUT_FILE		= "outFile";
 	public static final String JOB_PARAM_IN_FILE		= "inFile";

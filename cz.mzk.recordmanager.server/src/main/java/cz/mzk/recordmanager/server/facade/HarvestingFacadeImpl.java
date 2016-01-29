@@ -60,9 +60,8 @@ public class HarvestingFacadeImpl implements HarvestingFacade {
 		Map<String, JobParameter> parameters = new HashMap<>();
 		parameters.put(Constants.JOB_PARAM_CONF_ID, new JobParameter(conf.getId()));
 		parameters.put(Constants.JOB_PARAM_START_TIME, new JobParameter(new Date()));
-		parameters.put(Constants.JOB_PARAM_REHARVEST, new JobParameter(1L));
 		JobParameters params = new JobParameters(parameters);
-		jobExecutor.execute(Constants.JOB_ID_HARVEST, params);
+		jobExecutor.execute(Constants.JOB_ID_REHARVEST, params);
 	}
 
 	@Override
