@@ -20,7 +20,7 @@ author_sort_str = getAuthorForSorting()
 
 title = getFirstField "245abnp"
 title_sub = getFirstField "245b"
-title_short = getFirstField "245a"
+title_short = getFirstFieldTrim "245a"
 title_full = getFirstField "245abdefghijklmnopqrstuvwxyz0123456789"
 title_auth = getFirstField "245ab"
 title_alt = getFields "130adfgklnpst:240a:246a:730adfgklnpst:740a"
@@ -84,7 +84,7 @@ bbox_geo_str = getBoundingBox()
 //statuses = getStatuses()
 
 // deprecated
-title_display = getFirstField "245abnp"
+title_display = getTitleDisplay()
 
 //published = getFirstField "260a"
 

@@ -13,6 +13,8 @@ import java.util.regex.Pattern;
 import org.marc4j.marc.DataField;
 import org.marc4j.marc.Subfield;
 
+import com.google.common.primitives.Chars;
+
 import cz.mzk.recordmanager.server.export.IOFormat;
 import cz.mzk.recordmanager.server.marc.MarcRecord;
 import cz.mzk.recordmanager.server.metadata.MetadataMarcRecord;
@@ -37,6 +39,8 @@ public class MarcDSL extends BaseDSL {
 
 	private final static Pattern FIELD_PATTERN = Pattern
 			.compile("([0-9]{3})([a-zA-Z0-9]*)");
+	private final static Pattern AUTHOR_PATTERN = Pattern
+			.compile("([^,]+),(.+)");
 	
 	private final MarcFunctionContext context;
 
@@ -233,7 +237,7 @@ public class MarcDSL extends BaseDSL {
     public Set<String> getFieldsTrim(String tags){
     	Set<String> result = new HashSet<String>();
     	for(String data: getFields(tags)){
-    		data = data.replaceAll("[,;:/\\s]+$", "");
+    		removeEndPunctuation(data);
     		result.add(data);
     	}
     	return result;
@@ -244,7 +248,11 @@ public class MarcDSL extends BaseDSL {
     	result.addAll(getFields(tags));
     	return result;
     }
- 
+
+    public String getFirstFieldTrim(String tags){
+    	return removeEndPunctuation(getFirstField(tags));
+    }
+    
     public Set<String> getSubject(String tags){
     	Set<String> subjects = new HashSet<String>();
 
@@ -399,5 +407,80 @@ public class MarcDSL extends BaseDSL {
     
     public String getCitationRecordType(){
     	return marcMetadataRecord.getCitationFormat().getCitationType();
+    }
+    
+    public String getTitleDisplay(){
+		DataField df = getFirstDataField("245");
+		if(df == null) return null;
+		
+		final char titleSubfields[] = new char[]{'a','b','n','p'};
+		StringBuilder sb = new StringBuilder();
+		for(Subfield sf: df.getSubfields()){
+			if(Chars.contains(titleSubfields, sf.getCode())){
+				sb.append(removeEndPunctuation(sf.getData()));
+				sb.append(" ");
+			}
+		}
+		
+    	return sb.toString().trim();
+    }
+    
+    protected String removeEndPunctuation(String data){
+    	data = data.replaceAll("[,;:/\\s]+$", "");
+    	if(data.matches(".*[^\\.]\\.\\.$")) data = data.substring(0, data.length()-1);
+    	return data;
+    }
+    
+    public DataField getFirstDataField(String tag){
+    	List<DataField> list = record.getDataFields(tag);
+    	if(list.isEmpty()) return null;
+    	else return list.get(0);
+    }
+
+	public String getAuthorDisplay(){
+    	List<DataField> list = record.getDataFields("100");
+    	if(list.isEmpty()) return null;
+		DataField df = list.get(0);
+		return removeEndPunctuation(changeName(df));
+    }
+    
+    public List<String> getAuthor2Display(){
+    	List<String> result = new ArrayList<String>();
+    	for(DataField df: record.getDataFields("700")){
+    		result.add(removeEndPunctuation(changeName(df)));
+    	}
+    	result.addAll(getFields("110ab:111ab:700abcd:710ab:711ab"));
+    	return result;
+    }
+    
+    public String changeName(DataField df){
+    	StringBuilder sb = new StringBuilder();
+		if(df.getIndicator1() == '1'){
+			String suba = "";
+			if(df.getSubfield('a') != null) suba = df.getSubfield('a').getData();
+			Matcher matcher = AUTHOR_PATTERN.matcher(suba);
+			if(matcher.matches()){
+				String group2 = matcher.group(2).trim();
+				if(group2.lastIndexOf(",") == group2.length()-1){
+					sb.append(group2.substring(0, group2.length()-1));
+				}
+				else sb.append(group2);
+				sb.append(" ");
+				sb.append(matcher.group(1));
+				sb.append(",");
+			}
+			else sb.append(suba);
+		}
+		else{
+			if(df.getSubfield('a') != null) sb.append(df.getSubfield('a').getData());
+		}
+
+		for(char subfield: new char[]{'b', 'c', 'd'}){
+			if(df.getSubfield(subfield) != null) {
+				sb.append(" ");
+				sb.append(df.getSubfield(subfield).getData());
+			}
+		}
+		return sb.toString().trim(); 	
     }
 }

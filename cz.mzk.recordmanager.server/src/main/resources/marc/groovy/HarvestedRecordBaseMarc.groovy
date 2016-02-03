@@ -4,16 +4,16 @@ fullrecord = getFullrecord()
 language_display_mv = translate("mzk_language.map", getLanguages(), null)
 country_display_mv = translate("mzk_country.map", getCountry(), null)
 
-title_display = getFirstField "245abnp"
+title_display = getTitleDisplay()
 title_sub_display = getFirstField "245b"
 
-author_display = getFirstField "100abcd"
-author2_display_mv = getFields "110ab:111ab:700abcd:710ab:711ab"
+author_display = getAuthorDisplay()
+author2_display_mv = getAuthor2Display()
 
 publishDate_display = getPublishDateDisplay()
 
 ean_display_mv = getEAN()
-isbn_display_mv = getFields "020a"
+isbn_display_mv = getFieldsTrim "020a"
 nbn_display = getFirstField "015a"
 
 url = getUrls()
