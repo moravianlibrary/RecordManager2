@@ -426,6 +426,7 @@ public class MarcDSL extends BaseDSL {
     }
     
     protected String removeEndPunctuation(String data){
+    	if(data == null || data == "") return null;
     	data = data.replaceAll("[,;:/\\s]+$", "");
     	if(data.matches(".*[^\\.]\\.\\.$")) data = data.substring(0, data.length()-1);
     	return data;
