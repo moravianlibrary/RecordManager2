@@ -449,7 +449,7 @@ public class MarcDSL extends BaseDSL {
     	for(DataField df: record.getDataFields("700")){
     		result.add(removeEndPunctuation(changeName(df)));
     	}
-    	result.addAll(getFields("110ab:111ab:700abcd:710ab:711ab"));
+    	result.addAll(getFields("110ab:111ab:710ab:711ab"));
     	return result;
     }
     
