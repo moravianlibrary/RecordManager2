@@ -1,19 +1,21 @@
 package cz.mzk.recordmanager.server.facade;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import cz.mzk.recordmanager.server.model.OAIHarvestConfiguration;
 
 public interface HarvestingFacade {
 
-	public void incrementalHarvest(OAIHarvestConfiguration conf);
-
 	public void fullHarvest(OAIHarvestConfiguration conf);
 
-	public Date getLastHarvest(OAIHarvestConfiguration conf);
+	public LocalDateTime getLastFullHarvest(OAIHarvestConfiguration conf);
+
+	public void incrementalHarvest(OAIHarvestConfiguration conf);
+
+	public LocalDateTime getLastHarvest(OAIHarvestConfiguration conf);
 
 	public void obalkyKnihHarvest();
 
-	public Date getLastObalkyKnihHarvest();
+	public LocalDateTime getLastObalkyKnihHarvest();
 
 }
