@@ -33,7 +33,7 @@ public class SolrIndexWriter implements ItemWriter<Future<List<SolrInputDocument
 
 	private String solrUrl;
 
-	private int commitWithinMs = 10000;
+	private int commitWithinMs = 100000;  //<MJ.>
 
 	public SolrIndexWriter(String solrUrl) {
 		this.solrUrl = solrUrl;

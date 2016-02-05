@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -197,8 +198,89 @@ public class KrameriusFulltexterFedora implements KrameriusFulltexter {
 	@Override
 	public List<FulltextMonography> getFulltextForRoot(String rootUuid)
 			throws IOException {
-		// TODO Auto-generated method stub
-		return null;
+		
+		List<FulltextMonography> pagesMetadataList = new ArrayList<FulltextMonography>();
+		
+		// find all non page objects... and add them to uuid list; then get fulltext for all objects
+		LinkedList<String> nonPagesUuids = new LinkedList<String>();
+		nonPagesUuids.add(rootUuid);
+		JSONArray pagesJson;
+		
+		while (!nonPagesUuids.isEmpty()) {
+			String processedUuid = nonPagesUuids.poll();
+			
+			// read json object for processedUuid
+			String childrenListUrl = kramApiUrl + "/item/" + processedUuid + "/children";
+
+			try {
+				pagesJson = readKrameriusJSON(childrenListUrl);
+			} catch (JSONException e) {
+				logger.warn(e.getMessage());
+				pagesJson = new JSONArray();
+			}
+			
+			// get all volume / issue models and push their uuids into nonPagesUuids
+			// get all pages, create FulltextMonography page for them, put them into list
+		
+			
+			for (int i = 0; i < pagesJson.length(); i++) {
+				FulltextMonography ftm = new FulltextMonography();
+
+				try {
+					JSONObject obj = pagesJson.getJSONObject(i);
+									
+					String model = (String) obj.get("model");
+  				    String pid = (String) obj.get("pid");
+
+					//get pages
+					if (model.equals("page")) {
+						
+  					  logger.debug("Got periodical page: " + pid);
+		
+  					  String policy = (String) obj.get("policy");
+					  ftm.setPrivate(!policy.equals("public"));
+		
+					  ftm.setUuidPage(pid);
+				
+					  JSONObject details = (JSONObject) obj.get("details");
+					  String page = (String) details.get("pagenumber");
+					// String page= (String) obj.get("title"); //information in
+					// "title" is sometimes malformed in Kramerius' JSON
+					  ftm.setPage(page.trim());
+					
+					  pagesMetadataList.add(ftm); 
+
+					//put other models in list, they will be searched by while cycle
+					} else {
+						nonPagesUuids.push(pid);
+					}
+					
+				} catch (JSONException e) {
+					logger.error(e.getMessage());
+				}
+			 }		
+		}			
+		
+		Long pageOrder = 0L;
+
+		for (FulltextMonography fm : pagesMetadataList) {
+			pageOrder++;
+			String pageUuid = fm.getUuidPage();
+
+			/*
+			 * really try to get OCR only if page is not private(=is public), or
+			 * download of private fulltext is allowed and authToken is set)
+			 */
+			if (!fm.isPrivate()
+					|| (downloadPrivateFulltexts && authToken != null)) {
+				byte[] ocr = getOCRBytes(pageUuid, fm.isPrivate());
+				fm.setFulltext(ocr);
+			}
+			fm.setOrder(pageOrder);
+		}
+		
+		
+		return pagesMetadataList;
 	}
 
 	
