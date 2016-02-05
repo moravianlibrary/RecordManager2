@@ -51,6 +51,8 @@ public class SolrFieldConstants {
 	public static final String FIELD_996b = "996b";
 
 	public static final String TOC = "toc_txt_mv";
+	
+	public static final String ID_001_SEARCH = "id001_search";
 
 	/**
 	 * dummy fields used for processing purposes only, shouldn't be indexed. Fields are deleted in AuthorityEnricher. 

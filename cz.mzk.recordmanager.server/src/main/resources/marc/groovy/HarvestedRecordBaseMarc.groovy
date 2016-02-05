@@ -28,3 +28,5 @@ sfx_links = getSfxIds()
 barcodes = getFields "996b"
 
 loanRelevance = getLoanRelevance();
+
+id001_search = getId001()
