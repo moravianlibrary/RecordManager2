@@ -442,13 +442,13 @@ public class MarcDSL extends BaseDSL {
     	List<DataField> list = record.getDataFields("100");
     	if(list.isEmpty()) return null;
 		DataField df = list.get(0);
-		return removeEndPunctuation(changeName(df));
+		return changeName(df);
     }
     
     public List<String> getAuthor2Display(){
     	List<String> result = new ArrayList<String>();
     	for(DataField df: record.getDataFields("700")){
-    		result.add(removeEndPunctuation(changeName(df)));
+    		result.add(changeName(df));
     	}
     	result.addAll(getFields("110ab:111ab:710ab:711ab"));
     	return result;
@@ -461,11 +461,7 @@ public class MarcDSL extends BaseDSL {
 			if(df.getSubfield('a') != null) suba = df.getSubfield('a').getData();
 			Matcher matcher = AUTHOR_PATTERN.matcher(suba);
 			if(matcher.matches()){
-				String group2 = matcher.group(2).trim();
-				if(group2.lastIndexOf(",") == group2.length()-1){
-					sb.append(group2.substring(0, group2.length()-1));
-				}
-				else sb.append(group2);
+				sb.append(removeEndPunctuation(matcher.group(2)));
 				sb.append(" ");
 				sb.append(matcher.group(1));
 				sb.append(",");
@@ -482,6 +478,6 @@ public class MarcDSL extends BaseDSL {
 				sb.append(df.getSubfield(subfield).getData());
 			}
 		}
-		return sb.toString().trim(); 	
+		return removeEndPunctuation(sb.toString().trim());
     }
 }
