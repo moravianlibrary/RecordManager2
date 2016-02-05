@@ -3,6 +3,8 @@ CREATE TABLE recordmanager_key (
   val                  DECIMAL(10)
 );
 
+COMMENT ON TABLE recordmanager_key IS 'source of ids, used by Hibernate';
+
 CREATE TABLE library (
   id                   DECIMAL(10) PRIMARY KEY,
   name                 VARCHAR(128),
@@ -10,6 +12,8 @@ CREATE TABLE library (
   catalog_url          VARCHAR(128),
   city                 VARCHAR(60)
 );
+
+COMMENT ON TABLE library IS '';
 
 CREATE TABLE contact_person (
   id                   DECIMAL(10) PRIMARY KEY,
@@ -19,6 +23,8 @@ CREATE TABLE contact_person (
   phone                VARCHAR(32),
   FOREIGN KEY (library_id) REFERENCES library(id)
 );
+
+COMMENT ON TABLE contact_person IS '';
 
 CREATE TABLE import_conf (
   id                   DECIMAL(10) PRIMARY KEY,
@@ -35,12 +41,24 @@ CREATE TABLE import_conf (
   CONSTRAINT import_conf_contact_person_id_fk FOREIGN KEY (contact_person_id) REFERENCES contact_person(id)
 );
 
+COMMENT ON TABLE import_conf IS 'configuration of record sources';
+COMMENT ON COLUMN import_conf.id_prefix IS 'prefix of source institution, used in SOLR as prefix of identifier';
+COMMENT ON COLUMN import_conf.base_weight IS 'base weight for records from this source';
+COMMENT ON COLUMN import_conf.cluster_id_enabled IS 'indicator whether cluster_id deduplication should be used for this source';
+COMMENT ON COLUMN import_conf.filtering_enabled IS 'indicator whether additional filters for records from this source';
+COMMENT ON COLUMN import_conf.interception_enabled IS 'indicator whether intercepting (intensional changes in records) should be applied for this source';
+COMMENT ON COLUMN import_conf.is_library IS 'indicator whether this source is library or different type of institution. MOVE TO LIBRARY TABLE ???';
+COMMENT ON COLUMN import_conf.harvest_frequency IS 'frequency of harvesting during automatic updates';
+
+
 CREATE TABLE sigla (
   import_conf_id       DECIMAL(10),
   sigla                VARCHAR(20),
   CONSTRAINT sigla_pk PRIMARY KEY(import_conf_id,sigla),
   CONSTRAINT sigla_import_conf_fk FOREIGN KEY (import_conf_id) REFERENCES import_conf(id)
 );
+
+COMMENT ON TABLE sigla IS 'information about siglas(unique identifiers of libraries) for import configurations. MOVE TO IMPORT_CONF TABLE ???';
 
 CREATE TABLE oai_harvest_conf (
   import_conf_id       DECIMAL(10) PRIMARY KEY,
@@ -51,6 +69,11 @@ CREATE TABLE oai_harvest_conf (
   extract_id_regex     VARCHAR(128),
   CONSTRAINT oai_harvest_conf_import_conf_fk FOREIGN KEY (import_conf_id) REFERENCES import_conf(id)
 );
+
+COMMENT ON TABLE oai_harvest_conf IS 'extension of import_conf for OAI';
+COMMENT ON COLUMN oai_harvest_conf.url IS 'URL of OAI provider';
+COMMENT ON COLUMN oai_harvest_conf.set_spec IS 'OAI set';
+
 
 CREATE TABLE kramerius_conf (
   import_conf_id              DECIMAL(10)  PRIMARY KEY,
@@ -65,6 +88,16 @@ CREATE TABLE kramerius_conf (
   CONSTRAINT kramerius_conf_import_conf_fk FOREIGN KEY (import_conf_id) REFERENCES import_conf(id)
 );
 
+COMMENT ON TABLE kramerius_conf IS 'extension of import_conf for Kramerius';
+COMMENT ON COLUMN kramerius_conf.url IS '';
+COMMENT ON COLUMN kramerius_conf.url_solr IS '';
+COMMENT ON COLUMN kramerius_conf.model IS '';
+COMMENT ON COLUMN kramerius_conf.query_rows IS '';
+COMMENT ON COLUMN kramerius_conf.metadata_stream IS '';
+COMMENT ON COLUMN kramerius_conf.auth_token IS '';
+COMMENT ON COLUMN kramerius_conf.fulltext_harvest_type IS '';
+COMMENT ON COLUMN kramerius_conf.download_private_fulltexts IS '';
+
 CREATE TABLE download_import_conf (
   import_conf_id       DECIMAL(10)  PRIMARY KEY,
   url                  VARCHAR(128),
@@ -76,11 +109,16 @@ CREATE TABLE format (
   description          VARCHAR(255)
 );
 
+COMMENT ON TABLE format IS 'represents possible formats of harvested records (MARC, DC ..)';
+
 CREATE SEQUENCE dedup_record_seq_id MINVALUE 1;
 CREATE TABLE dedup_record (
   id                   DECIMAL(10) DEFAULT NEXTVAL('"dedup_record_seq_id"')  PRIMARY KEY,
   updated              TIMESTAMP
 );
+
+COMMENT ON TABLE dedup_record IS 'represents one deduplicated record which consists of one or more harvested records';
+COMMENT ON COLUMN dedup_record.updated IS 'timestamp of last change'; 
 
 CREATE TABLE harvested_record (
   id                   DECIMAL(10) PRIMARY KEY,
@@ -111,6 +149,32 @@ CREATE TABLE harvested_record (
   FOREIGN KEY (format)              REFERENCES format(format)
 );
 
+COMMENT ON TABLE harvested_record IS 'basic table, contains full records in raw form';
+COMMENT ON COLUMN harvested_record.id IS 'unique artificial record identifier'; 
+COMMENT ON COLUMN harvested_record.import_conf_id IS 'source of record ';
+COMMENT ON COLUMN harvested_record.record_id IS 'identifier of record, unique in source';
+COMMENT ON COLUMN harvested_record.raw_001_id IS 'raw conent of 001 MARC field';
+COMMENT ON COLUMN harvested_record.harvested IS 'timestamp of first record obtaining';
+COMMENT ON COLUMN harvested_record.updated IS 'timestamp of last record change from source';
+COMMENT ON COLUMN harvested_record.deleted IS 'timestamp of record deletion from source';
+COMMENT ON COLUMN harvested_record.oai_timestamp IS 'raw timestamp from OAI protocol';
+COMMENT ON COLUMN harvested_record.dedup_record_id IS 'dedup_record assigned to this record';
+COMMENT ON COLUMN harvested_record.publication_year IS 'dedup_key: year of publication';
+COMMENT ON COLUMN harvested_record.author_auth_key IS 'dedup_key: authority key of main author';
+COMMENT ON COLUMN harvested_record.author_string IS 'dedup_key: normalized name of main author';
+COMMENT ON COLUMN harvested_record.issn_series IS 'dedup_key: serie of issn';
+COMMENT ON COLUMN harvested_record.issn_series_order IS 'dedup_key: order of issn series';
+COMMENT ON COLUMN harvested_record.uuid IS 'UUID of record';
+COMMENT ON COLUMN harvested_record.scale IS 'dedup_key: scale, for maps only';
+COMMENT ON COLUMN harvested_record.weight IS 'estimated weight of record based on record quality';
+COMMENT ON COLUMN harvested_record.cluster_id IS 'dedup_key: id for cluster deduplication, used for selected sources';
+COMMENT ON COLUMN harvested_record.pages IS 'dedup_key: count of pages';
+COMMENT ON COLUMN harvested_record.dedup_keys_hash IS 'SHA-1 hash of all dedup keys of record';
+COMMENT ON COLUMN harvested_record.next_dedup_flag IS 'indicator whether this record should be deduplicated in next deduplication process';
+COMMENT ON COLUMN harvested_record.format IS 'indicator format used for storing of raw_record';
+COMMENT ON COLUMN harvested_record.raw_record IS 'raw record data in given format';
+
+
 CREATE TABLE isbn (
   id                   DECIMAL(10) PRIMARY KEY,
   harvested_record_id  DECIMAL(10),
@@ -119,6 +183,8 @@ CREATE TABLE isbn (
   note                 VARCHAR(300),
   FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE
 );
+
+COMMENT ON TABLE isbn IS 'dedup_keys: table contatining ISBNs';
 
 CREATE TABLE issn (
   id                   DECIMAL(10) PRIMARY KEY,
@@ -129,12 +195,16 @@ CREATE TABLE issn (
   FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE
 );
 
+COMMENT ON TABLE issn IS 'dedup_keys: table contatining ISSNs';
+
 CREATE TABLE cnb (
   id                   DECIMAL(10) PRIMARY KEY,
   harvested_record_id  DECIMAL(10),
   cnb                  VARCHAR(100),
   FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE
 );
+
+COMMENT ON TABLE cnb IS 'dedup_keys: table contatining CNBs';
 
 CREATE TABLE title (
   id                   DECIMAL(10) PRIMARY KEY,
@@ -151,6 +221,8 @@ CREATE TABLE oclc (
   FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE
 );
 
+COMMENT ON TABLE oclc IS 'dedup_keys: table contatining OCLCs';
+
 CREATE TABLE language (
   harvested_record_id  DECIMAL(10),
   lang                 VARCHAR(5),
@@ -163,6 +235,8 @@ CREATE TABLE harvested_record_format (
   name                 VARCHAR(50) UNIQUE
 );
 
+COMMENT ON TABLE harvested_record_format IS 'represents all possible physical formats of record';
+
 CREATE TABLE harvested_record_format_link (
   harvested_record_id            DECIMAL(10),
   harvested_record_format_id     DECIMAL(10),
@@ -171,6 +245,7 @@ CREATE TABLE harvested_record_format_link (
   FOREIGN KEY (harvested_record_format_id) REFERENCES harvested_record_format(id)
 );
 
+COMMENT ON TABLE harvested_record_format_link IS 'link table';
 
 CREATE TABLE authority_record (
   id                   DECIMAL(10) PRIMARY KEY,
@@ -187,6 +262,8 @@ CREATE TABLE authority_record (
   CONSTRAINT authority_code_unique UNIQUE(authority_code)
 );
 
+COMMENT ON TABLE authority_record IS 'table holding authority records information';
+
 CREATE TABLE antikvariaty (
   id                   DECIMAL(10) PRIMARY KEY,
   updated              TIMESTAMP,
@@ -195,12 +272,16 @@ CREATE TABLE antikvariaty (
   pub_year             DECIMAL(5)
 );
 
+COMMENT ON TABLE antikvariaty IS 'data from muj-antikvariat.cz, used for record enrichment';
+
 CREATE TABLE antikvariaty_catids (
   id_from_catalogue   VARCHAR(100), 
   antikvariaty_id     DECIMAL(10),
   CONSTRAINT antikvariaty_catids_pk PRIMARY KEY (id_from_catalogue, antikvariaty_id),
   CONSTRAINT antikvariaty_catids_fk FOREIGN KEY (antikvariaty_id) REFERENCES antikvariaty(id)
 );
+
+COMMENT ON TABLE antikvariaty_catids IS 'extracted identifiers from antikvariaty records. These are used for mapping to real records.';
 
 CREATE TABLE fulltext_monography (
   id                  DECIMAL(10) PRIMARY KEY,
@@ -213,6 +294,14 @@ CREATE TABLE fulltext_monography (
   CONSTRAINT fulltext_monography_harvested_record_id_fk FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id)
 ); 
 
+COMMENT ON TABLE fulltext_monography IS 'harvested OCRs from digital libraries, page by page. REDUNDANT DATA, CONSIDER NORMALIZATION ???';
+COMMENT ON COLUMN fulltext_monography.harvested_record_id IS 'link to record';
+COMMENT ON COLUMN fulltext_monography.uuid_page IS 'UUID of page';
+COMMENT ON COLUMN fulltext_monography.is_private IS 'is this fulltext publicly available?';
+COMMENT ON COLUMN fulltext_monography.order_in_monography IS 'sequential order of page in record'; 
+COMMENT ON COLUMN fulltext_monography.page IS 'string notation of page';
+COMMENT ON COLUMN fulltext_monography.fulltext IS 'raw OCR';
+
 CREATE TABLE skat_keys (
   skat_record_id      DECIMAL(10),
   sigla               VARCHAR(20),
@@ -220,6 +309,12 @@ CREATE TABLE skat_keys (
   manually_merged     BOOLEAN DEFAULT FALSE,
   CONSTRAINT skat_keys_pk PRIMARY KEY(skat_record_id,sigla,local_record_id)
 );
+
+COMMENT ON TABLE skat_keys IS 'dedup_keys: extracted identifiers of merged records from SKAT';
+COMMENT ON COLUMN skat_keys.skat_record_id IS 'identifier of SKAT record';
+COMMENT ON COLUMN skat_keys.sigla IS 'sigla of local local record';
+COMMENT ON COLUMN skat_keys.local_record_id IS 'identifier of local record';
+COMMENT ON COLUMN skat_keys.manually_merged is 'indicator, whether source SKAT record was manually checked by librarian';
 
 CREATE TABLE cosmotron_996 (
   id                   DECIMAL(10) PRIMARY KEY,
@@ -233,6 +328,8 @@ CREATE TABLE cosmotron_996 (
   FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE
  );
 
+COMMENT ON TABLE cosmotron_996 IS '?';
+ 
  CREATE TABLE obalkyknih_toc (
   id                   DECIMAL(10) PRIMARY KEY,
   book_id              DECIMAL(10),
@@ -242,3 +339,5 @@ CREATE TABLE cosmotron_996 (
   isbn                 DECIMAL(13),
   toc                  VARCHAR(1048576)
 );
+
+COMMENT ON TABLE obalkyknih_toc IS 'downloaded table of contents from obalkyknih.cz';
