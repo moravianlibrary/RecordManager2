@@ -417,12 +417,11 @@ public class MarcDSL extends BaseDSL {
 		StringBuilder sb = new StringBuilder();
 		for(Subfield sf: df.getSubfields()){
 			if(Chars.contains(titleSubfields, sf.getCode())){
-				sb.append(removeEndPunctuation(sf.getData()));
+				sb.append(sf.getData());
 				sb.append(" ");
 			}
 		}
-		
-    	return sb.toString().trim();
+    	return removeEndPunctuation(sb.toString());
     }
     
     protected String removeEndPunctuation(String data){
