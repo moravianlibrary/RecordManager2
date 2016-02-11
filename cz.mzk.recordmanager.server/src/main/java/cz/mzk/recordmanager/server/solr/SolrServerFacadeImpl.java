@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrRequest;
@@ -16,7 +17,9 @@ import org.apache.solr.common.util.NamedList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import cz.mzk.recordmanager.server.index.SolrFieldConstants;
 import cz.mzk.recordmanager.server.index.SolrRecordProcessor;
+import cz.mzk.recordmanager.server.index.enrich.LazyFulltextFieldImpl;
 
 public class SolrServerFacadeImpl implements SolrServerFacade {
 
@@ -39,15 +42,19 @@ public class SolrServerFacadeImpl implements SolrServerFacade {
 	@Override
 	public void add(Collection<SolrInputDocument> documents, int commitWithinMs)
 			throws IOException, SolrServerException {
-		try {
-			server.add(documents, commitWithinMs);
-		} catch (OutOfMemoryError err) {
-			logger.warn("Out of memory error occured! Trying to use one by one indexing.");
-			fallbackIndex(documents, commitWithinMs);
-		} catch (SolrException | SolrServerException | IOException ex) {
-			if (exceptionHandler.handle(ex, documents)) {
-				fallbackIndex(documents, commitWithinMs);
+		List<SolrInputDocument> docsWithoutFulltext = documents.stream().filter(doc -> !hasLazyFulltext(doc)).collect(Collectors.toList());
+		List<SolrInputDocument> docsWithFulltext = documents.stream().filter(doc -> hasLazyFulltext(doc)).collect(Collectors.toList());
+		if (!docsWithoutFulltext.isEmpty()) {
+			try {
+				server.add(docsWithoutFulltext, commitWithinMs);
+			} catch (SolrException | SolrServerException | IOException ex) {
+				if (exceptionHandler.handle(ex, documents)) {
+					fallbackIndex(docsWithoutFulltext, commitWithinMs);
+				}
 			}
+		}
+		if (!docsWithFulltext.isEmpty()) {
+			indexLazyFulltext(docsWithFulltext, commitWithinMs);
 		}
 	}
 
@@ -89,6 +96,23 @@ public class SolrServerFacadeImpl implements SolrServerFacade {
 				exceptionHandler.handle(ex, Collections.singletonList(document));
 			}
 		}
+	}
+
+	private void indexLazyFulltext(Collection<SolrInputDocument> documents, int commitWithinMs) throws SolrServerException {
+		for (SolrInputDocument document : documents) {
+			try {
+				LazyFulltextFieldImpl fulltext = (LazyFulltextFieldImpl) document.getFieldValue(SolrFieldConstants.FULLTEXT_FIELD);
+				document.setField(SolrFieldConstants.FULLTEXT_FIELD, fulltext.getContent());
+				server.add(document, commitWithinMs);
+			} catch (SolrException | SolrServerException | IOException ex) {
+				exceptionHandler.handle(ex, Collections.singletonList(document));
+			}
+		}
+	}
+
+	private boolean hasLazyFulltext(SolrInputDocument document) {
+		Object fulltext = document.getFieldValue(SolrFieldConstants.FULLTEXT_FIELD);
+		return (fulltext != null && fulltext instanceof LazyFulltextFieldImpl);
 	}
 
 }

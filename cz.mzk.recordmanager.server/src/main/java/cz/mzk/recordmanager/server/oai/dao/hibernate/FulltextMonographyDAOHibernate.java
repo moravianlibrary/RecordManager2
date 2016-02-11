@@ -21,10 +21,17 @@ public class FulltextMonographyDAOHibernate extends
 
 	private static final RowMapper<String> ROW_MAPPER = new BlobToStringValueRowMapper();
 
+	private String fullTextSizeQuery = ResourceUtils.asString("sql/query/FullTextSizeQueryByDedupRecord.sql");
+
 	private String fullTextQuery = ResourceUtils.asString("sql/query/FullTextQueryByDedupRecord.sql");
 
 	@Autowired
 	private NamedParameterJdbcTemplate jdbcTemplate;
+
+	@Override
+	public long getFullTextSize(DedupRecord record) {
+		return jdbcTemplate.queryForObject(fullTextSizeQuery, Collections.singletonMap("dedupRecordId", record.getId()), Long.class);
+	}
 
 	@Override
 	public List<String> getFullText(DedupRecord record) {
