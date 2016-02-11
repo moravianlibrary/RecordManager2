@@ -402,6 +402,7 @@ public class MarcDSL extends BaseDSL {
 		author = author.replaceAll(TO_BLANK, SPACE_SEPARATOR);
 		author = author.replaceAll(LEAD_SPACE, EMPTY_SEPARATOR);
 		author = author.replaceAll(PACK_SPACES, SPACE_SEPARATOR);
+		if(author.isEmpty()) return null;
 		return author;
     }
     
