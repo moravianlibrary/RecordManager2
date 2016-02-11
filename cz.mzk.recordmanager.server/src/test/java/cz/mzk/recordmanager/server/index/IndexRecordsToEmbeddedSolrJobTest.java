@@ -64,7 +64,7 @@ public class IndexRecordsToEmbeddedSolrJobTest extends AbstractSolrTest {
 			QueryResponse docResponse = server.query(docQuery);
 			Assert.assertEquals(docResponse.getResults().size(), 1);
 			SolrDocument document = docResponse.getResults().get(0);
-			Assert.assertEquals(document.get("author"), "Grisham, John, 1955-");
+			Assert.assertEquals(document.get("author"), "John Grisham, 1955-");
 			Assert.assertEquals(document.get("title"), "--a je čas zabíjet /");
 		}
 
@@ -74,7 +74,7 @@ public class IndexRecordsToEmbeddedSolrJobTest extends AbstractSolrTest {
 			QueryResponse docResponse = server.query(docQuery);
 			Assert.assertEquals(docResponse.getResults().size(), 1);
 			SolrDocument document = docResponse.getResults().get(0);
-			Assert.assertEquals(document.get("author"), "Andrić, Ivo, 1892-1975");
+			Assert.assertEquals(document.get("author"), "Ivo Andrić, 1892-1975");
 			Assert.assertEquals(document.get("title"), "Most přes Drinu");
 		}
 

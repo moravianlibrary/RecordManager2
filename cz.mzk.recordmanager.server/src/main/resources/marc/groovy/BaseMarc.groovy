@@ -10,7 +10,7 @@ fullrecord = getFullrecord()
 language = translate("mzk_language.map", getLanguages(), null)
 country_str = translate("mzk_country.map", getCountry(), null)
 
-author = getFirstField "100abcd"
+author = getAuthorDisplay()
 author_fuller = getFirstField "100q"
 author_letter = getFirstField "100a"
 author2 = getFields "110ab:111ab:700abcd:710ab:711ab"
