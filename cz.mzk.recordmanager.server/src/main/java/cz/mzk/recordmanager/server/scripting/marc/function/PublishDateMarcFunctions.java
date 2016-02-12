@@ -87,7 +87,19 @@ public class PublishDateMarcFunctions implements MarcRecordFunctions {
 	public Set<Integer> getPublishDate(MarcFunctionContext ctx) {
 		MarcRecord record = ctx.record();
 		Set<Integer> years = new TreeSet<Integer>();
-		
+
+		years.addAll(getPublishDateFromFields(ctx));
+
+        String field008 = record.getControlField("008");
+        years.addAll(parsePublishDateFrom008(field008));
+
+        return years;
+	}
+
+	public Set<Integer> getPublishDateFromFields(MarcFunctionContext ctx){
+		MarcRecord record = ctx.record();
+		Set<Integer> years = new TreeSet<Integer>();
+
 		for(DataField datafield: record.getDataFields("264")){
 			if(datafield.getIndicator2() == '1'){
 				if(datafield.getSubfield('c') != null){
@@ -99,10 +111,7 @@ public class PublishDateMarcFunctions implements MarcRecordFunctions {
 		years.addAll(getPublishDateFromItems(ctx, "773", '9'));
 		years.addAll(getPublishDateFromItems(ctx, "996", 'y'));
 
-        String field008 = record.getControlField("008");
-        years.addAll(parsePublishDateFrom008(field008));
-	    
-        return years;
+		return years;
 	}
 
 	public Set<Integer> parsePublishDateFrom008(String field008) {
@@ -172,7 +181,38 @@ public class PublishDateMarcFunctions implements MarcRecordFunctions {
 	}
 
 	public String getPublishDateForSorting(MarcFunctionContext ctx) {
-		Set<Integer> years = getPublishDate(ctx);
+		Set<Integer> years = getPublishDateFromFields(ctx);
+
+		years = getPublishDateFromFields(ctx);
+
+		MarcRecord mr = ctx.record();
+		String field008 = mr.getControlField("008");
+
+		if (field008 != null && field008.length() >= 12) {
+			char type = field008.charAt(6);
+			if(type == 'd' || type == 'q' || type == 'c'){
+				years.addAll(parsePublishDateFrom008(field008));
+			}
+			else{
+				if(field008.length() > 15){
+					String toString = field008.substring(11, 15).trim();
+					int to = 0;
+					if((SINGLE_YEAR_PATTERN.matcher(toString)).matches()){
+						to = Integer.parseInt(toString);
+					}
+					if(to <= MAX_YEAR+1) years.addAll(parsePublishDateFrom008(field008));
+				}
+				else if(field008.length() > 11){
+					String fromString = field008.substring(7, 11);
+					int from = 0;
+					if((SINGLE_YEAR_PATTERN.matcher(fromString)).matches()){
+						from = Integer.parseInt(fromString);
+						System.out.println(from);
+					}
+					if(from <= MAX_YEAR+1) years.addAll(parsePublishDateFrom008(field008));
+				}
+			}
+        }
 		if(!years.isEmpty()) return years.iterator().next().toString();
 		return null;
 	}

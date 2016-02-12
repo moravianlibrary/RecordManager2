@@ -2,8 +2,18 @@ package cz.mzk.recordmanager.server.dedup.clustering;
 
 import cz.mzk.recordmanager.server.util.StringUtils;
 
+
+/**
+ * {@link Clusterable} implementation using title similarity.
+ *
+ */
 public class TitleClusterable implements Clusterable {
 
+	/**
+	 * Minimal match percentage is used for speeding up computation.
+	 * If there is no chance to reach this boundary, it's considered
+	 * to be 0 (exact similarity is not important)
+	 */
 	protected int MINIMAL_TITILE_MATCH_PERCENTAGE = 70;
 	
 	protected int TITLE_PREFIX_BOUNDARY = 8;

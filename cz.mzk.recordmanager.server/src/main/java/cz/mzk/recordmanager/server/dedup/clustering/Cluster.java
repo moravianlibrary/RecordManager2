@@ -12,11 +12,23 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+
+/**
+ * Implementation of similarity clustering.
+ * 
+ * Aim of this class is divide input objects into sets based on 
+ * provided similarity metric.
+ * 
+ * Note that relation 'to be similar' is not transitive.
+ * Computation is performed in quadratic time.
+ *
+ * @param <T>
+ */
 public class Cluster<T extends Clusterable>  {
 	
 	private static Logger logger = LoggerFactory.getLogger(Cluster.class);
-
-	private final int RECORD_MATCH_PERCENTAGE = 70;
+	
+	private final int matchThreshold;
 	
 	private final List<T> inputList;
 	
@@ -28,10 +40,28 @@ public class Cluster<T extends Clusterable>  {
 	
 	private long startTime = 0L;
 
-	public Cluster(List<T> inputList) {
+	
+	/**
+	 * Create new instance of similarity cluster.
+	 * 
+	 * @param inputList list of objects to be clustered
+	 * @param matchThreshold percentage threshold for similarity matching
+	 */
+	public Cluster(List<T> inputList, int matchThreshold) {
+		if (matchThreshold < 0 || matchThreshold > 100) {
+			// assign default match threshold
+			this.matchThreshold = 70;
+			logger.warn("Using default match threshold for simmilarity clustering");
+		} else {
+			this.matchThreshold = matchThreshold;
+		}
+		
 		this.inputList = inputList;
 	}
 	
+	/**
+	 * initialize clusters
+	 */
 	public void initCluster() {
     	logger.info(String.format("Creating cluster from %d records.", inputList.size()));
     	startTime = Calendar.getInstance().getTimeInMillis();
@@ -42,7 +72,11 @@ public class Cluster<T extends Clusterable>  {
     	logger.info(String.format("Cluster created, building took %d seconds", elapsedSecs));
     	isInitialized = true;
 	}
-	
+
+	/**
+	 * Return true if cluster is initialized (i.e. computations on input data were finished)
+	 * @return
+	 */
 	public boolean isInialized() {
 		return isInitialized;
 	}
@@ -74,13 +108,14 @@ public class Cluster<T extends Clusterable>  {
 		return new ArrayList<Set<Long>>(clusters.values());
 	}
     	
+
 	protected void createClusters(List<T> input,
 			Map<Long, Long> mapping, Map<Long, Set<Long>> clusters) {
 		for (int i = 0; i < input.size(); i++) {
 			T currentT = input.get(i);
 			for (int j = i + 1; j < input.size(); j++) {
 				T tmpT = input.get(j);
-				if (currentT.computeSimilarityPercentage(tmpT) > RECORD_MATCH_PERCENTAGE) {
+				if (currentT.computeSimilarityPercentage(tmpT) > matchThreshold) {
 					writeResult(currentT.getId(), tmpT.getId());
 				}
 			}

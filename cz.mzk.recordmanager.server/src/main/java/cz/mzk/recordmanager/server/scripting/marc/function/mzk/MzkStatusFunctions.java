@@ -88,7 +88,7 @@ public class MzkStatusFunctions implements MarcRecordFunctions {
 		if (statuses.contains(AvailabilityStatus.PRESENT)) {
 			result.add(PRESENT_STATUS);
 		}
-		if (statuses.contains(AvailabilityStatus.FREE_STACK) && result.isEmpty()) {
+		if (statuses.contains(AvailabilityStatus.FREE_STACK) && !result.isEmpty()) {
 			result.add(FREE_STACK_STATUS);
 		}
 		if (isEod(ctx)) {

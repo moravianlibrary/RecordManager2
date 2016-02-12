@@ -48,6 +48,7 @@ public class PatentsXmlStreamReader implements MarcReader{
     private static final String TEXT_260a = "Praha";
     private static final String TEXT_260b = "Úřad průmyslového vlastnictví";
     private static final String TEXT_300a = "elektronický zdroj";
+    private static final String TEXT_0722 = "Konspekt";
     
     private static final String DATE_STRING_005 = "yyyyMMddHHmmss'.0'";
     
@@ -113,7 +114,7 @@ public class PatentsXmlStreamReader implements MarcReader{
         String name = null;
         boolean b100 = false; // first to field 100, others 700 
         boolean b110 = false; // first to field 110, others 710
-        boolean shouldByProcessedText = false;
+        boolean shouldBeProcessedText = false;
         
         try {
 			while(xmlReader.hasNext()){
@@ -178,15 +179,17 @@ public class PatentsXmlStreamReader implements MarcReader{
 					case ELEMENT_CLASSIFICATION_IPCR:						
 						if(xmlReader.getAttributeValue(null, ATTRIBUTE_SEQUENCE).equals("1")){
 							df = factory.newDataField("653", ' ', ' ');
-							shouldByProcessedText = true;
+							shouldBeProcessedText = true;
 						}
 						else df = null;
 						break;
 					case ELEMENT_TEXT:
-						if(shouldByProcessedText){
+						if(shouldBeProcessedText){
 							String s = xmlReader.getElementText().substring(0, 4);
-							df.addSubfield(factory.newSubfield('a', propertyResolver.resolve(PATENTS_MAP).get(s)));
-							shouldByProcessedText = false;
+							String temp[] = propertyResolver.resolve(PATENTS_MAP).get(s).split("\\|");
+							df.addSubfield(factory.newSubfield('a', temp[0]));
+							record.addVariableField(createField072(temp[1]));
+							shouldBeProcessedText = false;
 						}
 						break;
 					}	
@@ -250,6 +253,17 @@ public class PatentsXmlStreamReader implements MarcReader{
 		return df;
     }
     
+    private DataField createField072(String text){
+		String temp[] = text.split(" - ");
+		DataField df = factory.newDataField("072", '7', ' ');
+		df.addSubfield(factory.newSubfield('a', temp[0].split(" ")[1]));
+		df.addSubfield(factory.newSubfield('x', temp[1]));
+		df.addSubfield(factory.newSubfield('2', TEXT_0722));
+		df.addSubfield(factory.newSubfield('9', temp[0].split(" ")[0]));
+
+    	return df;
+    }
+
     private Record sortFields(Record record){
     	Record newRecord = factory.newRecord();
 				

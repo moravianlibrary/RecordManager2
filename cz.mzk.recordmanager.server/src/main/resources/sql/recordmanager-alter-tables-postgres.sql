@@ -348,7 +348,7 @@ ALTER TABLE kramerius_conf ADD COLUMN url_solr character varying(128);
 UPDATE import_conf SET id_prefix='vktatest' WHERE id=329;
 
 -- 17. 12. 2015 tomascejpek
-UPDATE import_conf SET harvest_frequency='D' WHERE id IN (300,301,304,306,307,311,312,313,314,315,316,320,323,324);
+UPDATE import_conf SET harvest_frequency='D' WHERE id IN (300,301,304,306,307,311,312,313,314,315,316,320,323,324)
 
 -- 17. 12. 2015 mertam
 ALTER TABLE harvested_record ADD COLUMN dedup_keys_hash CHAR(40);
@@ -377,3 +377,10 @@ CREATE INDEX obalkyknih_toc_isbn_idx ON obalkyknih_toc(isbn);
 CREATE INDEX obalkyknih_toc_nbn_idx ON obalkyknih_toc(nbn);
 
 ALTER TABLE obalkyknih_toc ALTER COLUMN isbn TYPE DECIMAL(13) USING isbn::numeric(13,0);
+
+-- 25. 1. 2016 xrosecky
+ALTER TABLE oai_harvest_conf ADD COLUMN extract_id_regex VARCHAR(128);
+
+-- 27. 1. 2016 tomascejpek
+UPDATE oai_harvest_conf SET extract_id_regex='[^:]+:(.*)' WHERE import_conf_id in (319,321,325,326);
+UPDATE oai_harvest_conf SET extract_id_regex='[^:]+:[^:]+:MZK04-(.*)' WHERE import_conf_id=320;

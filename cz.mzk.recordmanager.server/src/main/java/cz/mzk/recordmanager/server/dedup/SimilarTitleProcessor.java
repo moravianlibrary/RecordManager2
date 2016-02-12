@@ -12,11 +12,13 @@ public class SimilarTitleProcessor<T extends Clusterable> implements
 		ItemProcessor<List<T>, List<Set<Long>>> {
 
 	
+	private static final int SIMILARITY_BOUNDARY = 70;
+	
 	@Override
 	public List<Set<Long>> process(List<T> titles)
 			throws Exception {
 		
-		Cluster<T>  clusterer = new Cluster<>(titles);
+		Cluster<T>  clusterer = new Cluster<>(titles,SIMILARITY_BOUNDARY);
 		clusterer.initCluster();
 		return clusterer.getClusters();
 

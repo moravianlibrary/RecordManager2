@@ -33,9 +33,6 @@ public class OAIHarvestJobTest extends AbstractTest {
 	
 	@Autowired
 	private JobExecutor jobExecutor;
-
-	@Autowired
-	private JobExplorer jobExplorer;
 	
 	@Autowired
 	private HttpClient httpClient;
@@ -65,8 +62,7 @@ public class OAIHarvestJobTest extends AbstractTest {
 		params.put("configurationId", new JobParameter(configId));
 		JobParameters jobParams = new JobParameters(params);
 		
-		Long jobExecutionId = jobExecutor.execute("oaiHarvestJob", jobParams);
-		JobExecution exec = jobExplorer.getJobExecution(jobExecutionId);
+		JobExecution exec = jobExecutor.execute("oaiHarvestJob", jobParams);
 		Assert.assertEquals(exec.getExitStatus(), ExitStatus.COMPLETED);
 
 		final OAIHarvestConfiguration updatedOaiConfig = configDao.get(configId);
@@ -88,8 +84,7 @@ public class OAIHarvestJobTest extends AbstractTest {
 		params.put(Constants.JOB_PARAM_CONF_ID, new JobParameter(300L));
 		params.put(Constants.JOB_PARAM_FROM_DATE, new JobParameter(new Date(1420070400000L)));
 			
-		Long jobExecutionId = jobExecutor.execute("oaiHarvestJob", new JobParameters(params));
-		JobExecution exec = jobExplorer.getJobExecution(jobExecutionId);
+		JobExecution exec = jobExecutor.execute("oaiHarvestJob", new JobParameters(params));
 		Assert.assertEquals(exec.getExitStatus(), ExitStatus.COMPLETED);
 	}
 
@@ -107,8 +102,7 @@ public class OAIHarvestJobTest extends AbstractTest {
 		params.put(Constants.JOB_PARAM_CONF_ID, new JobParameter(300L));
 		params.put(Constants.JOB_PARAM_UNTIL_DATE, new JobParameter(new Date(1418083200000L)));
 			
-		Long jobExecutionId = jobExecutor.execute("oaiHarvestJob", new JobParameters(params));
-		JobExecution exec = jobExplorer.getJobExecution(jobExecutionId);
+		JobExecution exec = jobExecutor.execute("oaiHarvestJob", new JobParameters(params));
 		Assert.assertEquals(exec.getExitStatus(), ExitStatus.COMPLETED);
 	}
 	
@@ -125,8 +119,7 @@ public class OAIHarvestJobTest extends AbstractTest {
 		params.put(Constants.JOB_PARAM_CONF_ID, new JobParameter(301L));
 		params.put(Constants.JOB_PARAM_FROM_DATE, new JobParameter(new Date(1420070400000L)));
 			
-		Long jobExecutionId = jobExecutor.execute("oaiHarvestJob", new JobParameters(params));
-		JobExecution exec = jobExplorer.getJobExecution(jobExecutionId);
+		JobExecution exec = jobExecutor.execute("oaiHarvestJob", new JobParameters(params));
 		Assert.assertEquals(exec.getExitStatus(), ExitStatus.COMPLETED);
 	}
 	
@@ -143,8 +136,7 @@ public class OAIHarvestJobTest extends AbstractTest {
 		Map<String, JobParameter> params = new HashMap<String, JobParameter>();
 		params.put(Constants.JOB_PARAM_CONF_ID, new JobParameter(300L));
 		params.put(Constants.JOB_PARAM_FROM_DATE, new JobParameter(new Date(1420156800000L)));
-		Long jobExecutionId = jobExecutor.execute(Constants.JOB_ID_HARVEST, new JobParameters(params));
-		JobExecution exec = jobExplorer.getJobExecution(jobExecutionId);
+		JobExecution exec = jobExecutor.execute(Constants.JOB_ID_HARVEST, new JobParameters(params));
 		Assert.assertEquals(exec.getExitStatus(), ExitStatus.COMPLETED);
 		
 		reset(httpClient);
@@ -157,8 +149,7 @@ public class OAIHarvestJobTest extends AbstractTest {
 		params = new HashMap<String, JobParameter>();
 		params.put(Constants.JOB_PARAM_CONF_ID, new JobParameter("300"));
 		params.put(Constants.JOB_PARAM_FROM_DATE, new JobParameter("2015-01-03T01:00:00Z"));
-		jobExecutionId = jobExecutor.execute(Constants.JOB_ID_HARVEST, new JobParameters(params));
-		exec = jobExplorer.getJobExecution(jobExecutionId);
+		exec = jobExecutor.execute(Constants.JOB_ID_HARVEST, new JobParameters(params));
 		Assert.assertEquals(exec.getExitStatus(), ExitStatus.COMPLETED);	
 	}
 	
@@ -177,8 +168,7 @@ public class OAIHarvestJobTest extends AbstractTest {
 		final Long confID = 301L;
 		params = new HashMap<String, JobParameter>();
 		params.put(Constants.JOB_PARAM_CONF_ID, new JobParameter(confID));
-		Long jobExecutionId = jobExecutor.execute(Constants.JOB_ID_HARVEST, new JobParameters(params));
-		JobExecution exec = jobExplorer.getJobExecution(jobExecutionId);
+		JobExecution exec = jobExecutor.execute(Constants.JOB_ID_HARVEST, new JobParameters(params));
 		Assert.assertEquals(exec.getExitStatus(), ExitStatus.COMPLETED);
 		
 		OAIHarvestConfiguration config = configDao.get(confID);
@@ -199,8 +189,7 @@ public class OAIHarvestJobTest extends AbstractTest {
 		Map<String, JobParameter> params = new HashMap<String, JobParameter>();
 		params.put(Constants.JOB_PARAM_CONF_ID, new JobParameter(303L));
 		
-		Long jobExecutionId = jobExecutor.execute(Constants.JOB_ID_HARVEST, new JobParameters(params));
-		JobExecution exec = jobExplorer.getJobExecution(jobExecutionId);
+		JobExecution exec = jobExecutor.execute(Constants.JOB_ID_HARVEST, new JobParameters(params));
 		Assert.assertEquals(exec.getExitStatus(), ExitStatus.COMPLETED);
 	}
 	
@@ -219,8 +208,7 @@ public class OAIHarvestJobTest extends AbstractTest {
 		
 		Map<String, JobParameter> params = new HashMap<String, JobParameter>();
 		params.put(Constants.JOB_PARAM_CONF_ID, new JobParameter(300L));
-		Long jobExecutionId = jobExecutor.execute(Constants.JOB_ID_HARVEST_ONE_BY_ONE, new JobParameters(params));
-		JobExecution exec = jobExplorer.getJobExecution(jobExecutionId);
+		JobExecution exec = jobExecutor.execute(Constants.JOB_ID_HARVEST_ONE_BY_ONE, new JobParameters(params));
 		Assert.assertEquals(exec.getExitStatus(), ExitStatus.COMPLETED);
 		
 		Assert.assertNotNull(recordDao.findByIdAndHarvestConfiguration("MZK01-100000151", 300L));

@@ -2,6 +2,8 @@ package cz.mzk.recordmanager.server.solr;
 
 import org.apache.http.client.HttpClient;
 import org.apache.solr.client.solrj.SolrServer;
+import org.apache.solr.client.solrj.impl.BinaryRequestWriter;
+import org.apache.solr.client.solrj.impl.BinaryResponseParser;
 import org.apache.solr.client.solrj.impl.HttpSolrServer;
 import org.apache.solr.client.solrj.impl.XMLResponseParser;
 
@@ -13,6 +15,8 @@ public class SolrServerFactoryImpl implements SolrServerFactory {
 			@Override
 			public SolrServer create(String url) {
 				HttpSolrServer solr = new HttpSolrServer(url);
+				solr.setParser(new BinaryResponseParser());
+				solr.setRequestWriter(new BinaryRequestWriter());
 				return solr;
 			}
 		},

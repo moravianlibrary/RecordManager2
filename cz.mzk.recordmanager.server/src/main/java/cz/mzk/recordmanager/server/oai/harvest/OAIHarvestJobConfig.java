@@ -9,6 +9,7 @@ import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepScope;
+import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -49,15 +50,26 @@ public class OAIHarvestJobConfig {
     }
 
     @Bean
-    public Job oaiHarvestJob(@Qualifier("oaiHarvestJob:step") Step step) {
+    public Job oaiHarvestJob(@Qualifier("oaiHarvestJob:step") Step step1, @Qualifier("oaiHarvestJob:afterHarvestStep") Step step2) {
         return jobs.get("oaiHarvestJob") //
         		.validator(new OAIHarvestJobParametersValidator()) //
         		.listener(JobFailureListener.INSTANCE) //
-				.flow(step) //
+				.flow(step1) //
 				.end() //
 				.build();
     }
-    
+
+	@Bean
+	public Job oaiReharvestJob(@Qualifier("oaiHarvestJob:step") Step step1, @Qualifier("oaiHarvestJob:afterHarvestStep") Step step2) {
+		return jobs.get(Constants.JOB_ID_REHARVEST) //
+				.validator(new OAIHarvestJobParametersValidator()) //
+				.listener(JobFailureListener.INSTANCE) //
+				.flow(step1) //
+				.next(step2) //
+				.end() //
+				.build();
+	}
+
     @Bean
     public Job oaiHarvestAuthorityJob(@Qualifier("oaiHarvestJob:authStep") Step step) {
         return jobs.get("oaiHarvestAuthorityJob") //
@@ -156,8 +168,14 @@ public class OAIHarvestJobConfig {
     			.build();
     	
     }
-    
-    
+
+	@Bean(name="oaiHarvestJob:afterHarvestStep")
+	public Step afterHarvestStep() {
+		return steps.get("afterHarvestStep") //
+				.tasklet(afterHarvestTasklet()) //
+				.build();
+	}
+
     @Bean(name="oaiHarvestSingleRecordJob:reader")
     @StepScope
     public OAIItemSingleReader singleReader(@Value("#{jobParameters[" + Constants.JOB_PARAM_CONF_ID + "]}") Long configId, 
@@ -204,5 +222,11 @@ public class OAIHarvestJobConfig {
     				+ "?:jobParameters[" + Constants.JOB_PARAM_UNTIL_DATE +"]}") Date to) {
     	return new OAIOneByOneItemReader(configId, from, to);
     }
+
+	@Bean(name="oaiHarvestJob:afterHarvestTasklet")
+	@StepScope
+	public Tasklet afterHarvestTasklet() {
+		return new AfterHarvestTasklet();
+	}
 
 }

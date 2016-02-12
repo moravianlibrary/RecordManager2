@@ -5,6 +5,6 @@ FROM
   batch_job_execution_params params1 ON params1.job_execution_id = bje.job_execution_id AND params1.key_name = 'solrUrl' LEFT JOIN
   batch_job_execution_params params2 ON params2.job_execution_id = bje.job_execution_id AND params2.key_name = 'to'
 WHERE
-  job_name = 'indexAllRecordsToSolrJob' AND
+  job_name = :jobName AND
   bje.status = 'COMPLETED' AND
   params1.string_val = :solrUrl

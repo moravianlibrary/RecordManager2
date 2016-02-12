@@ -36,6 +36,8 @@ public class SolrFieldConstants {
 
 	public static final String ISBN = "isbn";
 
+	public static final String NBN = "nbn_display";
+
 	public static final String LOCAL_STATUSES_FACET = "local_statuses_facet_str_mv";
 	
 	public static final String SFX_LINKS_FIELD = "sfx_links";
@@ -49,6 +51,8 @@ public class SolrFieldConstants {
 	public static final String FIELD_996b = "996b";
 
 	public static final String TOC = "toc_txt_mv";
+	
+	public static final String ID_001_SEARCH = "id001_search";
 
 	/**
 	 * dummy fields used for processing purposes only, shouldn't be indexed. Fields are deleted in AuthorityEnricher. 

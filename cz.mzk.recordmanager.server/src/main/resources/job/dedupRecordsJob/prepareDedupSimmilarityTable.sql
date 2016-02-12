@@ -21,20 +21,22 @@ SELECT unique_ids.id,
     i.isbn,
     c.cnb,
     language.lang
-  FROM
-    (SELECT DISTINCT ON (hr2.dedup_record_id) hr2.dedup_record_id,hr2.id,hr2.publication_year,hr2.pages,hr2.author_string, t.w
-    FROM (
-      SELECT dedup_record_id, MAX(weight) AS w
-        FROM harvested_record
-        GROUP BY dedup_record_id
-        ) t INNER JOIN harvested_record hr2 ON hr2.dedup_record_id = t.dedup_record_id AND t.w = hr2.weight
+  FROM (
+    SELECT DISTINCT ON (hr2.dedup_record_id) hr2.dedup_record_id,hr2.id,hr2.publication_year,hr2.pages,hr2.author_string, t.w
+      FROM (
+        SELECT dedup_record_id, MAX(weight) AS w
+          FROM harvested_record
+          GROUP BY dedup_record_id
+        ) t INNER JOIN (
+          SELECT dedup_record_id FROM harvested_record GROUP BY dedup_record_id HAVING bool_or(next_dedup_flag) = TRUE
+        ) hr_new_only ON t.dedup_record_id = hr_new_only.dedup_record_id INNER JOIN harvested_record hr2 ON hr2.dedup_record_id = t.dedup_record_id AND t.w = hr2.weight
     ) AS unique_ids
   INNER JOIN title ON unique_ids.id = title.harvested_record_id
   INNER JOIN language ON unique_ids.id = language.harvested_record_id
   LEFT OUTER JOIN isbn i ON unique_ids.id = i.harvested_record_id
   LEFT OUTER JOIN cnb c ON unique_ids.id = c.harvested_record_id
   LEFT OUTER JOIN tmp_periodicals_ids tpi ON unique_ids.id = tpi.id
-  WHERE tpi.id is NULL
+  WHERE tpi.id is NULL 
 UNION
 SELECT 
     nhr.id,

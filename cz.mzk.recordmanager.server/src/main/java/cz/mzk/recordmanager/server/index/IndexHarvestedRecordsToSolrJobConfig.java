@@ -17,6 +17,7 @@ import org.springframework.batch.core.configuration.annotation.StepBuilderFactor
 import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.integration.async.AsyncItemProcessor;
 import org.springframework.batch.item.database.JdbcPagingItemReader;
+import org.springframework.batch.item.database.Order;
 import org.springframework.batch.item.database.support.SqlPagingQueryProviderFactoryBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -24,6 +25,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.task.TaskExecutor;
+
+import com.google.common.collect.ImmutableMap;
 
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.springbatch.DelegatingHibernateProcessor;
@@ -38,10 +41,9 @@ public class IndexHarvestedRecordsToSolrJobConfig {
 
 	private static final String STRING_OVERRIDEN_BY_EXPRESSION = null;
 
-//	private static final int CHUNK_SIZE = 1000;
-	private static final int CHUNK_SIZE = 1;
-	
-	private static final int PAGE_SIZE = 5000;
+	private static final int CHUNK_SIZE = 1000;
+
+	private static final int PAGE_SIZE = 20000;
 
 	@Autowired
 	private JobBuilderFactory jobs;
@@ -99,7 +101,7 @@ public class IndexHarvestedRecordsToSolrJobConfig {
 			whereClause += " AND updated BETWEEN :from AND :to";
 		}
 		pqpf.setWhereClause(whereClause);
-		pqpf.setSortKey("id");
+		pqpf.setSortKeys(ImmutableMap.of("updated", Order.ASCENDING, "id", Order.ASCENDING));
 		JdbcPagingItemReader<HarvestedRecord> reader = new JdbcPagingItemReader<>();
 		reader.setRowMapper(harvestedRecordRowMapper());
 		reader.setPageSize(PAGE_SIZE);

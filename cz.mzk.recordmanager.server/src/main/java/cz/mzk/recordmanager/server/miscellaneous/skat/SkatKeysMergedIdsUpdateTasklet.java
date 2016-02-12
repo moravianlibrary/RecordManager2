@@ -60,7 +60,7 @@ public class SkatKeysMergedIdsUpdateTasklet implements Tasklet {
 	public RepeatStatus execute(StepContribution contribution,
 			ChunkContext chunkContext) throws Exception {
 		
-		for (String basePrefix: prepareMonthPrefixes()) {
+		for (String basePrefix: preparePrefixes()) {
 			
 			long setNo = 0L;
 			long recordsNo = 0L;
@@ -130,10 +130,12 @@ public class SkatKeysMergedIdsUpdateTasklet implements Tasklet {
 		String query = "UPDATE skat_keys "
 				+ "SET manually_merged = TRUE "
 				+ "WHERE skat_record_id IN "
-				+ "(SELECT id FROM harvested_record WHERE record_id = '" + recordId + "'"
+				+ "(SELECT id FROM harvested_record WHERE record_id = ?"
 				+ ")";
 		Session session = sessionFactory.getCurrentSession();
-		session.createSQLQuery(query).executeUpdate();
+		session.createSQLQuery(query)
+			.setString(0, recordId)
+			.executeUpdate();
 	}
 	
 	
@@ -142,20 +144,28 @@ public class SkatKeysMergedIdsUpdateTasklet implements Tasklet {
 	 *  up to current month.
 	 * @return
 	 */
-	protected List<String> prepareMonthPrefixes() {
+	protected List<String> preparePrefixes() {
 		List<String> result = new ArrayList<>();
 		
 		//setup lower and upper bound
-		int currentYear = Calendar.getInstance().get(Calendar.YEAR);
-		int currentMonth = Calendar.getInstance().get(Calendar.MONTH) + 1;
+		Calendar currentCal = Calendar.getInstance();
+		int currentYear = currentCal.get(Calendar.YEAR);
+		int currentMonth = currentCal.get(Calendar.MONTH) + 1;
 		
 		int startYear = 2000;
 		int startMonth = 1;
 		if (fromDate != null) {
-			Calendar cal = Calendar.getInstance();
-			cal.setTime(fromDate);
-			startYear = cal.get(Calendar.YEAR);
-			startMonth = cal.get(Calendar.MONTH) + 1;
+			Calendar fromCal = Calendar.getInstance();
+			fromCal.setTime(fromDate);
+			
+			// detect incremental update and process with finer granularity
+			int countOfDays = daysBetween(fromCal, Calendar.getInstance()); 
+			if (countOfDays < 7) {
+				return prepreIncrementalPrefixes(fromCal, countOfDays);
+			}
+			
+			startYear = fromCal.get(Calendar.YEAR);
+			startMonth = fromCal.get(Calendar.MONTH) + 1;
 		}
 		
 		for (int year = startYear; year <= currentYear; year++) {
@@ -166,11 +176,23 @@ public class SkatKeysMergedIdsUpdateTasklet implements Tasklet {
 				if (year == startYear && month < startMonth) {
 					continue;
 				}
-				
+				// process full month
 				for (int partOfMonth = 0; partOfMonth <= 3; partOfMonth++) {
 					result.add(String.format("sl%d%02d%d*", year, month, partOfMonth));
 				}
 			}
+		}
+		return result;
+	}
+	
+	protected List<String> prepreIncrementalPrefixes(Calendar fromCal, int countOfDays) {
+		List<String> result = new ArrayList<>();
+		
+		Calendar local = (Calendar) fromCal.clone();
+		
+		for (int i = 1; i <= countOfDays; i++) {
+			local.add(Calendar.DAY_OF_YEAR, 1);
+			result.add(String.format("sl%d%02d%02d*", local.get(Calendar.YEAR), local.get(Calendar.MONTH) +1, local.get(Calendar.DAY_OF_MONTH)));
 		}
 		return result;
 	}
@@ -205,5 +227,32 @@ public class SkatKeysMergedIdsUpdateTasklet implements Tasklet {
 		long max = total < offset + countPerRequest ? total : offset + countPerRequest;
 		
 		return String.format("%09d-%09d", min, max);
+	}
+	
+	protected int daysBetween(Calendar day1, Calendar day2){
+	    Calendar dayOne = (Calendar) day1.clone(),
+	            dayTwo = (Calendar) day2.clone();
+
+	    if (dayOne.get(Calendar.YEAR) == dayTwo.get(Calendar.YEAR)) {
+	        return Math.abs(dayOne.get(Calendar.DAY_OF_YEAR) - dayTwo.get(Calendar.DAY_OF_YEAR));
+	    } else {
+	        if (dayTwo.get(Calendar.YEAR) > dayOne.get(Calendar.YEAR)) {
+	            //swap them
+	            Calendar temp = dayOne;
+	            dayOne = dayTwo;
+	            dayTwo = temp;
+	        }
+	        int extraDays = 0;
+
+	        int dayOneOriginalYearDays = dayOne.get(Calendar.DAY_OF_YEAR);
+
+	        while (dayOne.get(Calendar.YEAR) > dayTwo.get(Calendar.YEAR)) {
+	            dayOne.add(Calendar.YEAR, -1);
+	            // getActualMaximum() important for leap years
+	            extraDays += dayOne.getActualMaximum(Calendar.DAY_OF_YEAR);
+	        }
+
+	        return extraDays - dayTwo.get(Calendar.DAY_OF_YEAR) + dayOneOriginalYearDays ;
+	    }
 	}
 }

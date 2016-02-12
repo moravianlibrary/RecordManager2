@@ -38,9 +38,6 @@ public class CosmotronHarvestJobTest extends AbstractTest {
 	
 	@Autowired
 	private JobExecutor jobExecutor;
-
-	@Autowired
-	private JobExplorer jobExplorer;
 	
 	@Autowired
 	private HttpClient httpClient;
@@ -74,8 +71,7 @@ public class CosmotronHarvestJobTest extends AbstractTest {
 		final Long confID = 300L;		
 		Map<String, JobParameter> params = new HashMap<String, JobParameter>();
 		params.put(Constants.JOB_PARAM_CONF_ID, new JobParameter(confID));			
-		Long jobExecutionId = jobExecutor.execute(Constants.JOB_ID_HARVEST_COSMOTRON, new JobParameters(params));
-		JobExecution exec = jobExplorer.getJobExecution(jobExecutionId);
+		JobExecution exec = jobExecutor.execute(Constants.JOB_ID_HARVEST_COSMOTRON, new JobParameters(params));
 		Assert.assertEquals(exec.getExitStatus(), ExitStatus.COMPLETED);
 		
 		HarvestedRecord hr = recordDao.findByIdAndHarvestConfiguration("MZK01-000213478", confID);
@@ -101,8 +97,7 @@ public class CosmotronHarvestJobTest extends AbstractTest {
 		final Long confID = 301L;
 		params = new HashMap<String, JobParameter>();
 		params.put(Constants.JOB_PARAM_CONF_ID, new JobParameter(confID));
-		Long jobExecutionId = jobExecutor.execute(Constants.JOB_ID_HARVEST_COSMOTRON, new JobParameters(params));
-		JobExecution exec = jobExplorer.getJobExecution(jobExecutionId);
+		JobExecution exec = jobExecutor.execute(Constants.JOB_ID_HARVEST_COSMOTRON, new JobParameters(params));
 		Assert.assertEquals(exec.getExitStatus(), ExitStatus.COMPLETED);
 		
 		HarvestedRecord record = recordDao.findByIdAndHarvestConfiguration("111111", confID);
@@ -123,8 +118,7 @@ public class CosmotronHarvestJobTest extends AbstractTest {
 		final Long confID = 328L;
 		params = new HashMap<String, JobParameter>();
 		params.put(Constants.JOB_PARAM_CONF_ID, new JobParameter(confID));
-		Long jobExecutionId = jobExecutor.execute(Constants.JOB_ID_HARVEST_COSMOTRON, new JobParameters(params));
-		JobExecution exec = jobExplorer.getJobExecution(jobExecutionId);
+		JobExecution exec = jobExecutor.execute(Constants.JOB_ID_HARVEST_COSMOTRON, new JobParameters(params));
 		Assert.assertEquals(exec.getExitStatus(), ExitStatus.COMPLETED);
 		
 		HarvestedRecord record = recordDao.findByIdAndHarvestConfiguration("CbvkUsCat"+Constants.COSMOTRON_RECORD_ID_CHAR+"0000003", confID);
@@ -144,8 +138,7 @@ public class CosmotronHarvestJobTest extends AbstractTest {
 		final Long confID = 328L;		
 		Map<String, JobParameter> params = new HashMap<String, JobParameter>();
 		params.put(Constants.JOB_PARAM_CONF_ID, new JobParameter(confID));			
-		Long jobExecutionId = jobExecutor.execute(Constants.JOB_ID_HARVEST_COSMOTRON, new JobParameters(params));
-		JobExecution exec = jobExplorer.getJobExecution(jobExecutionId);
+		JobExecution exec = jobExecutor.execute(Constants.JOB_ID_HARVEST_COSMOTRON, new JobParameters(params));
 		Assert.assertEquals(exec.getExitStatus(), ExitStatus.COMPLETED);
 		
 		Assert.assertNull(recordDao.findByIdAndHarvestConfiguration("CbvkUsCat"+Constants.COSMOTRON_RECORD_ID_CHAR+"m0000003", confID));
@@ -166,8 +159,7 @@ public class CosmotronHarvestJobTest extends AbstractTest {
 		final Long confID = 328L;		
 		Map<String, JobParameter> params = new HashMap<String, JobParameter>();
 		params.put(Constants.JOB_PARAM_CONF_ID, new JobParameter(confID));			
-		Long jobExecutionId = jobExecutor.execute(Constants.JOB_ID_HARVEST_COSMOTRON, new JobParameters(params));
-		JobExecution exec = jobExplorer.getJobExecution(jobExecutionId);
+		JobExecution exec = jobExecutor.execute(Constants.JOB_ID_HARVEST_COSMOTRON, new JobParameters(params));
 		Assert.assertEquals(exec.getExitStatus(), ExitStatus.COMPLETED);
 		
 		OAIHarvestConfiguration config = configDao.get(confID);
@@ -195,8 +187,7 @@ public class CosmotronHarvestJobTest extends AbstractTest {
 		final Long confID = 328L;		
 		Map<String, JobParameter> params = new HashMap<String, JobParameter>();
 		params.put(Constants.JOB_PARAM_CONF_ID, new JobParameter(confID));			
-		Long jobExecutionId = jobExecutor.execute(Constants.JOB_ID_HARVEST_COSMOTRON, new JobParameters(params));
-		JobExecution exec = jobExplorer.getJobExecution(jobExecutionId);
+		JobExecution exec = jobExecutor.execute(Constants.JOB_ID_HARVEST_COSMOTRON, new JobParameters(params));
 		Assert.assertEquals(exec.getExitStatus(), ExitStatus.COMPLETED);
 		
 		OAIHarvestConfiguration config = configDao.get(confID);
@@ -220,8 +211,7 @@ public class CosmotronHarvestJobTest extends AbstractTest {
 		final Long confID = 328L;		
 		Map<String, JobParameter> params = new HashMap<String, JobParameter>();
 		params.put(Constants.JOB_PARAM_CONF_ID, new JobParameter(confID));			
-		Long jobExecutionId = jobExecutor.execute(Constants.JOB_ID_HARVEST_COSMOTRON, new JobParameters(params));
-		JobExecution exec = jobExplorer.getJobExecution(jobExecutionId);
+		JobExecution exec = jobExecutor.execute(Constants.JOB_ID_HARVEST_COSMOTRON, new JobParameters(params));
 		Assert.assertEquals(exec.getExitStatus(), ExitStatus.COMPLETED);
 		
 		OAIHarvestConfiguration config = configDao.get(confID);
@@ -249,8 +239,7 @@ public class CosmotronHarvestJobTest extends AbstractTest {
 		final Long confID = 328L;		
 		Map<String, JobParameter> params = new HashMap<String, JobParameter>();
 		params.put(Constants.JOB_PARAM_CONF_ID, new JobParameter(confID));			
-		Long jobExecutionId = jobExecutor.execute(Constants.JOB_ID_HARVEST_COSMOTRON, new JobParameters(params));
-		JobExecution exec = jobExplorer.getJobExecution(jobExecutionId);
+		JobExecution exec = jobExecutor.execute(Constants.JOB_ID_HARVEST_COSMOTRON, new JobParameters(params));
 		Assert.assertEquals(exec.getExitStatus(), ExitStatus.COMPLETED);
 		
 		OAIHarvestConfiguration config = configDao.get(confID);
@@ -275,8 +264,7 @@ public class CosmotronHarvestJobTest extends AbstractTest {
 		final Long confID = 328L;		
 		Map<String, JobParameter> params = new HashMap<String, JobParameter>();
 		params.put(Constants.JOB_PARAM_CONF_ID, new JobParameter(confID));			
-		Long jobExecutionId = jobExecutor.execute(Constants.JOB_ID_HARVEST_COSMOTRON, new JobParameters(params));
-		JobExecution exec = jobExplorer.getJobExecution(jobExecutionId);
+		JobExecution exec = jobExecutor.execute(Constants.JOB_ID_HARVEST_COSMOTRON, new JobParameters(params));
 		Assert.assertEquals(exec.getExitStatus(), ExitStatus.COMPLETED);
 		
 		OAIHarvestConfiguration config = configDao.get(confID);

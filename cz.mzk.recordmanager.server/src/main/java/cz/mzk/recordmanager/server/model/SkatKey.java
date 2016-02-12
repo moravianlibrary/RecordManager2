@@ -40,14 +40,26 @@ public class SkatKey {
 			super();
 		}
 
+		public void setSkatHarvestedRecordId(Long skatHarvestedRecordId) {
+			this.skatHarvestedRecordId = skatHarvestedRecordId;
+		}
+		
 		public Long getSkatHarvestedRecordId() {
 			return skatHarvestedRecordId;
 		}
 
+		public void setSigla(String sigla) {
+			this.sigla = sigla;
+		}
+		
 		public String getSigla() {
 			return sigla;
 		}
 
+		public void setRecordId(String recordId) {
+			this.recordId = recordId;
+		}
+		
 		public String getRecordId() {
 			return recordId;
 		}

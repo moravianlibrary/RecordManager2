@@ -10,7 +10,7 @@ fullrecord = getFullrecord()
 language = translate("mzk_language.map", getLanguages(), null)
 country_str = translate("mzk_country.map", getCountry(), null)
 
-author = getFirstField "100abcd"
+author = getAuthorDisplay()
 author_fuller = getFirstField "100q"
 author_letter = getFirstField "100a"
 author2 = getFields "110ab:111ab:700abcd:710ab:711ab"
@@ -20,7 +20,7 @@ author_sort_str = getAuthorForSorting()
 
 title = getFirstField "245abnp"
 title_sub = getFirstField "245b"
-title_short = getFirstField "245a"
+title_short = getFirstFieldTrim "245a"
 title_full = getFirstField "245abdefghijklmnopqrstuvwxyz0123456789"
 title_auth = getFirstField "245ab"
 title_alt = getFields "130adfgklnpst:240a:246a:730adfgklnpst:740a"
@@ -63,7 +63,6 @@ issnIsbnIsmn_search_str_mv = getISBNISSNISMN()
 sourceTitle_search_txt_mv = getFieldsUnique "773adtkxz9"
 callNumber_search_txt_mv = getFieldsUnique "910b:996ch"
 publisher_search_txt_mv = getFieldsTrim "260b:264b:928a:978abcdg7"
-id001_search_str = getId001()
 cnb_search_str = getFirstField "015az"
 
 ean_str_mv = getEAN()
@@ -84,7 +83,7 @@ bbox_geo_str = getBoundingBox()
 //statuses = getStatuses()
 
 // deprecated
-title_display = getFirstField "245abnp"
+title_display = getTitleDisplay()
 
 //published = getFirstField "260a"
 

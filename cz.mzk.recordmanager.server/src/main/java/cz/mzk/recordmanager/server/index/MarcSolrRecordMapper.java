@@ -61,7 +61,7 @@ public class MarcSolrRecordMapper implements SolrRecordMapper, InitializingBean 
 		InputStream is = new ByteArrayInputStream(record.getRawRecord());
 		MarcRecord rec = marcXmlParser.parseRecord(is);
 		MappingScript<MarcFunctionContext> script = getMappingScript(record);
-		MarcFunctionContext ctx = new MarcFunctionContext(rec);
+		MarcFunctionContext ctx = new MarcFunctionContext(rec, record);
 		Map<String, Object> result = script.parse(ctx);
 		return result;
 	}
@@ -69,7 +69,7 @@ public class MarcSolrRecordMapper implements SolrRecordMapper, InitializingBean 
 	protected Map<String, Object> parseAsLocalRecord(HarvestedRecord record) {
 		InputStream is = new ByteArrayInputStream(record.getRawRecord());
 		MarcRecord rec = marcXmlParser.parseRecord(is);
-		MarcFunctionContext ctx = new MarcFunctionContext(rec);
+		MarcFunctionContext ctx = new MarcFunctionContext(rec, record);
 		return harvestedRecordMappingScript.parse(ctx);
 	}
 

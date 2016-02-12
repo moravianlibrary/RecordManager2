@@ -4,6 +4,8 @@ import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
@@ -12,12 +14,16 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.ExitStatus;
 import org.springframework.batch.core.StepExecution;
 import org.springframework.batch.core.StepExecutionListener;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.w3c.dom.Element;
+
+import com.google.common.base.MoreObjects;
 
 import cz.mzk.recordmanager.server.marc.intercepting.MarcInterceptorFactory;
 import cz.mzk.recordmanager.server.marc.intercepting.MarcRecordInterceptor;
@@ -31,6 +37,10 @@ import cz.mzk.recordmanager.server.util.HibernateSessionSynchronizer;
 import cz.mzk.recordmanager.server.util.HibernateSessionSynchronizer.SessionBinder;
 
 public class OAIItemProcessor implements ItemProcessor<List<OAIRecord>, List<HarvestedRecord>>, StepExecutionListener {
+
+	private static final String DEFAULT_EXTRACT_ID_PATTERN = "[^:]+:[^:]+:([^:]+)";
+
+	private static Logger logger = LoggerFactory.getLogger(OAIItemProcessor.class);
 
 	@Autowired
 	protected HarvestedRecordDAO recordDao;
@@ -50,6 +60,8 @@ public class OAIItemProcessor implements ItemProcessor<List<OAIRecord>, List<Har
 	private String format;
 	
 	private OAIHarvestConfiguration configuration;
+
+	private Pattern extractIdPattern;
 
 	private Transformer transformer;
 	
@@ -113,6 +125,8 @@ public class OAIItemProcessor implements ItemProcessor<List<OAIRecord>, List<Har
 					"configurationId");
 			configuration = configDao.get(confId);
 			format = formatResolver.resolve(configuration.getMetadataPrefix());
+			String regex = MoreObjects.firstNonNull(configuration.getRegex(), DEFAULT_EXTRACT_ID_PATTERN);
+			extractIdPattern = Pattern.compile(regex);
 			try {
 				TransformerFactory transformerFactory = TransformerFactory
 						.newInstance();
@@ -131,24 +145,12 @@ public class OAIItemProcessor implements ItemProcessor<List<OAIRecord>, List<Har
 	}
 	
 	protected String extractIdentifier(String oaiIdentifier) {
-		if (oaiIdentifier == null) {
-			return null;
-		}
-		
-		String[] parts = oaiIdentifier.split(":");
-		if (parts.length == 3) {
-			// workaround for norms from MZK
-			if (parts[2].matches("^MZK04-\\d{9}")) {
-				return parts[2].replace("MZK04-", "");
-			}
-			return parts[2];
-		}
-		if(parts.length == 2){
-			// for ANL, KKL, STT, SLK
-			if(parts[0].matches("aleph-publish")) return parts[1];
+		Matcher matcher = extractIdPattern.matcher(oaiIdentifier);
+		if (matcher.matches()) {
+			String id = matcher.group(1);
+			return id;
 		}
 		return oaiIdentifier;
 	}
-	
 
 }
