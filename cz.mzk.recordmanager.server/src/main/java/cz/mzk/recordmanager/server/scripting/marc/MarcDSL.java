@@ -442,7 +442,9 @@ public class MarcDSL extends BaseDSL {
     	List<DataField> list = record.getDataFields("100");
     	if(list.isEmpty()) return null;
 		DataField df = list.get(0);
-		return changeName(df);
+		String name = changeName(df);
+		if(name.isEmpty()) return null;
+		else return name;
     }
     
     public List<String> getAuthor2Display(){
