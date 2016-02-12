@@ -2,6 +2,15 @@ package cz.mzk.recordmanager.server.dedup.clustering;
 
 import cz.mzk.recordmanager.server.util.DeduplicationUtils;
 
+
+/**
+ * {@link TitleClusterable} implementation for all non-periodical records.
+ * 
+ * Two records are considered similar if their titles are similar and:
+ *   count of pages doesn't differ much (boundaries computed dynamically)
+ *   identifiers (ISBN,CNB) are not different
+ *
+ */
 public class NonperiodicalTitleClusterable extends TitleClusterable {
 	
 	private final int PAGING_PERCENTAGE_BOUDNARY = 5;
