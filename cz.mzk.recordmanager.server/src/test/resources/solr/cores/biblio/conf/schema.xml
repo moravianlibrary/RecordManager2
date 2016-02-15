@@ -275,10 +275,12 @@
  <copyField source="format"    dest="allfields"/>
  <copyField source="format"    dest="allfields_unstemmed"/>
  <!-- CopyFields for Autocomplete -->
- <copyField source="author" dest="author_autocomplete"/>
- <copyField source="author" dest="author_str"/>
+ <copyField source="author_facet_str_mv" dest="author_autocomplete"/>
+ <copyField source="author_facet_str_mv" dest="author_str_mv"/>
  <copyField source="title_short" dest="title_autocomplete"/>
  <copyField source="title_short" dest="title_str"/>
+ <copyField source="subject_facet_str_mv" dest="subject_autocomplete"/>
+ <copyField source="subject_facet_str_mv" dest="subject_str_mv"/>
  <!-- Default Boolean Operator -->
  <solrQueryParser defaultOperator="AND"/>
 </schema>
