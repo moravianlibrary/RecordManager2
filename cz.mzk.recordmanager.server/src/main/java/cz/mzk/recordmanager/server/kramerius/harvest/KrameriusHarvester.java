@@ -10,8 +10,6 @@ import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrQuery.ORDER;
 import org.apache.solr.client.solrj.SolrRequest;
 import org.apache.solr.client.solrj.SolrServerException;
-import org.apache.solr.client.solrj.impl.HttpSolrServer;
-import org.apache.solr.client.solrj.impl.XMLResponseParser;
 import org.apache.solr.client.solrj.request.QueryRequest;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocument;
@@ -19,11 +17,12 @@ import org.apache.solr.common.SolrDocumentList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import cz.mzk.recordmanager.server.kramerius.FedoraModels;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecord.HarvestedRecordUniqueId;
 import cz.mzk.recordmanager.server.solr.SolrServerFacade;
-import cz.mzk.recordmanager.server.solr.SolrServerFactoryImpl.Mode;
 import cz.mzk.recordmanager.server.solr.SolrServerFactory;
+import cz.mzk.recordmanager.server.solr.SolrServerFactoryImpl.Mode;
 import cz.mzk.recordmanager.server.util.HttpClient;
 import cz.mzk.recordmanager.server.util.SolrUtils;
 
@@ -99,10 +98,7 @@ public class KrameriusHarvester {
 		final String baseUrl = params.getUrl();
 		final String kramAPIItem = "/item/";
 		final String kramAPIStream = "/streams/";
-
-		final String kramStreamType = params.getMetadataStream(); // /w
-																	// KramParams
-		// final String kramStreamType = "DC"; // w/ OAIParams
+		final String kramStreamType = params.getMetadataStream(); 
 
 		String resultingUrl = baseUrl + kramAPIItem + uuid + kramAPIStream
 				+ kramStreamType;
@@ -132,10 +128,15 @@ public class KrameriusHarvester {
 
 		SolrQuery query = new SolrQuery();
 		query.setQuery("*:*");
+		
 		if (nextPid != null) {
 			query.add("fq", SolrUtils.createFieldQuery(PID_FIELD, SolrUtils.createRange(nextPid, null)));
 		}
-		query.add("fq", SolrUtils.createFieldQuery("fedora.model", params.getModel()));
+		
+		//works with all possible models in single configuration
+		String harvestedModelsStatement = String.join(" OR ", FedoraModels.HARVESTED_MODELS);
+		query.add("fq",  harvestedModelsStatement);
+		
 		if (params.getFrom() != null || params.getUntil() != null) {
 			String range = SolrUtils.createDateRange(
 					params.getFrom(), params.getUntil());

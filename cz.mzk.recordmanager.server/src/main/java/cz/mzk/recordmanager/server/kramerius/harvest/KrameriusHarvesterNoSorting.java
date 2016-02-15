@@ -3,7 +3,6 @@ package cz.mzk.recordmanager.server.kramerius.harvest;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -12,8 +11,6 @@ import org.apache.commons.io.IOUtils;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrRequest;
 import org.apache.solr.client.solrj.SolrServerException;
-import org.apache.solr.client.solrj.impl.HttpSolrServer;
-import org.apache.solr.client.solrj.impl.XMLResponseParser;
 import org.apache.solr.client.solrj.request.QueryRequest;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocument;
@@ -21,6 +18,7 @@ import org.apache.solr.common.SolrDocumentList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import cz.mzk.recordmanager.server.kramerius.FedoraModels;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecord.HarvestedRecordUniqueId;
 import cz.mzk.recordmanager.server.solr.SolrServerFacade;
@@ -103,10 +101,7 @@ public class KrameriusHarvesterNoSorting {
 		final String baseUrl = params.getUrl();
 		final String kramAPIItem = "/item/";
 		final String kramAPIStream = "/streams/";
-
-		final String kramStreamType = params.getMetadataStream(); // /w
-																	// KramParams
-		// final String kramStreamType = "DC"; // w/ OAIParams
+		final String kramStreamType = params.getMetadataStream(); 
 
 		String resultingUrl = baseUrl + kramAPIItem + uuid + kramAPIStream
 				+ kramStreamType;
@@ -137,18 +132,18 @@ public class KrameriusHarvesterNoSorting {
 		SolrServerFacade solr = solrServerFactory.create(params.getUrl(), Mode.KRAMERIUS);
 
 		SolrQuery query = new SolrQuery();
-
-		// creates map of SOLR query parameters and formats them into string,
-		// which is set as SolrQuery's query.
-		Map<String, String> queryMap = new HashMap<String, String>();
-		queryMap.put("fedora.model", params.getModel()); // w/ KrameriusParams
+		query.setQuery("*:*");	
+		
+		//works with all possible models in single configuration
+		String harvestedModelsStatement = String.join(" OR ",FedoraModels.HARVESTED_MODELS);
+		query.add("fq",  harvestedModelsStatement);
+		
 		if (params.getFrom() != null || params.getUntil() != null) {
 			String range = SolrUtils.createDateRange(
 					params.getFrom(), params.getUntil());
-			queryMap.put("modified_date", range);
+			query.add("fq", SolrUtils.createFieldQuery("modified_date", range));
 		}
 		
-		query.setQuery(createQueryString(queryMap));
 		logger.info("query: {}", query.getQuery());
 		query.setFields(fields);
 
