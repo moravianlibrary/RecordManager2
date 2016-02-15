@@ -239,6 +239,11 @@ public class CosmotronItemProcessor implements ItemProcessor<List<OAIRecord>, Li
 			if(df.getIndicator1() == '0' && df.getIndicator2() == '8'){
 				if(df.getSubfield('w') != null)	return parseIdFrom773(df.getSubfield('w').getData());
 			}
+			if(df.getIndicator1() == '0'){
+				if(df.getSubfield('7') != null && df.getSubfield('7').getData().equals("nnas")){
+					if(df.getSubfield('w') != null)	return parseIdFrom773(df.getSubfield('w').getData());
+				}
+			}
 		}
 		return null;
 	}

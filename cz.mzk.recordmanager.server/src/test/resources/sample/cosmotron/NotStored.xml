@@ -137,5 +137,29 @@
 				</marc:record>
 			</metadata>
 		</record>
+		<record>
+			<header>
+				<identifier>oai:katalog.cbvk.cz:CbvkUsCat/m0000004</identifier>
+				<datestamp>2014-10-20T13:36:54Z</datestamp>
+				<setSpec>CPK</setSpec>
+			</header>
+			<metadata>
+				<marc:record xmlns:marc="http://www.loc.gov/MARC21/slim"
+					xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+					xsi:schemaLocation="http://www.loc.gov/MARC21/slim
+		  http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd">
+					<marc:leader>00000nam a22     3a 4500</marc:leader>
+					<marc:controlfield tag="001">m0000004</marc:controlfield>
+					<marc:controlfield tag="003">CZ-CbJVK</marc:controlfield>
+					<marc:controlfield tag="005">20120717122706.1</marc:controlfield>
+					<marc:controlfield tag="007">ta</marc:controlfield>
+					<marc:controlfield tag="008">021101s2002----xr-                 cze-|</marc:controlfield>
+					<marc:datafield tag="773" ind1="0" ind2=" ">
+						<marc:subfield code="w">12345</marc:subfield>
+						<marc:subfield code="7">nnas</marc:subfield>
+					</marc:datafield>
+				</marc:record>
+			</metadata>
+		</record>
 	</ListRecords>
 </OAI-PMH>
