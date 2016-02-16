@@ -118,7 +118,7 @@ public class DublinCoreDSL extends BaseDSL {
 	}
 	
 	public String getPolicy() {
-		return dcMetadataRecord.getPolicy();
+		return dcMetadataRecord.getPolicyKramerius();
 	}
 	
 	public List<String> getISBNs() {

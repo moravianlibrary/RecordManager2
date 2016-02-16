@@ -7,6 +7,7 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import cz.mzk.recordmanager.server.AbstractTest;
+import cz.mzk.recordmanager.server.metadata.MetadataDublinCoreRecord;
 import cz.mzk.recordmanager.server.metadata.MetadataRecord;
 
 public class DublinCoreParserXMLImplTest extends AbstractTest {
@@ -22,6 +23,12 @@ public class DublinCoreParserXMLImplTest extends AbstractTest {
 						"/records/dublincore/K4NTK-uuid-d3cf7ce9-1891-4e39-bb35-3b38b6eb0d60.xml");
 		DublinCoreRecord dc = parser.parseRecord(is);
 		Assert.assertNotNull(dc);
+		
+		//Kramerius specific tests
+		MetadataDublinCoreRecord mdrc = new MetadataDublinCoreRecord(dc);
+		Assert.assertTrue(mdrc.getPolicyKramerius().equals("public"));
+		Assert.assertTrue(mdrc.getModelKramerius().equals("monograph"));
+		
 	}
 
 	@Test
@@ -44,6 +51,9 @@ public class DublinCoreParserXMLImplTest extends AbstractTest {
 		DublinCoreRecord dc = parser.parseRecord(is);
 		Assert.assertNotNull(dc);
 
+		//Kramerius specific data are not present
+		MetadataDublinCoreRecord mdrc = new MetadataDublinCoreRecord(dc);
+		Assert.assertTrue(mdrc.getModelKramerius().equals("unknown"));
 	}
 
 	//test of record which is actually not Dublin Core

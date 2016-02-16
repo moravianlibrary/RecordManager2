@@ -97,7 +97,7 @@ public class KrameriusFulltextProcessor implements
 		try {
 			DublinCoreRecord dcRecord = parser.parseRecord(is);
 			MetadataDublinCoreRecord mdrc = new MetadataDublinCoreRecord(dcRecord);
-			policy = mdrc.getPolicy();
+			policy = mdrc.getPolicyKramerius();
 		} catch ( InvalidDcException e) {
 			logger.warn("InvalidDcException for record with id:" + item.getUniqueId());
 			logger.warn(e.getMessage());

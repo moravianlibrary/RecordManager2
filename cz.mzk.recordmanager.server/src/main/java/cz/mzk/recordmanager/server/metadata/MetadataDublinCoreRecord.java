@@ -43,6 +43,8 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 			.compile("issn:(.*)",Pattern.CASE_INSENSITIVE);
 	protected static final Pattern DC_CNB_PATTERN = Pattern
 			.compile("^ccnb:(.*)",Pattern.CASE_INSENSITIVE);
+	
+	protected static final Pattern DC_TYPE_KRAMERIUS_PATTERN = Pattern.compile("^model:(.*)");
 
 
 	public MetadataDublinCoreRecord(DublinCoreRecord dcRecord) {
@@ -227,7 +229,7 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 	}
 
 	/* there may be more than one rights value in Kramerius, but only one "policy:.*" */
-	public String getPolicy(){
+	public String getPolicyKramerius(){
 		List<String> rights = dcRecord.getRights();
 		String policy = "unknown";
 		for (String f : rights) {
@@ -238,6 +240,23 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 			}
 		}
 		return policy;
+	}
+	
+	public String getModelKramerius(){
+		List<String> types = dcRecord.getTypes();
+		Pattern p = DC_TYPE_KRAMERIUS_PATTERN;
+		Matcher m;
+		String model = "unknown";
+
+		for (String f : types) {
+			m = p.matcher(f);
+
+			if (m.find()) {
+				return m.group(1).trim();
+			}
+		}
+		
+		return model;
 	}
 	
 	@Override
