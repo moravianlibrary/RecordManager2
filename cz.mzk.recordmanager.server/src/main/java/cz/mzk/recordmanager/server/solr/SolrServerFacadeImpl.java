@@ -18,12 +18,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import cz.mzk.recordmanager.server.index.SolrFieldConstants;
-import cz.mzk.recordmanager.server.index.SolrRecordProcessor;
 import cz.mzk.recordmanager.server.index.enrich.LazyFulltextFieldImpl;
 
 public class SolrServerFacadeImpl implements SolrServerFacade {
 
-	private static Logger logger = LoggerFactory.getLogger(SolrRecordProcessor.class);
+	private static Logger logger = LoggerFactory.getLogger(SolrServerFacadeImpl.class);
 
 	protected final SolrServer server;
 
@@ -106,6 +105,9 @@ public class SolrServerFacadeImpl implements SolrServerFacade {
 				server.add(document, commitWithinMs);
 			} catch (SolrException | SolrServerException | IOException ex) {
 				exceptionHandler.handle(ex, Collections.singletonList(document));
+			} finally {
+				// to enable garbage collection
+				document.removeField(SolrFieldConstants.FULLTEXT_FIELD);
 			}
 		}
 	}

@@ -16,7 +16,7 @@ public class FullTextEnricher implements DedupRecordEnricher {
 
 	private static Logger logger = LoggerFactory.getLogger(FullTextEnricher.class);
 
-	private long maxFullTextSize = 50_000_000L; // 50 MB
+	private long maxFullTextSize = 20_000_000L; // 20 MB
 
 	private long directFullTextSize = 1_000_000L; // 1 MB
 
