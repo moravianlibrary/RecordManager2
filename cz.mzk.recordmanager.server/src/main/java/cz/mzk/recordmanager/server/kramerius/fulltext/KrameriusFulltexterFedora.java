@@ -253,9 +253,9 @@ public class KrameriusFulltexterFedora implements KrameriusFulltexter {
 					//put other models in list, they will be searched by while cycle
 					} else {
 						nonPagesUuids.push(pid);
-					}
+					} 
 					
-				} catch (JSONException e) {
+				} catch (JSONException | ClassCastException e) {
 					logger.error(e.getMessage());
 				}
 			 }		

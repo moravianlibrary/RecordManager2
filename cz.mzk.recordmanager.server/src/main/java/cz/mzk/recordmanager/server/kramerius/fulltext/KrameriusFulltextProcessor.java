@@ -55,7 +55,7 @@ public class KrameriusFulltextProcessor implements
 
 	// configuration
 	private Long confId;
-	private String model;
+//	private String model;
 
 	private boolean downloadPrivateFulltexts;
 
@@ -69,7 +69,7 @@ public class KrameriusFulltextProcessor implements
 		try (SessionBinder sess = sync.register()) {
 			KrameriusConfiguration config = configDao.get(confId);
 			
-			model = configDao.get(confId).getModel();
+//			model = configDao.get(confId).getModel();
 			downloadPrivateFulltexts = configDao.get(confId)
 					.isDownloadPrivateFulltexts();
 			fulltexter = krameriusFulltexterFactory.create(config);
@@ -87,6 +87,8 @@ public class KrameriusFulltextProcessor implements
 				+ " uniqueId: " + item.getUniqueId());
 
 		String policy;
+		String model;
+		
 		// read complete HarvestedRecord using DAO
 		HarvestedRecord rec = recordDao.findByIdAndHarvestConfiguration(item
 				.getUniqueId().getRecordId(), confId);
@@ -98,6 +100,7 @@ public class KrameriusFulltextProcessor implements
 			DublinCoreRecord dcRecord = parser.parseRecord(is);
 			MetadataDublinCoreRecord mdrc = new MetadataDublinCoreRecord(dcRecord);
 			policy = mdrc.getPolicyKramerius();
+			model = mdrc.getModelKramerius();
 		} catch ( InvalidDcException e) {
 			logger.warn("InvalidDcException for record with id:" + item.getUniqueId());
 			logger.warn(e.getMessage());
