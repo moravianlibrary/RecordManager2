@@ -46,6 +46,7 @@ import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordDAO;
 import cz.mzk.recordmanager.server.oai.dao.OAIHarvestConfigurationDAO;
 import cz.mzk.recordmanager.server.oai.model.OAIRecord;
 import cz.mzk.recordmanager.server.util.Constants;
+import cz.mzk.recordmanager.server.util.CosmotronUtils;
 import cz.mzk.recordmanager.server.util.HibernateSessionSynchronizer;
 import cz.mzk.recordmanager.server.util.HibernateSessionSynchronizer.SessionBinder;
 
@@ -123,7 +124,7 @@ public class CosmotronItemProcessor implements ItemProcessor<List<OAIRecord>, Li
 					c996.setDeleted(new Date());
 					c996.setRawRecord(new byte[0]);
 					c996.setHarvestedRecord(parentHr);
-					rec = update996(parentHr, c996, true);
+					rec = CosmotronUtils.update996(parentHr, c996);
 				}
 				else{ // others
 					// create new record
@@ -149,7 +150,7 @@ public class CosmotronItemProcessor implements ItemProcessor<List<OAIRecord>, Li
 			InputStream is = new ByteArrayInputStream(recordContent);
 			MarcRecord mr = marcXmlParser.parseRecord(is);
 			
-			String recordIdFrom773 = get77308w(mr);
+			String recordIdFrom773 = CosmotronUtils.get77308w(mr);
 			List<DataField> all996 = get996(mr);
 			if(recordIdFrom773 != null){ // exist field 773 08$w
 				if(all996 != null && !all996.isEmpty()){ // exist field 996
@@ -174,7 +175,7 @@ public class CosmotronItemProcessor implements ItemProcessor<List<OAIRecord>, Li
 					}
 					else{
 						new996.setHarvestedRecord(parentHr);
-						rec = update996(parentHr, new996, false);
+						rec = CosmotronUtils.update996(parentHr, new996);
 					}
 				}				
 				else{ // not stored records - 77308$w && not 996
@@ -200,6 +201,10 @@ public class CosmotronItemProcessor implements ItemProcessor<List<OAIRecord>, Li
 				rec.setRawRecord(recordContent);
 			}			
 		}
+		if (record.getHeader().getDatestamp() != null) {
+			rec.setTemporalOldOaiTimestamp(rec.getOaiTimestamp());
+			rec.setOaiTimestamp(record.getHeader().getDatestamp());
+		}		
 		if(rec.getDeleted() != null) return rec;
 		return updateMarc(rec);
 	}
@@ -234,21 +239,6 @@ public class CosmotronItemProcessor implements ItemProcessor<List<OAIRecord>, Li
 		return bos.toByteArray();
 	}
 	
-	protected String get77308w(MarcRecord mr){
-		for(DataField df: mr.getDataFields("773")){
-			if(df.getIndicator1() == '0' && df.getIndicator2() == '8'){
-				if(df.getSubfield('w') != null)	return parseIdFrom773(df.getSubfield('w').getData());
-			}
-		}
-		return null;
-	}
-	
-	protected String parseIdFrom773(String s){
-		s = Character.toUpperCase(s.charAt(0)) + s.substring(1);
-		s = s.replaceAll("_us_cat\\*", "UsCat"+Constants.COSMOTRON_RECORD_ID_CHAR);
-		return s;
-	}
-	
 	protected List<DataField> get996(MarcRecord mr){
 		return mr.getDataFields("996");
 	}
@@ -264,32 +254,6 @@ public class CosmotronItemProcessor implements ItemProcessor<List<OAIRecord>, Li
 		}
 		
 		return oaiIdentifier;
-	}
-	
-	protected HarvestedRecord update996(HarvestedRecord hr, Cosmotron996 new996, boolean deleted){
-		List<Cosmotron996> result = new ArrayList<Cosmotron996>();
-		boolean exists = false;
-		for(Cosmotron996 c996: hr.getCosmotron()){
-			if(c996.getRecordId().equals(new996.getRecordId())){
-				c996.setUpdated(new Date());
-				if(deleted){
-					c996.setDeleted(new Date());
-					c996.setRawRecord(new byte[0]);
-				}
-				else{
-					c996.setRawRecord(new996.getRawRecord());					
-				}
-				exists = true;				
-			}
-			
-			result.add(c996);
-		}
-		if(!exists) result.add(new996);
-		
-		hr.setUpdated(new Date());
-		hr.setCosmotron(result);
-		
-		return hr;		
 	}
 	
 	protected HarvestedRecord updateMarc(HarvestedRecord hr){

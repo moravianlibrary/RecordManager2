@@ -22,6 +22,7 @@ import cz.mzk.recordmanager.server.marc.MarcRecord;
 import cz.mzk.recordmanager.server.marc.MarcRecordImpl;
 import cz.mzk.recordmanager.server.marc.MarcXmlParser;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
+import cz.mzk.recordmanager.server.oai.dao.Cosmotron996DAO;
 import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordDAO;
 import cz.mzk.recordmanager.server.util.Constants;
 
@@ -37,8 +38,10 @@ public class ImportRecordsJobTest extends AbstractTest {
 	private MarcXmlParser marcXmlParser;
 	
 	@Autowired
-	private 
-	HarvestedRecordDAO harvestedRecordDao;
+	private HarvestedRecordDAO harvestedRecordDao;
+	
+	@Autowired
+	private Cosmotron996DAO cosmotron996Dao;
 	
 	@Autowired
 	private DBUnitHelper dbUnitHelper;
@@ -55,6 +58,8 @@ public class ImportRecordsJobTest extends AbstractTest {
 	private String testFilePatents2;
 	private String testFileOai;
 	private String testFolderOai;
+	private String testFileCosmotron1;
+	private String testFileCosmotron2;
 	
 	@BeforeClass
 	public void init() {
@@ -71,6 +76,8 @@ public class ImportRecordsJobTest extends AbstractTest {
 		testFilePatents2 = this.getClass().getResource("/import/patents/PatentsRecords.xml").getFile();
 		testFileOai = this.getClass().getResource("/import/oai/ANL01.000000502.ANL-CPK.xml").getFile();
 		testFolderOai = this.getClass().getResource("/import/oai/").getFile();
+		testFileCosmotron1 = this.getClass().getResource("/import/cosmotron/record.mrc").getFile();
+		testFileCosmotron2 = this.getClass().getResource("/import/cosmotron/996.mrc").getFile();
 	}
 	
 	@BeforeMethod
@@ -255,5 +262,28 @@ public class ImportRecordsJobTest extends AbstractTest {
 
 		Assert.assertNotNull(harvestedRecordDao.findByIdAndHarvestConfiguration("000000502", 300L));
 		Assert.assertNotNull(harvestedRecordDao.findByIdAndHarvestConfiguration("000000503", 300L));
+	}
+	
+	@Test
+	public void testImportCosmotron996() throws Exception {
+		Job job = jobRegistry.getJob(Constants.JOB_ID_IMPORT);
+		Map<String, JobParameter> params = new HashMap<String, JobParameter>();
+		params.put(Constants.JOB_PARAM_CONF_ID, new JobParameter(300L));
+		params.put(Constants.JOB_PARAM_IN_FILE, new JobParameter(testFileCosmotron1));
+		params.put(Constants.JOB_PARAM_FORMAT, new JobParameter("line"));
+		JobParameters jobParams = new JobParameters(params);
+		jobLauncher.run(job, jobParams);
+		
+		job = jobRegistry.getJob(Constants.JOB_ID_IMPORT_COSMOTRON_996);
+		params = new HashMap<String, JobParameter>();
+		params.put(Constants.JOB_PARAM_CONF_ID, new JobParameter(300L));
+		params.put(Constants.JOB_PARAM_IN_FILE, new JobParameter(testFileCosmotron2));
+		params.put(Constants.JOB_PARAM_FORMAT, new JobParameter("line"));
+		jobParams = new JobParameters(params);
+		jobLauncher.run(job, jobParams);
+
+		Assert.assertNotNull(harvestedRecordDao.findByIdAndHarvestConfiguration("LiUsCat_0495991", 300L));
+		Assert.assertNotNull(cosmotron996Dao.findByIdAndHarvestConfiguration("LiUsCat_0002490", 300L));
+		Assert.assertNull(cosmotron996Dao.findByIdAndHarvestConfiguration("LiUsCat_0002491", 300L));
 	}
 }
