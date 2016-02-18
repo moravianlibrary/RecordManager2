@@ -94,7 +94,6 @@ public class KrameriusItemReaderNoSorting implements ItemReader<List<HarvestedRe
 			params.setUrl(conf.getUrl());
 			params.setMetadataStream(conf.getMetadataStream());
 			params.setQueryRows(conf.getQueryRows());
-			params.setModel(conf.getModel());
 			params.setFrom(fromDate);
 			params.setUntil(untilDate);
 			kHarvester = harvesterFactory.createNoSorting(params, confId);

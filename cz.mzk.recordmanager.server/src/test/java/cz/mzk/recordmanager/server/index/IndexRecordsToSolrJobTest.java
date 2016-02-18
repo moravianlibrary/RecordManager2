@@ -80,7 +80,7 @@ public class IndexRecordsToSolrJobTest extends AbstractTest {
 		params.put(Constants.JOB_PARAM_SOLR_URL, new JobParameter(SOLR_URL, true));
 		JobParameters jobParams = new JobParameters(params);
 		JobExecution execution = jobLauncher.run(job, jobParams);
-//<MJ.>		Assert.assertEquals(execution.getExitStatus(), ExitStatus.COMPLETED);
+		Assert.assertEquals(execution.getExitStatus(), ExitStatus.COMPLETED);
 		verify(solrServerFactory, mockedSolrServer);
 	}
 

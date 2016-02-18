@@ -391,4 +391,9 @@ ALTER TABLE fulltext_monography ALTER COLUMN page TYPE VARCHAR(50);
 ALTER TABLE fulltext_monography RENAME TO fulltext_kramerius;
 ALTER TABLE fulltext_kramerius RENAME COLUMN order_in_monography TO order_in_document;
 
+DROP INDEX fulltext_monography_harvested_record_idx;
+CREATE INDEX fulltext_kramerius_harvested_record_idx ON fulltext_kramerius(harvested_record_id);
+
+ALTER TABLE kramerius_conf DROP COLUMN model;
+
 

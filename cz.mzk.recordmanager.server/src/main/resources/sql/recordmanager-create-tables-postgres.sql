@@ -79,7 +79,6 @@ CREATE TABLE kramerius_conf (
   import_conf_id              DECIMAL(10)  PRIMARY KEY,
   url                         VARCHAR(128),
   url_solr		      VARCHAR(128),
-  model                       VARCHAR(128),
   query_rows                  DECIMAL(10),
   metadata_stream             VARCHAR(128),
   auth_token 	              VARCHAR(128),
@@ -91,7 +90,6 @@ CREATE TABLE kramerius_conf (
 COMMENT ON TABLE kramerius_conf IS 'extension of import_conf for Kramerius';
 COMMENT ON COLUMN kramerius_conf.url IS 'url of Kramerius API endpoint';
 COMMENT ON COLUMN kramerius_conf.url_solr IS 'url of Kramerius SOLR (used in specific cases when access to SOLR is granted by Kramerius owner)';
-COMMENT ON COLUMN kramerius_conf.model IS '';
 COMMENT ON COLUMN kramerius_conf.query_rows IS 'number of result rows requested from API, high numbers may cause latency problems';
 COMMENT ON COLUMN kramerius_conf.metadata_stream IS 'type of metadata harvested from Kramerius';
 COMMENT ON COLUMN kramerius_conf.auth_token IS 'Base64 token created from username and password provided by Kramerius owner to access private documents';
