@@ -246,6 +246,10 @@ public class KrameriusFulltexterFedora implements KrameriusFulltexter {
 					  String page = (String) details.get("pagenumber");
 					// String page= (String) obj.get("title"); //information in
 					// "title" is sometimes malformed in Kramerius' JSON
+					  
+					//TODO data sometimes contain garbage values - this should be considered fallback solution
+					  page = page.length() > 50 ? page.substring(0, 50) : page;
+					  
 					  ftm.setPage(page.trim());
 					
 					  pagesMetadataList.add(ftm); 

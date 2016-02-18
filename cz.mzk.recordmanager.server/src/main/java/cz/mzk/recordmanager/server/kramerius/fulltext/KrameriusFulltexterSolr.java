@@ -75,7 +75,7 @@ public class KrameriusFulltexterSolr implements KrameriusFulltexter {
 			String pageNum = (String) document.getFieldValue(PAGE_NUMBER_FIELD);
 			
 			pageNum = pageNum==null ? String.valueOf(order) : pageNum;
-			//TODO data sometimes contain garbage values - this should be considered temporary solution
+			//TODO data sometimes contain garbage values - this should be considered fallback solution
 			pageNum = pageNum.length() > 50 ? pageNum.substring(0, 50) : pageNum; 
 			
 			page.setUuidPage(uuid);
