@@ -206,6 +206,22 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 		return null;
 	}
 
+	// note: recognized Kramerius formats are in c.m.r.server.kramerius.FedoraModels;
+	@Override
+	public List<HarvestedRecordFormatEnum> getDetectedFormatList() {
+		List<HarvestedRecordFormatEnum> hrf = new ArrayList<HarvestedRecordFormatEnum>();
+
+		if(isBook()) hrf.add(HarvestedRecordFormatEnum.BOOKS);
+		if(isPeriodical()) hrf.add(HarvestedRecordFormatEnum.PERIODICALS);
+		if(isMap()) hrf.add(HarvestedRecordFormatEnum.MAPS);
+		if(isVisual()) hrf.add(HarvestedRecordFormatEnum.VISUAL_DOCUMENTS);
+		if(isMusicalScore()) hrf.add(HarvestedRecordFormatEnum.MUSICAL_SCORES);
+		if(isAudioDocument()) hrf.add(HarvestedRecordFormatEnum.AUDIO_DOCUMENTS);
+		if(isOtherDocument()) hrf.add(HarvestedRecordFormatEnum.OTHER_UNSPECIFIED);
+		return hrf;
+	}
+	
+	
 	protected boolean isBook() {
 		List<String> type = dcRecord.getTypes();
 		for (String f : type) {
@@ -228,6 +244,61 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 		return false;
 	}
 
+	protected boolean isMap() {
+		List<String> type = dcRecord.getTypes();
+		for (String f : type) {
+			// Kramerius specific
+			if (f.equals("model:map")) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	protected boolean isVisual() {
+		List<String> type = dcRecord.getTypes();
+		for (String f : type) {
+			// Kramerius specific
+			if (f.equals("model:graphic")) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	protected boolean isMusicalScore() {
+		List<String> type = dcRecord.getTypes();
+		for (String f : type) {
+			// Kramerius specific
+			if (f.equals("model:sheetmusic")) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	protected boolean isAudioDocument() {
+		List<String> type = dcRecord.getTypes();
+		for (String f : type) {
+			// Kramerius specific
+			if (f.equals("model:soundrecording")) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	protected boolean isOtherDocument() {
+		List<String> type = dcRecord.getTypes();
+		for (String f : type) {
+			// Kramerius specific
+			if (f.equals("model:archive") || f.equals("model:manuscript") ) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	/* there may be more than one rights value in Kramerius, but only one "policy:.*" */
 	public String getPolicyKramerius(){
 		List<String> rights = dcRecord.getRights();
@@ -259,15 +330,7 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 		return model;
 	}
 	
-	@Override
-	public List<HarvestedRecordFormatEnum> getDetectedFormatList() {
-		List<HarvestedRecordFormatEnum> hrf = new ArrayList<HarvestedRecordFormatEnum>();
 
-		if(isBook()) hrf.add(HarvestedRecordFormatEnum.BOOKS);
-		if(isPeriodical()) hrf.add(HarvestedRecordFormatEnum.PERIODICALS);
-
-		return hrf;
-	}
 
 	@Override
 	public List<Cnb> getCNBs() {
