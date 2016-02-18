@@ -3,12 +3,12 @@ package cz.mzk.recordmanager.server.kramerius.fulltext;
 import java.io.IOException;
 import java.util.List;
 
-import cz.mzk.recordmanager.server.model.FulltextMonography;
+import cz.mzk.recordmanager.server.model.FulltextKramerius;
 
 public interface KrameriusFulltexter {
 
-	public List<FulltextMonography> getFulltextObjects(String rootUuid) throws IOException;
+	public List<FulltextKramerius> getFulltextObjects(String rootUuid) throws IOException;
 
-	public List<FulltextMonography> getFulltextForRoot(String rootUuid) throws IOException;
+	public List<FulltextKramerius> getFulltextForRoot(String rootUuid) throws IOException;
 
 }

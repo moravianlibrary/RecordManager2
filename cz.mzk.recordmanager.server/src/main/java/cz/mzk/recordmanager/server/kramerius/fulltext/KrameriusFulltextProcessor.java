@@ -18,10 +18,10 @@ import cz.mzk.recordmanager.server.dc.DublinCoreParser;
 import cz.mzk.recordmanager.server.dc.DublinCoreRecord;
 import cz.mzk.recordmanager.server.dc.InvalidDcException;
 import cz.mzk.recordmanager.server.metadata.MetadataDublinCoreRecord;
-import cz.mzk.recordmanager.server.model.FulltextMonography;
+import cz.mzk.recordmanager.server.model.FulltextKramerius;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.model.KrameriusConfiguration;
-import cz.mzk.recordmanager.server.oai.dao.FulltextMonographyDAO;
+import cz.mzk.recordmanager.server.oai.dao.FulltextKrameriusDAO;
 import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordDAO;
 import cz.mzk.recordmanager.server.oai.dao.KrameriusConfigurationDAO;
 import cz.mzk.recordmanager.server.util.HibernateSessionSynchronizer;
@@ -45,7 +45,7 @@ public class KrameriusFulltextProcessor implements
 	private HarvestedRecordDAO recordDao;
 
 	@Autowired
-	private FulltextMonographyDAO fmDao;
+	private FulltextKrameriusDAO fmDao;
 	
 	@Autowired
 	private HibernateSessionSynchronizer sync;
@@ -114,7 +114,7 @@ public class KrameriusFulltextProcessor implements
 
 			String rootUuid = rec.getUniqueId().getRecordId();
 			
-			List<FulltextMonography> pages;
+			List<FulltextKramerius> pages;
 			if (model.equals("periodical")) {
 				logger.info("Using fultexter \"for root\" for uuid "+rootUuid+".");
 			    pages = fulltexter.getFulltextForRoot(rootUuid);	
@@ -129,14 +129,14 @@ public class KrameriusFulltextProcessor implements
 				return rec;
 			}
 			
-			//delete old FulltextMonography from database before adding new ones
-			if (!rec.getFulltextMonography().isEmpty()) {
-				for (FulltextMonography fm: rec.getFulltextMonography()) {
+			//delete old FulltextKramerius from database before adding new ones
+			if (!rec.getFulltextKramerius().isEmpty()) {
+				for (FulltextKramerius fm: rec.getFulltextKramerius()) {
 					fmDao.delete(fm);
 				}
 			}
 			
-			rec.setFulltextMonography(pages);
+			rec.setFulltextKramerius(pages);
 		} else {
 			logger.debug("Processor: privacy condition is NOT fulfilled, skipping record");
 		}

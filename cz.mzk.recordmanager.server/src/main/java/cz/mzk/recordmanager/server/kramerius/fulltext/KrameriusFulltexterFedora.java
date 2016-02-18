@@ -20,7 +20,7 @@ import com.google.common.base.Charsets;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.io.ByteStreams;
 
-import cz.mzk.recordmanager.server.model.FulltextMonography;
+import cz.mzk.recordmanager.server.model.FulltextKramerius;
 import cz.mzk.recordmanager.server.util.HttpClient;
 
 public class KrameriusFulltexterFedora implements KrameriusFulltexter {
@@ -50,9 +50,9 @@ public class KrameriusFulltexterFedora implements KrameriusFulltexter {
 	 * gets basic page metadata from JSON received from Kramerius API (for
 	 * specified rootUuid) returns list of FulltextMonographies
 	 */
-	public List<FulltextMonography> getPagesMetadata(String rootUuid) throws IOException {
+	public List<FulltextKramerius> getPagesMetadata(String rootUuid) throws IOException {
 		JSONArray pagesJson; /* check it */
-		List<FulltextMonography> pagesMetadataList = new ArrayList<FulltextMonography>();
+		List<FulltextKramerius> pagesMetadataList = new ArrayList<FulltextKramerius>();
 
 		String pagesListUrl = kramApiUrl + "/item/" + rootUuid + "/children";
 		logger.debug("Going to read pages metadata from: " + pagesListUrl);
@@ -69,7 +69,7 @@ public class KrameriusFulltexterFedora implements KrameriusFulltexter {
 		 * check model
 		 */
 		for (int i = 0; i < pagesJson.length(); i++) {
-			FulltextMonography ftm = new FulltextMonography();
+			FulltextKramerius ftm = new FulltextKramerius();
 
 			try {
 				JSONObject obj = pagesJson.getJSONObject(i);
@@ -125,14 +125,14 @@ public class KrameriusFulltexterFedora implements KrameriusFulltexter {
 
 	/*
 	 * gets some page metadata read from JSON for given rootUuid, loads OCR,
-	 * modifies FulltextMonography and returns them in list
+	 * modifies FulltextKramerius and returns them in list
 	 */
 	@Override
-	public List<FulltextMonography> getFulltextObjects(String rootUuid) throws IOException {
-		List<FulltextMonography> fms = getPagesMetadata(rootUuid);
+	public List<FulltextKramerius> getFulltextObjects(String rootUuid) throws IOException {
+		List<FulltextKramerius> fms = getPagesMetadata(rootUuid);
 		Long pageOrder = 0L;
 
-		for (FulltextMonography fm : fms) {
+		for (FulltextKramerius fm : fms) {
 			pageOrder++;
 			String pageUuid = fm.getUuidPage();
 
@@ -196,10 +196,10 @@ public class KrameriusFulltexterFedora implements KrameriusFulltexter {
 	}
 
 	@Override
-	public List<FulltextMonography> getFulltextForRoot(String rootUuid)
+	public List<FulltextKramerius> getFulltextForRoot(String rootUuid)
 			throws IOException {
 		
-		List<FulltextMonography> pagesMetadataList = new ArrayList<FulltextMonography>();
+		List<FulltextKramerius> pagesMetadataList = new ArrayList<FulltextKramerius>();
 		
 		// find all non page objects... and add them to uuid list; then get fulltext for all objects
 		LinkedList<String> nonPagesUuids = new LinkedList<String>();
@@ -220,11 +220,11 @@ public class KrameriusFulltexterFedora implements KrameriusFulltexter {
 			}
 			
 			// get all volume / issue models and push their uuids into nonPagesUuids
-			// get all pages, create FulltextMonography page for them, put them into list
+			// get all pages, create FulltextKramerius page for them, put them into list
 		
 			
 			for (int i = 0; i < pagesJson.length(); i++) {
-				FulltextMonography ftm = new FulltextMonography();
+				FulltextKramerius ftm = new FulltextKramerius();
 
 				try {
 					JSONObject obj = pagesJson.getJSONObject(i);
@@ -267,7 +267,7 @@ public class KrameriusFulltexterFedora implements KrameriusFulltexter {
 		
 		Long pageOrder = 0L;
 
-		for (FulltextMonography fm : pagesMetadataList) {
+		for (FulltextKramerius fm : pagesMetadataList) {
 			pageOrder++;
 			String pageUuid = fm.getUuidPage();
 

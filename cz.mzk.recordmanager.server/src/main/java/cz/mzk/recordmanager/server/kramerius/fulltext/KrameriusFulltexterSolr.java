@@ -17,7 +17,7 @@ import org.slf4j.LoggerFactory;
 import com.google.common.base.Charsets;
 
 import static cz.mzk.recordmanager.server.kramerius.fulltext.KrameriusSolrConstants.*;
-import cz.mzk.recordmanager.server.model.FulltextMonography;
+import cz.mzk.recordmanager.server.model.FulltextKramerius;
 import cz.mzk.recordmanager.server.solr.SolrServerFacade;
 import cz.mzk.recordmanager.server.util.SolrUtils;
 
@@ -38,7 +38,7 @@ public class KrameriusFulltexterSolr implements KrameriusFulltexter {
 	}
 
 	@Override
-	public List<FulltextMonography> getFulltextObjects(String rootUuid)
+	public List<FulltextKramerius> getFulltextObjects(String rootUuid)
 			throws IOException {
 		logger.debug("About to harvest fulltext from Kramerius for {}", rootUuid);
 		SolrQuery query = new SolrQuery();
@@ -57,17 +57,17 @@ public class KrameriusFulltexterSolr implements KrameriusFulltexter {
 			logger.error("Harvesting of fulltext for uuid: {} FAILED", rootUuid);
 			logger.error(ex.getMessage());
 
-			return new ArrayList<FulltextMonography>();
+			return new ArrayList<FulltextKramerius>();
 		}
 	}
 
-	private List<FulltextMonography> asPages(SolrDocumentList documents) {
-		List<FulltextMonography> pages = new ArrayList<FulltextMonography>(documents.size());
+	private List<FulltextKramerius> asPages(SolrDocumentList documents) {
+		List<FulltextKramerius> pages = new ArrayList<FulltextKramerius>(documents.size());
 		Collections.sort(documents, KrameriusPageComparator.INSTANCE);
 		long order = 0L;
 		for (SolrDocument document : documents) {
 			order++;
-			FulltextMonography page = new FulltextMonography();
+			FulltextKramerius page = new FulltextKramerius();
 			
 			String uuid = (String) document.getFieldValue(PID_FIELD);
 			logger.debug("Harvesting fulltext from Kramerius for page uuid: {}", uuid);
@@ -90,7 +90,7 @@ public class KrameriusFulltexterSolr implements KrameriusFulltexter {
 	}
 	
 	@Override
-	public List<FulltextMonography> getFulltextForRoot(String rootUuid)
+	public List<FulltextKramerius> getFulltextForRoot(String rootUuid)
 			throws IOException {
 		logger.debug("About to harvest fulltext from Kramerius for {}", rootUuid);
 		SolrQuery query = new SolrQuery();
@@ -111,7 +111,7 @@ public class KrameriusFulltexterSolr implements KrameriusFulltexter {
 			logger.error("Harvesting of fulltext for uuid: {} FAILED", rootUuid);
 			logger.error(ex.getMessage());
 
-			return new ArrayList<FulltextMonography>();
+			return new ArrayList<FulltextKramerius>();
 		}
 	}
 

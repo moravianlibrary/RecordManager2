@@ -283,24 +283,24 @@ CREATE TABLE antikvariaty_catids (
 
 COMMENT ON TABLE antikvariaty_catids IS 'extracted identifiers from antikvariaty records. These are used for mapping to real records.';
 
-CREATE TABLE fulltext_monography (
+CREATE TABLE fulltext_kramerius (
   id                  DECIMAL(10) PRIMARY KEY,
   harvested_record_id DECIMAL(10),
   uuid_page           VARCHAR(50),
   is_private          BOOLEAN, 
-  order_in_monography DECIMAL(10),
+  order_in_document   DECIMAL(10),
   page                VARCHAR(50),
   fulltext            BYTEA,
-  CONSTRAINT fulltext_monography_harvested_record_id_fk FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id)
+  CONSTRAINT fulltext_kramerius_harvested_record_id_fk FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id)
 ); 
 
-COMMENT ON TABLE fulltext_monography IS 'harvested OCRs from digital libraries, page by page. REDUNDANT DATA, CONSIDER NORMALIZATION ???';
-COMMENT ON COLUMN fulltext_monography.harvested_record_id IS 'link to record';
-COMMENT ON COLUMN fulltext_monography.uuid_page IS 'UUID of page';
-COMMENT ON COLUMN fulltext_monography.is_private IS 'is this fulltext publicly available?';
-COMMENT ON COLUMN fulltext_monography.order_in_monography IS 'sequential order of page in record'; 
-COMMENT ON COLUMN fulltext_monography.page IS 'string notation of page';
-COMMENT ON COLUMN fulltext_monography.fulltext IS 'raw OCR';
+COMMENT ON TABLE fulltext_kramerius IS 'harvested OCRs from digital libraries, page by page. REDUNDANT DATA, CONSIDER NORMALIZATION ???';
+COMMENT ON COLUMN fulltext_kramerius.harvested_record_id IS 'link to record';
+COMMENT ON COLUMN fulltext_kramerius.uuid_page IS 'UUID of page';
+COMMENT ON COLUMN fulltext_kramerius.is_private IS 'is this fulltext publicly available?';
+COMMENT ON COLUMN fulltext_kramerius.order_in_document IS 'sequential order of page in record'; 
+COMMENT ON COLUMN fulltext_kramerius.page IS 'string notation of page';
+COMMENT ON COLUMN fulltext_kramerius.fulltext IS 'raw OCR';
 
 CREATE TABLE skat_keys (
   skat_record_id      DECIMAL(10),

@@ -13,7 +13,7 @@ CREATE INDEX cosmotron_996_record_id_import_conf_idx ON cosmotron_996(record_id,
 
 CREATE INDEX authority_code_idx ON authority_record(authority_code);
 
-CREATE INDEX fulltext_monography_harvested_record_idx ON fulltext_monography(harvested_record_id);
+CREATE INDEX fulltext_kramerius_harvested_record_idx ON fulltext_kramerius(harvested_record_id);
 
 CREATE INDEX obalkyknih_toc_book_idx ON obalkyknih_toc(book_id);
 CREATE INDEX obalkyknih_toc_oclc_idx ON obalkyknih_toc(oclc);

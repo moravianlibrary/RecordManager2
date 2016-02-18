@@ -7,15 +7,15 @@ import javax.persistence.FetchType;
 import javax.persistence.Table;
 
 @Entity
-@Table(name=FulltextMonography.TABLE_NAME)
-public class FulltextMonography extends AbstractDomainObject {
+@Table(name=FulltextKramerius.TABLE_NAME)
+public class FulltextKramerius extends AbstractDomainObject {
 
-	public static final String TABLE_NAME = "fulltext_monography";
+	public static final String TABLE_NAME = "fulltext_kramerius";
 	
 	@Column(name="uuid_page")
 	private String uuidPage;
 	
-	@Column(name="order_in_monography")
+	@Column(name="order_in_document")
 	private Long order;
 	
 	@Basic(fetch = FetchType.LAZY)

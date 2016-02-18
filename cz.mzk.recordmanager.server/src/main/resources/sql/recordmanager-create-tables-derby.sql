@@ -207,15 +207,15 @@ CREATE TABLE antikvariaty_catids (
   CONSTRAINT antikvariaty_catids_fk FOREIGN KEY (antikvariaty_id) REFERENCES antikvariaty(id)
 );
 
-CREATE TABLE fulltext_monography (
+CREATE TABLE fulltext_kramerius (
   id                  DECIMAL(10) PRIMARY KEY,
   harvested_record_id DECIMAL(10),
   uuid_page           VARCHAR(50),
   is_private          BOOLEAN, 
-  order_in_monography DECIMAL(10),
+  order_in_document   DECIMAL(10),
   page                VARCHAR(50),
   fulltext            BLOB,
-  CONSTRAINT fulltext_monography_harvested_record_id_fk FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id)
+  CONSTRAINT fulltext_kramerius_harvested_record_id_fk FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id)
 ); 
 
 CREATE TABLE skat_keys (

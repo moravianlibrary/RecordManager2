@@ -20,7 +20,7 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import cz.mzk.recordmanager.server.AbstractTest;
-import cz.mzk.recordmanager.server.model.FulltextMonography;
+import cz.mzk.recordmanager.server.model.FulltextKramerius;
 import cz.mzk.recordmanager.server.solr.SolrServerFacade;
 import cz.mzk.recordmanager.server.solr.SolrServerFactory;
 
@@ -35,7 +35,7 @@ public class KrameriusFulltexterSolrTest extends AbstractTest {
 	public void test() throws Exception {
 		prepare();
 		KrameriusFulltexterSolr solr = new KrameriusFulltexterSolr(mockedSolrServer);
-		List<FulltextMonography> pages = solr.getFulltextObjects("uuid:111ad136-1f0a-4cd0-9d00-242155955bdc");
+		List<FulltextKramerius> pages = solr.getFulltextObjects("uuid:111ad136-1f0a-4cd0-9d00-242155955bdc");
 		Assert.assertEquals(pages.size(), 3);
 	}
 

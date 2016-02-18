@@ -8,7 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import cz.mzk.recordmanager.server.model.DedupRecord;
-import cz.mzk.recordmanager.server.oai.dao.FulltextMonographyDAO;
+import cz.mzk.recordmanager.server.oai.dao.FulltextKrameriusDAO;
 import cz.mzk.recordmanager.server.solr.LazyFulltextField;
 
 public class LazyFulltextFieldImpl implements LazyFulltextField {
@@ -25,20 +25,20 @@ public class LazyFulltextFieldImpl implements LazyFulltextField {
 	// tabelators
 	protected static final Pattern TEXT_TAB = Pattern.compile("\\s*\\t\\s*");
 
-	private final FulltextMonographyDAO monographyDao;
+	private final FulltextKrameriusDAO fulltextKrameriusDao;
 
 	private final DedupRecord record;
 
-	public LazyFulltextFieldImpl(FulltextMonographyDAO monographyDao,
+	public LazyFulltextFieldImpl(FulltextKrameriusDAO fulltextKrameriusDao,
 			DedupRecord record) {
 		super();
-		this.monographyDao = monographyDao;
+		this.fulltextKrameriusDao = fulltextKrameriusDao;
 		this.record = record;
 	}
 
 	@Override
 	public String getContent() {
-		List<String> text = monographyDao.getFullText(record);
+		List<String> text = fulltextKrameriusDao.getFullText(record);
 		if (text.isEmpty()) {
 			return null;
 		}
