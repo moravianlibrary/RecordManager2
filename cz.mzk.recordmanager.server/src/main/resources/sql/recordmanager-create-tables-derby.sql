@@ -213,7 +213,7 @@ CREATE TABLE fulltext_monography (
   uuid_page           VARCHAR(50),
   is_private          BOOLEAN, 
   order_in_monography DECIMAL(10),
-  page                VARCHAR(20),
+  page                VARCHAR(50),
   fulltext            BLOB,
   CONSTRAINT fulltext_monography_harvested_record_id_fk FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id)
 ); 

@@ -89,14 +89,14 @@ CREATE TABLE kramerius_conf (
 );
 
 COMMENT ON TABLE kramerius_conf IS 'extension of import_conf for Kramerius';
-COMMENT ON COLUMN kramerius_conf.url IS '';
-COMMENT ON COLUMN kramerius_conf.url_solr IS '';
+COMMENT ON COLUMN kramerius_conf.url IS 'url of Kramerius API endpoint';
+COMMENT ON COLUMN kramerius_conf.url_solr IS 'url of Kramerius SOLR (used in specific cases when access to SOLR is granted by Kramerius owner)';
 COMMENT ON COLUMN kramerius_conf.model IS '';
-COMMENT ON COLUMN kramerius_conf.query_rows IS '';
-COMMENT ON COLUMN kramerius_conf.metadata_stream IS '';
-COMMENT ON COLUMN kramerius_conf.auth_token IS '';
-COMMENT ON COLUMN kramerius_conf.fulltext_harvest_type IS '';
-COMMENT ON COLUMN kramerius_conf.download_private_fulltexts IS '';
+COMMENT ON COLUMN kramerius_conf.query_rows IS 'number of result rows requested from API, high numbers may cause latency problems';
+COMMENT ON COLUMN kramerius_conf.metadata_stream IS 'type of metadata harvested from Kramerius';
+COMMENT ON COLUMN kramerius_conf.auth_token IS 'Base64 token created from username and password provided by Kramerius owner to access private documents';
+COMMENT ON COLUMN kramerius_conf.fulltext_harvest_type IS '[fedora|solr], fedora is default type, should work for most institutions';
+COMMENT ON COLUMN kramerius_conf.download_private_fulltexts IS 'decides whether fulltexts should be harvested from private documents, auth_token is needed if true';
 
 CREATE TABLE download_import_conf (
   import_conf_id       DECIMAL(10)  PRIMARY KEY,
@@ -289,7 +289,7 @@ CREATE TABLE fulltext_monography (
   uuid_page           VARCHAR(50),
   is_private          BOOLEAN, 
   order_in_monography DECIMAL(10),
-  page                VARCHAR(20),
+  page                VARCHAR(50),
   fulltext            BYTEA,
   CONSTRAINT fulltext_monography_harvested_record_id_fk FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id)
 ); 

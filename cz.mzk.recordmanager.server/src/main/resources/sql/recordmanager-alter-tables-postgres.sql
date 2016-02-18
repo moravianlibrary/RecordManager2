@@ -384,3 +384,6 @@ ALTER TABLE oai_harvest_conf ADD COLUMN extract_id_regex VARCHAR(128);
 -- 27. 1. 2016 tomascejpek
 UPDATE oai_harvest_conf SET extract_id_regex='[^:]+:(.*)' WHERE import_conf_id in (319,321,325,326);
 UPDATE oai_harvest_conf SET extract_id_regex='[^:]+:[^:]+:MZK04-(.*)' WHERE import_conf_id=320;
+
+-- 18.12.2016 mjtecka
+ALTER TABLE fulltext_monography ALTER COLUMN page TYPE VARCHAR(50);
