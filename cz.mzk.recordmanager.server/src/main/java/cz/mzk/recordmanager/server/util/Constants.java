@@ -22,6 +22,7 @@ public class Constants {
 	public static final String JOB_ID_IMPORT						= "importRecordsJob";
 	public static final String JOB_ID_IMPORT_ANTIKVARIATY			= "antikvariatyImportRecordsJob";
 	public static final String JOB_ID_IMPORT_OAI					= "importOaiRecordsJob";
+	public static final String JOB_ID_IMPORT_COSMOTRON_996			= "importCosmotron996RecordsJob";
 	public static final String JOB_ID_REGEN_DEDUP_KEYS				= "regenerateDedupKeysJob";
 	public static final String JOB_ID_REGEN_MISSING_DEDUP_KEYS		= "regenerateMissingDedupKeysJob";
 	public static final String JOB_ID_DELETE_ALL_RECORDS_FROM_SOLR	= "deleteAllRecordsFromSolrJob";

@@ -21,4 +21,16 @@ public class Cosmotron996DAOHibernate extends AbstractDomainDAOHibernate<Long, C
 				.setParameter(0, recordId).setParameter(1, configuration.getId())
 				.uniqueResult();
 	}
+
+	@Override
+	public Cosmotron996 findByIdAndHarvestConfiguration(String recordId,
+			Long configurationId) {
+		Session session = sessionFactory.getCurrentSession();
+		return (Cosmotron996) session
+				.createQuery(
+						"from Cosmotron996 where recordId = ? and harvestedFrom = ?")
+				.setParameter(0, recordId).setParameter(1, configurationId)
+				.uniqueResult();
+		
+	}
 }

@@ -147,4 +147,28 @@ public class ImportRecordJobConfig {
     public ItemWriter<List<HarvestedRecord>> harvestedRecordWriter() {
     	return new HarvestedRecordWriter();
     }
+	
+	@Bean
+	public Job importCosmotron996RecordsJob(
+			@Qualifier(Constants.JOB_ID_IMPORT_COSMOTRON_996 +":importRecordsStep") Step importRecordsStep) {
+		return jobs.get(Constants.JOB_ID_IMPORT_COSMOTRON_996)
+				.validator(new ImportRecordsJobParametersValidator())
+				.listener(JobFailureListener.INSTANCE).flow(importRecordsStep)
+				.end().build();
+	}
+
+	@Bean(name=Constants.JOB_ID_IMPORT_COSMOTRON_996 +":importRecordsStep")
+	public Step importCosmotron996RecordsStep() throws Exception {
+		return steps.get(Constants.JOB_ID_IMPORT_COSMOTRON_996+"importRecordsStep")
+				.<List<Record>, List<Record>> chunk(100)//
+				.reader(importRecordsReader(STRING_OVERRIDEN_BY_EXPRESSION, STRING_OVERRIDEN_BY_EXPRESSION))//
+				.writer(importCosmotron996RecordsWriter(LONG_OVERRIDEN_BY_EXPRESSION)) //
+				.build();
+	}
+
+	@Bean(name=Constants.JOB_ID_IMPORT_COSMOTRON_996 +":writer")
+	@StepScope
+	public ItemWriter<List<Record>> importCosmotron996RecordsWriter(@Value("#{jobParameters[" + Constants.JOB_PARAM_CONF_ID + "]}") Long configurationId) {
+		return new ImportCosmotron996RecordsWriter(configurationId);
+	}
 }

@@ -6,4 +6,6 @@ import cz.mzk.recordmanager.server.model.ImportConfiguration;
 public interface Cosmotron996DAO extends DomainDAO<Long, Cosmotron996>{
 
 	public Cosmotron996 findByIdAndHarvestConfiguration(String recordId, ImportConfiguration configuration);
+	
+	public Cosmotron996 findByIdAndHarvestConfiguration(String recordId, Long configuration);
 }
