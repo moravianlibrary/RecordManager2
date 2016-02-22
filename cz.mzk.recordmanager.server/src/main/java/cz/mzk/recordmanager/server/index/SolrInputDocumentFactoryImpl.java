@@ -102,7 +102,7 @@ public class SolrInputDocumentFactoryImpl implements SolrInputDocumentFactory, I
 			document.addField(SolrFieldConstants.MERGED_CHILD_FIELD, 1);
 			document.addField(SolrFieldConstants.WEIGHT, record.getWeight());
 			document.addField(SolrFieldConstants.RECORD_FORMAT_DISPLAY, getRecordType(record));
-			document.addField(SolrFieldConstants.FIELD_996b, get996b(record));
+			//document.addField(SolrFieldConstants.FIELD_996b, get996b(record));
 			
 			return document;
 		} catch (Exception ex) {
