@@ -88,7 +88,7 @@ public class MarcDSL extends BaseDSL {
 	}
 
 	public List<String> getLanguages() {
-		List<String> languages = new ArrayList<String>();
+		Set<String> languages = new HashSet<String>();
 		String f008 = record.getControlField("008");
 		if (f008 != null && f008.length() > 38) {
 			languages.add(f008.substring(35, 38));
@@ -96,7 +96,7 @@ public class MarcDSL extends BaseDSL {
 		languages.addAll(record.getFields("041", EMPTY_SEPARATOR, 'a'));
 		languages.addAll(record.getFields("041", EMPTY_SEPARATOR, 'd'));
 		languages.addAll(record.getFields("041", EMPTY_SEPARATOR, 'e'));
-		return languages;
+		return new ArrayList<String>(languages);
 	}
 	
 	public String getCountry(){
