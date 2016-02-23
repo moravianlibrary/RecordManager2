@@ -482,4 +482,11 @@ public class MarcDSL extends BaseDSL {
 		}
 		return removeEndPunctuation(sb.toString().trim());
     }
+    
+    public List<String> getAuthorFind(){
+    	List<String> result = new ArrayList<String>();
+    	result.add(getAuthorDisplay());
+    	result.addAll(getAuthor2Display());
+    	return result;
+    }
 }

@@ -7,7 +7,7 @@ fullrecord = getFullrecord()
 language = translate("mzk_language.map", getLanguages(), null)
 country_str = translate("mzk_country.map", getCountry(), null)
 
-author = getAuthorDisplay()
+author = getFirstField "100abcd"
 author_fuller = getFirstField "100q"
 author2 = getFields "110ab:111ab:700abcd:710ab:711ab"
 author_additional = getFields "505r"
@@ -73,3 +73,4 @@ bbox_geo_str = getBoundingBox()
 availability_id_str_mv = getFieldsUnique "996w"
 
 citation_record_type = getCitationRecordType();
+author_find = getAuthorFind();
