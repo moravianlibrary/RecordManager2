@@ -415,12 +415,31 @@ public class MarcDSL extends BaseDSL {
 		if(df == null) return null;
 		
 		final char titleSubfields[] = new char[]{'a','b','n','p'};
+		final char sfhPunctuation[] = new char[]{'.',',',':'};
+		char endCharH = ' ';
 		StringBuilder sb = new StringBuilder();
+
 		for(Subfield sf: df.getSubfields()){
-			if(Chars.contains(titleSubfields, sf.getCode())){
+			// get last punctuation from 'h'
+			if(sf.getCode() == 'h'){
+				String data = sf.getData().trim();
+				if(data.length() > 0){
+					if(Chars.contains(sfhPunctuation, data.charAt(data.length() - 1))){
+						endCharH = data.charAt(data.length() - 1);
+					}
+				}
+			}
+			else if(Chars.contains(titleSubfields, sf.getCode())){
+				// print punctuation from h
+				if(endCharH != ' '){
+					sb.append(endCharH);
+					sb.append(" ");
+					endCharH = ' ';
+				}
 				sb.append(sf.getData());
 				sb.append(" ");
 			}
+			else endCharH = ' ';
 		}
     	return removeEndPunctuation(sb.toString());
     }
