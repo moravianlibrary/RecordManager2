@@ -24,10 +24,6 @@ public class GetStatusesMarcFunctions implements MarcRecordFunctions {
 	protected final static String ONLINE = "online";
 	protected final static Pattern ONLINE_PATTERN = Pattern.compile("(?i).*"+ONLINE+".*");
 	
-	protected final static String UNKNOWN = "nz";
-	protected final static String UNSPECIFIED = "n";
-	protected final static String LIMITED = "o";
-	protected final static String TEMPORARY = "d";
 	protected final static String FREESTACK = "0";
 
 	public List<String> getStatuses(MarcFunctionContext ctx) {
@@ -56,10 +52,6 @@ public class GetStatusesMarcFunctions implements MarcRecordFunctions {
 		List<String> statuses = new ArrayList<String>();
 		boolean present = false;
 		boolean absent = false;
-		boolean unknown = false;
-		boolean unspecified = false;
-		boolean limited = false;
-		boolean temporary = false;
 		boolean freestack = false;
 		for (DataField field : fields) {
 			Subfield s = field.getSubfield('s');
@@ -73,18 +65,6 @@ public class GetStatusesMarcFunctions implements MarcRecordFunctions {
 				break;
 			case PRESENT:
 				present = true;
-				break;
-			case UNKNOWN:
-				unknown = true;
-				break;
-			case UNSPECIFIED:
-				unspecified = true;
-				break;
-			case LIMITED:
-				limited = true;
-				break;
-			case TEMPORARY:
-				temporary = true;
 				break;
 			}
 			
@@ -104,18 +84,6 @@ public class GetStatusesMarcFunctions implements MarcRecordFunctions {
 		}
 		if (present) {
 			statuses.addAll(SolrUtils.createHierarchicFacetValues("present"));
-		}
-		if (unknown) {
-			statuses.addAll(SolrUtils.createHierarchicFacetValues("unknown"));
-		}
-		if (unspecified) {
-			statuses.addAll(SolrUtils.createHierarchicFacetValues("unspecified"));
-		}
-		if (limited) {
-			statuses.addAll(SolrUtils.createHierarchicFacetValues("limited"));
-		}
-		if (temporary) {
-			statuses.addAll(SolrUtils.createHierarchicFacetValues("temporary"));
 		}
 		if (freestack) {
 			statuses.addAll(SolrUtils.createHierarchicFacetValues("freestack"));

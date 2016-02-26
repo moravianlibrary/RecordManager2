@@ -88,7 +88,7 @@ public class MarcDSL extends BaseDSL {
 	}
 
 	public List<String> getLanguages() {
-		List<String> languages = new ArrayList<String>();
+		Set<String> languages = new HashSet<String>();
 		String f008 = record.getControlField("008");
 		if (f008 != null && f008.length() > 38) {
 			languages.add(f008.substring(35, 38));
@@ -96,7 +96,7 @@ public class MarcDSL extends BaseDSL {
 		languages.addAll(record.getFields("041", EMPTY_SEPARATOR, 'a'));
 		languages.addAll(record.getFields("041", EMPTY_SEPARATOR, 'd'));
 		languages.addAll(record.getFields("041", EMPTY_SEPARATOR, 'e'));
-		return languages;
+		return new ArrayList<String>(languages);
 	}
 	
 	public String getCountry(){
@@ -415,12 +415,31 @@ public class MarcDSL extends BaseDSL {
 		if(df == null) return null;
 		
 		final char titleSubfields[] = new char[]{'a','b','n','p'};
+		final char sfhPunctuation[] = new char[]{'.',',',':'};
+		char endCharH = ' ';
 		StringBuilder sb = new StringBuilder();
+
 		for(Subfield sf: df.getSubfields()){
-			if(Chars.contains(titleSubfields, sf.getCode())){
+			// get last punctuation from 'h'
+			if(sf.getCode() == 'h'){
+				String data = sf.getData().trim();
+				if(data.length() > 0){
+					if(Chars.contains(sfhPunctuation, data.charAt(data.length() - 1))){
+						endCharH = data.charAt(data.length() - 1);
+					}
+				}
+			}
+			else if(Chars.contains(titleSubfields, sf.getCode())){
+				// print punctuation from h
+				if(endCharH != ' '){
+					sb.append(endCharH);
+					sb.append(" ");
+					endCharH = ' ';
+				}
 				sb.append(sf.getData());
 				sb.append(" ");
 			}
+			else endCharH = ' ';
 		}
     	return removeEndPunctuation(sb.toString());
     }

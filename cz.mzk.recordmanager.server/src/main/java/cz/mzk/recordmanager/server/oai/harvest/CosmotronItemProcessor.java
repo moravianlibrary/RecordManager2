@@ -211,7 +211,18 @@ public class CosmotronItemProcessor implements ItemProcessor<List<OAIRecord>, Li
 	
 	@Override
 	public ExitStatus afterStep(StepExecution stepExecution) {
-		if(writer != null) writer.close();
+		if(writer != null){
+			writer.println("*** 996 records with no parent");
+			for(List<Cosmotron996> list996: temp996.values()){
+				for(Cosmotron996 c996: list996){
+					MarcRecord mr = marcXmlParser.parseRecord(new ByteArrayInputStream(c996.getRawRecord()));
+					writer.println(mr.export(IOFormat.LINE_MARC));
+				}
+			}
+			
+			writer.close();
+		}
+		
 		return null;
 	}
 
