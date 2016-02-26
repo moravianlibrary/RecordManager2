@@ -3,6 +3,7 @@ package cz.mzk.recordmanager.server.marc.intercepting;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.tuple.Pair;
@@ -41,7 +42,7 @@ public class SkatMarcInterceptor extends DefaultMarcInterceptor {
 		}
 		
 		Map<String, List<DataField>> dfMap = marc.getAllFields();
-		for (String tag: dfMap.keySet()) {
+		for (String tag: new TreeSet<String>(dfMap.keySet())) {
 			for (DataField df: dfMap.get(tag)) {
 				if (df.getTag().equals("910")) {
 					/*
