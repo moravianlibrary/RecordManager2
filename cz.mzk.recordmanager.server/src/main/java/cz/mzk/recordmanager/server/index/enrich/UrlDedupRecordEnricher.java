@@ -61,7 +61,7 @@ public class UrlDedupRecordEnricher implements DedupRecordEnricher {
 			
 			for(Object obj: urls){
 			    String spliturl[] = obj.toString().split(SPLITTER);
-			    if(url.matches(spliturl[2])){
+			    if(url.contains(spliturl[2])){
 			    	switch (spliturl[1]) {
 					case ONLINE:
 						online = true;
