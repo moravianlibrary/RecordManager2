@@ -2,7 +2,6 @@ package cz.mzk.recordmanager.server.index;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.Future;
 
@@ -16,7 +15,7 @@ import org.springframework.batch.core.StepExecutionListener;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import cz.mzk.recordmanager.server.solr.LoggingSolrIndexingExceptionHandler;
+import cz.mzk.recordmanager.server.solr.FaultTolerantIndexingExceptionHandler;
 import cz.mzk.recordmanager.server.solr.SolrServerFacade;
 import cz.mzk.recordmanager.server.solr.SolrServerFactory;
 import cz.mzk.recordmanager.server.solr.SolrServerFactoryImpl.Mode;
@@ -24,7 +23,7 @@ import cz.mzk.recordmanager.server.util.SolrUtils;
 
 public class SolrIndexWriter implements ItemWriter<Future<List<SolrInputDocument>>>, StepExecutionListener {
 
-	private static Logger logger = LoggerFactory.getLogger(SolrRecordProcessor.class);
+	private static Logger logger = LoggerFactory.getLogger(SolrIndexWriter.class);
 
 	@Autowired
 	private SolrServerFactory factory;
@@ -42,23 +41,19 @@ public class SolrIndexWriter implements ItemWriter<Future<List<SolrInputDocument
 	@Override
 	public void write(List<? extends Future<List<SolrInputDocument>>> items)
 			throws Exception {
-		try {
-			List<SolrInputDocument> documents = new ArrayList<SolrInputDocument>();
-			for (Future<List<SolrInputDocument>> item : items) {
-				List<SolrInputDocument> docs = item.get();
-				if (docs != null) {
-					docs = SolrUtils.removeHiddenFields(docs);
-					documents.addAll(docs);
-				}
+		List<SolrInputDocument> documents = new ArrayList<SolrInputDocument>();
+		for (Future<List<SolrInputDocument>> item : items) {
+			List<SolrInputDocument> docs = item.get();
+			if (docs != null) {
+				docs = SolrUtils.removeHiddenFields(docs);
+				documents.addAll(docs);
 			}
-			if (documents.isEmpty()) {
-				return;
-			}
-			logger.info("About to index {} documents to Solr", documents.size());
-			server.add(documents, commitWithinMs);
-		} catch (Exception ex) {
-			logger.error("Exception thrown when indexing documents to Solr", ex);
 		}
+		if (documents.isEmpty()) {
+			return;
+		}
+		logger.info("About to index {} documents to Solr", documents.size());
+		server.add(documents, commitWithinMs);
 	}
 
 	public int getCommitWithinMs() {
@@ -71,7 +66,7 @@ public class SolrIndexWriter implements ItemWriter<Future<List<SolrInputDocument
 
 	@Override
 	public void beforeStep(StepExecution stepExecution) {
-		server = factory.create(solrUrl, Mode.DEFAULT, LoggingSolrIndexingExceptionHandler.INSTANCE);
+		server = factory.create(solrUrl, Mode.DEFAULT, new FaultTolerantIndexingExceptionHandler());
 	}
 
 	@Override

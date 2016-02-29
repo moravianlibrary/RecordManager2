@@ -19,6 +19,7 @@ import org.slf4j.LoggerFactory;
 
 import cz.mzk.recordmanager.server.index.SolrFieldConstants;
 import cz.mzk.recordmanager.server.index.enrich.LazyFulltextFieldImpl;
+import cz.mzk.recordmanager.server.solr.SolrIndexingExceptionHandler.Action;
 
 public class SolrServerFacadeImpl implements SolrServerFacade {
 
@@ -44,11 +45,18 @@ public class SolrServerFacadeImpl implements SolrServerFacade {
 		List<SolrInputDocument> docsWithoutFulltext = documents.stream().filter(doc -> !hasLazyFulltext(doc)).collect(Collectors.toList());
 		List<SolrInputDocument> docsWithFulltext = documents.stream().filter(doc -> hasLazyFulltext(doc)).collect(Collectors.toList());
 		if (!docsWithoutFulltext.isEmpty()) {
-			try {
-				server.add(docsWithoutFulltext, commitWithinMs);
-			} catch (SolrException | SolrServerException | IOException ex) {
-				if (exceptionHandler.handle(ex, documents)) {
-					fallbackIndex(docsWithoutFulltext, commitWithinMs);
+			boolean carryOn = true;
+			while (carryOn) {
+				try {
+					server.add(docsWithoutFulltext, commitWithinMs);
+					exceptionHandler.ok();
+					carryOn = false;
+				} catch (SolrException | SolrServerException | IOException ex) {
+					Action action = exceptionHandler.handle(ex, documents); 
+					if (action == Action.FALLBACK) {
+						fallbackIndex(docsWithoutFulltext, commitWithinMs);
+					}
+					carryOn = action == Action.RETRY;
 				}
 			}
 		}
@@ -89,25 +97,36 @@ public class SolrServerFacadeImpl implements SolrServerFacade {
 
 	private void fallbackIndex(Collection<SolrInputDocument> documents, int commitWithinMs) throws SolrServerException {
 		for (SolrInputDocument document : documents) {
-			try {
-				server.add(document, commitWithinMs);
-			} catch (SolrException | SolrServerException | IOException ex) {
-				exceptionHandler.handle(ex, Collections.singletonList(document));
+			boolean carryOn = true;
+			while (carryOn) {
+				try {
+					server.add(document, commitWithinMs);
+					exceptionHandler.ok();
+					carryOn = false;
+				} catch (SolrException | SolrServerException | IOException ex) {
+					Action action = exceptionHandler.handle(ex, documents);
+					carryOn = action == Action.RETRY;
+				}
 			}
 		}
 	}
 
 	private void indexLazyFulltext(Collection<SolrInputDocument> documents, int commitWithinMs) throws SolrServerException {
 		for (SolrInputDocument document : documents) {
-			try {
-				LazyFulltextFieldImpl fulltext = (LazyFulltextFieldImpl) document.getFieldValue(SolrFieldConstants.FULLTEXT_FIELD);
-				document.setField(SolrFieldConstants.FULLTEXT_FIELD, fulltext.getContent());
-				server.add(document, commitWithinMs);
-			} catch (SolrException | SolrServerException | IOException ex) {
-				exceptionHandler.handle(ex, Collections.singletonList(document));
-			} finally {
-				// to enable garbage collection
-				document.removeField(SolrFieldConstants.FULLTEXT_FIELD);
+			boolean carryOn = true;
+			while (carryOn) {
+				try {
+					LazyFulltextFieldImpl fulltext = (LazyFulltextFieldImpl) document.getFieldValue(SolrFieldConstants.FULLTEXT_FIELD);
+					document.setField(SolrFieldConstants.FULLTEXT_FIELD, fulltext.getContent());
+					server.add(document, commitWithinMs);
+					exceptionHandler.ok();
+					carryOn = false;
+				} catch (SolrException | SolrServerException | IOException ex) {
+					carryOn = exceptionHandler.handle(ex, Collections.singletonList(document)) == Action.RETRY;
+				} finally {
+					// to enable garbage collection
+					document.removeField(SolrFieldConstants.FULLTEXT_FIELD);
+				}
 			}
 		}
 	}

@@ -11,7 +11,7 @@ public enum RethrowingSolrIndexingExceptionHandler implements
 	INSTANCE;
 
 	@Override
-	public boolean handle(Exception ex,
+	public Action handle(Exception ex,
 			Collection<SolrInputDocument> documents)
 			throws SolrServerException {
 		if (ex instanceof SolrServerException) {

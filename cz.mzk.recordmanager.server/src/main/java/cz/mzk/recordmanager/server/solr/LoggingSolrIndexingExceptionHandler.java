@@ -13,13 +13,13 @@ public enum LoggingSolrIndexingExceptionHandler implements SolrIndexingException
 	private static Logger logger = LoggerFactory.getLogger(LoggingSolrIndexingExceptionHandler.class);
 
 	@Override
-	public boolean handle(Exception ex, Collection<SolrInputDocument> documents) {
+	public Action handle(Exception ex, Collection<SolrInputDocument> documents) {
 		if (documents.size() == 1) {
-			//logger.error(String.format("Exception thrown during indexing record: %s", documents.iterator().next()), ex);
 			logger.error(String.format("Exception thrown during indexing record: %s", ex));
+			return Action.SKIP;
 
 		}
-		return true; // fallback to index one record at time
+		return Action.FALLBACK; // fallback to index one record at time
 	}
 
 }

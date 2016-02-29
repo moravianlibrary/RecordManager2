@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.annotations.BeforeMethod;
 
 import cz.mzk.recordmanager.server.AbstractTest;
+import cz.mzk.recordmanager.server.solr.FaultTolerantIndexingExceptionHandler;
 import cz.mzk.recordmanager.server.solr.SolrIndexingExceptionHandler;
 import cz.mzk.recordmanager.server.solr.SolrServerFacadeImpl;
 import cz.mzk.recordmanager.server.solr.SolrServerFactory;
@@ -31,8 +32,9 @@ public class AbstractSolrTest extends AbstractTest {
 		server.deleteByQuery("*:*");
 		server.commit();
 		resetToNice(solrServerFactory);
-		expect(solrServerFactory.create(eq(SOLR_URL), anyObject(Mode.class), anyObject(SolrIndexingExceptionHandler.class))).andReturn(new SolrServerFacadeImpl(server)).anyTimes();
-		expect(solrServerFactory.create(eq(SOLR_URL))).andReturn(new SolrServerFacadeImpl(server)).anyTimes();
+		SolrIndexingExceptionHandler handler = new FaultTolerantIndexingExceptionHandler();
+		expect(solrServerFactory.create(eq(SOLR_URL), anyObject(Mode.class), anyObject(SolrIndexingExceptionHandler.class))).andReturn(new SolrServerFacadeImpl(server, handler)).anyTimes();
+		expect(solrServerFactory.create(eq(SOLR_URL))).andReturn(new SolrServerFacadeImpl(server, handler)).anyTimes();
 		replay(solrServerFactory);
 	}
 
