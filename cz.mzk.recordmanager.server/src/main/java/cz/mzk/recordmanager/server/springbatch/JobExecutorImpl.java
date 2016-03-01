@@ -149,7 +149,9 @@ public class JobExecutorImpl implements JobExecutor {
 		for (JobParameterDeclaration declaration: insValidator.getParameters()) {
 			paramDeclMap.put(declaration.getName(), declaration);
 		}
-		
+		// Parameter uuid is used for starting the job with the same parameters again
+		paramDeclMap.put(Constants.JOB_PARAM_UUID, new JobParameterDeclaration(Constants.JOB_PARAM_UUID, ParameterType.STRING, true));
+
 		//No need for declare 'repeat' parameter in job validator
 		if (paramDeclMap.get(Constants.JOB_PARAM_REPEAT) == null) {
 			paramDeclMap.put(Constants.JOB_PARAM_REPEAT, new JobParameterDeclaration(Constants.JOB_PARAM_REPEAT, ParameterType.LONG, false));

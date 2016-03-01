@@ -12,7 +12,7 @@ import cz.mzk.recordmanager.server.springbatch.JobParameterDeclaration;
 import cz.mzk.recordmanager.server.util.Constants;
 
 public class IndexRecordsToSolrJobParametersValidator extends
-DefaultJobParametersValidator {
+	DefaultJobParametersValidator {
 
 	@Override
 	public Collection<JobParameterDeclaration> getParameters() {

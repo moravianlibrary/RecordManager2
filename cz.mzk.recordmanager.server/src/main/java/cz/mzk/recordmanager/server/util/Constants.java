@@ -42,6 +42,7 @@ public class Constants {
 	public static final String JOB_PARAM_INCREMENTAL	= "incremental";
 	public static final String JOB_PARAM_RECORD_IDS		= "recordIds";
 	public static final String JOB_PARAM_START_TIME		= "startTime";
+	public static final String JOB_PARAM_UUID			= "uuid";
 
 	public static final String JOB_PARAM_OUT_FILE		= "outFile";
 	public static final String JOB_PARAM_IN_FILE		= "inFile";
