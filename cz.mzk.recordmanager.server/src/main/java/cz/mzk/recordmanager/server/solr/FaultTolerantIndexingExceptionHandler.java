@@ -22,7 +22,8 @@ public class FaultTolerantIndexingExceptionHandler implements SolrIndexingExcept
 
 	private static final List<String> SKIPPABLE_ERRORS = Arrays.asList(
 			"multiple values encountered for non multiValued field",
-			"Error adding field"
+			"Error adding field",
+			"Couldn't parse shape"
 	);
 
 	private final long failureTimeout = 120_000L;
