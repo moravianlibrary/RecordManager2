@@ -93,26 +93,50 @@ public class KrameriusFulltexterSolr implements KrameriusFulltexter {
 	public List<FulltextKramerius> getFulltextForRoot(String rootUuid)
 			throws IOException {
 		logger.debug("About to harvest fulltext from Kramerius for {}", rootUuid);
-		SolrQuery query = new SolrQuery();
 		
-		//<MJ.> here is the change - all pages for given root, should work for serials;-)
-		String queryString = SolrUtils.createEscapedFieldQuery("root_pid", rootUuid) + " AND " +
-				SolrUtils.createEscapedFieldQuery(FEDORA_MODEL_FIELD, FEDORA_MODEL_PAGE);
-		query.setQuery(queryString);
-		query.set("fl", FL_FIELDS);
-		query.setRows(MAX_PAGES);
-		SolrRequest request = new QueryRequest(query);
-		request.setPath("/solr");
-		try {
-			QueryResponse response = solr.query(request);
-			SolrDocumentList documents = response.getResults();
-			return asPages(documents);
-		} catch (Exception ex) {
-			logger.error("Harvesting of fulltext for uuid: {} FAILED", rootUuid);
-			logger.error(ex.getMessage());
-
-			return new ArrayList<FulltextKramerius>();
+		int start = 0;
+		Long numFound;
+		boolean finished=false;
+		List<FulltextKramerius> result = new ArrayList<FulltextKramerius>();
+		
+		while (!finished) {
+			
+			logger.debug("Downloading fulltext for pages {} to {}", start, start+MAX_PAGES);
+			// vytvorit query & request
+			SolrQuery query = new SolrQuery();
+			
+			//<MJ.> here is the change - all pages for given root, should work for serials;-)
+			String queryString = SolrUtils.createEscapedFieldQuery(ROOT_PID_FIELD, rootUuid) + " AND " +
+					SolrUtils.createEscapedFieldQuery(FEDORA_MODEL_FIELD, FEDORA_MODEL_PAGE);
+			query.setQuery(queryString);
+			query.set("fl", FL_FIELDS);
+			query.setRows(MAX_PAGES);
+			query.setStart(start);
+			SolrRequest request = new QueryRequest(query);
+			request.setPath("/solr");
+			
+			//poslat request
+			try {
+				QueryResponse response = solr.query(request);
+				SolrDocumentList documents = response.getResults();
+				numFound = documents.getNumFound();
+				
+				result.addAll(asPages(documents));
+				//return asPages(documents);
+			} catch (Exception ex) {
+				logger.error("Harvesting of fulltext for uuid: {} FAILED", rootUuid);
+				logger.error(ex.getMessage());
+		
+				return result;
+			}
+			
+			//nastavit novy start / finished
+			start += MAX_PAGES;
+			if (start > numFound) {
+				finished = true;
+			}
 		}
+		return result;
 	}
 
 }
