@@ -387,3 +387,6 @@ UPDATE oai_harvest_conf SET extract_id_regex='[^:]+:[^:]+:MZK04-(.*)' WHERE impo
 
 -- 2. 3. 2016
 UPDATE import_conf SET library_id=130 WHERE id=99003;
+
+-- 3. 3. 2016
+UPDATE oai_harvest_conf SET extract_id_regex='UOG505:(.*)' WHERE import_conf_id=306;
