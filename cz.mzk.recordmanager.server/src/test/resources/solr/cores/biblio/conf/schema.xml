@@ -114,7 +114,7 @@
    <field name="marc_error" type="string" indexed="false" stored="true" multiValued="true"/>
    <field name="allfields" type="text" indexed="true" stored="false" multiValued="true"/>
    <field name="allfields_unstemmed" type="textProper" indexed="true" stored="false" multiValued="true"/>
-   <field name="fulltext" type="text" indexed="true" stored="false"/>
+   <field name="fulltext" type="text" indexed="true" stored="true"/>
    <field name="fulltext_unstemmed" type="textProper" indexed="true" stored="false"/>
    <field name="spelling" type="textSpell" indexed="true" stored="true" multiValued="true"/>
    <field name="spellingShingle" type="textSpellShingle" indexed="true" stored="true" multiValued="true"/>
