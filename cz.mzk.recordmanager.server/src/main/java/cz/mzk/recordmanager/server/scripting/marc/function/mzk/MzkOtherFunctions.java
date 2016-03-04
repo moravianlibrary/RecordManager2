@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 
@@ -172,6 +173,10 @@ public class MzkOtherFunctions implements MarcRecordFunctions {
 			return author + ": " + title;
 		}
 		return null;
+	}
+
+	public String getMZKPublisher(MarcFunctionContext ctx) {
+		return MoreObjects.firstNonNull(ctx.record().getField("260", 'b'), ctx.record().getField("260", 'b'));
 	}
 
 }

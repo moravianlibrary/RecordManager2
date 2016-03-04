@@ -39,9 +39,9 @@ title_sub_display = getFirstField "245b"
 series = getFields "440ap:800abcdfpqt:830ap"
 series2 = getFields "490a"
 
-publisher = getPublisher()
-publishDate_display = getPublishDateDisplay()
-placeOfPublication_txt_mv = getFieldsTrim "260a:264a"
+publisher = record.getFields("260", 'b' as char) ?: record.getFields("264", { field -> field.getIndicator2() == '1' }, 'b' as char)
+publishDate_display = record.getField("260", 'c' as char) ?: record.getFields("264", { field -> field.getIndicator2() == '1' }, 'c' as char)?.find { true }
+placeOfPublication_txt_mv = record.getFields("260", 'a' as char) ?: record.getFields("264", { field -> field.getIndicator2() == '1' }, 'a' as char)
 publishDate = getPublishDate()
 publishDate_txt_mv = getPublishDate()
 publishDateSort = getPublishDateForSorting()
