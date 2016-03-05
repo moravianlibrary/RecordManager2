@@ -11,6 +11,7 @@
 		<maven-compiler-plugin.version>2.4</maven-compiler-plugin.version>
 		<java.source.version>1.8</java.source.version>
 		<java.source.target.version>1.8</java.source.target.version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
 	<build>
