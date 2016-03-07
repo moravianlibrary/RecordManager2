@@ -65,9 +65,11 @@ public class KrameriusFulltextProcessor implements
 	public void beforeStep(StepExecution stepExecution) {
 		try (SessionBinder sess = sync.register()) {
 			KrameriusConfiguration config = configDao.get(confId);
-			
-			downloadPrivateFulltexts = configDao.get(confId)
-					.isDownloadPrivateFulltexts();
+			if (config == null) {
+				throw new IllegalArgumentException(String.format(
+						"Kramerius configuration with id=%s not found", confId));
+			}
+			downloadPrivateFulltexts = config.isDownloadPrivateFulltexts();
 			fulltexter = krameriusFulltexterFactory.create(config);
 		}
 	}

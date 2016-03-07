@@ -6,8 +6,6 @@ import java.util.Collections;
 import java.util.List;
 
 import org.apache.solr.client.solrj.SolrQuery;
-import org.apache.solr.client.solrj.SolrRequest;
-import org.apache.solr.client.solrj.request.QueryRequest;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
@@ -28,9 +26,9 @@ public class KrameriusFulltexterSolr implements KrameriusFulltexter {
 
 	private static final String FL_FIELDS = String.join(",", UUID_FIELD, FULLTEXT_FIELD, PAGE_NUMBER_FIELD, PAGE_ORDER_FIELD, PID_FIELD);
 
-	private static final int MAX_PAGES = 1000;  //number of pages requested in single SOLR query
+	private static final int MAX_PAGES = 1000;  // number of pages requested in single SOLR query
 	
-	private static final int PAGE_LIMIT = 50000; //maximal number of downloaded pages for 1 document
+	private static final int PAGE_LIMIT = 50000; // maximal number of downloaded pages for 1 document
 
 	private final SolrServerFacade solr;
 
@@ -40,55 +38,40 @@ public class KrameriusFulltexterSolr implements KrameriusFulltexter {
 	}
 
 	@Override
-	public List<FulltextKramerius> getFulltextObjects(String rootUuid)
-			throws IOException {
+	public List<FulltextKramerius> getFulltextObjects(String rootUuid) throws IOException {
+		return getFulltextObjects(PARENT_PID_FIELD, rootUuid);
+	}
 
-	/*	logger.debug("About to harvest fulltext from Kramerius for {}", rootUuid);
-		SolrQuery query = new SolrQuery();
-		String queryString = SolrUtils.createEscapedFieldQuery(PARENT_PID_FIELD, rootUuid) + " AND " +
-				SolrUtils.createEscapedFieldQuery(FEDORA_MODEL_FIELD, FEDORA_MODEL_PAGE);
-		query.setQuery(queryString);
-		query.set("fl", FL_FIELDS);
-		query.setRows(MAX_PAGES);
-		SolrRequest request = new QueryRequest(query);
-		request.setPath("/solr");
-		try {
-			QueryResponse response = solr.query(request);
-			SolrDocumentList documents = response.getResults();
-			return asPages(documents);
-		} catch (Exception ex) {
-			logger.error("Harvesting of fulltext for uuid: {} FAILED", rootUuid);
-			logger.error(ex.getMessage());
+	@Override
+	public List<FulltextKramerius> getFulltextForRoot(String rootUuid) throws IOException {
+		return getFulltextObjects(ROOT_PID_FIELD, rootUuid);
+	}
 
-			return new ArrayList<FulltextKramerius>();
-		}*/
-		
+	protected List<FulltextKramerius> getFulltextObjects(String field, String rootUuid)
+			throws IOException {		
 		int start = 0;
-		Long numFound;
-		boolean finished=false;
+		long numFound = 0;
+		boolean finished = false;
 		List<FulltextKramerius> result = new ArrayList<FulltextKramerius>();
 		
 		while (!finished) {
 			
-			logger.debug("Downloading fulltext for pages {} to {}", start, start+MAX_PAGES);
+			logger.debug("Downloading fulltext for pages {} to {}", start, start + MAX_PAGES);
 			SolrQuery query = new SolrQuery();
 			
-			String queryString = SolrUtils.createEscapedFieldQuery(PARENT_PID_FIELD, rootUuid) + " AND " +
+			String queryString = SolrUtils.createEscapedFieldQuery(field, rootUuid) + " AND " +
 					SolrUtils.createEscapedFieldQuery(FEDORA_MODEL_FIELD, FEDORA_MODEL_PAGE);
 			query.setQuery(queryString);
 			query.set("fl", FL_FIELDS);
 			query.setRows(MAX_PAGES);
 			query.setStart(start);
-			SolrRequest request = new QueryRequest(query);
-			request.setPath("/solr");
 			
 			try {
-				QueryResponse response = solr.query(request);
+				QueryResponse response = solr.query(query);
 				SolrDocumentList documents = response.getResults();
 				numFound = documents.getNumFound();
 				
 				result.addAll(asPages(documents));
-				//return asPages(documents);
 			} catch (Exception ex) {
 				logger.error("Harvesting of fulltext for uuid: {} FAILED", rootUuid);
 				logger.error(ex.getMessage());
@@ -108,8 +91,6 @@ public class KrameriusFulltexterSolr implements KrameriusFulltexter {
 			}
 		}
 		return result;
-		
-		
 	}
 
 	private List<FulltextKramerius> asPages(SolrDocumentList documents) {
@@ -125,7 +106,7 @@ public class KrameriusFulltexterSolr implements KrameriusFulltexter {
 			String fulltext = (String) document.getFieldValue(FULLTEXT_FIELD);
 			String pageNum = (String) document.getFieldValue(PAGE_NUMBER_FIELD);
 			
-			pageNum = pageNum==null ? String.valueOf(order) : pageNum;
+			pageNum = (pageNum == null) ? String.valueOf(order) : pageNum;
 			//TODO data sometimes contain garbage values - this should be considered fallback solution
 			pageNum = pageNum.length() > 50 ? pageNum.substring(0, 50) : pageNum; 
 			
@@ -138,59 +119,6 @@ public class KrameriusFulltexterSolr implements KrameriusFulltexter {
 			pages.add(page);
 		}
 		return pages;
-	}
-	
-	@Override
-	public List<FulltextKramerius> getFulltextForRoot(String rootUuid)
-			throws IOException {
-		logger.debug("About to harvest fulltext from Kramerius for {}", rootUuid);
-		
-		int start = 0;
-		Long numFound;
-		boolean finished=false;
-		List<FulltextKramerius> result = new ArrayList<FulltextKramerius>();
-		
-		while (!finished) {
-			
-			logger.debug("Downloading fulltext for pages {} to {}", start, start+MAX_PAGES);
-			SolrQuery query = new SolrQuery();
-			
-			//<MJ.> here is the change - all pages for given root, should work for serials;-)
-			String queryString = SolrUtils.createEscapedFieldQuery(ROOT_PID_FIELD, rootUuid) + " AND " +
-					SolrUtils.createEscapedFieldQuery(FEDORA_MODEL_FIELD, FEDORA_MODEL_PAGE);
-			query.setQuery(queryString);
-			query.set("fl", FL_FIELDS);
-			query.setRows(MAX_PAGES);
-			query.setStart(start);
-			SolrRequest request = new QueryRequest(query);
-			request.setPath("/solr");
-			
-			try {
-				QueryResponse response = solr.query(request);
-				SolrDocumentList documents = response.getResults();
-				numFound = documents.getNumFound();
-				
-				result.addAll(asPages(documents));
-				//return asPages(documents);
-			} catch (Exception ex) {
-				logger.error("Harvesting of fulltext for uuid: {} FAILED", rootUuid);
-				logger.error(ex.getMessage());
-		
-				return result;
-			}
-			
-			start += MAX_PAGES;
-			
-			if (start >= PAGE_LIMIT) {
-				logger.error("Harvesting of fulltext for uuid: {} REACHED LIMIT {} for number of pages for one record", rootUuid, PAGE_LIMIT);
-				finished = true;
-			}
-			
-			if (start > numFound) {
-				finished = true;
-			}
-		}
-		return result;
 	}
 
 }

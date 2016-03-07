@@ -10,6 +10,7 @@ import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrRequest;
 import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.SolrServerException;
+import org.apache.solr.client.solrj.request.QueryRequest;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrException;
 import org.apache.solr.common.SolrInputDocument;
@@ -28,14 +29,21 @@ public class SolrServerFacadeImpl implements SolrServerFacade {
 
 	protected final SolrIndexingExceptionHandler exceptionHandler;
 
+	protected final String requestPath;
+
 	public SolrServerFacadeImpl(SolrServer server) {
 		this(server, RethrowingSolrIndexingExceptionHandler.INSTANCE);
 	}
 
 	public SolrServerFacadeImpl(SolrServer server, SolrIndexingExceptionHandler exceptionHandler) {
+		this(server, RethrowingSolrIndexingExceptionHandler.INSTANCE, null);
+	}
+
+	public SolrServerFacadeImpl(SolrServer server, SolrIndexingExceptionHandler exceptionHandler, String requestPath) {
 		super();
 		this.server = server;
 		this.exceptionHandler = exceptionHandler;
+		this.requestPath = requestPath;
 	}
 
 	@Override
@@ -69,7 +77,19 @@ public class SolrServerFacadeImpl implements SolrServerFacade {
 	}
 
 	public QueryResponse query(SolrQuery query) throws SolrServerException {
-		return server.query(query);
+		if (requestPath == null) {
+			return server.query(query);
+		} else {
+			SolrRequest request = new QueryRequest(query);
+			request.setPath("/solr");
+			NamedList<Object> req;
+			try {
+				req = server.request(request);
+			} catch (IOException ioe) {
+				throw new SolrServerException(ioe);
+			}
+			return new QueryResponse(req, server);
+		}
 	}
 
 	@Override

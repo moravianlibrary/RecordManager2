@@ -12,6 +12,7 @@ public class SolrServerFactoryImpl implements SolrServerFactory {
 	public static enum Mode {
 
 		DEFAULT {
+
 			@Override
 			public SolrServer create(String url) {
 				HttpSolrServer solr = new HttpSolrServer(url);
@@ -19,9 +20,18 @@ public class SolrServerFactoryImpl implements SolrServerFactory {
 				solr.setRequestWriter(new BinaryRequestWriter());
 				return solr;
 			}
+
+			@Override
+			public String getRequestPath() {
+				return null;
+			}
+
 		},
 
 		KRAMERIUS {
+
+			private final String REQUEST_PATH = "/solr";
+
 			@Override
 			public SolrServer create(String url) {
 				HttpClient client  = new KrameriusHttpClient();
@@ -29,9 +39,17 @@ public class SolrServerFactoryImpl implements SolrServerFactory {
 				solr.setParser(new XMLResponseParser());
 				return solr;
 			}
+
+			@Override
+			public String getRequestPath() {
+				return REQUEST_PATH;
+			}
+
 		};
 
 		public abstract SolrServer create(String url);
+
+		public abstract String getRequestPath();
 
 	}
 
@@ -41,7 +59,7 @@ public class SolrServerFactoryImpl implements SolrServerFactory {
 			mode = Mode.DEFAULT;
 		}
 		SolrServer server = mode.create(url);
-		return new SolrServerFacadeImpl(server, exceptionHandler);
+		return new SolrServerFacadeImpl(server, exceptionHandler, mode.getRequestPath());
 	}
 
 	@Override

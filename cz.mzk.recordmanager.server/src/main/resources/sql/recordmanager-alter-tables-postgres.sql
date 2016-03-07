@@ -395,5 +395,3 @@ DROP INDEX fulltext_monography_harvested_record_idx;
 CREATE INDEX fulltext_kramerius_harvested_record_idx ON fulltext_kramerius(harvested_record_id);
 
 ALTER TABLE kramerius_conf DROP COLUMN model;
-
-
