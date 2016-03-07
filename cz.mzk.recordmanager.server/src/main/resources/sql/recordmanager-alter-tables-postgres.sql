@@ -385,8 +385,18 @@ ALTER TABLE oai_harvest_conf ADD COLUMN extract_id_regex VARCHAR(128);
 UPDATE oai_harvest_conf SET extract_id_regex='[^:]+:(.*)' WHERE import_conf_id in (319,321,325,326);
 UPDATE oai_harvest_conf SET extract_id_regex='[^:]+:[^:]+:MZK04-(.*)' WHERE import_conf_id=320;
 
--- 2. 3. 2016
+-- 2. 3. 2016 tomascejpek
 UPDATE import_conf SET library_id=130 WHERE id=99003;
 
--- 3. 3. 2016
+-- 3. 3. 2016 tomascejpek
 UPDATE oai_harvest_conf SET extract_id_regex='UOG505:(.*)' WHERE import_conf_id=306;
+
+-- 7. 3. 2016 tomascejpek
+UPDATE harvested_record SET record_id = substring(record_id FROM 'UOG505:(.*)') where import_conf_id=306 and record_id ~ 'UOG505:';
+CREATE TABLE inspiration (
+  id					DECIMAL(10) PRIMARY KEY,
+  harvested_record_id	DECIMAL(10),
+  name					VARCHAR(32),
+  FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE
+);
+CREATE INDEX inspiration_harvested_record_idx ON inspiration(harvested_record_id);

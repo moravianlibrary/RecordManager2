@@ -10,6 +10,7 @@ CREATE INDEX oclc_harvested_record_idx ON oclc(harvested_record_id);
 CREATE INDEX language_harvested_record_idx ON language(harvested_record_id);
 CREATE INDEX cosmotron_996_harvested_record_idx ON cosmotron_996(harvested_record_id);
 CREATE INDEX cosmotron_996_record_id_import_conf_idx ON cosmotron_996(record_id, import_conf_id);
+CREATE INDEX inspiration_harvested_record_idx ON inspiration(harvested_record_id);
 
 CREATE INDEX authority_code_idx ON authority_record(authority_code);
 

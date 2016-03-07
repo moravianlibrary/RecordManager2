@@ -1,5 +1,7 @@
 package cz.mzk.recordmanager.server.oai.dao.hibernate;
 
+import java.util.List;
+
 import org.hibernate.Session;
 import org.springframework.stereotype.Component;
 
@@ -11,14 +13,15 @@ public class ImportRecordsDAOHibernate extends
 		AbstractDomainDAOHibernate<Long, ImportConfiguration> implements
 		ImportConfigurationDAO {
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public ImportConfiguration findByIdPrefix(String prefix) {
+	public List<ImportConfiguration> findByIdPrefix(String prefix) {
 		Session session = sessionFactory.getCurrentSession();
-		return (ImportConfiguration) session
+		return (List<ImportConfiguration>) session
 				.createQuery(
 						"from ImportConfiguration where idPrefix = ?")
 				.setParameter(0, prefix)
-				.uniqueResult();
+				.list();
 	}
 
 }

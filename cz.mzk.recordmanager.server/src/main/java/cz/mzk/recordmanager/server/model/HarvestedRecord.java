@@ -159,6 +159,10 @@ public class HarvestedRecord extends AbstractDomainObject {
 	@JoinColumn(name="harvested_record_id", referencedColumnName="id")
 	private List<FulltextMonography> fulltextMonography = new ArrayList<>();
 	
+	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.LAZY)
+	@JoinColumn(name="harvested_record_id", referencedColumnName="id")
+	private List<Inspiration> inspiration = new ArrayList<Inspiration>();
+	
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name="harvested_record_id", referencedColumnName="id")
 	private List<Cosmotron996> cosmotron = new ArrayList<Cosmotron996>();
@@ -533,5 +537,13 @@ public class HarvestedRecord extends AbstractDomainObject {
 
 	public void setTemporalDedupHash(String temporalDedupHash) {
 		this.temporalDedupHash = temporalDedupHash;
+	}
+
+	public List<Inspiration> getInspiration() {
+		return inspiration;
+	}
+
+	public void setInspiration(List<Inspiration> inspiration) {
+		this.inspiration = inspiration;
 	}
 }

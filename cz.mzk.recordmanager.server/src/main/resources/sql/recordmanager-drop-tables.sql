@@ -11,3 +11,4 @@ DROP TABLE oai_harvest_conf;
 DROP TABLE contact_person;
 DROP TABLE library;
 DROP TABLE recordmanager_key;
+DROP TABLE inspiration;

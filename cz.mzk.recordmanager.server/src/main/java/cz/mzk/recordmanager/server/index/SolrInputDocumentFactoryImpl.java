@@ -32,6 +32,7 @@ import cz.mzk.recordmanager.server.model.DedupRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecordFormat.HarvestedRecordFormatEnum;
 import cz.mzk.recordmanager.server.model.ImportConfiguration;
+import cz.mzk.recordmanager.server.model.Inspiration;
 import cz.mzk.recordmanager.server.scripting.MappingResolver;
 import cz.mzk.recordmanager.server.util.MetadataUtils;
 import cz.mzk.recordmanager.server.util.SolrUtils;
@@ -130,6 +131,7 @@ public class SolrInputDocumentFactoryImpl implements SolrInputDocumentFactory, I
 		Set<String> institutions = records.stream().map(rec -> getInstitution(rec)).flatMap(it -> it.stream()).collect(Collectors.toCollection(HashSet::new));
 		mergedDocument.addField(SolrFieldConstants.INSTITUTION_FIELD, institutions);
 		mergedDocument.addField(SolrFieldConstants.RECORD_FORMAT, getRecordType(record));
+		mergedDocument.addField(SolrFieldConstants.INSPIRATION, getInspirations(records));
 		
 		dedupRecordEnrichers.forEach(enricher -> enricher.enrich(dedupRecord, mergedDocument, childs));
 		mergedDocument.addChildDocuments(childs);
@@ -245,6 +247,19 @@ public class SolrInputDocumentFactoryImpl implements SolrInputDocumentFactory, I
 
 		return result;
 	}
+	
+	protected Set<String> getInspirations(List<HarvestedRecord> records){
+		Set<String> result = new HashSet<String>();
+		
+		for(HarvestedRecord record: records){
+			for(Inspiration inspiration: record.getInspiration()){
+				result.add(inspiration.getName());
+			}
+		}
+		
+		return result;
+	}
+	
 
 	@Override
 	public void afterPropertiesSet() throws Exception {

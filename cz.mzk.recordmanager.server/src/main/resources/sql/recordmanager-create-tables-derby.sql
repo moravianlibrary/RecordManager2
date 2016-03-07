@@ -248,3 +248,10 @@ CREATE TABLE obalkyknih_toc (
   isbn                 DECIMAL(13),
   toc                  VARCHAR(32672)
 );
+
+CREATE TABLE inspiration (
+  id					DECIMAL(10) PRIMARY KEY,
+  harvested_record_id	DECIMAL(10),
+  name					VARCHAR(32),
+  CONSTRAINT inspiration_fk FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id)
+);

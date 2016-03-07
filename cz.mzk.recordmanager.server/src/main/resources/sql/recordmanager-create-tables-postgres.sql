@@ -328,7 +328,7 @@ CREATE TABLE cosmotron_996 (
   FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE
  );
 
-COMMENT ON TABLE cosmotron_996 IS '?';
+COMMENT ON TABLE cosmotron_996 IS 'records from cosmotron, used for periodicals';
  
  CREATE TABLE obalkyknih_toc (
   id                   DECIMAL(10) PRIMARY KEY,
@@ -341,3 +341,10 @@ COMMENT ON TABLE cosmotron_996 IS '?';
 );
 
 COMMENT ON TABLE obalkyknih_toc IS 'downloaded table of contents from obalkyknih.cz';
+
+CREATE TABLE inspiration (
+  id					DECIMAL(10) PRIMARY KEY,
+  harvested_record_id	DECIMAL(10),
+  name					VARCHAR(32),
+  FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE
+);
