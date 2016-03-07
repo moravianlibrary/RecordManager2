@@ -400,3 +400,4 @@ CREATE TABLE inspiration (
   FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE
 );
 CREATE INDEX inspiration_harvested_record_idx ON inspiration(harvested_record_id);
+UPDATE import_conf SET id_prefix = 'mzk' WHERE id=324;
