@@ -35,4 +35,14 @@ public class Inspiration extends AbstractDomainObject{
 		return harvestedRecordId;
 	}
 	
+	public void setHarvestedRecordId(Long id) {
+		this.harvestedRecordId = id;
+	}
+
+	@Override
+	public String toString() {
+		return "Inspiration [harvestedRecordId=" + harvestedRecordId
+				+ ", name=" + name + "]";
+	}
+	
 }

@@ -50,7 +50,9 @@ public class InspirationImportWriter implements ItemWriter<Map<String, List<Stri
 				    		if(hr == null) continue;
 				    		if(!inspirationExist(hr, new_inspiration)){ 
 				    			List<Inspiration> result = hr.getInspiration();
-				    			result.add(new Inspiration(entry.getKey()));
+				    			Inspiration newInspiration = new Inspiration(entry.getKey());
+				    			newInspiration.setHarvestedRecordId(hr.getId());
+				    			result.add(newInspiration);
 				    			hr.setInspiration(result);
 				    			hr.setUpdated(new Date());
 				    			hrDao.persist(hr);
