@@ -1,4 +1,4 @@
-package cz.mzk.recordmanager.server.imports;
+package cz.mzk.recordmanager.server.imports.inspirations;
 
 import java.io.BufferedReader;
 import java.io.File;

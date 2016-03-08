@@ -1,4 +1,4 @@
-package cz.mzk.recordmanager.server.imports;
+package cz.mzk.recordmanager.server.imports.inspirations;
 
 import java.util.HashMap;
 import java.util.List;
@@ -20,9 +20,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import cz.mzk.recordmanager.server.imports.inspirations.InspirationDeleteJobParametersValidator;
-import cz.mzk.recordmanager.server.imports.inspirations.InspirationDeleteWriter;
-import cz.mzk.recordmanager.server.imports.inspirations.InspirationIdRowMapper;
 import cz.mzk.recordmanager.server.springbatch.JobFailureListener;
 import cz.mzk.recordmanager.server.util.Constants;
 
