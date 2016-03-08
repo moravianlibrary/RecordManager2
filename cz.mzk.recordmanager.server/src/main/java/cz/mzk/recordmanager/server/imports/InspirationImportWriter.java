@@ -12,7 +12,6 @@ import org.springframework.batch.item.ItemWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import cz.mzk.recordmanager.server.metadata.MetadataRecordFactory;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.model.ImportConfiguration;
 import cz.mzk.recordmanager.server.model.Inspiration;
@@ -28,9 +27,6 @@ public class InspirationImportWriter implements ItemWriter<Map<String, List<Stri
 	
 	@Autowired
 	private HarvestedRecordDAO hrDao;
-	
-	@Autowired
-	private MetadataRecordFactory metadataFactory;
 	
 	public InspirationImportWriter() {
 	}

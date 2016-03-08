@@ -24,6 +24,7 @@ public class Constants {
 	public static final String JOB_ID_IMPORT_OAI					= "importOaiRecordsJob";
 	public static final String JOB_ID_IMPORT_COSMOTRON_996			= "importCosmotron996RecordsJob";
 	public static final String JOB_ID_IMPORT_INSPIRATION			= "importInspirationJob";
+	public static final String JOB_ID_DELETE_INSPIRATION			= "deleteInspirationJob";
 	public static final String JOB_ID_REGEN_DEDUP_KEYS				= "regenerateDedupKeysJob";
 	public static final String JOB_ID_REGEN_MISSING_DEDUP_KEYS		= "regenerateMissingDedupKeysJob";
 	public static final String JOB_ID_DELETE_ALL_RECORDS_FROM_SOLR	= "deleteAllRecordsFromSolrJob";
@@ -48,6 +49,7 @@ public class Constants {
 	public static final String JOB_PARAM_OUT_FILE		= "outFile";
 	public static final String JOB_PARAM_IN_FILE		= "inFile";
 	public static final String JOB_PARAM_DELETED_OUT_FILE = "deletedOutFile";
+	public static final String JOB_PARAM_DELETE_INSPIRATION = "inspiration";
 	
 	public static final String JOB_PARAM_TIMESTAMP		= "timestamp";
 	

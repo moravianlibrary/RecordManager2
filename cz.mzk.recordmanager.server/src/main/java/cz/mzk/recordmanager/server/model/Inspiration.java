@@ -17,6 +17,9 @@ public class Inspiration extends AbstractDomainObject{
 		setName(name);
 	}
 	
+	@Column(name="harvested_record_id")
+	private Long harvestedRecordId;
+	
 	@Column(name="name")
 	private String name;
 
@@ -26,6 +29,10 @@ public class Inspiration extends AbstractDomainObject{
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public Long getHarvestedRecordId() {
+		return harvestedRecordId;
 	}
 	
 }
