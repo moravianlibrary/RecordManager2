@@ -21,6 +21,7 @@ title_alt = getFields "130adfgklnpst:240a:246a:730adfgklnpst:740a"
 title_old = getFields "780ast"
 title_new = getFields "785ast"
 title_sort = getSortableTitle()
+title_auto_str = getTitleDisplay()
 series = getFields "440ap:800abcdfpqt:830ap"
 series2 = getFields "490a"
 

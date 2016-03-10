@@ -279,8 +279,7 @@
  <!-- CopyFields for Autocomplete -->
  <copyField source="author_facet_str_mv" dest="author_autocomplete"/>
  <copyField source="author_facet_str_mv" dest="author_str_mv"/>
- <copyField source="title_display" dest="title_autocomplete"/>
- <copyField source="title_display" dest="title_auto_str"/>
+ <copyField source="title_auto_str" dest="title_autocomplete"/>
  <copyField source="subject_facet_str_mv" dest="subject_autocomplete"/>
  <copyField source="subject_facet_str_mv" dest="subject_str_mv"/>
  <!-- Default Boolean Operator -->
