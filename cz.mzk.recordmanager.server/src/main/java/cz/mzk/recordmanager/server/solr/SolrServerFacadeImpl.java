@@ -70,18 +70,12 @@ public class SolrServerFacadeImpl implements SolrServerFacade {
 		server.commit();
 	}
 
-	@Override
-	public QueryResponse query(final SolrRequest request) throws SolrServerException, IOException {
-		NamedList<Object> req = server.request(request);
-		return new QueryResponse(req, server);
-	}
-
 	public QueryResponse query(SolrQuery query) throws SolrServerException {
 		if (requestPath == null) {
 			return server.query(query);
 		} else {
 			SolrRequest request = new QueryRequest(query);
-			request.setPath("/solr");
+			request.setPath(requestPath);
 			NamedList<Object> req;
 			try {
 				req = server.request(request);

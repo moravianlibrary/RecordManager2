@@ -6,8 +6,12 @@ import org.apache.solr.client.solrj.impl.BinaryRequestWriter;
 import org.apache.solr.client.solrj.impl.BinaryResponseParser;
 import org.apache.solr.client.solrj.impl.HttpSolrServer;
 import org.apache.solr.client.solrj.impl.XMLResponseParser;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class SolrServerFactoryImpl implements SolrServerFactory {
+
+	private static Logger logger = LoggerFactory.getLogger(SolrServerFactoryImpl.class);
 
 	public static enum Mode {
 
@@ -28,9 +32,26 @@ public class SolrServerFactoryImpl implements SolrServerFactory {
 
 		},
 
+		KRAMERIUS_DIRECT {
+
+			@Override
+			public SolrServer create(String url) {
+				HttpClient client  = new KrameriusHttpClient();
+				HttpSolrServer solr = new HttpSolrServer(url, client);
+				solr.setParser(new XMLResponseParser());
+				return solr;
+			}
+
+			@Override
+			public String getRequestPath() {
+				return null;
+			}
+
+		},
+
 		KRAMERIUS {
 
-			private final String REQUEST_PATH = "/solr";
+			private final String REQUEST_PATH = "/search";
 
 			@Override
 			public SolrServer create(String url) {
@@ -58,6 +79,7 @@ public class SolrServerFactoryImpl implements SolrServerFactory {
 		if (mode == null) {
 			mode = Mode.DEFAULT;
 		}
+		logger.info("About to create SolrServerFacade for url: {}", (mode.getRequestPath() == null) ? url : url +  mode.getRequestPath());
 		SolrServer server = mode.create(url);
 		return new SolrServerFacadeImpl(server, exceptionHandler, mode.getRequestPath());
 	}

@@ -57,7 +57,6 @@ public class KrameriusHarvestJobConfig {
 				.end() //
 				.build();
 	}
-	
 
 	@Bean(name = "krameriusHarvestJob:step")
 	public Step step() {
