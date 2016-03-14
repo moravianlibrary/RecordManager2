@@ -1,1 +1,1 @@
-Record Manager written in Java
+Record Manager (Správce zdrojů) written in Java
