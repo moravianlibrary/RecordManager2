@@ -119,13 +119,13 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 			record.setOclcs(encapsulator.getOclcs());
 			record.setLanguages(metadataRecord.getLanguages());
 			record.setClusterId(encapsulator.getClusterId());
-			record.setShouldBeProcessed(metadataRecord.matchFilter());
 			record.setRaw001Id(encapsulator.getRaw001Id());
 			
 			record.setTemporalDedupHash(computedHash);
 		} 
 		
 		record.setDedupKeysHash(computedHash);
+		record.setShouldBeProcessed(metadataRecord.matchFilter());
 		
 		
 		if (record.getOaiTimestamp() != null && record.getTemporalOldOaiTimestamp() != null

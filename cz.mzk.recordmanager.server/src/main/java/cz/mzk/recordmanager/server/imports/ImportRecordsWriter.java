@@ -102,7 +102,7 @@ public class ImportRecordsWriter implements ItemWriter<List<Record>> {
 					
 					if (harvestConfiguration.isFilteringEnabled() && !hr.getShouldBeProcessed()) {
 						logger.debug("Filtered record: " + hr.getUniqueId());
-						continue;
+						hr.setDeleted(new Date());
 					}
 					
 					harvestedRecordDao.persist(hr);

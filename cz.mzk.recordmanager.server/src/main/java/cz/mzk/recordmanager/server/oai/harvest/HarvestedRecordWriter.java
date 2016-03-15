@@ -1,5 +1,6 @@
 package cz.mzk.recordmanager.server.oai.harvest;
 
+import java.util.Date;
 import java.util.List;
 
 import org.hibernate.SessionFactory;
@@ -35,15 +36,14 @@ public class HarvestedRecordWriter implements ItemWriter<List<HarvestedRecord>> 
 				if(hr == null) continue;
 				if (hr.getDeleted() == null) {
 					try {
-						if (hr.getHarvestedFrom().isFilteringEnabled() && !hr.getShouldBeProcessed()) {
-							logger.debug("Filtered record: " + hr.getUniqueId());
-							return;
-						}
 						if (hr.getId() == null) {
 							recordDao.persist(hr);
 						}
 						dedupKeysParser.parse(hr);
-
+						if (hr.getHarvestedFrom().isFilteringEnabled() && !hr.getShouldBeProcessed()) {
+							logger.debug("Filtered record: " + hr.getUniqueId());
+							hr.setDeleted(new Date());
+						}
 					} catch (DedupKeyParserException dkpe) {
 						logger.error(
 								"Dedup keys could not be generated for {}, exception thrown.",
