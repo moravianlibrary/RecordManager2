@@ -62,19 +62,17 @@ public class KrameriusHarvester {
 		return uuids;
 	}
 
+	/*
+	 * Return unparsed(!) HarvestedRecord (most of variables are not set yet)
+	 */
 	public HarvestedRecord downloadRecord(String uuid) {
-
-		String recordId;
-		HarvestedRecordUniqueId id;
-		HarvestedRecord unparsedHr;
-
-		recordId = uuid;
-		id = new HarvestedRecordUniqueId(harvestedFrom, recordId);
-		unparsedHr = new HarvestedRecord(id);
+		String recordId = uuid;
+		HarvestedRecordUniqueId id = new HarvestedRecordUniqueId(harvestedFrom, recordId);
+		HarvestedRecord unparsedHr = new HarvestedRecord(id);
 
 		String url = createUrl(uuid);
 		
-		logger.info("Harvesting record from: "+url);
+		logger.trace("Harvesting record from: {}", url);
 		try (InputStream is = httpClient.executeGet(url)) {
 			if (is.markSupported()) {
 				is.mark(Integer.MAX_VALUE);
@@ -87,8 +85,6 @@ public class KrameriusHarvester {
 			return null;
 		}
 
-		// return unparsed(!) HarvestedRecord (most of variables are not set
-		// yet)
 		return unparsedHr;
 	}
 
@@ -107,12 +103,12 @@ public class KrameriusHarvester {
 	public List<HarvestedRecord> getRecords(List<String> uuids) {
 		List<HarvestedRecord> records = new ArrayList<HarvestedRecord>();
 
-		for (String s : uuids) {
-			HarvestedRecord r = this.downloadRecord(s);			
-			if (r !=null) {
-				records.add(r);
+		for (String uuid : uuids) {
+			HarvestedRecord record = this.downloadRecord(uuid);
+			if (record != null) {
+				records.add(record);
 			} else {
-				logger.debug("Skipping HarvestedRecord with uuid: " + s + " [null value returned]");
+				logger.debug("Skipping HarvestedRecord with uuid: " + uuid + " [null value returned]");
 			}
 		}
 

@@ -9,5 +9,5 @@ public interface KrameriusHarvesterFactory {
 
 	public KrameriusHarvesterNoSorting createNoSorting(KrameriusHarvesterParams parameters,
 			Long confId);
-	
+
 }

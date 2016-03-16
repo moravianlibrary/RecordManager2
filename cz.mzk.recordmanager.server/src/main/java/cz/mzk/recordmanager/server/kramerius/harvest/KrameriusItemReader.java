@@ -77,9 +77,7 @@ public class KrameriusItemReader implements ItemReader<List<HarvestedRecord>>,
 		// get metadata
 		List<HarvestedRecord> records = kHarvester.getRecords(uuids);
 
-		if (uuids.isEmpty() || (previousPid != null && previousPid.equals(nextPid))) {
-			finished = true;
-		}
+		finished = uuids.isEmpty() || (previousPid != null && previousPid.equals(nextPid));
 		
 		// return metadata
 		return records;

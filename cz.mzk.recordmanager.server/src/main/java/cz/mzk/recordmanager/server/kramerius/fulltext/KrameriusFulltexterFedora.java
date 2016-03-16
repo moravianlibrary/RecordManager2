@@ -55,7 +55,7 @@ public class KrameriusFulltexterFedora implements KrameriusFulltexter {
 		List<FulltextKramerius> pagesMetadataList = new ArrayList<FulltextKramerius>();
 
 		String pagesListUrl = kramApiUrl + "/item/" + rootUuid + "/children";
-		logger.debug("Going to read pages metadata from: " + pagesListUrl);
+		logger.debug("Going to read pages metadata from: {}", pagesListUrl);
 
 		try {
 			pagesJson = readKrameriusJSON(pagesListUrl);
@@ -77,8 +77,8 @@ public class KrameriusFulltexterFedora implements KrameriusFulltexter {
 				// model MUST equal "page" or it will be ignored
 				String model = (String) obj.get("model");
 				if (!model.equals("page")) {
-					logger.debug("Model is not \"page\", Model is  \"" + model
-							+ "\" for uuid:" + (String) obj.get("pid"));
+					logger.debug("Model is not \"page\", Model is \"{}\" for uuid: {}",
+							model, obj.get("pid"));
 					continue;
 				}
 	
@@ -110,7 +110,7 @@ public class KrameriusFulltexterFedora implements KrameriusFulltexter {
 	public byte[] getOCRBytes(String pageUuid, boolean isPrivate) {
 		/* vytvorit odkaz do API pro UUID stranky */
 		String ocrUrl = kramApiUrl + "/item/" + pageUuid + "/streams/TEXT_OCR";
-		logger.debug("Trying to download OCR from [" + ocrUrl + "] ....");
+		logger.debug("Trying to download OCR from \"{}\" ....", ocrUrl);
 		byte[] ocr = null; /* TODO check */
 
 		try {
@@ -198,14 +198,14 @@ public class KrameriusFulltexterFedora implements KrameriusFulltexter {
 	@Override
 	public List<FulltextKramerius> getFulltextForRoot(String rootUuid)
 			throws IOException {
-		
+
 		List<FulltextKramerius> pagesMetadataList = new ArrayList<FulltextKramerius>();
-		
+
 		// find all non page objects... and add them to uuid list; then get fulltext for all objects
 		LinkedList<String> nonPagesUuids = new LinkedList<String>();
 		nonPagesUuids.add(rootUuid);
 		JSONArray pagesJson;
-		
+
 		while (!nonPagesUuids.isEmpty()) {
 			String processedUuid = nonPagesUuids.poll();
 			
@@ -234,37 +234,28 @@ public class KrameriusFulltexterFedora implements KrameriusFulltexter {
 
 					//get pages
 					if (model.equals("page")) {
-						
-  					  logger.debug("Got periodical page: " + pid);
-		
-  					  String policy = (String) obj.get("policy");
-					  ftm.setPrivate(!policy.equals("public"));
-		
-					  ftm.setUuidPage(pid);
-				
-					  JSONObject details = (JSONObject) obj.get("details");
-					  String page = (String) details.get("pagenumber");
-					// String page= (String) obj.get("title"); //information in
-					// "title" is sometimes malformed in Kramerius' JSON
-					  
-					//TODO data sometimes contain garbage values - this should be considered fallback solution
-					  page = page.length() > 50 ? page.substring(0, 50) : page;
-					  
-					  ftm.setPage(page.trim());
-					
-					  pagesMetadataList.add(ftm); 
-
-					//put other models in list, they will be searched by while cycle
+						logger.debug("Got periodical page: {}", pid);
+						String policy = (String) obj.get("policy");
+						ftm.setPrivate(!policy.equals("public"));
+						ftm.setUuidPage(pid);
+						JSONObject details = (JSONObject) obj.get("details");
+						String page = (String) details.get("pagenumber");
+						//String page= (String) obj.get("title"); //information in
+						// "title" is sometimes malformed in Kramerius' JSON
+						//TODO data sometimes contain garbage values - this should be considered fallback solution
+						page = page.length() > 50 ? page.substring(0, 50) : page;
+						ftm.setPage(page.trim());
+						pagesMetadataList.add(ftm);
+						//put other models in list, they will be searched by while cycle
 					} else {
 						nonPagesUuids.push(pid);
-					} 
-					
+					}
 				} catch (JSONException | ClassCastException e) {
 					logger.error(e.getMessage());
 				}
-			 }		
+			}
 		}			
-		
+
 		Long pageOrder = 0L;
 
 		for (FulltextKramerius fm : pagesMetadataList) {
@@ -282,11 +273,8 @@ public class KrameriusFulltexterFedora implements KrameriusFulltexter {
 			}
 			fm.setOrder(pageOrder);
 		}
-		
-		
+
 		return pagesMetadataList;
 	}
 
-	
-	
 }

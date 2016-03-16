@@ -18,7 +18,7 @@ public class KrameriusHarvesterFactoryImpl implements KrameriusHarvesterFactory 
 			Long confId) {
 		return new KrameriusHarvester(httpClient, solrServerFactory, parameters, confId);
 	}
-	
+
 	/*no paging*/
 	public KrameriusHarvesterNoSorting createNoSorting(KrameriusHarvesterParams parameters,
 			Long confId) {

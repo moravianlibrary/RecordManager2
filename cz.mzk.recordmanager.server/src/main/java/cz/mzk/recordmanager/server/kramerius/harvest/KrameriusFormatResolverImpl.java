@@ -17,7 +17,11 @@ public class KrameriusFormatResolverImpl implements KrameriusFormatResolver {
 
 	@Override
 	public String resolve(String metadataStream) {
-		return formats.get(metadataStream);
+		String format = formats.get(metadataStream);
+		if (format == null) {
+			throw new IllegalArgumentException(String.format("Format for metadata stream %s not found", metadataStream));
+		}
+		return format;
 	}
 
 }
