@@ -39,11 +39,8 @@ public class ConfigurationTest extends AbstractTest {
 		Assert.assertEquals(importConfigDao.get(OAI_CONF_ID), oaiConf);
 		Assert.assertEquals(importConfigDao.get(KRAM_CONF_ID), kramConf);
 		
-		final String model = "model2";
-		kramConf.setModel(model);
 		kramConfigDao.persist(kramConf);
 		
 		Assert.assertNotNull(kramConfigDao.get(KRAM_CONF_ID));
-		Assert.assertEquals(kramConfigDao.get(KRAM_CONF_ID).getModel(), model);
 	}
 }

@@ -18,9 +18,6 @@ public class KrameriusConfiguration extends ImportConfiguration {
 	@Column(name="url_solr")
 	private String urlSolr;
 	
-	@Column(name="model")
-	private String model;
-	
 	@Column(name="query_rows")
 	private Long queryRows;
 	
@@ -50,14 +47,6 @@ public class KrameriusConfiguration extends ImportConfiguration {
 
 	public void setUrlSolr(String urlSolr) {
 		this.urlSolr = urlSolr;
-	}
-	
-	public String getModel() {
-		return model;
-	}
-
-	public void setModel(String model) {
-		this.model = model;
 	}
 
 	public Long getQueryRows() {

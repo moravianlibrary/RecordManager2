@@ -10,8 +10,6 @@ import org.apache.commons.io.IOUtils;
 import org.springframework.stereotype.Component;
 import org.xml.sax.SAXParseException;
 
-import cz.mzk.recordmanager.server.marc.InvalidMarcException;
-
 @Component
 public class DublinCoreParserXMLImpl implements DublinCoreParser {
 

@@ -10,14 +10,14 @@ import org.springframework.stereotype.Component;
 
 import cz.mzk.recordmanager.server.jdbc.BlobToStringValueRowMapper;
 import cz.mzk.recordmanager.server.model.DedupRecord;
-import cz.mzk.recordmanager.server.model.FulltextMonography;
-import cz.mzk.recordmanager.server.oai.dao.FulltextMonographyDAO;
+import cz.mzk.recordmanager.server.model.FulltextKramerius;
+import cz.mzk.recordmanager.server.oai.dao.FulltextKrameriusDAO;
 import cz.mzk.recordmanager.server.util.ResourceUtils;
 
 @Component
-public class FulltextMonographyDAOHibernate extends
-		AbstractDomainDAOHibernate<Long, FulltextMonography> implements
-		FulltextMonographyDAO {
+public class FulltextKrameriusDAOHibernate extends
+		AbstractDomainDAOHibernate<Long, FulltextKramerius> implements
+		FulltextKrameriusDAO {
 
 	private static final RowMapper<String> ROW_MAPPER = new BlobToStringValueRowMapper();
 

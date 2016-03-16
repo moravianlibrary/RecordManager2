@@ -4,6 +4,8 @@ public class KrameriusSolrConstants {
 
 	public static final String PARENT_PID_FIELD = "parent_pid";
 
+	public static final String ROOT_PID_FIELD = "root_pid";
+
 	public static final String PID_FIELD = "PID";
 
 	public static final String FEDORA_MODEL_FIELD = "fedora.model";

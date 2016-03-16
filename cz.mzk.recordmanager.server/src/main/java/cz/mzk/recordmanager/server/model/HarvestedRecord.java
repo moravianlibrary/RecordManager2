@@ -157,7 +157,7 @@ public class HarvestedRecord extends AbstractDomainObject {
 	
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name="harvested_record_id", referencedColumnName="id")
-	private List<FulltextMonography> fulltextMonography = new ArrayList<>();
+	private List<FulltextKramerius> fulltextKramerius = new ArrayList<>();
 	
 	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.LAZY)
 	@JoinColumn(name="harvested_record_id", referencedColumnName="id")
@@ -469,12 +469,12 @@ public class HarvestedRecord extends AbstractDomainObject {
 		this.shouldBeProcessed = shouldBeProcessed;
 	}
 
-	public List<FulltextMonography> getFulltextMonography() {
-		return fulltextMonography;
+	public List<FulltextKramerius> getFulltextKramerius() {
+		return fulltextKramerius;
 	}
 
-	public void setFulltextMonography(List<FulltextMonography> fulltextMonography) {
-		this.fulltextMonography = fulltextMonography;
+	public void setFulltextKramerius(List<FulltextKramerius> fulltextKramerius) {
+		this.fulltextKramerius = fulltextKramerius;
 	}
 	
 

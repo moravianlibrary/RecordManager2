@@ -2,8 +2,6 @@ package cz.mzk.recordmanager.server.kramerius.harvest;
 
 import java.util.Date;
 
-import cz.mzk.recordmanager.server.model.OAIGranularity;
-
 public class KrameriusHarvesterParams {
 
 	private String url;

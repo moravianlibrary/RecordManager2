@@ -8,22 +8,19 @@ import java.util.List;
 import org.apache.commons.io.IOUtils;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrQuery.ORDER;
-import org.apache.solr.client.solrj.SolrRequest;
 import org.apache.solr.client.solrj.SolrServerException;
-import org.apache.solr.client.solrj.impl.HttpSolrServer;
-import org.apache.solr.client.solrj.impl.XMLResponseParser;
-import org.apache.solr.client.solrj.request.QueryRequest;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import cz.mzk.recordmanager.server.kramerius.FedoraModels;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecord.HarvestedRecordUniqueId;
 import cz.mzk.recordmanager.server.solr.SolrServerFacade;
-import cz.mzk.recordmanager.server.solr.SolrServerFactoryImpl.Mode;
 import cz.mzk.recordmanager.server.solr.SolrServerFactory;
+import cz.mzk.recordmanager.server.solr.SolrServerFactoryImpl.Mode;
 import cz.mzk.recordmanager.server.util.HttpClient;
 import cz.mzk.recordmanager.server.util.SolrUtils;
 
@@ -65,37 +62,29 @@ public class KrameriusHarvester {
 		return uuids;
 	}
 
+	/*
+	 * Return unparsed(!) HarvestedRecord (most of variables are not set yet)
+	 */
 	public HarvestedRecord downloadRecord(String uuid) {
-
-		String recordId;
-		HarvestedRecordUniqueId id;
-		HarvestedRecord unparsedHr;
-
-		recordId = uuid;
-		id = new HarvestedRecordUniqueId(harvestedFrom, recordId);
-		unparsedHr = new HarvestedRecord(id);
+		String recordId = uuid;
+		HarvestedRecordUniqueId id = new HarvestedRecordUniqueId(harvestedFrom, recordId);
+		HarvestedRecord unparsedHr = new HarvestedRecord(id);
 
 		String url = createUrl(uuid);
 		
-		logger.info("Harvesting record from: "+url);
+		logger.trace("Harvesting record from: {}", url);
 		try (InputStream is = httpClient.executeGet(url)) {
 			if (is.markSupported()) {
 				is.mark(Integer.MAX_VALUE);
 				is.reset();
 			}
-
 			unparsedHr.setRawRecord(IOUtils.toByteArray(is));
-			// unparsedHr.setFormat("dublinCore"); // TODO - make it
-			// configurable // may be deleted?
 		} catch (IOException ioe) {
 			logger.error("Harvesting record from: " + url + " caused IOException!");
 			logger.error(ioe.getMessage());
 			return null;
-			// TODO - catch IO Exception properly
 		}
 
-		// return unparsed(!) HarvestedRecord (most of variables are not set
-		// yet)
 		return unparsedHr;
 	}
 
@@ -103,10 +92,7 @@ public class KrameriusHarvester {
 		final String baseUrl = params.getUrl();
 		final String kramAPIItem = "/item/";
 		final String kramAPIStream = "/streams/";
-
-		final String kramStreamType = params.getMetadataStream(); // /w
-																	// KramParams
-		// final String kramStreamType = "DC"; // w/ OAIParams
+		final String kramStreamType = params.getMetadataStream(); 
 
 		String resultingUrl = baseUrl + kramAPIItem + uuid + kramAPIStream
 				+ kramStreamType;
@@ -117,12 +103,12 @@ public class KrameriusHarvester {
 	public List<HarvestedRecord> getRecords(List<String> uuids) {
 		List<HarvestedRecord> records = new ArrayList<HarvestedRecord>();
 
-		for (String s : uuids) {
-			HarvestedRecord r = this.downloadRecord(s);			
-			if (r !=null) {
-				records.add(r);
+		for (String uuid : uuids) {
+			HarvestedRecord record = this.downloadRecord(uuid);
+			if (record != null) {
+				records.add(record);
 			} else {
-				logger.debug("Skipping HarvestedRecord with uuid: " + s + " [null value returned]");
+				logger.debug("Skipping HarvestedRecord with uuid: " + uuid + " [null value returned]");
 			}
 		}
 
@@ -136,10 +122,15 @@ public class KrameriusHarvester {
 
 		SolrQuery query = new SolrQuery();
 		query.setQuery("*:*");
+		
 		if (nextPid != null) {
 			query.add("fq", SolrUtils.createFieldQuery(PID_FIELD, SolrUtils.createRange(nextPid, null)));
 		}
-		query.add("fq", SolrUtils.createFieldQuery("fedora.model", params.getModel()));
+		
+		//works with all possible models in single configuration
+		String harvestedModelsStatement = String.join(" OR ", FedoraModels.HARVESTED_MODELS);
+		query.add("fq",  harvestedModelsStatement);
+		
 		if (params.getFrom() != null || params.getUntil() != null) {
 			String range = SolrUtils.createDateRange(
 					params.getFrom(), params.getUntil());
@@ -151,24 +142,15 @@ public class KrameriusHarvester {
 		query.setRows((params.getQueryRows() != null) ? params.getQueryRows().intValue() : 100);
 		query.setTimeAllowed(MAX_TIME_ALLOWED);
 
-		SolrRequest request = new QueryRequest(query);
-		request.setPath("/search");
-		logger.info("Params: {}", request.getParams());
-
 		try {
-			QueryResponse response = solr.query(request);
+			QueryResponse response = solr.query(query);
 			documents = response.getResults();
 		 } catch (SolrServerException sse) {
 			logger.error("Harvesting list of uuids from Kramerius API: caused SolrServerException for model: %s, url:%s and nextPid:%s", params.getModel(), params.getUrl(), nextPid);
 			logger.error(sse.getMessage());
 			return new SolrDocumentList();
-		} catch (IOException ioe) {
-			logger.error("Harvesting list of uuids from Kramerius API: caused IOException for model: %s, url:%s and nextPid:%s", params.getModel(), params.getUrl(), nextPid);
-			logger.error(ioe.getMessage());
-			return new SolrDocumentList();
 		}
 		return documents;
 	}
 
-	
 }

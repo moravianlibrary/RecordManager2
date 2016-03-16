@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 
 import cz.mzk.recordmanager.server.model.KrameriusConfiguration;
 import cz.mzk.recordmanager.server.solr.SolrServerFactory;
+import cz.mzk.recordmanager.server.solr.SolrServerFactoryImpl.Mode;
 
 @Component
 public class KrameriusFulltexterFactoryImpl implements KrameriusFulltexterFactory {
@@ -22,7 +23,7 @@ public class KrameriusFulltexterFactoryImpl implements KrameriusFulltexterFactor
 		KrameriusFulltexter fulltexter = null;
 		switch (config.getFulltextHarvestType()) {
 			case "solr":
-				fulltexter = new KrameriusFulltexterSolr(solrFactory.create(config.getUrlSolr()));
+				fulltexter = new KrameriusFulltexterSolr(solrFactory.create(config.getUrlSolr(), Mode.KRAMERIUS));
 				break;
 			default:
 				fulltexter = new KrameriusFulltexterFedora(config.getUrl(),

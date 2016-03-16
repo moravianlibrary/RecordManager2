@@ -15,7 +15,7 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import cz.mzk.recordmanager.server.AbstractTest;
-import cz.mzk.recordmanager.server.model.FulltextMonography;
+import cz.mzk.recordmanager.server.model.FulltextKramerius;
 import cz.mzk.recordmanager.server.util.HttpClient;
 
 public class KrameriusFulltexterFedoraTest extends AbstractTest {
@@ -34,7 +34,7 @@ public class KrameriusFulltexterFedoraTest extends AbstractTest {
 		KrameriusFulltexterFedora fedora = new KrameriusFulltexterFedora(BASE_API_URL, authToken, downloadPrivateTexts);
 		fedora.setHttpClient(httpClient);
 		
-		List<FulltextMonography> pages = fedora.getFulltextObjects("uuid:f5a09c95-2fd8-11e0-83a8-0050569d679d");
+		List<FulltextKramerius> pages = fedora.getFulltextObjects("uuid:f5a09c95-2fd8-11e0-83a8-0050569d679d");
 		Assert.assertEquals(pages.size(), 2);
 	}
 	
@@ -62,7 +62,7 @@ public class KrameriusFulltexterFedoraTest extends AbstractTest {
 		fedora.setHttpClient(httpClient);
 		
 		//1st - server 500
-		List<FulltextMonography> pages = fedora.getFulltextObjects("uuid:f5a09c95-2fd8-11e0-83a8-0050569d679d");
+		List<FulltextKramerius> pages = fedora.getFulltextObjects("uuid:f5a09c95-2fd8-11e0-83a8-0050569d679d");
 		Assert.assertEquals(pages.size(), 0);
 
 		//2nd - not JSON

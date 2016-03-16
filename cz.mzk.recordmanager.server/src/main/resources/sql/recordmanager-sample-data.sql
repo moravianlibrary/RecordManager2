@@ -114,10 +114,10 @@ INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granul
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (1301,NULL,NULL,'marc21',NULL); 
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (1302,NULL,NULL,'marc21',NULL);
 
-INSERT INTO kramerius_conf (import_conf_id,url,model,query_rows,metadata_stream) VALUES (99001,'http://kramerius.mzk.cz/search/api/v5.0','monograph',20,'DC');
-INSERT INTO kramerius_conf (import_conf_id,url,model,query_rows,metadata_stream) VALUES (99002,'http://k4.techlib.cz/search/api/v5.0','monograph',20,'DC');
-INSERT INTO kramerius_conf (import_conf_id,url,model,query_rows,metadata_stream) VALUES (99003,'http://kramerius.lib.cas.cz/search/api/v5.0','monograph',20,'DC');
-INSERT INTO kramerius_conf (import_conf_id,url,model,query_rows,metadata_stream) VALUES (99004,'http://kramerius4.nkp.cz/search/api/v5.0','monograph',20,'DC');
+INSERT INTO kramerius_conf (import_conf_id,url,query_rows,metadata_stream, fulltext_harvest_type, url_solr) VALUES (99001,'http://kramerius.mzk.cz/search/api/v5.0',20,'DC','solr','http://kramerius.mzk.cz/solr/select/');
+INSERT INTO kramerius_conf (import_conf_id,url,query_rows,metadata_stream) VALUES (99002,'http://k4.techlib.cz/search/api/v5.0',20,'DC');
+INSERT INTO kramerius_conf (import_conf_id,url,query_rows,metadata_stream) VALUES (99003,'http://kramerius.lib.cas.cz/search/api/v5.0',20,'DC');
+INSERT INTO kramerius_conf (import_conf_id,url,query_rows,metadata_stream) VALUES (99004,'http://kramerius4.nkp.cz/search/api/v5.0',20,'DC');
 
 INSERT INTO download_import_conf (import_conf_id,url) VALUES (500,'http://muj-antikvariat.cz/oai-all.xml');
 

@@ -5,7 +5,6 @@ import java.util.Collection;
 import java.util.List;
 
 import org.apache.solr.client.solrj.SolrQuery;
-import org.apache.solr.client.solrj.SolrRequest;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrInputDocument;
@@ -16,9 +15,6 @@ public interface SolrServerFacade {
 			SolrServerException;
 
 	public void commit() throws SolrServerException, IOException;
-
-	public QueryResponse query(SolrRequest request) throws SolrServerException,
-			IOException;
 
 	public QueryResponse query(SolrQuery query) throws SolrServerException;
 

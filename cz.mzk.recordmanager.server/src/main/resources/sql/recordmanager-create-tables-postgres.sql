@@ -79,7 +79,6 @@ CREATE TABLE kramerius_conf (
   import_conf_id              DECIMAL(10)  PRIMARY KEY,
   url                         VARCHAR(128),
   url_solr		      VARCHAR(128),
-  model                       VARCHAR(128),
   query_rows                  DECIMAL(10),
   metadata_stream             VARCHAR(128),
   auth_token 	              VARCHAR(128),
@@ -89,14 +88,13 @@ CREATE TABLE kramerius_conf (
 );
 
 COMMENT ON TABLE kramerius_conf IS 'extension of import_conf for Kramerius';
-COMMENT ON COLUMN kramerius_conf.url IS '';
-COMMENT ON COLUMN kramerius_conf.url_solr IS '';
-COMMENT ON COLUMN kramerius_conf.model IS '';
-COMMENT ON COLUMN kramerius_conf.query_rows IS '';
-COMMENT ON COLUMN kramerius_conf.metadata_stream IS '';
-COMMENT ON COLUMN kramerius_conf.auth_token IS '';
-COMMENT ON COLUMN kramerius_conf.fulltext_harvest_type IS '';
-COMMENT ON COLUMN kramerius_conf.download_private_fulltexts IS '';
+COMMENT ON COLUMN kramerius_conf.url IS 'url of Kramerius API endpoint';
+COMMENT ON COLUMN kramerius_conf.url_solr IS 'url of Kramerius SOLR (used in specific cases when access to SOLR is granted by Kramerius owner)';
+COMMENT ON COLUMN kramerius_conf.query_rows IS 'number of result rows requested from API, high numbers may cause latency problems';
+COMMENT ON COLUMN kramerius_conf.metadata_stream IS 'type of metadata harvested from Kramerius';
+COMMENT ON COLUMN kramerius_conf.auth_token IS 'Base64 token created from username and password provided by Kramerius owner to access private documents';
+COMMENT ON COLUMN kramerius_conf.fulltext_harvest_type IS '[fedora|solr], fedora is default type, should work for most institutions';
+COMMENT ON COLUMN kramerius_conf.download_private_fulltexts IS 'decides whether fulltexts should be harvested from private documents, auth_token is needed if true';
 
 CREATE TABLE download_import_conf (
   import_conf_id       DECIMAL(10)  PRIMARY KEY,
@@ -283,24 +281,24 @@ CREATE TABLE antikvariaty_catids (
 
 COMMENT ON TABLE antikvariaty_catids IS 'extracted identifiers from antikvariaty records. These are used for mapping to real records.';
 
-CREATE TABLE fulltext_monography (
+CREATE TABLE fulltext_kramerius (
   id                  DECIMAL(10) PRIMARY KEY,
   harvested_record_id DECIMAL(10),
   uuid_page           VARCHAR(50),
   is_private          BOOLEAN, 
-  order_in_monography DECIMAL(10),
-  page                VARCHAR(20),
+  order_in_document   DECIMAL(10),
+  page                VARCHAR(50),
   fulltext            BYTEA,
-  CONSTRAINT fulltext_monography_harvested_record_id_fk FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id)
+  CONSTRAINT fulltext_kramerius_harvested_record_id_fk FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id)
 ); 
 
-COMMENT ON TABLE fulltext_monography IS 'harvested OCRs from digital libraries, page by page. REDUNDANT DATA, CONSIDER NORMALIZATION ???';
-COMMENT ON COLUMN fulltext_monography.harvested_record_id IS 'link to record';
-COMMENT ON COLUMN fulltext_monography.uuid_page IS 'UUID of page';
-COMMENT ON COLUMN fulltext_monography.is_private IS 'is this fulltext publicly available?';
-COMMENT ON COLUMN fulltext_monography.order_in_monography IS 'sequential order of page in record'; 
-COMMENT ON COLUMN fulltext_monography.page IS 'string notation of page';
-COMMENT ON COLUMN fulltext_monography.fulltext IS 'raw OCR';
+COMMENT ON TABLE fulltext_kramerius IS 'harvested OCRs from digital libraries, page by page. REDUNDANT DATA, CONSIDER NORMALIZATION ???';
+COMMENT ON COLUMN fulltext_kramerius.harvested_record_id IS 'link to record';
+COMMENT ON COLUMN fulltext_kramerius.uuid_page IS 'UUID of page';
+COMMENT ON COLUMN fulltext_kramerius.is_private IS 'is this fulltext publicly available?';
+COMMENT ON COLUMN fulltext_kramerius.order_in_document IS 'sequential order of page in record'; 
+COMMENT ON COLUMN fulltext_kramerius.page IS 'string notation of page';
+COMMENT ON COLUMN fulltext_kramerius.fulltext IS 'raw OCR';
 
 CREATE TABLE skat_keys (
   skat_record_id      DECIMAL(10),

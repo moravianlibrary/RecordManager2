@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -14,11 +15,12 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+
 import com.google.common.base.Charsets;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.io.ByteStreams;
 
-import cz.mzk.recordmanager.server.model.FulltextMonography;
+import cz.mzk.recordmanager.server.model.FulltextKramerius;
 import cz.mzk.recordmanager.server.util.HttpClient;
 
 public class KrameriusFulltexterFedora implements KrameriusFulltexter {
@@ -48,12 +50,12 @@ public class KrameriusFulltexterFedora implements KrameriusFulltexter {
 	 * gets basic page metadata from JSON received from Kramerius API (for
 	 * specified rootUuid) returns list of FulltextMonographies
 	 */
-	public List<FulltextMonography> getPagesMetadata(String rootUuid) throws IOException {
+	public List<FulltextKramerius> getPagesMetadata(String rootUuid) throws IOException {
 		JSONArray pagesJson; /* check it */
-		List<FulltextMonography> pagesMetadataList = new ArrayList<FulltextMonography>();
+		List<FulltextKramerius> pagesMetadataList = new ArrayList<FulltextKramerius>();
 
 		String pagesListUrl = kramApiUrl + "/item/" + rootUuid + "/children";
-		logger.debug("Going to read pages metadata from: " + pagesListUrl);
+		logger.debug("Going to read pages metadata from: {}", pagesListUrl);
 
 		try {
 			pagesJson = readKrameriusJSON(pagesListUrl);
@@ -67,7 +69,7 @@ public class KrameriusFulltexterFedora implements KrameriusFulltexter {
 		 * check model
 		 */
 		for (int i = 0; i < pagesJson.length(); i++) {
-			FulltextMonography ftm = new FulltextMonography();
+			FulltextKramerius ftm = new FulltextKramerius();
 
 			try {
 				JSONObject obj = pagesJson.getJSONObject(i);
@@ -75,8 +77,8 @@ public class KrameriusFulltexterFedora implements KrameriusFulltexter {
 				// model MUST equal "page" or it will be ignored
 				String model = (String) obj.get("model");
 				if (!model.equals("page")) {
-					logger.debug("Model is not \"page\", Model is  \"" + model
-							+ "\" for uuid:" + (String) obj.get("pid"));
+					logger.debug("Model is not \"page\", Model is \"{}\" for uuid: {}",
+							model, obj.get("pid"));
 					continue;
 				}
 	
@@ -108,7 +110,7 @@ public class KrameriusFulltexterFedora implements KrameriusFulltexter {
 	public byte[] getOCRBytes(String pageUuid, boolean isPrivate) {
 		/* vytvorit odkaz do API pro UUID stranky */
 		String ocrUrl = kramApiUrl + "/item/" + pageUuid + "/streams/TEXT_OCR";
-		logger.debug("Trying to download OCR from [" + ocrUrl + "] ....");
+		logger.debug("Trying to download OCR from \"{}\" ....", ocrUrl);
 		byte[] ocr = null; /* TODO check */
 
 		try {
@@ -123,14 +125,14 @@ public class KrameriusFulltexterFedora implements KrameriusFulltexter {
 
 	/*
 	 * gets some page metadata read from JSON for given rootUuid, loads OCR,
-	 * modifies FulltextMonography and returns them in list
+	 * modifies FulltextKramerius and returns them in list
 	 */
 	@Override
-	public List<FulltextMonography> getFulltextObjects(String rootUuid) throws IOException {
-		List<FulltextMonography> fms = getPagesMetadata(rootUuid);
+	public List<FulltextKramerius> getFulltextObjects(String rootUuid) throws IOException {
+		List<FulltextKramerius> fms = getPagesMetadata(rootUuid);
 		Long pageOrder = 0L;
 
-		for (FulltextMonography fm : fms) {
+		for (FulltextKramerius fm : fms) {
 			pageOrder++;
 			String pageUuid = fm.getUuidPage();
 
@@ -193,6 +195,86 @@ public class KrameriusFulltexterFedora implements KrameriusFulltexter {
 		this.httpClient = httpClient;
 	}
 
-	
-	
+	@Override
+	public List<FulltextKramerius> getFulltextForRoot(String rootUuid)
+			throws IOException {
+
+		List<FulltextKramerius> pagesMetadataList = new ArrayList<FulltextKramerius>();
+
+		// find all non page objects... and add them to uuid list; then get fulltext for all objects
+		LinkedList<String> nonPagesUuids = new LinkedList<String>();
+		nonPagesUuids.add(rootUuid);
+		JSONArray pagesJson;
+
+		while (!nonPagesUuids.isEmpty()) {
+			String processedUuid = nonPagesUuids.poll();
+			
+			// read json object for processedUuid
+			String childrenListUrl = kramApiUrl + "/item/" + processedUuid + "/children";
+
+			try {
+				pagesJson = readKrameriusJSON(childrenListUrl);
+			} catch (JSONException e) {
+				logger.warn(e.getMessage());
+				pagesJson = new JSONArray();
+			}
+			
+			// get all volume / issue models and push their uuids into nonPagesUuids
+			// get all pages, create FulltextKramerius page for them, put them into list
+		
+			
+			for (int i = 0; i < pagesJson.length(); i++) {
+				FulltextKramerius ftm = new FulltextKramerius();
+
+				try {
+					JSONObject obj = pagesJson.getJSONObject(i);
+									
+					String model = (String) obj.get("model");
+  				    String pid = (String) obj.get("pid");
+
+					//get pages
+					if (model.equals("page")) {
+						logger.debug("Got periodical page: {}", pid);
+						String policy = (String) obj.get("policy");
+						ftm.setPrivate(!policy.equals("public"));
+						ftm.setUuidPage(pid);
+						JSONObject details = (JSONObject) obj.get("details");
+						String page = (String) details.get("pagenumber");
+						//String page= (String) obj.get("title"); //information in
+						// "title" is sometimes malformed in Kramerius' JSON
+						//TODO data sometimes contain garbage values - this should be considered fallback solution
+						page = page.length() > 50 ? page.substring(0, 50) : page;
+						ftm.setPage(page.trim());
+						pagesMetadataList.add(ftm);
+						//put other models in list, they will be searched by while cycle
+					} else {
+						nonPagesUuids.push(pid);
+					}
+				} catch (JSONException | ClassCastException e) {
+					logger.error(e.getMessage());
+				}
+			}
+		}			
+
+		Long pageOrder = 0L;
+
+		for (FulltextKramerius fm : pagesMetadataList) {
+			pageOrder++;
+			String pageUuid = fm.getUuidPage();
+
+			/*
+			 * really try to get OCR only if page is not private(=is public), or
+			 * download of private fulltext is allowed and authToken is set)
+			 */
+			if (!fm.isPrivate()
+					|| (downloadPrivateFulltexts && authToken != null)) {
+				byte[] ocr = getOCRBytes(pageUuid, fm.isPrivate());
+				fm.setFulltext(ocr);
+			}
+			fm.setOrder(pageOrder);
+		}
+
+		return pagesMetadataList;
+	}
+
 }

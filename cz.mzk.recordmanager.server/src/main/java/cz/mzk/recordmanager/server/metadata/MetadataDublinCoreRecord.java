@@ -43,6 +43,8 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 			.compile("issn:(.*)",Pattern.CASE_INSENSITIVE);
 	protected static final Pattern DC_CNB_PATTERN = Pattern
 			.compile("^ccnb:(.*)",Pattern.CASE_INSENSITIVE);
+	
+	protected static final Pattern DC_TYPE_KRAMERIUS_PATTERN = Pattern.compile("^model:(.*)");
 
 
 	public MetadataDublinCoreRecord(DublinCoreRecord dcRecord) {
@@ -204,6 +206,22 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 		return null;
 	}
 
+	// note: recognized Kramerius formats are in c.m.r.server.kramerius.FedoraModels;
+	@Override
+	public List<HarvestedRecordFormatEnum> getDetectedFormatList() {
+		List<HarvestedRecordFormatEnum> hrf = new ArrayList<HarvestedRecordFormatEnum>();
+
+		if(isBook()) hrf.add(HarvestedRecordFormatEnum.BOOKS);
+		if(isPeriodical()) hrf.add(HarvestedRecordFormatEnum.PERIODICALS);
+		if(isMap()) hrf.add(HarvestedRecordFormatEnum.MAPS);
+		if(isVisual()) hrf.add(HarvestedRecordFormatEnum.VISUAL_DOCUMENTS);
+		if(isMusicalScore()) hrf.add(HarvestedRecordFormatEnum.MUSICAL_SCORES);
+		if(isAudioDocument()) hrf.add(HarvestedRecordFormatEnum.AUDIO_DOCUMENTS);
+		if(isOtherDocument()) hrf.add(HarvestedRecordFormatEnum.OTHER_UNSPECIFIED);
+		return hrf;
+	}
+	
+	
 	protected boolean isBook() {
 		List<String> type = dcRecord.getTypes();
 		for (String f : type) {
@@ -226,8 +244,63 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 		return false;
 	}
 
+	protected boolean isMap() {
+		List<String> type = dcRecord.getTypes();
+		for (String f : type) {
+			// Kramerius specific
+			if (f.equals("model:map")) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	protected boolean isVisual() {
+		List<String> type = dcRecord.getTypes();
+		for (String f : type) {
+			// Kramerius specific
+			if (f.equals("model:graphic")) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	protected boolean isMusicalScore() {
+		List<String> type = dcRecord.getTypes();
+		for (String f : type) {
+			// Kramerius specific
+			if (f.equals("model:sheetmusic")) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	protected boolean isAudioDocument() {
+		List<String> type = dcRecord.getTypes();
+		for (String f : type) {
+			// Kramerius specific
+			if (f.equals("model:soundrecording")) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	protected boolean isOtherDocument() {
+		List<String> type = dcRecord.getTypes();
+		for (String f : type) {
+			// Kramerius specific
+			if (f.equals("model:archive") || f.equals("model:manuscript") ) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	/* there may be more than one rights value in Kramerius, but only one "policy:.*" */
-	public String getPolicy(){
+	public String getPolicyKramerius(){
 		List<String> rights = dcRecord.getRights();
 		String policy = "unknown";
 		for (String f : rights) {
@@ -240,15 +313,24 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 		return policy;
 	}
 	
-	@Override
-	public List<HarvestedRecordFormatEnum> getDetectedFormatList() {
-		List<HarvestedRecordFormatEnum> hrf = new ArrayList<HarvestedRecordFormatEnum>();
+	public String getModelKramerius(){
+		List<String> types = dcRecord.getTypes();
+		Pattern p = DC_TYPE_KRAMERIUS_PATTERN;
+		Matcher m;
+		String model = "unknown";
 
-		if(isBook()) hrf.add(HarvestedRecordFormatEnum.BOOKS);
-		if(isPeriodical()) hrf.add(HarvestedRecordFormatEnum.PERIODICALS);
+		for (String f : types) {
+			m = p.matcher(f);
 
-		return hrf;
+			if (m.find()) {
+				return m.group(1).trim();
+			}
+		}
+		
+		return model;
 	}
+	
+
 
 	@Override
 	public List<Cnb> getCNBs() {

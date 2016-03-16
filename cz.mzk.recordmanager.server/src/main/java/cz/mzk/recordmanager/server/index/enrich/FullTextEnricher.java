@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 import cz.mzk.recordmanager.server.index.SolrFieldConstants;
 import cz.mzk.recordmanager.server.model.DedupRecord;
-import cz.mzk.recordmanager.server.oai.dao.FulltextMonographyDAO;
+import cz.mzk.recordmanager.server.oai.dao.FulltextKrameriusDAO;
 
 @Component
 public class FullTextEnricher implements DedupRecordEnricher {
@@ -21,12 +21,12 @@ public class FullTextEnricher implements DedupRecordEnricher {
 	private long directFullTextSize = 1_000_000L; // 1 MB
 
 	@Autowired
-	private FulltextMonographyDAO monographyDao;
+	private FulltextKrameriusDAO fulltextKrameriusDAO;
 
 	@Override
 	public void enrich(DedupRecord record, SolrInputDocument mergedDocument,
 			List<SolrInputDocument> localRecords) {
-		long size = monographyDao.getFullTextSize(record);
+		long size = fulltextKrameriusDAO.getFullTextSize(record);
 		if (size == 0) {
 			return;
 		}
@@ -35,7 +35,7 @@ public class FullTextEnricher implements DedupRecordEnricher {
 					new Object[]{ size, record, maxFullTextSize});
 			return;
 		}
-		LazyFulltextFieldImpl fetcher = new LazyFulltextFieldImpl(monographyDao, record);
+		LazyFulltextFieldImpl fetcher = new LazyFulltextFieldImpl(fulltextKrameriusDAO, record);
 		if (size <= directFullTextSize) {
 			mergedDocument.setField(SolrFieldConstants.FULLTEXT_FIELD, fetcher.getContent());
 		} else {

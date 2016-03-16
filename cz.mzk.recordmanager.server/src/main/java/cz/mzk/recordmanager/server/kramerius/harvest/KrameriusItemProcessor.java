@@ -47,8 +47,7 @@ public class KrameriusItemProcessor implements
 	}
 
 	private HarvestedRecord completeHarvestedRecord(HarvestedRecord hrIncomplete) {
-		String recordId = hrIncomplete.getUniqueId().getRecordId(); // TODO
-																	// check it!
+		String recordId = hrIncomplete.getUniqueId().getRecordId(); 
 		HarvestedRecord rec = recordDao.findByIdAndHarvestConfiguration(
 				recordId, configuration);
 		if (rec == null) {
