@@ -24,7 +24,7 @@ import cz.mzk.recordmanager.server.util.HibernateSessionSynchronizer.SessionBind
 @Component
 @StepScope
 public class KrameriusItemReaderNoSorting implements ItemReader<List<HarvestedRecord>>,
-		ItemStream, StepExecutionListener {
+		StepExecutionListener, ItemStream {
 
 	@Autowired
 	private KrameriusConfigurationDAO configDao;
@@ -50,7 +50,7 @@ public class KrameriusItemReaderNoSorting implements ItemReader<List<HarvestedRe
 	private Date fromDate;
 	private Date untilDate;
 
-	private Integer start;
+	private int start = 0;
 
 	private boolean finished = false;
 
@@ -59,8 +59,6 @@ public class KrameriusItemReaderNoSorting implements ItemReader<List<HarvestedRe
 		this.confId = confId;
 		this.fromDate = fromDate;
 		this.untilDate = untilDate;
-
-		start = 0;
 	}
 
 	@Override
@@ -77,7 +75,7 @@ public class KrameriusItemReaderNoSorting implements ItemReader<List<HarvestedRe
 
 		Long queryRows = conf.getQueryRows();
 		if (start < kHarvester.getNumFound()) {
-			start = start + queryRows.intValue();
+			start += queryRows.intValue();
 		} else {
 			finished = true;
 		}
@@ -90,6 +88,10 @@ public class KrameriusItemReaderNoSorting implements ItemReader<List<HarvestedRe
 	public void beforeStep(StepExecution stepExecution) {
 		try (SessionBinder sess = hibernateSync.register()) {
 			conf = configDao.get(confId);
+			if (confId == null) {
+				throw new IllegalArgumentException(String.format(
+						"Kramerius harvest configuration with id=%s not found", confId));
+			}
 			KrameriusHarvesterParams params = new KrameriusHarvesterParams();
 			params.setUrl(conf.getUrl());
 			params.setMetadataStream(conf.getMetadataStream());
@@ -107,10 +109,14 @@ public class KrameriusItemReaderNoSorting implements ItemReader<List<HarvestedRe
 
 	@Override
 	public void open(ExecutionContext ctx) throws ItemStreamException {
+		if (ctx.containsKey("start")) {
+			start = ctx.getInt("start");
+		}
 	}
 
 	@Override
 	public void update(ExecutionContext ctx) throws ItemStreamException {
+		ctx.putInt("start", start);
 	}
 
 	@Override
