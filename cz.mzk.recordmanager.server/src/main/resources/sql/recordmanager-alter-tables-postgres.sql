@@ -385,7 +385,6 @@ ALTER TABLE oai_harvest_conf ADD COLUMN extract_id_regex VARCHAR(128);
 UPDATE oai_harvest_conf SET extract_id_regex='[^:]+:(.*)' WHERE import_conf_id in (319,321,325,326);
 UPDATE oai_harvest_conf SET extract_id_regex='[^:]+:[^:]+:MZK04-(.*)' WHERE import_conf_id=320;
 
-<<<<<<< HEAD
 -- 2. 3. 2016 tomascejpek
 UPDATE import_conf SET library_id=130 WHERE id=99003;
 
