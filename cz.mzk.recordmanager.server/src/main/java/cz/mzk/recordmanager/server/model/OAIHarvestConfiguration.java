@@ -72,7 +72,7 @@ public class OAIHarvestConfiguration extends ImportConfiguration {
 
 	@Override
 	public String toString() {
-		return String.format("%s[id=%s, url='%s', set='%']", this.getClass().getSimpleName(),
+		return String.format("%s[id=%s, url='%s', set='%s']", this.getClass().getSimpleName(),
 				this.getId(), this.getUrl(), this.getSet());
 	}
 
