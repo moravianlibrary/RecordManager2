@@ -70,4 +70,10 @@ public class OAIHarvestConfiguration extends ImportConfiguration {
 		this.regex = regex;
 	}
 
+	@Override
+	public String toString() {
+		return String.format("%s[id=%s, url='%s', set='%']", this.getClass().getSimpleName(),
+				this.getId(), this.getUrl(), this.getSet());
+	}
+
 }
