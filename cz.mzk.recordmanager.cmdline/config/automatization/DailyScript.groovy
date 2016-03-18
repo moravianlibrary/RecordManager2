@@ -32,7 +32,7 @@ public class DailyScript implements Runnable {
 				try {
 					harvestingFacade.incrementalHarvest(conf)
 				} catch (JobExecutionFailure jfe) {
-					logger.error(String.format("Incremental harvest of %s failed"), jfe );
+					logger.error(String.format("Incremental harvest of %s failed", conf), jfe);
 				}
 			}
 		}
