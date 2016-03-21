@@ -30,8 +30,8 @@ public class OAIHarvester {
 
 	private static Logger logger = LoggerFactory.getLogger(OAIHarvester.class);
 
-	private final Set<String> IGNORED_EXCEPTIONS = ImmutableSet.of( //
-			"no record match the search criteria" // Thrown by Aleph on empty result set
+	private final Set<String> IGNORED_ERROR_CODES = ImmutableSet.of( //
+			"noRecordsMatch" // Thrown by OAI providers on empty result set
 	);
 
 	private static final String OAI_VERB_LIST_RECORDS = "ListRecords";
@@ -154,8 +154,8 @@ public class OAIHarvester {
 			if (!postLogMessage.isEmpty()) {
 				logger.info(postLogMessage, url);
 			}
-			if (oaiRoot.getOaiError() != null && !IGNORED_EXCEPTIONS.contains(oaiRoot.getOaiError())) {
-				throw new OaiErrorException(oaiRoot.getOaiError());
+			if (oaiRoot.getOaiError() != null && !IGNORED_ERROR_CODES.contains(oaiRoot.getOaiError().getCode())) {
+				throw new OaiErrorException(oaiRoot.getOaiError().getMessage());
 			}
 			return oaiRoot;
 		} catch (IOException ioe) {

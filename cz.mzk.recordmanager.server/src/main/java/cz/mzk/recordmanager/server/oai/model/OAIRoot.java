@@ -23,10 +23,10 @@ public class OAIRoot {
 	
 	@XmlElement(name = "Identify")	
 	private OAIIdentify identify;
-	
+
 	@XmlElement(name="error")
-	private String oaiError;
-	
+	private OAIError oaiError;
+
 	public OAIIdentify getIdentify() {
 		return identify;
 	}
@@ -59,11 +59,11 @@ public class OAIRoot {
 		return listRecords;
 	}
 
-	public String getOaiError() {
+	public OAIError getOaiError() {
 		return oaiError;
 	}
 
-	public void setOaiError(String oaiError) {
+	public void setOaiError(OAIError oaiError) {
 		this.oaiError = oaiError;
 	}
 

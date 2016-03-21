@@ -63,7 +63,7 @@ public class ImportOaiRecordsFileReader implements ItemReader<List<OAIRecord>> {
 			OAIRoot oaiRoot = (OAIRoot) unmarshaller.unmarshal(is);
 			is.close();
 			if (oaiRoot.getOaiError() != null) {
-				throw new OaiErrorException(oaiRoot.getOaiError());
+				throw new OaiErrorException(oaiRoot.getOaiError().getMessage());
 			}
 			
 			if(!oaiRoot.getListRecords().getRecords().isEmpty()){

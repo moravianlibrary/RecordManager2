@@ -9,8 +9,9 @@ public class OAIGetRecord {
 
 	@XmlElement(name="record")
 	private OAIRecord record;
-	
+
 	public OAIRecord getRecord() {
 		return record;
 	}
+
 }

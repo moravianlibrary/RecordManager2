@@ -13,7 +13,6 @@ import org.springframework.batch.core.ExitStatus;
 import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobParameter;
 import org.springframework.batch.core.JobParameters;
-import org.springframework.batch.core.explore.JobExplorer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
@@ -215,4 +214,22 @@ public class OAIHarvestJobTest extends AbstractTest {
 		Assert.assertNotNull(recordDao.findByIdAndHarvestConfiguration("MZK01-100000152", 300L));
 		
 	}
+
+	@Test
+	public void emptySet() throws Exception {
+		reset(httpClient);
+		InputStream response0 = this.getClass().getResourceAsStream("/sample/Identify.xml");
+		InputStream response1 = this.getClass().getResourceAsStream("/sample/ListRecordsEmptySet.xml");
+		expect(httpClient.executeGet("http://aleph.mzk.cz/OAI?verb=Identify")).andReturn(response0);
+		expect(httpClient.executeGet("http://aleph.mzk.cz/OAI?verb=ListRecords&metadataPrefix=marc21&from=2015-01-01T01%3A00%3A00Z")).andReturn(response1);
+		replay(httpClient);
+
+		Map<String, JobParameter> params = new HashMap<String, JobParameter>();
+		params.put(Constants.JOB_PARAM_CONF_ID, new JobParameter(300L));
+		params.put(Constants.JOB_PARAM_FROM_DATE, new JobParameter(new Date(1420070400000L)));
+
+		JobExecution exec = jobExecutor.execute("oaiHarvestJob", new JobParameters(params));
+		Assert.assertEquals(exec.getExitStatus(), ExitStatus.COMPLETED);
+	}
+
 }

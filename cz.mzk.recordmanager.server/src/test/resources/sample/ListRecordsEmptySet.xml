@@ -1,0 +1,6 @@
+<OAI-PMH xmlns="http://www.openarchives.org/OAI/2.0/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/ http://www.openarchives.org/OAI/2.0/OAI-PMH.xsd">
+	<responseDate>2016-03-21T17:46:36Z</responseDate>
+	<request>http://aleph.mzk.cz/OAI</request>
+	<error code="noRecordsMatch">no record match the search criteria</error>
+</OAI-PMH>
