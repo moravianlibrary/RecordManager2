@@ -9,6 +9,7 @@ import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepScope;
+import org.springframework.batch.core.job.flow.FlowExecutionStatus;
 import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,11 +41,13 @@ public class OAIHarvestJobConfig {
     private StepBuilderFactory steps;
     
     @Bean
-    public Job oaiPartitionedHarvestJob(@Qualifier("oaiHarvestJob:partitionedStep") Step step) {
+    public Job oaiPartitionedHarvestJob(@Qualifier("oaiHarvestJob:partitionedStep") Step step1, @Qualifier("oaiHarvestJob:afterHarvestStep") Step step2) {
         return jobs.get("oaiPartitionedHarvestJob") //
         		.validator(new OAIHarvestJobParametersValidator()) //
         		.listener(JobFailureListener.INSTANCE) //
-				.flow(step) //
+				.flow(step1) //
+				.next(ReharvestJobExecutionDecider.INSTANCE).on(ReharvestJobExecutionDecider.REHARVEST_FLOW_STATUS.toString()).to(step2) //
+				.from(ReharvestJobExecutionDecider.INSTANCE).on(FlowExecutionStatus.COMPLETED.toString()).end() //
 				.end() //
 				.build();
     }
@@ -55,20 +58,11 @@ public class OAIHarvestJobConfig {
         		.validator(new OAIHarvestJobParametersValidator()) //
         		.listener(JobFailureListener.INSTANCE) //
 				.flow(step1) //
+				.next(ReharvestJobExecutionDecider.INSTANCE).on(ReharvestJobExecutionDecider.REHARVEST_FLOW_STATUS.toString()).to(step2) //
+				.from(ReharvestJobExecutionDecider.INSTANCE).on(FlowExecutionStatus.COMPLETED.toString()).end() //
 				.end() //
 				.build();
     }
-
-	@Bean
-	public Job oaiReharvestJob(@Qualifier("oaiHarvestJob:step") Step step1, @Qualifier("oaiHarvestJob:afterHarvestStep") Step step2) {
-		return jobs.get(Constants.JOB_ID_REHARVEST) //
-				.validator(new OAIHarvestJobParametersValidator()) //
-				.listener(JobFailureListener.INSTANCE) //
-				.flow(step1) //
-				.next(step2) //
-				.end() //
-				.build();
-	}
 
     @Bean
     public Job oaiHarvestAuthorityJob(@Qualifier("oaiHarvestJob:authStep") Step step) {
@@ -78,18 +72,20 @@ public class OAIHarvestJobConfig {
 				.flow(step) //
 				.end() //
 				.build();
-    }
-    
+	}
+
     @Bean
-    public Job oaiHarvestOneByOneJob(@Qualifier("oaiHarvestJob:harvestOneByOneStep") Step step) {
+    public Job oaiHarvestOneByOneJob(@Qualifier("oaiHarvestJob:harvestOneByOneStep") Step step1, @Qualifier("oaiHarvestJob:afterHarvestStep") Step step2) {
         return jobs.get(Constants.JOB_ID_HARVEST_ONE_BY_ONE) //
         		.validator(new OAIHarvestJobParametersValidator()) //
         		.listener(JobFailureListener.INSTANCE) //
-				.flow(step) //
+				.flow(step1) //
+				.next(ReharvestJobExecutionDecider.INSTANCE).on(ReharvestJobExecutionDecider.REHARVEST_FLOW_STATUS.toString()).to(step2) //
+				.from(ReharvestJobExecutionDecider.INSTANCE).on(FlowExecutionStatus.COMPLETED.toString()).end() //
 				.end() //
 				.build();
     }
-    
+
 	@Bean(name="oaiHarvestJob:step")
     public Step step() {
         return steps.get("step1") //

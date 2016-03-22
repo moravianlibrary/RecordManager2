@@ -30,6 +30,9 @@ public class OAIHarvestConfiguration extends ImportConfiguration {
 	@Column(name="extract_id_regex")
 	private String regex;
 
+	@Column(name="harvest_job_name")
+	private String harvestJobName;
+
 	public String getUrl() {
 		return url;
 	}
@@ -68,6 +71,14 @@ public class OAIHarvestConfiguration extends ImportConfiguration {
 
 	public void setRegex(String regex) {
 		this.regex = regex;
+	}
+
+	public String getHarvestJobName() {
+		return harvestJobName;
+	}
+
+	public void setHarvestJobName(String harvestJobName) {
+		this.harvestJobName = harvestJobName;
 	}
 
 	@Override

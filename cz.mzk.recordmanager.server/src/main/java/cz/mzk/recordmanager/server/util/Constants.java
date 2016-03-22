@@ -2,9 +2,7 @@ package cz.mzk.recordmanager.server.util;
 
 public class Constants {
 
-
 	public static final String JOB_ID_HARVEST			= "oaiHarvestJob";
-	public static final String JOB_ID_REHARVEST			= "oaiReharvestJob";
 	public static final String JOB_ID_HARVEST_PART		= "oaiPartitionedHarvestJob";
 	public static final String JOB_ID_HARVEST_AUTH		= "oaiHarvestAuthorityJob";
 	public static final String JOB_ID_HARVEST_ONE_BY_ONE = "oaiHarvestOneByOneJob";
@@ -43,9 +41,12 @@ public class Constants {
 	public static final String JOB_PARAM_FULLTEXT_LAST  = "lastId";
 	public static final String JOB_PARAM_REPEAT    		= "repeat";
 	public static final String JOB_PARAM_INCREMENTAL	= "incremental";
+	public static final String JOB_PARAM_REHARVEST		= "reharvest";
 	public static final String JOB_PARAM_RECORD_IDS		= "recordIds";
 	public static final String JOB_PARAM_START_TIME		= "startTime";
 	public static final String JOB_PARAM_UUID			= "uuid";
+
+	public static final String JOB_PARAM_TRUE_VALUE		= "true";
 
 	public static final String JOB_PARAM_OUT_FILE		= "outFile";
 	public static final String JOB_PARAM_IN_FILE		= "inFile";
@@ -86,4 +87,3 @@ public class Constants {
 	public static final String COSMOTRON_RECORD_ID_CHAR = "_";
 
 }	
-

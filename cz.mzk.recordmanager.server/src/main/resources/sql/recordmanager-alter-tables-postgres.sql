@@ -419,3 +419,6 @@ WHERE harvest_frequency = 'U' AND id IN (SELECT import_conf_id FROM oai_harvest_
 
 -- 22. 3. 2016 tomascejpek
 ALTER TABLE sigla ADD COLUMN id DECIMAL(10) UNIQUE;
+
+-- 22. 3. 2016 xrosecky
+ALTER TABLE oai_harvest_conf ADD COLUMN harvest_job_name VARCHAR(128);

@@ -232,4 +232,22 @@ public class OAIHarvestJobTest extends AbstractTest {
 		Assert.assertEquals(exec.getExitStatus(), ExitStatus.COMPLETED);
 	}
 
+	@Test
+	public void reharvest() throws Exception {
+		reset(httpClient);
+		InputStream response0 = this.getClass().getResourceAsStream("/sample/Identify.xml");
+		InputStream response1 = this.getClass().getResourceAsStream("/sample/ListRecordsEmptySet.xml");
+		expect(httpClient.executeGet("http://aleph.mzk.cz/OAI?verb=Identify")).andReturn(response0);
+		expect(httpClient.executeGet("http://aleph.mzk.cz/OAI?verb=ListRecords&metadataPrefix=marc21")).andReturn(response1);
+		replay(httpClient);
+
+		Map<String, JobParameter> params = new HashMap<String, JobParameter>();
+		params.put(Constants.JOB_PARAM_CONF_ID, new JobParameter(300L));
+		params.put(Constants.JOB_PARAM_REHARVEST, new JobParameter(Constants.JOB_PARAM_TRUE_VALUE));
+		params.put(Constants.JOB_PARAM_START_TIME, new JobParameter(new Date()));
+
+		JobExecution exec = jobExecutor.execute("oaiHarvestJob", new JobParameters(params));
+		Assert.assertEquals(exec.getExitStatus(), ExitStatus.COMPLETED);
+	}
+
 }
