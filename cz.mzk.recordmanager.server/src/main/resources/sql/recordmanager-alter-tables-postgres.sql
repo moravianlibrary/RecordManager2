@@ -416,3 +416,6 @@ ALTER TABLE kramerius_conf DROP COLUMN model;
 -- 18. 3. 2016 xrosecky
 UPDATE import_conf SET harvest_frequency = 'D'
 WHERE harvest_frequency = 'U' AND id IN (SELECT import_conf_id FROM oai_harvest_conf WHERE url IS NOT NULL AND url NOT LIKE '%i2.ws.oai.cls' /* Cosmotron */);
+
+-- 22. 3. 2016 tomascejpek
+ALTER TABLE sigla ADD COLUMN id DECIMAL(10) UNIQUE;

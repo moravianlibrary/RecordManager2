@@ -29,4 +29,11 @@ public class SkatMarcMetadataRecord extends MetadataMarcRecord {
 		return null;
 	}
 	
+	@Override
+	public boolean matchFilter(){
+		if(underlayingMarc.getDataFields("996").isEmpty()) return false;
+		return true;
+	}
+	
+	
 }

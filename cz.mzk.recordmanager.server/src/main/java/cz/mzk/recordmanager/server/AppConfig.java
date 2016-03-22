@@ -45,6 +45,7 @@ import cz.mzk.recordmanager.server.kramerius.fulltext.KrameriusFulltextJobConfig
 import cz.mzk.recordmanager.server.kramerius.harvest.KrameriusHarvestJobConfig;
 import cz.mzk.recordmanager.server.kramerius.harvest.KrameriusHarvesterFactory;
 import cz.mzk.recordmanager.server.kramerius.harvest.KrameriusHarvesterFactoryImpl;
+import cz.mzk.recordmanager.server.miscellaneous.FilterCaslinRecordsBySiglaJobConfig;
 import cz.mzk.recordmanager.server.miscellaneous.MiscellaneousJobsConfig;
 import cz.mzk.recordmanager.server.oai.harvest.CosmotronHarvestJobConfig;
 import cz.mzk.recordmanager.server.oai.harvest.DeleteAllHarvestsJobConfig;
@@ -180,7 +181,8 @@ public class AppConfig extends DefaultBatchConfigurer {
 				DeleteAllRecordsFromSolrJobConfig.class,
 				MiscellaneousJobsConfig.class,
 				IndexHarvestedRecordsToSolrJobConfig.class,
-				ObalkyKnihHarvestJobConfig.class
+				ObalkyKnihHarvestJobConfig.class,
+				FilterCaslinRecordsBySiglaJobConfig.class
 			);
 	}
 

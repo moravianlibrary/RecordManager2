@@ -12,14 +12,19 @@ import org.marc4j.marc.DataField;
 import org.marc4j.marc.MarcFactory;
 import org.marc4j.marc.Record;
 import org.marc4j.marc.Subfield;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import cz.mzk.recordmanager.server.export.IOFormat;
 import cz.mzk.recordmanager.server.marc.MarcRecord;
 import cz.mzk.recordmanager.server.marc.MarcRecordImpl;
 import cz.mzk.recordmanager.server.marc.marc4j.MarcFactoryImpl;
 import cz.mzk.recordmanager.server.marc.marc4j.RecordImpl;
+import cz.mzk.recordmanager.server.util.CaslinFilter;
 
 public class SkatMarcInterceptor extends DefaultMarcInterceptor {
+	
+	@Autowired
+	private CaslinFilter cf;
 	
 	public SkatMarcInterceptor(Record record) {
 		super(record);
@@ -40,6 +45,8 @@ public class SkatMarcInterceptor extends DefaultMarcInterceptor {
 		for (ControlField cf: super.getRecord().getControlFields()) {
 			newRecord.addVariableField(cf);
 		}
+		
+		List<DataField> list996 = new ArrayList<>();
 		
 		Map<String, List<DataField>> dfMap = marc.getAllFields();
 		for (String tag: new TreeSet<String>(dfMap.keySet())) {
@@ -86,11 +93,14 @@ public class SkatMarcInterceptor extends DefaultMarcInterceptor {
 					}
 					
 					newDf.addSubfield(marcFactory.newSubfield('s', "NZ"));
-					newRecord.addVariableField(newDf);
+					list996.add(newDf);
 				} else {
 					newRecord.addVariableField(df);
 				}
 			}
+		}
+		for(DataField df: cf.filter(list996)){
+			newRecord.addVariableField(df);
 		}
 		
 		return new MarcRecordImpl(newRecord).export(IOFormat.XML_MARC).getBytes();

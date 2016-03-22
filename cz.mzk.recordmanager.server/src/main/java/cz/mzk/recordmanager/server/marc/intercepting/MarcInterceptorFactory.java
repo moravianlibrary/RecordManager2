@@ -5,6 +5,7 @@ import java.io.InputStream;
 
 import org.marc4j.marc.Record;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 import cz.mzk.recordmanager.server.marc.InvalidMarcException;
@@ -18,6 +19,9 @@ public class MarcInterceptorFactory {
 	@Autowired
 	private MarcXmlParser marcXmlParser;
 	
+	@Autowired
+	private ApplicationContext appCtx;
+	
 	public MarcRecordInterceptor getInterceptor(ImportConfiguration configuration, byte rawRecord[]) {
 		
 		
@@ -25,7 +29,10 @@ public class MarcInterceptorFactory {
 		try {
 			Record record = parseRecord(rawRecord);
 			switch (prefix){
-			case Constants.PREFIX_CASLIN: return new SkatMarcInterceptor(record);
+			case Constants.PREFIX_CASLIN: 
+				MarcRecordInterceptor mri = new SkatMarcInterceptor(record);
+				appCtx.getAutowireCapableBeanFactory().autowireBean(mri);
+				return mri;
 			case Constants.PREFIX_MZKNORMS: return new MzkNormsMarcInterceptor(record);
 			case Constants.PREFIX_NLK: return new NlkMarcInterceptor(record);
 			case Constants.PREFIX_OPENLIB: return new OpenlibMarcInterceptor(record);
