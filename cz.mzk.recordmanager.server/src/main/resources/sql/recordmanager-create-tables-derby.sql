@@ -36,6 +36,7 @@ CREATE TABLE import_conf (
 );
 
 CREATE TABLE sigla (
+  id                   DECIMAL(10),
   import_conf_id       DECIMAL(10),
   sigla                VARCHAR(20),
   CONSTRAINT sigla_pk PRIMARY KEY(import_conf_id,sigla),
