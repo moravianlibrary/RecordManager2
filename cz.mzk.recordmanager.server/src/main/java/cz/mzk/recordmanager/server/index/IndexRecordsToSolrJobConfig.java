@@ -203,7 +203,7 @@ public class IndexRecordsToSolrJobConfig {
 		pqpf.setSortKey("dedup_record_id");
 		JdbcPagingItemReader<Long> reader = new JdbcPagingItemReader<Long>();
 		reader.setRowMapper(new LongValueRowMapper());
-		reader.setPageSize(20);
+		reader.setPageSize(100000);
 		reader.setQueryProvider(pqpf.getObject());
 		reader.setDataSource(dataSource);
 		if (from != null && to != null) {
