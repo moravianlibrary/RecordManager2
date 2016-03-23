@@ -160,7 +160,7 @@ public class ImportRecordJobConfig {
 	@Bean(name=Constants.JOB_ID_IMPORT_COSMOTRON_996 +":importRecordsStep")
 	public Step importCosmotron996RecordsStep() throws Exception {
 		return steps.get(Constants.JOB_ID_IMPORT_COSMOTRON_996+"importRecordsStep")
-				.<List<Record>, List<Record>> chunk(100)//
+				.<List<Record>, List<Record>> chunk(20)//
 				.reader(importRecordsReader(STRING_OVERRIDEN_BY_EXPRESSION, STRING_OVERRIDEN_BY_EXPRESSION))//
 				.writer(importCosmotron996RecordsWriter(LONG_OVERRIDEN_BY_EXPRESSION)) //
 				.build();
