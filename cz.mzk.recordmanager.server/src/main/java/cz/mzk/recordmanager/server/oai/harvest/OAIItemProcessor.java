@@ -39,6 +39,8 @@ import cz.mzk.recordmanager.server.util.HibernateSessionSynchronizer.SessionBind
 public class OAIItemProcessor implements ItemProcessor<List<OAIRecord>, List<HarvestedRecord>>, StepExecutionListener {
 
 	private static final String DEFAULT_EXTRACT_ID_PATTERN = "[^:]+:[^:]+:([^:]+)";
+	
+	private static final String METADATA_ERROR = "metadataError";
 
 	private static Logger logger = LoggerFactory.getLogger(OAIItemProcessor.class);
 
@@ -94,7 +96,8 @@ public class OAIItemProcessor implements ItemProcessor<List<OAIRecord>, List<Har
 			rec.setOaiTimestamp(record.getHeader().getDatestamp());
 		}
 		
-		if (record.getHeader().isDeleted()) {
+		if (record.getHeader().isDeleted() 
+				|| record.getMetadata().getElement().getTagName() == METADATA_ERROR) {
 			rec.setDeleted(new Date());
 			rec.setRawRecord(new byte[0]);
 			return rec;

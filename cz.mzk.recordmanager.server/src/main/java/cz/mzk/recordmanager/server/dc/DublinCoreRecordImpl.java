@@ -21,6 +21,12 @@ public class DublinCoreRecordImpl implements DublinCoreRecord {
 	private List<String> title = new ArrayList<>();
 	private List<String> type = new ArrayList<>();
 	
+	// ESE
+	private List<String> content = new ArrayList<>();
+	private List<String> physical = new ArrayList<>();
+	private List<String> titleAlt = new ArrayList<>();
+	private List<String> url = new ArrayList<>();
+	
 	private byte[] rawRecord = new byte[0];
 
 	
@@ -149,8 +155,39 @@ public class DublinCoreRecordImpl implements DublinCoreRecord {
 		}
 		return new ArrayList<String>();
 	}
-
 	
+	@Override
+	public List<String> getUrls() {
+		if(this.url != null){
+			return this.url;
+		}
+		return new ArrayList<String>();
+	}
+
+	@Override
+	public List<String> getPhysicals() {
+		if(this.physical != null){
+			return this.physical;
+		}
+		return new ArrayList<String>();
+	}
+
+	@Override
+	public List<String> getContents() {
+		if(this.content != null){
+			return this.content;
+		}
+		return new ArrayList<String>();
+	}
+
+	@Override
+	public List<String> getTitleAlts() {
+		if(this.titleAlt != null){
+			return this.titleAlt;
+		}
+		return new ArrayList<String>();
+	}
+
     /* ADD */
 
 	@Override
@@ -242,6 +279,30 @@ public class DublinCoreRecordImpl implements DublinCoreRecord {
 	public void addType(String s) {
 		this.type = getTypes();
 		type.add(s);
+	}
+	
+	@Override
+	public void addUrls(String s) {
+		this.url = getUrls();
+		url.add(s);
+	}
+
+	@Override
+	public void addPhysical(String s) {
+		this.physical = getPhysicals();
+		physical.add(s);
+	}
+
+	@Override
+	public void addContent(String s) {
+		this.content = getContents();
+		content.add(s);
+	}
+
+	@Override
+	public void addTitleAlt(String s) {
+		this.titleAlt = getTitleAlts();
+		titleAlt.add(s);
 	}
 
 	/* GET FIRST */

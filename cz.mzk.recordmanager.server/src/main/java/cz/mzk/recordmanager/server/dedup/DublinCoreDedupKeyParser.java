@@ -1,6 +1,6 @@
 package cz.mzk.recordmanager.server.dedup;
 
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +18,7 @@ import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordFormatDAO;
 public class DublinCoreDedupKeyParser extends HashingDedupKeyParser {
 
 	private final static String FORMAT = "dublinCore";
+	private final static String FORMAT_ESE = "ese";
 	
 	@Autowired 
 	private MetadataRecordFactory metadataFactory;
@@ -27,12 +28,13 @@ public class DublinCoreDedupKeyParser extends HashingDedupKeyParser {
 	
 	@Override
 	public List<String> getSupportedFormats() {
-		return Collections.singletonList(FORMAT);
+		return Arrays.asList(FORMAT, FORMAT_ESE);
 	}
 
 	@Override
 	public HarvestedRecord parse(HarvestedRecord record) {
-		Preconditions.checkArgument(FORMAT.equals(record.getFormat()));
+		Preconditions.checkArgument(FORMAT.equals(record.getFormat())
+				|| FORMAT_ESE.equals(record.getFormat()));
 		try {		
 			MetadataRecord metadata = metadataFactory.getMetadataRecord(record);
 			return parse(record, metadata);

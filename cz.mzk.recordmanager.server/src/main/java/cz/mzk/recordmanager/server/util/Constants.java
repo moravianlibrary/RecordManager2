@@ -61,6 +61,7 @@ public class Constants {
 	public static final String METADATA_FORMAT_OAI_MARCXML_CPK = "oai_marcxml_cpk";
 	public static final String METADATA_FORMAT_MARC21E     = "marc21e";
 	public static final String METADATA_FORMAT_DUBLIN_CORE = "dublinCore";
+	public static final String METADATA_FORMAT_ESE		= "ese";
 	
 	public static final String PREFIX_MZK				= "mzk";
 	public static final String PREFIX_NKP				= "nkp";

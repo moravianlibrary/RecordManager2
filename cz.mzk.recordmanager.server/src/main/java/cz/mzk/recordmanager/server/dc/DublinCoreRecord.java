@@ -20,6 +20,12 @@ public interface DublinCoreRecord {
 	 subject 
 	 title
 	 type
+	 
+	ese
+	 url
+	 physical
+	 content
+	 title alternative
 */	
 	
 	/* --- get List --- */
@@ -69,6 +75,17 @@ public interface DublinCoreRecord {
 	/* gets list of all types */
 	public List<String> getTypes();
 	
+	/* gets list of all urls */
+	public List<String> getUrls();
+	
+	/* gets list of all physicals */
+	public List<String> getPhysicals();
+	
+	/* gets list of all contents */
+	public List<String> getContents();
+	
+	/* gets list of all title alternatives */
+	public List<String> getTitleAlts();
 	
 	/* --- add --- */
 
@@ -117,6 +134,17 @@ public interface DublinCoreRecord {
 	/* adds to type list */
 	public void addType(String s);
 	
+	/* adds to url list */
+	public void addUrls(String s);
+	
+	/* adds to physical list */
+	public void addPhysical(String s);
+	
+	/* adds to content list */
+	public void addContent(String s);
+	
+	/* adds to title alternatives list */
+	public void addTitleAlt(String s);
 	
 	/* -- get first --- */
 

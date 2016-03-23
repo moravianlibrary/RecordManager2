@@ -389,7 +389,8 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 				uuid = m.group(1).trim();
 			}
 		}
-		return uuid;
+		if(uuid.isEmpty()) return null;
+		else return uuid;
 	}
 
 	@Override

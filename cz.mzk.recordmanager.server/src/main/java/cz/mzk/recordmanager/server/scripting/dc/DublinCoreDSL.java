@@ -156,5 +156,20 @@ public class DublinCoreDSL extends BaseDSL {
 	public List<String> getStatuses() {
 		return SolrUtils.createHierarchicFacetValues(Constants.DOCUMENT_AVAILABILITY_ONLINE, getRights());
 	}
+	
+	public List<String> getUrls(){
+		return record.getUrls();
+	}
+	
+	public List<String> getPhysicals(){
+		return record.getPhysicals();
+	}
 
+	public List<String> getContents(){
+		return record.getContents();
+	}
+	
+	public List<String> getAlternatives(){
+		return record.getTitleAlts();
+	}
 }

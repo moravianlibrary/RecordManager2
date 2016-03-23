@@ -30,12 +30,21 @@ public class DublinCoreXMLHandler extends DefaultHandler {
 	private static final String DC_TITLE="dc:title";
 	private static final String DC_TYPE="dc:type";
 	
+	private static final String ESE_TYPE = "ese:type";
+	private static final String ESE_RIGHTS = "ese:rights";
+	private static final String ESE_ISSHOWNAT = "ese:isShownAt";
+	private static final String ESE_DATAPROVIDER = "ese:dataProvider";
+	
+	private static final String DCTERMS_EXTENT = "dcterms:extent";
+	private static final String DCTERMS_TABLE_OF_CONTENTS = "dcterms:tableOfContents";
+	private static final String DCTERMS_ALTERNATIVE = "dcterms:alternative";
 
 	public void startElement(String uri, String localName, String qName,
 			Attributes attributes) throws SAXException {
 //		this.elementStack.push(qName);
 
-		if ("oai_dc:dc".equals(qName)) {
+		if ("oai_dc:dc".equals(qName)
+				|| "record".equals(qName)) {
 			// New DC Record instance
 			this.dcRecord = new DublinCoreRecordImpl();
 		}
@@ -96,6 +105,27 @@ public class DublinCoreXMLHandler extends DefaultHandler {
 				break;
 			case DC_TYPE:
 				this.dcRecord.addType(s);
+				break;
+			case ESE_TYPE:
+				this.dcRecord.addType(s);
+				break;
+			case ESE_RIGHTS:
+				this.dcRecord.addRights(s);
+				break;
+			case ESE_ISSHOWNAT:
+				this.dcRecord.addUrls(s);
+				break;
+			case ESE_DATAPROVIDER:
+				this.dcRecord.addSource(s);
+				break;
+			case DCTERMS_ALTERNATIVE:
+				this.dcRecord.addTitleAlt(s);
+				break;
+			case DCTERMS_EXTENT:
+				this.dcRecord.addPhysical(s);
+				break;
+			case DCTERMS_TABLE_OF_CONTENTS:
+				this.dcRecord.addContent(s);
 				break;
 			}
 		}

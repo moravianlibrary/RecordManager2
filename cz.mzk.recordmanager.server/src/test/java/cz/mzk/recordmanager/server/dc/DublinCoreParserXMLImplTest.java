@@ -8,7 +8,6 @@ import org.testng.annotations.Test;
 
 import cz.mzk.recordmanager.server.AbstractTest;
 import cz.mzk.recordmanager.server.metadata.MetadataDublinCoreRecord;
-import cz.mzk.recordmanager.server.metadata.MetadataRecord;
 
 public class DublinCoreParserXMLImplTest extends AbstractTest {
 
@@ -55,18 +54,16 @@ public class DublinCoreParserXMLImplTest extends AbstractTest {
 		MetadataDublinCoreRecord mdrc = new MetadataDublinCoreRecord(dc);
 		Assert.assertTrue(mdrc.getModelKramerius().equals("unknown"));
 	}
-
-	//test of record which is actually not Dublin Core
-	@Test(expectedExceptions = InvalidDcException.class)
-	public void testBadDCRecord() {
-		InputStream is = this
-				.getClass()
-				.getResourceAsStream(
-						"/records/marcxml/KFBZ-kpw0120405.xml");
-		DublinCoreRecord dc = parser.parseRecord(is);
-
-	}
 	
+	@Test
+	public void testDCRecordManuscriptorium() {
+		InputStream is = this.getClass().getResourceAsStream(
+				"/records/dublincore/manuscriptorium.xml");
+		DublinCoreRecord dc = parser.parseRecord(is);
+		Assert.assertNotNull(dc);
+		Assert.assertEquals(dc.getFirstIdentifier(), "AIPDIG-AMBFSK36_73_______02ZG1F9-cs");
+	}
+
 	//test of file which is not even XML 
 	@Test(expectedExceptions = InvalidDcException.class)
 	public void testNotXMLDCRecord() {

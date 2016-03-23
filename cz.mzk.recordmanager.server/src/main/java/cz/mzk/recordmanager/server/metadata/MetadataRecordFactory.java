@@ -81,7 +81,8 @@ public class MetadataRecordFactory {
 			}
 		}
         
-        if (Constants.METADATA_FORMAT_DUBLIN_CORE.equals(recordFormat)) {
+        if (Constants.METADATA_FORMAT_DUBLIN_CORE.equals(recordFormat)
+        		|| Constants.METADATA_FORMAT_ESE.equals(recordFormat)) {
         	DublinCoreRecord dcRec = dcParser.parseRecord(is);
         	switch(prefix){
 			case Constants.PREFIX_KRAM_MZK:

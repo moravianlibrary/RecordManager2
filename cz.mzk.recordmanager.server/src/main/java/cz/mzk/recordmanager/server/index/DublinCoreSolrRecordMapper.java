@@ -2,9 +2,10 @@ package cz.mzk.recordmanager.server.index;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
@@ -26,6 +27,7 @@ public class DublinCoreSolrRecordMapper implements SolrRecordMapper,
 			.getLogger(DublinCoreSolrRecordMapper.class);
 	
 	private final static String FORMAT = "dublinCore";
+	private final static String FORMAT_ESE = "ese";
 
 	@Autowired
 	private DublinCoreScriptFactory dublinCoreScriptFactory;
@@ -37,7 +39,7 @@ public class DublinCoreSolrRecordMapper implements SolrRecordMapper,
 	
 	@Override
 	public List<String> getSupportedFormats() {
-		return Collections.singletonList(FORMAT);
+		return Arrays.asList(FORMAT, FORMAT_ESE);
 	}
 
 	@Override

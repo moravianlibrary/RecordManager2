@@ -25,3 +25,8 @@ fullrecord = getFullRecord()
 _hidden_authors_dummy = ""
 _hidden_authority_dummy_field = ""
 kramerius_dummy_rights = getRights()
+
+url = getUrls();
+physical = getPhysicals();
+contents = getContents();
+title_alt = getAlternatives();

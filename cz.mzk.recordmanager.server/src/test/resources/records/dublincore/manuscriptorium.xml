@@ -1,0 +1,36 @@
+<OAI-PMH
+	xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/ http://www.openarchives.org/OAI/2.0/OAI-PMH.xsd">
+	<responseDate>2016-02-18T13:28:57Z</responseDate>
+	<request verb="ListRecords" metadataPrefix="ese" set="digitized-xr">http://dbase.aipberoun.cz/manu3/oai/index.php
+	</request>
+	<ListRecords>
+		<record>
+			<header>
+				<identifier>AIPDIG-AMBFSK36_73_______02ZG1F9-cs</identifier>
+				<datestamp>2013-03-19T00:39:26Z</datestamp>
+				<setSpec>all;digitized;digitized-xr</setSpec>
+			</header>
+			<metadata>
+				<record
+					xsi:schemaLocation="http://www.europeana.eu/schemas/ese/ http://www.europeana.eu/schemas/ese/ESE-V3.4.xsd">
+					<dc:identifier>AIPDIG-AMBFSK36_73_______02ZG1F9-cs</dc:identifier>
+					<dc:title>[Franciscus de Abbatibus: Sermones varii]</dc:title>
+					<dc:format>other</dc:format>
+					<dcterms:extent>30 x 20,5 cm</dcterms:extent>
+					<dcterms:medium>chart</dcterms:medium>
+					<dc:source>Archiv města Brna, fond svatojakubská knihovna</dc:source>
+					<object>http://mscripthq.nkp.cz/documentrepository/manuscriptorium/N/AMBFSK36_73__________0YNN/G0/36_73__________0YNNG0000FC.JPG
+					</object>
+					<provider>Manuscriptorium - National Library of the Czech Republic
+					</provider>
+					<type>TEXT</type>
+					<rights>http://creativecommons.org/publicdomain/mark/1.0/</rights>
+					<dataProvider>Archiv města Brna, fond svatojakubská knihovna
+					</dataProvider>
+					<isShownAt>http://www.manuscriptorium.com/apps/index.php?direct=record&amp;pid=AIPDIG-AMBFSK36_73_______02ZG1F9-cs
+					</isShownAt>
+				</record>
+			</metadata>
+		</record>
+	</ListRecords>
+</OAI-PMH>
