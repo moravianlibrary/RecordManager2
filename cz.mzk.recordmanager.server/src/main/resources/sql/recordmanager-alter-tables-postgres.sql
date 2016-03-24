@@ -422,3 +422,6 @@ ALTER TABLE sigla ADD COLUMN id DECIMAL(10) UNIQUE;
 
 -- 22. 3. 2016 xrosecky
 ALTER TABLE oai_harvest_conf ADD COLUMN harvest_job_name VARCHAR(128);
+
+-- 24. 3. 2016 tomascejpek
+UPDATE import_conf SET filtering_enabled=true WHERE id=316;
