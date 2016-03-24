@@ -207,7 +207,6 @@ public class PublishDateMarcFunctions implements MarcRecordFunctions {
 					int from = 0;
 					if((SINGLE_YEAR_PATTERN.matcher(fromString)).matches()){
 						from = Integer.parseInt(fromString);
-						System.out.println(from);
 					}
 					if(from <= MAX_YEAR+1) years.addAll(parsePublishDateFrom008(field008));
 				}

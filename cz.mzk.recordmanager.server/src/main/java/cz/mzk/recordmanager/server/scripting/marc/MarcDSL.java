@@ -189,10 +189,6 @@ public class MarcDSL extends BaseDSL {
 	public String getFullrecord() {
 		return marcMetadataRecord.export(IOFormat.ISO_2709);
 	}
-	
-	public String isIllustrated() {
-		return null; // FIXME
-	}
 
 	public Object methodMissing(String methodName, Object args) {
 		RecordFunction<MarcFunctionContext> func = functions.get(methodName);

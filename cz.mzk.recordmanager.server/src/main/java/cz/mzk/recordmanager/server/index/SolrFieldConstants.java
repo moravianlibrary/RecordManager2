@@ -48,8 +48,6 @@ public class SolrFieldConstants {
 
 	public static final String SOLR_HIDDEN_FIELD_PREFIX = "_hidden";
 
-	public static final String FIELD_996b = "996b";
-
 	public static final String TOC = "toc_txt_mv";
 	
 	public static final String ID_001_SEARCH = "id001_search";

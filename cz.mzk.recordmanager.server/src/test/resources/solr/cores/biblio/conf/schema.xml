@@ -220,7 +220,6 @@
    <field name="author_search" type="textProper" indexed="true" stored="true" multiValued="true"/>
    <field name="barcodes" type="string" indexed="true" stored="true" multiValued="true"/>
    <field name="sfx_links" type="string" indexed="false" stored="true" multiValued="true"/>
-   <field name="996b" type="string" indexed="true" stored="true" multiValued="true"/>
    <field name="citation_record_type" type="string" indexed="true" stored="true" multiValued="false"/>
    <field name="id001_search" type="string" indexed="true" stored="true" multiValued="true"/>
    <field name="author_find" type="textProper" indexed="true" stored="true" multiValued="true"/>

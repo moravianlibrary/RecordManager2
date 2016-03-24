@@ -52,8 +52,6 @@ url = getFields "856u"
 
 ean_str_mv = getEAN()
 
-illustrated = isIllustrated()
-
 bbox_geo = getBoundingBox()
 bbox_geo_str = getBoundingBox()
 
