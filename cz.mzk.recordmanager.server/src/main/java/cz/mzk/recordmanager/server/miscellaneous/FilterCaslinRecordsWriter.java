@@ -44,8 +44,8 @@ public class FilterCaslinRecordsWriter implements ItemWriter<HarvestedRecordUniq
 		
 		for(HarvestedRecordUniqueId uniqueId: items){
 			HarvestedRecord hr = hrDao.get(uniqueId);
-			if(hr == null) continue;
 			
+			if(hr == null || hr.getRawRecord().length == 0) continue;
 			InputStream is = new ByteArrayInputStream(hr.getRawRecord());
 			MarcRecord marc = marcXmlParser.parseRecord(is);
 			is = new ByteArrayInputStream(hr.getRawRecord());
