@@ -425,3 +425,7 @@ ALTER TABLE oai_harvest_conf ADD COLUMN harvest_job_name VARCHAR(128);
 
 -- 24. 3. 2016 tomascejpek
 UPDATE import_conf SET filtering_enabled=true WHERE id=316;
+
+-- 01. 4. 2016 tomascejpek
+UPDATE oai_harvest_conf SET url='http://katalog.svkos.cz/OAI' WHERE import_conf_id=335;
+UPDATE oai_harvest_conf SET set_spec='MZK-CPK' WHERE import_conf_id=335;
