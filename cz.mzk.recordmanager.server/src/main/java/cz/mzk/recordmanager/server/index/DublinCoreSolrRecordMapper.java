@@ -6,8 +6,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -23,9 +21,6 @@ import cz.mzk.recordmanager.server.scripting.dc.DublinCoreScriptFactory;
 public class DublinCoreSolrRecordMapper implements SolrRecordMapper,
 		InitializingBean {
 
-	private static Logger logger = LoggerFactory
-			.getLogger(DublinCoreSolrRecordMapper.class);
-	
 	private final static String FORMAT = "dublinCore";
 	private final static String FORMAT_ESE = "ese";
 
@@ -35,7 +30,9 @@ public class DublinCoreSolrRecordMapper implements SolrRecordMapper,
 	@Autowired
 	private DublinCoreParser parser;
 
-	private MappingScript<DublinCoreRecord> mappingScript;
+	private MappingScript<DublinCoreRecord> dedupRecordMappingScript;
+	
+	private MappingScript<DublinCoreRecord> harvestedRecordMappingScript;
 	
 	@Override
 	public List<String> getSupportedFormats() {
@@ -49,31 +46,39 @@ public class DublinCoreSolrRecordMapper implements SolrRecordMapper,
 			return null;
 		}
 		HarvestedRecord record = records.get(0);
-		return parse(record);
+		return parseAsDedupRecord(record);
 	}
 
 	@Override
 	public Map<String, Object> map(HarvestedRecord record) {
-		return parse(record);
+		return parseAsLocalRecord(record);
 	}
 
-	protected Map<String, Object> parse(HarvestedRecord record) {
+	protected Map<String, Object> parseAsDedupRecord(HarvestedRecord record) {
 		InputStream is = new ByteArrayInputStream(record.getRawRecord());
 		MappingScript<DublinCoreRecord> script = getMappingScript(record);
 		DublinCoreRecord rec = parser.parseRecord(is);
 		Map<String, Object> fields = script.parse(rec);
 		return fields;
 	}
+	
+	protected Map<String, Object> parseAsLocalRecord(HarvestedRecord record){
+		InputStream is = new ByteArrayInputStream(record.getRawRecord());
+		DublinCoreRecord rec = parser.parseRecord(is);
+		return harvestedRecordMappingScript.parse(rec);
+	}
 
 	protected MappingScript<DublinCoreRecord> getMappingScript(
 			HarvestedRecord record) {
-		return mappingScript;
+		return dedupRecordMappingScript;
 	}
 
 	@Override
 	public void afterPropertiesSet() throws Exception {
-		mappingScript = dublinCoreScriptFactory.create(getClass()
+		dedupRecordMappingScript = dublinCoreScriptFactory.create(getClass()
 				.getResourceAsStream("/dc/groovy/BaseDC.groovy"));
+		harvestedRecordMappingScript = dublinCoreScriptFactory.create(getClass()
+				.getResourceAsStream("/dc/groovy/HarvestedRecordBaseDC.groovy"));
 	}
 
 }

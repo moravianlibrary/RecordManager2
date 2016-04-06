@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import cz.mzk.recordmanager.server.dc.DublinCoreRecord;
 import cz.mzk.recordmanager.server.metadata.MetadataDublinCoreRecord;
@@ -24,9 +26,11 @@ public class DublinCoreDSL extends BaseDSL {
 	private final DublinCoreRecord record;
 	private MetadataDublinCoreRecord dcMetadataRecord;
 	
-	
 	private final Map<String, RecordFunction<DublinCoreRecord>> functions;
 
+	private final static Pattern AUTHOR_PATTERN = Pattern.compile("([^,]+),(.+)");
+	private final static Pattern MDT_PATTERN = Pattern.compile("[\\W0-9]+");
+	
 	public DublinCoreDSL(DublinCoreRecord record,
 			MappingResolver propertyResolver, StopWordsResolver stopWordsResolver,
 			Map<String, RecordFunction<DublinCoreRecord>> functions) {
@@ -54,7 +58,12 @@ public class DublinCoreDSL extends BaseDSL {
 	
 	public List<String> getOtherTitles() {
 		List<String> titles = record.getTitles();
-		return (titles.size() <= 1) ? Collections.emptyList() : titles.subList(1, titles.size());
+		
+		if(titles.size() <= 1) titles.clear();
+		else titles.subList(1, titles.size());
+		
+		if(record.getTitleAlts() != null) titles.addAll(record.getTitleAlts());
+		return null;
 	}
 	
 	public String getFirstCreator() {
@@ -76,6 +85,45 @@ public class DublinCoreDSL extends BaseDSL {
 		return creators;
 	}
 	
+	public String getAuthorDisplay(){
+		return changeName(getFirstCreator());
+	}
+	
+	public List<String> getAuthor2Display(){
+		List<String> authors = getOtherCreators();
+		if(authors == null) return Collections.emptyList();
+		
+		List<String> result = new ArrayList<String>();
+		for(String name: authors){
+			String newName = changeName(name);
+			if(newName != null) result.add(newName);
+		}
+		
+		return result;
+	}
+	
+	public List<String> getAuthorFind(){
+    	List<String> result = new ArrayList<String>();
+    	result.add(getAuthorDisplay());
+    	result.addAll(getAuthor2Display());
+    	return result;
+    }
+	
+	public String changeName(String name){
+		if(name == null || name.isEmpty()) return null;
+		
+		StringBuilder sb = new StringBuilder();
+		Matcher matcher = AUTHOR_PATTERN.matcher(name);
+		if(matcher.matches()){
+			sb.append(matcher.group(2));
+			sb.append(" ");
+			sb.append(matcher.group(1));
+		}
+		else return name;
+		
+		return sb.toString();
+	}
+	
 	public String getFirstDate() {
 		return record.getFirstDate();
 	}
@@ -86,6 +134,17 @@ public class DublinCoreDSL extends BaseDSL {
 	
 	public List <String> getSubjects() {
 		return record.getSubjects();
+	}
+	
+	public List<String> getSubjectFacet(){
+		List<String> subjects = getSubjects();
+		if(subjects == null || subjects.isEmpty()) return null;
+		
+		List<String> result = new ArrayList<String>();
+		for(String subject: subjects){
+			if(!MDT_PATTERN.matcher(subject).matches()) result.add(subject);
+		}
+		return result;
 	}
 	
 	public String getAllFields() {
@@ -167,9 +226,5 @@ public class DublinCoreDSL extends BaseDSL {
 
 	public List<String> getContents(){
 		return record.getContents();
-	}
-	
-	public List<String> getAlternatives(){
-		return record.getTitleAlts();
 	}
 }
