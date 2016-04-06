@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.Criteria;
+import org.hibernate.NullPrecedence;
 import org.hibernate.Session;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Component;
@@ -112,6 +114,7 @@ public class HarvestedRecordDAOHibernate extends
 		Session session = sessionFactory.getCurrentSession();
 		Criteria crit = session.createCriteria(HarvestedRecord.class);
 		crit.add(Restrictions.eq("dedupRecord", dedupRecord));
+		crit.addOrder(Order.desc("weight").nulls(NullPrecedence.LAST));
 		if (!alsoDeleted) {
 			crit.add(Restrictions.isNull("deleted"));
 		}
