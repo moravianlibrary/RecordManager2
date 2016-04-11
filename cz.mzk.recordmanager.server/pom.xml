@@ -243,13 +243,19 @@
 			</exclusions>
 		</dependency>
 
-
 		<!-- Geospatial support - used by SOLR -->
 		<dependency>
 			<groupId>com.vividsolutions</groupId>
 			<artifactId>jts</artifactId>
 			<version>1.13</version>
 			<scope>test</scope>
+		</dependency>
+
+		<!-- Liquibase -->
+		<dependency>
+			<groupId>org.liquibase</groupId>
+			<artifactId>liquibase-core</artifactId>
+			<version>3.4.2</version>
 		</dependency>
 
 	</dependencies>

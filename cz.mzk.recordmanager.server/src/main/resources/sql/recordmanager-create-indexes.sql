@@ -21,3 +21,5 @@ CREATE INDEX obalkyknih_toc_oclc_idx ON obalkyknih_toc(oclc);
 CREATE INDEX obalkyknih_toc_ean_idx ON obalkyknih_toc(ean);
 CREATE INDEX obalkyknih_toc_isbn_idx ON obalkyknih_toc(isbn);
 CREATE INDEX obalkyknih_toc_nbn_idx ON obalkyknih_toc(nbn);
+
+CREATE INDEX dedup_record_updated_idx ON dedup_record(updated);

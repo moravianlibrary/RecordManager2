@@ -19,7 +19,7 @@ FROM batch_job_instance bji
   JOIN oai_harvest_conf ohc ON ohc.import_conf_id = conf_id_param.long_val
   JOIN import_conf ic ON ic.id = ohc.import_conf_id
   JOIN library l ON l.id = ic.library_id
-WHERE bji.job_name IN ('oaiHarvestJob', 'oaiReharvestJob', 'oaiPartitionedHarvestJob')
+WHERE bji.job_name IN ('oaiHarvestJob', 'oaiReharvestJob', 'oaiPartitionedHarvestJob', 'cosmotronHarvestJob')
 ;
 
 CREATE OR REPLACE VIEW oai_harvest_summary AS

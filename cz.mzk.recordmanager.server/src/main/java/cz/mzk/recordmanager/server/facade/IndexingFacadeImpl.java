@@ -116,7 +116,7 @@ public class IndexingFacadeImpl implements IndexingFacade {
 		Map<String, JobParameter> parameters = new HashMap<>();
 		parameters.put(Constants.JOB_PARAM_SOLR_URL, new JobParameter(solrUrl));
 		if (!reindex) {
-			LocalDateTime lastIndexed = (reindex) ? null : getLastIndexed(lastIndexedQuery, jobName, solrUrl);
+			LocalDateTime lastIndexed = getLastIndexed(lastIndexedQuery, jobName, solrUrl);
 			if (lastIndexed != null) {
 				Date lastIndexedDate = Date.from(lastIndexed.atZone(ZoneId.systemDefault()).toInstant());
 				logger.trace("Starting indexing from {}", lastIndexedDate);

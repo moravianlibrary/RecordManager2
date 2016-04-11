@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.core.env.Environment;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
@@ -26,11 +25,6 @@ public class AppConfigCmdline {
 
 	@Autowired
 	private Environment environment;
-
-	@Bean
-	public PropertySourcesPlaceholderConfigurer propertyPlaceholderConfigurer() {
-	    return new PropertySourcesPlaceholderConfigurer();
-	}
 
 	@Bean
 	public DataSource dataSource(@Value("${jdbc.driverClassName}") String driverClassName, @Value("${jdbc.url}") String url, 

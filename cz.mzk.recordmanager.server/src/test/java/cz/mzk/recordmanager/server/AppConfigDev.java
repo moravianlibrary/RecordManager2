@@ -15,7 +15,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.jdbc.datasource.init.DataSourceInitializer;
@@ -38,11 +37,6 @@ public class AppConfigDev {
 			"sql/recordmanager-insert-test.sql",
 			"sql/recordmanager-create-views.sql"
 	);
-	
-	@Bean
-	public PropertySourcesPlaceholderConfigurer propertyPlaceholderConfigurer() {
-	    return new PropertySourcesPlaceholderConfigurer();
-	}
 
 	public DataSourceInitializer dataSourceInitializer(final DataSource dataSource) {
 	    final DataSourceInitializer initializer = new DataSourceInitializer();

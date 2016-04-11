@@ -20,7 +20,6 @@ WHERE
   NOT EXISTS(SELECT 1 FROM harvested_record hr WHERE hr.dedup_record_id = dr.id)
 ;
 
-
 CREATE VIEW antikvariaty_url_view AS 
 SELECT
   hr.dedup_record_id, 

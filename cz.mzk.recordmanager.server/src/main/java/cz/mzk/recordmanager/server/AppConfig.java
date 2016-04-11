@@ -2,6 +2,9 @@ package cz.mzk.recordmanager.server;
 
 import javax.sql.DataSource;
 
+import liquibase.exception.LiquibaseException;
+import liquibase.integration.spring.SpringLiquibase;
+
 import org.hibernate.SessionFactory;
 import org.springframework.batch.core.configuration.JobRegistry;
 import org.springframework.batch.core.configuration.annotation.DefaultBatchConfigurer;
@@ -24,6 +27,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -70,6 +74,16 @@ import cz.mzk.recordmanager.server.util.HttpClient;
 @ImportResource("classpath:appCtx-recordmanager-server.xml")
 public class AppConfig extends DefaultBatchConfigurer {
 
+	private static final String DB_CHANGE_LOG = "classpath:sql/recordmanager-liquibase.sql";
+
+	private static final String DEFAULT_LIQUIBASE_CONTEXTS = "empty";
+
+	@Value(value = "${liquibase.enable:#{false}}")
+	private boolean enableLiquibase;
+
+	@Value(value = "${liquibase.contexts:#{null}}")
+	private String liquibaseContexts;
+
 	@Autowired
 	private DataSource dataSource;
 
@@ -78,6 +92,11 @@ public class AppConfig extends DefaultBatchConfigurer {
 
 	@Autowired
 	private ResourceProvider resourceProvider;
+
+	@Bean
+	public static PropertySourcesPlaceholderConfigurer propertyPlaceholderConfigurer() {
+	    return new PropertySourcesPlaceholderConfigurer();
+	}
 
 	@Bean
 	public DefaultJobLoader defaultJobLoader() {
@@ -217,6 +236,21 @@ public class AppConfig extends DefaultBatchConfigurer {
 	@Bean
 	public StopWordsResolver stopWordsResolver() {
 		return new CachingStopWordsResolver(new ResourceStopWordsResolver(resourceProvider));
+	}
+
+	@Bean
+	public SpringLiquibase springLiquibase(DataSource dataSource) throws LiquibaseException {
+		SpringLiquibase liquibase = new SpringLiquibase();
+		liquibase.setDataSource(dataSource);
+		liquibase.setChangeLog(DB_CHANGE_LOG);
+		liquibase.setShouldRun(enableLiquibase);
+		if (liquibaseContexts != null && !liquibaseContexts.trim().isEmpty()) {
+			liquibase.setContexts(liquibaseContexts);
+		} else {
+			liquibase.setContexts(DEFAULT_LIQUIBASE_CONTEXTS);
+		}
+		System.out.println(String.format("contexts: %s",liquibaseContexts));
+		return liquibase;
 	}
 
 }

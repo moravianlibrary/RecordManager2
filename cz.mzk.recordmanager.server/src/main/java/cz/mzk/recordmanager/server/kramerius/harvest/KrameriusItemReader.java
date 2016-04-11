@@ -87,6 +87,9 @@ public class KrameriusItemReader implements ItemReader<List<HarvestedRecord>>,
 	public void beforeStep(StepExecution stepExecution) {
 		try (SessionBinder sess = hibernateSync.register()) {
 			conf = configDao.get(confId);
+			if (conf == null) {
+				throw new IllegalArgumentException(String.format("OAI harvest configuration with id=%s not found", confId));
+			}
 			KrameriusHarvesterParams params = new KrameriusHarvesterParams();
 			params.setUrl(conf.getUrl());
 			params.setMetadataStream(conf.getMetadataStream());

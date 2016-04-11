@@ -1,9 +1,11 @@
 jdbc.url=
 jdbc.username=
 jdbc.password=
--
+
 hibernate.dialect=org.hibernate.dialect.PostgreSQL9Dialect
 hibernate.show_sql=false
 hibernate.format_sql=false
 hibernate.hbm2ddl.auto=none
 
+liquibase.enable=true
+liquibase.contexts=cpk
