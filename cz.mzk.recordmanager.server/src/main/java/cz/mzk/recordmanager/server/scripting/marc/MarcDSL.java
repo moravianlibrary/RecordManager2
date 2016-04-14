@@ -256,6 +256,14 @@ public class MarcDSL extends BaseDSL {
     		String up = subject.substring(0,1).toUpperCase() + subject.substring(1);
     		subjects.add(up);
     	}
+
+    	for(DataField df: record.getDataFields("653")){
+    		for(Subfield sf: df.getSubfields('a')){ 
+    			if(!sf.getData().matches("forma:.*|nosič:.*|způsob vydávání:.*|úroveň zpracování:.*"))
+    				subjects.add(sf.getData());
+    		}
+    	}
+    	
     	return subjects;
     }
 
