@@ -54,7 +54,7 @@ publisher_search_txt_mv = getFieldsTrim "260b:264b:928a:978abcdg7"
 cnb_search_str = getFirstField "015az"
 
 ean_str_mv = getEAN()
-subject_facet_str_mv = getSubject "600abcdfglnpqstyz:610abcdfgklnpstyz:611abcdefgklnpqstyz:630adfgklnpstyz2:648a:650avxyz:651avxyz:964abcdefg:967ab"
+subject_facet_str_mv = getSubject "600abcdfglnpqstyz:610abcdfgklnpstyz:611abcdefgklnpqstyz:630adfgklnpstyz2:648a:650avyz:651avxyz:964abcdefg:967ab"
 source_title_facet_str = getFirstField "773t"
 genre_facet_str = getFirstField "655avxyz"
 conspectus_facet_str_mv = getFields "072x"

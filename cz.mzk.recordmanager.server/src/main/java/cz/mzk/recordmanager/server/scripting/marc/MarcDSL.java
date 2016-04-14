@@ -1,5 +1,6 @@
 package cz.mzk.recordmanager.server.scripting.marc;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -249,22 +250,34 @@ public class MarcDSL extends BaseDSL {
     	return removeEndPunctuation(getFirstField(tags));
     }
     
-    public Set<String> getSubject(String tags){
+    public Set<String> getSubject(String tags) throws IOException{
     	Set<String> subjects = new HashSet<String>();
 
     	for(String subject: getFields(tags)){
-    		String up = subject.substring(0,1).toUpperCase() + subject.substring(1);
-    		subjects.add(up);
+    		subjects.add(toUpperCaseFirstChar(subject));
     	}
 
     	for(DataField df: record.getDataFields("653")){
     		for(Subfield sf: df.getSubfields('a')){ 
     			if(!sf.getData().matches("forma:.*|nosič:.*|způsob vydávání:.*|úroveň zpracování:.*"))
-    				subjects.add(sf.getData());
+    				subjects.add(toUpperCaseFirstChar(sf.getData()));
+    		}
+    	}
+    	
+    	for(DataField df: record.getDataFields("650")){
+    		if(df.getSubfield('2') != null && df.getSubfield('2').getData().contains("psh")){
+    			if(df.getSubfield('x') != null){ 
+    				subjects.add(toUpperCaseFirstChar(translate("psh.map", df.getSubfield('x').getData(), null)));
+    			}
     		}
     	}
     	
     	return subjects;
+    }
+    
+    public String toUpperCaseFirstChar(String string){
+    	if(string == null) return null;
+    	return string.substring(0,1).toUpperCase() + string.substring(1);
     }
 
     public Set<String> getISBNISSNISMN(){
