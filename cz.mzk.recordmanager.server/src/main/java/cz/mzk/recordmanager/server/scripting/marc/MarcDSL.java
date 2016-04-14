@@ -214,9 +214,15 @@ public class MarcDSL extends BaseDSL {
     			publishers.addAll(getFieldsTrim("264b"));
     		}
     	}
-    	publishers.addAll(getFieldsTrim("260b:928a:978abcdg"));
+    	publishers.addAll(getFieldsTrim("260b:928a:978ab"));
     	
-    	return publishers;
+    	List<String> result = new ArrayList<String>();
+    	for(String publisher: publishers){
+    		if(publisher.endsWith(",")) result.add(publisher.substring(0, publisher.length()-1));
+    		else result.add(publisher);
+    	}
+    		
+    	return result;
     }
     
     public List<String> getPublisher(){
