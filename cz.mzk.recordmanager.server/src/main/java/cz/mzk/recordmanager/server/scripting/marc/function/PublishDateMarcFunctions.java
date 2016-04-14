@@ -223,7 +223,11 @@ public class PublishDateMarcFunctions implements MarcRecordFunctions {
 					continue;
 				}
 				if(df.getSubfield('c') != null) {
-					return df.getSubfield('c').getData();
+					String year = df.getSubfield('c').getData().trim();
+					if(year.length() > 0 && year.charAt(year.length()-1) == ']'){ 
+						return "[" + year;
+					}
+					return year;
 				}
 			}
 		}
