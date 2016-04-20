@@ -429,3 +429,7 @@ UPDATE import_conf SET filtering_enabled=true WHERE id=316;
 -- 01. 4. 2016 tomascejpek
 UPDATE oai_harvest_conf SET url='http://katalog.svkos.cz/OAI' WHERE import_conf_id=335;
 UPDATE oai_harvest_conf SET set_spec='MZK-CPK' WHERE import_conf_id=335;
+
+-- 20. 4. 2016 tomascejpek
+UPDATE oai_harvest_conf SET url='http://aleph.knihovna-pardubice.cz/OAI' WHERE import_conf_id=333;
+UPDATE oai_harvest_conf SET set_spec='PAG_OAI_CPK_MARC21' WHERE import_conf_id=333;
