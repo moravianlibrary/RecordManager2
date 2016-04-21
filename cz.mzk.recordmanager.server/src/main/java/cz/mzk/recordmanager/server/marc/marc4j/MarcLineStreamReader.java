@@ -102,9 +102,13 @@ public class MarcLineStreamReader implements MarcReader{
 				char ind1 = line.charAt(4);
 				char ind2 = line.charAt(5);
 				String data = line.substring(6);
-				DataField df = factory.newDataField(tag, ind1, ind2);
-				df = parseDataField(df, data);
-				record.addVariableField(df);
+				if(data.length()>0 && data.charAt(0) == '$'){
+					DataField df = factory.newDataField(tag, ind1, ind2);
+					record.addVariableField(parseDataField(df, data));
+				}
+				else{
+					record.addVariableField(factory.newControlField(tag, line.substring(4)));
+				}
 			}			
 		}
     }
