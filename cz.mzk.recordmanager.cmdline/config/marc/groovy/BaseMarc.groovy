@@ -58,7 +58,7 @@ subject_facet_str_mv = getSubject "600abcdfglnpqstyz:610abcdfgklnpstyz:611abcdef
 source_title_facet_str = getFirstField "773t"
 genre_facet_str = getFirstField "655avxyz"
 conspectus_facet_str_mv = getFields "072x"
-publisher_str_mv = filter("publisher.txt", getPublisherStrMv())
+publisher_str_mv = getPublisherStrMv()
 author_facet_str_mv = getFields "100abcdq:110abc:111acdegq:700abcdq:710abc:711acdegq:975abcdq:976abc"
 
 bbox_geo = getBoundingBoxAsPolygon()

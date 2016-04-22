@@ -207,22 +207,34 @@ public class MarcDSL extends BaseDSL {
         return result;
     }
     
-    public List<String> getPublisherStrMv(){
-    	List<String> publishers = new ArrayList<String>();
+    public List<String> getPublisherStrMv() throws IOException{
+    	Set<String> publishers = new HashSet<String>();
     	for(DataField dataField: record.getDataFields("264")){
     		if(dataField.getIndicator2() == '1'){
-    			publishers.addAll(getFieldsTrim("264b"));
+    			dataField.getSubfields('b').stream().forEach(sf -> publishers.add(editPublisherName(sf.getData())));
     		}
     	}
-    	publishers.addAll(getFieldsTrim("260b:928a:978ab"));
-    	
-    	List<String> result = new ArrayList<String>();
-    	for(String publisher: publishers){
-    		if(publisher.endsWith(",")) result.add(publisher.substring(0, publisher.length()-1));
-    		else result.add(publisher);
+    	for(DataField dataField: record.getDataFields("928")){
+    		if(dataField.getIndicator1() == '9'){
+    			dataField.getSubfields('a').stream().forEach(sf -> publishers.add(editPublisherName(sf.getData())));
+    		}
     	}
-    		
-    	return result;
+    	getFields("260b:978ab").stream().forEach(str -> publishers.add(editPublisherName(str)));
+    	
+    	Set<String> result = new HashSet<String>();
+    	for(String publisher: publishers){
+    		String newPublisher = translate("publisher.map", publisher, null);
+    		if(newPublisher == null) result.add(publisher);
+    		else result.add(newPublisher);
+    	}
+    	return new ArrayList<String>(result);
+    }
+    
+    public String editPublisherName(String name){
+    	name = name.replaceAll("[<>\\[\\]]", "");
+    	name = name.replaceAll("[,?\\s]+$", "");
+    	name = name.trim();
+    	return name;
     }
     
     public List<String> getPublisher(){
@@ -240,8 +252,7 @@ public class MarcDSL extends BaseDSL {
     public Set<String> getFieldsTrim(String tags){
     	Set<String> result = new HashSet<String>();
     	for(String data: getFields(tags)){
-    		removeEndPunctuation(data);
-    		result.add(data);
+    		result.add(removeEndPunctuation(data));
     	}
     	return result;
     }
