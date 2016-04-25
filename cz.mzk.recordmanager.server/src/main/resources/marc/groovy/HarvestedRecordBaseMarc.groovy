@@ -1,9 +1,6 @@
 recordtype = "local"
 fullrecord = getFullrecord()
 
-language_display_mv = translate("mzk_language.map", getLanguages(), null)
-country_display_mv = translate("mzk_country.map", getCountry(), null)
-
 title_display = getTitleDisplay()
 title_sub_display = getFirstField "245b"
 
