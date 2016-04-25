@@ -292,8 +292,8 @@ public class MarcDSL extends BaseDSL {
     	return subjects;
     }
     
-    public String toUpperCaseFirstChar(String string){
-    	if(string == null) return null;
+    protected String toUpperCaseFirstChar(String string){
+    	if(string == null || string.isEmpty()) return null;
     	return string.substring(0,1).toUpperCase() + string.substring(1);
     }
 
