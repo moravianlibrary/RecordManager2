@@ -8,6 +8,7 @@ import org.apache.solr.client.solrj.impl.HttpSolrServer;
 import org.apache.solr.client.solrj.impl.XMLResponseParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 
 public class SolrServerFactoryImpl implements SolrServerFactory {
 
@@ -25,9 +26,15 @@ public class SolrServerFactoryImpl implements SolrServerFactory {
 				return solr;
 			}
 
+		},
+
+		DEFAULT_XML {
+
 			@Override
-			public String getRequestPath() {
-				return null;
+			public SolrServer create(String url) {
+				HttpSolrServer solr = new HttpSolrServer(url);
+				solr.setParser(new XMLResponseParser());
+				return solr;
 			}
 
 		},
@@ -40,11 +47,6 @@ public class SolrServerFactoryImpl implements SolrServerFactory {
 				HttpSolrServer solr = new HttpSolrServer(url, client);
 				solr.setParser(new XMLResponseParser());
 				return solr;
-			}
-
-			@Override
-			public String getRequestPath() {
-				return null;
 			}
 
 		},
@@ -70,14 +72,19 @@ public class SolrServerFactoryImpl implements SolrServerFactory {
 
 		public abstract SolrServer create(String url);
 
-		public abstract String getRequestPath();
+		public String getRequestPath() {
+			return null;
+		}
 
 	}
+
+	@Value(value = "${solr.javabin:#{true}}")
+	private boolean javabin = true;
 
 	@Override
 	public SolrServerFacade create(String url, Mode mode, SolrIndexingExceptionHandler exceptionHandler) {
 		if (mode == null) {
-			mode = Mode.DEFAULT;
+			mode = (javabin) ? Mode.DEFAULT : Mode.DEFAULT_XML;
 		}
 		logger.info("About to create SolrServerFacade for url: {}", (mode.getRequestPath() == null) ? url : url +  mode.getRequestPath());
 		SolrServer server = mode.create(url);

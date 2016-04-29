@@ -66,7 +66,7 @@ public class SolrIndexWriter implements ItemWriter<Future<List<SolrInputDocument
 
 	@Override
 	public void beforeStep(StepExecution stepExecution) {
-		server = factory.create(solrUrl, Mode.DEFAULT, new FaultTolerantIndexingExceptionHandler());
+		server = factory.create(solrUrl, null, new FaultTolerantIndexingExceptionHandler());
 	}
 
 	@Override
