@@ -1,8 +1,11 @@
 package cz.mzk.recordmanager.server.scripting.marc.function;
 
 import java.text.MessageFormat;
+import java.text.ParseException;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -10,6 +13,9 @@ import org.marc4j.marc.DataField;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+
+import com.spatial4j.core.context.SpatialContext;
+import com.spatial4j.core.context.SpatialContextFactory;
 
 import cz.mzk.recordmanager.server.marc.MarcRecord;
 import cz.mzk.recordmanager.server.scripting.marc.MarcFunctionContext;
@@ -27,28 +33,45 @@ public strictfp class BoundingBoxMarcFunctions implements MarcRecordFunctions {
 	private static final Pattern PATTERN = Pattern
 			.compile("([eEwWnNsS]{1})(\\d{3})(\\d{2})(\\d{2})");
 
+	private static final SpatialContext SPATIAL_CONTEXT = createSpatialContext();
+
+	public String getBoundingBoxAsPolygon(MarcFunctionContext ctx) {
+		double points[] =  parseBoundingBox(ctx.record());
+		if (points == null) {
+			return null;
+		}
+		// different Locale settings can lead to different values - hard setting Locale.US, which produces desired format
+		MessageFormat mf = new MessageFormat("POLYGON(({0} {1}, {2} {1}, {2} {3}, {0} {3}, {0} {1}))");
+		Object[] arguments = {points[0], points[1], points[2], points[3]};
+		mf.setLocale(Locale.US);
+		String result = mf.format(arguments);
+		return (isValid(result, ctx)) ? result : null;
+	}
+
+	public String getBoundingBox(MarcFunctionContext ctx) {
+		double points[] =  parseBoundingBox(ctx.record());
+		if (points == null) {
+			return null;
+		}
+		return String.format("%s %s %s %s",
+				points[0], points[1], points[2], points[3]);
+	}
+
+	@Deprecated
 	public String getBoundingBoxAsPolygon(MarcRecord rec) {
 		double points[] =  parseBoundingBox(rec);
 		if (points == null) {
 			return null;
 		}
-		
 		// different Locale settings can lead to different values - hard setting Locale.US, which produces desired format
 		MessageFormat mf = new MessageFormat("POLYGON(({0} {1}, {2} {1}, {2} {3}, {0} {3}, {0} {1}))");
 		Object[] arguments = {points[0], points[1], points[2], points[3]};
 		mf.setLocale(Locale.US);
-		return mf.format(arguments );
+		String result = mf.format(arguments);
+		return (isValid(result, null)) ? result : null;
 	}
 
-	public String getBoundingBoxAsPolygon(MarcFunctionContext ctx) {
-		MarcRecord record = ctx.record();
-		return getBoundingBoxAsPolygon(record);
-	}
-
-	public String getBoundingBox(MarcFunctionContext ctx) {
-		return getBoundingBox(ctx.record());
-	}
-
+	@Deprecated
 	public String getBoundingBox(MarcRecord record) {
 		double points[] =  parseBoundingBox(record);
 		if (points == null) {
@@ -135,6 +158,25 @@ public strictfp class BoundingBoxMarcFunctions implements MarcRecordFunctions {
 			loc *= -1.0;
 		}
 		return loc;
+	}
+
+	private boolean isValid(String shape, MarcFunctionContext ctx) {
+		try {
+			SPATIAL_CONTEXT.readShapeFromWkt(shape);
+			return true;
+		} catch (ParseException pe) {
+			logger.warn("Record {} has invalid shape: {}, error: {}",
+					ctx.harvestedRecord(), shape, pe.getMessage());
+			return false;
+		}
+	}
+
+	private static SpatialContext createSpatialContext() {
+		String spatialContextFactoryClass = "com.spatial4j.core.context.jts.JtsSpatialContextFactory";
+		Map<String, String> args = Collections.singletonMap("spatialContextFactory", spatialContextFactoryClass);
+		ClassLoader classLoader = BoundingBoxMarcFunctions.class.getClassLoader();
+		SpatialContext ctx = SpatialContextFactory.makeSpatialContext(args, classLoader);
+		return ctx;
 	}
 
 }
