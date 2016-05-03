@@ -4,8 +4,10 @@ import java.io.ByteArrayOutputStream;
 import java.util.Date;
 import java.util.List;
 
+import org.hibernate.SessionFactory;
 import org.marc4j.MarcWriter;
 import org.marc4j.MarcXmlWriter;
+import org.marc4j.converter.CharConverter;
 import org.marc4j.marc.Record;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,7 +16,10 @@ import org.springframework.batch.item.ItemWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.google.common.base.CharMatcher;
+
 import cz.mzk.recordmanager.server.dedup.DelegatingDedupKeysParser;
+import cz.mzk.recordmanager.server.marc.ISOCharConvertor;
 import cz.mzk.recordmanager.server.marc.MarcRecord;
 import cz.mzk.recordmanager.server.marc.MarcRecordImpl;
 import cz.mzk.recordmanager.server.marc.intercepting.MarcInterceptorFactory;
@@ -47,18 +52,28 @@ public class ImportRecordsWriter implements ItemWriter<List<Record>> {
 	
 	@Autowired 
 	private MarcInterceptorFactory marcInterceptorFactory;
-	
+
+	@Autowired
+	protected SessionFactory sessionFactory;
+
 	private OAIHarvestConfiguration harvestConfiguration;
-	
+
 	private Long configurationId;
-	
-	
+
 	public ImportRecordsWriter(Long configraionId) {
 		this.configurationId = configraionId;
 	}
 
-	@Override
 	public void write(List<? extends List<Record>> items) throws Exception {
+		try {
+			writeInner(items);
+		} finally {
+			sessionFactory.getCurrentSession().flush();
+			sessionFactory.getCurrentSession().clear();
+		}
+	}
+
+	protected void writeInner(List<? extends List<Record>> items) throws Exception {
 		if (harvestConfiguration == null) {
 			harvestConfiguration = oaiHarvestConfigurationDao.get(configurationId);			
 		}
@@ -80,6 +95,7 @@ public class ImportRecordsWriter implements ItemWriter<List<Record>> {
 					hr.setUpdated(new Date());
 					ByteArrayOutputStream outStream = new ByteArrayOutputStream();
 					MarcWriter marcWriter = new MarcXmlWriter(outStream, true);
+					marcWriter.setConverter(ISOCharConvertor.INSTANCE);
 					marcWriter.write(currentRecord);
 					marcWriter.close();
 					byte[] recordContent = outStream.toByteArray();
