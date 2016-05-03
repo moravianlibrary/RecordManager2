@@ -12,16 +12,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import cz.mzk.recordmanager.server.solr.SolrServerFacade;
 import cz.mzk.recordmanager.server.solr.SolrServerFactory;
 
-public class OrphanedRecordsWriter implements ItemWriter<String>, StepExecutionListener {
-	
+public class DeletedHarvestedRecordsWriter implements ItemWriter<String>, StepExecutionListener {
+
 	@Autowired
 	private SolrServerFactory factory;
 
 	private SolrServerFacade server;
 
 	private String solrUrl;
-	
-	public OrphanedRecordsWriter(String solrUrl) {
+
+	public DeletedHarvestedRecordsWriter(String solrUrl) {
 		this.solrUrl = solrUrl;
 	}
 
