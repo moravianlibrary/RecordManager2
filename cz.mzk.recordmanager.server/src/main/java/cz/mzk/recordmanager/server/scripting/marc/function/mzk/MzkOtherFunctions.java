@@ -163,7 +163,7 @@ public class MzkOtherFunctions implements MarcRecordFunctions {
 
 	public String getMZKSysno(MarcFunctionContext ctx) {
 		String idParts[] = ctx.harvestedRecord().getUniqueId().getRecordId().split("-");
-		return idParts[1];
+		return (idParts.length >= 2)? idParts[1] : null;
 	}
 
 	public String getMZKAuthorAndTitle(MarcFunctionContext ctx) {
