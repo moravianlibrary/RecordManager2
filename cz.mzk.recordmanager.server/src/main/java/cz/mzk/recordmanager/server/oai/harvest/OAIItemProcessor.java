@@ -35,6 +35,7 @@ import cz.mzk.recordmanager.server.oai.dao.OAIHarvestConfigurationDAO;
 import cz.mzk.recordmanager.server.oai.model.OAIRecord;
 import cz.mzk.recordmanager.server.util.HibernateSessionSynchronizer;
 import cz.mzk.recordmanager.server.util.HibernateSessionSynchronizer.SessionBinder;
+import cz.mzk.recordmanager.server.util.RegexpExtractor;
 
 public class OAIItemProcessor implements ItemProcessor<List<OAIRecord>, List<HarvestedRecord>>, StepExecutionListener {
 
@@ -63,7 +64,7 @@ public class OAIItemProcessor implements ItemProcessor<List<OAIRecord>, List<Har
 	
 	private OAIHarvestConfiguration configuration;
 
-	private Pattern extractIdPattern;
+	private RegexpExtractor idExtractor;
 
 	private Transformer transformer;
 	
@@ -77,7 +78,7 @@ public class OAIItemProcessor implements ItemProcessor<List<OAIRecord>, List<Har
 	}
 	
 	protected HarvestedRecord createHarvestedRecord(OAIRecord record) throws TransformerException {
-		String recordId = extractIdentifier(record.getHeader().getIdentifier());
+		String recordId = idExtractor.extract(record.getHeader().getIdentifier());
 		HarvestedRecord rec = recordDao.findByIdAndHarvestConfiguration(
 				recordId, configuration);
 		if (rec == null) {
@@ -130,7 +131,7 @@ public class OAIItemProcessor implements ItemProcessor<List<OAIRecord>, List<Har
 			configuration = configDao.get(confId);
 			format = formatResolver.resolve(configuration.getMetadataPrefix());
 			String regex = MoreObjects.firstNonNull(configuration.getRegex(), DEFAULT_EXTRACT_ID_PATTERN);
-			extractIdPattern = Pattern.compile(regex);
+			idExtractor = new RegexpExtractor(regex);
 			try {
 				TransformerFactory transformerFactory = TransformerFactory
 						.newInstance();
@@ -146,15 +147,6 @@ public class OAIItemProcessor implements ItemProcessor<List<OAIRecord>, List<Har
 		StreamResult result = new StreamResult(bos);
 		transformer.transform(new DOMSource(element), result);
 		return bos.toByteArray();
-	}
-	
-	protected String extractIdentifier(String oaiIdentifier) {
-		Matcher matcher = extractIdPattern.matcher(oaiIdentifier);
-		if (matcher.matches()) {
-			String id = matcher.group(1);
-			return id;
-		}
-		return oaiIdentifier;
 	}
 
 }
