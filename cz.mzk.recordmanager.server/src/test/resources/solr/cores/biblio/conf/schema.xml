@@ -224,6 +224,10 @@
    <field name="id001_search" type="string" indexed="true" stored="true" multiValued="true"/>
    <field name="author_find" type="textProper" indexed="true" stored="true" multiValued="true"/>
    <field name="inspiration" type="string" indexed="true" stored="true" multiValued="true"/>
+   <field name="author_viz" type="textProper" indexed="true" stored="true" multiValued="true"/>
+   <field name="corporation_viz" type="textProper" indexed="true" stored="true" multiValued="true"/>
+   <field name="subject_viz" type="textProper" indexed="true" stored="true" multiValued="true"/>
+   <field name="genre_viz" type="textProper" indexed="true" stored="true" multiValued="true"/>
    <!-- Doesn't need to be stored after successful testing -->
    <field name="loanRelevance" type="integer"  indexed="true"  stored="true"/>
    <!-- Dynamic fields for customization without schema modification -->

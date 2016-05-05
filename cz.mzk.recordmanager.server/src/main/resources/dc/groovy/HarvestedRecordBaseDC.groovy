@@ -3,7 +3,6 @@ fullrecord = getFullRecord()
 
 local_statuses_facet_str_mv = getStatuses()
 
-_hidden_authors_dummy = ""
 _hidden_authority_dummy_field = ""
 kramerius_dummy_rights = getRights()
 

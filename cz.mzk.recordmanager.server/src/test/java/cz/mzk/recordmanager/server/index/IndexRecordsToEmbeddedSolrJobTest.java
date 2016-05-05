@@ -93,7 +93,7 @@ public class IndexRecordsToEmbeddedSolrJobTest extends AbstractSolrTest {
 			SolrDocument document = docResponse.getResults().get(0);
 			// check whether author_search field contains alternative name from authority record
 			Assert.assertTrue(
-					document.getFieldValues("author_search").stream() //
+					document.getFieldValues("author_viz").stream() //
 							.anyMatch(s -> s.equals("Imaginarni, Karel, 1900-2000")), 
 					"Authority enrichment failed.");
 		}

@@ -18,8 +18,11 @@ local_statuses_facet_str_mv = getStatuses()
 
 holdings_996_str_mv = getHoldings996()
 
-_hidden_authority_dummy_field = getFields "1007:7007"
-_hidden_authors_dummy = getFields "100abcd:700abcd"
+_hidden_authority_dummy_field = getAuthorityIds "1007:7007"
+_hidden_corporation_dummy_field = getAuthorityIds "1107:1117:7107:7117"
+_hidden_subject_dummy_field = getAuthorityIds "6007:6107:6117:6487:6507:6517"
+_hidden_genre_dummy_field = getAuthorityIds "6557"
+
 sfx_links = getSfxIds()
 
 barcodes = getFields "996b"

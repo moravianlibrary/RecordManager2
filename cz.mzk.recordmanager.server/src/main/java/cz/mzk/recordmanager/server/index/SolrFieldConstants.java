@@ -30,7 +30,13 @@ public class SolrFieldConstants {
 	
 	public static final String AUTHOR_FIELD = "author";
 	
-	public static final String AUTHOR_FIELD_SEARCH = "author_search";
+	public static final String AUTHOR_VIZ_FIELD = "author_viz";
+	
+	public static final String CORPORATION_VIZ_FIELD = "corporation_viz";
+	
+	public static final String SUBJECT_VIZ_FIELD = "subject_viz";
+	
+	public static final String GENRE_VIZ_FIELD = "genre_viz";
 	
 	public static final String URL = "url";
 
@@ -58,8 +64,12 @@ public class SolrFieldConstants {
 	 * dummy fields used for processing purposes only, shouldn't be indexed. Fields are deleted in AuthorityEnricher. 
 	 */
 	public static final String AUTHOR_AUTHORITY_DUMMY_FIELD = "_hidden_authority_dummy_field";
-
-	public static final String AUTHOR_DUMMY_FIELD = "_hidden_authors_dummy";
+	
+	public static final String CORPORATION_AUTHORITY_DUMMY_FIELD = "_hidden_corporation_dummy_field";
+	
+	public static final String SUBJECT_AUTHORITY_DUMMY_FIELD = "_hidden_subject_dummy_field";
+	
+	public static final String GENRE_AUTHORITY_DUMMY_FIELD = "_hidden_genre_dummy_field";
 	
 	/**
 	 * dummy field for passing kramerius policy, removed in UrlEnricher

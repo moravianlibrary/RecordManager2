@@ -542,4 +542,20 @@ public class MarcDSL extends BaseDSL {
     	result.addAll(getAuthor2Display());
     	return result;
     }
+    
+    public Set<String> getAuthorityIds(String tags){
+    	Set<String> result = new HashSet<>();
+		for (String tag : tags.split(":")) {
+			Matcher matcher = FIELD_PATTERN.matcher(tag);
+			if (!matcher.matches()) {
+				throw new IllegalArgumentException("Tag can't be parsed: "
+						+ tag);
+			}
+			String fieldTag = matcher.group(1);
+			String subFields = matcher.group(2);
+			record.getFields(fieldTag, " ",	subFields.toCharArray()).stream()
+				.forEach(s -> result.add(fieldTag + ":" + s));
+		}
+		return result;
+    }
 }
