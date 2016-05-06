@@ -18,7 +18,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import cz.mzk.recordmanager.server.solr.FaultTolerantIndexingExceptionHandler;
 import cz.mzk.recordmanager.server.solr.SolrServerFacade;
 import cz.mzk.recordmanager.server.solr.SolrServerFactory;
-import cz.mzk.recordmanager.server.solr.SolrServerFactoryImpl.Mode;
 import cz.mzk.recordmanager.server.util.SolrUtils;
 
 public class SolrIndexWriter implements ItemWriter<Future<List<SolrInputDocument>>>, StepExecutionListener {

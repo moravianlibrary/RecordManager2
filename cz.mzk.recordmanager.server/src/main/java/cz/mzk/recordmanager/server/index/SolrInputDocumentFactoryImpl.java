@@ -31,6 +31,7 @@ import cz.mzk.recordmanager.server.model.HarvestedRecordFormat.HarvestedRecordFo
 import cz.mzk.recordmanager.server.model.ImportConfiguration;
 import cz.mzk.recordmanager.server.model.Inspiration;
 import cz.mzk.recordmanager.server.scripting.MappingResolver;
+import cz.mzk.recordmanager.server.util.IndexingUtils;
 import cz.mzk.recordmanager.server.util.MetadataUtils;
 import cz.mzk.recordmanager.server.util.SolrUtils;
 
@@ -41,8 +42,7 @@ public class SolrInputDocumentFactoryImpl implements SolrInputDocumentFactory, I
 	private static final String INSTITUTION_OTHERS = "Others";
 
 	private static Logger logger = LoggerFactory.getLogger(SolrInputDocumentFactoryImpl.class);
-	
-	private static final Pattern OAI_RECORD_ID_PATTERN = Pattern.compile("oai:[\\w|.]+:([\\w|-]+)");
+
 	private static final Pattern RECORDTYPE_PATTERN = Pattern.compile("^(AUDIO|VIDEO|OTHER)_(.*)$");
 
 	private List<String> fieldsWithDash = Arrays.asList( //
@@ -87,7 +87,7 @@ public class SolrInputDocumentFactoryImpl implements SolrInputDocumentFactory, I
 	public SolrInputDocument create(HarvestedRecord record) {
 		try {
 			Map<String, Object> fields = mapper.map(record);
-			String id = getId(record);
+			String id = IndexingUtils.getSolrId(record);
 			updateHoldings(id, fields);
 			SolrInputDocument document = asSolrDocument(fields);
 			if (!document.containsKey(SolrFieldConstants.ID_FIELD)) {
@@ -161,17 +161,6 @@ public class SolrInputDocumentFactoryImpl implements SolrInputDocumentFactory, I
 		return document;
 	}
 
-	protected String getId(HarvestedRecord record) {
-		String prefix = record.getHarvestedFrom().getIdPrefix();
-		String suffix = record.getUniqueId().getRecordId();
-		Matcher matcher = OAI_RECORD_ID_PATTERN.matcher(suffix);
-		if (matcher.matches()) {
-			suffix = matcher.group(1);
-		}
-		String id = ((prefix != null) ? prefix + "." : "") + suffix;
-		return id;
-	}
-
 	protected String getInstitutionOfRecord(HarvestedRecord hr) {
 		ImportConfiguration config = hr.getHarvestedFrom();
 		if (config != null
@@ -236,7 +225,6 @@ public class SolrInputDocumentFactoryImpl implements SolrInputDocumentFactory, I
 		
 		return result;
 	}
-	
 
 	@Override
 	public void afterPropertiesSet() throws Exception {
