@@ -7,16 +7,14 @@ import java.util.List;
 import org.hibernate.SessionFactory;
 import org.marc4j.MarcWriter;
 import org.marc4j.MarcXmlWriter;
-import org.marc4j.converter.CharConverter;
 import org.marc4j.marc.Record;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.batch.core.configuration.annotation.StepScope;
+import org.springframework.batch.core.ExitStatus;
+import org.springframework.batch.core.StepExecution;
+import org.springframework.batch.core.StepExecutionListener;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-import com.google.common.base.CharMatcher;
 
 import cz.mzk.recordmanager.server.dedup.DelegatingDedupKeysParser;
 import cz.mzk.recordmanager.server.marc.ISOCharConvertor;
@@ -31,10 +29,11 @@ import cz.mzk.recordmanager.server.model.HarvestedRecord.HarvestedRecordUniqueId
 import cz.mzk.recordmanager.server.model.OAIHarvestConfiguration;
 import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordDAO;
 import cz.mzk.recordmanager.server.oai.dao.OAIHarvestConfigurationDAO;
+import cz.mzk.recordmanager.server.util.HibernateSessionSynchronizer;
+import cz.mzk.recordmanager.server.util.HibernateSessionSynchronizer.SessionBinder;
+import cz.mzk.recordmanager.server.util.RegexpExtractor;
 
-@Component
-@StepScope
-public class ImportRecordsWriter implements ItemWriter<List<Record>> {
+public class ImportRecordsWriter implements ItemWriter<List<Record>>, StepExecutionListener {
 	
 	private static Logger logger = LoggerFactory.getLogger(ImportRecordsWriter.class);
 	
@@ -54,16 +53,22 @@ public class ImportRecordsWriter implements ItemWriter<List<Record>> {
 	private MarcInterceptorFactory marcInterceptorFactory;
 
 	@Autowired
+	private HibernateSessionSynchronizer sync;
+
+	@Autowired
 	protected SessionFactory sessionFactory;
 
 	private OAIHarvestConfiguration harvestConfiguration;
 
 	private Long configurationId;
 
-	public ImportRecordsWriter(Long configraionId) {
-		this.configurationId = configraionId;
+	private RegexpExtractor regexpExtractor;
+
+	public ImportRecordsWriter(Long configurationId) {
+		this.configurationId = configurationId;
 	}
 
+	@Override
 	public void write(List<? extends List<Record>> items) throws Exception {
 		try {
 			writeInner(items);
@@ -74,21 +79,23 @@ public class ImportRecordsWriter implements ItemWriter<List<Record>> {
 	}
 
 	protected void writeInner(List<? extends List<Record>> items) throws Exception {
-		if (harvestConfiguration == null) {
-			harvestConfiguration = oaiHarvestConfigurationDao.get(configurationId);			
-		}
 		for (List<Record> records : items) {
 			for (Record currentRecord : records) {
 				try {
 					MarcRecord marc = new MarcRecordImpl(currentRecord);
 					MetadataRecord metadata = metadataFactory.getMetadataRecord(marc);
 					String recordId = metadata.getOAIRecordId();
-					if(recordId == null) recordId = metadata.getUniqueId();
+					if (recordId == null) {
+						recordId = metadata.getUniqueId();
+					}
+					if (regexpExtractor != null) {
+						recordId = regexpExtractor.extract(recordId);
+					}
 					HarvestedRecord hr = harvestedRecordDao.findByIdAndHarvestConfiguration(recordId, configurationId);
-					if(hr == null){
+					if (hr == null){
 						HarvestedRecordUniqueId id = new HarvestedRecordUniqueId(harvestConfiguration, recordId);
 						hr = new HarvestedRecord(id);
-//						TODO detect format
+						// TODO detect format
 						hr.setFormat("marc21-xml");
 						hr.setHarvestedFrom(harvestConfiguration);
 					}
@@ -100,7 +107,7 @@ public class ImportRecordsWriter implements ItemWriter<List<Record>> {
 					marcWriter.close();
 					byte[] recordContent = outStream.toByteArray();
 					if (harvestConfiguration.isInterceptionEnabled()) {
-						MarcRecordInterceptor interceptor = marcInterceptorFactory.getInterceptor(harvestConfiguration,recordContent);
+						MarcRecordInterceptor interceptor = marcInterceptorFactory.getInterceptor(harvestConfiguration, recordContent);
 						if (interceptor != null) {
 							recordContent = interceptor.intercept();
 						}
@@ -129,4 +136,20 @@ public class ImportRecordsWriter implements ItemWriter<List<Record>> {
 			}
 		}
 	}
+
+	@Override
+	public void beforeStep(StepExecution stepExecution) {
+		try (SessionBinder session = sync.register()) {
+			harvestConfiguration = oaiHarvestConfigurationDao.get(configurationId);
+			if (harvestConfiguration.getRegex() != null) {
+				regexpExtractor = new RegexpExtractor(harvestConfiguration.getRegex());
+			}
+		}
+	}
+
+	@Override
+	public ExitStatus afterStep(StepExecution stepExecution) {
+		return null;
+	}
+
 }

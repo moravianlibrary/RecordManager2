@@ -22,6 +22,7 @@ import cz.mzk.recordmanager.server.oai.harvest.HarvestedRecordWriter;
 import cz.mzk.recordmanager.server.oai.harvest.OAIItemProcessor;
 import cz.mzk.recordmanager.server.oai.model.OAIRecord;
 import cz.mzk.recordmanager.server.springbatch.JobFailureListener;
+import cz.mzk.recordmanager.server.springbatch.UUIDIncrementer;
 import cz.mzk.recordmanager.server.util.Constants;
 
 @Configuration
@@ -42,13 +43,15 @@ public class ImportRecordJobConfig {
 			@Qualifier(Constants.JOB_ID_IMPORT +":importRecordsStep") Step importRecordsStep) {
 		return jobs.get(Constants.JOB_ID_IMPORT)
 				.validator(new ImportRecordsJobParametersValidator())
-				.listener(JobFailureListener.INSTANCE).flow(importRecordsStep)
+				.incrementer(UUIDIncrementer.INSTANCE)
+				.listener(JobFailureListener.INSTANCE)
+				.flow(importRecordsStep)
 				.end().build();
 	}
 
 	@Bean(name=Constants.JOB_ID_IMPORT +":importRecordsStep")
 	public Step importRecordsStep() throws Exception {
-		return steps.get("updateRecordsJobStep")
+		return steps.get("importRecordsStep")
 				.<List<Record>, List<Record>> chunk(20)//
 				.reader(importRecordsReader(STRING_OVERRIDEN_BY_EXPRESSION, STRING_OVERRIDEN_BY_EXPRESSION))//
 				.writer(importRecordsWriter(LONG_OVERRIDEN_BY_EXPRESSION)) //
@@ -63,13 +66,13 @@ public class ImportRecordJobConfig {
 			throws Exception {
 			return new ImportRecordsFileReader(filename, strFormat);
 	}
-	
+
 	@Bean(name=Constants.JOB_ID_IMPORT +":writer")
 	@StepScope
-	public ItemWriter<List<Record>> importRecordsWriter(@Value("#{jobParameters[" + Constants.JOB_PARAM_CONF_ID + "]}") Long configurationId) {
+	public ImportRecordsWriter importRecordsWriter(@Value("#{jobParameters[" + Constants.JOB_PARAM_CONF_ID + "]}") Long configurationId) {
 		return new ImportRecordsWriter(configurationId);
 	}
-	
+
 	// Antikvariaty
 	@Bean
 	public Job AntikvariatyImportRecordsJob(
@@ -171,4 +174,5 @@ public class ImportRecordJobConfig {
 	public ItemWriter<List<Record>> importCosmotron996RecordsWriter(@Value("#{jobParameters[" + Constants.JOB_PARAM_CONF_ID + "]}") Long configurationId) {
 		return new ImportCosmotron996RecordsWriter(configurationId);
 	}
+
 }
