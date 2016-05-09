@@ -115,9 +115,9 @@ public class MarcDSL extends BaseDSL {
      * Get all fields starting with the 100 and ending with the 839
      * This will ignore any "code" fields and only use textual fields
      */
-	public String getAllFields() {
+	public List<String> getAllFields() {
 		Map<String, List<DataField>> allFields = record.getAllFields();
-		StringBuffer buffer = new StringBuffer();
+		List<String> result = new ArrayList<String>();
         for (Entry<String, List<DataField>> entry : allFields.entrySet()) {
         	int tag = -1;
         	try {
@@ -129,6 +129,7 @@ public class MarcDSL extends BaseDSL {
             	continue;
             }
             List<DataField> fields = entry.getValue();
+            StringBuffer buffer = new StringBuffer();
 			for (DataField field : fields) {
                 List<Subfield> subfields = field.getSubfields();
                 Iterator<Subfield> subfieldsIter = subfields.iterator();
@@ -141,10 +142,11 @@ public class MarcDSL extends BaseDSL {
                     }
                 }
             }
+			result.add(buffer.toString());
         }
-        return buffer.toString();
+        return result;
 	}
-	
+
     /**
      * Get the title (245ab) from a record, without non-filing chars as
      * specified in 245 2nd indicator, and lowercased. 
