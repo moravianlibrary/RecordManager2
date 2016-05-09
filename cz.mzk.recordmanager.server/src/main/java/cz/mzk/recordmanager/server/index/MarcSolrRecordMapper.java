@@ -1,10 +1,12 @@
 package cz.mzk.recordmanager.server.index;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +17,7 @@ import cz.mzk.recordmanager.server.marc.MarcRecord;
 import cz.mzk.recordmanager.server.marc.MarcXmlParser;
 import cz.mzk.recordmanager.server.model.DedupRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
+import cz.mzk.recordmanager.server.model.ImportConfiguration;
 import cz.mzk.recordmanager.server.scripting.MappingScript;
 import cz.mzk.recordmanager.server.scripting.marc.MarcFunctionContext;
 import cz.mzk.recordmanager.server.scripting.marc.MarcScriptFactory;
@@ -35,7 +38,9 @@ public class MarcSolrRecordMapper implements SolrRecordMapper, InitializingBean 
 
 	private MappingScript<MarcFunctionContext> dedupRecordMappingScript;
 
-	private MappingScript<MarcFunctionContext> harvestedRecordMappingScript;
+	private Map<Long, MappingScript<MarcFunctionContext>> harvestedRecordMappingScripts = new ConcurrentHashMap<Long, MappingScript<MarcFunctionContext>>(10, 0.75f, 1);
+
+	private MappingScript<MarcFunctionContext> defaultHarvestedRecordMappingScript;
 
 	@Override
 	public List<String> getSupportedFormats() {
@@ -60,7 +65,7 @@ public class MarcSolrRecordMapper implements SolrRecordMapper, InitializingBean 
 	protected Map<String, Object> parseAsDedupRecord(HarvestedRecord record) {
 		InputStream is = new ByteArrayInputStream(record.getRawRecord());
 		MarcRecord rec = marcXmlParser.parseRecord(is);
-		MappingScript<MarcFunctionContext> script = getMappingScript(record);
+		MappingScript<MarcFunctionContext> script = getDedupMappingScript(record);
 		MarcFunctionContext ctx = new MarcFunctionContext(rec, record);
 		Map<String, Object> result = script.parse(ctx);
 		return result;
@@ -70,18 +75,46 @@ public class MarcSolrRecordMapper implements SolrRecordMapper, InitializingBean 
 		InputStream is = new ByteArrayInputStream(record.getRawRecord());
 		MarcRecord rec = marcXmlParser.parseRecord(is);
 		MarcFunctionContext ctx = new MarcFunctionContext(rec, record);
-		return harvestedRecordMappingScript.parse(ctx);
+		return getHarvestedMappingScript(record).parse(ctx);
 	}
 
-	protected MappingScript<MarcFunctionContext> getMappingScript(HarvestedRecord record) {
+	protected MappingScript<MarcFunctionContext> getDedupMappingScript(HarvestedRecord record) {
 		return dedupRecordMappingScript;
+	}
+
+	protected MappingScript<MarcFunctionContext> getHarvestedMappingScript(HarvestedRecord record) {
+		MappingScript<MarcFunctionContext> script = harvestedRecordMappingScripts.get(record.getHarvestedFrom().getId());
+		if (script == null) {
+			script = getScript(record.getHarvestedFrom());
+			harvestedRecordMappingScripts.put(record.getHarvestedFrom().getId(), script);
+		}
+		return script;
+	}
+
+	protected MappingScript<MarcFunctionContext> getScript(ImportConfiguration importConf) {
+		if (importConf.getMappingScript() != null) {
+			String[] scripts = importConf.getMappingScript().split(",");
+			InputStream resources[] = new InputStream[scripts.length];
+			int index = 0;
+			for (String script : scripts) {
+				try {
+					resources[index] = resourceProvider.getResource("/marc/groovy/" + script.trim());
+					index++;
+				} catch (IOException ioe) {
+					throw new RuntimeException(ioe.getMessage(), ioe);
+				}
+			}
+			return marcScriptFactory.create(resources);
+		} else {
+			return defaultHarvestedRecordMappingScript;
+		}
 	}
 
 	@Override
 	public void afterPropertiesSet() throws Exception {
 		dedupRecordMappingScript = marcScriptFactory.create( //
 				resourceProvider.getResource("/marc/groovy/BaseMarc.groovy"));
-		harvestedRecordMappingScript = marcScriptFactory.create( //
+		defaultHarvestedRecordMappingScript = marcScriptFactory.create( //
 				resourceProvider.getResource("/marc/groovy/HarvestedRecordBaseMarc.groovy"));
 	}
 

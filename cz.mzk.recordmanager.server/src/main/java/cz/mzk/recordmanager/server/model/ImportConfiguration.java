@@ -52,6 +52,9 @@ public abstract class ImportConfiguration extends AbstractDomainObject {
 	@Column(name="harvest_frequency")
 	private HarvestFrequency harvestFrequency = HarvestFrequency.UNSPECIFIED;
 
+	@Column(name="mapping_script")
+	private String mappingScript;
+
 	public Library getLibrary() {
 		return library;
 	}
@@ -122,6 +125,14 @@ public abstract class ImportConfiguration extends AbstractDomainObject {
 
 	public void setHarvestFrequency(HarvestFrequency harvestFrequency) {
 		this.harvestFrequency = harvestFrequency;
+	}
+
+	public String getMappingScript() {
+		return mappingScript;
+	}
+
+	public void setMappingScript(String mappingScript) {
+		this.mappingScript = mappingScript;
 	}
 
 }

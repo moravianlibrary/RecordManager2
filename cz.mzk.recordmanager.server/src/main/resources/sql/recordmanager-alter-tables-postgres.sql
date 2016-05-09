@@ -433,3 +433,6 @@ UPDATE oai_harvest_conf SET set_spec='MZK-CPK' WHERE import_conf_id=335;
 -- 20. 4. 2016 tomascejpek
 UPDATE oai_harvest_conf SET url='http://aleph.knihovna-pardubice.cz/OAI' WHERE import_conf_id=333;
 UPDATE oai_harvest_conf SET set_spec='PAG_OAI_CPK_MARC21' WHERE import_conf_id=333;
+
+-- 9. 5. 2016 xrosecky
+ALTER TABLE import_conf ADD COLUMN mapping_script VARCHAR(256);

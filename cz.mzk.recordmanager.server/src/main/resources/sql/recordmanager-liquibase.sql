@@ -684,3 +684,6 @@ INSERT INTO sigla (import_conf_id, sigla, id) VALUES (335, 'OSA001', 29);
 INSERT INTO sigla (import_conf_id, sigla, id) VALUES (336, 'KLG001', 30);
 INSERT INTO sigla (import_conf_id, sigla, id) VALUES (337, 'PNA001', 31);
 INSERT INTO sigla (import_conf_id, sigla, id) VALUES (338, 'ABC016', 32);
+
+--changeset xrosecky:3
+ALTER TABLE import_conf ADD COLUMN mapping_script VARCHAR(256);
