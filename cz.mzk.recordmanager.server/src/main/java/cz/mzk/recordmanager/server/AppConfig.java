@@ -249,7 +249,6 @@ public class AppConfig extends DefaultBatchConfigurer {
 		} else {
 			liquibase.setContexts(DEFAULT_LIQUIBASE_CONTEXTS);
 		}
-		System.out.println(String.format("contexts: %s",liquibaseContexts));
 		return liquibase;
 	}
 
