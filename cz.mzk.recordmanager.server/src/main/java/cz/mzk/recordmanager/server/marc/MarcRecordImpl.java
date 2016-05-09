@@ -117,23 +117,23 @@ public class MarcRecordImpl implements MarcRecord {
 	public Map<String, List<DataField>> getAllFields() {
 		return Collections.unmodifiableMap(dataFields);
 	}
-	
-	
-	
+
 	protected String parseSubfields(DataField df, String separator, char... subfields) {
 		StringBuilder sb = new StringBuilder();
 		String sep = EMPTY_STRING;
 		for (char subfield : subfields) {
-			Subfield sf = df.getSubfield(subfield);
-			if (sf != null) {
-				sb.append(sep);
-				sb.append(sf.getData());
-				sep = separator;
+			List<Subfield> sfl = df.getSubfields(subfield);
+			if (sfl != null && !sfl.isEmpty()) {
+				for (Subfield sf : sfl) {
+					sb.append(sep);
+					sb.append(sf.getData());
+					sep = separator;
+				}
 			}
 		}
 		return sb.toString();
 	}
-	
+
 	/**
 	 * get first code subfield from first field having given tag
 	 * @param tag
