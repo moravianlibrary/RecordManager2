@@ -19,8 +19,9 @@ public class IndexRecordsToSolrJobParametersValidator extends
 		return Arrays.asList(
 				param(Constants.JOB_PARAM_FROM_DATE, ParameterType.DATE, false), //
 				param(Constants.JOB_PARAM_UNTIL_DATE, ParameterType.DATE, false), //
-				param(Constants.JOB_PARAM_SOLR_URL, ParameterType.STRING, true) //
-				);
+				param(Constants.JOB_PARAM_SOLR_URL, ParameterType.STRING, true), //
+				param(Constants.JOB_PARAM_CONF_ID, ParameterType.LONG, false) //
+		);
 	}
 
 }

@@ -41,6 +41,8 @@ public class IndexHarvestedRecordsToSolrJobConfig {
 
 	private static final String STRING_OVERRIDEN_BY_EXPRESSION = null;
 
+	private static final Long LONG_OVERRIDEN_BY_EXPRESSION = null;
+
 	private static final int CHUNK_SIZE = 1000;
 
 	private static final int PAGE_SIZE = 20000;
@@ -78,7 +80,7 @@ public class IndexHarvestedRecordsToSolrJobConfig {
 		return steps
 				.get("updateRecordsJobStep")
 				.<HarvestedRecord, Future<List<SolrInputDocument>>> chunk(CHUNK_SIZE)
-				.reader(updatedRecordsReader(DATE_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION)) //
+				.reader(updatedRecordsReader(DATE_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION, LONG_OVERRIDEN_BY_EXPRESSION)) //
 				.processor(asyncUpdatedRecordsProcessor()) //
 				.writer(updatedRecordsWriter(STRING_OVERRIDEN_BY_EXPRESSION)) //
 				.build();
@@ -88,36 +90,27 @@ public class IndexHarvestedRecordsToSolrJobConfig {
 	@StepScope
 	public JdbcPagingItemReader<HarvestedRecord> updatedRecordsReader(
 			@Value("#{jobParameters[" + Constants.JOB_PARAM_FROM_DATE + "]}") Date from,
-			@Value("#{jobParameters[" + Constants.JOB_PARAM_UNTIL_DATE + "]}") Date to)
+			@Value("#{jobParameters[" + Constants.JOB_PARAM_UNTIL_DATE + "]}") Date to,
+			@Value("#{jobParameters[" + Constants.JOB_PARAM_CONF_ID + "]}") Long importConfId)
 			throws Exception {
 		if (from != null && to == null) {
 			to = new Date();
 		}
+		JdbcPagingItemReader<HarvestedRecord> reader = new JdbcPagingItemReader<>();
 		SqlPagingQueryProviderFactoryBean pqpf = new SqlPagingQueryProviderFactoryBean();
 		pqpf.setDataSource(dataSource);
 		pqpf.setSelectClause("SELECT id, import_conf_id, record_id, updated, deleted, raw_record, format");
 		pqpf.setFromClause("FROM harvested_record");
-		String whereClause = "WHERE deleted IS NULL";
-		if (from != null && to != null) {
-			whereClause += " AND updated BETWEEN :from AND :to";
-		}
-		pqpf.setWhereClause(whereClause);
+		init(reader, pqpf, from, to, importConfId, false);
 		if (from != null && to != null) {
 			pqpf.setSortKeys(ImmutableMap.of("updated", Order.ASCENDING, "id", Order.ASCENDING));
 		} else {
 			pqpf.setSortKeys(ImmutableMap.of("id", Order.ASCENDING));
 		}
-		JdbcPagingItemReader<HarvestedRecord> reader = new JdbcPagingItemReader<>();
 		reader.setRowMapper(harvestedRecordRowMapper());
 		reader.setPageSize(PAGE_SIZE);
 		reader.setQueryProvider(pqpf.getObject());
 		reader.setDataSource(dataSource);
-		if (from != null && to != null) {
-			Map<String, Object> parameterValues = new HashMap<String, Object>();
-			parameterValues.put("from", from);
-			parameterValues.put("to", to);
-			reader.setParameterValues(parameterValues);
-		}
 		reader.setSaveState(true);
 		reader.afterPropertiesSet();
 		return reader;
@@ -155,7 +148,7 @@ public class IndexHarvestedRecordsToSolrJobConfig {
 	public Step deleteOrphanedRecordsStep() throws Exception {
 		return steps.get("deleteHarvestedRecordsStep")
 				.<HarvestedRecord, HarvestedRecord> chunk(20) //
-				.reader(deletedHarvestedRecordsReader(DATE_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION)) //
+				.reader(deletedHarvestedRecordsReader(DATE_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION, LONG_OVERRIDEN_BY_EXPRESSION)) //
 				.writer(deletedHarvestedRecordsWriter(STRING_OVERRIDEN_BY_EXPRESSION)) //
 				.build();
 	}
@@ -170,7 +163,8 @@ public class IndexHarvestedRecordsToSolrJobConfig {
 	@StepScope
 	public JdbcPagingItemReader<HarvestedRecord> deletedHarvestedRecordsReader(
 			@Value("#{jobParameters[" + Constants.JOB_PARAM_FROM_DATE + "]}") Date from,
-			@Value("#{jobParameters[" + Constants.JOB_PARAM_UNTIL_DATE + "]}") Date to)
+			@Value("#{jobParameters[" + Constants.JOB_PARAM_UNTIL_DATE + "]}") Date to,
+			@Value("#{jobParameters[" + Constants.JOB_PARAM_CONF_ID + "]}") Long importConfId)
 			throws Exception {
 		if (from != null && to == null) {
 			to = new Date();
@@ -180,26 +174,40 @@ public class IndexHarvestedRecordsToSolrJobConfig {
 		pqpf.setDataSource(dataSource);
 		pqpf.setSelectClause("SELECT id, import_conf_id, record_id, updated, deleted, raw_record, format");
 		pqpf.setFromClause("FROM harvested_record");
-		if (from != null && to != null) {
-			pqpf.setWhereClause("WHERE deleted BETWEEN :from AND :to");
-		} else {
-			pqpf.setWhereClause("WHERE deleted IS NOT NULL");
-		}
+		init(reader, pqpf, from, to, importConfId, true);
 		pqpf.setSortKeys(ImmutableMap.of("import_conf_id", Order.ASCENDING,
 				"record_id", Order.ASCENDING));
 		reader.setRowMapper(harvestedRecordRowMapper());
 		reader.setPageSize(PAGE_SIZE);
 		reader.setQueryProvider(pqpf.getObject());
 		reader.setDataSource(dataSource);
-		if (from != null && to != null) {
-			Map<String, Object> parameterValues = new HashMap<String, Object>();
-			parameterValues.put("from", from);
-			parameterValues.put("to", to);
-			reader.setParameterValues(parameterValues);
-		}
 		reader.setSaveState(true);
 		reader.afterPropertiesSet();
 		return reader;
+	}
+
+	private void init(JdbcPagingItemReader<HarvestedRecord> reader,
+			SqlPagingQueryProviderFactoryBean pqpf, Date from, Date to,
+			Long importConfId, boolean deleted) {
+		Map<String, Object> parameterValues = new HashMap<String, Object>();
+		StringBuffer where = new StringBuffer("WHERE ");
+		if (from != null && to != null) {
+			where.append("deleted BETWEEN :from AND :to");
+			parameterValues.put("from", from);
+			parameterValues.put("to", to);
+		} else if (deleted) {
+			where.append("deleted IS NOT NULL");
+		} else {
+			where.append("deleted IS NULL");
+		}
+		if (importConfId != null) {
+			where.append(" AND import_conf_id = :importConfId");
+			parameterValues.put("importConfId", importConfId);
+		}
+		pqpf.setWhereClause(where.toString());
+		if (!parameterValues.isEmpty()) {
+			reader.setParameterValues(parameterValues);
+		}
 	}
 
 }
