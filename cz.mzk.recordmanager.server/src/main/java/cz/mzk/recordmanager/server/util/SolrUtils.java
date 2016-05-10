@@ -12,6 +12,8 @@ import java.util.List;
 import org.apache.solr.client.solrj.util.ClientUtils;
 import org.apache.solr.common.SolrInputDocument;
 
+import com.google.common.base.Preconditions;
+
 import cz.mzk.recordmanager.server.index.SolrFieldConstants;
 
 public class SolrUtils {
@@ -84,6 +86,7 @@ public class SolrUtils {
 	}
 
 	public static SolrInputDocument removeHiddenFields(SolrInputDocument document) {
+		Preconditions.checkNotNull(document, "document");
 		Iterator<String> iter = document.getFieldNames().iterator();
 		while (iter.hasNext()) {
 			String field = iter.next();

@@ -93,9 +93,6 @@ public class IndexHarvestedRecordsToSolrJobConfig {
 			@Value("#{jobParameters[" + Constants.JOB_PARAM_UNTIL_DATE + "]}") Date to,
 			@Value("#{jobParameters[" + Constants.JOB_PARAM_CONF_ID + "]}") Long importConfId)
 			throws Exception {
-		if (from != null && to == null) {
-			to = new Date();
-		}
 		JdbcPagingItemReader<HarvestedRecord> reader = new JdbcPagingItemReader<>();
 		SqlPagingQueryProviderFactoryBean pqpf = new SqlPagingQueryProviderFactoryBean();
 		pqpf.setDataSource(dataSource);
@@ -166,9 +163,6 @@ public class IndexHarvestedRecordsToSolrJobConfig {
 			@Value("#{jobParameters[" + Constants.JOB_PARAM_UNTIL_DATE + "]}") Date to,
 			@Value("#{jobParameters[" + Constants.JOB_PARAM_CONF_ID + "]}") Long importConfId)
 			throws Exception {
-		if (from != null && to == null) {
-			to = new Date();
-		}
 		JdbcPagingItemReader<HarvestedRecord> reader = new JdbcPagingItemReader<HarvestedRecord>();
 		SqlPagingQueryProviderFactoryBean pqpf = new SqlPagingQueryProviderFactoryBean();
 		pqpf.setDataSource(dataSource);
@@ -189,16 +183,27 @@ public class IndexHarvestedRecordsToSolrJobConfig {
 	private void init(JdbcPagingItemReader<HarvestedRecord> reader,
 			SqlPagingQueryProviderFactoryBean pqpf, Date from, Date to,
 			Long importConfId, boolean deleted) {
+		if (from != null && to == null) {
+			to = new Date();
+		}
 		Map<String, Object> parameterValues = new HashMap<String, Object>();
 		StringBuffer where = new StringBuffer("WHERE ");
-		if (from != null && to != null) {
-			where.append("deleted BETWEEN :from AND :to");
-			parameterValues.put("from", from);
-			parameterValues.put("to", to);
-		} else if (deleted) {
-			where.append("deleted IS NOT NULL");
+		if (deleted) {
+			if (from != null && to != null) {
+				where.append("deleted BETWEEN :from AND :to");
+				parameterValues.put("from", from);
+				parameterValues.put("to", to);
+			} else {
+				where.append("deleted IS NOT NULL");
+			}
 		} else {
-			where.append("deleted IS NULL");
+			if (from != null && to != null) {
+				where.append("updated BETWEEN :from AND :to AND deleted IS NULL");
+				parameterValues.put("from", from);
+				parameterValues.put("to", to);
+			} else {
+				where.append("deleted IS NULL");
+			}
 		}
 		if (importConfId != null) {
 			where.append(" AND import_conf_id = :importConfId");
