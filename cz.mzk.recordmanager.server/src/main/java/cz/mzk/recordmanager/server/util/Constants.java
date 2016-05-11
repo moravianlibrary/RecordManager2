@@ -72,6 +72,7 @@ public class Constants {
 	public static final String PREFIX_SFXJIBMZK			= "sfxjibmzk";
 	public static final String PREFIX_SFXJIBNLK			= "sfxjibnlk";
 	public static final String PREFIX_SFXJIBNLK_PERIODICALS	= "sfxnlkper";
+	public static final String PREFIX_SFXKNAV			= "sfxknav";
 	public static final String PREFIX_NLK				= "nlk";
 	public static final String PREFIX_OPENLIB			= "openlib";
 	public static final String PREFIX_KRAM_MZK			= "kram-mzk";

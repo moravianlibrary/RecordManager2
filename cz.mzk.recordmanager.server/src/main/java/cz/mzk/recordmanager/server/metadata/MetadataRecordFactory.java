@@ -14,8 +14,7 @@ import cz.mzk.recordmanager.server.metadata.institutions.KramDefaultMetadataDubl
 import cz.mzk.recordmanager.server.metadata.institutions.MzkMetadataMarcRecord;
 import cz.mzk.recordmanager.server.metadata.institutions.MzkNormsMetadataMarcRecord;
 import cz.mzk.recordmanager.server.metadata.institutions.NkpMarcMetadataRecord;
-import cz.mzk.recordmanager.server.metadata.institutions.SfxjibMzkMetadataMarcRecord;
-import cz.mzk.recordmanager.server.metadata.institutions.SfxjibNlkMetadataMarcRecord;
+import cz.mzk.recordmanager.server.metadata.institutions.SfxMetadataMarcRecord;
 import cz.mzk.recordmanager.server.metadata.institutions.SfxjibNlkPeriodicalsMetadataMarcRecord;
 import cz.mzk.recordmanager.server.metadata.institutions.SkatMarcMetadataRecord;
 import cz.mzk.recordmanager.server.metadata.institutions.TreMetadataMarcRecord;
@@ -69,9 +68,9 @@ public class MetadataRecordFactory {
 			case Constants.PREFIX_MZKNORMS:
 				return new MzkNormsMetadataMarcRecord(marcRec);
 			case Constants.PREFIX_SFXJIBMZK:
-				return new SfxjibMzkMetadataMarcRecord(marcRec);
 			case Constants.PREFIX_SFXJIBNLK:
-				return new SfxjibNlkMetadataMarcRecord(marcRec);
+			case Constants.PREFIX_SFXKNAV:
+				return new SfxMetadataMarcRecord(marcRec);
 			case Constants.PREFIX_SFXJIBNLK_PERIODICALS:
 				return new SfxjibNlkPeriodicalsMetadataMarcRecord(marcRec);
 			case Constants.PREFIX_CASLIN:

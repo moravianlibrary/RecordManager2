@@ -6,9 +6,9 @@ import cz.mzk.recordmanager.server.marc.MarcRecord;
 import cz.mzk.recordmanager.server.metadata.MetadataMarcRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecordFormat.HarvestedRecordFormatEnum;
 
-public class SfxjibMzkMetadataMarcRecord extends MetadataMarcRecord{
+public class SfxMetadataMarcRecord extends MetadataMarcRecord{
 
-	public SfxjibMzkMetadataMarcRecord(MarcRecord underlayingMarc) {
+	public SfxMetadataMarcRecord(MarcRecord underlayingMarc) {
 		super(underlayingMarc);
 	}
 	
@@ -20,5 +20,4 @@ public class SfxjibMzkMetadataMarcRecord extends MetadataMarcRecord{
 		}
 		return list;		
 	}
-
 }
