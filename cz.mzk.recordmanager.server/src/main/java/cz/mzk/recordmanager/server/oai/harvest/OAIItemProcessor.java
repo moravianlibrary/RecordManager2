@@ -2,6 +2,7 @@ package cz.mzk.recordmanager.server.oai.harvest;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -67,26 +68,32 @@ public class OAIItemProcessor implements ItemProcessor<List<OAIRecord>, List<Har
 	private RegexpExtractor idExtractor;
 
 	private Transformer transformer;
-	
+
 	@Override
-	public List<HarvestedRecord> process(List<OAIRecord> arg0) throws Exception {
+	public List<HarvestedRecord> process(List<OAIRecord> oaiRecs) throws Exception {
 		List<HarvestedRecord> result = new ArrayList<>();
-		for (OAIRecord oaiRec: arg0) {
-			result.add(createHarvestedRecord(oaiRec));
+		for (OAIRecord oaiRec: oaiRecs) {
+			HarvestedRecord rec = createHarvestedRecord(oaiRec);
+			if (rec != null) {
+				result.add(rec);
+			}
 		}
 		return result;
 	}
-	
+
 	protected HarvestedRecord createHarvestedRecord(OAIRecord record) throws TransformerException {
 		String recordId = idExtractor.extract(record.getHeader().getIdentifier());
 		HarvestedRecord rec = recordDao.findByIdAndHarvestConfiguration(
 				recordId, configuration);
+		byte[] recordContent = (record.getHeader().isDeleted()) ? null : asByteArray(record.getMetadata().getElement());
 		if (rec == null) {
 			// create new record
 			HarvestedRecordUniqueId id = new HarvestedRecordUniqueId(configuration, recordId);
 			rec = new HarvestedRecord(id);
 			rec.setHarvestedFrom(configuration);
 			rec.setFormat(format);
+		} else if (Arrays.equals(recordContent, rec.getRawRecord())) {
+			return null; // no change in record
 		}
 		rec.setUpdated(new Date());
 		if (record.getHeader().getDatestamp() != null) {
@@ -104,7 +111,6 @@ public class OAIItemProcessor implements ItemProcessor<List<OAIRecord>, List<Har
 			return rec;
 		} else {
 			rec.setDeleted(null);
-			byte[] recordContent = asByteArray(record.getMetadata().getElement());
 			if (configuration.isInterceptionEnabled()) {
 				MarcRecordInterceptor interceptor = marcInterceptorFactory.getInterceptor(configuration,recordContent);
 				if (interceptor != null) {
@@ -117,7 +123,7 @@ public class OAIItemProcessor implements ItemProcessor<List<OAIRecord>, List<Har
 
 		return rec;
 	}
-	
+
 	@Override
 	public ExitStatus afterStep(StepExecution stepExecution) {
 		return null;
