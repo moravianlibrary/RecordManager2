@@ -5,9 +5,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
@@ -40,11 +37,11 @@ import cz.mzk.recordmanager.server.util.RegexpExtractor;
 
 public class OAIItemProcessor implements ItemProcessor<List<OAIRecord>, List<HarvestedRecord>>, StepExecutionListener {
 
+	private static Logger logger = LoggerFactory.getLogger(OAIItemProcessor.class);
+
 	private static final String DEFAULT_EXTRACT_ID_PATTERN = "[^:]+:[^:]+:([^:]+)";
 	
 	private static final String METADATA_ERROR = "metadataError";
-
-	private static Logger logger = LoggerFactory.getLogger(OAIItemProcessor.class);
 
 	@Autowired
 	protected HarvestedRecordDAO recordDao;
@@ -85,16 +82,29 @@ public class OAIItemProcessor implements ItemProcessor<List<OAIRecord>, List<Har
 		String recordId = idExtractor.extract(record.getHeader().getIdentifier());
 		HarvestedRecord rec = recordDao.findByIdAndHarvestConfiguration(
 				recordId, configuration);
-		byte[] recordContent = (record.getHeader().isDeleted()) ? null : asByteArray(record.getMetadata().getElement());
+		boolean deleted = record.getHeader().isDeleted()
+				|| record.getMetadata().getElement().getTagName() == METADATA_ERROR;
+		byte[] recordContent = (deleted) ? null : asByteArray(record.getMetadata().getElement());
+		if (recordContent != null && configuration.isInterceptionEnabled()) {
+			MarcRecordInterceptor interceptor = marcInterceptorFactory.getInterceptor(configuration, recordContent);
+			if (interceptor != null) {
+				//in case of invalid MARC is error processed later
+				recordContent = interceptor.intercept();
+			}
+		}
+
 		if (rec == null) {
 			// create new record
 			HarvestedRecordUniqueId id = new HarvestedRecordUniqueId(configuration, recordId);
 			rec = new HarvestedRecord(id);
 			rec.setHarvestedFrom(configuration);
 			rec.setFormat(format);
-		} else if (Arrays.equals(recordContent, rec.getRawRecord())) {
-			return null; // no change in record
+		} else if ((deleted && rec.getDeleted() != null) || Arrays.equals(recordContent, rec.getRawRecord())) {
+			rec.setUpdated(new Date());
+			rec.setShouldBeProcessed(false);
+			return rec; // no change in record
 		}
+		rec.setShouldBeProcessed(true);
 		rec.setUpdated(new Date());
 		if (record.getHeader().getDatestamp() != null) {
 			rec.setHarvested(record.getHeader().getDatestamp());
@@ -104,20 +114,12 @@ public class OAIItemProcessor implements ItemProcessor<List<OAIRecord>, List<Har
 			rec.setOaiTimestamp(record.getHeader().getDatestamp());
 		}
 		
-		if (record.getHeader().isDeleted() 
-				|| record.getMetadata().getElement().getTagName() == METADATA_ERROR) {
+		if (deleted) {
 			rec.setDeleted(new Date());
 			rec.setRawRecord(new byte[0]);
 			return rec;
 		} else {
 			rec.setDeleted(null);
-			if (configuration.isInterceptionEnabled()) {
-				MarcRecordInterceptor interceptor = marcInterceptorFactory.getInterceptor(configuration,recordContent);
-				if (interceptor != null) {
-					//in case of invalid MARC is error processed later
-					recordContent = interceptor.intercept();
-				}
-			}
 			rec.setRawRecord(recordContent);
 		}
 

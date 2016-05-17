@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.hibernate.Criteria;
 import org.hibernate.NullPrecedence;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
@@ -185,7 +186,14 @@ public class HarvestedRecordDAOHibernate extends
 		session.update(hr);
 		session.flush();
 	}
-	
-	
+
+	@Override
+	public void updateTimestampOnly(HarvestedRecord hr) {
+		Session session = sessionFactory.getCurrentSession();
+		Query update = session.createQuery("UPDATE HarvestedRecord set updated = :updated WHERE id = :id");
+		update.setParameter("id", hr.getId());
+		update.setParameter("updated", hr.getUpdated());
+		update.executeUpdate();
+	}
 
 }

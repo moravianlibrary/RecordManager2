@@ -29,4 +29,6 @@ public interface HarvestedRecordDAO extends DomainDAO<Long, HarvestedRecord> {
 	
 	public void dropDedupKeys(HarvestedRecord hr);
 
+	public void updateTimestampOnly(HarvestedRecord hr);
+
 }

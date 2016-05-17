@@ -32,30 +32,36 @@ public class HarvestedRecordWriter implements ItemWriter<List<HarvestedRecord>> 
 	@Override
 	public void write(List<? extends List<HarvestedRecord>> records) throws Exception {
 		for (List<HarvestedRecord> list: records) {
-			for (HarvestedRecord hr: list) {
-				if(hr == null) continue;
-				if (hr.getDeleted() == null) {
+			for (HarvestedRecord record : list) {
+				if (record == null) {
+					continue;
+				}
+				if (!record.getShouldBeProcessed()) {
+					recordDao.updateTimestampOnly(record);
+					continue;
+				}
+				if (record.getDeleted() == null) {
 					try {
-						if (hr.getId() == null) {
-							recordDao.persist(hr);
+						if (record.getId() == null) {
+							recordDao.persist(record);
 						}
-						dedupKeysParser.parse(hr);
-						if (hr.getHarvestedFrom().isFilteringEnabled() && !hr.getShouldBeProcessed()) {
-							logger.debug("Filtered record: " + hr.getUniqueId());
-							hr.setDeleted(new Date());
+						dedupKeysParser.parse(record);
+						if (record.getHarvestedFrom().isFilteringEnabled() && !record.getShouldBeProcessed()) {
+							logger.debug("Filtered record: " + record.getUniqueId());
+							record.setDeleted(new Date());
 						}
 					} catch (DedupKeyParserException dkpe) {
 						logger.error(
 								"Dedup keys could not be generated for {}, exception thrown.",
-								hr, dkpe);
+								record, dkpe);
 					} catch (InvalidMarcException ime) {
-						logger.warn("Skipping record due to invalid MARC {}", hr.getUniqueId());
+						logger.warn("Skipping record due to invalid MARC {}", record.getUniqueId());
 					} catch (InvalidDcException dce) {
-						logger.warn("Skipping record due to invalid DublinCore {}", hr.getUniqueId());
+						logger.warn("Skipping record due to invalid DublinCore {}", record.getUniqueId());
 					}
 					
 				}
-				recordDao.persist(hr);
+				recordDao.persist(record);
 				
 			}
 		}

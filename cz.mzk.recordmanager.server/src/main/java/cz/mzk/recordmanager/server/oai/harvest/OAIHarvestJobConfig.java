@@ -11,6 +11,7 @@ import org.springframework.batch.core.configuration.annotation.StepBuilderFactor
 import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.core.job.flow.FlowExecutionStatus;
 import org.springframework.batch.core.step.tasklet.Tasklet;
+import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -33,7 +34,10 @@ public class OAIHarvestJobConfig {
 	private static final Long LONG_OVERRIDEN_BY_EXPRESSION = null;
 	
 	private static final String STRING_OVERRIDEN_BY_EXPRESSION = null;
-	
+
+	@Value(value = "${oai_harvest.async_reader:#{false}}")
+	private boolean asyncReader = false;
+
 	@Autowired
     private JobBuilderFactory jobs;
 
@@ -88,9 +92,15 @@ public class OAIHarvestJobConfig {
 
 	@Bean(name="oaiHarvestJob:step")
     public Step step() {
+		ItemReader<List<OAIRecord>> reader = null;
+		if (this.asyncReader) {
+			reader = asyncReader(LONG_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION, STRING_OVERRIDEN_BY_EXPRESSION);
+		} else {
+			reader = reader(LONG_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION, STRING_OVERRIDEN_BY_EXPRESSION);
+		}
         return steps.get("step1") //
             .<List<OAIRecord>, List<HarvestedRecord>> chunk(1) //
-            .reader(reader(LONG_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION, STRING_OVERRIDEN_BY_EXPRESSION)) //
+            .reader(reader) //
             .processor(oaiItemProcessor())
             .writer(harvestedRecordWriter()) //
             .build();
@@ -190,7 +200,19 @@ public class OAIHarvestJobConfig {
     	    		+ "?:jobParameters[" + Constants.JOB_PARAM_RESUMPTION_TOKEN +"]}") String resumptionToken) {
     	return new OAIItemReader(configId, from, to, resumptionToken);
     }
-    
+
+	@Bean(name="oaiHarvestJob:asyncReader")
+	@StepScope
+	public AsyncOAIItemReader asyncReader(@Value("#{jobParameters[" + Constants.JOB_PARAM_CONF_ID + "]}") Long configId, 
+			@Value("#{stepExecutionContext[" + Constants.JOB_PARAM_FROM_DATE + "] "
+					+ "?:jobParameters[ " + Constants.JOB_PARAM_FROM_DATE +"]}") Date from,
+			@Value("#{stepExecutionContext[" + Constants.JOB_PARAM_UNTIL_DATE+"]"
+					+ "?:jobParameters[" + Constants.JOB_PARAM_UNTIL_DATE +"]}") Date to,
+			@Value("#{stepExecutionContext[" + Constants.JOB_PARAM_RESUMPTION_TOKEN+"]"
+					+ "?:jobParameters[" + Constants.JOB_PARAM_RESUMPTION_TOKEN +"]}") String resumptionToken) {
+		return new AsyncOAIItemReader(configId, from, to, resumptionToken);
+	}
+
     @Bean(name="oaiHarvestJob:HarvestedRecordWriter")
     @StepScope
     public ItemWriter<List<HarvestedRecord>> harvestedRecordWriter() {
