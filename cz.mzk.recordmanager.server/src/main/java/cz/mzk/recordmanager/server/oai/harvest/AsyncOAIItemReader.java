@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ArrayBlockingQueue;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.ExitStatus;
 import org.springframework.batch.core.StepExecution;
 import org.springframework.batch.core.StepExecutionListener;
@@ -26,6 +28,26 @@ import cz.mzk.recordmanager.server.util.HibernateSessionSynchronizer.SessionBind
 
 public class AsyncOAIItemReader implements ItemReader<List<OAIRecord>>, ItemStream,
 		StepExecutionListener {
+
+	private static class Entry {
+
+		private final String resumptionToken;
+
+		private final List<OAIRecord> records;
+
+		public Entry(String resumptionToken, List<OAIRecord> records) {
+			super();
+			this.resumptionToken = resumptionToken;
+			this.records = records;
+		}
+
+	}
+
+	private static Logger logger = LoggerFactory.getLogger(OAIHarvester.class);
+
+	private static final Entry HARVEST_FINISHED_SENTINEL = new Entry(null, Collections.emptyList());
+
+	private static final Entry HARVEST_FAILED_SENTINEL = new Entry(null, Collections.emptyList());
 
 	@Autowired
 	private OAIHarvestConfigurationDAO configDao;
@@ -55,23 +77,7 @@ public class AsyncOAIItemReader implements ItemReader<List<OAIRecord>>, ItemStre
 	// state
 	private String lastReturnedResumptionToken;
 
-	private static final Entry END_SENTINEL = new Entry(null, Collections.emptyList());
-
-	private static class Entry {
-
-		private final String resumptionToken;
-
-		private final List<OAIRecord> records;
-
-		public Entry(String resumptionToken, List<OAIRecord> records) {
-			super();
-			this.resumptionToken = resumptionToken;
-			this.records = records;
-		}
-
-	}
-
-	private Thread fillingThread;
+	private volatile Thread harvestingThread;
 
 	private ArrayBlockingQueue<Entry> queue = new ArrayBlockingQueue<Entry>(5);
 
@@ -84,29 +90,26 @@ public class AsyncOAIItemReader implements ItemReader<List<OAIRecord>>, ItemStre
 	}
 
 	@Override
-	public List<OAIRecord> read() {
+	public List<OAIRecord> read() throws InterruptedException {
 		if (done) {
 			return null;
 		}
-		Entry entry;
-		try {
-			entry = queue.take();
-		} catch (InterruptedException e) {
+		Entry entry = queue.take();
+		if (entry == HARVEST_FINISHED_SENTINEL) {
 			done = true;
 			return null;
-		}
-		List<OAIRecord> result = (entry == null || entry == END_SENTINEL || entry.records == null) ? null : entry.records;
-		lastReturnedResumptionToken = (entry != null) ? entry.resumptionToken : null;
-		if (result == null) {
+		} else if (entry == HARVEST_FAILED_SENTINEL) {
 			done = true;
+			throw new RuntimeException("OAI harvest failed, see logs for details");
 		}
-		return result;
+		lastReturnedResumptionToken = entry.resumptionToken;
+		return entry.records;
 	}
 
 	@Override
 	public void close() throws ItemStreamException {
-		if (fillingThread != null) {
-			fillingThread.interrupt();
+		if (harvestingThread != null) {
+			harvestingThread.interrupt();
 		}
 	}
 
@@ -116,8 +119,8 @@ public class AsyncOAIItemReader implements ItemReader<List<OAIRecord>>, ItemStre
 			resumptionToken = ctx.getString("resumptionToken");
 			lastReturnedResumptionToken = resumptionToken;
 		}
-		fillingThread = new Thread((Runnable) this::queueWriter);
-		fillingThread.start();
+		harvestingThread = new Thread((Runnable) this::queueWriter);
+		harvestingThread.start();
 	}
 
 	@Override
@@ -161,31 +164,45 @@ public class AsyncOAIItemReader implements ItemReader<List<OAIRecord>>, ItemStre
 	}
 
 	private void queueWriter() {
+		boolean failed = true;
 		try {
-			do {
-				OAIListRecords listRecords = harvester
-						.listRecords(resumptionToken);
-				if (listRecords != null) {
-					resumptionToken = listRecords.getNextResumptionToken();
-				}
-				List<OAIRecord> records = null;
-				if (listRecords != null && listRecords.getRecords() != null
-						&& !listRecords.getRecords().isEmpty()) {
-					records = listRecords.getRecords();
-				}
-				try {
-					queue.put(new Entry(resumptionToken, records));
-				} catch (InterruptedException ie) {
+			while (true) {
+				OAIListRecords listRecords = harvester.listRecords(resumptionToken);
+				resumptionToken = (listRecords != null)? listRecords.getNextResumptionToken() : null;
+				if (listRecords == null || listRecords.getRecords() == null
+						|| listRecords.getRecords().isEmpty()) {
+					failed = false;
 					break;
 				}
-			} while (resumptionToken != null);
+				try {
+					queue.put(new Entry(resumptionToken, listRecords.getRecords()));
+				} catch (InterruptedException ie) {
+					// to make sure there is a room for sentinel value
+					if (queue.remainingCapacity() == 0) {
+						queue.poll();
+					}
+					break;
+				}
+				if (resumptionToken == null) {
+					failed = false;
+					break;
+				}
+			}
+		} catch (RuntimeException re) {
+			logger.error("Exception thrown during OAI harvest", re);
 		} finally {
 			try {
-				queue.put(END_SENTINEL);
+				queue.put((failed) ? HARVEST_FAILED_SENTINEL : HARVEST_FINISHED_SENTINEL);
 			} catch (InterruptedException ie) {
-				// done
+				queue.poll(); // to make sure there is a room for sentinel value
+				try {
+					queue.put((failed) ? HARVEST_FAILED_SENTINEL : HARVEST_FINISHED_SENTINEL);
+				} catch (InterruptedException ie2) {
+					// done
+				}
 			}
 		}
+		this.harvestingThread = null;
 	}
 
 }
