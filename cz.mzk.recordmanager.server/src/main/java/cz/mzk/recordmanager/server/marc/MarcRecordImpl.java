@@ -4,6 +4,7 @@ import info.freelibrary.marc4j.impl.LeaderImpl;
 
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -240,13 +241,13 @@ public class MarcRecordImpl implements MarcRecord {
 	}
 	
 	protected String exportToIso2709() {
-		OutputStream stream = new ByteArrayOutputStream();
+		ByteArrayOutputStream stream = new ByteArrayOutputStream();
 		MarcWriter writer = new MarcStreamWriter(stream, "UTF-8", true);
 		writer.write(record);
 		writer.close();
-		return stream.toString();
+		return new String(stream.toByteArray(), StandardCharsets.UTF_8);
 	}
-	
+
 	protected String exportToXML() {
 		OutputStream stream = new ByteArrayOutputStream();
 		MarcXmlWriter writer = new MarcXmlWriter(stream, "UTF-8");
