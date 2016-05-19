@@ -228,6 +228,15 @@
    <field name="corporation_viz" type="textProper" indexed="true" stored="true" multiValued="true"/>
    <field name="subject_viz" type="textProper" indexed="true" stored="true" multiValued="true"/>
    <field name="genre_viz" type="textProper" indexed="true" stored="true" multiValued="true"/>
+   <!-- Authority fields  -->
+   <field name="heading" type="string" indexed="true" stored="true"/>
+   <field name="use_for" type="string" indexed="true" stored="true" multiValued="true"/>
+   <field name="see_also" type="string" indexed="true" stored="true" multiValued="true"/>
+   <field name="source" type="string" indexed="true" stored="true" multiValued="true"/>
+   <field name="scope_note" type="string" indexed="false" stored="true" multiValued="true"/>
+   <field name="id_authority" type="string" indexed="true" stored="true"/>
+   <field name="short_note_cs" type="string" indexed="true" stored="true"/>
+   <field name="short_note_en" type="string" indexed="true" stored="true"/>
    <!-- Doesn't need to be stored after successful testing -->
    <field name="loanRelevance" type="integer"  indexed="true"  stored="true"/>
    <!-- Dynamic fields for customization without schema modification -->

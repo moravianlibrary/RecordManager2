@@ -32,6 +32,12 @@ public class SolrFieldConstants {
 	
 	public static final String AUTHOR_VIZ_FIELD = "author_viz";
 	
+	public static final String AUTHOR_SORT_STR = "author_sort_str";
+	
+	public static final String AUTHOR_FIND = "author_find";
+	
+	public static final String AUTHOR_FACET = "author_facet_str_mv";
+	
 	public static final String CORPORATION_VIZ_FIELD = "corporation_viz";
 	
 	public static final String SUBJECT_VIZ_FIELD = "subject_viz";
@@ -59,6 +65,16 @@ public class SolrFieldConstants {
 	public static final String ID_001_SEARCH = "id001_search";
 	
 	public static final String INSPIRATION = "inspiration";
+	
+	public static final String SUBJECT_KEYWORDS_SEARCH = "subjectKeywords_search_txt_mv";
+	
+	public static final String PEOPLE_SEARCH = "people_search_txt_mv";
+	
+	public static final String SUBJECT_FACET = "subject_facet_str_mv";
+	
+	public static final String ID_AUTHORITY = "id_authority";
+	
+	public static final String AUTHOR_CORPORATION_SEARCH = "authorCorporation_search_txt_mv";
 
 	/**
 	 * dummy fields used for processing purposes only, shouldn't be indexed. Fields are deleted in AuthorityEnricher. 

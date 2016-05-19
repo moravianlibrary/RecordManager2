@@ -691,3 +691,10 @@ ALTER TABLE import_conf ADD COLUMN mapping_script VARCHAR(256);
 --changeset tomascejpek:4 context:cpk
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency) VALUES (1304, 130, 200, 'sfxknav', 8, false, false, false, true, 'U');
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (1304,NULL,NULL,'marc21',NULL);
+
+--changeset tomascejpek:5 context:cpk
+INSERT INTO library (id, name, url, catalog_url, city) VALUES (400, 'AUTHORITY', 'nkp.cz', 'aleph.nkp.cz', NULL);
+UPDATE import_conf SET library_id=400 WHERE id=400;
+UPDATE import_conf SET is_library=false WHERE id=400;
+UPDATE import_conf SET mapping_script='AuthorityMarc.groovy' WHERE id=400;
+INSERT INTO harvested_record_format(id, name) VALUES (28, 'PERSON');

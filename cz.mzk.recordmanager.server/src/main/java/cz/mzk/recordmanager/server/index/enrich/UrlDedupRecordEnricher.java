@@ -41,15 +41,17 @@ public class UrlDedupRecordEnricher implements DedupRecordEnricher {
 		List<String> results = new ArrayList<>();
 		
 		Set<String> helper = new HashSet<>();
-		// duplicit urls
+		
 		for(Object obj: urls){
+			if(obj.toString().split(SPLITTER).length < 3){
+				urls.remove(obj);
+				results.add(obj.toString());
+				continue;
+			}
 		    String spliturl[] = obj.toString().split(SPLITTER);
+		 // duplicit urls
 		    if(!helper.add(spliturl[2])) duplicitUrls.add(spliturl[2].toString());
-		}
-
-		// nonduplicit urls to result
-		for(Object obj: urls){
-		    String spliturl[] = obj.toString().split(SPLITTER);
+		 // nonduplicit urls to result
 		    if(!duplicitUrls.contains(spliturl[2])) results.add(obj.toString());
 		}
 		

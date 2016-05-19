@@ -75,6 +75,7 @@ public class Constants {
 	public static final String PREFIX_SFXKNAV			= "sfxknav";
 	public static final String PREFIX_NLK				= "nlk";
 	public static final String PREFIX_OPENLIB			= "openlib";
+	public static final String PREFIX_AUTH				= "auth";
 	public static final String PREFIX_KRAM_MZK			= "kram-mzk";
 	public static final String PREFIX_KRAM_NTK			= "kram-ntk";
 	public static final String PREFIX_KRAM_KNAV			= "kram-knav";

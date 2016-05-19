@@ -2,6 +2,7 @@ package cz.mzk.recordmanager.server.scripting.marc;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -559,5 +560,29 @@ public class MarcDSL extends BaseDSL {
 				.forEach(s -> result.add(fieldTag + ":" + s));
 		}
 		return result;
+    }
+    
+    public List<String> getAuthAuthors(String tag){
+    	List<String> result = new ArrayList<>();
+    	for(DataField df: record.getDataFields(tag)){
+    		result.add(changeName(df));
+    	}
+    	return result;
+    }
+    
+    public String getFirstAuthAuthor(String tag){
+    	List<String> result = getAuthAuthors(tag);
+    	if(result.isEmpty()) return null;
+    	return result.get(0);
+    }
+    
+    public List<String> getAuthorityUrl(String tags){
+    	List<String> urls = getFields(tags);
+    	if(urls.isEmpty()) return Collections.emptyList();
+    	if(urls.size() == 1) return urls;
+    	for(String url: urls){
+    		if(url.matches(".*wikipedia.*")) return Collections.singletonList(url);
+    	}
+    	return Collections.singletonList(urls.get(0));
     }
 }

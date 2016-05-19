@@ -10,6 +10,7 @@ import cz.mzk.recordmanager.server.dc.DublinCoreParser;
 import cz.mzk.recordmanager.server.dc.DublinCoreRecord;
 import cz.mzk.recordmanager.server.marc.MarcRecord;
 import cz.mzk.recordmanager.server.marc.MarcXmlParser;
+import cz.mzk.recordmanager.server.metadata.institutions.AuthMetadataMarcRecord;
 import cz.mzk.recordmanager.server.metadata.institutions.KramDefaultMetadataDublinCoreRecord;
 import cz.mzk.recordmanager.server.metadata.institutions.MzkMetadataMarcRecord;
 import cz.mzk.recordmanager.server.metadata.institutions.MzkNormsMetadataMarcRecord;
@@ -75,6 +76,8 @@ public class MetadataRecordFactory {
 				return new SfxjibNlkPeriodicalsMetadataMarcRecord(marcRec);
 			case Constants.PREFIX_CASLIN:
 				return new SkatMarcMetadataRecord(marcRec);
+			case Constants.PREFIX_AUTH:
+				return new AuthMetadataMarcRecord(marcRec);
 			default:
 				return new MetadataMarcRecord(marcRec);
 			}

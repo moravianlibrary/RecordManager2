@@ -39,6 +39,8 @@ INSERT INTO library (id, name, url, catalog_url, city) VALUES (137, 'SVKPK', 'sv
 INSERT INTO library (id, name, url, catalog_url, city) VALUES (138, 'IIR', 'iir.cz', 'katalog.iir.cz:8080/Carmen/', 'Praha');
 INSERT INTO library (id, name, url, catalog_url, city) VALUES (139, 'MANUSCRIPTORIUM', 'www.manuscriptorium.com', 'www.manuscriptorium.com', NULL);
 
+INSERT INTO library (id, name, url, catalog_url, city) VALUES (400, 'AUTHORITY', 'nkp.cz', 'aleph.nkp.cz', NULL);
+
 INSERT INTO format(format, description) VALUES('marc21-xml', 'MARC21 XML');
 INSERT INTO format(format, description) VALUES('xml-marc', 'MARC21 XML');
 INSERT INTO format(format, description) VALUES('marccpk', 'MARC21 XML');
@@ -66,7 +68,7 @@ INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weig
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency) VALUES (312, 112, 200, 'kkvy', 12, false, false, false, true, 'D');
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency) VALUES (313, 113, 200, 'svkhk', 14, false, false, false, true, 'D');
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency) VALUES (314, 114, 200, 'svkul', 14, false, false, false, true, 'D');
-INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency) VALUES (400, 104, 200, 'auth', 0, false, false, false, true, 'D');
+INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency,mapping_script) VALUES (400, 400, 200, 'auth', 0, false, false, false, false, 'D','AuthorityMarc.groovy');
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency) VALUES (317, 117, 200, 'nkp2', 14, false, false, false, true, 'D');
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency) VALUES (315, 115, 200, 'vkol', 14, true, false, false, true, 'D');
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency) VALUES (301, 101, 200, 'nlk', 14, false, false, true, true, 'D');
@@ -170,6 +172,7 @@ INSERT INTO harvested_record_format(id, name) VALUES (24, 'OTHER_KIT');
 INSERT INTO harvested_record_format(id, name) VALUES (25, 'OTHER_OBJECT');
 INSERT INTO harvested_record_format(id, name) VALUES (26, 'OTHER_MIX_DOCUMENT');
 INSERT INTO harvested_record_format(id, name) VALUES (27, 'NORMS');
+INSERT INTO harvested_record_format(id, name) VALUES (28, 'PERSON');
 INSERT INTO harvested_record_format(id, name) VALUES (100, 'OTHER_UNSPECIFIED');
 
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (1, 300, 'BOA001');
