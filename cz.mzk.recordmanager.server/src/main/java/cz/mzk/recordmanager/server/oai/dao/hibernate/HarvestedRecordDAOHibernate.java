@@ -73,6 +73,15 @@ public class HarvestedRecordDAOHibernate extends
 	}
 	
 	@Override
+	public HarvestedRecord findByRaw001Id(String id001) {
+		Session session = sessionFactory.getCurrentSession();
+		return (HarvestedRecord) session
+				.createQuery("from HarvestedRecord where raw001Id = ?")
+				.setParameter(0, id001)
+				.uniqueResult();
+	}
+	
+	@Override
 	public List<HarvestedRecord> getByDedupRecord(DedupRecord dedupRecord) {
 		return getByDedupRecord(dedupRecord, false);
 	}

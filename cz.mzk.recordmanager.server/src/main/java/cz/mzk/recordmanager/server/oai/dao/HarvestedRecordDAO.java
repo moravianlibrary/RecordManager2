@@ -14,6 +14,8 @@ public interface HarvestedRecordDAO extends DomainDAO<Long, HarvestedRecord> {
 	public HarvestedRecord findByIdAndHarvestConfiguration(String recordId, Long configurationId);
 
 	public HarvestedRecord findBySolrId(String solrId);
+	
+	public HarvestedRecord findByRaw001Id(String id);
 
 	public HarvestedRecord get(HarvestedRecordUniqueId uniqueId);
 

@@ -18,13 +18,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import cz.mzk.recordmanager.server.marc.InvalidMarcException;
 import cz.mzk.recordmanager.server.marc.MarcRecord;
 import cz.mzk.recordmanager.server.marc.MarcXmlParser;
-import cz.mzk.recordmanager.server.model.AuthorityRecord;
-import cz.mzk.recordmanager.server.oai.dao.AuthorityRecordDAO;
+import cz.mzk.recordmanager.server.model.HarvestedRecord;
+import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordDAO;
 
 public abstract class AuthorityEnricher {
 
 	@Autowired
-	private AuthorityRecordDAO authorityRecordDao;
+	private HarvestedRecordDAO hrDao;
 	
 	@Autowired
 	private MarcXmlParser marcXmlParser;
@@ -90,7 +90,7 @@ public abstract class AuthorityEnricher {
 				result.add(currentCache.get(currentAuthKey));
 			} else {
 				// parse value from authority record
-				AuthorityRecord auth = authorityRecordDao.findByAuthKey(currentAuthKey);
+				HarvestedRecord auth = hrDao.findByRaw001Id(currentAuthKey);
 				if (auth == null || auth.getRawRecord() == null) {
 					continue;
 				}
@@ -105,7 +105,7 @@ public abstract class AuthorityEnricher {
 				String resultAuthStr = marc.getField(currentAuthFieldTag, 'a', 'b', 'c', 'd');
 				if (resultAuthStr != null && !resultAuthStr.isEmpty()) {
 					result.add(resultAuthStr);
-					currentCache.put(auth.getAuthorityCode(), resultAuthStr);
+					currentCache.put(auth.getRaw001Id(), resultAuthStr);
 				}
 			}
 		}
