@@ -75,6 +75,14 @@ public class SolrFieldConstants {
 	public static final String ID_AUTHORITY = "id_authority";
 	
 	public static final String AUTHOR_CORPORATION_SEARCH = "authorCorporation_search_txt_mv";
+	
+	public static final String HEADING = "heading";
+	
+	public static final String USE_FOR = "use_for";
+	
+	public static final String RECORDTYPE = "recordtype";
+	
+	public static final String TITLE = "title";
 
 	/**
 	 * dummy fields used for processing purposes only, shouldn't be indexed. Fields are deleted in AuthorityEnricher. 

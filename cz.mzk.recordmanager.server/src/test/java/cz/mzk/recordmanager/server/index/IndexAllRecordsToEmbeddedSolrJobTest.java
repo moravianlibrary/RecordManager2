@@ -46,7 +46,7 @@ public class IndexAllRecordsToEmbeddedSolrJobTest extends AbstractSolrTest {
 		query.set("q", "id:*");
 		query.setRows(100);
 		QueryResponse response = server.query(query);
-		Assert.assertEquals(response.getResults().size(), 79);
+		Assert.assertEquals(response.getResults().size(), 81);
 	}
 
 }

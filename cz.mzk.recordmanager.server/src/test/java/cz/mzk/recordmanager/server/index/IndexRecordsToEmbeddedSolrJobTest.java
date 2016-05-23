@@ -1,5 +1,6 @@
 package cz.mzk.recordmanager.server.index;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -52,74 +53,74 @@ public class IndexRecordsToEmbeddedSolrJobTest extends AbstractSolrTest {
 
 		{
 			SolrQuery allDocsQuery = new SolrQuery();
-			allDocsQuery.set("q", "id:*");
+			allDocsQuery.set("q", SolrFieldConstants.ID_FIELD+":*");
 			allDocsQuery.set("rows", 10000);
 			QueryResponse allDocsResponse = server.query(allDocsQuery);
-			Assert.assertEquals(allDocsResponse.getResults().size(), 79);
+			Assert.assertEquals(allDocsResponse.getResults().size(), 81);
 		}
 
 		{
 			SolrQuery docQuery = new SolrQuery();
-			docQuery.set("q", "id:64");
+			docQuery.set("q", SolrFieldConstants.ID_FIELD+":64");
 			QueryResponse docResponse = server.query(docQuery);
 			Assert.assertEquals(docResponse.getResults().size(), 1);
 			SolrDocument document = docResponse.getResults().get(0);
-			Assert.assertEquals(document.get("author"), "Grisham, John, 1955-");
-			Assert.assertEquals(document.get("title"), "--a je čas zabíjet /");
+			Assert.assertEquals(document.get(SolrFieldConstants.AUTHOR_FIELD), "Grisham, John, 1955-");
+			Assert.assertEquals(document.get(SolrFieldConstants.TITLE), "--a je čas zabíjet /");
 		}
 
 		{
 			SolrQuery docQuery = new SolrQuery();
-			docQuery.set("q", "id:91");
+			docQuery.set("q", SolrFieldConstants.ID_FIELD+":91");
 			QueryResponse docResponse = server.query(docQuery);
 			Assert.assertEquals(docResponse.getResults().size(), 1);
 			SolrDocument document = docResponse.getResults().get(0);
-			Assert.assertEquals(document.get("author"), "Andrić, Ivo, 1892-1975");
-			Assert.assertEquals(document.get("title"), "Most přes Drinu");
+			Assert.assertEquals(document.get(SolrFieldConstants.AUTHOR_FIELD), "Andrić, Ivo, 1892-1975");
+			Assert.assertEquals(document.get(SolrFieldConstants.TITLE), "Most přes Drinu");
 		}
 
 		{
 			SolrQuery deletedDocQuery = new SolrQuery();
-			deletedDocQuery.set("q", "id:99");
+			deletedDocQuery.set("q", SolrFieldConstants.ID_FIELD+":99");
 			QueryResponse docResponse = server.query(deletedDocQuery);
 			Assert.assertEquals(docResponse.getResults().size(), 0);
 		}
 
 		{
 			SolrQuery authQuery = new SolrQuery();
-			authQuery.set("q", "id:73");
+			authQuery.set("q", SolrFieldConstants.ID_FIELD+":73");
 			QueryResponse docResponse = server.query(authQuery);
 			Assert.assertEquals(docResponse.getResults().size(), 1);
 			SolrDocument document = docResponse.getResults().get(0);
 			// check whether author_search field contains alternative name from authority record
 			Assert.assertTrue(
-					document.getFieldValues("author_viz").stream() //
+					document.getFieldValues(SolrFieldConstants.AUTHOR_VIZ_FIELD).stream() //
 							.anyMatch(s -> s.equals("Imaginarni, Karel, 1900-2000")), 
 					"Authority enrichment failed.");
 		}
 
 		{
 			SolrQuery dcQuery = new SolrQuery();
-			dcQuery.set("q", "id:100");
+			dcQuery.set("q", SolrFieldConstants.ID_FIELD+":100");
 			QueryResponse docResponse = server.query(dcQuery);
 			Assert.assertEquals(docResponse.getResults().size(), 1);
 			SolrDocument document = docResponse.getResults().get(0);
-			Assert.assertTrue(document.containsKey("recordtype"), "Record type missing in DC record.");
-			Assert.assertEquals(document.getFieldValue("recordtype"), "dublinCore");
-			Assert.assertTrue(document.containsKey("fullrecord"), "Full record missing in DC record.");
-			String fullRecord = (String) document.getFieldValue("fullrecord");
+			Assert.assertTrue(document.containsKey(SolrFieldConstants.RECORDTYPE), "Record type missing in DC record.");
+			Assert.assertEquals(document.getFieldValue(SolrFieldConstants.RECORDTYPE), "dublinCore");
+			Assert.assertTrue(document.containsKey(SolrFieldConstants.FULLTEXT_FIELD), "Full record missing in DC record.");
+			String fullRecord = (String) document.getFieldValue(SolrFieldConstants.FULLTEXT_FIELD);
 			Assert.assertTrue(fullRecord.length() > 0);
 		}
 
 		{
 			// check for url
 			SolrQuery dcQuery = new SolrQuery();
-			dcQuery.set("q", "id:96");
+			dcQuery.set("q", SolrFieldConstants.ID_FIELD+":96");
 			QueryResponse docResponse = server.query(dcQuery);
 			Assert.assertEquals(docResponse.getResults().size(), 1);
 			SolrDocument document = docResponse.getResults().get(0);
 			Assert.assertTrue(
-					document.getFieldValues("url").stream()
+					document.getFieldValues(SolrFieldConstants.URL).stream()
 						.anyMatch(url -> url.equals("MZK|unknown|http://krameriusndktest.mzk.cz/search/handle/uuid:f1401080-de25-11e2-9923-005056827e52|Digitalizovaný dokument"))
 			);
 		}
@@ -127,12 +128,12 @@ public class IndexRecordsToEmbeddedSolrJobTest extends AbstractSolrTest {
 		{
 			// check for Kramerius url
 			SolrQuery dcQuery = new SolrQuery();
-			dcQuery.set("q", "id:100");
+			dcQuery.set("q", SolrFieldConstants.ID_FIELD+":100");
 			QueryResponse docResponse = server.query(dcQuery);
 			Assert.assertEquals(docResponse.getResults().size(), 1);
 			SolrDocument document = docResponse.getResults().get(0);
 			Assert.assertTrue(
-					document.getFieldValues("url").stream()
+					document.getFieldValues(SolrFieldConstants.URL).stream()
 						.anyMatch(url -> url.equals("KRAM-MZK|online|http://kramerius.mzk.cz/search/i.jsp?pid=UUID:039764f8-d6db-11e0-b2cd-0050569d679d|"))
 			);
 		}
@@ -140,7 +141,7 @@ public class IndexRecordsToEmbeddedSolrJobTest extends AbstractSolrTest {
 		{
 			// check for indexed fulltext
 			SolrQuery dcQuery = new SolrQuery();
-			dcQuery.set("q", "id:100 AND fulltext:indexace");
+			dcQuery.set("q", SolrFieldConstants.ID_FIELD+":100 AND "+SolrFieldConstants.FULLTEXT_FIELD+":indexace");
 			QueryResponse docResponse = server.query(dcQuery);
 			Assert.assertEquals(docResponse.getResults().size(), 1);
 		}
@@ -148,11 +149,32 @@ public class IndexRecordsToEmbeddedSolrJobTest extends AbstractSolrTest {
 		{
 			// check for indexed fulltext
 			SolrQuery dcQuery = new SolrQuery();
-			dcQuery.set("q", "id:100 AND fulltext:neexistuje");
+			dcQuery.set("q", SolrFieldConstants.ID_FIELD+":100 AND "+SolrFieldConstants.FULLTEXT_FIELD+":neexistuje");
 			QueryResponse docResponse = server.query(dcQuery);
 			Assert.assertEquals(docResponse.getResults().size(), 0);
 		}
 
+		{ 
+			// check dedup record for authority record
+			SolrQuery docQuery = new SolrQuery();
+			docQuery.set("q", SolrFieldConstants.ID_FIELD+":102");
+			QueryResponse docResponse = server.query(docQuery);
+			Assert.assertEquals(docResponse.getResults().size(), 1);
+			SolrDocument document = docResponse.getResults().get(0);
+			Assert.assertEquals(document.get(SolrFieldConstants.ID_AUTHORITY), "aut000001");
+			Assert.assertFalse(document.containsKey(SolrFieldConstants.AUTHOR_FIELD));
+		}
+		
+		{ 
+			// check authority record
+			SolrQuery docQuery = new SolrQuery();
+			docQuery.set("q", SolrFieldConstants.ID_FIELD+":auth.AUT10-000051020");
+			QueryResponse docResponse = server.query(docQuery);
+			Assert.assertEquals(docResponse.getResults().size(), 1);
+			SolrDocument document = docResponse.getResults().get(0);
+			Assert.assertEquals(document.get(SolrFieldConstants.USE_FOR), Collections.singletonList("Karel Imaginarni, 1900-2000"));
+			Assert.assertEquals(document.get(SolrFieldConstants.HEADING), "Jiří Šolc, 1900-2000");
+		}
 	}
 
 }
