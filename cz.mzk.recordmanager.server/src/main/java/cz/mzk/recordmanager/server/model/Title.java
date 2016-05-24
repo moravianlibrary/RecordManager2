@@ -16,6 +16,9 @@ public class Title extends AbstractDomainObject {
 	@Column(name="order_in_record")
 	private Long orderInRecord;
 
+	@Column(name="similarity_enabled")
+	private boolean similarityEnabled;
+	
 	public String getTitleStr() {
 		return title;
 	}
@@ -30,6 +33,14 @@ public class Title extends AbstractDomainObject {
 
 	public void setOrderInRecord(Long orderInRecord) {
 		this.orderInRecord = orderInRecord;
+	}
+
+	public boolean isSimilarityEnabled() {
+		return similarityEnabled;
+	}
+
+	public void setSimilarityEnabled(boolean similarityEnabled) {
+		this.similarityEnabled = similarityEnabled;
 	}
 
 	@Override

@@ -212,6 +212,7 @@ CREATE TABLE title (
   harvested_record_id  DECIMAL(10),
   title                VARCHAR(255),
   order_in_record      DECIMAL(4),
+  similarity_enabled  BOOLEAN DEFAULT FALSE,
   FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE
 );
 

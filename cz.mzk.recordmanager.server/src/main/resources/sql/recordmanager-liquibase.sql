@@ -698,3 +698,6 @@ UPDATE import_conf SET library_id=400 WHERE id=400;
 UPDATE import_conf SET is_library=false WHERE id=400;
 UPDATE import_conf SET mapping_script='AuthorityMarc.groovy' WHERE id=400;
 INSERT INTO harvested_record_format(id, name) VALUES (28, 'PERSON');
+
+--changeset tomascejpek:6
+ALTER TABLE title ADD COLUMN similarity_enabled BOOLEAN DEFAULT(FALSE);

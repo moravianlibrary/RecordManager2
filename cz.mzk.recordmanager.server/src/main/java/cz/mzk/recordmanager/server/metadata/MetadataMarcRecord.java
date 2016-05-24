@@ -26,7 +26,7 @@ import cz.mzk.recordmanager.server.model.Title;
 import cz.mzk.recordmanager.server.util.MetadataUtils;
 
 public class MetadataMarcRecord implements MetadataRecord {
-
+	
 	private static Logger logger = LoggerFactory.getLogger(MetadataMarcRecord.class);
 	
 	protected MarcRecord underlayingMarc;
@@ -284,6 +284,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 					Title title = new Title();
 					title.setTitleStr(builder.toString());
 					title.setOrderInRecord(++titleOrder);
+					title.setSimilarityEnabled(MetadataUtils.similarityEnabled(title));
 					result.add(title);
 				}
 			}

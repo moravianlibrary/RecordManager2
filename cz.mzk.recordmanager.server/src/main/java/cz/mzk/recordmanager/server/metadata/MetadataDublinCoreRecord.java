@@ -18,6 +18,7 @@ import cz.mzk.recordmanager.server.model.Isbn;
 import cz.mzk.recordmanager.server.model.Issn;
 import cz.mzk.recordmanager.server.model.Oclc;
 import cz.mzk.recordmanager.server.model.Title;
+import cz.mzk.recordmanager.server.util.MetadataUtils;
 
 public class MetadataDublinCoreRecord implements MetadataRecord {
 
@@ -64,7 +65,7 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 		for (String s: dcTitles) {
 			Title title = new Title();
 			title.setTitleStr(s);
-			
+			title.setSimilarityEnabled(MetadataUtils.similarityEnabled(title));
 			title.setOrderInRecord(++titleOrder);
 			result.add(title);
 		}
