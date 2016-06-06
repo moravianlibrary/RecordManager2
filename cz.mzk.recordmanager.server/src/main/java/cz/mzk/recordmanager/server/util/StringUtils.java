@@ -26,8 +26,12 @@ public class StringUtils {
 			return MIN_MATCH_BOUNDARY;
 		}
 		
-		return simmilarTitleMatchPercentage(titleA.getTitleStr(), titleB.getTitleStr(), matchBoundary, prefixBoundary);
 		
+		if(titleA.isSimilarityEnabled() && titleB.isSimilarityEnabled()){
+			return simmilarTitleMatchPercentage(titleA.getTitleStr(), titleB.getTitleStr(), matchBoundary, prefixBoundary);
+		}
+
+		return titleA.getTitleStr().equals(titleB.getTitleStr()) ? MAX_MATCH_BOUNDARY : MIN_MATCH_BOUNDARY;
 	}
 	
 	public static int simmilarTitleMatchPercentage(String strA, String strB, int matchBoundary, int prefixBoundary) {
