@@ -35,6 +35,7 @@ import cz.mzk.recordmanager.server.util.MetadataUtils;
 public abstract class HashingDedupKeyParser implements DedupKeysParser {
 
 	private final static int EFFECTIVE_TITLE_LENGTH = 255;
+	private final static int EFFECTIVE_AUTHOR_LENGTH = 200;
 	
 	@Autowired 
 	private HarvestedRecordFormatDAO harvestedRecordFormatDAO;
@@ -68,7 +69,7 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 		List<HarvestedRecordFormatEnum> formatEnums = metadataRecord.getDetectedFormatList();
 		encapsulator.setFormats(harvestedRecordFormatDAO.getFormatsFromEnums(formatEnums));
 		encapsulator.setAuthorAuthKey(metadataRecord.getAuthorAuthKey());
-		encapsulator.setAuthorString(MetadataUtils.normalize(metadataRecord.getAuthorString()));
+		encapsulator.setAuthorString(MetadataUtils.normalizeAndShorten(metadataRecord.getAuthorString(), EFFECTIVE_AUTHOR_LENGTH));
 		encapsulator.setScale(metadataRecord.getScale());
 		encapsulator.setUuid(metadataRecord.getUUId());
 		encapsulator.setPages(metadataRecord.getPageCount());
