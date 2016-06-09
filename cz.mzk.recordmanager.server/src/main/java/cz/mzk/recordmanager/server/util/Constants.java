@@ -81,6 +81,8 @@ public class Constants {
 	public static final String PREFIX_KRAM_KNAV			= "kram-knav";
 	public static final String PREFIX_KRAM_NKP			= "kram-nkp";
 	
+	public static final Long IMPORT_CONF_ID_AUTHORITY = 400L;
+	
 	public static final String DOCUMENT_AVAILABILITY_ONLINE     = "online";
 	public static final String DOCUMENT_AVAILABILITY_PROTECTED  = "protected";
 	public static final String DOCUMENT_AVAILABILITY_UNKNOWN    = "unknown";

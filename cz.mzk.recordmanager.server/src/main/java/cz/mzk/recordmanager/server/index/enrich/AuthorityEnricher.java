@@ -20,6 +20,7 @@ import cz.mzk.recordmanager.server.marc.MarcRecord;
 import cz.mzk.recordmanager.server.marc.MarcXmlParser;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordDAO;
+import cz.mzk.recordmanager.server.util.Constants;
 
 public abstract class AuthorityEnricher {
 
@@ -90,7 +91,7 @@ public abstract class AuthorityEnricher {
 				result.add(currentCache.get(currentAuthKey));
 			} else {
 				// parse value from authority record
-				HarvestedRecord auth = hrDao.findByRaw001Id(currentAuthKey);
+				HarvestedRecord auth = hrDao.findByHarvestConfAndRaw001Id(Constants.IMPORT_CONF_ID_AUTHORITY, currentAuthKey);
 				if (auth == null || auth.getRawRecord() == null) {
 					continue;
 				}

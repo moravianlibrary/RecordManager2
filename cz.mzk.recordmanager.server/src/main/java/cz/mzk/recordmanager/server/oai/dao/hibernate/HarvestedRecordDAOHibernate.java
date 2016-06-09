@@ -73,11 +73,12 @@ public class HarvestedRecordDAOHibernate extends
 	}
 	
 	@Override
-	public HarvestedRecord findByRaw001Id(String id001) {
+	public HarvestedRecord findByHarvestConfAndRaw001Id(Long configurationId, String id001) {
 		Session session = sessionFactory.getCurrentSession();
 		return (HarvestedRecord) session
-				.createQuery("from HarvestedRecord where raw001Id = ?")
-				.setParameter(0, id001)
+				.createQuery("from HarvestedRecord where uniqueId.harvestedFromId = ? and raw001Id = ?")
+				.setParameter(0, configurationId)
+				.setParameter(1, id001)
 				.uniqueResult();
 	}
 	
