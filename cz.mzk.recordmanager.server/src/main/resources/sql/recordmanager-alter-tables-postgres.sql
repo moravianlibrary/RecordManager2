@@ -450,3 +450,7 @@ INSERT INTO harvested_record_format(id, name) VALUES (28, 'PERSON');
 
 -- 24. 5. 2016 tomascejpek
 ALTER TABLE title ADD COLUMN similarity_enabled BOOLEAN DEFAULT(FALSE);
+
+-- 10. 6. 2016 tomascejpek
+UPDATE import_conf SET library_id=104 WHERE id in (321,325,326);
+UPDATE import_conf SET is_library=true WHERE id in (325,326);

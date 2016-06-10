@@ -701,3 +701,7 @@ INSERT INTO harvested_record_format(id, name) VALUES (28, 'PERSON');
 
 --changeset tomascejpek:6
 ALTER TABLE title ADD COLUMN similarity_enabled BOOLEAN DEFAULT(FALSE);
+
+--changeset tomascejpek:7 context:cpk
+UPDATE import_conf SET library_id=104 WHERE id in (321,325,326);
+UPDATE import_conf SET is_library=true WHERE id in (325,326);

@@ -31,6 +31,7 @@ import cz.mzk.recordmanager.server.model.HarvestedRecordFormat.HarvestedRecordFo
 import cz.mzk.recordmanager.server.model.ImportConfiguration;
 import cz.mzk.recordmanager.server.model.Inspiration;
 import cz.mzk.recordmanager.server.scripting.MappingResolver;
+import cz.mzk.recordmanager.server.util.Constants;
 import cz.mzk.recordmanager.server.util.IndexingUtils;
 import cz.mzk.recordmanager.server.util.MetadataUtils;
 import cz.mzk.recordmanager.server.util.SolrUtils;
@@ -181,11 +182,24 @@ public class SolrInputDocumentFactoryImpl implements SolrInputDocumentFactory, I
 		return SolrFieldConstants.UNKNOWN_INSTITUTION;
 	}
 	
+	protected String getPrefixOfRecord(HarvestedRecord hr) {
+		ImportConfiguration config = hr.getHarvestedFrom();
+		if (config != null && config.getIdPrefix() != null) {
+			return config.getIdPrefix().toUpperCase();
+		}
+		return SolrFieldConstants.UNKNOWN_INSTITUTION;
+	}
+	
 	protected List<String> getInstitution(HarvestedRecord record){
 		if(record.getHarvestedFrom() != null) {
 			if (record.getHarvestedFrom().isLibrary()) {
 				String city = MetadataUtils.normalize(getCityOfRecord(record));
 				String name = getInstitutionOfRecord(record);
+				if(name.equals(Constants.LIBRARY_NAME_NKP)){
+					String prefix = getPrefixOfRecord(record);
+					return SolrUtils.createHierarchicFacetValues(INSTITUTION_LIBRARY, city, name, prefix);
+				}
+				
 				return SolrUtils.createHierarchicFacetValues(INSTITUTION_LIBRARY, city, name);
 			}
 			else {
