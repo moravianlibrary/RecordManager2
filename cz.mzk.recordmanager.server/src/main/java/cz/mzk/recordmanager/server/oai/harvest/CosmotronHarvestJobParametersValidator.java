@@ -28,6 +28,7 @@ public class CosmotronHarvestJobParametersValidator extends
 				param(Constants.JOB_PARAM_UNTIL_DATE, ParameterType.DATE, false), //
 				param(Constants.JOB_PARAM_RESUMPTION_TOKEN, ParameterType.STRING, false), //
 				param(Constants.JOB_PARAM_INCREMENTAL, ParameterType.LONG, false), //
+				param(Constants.JOB_PARAM_START_TIME, ParameterType.DATE, false), //
 				param(Constants.JOB_PARAM_DELETED_OUT_FILE, ParameterType.STRING, false) //
 				);
 	}
