@@ -585,4 +585,16 @@ public class MarcDSL extends BaseDSL {
     	}
     	return Collections.singletonList(urls.get(0));
     }
+    
+    public List<String> getAuthIds(String tags){
+		List<String> result = new ArrayList<>();
+		
+		for(String tag : tags.split(":")) {
+			for(DataField df: record.getDataFields(tag)){
+				if(df.getSubfield('7') == null) result.add("");
+				else result.add(df.getSubfield('7').getData());
+			}
+		}
+    	return result;
+    }
 }
