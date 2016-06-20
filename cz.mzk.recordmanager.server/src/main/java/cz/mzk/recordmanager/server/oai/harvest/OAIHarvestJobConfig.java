@@ -129,7 +129,7 @@ public class OAIHarvestJobConfig {
     public Step harvestOneByOneStep() {
         return steps.get("harvestOneByOneStep") //
         		 .<List<OAIRecord>, List<HarvestedRecord>> chunk(1) //
-                 .reader(oneByOneItemReader(LONG_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION)) //
+                 .reader(oneByOneItemReader(LONG_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION, STRING_OVERRIDEN_BY_EXPRESSION)) //
                  .processor(oaiItemProcessor())
                  .writer(harvestedRecordWriter()) //
                  .build();
@@ -237,8 +237,10 @@ public class OAIHarvestJobConfig {
     		@Value("#{stepExecutionContext[" + Constants.JOB_PARAM_FROM_DATE + "] "
     				+ "?:jobParameters[ " + Constants.JOB_PARAM_FROM_DATE +"]}") Date from,
     		@Value("#{stepExecutionContext[" + Constants.JOB_PARAM_UNTIL_DATE+"]"
-    				+ "?:jobParameters[" + Constants.JOB_PARAM_UNTIL_DATE +"]}") Date to) {
-    	return new OAIOneByOneItemReader(configId, from, to);
+    				+ "?:jobParameters[" + Constants.JOB_PARAM_UNTIL_DATE +"]}") Date to,
+    	    @Value("#{stepExecutionContext[" + Constants.JOB_PARAM_RESUMPTION_TOKEN+"]"
+    	       		+ "?:jobParameters[" + Constants.JOB_PARAM_RESUMPTION_TOKEN +"]}") String resumptionToken){
+    	return new OAIOneByOneItemReader(configId, from, to, resumptionToken);
     }
 
 	@Bean(name="oaiHarvestJob:afterHarvestTasklet")

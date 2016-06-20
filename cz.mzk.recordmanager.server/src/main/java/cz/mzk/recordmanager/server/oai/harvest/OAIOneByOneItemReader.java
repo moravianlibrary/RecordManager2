@@ -10,7 +10,10 @@ import org.springframework.batch.core.ExitStatus;
 import org.springframework.batch.core.StepExecution;
 import org.springframework.batch.core.StepExecutionListener;
 import org.springframework.batch.core.configuration.annotation.StepScope;
+import org.springframework.batch.item.ExecutionContext;
 import org.springframework.batch.item.ItemReader;
+import org.springframework.batch.item.ItemStream;
+import org.springframework.batch.item.ItemStreamException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -28,7 +31,7 @@ import cz.mzk.recordmanager.server.util.HibernateSessionSynchronizer.SessionBind
 @Component
 @StepScope
 public class OAIOneByOneItemReader implements ItemReader<List<OAIRecord>>,
-		StepExecutionListener {
+		StepExecutionListener, ItemStream {
 	
 	@Autowired
 	private OAIHarvestConfigurationDAO configDao;
@@ -57,11 +60,12 @@ public class OAIOneByOneItemReader implements ItemReader<List<OAIRecord>>,
 	
     private static final int COMMIT_INTERVAL = 50;
 	
-	public OAIOneByOneItemReader(Long confId, Date fromDate, Date untilDate) {
+	public OAIOneByOneItemReader(Long confId, Date fromDate, Date untilDate, String resumptionToken) {
 		super();
 		this.confId = confId;
 		this.fromDate = fromDate;
 		this.untilDate = untilDate;
+		this.resumptionToken = resumptionToken;
 	}
 	
 	@Override
@@ -136,6 +140,25 @@ public class OAIOneByOneItemReader implements ItemReader<List<OAIRecord>>,
 		conf.setGranularity(OAIGranularity.stringToOAIGranularity(identify
 				.getGranularity()));
 		configDao.persist(conf);
+	}
+
+	@Override
+	public void open(ExecutionContext ctx)
+			throws ItemStreamException {
+		if (ctx.containsKey("resumptionToken")) {
+			resumptionToken = ctx.getString("resumptionToken");
+		}
+	}
+
+	@Override
+	public void update(ExecutionContext ctx)
+			throws ItemStreamException {
+		ctx.putString("resumptionToken", resumptionToken);
+		
+	}
+
+	@Override
+	public void close() throws ItemStreamException {
 	}
 
 }
