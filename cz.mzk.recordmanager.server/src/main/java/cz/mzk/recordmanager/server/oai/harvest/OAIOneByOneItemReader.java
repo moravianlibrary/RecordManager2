@@ -71,6 +71,7 @@ public class OAIOneByOneItemReader implements ItemReader<List<OAIRecord>>,
 			OAIHarvesterParams params = new OAIHarvesterParams();
 			params.setUrl(conf.getUrl());
 			params.setMetadataPrefix(conf.getMetadataPrefix());
+			params.setSet(conf.getSet());
 			params.setGranularity(conf.getGranularity());
 			params.setFrom(fromDate);
 			params.setUntil(untilDate);
