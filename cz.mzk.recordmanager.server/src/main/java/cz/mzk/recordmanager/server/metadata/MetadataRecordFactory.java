@@ -65,6 +65,7 @@ public class MetadataRecordFactory {
 			case Constants.PREFIX_NKP:
 				return new NkpMarcMetadataRecord(marcRec);
 			case Constants.PREFIX_TRE:
+			case Constants.PREFIX_MKUO:
 				return new TreMetadataMarcRecord(marcRec);
 			case Constants.PREFIX_MZKNORMS:
 				return new MzkNormsMetadataMarcRecord(marcRec);
