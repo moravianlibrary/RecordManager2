@@ -45,10 +45,11 @@ public class HarvestedRecordWriter implements ItemWriter<List<HarvestedRecord>> 
 						if (record.getId() == null) {
 							recordDao.persist(record);
 						}
-						dedupKeysParser.parse(record);
 						if (record.getHarvestedFrom().isFilteringEnabled() && !record.getShouldBeProcessed()) {
 							logger.debug("Filtered record: " + record.getUniqueId());
 							record.setDeleted(new Date());
+						} else {
+							dedupKeysParser.parse(record);
 						}
 					} catch (DedupKeyParserException dkpe) {
 						logger.error(

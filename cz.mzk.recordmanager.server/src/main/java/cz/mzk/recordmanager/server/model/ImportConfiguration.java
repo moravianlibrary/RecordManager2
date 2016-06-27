@@ -55,6 +55,9 @@ public abstract class ImportConfiguration extends AbstractDomainObject {
 	@Column(name="mapping_script")
 	private String mappingScript;
 
+	@Column(name="generate_dedup_keys")
+	private boolean generateDedupKeys = true;
+
 	public Library getLibrary() {
 		return library;
 	}
@@ -133,6 +136,14 @@ public abstract class ImportConfiguration extends AbstractDomainObject {
 
 	public void setMappingScript(String mappingScript) {
 		this.mappingScript = mappingScript;
+	}
+
+	public boolean isGenerateDedupKeys() {
+		return generateDedupKeys;
+	}
+
+	public void setGenerateDedupKeys(boolean generateDedupKeys) {
+		this.generateDedupKeys = generateDedupKeys;
 	}
 
 }

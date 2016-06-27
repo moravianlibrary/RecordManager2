@@ -38,6 +38,7 @@ CREATE TABLE import_conf (
   is_library           BOOLEAN DEFAULT FALSE,
   harvest_frequency    CHAR(1) DEFAULT 'U',
   mapping_script       VARCHAR(256),
+  generate_dedup_keys  BOOLEAN DEFAULT(TRUE),
   CONSTRAINT import_conf_library_id_fk        FOREIGN KEY (library_id)        REFERENCES library(id),
   CONSTRAINT import_conf_contact_person_id_fk FOREIGN KEY (contact_person_id) REFERENCES contact_person(id)
 );
