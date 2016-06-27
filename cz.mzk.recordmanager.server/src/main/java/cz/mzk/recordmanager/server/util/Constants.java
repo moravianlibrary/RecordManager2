@@ -63,24 +63,25 @@ public class Constants {
 	public static final String METADATA_FORMAT_DUBLIN_CORE = "dublinCore";
 	public static final String METADATA_FORMAT_ESE		= "ese";
 	
-	public static final String PREFIX_MZK				= "mzk";
-	public static final String PREFIX_NKP				= "nkp";
-	public static final String PREFIX_NTK				= "ntk";
-	public static final String PREFIX_TRE				= "tre";
-	public static final String PREFIX_CASLIN			= "caslin";
-	public static final String PREFIX_MZKNORMS			= "unmz";
-	public static final String PREFIX_SFXJIBMZK			= "sfxjibmzk";
-	public static final String PREFIX_SFXJIBNLK			= "sfxjibnlk";
-	public static final String PREFIX_SFXJIBNLK_PERIODICALS	= "sfxnlkper";
-	public static final String PREFIX_SFXKNAV			= "sfxknav";
-	public static final String PREFIX_NLK				= "nlk";
-	public static final String PREFIX_OPENLIB			= "openlib";
 	public static final String PREFIX_AUTH				= "auth";
-	public static final String PREFIX_MKUO				= "mkuo";
-	public static final String PREFIX_KRAM_MZK			= "kram-mzk";
-	public static final String PREFIX_KRAM_NTK			= "kram-ntk";
+	public static final String PREFIX_CASLIN			= "caslin";
 	public static final String PREFIX_KRAM_KNAV			= "kram-knav";
+	public static final String PREFIX_KRAM_MZK			= "kram-mzk";
 	public static final String PREFIX_KRAM_NKP			= "kram-nkp";
+	public static final String PREFIX_KRAM_NTK			= "kram-ntk";
+	public static final String PREFIX_MKUO				= "mkuo";
+	public static final String PREFIX_MZK				= "mzk";
+	public static final String PREFIX_MZKNORMS			= "unmz";
+	public static final String PREFIX_NKP				= "nkp";
+	public static final String PREFIX_NLK				= "nlk";
+	public static final String PREFIX_NTK				= "ntk";
+	public static final String PREFIX_OPENLIB			= "openlib";
+	public static final String PREFIX_SFXJIBMZK			= "sfxjibmzk";
+	public static final String PREFIX_SFXJIBNLK_PERIODICALS	= "sfxnlkper";
+	public static final String PREFIX_SFXJIBNLK			= "sfxjibnlk";
+	public static final String PREFIX_SFXKNAV			= "sfxknav";
+	public static final String PREFIX_SVKUL				= "svkul";
+	public static final String PREFIX_TRE				= "tre";
 	
 	public static final String LIBRARY_NAME_NKP			= "NKP";
 	

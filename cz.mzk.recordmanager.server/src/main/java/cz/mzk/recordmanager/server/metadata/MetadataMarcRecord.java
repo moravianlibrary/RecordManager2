@@ -987,6 +987,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 		else return false;
 	}
 	
+	@Override
 	public CitationRecordType getCitationFormat(){
 		String ldr06 = Character.toString(underlayingMarc.getLeader().getTypeOfRecord()).toLowerCase();
 		String ldr07 = Character.toString(underlayingMarc.getLeader().getImplDefined1()[0]).toLowerCase();
@@ -1033,6 +1034,11 @@ public class MetadataMarcRecord implements MetadataRecord {
 		if(ldr06.matches("[cdkgijopr]")) return CitationRecordType.OTHERS;
 		
 		return CitationRecordType.ERROR;
+	}
+	
+	@Override
+	public List<String> getBarcodes(){
+		return underlayingMarc.getFields("996", 'b');
 	}
 	
 }

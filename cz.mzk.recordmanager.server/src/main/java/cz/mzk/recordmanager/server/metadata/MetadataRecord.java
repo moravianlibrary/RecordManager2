@@ -157,4 +157,12 @@ public interface MetadataRecord {
 	 * @return
 	 */
 	public CitationRecordType getCitationFormat();
+	
+	/**
+	 * return barcodes
+	 * @return
+	 */
+	default public List<String> getBarcodes(){
+		return null;
+	}
 }
