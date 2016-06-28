@@ -1,0 +1,85 @@
+<add>
+	<doc>
+		<field name="id">1</field>
+		<field name="recordtype">Osobnosti</field>
+		<field name="primarySurname">Fuksa</field>
+		<field name="primaryFirstname">Stanislav</field>
+		<field name="primaryFullnameStr">Stanislav Fuksa</field>
+		<field name="gender">male</field>
+		<field name="birthDate">1894-09-12T00:00:00Z</field>
+		<field name="birthMonth">09</field>
+		<field name="birthPlace">Brno</field>
+		<field name="birthPlaceFull">Brno (okres Brno)</field>
+		<field name="birthPlaceLatLon">49.1974256,16.6031489</field>
+		<field name="deathDate">1991-06-19T00:00:00Z</field>
+		<field name="deathMonth">06</field>
+		<field name="living">dead</field>
+		<field name="description"><![CDATA[Narodil se  Brně v rodině vrchního konduktéra státních drah Jana Fuksy a jeho manželky Anny. Rodina se přestěhovala za prací do České Třebové. V našem městě absolvoval obecnou i měšťanskou školu. Poté, co se ve Vídni vyučil zámečnickému řemeslu, dobrovolně se přihlásil na vojnu, kde se stal zbrojířem. Po uplynutí tehdy tříleté vojenské služby se mladému Stanislavovi vypuknutím první světové války vojenská služba protáhla na sedm let. Odešel bojovat do Sarajeva a do Haliče, kde prodělal tyfus. Dostal se do lazaretu ve Vídni, odkud po úplném vyléčení odešel na frontu na Piavu do Itálie. Tam zůstal až do konce války. Byl členem Sokola, vypracoval se až na náčelníka. V sokolovně Na Skále, v tamnějším biografu se stal promítačem, či jak se tehdy říkalo „kinooperatérem“. Po zrušení bia Sokol pracoval jako promítač v kině Svět, zde pak stal i uvaděčem. Jeho velkou zálibou byla sbírka fotografií, která je v této době v majetku Městského muzea. ]]></field>
+		<field name="field">sokolové</field>
+		<field name="field">legionáři</field>
+		<field name="field">promítači</field>
+		<field name="institution">Městská knihovna Česká Třebová</field>
+		<field name="url">http://www.osobnostiregionu.cz/osoby/1-stanislav-fuksa-1894-1991</field>
+		<field name="source">Českotřebovský zpravodaj, 9, 2004, s. 56-57</field>
+		<field name="previewImageUrl">http://www.osobnostiregionu.cz/components/com_osobnosti/images/no_photo_man_fp.png
+		</field>
+	</doc>
+	<doc>
+		<field name="id">2</field>
+		<field name="recordtype">Osobnosti</field>
+		<field name="primarySurname">Řehák</field>
+		<field name="primaryFirstname">Oldřich</field>
+		<field name="primaryFullnameStr">Oldřich Řehák</field>
+		<field name="gender">male</field>
+		<field name="birthDate">1922-00-00T00:00:00Z</field>
+		<field name="birthMonth">00</field>
+		<field name="deathMonth">00</field>
+		<field name="living">living</field>
+		<field name="description"><![CDATA[Číšník, řezník a skladník. Odsouzen Krajským soudem Pardubice v r. 1950 za šíření poplašné zprávy na 3 měsíce odnětí svobody a peněžitý trest 5000,- Kč. Rehabilitován v r. 1990 Okresním soudem v Ústí nad Orlicí. ]]></field>
+		<field name="field">oběti normalizace</field>
+		<field name="field">političtí vězni</field>
+		<field name="institution">Městská knihovna Česká Třebová</field>
+		<field name="url">http://www.osobnostiregionu.cz/osoby/2-oldrich-rehak-1922</field>
+		<field name="source">Českotřebovský zpravodaj, 6, 1996, str. 30</field>
+		<field name="previewImageUrl">http://www.osobnostiregionu.cz/components/com_osobnosti/images/no_photo_man_fp.png
+		</field>
+	</doc>
+	<doc>
+		<field name="id">3</field>
+		<field name="recordtype">Osobnosti</field>
+		<field name="primarySurname">Špedla</field>
+		<field name="primaryFirstname">Josef</field>
+		<field name="primaryFullnameStr">Josef Špedla</field>
+		<field name="gender">male</field>
+		<field name="birthDate">1901-01-18T00:00:00Z</field>
+		<field name="birthMonth">01</field>
+		<field name="birthPlace">Červený Kostelec</field>
+		<field name="birthPlaceFull">Červený Kostelec (okres Náchod)</field>
+		<field name="birthPlaceLatLon">50.4762988888889,16.0929822222222</field>
+		<field name="deathDate">1984-00-00T00:00:00Z</field>
+		<field name="deathMonth">00</field>
+		<field name="deathPlace">Ústí nad Orlicí</field>
+		<field name="deathPlaceFull">Ústí nad Orlicí (okres Ústí nad Orlicí)</field>
+		<field name="deathPlaceLatLon">49.973905,16.3936686111111</field>
+		<field name="living">dead</field>
+		<field name="description"><![CDATA[Bývalý úředník několika dřevařských firem a spolumajitele velkoobchodu dřívím, pan Josef Špelda se narodil  dne 18. ledna 1901 v Červeném Kostelci v rodině tkalce Františka Špeldy a jeho manželky Marie, roz. Müllerové, jako jedno z pěti dětí. Tři z nich zemřely v útlém věku a dospělosti se dožil pouze Josef a mladší sestra Maruška.
+Po studiích na c. k. průmyslové škole v Jaroměři, na obchodní škole České obchodní besedy v Praze a praxi na pile v obci Krásná u Poličky nastoupil dne 1. července 1920 na své první úřednické místo v České Třebové u firmy Krbec &amp; Přibyl, parní pila obchod dřívím ve velkém. Zde se setkal se svým kolegou a pozdějším společníkem Hubertem Veselým, s nímž žil i ve společném podnájmu v rodné chalupě buditele Jana Hýbla v Hýblově ulici. Ze Třebové odešel pracovat k firmě J. Novák ve Hředlí a poté do Roudnice nad Labem k firmě Ladislav Otto Kuchař, továrna na nábytek. Z Roudnice zavítal do Prahy, kde nastoupil v paláci Lucerna u firmy Ing. Vlček, podnikatelství staveb. V letech 1923 - 1925 vykonal vojenská službu v Košicích. Den 15. duben 1925 jej přivedl opět do České Třebové a naše město se mu již stalo osudem pro celý život. Přijal místo u firmy “Bratří Hofmanové, parní pila a obchod dřívím ve velkém”, kde měl na starosti vedení administrativy, fakturaci a účetnictví. Kancelář firmy tenkrát sídlila v domě kapelníka Františka Preislera v Klácelově ulici. Ubytování získal Josef Špelda v přízemí domu Zapských na náměstí jako podnájemník u mistra obuvnického Vendelína Suchomela.
+Mladý úředník záhy splynul s životem České Třebové. Čile se účastnil veřejných akcí a zapojil se též do sportovního dění ve městě - hrál tenis (na kurtech na Trávníku proti Vyskočilově vile a u Brázdů za Vrbovkou), podlehl také kouzlu turistiky a lyžaření. Není tedy divu, že zakrátko získal řadu přátel a kamarádů. Stýkal se i s tehdejšími všeobecně váženými občany města. Za všechny připomeňme jeho domácího pána lékárníka Adolfa J. rytíře Zapského ze Zap, s nímž a jeho manželkou často sedával na zahradě za domem v čínském altánu, kde se zájmem naslouchal jejich vyprávění a vzpomínání na mladá léta.
+Významným mezníkem v životě Josefa Špeldy se stal rok 1929. Dne 1. července toho roku založil se dvěma společníky Hubertem Veselým a Václavem Krbcem vlastní firmu s názvem “Václav Krbec &amp; spol., obchod dřívím ve velkém”. Dne 10. prosince 1929 se v Praze na Staroměstské radnici oženil se slečnou Marií Stříbrnou, sestrou zdejšího rodáka ing. Eduarda Stříbrného, pamětníka historie starého Trávníka a výborného vypravěče. Strojopis jeho “Pamětí”, uchovávaný v knihovně městského muzea a v několika opisech občany města, zaujme i dnešního čtenáře. Svědky při obřadu se stali bratr nevěsty a jeho přítel, rovněž českotřebovský rodák, ministr školství a národní osvěty Gustav Habrman. Paní Marie Špeldová měla zálibu v hudbě a příležitostně se svými pěveckými čísly vystupovala i na veřejnosti. Stala se členkou pěveckého sboru Bendl a její manžel Josef Špelda zveřejnil řadu článků o činnosti sboru a jeho sbormistru Jindřichu Pravečkovi st. v místním čtrnáctideníku “Náš kraj”.
+V roce 1936 vystavěl pro manžele Špeldovy stavitel Jan Lustyk z Řetůvky podle projektu ing. E. F. Sedloně z Prahy tehdy vysoce moderní vilku čp. 1572 ve Svatováclavské ulici na Trávníku, na přední fasádě ozdobenou reliéfem akademického sochaře Františka Formánka, představujícím anděla s rohem hojnosti plným květin. V pozdějších letech vznikly ve vile dětské jesle. Stavba dnes zcela zaniká za mnohapatrovým obytným domem, označení budovy jako Špeldova vila se však udrželo do dnešních dnů. Firma “Václav Krbec &amp; spol.” nedobrovolně ukončila činnost v roce 1948. Josef Špelda se tehdy stal šéfem velkoprodejny dříví v Šumperku, později pracoval jako vedoucí odbytu dřevařských oddělení Státních lesů ve Svitavách a Moravské Třebové. Stal se také správcem pily v Třebovici. Po odchodu z dřevařského oboru působil postupně, a to i po odchodu do důchodu, ve Státní bance ve Svitavách, u stavebního vlaku ŽS Ostrava, ve VKDI Orlík v České Třebové a do roku 1973 jako účetní a ekonom SBD v našem městě.
+Dne 18. února 1972 se manželé Špeldovi přestěhovali do nově postaveného domu na sídlišti Křib. Zde u nich nalezl svůj druhý domov ovdovělý ing. Eduard Stříbrný, dosud žijící v Děčíně.
+V roce 1976, po úmrtí manželky, se Josef Špelda věnoval podle vzoru svého švagra sepisování vlastních životních příběhů, které nazval “Kytička vyprávění a vzpomínek”. Jeden z opisů je uložen v knihovně  městského muzea v České Třebové. Vzpomínky na mladá léta a na rodný Červený Kostelec se objevily i na několika Špeldových malbách.Josef Špelda nezapřel ani v pozdním věku své bývalé povolání úředníka a do posledních chvil si zachoval krásný kaligrafický rukopis i noblesní vystupování. Zemřel v ústecké nemocnici ve věku nedožitých třiaosmdesáti let.]]></field>
+		<field name="field">podnikatelé</field>
+		<field name="field">úřednici</field>
+		<field name="field">malíři</field>
+		<field name="field">spisovatelé</field>
+		<field name="field">výtvarnici</field>
+		<field name="field">výtvarní umělci</field>
+		<field name="recordAuthor">Martin Šebela</field>
+		<field name="relation">328</field>
+		<field name="institution">Městská knihovna Česká Třebová</field>
+		<field name="url">http://www.osobnostiregionu.cz/osoby/3-josef-spedla-1901-1984	</field>
+		<field name="source">www (Českotřebovský zpravodaj - Kalendárium), cit.	13.07.2011</field>
+		<field name="previewImageUrl">http://www.osobnostiregionu.cz/components/com_osobnosti/images/no_photo_man_fp.png</field>
+	</doc>
+</add>

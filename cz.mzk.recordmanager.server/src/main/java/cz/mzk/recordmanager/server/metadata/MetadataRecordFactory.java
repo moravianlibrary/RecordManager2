@@ -79,6 +79,7 @@ public class MetadataRecordFactory {
 			case Constants.PREFIX_CASLIN:
 				return new SkatMarcMetadataRecord(marcRec);
 			case Constants.PREFIX_AUTH:
+			case Constants.PREFIX_OSOBNOSTI:
 				return new AuthMetadataMarcRecord(marcRec);
 			case Constants.PREFIX_SVKUL:
 				return new SvkulMetadataMarcRecord(marcRec);

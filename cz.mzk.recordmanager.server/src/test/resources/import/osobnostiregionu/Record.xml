@@ -1,0 +1,25 @@
+<add>
+	<doc>
+		<field name="id">5</field>
+		<field name="recordtype">Osobnosti</field>
+		<field name="primarySurname">Přívratský</field>
+		<field name="primaryFirstname">Miloslav</field>
+		<field name="primaryFullnameStr">Miloslav Přívratský</field>
+		<field name="gender">male</field>
+		<field name="birthDate">1923-06-16T00:00:00Z</field>
+		<field name="birthMonth">06</field>
+		<field name="deathDate">1944-10-24T00:00:00Z</field>
+		<field name="deathMonth">10</field>
+		<field name="deathPlace">Brandenburg</field>
+		<field name="deathPlaceFull">Brandenburg (Německo)</field>
+		<field name="deathPlaceLatLon">52.411849862216144,12.52970695495604</field>
+		<field name="living">dead</field>
+		<field name="description"><![CDATA[Narodil se 16. července 1923, byl členem odboje a byl popraven 24. října 1944 v Brandenburgu. Péčí československých a spojeneckých úřadů byla urna s tělesnými pozůstatky o předána pozůstalým na Ministerstvu zahraničí ČSR po dvou letech 1. října 1946. Poté byla urna vystavena v měšťanské škole chlapecké na Farářství, kterou Miloslav Přívratský navštěvoval. Dne 2. října 1946 se konala v této škole pietní slavnost.]]></field>
+		<field name="field">odbojáři</field>
+		<field name="field">oběti nacismu</field>
+		<field name="institution">Městská knihovna Česká Třebová</field>
+		<field name="url">http://www.osobnostiregionu.cz/osoby/5-miloslav-privratsky-1923-1944</field>
+		<field name="source">www (Českotřebovský zpravodaj - Kalendárium), cit.	15.07.2011</field>
+		<field name="previewImageUrl">http://www.osobnostiregionu.cz/components/com_osobnosti/images/no_photo_man_fp.png</field>
+	</doc>
+</add>

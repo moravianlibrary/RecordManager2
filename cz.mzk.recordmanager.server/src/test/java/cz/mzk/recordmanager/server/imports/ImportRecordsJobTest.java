@@ -60,6 +60,8 @@ public class ImportRecordsJobTest extends AbstractTest {
 	private String testFolderOai;
 	private String testFileCosmotron1;
 	private String testFileCosmotron2;
+	private String testFileOsobnosti1;
+	private String testFileOsobnosti2;
 	
 	@BeforeClass
 	public void init() {
@@ -78,6 +80,8 @@ public class ImportRecordsJobTest extends AbstractTest {
 		testFolderOai = this.getClass().getResource("/import/oai/").getFile();
 		testFileCosmotron1 = this.getClass().getResource("/import/cosmotron/record.mrc").getFile();
 		testFileCosmotron2 = this.getClass().getResource("/import/cosmotron/996.mrc").getFile();
+		testFileOsobnosti1 = this.getClass().getResource("/import/osobnostiregionu/Record.xml").getFile();
+		testFileOsobnosti2 = this.getClass().getResource("/import/osobnostiregionu/OsobnostiRecords.xml").getFile();
 	}
 	
 	@BeforeMethod
@@ -155,6 +159,25 @@ public class ImportRecordsJobTest extends AbstractTest {
 		MarcRecord mr = new MarcRecordImpl(marcXmlParser.parseUnderlyingRecord(is));
 		Assert.assertFalse(mr.getDataFields("100").isEmpty());
 		Assert.assertFalse(mr.getDataFields("520").isEmpty());
+	}
+	
+	@Test
+	public void testSimpleImportOsobnosti() throws Exception {
+		Job job = jobRegistry.getJob(Constants.JOB_ID_IMPORT);
+		Map<String, JobParameter> params = new HashMap<String, JobParameter>();
+		params.put(Constants.JOB_PARAM_CONF_ID, new JobParameter(300L));
+		params.put(Constants.JOB_PARAM_IN_FILE, new JobParameter(testFileOsobnosti1));
+		params.put(Constants.JOB_PARAM_FORMAT, new JobParameter("osobnosti"));
+		JobParameters jobParams = new JobParameters(params);
+		jobLauncher.run(job, jobParams);
+		
+		HarvestedRecord hr = harvestedRecordDao.findByIdAndHarvestConfiguration("5", 300L);
+		Assert.assertNotNull(hr);
+		InputStream is = new ByteArrayInputStream(hr.getRawRecord());
+		MarcRecord mr = new MarcRecordImpl(marcXmlParser.parseUnderlyingRecord(is));
+		Assert.assertFalse(mr.getDataFields("100").isEmpty());
+		Assert.assertFalse(mr.getDataFields("670").isEmpty());
+		Assert.assertEquals(mr.getDataFields("856").size(), 1);
 	}
 	
 	@Test
@@ -285,5 +308,20 @@ public class ImportRecordsJobTest extends AbstractTest {
 		Assert.assertNotNull(harvestedRecordDao.findByIdAndHarvestConfiguration("LiUsCat_0495991", 300L));
 		Assert.assertNotNull(cosmotron996Dao.findByIdAndHarvestConfiguration("LiUsCat_0002490", 300L));
 		Assert.assertNull(cosmotron996Dao.findByIdAndHarvestConfiguration("LiUsCat_0002491", 300L));
+	}
+	
+	@Test
+	public void testMultipleImportOsobnosti() throws Exception {
+		Job job = jobRegistry.getJob(Constants.JOB_ID_IMPORT);
+		Map<String, JobParameter> params = new HashMap<String, JobParameter>();
+		params.put(Constants.JOB_PARAM_CONF_ID, new JobParameter(300L));
+		params.put(Constants.JOB_PARAM_IN_FILE, new JobParameter(testFileOsobnosti2));
+		params.put(Constants.JOB_PARAM_FORMAT, new JobParameter("osobnosti"));
+		JobParameters jobParams = new JobParameters(params);
+		jobLauncher.run(job, jobParams);
+		
+		Assert.assertNotNull(harvestedRecordDao.findByIdAndHarvestConfiguration("1", 300L));
+		Assert.assertNotNull(harvestedRecordDao.findByIdAndHarvestConfiguration("2", 300L));
+		Assert.assertNotNull(harvestedRecordDao.findByIdAndHarvestConfiguration("3", 300L));
 	}
 }

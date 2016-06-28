@@ -1,0 +1,293 @@
+package cz.mzk.recordmanager.server.marc.marc4j;
+
+import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeSet;
+
+import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamReader;
+
+import org.marc4j.MarcReader;
+import org.marc4j.marc.ControlField;
+import org.marc4j.marc.DataField;
+import org.marc4j.marc.MarcFactory;
+import org.marc4j.marc.Record;
+
+import cz.mzk.recordmanager.server.marc.MarcRecord;
+import cz.mzk.recordmanager.server.marc.MarcRecordImpl;
+
+public class OsobnostiRegionuXmlStreamReader implements MarcReader{
+	
+    private Record record;
+
+    private MarcFactory factory;
+    
+    private XMLInputFactory xmlFactory;
+    
+    private XMLStreamReader xmlReader;
+    
+    private static final String TEXT_LEADER = "00000nz--a2200000n--4500";
+    private static final String TEXT_008_END = "|n|acnnna|bn-----------n-a|a------";
+    private static final String TEXT_003_TRE = "CZ-CtMK";
+    private static final String TEXT_003_MKUO = "CZ-UoMK";
+    private static final String TEXT_040A_TRE = "UOG505";
+    private static final String TEXT_040A_MKUO = "UOG001";
+    private static final String TEXT_040B = "cze";
+    private static final String TEXT_040D = "BOA001";
+    private static final String TEXT_040E = "erda";
+    
+    private static final String DATE_STRING_005 = "yyyyMMddHHmmss'.0'";
+    private static final String DATE_STRING_008 = "yyMMdd";
+    
+    private static final String ELEMENT_RECORD = "doc";
+    private static final String ELEMENT_FIELD = "field";
+    
+    private static final String ATTR_NAME = "name";
+    private static final String ATTR_NAME_ID = "id";
+    private static final String ATTR_NAME_INSTITUTION = "institution";
+    private static final String ATTR_NAME_PRIMARY_SURNAME = "primarySurname";
+	private static final String ATTR_NAME_PRIMARY_FIRSTNAME = "primaryFirstname";
+	private static final String ATTR_NAME_BIRTHDATE = "birthDate";
+	private static final String ATTR_NAME_DEATHDATE = "deathDate";
+	private static final String ATTR_NAME_SOURCE = "source";
+	private static final String ATTR_NAME_DESCRIPTION = "description";
+	private static final String ATTR_NAME_URL = "url";
+	private static final String ATTR_NAME_IMG_URL = "previewImageUrl";
+	private static final String ATTR_NAME_FIELD = "field";
+    private static final String INSTITUTION_TRE = "Městská knihovna Česká Třebová";
+    private static final String INSTITUTION_MKUO = "Městská knihovna Ústí nad Orlicí";
+    
+    private static final String URL_WOMAN = "http://www.osobnostiregionu.cz/components/com_osobnosti/images/no_photo_woman_fp.png";
+    private static final String URL_MAN = "http://www.osobnostiregionu.cz/components/com_osobnosti/images/no_photo_man_fp.png";
+    
+    
+    /**
+     * Constructs an instance with the specified input stream.
+     */
+    public OsobnostiRegionuXmlStreamReader(InputStream input) {
+    	xmlFactory = XMLInputFactory.newInstance();
+        factory = MarcFactoryImpl.newInstance();
+        initializeReader(input);
+    }
+
+    private void initializeReader(InputStream input){
+    	try {
+        	xmlFactory.setProperty(XMLInputFactory.SUPPORT_DTD, false);
+			this.xmlReader = xmlFactory.createXMLStreamReader(input);
+		} catch (XMLStreamException e) {
+			e.printStackTrace();
+		}
+    }
+    
+    /**
+     * Returns true if the iteration has more records, false otherwise.
+     */
+    public boolean hasNext(){
+    	try {
+			return xmlReader.hasNext();
+		} catch (XMLStreamException e) {
+			e.printStackTrace();
+		}
+		return false;
+    }
+
+    /**
+     * Returns the next record in the iteration.
+     * 
+     * @return Record - the record object
+     */
+    public Record next() {
+        record = null;
+        StringBuilder sb = new StringBuilder();
+        String description = "";
+        Person primaryName = new Person();
+        try {
+			while(xmlReader.hasNext()){
+				switch(xmlReader.getEventType()){
+				case XMLStreamReader.START_ELEMENT:
+					switch(xmlReader.getLocalName()){
+					case ELEMENT_RECORD:
+						record = factory.newRecord();
+						createFields();			
+						break;
+					case ELEMENT_FIELD:
+						switch(xmlReader.getAttributeValue(null, ATTR_NAME)) {
+						case ATTR_NAME_ID:
+							newControlfield("001", xmlReader.getElementText());
+							break;
+						case ATTR_NAME_INSTITUTION:
+							addFieldsByInstitution(xmlReader.getElementText());
+							break;
+						case ATTR_NAME_IMG_URL:
+						case ATTR_NAME_URL:
+							addField856(xmlReader.getElementText());
+							break;
+						case ATTR_NAME_FIELD:
+							if(sb.length() == 0) sb.append(xmlReader.getElementText());
+							else sb.append(", " + xmlReader.getElementText());
+							break;
+						case ATTR_NAME_DESCRIPTION:
+							description = xmlReader.getElementText();
+							break;
+						case ATTR_NAME_SOURCE:
+							addField670(xmlReader.getElementText());
+							break;
+						case ATTR_NAME_PRIMARY_FIRSTNAME:
+							primaryName.setFirstname(xmlReader.getElementText());
+							break;
+						case ATTR_NAME_PRIMARY_SURNAME:
+							primaryName.setSurname(xmlReader.getElementText());
+							break;
+						case ATTR_NAME_BIRTHDATE:
+							primaryName.setBirth(xmlReader.getElementText());
+							break;
+						case ATTR_NAME_DEATHDATE:
+							primaryName.setDeath(xmlReader.getElementText());
+							break;
+						}
+						break;
+					}	
+					break;			
+				case XMLStreamReader.END_ELEMENT:
+					switch(xmlReader.getLocalName()){
+					case ELEMENT_RECORD:
+						while(xmlReader.hasNext() && xmlReader.getEventType()!=XMLStreamReader.START_ELEMENT){
+							xmlReader.next();
+						}
+						addField678(sb.toString(), description);
+						addAuthor(primaryName);
+						return sortFields(record);
+					}
+					break;
+				}
+				xmlReader.next();
+				
+			}
+		} catch (XMLStreamException e) {
+			e.printStackTrace();
+		}
+        
+        return record;
+    }
+
+    private void addFieldsByInstitution(String institution){
+    	if(institution.equals(INSTITUTION_TRE)) addFields003And040(TEXT_003_TRE, TEXT_040A_TRE);
+    	if(institution.equals(INSTITUTION_MKUO) && record.getVariableFields("040").isEmpty())
+    		addFields003And040(TEXT_003_MKUO, TEXT_040A_MKUO);
+    }
+    
+    private void addFields003And040(String f003, String sigla){
+    	newControlfield("003", f003);
+    	DataField df = factory.newDataField("040", ' ', ' ');
+    	newSubfield(df, 'a', sigla);
+    	newSubfield(df, 'b', TEXT_040B);
+    	newSubfield(df, 'd', TEXT_040D);
+    	newSubfield(df, 'e', TEXT_040E);
+    	record.addVariableField(df);
+    	
+    }
+    
+    private void addField678(String field, String description){
+    	if(!field.isEmpty()) field += ". ";
+    	if(!field.isEmpty() || !description.isEmpty()){
+    		DataField df = factory.newDataField("678", '0', ' ');
+    		newSubfield(df, 'a', field+description.trim());
+    		record.addVariableField(df);
+    	}
+    }
+    
+    private void createFields(){
+    	record.setLeader(factory.newLeader(TEXT_LEADER));
+
+		SimpleDateFormat sdf = new SimpleDateFormat(DATE_STRING_005);
+		newControlfield("005", sdf.format(new Date()));
+		sdf = new SimpleDateFormat(DATE_STRING_008);
+		newControlfield("008", sdf.format(new Date())+TEXT_008_END);
+    }
+
+    private void addField856(String url){
+    	if(url.equals(URL_MAN) || url.equals(URL_WOMAN)) return;
+    	DataField df = factory.newDataField("856", '4', ' ');
+    	newSubfield(df, 'u', url);
+    	record.addVariableField(df);
+    }
+    
+    private void addField670(String source){
+    	DataField df = factory.newDataField("670", ' ', ' ');
+    	newSubfield(df, 'a', source);
+    	record.addVariableField(df);
+    }
+    
+    private void addAuthor(Person name){
+    	DataField df = factory.newDataField("100", '1', ' ');
+    	if(name.getSurname() != null) newSubfield(df, 'a', name.getSurname());
+    	if(name.getFirstname() != null) newSubfield(df, 'b', name.getFirstname());
+    	if(!name.getDate().isEmpty()) newSubfield(df, 'd', name.getDate());
+    	record.addVariableField(df);
+    }
+
+    private void newControlfield(String tag, String value){
+    	record.addVariableField(factory.newControlField(tag, value));
+    }
+    
+    private void newSubfield(DataField df, char code, String data){
+    	df.addSubfield(factory.newSubfield(code, data));
+    }
+    
+    private Record sortFields(Record record){
+    	Record newRecord = factory.newRecord();
+				
+    	newRecord.setLeader(record.getLeader());
+    	for(ControlField cf: record.getControlFields()){
+    		newRecord.addVariableField(cf);
+    	}
+    	MarcRecord marc = new MarcRecordImpl(record);
+    	Map<String, List<DataField>> dfMap = marc.getAllFields();
+    	for(String tag: new TreeSet<String>(dfMap.keySet())){ // sorted tags
+    		for(DataField df: dfMap.get(tag)){
+    			newRecord.addVariableField(df);
+    		}
+    	}
+    	return newRecord;
+    }
+    
+    private class Person{
+    	String firstname;
+    	String surname;
+    	String birth = "";
+    	String death = "";
+    	
+		public String getFirstname() {
+			return firstname;
+		}
+		
+		public void setFirstname(String firstname) {
+			this.firstname = firstname;
+		}
+		
+		public String getSurname() {
+			return surname + ", ";
+		}
+		
+		public void setSurname(String surname) {
+			this.surname = surname;
+		}
+		
+		public String getDate() {
+			if(birth.isEmpty() && death.isEmpty()) return "";
+			return birth+"-"+death;
+		}
+		
+		public void setBirth(String birth) {
+			if(birth.length() > 3) this.birth = birth.substring(0, 4);
+		}
+		
+		public void setDeath(String death) {
+			if(death.length() > 3) this.death = death.substring(0, 4);
+		}
+	}
+}
