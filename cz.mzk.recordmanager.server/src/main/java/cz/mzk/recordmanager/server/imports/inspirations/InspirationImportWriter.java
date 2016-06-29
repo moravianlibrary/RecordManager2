@@ -17,6 +17,7 @@ import cz.mzk.recordmanager.server.model.ImportConfiguration;
 import cz.mzk.recordmanager.server.model.Inspiration;
 import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordDAO;
 import cz.mzk.recordmanager.server.oai.dao.ImportConfigurationDAO;
+import cz.mzk.recordmanager.server.oai.dao.InspirationDAO;
 
 @Component
 @StepScope
@@ -28,6 +29,11 @@ public class InspirationImportWriter implements ItemWriter<Map<String, List<Stri
 	@Autowired
 	private HarvestedRecordDAO hrDao;
 	
+	@Autowired
+	private InspirationDAO inspirationDao;
+	
+	private List<HarvestedRecord> hrWithInspiration;
+	
 	public InspirationImportWriter() {
 	}
 	
@@ -38,7 +44,9 @@ public class InspirationImportWriter implements ItemWriter<Map<String, List<Stri
 			throws Exception {
 		for(Map<String, List<String>> map: items){
 			for (Entry<String, List<String>> entry : map.entrySet()){
-				String new_inspiration = entry.getKey();
+				String inspiration_name = entry.getKey();
+				// actual list of records with inspiration in db
+				hrWithInspiration = inspirationDao.fingHrByInspiraion(inspiration_name);
 			    for(String id: entry.getValue()){
 			    	Matcher matcher = PATTERN_ID.matcher(id);
 			    	if(matcher.matches()){
@@ -48,7 +56,12 @@ public class InspirationImportWriter implements ItemWriter<Map<String, List<Stri
 				    		if(conf == null) continue;
 				    		HarvestedRecord hr = hrDao.findByIdAndHarvestConfiguration(record_id, conf);
 				    		if(hr == null) continue;
-				    		if(!inspirationExist(hr, new_inspiration)){ 
+				    		
+				    		if(hrWithInspiration.contains(hr)){
+				    			// inspiration is already in db
+				    			hrWithInspiration.remove(hr);
+				    		}
+				    		else{ // add inspiration to hr 
 				    			List<Inspiration> result = hr.getInspiration();
 				    			Inspiration newInspiration = new Inspiration(entry.getKey());
 				    			newInspiration.setHarvestedRecordId(hr.getId());
@@ -60,15 +73,17 @@ public class InspirationImportWriter implements ItemWriter<Map<String, List<Stri
 			    		}
 			    	}
 			    }
+			    // rest of records - delete inspiration
+			    for(HarvestedRecord hr: hrWithInspiration){
+			    	Inspiration delete = inspirationDao.findByHrIdAndName(hr.getId(), inspiration_name);
+					List<Inspiration> inspirations = hr.getInspiration();
+					inspirations.remove(delete);
+					hr.setInspiration(inspirations);
+					hr.setUpdated(new Date());
+					hrDao.persist(hr);
+					inspirationDao.delete(delete);
+			    }
 			}
 		}
-	}
-	
-	private Boolean inspirationExist(HarvestedRecord hr, String new_inspiration){
-		Boolean exist = false;		
-		for(Inspiration ins: hr.getInspiration()){
-			if(ins.getName().equals(new_inspiration)) exist = true;
-		}
-		return exist;
 	}
 }
