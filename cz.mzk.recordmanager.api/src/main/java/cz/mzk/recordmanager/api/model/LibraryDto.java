@@ -1,7 +1,6 @@
 package cz.mzk.recordmanager.api.model;
 
 import java.io.Serializable;
-import java.util.List;
 
 public class LibraryDto implements Serializable {
 

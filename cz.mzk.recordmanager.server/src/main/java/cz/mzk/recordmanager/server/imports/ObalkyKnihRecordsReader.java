@@ -3,7 +3,6 @@ package cz.mzk.recordmanager.server.imports;
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.apache.commons.validator.routines.ISBNValidator;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.NonTransientResourceException;
 import org.springframework.batch.item.ParseException;

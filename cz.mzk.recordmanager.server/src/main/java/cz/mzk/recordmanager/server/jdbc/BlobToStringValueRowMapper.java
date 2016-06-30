@@ -3,7 +3,6 @@ package cz.mzk.recordmanager.server.jdbc;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.sql.Blob;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
