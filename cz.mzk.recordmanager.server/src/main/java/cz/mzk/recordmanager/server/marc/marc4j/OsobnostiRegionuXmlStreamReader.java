@@ -30,7 +30,7 @@ public class OsobnostiRegionuXmlStreamReader implements MarcReader{
     
     private XMLStreamReader xmlReader;
     
-    private static final String TEXT_LEADER = "00000nz--a2200000n--4500";
+    private static final String TEXT_LEADER = "-----nz--a2200000n--4500";
     private static final String TEXT_008_END = "|n|acnnna|bn-----------n-a|a------";
     private static final String TEXT_003_TRE = "CZ-CtMK";
     private static final String TEXT_003_MKUO = "CZ-UoMK";
@@ -38,7 +38,7 @@ public class OsobnostiRegionuXmlStreamReader implements MarcReader{
     private static final String TEXT_040A_MKUO = "UOG001";
     private static final String TEXT_040B = "cze";
     private static final String TEXT_040D = "BOA001";
-    private static final String TEXT_040E = "erda";
+    private static final String TEXT_670A_FRONT = "Profese a obory působení: ";
     
     private static final String DATE_STRING_005 = "yyyyMMddHHmmss'.0'";
     private static final String DATE_STRING_008 = "yyMMdd";
@@ -58,12 +58,14 @@ public class OsobnostiRegionuXmlStreamReader implements MarcReader{
 	private static final String ATTR_NAME_URL = "url";
 	private static final String ATTR_NAME_IMG_URL = "previewImageUrl";
 	private static final String ATTR_NAME_FIELD = "field";
+	
     private static final String INSTITUTION_TRE = "Městská knihovna Česká Třebová";
     private static final String INSTITUTION_MKUO = "Městská knihovna Ústí nad Orlicí";
     
     private static final String URL_WOMAN = "http://www.osobnostiregionu.cz/components/com_osobnosti/images/no_photo_woman_fp.png";
     private static final String URL_MAN = "http://www.osobnostiregionu.cz/components/com_osobnosti/images/no_photo_man_fp.png";
     
+    private static final String NEW_LINE = "\n";
     
     /**
      * Constructs an instance with the specified input stream.
@@ -186,7 +188,6 @@ public class OsobnostiRegionuXmlStreamReader implements MarcReader{
     	newSubfield(df, 'a', sigla);
     	newSubfield(df, 'b', TEXT_040B);
     	newSubfield(df, 'd', TEXT_040D);
-    	newSubfield(df, 'e', TEXT_040E);
     	record.addVariableField(df);
     	
     }
@@ -195,7 +196,7 @@ public class OsobnostiRegionuXmlStreamReader implements MarcReader{
     	if(!field.isEmpty()) field += ". ";
     	if(!field.isEmpty() || !description.isEmpty()){
     		DataField df = factory.newDataField("678", '0', ' ');
-    		newSubfield(df, 'a', field+description.trim());
+    		newSubfield(df, 'a', TEXT_670A_FRONT+field+description.trim());
     		record.addVariableField(df);
     	}
     }
@@ -216,16 +217,17 @@ public class OsobnostiRegionuXmlStreamReader implements MarcReader{
     	record.addVariableField(df);
     }
     
-    private void addField670(String source){
-    	DataField df = factory.newDataField("670", ' ', ' ');
-    	newSubfield(df, 'a', source);
-    	record.addVariableField(df);
+    private void addField670(String sources){
+    	for(String source: sources.split(NEW_LINE)){
+    		DataField df = factory.newDataField("670", ' ', ' ');
+    		newSubfield(df, 'a', source);
+    		record.addVariableField(df);
+    	}
     }
     
     private void addAuthor(Person name){
     	DataField df = factory.newDataField("100", '1', ' ');
-    	if(name.getSurname() != null) newSubfield(df, 'a', name.getSurname());
-    	if(name.getFirstname() != null) newSubfield(df, 'b', name.getFirstname());
+    	if(name.getName() != null) newSubfield(df, 'a', name.getName());
     	if(!name.getDate().isEmpty()) newSubfield(df, 'd', name.getDate());
     	record.addVariableField(df);
     }
@@ -261,20 +263,19 @@ public class OsobnostiRegionuXmlStreamReader implements MarcReader{
     	String birth = "";
     	String death = "";
     	
-		public String getFirstname() {
-			return firstname;
-		}
-		
 		public void setFirstname(String firstname) {
 			this.firstname = firstname;
 		}
 		
-		public String getSurname() {
-			return surname + ", ";
-		}
-		
 		public void setSurname(String surname) {
 			this.surname = surname;
+		}
+		
+		public String getName(){
+			if((surname == null) && (firstname == null)) return null;
+			if(surname == null) return firstname;
+			if(firstname == null) return surname;
+			return surname + ", " + firstname;
 		}
 		
 		public String getDate() {
