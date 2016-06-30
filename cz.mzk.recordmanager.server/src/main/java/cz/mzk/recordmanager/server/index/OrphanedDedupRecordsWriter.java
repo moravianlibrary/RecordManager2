@@ -1,8 +1,10 @@
 package cz.mzk.recordmanager.server.index;
 
+import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.List;
 
+import org.apache.solr.client.solrj.SolrServerException;
 import org.springframework.batch.core.ExitStatus;
 import org.springframework.batch.core.StepExecution;
 import org.springframework.batch.core.StepExecutionListener;
@@ -42,6 +44,11 @@ public class OrphanedDedupRecordsWriter implements ItemWriter<Long>, StepExecuti
 
 	@Override
 	public ExitStatus afterStep(StepExecution stepExecution) {
+		try {
+			server.commit();
+		} catch (SolrServerException | IOException ex) {
+			throw new RuntimeException("Final commit failed", ex);
+		}
 		return null;
 	}
 
