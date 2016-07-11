@@ -73,3 +73,9 @@ availability_id_str_mv = getFieldsUnique "996w"
 
 citation_record_type = getCitationRecordType();
 author_find = getAuthorFind();
+
+category_str = translate("conspectus_category.map",
+  getRecord().getDataFields("072").findAll{ df -> df?.getSubfield('2' as char)?.getData() == 'Konspekt' }
+  .collect{ df -> df?.getSubfield('9' as char)?.getData() }.find{ true }, null);
+subcategory_str = getRecord().getDataFields("072").findAll{ df -> df?.getSubfield('2' as char)?.getData() == 'Konspekt' }
+  .collect{ df -> df?.getSubfield('x' as char)?.getData() }.find{ true };
