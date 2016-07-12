@@ -724,3 +724,9 @@ INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granul
 
 --changeset tomascejpek:12 context:cpk
 UPDATE oai_harvest_conf SET metadata_prefix='marccpk' WHERE import_conf_id=340;
+
+--changeset tomascejpek:13 context:cpk
+UPDATE import_conf SET harvest_frequency='D' WHERE id=334;
+UPDATE oai_harvest_conf SET url='http://109.73.209.153/clavius/l.dll', set_spec='NKP' WHERE import_conf_id=334;
+UPDATE import_conf SET harvest_frequency='D' WHERE id=338;
+UPDATE oai_harvest_conf SET url='http://katalogold.iir.cz:81/l.dll', set_spec='CPK' WHERE import_conf_id=338;
