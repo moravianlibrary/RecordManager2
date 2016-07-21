@@ -1,5 +1,9 @@
 CREATE INDEX harvested_record_updated_index ON harvested_record USING btree (updated);
 CREATE INDEX harvested_record_dedup_record_id_updated_idx ON harvested_record(dedup_record_id, updated);
+CREATE INDEX harvested_record_dedup_keys_hash_idx ON harvested_record(dedup_keys_hash);
+CREATE INDEX harvested_record_import_conf_id ON harvested_record(import_conf_id);
+CREATE INDEX harvested_record_next_dedup_flag ON harvested_record(next_dedup_flag);
+CREATE INDEX harvested_record_raw_001_id_idx ON harvested_record(raw_001_id);
 
 CREATE INDEX cnb_harvested_record_idx ON cnb(harvested_record_id);
 CREATE INDEX title_harvested_record_idx ON title(harvested_record_id);
@@ -23,3 +27,6 @@ CREATE INDEX obalkyknih_toc_isbn_idx ON obalkyknih_toc(isbn);
 CREATE INDEX obalkyknih_toc_nbn_idx ON obalkyknih_toc(nbn);
 
 CREATE INDEX dedup_record_updated_idx ON dedup_record(updated);
+
+CREATE UNIQUE INDEX sigla_id_key ON sigla(id);
+CREATE INDEX sigla_sigla_idx ON sigla(sigla);
