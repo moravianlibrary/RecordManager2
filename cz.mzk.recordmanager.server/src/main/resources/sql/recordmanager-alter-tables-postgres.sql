@@ -487,3 +487,6 @@ INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granul
 
 -- 19. 7. 2016 tomascejpek
 UPDATE oai_harvest_conf SET set_spec='CPK' WHERE import_conf_id=334;
+
+-- 22. 7. 2016 tomascejpek
+UPDATE import_conf SET harvest_frequency='U' WHERE id in (329,323);

@@ -738,3 +738,6 @@ INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granul
 
 --changeset tomascejpek:15 context:cpk
 UPDATE oai_harvest_conf SET set_spec='CPK' WHERE import_conf_id=334;
+
+--changeset tomascejpek:16 context:cpk
+UPDATE import_conf SET harvest_frequency='U' WHERE id in (329,323);
