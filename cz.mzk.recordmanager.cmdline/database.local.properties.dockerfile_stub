@@ -1,0 +1,13 @@
+jdbc.url=DB_HOST_URL
+jdbc.username=DB_USERNAME
+jdbc.password=DB_PASSWORD
+
+hibernate.dialect=org.hibernate.dialect.PostgreSQL9Dialect
+hibernate.show_sql=false
+hibernate.format_sql=false
+hibernate.hbm2ddl.auto=none
+
+liquibase.enable=true
+liquibase.contexts=cpk
+
+recordmanager.threadPoolSize=THREAD_COUNT
