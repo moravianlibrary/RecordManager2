@@ -14,6 +14,7 @@ import cz.mzk.recordmanager.server.model.AntikvariatyRecord;
 import cz.mzk.recordmanager.server.model.DownloadImportConfiguration;
 import cz.mzk.recordmanager.server.oai.dao.DownloadImportConfigurationDAO;
 import cz.mzk.recordmanager.server.util.HttpClient;
+import cz.mzk.recordmanager.server.util.MetadataUtils;
 
 public class AntikvariatyRecordsReader implements ItemReader<AntikvariatyRecord> {
 
@@ -21,6 +22,8 @@ public class AntikvariatyRecordsReader implements ItemReader<AntikvariatyRecord>
 
 	private Long configId;
 
+	private final static int EFFECTIVE_TITLE_LENGTH = 255;
+	
 	@Autowired 
 	private HttpClient httpClient;
 
@@ -41,10 +44,11 @@ public class AntikvariatyRecordsReader implements ItemReader<AntikvariatyRecord>
 		AntikvariatyRecord item = reader.read();
 		if (item != null) {
 			fixCatalogueIds(item);
+			shortenTitle(item);
 		}
 		return item;
 	}
-
+	
 	protected void fixCatalogueIds(AntikvariatyRecord item) {
 		if (item.getCatalogueIds() == null) {
 			return;
@@ -66,6 +70,10 @@ public class AntikvariatyRecordsReader implements ItemReader<AntikvariatyRecord>
 		}
 	}
 
+	protected void shortenTitle(AntikvariatyRecord item){
+		item.setTitle(MetadataUtils.normalizeAndShorten(item.getTitle(), EFFECTIVE_TITLE_LENGTH));
+	}
+	
 	protected void initializeReader() throws Exception {
 		DownloadImportConfiguration config = configDao.get(configId);
 		if (config == null) {
