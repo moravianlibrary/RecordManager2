@@ -1,5 +1,7 @@
 package cz.mzk.recordmanager.server.imports;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.ListIterator;
 
 import org.slf4j.Logger;
@@ -68,6 +70,8 @@ public class AntikvariatyRecordsReader implements ItemReader<AntikvariatyRecord>
 				iter.remove();
 			}
 		}
+		// unique ids
+		item.setCatalogueIds(new ArrayList<String>(new HashSet<>(item.getCatalogueIds())));
 	}
 
 	protected void shortenTitle(AntikvariatyRecord item){
