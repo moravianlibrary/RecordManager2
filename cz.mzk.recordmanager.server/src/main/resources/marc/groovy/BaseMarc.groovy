@@ -71,5 +71,5 @@ bbox_geo_str = getBoundingBox()
 
 availability_id_str_mv = getFieldsUnique "996w"
 
-citation_record_type = getCitationRecordType();
+citation_record_type_str = getCitationRecordType();
 author_find = getAuthorFind();
