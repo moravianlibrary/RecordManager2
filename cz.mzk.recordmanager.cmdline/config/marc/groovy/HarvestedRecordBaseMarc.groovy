@@ -29,3 +29,9 @@ sfx_links = getSfxIds()
 loanRelevance = getLoanRelevance();
 
 id001_search = getId001()
+
+category_txtF = translate("conspectus_category.map",
+  getRecord().getDataFields("072").findAll{ df -> df?.getSubfield('2' as char)?.getData() == 'Konspekt' }
+  .collect{ df -> df?.getSubfield('9' as char)?.getData() }.find{ true }, null);
+subcategory_txtF = getRecord().getDataFields("072").findAll{ df -> df?.getSubfield('2' as char)?.getData() == 'Konspekt' }
+  .collect{ df -> df?.getSubfield('x' as char)?.getData() }.find{ true };
