@@ -25,6 +25,7 @@ import cz.mzk.recordmanager.server.scripting.MappingResolver;
 import cz.mzk.recordmanager.server.scripting.StopWordsResolver;
 import cz.mzk.recordmanager.server.scripting.function.RecordFunction;
 import cz.mzk.recordmanager.server.util.Constants;
+import cz.mzk.recordmanager.server.util.SolrUtils;
 
 public class MarcDSL extends BaseDSL {
 
@@ -595,6 +596,22 @@ public class MarcDSL extends BaseDSL {
 				else result.add(df.getSubfield('7').getData());
 			}
 		}
+    	return result;
+    }
+    
+    public Set<String> getConspectus() throws IOException{
+    	Set<String> result = new HashSet<>();
+    	
+    	for(DataField df: record.getDataFields("072")){
+    		if((df.getSubfield('2') != null) && (df.getSubfield('2').getData().equals("Konspekt"))
+    				&& (df.getSubfield('9') != null) && (df.getSubfield('x') != null)){
+    			String category = translate("conspectus_category.map", df.getSubfield('9').getData(), null);
+    			String subcategory = df.getSubfield('x').getData();
+    			
+    			result.addAll(SolrUtils.createHierarchicFacetValues(category, subcategory));
+    		}
+    	}
+    	
     	return result;
     }
 }
