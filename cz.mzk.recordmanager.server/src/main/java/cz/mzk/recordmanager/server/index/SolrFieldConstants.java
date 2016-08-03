@@ -85,6 +85,8 @@ public class SolrFieldConstants {
 	public static final String TITLE = "title";
 	
 	public static final String BARCODES = "barcodes";
+	
+	public static final String CONSPECTUS_STR_MV = "conspectus_str_mv";
 
 	/**
 	 * dummy fields used for processing purposes only, shouldn't be indexed. Fields are deleted in AuthorityEnricher. 
