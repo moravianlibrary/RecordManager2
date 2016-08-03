@@ -40,6 +40,10 @@ public class MarcDSL extends BaseDSL {
 	private final static String SUPPRESS = "<<[^<{2}]*>>";
 	private final static String TO_BLANK = "['\\[\\]\"`!()\\-{};:.,?/\\@*%=^_|~]";
 
+	private final static String MAP_CATEGORY_SUBCATEGORY = "category_subcategory.map";
+	private final static String MAP_SUBCATEGORY_NAME = "subcategory_name.map";
+	private final static String MAP_CONSPECTUS_CATEGORY = "conspectus_category.map";
+	
 	private final static Pattern FIELD_PATTERN = Pattern
 			.compile("([0-9]{3})([a-zA-Z0-9]*)");
 	private final static Pattern AUTHOR_PATTERN = Pattern
@@ -601,14 +605,22 @@ public class MarcDSL extends BaseDSL {
     
     public Set<String> getConspectus() throws IOException{
     	Set<String> result = new HashSet<>();
-    	
     	for(DataField df: record.getDataFields("072")){
     		if((df.getSubfield('2') != null) && (df.getSubfield('2').getData().equals("Konspekt"))
-    				&& (df.getSubfield('9') != null) && (df.getSubfield('x') != null)){
-    			String category = translate("conspectus_category.map", df.getSubfield('9').getData(), null);
-    			String subcategory = df.getSubfield('x').getData();
+    				&& (df.getSubfield('9') != null) && (df.getSubfield('x') != null && (df.getSubfield('a') != null))){
+    			String subcat_code_source = df.getSubfield('a').getData().trim();
+    			String subcat_name_source = df.getSubfield('x').getData().trim();
+    			String cat_code_source = df.getSubfield('9').getData().trim();
     			
-    			result.addAll(SolrUtils.createHierarchicFacetValues(category, subcategory));
+    			String cat_code = translate(MAP_CATEGORY_SUBCATEGORY, subcat_code_source, null);
+    			if(!cat_code_source.equals(cat_code)) continue;
+
+    			String subcat_name = translate(MAP_SUBCATEGORY_NAME, subcat_code_source, null);
+
+    			if(subcat_name_source.equals(subcat_name)){
+	    			String category = translate(MAP_CONSPECTUS_CATEGORY, cat_code_source, null);
+	    			result.addAll(SolrUtils.createHierarchicFacetValues(category, subcat_name_source));
+    			}
     		}
     	}
     	
