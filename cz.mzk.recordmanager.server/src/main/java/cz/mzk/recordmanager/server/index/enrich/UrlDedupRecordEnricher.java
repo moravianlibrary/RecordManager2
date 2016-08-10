@@ -21,6 +21,9 @@ public class UrlDedupRecordEnricher implements DedupRecordEnricher {
 	private static final String PROTECTED = "protected";
 	private static final String SPLITTER = "\\|";
 	private static final String JOINER = "|";
+	private static final String KRAMERIUS_URL = "http://kramerius";
+	private static final String KRAMERIUS_HANDLE = "handle/";
+	private static final String KRAMERIUS_IJSP = "i.jsp?pid=";
 	
 	@Override
 	public void enrich(DedupRecord record, SolrInputDocument mergedDocument,
@@ -39,6 +42,11 @@ public class UrlDedupRecordEnricher implements DedupRecordEnricher {
 		localRecords.stream().forEach(doc -> doc.remove(SolrFieldConstants.URL));
 	}
 
+	/**
+	 * urls format "institution code"|"policy code"|"url"
+	 * @param values
+	 * @return
+	 */
 	private List<String> urlsFilter(Set<Object> values){
 		List<String> results = new ArrayList<>();
 		
@@ -50,26 +58,27 @@ public class UrlDedupRecordEnricher implements DedupRecordEnricher {
 			}
 			else{
 				String spliturl[] = obj.toString().split(SPLITTER);
-				if(urlsMap.containsKey(spliturl[2])){
-					List<String> urls = urlsMap.get(spliturl[2]);
-//					online urls at the beginning
-					if(spliturl[1].equals(ONLINE)) urls.add(0, obj.toString());
-					else urls.add(obj.toString());
-					urlsMap.put(spliturl[2], urls);
+				String parsedUrl = krameriusUrlParser(spliturl[2]);
+				if(urlsMap.containsKey(parsedUrl)){
+					List<String> completeUrls = urlsMap.get(parsedUrl);
+//					online url at the beginning
+					if(spliturl[1].equals(ONLINE)) completeUrls.add(0, obj.toString());
+					else completeUrls.add(obj.toString());
+					urlsMap.put(parsedUrl, completeUrls);
 				}
 				else{
 					List<String> list = new ArrayList<>();
 					list.add(obj.toString());
-					urlsMap.put(spliturl[2], list);
+					urlsMap.put(parsedUrl, list);
 				}
 			}
 		}
 
 		for(String url: urlsMap.keySet()){
-			Set<String> urls = new HashSet<>(urlsMap.get(url));
+			Set<String> completeUrls = new HashSet<>(urlsMap.get(url));
 			boolean online = false;
 			List<String> unknownlist = new ArrayList<>();
-			for(String value: urls){
+			for(String value: completeUrls){
 				String spliturl[] = value.split(SPLITTER);
 				if(spliturl[1].equals(ONLINE)){
 					results.add(value);
@@ -78,22 +87,43 @@ public class UrlDedupRecordEnricher implements DedupRecordEnricher {
 				else{
 					if(online) break;
 					if(spliturl[1].equals(PROTECTED)) results.add(value);
-					if(spliturl[1].equals(UNKNOWN)) unknownlist.add(value);
+					if(spliturl[1].equals(UNKNOWN)){
+						if(!spliturl[2].contains(KRAMERIUS_URL) || completeUrls.size() == 1) 
+							unknownlist.add(value);
+					}
 				}
 			}
 			
 			if(unknownlist.size() == 1) results.addAll(unknownlist);
 			if(unknownlist.size() > 1){
-				String spliturl[] = unknownlist.get(0).split(SPLITTER);
-				spliturl[0] = UNKNOWN;
-				StringBuilder sb = new StringBuilder();
-				sb.append(String.join(JOINER, spliturl));
-				if(spliturl.length == 3) sb.append(JOINER);
-				results.add(sb.toString());
+				results.add(urlUpdaterAndJoiner(unknownlist.get(0), 0, UNKNOWN));
 			}
 		}
 
 		return results;
+	}
+	
+	private String urlUpdaterAndJoiner(String url, int index, String newValue){
+		String spliturl[] = url.split(SPLITTER);
+		spliturl[index] = newValue;
+		StringBuilder sb = new StringBuilder();
+		sb.append(String.join(JOINER, spliturl));
+		if(spliturl.length == 3) sb.append(JOINER);
+		return sb.toString();
+	}
+	/**
+	 * kramerius url formats
+	 * http://kramerius.mzk.cz/search/i.jsp?pid=uuid:...
+	 * http://kramerius.mzk.cz/search/handle/uuid:...
+	 * @param url
+	 * @return
+	 */
+	private String krameriusUrlParser(String url){
+		if(url.contains(KRAMERIUS_URL)){
+			return url.replace(KRAMERIUS_HANDLE, KRAMERIUS_IJSP);
+		}
+		
+		return url;
 	}
 	
 }
