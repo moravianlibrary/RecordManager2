@@ -11,20 +11,16 @@ import java.util.regex.Pattern;
 import java.util.stream.IntStream;
 
 import org.marc4j.marc.DataField;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import com.google.common.collect.Sets;
 
 import cz.mzk.recordmanager.server.marc.MarcRecord;
+import cz.mzk.recordmanager.server.model.HarvestedRecordFormat.HarvestedRecordFormatEnum;
 import cz.mzk.recordmanager.server.scripting.marc.MarcFunctionContext;
 
 @Component
 public class PublishDateMarcFunctions implements MarcRecordFunctions {
-
-	private static Logger logger = LoggerFactory
-			.getLogger(PublishDateMarcFunctions.class);
 
 	private static final int MAX_YEAR = Calendar.getInstance().get(Calendar.YEAR);
 
@@ -180,7 +176,36 @@ public class PublishDateMarcFunctions implements MarcRecordFunctions {
 		return result;
 	}
 
-	public String getPublishDateForSorting(MarcFunctionContext ctx) {
+	public String getPublishDateForSorting(MarcFunctionContext ctx){
+		if(ctx.metadataRecord().getDetectedFormatList().contains(HarvestedRecordFormatEnum.ARTICLES)){
+			return getPublishDateForSortingForArticles(ctx);
+		}
+		else{
+			return getPublishDateForSortingForOthers(ctx);
+		}
+	}
+	
+	private String getPublishDateForSortingForArticles(MarcFunctionContext ctx){
+		for(String year: ctx.record().getFields("773", "", '9')){
+			if(year.length() > 4) year = year.substring(0, 4);
+			if(SINGLE_YEAR_PATTERN.matcher(year).matches()) return year;
+		}
+		
+		MarcRecord mr = ctx.record();
+		String field008 = mr.getControlField("008");
+		if(field008 != null && field008.length() >= 12){
+			String yearS = field008.substring(7, 11);
+			if(SINGLE_YEAR_PATTERN.matcher(yearS).matches()) {
+				 int yearI = Integer.parseInt(yearS);
+				 if((1500 < yearI) && (yearI < (MAX_YEAR+1))){
+					 return yearS;
+				 }
+			}
+		}
+		return null;
+	}
+	
+	private String getPublishDateForSortingForOthers(MarcFunctionContext ctx) {
 		Set<Integer> years = getPublishDateFromFields(ctx);
 
 		years = getPublishDateFromFields(ctx);
