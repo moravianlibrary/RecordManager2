@@ -12,6 +12,7 @@ import org.testng.annotations.Test;
 import cz.mzk.recordmanager.server.AbstractTest;
 import cz.mzk.recordmanager.server.marc.MarcRecord;
 import cz.mzk.recordmanager.server.marc.MarcXmlParser;
+import cz.mzk.recordmanager.server.metadata.MetadataRecordFactory;
 import cz.mzk.recordmanager.server.scripting.marc.MarcFunctionContext;
 import cz.mzk.recordmanager.server.scripting.marc.MarcScriptFactory;
 
@@ -22,6 +23,9 @@ public class MarcScriptFactoryTest extends AbstractTest {
 
 	@Autowired
 	private MarcScriptFactory factory;
+	
+	@Autowired
+	private MetadataRecordFactory metadataRecordFactory;
 
 	@Test
 	@SuppressWarnings("unchecked")
@@ -33,7 +37,7 @@ public class MarcScriptFactoryTest extends AbstractTest {
 		InputStream is2 = getClass().getResourceAsStream(
 				"/groovy/BaseMarc.groovy");
 		MappingScript<MarcFunctionContext> script = factory.create(is1, is2);
-		MarcFunctionContext ctx = new MarcFunctionContext(record);
+		MarcFunctionContext ctx = new MarcFunctionContext(record, metadataRecordFactory.getMetadataRecord(record));
 		Map<String, Object> entries = script.parse(ctx);
 		Assert.assertEquals(entries.get("author"), null);
 		Assert.assertEquals(entries.get("published"), "Rožnov pod Radhoštěm : Proxima Bohemia, 2014");
@@ -54,7 +58,7 @@ public class MarcScriptFactoryTest extends AbstractTest {
 		InputStream is2 = getClass().getResourceAsStream(
 				"/groovy/BaseMarc.groovy");
 		MappingScript<MarcFunctionContext> script = factory.create(is1, is2);
-		MarcFunctionContext ctx = new MarcFunctionContext(record);
+		MarcFunctionContext ctx = new MarcFunctionContext(record, metadataRecordFactory.getMetadataRecord(record));
 		Map<String, Object> entries = script.parse(ctx);
 		Collection<?> author2Roles = (Collection<?>) entries.get("author2_role");
 		Assert.assertTrue(author2Roles.isEmpty());

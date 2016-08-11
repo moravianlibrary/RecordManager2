@@ -19,7 +19,7 @@ import com.google.common.primitives.Chars;
 
 import cz.mzk.recordmanager.server.export.IOFormat;
 import cz.mzk.recordmanager.server.marc.MarcRecord;
-import cz.mzk.recordmanager.server.metadata.MetadataMarcRecord;
+import cz.mzk.recordmanager.server.metadata.MetadataRecord;
 import cz.mzk.recordmanager.server.scripting.BaseDSL;
 import cz.mzk.recordmanager.server.scripting.MappingResolver;
 import cz.mzk.recordmanager.server.scripting.StopWordsResolver;
@@ -29,7 +29,7 @@ import cz.mzk.recordmanager.server.util.SolrUtils;
 
 public class MarcDSL extends BaseDSL {
 
-	private MetadataMarcRecord marcMetadataRecord;
+	private MetadataRecord metadataRecord;
 
 	private final static String EMPTY_SEPARATOR = "";
 	private final static String SPACE_SEPARATOR = " ";
@@ -61,7 +61,7 @@ public class MarcDSL extends BaseDSL {
 		this.context = context;
 		this.record = context.record();
 		this.functions = functions;
-		this.marcMetadataRecord = new MetadataMarcRecord(record);
+		this.metadataRecord = context.metadataRecord();
 	}
 
 	public MarcRecord getRecord() {
@@ -174,7 +174,7 @@ public class MarcDSL extends BaseDSL {
 
         int nonFilingInt = getInd2AsInt(titleField);
         
-        String title = marcMetadataRecord.getTitle().get(0).getTitleStr();
+        String title = metadataRecord.getTitle().get(0).getTitleStr();
         title = title.replaceAll(END_PUNCTUATION, EMPTY_SEPARATOR);
         title = title.replaceAll(NUMBERS, "$1$2");
         title = title.toLowerCase();
@@ -196,7 +196,7 @@ public class MarcDSL extends BaseDSL {
     }
 
 	public String getFullrecord() {
-		return marcMetadataRecord.export(IOFormat.ISO_2709);
+		return metadataRecord.export(IOFormat.ISO_2709);
 	}
 
 	public Object methodMissing(String methodName, Object args) {
@@ -449,7 +449,7 @@ public class MarcDSL extends BaseDSL {
     }
     
     public String getCitationRecordType(){
-    	return marcMetadataRecord.getCitationFormat().getCitationType();
+    	return metadataRecord.getCitationFormat().getCitationType();
     }
     
     public String getTitleDisplay(){

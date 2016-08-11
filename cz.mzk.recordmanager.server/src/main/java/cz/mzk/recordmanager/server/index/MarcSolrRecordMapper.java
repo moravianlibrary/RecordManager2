@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 import cz.mzk.recordmanager.server.ResourceProvider;
 import cz.mzk.recordmanager.server.marc.MarcRecord;
 import cz.mzk.recordmanager.server.marc.MarcXmlParser;
+import cz.mzk.recordmanager.server.metadata.MetadataRecordFactory;
 import cz.mzk.recordmanager.server.model.DedupRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.model.ImportConfiguration;
@@ -35,6 +36,9 @@ public class MarcSolrRecordMapper implements SolrRecordMapper, InitializingBean 
 
 	@Autowired
 	private ResourceProvider resourceProvider;
+	
+	@Autowired
+	private MetadataRecordFactory metadataRecordFactory;
 
 	private MappingScript<MarcFunctionContext> dedupRecordMappingScript;
 
@@ -66,7 +70,7 @@ public class MarcSolrRecordMapper implements SolrRecordMapper, InitializingBean 
 		InputStream is = new ByteArrayInputStream(record.getRawRecord());
 		MarcRecord rec = marcXmlParser.parseRecord(is);
 		MappingScript<MarcFunctionContext> script = getDedupMappingScript(record);
-		MarcFunctionContext ctx = new MarcFunctionContext(rec, record);
+		MarcFunctionContext ctx = new MarcFunctionContext(rec, record, metadataRecordFactory.getMetadataRecord(record));
 		Map<String, Object> result = script.parse(ctx);
 		return result;
 	}
@@ -74,7 +78,7 @@ public class MarcSolrRecordMapper implements SolrRecordMapper, InitializingBean 
 	protected Map<String, Object> parseAsLocalRecord(HarvestedRecord record) {
 		InputStream is = new ByteArrayInputStream(record.getRawRecord());
 		MarcRecord rec = marcXmlParser.parseRecord(is);
-		MarcFunctionContext ctx = new MarcFunctionContext(rec, record);
+		MarcFunctionContext ctx = new MarcFunctionContext(rec, record, metadataRecordFactory.getMetadataRecord(record));
 		return getHarvestedMappingScript(record).parse(ctx);
 	}
 
