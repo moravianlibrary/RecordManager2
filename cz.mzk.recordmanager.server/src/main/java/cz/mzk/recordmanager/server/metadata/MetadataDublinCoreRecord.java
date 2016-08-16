@@ -15,6 +15,7 @@ import cz.mzk.recordmanager.server.export.IOFormat;
 import cz.mzk.recordmanager.server.model.Cnb;
 import cz.mzk.recordmanager.server.model.HarvestedRecordFormat.HarvestedRecordFormatEnum;
 import cz.mzk.recordmanager.server.model.Isbn;
+import cz.mzk.recordmanager.server.model.Ismn;
 import cz.mzk.recordmanager.server.model.Issn;
 import cz.mzk.recordmanager.server.model.Oclc;
 import cz.mzk.recordmanager.server.model.Title;
@@ -448,6 +449,12 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 
 	@Override
 	public CitationRecordType getCitationFormat() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Ismn> getISMNs() {
 		// TODO Auto-generated method stub
 		return null;
 	}

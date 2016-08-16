@@ -6,6 +6,7 @@ import cz.mzk.recordmanager.server.export.IOFormat;
 import cz.mzk.recordmanager.server.model.Cnb;
 import cz.mzk.recordmanager.server.model.HarvestedRecordFormat.HarvestedRecordFormatEnum;
 import cz.mzk.recordmanager.server.model.Isbn;
+import cz.mzk.recordmanager.server.model.Ismn;
 import cz.mzk.recordmanager.server.model.Issn;
 import cz.mzk.recordmanager.server.model.Language;
 import cz.mzk.recordmanager.server.model.Oclc;
@@ -165,4 +166,10 @@ public interface MetadataRecord {
 	default public List<String> getBarcodes(){
 		return null;
 	}
+	
+	/**
+	 * get all ISMNs assigned to record
+	 * @return List<Ismn>
+	 */
+	public List<Ismn> getISMNs();
 }

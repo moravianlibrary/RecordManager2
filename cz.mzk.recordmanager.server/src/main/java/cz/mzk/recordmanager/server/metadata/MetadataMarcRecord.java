@@ -20,6 +20,7 @@ import cz.mzk.recordmanager.server.marc.MarcRecord;
 import cz.mzk.recordmanager.server.model.Cnb;
 import cz.mzk.recordmanager.server.model.HarvestedRecordFormat.HarvestedRecordFormatEnum;
 import cz.mzk.recordmanager.server.model.Isbn;
+import cz.mzk.recordmanager.server.model.Ismn;
 import cz.mzk.recordmanager.server.model.Issn;
 import cz.mzk.recordmanager.server.model.Oclc;
 import cz.mzk.recordmanager.server.model.Title;
@@ -41,6 +42,13 @@ public class MetadataMarcRecord implements MetadataRecord {
 	protected static final Pattern UUID_PATTERN = Pattern.compile("uuid:[\\w-]+");
 	protected static final Pattern OCLC_PATTERN= Pattern.compile("(\\(ocolc\\))(.*)", Pattern.CASE_INSENSITIVE);
 	protected static final String ISBN_CLEAR_REGEX = "[^0-9^X^x]";
+	protected static final String ISMN_CLEAR_REGEX = "[^0-9^M]";
+	protected static final String NOTE_FORMAT = "\\(.+\\)";
+	protected static final String BEGIN_BRACKET = "^\\(.*";
+	protected static final String END_BRACKET = ".*\\)$";
+	
+	protected static final String ISMN10_PREFIX = "M";
+	protected static final String ISMN13_PREFIX = "9790";
 	
 	protected static final Long MAX_PAGES = 10_000_000L;
 	
@@ -88,7 +96,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 					StringBuilder builder = new StringBuilder();
 					if(matcher.group(2).trim() != null){ 
 						String s = matcher.group(2).trim();
-						if(s.matches("\\(.+\\)")) {
+						if(s.matches(NOTE_FORMAT)) {
 							builder.append(s.substring(1, s.length()-1));
 						}
 						else builder.append(s);
@@ -207,14 +215,14 @@ public class MetadataMarcRecord implements MetadataRecord {
 			StringBuilder builder = new StringBuilder();
 			if(matcher.group(2).trim() != null){ 
 				String s = matcher.group(2).trim();
-				if(s.matches("\\(.+\\)")) {
+				if(s.matches(NOTE_FORMAT)) {
 					builder.append(s.substring(1, s.length()-1));
 				}
 				else builder.append(s);
 				builder.append(" ");
 			}
 			for(Subfield subfieldQ: field.getSubfields('q')){
-				if(subfieldQ.getData().matches("\\(.+\\)")) {
+				if(subfieldQ.getData().matches(NOTE_FORMAT)) {
 					builder.append(subfieldQ.getData().substring(1, subfieldQ.getData().length()-1));
 				}
 				else builder.append(subfieldQ.getData());
@@ -1039,6 +1047,46 @@ public class MetadataMarcRecord implements MetadataRecord {
 	@Override
 	public List<String> getBarcodes(){
 		return underlayingMarc.getFields("996", 'b');
+	}
+
+	@Override
+	public List<Ismn> getISMNs() {
+		List<Ismn> ismns = new ArrayList<>();
+		Long ismnCounter = 0L;
+		
+		for(DataField df: underlayingMarc.getDataFields("024")){
+			Subfield sfA = df.getSubfield('a');
+			if((df.getIndicator1() == '2') && (sfA != null)){
+				Ismn ismn = new Ismn();
+				String ismnStr = sfA.getData().replaceAll(ISMN_CLEAR_REGEX, "").replaceAll(ISMN10_PREFIX, ISMN13_PREFIX);
+				try {
+					if(ismnStr.length() != 13) throw new NumberFormatException();
+					ismn.setIsmn(Long.valueOf(ismnStr));
+				} catch (NumberFormatException nfe) {
+					logger.info(String.format("Invalid ISMN: %s", sfA.getData()));
+					continue;
+				}
+				
+				StringBuilder builder = new StringBuilder();
+				for(Subfield sfQ: df.getSubfields('q')){
+					if(sfQ == null) continue;
+					int beginIndex = 0;
+					int endIndex = sfQ.getData().length();
+					if(sfQ.getData().matches(BEGIN_BRACKET)) beginIndex = 1;
+					if(sfQ.getData().matches(END_BRACKET)) --endIndex;
+					if(beginIndex <= endIndex) {
+						builder.append(sfQ.getData().substring(beginIndex, endIndex));
+					}
+					else builder.append(sfQ.getData());
+					builder.append(" ");
+				}
+				ismn.setNote(builder.toString().trim());
+				ismn.setOrderInRecord(++ismnCounter);
+				ismns.add(ismn);
+			}
+		}
+		
+		return ismns;
 	}
 	
 }
