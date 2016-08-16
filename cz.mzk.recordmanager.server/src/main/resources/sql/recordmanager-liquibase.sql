@@ -741,3 +741,7 @@ UPDATE oai_harvest_conf SET set_spec='CPK' WHERE import_conf_id=334;
 
 --changeset tomascejpek:16 context:cpk
 UPDATE import_conf SET harvest_frequency='U' WHERE id in (329,323);
+
+--changeset tomascejpek:17 context:cpk
+UPDATE import_conf SET harvest_frequency='D' WHERE id=336;
+UPDATE oai_harvest_conf SET url='http://svk7.svkkl.cz/i2/i2.ws.oai.cls', set_spec='CPK1', metadata_prefix='oai_marcxml_cpk', harvest_job_name='cosmotronHarvestJob' WHERE import_conf_id=336;
