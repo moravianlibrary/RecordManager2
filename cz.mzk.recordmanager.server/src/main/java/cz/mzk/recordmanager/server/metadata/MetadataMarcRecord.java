@@ -37,6 +37,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 	protected static final Pattern PAGECOUNT_PATTERN = Pattern.compile("(\\d+)");
 	protected static final Pattern YEAR_PATTERN = Pattern.compile("\\d{4}");
 	protected static final Pattern ISBN_PATTERN = Pattern.compile("([\\dxX\\s\\-]*)(.*)");
+	protected static final Pattern ISMN_PATTERN = Pattern.compile("([\\dM\\s\\-]*)(.*)");
 	protected static final Pattern ISSN_PATTERN = Pattern.compile("(\\d{4}-\\d{3}[\\dxX])(.*)");
 	protected static final Pattern SCALE_PATTERN = Pattern.compile("\\d+[\\ \\^]*\\d+");
 	protected static final Pattern UUID_PATTERN = Pattern.compile("uuid:[\\w-]+");
@@ -1057,8 +1058,14 @@ public class MetadataMarcRecord implements MetadataRecord {
 		for(DataField df: underlayingMarc.getDataFields("024")){
 			Subfield sfA = df.getSubfield('a');
 			if((df.getIndicator1() == '2') && (sfA != null)){
+				
+				Matcher matcher = ISMN_PATTERN.matcher(sfA.getData());
+				if(!matcher.find()) continue;
+				String g1 = matcher.group(1); // ismn
+				if (g1 == null)	continue;				
+				
 				Ismn ismn = new Ismn();
-				String ismnStr = sfA.getData().replaceAll(ISMN_CLEAR_REGEX, "").replaceAll(ISMN10_PREFIX, ISMN13_PREFIX);
+				String ismnStr = g1.replaceAll(ISMN_CLEAR_REGEX, "").replaceAll(ISMN10_PREFIX, ISMN13_PREFIX);
 				try {
 					if(ismnStr.length() != 13) throw new NumberFormatException();
 					ismn.setIsmn(Long.valueOf(ismnStr));
@@ -1068,16 +1075,15 @@ public class MetadataMarcRecord implements MetadataRecord {
 				}
 				
 				StringBuilder builder = new StringBuilder();
+				String g2 = matcher.group(2).trim();
+				if(g2 != null){ 
+					builder.append(trimNote(g2));
+					builder.append(" ");
+				}
+				
 				for(Subfield sfQ: df.getSubfields('q')){
 					if(sfQ == null) continue;
-					int beginIndex = 0;
-					int endIndex = sfQ.getData().length();
-					if(sfQ.getData().matches(BEGIN_BRACKET)) beginIndex = 1;
-					if(sfQ.getData().matches(END_BRACKET)) --endIndex;
-					if(beginIndex <= endIndex) {
-						builder.append(sfQ.getData().substring(beginIndex, endIndex));
-					}
-					else builder.append(sfQ.getData());
+					builder.append(trimNote(sfQ.getData()));
 					builder.append(" ");
 				}
 				ismn.setNote(builder.toString().trim());
@@ -1087,6 +1093,17 @@ public class MetadataMarcRecord implements MetadataRecord {
 		}
 		
 		return ismns;
+	}
+	
+	protected String trimNote(String note){
+		int beginIndex = 0;
+		int endIndex = note.length();
+		if(note.matches(BEGIN_BRACKET)) beginIndex = 1;
+		if(note.matches(END_BRACKET)) --endIndex;
+		if(beginIndex <= endIndex) {
+			return note.substring(beginIndex, endIndex);
+		}
+		else return note;
 	}
 	
 }

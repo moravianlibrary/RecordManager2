@@ -956,6 +956,13 @@ public class MarcRecordImplTest extends AbstractTest {
 		ismn.setNote("Praha v hudebnině neuvedeno ; brož.");
 		ismnlist.add(ismn);
 		
+		data.add("024 2 $aM-66056-061-7 (Brno)$q(Praha)");
+		ismn = new Ismn();
+		ismn.setIsmn(9790660560617L);
+		ismn.setOrderInRecord(4L);
+		ismn.setNote("Brno Praha");
+		ismnlist.add(ismn);
+		
 		mri = MarcRecordFactory.recordFactory(data);
 		metadataRecord = metadataFactory.getMetadataRecord(mri);
 		List<Ismn> results = metadataRecord.getISMNs();
