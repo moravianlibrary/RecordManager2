@@ -17,6 +17,7 @@ import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecordFormat;
 import cz.mzk.recordmanager.server.model.HarvestedRecordFormat.HarvestedRecordFormatEnum;
 import cz.mzk.recordmanager.server.model.Isbn;
+import cz.mzk.recordmanager.server.model.Ismn;
 import cz.mzk.recordmanager.server.model.Issn;
 import cz.mzk.recordmanager.server.model.Oclc;
 import cz.mzk.recordmanager.server.model.Title;
@@ -64,6 +65,7 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 		encapsulator.setTitles(titles);
 		encapsulator.setIsbns(metadataRecord.getISBNs());
 		encapsulator.setIssns(metadataRecord.getISSNs());
+		encapsulator.setIsmns(metadataRecord.getISMNs());
 		encapsulator.setCnbs(metadataRecord.getCNBs());
 		encapsulator.setPublicationYear(metadataRecord.getPublicationYear());
 		List<HarvestedRecordFormatEnum> formatEnums = metadataRecord.getDetectedFormatList();
@@ -97,7 +99,6 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 			// keys changed, updated in database
 			dedupKeysChanged = true;
 			
-			if(record.getHarvestedFrom() != null) record.setWeight(metadataRecord.getWeight(record.getHarvestedFrom().getBaseWeight()));
 			// drop old keys
 			harvestedRecordDao.dropDedupKeys(record);
 			if(record.getHarvestedFrom() != null) record.setWeight(metadataRecord.getWeight(record.getHarvestedFrom().getBaseWeight()));
@@ -106,6 +107,7 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 			record.setTitles(encapsulator.getTitles());
 			record.setIsbns(encapsulator.getIsbns());
 			record.setIssns(encapsulator.getIssns());
+			record.setIsmns(encapsulator.getIsmns());
 			record.setCnb(encapsulator.getCnbs());
 			record.setPublicationYear(encapsulator.getPublicationYear());
 			record.setPhysicalFormats(harvestedRecordFormatDAO.getFormatsFromEnums(formatEnums));
@@ -177,6 +179,10 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 				
 				for (Issn i: encapsulator.getIssns()) {
 					md.update(i.getIssn().getBytes());
+				}
+				
+				for (Ismn i: encapsulator.getIsmns()) {
+					md.update(i.getIsmn().byteValue());
 				}
 				
 				for (Cnb c: encapsulator.getCnbs()) {
@@ -265,6 +271,7 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 			encapsulator.setTitles(hr.getTitles());
 			encapsulator.setIsbns(hr.getIsbns());
 			encapsulator.setIssns(hr.getIssns());
+			encapsulator.setIsmns(hr.getIsmns());
 			encapsulator.setCnbs(hr.getCnb());
 			encapsulator.setPublicationYear(hr.getPublicationYear());
 			encapsulator.setFormats(hr.getPhysicalFormats());
@@ -286,6 +293,7 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 		List<Title> titles = new ArrayList<>();
 		List<Isbn> isbns = new ArrayList<>();
 		List<Issn> issns = new ArrayList<>();
+		List<Ismn> ismns = new ArrayList<>();
 		List<Cnb> cnbs = new ArrayList<>();
 		List<Oclc> oclcs = new ArrayList<>();
 		List<HarvestedRecordFormat> formats = new ArrayList<>();
@@ -302,6 +310,12 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 		String clusterId;
 		String raw001Id;
 		
+		public List<Ismn> getIsmns() {
+			return ismns;
+		}
+		public void setIsmns(List<Ismn> ismns) {
+			this.ismns = ismns;
+		}
 		public List<Title> getTitles() {
 			return titles != null ? titles : Collections.emptyList();
 		}

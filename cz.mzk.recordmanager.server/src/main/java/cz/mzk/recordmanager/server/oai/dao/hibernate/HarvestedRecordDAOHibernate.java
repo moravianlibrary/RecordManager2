@@ -19,6 +19,7 @@ import cz.mzk.recordmanager.server.model.HarvestedRecord.HarvestedRecordUniqueId
 import cz.mzk.recordmanager.server.model.HarvestedRecordFormat;
 import cz.mzk.recordmanager.server.model.ImportConfiguration;
 import cz.mzk.recordmanager.server.model.Isbn;
+import cz.mzk.recordmanager.server.model.Ismn;
 import cz.mzk.recordmanager.server.model.Issn;
 import cz.mzk.recordmanager.server.model.Oclc;
 import cz.mzk.recordmanager.server.model.Title;
@@ -171,6 +172,12 @@ public class HarvestedRecordDAOHibernate extends
 		List<Issn> issns =  hr.getIssns();
 		hr.setIssns(new ArrayList<>());
 		for (Issn i: issns) {
+			session.delete(i);
+		}
+		
+		List<Ismn> ismns =  hr.getIsmns();
+		hr.setIsmns(new ArrayList<>());
+		for (Ismn i: ismns) {
 			session.delete(i);
 		}
 		

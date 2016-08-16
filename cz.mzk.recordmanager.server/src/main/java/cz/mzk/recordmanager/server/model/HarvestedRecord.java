@@ -156,6 +156,10 @@ public class HarvestedRecord extends AbstractDomainObject {
 	private List<Oclc> oclcs = new ArrayList<Oclc>();
 	
 	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name="harvested_record_id", referencedColumnName="id", nullable=false)
+	private List<Ismn> ismns = new ArrayList<Ismn>();
+	
+	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name="harvested_record_id", referencedColumnName="id")
 	private List<FulltextKramerius> fulltextKramerius = new ArrayList<>();
 	
@@ -304,6 +308,14 @@ public class HarvestedRecord extends AbstractDomainObject {
 
 	public void setIsbns(List<Isbn> isbns) {
 		this.isbns = isbns;
+	}
+
+	public List<Ismn> getIsmns() {
+		return ismns;
+	}
+
+	public void setIsmns(List<Ismn> ismns) {
+		this.ismns = ismns;
 	}
 
 	public List<Title> getTitles() {
