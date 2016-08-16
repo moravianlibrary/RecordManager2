@@ -12,3 +12,4 @@ DROP TABLE contact_person;
 DROP TABLE library;
 DROP TABLE recordmanager_key;
 DROP TABLE inspiration;
+DROP TABLE ismn;

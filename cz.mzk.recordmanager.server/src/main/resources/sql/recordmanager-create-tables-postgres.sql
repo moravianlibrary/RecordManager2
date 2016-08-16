@@ -188,6 +188,17 @@ CREATE TABLE isbn (
 
 COMMENT ON TABLE isbn IS 'dedup_keys: table contatining ISBNs';
 
+CREATE TABLE ismn (
+  id                   DECIMAL(10) PRIMARY KEY,
+  harvested_record_id  DECIMAL(10),
+  ismn                 DECIMAL(13),
+  order_in_record      DECIMAL(4),
+  note                 VARCHAR(300),
+  FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE
+);
+
+COMMENT ON TABLE ismn IS 'dedup_keys: table contatining ISMNs';
+
 CREATE TABLE issn (
   id                   DECIMAL(10) PRIMARY KEY,
   harvested_record_id  DECIMAL(10),
