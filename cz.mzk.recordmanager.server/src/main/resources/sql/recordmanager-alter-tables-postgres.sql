@@ -495,3 +495,14 @@ UPDATE import_conf SET harvest_frequency='U' WHERE id in (329,323);
 UPDATE import_conf SET harvest_frequency='D' WHERE id=336;
 UPDATE oai_harvest_conf SET url='http://svk7.svkkl.cz/i2/i2.ws.oai.cls', set_spec='CPK1', metadata_prefix='oai_marcxml_cpk', harvest_job_name='cosmotronHarvestJob' WHERE import_conf_id=336;
 
+-- 16. 8. 2016 tomascejpek
+CREATE TABLE ismn (
+  id                   DECIMAL(10) PRIMARY KEY,
+  harvested_record_id  DECIMAL(10),
+  ismn                 DECIMAL(13),
+  order_in_record      DECIMAL(4),
+  note                 VARCHAR(300),
+  FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE
+);
+COMMENT ON TABLE ismn IS 'dedup_keys: table contatining ISMNs';
+CREATE INDEX ismn_harvested_record_idx ON ismn(harvested_record_id);
