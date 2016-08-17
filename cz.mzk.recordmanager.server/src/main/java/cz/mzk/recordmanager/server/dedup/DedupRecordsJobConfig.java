@@ -57,6 +57,8 @@ public class DedupRecordsJobConfig {
 	
 	private static final String TMP_TABLE_UUID_CLUSTERS = "tmp_uuid_clusters";
 	
+	private static final String TMP_TABLE_ISMN_CLUSTERS = "tmp_ismn_clusters";
+	
 	private static final String TMP_TABLE_SIMILARITY_IDS = "tmp_similarity_ids";
 	
 	private static final String TMP_TABLE_SKAT_KEYS_MANUALLY_MERGED = "tmp_skat_keys_manually_merged";
@@ -110,6 +112,8 @@ public class DedupRecordsJobConfig {
 
 	private String prepareTempUuidClustersSql = ResourceUtils.asString("job/dedupRecordsJob/prepareTempUuidClustersTable.sql");
 
+	private String prepareTempIsmnClustersSql = ResourceUtils.asString("job/dedupRecordsJob/prepareTempIsmnClustersTable.sql");
+	
 	private String prepareDedupSimmilarityTableSql = ResourceUtils.asString("job/dedupRecordsJob/prepareDedupSimmilarityTable.sql");
 
 	private String prepareTempSkatKeysManuallyMerged = ResourceUtils.asString("job/dedupRecordsJob/prepareTempSkatManuallyMergedTable.sql");
@@ -166,6 +170,8 @@ public class DedupRecordsJobConfig {
 			@Qualifier(Constants.JOB_ID_DEDUP + ":prepareDedupSimmilarityTableStep") Step prepareDedupSimmilarityTableStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":prepareDedupSimmilarTitlesStep") Step prepareDedupSimmilarTitles,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":processSimilaritesResultsStep") Step processSimilaritesResultsStep,
+			@Qualifier(Constants.JOB_ID_DEDUP + ":prepareTempIsmnClustersTableStep") Step prepareTempIsmnClustersTableStep,
+			@Qualifier(Constants.JOB_ID_DEDUP + ":dedupIsmnClustersStep") Step dedupIsmnClustersStep,
 			
 			@Qualifier(Constants.JOB_ID_DEDUP + ":prepareDedupPeriodicalsIssnStep") Step prepareDedupPeriodicalsIssnStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":dedupPeriodicalsIssnStep") Step dedupPeriodicalsIssnStep,
@@ -202,6 +208,8 @@ public class DedupRecordsJobConfig {
 				.next(dedupCnbClustersStep)
 				.next(prepareTempOclcClustersTableStep)
 				.next(dedupOclcClustersStep)
+				.next(prepareTempIsmnClustersTableStep)
+				.next(dedupIsmnClustersStep)
 				
 				.next(prepareDedupPeriodicalsIssnStep)
 				.next(dedupPeriodicalsIssnStep)
@@ -672,6 +680,40 @@ public class DedupRecordsJobConfig {
 	}
 	
 	/**
+	 * 	Deduplicate same ISMN
+	 */
+	@Bean(name = "prepareTempTablesStep:prepareTempIsmnClustersTableTasklet")
+	@StepScope
+	public Tasklet prepareIsmnClustersTasklet() {
+		return new SqlCommandTasklet(prepareTempIsmnClustersSql);
+	}
+	
+	@Bean(name = Constants.JOB_ID_DEDUP + ":prepareTempIsmnClustersTableStep")
+	public Step prepareTempIsmnClustersTableStep() {
+		return steps.get("prepareTempIsmnClustersTableStep")
+				.tasklet(prepareIsmnClustersTasklet())
+				.listener(new StepProgressListener())
+				.build();
+	}
+	
+	@Bean(name = "dedupIsmnClustersStep:reader")
+	@StepScope
+	public ItemReader<List<Long>> dedupIsmnClustersReader() throws Exception {
+		return dedupSimpleKeysReader(TMP_TABLE_ISMN_CLUSTERS);
+	}
+
+	@Bean(name = Constants.JOB_ID_DEDUP + ":dedupIsmnClustersStep")
+	public Step dedupIsmnClustersStep() throws Exception {
+		return steps.get("dedupIsmnClustersTableStep")
+				.listener(new StepProgressListener())
+				.<List<Long>, List<HarvestedRecord>> chunk(100)
+				.reader(dedupIsmnClustersReader())
+				.processor(generalDedupClustersProcessor())
+				.writer(dedupSimpleKeysStepWriter())
+				.build();
+	}
+	
+	/**
 	 * Deduplicate periodicals using ISSN and title
 	 */
 	
@@ -1017,7 +1059,7 @@ public class DedupRecordsJobConfig {
 	
 	
 	/**
-	 * general processor for deduplication of clusters based on identifier (ISBN,ISSN,CNB,OCLC)
+	 * general processor for deduplication of clusters based on identifier (ISBN,ISSN,CNB,OCLC,ISMN)
 	 */
 	@Bean(name = "generalDedupClustersProcessor")
 	@StepScope
