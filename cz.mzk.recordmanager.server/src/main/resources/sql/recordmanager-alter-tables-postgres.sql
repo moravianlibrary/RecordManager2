@@ -506,3 +506,6 @@ CREATE TABLE ismn (
 );
 COMMENT ON TABLE ismn IS 'dedup_keys: table contatining ISMNs';
 CREATE INDEX ismn_harvested_record_idx ON ismn(harvested_record_id);
+
+-- 18. 8. 2016 tomascejpek
+ALTER TABLE download_import_conf ADD COLUMN import_job_name VARCHAR(128);

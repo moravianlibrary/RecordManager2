@@ -15,6 +15,17 @@ public class DownloadImportConfiguration extends ImportConfiguration {
 	@Column(name="url")
 	private String url;
 
+	@Column(name="import_job_name")
+	private String jobName;
+	
+	public String getJobName() {
+		return jobName;
+	}
+
+	public void setJobName(String jobName) {
+		this.jobName = jobName;
+	}
+
 	public String getUrl() {
 		return url;
 	}
