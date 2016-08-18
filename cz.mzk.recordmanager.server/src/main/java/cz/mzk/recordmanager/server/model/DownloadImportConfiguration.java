@@ -15,9 +15,31 @@ public class DownloadImportConfiguration extends ImportConfiguration {
 	@Column(name="url")
 	private String url;
 
+	@Column(name="format")
+	private String format;
+	
 	@Column(name="import_job_name")
 	private String jobName;
 	
+	@Column(name="extract_id_regex")
+	private String regex;
+	
+	public String getRegex() {
+		return regex;
+	}
+
+	public void setRegex(String regex) {
+		this.regex = regex;
+	}
+
+	public String getFormat() {
+		return format;
+	}
+
+	public void setFormat(String format) {
+		this.format = format;
+	}
+
 	public String getJobName() {
 		return jobName;
 	}

@@ -71,7 +71,9 @@ CREATE TABLE kramerius_conf (
 CREATE TABLE download_import_conf (
   import_conf_id       DECIMAL(10)  PRIMARY KEY,
   url                  VARCHAR(128),
+  format               VARCHAR(128),
   import_job_name      VARCHAR(128),
+  extract_id_regex     VARCHAR(128),
   CONSTRAINT download_conf_import_conf_fk FOREIGN KEY (import_conf_id) REFERENCES import_conf(id)
 );
 

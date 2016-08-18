@@ -509,3 +509,5 @@ CREATE INDEX ismn_harvested_record_idx ON ismn(harvested_record_id);
 
 -- 18. 8. 2016 tomascejpek
 ALTER TABLE download_import_conf ADD COLUMN import_job_name VARCHAR(128);
+ALTER TABLE download_import_conf ADD COLUMN format VARCHAR(128);
+ALTER TABLE download_import_conf ADD COLUMN extract_id_regex VARCHAR(128);
