@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import cz.mzk.recordmanager.server.facade.exception.JobExecutionFailure;
+import cz.mzk.recordmanager.server.model.DownloadImportConfiguration;
 import cz.mzk.recordmanager.server.springbatch.JobExecutor;
 import cz.mzk.recordmanager.server.util.Constants;
 
@@ -20,7 +21,16 @@ public class ImportRecordFacadeImpl implements ImportRecordFacade {
 
 	@Autowired
 	private JobExecutor jobExecutor;
-
+	
+	@Override
+	public void importFactory(DownloadImportConfiguration dic) {
+		switch (dic.getJobName()) {
+		case Constants.JOB_ID_IMPORT_ANTIKVARIATY:
+			antikvariatyImport(dic);
+			break;
+		}
+	}
+	
 	@Override
 	public void importFile(long importConfId, File file, String format) {
 		Map<String, JobParameter> parameters = new HashMap<>();
@@ -34,4 +44,15 @@ public class ImportRecordFacadeImpl implements ImportRecordFacade {
 		}
 	}
 
+	@Override
+	public void antikvariatyImport(DownloadImportConfiguration dic) {
+		Map<String, JobParameter> parameters = new HashMap<>();
+		parameters.put(Constants.JOB_PARAM_CONF_ID, new JobParameter(dic.getId()));
+		parameters.put(Constants.JOB_PARAM_REPEAT, new JobParameter("1"));
+		JobParameters params = new JobParameters(parameters);
+		JobExecution exec = jobExecutor.execute(Constants.JOB_ID_IMPORT_ANTIKVARIATY, params);
+		if (!ExitStatus.COMPLETED.equals(exec.getExitStatus())) {
+			throw new JobExecutionFailure("Antikvariaty import failed", exec);
+		}
+	}
 }

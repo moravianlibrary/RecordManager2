@@ -95,6 +95,7 @@ INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weig
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency,mapping_script) VALUES (341, 141, 200, 'osobnosti', 0, false, false, false, false, 'U', 'AuthorityMarc.groovy');
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency) VALUES (342, 142, 200, 'bmc', 8, false, false, false, false, 'D');
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency,mapping_script) VALUES (400, 400, 200, 'auth', 0, false, true, false, false, 'D','AuthorityMarc.groovy');
+INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency) VALUES (500, 110, 200, 'antik', null, false, false, false, false, 'U');
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency) VALUES (1300, 100, 200, 'sfxjibmzk', 8, false, false, false, true, 'U');
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency) VALUES (1301, 101, 200, 'sfxjibnlk', 8, false, false, false, true, 'U');
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency) VALUES (1302, 101, 200, 'sfxnlkper', 8, false, false, false, true, 'U');
@@ -153,7 +154,7 @@ INSERT INTO kramerius_conf (import_conf_id,url,query_rows,metadata_stream) VALUE
 INSERT INTO kramerius_conf (import_conf_id,url,query_rows,metadata_stream) VALUES (99003,'http://kramerius.lib.cas.cz/search/api/v5.0',20,'DC');
 INSERT INTO kramerius_conf (import_conf_id,url,query_rows,metadata_stream) VALUES (99004,'http://kramerius4.nkp.cz/search/api/v5.0',20,'DC');
 
-INSERT INTO download_import_conf (import_conf_id,url) VALUES (500,'http://muj-antikvariat.cz/oai-all.xml');
+INSERT INTO download_import_conf (import_conf_id,url,import_job_name) VALUES (500,'http://muj-antikvariat.cz/oai-all.xml','antikvariatyImportRecordsJob');
 
 INSERT INTO harvested_record_format(id, name) VALUES (1, 'BOOKS'); 
 INSERT INTO harvested_record_format(id, name) VALUES (2, 'PERIODICALS');
