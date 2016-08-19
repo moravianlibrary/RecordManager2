@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.ListIterator;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.xml.StaxEventItemReader;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +17,6 @@ import cz.mzk.recordmanager.server.util.HttpClient;
 import cz.mzk.recordmanager.server.util.MetadataUtils;
 
 public class AntikvariatyRecordsReader implements ItemReader<AntikvariatyRecord> {
-
-	private static Logger logger = LoggerFactory.getLogger(AntikvariatyRecordsReader.class);
 
 	private Long configId;
 

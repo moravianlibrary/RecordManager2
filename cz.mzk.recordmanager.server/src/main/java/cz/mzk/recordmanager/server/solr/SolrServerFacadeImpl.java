@@ -15,16 +15,12 @@ import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrException;
 import org.apache.solr.common.SolrInputDocument;
 import org.apache.solr.common.util.NamedList;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import cz.mzk.recordmanager.server.index.SolrFieldConstants;
 import cz.mzk.recordmanager.server.index.enrich.LazyFulltextFieldImpl;
 import cz.mzk.recordmanager.server.solr.SolrIndexingExceptionHandler.Action;
 
 public class SolrServerFacadeImpl implements SolrServerFacade {
-
-	private static Logger logger = LoggerFactory.getLogger(SolrServerFacadeImpl.class);
 
 	protected final SolrServer server;
 

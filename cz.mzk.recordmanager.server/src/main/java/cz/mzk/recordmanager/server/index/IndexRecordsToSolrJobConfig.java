@@ -11,8 +11,6 @@ import javax.sql.DataSource;
 
 import org.apache.solr.common.SolrInputDocument;
 import org.hibernate.SessionFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
@@ -39,8 +37,6 @@ import cz.mzk.recordmanager.server.util.Constants;
 
 @Configuration
 public class IndexRecordsToSolrJobConfig {
-
-	private static Logger logger = LoggerFactory.getLogger(IndexRecordsToSolrJobConfig.class);
 
 	private static final Date DATE_OVERRIDEN_BY_EXPRESSION = null;
 
