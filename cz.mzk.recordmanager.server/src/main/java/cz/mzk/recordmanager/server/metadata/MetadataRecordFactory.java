@@ -20,6 +20,7 @@ import cz.mzk.recordmanager.server.metadata.institutions.SfxjibNlkPeriodicalsMet
 import cz.mzk.recordmanager.server.metadata.institutions.SkatMarcMetadataRecord;
 import cz.mzk.recordmanager.server.metadata.institutions.SvkulMetadataMarcRecord;
 import cz.mzk.recordmanager.server.metadata.institutions.TreMetadataMarcRecord;
+import cz.mzk.recordmanager.server.metadata.institutions.VkolMarcMetadataRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecord.HarvestedRecordUniqueId;
 import cz.mzk.recordmanager.server.model.ImportConfiguration;
@@ -83,6 +84,8 @@ public class MetadataRecordFactory {
 				return new AuthMetadataMarcRecord(marcRec);
 			case Constants.PREFIX_SVKUL:
 				return new SvkulMetadataMarcRecord(marcRec);
+			case Constants.PREFIX_VKOL:
+				return new VkolMarcMetadataRecord(marcRec);
 			default:
 				return new MetadataMarcRecord(marcRec);
 			}

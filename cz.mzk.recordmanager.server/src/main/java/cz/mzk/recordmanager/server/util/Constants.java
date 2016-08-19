@@ -84,6 +84,7 @@ public class Constants {
 	public static final String PREFIX_SFXKNAV			= "sfxknav";
 	public static final String PREFIX_SVKUL				= "svkul";
 	public static final String PREFIX_TRE				= "tre";
+	public static final String PREFIX_VKOL				= "vkol";
 	
 	public static final String LIBRARY_NAME_NKP			= "NKP";
 	
