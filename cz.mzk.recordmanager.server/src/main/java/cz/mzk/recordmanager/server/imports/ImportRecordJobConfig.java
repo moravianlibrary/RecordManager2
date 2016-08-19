@@ -73,6 +73,36 @@ public class ImportRecordJobConfig {
 		return new ImportRecordsWriter(configurationId);
 	}
 
+	// Download and import
+	@Bean
+	public Job DownloadAndImportRecordsJob(
+			@Qualifier(Constants.JOB_ID_DOWNLOAD_IMPORT +":downloadImportRecordsStep") Step downloadImportRecordsStep) {
+		return jobs.get(Constants.JOB_ID_DOWNLOAD_IMPORT)
+				.validator(new DownloadAndImportRecordsJobParametersValidator())
+				.incrementer(UUIDIncrementer.INSTANCE)
+				.listener(JobFailureListener.INSTANCE)
+				.flow(downloadImportRecordsStep)
+				.end().build();
+	}
+
+	@Bean(name=Constants.JOB_ID_DOWNLOAD_IMPORT +":downloadImportRecordsStep")
+	public Step downloadImportRecordsStep() throws Exception {
+		return steps.get("downloadImportRecordsStep")
+				.<List<Record>, List<Record>> chunk(20)//
+				.reader(downloadImportRecordsReader(LONG_OVERRIDEN_BY_EXPRESSION))//
+				.writer(importRecordsWriter(LONG_OVERRIDEN_BY_EXPRESSION)) //
+				.build();
+	}
+	
+	@Bean(name=Constants.JOB_ID_DOWNLOAD_IMPORT +":importRecordsReader")
+	@StepScope
+	public ItemReader<List<Record>> downloadImportRecordsReader(
+			@Value("#{jobParameters[" + Constants.JOB_PARAM_CONF_ID + "]}") Long confId)
+			throws Exception {
+			return new ImportRecordsFileReader(confId);
+	}
+	
+	
 	// Antikvariaty
 	@Bean
 	public Job AntikvariatyImportRecordsJob(

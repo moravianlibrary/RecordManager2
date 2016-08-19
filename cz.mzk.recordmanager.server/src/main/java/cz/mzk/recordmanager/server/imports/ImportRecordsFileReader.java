@@ -2,6 +2,7 @@ package cz.mzk.recordmanager.server.imports;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +16,7 @@ import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.NonTransientResourceException;
 import org.springframework.batch.item.ParseException;
 import org.springframework.batch.item.UnexpectedInputException;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import cz.mzk.recordmanager.server.export.IOFormat;
 import cz.mzk.recordmanager.server.marc.marc4j.MarcAlephStreamReader;
@@ -23,16 +25,27 @@ import cz.mzk.recordmanager.server.marc.marc4j.MarcLineStreamReader;
 import cz.mzk.recordmanager.server.marc.marc4j.MarcXmlReader;
 import cz.mzk.recordmanager.server.marc.marc4j.OsobnostiRegionuXmlStreamReader;
 import cz.mzk.recordmanager.server.marc.marc4j.PatentsXmlStreamReader;
+import cz.mzk.recordmanager.server.model.DownloadImportConfiguration;
+import cz.mzk.recordmanager.server.oai.dao.DownloadImportConfigurationDAO;
+import cz.mzk.recordmanager.server.util.HttpClient;
 
 public class ImportRecordsFileReader implements ItemReader<List<Record>> {
 
 	private static Logger logger = LoggerFactory.getLogger(ImportRecordsFileReader.class);
+	
+	@Autowired
+	private DownloadImportConfigurationDAO dicDao;
+	
+	@Autowired 
+	private HttpClient httpClient;
 	
 	private MarcReader reader;
 	
 	private IOFormat format;
 	
 	private FileInputStream inStream;
+	
+	private Long confId;
 	
 	private int batchSize = 20;
 
@@ -42,10 +55,18 @@ public class ImportRecordsFileReader implements ItemReader<List<Record>> {
 		reader = getMarcReader(inStream);
 	}
 	
+	public ImportRecordsFileReader(Long confId) throws Exception {
+		this.confId = confId;
+		this.reader = null;
+	}
+	
 	@Override
 	public List<Record> read() throws Exception, UnexpectedInputException,
 			ParseException, NonTransientResourceException {
 		List<Record> batch = new ArrayList<Record>();
+		
+		if(reader == null) initializeReader();
+		
 		while (reader.hasNext()) {
 			try {
 				batch.add(reader.next());
@@ -74,6 +95,20 @@ public class ImportRecordsFileReader implements ItemReader<List<Record>> {
 		default:
 			return new MarcXmlReader(inStream);
 		}
+	}
+	
+	protected void initializeReader() throws IOException{
+		DownloadImportConfiguration config = dicDao.get(confId);
+		if (config == null) {
+			throw new IllegalArgumentException(String.format("Configuration with id=%s not found.", confId));
+		}
+		String url = config.getUrl();
+		if (url == null || url.isEmpty()) {
+			throw new IllegalArgumentException(
+					String.format("Missing url in DownloadImportConfiguration with id=%s.", confId));
+		}
+		this.format = IOFormat.stringToExportFormat(config.getFormat());		
+		this.reader = getMarcReader(httpClient.executeGet(url));
 	}
 
 }

@@ -24,9 +24,12 @@ import cz.mzk.recordmanager.server.marc.intercepting.MarcInterceptorFactory;
 import cz.mzk.recordmanager.server.marc.intercepting.MarcRecordInterceptor;
 import cz.mzk.recordmanager.server.metadata.MetadataRecord;
 import cz.mzk.recordmanager.server.metadata.MetadataRecordFactory;
+import cz.mzk.recordmanager.server.model.DownloadImportConfiguration;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecord.HarvestedRecordUniqueId;
+import cz.mzk.recordmanager.server.model.ImportConfiguration;
 import cz.mzk.recordmanager.server.model.OAIHarvestConfiguration;
+import cz.mzk.recordmanager.server.oai.dao.DownloadImportConfigurationDAO;
 import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordDAO;
 import cz.mzk.recordmanager.server.oai.dao.OAIHarvestConfigurationDAO;
 import cz.mzk.recordmanager.server.util.HibernateSessionSynchronizer;
@@ -44,6 +47,9 @@ public class ImportRecordsWriter implements ItemWriter<List<Record>>, StepExecut
 	private OAIHarvestConfigurationDAO oaiHarvestConfigurationDao;
 	
 	@Autowired
+	private DownloadImportConfigurationDAO downloadImportConfigurationDao;
+	
+	@Autowired
 	private HarvestedRecordDAO harvestedRecordDao;
 	
 	@Autowired
@@ -58,7 +64,7 @@ public class ImportRecordsWriter implements ItemWriter<List<Record>>, StepExecut
 	@Autowired
 	protected SessionFactory sessionFactory;
 
-	private OAIHarvestConfiguration harvestConfiguration;
+	private ImportConfiguration harvestConfiguration;
 
 	private Long configurationId;
 
@@ -140,9 +146,22 @@ public class ImportRecordsWriter implements ItemWriter<List<Record>>, StepExecut
 	@Override
 	public void beforeStep(StepExecution stepExecution) {
 		try (SessionBinder session = sync.register()) {
-			harvestConfiguration = oaiHarvestConfigurationDao.get(configurationId);
-			if (harvestConfiguration.getRegex() != null) {
-				regexpExtractor = new RegexpExtractor(harvestConfiguration.getRegex());
+			OAIHarvestConfiguration hc = oaiHarvestConfigurationDao.get(configurationId);
+			String regex = null;
+			if(hc != null){
+				regex = hc.getRegex();
+				harvestConfiguration = hc;
+			}
+			else{
+				DownloadImportConfiguration dic = downloadImportConfigurationDao.get(configurationId);
+				if(dic != null){
+					regex = dic.getRegex();
+					harvestConfiguration = dic;
+				}
+			}
+			
+			if (regex != null) {
+				regexpExtractor = new RegexpExtractor(regex);
 			}
 		}
 	}
