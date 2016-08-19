@@ -973,7 +973,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 
 	@Override
 	public boolean matchFilter() {
-		// TODO Auto-generated method stub
+		// implemented only in institution specific classes
 		return true;
 	}
 

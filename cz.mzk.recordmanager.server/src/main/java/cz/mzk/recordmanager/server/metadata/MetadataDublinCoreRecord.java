@@ -425,25 +425,25 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 
 	@Override
 	public boolean matchFilter() {
-		// TODO Auto-generated method stub
+		// implemented only in institution specific classes
 		return true;
 	}
 
 	@Override
 	public String getOAIRecordId() {
-		// TODO Nothing to return
+		// Nothing to return
 		return null;
 	}
 
 	@Override
 	public String getRaw001Id() {
-		// TODO Nothing to return
+		// Nothing to return
 		return null;
 	}
 
 	@Override
 	public Boolean isDeleted() {
-		// TODO Auto-generated method stub
+		// Nothing to return
 		return null;
 	}
 

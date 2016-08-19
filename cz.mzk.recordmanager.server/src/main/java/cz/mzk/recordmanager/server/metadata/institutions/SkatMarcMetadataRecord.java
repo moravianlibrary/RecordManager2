@@ -9,7 +9,6 @@ public class SkatMarcMetadataRecord extends MetadataMarcRecord {
 
 	public SkatMarcMetadataRecord(MarcRecord underlayingMarc) {
 		super(underlayingMarc);
-		// TODO Auto-generated constructor stub
 	}
 	
 	@Override
