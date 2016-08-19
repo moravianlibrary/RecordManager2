@@ -26,7 +26,8 @@ public class ImportRecordFacadeImpl implements ImportRecordFacade {
 	public void importFactory(DownloadImportConfiguration dic) {
 		switch (dic.getJobName()) {
 		case Constants.JOB_ID_IMPORT_ANTIKVARIATY:
-			antikvariatyImport(dic);
+		case Constants.JOB_ID_DOWNLOAD_IMPORT:
+			downloadAndImportRecordSJob(dic);
 			break;
 		}
 	}
@@ -45,14 +46,14 @@ public class ImportRecordFacadeImpl implements ImportRecordFacade {
 	}
 
 	@Override
-	public void antikvariatyImport(DownloadImportConfiguration dic) {
+	public void downloadAndImportRecordSJob(DownloadImportConfiguration dic) {
 		Map<String, JobParameter> parameters = new HashMap<>();
 		parameters.put(Constants.JOB_PARAM_CONF_ID, new JobParameter(dic.getId()));
 		parameters.put(Constants.JOB_PARAM_REPEAT, new JobParameter("1"));
 		JobParameters params = new JobParameters(parameters);
-		JobExecution exec = jobExecutor.execute(Constants.JOB_ID_IMPORT_ANTIKVARIATY, params);
+		JobExecution exec = jobExecutor.execute(dic.getJobName(), params);
 		if (!ExitStatus.COMPLETED.equals(exec.getExitStatus())) {
-			throw new JobExecutionFailure("Antikvariaty import failed", exec);
+			throw new JobExecutionFailure("Download and import failed", exec);
 		}
 	}
 }
