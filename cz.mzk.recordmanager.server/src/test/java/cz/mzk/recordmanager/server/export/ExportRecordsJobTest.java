@@ -41,7 +41,7 @@ public class ExportRecordsJobTest extends AbstractTest {
 	
 	@BeforeClass
 	public void cleanUp() {
-		for (String filename : new String[]{ TEST_FILE_1, TEST_FILE_2, TEST_FILE_3 }) {
+		for (String filename : new String[]{ TEST_FILE_1, TEST_FILE_2, TEST_FILE_3, TEST_FILE_4 }) {
 			File file = new File(filename);
 			file.delete();
 		}
@@ -80,18 +80,18 @@ public class ExportRecordsJobTest extends AbstractTest {
 		jobLauncher.run(job, jobParams);
 	}
 	
-//	/**
-//	 * test export marc record with alphabetic field identifier
-//	 */
-//	@Test 
-//	public void testExportRecordsMarcAlpnaKey() throws Exception {
-//		Job job = jobRegistry.getJob(Constants.JOB_ID_EXPORT);
-//		Map<String, JobParameter> params = new HashMap<String, JobParameter>();
-//		params.put(Constants.JOB_PARAM_CONF_ID, new JobParameter(301L));
-//		params.put(Constants.JOB_PARAM_OUT_FILE, new JobParameter(TEST_FILE_4));
-//		params.put(Constants.JOB_PARAM_FORMAT, new JobParameter("xml"));
-//		JobParameters jobParams = new JobParameters(params);
-//		jobLauncher.run(job, jobParams);
-//	}
+	/**
+	 * test export marc record with alphabetic field identifier
+	 */
+	@Test 
+	public void testExportRecordsMarcAlpnaKey() throws Exception {
+		Job job = jobRegistry.getJob(Constants.JOB_ID_EXPORT);
+		Map<String, JobParameter> params = new HashMap<String, JobParameter>();
+		params.put(Constants.JOB_PARAM_CONF_ID, new JobParameter(301L));
+		params.put(Constants.JOB_PARAM_OUT_FILE, new JobParameter(TEST_FILE_4));
+		params.put(Constants.JOB_PARAM_FORMAT, new JobParameter("xml"));
+		JobParameters jobParams = new JobParameters(params);
+		jobLauncher.run(job, jobParams);
+	}
 	
 }
