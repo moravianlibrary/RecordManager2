@@ -38,7 +38,7 @@ public class ObalkyKnihRecordsReader implements ItemReader<ObalkyKnihTOC> {
 		@Override
 		public int read() throws IOException {
 			int nextByte = -1;
-			while ((nextByte = delegate.read()) == 12);
+			while ((nextByte = delegate.read()) == 12) continue;
 			return nextByte;
 		}
 
