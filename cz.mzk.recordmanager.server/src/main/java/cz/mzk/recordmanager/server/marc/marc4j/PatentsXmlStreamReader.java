@@ -137,26 +137,32 @@ public class PatentsXmlStreamReader implements MarcReader{
 						df.setIndicator2(' ');
 						break;
 					case ELEMENT_ORGNAME:
-						if(b110) df.setTag("710");
-						else df.setTag("110");
-						df.addSubfield(factory.newSubfield('a', xmlReader.getElementText()));
+						if(df != null){
+							if(b110) df.setTag("710");
+							else df.setTag("110");
+							df.addSubfield(factory.newSubfield('a', xmlReader.getElementText()));
+						}
 						break;
 					case ELEMENT_FIRST_NAME:
-						if(name == null) name = xmlReader.getElementText();
-						else{
-							df.addSubfield(factory.newSubfield('a', name+", "+xmlReader.getElementText()));
-							b100 = true;
-							name = null;
+						if(df != null){
+							if(name == null) name = xmlReader.getElementText();
+							else{
+								df.addSubfield(factory.newSubfield('a', name+", "+xmlReader.getElementText()));
+								b100 = true;
+								name = null;
+							}
 						}
 						break;
 					case ELEMENT_LAST_NAME:
-						if(b100) df.setTag("700");
-						else df.setTag("100");
-						if(name == null) name = xmlReader.getElementText();
-						else{
-							df.addSubfield(factory.newSubfield('a', xmlReader.getElementText()+", "+name));
-							name = null;
-							b100 = true;
+						if(df != null){
+							if(b100) df.setTag("700");
+							else df.setTag("100");
+							if(name == null) name = xmlReader.getElementText();
+							else{
+								df.addSubfield(factory.newSubfield('a', xmlReader.getElementText()+", "+name));
+								name = null;
+								b100 = true;
+							}
 						}
 						break;
 					case ELEMENT_INVENTION_TITLE:						
@@ -185,11 +191,13 @@ public class PatentsXmlStreamReader implements MarcReader{
 						break;
 					case ELEMENT_TEXT:
 						if(shouldBeProcessedText){
-							String s = xmlReader.getElementText().substring(0, 4);
-							String temp[] = propertyResolver.resolve(PATENTS_MAP).get(s).split("\\|");
-							df.addSubfield(factory.newSubfield('a', temp[0]));
-							record.addVariableField(createField072(temp[1]));
-							shouldBeProcessedText = false;
+							if(df != null){
+								String s = xmlReader.getElementText().substring(0, 4);
+								String temp[] = propertyResolver.resolve(PATENTS_MAP).get(s).split("\\|");
+								df.addSubfield(factory.newSubfield('a', temp[0]));
+								record.addVariableField(createField072(temp[1]));
+								shouldBeProcessedText = false;
+							}
 						}
 						break;
 					}	
@@ -197,16 +205,22 @@ public class PatentsXmlStreamReader implements MarcReader{
 				case XMLStreamReader.END_ELEMENT:
 					switch(xmlReader.getLocalName()){
 					case ELEMENT_APPLICANT:
-						df.addSubfield(factory.newSubfield('u', "pta"));
-						record.addVariableField(df);
+						if(df != null){
+							df.addSubfield(factory.newSubfield('u', "pta"));
+							record.addVariableField(df);
+						}
 						break;
 					case ELEMENT_INVENTOR:
-						df.addSubfield(factory.newSubfield('u', "inv"));
-						record.addVariableField(df);
+						if(df != null){
+							df.addSubfield(factory.newSubfield('u', "inv"));
+							record.addVariableField(df);
+						}
 						break;
 					case ELEMENT_AGENT:
-						df.addSubfield(factory.newSubfield('u', "pth"));
-						record.addVariableField(df);
+						if(df != null){
+							df.addSubfield(factory.newSubfield('u', "pth"));
+							record.addVariableField(df);
+						}
 						break;
 					case ELEMENT_CLASSIFICATION_IPCR:
 						if(df != null) record.addVariableField(df);

@@ -83,11 +83,12 @@ public abstract class AuthorityEnricher {
 				currentAuthFieldTag = sourceAuthFieldMap.get(matcher.group(1));
 				currentAuthKey = matcher.group(2);
 				currentCache = cacheMap.get(currentAuthFieldTag);
+				if(currentCache == null) continue;
 			}
 			else continue;
 			
 			// check cache for field value
-			if (currentCache != null && currentCache.containsKey(currentAuthKey)) {
+			if (currentCache.containsKey(currentAuthKey)) {
 				result.add(currentCache.get(currentAuthKey));
 			} else {
 				// parse value from authority record
