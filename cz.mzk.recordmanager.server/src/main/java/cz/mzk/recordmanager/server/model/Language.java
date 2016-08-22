@@ -18,7 +18,7 @@ public class Language {
 	public static final String TABLE_NAME = "language";
 	
 	@Embeddable
-	private static class LanguageId implements Serializable {
+	protected static class LanguageId implements Serializable {
 
 		private static final long serialVersionUID = 1L;
 
@@ -29,7 +29,7 @@ public class Language {
 		private String langStr;
 
 		// for hibernate
-		private LanguageId(){
+		protected LanguageId(){
 		}
 		
 		public LanguageId(long harvestedRecordId, String langStr) {
@@ -69,7 +69,7 @@ public class Language {
 	@EmbeddedId
 	private LanguageId id;
 
-	private Language(){
+	protected Language(){
 	}
 	
 	public Language(HarvestedRecord record, String language) {
