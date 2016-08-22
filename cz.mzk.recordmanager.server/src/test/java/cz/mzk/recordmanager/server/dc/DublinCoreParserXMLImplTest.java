@@ -71,7 +71,7 @@ public class DublinCoreParserXMLImplTest extends AbstractTest {
 				.getClass()
 				.getResourceAsStream(
 						"/sample/kramerius/children.json");
-		DublinCoreRecord dc = parser.parseRecord(is);
+		parser.parseRecord(is);
 
 	}
 	
