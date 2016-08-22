@@ -82,7 +82,7 @@ public class SkatKeysMergedIdsUpdateTasklet implements Tasklet {
 			} catch (IOException ioe) {
 				logger.error("Response failed...");
 				continue;
-			};
+			}
 			
 			if (setNo == 0 || recordsNo == 0) {
 				logger.info("Nothing to do...");

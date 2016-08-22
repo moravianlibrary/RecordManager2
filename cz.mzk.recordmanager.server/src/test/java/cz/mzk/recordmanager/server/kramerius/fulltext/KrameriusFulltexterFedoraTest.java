@@ -103,7 +103,7 @@ public class KrameriusFulltexterFedoraTest extends AbstractTest {
 		//InputStream page1 = getClass().getResourceAsStream("/sample/kramerius/ocr1.txt");
 		InputStream page2 = getClass().getResourceAsStream("/sample/kramerius/ocr2.txt");	
 		// return 500 for one page
-		expect(httpClient.executeGet(eq(BASE_API_URL + "/item/uuid:f5a22336-2fd8-11e0-83a8-0050569d679d/streams/TEXT_OCR"), anyObject())).andThrow(new IOException("Bad status code: 500"));;
+		expect(httpClient.executeGet(eq(BASE_API_URL + "/item/uuid:f5a22336-2fd8-11e0-83a8-0050569d679d/streams/TEXT_OCR"), anyObject())).andThrow(new IOException("Bad status code: 500"));
 		expect(httpClient.executeGet(eq(BASE_API_URL + "/item/uuid:f64abf47-2fd8-11e0-83a8-0050569d679d/streams/TEXT_OCR"), anyObject())).andReturn(page2);
 		replay(httpClient);		
 	}

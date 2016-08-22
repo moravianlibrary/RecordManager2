@@ -10,7 +10,7 @@ public interface SolrIndexingExceptionHandler {
 		SKIP,
 		RETRY,
 		FALLBACK;
-	};
+	}
 
 	public Action handle(Exception ex, Collection<SolrInputDocument> documents) throws SolrServerException;
 

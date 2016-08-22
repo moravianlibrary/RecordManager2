@@ -824,7 +824,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 		
         boolean f245Ind1 = false;
 		for (String key: fields1xx){
-			if(!underlayingMarc.getDataFields(key).isEmpty()){;
+			if(!underlayingMarc.getDataFields(key).isEmpty()){
 				for(DataField dataField: underlayingMarc.getDataFields("245")){
 					if(dataField.getIndicator1() == 0) f245Ind1 = true;
 				}
