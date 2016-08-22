@@ -27,6 +27,8 @@ public class TitleDAOHibernate extends AbstractDomainDAOHibernate<Long, Title>
 						+ "WHERE publication_year = ? and pages BETWEEN ? and ? AND lang = ?")
 				.setResultTransformer(new ResultTransformer() {
 
+					private static final long serialVersionUID = 1L;
+
 					@Override
 					public Object transformTuple(Object[] tuple, String[] aliases) {
 						NonperiodicalTitleClusterable title = new NonperiodicalTitleClusterable();
@@ -70,7 +72,9 @@ public class TitleDAOHibernate extends AbstractDomainDAOHibernate<Long, Title>
 		return (List<TitleClusterable>)
 				session.createSQLQuery("SELECT harvested_record_id,title FROM tmp_periodicals_years WHERE publication_year = ?")
 					.setResultTransformer(new ResultTransformer() {
-			
+						
+						private static final long serialVersionUID = 1L;
+
 						@Override
 						public Object transformTuple(Object[] tuple, String[] aliases) {
 							TitleClusterable titleClusterable = new TitleClusterable();

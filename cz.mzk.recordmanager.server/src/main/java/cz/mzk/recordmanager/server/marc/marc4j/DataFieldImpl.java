@@ -19,6 +19,8 @@ import com.google.common.collect.ImmutableSet;
  */
 public class DataFieldImpl extends info.freelibrary.marc4j.impl.VariableFieldImpl implements DataField {
 
+	private static final long serialVersionUID = 1L;
+
 	private char myFirstInd;
 
     private char mySecondInd;

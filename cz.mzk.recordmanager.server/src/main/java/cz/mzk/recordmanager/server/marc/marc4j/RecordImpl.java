@@ -15,6 +15,8 @@ import org.marc4j.marc.VariableField;
  */
 public class RecordImpl extends info.freelibrary.marc4j.impl.RecordImpl {
 
+	private static final long serialVersionUID = 1L;
+
 	/**
      * Gets the first {@link VariableField} with the supplied tag.
      * 
