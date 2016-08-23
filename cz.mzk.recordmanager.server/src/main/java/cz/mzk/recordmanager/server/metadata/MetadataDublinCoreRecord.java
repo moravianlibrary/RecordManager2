@@ -456,7 +456,7 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 	@Override
 	public List<Ismn> getISMNs() {
 		// TODO Auto-generated method stub
-		return null;
+		return Collections.emptyList();
 	}
 
 }
