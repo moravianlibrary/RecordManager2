@@ -28,7 +28,7 @@ public class AuthMetadataMarcRecord extends MetadataMarcRecord{
 	
 	@Override
 	public List<HarvestedRecordFormatEnum> getDetectedFormatList() {
-		return Collections.singletonList(HarvestedRecordFormatEnum.PERSON);
+		return Collections.singletonList(HarvestedRecordFormatEnum.OTHER_PERSON);
 		
 	}
 

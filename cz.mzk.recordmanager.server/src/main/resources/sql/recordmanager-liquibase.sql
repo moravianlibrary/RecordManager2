@@ -765,7 +765,7 @@ ALTER TABLE download_import_conf ADD COLUMN import_job_name VARCHAR(128);
 ALTER TABLE download_import_conf ADD COLUMN format VARCHAR(128);
 ALTER TABLE download_import_conf ADD COLUMN extract_id_regex VARCHAR(128);
 
---changeset tomascejpek:21
+--changeset tomascejpek:21 context:cpk
 INSERT INTO 
   import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency)
 SELECT 500, 110, 200, 'antik', null, false, false, false, false, 'U' 
@@ -781,3 +781,6 @@ WHERE
 UPDATE download_import_conf SET import_job_name='antikvariatyImportRecordsJob' WHERE import_conf_id=500;
 DELETE FROM oai_harvest_conf WHERE import_conf_id=341;
 INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format) VALUES (341,'http://www.osobnostiregionu.cz/export_online.php','downloadAndImportRecordsJob','osobnosti');
+
+--changeset tomascejpek:22 context:cpk
+UPDATE harvested_record_format SET name='OTHER_PERSON' WHERE id=28;

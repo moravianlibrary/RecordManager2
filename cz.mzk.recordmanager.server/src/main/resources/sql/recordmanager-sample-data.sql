@@ -183,7 +183,7 @@ INSERT INTO harvested_record_format(id, name) VALUES (24, 'OTHER_KIT');
 INSERT INTO harvested_record_format(id, name) VALUES (25, 'OTHER_OBJECT');
 INSERT INTO harvested_record_format(id, name) VALUES (26, 'OTHER_MIX_DOCUMENT');
 INSERT INTO harvested_record_format(id, name) VALUES (27, 'NORMS');
-INSERT INTO harvested_record_format(id, name) VALUES (28, 'PERSON');
+INSERT INTO harvested_record_format(id, name) VALUES (28, 'OTHER_PERSON');
 INSERT INTO harvested_record_format(id, name) VALUES (100, 'OTHER_UNSPECIFIED');
 
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (1, 300, 'BOA001');
