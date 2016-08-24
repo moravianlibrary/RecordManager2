@@ -33,6 +33,9 @@ public class KrameriusConfiguration extends ImportConfiguration {
 	@Column(name="fulltext_harvest_type")
 	private String fulltextHarvestType = "fedora";
 
+	@Column(name="harvest_job_name")
+	private String harvestJobName;
+	
 	public String getUrl() {
 		return url;
 	}
@@ -87,6 +90,14 @@ public class KrameriusConfiguration extends ImportConfiguration {
 
 	public void setFulltextHarvestType(String fulltextHarvestType) {
 		this.fulltextHarvestType = fulltextHarvestType;
+	}
+
+	public String getHarvestJobName() {
+		return harvestJobName;
+	}
+
+	public void setHarvestJobName(String harvestJobName) {
+		this.harvestJobName = harvestJobName;
 	}
 
 }

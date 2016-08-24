@@ -22,6 +22,7 @@ import com.google.common.collect.ImmutableMap;
 
 import cz.mzk.recordmanager.server.util.Constants;
 import cz.mzk.recordmanager.server.facade.exception.JobExecutionFailure;
+import cz.mzk.recordmanager.server.model.KrameriusConfiguration;
 import cz.mzk.recordmanager.server.model.OAIHarvestConfiguration;
 import cz.mzk.recordmanager.server.springbatch.JobExecutor;
 import cz.mzk.recordmanager.server.util.ResourceUtils;
@@ -45,9 +46,18 @@ public class HarvestingFacadeImpl implements HarvestingFacade {
 
 	@Override
 	public void incrementalHarvest(OAIHarvestConfiguration conf) {
-		LocalDateTime lastHarvestTime = getLastHarvest(conf);
+		incrementalHarvest(conf.getId(), getJobName(conf));
+	}
+	
+	@Override
+	public void incrementalHarvest(KrameriusConfiguration conf) {
+		incrementalHarvest(conf.getId(), getJobName(conf));
+	}
+	
+	public void incrementalHarvest(long conf_id, String job_name){
+		LocalDateTime lastHarvestTime = getLastHarvest(conf_id, job_name);
 		Map<String, JobParameter> parameters = new HashMap<>();
-		parameters.put(Constants.JOB_PARAM_CONF_ID, new JobParameter(conf.getId()));
+		parameters.put(Constants.JOB_PARAM_CONF_ID, new JobParameter(conf_id));
 		if (lastHarvestTime != null) {
 			Date lastHarvest = Date.from(lastHarvestTime.atZone(ZoneId.systemDefault()).toInstant());
 			logger.trace("Starting harvest from {}", lastHarvest);
@@ -56,7 +66,7 @@ public class HarvestingFacadeImpl implements HarvestingFacade {
 		parameters.put(Constants.JOB_PARAM_UNTIL_DATE, new JobParameter(new Date()));
 		parameters.put(Constants.JOB_PARAM_START_TIME, new JobParameter(new Date()));
 		JobParameters params = new JobParameters(parameters);
-		JobExecution exec = jobExecutor.execute(getJobName(conf), params);
+		JobExecution exec = jobExecutor.execute(job_name, params);
 		if (!ExitStatus.COMPLETED.equals(exec.getExitStatus())) {
 			throw new JobExecutionFailure("Incremental harvest failed", exec);
 		}
@@ -74,14 +84,32 @@ public class HarvestingFacadeImpl implements HarvestingFacade {
 
 	@Override
 	public LocalDateTime getLastFullHarvest(OAIHarvestConfiguration conf) {
-		return query(lastCompletedReharvestQuery, ImmutableMap.of("jobName", getJobName(conf),
-				Constants.JOB_PARAM_CONF_ID, conf.getId()));
+		return getLastFullHarvest(conf.getId(), getJobName(conf));
+	}
+	
+	@Override
+	public LocalDateTime getLastFullHarvest(KrameriusConfiguration conf) {
+		return getLastFullHarvest(conf.getId(), getJobName(conf));
+	}
+	
+	public LocalDateTime getLastFullHarvest(long conf_id, String job_name) {
+		return query(lastCompletedReharvestQuery, ImmutableMap.of("jobName", job_name,
+				Constants.JOB_PARAM_CONF_ID, conf_id));
 	}
 
 	@Override
 	public LocalDateTime getLastHarvest(OAIHarvestConfiguration conf) {
-		return query(lastCompletedHarvestQuery, ImmutableMap.of("jobName", getJobName(conf),
-				Constants.JOB_PARAM_CONF_ID, conf.getId()));
+		return getLastHarvest(conf.getId(), getJobName(conf));
+	}
+	
+	@Override
+	public LocalDateTime getLastHarvest(KrameriusConfiguration conf) {
+		return getLastHarvest(conf.getId(), getJobName(conf));
+	}
+	
+	public LocalDateTime getLastHarvest(long conf_id, String job_name) {
+		return query(lastCompletedHarvestQuery, ImmutableMap.of("jobName", job_name,
+				Constants.JOB_PARAM_CONF_ID, conf_id));
 	}
 
 	@Override
@@ -101,6 +129,10 @@ public class HarvestingFacadeImpl implements HarvestingFacade {
 
 	private String getJobName(OAIHarvestConfiguration conf) {
 		return MoreObjects.firstNonNull(conf.getHarvestJobName(), Constants.JOB_ID_HARVEST);
+	}
+	
+	private String getJobName(KrameriusConfiguration conf) {
+		return MoreObjects.firstNonNull(conf.getHarvestJobName(), Constants.JOB_ID_HARVEST_KRAMERIUS);
 	}
 
 }

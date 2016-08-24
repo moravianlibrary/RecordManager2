@@ -1,7 +1,7 @@
 CREATE OR REPLACE VIEW oai_harvest_job_stat AS
 SELECT
   bje.job_execution_id,
-  ohc.import_conf_id,
+  (array_agg(ic.id))[1]  import_conf_id,
   l.name library_name,
   ohc.url url,
   ohc.set_spec,
@@ -16,10 +16,12 @@ FROM batch_job_instance bji
   JOIN batch_job_execution_params conf_id_param ON conf_id_param.job_execution_id = bje.job_execution_id AND conf_id_param.key_name = 'configurationId'
   LEFT JOIN batch_job_execution_params to_param ON to_param.job_execution_id = bje.job_execution_id AND to_param.key_name = 'to'
   LEFT JOIN batch_job_execution_params from_param ON from_param.job_execution_id = bje.job_execution_id AND from_param.key_name = 'from'
-  JOIN oai_harvest_conf ohc ON ohc.import_conf_id = conf_id_param.long_val
-  JOIN import_conf ic ON ic.id = ohc.import_conf_id
+  LEFT JOIN oai_harvest_conf ohc ON ohc.import_conf_id = conf_id_param.long_val
+  LEFT JOIN kramerius_conf kc ON kc.import_conf_id = conf_id_param.long_val
+  JOIN import_conf ic ON ic.id = ohc.import_conf_id OR ic.id = kc.import_conf_id
   JOIN library l ON l.id = ic.library_id
-WHERE bji.job_name IN ('oaiHarvestJob', 'oaiReharvestJob', 'oaiPartitionedHarvestJob', 'cosmotronHarvestJob')
+WHERE bji.job_name IN ('oaiHarvestJob', 'oaiReharvestJob', 'oaiPartitionedHarvestJob', 'cosmotronHarvestJob', 'krameriusHarvestJob', 'krameriusHarvestNoSortingJob')
+GROUP BY bje.job_execution_id,l.name,ohc.url,ohc.set_spec,from_param.date_val,to_param.date_val
 ;
 
 CREATE OR REPLACE VIEW oai_harvest_summary AS
@@ -33,10 +35,11 @@ WITH last_harvest_date AS (
   FROM oai_harvest_job_stat
   GROUP BY import_conf_id
 )
-SELECT l.name, ohc.url, ohc.set_spec, lhd.last_successful_harvest_date, lhd.last_failed_harvest_date, lhd.first_harvest_date, lhd.no_of_harvests
+SELECT l.name, ic.id_prefix, ohc.url, ohc.set_spec, lhd.last_successful_harvest_date, lhd.last_failed_harvest_date, lhd.first_harvest_date, lhd.no_of_harvests
 FROM last_harvest_date lhd
   JOIN import_conf ic ON ic.id = lhd.import_conf_id
-  JOIN oai_harvest_conf ohc ON ohc.import_conf_id = ic.id
+  LEFT JOIN oai_harvest_conf ohc ON ohc.import_conf_id = ic.id
+  LEFT JOIN kramerius_conf kc ON kc.import_conf_id = ic.id
   JOIN library l ON l.id = ic.library_id
 ;
 
@@ -56,4 +59,3 @@ WHERE bji.job_name IN ('indexRecordsToSolrJob', 'indexAllRecordsToSolrJob', 'ind
   AND bje.status = 'COMPLETED'
 GROUP BY params1.string_val
 ;
-
