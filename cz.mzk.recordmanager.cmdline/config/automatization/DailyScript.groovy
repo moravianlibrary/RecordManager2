@@ -7,6 +7,7 @@ import cz.mzk.recordmanager.server.facade.IndexingFacade;
 import cz.mzk.recordmanager.server.facade.DedupFacade;
 import cz.mzk.recordmanager.server.facade.exception.JobExecutionFailure;
 import cz.mzk.recordmanager.server.model.HarvestFrequency;
+import cz.mzk.recordmanager.server.oai.dao.KrameriusConfigurationDAO;
 import cz.mzk.recordmanager.server.oai.dao.OAIHarvestConfigurationDAO;
 
 public class DailyScript implements Runnable {
@@ -24,6 +25,9 @@ public class DailyScript implements Runnable {
 
 	@Autowired
 	private OAIHarvestConfigurationDAO oaiHarvestConfigurationDAO;
+	
+	@Autowired
+	private KrameriusConfigurationDAO krameriusConfigurationDAO;
 
 	@Override
 	public void run() {
@@ -36,6 +40,16 @@ public class DailyScript implements Runnable {
 				}
 			}
 		}
+		krameriusConfigurationDAO.findAll().each { conf ->
+			if (conf.harvestFrequency == HarvestFrequency.DAILY) {
+				try {
+					harvestingFacade.incrementalHarvest(conf)
+				} catch (JobExecutionFailure jfe) {
+					logger.error(String.format("Incremental harvest of %s failed", conf), jfe);
+				}
+			}
+		}
+		
 		dedupFacade.deduplicate();
 		indexingFacade.index();
 	}
