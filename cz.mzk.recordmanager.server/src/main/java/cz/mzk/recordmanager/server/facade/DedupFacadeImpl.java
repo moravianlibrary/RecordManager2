@@ -20,6 +20,7 @@ public class DedupFacadeImpl implements DedupFacade {
 	@Override
 	public void deduplicate() {
 		Map<String, JobParameter> parameters = new HashMap<>();
+		parameters.put(Constants.JOB_PARAM_REPEAT, new JobParameter(Constants.JOB_PARAM_ONE_VALUE));
 		JobParameters params = new JobParameters(parameters);
 		jobExecutor.execute(Constants.JOB_ID_DEDUP, params);
 	}

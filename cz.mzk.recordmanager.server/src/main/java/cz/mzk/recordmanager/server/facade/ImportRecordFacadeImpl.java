@@ -49,7 +49,7 @@ public class ImportRecordFacadeImpl implements ImportRecordFacade {
 	public void downloadAndImportRecordSJob(DownloadImportConfiguration dic) {
 		Map<String, JobParameter> parameters = new HashMap<>();
 		parameters.put(Constants.JOB_PARAM_CONF_ID, new JobParameter(dic.getId()));
-		parameters.put(Constants.JOB_PARAM_REPEAT, new JobParameter("1"));
+		parameters.put(Constants.JOB_PARAM_REPEAT, new JobParameter(Constants.JOB_PARAM_ONE_VALUE));
 		JobParameters params = new JobParameters(parameters);
 		JobExecution exec = jobExecutor.execute(dic.getJobName(), params);
 		if (!ExitStatus.COMPLETED.equals(exec.getExitStatus())) {

@@ -48,6 +48,7 @@ public class Constants {
 	public static final String JOB_PARAM_UUID			= "uuid";
 
 	public static final String JOB_PARAM_TRUE_VALUE		= "true";
+	public static final String JOB_PARAM_ONE_VALUE		= "1";
 
 	public static final String JOB_PARAM_OUT_FILE		= "outFile";
 	public static final String JOB_PARAM_IN_FILE		= "inFile";
