@@ -11,3 +11,5 @@ liquibase.enable=true
 liquibase.contexts=cpk
 
 recordmanager.threadPoolSize=THREAD_COUNT
+
+solr.url=SOLR_URL
