@@ -289,7 +289,6 @@
  <copyField source="format"    dest="allfields"/>
  <copyField source="format"    dest="allfields_unstemmed"/>
  <!-- CopyFields for Autocomplete -->
- <copyField source="author_facet_str_mv" dest="author_autocomplete"/>
  <copyField source="author_facet_str_mv" dest="author_str_mv"/>
  <copyField source="title_auto_str" dest="title_autocomplete"/>
  <copyField source="subject_facet_str_mv" dest="subject_autocomplete"/>

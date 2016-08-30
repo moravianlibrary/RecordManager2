@@ -60,7 +60,7 @@ genre_facet_str = getFirstField "655avxyz"
 conspectus_facet_str_mv = getFields "072x"
 publisher_str_mv = getPublisherStrMv()
 author_facet_str_mv = filter("author_facet.txt", getFields("100abcdq:110abc:111acdegq:700abcdq:710abc:711acdegq:975abcdq:976abc"))
-
+author_autocomplete = getAuthorAutocomplete("100abcdq:110abc:111acdegq:700abcdq:710abc:711acdegq:975abcdq:976abc")
 bbox_geo = getBoundingBoxAsPolygon()
 bbox_geo_str = getBoundingBox()
 

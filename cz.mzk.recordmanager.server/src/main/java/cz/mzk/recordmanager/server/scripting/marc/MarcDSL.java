@@ -626,4 +626,12 @@ public class MarcDSL extends BaseDSL {
     	
     	return result;
     }
+    
+    public Set<String> getAuthorAutocomplete(String tags){
+    	Set<String> result = new HashSet<>();
+    	for(String s: getFields(tags)){
+    		result.add(s.replaceAll(",", ""));
+    	}
+    	return result;
+    }
 }
