@@ -49,7 +49,9 @@ public class MetadataUtils {
 	public static boolean similarityEnabled(Title title){
 		if(title.getTitleStr().matches(".*\\d.*")) return false;
 		for(String word: similarity_words){
-			if(title.getTitleStr().toLowerCase().matches(".*[\\p{Punct}\\s]+"+word+"[\\p{Punct}\\s]+.*")){
+			String titleStr = title.getTitleStr().toLowerCase();
+			if(titleStr.matches(".*[\\p{Punct}\\s]+"+word+"[\\p{Punct}\\s]+.*") 
+					|| titleStr.startsWith(word) || titleStr.endsWith(word)){
 				return false;
 			}
 		}
