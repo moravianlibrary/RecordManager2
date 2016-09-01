@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.concurrent.Executor;
 
 import javax.sql.DataSource;
 
@@ -23,6 +24,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.task.TaskExecutor;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import com.google.common.io.CharStreams;
 
@@ -87,6 +90,7 @@ public class RegenerateDedupKeysJobConfig {
 				.<Long, Long> chunk(100)//
 				.reader(reader())//
 				.writer(writer()) //
+				.taskExecutor((TaskExecutor) poolTaskExecutor()) 
 				.build();
 	}
     
@@ -98,7 +102,6 @@ public class RegenerateDedupKeysJobConfig {
 		pqpf.setDataSource(dataSource);
 		pqpf.setSelectClause("SELECT id");
 		pqpf.setFromClause("FROM harvested_record hr");
-		pqpf.setWhereClause("dedup_keys_hash is null");
 		pqpf.setSortKey("id");
 		reader.setRowMapper(new LongValueRowMapper());
 		reader.setPageSize(100);
@@ -133,6 +136,16 @@ public class RegenerateDedupKeysJobConfig {
 			return Collections.emptyList();
 
 		}
+    }
+    
+    @Bean(name = "threadPoolTaskExecutor")
+    public Executor poolTaskExecutor()
+    {
+        ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+        executor.setCorePoolSize(5);
+        executor.setMaxPoolSize(5);
+        executor.initialize();
+        return executor;
     }
 }
 
