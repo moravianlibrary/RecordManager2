@@ -7,6 +7,7 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 
+import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.item.ItemWriter;
@@ -27,7 +28,10 @@ public class DedupSimpleKeysStepWriter implements
 	
 	@Autowired
 	private HarvestedRecordDAO harvestedRecordDAO;
-	
+
+	@Autowired
+	protected SessionFactory sessionFactory;
+
 	long startTime;
 	
 	@PostConstruct
@@ -55,7 +59,8 @@ public class DedupSimpleKeysStepWriter implements
 				logProgress(false);
 			}
 		}
-
+		sessionFactory.getCurrentSession().flush();
+		sessionFactory.getCurrentSession().clear();
 	}
 	
 	/**
