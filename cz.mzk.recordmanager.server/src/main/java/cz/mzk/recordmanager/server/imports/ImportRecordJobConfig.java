@@ -8,6 +8,7 @@ import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepScope;
+import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,7 @@ import org.springframework.context.annotation.Configuration;
 
 import cz.mzk.recordmanager.server.model.AntikvariatyRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
+import cz.mzk.recordmanager.server.oai.harvest.AfterHarvestTasklet;
 import cz.mzk.recordmanager.server.oai.harvest.HarvestedRecordWriter;
 import cz.mzk.recordmanager.server.oai.harvest.OAIItemProcessor;
 import cz.mzk.recordmanager.server.oai.model.OAIRecord;
@@ -103,6 +105,19 @@ public class ImportRecordJobConfig {
 	}
 	
 	
+	@Bean(name=Constants.JOB_ID_IMPORT + ":afterHarvestStep")
+	public Step afterHarvestStep() {
+		return steps.get("afterHarvestStep") //
+				.tasklet(afterHarvestTasklet()) //
+				.build();
+	}
+
+	@Bean(name=Constants.JOB_ID_IMPORT + ":afterHarvestTasklet")
+	@StepScope
+	public Tasklet afterHarvestTasklet() {
+		return new AfterHarvestTasklet();
+	}
+
 	// Antikvariaty
 	@Bean
 	public Job AntikvariatyImportRecordsJob(
