@@ -1,6 +1,6 @@
 package cz.mzk.recordmanager.server.marc.intercepting;
 
-import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 
 import org.marc4j.marc.Record;
 
@@ -19,12 +19,7 @@ public class DefaultMarcInterceptor implements MarcRecordInterceptor {
 	@Override
 	public byte[] intercept() {
 		MarcRecord marcRecord = new MarcRecordImpl(record);
-		try {
-			return marcRecord.export(IOFormat.XML_MARC).getBytes("UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		}
-		return new byte[0];
+		return marcRecord.export(IOFormat.XML_MARC).getBytes(StandardCharsets.UTF_8);
 	}
 	
 	protected Record getRecord() {

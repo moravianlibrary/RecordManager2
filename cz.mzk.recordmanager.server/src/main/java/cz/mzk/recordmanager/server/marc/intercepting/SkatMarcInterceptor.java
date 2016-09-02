@@ -1,5 +1,6 @@
 package cz.mzk.recordmanager.server.marc.intercepting;
 
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -103,7 +104,7 @@ public class SkatMarcInterceptor extends DefaultMarcInterceptor {
 			newRecord.addVariableField(df);
 		}
 		
-		return new MarcRecordImpl(newRecord).export(IOFormat.XML_MARC).getBytes();
+		return new MarcRecordImpl(newRecord).export(IOFormat.XML_MARC).getBytes(StandardCharsets.UTF_8);
 	}
 	
 }
