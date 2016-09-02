@@ -1,6 +1,7 @@
 package cz.mzk.recordmanager.server.miscellaneous;
 
 import java.io.ByteArrayInputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -75,7 +76,7 @@ public class FilterCaslinRecordsWriter implements ItemWriter<HarvestedRecordUniq
 					for(DataField df: new996){
 						newRecord.addVariableField(df);
 					}
-					hr.setRawRecord(new MarcRecordImpl(newRecord).export(IOFormat.XML_MARC).getBytes());
+					hr.setRawRecord(new MarcRecordImpl(newRecord).export(IOFormat.XML_MARC).getBytes(StandardCharsets.UTF_8));
 					updated = true;
 				}
 				if(hr.getDeleted() == null && !mrFactory.getMetadataRecord(hr).matchFilter()){
