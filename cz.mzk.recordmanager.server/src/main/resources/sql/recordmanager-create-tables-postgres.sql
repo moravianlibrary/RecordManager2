@@ -363,6 +363,6 @@ COMMENT ON TABLE obalkyknih_toc IS 'downloaded table of contents from obalkyknih
 CREATE TABLE inspiration (
   id					DECIMAL(10) PRIMARY KEY,
   harvested_record_id	DECIMAL(10),
-  name					VARCHAR(32),
+  name					VARCHAR(128),
   FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE
 );
