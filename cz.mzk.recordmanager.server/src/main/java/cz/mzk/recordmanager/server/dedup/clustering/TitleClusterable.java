@@ -2,6 +2,9 @@ package cz.mzk.recordmanager.server.dedup.clustering;
 
 import cz.mzk.recordmanager.server.util.StringUtils;
 
+import static cz.mzk.recordmanager.server.util.StringUtils.MAX_MATCH_BOUNDARY;
+import static cz.mzk.recordmanager.server.util.StringUtils.MIN_MATCH_BOUNDARY;
+
 
 /**
  * {@link Clusterable} implementation using title similarity.
@@ -21,7 +24,10 @@ public class TitleClusterable implements Clusterable {
 	private Long id;
 	
 	private String title;
-	
+
+	private boolean similarity_enabled;
+
+
 	public String getTitle() {
 		return title;
 	}
@@ -47,11 +53,24 @@ public class TitleClusterable implements Clusterable {
 		}
 		
 		TitleClusterable otherTitleClusterable = (TitleClusterable) other;
-		return StringUtils.simmilarTitleMatchPercentage(
+		if (similarity_enabled && otherTitleClusterable.isSimilarity_enabled())
+		{
+			return StringUtils.simmilarTitleMatchPercentage(
 					this.getTitle(), //
 					otherTitleClusterable.getTitle(), //
 					MINIMAL_TITILE_MATCH_PERCENTAGE, //
 					TITLE_PREFIX_BOUNDARY);
+		}else {
+			return this.getTitle().equals(otherTitleClusterable.getTitle()) ? MAX_MATCH_BOUNDARY : MIN_MATCH_BOUNDARY;
+		}
+
 	}
 
+	public boolean isSimilarity_enabled() {
+		return similarity_enabled;
+	}
+
+	public void setSimilarity_enabled(boolean similarity_enabled) {
+		this.similarity_enabled = similarity_enabled;
+	}
 }

@@ -70,7 +70,7 @@ public class TitleDAOHibernate extends AbstractDomainDAOHibernate<Long, Title>
 	public List<TitleClusterable> getPeriodicalsTitleForDeduplication(Long year) {
 		Session session = sessionFactory.getCurrentSession();
 		return (List<TitleClusterable>)
-				session.createSQLQuery("SELECT harvested_record_id,title FROM tmp_periodicals_years WHERE publication_year = ?")
+				session.createSQLQuery("SELECT harvested_record_id,title,similarity_enabled FROM tmp_periodicals_years WHERE publication_year = ?")
 					.setResultTransformer(new ResultTransformer() {
 						
 						private static final long serialVersionUID = 1L;
@@ -82,6 +82,7 @@ public class TitleDAOHibernate extends AbstractDomainDAOHibernate<Long, Title>
 								switch (aliases[i]) {
 								case "harvested_record_id": titleClusterable.setId(((BigDecimal)tuple[i]).longValue()); break;
 								case "title": titleClusterable.setTitle((String)tuple[i]); break;
+									case "similarity_enabled": titleClusterable.setSimilarity_enabled((Boolean)tuple[i]);
 								}
 							}
 							return titleClusterable;

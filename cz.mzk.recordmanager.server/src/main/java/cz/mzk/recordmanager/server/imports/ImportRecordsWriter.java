@@ -133,7 +133,7 @@ public class ImportRecordsWriter implements ItemWriter<List<Record>>, StepExecut
 						logger.debug("Filtered record: " + hr.getUniqueId());
 						hr.setDeleted(new Date());
 					}
-					
+
 					harvestedRecordDao.persist(hr);
 				} catch (Exception e) {
 					logger.warn("Error occured in processing record");

@@ -1,7 +1,7 @@
 DROP TABLE IF EXISTS tmp_periodicals_years;
 
 CREATE TABLE tmp_periodicals_years AS
-SELECT hr_limited.id as harvested_record_id,hr_limited.publication_year,t.title,hr_limited.updated FROM (
+SELECT hr_limited.id as harvested_record_id,hr_limited.publication_year,t.title, t.similarity_enabled,hr_limited.updated FROM (
   SELECT DISTINCT ON (hr2.dedup_record_id) hr2.dedup_record_id,hr2.id,hr2.publication_year,hr2.updated
     FROM (
       SELECT dedup_record_id, MAX(weight) AS w
@@ -19,7 +19,7 @@ SELECT hr_limited.id as harvested_record_id,hr_limited.publication_year,t.title,
   WHERE t.order_in_record = 1
     AND tpi.id IS NOT NULL
 UNION
-SELECT hr_null.id as harvested_record_id,hr_null.publication_year,t.title,hr_null.updated 
+SELECT hr_null.id as harvested_record_id,hr_null.publication_year,t.title, t.similarity_enabled,hr_null.updated
 FROM harvested_record hr_null
   INNER JOIN title t on hr_null.id = t.harvested_record_id
   LEFT OUTER JOIN tmp_periodicals_ids tpi ON hr_null.id = tpi.id

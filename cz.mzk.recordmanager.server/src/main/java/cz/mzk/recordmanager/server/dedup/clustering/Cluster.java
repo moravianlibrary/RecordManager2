@@ -107,7 +107,7 @@ public class Cluster<T extends Clusterable>  {
 		}
 		return new ArrayList<Set<Long>>(clusters.values());
 	}
-    	
+
 
 	protected void createClusters(List<T> input,
 			Map<Long, Long> mapping, Map<Long, Set<Long>> clusters) {
