@@ -601,3 +601,10 @@ INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granul
 
 -- 5. 9. 2016 tomascejpek
 ALTER TABLE inspiration ALTER COLUMN name TYPE VARCHAR(128);
+
+-- 6. 9. 2016 tomascejpek
+UPDATE import_conf SET id_prefix='nkp' WHERE id in (321,325,326);
+UPDATE oai_harvest_conf SET extract_id_regex='s/[^:]+:(.*)/SLK01-$1/' WHERE import_conf_id=321;
+UPDATE oai_harvest_conf SET extract_id_regex='s/[^:]+:(.*)/KKL01-$1/' WHERE import_conf_id=325;
+UPDATE oai_harvest_conf SET extract_id_regex='s/[^:]+:(.*)/STT01-$1/' WHERE import_conf_id=326;
+UPDATE oai_harvest_conf SET url='http://ipac.kvkli.cz/i2/i2.ws.oai.cls' WHERE import_conf_id=308;
