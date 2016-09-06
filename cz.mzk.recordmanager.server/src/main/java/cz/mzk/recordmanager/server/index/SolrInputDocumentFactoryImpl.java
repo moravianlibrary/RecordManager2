@@ -185,10 +185,17 @@ public class SolrInputDocumentFactoryImpl implements SolrInputDocumentFactory, I
 		return SolrFieldConstants.UNKNOWN_INSTITUTION;
 	}
 	
-	protected String getPrefixOfRecord(HarvestedRecord hr) {
+	protected String getPrefixOfNKPRecord(HarvestedRecord hr) {
 		ImportConfiguration config = hr.getHarvestedFrom();
-		if (config != null && config.getIdPrefix() != null) {
-			return config.getIdPrefix().toUpperCase();
+		if(config != null){
+			if(config.getId() != null){
+				if(config.getId() == Constants.IMPORT_CONF_ID_SLK) return Constants.LIBRARY_NAME_SLK;
+				if(config.getId() == Constants.IMPORT_CONF_ID_KKL) return Constants.LIBRARY_NAME_KKL;
+				if(config.getId() == Constants.IMPORT_CONF_ID_STT) return Constants.LIBRARY_NAME_STT;
+			}
+			if(config.getIdPrefix() != null) {
+				return config.getIdPrefix().toUpperCase();
+			}
 		}
 		return SolrFieldConstants.UNKNOWN_INSTITUTION;
 	}
@@ -199,7 +206,7 @@ public class SolrInputDocumentFactoryImpl implements SolrInputDocumentFactory, I
 				String city = MetadataUtils.normalize(getCityOfRecord(record));
 				String name = getInstitutionOfRecord(record);
 				if(name.equals(Constants.LIBRARY_NAME_NKP)){
-					String prefix = getPrefixOfRecord(record);
+					String prefix = getPrefixOfNKPRecord(record);
 					return SolrUtils.createHierarchicFacetValues(INSTITUTION_LIBRARY, city, name, prefix);
 				}
 				

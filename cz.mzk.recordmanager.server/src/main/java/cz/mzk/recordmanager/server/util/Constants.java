@@ -87,9 +87,15 @@ public class Constants {
 	public static final String PREFIX_TRE				= "tre";
 	public static final String PREFIX_VKOL				= "vkol";
 	
+	public static final String LIBRARY_NAME_KKL			= "KKL";
 	public static final String LIBRARY_NAME_NKP			= "NKP";
+	public static final String LIBRARY_NAME_SLK			= "SLK";
+	public static final String LIBRARY_NAME_STT			= "STT";
 	
-	public static final Long IMPORT_CONF_ID_AUTHORITY = 400L;
+	public static final long IMPORT_CONF_ID_SLK			= 321L;
+	public static final long IMPORT_CONF_ID_KKL			= 325L;
+	public static final long IMPORT_CONF_ID_STT			= 326L;
+	public static final Long IMPORT_CONF_ID_AUTHORITY	= 400L;
 	
 	public static final String DOCUMENT_AVAILABILITY_ONLINE     = "online";
 	public static final String DOCUMENT_AVAILABILITY_PROTECTED  = "protected";
