@@ -114,7 +114,7 @@ public class MarcLineStreamReader implements MarcReader{
     }
 
     private DataField parseDataField(DataField df, String data){
-    	String a[] = data.split("\\$");
+    	String a[] = data.split("\\$+");
     	for(String sbstr : Arrays.copyOfRange(a, 1, a.length)){
     		df.addSubfield(factory.newSubfield(sbstr.charAt(0), sbstr.substring(1)));
     	}
