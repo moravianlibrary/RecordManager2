@@ -43,7 +43,7 @@ public class AsyncOAIItemReader implements ItemReader<List<OAIRecord>>, ItemStre
 
 	}
 
-	private static Logger logger = LoggerFactory.getLogger(OAIHarvester.class);
+	private static Logger logger = LoggerFactory.getLogger(OAIHarvesterImpl.class);
 
 	private static final Entry HARVEST_FINISHED_SENTINEL = new Entry(null, Collections.emptyList());
 

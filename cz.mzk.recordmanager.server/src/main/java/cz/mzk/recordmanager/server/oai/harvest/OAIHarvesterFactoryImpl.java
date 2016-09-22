@@ -11,7 +11,7 @@ public class OAIHarvesterFactoryImpl implements OAIHarvesterFactory {
 	
 	@Override
 	public OAIHarvester create(OAIHarvesterParams parameters) {
-		return new OAIHarvester(httpClient, parameters);
+		return new OAIHarvesterImpl(httpClient, parameters);
 	}
 
 }
