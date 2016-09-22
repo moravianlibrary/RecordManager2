@@ -32,6 +32,7 @@
 		<module>cz.mzk.recordmanager.server</module>
 		<module>cz.mzk.recordmanager.api</module>
 		<module>cz.mzk.recordmanager.cmdline</module>
+		<module>cz.mzk.recordmanager.webapp</module>
 	</modules>
 
 </project>
