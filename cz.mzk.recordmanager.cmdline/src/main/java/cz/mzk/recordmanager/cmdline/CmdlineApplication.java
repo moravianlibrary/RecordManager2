@@ -16,7 +16,6 @@ import org.springframework.transaction.support.TransactionSynchronizationManager
 
 import cz.mzk.recordmanager.api.model.batch.BatchJobExecutionDTO;
 import cz.mzk.recordmanager.api.service.BatchService;
-import cz.mzk.recordmanager.server.AppConfig;
 import cz.mzk.recordmanager.server.automatization.ScriptRunner;
 import cz.mzk.recordmanager.server.springbatch.JobExecutor;
 import cz.mzk.recordmanager.server.util.ResourceUtils;
@@ -50,7 +49,7 @@ public class CmdlineApplication {
 	private static void run(JobParameters jobParams) throws Exception {
 		try (AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext()) {
 			applicationContext
-					.register(AppConfigCmdline.class, AppConfig.class);
+					.register(AppConfigCmdline.class);
 			applicationContext.refresh();
 			applicationContext.start();
 			SessionFactory sessionFactory = applicationContext

@@ -5,22 +5,43 @@ import java.io.File;
 
 import javax.sql.DataSource;
 
+import org.springframework.batch.core.configuration.support.ApplicationContextFactory;
+import org.springframework.batch.core.configuration.support.GenericApplicationContextFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 
+import cz.mzk.recordmanager.server.AppConfig;
 import cz.mzk.recordmanager.server.ClasspathResourceProvider;
 import cz.mzk.recordmanager.server.DelegatingResourceProvider;
 import cz.mzk.recordmanager.server.FileSystemResourceProvider;
 import cz.mzk.recordmanager.server.ResourceProvider;
+import cz.mzk.recordmanager.server.dedup.DedupRecordsJobConfig;
+import cz.mzk.recordmanager.server.dedup.RegenerateDedupKeysJobConfig;
+import cz.mzk.recordmanager.server.export.ExportRecordsJobConfig;
+import cz.mzk.recordmanager.server.imports.ImportRecordJobConfig;
+import cz.mzk.recordmanager.server.imports.ObalkyKnihHarvestJobConfig;
+import cz.mzk.recordmanager.server.imports.inspirations.InspirationImportJobConfig;
+import cz.mzk.recordmanager.server.index.DeleteAllRecordsFromSolrJobConfig;
+import cz.mzk.recordmanager.server.index.IndexHarvestedRecordsToSolrJobConfig;
+import cz.mzk.recordmanager.server.index.IndexRecordsToSolrJobConfig;
+import cz.mzk.recordmanager.server.kramerius.fulltext.KrameriusFulltextJobConfig;
+import cz.mzk.recordmanager.server.kramerius.harvest.KrameriusHarvestJobConfig;
+import cz.mzk.recordmanager.server.miscellaneous.FilterCaslinRecordsBySiglaJobConfig;
+import cz.mzk.recordmanager.server.miscellaneous.MiscellaneousJobsConfig;
+import cz.mzk.recordmanager.server.oai.harvest.CosmotronHarvestJobConfig;
+import cz.mzk.recordmanager.server.oai.harvest.DeleteAllHarvestsJobConfig;
+import cz.mzk.recordmanager.server.oai.harvest.OAIHarvestJobConfig;
 
 @Configuration
 @PropertySource(value={"file:${CONFIG_DIR:.}/database.properties", "file:${CONFIG_DIR:.}/database.local.properties"}, ignoreResourceNotFound=true)
+@Import({AppConfig.class})
 public class AppConfigCmdline {
 
 	@Autowired
@@ -43,6 +64,28 @@ public class AppConfigCmdline {
 				new FileSystemResourceProvider(configDir), //
 				new ClasspathResourceProvider() //
 		);
+	}
+
+	@Bean
+	public ApplicationContextFactory moreJobs() {
+		return new GenericApplicationContextFactory(
+				OAIHarvestJobConfig.class,
+				KrameriusFulltextJobConfig.class,
+				KrameriusHarvestJobConfig.class,
+				CosmotronHarvestJobConfig.class,
+				DedupRecordsJobConfig.class,
+				IndexRecordsToSolrJobConfig.class,
+				DeleteAllHarvestsJobConfig.class,
+				RegenerateDedupKeysJobConfig.class,
+				ImportRecordJobConfig.class,
+				InspirationImportJobConfig.class,
+				ExportRecordsJobConfig.class,
+				DeleteAllRecordsFromSolrJobConfig.class,
+				MiscellaneousJobsConfig.class,
+				IndexHarvestedRecordsToSolrJobConfig.class,
+				ObalkyKnihHarvestJobConfig.class,
+				FilterCaslinRecordsBySiglaJobConfig.class
+			);
 	}
 
 }

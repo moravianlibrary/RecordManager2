@@ -9,9 +9,7 @@ import org.hibernate.SessionFactory;
 import org.springframework.batch.core.configuration.JobRegistry;
 import org.springframework.batch.core.configuration.annotation.DefaultBatchConfigurer;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
-import org.springframework.batch.core.configuration.support.ApplicationContextFactory;
 import org.springframework.batch.core.configuration.support.DefaultJobLoader;
-import org.springframework.batch.core.configuration.support.GenericApplicationContextFactory;
 import org.springframework.batch.core.configuration.support.JobRegistryBeanPostProcessor;
 import org.springframework.batch.core.configuration.support.MapJobRegistry;
 import org.springframework.batch.core.explore.JobExplorer;
@@ -36,24 +34,9 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import cz.mzk.recordmanager.server.dedup.DedupRecordsJobConfig;
-import cz.mzk.recordmanager.server.dedup.RegenerateDedupKeysJobConfig;
-import cz.mzk.recordmanager.server.export.ExportRecordsJobConfig;
-import cz.mzk.recordmanager.server.imports.ImportRecordJobConfig;
-import cz.mzk.recordmanager.server.imports.ObalkyKnihHarvestJobConfig;
-import cz.mzk.recordmanager.server.imports.inspirations.InspirationImportJobConfig;
-import cz.mzk.recordmanager.server.index.DeleteAllRecordsFromSolrJobConfig;
-import cz.mzk.recordmanager.server.index.IndexHarvestedRecordsToSolrJobConfig;
-import cz.mzk.recordmanager.server.index.IndexRecordsToSolrJobConfig;
-import cz.mzk.recordmanager.server.kramerius.fulltext.KrameriusFulltextJobConfig;
-import cz.mzk.recordmanager.server.kramerius.harvest.KrameriusHarvestJobConfig;
+import cz.mzk.recordmanager.api.service.LibraryService;
 import cz.mzk.recordmanager.server.kramerius.harvest.KrameriusHarvesterFactory;
 import cz.mzk.recordmanager.server.kramerius.harvest.KrameriusHarvesterFactoryImpl;
-import cz.mzk.recordmanager.server.miscellaneous.FilterCaslinRecordsBySiglaJobConfig;
-import cz.mzk.recordmanager.server.miscellaneous.MiscellaneousJobsConfig;
-import cz.mzk.recordmanager.server.oai.harvest.CosmotronHarvestJobConfig;
-import cz.mzk.recordmanager.server.oai.harvest.DeleteAllHarvestsJobConfig;
-import cz.mzk.recordmanager.server.oai.harvest.OAIHarvestJobConfig;
 import cz.mzk.recordmanager.server.oai.harvest.OAIHarvesterFactory;
 import cz.mzk.recordmanager.server.oai.harvest.OAIHarvesterFactoryImpl;
 import cz.mzk.recordmanager.server.scripting.CachingMappingResolver;
@@ -62,6 +45,7 @@ import cz.mzk.recordmanager.server.scripting.MappingResolver;
 import cz.mzk.recordmanager.server.scripting.ResourceMappingResolver;
 import cz.mzk.recordmanager.server.scripting.ResourceStopWordsResolver;
 import cz.mzk.recordmanager.server.scripting.StopWordsResolver;
+import cz.mzk.recordmanager.server.service.LibraryServiceImpl;
 import cz.mzk.recordmanager.server.solr.SolrServerFactory;
 import cz.mzk.recordmanager.server.solr.SolrServerFactoryImpl;
 import cz.mzk.recordmanager.server.util.ApacheHttpClient;
@@ -184,28 +168,6 @@ public class AppConfig extends DefaultBatchConfigurer {
 	}
 
 	@Bean
-	public ApplicationContextFactory moreJobs() {
-		return new GenericApplicationContextFactory(
-				OAIHarvestJobConfig.class,
-				KrameriusFulltextJobConfig.class,
-				KrameriusHarvestJobConfig.class,
-				CosmotronHarvestJobConfig.class,
-				DedupRecordsJobConfig.class,
-				IndexRecordsToSolrJobConfig.class,
-				DeleteAllHarvestsJobConfig.class,
-				RegenerateDedupKeysJobConfig.class,
-				ImportRecordJobConfig.class,
-				InspirationImportJobConfig.class,
-				ExportRecordsJobConfig.class,
-				DeleteAllRecordsFromSolrJobConfig.class,
-				MiscellaneousJobsConfig.class,
-				IndexHarvestedRecordsToSolrJobConfig.class,
-				ObalkyKnihHarvestJobConfig.class,
-				FilterCaslinRecordsBySiglaJobConfig.class
-			);
-	}
-
-	@Bean
 	public HibernateSessionSynchronizer hibernateSessionSynchronizer() {
 		return new HibernateSessionSynchronizer();
 	}
@@ -250,6 +212,11 @@ public class AppConfig extends DefaultBatchConfigurer {
 			liquibase.setContexts(DEFAULT_LIQUIBASE_CONTEXTS);
 		}
 		return liquibase;
+	}
+
+	@Bean
+	public LibraryService libraryService() {
+		return new LibraryServiceImpl();
 	}
 
 }
