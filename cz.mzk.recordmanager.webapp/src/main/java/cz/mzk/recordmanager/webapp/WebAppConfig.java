@@ -9,8 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.ImportResource;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 
@@ -18,9 +20,12 @@ import cz.mzk.recordmanager.server.ClasspathResourceProvider;
 import cz.mzk.recordmanager.server.DelegatingResourceProvider;
 import cz.mzk.recordmanager.server.FileSystemResourceProvider;
 import cz.mzk.recordmanager.server.ResourceProvider;
+import cz.mzk.recordmanager.webapp.controller.LibraryController;
 
 @Configuration
 @PropertySource(value={"file:${CONFIG_DIR:.}/database.properties", "file:${CONFIG_DIR:.}/database.local.properties"}, ignoreResourceNotFound=true)
+@ImportResource("classpath:appCtx-recordmanager-server.xml")
+@EnableWebMvc
 public class WebAppConfig {
 
 	@Autowired
@@ -43,6 +48,11 @@ public class WebAppConfig {
 				new FileSystemResourceProvider(configDir), //
 				new ClasspathResourceProvider() //
 		);
+	}
+
+	@Bean
+	public static LibraryController libraryController() {
+		return new LibraryController();
 	}
 
 }

@@ -14,7 +14,25 @@
 
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
-		<param-value>cz.mzk.recordmanager.webapp.WebAppConfig,cz.mzk.recordmanager.server.AppConfig</param-value>
+		<param-value>cz.mzk.recordmanager.webapp.WebAppConfig</param-value>
 	</context-param>
+
+	<servlet>
+		<servlet-name>rest</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<init-param>
+			<param-name>contextClass</param-name>
+			<param-value>org.springframework.web.context.support.AnnotationConfigWebApplicationContext</param-value>
+		</init-param>
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>cz.mzk.recordmanager.webapp.WebAppConfig</param-value>
+		</init-param>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>rest</servlet-name>
+		<url-pattern>/rest/*</url-pattern>
+	</servlet-mapping>
 
 </web-app>

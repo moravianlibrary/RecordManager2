@@ -13,13 +13,18 @@
 		<artifactId>recordmanager</artifactId>
 		<version>1.0.0-SNAPSHOT</version>
 	</parent>
-	
+
+	<properties>
+		<jackson.version>2.4.0</jackson.version>
+		<jaxb-api.version>2.2.11</jaxb-api.version>
+	</properties>
+
 	<build>
 		<plugins>
 			<plugin>
 				<groupId>org.eclipse.jetty</groupId>
 				<artifactId>jetty-maven-plugin</artifactId>
-				<version>9.2.11.v20150529</version>
+				<version>9.3.12.v20160915</version>
 			</plugin>
 		</plugins>
 	</build>
@@ -44,6 +49,26 @@
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-web</artifactId>
 			<version>4.1.4.RELEASE</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-webmvc</artifactId>
+			<version>4.1.4.RELEASE</version>
+		</dependency>
+
+		<!-- REST API -->
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>${jackson.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>javax.xml.bind</groupId>
+			<artifactId>jaxb-api</artifactId>
+			<version>${jaxb-api.version}</version>
+			<scope>runtime</scope>
 		</dependency>
 
 		<!-- JDBC connection pooling -->
