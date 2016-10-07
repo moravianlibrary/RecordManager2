@@ -27,6 +27,7 @@ import cz.mzk.recordmanager.server.dedup.RegenerateDedupKeysJobConfig;
 import cz.mzk.recordmanager.server.export.ExportRecordsJobConfig;
 import cz.mzk.recordmanager.server.imports.ImportRecordJobConfig;
 import cz.mzk.recordmanager.server.imports.ObalkyKnihHarvestJobConfig;
+import cz.mzk.recordmanager.server.imports.ZakonyProLidiHarvestJobConfig;
 import cz.mzk.recordmanager.server.imports.inspirations.InspirationImportJobConfig;
 import cz.mzk.recordmanager.server.index.DeleteAllRecordsFromSolrJobConfig;
 import cz.mzk.recordmanager.server.index.IndexHarvestedRecordsToSolrJobConfig;
@@ -84,7 +85,8 @@ public class AppConfigCmdline {
 				MiscellaneousJobsConfig.class,
 				IndexHarvestedRecordsToSolrJobConfig.class,
 				ObalkyKnihHarvestJobConfig.class,
-				FilterCaslinRecordsBySiglaJobConfig.class
+				FilterCaslinRecordsBySiglaJobConfig.class,
+				ZakonyProLidiHarvestJobConfig.class
 			);
 	}
 
