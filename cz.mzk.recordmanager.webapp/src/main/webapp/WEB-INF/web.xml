@@ -17,6 +17,16 @@
 		<param-value>cz.mzk.recordmanager.webapp.WebAppConfig</param-value>
 	</context-param>
 
+	<filter>
+		<filter-name>CORSFilter</filter-name>
+		<filter-class>cz.mzk.recordmanager.webapp.CORSFilter</filter-class>
+	</filter>
+
+	<filter-mapping>
+		<filter-name>CORSFilter</filter-name>
+		<url-pattern>/rest/*</url-pattern>
+	</filter-mapping>
+
 	<servlet>
 		<servlet-name>rest</servlet-name>
 		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
