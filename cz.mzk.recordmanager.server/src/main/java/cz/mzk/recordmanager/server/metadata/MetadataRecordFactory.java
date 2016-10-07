@@ -21,6 +21,7 @@ import cz.mzk.recordmanager.server.metadata.institutions.SkatMarcMetadataRecord;
 import cz.mzk.recordmanager.server.metadata.institutions.SvkulMetadataMarcRecord;
 import cz.mzk.recordmanager.server.metadata.institutions.TreMetadataMarcRecord;
 import cz.mzk.recordmanager.server.metadata.institutions.VkolMarcMetadataRecord;
+import cz.mzk.recordmanager.server.metadata.institutions.ZakonyProLidiMetadataMarcRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecord.HarvestedRecordUniqueId;
 import cz.mzk.recordmanager.server.model.ImportConfiguration;
@@ -86,6 +87,8 @@ public class MetadataRecordFactory {
 				return new SvkulMetadataMarcRecord(marcRec);
 			case Constants.PREFIX_VKOL:
 				return new VkolMarcMetadataRecord(marcRec);
+			case Constants.PREFIX_ZAKONY:
+				return new ZakonyProLidiMetadataMarcRecord(marcRec);
 			default:
 				return new MetadataMarcRecord(marcRec);
 			}
