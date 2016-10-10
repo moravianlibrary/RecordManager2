@@ -189,6 +189,14 @@ INSERT INTO harvested_record_format(id, name) VALUES (25, 'OTHER_OBJECT');
 INSERT INTO harvested_record_format(id, name) VALUES (26, 'OTHER_MIX_DOCUMENT');
 INSERT INTO harvested_record_format(id, name) VALUES (27, 'NORMS');
 INSERT INTO harvested_record_format(id, name) VALUES (28, 'OTHER_PERSON');
+INSERT INTO harvested_record_format(id, name) VALUES (29, 'LEGISLATIVE_GOVERNMENT_ORDERS');
+INSERT INTO harvested_record_format(id, name) VALUES (30, 'LEGISLATIVE_REGULATIONS');
+INSERT INTO harvested_record_format(id, name) VALUES (31, 'LEGISLATIVE_COMMUNICATION');
+INSERT INTO harvested_record_format(id, name) VALUES (32, 'LEGISLATIVE_LAWS');
+INSERT INTO harvested_record_format(id, name) VALUES (33, 'LEGISLATIVE_LAWS_TEXT');
+INSERT INTO harvested_record_format(id, name) VALUES (34, 'LEGISLATIVE_FINDING');
+INSERT INTO harvested_record_format(id, name) VALUES (35, 'LEGISLATIVE_CONSTITUTIONAL_LAWS');
+INSERT INTO harvested_record_format(id, name) VALUES (36, 'LEGISLATIVE_DECISIONS');
 INSERT INTO harvested_record_format(id, name) VALUES (100, 'OTHER_UNSPECIFIED');
 
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (1, 300, 'BOA001');

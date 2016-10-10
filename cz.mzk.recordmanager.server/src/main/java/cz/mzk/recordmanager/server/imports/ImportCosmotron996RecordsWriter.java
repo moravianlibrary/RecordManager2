@@ -72,7 +72,7 @@ public class ImportCosmotron996RecordsWriter implements ItemWriter<List<Record>>
 				try {
 					MarcRecord marc = new MarcRecordImpl(currentRecord);
 					String parentId = CosmotronUtils.get77308w(marc);
-					MetadataRecord metadata = metadataFactory.getMetadataRecord(marc);
+					MetadataRecord metadata = metadataFactory.getMetadataRecord(marc, harvestConfiguration);
 					String recordId = metadata.getOAIRecordId();
 					HarvestedRecord hr = harvestedRecordDao.findByIdAndHarvestConfiguration(parentId, configurationId);
 					if(hr == null) continue;

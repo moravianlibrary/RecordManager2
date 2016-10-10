@@ -29,6 +29,7 @@ public class Constants {
 	public static final String JOB_ID_DELETE_ALL_RECORDS_FROM_SOLR	= "deleteAllRecordsFromSolrJob";
 	public static final String JOB_ID_GENERATE_SKAT_DEDUP_KEYS		= "generateSkatDedupKeys";
 	public static final String JOB_ID_HARVEST_OBALKY_KNIH		= "obalkyKnihHarvestJob";
+	public static final String JOB_ID_HARVEST_ZAKONYPROLIDI			= "zakonyProLidiHarvestJob";
 	public static final String JOB_ID_FILTER_CASLIN					= "filterCaslinRecordsJob";
 	
 	public static final String JOB_PARAM_CONF_ID 		= "configurationId";
@@ -86,6 +87,7 @@ public class Constants {
 	public static final String PREFIX_SVKUL				= "svkul";
 	public static final String PREFIX_TRE				= "tre";
 	public static final String PREFIX_VKOL				= "vkol";
+	public static final String PREFIX_ZAKONY			= "zakony";
 	
 	public static final String LIBRARY_NAME_KKL			= "KKL";
 	public static final String LIBRARY_NAME_NKP			= "NKP";
