@@ -89,7 +89,7 @@ public class ImportRecordsWriter implements ItemWriter<List<Record>>, StepExecut
 			for (Record currentRecord : records) {
 				try {
 					MarcRecord marc = new MarcRecordImpl(currentRecord);
-					MetadataRecord metadata = metadataFactory.getMetadataRecord(marc);
+					MetadataRecord metadata = metadataFactory.getMetadataRecord(marc, harvestConfiguration);
 					String recordId = metadata.getOAIRecordId();
 					if (recordId == null) {
 						recordId = metadata.getUniqueId();
