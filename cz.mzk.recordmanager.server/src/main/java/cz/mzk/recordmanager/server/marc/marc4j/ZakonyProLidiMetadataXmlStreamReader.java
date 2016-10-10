@@ -270,7 +270,7 @@ public class ZakonyProLidiMetadataXmlStreamReader implements MarcReader{
 	}
 	
 	private void addField856(){
-		DataField df = factory.newDataField("856", '4', ' ');
+		DataField df = factory.newDataField("856", '4', '1');
 		newSubfield(df, 'u', String.format(TEXT_856U, getAttr(ATTR_NAME_HREF)));
 		newSubfield(df, 'y', TEXT_856Y);
 		record.addVariableField(df);
