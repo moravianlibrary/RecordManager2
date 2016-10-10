@@ -21,6 +21,8 @@ public class ZakonyProLidiMetadataMarcRecord extends MetadataMarcRecord{
 	private static final String TEXT_ROZHODNUTI = "Rozhodnutí";
 	private static final String TEXT_LAWS_TEXT = "Úplné znění zákona";
 	
+	private static final String TEXT_UCINOST_DO = "Účinnost do";
+	
 	private static final HashMap<String, HarvestedRecordFormatEnum> TYPES = new HashMap<>();
     {
     	TYPES.put(TEXT_NARIZENI, HarvestedRecordFormatEnum.LEGISLATIVE_GOVERNMENT_ORDERS);
@@ -52,5 +54,17 @@ public class ZakonyProLidiMetadataMarcRecord extends MetadataMarcRecord{
 			}
 		}
 		return result;		
+	}
+	
+	@Override
+	public boolean matchFilter(){
+		for(DataField df: underlayingMarc.getDataFields("500")){
+			if(df.getSubfield('a') != null){
+				if(df.getSubfield('a').getData().startsWith(TEXT_UCINOST_DO)) {
+					return false;
+				}
+			}
+		}
+		return true;
 	}
 }
