@@ -4,7 +4,8 @@ import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
@@ -47,6 +48,17 @@ public class ZakonyProLidiMetadataXmlStreamReader implements MarcReader{
     private static final String TEXT_500A_TILL = "Účinnost do %s";
     private static final String TEXT_655A_NAR_VLADY = "nařízení vlády";
     private static final String TEXT_6557_NAR_VLADY = "fd187880";
+    private static final String TEXT_655A_PRAVIDLA = "pravidla";
+    private static final String TEXT_6557_PRAVIDLA = "fd133121";
+    private static final String TEXT_655A_SMERNICE = "směrnice";
+    private static final String TEXT_6557_SMERNICE = "fd133465";
+    private static final String TEXT_655A_SMLOUVY = "smlouvy";
+    private static final String TEXT_6557_SMLOUVY = "fd187886";
+    private static final String TEXT_655A_STANOVY = "stanovy";
+    private static final String TEXT_6557_STANOVY = "fd133584";
+    private static final String TEXT_655A_STANOVY_EN = "statutes";
+    private static final String TEXT_655A_USNESENI = "usnesení vlády";
+    private static final String TEXT_6557_USNESENI = "fd185245";
     private static final String TEXT_655A_VYHLASKY = "vyhlášky";
     private static final String TEXT_6557_VYHLASKY = "fd185965";
     private static final String TEXT_655A_VYHLASKY_EN = "promulgations";
@@ -63,9 +75,11 @@ public class ZakonyProLidiMetadataXmlStreamReader implements MarcReader{
     private static final String TYPE_ZAKON = "Zakon";
     private static final String TYPE_UPLNE_ZNENI = "Uplne_zneni";
     private static final String TYPE_USTAVA = "Ustava";
-    private static final String TYPE_NALEZ = "Nalez";
-    private static final String TYPE_SDELENI = "Sdeleni";
-    private static final String TYPE_ROZHODNUTI = "Rozhodnuti";
+    private static final String TYPE_USNESENI = "Usneseni";
+    private static final String TYPE_SMERNICE = "Smernice";
+    private static final String TYPE_SMLOUVY = "Smlouvy";
+    private static final String TYPE_PRAVIDLA = "Pravidla";
+    private static final String TYPE_STANOVY = "Stanovy";
     
     private static final String DATE_STRING_005 = "yyyyMMddHHmmss'.0'";
     private static final String DATE_ORIGIN_FORMAT = "yyyy-MM-dd";
@@ -79,16 +93,8 @@ public class ZakonyProLidiMetadataXmlStreamReader implements MarcReader{
     private static final SimpleDateFormat SDF_260 = new SimpleDateFormat(DATE_STRING_260);
     private static final SimpleDateFormat SDF_500 = new SimpleDateFormat(DATE_STRING_500);
     
-    private static final HashMap<String, Integer> wordsCounter = new HashMap<>();
-    {
-    	wordsCounter.put(TYPE_VYHLASKA, 1);
-    	wordsCounter.put(TYPE_SDELENI, 1);
-    	wordsCounter.put(TYPE_ZAKON, 1);
-    	wordsCounter.put(TYPE_ROZHODNUTI, 1);
-    	wordsCounter.put(TYPE_NARIZENI_VLADY, 2);
-    	wordsCounter.put(TYPE_USTAVA, 2);
-    	wordsCounter.put(TYPE_NALEZ, 3);
-    }
+    private static final Pattern PATERN245 = Pattern.compile("(?i)((?:[^\\s]+\\s){0,1}(?:vyhláška|"
+    		+ "zákon|nález ústavního soudu|nařízení vlády|vládní nařízení|sdělení|rozhodnutí))(.*)");
     
     /**
      * Constructs an instance with the specified input stream.
@@ -140,6 +146,7 @@ public class ZakonyProLidiMetadataXmlStreamReader implements MarcReader{
 						addField300();
 						addField500(TEXT_500A_FROM, getAttr(ATTR_NAME_EFFECT_FROM));
 						addField500(TEXT_500A_TILL, getAttr(ATTR_NAME_EFFECT_TILL));
+						addField653();
 						addField655();
 						addField856();			
 						break;
@@ -189,30 +196,13 @@ public class ZakonyProLidiMetadataXmlStreamReader implements MarcReader{
 	private void addField245(){
 		DataField df = factory.newDataField("245", '0', '0');
 		
-		if(wordsCounter.get(getAttr(ATTR_NAME_DOC_TYPE)) == null) newSubfield(df, 'a', getAttr(ATTR_NAME_TITLE));
-		else{
-			String[] split = splitTitle(getAttr(ATTR_NAME_TITLE).trim(), wordsCounter.get(getAttr(ATTR_NAME_DOC_TYPE)));
-			newSubfield(df, 'a', String.format(TEXT_245, split[0], getAttr(ATTR_NAME_QUOTE), split[1]));
+		Matcher matcher = PATERN245.matcher(getAttr(ATTR_NAME_TITLE).trim());
+		if(matcher.matches()){
+			newSubfield(df, 'a', String.format(TEXT_245, matcher.group(1), getAttr(ATTR_NAME_QUOTE), matcher.group(2)));
 		}
+		else newSubfield(df, 'a', getAttr(ATTR_NAME_TITLE));
 		
 		record.addVariableField(df);
-	}
-	
-	private String[] splitTitle(String text, Integer count){
-		String[] split = text.split("\\s", count+1);
-		StringBuilder sb = new StringBuilder();
-		for (int i = 0; i < split.length-1; i++) {
-			sb.append(split[i]);
-			sb.append(" ");
-		}
-		String prefix = sb.toString().trim();
-		String suffix = split[split.length-1];
-		if(prefix.endsWith(",")){
-			prefix = prefix.replaceAll(",", "");
-			suffix = ", " + suffix;
-		}
-		else suffix = " " + suffix;
-		return new String[]{prefix, suffix};
 	}
 	
 	private void addField260() throws ParseException{
@@ -234,6 +224,12 @@ public class ZakonyProLidiMetadataXmlStreamReader implements MarcReader{
 		record.addVariableField(df);
 	}
 	
+	private void addField653(){
+		DataField df = factory.newDataField("653", '1', '6');
+		newSubfield(df, 'a', getAttr(ATTR_NAME_DOC_TYPE));
+		record.addVariableField(df);
+	}
+	
 	private void addField655(){
 		switch (getAttr(ATTR_NAME_DOC_TYPE)) {
 		case TYPE_NARIZENI_VLADY:
@@ -248,6 +244,22 @@ public class ZakonyProLidiMetadataXmlStreamReader implements MarcReader{
 		case TYPE_USTAVA:
 			addField6557(TEXT_655A_ZAKONY, TEXT_6557_ZAKONY, TEXT_6552_CZE);
 			addField6559(TEXT_655A_ZAKONY_EN, TEXT_6552_EN);
+			break;
+		case TYPE_USNESENI:
+			addField6557(TEXT_655A_USNESENI, TEXT_6557_USNESENI, TEXT_6552_CZE);
+			break;
+		case TYPE_SMERNICE:
+			addField6557(TEXT_655A_SMERNICE, TEXT_6557_SMERNICE, TEXT_6552_CZE);
+			break;
+		case TYPE_SMLOUVY:
+			addField6557(TEXT_655A_SMLOUVY, TEXT_6557_SMLOUVY, TEXT_6552_CZE);
+			break;
+		case TYPE_PRAVIDLA:
+			addField6557(TEXT_655A_PRAVIDLA, TEXT_6557_PRAVIDLA, TEXT_6552_CZE);
+			break;
+		case TYPE_STANOVY:
+			addField6557(TEXT_655A_STANOVY, TEXT_6557_STANOVY, TEXT_6552_CZE);
+			addField6559(TEXT_655A_STANOVY_EN, TEXT_6552_EN);
 			break;
 		default:
 			break;
