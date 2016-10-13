@@ -56,7 +56,7 @@ public class LibraryServiceImpl implements LibraryService {
 		for (OAIHarvestConfiguration config:
 				configs) {
 
-			OaiHarvestConfigurationDto oaiHarvestConfDto = translate(config, config.getContact());
+			OaiHarvestConfigurationDto oaiHarvestConfDto = translate(config);
 
 			harvestConfigurationDtos.add(oaiHarvestConfDto);
 		}
@@ -117,13 +117,13 @@ public class LibraryServiceImpl implements LibraryService {
 		if (configuration.getContact() == null)
 			person = null;
 		else
-			person = personDAO.get(config.getContactPerson().getId());
+			person = personDAO.get(config.getContact().getId());
 
 		if (person == null)
 			return;
 
 
-		fillPerson(person, config.getContactPerson());
+		fillPerson(person, config.getContact());
 
 
 		if (configuration == null)
@@ -197,16 +197,25 @@ public class LibraryServiceImpl implements LibraryService {
 		return libraryDetailDto;
 	}
 
-	private OaiHarvestConfigurationDto translate(OAIHarvestConfiguration oaiHarvestConfiguration, ContactPerson person)
+	private OaiHarvestConfigurationDto translate(OAIHarvestConfiguration oaiHarvestConfiguration)
 	{
 		OaiHarvestConfigurationDto oaiHarvestConfigurationDto = new OaiHarvestConfigurationDto();
 
 		oaiHarvestConfigurationDto.setId(oaiHarvestConfiguration.getId());
+		oaiHarvestConfigurationDto.setContact(translate(oaiHarvestConfiguration.getContact()));
+		oaiHarvestConfigurationDto.setIdPrefix(oaiHarvestConfiguration.getIdPrefix());
+		oaiHarvestConfigurationDto.setBaseWeight(oaiHarvestConfiguration.getBaseWeight());
+		oaiHarvestConfigurationDto.setClusterIdEnabled(oaiHarvestConfiguration.isClusterIdEnabled());
+		oaiHarvestConfigurationDto.setFilteringEnabled(oaiHarvestConfiguration.isFilteringEnabled());
+		oaiHarvestConfigurationDto.setInterceptionEnabled(oaiHarvestConfiguration.isInterceptionEnabled());
+		oaiHarvestConfigurationDto.setLibrary(oaiHarvestConfiguration.isLibrary());
+
+
 		oaiHarvestConfigurationDto.setUrl(oaiHarvestConfiguration.getUrl());
 		oaiHarvestConfigurationDto.setSet(oaiHarvestConfiguration.getSet());
 		oaiHarvestConfigurationDto.setMetadataPrefix(oaiHarvestConfiguration.getMetadataPrefix());
-		oaiHarvestConfigurationDto.setContactPerson(translate(person));
-
+		oaiHarvestConfigurationDto.setExtractIdRegex(oaiHarvestConfiguration.getRegex());
+		oaiHarvestConfigurationDto.setHarvestJobName(oaiHarvestConfiguration.getHarvestJobName());
 		return oaiHarvestConfigurationDto;
 	}
 

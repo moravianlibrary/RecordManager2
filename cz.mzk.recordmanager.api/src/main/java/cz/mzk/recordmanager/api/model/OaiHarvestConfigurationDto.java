@@ -2,27 +2,18 @@ package cz.mzk.recordmanager.api.model;
 
 import java.io.Serializable;
 
-public class OaiHarvestConfigurationDto implements Serializable {
+public class OaiHarvestConfigurationDto extends ImportConfigurationDto implements Serializable {
 
-	private static final long serialVersionUID = 1L;
-	
-	private Long id;
-	
 	private String url;
-	
-	private String set;
+
+	private String extractIdRegex;
+
+	private String harvestJobName;
 	
 	private String metadataPrefix;
-	
-	private ContactPersonDto contactPerson;
 
-	public Long getId() {
-		return id;
-	}
+	private String set;
 
-	public void setId(Long id) {
-		this.id = id;
-	}
 
 	public String getUrl() {
 		return url;
@@ -32,13 +23,6 @@ public class OaiHarvestConfigurationDto implements Serializable {
 		this.url = url;
 	}
 
-	public String getSet() {
-		return set;
-	}
-
-	public void setSet(String set) {
-		this.set = set;
-	}
 
 	public String getMetadataPrefix() {
 		return metadataPrefix;
@@ -48,12 +32,27 @@ public class OaiHarvestConfigurationDto implements Serializable {
 		this.metadataPrefix = metadataPrefix;
 	}
 
-	public ContactPersonDto getContactPerson() {
-		return contactPerson;
+	public String getExtractIdRegex() {
+		return extractIdRegex;
 	}
 
-	public void setContactPerson(ContactPersonDto contactPerson) {
-		this.contactPerson = contactPerson;
+	public void setExtractIdRegex(String extractIdRegex) {
+		this.extractIdRegex = extractIdRegex;
 	}
 
+	public String getHarvestJobName() {
+		return harvestJobName;
+	}
+
+	public void setHarvestJobName(String harvestJobName) {
+		this.harvestJobName = harvestJobName;
+	}
+
+	public String getSet() {
+		return set;
+	}
+
+	public void setSet(String set) {
+		this.set = set;
+	}
 }

@@ -27,6 +27,7 @@ public class LibraryDAOHibernate extends
 		Criteria libraryCrit = session.createCriteria(ImportConfiguration.class, "impComfig");
 		libraryCrit.createAlias("impComfig.library", "lib");
 		libraryCrit.add(Restrictions.eq("lib.id", libraryId));
+
 		List<OAIHarvestConfiguration> configs = libraryCrit.list();
 
 		return configs;
