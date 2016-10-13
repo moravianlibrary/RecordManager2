@@ -31,3 +31,12 @@ div.progress{
 .contact {
   font-size: 80%;
 }
+
+.header {
+      color: #ee6e73;
+      font-weight: 300;
+}
+.oai-harvest-configuration {
+  margin-top: 10px;
+  margin-left: 10px;
+}

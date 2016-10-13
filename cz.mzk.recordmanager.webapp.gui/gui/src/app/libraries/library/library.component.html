@@ -4,32 +4,100 @@
 <h5 class="center-align">{{libraryDetail?.id}}</h5>
 
 <div class="row">
-  <form class="col s12">
+    <div class="col s12" id='main'>
 
-    <div class="row">
-      <div class="input-field col s6">
-        <input placeholder="Name" value="{{libraryDetail?.name}}" type="text" class="validate">
-      </div>
+	  <div class="row" id='library'>
+		<form class="col s12">
+		  <div class="row">
+			<div class="col s5">
+		      <h2 class="header">Library</h2>
+		    </div>
+			<div class="input-field col s6 right">
+		      <button class='waves-effect waves-light btn right' type="submit">
+				Save<i class="material-icons right">send</i>
+			  </button>
+		    </div>
+		  </div>
+
+
+		  <div class="row">
+		    <div class="input-field col s12">
+		      <input id="disabled" type="text" class="validate" value="101" disabled>
+		      <label for="disabled">ID</label>
+		    </div>
+		  </div>
+		  <div class="row">
+		    <div class="input-field col s12">
+		      <input id="name" type="text" class="validate" value="NLK">
+		      <label for="namee">Name</label>
+		    </div>
+		  </div>
+		  <div class="row">
+		    <div class="input-field col s12">
+		      <input id="url" type="text" class="validate" value="medivk.cz">
+		      <label for="url">URL</label>
+		    </div>
+		  </div>
+		  <div class="row">
+		    <div class="input-field col s12">
+		      <input id="catalogUrl" type="text" class="validate" value="medivk.cz">
+		      <label for="catalogUrl">catalogUrl</label>
+		    </div>
+		  </div>
+		  <div class="row">
+		    <div class="input-field col s12">
+		      <input id="city" type="text" class="validate" value="Praha">
+		      <label for="city">city</label>
+		    </div>
+		  </div>
+
+		  <div class="row">
+		    <div class="col s12">
+			  <h2 class="header">OAI harvest configurations</h2>
+			  <ul class="collapsible popout" data-collapsible="accordion">
+				<li>
+				  <div class="collapsible-header"><i class="material-icons">mode_edit</i>Harvester 3845630</div>
+				  <div class="collapsible-body">
+					<div class="row oai-harvest-configuration">
+						<div class="input-field col s12">
+						  <input id="id" type="text" class="validate" value="3845630" disabled>
+						  <label for="id">id</label>
+						</div>
+					</div>
+					<div class="row oai-harvest-configuration">
+						<div class="input-field col s12">
+						  <input id="url" type="text" class="validate" value="http://WWW.WEARD_TEST.COM/OAI">
+						  <label for="url">url</label>
+						</div>
+					</div>
+					 <div class="row oai-harvest-configuration">
+						<div class="input-field col s12">
+						  <input id="set" type="text" class="validate" value="MZK03-CPK">
+						  <label for="set">set</label>
+						</div>
+					</div>
+					<div class="row oai-harvest-configuration">
+						<div class="input-field col s12">
+						  <input id="metadataPrefix" type="text" class="validate" value="marc21">
+						  <label for="metadataPrefix">metadataPrefix</label>
+						</div>
+					</div>
+	  			  </div>
+				</li>
+				<li>
+				  <div class="collapsible-header"><i class="material-icons">mode_edit</i>Harvester 3845631</div>
+				  <div class="collapsible-body"><p>Lorem ipsum dolor sit amet.</p></div>
+				</li>
+				<li>
+				  <div class="collapsible-header"><i class="material-icons">mode_edit</i>Harvester 301</div>
+				  <div class="collapsible-body"><p>Lorem ipsum dolor sit amet.</p></div>
+				</li>
+			  </ul>
+			</div>
+		  </div>
+
+		</form>
+	  </div>
+
     </div>
-
-    <div class="row">
-      <div class="input-field col s6">
-        <input placeholder="URL" value="{{libraryDetail?.url}}" type="url" class="validate">
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="input-field col s6">
-        <input placeholder="Catalog URL" value="{{libraryDetail?.catalogUrl}}" type="url" class="validate">
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="input-field col s6">
-        <input placeholder="City" value="{{libraryDetail?.city}}" type="text" class="validate">
-      </div>
-    </div>
-
-
-  </form>
-</div>
+  </div>
