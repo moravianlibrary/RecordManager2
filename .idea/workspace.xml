@@ -2,793 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="bc8115f3-73e9-4154-96dc-35cc34df7e45" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.gitignore" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__javax_servlet_servlet_api_2_4.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_spring_aop_4_1_4_RELEASE.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_spring_context_4_1_4_RELEASE.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_spring_expression_4_1_4_RELEASE.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_spring_web_4_1_4_RELEASE.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_spring_webmvc_4_1_4_RELEASE.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/README.md" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.api/pom.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.api/src/main/java/cz/mzk/recordmanager/api/model/ContactPersonDto.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.api/src/main/java/cz/mzk/recordmanager/api/model/LibraryDetailDto.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.api/src/main/java/cz/mzk/recordmanager/api/model/LibraryDto.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.api/src/main/java/cz/mzk/recordmanager/api/model/OaiHarvestConfigurationDto.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.api/src/main/java/cz/mzk/recordmanager/api/model/batch/BatchJobExecutionDTO.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.api/src/main/java/cz/mzk/recordmanager/api/model/batch/JobExecutionQueryDTO.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.api/src/main/java/cz/mzk/recordmanager/api/model/query/LogicalOperator.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.api/src/main/java/cz/mzk/recordmanager/api/model/query/ObalkyKnihTOCQuery.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.api/src/main/java/cz/mzk/recordmanager/api/service/BatchService.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.api/src/main/java/cz/mzk/recordmanager/api/service/LibraryService.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.cmdline/.gitignore" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.cmdline/README.txt" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.cmdline/config/.gitignore" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.cmdline/config/automatization/DailyScript.groovy" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.cmdline/config/automatization/IndexingScript.groovy" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.cmdline/config/database.properties" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.cmdline/config/logback.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.cmdline/config/mapping/conspectus_category.map" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.cmdline/config/mapping/mzk_language.map" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.cmdline/config/marc/groovy/BaseMarc.groovy" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.cmdline/config/marc/groovy/HarvestedRecordBaseMarc.groovy" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.cmdline/config/stopwords/publisher.txt" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.cmdline/config_mzk/.gitignore" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.cmdline/config_mzk/automatization/DailyScript.groovy" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.cmdline/config_mzk/automatization/WeeklyScript.groovy" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.cmdline/config_mzk/database.properties" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.cmdline/config_mzk/logback.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.cmdline/config_mzk/mapping/conspectus_category.map" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.cmdline/config_mzk/mapping/mzk_format.map" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.cmdline/config_mzk/mapping/mzk_language.map" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.cmdline/config_mzk/marc/groovy/BaseMarc.groovy" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.cmdline/config_mzk/marc/groovy/EBSCOMarc.groovy" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.cmdline/config_mzk/marc/groovy/HarvestedRecordBaseMarc.groovy" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.cmdline/config_mzk/marc/groovy/MZKNormsMarc.groovy" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.cmdline/config_mzk/stopwords/publisher.txt" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.cmdline/database.local.properties.dockerfile_stub" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.cmdline/database.local.properties.sample" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.cmdline/database.properties" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.cmdline/logback.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.cmdline/pom.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.cmdline/src/main/java/cz/mzk/recordmanager/cmdline/AppConfigCmdline.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.cmdline/src/main/java/cz/mzk/recordmanager/cmdline/CmdlineApplication.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.cmdline/src/main/resources/usage.txt" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/.gitignore" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/INSTALL.txt" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/pom.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/AppConfig.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/ClasspathResourceProvider.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/DelegatingResourceProvider.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/FileSystemResourceProvider.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/ResourceProvider.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/automatization/ScriptRunner.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/automatization/ScriptRunnerImpl.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/dao/batch/BatchJobExecutionDAO.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/dao/batch/BatchJobParameterDAO.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/dao/hibernate/BatchJobExecutionDAOHibernate.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/dao/hibernate/BatchJobParameterDAOHibernate.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/dc/DublinCoreParser.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/dc/DublinCoreParserXMLImpl.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/dc/DublinCoreRecord.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/dc/DublinCoreRecordImpl.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/dc/DublinCoreXMLHandler.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/dc/InvalidDcException.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/dedup/DedupIdentifierClustersProcessor.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/dedup/DedupKeyParserException.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/dedup/DedupKeysParser.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/dedup/DedupRecordsJobConfig.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/dedup/DedupRecordsJobParametersValidator.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/dedup/DedupSimpleKeysStepProcessor.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/dedup/DedupSimpleKeysStepWriter.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/dedup/DedupSkatKeysProcessor.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/dedup/DedupTitleAuthItemProcessor.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/dedup/DelegatingDedupKeysParser.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/dedup/DublinCoreDedupKeyParser.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/dedup/HarvestedRecordLimitedRowMapper.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/dedup/HashingDedupKeyParser.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/dedup/MarcXmlDedupKeyParser.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/dedup/PeriodicalsTitleByYearReader.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/dedup/RegenerateDedupKeysJobConfig.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/dedup/RegenerateDedupKeysWriter.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/dedup/SimilarTitleProcessor.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/dedup/TitleByYearReader.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/dedup/TitleSimilarityWriter.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/dedup/UniqueRecordsDedupTasklet.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/dedup/clustering/Cluster.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/dedup/clustering/Clusterable.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/dedup/clustering/NonperiodicalTitleClusterable.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/dedup/clustering/PeriodicalTitleClusterable.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/dedup/clustering/TitleClusterable.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/dedup/clustering/package-info.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/dedup/package-info.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/export/ExportCosmotron996Processor.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/export/ExportRecordsJobConfig.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/export/ExportRecordsJobParametersValidator.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/export/ExportRecordsProcessor.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/export/HarvestedRecordIdRowMapper.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/export/IOFormat.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/facade/DedupFacade.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/facade/DedupFacadeImpl.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/facade/HarvestingFacade.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/facade/HarvestingFacadeImpl.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/facade/ImportRecordFacade.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/facade/ImportRecordFacadeImpl.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/facade/IndexingFacade.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/facade/IndexingFacadeImpl.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/facade/exception/JobExecutionFailure.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/hibernate/CharEnumUserType.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/hibernate/CharValueEnum.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/imports/AntikvariatyImportJobParametersValidator.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/imports/AntikvariatyRecordsReader.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/imports/AntikvariatyRecordsWriter.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/imports/DownloadAndImportRecordsJobParametersValidator.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/imports/ImportCosmotron996RecordsWriter.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/imports/ImportOaiRecordsFileReader.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/imports/ImportOaiRecordsJobParametersValidator.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/imports/ImportRecordJobConfig.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/imports/ImportRecordsFileReader.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/imports/ImportRecordsJobParametersValidator.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/imports/ImportRecordsWriter.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/imports/ObalkyKnihHarvestJobConfig.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/imports/ObalkyKnihHarvestJobParametersValidator.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/imports/ObalkyKnihRecordsReader.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/imports/ObalkyKnihRecordsWriter.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/imports/inspirations/InspirationDeleteJobParametersValidator.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/imports/inspirations/InspirationDeleteWriter.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/imports/inspirations/InspirationIdRowMapper.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/imports/inspirations/InspirationImportFileReader.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/imports/inspirations/InspirationImportJobConfig.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/imports/inspirations/InspirationImportJobParametersValidator.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/imports/inspirations/InspirationImportWriter.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/index/DelegatingSolrRecordMapper.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/index/DeleteAllRecordsFromSolrJobConfig.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/index/DeletedHarvestedRecordsWriter.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/index/DublinCoreSolrRecordMapper.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/index/HarvestedRecordRowMapper.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/index/IndexHarvestedRecordsToSolrJobConfig.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/index/IndexIndividualRecordsTasklet.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/index/IndexIndividualRecordsToSolrJobParametersValidator.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/index/IndexRecordsToSolrJobConfig.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/index/IndexRecordsToSolrJobParametersValidator.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/index/MarcSolrRecordMapper.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/index/OrphanedDedupRecordsWriter.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/index/SolrFieldConstants.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/index/SolrHarvestedRecordProcessor.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/index/SolrIndexWriter.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/index/SolrInputDocumentFactory.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/index/SolrInputDocumentFactoryImpl.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/index/SolrRecordMapper.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/index/SolrRecordProcessor.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/index/enrich/AntikvariatyDedupRecordEnricher.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/index/enrich/AuthorityAuthorEnricher.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/index/enrich/AuthorityCorporationEnricher.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/index/enrich/AuthorityEnricher.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/index/enrich/AuthorityGenreEnricher.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/index/enrich/AuthorityRecordsEnricher.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/index/enrich/AuthoritySubjectEnricher.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/index/enrich/AvailabilityFacetEnricher.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/index/enrich/ConspectusEnricher.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/index/enrich/DedupRecordEnricher.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/index/enrich/FieldMerger.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/index/enrich/FullTextEnricher.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/index/enrich/HarvestedRecordEnricher.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/index/enrich/HoldingsDedupRecordEnricher.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/index/enrich/Id001SearchEnricher.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/index/enrich/LazyFulltextFieldImpl.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/index/enrich/LoanRelevanceEnricher.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/index/enrich/ObalkyKnihTocDedupRecordEnricher.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/index/enrich/ObalkyKnihTocHarvestedRecordEnricher.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/index/enrich/ParentIdEnricher.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/index/enrich/SfxEnricher.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/index/enrich/SfxLinkHarvestedRecordEnricher.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/index/enrich/UrlDedupRecordEnricher.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/index/enrich/UrlHarvestedRecordEnricher.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/jdbc/BlobToStringValueRowMapper.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/jdbc/Cosmotron996RowMapper.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/jdbc/DedupRecordRowMapper.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/jdbc/HarvestedRecordRowMapper.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/jdbc/LongValueRowMapper.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/jdbc/StringValueRowMapper.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/kramerius/FedoraModels.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/kramerius/fulltext/KrameriusFulltextJobConfig.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/kramerius/fulltext/KrameriusFulltextJobParametersValidator.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/kramerius/fulltext/KrameriusFulltextProcessor.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/kramerius/fulltext/KrameriusFulltextWriter.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/kramerius/fulltext/KrameriusFulltexter.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/kramerius/fulltext/KrameriusFulltexterFactory.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/kramerius/fulltext/KrameriusFulltexterFactoryImpl.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/kramerius/fulltext/KrameriusFulltexterFedora.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/kramerius/fulltext/KrameriusFulltexterSolr.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/kramerius/fulltext/KrameriusPageComparator.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/kramerius/fulltext/KrameriusSolrConstants.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/kramerius/harvest/KrameriusFormatResolver.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/kramerius/harvest/KrameriusFormatResolverImpl.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/kramerius/harvest/KrameriusHarvestJobConfig.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/kramerius/harvest/KrameriusHarvestJobParametersValidator.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/kramerius/harvest/KrameriusHarvester.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/kramerius/harvest/KrameriusHarvesterFactory.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/kramerius/harvest/KrameriusHarvesterFactoryImpl.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/kramerius/harvest/KrameriusHarvesterNoSorting.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/kramerius/harvest/KrameriusHarvesterParams.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/kramerius/harvest/KrameriusItemProcessor.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/kramerius/harvest/KrameriusItemReader.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/kramerius/harvest/KrameriusItemReaderNoSorting.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/marc/DataFieldMatcher.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/marc/ISOCharConvertor.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/marc/InvalidMarcException.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/marc/MarcRecord.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/marc/MarcRecordImpl.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/marc/MarcXmlParser.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/marc/MarcXmlParserImpl.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/marc/MatchAllDataFieldMatcher.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/marc/intercepting/DefaultMarcInterceptor.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/marc/intercepting/MarcInterceptorFactory.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/marc/intercepting/MarcRecordInterceptor.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/marc/intercepting/MzkNormsMarcInterceptor.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/marc/intercepting/NlkMarcInterceptor.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/marc/intercepting/OpenlibMarcInterceptor.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/marc/intercepting/SkatMarcInterceptor.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/marc/marc4j/AlphaNumericControlFieldImpl.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/marc/marc4j/DataFieldImpl.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/marc/marc4j/MarcAlephStreamReader.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/marc/marc4j/MarcFactoryImpl.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/marc/marc4j/MarcISO2709StreamReader.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/marc/marc4j/MarcLineStreamReader.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/marc/marc4j/MarcXmlHandler.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/marc/marc4j/MarcXmlParserThread.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/marc/marc4j/MarcXmlReader.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/marc/marc4j/OsobnostiRegionuXmlStreamReader.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/marc/marc4j/PatentsXmlStreamReader.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/marc/marc4j/RecordImpl.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/metadata/CitationRecordType.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/metadata/MetadataDublinCoreRecord.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/metadata/MetadataMarcRecord.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/metadata/MetadataRecord.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/metadata/MetadataRecordFactory.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/metadata/institutions/AuthMetadataMarcRecord.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/metadata/institutions/KramDefaultMetadataDublinCoreRecord.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/metadata/institutions/MzkMetadataMarcRecord.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/metadata/institutions/MzkNormsMetadataMarcRecord.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/metadata/institutions/NkpMarcMetadataRecord.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/metadata/institutions/SfxMetadataMarcRecord.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/metadata/institutions/SfxjibNlkPeriodicalsMetadataMarcRecord.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/metadata/institutions/SkatMarcMetadataRecord.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/metadata/institutions/SvkulMetadataMarcRecord.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/metadata/institutions/TreMetadataMarcRecord.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/metadata/institutions/VkolMarcMetadataRecord.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/miscellaneous/FilterCaslinRecordsBySiglaJobConfig.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/miscellaneous/FilterCaslinRecordsJobParametersValidator.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/miscellaneous/FilterCaslinRecordsWriter.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/miscellaneous/MiscellaneousJobsConfig.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/miscellaneous/skat/GenerateSkatKeysJobParameterValidator.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/miscellaneous/skat/GenerateSkatKeysProcessor.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/miscellaneous/skat/GenerateSkatKeysWriter.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/miscellaneous/skat/SkatKeysMergedIdsUpdateTasklet.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/model/AbstractDomainObject.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/model/AntikvariatyRecord.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/model/AuthorityRecord.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/model/Cnb.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/model/ContactPerson.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/model/Cosmotron996.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/model/DedupRecord.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/model/DownloadImportConfiguration.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/model/Format.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/model/FulltextKramerius.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/model/HarvestFrequency.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/model/HarvestedRecord.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/model/HarvestedRecordFormat.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/model/ImportConfiguration.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/model/Inspiration.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/model/Isbn.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/model/Ismn.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/model/Issn.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/model/KrameriusConfiguration.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/model/Language.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/model/Library.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/model/OAIGranularity.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/model/OAIHarvestConfiguration.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/model/ObalkyKnihTOC.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/model/Oclc.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/model/Sigla.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/model/SkatKey.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/model/Title.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/model/batch/BatchJobExecution.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/model/batch/BatchJobExecutionStep.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/model/batch/BatchJobInstance.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/model/batch/BatchJobParam.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/oai/dao/AntikvariatyRecordDAO.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/oai/dao/AuthorityRecordDAO.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/oai/dao/BatchJobExecutionDAO.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/oai/dao/CnbDAO.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/oai/dao/ContactPersonDAO.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/oai/dao/Cosmotron996DAO.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/oai/dao/DedupRecordDAO.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/oai/dao/DomainDAO.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/oai/dao/DownloadImportConfigurationDAO.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/oai/dao/FormatDAO.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/oai/dao/FulltextKrameriusDAO.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/oai/dao/HarvestedRecordDAO.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/oai/dao/HarvestedRecordFormatDAO.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/oai/dao/ImportConfigurationDAO.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/oai/dao/InspirationDAO.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/oai/dao/IsbnDAO.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/oai/dao/IsmnDAO.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/oai/dao/IssnDAO.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/oai/dao/KrameriusConfigurationDAO.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/oai/dao/LanguageDAO.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/oai/dao/LibraryDAO.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/oai/dao/OAIHarvestConfigurationDAO.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/oai/dao/ObalkyKnihTOCDAO.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/oai/dao/OclcDAO.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/oai/dao/SiglaDAO.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/oai/dao/SkatKeyDAO.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/oai/dao/TitleDAO.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/oai/dao/hibernate/AbstractDomainDAOHibernate.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/oai/dao/hibernate/AntikvariatyRecordDAOHibernate.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/oai/dao/hibernate/AuthorityRecordDAOHibernate.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/oai/dao/hibernate/BatchJobExecutionDAOHibernate.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/oai/dao/hibernate/CnbDAOHibernate.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/oai/dao/hibernate/ContactPersonDAOHibernate.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/oai/dao/hibernate/Cosmotron996DAOHibernate.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/oai/dao/hibernate/DedupRecordDAOHibernate.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/oai/dao/hibernate/DownloadImportConfiurationDAOHibernate.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/oai/dao/hibernate/FormatDAOHibernate.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/oai/dao/hibernate/FulltextKrameriusDAOHibernate.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/oai/dao/hibernate/HarvestedRecordDAOHibernate.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/oai/dao/hibernate/HarvestedRecordFormatDAOHibernate.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/oai/dao/hibernate/ImportRecordsDAOHibernate.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/oai/dao/hibernate/InspirationDAOHibernate.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/oai/dao/hibernate/IsbnDAOHibernate.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/oai/dao/hibernate/IsmnDAOHibernate.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/oai/dao/hibernate/IssnDAOHibernate.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/oai/dao/hibernate/KrameriusConfiurationDAOHibernate.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/oai/dao/hibernate/LanguageDAOHibernate.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/oai/dao/hibernate/LibraryDAOHibernate.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/oai/dao/hibernate/OAIHarvestConfigurationDAOHibernate.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/oai/dao/hibernate/ObalkyKnihTOCDAOHibernate.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/oai/dao/hibernate/OclcDAOHibernate.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/oai/dao/hibernate/SiglaDAOHibernate.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/oai/dao/hibernate/SkatKeyDAOHibernate.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/oai/dao/hibernate/TitleDAOHibernate.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/oai/harvest/AfterHarvestTasklet.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/oai/harvest/AsyncOAIItemReader.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/oai/harvest/CosmotronHarvestJobConfig.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/oai/harvest/CosmotronHarvestJobParametersValidator.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/oai/harvest/CosmotronItemProcessor.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/oai/harvest/DeleteAllHarvestsJobConfig.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/oai/harvest/HarvestedRecordWriter.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/oai/harvest/OAIAuthItemWriter.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/oai/harvest/OAIFormatResolver.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/oai/harvest/OAIFormatResolverImpl.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/oai/harvest/OAIHarvestJobConfig.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/oai/harvest/OAIHarvestJobParametersValidator.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/oai/harvest/OAIHarvestSingleRecordJobParametersValidator.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/oai/harvest/OAIHarvester.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/oai/harvest/OAIHarvesterFactory.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/oai/harvest/OAIHarvesterFactoryImpl.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/oai/harvest/OAIHarvesterImpl.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/oai/harvest/OAIHarvesterParams.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/oai/harvest/OAIItemProcessor.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/oai/harvest/OAIItemReader.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/oai/harvest/OAIItemSingleReader.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/oai/harvest/OAIOneByOneItemReader.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/oai/harvest/OaiErrorException.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/oai/harvest/ReharvestJobExecutionDecider.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/oai/model/OAIError.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/oai/model/OAIGetRecord.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/oai/model/OAIHeader.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/oai/model/OAIIdentify.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/oai/model/OAIListIdentifiers.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/oai/model/OAIListRecords.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/oai/model/OAIMetadata.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/oai/model/OAIRecord.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/oai/model/OAIRequest.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/oai/model/OAIRoot.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/oai/model/package-info.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/scripting/AbstractScriptFactory.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/scripting/AssignmentEliminationTransformation.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/scripting/BaseDSL.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/scripting/CachingMappingResolver.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/scripting/CachingStopWordsResolver.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/scripting/FunctionContext.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/scripting/Mapping.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/scripting/MappingResolver.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/scripting/MappingScript.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/scripting/MappingScriptFactory.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/scripting/ResourceMappingResolver.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/scripting/ResourceStopWordsResolver.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/scripting/StopWordsResolver.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/scripting/dc/DublinCoreDSL.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/scripting/dc/DublinCoreMappingScriptImpl.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/scripting/dc/DublinCoreScriptFactory.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/scripting/dc/DublinCoreScriptFactoryImpl.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/scripting/dc/function/DublinCoreRecordFunctions.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/scripting/dc/function/IdentifiersDublinCoreRecordFunctions.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/scripting/function/RecordFunction.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/scripting/function/RecordFunctionsFactory.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/scripting/function/RecordFunctionsFactoryImpl.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/scripting/marc/MarcDSL.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/scripting/marc/MarcFunctionContext.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/scripting/marc/MarcMappingScriptImpl.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/scripting/marc/MarcScriptFactory.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/scripting/marc/MarcScriptFactoryImpl.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/scripting/marc/function/BoundingBoxMarcFunctions.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/scripting/marc/function/GetStatusesMarcFunctions.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/scripting/marc/function/IdentifiersMarcFunctions.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/scripting/marc/function/MarcRecordFunctions.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/scripting/marc/function/PublishDateMarcFunctions.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/scripting/marc/function/mzk/MzkFormatFunctions.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/scripting/marc/function/mzk/MzkOtherFunctions.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/scripting/marc/function/mzk/MzkStatusFunctions.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/service/BatchServiceImpl.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/service/LibraryServiceImpl.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/solr/FaultTolerantIndexingExceptionHandler.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/solr/KrameriusHttpClient.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/solr/LazyFulltextField.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/solr/LoggingSolrIndexingExceptionHandler.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/solr/RethrowingSolrIndexingExceptionHandler.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/solr/SolrIndexingExceptionHandler.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/solr/SolrServerFacade.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/solr/SolrServerFacadeImpl.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/solr/SolrServerFactory.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/solr/SolrServerFactoryImpl.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/springbatch/BatchDTOTranslator.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/springbatch/BatchServiceImpl.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/springbatch/DateIntervalPartitioner.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/springbatch/DefaultJobParametersValidator.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/springbatch/DelegatingHibernateProcessor.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/springbatch/IntrospectiveJobParametersValidator.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/springbatch/JobExecutor.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/springbatch/JobExecutorImpl.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/springbatch/JobFailureListener.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/springbatch/JobParameterDeclaration.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/springbatch/SqlCommandTasklet.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/springbatch/StepProgressListener.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/springbatch/UUIDIncrementer.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/util/ApacheHttpClient.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/util/CaslinFilter.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/util/CleaningUtils.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/util/Constants.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/util/CosmotronUtils.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/util/DeduplicationUtils.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/util/HibernateSessionSynchronizer.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/util/HttpClient.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/util/ISSNUtils.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/util/IndexingUtils.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/util/MarcCleaningUtils.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/util/MetadataUtils.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/util/RegexpExtractor.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/util/ResourceUtils.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/util/SolrUtils.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/util/StringUtils.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/util/UrlUtils.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/util/proxy/FaultTolerantProxy.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/resources/appCtx-recordmanager-server.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/resources/dc/groovy/BaseDC.groovy" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/resources/dc/groovy/HarvestedRecordBaseDC.groovy" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/resources/job/dedupRecordsJob/UniqueRecordsDedup.sql" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/resources/job/dedupRecordsJob/cleanup.sql" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/resources/job/dedupRecordsJob/initDeduplication.sql" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/resources/job/dedupRecordsJob/prepareDedupSfxStep.sql" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/resources/job/dedupRecordsJob/prepareDedupSimmilarityTable.sql" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/resources/job/dedupRecordsJob/prepareTempAuthKeyTable.sql" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/resources/job/dedupRecordsJob/prepareTempClusterId.sql" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/resources/job/dedupRecordsJob/prepareTempCnbClustersTable.sql" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/resources/job/dedupRecordsJob/prepareTempCnbTable.sql" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/resources/job/dedupRecordsJob/prepareTempIsbnTable.sql" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/resources/job/dedupRecordsJob/prepareTempIsmnClustersTable.sql" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/resources/job/dedupRecordsJob/prepareTempOclcClustersTable.sql" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/resources/job/dedupRecordsJob/prepareTempPeriodicalsCnbClustersTable.sql" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/resources/job/dedupRecordsJob/prepareTempPeriodicalsCnbTable.sql" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/resources/job/dedupRecordsJob/prepareTempPeriodicalsIssnClustersTable.sql" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/resources/job/dedupRecordsJob/prepareTempPeriodicalsIssnTable.sql" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/resources/job/dedupRecordsJob/prepareTempPeriodicalsOclcClustersTable.sql" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/resources/job/dedupRecordsJob/prepareTempPeriodicalsTitleClustersTable.sql" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/resources/job/dedupRecordsJob/prepareTempPeriodicalsYearCluster.sql" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/resources/job/dedupRecordsJob/prepareTempSkatManuallyMergedTable.sql" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/resources/job/dedupRecordsJob/prepareTempSkatRestTable.sql" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/resources/job/dedupRecordsJob/prepareTempUuidClustersTable.sql" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/resources/job/regenerateDedupKeysJob/dropDedupKeys.sql" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/resources/mapping/auth_short_note_cs.map" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/resources/mapping/auth_short_note_en.map" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/resources/mapping/category_subcategory.map" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/resources/mapping/mzk_city.map" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/resources/mapping/mzk_country.map" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/resources/mapping/mzk_language.map" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/resources/mapping/patents.map" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/resources/mapping/psh.map" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/resources/mapping/publisher.map" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/resources/mapping/similarity_words.map" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/resources/mapping/subcategory_name.map" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/resources/marc/groovy/AuthorityMarc.groovy" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/resources/marc/groovy/BaseMarc.groovy" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/resources/marc/groovy/HarvestedRecordBaseMarc.groovy" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/resources/sql/mzk/recordmanager-create-indexes-mzk.sql" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/resources/sql/mzk/recordmanager-insert-mzk.sql" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/resources/sql/query/FullTextQueryByDedupRecord.sql" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/resources/sql/query/FullTextSizeQueryByDedupRecord.sql" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/resources/sql/query/LastCompletedHarvestQuery.sql" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/resources/sql/query/LastCompletedReharvestQuery.sql" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/resources/sql/query/LastIndexedQuery.sql" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/resources/sql/query/LastJobExecutionQuery.sql" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/resources/sql/query/LastReindexedQuery.sql" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/resources/sql/recordmanager-alter-tables-postgres.sql" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/resources/sql/recordmanager-create-indexes.sql" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/resources/sql/recordmanager-create-procedures.sql" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/resources/sql/recordmanager-create-tables-derby.sql" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/resources/sql/recordmanager-create-tables-postgres.sql" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/resources/sql/recordmanager-create-views-postgres-statistic.sql" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/resources/sql/recordmanager-create-views-postgres.sql" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/resources/sql/recordmanager-create-views.sql" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/resources/sql/recordmanager-delete-tables.sql" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/resources/sql/recordmanager-drop-tables.sql" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/resources/sql/recordmanager-insert.sql" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/resources/sql/recordmanager-liquibase.sql" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/resources/sql/recordmanager-sample-data.sql" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/resources/sql/spring-batch-create-tables-postgres.sql" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/resources/sql/spring-batch-drop-tables-postgres.sql" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/resources/stopwords/author_facet.txt" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/resources/stopwords/publisher.txt" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/java/cz/mzk/recordmanager/server/AbstractTest.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/java/cz/mzk/recordmanager/server/AppConfigDev.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/java/cz/mzk/recordmanager/server/DBUnitHelper.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/java/cz/mzk/recordmanager/server/automatization/ScriptRunnerTest.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/java/cz/mzk/recordmanager/server/config/ConfigurationTest.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/java/cz/mzk/recordmanager/server/dc/DublinCoreParserXMLImplTest.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/java/cz/mzk/recordmanager/server/dc/DublinCoreRecordImplTest.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/java/cz/mzk/recordmanager/server/dedup/DedupRecordsJobTest.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/java/cz/mzk/recordmanager/server/dedup/MarcXmlDedupKeyParserTest.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/java/cz/mzk/recordmanager/server/dedup/RegenerateDedupKeysTest.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/java/cz/mzk/recordmanager/server/enrich/UrlEnricherTest.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/java/cz/mzk/recordmanager/server/export/ExportRecordsJobTest.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/java/cz/mzk/recordmanager/server/facade/HarvestingFacadeTest.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/java/cz/mzk/recordmanager/server/imports/ImportAntikvariatyTest.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/java/cz/mzk/recordmanager/server/imports/ImportInspirationsTest.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/java/cz/mzk/recordmanager/server/imports/ImportObalkyKnihTest.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/java/cz/mzk/recordmanager/server/imports/ImportRecordsJobTest.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/java/cz/mzk/recordmanager/server/index/AbstractSolrTest.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/java/cz/mzk/recordmanager/server/index/DeleteAllRecordsFromSolrJobTest.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/java/cz/mzk/recordmanager/server/index/IndexAllRecordsToEmbeddedSolrJobTest.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/java/cz/mzk/recordmanager/server/index/IndexHarvestedRecordsToEmbeddedSolrJobTest.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/java/cz/mzk/recordmanager/server/index/IndexIndividualRecordsToSolrJobTest.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/java/cz/mzk/recordmanager/server/index/IndexRecordsToEmbeddedSolrJobTest.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/java/cz/mzk/recordmanager/server/index/IndexRecordsToSolrJobTest.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/java/cz/mzk/recordmanager/server/kramerius/fulltext/KrameriusFulltextJobTest.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/java/cz/mzk/recordmanager/server/kramerius/fulltext/KrameriusFulltexterFedoraTest.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/java/cz/mzk/recordmanager/server/kramerius/fulltext/KrameriusFulltexterSolrTest.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/java/cz/mzk/recordmanager/server/kramerius/harvest/AbstractKrameriusTest.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/java/cz/mzk/recordmanager/server/kramerius/harvest/KrameriusHarvestJobTest.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/java/cz/mzk/recordmanager/server/kramerius/harvest/KrameriusHarvesterNoSortingTest.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/java/cz/mzk/recordmanager/server/kramerius/harvest/KrameriusHarvesterTest.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/java/cz/mzk/recordmanager/server/marc/MarcRecordFactory.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/java/cz/mzk/recordmanager/server/marc/MarcRecordImplTest.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/java/cz/mzk/recordmanager/server/marc/MarcXmlParserTest.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/java/cz/mzk/recordmanager/server/miscellaneous/FilterCaslinRecordsTest.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/java/cz/mzk/recordmanager/server/oai/dao/DedupRecordDAOTest.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/java/cz/mzk/recordmanager/server/oai/dao/FulltextKrameriusDAOTest.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/java/cz/mzk/recordmanager/server/oai/dao/HarvestedRecordDAOTest.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/java/cz/mzk/recordmanager/server/oai/dao/ImportConfigurationDAOTest.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/java/cz/mzk/recordmanager/server/oai/dao/LibraryDAOTest.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/java/cz/mzk/recordmanager/server/oai/dao/ObalkyKnihTOCDAOTest.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/java/cz/mzk/recordmanager/server/oai/harvest/CosmotronHarvestJobTest.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/java/cz/mzk/recordmanager/server/oai/harvest/DeleteAllHarvestsJobTest.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/java/cz/mzk/recordmanager/server/oai/harvest/OAIHarvestAuthorityJobTest.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/java/cz/mzk/recordmanager/server/oai/harvest/OAIHarvestJobTest.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/java/cz/mzk/recordmanager/server/oai/harvest/RawRecordsParserTest.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/java/cz/mzk/recordmanager/server/scripting/DublinCoreScriptFactoryTest.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/java/cz/mzk/recordmanager/server/scripting/MarcScriptFactoryTest.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/java/cz/mzk/recordmanager/server/scripting/dc/function/IdentifiersDublinCoreRecordFunctionsTest.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/java/cz/mzk/recordmanager/server/scripting/function/BoundingBoxMarcFunctionsTest.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/java/cz/mzk/recordmanager/server/scripting/function/PublishDateMarcFunctionsTest.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/java/cz/mzk/recordmanager/server/scripting/marc/function/mzk/MzkFormatFunctionsTest.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/java/cz/mzk/recordmanager/server/scripting/marc/function/mzk/MzkStatusFunctionsTest.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/java/cz/mzk/recordmanager/server/springbatch/DateIntervalPartitionerTest.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/java/cz/mzk/recordmanager/server/springbatch/JobExecutorTest.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/java/cz/mzk/recordmanager/server/util/ApacheHttpClientTest.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/java/cz/mzk/recordmanager/server/util/ISSNUtilsTest.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/java/cz/mzk/recordmanager/server/util/MarcCleaningUtilsTest.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/java/cz/mzk/recordmanager/server/util/MetadataUtilsTest.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/java/cz/mzk/recordmanager/server/util/RegexpExtractorTest.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/java/cz/mzk/recordmanager/server/util/SolrUtilsTest.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/java/cz/mzk/recordmanager/server/util/UrlUtilsTest.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/resources/antikvariaty/antikvariaty-base.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/resources/antikvariaty/antikvariaty-update.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/resources/auth/Identify.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/resources/auth/ListRecords1.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/resources/automatization/Harvest.groovy" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/resources/database.test.properties" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/resources/dbunit/CaslinFilterRecords.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/resources/dbunit/ConfigTest.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/resources/dbunit/DedupRecordLocator.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/resources/dbunit/DedupRecordMatcherTest.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/resources/dbunit/ExportRecords.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/resources/dbunit/ImportAuthorityRecords.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/resources/dbunit/ImportRecords.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/resources/dbunit/IndexRecordsToSolrJobTest.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/resources/dbunit/OAIHarvestTest.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/resources/dbunit/RegenerateDedupKeysTest.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/resources/dbunit/krameriusFulltextJobTest.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/resources/groovy/BaseDublinCore.groovy" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/resources/groovy/BaseMarc.groovy" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/resources/groovy/ExtendedMarc.groovy" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/resources/import/cosmotron/996.mrc" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/resources/import/cosmotron/record.mrc" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/resources/import/inspiration/inspirations.txt" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/resources/import/iso2709/MZK-records.mrc" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/resources/import/iso2709/MZK01-000000146.mrc" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/resources/import/marcaleph/MZK-records.txt" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/resources/import/marcaleph/MZK01-000004171.txt" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/resources/import/marcline/MZK-records.mrc" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/resources/import/marcline/MZK01-000000116.mrc" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/resources/import/marcxml/KKFB-records.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/resources/import/marcxml/NLK-192047.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/resources/import/oai/ANL01.000000502.ANL-CPK.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/resources/import/oai/ANL01.000000503.ANL-CPK.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/resources/import/osobnostiregionu/OsobnostiRecords.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/resources/import/osobnostiregionu/Record.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/resources/import/patents/201546-B6-305523.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/resources/import/patents/PatentsRecords.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/resources/logback.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/resources/obalkyknih/toc.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/resources/records/dublincore/K4MZK-uuid-c28962c9-a67a-11e1-ac9a-0050569d679d.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/resources/records/dublincore/K4NTK-uuid-d3cf7ce9-1891-4e39-bb35-3b38b6eb0d60.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/resources/records/dublincore/NuslNTK-nusl2-oaipmh.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/resources/records/dublincore/manuscriptorium.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/resources/records/marcxml/KFBZ-kpw0120405.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/resources/records/marcxml/MZK01-000087310.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/resources/records/marcxml/MZK01-000153226.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/resources/records/marcxml/MZK01-001439241.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/resources/records/marcxml/NLK-192047.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/resources/sample/GetRecord.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/resources/sample/GetRecordMZK1.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/resources/sample/GetRecordMZK2.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/resources/sample/Identify.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/resources/sample/IdentifyMLP.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/resources/sample/IdentifyNonstandardGranularity.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/resources/sample/ListIdentifiersMZK.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/resources/sample/ListRecords1.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/resources/sample/ListRecords2.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/resources/sample/ListRecordsEmptySet.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/resources/sample/ListRecordsFrom.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/resources/sample/ListRecordsMLPset.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/resources/sample/ListRecordsNLK.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/resources/sample/ListRecordsNLKdeleted1.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/resources/sample/ListRecordsNLKdeleted2.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/resources/sample/ListRecordsUntil.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/resources/sample/cosmotron/996BeforeRecord.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/resources/sample/cosmotron/Deleted996.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/resources/sample/cosmotron/DeletedRecord.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/resources/sample/cosmotron/New9961.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/resources/sample/cosmotron/New9962.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/resources/sample/cosmotron/NotStored.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/resources/sample/cosmotron/RecordAnd996.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/resources/sample/cosmotron/Updated996.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/resources/sample/kramerius/DownloadItem1.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/resources/sample/kramerius/DownloadItem2.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/resources/sample/kramerius/children.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/resources/sample/kramerius/invalidJson.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/resources/sample/kramerius/ocr1.txt" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/resources/sample/kramerius/ocr2.txt" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/resources/solr/cores/biblio/conf/_rest_managed.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/resources/solr/cores/biblio/conf/protwords.txt" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/resources/solr/cores/biblio/conf/schema.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/resources/solr/cores/biblio/conf/solrconfig.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/resources/solr/cores/biblio/conf/stopwords.txt" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/resources/solr/cores/biblio/conf/synonyms.txt" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/resources/solr/cores/solr.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/test/resources/sql/recordmanager-insert-test.sql" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.webapp.gui/gui/.editorconfig" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.webapp.gui/gui/.gitignore" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.webapp.gui/gui/README.md" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.webapp.gui/gui/angular-cli.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.webapp.gui/gui/e2e/app.e2e-spec.ts" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.webapp.gui/gui/e2e/app.po.ts" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.webapp.gui/gui/e2e/materialize/LICENSE" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.webapp.gui/gui/e2e/materialize/README.md" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.webapp.gui/gui/e2e/materialize/css/materialize.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.webapp.gui/gui/e2e/materialize/css/materialize.min.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.webapp.gui/gui/e2e/materialize/fonts/roboto/Roboto-Bold.eot" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.webapp.gui/gui/e2e/materialize/fonts/roboto/Roboto-Bold.ttf" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.webapp.gui/gui/e2e/materialize/fonts/roboto/Roboto-Bold.woff" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.webapp.gui/gui/e2e/materialize/fonts/roboto/Roboto-Bold.woff2" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.webapp.gui/gui/e2e/materialize/fonts/roboto/Roboto-Light.eot" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.webapp.gui/gui/e2e/materialize/fonts/roboto/Roboto-Light.ttf" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.webapp.gui/gui/e2e/materialize/fonts/roboto/Roboto-Light.woff" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.webapp.gui/gui/e2e/materialize/fonts/roboto/Roboto-Light.woff2" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.webapp.gui/gui/e2e/materialize/fonts/roboto/Roboto-Medium.eot" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.webapp.gui/gui/e2e/materialize/fonts/roboto/Roboto-Medium.ttf" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.webapp.gui/gui/e2e/materialize/fonts/roboto/Roboto-Medium.woff" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.webapp.gui/gui/e2e/materialize/fonts/roboto/Roboto-Medium.woff2" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.webapp.gui/gui/e2e/materialize/fonts/roboto/Roboto-Regular.eot" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.webapp.gui/gui/e2e/materialize/fonts/roboto/Roboto-Regular.ttf" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.webapp.gui/gui/e2e/materialize/fonts/roboto/Roboto-Regular.woff" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.webapp.gui/gui/e2e/materialize/fonts/roboto/Roboto-Regular.woff2" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.webapp.gui/gui/e2e/materialize/fonts/roboto/Roboto-Thin.eot" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.webapp.gui/gui/e2e/materialize/fonts/roboto/Roboto-Thin.ttf" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.webapp.gui/gui/e2e/materialize/fonts/roboto/Roboto-Thin.woff" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.webapp.gui/gui/e2e/materialize/fonts/roboto/Roboto-Thin.woff2" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.webapp.gui/gui/e2e/materialize/js/materialize.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.webapp.gui/gui/e2e/materialize/js/materialize.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.webapp.gui/gui/e2e/tsconfig.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.webapp.gui/gui/karma.conf.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.webapp.gui/gui/package.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.webapp.gui/gui/protractor.conf.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.webapp.gui/gui/src/app/app.component.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.webapp.gui/gui/src/app/app.component.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.webapp.gui/gui/src/app/app.component.spec.ts" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.webapp.gui/gui/src/app/app.component.ts" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.webapp.gui/gui/src/app/app.module.ts" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.webapp.gui/gui/src/app/app.routing.ts" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.webapp.gui/gui/src/app/index.ts" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.webapp.gui/gui/src/app/libraries/libraries.component.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.webapp.gui/gui/src/app/libraries/libraries.component.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.webapp.gui/gui/src/app/libraries/libraries.component.spec.ts" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.webapp.gui/gui/src/app/libraries/libraries.component.ts" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.webapp.gui/gui/src/app/libraries/libraries.module.ts" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.webapp.gui/gui/src/app/libraries/libraries.routing.ts" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.webapp.gui/gui/src/app/libraries/libraries.service.spec.ts" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.webapp.gui/gui/src/app/libraries/libraries.service.ts" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.webapp.gui/gui/src/app/libraries/library/library.component.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.webapp.gui/gui/src/app/libraries/library/library.component.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.webapp.gui/gui/src/app/libraries/library/library.component.spec.ts" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.webapp.gui/gui/src/app/libraries/library/library.component.ts" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.webapp.gui/gui/src/app/libraries/model/contact-person.spec.ts" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.webapp.gui/gui/src/app/libraries/model/contact-person.ts" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.webapp.gui/gui/src/app/libraries/model/library-detail.spec.ts" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.webapp.gui/gui/src/app/libraries/model/library-detail.ts" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.webapp.gui/gui/src/app/libraries/model/library.spec.ts" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.webapp.gui/gui/src/app/libraries/model/library.ts" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.webapp.gui/gui/src/app/libraries/model/oai-harvest-configuration.spec.ts" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.webapp.gui/gui/src/app/libraries/model/oai-harvest-configuration.ts" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.webapp.gui/gui/src/app/rxjs-operators.ts" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.webapp.gui/gui/src/app/shared/index.ts" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.webapp.gui/gui/src/assets/.gitkeep" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.webapp.gui/gui/src/assets/.npmignore" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.webapp.gui/gui/src/environments/environment.prod.ts" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.webapp.gui/gui/src/environments/environment.ts" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.webapp.gui/gui/src/favicon.ico" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.webapp.gui/gui/src/index.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.webapp.gui/gui/src/main.ts" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.webapp.gui/gui/src/materialize/LICENSE" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.webapp.gui/gui/src/materialize/README.md" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.webapp.gui/gui/src/materialize/css/materialize.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.webapp.gui/gui/src/materialize/css/materialize.min.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.webapp.gui/gui/src/materialize/fonts/roboto/Roboto-Bold.eot" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.webapp.gui/gui/src/materialize/fonts/roboto/Roboto-Bold.ttf" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.webapp.gui/gui/src/materialize/fonts/roboto/Roboto-Bold.woff" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.webapp.gui/gui/src/materialize/fonts/roboto/Roboto-Bold.woff2" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.webapp.gui/gui/src/materialize/fonts/roboto/Roboto-Light.eot" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.webapp.gui/gui/src/materialize/fonts/roboto/Roboto-Light.ttf" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.webapp.gui/gui/src/materialize/fonts/roboto/Roboto-Light.woff" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.webapp.gui/gui/src/materialize/fonts/roboto/Roboto-Light.woff2" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.webapp.gui/gui/src/materialize/fonts/roboto/Roboto-Medium.eot" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.webapp.gui/gui/src/materialize/fonts/roboto/Roboto-Medium.ttf" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.webapp.gui/gui/src/materialize/fonts/roboto/Roboto-Medium.woff" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.webapp.gui/gui/src/materialize/fonts/roboto/Roboto-Medium.woff2" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.webapp.gui/gui/src/materialize/fonts/roboto/Roboto-Regular.eot" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.webapp.gui/gui/src/materialize/fonts/roboto/Roboto-Regular.ttf" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.webapp.gui/gui/src/materialize/fonts/roboto/Roboto-Regular.woff" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.webapp.gui/gui/src/materialize/fonts/roboto/Roboto-Regular.woff2" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.webapp.gui/gui/src/materialize/fonts/roboto/Roboto-Thin.eot" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.webapp.gui/gui/src/materialize/fonts/roboto/Roboto-Thin.ttf" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.webapp.gui/gui/src/materialize/fonts/roboto/Roboto-Thin.woff" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.webapp.gui/gui/src/materialize/fonts/roboto/Roboto-Thin.woff2" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.webapp.gui/gui/src/materialize/js/materialize.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.webapp.gui/gui/src/materialize/js/materialize.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.webapp.gui/gui/src/polyfills.ts" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.webapp.gui/gui/src/styles.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.webapp.gui/gui/src/test.ts" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.webapp.gui/gui/src/tsconfig.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.webapp.gui/gui/src/typings.d.ts" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.webapp.gui/gui/tslint.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.webapp/pom.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.webapp/src/main/java/cz/mzk/recordmanager/webapp/CORSFilter.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.webapp/src/main/java/cz/mzk/recordmanager/webapp/WebAppConfig.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.webapp/src/main/java/cz/mzk/recordmanager/webapp/controller/BatchJobController.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.webapp/src/main/java/cz/mzk/recordmanager/webapp/controller/LibraryController.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.webapp/src/main/webapp/WEB-INF/web.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/pom.xml" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cz.mzk.recordmanager.webapp.gui/gui/.gitignore" afterPath="$PROJECT_DIR$/cz.mzk.recordmanager.webapp.gui/gui/.gitignore" />
     </list>
     <ignored path="RecordManager2.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -851,7 +67,7 @@
     <favorites_list name="RecordManager2" />
   </component>
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.46885467">
+    <splitter split-orientation="horizontal" split-proportion="0.67982066">
       <split-first>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
           <file leaf-file-name="BatchService.java" pinned="false" current-in-tab="false">
@@ -884,19 +100,27 @@
           <file leaf-file-name="LibraryService.java" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/cz.mzk.recordmanager.api/src/main/java/cz/mzk/recordmanager/api/service/LibraryService.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="150">
-                  <caret line="14" column="16" selection-start-line="14" selection-start-column="16" selection-end-line="14" selection-end-column="16" />
-                  <folding>
-                    <element signature="imports" expanded="false" />
-                  </folding>
+                <state relative-caret-position="120">
+                  <caret line="12" column="17" selection-start-line="12" selection-start-column="17" selection-end-line="12" selection-end-column="17" />
+                  <folding />
                 </state>
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="LibraryServiceImpl.java" pinned="false" current-in-tab="true">
+          <file leaf-file-name="LibraryDetailDto.java" pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/cz.mzk.recordmanager.api/src/main/java/cz/mzk/recordmanager/api/model/LibraryDetailDto.java">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="60">
+                  <caret line="4" column="48" selection-start-line="4" selection-start-column="48" selection-end-line="4" selection-end-column="48" />
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="LibraryServiceImpl.java" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/service/LibraryServiceImpl.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="30">
+                <state relative-caret-position="480">
                   <caret line="70" column="62" selection-start-line="70" selection-start-column="62" selection-end-line="70" selection-end-column="62" />
                   <folding>
                     <element signature="method#translate#1;class#LibraryServiceImpl#0" expanded="false" />
@@ -968,72 +192,6 @@
       </split-first>
       <split-second>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-          <file leaf-file-name="OAIHarvestConfiguration.java" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/model/OAIHarvestConfiguration.java">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="105">
-                  <caret line="12" column="52" selection-start-line="12" selection-start-column="52" selection-end-line="12" selection-end-column="52" />
-                  <folding />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="ImportConfiguration.java" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/model/ImportConfiguration.java">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="255">
-                  <caret line="20" column="17" selection-start-line="20" selection-start-column="17" selection-end-line="20" selection-end-column="17" />
-                  <folding>
-                    <element signature="imports" expanded="false" />
-                    <element signature="e#1515#1516#0" expanded="false" />
-                    <element signature="e#1536#1537#0" expanded="false" />
-                    <element signature="e#1580#1581#0" expanded="false" />
-                    <element signature="e#1609#1610#0" expanded="false" />
-                    <element signature="e#1647#1648#0" expanded="false" />
-                    <element signature="e#1668#1669#0" expanded="false" />
-                    <element signature="e#1718#1719#0" expanded="false" />
-                    <element signature="e#1747#1748#0" expanded="false" />
-                    <element signature="e#1779#1780#0" expanded="false" />
-                    <element signature="e#1801#1802#0" expanded="false" />
-                    <element signature="e#1846#1847#0" expanded="false" />
-                    <element signature="e#1877#1878#0" expanded="false" />
-                    <element signature="e#1909#1910#0" expanded="false" />
-                    <element signature="e#1933#1934#0" expanded="false" />
-                    <element signature="e#1980#1981#0" expanded="false" />
-                    <element signature="e#2015#2016#0" expanded="false" />
-                    <element signature="e#2055#2056#0" expanded="false" />
-                    <element signature="e#2085#2086#0" expanded="false" />
-                    <element signature="e#2147#2148#0" expanded="false" />
-                    <element signature="e#2194#2195#0" expanded="false" />
-                    <element signature="e#2234#2235#0" expanded="false" />
-                    <element signature="e#2264#2265#0" expanded="false" />
-                    <element signature="e#2326#2327#0" expanded="false" />
-                    <element signature="e#2373#2374#0" expanded="false" />
-                    <element signature="e#2416#2417#0" expanded="false" />
-                    <element signature="e#2449#2450#0" expanded="false" />
-                    <element signature="e#2517#2518#0" expanded="false" />
-                    <element signature="e#2570#2571#0" expanded="false" />
-                    <element signature="e#2601#2602#0" expanded="false" />
-                    <element signature="e#2624#2625#0" expanded="false" />
-                    <element signature="e#2670#2671#0" expanded="false" />
-                    <element signature="e#2703#2704#0" expanded="false" />
-                    <element signature="e#2753#2754#0" expanded="false" />
-                    <element signature="e#2783#2784#0" expanded="false" />
-                    <element signature="e#2854#2855#0" expanded="false" />
-                    <element signature="e#2901#2902#0" expanded="false" />
-                    <element signature="e#2938#2939#0" expanded="false" />
-                    <element signature="e#2965#2966#0" expanded="false" />
-                    <element signature="e#3020#3021#0" expanded="false" />
-                    <element signature="e#3061#3062#0" expanded="false" />
-                    <element signature="e#3102#3103#0" expanded="false" />
-                    <element signature="e#3133#3134#0" expanded="false" />
-                    <element signature="e#3197#3198#0" expanded="false" />
-                    <element signature="e#3246#3247#0" expanded="false" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
           <file leaf-file-name="LibraryController.java" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/cz.mzk.recordmanager.webapp/src/main/java/cz/mzk/recordmanager/webapp/controller/LibraryController.java">
               <provider selected="true" editor-type-id="text-editor">
@@ -1074,11 +232,21 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name=".gitignore" pinned="false" current-in-tab="true">
+          <file leaf-file-name=".gitignore" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/.gitignore">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="30">
-                  <caret line="2" column="8" selection-start-line="2" selection-start-column="8" selection-end-line="2" selection-end-column="8" />
+                <state relative-caret-position="90">
+                  <caret line="6" column="8" selection-start-line="6" selection-start-column="8" selection-end-line="6" selection-end-column="8" />
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name=".gitignore" pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/cz.mzk.recordmanager.cmdline/.gitignore">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="0">
+                  <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
                   <folding />
                 </state>
               </provider>
@@ -1180,7 +348,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/index/SolrInputDocumentFactoryImpl.java" />
         <option value="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/index/DelegatingSolrRecordMapper.java" />
         <option value="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/index/HarvestedRecordRowMapper.java" />
         <option value="$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/dedup/DedupTitleAuthItemProcessor.java" />
@@ -1231,6 +398,7 @@
         <option value="$PROJECT_DIR$/cz.mzk.recordmanager.webapp/src/main/java/cz/mzk/recordmanager/webapp/CORSFilter.java" />
         <option value="$PROJECT_DIR$/cz.mzk.recordmanager.webapp/src/main/java/cz/mzk/recordmanager/webapp/controller/LibraryController.java" />
         <option value="$PROJECT_DIR$/.gitignore" />
+        <option value="$PROJECT_DIR$/cz.mzk.recordmanager.webapp.gui/gui/.gitignore" />
       </list>
     </option>
   </component>
@@ -1318,6 +486,24 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
+              <option name="myItemId" value="cz.mzk.recordmanager.webapp.gui" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="gui" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="RecordManager2" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="RecordManager2" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
               <option name="myItemId" value="cz.mzk.recordmanager.webapp" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
@@ -1374,6 +560,84 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="RecordManager2" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="RecordManager2" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="cz.mzk.recordmanager.api" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="RecordManager2" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="RecordManager2" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="cz.mzk.recordmanager.api" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="api" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="service" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="RecordManager2" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="RecordManager2" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="cz.mzk.recordmanager.api" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="api" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
         </subPane>
       </pane>
       <pane id="PackagesPane" />
@@ -1392,6 +656,7 @@
     <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
     <property name="settings.editor.splitter.proportion" value="0.2" />
     <property name="js-jscs-nodeInterpreter" value="/usr/bin/node" />
+    <property name="editor.config.accepted" value="true" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
@@ -1877,7 +1142,7 @@
       <workItem from="1476076757570" duration="26876000" />
       <workItem from="1476163071350" duration="6848000" />
       <workItem from="1476250534683" duration="11322000" />
-      <workItem from="1476336647386" duration="2293000" />
+      <workItem from="1476336647386" duration="3049000" />
     </task>
     <servers />
   </component>
@@ -1905,7 +1170,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="235495000" />
+    <option name="totallyTimeSpent" value="236251000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="51" y="1104" width="1869" height="1056" extended-state="6" />
@@ -1924,7 +1189,7 @@
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.510451" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1349424" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.20735052" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Web" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18102029" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -2044,14 +1309,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/resources/sql/recordmanager-liquibase.sql">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="324">
-          <caret line="91" column="41" selection-start-line="91" selection-start-column="41" selection-end-line="91" selection-end-column="41" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="dbDummy://dbtable:/c8590481/37d83848-32ca-482c-98bf-e16a6f4f66f9/test_db.public.library" />
     <entry file="dbDummy://dbtable:/c8590481/37d83848-32ca-482c-98bf-e16a6f4f66f9/test_db.public.oai_harvest_conf" />
     <entry file="dbDummy://dbtable:/c8590481/37d83848-32ca-482c-98bf-e16a6f4f66f9/test_db.public.import_conf" />
     <entry file="dbDummy://dbtable:/c8590481/37d83848-32ca-482c-98bf-e16a6f4f66f9/test_db.public.harvested_record_simple_keys" />
@@ -2134,13 +1391,6 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/cz.mzk.recordmanager.api/src/main/java/cz/mzk/recordmanager/api/model/ImportConfigurationDto.java" />
-    <entry file="file://$PROJECT_DIR$/cz.mzk.recordmanager.api/src/main/java/cz/mzk/recordmanager/api/model/LibraryDetailDto.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="4" column="44" selection-start-line="4" selection-start-column="44" selection-end-line="4" selection-end-column="44" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/cz.mzk.recordmanager.api/src/main/java/cz/mzk/recordmanager/api/model/OaiHarvestConfigurationDto.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="360">
@@ -2252,16 +1502,6 @@
             <element signature="e#245#246#0" expanded="false" />
             <element signature="e#276#277#0" expanded="false" />
             <element signature="e#295#296#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cz.mzk.recordmanager.api/src/main/java/cz/mzk/recordmanager/api/service/LibraryService.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="14" column="16" selection-start-line="14" selection-start-column="16" selection-end-line="14" selection-end-column="16" />
-          <folding>
-            <element signature="imports" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -2504,19 +1744,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/service/LibraryServiceImpl.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="30">
-          <caret line="70" column="62" selection-start-line="70" selection-start-column="62" selection-end-line="70" selection-end-column="62" />
-          <folding>
-            <element signature="method#translate#1;class#LibraryServiceImpl#0" expanded="false" />
-            <element signature="method#translate#2;class#LibraryServiceImpl#0" expanded="false" />
-            <element signature="method#translate#3;class#LibraryServiceImpl#0" expanded="false" />
-            <element signature="method#translate#4;class#LibraryServiceImpl#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/cz.mzk.recordmanager.webapp/src/main/java/cz/mzk/recordmanager/webapp/controller/LibraryController.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="630">
@@ -2529,10 +1756,55 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/cz.mzk.recordmanager.server/src/main/java/cz/mzk/recordmanager/server/service/LibraryServiceImpl.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="480">
+          <caret line="70" column="62" selection-start-line="70" selection-start-column="62" selection-end-line="70" selection-end-column="62" />
+          <folding>
+            <element signature="method#translate#1;class#LibraryServiceImpl#0" expanded="false" />
+            <element signature="method#translate#2;class#LibraryServiceImpl#0" expanded="false" />
+            <element signature="method#translate#3;class#LibraryServiceImpl#0" expanded="false" />
+            <element signature="method#translate#4;class#LibraryServiceImpl#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cz.mzk.recordmanager.api/src/main/java/cz/mzk/recordmanager/api/service/LibraryService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="120">
+          <caret line="12" column="17" selection-start-line="12" selection-start-column="17" selection-end-line="12" selection-end-column="17" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cz.mzk.recordmanager.api/src/main/java/cz/mzk/recordmanager/api/model/LibraryDetailDto.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="4" column="48" selection-start-line="4" selection-start-column="48" selection-end-line="4" selection-end-column="48" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/.gitignore">
       <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="6" column="8" selection-start-line="6" selection-start-column="8" selection-end-line="6" selection-end-column="8" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cz.mzk.recordmanager.webapp.gui/gui/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="30">
-          <caret line="2" column="8" selection-start-line="2" selection-start-column="8" selection-end-line="2" selection-end-column="8" />
+          <caret line="2" column="5" selection-start-line="2" selection-start-column="5" selection-end-line="2" selection-end-column="5" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cz.mzk.recordmanager.cmdline/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
       </provider>

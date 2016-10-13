@@ -1,6 +1,7 @@
 .project
 .settings
-*/target
-*/.classpath
-*/.idea/
-*/node_modules/
+**/target
+**/.classpath
+**/.idea/
+**/node_modules/
+**/*.iml
