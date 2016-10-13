@@ -1,38 +1,19 @@
 <!doctype html>
 <html>
-<head>
-  <meta charset="utf-8">
-  <title>Gui</title>
-  <base href="/">
-  <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-
-  <link type="text/css" rel="stylesheet" href="materialize/css/materialize.min.css"  media="screen,projection"/>
-
-  <link rel="icon" type="image/x-icon" href="favicon.ico">
-
-  <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-  <script type="text/javascript" src="materialize/js/materialize.min.js"></script>
-  <script>
-    $(document).ready(function(){
-      // the "href" attribute of .modal-trigger must specify the modal ID that wants to be triggered
-      $('.modal-trigger').leanModal();
-
-      $( '#createNewLibrary' ).click(function(){
-        $('#modal1').closeModal();
-        var lastLibrary = $( '#libraries' ).find( '.collection' ).last();
-        smoothScrollToElement($( lastLibrary ));
-      });
-
-    });
-  </script>
-
-</head>
-<body>
-  <app-root>Loading...</app-root>
-  <script type="text/javascript"
-          src="assets/smoothScroll.js"></script>
-  <script type="text/javascript"
-          src="assets/jquery-ui.min.js"></script>
-</body>
-
+  <head>
+	  <meta charset="utf-8">
+	  <title>Record Manger</title>
+	  <base href="/">
+	  <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	  <link type="text/css" rel="stylesheet" href="materialize/css/materialize.min.css"  media="screen,projection"/>
+	  <link rel="icon" type="image/x-icon" href="favicon.ico">
+	</head>
+	<body>
+	  <app-root>Loading...</app-root>
+	  <script type="text/javascript" src="assets/smoothScroll.js"></script>
+	  <script type="text/javascript" src="assets/jquery-ui.min.js"></script>
+	  <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+	  <script type="text/javascript" src="materialize/js/materialize.min.js"></script>
+	  <script type="text/javascript" src="assets/main.js"></script>
+	</body>
 </html>
