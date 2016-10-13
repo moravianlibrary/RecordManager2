@@ -5,6 +5,7 @@ import java.util.List;
 
 import cz.mzk.recordmanager.api.model.ContactPersonDto;
 import cz.mzk.recordmanager.server.model.ContactPerson;
+import cz.mzk.recordmanager.server.model.ImportConfiguration;
 import cz.mzk.recordmanager.server.model.OAIHarvestConfiguration;
 import cz.mzk.recordmanager.server.oai.dao.ContactPersonDAO;
 import cz.mzk.recordmanager.server.oai.dao.OAIHarvestConfigurationDAO;
@@ -66,6 +67,7 @@ public class LibraryServiceImpl implements LibraryService {
 		return detail;
 	}
 
+
 	@Override
 	@Transactional
 	public void updateOrCreateLibrary(LibraryDto libraryDto) {
@@ -94,74 +96,89 @@ public class LibraryServiceImpl implements LibraryService {
 
 	@Override
 	@Transactional
-	public void removeLibrary(Long libraryId) { throw new UnsupportedOperationException();
-	}
-
-	@Override
-	@Transactional
 	public void updateOrCreateConfig(OaiHarvestConfigurationDto config, Long libraryId) {
 		Library lib = libraryDao.get(libraryId);
-		if (lib == null)
+
+		if (
+				lib == null ||
+						config.getContact() == null ||
+						config.getContact().getId() == null ||
+						personDAO.get(config.getContact().getId()) == null
+				)
 		{
 			return;
 		}
-
-		OAIHarvestConfiguration configuration;
-		if (config.getId() == null)
-			configuration = new OAIHarvestConfiguration();
-		else
-			configuration = harvestConfigurationDAO.get(config.getId());
-
-		ContactPerson person;
-
-		if (configuration.getContact() == null)
-			person = null;
-		else
-			person = personDAO.get(config.getContact().getId());
-
-		if (person == null)
-			return;
-
-
-		fillPerson(person, config.getContact());
-
-
-		if (configuration == null)
+		OAIHarvestConfiguration oaiHarvestConfiguration;
+		if (config.getId() == null)	//Detect creating new configuration
 		{
-			configuration = new OAIHarvestConfiguration();
+			//TODO: How to add contact to configuration??
+			oaiHarvestConfiguration = new OAIHarvestConfiguration();
+		}else
+		{
+			oaiHarvestConfiguration = harvestConfigurationDAO.get(config.getId());
 		}
-		fillOAIHarvestConfiguration(configuration, config);
 
-		configuration.setContact(person);
-		configuration.setLibrary(lib);
-		harvestConfigurationDAO.persist(configuration);
+		fillOAIHarvestConfiguration(oaiHarvestConfiguration, config);
 
+		ContactPerson contact = personDAO.get(config.getContact().getId());
+
+		fillPerson(contact, config.getContact());
+
+		oaiHarvestConfiguration.setContact(contact);
+
+		harvestConfigurationDAO.saveOrUpdate(oaiHarvestConfiguration);
 	}
 
-	@Override
-	@Transactional
-	public void removeOaiHarvestConfiguration(Long configId) {
-		OAIHarvestConfiguration config = harvestConfigurationDAO.get(configId);
-		if (config != null)
-			harvestConfigurationDAO.delete(config);
-	}
+//
+//	@Override
+//	@Transactional
+//	public void removeLibrary(Long libraryId) { throw new UnsupportedOperationException();
+//	}
+//
 
-	private OAIHarvestConfiguration fillOAIHarvestConfiguration(OAIHarvestConfiguration target, OaiHarvestConfigurationDto src)
+//
+//	@Override
+//	@Transactional
+//	public void removeOaiHarvestConfiguration(Long configId) {
+//		OAIHarvestConfiguration config = harvestConfigurationDAO.get(configId);
+//		if (config != null)
+//			harvestConfigurationDAO.delete(config);
+//	}
+
+	private void fillOAIHarvestConfiguration(OAIHarvestConfiguration harvestConfiguration, OaiHarvestConfigurationDto config)
 	{
-		target.setUrl(src.getUrl());
-		target.setMetadataPrefix(src.getMetadataPrefix());
-		target.setSet(src.getSet());
 
-		return target;
+		harvestConfiguration.setIdPrefix(config.getIdPrefix());
+
+		harvestConfiguration.setBaseWeight(config.getBaseWeight());
+
+		harvestConfiguration.setClusterIdEnabled(config.isClusterIdEnabled());
+
+		harvestConfiguration.setFilteringEnabled(config.isFilteringEnabled());
+
+		harvestConfiguration.setInterceptionEnabled(config.isInterceptionEnabled());
+
+		harvestConfiguration.setLibrary(config.isLibrary());
+
+		harvestConfiguration.setUrl(config.getUrl());
+
+		harvestConfiguration.setRegex(config.getExtractIdRegex());
+
+
+		harvestConfiguration.setHarvestJobName(config.getHarvestJobName());
+
+		harvestConfiguration.setSet(config.getSet());
+
+		harvestConfiguration.setMetadataPrefix(config.getMetadataPrefix());
 	}
 
 
-	private ContactPerson fillPerson(ContactPerson target, ContactPersonDto src)
+	private void fillPerson(ContactPerson target, ContactPersonDto src)
 	{
 		target.setName(src.getName());
 		target.setEmail(src.getEmail());
 		target.setPhone(src.getPhone());
-		return target;
+
 	}
 	private Library fillLibrary(Library target, LibraryDto src)
 	{

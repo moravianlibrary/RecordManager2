@@ -33,10 +33,11 @@ public class LibraryController {
 
 	@RequestMapping(method = RequestMethod.PUT)
 	@ResponseBody
-	public void createLibrary(@RequestBody LibraryDto library)
+	public void createLibrary(@RequestBody LibraryDto libraryDto)
 	{
-		libraryService.updateOrCreateLibrary(library);
+		libraryService.updateOrCreateLibrary(libraryDto);
 	}
+
 
 	@RequestMapping(method = RequestMethod.POST, value = "/{libraryId}")
 	@ResponseBody
