@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project version="4">
-  <component name="JavaScriptLibraryMappings">
-    <file url="file://$PROJECT_DIR$/cz.mzk.recordmanager.webapp.gui/gui" libraries="{RecordManager2/cz.mzk.recordmanager.webapp.gui/gui/node_modules}" />
-  </component>
-</project>
