@@ -25,35 +25,11 @@
           <td>{{library.city}}</td>
           <td><a [href]="'http://' + library.url" target="_blank">{{library?.url}}</a></td>
           <td><a [href]="'http://' + library.catalogUrl" target="_blank">{{library?.catalogUrl}}</a></td>
+          <td><a [routerLink]="['/library', library.id]"><i class="material-icons">send</i></a></td>
         </tr>
       </tbody>
     </table>
 
-
-
-    <!--<div id="libraries">-->
-      <!--<ul class="collection" *ngFor="let library of libraries">-->
-        <!--<div class="row">-->
-          <!--<div class="col s12 m6">-->
-            <!--<div class="card blue-grey darken-1">-->
-              <!--<div class="card-content white-text">-->
-                <!--<span class="card-title">{{library?.name}}</span>-->
-                <!--<br>-->
-                <!--{{library?.id}}-->
-                <!--<br>-->
-                <!--{{library?.city}}-->
-              <!--</div>-->
-              <!--<div class="card-action">-->
-                <!--<a [href]="'http://' + library.url" target="_blank">{{library?.url}}</a>-->
-                <!--<a [href]="'http://' + library.catalogUrl" target="_blank">{{library?.catalogUrl}}</a>-->
-                <!--<a [routerLink]="['/library', library.id]">Details</a>-->
-              <!--</div>-->
-            <!--</div>-->
-          <!--</div>-->
-        <!--</div>-->
-      <!--</ul>-->
-    <!--</div>-->
-    <!---->
   </div>
 
 
