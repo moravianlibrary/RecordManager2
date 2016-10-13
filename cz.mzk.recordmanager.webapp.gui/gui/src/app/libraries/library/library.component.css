@@ -12,3 +12,22 @@ div, ul{
 div.progress{
   align-content: center;
 }
+
+
+.borderless {
+  border: none;
+}
+
+.info {
+  font-size: 120%;
+}
+
+
+.highlighted {
+  font-weight: bold;
+  color: teal;
+}
+
+.contact {
+  font-size: 80%;
+}

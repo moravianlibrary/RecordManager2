@@ -4,11 +4,13 @@ import {librariesRouting} from "./libraries.routing";
 import {LibrariesComponent} from "./libraries.component";
 import {LibrariesService} from "./libraries.service";
 import {LibraryComponent} from "./library/library.component";
+import {FormsModule} from "@angular/forms";
 
 @NgModule({
   imports: [
     CommonModule,
-    librariesRouting
+    librariesRouting,
+    FormsModule
   ],
   providers: [LibrariesService],
 

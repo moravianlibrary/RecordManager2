@@ -1,9 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, ElementRef} from '@angular/core';
 import {LibrariesService} from "./libraries.service";
 import {Library} from "./model/library";
-import {Http, Response} from "@angular/http";
 import {Router} from "@angular/router";
-import {$} from "protractor/globals";
 
 @Component({
   selector: 'app-libraries',
@@ -14,11 +12,20 @@ export class LibrariesComponent implements OnInit {
 
   libraries: Library[];
   loading: boolean;
+
+  public newLibrary: Library = new Library();
+
   constructor(private librariesService: LibrariesService, private router: Router)
   {}
 
+  printNewLibrary()
+  {
+    console.log(this.newLibrary.name);
+  }
+
   getLibraries()
   {
+    this.loading = true;
     this.librariesService.getLibraries().subscribe(
       libraries => {
         this.libraries = libraries;
@@ -26,7 +33,13 @@ export class LibrariesComponent implements OnInit {
       }
     );
   }
+  createLibrary()
+  {
+    console.log(this.newLibrary.name);
+    this.librariesService.createLibrary(this.newLibrary);
+    this.getLibraries();
 
+  }
 
   ngOnInit() {
     this.loading = true;

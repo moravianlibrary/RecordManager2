@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="cz.mzk.recordmanager.webapp:war">
+    <output-path>$PROJECT_DIR$/cz.mzk.recordmanager.webapp/target</output-path>
+    <root id="archive" name="cz.mzk.recordmanager.webapp-1.0.0-SNAPSHOT.war">
+      <element id="artifact" artifact-name="cz.mzk.recordmanager.webapp:war exploded" />
+    </root>
+  </artifact>
+</component>

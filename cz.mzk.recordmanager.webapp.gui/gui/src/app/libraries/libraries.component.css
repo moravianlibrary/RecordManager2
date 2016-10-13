@@ -1,13 +1,14 @@
 /* You can add global styles to this file, and also import other style files */
-div, ul{
-  padding-left: 110px;
+header, main, footer {
+  padding-left: 300px;
 }
 
 @media only screen and (max-width : 992px) {
-  div, ul{
+  header, main, footer {
     padding-left: 0;
   }
 }
+
 
 div.progress{
   align-content: center;
@@ -15,6 +16,11 @@ div.progress{
 
 #addLibraryBtn {
   position: fixed;
+  bottom: 2%;
+  right: 2%;
+}
+
+#submit{
   bottom: 2%;
   right: 2%;
 }

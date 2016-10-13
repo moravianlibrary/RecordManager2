@@ -15,6 +15,11 @@ const librariesRoutes = [
   {
     path: "library/:id",
     component: LibraryComponent
+  },
+  {
+    path: '',
+    redirectTo: 'library',
+    pathMatch: 'full'
   }
 
 ];

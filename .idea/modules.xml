@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/cz.mzk.recordmanager.api/cz.mzk.recordmanager.api.iml" filepath="$PROJECT_DIR$/cz.mzk.recordmanager.api/cz.mzk.recordmanager.api.iml" />
+      <module fileurl="file://$PROJECT_DIR$/cz.mzk.recordmanager.cmdline/cz.mzk.recordmanager.cmdline.iml" filepath="$PROJECT_DIR$/cz.mzk.recordmanager.cmdline/cz.mzk.recordmanager.cmdline.iml" />
+      <module fileurl="file://$PROJECT_DIR$/cz.mzk.recordmanager.server/cz.mzk.recordmanager.server.iml" filepath="$PROJECT_DIR$/cz.mzk.recordmanager.server/cz.mzk.recordmanager.server.iml" />
+      <module fileurl="file://$PROJECT_DIR$/cz.mzk.recordmanager.webapp/cz.mzk.recordmanager.webapp.iml" filepath="$PROJECT_DIR$/cz.mzk.recordmanager.webapp/cz.mzk.recordmanager.webapp.iml" />
+      <module fileurl="file://$PROJECT_DIR$/recordmanager.iml" filepath="$PROJECT_DIR$/recordmanager.iml" />
+    </modules>
+  </component>
+</project>
