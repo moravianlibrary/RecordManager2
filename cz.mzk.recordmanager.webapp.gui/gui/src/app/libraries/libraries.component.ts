@@ -4,46 +4,42 @@ import {Library} from "./model/library";
 import {Router} from "@angular/router";
 
 @Component({
-  selector: 'app-libraries',
-  templateUrl: './libraries.component.html',
-  styleUrls: ['./libraries.component.css']
+	selector: 'app-libraries',
+	templateUrl: './libraries.component.html',
+	styleUrls: ['./libraries.component.css']
 })
 export class LibrariesComponent implements OnInit {
 
-  libraries: Library[];
-  loading: boolean;
+	libraries: Library[];
+	loading: boolean;
 
-  public newLibrary: Library = new Library();
+	public newLibrary: Library = new Library();
 
-  constructor(private librariesService: LibrariesService, private router: Router)
-  {}
+	constructor(private librariesService: LibrariesService, private router: Router)
+	{}
 
-  printNewLibrary()
-  {
-    console.log(this.newLibrary.name);
-  }
 
-  getLibraries()
-  {
-    this.loading = true;
-    this.librariesService.getLibraries().subscribe(
-      libraries => {
-        this.libraries = libraries;
-        this.loading = false;
-      }
-    );
-  }
-  createLibrary()
-  {
-    console.log(this.newLibrary.name);
-    this.librariesService.createLibrary(this.newLibrary);
-    this.getLibraries();
+	getLibraries()
+	{
+		this.loading = true;
+		this.librariesService.getLibraries().subscribe(
+			libraries => {
+				this.libraries = libraries;
+				this.loading = false;
+			}
+		);
+	}
+	createLibrary()
+	{
+		console.log(this.newLibrary.name);
+		this.librariesService.createLibrary(this.newLibrary);
+		this.getLibraries();
 
-  }
+	}
 
-  ngOnInit() {
-    this.loading = true;
-    this.getLibraries();
-  }
+	ngOnInit() {
+		this.loading = true;
+		this.getLibraries();
+	}
 
 }

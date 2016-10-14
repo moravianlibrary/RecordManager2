@@ -1,103 +1,148 @@
-<h1>{{libraryDetail?.oaiHarvestConfigurations[0].contactPerson.name}}</h1>
-
-<h4 class="center-align">Knihovna - {{libraryDetail?.name}}</h4>
+<h4 class="center-align">Knihovna - {{library?.name}}</h4>
 <h5 class="center-align">{{libraryDetail?.id}}</h5>
 
 <div class="row">
-    <div class="col s12" id='main'>
+		<div class="col s12" id='main'>
 
-	  <div class="row" id='library'>
+		<div class="row" id='library'>
 		<form class="col s12">
-		  <div class="row">
-			<div class="col s5">
-		      <h2 class="header">Library</h2>
-		    </div>
+				<div class="row">
+				<div class="col s5">
+						<h2 class="header">Library</h2>
+					</div>
+
+				</div>
+
+				<div class="row">
+					<div class="input-field col s12">
+						<input id="disabled" type="text" class="validate" value="{{libraryd?.id}}" disabled>
+					</div>
+				</div>
+				<div class="row">
+					<div class="input-field col s12">
+						<input id="name" type="text" class="validate" value="{{libraryDetail?.name }}" [(ngModel)]="library.name" name="name" placeholder="Name">
+					</div>
+				</div>
+				<div class="row">
+					<div class="input-field col s12">
+						<input id="url" type="text" class="validate" value="{{library?.url}}" [(ngModel)]="library.url" name="URL" placeholder="URL">
+					</div>
+				</div>
+				<div class="row">
+					<div class="input-field col s12">
+						<input id="catalogUrl" type="text" class="validate" value="{{library?.catalogUrl}}" [(ngModel)]="library.catalogUrl" name="catalogURL" placeholder="catalogURL" >
+					</div>
+				</div>
+				<div class="row">
+					<div class="input-field col s12">
+						<input id="city" type="text" class="validate" value="{{library?.city}}" [(ngModel)]="library.city" name="city" placeholder="City" >
+					</div>
+				</div>
+
+
 			<div class="input-field col s6 right">
-		      <button class='waves-effect waves-light btn right' type="submit">
-				Save<i class="material-icons right">send</i>
-			  </button>
-		    </div>
-		  </div>
-
-
-		  <div class="row">
-		    <div class="input-field col s12">
-		      <input id="disabled" type="text" class="validate" value="101" disabled>
-		      <label for="disabled">ID</label>
-		    </div>
-		  </div>
-		  <div class="row">
-		    <div class="input-field col s12">
-		      <input id="name" type="text" class="validate" value="NLK">
-		      <label for="namee">Name</label>
-		    </div>
-		  </div>
-		  <div class="row">
-		    <div class="input-field col s12">
-		      <input id="url" type="text" class="validate" value="medivk.cz">
-		      <label for="url">URL</label>
-		    </div>
-		  </div>
-		  <div class="row">
-		    <div class="input-field col s12">
-		      <input id="catalogUrl" type="text" class="validate" value="medivk.cz">
-		      <label for="catalogUrl">catalogUrl</label>
-		    </div>
-		  </div>
-		  <div class="row">
-		    <div class="input-field col s12">
-		      <input id="city" type="text" class="validate" value="Praha">
-		      <label for="city">city</label>
-		    </div>
-		  </div>
-
-		  <div class="row">
-		    <div class="col s12">
-			  <h2 class="header">OAI harvest configurations</h2>
-			  <ul class="collapsible popout" data-collapsible="accordion">
-				<li>
-				  <div class="collapsible-header"><i class="material-icons">mode_edit</i>Harvester 3845630</div>
-				  <div class="collapsible-body">
-					<div class="row oai-harvest-configuration">
-						<div class="input-field col s12">
-						  <input id="id" type="text" class="validate" value="3845630" disabled>
-						  <label for="id">id</label>
-						</div>
-					</div>
-					<div class="row oai-harvest-configuration">
-						<div class="input-field col s12">
-						  <input id="url" type="text" class="validate" value="http://WWW.WEARD_TEST.COM/OAI">
-						  <label for="url">url</label>
-						</div>
-					</div>
-					 <div class="row oai-harvest-configuration">
-						<div class="input-field col s12">
-						  <input id="set" type="text" class="validate" value="MZK03-CPK">
-						  <label for="set">set</label>
-						</div>
-					</div>
-					<div class="row oai-harvest-configuration">
-						<div class="input-field col s12">
-						  <input id="metadataPrefix" type="text" class="validate" value="marc21">
-						  <label for="metadataPrefix">metadataPrefix</label>
-						</div>
-					</div>
-	  			  </div>
-				</li>
-				<li>
-				  <div class="collapsible-header"><i class="material-icons">mode_edit</i>Harvester 3845631</div>
-				  <div class="collapsible-body"><p>Lorem ipsum dolor sit amet.</p></div>
-				</li>
-				<li>
-				  <div class="collapsible-header"><i class="material-icons">mode_edit</i>Harvester 301</div>
-				  <div class="collapsible-body"><p>Lorem ipsum dolor sit amet.</p></div>
-				</li>
-			  </ul>
+				<button class='waves-effect waves-light btn right' type="submit" (click)="updateLibrary()">
+					Save<i class="material-icons right">send</i>
+				</button>
 			</div>
-		  </div>
+		</form>
+
+			<form>
+				<div class="row">
+					<div class="col s12">
+					<h2 class="header">OAI harvest configurations</h2>
+					<ul class="collapsible popout" data-collapsible="accordion">
+
+
+					<li	*ngFor="let config of libraryDetail?.oaiHarvestConfigurations" (click)="selectConfiguration(config.id)">
+						<div class="collapsible-header"><i class="material-icons">mode_edit</i>Harvester {{config.id}}</div>
+						<div class="collapsible-body">
+
+						<div class="row oai-harvest-configuration">
+							<div class="input-field col s12">
+								<input id="id" type="text" class="validate" value="{{config.id}}" disabled>
+							</div>
+						</div>
+
+						<div class="row oai-harvest-configuration">
+							<div class="input-field col s12">
+								<input id="url2" type="text" class="validate" value="{{config.url}}" [(ngModel)]="selected.url"	name="selectedConfigUrl" placeholder="url">
+							</div>
+						</div>
+
+						 <div class="row oai-harvest-configuration">
+							<div class="input-field col s12">
+								<input id="set" type="text" class="validate" value="{{config.set}}" [(ngModel)]="selected.set"	name="selectedConfigSet" placeholder="set">
+							</div>
+						</div>
+
+						<div class="row oai-harvest-configuration">
+							<div class="input-field col s12">
+								<input id="metadataPrefix" type="text" class="validate" value="{{config.metadataPrefix}}" [(ngModel)]="selected.metadataPrefix"	name="selectedConfigMetadataPrefix" placeholder="metadataPrefix">
+							</div>
+						</div>
+
+							<div class="row oai-harvest-configuration">
+								<div class="input-field col s12">
+									<input id="idPrefix" type="text" class="validate" value="{{config.idPrefix}}"	[(ngModel)]="selected.idPrefix"	name="selectedConfigIdPrefix"placeholder="idPrefix">
+								</div>
+							</div>
+
+							<div class="row oai-harvest-configuration">
+								<div class="input-field col s12">
+									<input id="clusterIdEnabled" type="text" class="validate" value="{{config.baseWeight}}" [(ngModel)]="selected.baseWeight"	name="selectedConfigBaseWeight" placeholder="clusterIdEnabled">
+								</div>
+							</div>
+
+							<div class="row oai-harvest-configuration">
+								<div class="input-field col s12">
+									<input id="filteringEnabled" type="text" class="validate" value="{{config.filteringEnabled}}" [(ngModel)]="selected.filteringEnabled"	name="selectedConfigFilteringEnabled" placeholder="filteringEnabled">
+								</div>
+							</div>
+
+							<div class="row oai-harvest-configuration">
+								<div class="input-field col s12">
+									<input id="interceptionEnabled" type="text" class="validate" value="{{config.interceptionEnabled}}" [(ngModel)]="selected.interceptionEnabled"	name="selectedConfigInterceptionEnabled" placeholder="interceptionEnabled">
+								</div>
+							</div>
+
+							<div class="row oai-harvest-configuration">
+								<div class="input-field col s12">
+									<input id="extractIdRegex" type="text" class="validate" value="{{config.extractIdRegex}}" [(ngModel)]="selected.extractIdRegex"	name="selectedConfigExtractIdRegex" placeholder="extractIdRegex">
+								</div>
+							</div>
+
+							<div class="row oai-harvest-configuration">
+								<div class="input-field col s12">
+									<input id="harvestJobName" type="text" class="validate" value="{{config.harvestJobName}}" [(ngModel)]="selected.harvestJobName"	name="selectedConfigHarvestJobName" placeholder="harvestJobName">
+								</div>
+							</div>
+
+							<div class="row oai-harvest-configuration">
+								<div class="input-field col s12">
+									<input id="islibrary" type="text" class="validate" value="{{config.library}}" [(ngModel)]="selected.library"	name="selectedConfigLibrary" placeholder="Is library?">
+								</div>
+							</div>
+
+							<!--TODO: display contact-->
+
+							<div class="input-field col s6 right">
+								<button class='waves-effect waves-light btn right' type="submit" (click)="updateConfiguration(library.id)">
+									Save<i class="material-icons right">send</i>
+								</button>
+							</div>
+
+						</div>
+					</li>
+
+					</ul>
+				</div>
+				</div>
 
 		</form>
-	  </div>
 
-    </div>
-  </div>
+
+		</div>
+
+		</div>
+	</div>

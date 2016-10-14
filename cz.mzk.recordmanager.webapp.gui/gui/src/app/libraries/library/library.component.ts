@@ -6,33 +6,68 @@ import { Component, OnInit } from '@angular/core';
 import {LibraryDetail} from "../model/library-detail";
 import {LibrariesService} from "../libraries.service";
 import {Router, ActivatedRoute, Params} from "@angular/router";
+import {Library} from "../model/library";
+import {ContactPerson} from "../model/contact-person";
+import {OaiHarvestConfiguration} from "../model/oai-harvest-configuration";
 
 
 @Component({
-  selector: 'app-library',
-  templateUrl: './library.component.html',
-  styleUrls: ['./library.component.css']
+	selector: 'app-library',
+	templateUrl: './library.component.html',
+	styleUrls: ['./library.component.css']
 })
 export class LibraryComponent implements OnInit{
 
-  libraryDetail: LibraryDetail;
+	libraryDetail: LibraryDetail;
+	library: Library = new Library;
+	selected: OaiHarvestConfiguration = new OaiHarvestConfiguration;
 
-  constructor(private librariesService: LibrariesService, private route: ActivatedRoute,){}
+	constructor(private librariesService: LibrariesService, private route: ActivatedRoute,){
+		console.log("constructor");
+	}
 
-  getLibraryDetails(libraryId: number)
-  {
-    this.librariesService.getLibraryDetails(libraryId)
-      .subscribe(libraryDetail => {
-        this.libraryDetail = libraryDetail;
-      });
-  }
+	getLibraryDetails(libraryId: number)
+	{
+		this.librariesService.getLibraryDetails(libraryId)
+			.subscribe(libraryDetail => {
+				this.libraryDetail = libraryDetail;
 
-  ngOnInit(): void {
-    this.route.params.forEach((params: Params) => {
-      let id = +params['id'];
-      this.getLibraryDetails(id);
-    });
+				this.library = new Library({
+					id: this.libraryDetail.id,
+					name: this.libraryDetail.name,
+					url: this.libraryDetail.url,
+					catalogUrl: this.libraryDetail.catalogUrl,
+					city: this.libraryDetail.city
+				});
 
-  }
+			});
+
+	}
+
+	updateLibrary(): void
+	{
+		this.librariesService.updateLibrary(this.library);
+		this.getLibraryDetails(this.library.id);
+	}
+
+
+	ngOnInit(): void
+	{
+		this.route.params.forEach((params: Params) => {
+			let id = +params['id'];
+			this.getLibraryDetails(id);
+		});
+	}
+
+	selectConfiguration(id: number)
+	{
+		this.selected = this.libraryDetail.oaiHarvestConfigurations.filter(config => config.id == id)[0];
+	}
+
+	updateConfiguration(id: number)
+	{
+		this.librariesService.updateConfiguration(this.selected, id);
+		this.getLibraryDetails(id);
+	}
 
 }

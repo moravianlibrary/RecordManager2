@@ -49,7 +49,14 @@ public class LibraryServiceImpl implements LibraryService {
 
 		if (configs.size() <= 0)
 		{
-			return null;
+			Library lib = libraryDao.get(libraryId);
+			if (lib == null)
+				return null;
+
+			LibraryDetailDto details = translate(lib, new ArrayList<>());
+
+
+			return details;
 		}
 
 		List<OaiHarvestConfigurationDto> harvestConfigurationDtos = new ArrayList<>();
