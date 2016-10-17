@@ -17,7 +17,10 @@ public class AvailabilityFacetEnricher implements DedupRecordEnricher {
 
 	private final Pattern GLOBAL_AVAILABILITY_INSTITUTION_PATTERN = Pattern.compile("^sfx.*");
 
-	private final List<String> ONLINE_STATUSES = SolrUtils.createHierarchicFacetValues("online", Constants.DOCUMENT_AVAILABILITY_ONLINE);
+	private static final String ONLINE = "online";
+	
+	private final List<String> ONLINE_STATUSES = SolrUtils.createHierarchicFacetValues(ONLINE, Constants.DOCUMENT_AVAILABILITY_ONLINE);
+	private final List<String> ONLINE_UNKNOWN_STATUSES = SolrUtils.createHierarchicFacetValues(ONLINE, Constants.DOCUMENT_AVAILABILITY_UNKNOWN);
 
 	@Override
 	public void enrich(DedupRecord record, SolrInputDocument mergedDocument,
@@ -26,17 +29,17 @@ public class AvailabilityFacetEnricher implements DedupRecordEnricher {
 		if (online) {
 			localRecords.forEach(doc -> doc.setField(SolrFieldConstants.LOCAL_STATUSES_FACET, ONLINE_STATUSES));
 		}
+		else {
+			boolean unknown = localRecords.stream().anyMatch(rec -> isOnlineUnknown(rec));
+			if (unknown) {
+				localRecords.forEach(doc -> doc.setField(SolrFieldConstants.LOCAL_STATUSES_FACET, ONLINE_UNKNOWN_STATUSES));
+			}
+		}
 		// remove status facets from merged document
 		mergedDocument.remove(SolrFieldConstants.LOCAL_STATUSES_FACET);
 	}
 
 	protected boolean isOnline(SolrInputDocument doc) {
-		// Is from SFX?
-		String id = (String) doc.getFieldValue(SolrFieldConstants.ID_FIELD);
-		if (GLOBAL_AVAILABILITY_INSTITUTION_PATTERN.matcher(id).matches()) {
-			return true;
-		}
-
 		// contains online URL?
 		Collection<Object> urls = doc.getFieldValues(SolrFieldConstants.URL);
 		if (urls == null) {
@@ -51,4 +54,13 @@ public class AvailabilityFacetEnricher implements DedupRecordEnricher {
 		return false;
 	}
 
+	protected boolean isOnlineUnknown(SolrInputDocument doc){
+		// Is from SFX?
+		String id = (String) doc.getFieldValue(SolrFieldConstants.ID_FIELD);
+		if (GLOBAL_AVAILABILITY_INSTITUTION_PATTERN.matcher(id).matches()) {
+			return true;
+		}
+		return false;
+	}
+	
 }
