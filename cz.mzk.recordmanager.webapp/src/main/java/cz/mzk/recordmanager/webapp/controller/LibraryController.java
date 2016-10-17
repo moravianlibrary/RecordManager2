@@ -49,14 +49,14 @@ public class LibraryController {
 
 	@RequestMapping(method = RequestMethod.PUT, value = "/{libraryId}/configuration")
 	@ResponseBody
-	public void createHarvestConfiguration(@RequestBody OaiHarvestConfigurationDto configurationDto, @PathVariable Long libraryId) {
-		libraryService.updateOrCreateConfig(configurationDto, libraryId);
+	public OaiHarvestConfigurationDto createHarvestConfiguration(@RequestBody OaiHarvestConfigurationDto configurationDto, @PathVariable Long libraryId) {
+		return libraryService.updateOrCreateConfig(configurationDto, libraryId);
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/{libraryId}/configuration/{configId}")
 	@ResponseBody
-	public void deleteConfiguration(@RequestBody OaiHarvestConfigurationDto configurationDto, @PathVariable Long libraryId, @PathVariable Long configId) {
+	public OaiHarvestConfigurationDto deleteConfiguration(@RequestBody OaiHarvestConfigurationDto configurationDto, @PathVariable Long libraryId, @PathVariable Long configId) {
 		configurationDto.setId(configId);
-		libraryService.updateOrCreateConfig(configurationDto, libraryId);
+		return libraryService.updateOrCreateConfig(configurationDto, libraryId);
 	}
 }

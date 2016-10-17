@@ -44,8 +44,8 @@ export class LibraryComponent implements OnInit{
 
 	updateLibrary(): void
 	{
-		this.librariesService.updateLibrary(this.library);
-		this.getLibraryDetails(this.library.id);
+		this.librariesService.updateLibrary(this.library)
+      .subscribe(library => this.library = library);
 	}
 
 
@@ -60,13 +60,15 @@ export class LibraryComponent implements OnInit{
 	selectConfiguration(id: number)
 	{
 		this.selected = this.libraryDetail.oaiHarvestConfigurations.filter(config => config.id == id)[0];
-    console.log(this.selected.baseWeight);
 	}
 
 	updateConfiguration(id: number)
 	{
-		this.librariesService.updateConfiguration(this.selected, id);
-		this.getLibraryDetails(id);
+		this.librariesService.updateConfiguration(this.selected, id)
+      .subscribe(configuration => {
+        this.libraryDetail.oaiHarvestConfigurations.filter(conf => conf.id == configuration.id)[0] = configuration;
+        this.selected = configuration;
+      });
 	}
 
 }

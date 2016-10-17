@@ -11,7 +11,7 @@ public class OAIHarvestConfigurationDAOHibernate extends
 		OAIHarvestConfigurationDAO {
 
 	@Override
-	public void saveOrUpdate(OAIHarvestConfiguration configuration) {
-		sessionFactory.getCurrentSession().saveOrUpdate(configuration);
+	public void update(OAIHarvestConfiguration configuration) {
+		sessionFactory.getCurrentSession().update(configuration);
 	}
 }

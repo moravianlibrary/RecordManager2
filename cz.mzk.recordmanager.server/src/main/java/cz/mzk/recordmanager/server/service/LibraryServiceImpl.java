@@ -106,9 +106,23 @@ public class LibraryServiceImpl implements LibraryService {
 
 	}
 
+	private OAIHarvestConfiguration fillConfiguration(OAIHarvestConfiguration target, OaiHarvestConfigurationDto src)
+	{
+		fillOAIHarvestConfiguration(target, src);
+
+		ContactPerson contact = personDAO.get(src.getContact().getId());
+
+		fillPerson(contact, src.getContact());
+
+		target.setContact(contact);
+
+		return target;
+	}
+
+
 	@Override
 	@Transactional
-	public void updateOrCreateConfig(OaiHarvestConfigurationDto config, Long libraryId) {
+	public OaiHarvestConfigurationDto updateOrCreateConfig(OaiHarvestConfigurationDto config, Long libraryId) {
 		Library lib = libraryDao.get(libraryId);
 
 		if (
@@ -118,27 +132,30 @@ public class LibraryServiceImpl implements LibraryService {
 						personDAO.get(config.getContact().getId()) == null
 				)
 		{
-			return;
+			return null;
 		}
 		OAIHarvestConfiguration oaiHarvestConfiguration;
+		long id = -1000;
 		if (config.getId() == null)	//Detect creating new configuration
 		{
 			//TODO: How to add contact to configuration??
 			oaiHarvestConfiguration = new OAIHarvestConfiguration();
+
+			oaiHarvestConfiguration = fillConfiguration(oaiHarvestConfiguration, config);
+
+			id = harvestConfigurationDAO.save(oaiHarvestConfiguration);
+
 		}else
 		{
 			oaiHarvestConfiguration = harvestConfigurationDAO.get(config.getId());
+
+			oaiHarvestConfiguration = fillConfiguration(oaiHarvestConfiguration, config);
+
+			id = config.getId();
+
+			harvestConfigurationDAO.update(oaiHarvestConfiguration);
 		}
-
-		fillOAIHarvestConfiguration(oaiHarvestConfiguration, config);
-
-		ContactPerson contact = personDAO.get(config.getContact().getId());
-
-		fillPerson(contact, config.getContact());
-
-		oaiHarvestConfiguration.setContact(contact);
-
-		harvestConfigurationDAO.saveOrUpdate(oaiHarvestConfiguration);
+		return translate(harvestConfigurationDAO.get(id));
 	}
 
 //

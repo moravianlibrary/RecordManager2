@@ -69,14 +69,14 @@ export class LibrariesService {
 	}
 
 
-	updateLibrary(library: Library)
+	updateLibrary(library: Library): Observable<Library>
 	{
 		var headers = new Headers({"Content-Type": 'application/json'});
 		let options = new RequestOptions({ headers: headers });
 		console.log(JSON.stringify(library) + " " + SERVER + "/library/" + library.id + "Updated");
 
-		this.http.post(SERVER + "/library/" + library.id, JSON.stringify(library), options)
-			.subscribe();
+		return this.http.post(SERVER + "/library/" + library.id, JSON.stringify(library), options)
+			.map((res: Response) => res.json());
 	}
 	createLibrary(library: Library): Observable<Library>
 	{
@@ -88,14 +88,16 @@ export class LibrariesService {
 			.map((res: Response) =>  res.json());
 	}
 
-	updateConfiguration(config: OaiHarvestConfiguration, libraryId: number)
+	updateConfiguration(config: OaiHarvestConfiguration, libraryId: number): Observable<OaiHarvestConfiguration>
 	{
 		var headers = new Headers({"Content-Type": 'application/json'});
 		let options = new RequestOptions({ headers: headers });
 		console.log(JSON.stringify(config) + " " + SERVER + "/library/" + libraryId + "Updated");
 
-		this.http.post(SERVER + "/library/" + libraryId + "/configuration/" + config.id, JSON.stringify(config), options)
-      .subscribe();
+		return this.http.post(SERVER + "/library/" + libraryId + "/configuration/" + config.id, JSON.stringify(config), options)
+      .map((res: Response) => {
+		    return res.json();
+      });
 	}
 
 
