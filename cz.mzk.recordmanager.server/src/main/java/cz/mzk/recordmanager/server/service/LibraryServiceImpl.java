@@ -77,7 +77,7 @@ public class LibraryServiceImpl implements LibraryService {
 
 	@Override
 	@Transactional
-	public void updateOrCreateLibrary(LibraryDto libraryDto) {
+	public LibraryDto updateOrCreateLibrary(LibraryDto libraryDto) {
 
 		Library lib;
 
@@ -86,18 +86,23 @@ public class LibraryServiceImpl implements LibraryService {
 		else
 			lib = libraryDao.get(libraryDto.getId());
 
+		long id = -10000;
+
 		if (lib == null || lib.getId() == null)
 		{
 			lib = new Library();
 			fillLibrary(lib, libraryDto);
-			libraryDao.persist(lib);
+			id =  libraryDao.save(lib);
 
 		}else
 		{
 			lib.setId(libraryDto.getId());
 			fillLibrary(lib, libraryDto);
 			libraryDao.updateLibrary(lib);
+			id = libraryDto.getId();
 		}
+
+		return translate(libraryDao.get(id));
 
 	}
 

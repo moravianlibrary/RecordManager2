@@ -12,7 +12,7 @@ public interface LibraryService {
 
 	LibraryDetailDto getDetail(Long libraryId);
 
-	void updateOrCreateLibrary(LibraryDto libraryDto);
+	LibraryDto updateOrCreateLibrary(LibraryDto libraryDto);
 
 	void updateOrCreateConfig(OaiHarvestConfigurationDto config, Long libraryId);
 

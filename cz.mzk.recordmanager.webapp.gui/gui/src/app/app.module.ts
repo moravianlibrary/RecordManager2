@@ -6,6 +6,7 @@ import { HttpModule } from '@angular/http';
 import { AppComponent } from './app.component';
 import {LibrariesModule} from "./libraries/libraries.module";
 import {routing} from "./app.routing";
+import {CommonModule} from "@angular/common";
 
 @NgModule({
   declarations: [

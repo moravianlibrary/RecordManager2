@@ -3,12 +3,11 @@
  */
 import { Component, OnInit } from '@angular/core';
 
-import {LibraryDetail} from "../model/library-detail";
+import {LibraryDetail} from "../../model/library-detail";
 import {LibrariesService} from "../libraries.service";
-import {Router, ActivatedRoute, Params} from "@angular/router";
-import {Library} from "../model/library";
-import {ContactPerson} from "../model/contact-person";
-import {OaiHarvestConfiguration} from "../model/oai-harvest-configuration";
+import {ActivatedRoute, Params} from "@angular/router";
+import {Library} from "../../model/library";
+import {OaiHarvestConfiguration} from "../../model/oai-harvest-configuration";
 
 
 @Component({
@@ -22,14 +21,14 @@ export class LibraryComponent implements OnInit{
 	library: Library = new Library;
 	selected: OaiHarvestConfiguration = new OaiHarvestConfiguration;
 
-	constructor(private librariesService: LibrariesService, private route: ActivatedRoute,){
-		console.log("constructor");
+	constructor(private librariesService: LibrariesService, private route: ActivatedRoute){
 	}
 
 	getLibraryDetails(libraryId: number)
 	{
 		this.librariesService.getLibraryDetails(libraryId)
 			.subscribe(libraryDetail => {
+			  this.libraryDetail = new LibraryDetail;
 				this.libraryDetail = libraryDetail;
 
 				this.library = new Library({
@@ -39,7 +38,6 @@ export class LibraryComponent implements OnInit{
 					catalogUrl: this.libraryDetail.catalogUrl,
 					city: this.libraryDetail.city
 				});
-
 			});
 
 	}
@@ -62,6 +60,7 @@ export class LibraryComponent implements OnInit{
 	selectConfiguration(id: number)
 	{
 		this.selected = this.libraryDetail.oaiHarvestConfigurations.filter(config => config.id == id)[0];
+    console.log(this.selected.baseWeight);
 	}
 
 	updateConfiguration(id: number)

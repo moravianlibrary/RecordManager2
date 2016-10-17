@@ -1,6 +1,6 @@
 import {Component, OnInit, ElementRef} from '@angular/core';
 import {LibrariesService} from "./libraries.service";
-import {Library} from "./model/library";
+import {Library} from "../model/library";
 import {Router} from "@angular/router";
 
 @Component({
@@ -32,9 +32,7 @@ export class LibrariesComponent implements OnInit {
 	createLibrary()
 	{
 		console.log(this.newLibrary.name);
-		this.librariesService.createLibrary(this.newLibrary);
-		this.getLibraries();
-
+		this.librariesService.createLibrary(this.newLibrary).subscribe(library => this.libraries.push(library));
 	}
 
 	ngOnInit() {

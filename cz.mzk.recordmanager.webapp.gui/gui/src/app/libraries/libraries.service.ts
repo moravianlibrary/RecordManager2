@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import {Library} from "./model/library";
+import {Library} from "../model/library";
 import {Http, Response, RequestOptions, RequestMethod, Headers} from "@angular/http";
 import {Observable} from "rxjs";
-import {LibraryDetail} from "./model/library-detail";
-import {OaiHarvestConfiguration} from "./model/oai-harvest-configuration";
-import {ContactPerson} from "./model/contact-person";
+import {LibraryDetail} from "../model/library-detail";
+import {OaiHarvestConfiguration} from "../model/oai-harvest-configuration";
+import {ContactPerson} from "../model/contact-person";
 import {SERVER} from "../server";
 
 
@@ -53,7 +53,6 @@ export class LibrariesService {
 						harvestJobName: res.json().oaiHarvestConfigurations[i].harvestJobName,
 						library: res.json().oaiHarvestConfigurations[i].library
 					});
-
 					configs.push(config);
 				}
 				let detail: LibraryDetail = new LibraryDetail({
@@ -79,14 +78,14 @@ export class LibrariesService {
 		this.http.post(SERVER + "/library/" + library.id, JSON.stringify(library), options)
 			.subscribe();
 	}
-	createLibrary(library: Library)
+	createLibrary(library: Library): Observable<Library>
 	{
 		var headers = new Headers({"Content-Type": 'application/json'});
 		let options = new RequestOptions({ headers: headers });
 		console.log(JSON.stringify(library) + " " + SERVER + "/library");
 
-		this.http.put(SERVER + "/library", JSON.stringify(library), options)
-			.subscribe();
+		return this.http.put(SERVER + "/library", JSON.stringify(library), options)
+			.map((res: Response) =>  res.json());
 	}
 
 	updateConfiguration(config: OaiHarvestConfiguration, libraryId: number)
@@ -96,7 +95,7 @@ export class LibrariesService {
 		console.log(JSON.stringify(config) + " " + SERVER + "/library/" + libraryId + "Updated");
 
 		this.http.post(SERVER + "/library/" + libraryId + "/configuration/" + config.id, JSON.stringify(config), options)
-			.subscribe();
+      .subscribe();
 	}
 
 
