@@ -10,3 +10,9 @@ SELECT hrfl.harvested_record_id AS id FROM harvested_record_format_link hrfl
   WHERE hrf.name = 'PERIODICALS';
   
 CREATE INDEX tmp_periodicals_ids_idx ON tmp_periodicals_ids(id);
+
+UPDATE dedup_record
+SET updated=localtimestamp
+WHERE id IN (SELECT dedup_record_id FROM harvested_record WHERE next_dedup_flag=TRUE AND dedup_record_id IS NOT NULL GROUP BY dedup_record_id);
+
+UPDATE harvested_record SET dedup_record_id=NULL WHERE next_dedup_flag=TRUE AND dedup_record_id IS NOT NULL;
