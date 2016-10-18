@@ -9,16 +9,23 @@
     <table>
       <thead>
       <tr>
-        <th data-field="id">Id</th>
-        <th data-field="name">Name</th>
-        <th data-field="city">City</th>
-        <th data-field="url">URL</th>
-        <th data-field="catalogUrl">Catalog URL</th>
-        <th data-field="details">Details</th>
+
+        <th data-field="id"><a class="waves-effect waves-teal btn-flat" (click)="sortByMe('id')">id<i  class="tiny material-icons" [ngClass]="[getArrow('id'), getVisibility('id')]">navigation</i></a></th>
+
+        <th data-field="name"><a class="waves-effect waves-teal btn-flat" (click)="sortByMe('name')">Name<i  class="tiny material-icons" [ngClass]="[getArrow('name'), getVisibility('name')]" >navigation</i></a></th>
+
+        <th data-field="city"><a class="waves-effect waves-teal btn-flat" (click)="sortByMe('city')">City<i  class="tiny material-icons" [ngClass]="[getArrow('city'), getVisibility('city')]" >navigation</i></a></th>
+
+        <th data-field="url"><a class="waves-effect waves-teal btn-flat" (click)="sortByMe('url')">url<i  class="tiny material-icons" [ngClass]="[getArrow('url'), getVisibility('url')]" >navigation</i></a></th>
+
+        <th data-field="catalogUrl"><a class="waves-effect waves-teal btn-flat" (click)="sortByMe('catalogUrl')">Catalog URL<i  class="tiny material-icons" [ngClass]="[getArrow('catalogUrl'), getVisibility('catalogUrl')]" >navigation</i></a></th>
+
+        <th data-field="details">DETAILS</th>
+
       </tr>
       </thead>
 
-      <tbody *ngFor="let library of libraries">
+      <tbody *ngFor="let library of libraries | orderBy: [sortBy]">
         <tr>
           <td>{{library.id}}</td>
           <td>{{library.name}}</td>

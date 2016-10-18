@@ -5,6 +5,8 @@ import {LibrariesComponent} from "./libraries.component";
 import {LibrariesService} from "./libraries.service";
 import {LibraryComponent} from "./library/library.component";
 import {FormsModule} from "@angular/forms";
+import {OrderByPipe} from "../order-by.pipe";
+
 
 @NgModule({
   imports: [
@@ -14,6 +16,6 @@ import {FormsModule} from "@angular/forms";
   ],
   providers: [LibrariesService],
 
-  declarations: [LibrariesComponent, LibraryComponent]
+  declarations: [LibrariesComponent, LibraryComponent, OrderByPipe]
 })
 export class LibrariesModule { }

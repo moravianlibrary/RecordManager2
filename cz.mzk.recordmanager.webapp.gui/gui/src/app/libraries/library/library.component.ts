@@ -60,6 +60,8 @@ export class LibraryComponent implements OnInit{
 	selectConfiguration(id: number)
 	{
 		this.selected = this.libraryDetail.oaiHarvestConfigurations.filter(config => config.id == id)[0];
+    console.log(this.selected.id);
+    console.log(this.selected.harvestJobName);
 	}
 
 	updateConfiguration(id: number)
