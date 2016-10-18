@@ -31,3 +31,5 @@ loanRelevance = getLoanRelevance();
 id001_search = getId001()
 
 conspectus_str_mv = getConspectus();
+
+link773_str = get773link();

@@ -12,6 +12,7 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.validator.routines.ISBNValidator;
 import org.marc4j.marc.DataField;
 import org.marc4j.marc.Subfield;
 
@@ -26,6 +27,7 @@ import cz.mzk.recordmanager.server.scripting.MappingResolver;
 import cz.mzk.recordmanager.server.scripting.StopWordsResolver;
 import cz.mzk.recordmanager.server.scripting.function.RecordFunction;
 import cz.mzk.recordmanager.server.util.Constants;
+import cz.mzk.recordmanager.server.util.ISSNUtils;
 import cz.mzk.recordmanager.server.util.SolrUtils;
 
 public class MarcDSL extends BaseDSL {
@@ -50,12 +52,20 @@ public class MarcDSL extends BaseDSL {
 	private final static Pattern AUTHOR_PATTERN = Pattern
 			.compile("([^,]+),(.+)");
 	
+	private final ISBNValidator isbnValidator = ISBNValidator.getInstance(true);
+	
+	private static final String ISBN_CLEAR_REGEX = "[^0-9^X^x]";
+	
+	private static final String LINK773_ISBN = "isbn:";
+	private static final String LINK773_ISSN = "issn:";
+	private static final String LINK773_TITLE = "title:";
+	
 	private final MarcFunctionContext context;
 
 	private final MarcRecord record;
 
 	private final Map<String, RecordFunction<MarcFunctionContext>> functions;
-
+	
 	public MarcDSL(MarcFunctionContext context, MappingResolver propertyResolver, StopWordsResolver stopWordsResolver,
 			Map<String, RecordFunction<MarcFunctionContext>> functions) {
 		super(propertyResolver, stopWordsResolver);
@@ -642,5 +652,36 @@ public class MarcDSL extends BaseDSL {
     		result.add(s.replaceAll(",", ""));
     	}
     	return result;
+    }
+    
+    public String get773link(){
+    	for(DataField df: record.getDataFields("773")){
+    		for(char code: new char[]{'x', 'z', 't'}){
+    			Subfield sf = df.getSubfield(code);
+    			if(sf != null){
+    				switch (sf.getCode()) {
+					case 'x':
+						if(ISSNUtils.isValid(sf.getData())){
+							return LINK773_ISSN + sf.getData();
+						}
+						break;
+					case 'z':
+						String isbnStr = isbnValidator.validate(sf.getData().replaceAll(ISBN_CLEAR_REGEX,"").replaceAll("x", "X"));
+						isbnStr = isbnValidator.validate(isbnStr);
+						try {
+							return LINK773_ISBN + Long.valueOf(isbnStr);
+						} catch (Exception e) {
+							continue;
+						}
+					case 't':
+						return LINK773_TITLE + sf.getData();
+					default:
+						break;
+					} 
+    			}
+    		}
+    	}
+    	
+		return null;	
     }
 }
