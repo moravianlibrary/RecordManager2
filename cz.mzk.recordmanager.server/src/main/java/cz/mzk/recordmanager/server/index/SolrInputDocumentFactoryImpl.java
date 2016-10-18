@@ -127,6 +127,7 @@ public class SolrInputDocumentFactoryImpl implements SolrInputDocumentFactory, I
 		mergedDocument.addField(SolrFieldConstants.WEIGHT, record.getWeight());
 		List<String> localIds = childs.stream().map(rec -> (String) rec.getFieldValue("id")).collect(Collectors.toCollection(ArrayList::new));
 		mergedDocument.addField(SolrFieldConstants.LOCAL_IDS_FIELD, localIds);
+		if(localIds.size() > 1) mergedDocument.addField(SolrFieldConstants.MERGED_RECORDS, 1);
 		
 		Set<String> institutions = records.stream().map(rec -> getInstitution(rec)).flatMap(it -> it.stream()).collect(Collectors.toCollection(HashSet::new));
 		mergedDocument.addField(SolrFieldConstants.INSTITUTION_FIELD, institutions);
