@@ -15,7 +15,8 @@ import cz.mzk.recordmanager.server.util.SolrUtils;
 @Component
 public class AvailabilityFacetEnricher implements DedupRecordEnricher {
 
-	private final Pattern GLOBAL_AVAILABILITY_INSTITUTION_PATTERN = Pattern.compile("^sfx.*");
+	private final Pattern GLOBAL_ONLINE_AVAILABILITY_INSTITUTION_PATTERN = Pattern.compile("^mkpe.*");
+	private final Pattern GLOBAL_UNKNOWN_AVAILABILITY_INSTITUTION_PATTERN = Pattern.compile("^sfx.*");
 
 	private static final String ONLINE = "online";
 	
@@ -40,6 +41,11 @@ public class AvailabilityFacetEnricher implements DedupRecordEnricher {
 	}
 
 	protected boolean isOnline(SolrInputDocument doc) {
+		String id = (String) doc.getFieldValue(SolrFieldConstants.ID_FIELD);
+		if (GLOBAL_ONLINE_AVAILABILITY_INSTITUTION_PATTERN.matcher(id).matches()) {
+			return true;
+		}
+		
 		// contains online URL?
 		Collection<Object> urls = doc.getFieldValues(SolrFieldConstants.URL);
 		if (urls == null) {
@@ -57,7 +63,7 @@ public class AvailabilityFacetEnricher implements DedupRecordEnricher {
 	protected boolean isOnlineUnknown(SolrInputDocument doc){
 		// Is from SFX?
 		String id = (String) doc.getFieldValue(SolrFieldConstants.ID_FIELD);
-		if (GLOBAL_AVAILABILITY_INSTITUTION_PATTERN.matcher(id).matches()) {
+		if (GLOBAL_UNKNOWN_AVAILABILITY_INSTITUTION_PATTERN.matcher(id).matches()) {
 			return true;
 		}
 		return false;
