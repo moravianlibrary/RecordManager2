@@ -1,24 +1,35 @@
 <main>
+
   <div>
 
-    <div *ngIf="loading" class="progress red lighten-3" >
-      <div class="indeterminate"></div>
+    <div *ngIf="loading" id="circlePreloader" class="preloader-wrapper big active">
+      <div class="spinner-layer spinner-red-only">
+        <div class="circle-clipper left">
+          <div class="circle"></div>
+        </div><div class="gap-patch">
+        <div class="circle"></div>
+      </div><div class="circle-clipper right">
+        <div class="circle"></div>
+      </div>
+      </div>
     </div>
+
+
     <h4 class="truncate center">Libraries</h4>
 
-    <table>
+    <table class="bordered">
       <thead>
       <tr>
 
-        <th data-field="id"><a class="waves-effect waves-teal btn-flat" (click)="sortByMe('id')">id<i  class="tiny material-icons" [ngClass]="[getArrow('id'), getVisibility('id')]">navigation</i></a></th>
+        <th data-field="id"><a class="waves-effect btn-flat waves-red" (click)="sortByMe('id')">id<i  class="tiny material-icons" [ngClass]="[getArrow('id'), getVisibility('id')]">keyboard_arrow_down</i></a></th>
 
-        <th data-field="name"><a class="waves-effect waves-teal btn-flat" (click)="sortByMe('name')">Name<i  class="tiny material-icons" [ngClass]="[getArrow('name'), getVisibility('name')]" >navigation</i></a></th>
+        <th data-field="name"><a class="waves-effect btn-flat waves-red" (click)="sortByMe('name')">Name<i  class="tiny material-icons" [ngClass]="[getArrow('name'), getVisibility('name')]" >keyboard_arrow_down</i></a></th>
 
-        <th data-field="city"><a class="waves-effect waves-teal btn-flat" (click)="sortByMe('city')">City<i  class="tiny material-icons" [ngClass]="[getArrow('city'), getVisibility('city')]" >navigation</i></a></th>
+        <th data-field="city"><a class="waves-effect btn-flat waves-red" (click)="sortByMe('city')">City<i  class="tiny material-icons" [ngClass]="[getArrow('city'), getVisibility('city')]" >keyboard_arrow_down</i></a></th>
 
-        <th data-field="url"><a class="waves-effect waves-teal btn-flat" (click)="sortByMe('url')">url<i  class="tiny material-icons" [ngClass]="[getArrow('url'), getVisibility('url')]" >navigation</i></a></th>
+        <th data-field="url"><a class="waves-effect btn-flat waves-red" (click)="sortByMe('url')">url<i  class="tiny material-icons" [ngClass]="[getArrow('url'), getVisibility('url')]" >keyboard_arrow_down</i></a></th>
 
-        <th data-field="catalogUrl"><a class="waves-effect waves-teal btn-flat" (click)="sortByMe('catalogUrl')">Catalog URL<i  class="tiny material-icons" [ngClass]="[getArrow('catalogUrl'), getVisibility('catalogUrl')]" >navigation</i></a></th>
+        <th data-field="catalogUrl"><a class="waves-effect btn-flat waves-red" (click)="sortByMe('catalogUrl')">Catalog URL<i  class="tiny material-icons" [ngClass]="[getArrow('catalogUrl'), getVisibility('catalogUrl')]" >keyboard_arrow_down</i></a></th>
 
         <th data-field="details">DETAILS</th>
 
@@ -52,28 +63,28 @@
 
           <div class="row">
             <div class="input-field col s12">
-              <input id="name" type="text" class="validate" [(ngModel)]="newLibrary.name" name="libraryName">
+              <input id="name" type="text" [(ngModel)]="newLibrary.name" name="libraryName">
               <label for="name">Name</label>
             </div>
           </div>
 
           <div class="row">
             <div class="input-field col s12">
-              <input id="url" type="url" class="validate" [(ngModel)]="newLibrary.url" name="libraryURL">
+              <input id="url" type="url"  [(ngModel)]="newLibrary.url" name="libraryURL">
               <label for="url">URL</label>
             </div>
           </div>
 
           <div class="row">
             <div class="input-field col s12">
-              <input id="catalogUrl" type="url" class="validate" [(ngModel)]="newLibrary.catalogUrl" name="libraryCatalogURL">
+              <input id="catalogUrl" type="url"  [(ngModel)]="newLibrary.catalogUrl" name="libraryCatalogURL">
               <label for="catalogUrl">Catalog URL</label>
             </div>
           </div>
 
           <div class="row">
             <div class="input-field col s12">
-              <input id="city" type="text" class="validate" [(ngModel)]="newLibrary.city" name="libraryCity">
+              <input id="city" type="text"  [(ngModel)]="newLibrary.city" name="libraryCity">
               <label for="city">City</label>
             </div>
           </div>

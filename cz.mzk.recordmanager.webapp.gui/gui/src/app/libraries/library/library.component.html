@@ -1,4 +1,4 @@
-<h4 class="center-align">Knihovna - {{library?.name}}</h4>
+<h4 class="center-align">{{library?.name}}</h4>
 <h5 class="center-align">{{libraryDetail?.id}}</h5>
 
 <div class="row">
@@ -15,27 +15,27 @@
 
 				<div class="row">
 					<div class="input-field col s12">
-						<input id="disabled" type="text" class="validate" value="{{libraryd?.id}}" disabled>
+						<input id="disabled" type="text"  value="{{library?.id}}" disabled>
 					</div>
 				</div>
 				<div class="row">
 					<div class="input-field col s12">
-						<input id="name" type="text" class="validate" value="{{libraryDetail?.name }}" [(ngModel)]="library.name" name="name" placeholder="Name">
+						<input id="name" type="text"  value="{{libraryDetail?.name }}" [(ngModel)]="library.name" name="name" placeholder="Name">
 					</div>
 				</div>
 				<div class="row">
 					<div class="input-field col s12">
-						<input id="url" type="text" class="validate" value="{{library?.url}}" [(ngModel)]="library.url" name="URL" placeholder="URL">
+						<input id="url" type="text"  value="{{library?.url}}" [(ngModel)]="library.url" name="URL" placeholder="URL">
 					</div>
 				</div>
 				<div class="row">
 					<div class="input-field col s12">
-						<input id="catalogUrl" type="text" class="validate" value="{{library?.catalogUrl}}" [(ngModel)]="library.catalogUrl" name="catalogURL" placeholder="catalogURL" >
+						<input id="catalogUrl" type="text"  value="{{library?.catalogUrl}}" [(ngModel)]="library.catalogUrl" name="catalogURL" placeholder="catalogURL" >
 					</div>
 				</div>
 				<div class="row">
 					<div class="input-field col s12">
-						<input id="city" type="text" class="validate" value="{{library?.city}}" [(ngModel)]="library.city" name="city" placeholder="City" >
+						<input id="city" type="text"  value="{{library?.city}}" [(ngModel)]="library.city" name="city" placeholder="City" >
 					</div>
 				</div>
 
@@ -47,7 +47,7 @@
 			</div>
 		</form>
 
-			<form>
+
 				<div class="row">
 					<div class="col s12">
 					<h2 class="header">OAI harvest configurations</h2>
@@ -57,82 +57,84 @@
 					<li	*ngFor="let config of libraryDetail?.oaiHarvestConfigurations" (click)="selectConfiguration(config.id)">
 						<div class="collapsible-header"><i class="material-icons">mode_edit</i>Harvester {{config.id}}</div>
 						<div class="collapsible-body">
+              <form>
 
-						<div class="row oai-harvest-configuration">
-							<div class="input-field col s12">
-								<input id="id" type="text" class="validate" value="{{config.id}}" disabled>
-							</div>
-						</div>
+                <div class="row oai-harvest-configuration">
+                  <div class="input-field col s12">
+                    <input id="id" type="text"  value="{{config.id}}" disabled>
+                  </div>
+                </div>
 
-						<div class="row oai-harvest-configuration">
-							<div class="input-field col s12">
-								<input id="url2" type="text" class="validate" value="{{selected?.url}}" [(ngModel)]="selected.url"	name="selectedConfigUrl" placeholder="url">
-							</div>
-						</div>
+                <div class="row oai-harvest-configuration">
+                  <div class="input-field col s12">
+                    <input id="url2" type="text"  value="{{selected.url}}" [(ngModel)]="selected.url"	name="selectedConfigUrl" placeholder="url">
+                  </div>
+                </div>
 
-						 <div class="row oai-harvest-configuration">
-							<div class="input-field col s12">
-								<input id="set" type="text" class="validate" value="{{selected?.set}}" [(ngModel)]="selected.set"	name="selectedConfigSet" placeholder="set">
-							</div>
-						</div>
+                 <div class="row oai-harvest-configuration">
+                  <div class="input-field col s12">
+                    <input id="set" type="text"  value="{{selected.set}}" [(ngModel)]="selected.set"	name="selectedConfigSet" placeholder="set">
+                  </div>
+                </div>
 
-						<div class="row oai-harvest-configuration">
-							<div class="input-field col s12">
-								<input id="metadataPrefix" type="text" class="validate" value="{{selected?.metadataPrefix}}" [(ngModel)]="selected.metadataPrefix"	name="selectedConfigMetadataPrefix" placeholder="metadataPrefix">
-							</div>
-						</div>
+                <div class="row oai-harvest-configuration">
+                  <div class="input-field col s12">
+                    <input id="metadataPrefix" type="text"  value="{{selected.metadataPrefix}}" [(ngModel)]="selected.metadataPrefix"	name="selectedConfigMetadataPrefix" placeholder="metadataPrefix">
+                  </div>
+                </div>
 
-							<div class="row oai-harvest-configuration">
-								<div class="input-field col s12">
-									<input id="idPrefix" type="text" class="validate" value="{{selected?.idPrefix}}"	[(ngModel)]="selected.idPrefix"	name="selectedConfigIdPrefix"placeholder="idPrefix">
-								</div>
-							</div>
+                  <div class="row oai-harvest-configuration">
+                    <div class="input-field col s12">
+                      <input id="idPrefix" type="text"  value="{{selected.idPrefix}}"	[(ngModel)]="selected.idPrefix"	name="selectedConfigIdPrefix"placeholder="idPrefix">
+                    </div>
+                  </div>
 
-							<div class="row oai-harvest-configuration">
-								<div class="input-field col s12">
-									<input id="clusterIdEnabled" type="text" class="validate" value="{{selected?.baseWeight}}" [(ngModel)]="selected.baseWeight"	name="selectedConfigBaseWeight" placeholder="clusterIdEnabled">
-								</div>
-							</div>
+                  <div class="row oai-harvest-configuration">
+                    <div class="input-field col s12">
+                      <input id="clusterIdEnabled" type="text"  value="{{selected.baseWeight}}" [(ngModel)]="selected.baseWeight"	name="selectedConfigBaseWeight" placeholder="clusterIdEnabled">
+                    </div>
+                  </div>
 
-							<div class="row oai-harvest-configuration">
-								<div class="input-field col s12">
-									<input id="filteringEnabled" type="text" class="validate" value="{{selected?.filteringEnabled}}" [(ngModel)]="selected.filteringEnabled"	name="selectedConfigFilteringEnabled" placeholder="filteringEnabled">
-								</div>
-							</div>
+                  <div class="row oai-harvest-configuration">
+                    <div class="input-field col s12">
+                      <input id="filteringEnabled" type="text"  value="{{selected.filteringEnabled}}" [(ngModel)]="selected.filteringEnabled"	name="selectedConfigFilteringEnabled" placeholder="filteringEnabled">
+                    </div>
+                  </div>
 
-							<div class="row oai-harvest-configuration">
-								<div class="input-field col s12">
-									<input id="interceptionEnabled" type="text" class="validate" value="{{selected?.interceptionEnabled}}" [(ngModel)]="selected.interceptionEnabled"	name="selectedConfigInterceptionEnabled" placeholder="interceptionEnabled">
-								</div>
-							</div>
+                  <div class="row oai-harvest-configuration">
+                    <div class="input-field col s12">
+                      <input id="interceptionEnabled" type="text"  value="{{selected.interceptionEnabled}}" [(ngModel)]="selected.interceptionEnabled"	name="selectedConfigInterceptionEnabled" placeholder="interceptionEnabled">
+                    </div>
+                  </div>
 
-							<div class="row oai-harvest-configuration">
-								<div class="input-field col s12">
-									<input id="extractIdRegex" type="text" class="validate" value="{{selected?.extractIdRegex}}" [(ngModel)]="selected.extractIdRegex"	name="selectedConfigExtractIdRegex" placeholder="extractIdRegex">
-								</div>
-							</div>
+                  <div class="row oai-harvest-configuration">
+                    <div class="input-field col s12">
+                      <input id="extractIdRegex" type="text"  value="{{selected.extractIdRegex}}" [(ngModel)]="selected.extractIdRegex"	name="selectedConfigExtractIdRegex" placeholder="extractIdRegex">
+                    </div>
+                  </div>
 
-							<div class="row oai-harvest-configuration">
-								<div class="input-field col s12">
-									<input id="harvestJobName" type="text" class="validate" value="{{selected?.harvestJobName}}" [(ngModel)]="selected.harvestJobName"	name="selectedConfigHarvestJobName" placeholder="harvestJobName">
-								</div>
-							</div>
+                  <div class="row oai-harvest-configuration">
+                    <div class="input-field col s12">
+                      <input id="harvestJobName" type="text"  value="{{selected.harvestJobName}}" [(ngModel)]="selected.harvestJobName"	name="selectedConfigHarvestJobName" placeholder="harvestJobName">
+                    </div>
+                  </div>
 
-							<div class="row oai-harvest-configuration">
-								<div class="input-field col s12">
-									<input id="islibrary" type="text" class="validate" value="{{selected?.library}}" [(ngModel)]="selected.library"	name="selectedConfigLibrary" placeholder="Is library?">
-                  <label for="islibrary">Is library?</label>
-								</div>
-							</div>
+                  <div class="row oai-harvest-configuration">
+                    <div class="input-field col s12">
+                      <input id="islibrary" type="text"  value="{{selected.library}}" [(ngModel)]="selected.library"	name="selectedConfigLibrary" placeholder="Is library?">
+                      <label for="islibrary">Is library?</label>
+                    </div>
+                  </div>
 
-							<!--TODO: display contact-->
+                  <!--TODO: display contact-->
 
-							<div class="input-field col s6 right">
-								<button class='waves-effect waves-light btn right' type="submit" (click)="updateConfiguration(library.id)">
-									Save<i class="material-icons right">send</i>
-								</button>
-							</div>
+                  <div class="input-field col s6 right">
+                    <button class='waves-effect waves-light btn right' type="submit" (click)="updateConfiguration(library.id)">
+                      Save<i class="material-icons right">send</i>
+                    </button>
+                  </div>
 
+              </form>
 						</div>
 					</li>
 
@@ -140,7 +142,7 @@
 				</div>
 				</div>
 
-		</form>
+
 
 
 		</div>

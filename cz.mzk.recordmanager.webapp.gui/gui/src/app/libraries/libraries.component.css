@@ -20,6 +20,12 @@ div.progress{
   right: 10%;
 }
 
+#circlePreloader{
+  position: fixed;
+  right:50%;
+  bottom: 50%;
+}
+
 #submit{
   bottom: 2%;
   right: 2%;
