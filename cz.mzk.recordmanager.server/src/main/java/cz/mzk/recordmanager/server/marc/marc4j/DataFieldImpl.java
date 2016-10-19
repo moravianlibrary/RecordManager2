@@ -10,6 +10,8 @@ import org.marc4j.marc.DataField;
 import org.marc4j.marc.IllegalAddException;
 import org.marc4j.marc.InvalidMARCException;
 import org.marc4j.marc.Subfield;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.ImmutableSet;
 
@@ -19,6 +21,8 @@ import com.google.common.collect.ImmutableSet;
  */
 public class DataFieldImpl extends info.freelibrary.marc4j.impl.VariableFieldImpl implements DataField {
 
+	private static Logger logger = LoggerFactory.getLogger(DataFieldImpl.class);
+	
 	private static final long serialVersionUID = 1L;
 
 	private char myFirstInd;
@@ -58,8 +62,9 @@ public class DataFieldImpl extends info.freelibrary.marc4j.impl.VariableFieldImp
         if (aTag.length() == 3) {
 
                 if (aTag.startsWith("00") && !RESERVED_DATA_FIELDS.contains(aTag)) {
-                    throw new InvalidMARCException(aTag +
-                            " is not a valid DataField tag");
+                	logger.info(aTag + " is not a valid DataField tag");
+//                    throw new InvalidMARCException(aTag +
+//                            " is not a valid DataField tag");
                 }
 
         } else {

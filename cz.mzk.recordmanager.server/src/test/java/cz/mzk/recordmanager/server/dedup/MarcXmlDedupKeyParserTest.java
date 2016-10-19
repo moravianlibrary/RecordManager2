@@ -9,7 +9,6 @@ import org.testng.annotations.Test;
 import com.google.common.io.ByteStreams;
 
 import cz.mzk.recordmanager.server.AbstractTest;
-import cz.mzk.recordmanager.server.marc.InvalidMarcException;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecord.HarvestedRecordUniqueId;
 import cz.mzk.recordmanager.server.model.HarvestedRecordFormat.HarvestedRecordFormatEnum;
@@ -53,15 +52,15 @@ public class MarcXmlDedupKeyParserTest extends AbstractTest {
 		Assert.assertEquals(record.getIssnSeriesOrder(), EXPECTED_ISSNSERIESORDER);
 	}
 	
-	@Test(expectedExceptions=InvalidMarcException.class)
-	public void parseBadRecord() throws Exception {
-		InputStream is = this.getClass().getResourceAsStream("/records/marcxml/MZK01-000153226.xml");
-		HarvestedRecordUniqueId id = new HarvestedRecordUniqueId(1L, "1");
-		HarvestedRecord record = new HarvestedRecord(id);
-		record.setFormat("marc21-xml");
-		byte[] rawRecord = ByteStreams.toByteArray(is);
-		record.setRawRecord(rawRecord);
-		parser.parse(record);
-	}
+//	@Test(expectedExceptions=InvalidMarcException.class)
+//	public void parseBadRecord() throws Exception {
+//		InputStream is = this.getClass().getResourceAsStream("/records/marcxml/MZK01-000153226.xml");
+//		HarvestedRecordUniqueId id = new HarvestedRecordUniqueId(1L, "1");
+//		HarvestedRecord record = new HarvestedRecord(id);
+//		record.setFormat("marc21-xml");
+//		byte[] rawRecord = ByteStreams.toByteArray(is);
+//		record.setRawRecord(rawRecord);
+//		parser.parse(record);
+//	}
 
 }

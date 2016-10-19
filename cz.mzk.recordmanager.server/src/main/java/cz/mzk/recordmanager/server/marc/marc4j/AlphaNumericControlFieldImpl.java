@@ -1,19 +1,22 @@
 package cz.mzk.recordmanager.server.marc.marc4j;
 
+import info.freelibrary.marc4j.impl.VariableFieldImpl;
+
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.marc4j.Constants;
 import org.marc4j.marc.ControlField;
-import org.marc4j.marc.InvalidMARCException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.ImmutableSet;
 
-import info.freelibrary.marc4j.impl.VariableFieldImpl;
-
 public class AlphaNumericControlFieldImpl extends VariableFieldImpl implements ControlField {
 
+	private static Logger logger = LoggerFactory.getLogger(AlphaNumericControlFieldImpl.class);
+	
     private static final long serialVersionUID = 8049827626175226331L;
 
     private String myData;
@@ -59,8 +62,9 @@ public class AlphaNumericControlFieldImpl extends VariableFieldImpl implements C
      */
     public void setTag(String aTag) {
     	if (!Constants.CF_TAG_PATTERN.matcher(aTag).find() && !RESERVED_CONTROL_FIELDS.contains(aTag)) {
-            throw new InvalidMARCException(aTag +
-                    " is not a valid ControlField tag");
+    		logger.info(aTag + " is not a valid ControlField tag");
+//            throw new InvalidMARCException(aTag +
+//                    " is not a valid ControlField tag");
         }
         super.setTag(aTag);
     }
