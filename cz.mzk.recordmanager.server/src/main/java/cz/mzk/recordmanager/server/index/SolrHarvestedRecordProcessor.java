@@ -23,7 +23,7 @@ public class SolrHarvestedRecordProcessor implements ItemProcessor<HarvestedReco
 		logger.debug("About to process harvested record with id={}", record.getId());
 		try {
 			SolrInputDocument result = factory.create(record);
-			return Collections.singletonList(result);
+			return (result != null) ? Collections.singletonList(result) : Collections.emptyList();
 		} catch (Exception ex) {
 			logger.error(String.format("Exception thrown when indexing harvested record with id=%s", record.getId()), ex);
 			return null;
