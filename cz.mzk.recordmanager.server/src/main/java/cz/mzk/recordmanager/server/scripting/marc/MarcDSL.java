@@ -19,6 +19,7 @@ import com.google.common.primitives.Chars;
 
 import cz.mzk.recordmanager.server.export.IOFormat;
 import cz.mzk.recordmanager.server.marc.MarcRecord;
+import cz.mzk.recordmanager.server.marc.SubfieldExtractionMethod;
 import cz.mzk.recordmanager.server.metadata.MetadataRecord;
 import cz.mzk.recordmanager.server.scripting.BaseDSL;
 import cz.mzk.recordmanager.server.scripting.MappingResolver;
@@ -79,6 +80,10 @@ public class MarcDSL extends BaseDSL {
 	}
 
 	public List<String> getFields(String tags) {
+		return this.getFields(tags, SubfieldExtractionMethod.JOINED);
+	}
+
+	public List<String> getFields(String tags, SubfieldExtractionMethod method) {
 		List<String> result = new ArrayList<String>(0);
 		for (String tag : tags.split(":")) {
 			Matcher matcher = FIELD_PATTERN.matcher(tag);
@@ -88,7 +93,7 @@ public class MarcDSL extends BaseDSL {
 			}
 			String fieldTag = matcher.group(1);
 			String subFields = matcher.group(2);
-			result.addAll(record.getFields(fieldTag, " ",
+			result.addAll(record.getFields(fieldTag, null, method, " ",
 					subFields.toCharArray()));
 		}
 		return result;
@@ -264,12 +269,16 @@ public class MarcDSL extends BaseDSL {
     	}
     	return result;
     }
-    
-    public Set<String> getFieldsUnique(String tags){
-    	Set<String> result = new HashSet<String>();
-    	result.addAll(getFields(tags));
-    	return result;
-    }
+
+	public Set<String> getFieldsUnique(String tags) {
+		return this.getFieldsUnique(tags, SubfieldExtractionMethod.JOINED);
+	}
+
+	public Set<String> getFieldsUnique(String tags, SubfieldExtractionMethod method) {
+		Set<String> result = new HashSet<String>();
+		result.addAll(getFields(tags, method));
+		return result;
+	}
 
     public String getFirstFieldTrim(String tags){
     	return removeEndPunctuation(getFirstField(tags));

@@ -57,7 +57,20 @@ public interface MarcRecord {
 	 * @return
 	 */
 	public List<String> getFields(String tag, DataFieldMatcher matcher, String separator, char... subfields);
-	
+
+	/**
+	 * Extract given field with subfields separated by separator filtered by matcher
+	 *
+	 * @param tag
+	 * @param matcher for filtering data fields
+	 * @param method for subfields extraction
+	 * @param separator
+	 * @param subfields
+	 * @return
+	 */
+	public List<String> getFields(String tag, DataFieldMatcher matcher, SubfieldExtractionMethod method, String separator,
+			char... subfields);
+
 	/**
 	 * Extract given subfield from field filtered by matcher
 	 * 

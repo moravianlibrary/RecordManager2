@@ -30,7 +30,6 @@ public class MarcRecordImpl implements MarcRecord {
 	
 	private static final String EMPTY_STRING = "";
 
-	
 	protected final Record record;
 	
 	protected final Map<String, List<DataField>> dataFields;
@@ -113,10 +112,41 @@ public class MarcRecordImpl implements MarcRecord {
 		}
 		return result;
 	}
-	
+
+	@Override
+	public List<String> getFields(String tag, DataFieldMatcher matcher, SubfieldExtractionMethod method, String separator,
+			char... subfields) {
+		if (matcher == null) {
+			matcher = MatchAllDataFieldMatcher.INSTANCE;
+		}
+		List<DataField> fields = dataFields.get(tag);
+		if (fields == null) {
+			return Collections.emptyList();
+		}
+		List<String> result = new ArrayList<String>(fields.size());
+		for (DataField field : fields) {
+			if (matcher.matches(field)) {
+				List<String> sfValues = parseSubfields(field, separator, method, subfields);
+				for (String sfValue : sfValues) {
+					if (sfValue != null && !sfValue.trim().isEmpty()) {
+						result.add(sfValue);
+					}
+				}
+			}
+		}
+		return result;
+	}
+
 	@Override
 	public Map<String, List<DataField>> getAllFields() {
 		return Collections.unmodifiableMap(dataFields);
+	}
+
+	protected List<String> parseSubfields(DataField df, String separator, SubfieldExtractionMethod method, char... subfields) {
+		if (method == null) {
+			method = SubfieldExtractionMethod.JOINED;
+		}
+		return method.getJoiner().extract(df, separator, subfields);
 	}
 
 	protected String parseSubfields(DataField df, String separator, char... subfields) {

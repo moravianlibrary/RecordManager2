@@ -1,4 +1,5 @@
 import static cz.mzk.recordmanager.server.util.MarcCleaningUtils.*;
+import static cz.mzk.recordmanager.server.marc.SubfieldExtractionMethod.*;
 
 recordtype = "marc"
 allfields = getAllFields()
@@ -36,7 +37,7 @@ contents = getFields "505a:505t"
 isbn = getFields "020a"
 issn = getFields "022a:440x:490x:730x:776x:780x:785x"
 
-callnumber_str_mv = getFields "910b"
+callnumber_str_mv = getFields "910b", SEPARATED
      
 topic = getFields "600:610:630:650"
 genre = getFields "655"
