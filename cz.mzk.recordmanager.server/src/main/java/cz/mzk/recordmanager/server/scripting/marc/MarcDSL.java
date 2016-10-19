@@ -58,6 +58,7 @@ public class MarcDSL extends BaseDSL {
 	
 	private static final String LINK773_ISBN = "isbn:";
 	private static final String LINK773_ISSN = "issn:";
+	private static final String LINK773_ISMN = "ismn:";
 	private static final String LINK773_TITLE = "title:";
 	
 	private static final String DISPLAY773_ISMN = "ISMN ";
@@ -669,6 +670,7 @@ public class MarcDSL extends BaseDSL {
 						if(ISSNUtils.isValid(sf.getData())){
 							return LINK773_ISSN + sf.getData();
 						}
+						if(sf.getData().startsWith("M")) return LINK773_ISMN + sf.getData();
 						break;
 					case 'z':
 						String isbnStr = isbnValidator.validate(sf.getData().replaceAll(ISBN_CLEAR_REGEX,"").replaceAll("x", "X"));
