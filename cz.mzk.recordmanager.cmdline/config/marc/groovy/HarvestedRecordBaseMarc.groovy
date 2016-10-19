@@ -28,9 +28,10 @@ sfx_links = getSfxIds()
 
 loanRelevance = getLoanRelevance();
 
-id001_search = getId001()
+id001_search = getId001();
 
 conspectus_str_mv = getConspectus();
 
 link773_str = get773link();
 f773_display = get773display();
+id001_str = getId001();
