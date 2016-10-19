@@ -435,7 +435,7 @@ public class HarvestedRecord extends AbstractDomainObject {
 	}
 
 	public void setClusterId(String clusterId) {
-		this.clusterId = clusterId;
+		if(clusterId != null && clusterId.length() <= 20) this.clusterId = clusterId;
 	}
 
 	public Long getPages() {
