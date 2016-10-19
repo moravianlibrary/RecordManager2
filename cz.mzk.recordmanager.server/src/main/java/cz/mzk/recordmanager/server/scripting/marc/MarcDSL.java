@@ -60,6 +60,11 @@ public class MarcDSL extends BaseDSL {
 	private static final String LINK773_ISSN = "issn:";
 	private static final String LINK773_TITLE = "title:";
 	
+	private static final String DISPLAY773_ISMN = "ISMN ";
+	private static final String DISPLAY773_ISSN = "ISSN ";
+	private static final String DISPLAY773_ISBN = "ISBN ";
+	private static final String DISPLAY773_JOINER = ". -- ";
+	
 	private final MarcFunctionContext context;
 
 	private final MarcRecord record;
@@ -683,5 +688,32 @@ public class MarcDSL extends BaseDSL {
     	}
     	
 		return null;	
+    }
+    
+    public String get773display(){
+    	List<String> result = new ArrayList<>();
+    	for(DataField df: record.getDataFields("773")){
+    		for(char code: new char[]{'t', 'd', 'x', 'g'}){
+    			Subfield sf = df.getSubfield(code);
+    			if(code == 'x'){
+    				if(sf != null){
+    					if(sf.getData().startsWith("M")) result.add(DISPLAY773_ISMN + sf.getData());
+    					else result.add(DISPLAY773_ISSN + sf.getData());
+    				}
+    				else{
+    					sf = df.getSubfield('z');
+    					if(sf != null) result.add(DISPLAY773_ISBN + sf.getData());
+    				}
+    			}
+    			else{ // 't', 'd', 'g'
+    				if(sf == null) continue;
+    				result.add(sf.getData());
+    			}
+    		}
+    		if(!result.isEmpty()){
+    			return String.join(DISPLAY773_JOINER, result);
+    		}
+    	}
+    	return null;
     }
 }
