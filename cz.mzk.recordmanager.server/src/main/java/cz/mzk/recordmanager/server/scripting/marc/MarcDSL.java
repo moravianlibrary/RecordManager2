@@ -693,7 +693,7 @@ public class MarcDSL extends BaseDSL {
     public String get773display(){
     	List<String> result = new ArrayList<>();
     	for(DataField df: record.getDataFields("773")){
-    		for(char code: new char[]{'t', 'd', 'x', 'g'}){
+    		for(char code: new char[]{'t', 'x', 'g'}){
     			Subfield sf = df.getSubfield(code);
     			if(code == 'x'){
     				if(sf != null){
@@ -705,7 +705,7 @@ public class MarcDSL extends BaseDSL {
     					if(sf != null) result.add(DISPLAY773_ISBN + sf.getData());
     				}
     			}
-    			else{ // 't', 'd', 'g'
+    			else{ // 't', 'g'
     				if(sf == null) continue;
     				result.add(sf.getData());
     			}
