@@ -1105,5 +1105,11 @@ public class MetadataMarcRecord implements MetadataRecord {
 		}
 		else return note;
 	}
+
+	@Override
+	public String getAuthorityId() {
+		// implemented only in institution specific classes
+		return null;
+	}
 	
 }

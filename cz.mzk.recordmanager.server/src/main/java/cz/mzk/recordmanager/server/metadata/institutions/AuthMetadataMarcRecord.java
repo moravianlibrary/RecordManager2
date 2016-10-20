@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.marc4j.marc.DataField;
+import org.marc4j.marc.Subfield;
 
 import cz.mzk.recordmanager.server.marc.MarcRecord;
 import cz.mzk.recordmanager.server.metadata.MetadataMarcRecord;
@@ -30,6 +31,15 @@ public class AuthMetadataMarcRecord extends MetadataMarcRecord{
 	public List<HarvestedRecordFormatEnum> getDetectedFormatList() {
 		return Collections.singletonList(HarvestedRecordFormatEnum.OTHER_PERSON);
 		
+	}
+	
+	@Override
+	public String getAuthorityId(){
+		for(DataField df: underlayingMarc.getDataFields("100")){
+			Subfield sf = df.getSubfield('7');
+			if(sf != null) return sf.getData();
+		}
+		return null;
 	}
 
 }

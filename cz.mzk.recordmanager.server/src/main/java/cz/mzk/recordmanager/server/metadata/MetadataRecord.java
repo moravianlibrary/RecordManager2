@@ -172,4 +172,6 @@ public interface MetadataRecord {
 	 * @return List<Ismn>
 	 */
 	public List<Ismn> getISMNs();
+	
+	public String getAuthorityId();
 }

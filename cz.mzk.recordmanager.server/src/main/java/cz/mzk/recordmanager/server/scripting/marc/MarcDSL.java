@@ -718,4 +718,8 @@ public class MarcDSL extends BaseDSL {
     	}
     	return null;
     }
+    
+    public String getAuthorityId(){
+    	return metadataRecord.getAuthorityId();
+    }
 }

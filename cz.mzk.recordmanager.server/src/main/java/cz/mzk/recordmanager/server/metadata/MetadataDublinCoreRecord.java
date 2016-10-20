@@ -459,4 +459,10 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 		return Collections.emptyList();
 	}
 
+	@Override
+	public String getAuthorityId() {
+		// can't get authority key from DC .. leaving with null
+		return null;
+	}
+
 }
