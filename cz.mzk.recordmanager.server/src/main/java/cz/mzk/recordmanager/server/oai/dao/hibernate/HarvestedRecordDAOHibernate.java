@@ -53,6 +53,9 @@ public class HarvestedRecordDAOHibernate extends
 	}
 
 	public HarvestedRecord findBySolrId(String solrId) {
+		if (!solrId.contains(".")) {
+			return this.findByRecordId(solrId);
+		}
 		String[] parts = solrId.split("\\.", 2);
 		String prefix = parts[0];
 		String id = parts[1];

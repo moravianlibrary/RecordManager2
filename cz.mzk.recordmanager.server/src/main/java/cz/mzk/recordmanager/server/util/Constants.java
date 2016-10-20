@@ -15,6 +15,7 @@ public class Constants {
 	public static final String JOB_ID_SOLR_INDEX_HARVESTED_RECORDS	= "indexHarvestedRecordsToSolrJob";
 	public static final String JOB_ID_SOLR_INDEX					= "indexRecordsToSolrJob";
 	public static final String JOB_ID_SOLR_INDEX_INDIVIDUAL_RECORDS	= "indexIndividualRecordsToSolrJob";
+	public static final String JOB_ID_SOLR_INDEX_INDIVIDUAL_HARVESTED_RECORDS	= "indexIndividualHarvestedRecordsToSolrJob";
 	public static final String JOB_ID_EXPORT						= "exportRecordsJob";
 	public static final String JOB_ID_EXPORT_COSMOTRON_996			= "exportCosmotron996Job";
 	public static final String JOB_ID_IMPORT						= "importRecordsJob";
