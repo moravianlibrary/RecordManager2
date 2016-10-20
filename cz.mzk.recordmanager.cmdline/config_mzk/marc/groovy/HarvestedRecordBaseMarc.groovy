@@ -1,3 +1,6 @@
+import static cz.mzk.recordmanager.server.util.MarcCleaningUtils.*;
+import static cz.mzk.recordmanager.server.marc.SubfieldExtractionMethod.*;
+
 recordtype = "mzk"
 allfields = getAllFields()
 fullrecord = getFullrecord()
@@ -76,7 +79,7 @@ fulltext = "" // custom, getFullText()
 topic = getMZKKeywords()
 relevancy_str = getMZKRelevancy()
 
-callnumber_str_mv = getFields "910b"
+callnumber_str_mv = getFields "910b", SEPARATED
 callnumber_second_str_mv = getFields("996h").collect{it -> it.replace(' ', '|')}
 
 // source = "MZK"
