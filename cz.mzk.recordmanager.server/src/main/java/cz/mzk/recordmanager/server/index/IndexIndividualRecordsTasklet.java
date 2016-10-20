@@ -44,7 +44,7 @@ public class IndexIndividualRecordsTasklet implements Tasklet {
 	@Override
 	public RepeatStatus execute(StepContribution contribution,
 			ChunkContext chunkContext) throws Exception {
-		SolrServerFacade solrServer = solrServerFactory.create(solrUrl, Mode.DEFAULT, LoggingSolrIndexingExceptionHandler.INSTANCE);
+		SolrServerFacade solrServer = solrServerFactory.create(solrUrl, null, LoggingSolrIndexingExceptionHandler.INSTANCE);
 		for (String solrId : recordIds) {
 			HarvestedRecord rec = harvestedRecordDao.findBySolrId(solrId);
 			if (rec == null) {
