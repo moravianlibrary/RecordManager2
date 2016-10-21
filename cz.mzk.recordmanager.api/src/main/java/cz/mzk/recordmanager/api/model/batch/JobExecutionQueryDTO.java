@@ -12,7 +12,11 @@ public class JobExecutionQueryDTO implements Serializable {
 	private Date startedFrom;
 	
 	private Date startedTo;
-	
+
+	private String status;
+
+	private String exitCode;
+
 	private int limit = 10;
 	
 	private int offset = 0;
@@ -39,6 +43,22 @@ public class JobExecutionQueryDTO implements Serializable {
 
 	public void setStartedTo(Date startedTo) {
 		this.startedTo = startedTo;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	public String getExitCode() {
+		return exitCode;
+	}
+
+	public void setExitCode(String exitCode) {
+		this.exitCode = exitCode;
 	}
 
 	public int getLimit() {
