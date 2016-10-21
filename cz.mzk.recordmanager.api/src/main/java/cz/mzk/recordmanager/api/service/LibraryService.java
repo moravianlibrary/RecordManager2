@@ -7,19 +7,18 @@ import cz.mzk.recordmanager.api.model.LibraryDto;
 import cz.mzk.recordmanager.api.model.OaiHarvestConfigurationDto;
 
 public interface LibraryService {
-	
-	List<LibraryDto> getLibraries();
 
-	LibraryDetailDto getDetail(Long libraryId);
+	public List<LibraryDto> getLibraries();
 
-	LibraryDto updateOrCreateLibrary(LibraryDto libraryDto);
+	public LibraryDetailDto getDetail(Long libraryId);
 
-	OaiHarvestConfigurationDto updateOrCreateConfig(OaiHarvestConfigurationDto config, Long libraryId);
+	public LibraryDto updateOrCreateLibrary(LibraryDto libraryDto);
 
-//	public void removeLibrary(Long libraryId);
-//
-//	public void updateOrCreateConfig(OaiHarvestConfigurationDto configm, Long libraryId);
-//
-//	public void removeOaiHarvestConfiguration(Long configId);
-	
+	public void removeLibrary(Long libraryId);
+
+	public void updateOrCreateConfig(OaiHarvestConfigurationDto config,
+			Long libraryId);
+
+	public void removeOaiHarvestConfiguration(Long configId);
+
 }
