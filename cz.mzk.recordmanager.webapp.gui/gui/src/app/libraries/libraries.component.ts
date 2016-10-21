@@ -76,12 +76,10 @@ export class LibrariesComponent implements OnInit {
 
 
 
-	constructor(private librariesService: LibrariesService, private router: Router)
-	{}
+	constructor(private librariesService: LibrariesService, private router: Router) {}
 
 
-	getLibraries()
-	{
+	getLibraries() {
 		this.loading = true;
 		this.librariesService.getLibraries().subscribe(
 			libraries => {
@@ -90,8 +88,7 @@ export class LibrariesComponent implements OnInit {
 			}
 		);
 	}
-	createLibrary()
-	{
+	createLibrary() {
 		this.librariesService.createLibrary(this.newLibrary).subscribe(library => this.libraries.push(library));
 	}
 
@@ -114,8 +111,7 @@ export class LibrariesComponent implements OnInit {
     this.getLibraries();
 	}
 
-	sortByMe(name: string)
-  {
+	sortByMe(name: string) {
     //Make all arrows invisible
     this.fields.forEach(field => {
       if (field.style.visibility == 'visible'){

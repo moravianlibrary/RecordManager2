@@ -2,6 +2,8 @@ package cz.mzk.recordmanager.server;
 
 import javax.sql.DataSource;
 
+import cz.mzk.recordmanager.api.service.OaiHarvestStatisticsService;
+import cz.mzk.recordmanager.server.service.OaiHarvestStatisticsServiceImpl;
 import liquibase.exception.LiquibaseException;
 import liquibase.integration.spring.SpringLiquibase;
 
@@ -217,6 +219,11 @@ public class AppConfig extends DefaultBatchConfigurer {
 	@Bean
 	public LibraryService libraryService() {
 		return new LibraryServiceImpl();
+	}
+
+	@Bean
+	public OaiHarvestStatisticsService oaiHarvestStatisticsService(){
+		return new OaiHarvestStatisticsServiceImpl();
 	}
 
 }

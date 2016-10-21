@@ -11,6 +11,12 @@ public class BatchDTOTranslator {
 	public BatchJobExecutionDTO translate(BatchJobExecution jobExec) {
 		BatchJobExecutionDTO dto = new BatchJobExecutionDTO();
 		dto.setId(jobExec.getId());
+		dto.setJobInstanceID(jobExec.getJobInstance().getId());
+		dto.setCreateTime(jobExec.getCreate());
+		dto.setStartTime(jobExec.getStart());
+		dto.setEndTime(jobExec.getEnd());
+		dto.setStatus(jobExec.getStatus());
+		dto.setExitMessage(jobExec.getExitMessage());
 		return dto;
 	}
 

@@ -1,6 +1,4 @@
-/**
- * Created by sergey on 10/7/16.
- */
+
 import 'rxjs/add/observable/throw';
 
 // Operators

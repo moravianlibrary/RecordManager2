@@ -20,6 +20,5 @@ public interface DomainDAO<ID extends Serializable, T> {
 
 	public void flush();
 
-	ID save(T object);
 
 }

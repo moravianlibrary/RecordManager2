@@ -7,6 +7,7 @@ import { AppComponent } from './app.component';
 import {LibrariesModule} from "./libraries/libraries.module";
 import {routing} from "./app.routing";
 import {CommonModule} from "@angular/common";
+import {StatisticsModule} from "./statistics/statistics.module";
 
 @NgModule({
   declarations: [
@@ -17,6 +18,7 @@ import {CommonModule} from "@angular/common";
     FormsModule,
     HttpModule,
     LibrariesModule,
+    StatisticsModule,
     routing
   ],
   providers: [],

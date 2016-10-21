@@ -51,4 +51,10 @@ public class BatchServiceImpl implements BatchService {
 		jobExecutor.restart(jobExecution.getId());
 	}
 
+	@Transactional(readOnly=true)
+	@Override
+	public BatchJobExecutionDTO getJobExecution(Long id) {
+		return dtoTranslator.translate(batchJobExecutionDao.get(id));
+	}
+
 }

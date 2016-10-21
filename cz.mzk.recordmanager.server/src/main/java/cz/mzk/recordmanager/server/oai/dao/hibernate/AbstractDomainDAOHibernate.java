@@ -66,9 +66,5 @@ public class AbstractDomainDAOHibernate<ID extends Serializable, T> implements D
 		sessionFactory.getCurrentSession().flush();
 	}
 
-	@Override
-	public ID save(T object) {
-		return (ID) sessionFactory.getCurrentSession().save(object);
-	}
 
 }

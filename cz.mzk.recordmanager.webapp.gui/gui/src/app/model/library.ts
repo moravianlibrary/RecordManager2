@@ -2,16 +2,14 @@ import any = jasmine.any;
 /**
  * Class represents library.
  */
-export class Library
-{
+export class Library {
 	id: number;
 	name: string;
 	url: string;
 	catalogUrl: string;
 	city: string;
 
-	constructor(obj?: any)
-	{
+	constructor(obj?: any) {
 		this.id							 = obj && obj.id						 || null;
 		this.name						 = obj && obj.name					 || null;
 		this.url							= obj && obj.url						|| null;

@@ -92,7 +92,8 @@ public class LibraryServiceImpl implements LibraryService {
 		{
 			lib = new Library();
 			fillLibrary(lib, libraryDto);
-			id =  libraryDao.save(lib);
+			libraryDao.persist(lib);
+			id = lib.getId();
 
 		}else
 		{
@@ -143,7 +144,9 @@ public class LibraryServiceImpl implements LibraryService {
 
 			oaiHarvestConfiguration = fillConfiguration(oaiHarvestConfiguration, config);
 
-			id = harvestConfigurationDAO.save(oaiHarvestConfiguration);
+			harvestConfigurationDAO.persist(oaiHarvestConfiguration);
+
+			id = oaiHarvestConfiguration.getId();
 
 		}else
 		{
