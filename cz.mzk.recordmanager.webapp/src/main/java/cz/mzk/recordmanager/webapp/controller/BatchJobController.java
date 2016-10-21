@@ -10,20 +10,17 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-/**
- * Created by sergey on 10/11/16.
- */
 @RestController
 @RequestMapping(value = "/batches")
 public class BatchJobController {
-    @Autowired
-    private BatchService batchService;
 
+	@Autowired
+	private BatchService batchService;
 
-    @RequestMapping(method = RequestMethod.GET, value = "/running")
-    @ResponseBody
-    private List<BatchJobExecutionDTO> getRunningJobExecutions()
-    {
-        return batchService.getRunningJobExecutions();
-    }
+	@RequestMapping(method = RequestMethod.GET, value = "/running")
+	@ResponseBody
+	private List<BatchJobExecutionDTO> getRunningJobExecutions() {
+		return batchService.getRunningJobExecutions();
+	}
+
 }
