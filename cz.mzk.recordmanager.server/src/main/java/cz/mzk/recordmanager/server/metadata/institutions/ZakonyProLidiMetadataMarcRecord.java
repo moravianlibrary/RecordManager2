@@ -9,6 +9,7 @@ import org.marc4j.marc.DataField;
 import cz.mzk.recordmanager.server.marc.MarcRecord;
 import cz.mzk.recordmanager.server.metadata.MetadataMarcRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecordFormat.HarvestedRecordFormatEnum;
+import cz.mzk.recordmanager.server.util.Constants;
 
 public class ZakonyProLidiMetadataMarcRecord extends MetadataMarcRecord{
 	
@@ -104,5 +105,10 @@ public class ZakonyProLidiMetadataMarcRecord extends MetadataMarcRecord{
 			}
 		}
 		return true;
+	}
+	
+	@Override
+	public List<String> getUrls() {
+		return getUrls(Constants.DOCUMENT_AVAILABILITY_ONLINE);
 	}
 }
