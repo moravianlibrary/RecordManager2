@@ -465,4 +465,9 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 		return null;
 	}
 
+	@Override
+	public List<String> getUrls() {
+		return dcRecord.getUrls();
+	}
+
 }

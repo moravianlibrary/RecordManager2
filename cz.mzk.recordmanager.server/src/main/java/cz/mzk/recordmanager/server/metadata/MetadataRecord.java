@@ -173,5 +173,16 @@ public interface MetadataRecord {
 	 */
 	public List<Ismn> getISMNs();
 	
+	/**
+	 * get authority ID
+	 * @return
+	 */
 	public String getAuthorityId();
+
+	/**
+	 * get urls
+	 * format: availability | link | comment
+	 * @return
+	 */
+	public List<String> getUrls();
 }

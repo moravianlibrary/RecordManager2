@@ -24,6 +24,7 @@ import cz.mzk.recordmanager.server.model.Ismn;
 import cz.mzk.recordmanager.server.model.Issn;
 import cz.mzk.recordmanager.server.model.Oclc;
 import cz.mzk.recordmanager.server.model.Title;
+import cz.mzk.recordmanager.server.util.Constants;
 import cz.mzk.recordmanager.server.util.MetadataUtils;
 
 public class MetadataMarcRecord implements MetadataRecord {
@@ -1111,5 +1112,52 @@ public class MetadataMarcRecord implements MetadataRecord {
 		// implemented only in institution specific classes
 		return null;
 	}
+	
+	@Override
+	public List<String> getUrls(){
+		return getUrls(Constants.DOCUMENT_AVAILABILITY_UNKNOWN);
+	}
+	
+	protected List<String> getUrls(String availability) {
+    	List<String> result = new ArrayList<>();
+    	
+    	for (DataField df: underlayingMarc.getDataFields("856")) {
+    		if (df.getSubfield('u') == null) {
+    			continue;
+    		}
+    		String link = df.getSubfield('u').getData();
+    		String comment = "";
+    		
+    		String sub3 = null,subY = null,subZ = null;
+    		
+    		if (df.getSubfield('3') != null) {
+    			sub3 = df.getSubfield('3').getData();
+    		}
+    		if (df.getSubfield('y') != null) {
+    			subY = df.getSubfield('y').getData();
+    		}
+    		if (df.getSubfield('z') != null) {
+    			subZ = df.getSubfield('z').getData();
+    		}
+    		
+    		if (sub3 != null) {
+    			comment = sub3;
+    			if (subZ != null) {
+    				comment += " (" + subZ + ")";
+    			}
+    		} else if (subY != null) {
+    			comment = subY;
+    			if (subZ != null) {
+    				comment += " (" + subZ + ")";
+    			}
+    		} else if (subZ != null) {
+    			comment = subZ;
+    		}
+    		
+    		result.add(availability + "|" + link + "|" + comment);
+    	}
+    	
+    	return result;
+    }
 	
 }

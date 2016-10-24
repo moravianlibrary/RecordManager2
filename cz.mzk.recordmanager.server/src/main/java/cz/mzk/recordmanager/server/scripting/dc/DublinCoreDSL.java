@@ -217,7 +217,7 @@ public class DublinCoreDSL extends BaseDSL {
 	}
 	
 	public List<String> getUrls(){
-		return record.getUrls();
+		return dcMetadataRecord.getUrls();
 	}
 	
 	public List<String> getPhysicals(){

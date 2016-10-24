@@ -12,6 +12,7 @@ import cz.mzk.recordmanager.server.marc.MarcRecord;
 import cz.mzk.recordmanager.server.marc.MarcXmlParser;
 import cz.mzk.recordmanager.server.metadata.institutions.AuthMetadataMarcRecord;
 import cz.mzk.recordmanager.server.metadata.institutions.KramDefaultMetadataDublinCoreRecord;
+import cz.mzk.recordmanager.server.metadata.institutions.MkpEbooksMetadataMarcRecord;
 import cz.mzk.recordmanager.server.metadata.institutions.MzkMetadataMarcRecord;
 import cz.mzk.recordmanager.server.metadata.institutions.MzkNormsMetadataMarcRecord;
 import cz.mzk.recordmanager.server.metadata.institutions.NkpMarcMetadataRecord;
@@ -97,6 +98,8 @@ public class MetadataRecordFactory {
 			return new VkolMarcMetadataRecord(marcRec);
 		case Constants.PREFIX_ZAKONY:
 			return new ZakonyProLidiMetadataMarcRecord(marcRec);
+		case Constants.PREFIX_MKP_EBOOKS:
+			return new MkpEbooksMetadataMarcRecord(marcRec);
 		default:
 			return new MetadataMarcRecord(marcRec);
 		}
