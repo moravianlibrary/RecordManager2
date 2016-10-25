@@ -31,6 +31,12 @@ public class BatchJobExecutionDAOHibernate extends
 		if (query.getStartedTo() != null) {
 			criteria.add(Restrictions.lt("start", query.getStartedTo()));
 		}
+		if (query.getStatus() != null) {
+			criteria.add(Restrictions.lt("status", query.getStatus()));
+		}
+		if (query.getExitCode() != null) {
+			criteria.add(Restrictions.lt("exitCode", query.getExitCode()));
+		}
 		if (query.getLimit() > 0) {
 			criteria.setMaxResults(query.getLimit());
 		}
@@ -41,7 +47,7 @@ public class BatchJobExecutionDAOHibernate extends
 		List<BatchJobExecution> results = (List<BatchJobExecution>) criteria.list();
 		return results;
 	}
-	
+
 	@Override
 	@SuppressWarnings("unchecked")
 	public List<BatchJobExecution> getRunningExecutions() {
