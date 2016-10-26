@@ -3,6 +3,13 @@ package cz.mzk.recordmanager.server.springbatch;
 import java.util.ArrayList;
 import java.util.List;
 
+import cz.mzk.recordmanager.server.facade.*;
+import cz.mzk.recordmanager.server.model.DownloadImportConfiguration;
+import cz.mzk.recordmanager.server.model.KrameriusConfiguration;
+import cz.mzk.recordmanager.server.model.OAIHarvestConfiguration;
+import cz.mzk.recordmanager.server.oai.dao.DownloadImportConfigurationDAO;
+import cz.mzk.recordmanager.server.oai.dao.KrameriusConfigurationDAO;
+import cz.mzk.recordmanager.server.oai.dao.OAIHarvestConfigurationDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
@@ -24,6 +31,27 @@ public class BatchServiceImpl implements BatchService {
 
 	@Autowired
 	private BatchDTOTranslator dtoTranslator;
+
+	@Autowired
+	private OAIHarvestConfigurationDAO harvestConfigurationDAO;
+
+	@Autowired
+	private KrameriusConfigurationDAO krameriusConfigurationDAO;
+
+	@Autowired
+	private DownloadImportConfigurationDAO downloadImportConfigurationDAO;
+
+	@Autowired
+	private HarvestingFacade harvestingFacade;
+
+	@Autowired
+	private ImportRecordFacade importRecordFacade;
+
+	@Autowired
+	private DedupFacade dedupFacade;
+
+	@Autowired
+	private IndexingFacade indexingFacade;
 	
 	@Transactional(readOnly=true)
 	@Override
@@ -56,5 +84,49 @@ public class BatchServiceImpl implements BatchService {
 	public BatchJobExecutionDTO getJobExecution(Long id) {
 		return dtoTranslator.translate(batchJobExecutionDao.get(id));
 	}
+
+	@Override
+	@Transactional(propagation = Propagation.NOT_SUPPORTED)
+	public void runFullHarvest(Long id) {
+		OAIHarvestConfiguration configuration = harvestConfigurationDAO.get(id);
+		if (configuration != null)
+			harvestingFacade.fullHarvest(configuration);
+	}
+
+	@Override
+	@Transactional(propagation = Propagation.NOT_SUPPORTED)
+	public void runIncrementalHarvest(Long id) {
+		OAIHarvestConfiguration oaiConfig = harvestConfigurationDAO.get(id);
+		if (oaiConfig != null) {
+			harvestingFacade.incrementalHarvest(oaiConfig);
+		}else {
+			KrameriusConfiguration kramConfig = krameriusConfigurationDAO.get(id);
+
+			if (kramConfig != null) {
+				harvestingFacade.incrementalHarvest(kramConfig);
+			}
+		}
+	}
+
+	@Override
+	@Transactional(propagation = Propagation.NOT_SUPPORTED)
+	public void runDeduplicate() {
+		dedupFacade.deduplicate();
+	}
+
+	@Override
+	@Transactional(propagation = Propagation.NOT_SUPPORTED)
+	public void runDownloadAndImport(Long id) {
+		DownloadImportConfiguration downloadImportConfiguration = downloadImportConfigurationDAO.get(id);
+		if (downloadImportConfiguration != null)
+			importRecordFacade.downloadAndImportRecordSJob(downloadImportConfiguration);
+	}
+
+	@Override
+	@Transactional(propagation = Propagation.NOT_SUPPORTED)
+	public void runIndex() {
+		indexingFacade.index();
+	}
+
 
 }

@@ -28,4 +28,34 @@ public class BatchJobController {
     {
         return batchService.getRunningJobExecutions();
     }
+
+    @RequestMapping(method = RequestMethod.POST, value = "/run/fullHarvest/{configId}")
+	@ResponseBody
+	private void runFullHarvest(@PathVariable Long configId){
+	    batchService.runFullHarvest(configId);
+    }
+
+	@RequestMapping(method = RequestMethod.POST, value = "/run/incrementalHarvest/{configId}")
+	@ResponseBody
+	private void runIncrementalHarvest(@PathVariable Long configId){
+		batchService.runIncrementalHarvest(configId);
+	}
+
+	@RequestMapping(method = RequestMethod.POST, value = "/run/deduplicate")
+	@ResponseBody
+	private void runDuduplicate(){
+		batchService.runDeduplicate();
+	}
+
+	@RequestMapping(method = RequestMethod.POST, value = "/run/downloadImport/{configId}")
+	@ResponseBody
+	private void runDownloadImport(@PathVariable Long configId){
+		batchService.runDownloadAndImport(configId);
+	}
+
+	@RequestMapping(method = RequestMethod.POST, value = "/run/index")
+	@ResponseBody
+	private void runIndex(){
+		batchService.runIndex();
+	}
 }

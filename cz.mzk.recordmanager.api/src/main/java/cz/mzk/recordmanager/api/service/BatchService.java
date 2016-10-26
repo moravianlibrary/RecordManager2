@@ -12,6 +12,16 @@ public interface BatchService {
 
 	public void restart(BatchJobExecutionDTO jobExecution);
 
-	BatchJobExecutionDTO getJobExecution(Long id);
+	public BatchJobExecutionDTO getJobExecution(Long id);
+
+	public void runFullHarvest(Long id);
+
+	public void runIncrementalHarvest(Long id);
+
+	public void runDeduplicate();
+
+	public void runDownloadAndImport(Long id);
+
+	public void runIndex();
 
 }
