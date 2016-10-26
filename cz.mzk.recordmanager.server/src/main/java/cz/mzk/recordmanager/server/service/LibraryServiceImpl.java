@@ -2,6 +2,7 @@ package cz.mzk.recordmanager.server.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import cz.mzk.recordmanager.api.model.ContactPersonDto;
 import cz.mzk.recordmanager.server.model.ContactPerson;
@@ -54,7 +55,7 @@ public class LibraryServiceImpl implements LibraryService {
 	public LibraryDto updateOrCreateLibrary(LibraryDto libraryDto) {
 		Library library = (libraryDto.getId() == null)? new Library() : libraryDao.get(libraryDto.getId());
 		fillLibrary(library, libraryDto);
-		libraryDao.save(library);
+		libraryDao.persist(library);
 		if (libraryDto.getId() == null) {
 			libraryDto.setId(library.getId());
 		}

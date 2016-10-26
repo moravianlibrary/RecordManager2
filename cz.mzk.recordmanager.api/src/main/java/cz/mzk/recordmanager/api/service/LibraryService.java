@@ -16,7 +16,7 @@ public interface LibraryService {
 
 	public void removeLibrary(Long libraryId);
 
-	public void updateOrCreateConfig(OaiHarvestConfigurationDto config,
+	public OaiHarvestConfigurationDto updateOrCreateConfig(OaiHarvestConfigurationDto config,
 			Long libraryId);
 
 	public void removeOaiHarvestConfiguration(Long configId);
