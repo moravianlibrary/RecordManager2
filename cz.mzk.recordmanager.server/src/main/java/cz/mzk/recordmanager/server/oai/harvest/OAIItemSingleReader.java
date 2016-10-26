@@ -59,7 +59,7 @@ public class OAIItemSingleReader implements ItemReader<List<OAIRecord>>,
 	}
 
 	/**
-	 * Harvests record by Id
+	 * Harvests record by IdDto
 	 * 
 	 * @return single record in list or null if nothing is found
 	 */

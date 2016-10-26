@@ -3,6 +3,7 @@ package cz.mzk.recordmanager.server.springbatch;
 import java.util.ArrayList;
 import java.util.List;
 
+import cz.mzk.recordmanager.api.model.IdDto;
 import cz.mzk.recordmanager.server.facade.*;
 import cz.mzk.recordmanager.server.model.DownloadImportConfiguration;
 import cz.mzk.recordmanager.server.model.KrameriusConfiguration;
@@ -87,20 +88,20 @@ public class BatchServiceImpl implements BatchService {
 
 	@Override
 	@Transactional(propagation = Propagation.NOT_SUPPORTED)
-	public void runFullHarvest(Long id) {
-		OAIHarvestConfiguration configuration = harvestConfigurationDAO.get(id);
+	public void runFullHarvest(IdDto id) {
+		OAIHarvestConfiguration configuration = harvestConfigurationDAO.get(id.getId());
 		if (configuration != null)
 			harvestingFacade.fullHarvest(configuration);
 	}
 
 	@Override
 	@Transactional(propagation = Propagation.NOT_SUPPORTED)
-	public void runIncrementalHarvest(Long id) {
-		OAIHarvestConfiguration oaiConfig = harvestConfigurationDAO.get(id);
+	public void runIncrementalHarvest(IdDto id) {
+		OAIHarvestConfiguration oaiConfig = harvestConfigurationDAO.get(id.getId());
 		if (oaiConfig != null) {
 			harvestingFacade.incrementalHarvest(oaiConfig);
 		}else {
-			KrameriusConfiguration kramConfig = krameriusConfigurationDAO.get(id);
+			KrameriusConfiguration kramConfig = krameriusConfigurationDAO.get(id.getId());
 
 			if (kramConfig != null) {
 				harvestingFacade.incrementalHarvest(kramConfig);
@@ -116,8 +117,8 @@ public class BatchServiceImpl implements BatchService {
 
 	@Override
 	@Transactional(propagation = Propagation.NOT_SUPPORTED)
-	public void runDownloadAndImport(Long id) {
-		DownloadImportConfiguration downloadImportConfiguration = downloadImportConfigurationDAO.get(id);
+	public void runDownloadAndImport(IdDto id) {
+		DownloadImportConfiguration downloadImportConfiguration = downloadImportConfigurationDAO.get(id.getId());
 		if (downloadImportConfiguration != null)
 			importRecordFacade.downloadAndImportRecordSJob(downloadImportConfiguration);
 	}

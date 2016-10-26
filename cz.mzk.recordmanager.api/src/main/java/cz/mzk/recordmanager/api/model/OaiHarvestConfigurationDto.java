@@ -2,11 +2,10 @@ package cz.mzk.recordmanager.api.model;
 
 import java.io.Serializable;
 
-public class OaiHarvestConfigurationDto implements Serializable {
+public class OaiHarvestConfigurationDto extends IdDto implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	private Long id;
 
 	private ContactPersonDto contact;
 
@@ -72,16 +71,6 @@ public class OaiHarvestConfigurationDto implements Serializable {
 
 	public void setSet(String set) {
 		this.set = set;
-	}
-
-	
-	public Long getId() {
-		return id;
-	}
-
-	
-	public void setId(Long id) {
-		this.id = id;
 	}
 
 	

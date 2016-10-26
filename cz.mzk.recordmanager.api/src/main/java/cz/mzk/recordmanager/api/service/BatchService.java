@@ -2,6 +2,7 @@ package cz.mzk.recordmanager.api.service;
 
 import java.util.List;
 
+import cz.mzk.recordmanager.api.model.IdDto;
 import cz.mzk.recordmanager.api.model.batch.BatchJobExecutionDTO;
 
 public interface BatchService {
@@ -14,13 +15,13 @@ public interface BatchService {
 
 	public BatchJobExecutionDTO getJobExecution(Long id);
 
-	public void runFullHarvest(Long id);
+	public void runFullHarvest(IdDto id);
 
-	public void runIncrementalHarvest(Long id);
+	public void runIncrementalHarvest(IdDto id);
 
 	public void runDeduplicate();
 
-	public void runDownloadAndImport(Long id);
+	public void runDownloadAndImport(IdDto id);
 
 	public void runIndex();
 

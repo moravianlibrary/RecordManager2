@@ -1,5 +1,6 @@
 package cz.mzk.recordmanager.webapp.controller;
 
+import cz.mzk.recordmanager.api.model.IdDto;
 import cz.mzk.recordmanager.api.model.batch.BatchJobExecutionDTO;
 import cz.mzk.recordmanager.api.service.BatchService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,15 +30,15 @@ public class BatchJobController {
         return batchService.getRunningJobExecutions();
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = "/run/fullHarvest/{configId}")
+    @RequestMapping(method = RequestMethod.POST, value = "/run/fullHarvest")
 	@ResponseBody
-	private void runFullHarvest(@PathVariable Long configId){
+	private void runFullHarvest(@RequestBody IdDto configId){
 	    batchService.runFullHarvest(configId);
     }
 
-	@RequestMapping(method = RequestMethod.POST, value = "/run/incrementalHarvest/{configId}")
+	@RequestMapping(method = RequestMethod.POST, value = "/run/incrementalHarvest")
 	@ResponseBody
-	private void runIncrementalHarvest(@PathVariable Long configId){
+	private void runIncrementalHarvest(@RequestBody IdDto configId){
 		batchService.runIncrementalHarvest(configId);
 	}
 
@@ -47,9 +48,9 @@ public class BatchJobController {
 		batchService.runDeduplicate();
 	}
 
-	@RequestMapping(method = RequestMethod.POST, value = "/run/downloadImport/{configId}")
+	@RequestMapping(method = RequestMethod.POST, value = "/run/downloadImport")
 	@ResponseBody
-	private void runDownloadImport(@PathVariable Long configId){
+	private void runDownloadImport(@RequestBody IdDto configId){
 		batchService.runDownloadAndImport(configId);
 	}
 
