@@ -2,14 +2,13 @@ package cz.mzk.recordmanager.server.service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import cz.mzk.recordmanager.api.model.ContactPersonDto;
 import cz.mzk.recordmanager.server.model.ContactPerson;
+import cz.mzk.recordmanager.server.model.ImportConfiguration;
 import cz.mzk.recordmanager.server.model.OAIHarvestConfiguration;
 import cz.mzk.recordmanager.server.oai.dao.ContactPersonDAO;
 import cz.mzk.recordmanager.server.oai.dao.OAIHarvestConfigurationDAO;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -49,6 +48,7 @@ public class LibraryServiceImpl implements LibraryService {
 		return this.translateWithDetails(library);
 	}
 
+
 	@Override
 	@Transactional
 	public LibraryDto updateOrCreateLibrary(LibraryDto libraryDto) {
@@ -63,44 +63,98 @@ public class LibraryServiceImpl implements LibraryService {
 
 	private OAIHarvestConfiguration fillConfiguration(OAIHarvestConfiguration target, OaiHarvestConfigurationDto src) {
 		fillOAIHarvestConfiguration(target, src);
+
 		ContactPerson contact = personDAO.get(src.getContact().getId());
+
 		fillPerson(contact, src.getContact());
+
 		target.setContact(contact);
+
 		return target;
 	}
 
-	@Override
-	@Transactional
-	public void updateOrCreateConfig(OaiHarvestConfigurationDto config, Long libraryId) {
-		throw new UnsupportedOperationException("updateOrCreateConfig");
-	}
 
 	@Override
 	@Transactional
-	public void removeLibrary(Long libraryId) {
+	public OaiHarvestConfigurationDto updateOrCreateConfig(OaiHarvestConfigurationDto config, Long libraryId) {
+		Library lib = libraryDao.get(libraryId);
+
+		if (
+				lib == null ||
+						config.getContact() == null ||
+						config.getContact().getId() == null ||
+						personDAO.get(config.getContact().getId()) == null
+				)
+		{
+			return null;
+		}
+		OAIHarvestConfiguration oaiHarvestConfiguration;
+		long id = -1000;
+		if (config.getId() == null)	//Detect creating new configuration
+		{
+			//TODO: How to add contact to configuration??
+			oaiHarvestConfiguration = new OAIHarvestConfiguration();
+
+			oaiHarvestConfiguration = fillConfiguration(oaiHarvestConfiguration, config);
+
+			harvestConfigurationDAO.persist(oaiHarvestConfiguration);
+
+			id = oaiHarvestConfiguration.getId();
+
+		}else
+		{
+			oaiHarvestConfiguration = harvestConfigurationDAO.get(config.getId());
+
+			oaiHarvestConfiguration = fillConfiguration(oaiHarvestConfiguration, config);
+
+			id = config.getId();
+
+			harvestConfigurationDAO.update(oaiHarvestConfiguration);
+		}
+		return translate(harvestConfigurationDAO.get(id));
+	}
+
+
+	@Override
+	@Transactional
+	public void removeLibrary(Long libraryId) { 
 		throw new UnsupportedOperationException();
 	}
+
+
 
 	@Override
 	@Transactional
 	public void removeOaiHarvestConfiguration(Long configId) {
 		OAIHarvestConfiguration config = harvestConfigurationDAO.get(configId);
-		if (config != null) {
+		if (config != null)
 			harvestConfigurationDAO.delete(config);
-		}
 	}
 
-	private void fillOAIHarvestConfiguration(OAIHarvestConfiguration harvestConfiguration, OaiHarvestConfigurationDto config) {
+	private void fillOAIHarvestConfiguration(OAIHarvestConfiguration harvestConfiguration, OaiHarvestConfigurationDto config)
+	{
+
 		harvestConfiguration.setIdPrefix(config.getIdPrefix());
+
 		harvestConfiguration.setBaseWeight(config.getBaseWeight());
+
 		harvestConfiguration.setClusterIdEnabled(config.isClusterIdEnabled());
+
 		harvestConfiguration.setFilteringEnabled(config.isFilteringEnabled());
+
 		harvestConfiguration.setInterceptionEnabled(config.isInterceptionEnabled());
+
 		harvestConfiguration.setLibrary(config.isLibrary());
+
 		harvestConfiguration.setUrl(config.getUrl());
+
 		harvestConfiguration.setRegex(config.getExtractIdRegex());
+
+
 		harvestConfiguration.setHarvestJobName(config.getHarvestJobName());
+
 		harvestConfiguration.setSet(config.getSet());
+
 		harvestConfiguration.setMetadataPrefix(config.getMetadataPrefix());
 	}
 
@@ -127,6 +181,7 @@ public class LibraryServiceImpl implements LibraryService {
 		library.setCity(libraryDto.getCity());
 		library.setName(libraryDto.getName());
 		library.setCatalogUrl(library.getCatalogUrl());
+
 		return library;
 	}
 
@@ -140,11 +195,13 @@ public class LibraryServiceImpl implements LibraryService {
 		libraryDetailDto.setUrl(library.getUrl());
 		libraryDetailDto.setCatalogUrl(library.getCatalogUrl());
 		libraryDetailDto.setCity(library.getCity());
+
 		return libraryDetailDto;
 	}
 
 	private OaiHarvestConfigurationDto translate(OAIHarvestConfiguration oaiHarvestConfiguration) {
 		OaiHarvestConfigurationDto oaiHarvestConfigurationDto = new OaiHarvestConfigurationDto();
+
 		oaiHarvestConfigurationDto.setId(oaiHarvestConfiguration.getId());
 		oaiHarvestConfigurationDto.setContact(translate(oaiHarvestConfiguration.getContact()));
 		oaiHarvestConfigurationDto.setIdPrefix(oaiHarvestConfiguration.getIdPrefix());
@@ -153,6 +210,8 @@ public class LibraryServiceImpl implements LibraryService {
 		oaiHarvestConfigurationDto.setFilteringEnabled(oaiHarvestConfiguration.isFilteringEnabled());
 		oaiHarvestConfigurationDto.setInterceptionEnabled(oaiHarvestConfiguration.isInterceptionEnabled());
 		oaiHarvestConfigurationDto.setLibrary(oaiHarvestConfiguration.isLibrary());
+
+
 		oaiHarvestConfigurationDto.setUrl(oaiHarvestConfiguration.getUrl());
 		oaiHarvestConfigurationDto.setSet(oaiHarvestConfiguration.getSet());
 		oaiHarvestConfigurationDto.setMetadataPrefix(oaiHarvestConfiguration.getMetadataPrefix());
@@ -167,9 +226,9 @@ public class LibraryServiceImpl implements LibraryService {
 		contactPersonDto.setEmail(contactPerson.getEmail());
 		contactPersonDto.setName(contactPerson.getName());
 		contactPersonDto.setPhone(contactPerson.getPhone());
+
 		return contactPersonDto;
 	}
-
 	private LibraryDto translate(Library library) {
 		LibraryDto libraryDto = new LibraryDto();
 		libraryDto.setId(library.getId());
@@ -179,5 +238,7 @@ public class LibraryServiceImpl implements LibraryService {
 		libraryDto.setUrl(library.getUrl());
 		return libraryDto;
 	}
+
+
 
 }

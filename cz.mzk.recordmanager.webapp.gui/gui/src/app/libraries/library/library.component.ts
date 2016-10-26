@@ -24,8 +24,7 @@ export class LibraryComponent implements OnInit{
 	constructor(private librariesService: LibrariesService, private route: ActivatedRoute){
 	}
 
-	getLibraryDetails(libraryId: number)
-	{
+	getLibraryDetails(libraryId: number) {
 		this.librariesService.getLibraryDetails(libraryId)
 			.subscribe(libraryDetail => {
 			  this.libraryDetail = new LibraryDetail;
@@ -42,30 +41,26 @@ export class LibraryComponent implements OnInit{
 
 	}
 
-	updateLibrary(): void
-	{
+	updateLibrary(): void {
 		this.librariesService.updateLibrary(this.library)
       .subscribe(library => this.library = library);
 	}
 
 
-	ngOnInit(): void
-	{
+	ngOnInit(): void {
 		this.route.params.forEach((params: Params) => {
 			let id = +params['id'];
 			this.getLibraryDetails(id);
 		});
 	}
 
-	selectConfiguration(id: number)
-	{
+	selectConfiguration(id: number) {
 		this.selected = this.libraryDetail.oaiHarvestConfigurations.filter(config => config.id == id)[0];
     console.log(this.selected.id);
     console.log(this.selected.harvestJobName);
 	}
 
-	updateConfiguration(id: number)
-	{
+	updateConfiguration(id: number) {
 		this.librariesService.updateConfiguration(this.selected, id)
       .subscribe(configuration => {
         this.libraryDetail.oaiHarvestConfigurations.filter(conf => conf.id == configuration.id)[0] = configuration;

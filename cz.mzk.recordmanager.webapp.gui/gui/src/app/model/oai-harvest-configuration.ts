@@ -15,8 +15,7 @@ export class OaiHarvestConfiguration {
 	library: boolean;
 
 
-	constructor(obj?: any)
-	{
+	constructor(obj?: any) {
 		this.id									= obj && obj.id										|| null;
 		this.url								 = obj && obj.url									 || null;
 		this.set								 = obj && obj.set									 || null;

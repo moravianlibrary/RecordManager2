@@ -14,13 +14,21 @@ import java.util.List;
 @RequestMapping(value = "/batches")
 public class BatchJobController {
 
-	@Autowired
-	private BatchService batchService;
+    @Autowired
+    private BatchService batchService;
 
-	@RequestMapping(method = RequestMethod.GET, value = "/running")
+
+	@RequestMapping(method = RequestMethod.GET, value = "/{jobId}")
 	@ResponseBody
-	private List<BatchJobExecutionDTO> getRunningJobExecutions() {
-		return batchService.getRunningJobExecutions();
+	private BatchJobExecutionDTO getJobExecution(@PathVariable Long jobId)
+	{
+		return batchService.getJobExecution(jobId);
 	}
 
+    @RequestMapping(method = RequestMethod.GET, value = "/running")
+    @ResponseBody
+    private List<BatchJobExecutionDTO> getRunningJobExecutions()
+    {
+        return batchService.getRunningJobExecutions();
+    }
 }

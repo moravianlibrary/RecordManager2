@@ -5,17 +5,18 @@ import {LibrariesComponent} from "./libraries.component";
 import {LibrariesService} from "./libraries.service";
 import {LibraryComponent} from "./library/library.component";
 import {FormsModule} from "@angular/forms";
-import {OrderByPipe} from "../order-by.pipe";
+import {IndexModule} from "../shared/index";
 
 
 @NgModule({
   imports: [
     CommonModule,
+    IndexModule,
     librariesRouting,
     FormsModule
   ],
   providers: [LibrariesService],
 
-  declarations: [LibrariesComponent, LibraryComponent, OrderByPipe]
+  declarations: [LibrariesComponent, LibraryComponent]
 })
 export class LibrariesModule { }
