@@ -1,0 +1,69 @@
+import { Component, OnInit } from '@angular/core';
+import {OaiHarvestJobStatistics} from "../model/oai-harvest-job-statistics";
+import {StatisticsService} from "./statistics.service";
+import {Field} from "../shared/Field";
+import {Style} from "../shared/Style";
+import {SortControl} from "../shared/SortControl";
+
+@Component({
+  selector: 'app-statistics',
+  templateUrl: './statistics.component.html',
+  styleUrls: ['./statistics.component.css']
+})
+export class StatisticsComponent implements OnInit {
+
+  statistics: OaiHarvestJobStatistics[];
+
+  sortBy: string;
+  fields: Field[] = [];
+  loading: boolean;
+
+  constructor(private statisticsService: StatisticsService) { }
+
+  getStatistics(){
+    this.statisticsService.getStatistics().subscribe(statistics => {
+      this.statistics = statistics;
+      this.loading = false;
+    });
+  }
+
+  ngOnInit() {
+    this.fields.push(new Field({'_name': 'jobExecutionId', '_style': new Style()}));
+
+    this.fields.push(new Field({'_name': 'importConfId', '_style': new Style()}));
+
+    this.fields.push(new Field({'_name': 'libraryName', '_style': new Style()}));
+
+    this.fields.push(new Field({'_name': 'url', '_style': new Style()}));
+
+    this.fields.push(new Field({'_name': 'startTime', '_style': new Style()}));
+
+    this.fields.push(new Field({'_name': 'endTime', '_style': new Style()}));
+
+    this.fields.push(new Field({'_name': 'status', '_style': new Style()}));
+
+    this.fields.push(new Field({'_name': 'fromParam', '_style': new Style()}));
+
+    this.fields.push(new Field({'_name': 'toParam', '_style': new Style()}));
+
+    this.fields.push(new Field({'_name': 'noOfRecords', '_style': new Style()}));
+
+    this.sortByMe("jobExecutionId");
+
+    this.loading = true;
+
+    this.getStatistics();
+  }
+
+  sortByMe(name: string){
+    this.sortBy = SortControl.sortByMe(name, this.fields);
+  }
+
+  getArrow(name: string): string{
+    return SortControl.getArrow(name, this.fields);
+  }
+  getVisibility(name: string): string{
+    return SortControl.getVisibility(name, this.fields);
+  }
+
+}

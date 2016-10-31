@@ -1,0 +1,67 @@
+<main>
+  <div>
+
+    <div *ngIf="loading" id="circlePreloader" class="preloader-wrapper big active">
+      <div class="spinner-layer spinner-red-only">
+        <div class="circle-clipper left">
+          <div class="circle"></div>
+        </div><div class="gap-patch">
+        <div class="circle"></div>
+      </div><div class="circle-clipper right">
+        <div class="circle"></div>
+      </div>
+      </div>
+    </div>
+
+
+    <h4 class="truncate center">Statistics</h4>
+
+    <table class="bordered">
+      <thead>
+      <tr>
+
+        <th data-field="jobExecId"><a class="waves-effect btn-flat waves-red" (click)="sortByMe('jobExecutionId')"><i  class="tiny material-icons" [ngClass]="[getArrow('jobExecutionId'), getVisibility('jobExecutionId')]">keyboard_arrow_down</i>ID</a></th>
+
+        <th data-field="importConfId"><a class="waves-effect btn-flat waves-red" (click)="sortByMe('importConfId')" ><i  class="tiny material-icons" [ngClass]="[getArrow('importConfId'), getVisibility('importConfId')]" >keyboard_arrow_down</i>Import Configuration ID</a></th>
+
+        <th data-field="libraryName"><a class="waves-effect btn-flat waves-red" (click)="sortByMe('libraryName')" ><i  class="tiny material-icons" [ngClass]="[getArrow('libraryName'), getVisibility('libraryName')]" >keyboard_arrow_down</i>Library name</a></th>
+
+        <th data-field="url"><a class="waves-effect btn-flat waves-red" (click)="sortByMe('url')" ><i  class="tiny material-icons" [ngClass]="[getArrow('url'), getVisibility('url')]"  >keyboard_arrow_down</i>url</a></th>
+
+        <th data-field="startTime"><a class="waves-effect btn-flat waves-red" (click)="sortByMe('startTime')"><i  class="tiny material-icons" [ngClass]="[getArrow('startTime'), getVisibility('startTime')]"  >keyboard_arrow_down</i>Start Time</a></th>
+
+        <th data-field="endTime"><a class="waves-effect btn-flat waves-red" (click)="sortByMe('endTime')" ><i  class="tiny material-icons" [ngClass]="[getArrow('endTime'), getVisibility('endTime')]"  >keyboard_arrow_down</i>End time</a></th>
+
+        <th data-field="status"><a class="waves-effect btn-flat waves-red" (click)="sortByMe('status')" ><i  class="tiny material-icons" [ngClass]="[getArrow('status'), getVisibility('status')]"  >keyboard_arrow_down</i>Status</a></th>
+
+        <th data-field="fromParameter"><a class="waves-effect btn-flat waves-red" (click)="sortByMe('fromParam')" ><i  class="tiny material-icons" [ngClass]="[getArrow('fromParam'), getVisibility('fromParam')]"  >keyboard_arrow_down</i>From Parameter</a></th>
+
+        <th data-field="toParameter"><a class="waves-effect btn-flat waves-red" (click)="sortByMe('toParam')" ><i  class="tiny material-icons" [ngClass]="[getArrow('toParam'), getVisibility('toParam')]"  >keyboard_arrow_down</i>To parameter</a></th>
+
+        <th data-field="numberOfRecords"><a class="waves-effect btn-flat waves-red" (click)="sortByMe('noOfRecords')"><i  class="tiny material-icons" [ngClass]="[getArrow('noOfRecords'), getVisibility('noOfRecords')]">keyboard_arrow_down</i>Number of records</a></th>
+
+        <th data-field="details">DETAILS</th>
+
+      </tr>
+      </thead>
+
+      <tbody *ngFor="let statistic of statistics | orderBy: [sortBy]">
+      <tr>
+        <td>{{statistic.jobExecutionId}}</td>
+        <td>{{statistic.importConfId}}</td>
+        <td>{{statistic.libraryName}}</td>
+        <td><a [href]="'http://' + statistic.url" target="_blank">{{statistic?.url}}</a></td>
+        <td>{{statistic.startTime | date: "dd/MM/yy"}}</td>
+        <td>{{statistic.endTime | date: "dd/MM/yy"}}</td>
+        <td>{{statistic.status}}</td>
+        <td>{{statistic.fromParam | date: "dd/MM/yy"}}</td>
+        <td>{{statistic.toParam | date: "dd/MM/yy"}}</td>
+        <td>{{statistic.noOfRecords}}</td>
+        <td><a [routerLink]="['/oaiHarvestStats', statistic.jobExecutionId]"><i class="material-icons">send</i></a></td>
+      </tr>
+      </tbody>
+    </table>
+
+  </div>
+
+</main>
