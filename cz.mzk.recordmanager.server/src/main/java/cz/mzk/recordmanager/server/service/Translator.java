@@ -2,9 +2,11 @@ package cz.mzk.recordmanager.server.service;
 
 
 import cz.mzk.recordmanager.api.model.ContactPersonDto;
+import cz.mzk.recordmanager.api.model.ImportConfigurationDto;
 import cz.mzk.recordmanager.api.model.LibraryDto;
 import cz.mzk.recordmanager.api.model.OaiHarvestConfigurationDto;
 import cz.mzk.recordmanager.server.model.ContactPerson;
+import cz.mzk.recordmanager.server.model.ImportConfiguration;
 import cz.mzk.recordmanager.server.model.Library;
 import cz.mzk.recordmanager.server.model.OAIHarvestConfiguration;
 
@@ -67,6 +69,13 @@ public class Translator {
 		contactPerson.setEmail(contactPersonDto.getPhone());
 		contactPerson.setName(contactPersonDto.getName());
 		return contactPerson;
+	}
+	public ImportConfigurationDto translate(ImportConfiguration configuration){
+		ImportConfigurationDto importConfigurationDto = new ImportConfigurationDto();
+		importConfigurationDto.setId(configuration.getId());
+		importConfigurationDto.setIdPrefix(configuration.getIdPrefix());
+		importConfigurationDto.setLibrary(translate(configuration.getLibrary()));
+		return importConfigurationDto;
 	}
 
 }
