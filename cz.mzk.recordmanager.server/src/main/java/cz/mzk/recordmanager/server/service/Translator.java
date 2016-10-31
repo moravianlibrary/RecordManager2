@@ -69,23 +69,4 @@ public class Translator {
 		return contactPerson;
 	}
 
-	private OAIHarvestConfiguration translate(OaiHarvestConfigurationDto config) {
-		OAIHarvestConfiguration harvestConfiguration = new OAIHarvestConfiguration();
-		harvestConfiguration.setId(config.getId());
-		harvestConfiguration.setIdPrefix(config.getIdPrefix());
-		harvestConfiguration.setBaseWeight(config.getBaseWeight());
-		harvestConfiguration.setClusterIdEnabled(config.isClusterIdEnabled());
-		harvestConfiguration.setFilteringEnabled(config.isFilteringEnabled());
-		harvestConfiguration.setInterceptionEnabled(config.isInterceptionEnabled());
-		harvestConfiguration.setLibrary(config.isLibrary());
-		harvestConfiguration.setUrl(config.getUrl());
-		harvestConfiguration.setRegex(config.getExtractIdRegex());
-		harvestConfiguration.setHarvestJobName(config.getHarvestJobName());
-		harvestConfiguration.setSet(config.getSet());
-		harvestConfiguration.setMetadataPrefix(config.getMetadataPrefix());
-		harvestConfiguration.setContact(translate(config.getContact()));
-
-		return harvestConfiguration;
-	}
-
 }
