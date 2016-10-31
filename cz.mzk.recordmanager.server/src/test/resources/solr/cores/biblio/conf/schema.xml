@@ -102,6 +102,12 @@
     <fieldType name="date" class="solr.TrieDateField" sortMissingLast="true" omitNorms="true" precisionStep="6"/>
     <fieldType name="geo" class="solr.SpatialRecursivePrefixTreeFieldType" spatialContextFactory="com.spatial4j.core.context.jts.JtsSpatialContextFactory"
       distErrPct="0.025" maxDistErr="0.000009" units="degrees" />
+    <fieldType name="exact" class="solr.TextField" sortMissingLast="true" omitNorms="true">
+      <analyzer>
+        <tokenizer class="solr.KeywordTokenizerFactory"/>
+        <filter class="solr.ICUFoldingFilterFactory"/>
+      </analyzer>
+    </fieldType>
   </types>
  <fields>
    <!-- Required by Solr 4.x -->
@@ -259,6 +265,8 @@
    <dynamicField name="*_geo"  type="geo" indexed="true" stored="true" multiValued="true" />
    <dynamicField name="*_display"  type="string" indexed="false" stored="true" multiValued="false" />
    <dynamicField name="*_display_mv"  type="string" indexed="false" stored="true" multiValued="true" />
+   <dynamicField name="*_exact" type="exact" indexed="true" stored="true" multiValued="false" />
+   <dynamicField name="*_exact_mv" type="exact" indexed="true" stored="true" multiValued="true" />
  </fields>
  <uniqueKey>id</uniqueKey>
  <defaultSearchField>allfields</defaultSearchField>
