@@ -15,7 +15,6 @@ public class LibraryDto extends IdDto implements Serializable {
 	
 	private String city;
 
-
 	public String getName() {
 		return name;
 	}

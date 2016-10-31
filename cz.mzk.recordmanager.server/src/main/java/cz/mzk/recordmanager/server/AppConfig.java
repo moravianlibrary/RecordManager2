@@ -2,8 +2,11 @@ package cz.mzk.recordmanager.server;
 
 import javax.sql.DataSource;
 
+import cz.mzk.recordmanager.api.service.ImportConfigurationService;
 import cz.mzk.recordmanager.api.service.OaiHarvestStatisticsService;
+import cz.mzk.recordmanager.server.service.ImportConfigurationServiceImpl;
 import cz.mzk.recordmanager.server.service.OaiHarvestStatisticsServiceImpl;
+import cz.mzk.recordmanager.server.service.Translator;
 import liquibase.exception.LiquibaseException;
 import liquibase.integration.spring.SpringLiquibase;
 
@@ -186,7 +189,10 @@ public class AppConfig extends DefaultBatchConfigurer {
 		taskExecutor.afterPropertiesSet();
 		return taskExecutor;
 	}
-
+	@Bean
+	public ImportConfigurationService importConfigurationService() {
+		return new ImportConfigurationServiceImpl();
+	}
 	@Override
 	public PlatformTransactionManager getTransactionManager() {
 		return transactionManager();
@@ -196,7 +202,10 @@ public class AppConfig extends DefaultBatchConfigurer {
 	public MappingResolver propertyResolver() {
 		return new CachingMappingResolver(new ResourceMappingResolver(resourceProvider));
 	}
-
+	@Bean
+	public Translator translator(){
+		return new Translator();
+	}
 	@Bean
 	public StopWordsResolver stopWordsResolver() {
 		return new CachingStopWordsResolver(new ResourceStopWordsResolver(resourceProvider));

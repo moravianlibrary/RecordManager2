@@ -8,6 +8,7 @@ import {LibrariesModule} from "./libraries/libraries.module";
 import {routing} from "./app.routing";
 import {CommonModule} from "@angular/common";
 import {StatisticsModule} from "./statistics/statistics.module";
+import {JobsModule} from "./jobs/jobs.module";
 
 @NgModule({
   declarations: [
@@ -19,6 +20,7 @@ import {StatisticsModule} from "./statistics/statistics.module";
     HttpModule,
     LibrariesModule,
     StatisticsModule,
+    JobsModule,
     routing
   ],
   providers: [],
