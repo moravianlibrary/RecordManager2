@@ -1,0 +1,5 @@
+<main>
+  <input [(ngModel)]="desiredIdPrefix">
+  <br>
+  <h1 *ngFor="let config of (importConfigs | autocomplete : desiredIdPrefix)"> {{config.id}} {{config.idPrefix}} {{config.library.name}}</h1>
+</main>

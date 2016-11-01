@@ -1,7 +1,5 @@
 import any = jasmine.any;
-/**
- * Class represents library.
- */
+
 export class Library {
 	id: number;
 	name: string;
