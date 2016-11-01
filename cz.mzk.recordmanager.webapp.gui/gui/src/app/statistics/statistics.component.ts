@@ -18,7 +18,7 @@ export class StatisticsComponent implements OnInit {
   fields: Field[] = [];
   loading: boolean;
 
-  constructor(private statisticsService: StatisticsService) { }
+  constructor(private statisticsService: StatisticsService, private sortControl: SortControl) { }
 
   getStatistics(){
     this.statisticsService.getStatistics().subscribe(statistics => {
@@ -56,14 +56,14 @@ export class StatisticsComponent implements OnInit {
   }
 
   sortByMe(name: string){
-    this.sortBy = SortControl.sortByMe(name, this.fields);
+    this.sortBy = this.sortControl.sortByMe(name, this.fields);
   }
 
   getArrow(name: string): string{
-    return SortControl.getArrow(name, this.fields);
+    return this.sortControl.getArrow(name, this.fields);
   }
   getVisibility(name: string): string{
-    return SortControl.getVisibility(name, this.fields);
+    return this.sortControl.getVisibility(name, this.fields);
   }
 
 }

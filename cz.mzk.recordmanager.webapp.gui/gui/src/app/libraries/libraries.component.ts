@@ -23,7 +23,7 @@ export class LibrariesComponent implements OnInit {
 
 
 
-	constructor(private librariesService: LibrariesService, private router: Router) {}
+	constructor(private librariesService: LibrariesService, private router: Router, private sortControl: SortControl) {}
 
 
 	getLibraries() {
@@ -59,13 +59,13 @@ export class LibrariesComponent implements OnInit {
 	}
 
 	sortByMe(name: string) {
-    this.sortBy = SortControl.sortByMe(name, this.fields);
+    this.sortBy = this.sortControl.sortByMe(name, this.fields);
   }
 
   getArrow(name: string): string{
-    return SortControl.getArrow(name, this.fields);
+    return this.sortControl.getArrow(name, this.fields);
   }
   getVisibility(name: string): string{
-    return SortControl.getVisibility(name, this.fields);
+    return this.sortControl.getVisibility(name, this.fields);
   }
 }
