@@ -57,7 +57,7 @@ public class LibraryServiceImpl implements LibraryService {
 	@Transactional
 	public LibraryDto updateOrCreateLibrary(LibraryDto libraryDto) {
 		Library library = (libraryDto.getId() == null)? new Library() : libraryDao.get(libraryDto.getId());
-		library = translator.translate(libraryDto);
+		library = fillLibrary(library, libraryDto);
 		libraryDao.persist(library);
 		if (libraryDto.getId() == null) {
 			libraryDto.setId(library.getId());
@@ -158,7 +158,14 @@ public class LibraryServiceImpl implements LibraryService {
 		target.setPhone(src.getPhone());
 	}
 
-
+	private Library fillLibrary(Library target, LibraryDto src){
+		target.setId(src.getId());
+		target.setCity(src.getCity());
+		target.setName(src.getName());
+		target.setUrl(src.getName());
+		target.setCatalogUrl(src.getCatalogUrl());
+		return target;
+	}
 
 	private LibraryDetailDto translateWithDetails(Library library) {
 		LibraryDetailDto libraryDetailDto = new LibraryDetailDto();

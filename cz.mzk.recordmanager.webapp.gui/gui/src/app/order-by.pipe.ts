@@ -1,4 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
+import {isNumber} from "@angular/core/src/facade/lang";
 
 @Pipe({
   name: 'orderBy',
@@ -7,13 +8,21 @@ import { Pipe, PipeTransform } from '@angular/core';
 export class OrderByPipe implements PipeTransform {
 
   static _orderByComparator(a:any, b:any):number {
+    if (a == null && b == null)
+      return 0;
     if (a == null)
     {
-      a = "";
+      if (b != null && isNumber(b))
+        a = 0;
+      else
+        a = "";
     }
     if (b == null)
     {
-      b = "";
+      if (a != null && isNumber(a))
+        b = 0;
+      else
+        b = "";
     }
 
     if((isNaN(parseFloat(a)) || !isFinite(a)) || (isNaN(parseFloat(b)) || !isFinite(b))){

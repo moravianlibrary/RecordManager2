@@ -1,10 +1,9 @@
-/* You can add global styles to this file, and also import other style files */
-div, ul{
-  padding-left: 110px;
+header, main, footer {
+  padding-left: 300px;
 }
 
 @media only screen and (max-width : 992px) {
-  div, ul{
+  header, main, footer {
     padding-left: 0;
   }
 }

@@ -20,7 +20,7 @@ export class OaiHarvestConfiguration {
 		this.url								 = obj && obj.url									 || null;
 		this.set								 = obj && obj.set									 || null;
 		this.metadataPrefix			= obj && obj.metadataPrefix				|| null;
-		this.contact						 = obj && obj.contact							 || null;
+		this.contact						 = obj && obj.contact							 || new ContactPerson();
 		this.idPrefix						= obj && obj.idPrefix							|| null;
 		this.baseWeight					= obj && obj.baseWeight						|| 0;
 		this.clusterIdEnabled		= obj && obj.clusterIdEnabled			|| false;
