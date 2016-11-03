@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, Input} from '@angular/core';
 import {JobsService} from "../jobs.service";
 import {ImportConfig} from "../../model/import-config";
 
@@ -6,13 +6,18 @@ import {ImportConfig} from "../../model/import-config";
 @Component({
   selector: 'app-job-runner',
   templateUrl: './job-runner.component.html',
-  styleUrls: ['./job-runner.component.css']
+  styleUrls: ['./job-runner.component.css'],
 })
-export class JobRunnerComponent implements OnInit {
+export class JobRunnerComponent implements OnInit{
 
 
   private importConfigs: ImportConfig[] = [];
-  private desiredIdPrefix: string = "";
+
+  @Input()
+  whoAmI: string;
+
+  selectedConfiguration: ImportConfig = new ImportConfig;
+
 
   constructor(private jobsService: JobsService) { }
 
@@ -21,8 +26,19 @@ export class JobRunnerComponent implements OnInit {
       this.importConfigs = configs;
     });
   }
+  chooseConfiguration(id: number){
+    this.importConfigs.filter((conf) => {
+      if (conf.id == id){
+        this.selectedConfiguration = new ImportConfig(conf);
+      }
+    });
+  }
 
+  runJob(){
+    this.jobsService.runJob(this.whoAmI, this.selectedConfiguration.id);
+  }
   ngOnInit() {
     this.getConfigurations();
   }
+
 }

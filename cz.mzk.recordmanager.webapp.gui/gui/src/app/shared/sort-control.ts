@@ -1,4 +1,4 @@
-import {Field} from "./Field";
+import {Field} from "./field";
 import {Injectable} from "@angular/core";
 @Injectable()
 export class SortControl{

@@ -6,6 +6,9 @@ import {LibraryDetail} from "../model/library-detail";
 import {OaiHarvestConfiguration} from "../model/oai-harvest-configuration";
 import {ContactPerson} from "../model/contact-person";
 import {SERVER} from "../server";
+import {Router} from "@angular/router";
+import {stat} from "fs";
+import {ErrorHolder} from "../shared/error-holder";
 
 
 @Injectable()
@@ -18,14 +21,14 @@ export class LibrariesService {
 	getLibraries(): Observable<Library[]>
 	{
 		return this.http.get(SERVER + "/library")
-			.map((res: Response) => res.json());
+			.map((res: Response) => res.json())
+      .catch(this.handleError);
 	}
 
 	getLibraryDetails(libraryId: number): Observable<LibraryDetail>
 	{
 		return this.http.get(SERVER + "/library/" + libraryId)
 			.map((res: Response) => {
-
 				let configs: OaiHarvestConfiguration[] = [];
 
 				for (var i = 0; i < res.json().oaiHarvestConfigurations.length; ++i)
@@ -65,7 +68,8 @@ export class LibrariesService {
 				});
 
 				return detail;
-			});
+			})
+      .catch(this.handleError);
 	}
 
 
@@ -100,5 +104,11 @@ export class LibrariesService {
       });
 	}
 
+  private handleError (error: Response) {
+    let status = error.status;
+    let message = error.statusText;
+
+    return Observable.throw(new ErrorHolder({status: status, message: message}));
+  }
 
 }

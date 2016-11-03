@@ -1,4 +1,4 @@
-import {Style} from "./Style";
+import {Style} from "./style";
 export class Field{
   get style(): Style {
     return this._style;

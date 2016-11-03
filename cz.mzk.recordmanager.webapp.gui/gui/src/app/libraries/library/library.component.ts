@@ -5,7 +5,7 @@ import { Component, OnInit } from '@angular/core';
 
 import {LibraryDetail} from "../../model/library-detail";
 import {LibrariesService} from "../libraries.service";
-import {ActivatedRoute, Params} from "@angular/router";
+import {ActivatedRoute, Params, Router} from "@angular/router";
 import {Library} from "../../model/library";
 import {OaiHarvestConfiguration} from "../../model/oai-harvest-configuration";
 import {ContactPerson} from "../../model/contact-person";
@@ -23,7 +23,7 @@ export class LibraryComponent implements OnInit{
 	selected: OaiHarvestConfiguration = new OaiHarvestConfiguration;
   page: number = 1;
 
-	constructor(private librariesService: LibrariesService, private route: ActivatedRoute){
+	constructor(private librariesService: LibrariesService, private route: ActivatedRoute, private router: Router){
 	}
 
 	getLibraryDetails(libraryId: number) {
@@ -44,7 +44,10 @@ export class LibraryComponent implements OnInit{
           this.selected = libraryDetail.oaiHarvestConfigurations[0];
         }
 
-			});
+			},
+			error => {
+          this.router.navigate(['/error', {status: error.status, message: error.message}]);
+      });
 
 	}
 

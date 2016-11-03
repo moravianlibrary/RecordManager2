@@ -1,5 +1,16 @@
 <main>
-  <input [(ngModel)]="desiredIdPrefix">
-  <br>
-  <h1 *ngFor="let config of (importConfigs | autocomplete : desiredIdPrefix)"> {{config.id}} {{config.idPrefix}} {{config.library.name}}</h1>
+  <form class="col s12">
+    <input [(ngModel)]="selectedConfiguration.idPrefix" name="idPrefix">
+
+    <br>
+
+    <div class="collection">
+      <a *ngFor="let config of (importConfigs | autocomplete : selectedConfiguration.idPrefix)" class="collection-item" (click)="chooseConfiguration(config.id)">{{config.id}} {{config.idPrefix}} {{config.library.name}}</a>
+    </div>
+
+    <a class="waves-effect waves-light btn" (click)="runJob()">Run</a>
+  </form>
+
+
+  <!--<h1 *ngFor="let config of (importConfigs | autocomplete : desiredIdPrefix)"> {{config.id}} {{config.idPrefix}} {{config.library.name}}</h1>-->
 </main>

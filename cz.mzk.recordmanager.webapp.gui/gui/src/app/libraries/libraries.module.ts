@@ -6,7 +6,7 @@ import {LibrariesService} from "./libraries.service";
 import {LibraryComponent} from "./library/library.component";
 import {FormsModule} from "@angular/forms";
 import {IndexModule} from "../shared/index";
-import {SortControl} from "../shared/SortControl";
+import {SortControl} from "../shared/sort-control";
 
 
 @NgModule({

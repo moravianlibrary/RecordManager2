@@ -2,9 +2,9 @@ import {Component, OnInit, ElementRef} from '@angular/core';
 import {LibrariesService} from "./libraries.service";
 import {Library} from "../model/library";
 import {Router} from "@angular/router";
-import {Field} from "../shared/Field";
-import {Style} from "../shared/Style";
-import {SortControl} from "../shared/SortControl";
+import {Field} from "../shared/field";
+import {Style} from "../shared/style";
+import {SortControl} from "../shared/sort-control";
 
 
 @Component({

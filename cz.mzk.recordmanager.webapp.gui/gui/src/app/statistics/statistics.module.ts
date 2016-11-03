@@ -5,7 +5,7 @@ import {statisticsRouting} from "./statistics.routing";
 import {StatisticsComponent} from "./statistics.component";
 import {IndexModule} from "../shared/index";
 import {StatisticDetailComponent} from "./statistic-detail/statistic-detail.component";
-import {SortControl} from "../shared/SortControl";
+import {SortControl} from "../shared/sort-control";
 
 @NgModule({
   imports: [

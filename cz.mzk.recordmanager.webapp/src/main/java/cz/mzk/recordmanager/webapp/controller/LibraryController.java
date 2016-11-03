@@ -5,6 +5,8 @@ import java.util.List;
 import cz.mzk.recordmanager.api.model.LibraryDetailDto;
 import cz.mzk.recordmanager.api.model.OaiHarvestConfigurationDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import cz.mzk.recordmanager.api.model.LibraryDto;
@@ -25,8 +27,11 @@ public class LibraryController {
 
 	@RequestMapping(method = RequestMethod.GET, value = "/{libraryId}")
 	@ResponseBody
-	public LibraryDetailDto libraryDetails(@PathVariable Long libraryId) {
-		return libraryService.getDetail(libraryId);
+	public ResponseEntity<LibraryDetailDto> libraryDetails(@PathVariable Long libraryId) {
+		LibraryDetailDto detail = libraryService.getDetail(libraryId);
+		if (detail == null)
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+		return ResponseEntity.ok(detail);
 	}
 
 	@RequestMapping(method = RequestMethod.PUT)

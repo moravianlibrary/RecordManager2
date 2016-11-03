@@ -7,7 +7,7 @@ export class ImportConfig {
 
   constructor(obj?: any) {
     this.id							     = obj && obj.id						 || null;
-    this.library						 = obj && obj.librar		     || null;
+    this.library						 = obj && obj.librar		     || new Library();
     this.idPrefix            = obj && obj.idPrefix       ||   "";
   }
 

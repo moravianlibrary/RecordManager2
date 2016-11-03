@@ -49,6 +49,8 @@ public class LibraryServiceImpl implements LibraryService {
 	@Transactional(readOnly=true)
 	public LibraryDetailDto getDetail(Long libraryId) {
 		Library library = libraryDao.get(libraryId);
+		if (library == null)
+			return null;
 		return this.translateWithDetails(library);
 	}
 

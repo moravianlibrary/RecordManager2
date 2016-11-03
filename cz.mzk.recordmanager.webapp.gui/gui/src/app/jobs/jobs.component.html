@@ -1,3 +1,18 @@
 <main>
-  <app-job-runner></app-job-runner>
+  <ul class="collapsible" data-collapsible="accordion">
+    <li>
+      <div class="collapsible-header"><i class="material-icons">label_outline</i>Full harvest</div>
+      <div class="collapsible-body"><app-job-runner [whoAmI]='"fullHarvest"'></app-job-runner></div>
+    </li>
+    <li>
+      <div class="collapsible-header"><i class="material-icons">label_outline</i>Second</div>
+      <div class="collapsible-body"><p>Lorem ipsum dolor sit amet.</p></div>
+    </li>
+    <li>
+      <div class="collapsible-header"><i class="material-icons">label_outline</i>Third</div>
+      <div class="collapsible-body"><p>Lorem ipsum dolor sit amet.</p></div>
+    </li>
+  </ul>
+
+  <!--<app-job-runner></app-job-runner>-->
 </main>

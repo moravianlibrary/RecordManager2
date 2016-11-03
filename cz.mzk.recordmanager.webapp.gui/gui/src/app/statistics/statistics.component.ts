@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import {OaiHarvestJobStatistics} from "../model/oai-harvest-job-statistics";
 import {StatisticsService} from "./statistics.service";
-import {Field} from "../shared/Field";
-import {Style} from "../shared/Style";
-import {SortControl} from "../shared/SortControl";
+import {Field} from "../shared/field";
+import {Style} from "../shared/style";
+import {SortControl} from "../shared/sort-control";
 
 @Component({
   selector: 'app-statistics',
