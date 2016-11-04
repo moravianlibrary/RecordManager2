@@ -61,6 +61,7 @@ public class UrlDedupRecordEnricher implements DedupRecordEnricher {
 				String parsedUrl = krameriusUrlParser(spliturl[2]);
 				if(urlsMap.containsKey(parsedUrl)){
 					List<String> completeUrls = urlsMap.get(parsedUrl);
+					if(completeUrls.contains(obj.toString())) continue;
 //					online url at the beginning
 					if(spliturl[1].equals(ONLINE)) completeUrls.add(0, obj.toString());
 					else completeUrls.add(obj.toString());
@@ -75,7 +76,7 @@ public class UrlDedupRecordEnricher implements DedupRecordEnricher {
 		}
 
 		for(String url: urlsMap.keySet()){
-			Set<String> completeUrls = new HashSet<>(urlsMap.get(url));
+			List<String> completeUrls = urlsMap.get(url);
 			boolean online = false;
 			List<String> unknownlist = new ArrayList<>();
 			for(String value: completeUrls){

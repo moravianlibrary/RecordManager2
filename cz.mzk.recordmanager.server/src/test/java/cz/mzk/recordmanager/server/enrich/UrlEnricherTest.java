@@ -70,8 +70,8 @@ public class UrlEnricherTest extends AbstractTest{
 		local.add(newField(MZK_PROTECTED_MZK_URL));
 		
 		List<String> result = new ArrayList<>();
-		result.add(TRE_ONLINE_MZK_URL);
 		result.add(MZK_ONLINE_MZK_URL);
+		result.add(TRE_ONLINE_MZK_URL);
 
 		UrlDedupRecordEnricher ue = new UrlDedupRecordEnricher();
 		ue.enrich(dr, merged, local);
