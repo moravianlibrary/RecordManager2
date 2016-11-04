@@ -1,16 +1,23 @@
 <main>
-  <form class="col s12">
-    <input [(ngModel)]="selectedConfiguration.idPrefix" name="idPrefix">
 
-    <br>
+  <div *ngIf="needId">
+    <form class="col s12">
+      <input [(ngModel)]="selectedConfiguration.idPrefix" value="{{selectedConfiguration.idPrefix}}" name="idPrefix">
 
-    <div class="collection">
-      <a *ngFor="let config of (importConfigs | autocomplete : selectedConfiguration.idPrefix)" class="collection-item" (click)="chooseConfiguration(config.id)">{{config.id}} {{config.idPrefix}} {{config.library.name}}</a>
-    </div>
+      <br>
 
-    <a class="waves-effect waves-light btn" (click)="runJob()">Run</a>
-  </form>
+      <div class="collection">
+        <a routerLink="./" *ngFor="let config of (importConfigs | autocomplete : selectedConfiguration.idPrefix)" [ngClass]="{'collection-item': true, 'active': amISelected(config.id)}"  (click)="chooseConfiguration(config.id)">{{config.id}} {{config.idPrefix}} {{config.library.name}}</a>
+      </div>
 
+      <a [ngClass]="{'waves-effect': true, 'waves-light': true, 'btn': true, 'disabled': (selectedConfiguration.idPrefix.length <= 0 || selectedConfiguration.id == null)}"  (click)="runJob()">Run</a>
+    </form>
+  </div>
 
-  <!--<h1 *ngFor="let config of (importConfigs | autocomplete : desiredIdPrefix)"> {{config.id}} {{config.idPrefix}} {{config.library.name}}</h1>-->
+  <div *ngIf="!needId">
+    <form>
+      <a [ngClass]="{'waves-effect': true, 'waves-light': true, 'btn': true}"  (click)="runJob()">Run</a>
+    </form>
+  </div>
+
 </main>

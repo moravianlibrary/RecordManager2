@@ -9,6 +9,10 @@ public interface HarvestingFacade {
 
 	public void fullHarvest(OAIHarvestConfiguration conf);
 
+	public void fullHarvest(KrameriusConfiguration conf);
+
+	public void fullHarvest(Long id);
+
 	public LocalDateTime getLastFullHarvest(OAIHarvestConfiguration conf);
 	
 	public LocalDateTime getLastFullHarvest(KrameriusConfiguration conf);
@@ -16,6 +20,8 @@ public interface HarvestingFacade {
 	public void incrementalHarvest(OAIHarvestConfiguration conf);
 
 	public void incrementalHarvest(KrameriusConfiguration conf);
+
+	public void incrementalHarvest(Long id);
 	
 	public LocalDateTime getLastHarvest(OAIHarvestConfiguration conf);
 	

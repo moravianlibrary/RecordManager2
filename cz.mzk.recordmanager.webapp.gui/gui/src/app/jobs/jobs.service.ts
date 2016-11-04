@@ -14,7 +14,7 @@ export class JobsService {
     return this.http.get(SERVER + "/importConfiguration").map((res: Response) => res.json());
   }
 
-  runJob(name: string, id: number){
+  runJob(name: string, id: number = -1){
     var headers = new Headers({"Content-Type": 'application/json'});
     let options = new RequestOptions({ headers: headers });
     console.log(SERVER + "/batches/run/" + name);

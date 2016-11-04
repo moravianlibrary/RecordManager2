@@ -89,24 +89,13 @@ public class BatchServiceImpl implements BatchService {
 	@Override
 	@Transactional(propagation = Propagation.NOT_SUPPORTED)
 	public void runFullHarvest(IdDto id) {
-		OAIHarvestConfiguration configuration = harvestConfigurationDAO.get(id.getId());
-		if (configuration != null)
-			harvestingFacade.fullHarvest(configuration);
+		harvestingFacade.fullHarvest(id.getId());
 	}
 
 	@Override
 	@Transactional(propagation = Propagation.NOT_SUPPORTED)
 	public void runIncrementalHarvest(IdDto id) {
-		OAIHarvestConfiguration oaiConfig = harvestConfigurationDAO.get(id.getId());
-		if (oaiConfig != null) {
-			harvestingFacade.incrementalHarvest(oaiConfig);
-		}else {
-			KrameriusConfiguration kramConfig = krameriusConfigurationDAO.get(id.getId());
-
-			if (kramConfig != null) {
-				harvestingFacade.incrementalHarvest(kramConfig);
-			}
-		}
+		harvestingFacade.incrementalHarvest(id.getId());
 	}
 
 	@Override
@@ -115,13 +104,6 @@ public class BatchServiceImpl implements BatchService {
 		dedupFacade.deduplicate();
 	}
 
-	@Override
-	@Transactional(propagation = Propagation.NOT_SUPPORTED)
-	public void runDownloadAndImport(IdDto id) {
-		DownloadImportConfiguration downloadImportConfiguration = downloadImportConfigurationDAO.get(id.getId());
-		if (downloadImportConfiguration != null)
-			importRecordFacade.downloadAndImportRecordSJob(downloadImportConfiguration);
-	}
 
 	@Override
 	@Transactional(propagation = Propagation.NOT_SUPPORTED)

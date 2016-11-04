@@ -48,11 +48,6 @@ public class BatchJobController {
 		batchService.runDeduplicate();
 	}
 
-	@RequestMapping(method = RequestMethod.POST, value = "/run/downloadImport")
-	@ResponseBody
-	private void runDownloadImport(@RequestBody IdDto configId){
-		batchService.runDownloadAndImport(configId);
-	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/run/index")
 	@ResponseBody
