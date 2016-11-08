@@ -17,9 +17,15 @@
 
 
     <div class="row">
+
       <div class="input-field col s2">
-        <input placeholder="Status" id="status" [(ngModel)]="status" type="text" class="validate">
-        <label for="status">Status</label>
+        <ng-select
+          [options]="options"
+          multiple="true"
+          placeholder="Choose statistic"
+          (selected)="onSelected($event)"
+          (deselected)="onDeselected($event)">
+        </ng-select>
       </div>
 
       <div class="input-field col s2">
@@ -72,7 +78,7 @@
       </tr>
       </thead>
 
-      <tbody *ngFor="let statistic of statistics | statusFilter: status | afterDateFilter : startDate | beforeDateFilter: endDate | afterDateFilter: fromParam | beforeDateFilter: toParam | orderBy: [sortBy]">
+      <tbody *ngFor="let statistic of statistics | statusFilter: statuses | afterDateFilter : startDate | beforeDateFilter: endDate | afterDateFilter: fromParam | beforeDateFilter: toParam | orderBy: [sortBy]">
       <tr>
         <td>{{statistic.jobExecutionId}}</td>
         <td>{{statistic.importConfId}}</td>

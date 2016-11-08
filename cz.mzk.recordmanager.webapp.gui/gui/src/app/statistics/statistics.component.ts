@@ -18,12 +18,43 @@ export class StatisticsComponent implements OnInit {
   fields: Field[] = [];
   loading: boolean;
 
-  status: string;
+  // status: string;
   startDate: Date;
   endDate: Date;
   fromParam: Date;
   toParam: Date;
 
+  /////////////
+
+  statuses: string[] = [];
+
+  options: Array<any> = [
+    {
+      value: 'COMPLETED',
+      label: 'COMPLETED'
+    },
+    {
+      value: 'STARTED',
+      label: 'STARTED'
+    },
+    {
+      value: 'FAILED',
+      label: 'FAILED'
+    }
+  ];
+
+
+  onSelected(item) {
+    this.statuses.push(item.value);
+    this.statuses = this.statuses;
+  }
+
+  onDeselected(item) {
+    var index = this.statuses.indexOf(item.value);
+    this.statuses.splice(index, 1);
+  }
+
+  ////////////
 
   constructor(private statisticsService: StatisticsService, private sortControl: SortControl) { }
 
