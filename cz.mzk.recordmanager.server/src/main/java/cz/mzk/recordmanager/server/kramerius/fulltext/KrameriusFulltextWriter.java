@@ -1,5 +1,6 @@
 package cz.mzk.recordmanager.server.kramerius.fulltext;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.batch.item.ItemWriter;
@@ -20,6 +21,7 @@ public class KrameriusFulltextWriter implements ItemWriter<HarvestedRecord> {
 	@Override
 	public void write(List<? extends HarvestedRecord> items) throws Exception {
 		for (HarvestedRecord hr : items) {
+			hr.setUpdated(new Date());
 			recordDao.persist(hr);
 		}
 	}
