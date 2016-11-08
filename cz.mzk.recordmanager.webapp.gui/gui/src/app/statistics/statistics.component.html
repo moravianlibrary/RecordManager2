@@ -14,6 +14,33 @@
     </div>
 
 
+
+
+    <div class="row">
+      <div class="input-field col s2">
+        <input placeholder="Status" id="status" [(ngModel)]="status" type="text" class="validate">
+        <label for="status">Status</label>
+      </div>
+
+      <div class="input-field col s2">
+        <input type="date" class="datepicker" [(ngModel)]="startDate">
+      </div>
+
+      <div class="input-field col s2">
+        <input type="date" class="datepicker" [(ngModel)]="endDate">
+      </div>
+
+      <div class="input-field col s2">
+        <input type="date" class="datepicker" [(ngModel)]="fromParam">
+      </div>
+
+      <div class="input-field col s2">
+        <input type="date" class="datepicker" [(ngModel)]="toParam">
+      </div>
+
+
+    </div>
+
     <h4 class="truncate center">Statistics</h4>
 
     <table class="bordered">
@@ -45,7 +72,7 @@
       </tr>
       </thead>
 
-      <tbody *ngFor="let statistic of statistics | orderBy: [sortBy]">
+      <tbody *ngFor="let statistic of statistics | statusFilter: status | afterDateFilter : startDate | beforeDateFilter: endDate | afterDateFilter: fromParam | beforeDateFilter: toParam | orderBy: [sortBy]">
       <tr>
         <td>{{statistic.jobExecutionId}}</td>
         <td>{{statistic.importConfId}}</td>

@@ -67,8 +67,7 @@ export class LibraryComponent implements OnInit{
 	selectConfiguration(page: number) {
 		this.selected = this.libraryDetail.oaiHarvestConfigurations[page];
     this.page = page + 1;
-    console.log(page);
-    console.log(this.page);
+
 	}
 
 	updateConfiguration(id: number) {

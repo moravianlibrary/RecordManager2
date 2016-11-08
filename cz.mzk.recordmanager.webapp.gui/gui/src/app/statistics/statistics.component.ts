@@ -18,6 +18,13 @@ export class StatisticsComponent implements OnInit {
   fields: Field[] = [];
   loading: boolean;
 
+  status: string;
+  startDate: Date;
+  endDate: Date;
+  fromParam: Date;
+  toParam: Date;
+
+
   constructor(private statisticsService: StatisticsService, private sortControl: SortControl) { }
 
   getStatistics(){
@@ -65,5 +72,6 @@ export class StatisticsComponent implements OnInit {
   getVisibility(name: string): string{
     return this.sortControl.getVisibility(name, this.fields);
   }
+
 
 }

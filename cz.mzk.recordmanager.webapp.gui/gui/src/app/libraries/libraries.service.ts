@@ -77,7 +77,6 @@ export class LibrariesService {
 	{
 		var headers = new Headers({"Content-Type": 'application/json'});
 		let options = new RequestOptions({ headers: headers });
-		console.log(JSON.stringify(library) + " " + SERVER + "/library/" + library.id + "Updated");
 
 		return this.http.post(SERVER + "/library/" + library.id, JSON.stringify(library), options)
 			.map((res: Response) => res.json());
@@ -86,7 +85,7 @@ export class LibrariesService {
 	{
 		var headers = new Headers({"Content-Type": 'application/json'});
 		let options = new RequestOptions({ headers: headers });
-		console.log(JSON.stringify(library) + " " + SERVER + "/library");
+
 
 		return this.http.put(SERVER + "/library", JSON.stringify(library), options)
 			.map((res: Response) =>  res.json());
@@ -96,7 +95,7 @@ export class LibrariesService {
 	{
 		var headers = new Headers({"Content-Type": 'application/json'});
 		let options = new RequestOptions({ headers: headers });
-		console.log(JSON.stringify(config) + " " + SERVER + "/library/" + libraryId + "Updated");
+
 
 		return this.http.post(SERVER + "/library/" + libraryId + "/configuration/" + config.id, JSON.stringify(config), options)
       .map((res: Response) => {

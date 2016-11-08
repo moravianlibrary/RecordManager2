@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import {ImportConfig} from "./model/import-config";
+import {ImportConfig} from "../model/import-config";
 
 @Pipe({
   name: 'autocomplete'

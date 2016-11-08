@@ -5,7 +5,7 @@ import {JobsComponent} from "./jobs.component";
 import {JobRunnerComponent} from "./job-runner/job-runner.component";
 import {FormsModule} from "@angular/forms";
 import {JobsService} from "./jobs.service";
-import {AutocompletePipe} from "../autocomplete.pipe";
+import {AutocompletePipe} from "../pipes/autocomplete.pipe";
 
 @NgModule({
   imports: [

@@ -1,5 +1,5 @@
 import {NgModule} from "@angular/core";
-import {OrderByPipe} from "../order-by.pipe";
+import {OrderByPipe} from "../pipes/order-by.pipe";
 import {ErrorPageComponent} from "./error-page/error-page.component";
 import {errorsRouting} from "./error.routing";
 

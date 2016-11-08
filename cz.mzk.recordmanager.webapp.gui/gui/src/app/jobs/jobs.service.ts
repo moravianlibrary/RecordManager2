@@ -17,8 +17,7 @@ export class JobsService {
   runJob(name: string, id: number = -1){
     var headers = new Headers({"Content-Type": 'application/json'});
     let options = new RequestOptions({ headers: headers });
-    console.log(SERVER + "/batches/run/" + name);
-    console.log(JSON.stringify({id: id}));
+
     this.http.post(SERVER + "/batches/run/" + name, JSON.stringify({id: id}), options).subscribe();
   }
 }
