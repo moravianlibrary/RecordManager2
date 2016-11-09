@@ -219,6 +219,10 @@ public class MarcDSL extends BaseDSL {
 		return metadataRecord.export(IOFormat.ISO_2709);
 	}
 
+	public String getFullRecordAsXML() {
+		return metadataRecord.export(IOFormat.XML_MARC);
+	}
+
 	public Object methodMissing(String methodName, Object args) {
 		RecordFunction<MarcFunctionContext> func = functions.get(methodName);
 		if (func == null) {
