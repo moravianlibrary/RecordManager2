@@ -19,8 +19,8 @@ import {JobsModule} from "./jobs/jobs.module";
     FormsModule,
     HttpModule,
     LibrariesModule,
-    StatisticsModule,
-    JobsModule,
+    // StatisticsModule,
+    // JobsModule,
     routing
   ],
   providers: [],

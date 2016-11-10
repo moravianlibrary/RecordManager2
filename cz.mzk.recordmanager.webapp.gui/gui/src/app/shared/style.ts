@@ -15,7 +15,7 @@ export class Style{
   }
 
   switchArrow(){
-    this._arrow = this._arrow == "sortArrowUp" ? "sortArrowDown" : "sortArrowUp";
+    this._arrow = this._arrow == "glyphicon-arrow-up" ? "glyphicon glyphicon-arrow-down" : "glyphicon-arrow-up";
   }
 
   switchVisibility(){
@@ -23,7 +23,7 @@ export class Style{
   }
 
   constructor(obj?: any) {
-    this._arrow       = obj && obj._arrow    ||  "sortArrowUp";
+    this._arrow       = obj && obj._arrow    ||  "glyphicon-arrow-up";
     this._visibility  = obj && obj._arrow    ||  "invisible";
   }
 

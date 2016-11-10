@@ -1,21 +1,43 @@
-<div class="navbar-fixed mainNav">
-  <nav>
-    <!-- Login dropdown content end -->
-    <div class="nav-wrapper">
-      <div class="logo">
-        <a routerLink="/library" class="brand-logo"><i></i>Správce zdrojů (Record Manager 2)</a>
-        <!-- Empty piece added to indent the logo -->
+<div id="wrapper">
+
+  <!-- Sidebar -->
+  <div id="sidebar-wrapper">
+    <ul class="sidebar-nav">
+      <li class="sidebar-brand">
+        <a routerLink="/library">
+          Record Manager 2
+        </a>
+      </li>
+      <li>
+        <a routerLink="/library">Libraries</a>
+      </li>
+      <li>
+        <a routerLink="#">Jobs</a>
+      </li>
+      <li>
+        <a routerLink="#">Statistics</a>
+      </li>
+      <li>
+        <a routerLink="#">About</a>
+      </li>
+      <li>
+        <a routerLink="#">Login</a>
+      </li>
+    </ul>
+  </div>
+  <!-- /#sidebar-wrapper -->
+
+
+  <!-- Page Content -->
+  <div id="page-content-wrapper">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-lg-12">
+          <router-outlet></router-outlet>
+        </div>
       </div>
     </div>
+  </div>
+  <!-- /#page-content-wrapper -->
 
-  </nav>
 </div>
-
-<ul id="slide-out" class="side-nav fixed">
-  <li><a routerLink="/library" class="waves-effect waves-red">Libraries</a></li>
-  <li><a routerLink="/jobs" class="waves-effect waves-red">Jobs</a></li>
-  <li><a routerLink="/oaiHarvestStats" class="waves-effect waves-red">Statistics</a></li>
-  <li><a href="#!" class="waves-effect waves-red">Login</a></li>
-</ul>
-<a href="#" data-activates="slide-out" class="button-collapse"><i class="material-icons">menu</i></a>
-<router-outlet></router-outlet>

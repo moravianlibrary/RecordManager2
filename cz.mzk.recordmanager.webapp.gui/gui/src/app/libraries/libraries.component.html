@@ -1,101 +1,78 @@
-<main>
+<div class="page-header">
+  <h1>Libraries</h1>
+</div>
 
-  <div>
+<!--Preloader-->
+<div *ngIf="loading" id="circlePreloader" class='uil-ring-css' style='transform:scale(0.6);'><div></div></div>
 
-    <div *ngIf="loading" id="circlePreloader" class="preloader-wrapper big active">
-      <div class="spinner-layer spinner-red-only">
-        <div class="circle-clipper left">
-          <div class="circle"></div>
-        </div><div class="gap-patch">
-        <div class="circle"></div>
-      </div><div class="circle-clipper right">
-        <div class="circle"></div>
-      </div>
-      </div>
-    </div>
+<div *ngIf="!loading">
 
-
-    <h4 class="truncate center">Libraries</h4>
-
-    <table class="bordered">
-      <thead>
+  <div class="panel panel-default">
+    <!-- Default panel contents -->
+    <!-- Table -->
+    <table class="table">
       <tr>
-
-        <th data-field="id"><a class="waves-effect btn-flat waves-red" (click)="sortByMe('id')">id<i  class="tiny material-icons" [ngClass]="[getArrow('id'), getVisibility('id')]">keyboard_arrow_down</i></a></th>
-
-        <th data-field="name"><a class="waves-effect btn-flat waves-red" (click)="sortByMe('name')">Name<i  class="tiny material-icons" [ngClass]="[getArrow('name'), getVisibility('name')]" >keyboard_arrow_down</i></a></th>
-
-        <th data-field="city"><a class="waves-effect btn-flat waves-red" (click)="sortByMe('city')">City<i  class="tiny material-icons" [ngClass]="[getArrow('city'), getVisibility('city')]" >keyboard_arrow_down</i></a></th>
-
-        <th data-field="url"><a class="waves-effect btn-flat waves-red" (click)="sortByMe('url')">url<i  class="tiny material-icons" [ngClass]="[getArrow('url'), getVisibility('url')]" >keyboard_arrow_down</i></a></th>
-
-        <th data-field="catalogUrl"><a class="waves-effect btn-flat waves-red" (click)="sortByMe('catalogUrl')">Catalog URL<i  class="tiny material-icons" [ngClass]="[getArrow('catalogUrl'), getVisibility('catalogUrl')]" >keyboard_arrow_down</i></a></th>
-
-        <th data-field="details">DETAILS</th>
-
+        <th>ID<i (click)="sortByMe('id')" [ngClass]="{'glyphicon': true, 'glyphicon-arrow-up': getArrow('id') && getVisibility('id'), 'glyphicon-arrow-down': !getArrow('id') && getVisibility('id'), 'glyphicon-sort': !getVisibility('id')}"></i></th>
+        <th>Name<i (click)="sortByMe('name')" [ngClass]="{'glyphicon': true, 'glyphicon-arrow-up': getArrow('name'), 'glyphicon-arrow-down': !getArrow('name'),  'glyphicon-sort': !getVisibility('name')}"></i></th>
+        <th>City<i (click)="sortByMe('city')" [ngClass]="{'glyphicon': true, 'glyphicon-arrow-up': getArrow('city'), 'glyphicon-arrow-down': !getArrow('city'),  'glyphicon-sort': !getVisibility('city')}"></i></th>
+        <th>URL<i (click)="sortByMe('url')" [ngClass]="{'glyphicon': true, 'glyphicon-arrow-up': getArrow('url'), 'glyphicon-arrow-down': !getArrow('url'),  'glyphicon-sort': !getVisibility('url')}"></i></th>
+        <th>Catalog URL<i (click)="sortByMe('catalogUrl')" [ngClass]="{'glyphicon': true, 'glyphicon-arrow-up': getArrow('catalogUrl'), 'glyphicon-arrow-down': !getArrow('catalogUrl'),  'glyphicon-sort': !getVisibility('catalogUrl')}"></i></th>
+        <th>Details</th>
       </tr>
-      </thead>
 
-      <tbody *ngFor="let library of libraries | orderBy: [sortBy]">
-        <tr>
-          <td>{{library.id}}</td>
-          <td>{{library.name}}</td>
-          <td>{{library.city}}</td>
-          <td><a [href]="'http://' + library.url" target="_blank">{{library?.url}}</a></td>
-          <td><a [href]="'http://' + library.catalogUrl" target="_blank">{{library?.catalogUrl}}</a></td>
-          <td><a [routerLink]="['/library', library.id]"><i class="material-icons">send</i></a></td>
-        </tr>
-      </tbody>
+      <tr *ngFor="let library of libraries | orderBy: [sortBy]">
+        <td>{{library.id}}</td>
+        <td>{{library.name}}</td>
+        <td>{{library.city}}</td>
+        <td><a [href]="'http://' + library.url" target="_blank">{{library?.url}}</a></td>
+        <td><a [href]="'http://' + library.catalogUrl" target="_blank">{{library?.catalogUrl}}</a></td>
+        <td><a [routerLink]="['/library', library.id]"><i class="glyphicon glyphicon-triangle-right"></i></a></td>
+      </tr>
+
     </table>
-
   </div>
 
 
+  <button id="addLibraryBtn" type="button" class="btn btn-primary btn-circle btn-lg"><i class="glyphicon glyphicon glyphicon-plus" data-toggle="modal" data-target="#addLibraryModal"></i></button>
 
-  <a class="btn-floating btn-large waves-effect waves-light red waves-effect waves-light btn modal-trigger" id="addLibraryBtn" href="#add-library-modal"><i class="material-icons">add</i></a>
+</div>
 
-
-  <div id="add-library-modal" class="modal">
+<div class="modal fade" id="addLibraryModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+  <div class="modal-dialog" role="document">
     <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="exampleModalLabel">Create new library</h4>
+      </div>
+      <div class="modal-body">
+        <form>
 
-      <div class="row">
-        <form class="col s12">
-
-          <div class="row">
-            <div class="input-field col s12">
-              <input id="name" type="text" [(ngModel)]="newLibrary.name" name="libraryName">
-              <label for="name">Name</label>
-            </div>
+          <div class="form-group">
+            <label for="name" class="control-label">Name:</label>
+            <input type="text" [(ngModel)]="newLibrary.name" name="libraryName" class="form-control" id="name">
           </div>
 
-          <div class="row">
-            <div class="input-field col s12">
-              <input id="url" type="url"  [(ngModel)]="newLibrary.url" name="libraryURL">
-              <label for="url">URL</label>
-            </div>
+          <div class="form-group">
+            <label for="url" class="control-label">URL:</label>
+            <input type="url"  [(ngModel)]="newLibrary.url" name="libraryURL" class="form-control" id="url">
           </div>
 
-          <div class="row">
-            <div class="input-field col s12">
-              <input id="catalogUrl" type="url"  [(ngModel)]="newLibrary.catalogUrl" name="libraryCatalogURL">
-              <label for="catalogUrl">Catalog URL</label>
-            </div>
+          <div class="form-group">
+            <label for="catalorUrl" class="control-label">Catalog URL:</label>
+            <input type="url"  [(ngModel)]="newLibrary.catalogUrl" name="libraryCatalogURL" class="form-control" id="catalorUrl">
           </div>
 
-          <div class="row">
-            <div class="input-field col s12">
-              <input id="city" type="text"  [(ngModel)]="newLibrary.city" name="libraryCity">
-              <label for="city">City</label>
-            </div>
+          <div class="form-group">
+            <label for="catalorUrl" class="control-label">City:</label>
+            <input type="text"  [(ngModel)]="newLibrary.city" name="libraryCity" class="form-control" id="city">
           </div>
 
-          <button class="btn waves-effect waves-light" type="submit" id="createNewLibrary" name="action" (click)="createLibrary()">Submit
-            <i class="material-icons right">send</i>
-          </button>
         </form>
       </div>
-
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" (click)="createLibrary()" data-dismiss="modal">Save</button>
+      </div>
     </div>
-
   </div>
-</main>
+</div>

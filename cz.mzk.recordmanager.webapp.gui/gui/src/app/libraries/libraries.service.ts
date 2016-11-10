@@ -14,12 +14,10 @@ import {ErrorHolder} from "../shared/error-holder";
 @Injectable()
 export class LibrariesService {
 
-	constructor(private http: Http)
-	{
+	constructor(private http: Http) {
 	}
 
-	getLibraries(): Observable<Library[]>
-	{
+	getLibraries(): Observable<Library[]> {
 		return this.http.get(SERVER + "/library")
 			.map((res: Response) => res.json())
       .catch(this.handleError);
@@ -28,61 +26,19 @@ export class LibrariesService {
 	getLibraryDetails(libraryId: number): Observable<LibraryDetail>
 	{
 		return this.http.get(SERVER + "/library/" + libraryId)
-			.map((res: Response) => {
-				let configs: OaiHarvestConfiguration[] = [];
-
-				for (var i = 0; i < res.json().oaiHarvestConfigurations.length; ++i)
-				{
-					//Create contact person
-					let person: ContactPerson = new ContactPerson({
-						id: res.json().oaiHarvestConfigurations[i].contact.id,
-						name: res.json().oaiHarvestConfigurations[i].contact.name,
-						email: res.json().oaiHarvestConfigurations[i].contact.email,
-						phone: res.json().oaiHarvestConfigurations[i].contact.phone
-					});
-
-					let config: OaiHarvestConfiguration = new OaiHarvestConfiguration({
-						id: res.json().oaiHarvestConfigurations[i].id,
-						url: res.json().oaiHarvestConfigurations[i].url,
-						set: res.json().oaiHarvestConfigurations[i].set,
-						metadataPrefix: res.json().oaiHarvestConfigurations[i].metadataPrefix,
-						contact: person,
-						idPrefix: res.json().oaiHarvestConfigurations[i].idPrefix,
-						baseWeight: res.json().oaiHarvestConfigurations[i].baseWeight,
-						clusterIdEnabled: res.json().oaiHarvestConfigurations[i].clusterIdEnabled,
-						filteringEnabled: res.json().oaiHarvestConfigurations[i].filteringEnabled,
-						interceptionEnabled: res.json().oaiHarvestConfigurations[i].interceptionEnabled,
-						extractIdRegex: res.json().oaiHarvestConfigurations[i].extractIdRegex,
-						harvestJobName: res.json().oaiHarvestConfigurations[i].harvestJobName,
-						library: res.json().oaiHarvestConfigurations[i].library
-					});
-					configs.push(config);
-				}
-				let detail: LibraryDetail = new LibraryDetail({
-					id: res.json().id,
-					name: res.json().name,
-					url: res.json().url,
-					catalogUrl: res.json().catalogUrl,
-					city: res.json().city,
-					oaiHarvestConfigurations: configs
-				});
-
-				return detail;
-			})
+			.map(this.processResponse)
       .catch(this.handleError);
 	}
 
 
-	updateLibrary(library: Library): Observable<Library>
-	{
+	updateLibrary(library: Library): Observable<LibraryDetail> {
 		var headers = new Headers({"Content-Type": 'application/json'});
 		let options = new RequestOptions({ headers: headers });
-
+    console.log(JSON.stringify(library));
 		return this.http.post(SERVER + "/library/" + library.id, JSON.stringify(library), options)
-			.map((res: Response) => res.json());
+			.map(this.processResponse);
 	}
-	createLibrary(library: Library): Observable<Library>
-	{
+	createLibrary(library: Library): Observable<Library> {
 		var headers = new Headers({"Content-Type": 'application/json'});
 		let options = new RequestOptions({ headers: headers });
 
@@ -91,16 +47,13 @@ export class LibrariesService {
 			.map((res: Response) =>  res.json());
 	}
 
-	updateConfiguration(config: OaiHarvestConfiguration, libraryId: number): Observable<OaiHarvestConfiguration>
-	{
+	updateConfiguration(config: OaiHarvestConfiguration, libraryId: number): Observable<LibraryDetail> {
 		var headers = new Headers({"Content-Type": 'application/json'});
 		let options = new RequestOptions({ headers: headers });
 
-
+    console.log(JSON.stringify(config));
 		return this.http.post(SERVER + "/library/" + libraryId + "/configuration/" + config.id, JSON.stringify(config), options)
-      .map((res: Response) => {
-		    return res.json();
-      });
+      .map(this.processResponse);
 	}
 
   private handleError (error: Response) {
@@ -108,6 +61,50 @@ export class LibrariesService {
     let message = error.statusText;
 
     return Observable.throw(new ErrorHolder({status: status, message: message}));
+  }
+
+  private processResponse(res: Response){
+
+    let configs: OaiHarvestConfiguration[] = [];
+
+    for (var i = 0; i < res.json().oaiHarvestConfigurations.length; ++i)
+    {
+      //Create contact person
+      let person: ContactPerson = new ContactPerson({
+        id: res.json().oaiHarvestConfigurations[i].contact.id,
+        name: res.json().oaiHarvestConfigurations[i].contact.name,
+        email: res.json().oaiHarvestConfigurations[i].contact.email,
+        phone: res.json().oaiHarvestConfigurations[i].contact.phone
+      });
+
+      let config: OaiHarvestConfiguration = new OaiHarvestConfiguration({
+        id: res.json().oaiHarvestConfigurations[i].id,
+        url: res.json().oaiHarvestConfigurations[i].url,
+        set: res.json().oaiHarvestConfigurations[i].set,
+        metadataPrefix: res.json().oaiHarvestConfigurations[i].metadataPrefix,
+        contact: person,
+        idPrefix: res.json().oaiHarvestConfigurations[i].idPrefix,
+        baseWeight: res.json().oaiHarvestConfigurations[i].baseWeight,
+        clusterIdEnabled: res.json().oaiHarvestConfigurations[i].clusterIdEnabled,
+        filteringEnabled: res.json().oaiHarvestConfigurations[i].filteringEnabled,
+        interceptionEnabled: res.json().oaiHarvestConfigurations[i].interceptionEnabled,
+        extractIdRegex: res.json().oaiHarvestConfigurations[i].extractIdRegex,
+        harvestJobName: res.json().oaiHarvestConfigurations[i].harvestJobName,
+        library: res.json().oaiHarvestConfigurations[i].library
+      });
+      configs.push(config);
+    }
+    let detail: LibraryDetail = new LibraryDetail({
+      id: res.json().id,
+      name: res.json().name,
+      url: res.json().url,
+      catalogUrl: res.json().catalogUrl,
+      city: res.json().city,
+      oaiHarvestConfigurations: configs
+    });
+
+    return detail;
+
   }
 
 }

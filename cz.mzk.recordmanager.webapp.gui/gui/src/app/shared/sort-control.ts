@@ -14,7 +14,7 @@ export class SortControl{
     me.style.switchArrow();
     me.style.switchVisibility();
 
-    return me.style.arrow == "sortArrowUp" ? "+" + name : "-" + name;
+    return me.style.arrow == "glyphicon-arrow-up" ? "+" + name : "-" + name;
   }
 
   public getArrow(name: string, fields: Field[]): string{

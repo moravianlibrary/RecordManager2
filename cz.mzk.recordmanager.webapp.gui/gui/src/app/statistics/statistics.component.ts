@@ -100,8 +100,8 @@ export class StatisticsComponent implements OnInit {
   getArrow(name: string): string{
     return this.sortControl.getArrow(name, this.fields);
   }
-  getVisibility(name: string): string{
-    return this.sortControl.getVisibility(name, this.fields);
+  getVisibility(name: string): boolean{
+    return this.sortControl.getVisibility(name, this.fields) == 'visible' ? true: false;
   }
 
 

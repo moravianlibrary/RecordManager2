@@ -62,10 +62,10 @@ export class LibrariesComponent implements OnInit {
     this.sortBy = this.sortControl.sortByMe(name, this.fields);
   }
 
-  getArrow(name: string): string{
-    return this.sortControl.getArrow(name, this.fields);
+  getArrow(name: string): boolean{
+    return this.sortControl.getArrow(name, this.fields) == 'glyphicon-arrow-up' ? true: false;
   }
-  getVisibility(name: string): string{
-    return this.sortControl.getVisibility(name, this.fields);
+  getVisibility(name: string): boolean{
+    return this.sortControl.getVisibility(name, this.fields) == 'visible' ? true : false;
   }
 }

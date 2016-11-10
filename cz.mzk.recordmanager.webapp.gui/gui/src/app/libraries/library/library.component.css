@@ -1,41 +1,4 @@
-header, main, footer {
-  padding-left: 300px;
-}
-
-@media only screen and (max-width : 992px) {
-  header, main, footer {
-    padding-left: 0;
-  }
-}
-
-div.progress{
-  align-content: center;
-}
-
-
-.borderless {
-  border: none;
-}
-
-.info {
-  font-size: 120%;
-}
-
-
-.highlighted {
-  font-weight: bold;
-  color: teal;
-}
-
-.contact {
-  font-size: 80%;
-}
-
-.header {
-      color: #ee6e73;
-      font-weight: 300;
-}
-.oai-harvest-configuration {
-  margin-top: 10px;
-  margin-left: 10px;
+button.saveBtn{
+  position: relative;
+  left: 96%;
 }

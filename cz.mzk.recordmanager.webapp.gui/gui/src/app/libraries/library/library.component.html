@@ -1,342 +1,173 @@
-<h4 class="center-align">{{library?.name}}</h4>
-<h5 class="center-align">{{libraryDetail?.id}}</h5>
+<div class="page-header">
+  <h1>Library {{library.name}}</h1>
+</div>
 
-<main>
-  <div class="row">
+<form>
 
-    <div class="col s4">
-      <div class="card">
-        <div class="card-content">
-          <span class="card-title">Library</span>
-          <div class="row">
-            <form class="col s12">
-
-              <div class="input-field col s6">
-                <input placeholder="Library ID" id="libraryId" type="text" class="validate" value="{{library?.id}}" disabled>
-                <label for="libraryId">Library ID</label>
-              </div>
-
-              <div class="input-field col s6">
-                <input id="name" type="text"  value="{{libraryDetail?.name }}" [(ngModel)]="library.name" name="name" placeholder="Name">
-                <label for="name">Name</label>
-              </div>
-
-              <div class="input-field col s6">
-                <input id="url" type="text"  value="{{library?.url}}" [(ngModel)]="library.url" name="URL" placeholder="URL">
-                <label for="url">URL</label>
-              </div>
-
-              <div class="input-field col s6">
-                <input id="catalogUrl" type="text"  value="{{library?.catalogUrl}}" [(ngModel)]="library.catalogUrl" name="catalogURL" placeholder="catalogURL" >
-                <label for="catalogUrl">Catalog URL</label>
-              </div>
-
-              <div class="input-field col s6">
-                <input id="city" type="text"  value="{{library?.city}}" [(ngModel)]="library.city" name="city" placeholder="City" >
-                <label for="city">City</label>
-              </div>
-
-              <div class="input-field col s6 right">
-                <button class='waves-effect waves-light btn right' type="submit" (click)="updateLibrary()">Save<i class="material-icons right">send</i>
-                </button>
-              </div>
-
-            </form> <!-- base info form col-->
-          </div> <!-- base info card row-->
-        </div> <!-- base info card content -->
-      </div> <!-- base info card-->
-    </div> <!-- base info col -->
-
-    <div class="col s8">
-      <div class="card">
-        <div class="card-content">
-          <span class="card-title">OAI harvest configuration</span>
-
-          <div class="row">
-            <form class="col s12">
-
-              <div class="row">
-
-                <div class="input-field col s6">
-                  <input placeholder="Harvest configuration ID" value="{{selected.id}}" id="harvestConfigId" type="text" class="validate" disabled>
-                  <label for="harvestConfigId">Harvest configuration ID</label>
-                </div>
-
-                <div class="input-field col s6">
-                  <input id="configUrl" type="text"  value="{{selected?.url}}" [(ngModel)]="selected.url"	name="selectedConfigUrl" placeholder="URL">
-                  <label for="configUrl">Configuration URL</label>
-                </div>
-              </div> <!-- harvest config form 1st row -->
-
-            <div class="row">
-              <div class="input-field col s6">
-                <input id="set" type="text"  value="{{selected?.set}}" [(ngModel)]="selected.set"	name="selectedConfigSet" placeholder="Set">
-                <label for="set">Set</label>
-              </div>
-
-              <div class="input-field col s6">
-                <input id="metadataPrefix" type="text"  value="{{selected?.metadataPrefix}}" [(ngModel)]="selected.metadataPrefix"	name="selectedConfigMetadataPrefix" placeholder="Metadata prefix">
-                <label for="metadataPrefix">Metadata prefix</label>
-              </div>
-            </div>
-
-              <div class="row">
-                <div class="input-field col s6">
-                  <input id="idPrefix" type="text"  value="{{selected?.idPrefix}}"	[(ngModel)]="selected.idPrefix"	name="selectedConfigIdPrefix"placeholder="ID prefix">
-                  <label for="idPrefix">ID prefix</label>
-                </div>
-
-                <div class="input-field col s6">
-                  <input id="baseWeight" type="text"  value="{{selected?.baseWeight}}" [(ngModel)]="selected.baseWeight"	name="selectedConfigBaseWeight" placeholder="Base weigh">
-                  <label for="baseWeight">Base weigh</label>
-                </div>
-              </div>
-
-              <div class="row">
-                <div class="input-field col s6">
-                  <input id="clusterIdEnabled" type="text"  value="{{selected?.clusterIdEnabled}}" [(ngModel)]="selected.baseWeight"	name="selectedConfigBaseWeight" placeholder="Enable cluster">
-                  <label for="clusterIdEnabled">Enabled cluster</label>
-                </div>
-
-                <div class="input-field col s6">
-                  <input id="filteringEnabled" type="text"  value="{{selected?.filteringEnabled}}" [(ngModel)]="selected.filteringEnabled"	name="selectedConfigFilteringEnabled" placeholder="Enabled filtering">
-                  <label for="filteringEnabled">Enabled filtering</label>
-                </div>
-              </div>
-
-              <div class="row">
-                <div class="input-field col s6">
-                  <input id="interceptionEnabled" type="text"  value="{{selected?.interceptionEnabled}}" [(ngModel)]="selected.interceptionEnabled"	name="selectedConfigInterceptionEnabled" placeholder="interceptionEnabled">
-                  <label for="interceptionEnabled">Interception enabled</label>
-                </div>
-                <div class="input-field col s6">
-                  <input id="extractIdRegex" type="text"  value="{{selected?.extractIdRegex}}" [(ngModel)]="selected.extractIdRegex"	name="selectedConfigExtractIdRegex" placeholder="Extract regex">
-                  <label for="extractIdRegex">Extract regex</label>
-                </div>
-              </div>
-
-              <div class="row">
-                <div class="input-field col s6">
-                  <input id="harvestJobName" type="text"  value="{{selected?.harvestJobName}}" [(ngModel)]="selected.harvestJobName"	name="selectedConfigHarvestJobName" placeholder="Harvest job name">
-                  <label for="harvestJobName">Harvest job name</label>
-                </div>
-                <div class="input-field col s6">
-                  <input id="islibrary" type="text"  value="{{selected?.library}}" [(ngModel)]="selected.library"	name="selectedConfigLibrary" placeholder="Is library">
-                  <label for="islibrary">Is library</label>
-                </div>
-              </div>
-            </form> <!-- harvest config form col-->
-          </div> <!-- harvest config card row-->
-
-          <div class="center">
-            <h5>Contact</h5>
-          </div>
-
-          <div class="row">
-            <div class="input-field col s6">
-              <input placeholder="Contact ID" id="contactId" value="{{selected?.contact?.id}}" type="text" class="validate" disabled>
-              <label for="configUrl">Contact ID</label>
-            </div>
-            <div class="input-field col s6">
-              <input placeholder="Name" id="contactName" type="text" value="{{selected?.contact?.name}}" [(ngModel)]="selected.contact.name" class="validate">
-              <label for="contactName">Name</label>
-            </div>
-          </div>
-          <div class="input-field col s6">
-            <input placeholder="Email" id="contactEmail" type="text" value="{{selected?.contact?.email}}" [(ngModel)]="selected.contact.email" class="validate">
-            <label for="contactEmail">Email</label>
-          </div>
-          <div class="input-field col s6">
-            <input placeholder="Phone" id="phone" type="text" value="{{selected?.contact?.phone}}" [(ngModel)]="selected.contact.phone" class="validate">
-            <label for="phone">Phone</label>
-          </div>
-          <div class="row">
-
-            <div class="input-field col s6 right">
-              <button class='waves-effect waves-light btn right' type="submit" (click)="updateConfiguration(library.id)">
-              Save<i class="material-icons right">send</i>
-              </button>
-            </div>
-
-          </div>
-
-          <!--Pagination-->
-          <div class="row">
-            <div class="col s1">
-              <a class="btn-floating waves-effect waves-light modal-trigger tooltipped" name="delete_harvest_config" data-position="bottom" data-delay="50" data-tooltip="Delete configuration" href="#modalDelConfig">
-                <i class="material-icons">delete</i>
-              </a>
-            </div>
-            <div class="col s10" *ngIf="libraryDetail?.oaiHarvestConfigurations != null && libraryDetail?.oaiHarvestConfigurations.length > 0">
-              <ul class="pagination center-align">
-
-                <li *ngIf="page != 1" class="waves-effect"><a (click)="selectConfiguration(page - 2)"><i class="material-icons">chevron_left</i></a></li>
-
-
-                <li *ngFor="let config of libraryDetail?.oaiHarvestConfigurations; let i = index" [ngClass]="{'waves-effect': i != page - 1, 'active': i == page - 1}"><a (click)="selectConfiguration(i)">{{i + 1}}</a></li>
-
-                <li *ngIf="page != libraryDetail?.oaiHarvestConfigurations.length" class="waves-effect"><a (click)="selectConfiguration(page)"><i class="material-icons">chevron_right</i></a></li>
-
-              </ul>
-            </div> <!-- harvest config pagination col -->
-            <div class="col s1">
-              <a class="btn-floating waves-effect waves-light right tooltipped" type="submit" name="save_harvest_config" data-position="bottom" data-delay="50" data-tooltip="Add configuration">
-                <i class="material-icons">add</i>
-              </a>
-            </div>
-          </div> <!-- harvest config pagination row -->
-        </div> <!-- whole harvest config card content -->
-      </div> <!-- whole harvest config card-->
-    </div> <!-- whole harvest config col-->
-
+  <div class="form-group">
+    <label for="id" class="control-label">ID:</label>
+    <input type="number" [(ngModel)]="library.id" name="libraryId" class="form-control" id="id" [value]="library.id" disabled>
   </div>
-</main>
 
-<!--<div class="row">-->
-		<!--<div class="col s12" id='main'>-->
+  <div class="form-group">
+    <label for="name" class="control-label">Name:</label>
+    <input type="text" [(ngModel)]="library.name" name="libraryName" class="form-control" id="name" [value]="library.name">
+  </div>
 
-		<!--<div class="row" id='library'>-->
-		<!--<form class="col s12">-->
-				<!--<div class="row">-->
-				<!--<div class="col s5">-->
-						<!--<h2 class="header">Library</h2>-->
-					<!--</div>-->
+  <div class="form-group">
+    <label for="url" class="control-label">URL:</label>
+    <input type="url"  [(ngModel)]="library.url" name="libraryURL" class="form-control" id="url" [value]="library.url">
+  </div>
 
-				<!--</div>-->
+  <div class="form-group">
+    <label for="catalorUrl" class="control-label">Catalog URL:</label>
+    <input type="url"  [(ngModel)]="library.catalogUrl" name="libraryCatalogURL" class="form-control" id="catalorUrl" [value]="library.catalogUrl">
+  </div>
 
-				<!--<div class="row">-->
-					<!--<div class="input-field col s12">-->
-						<!--<input id="disabled" type="text"  value="{{library?.id}}" disabled>-->
-					<!--</div>-->
-				<!--</div>-->
-				<!--<div class="row">-->
-					<!--<div class="input-field col s12">-->
-						<!--<input id="name" type="text"  value="{{libraryDetail?.name }}" [(ngModel)]="library.name" name="name" placeholder="Name">-->
-					<!--</div>-->
-				<!--</div>-->
-				<!--<div class="row">-->
-					<!--<div class="input-field col s12">-->
-						<!--<input id="url" type="text"  value="{{library?.url}}" [(ngModel)]="library.url" name="URL" placeholder="URL">-->
-					<!--</div>-->
-				<!--</div>-->
-				<!--<div class="row">-->
-					<!--<div class="input-field col s12">-->
-						<!--<input id="catalogUrl" type="text"  value="{{library?.catalogUrl}}" [(ngModel)]="library.catalogUrl" name="catalogURL" placeholder="catalogURL" >-->
-					<!--</div>-->
-				<!--</div>-->
-				<!--<div class="row">-->
-					<!--<div class="input-field col s12">-->
-						<!--<input id="city" type="text"  value="{{library?.city}}" [(ngModel)]="library.city" name="city" placeholder="City" >-->
-					<!--</div>-->
-				<!--</div>-->
+  <div class="form-group">
+    <label for="catalorUrl" class="control-label">City:</label>
+    <input type="text"  [(ngModel)]="library.city" name="libraryCity" class="form-control" id="city" [value]="library.city">
+  </div>
 
+  <button type="button" class="btn btn-primary saveBtn" (click)="updateLibrary()">Save</button>
 
-			<!--<div class="input-field col s6 right">-->
-				<!--<button class='waves-effect waves-light btn right' type="submit" (click)="updateLibrary()">-->
-					<!--Save<i class="material-icons right">send</i>-->
-				<!--</button>-->
-			<!--</div>-->
-		<!--</form>-->
-
-
-				<!--<div class="row">-->
-					<!--<div class="col s12">-->
-					<!--<h2 class="header">OAI harvest configurations</h2>-->
-					<!--<ul class="collapsible popout" data-collapsible="accordion">-->
-
-
-					<!--<li	*ngFor="let config of libraryDetail?.oaiHarvestConfigurations" (click)="selectConfiguration(config.id)">-->
-						<!--<div class="collapsible-header"><i class="material-icons">mode_edit</i>Harvester {{config.id}}</div>-->
-						<!--<div class="collapsible-body">-->
-              <!--<form>-->
-
-                <!--<div class="row oai-harvest-configuration">-->
-                  <!--<div class="input-field col s12">-->
-                    <!--<input id="id" type="text"  value="{{config.id}}" disabled>-->
-                  <!--</div>-->
-                <!--</div>-->
-
-                <!--<div class="row oai-harvest-configuration">-->
-                  <!--<div class="input-field col s12">-->
-                    <!--<input id="url2" type="text"  value="{{selected.url}}" [(ngModel)]="selected.url"	name="selectedConfigUrl" placeholder="url">-->
-                  <!--</div>-->
-                <!--</div>-->
-
-                 <!--<div class="row oai-harvest-configuration">-->
-                  <!--<div class="input-field col s12">-->
-                    <!--<input id="set" type="text"  value="{{selected.set}}" [(ngModel)]="selected.set"	name="selectedConfigSet" placeholder="set">-->
-                  <!--</div>-->
-                <!--</div>-->
-
-                <!--<div class="row oai-harvest-configuration">-->
-                  <!--<div class="input-field col s12">-->
-                    <!--<input id="metadataPrefix" type="text"  value="{{selected.metadataPrefix}}" [(ngModel)]="selected.metadataPrefix"	name="selectedConfigMetadataPrefix" placeholder="metadataPrefix">-->
-                  <!--</div>-->
-                <!--</div>-->
-
-                  <!--<div class="row oai-harvest-configuration">-->
-                    <!--<div class="input-field col s12">-->
-                      <!--<input id="idPrefix" type="text"  value="{{selected.idPrefix}}"	[(ngModel)]="selected.idPrefix"	name="selectedConfigIdPrefix"placeholder="idPrefix">-->
-                    <!--</div>-->
-                  <!--</div>-->
-
-                  <!--<div class="row oai-harvest-configuration">-->
-                    <!--<div class="input-field col s12">-->
-                      <!--<input id="clusterIdEnabled" type="text"  value="{{selected.baseWeight}}" [(ngModel)]="selected.baseWeight"	name="selectedConfigBaseWeight" placeholder="clusterIdEnabled">-->
-                    <!--</div>-->
-                  <!--</div>-->
-
-                  <!--<div class="row oai-harvest-configuration">-->
-                    <!--<div class="input-field col s12">-->
-                      <!--<input id="filteringEnabled" type="text"  value="{{selected.filteringEnabled}}" [(ngModel)]="selected.filteringEnabled"	name="selectedConfigFilteringEnabled" placeholder="filteringEnabled">-->
-                    <!--</div>-->
-                  <!--</div>-->
-
-                  <!--<div class="row oai-harvest-configuration">-->
-                    <!--<div class="input-field col s12">-->
-                      <!--<input id="interceptionEnabled" type="text"  value="{{selected.interceptionEnabled}}" [(ngModel)]="selected.interceptionEnabled"	name="selectedConfigInterceptionEnabled" placeholder="interceptionEnabled">-->
-                    <!--</div>-->
-                  <!--</div>-->
-
-                  <!--<div class="row oai-harvest-configuration">-->
-                    <!--<div class="input-field col s12">-->
-                      <!--<input id="extractIdRegex" type="text"  value="{{selected.extractIdRegex}}" [(ngModel)]="selected.extractIdRegex"	name="selectedConfigExtractIdRegex" placeholder="extractIdRegex">-->
-                    <!--</div>-->
-                  <!--</div>-->
-
-                  <!--<div class="row oai-harvest-configuration">-->
-                    <!--<div class="input-field col s12">-->
-                      <!--<input id="harvestJobName" type="text"  value="{{selected.harvestJobName}}" [(ngModel)]="selected.harvestJobName"	name="selectedConfigHarvestJobName" placeholder="harvestJobName">-->
-                    <!--</div>-->
-                  <!--</div>-->
-
-                  <!--<div class="row oai-harvest-configuration">-->
-                    <!--<div class="input-field col s12">-->
-                      <!--<input id="islibrary" type="text"  value="{{selected.library}}" [(ngModel)]="selected.library"	name="selectedConfigLibrary" placeholder="Is library?">-->
-                      <!--<label for="islibrary">Is library?</label>-->
-                    <!--</div>-->
-                  <!--</div>-->
-
-                  <!--&lt;!&ndash;TODO: display contact&ndash;&gt;-->
-
-                  <!--<div class="input-field col s6 right">-->
-                    <!--<button class='waves-effect waves-light btn right' type="submit" (click)="updateConfiguration(library.id)">-->
-                      <!--Save<i class="material-icons right">send</i>-->
-                    <!--</button>-->
-                  <!--</div>-->
-
-              <!--</form>-->
-						<!--</div>-->
-					<!--</li>-->
-
-					<!--</ul>-->
-				<!--</div>-->
-				<!--</div>-->
+</form>
 
 
 
+<div class="panel-group" id="accordion">
 
-		<!--</div>-->
 
-		<!--</div>-->
-	<!--</div>-->
+  <div *ngFor="let conf of libraryDetail?.oaiHarvestConfigurations" class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <a (click)="selectMe(conf.id)" data-toggle="collapse" data-parent="#accordion" href="#collapse{{conf.id}}">Harvest: {{conf.id}} {{conf.idPrefix}}</a>
+      </h4>
+    </div>
+    <div id="collapse{{conf.id}}" class="panel-collapse collapse">
+      <div class="panel-body">
+
+        <form>
+
+          <h3>Harvest configuration:</h3>
+
+          <div class="row">
+            <div class="form-group col-md-6">
+              <label for="harvestId" class="control-label">ID:</label>
+              <input type="number" [(ngModel)]="selected.id" name="harvestId" class="form-control" id="harvestId" [value]="selected.id" disabled>
+            </div>
+
+            <div class="form-group col-md-6">
+              <label for="harvestUrl" class="control-label">URL:</label>
+              <input type="url" [(ngModel)]="selected.url" name="harvestUrl" class="form-control" id="harvestUrl" [value]="selected.url">
+            </div>
+
+          </div>
+
+
+          <div class="row">
+            <div class="form-group col-md-6">
+              <label for="harvestId" class="control-label">Set:</label>
+              <input type="text" [(ngModel)]="selected.set" name="harvestSet" class="form-control" id="harvestSet" [value]="selected.set" >
+            </div>
+
+            <div class="form-group col-md-6">
+              <label for="harvestUrl" class="control-label">Metadata prefix:</label>
+              <input type="text" [(ngModel)]="selected.metadataPrefix" name="harvestMetadataPrefix" class="form-control" id="harvestMetadataPrefix" [value]="selected.metadataPrefix">
+            </div>
+
+          </div>
+
+
+
+          <div class="row">
+            <div class="form-group col-md-6">
+              <label for="harvestId" class="control-label">ID prefix:</label>
+              <input type="text" [(ngModel)]="selected.idPrefix" name="harvestIdPrefix" class="form-control" id="harvestIdPrefix" [value]="selected.idPrefix" >
+            </div>
+
+            <div class="form-group col-md-6">
+              <label for="harvestUrl" class="control-label">Base weight:</label>
+              <input type="text" [(ngModel)]="selected.baseWeight" name="harvestBaseWeight" class="form-control" id="harvestBaseWeight" [value]="selected.baseWeight">
+            </div>
+
+          </div>
+
+
+          <div class="row">
+            <div class="form-group col-md-6">
+              <label for="harvestId" class="control-label">Cluster ID enabled:</label>
+              <input type="text" [(ngModel)]="selected.clusterIdEnabled" name="harvestCluestrIdEnabled" class="form-control" id="harvestCluestrIdEnabled" [value]="selected.clusterIdEnabled" >
+            </div>
+
+            <div class="form-group col-md-6">
+              <label for="harvestUrl" class="control-label">Filtering enabled:</label>
+              <input type="text" [(ngModel)]="selected.filteringEnabled" name="harvestFilteringEnabled" class="form-control" id="harvestFilteringEnabled" [value]="selected.filteringEnabled">
+            </div>
+
+          </div>
+
+          <div class="row">
+            <div class="form-group col-md-6">
+              <label for="harvestId" class="control-label">Interception enabled:</label>
+              <input type="text" [(ngModel)]="selected.interceptionEnabled" name="harvestInterceptionEnabled" class="form-control" id="harvestInterceptionEnabled" [value]="selected.interceptionEnabled" >
+            </div>
+
+            <div class="form-group col-md-6">
+              <label for="harvestUrl" class="control-label">Extract ID prefix:</label>
+              <input type="text" [(ngModel)]="selected.extractIdRegex" name="harvestExtractIdPrefix" class="form-control" id="harvestExtractIdPrefix" [value]="selected.extractIdRegex">
+            </div>
+
+          </div>
+
+
+          <div class="row">
+            <div class="form-group col-md-6">
+              <label for="harvestId" class="control-label">Harvest job name:</label>
+              <input type="text" [(ngModel)]="selected.harvestJobName" name="harvestJobName" class="form-control" id="harvestJobName" [value]="selected.harvestJobName" >
+            </div>
+
+            <div class="form-group col-md-6">
+              <label for="harvestUrl" class="control-label">Is library:</label>
+              <input type="text" [(ngModel)]="selected.library" name="harvestLibrary" class="form-control" id="harvestLibrary" [value]="selected.library">
+            </div>
+
+          </div>
+
+          <h3>Contact person:</h3>
+
+          <div class="row">
+            <div class="form-group col-md-6">
+              <label for="contactId" class="control-label">Contact ID:</label>
+              <input type="number" [(ngModel)]="selected.contact.id" name="harvestJobName" class="form-control" id="contactId" [value]="selected.contact.id" disabled>
+            </div>
+
+            <div class="form-group col-md-6">
+              <label for="harvestUrl" class="control-label">Name:</label>
+              <input type="text" [(ngModel)]="selected.contact.name" name="contactName" class="form-control" id="contactName" [value]="selected.contact.name">
+            </div>
+
+          </div>
+
+          <div class="row">
+            <div class="form-group col-md-6">
+              <label for="contactId" class="control-label">Email:</label>
+              <input type="email" [(ngModel)]="selected.contact.email" name="contactEmail" class="form-control" id="contactEmail" [value]="selected.contact.email">
+            </div>
+
+            <div class="form-group col-md-6">
+              <label for="harvestUrl" class="control-label">Phone:</label>
+              <input type="text" [(ngModel)]="selected.contact.phone" name="contactPhone" class="form-control" id="contactPhone" [value]="selected.contact.phone">
+            </div>
+
+          </div>
+
+          <button type="button" class="btn btn-primary saveBtn" (click)="updateConfiguration(library.id)">Save</button>
+
+        </form>
+
+      </div>
+    </div>
+  </div>
+
+</div>

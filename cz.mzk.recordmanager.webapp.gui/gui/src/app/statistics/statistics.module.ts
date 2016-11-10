@@ -10,7 +10,7 @@ import {FormsModule} from "@angular/forms";
 import {StatusFilterPipe} from "../pipes/status-filter.pipe";
 import {AfterDateFilterPipe} from "../pipes/after-date-filter.pipe";
 import {BeforeDateFilterPipe} from "../pipes/before-date-filter.pipe";
-import {SelectModule} from "angular2-select";
+
 
 
 @NgModule({
@@ -18,7 +18,6 @@ import {SelectModule} from "angular2-select";
     CommonModule,
     IndexModule,
     FormsModule,
-    SelectModule,
     statisticsRouting
   ],
   providers: [StatisticsService, SortControl],

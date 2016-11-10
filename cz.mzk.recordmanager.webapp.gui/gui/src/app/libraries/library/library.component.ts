@@ -21,7 +21,6 @@ export class LibraryComponent implements OnInit{
 	libraryDetail: LibraryDetail;
 	library: Library = new Library;
 	selected: OaiHarvestConfiguration = new OaiHarvestConfiguration;
-  page: number = 1;
 
 	constructor(private librariesService: LibrariesService, private route: ActivatedRoute, private router: Router){
 	}
@@ -29,31 +28,52 @@ export class LibraryComponent implements OnInit{
 	getLibraryDetails(libraryId: number) {
 		this.librariesService.getLibraryDetails(libraryId)
 			.subscribe(libraryDetail => {
-			  this.libraryDetail = new LibraryDetail;
-				this.libraryDetail = libraryDetail;
+          this.libraryDetail = new LibraryDetail;
+          this.libraryDetail = libraryDetail;
 
-				this.library = new Library({
-					id: this.libraryDetail.id,
-					name: this.libraryDetail.name,
-					url: this.libraryDetail.url,
-					catalogUrl: this.libraryDetail.catalogUrl,
-					city: this.libraryDetail.city
-				});
-        if (libraryDetail.oaiHarvestConfigurations.length > 0) {
 
-          this.selected = libraryDetail.oaiHarvestConfigurations[0];
-        }
+          this.library = new Library({
+            id: this.libraryDetail.id,
+            name: this.libraryDetail.name,
+            url: this.libraryDetail.url,
+            catalogUrl: this.libraryDetail.catalogUrl,
+            city: this.libraryDetail.city
+          });
 
-			},
+          if (libraryDetail.oaiHarvestConfigurations.length > 0) {
+            this.selected = libraryDetail.oaiHarvestConfigurations[0];
+          }
+        },
+
 			error => {
           this.router.navigate(['/error', {status: error.status, message: error.message}]);
       });
 
 	}
 
+  selectMe(id: number){
+    this.selected = this.libraryDetail.oaiHarvestConfigurations.filter(conf => conf.id == id)[0];
+  }
+
 	updateLibrary(): void {
 		this.librariesService.updateLibrary(this.library)
-      .subscribe(library => this.library = library);
+      .subscribe(libraryDetail => {
+        this.libraryDetail = new LibraryDetail;
+        this.libraryDetail = libraryDetail;
+
+
+        this.library = new Library({
+          id: this.libraryDetail.id,
+          name: this.libraryDetail.name,
+          url: this.libraryDetail.url,
+          catalogUrl: this.libraryDetail.catalogUrl,
+          city: this.libraryDetail.city
+        });
+
+        if (libraryDetail.oaiHarvestConfigurations.length > 0) {
+          this.selected = libraryDetail.oaiHarvestConfigurations[0];
+        }
+      });
 	}
 
 
@@ -66,16 +86,30 @@ export class LibraryComponent implements OnInit{
 
 	selectConfiguration(page: number) {
 		this.selected = this.libraryDetail.oaiHarvestConfigurations[page];
-    this.page = page + 1;
 
 	}
 
 	updateConfiguration(id: number) {
 		this.librariesService.updateConfiguration(this.selected, id)
-      .subscribe(configuration => {
-        this.libraryDetail.oaiHarvestConfigurations.filter(conf => conf.id == configuration.id)[0] = configuration;
-        this.selected = configuration;
+      .subscribe(libraryDetail => {
+        this.libraryDetail = new LibraryDetail;
+        this.libraryDetail = libraryDetail;
+
+
+        this.library = new Library({
+          id: this.libraryDetail.id,
+          name: this.libraryDetail.name,
+          url: this.libraryDetail.url,
+          catalogUrl: this.libraryDetail.catalogUrl,
+          city: this.libraryDetail.city
+        });
+
+        if (libraryDetail.oaiHarvestConfigurations.length > 0) {
+          this.selected = libraryDetail.oaiHarvestConfigurations[0];
+        }
       });
 	}
+
+
 
 }

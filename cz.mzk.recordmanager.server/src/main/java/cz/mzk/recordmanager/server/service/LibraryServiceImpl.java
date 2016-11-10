@@ -164,7 +164,7 @@ public class LibraryServiceImpl implements LibraryService {
 		target.setId(src.getId());
 		target.setCity(src.getCity());
 		target.setName(src.getName());
-		target.setUrl(src.getName());
+		target.setUrl(src.getUrl());
 		target.setCatalogUrl(src.getCatalogUrl());
 		return target;
 	}
