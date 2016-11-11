@@ -4,20 +4,65 @@
 
 
 
+<div class="panel panel-default">
+  <div class="panel-body">
 
-<nav class="navbar navbar-default">
-  <div class="container-fluid statusPicker">
+    <div class="row">
 
-    <select [(ngModel)]="statuses" class="selectpicker" data-selected-text-format="count > 2" multiple title="Choose the following...">
-      <option>COMPLETED</option>
-      <option>FAILED</option>
-      <option>STARTED</option>
-    </select>
+      <div class="col-md-2">
+        <div class="input-group">
+          <select name="selector" [(ngModel)]="statuses" class="selectpicker" data-selected-text-format="count > 2" multiple title="Choose the following...">
+            <option>COMPLETED</option>
+            <option>FAILED</option>
+            <option>STARTED</option>
+          </select>
+        </div>
+      </div>
 
+      <div class="col-md-2">
+        <div class="input-group col-md-1">
+          <span class="input-group-addon">Start</span>
+          <input [(ngModel)]="startDate" class="form-control" type="date" id="startDate">
+        </div>
+      </div>
+
+      <div class="col-md-2">
+        <div class="input-group col-md-1">
+          <span class="input-group-addon">End</span>
+          <input [(ngModel)]="endDate" class="form-control" type="date" id="endDate">
+        </div>
+      </div>
+
+      <div class="col-md-2">
+        <div class="input-group col-md-1">
+          <span class="input-group-addon">From</span>
+          <input [(ngModel)]="fromParam" class="form-control" type="date" id="fromDate">
+        </div>
+      </div>
+
+      <div class="col-md-2">
+        <div class="input-group col-md-1">
+          <span class="input-group-addon">To</span>
+          <input [(ngModel)]="toParam" class="form-control" type="date" id="toDate">
+        </div>
+      </div>
+
+    </div>
 
 
   </div>
-</nav>
+</div>
+
+
+<div class="input-group">
+  <select [(ngModel)]="statuses" class="selectpicker" data-selected-text-format="count > 2" multiple title="Choose the following...">
+    <option>COMPLETED</option>
+    <option>FAILED</option>
+    <option>STARTED</option>
+  </select>
+</div>
+
+
 
 
 <div class="panel panel-default">
