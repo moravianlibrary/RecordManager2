@@ -19,42 +19,12 @@ export class StatisticsComponent implements OnInit {
   loading: boolean;
 
   // status: string;
+  statuses: string[] = [];
   startDate: Date;
   endDate: Date;
   fromParam: Date;
   toParam: Date;
 
-  /////////////
-
-  statuses: string[] = [];
-
-  options: Array<any> = [
-    {
-      value: 'COMPLETED',
-      label: 'COMPLETED'
-    },
-    {
-      value: 'STARTED',
-      label: 'STARTED'
-    },
-    {
-      value: 'FAILED',
-      label: 'FAILED'
-    }
-  ];
-
-
-  onSelected(item) {
-    this.statuses.push(item.value);
-    this.statuses = this.statuses;
-  }
-
-  onDeselected(item) {
-    var index = this.statuses.indexOf(item.value);
-    this.statuses.splice(index, 1);
-  }
-
-  ////////////
 
   constructor(private statisticsService: StatisticsService, private sortControl: SortControl) { }
 
@@ -97,8 +67,8 @@ export class StatisticsComponent implements OnInit {
     this.sortBy = this.sortControl.sortByMe(name, this.fields);
   }
 
-  getArrow(name: string): string{
-    return this.sortControl.getArrow(name, this.fields);
+  getArrow(name: string): boolean{
+    return this.sortControl.getArrow(name, this.fields)== 'glyphicon-arrow-up' ? true: false;
   }
   getVisibility(name: string): boolean{
     return this.sortControl.getVisibility(name, this.fields) == 'visible' ? true: false;

@@ -19,7 +19,7 @@ import {JobsModule} from "./jobs/jobs.module";
     FormsModule,
     HttpModule,
     LibrariesModule,
-    // StatisticsModule,
+    StatisticsModule,
     // JobsModule,
     routing
   ],

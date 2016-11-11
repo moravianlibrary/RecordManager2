@@ -1,100 +1,170 @@
-<main>
-  <div>
-
-    <div *ngIf="loading" id="circlePreloader" class="preloader-wrapper big active">
-      <div class="spinner-layer spinner-red-only">
-        <div class="circle-clipper left">
-          <div class="circle"></div>
-        </div><div class="gap-patch">
-        <div class="circle"></div>
-      </div><div class="circle-clipper right">
-        <div class="circle"></div>
-      </div>
-      </div>
-    </div>
+<div class="page-header">
+  <h1>Statistics</h1>
+</div>
 
 
 
 
-    <div class="row">
+<nav class="navbar navbar-default">
+  <div class="container-fluid statusPicker">
 
-      <!--<div class="input-field col s2">-->
-        <!--<ng-select-->
-          <!--[options]="options"-->
-          <!--multiple="true"-->
-          <!--placeholder="Choose statistic"-->
-          <!--(selected)="onSelected($event)"-->
-          <!--(deselected)="onDeselected($event)">-->
-        <!--</ng-select>-->
-      <!--</div>-->
-
-      <div class="input-field col s2">
-        <input type="date" class="datepicker" [(ngModel)]="startDate">
-      </div>
-
-      <div class="input-field col s2">
-        <input type="date" class="datepicker" [(ngModel)]="endDate">
-      </div>
-
-      <div class="input-field col s2">
-        <input type="date" class="datepicker" [(ngModel)]="fromParam">
-      </div>
-
-      <div class="input-field col s2">
-        <input type="date" class="datepicker" [(ngModel)]="toParam">
-      </div>
+    <select [(ngModel)]="statuses" class="selectpicker" data-selected-text-format="count > 2" multiple title="Choose the following...">
+      <option>COMPLETED</option>
+      <option>FAILED</option>
+      <option>STARTED</option>
+    </select>
 
 
-    </div>
-
-    <h4 class="truncate center">Statistics</h4>
-
-    <table class="bordered">
-      <thead>
-      <tr>
-
-        <th data-field="jobExecId"><a class="waves-effect btn-flat waves-red" (click)="sortByMe('jobExecutionId')"><i  class="tiny material-icons" [ngClass]="[getArrow('jobExecutionId'), getVisibility('jobExecutionId')]">keyboard_arrow_down</i>ID</a></th>
-
-        <th data-field="importConfId"><a class="waves-effect btn-flat waves-red" (click)="sortByMe('importConfId')" ><i  class="tiny material-icons" [ngClass]="[getArrow('importConfId'), getVisibility('importConfId')]" >keyboard_arrow_down</i>Import Configuration ID</a></th>
-
-        <th data-field="libraryName"><a class="waves-effect btn-flat waves-red" (click)="sortByMe('libraryName')" ><i  class="tiny material-icons" [ngClass]="[getArrow('libraryName'), getVisibility('libraryName')]" >keyboard_arrow_down</i>Library name</a></th>
-
-        <th data-field="url"><a class="waves-effect btn-flat waves-red" (click)="sortByMe('url')" ><i  class="tiny material-icons" [ngClass]="[getArrow('url'), getVisibility('url')]"  >keyboard_arrow_down</i>url</a></th>
-
-        <th data-field="startTime"><a class="waves-effect btn-flat waves-red" (click)="sortByMe('startTime')"><i  class="tiny material-icons" [ngClass]="[getArrow('startTime'), getVisibility('startTime')]"  >keyboard_arrow_down</i>Start Time</a></th>
-
-        <th data-field="endTime"><a class="waves-effect btn-flat waves-red" (click)="sortByMe('endTime')" ><i  class="tiny material-icons" [ngClass]="[getArrow('endTime'), getVisibility('endTime')]"  >keyboard_arrow_down</i>End time</a></th>
-
-        <th data-field="status"><a class="waves-effect btn-flat waves-red" (click)="sortByMe('status')" ><i  class="tiny material-icons" [ngClass]="[getArrow('status'), getVisibility('status')]"  >keyboard_arrow_down</i>Status</a></th>
-
-        <th data-field="fromParameter"><a class="waves-effect btn-flat waves-red" (click)="sortByMe('fromParam')" ><i  class="tiny material-icons" [ngClass]="[getArrow('fromParam'), getVisibility('fromParam')]"  >keyboard_arrow_down</i>From Parameter</a></th>
-
-        <th data-field="toParameter"><a class="waves-effect btn-flat waves-red" (click)="sortByMe('toParam')" ><i  class="tiny material-icons" [ngClass]="[getArrow('toParam'), getVisibility('toParam')]"  >keyboard_arrow_down</i>To parameter</a></th>
-
-        <th data-field="numberOfRecords"><a class="waves-effect btn-flat waves-red" (click)="sortByMe('noOfRecords')"><i  class="tiny material-icons" [ngClass]="[getArrow('noOfRecords'), getVisibility('noOfRecords')]">keyboard_arrow_down</i>Number of records</a></th>
-
-        <th data-field="details">DETAILS</th>
-
-      </tr>
-      </thead>
-
-      <tbody *ngFor="let statistic of statistics | statusFilter: statuses | afterDateFilter : startDate | beforeDateFilter: endDate | afterDateFilter: fromParam | beforeDateFilter: toParam | orderBy: [sortBy]">
-      <tr>
-        <td>{{statistic.jobExecutionId}}</td>
-        <td>{{statistic.importConfId}}</td>
-        <td>{{statistic.libraryName}}</td>
-        <td><a [href]="'http://' + statistic.url" target="_blank">{{statistic?.url}}</a></td>
-        <td>{{statistic.startTime | date: "dd/MM/yy"}}</td>
-        <td>{{statistic.endTime | date: "dd/MM/yy"}}</td>
-        <td>{{statistic.status}}</td>
-        <td>{{statistic.fromParam | date: "dd/MM/yy"}}</td>
-        <td>{{statistic.toParam | date: "dd/MM/yy"}}</td>
-        <td>{{statistic.noOfRecords}}</td>
-        <td><a [routerLink]="['/oaiHarvestStats', statistic.jobExecutionId]"><i class="material-icons">send</i></a></td>
-      </tr>
-      </tbody>
-    </table>
 
   </div>
+</nav>
 
-</main>
+
+<div class="panel panel-default">
+  <!-- Default panel contents -->
+  <!-- Table -->
+  <table class="table">
+    <tr>
+      <th>ID<i (click)="sortByMe('jobExecutionId')" [ngClass]="{'glyphicon': true, 'glyphicon-arrow-up': getArrow('jobExecutionId') && getVisibility('jobExecutionId'), 'glyphicon-arrow-down': !getArrow('jobExecutionId') && getVisibility('jobExecutionId'), 'glyphicon-sort': !getVisibility('jobExecutionId')}"></i></th>
+
+      <th>Conf. ID.<i (click)="sortByMe('importConfId')" [ngClass]="{'glyphicon': true, 'glyphicon-arrow-up': getArrow('importConfId') && getVisibility('importConfId'), 'glyphicon-arrow-down': !getArrow('importConfId') && getVisibility('importConfId'), 'glyphicon-sort': !getVisibility('importConfId')}"></i></th>
+
+      <th>Lib. name<i (click)="sortByMe('libraryName')" [ngClass]="{'glyphicon': true, 'glyphicon-arrow-up': getArrow('libraryName') && getVisibility('libraryName'), 'glyphicon-arrow-down': !getArrow('libraryName') && getVisibility('libraryName'), 'glyphicon-sort': !getVisibility('libraryName')}"></i></th>
+
+      <th>URL<i (click)="sortByMe('url')" [ngClass]="{'glyphicon': true, 'glyphicon-arrow-up': getArrow('url') && getVisibility('url'), 'glyphicon-arrow-down': !getArrow('url') && getVisibility('url'), 'glyphicon-sort': !getVisibility('url')}"></i></th>
+
+
+      <th>Start<i (click)="sortByMe('startTime')" [ngClass]="{'glyphicon': true, 'glyphicon-arrow-up': getArrow('startTime') && getVisibility('startTime'), 'glyphicon-arrow-down': !getArrow('startTime') && getVisibility('startTime'), 'glyphicon-sort': !getVisibility('startTime')}"></i></th>
+
+      <th>End<i (click)="sortByMe('endTime')" [ngClass]="{'glyphicon': true, 'glyphicon-arrow-up': getArrow('endTime') && getVisibility('endTime'), 'glyphicon-arrow-down': !getArrow('endTime') && getVisibility('endTime'), 'glyphicon-sort': !getVisibility('endTime')}"></i></th>
+
+      <th>Status<i (click)="sortByMe('status')" [ngClass]="{'glyphicon': true, 'glyphicon-arrow-up': getArrow('status') && getVisibility('status'), 'glyphicon-arrow-down': !getArrow('status') && getVisibility('status'), 'glyphicon-sort': !getVisibility('status')}"></i></th>
+
+      <th>From<i (click)="sortByMe('fromParam')" [ngClass]="{'glyphicon': true, 'glyphicon-arrow-up': getArrow('fromParam') && getVisibility('fromParam'), 'glyphicon-arrow-down': !getArrow('fromParam') && getVisibility('fromParam'), 'glyphicon-sort': !getVisibility('fromParam')}"></i></th>
+
+      <th>To<i (click)="sortByMe('toParam')" [ngClass]="{'glyphicon': true, 'glyphicon-arrow-up': getArrow('toParam') && getVisibility('toParam'), 'glyphicon-arrow-down': !getArrow('toParam') && getVisibility('toParam'), 'glyphicon-sort': !getVisibility('toParam')}"></i></th>
+
+      <th>Records<i (click)="sortByMe('noOfRecords')" [ngClass]="{'glyphicon': true, 'glyphicon-arrow-up': getArrow('noOfRecords') && getVisibility('noOfRecords'), 'glyphicon-arrow-down': !getArrow('noOfRecords') && getVisibility('noOfRecords'), 'glyphicon-sort': !getVisibility('noOfRecords')}"></i></th>
+
+      <th>Details</th>
+    </tr>
+
+    <tr *ngFor="let statistic of statistics | statusFilter: statuses | afterDateFilter : startDate | beforeDateFilter: endDate | afterDateFilter: fromParam | beforeDateFilter: toParam | orderBy: [sortBy]">
+      <td>{{statistic.jobExecutionId}}</td>
+      <td>{{statistic.importConfId}}</td>
+      <td>{{statistic.libraryName}}</td>
+      <td><a [href]="'http://' + statistic.url" target="_blank">{{statistic?.url}}</a></td>
+      <td>{{statistic.startTime | date: "dd/MM/yy"}}</td>
+      <td>{{statistic.endTime | date: "dd/MM/yy"}}</td>
+      <td>{{statistic.status}}</td>
+      <td>{{statistic.fromParam | date: "dd/MM/yy"}}</td>
+      <td>{{statistic.toParam | date: "dd/MM/yy"}}</td>
+      <td>{{statistic.noOfRecords}}</td>
+      <td><a [routerLink]="['/oaiHarvestStats', statistic.jobExecutionId]"><i class="glyphicon glyphicon-triangle-right"></i></a></td>
+    </tr>
+
+
+  </table>
+</div>
+
+
+<!--<main>-->
+  <!--<div>-->
+
+    <!--<div *ngIf="loading" id="circlePreloader" class="preloader-wrapper big active">-->
+      <!--<div class="spinner-layer spinner-red-only">-->
+        <!--<div class="circle-clipper left">-->
+          <!--<div class="circle"></div>-->
+        <!--</div><div class="gap-patch">-->
+        <!--<div class="circle"></div>-->
+      <!--</div><div class="circle-clipper right">-->
+        <!--<div class="circle"></div>-->
+      <!--</div>-->
+      <!--</div>-->
+    <!--</div>-->
+
+
+
+
+    <!--<div class="row">-->
+
+      <!--&lt;!&ndash;<div class="input-field col s2">&ndash;&gt;-->
+        <!--&lt;!&ndash;<ng-select&ndash;&gt;-->
+          <!--&lt;!&ndash;[options]="options"&ndash;&gt;-->
+          <!--&lt;!&ndash;multiple="true"&ndash;&gt;-->
+          <!--&lt;!&ndash;placeholder="Choose statistic"&ndash;&gt;-->
+          <!--&lt;!&ndash;(selected)="onSelected($event)"&ndash;&gt;-->
+          <!--&lt;!&ndash;(deselected)="onDeselected($event)">&ndash;&gt;-->
+        <!--&lt;!&ndash;</ng-select>&ndash;&gt;-->
+      <!--&lt;!&ndash;</div>&ndash;&gt;-->
+
+      <!--<div class="input-field col s2">-->
+        <!--<input type="date" class="datepicker" [(ngModel)]="startDate">-->
+      <!--</div>-->
+
+      <!--<div class="input-field col s2">-->
+        <!--<input type="date" class="datepicker" [(ngModel)]="endDate">-->
+      <!--</div>-->
+
+      <!--<div class="input-field col s2">-->
+        <!--<input type="date" class="datepicker" [(ngModel)]="fromParam">-->
+      <!--</div>-->
+
+      <!--<div class="input-field col s2">-->
+        <!--<input type="date" class="datepicker" [(ngModel)]="toParam">-->
+      <!--</div>-->
+
+
+    <!--</div>-->
+
+    <!--<h4 class="truncate center">Statistics</h4>-->
+
+    <!--<table class="bordered">-->
+      <!--<thead>-->
+      <!--<tr>-->
+
+        <!--<th data-field="jobExecId"><a class="waves-effect btn-flat waves-red" (click)="sortByMe('jobExecutionId')"><i  class="tiny material-icons" [ngClass]="[getArrow('jobExecutionId'), getVisibility('jobExecutionId')]">keyboard_arrow_down</i>ID</a></th>-->
+
+        <!--<th data-field="importConfId"><a class="waves-effect btn-flat waves-red" (click)="sortByMe('importConfId')" ><i  class="tiny material-icons" [ngClass]="[getArrow('importConfId'), getVisibility('importConfId')]" >keyboard_arrow_down</i>Import Configuration ID</a></th>-->
+
+        <!--<th data-field="libraryName"><a class="waves-effect btn-flat waves-red" (click)="sortByMe('libraryName')" ><i  class="tiny material-icons" [ngClass]="[getArrow('libraryName'), getVisibility('libraryName')]" >keyboard_arrow_down</i>Library name</a></th>-->
+
+        <!--<th data-field="url"><a class="waves-effect btn-flat waves-red" (click)="sortByMe('url')" ><i  class="tiny material-icons" [ngClass]="[getArrow('url'), getVisibility('url')]"  >keyboard_arrow_down</i>url</a></th>-->
+
+        <!--<th data-field="startTime"><a class="waves-effect btn-flat waves-red" (click)="sortByMe('startTime')"><i  class="tiny material-icons" [ngClass]="[getArrow('startTime'), getVisibility('startTime')]"  >keyboard_arrow_down</i>Start Time</a></th>-->
+
+        <!--<th data-field="endTime"><a class="waves-effect btn-flat waves-red" (click)="sortByMe('endTime')" ><i  class="tiny material-icons" [ngClass]="[getArrow('endTime'), getVisibility('endTime')]"  >keyboard_arrow_down</i>End time</a></th>-->
+
+        <!--<th data-field="status"><a class="waves-effect btn-flat waves-red" (click)="sortByMe('status')" ><i  class="tiny material-icons" [ngClass]="[getArrow('status'), getVisibility('status')]"  >keyboard_arrow_down</i>Status</a></th>-->
+
+        <!--<th data-field="fromParameter"><a class="waves-effect btn-flat waves-red" (click)="sortByMe('fromParam')" ><i  class="tiny material-icons" [ngClass]="[getArrow('fromParam'), getVisibility('fromParam')]"  >keyboard_arrow_down</i>From Parameter</a></th>-->
+
+        <!--<th data-field="toParameter"><a class="waves-effect btn-flat waves-red" (click)="sortByMe('toParam')" ><i  class="tiny material-icons" [ngClass]="[getArrow('toParam'), getVisibility('toParam')]"  >keyboard_arrow_down</i>To parameter</a></th>-->
+
+        <!--<th data-field="numberOfRecords"><a class="waves-effect btn-flat waves-red" (click)="sortByMe('noOfRecords')"><i  class="tiny material-icons" [ngClass]="[getArrow('noOfRecords'), getVisibility('noOfRecords')]">keyboard_arrow_down</i>Number of records</a></th>-->
+
+        <!--<th data-field="details">DETAILS</th>-->
+
+      <!--</tr>-->
+      <!--</thead>-->
+
+      <!--<tbody *ngFor="let statistic of statistics | statusFilter: statuses | afterDateFilter : startDate | beforeDateFilter: endDate | afterDateFilter: fromParam | beforeDateFilter: toParam | orderBy: [sortBy]">-->
+      <!--<tr>-->
+        <!--<td>{{statistic.jobExecutionId}}</td>-->
+        <!--<td>{{statistic.importConfId}}</td>-->
+        <!--<td>{{statistic.libraryName}}</td>-->
+        <!--<td><a [href]="'http://' + statistic.url" target="_blank">{{statistic?.url}}</a></td>-->
+        <!--<td>{{statistic.startTime | date: "dd/MM/yy"}}</td>-->
+        <!--<td>{{statistic.endTime | date: "dd/MM/yy"}}</td>-->
+        <!--<td>{{statistic.status}}</td>-->
+        <!--<td>{{statistic.fromParam | date: "dd/MM/yy"}}</td>-->
+        <!--<td>{{statistic.toParam | date: "dd/MM/yy"}}</td>-->
+        <!--<td>{{statistic.noOfRecords}}</td>-->
+        <!--<td><a [routerLink]="['/oaiHarvestStats', statistic.jobExecutionId]"><i class="material-icons">send</i></a></td>-->
+      <!--</tr>-->
+      <!--</tbody>-->
+    <!--</table>-->
+
+  <!--</div>-->
+
+<!--</main>-->
