@@ -13,7 +13,7 @@ export class JobRunnerComponent implements OnInit{
 
   private importConfigs: ImportConfig[] = [];
 
-  selectedConfigs: ImportConfig[] = [];
+  selectedConfigs: number[] = [];
 
   @Input()
   whoAmI: string;
@@ -32,6 +32,7 @@ export class JobRunnerComponent implements OnInit{
 
 
   runJob(){
+    this.jobsService.runJob(this.whoAmI, this.selectedConfigs);
 
   }
 

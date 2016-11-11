@@ -32,13 +32,13 @@ public class BatchJobController {
 
     @RequestMapping(method = RequestMethod.POST, value = "/run/fullHarvest")
 	@ResponseBody
-	private void runFullHarvest(@RequestBody IdDto configId){
+	private void runFullHarvest(@RequestBody List<IdDto> configId){
 	    batchService.runFullHarvest(configId);
     }
 
 	@RequestMapping(method = RequestMethod.POST, value = "/run/incrementalHarvest")
 	@ResponseBody
-	private void runIncrementalHarvest(@RequestBody IdDto configId){
+	private void runIncrementalHarvest(@RequestBody List<IdDto> configId){
 		batchService.runIncrementalHarvest(configId);
 	}
 

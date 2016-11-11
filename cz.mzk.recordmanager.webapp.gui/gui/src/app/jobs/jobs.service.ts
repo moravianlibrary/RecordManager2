@@ -14,10 +14,10 @@ export class JobsService {
     return this.http.get(SERVER + "/importConfiguration").map((res: Response) => res.json());
   }
 
-  runJob(name: string, id: number = -1){
+  runJob(name: string, idList: number[]){
     var headers = new Headers({"Content-Type": 'application/json'});
     let options = new RequestOptions({ headers: headers });
-
-    this.http.post(SERVER + "/batches/run/" + name, JSON.stringify({id: id}), options).subscribe();
+    let ids = idList.map(item => { return {id: item} })
+    this.http.post(SERVER + "/batches/run/" + name, JSON.stringify(ids), options).subscribe();
   }
 }

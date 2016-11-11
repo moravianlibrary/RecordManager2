@@ -9,26 +9,3 @@
 
 <button (click)="runJob()" type="button" class="btn btn-primary">Run</button>
 
-
-<!--<main>-->
-
-  <!--<div *ngIf="needId">-->
-    <!--<form class="col s12">-->
-      <!--<input [(ngModel)]="selectedConfiguration.idPrefix" value="{{selectedConfiguration.idPrefix}}" name="idPrefix">-->
-
-      <!--<br>-->
-
-      <!--<div class="collection">-->
-        <!--<a routerLink="./" *ngFor="let config of (importConfigs | autocomplete : selectedConfiguration.idPrefix)" [ngClass]="{'collection-item': true, 'active': amISelected(config.id)}"  (click)="chooseConfiguration(config.id)">{{config.id}} {{config.idPrefix}} {{config.library.name}}</a>-->
-      <!--</div>-->
-
-      <!--<a [ngClass]="{'waves-effect': true, 'waves-light': true, 'btn': true, 'disabled': (selectedConfiguration.idPrefix.length <= 0 || selectedConfiguration.id == null)}"  (click)="runJob()">Run</a>-->
-    <!--</form>-->
-  <!--</div>-->
-
-  <!--<div *ngIf="!needId">-->
-    <!--<form>-->
-      <!--<a [ngClass]="{'waves-effect': true, 'waves-light': true, 'btn': true}"  (click)="runJob()">Run</a>-->
-    <!--</form>-->
-  <!--</div>-->
-<!--</main>-->

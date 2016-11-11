@@ -9,47 +9,38 @@
       <div class="panel-body"><app-job-runner [needId]="true" [whoAmI]="'fullHarvest'"></app-job-runner></div>
     </div>
   </div>
+
+
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <a data-toggle="collapse" href="#collapseIncrementalHarvest"><i class="glyphicon glyphicon-wrench"></i> Incremental harvest</a>
+      </h4>
+    </div>
+    <div id="collapseIncrementalHarvest" class="panel-collapse collapse">
+      <div class="panel-body"><app-job-runner [needId]="true" [whoAmI]="'incrementalHarvest'"></app-job-runner></div>
+    </div>
+  </div>
+
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <a data-toggle="collapse" href="#collapseDeduplicate"><i class="glyphicon glyphicon-wrench"></i> Deduplicate</a>
+      </h4>
+    </div>
+    <div id="collapseDeduplicate" class="panel-collapse collapse">
+      <div class="panel-body"><app-job-runner [needId]="false" [whoAmI]="'deduplicate'"></app-job-runner></div>
+    </div>
+  </div>
+
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <a data-toggle="collapse" href="#collapseIndex"><i class="glyphicon glyphicon-wrench"></i> Index</a>
+      </h4>
+    </div>
+    <div id="collapseIndex" class="panel-collapse collapse">
+      <div class="panel-body"><app-job-runner [needId]="false" [whoAmI]="'index'"></app-job-runner></div>
+    </div>
+  </div>
 </div>
-
-
-<!--<main>-->
-  <!--<ul class="collapsible" data-collapsible="accordion">-->
-    <!--<li>-->
-      <!--<div class="collapsible-header"><i class="material-icons">label_outline</i>Full harvest</div>-->
-      <!--<div class="collapsible-body"><app-job-runner [whoAmI]='"fullHarvest"' [needId]="true"></app-job-runner></div>-->
-    <!--</li>-->
-    <!--<li>-->
-      <!--<div class="collapsible-header"><i class="material-icons">label_outline</i>Incremental harvest</div>-->
-      <!--<div class="collapsible-body"><app-job-runner [whoAmI]='"incrementalHarvest"' [needId]="true"></app-job-runner></div>-->
-    <!--</li>-->
-    <!--<li>-->
-      <!--<div class="collapsible-header"><i class="material-icons">label_outline</i>Deduplicate</div>-->
-      <!--<div class="collapsible-body"><app-job-runner [whoAmI]='"deduplicate"' [needId]="false"></app-job-runner></div>-->
-    <!--</li>-->
-
-    <!--<li>-->
-      <!--<div class="collapsible-header"><i class="material-icons">label_outline</i>Index</div>-->
-      <!--<div class="collapsible-body"><app-job-runner [whoAmI]='"index"' [needId]="false"></app-job-runner></div>-->
-    <!--</li>-->
-
-    <!--&lt;!&ndash;TODO: Use datalist instead of anc. tag&ndash;&gt;-->
-    <!--&lt;!&ndash;<li>&ndash;&gt;-->
-      <!--&lt;!&ndash;<div class="collapsible-header"><i class="material-icons">label_outline</i>Index</div>&ndash;&gt;-->
-      <!--&lt;!&ndash;<div class="collapsible-body">&ndash;&gt;-->
-
-        <!--&lt;!&ndash;<input list="browsers" name="myBrowser"/>&ndash;&gt;-->
-        <!--&lt;!&ndash;<datalist id="browsers">&ndash;&gt;-->
-          <!--&lt;!&ndash;<option value="Chrome">&ndash;&gt;-->
-          <!--&lt;!&ndash;<option value="Firefox">&ndash;&gt;-->
-          <!--&lt;!&ndash;<option value="Internet Explorer">&ndash;&gt;-->
-          <!--&lt;!&ndash;<option value="Opera">&ndash;&gt;-->
-          <!--&lt;!&ndash;<option value="Safari">&ndash;&gt;-->
-          <!--&lt;!&ndash;<option value="Microsoft Edge">&ndash;&gt;-->
-        <!--&lt;!&ndash;</datalist>&ndash;&gt;-->
-
-      <!--&lt;!&ndash;</div>&ndash;&gt;-->
-    <!--&lt;!&ndash;</li>&ndash;&gt;-->
-  <!--</ul>-->
-
-  <!--&lt;!&ndash;<app-job-runner></app-job-runner>&ndash;&gt;-->
-<!--</main>-->

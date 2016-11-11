@@ -15,9 +15,9 @@ public interface BatchService {
 
 	public BatchJobExecutionDTO getJobExecution(Long id);
 
-	public void runFullHarvest(IdDto id);
+	public void runFullHarvest(List<IdDto> id);
 
-	public void runIncrementalHarvest(IdDto id);
+	public void runIncrementalHarvest(List<IdDto> id);
 
 	public void runDeduplicate();
 

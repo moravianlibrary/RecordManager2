@@ -88,14 +88,19 @@ public class BatchServiceImpl implements BatchService {
 
 	@Override
 	@Transactional(propagation = Propagation.NOT_SUPPORTED)
-	public void runFullHarvest(IdDto id) {
-		harvestingFacade.fullHarvest(id.getId());
+	public void runFullHarvest(List<IdDto> id) {
+		id.forEach(item -> {
+			harvestingFacade.fullHarvest(item.getId());
+		});
+
 	}
 
 	@Override
 	@Transactional(propagation = Propagation.NOT_SUPPORTED)
-	public void runIncrementalHarvest(IdDto id) {
-		harvestingFacade.incrementalHarvest(id.getId());
+	public void runIncrementalHarvest(List<IdDto> id) {
+		id.forEach(item -> {
+			harvestingFacade.incrementalHarvest(item.getId());
+		});
 	}
 
 	@Override
