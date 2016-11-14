@@ -2,6 +2,7 @@ package cz.mzk.recordmanager.server.miscellaneous;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.Executor;
 
 import javax.sql.DataSource;
 
@@ -15,8 +16,11 @@ import org.springframework.batch.item.database.JdbcPagingItemReader;
 import org.springframework.batch.item.database.support.SqlPagingQueryProviderFactoryBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.task.TaskExecutor;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import cz.mzk.recordmanager.server.export.HarvestedRecordIdRowMapper;
 import cz.mzk.recordmanager.server.model.HarvestedRecord.HarvestedRecordUniqueId;
@@ -35,6 +39,9 @@ public class FilterCaslinRecordsBySiglaJobConfig {
 	@Autowired
 	private DataSource dataSource;
 
+	@Value(value = "${recordmanager.threadPoolSize:#{1}}")
+	private int threadPoolSize = 1;
+	
 	@Bean
 	public Job filterCaslinRecordsJob(
 			@Qualifier(Constants.JOB_ID_FILTER_CASLIN+":filterCaslinRecordsStep") Step filterCaslinRecordsStep) {
@@ -52,12 +59,13 @@ public class FilterCaslinRecordsBySiglaJobConfig {
 				.<HarvestedRecordUniqueId, HarvestedRecordUniqueId> chunk(20)//
 				.reader(caslinRecordsReader()) //
 				.writer(caslinRecordsWriter()) //
+				.taskExecutor((TaskExecutor) poolTaskExecutor()) 
 				.build();
 	}
 	
 	@Bean(name = Constants.JOB_ID_FILTER_CASLIN+":caslinRecordsReader")
 	@StepScope
-	public ItemReader<HarvestedRecordUniqueId> caslinRecordsReader()
+	public synchronized ItemReader<HarvestedRecordUniqueId> caslinRecordsReader()
 			throws Exception {
 		JdbcPagingItemReader<HarvestedRecordUniqueId> reader = new JdbcPagingItemReader<HarvestedRecordUniqueId>();
 		SqlPagingQueryProviderFactoryBean pqpf = new SqlPagingQueryProviderFactoryBean();
@@ -82,4 +90,14 @@ public class FilterCaslinRecordsBySiglaJobConfig {
 	public FilterCaslinRecordsWriter caslinRecordsWriter() {
 		return new FilterCaslinRecordsWriter();
 	}
+	
+	@Bean(name = Constants.JOB_ID_FILTER_CASLIN+":threadPoolTaskExecutor")
+    public Executor poolTaskExecutor()
+    {
+        ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+        executor.setCorePoolSize(threadPoolSize);
+        executor.setMaxPoolSize(threadPoolSize);
+        executor.initialize();
+        return executor;
+    }
 }
