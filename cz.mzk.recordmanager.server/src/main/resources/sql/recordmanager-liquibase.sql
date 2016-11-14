@@ -903,3 +903,9 @@ INSERT INTO harvested_record_format(id, name) VALUES (54, 'LEGISLATIVE_CONDITION
 INSERT INTO harvested_record_format(id, name) VALUES (55, 'LEGISLATIVE_OTHERS');
 INSERT INTO harvested_record_format(id, name) VALUES (56, 'LEGISLATIVE_NOTICE');
 INSERT INTO harvested_record_format(id, name) VALUES (57, 'LEGISLATIVE_CODE');
+
+--changeset tomascejpek:31 context:cpk
+DELETE FROM sigla WHERE id IN (4,26,27,31);
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (33, 340, 'UOG001');
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (34, 340, 'UOG009');
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (35, 340, 'UOG010');
