@@ -22,6 +22,7 @@ import org.springframework.batch.item.database.JdbcPagingItemReader;
 import org.springframework.batch.item.database.support.SqlPagingQueryProviderFactoryBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.task.TaskExecutor;
@@ -51,6 +52,9 @@ public class RegenerateDedupKeysJobConfig {
     
     private String dropOldDedupKeysSql = CharStreams.toString(new InputStreamReader(getClass() //
     		.getClassLoader().getResourceAsStream("job/regenerateDedupKeysJob/dropDedupKeys.sql"), "UTF-8"));
+    
+    @Value(value = "${recordmanager.threadPoolSize:#{1}}")
+	private int threadPoolSize = 1;
     
     public RegenerateDedupKeysJobConfig() throws IOException {
     }
@@ -142,8 +146,8 @@ public class RegenerateDedupKeysJobConfig {
     public Executor poolTaskExecutor()
     {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-        executor.setCorePoolSize(5);
-        executor.setMaxPoolSize(5);
+        executor.setCorePoolSize(threadPoolSize);
+        executor.setMaxPoolSize(threadPoolSize);
         executor.initialize();
         return executor;
     }
