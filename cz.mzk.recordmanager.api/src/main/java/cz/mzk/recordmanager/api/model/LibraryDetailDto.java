@@ -4,16 +4,15 @@ import java.util.List;
 
 public class LibraryDetailDto extends LibraryDto {
 
-	private static final long serialVersionUID = 1L;
+
+	private List<ImportConfigurationDto> oaiHarvestConfigurations;
 	
-	private List<OaiHarvestConfigurationDto> oaiHarvestConfigurations;
-	
-	public List<OaiHarvestConfigurationDto> getOaiHarvestConfigurations() {
+	public List<ImportConfigurationDto> getOaiHarvestConfigurations() {
 		return oaiHarvestConfigurations;
 	}
 
 	public void setOaiHarvestConfigurations(
-			List<OaiHarvestConfigurationDto> oaiHarvestConfigurations) {
+			List<ImportConfigurationDto> oaiHarvestConfigurations) {
 		this.oaiHarvestConfigurations = oaiHarvestConfigurations;
 	}
 

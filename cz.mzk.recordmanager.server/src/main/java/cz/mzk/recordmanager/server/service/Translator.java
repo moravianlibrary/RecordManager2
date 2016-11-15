@@ -1,14 +1,9 @@
 package cz.mzk.recordmanager.server.service;
 
 
-import cz.mzk.recordmanager.api.model.ContactPersonDto;
-import cz.mzk.recordmanager.api.model.ImportConfigurationDto;
-import cz.mzk.recordmanager.api.model.LibraryDto;
-import cz.mzk.recordmanager.api.model.OaiHarvestConfigurationDto;
-import cz.mzk.recordmanager.server.model.ContactPerson;
-import cz.mzk.recordmanager.server.model.ImportConfiguration;
-import cz.mzk.recordmanager.server.model.Library;
-import cz.mzk.recordmanager.server.model.OAIHarvestConfiguration;
+import cz.mzk.recordmanager.api.model.*;
+import cz.mzk.recordmanager.api.model.batch.OaiHarvestJobStatisticsDto;
+import cz.mzk.recordmanager.server.model.*;
 
 public class Translator {
 
@@ -51,7 +46,7 @@ public class Translator {
 		oaiHarvestConfigurationDto.setClusterIdEnabled(oaiHarvestConfiguration.isClusterIdEnabled());
 		oaiHarvestConfigurationDto.setFilteringEnabled(oaiHarvestConfiguration.isFilteringEnabled());
 		oaiHarvestConfigurationDto.setInterceptionEnabled(oaiHarvestConfiguration.isInterceptionEnabled());
-		oaiHarvestConfigurationDto.setLibrary(oaiHarvestConfiguration.isLibrary());
+		oaiHarvestConfigurationDto.setThisLibrary(oaiHarvestConfiguration.isLibrary());
 
 
 		oaiHarvestConfigurationDto.setUrl(oaiHarvestConfiguration.getUrl());
@@ -59,14 +54,52 @@ public class Translator {
 		oaiHarvestConfigurationDto.setMetadataPrefix(oaiHarvestConfiguration.getMetadataPrefix());
 		oaiHarvestConfigurationDto.setExtractIdRegex(oaiHarvestConfiguration.getRegex());
 		oaiHarvestConfigurationDto.setHarvestJobName(oaiHarvestConfiguration.getHarvestJobName());
+
+		oaiHarvestConfigurationDto.setConfigurationType(oaiHarvestConfiguration.getClass().getSimpleName());
 		return oaiHarvestConfigurationDto;
+	}
+
+	public KrameriusConfigurationDto translate(KrameriusConfiguration krameriusConfiguration){
+		KrameriusConfigurationDto krameriusConfigurationDto = new KrameriusConfigurationDto();
+
+		krameriusConfigurationDto.setId(krameriusConfiguration.getId());
+		krameriusConfigurationDto.setIdPrefix(krameriusConfiguration.getIdPrefix());
+		krameriusConfigurationDto.setUrl(krameriusConfiguration.getUrl());
+		krameriusConfigurationDto.setUrlSolr(krameriusConfiguration.getUrlSolr());
+		krameriusConfigurationDto.setQueryRows(krameriusConfiguration.getQueryRows());
+		krameriusConfigurationDto.setMetadataStream(krameriusConfiguration.getMetadataStream());
+		krameriusConfigurationDto.setAuthToken(krameriusConfiguration.getAuthToken());
+		krameriusConfigurationDto.setDownloadPrivateFulltexts(krameriusConfiguration.isDownloadPrivateFulltexts());
+		krameriusConfigurationDto.setFulltextHarvestType(krameriusConfiguration.getFulltextHarvestType());
+		krameriusConfigurationDto.setHarvestJobName(krameriusConfiguration.getHarvestJobName());
+		krameriusConfigurationDto.setContact(translate(krameriusConfiguration.getContact()));
+		krameriusConfigurationDto.setThisLibrary(krameriusConfiguration.isLibrary());
+
+		krameriusConfigurationDto.setConfigurationType(krameriusConfiguration.getClass().getSimpleName());
+		return krameriusConfigurationDto;
+	}
+
+	public DownloadImportConfigurationDto translate(DownloadImportConfiguration downloadImportConfiguration){
+		DownloadImportConfigurationDto downloadImportConfigurationDto = new DownloadImportConfigurationDto();
+
+		downloadImportConfigurationDto.setId(downloadImportConfiguration.getId());
+		downloadImportConfigurationDto.setIdPrefix(downloadImportConfiguration.getIdPrefix());
+		downloadImportConfigurationDto.setUrl(downloadImportConfiguration.getUrl());
+		downloadImportConfigurationDto.setFormat(downloadImportConfiguration.getFormat());
+		downloadImportConfigurationDto.setJobName(downloadImportConfiguration.getJobName());
+		downloadImportConfigurationDto.setRegex(downloadImportConfiguration.getRegex());
+		downloadImportConfigurationDto.setContact(translate(downloadImportConfiguration.getContact()));
+		downloadImportConfigurationDto.setThisLibrary(downloadImportConfiguration.isLibrary());
+
+		downloadImportConfigurationDto.setConfigurationType(downloadImportConfiguration.getClass().getSimpleName());
+		return downloadImportConfigurationDto;
 	}
 
 	public ContactPerson translate(ContactPersonDto contactPersonDto){
 		ContactPerson contactPerson = new ContactPerson();
 		contactPerson.setId(contactPersonDto.getId());
 		contactPerson.setPhone(contactPersonDto.getPhone());
-		contactPerson.setEmail(contactPersonDto.getPhone());
+		contactPerson.setEmail(contactPersonDto.getEmail());
 		contactPerson.setName(contactPersonDto.getName());
 		return contactPerson;
 	}
@@ -77,5 +110,76 @@ public class Translator {
 		importConfigurationDto.setLibrary(translate(configuration.getLibrary()));
 		return importConfigurationDto;
 	}
+
+	public OAIHarvestConfiguration translate(OaiHarvestConfigurationDto conf){
+		OAIHarvestConfiguration configuration = new OAIHarvestConfiguration();
+
+		configuration.setId(conf.getId());
+		configuration.setContact(translate(conf.getContact()));
+		configuration.setIdPrefix(conf.getIdPrefix());
+		configuration.setBaseWeight(conf.getBaseWeight());
+		configuration.setClusterIdEnabled(conf.isClusterIdEnabled());
+		configuration.setFilteringEnabled(conf.isFilteringEnabled());
+		configuration.setInterceptionEnabled(conf.isInterceptionEnabled());
+		configuration.setLibrary(conf.isThisLibrary());
+		configuration.setContact(translate(conf.getContact()));
+
+		configuration.setUrl(conf.getUrl());
+		configuration.setSet(conf.getSet());
+		configuration.setMetadataPrefix(conf.getMetadataPrefix());
+		configuration.setRegex(conf.getExtractIdRegex());
+		configuration.setHarvestJobName(conf.getHarvestJobName());
+
+		return configuration;
+	}
+
+	public KrameriusConfiguration translate(KrameriusConfigurationDto conf){
+		KrameriusConfiguration configuration = new KrameriusConfiguration();
+
+		configuration.setId(conf.getId());
+		configuration.setContact(translate(conf.getContact()));
+		configuration.setIdPrefix(conf.getIdPrefix());
+		configuration.setBaseWeight(conf.getBaseWeight());
+		configuration.setClusterIdEnabled(conf.isClusterIdEnabled());
+		configuration.setFilteringEnabled(conf.isFilteringEnabled());
+		configuration.setInterceptionEnabled(conf.isInterceptionEnabled());
+		configuration.setLibrary(conf.isThisLibrary());
+		configuration.setContact(translate(conf.getContact()));
+
+		configuration.setUrl(conf.getUrl());
+		configuration.setUrlSolr(conf.getUrlSolr());
+		configuration.setQueryRows(conf.getQueryRows());
+		configuration.setMetadataStream(conf.getMetadataStream());
+		configuration.setAuthToken(conf.getAuthToken());
+		configuration.setDownloadPrivateFulltexts(conf.isDownloadPrivateFulltexts());
+		configuration.setFulltextHarvestType(conf.getFulltextHarvestType());
+		configuration.setHarvestJobName(conf.getHarvestJobName());
+
+
+		return configuration;
+	}
+
+	public DownloadImportConfiguration translate(DownloadImportConfigurationDto conf){
+		DownloadImportConfiguration configuration = new DownloadImportConfiguration();
+
+		configuration.setId(conf.getId());
+		configuration.setContact(translate(conf.getContact()));
+		configuration.setIdPrefix(conf.getIdPrefix());
+		configuration.setBaseWeight(conf.getBaseWeight());
+		configuration.setClusterIdEnabled(conf.isClusterIdEnabled());
+		configuration.setFilteringEnabled(conf.isFilteringEnabled());
+		configuration.setInterceptionEnabled(conf.isInterceptionEnabled());
+		configuration.setLibrary(conf.isThisLibrary());
+		configuration.setContact(translate(conf.getContact()));
+
+		configuration.setUrl(conf.getUrl());
+		configuration.setFormat(conf.getFormat());
+		configuration.setJobName(conf.getJobName());
+		configuration.setRegex(conf.getRegex());
+
+
+		return configuration;
+	}
+
 
 }

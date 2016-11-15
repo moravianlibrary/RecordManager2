@@ -7,5 +7,4 @@ public interface OAIHarvestConfigurationDAO extends
 
 	void update(OAIHarvestConfiguration configuration);
 
-
 }

@@ -2,14 +2,12 @@ package cz.mzk.recordmanager.webapp.controller;
 
 import java.util.List;
 
-import cz.mzk.recordmanager.api.model.LibraryDetailDto;
-import cz.mzk.recordmanager.api.model.OaiHarvestConfigurationDto;
+import cz.mzk.recordmanager.api.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import cz.mzk.recordmanager.api.model.LibraryDto;
 import cz.mzk.recordmanager.api.service.LibraryService;
 
 @RestController
@@ -27,11 +25,11 @@ public class LibraryController {
 
 	@RequestMapping(method = RequestMethod.GET, value = "/{libraryId}")
 	@ResponseBody
-	public ResponseEntity<LibraryDetailDto> libraryDetails(@PathVariable Long libraryId) {
+	public LibraryDetailDto libraryDetails(@PathVariable Long libraryId) {
 		LibraryDetailDto detail = libraryService.getDetail(libraryId);
 		if (detail == null)
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-		return ResponseEntity.ok(detail);
+			return null;
+		return detail;
 	}
 
 	@RequestMapping(method = RequestMethod.PUT)
@@ -60,10 +58,32 @@ public class LibraryController {
 
 
 
-	@RequestMapping(method = RequestMethod.POST, value = "/{libraryId}/configuration/{configId}")
+	@RequestMapping(method = RequestMethod.POST, value = "/{libraryId}/OAIHarvestConfiguration/{configId}")
 	@ResponseBody
-	public LibraryDetailDto updateConfiguration(
+	public LibraryDetailDto updateOaiHarvestConfig(
 			@RequestBody OaiHarvestConfigurationDto configurationDto,
+			@PathVariable Long libraryId, @PathVariable Long configId) {
+		configurationDto.setId(configId);
+		libraryService.updateOrCreateConfig(configurationDto, libraryId);
+
+		return libraryService.getDetail(libraryId);
+	}
+
+	@RequestMapping(method = RequestMethod.POST, value = "/{libraryId}/KrameriusConfiguration/{configId}")
+	@ResponseBody
+	public LibraryDetailDto updateKrameriusConfig(
+			@RequestBody KrameriusConfigurationDto configurationDto,
+			@PathVariable Long libraryId, @PathVariable Long configId) {
+		configurationDto.setId(configId);
+		libraryService.updateOrCreateConfig(configurationDto, libraryId);
+
+		return libraryService.getDetail(libraryId);
+	}
+
+	@RequestMapping(method = RequestMethod.POST, value = "/{libraryId}/DownloadImportConfiguration/{configId}")
+	@ResponseBody
+	public LibraryDetailDto updateDownloadImportConfig(
+			@RequestBody DownloadImportConfigurationDto configurationDto,
 			@PathVariable Long libraryId, @PathVariable Long configId) {
 		configurationDto.setId(configId);
 		libraryService.updateOrCreateConfig(configurationDto, libraryId);

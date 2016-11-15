@@ -2,24 +2,8 @@ package cz.mzk.recordmanager.api.model;
 
 import java.io.Serializable;
 
-public class OaiHarvestConfigurationDto extends IdDto implements Serializable {
+public class OaiHarvestConfigurationDto extends ImportConfigurationDto implements Serializable {
 
-	private static final long serialVersionUID = 1L;
-
-
-	private ContactPersonDto contact;
-
-	private String idPrefix;
-
-	private Long baseWeight;
-
-	private boolean clusterIdEnabled;
-
-	private boolean filteringEnabled;
-
-	private boolean interceptionEnabled;
-
-	private boolean isLibrary;
 
 	private String url;
 
@@ -73,73 +57,5 @@ public class OaiHarvestConfigurationDto extends IdDto implements Serializable {
 		this.set = set;
 	}
 
-	
-	public ContactPersonDto getContact() {
-		return contact;
-	}
 
-	
-	public void setContact(ContactPersonDto contact) {
-		this.contact = contact;
-	}
-
-	
-	public String getIdPrefix() {
-		return idPrefix;
-	}
-
-	
-	public void setIdPrefix(String idPrefix) {
-		this.idPrefix = idPrefix;
-	}
-
-	
-	public Long getBaseWeight() {
-		return baseWeight;
-	}
-
-	
-	public void setBaseWeight(Long baseWeight) {
-		this.baseWeight = baseWeight;
-	}
-
-	
-	public boolean isClusterIdEnabled() {
-		return clusterIdEnabled;
-	}
-
-	
-	public void setClusterIdEnabled(boolean clusterIdEnabled) {
-		this.clusterIdEnabled = clusterIdEnabled;
-	}
-
-	
-	public boolean isFilteringEnabled() {
-		return filteringEnabled;
-	}
-
-	
-	public void setFilteringEnabled(boolean filteringEnabled) {
-		this.filteringEnabled = filteringEnabled;
-	}
-
-	
-	public boolean isInterceptionEnabled() {
-		return interceptionEnabled;
-	}
-
-	
-	public void setInterceptionEnabled(boolean interceptionEnabled) {
-		this.interceptionEnabled = interceptionEnabled;
-	}
-
-	
-	public boolean isLibrary() {
-		return isLibrary;
-	}
-
-	
-	public void setLibrary(boolean library) {
-		isLibrary = library;
-	}
 }

@@ -4,21 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import cz.mzk.recordmanager.api.model.ContactPersonDto;
-import cz.mzk.recordmanager.server.model.ContactPerson;
-import cz.mzk.recordmanager.server.model.ImportConfiguration;
-import cz.mzk.recordmanager.server.model.OAIHarvestConfiguration;
-import cz.mzk.recordmanager.server.oai.dao.ContactPersonDAO;
-import cz.mzk.recordmanager.server.oai.dao.OAIHarvestConfigurationDAO;
+import cz.mzk.recordmanager.api.model.*;
+import cz.mzk.recordmanager.server.model.*;
+import cz.mzk.recordmanager.server.oai.dao.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
-import cz.mzk.recordmanager.api.model.LibraryDetailDto;
-import cz.mzk.recordmanager.api.model.LibraryDto;
-import cz.mzk.recordmanager.api.model.OaiHarvestConfigurationDto;
 import cz.mzk.recordmanager.api.service.LibraryService;
-import cz.mzk.recordmanager.server.model.Library;
-import cz.mzk.recordmanager.server.oai.dao.LibraryDAO;
 
 public class LibraryServiceImpl implements LibraryService {
 
@@ -27,6 +19,11 @@ public class LibraryServiceImpl implements LibraryService {
 
 	@Autowired
 	private OAIHarvestConfigurationDAO harvestConfigurationDAO;
+
+	@Autowired
+	private KrameriusConfigurationDAO krameriusConfigurationDAO;
+	@Autowired
+	private DownloadImportConfigurationDAO downloadImportConfigurationDAO;
 
 	@Autowired
 	private ContactPersonDAO personDAO;
@@ -67,58 +64,45 @@ public class LibraryServiceImpl implements LibraryService {
 		return libraryDto;
 	}
 
-	private OAIHarvestConfiguration fillConfiguration(OAIHarvestConfiguration target, OaiHarvestConfigurationDto src) {
-		fillOAIHarvestConfiguration(target, src);
-
-		ContactPerson contact = personDAO.get(src.getContact().getId());
-
-
-		fillPerson(contact, src.getContact());
-
-		target.setContact(contact);
-
-		return target;
-	}
-
 
 	@Override
 	@Transactional
-	public OaiHarvestConfigurationDto updateOrCreateConfig(OaiHarvestConfigurationDto config, Long libraryId) {
+	public void updateOrCreateConfig(ImportConfigurationDto config, Long libraryId) {
 		Library lib = libraryDao.get(libraryId);
 
-		if (
-				lib == null ||
-						config.getContact() == null ||
-						config.getContact().getId() == null ||
-						personDAO.get(config.getContact().getId()) == null
-				)
-		{
-			return null;
+		if (lib != null){
+			if (config.getId() != null){
+				if (config instanceof OaiHarvestConfigurationDto){
+					OAIHarvestConfiguration  configuration = harvestConfigurationDAO.get(config.getId());
+					if (configuration != null) {
+						fillHarvestConfiguration(configuration, (OaiHarvestConfigurationDto) config);
+						harvestConfigurationDAO.update(configuration);
+					}
+
+				}
+
+				if (config instanceof KrameriusConfigurationDto){
+					KrameriusConfiguration configuration = krameriusConfigurationDAO.get(config.getId());
+					if (configuration != null){
+						fillKramConfiguration(configuration, (KrameriusConfigurationDto) config);
+						krameriusConfigurationDAO.update(configuration);
+					}
+
+				}
+
+				if (config instanceof DownloadImportConfigurationDto){
+					DownloadImportConfiguration configuration = downloadImportConfigurationDAO.get(config.getId());
+					if (configuration != null){
+						configuration.setLibrary(lib);
+						downloadImportConfigurationDAO.update(configuration);
+					}
+
+
+				}
+			}
 		}
-		OAIHarvestConfiguration oaiHarvestConfiguration;
-		long id = -1000;
-		if (config.getId() == null)	//Detect creating new configuration
-		{
-			//TODO: How to add contact to configuration??
-			oaiHarvestConfiguration = new OAIHarvestConfiguration();
 
-			oaiHarvestConfiguration = fillConfiguration(oaiHarvestConfiguration, config);
 
-			harvestConfigurationDAO.persist(oaiHarvestConfiguration);
-
-			id = oaiHarvestConfiguration.getId();
-
-		}else
-		{
-			oaiHarvestConfiguration = harvestConfigurationDAO.get(config.getId());
-
-			oaiHarvestConfiguration = fillConfiguration(oaiHarvestConfiguration, config);
-
-			id = config.getId();
-
-			harvestConfigurationDAO.update(oaiHarvestConfiguration);
-		}
-		return translator.translate(harvestConfigurationDAO.get(id));
 	}
 
 
@@ -138,14 +122,62 @@ public class LibraryServiceImpl implements LibraryService {
 			harvestConfigurationDAO.delete(config);
 	}
 
-	private void fillOAIHarvestConfiguration(OAIHarvestConfiguration harvestConfiguration, OaiHarvestConfigurationDto config)
-	{
-		harvestConfiguration.setIdPrefix(config.getIdPrefix());
-		harvestConfiguration.setBaseWeight(config.getBaseWeight());
-		harvestConfiguration.setClusterIdEnabled(config.isClusterIdEnabled());
-		harvestConfiguration.setFilteringEnabled(config.isFilteringEnabled());
-		harvestConfiguration.setInterceptionEnabled(config.isInterceptionEnabled());
-		harvestConfiguration.setLibrary(config.isLibrary());
+	private DownloadImportConfiguration fillDownImpCon(DownloadImportConfiguration target, DownloadImportConfigurationDto src){
+		fillDownloadImportConfiguration(target, src);
+		ContactPerson contactPerson = personDAO.get(src.getContact().getId());
+		fillPerson(contactPerson, src.getContact());
+		return target;
+	}
+
+	private void fillDownloadImportConfiguration(DownloadImportConfiguration downloadImportConfiguration, DownloadImportConfigurationDto config){
+		fillImportConfig(downloadImportConfiguration, config);
+		downloadImportConfiguration.setUrl(config.getUrl());
+		downloadImportConfiguration.setFormat(config.getFormat());
+		downloadImportConfiguration.setJobName(config.getJobName());
+		downloadImportConfiguration.setRegex(config.getRegex());
+	}
+
+
+
+	private void fillImportConfig(ImportConfiguration importConfiguration, ImportConfigurationDto config){
+		importConfiguration.setIdPrefix(config.getIdPrefix());
+		importConfiguration.setBaseWeight(config.getBaseWeight());
+		importConfiguration.setClusterIdEnabled(config.isClusterIdEnabled());
+		importConfiguration.setFilteringEnabled(config.isFilteringEnabled());
+		importConfiguration.setInterceptionEnabled(config.isInterceptionEnabled());
+		importConfiguration.setLibrary(config.isThisLibrary());
+	}
+
+	private KrameriusConfiguration fillKramConfiguration(KrameriusConfiguration target, KrameriusConfigurationDto src){
+		fillKrameriusConfiguration(target, src);
+		ContactPerson contact = personDAO.get(src.getContact().getId());
+		fillPerson(contact, src.getContact());
+		return target;
+	}
+	private void fillKrameriusConfiguration(KrameriusConfiguration krameriusConfiguration, KrameriusConfigurationDto config){
+		fillImportConfig(krameriusConfiguration, config);
+		krameriusConfiguration.setUrl(config.getUrl());
+		krameriusConfiguration.setUrlSolr(config.getUrlSolr());
+		krameriusConfiguration.setQueryRows(config.getQueryRows());
+		krameriusConfiguration.setMetadataStream(config.getMetadataStream());
+		krameriusConfiguration.setAuthToken(config.getAuthToken());
+		krameriusConfiguration.setDownloadPrivateFulltexts(config.isDownloadPrivateFulltexts());
+		krameriusConfiguration.setFulltextHarvestType(config.getFulltextHarvestType());
+		krameriusConfiguration.setHarvestJobName(config.getHarvestJobName());
+	}
+
+
+	private OAIHarvestConfiguration fillHarvestConfiguration(OAIHarvestConfiguration target, OaiHarvestConfigurationDto src) {
+		fillOAIHarvestConfiguration(target, src);
+		ContactPerson contact = personDAO.get(src.getContact().getId());
+		fillPerson(contact, src.getContact());
+		target.setContact(contact);
+		return target;
+	}
+
+	private void fillOAIHarvestConfiguration(OAIHarvestConfiguration harvestConfiguration, OaiHarvestConfigurationDto config) {
+		fillImportConfig(harvestConfiguration, config);
+
 		harvestConfiguration.setUrl(config.getUrl());
 		harvestConfiguration.setRegex(config.getExtractIdRegex());
 		harvestConfiguration.setHarvestJobName(config.getHarvestJobName());
@@ -171,8 +203,19 @@ public class LibraryServiceImpl implements LibraryService {
 
 	private LibraryDetailDto translateWithDetails(Library library) {
 		LibraryDetailDto libraryDetailDto = new LibraryDetailDto();
-		List<OaiHarvestConfigurationDto> configs = library.getOaiHarvestConfigurations().stream()
-				.map(it -> translator.translate((OAIHarvestConfiguration) it)).collect(Collectors.toList());
+		List<ImportConfigurationDto> configs = new ArrayList<>();
+		library.getOaiHarvestConfigurations().forEach(conf -> {
+			if (conf instanceof OAIHarvestConfiguration){
+				configs.add(translator.translate((OAIHarvestConfiguration) conf));
+			}
+			if (conf instanceof KrameriusConfiguration){
+				configs.add(translator.translate((KrameriusConfiguration) conf));
+			}
+			if (conf instanceof DownloadImportConfiguration){
+				configs.add(translator.translate((DownloadImportConfiguration) conf));
+			}
+
+		});
 		libraryDetailDto.setOaiHarvestConfigurations(configs);
 		libraryDetailDto.setId(library.getId());
 		libraryDetailDto.setName(library.getName());

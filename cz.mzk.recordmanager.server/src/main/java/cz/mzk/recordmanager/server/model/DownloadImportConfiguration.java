@@ -9,7 +9,7 @@ import javax.persistence.Table;
 @Table(name = DownloadImportConfiguration.TABLE_NAME)
 @PrimaryKeyJoinColumn(name="import_conf_id")
 public class DownloadImportConfiguration extends ImportConfiguration {
-	
+
 	public static final String TABLE_NAME = "download_import_conf";
 	
 	@Column(name="url")

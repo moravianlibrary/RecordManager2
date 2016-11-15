@@ -18,6 +18,7 @@ public class OaiHarvestJobStatisticsDto {
     private Long noOfRecords;
 
 
+
     public Long getImportConfId() {
         return importConfId;
     }
@@ -105,4 +106,5 @@ public class OaiHarvestJobStatisticsDto {
     public void setJobExecutionId(Long jobExecutionId) {
         this.jobExecutionId = jobExecutionId;
     }
+
 }

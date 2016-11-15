@@ -1,6 +1,3 @@
-/**
- * Component represents view of library. How does library looks like.
- */
 import { Component, OnInit } from '@angular/core';
 
 import {LibraryDetail} from "../../model/library-detail";
@@ -9,6 +6,7 @@ import {ActivatedRoute, Params, Router} from "@angular/router";
 import {Library} from "../../model/library";
 import {OaiHarvestConfiguration} from "../../model/oai-harvest-configuration";
 import {ContactPerson} from "../../model/contact-person";
+import {ImportConfig} from "../../model/import-config";
 
 
 @Component({
@@ -20,7 +18,7 @@ export class LibraryComponent implements OnInit{
 
 	libraryDetail: LibraryDetail;
 	library: Library = new Library;
-	selected: OaiHarvestConfiguration = new OaiHarvestConfiguration;
+	selected: any;
 
 	constructor(private librariesService: LibrariesService, private route: ActivatedRoute, private router: Router){
 	}
@@ -31,14 +29,7 @@ export class LibraryComponent implements OnInit{
           this.libraryDetail = new LibraryDetail;
           this.libraryDetail = libraryDetail;
 
-
-          this.library = new Library({
-            id: this.libraryDetail.id,
-            name: this.libraryDetail.name,
-            url: this.libraryDetail.url,
-            catalogUrl: this.libraryDetail.catalogUrl,
-            city: this.libraryDetail.city
-          });
+          this.library = new Library(libraryDetail);
 
           if (libraryDetail.oaiHarvestConfigurations.length > 0) {
             this.selected = libraryDetail.oaiHarvestConfigurations[0];
@@ -62,13 +53,7 @@ export class LibraryComponent implements OnInit{
         this.libraryDetail = libraryDetail;
 
 
-        this.library = new Library({
-          id: this.libraryDetail.id,
-          name: this.libraryDetail.name,
-          url: this.libraryDetail.url,
-          catalogUrl: this.libraryDetail.catalogUrl,
-          city: this.libraryDetail.city
-        });
+        this.library = new Library(libraryDetail);
 
         if (libraryDetail.oaiHarvestConfigurations.length > 0) {
           this.selected = libraryDetail.oaiHarvestConfigurations[0];
@@ -89,20 +74,14 @@ export class LibraryComponent implements OnInit{
 
 	}
 
-	updateConfiguration(id: number) {
-		this.librariesService.updateConfiguration(this.selected, id)
+	updateConfiguration(id: number, configurationType: string) {
+		this.librariesService.updateConfiguration(this.selected, id, configurationType)
       .subscribe(libraryDetail => {
         this.libraryDetail = new LibraryDetail;
         this.libraryDetail = libraryDetail;
 
 
-        this.library = new Library({
-          id: this.libraryDetail.id,
-          name: this.libraryDetail.name,
-          url: this.libraryDetail.url,
-          catalogUrl: this.libraryDetail.catalogUrl,
-          city: this.libraryDetail.city
-        });
+        this.library = new Library(libraryDetail);
 
         if (libraryDetail.oaiHarvestConfigurations.length > 0) {
           this.selected = libraryDetail.oaiHarvestConfigurations[0];
@@ -110,6 +89,12 @@ export class LibraryComponent implements OnInit{
       });
 	}
 
+	changeConfig(field: any, key: string){
+	  this.selected[key] = field.value;
+  }
 
+  changeContact(field: any, key: string){
+    this.selected.contact[key] = field.value;
+  }
 
 }

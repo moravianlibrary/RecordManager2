@@ -37,7 +37,6 @@
 
 <div class="panel-group" id="accordion">
 
-
   <div *ngFor="let conf of libraryDetail?.oaiHarvestConfigurations" class="panel panel-default">
     <div class="panel-heading">
       <h4 class="panel-title">
@@ -46,123 +45,46 @@
     </div>
     <div id="collapse{{conf.id}}" class="panel-collapse collapse">
       <div class="panel-body">
-
         <form>
 
-          <h3>Harvest configuration:</h3>
+          <h3>Configuration: </h3>
 
-          <div class="row">
-            <div class="form-group col-md-6">
-              <label for="harvestId" class="control-label">ID:</label>
-              <input type="number" [(ngModel)]="selected.id" name="harvestId" class="form-control" id="harvestId" [value]="selected.id" disabled>
+          <div  *ngFor="let key of selected | keyExtractor">
+
+            <div class="form-group col-md-12" *ngIf="key.toLowerCase() == 'id'">
+              <label class="control-label">{{key}}:</label>
+              <input type="text" #field name="harvestId" class="form-control" [value]="selected[key]" disabled>
             </div>
 
-            <div class="form-group col-md-6">
-              <label for="harvestUrl" class="control-label">URL:</label>
-              <input type="url" [(ngModel)]="selected.url" name="harvestUrl" class="form-control" id="harvestUrl" [value]="selected.url">
+            <div class="form-group col-md-12" *ngIf="key.toLowerCase() == 'configurationtype'">
+              <label class="control-label">{{key}}:</label>
+              <input type="text"  name="harvestId" class="form-control" [value]="selected[key]" disabled>
+            </div>
+
+            <div class="form-group col-md-12" *ngIf="key.toLowerCase() != 'configurationtype' && key.toLowerCase() != 'id' && key.toLowerCase() != 'contact' && key.toLowerCase() != 'library'">
+              <label class="control-label">{{key}}:</label>
+              <input type="text" #field (input)="changeConfig(field, key)"  name="harvestId" class="form-control" [value]="selected[key]">
+            </div>
+          </div>
+
+
+          <h3>Contact:</h3>
+
+          <div *ngFor="let contactField of selected?.contact | keyExtractor">
+
+            <div class="form-group col-md-12" *ngIf="contactField.toLowerCase() == 'id'">
+              <label class="control-label">{{contactField}}:</label>
+              <input type="text" name="harvestId" class="form-control" [value]="selected?.contact[contactField]" disabled>
+            </div>
+
+            <div class="form-group col-md-12" *ngIf="contactField.toLowerCase() != 'id'">
+              <label class="control-label">{{contactField}}:</label>
+              <input type="text" #field (input)="changeContact(field, contactField)"  name="harvestId" class="form-control" [value]="selected?.contact[contactField]">
             </div>
 
           </div>
 
-
-          <div class="row">
-            <div class="form-group col-md-6">
-              <label for="harvestId" class="control-label">Set:</label>
-              <input type="text" [(ngModel)]="selected.set" name="harvestSet" class="form-control" id="harvestSet" [value]="selected.set" >
-            </div>
-
-            <div class="form-group col-md-6">
-              <label for="harvestUrl" class="control-label">Metadata prefix:</label>
-              <input type="text" [(ngModel)]="selected.metadataPrefix" name="harvestMetadataPrefix" class="form-control" id="harvestMetadataPrefix" [value]="selected.metadataPrefix">
-            </div>
-
-          </div>
-
-
-
-          <div class="row">
-            <div class="form-group col-md-6">
-              <label for="harvestId" class="control-label">ID prefix:</label>
-              <input type="text" [(ngModel)]="selected.idPrefix" name="harvestIdPrefix" class="form-control" id="harvestIdPrefix" [value]="selected.idPrefix" >
-            </div>
-
-            <div class="form-group col-md-6">
-              <label for="harvestUrl" class="control-label">Base weight:</label>
-              <input type="text" [(ngModel)]="selected.baseWeight" name="harvestBaseWeight" class="form-control" id="harvestBaseWeight" [value]="selected.baseWeight">
-            </div>
-
-          </div>
-
-
-          <div class="row">
-            <div class="form-group col-md-6">
-              <label for="harvestId" class="control-label">Cluster ID enabled:</label>
-              <input type="text" [(ngModel)]="selected.clusterIdEnabled" name="harvestCluestrIdEnabled" class="form-control" id="harvestCluestrIdEnabled" [value]="selected.clusterIdEnabled" >
-            </div>
-
-            <div class="form-group col-md-6">
-              <label for="harvestUrl" class="control-label">Filtering enabled:</label>
-              <input type="text" [(ngModel)]="selected.filteringEnabled" name="harvestFilteringEnabled" class="form-control" id="harvestFilteringEnabled" [value]="selected.filteringEnabled">
-            </div>
-
-          </div>
-
-          <div class="row">
-            <div class="form-group col-md-6">
-              <label for="harvestId" class="control-label">Interception enabled:</label>
-              <input type="text" [(ngModel)]="selected.interceptionEnabled" name="harvestInterceptionEnabled" class="form-control" id="harvestInterceptionEnabled" [value]="selected.interceptionEnabled" >
-            </div>
-
-            <div class="form-group col-md-6">
-              <label for="harvestUrl" class="control-label">Extract ID prefix:</label>
-              <input type="text" [(ngModel)]="selected.extractIdRegex" name="harvestExtractIdPrefix" class="form-control" id="harvestExtractIdPrefix" [value]="selected.extractIdRegex">
-            </div>
-
-          </div>
-
-
-          <div class="row">
-            <div class="form-group col-md-6">
-              <label for="harvestId" class="control-label">Harvest job name:</label>
-              <input type="text" [(ngModel)]="selected.harvestJobName" name="harvestJobName" class="form-control" id="harvestJobName" [value]="selected.harvestJobName" >
-            </div>
-
-            <div class="form-group col-md-6">
-              <label for="harvestUrl" class="control-label">Is library:</label>
-              <input type="text" [(ngModel)]="selected.library" name="harvestLibrary" class="form-control" id="harvestLibrary" [value]="selected.library">
-            </div>
-
-          </div>
-
-          <h3>Contact person:</h3>
-
-          <div class="row">
-            <div class="form-group col-md-6">
-              <label for="contactId" class="control-label">Contact ID:</label>
-              <input type="number" [(ngModel)]="selected.contact.id" name="harvestJobName" class="form-control" id="contactId" [value]="selected.contact.id" disabled>
-            </div>
-
-            <div class="form-group col-md-6">
-              <label for="harvestUrl" class="control-label">Name:</label>
-              <input type="text" [(ngModel)]="selected.contact.name" name="contactName" class="form-control" id="contactName" [value]="selected.contact.name">
-            </div>
-
-          </div>
-
-          <div class="row">
-            <div class="form-group col-md-6">
-              <label for="contactId" class="control-label">Email:</label>
-              <input type="email" [(ngModel)]="selected.contact.email" name="contactEmail" class="form-control" id="contactEmail" [value]="selected.contact.email">
-            </div>
-
-            <div class="form-group col-md-6">
-              <label for="harvestUrl" class="control-label">Phone:</label>
-              <input type="text" [(ngModel)]="selected.contact.phone" name="contactPhone" class="form-control" id="contactPhone" [value]="selected.contact.phone">
-            </div>
-
-          </div>
-
-          <button type="button" class="btn btn-primary saveBtn" (click)="updateConfiguration(library.id)">Save</button>
+          <button type="button" class="btn btn-primary saveBtn" (click)="updateConfiguration(library?.id, selected?.configurationType)">Save</button>
 
         </form>
 

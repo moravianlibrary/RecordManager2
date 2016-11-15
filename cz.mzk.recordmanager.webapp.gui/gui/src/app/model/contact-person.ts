@@ -1,12 +1,11 @@
-export class ContactPerson {
-  id: number;
+import {Id} from "./id";
+export class ContactPerson extends Id{
   name: string;
   email: string;
   phone: string;
 
-  constructor(obj?: any)
-  {
-    this.id          = obj && obj.id             || null;
+  constructor(obj?: any) {
+    super(obj);
     this.name        = obj && obj.name           || null;
     this.email       = obj && obj.email          || null;
     this.phone       = obj && obj.phone          || null;

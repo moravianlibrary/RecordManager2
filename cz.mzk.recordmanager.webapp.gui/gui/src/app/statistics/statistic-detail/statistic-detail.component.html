@@ -1,43 +1,77 @@
-<main>
-  <p>
-    {{batchJobExecution?.id}}
-  </p>
-  <br>
-
-  <p>
-    {{batchJobExecution?.jobInstanceID}}
-  </p>
-  <br>
-
-  <p>
-    {{batchJobExecution?.createTime | date: "dd/MM/yy"}}
-  </p>
-  <br>
-
-  <p>
-    {{batchJobExecution?.startTime | date: "dd/MM/yy"}}
-  </p>
-  <br>
-
-  <p>
-    {{batchJobExecution?.endTime | date: "dd/MM/yy"}}
-  </p>
-  <br>
-
-  <p>
-    {{batchJobExecution?.status}}
-  </p>
-  <br>
-
-  <p>
-    {{batchJobExecution?.exitCode}}
-  </p>
-  <br>
-
-  <p>
-    {{batchJobExecution?.exitMessage}}
-  </p>
-  <br>
+<div class="panel panel-default">
+  <div class="panel-heading"><label for="Id">Job execution ID:</label></div>
+  <div class="panel-body">
+    <p id="Id">
+      {{batchJobExecution?.id}}
+    </p>
+  </div>
+</div>
 
 
-</main>
+<div class="panel panel-default">
+  <div class="panel-heading"><label for="jobInstanceId">Job instance ID:</label></div>
+  <div class="panel-body">
+    <p id="jobInstanceId">
+      {{batchJobExecution?.jobInstanceID}}
+    </p>
+  </div>
+</div>
+
+
+<div class="panel panel-default">
+  <div class="panel-heading"><label for="createTime">Job create time:</label></div>
+  <div class="panel-body">
+    <p id="createTime">
+      {{batchJobExecution?.createTime | date: "dd/MM/yy/h:m:s"}}
+    </p>
+  </div>
+</div>
+
+<div class="panel panel-default">
+  <div class="panel-heading"><label for="startTime">Job start time:</label></div>
+  <div class="panel-body">
+    <p id="startTime">
+      {{batchJobExecution?.startTime | date: "dd/MM/yy/h:m:s"}}
+    </p>
+  </div>
+</div>
+
+
+<div class="panel panel-default">
+  <div class="panel-heading"><label for="endTime">Job end time:</label></div>
+  <div class="panel-body">
+    <p id="endTime">
+      {{batchJobExecution?.endTime | date: "dd/MM/yy/h:m:s"}}
+    </p>
+  </div>
+</div>
+
+
+
+<div class="panel panel-default">
+  <div class="panel-heading"><label for="status">Job status:</label></div>
+  <div class="panel-body">
+    <p id="status">
+      {{batchJobExecution?.status}}
+    </p>
+  </div>
+</div>
+
+<div class="panel panel-default">
+  <div class="panel-heading"><label for="exitCode">Job exit code:</label></div>
+  <div class="panel-body">
+    <p id="exitCode">
+      {{batchJobExecution?.exitCode}}
+    </p>
+  </div>
+</div>
+
+
+<div class="panel panel-default">
+  <div class="panel-heading"><label for="message">Error message:</label></div>
+  <div class="panel-body">
+    <p id="message">
+      <code>{{batchJobExecution?.exitMessage}}</code>
+    </p>
+  </div>
+</div>

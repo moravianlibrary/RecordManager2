@@ -1,11 +1,14 @@
 package cz.mzk.recordmanager.server.service;
 
+import cz.mzk.recordmanager.api.model.IdDto;
 import cz.mzk.recordmanager.api.model.batch.OaiHarvestJobStatisticsDto;
 import cz.mzk.recordmanager.api.service.OaiHarvestStatisticsService;
+import cz.mzk.recordmanager.server.oai.dao.ImportConfigurationDAO;
+import org.hibernate.Criteria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
-
+import org.springframework.transaction.annotation.Transactional;
 
 
 import java.util.List;
@@ -15,6 +18,9 @@ public class OaiHarvestStatisticsServiceImpl implements OaiHarvestStatisticsServ
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
+
+	@Autowired
+	private ImportConfigurationDAO importConfigurationDAO;
 
     @Override
     public List<OaiHarvestJobStatisticsDto> getHarvestJobStatistics() {
@@ -43,4 +49,12 @@ public class OaiHarvestStatisticsServiceImpl implements OaiHarvestStatisticsServ
 		        "GROUP BY bje.job_execution_id,l.name,ohc.url,ohc.set_spec,from_param.date_val,to_param.date_val\n", new BeanPropertyRowMapper(OaiHarvestJobStatisticsDto.class));
         return statistics;
     }
+
+	@Override
+	@Transactional(readOnly = true)
+	public IdDto getLibraryId(Long configId) {
+		IdDto id = new IdDto();
+		id.setId(importConfigurationDAO.get(configId).getLibrary().getId());
+		return id;
+	}
 }

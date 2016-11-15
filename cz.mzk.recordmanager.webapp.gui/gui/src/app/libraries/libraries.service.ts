@@ -9,6 +9,9 @@ import {SERVER} from "../server";
 import {Router} from "@angular/router";
 import {stat} from "fs";
 import {ErrorHolder} from "../shared/error-holder";
+import {ImportConfig} from "../model/import-config";
+import {KrameriusConfiguration} from "../model/kramerius-configuration";
+import {DownloadImportConfiguration} from "../model/download-import-configuration";
 
 
 @Injectable()
@@ -23,8 +26,7 @@ export class LibrariesService {
       .catch(this.handleError);
 	}
 
-	getLibraryDetails(libraryId: number): Observable<LibraryDetail>
-	{
+	getLibraryDetails(libraryId: number): Observable<LibraryDetail> {
 		return this.http.get(SERVER + "/library/" + libraryId)
 			.map(this.processResponse)
       .catch(this.handleError);
@@ -47,12 +49,12 @@ export class LibrariesService {
 			.map((res: Response) =>  res.json());
 	}
 
-	updateConfiguration(config: OaiHarvestConfiguration, libraryId: number): Observable<LibraryDetail> {
+	updateConfiguration(config: ImportConfig, libraryId: number, configurationType: string): Observable<LibraryDetail> {
 		var headers = new Headers({"Content-Type": 'application/json'});
 		let options = new RequestOptions({ headers: headers });
 
     console.log(JSON.stringify(config));
-		return this.http.post(SERVER + "/library/" + libraryId + "/configuration/" + config.id, JSON.stringify(config), options)
+		return this.http.post(SERVER + "/library/" + libraryId + "/" + configurationType + "/" + config.id, JSON.stringify(config), options)
       .map(this.processResponse);
 	}
 
@@ -64,47 +66,7 @@ export class LibrariesService {
   }
 
   private processResponse(res: Response){
-
-    let configs: OaiHarvestConfiguration[] = [];
-
-    for (var i = 0; i < res.json().oaiHarvestConfigurations.length; ++i)
-    {
-      //Create contact person
-      let person: ContactPerson = new ContactPerson({
-        id: res.json().oaiHarvestConfigurations[i].contact.id,
-        name: res.json().oaiHarvestConfigurations[i].contact.name,
-        email: res.json().oaiHarvestConfigurations[i].contact.email,
-        phone: res.json().oaiHarvestConfigurations[i].contact.phone
-      });
-
-      let config: OaiHarvestConfiguration = new OaiHarvestConfiguration({
-        id: res.json().oaiHarvestConfigurations[i].id,
-        url: res.json().oaiHarvestConfigurations[i].url,
-        set: res.json().oaiHarvestConfigurations[i].set,
-        metadataPrefix: res.json().oaiHarvestConfigurations[i].metadataPrefix,
-        contact: person,
-        idPrefix: res.json().oaiHarvestConfigurations[i].idPrefix,
-        baseWeight: res.json().oaiHarvestConfigurations[i].baseWeight,
-        clusterIdEnabled: res.json().oaiHarvestConfigurations[i].clusterIdEnabled,
-        filteringEnabled: res.json().oaiHarvestConfigurations[i].filteringEnabled,
-        interceptionEnabled: res.json().oaiHarvestConfigurations[i].interceptionEnabled,
-        extractIdRegex: res.json().oaiHarvestConfigurations[i].extractIdRegex,
-        harvestJobName: res.json().oaiHarvestConfigurations[i].harvestJobName,
-        library: res.json().oaiHarvestConfigurations[i].library
-      });
-      configs.push(config);
-    }
-    let detail: LibraryDetail = new LibraryDetail({
-      id: res.json().id,
-      name: res.json().name,
-      url: res.json().url,
-      catalogUrl: res.json().catalogUrl,
-      city: res.json().city,
-      oaiHarvestConfigurations: configs
-    });
-
-    return detail;
-
+	  return new LibraryDetail(res.json());
   }
 
 }
