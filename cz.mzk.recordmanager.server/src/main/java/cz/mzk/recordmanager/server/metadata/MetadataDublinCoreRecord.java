@@ -46,6 +46,9 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 	protected static final Pattern DC_CNB_PATTERN = Pattern
 			.compile("^ccnb:(.*)",Pattern.CASE_INSENSITIVE);
 	
+	protected static final Pattern DC_IDENTIFIER_PATTERN = Pattern
+			.compile(".*:.*",Pattern.CASE_INSENSITIVE);
+	
 	protected static final Pattern DC_TYPE_KRAMERIUS_PATTERN = Pattern.compile("^model:(.*)");
 
 
@@ -178,7 +181,12 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 			
 			m = p.matcher(id);
 			String dcIssn;
-			dcIssn = m.find() ? m.group(1) : id;
+			if(m.find()) dcIssn = m.group(1);
+			else{
+				if(DC_IDENTIFIER_PATTERN.matcher(id).matches()) continue;
+				dcIssn = id;
+			}
+
 			Matcher matcher = ISSN_PATTERN.matcher(dcIssn);
 			
 			try {
