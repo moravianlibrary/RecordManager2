@@ -174,29 +174,27 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 		Pattern p = DC_ISSN_PATTERN;
 		Matcher m;
 
-		for (String f : identifiers) {
+		for (String id : identifiers) {
 			
-			m = p.matcher(f);
-			if (m.find()) {
-				Issn issn = new Issn();
-				String dcIssn = m.group(1);
-				Matcher matcher = ISSN_PATTERN.matcher(dcIssn);
-				
-				try {
-					if(matcher.find()) {
-						if(!issn.issnValidator(matcher.group(1).trim())){
-							throw new NumberFormatException();
-						}					
-						issn.setIssn(matcher.group(1).trim());						
-						issn.setNote("");
-						issn.setOrderInRecord(++issnCounter);
-						issns.add(issn);
-					}			
-				} catch (NumberFormatException e) {
-					logger.info(String.format("Invalid ISSN: %s", dcIssn));
-					continue;
-				}
-
+			m = p.matcher(id);
+			String dcIssn;
+			dcIssn = m.find() ? m.group(1) : id;
+			Matcher matcher = ISSN_PATTERN.matcher(dcIssn);
+			
+			try {
+				if(matcher.find()) {
+					Issn issn = new Issn();
+					if(!issn.issnValidator(matcher.group(1).trim())){
+						throw new NumberFormatException();
+					}					
+					issn.setIssn(matcher.group(1).trim());						
+					issn.setNote("");
+					issn.setOrderInRecord(++issnCounter);
+					issns.add(issn);
+				}			
+			} catch (NumberFormatException e) {
+				logger.info(String.format("Invalid ISSN: %s", dcIssn));
+				continue;
 			}
 		}
 		return issns;
