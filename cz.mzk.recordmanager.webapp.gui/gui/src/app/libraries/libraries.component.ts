@@ -40,6 +40,7 @@ export class LibrariesComponent implements OnInit {
 	}
 
 	ngOnInit() {
+	  console.log("Init");
 
     this.fields.push(new Field({'_name': 'id', '_style': new Style()}));
 

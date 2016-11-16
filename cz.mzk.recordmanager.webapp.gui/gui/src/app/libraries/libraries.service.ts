@@ -33,12 +33,12 @@ export class LibrariesService {
 	}
 
 
-	updateLibrary(library: Library): Observable<LibraryDetail> {
+	updateLibrary(library: Library): Observable<void> {
 		var headers = new Headers({"Content-Type": 'application/json'});
 		let options = new RequestOptions({ headers: headers });
     console.log(JSON.stringify(library));
 		return this.http.post(SERVER + "/library/" + library.id, JSON.stringify(library), options)
-			.map(this.processResponse);
+			.map((res: Response) => {return;});
 	}
 	createLibrary(library: Library): Observable<Library> {
 		var headers = new Headers({"Content-Type": 'application/json'});
@@ -49,14 +49,24 @@ export class LibrariesService {
 			.map((res: Response) =>  res.json());
 	}
 
-	updateConfiguration(config: ImportConfig, libraryId: number, configurationType: string): Observable<LibraryDetail> {
+	updateConfiguration(config: ImportConfig, libraryId: number, configurationType: string): Observable<void> {
 		var headers = new Headers({"Content-Type": 'application/json'});
 		let options = new RequestOptions({ headers: headers });
 
     console.log(JSON.stringify(config));
 		return this.http.post(SERVER + "/library/" + libraryId + "/" + configurationType + "/" + config.id, JSON.stringify(config), options)
-      .map(this.processResponse);
+      .map((res: Response) => {return;});
 	}
+
+	removeLibrary(libraryId: number): Observable<void>{
+	  return this.http.delete(SERVER + "/library/" + libraryId).map((res: Response) => {return;});
+  }
+
+  removeConfiguration(configId: number): Observable<void>{
+	  return this.http.delete(SERVER + "/configuration/" + configId).map((res: Response) => {return;});
+  }
+
+
 
   private handleError (error: Response) {
     let status = error.status;

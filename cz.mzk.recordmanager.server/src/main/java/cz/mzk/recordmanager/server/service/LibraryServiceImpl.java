@@ -108,18 +108,38 @@ public class LibraryServiceImpl implements LibraryService {
 
 	@Override
 	@Transactional
-	public void removeLibrary(Long libraryId) { 
-		throw new UnsupportedOperationException();
+	public void removeLibrary(Long libraryId) {
+		Library lib = libraryDao.get(libraryId);
+		if (lib != null){
+			libraryDao.delete(lib);
+		}
+
 	}
 
 
 
 	@Override
 	@Transactional
-	public void removeOaiHarvestConfiguration(Long configId) {
+	public void removeConfiguration(Long configId) {
 		OAIHarvestConfiguration config = harvestConfigurationDAO.get(configId);
-		if (config != null)
+		if (config != null){
 			harvestConfigurationDAO.delete(config);
+			return;
+		}
+
+		KrameriusConfiguration kramConf = krameriusConfigurationDAO.get(configId);
+		if (kramConf != null){
+			krameriusConfigurationDAO.delete(kramConf);
+			return;
+		}
+
+		DownloadImportConfiguration dowConf = downloadImportConfigurationDAO.get(configId);
+		if (dowConf != null){
+			downloadImportConfigurationDAO.delete(dowConf);
+			return;
+		}
+
+
 	}
 
 	private DownloadImportConfiguration fillDownImpCon(DownloadImportConfiguration target, DownloadImportConfigurationDto src){

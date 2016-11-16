@@ -48,16 +48,8 @@ export class LibraryComponent implements OnInit{
 
 	updateLibrary(): void {
 		this.librariesService.updateLibrary(this.library)
-      .subscribe(libraryDetail => {
-        this.libraryDetail = new LibraryDetail;
-        this.libraryDetail = libraryDetail;
-
-
-        this.library = new Library(libraryDetail);
-
-        if (libraryDetail.oaiHarvestConfigurations.length > 0) {
-          this.selected = libraryDetail.oaiHarvestConfigurations[0];
-        }
+      .subscribe(res => {
+        this.getLibraryDetails(this.library.id);
       });
 	}
 
@@ -69,25 +61,25 @@ export class LibraryComponent implements OnInit{
 		});
 	}
 
-	selectConfiguration(page: number) {
-		this.selected = this.libraryDetail.oaiHarvestConfigurations[page];
-
-	}
 
 	updateConfiguration(id: number, configurationType: string) {
 		this.librariesService.updateConfiguration(this.selected, id, configurationType)
-      .subscribe(libraryDetail => {
-        this.libraryDetail = new LibraryDetail;
-        this.libraryDetail = libraryDetail;
-
-
-        this.library = new Library(libraryDetail);
-
-        if (libraryDetail.oaiHarvestConfigurations.length > 0) {
-          this.selected = libraryDetail.oaiHarvestConfigurations[0];
-        }
+      .subscribe(res => {
+        this.getLibraryDetails(this.library.id);
       });
 	}
+
+	removeConfiguration(confId: number){
+	  this.librariesService.removeConfiguration(confId).subscribe(res => {
+	    this.getLibraryDetails(this.library.id);
+    })
+  }
+
+	removeLibrary(){
+	  this.librariesService.removeLibrary(this.library.id).subscribe(res => {
+	    this.router.navigate(['..']);
+    });
+  }
 
 	changeConfig(field: any, key: string){
 	  this.selected[key] = field.value;

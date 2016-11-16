@@ -32,6 +32,18 @@ public class LibraryController {
 		return detail;
 	}
 
+	@RequestMapping(method = RequestMethod.DELETE, value = "{libraryId}")
+	@ResponseBody
+	public void removeLibrary(@PathVariable Long libraryId){
+		libraryService.removeLibrary(libraryId);
+	}
+
+	@RequestMapping(method = RequestMethod.DELETE, value = "/configuration/{configId}")
+	@ResponseBody
+	public void removeConfiguration(@PathVariable Long configId){
+		libraryService.removeConfiguration(configId);
+	}
+
 	@RequestMapping(method = RequestMethod.PUT)
 	@ResponseBody
 	public LibraryDto createLibrary(@RequestBody LibraryDto libraryDto) {
@@ -40,11 +52,10 @@ public class LibraryController {
 
 	@RequestMapping(method = RequestMethod.POST, value = "/{libraryId}")
 	@ResponseBody
-	public LibraryDetailDto updateLibrary(@RequestBody LibraryDto library,
+	public void updateLibrary(@RequestBody LibraryDto library,
 			@PathVariable Long libraryId) {
 		library.setId(libraryId);
 		libraryService.updateOrCreateLibrary(library);
-		return libraryService.getDetail(libraryId);
 	}
 
 	@RequestMapping(method = RequestMethod.PUT, value = "/{libraryId}/configuration")
@@ -60,35 +71,30 @@ public class LibraryController {
 
 	@RequestMapping(method = RequestMethod.POST, value = "/{libraryId}/OAIHarvestConfiguration/{configId}")
 	@ResponseBody
-	public LibraryDetailDto updateOaiHarvestConfig(
+	public void updateOaiHarvestConfig(
 			@RequestBody OaiHarvestConfigurationDto configurationDto,
 			@PathVariable Long libraryId, @PathVariable Long configId) {
 		configurationDto.setId(configId);
 		libraryService.updateOrCreateConfig(configurationDto, libraryId);
-
-		return libraryService.getDetail(libraryId);
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/{libraryId}/KrameriusConfiguration/{configId}")
 	@ResponseBody
-	public LibraryDetailDto updateKrameriusConfig(
+	public void updateKrameriusConfig(
 			@RequestBody KrameriusConfigurationDto configurationDto,
 			@PathVariable Long libraryId, @PathVariable Long configId) {
 		configurationDto.setId(configId);
 		libraryService.updateOrCreateConfig(configurationDto, libraryId);
 
-		return libraryService.getDetail(libraryId);
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/{libraryId}/DownloadImportConfiguration/{configId}")
 	@ResponseBody
-	public LibraryDetailDto updateDownloadImportConfig(
+	public void updateDownloadImportConfig(
 			@RequestBody DownloadImportConfigurationDto configurationDto,
 			@PathVariable Long libraryId, @PathVariable Long configId) {
 		configurationDto.setId(configId);
 		libraryService.updateOrCreateConfig(configurationDto, libraryId);
-
-		return libraryService.getDetail(libraryId);
 	}
 
 }

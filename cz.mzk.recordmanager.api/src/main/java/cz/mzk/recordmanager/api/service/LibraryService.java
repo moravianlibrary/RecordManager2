@@ -20,6 +20,6 @@ public interface LibraryService {
 	public void updateOrCreateConfig(ImportConfigurationDto config,
 			Long libraryId);
 
-	public void removeOaiHarvestConfiguration(Long configId);
+	public void removeConfiguration(Long configId);
 
 }
