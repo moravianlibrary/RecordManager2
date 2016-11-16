@@ -226,7 +226,7 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 		List<String> type = dcRecord.getTypes();
 		for (String f : type) {
 			// Kramerius specific
-			if (f.equals("model:monograph")) {
+			if (f.equals("model:monograph") || f.equals("Digitized Monograph")) {
 				return true;
 			}
 		}
