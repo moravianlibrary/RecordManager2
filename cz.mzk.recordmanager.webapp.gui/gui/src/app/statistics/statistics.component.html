@@ -3,6 +3,8 @@
 </div>
 
 
+<br>
+
 <div class="panel panel-default">
   <div class="panel-body">
 
@@ -10,11 +12,7 @@
 
       <div class="col-md-2">
         <div class="input-group">
-          <select name="selector" [(ngModel)]="statuses" class="selectpicker" data-selected-text-format="count > 2" multiple title="Choose the following...">
-            <option>COMPLETED</option>
-            <option>FAILED</option>
-            <option>STARTED</option>
-          </select>
+          <app-multi-select [itemsAmount]="3" [options]="options" [placeholder]="'Status'" (onSelect)="selected($event)"></app-multi-select>
         </div>
       </div>
 

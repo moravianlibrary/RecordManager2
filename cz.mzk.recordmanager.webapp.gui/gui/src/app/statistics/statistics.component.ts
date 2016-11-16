@@ -21,13 +21,24 @@ export class StatisticsComponent implements OnInit {
   fields: Field[] = [];
   loading: boolean;
 
-  // status: string;
   statuses: string[] = [];
   startDate: Date;
   endDate: Date;
   fromParam: Date;
   toParam: Date;
 
+
+
+  options: any = [{key: "COMPLETED", value: "COMPLETED"}, {key: "FAILED", value: "FAILED"}, {key: "STARTED", value: "STARTED"}];
+
+
+
+  selected(event: any){
+    this.statuses = [];
+    event.forEach(item => {
+      this.statuses.push(item.key);
+    });
+  }
 
   constructor(private router: Router, private statisticsService: StatisticsService, private sortControl: SortControl) { }
 

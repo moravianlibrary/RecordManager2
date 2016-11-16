@@ -10,6 +10,7 @@ import {FormsModule} from "@angular/forms";
 import {StatusFilterPipe} from "../pipes/status-filter.pipe";
 import {AfterDateFilterPipe} from "../pipes/after-date-filter.pipe";
 import {BeforeDateFilterPipe} from "../pipes/before-date-filter.pipe";
+import {MultiSelectModule} from "../shared/multi-select/multi-select.module";
 
 
 
@@ -18,6 +19,7 @@ import {BeforeDateFilterPipe} from "../pipes/before-date-filter.pipe";
     CommonModule,
     IndexModule,
     FormsModule,
+    MultiSelectModule,
     statisticsRouting
   ],
   providers: [StatisticsService, SortControl],
