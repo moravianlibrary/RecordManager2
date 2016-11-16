@@ -33,6 +33,7 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 
 	protected static final Pattern YEAR_PATTERN = Pattern.compile("\\d{4}");
 	protected static final Pattern ISSN_PATTERN = Pattern.compile("(\\d{4}-\\d{3}[\\dxX])(.*)");
+	protected static final Pattern ISBN_PATTERN = Pattern.compile("([\\dxX\\s\\-]*)(.*)");
 	
 	protected static final Pattern DC_UUID_PATTERN = Pattern.compile("^uuid:(.*)",Pattern.CASE_INSENSITIVE);
 /*	protected static final Pattern DC_ISBN_PATTERN = Pattern
@@ -149,9 +150,16 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 		for (String f : identifiers) {
 
 			m = p.matcher(f);
-			if (m.find()) {
+			String isbnStr;
+			if(m.find()){
+				isbnStr = m.group(1).trim();
+			}
+			else{
+				if(DC_IDENTIFIER_PATTERN.matcher(f).matches()) continue;
+				isbnStr = f.trim();
+			}
+			if(ISBN_PATTERN.matcher(isbnStr).find()){
 				try {
-					String isbnStr = m.group(1).trim();
 					isbnStr = isbnValidator.validate(isbnStr);
 					isbn.setIsbn(Long.valueOf(isbnStr));
 
