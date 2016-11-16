@@ -237,7 +237,7 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 		List<String> type = dcRecord.getTypes();
 		for (String f : type) {
 			// Kramerius specific
-			if (f.equals("model:periodical")) {
+			if (f.equals("model:periodical") || f.equals("Digitized Periodical")) {
 				return true;
 			}
 		}
