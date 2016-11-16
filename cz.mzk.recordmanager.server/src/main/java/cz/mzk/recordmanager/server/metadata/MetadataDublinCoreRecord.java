@@ -46,7 +46,8 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 			.compile("issn:(.*)",Pattern.CASE_INSENSITIVE);
 	protected static final Pattern DC_CNB_PATTERN = Pattern
 			.compile("^ccnb:(.*)",Pattern.CASE_INSENSITIVE);
-	
+	protected static final Pattern DC_OCLC_PATTERN = Pattern
+			.compile("^oclc:(.*)",Pattern.CASE_INSENSITIVE);
 	protected static final Pattern DC_IDENTIFIER_PATTERN = Pattern
 			.compile(".*:.*",Pattern.CASE_INSENSITIVE);
 	
@@ -428,8 +429,19 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 
 	@Override
 	public List<Oclc> getOclcs() {
-		// TODO Auto-generated method stub
-		return null;
+		List<String> identifiers = dcRecord.getIdentifiers();
+		List<Oclc> oclcs = new ArrayList<>();
+		Matcher matcher;
+		
+		for (String f : identifiers) {
+			matcher = DC_OCLC_PATTERN.matcher(f);
+			if (matcher.find()) {			
+				Oclc oclc = new Oclc();        	
+    			oclc.setOclcStr(matcher.group(1).trim());			
+    			oclcs.add(oclc);
+			}
+		}
+		return oclcs;
 	}
 
 	@Override
