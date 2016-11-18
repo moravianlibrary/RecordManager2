@@ -1,9 +1,7 @@
 <div *ngIf="needId">
-  <select [(ngModel)]="selectedConfigs" class="selectpicker" multiple data-selected-text-format="count > 2" data-live-search="true">
 
-    <option *ngFor="let conf of importConfigs" value="{{conf.id}}">{{conf.id}} {{conf.idPrefix}} {{conf.library.name}}</option>
+  <app-multi-select (onSelect)="onSelectHandler($event)" [options]="options" [itemsAmount]="3" [placeholder]="'Configuration'"></app-multi-select>
 
-  </select>
 </div>
 <br>
 
