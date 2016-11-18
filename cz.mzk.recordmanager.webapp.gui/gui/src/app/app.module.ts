@@ -9,6 +9,7 @@ import {routing} from "./app.routing";
 import {StatisticsModule} from "./statistics/statistics.module";
 import {JobsModule} from "./jobs/jobs.module";
 
+
 @NgModule({
   declarations: [
     AppComponent

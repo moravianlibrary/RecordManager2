@@ -1,66 +1,50 @@
 /**
- * PLUNKER VERSION (based on systemjs.config.js in angular.io)
  * System configuration for Angular 2 samples
  * Adjust as necessary for your application needs.
- * Override at the last minute with global.filterSystemConfig (as plunkers do)
  */
 (function(global) {
-
-  //map tells the System loader where to look for things
-  var  map = {
-    'app':                        'src', // 'dist',
-    'rxjs':                       'https://npmcdn.com/rxjs@5.0.0-beta.12',
-    'angular2-in-memory-web-api': 'https://npmcdn.com/angular2-in-memory-web-api',
-    'angular2-select':            'https://npmcdn.com/angular2-select@1.0.0-alpha.8'
+  // map tells the System loader where to look for things
+  var map = {
+    'app':                        'app', // 'dist',
+    '@angular':                   'node_modules/@angular',
+    'angular2-in-memory-web-api': 'node_modules/angular2-in-memory-web-api',
+    'rxjs':                       'node_modules/rxjs',
+    'primeng':                    'node_modules/primeng'
   };
-
-  //packages tells the System loader how to load when no filename and/or no extension
+  // packages tells the System loader how to load when no filename and/or no extension
   var packages = {
-    'app':                        { main: 'main.ts',  defaultExtension: 'ts' },
+    'app':                        { main: 'main.js',  defaultExtension: 'js' },
     'rxjs':                       { defaultExtension: 'js' },
-    'angular2-in-memory-web-api': { defaultExtension: 'js' },
-    'angular2-select':            { main: 'index.js', defaultExtension: 'js' }
+    'angular2-in-memory-web-api': { main: 'index.js', defaultExtension: 'js' },
+    'primeng':                    { defaultExtension: 'js' }
   };
-
-  var packageNames = [
-    '@angular/common',
-    '@angular/compiler',
-    '@angular/core',
-    '@angular/forms',
-    '@angular/http',
-    '@angular/platform-browser',
-    '@angular/platform-browser-dynamic',
-    '@angular/testing',
-    '@angular/upgrade'
+  var ngPackageNames = [
+    'common',
+    'compiler',
+    'core',
+    'forms',
+    'http',
+    'platform-browser',
+    'platform-browser-dynamic',
+    'router',
+    'router-deprecated',
+    'upgrade',
   ];
-
-  packageNames.forEach(function(pkgName) {
-    map[pkgName] = 'https://npmcdn.com/' + pkgName + '@latest';
-  });
-
-  packageNames.forEach(function(pkgName) {
-    packages[pkgName] = { main: 'index.js', defaultExtension: 'js' };
-  });
-
+  // Individual files (~300 requests):
+  function packIndex(pkgName) {
+    packages['@angular/'+pkgName] = { main: 'index.js', defaultExtension: 'js' };
+  }
+  // Bundled (~40 requests):
+  function packUmd(pkgName) {
+    packages['@angular/'+pkgName] = { main: 'bundles/' + pkgName + '.umd.js', defaultExtension: 'js' };
+  }
+  // Most environments should use UMD; some (Karma) need the individual index files
+  var setPackageConfig = System.packageWithIndex ? packIndex : packUmd;
+  // Add package entries for angular packages
+  ngPackageNames.forEach(setPackageConfig);
   var config = {
-    transpiler: 'typescript',
-    typescriptOptions: {
-      emitDecoratorMetadata: true
-    },
     map: map,
     packages: packages
-  }
-
-  // filterSystemConfig - index.html's chance to modify config before we register it.
-  if (global.filterSystemConfig) { global.filterSystemConfig(config); }
-
+  };
   System.config(config);
-
 })(this);
-
-
-/*
- Copyright 2016 Google Inc. All Rights Reserved.
- Use of this source code is governed by an MIT-style license that
- can be found in the LICENSE file at http://angular.io/license
- */

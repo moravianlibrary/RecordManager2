@@ -6,8 +6,6 @@ import {Style} from "../shared/style";
 import {SortControl} from "../shared/sort-control";
 import {Router} from "@angular/router";
 
-declare var jQuery: any;
-
 @Component({
   selector: 'app-statistics',
   templateUrl: './statistics.component.html',
@@ -27,7 +25,9 @@ export class StatisticsComponent implements OnInit {
   fromParam: Date;
   toParam: Date;
 
-
+  //
+  value: any;
+  //
 
   options: any = [{key: "COMPLETED", value: "COMPLETED"}, {key: "FAILED", value: "FAILED"}, {key: "STARTED", value: "STARTED"}];
 

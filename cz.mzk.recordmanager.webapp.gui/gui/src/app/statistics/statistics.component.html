@@ -19,28 +19,44 @@
       <div class="col-md-2">
         <div class="input-group col-md-1">
           <span class="input-group-addon">Start</span>
-          <input [(ngModel)]="startDate" class="form-control" type="date" id="startDate">
+            <input
+              class="dateTimePicker"
+              [(ngModel)]="startDate" ng2-datetime-picker
+              date-format="DD-MM-YYYY hh:mm"
+              close-on-select="false"/>
         </div>
       </div>
 
       <div class="col-md-2">
         <div class="input-group col-md-1">
           <span class="input-group-addon">End</span>
-          <input [(ngModel)]="endDate" class="form-control" type="date" id="endDate">
+          <input
+            class="dateTimePicker"
+            [(ngModel)]="endDate" ng2-datetime-picker
+            date-format="DD-MM-YYYY hh:mm"
+            close-on-select="false"/>
         </div>
       </div>
 
       <div class="col-md-2">
         <div class="input-group col-md-1">
           <span class="input-group-addon">From</span>
-          <input [(ngModel)]="fromParam" class="form-control" type="date" id="fromDate">
+          <input
+            class="dateTimePicker"
+            [(ngModel)]="fromParam" ng2-datetime-picker
+            date-format="DD-MM-YYYY hh:mm"
+            close-on-select="false"/>
         </div>
       </div>
 
       <div class="col-md-2">
         <div class="input-group col-md-1">
           <span class="input-group-addon">To</span>
-          <input [(ngModel)]="toParam" class="form-control" type="date" id="toDate">
+          <input
+            class="dateTimePicker"
+            [(ngModel)]="toParam" ng2-datetime-picker
+            date-format="DD-MM-YYYY hh:mm"
+            close-on-select="false"/>
         </div>
       </div>
 

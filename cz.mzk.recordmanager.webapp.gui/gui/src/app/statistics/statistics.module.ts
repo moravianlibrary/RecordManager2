@@ -11,8 +11,7 @@ import {StatusFilterPipe} from "../pipes/status-filter.pipe";
 import {AfterDateFilterPipe} from "../pipes/after-date-filter.pipe";
 import {BeforeDateFilterPipe} from "../pipes/before-date-filter.pipe";
 import {MultiSelectModule} from "../shared/multi-select/multi-select.module";
-
-
+import { Ng2DatetimePickerModule } from 'ng2-datetime-picker';
 
 @NgModule({
   imports: [
@@ -20,6 +19,7 @@ import {MultiSelectModule} from "../shared/multi-select/multi-select.module";
     IndexModule,
     FormsModule,
     MultiSelectModule,
+    Ng2DatetimePickerModule,
     statisticsRouting
   ],
   providers: [StatisticsService, SortControl],
