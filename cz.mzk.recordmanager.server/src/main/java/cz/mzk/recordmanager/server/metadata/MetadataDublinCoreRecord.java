@@ -147,8 +147,7 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 		 * list
 		 */
 		List<String> identifiers = dcRecord.getIdentifiers();
-		List<Isbn> isbns = new ArrayList<Isbn>();
-		Isbn isbn = new Isbn();
+		List<Isbn> isbns = new ArrayList<Isbn>();		
 		Pattern p = DC_ISBN_PATTERN;
 		Matcher m;
 		Long isbnCounter = 0L;
@@ -164,9 +163,11 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 				if(DC_IDENTIFIER_PATTERN.matcher(f).matches()) continue;
 				isbnStr = f.trim();
 			}
+
 			if(ISBN_PATTERN.matcher(isbnStr).find()){
 				try {
 					isbnStr = isbnValidator.validate(isbnStr);
+					Isbn isbn = new Isbn();
 					isbn.setIsbn(Long.valueOf(isbnStr));
 
 					isbn.setNote("");
@@ -174,7 +175,7 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 
 					isbns.add(isbn);
 				} catch (NumberFormatException nfe) {
-					logger.info(String.format("Invalid ISBN: %s", m.group(1)));
+					logger.info(String.format("Invalid ISBN: %s", isbnStr));
 					continue;
 				}
 			}

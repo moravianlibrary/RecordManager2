@@ -11,6 +11,7 @@ import cz.mzk.recordmanager.server.marc.MarcXmlParser;
 import cz.mzk.recordmanager.server.metadata.MetadataRecord;
 import cz.mzk.recordmanager.server.metadata.MetadataRecordFactory;
 import cz.mzk.recordmanager.server.model.Cnb;
+import cz.mzk.recordmanager.server.model.Isbn;
 import cz.mzk.recordmanager.server.model.Ismn;
 import cz.mzk.recordmanager.server.model.Issn;
 import cz.mzk.recordmanager.server.model.Title;
@@ -187,6 +188,36 @@ public class DublinCoreRecordImplTest extends AbstractTest {
 		Cnb cnb2 = new Cnb();
 		cnb2.setCnb("cnb000790921");
 		Assert.assertTrue(cnbs.contains(cnb2));
+	}
+	
+	@Test
+	public void getISBNsTest() throws Exception {
+		DublinCoreRecord dcr = new DublinCoreRecordImpl();
+		MetadataRecord metadataRecord;
+		
+		String isbnstr = "isbn:80-214-1182-1"; 
+		String isbn2str = "0-582-53020-2"; 
+		String notIsbnStr = "uuid:not:cnb:identifier";
+		String noValidIsbnStr = "0-582-53020-255555";
+		dcr.addIdentifier(isbnstr);
+		dcr.addIdentifier(notIsbnStr);
+		dcr.addIdentifier(isbn2str);
+		dcr.addIdentifier(noValidIsbnStr);
+
+		metadataRecord = metadataFactory.getMetadataRecord(dcr);
+		List<Isbn> isbns = metadataRecord.getISBNs();
+		
+		Isbn isbn1 = new Isbn();
+		isbn1.setIsbn(9788021411821L);
+		isbn1.setOrderInRecord(1L);
+		Assert.assertTrue(isbns.contains(isbn1));
+
+		Isbn isbn2 = new Isbn();
+		isbn2.setIsbn(9780582530201L);
+		isbn2.setOrderInRecord(2L);
+		Assert.assertTrue(isbns.contains(isbn2));
+		
+		Assert.assertTrue(isbns.size() == 2);
 	}
 	
 	@Test
