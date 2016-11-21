@@ -235,6 +235,7 @@ public class DublinCoreRecordImplTest extends AbstractTest {
 
 		Ismn ismn1 = new Ismn();
 		ismn1.setIsmn(9790660510735L);
+		ismn1.setOrderInRecord(1L);
 		Assert.assertTrue(ismns.contains(ismn1));
 
 		Assert.assertTrue(ismns.size() == 1);

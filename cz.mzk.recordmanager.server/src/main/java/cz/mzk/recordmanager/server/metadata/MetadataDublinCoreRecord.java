@@ -490,6 +490,7 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 		List<String> identifiers = dcRecord.getIdentifiers();
 		List<Ismn> ismns = new ArrayList<>();
 		Matcher matcher;
+		Long ismnCounter = 0L;
 		
 		for (String f : identifiers) {
 			matcher = DC_ISMN_PATTERN.matcher(f);
@@ -500,6 +501,7 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 					try {
 						if(ismnStr.length() != 13) throw new NumberFormatException();
 						ismn.setIsmn(Long.valueOf(ismnStr));
+						ismn.setOrderInRecord(++ismnCounter);
 					} catch (NumberFormatException nfe) {
 						logger.info(String.format("Invalid ISMN: %s", matcher.group(1).trim()));
 						continue;
