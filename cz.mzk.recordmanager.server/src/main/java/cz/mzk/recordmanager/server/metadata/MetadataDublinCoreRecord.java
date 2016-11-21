@@ -48,12 +48,17 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 			.compile("^ccnb:(.*)",Pattern.CASE_INSENSITIVE);
 	protected static final Pattern DC_OCLC_PATTERN = Pattern
 			.compile("^oclc:(.*)",Pattern.CASE_INSENSITIVE);
+	protected static final Pattern DC_ISMN_PATTERN = Pattern
+			.compile("^ismn:([\\dM\\s\\-]*)(.*)",Pattern.CASE_INSENSITIVE);
 	protected static final Pattern DC_IDENTIFIER_PATTERN = Pattern
 			.compile(".*:.*",Pattern.CASE_INSENSITIVE);
 	
 	protected static final Pattern DC_TYPE_KRAMERIUS_PATTERN = Pattern.compile("^model:(.*)");
 
-
+	protected static final String ISMN_CLEAR_REGEX = "[^0-9^M]";
+	protected static final String ISMN10_PREFIX = "M";
+	protected static final String ISMN13_PREFIX = "9790";
+	
 	public MetadataDublinCoreRecord(DublinCoreRecord dcRecord) {
 		if (dcRecord == null) {
 			throw new IllegalArgumentException(
@@ -481,8 +486,28 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 
 	@Override
 	public List<Ismn> getISMNs() {
-		// TODO Auto-generated method stub
-		return Collections.emptyList();
+		List<String> identifiers = dcRecord.getIdentifiers();
+		List<Ismn> ismns = new ArrayList<>();
+		Matcher matcher;
+		
+		for (String f : identifiers) {
+			matcher = DC_ISMN_PATTERN.matcher(f);
+			if (matcher.find()) {
+				
+					Ismn ismn = new Ismn();
+					String ismnStr = matcher.group(1).trim().replaceAll(ISMN_CLEAR_REGEX, "").replaceAll(ISMN10_PREFIX, ISMN13_PREFIX);
+					try {
+						if(ismnStr.length() != 13) throw new NumberFormatException();
+						ismn.setIsmn(Long.valueOf(ismnStr));
+					} catch (NumberFormatException nfe) {
+						logger.info(String.format("Invalid ISMN: %s", matcher.group(1).trim()));
+						continue;
+					}
+	    			ismns.add(ismn);
+				}
+			
+		}
+		return ismns;
 	}
 
 	@Override

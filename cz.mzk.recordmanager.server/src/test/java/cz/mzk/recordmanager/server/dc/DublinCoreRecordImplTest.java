@@ -11,6 +11,7 @@ import cz.mzk.recordmanager.server.marc.MarcXmlParser;
 import cz.mzk.recordmanager.server.metadata.MetadataRecord;
 import cz.mzk.recordmanager.server.metadata.MetadataRecordFactory;
 import cz.mzk.recordmanager.server.model.Cnb;
+import cz.mzk.recordmanager.server.model.Ismn;
 import cz.mzk.recordmanager.server.model.Issn;
 import cz.mzk.recordmanager.server.model.Title;
 import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordDAO;
@@ -188,4 +189,23 @@ public class DublinCoreRecordImplTest extends AbstractTest {
 		Assert.assertTrue(cnbs.contains(cnb2));
 	}
 	
+	@Test
+	public void getISMNsTest() throws Exception {
+		DublinCoreRecord dcr = new DublinCoreRecordImpl();
+		MetadataRecord metadataRecord;
+
+		String ismn1str = "ismn:M-66051-073-5(comment)";
+		String ismn2str = "ismn:M-66051-0753-5"; // bad
+		dcr.addIdentifier(ismn1str);
+		dcr.addIdentifier(ismn2str);
+
+		metadataRecord = metadataFactory.getMetadataRecord(dcr);
+		List<Ismn> ismns = metadataRecord.getISMNs();
+
+		Ismn ismn1 = new Ismn();
+		ismn1.setIsmn(9790660510735L);
+		Assert.assertTrue(ismns.contains(ismn1));
+
+		Assert.assertTrue(ismns.size() == 1);
+	}
 }
