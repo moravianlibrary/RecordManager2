@@ -166,9 +166,9 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 
 			if(ISBN_PATTERN.matcher(isbnStr).find()){
 				try {
-					isbnStr = isbnValidator.validate(isbnStr);
+					String isbnValidStr = isbnValidator.validate(isbnStr);
 					Isbn isbn = new Isbn();
-					isbn.setIsbn(Long.valueOf(isbnStr));
+					isbn.setIsbn(Long.valueOf(isbnValidStr));
 
 					isbn.setNote("");
 					isbn.setOrderInRecord(++isbnCounter);
