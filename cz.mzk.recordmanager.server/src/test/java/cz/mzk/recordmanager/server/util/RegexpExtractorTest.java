@@ -16,5 +16,11 @@ public class RegexpExtractorTest {
 		RegexpExtractor extractor = new RegexpExtractor("s/^(.*)/EBSCO-$1/");
 		Assert.assertEquals(extractor.extract("ocn11155777"), "EBSCO-ocn11155777");
 	}
+	
+	@Test 
+	public void replacing2Extractor() {
+		RegexpExtractor extractor = new RegexpExtractor("s/^[^:]+:[^:]+:([^\\/]+)\\/(.+)/$1_$2/");
+		Assert.assertEquals(extractor.extract("oai:kramerius.nkp.cz:p-ABA001/1"), "p-ABA001_1");
+	}
 
 }
