@@ -26,12 +26,6 @@ export class StatisticsComponent implements OnInit {
   toParam: Date;
 
 
-  onchange(event: any){
-    console.log(event);
-  }
-  //
-  value: any;
-  //
 
   options: any = [];
 
@@ -54,6 +48,7 @@ export class StatisticsComponent implements OnInit {
   }
 
   ngOnInit() {
+
     this.fields.push(new Field({'_name': 'jobExecutionId', '_style': new Style()}));
 
     this.fields.push(new Field({'_name': 'importConfId', '_style': new Style()}));
@@ -102,4 +97,16 @@ export class StatisticsComponent implements OnInit {
     });
   }
 
+  setStart(event: any){
+    this.startDate = event;
+  }
+  setEnd(event: any){
+    this.endDate = event;
+  }
+  setFrom(event: any){
+    this.fromParam = event;
+  }
+  setTo(event: any){
+    this.toParam = event;
+  }
 }

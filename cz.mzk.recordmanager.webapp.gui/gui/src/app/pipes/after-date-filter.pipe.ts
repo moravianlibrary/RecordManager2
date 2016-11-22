@@ -7,26 +7,24 @@ import {stat} from "fs";
 })
 export class AfterDateFilterPipe implements PipeTransform {
 
-  transform(statistics: OaiHarvestJobStatistics[], after: string): OaiHarvestJobStatistics[] {
+  transform(statistics: OaiHarvestJobStatistics[], after: Date): OaiHarvestJobStatistics[] {
     var filteredStatistics: OaiHarvestJobStatistics[] = [];
-    var afterDate = new Date(after);
 
 
     if (statistics != null){
       statistics.forEach(item => {
 
-        if (afterDate != null && !isNaN(afterDate.getTime())){
+        if (after != null && !isNaN(after.getTime())){
 
           let startedDate = new Date(item.startTime);
 
 
-          if (item.startTime != null && !isNaN(startedDate.getTime()) && afterDate <= startedDate){
+          if (item.startTime != null && !isNaN(startedDate.getTime()) && after <= startedDate){
             filteredStatistics.push(item);
           }
         }else {
           filteredStatistics.push(item);
         }
-
       });
     }
 

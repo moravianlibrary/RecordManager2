@@ -1,0 +1,41 @@
+<div class="col-md-3">
+  <div class="input-group">
+    <span class="input-group-addon" id="sizing-addon1">{{description}}</span>
+    <input disabled type="text" class="form-control" value="{{pickedDate | date: 'dd/MM/yyyy hh:mm'}}">
+    <div class="input-group-btn">
+
+      <button (click)="selectDate(null)" type="button" class="btn btn-default" ><i class="glyphicon glyphicon-remove-circle"></i></button>
+
+      <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="glyphicon glyphicon-calendar"></i></button>
+
+
+
+      <div (click)="$event.stopPropagation();" id="calendarDropDown" class="dropdown-menu dropdown-menu-right">
+
+        <div class="row">
+          <div class="col-md-3" style="left: 5%">
+            <i (click)="nextYear(-1)" class="glyphicon glyphicon-menu-left"></i> {{refDate | date: 'yyyy'}} <i (click)="nextYear(1)" class="glyphicon glyphicon-menu-right"></i>
+          </div>
+
+          <div class="col-md-3" style="left: 40%">
+            <i (click)="nextMonth(-1)" class="glyphicon glyphicon-menu-left"></i> {{refDate | date: 'MMM'}} <i (click)="nextMonth(1)" class="glyphicon glyphicon-menu-right"></i>
+          </div>
+        </div>
+
+        <table class="table">
+          <thead>
+            <tr>
+              <th *ngFor="let day of weekday">{{day}}</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr *ngFor="let days of getDaysOfMonth()">
+              <td *ngFor="let day of days"><a (click)="selectDate(day)">{{day | date: "dd"}}</a></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

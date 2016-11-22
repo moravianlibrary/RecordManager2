@@ -12,12 +12,15 @@ import {AfterDateFilterPipe} from "../pipes/after-date-filter.pipe";
 import {BeforeDateFilterPipe} from "../pipes/before-date-filter.pipe";
 import {MultiSelectModule} from "../shared/multi-select/multi-select.module";
 import {BatchJobsService} from "./batch-jobs.service";
+import {DatetimePickerModule} from "../shared/datetime-picker/datetime-picker.module";
+
 @NgModule({
   imports: [
     CommonModule,
     IndexModule,
     FormsModule,
     MultiSelectModule,
+    DatetimePickerModule,
     statisticsRouting
   ],
   providers: [StatisticsService, SortControl, BatchJobsService],

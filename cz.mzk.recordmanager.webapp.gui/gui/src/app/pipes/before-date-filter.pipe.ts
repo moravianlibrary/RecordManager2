@@ -6,19 +6,17 @@ import {OaiHarvestJobStatistics} from "../model/oai-harvest-job-statistics";
 })
 export class BeforeDateFilterPipe implements PipeTransform {
 
-  transform(statistics: OaiHarvestJobStatistics[], before: string): OaiHarvestJobStatistics[] {
+  transform(statistics: OaiHarvestJobStatistics[], before: Date): OaiHarvestJobStatistics[] {
     var filteredStatistics: OaiHarvestJobStatistics[] = [];
-    var beforeDate = new Date(before);
-
 
     if (statistics != null){
       statistics.forEach(item => {
 
-        if (beforeDate != null && !isNaN(beforeDate.getTime())){
+        if (before != null && !isNaN(before.getTime())){
 
-          let startedDate = new Date(item.startTime);
+          let endTime = new Date(item.endTime);
 
-          if (item.startTime != null && !isNaN(startedDate.getTime()) && beforeDate >= startedDate){
+          if (item.endTime != null && !isNaN(endTime.getTime()) && before >= endTime){
             filteredStatistics.push(item);
           }
         }else {

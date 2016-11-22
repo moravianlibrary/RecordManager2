@@ -3,60 +3,32 @@
 </div>
 
 
+
+
 <div class="panel panel-default">
   <div class="panel-body">
 
     <div class="row">
-
       <div class="col-md-2">
         <div class="input-group">
           <app-multi-select [itemsAmount]="3" [options]="options" [placeholder]="'Status'" (onSelect)="selected($event)"></app-multi-select>
         </div>
       </div>
 
-      <!--<div class="col-md-2">-->
-        <!--<div class="input-group col-md-1">-->
-          <!--<span class="input-group-addon">Start</span>-->
-            <!--<input-->
-              <!--class="dateTimePicker"-->
-              <!--[(ngModel)]="startDate" ng2-datetime-picker-->
-              <!--date-format="DD-MM-YYYY hh:mm"-->
-              <!--close-on-select="false"/>-->
-        <!--</div>-->
-      <!--</div>-->
+    </div>
 
-      <!--<div class="col-md-2">-->
-        <!--<div class="input-group col-md-1">-->
-          <!--<span class="input-group-addon">End</span>-->
-          <!--<input-->
-            <!--class="dateTimePicker"-->
-            <!--[(ngModel)]="endDate" ng2-datetime-picker-->
-            <!--date-format="DD-MM-YYYY hh:mm"-->
-            <!--close-on-select="false"/>-->
-        <!--</div>-->
-      <!--</div>-->
+    <br>
 
-      <!--<div class="col-md-2">-->
-        <!--<div class="input-group col-md-1">-->
-          <!--<span class="input-group-addon">From</span>-->
-          <!--<input-->
-            <!--class="dateTimePicker"-->
-            <!--[(ngModel)]="fromParam" ng2-datetime-picker-->
-            <!--date-format="DD-MM-YYYY hh:mm"-->
-            <!--close-on-select="false"/>-->
-        <!--</div>-->
-      <!--</div>-->
+    <div class="row">
 
-      <!--<div class="col-md-2">-->
-        <!--<div class="input-group col-md-1">-->
-          <!--<span class="input-group-addon">To</span>-->
-          <!--<input-->
-            <!--class="dateTimePicker"-->
-            <!--[(ngModel)]="toParam" ng2-datetime-picker-->
-            <!--date-format="DD-MM-YYYY hh:mm"-->
-            <!--close-on-select="false"/>-->
-        <!--</div>-->
-      <!--</div>-->
+      <app-datetime-picker [description]="'Start'" (emitDate)="setStart($event)"></app-datetime-picker>
+
+
+      <app-datetime-picker [description]="'End'" (emitDate)="setEnd($event)"></app-datetime-picker>
+
+      <app-datetime-picker [description]="'From'" (emitDate)="setFrom($event)"></app-datetime-picker>
+
+      <app-datetime-picker [description]="'To'" (emitDate)="setTo($event)"></app-datetime-picker>
 
     </div>
 
@@ -99,11 +71,11 @@
       <td><a (click)="routToConfig(statistic.importConfId)">{{statistic.importConfId}}</a></td>
       <td>{{statistic.libraryName}}</td>
       <td><a [href]="'http://' + statistic.url" target="_blank">{{statistic?.url}}</a></td>
-      <td>{{statistic.startTime | date: "dd/MM/yy/h:m:s"}}</td>
-      <td>{{statistic.endTime | date: "dd/MM/yy/h:m:s"}}</td>
+      <td>{{statistic.startTime | date: "dd/MM/yyyy hh:mm"}}</td>
+      <td>{{statistic.endTime | date: "dd/MM/yyyy hh:mm"}}</td>
       <td>{{statistic.status}}</td>
-      <td>{{statistic.fromParam | date: "dd/MM/yy/h:m:s"}}</td>
-      <td>{{statistic.toParam | date: "dd/MM/yy/h:m:s"}}</td>
+      <td>{{statistic.fromParam | date: "dd/MM/yyyy hh:mm"}}</td>
+      <td>{{statistic.toParam | date: "dd/MM/yyyy hh:mm"}}</td>
       <td>{{statistic.noOfRecords}}</td>
       <td><a [routerLink]="['/oaiHarvestStats', statistic.jobExecutionId]"><i class="glyphicon glyphicon-triangle-right"></i></a></td>
     </tr>
