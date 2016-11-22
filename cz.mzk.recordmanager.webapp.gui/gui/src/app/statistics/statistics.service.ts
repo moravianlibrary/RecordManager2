@@ -17,26 +17,13 @@ export class StatisticsService {
     })
   }
 
-  getDetails(id: number): Observable<BatchJobExecution>{
-    return this.http.get(SERVER + "/batches/" + id)
-      .map((res: Response) => {
-        return new BatchJobExecution({
-          'id': res.json().id,
-          'jobInstanceID': res.json().jobInstanceID,
-          'createTime': res.json().createTime,
-          'startTime': res.json().startTime,
-          'endTime': res.json().endTime,
-          'status': res.json().status,
-          'exitCode': res.json().exitCode,
-          'exitMessage': res.json().exitMessage
-        });
-      });
-  }
   getLibraryWithConfiguration(configId: number): Observable<Id>{
     return this.http.get(SERVER + "/oaiHarvestStats/" + configId).map((res: Response) => {
       return res.json();
     });
   }
+
+
 
 
 }

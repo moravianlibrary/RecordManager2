@@ -11,18 +11,16 @@ import {StatusFilterPipe} from "../pipes/status-filter.pipe";
 import {AfterDateFilterPipe} from "../pipes/after-date-filter.pipe";
 import {BeforeDateFilterPipe} from "../pipes/before-date-filter.pipe";
 import {MultiSelectModule} from "../shared/multi-select/multi-select.module";
-import { Ng2DatetimePickerModule } from 'ng2-datetime-picker';
-
+import {BatchJobsService} from "./batch-jobs.service";
 @NgModule({
   imports: [
     CommonModule,
     IndexModule,
     FormsModule,
     MultiSelectModule,
-    Ng2DatetimePickerModule,
     statisticsRouting
   ],
-  providers: [StatisticsService, SortControl],
+  providers: [StatisticsService, SortControl, BatchJobsService],
   declarations: [StatisticsComponent, StatisticDetailComponent, StatusFilterPipe, AfterDateFilterPipe, BeforeDateFilterPipe]
 })
 export class StatisticsModule { }

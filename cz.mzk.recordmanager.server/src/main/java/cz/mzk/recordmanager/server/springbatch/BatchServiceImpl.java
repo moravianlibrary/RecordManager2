@@ -77,7 +77,9 @@ public class BatchServiceImpl implements BatchService {
 	
 	@Transactional(propagation=Propagation.NOT_SUPPORTED)
 	public void restart(BatchJobExecutionDTO jobExecution) {
-		jobExecutor.restart(jobExecution.getId());
+		BatchJobExecution exec = batchJobExecutionDao.get(jobExecution.getId());
+		if (exec != null)
+			jobExecutor.restart(jobExecution.getId());
 	}
 
 	@Transactional(readOnly=true)

@@ -49,7 +49,7 @@ export class MultiSelectComponent implements OnInit {
 
 
   amISelected(item: any): boolean{
-      return this.selected.find(obj => obj.id === item.id && obj.value === item.value) != null;
+    return this.selected.find(obj => obj.id === item.id && obj.value === item.value) != null;
   }
   ngOnInit() {
   }

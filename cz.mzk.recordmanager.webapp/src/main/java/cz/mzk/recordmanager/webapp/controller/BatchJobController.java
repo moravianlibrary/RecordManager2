@@ -54,4 +54,10 @@ public class BatchJobController {
 	private void runIndex(){
 		batchService.runIndex();
 	}
+
+	@RequestMapping(method = RequestMethod.PATCH)
+	@ResponseBody
+	private void restart(@RequestBody BatchJobExecutionDTO jobExecution){
+		batchService.restart(jobExecution);
+	}
 }

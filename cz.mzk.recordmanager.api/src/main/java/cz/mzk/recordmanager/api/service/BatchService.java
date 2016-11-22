@@ -11,7 +11,7 @@ public interface BatchService {
 	
 	public BatchJobExecutionDTO getJobExecution(long id);
 
-	public void restart(BatchJobExecutionDTO jobExecution);
+	public void restart(BatchJobExecutionDTO jobExecutionId);
 
 	public BatchJobExecutionDTO getJobExecution(Long id);
 

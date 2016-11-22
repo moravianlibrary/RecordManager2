@@ -25,11 +25,15 @@ export class StatisticsComponent implements OnInit {
   fromParam: Date;
   toParam: Date;
 
+
+  onchange(event: any){
+    console.log(event);
+  }
   //
   value: any;
   //
 
-  options: any = [{key: "COMPLETED", value: "COMPLETED"}, {key: "FAILED", value: "FAILED"}, {key: "STARTED", value: "STARTED"}];
+  options: any = [];
 
 
 
@@ -69,6 +73,10 @@ export class StatisticsComponent implements OnInit {
     this.fields.push(new Field({'_name': 'toParam', '_style': new Style()}));
 
     this.fields.push(new Field({'_name': 'noOfRecords', '_style': new Style()}));
+
+    this.options.push({key: "COMPLETED", value: "COMPLETED"});
+    this.options.push({key: "FAILED", value: "FAILED"});
+    this.options.push({key: "STARTED", value: "STARTED"});
 
     this.sortByMe("jobExecutionId");
 

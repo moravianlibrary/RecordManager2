@@ -3,8 +3,6 @@
 </div>
 
 
-<br>
-
 <div class="panel panel-default">
   <div class="panel-body">
 
@@ -16,49 +14,49 @@
         </div>
       </div>
 
-      <div class="col-md-2">
-        <div class="input-group col-md-1">
-          <span class="input-group-addon">Start</span>
-            <input
-              class="dateTimePicker"
-              [(ngModel)]="startDate" ng2-datetime-picker
-              date-format="DD-MM-YYYY hh:mm"
-              close-on-select="false"/>
-        </div>
-      </div>
+      <!--<div class="col-md-2">-->
+        <!--<div class="input-group col-md-1">-->
+          <!--<span class="input-group-addon">Start</span>-->
+            <!--<input-->
+              <!--class="dateTimePicker"-->
+              <!--[(ngModel)]="startDate" ng2-datetime-picker-->
+              <!--date-format="DD-MM-YYYY hh:mm"-->
+              <!--close-on-select="false"/>-->
+        <!--</div>-->
+      <!--</div>-->
 
-      <div class="col-md-2">
-        <div class="input-group col-md-1">
-          <span class="input-group-addon">End</span>
-          <input
-            class="dateTimePicker"
-            [(ngModel)]="endDate" ng2-datetime-picker
-            date-format="DD-MM-YYYY hh:mm"
-            close-on-select="false"/>
-        </div>
-      </div>
+      <!--<div class="col-md-2">-->
+        <!--<div class="input-group col-md-1">-->
+          <!--<span class="input-group-addon">End</span>-->
+          <!--<input-->
+            <!--class="dateTimePicker"-->
+            <!--[(ngModel)]="endDate" ng2-datetime-picker-->
+            <!--date-format="DD-MM-YYYY hh:mm"-->
+            <!--close-on-select="false"/>-->
+        <!--</div>-->
+      <!--</div>-->
 
-      <div class="col-md-2">
-        <div class="input-group col-md-1">
-          <span class="input-group-addon">From</span>
-          <input
-            class="dateTimePicker"
-            [(ngModel)]="fromParam" ng2-datetime-picker
-            date-format="DD-MM-YYYY hh:mm"
-            close-on-select="false"/>
-        </div>
-      </div>
+      <!--<div class="col-md-2">-->
+        <!--<div class="input-group col-md-1">-->
+          <!--<span class="input-group-addon">From</span>-->
+          <!--<input-->
+            <!--class="dateTimePicker"-->
+            <!--[(ngModel)]="fromParam" ng2-datetime-picker-->
+            <!--date-format="DD-MM-YYYY hh:mm"-->
+            <!--close-on-select="false"/>-->
+        <!--</div>-->
+      <!--</div>-->
 
-      <div class="col-md-2">
-        <div class="input-group col-md-1">
-          <span class="input-group-addon">To</span>
-          <input
-            class="dateTimePicker"
-            [(ngModel)]="toParam" ng2-datetime-picker
-            date-format="DD-MM-YYYY hh:mm"
-            close-on-select="false"/>
-        </div>
-      </div>
+      <!--<div class="col-md-2">-->
+        <!--<div class="input-group col-md-1">-->
+          <!--<span class="input-group-addon">To</span>-->
+          <!--<input-->
+            <!--class="dateTimePicker"-->
+            <!--[(ngModel)]="toParam" ng2-datetime-picker-->
+            <!--date-format="DD-MM-YYYY hh:mm"-->
+            <!--close-on-select="false"/>-->
+        <!--</div>-->
+      <!--</div>-->
 
     </div>
 
@@ -98,7 +96,7 @@
 
     <tr *ngFor="let statistic of statistics | statusFilter: statuses | afterDateFilter : startDate | beforeDateFilter: endDate | afterDateFilter: fromParam | beforeDateFilter: toParam | orderBy: [sortBy]">
       <td>{{statistic.jobExecutionId}}</td>
-      <td><a routerLink="." (click)="routToConfig(statistic.importConfId)">{{statistic.importConfId}}</a></td>
+      <td><a (click)="routToConfig(statistic.importConfId)">{{statistic.importConfId}}</a></td>
       <td>{{statistic.libraryName}}</td>
       <td><a [href]="'http://' + statistic.url" target="_blank">{{statistic?.url}}</a></td>
       <td>{{statistic.startTime | date: "dd/MM/yy/h:m:s"}}</td>
