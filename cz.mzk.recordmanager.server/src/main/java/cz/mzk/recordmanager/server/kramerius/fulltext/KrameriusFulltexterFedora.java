@@ -230,7 +230,7 @@ public class KrameriusFulltexterFedora implements KrameriusFulltexter {
 					JSONObject obj = pagesJson.getJSONObject(i);
 									
 					String model = (String) obj.get("model");
-  				    String pid = (String) obj.get("pid");
+  					String pid = (String) obj.get("pid");
 
 					//get pages
 					if (model.equals("page")) {

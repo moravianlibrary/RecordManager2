@@ -76,17 +76,17 @@ public class MetadataMarcRecord implements MetadataRecord {
 	
 	@Override
 	public List<Issn> getISSNs() {	
-        List<Issn> issns = new ArrayList<Issn>();
-        Long issnCounter = 0L;
-        
-        for(DataField field: underlayingMarc.getDataFields("022")){
-        	Subfield subfieldA = field.getSubfield('a');
-        	if(subfieldA == null){
-        		continue;
-        	}
-        	Issn issn = new Issn();
-        	
-        	Matcher matcher = ISSN_PATTERN.matcher(subfieldA.getData());
+		List<Issn> issns = new ArrayList<Issn>();
+		Long issnCounter = 0L;
+
+		for(DataField field: underlayingMarc.getDataFields("022")){
+			Subfield subfieldA = field.getSubfield('a');
+			if(subfieldA == null){
+				continue;
+			}
+			Issn issn = new Issn();
+
+			Matcher matcher = ISSN_PATTERN.matcher(subfieldA.getData());
 			try {
 				if(matcher.find()) {
 					if(!issn.issnValidator(matcher.group(1))){
@@ -113,10 +113,10 @@ public class MetadataMarcRecord implements MetadataRecord {
 				logger.info(String.format("Invalid ISSN: %s", subfieldA.getData()));
 				continue;
 			}
-        
+
 			
-        }        
-        
+		}
+
 		return issns;
 	}
 	
@@ -125,15 +125,15 @@ public class MetadataMarcRecord implements MetadataRecord {
 		List<Cnb> cnbs = new ArrayList<Cnb>();
 		
 		for(DataField field: underlayingMarc.getDataFields("015")){
-        	for(Subfield subfieldA: field.getSubfields('a')){
-        		if(subfieldA != null){
-        			Cnb cnb = new Cnb();        	
-        			cnb.setCnb(subfieldA.getData());			
-        			cnbs.add(cnb);
-        		}
-        	}
+			for(Subfield subfieldA: field.getSubfields('a')){
+				if(subfieldA != null){
+					Cnb cnb = new Cnb();
+					cnb.setCnb(subfieldA.getData());
+					cnbs.add(cnb);
+				}
+			}
 		}
-        
+
 		return cnbs;
 	}
 
@@ -268,7 +268,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 	 * get title of record
 	 * 
 	 * @return all 245a:245b.245n.245p and 240a:240b.240n.240p. If no title is
-	 *         found, list containing empty string is returned
+	 *		 found, list containing empty string is returned
 	 */
 	@Override
 	public List<Title> getTitle() {
@@ -319,7 +319,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 		String ldr07 = Character.toString(underlayingMarc.getLeader().getImplDefined1()[0]);
 		
 		String f006 = underlayingMarc.getControlField("006");
-	    String f006_00 = (f006 != null) && (f006.length() > 0) ? Character.toString(f006.charAt(0)) : "";
+		String f006_00 = (f006 != null) && (f006.length() > 0) ? Character.toString(f006.charAt(0)) : "";
 		
 		if(ldr06.matches("(?i)[at]") && ldr07.matches("(?i)[cdm]"))	return true;				
 		if(f006_00.matches("(?i)[a]")) return true;
@@ -349,8 +349,8 @@ public class MetadataMarcRecord implements MetadataRecord {
 		String f006 = underlayingMarc.getControlField("006");
 		String f006_00 = (f006 != null) && (f006.length() > 0) ? Character.toString(f006.charAt(0)) : "";
 		
-	    String f007 = underlayingMarc.getControlField("007");
-	    String f007_00 = (f007 != null) && (f007.length() > 0) ? Character.toString(f007.charAt(0)) : "";
+		String f007 = underlayingMarc.getControlField("007");
+		String f007_00 = (f007 != null) && (f007.length() > 0) ? Character.toString(f007.charAt(0)) : "";
 		
 		String f245h = underlayingMarc.getField("245", 'h');		
 		if(f245h == null) f245h = "";
@@ -398,7 +398,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 		String f006_00 = (f006 != null) && (f006.length() > 0) ? Character.toString(f006.charAt(0)) : "";
 		
 		String f007 = underlayingMarc.getControlField("007");
-	    String f007_00 = (f007 != null) && (f007.length() > 0) ? Character.toString(f007.charAt(0)) : "";
+		String f007_00 = (f007 != null) && (f007.length() > 0) ? Character.toString(f007.charAt(0)) : "";
 		
 		String f245h = underlayingMarc.getField("245", 'h');		
 		if(f245h == null) f245h = "";
@@ -427,11 +427,11 @@ public class MetadataMarcRecord implements MetadataRecord {
 		String ldr06 = Character.toString(underlayingMarc.getLeader().getTypeOfRecord());
 				
 		String f007 = underlayingMarc.getControlField("007");
-	    String f007_00 = (f007 != null) && (f007.length() > 0) ? Character.toString(f007.charAt(0)) : "";
+		String f007_00 = (f007 != null) && (f007.length() > 0) ? Character.toString(f007.charAt(0)) : "";
 		
 		String f008 = underlayingMarc.getControlField("008");
-	    String f008_23 = (f008 != null) && (f008.length() > 23) ? Character.toString(f008.charAt(23)) : "";
-	    String f008_29 = (f008 != null) && (f008.length() > 29) ? Character.toString(f008.charAt(29)) : "";
+		String f008_23 = (f008 != null) && (f008.length() > 23) ? Character.toString(f008.charAt(23)) : "";
+		String f008_29 = (f008 != null) && (f008.length() > 29) ? Character.toString(f008.charAt(29)) : "";
 
 		String f245h = underlayingMarc.getField("245", 'h');		
 		if(f245h == null) f245h = "";
@@ -455,24 +455,24 @@ public class MetadataMarcRecord implements MetadataRecord {
 	protected boolean isBraill(){
 		String ldr06 = Character.toString(underlayingMarc.getLeader().getTypeOfRecord());
 		
-	    String f006 = underlayingMarc.getControlField("006");
+		String f006 = underlayingMarc.getControlField("006");
 		String f006_06 = (f006 != null) && (f006.length() > 6) ? Character.toString(f006.charAt(6)) : "";
-	    String f006_12 = (f006 != null) && (f006.length() > 12) ? Character.toString(f006.charAt(12)) : "";
-	    
-	    String f007 = underlayingMarc.getControlField("007");
-	    String f007_00 = (f007 != null) && (f007.length() > 0) ? Character.toString(f007.charAt(0)) : "";
-		String f007_01 = (f007 != null) && (f007.length() > 1) ? Character.toString(f007.charAt(1)) : "";
-	    
-		String f008 = underlayingMarc.getControlField("008");
-	    String f008_23 = (f008 != null) && (f008.length() > 23) ? Character.toString(f008.charAt(23)) : "";
-	    String f008_29 = (f008 != null) && (f008.length() > 29) ? Character.toString(f008.charAt(29)) : "";
+		String f006_12 = (f006 != null) && (f006.length() > 12) ? Character.toString(f006.charAt(12)) : "";
 
-	    String f245h = underlayingMarc.getField("245", 'h');		
+		String f007 = underlayingMarc.getControlField("007");
+		String f007_00 = (f007 != null) && (f007.length() > 0) ? Character.toString(f007.charAt(0)) : "";
+		String f007_01 = (f007 != null) && (f007.length() > 1) ? Character.toString(f007.charAt(1)) : "";
+
+		String f008 = underlayingMarc.getControlField("008");
+		String f008_23 = (f008 != null) && (f008.length() > 23) ? Character.toString(f008.charAt(23)) : "";
+		String f008_29 = (f008 != null) && (f008.length() > 29) ? Character.toString(f008.charAt(29)) : "";
+
+		String f245h = underlayingMarc.getField("245", 'h');
 		if(f245h == null) f245h = "";
 		
 		String f336b = underlayingMarc.getField("336", 'b');
 		if(f336b == null) f336b = "";
-	    
+
 		if(ldr06.matches("(?i)[acdpt]") && f008_23.matches("(?i)f")){
 			return true;
 		}
@@ -500,18 +500,18 @@ public class MetadataMarcRecord implements MetadataRecord {
 	protected boolean isElectronicSource(){
 		String ldr06 = Character.toString(underlayingMarc.getLeader().getTypeOfRecord());
 		
-	    String f006 = underlayingMarc.getControlField("006");
-	    String f006_00 = (f006 != null) && (f006.length() > 0) ? Character.toString(f006.charAt(0)) : "";
+		String f006 = underlayingMarc.getControlField("006");
+		String f006_00 = (f006 != null) && (f006.length() > 0) ? Character.toString(f006.charAt(0)) : "";
 		String f006_06 = (f006 != null) && (f006.length() > 6) ? Character.toString(f006.charAt(6)) : "";
 		
-	    String f007 = underlayingMarc.getControlField("007");
-	    String f007_00 = (f007 != null) && (f007.length() > 0) ? Character.toString(f007.charAt(0)) : "";
+		String f007 = underlayingMarc.getControlField("007");
+		String f007_00 = (f007 != null) && (f007.length() > 0) ? Character.toString(f007.charAt(0)) : "";
 		
 		String f008 = underlayingMarc.getControlField("008");
-	    String f008_23 = (f008 != null) && (f008.length() > 23) ? Character.toString(f008.charAt(23)) : "";
-	    String f008_29 = (f008 != null) && (f008.length() > 29) ? Character.toString(f008.charAt(29)) : "";
+		String f008_23 = (f008 != null) && (f008.length() > 23) ? Character.toString(f008.charAt(23)) : "";
+		String f008_29 = (f008 != null) && (f008.length() > 29) ? Character.toString(f008.charAt(29)) : "";
 
-	    String f245h = underlayingMarc.getField("245", 'h');		
+		String f245h = underlayingMarc.getField("245", 'h');
 		if(f245h == null) f245h = "";
 		
 		String f300a = underlayingMarc.getField("300", 'a');
@@ -556,12 +556,12 @@ public class MetadataMarcRecord implements MetadataRecord {
 		String ldr06 = Character.toString(underlayingMarc.getLeader().getTypeOfRecord());
 		
 		String f006 = underlayingMarc.getControlField("006");
-	    String f006_00 = (f006 != null) && (f006.length() > 0) ? Character.toString(f006.charAt(0)) : "";
+		String f006_00 = (f006 != null) && (f006.length() > 0) ? Character.toString(f006.charAt(0)) : "";
 		
-	    String f007 = underlayingMarc.getControlField("007");
-	    String f007_00 = (f007 != null) && (f007.length() > 0) ? Character.toString(f007.charAt(0)) : "";
-	    String f007_01 = (f007 != null) && (f007.length() > 1) ? Character.toString(f007.charAt(1)) : "";
-	    	    
+		String f007 = underlayingMarc.getControlField("007");
+		String f007_00 = (f007 != null) && (f007.length() > 0) ? Character.toString(f007.charAt(0)) : "";
+		String f007_01 = (f007 != null) && (f007.length() > 1) ? Character.toString(f007.charAt(1)) : "";
+
 		String f245h = underlayingMarc.getField("245", 'h');		
 		if(f245h == null) f245h = "";
 		
@@ -624,16 +624,16 @@ public class MetadataMarcRecord implements MetadataRecord {
 		
 		String f006 = underlayingMarc.getControlField("006");
 		String f006_00 = (f006 != null) && (f006.length() > 0) ? Character.toString(f006.charAt(0)) : "";
-	    String f006_16 = (f006 != null) && (f006.length() > 16) ? Character.toString(f006.charAt(16)) : "";
+		String f006_16 = (f006 != null) && (f006.length() > 16) ? Character.toString(f006.charAt(16)) : "";
 		
 		String f007 = underlayingMarc.getControlField("007");
-	    String f007_00 = (f007 != null) && (f007.length() > 0) ? Character.toString(f007.charAt(0)) : "";
-	    String f007_04 = (f007 != null) && (f007.length() > 4) ? Character.toString(f007.charAt(4)) : "";
+		String f007_00 = (f007 != null) && (f007.length() > 0) ? Character.toString(f007.charAt(0)) : "";
+		String f007_04 = (f007 != null) && (f007.length() > 4) ? Character.toString(f007.charAt(4)) : "";
 		
-	    String f008 = underlayingMarc.getControlField("008");
-	    String f008_33 = (f008 != null) && (f008.length() > 33) ? Character.toString(f008.charAt(33)) : "";
-	    
-	    String f245h = underlayingMarc.getField("245", 'h');		
+		String f008 = underlayingMarc.getControlField("008");
+		String f008_33 = (f008 != null) && (f008.length() > 33) ? Character.toString(f008.charAt(33)) : "";
+
+		String f245h = underlayingMarc.getField("245", 'h');
 		if(f245h == null) f245h = "";
 		
 		String f300 = underlayingMarc.getDataFields("300").toString();
@@ -683,13 +683,13 @@ public class MetadataMarcRecord implements MetadataRecord {
 		String ldr06 = Character.toString(underlayingMarc.getLeader().getTypeOfRecord());
 		
 		String f006 = underlayingMarc.getControlField("006");
-	    String f006_00 = (f006 != null) && (f006.length() > 0) ? Character.toString(f006.charAt(0)) : "";
+		String f006_00 = (f006 != null) && (f006.length() > 0) ? Character.toString(f006.charAt(0)) : "";
 		
 		String f007 = underlayingMarc.getControlField("007");
-	    String f007_00 = (f007 != null) && (f007.length() > 0) ? Character.toString(f007.charAt(0)) : "";
+		String f007_00 = (f007 != null) && (f007.length() > 0) ? Character.toString(f007.charAt(0)) : "";
 		
-	    if(ldr06.matches("(?i)o")) return true;
-	    if(f006_00.matches("(?i)o") && f007_00.matches("(?i)o")) return true;
+		if(ldr06.matches("(?i)o")) return true;
+		if(f006_00.matches("(?i)o") && f007_00.matches("(?i)o")) return true;
 		return false;
 	}
 	
@@ -697,31 +697,31 @@ public class MetadataMarcRecord implements MetadataRecord {
 		String ldr06 = Character.toString(underlayingMarc.getLeader().getTypeOfRecord());
 		
 		String f006 = underlayingMarc.getControlField("006");
-	    String f006_00 = (f006 != null) && (f006.length() > 0) ? Character.toString(f006.charAt(0)) : "";
+		String f006_00 = (f006 != null) && (f006.length() > 0) ? Character.toString(f006.charAt(0)) : "";
 		
 		String f008 = underlayingMarc.getControlField("008");
-	    String f008_33 = (f008 != null) && (f008.length() > 33) ? Character.toString(f008.charAt(33)) : "";
-	    		
+		String f008_33 = (f008 != null) && (f008.length() > 33) ? Character.toString(f008.charAt(33)) : "";
+
 		String f336b = underlayingMarc.getField("336", 'b');
 		if(f336b == null) f336b = "";
 				
-	    if(ldr06.matches("(?i)r")) return true;
-	    if(f336b.matches("(?i)tcf|tdm|tdf")) return true;
-	    if(f008_33.matches("(?i)d")) return true;
-	    if(f006_00.matches("(?i)r")) return true;
+		if(ldr06.matches("(?i)r")) return true;
+		if(f336b.matches("(?i)tcf|tdm|tdf")) return true;
+		if(f008_33.matches("(?i)d")) return true;
+		if(f006_00.matches("(?i)r")) return true;
 		return false;
 	}
 	
 	protected boolean isMixDocument(){
 		String ldr06 = Character.toString(underlayingMarc.getLeader().getTypeOfRecord());
 		
-	    if(ldr06.matches("(?i)p")) return true;
+		if(ldr06.matches("(?i)p")) return true;
 		return false;
 	}
 	
 	protected boolean isUnspecified(){
 		String f007 = underlayingMarc.getControlField("007");
-	    String f007_00 = (f007 != null) && (f007.length() > 0) ? Character.toString(f007.charAt(0)) : "";
+		String f007_00 = (f007 != null) && (f007.length() > 0) ? Character.toString(f007.charAt(0)) : "";
 		
 		String f336b = underlayingMarc.getField("336", 'b');
 		if(f336b == null) f336b = "";
@@ -800,7 +800,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 		return null;
 	}
 
-    @Override
+	@Override
 	public Long getWeight(Long baseWeight) {
 		Long weight = 0L;
 		if(baseWeight != null) weight = baseWeight;
@@ -822,7 +822,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 		if(underlayingMarc.getControlField("008") == null) weight -= 1;
 		if(underlayingMarc.getDataFields("300").isEmpty()) weight -= 1;
 		
-        boolean f245Ind1 = false;
+		boolean f245Ind1 = false;
 		for (String key: fields1xx){
 			if(!underlayingMarc.getDataFields(key).isEmpty()){
 				for(DataField dataField: underlayingMarc.getDataFields("245")){

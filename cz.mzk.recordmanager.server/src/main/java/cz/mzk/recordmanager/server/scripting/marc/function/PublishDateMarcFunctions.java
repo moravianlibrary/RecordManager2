@@ -86,10 +86,10 @@ public class PublishDateMarcFunctions implements MarcRecordFunctions {
 
 		years.addAll(getPublishDateFromFields(ctx));
 
-        String field008 = record.getControlField("008");
-        years.addAll(parsePublishDateFrom008(field008));
+		String field008 = record.getControlField("008");
+		years.addAll(parsePublishDateFrom008(field008));
 
-        return years;
+		return years;
 	}
 
 	public Set<Integer> getPublishDateFromFields(MarcFunctionContext ctx){
@@ -113,8 +113,8 @@ public class PublishDateMarcFunctions implements MarcRecordFunctions {
 	public Set<Integer> parsePublishDateFrom008(String field008) {
 		Set<Integer> result = Sets.newHashSet();
 		if (field008 == null || field008.length() < 12) {
-            return result;
-        }
+			return result;
+		}
 		char type = field008.charAt(6);
 		if(type == 'b' || type == 'n'){
 			return result;
@@ -141,8 +141,8 @@ public class PublishDateMarcFunctions implements MarcRecordFunctions {
 		
 		if(type == 'd' || type == 'q' || type == 'c'){
 			if (to > MAX_YEAR) {
-	            to = MAX_YEAR;
-	        }
+				to = MAX_YEAR;
+			}
 			for (int year = from; year <= to; year++) {
 				result.add(year);
 			}
@@ -236,7 +236,7 @@ public class PublishDateMarcFunctions implements MarcRecordFunctions {
 					if(from <= MAX_YEAR+1) years.addAll(parsePublishDateFrom008(field008));
 				}
 			}
-        }
+		}
 		if(!years.isEmpty()) return years.iterator().next().toString();
 		return null;
 	}

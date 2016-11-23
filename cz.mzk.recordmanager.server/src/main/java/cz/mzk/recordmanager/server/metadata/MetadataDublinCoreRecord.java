@@ -345,9 +345,9 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 		for (String f : identifiers) {
 			m = p.matcher(f);
 			if (m.find()) {			
-				Cnb cnb = new Cnb();        	
-    			cnb.setCnb(m.group(1).trim());			
-    			cnbs.add(cnb);
+				Cnb cnb = new Cnb();
+				cnb.setCnb(m.group(1).trim());
+				cnbs.add(cnb);
 			}
 		}
 		return cnbs;

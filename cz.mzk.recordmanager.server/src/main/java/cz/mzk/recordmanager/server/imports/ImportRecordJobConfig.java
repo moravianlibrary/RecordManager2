@@ -185,16 +185,16 @@ public class ImportRecordJobConfig {
 	}
 
 	@Bean(name=Constants.JOB_ID_IMPORT_OAI+":processor")
-    @StepScope
-    public OAIItemProcessor oaiItemProcessor() {
-    	return new OAIItemProcessor();
-    }
+	@StepScope
+	public OAIItemProcessor oaiItemProcessor() {
+		return new OAIItemProcessor();
+	}
 
 	@Bean(name=Constants.JOB_ID_IMPORT_OAI+":HarvestedRecordWriter")
-    @StepScope
-    public ItemWriter<List<HarvestedRecord>> harvestedRecordWriter() {
-    	return new HarvestedRecordWriter();
-    }
+	@StepScope
+	public ItemWriter<List<HarvestedRecord>> harvestedRecordWriter() {
+		return new HarvestedRecordWriter();
+	}
 	
 	@Bean
 	public Job importCosmotron996RecordsJob(

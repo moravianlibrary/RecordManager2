@@ -4,7 +4,7 @@ import {DatetimePickerComponent} from "./datetime-picker.component";
 
 @NgModule({
   imports: [
-    CommonModule
+    CommonModule,
   ],
   declarations: [DatetimePickerComponent],
   exports: [DatetimePickerComponent]

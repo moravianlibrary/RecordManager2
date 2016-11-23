@@ -18,68 +18,68 @@ public class RecordImpl extends info.freelibrary.marc4j.impl.RecordImpl {
 	private static final long serialVersionUID = 1L;
 
 	/**
-     * Gets the first {@link VariableField} with the supplied tag.
-     * 
-     * @param aTag The tag of the field to be returned
-     */
-    public VariableField getVariableField(String aTag) {
-        Iterator<? extends VariableField> iterator = getIterator(aTag);
+	 * Gets the first {@link VariableField} with the supplied tag.
+	 *
+	 * @param aTag The tag of the field to be returned
+	 */
+	public VariableField getVariableField(String aTag) {
+		Iterator<? extends VariableField> iterator = getIterator(aTag);
 
-        while (iterator.hasNext()) {
-            VariableField field = iterator.next();
+		while (iterator.hasNext()) {
+			VariableField field = iterator.next();
 
-            if (field.getTag().equals(aTag)) {
-                return field;
-            }
-        }
+			if (field.getTag().equals(aTag)) {
+				return field;
+			}
+		}
 
-        return null;
-    }
+		return null;
+	}
 
-    /**
-     * Gets a {@link List} of {@link VariableField}s with the supplied tag.
-     */
-    public List<VariableField> getVariableFields(String aTag) {
-        List<VariableField> fields = new ArrayList<VariableField>();
-        Iterator<? extends VariableField> iterator = getIterator(aTag);
+	/**
+	 * Gets a {@link List} of {@link VariableField}s with the supplied tag.
+	 */
+	public List<VariableField> getVariableFields(String aTag) {
+		List<VariableField> fields = new ArrayList<VariableField>();
+		Iterator<? extends VariableField> iterator = getIterator(aTag);
 
-        while (iterator.hasNext()) {
-            VariableField field = iterator.next();
+		while (iterator.hasNext()) {
+			VariableField field = iterator.next();
 
-            if (field.getTag().equals(aTag)) {
-                fields.add(field);
-            }
-        }
+			if (field.getTag().equals(aTag)) {
+				fields.add(field);
+			}
+		}
 
-        return fields;
-    }
+		return fields;
+	}
 
-    /**
-     * Gets a {@link List} of {@link VariableField}s from the {@link Record}.
-     */
-    public List<VariableField> getVariableFields() {
-        List<VariableField> fields = new ArrayList<VariableField>();
-        Iterator<? extends VariableField> iterator = controlFields.iterator();
+	/**
+	 * Gets a {@link List} of {@link VariableField}s from the {@link Record}.
+	 */
+	public List<VariableField> getVariableFields() {
+		List<VariableField> fields = new ArrayList<VariableField>();
+		Iterator<? extends VariableField> iterator = controlFields.iterator();
 
-        while (iterator.hasNext()) {
-            fields.add(iterator.next());
-        }
+		while (iterator.hasNext()) {
+			fields.add(iterator.next());
+		}
 
-        iterator = dataFields.iterator();
+		iterator = dataFields.iterator();
 
-        while (iterator.hasNext()) {
-            fields.add(iterator.next());
-        }
+		while (iterator.hasNext()) {
+			fields.add(iterator.next());
+		}
 
-        return fields;
-    }
+		return fields;
+	}
 
 
-    @SuppressWarnings("unchecked")
+	@SuppressWarnings("unchecked")
 	private Iterator<? extends VariableField> getIterator(String aTag) {
-        if (aTag.length() == 3) {
-            try {
-                if (aTag.startsWith("00")) {
+		if (aTag.length() == 3) {
+			try {
+			    if (aTag.startsWith("00")) {
                     return controlFields.iterator();
                 } else {
                     return dataFields.iterator();

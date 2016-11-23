@@ -12,8 +12,8 @@ import java.util.List;
 @RequestMapping(value = "/batches")
 public class BatchJobController {
 
-    @Autowired
-    private BatchService batchService;
+	@Autowired
+	private BatchService batchService;
 
 
 	@RequestMapping(method = RequestMethod.GET, value = "/{jobId}")
@@ -23,18 +23,18 @@ public class BatchJobController {
 		return batchService.getJobExecution(jobId);
 	}
 
-    @RequestMapping(method = RequestMethod.GET, value = "/running")
-    @ResponseBody
-    private List<BatchJobExecutionDTO> getRunningJobExecutions()
-    {
-        return batchService.getRunningJobExecutions();
-    }
+	@RequestMapping(method = RequestMethod.GET, value = "/running")
+	@ResponseBody
+	private List<BatchJobExecutionDTO> getRunningJobExecutions()
+	{
+		return batchService.getRunningJobExecutions();
+	}
 
-    @RequestMapping(method = RequestMethod.POST, value = "/run/fullHarvest")
+	@RequestMapping(method = RequestMethod.POST, value = "/run/fullHarvest")
 	@ResponseBody
 	private void runFullHarvest(@RequestBody List<IdDto> configId){
-	    batchService.runFullHarvest(configId);
-    }
+		batchService.runFullHarvest(configId);
+	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/run/incrementalHarvest")
 	@ResponseBody

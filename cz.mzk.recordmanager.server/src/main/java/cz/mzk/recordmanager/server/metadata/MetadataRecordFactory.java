@@ -55,12 +55,12 @@ public class MetadataRecordFactory {
 		
 		String recordFormat = record.getFormat();
 		
-        if (Constants.METADATA_FORMAT_MARC21.equals(recordFormat) 
-        		|| Constants.METADATA_FORMAT_XML_MARC.equals(recordFormat)
-        		|| Constants.METADATA_FORMAT_MARC_CPK.equals(recordFormat)
-        		|| Constants.METADATA_FORMAT_OAI_MARCXML_CPK.equals(recordFormat)
-        		|| Constants.METADATA_FORMAT_MARC21E.equals(recordFormat)) {
-    		MarcRecord marcRec = marcXmlParser.parseRecord(is);
+		if (Constants.METADATA_FORMAT_MARC21.equals(recordFormat)
+				|| Constants.METADATA_FORMAT_XML_MARC.equals(recordFormat)
+				|| Constants.METADATA_FORMAT_MARC_CPK.equals(recordFormat)
+				|| Constants.METADATA_FORMAT_OAI_MARCXML_CPK.equals(recordFormat)
+				|| Constants.METADATA_FORMAT_MARC21E.equals(recordFormat)) {
+			MarcRecord marcRec = marcXmlParser.parseRecord(is);
 			switch (prefix) {
 			case Constants.PREFIX_MZK:
 				return new MzkMetadataMarcRecord(marcRec);
@@ -90,11 +90,11 @@ public class MetadataRecordFactory {
 				return new MetadataMarcRecord(marcRec);
 			}
 		}
-        
-        if (Constants.METADATA_FORMAT_DUBLIN_CORE.equals(recordFormat)
-        		|| Constants.METADATA_FORMAT_ESE.equals(recordFormat)) {
-        	DublinCoreRecord dcRec = dcParser.parseRecord(is);
-        	switch(prefix){
+
+		if (Constants.METADATA_FORMAT_DUBLIN_CORE.equals(recordFormat)
+				|| Constants.METADATA_FORMAT_ESE.equals(recordFormat)) {
+			DublinCoreRecord dcRec = dcParser.parseRecord(is);
+			switch(prefix){
 			case Constants.PREFIX_KRAM_MZK:
 			case Constants.PREFIX_KRAM_NTK:
 			case Constants.PREFIX_KRAM_KNAV:
@@ -102,12 +102,12 @@ public class MetadataRecordFactory {
 				return new KramDefaultMetadataDublinCoreRecord(dcRec);
 			default:
 				return getMetadataRecord(dcRec);
-        	}
+			}
 			
-        }
-        
-        return null;
-    }
+		}
+
+		return null;
+	}
 	
 	public MetadataRecord getMetadataRecord(HarvestedRecordUniqueId recordId) {
 		return getMetadataRecord(harvestedRecordDao.get(recordId));

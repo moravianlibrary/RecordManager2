@@ -4,7 +4,6 @@
 
 
 
-
 <div class="panel panel-default">
   <div class="panel-body">
 
@@ -31,7 +30,6 @@
       <app-datetime-picker [description]="'To'" (emitDate)="setTo($event)"></app-datetime-picker>
 
     </div>
-
 
   </div>
 </div>
@@ -71,11 +69,11 @@
       <td><a (click)="routToConfig(statistic.importConfId)">{{statistic.importConfId}}</a></td>
       <td>{{statistic.libraryName}}</td>
       <td><a [href]="'http://' + statistic.url" target="_blank">{{statistic?.url}}</a></td>
-      <td>{{statistic.startTime | date: "dd/MM/yyyy hh:mm"}}</td>
-      <td>{{statistic.endTime | date: "dd/MM/yyyy hh:mm"}}</td>
+      <td>{{statistic.startTime | date: "dd/MM/yyyy HH:mm"}}</td>
+      <td>{{statistic.endTime | date: "dd/MM/yyyy HH:mm"}}</td>
       <td>{{statistic.status}}</td>
-      <td>{{statistic.fromParam | date: "dd/MM/yyyy hh:mm"}}</td>
-      <td>{{statistic.toParam | date: "dd/MM/yyyy hh:mm"}}</td>
+      <td>{{statistic.fromParam | date: "dd/MM/yyyy HH:mm"}}</td>
+      <td>{{statistic.toParam | date: "dd/MM/yyyy HH:mm"}}</td>
       <td>{{statistic.noOfRecords}}</td>
       <td><a [routerLink]="['/oaiHarvestStats', statistic.jobExecutionId]"><i class="glyphicon glyphicon-triangle-right"></i></a></td>
     </tr>

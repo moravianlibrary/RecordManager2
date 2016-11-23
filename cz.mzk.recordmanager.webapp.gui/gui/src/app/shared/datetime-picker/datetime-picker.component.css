@@ -1,3 +1,13 @@
 i, a{
   cursor: pointer;
 }
+.center {
+  text-align: center;
+}
+.side{
+  display: inline-block;
+}
+
+.selector{
+  margin: 10px;
+}

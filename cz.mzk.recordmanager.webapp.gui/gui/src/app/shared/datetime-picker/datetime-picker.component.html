@@ -1,7 +1,7 @@
 <div class="col-md-3">
   <div class="input-group">
     <span class="input-group-addon" id="sizing-addon1">{{description}}</span>
-    <input disabled type="text" class="form-control" value="{{pickedDate | date: 'dd/MM/yyyy hh:mm'}}">
+    <input readonly type="text" class="form-control" value="{{pickedDate | date: 'dd/MM/yyyy HH:mm'}}">
     <div class="input-group-btn">
 
       <button (click)="selectDate(null)" type="button" class="btn btn-default" ><i class="glyphicon glyphicon-remove-circle"></i></button>
@@ -12,29 +12,74 @@
 
       <div (click)="$event.stopPropagation();" id="calendarDropDown" class="dropdown-menu dropdown-menu-right">
 
-        <div class="row">
-          <div class="col-md-3" style="left: 5%">
-            <i (click)="nextYear(-1)" class="glyphicon glyphicon-menu-left"></i> {{refDate | date: 'yyyy'}} <i (click)="nextYear(1)" class="glyphicon glyphicon-menu-right"></i>
+
+        <div class="center">
+          <div class="side" style="float: left" >
+            <i (click)="nextYear(-1); setDaysOfMonth()" class="glyphicon glyphicon-menu-left"></i> {{refDate | date: 'yyyy'}} <i (click)="nextYear(1); setDaysOfMonth()" class="glyphicon glyphicon-menu-right"></i>
           </div>
 
-          <div class="col-md-3" style="left: 40%">
-            <i (click)="nextMonth(-1)" class="glyphicon glyphicon-menu-left"></i> {{refDate | date: 'MMM'}} <i (click)="nextMonth(1)" class="glyphicon glyphicon-menu-right"></i>
+          <div class="side">
+            <button class="btn btn-default btn-xs" (click)="today()">Today</button>
+          </div>
+
+          <div class="side" style="float: right">
+            <i (click)="nextMonth(-1); setDaysOfMonth()" class="glyphicon glyphicon-menu-left"></i> {{refDate | date: 'MMM'}} <i (click)="nextMonth(1); setDaysOfMonth()" class="glyphicon glyphicon-menu-right"></i>
           </div>
         </div>
 
-        <table class="table">
-          <thead>
-            <tr>
-              <th *ngFor="let day of weekday">{{day}}</th>
-            </tr>
-          </thead>
 
-          <tbody>
-            <tr *ngFor="let days of getDaysOfMonth()">
-              <td *ngFor="let day of days"><a (click)="selectDate(day)">{{day | date: "dd"}}</a></td>
-            </tr>
-          </tbody>
-        </table>
+          <table class="table">
+            <thead>
+              <tr>
+                <th *ngFor="let day of weekday">{{day}}</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr *ngFor="let days of daysOfMonth">
+                <td *ngFor="let day of days"><button *ngIf="day?.day" [ngClass]="{'btn-default': !day.isSelected, 'btn-primary': day.isSelected}" class="btn btn-xs"  (click)="selectDate(day?.day)">{{day?.day | date: "dd"}}</button></td>
+              </tr>
+            </tbody>
+          </table>
+
+        <div class="center" *ngIf="pickedDate">
+
+          <div>
+            <div class="side selector">
+              <a (click)="nextHour(1);" class="glyphicon glyphicon-menu-up"></a>
+            </div>
+
+            <div class="side selector">
+              <a (click)="nextMinute(1);" class="glyphicon glyphicon-menu-up"></a>
+            </div>
+          </div>
+
+          <div>
+            <div class="side">
+              <h3>{{pickedDate | date: 'HH'}}</h3>
+            </div>
+
+            <div class="side">
+              <h3>:</h3>
+            </div>
+
+            <div class="side">
+              <h3>{{pickedDate | date: 'mm'}}</h3>
+            </div>
+          </div>
+
+          <div>
+            <div class="side selector">
+              <a (click)="nextHour(-1);" class="glyphicon glyphicon-menu-down"></a>
+            </div>
+
+            <div class="side selector">
+              <a (click)="nextMinute(-1);" class="glyphicon glyphicon-menu-down"></a>
+            </div>
+          </div>
+
+        </div>
+
       </div>
     </div>
   </div>

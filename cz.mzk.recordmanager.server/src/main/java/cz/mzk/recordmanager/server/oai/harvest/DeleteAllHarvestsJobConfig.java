@@ -27,19 +27,19 @@ import cz.mzk.recordmanager.server.springbatch.SqlCommandTasklet;
 public class DeleteAllHarvestsJobConfig {
 	
 	@Autowired
-    private JobBuilderFactory jobs;
+	private JobBuilderFactory jobs;
 
-    @Autowired
-    private StepBuilderFactory steps;
-    
-    private List<String> deleteSqlScripts = Arrays.asList(
-    		"DELETE FROM dedup_record", //
-    		"DELETE FROM harvested_record" //
-    );
-    
-    private static enum DeleteAllHarvestsJobParameterValidator implements IntrospectiveJobParametersValidator {
-    	
-    	INSTANCE;
+	@Autowired
+	private StepBuilderFactory steps;
+
+	private List<String> deleteSqlScripts = Arrays.asList(
+			"DELETE FROM dedup_record", //
+			"DELETE FROM harvested_record" //
+	);
+
+	private static enum DeleteAllHarvestsJobParameterValidator implements IntrospectiveJobParametersValidator {
+
+		INSTANCE;
 
 		@Override
 		public void validate(JobParameters parameters)
@@ -51,29 +51,29 @@ public class DeleteAllHarvestsJobConfig {
 			return Collections.emptyList();
 		}
 
-    }
-    
-    @Bean
-    public Job deleteAllHarvestsJob(@Qualifier("deleteAllHarvestsJob:step") Step step) {
-        return jobs.get("deleteAllHarvestsJob") //
-        		.validator(DeleteAllHarvestsJobParameterValidator.INSTANCE) //
-        		.listener(JobFailureListener.INSTANCE) //
+	}
+
+	@Bean
+	public Job deleteAllHarvestsJob(@Qualifier("deleteAllHarvestsJob:step") Step step) {
+		return jobs.get("deleteAllHarvestsJob") //
+				.validator(DeleteAllHarvestsJobParameterValidator.INSTANCE) //
+				.listener(JobFailureListener.INSTANCE) //
 				.flow(step) //
 				.end() //
 				.build();
-    }
-    
-    @Bean(name="deleteAllHarvestsJob:step")
-    public Step step() {
-        return steps.get("step") //
-        	.tasklet(deleteTasklet())//
-            .build();
-    }
+	}
 
-    @Bean(name="deleteAllHarvestsJob:deleteTasklet")
-    @StepScope
-    public Tasklet deleteTasklet() {
-    	return new SqlCommandTasklet(deleteSqlScripts);
-    }
-    
+	@Bean(name="deleteAllHarvestsJob:step")
+	public Step step() {
+		return steps.get("step") //
+			.tasklet(deleteTasklet())//
+			.build();
+	}
+
+	@Bean(name="deleteAllHarvestsJob:deleteTasklet")
+	@StepScope
+	public Tasklet deleteTasklet() {
+		return new SqlCommandTasklet(deleteSqlScripts);
+	}
+
 }

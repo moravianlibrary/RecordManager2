@@ -11,9 +11,7 @@ export class DatetimePickerComponent implements OnInit {
 
   @Input() description: string = "";
 
-  today: Date = new Date();
-
-  refDate: Date = new Date(this.today.getFullYear(), this.today.getMonth(), 1);
+  refDate: Date;
 
   month: Date;
   weekday: string[] = [
@@ -27,6 +25,7 @@ export class DatetimePickerComponent implements OnInit {
 
 ];
 
+  daysOfMonth: any[];
 
   pickedDate: Date;
 
@@ -40,32 +39,57 @@ export class DatetimePickerComponent implements OnInit {
     this.refDate = new Date(this.refDate.getFullYear() , this.refDate.getMonth() + offset, 1);
   }
 
-  getDaysOfMonth(): any[]{
+  setDaysOfMonth(){
     var calendarMatrix: any[] = [];
     var lastDay = new Date(this.refDate.getFullYear(), this.refDate.getMonth() + 1, 0);
-    var monthIndex = 1;
-    for(let i = 0; i < Math.ceil(lastDay.getDate() / 7); ++i){
+    var dayIndex = 1;
+
+    var i = 0;
+    while(dayIndex <= lastDay.getDate()){
       calendarMatrix.push(new Array(7));
-
-      for (let j = 0; j < this.weekday.length && monthIndex <= lastDay.getDate(); ++j){
-
-        let day = new Date(this.refDate.getFullYear(), this.refDate.getMonth(), monthIndex).getDay() - 1 < 0 ? this.weekday.length - 1 : new Date(this.refDate.getFullYear(), this.refDate.getMonth(), monthIndex).getDay() - 1;
+      for (let j = 0; j < this.weekday.length && dayIndex <= lastDay.getDate(); ++j){
+        let day = new Date(this.refDate.getFullYear(), this.refDate.getMonth(), dayIndex).getDay() - 1 < 0 ? this.weekday.length - 1 : new Date(this.refDate.getFullYear(), this.refDate.getMonth(), dayIndex).getDay() - 1;
 
         if (day == j){
-          calendarMatrix[i][j] = new Date(this.refDate.getFullYear(), this.refDate.getMonth(), monthIndex);
-          monthIndex = monthIndex + 1;
+          let aux = this.pickedDate == null ? null : new Date(this.pickedDate.getFullYear(), this.pickedDate.getMonth(), this.pickedDate.getDate());
+          let now = new Date(this.refDate.getFullYear(), this.refDate.getMonth(), dayIndex);
+          let selected = false;
+          if (aux != null)
+            selected = now.getTime() === aux.getTime();
+          calendarMatrix[i][j] = {day: now, isSelected: selected};
+          dayIndex = dayIndex + 1;
         }
-
       }
+      ++i;
     }
-    return calendarMatrix;
+    this.daysOfMonth = calendarMatrix;
   }
 
   selectDate(date: Date){
-    this.pickedDate = date;
+    this.pickedDate = date == null ? null : date;
     this.emitDate.emit(this.pickedDate);
+    this.setDaysOfMonth();
   }
+
+  nextHour(offset: number){
+    this.pickedDate = new Date(this.pickedDate.getFullYear(), this.pickedDate.getMonth(), this.pickedDate.getDate(), this.pickedDate.getHours() + offset, this.pickedDate.getMinutes());
+    this.setDaysOfMonth();
+  }
+  nextMinute(offset: number){
+    this.pickedDate = new Date(this.pickedDate.getFullYear(), this.pickedDate.getMonth(), this.pickedDate.getDate(), this.pickedDate.getHours(), this.pickedDate.getMinutes() + offset);
+    this.setDaysOfMonth();
+  }
+
   ngOnInit() {
+    this.refDate = new Date();
+    this.setDaysOfMonth();
+  }
+
+  today(){
+    var today = new Date(Date.now());
+    this.selectDate(today);
+    this.refDate = this.pickedDate;
+    this.setDaysOfMonth();
   }
 
 }
