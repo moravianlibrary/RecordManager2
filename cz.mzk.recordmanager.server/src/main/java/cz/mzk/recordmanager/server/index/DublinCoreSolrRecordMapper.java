@@ -10,6 +10,7 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import cz.mzk.recordmanager.server.ResourceProvider;
 import cz.mzk.recordmanager.server.dc.DublinCoreParser;
 import cz.mzk.recordmanager.server.dc.DublinCoreRecord;
 import cz.mzk.recordmanager.server.model.DedupRecord;
@@ -29,6 +30,9 @@ public class DublinCoreSolrRecordMapper implements SolrRecordMapper,
 
 	@Autowired
 	private DublinCoreParser parser;
+	
+	@Autowired
+	private ResourceProvider resourceProvider;
 
 	private MappingScript<DublinCoreRecord> dedupRecordMappingScript;
 	
@@ -75,10 +79,10 @@ public class DublinCoreSolrRecordMapper implements SolrRecordMapper,
 
 	@Override
 	public void afterPropertiesSet() throws Exception {
-		dedupRecordMappingScript = dublinCoreScriptFactory.create(getClass()
-				.getResourceAsStream("/dc/groovy/BaseDC.groovy"));
-		harvestedRecordMappingScript = dublinCoreScriptFactory.create(getClass()
-				.getResourceAsStream("/dc/groovy/HarvestedRecordBaseDC.groovy"));
+		dedupRecordMappingScript = dublinCoreScriptFactory.create( //
+				resourceProvider.getResource("/dc/groovy/BaseDC.groovy"));
+		harvestedRecordMappingScript = dublinCoreScriptFactory.create( //
+				resourceProvider.getResource("/dc/groovy/HarvestedRecordBaseDC.groovy"));
 	}
 
 }
