@@ -9,7 +9,6 @@ public class BatchJobExecutionDTO implements Serializable {
 
 	private Long id;
 
-
 	private Long jobInstanceID;
 
 	private Date createTime;

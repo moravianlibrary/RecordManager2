@@ -4,6 +4,8 @@ import java.io.Serializable;
 
 public class KrameriusConfigurationDto extends ImportConfigurationDto implements Serializable {
 
+	private static final long serialVersionUID = 1L;
+
 	private String url;
 
 	private String urlSolr;

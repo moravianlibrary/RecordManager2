@@ -5,7 +5,6 @@ import java.util.List;
 import cz.mzk.recordmanager.api.model.ImportConfigurationDto;
 import cz.mzk.recordmanager.api.model.LibraryDetailDto;
 import cz.mzk.recordmanager.api.model.LibraryDto;
-import cz.mzk.recordmanager.api.model.OaiHarvestConfigurationDto;
 
 public interface LibraryService {
 

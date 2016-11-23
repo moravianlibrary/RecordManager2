@@ -1,8 +1,6 @@
 package cz.mzk.recordmanager.server.service;
 
-
 import cz.mzk.recordmanager.api.model.*;
-import cz.mzk.recordmanager.api.model.batch.OaiHarvestJobStatisticsDto;
 import cz.mzk.recordmanager.server.model.*;
 
 public class Translator {
@@ -59,7 +57,7 @@ public class Translator {
 		return oaiHarvestConfigurationDto;
 	}
 
-	public KrameriusConfigurationDto translate(KrameriusConfiguration krameriusConfiguration){
+	public KrameriusConfigurationDto translate(KrameriusConfiguration krameriusConfiguration) {
 		KrameriusConfigurationDto krameriusConfigurationDto = new KrameriusConfigurationDto();
 
 		krameriusConfigurationDto.setId(krameriusConfiguration.getId());
@@ -79,7 +77,7 @@ public class Translator {
 		return krameriusConfigurationDto;
 	}
 
-	public DownloadImportConfigurationDto translate(DownloadImportConfiguration downloadImportConfiguration){
+	public DownloadImportConfigurationDto translate(DownloadImportConfiguration downloadImportConfiguration) { 
 		DownloadImportConfigurationDto downloadImportConfigurationDto = new DownloadImportConfigurationDto();
 
 		downloadImportConfigurationDto.setId(downloadImportConfiguration.getId());
@@ -95,7 +93,7 @@ public class Translator {
 		return downloadImportConfigurationDto;
 	}
 
-	public ContactPerson translate(ContactPersonDto contactPersonDto){
+	public ContactPerson translate(ContactPersonDto contactPersonDto) {
 		ContactPerson contactPerson = new ContactPerson();
 		contactPerson.setId(contactPersonDto.getId());
 		contactPerson.setPhone(contactPersonDto.getPhone());
@@ -103,7 +101,7 @@ public class Translator {
 		contactPerson.setName(contactPersonDto.getName());
 		return contactPerson;
 	}
-	public ImportConfigurationDto translate(ImportConfiguration configuration){
+	public ImportConfigurationDto translate(ImportConfiguration configuration) {
 		ImportConfigurationDto importConfigurationDto = new ImportConfigurationDto();
 		importConfigurationDto.setId(configuration.getId());
 		importConfigurationDto.setIdPrefix(configuration.getIdPrefix());
@@ -111,7 +109,7 @@ public class Translator {
 		return importConfigurationDto;
 	}
 
-	public OAIHarvestConfiguration translate(OaiHarvestConfigurationDto conf){
+	public OAIHarvestConfiguration translate(OaiHarvestConfigurationDto conf) {
 		OAIHarvestConfiguration configuration = new OAIHarvestConfiguration();
 
 		configuration.setId(conf.getId());
@@ -133,7 +131,7 @@ public class Translator {
 		return configuration;
 	}
 
-	public KrameriusConfiguration translate(KrameriusConfigurationDto conf){
+	public KrameriusConfiguration translate(KrameriusConfigurationDto conf) {
 		KrameriusConfiguration configuration = new KrameriusConfiguration();
 
 		configuration.setId(conf.getId());
@@ -159,7 +157,7 @@ public class Translator {
 		return configuration;
 	}
 
-	public DownloadImportConfiguration translate(DownloadImportConfigurationDto conf){
+	public DownloadImportConfiguration translate(DownloadImportConfigurationDto conf) {
 		DownloadImportConfiguration configuration = new DownloadImportConfiguration();
 
 		configuration.setId(conf.getId());
@@ -177,9 +175,7 @@ public class Translator {
 		configuration.setJobName(conf.getJobName());
 		configuration.setRegex(conf.getRegex());
 
-
 		return configuration;
 	}
-
 
 }

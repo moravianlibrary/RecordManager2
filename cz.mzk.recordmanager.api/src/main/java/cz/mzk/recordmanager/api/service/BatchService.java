@@ -21,7 +21,6 @@ public interface BatchService {
 
 	public void runDeduplicate();
 
-
 	public void runIndex();
 
 }

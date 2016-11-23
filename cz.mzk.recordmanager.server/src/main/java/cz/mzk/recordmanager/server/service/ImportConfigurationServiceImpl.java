@@ -1,11 +1,8 @@
 package cz.mzk.recordmanager.server.service;
 
-
 import cz.mzk.recordmanager.api.model.ImportConfigurationDto;
-import cz.mzk.recordmanager.api.model.LibraryDto;
 import cz.mzk.recordmanager.api.service.ImportConfigurationService;
 import cz.mzk.recordmanager.server.model.ImportConfiguration;
-import cz.mzk.recordmanager.server.model.Library;
 import cz.mzk.recordmanager.server.oai.dao.ImportConfigurationDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,7 +28,5 @@ public class ImportConfigurationServiceImpl implements ImportConfigurationServic
 		}
 		return result;
 	}
-
-
 
 }

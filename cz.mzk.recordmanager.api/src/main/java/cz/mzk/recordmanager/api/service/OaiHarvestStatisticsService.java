@@ -5,9 +5,10 @@ import cz.mzk.recordmanager.api.model.batch.OaiHarvestJobStatisticsDto;
 
 import java.util.List;
 
-
 public interface OaiHarvestStatisticsService {
-    List<OaiHarvestJobStatisticsDto> getHarvestJobStatistics();
 
-    public IdDto getLibraryId(Long configId);
+	public List<OaiHarvestJobStatisticsDto> getHarvestJobStatistics();
+
+	public IdDto getLibraryId(Long configId);
+
 }

@@ -4,6 +4,7 @@ import java.util.List;
 
 public class LibraryDetailDto extends LibraryDto {
 
+	private static final long serialVersionUID = 1L;
 
 	private List<ImportConfigurationDto> oaiHarvestConfigurations;
 	

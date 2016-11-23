@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 public class OaiHarvestConfigurationDto extends ImportConfigurationDto implements Serializable {
 
+	private static final long serialVersionUID = 1L;
 
 	private String url;
 

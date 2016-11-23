@@ -1,110 +1,120 @@
 package cz.mzk.recordmanager.api.model.batch;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class OaiHarvestJobStatisticsDto {
-    private static final long serialVersionUID = 1L;
+public class OaiHarvestJobStatisticsDto implements Serializable {
 
-    private Long jobExecutionId;
-    private Long importConfId;
-    private String libraryName;
-    private String url;
-    private String setSpec;
-    private Date startTime;
-    private Date endTime;
-    private String status;
-    private Date fromParam;
-    private Date toParam;
-    private Long noOfRecords;
+	private static final long serialVersionUID = 1L;
 
+	private Long jobExecutionId;
 
+	private Long importConfId;
 
-    public Long getImportConfId() {
-        return importConfId;
-    }
+	private String libraryName;
 
-    public void setImportConfId(Long importConfId) {
-        this.importConfId = importConfId;
-    }
+	private String url;
 
-    public String getLibraryName() {
-        return libraryName;
-    }
+	private String setSpec;
 
-    public void setLibraryName(String libraryName) {
-        this.libraryName = libraryName;
-    }
+	private Date startTime;
 
-    public String getUrl() {
-        return url;
-    }
+	private Date endTime;
 
-    public void setUrl(String url) {
-        this.url = url;
-    }
+	private String status;
 
-    public String getSetSpec() {
-        return setSpec;
-    }
+	private Date fromParam;
 
-    public void setSetSpec(String setSpec) {
-        this.setSpec = setSpec;
-    }
+	private Date toParam;
 
-    public Date getStartTime() {
-        return startTime;
-    }
+	private Long noOfRecords;
 
-    public void setStartTime(Date startTime) {
-        this.startTime = startTime;
-    }
+	public Long getImportConfId() {
+		return importConfId;
+	}
 
-    public Date getEndTime() {
-        return endTime;
-    }
+	public void setImportConfId(Long importConfId) {
+		this.importConfId = importConfId;
+	}
 
-    public void setEndTime(Date endTime) {
-        this.endTime = endTime;
-    }
+	public String getLibraryName() {
+		return libraryName;
+	}
 
-    public String getStatus() {
-        return status;
-    }
+	public void setLibraryName(String libraryName) {
+		this.libraryName = libraryName;
+	}
 
-    public void setStatus(String status) {
-        this.status = status;
-    }
+	public String getUrl() {
+		return url;
+	}
 
-    public Date getFromParam() {
-        return fromParam;
-    }
+	public void setUrl(String url) {
+		this.url = url;
+	}
 
-    public void setFromParam(Date fromParam) {
-        this.fromParam = fromParam;
-    }
+	public String getSetSpec() {
+		return setSpec;
+	}
 
-    public Date getToParam() {
-        return toParam;
-    }
+	public void setSetSpec(String setSpec) {
+		this.setSpec = setSpec;
+	}
 
-    public void setToParam(Date toParam) {
-        this.toParam = toParam;
-    }
+	public Date getStartTime() {
+		return startTime;
+	}
 
-    public Long getNoOfRecords() {
-        return noOfRecords;
-    }
+	public void setStartTime(Date startTime) {
+		this.startTime = startTime;
+	}
 
-    public void setNoOfRecords(Long noOfRecords) {
-        this.noOfRecords = noOfRecords;
-    }
+	public Date getEndTime() {
+		return endTime;
+	}
 
-    public Long getJobExecutionId() {
-        return jobExecutionId;
-    }
+	public void setEndTime(Date endTime) {
+		this.endTime = endTime;
+	}
 
-    public void setJobExecutionId(Long jobExecutionId) {
-        this.jobExecutionId = jobExecutionId;
-    }
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	public Date getFromParam() {
+		return fromParam;
+	}
+
+	public void setFromParam(Date fromParam) {
+		this.fromParam = fromParam;
+	}
+
+	public Date getToParam() {
+		return toParam;
+	}
+
+	public void setToParam(Date toParam) {
+		this.toParam = toParam;
+	}
+
+	public Long getNoOfRecords() {
+		return noOfRecords;
+	}
+
+	public void setNoOfRecords(Long noOfRecords) {
+		this.noOfRecords = noOfRecords;
+	}
+
+	public Long getJobExecutionId() {
+		return jobExecutionId;
+	}
+
+	public void setJobExecutionId(Long jobExecutionId) {
+		this.jobExecutionId = jobExecutionId;
+	}
 
 }

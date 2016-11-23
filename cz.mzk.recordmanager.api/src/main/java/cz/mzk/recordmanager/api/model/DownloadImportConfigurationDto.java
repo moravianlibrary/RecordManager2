@@ -1,9 +1,10 @@
 package cz.mzk.recordmanager.api.model;
 
-
 import java.io.Serializable;
 
 public class DownloadImportConfigurationDto extends ImportConfigurationDto implements Serializable{
+
+	private static final long serialVersionUID = 1L;
 
 	private String url;
 

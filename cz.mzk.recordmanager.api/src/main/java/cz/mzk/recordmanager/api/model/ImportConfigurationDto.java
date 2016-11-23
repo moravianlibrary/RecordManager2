@@ -1,6 +1,7 @@
 package cz.mzk.recordmanager.api.model;
 
 public class ImportConfigurationDto extends IdDto {
+
 	private LibraryDto library;
 
 	private String idPrefix;

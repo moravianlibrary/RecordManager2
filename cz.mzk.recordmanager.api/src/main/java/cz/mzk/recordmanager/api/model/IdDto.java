@@ -1,6 +1,7 @@
 package cz.mzk.recordmanager.api.model;
 
 public class IdDto {
+
 	private Long id;
 
 	public Long getId() {
@@ -10,4 +11,5 @@ public class IdDto {
 	public void setId(Long id) {
 		this.id = id;
 	}
+
 }

@@ -2,8 +2,6 @@ package cz.mzk.recordmanager.server.service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
-
 import cz.mzk.recordmanager.api.model.*;
 import cz.mzk.recordmanager.server.model.*;
 import cz.mzk.recordmanager.server.oai.dao.*;
@@ -46,11 +44,11 @@ public class LibraryServiceImpl implements LibraryService {
 	@Transactional(readOnly=true)
 	public LibraryDetailDto getDetail(Long libraryId) {
 		Library library = libraryDao.get(libraryId);
-		if (library == null)
+		if (library == null) {
 			return null;
+		}
 		return this.translateWithDetails(library);
 	}
-
 
 	@Override
 	@Transactional
@@ -97,49 +95,41 @@ public class LibraryServiceImpl implements LibraryService {
 						downloadImportConfigurationDAO.update(configuration);
 					}
 
-
 				}
 			}
 		}
-
-
 	}
-
 
 	@Override
 	@Transactional
 	public void removeLibrary(Long libraryId) {
 		Library lib = libraryDao.get(libraryId);
-		if (lib != null){
+		if (lib != null) {
 			libraryDao.delete(lib);
 		}
 
 	}
 
-
-
 	@Override
 	@Transactional
 	public void removeConfiguration(Long configId) {
 		OAIHarvestConfiguration config = harvestConfigurationDAO.get(configId);
-		if (config != null){
+		if (config != null) {
 			harvestConfigurationDAO.delete(config);
 			return;
 		}
 
 		KrameriusConfiguration kramConf = krameriusConfigurationDAO.get(configId);
-		if (kramConf != null){
+		if (kramConf != null) {
 			krameriusConfigurationDAO.delete(kramConf);
 			return;
 		}
 
 		DownloadImportConfiguration dowConf = downloadImportConfigurationDAO.get(configId);
-		if (dowConf != null){
+		if (dowConf != null) {
 			downloadImportConfigurationDAO.delete(dowConf);
 			return;
 		}
-
-
 	}
 
 	private DownloadImportConfiguration fillDownImpCon(DownloadImportConfiguration target, DownloadImportConfigurationDto src){
@@ -157,8 +147,6 @@ public class LibraryServiceImpl implements LibraryService {
 		downloadImportConfiguration.setRegex(config.getRegex());
 	}
 
-
-
 	private void fillImportConfig(ImportConfiguration importConfiguration, ImportConfigurationDto config){
 		importConfiguration.setIdPrefix(config.getIdPrefix());
 		importConfiguration.setBaseWeight(config.getBaseWeight());
@@ -174,6 +162,7 @@ public class LibraryServiceImpl implements LibraryService {
 		fillPerson(contact, src.getContact());
 		return target;
 	}
+
 	private void fillKrameriusConfiguration(KrameriusConfiguration krameriusConfiguration, KrameriusConfigurationDto config){
 		fillImportConfig(krameriusConfiguration, config);
 		krameriusConfiguration.setUrl(config.getUrl());
@@ -185,7 +174,6 @@ public class LibraryServiceImpl implements LibraryService {
 		krameriusConfiguration.setFulltextHarvestType(config.getFulltextHarvestType());
 		krameriusConfiguration.setHarvestJobName(config.getHarvestJobName());
 	}
-
 
 	private OAIHarvestConfiguration fillHarvestConfiguration(OAIHarvestConfiguration target, OaiHarvestConfigurationDto src) {
 		fillOAIHarvestConfiguration(target, src);
@@ -204,7 +192,6 @@ public class LibraryServiceImpl implements LibraryService {
 		harvestConfiguration.setSet(config.getSet());
 		harvestConfiguration.setMetadataPrefix(config.getMetadataPrefix());
 	}
-
 
 	private void fillPerson(ContactPerson target, ContactPersonDto src) {
 		target.setName(src.getName());
@@ -225,13 +212,13 @@ public class LibraryServiceImpl implements LibraryService {
 		LibraryDetailDto libraryDetailDto = new LibraryDetailDto();
 		List<ImportConfigurationDto> configs = new ArrayList<>();
 		library.getOaiHarvestConfigurations().forEach(conf -> {
-			if (conf instanceof OAIHarvestConfiguration){
+			if (conf instanceof OAIHarvestConfiguration) {
 				configs.add(translator.translate((OAIHarvestConfiguration) conf));
 			}
-			if (conf instanceof KrameriusConfiguration){
+			if (conf instanceof KrameriusConfiguration) {
 				configs.add(translator.translate((KrameriusConfiguration) conf));
 			}
-			if (conf instanceof DownloadImportConfiguration){
+			if (conf instanceof DownloadImportConfiguration) {
 				configs.add(translator.translate((DownloadImportConfiguration) conf));
 			}
 
@@ -245,8 +232,5 @@ public class LibraryServiceImpl implements LibraryService {
 
 		return libraryDetailDto;
 	}
-
-
-
 
 }
