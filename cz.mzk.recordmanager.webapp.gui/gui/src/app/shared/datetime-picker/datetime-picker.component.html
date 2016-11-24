@@ -47,12 +47,12 @@
         <div class="center" *ngIf="pickedDate">
 
           <div>
-            <div class="side selector">
-              <i (click)="nextHour(1);" class="glyphicon glyphicon-menu-up"></i>
+            <div class="side ">
+              <button (click)="nextHour(1);" class="btn btn-default btn-sm" ><i class="glyphicon glyphicon-menu-up"></i></button>
             </div>
 
-            <div class="side selector">
-              <i (click)="nextMinute(1);" class="glyphicon glyphicon-menu-up"></i>
+            <div class="side ">
+              <button (click)="nextMinute(1);" class="btn btn-default btn-sm" ><i class="glyphicon glyphicon-menu-up"></i></button>
             </div>
           </div>
 
@@ -71,12 +71,12 @@
           </div>
 
           <div>
-            <div class="side selector">
-              <i (click)="nextHour(-1);" class="glyphicon glyphicon-menu-down"></i>
+            <div class="side ">
+              <button (click)="nextHour(-1);" class="btn btn-default btn-sm" ><i class="glyphicon glyphicon-menu-down"></i></button>
             </div>
 
-            <div class="side selector">
-              <i (click)="nextMinute(-1);" class="glyphicon glyphicon-menu-down"></i>
+            <div class="side ">
+              <button (click)="nextMinute(-1);" class="btn btn-default btn-sm" ><i class="glyphicon glyphicon-menu-down"></i></button>
             </div>
           </div>
 
