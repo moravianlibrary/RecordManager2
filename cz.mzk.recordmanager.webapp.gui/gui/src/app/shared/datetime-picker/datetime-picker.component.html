@@ -14,8 +14,9 @@
 
 
         <div class="center">
-          <div class="side" style="float: left" >
-            <i (click)="nextYear(-1); setDaysOfMonth()" class="glyphicon glyphicon-menu-left"></i> {{refDate | date: 'yyyy'}} <i (click)="nextYear(1); setDaysOfMonth()" class="glyphicon glyphicon-menu-right"></i>
+
+          <div class="side" style="float: left;" >
+            <i (click)="nextYear(-1); " class="glyphicon glyphicon-menu-left"></i> {{refDate | date: 'yyyy'}} <i (click)="nextYear(1); " class="glyphicon glyphicon-menu-right"></i>
           </div>
 
           <div class="side">
@@ -23,8 +24,9 @@
           </div>
 
           <div class="side" style="float: right">
-            <i (click)="nextMonth(-1); setDaysOfMonth()" class="glyphicon glyphicon-menu-left"></i> {{refDate | date: 'MMM'}} <i (click)="nextMonth(1); setDaysOfMonth()" class="glyphicon glyphicon-menu-right"></i>
+            <i (click)="nextMonth(-1); " class="glyphicon glyphicon-menu-left"></i> {{refDate | date: 'MMM'}} <i (click)="nextMonth(1); " class="glyphicon glyphicon-menu-right"></i>
           </div>
+
         </div>
 
 
@@ -36,7 +38,7 @@
             </thead>
 
             <tbody>
-              <tr *ngFor="let days of daysOfMonth">
+              <tr *ngFor="let days of getDaysOfMonth()">
                 <td *ngFor="let day of days"><button *ngIf="day?.day" [ngClass]="{'btn-default': !day.isSelected, 'btn-primary': day.isSelected}" class="btn btn-xs"  (click)="selectDate(day?.day)">{{day?.day | date: "dd"}}</button></td>
               </tr>
             </tbody>
@@ -46,11 +48,11 @@
 
           <div>
             <div class="side selector">
-              <a (click)="nextHour(1);" class="glyphicon glyphicon-menu-up"></a>
+              <i (click)="nextHour(1);" class="glyphicon glyphicon-menu-up"></i>
             </div>
 
             <div class="side selector">
-              <a (click)="nextMinute(1);" class="glyphicon glyphicon-menu-up"></a>
+              <i (click)="nextMinute(1);" class="glyphicon glyphicon-menu-up"></i>
             </div>
           </div>
 
@@ -70,11 +72,11 @@
 
           <div>
             <div class="side selector">
-              <a (click)="nextHour(-1);" class="glyphicon glyphicon-menu-down"></a>
+              <i (click)="nextHour(-1);" class="glyphicon glyphicon-menu-down"></i>
             </div>
 
             <div class="side selector">
-              <a (click)="nextMinute(-1);" class="glyphicon glyphicon-menu-down"></a>
+              <i (click)="nextMinute(-1);" class="glyphicon glyphicon-menu-down"></i>
             </div>
           </div>
 

@@ -25,7 +25,6 @@ export class DatetimePickerComponent implements OnInit {
 
 ];
 
-  daysOfMonth: any[];
 
   pickedDate: Date;
 
@@ -39,7 +38,7 @@ export class DatetimePickerComponent implements OnInit {
     this.refDate = new Date(this.refDate.getFullYear() , this.refDate.getMonth() + offset, 1);
   }
 
-  setDaysOfMonth(){
+  getDaysOfMonth(): any[]{
     var calendarMatrix: any[] = [];
     var lastDay = new Date(this.refDate.getFullYear(), this.refDate.getMonth() + 1, 0);
     var dayIndex = 1;
@@ -62,34 +61,31 @@ export class DatetimePickerComponent implements OnInit {
       }
       ++i;
     }
-    this.daysOfMonth = calendarMatrix;
+
+    return calendarMatrix;
   }
 
   selectDate(date: Date){
     this.pickedDate = date == null ? null : date;
     this.emitDate.emit(this.pickedDate);
-    this.setDaysOfMonth();
   }
 
   nextHour(offset: number){
     this.pickedDate = new Date(this.pickedDate.getFullYear(), this.pickedDate.getMonth(), this.pickedDate.getDate(), this.pickedDate.getHours() + offset, this.pickedDate.getMinutes());
-    this.setDaysOfMonth();
+
   }
   nextMinute(offset: number){
     this.pickedDate = new Date(this.pickedDate.getFullYear(), this.pickedDate.getMonth(), this.pickedDate.getDate(), this.pickedDate.getHours(), this.pickedDate.getMinutes() + offset);
-    this.setDaysOfMonth();
   }
 
   ngOnInit() {
     this.refDate = new Date();
-    this.setDaysOfMonth();
   }
 
   today(){
     var today = new Date(Date.now());
     this.selectDate(today);
     this.refDate = this.pickedDate;
-    this.setDaysOfMonth();
   }
 
 }
