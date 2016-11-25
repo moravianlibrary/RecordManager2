@@ -79,6 +79,7 @@ public class UrlDedupRecordEnricher implements DedupRecordEnricher {
 			List<String> completeUrls = urlsMap.get(url);
 			boolean online = false;
 			List<String> unknownlist = new ArrayList<>();
+			List<String> protectedlist = new ArrayList<>();
 			for(String value: completeUrls){
 				String spliturl[] = value.split(SPLITTER);
 				if(spliturl[1].equals(ONLINE)){
@@ -87,17 +88,16 @@ public class UrlDedupRecordEnricher implements DedupRecordEnricher {
 				}
 				else{
 					if(online) break;
-					if(spliturl[1].equals(PROTECTED)) results.add(value);
-					if(spliturl[1].equals(UNKNOWN)){
-						if(!spliturl[2].contains(KRAMERIUS_URL) || completeUrls.size() == 1) 
-							unknownlist.add(value);
-					}
+					if(spliturl[1].equals(PROTECTED)) protectedlist.add(value);
+					if(spliturl[1].equals(UNKNOWN)) unknownlist.add(value);
 				}
 			}
-			
-			if(unknownlist.size() == 1) results.addAll(unknownlist);
-			if(unknownlist.size() > 1){
-				results.add(urlUpdaterAndJoiner(unknownlist.get(0), 0, UNKNOWN));
+			if (!protectedlist.isEmpty()) results.addAll(protectedlist);
+			else {
+				if(unknownlist.size() == 1) results.addAll(unknownlist);
+				if(unknownlist.size() > 1){
+					results.add(urlUpdaterAndJoiner(unknownlist.get(0), 0, UNKNOWN));
+				}
 			}
 		}
 
