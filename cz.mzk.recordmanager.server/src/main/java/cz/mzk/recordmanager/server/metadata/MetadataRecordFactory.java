@@ -11,6 +11,7 @@ import cz.mzk.recordmanager.server.dc.DublinCoreRecord;
 import cz.mzk.recordmanager.server.marc.MarcRecord;
 import cz.mzk.recordmanager.server.marc.MarcXmlParser;
 import cz.mzk.recordmanager.server.metadata.institutions.AuthMetadataMarcRecord;
+import cz.mzk.recordmanager.server.metadata.institutions.Kram3NkpMetadataDublinCoreRecord;
 import cz.mzk.recordmanager.server.metadata.institutions.KramDefaultMetadataDublinCoreRecord;
 import cz.mzk.recordmanager.server.metadata.institutions.MkpEbooksMetadataMarcRecord;
 import cz.mzk.recordmanager.server.metadata.institutions.MzkMetadataMarcRecord;
@@ -113,6 +114,8 @@ public class MetadataRecordFactory {
 		case Constants.PREFIX_KRAM_KNAV:
 		case Constants.PREFIX_KRAM_NKP:
 			return new KramDefaultMetadataDublinCoreRecord(dcRec);
+		case Constants.PREFIX_KRAM3_NKP:
+			return new Kram3NkpMetadataDublinCoreRecord(dcRec);
 		default:
 			return getMetadataRecord(dcRec);
     	}
