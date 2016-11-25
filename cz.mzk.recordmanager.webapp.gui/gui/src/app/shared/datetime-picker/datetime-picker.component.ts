@@ -72,10 +72,12 @@ export class DatetimePickerComponent implements OnInit {
 
   nextHour(offset: number){
     this.pickedDate = new Date(this.pickedDate.getFullYear(), this.pickedDate.getMonth(), this.pickedDate.getDate(), this.pickedDate.getHours() + offset, this.pickedDate.getMinutes());
+    this.refDate = this.pickedDate;
 
   }
   nextMinute(offset: number){
     this.pickedDate = new Date(this.pickedDate.getFullYear(), this.pickedDate.getMonth(), this.pickedDate.getDate(), this.pickedDate.getHours(), this.pickedDate.getMinutes() + offset);
+    this.refDate = this.pickedDate;
   }
 
   ngOnInit() {
