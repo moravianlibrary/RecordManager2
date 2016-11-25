@@ -10,6 +10,7 @@ import org.testng.annotations.Test;
 import cz.mzk.recordmanager.server.AbstractTest;
 import cz.mzk.recordmanager.server.dc.DublinCoreRecord;
 import cz.mzk.recordmanager.server.dc.DublinCoreRecordImpl;
+import cz.mzk.recordmanager.server.scripting.dc.DublinCoreFunctionContext;
 import cz.mzk.recordmanager.server.scripting.dc.DublinCoreScriptFactory;
 
 public class DublinCoreScriptFactoryTest extends AbstractTest {
@@ -21,10 +22,11 @@ public class DublinCoreScriptFactoryTest extends AbstractTest {
 	public void test() {
 		InputStream is1 = getClass().getResourceAsStream(
 				"/groovy/BaseDublinCore.groovy");
-		MappingScript<DublinCoreRecord> script = factory.create(is1);
+		MappingScript<DublinCoreFunctionContext> script = factory.create(is1);
 		DublinCoreRecord record = new DublinCoreRecordImpl();
 		record.addTitle("test");
-		Map<String, Object> entries = script.parse(record);
+		DublinCoreFunctionContext dcContext = new DublinCoreFunctionContext(record);
+		Map<String, Object> entries = script.parse(dcContext);
 		Assert.assertEquals(entries.size(), 1);
 		Assert.assertEquals(entries.get("title"), "test");
 	}

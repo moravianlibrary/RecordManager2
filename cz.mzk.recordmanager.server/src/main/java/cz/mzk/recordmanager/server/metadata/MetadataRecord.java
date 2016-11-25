@@ -185,4 +185,11 @@ public interface MetadataRecord {
 	 * @return
 	 */
 	public List<String> getUrls();
+
+	/**
+	 * get rights value from Kramerius
+	 * @return
+	 */
+	public String getPolicyKramerius();
+
 }

@@ -9,7 +9,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import cz.mzk.recordmanager.server.dc.DublinCoreRecord;
-import cz.mzk.recordmanager.server.metadata.MetadataDublinCoreRecord;
+import cz.mzk.recordmanager.server.metadata.MetadataRecord;
 import cz.mzk.recordmanager.server.model.Isbn;
 import cz.mzk.recordmanager.server.model.Issn;
 import cz.mzk.recordmanager.server.scripting.BaseDSL;
@@ -24,20 +24,23 @@ public class DublinCoreDSL extends BaseDSL {
 	private final Charset UTF8_CHARSET = Charset.forName("UTF-8");
 	
 	private final DublinCoreRecord record;
-	private MetadataDublinCoreRecord dcMetadataRecord;
+	private MetadataRecord dcMetadataRecord;
 	
-	private final Map<String, RecordFunction<DublinCoreRecord>> functions;
+	private DublinCoreFunctionContext dcContext; 
+	
+	private final Map<String, RecordFunction<DublinCoreFunctionContext>> functions;
 
 	private final static Pattern AUTHOR_PATTERN = Pattern.compile("([^,]+),(.+)");
 	private final static Pattern MDT_PATTERN = Pattern.compile("[\\W0-9]+");
 	
-	public DublinCoreDSL(DublinCoreRecord record,
+	public DublinCoreDSL(DublinCoreFunctionContext dcContext,
 			MappingResolver propertyResolver, StopWordsResolver stopWordsResolver,
-			Map<String, RecordFunction<DublinCoreRecord>> functions) {
+			Map<String, RecordFunction<DublinCoreFunctionContext>> functions) {
 		super(propertyResolver, stopWordsResolver);
-		this.record = record;
+		this.dcContext = dcContext;
+		this.record = dcContext.record();
 		this.functions = functions;
-		this.dcMetadataRecord = new MetadataDublinCoreRecord(record);
+		this.dcMetadataRecord = dcContext.metadataRecord();
 	}
 
 	public String getFirstTitle() {
@@ -205,11 +208,11 @@ public class DublinCoreDSL extends BaseDSL {
 
 
 	public Object methodMissing(String methodName, Object args) {
-		RecordFunction<DublinCoreRecord> func = functions.get(methodName);
+		RecordFunction<DublinCoreFunctionContext> func = functions.get(methodName);
 		if (func == null) {
 			throw new IllegalArgumentException(String.format("missing function: %s", methodName));
 		}
-		return func.apply(record, args);
+		return func.apply(dcContext, args);
 	}
 	
 	public List<String> getStatuses() {

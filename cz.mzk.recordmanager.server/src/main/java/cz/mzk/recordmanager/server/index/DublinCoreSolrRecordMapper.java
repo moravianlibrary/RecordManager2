@@ -13,9 +13,11 @@ import org.springframework.stereotype.Component;
 import cz.mzk.recordmanager.server.ResourceProvider;
 import cz.mzk.recordmanager.server.dc.DublinCoreParser;
 import cz.mzk.recordmanager.server.dc.DublinCoreRecord;
+import cz.mzk.recordmanager.server.metadata.MetadataRecordFactory;
 import cz.mzk.recordmanager.server.model.DedupRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.scripting.MappingScript;
+import cz.mzk.recordmanager.server.scripting.dc.DublinCoreFunctionContext;
 import cz.mzk.recordmanager.server.scripting.dc.DublinCoreScriptFactory;
 
 @Component
@@ -34,9 +36,12 @@ public class DublinCoreSolrRecordMapper implements SolrRecordMapper,
 	@Autowired
 	private ResourceProvider resourceProvider;
 
-	private MappingScript<DublinCoreRecord> dedupRecordMappingScript;
+	@Autowired
+	private MetadataRecordFactory metadataRecordFactory;
 	
-	private MappingScript<DublinCoreRecord> harvestedRecordMappingScript;
+	private MappingScript<DublinCoreFunctionContext> dedupRecordMappingScript;
+	
+	private MappingScript<DublinCoreFunctionContext> harvestedRecordMappingScript;
 	
 	@Override
 	public List<String> getSupportedFormats() {
@@ -60,19 +65,21 @@ public class DublinCoreSolrRecordMapper implements SolrRecordMapper,
 
 	protected Map<String, Object> parseAsDedupRecord(HarvestedRecord record) {
 		InputStream is = new ByteArrayInputStream(record.getRawRecord());
-		MappingScript<DublinCoreRecord> script = getMappingScript(record);
+		MappingScript<DublinCoreFunctionContext> script = getMappingScript(record);
 		DublinCoreRecord rec = parser.parseRecord(is);
-		Map<String, Object> fields = script.parse(rec);
+		DublinCoreFunctionContext dcContext = new DublinCoreFunctionContext(rec, record, metadataRecordFactory.getMetadataRecord(record));
+		Map<String, Object> fields = script.parse(dcContext);
 		return fields;
 	}
 	
 	protected Map<String, Object> parseAsLocalRecord(HarvestedRecord record){
 		InputStream is = new ByteArrayInputStream(record.getRawRecord());
 		DublinCoreRecord rec = parser.parseRecord(is);
-		return harvestedRecordMappingScript.parse(rec);
+		DublinCoreFunctionContext dcContext = new DublinCoreFunctionContext(rec, record, metadataRecordFactory.getMetadataRecord(record));
+		return harvestedRecordMappingScript.parse(dcContext);
 	}
 
-	protected MappingScript<DublinCoreRecord> getMappingScript(
+	protected MappingScript<DublinCoreFunctionContext> getMappingScript(
 			HarvestedRecord record) {
 		return dedupRecordMappingScript;
 	}

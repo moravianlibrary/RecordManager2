@@ -1159,5 +1159,11 @@ public class MetadataMarcRecord implements MetadataRecord {
     	
     	return result;
     }
+
+	@Override
+	public String getPolicyKramerius() {
+		// Nothing to return
+		return null;
+	}
 	
 }

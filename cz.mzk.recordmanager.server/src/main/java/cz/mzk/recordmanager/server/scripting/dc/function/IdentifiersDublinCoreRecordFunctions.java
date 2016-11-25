@@ -8,6 +8,7 @@ import java.util.regex.Pattern;
 import org.springframework.stereotype.Component;
 
 import cz.mzk.recordmanager.server.dc.DublinCoreRecord;
+import cz.mzk.recordmanager.server.scripting.dc.DublinCoreFunctionContext;
 
 @Component
 public class IdentifiersDublinCoreRecordFunctions implements
@@ -16,8 +17,9 @@ public class IdentifiersDublinCoreRecordFunctions implements
 	private static final Pattern ISBN_PATTERN = Pattern.compile("isbn|ISBN:([\\d]+)");
 	private static final Pattern ISSN_PATTERN = Pattern.compile("(\\d{4}-\\d{3}[\\dxX])(.*)");
 
-	public List<String> getISBNs(DublinCoreRecord record) {
+	public List<String> getISBNs(DublinCoreFunctionContext dcContext) {
 		List<String> isbns = new ArrayList<String>();
+		DublinCoreRecord record = dcContext.record();
 		for (String ident : record.getIdentifiers()) {
 			Matcher matcher = ISBN_PATTERN.matcher(ident);
 			if (matcher.matches()) {
@@ -27,8 +29,9 @@ public class IdentifiersDublinCoreRecordFunctions implements
 		return isbns;
 	}
 
-	public List<String> getISSNs(DublinCoreRecord record) {
+	public List<String> getISSNs(DublinCoreFunctionContext dcContext) {
 		List<String> issns = new ArrayList<String>();
+		DublinCoreRecord record = dcContext.record();
 		for (String ident : record.getIdentifiers()) {
 			Matcher matcher = ISSN_PATTERN.matcher(ident);
 			if (matcher.matches()) {

@@ -9,6 +9,7 @@ import org.testng.annotations.Test;
 import cz.mzk.recordmanager.server.AbstractTest;
 import cz.mzk.recordmanager.server.dc.DublinCoreRecord;
 import cz.mzk.recordmanager.server.dc.DublinCoreRecordImpl;
+import cz.mzk.recordmanager.server.scripting.dc.DublinCoreFunctionContext;
 
 public class IdentifiersDublinCoreRecordFunctionsTest extends AbstractTest {
 
@@ -19,7 +20,8 @@ public class IdentifiersDublinCoreRecordFunctionsTest extends AbstractTest {
 	public void getISBNs() {
 		DublinCoreRecord record = new DublinCoreRecordImpl();
 		record.addIdentifier("ISBN:0385424728");
-		List<String> isbns = functions.getISBNs(record);
+		DublinCoreFunctionContext dcContext = new DublinCoreFunctionContext(record);
+		List<String> isbns = functions.getISBNs(dcContext);
 		Assert.assertFalse(isbns.isEmpty());
 		Assert.assertEquals(isbns.get(0), "0385424728");
 	}
