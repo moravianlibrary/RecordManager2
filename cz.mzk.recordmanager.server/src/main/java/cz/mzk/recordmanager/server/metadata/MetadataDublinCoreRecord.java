@@ -495,20 +495,18 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 		for (String f : identifiers) {
 			matcher = DC_ISMN_PATTERN.matcher(f);
 			if (matcher.find()) {
-				
-					Ismn ismn = new Ismn();
-					String ismnStr = matcher.group(1).trim().replaceAll(ISMN_CLEAR_REGEX, "").replaceAll(ISMN10_PREFIX, ISMN13_PREFIX);
-					try {
-						if(ismnStr.length() != 13) throw new NumberFormatException();
-						ismn.setIsmn(Long.valueOf(ismnStr));
-						ismn.setOrderInRecord(++ismnCounter);
-					} catch (NumberFormatException nfe) {
-						logger.info(String.format("Invalid ISMN: %s", matcher.group(1).trim()));
-						continue;
-					}
-	    			ismns.add(ismn);
+				Ismn ismn = new Ismn();
+				String ismnStr = matcher.group(1).trim().replaceAll(ISMN_CLEAR_REGEX, "").replaceAll(ISMN10_PREFIX, ISMN13_PREFIX);
+				try {
+					if(ismnStr.length() != 13) throw new NumberFormatException();
+					ismn.setIsmn(Long.valueOf(ismnStr));
+					ismn.setOrderInRecord(++ismnCounter);
+				} catch (NumberFormatException nfe) {
+					logger.info(String.format("Invalid ISMN: %s", matcher.group(1).trim()));
+					continue;
 				}
-			
+				ismns.add(ismn);
+			}
 		}
 		return ismns;
 	}
