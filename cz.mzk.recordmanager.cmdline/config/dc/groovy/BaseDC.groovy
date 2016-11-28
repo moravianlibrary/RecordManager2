@@ -22,4 +22,4 @@ topic = getSubjects()
 url = getUrls();
 contents = getContents();
 
-subject_facet_str_mv = getSubjectFacet();
+subject_facet_str_mv = filter("subject_facet.txt", getSubjectFacet())

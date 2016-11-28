@@ -144,7 +144,7 @@ public class DublinCoreDSL extends BaseDSL {
 	
 	public List<String> getSubjectFacet(){
 		List<String> subjects = getSubjects();
-		if(subjects == null || subjects.isEmpty()) return null;
+		if(subjects == null || subjects.isEmpty()) return subjects;
 		
 		List<String> result = new ArrayList<String>();
 		for(String subject: subjects){
