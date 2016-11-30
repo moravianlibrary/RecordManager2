@@ -4,12 +4,6 @@
   right: 10%;
 }
 
-#circlePreloader{
-  position: fixed;
-  right:50%;
-  bottom: 50%;
-}
-
 #submit{
   bottom: 2%;
   right: 2%;
@@ -150,25 +144,4 @@
     -o-transform: rotate(360deg);
     transform: rotate(360deg);
   }
-}
-.uil-ring-css {
-  background: none;
-  position: relative;
-  width: 200px;
-  height: 200px;
-}
-.uil-ring-css > div {
-  position: absolute;
-  display: block;
-  width: 160px;
-  height: 160px;
-  top: 20px;
-  left: 20px;
-  border-radius: 80px;
-  box-shadow: 0 6px 0 0 #59ebff;
-  -ms-animation: uil-ring-anim 1s linear infinite;
-  -moz-animation: uil-ring-anim 1s linear infinite;
-  -webkit-animation: uil-ring-anim 1s linear infinite;
-  -o-animation: uil-ring-anim 1s linear infinite;
-  animation: uil-ring-anim 1s linear infinite;
 }

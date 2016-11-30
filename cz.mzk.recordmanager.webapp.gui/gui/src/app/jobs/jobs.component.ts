@@ -1,6 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import {ImportConfig} from "../model/import-config";
-import {JobsService} from "./jobs.service";
+import {Component, OnInit, ViewChild} from '@angular/core';
+
 
 @Component({
   selector: 'app-jobs',

@@ -54,8 +54,6 @@ export class LibrariesComponent implements OnInit {
 
     this.sortByMe("id");
 
-    this.loading = true;
-
     this.getLibraries();
 	}
 

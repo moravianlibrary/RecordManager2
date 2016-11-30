@@ -26,7 +26,6 @@ export class StatisticsComponent implements OnInit {
   toParam: Date;
 
 
-
   options: any = [];
 
 

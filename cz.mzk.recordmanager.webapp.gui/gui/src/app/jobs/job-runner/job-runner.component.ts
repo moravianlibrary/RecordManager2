@@ -1,4 +1,4 @@
-import {Component, OnInit, Input, style} from '@angular/core';
+import {Component, OnInit, Input} from '@angular/core';
 import {JobsService} from "../jobs.service";
 import {ImportConfig} from "../../model/import-config";
 
@@ -24,7 +24,8 @@ export class JobRunnerComponent implements OnInit{
   options: any[] = [];
 
 
-  constructor(private jobsService: JobsService) { }
+  constructor(private jobsService: JobsService) {
+  }
 
   getConfigurations(){
     this.jobsService.getImportConfigurations().subscribe(configs => {
@@ -44,10 +45,11 @@ export class JobRunnerComponent implements OnInit{
   }
 
   runJob(){
-    this.jobsService.runJob(this.whoAmI, this.selectedConfigs);
 
+    if (confirm("Are you sure you want to run jod: " + this.whoAmI)){
+      this.jobsService.runJob(this.whoAmI, this.selectedConfigs);
+    }
   }
-
 
   ngOnInit() {
     this.getConfigurations();

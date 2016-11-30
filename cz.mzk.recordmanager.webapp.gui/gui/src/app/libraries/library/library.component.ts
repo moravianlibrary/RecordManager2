@@ -4,9 +4,7 @@ import {LibraryDetail} from "../../model/library-detail";
 import {LibrariesService} from "../libraries.service";
 import {ActivatedRoute, Params, Router} from "@angular/router";
 import {Library} from "../../model/library";
-import {OaiHarvestConfiguration} from "../../model/oai-harvest-configuration";
-import {ContactPerson} from "../../model/contact-person";
-import {ImportConfig} from "../../model/import-config";
+
 
 
 @Component({
@@ -19,11 +17,13 @@ export class LibraryComponent implements OnInit{
 	libraryDetail: LibraryDetail;
 	library: Library = new Library;
 	selected: any;
+  loading: boolean;
 
 	constructor(private librariesService: LibrariesService, private route: ActivatedRoute, private router: Router){
 	}
 
 	getLibraryDetails(libraryId: number) {
+    this.loading = true;
 		this.librariesService.getLibraryDetails(libraryId)
 			.subscribe(libraryDetail => {
           this.libraryDetail = new LibraryDetail;
@@ -34,6 +34,8 @@ export class LibraryComponent implements OnInit{
           if (libraryDetail.oaiHarvestConfigurations.length > 0) {
             this.selected = libraryDetail.oaiHarvestConfigurations[0];
           }
+
+          this.loading = false;
         },
 
 			error => {

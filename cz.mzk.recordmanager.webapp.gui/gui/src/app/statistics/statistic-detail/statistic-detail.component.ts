@@ -13,11 +13,15 @@ export class StatisticDetailComponent implements OnInit {
 
   batchJobExecution: BatchJobExecution;
 
+  loading: boolean;
+
   constructor(private statisticsService: StatisticsService, private batchJobService: BatchJobsService, private route: ActivatedRoute) { }
 
   getDetail(id: number){
+    this.loading = true;
     this.batchJobService.getDetails(id).subscribe(detail => {
       this.batchJobExecution = detail;
+      this.loading = false;
     });
   }
   ngOnInit() {
