@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cz.mzk.recordmanager.api.model.IdDto;
+import cz.mzk.recordmanager.api.model.RecordIdDto;
 import cz.mzk.recordmanager.server.facade.*;
 import cz.mzk.recordmanager.server.model.DownloadImportConfiguration;
 import cz.mzk.recordmanager.server.model.KrameriusConfiguration;
@@ -116,6 +117,14 @@ public class BatchServiceImpl implements BatchService {
 	@Transactional(propagation = Propagation.NOT_SUPPORTED)
 	public void runIndex() {
 		indexingFacade.index();
+	}
+
+	@Override
+	public void runIndividualIndex(List<RecordIdDto> ids) {
+		ids.forEach(id -> {
+			indexingFacade.indexIndividualRecordsToSolrJob(id.getCompleteInstitutionId());
+		});
+
 	}
 
 

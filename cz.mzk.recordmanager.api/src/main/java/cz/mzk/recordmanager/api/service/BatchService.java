@@ -3,6 +3,7 @@ package cz.mzk.recordmanager.api.service;
 import java.util.List;
 
 import cz.mzk.recordmanager.api.model.IdDto;
+import cz.mzk.recordmanager.api.model.RecordIdDto;
 import cz.mzk.recordmanager.api.model.batch.BatchJobExecutionDTO;
 
 public interface BatchService {
@@ -22,5 +23,7 @@ public interface BatchService {
 	public void runDeduplicate();
 
 	public void runIndex();
+
+	public void runIndividualIndex(List<RecordIdDto> ids);
 
 }

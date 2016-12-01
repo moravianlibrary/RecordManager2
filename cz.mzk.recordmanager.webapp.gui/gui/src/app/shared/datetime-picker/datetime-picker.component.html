@@ -58,7 +58,7 @@
 
           <div>
             <div class="side">
-              <h3>{{pickedDate | date: 'HH'}}</h3>
+              <h3 style="cursor: pointer" (click)="setHourSelection()">{{pickedDate | date: 'HH'}}</h3>
             </div>
 
             <div class="side">
@@ -66,7 +66,7 @@
             </div>
 
             <div class="side">
-              <h3>{{pickedDate | date: 'mm'}}</h3>
+              <h3 style="cursor: pointer" (click)="setMinuteSelection()">{{pickedDate | date: 'mm'}}</h3>
             </div>
           </div>
 
@@ -80,9 +80,18 @@
             </div>
           </div>
 
+
+          <table *ngIf="isTimeChooser" class="table">
+            <tr *ngFor="let row of getTimeMatrix()">
+              <td *ngFor="let val of row"><button (click)="selectDate(val)" class="btn btn-default btn-xs">{{isHourSelection ?( val | date : 'HH' ) : ( val | date : 'mm' )}}</button></td>
+            </tr>
+          </table>
+
+
         </div>
 
       </div>
+
     </div>
   </div>
 </div>

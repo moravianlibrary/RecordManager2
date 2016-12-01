@@ -20,4 +20,11 @@ export class JobsService {
     let ids = idList.map(item => { return {id: item} })
     this.http.post(SERVER + "/batches/run/" + name, JSON.stringify(ids), options).subscribe();
   }
+
+
+  runIndividualRecordsToSolrJob(recordIds: any[]){
+    var headers = new Headers({"Content-Type": 'application/json'});
+    let options = new RequestOptions({ headers: headers });
+    this.http.post(SERVER + "/batches/run/indexIndividualIndexesToSolr", JSON.stringify(recordIds), options).subscribe();
+  }
 }

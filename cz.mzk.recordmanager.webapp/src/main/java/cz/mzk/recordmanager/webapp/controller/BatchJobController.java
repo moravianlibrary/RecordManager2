@@ -1,6 +1,7 @@
 package cz.mzk.recordmanager.webapp.controller;
 
 import cz.mzk.recordmanager.api.model.IdDto;
+import cz.mzk.recordmanager.api.model.RecordIdDto;
 import cz.mzk.recordmanager.api.model.batch.BatchJobExecutionDTO;
 import cz.mzk.recordmanager.api.service.BatchService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,6 +54,12 @@ public class BatchJobController {
 	@ResponseBody
 	private void runIndex(){
 		batchService.runIndex();
+	}
+
+	@RequestMapping(method = RequestMethod.POST, value = "/run/indexIndividualIndexesToSolr")
+	@ResponseBody
+	private void runIndexIndividual(@RequestBody List<RecordIdDto>  ids){
+		batchService.runIndividualIndex(ids);
 	}
 
 	@RequestMapping(method = RequestMethod.PATCH)

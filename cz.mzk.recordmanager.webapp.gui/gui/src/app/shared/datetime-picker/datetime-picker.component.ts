@@ -13,7 +13,11 @@ export class DatetimePickerComponent implements OnInit {
 
   refDate: Date;
 
-  month: Date;
+  isTimeChooser: boolean = false;
+
+  isHourSelection: boolean = true;
+  isMinuteSelection: boolean = false;
+
   weekday: string[] = [
     "Mon",
     "Tue",
@@ -89,5 +93,54 @@ export class DatetimePickerComponent implements OnInit {
     this.selectDate(today);
     this.refDate = this.pickedDate;
   }
+
+
+  getTimeMatrix(): any{
+    var timeMatrix = [];
+    var step = this.isMinuteSelection ? 5 : 1;
+    var periodOfTime = this.isMinuteSelection ? 60 : 24;
+
+
+    var currentTime = 0;
+
+    // 4 because of max length of the rows is 4
+    for (let row = 0; row < periodOfTime / (4 * step); ++row){
+      timeMatrix.push(new Array(4));
+        for (let col = 0; col <  4; ++col){
+          let aux = new Date(this.pickedDate);
+          if(this.isMinuteSelection){
+            timeMatrix[row][col] = new Date(aux.setMinutes(currentTime));
+          }else {
+            timeMatrix[row][col] = new Date(aux.setHours(currentTime));
+          }
+
+          currentTime += step;
+        }
+    }
+
+    return timeMatrix;
+  }
+
+
+  setHourSelection(){
+    if (this.isTimeChooser  && this.isHourSelection){
+      this.isTimeChooser = false;
+    }else {
+      this.isTimeChooser = true;
+    }
+    this.isHourSelection = true;
+    this.isMinuteSelection = false;
+  }
+
+  setMinuteSelection(){
+    if (this.isTimeChooser && this.isMinuteSelection){
+      this.isTimeChooser = false;
+    }else {
+      this.isTimeChooser = true;
+    }
+    this.isHourSelection = false;
+    this.isMinuteSelection = true;
+  }
+
 
 }

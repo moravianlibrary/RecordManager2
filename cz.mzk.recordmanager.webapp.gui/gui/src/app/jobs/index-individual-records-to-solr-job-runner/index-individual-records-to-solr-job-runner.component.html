@@ -1,0 +1,16 @@
+<ul class="list-group">
+    <li *ngFor="let recordId of recordIds; let i = index" class="list-group-item">
+      <div class="input-group">
+        <span class="input-group-btn">
+            <button type="button" class="btn btn-danger" (click)="removeRecordId(i)"><i class="glyphicon glyphicon-trash"></i> Delete</button>
+        </span>
+        <input [(ngModel)]="recordIds[i].completeInstitutionId" class="form-control" type="text">
+      </div>
+    </li>
+</ul>
+
+<div>
+  <button (click)="addId()" id="addRecordIdBtn" type="button" class="btn btn-primary btn-circle btn-sm"><i class="glyphicon glyphicon glyphicon-plus"></i></button>
+</div>
+
+<button (click)="runIndividualRecordsToSolrJob()" type="button" class="btn btn-primary">Run</button>
