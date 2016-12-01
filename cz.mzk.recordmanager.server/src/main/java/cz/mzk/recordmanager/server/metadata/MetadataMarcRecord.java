@@ -600,7 +600,6 @@ public class MetadataMarcRecord implements MetadataRecord {
 		if(f300a.matches(".*SP.*")) return HarvestedRecordFormatEnum.AUDIO_LP;
 		
 		// AUDIO_CASSETTE
-		if(ldr06.matches("(?i)[ij]") && f007_00.matches("(?i)s")) return HarvestedRecordFormatEnum.AUDIO_CASSETTE;
 		if(f007_00.matches("(?i)s") && f338b.matches("(?i)ss")) return HarvestedRecordFormatEnum.AUDIO_CASSETTE;
 		if(f007_00.matches("(?i)s") && f007_01.matches("(?i)[zgeiqt]")) return HarvestedRecordFormatEnum.AUDIO_CASSETTE;
 		if(f300.matches("(?i).*zvukov(a|á|e|é|ych|ých)\\skaze(ta|ty|t).*")) return HarvestedRecordFormatEnum.AUDIO_CASSETTE;
