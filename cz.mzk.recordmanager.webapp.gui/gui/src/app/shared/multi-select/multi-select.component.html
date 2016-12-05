@@ -7,7 +7,7 @@
 
   <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
 
-    <input [(ngModel)]="inputValue" type="text" class="form-control" [placeholder]="placeholder" aria-describedby="basic-addon1" [value]="selected">
+    <input [(ngModel)]="inputValue" type="text" class="form-control" [placeholder]="placeholder" aria-describedby="basic-addon1">
 
 
     <li (click)="$event.stopPropagation();" *ngFor="let opt of options | typeahead: inputValue"><a (click)="selectMe(opt)" class="item">{{opt.value}} <i style="float: right;" [ngClass]="{'glyphicon': true, 'glyphicon-ok': true, 'hidden': !amISelected(opt)}"></i></a></li>

@@ -1,9 +1,11 @@
 package cz.mzk.recordmanager.server.springbatch;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import cz.mzk.recordmanager.api.model.IdDto;
+import cz.mzk.recordmanager.api.model.ImportRecordsDto;
 import cz.mzk.recordmanager.api.model.RecordIdDto;
 import cz.mzk.recordmanager.server.facade.*;
 import cz.mzk.recordmanager.server.model.DownloadImportConfiguration;
@@ -54,6 +56,7 @@ public class BatchServiceImpl implements BatchService {
 
 	@Autowired
 	private IndexingFacade indexingFacade;
+
 	
 	@Transactional(readOnly=true)
 	@Override
@@ -125,6 +128,16 @@ public class BatchServiceImpl implements BatchService {
 			indexingFacade.indexIndividualRecordsToSolrJob(id.getCompleteInstitutionId());
 		});
 
+	}
+
+	@Override
+	public void runImportRecordsJob(ImportRecordsDto recordsDto) {
+		if (harvestConfigurationDAO.get(recordsDto.getId()) != null ||
+				downloadImportConfigurationDAO.get(recordsDto.getId()) != null ||
+				krameriusConfigurationDAO.get(recordsDto.getId()) != null
+				){
+			importRecordFacade.importFile(recordsDto.getId(), recordsDto.getFile(), recordsDto.getFormat());
+		}
 	}
 
 

@@ -27,4 +27,15 @@ export class JobsService {
     let options = new RequestOptions({ headers: headers });
     this.http.post(SERVER + "/batches/run/indexIndividualIndexesToSolr", JSON.stringify(recordIds), options).subscribe();
   }
+
+  runImportRecordsJob(importRecords: any){
+    var headers = new Headers({"Content-Type": 'application/json'});
+    let options = new RequestOptions({ headers: headers });
+    console.log(importRecords);
+    this.http.post(SERVER + "/batches/run/importRecordsJob", importRecords, options).subscribe();
+  }
+
+  getFormats(): Observable<string[]>{
+    return this.http.get(SERVER + "/format").map((res: Response) => res.json());
+  }
 }

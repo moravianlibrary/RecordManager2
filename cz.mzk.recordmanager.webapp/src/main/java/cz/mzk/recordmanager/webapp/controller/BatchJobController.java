@@ -1,6 +1,7 @@
 package cz.mzk.recordmanager.webapp.controller;
 
 import cz.mzk.recordmanager.api.model.IdDto;
+import cz.mzk.recordmanager.api.model.ImportRecordsDto;
 import cz.mzk.recordmanager.api.model.RecordIdDto;
 import cz.mzk.recordmanager.api.model.batch.BatchJobExecutionDTO;
 import cz.mzk.recordmanager.api.service.BatchService;
@@ -66,5 +67,11 @@ public class BatchJobController {
 	@ResponseBody
 	private void restart(@RequestBody BatchJobExecutionDTO jobExecution){
 		batchService.restart(jobExecution);
+	}
+
+	@RequestMapping(method = RequestMethod.POST, value = "/run/importRecordsJob")
+	@ResponseBody
+	private void runImportRecordsJob(@RequestBody ImportRecordsDto recordsDto){
+		batchService.runImportRecordsJob(recordsDto);
 	}
 }

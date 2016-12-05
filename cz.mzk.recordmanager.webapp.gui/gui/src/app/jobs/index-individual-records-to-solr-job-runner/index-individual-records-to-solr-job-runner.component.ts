@@ -22,7 +22,8 @@ export class IndexIndividualRecordsToSolrJobRunnerComponent implements OnInit {
     }
   }
   runIndividualRecordsToSolrJob(){
-    this.jobsService.runIndividualRecordsToSolrJob(this.recordIds);
+    if(confirm("Are you sure you want to run this job?"))
+      this.jobsService.runIndividualRecordsToSolrJob(this.recordIds);
   }
   removeRecordId(index: number){
     this.recordIds.splice(index, 1);
