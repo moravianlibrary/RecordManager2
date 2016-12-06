@@ -920,3 +920,6 @@ FROM
 WHERE
   NOT EXISTS(SELECT 1 FROM harvested_record hr WHERE hr.dedup_record_id = dr.id and deleted is null)
 ;
+
+--changeset tomascejpek:33 context:cpk
+UPDATE import_conf SET interception_enabled='true' WHERE id=312;

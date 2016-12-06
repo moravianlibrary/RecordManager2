@@ -667,3 +667,6 @@ FROM
 WHERE
   NOT EXISTS(SELECT 1 FROM harvested_record hr WHERE hr.dedup_record_id = dr.id and deleted is null)
 ;
+
+-- 06. 12. 2016 tomascejpek
+UPDATE import_conf SET interception_enabled='true' WHERE id=312;

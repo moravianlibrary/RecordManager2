@@ -36,6 +36,7 @@ public class MarcInterceptorFactory {
 			case Constants.PREFIX_MZKNORMS: return new MzkNormsMarcInterceptor(record);
 			case Constants.PREFIX_NLK: return new NlkMarcInterceptor(record);
 			case Constants.PREFIX_OPENLIB: return new OpenlibMarcInterceptor(record);
+			case Constants.PREFIX_KKVY: return new KkvyNormsMarcInterceptor(record);
 			default: return new DefaultMarcInterceptor(record);
 			}
 		} catch (InvalidMarcException ime) {
