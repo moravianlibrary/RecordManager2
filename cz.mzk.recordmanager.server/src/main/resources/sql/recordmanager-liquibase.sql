@@ -909,3 +909,14 @@ DELETE FROM sigla WHERE id IN (4,26,27,31);
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (33, 340, 'UOG001');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (34, 340, 'UOG009');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (35, 340, 'UOG010');
+
+--changeset tomascejpek:32 
+CREATE OR REPLACE VIEW dedup_record_orphaned AS
+SELECT
+  dr.id dedup_record_id,
+  dr.updated AS orphaned
+FROM
+  dedup_record dr
+WHERE
+  NOT EXISTS(SELECT 1 FROM harvested_record hr WHERE hr.dedup_record_id = dr.id and deleted is null)
+;

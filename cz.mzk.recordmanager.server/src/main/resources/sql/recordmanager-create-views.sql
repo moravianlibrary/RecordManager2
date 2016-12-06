@@ -17,7 +17,7 @@ SELECT
 FROM
   dedup_record dr
 WHERE
-  NOT EXISTS(SELECT 1 FROM harvested_record hr WHERE hr.dedup_record_id = dr.id)
+  NOT EXISTS(SELECT 1 FROM harvested_record hr WHERE hr.dedup_record_id = dr.id and deleted is null)
 ;
 
 CREATE VIEW antikvariaty_url_view AS 
