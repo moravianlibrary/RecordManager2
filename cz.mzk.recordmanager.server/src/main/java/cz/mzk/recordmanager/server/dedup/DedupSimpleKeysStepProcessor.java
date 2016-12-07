@@ -79,6 +79,7 @@ public class DedupSimpleKeysStepProcessor implements
 							
 							outerRec.setDedupRecord(moreFrequented);
 							innerRec.setDedupRecord(moreFrequented);
+							lessFrequented.setUpdated(new Date());
 							dedupMap.add(moreFrequented);
 							dedupMap.remove(lessFrequented);
 							
