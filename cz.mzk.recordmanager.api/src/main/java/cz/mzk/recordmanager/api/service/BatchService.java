@@ -28,6 +28,12 @@ public interface BatchService {
 
 	public void runIndividualIndex(List<RecordIdDto> ids);
 
-	public void runImportRecordsJob(ImportRecordsDto recordsDto);
+	public void runImportRecordsJob(Long id, File file, String format);
+
+	public void runFilterCaslinRecordsJob();
+
+	public void runRegenerateDedupKeysJob();
+
+	public void runRegenerateMissingDedupKeysJob();
 
 }

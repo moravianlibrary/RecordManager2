@@ -13,9 +13,9 @@ export class MultiSelectComponent implements OnInit {
 
   @Input() itemsAmount: number;
 
-  multiSelectContent: string = "Choose the following ...";
+  @Input() isMultiple = true;
 
-  @Input() isMultiple: boolean = true;
+  multiSelectContent: string = "Choose the following ...";
 
   @Output() onSelect = new EventEmitter<any[]>();
 
@@ -50,7 +50,7 @@ export class MultiSelectComponent implements OnInit {
 
     }else {
       if (this.selected.length == 0){
-          this.multiSelectContent = "Choose the following ...";
+        this.multiSelectContent = "Choose the following ...";
       }else{
         if (this.selected.length <= this.itemsAmount){
           this.multiSelectContent = "";
@@ -65,7 +65,6 @@ export class MultiSelectComponent implements OnInit {
 
     this.onSelect.emit(this.selected);
   }
-
 
 
 

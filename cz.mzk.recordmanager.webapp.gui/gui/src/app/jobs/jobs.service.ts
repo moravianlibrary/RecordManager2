@@ -29,10 +29,17 @@ export class JobsService {
   }
 
   runImportRecordsJob(importRecords: any){
-    var headers = new Headers({"Content-Type": 'application/json'});
-    let options = new RequestOptions({ headers: headers });
-    console.log(importRecords);
-    this.http.post(SERVER + "/batches/run/importRecordsJob", importRecords, options).subscribe();
+    let options = new RequestOptions();
+    let formData = new FormData();
+    formData.append("file", importRecords.file, importRecords.file.name);
+    formData.append("id", importRecords.id);
+    formData.append("format", importRecords.format);
+
+    this.http.post(SERVER + "/batches/run/importRecordsJob", formData, options).subscribe();
+  }
+
+  runNoParamsJob(name: string){
+    this.http.post(SERVER + "/batches/run/" + name, JSON, new RequestOptions()).subscribe();
   }
 
   getFormats(): Observable<string[]>{

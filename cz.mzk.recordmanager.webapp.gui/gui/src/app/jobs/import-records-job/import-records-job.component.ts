@@ -16,7 +16,7 @@ export class ImportRecordsJobComponent implements OnInit {
 
   id: number;
   file: File;
-  format: string;
+  format: string = null;
 
   constructor(private jobsService: JobsService) { }
 
@@ -35,6 +35,7 @@ export class ImportRecordsJobComponent implements OnInit {
       formats.forEach(fr => {
         this.formats.push({key: fr, value: fr});
       });
+      this.formats.push({key: null, value: "null"});
     });
   }
 
@@ -49,7 +50,6 @@ export class ImportRecordsJobComponent implements OnInit {
   chooseFile(event: any){
     this.file = event.srcElement.files[0];
 
-    console.log(this.file);
   }
 
   selectFormat(event: any){

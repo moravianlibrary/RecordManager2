@@ -7,7 +7,14 @@ import cz.mzk.recordmanager.api.model.batch.BatchJobExecutionDTO;
 import cz.mzk.recordmanager.api.service.BatchService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import javax.servlet.http.HttpServletRequest;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.util.List;
 
 @RestController
@@ -71,7 +78,33 @@ public class BatchJobController {
 
 	@RequestMapping(method = RequestMethod.POST, value = "/run/importRecordsJob")
 	@ResponseBody
-	private void runImportRecordsJob(@RequestBody ImportRecordsDto recordsDto){
-		batchService.runImportRecordsJob(recordsDto);
+	private void runImportRecordsJob(@RequestParam("file") MultipartFile file, @RequestParam("format") String format, @RequestParam("id") Long id) throws IOException, NoSuchFileException {
+		File convFile = new File(file.getOriginalFilename());
+		file.transferTo(convFile);
+		if (format.toLowerCase().equals("null")){
+			format = null;
+		}
+		batchService.runImportRecordsJob(id, convFile, format);
+		Files.delete(convFile.toPath());
+	}
+
+	@RequestMapping(method = RequestMethod.POST, value = "/run/filterCaslinRecordsJob")
+	@ResponseBody
+	private void runFilterCaslinRecordsJob(){
+		batchService.runFilterCaslinRecordsJob();
+	}
+
+
+	@RequestMapping(method = RequestMethod.POST, value = "/run/regenerateDedupKeysJob")
+	@ResponseBody
+	private void runRegenerateDedupKeysJob(){
+		batchService.runRegenerateDedupKeysJob();
+	}
+
+
+	@RequestMapping(method = RequestMethod.POST, value = "/run/regenerateMissingDedupKeysJob")
+	@ResponseBody
+	private void regenerateMissingDedupKeysJob(){
+		batchService.runRegenerateMissingDedupKeysJob();
 	}
 }

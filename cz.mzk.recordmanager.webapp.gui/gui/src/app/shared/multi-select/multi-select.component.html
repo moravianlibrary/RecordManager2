@@ -10,7 +10,11 @@
     <input [(ngModel)]="inputValue" type="text" class="form-control" [placeholder]="placeholder" aria-describedby="basic-addon1">
 
 
-    <li (click)="$event.stopPropagation();" *ngFor="let opt of options | typeahead: inputValue"><a (click)="selectMe(opt)" class="item">{{opt.value}} <i style="float: right;" [ngClass]="{'glyphicon': true, 'glyphicon-ok': true, 'hidden': !amISelected(opt)}"></i></a></li>
+
+      <li (click)="$event.stopPropagation();" *ngFor="let opt of options | typeahead: inputValue"><a *ngIf="isMultiple" (click)="selectMe(opt)" class="item">{{opt.value}} <i style="float: right;" [ngClass]="{'glyphicon': true, 'glyphicon-ok': true, 'hidden': !amISelected(opt)}"></i></a></li>
+
+
+    <li *ngFor="let opt of options | typeahead: inputValue"><a *ngIf="!isMultiple" (click)="selectMe(opt)" class="item">{{opt.value}} <i style="float: right;" [ngClass]="{'glyphicon': true, 'glyphicon-ok': true, 'hidden': !amISelected(opt)}"></i></a></li>
   </ul>
 
 </div>

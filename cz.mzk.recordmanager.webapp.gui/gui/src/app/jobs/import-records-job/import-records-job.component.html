@@ -1,9 +1,6 @@
-
-<app-multi-select [isMultiple]="false" (onSelect)="selectConfig($event)" [options]="options" [itemsAmount]="3" [placeholder]="'Configuration'"></app-multi-select>
+<app-multi-select (onSelect)="selectConfig($event)" [isMultiple]="false" [options]="options" [itemsAmount]="2" [placeholder]="'Configuration'"></app-multi-select>
 
 <br/>
-
-
 
 <label class="btn btn-default btn-file">
   Choose file <input type="file" (change)="chooseFile($event)" style="display: none;">
@@ -15,9 +12,9 @@
 </form>
 <br/>
 
-<app-multi-select (onSelect)="selectFormat($event)" [isMultiple]="false" [options]="formats" [itemsAmount]="3" [placeholder]="'Format'"></app-multi-select>
+<app-multi-select (onSelect)="selectFormat($event)" [isMultiple]="false" [placeholder]="'Format'" [options]="formats" [itemsAmount]="2"></app-multi-select>
 
 <br>
 
-<button (click)="runImportRecordsJob()" type="button" class="btn btn-primary">Run</button>
 
+<button (click)="runImportRecordsJob()" type="button" class="btn btn-primary">Run</button>

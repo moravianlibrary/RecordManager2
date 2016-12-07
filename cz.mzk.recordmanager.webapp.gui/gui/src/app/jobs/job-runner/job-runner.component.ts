@@ -45,7 +45,6 @@ export class JobRunnerComponent implements OnInit{
   }
 
   runJob(){
-
     if (confirm("Are you sure you want to run jod: " + this.whoAmI)){
       this.jobsService.runJob(this.whoAmI, this.selectedConfigs);
     }

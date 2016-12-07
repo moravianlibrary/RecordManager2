@@ -57,6 +57,15 @@ public class BatchServiceImpl implements BatchService {
 	@Autowired
 	private IndexingFacade indexingFacade;
 
+	@Autowired
+	private MiscellaneousFacade miscellaneousFacade;
+
+	@Autowired
+	private RegenerateDedupKeysFacade regenerateDedupKeysFacade;
+
+	@Autowired
+	private RegenerateMissingDedupKeysJob regenerateMissingDedupKeysJob;
+
 	
 	@Transactional(readOnly=true)
 	@Override
@@ -131,13 +140,29 @@ public class BatchServiceImpl implements BatchService {
 	}
 
 	@Override
-	public void runImportRecordsJob(ImportRecordsDto recordsDto) {
-		if (harvestConfigurationDAO.get(recordsDto.getId()) != null ||
-				downloadImportConfigurationDAO.get(recordsDto.getId()) != null ||
-				krameriusConfigurationDAO.get(recordsDto.getId()) != null
+	@Transactional(propagation = Propagation.NOT_SUPPORTED)
+	public void runImportRecordsJob(Long id, File file, String format) {
+		if (harvestConfigurationDAO.get(id) != null ||
+				downloadImportConfigurationDAO.get(id) != null ||
+				krameriusConfigurationDAO.get(id) != null
 				){
-			importRecordFacade.importFile(recordsDto.getId(), recordsDto.getFile(), recordsDto.getFormat());
+			importRecordFacade.importFile(id, file, format);
 		}
+	}
+
+	@Override
+	public void runFilterCaslinRecordsJob() {
+		miscellaneousFacade.runFilterCaslinRecordsJob();
+	}
+
+	@Override
+	public void runRegenerateDedupKeysJob() {
+		regenerateDedupKeysFacade.runRegenerateDedupKeysJob();
+	}
+
+	@Override
+	public void runRegenerateMissingDedupKeysJob() {
+		regenerateMissingDedupKeysJob.runRegenerateMissingDedupKeysJob();
 	}
 
 
