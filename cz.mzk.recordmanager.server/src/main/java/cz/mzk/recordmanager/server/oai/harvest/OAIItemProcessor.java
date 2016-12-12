@@ -24,12 +24,16 @@ import com.google.common.base.MoreObjects;
 
 import cz.mzk.recordmanager.server.marc.intercepting.MarcInterceptorFactory;
 import cz.mzk.recordmanager.server.marc.intercepting.MarcRecordInterceptor;
+import cz.mzk.recordmanager.server.model.DownloadImportConfiguration;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecord.HarvestedRecordUniqueId;
+import cz.mzk.recordmanager.server.model.ImportConfiguration;
 import cz.mzk.recordmanager.server.model.OAIHarvestConfiguration;
+import cz.mzk.recordmanager.server.oai.dao.DownloadImportConfigurationDAO;
 import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordDAO;
 import cz.mzk.recordmanager.server.oai.dao.OAIHarvestConfigurationDAO;
 import cz.mzk.recordmanager.server.oai.model.OAIRecord;
+import cz.mzk.recordmanager.server.util.Constants;
 import cz.mzk.recordmanager.server.util.HibernateSessionSynchronizer;
 import cz.mzk.recordmanager.server.util.HibernateSessionSynchronizer.SessionBinder;
 import cz.mzk.recordmanager.server.util.RegexpExtractor;
@@ -45,6 +49,9 @@ public class OAIItemProcessor implements ItemProcessor<List<OAIRecord>, List<Har
 
 	@Autowired
 	protected OAIHarvestConfigurationDAO configDao;
+	
+	@Autowired
+	protected DownloadImportConfigurationDAO downloadImportConfDao;
 
 	@Autowired
 	protected OAIFormatResolver formatResolver;
@@ -57,7 +64,7 @@ public class OAIItemProcessor implements ItemProcessor<List<OAIRecord>, List<Har
 
 	private String format;
 	
-	private OAIHarvestConfiguration configuration;
+	private ImportConfiguration configuration;
 
 	private RegexpExtractor idExtractor;
 
@@ -133,10 +140,24 @@ public class OAIItemProcessor implements ItemProcessor<List<OAIRecord>, List<Har
 		try (SessionBinder session = sync.register()) {
 			Long confId = stepExecution.getJobParameters().getLong(
 					"configurationId");
-			configuration = configDao.get(confId);
-			format = formatResolver.resolve(configuration.getMetadataPrefix());
-			String regex = MoreObjects.firstNonNull(configuration.getRegex(), DEFAULT_EXTRACT_ID_PATTERN);
-			idExtractor = new RegexpExtractor(regex);
+			
+			OAIHarvestConfiguration hc = configDao.get(confId);
+			if (hc != null) {
+				format = formatResolver.resolve(hc.getMetadataPrefix());
+				String regex = MoreObjects.firstNonNull(hc.getRegex(), DEFAULT_EXTRACT_ID_PATTERN);
+				configuration = hc;
+				idExtractor = new RegexpExtractor(regex);
+			}
+			else {
+				DownloadImportConfiguration dic = downloadImportConfDao.get(confId);
+				if (dic != null) {
+					format = formatResolver.resolve(Constants.METADATA_FORMAT_XML_MARC);
+					String regex = MoreObjects.firstNonNull(dic.getRegex(), DEFAULT_EXTRACT_ID_PATTERN);
+					configuration = dic;
+					idExtractor = new RegexpExtractor(regex);
+				}
+			}
+			
 			try {
 				TransformerFactory transformerFactory = TransformerFactory
 						.newInstance();

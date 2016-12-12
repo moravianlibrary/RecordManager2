@@ -11,5 +11,9 @@ public interface ImportRecordFacade {
 	public void importFile(long importConfId, File file, String format);
 	
 	public void downloadAndImportRecordSJob(DownloadImportConfiguration dic);
+	
+	public void importOaiRecordsJob(long impotrConfId, String fileName);
+	
+	public void unpackAndImportRecordsJob(DownloadImportConfiguration dic);
 
 }
