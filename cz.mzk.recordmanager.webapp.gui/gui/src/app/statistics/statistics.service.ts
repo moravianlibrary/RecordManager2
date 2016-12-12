@@ -11,8 +11,8 @@ export class StatisticsService {
 
   constructor(private http: Http) { }
 
-  getStatistics(): Observable<OaiHarvestJobStatistics[]>{
-    return this.http.get(SERVER + "/oaiHarvestStats").map((res: Response) => {
+  getStatistics(offset: number): Observable<OaiHarvestJobStatistics[]>{
+    return this.http.get(SERVER + "/oaiHarvestStats/offset/" + offset).map((res: Response) => {
       return res.json();
     })
   }

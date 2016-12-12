@@ -13,7 +13,9 @@ import {Router} from "@angular/router";
 })
 export class StatisticsComponent implements OnInit {
 
-  statistics: OaiHarvestJobStatistics[];
+  statistics: OaiHarvestJobStatistics[] = [];
+
+  offset: number;
 
   sortBy: string;
   fields: Field[] = [];
@@ -40,8 +42,10 @@ export class StatisticsComponent implements OnInit {
   constructor(private router: Router, private statisticsService: StatisticsService, private sortControl: SortControl) { }
 
   getStatistics(){
-    this.statisticsService.getStatistics().subscribe(statistics => {
-      this.statistics = statistics;
+    this.statisticsService.getStatistics(this.offset).subscribe(statistics => {
+      statistics.forEach(st => {
+        this.statistics.push(st);
+      });
       this.loading = false;
     });
   }
@@ -75,7 +79,7 @@ export class StatisticsComponent implements OnInit {
     this.sortByMe("jobExecutionId");
 
     this.loading = true;
-
+    this.offset = 0;
     this.getStatistics();
   }
 
@@ -107,5 +111,10 @@ export class StatisticsComponent implements OnInit {
   }
   setTo(event: any){
     this.toParam = event;
+  }
+
+  nextPartOfStats(offset: number){
+    this.offset = this.offset + offset;
+    this.getStatistics();
   }
 }

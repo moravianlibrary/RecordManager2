@@ -21,10 +21,10 @@ public class OaiHarvestStatisticsServiceImpl implements
 	private ImportConfigurationDAO importConfigurationDAO;
 
 	@Override
-	public List<OaiHarvestJobStatisticsDto> getHarvestJobStatistics() {
-		return jdbcTemplate.query("SELECT * FROM oai_harvest_job_stat",
+	public List<OaiHarvestJobStatisticsDto> getHarvestJobStatistics(Integer offset) {
+		return jdbcTemplate.query("SELECT * FROM oai_harvest_job_stat LIMIT 10 OFFSET ?",
 				new BeanPropertyRowMapper<OaiHarvestJobStatisticsDto>(
-						OaiHarvestJobStatisticsDto.class));
+						OaiHarvestJobStatisticsDto.class), offset);
 	}
 
 	@Override

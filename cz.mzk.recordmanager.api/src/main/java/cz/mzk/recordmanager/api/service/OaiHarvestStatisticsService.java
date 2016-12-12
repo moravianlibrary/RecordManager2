@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface OaiHarvestStatisticsService {
 
-	public List<OaiHarvestJobStatisticsDto> getHarvestJobStatistics();
+	public List<OaiHarvestJobStatisticsDto> getHarvestJobStatistics(Integer offset);
 
 	public IdDto getLibraryId(Long configId);
 

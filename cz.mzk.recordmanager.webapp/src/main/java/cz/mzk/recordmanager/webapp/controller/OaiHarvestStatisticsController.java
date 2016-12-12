@@ -15,10 +15,10 @@ public class OaiHarvestStatisticsController {
     @Autowired
     private OaiHarvestStatisticsService oaiHarvestStatisticsService;
 
-    @RequestMapping(method = RequestMethod.GET)
+    @RequestMapping(method = RequestMethod.GET, value = "offset/{offset}")
     @ResponseBody
-    public List<OaiHarvestJobStatisticsDto> getStatistics() {
-        return oaiHarvestStatisticsService.getHarvestJobStatistics();
+    public List<OaiHarvestJobStatisticsDto> getStatistics(@PathVariable Integer offset) {
+        return oaiHarvestStatisticsService.getHarvestJobStatistics(offset);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "{configId}")
