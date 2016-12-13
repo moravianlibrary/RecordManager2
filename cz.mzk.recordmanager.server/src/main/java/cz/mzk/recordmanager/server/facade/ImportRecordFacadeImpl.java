@@ -96,10 +96,10 @@ public class ImportRecordFacadeImpl implements ImportRecordFacade {
 		if (matcher.matches()) {
 			getFileNames(matcher.group(1), matcher.group(2));
 			File destFile = new File(matcher.group(1), dic.getIdPrefix());
+			deleteFile(destFile);
 			for (String tarFileName: files) {
 				File tarFile = new File(matcher.group(1), tarFileName);
 				try {
-					FileUtils.deleteQuietly(destFile);
 					ExtractTarGz.extractTarGz(tarFile, destFile);
 					logger.info("Importing file: " + tarFileName);
 					
@@ -108,20 +108,25 @@ public class ImportRecordFacadeImpl implements ImportRecordFacade {
 						importOaiRecordsJob(dic.getId(), destFile.getAbsolutePath());
 						break;
 					default:
-						logger.warn("Job not implemented!!!");
+						importFile(dic.getId(), destFile, dic.getFormat());
 						break;
 					}
 					
-					FileUtils.deleteQuietly(destFile);
-					FileUtils.deleteQuietly(tarFile);
+					deleteFile(destFile);
+					deleteFile(tarFile);
 				} catch (Exception e) {
-					FileUtils.deleteQuietly(destFile);
+					deleteFile(destFile);
 					logger.info("Importing FAILED: " + tarFileName);
 					e.printStackTrace();
 					break;
 				}
 			}
 		}
+	}
+	
+	private void deleteFile(File file) {
+		logger.info("Delete file: " + file.getAbsolutePath());
+		FileUtils.deleteQuietly(file);
 	}
 	
 	private void getFileNames(String dirName, String fileNamePrefix) {
