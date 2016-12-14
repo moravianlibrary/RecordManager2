@@ -1,12 +1,12 @@
-Mužské pohlaví 
+Mužské pohlaví
 Ženské pohlaví
 Novorozenec
-Kojenec 
+Kojenec
 Dítě předškolní
 Dítě
-Mladiství 
-Dospělí 
-Mladý dospělý 
+Mladiství
+Dospělí
+Mladý dospělý
 Lidé středního věku
 Staří
 Staří od 80 let výše
