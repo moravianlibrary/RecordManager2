@@ -11,6 +11,7 @@ import cz.mzk.recordmanager.server.dc.DublinCoreRecord;
 import cz.mzk.recordmanager.server.marc.MarcRecord;
 import cz.mzk.recordmanager.server.marc.MarcXmlParser;
 import cz.mzk.recordmanager.server.metadata.institutions.AuthMetadataMarcRecord;
+import cz.mzk.recordmanager.server.metadata.institutions.BmcMetadataMarcRecord;
 import cz.mzk.recordmanager.server.metadata.institutions.Kram3NkpMetadataDublinCoreRecord;
 import cz.mzk.recordmanager.server.metadata.institutions.KramDefaultMetadataDublinCoreRecord;
 import cz.mzk.recordmanager.server.metadata.institutions.MkpEbooksMetadataMarcRecord;
@@ -101,6 +102,8 @@ public class MetadataRecordFactory {
 			return new ZakonyProLidiMetadataMarcRecord(marcRec);
 		case Constants.PREFIX_MKP_EBOOKS:
 			return new MkpEbooksMetadataMarcRecord(marcRec);
+		case Constants.PREFIX_BMC:
+			return new BmcMetadataMarcRecord(marcRec);
 		default:
 			return new MetadataMarcRecord(marcRec);
 		}

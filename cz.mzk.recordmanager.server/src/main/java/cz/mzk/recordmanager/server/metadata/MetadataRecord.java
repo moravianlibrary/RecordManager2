@@ -191,5 +191,11 @@ public interface MetadataRecord {
 	 * @return
 	 */
 	public String getPolicyKramerius();
+	
+	/**
+	 * get stopwords file name
+	 * @return
+	 */
+	public String filterSubjectFacet();
 
 }

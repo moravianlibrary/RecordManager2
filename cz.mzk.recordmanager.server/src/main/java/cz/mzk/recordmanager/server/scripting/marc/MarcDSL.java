@@ -325,6 +325,10 @@ public class MarcDSL extends BaseDSL {
     		}
     	}
     	
+    	if (metadataRecord.filterSubjectFacet() != null) {
+    		return new HashSet<String>(filter(metadataRecord.filterSubjectFacet(), new ArrayList<String>(subjects)));
+    	}
+    	
     	return subjects;
     }
     

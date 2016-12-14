@@ -522,4 +522,10 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 		return dcRecord.getUrls();
 	}
 
+	@Override
+	public String filterSubjectFacet() {
+		// implemented only in institution specific classes
+		return null;
+	}
+
 }

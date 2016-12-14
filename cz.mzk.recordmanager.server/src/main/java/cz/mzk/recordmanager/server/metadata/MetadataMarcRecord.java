@@ -1164,5 +1164,11 @@ public class MetadataMarcRecord implements MetadataRecord {
 		// Nothing to return
 		return null;
 	}
+
+	@Override
+	public String filterSubjectFacet() {
+		// implemented only in institution specific classes
+		return null;
+	}
 	
 }
