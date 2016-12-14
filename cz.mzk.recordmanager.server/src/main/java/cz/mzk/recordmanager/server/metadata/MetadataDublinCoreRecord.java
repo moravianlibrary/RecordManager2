@@ -522,4 +522,10 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 		return dcRecord.getUrls();
 	}
 
+	@Override
+	public String getSourceInfo() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

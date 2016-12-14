@@ -192,4 +192,6 @@ public interface MetadataRecord {
 	 */
 	public String getPolicyKramerius();
 
+	public String getSourceInfo();
+
 }

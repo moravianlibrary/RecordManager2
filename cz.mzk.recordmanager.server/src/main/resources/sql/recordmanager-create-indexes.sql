@@ -4,6 +4,7 @@ CREATE INDEX harvested_record_dedup_keys_hash_idx ON harvested_record(dedup_keys
 CREATE INDEX harvested_record_import_conf_id ON harvested_record(import_conf_id);
 CREATE INDEX harvested_record_next_dedup_flag ON harvested_record(next_dedup_flag);
 CREATE INDEX harvested_record_raw_001_id_idx ON harvested_record(raw_001_id);
+CREATE INDEX harvested_record_source_info_idx ON harvested_record(source_info);
 
 CREATE INDEX cnb_harvested_record_idx ON cnb(harvested_record_id);
 CREATE INDEX title_harvested_record_idx ON title(harvested_record_id);

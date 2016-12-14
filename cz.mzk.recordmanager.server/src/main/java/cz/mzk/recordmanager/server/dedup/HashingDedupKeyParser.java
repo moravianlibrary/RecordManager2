@@ -36,6 +36,7 @@ import cz.mzk.recordmanager.server.util.MetadataUtils;
 public abstract class HashingDedupKeyParser implements DedupKeysParser {
 
 	private final static int EFFECTIVE_TITLE_LENGTH = 255;
+	private final static int EFFECTIVE_SOURCE_INFO_LENGTH = 255;
 	private final static int EFFECTIVE_AUTHOR_LENGTH = 200;
 	
 	@Autowired 
@@ -80,6 +81,7 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 		encapsulator.setOclcs(metadataRecord.getOclcs());
 		encapsulator.setClusterId(metadataRecord.getClusterId());
 		encapsulator.setRaw001Id(metadataRecord.getRaw001Id());
+		encapsulator.setSourceInfo(MetadataUtils.normalizeAndShorten(metadataRecord.getSourceInfo(), EFFECTIVE_SOURCE_INFO_LENGTH));
 		
 		encapsulator.setLanguages(new HashSet<>(metadataRecord.getLanguages()));
 		
@@ -123,6 +125,7 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 			record.setLanguages(metadataRecord.getLanguages());
 			record.setClusterId(encapsulator.getClusterId());
 			record.setRaw001Id(encapsulator.getRaw001Id());
+			record.setSourceInfo(encapsulator.getSourceInfo());
 			
 			record.setTemporalDedupHash(computedHash);
 		} 
@@ -241,6 +244,10 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 					md.update(encapsulator.getRaw001Id().getBytes());
 				}
 				
+				if (encapsulator.getSourceInfo() != null) {
+					md.update(encapsulator.getSourceInfo().getBytes());
+				}
+				
 				byte[] hash = md.digest();
 				StringBuilder sb = new StringBuilder();
 			    for (byte b : hash) {
@@ -285,6 +292,7 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 			encapsulator.setOclcs(hr.getOclcs());
 			encapsulator.setClusterId(hr.getClusterId());
 			encapsulator.setRaw001Id(hr.getRaw001Id());
+			encapsulator.setSourceInfo(hr.getSourceInfo());
 			
 			return computeHashValue(encapsulator);
 		}
@@ -309,6 +317,7 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 		String issnSeriesOrder;
 		String clusterId;
 		String raw001Id;
+		String sourceInfo;
 		
 		public List<Ismn> getIsmns() {
 			return ismns;
@@ -417,6 +426,12 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 		}
 		public void setRaw001Id(String raw001Id) {
 			this.raw001Id = raw001Id;
+		}
+		public String getSourceInfo() {
+			return sourceInfo;
+		}
+		public void setSourceInfo(String sourceInfo) {
+			this.sourceInfo = sourceInfo;
 		}
 	}
 
