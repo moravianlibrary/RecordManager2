@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.Executor;
 
 import javax.sql.DataSource;
 
@@ -21,6 +22,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.task.TaskExecutor;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import com.google.common.collect.ImmutableMap;
 
@@ -50,6 +53,9 @@ public class KrameriusFulltextJobConfig {
 	
 	@Autowired
 	private HarvestedRecordRowMapper harvestedRecordRowMapper;
+	
+	@Value(value = "${recordmanager.threadPoolSize:#{1}}")
+	private int threadPoolSize = 1;
 	
 	@Bean
 	public Job krameriusFulltextJob(
@@ -94,6 +100,7 @@ public class KrameriusFulltextJobConfig {
 				.reader(missingReader(LONG_OVERRIDEN_BY_EXPRESSION))
 				.processor(krameriusFulltextProcessor(LONG_OVERRIDEN_BY_EXPRESSION))
 				.writer(krameriusFulltextWriter())
+				.taskExecutor((TaskExecutor) poolTaskExecutor()) 
 				.build();
 	}
 	
@@ -155,7 +162,7 @@ public class KrameriusFulltextJobConfig {
 	
 	@Bean(name = Constants.JOB_ID_MISSING_FULLTEXT_KRAMERIUS+":reader")
 	@StepScope
-	public ItemReader<HarvestedRecord> missingReader(@Value("#{jobParameters["
+	public synchronized ItemReader<HarvestedRecord> missingReader(@Value("#{jobParameters["
 			+ Constants.JOB_PARAM_CONF_ID + "]}") Long configId) throws Exception {
 		JdbcPagingItemReader<HarvestedRecord> reader = new JdbcPagingItemReader<HarvestedRecord>();
 		SqlPagingQueryProviderFactoryBean pqpf = new SqlPagingQueryProviderFactoryBean();
@@ -188,5 +195,15 @@ public class KrameriusFulltextJobConfig {
 	public KrameriusFulltextProcessor krameriusFulltextProcessor(@Value("#{jobParameters["
 			+ Constants.JOB_PARAM_CONF_ID + "]}") Long configId) {
 		return new KrameriusFulltextProcessor(configId);
+	}
+	
+	@Bean(name = "threadPoolTaskExecutor")
+	public Executor poolTaskExecutor()
+	{
+		ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+		executor.setCorePoolSize(threadPoolSize);
+		executor.setMaxPoolSize(threadPoolSize);
+		executor.initialize();
+		return executor;
 	}
 }
