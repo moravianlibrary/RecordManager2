@@ -5,3 +5,4 @@ DELETE FROM issn;
 DELETE FROM cnb;
 DELETE FROM language;
 DELETE FROM oclc;
+DELETE FROM ean;

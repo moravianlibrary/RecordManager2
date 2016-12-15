@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import cz.mzk.recordmanager.server.metadata.MetadataRecord;
 import cz.mzk.recordmanager.server.model.Cnb;
+import cz.mzk.recordmanager.server.model.Ean;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecordFormat;
 import cz.mzk.recordmanager.server.model.HarvestedRecordFormat.HarvestedRecordFormatEnum;
@@ -82,6 +83,7 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 		encapsulator.setClusterId(metadataRecord.getClusterId());
 		encapsulator.setRaw001Id(metadataRecord.getRaw001Id());
 		encapsulator.setSourceInfo(MetadataUtils.normalizeAndShorten(metadataRecord.getSourceInfo(), EFFECTIVE_SOURCE_INFO_LENGTH));
+		encapsulator.setEans(metadataRecord.getEANs());
 		
 		encapsulator.setLanguages(new HashSet<>(metadataRecord.getLanguages()));
 		
@@ -126,6 +128,7 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 			record.setClusterId(encapsulator.getClusterId());
 			record.setRaw001Id(encapsulator.getRaw001Id());
 			record.setSourceInfo(encapsulator.getSourceInfo());
+			record.setEans(encapsulator.getEans());
 			
 			record.setTemporalDedupHash(computedHash);
 		} 
@@ -248,6 +251,10 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 					md.update(encapsulator.getSourceInfo().getBytes());
 				}
 				
+				for (Ean ean: encapsulator.getEans()) {
+					md.update(ean.getEan().byteValue());
+				}
+				
 				byte[] hash = md.digest();
 				StringBuilder sb = new StringBuilder();
 			    for (byte b : hash) {
@@ -293,6 +300,7 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 			encapsulator.setClusterId(hr.getClusterId());
 			encapsulator.setRaw001Id(hr.getRaw001Id());
 			encapsulator.setSourceInfo(hr.getSourceInfo());
+			encapsulator.setEans(hr.getEans());
 			
 			return computeHashValue(encapsulator);
 		}
@@ -306,6 +314,7 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 		List<Oclc> oclcs = new ArrayList<>();
 		List<HarvestedRecordFormat> formats = new ArrayList<>();
 		Set<String> languages = new HashSet<>();
+		List<Ean> eans = new ArrayList<>();
 		
 		Long publicationYear;
 		String authorString;
@@ -432,6 +441,12 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 		}
 		public void setSourceInfo(String sourceInfo) {
 			this.sourceInfo = sourceInfo;
+		}
+		public List<Ean> getEans() {
+			return eans;
+		}
+		public void setEans(List<Ean> eans) {
+			this.eans = eans;
 		}
 	}
 

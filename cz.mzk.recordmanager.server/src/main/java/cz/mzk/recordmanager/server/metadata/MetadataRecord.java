@@ -4,6 +4,7 @@ import java.util.List;
 
 import cz.mzk.recordmanager.server.export.IOFormat;
 import cz.mzk.recordmanager.server.model.Cnb;
+import cz.mzk.recordmanager.server.model.Ean;
 import cz.mzk.recordmanager.server.model.HarvestedRecordFormat.HarvestedRecordFormatEnum;
 import cz.mzk.recordmanager.server.model.Isbn;
 import cz.mzk.recordmanager.server.model.Ismn;
@@ -193,5 +194,7 @@ public interface MetadataRecord {
 	public String getPolicyKramerius();
 
 	public String getSourceInfo();
+	
+	public List<Ean> getEANs();
 
 }
