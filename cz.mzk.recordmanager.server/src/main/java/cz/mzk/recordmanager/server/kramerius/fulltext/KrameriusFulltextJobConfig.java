@@ -74,6 +74,28 @@ public class KrameriusFulltextJobConfig {
 				.build();
 	}
 	
+	@Bean
+	public Job krameriusMissingFulltextJob(
+			@Qualifier(Constants.JOB_ID_MISSING_FULLTEXT_KRAMERIUS+":missingStep") Step missingStep) {
+		return jobs.get(Constants.JOB_ID_MISSING_FULLTEXT_KRAMERIUS) //
+				.validator(new KrameriusMissingFulltextJobParametersValidator()) //
+				.incrementer(UUIDIncrementer.INSTANCE) //
+				.listener(JobFailureListener.INSTANCE) //
+				.flow(missingStep) //
+				.end() //
+				.build();
+	}
+	
+	@Bean(name = Constants.JOB_ID_MISSING_FULLTEXT_KRAMERIUS+":missingStep")
+	public Step missingStep() throws Exception {
+		return steps
+				.get("step")
+				.<HarvestedRecord, HarvestedRecord> chunk(1)
+				.reader(missingReader(LONG_OVERRIDEN_BY_EXPRESSION))
+				.processor(krameriusFulltextProcessor(LONG_OVERRIDEN_BY_EXPRESSION))
+				.writer(krameriusFulltextWriter())
+				.build();
+	}
 	
 	/* reads document uuids for given config (may be limited by update date)
 	 * returns ItemReader for HarvestedRecord(s)
@@ -130,7 +152,31 @@ public class KrameriusFulltextJobConfig {
 		
 		return reader;
 	}
+	
+	@Bean(name = Constants.JOB_ID_MISSING_FULLTEXT_KRAMERIUS+":reader")
+	@StepScope
+	public ItemReader<HarvestedRecord> missingReader(@Value("#{jobParameters["
+			+ Constants.JOB_PARAM_CONF_ID + "]}") Long configId) throws Exception {
+		JdbcPagingItemReader<HarvestedRecord> reader = new JdbcPagingItemReader<HarvestedRecord>();
+		SqlPagingQueryProviderFactoryBean pqpf = new SqlPagingQueryProviderFactoryBean();
+		pqpf.setDataSource(dataSource);
+		pqpf.setSelectClause("SELECT *");
+		pqpf.setFromClause("FROM harvested_record hr");
+		pqpf.setWhereClause("WHERE hr.import_conf_id = :configId AND NOT EXISTS ("
+				+ "SELECT 1 FROM fulltext_kramerius fk WHERE hr.id = fk.harvested_record_id)");
+		pqpf.setSortKey("record_id");
+		Map<String, Object> parameterValues = new HashMap<String, Object>();
+		parameterValues.put("configId", configId);
+		reader.setParameterValues(parameterValues);	
+		reader.setRowMapper(harvestedRecordRowMapper);
+		reader.setPageSize(PAGE_SIZE);
+		reader.setQueryProvider(pqpf.getObject());
+		reader.setDataSource(dataSource);
+		reader.afterPropertiesSet();
 		
+		return reader;
+	}
+			
 	@Bean(name = "krameriusFulltextJob:writer")
 	@StepScope
 	public KrameriusFulltextWriter krameriusFulltextWriter() {

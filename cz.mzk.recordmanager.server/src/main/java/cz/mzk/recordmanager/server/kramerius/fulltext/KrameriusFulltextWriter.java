@@ -25,13 +25,17 @@ public class KrameriusFulltextWriter implements ItemWriter<HarvestedRecord> {
 
 	@Override
 	public void write(List<? extends HarvestedRecord> items) throws Exception {
-		for (HarvestedRecord hr : items) {
-			DedupRecord dr = hr.getDedupRecord();
-			if(dr != null){
-				dr.setUpdated(new Date());
-				dedupDao.persist(dr);
+		try {
+			for (HarvestedRecord hr : items) {
+				DedupRecord dr = hr.getDedupRecord();
+				if(dr != null){
+					dr.setUpdated(new Date());
+					dedupDao.persist(dr);
+				}
+				recordDao.persist(hr);
 			}
-			recordDao.persist(hr);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 
