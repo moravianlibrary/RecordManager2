@@ -18,6 +18,7 @@ import cz.mzk.recordmanager.server.model.HarvestedRecordFormat.HarvestedRecordFo
 import cz.mzk.recordmanager.server.model.Isbn;
 import cz.mzk.recordmanager.server.model.Ismn;
 import cz.mzk.recordmanager.server.model.Issn;
+import cz.mzk.recordmanager.server.model.ShortTitle;
 import cz.mzk.recordmanager.server.model.Title;
 import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordDAO;
 
@@ -198,6 +199,30 @@ public class MarcRecordImplTest extends AbstractTest {
 		Assert.assertTrue(metadataRecord.getTitle().get(0).getTitleStr().isEmpty());
 		data.clear();
 		
+	}
+	
+	@Test
+	public void shortTitleTest() throws Exception {
+		MarcRecordImpl mri;
+		MetadataRecord metadataRecord;
+		List<String> data = new ArrayList<String>();
+
+		data.add("245 $nn$aa$pp$bb");
+		data.add("240 $aa$nn$bb$pp");
+		data.add("245 $aa$pp$nn");
+		mri = MarcRecordFactory.recordFactory(data);
+		metadataRecord = metadataFactory.getMetadataRecord(mri);
+		
+		ShortTitle expectedST1 = new ShortTitle();
+		expectedST1.setShortTitleStr("nap");
+		expectedST1.setOrderInRecord(1L);
+		ShortTitle expectedST2 = new ShortTitle();
+		expectedST2.setShortTitleStr("anp");
+		expectedST2.setOrderInRecord(2L);
+		
+		Assert.assertEquals(2, metadataRecord.getShortTitles().size());
+		Assert.assertEquals(metadataRecord.getShortTitles().get(0),expectedST1);
+		Assert.assertEquals(metadataRecord.getShortTitles().get(1),expectedST2);
 	}
 	
 	@Test

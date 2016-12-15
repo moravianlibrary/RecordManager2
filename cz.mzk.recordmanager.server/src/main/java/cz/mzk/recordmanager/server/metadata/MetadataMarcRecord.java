@@ -24,6 +24,7 @@ import cz.mzk.recordmanager.server.model.Isbn;
 import cz.mzk.recordmanager.server.model.Ismn;
 import cz.mzk.recordmanager.server.model.Issn;
 import cz.mzk.recordmanager.server.model.Oclc;
+import cz.mzk.recordmanager.server.model.ShortTitle;
 import cz.mzk.recordmanager.server.model.Title;
 import cz.mzk.recordmanager.server.util.Constants;
 import cz.mzk.recordmanager.server.util.EANUtils;
@@ -1230,6 +1231,39 @@ public class MetadataMarcRecord implements MetadataRecord {
 		}
 		
 		return builder.toString().trim();
+	}
+
+	@Override
+	public List<ShortTitle> getShortTitles() {
+		List<ShortTitle> results = new ArrayList<>();
+		Long shortTitleCounter = 0L;
+		char[] shortTitleSf = new char[]{'a', 'n', 'p'};
+		
+		for (String tag: new String[]{"245", "240"}) {
+			for (DataField df :underlayingMarc.getDataFields(tag)) {
+				if (df.getSubfield('b') == null) continue;
+				
+				StringBuilder builder = new StringBuilder();
+				for(Subfield subfield: df.getSubfields()){
+					if (MetadataUtils.hasTrailingPunctuation(builder.toString())) {
+						builder.append(" ");
+					}
+					if(Chars.contains(shortTitleSf, subfield.getCode())){
+						builder.append(subfield.getData());
+					}
+				}
+
+				if (builder.length() > 0) {
+					ShortTitle shortTitle = new ShortTitle();
+					shortTitle.setShortTitleStr(builder.toString());
+					shortTitle.setOrderInRecord(++shortTitleCounter);
+					shortTitle.setSimilarityEnabled(MetadataUtils.similarityEnabled(shortTitle));
+					results.add(shortTitle);
+				}
+			}
+		}
+
+		return results;
 	}
 	
 }

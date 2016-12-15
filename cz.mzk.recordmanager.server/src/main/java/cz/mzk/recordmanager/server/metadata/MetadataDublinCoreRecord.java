@@ -19,6 +19,7 @@ import cz.mzk.recordmanager.server.model.Isbn;
 import cz.mzk.recordmanager.server.model.Ismn;
 import cz.mzk.recordmanager.server.model.Issn;
 import cz.mzk.recordmanager.server.model.Oclc;
+import cz.mzk.recordmanager.server.model.ShortTitle;
 import cz.mzk.recordmanager.server.model.Title;
 import cz.mzk.recordmanager.server.util.MetadataUtils;
 
@@ -539,6 +540,12 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 	public List<Ean> getEANs() {
 		// TODO Auto-generated method stub
 		return Collections.emptyList();
+	}
+
+	@Override
+	public List<ShortTitle> getShortTitles() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
