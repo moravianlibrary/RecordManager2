@@ -942,3 +942,15 @@ INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format,extr
 --changeset tomascejpek:37
 ALTER TABLE harvested_record ADD COLUMN source_info VARCHAR(255);
 CREATE INDEX harvested_record_source_info_idx ON harvested_record(source_info);
+
+--changeset tomascejpek:38
+CREATE TABLE ean (
+  id                   DECIMAL(10) PRIMARY KEY,
+  harvested_record_id  DECIMAL(10),
+  ean                  DECIMAL(13),
+  order_in_record      DECIMAL(4),
+  note                 VARCHAR(300),
+  FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE
+);
+COMMENT ON TABLE ean IS 'dedup_keys: table contatining EANs';
+CREATE INDEX ean_harvested_record_idx ON ean(harvested_record_id); 

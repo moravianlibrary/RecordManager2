@@ -134,6 +134,15 @@ CREATE TABLE isbn (
   CONSTRAINT isbn_fk   FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id)
 );
 
+CREATE TABLE ean (
+  id                   DECIMAL(10) PRIMARY KEY,
+  harvested_record_id  DECIMAL(10),
+  ean                  DECIMAL(13),
+  order_in_record      DECIMAL(4),
+  note                 VARCHAR(150),
+  CONSTRAINT ean_fk    FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id)
+);
+
 CREATE TABLE ismn (
   id                   DECIMAL(10) PRIMARY KEY,
   harvested_record_id  DECIMAL(10),

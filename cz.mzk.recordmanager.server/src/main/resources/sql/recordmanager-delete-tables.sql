@@ -15,6 +15,7 @@ DELETE FROM kramerius_conf;
 DELETE FROM issn;
 DELETE FROM isbn;
 DELETE FROM ismn;
+DELETE FROM ean;
 DELETE FROM harvested_record_format_link;
 DELETE FROM download_import_conf;
 DELETE FROM cnb;
