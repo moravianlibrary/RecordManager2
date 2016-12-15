@@ -1,13 +1,13 @@
 package cz.mzk.recordmanager.server.util;
 
-import org.junit.Test;
 import org.testng.Assert;
+import org.testng.annotations.Test;
 
 public class EanUtilsTest {
 
 	private static final String VALID_EAN = "8593026341407";
 	
-	private static final String INVALID_EAN = "1234567891231";
+	private static final String INVALID_EAN = "1234567891232";
 	
 	@Test
 	public void isValid() {
