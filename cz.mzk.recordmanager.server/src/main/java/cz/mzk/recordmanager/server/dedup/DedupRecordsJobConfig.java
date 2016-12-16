@@ -47,6 +47,8 @@ public class DedupRecordsJobConfig {
 
 	private static final String TMP_TABLE_CNB = "tmp_simmilar_books_cnb";
 
+	private static final String TMP_TABLE_EAN = "tmp_simmilar_ean";
+	
 	private static final String TMP_TABLE_CLUSTER = "tmp_cluster_ids";
 
 	private static final String TMP_TABLE_AUTH_TITLE = "tmp_auth_keys";
@@ -102,6 +104,8 @@ public class DedupRecordsJobConfig {
 
 	private String prepareTempCnbTableSql = ResourceUtils.asString("job/dedupRecordsJob/prepareTempCnbTable.sql"); 
 
+	private String prepareTempEanTableSql = ResourceUtils.asString("job/dedupRecordsJob/prepareTempEanTable.sql");
+	
 	private String prepareTempClusterIdSql = ResourceUtils.asString("job/dedupRecordsJob/prepareTempClusterId.sql");
 
 	private String prepareTempAuthKeyTableSql = ResourceUtils.asString("job/dedupRecordsJob/prepareTempAuthKeyTable.sql");
@@ -157,6 +161,8 @@ public class DedupRecordsJobConfig {
 			@Qualifier(Constants.JOB_ID_DEDUP + ":dedupSimpleKeysIsbnStep") Step dedupSimpleKeysISBNStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":prepareTempCnbTableStep") Step prepareTempCnbTableStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":dedupSimpleKeysCnbStep") Step dedupSimpleKeysCnbStep,
+			@Qualifier(Constants.JOB_ID_DEDUP + ":prepareTempEanTableStep") Step prepareTempEanTableStep,
+			@Qualifier(Constants.JOB_ID_DEDUP + ":dedupSimpleKeysEanStep") Step dedupSimpleKeysEanStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":prepareTmpTitleAuthStep") Step prepareTmpTitleAuthStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":dedupTitleAuthStep") Step dedupTitleAuthStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":prepareTempCnbClustersTableStep") Step prepareTempCnbClustersTableStep,
@@ -204,6 +210,8 @@ public class DedupRecordsJobConfig {
 				.next(dedupSimpleKeysCnbStep)
 				.next(prepareTmpTitleAuthStep)
 				.next(dedupTitleAuthStep)
+				.next(prepareTempEanTableStep)
+				.next(dedupSimpleKeysEanStep)
 				.next(prepareTempCnbClustersTableStep)
 				.next(dedupCnbClustersStep)
 				.next(prepareTempOclcClustersTableStep)
@@ -408,6 +416,39 @@ public class DedupRecordsJobConfig {
 	@StepScope
 	public ItemReader<List<Long>> dedupSimpleKeysCnbReader() throws Exception {
 		return dedupSimpleKeysReader(TMP_TABLE_CNB);
+	}
+
+	/**
+	 * dedupSimpleKeysIsbnStep Deduplicate all books having equal publication
+	 * year, EAN and title
+	 */
+	@Bean(name = "prepareTempTablesStep:prepareTempEanTableTasklet")
+	@StepScope
+	public Tasklet prepareTempEanTableTasklet() {
+		return new SqlCommandTasklet(prepareTempEanTableSql);
+	}
+
+	@Bean(name = Constants.JOB_ID_DEDUP + ":prepareTempEanTableStep")
+	public Step prepareTempEanTableStep() {
+		return steps.get("prepareTempEanTableStep")
+				.listener(new StepProgressListener())
+				.tasklet(prepareTempEanTableTasklet()).build();
+	}
+
+	@Bean(name = Constants.JOB_ID_DEDUP + ":dedupSimpleKeysEanStep")
+	public Step dedupSimpleKeysEanStep() throws Exception {
+		return steps.get("dedupSimpleKeysEanStep")
+				.listener(new StepProgressListener())
+				.<List<Long>, List<HarvestedRecord>> chunk(100)
+				.reader(dedupSimpleKeysEanReader())
+				.processor(dedupSimpleKeysStepProsessor())
+				.writer(dedupSimpleKeysStepWriter()).build();
+	}
+
+	@Bean(name = "dedupSimpleKeysEanStep:reader")
+	@StepScope
+	public ItemReader<List<Long>> dedupSimpleKeysEanReader() throws Exception {
+		return dedupSimpleKeysReader(TMP_TABLE_EAN);
 	}
 
 	/**
