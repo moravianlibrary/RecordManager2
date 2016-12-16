@@ -81,6 +81,7 @@ public class DedupRecordsJobConfig {
 	
 	private static final String TMP_TABLE_PERIODICALS_SFX = "tmp_periodicals_sfx";
 	
+	private static final String TMP_TABLE_ARTICLES = "tmp_simmilar_articles";
 	
 	@Autowired
 	private SessionFactory sessionFactory;
@@ -140,6 +141,7 @@ public class DedupRecordsJobConfig {
 	
 	private String prepareTempPeriodicalsSfxSql = ResourceUtils.asString("job/dedupRecordsJob/prepareDedupSfxStep.sql");
 	
+	private String prepareTempArticlesTableSql = ResourceUtils.asString("job/dedupRecordsJob/prepareTempArticlesTable.sql");
 	
 	private String cleanupSql = ResourceUtils.asString("job/dedupRecordsJob/cleanup.sql");
 
@@ -194,6 +196,8 @@ public class DedupRecordsJobConfig {
 			@Qualifier(Constants.JOB_ID_DEDUP + ":preparePeriodicalsYearClustersStep") Step preparePeriodicalsYearClustersStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":prepareDedupPeriodicalsYearClustersStep") Step prepareDedupPeriodicalsYearClustersStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":processPeriodicalsSimilaritesResultsStep") Step processPeriodicalsSimilaritesResultsStep,
+			@Qualifier(Constants.JOB_ID_DEDUP + ":prepareTempArticlesTableStep") Step prepareTempArticlesTableStep,
+			@Qualifier(Constants.JOB_ID_DEDUP + ":dedupArticlesStep") Step dedupArticlesStep,
 			
 			@Qualifier(Constants.JOB_ID_DEDUP + ":dedupRestOfRecordsStep") Step dedupRestOfRecordsStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":cleanupStep") Step cleanupStep) {
@@ -243,7 +247,9 @@ public class DedupRecordsJobConfig {
 				.next(preparePeriodicalsYearClustersStep)
 				.next(prepareDedupPeriodicalsYearClustersStep)
 				.next(processPeriodicalsSimilaritesResultsStep)
-
+				.next(prepareTempArticlesTableStep)
+				.next(dedupArticlesStep)
+				
 				.next(dedupRestOfRecordsStep)
 				.next(cleanupStep)
 				.build();
@@ -450,6 +456,39 @@ public class DedupRecordsJobConfig {
 	public ItemReader<List<Long>> dedupSimpleKeysEanReader() throws Exception {
 		return dedupSimpleKeysReader(TMP_TABLE_EAN);
 	}
+	
+	/**
+	 * dedupArticlesStep Deduplicate audio having equal publication
+	 * year, author, sourceinfo and title
+	 */
+	@Bean(name = "prepareTempTablesStep:prepareTempArticlesTableTasklet")
+	@StepScope
+	public Tasklet prepareTempArticlesTableTasklet() {
+		return new SqlCommandTasklet(prepareTempArticlesTableSql);
+	}
+
+	@Bean(name = Constants.JOB_ID_DEDUP + ":prepareTempArticlesTableStep")
+	public Step prepareTempArticlesTableStep() {
+		return steps.get("prepareTempArticlesTableStep")
+				.listener(new StepProgressListener())
+				.tasklet(prepareTempIsbnTableTasklet()).build();
+	}
+
+	@Bean(name = Constants.JOB_ID_DEDUP + ":dedupArticlesStep")
+	public Step dedupArticlesStep() throws Exception {
+		return steps.get("dedupArticlesStep")
+				.listener(new StepProgressListener())
+				.<List<Long>, List<HarvestedRecord>> chunk(100)
+				.reader(dedupSimpleKeysArticlesReader())
+				.processor(dedupSimpleKeysStepProsessor())
+				.writer(dedupSimpleKeysStepWriter()).build();
+	}
+
+	@Bean(name = "dedupSimpleKeysIsbnStep:reader")
+	@StepScope
+	public ItemReader<List<Long>> dedupSimpleKeysArticlesReader() throws Exception {
+		return dedupSimpleKeysReader(TMP_TABLE_ARTICLES);
+	}
 
 	/**
 	 * dedupTitleAuthStep Deduplicate all books having same title, author key,
@@ -605,7 +644,7 @@ public class DedupRecordsJobConfig {
 				.writer(dedupSimpleKeysStepWriter())
 				.build();
 	}
-
+	
 	/**
 	 * dedupSimpleKeysSkatManuallyMergedStep Deduplicate all records, that were NOT manually
 	 * merged in Skat

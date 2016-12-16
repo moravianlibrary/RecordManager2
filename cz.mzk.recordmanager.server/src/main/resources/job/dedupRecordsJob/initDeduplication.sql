@@ -18,6 +18,13 @@ SELECT hrfl.harvested_record_id AS id FROM harvested_record_format_link hrfl
   WHERE hrf.name ~* '^AUDIO';
 CREATE INDEX tmp_audio_ids_idx ON tmp_audio_ids(id);
 
+DROP TABLE IF EXISTS tmp_articles_ids;
+CREATE TABLE tmp_articles_ids AS
+SELECT hrfl.harvested_record_id AS id FROM harvested_record_format_link hrfl 
+  INNER JOIN harvested_record_format hrf ON hrf.id = hrfl.harvested_record_format_id
+  WHERE hrf.name = 'ARTICLES';
+CREATE INDEX tmp_articles_ids_idx ON tmp_articles_ids(id);
+
 UPDATE dedup_record
 SET updated=localtimestamp
 WHERE id IN (SELECT dedup_record_id FROM harvested_record WHERE next_dedup_flag=TRUE AND dedup_record_id IS NOT NULL GROUP BY dedup_record_id);
