@@ -31,8 +31,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.jdbc.core.RowMapper;
 
-import cz.mzk.recordmanager.server.dedup.clustering.TitleClusterable;
 import cz.mzk.recordmanager.server.dedup.clustering.NonperiodicalTitleClusterable;
+import cz.mzk.recordmanager.server.dedup.clustering.TitleClusterable;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.springbatch.DelegatingHibernateProcessor;
 import cz.mzk.recordmanager.server.springbatch.SqlCommandTasklet;
@@ -425,7 +425,7 @@ public class DedupRecordsJobConfig {
 	}
 
 	/**
-	 * dedupSimpleKeysIsbnStep Deduplicate all books having equal publication
+	 * dedupSimpleKeysEanStep Deduplicate all books having equal publication
 	 * year, EAN and title
 	 */
 	@Bean(name = "prepareTempTablesStep:prepareTempEanTableTasklet")
@@ -471,7 +471,7 @@ public class DedupRecordsJobConfig {
 	public Step prepareTempArticlesTableStep() {
 		return steps.get("prepareTempArticlesTableStep")
 				.listener(new StepProgressListener())
-				.tasklet(prepareTempIsbnTableTasklet()).build();
+				.tasklet(prepareTempArticlesTableTasklet()).build();
 	}
 
 	@Bean(name = Constants.JOB_ID_DEDUP + ":dedupArticlesStep")
@@ -484,7 +484,7 @@ public class DedupRecordsJobConfig {
 				.writer(dedupSimpleKeysStepWriter()).build();
 	}
 
-	@Bean(name = "dedupSimpleKeysIsbnStep:reader")
+	@Bean(name = "dedupSimpleKeysArticlesStep:reader")
 	@StepScope
 	public ItemReader<List<Long>> dedupSimpleKeysArticlesReader() throws Exception {
 		return dedupSimpleKeysReader(TMP_TABLE_ARTICLES);
