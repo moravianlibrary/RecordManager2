@@ -17,7 +17,11 @@ public class KrameriusMissingFulltextJobParametersValidator extends
 	@Override
 	public Collection<JobParameterDeclaration> getParameters() {
 		return Arrays.asList(
-				param(Constants.JOB_PARAM_CONF_ID, ParameterType.LONG, true) //
+				param(Constants.JOB_PARAM_CONF_ID, ParameterType.LONG,true), //
+				param(Constants.JOB_PARAM_FROM_DATE, ParameterType.DATE, false), //
+				param(Constants.JOB_PARAM_UNTIL_DATE, ParameterType.DATE, false), //
+				param(Constants.JOB_PARAM_FULLTEXT_FIRST, ParameterType.STRING, false), //
+				param(Constants.JOB_PARAM_FULLTEXT_LAST, ParameterType.STRING, false) //
 			);
 	}
 

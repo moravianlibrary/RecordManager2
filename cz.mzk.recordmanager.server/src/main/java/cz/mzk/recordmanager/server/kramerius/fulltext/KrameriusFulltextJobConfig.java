@@ -40,6 +40,8 @@ public class KrameriusFulltextJobConfig {
 	
 	public static final Long LONG_OVERRIDEN_BY_EXPRESSION = null;
 
+	public static final String STRING_OVERRIDEN_BY_EXPRESSION = null;
+	
 	private static final int PAGE_SIZE = 2;
 
 	@Autowired
@@ -97,7 +99,7 @@ public class KrameriusFulltextJobConfig {
 		return steps
 				.get("step")
 				.<HarvestedRecord, HarvestedRecord> chunk(1)
-				.reader(missingReader(LONG_OVERRIDEN_BY_EXPRESSION))
+				.reader(missingReader(LONG_OVERRIDEN_BY_EXPRESSION, STRING_OVERRIDEN_BY_EXPRESSION, STRING_OVERRIDEN_BY_EXPRESSION,DATE_OVERRIDEN_BY_EXPRESSION,DATE_OVERRIDEN_BY_EXPRESSION))
 				.processor(krameriusFulltextProcessor(LONG_OVERRIDEN_BY_EXPRESSION))
 				.writer(krameriusFulltextWriter())
 				.taskExecutor((TaskExecutor) poolTaskExecutor()) 
@@ -162,18 +164,45 @@ public class KrameriusFulltextJobConfig {
 	
 	@Bean(name = Constants.JOB_ID_MISSING_FULLTEXT_KRAMERIUS+":reader")
 	@StepScope
-	public synchronized ItemReader<HarvestedRecord> missingReader(@Value("#{jobParameters["
-			+ Constants.JOB_PARAM_CONF_ID + "]}") Long configId) throws Exception {
+	public ItemReader<HarvestedRecord> missingReader(@Value("#{jobParameters["
+			+ Constants.JOB_PARAM_CONF_ID + "]}") Long configId,
+			@Value("#{jobParameters["+ Constants.JOB_PARAM_FULLTEXT_FIRST + "]}") String firstId,
+			@Value("#{jobParameters["+ Constants.JOB_PARAM_FULLTEXT_LAST + "]}") String lastId,
+			@Value("#{stepExecutionContext[" + Constants.JOB_PARAM_FROM_DATE
+					+ "] " + "?:jobParameters[ "
+					+ Constants.JOB_PARAM_FROM_DATE + "]}") Date from,
+			@Value("#{stepExecutionContext[" + Constants.JOB_PARAM_UNTIL_DATE
+					+ "]" + "?:jobParameters[" + Constants.JOB_PARAM_UNTIL_DATE
+					+ "]}") Date to) throws Exception {
 		JdbcPagingItemReader<HarvestedRecord> reader = new JdbcPagingItemReader<HarvestedRecord>();
 		SqlPagingQueryProviderFactoryBean pqpf = new SqlPagingQueryProviderFactoryBean();
 		pqpf.setDataSource(dataSource);
 		pqpf.setSelectClause("SELECT *");
 		pqpf.setFromClause("FROM harvested_record hr");
-		pqpf.setWhereClause("WHERE hr.import_conf_id = :configId AND NOT EXISTS ("
-				+ "SELECT 1 FROM fulltext_kramerius fk WHERE hr.id = fk.harvested_record_id)");
-		pqpf.setSortKey("record_id");
+		
+		String whereClause = "WHERE hr.import_conf_id = :configId AND NOT EXISTS ("
+				+ "SELECT 1 FROM fulltext_kramerius fk WHERE hr.id = fk.harvested_record_id)";
 		Map<String, Object> parameterValues = new HashMap<String, Object>();
 		parameterValues.put("configId", configId);
+		if (from != null) {
+			whereClause += " AND hr.updated >= :from";
+			parameterValues.put("from", new Timestamp(from.getTime()));
+		}
+		if (to != null) {
+			Date toStamp = new Timestamp(to.getTime());
+			whereClause += " AND hr.updated <= :to";
+			parameterValues.put("to", toStamp);
+		}
+		if (firstId != null) {
+			whereClause += " AND hr.record_id >= :firstId";
+			parameterValues.put("firstId", firstId);
+		}
+		if (lastId != null) {
+			whereClause += " AND hr.record_id <= :lastId";
+			parameterValues.put("lastId", lastId);
+		}
+		pqpf.setWhereClause(whereClause);
+		pqpf.setSortKey("record_id");
 		reader.setParameterValues(parameterValues);	
 		reader.setRowMapper(harvestedRecordRowMapper);
 		reader.setPageSize(PAGE_SIZE);
