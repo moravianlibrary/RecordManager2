@@ -1,10 +1,13 @@
 package cz.mzk.recordmanager.server.imports;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.List;
 
 import org.marc4j.MarcException;
@@ -48,11 +51,15 @@ public class ImportRecordsFileReader implements ItemReader<List<Record>> {
 	private Long confId;
 	
 	private int batchSize = 20;
+	
+	private Deque<String> files = null;
 
+	private String pathName = null;
+	
 	public ImportRecordsFileReader(String filename, String strFormat) throws FileNotFoundException {
 		format = IOFormat.stringToExportFormat(strFormat);
-		inStream = new FileInputStream(filename);
-		reader = getMarcReader(inStream);
+		getFilesName(filename);
+		initializeFilesReader();
 	}
 	
 	public ImportRecordsFileReader(Long confId) throws Exception {
@@ -65,8 +72,8 @@ public class ImportRecordsFileReader implements ItemReader<List<Record>> {
 			ParseException, NonTransientResourceException {
 		List<Record> batch = new ArrayList<Record>();
 		
-		if(reader == null) initializeReader();
-		
+		if (reader == null) initializeDownloadReader();
+		else if (!reader.hasNext()) initializeFilesReader();
 		while (reader.hasNext()) {
 			try {
 				batch.add(reader.next());
@@ -97,7 +104,7 @@ public class ImportRecordsFileReader implements ItemReader<List<Record>> {
 		}
 	}
 	
-	protected void initializeReader() throws IOException{
+	protected void initializeDownloadReader() throws IOException{
 		DownloadImportConfiguration config = dicDao.get(confId);
 		if (config == null) {
 			throw new IllegalArgumentException(String.format("Configuration with id=%s not found.", confId));
@@ -109,6 +116,33 @@ public class ImportRecordsFileReader implements ItemReader<List<Record>> {
 		}
 		this.format = IOFormat.stringToExportFormat(config.getFormat());		
 		this.reader = getMarcReader(httpClient.executeGet(url));
+	}
+
+	protected void initializeFilesReader() {
+		try {
+			if(!files.isEmpty()){
+				String file = pathName+files.pop();
+				inStream = new FileInputStream(file);
+				reader = getMarcReader(inStream);
+			}
+		} catch (FileNotFoundException e) {
+			logger.warn(e.getMessage());
+		}
+	}
+	
+	protected void getFilesName(String filename) {
+		files = new ArrayDeque<String>();
+		File f = new File(filename);
+		if (f.isFile()) {
+			pathName = f.getParent()+"/";
+			files.push(f.getName());
+		}
+		else {
+			for (File file: f.listFiles()) {
+				pathName = file.getParent()+"/";
+				files.push(file.getName());
+			}
+		}
 	}
 
 }
