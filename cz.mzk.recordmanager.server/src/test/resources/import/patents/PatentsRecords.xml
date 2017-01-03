@@ -1,357 +1,139 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE cz-patent-document PUBLIC "" "cz-patent-document-v1-3.dtd">
 <collection>
-<cz-patent-document id="201546-B6-305523" file="201546-B6-305523.xml" country="CZ" doc-number="305523" kind="B6" date-published="20151118" dtd-version="v1.3 2005-01-01" lang="en">
-  <bibliographic-data country="CZ">
-    <publication-reference>
-      <document-id>
-        <country>CZ</country>
-        <doc-number>305523</doc-number>
-        <kind>B6</kind>
-        <date>20151118</date>
-      </document-id>
-    </publication-reference>
-    <classifications-ipcr>
-      <classification-ipcr sequence="1">
-        <text>C07D 491/044       20060101AFI20060521RMWO        </text>
-      </classification-ipcr>
-      <classification-ipcr sequence="2">
-        <text>C07D 491/04        20060101ALI20051008RMEP        </text>
-      </classification-ipcr>
-      <classification-ipcr sequence="3">
-        <text>C07D 491/00        20060101ALI20061125RMEP        </text>
-      </classification-ipcr>
-      <classification-ipcr sequence="4">
-        <text>A61P  35/00        20060101ALI20060521RMWO        </text>
-      </classification-ipcr>
-      <classification-ipcr sequence="5">
-        <text>A61K  31/38        20060101ALI20150825BHCZ        </text>
-      </classification-ipcr>
-    </classifications-ipcr>
-    <application-reference>
-      <document-id>
-        <country>CZ</country>
-        <doc-number>2003-418</doc-number>
-        <date>20010801</date>
-      </document-id>
-    </application-reference>
-    <language-of-filing>cs</language-of-filing>
-    <language-of-publication>cs</language-of-publication>
-    <priority-claims>
-      <priority-claim>
-        <country>US</country>
-        <doc-number>2000      225590</doc-number>
-        <date>20000816</date>
-      </priority-claim>
-    </priority-claims>
-    <parties>
-      <applicants>
-        <applicant sequence="1" designation="all" app-type="applicant">
-          <addressbook>
-            <orgname>BRISTOL-MYERS SQUIBB COMPANY</orgname>
-            <address>
-              <street>P.O.Box 4000, Lawrenceville-Princeton Road</street>
-              <city>08543-4000 Princeton</city>
-              <country>US</country>
-            </address>
-          </addressbook>
-        </applicant>
-      </applicants>
-      <inventors>
-        <inventor sequence="1" designation="all">
-          <addressbook>
-            <last-name>Dimarco</last-name>
-            <first-name>John D.</first-name>
-            <address>
-              <street>16 Neal Dr.</street>
-              <city>08816 East Brunswick</city>
-              <country>US</country>
-            </address>
-          </addressbook>
-        </inventor>
-        <inventor sequence="2" designation="all">
-          <addressbook>
-            <last-name>Gougoutas</last-name>
-            <first-name>Jack Z.</first-name>
-            <address>
-              <street>101 Westerly Rd.</street>
-              <city>08540 Princeton</city>
-              <country>US</country>
-            </address>
-          </addressbook>
-        </inventor>
-        <inventor sequence="3" designation="all">
-          <addressbook>
-            <last-name>Vitez</last-name>
-            <first-name>Imre M.</first-name>
-            <address>
-              <street>117 Main St.</street>
-              <city>08889 Whitehouse Station</city>
-              <country>US</country>
-            </address>
-          </addressbook>
-        </inventor>
-        <inventor sequence="4" designation="all">
-          <addressbook>
-            <last-name>Davidovich</last-name>
-            <first-name>Martha</first-name>
-            <address>
-              <street>159 Fern Rd.</street>
-              <city>08816 East Brunswick</city>
-              <country>US</country>
-            </address>
-          </addressbook>
-        </inventor>
-        <inventor sequence="5" designation="all">
-          <addressbook>
-            <last-name>Galella</last-name>
-            <first-name>Michael</first-name>
-            <address>
-              <street>3 Evergreen Ct.</street>
-              <city>08502 Belle Mead</city>
-              <country>US</country>
-            </address>
-          </addressbook>
-        </inventor>
-        <inventor sequence="6" designation="all">
-          <addressbook>
-            <last-name>Malloy</last-name>
-            <first-name>Timothy M.</first-name>
-            <address>
-              <street>1902 Makefield Rd.</street>
-              <city>19067 Yardley</city>
-              <country>US</country>
-            </address>
-          </addressbook>
-        </inventor>
-        <inventor sequence="7" designation="all">
-          <addressbook>
-            <last-name>Guo</last-name>
-            <first-name>Zhenrong</first-name>
-            <address>
-              <street>21 Augusta Place</street>
-              <city>08816 East Brunswick</city>
-              <country>US</country>
-            </address>
-          </addressbook>
-        </inventor>
-        <inventor sequence="8" designation="all">
-          <addressbook>
-            <last-name>Favreau</last-name>
-            <first-name>Denis</first-name>
-            <address>
-              <street>5065 Terrase Beaudry, Saint-Hubert</street>
-              <city>J3Y 6L2 Quebec</city>
-              <country>CA</country>
-            </address>
-          </addressbook>
-        </inventor>
-      </inventors>
-      <agents>
-        <agent sequence="1" rep-type="agent">
-          <addressbook>
-            <last-name>Kalenský</last-name>
-            <first-name>Petr</first-name>
-            <address>
-              <street>Hálkova 2</street>
-              <city>Praha 2</city>
-              <postcode>12000</postcode>
-              <country>CZ</country>
-            </address>
-          </addressbook>
-        </agent>
-      </agents>
-    </parties>
-    <invention-title lang="cs">Krystalický polymorf analogu epothilonu, způsob jeho výroby, farmaceutický přípravek s aktivní složkou tohoto polymorfu a použití tohoto polymorfu k výrobě léčiva</invention-title>
-    <invention-title lang="en">Polymorphs of epothilone analogs </invention-title>
-    <references-cited>
-      <citation>
-        <patcit id="pcit0001" dnum="WO9942602" dnum-type="publication number">
-          <text>(Novartis Erfind Verwalt), 26.8.1999, str. 1, 10,17,24,25, nároky, anotace</text>
-        </patcit>
-      </citation>
-      <citation>
-        <patcit id="pcit0002" dnum="WO9927890" dnum-type="publication number">
-          <text>(Squibb bristol Myers CO), 10.6.1999, str. 1,5, př. 1, nároky , anotace</text>
-        </patcit>
-      </citation>
-    </references-cited>
-  </bibliographic-data>
-  <abstract lang="cs">﻿Krystalické polymorfy analogu epothilonu představovaného obecným vzorcem I, označené jako forma A a forma B v uvedeném pořadí, stejně jako jejich směsi. Způsob výroby nových polymorfů, použití uvedených krystalických polymorfů k výrobě léčiva pro léčby, které je využívají, a farmaceutické dávkovací formy, které je obsahují.
-</abstract>
-  <abstract lang="en">There are provided in accordance with the present invention two crystalline polymorphs, designated Form A and Form B, respectively, as well as mixtures thereof, of an epothilone analog represented by formula (I). Also provided are methods of forming the novel polymorphs, therapeutic methods utilizing them and pharmaceutical dosage forms containing them. 
-</abstract>
-</cz-patent-document>
-<cz-patent-document id="201546-B6-305524" file="201546-B6-305524.xml" country="CZ" doc-number="305524" kind="B6" date-published="20151118" dtd-version="v1.3 2005-01-01" lang="en">
-  <bibliographic-data country="CZ">
-    <publication-reference>
-      <document-id>
-        <country>CZ</country>
-        <doc-number>305524</doc-number>
-        <kind>B6</kind>
-        <date>20151118</date>
-      </document-id>
-    </publication-reference>
-    <classifications-ipcr>
-      <classification-ipcr sequence="1">
-        <text>C07C  51/41        20060101AFI20150105BHCZ        </text>
-      </classification-ipcr>
-      <classification-ipcr sequence="2">
-        <text>C07C  51/43        20060101ALI20150105BHCZ        </text>
-      </classification-ipcr>
-      <classification-ipcr sequence="3">
-        <text>C07C 215/10        20060101ALI20150105BHCZ        </text>
-      </classification-ipcr>
-      <classification-ipcr sequence="4">
-        <text>C07C 229/26        20060101ALI20150105BHCZ        </text>
-      </classification-ipcr>
-      <classification-ipcr sequence="5">
-        <text>C07B  57/00        20060101ALI20051220RMJP        </text>
-      </classification-ipcr>
-      <classification-ipcr sequence="6">
-        <text>C07C 215/36        20060101ALI20051008RMEP        </text>
-      </classification-ipcr>
-      <classification-ipcr sequence="7">
-        <text>C07C  59/56        20060101ALI20051220RMJP        </text>
-      </classification-ipcr>
-      <classification-ipcr sequence="8">
-        <text>C07C  51/02        20060101ALI20051008RMEP        </text>
-      </classification-ipcr>
-      <classification-ipcr sequence="9">
-        <text>C07B  55/00        20060101ALI20051220RMJP        </text>
-      </classification-ipcr>
-      <classification-ipcr sequence="10">
-        <text>C07C  51/487       20060101ALI20051220RMJP        </text>
-      </classification-ipcr>
-      <classification-ipcr sequence="11">
-        <text>C07C  51/23        20060101ALI20150825BHCZ        </text>
-      </classification-ipcr>
-    </classifications-ipcr>
-    <application-reference>
-      <document-id>
-        <country>CZ</country>
-        <doc-number>2004-102</doc-number>
-        <date>20020614</date>
-      </document-id>
-    </application-reference>
-    <language-of-filing>cs</language-of-filing>
-    <language-of-publication>cs</language-of-publication>
-    <priority-claims>
-      <priority-claim>
-        <country>HU</country>
-        <doc-number>2001     0102567</doc-number>
-        <date>20010621</date>
-      </priority-claim>
-    </priority-claims>
-    <parties>
-      <applicants>
-        <applicant sequence="1" designation="all" app-type="applicant">
-          <addressbook>
-            <orgname>Sanofi-Aventis</orgname>
-            <address>
-              <street></street>
-              <city>Paris</city>
-              <country>FR</country>
-            </address>
-          </addressbook>
-        </applicant>
-      </applicants>
-      <inventors>
-        <inventor sequence="1" designation="all">
-          <addressbook>
-            <last-name>Bálint</last-name>
-            <first-name>József</first-name>
-            <address>
-              <street>jász u. 92/A</street>
-              <city>1131 Budapest</city>
-              <country>HU</country>
-            </address>
-          </addressbook>
-        </inventor>
-        <inventor sequence="2" designation="all">
-          <addressbook>
-            <last-name>Csatáriné Nagy</last-name>
-            <first-name>Marianna</first-name>
-            <address>
-              <street>Géza u. 10</street>
-              <city>2113 Erdökertes</city>
-              <country>HU</country>
-            </address>
-          </addressbook>
-        </inventor>
-        <inventor sequence="3" designation="all">
-          <addressbook>
-            <last-name>Dombrády</last-name>
-            <first-name>Zsolt</first-name>
-            <address>
-              <street>Sólyom u. 10</street>
-              <city>1126 Budapest</city>
-              <country>HU</country>
-            </address>
-          </addressbook>
-        </inventor>
-        <inventor sequence="4" designation="all">
-          <addressbook>
-            <last-name>Fogassy</last-name>
-            <first-name>Elemér</first-name>
-            <address>
-              <street>Ördögorom u. 20</street>
-              <city>1112 Budapest</city>
-              <country>HU</country>
-            </address>
-          </addressbook>
-        </inventor>
-        <inventor sequence="5" designation="all">
-          <addressbook>
-            <last-name>Gajáry</last-name>
-            <first-name>Antal</first-name>
-            <address>
-              <street>Bölöni Gy. u. 15/b</street>
-              <city>1021 Budapest</city>
-              <country>HU</country>
-            </address>
-          </addressbook>
-        </inventor>
-        <inventor sequence="6" designation="all">
-          <addressbook>
-            <last-name>Suba</last-name>
-            <first-name>Charles</first-name>
-            <address>
-              <street>1,rue des Cordelies</street>
-              <city>04200 Sisteron</city>
-              <country>FR</country>
-            </address>
-          </addressbook>
-        </inventor>
-      </inventors>
-      <agents>
-        <agent sequence="1" rep-type="agent">
-          <addressbook>
-            <last-name>Kalenský</last-name>
-            <first-name>Petr</first-name>
-            <address>
-              <street>Hálkova 2</street>
-              <city>Praha 2</city>
-              <postcode>12000</postcode>
-              <country>CZ</country>
-            </address>
-          </addressbook>
-        </agent>
-      </agents>
-    </parties>
-    <invention-title lang="cs">Způsob separace kyseliny (R)-(-)-2-hydroxy-2-(2-chlorfenyl) octové</invention-title>
-    <invention-title lang="en">Process for the preparation of (R)- (-)-2-hydroxy-2- (2-chlorophenyl) acetic acid</invention-title>
-    <references-cited>
-      <citation>
-        <nplcit id="ncit0001" num="0001" type="A">
-          <text>HOOVER, J.R.E. ET AL: &quot;Semisynthetic cephalosporins. Synthesis and structure-activity relationships of 7-mandelamido-3-cephem-4-carboxylic acids&quot; JOURNAL OF MEDICINAL CHEMISTRY, vol. 17, no. 1, 1974, pages 34-41</text>
-        </nplcit>
-      </citation>
-    </references-cited>
-  </bibliographic-data>
-  <abstract lang="cs">﻿Způsob separace racemické kyseliny 2-hydroxy-2-(2-chlorfenyl)octové, který umožňuje přípravu kyseliny (R)-(-)-2-hydroxy-2-(2-chlorfenyl)octové obecného vzorce I, který spočívá v separaci racemické kyseliny se substituovaným aminem obecného vzorce II.
-</abstract>
-  <abstract lang="en">In the present invention, there is disclosed a process for the preparation of (R)- (-)-2-hydroxy-2- (2-chlorophenyl) acetic acid, characterized in that the racemic 2-hydroxy-2- (2-chlorophenyl) acetic acid is resolved with a substituted amine of the general formula (II). 
-</abstract>
-</cz-patent-document>
+	<ep-patent-document lang="en" file="St36_CZ_35076_B6.xml"
+		country="CZ" doc-number="35076" kind="B6">
+		<bibliographic-data country="CZ">
+			<publication-reference>
+				<document-id>
+					<country>CZ</country>
+					<doc-number>35076</doc-number>
+					<kind>B6</kind>
+					<date>19310210</date>
+				</document-id>
+			</publication-reference>
+			<classifications-ipcr>
+				<classification-ipcr sequence="1">
+					<text>F22B 3/00 20160101AFI20160523BHCZ        </text>
+				</classification-ipcr>
+			</classifications-ipcr>
+			<application-reference>
+				<document-id>
+					<country>CZ</country>
+					<doc-number>1929-1349985</doc-number>
+					<date>19290610</date>
+				</document-id>
+			</application-reference>
+			<language-of-filing>cs</language-of-filing>
+			<language-of-publication>cs</language-of-publication>
+			<priority-claims>
+				<priority-claim sequence="1" kind="international">
+					<country>DE</country>
+					<date>19280625</date>
+				</priority-claim>
+			</priority-claims>
+			<parties>
+				<applicants>
+					<applicant sequence="1" designation="all" app-type="applicant-inventor">
+						<addressbook>
+							<last-name>STEPHAN LÖFFLER</last-name>
+							<address>
+								<country>XY</country>
+							</address>
+						</addressbook>
+						<nationality>
+							<country>XY</country>
+						</nationality>
+						<residence>
+							<country>XY</country>
+						</residence>
+					</applicant>
+				</applicants>
+				<inventors>
+					<inventor sequence="1" designation="all">
+						<addressbook>
+							<last-name>STEPHAN LÖFFLER</last-name>
+							<address>
+								<country>XY</country>
+							</address>
+						</addressbook>
+					</inventor>
+				</inventors>
+			</parties>
+			<invention-title lang="CS">Pojistné ústrojí pro
+				vysokotlaké přehříváky páry</invention-title>
+		</bibliographic-data>
+	</ep-patent-document>
+	<ep-patent-document lang="en" file="St36_CZ_152998_B6.xml"
+		country="CZ" doc-number="152998" kind="B6">
+		<bibliographic-data country="CZ">
+			<publication-reference>
+				<document-id>
+					<country>CZ</country>
+					<doc-number>152998</doc-number>
+					<kind>B6</kind>
+					<date>19740415</date>
+				</document-id>
+			</publication-reference>
+			<classifications-ipcr>
+				<classification-ipcr sequence="1">
+					<text>A01C 5/08 20060101AFI20051110RMEP        </text>
+				</classification-ipcr>
+				<classification-ipcr sequence="2">
+					<text>A01C 7/06 20060101ALI20051110RMEP        </text>
+				</classification-ipcr>
+			</classifications-ipcr>
+			<application-reference>
+				<document-id>
+					<country>CZ</country>
+					<doc-number>1967-385</doc-number>
+					<date>19670117</date>
+				</document-id>
+			</application-reference>
+			<language-of-filing>cs</language-of-filing>
+			<language-of-publication>cs</language-of-publication>
+			<priority-claims>
+				<priority-claim sequence="1" kind="international">
+					<country>DE</country>
+					<doc-number>W40776III/45a</doc-number>
+					<date>19660122</date>
+				</priority-claim>
+				<priority-claim sequence="2" kind="international">
+					<country>DE</country>
+					<doc-number>W41383III/45b</doc-number>
+					<date>19660420</date>
+				</priority-claim>
+			</priority-claims>
+			<parties>
+				<applicants>
+					<applicant sequence="1" designation="all" app-type="applicant-inventor">
+						<addressbook>
+							<last-name>HEINRICH WEISTE</last-name>
+							<address>
+								<country>DE</country>
+							</address>
+						</addressbook>
+						<nationality>
+							<country>DE</country>
+						</nationality>
+						<residence>
+							<country>DE</country>
+						</residence>
+					</applicant>
+				</applicants>
+				<inventors>
+					<inventor sequence="1" designation="all">
+						<addressbook>
+							<last-name>HEINRICH WEISTE</last-name>
+							<address>
+								<country>DE</country>
+							</address>
+						</addressbook>
+					</inventor>
+				</inventors>
+			</parties>
+			<invention-title lang="CS">Zařízení pro setí zrnin nebo
+				rozmetání granulovaného hnojiva</invention-title>
+		</bibliographic-data>
+	</ep-patent-document>
 </collection>

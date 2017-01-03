@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE ep-patent-document PUBLIC "" "ep-patent-document-v1-0.dtd">
+<ep-patent-document lang="en" file="St36_CZ_305523_B6.xml"
+	country="CZ" doc-number="305523" kind="B6">
+	<bibliographic-data country="CZ">
+		<publication-reference>
+			<document-id>
+				<country>CZ</country>
+				<doc-number>305523</doc-number>
+				<kind>B6</kind>
+				<date>20151118</date>
+			</document-id>
+		</publication-reference>
+		<classifications-ipcr>
+			<classification-ipcr sequence="1">
+				<text>C07D 491/044 20060101AFI20060521RMWO        </text>
+			</classification-ipcr>
+			<classification-ipcr sequence="2">
+				<text>C07D 491/04 20060101ALI20051008RMEP        </text>
+			</classification-ipcr>
+			<classification-ipcr sequence="3">
+				<text>C07D 491/00 20060101ALI20061125RMEP        </text>
+			</classification-ipcr>
+			<classification-ipcr sequence="4">
+				<text>A61P 35/00 20060101ALI20060521RMWO        </text>
+			</classification-ipcr>
+			<classification-ipcr sequence="5">
+				<text>A61K 31/38 20060101ALI20150825BHCZ        </text>
+			</classification-ipcr>
+		</classifications-ipcr>
+		<application-reference>
+			<document-id>
+				<country>CZ</country>
+				<doc-number>2003-418</doc-number>
+				<date>20010801</date>
+			</document-id>
+		</application-reference>
+		<language-of-filing>cs</language-of-filing>
+		<language-of-publication>cs</language-of-publication>
+		<priority-claims>
+			<priority-claim sequence="1" kind="international">
+				<country>US</country>
+				<doc-number>2000 225590</doc-number>
+				<date>20000816</date>
+			</priority-claim>
+		</priority-claims>
+		<parties>
+			<applicants>
+				<applicant sequence="1" designation="all" app-type="applicant">
+					<addressbook>
+						<orgname>BRISTOL-MYERS SQUIBB COMPANY</orgname>
+						<address>
+							<street>P.O.Box 4000, Lawrenceville-Princeton Road</street>
+							<city>08543-4000 Princeton</city>
+							<country>US</country>
+						</address>
+					</addressbook>
+					<nationality>
+						<country>US</country>
+					</nationality>
+					<residence>
+						<country>US</country>
+					</residence>
+				</applicant>
+			</applicants>
+			<inventors>
+				<inventor sequence="1" designation="all">
+					<addressbook>
+						<last-name>Dimarco</last-name>
+						<first-name>John D.</first-name>
+						<address>
+							<street>16 Neal Dr.</street>
+							<city>08816 East Brunswick</city>
+							<country>US</country>
+						</address>
+					</addressbook>
+				</inventor>
+				<inventor sequence="2" designation="all">
+					<addressbook>
+						<last-name>Gougoutas</last-name>
+						<first-name>Jack Z.</first-name>
+						<address>
+							<street>101 Westerly Rd.</street>
+							<city>08540 Princeton</city>
+							<country>US</country>
+						</address>
+					</addressbook>
+				</inventor>
+				<inventor sequence="3" designation="all">
+					<addressbook>
+						<last-name>Vitez</last-name>
+						<first-name>Imre M.</first-name>
+						<address>
+							<street>117 Main St.</street>
+							<city>08889 Whitehouse Station</city>
+							<country>US</country>
+						</address>
+					</addressbook>
+				</inventor>
+				<inventor sequence="4" designation="all">
+					<addressbook>
+						<last-name>Davidovich</last-name>
+						<first-name>Martha</first-name>
+						<address>
+							<street>159 Fern Rd.</street>
+							<city>08816 East Brunswick</city>
+							<country>US</country>
+						</address>
+					</addressbook>
+				</inventor>
+				<inventor sequence="5" designation="all">
+					<addressbook>
+						<last-name>Galella</last-name>
+						<first-name>Michael</first-name>
+						<address>
+							<street>3 Evergreen Ct.</street>
+							<city>08502 Belle Mead</city>
+							<country>US</country>
+						</address>
+					</addressbook>
+				</inventor>
+				<inventor sequence="6" designation="all">
+					<addressbook>
+						<last-name>Malloy</last-name>
+						<first-name>Timothy M.</first-name>
+						<address>
+							<street>1902 Makefield Rd.</street>
+							<city>19067 Yardley</city>
+							<country>US</country>
+						</address>
+					</addressbook>
+				</inventor>
+				<inventor sequence="7" designation="all">
+					<addressbook>
+						<last-name>Guo</last-name>
+						<first-name>Zhenrong</first-name>
+						<address>
+							<street>21 Augusta Place</street>
+							<city>08816 East Brunswick</city>
+							<country>US</country>
+						</address>
+					</addressbook>
+				</inventor>
+				<inventor sequence="8" designation="all">
+					<addressbook>
+						<last-name>Favreau</last-name>
+						<first-name>Denis</first-name>
+						<address>
+							<street>5065 Terrase Beaudry, Saint-Hubert</street>
+							<city>J3Y 6L2 Quebec</city>
+							<country>CA</country>
+						</address>
+					</addressbook>
+				</inventor>
+			</inventors>
+			<agents>
+				<agent sequence="1" rep-type="agent">
+					<addressbook>
+						<last-name>Kalenský</last-name>
+						<first-name>Petr</first-name>
+						<address>
+							<street>Hálkova 2</street>
+							<city>Praha 2</city>
+							<postcode>12000</postcode>
+							<country>CZ</country>
+						</address>
+					</addressbook>
+				</agent>
+			</agents>
+		</parties>
+		<invention-title lang="CS">Krystalický polymorf analogu
+			epothilonu, způsob jeho výroby, farmaceutický přípravek s aktivní
+			složkou tohoto polymorfu a použití tohoto polymorfu k výrobě léčiva</invention-title>
+		<invention-title lang="EN">Polymorphs of epothilone analogs </invention-title>
+		<references-cited>
+			<citation>
+				<patcit id="pcit0001" dnum="WO9942602" dnum-type="publication number">
+					<text>(Novartis Erfind Verwalt), 26.8.1999, str. 1, 10,17,24,25,
+						nároky, anotace</text>
+				</patcit>
+			</citation>
+			<citation>
+				<patcit id="pcit0002" dnum="WO9927890" dnum-type="publication number">
+					<text>(Squibb bristol Myers CO), 10.6.1999, str. 1,5, př. 1, nároky
+						, anotace</text>
+				</patcit>
+			</citation>
+		</references-cited>
+	</bibliographic-data>
+	<abstract lang="CS">
+		<p num="1">﻿Krystalické polymorfy analogu epothilonu představovaného
+			obecným vzorcem I, označené jako forma A a forma B v uvedeném pořadí,
+			stejně jako jejich směsi. Způsob výroby nových polymorfů, použití
+			uvedených krystalických polymorfů k výrobě léčiva pro léčby, které je
+			využívají, a farmaceutické dávkovací formy, které je obsahují.
+		</p>
+	</abstract>
+	<abstract lang="EN">
+		<p num="1">There are provided in accordance with the present invention
+			two crystalline polymorphs, designated Form A and Form B,
+			respectively, as well as mixtures thereof, of an epothilone analog
+			represented by formula (I). Also provided are methods of forming the
+			novel polymorphs, therapeutic methods utilizing them and
+			pharmaceutical dosage forms containing them.
+		</p>
+	</abstract>
+</ep-patent-document>
