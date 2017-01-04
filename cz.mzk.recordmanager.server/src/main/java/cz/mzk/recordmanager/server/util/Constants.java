@@ -32,6 +32,7 @@ public class Constants {
 	public static final String JOB_ID_GENERATE_SKAT_DEDUP_KEYS		= "generateSkatDedupKeys";
 	public static final String JOB_ID_HARVEST_OBALKY_KNIH		= "obalkyKnihHarvestJob";
 	public static final String JOB_ID_HARVEST_ZAKONYPROLIDI			= "zakonyProLidiHarvestJob";
+	public static final String JOB_ID_FULLTEXT_ZAKONYPROLIDI		= "zakonyProLidiFulltextJob";
 	public static final String JOB_ID_FILTER_CASLIN					= "filterCaslinRecordsJob";
 	
 	public static final String JOB_PARAM_CONF_ID 		= "configurationId";
