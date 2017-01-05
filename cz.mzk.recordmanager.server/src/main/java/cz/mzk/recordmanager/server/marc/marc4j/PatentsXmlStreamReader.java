@@ -45,7 +45,6 @@ public class PatentsXmlStreamReader implements MarcReader{
     private XMLStreamReader xmlReader;
     
     private static final String TEXT_LEADER = "-----nam--22--------450-";
-    private static final String TEXT_007 = "ta";
     private static final String TEXT_008_PART1 = "------e";
     private static final String TEXT_008_PART2 = "--------sj----------";
     private static final String TEXT_260a = "Praha";
@@ -298,8 +297,6 @@ public class PatentsXmlStreamReader implements MarcReader{
 
 		SimpleDateFormat sdf = new SimpleDateFormat(DATE_STRING_005);
 		record.addVariableField(factory.newControlField("005", sdf.format(new Date())));
-
-    	record.addVariableField(factory.newControlField("007", TEXT_007));
 
     	record.addVariableField(factory.newDataField("300", ' ', ' ', "a", TEXT_300a));
 
