@@ -227,6 +227,7 @@ INSERT INTO harvested_record_format(id, name) VALUES (54, 'LEGISLATIVE_CONDITION
 INSERT INTO harvested_record_format(id, name) VALUES (55, 'LEGISLATIVE_OTHERS');
 INSERT INTO harvested_record_format(id, name) VALUES (56, 'LEGISLATIVE_NOTICE');
 INSERT INTO harvested_record_format(id, name) VALUES (57, 'LEGISLATIVE_CODE');
+INSERT INTO harvested_record_format(id, name) VALUES (58, 'PATENTS');
 INSERT INTO harvested_record_format(id, name) VALUES (100, 'OTHER_UNSPECIFIED');
 
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (1, 300, 'BOA001');
