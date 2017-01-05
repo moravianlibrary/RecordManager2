@@ -87,7 +87,7 @@ public class PatentsXmlStreamReader implements MarcReader{
     
     private static final Pattern PATTERN_024 = Pattern.compile("(.{4}\\s*\\d+\\/\\d+).*");
     
-    private static final Pattern A3_PATTERN = Pattern.compile("St36_CZ_(\\d{4})-(\\d{4})_A3");
+    private static final Pattern A3_PATTERN = Pattern.compile("St36_CZ_(\\d{4})-(\\d+)_A3");
     private static final String A3_URL = "http://spisy.upv.cz/Applications/%s/PPVCZ%s_%sA3.pdf";
     private static final Pattern B6_PATTERN = Pattern.compile("St36_CZ_(\\d*)_B6");
     private static final String B6_URL = "http://spisy.upv.cz/Patents/FullDocuments/%s/%s.pdf";
@@ -371,7 +371,7 @@ public class PatentsXmlStreamReader implements MarcReader{
     	String url = null;
     	Matcher matcher = A3_PATTERN.matcher(record.getControlNumber());
 		if (matcher.matches()) {
-			url = String.format(A3_URL, matcher.group(1), matcher.group(1), matcher.group(2));
+			url = String.format(A3_URL, matcher.group(1), matcher.group(1), StringUtils.leftPad(matcher.group(2), 4, '0'));
 		}
 		
 		matcher = B6_PATTERN.matcher(record.getControlNumber());
