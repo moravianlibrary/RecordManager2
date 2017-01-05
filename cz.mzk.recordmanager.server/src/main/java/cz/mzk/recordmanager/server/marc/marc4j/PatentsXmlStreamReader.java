@@ -57,7 +57,7 @@ public class PatentsXmlStreamReader implements MarcReader{
     private static final String TEXT_500a_NUMBER = "Číslo přihlášky: %s";
     private static final String TEXT_655a = "patenty";
     private static final String TEXT_0722 = "Konspekt";
-    private static final String TEXT_856y = "záznam patentu v Úřadu průmyslového vlastnictví";
+    private static final String TEXT_856y = "plný text";
     
     private static final String DATE_STRING_005 = "yyyyMMddHHmmss'.0'";
     
