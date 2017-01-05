@@ -100,6 +100,8 @@ public class PatentsXmlStreamReader implements MarcReader{
     private static final SimpleDateFormat SDF_ORIGIN = new SimpleDateFormat(DATE_ORIGIN_FORMAT);
     private static final SimpleDateFormat SDF_OUTPUT = new SimpleDateFormat(DATE_OUTPUT_FORMAT);
     
+    private static final String AUTHOR_NOT_AVAILABLE = "neuveden podle zákona 84/1972 Sb.";
+    
     /**
      * Constructs an instance with the specified input stream.
      */
@@ -143,6 +145,7 @@ public class PatentsXmlStreamReader implements MarcReader{
         String name = null;
         boolean firstAuthor = true; // first to field 100, others 700
         boolean author = true;
+        boolean authorAvailible = true;
         boolean firstCorporate = true; // first to field 110, others 710
         boolean b072 = false;
         boolean abstratcs = false;
@@ -178,14 +181,20 @@ public class PatentsXmlStreamReader implements MarcReader{
 						if(name == null) name = xmlReader.getElementText();
 						else name = xmlReader.getElementText() + ", " + name;
 						break;
-					case ELEMENT_INVENTION_TITLE:						
-						if(xmlReader.getAttributeValue(null, ATTRIBUTE_LANG).equalsIgnoreCase("cs")){
-							df = factory.newDataField("245", ' ', ' ');					
-						}
-						else{
-							df = factory.newDataField("246", '2', ' ');
-						}
+					case ELEMENT_INVENTION_TITLE:
+						df = factory.newDataField("TMP", ' ', ' ');
+						String a = xmlReader.getAttributeValue(null, ATTRIBUTE_LANG);
 						df.addSubfield(factory.newSubfield('a', xmlReader.getElementText()));
+						if (a.equalsIgnoreCase("cs")) {
+							df.setTag("245");
+							if (!authorAvailible) {
+								df.addSubfield(factory.newSubfield('c', AUTHOR_NOT_AVAILABLE));
+							}
+						}
+						else {
+							df.setTag("246");
+							df.setIndicator1('2');
+						}
 						record.addVariableField(df);
 						break;
 					case ELEMENT_ABSTRACT:
@@ -247,22 +256,31 @@ public class PatentsXmlStreamReader implements MarcReader{
 				case XMLStreamReader.END_ELEMENT:
 					switch(xmlReader.getLocalName()){
 					case ELEMENT_APPLICANT:
-						addAuthor(author, firstAuthor, firstCorporate, name, "pta");
-						if (author) firstAuthor = false;
-						else firstCorporate = false;
-						name = null;
+						if (isAuthorAvailable(name)) {
+							addAuthor(author, firstAuthor, firstCorporate, name, "pta");
+							if (author) firstAuthor = false;
+							else firstCorporate = false;
+							name = null;
+						}
+						else authorAvailible = false;
 						break;
 					case ELEMENT_INVENTOR:
-						addAuthor(author, firstAuthor, firstCorporate, name, "inv");
-						if (author) firstAuthor = false;
-						else firstCorporate = false;
-						name = null;
+						if (isAuthorAvailable(name)) {
+							addAuthor(author, firstAuthor, firstCorporate, name, "inv");
+							if (author) firstAuthor = false;
+							else firstCorporate = false;
+							name = null;
+						}
+						else authorAvailible = false;
 						break;
 					case ELEMENT_AGENT:
-						addAuthor(author, firstAuthor, firstCorporate, name, "pth");
-						if (author) firstAuthor = false;
-						else firstCorporate = false;
-						name = null;
+						if (isAuthorAvailable(name)) {
+							addAuthor(author, firstAuthor, firstCorporate, name, "pth");
+							if (author) firstAuthor = false;
+							else firstCorporate = false;
+							name = null;
+						}
+						else authorAvailible = false;
 						break;
 					case ELEMENT_CLASSIFICATION_IPCR:
 						if(df != null) record.addVariableField(df);
@@ -286,6 +304,10 @@ public class PatentsXmlStreamReader implements MarcReader{
 		}
 
         return record;
+    }
+    
+    private boolean isAuthorAvailable(String name) {
+    	return !name.equals(AUTHOR_NOT_AVAILABLE);
     }
     
     private void addAuthor(boolean personalOrCorporate, boolean b100, boolean b110, String name, String utext) {
