@@ -319,7 +319,7 @@ public class PatentsXmlStreamReader implements MarcReader{
     private void addField024(String data) {
     	Matcher matcher = PATTERN_024.matcher(data);
     	if (matcher.matches()) {
-			record.addVariableField(factory.newDataField("024", ' ', ' ', "a", 
+			record.addVariableField(factory.newDataField("024", '7', ' ', "a", 
 					matcher.group(1).replaceAll("\\s+", " "), "2", TEXT_0242));
 		}
 	}
