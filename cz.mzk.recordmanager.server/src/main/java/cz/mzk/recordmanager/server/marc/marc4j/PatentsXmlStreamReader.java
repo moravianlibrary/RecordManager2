@@ -2,6 +2,7 @@ package cz.mzk.recordmanager.server.marc.marc4j;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -51,6 +52,9 @@ public class PatentsXmlStreamReader implements MarcReader{
     private static final String TEXT_260a = "Praha :";
     private static final String TEXT_260b = "Úřad průmyslového vlastnictví,";
     private static final String TEXT_300a = "1 patent";
+    private static final String TEXT_500a_PUBLICATION = "Datum zveřejnění přihlášky: %s";
+    private static final String TEXT_500a_APPLICATION = "Datum přihlášení: %s";
+    private static final String TEXT_500a_NUMBER = "Číslo přihlášky: %s";
     private static final String TEXT_655a = "patenty";
     private static final String TEXT_0722 = "Konspekt";
     private static final String TEXT_856y = "záznam patentu v Úřadu průmyslového vlastnictví";
@@ -71,11 +75,13 @@ public class PatentsXmlStreamReader implements MarcReader{
     private static final String ELEMENT_TEXT = "text";
     private static final String ELEMENT_P = "p";
     private static final String ELEMENT_PUBLICATION_REFERENCE = "publication-reference";
+    private static final String ELEMENT_APPLICATION_REFERENCE = "application-reference";
     private static final String ELEMENT_DATE = "date";
     
     private static final String ATTRIBUTE_ID = "file";
     private static final String ATTRIBUTE_LANG = "lang";
     private static final String ATTRIBUTE_SEQUENCE = "sequence";
+    private static final String ATTRIBUTE_DOC_NUMBER = "doc-number";
     
     private static final String PATENTS_MAP = "patents.map";
     
@@ -87,6 +93,13 @@ public class PatentsXmlStreamReader implements MarcReader{
     private static final String B6_URL = "http://spisy.upv.cz/Patents/FullDocuments/%s/%s.pdf";
     private static final Pattern U1_PATTERN = Pattern.compile("St36_CZ_(\\d*)_U1");
     private static final String U1_URL = "http://spisy.upv.cz/UtilityModels/FullDocuments/FDUM%s/uv%s.pdf";
+    
+    private static final String DATE_ORIGIN_FORMAT = "yyyyMMdd";
+    private static final String DATE_OUTPUT_FORMAT = "d. M. yyyy";
+    
+    private static final SimpleDateFormat SDF_ORIGIN = new SimpleDateFormat(DATE_ORIGIN_FORMAT);
+    private static final SimpleDateFormat SDF_OUTPUT = new SimpleDateFormat(DATE_OUTPUT_FORMAT);
+    
     /**
      * Constructs an instance with the specified input stream.
      */
@@ -133,7 +146,7 @@ public class PatentsXmlStreamReader implements MarcReader{
         boolean firstCorporate = true; // first to field 110, others 710
         boolean b072 = false;
         boolean abstratcs = false;
-        boolean date = false;
+        char date = ' ';
         
         try {
 			while(xmlReader.hasNext()){
@@ -146,6 +159,7 @@ public class PatentsXmlStreamReader implements MarcReader{
 						addFields();
 						addIdentifier();					
 						addUrl();
+						add500aDocNumber();
 						break;
 					case ELEMENT_APPLICANT:
 					case ELEMENT_INVENTOR:
@@ -211,15 +225,22 @@ public class PatentsXmlStreamReader implements MarcReader{
 						}
 						break;
 					case ELEMENT_PUBLICATION_REFERENCE:
-						date = true;
+						date = 'p';
+						break;
+					case ELEMENT_APPLICATION_REFERENCE:
+						date = 'a';
 						break;
 					case ELEMENT_DATE:
-						if (date) {
-							String dateStr = xmlReader.getElementText();
+						String dateStr = xmlReader.getElementText();
+						if (date == 'p') {
 							addField008(dateStr);
 							addField260(dateStr);
-							date = false;
+							addField500aDate(TEXT_500a_PUBLICATION, dateStr);
 						}
+						else if (date == 'a') {
+							addField500aDate(TEXT_500a_APPLICATION, dateStr);
+						}
+						date = ' ';
 						break;
 					}	
 					break;
@@ -279,6 +300,20 @@ public class PatentsXmlStreamReader implements MarcReader{
         	else df.setTag("710");
 		}
 		record.addVariableField(df);
+	}
+    
+    private void addField500aDate(String text, String date) {
+		try {
+			record.addVariableField(factory.newDataField("500", ' ', ' ', "a", 
+					String.format(text, SDF_OUTPUT.format(SDF_ORIGIN.parse(date)))));
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+    }
+    
+    private void add500aDocNumber() {
+    	record.addVariableField(factory.newDataField("500", ' ', ' ', "a", 
+    			String.format(TEXT_500a_NUMBER, xmlReader.getAttributeValue(null, ATTRIBUTE_DOC_NUMBER))));
 	}
     
     private void addField024(String data) {
