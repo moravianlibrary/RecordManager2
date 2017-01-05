@@ -47,6 +47,7 @@ public class PatentsXmlStreamReader implements MarcReader{
     private static final String TEXT_LEADER = "-----nam--22--------450-";
     private static final String TEXT_008_PART1 = "------e";
     private static final String TEXT_008_PART2 = "--------sj----------";
+    private static final String TEXT_0242 = "MPT";
     private static final String TEXT_260a = "Praha";
     private static final String TEXT_260b = "Úřad průmyslového vlastnictví";
     private static final String TEXT_300a = "elektronický zdroj";
@@ -77,6 +78,8 @@ public class PatentsXmlStreamReader implements MarcReader{
     private static final String ATTRIBUTE_SEQUENCE = "sequence";
     
     private static final String PATENTS_MAP = "patents.map";
+    
+    private static final Pattern PATTERN_024 = Pattern.compile("(.{4}\\s*\\d+\\/\\d+).*");
     
     private static final Pattern A3_PATTERN = Pattern.compile("St36_CZ_(\\d{4})-(\\d{4})_A3");
     private static final String A3_URL = "http://spisy.upv.cz/Applications/%s/PPVCZ%s_%sA3.pdf";
@@ -128,7 +131,7 @@ public class PatentsXmlStreamReader implements MarcReader{
         boolean firstAuthor = true; // first to field 100, others 700
         boolean author = true;
         boolean firstCorporate = true; // first to field 110, others 710
-        boolean shouldBeProcessedText = false;
+        boolean b072 = false;
         boolean abstratcs = false;
         boolean date = false;
         
@@ -179,28 +182,25 @@ public class PatentsXmlStreamReader implements MarcReader{
 					case ELEMENT_CLASSIFICATION_IPCR:						
 						if(xmlReader.getAttributeValue(null, ATTRIBUTE_SEQUENCE).equals("1")){
 							df = factory.newDataField("653", ' ', ' ');
-							shouldBeProcessedText = true;
+							b072 = true;
 						}
 						else df = null;
 						break;
 					case ELEMENT_TEXT:
-						if(shouldBeProcessedText){
-							if(df != null){
-								String data = xmlReader.getElementText();
-								if (data.length() >=4) {
-						    		String s = data.substring(0, 4);
-						    		String get = propertyResolver.resolve(PATENTS_MAP).get(s);
-						    		if (get != null) {
-						    			String temp[] = get.split("\\|");
-						    			if (temp.length == 2) {
-											df.addSubfield(factory.newSubfield('a', temp[0]));
-											record.addVariableField(createField072(temp[1]));
-						    			}
-						    		}
-								}
-								shouldBeProcessedText = false;
-							}
+						String data = xmlReader.getElementText();
+						if (b072 && df != null && data.length() >= 4) {
+						    String s = data.substring(0, 4);
+						    String get = propertyResolver.resolve(PATENTS_MAP).get(s);
+						    if (get != null) {
+						    	String temp[] = get.split("\\|");
+						    	if (temp.length == 2) {
+									df.addSubfield(factory.newSubfield('a', temp[0]));
+									record.addVariableField(createField072(temp[1]));
+						   		}
+						   	}
+						   	b072 = false;
 						}
+						addField024(data);
 						break;
 					case ELEMENT_P:
 						if (abstratcs) {
@@ -279,6 +279,14 @@ public class PatentsXmlStreamReader implements MarcReader{
         	else df.setTag("710");
 		}
 		record.addVariableField(df);
+	}
+    
+    private void addField024(String data) {
+    	Matcher matcher = PATTERN_024.matcher(data);
+    	if (matcher.matches()) {
+			record.addVariableField(factory.newDataField("024", ' ', ' ', "a", 
+					matcher.group(1).replaceAll("\\s+", " "), "2", TEXT_0242));
+		}
 	}
     
     private void addIdentifier() {
