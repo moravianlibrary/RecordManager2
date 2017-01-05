@@ -269,7 +269,7 @@ public class PatentsXmlStreamReader implements MarcReader{
     
     private void addAuthor(boolean personalOrCorporate, boolean b100, boolean b110, String name, String utext) {
     	if (name == null) return;
-    	DataField df = factory.newDataField("TMP", '1', ' ', "a", name, "u", utext);
+    	DataField df = factory.newDataField("TMP", '1', ' ', "a", name.replaceAll("\\s+", " "), "u", utext);
     	if (personalOrCorporate) {
     		if (b100) df.setTag("100");
         	else df.setTag("700");
