@@ -18,6 +18,7 @@ import cz.mzk.recordmanager.server.metadata.institutions.MkpEbooksMetadataMarcRe
 import cz.mzk.recordmanager.server.metadata.institutions.MzkMetadataMarcRecord;
 import cz.mzk.recordmanager.server.metadata.institutions.MzkNormsMetadataMarcRecord;
 import cz.mzk.recordmanager.server.metadata.institutions.NkpMarcMetadataRecord;
+import cz.mzk.recordmanager.server.metadata.institutions.PatentsMetadataMarcRecord;
 import cz.mzk.recordmanager.server.metadata.institutions.SfxMetadataMarcRecord;
 import cz.mzk.recordmanager.server.metadata.institutions.SfxjibNlkPeriodicalsMetadataMarcRecord;
 import cz.mzk.recordmanager.server.metadata.institutions.SkatMarcMetadataRecord;
@@ -104,6 +105,8 @@ public class MetadataRecordFactory {
 			return new MkpEbooksMetadataMarcRecord(marcRec);
 		case Constants.PREFIX_BMC:
 			return new BmcMetadataMarcRecord(marcRec);
+		case Constants.PREFIX_UPV:
+			return new PatentsMetadataMarcRecord(marcRec);
 		default:
 			return new MetadataMarcRecord(marcRec);
 		}
