@@ -15,7 +15,7 @@ import cz.mzk.recordmanager.server.util.SolrUtils;
 @Component
 public class AvailabilityFacetEnricher implements DedupRecordEnricher {
 
-	private final Pattern GLOBAL_ONLINE_AVAILABILITY_INSTITUTION_PATTERN = Pattern.compile("^(mkpe|zakony).*");
+	private final Pattern GLOBAL_ONLINE_AVAILABILITY_INSTITUTION_PATTERN = Pattern.compile("^(mkpe|zakony|upv).*");
 	private final Pattern GLOBAL_UNKNOWN_AVAILABILITY_INSTITUTION_PATTERN = Pattern.compile("^sfx.*");
 
 	private static final String ONLINE = "online";
