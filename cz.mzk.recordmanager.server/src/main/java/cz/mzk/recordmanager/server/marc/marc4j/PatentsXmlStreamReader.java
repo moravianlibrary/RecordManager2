@@ -47,7 +47,7 @@ public class PatentsXmlStreamReader implements MarcReader{
     private static final String TEXT_LEADER = "-----nam--22--------450-";
     private static final String TEXT_007 = "ta";
     private static final String TEXT_008_PART1 = "------e";
-    private static final String TEXT_008_PART2 = "--------sj----------cze";
+    private static final String TEXT_008_PART2 = "--------sj----------";
     private static final String TEXT_260a = "Praha";
     private static final String TEXT_260b = "Úřad průmyslového vlastnictví";
     private static final String TEXT_300a = "elektronický zdroj";
