@@ -4,8 +4,6 @@ import java.util.List;
 
 import cz.mzk.recordmanager.api.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import cz.mzk.recordmanager.api.service.LibraryService;
@@ -27,8 +25,9 @@ public class LibraryController {
 	@ResponseBody
 	public LibraryDetailDto libraryDetails(@PathVariable Long libraryId) {
 		LibraryDetailDto detail = libraryService.getDetail(libraryId);
-		if (detail == null)
+		if (detail == null) {
 			return null;
+		}
 		return detail;
 	}
 
@@ -67,8 +66,6 @@ public class LibraryController {
 		return configurationDto;
 	}
 
-
-
 	@RequestMapping(method = RequestMethod.POST, value = "/{libraryId}/OAIHarvestConfiguration/{configId}")
 	@ResponseBody
 	public void updateOaiHarvestConfig(
@@ -85,7 +82,6 @@ public class LibraryController {
 			@PathVariable Long libraryId, @PathVariable Long configId) {
 		configurationDto.setId(configId);
 		libraryService.updateOrCreateConfig(configurationDto, libraryId);
-
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/{libraryId}/DownloadImportConfiguration/{configId}")

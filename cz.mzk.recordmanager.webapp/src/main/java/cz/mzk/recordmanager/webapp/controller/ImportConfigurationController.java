@@ -2,7 +2,6 @@ package cz.mzk.recordmanager.webapp.controller;
 
 import cz.mzk.recordmanager.api.model.ImportConfigurationDto;
 import cz.mzk.recordmanager.api.service.ImportConfigurationService;
-import cz.mzk.recordmanager.server.oai.dao.ImportConfigurationDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,9 +16,11 @@ public class ImportConfigurationController {
 
 	@Autowired
 	private ImportConfigurationService importConfigurationService;
+
 	@RequestMapping(method = RequestMethod.GET)
 	@ResponseBody
-	public List<ImportConfigurationDto> getAllConfigs(){
+	public List<ImportConfigurationDto> getAllConfigs() {
 		return importConfigurationService.getConfigurations();
 	}
+
 }
