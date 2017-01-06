@@ -1,5 +1,6 @@
 package cz.mzk.recordmanager.server.metadata.institutions;
 
+import java.util.Collections;
 import java.util.List;
 
 import cz.mzk.recordmanager.server.marc.MarcRecord;
@@ -14,11 +15,7 @@ public class PatentsMetadataMarcRecord extends MetadataMarcRecord{
 	
 	@Override
 	public List<HarvestedRecordFormatEnum> getDetectedFormatList() {
-		List<HarvestedRecordFormatEnum> list = super.getDetectedFormatList();
-		if(!list.contains(HarvestedRecordFormatEnum.PATENTS)){
-			list.add(HarvestedRecordFormatEnum.PATENTS);
-		}
-		return list;	
+		return Collections.singletonList(HarvestedRecordFormatEnum.PATENTS);	
 	}
 
 }
