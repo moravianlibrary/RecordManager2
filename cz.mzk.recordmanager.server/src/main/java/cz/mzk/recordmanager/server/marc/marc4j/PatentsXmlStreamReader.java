@@ -145,7 +145,7 @@ public class PatentsXmlStreamReader implements MarcReader{
         String name = null;
         boolean firstAuthor = true; // first to field 100, others 700
         boolean author = true;
-        boolean authorAvailible = true;
+        boolean authorAvailable = true;
         boolean firstCorporate = true; // first to field 110, others 710
         boolean b072 = false;
         boolean abstratcs = false;
@@ -187,7 +187,7 @@ public class PatentsXmlStreamReader implements MarcReader{
 						df.addSubfield(factory.newSubfield('a', xmlReader.getElementText()));
 						if (a.equalsIgnoreCase("cs")) {
 							df.setTag("245");
-							if (!authorAvailible) {
+							if (!authorAvailable) {
 								df.addSubfield(factory.newSubfield('c', AUTHOR_NOT_AVAILABLE));
 							}
 						}
@@ -260,27 +260,27 @@ public class PatentsXmlStreamReader implements MarcReader{
 							addAuthor(author, firstAuthor, firstCorporate, name, "pta");
 							if (author) firstAuthor = false;
 							else firstCorporate = false;
-							name = null;
 						}
-						else authorAvailible = false;
+						else authorAvailable = false;
+						name = null;
 						break;
 					case ELEMENT_INVENTOR:
 						if (isAuthorAvailable(name)) {
 							addAuthor(author, firstAuthor, firstCorporate, name, "inv");
 							if (author) firstAuthor = false;
 							else firstCorporate = false;
-							name = null;
 						}
-						else authorAvailible = false;
+						else authorAvailable = false;
+						name = null;
 						break;
 					case ELEMENT_AGENT:
 						if (isAuthorAvailable(name)) {
 							addAuthor(author, firstAuthor, firstCorporate, name, "pth");
 							if (author) firstAuthor = false;
 							else firstCorporate = false;
-							name = null;
 						}
-						else authorAvailible = false;
+						else authorAvailable = false;
+						name = null;
 						break;
 					case ELEMENT_CLASSIFICATION_IPCR:
 						if(df != null) record.addVariableField(df);
@@ -307,7 +307,10 @@ public class PatentsXmlStreamReader implements MarcReader{
     }
     
     private boolean isAuthorAvailable(String name) {
-    	return !name.equals(AUTHOR_NOT_AVAILABLE);
+    	if (name != null) {
+    		return !name.equals(AUTHOR_NOT_AVAILABLE);
+		}
+    	return true;
     }
     
     private void addAuthor(boolean personalOrCorporate, boolean b100, boolean b110, String name, String utext) {
