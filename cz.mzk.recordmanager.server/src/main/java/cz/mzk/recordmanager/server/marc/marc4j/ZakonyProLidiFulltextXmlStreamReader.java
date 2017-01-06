@@ -26,7 +26,7 @@ public class ZakonyProLidiFulltextXmlStreamReader {
     
     private static final String ATTR_NAME_CLASS = "class";
     
-    private static final String ATTR_VALUE_FRAGS_NOVEL = "Frags NOVEL";
+    private static final String ATTR_VALUE_FRAGS_NOVEL = "Frags";
     
     /**
      * Constructs an instance with the specified input stream.
