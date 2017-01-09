@@ -16,6 +16,7 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.text.WordUtils;
 import org.marc4j.MarcReader;
 import org.marc4j.marc.ControlField;
 import org.marc4j.marc.DataField;
@@ -315,16 +316,17 @@ public class PatentsXmlStreamReader implements MarcReader{
     
     private void addAuthor(boolean personalOrCorporate, boolean b100, boolean b110, String name, String utext) {
     	if (name == null) return;
-    	DataField df = factory.newDataField("TMP", '1', ' ', "a", name.replaceAll("\\s+", " "), "u", utext);
+    	String tag = null;
     	if (personalOrCorporate) {
-    		if (b100) df.setTag("100");
-        	else df.setTag("700");
+    		if (b100) tag = "100";
+        	else tag = "700";
+    		name = WordUtils.capitalizeFully(name);
 		}
     	else {
-    		if (b110) df.setTag("110");
-        	else df.setTag("710");
+    		if (b110) tag = "110";
+        	else tag = "710";
 		}
-		record.addVariableField(df);
+		record.addVariableField(factory.newDataField(tag, '1', ' ', "a", name.replaceAll("\\s+", " "), "u", utext));
 	}
     
     private void addField500aDate(String text, String date) {
