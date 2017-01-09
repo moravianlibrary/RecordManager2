@@ -529,6 +529,59 @@ public class MetadataMarcRecord implements MetadataRecord {
 		return false;
 	}
 
+	protected boolean isComputerCarrier(){
+		String ldr06 = Character.toString(underlayingMarc.getLeader().getTypeOfRecord());
+		
+		String f006 = underlayingMarc.getControlField("006");
+		String f006_00 = (f006 != null) && (f006.length() > 0) ? Character.toString(f006.charAt(0)) : "";
+		String f006_06 = (f006 != null) && (f006.length() > 6) ? Character.toString(f006.charAt(6)) : "";
+		
+		String f007 = underlayingMarc.getControlField("007");
+		String f007_00 = (f007 != null) && (f007.length() > 0) ? Character.toString(f007.charAt(0)) : "";
+		
+		String f008 = underlayingMarc.getControlField("008");
+		String f008_23 = (f008 != null) && (f008.length() > 23) ? Character.toString(f008.charAt(23)) : "";
+		String f008_29 = (f008 != null) && (f008.length() > 29) ? Character.toString(f008.charAt(29)) : "";
+
+		String f245h = underlayingMarc.getField("245", 'h');
+		if(f245h == null) f245h = "";
+		
+		String f300a = underlayingMarc.getField("300", 'a');
+		if(f300a == null) f300a = "";
+		
+		String f336b = underlayingMarc.getField("336", 'b');
+		if(f336b == null) f336b = "";
+		
+		String f338b = underlayingMarc.getField("338", 'b');
+		if(f338b == null) f338b = "";
+		
+		if(f245h.matches("(?i).*elektronický\\szdroj.*")){
+			return true;
+		}
+		if(ldr06.matches("(?i)[acdijpt]") && f008_23.matches("(?i)s")){
+			return true;
+		}
+		if(f006_00.matches("(?i)[acdijpt]") && f006_06.matches("(?i)s")){
+			return true;
+		}
+		if(ldr06.matches("(?i)[efgkopr]") && f008_29.matches("(?i)s")){
+			return true;
+		}
+		if(f006_00.matches("(?i)[efgkopr]") && f006_06.matches("(?i)s")){
+			return true;
+		}
+		if(ldr06.matches("(?i)m") && f006_00.matches("(?i)m")){
+			return true;
+		}
+		if(ldr06.matches("(?i)m") && f245h.matches("(?i).*multim[eé]dium.*") && f300a.matches("(?i).*cd-rom.*")) return true;
+		if(f007_00.matches("(?i)c")) return true;
+		if(f300a.matches("(?i).*disketa.*")) return true;
+		if(f336b.matches("(?i)cod|cop")) return true;
+		if(f338b.matches("(?i)ck|cb|cd|ce|ca|cf|ch|cz")) return true;
+		
+		return false;
+	}
+	
 	protected HarvestedRecordFormatEnum getAudioFormat(){
 		String ldr06 = Character.toString(underlayingMarc.getLeader().getTypeOfRecord());
 		
@@ -735,6 +788,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 		if(isKit()) hrf.add(HarvestedRecordFormatEnum.OTHER_KIT);
 		if(isObject()) hrf.add(HarvestedRecordFormatEnum.OTHER_OBJECT);
 		if(isMixDocument()) hrf.add(HarvestedRecordFormatEnum.OTHER_MIX_DOCUMENT);
+		if(isComputerCarrier()) hrf.add(HarvestedRecordFormatEnum.COMPUTER_CARRIERS);
 		if(isUnspecified()) hrf.add(HarvestedRecordFormatEnum.OTHER_UNSPECIFIED);		
 		if(hrf.isEmpty()) hrf.add(HarvestedRecordFormatEnum.OTHER_UNSPECIFIED);
 		

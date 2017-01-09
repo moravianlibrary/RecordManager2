@@ -947,3 +947,5 @@ INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granul
 --changeset tomascejpek:38
 INSERT INTO harvested_record_format(id, name) VALUES (58, 'PATENTS');
 
+--changeset tomascejpek:39
+INSERT INTO harvested_record_format(id, name) VALUES (59, 'COMPUTER_CARRIERS');

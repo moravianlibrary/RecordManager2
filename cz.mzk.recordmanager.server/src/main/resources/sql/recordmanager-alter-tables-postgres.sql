@@ -693,3 +693,6 @@ INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granul
 
 -- 05. 01. 2017 tomascejpek
 INSERT INTO harvested_record_format(id, name) VALUES (58, 'PATENTS');
+
+-- 06. 01. 2017 tomascejpek
+INSERT INTO harvested_record_format(id, name) VALUES (59, 'COMPUTER_CARRIERS');
