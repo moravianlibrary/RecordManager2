@@ -4,7 +4,9 @@ import {RouterModule} from "@angular/router";
 const  jobsRoutes = [
   {
     path: 'jobs',
-    component: JobsComponent
+    redirectTo: '/library',
+    pathMatch: 'full'
+    // component: JobsComponent
   }
 ];
 

@@ -72,15 +72,20 @@ export class LibraryComponent implements OnInit{
 	}
 
 	removeConfiguration(confId: number){
-	  this.librariesService.removeConfiguration(confId).subscribe(res => {
-	    this.getLibraryDetails(this.library.id);
-    })
+		if (confirm("Are You sure You want to remove this configuration?")){
+			this.librariesService.removeConfiguration(confId).subscribe(res => {
+				this.getLibraryDetails(this.library.id);
+			});
+		}
   }
 
 	removeLibrary(){
-	  this.librariesService.removeLibrary(this.library.id).subscribe(res => {
-	    this.router.navigate(['..']);
-    });
+		if (confirm("Are You sure You want to remove this library?")) {
+			this.librariesService.removeLibrary(this.library.id).subscribe(res => {
+				this.router.navigate(['..']);
+			});
+		}
+
   }
 
 	changeConfig(field: any, key: string){

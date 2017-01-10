@@ -33,7 +33,7 @@
       <input type="text"  [(ngModel)]="library.city" name="libraryCity" class="form-control" id="city" [value]="library.city">
     </div>
 
-    <button type="button" class="btn btn-danger" (click)="removeLibrary()"><i class="glyphicon glyphicon-trash"></i> Delete</button>
+    <!--<button type="button" class="btn btn-danger" (click)="removeLibrary()"><i class="glyphicon glyphicon-trash"></i> Delete</button>-->
     <button type="button" class="btn btn-primary saveBtn" (click)="updateLibrary()"><i class="glyphicon glyphicon-floppy-save"></i> Save</button>
 
   </form>
@@ -89,7 +89,7 @@
 
             </div>
 
-            <button type="button" class="btn btn-danger" (click)="removeLibrary()"><i class="glyphicon glyphicon-trash"></i> Delete</button>
+            <!--<button type="button" class="btn btn-danger" (click)="removeConfiguration(selected.id)"><i class="glyphicon glyphicon-trash"></i> Delete</button>-->
             <button type="button" class="btn btn-primary saveBtn" (click)="updateConfiguration(library?.id, selected?.configurationType)"><i class="glyphicon glyphicon-floppy-save"></i> Save</button>
 
           </form>
