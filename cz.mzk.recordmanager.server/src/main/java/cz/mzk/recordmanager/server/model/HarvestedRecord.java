@@ -141,6 +141,10 @@ public class HarvestedRecord extends AbstractDomainObject {
 	
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name="harvested_record_id", referencedColumnName="id", nullable=false)
+	private List<Ean> eans = new ArrayList<>();
+	
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name="harvested_record_id", referencedColumnName="id", nullable=false)
 	private List<Issn> issns = new ArrayList<Issn>();
 	
 	@OneToMany(cascade = CascadeType.ALL)
@@ -226,6 +230,9 @@ public class HarvestedRecord extends AbstractDomainObject {
 	
 	@Column(name="next_dedup_flag")
 	private boolean nextDedupFlag = true;
+	
+	@Column(name="source_info")
+	private String sourceInfo;
 	
 	/**
 	 * indicator variable used for filtering reasons
@@ -558,4 +565,21 @@ public class HarvestedRecord extends AbstractDomainObject {
 	public void setInspiration(List<Inspiration> inspiration) {
 		this.inspiration = inspiration;
 	}
+
+	public String getSourceInfo() {
+		return sourceInfo;
+	}
+
+	public void setSourceInfo(String sourceInfo) {
+		this.sourceInfo = sourceInfo;
+	}
+
+	public List<Ean> getEans() {
+		return eans;
+	}
+
+	public void setEans(List<Ean> eans) {
+		this.eans = eans;
+	}
+	
 }

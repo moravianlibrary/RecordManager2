@@ -147,6 +147,7 @@ CREATE TABLE harvested_record (
   weight               DECIMAL(10),
   cluster_id           VARCHAR(20),
   pages                DECIMAL(10),
+  source_info          VARCHAR(255),
   dedup_keys_hash      CHAR(40),
   next_dedup_flag      BOOLEAN DEFAULT TRUE,
   raw_record           BYTEA,
@@ -213,6 +214,17 @@ CREATE TABLE issn (
 );
 
 COMMENT ON TABLE issn IS 'dedup_keys: table contatining ISSNs';
+
+CREATE TABLE ean (
+  id                   DECIMAL(10) PRIMARY KEY,
+  harvested_record_id  DECIMAL(10),
+  ean                  DECIMAL(13),
+  order_in_record      DECIMAL(4),
+  note                 VARCHAR(300),
+  FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE
+);
+
+COMMENT ON TABLE ean IS 'dedup_keys: table contatining EANs';
 
 CREATE TABLE cnb (
   id                   DECIMAL(10) PRIMARY KEY,
