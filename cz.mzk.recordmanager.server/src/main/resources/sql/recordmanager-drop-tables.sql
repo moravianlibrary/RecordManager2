@@ -13,3 +13,5 @@ DROP TABLE library;
 DROP TABLE recordmanager_key;
 DROP TABLE inspiration;
 DROP TABLE ismn;
+DROP TABLE ean;
+DROP TABLE short_title;

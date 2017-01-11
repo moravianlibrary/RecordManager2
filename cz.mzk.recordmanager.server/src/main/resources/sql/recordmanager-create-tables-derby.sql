@@ -165,7 +165,7 @@ CREATE TABLE cnb (
   id                   DECIMAL(10) PRIMARY KEY,
   harvested_record_id  DECIMAL(10),
   cnb                  VARCHAR(100),
-  CONSTRAINT cnb_fk   FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id)
+  CONSTRAINT cnb_fk    FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id)
 );
 
 CREATE TABLE title (
@@ -173,15 +173,24 @@ CREATE TABLE title (
   harvested_record_id  DECIMAL(10),
   title                VARCHAR(255),
   order_in_record      DECIMAL(4),
-  similarity_enabled  BOOLEAN DEFAULT FALSE,
+  similarity_enabled   BOOLEAN DEFAULT FALSE,
   CONSTRAINT title_fk  FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id)
+);
+
+CREATE TABLE short_title (
+  id                   DECIMAL(10) PRIMARY KEY,
+  harvested_record_id  DECIMAL(10),
+  short_title          VARCHAR(255),
+  order_in_record      DECIMAL(4),
+  similarity_enabled   BOOLEAN DEFAULT FALSE,
+  CONSTRAINT short_title_fk  FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id)
 );
 
 CREATE TABLE oclc (
   id                   DECIMAL(10) PRIMARY KEY,
   harvested_record_id  DECIMAL(10),
   oclc                 VARCHAR(20),
-  CONSTRAINT oclc_fk  FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id)
+  CONSTRAINT oclc_fk   FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id)
 );
 
 CREATE TABLE language (

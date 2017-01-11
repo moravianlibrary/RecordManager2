@@ -7,6 +7,7 @@ DELETE FROM batch_job_instance;
 
 DELETE FROM cosmotron_996;
 DELETE FROM title;
+DELETE FROM short_title;
 DELETE FROM sigla;
 DELETE FROM oclc;
 DELETE FROM oai_harvest_conf;

@@ -157,6 +157,10 @@ public class HarvestedRecord extends AbstractDomainObject {
 	
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name="harvested_record_id", referencedColumnName="id", nullable=false)
+	private List<ShortTitle> shortTitles = new ArrayList<>();
+	
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name="harvested_record_id", referencedColumnName="id", nullable=false)
 	private List<Oclc> oclcs = new ArrayList<Oclc>();
 	
 	@OneToMany(cascade = CascadeType.ALL)
@@ -580,6 +584,14 @@ public class HarvestedRecord extends AbstractDomainObject {
 
 	public void setEans(List<Ean> eans) {
 		this.eans = eans;
+	}
+
+	public List<ShortTitle> getShortTitles() {
+		return shortTitles;
+	}
+
+	public void setShortTitles(List<ShortTitle> shortTitles) {
+		this.shortTitles = shortTitles;
 	}
 	
 }

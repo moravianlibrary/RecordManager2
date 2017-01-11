@@ -240,7 +240,16 @@ CREATE TABLE title (
   harvested_record_id  DECIMAL(10),
   title                VARCHAR(255),
   order_in_record      DECIMAL(4),
-  similarity_enabled  BOOLEAN DEFAULT FALSE,
+  similarity_enabled   BOOLEAN DEFAULT FALSE,
+  FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE
+);
+
+CREATE TABLE short_title (
+  id                   DECIMAL(10) PRIMARY KEY,
+  harvested_record_id  DECIMAL(10),
+  short_title          VARCHAR(255),
+  order_in_record      DECIMAL(4),
+  similarity_enabled   BOOLEAN DEFAULT FALSE,
   FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE
 );
 

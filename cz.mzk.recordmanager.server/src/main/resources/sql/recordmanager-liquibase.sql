@@ -962,3 +962,14 @@ CREATE TABLE ean (
 );
 COMMENT ON TABLE ean IS 'dedup_keys: table contatining EANs';
 CREATE INDEX ean_harvested_record_idx ON ean(harvested_record_id); 
+
+--changeset tomascejpek:41
+CREATE TABLE short_title (
+  id                   DECIMAL(10) PRIMARY KEY,
+  harvested_record_id  DECIMAL(10),
+  short_title          VARCHAR(255),
+  order_in_record      DECIMAL(4),
+  similarity_enabled   BOOLEAN DEFAULT FALSE,
+  FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE
+);
+CREATE INDEX short_title_harvested_record_idx ON short_title(harvested_record_id);
