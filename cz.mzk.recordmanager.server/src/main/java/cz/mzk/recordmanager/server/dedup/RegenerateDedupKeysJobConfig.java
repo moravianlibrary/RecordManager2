@@ -106,6 +106,7 @@ public class RegenerateDedupKeysJobConfig {
 		pqpf.setDataSource(dataSource);
 		pqpf.setSelectClause("SELECT id");
 		pqpf.setFromClause("FROM harvested_record hr");
+		pqpf.setWhereClause("WHERE dedup_keys_hash is null");
 		pqpf.setSortKey("id");
 		reader.setRowMapper(new LongValueRowMapper());
 		reader.setPageSize(100);
