@@ -61,6 +61,7 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 			title.setTitleStr(MetadataUtils.normalizeAndShorten(
 						title.getTitleStr(),
 						EFFECTIVE_TITLE_LENGTH));
+			if (title.getTitleStr() == "") continue;
 			if (!titles.contains(title)) {
 				titles.add(title);
 			}

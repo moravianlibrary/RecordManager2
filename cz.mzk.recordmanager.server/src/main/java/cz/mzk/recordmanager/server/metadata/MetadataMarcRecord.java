@@ -303,13 +303,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 				}
 			}
 		}
-		
-		if (result.isEmpty()) {
-			Title title = new Title();
-			title.setTitleStr("");
-			title.setOrderInRecord(1L);
-			result.add(title);
-		}
+
 		return result;
 	}
 

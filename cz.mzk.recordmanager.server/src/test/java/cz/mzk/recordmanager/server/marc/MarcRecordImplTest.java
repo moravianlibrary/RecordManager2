@@ -187,18 +187,17 @@ public class MarcRecordImplTest extends AbstractTest {
 				+ "buchhandels : Amtsblatt der Deutschen Bibliothek.");
 		expectedTitle3.setOrderInRecord(3L);
 		
-		Assert.assertEquals(3, metadataRecord.getTitle().size());
-		Assert.assertEquals(metadataRecord.getTitle().get(0),expectedTitle1);
-		Assert.assertEquals(metadataRecord.getTitle().get(1),expectedTitle2);
-		Assert.assertEquals(metadataRecord.getTitle().get(2),expectedTitle3);
+		List<Title> titles = metadataRecord.getTitle();
+		Assert.assertEquals(3, titles.size());
+		Assert.assertEquals(titles.get(0),expectedTitle1);
+		Assert.assertEquals(titles.get(1),expectedTitle2);
+		Assert.assertEquals(titles.get(2),expectedTitle3);
 		data.clear();
 
 		mri = MarcRecordFactory.recordFactory(data);
 		metadataRecord = metadataFactory.getMetadataRecord(mri);
-		Assert.assertEquals(1, metadataRecord.getTitle().size());
-		Assert.assertTrue(metadataRecord.getTitle().get(0).getTitleStr().isEmpty());
+		Assert.assertEquals(0, metadataRecord.getTitle().size());
 		data.clear();
-		
 	}
 	
 	@Test
