@@ -70,8 +70,8 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 		List<ShortTitle> shortTitles = new ArrayList<>();
 		for (ShortTitle shortTitle: metadataRecord.getShortTitles()) {
 			shortTitle.setShortTitleStr(MetadataUtils.normalizeAndShorten(
-					shortTitle.getShortTitleStr(),
-						EFFECTIVE_TITLE_LENGTH));
+					shortTitle.getShortTitleStr(), EFFECTIVE_TITLE_LENGTH));
+			if (shortTitle.getShortTitleStr() == "") continue;
 			if (!shortTitles.contains(shortTitle)) {
 				shortTitles.add(shortTitle);
 			}
