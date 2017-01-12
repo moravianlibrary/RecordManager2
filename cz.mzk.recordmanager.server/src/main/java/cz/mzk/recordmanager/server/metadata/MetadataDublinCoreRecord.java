@@ -538,7 +538,7 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 	@Override
 	public List<Ean> getEANs() {
 		// TODO Auto-generated method stub
-		return null;
+		return Collections.emptyList();
 	}
 
 }
