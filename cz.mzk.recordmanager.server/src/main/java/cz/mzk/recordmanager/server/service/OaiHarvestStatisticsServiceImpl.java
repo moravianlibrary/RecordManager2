@@ -1,7 +1,7 @@
 package cz.mzk.recordmanager.server.service;
 
 import cz.mzk.recordmanager.api.model.IdDto;
-import cz.mzk.recordmanager.api.model.batch.OaiHarvestJobStatisticsDto;
+import cz.mzk.recordmanager.api.model.batch.OaiHarvesrJobStatisticsDto;
 import cz.mzk.recordmanager.api.service.OaiHarvestStatisticsService;
 import cz.mzk.recordmanager.server.oai.dao.ImportConfigurationDAO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,10 +21,10 @@ public class OaiHarvestStatisticsServiceImpl implements
 	private ImportConfigurationDAO importConfigurationDAO;
 
 	@Override
-	public List<OaiHarvestJobStatisticsDto> getHarvestJobStatistics(Integer offset) {
+	public List<OaiHarvesrJobStatisticsDto> getHarvestJobStatistics(Integer offset) {
 		return jdbcTemplate.query("SELECT * FROM oai_harvest_job_stat LIMIT 10 OFFSET ?",
-				new BeanPropertyRowMapper<OaiHarvestJobStatisticsDto>(
-						OaiHarvestJobStatisticsDto.class), offset);
+				new BeanPropertyRowMapper<OaiHarvesrJobStatisticsDto>(
+						OaiHarvesrJobStatisticsDto.class), offset);
 	}
 
 	@Override

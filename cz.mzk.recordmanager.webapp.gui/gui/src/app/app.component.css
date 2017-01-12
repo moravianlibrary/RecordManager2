@@ -128,3 +128,8 @@ body {
     margin-right: 0;
   }
 }
+
+#collapsedWall{
+  background-color: #000000;
+  border: none #000000;
+}

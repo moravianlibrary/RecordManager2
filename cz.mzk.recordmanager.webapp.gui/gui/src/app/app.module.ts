@@ -4,10 +4,14 @@ import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
 import { AppComponent } from './app.component';
-import {LibrariesModule} from "./libraries/libraries.module";
 import {routing} from "./app.routing";
 import {StatisticsModule} from "./statistics/statistics.module";
-import {JobsModule} from "./jobs/jobs.module";
+import {LoginModule} from "./login/login.module";
+import {LibraryModule} from "./library/library.module";
+import {JobModule} from "./job/job.module";
+
+
+
 
 
 @NgModule({
@@ -15,13 +19,14 @@ import {JobsModule} from "./jobs/jobs.module";
     AppComponent
   ],
   imports: [
-    BrowserModule,
-    FormsModule,
-    HttpModule,
-    LibrariesModule,
-    StatisticsModule,
-    JobsModule,
-    routing
+      BrowserModule,
+      FormsModule,
+      HttpModule,
+      LibraryModule,
+      StatisticsModule,
+      LoginModule,
+      JobModule,
+      routing
   ],
   providers: [],
   bootstrap: [AppComponent]

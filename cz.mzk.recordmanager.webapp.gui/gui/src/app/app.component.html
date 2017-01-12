@@ -12,7 +12,16 @@
         <a routerLink="/library">Libraries</a>
       </li>
       <li>
-        <a routerLink="/jobs" >Jobs</a>
+        <a  data-toggle="collapse"  href="#jobsCollapse" aria-expanded="false" aria-controls="collapseExample">Jobs</a>
+
+        <div class="collapse" id="jobsCollapse">
+          <div class="well" id="collapsedWall">
+            <ul>
+              <li><a routerLink="job/runners">Run</a></li>
+              <li><a>Statistics</a></li>
+            </ul>
+          </div>
+        </div>
       </li>
       <li>
         <a routerLink="oaiHarvestStats">Statistics</a>
@@ -21,7 +30,7 @@
         <a routerLink="#">About</a>
       </li>
       <li>
-        <a routerLink="#">Login</a>
+        <a routerLink="/login">Login</a>
       </li>
     </ul>
   </div>
