@@ -70,6 +70,7 @@ public class HarvestedRecordFormat {
 		LEGISLATIVE_CODE(57L), // řád
 		PATENTS(58L),
 		COMPUTER_CARRIERS(59L),
+		OTHER_OTHER(60L),
 		OTHER_UNSPECIFIED(100L);
 
 		private Long numValue;

@@ -27,4 +27,5 @@ INSERT INTO harvested_record_format(id, name) VALUES (23, 'VIDEO_OTHER');
 INSERT INTO harvested_record_format(id, name) VALUES (24, 'KIT');
 INSERT INTO harvested_record_format(id, name) VALUES (25, 'OBJECT');
 INSERT INTO harvested_record_format(id, name) VALUES (26, 'MIX_DOCUMENT');
+INSERT INTO harvested_record_format(id, name) VALUES (60, 'OTHER_OTHER');
 INSERT INTO harvested_record_format(id, name) VALUES (100, 'UNSPECIFIED');

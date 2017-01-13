@@ -949,3 +949,6 @@ INSERT INTO harvested_record_format(id, name) VALUES (58, 'PATENTS');
 
 --changeset tomascejpek:39
 INSERT INTO harvested_record_format(id, name) VALUES (59, 'COMPUTER_CARRIERS');
+
+--changeset tomascejpek:40
+INSERT INTO harvested_record_format(id, name) VALUES (60, 'OTHER_OTHER');

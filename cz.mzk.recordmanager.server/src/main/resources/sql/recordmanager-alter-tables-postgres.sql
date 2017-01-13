@@ -696,3 +696,6 @@ INSERT INTO harvested_record_format(id, name) VALUES (58, 'PATENTS');
 
 -- 06. 01. 2017 tomascejpek
 INSERT INTO harvested_record_format(id, name) VALUES (59, 'COMPUTER_CARRIERS');
+
+-- 06. 01. 2017 tomascejpek
+INSERT INTO harvested_record_format(id, name) VALUES (60, 'OTHER_OTHER');
