@@ -228,7 +228,7 @@ INSERT INTO harvested_record_format(id, name) VALUES (55, 'LEGISLATIVE_OTHERS');
 INSERT INTO harvested_record_format(id, name) VALUES (56, 'LEGISLATIVE_NOTICE');
 INSERT INTO harvested_record_format(id, name) VALUES (57, 'LEGISLATIVE_CODE');
 INSERT INTO harvested_record_format(id, name) VALUES (58, 'PATENTS');
-INSERT INTO harvested_record_format(id, name) VALUES (59, 'COMPUTER_CARRIER');
+INSERT INTO harvested_record_format(id, name) VALUES (59, 'OTHER_COMPUTER_CARRIER');
 INSERT INTO harvested_record_format(id, name) VALUES (60, 'OTHER_OTHER');
 INSERT INTO harvested_record_format(id, name) VALUES (100, 'OTHER_UNSPECIFIED');
 

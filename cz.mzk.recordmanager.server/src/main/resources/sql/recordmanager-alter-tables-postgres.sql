@@ -699,3 +699,6 @@ INSERT INTO harvested_record_format(id, name) VALUES (59, 'COMPUTER_CARRIERS');
 
 -- 06. 01. 2017 tomascejpek
 INSERT INTO harvested_record_format(id, name) VALUES (60, 'OTHER_OTHER');
+
+-- 13. 01. 2017 tomascejpek
+UPDATE harvested_record_format SET name='OTHER_COMPUTER_CARRIER' WHERE id=59;
