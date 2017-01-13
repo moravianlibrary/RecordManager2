@@ -686,49 +686,17 @@ public class MetadataMarcRecord implements MetadataRecord {
 		return null;
 	}
 	
-	protected boolean isKit(){
+	protected boolean isOthers(){
 		String ldr06 = Character.toString(underlayingMarc.getLeader().getTypeOfRecord());
 		
 		String f006 = underlayingMarc.getControlField("006");
-	    String f006_00 = (f006 != null) && (f006.length() > 0) ? Character.toString(f006.charAt(0)) : "";
+		String f006_00 = (f006 != null) && (f006.length() > 0) ? Character.toString(f006.charAt(0)) : "";
 		
 		String f007 = underlayingMarc.getControlField("007");
-	    String f007_00 = (f007 != null) && (f007.length() > 0) ? Character.toString(f007.charAt(0)) : "";
-		
-	    if(ldr06.matches("(?i)o")) return true;
-	    if(f006_00.matches("(?i)o") && f007_00.matches("(?i)o")) return true;
-		return false;
-	}
-	
-	protected boolean isObject(){
-		String ldr06 = Character.toString(underlayingMarc.getLeader().getTypeOfRecord());
-		
-		String f006 = underlayingMarc.getControlField("006");
-	    String f006_00 = (f006 != null) && (f006.length() > 0) ? Character.toString(f006.charAt(0)) : "";
+		String f007_00 = (f007 != null) && (f007.length() > 0) ? Character.toString(f007.charAt(0)) : "";
 		
 		String f008 = underlayingMarc.getControlField("008");
-	    String f008_33 = (f008 != null) && (f008.length() > 33) ? Character.toString(f008.charAt(33)) : "";
-	    		
-		String f336b = underlayingMarc.getField("336", 'b');
-		if(f336b == null) f336b = "";
-				
-	    if(ldr06.matches("(?i)r")) return true;
-	    if(f336b.matches("(?i)tcf|tdm|tdf")) return true;
-	    if(f008_33.matches("(?i)d")) return true;
-	    if(f006_00.matches("(?i)r")) return true;
-		return false;
-	}
-	
-	protected boolean isMixDocument(){
-		String ldr06 = Character.toString(underlayingMarc.getLeader().getTypeOfRecord());
-		
-	    if(ldr06.matches("(?i)p")) return true;
-		return false;
-	}
-	
-	protected boolean isUnspecified(){
-		String f007 = underlayingMarc.getControlField("007");
-	    String f007_00 = (f007 != null) && (f007.length() > 0) ? Character.toString(f007.charAt(0)) : "";
+		String f008_33 = (f008 != null) && (f008.length() > 33) ? Character.toString(f008.charAt(33)) : "";
 		
 		String f336b = underlayingMarc.getField("336", 'b');
 		if(f336b == null) f336b = "";
@@ -738,6 +706,16 @@ public class MetadataMarcRecord implements MetadataRecord {
 				
 		String f338b = underlayingMarc.getField("338", 'b');
 		if(f338b == null) f338b = "";
+		
+		if(ldr06.matches("(?i)o")) return true;
+		if(f006_00.matches("(?i)o") && f007_00.matches("(?i)o")) return true;
+		
+		if(ldr06.matches("(?i)p")) return true;
+
+		if(ldr06.matches("(?i)r")) return true;
+		if(f336b.matches("(?i)tcf|tdm|tdf")) return true;
+		if(f008_33.matches("(?i)d")) return true;
+		if(f006_00.matches("(?i)r")) return true;
 		
 		if(f007_00.matches("(?i)z") && f336b.matches("(?i)zzz")) return true;
 		if(f337b.matches("(?i)[xz]")) return true;
@@ -763,12 +741,9 @@ public class MetadataMarcRecord implements MetadataRecord {
 		if(audio != null) hrf.add(audio);
 		HarvestedRecordFormatEnum video = getVideoDocument();
 		if(video != null) hrf.add(video);
-		if(isKit()) hrf.add(HarvestedRecordFormatEnum.OTHER_KIT);
-		if(isObject()) hrf.add(HarvestedRecordFormatEnum.OTHER_OBJECT);
-		if(isMixDocument()) hrf.add(HarvestedRecordFormatEnum.OTHER_MIX_DOCUMENT);
 		if(isComputerCarrier()) hrf.add(HarvestedRecordFormatEnum.COMPUTER_CARRIERS);
-		if(isUnspecified()) hrf.add(HarvestedRecordFormatEnum.OTHER_UNSPECIFIED);		
-		if(hrf.isEmpty()) hrf.add(HarvestedRecordFormatEnum.OTHER_UNSPECIFIED);
+		if(isOthers()) hrf.add(HarvestedRecordFormatEnum.OTHER_OTHER);
+		if(hrf.isEmpty()) hrf.add(HarvestedRecordFormatEnum.OTHER_OTHER);
 		
 		return hrf;
 	}
