@@ -454,39 +454,17 @@ public class MetadataMarcRecord implements MetadataRecord {
 	}
 		
 	protected boolean isBraill(){
-		String ldr06 = Character.toString(underlayingMarc.getLeader().getTypeOfRecord());
-		
-	    String f006 = underlayingMarc.getControlField("006");
-		String f006_06 = (f006 != null) && (f006.length() > 6) ? Character.toString(f006.charAt(6)) : "";
-	    String f006_12 = (f006 != null) && (f006.length() > 12) ? Character.toString(f006.charAt(12)) : "";
-	    
-	    String f007 = underlayingMarc.getControlField("007");
-	    String f007_00 = (f007 != null) && (f007.length() > 0) ? Character.toString(f007.charAt(0)) : "";
+		String f007 = underlayingMarc.getControlField("007");
+		String f007_00 = (f007 != null) && (f007.length() > 0) ? Character.toString(f007.charAt(0)) : "";
 		String f007_01 = (f007 != null) && (f007.length() > 1) ? Character.toString(f007.charAt(1)) : "";
-	    
-		String f008 = underlayingMarc.getControlField("008");
-	    String f008_23 = (f008 != null) && (f008.length() > 23) ? Character.toString(f008.charAt(23)) : "";
-	    String f008_29 = (f008 != null) && (f008.length() > 29) ? Character.toString(f008.charAt(29)) : "";
 
-	    String f245h = underlayingMarc.getField("245", 'h');		
+		String f245h = underlayingMarc.getField("245", 'h');		
 		if(f245h == null) f245h = "";
 		
 		String f336b = underlayingMarc.getField("336", 'b');
 		if(f336b == null) f336b = "";
-	    
-		if(ldr06.matches("(?i)[acdpt]") && f008_23.matches("(?i)f")){
-			return true;
-		}
-		if(ldr06.matches("(?i)[acdpt]") && f006_06.matches("(?i)f")){
-			return true;
-		}
+
 		if(f007_00.matches("(?i)f") && f007_01.matches("(?i)b") && f245h.matches("(?i).*hmatové\\spísmo.*")){
-			return true;
-		}
-		if(ldr06.matches("(?i)[efk]")&& f008_29.matches("(?i)f")){
-			return true;
-		}
-		if(ldr06.matches("(?i)[efk]") && f006_12.matches("(?i)f")){
 			return true;
 		}
 		
