@@ -516,6 +516,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 		
 		String f007 = underlayingMarc.getControlField("007");
 		String f007_00 = (f007 != null) && (f007.length() > 0) ? Character.toString(f007.charAt(0)) : "";
+		String f007_01 = (f007 != null) && (f007.length() > 1) ? Character.toString(f007.charAt(1)) : "";
 		
 		String f008 = underlayingMarc.getControlField("008");
 		String f008_23 = (f008 != null) && (f008.length() > 23) ? Character.toString(f008.charAt(23)) : "";
@@ -552,7 +553,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 			return true;
 		}
 		if(ldr06.matches("(?i)m") && f245h.matches("(?i).*multim[eé]dium.*") && f300a.matches("(?i).*cd-rom.*")) return true;
-		if(f007_00.matches("(?i)c")) return true;
+		if(f007_00.matches("(?i)c") && !f007_01.matches("(?i)r")) return true;
 		if(f300a.matches("(?i).*disketa.*")) return true;
 		if(f336b.matches("(?i)cod|cop")) return true;
 		if(f338b.matches("(?i)ck|cb|cd|ce|ca|cf|ch|cz")) return true;
