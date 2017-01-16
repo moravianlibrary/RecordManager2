@@ -5,7 +5,7 @@
 	<controlfield tag="001">19790455</controlfield>
 	<controlfield tag="003">CZ-PrNML</controlfield>
 	<controlfield tag="005">20141219080110.0</controlfield>
-	<controlfield tag="008">940304s1978    gw                  eng||</controlfield>
+	<controlfield tag="008">940304s1978	gw				  eng||</controlfield>
 	<datafield tag="020" ind1=" " ind2=" ">
 		<subfield code="a">3-540-08474-6</subfield>
 	</datafield>

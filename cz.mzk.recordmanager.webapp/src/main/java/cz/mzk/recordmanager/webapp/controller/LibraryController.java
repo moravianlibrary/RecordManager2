@@ -3,6 +3,9 @@ package cz.mzk.recordmanager.webapp.controller;
 import java.util.List;
 
 import cz.mzk.recordmanager.api.model.*;
+import cz.mzk.recordmanager.api.model.configurations.DownloadImportConfigurationDto;
+import cz.mzk.recordmanager.api.model.configurations.KrameriusConfigurationDto;
+import cz.mzk.recordmanager.api.model.configurations.OaiHarvestConfigurationDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

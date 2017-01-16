@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(value = "/login")
-public class LoginController {
+public class AuthController {
 
 	@RequestMapping(method = RequestMethod.POST)
 	@ResponseBody

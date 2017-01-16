@@ -1,4 +1,8 @@
-package cz.mzk.recordmanager.api.model;
+package cz.mzk.recordmanager.api.model.configurations;
+
+import cz.mzk.recordmanager.api.model.ContactPersonDto;
+import cz.mzk.recordmanager.api.model.IdDto;
+import cz.mzk.recordmanager.api.model.LibraryDto;
 
 public class ImportConfigurationDto extends IdDto {
 

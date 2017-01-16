@@ -4,7 +4,7 @@ import java.io.File;
 import java.util.List;
 
 import cz.mzk.recordmanager.api.model.IdDto;
-import cz.mzk.recordmanager.api.model.ImportRecordsDto;
+
 import cz.mzk.recordmanager.api.model.RecordIdDto;
 import cz.mzk.recordmanager.api.model.batch.BatchJobExecutionDTO;
 

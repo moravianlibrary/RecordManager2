@@ -11,4 +11,11 @@ export class AppComponent {
 
   constructor(private router: Router){}
 
+  logedInformation(): string{
+  	if (localStorage.getItem('currentUser'))
+  		return 'Logout';
+  	return 'Login';
+  }
+
+
 }

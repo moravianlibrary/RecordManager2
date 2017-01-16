@@ -1,0 +1,42 @@
+<div class="row">
+	<div class="col-md-6">
+		<h4>Running Jobs</h4>
+		<table class="table">
+			<thead>
+				<tr>
+					<th>Job Instance ID</th>
+					<th>Start time</th>
+					<th>Name</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr *ngFor="let job of getRunning()">
+					<td>{{job.jobInstanceId}}</td>
+					<td>{{job.startTime | date: 'dd/MM/yyyy'}}</td>
+					<td>{{job.jobName}}</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<div class="col-md-6">
+		<h4>Finished jobs</h4>
+		<table class="table">
+			<thead>
+			<tr>
+				<th>Job Instance ID</th>
+				<th>Start time</th>
+				<th>Name</th>
+			</tr>
+			</thead>
+			<tbody>
+			<tr *ngFor="let job of getFinished()">
+				<td>{{job.jobInstanceId}}</td>
+				<td>{{job.startTime | date: 'dd/MM/yyyy'}}</td>
+				<td>{{job.jobName}}</td>
+				<td>{{job.status}}</td>
+
+			</tr>
+			</tbody>
+		</table>
+	</div>
+</div>

@@ -1,4 +1,4 @@
-package cz.mzk.recordmanager.api.model;
+package cz.mzk.recordmanager.api.model.configurations;
 
 import java.io.Serializable;
 

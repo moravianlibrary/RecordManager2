@@ -4,9 +4,8 @@ import javax.sql.DataSource;
 
 import cz.mzk.recordmanager.api.service.ImportConfigurationService;
 import cz.mzk.recordmanager.api.service.OaiHarvestStatisticsService;
-import cz.mzk.recordmanager.server.service.ImportConfigurationServiceImpl;
-import cz.mzk.recordmanager.server.service.OaiHarvestStatisticsServiceImpl;
-import cz.mzk.recordmanager.server.service.Translator;
+import cz.mzk.recordmanager.api.service.StatisticsService;
+import cz.mzk.recordmanager.server.service.*;
 import liquibase.exception.LiquibaseException;
 import liquibase.integration.spring.SpringLiquibase;
 
@@ -50,7 +49,6 @@ import cz.mzk.recordmanager.server.scripting.MappingResolver;
 import cz.mzk.recordmanager.server.scripting.ResourceMappingResolver;
 import cz.mzk.recordmanager.server.scripting.ResourceStopWordsResolver;
 import cz.mzk.recordmanager.server.scripting.StopWordsResolver;
-import cz.mzk.recordmanager.server.service.LibraryServiceImpl;
 import cz.mzk.recordmanager.server.solr.SolrServerFactory;
 import cz.mzk.recordmanager.server.solr.SolrServerFactoryImpl;
 import cz.mzk.recordmanager.server.util.ApacheHttpClient;
@@ -233,6 +231,11 @@ public class AppConfig extends DefaultBatchConfigurer {
 	@Bean
 	public OaiHarvestStatisticsService oaiHarvestStatisticsService(){
 		return new OaiHarvestStatisticsServiceImpl();
+	}
+
+	@Bean
+	public StatisticsService statisticsService(){
+		return new StatisticsServiceImpl();
 	}
 
 }

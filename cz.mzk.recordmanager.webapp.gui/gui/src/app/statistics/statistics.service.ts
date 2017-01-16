@@ -18,7 +18,7 @@ export class StatisticsService {
   }
 
   getLibraryWithConfiguration(configId: number): Observable<Id>{
-    return this.http.get(SERVER + "/oaiHarvestStats/" + configId).map((res: Response) => {
+    return this.http.get(SERVER + "/statistics/" + configId).map((res: Response) => {
       return res.json();
     });
   }

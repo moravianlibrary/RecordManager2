@@ -82,8 +82,8 @@ CREATE SEQUENCE BATCH_JOB_EXECUTION_SEQ MAXVALUE 9223372036854775807 NO CYCLE;
 CREATE SEQUENCE BATCH_JOB_SEQ MAXVALUE 9223372036854775807 NO CYCLE;
 
 CREATE TABLE recordmanager_key (
-  name                 VARCHAR(128) PRIMARY KEY,
-  val                  DECIMAL(10)
+  name				 VARCHAR(128) PRIMARY KEY,
+  val	              DECIMAL(10)
 );
 
 COMMENT ON TABLE recordmanager_key IS 'source of ids, used by Hibernate';

@@ -7,6 +7,10 @@ import {SingleJobRunnerComponent} from "./runners/single-job-runner/single-job-r
 import {MultiSelectModule} from "../shared/multi-select/multi-select.module";
 import {JobRunnersService} from "./runners/job-runners.service";
 import {ImportRecordsJobComponent} from "./runners/import-record-job/import-records-job.component";
+import {StatisticsComponent} from "./statistics/statistics.component";
+import {FullHarvestComponent} from "./statistics/FullHarvestStatistic/full-harvest.component";
+import {ActualStatisticsComonent} from "./statistics/ActualStatistic/actual-statistic.component";
+import {StatisticsService} from "./statistics/statistics.service";
 
 @NgModule({
 	imports: [
@@ -14,7 +18,15 @@ import {ImportRecordsJobComponent} from "./runners/import-record-job/import-reco
 		JobRoutingModule,
 		MultiSelectModule
 	],
-	providers: [JobRunnersService],
-	declarations: [JobComponent, JobRunnersComponent, SingleJobRunnerComponent, ImportRecordsJobComponent]
+	providers: [JobRunnersService, StatisticsService],
+	declarations: [
+		JobComponent,
+		JobRunnersComponent,
+		SingleJobRunnerComponent,
+		ImportRecordsJobComponent,
+		StatisticsComponent,
+		FullHarvestComponent,
+		ActualStatisticsComonent
+	]
 })
 export class JobModule{}

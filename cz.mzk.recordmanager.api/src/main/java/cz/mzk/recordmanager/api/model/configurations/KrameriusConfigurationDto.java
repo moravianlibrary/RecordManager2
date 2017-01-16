@@ -1,4 +1,6 @@
-package cz.mzk.recordmanager.api.model;
+package cz.mzk.recordmanager.api.model.configurations;
+
+import cz.mzk.recordmanager.api.model.configurations.ImportConfigurationDto;
 
 import java.io.Serializable;
 

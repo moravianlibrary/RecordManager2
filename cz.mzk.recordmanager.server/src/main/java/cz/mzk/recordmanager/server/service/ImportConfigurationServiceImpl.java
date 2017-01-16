@@ -1,6 +1,6 @@
 package cz.mzk.recordmanager.server.service;
 
-import cz.mzk.recordmanager.api.model.ImportConfigurationDto;
+import cz.mzk.recordmanager.api.model.configurations.ImportConfigurationDto;
 import cz.mzk.recordmanager.api.service.ImportConfigurationService;
 import cz.mzk.recordmanager.server.model.ImportConfiguration;
 import cz.mzk.recordmanager.server.oai.dao.ImportConfigurationDAO;

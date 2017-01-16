@@ -1,6 +1,10 @@
 package cz.mzk.recordmanager.server.service;
 
 import cz.mzk.recordmanager.api.model.*;
+import cz.mzk.recordmanager.api.model.configurations.DownloadImportConfigurationDto;
+import cz.mzk.recordmanager.api.model.configurations.ImportConfigurationDto;
+import cz.mzk.recordmanager.api.model.configurations.KrameriusConfigurationDto;
+import cz.mzk.recordmanager.api.model.configurations.OaiHarvestConfigurationDto;
 import cz.mzk.recordmanager.server.model.*;
 
 public class Translator {
@@ -77,7 +81,7 @@ public class Translator {
 		return krameriusConfigurationDto;
 	}
 
-	public DownloadImportConfigurationDto translate(DownloadImportConfiguration downloadImportConfiguration) { 
+	public DownloadImportConfigurationDto translate(DownloadImportConfiguration downloadImportConfiguration) {
 		DownloadImportConfigurationDto downloadImportConfigurationDto = new DownloadImportConfigurationDto();
 
 		downloadImportConfigurationDto.setId(downloadImportConfiguration.getId());

@@ -1,5 +1,7 @@
 package cz.mzk.recordmanager.api.model;
 
+import cz.mzk.recordmanager.api.model.configurations.ImportConfigurationDto;
+
 import java.util.List;
 
 public class LibraryDetailDto extends LibraryDto {

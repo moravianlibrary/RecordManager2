@@ -18,19 +18,19 @@
           <div class="well" id="collapsedWall">
             <ul>
               <li><a routerLink="job/runners">Run</a></li>
-              <li><a>Statistics</a></li>
+              <li><a routerLink="job/statistics">Statistics</a></li>
             </ul>
           </div>
         </div>
       </li>
-      <li>
-        <a routerLink="oaiHarvestStats">Statistics</a>
-      </li>
+      <!--<li>-->
+        <!--<a routerLink="oaiHarvestStats">Statistics</a>-->
+      <!--</li>-->
       <li>
         <a routerLink="#">About</a>
       </li>
       <li>
-        <a routerLink="/login">Login</a>
+        <a routerLink="/login">{{logedInformation()}}</a>
       </li>
     </ul>
   </div>

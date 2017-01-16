@@ -1,6 +1,6 @@
 package cz.mzk.recordmanager.api.service;
 
-import cz.mzk.recordmanager.api.model.ImportConfigurationDto;
+import cz.mzk.recordmanager.api.model.configurations.ImportConfigurationDto;
 
 import java.util.List;
 

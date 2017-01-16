@@ -1,6 +1,6 @@
 package cz.mzk.recordmanager.webapp.controller;
 
-import cz.mzk.recordmanager.api.model.ImportConfigurationDto;
+import cz.mzk.recordmanager.api.model.configurations.ImportConfigurationDto;
 import cz.mzk.recordmanager.api.service.ImportConfigurationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
