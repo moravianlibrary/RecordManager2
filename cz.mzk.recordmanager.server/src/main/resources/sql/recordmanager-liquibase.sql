@@ -973,3 +973,12 @@ CREATE TABLE short_title (
   FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE
 );
 CREATE INDEX short_title_harvested_record_idx ON short_title(harvested_record_id);
+
+--changeset tomascejpek:42
+INSERT INTO harvested_record_format(id, name) VALUES (59, 'COMPUTER_CARRIERS');
+
+--changeset tomascejpek:43
+INSERT INTO harvested_record_format(id, name) VALUES (60, 'OTHER_OTHER');
+
+--changeset tomascejpek:44
+UPDATE harvested_record_format SET name='OTHER_COMPUTER_CARRIER' WHERE id=59;

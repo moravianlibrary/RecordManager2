@@ -69,6 +69,8 @@ public class HarvestedRecordFormat {
 		LEGISLATIVE_NOTICE(56L), // oznámení
 		LEGISLATIVE_CODE(57L), // řád
 		PATENTS(58L),
+		OTHER_COMPUTER_CARRIER(59L),
+		OTHER_OTHER(60L),
 		OTHER_UNSPECIFIED(100L);
 
 		private Long numValue;
