@@ -548,4 +548,10 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 		return null;
 	}
 
+	@Override
+	public List<String> getDefaultStatuses() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

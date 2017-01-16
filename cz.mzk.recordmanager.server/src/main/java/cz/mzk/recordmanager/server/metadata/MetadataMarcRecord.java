@@ -1,6 +1,7 @@
 package cz.mzk.recordmanager.server.metadata;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -1241,6 +1242,12 @@ public class MetadataMarcRecord implements MetadataRecord {
 		}
 
 		return results;
+	}
+
+	@Override
+	public List<String> getDefaultStatuses() {
+		// TODO Auto-generated method stub
+		return Collections.emptyList();
 	}
 	
 }

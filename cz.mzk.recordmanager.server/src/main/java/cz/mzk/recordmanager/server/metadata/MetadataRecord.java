@@ -206,4 +206,6 @@ public interface MetadataRecord {
 
 	public List<ShortTitle> getShortTitles();
 	
+	public List<String> getDefaultStatuses();
+	
 }
