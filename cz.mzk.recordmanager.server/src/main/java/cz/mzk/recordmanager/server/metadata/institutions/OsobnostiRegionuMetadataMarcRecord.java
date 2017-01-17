@@ -3,19 +3,18 @@ package cz.mzk.recordmanager.server.metadata.institutions;
 import java.util.List;
 
 import cz.mzk.recordmanager.server.marc.MarcRecord;
-import cz.mzk.recordmanager.server.metadata.MetadataMarcRecord;
 import cz.mzk.recordmanager.server.util.Constants;
 import cz.mzk.recordmanager.server.util.SolrUtils;
 
-public class SfxMetadataMarcRecord extends MetadataMarcRecord{
+public class OsobnostiRegionuMetadataMarcRecord extends AuthMetadataMarcRecord{
 
-	public SfxMetadataMarcRecord(MarcRecord underlayingMarc) {
+	public OsobnostiRegionuMetadataMarcRecord(MarcRecord underlayingMarc) {
 		super(underlayingMarc);
 	}
-
+	
 	@Override
 	public List<String> getDefaultStatuses() {
-		return SolrUtils.createHierarchicFacetValues(Constants.DOCUMENT_AVAILABILITY_ONLINE, Constants.DOCUMENT_AVAILABILITY_UNKNOWN);
+		return SolrUtils.createHierarchicFacetValues(Constants.DOCUMENT_AVAILABILITY_ONLINE, Constants.DOCUMENT_AVAILABILITY_ONLINE);
 	}
-
+	
 }

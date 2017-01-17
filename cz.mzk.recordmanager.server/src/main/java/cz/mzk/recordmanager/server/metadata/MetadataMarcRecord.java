@@ -1246,7 +1246,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 
 	@Override
 	public List<String> getDefaultStatuses() {
-		// TODO Auto-generated method stub
+		// implemented in institution specific classes
 		return Collections.emptyList();
 	}
 	

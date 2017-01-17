@@ -7,15 +7,15 @@ import cz.mzk.recordmanager.server.metadata.MetadataMarcRecord;
 import cz.mzk.recordmanager.server.util.Constants;
 import cz.mzk.recordmanager.server.util.SolrUtils;
 
-public class SfxMetadataMarcRecord extends MetadataMarcRecord{
+public class OpenLibraryMetadataMarcRecord extends MetadataMarcRecord{
 
-	public SfxMetadataMarcRecord(MarcRecord underlayingMarc) {
+	public OpenLibraryMetadataMarcRecord(MarcRecord underlayingMarc) {
 		super(underlayingMarc);
 	}
-
+	
 	@Override
 	public List<String> getDefaultStatuses() {
-		return SolrUtils.createHierarchicFacetValues(Constants.DOCUMENT_AVAILABILITY_ONLINE, Constants.DOCUMENT_AVAILABILITY_UNKNOWN);
+		return SolrUtils.createHierarchicFacetValues(Constants.DOCUMENT_AVAILABILITY_ONLINE, Constants.DOCUMENT_AVAILABILITY_ONLINE);
 	}
-
+	
 }

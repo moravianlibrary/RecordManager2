@@ -4,7 +4,6 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.regex.Pattern;
 
 import org.apache.solr.common.SolrInputDocument;
 import org.springframework.stereotype.Component;
@@ -16,14 +15,11 @@ import cz.mzk.recordmanager.server.util.SolrUtils;
 
 @Component
 public class AvailabilityFacetEnricher implements DedupRecordEnricher {
-
-	private final Pattern GLOBAL_ONLINE_AVAILABILITY_INSTITUTION_PATTERN = Pattern.compile("^(mkpe|zakony|upv|osobnosti|manuscript|openlib).*");
-	private final Pattern GLOBAL_UNKNOWN_AVAILABILITY_INSTITUTION_PATTERN = Pattern.compile("^sfx.*");
-
-	private static final String ONLINE = "online";
 	
-	private final List<String> ONLINE_STATUSES = SolrUtils.createHierarchicFacetValues(ONLINE, Constants.DOCUMENT_AVAILABILITY_ONLINE);
-	private final List<String> ONLINE_UNKNOWN_STATUSES = SolrUtils.createHierarchicFacetValues(ONLINE, Constants.DOCUMENT_AVAILABILITY_UNKNOWN);
+	private final List<String> ONLINE_STATUSES = SolrUtils.createHierarchicFacetValues(
+			Constants.DOCUMENT_AVAILABILITY_ONLINE, Constants.DOCUMENT_AVAILABILITY_ONLINE);
+	private final List<String> ONLINE_UNKNOWN_STATUSES = SolrUtils.createHierarchicFacetValues(
+			Constants.DOCUMENT_AVAILABILITY_ONLINE, Constants.DOCUMENT_AVAILABILITY_UNKNOWN);
 
 	@Override
 	public void enrich(DedupRecord record, SolrInputDocument mergedDocument,
@@ -57,11 +53,6 @@ public class AvailabilityFacetEnricher implements DedupRecordEnricher {
 	}
 
 	protected boolean isOnline(SolrInputDocument doc) {
-		String id = (String) doc.getFieldValue(SolrFieldConstants.ID_FIELD);
-		if (GLOBAL_ONLINE_AVAILABILITY_INSTITUTION_PATTERN.matcher(id).matches()) {
-			return true;
-		}
-		
 		// contains 1/online/online/ ?
 		Collection<Object> statuses = doc.getFieldValues(SolrFieldConstants.LOCAL_STATUSES_FACET);
 		if (statuses == null) return false;
@@ -84,11 +75,6 @@ public class AvailabilityFacetEnricher implements DedupRecordEnricher {
 	}
 
 	protected boolean isOnlineUnknown(SolrInputDocument doc){
-		// Is from SFX?
-		String id = (String) doc.getFieldValue(SolrFieldConstants.ID_FIELD);
-		if (GLOBAL_UNKNOWN_AVAILABILITY_INSTITUTION_PATTERN.matcher(id).matches()) {
-			return true;
-		}
 		// contains 1/online/unknown ?
 		Collection<Object> statuses = doc.getFieldValues(SolrFieldConstants.LOCAL_STATUSES_FACET);
 		if (statuses == null) return false;
