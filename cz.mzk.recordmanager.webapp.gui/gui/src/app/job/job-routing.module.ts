@@ -5,6 +5,7 @@ import {JobComponent} from "./job.component";
 import {StatisticsComponent} from "./statistics/statistics.component";
 import {FullHarvestComponent} from "./statistics/FullHarvestStatistic/full-harvest.component";
 import {ActualStatisticsComonent} from "./statistics/ActualStatistic/actual-statistic.component";
+import {AuthGuard} from "../login/auth.guard";
 const jobRoutes: Routes = [
 	{
 		path: 'job',
@@ -12,7 +13,8 @@ const jobRoutes: Routes = [
 		children: [
 			{
 				path: 'runners',
-				component: JobRunnersComponent
+				component: JobRunnersComponent,
+				canActivate: [AuthGuard]
 			},
 			{
 				path: 'statistics',
@@ -20,7 +22,7 @@ const jobRoutes: Routes = [
 				children:[
 					{
 						path: '',
-						redirectTo: 'actual-statistics',
+						redirectTo: 'actual',
 						pathMatch: 'full'
 					},
 					{
@@ -28,7 +30,7 @@ const jobRoutes: Routes = [
 						component: FullHarvestComponent
 					},
 					{
-						path: 'actual-statistics',
+						path: 'actual',
 						component: ActualStatisticsComonent
 					}
 				]

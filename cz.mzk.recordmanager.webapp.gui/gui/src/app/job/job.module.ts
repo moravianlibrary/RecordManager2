@@ -11,14 +11,22 @@ import {StatisticsComponent} from "./statistics/statistics.component";
 import {FullHarvestComponent} from "./statistics/FullHarvestStatistic/full-harvest.component";
 import {ActualStatisticsComonent} from "./statistics/ActualStatistic/actual-statistic.component";
 import {StatisticsService} from "./statistics/statistics.service";
+import {DatetimePickerModule} from "../shared/datetime-picker/datetime-picker.module";
+import {IndexModule} from "../shared/index";
+import {StatusFilterPipe} from "../pipes/status-filter.pipe";
+import {AfterDateFilterPipe} from "../pipes/after-date-filter.pipe";
+import {BeforeDateFilterPipe} from "../pipes/before-date-filter.pipe";
+import {SortControl} from "../shared/sort-control";
 
 @NgModule({
 	imports: [
 		CommonModule,
 		JobRoutingModule,
-		MultiSelectModule
+		MultiSelectModule,
+		DatetimePickerModule,
+		IndexModule
 	],
-	providers: [JobRunnersService, StatisticsService],
+	providers: [JobRunnersService, StatisticsService, SortControl],
 	declarations: [
 		JobComponent,
 		JobRunnersComponent,
@@ -26,7 +34,10 @@ import {StatisticsService} from "./statistics/statistics.service";
 		ImportRecordsJobComponent,
 		StatisticsComponent,
 		FullHarvestComponent,
-		ActualStatisticsComonent
+		ActualStatisticsComonent,
+		StatusFilterPipe,
+		AfterDateFilterPipe,
+		BeforeDateFilterPipe
 	]
 })
 export class JobModule{}

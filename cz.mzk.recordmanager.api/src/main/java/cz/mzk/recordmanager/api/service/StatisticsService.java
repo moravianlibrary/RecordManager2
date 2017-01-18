@@ -1,12 +1,17 @@
 package cz.mzk.recordmanager.api.service;
 
 
+import cz.mzk.recordmanager.api.model.PeriodDto;
 import cz.mzk.recordmanager.api.model.statistics.ActualStatisticsDto;
+import cz.mzk.recordmanager.api.model.statistics.OaiHarvestJobStatisticsDto;
 
-import java.time.Period;
 import java.util.Date;
 import java.util.List;
 
 public interface StatisticsService {
 	List<ActualStatisticsDto> getActualStatisticsForThePeriod(Date startDate);
+
+	List<OaiHarvestJobStatisticsDto> getOaiHarvestJobStats(Integer offset);
+
+	List<OaiHarvestJobStatisticsDto> getOaiHarvestStatisticsInPeriods(PeriodDto startEnd, PeriodDto fromTo);
 }

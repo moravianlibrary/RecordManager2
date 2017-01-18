@@ -26,4 +26,4 @@ import {DatetimePickerModule} from "../shared/datetime-picker/datetime-picker.mo
   providers: [StatisticsService, SortControl, BatchJobsService],
   declarations: [StatisticsComponent,  StatisticDetailComponent, StatusFilterPipe, AfterDateFilterPipe, BeforeDateFilterPipe]
 })
-export class StatisticsModule { }
+// export class StatisticsModule { }

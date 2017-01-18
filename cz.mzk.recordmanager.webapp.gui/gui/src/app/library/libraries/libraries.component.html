@@ -32,11 +32,11 @@
 	</div>
 
 
-	<button id="addLibraryBtn" type="button" class="btn btn-primary btn-circle btn-lg"><i class="glyphicon glyphicon glyphicon-plus" data-toggle="modal" data-target="#addLibraryModal"></i></button>
+	<button *ngIf="isAuthenticated()" id="addLibraryBtn" type="button" class="btn btn-primary btn-circle btn-lg"><i class="glyphicon glyphicon glyphicon-plus" data-toggle="modal" data-target="#addLibraryModal"></i></button>
 
 </div>
 
-<div class="modal fade" id="addLibraryModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+<div  class="modal fade" id="addLibraryModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
 			<div class="modal-header">

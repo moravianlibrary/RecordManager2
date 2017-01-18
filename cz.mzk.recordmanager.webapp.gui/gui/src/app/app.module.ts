@@ -5,7 +5,7 @@ import { HttpModule } from '@angular/http';
 
 import { AppComponent } from './app.component';
 
-import {StatisticsModule} from "./statistics/statistics.module";
+
 import {LoginModule} from "./login/login.module";
 import {LibraryModule} from "./library/library.module";
 import {JobModule} from "./job/job.module";
@@ -24,7 +24,6 @@ import {AppRoutingModule} from "./app-routing.module";
       FormsModule,
       HttpModule,
       LibraryModule,
-      StatisticsModule,
       LoginModule,
       JobModule,
       AppRoutingModule

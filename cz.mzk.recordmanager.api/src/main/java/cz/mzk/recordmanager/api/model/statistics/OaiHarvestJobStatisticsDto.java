@@ -1,9 +1,9 @@
-package cz.mzk.recordmanager.api.model.batch;
+package cz.mzk.recordmanager.api.model.statistics;
 
 import java.io.Serializable;
 import java.util.Date;
 
-public class OaiHarvesrJobStatisticsDto implements Serializable {
+public class OaiHarvestJobStatisticsDto implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -14,8 +14,6 @@ public class OaiHarvesrJobStatisticsDto implements Serializable {
 	private String libraryName;
 
 	private String url;
-
-	private String setSpec;
 
 	private Date startTime;
 
@@ -53,13 +51,6 @@ public class OaiHarvesrJobStatisticsDto implements Serializable {
 		this.url = url;
 	}
 
-	public String getSetSpec() {
-		return setSpec;
-	}
-
-	public void setSetSpec(String setSpec) {
-		this.setSpec = setSpec;
-	}
 
 	public Date getStartTime() {
 		return startTime;

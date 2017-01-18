@@ -93,4 +93,11 @@ export class LibraryDetailComponent implements OnInit{
 		this.selected.contact[key] = field.value;
 	}
 
+	isAuthenticated(): boolean{
+		if (localStorage.getItem("currentUser")){
+			return true;
+		}
+		return false;
+	}
+
 }

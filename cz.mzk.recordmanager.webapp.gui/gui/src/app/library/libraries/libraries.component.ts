@@ -65,4 +65,11 @@ export class LibrariesComponent implements OnInit{
 	getVisibility(name: string): boolean{
 		return this.sortControl.getVisibility(name, this.fields) == 'visible' ? true : false;
 	}
+
+	isAuthenticated(): boolean{
+		if (localStorage.getItem("currentUser")){
+			return true;
+		}
+		return false;
+	}
 }

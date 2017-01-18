@@ -10,11 +10,9 @@ const libraryRoutes: Routes = [
 	{
 		path: 'library',
 		component: LibraryComponent,
-		canActivate: [AuthGuard],
 		children:[
 			{
 				path: '',
-				canActivateChild: [AuthGuard],
 				children:[
 					{
 						path: '',
