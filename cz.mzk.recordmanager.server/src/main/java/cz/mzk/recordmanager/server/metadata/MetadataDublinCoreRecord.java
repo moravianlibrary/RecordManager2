@@ -242,7 +242,7 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 		if(isVisual()) hrf.add(HarvestedRecordFormatEnum.VISUAL_DOCUMENTS);
 		if(isMusicalScore()) hrf.add(HarvestedRecordFormatEnum.MUSICAL_SCORES);
 		if(isAudioDocument()) hrf.add(HarvestedRecordFormatEnum.AUDIO_OTHER);
-		if(isOtherDocument()) hrf.add(HarvestedRecordFormatEnum.OTHER_UNSPECIFIED);
+		if(isOtherDocument()) hrf.add(HarvestedRecordFormatEnum.OTHER_OTHER);
 		return hrf;
 	}
 	
