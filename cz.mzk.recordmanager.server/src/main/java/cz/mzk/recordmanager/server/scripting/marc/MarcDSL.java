@@ -691,4 +691,28 @@ public class MarcDSL extends BaseDSL {
     public String getAuthorityId(){
     	return metadataRecord.getAuthorityId();
     }
+    
+    /**
+     * remove dot at the end of 700d
+     */
+    public List<String> getAuthorFacet(String k){
+		Set<String> results = new HashSet<>();
+		results.addAll(getFields("100abcdq:975abcdq"));
+		char[] sfCodes = new char[]{'a', 'b', 'c', 'd', 'q'};
+		for (DataField df : record.getDataFields("700")) {
+			String author = "";
+			for (char c : sfCodes) {
+				if (df.getSubfield(c) != null) {
+					author += df.getSubfield(c).getData() + " ";
+					if (c == 'd') {
+						author = author.trim();
+						if (author.endsWith(".")) author = author.substring(0, author.length()-1);
+					}
+				}
+			}
+			if (author != "") results.add(author.trim());
+		}
+    	return new ArrayList<>(results);
+    }
+    
 }
