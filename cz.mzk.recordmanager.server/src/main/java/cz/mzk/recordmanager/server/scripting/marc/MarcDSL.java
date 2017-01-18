@@ -22,6 +22,7 @@ import cz.mzk.recordmanager.server.export.IOFormat;
 import cz.mzk.recordmanager.server.marc.MarcRecord;
 import cz.mzk.recordmanager.server.marc.SubfieldExtractionMethod;
 import cz.mzk.recordmanager.server.metadata.MetadataRecord;
+import cz.mzk.recordmanager.server.model.Title;
 import cz.mzk.recordmanager.server.scripting.BaseDSL;
 import cz.mzk.recordmanager.server.scripting.MappingResolver;
 import cz.mzk.recordmanager.server.scripting.StopWordsResolver;
@@ -194,6 +195,8 @@ public class MarcDSL extends BaseDSL {
 
         int nonFilingInt = getInd2AsInt(titleField);
         
+        List<Title> titles = metadataRecord.getTitle();
+        if (titles == null || titles.isEmpty()) return null;
         String title = metadataRecord.getTitle().get(0).getTitleStr();
         title = title.replaceAll(END_PUNCTUATION, EMPTY_SEPARATOR);
         title = title.replaceAll(NUMBERS, "$1$2");
