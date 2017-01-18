@@ -2,6 +2,7 @@ UPDATE harvested_record SET cluster_id = NULL, uuid = NULL, issn_series = NULL, 
 DELETE FROM title;
 DELETE FROM isbn;
 DELETE FROM issn;
+DELETE FROM ismn;
 DELETE FROM cnb;
 DELETE FROM language;
 DELETE FROM oclc;
