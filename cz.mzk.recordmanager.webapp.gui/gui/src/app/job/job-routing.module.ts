@@ -3,9 +3,10 @@ import {JobRunnersComponent} from "./runners/job-runners.component";
 import {NgModule} from "@angular/core";
 import {JobComponent} from "./job.component";
 import {StatisticsComponent} from "./statistics/statistics.component";
-import {FullHarvestComponent} from "./statistics/FullHarvestStatistic/full-harvest.component";
-import {ActualStatisticsComonent} from "./statistics/ActualStatistic/actual-statistic.component";
+import {FullHarvestComponent} from "./statistics/full-harvest-statistic/full-harvest.component";
+import {ActualStatisticsComonent} from "./statistics/actual-statistic/actual-statistic.component";
 import {AuthGuard} from "../login/auth.guard";
+import {IndexAllRecordsComponent} from "./statistics/index-all-records-statistic/index-all-records.component";
 const jobRoutes: Routes = [
 	{
 		path: 'job',
@@ -32,6 +33,10 @@ const jobRoutes: Routes = [
 					{
 						path: 'actual',
 						component: ActualStatisticsComonent
+					},
+					{
+						path: 'index-all-records',
+						component: IndexAllRecordsComponent
 					}
 				]
 			}

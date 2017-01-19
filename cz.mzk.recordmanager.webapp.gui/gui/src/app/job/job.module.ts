@@ -8,15 +8,14 @@ import {MultiSelectModule} from "../shared/multi-select/multi-select.module";
 import {JobRunnersService} from "./runners/job-runners.service";
 import {ImportRecordsJobComponent} from "./runners/import-record-job/import-records-job.component";
 import {StatisticsComponent} from "./statistics/statistics.component";
-import {FullHarvestComponent} from "./statistics/FullHarvestStatistic/full-harvest.component";
-import {ActualStatisticsComonent} from "./statistics/ActualStatistic/actual-statistic.component";
+import {FullHarvestComponent} from "./statistics/full-harvest-statistic/full-harvest.component";
+import {ActualStatisticsComonent} from "./statistics/actual-statistic/actual-statistic.component";
 import {StatisticsService} from "./statistics/statistics.service";
 import {DatetimePickerModule} from "../shared/datetime-picker/datetime-picker.module";
 import {IndexModule} from "../shared/index";
 import {StatusFilterPipe} from "../pipes/status-filter.pipe";
-import {AfterDateFilterPipe} from "../pipes/after-date-filter.pipe";
-import {BeforeDateFilterPipe} from "../pipes/before-date-filter.pipe";
 import {SortControl} from "../shared/sort-control";
+import {IndexAllRecordsComponent} from "./statistics/index-all-records-statistic/index-all-records.component";
 
 @NgModule({
 	imports: [
@@ -36,8 +35,7 @@ import {SortControl} from "../shared/sort-control";
 		FullHarvestComponent,
 		ActualStatisticsComonent,
 		StatusFilterPipe,
-		AfterDateFilterPipe,
-		BeforeDateFilterPipe
+		IndexAllRecordsComponent
 	]
 })
 export class JobModule{}

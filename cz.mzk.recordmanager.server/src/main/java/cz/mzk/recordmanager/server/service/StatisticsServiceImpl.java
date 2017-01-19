@@ -3,6 +3,7 @@ package cz.mzk.recordmanager.server.service;
 
 import cz.mzk.recordmanager.api.model.PeriodDto;
 import cz.mzk.recordmanager.api.model.statistics.ActualStatisticsDto;
+import cz.mzk.recordmanager.api.model.statistics.IndexAllRecordsJobStatisticsDto;
 import cz.mzk.recordmanager.api.model.statistics.OaiHarvestJobStatisticsDto;
 import cz.mzk.recordmanager.api.service.StatisticsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,5 +42,13 @@ public class StatisticsServiceImpl implements StatisticsService{
 						"ORDER BY start_time DESC ",
 				new BeanPropertyRowMapper<OaiHarvestJobStatisticsDto>(
 						OaiHarvestJobStatisticsDto.class),startEnd.getStart(), startEnd.getEnd(), fromTo.getStart(), fromTo.getEnd());
+	}
+
+	@Override
+	public List<IndexAllRecordsJobStatisticsDto> getIndexAllRecordsStatistics(Integer offset) {
+		return jdbcTemplate.query("SELECT * " +
+				"FROM index_all_records " +
+				"LIMIT 10 " +
+				"OFFSET ?", new BeanPropertyRowMapper<IndexAllRecordsJobStatisticsDto>(IndexAllRecordsJobStatisticsDto.class), offset);
 	}
 }

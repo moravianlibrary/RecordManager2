@@ -1,0 +1,24 @@
+<div class="page-header">
+	<h1>Index all records statistics</h1>
+</div>
+
+
+<!--Preloader-->
+<div *ngIf="loading" class='uil-ring-css' style='transform:scale(0.6); right: 50%; left: 50%; position: fixed'><div></div></div>
+
+
+<div *ngIf="!loading">
+	<table class="table">
+		<thead>
+		<tr>
+			<th>ID</th>
+			<th>Start</th>
+			<th>End</th>
+			<th>Status</th>
+			<th>From</th>
+			<th>To</th>
+			<th>Solr URL</th>
+		</tr>
+		</thead>
+	</table>
+</div>

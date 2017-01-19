@@ -3,6 +3,7 @@ package cz.mzk.recordmanager.webapp.controller;
 
 import cz.mzk.recordmanager.api.model.PeriodDto;
 import cz.mzk.recordmanager.api.model.statistics.ActualStatisticsDto;
+import cz.mzk.recordmanager.api.model.statistics.IndexAllRecordsJobStatisticsDto;
 import cz.mzk.recordmanager.api.model.statistics.OaiHarvestJobStatisticsDto;
 import cz.mzk.recordmanager.api.service.StatisticsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,4 +43,12 @@ public class JobsStatisticsController {
 	public List<ActualStatisticsDto> getActualStatistics(@RequestParam("startDate") Date startDate){
 	return statisticsService.getActualStatisticsForThePeriod(startDate);
     }
+
+
+    @RequestMapping(method = RequestMethod.GET, value = "indexAllRecordsStatistics/{offset}")
+	@ResponseBody
+	public List<IndexAllRecordsJobStatisticsDto> getIndexAllRecordsStatistics(@PathVariable Integer offset){
+		return statisticsService.getIndexAllRecordsStatistics(offset);
+    }
+
 }

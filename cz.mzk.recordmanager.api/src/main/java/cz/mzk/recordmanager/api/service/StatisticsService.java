@@ -3,6 +3,7 @@ package cz.mzk.recordmanager.api.service;
 
 import cz.mzk.recordmanager.api.model.PeriodDto;
 import cz.mzk.recordmanager.api.model.statistics.ActualStatisticsDto;
+import cz.mzk.recordmanager.api.model.statistics.IndexAllRecordsJobStatisticsDto;
 import cz.mzk.recordmanager.api.model.statistics.OaiHarvestJobStatisticsDto;
 
 import java.util.Date;
@@ -14,4 +15,6 @@ public interface StatisticsService {
 	List<OaiHarvestJobStatisticsDto> getOaiHarvestJobStats(Integer offset);
 
 	List<OaiHarvestJobStatisticsDto> getOaiHarvestStatisticsInPeriods(PeriodDto startEnd, PeriodDto fromTo);
+
+	List<IndexAllRecordsJobStatisticsDto> getIndexAllRecordsStatistics(Integer offset);
 }

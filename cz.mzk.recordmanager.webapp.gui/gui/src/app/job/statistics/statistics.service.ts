@@ -47,4 +47,10 @@ export class StatisticsService{
 		});
 	}
 
+	getIndexAllRecordsStatistics(osset: number): Observable<any>{
+		return this.http.get(SERVER + "/statistics/indexAllRecordsStatistics/" + osset).map((res: Response) => {
+			return res.json();
+		})
+	}
+
 }

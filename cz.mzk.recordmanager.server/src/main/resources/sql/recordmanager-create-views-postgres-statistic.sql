@@ -59,3 +59,22 @@ WHERE bji.job_name IN ('indexRecordsToSolrJob', 'indexAllRecordsToSolrJob', 'ind
   AND bje.status = 'COMPLETED'
 GROUP BY params1.string_val
 ;
+
+
+CREATE OR REPLACE VIEW index_all_records AS
+SELECT
+  bje.job_execution_id,
+  bje.start_time,
+  bje.end_time,
+  bje.status,
+  from_param.date_val from_param,
+  to_param.date_val to_param,
+  conf_id_param.string_val
+FROM batch_job_instance bji
+  JOIN batch_job_execution bje ON bje.job_instance_id = bji.job_instance_id
+  JOIN batch_job_execution_params conf_id_param ON conf_id_param.job_execution_id = bje.job_execution_id AND conf_id_param.key_name = 'solrUrl'
+  LEFT JOIN batch_job_execution_params to_param ON to_param.job_execution_id = bje.job_execution_id AND to_param.key_name = 'to'
+  LEFT JOIN batch_job_execution_params from_param ON from_param.job_execution_id = bje.job_execution_id AND from_param.key_name = 'from'
+WHERE bji.job_name IN ('indexAllRecordsToSolrJob')
+GROUP BY bje.job_execution_id, from_param.date_val,to_param.date_val, conf_id_param.string_val
+;
