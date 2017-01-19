@@ -34,6 +34,7 @@
 
 				<th>Start time<i (click)="sortByMe('startTime')" [ngClass]="{'glyphicon': true, 'glyphicon-arrow-up': getArrow('startTime') && getVisibility('startTime'), 'glyphicon-arrow-down': !getArrow('startTime') && getVisibility('startTime'), 'glyphicon-sort': !getVisibility('startTime')}"></i></th>
 
+				<th>Error message</th>
 			</tr>
 
 
@@ -43,6 +44,13 @@
 				<td>{{statistic.status}}</td>
 				<td>{{statistic.startTime | date: "dd/MM/yyyy HH:mm"}}</td>
 
+				<td>
+					<button data-toggle="collapse" class="btn btn-info" data-target="#demo">See the message</button>
+
+					<div id="demo" class="collapse">
+						<code>{{statistic.exitMessage}}</code>
+					</div>
+				</td>
 			</tr>
 		</table>
 	</div>

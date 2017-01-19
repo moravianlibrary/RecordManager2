@@ -42,4 +42,5 @@ export class ActualStatisticsComponent extends StatisticsComponent implements On
 		this.getActuals();
 	}
 
+
 }
