@@ -9,7 +9,7 @@ import {JobRunnersService} from "./runners/job-runners.service";
 import {ImportRecordsJobComponent} from "./runners/import-record-job/import-records-job.component";
 import {StatisticsComponent} from "./statistics/statistics.component";
 import {FullHarvestComponent} from "./statistics/full-harvest-statistic/full-harvest.component";
-import {ActualStatisticsComonent} from "./statistics/actual-statistic/actual-statistic.component";
+import {ActualStatisticsComponent} from "./statistics/actual-statistic/actual-statistic.component";
 import {StatisticsService} from "./statistics/statistics.service";
 import {DatetimePickerModule} from "../shared/datetime-picker/datetime-picker.module";
 import {IndexModule} from "../shared/index";
@@ -33,7 +33,7 @@ import {IndexAllRecordsComponent} from "./statistics/index-all-records-statistic
 		ImportRecordsJobComponent,
 		StatisticsComponent,
 		FullHarvestComponent,
-		ActualStatisticsComonent,
+		ActualStatisticsComponent,
 		StatusFilterPipe,
 		IndexAllRecordsComponent
 	]

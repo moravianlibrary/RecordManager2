@@ -1,8 +1,8 @@
 import {Component, OnInit} from "@angular/core";
-import {Field} from "../../../shared/field";
-import {Router} from "@angular/router";
 import {StatisticsService} from "../statistics.service";
 import {SortControl} from "../../../shared/sort-control";
+import {StatisticsComponent} from "../statistics.component";
+import {Field} from "../../../shared/field";
 import {Style} from "../../../shared/style";
 @Component({
 	selector: 'app-full-harvest',
@@ -10,38 +10,13 @@ import {Style} from "../../../shared/style";
 	styleUrls: ['./full-harvest.component.css']
 })
 
-export class FullHarvestComponent implements OnInit{
-
-	statistics: any[] = [];
-
-	offset: number;
-
-	sortBy: string;
-	fields: Field[] = [];
-	loading: boolean;
-
-	statuses: string[] = [];
-
-	startDate: Date = null;
-	endDate: Date = null;
-	fromParam: Date = null;
-	toParam: Date = null;
-
-
-	options: any = [];
-
-	isMore: boolean = true;
+export class FullHarvestComponent extends StatisticsComponent implements OnInit{
 
 
 
-	selected(event: any){
-		this.statuses = [];
-		event.forEach(item => {
-			this.statuses.push(item.key);
-		});
+	constructor(protected sortControl: SortControl, protected statisticsService: StatisticsService){
+		super(sortControl, statisticsService);
 	}
-
-	constructor(private router: Router, private statisticsService: StatisticsService, private sortControl: SortControl) { }
 
 	getStatistics(){
 		this.statisticsService.getOaiFullHarvestStatistics(this.offset).subscribe(stats => {
@@ -60,6 +35,7 @@ export class FullHarvestComponent implements OnInit{
 	}
 
 	ngOnInit() {
+		super.ngOnInit();
 
 		this.fields.push(new Field({'_name': 'jobExecutionId', '_style': new Style()}));
 
@@ -81,40 +57,9 @@ export class FullHarvestComponent implements OnInit{
 
 		this.fields.push(new Field({'_name': 'noOfRecords', '_style': new Style()}));
 
-		this.options.push({key: "COMPLETED", value: "COMPLETED"});
-		this.options.push({key: "FAILED", value: "FAILED"});
-		this.options.push({key: "STARTED", value: "STARTED"});
-
 		this.sortByMe("jobExecutionId");
 
-		this.loading = true;
-		this.offset = 0;
 		this.getStatistics();
-	}
-
-	sortByMe(name: string){
-		this.sortBy = this.sortControl.sortByMe(name, this.fields);
-	}
-
-	getArrow(name: string): boolean{
-		return this.sortControl.getArrow(name, this.fields)== 'glyphicon-arrow-up' ? true: false;
-	}
-	getVisibility(name: string): boolean{
-		return this.sortControl.getVisibility(name, this.fields) == 'visible' ? true: false;
-	}
-
-
-	setStart(event: any){
-		this.startDate = event;
-	}
-	setEnd(event: any){
-		this.endDate = event;
-	}
-	setFrom(event: any){
-		this.fromParam = event;
-	}
-	setTo(event: any){
-		this.toParam = event;
 	}
 
 	nextPartOfStats(offset: number){

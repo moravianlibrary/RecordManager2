@@ -4,7 +4,7 @@ import {NgModule} from "@angular/core";
 import {JobComponent} from "./job.component";
 import {StatisticsComponent} from "./statistics/statistics.component";
 import {FullHarvestComponent} from "./statistics/full-harvest-statistic/full-harvest.component";
-import {ActualStatisticsComonent} from "./statistics/actual-statistic/actual-statistic.component";
+import {ActualStatisticsComponent} from "./statistics/actual-statistic/actual-statistic.component";
 import {AuthGuard} from "../login/auth.guard";
 import {IndexAllRecordsComponent} from "./statistics/index-all-records-statistic/index-all-records.component";
 const jobRoutes: Routes = [
@@ -32,7 +32,7 @@ const jobRoutes: Routes = [
 					},
 					{
 						path: 'actual',
-						component: ActualStatisticsComonent
+						component: ActualStatisticsComponent
 					},
 					{
 						path: 'index-all-records',

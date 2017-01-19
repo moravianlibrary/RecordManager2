@@ -8,17 +8,58 @@
 
 
 <div *ngIf="!loading">
-	<table class="table">
-		<thead>
-		<tr>
-			<th>ID</th>
-			<th>Start</th>
-			<th>End</th>
-			<th>Status</th>
-			<th>From</th>
-			<th>To</th>
-			<th>Solr URL</th>
-		</tr>
-		</thead>
-	</table>
+
+	<div class="panel panel-default">
+		<div class="panel-body">
+
+			<div class="row">
+				<div class="col-md-2">
+					<div class="input-group">
+						<app-multi-select [itemsAmount]="3" [options]="options" [placeholder]="'Status'" (onSelect)="selected($event)"></app-multi-select>
+					</div>
+				</div>
+				<div class="col-md-2">
+					<button class="btn btn-default" (click)="getStatisticsInPeriods()">Search</button>
+				</div>
+			</div>
+
+			<br>
+
+			<div class="row">
+				<app-datetime-picker [description]="'Start'" (emitDate)="setStart($event)"></app-datetime-picker>
+
+				<app-datetime-picker [description]="'End'" (emitDate)="setEnd($event)"></app-datetime-picker>
+
+				<app-datetime-picker [description]="'From'" (emitDate)="setFrom($event)"></app-datetime-picker>
+
+				<app-datetime-picker [description]="'To'" (emitDate)="setTo($event)"></app-datetime-picker>
+			</div>
+
+		</div>
+	</div>
+
+
+	<div class="panel panel-default">
+		<table class="table">
+			<tr>
+				<th>ID<i (click)="sortByMe('jobExecutionId')" [ngClass]="{'glyphicon': true, 'glyphicon-arrow-up': getArrow('jobExecutionId') && getVisibility('jobExecutionId'), 'glyphicon-arrow-down': !getArrow('jobExecutionId') && getVisibility('jobExecutionId'), 'glyphicon-sort': !getVisibility('jobExecutionId')}"></i></th>
+				<th>Start<i (click)="sortByMe('startTime')" [ngClass]="{'glyphicon': true, 'glyphicon-arrow-up': getArrow('startTime') && getVisibility('startTime'), 'glyphicon-arrow-down': !getArrow('startTime') && getVisibility('startTime'), 'glyphicon-sort': !getVisibility('startTime')}"></i></th>
+				<th>End<i (click)="sortByMe('endTime')" [ngClass]="{'glyphicon': true, 'glyphicon-arrow-up': getArrow('endTime') && getVisibility('endTime'), 'glyphicon-arrow-down': !getArrow('endTime') && getVisibility('endTime'), 'glyphicon-sort': !getVisibility('endTime')}"></i></th>
+				<th>Status<i (click)="sortByMe('status')" [ngClass]="{'glyphicon': true, 'glyphicon-arrow-up': getArrow('status') && getVisibility('status'), 'glyphicon-arrow-down': !getArrow('status') && getVisibility('status'), 'glyphicon-sort': !getVisibility('status')}"></i></th>
+				<th>From<i (click)="sortByMe('fromParam')" [ngClass]="{'glyphicon': true, 'glyphicon-arrow-up': getArrow('fromParam') && getVisibility('fromParam'), 'glyphicon-arrow-down': !getArrow('fromParam') && getVisibility('fromParam'), 'glyphicon-sort': !getVisibility('fromParam')}"></i></th>
+				<th>To<i (click)="sortByMe('toParam')" [ngClass]="{'glyphicon': true, 'glyphicon-arrow-up': getArrow('toParam') && getVisibility('toParam'), 'glyphicon-arrow-down': !getArrow('toParam') && getVisibility('toParam'), 'glyphicon-sort': !getVisibility('toParam')}"></i></th>
+				<th>Solr URL<i (click)="sortByMe('stringVal')" [ngClass]="{'glyphicon': true, 'glyphicon-arrow-up': getArrow('stringVal') && getVisibility('stringVal'), 'glyphicon-arrow-down': !getArrow('stringVal') && getVisibility('stringVal'), 'glyphicon-sort': !getVisibility('stringVal')}"></i></th>
+			</tr>
+
+			<tr *ngFor="let statistic of statistics | statusFilter: statuses | orderBy: [sortBy]">
+				<td>{{statistic.jobExecutionId}}</td>
+				<td>{{statistic.startTime | date: "dd/MM/yyyy HH:mm"}}</td>
+				<td>{{statistic.endTime | date: "dd/MM/yyyy HH:mm"}}</td>
+				<td>{{statistic.status}}</td>
+				<td>{{statistic.fromParam | date: "dd/MM/yyyy HH:mm"}}</td>
+				<td>{{statistic.toParam | date: "dd/MM/yyyy HH:mm"}}</td>
+				<td>{{statistic.stringVal}}</td>
+			</tr>
+		</table>
+	</div>
 </div>

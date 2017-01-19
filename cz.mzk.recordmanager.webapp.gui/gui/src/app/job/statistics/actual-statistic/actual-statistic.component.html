@@ -1,47 +1,49 @@
 <div class="page-header">
 	<h1>Actual statistics</h1>
 </div>
+<div *ngIf="loading" class='uil-ring-css' style='transform:scale(0.6); right: 50%; left: 50%; position: fixed'><div></div></div>
 
 
-<div class="row">
-	<div class="col-md-6">
-		<h4>Running Jobs</h4>
-		<table class="table">
-			<thead>
-				<tr>
-					<th>Job Instance ID</th>
-					<th>Start time</th>
-					<th>Name</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr *ngFor="let job of getRunning()">
-					<td>{{job.jobInstanceId}}</td>
-					<td>{{job.startTime | date: 'dd/MM/yyyy'}}</td>
-					<td>{{job.jobName}}</td>
-				</tr>
-			</tbody>
-		</table>
+<div *ngIf="!loading">
+	<div class="panel panel-default">
+		<div class="panel-body">
+
+			<div class="row">
+				<div class="col-md-2">
+					<div class="input-group">
+						<app-multi-select [itemsAmount]="3" [options]="options" [placeholder]="'Status'" (onSelect)="selected($event)"></app-multi-select>
+					</div>
+				</div>
+			</div>
+			<br>
+		</div>
 	</div>
-	<div class="col-md-6">
-		<h4>Finished jobs</h4>
+
+
+	<div class="panel panel-default">
+		<!-- Default panel contents -->
+		<!-- Table -->
 		<table class="table">
-			<thead>
 			<tr>
-				<th>Job Instance ID</th>
-				<th>Start time</th>
-				<th>Name</th>
-			</tr>
-			</thead>
-			<tbody>
-			<tr *ngFor="let job of getFinished()">
-				<td>{{job.jobInstanceId}}</td>
-				<td>{{job.startTime | date: 'dd/MM/yyyy'}}</td>
-				<td>{{job.jobName}}</td>
-				<td>{{job.status}}</td>
+				<th>ID<i (click)="sortByMe('jobInstanceId')" [ngClass]="{'glyphicon': true, 'glyphicon-arrow-up': getArrow('jobInstanceId') && getVisibility('jobInstanceId'), 'glyphicon-arrow-down': !getArrow('jobInstanceId') && getVisibility('jobInstanceId'), 'glyphicon-sort': !getVisibility('jobInstanceId')}"></i></th>
+
+				<th>Job name<i (click)="sortByMe('jobName')" [ngClass]="{'glyphicon': true, 'glyphicon-arrow-up': getArrow('jobName') && getVisibility('jobName'), 'glyphicon-arrow-down': !getArrow('jobName') && getVisibility('jobName'), 'glyphicon-sort': !getVisibility('jobName')}"></i></th>
+
+				<th>Status<i (click)="sortByMe('status')" [ngClass]="{'glyphicon': true, 'glyphicon-arrow-up': getArrow('status') && getVisibility('status'), 'glyphicon-arrow-down': !getArrow('status') && getVisibility('status'), 'glyphicon-sort': !getVisibility('status')}"></i></th>
+
+
+				<th>Start time<i (click)="sortByMe('startTime')" [ngClass]="{'glyphicon': true, 'glyphicon-arrow-up': getArrow('startTime') && getVisibility('startTime'), 'glyphicon-arrow-down': !getArrow('startTime') && getVisibility('startTime'), 'glyphicon-sort': !getVisibility('startTime')}"></i></th>
 
 			</tr>
-			</tbody>
+
+
+			<tr *ngFor="let statistic of statistics | statusFilter: statuses | orderBy: [sortBy]">
+				<td>{{statistic.jobInstanceId}}</td>
+				<td>{{statistic.jobName}}</td>
+				<td>{{statistic.status}}</td>
+				<td>{{statistic.startTime | date: "dd/MM/yyyy HH:mm"}}</td>
+
+			</tr>
 		</table>
 	</div>
 </div>
