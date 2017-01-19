@@ -545,7 +545,7 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 	@Override
 	public List<ShortTitle> getShortTitles() {
 		// TODO Auto-generated method stub
-		return null;
+		return Collections.emptyList();
 	}
 
 	@Override
