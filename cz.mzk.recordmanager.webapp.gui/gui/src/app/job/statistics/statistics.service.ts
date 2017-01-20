@@ -11,7 +11,7 @@ export class StatisticsService{
 	getActualStatistics(): Observable<any>{
 		let options = new RequestOptions();
 		let startTime = new Date(Date.now());
-		startTime.setDate(startTime.getDate() - 200);
+		startTime.setDate(startTime.getDate() - 7);
 
 		let formData = new FormData();
 		formData.append("startDate", startTime);
