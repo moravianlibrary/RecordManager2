@@ -51,4 +51,10 @@ public class JobsStatisticsController {
 		return statisticsService.getIndexAllRecordsStatistics(offset);
     }
 
+    @RequestMapping(method = RequestMethod.POST, value = "indexAllRecordsStatistics/inPeriods")
+	@ResponseBody
+	public List<IndexAllRecordsJobStatisticsDto> getIndexAllRecordsStatisticsInPeriods(@RequestBody List<PeriodDto> periods){
+		return statisticsService.getIndexAllRecordsStatisticsInPeriods(periods.get(0), periods.get(1));
+    }
+
 }
