@@ -22,8 +22,18 @@ export class IndexAllRecordsComponent extends StatisticsComponent implements OnI
 				this.statistics.push(item);
 			});
 
+			if (res.length >= 10){
+				this.isMore = true;
+			}else {
+				this.isMore = false;
+			}
 			this.loading = false;
 		});
+	}
+
+	nextPartOfStats(offset: number){
+		this.offset += offset;
+		this.getIndexAllRecordsStats();
 	}
 
 	ngOnInit(): void {
@@ -46,6 +56,29 @@ export class IndexAllRecordsComponent extends StatisticsComponent implements OnI
 		this.sortByMe("jobExecutionId");
 
 		this.getIndexAllRecordsStats()
+	}
+
+	getStatisticsInPeriods(){
+		if (
+			this.startDate == null &&
+			this.endDate == null &&
+			this.fromParam == null &&
+			this.toParam == null
+		){
+			this.offset = 0;
+			this.statistics = [];
+			this.getIndexAllRecordsStats();
+		}else{
+			this.statisticsService.getIndexAllRecordsStatisticsInPeriods(
+				this.startDate,
+				this.endDate,
+				this.fromParam,
+				this.toParam).subscribe(res => {
+				this.statistics = res;
+				this.offset = 0;
+				this.isMore = false;
+			});
+		}
 	}
 
 }

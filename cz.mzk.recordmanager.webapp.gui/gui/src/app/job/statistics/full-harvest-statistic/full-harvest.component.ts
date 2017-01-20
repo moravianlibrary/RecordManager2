@@ -88,7 +88,6 @@ export class FullHarvestComponent extends StatisticsComponent implements OnInit{
 				this.isMore = false;
 			});
 		}
-
-
 	}
+
 }

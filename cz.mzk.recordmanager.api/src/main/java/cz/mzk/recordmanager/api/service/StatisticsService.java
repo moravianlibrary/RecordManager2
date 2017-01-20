@@ -17,4 +17,6 @@ public interface StatisticsService {
 	List<OaiHarvestJobStatisticsDto> getOaiHarvestStatisticsInPeriods(PeriodDto startEnd, PeriodDto fromTo);
 
 	List<IndexAllRecordsJobStatisticsDto> getIndexAllRecordsStatistics(Integer offset);
+
+	List<IndexAllRecordsJobStatisticsDto> getIndexAllRecordsStatisticsInPeriods(PeriodDto startEnd, PeriodDto fromTo);
 }

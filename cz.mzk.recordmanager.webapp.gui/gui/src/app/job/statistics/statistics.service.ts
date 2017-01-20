@@ -6,6 +6,8 @@ import {SERVER} from "../../server";
 export class StatisticsService{
 	constructor(private http: Http){}
 
+
+
 	getActualStatistics(): Observable<any>{
 		let options = new RequestOptions();
 		let startTime = new Date(Date.now());
@@ -33,16 +35,10 @@ export class StatisticsService{
 		var headers = new Headers({"Content-Type": 'application/json', 'Accept': 'application/json'});
 		let options = new RequestOptions({ headers: headers });
 
-		console.log(startDate);
-		console.log(endDate);
-		console.log(fromDate);
-		console.log(toDate);
-
-
 		return this.http.post(SERVER + "/statistics/oaiHarvestStatistics/inPeriods",
 			JSON.stringify([{start: startDate, end: endDate}, {start: fromDate, end: toDate}]),
 		options).map((res:Response) => {
-			console.log(res);
+
 			return res.json();
 		});
 	}
@@ -51,6 +47,29 @@ export class StatisticsService{
 		return this.http.get(SERVER + "/statistics/indexAllRecordsStatistics/" + osset).map((res: Response) => {
 			return res.json();
 		})
+	}
+
+	getIndexAllRecordsStatisticsInPeriods(startDate: Date, endDate: Date, fromDate: Date, toDate: Date): Observable<any>{
+		if (startDate == null) startDate = new Date(0);
+		if (endDate == null) endDate = new Date(Date.now());
+		if (fromDate == null) fromDate = new Date(0);
+		if (toDate == null) toDate = new Date(Date.now());
+
+		var headers = new Headers({"Content-Type": 'application/json', 'Accept': 'application/json'});
+		let options = new RequestOptions({ headers: headers });
+
+		console.log(startDate);
+		console.log(endDate);
+		console.log(fromDate);
+		console.log(toDate);
+
+
+		return this.http.post(SERVER + "/statistics/indexAllRecordsStatistics/inPeriods",
+			JSON.stringify([{start: startDate, end: endDate}, {start: fromDate, end: toDate}]),
+			options).map((res:Response) => {
+			console.log(res);
+			return res.json();
+		});
 	}
 
 }

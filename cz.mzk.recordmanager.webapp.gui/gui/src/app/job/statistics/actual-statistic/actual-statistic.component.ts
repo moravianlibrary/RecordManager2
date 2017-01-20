@@ -26,6 +26,7 @@ export class ActualStatisticsComponent extends StatisticsComponent implements On
 		});
 	}
 
+
 	ngOnInit(): void {
 		super.ngOnInit();
 

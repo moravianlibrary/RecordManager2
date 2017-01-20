@@ -48,7 +48,16 @@ public class StatisticsServiceImpl implements StatisticsService{
 	public List<IndexAllRecordsJobStatisticsDto> getIndexAllRecordsStatistics(Integer offset) {
 		return jdbcTemplate.query("SELECT * " +
 				"FROM index_all_records " +
+				"ORDER BY start_time DESC " +
 				"LIMIT 10 " +
 				"OFFSET ?", new BeanPropertyRowMapper<IndexAllRecordsJobStatisticsDto>(IndexAllRecordsJobStatisticsDto.class), offset);
+	}
+
+	@Override
+	public List<IndexAllRecordsJobStatisticsDto> getIndexAllRecordsStatisticsInPeriods(PeriodDto startEnd, PeriodDto fromTo) {
+		return jdbcTemplate.query("SELECT * " +
+				"FROM index_all_records " +
+				"WHERE (start_time >= ? OR start_time IS NULL ) AND (end_time <= ? OR end_time IS NULL ) AND (from_param >= ? OR from_param IS NULL ) AND (to_param <= ? OR to_param IS NULL )" +
+				"ORDER BY start_time DESC ", new BeanPropertyRowMapper<IndexAllRecordsJobStatisticsDto>(IndexAllRecordsJobStatisticsDto.class), startEnd.getStart(), startEnd.getEnd(), fromTo.getStart(), fromTo.getEnd());
 	}
 }
