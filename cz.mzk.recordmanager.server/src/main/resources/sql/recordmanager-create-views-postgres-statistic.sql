@@ -78,3 +78,15 @@ FROM batch_job_instance bji
 WHERE bji.job_name IN ('indexAllRecordsToSolrJob')
 GROUP BY bje.job_execution_id, from_param.date_val,to_param.date_val, conf_id_param.string_val
 ;
+
+CREATE OR REPLACE VIEW dedup_records_st AS
+SELECT
+  bje.job_execution_id,
+  bje.start_time,
+  bje.end_time,
+  bje.status
+FROM batch_job_instance bji
+  JOIN batch_job_execution bje ON bje.job_instance_id = bji.job_instance_id
+WHERE bji.job_name IN ('dedupRecordsJob')
+GROUP BY bje.job_execution_id
+;

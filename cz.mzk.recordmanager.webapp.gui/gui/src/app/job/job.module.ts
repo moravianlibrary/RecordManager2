@@ -16,6 +16,7 @@ import {IndexModule} from "../shared/index";
 import {StatusFilterPipe} from "../pipes/status-filter.pipe";
 import {SortControl} from "../shared/sort-control";
 import {IndexAllRecordsComponent} from "./statistics/index-all-records-statistic/index-all-records.component";
+import {DedupRecordsComponent} from "./statistics/dedup-records-statistics/dedup-records-statistics";
 
 @NgModule({
 	imports: [
@@ -35,7 +36,8 @@ import {IndexAllRecordsComponent} from "./statistics/index-all-records-statistic
 		FullHarvestComponent,
 		ActualStatisticsComponent,
 		StatusFilterPipe,
-		IndexAllRecordsComponent
+		IndexAllRecordsComponent,
+		DedupRecordsComponent
 	]
 })
 export class JobModule{}

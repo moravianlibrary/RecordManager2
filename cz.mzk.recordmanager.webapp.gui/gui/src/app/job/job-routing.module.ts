@@ -7,6 +7,7 @@ import {FullHarvestComponent} from "./statistics/full-harvest-statistic/full-har
 import {ActualStatisticsComponent} from "./statistics/actual-statistic/actual-statistic.component";
 import {AuthGuard} from "../login/auth.guard";
 import {IndexAllRecordsComponent} from "./statistics/index-all-records-statistic/index-all-records.component";
+import {DedupRecordsComponent} from "./statistics/dedup-records-statistics/dedup-records-statistics";
 const jobRoutes: Routes = [
 	{
 		path: 'job',
@@ -37,6 +38,10 @@ const jobRoutes: Routes = [
 					{
 						path: 'index-all-records',
 						component: IndexAllRecordsComponent
+					},
+					{
+						path: 'dedup-records',
+						component: DedupRecordsComponent
 					}
 				]
 			}

@@ -3,6 +3,7 @@ package cz.mzk.recordmanager.server.service;
 
 import cz.mzk.recordmanager.api.model.PeriodDto;
 import cz.mzk.recordmanager.api.model.statistics.ActualStatisticsDto;
+import cz.mzk.recordmanager.api.model.statistics.DedupRecordsDto;
 import cz.mzk.recordmanager.api.model.statistics.IndexAllRecordsJobStatisticsDto;
 import cz.mzk.recordmanager.api.model.statistics.OaiHarvestJobStatisticsDto;
 import cz.mzk.recordmanager.api.service.StatisticsService;
@@ -59,5 +60,14 @@ public class StatisticsServiceImpl implements StatisticsService{
 				"FROM index_all_records " +
 				"WHERE (start_time >= ? OR start_time IS NULL ) AND (end_time <= ? OR end_time IS NULL ) AND (from_param >= ? OR from_param IS NULL ) AND (to_param <= ? OR to_param IS NULL )" +
 				"ORDER BY start_time DESC ", new BeanPropertyRowMapper<IndexAllRecordsJobStatisticsDto>(IndexAllRecordsJobStatisticsDto.class), startEnd.getStart(), startEnd.getEnd(), fromTo.getStart(), fromTo.getEnd());
+	}
+
+	@Override
+	public List<DedupRecordsDto> getDedupRecordsStatistics(Integer offset) {
+		return jdbcTemplate.query("SELECT * " +
+				"FROM dedup_records_st " +
+				"ORDER BY start_time DESC " +
+				"LIMIT 10 " +
+				"OFFSET ?", new BeanPropertyRowMapper<DedupRecordsDto>(DedupRecordsDto.class), offset);
 	}
 }

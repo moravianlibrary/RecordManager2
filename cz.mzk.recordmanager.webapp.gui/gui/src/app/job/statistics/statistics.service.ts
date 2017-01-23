@@ -43,8 +43,14 @@ export class StatisticsService{
 		});
 	}
 
-	getIndexAllRecordsStatistics(osset: number): Observable<any>{
-		return this.http.get(SERVER + "/statistics/indexAllRecordsStatistics/" + osset).map((res: Response) => {
+	getIndexAllRecordsStatistics(offset: number): Observable<any>{
+		return this.http.get(SERVER + "/statistics/indexAllRecordsStatistics/" + offset).map((res: Response) => {
+			return res.json();
+		})
+	}
+
+	getDedupRecordsStatistics(offset: number): Observable<any>{
+		return this.http.get(SERVER + "/statistics/dedupRecordsStatistics/" + offset).map((res: Response) => {
 			return res.json();
 		})
 	}

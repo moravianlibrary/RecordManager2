@@ -3,6 +3,7 @@ package cz.mzk.recordmanager.webapp.controller;
 
 import cz.mzk.recordmanager.api.model.PeriodDto;
 import cz.mzk.recordmanager.api.model.statistics.ActualStatisticsDto;
+import cz.mzk.recordmanager.api.model.statistics.DedupRecordsDto;
 import cz.mzk.recordmanager.api.model.statistics.IndexAllRecordsJobStatisticsDto;
 import cz.mzk.recordmanager.api.model.statistics.OaiHarvestJobStatisticsDto;
 import cz.mzk.recordmanager.api.service.StatisticsService;
@@ -55,6 +56,12 @@ public class JobsStatisticsController {
 	@ResponseBody
 	public List<IndexAllRecordsJobStatisticsDto> getIndexAllRecordsStatisticsInPeriods(@RequestBody List<PeriodDto> periods){
 		return statisticsService.getIndexAllRecordsStatisticsInPeriods(periods.get(0), periods.get(1));
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "dedupRecordsStatistics/{offset}")
+	@ResponseBody
+	public List<DedupRecordsDto> getDedupRecordsStatistics(@PathVariable Integer offset){
+		return statisticsService.getDedupRecordsStatistics(offset);
     }
 
 }
