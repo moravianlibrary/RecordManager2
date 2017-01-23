@@ -106,6 +106,8 @@
       <analyzer>
         <tokenizer class="solr.KeywordTokenizerFactory"/>
         <filter class="solr.ICUFoldingFilterFactory"/>
+        <filter class="solr.PatternReplaceFilterFactory" pattern="([\/\s]+)$" replacement="" replace="first"/>
+        <filter class="solr.PatternReplaceFilterFactory" pattern="\s([\s]+)" replacement=" " replace="all"/>
       </analyzer>
     </fieldType>
   </types>

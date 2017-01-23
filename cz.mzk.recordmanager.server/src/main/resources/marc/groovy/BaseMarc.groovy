@@ -17,6 +17,7 @@ author_sort_str = getAuthorForSorting()
 title = getFirstField "245abnp"
 title_sub = getFirstField "245b"
 title_short = getFirstFieldTrim "245a"
+title_exact = getFirstFieldTrim "245a"
 title_full = getFirstField "245abdefghijklmnopqrstuvwxyz0123456789"
 title_alt = getFields "130adfgklnpst:240a:246a:730adfgklnpst:740a"
 title_old = getFields "780ast"
