@@ -22,4 +22,6 @@ public interface StatisticsService {
 	List<IndexAllRecordsJobStatisticsDto> getIndexAllRecordsStatisticsInPeriods(PeriodDto startEnd, PeriodDto fromTo);
 
 	List<DedupRecordsDto> getDedupRecordsStatistics(Integer offset);
+
+	List<DedupRecordsDto> getDedupRecordsStatisticsInPeriods(PeriodDto startEnd);
 }

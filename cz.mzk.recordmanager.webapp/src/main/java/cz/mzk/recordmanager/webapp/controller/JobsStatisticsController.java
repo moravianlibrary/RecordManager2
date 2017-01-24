@@ -64,4 +64,10 @@ public class JobsStatisticsController {
 		return statisticsService.getDedupRecordsStatistics(offset);
     }
 
+	@RequestMapping(method = RequestMethod.POST, value = "dedupRecordsStatistics/inPeriods")
+	@ResponseBody
+	public List<DedupRecordsDto> getDedupRecordsStatisticsInPeriods(@RequestBody PeriodDto period){
+		return statisticsService.getDedupRecordsStatisticsInPeriods(period);
+	}
+
 }

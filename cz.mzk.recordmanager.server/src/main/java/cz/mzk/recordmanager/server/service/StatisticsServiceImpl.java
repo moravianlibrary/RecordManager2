@@ -70,4 +70,12 @@ public class StatisticsServiceImpl implements StatisticsService{
 				"LIMIT 10 " +
 				"OFFSET ?", new BeanPropertyRowMapper<DedupRecordsDto>(DedupRecordsDto.class), offset);
 	}
+
+	@Override
+	public List<DedupRecordsDto> getDedupRecordsStatisticsInPeriods(PeriodDto startEnd) {
+		return jdbcTemplate.query("SELECT * " +
+				"FROM dedup_records_st " +
+				"WHERE (start_time >= ? OR start_time IS NULL ) AND (end_time <= ? OR end_time IS NULL ) " +
+				"ORDER BY start_time DESC ", new BeanPropertyRowMapper<DedupRecordsDto>(DedupRecordsDto.class), startEnd.getStart(), startEnd.getEnd());
+	}
 }

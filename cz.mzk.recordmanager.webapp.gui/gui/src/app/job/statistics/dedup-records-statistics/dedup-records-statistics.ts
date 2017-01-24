@@ -15,7 +15,7 @@ export class DedupRecordsComponent extends StatisticsComponent implements OnInit
 		super(sortControl, statisticsService);
 	}
 
-	getDedupRecords(){
+	getDedupRecordsStatistics(){
 		this.loading = true;
 		this.statisticsService.getDedupRecordsStatistics(this.offset).subscribe(res => {
 			res.forEach(st => {
@@ -45,12 +45,33 @@ export class DedupRecordsComponent extends StatisticsComponent implements OnInit
 
 		this.sortByMe('jobExecutionId');
 
-		this.getDedupRecords();
+		this.getDedupRecordsStatistics();
 
 	}
 
 	nextPartOfStats(offset: number){
 		this.offset = this.offset + offset;
-		this.getDedupRecords();
+		this.getDedupRecordsStatistics();
+	}
+
+	getStatisticsInPeriods(){
+		if (
+			this.startDate == null &&
+			this.endDate == null &&
+			this.fromParam == null &&
+			this.toParam == null
+		){
+			this.offset = 0;
+			this.statistics = [];
+			this.getDedupRecordsStatistics();
+		}else{
+			this.statisticsService.getDedupRecordsStatisticsInPeriods(
+				this.startDate,
+				this.endDate).subscribe(res => {
+				this.statistics = res;
+				this.offset = 0;
+				this.isMore = false;
+			});
+		}
 	}
 }
