@@ -420,7 +420,7 @@ public class MarcRecordImplTest extends AbstractTest {
 		data.add("964 $asd");
 		mri = MarcRecordFactory.recordFactory(data);
 		metadataRecord = metadataFactory.getMetadataRecord(mri);
-		Assert.assertEquals(metadataRecord.getWeight(0L).longValue(), 4L);
+		Assert.assertEquals(metadataRecord.getWeight(0L).longValue(), 5L);
 		data.clear();
 	}
 	

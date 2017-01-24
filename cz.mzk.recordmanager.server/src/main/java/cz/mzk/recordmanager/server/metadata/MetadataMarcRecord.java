@@ -804,16 +804,19 @@ public class MetadataMarcRecord implements MetadataRecord {
 		if(underlayingMarc.getControlField("008") == null) weight -= 1;
 		if(underlayingMarc.getDataFields("300").isEmpty()) weight -= 1;
 		
-        boolean f245Ind1 = false;
+		boolean exists1xx = false;
 		for (String key: fields1xx){
 			if(!underlayingMarc.getDataFields(key).isEmpty()){
-				for(DataField dataField: underlayingMarc.getDataFields("245")){
-					if(dataField.getIndicator1() == 0) f245Ind1 = true;
-				}
+				exists1xx = true;
 				break;
 			}
 		}
-		if(!f245Ind1){
+		boolean f245Ind1 = false;
+		for(DataField dataField: underlayingMarc.getDataFields("245")){
+			if(dataField.getIndicator1() == 0) f245Ind1 = true;
+		}
+		
+		if(!exists1xx && !f245Ind1){
 			weight -= 1;
 		}
 		
