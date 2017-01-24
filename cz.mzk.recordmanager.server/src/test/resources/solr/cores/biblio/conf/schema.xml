@@ -106,8 +106,14 @@
       <analyzer>
         <tokenizer class="solr.KeywordTokenizerFactory"/>
         <filter class="solr.ICUFoldingFilterFactory"/>
-        <filter class="solr.PatternReplaceFilterFactory" pattern="([\/\s]+)$" replacement="" replace="first"/>
-        <filter class="solr.PatternReplaceFilterFactory" pattern="\s([\s]+)" replacement=" " replace="all"/>
+        <!-- Odstraneni interpunkcnich znaku -->
+        <filter class="solr.PatternReplaceFilterFactory" pattern="([=;:.,\/\(\)])" replacement=" " replace="all"/>
+        <!-- Dve a vice mezer po sobe nahrad jednou mezerou -->
+        <filter class="solr.PatternReplaceFilterFactory" pattern="([\s]{2,})" replacement=" " replace="all"/>
+        <!-- Odstraneni mezer na konci retezce -->
+        <filter class="solr.PatternReplaceFilterFactory" pattern="(\s+)$" replacement="" replace="first"/>
+        <!-- Odstraneni mezer na zacatku retezce -->
+        <filter class="solr.PatternReplaceFilterFactory" pattern="^(\s+)" replacement="" replace="first"/>
       </analyzer>
     </fieldType>
   </types>
