@@ -500,7 +500,7 @@ public class MarcDSL extends BaseDSL {
     	List<DataField> list = record.getDataFields("100");
     	if(list.isEmpty()) return null;
 		DataField df = list.get(0);
-		String name = changeName(df);
+		String name = getNameForDisplay(df);
 		if(name.isEmpty()) return null;
 		else return name;
     }
@@ -508,10 +508,44 @@ public class MarcDSL extends BaseDSL {
     public List<String> getAuthor2Display(){
     	List<String> result = new ArrayList<String>();
     	for(DataField df: record.getDataFields("700")){
-    		result.add(changeName(df));
+    		result.add(getNameForDisplay(df));
     	}
     	result.addAll(getFields("110ab:111ab:710ab:711ab"));
     	return result;
+    }
+    
+    public String getNameForDisplay(DataField df) {
+    	StringBuilder sb = new StringBuilder();
+		sb.append(changeName(df));
+
+		for(char subfield: new char[]{'b', 'c', 'd'}){
+			if(df.getSubfield(subfield) != null) {
+				sb.append(" ");
+				sb.append(df.getSubfield(subfield).getData());
+			}
+		}
+		return removeEndPunctuation(sb.toString().trim());
+    }
+    
+    public String getAuthorExact(){
+    	List<DataField> list = record.getDataFields("100");
+    	if(list.isEmpty()) return null;
+		DataField df = list.get(0);
+		String name = getNameForExact(df);
+		if(name.isEmpty()) return null;
+		else return name;
+    }
+    
+    public String getNameForExact(DataField df) {
+    	StringBuilder sb = new StringBuilder();
+		sb.append(changeName(df));
+
+		if(df.getSubfield('b') != null) {
+			sb.append(" ");
+			sb.append(df.getSubfield('b').getData());
+		}
+
+		return removeEndPunctuation(sb.toString().trim());
     }
     
     public String changeName(DataField df){
@@ -532,13 +566,7 @@ public class MarcDSL extends BaseDSL {
 			if(df.getSubfield('a') != null) sb.append(df.getSubfield('a').getData());
 		}
 
-		for(char subfield: new char[]{'b', 'c', 'd'}){
-			if(df.getSubfield(subfield) != null) {
-				sb.append(" ");
-				sb.append(df.getSubfield(subfield).getData());
-			}
-		}
-		return removeEndPunctuation(sb.toString().trim());
+		return sb.toString();
     }
     
     public List<String> getAuthorFind(){
@@ -567,7 +595,7 @@ public class MarcDSL extends BaseDSL {
     public List<String> getAuthAuthors(String tag){
     	List<String> result = new ArrayList<>();
     	for(DataField df: record.getDataFields(tag)){
-    		result.add(changeName(df));
+    		result.add(getNameForDisplay(df));
     	}
     	return result;
     }
