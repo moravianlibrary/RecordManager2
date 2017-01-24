@@ -212,7 +212,7 @@ public class MarcDSL extends BaseDSL {
         title = title.replaceAll(TO_BLANK, SPACE_SEPARATOR);
         title = title.replaceAll(LEAD_SPACE, EMPTY_SEPARATOR);
         title = title.replaceAll(PACK_SPACES, SPACE_SEPARATOR);
-        return title;
+        return title.trim();
     }
 
 	public String getFullrecord() {
