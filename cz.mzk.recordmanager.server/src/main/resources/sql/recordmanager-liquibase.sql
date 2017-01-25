@@ -962,3 +962,27 @@ CREATE TABLE ean (
 );
 COMMENT ON TABLE ean IS 'dedup_keys: table contatining EANs';
 CREATE INDEX ean_harvested_record_idx ON ean(harvested_record_id); 
+
+--changeset tomascejpek:41
+CREATE TABLE short_title (
+  id                   DECIMAL(10) PRIMARY KEY,
+  harvested_record_id  DECIMAL(10),
+  short_title          VARCHAR(255),
+  order_in_record      DECIMAL(4),
+  similarity_enabled   BOOLEAN DEFAULT FALSE,
+  FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE
+);
+CREATE INDEX short_title_harvested_record_idx ON short_title(harvested_record_id);
+
+--changeset tomascejpek:42
+INSERT INTO harvested_record_format(id, name) VALUES (59, 'COMPUTER_CARRIERS');
+
+--changeset tomascejpek:43
+INSERT INTO harvested_record_format(id, name) VALUES (60, 'OTHER_OTHER');
+
+--changeset tomascejpek:44
+UPDATE harvested_record_format SET name='OTHER_COMPUTER_CARRIER' WHERE id=59;
+
+--changeset tomascejpek:45 context:cpk
+UPDATE import_conf SET base_weight=13 WHERE id in (308,314,328,335,336);
+UPDATE import_conf SET base_weight=10 WHERE id=313;

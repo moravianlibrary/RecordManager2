@@ -19,6 +19,7 @@ import cz.mzk.recordmanager.server.model.Isbn;
 import cz.mzk.recordmanager.server.model.Ismn;
 import cz.mzk.recordmanager.server.model.Issn;
 import cz.mzk.recordmanager.server.model.Oclc;
+import cz.mzk.recordmanager.server.model.ShortTitle;
 import cz.mzk.recordmanager.server.model.Title;
 import cz.mzk.recordmanager.server.util.MetadataUtils;
 
@@ -241,7 +242,7 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 		if(isVisual()) hrf.add(HarvestedRecordFormatEnum.VISUAL_DOCUMENTS);
 		if(isMusicalScore()) hrf.add(HarvestedRecordFormatEnum.MUSICAL_SCORES);
 		if(isAudioDocument()) hrf.add(HarvestedRecordFormatEnum.AUDIO_OTHER);
-		if(isOtherDocument()) hrf.add(HarvestedRecordFormatEnum.OTHER_UNSPECIFIED);
+		if(isOtherDocument()) hrf.add(HarvestedRecordFormatEnum.OTHER_OTHER);
 		return hrf;
 	}
 	
@@ -539,6 +540,18 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 	public List<Ean> getEANs() {
 		// TODO Auto-generated method stub
 		return Collections.emptyList();
+	}
+
+	@Override
+	public List<ShortTitle> getShortTitles() {
+		// TODO Auto-generated method stub
+		return Collections.emptyList();
+	}
+
+	@Override
+	public List<String> getDefaultStatuses() {
+		// implemented in institution specific classes
+		return null;
 	}
 
 }

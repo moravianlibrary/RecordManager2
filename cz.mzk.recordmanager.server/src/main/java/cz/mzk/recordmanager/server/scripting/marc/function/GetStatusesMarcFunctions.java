@@ -21,24 +21,26 @@ public class GetStatusesMarcFunctions implements MarcRecordFunctions {
 
 	protected final static String PRESENT = "p";
 	
-	protected final static String ONLINE = "online";
-	protected final static Pattern ONLINE_PATTERN = Pattern.compile("(?i).*"+ONLINE+".*");
+	protected final static Pattern STOP_WORDS = Pattern.compile("(?i).*obsah.*|.*tituln.*|.*abstrakt.*|"
+			+ ".*content.*|.*informace.*časopise.*");
 	
 	protected final static String FREESTACK = "0";
 
 	public List<String> getStatuses(MarcFunctionContext ctx) {
 		MarcRecord record = ctx.record();
 		List<String> statuses = new ArrayList<String>();
+		statuses.addAll(ctx.metadataRecord().getDefaultStatuses());
+		if (statuses.isEmpty()) statuses.addAll(getStatusFrom856(record, "856"));
 		statuses.addAll(getStatuses(record, "996"));
-		statuses.addAll(getStatusFrom856(record, "856"));	
 		return statuses;
 	}
 
 	private List<String> getStatusFrom856(MarcRecord record, String statusField) {
 		List<String> result = new ArrayList<>();
 		for (DataField field: record.getDataFields(statusField)) {
-			if (field.getIndicator1() == '4' && (field.getIndicator2() == '0' || field.getIndicator2() =='1')) {
-				result.addAll(SolrUtils.createHierarchicFacetValues(ONLINE, Constants.DOCUMENT_AVAILABILITY_UNKNOWN));
+			if ((field.getSubfield('3') == null || !STOP_WORDS.matcher(field.getSubfield('3').getData()).matches()) 
+					|| (field.getSubfield('y') == null || !STOP_WORDS.matcher(field.getSubfield('y').getData()).matches())) {
+				result.addAll(SolrUtils.createHierarchicFacetValues(Constants.DOCUMENT_AVAILABILITY_ONLINE, Constants.DOCUMENT_AVAILABILITY_UNKNOWN));
 			}
 		}
 		return result;

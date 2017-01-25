@@ -1,6 +1,7 @@
 package cz.mzk.recordmanager.server.metadata;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -24,6 +25,7 @@ import cz.mzk.recordmanager.server.model.Isbn;
 import cz.mzk.recordmanager.server.model.Ismn;
 import cz.mzk.recordmanager.server.model.Issn;
 import cz.mzk.recordmanager.server.model.Oclc;
+import cz.mzk.recordmanager.server.model.ShortTitle;
 import cz.mzk.recordmanager.server.model.Title;
 import cz.mzk.recordmanager.server.util.Constants;
 import cz.mzk.recordmanager.server.util.EANUtils;
@@ -302,13 +304,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 				}
 			}
 		}
-		
-		if (result.isEmpty()) {
-			Title title = new Title();
-			title.setTitleStr("");
-			title.setOrderInRecord(1L);
-			result.add(title);
-		}
+
 		return result;
 	}
 
@@ -457,39 +453,17 @@ public class MetadataMarcRecord implements MetadataRecord {
 	}
 		
 	protected boolean isBraill(){
-		String ldr06 = Character.toString(underlayingMarc.getLeader().getTypeOfRecord());
-		
-	    String f006 = underlayingMarc.getControlField("006");
-		String f006_06 = (f006 != null) && (f006.length() > 6) ? Character.toString(f006.charAt(6)) : "";
-	    String f006_12 = (f006 != null) && (f006.length() > 12) ? Character.toString(f006.charAt(12)) : "";
-	    
-	    String f007 = underlayingMarc.getControlField("007");
-	    String f007_00 = (f007 != null) && (f007.length() > 0) ? Character.toString(f007.charAt(0)) : "";
+		String f007 = underlayingMarc.getControlField("007");
+		String f007_00 = (f007 != null) && (f007.length() > 0) ? Character.toString(f007.charAt(0)) : "";
 		String f007_01 = (f007 != null) && (f007.length() > 1) ? Character.toString(f007.charAt(1)) : "";
-	    
-		String f008 = underlayingMarc.getControlField("008");
-	    String f008_23 = (f008 != null) && (f008.length() > 23) ? Character.toString(f008.charAt(23)) : "";
-	    String f008_29 = (f008 != null) && (f008.length() > 29) ? Character.toString(f008.charAt(29)) : "";
 
-	    String f245h = underlayingMarc.getField("245", 'h');		
+		String f245h = underlayingMarc.getField("245", 'h');		
 		if(f245h == null) f245h = "";
 		
 		String f336b = underlayingMarc.getField("336", 'b');
 		if(f336b == null) f336b = "";
-	    
-		if(ldr06.matches("(?i)[acdpt]") && f008_23.matches("(?i)f")){
-			return true;
-		}
-		if(ldr06.matches("(?i)[acdpt]") && f006_06.matches("(?i)f")){
-			return true;
-		}
+
 		if(f007_00.matches("(?i)f") && f007_01.matches("(?i)b") && f245h.matches("(?i).*hmatové\\spísmo.*")){
-			return true;
-		}
-		if(ldr06.matches("(?i)[efk]")&& f008_29.matches("(?i)f")){
-			return true;
-		}
-		if(ldr06.matches("(?i)[efk]") && f006_12.matches("(?i)f")){
 			return true;
 		}
 		
@@ -501,21 +475,53 @@ public class MetadataMarcRecord implements MetadataRecord {
 		return false;
 	}
 	
-	protected boolean isElectronicSource(){
+	protected boolean isElectronicSource() {
 		String ldr06 = Character.toString(underlayingMarc.getLeader().getTypeOfRecord());
 		
-	    String f006 = underlayingMarc.getControlField("006");
-	    String f006_00 = (f006 != null) && (f006.length() > 0) ? Character.toString(f006.charAt(0)) : "";
+		String f006 = underlayingMarc.getControlField("006");
+		String f006_00 = (f006 != null) && (f006.length() > 0) ? Character.toString(f006.charAt(0)) : "";
 		String f006_06 = (f006 != null) && (f006.length() > 6) ? Character.toString(f006.charAt(6)) : "";
 		
-	    String f007 = underlayingMarc.getControlField("007");
-	    String f007_00 = (f007 != null) && (f007.length() > 0) ? Character.toString(f007.charAt(0)) : "";
+		String f008 = underlayingMarc.getControlField("008");
+		String f008_23 = (f008 != null) && (f008.length() > 23) ? Character.toString(f008.charAt(23)) : "";
+		String f008_29 = (f008 != null) && (f008.length() > 29) ? Character.toString(f008.charAt(29)) : "";
+		
+		String f338b = underlayingMarc.getField("338", 'b');
+		if (f338b == null) f338b = "";
+		
+		if (ldr06.matches("(?i)[acdijpt]") && f008_23.matches("(?i)[oq]")) {
+			return true;
+		}
+		if (f006_00.matches("(?i)[acdijpt]") && f006_06.matches("(?i)[oq]")) {
+			return true;
+		}
+		if (ldr06.matches("(?i)[efgkopr]") && f008_29.matches("(?i)[oq]")) {
+			return true;
+		}
+		if (f006_00.matches("(?i)[efgkopr]") && f006_06.matches("(?i)[oq]")) {
+			return true;
+		}
+		if (f338b.matches("(?i)cr")) return true;
+		
+		return false;
+	}
+
+	protected boolean isComputerCarrier(){
+		String ldr06 = Character.toString(underlayingMarc.getLeader().getTypeOfRecord());
+		
+		String f006 = underlayingMarc.getControlField("006");
+		String f006_00 = (f006 != null) && (f006.length() > 0) ? Character.toString(f006.charAt(0)) : "";
+		String f006_06 = (f006 != null) && (f006.length() > 6) ? Character.toString(f006.charAt(6)) : "";
+		
+		String f007 = underlayingMarc.getControlField("007");
+		String f007_00 = (f007 != null) && (f007.length() > 0) ? Character.toString(f007.charAt(0)) : "";
+		String f007_01 = (f007 != null) && (f007.length() > 1) ? Character.toString(f007.charAt(1)) : "";
 		
 		String f008 = underlayingMarc.getControlField("008");
-	    String f008_23 = (f008 != null) && (f008.length() > 23) ? Character.toString(f008.charAt(23)) : "";
-	    String f008_29 = (f008 != null) && (f008.length() > 29) ? Character.toString(f008.charAt(29)) : "";
+		String f008_23 = (f008 != null) && (f008.length() > 23) ? Character.toString(f008.charAt(23)) : "";
+		String f008_29 = (f008 != null) && (f008.length() > 29) ? Character.toString(f008.charAt(29)) : "";
 
-	    String f245h = underlayingMarc.getField("245", 'h');		
+		String f245h = underlayingMarc.getField("245", 'h');
 		if(f245h == null) f245h = "";
 		
 		String f300a = underlayingMarc.getField("300", 'a');
@@ -530,28 +536,26 @@ public class MetadataMarcRecord implements MetadataRecord {
 		if(f245h.matches("(?i).*elektronický\\szdroj.*")){
 			return true;
 		}
-		if(ldr06.matches("(?i)[acdijpt]") && f008_23.matches("(?i)[soq]")){
+		if(ldr06.matches("(?i)[acdijpt]") && f008_23.matches("(?i)s")){
 			return true;
 		}
-		if(f006_00.matches("(?i)[acdijpt]") && f006_06.matches("(?i)[soq]")){
+		if(f006_00.matches("(?i)[acdijpt]") && f006_06.matches("(?i)s")){
 			return true;
 		}
-		if(ldr06.matches("(?i)[efgkopr]") && f008_29.matches("(?i)[soq]")){
+		if(ldr06.matches("(?i)[efgkopr]") && f008_29.matches("(?i)s")){
 			return true;
 		}
-		
-		if(f006_00.matches("(?i)[efgkopr]") && f006_06.matches("(?i)[soq]")){
+		if(f006_00.matches("(?i)[efgkopr]") && f006_06.matches("(?i)s")){
 			return true;
 		}
 		if(ldr06.matches("(?i)m") && f006_00.matches("(?i)m")){
 			return true;
 		}
 		if(ldr06.matches("(?i)m") && f245h.matches("(?i).*multim[eé]dium.*") && f300a.matches("(?i).*cd-rom.*")) return true;
-		if(f007_00.matches("(?i)c")) return true;
+		if(f007_00.matches("(?i)c") && !f007_01.matches("(?i)r")) return true;
 		if(f300a.matches("(?i).*disketa.*")) return true;
 		if(f336b.matches("(?i)cod|cop")) return true;
-		if(f338b.matches("(?i)cr|ck|cb|cd|ce|ca|cf|ch|cz")) return true;
-		
+		if(f338b.matches("(?i)ck|cb|cd|ce|ca|cf|ch|cz")) return true;
 		
 		return false;
 	}
@@ -682,49 +686,17 @@ public class MetadataMarcRecord implements MetadataRecord {
 		return null;
 	}
 	
-	protected boolean isKit(){
+	protected boolean isOthers(){
 		String ldr06 = Character.toString(underlayingMarc.getLeader().getTypeOfRecord());
 		
 		String f006 = underlayingMarc.getControlField("006");
-	    String f006_00 = (f006 != null) && (f006.length() > 0) ? Character.toString(f006.charAt(0)) : "";
+		String f006_00 = (f006 != null) && (f006.length() > 0) ? Character.toString(f006.charAt(0)) : "";
 		
 		String f007 = underlayingMarc.getControlField("007");
-	    String f007_00 = (f007 != null) && (f007.length() > 0) ? Character.toString(f007.charAt(0)) : "";
-		
-	    if(ldr06.matches("(?i)o")) return true;
-	    if(f006_00.matches("(?i)o") && f007_00.matches("(?i)o")) return true;
-		return false;
-	}
-	
-	protected boolean isObject(){
-		String ldr06 = Character.toString(underlayingMarc.getLeader().getTypeOfRecord());
-		
-		String f006 = underlayingMarc.getControlField("006");
-	    String f006_00 = (f006 != null) && (f006.length() > 0) ? Character.toString(f006.charAt(0)) : "";
+		String f007_00 = (f007 != null) && (f007.length() > 0) ? Character.toString(f007.charAt(0)) : "";
 		
 		String f008 = underlayingMarc.getControlField("008");
-	    String f008_33 = (f008 != null) && (f008.length() > 33) ? Character.toString(f008.charAt(33)) : "";
-	    		
-		String f336b = underlayingMarc.getField("336", 'b');
-		if(f336b == null) f336b = "";
-				
-	    if(ldr06.matches("(?i)r")) return true;
-	    if(f336b.matches("(?i)tcf|tdm|tdf")) return true;
-	    if(f008_33.matches("(?i)d")) return true;
-	    if(f006_00.matches("(?i)r")) return true;
-		return false;
-	}
-	
-	protected boolean isMixDocument(){
-		String ldr06 = Character.toString(underlayingMarc.getLeader().getTypeOfRecord());
-		
-	    if(ldr06.matches("(?i)p")) return true;
-		return false;
-	}
-	
-	protected boolean isUnspecified(){
-		String f007 = underlayingMarc.getControlField("007");
-	    String f007_00 = (f007 != null) && (f007.length() > 0) ? Character.toString(f007.charAt(0)) : "";
+		String f008_33 = (f008 != null) && (f008.length() > 33) ? Character.toString(f008.charAt(33)) : "";
 		
 		String f336b = underlayingMarc.getField("336", 'b');
 		if(f336b == null) f336b = "";
@@ -734,6 +706,16 @@ public class MetadataMarcRecord implements MetadataRecord {
 				
 		String f338b = underlayingMarc.getField("338", 'b');
 		if(f338b == null) f338b = "";
+		
+		if(ldr06.matches("(?i)o")) return true;
+		if(f006_00.matches("(?i)o") && f007_00.matches("(?i)o")) return true;
+		
+		if(ldr06.matches("(?i)p")) return true;
+
+		if(ldr06.matches("(?i)r")) return true;
+		if(f336b.matches("(?i)tcf|tdm|tdf")) return true;
+		if(f008_33.matches("(?i)d")) return true;
+		if(f006_00.matches("(?i)r")) return true;
 		
 		if(f007_00.matches("(?i)z") && f336b.matches("(?i)zzz")) return true;
 		if(f337b.matches("(?i)[xz]")) return true;
@@ -754,16 +736,13 @@ public class MetadataMarcRecord implements MetadataRecord {
 		if(isVisualDocument()) hrf.add(HarvestedRecordFormatEnum.VISUAL_DOCUMENTS);
 		if(isMicroform()) hrf.add(HarvestedRecordFormatEnum.OTHER_MICROFORMS);
 		if(isBraill()) hrf.add(HarvestedRecordFormatEnum.OTHER_BRAILLE);
-		if(isElectronicSource()) hrf.add(HarvestedRecordFormatEnum.ELECTRONIC_SOURCE);
 		HarvestedRecordFormatEnum audio = getAudioFormat();
 		if(audio != null) hrf.add(audio);
 		HarvestedRecordFormatEnum video = getVideoDocument();
 		if(video != null) hrf.add(video);
-		if(isKit()) hrf.add(HarvestedRecordFormatEnum.OTHER_KIT);
-		if(isObject()) hrf.add(HarvestedRecordFormatEnum.OTHER_OBJECT);
-		if(isMixDocument()) hrf.add(HarvestedRecordFormatEnum.OTHER_MIX_DOCUMENT);
-		if(isUnspecified()) hrf.add(HarvestedRecordFormatEnum.OTHER_UNSPECIFIED);		
-		if(hrf.isEmpty()) hrf.add(HarvestedRecordFormatEnum.OTHER_UNSPECIFIED);
+		if(isComputerCarrier()) hrf.add(HarvestedRecordFormatEnum.OTHER_COMPUTER_CARRIER);
+		if(isOthers()) hrf.add(HarvestedRecordFormatEnum.OTHER_OTHER);
+		if(hrf.isEmpty()) hrf.add(HarvestedRecordFormatEnum.OTHER_OTHER);
 		
 		return hrf;
 	}
@@ -825,16 +804,19 @@ public class MetadataMarcRecord implements MetadataRecord {
 		if(underlayingMarc.getControlField("008") == null) weight -= 1;
 		if(underlayingMarc.getDataFields("300").isEmpty()) weight -= 1;
 		
-        boolean f245Ind1 = false;
+		boolean exists1xx = false;
 		for (String key: fields1xx){
 			if(!underlayingMarc.getDataFields(key).isEmpty()){
-				for(DataField dataField: underlayingMarc.getDataFields("245")){
-					if(dataField.getIndicator1() == 0) f245Ind1 = true;
-				}
+				exists1xx = true;
 				break;
 			}
 		}
-		if(!f245Ind1){
+		boolean f245Ind1 = false;
+		for(DataField dataField: underlayingMarc.getDataFields("245")){
+			if(dataField.getIndicator1() == 0) f245Ind1 = true;
+		}
+		
+		if(!exists1xx && !f245Ind1){
 			weight -= 1;
 		}
 		
@@ -1230,6 +1212,45 @@ public class MetadataMarcRecord implements MetadataRecord {
 		}
 		
 		return builder.toString().trim();
+	}
+
+	@Override
+	public List<ShortTitle> getShortTitles() {
+		List<ShortTitle> results = new ArrayList<>();
+		Long shortTitleCounter = 0L;
+		char[] shortTitleSf = new char[]{'a', 'n', 'p'};
+		
+		for (String tag: new String[]{"245", "240"}) {
+			for (DataField df :underlayingMarc.getDataFields(tag)) {
+				if (df.getSubfield('b') == null) continue;
+				
+				StringBuilder builder = new StringBuilder();
+				for(Subfield subfield: df.getSubfields()){
+					if (MetadataUtils.hasTrailingPunctuation(builder.toString())) {
+						builder.append(" ");
+					}
+					if(Chars.contains(shortTitleSf, subfield.getCode())){
+						builder.append(subfield.getData());
+					}
+				}
+
+				if (builder.length() > 0) {
+					ShortTitle shortTitle = new ShortTitle();
+					shortTitle.setShortTitleStr(builder.toString());
+					shortTitle.setOrderInRecord(++shortTitleCounter);
+					shortTitle.setSimilarityEnabled(MetadataUtils.similarityEnabled(shortTitle));
+					results.add(shortTitle);
+				}
+			}
+		}
+
+		return results;
+	}
+
+	@Override
+	public List<String> getDefaultStatuses() {
+		// implemented in institution specific classes
+		return Collections.emptyList();
 	}
 	
 }

@@ -32,7 +32,9 @@ public class DedupTitleAuthItemProcessor extends DedupSimpleKeysStepProcessor {
 		Set<String> aTitles = new HashSet<>();
 		Set<String> bTitles = new HashSet<>();		
 		hrA.getTitles().stream().filter(t -> t.getTitleStr() != null && !t.getTitleStr().isEmpty()).forEach(t -> aTitles.add(t.getTitleStr()));
+		hrA.getShortTitles().stream().filter(st -> st.getShortTitleStr() != null && !st.getShortTitleStr().isEmpty()).forEach(st -> aTitles.add(st.getShortTitleStr()));
 		hrB.getTitles().stream().filter(t -> t.getTitleStr() != null && !t.getTitleStr().isEmpty()).forEach(t -> bTitles.add(t.getTitleStr()));
+		hrB.getShortTitles().stream().filter(st -> st.getShortTitleStr() != null && !st.getShortTitleStr().isEmpty()).forEach(st -> bTitles.add(st.getShortTitleStr()));
 		Set<String> intersection = new HashSet<>(aTitles);
 		intersection.retainAll(bTitles);
 		

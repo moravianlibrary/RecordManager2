@@ -14,10 +14,13 @@ import cz.mzk.recordmanager.server.metadata.institutions.AuthMetadataMarcRecord;
 import cz.mzk.recordmanager.server.metadata.institutions.BmcMetadataMarcRecord;
 import cz.mzk.recordmanager.server.metadata.institutions.Kram3NkpMetadataDublinCoreRecord;
 import cz.mzk.recordmanager.server.metadata.institutions.KramDefaultMetadataDublinCoreRecord;
+import cz.mzk.recordmanager.server.metadata.institutions.ManuscriptoriumMetadataDublinCoreRecord;
 import cz.mzk.recordmanager.server.metadata.institutions.MkpEbooksMetadataMarcRecord;
 import cz.mzk.recordmanager.server.metadata.institutions.MzkMetadataMarcRecord;
 import cz.mzk.recordmanager.server.metadata.institutions.MzkNormsMetadataMarcRecord;
 import cz.mzk.recordmanager.server.metadata.institutions.NkpMarcMetadataRecord;
+import cz.mzk.recordmanager.server.metadata.institutions.OpenLibraryMetadataMarcRecord;
+import cz.mzk.recordmanager.server.metadata.institutions.OsobnostiRegionuMetadataMarcRecord;
 import cz.mzk.recordmanager.server.metadata.institutions.PatentsMetadataMarcRecord;
 import cz.mzk.recordmanager.server.metadata.institutions.SfxMetadataMarcRecord;
 import cz.mzk.recordmanager.server.metadata.institutions.SfxjibNlkPeriodicalsMetadataMarcRecord;
@@ -93,8 +96,9 @@ public class MetadataRecordFactory {
 		case Constants.PREFIX_CASLIN:
 			return new SkatMarcMetadataRecord(marcRec);
 		case Constants.PREFIX_AUTH:
-		case Constants.PREFIX_OSOBNOSTI:
 			return new AuthMetadataMarcRecord(marcRec);
+		case Constants.PREFIX_OSOBNOSTI:
+			return new OsobnostiRegionuMetadataMarcRecord(marcRec);
 		case Constants.PREFIX_SVKUL:
 			return new SvkulMetadataMarcRecord(marcRec);
 		case Constants.PREFIX_VKOL:
@@ -107,6 +111,8 @@ public class MetadataRecordFactory {
 			return new BmcMetadataMarcRecord(marcRec);
 		case Constants.PREFIX_UPV:
 			return new PatentsMetadataMarcRecord(marcRec);
+		case Constants.PREFIX_OPENLIB:
+			return new OpenLibraryMetadataMarcRecord(marcRec);
 		default:
 			return new MetadataMarcRecord(marcRec);
 		}
@@ -122,6 +128,8 @@ public class MetadataRecordFactory {
 			return new KramDefaultMetadataDublinCoreRecord(dcRec);
 		case Constants.PREFIX_KRAM3_NKP:
 			return new Kram3NkpMetadataDublinCoreRecord(dcRec);
+		case Constants.PREFIX_MANUSCRIPTORIUM:
+			return new ManuscriptoriumMetadataDublinCoreRecord(dcRec);
 		default:
 			return getMetadataRecord(dcRec);
     	}

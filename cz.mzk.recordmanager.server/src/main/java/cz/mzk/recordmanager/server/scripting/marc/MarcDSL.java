@@ -22,6 +22,7 @@ import cz.mzk.recordmanager.server.export.IOFormat;
 import cz.mzk.recordmanager.server.marc.MarcRecord;
 import cz.mzk.recordmanager.server.marc.SubfieldExtractionMethod;
 import cz.mzk.recordmanager.server.metadata.MetadataRecord;
+import cz.mzk.recordmanager.server.model.Title;
 import cz.mzk.recordmanager.server.scripting.BaseDSL;
 import cz.mzk.recordmanager.server.scripting.MappingResolver;
 import cz.mzk.recordmanager.server.scripting.StopWordsResolver;
@@ -194,6 +195,8 @@ public class MarcDSL extends BaseDSL {
 
         int nonFilingInt = getInd2AsInt(titleField);
         
+        List<Title> titles = metadataRecord.getTitle();
+        if (titles == null || titles.isEmpty()) return null;
         String title = metadataRecord.getTitle().get(0).getTitleStr();
         title = title.replaceAll(END_PUNCTUATION, EMPTY_SEPARATOR);
         title = title.replaceAll(NUMBERS, "$1$2");
@@ -497,7 +500,7 @@ public class MarcDSL extends BaseDSL {
     	List<DataField> list = record.getDataFields("100");
     	if(list.isEmpty()) return null;
 		DataField df = list.get(0);
-		String name = changeName(df);
+		String name = getNameForDisplay(df);
 		if(name.isEmpty()) return null;
 		else return name;
     }
@@ -505,10 +508,44 @@ public class MarcDSL extends BaseDSL {
     public List<String> getAuthor2Display(){
     	List<String> result = new ArrayList<String>();
     	for(DataField df: record.getDataFields("700")){
-    		result.add(changeName(df));
+    		result.add(getNameForDisplay(df));
     	}
     	result.addAll(getFields("110ab:111ab:710ab:711ab"));
     	return result;
+    }
+    
+    public String getNameForDisplay(DataField df) {
+    	StringBuilder sb = new StringBuilder();
+		sb.append(changeName(df));
+
+		for(char subfield: new char[]{'b', 'c', 'd'}){
+			if(df.getSubfield(subfield) != null) {
+				sb.append(" ");
+				sb.append(df.getSubfield(subfield).getData());
+			}
+		}
+		return removeEndPunctuation(sb.toString().trim());
+    }
+    
+    public String getAuthorExact(){
+    	List<DataField> list = record.getDataFields("100");
+    	if(list.isEmpty()) return null;
+		DataField df = list.get(0);
+		String name = getNameForExact(df);
+		if(name.isEmpty()) return null;
+		else return name;
+    }
+    
+    public String getNameForExact(DataField df) {
+    	StringBuilder sb = new StringBuilder();
+		sb.append(changeName(df));
+
+		if(df.getSubfield('b') != null) {
+			sb.append(" ");
+			sb.append(df.getSubfield('b').getData());
+		}
+
+		return removeEndPunctuation(sb.toString().trim());
     }
     
     public String changeName(DataField df){
@@ -529,13 +566,7 @@ public class MarcDSL extends BaseDSL {
 			if(df.getSubfield('a') != null) sb.append(df.getSubfield('a').getData());
 		}
 
-		for(char subfield: new char[]{'b', 'c', 'd'}){
-			if(df.getSubfield(subfield) != null) {
-				sb.append(" ");
-				sb.append(df.getSubfield(subfield).getData());
-			}
-		}
-		return removeEndPunctuation(sb.toString().trim());
+		return sb.toString();
     }
     
     public List<String> getAuthorFind(){
@@ -564,7 +595,7 @@ public class MarcDSL extends BaseDSL {
     public List<String> getAuthAuthors(String tag){
     	List<String> result = new ArrayList<>();
     	for(DataField df: record.getDataFields(tag)){
-    		result.add(changeName(df));
+    		result.add(getNameForDisplay(df));
     	}
     	return result;
     }
@@ -691,4 +722,28 @@ public class MarcDSL extends BaseDSL {
     public String getAuthorityId(){
     	return metadataRecord.getAuthorityId();
     }
+    
+    /**
+     * remove dot at the end of 700d
+     */
+    public List<String> getAuthorFacet(String k){
+		Set<String> results = new HashSet<>();
+		results.addAll(getFields("100abcdq:975abcdq"));
+		char[] sfCodes = new char[]{'a', 'b', 'c', 'd', 'q'};
+		for (DataField df : record.getDataFields("700")) {
+			String author = "";
+			for (char c : sfCodes) {
+				if (df.getSubfield(c) != null) {
+					author += df.getSubfield(c).getData() + " ";
+					if (c == 'd') {
+						author = author.trim();
+						if (author.endsWith(".")) author = author.substring(0, author.length()-1);
+					}
+				}
+			}
+			if (author != "") results.add(author.trim());
+		}
+    	return new ArrayList<>(results);
+    }
+    
 }

@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 import org.apache.commons.validator.routines.ISBNValidator;
 
 import cz.mzk.recordmanager.server.ClasspathResourceProvider;
+import cz.mzk.recordmanager.server.model.ShortTitle;
 import cz.mzk.recordmanager.server.model.Title;
 
 public class MetadataUtils {
@@ -47,9 +48,17 @@ public class MetadataUtils {
 	}
 	
 	public static boolean similarityEnabled(Title title){
-		if(title.getTitleStr().matches(".*\\d.*")) return false;
+		return similarityEnabled(title.getTitleStr());
+	}
+	
+	public static boolean similarityEnabled(ShortTitle shortTitle) {
+		return similarityEnabled(shortTitle.getShortTitleStr());
+	}
+	
+	protected static boolean similarityEnabled(String title) {
+		if(title.matches(".*\\d.*")) return false;
 		for(String word: similarity_words){
-			String titleStr = title.getTitleStr().toLowerCase();
+			String titleStr = title.toLowerCase();
 			if(titleStr.matches(".*[\\p{Punct}\\s]+"+word+"[\\p{Punct}\\s]+.*") 
 					|| titleStr.startsWith(word) || titleStr.endsWith(word)){
 				return false;
