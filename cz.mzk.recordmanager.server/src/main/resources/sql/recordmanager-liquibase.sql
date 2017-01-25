@@ -982,3 +982,7 @@ INSERT INTO harvested_record_format(id, name) VALUES (60, 'OTHER_OTHER');
 
 --changeset tomascejpek:44
 UPDATE harvested_record_format SET name='OTHER_COMPUTER_CARRIER' WHERE id=59;
+
+--changeset tomascejpek:45 context:cpk
+UPDATE import_conf SET base_weight=13 WHERE id in (308,314,328,335,336);
+UPDATE import_conf SET base_weight=10 WHERE id=313;

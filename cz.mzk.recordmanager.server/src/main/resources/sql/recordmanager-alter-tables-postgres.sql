@@ -729,3 +729,7 @@ INSERT INTO harvested_record_format(id, name) VALUES (60, 'OTHER_OTHER');
 
 -- 16. 01. 2017 tomascejpek
 UPDATE harvested_record_format SET name='OTHER_COMPUTER_CARRIER' WHERE id=59;
+
+-- 25. 01. 2017 tomascejpek
+UPDATE import_conf SET base_weight=13 WHERE id in (308,314,328,335,336);
+UPDATE import_conf SET base_weight=10 WHERE id=313;
