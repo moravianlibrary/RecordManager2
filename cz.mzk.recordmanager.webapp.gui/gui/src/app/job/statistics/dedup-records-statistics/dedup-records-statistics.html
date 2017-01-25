@@ -51,6 +51,8 @@
 
 				<th>Status<i (click)="sortByMe('status')" [ngClass]="{'glyphicon': true, 'glyphicon-arrow-up': getArrow('status') && getVisibility('status'), 'glyphicon-arrow-down': !getArrow('status') && getVisibility('status'), 'glyphicon-sort': !getVisibility('status')}"></i></th>
 
+				<th>Details</th>
+
 			</tr>
 
 
@@ -59,6 +61,7 @@
 				<td>{{statistic.startTime | date: "dd/MM/yyyy HH:mm"}}</td>
 				<td>{{statistic.endTime | date: "dd/MM/yyyy HH:mm"}}</td>
 				<td>{{statistic.status}}</td>
+				<td><a [routerLink]="['../details', statistic.jobExecutionId]"><i class="glyphicon glyphicon-triangle-right"></i></a></td>
 			</tr>
 
 

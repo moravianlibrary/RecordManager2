@@ -2,10 +2,7 @@ package cz.mzk.recordmanager.webapp.controller;
 
 
 import cz.mzk.recordmanager.api.model.PeriodDto;
-import cz.mzk.recordmanager.api.model.statistics.ActualStatisticsDto;
-import cz.mzk.recordmanager.api.model.statistics.DedupRecordsDto;
-import cz.mzk.recordmanager.api.model.statistics.IndexAllRecordsJobStatisticsDto;
-import cz.mzk.recordmanager.api.model.statistics.OaiHarvestJobStatisticsDto;
+import cz.mzk.recordmanager.api.model.statistics.*;
 import cz.mzk.recordmanager.api.service.StatisticsService;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -68,6 +65,12 @@ public class JobsStatisticsController {
 	@ResponseBody
 	public List<DedupRecordsDto> getDedupRecordsStatisticsInPeriods(@RequestBody PeriodDto period){
 		return statisticsService.getDedupRecordsStatisticsInPeriods(period);
+	}
+
+	@RequestMapping(method = RequestMethod.GET, value = "details/{jobExecutionId}")
+	@ResponseBody
+	public StatisticDetailsDto getDetails(@PathVariable Long jobExecutionId){
+		return statisticsService.getDetails(jobExecutionId);
 	}
 
 }

@@ -49,6 +49,7 @@
 				<th>From<i (click)="sortByMe('fromParam')" [ngClass]="{'glyphicon': true, 'glyphicon-arrow-up': getArrow('fromParam') && getVisibility('fromParam'), 'glyphicon-arrow-down': !getArrow('fromParam') && getVisibility('fromParam'), 'glyphicon-sort': !getVisibility('fromParam')}"></i></th>
 				<th>To<i (click)="sortByMe('toParam')" [ngClass]="{'glyphicon': true, 'glyphicon-arrow-up': getArrow('toParam') && getVisibility('toParam'), 'glyphicon-arrow-down': !getArrow('toParam') && getVisibility('toParam'), 'glyphicon-sort': !getVisibility('toParam')}"></i></th>
 				<th>Solr URL<i (click)="sortByMe('stringVal')" [ngClass]="{'glyphicon': true, 'glyphicon-arrow-up': getArrow('stringVal') && getVisibility('stringVal'), 'glyphicon-arrow-down': !getArrow('stringVal') && getVisibility('stringVal'), 'glyphicon-sort': !getVisibility('stringVal')}"></i></th>
+				<th>Details</th>
 			</tr>
 
 			<tr *ngFor="let statistic of statistics | statusFilter: statuses | orderBy: [sortBy]">
@@ -59,6 +60,7 @@
 				<td>{{statistic.fromParam | date: "dd/MM/yyyy HH:mm"}}</td>
 				<td>{{statistic.toParam | date: "dd/MM/yyyy HH:mm"}}</td>
 				<td>{{statistic.stringVal}}</td>
+				<td><a [routerLink]="['../details', statistic.jobExecutionId]"><i class="glyphicon glyphicon-triangle-right"></i></a></td>
 			</tr>
 		</table>
 	</div>

@@ -1,0 +1,156 @@
+<!--Preloader-->
+<div *ngIf="loading" class='uil-ring-css' style='transform:scale(0.6); right: 50%; left: 50%; position: fixed'><div></div></div>
+
+
+<div *ngIf="!loading">
+
+	<div class="panel panel-default">
+		<div class="panel-heading"><label for="jobExecutionId">Job execution ID:</label></div>
+		<div class="panel-body">
+			<p id="jobExecutionId">
+				{{details?.jobExecutionId}}
+			</p>
+		</div>
+	</div>
+
+	<div class="panel panel-default">
+		<div class="panel-heading"><label for="jobInstanceId">Job instance ID:</label></div>
+		<div class="panel-body">
+			<p id="jobInstanceId">
+				{{details?.jobInstanceId}}
+			</p>
+		</div>
+	</div>
+
+	<div class="panel panel-default">
+		<div class="panel-heading"><label for="version">Version:</label></div>
+		<div class="panel-body">
+			<p id="version">
+				{{details?.version}}
+			</p>
+		</div>
+	</div>
+
+	<div class="panel panel-default">
+		<div class="panel-heading"><label for="createTime">Create time:</label></div>
+		<div class="panel-body">
+			<p id="createTime">
+				{{details?.createTime | date: "dd.MM.yyyy HH:mm"}}
+			</p>
+		</div>
+	</div>
+
+	<div class="panel panel-default">
+		<div class="panel-heading"><label for="startTime">Start time:</label></div>
+		<div class="panel-body">
+			<p id="startTime">
+				{{details?.startTime | date: "dd.MM.yyyy HH:mm"}}
+			</p>
+		</div>
+	</div>
+
+	<div class="panel panel-default">
+		<div class="panel-heading"><label for="startTime">Last updated time:</label></div>
+		<div class="panel-body">
+			<p id="lastUpdated">
+				{{details?.lastUpdated | date: "dd.MM.yyyy HH:mm"}}
+			</p>
+		</div>
+	</div>
+
+	<div class="panel panel-default">
+		<div class="panel-heading"><label for="jobConfigurationLocation">Jobs configuration location:</label></div>
+		<div class="panel-body">
+			<p id="jobConfigurationLocation">
+				{{details?.jobConfigurationLocation }}
+			</p>
+		</div>
+	</div>
+
+	<div class="panel panel-default">
+		<div class="panel-heading"><label for="jobName">Jobs name:</label></div>
+		<div class="panel-body">
+			<p id="jobName">
+				{{details?.jobName }}
+			</p>
+		</div>
+	</div>
+
+	<div class="panel panel-default">
+		<div class="panel-heading"><label for="jobKey">Jobs key:</label></div>
+		<div class="panel-body">
+			<p id="jobKey">
+				{{details?.jobKey}}
+			</p>
+		</div>
+	</div>
+
+	<h2>Parameters</h2>
+
+	<div *ngFor="let param of details?.jobParameter ; let i = index">
+		<h3>Parameter {{i}}</h3>
+		<div class="panel panel-default">
+			<div class="panel-heading"><label for="typeCd">Type CD:</label></div>
+			<div class="panel-body">
+				<p id="typeCd">
+					{{param?.typeCd}}
+				</p>
+			</div>
+		</div>
+
+		<div class="panel panel-default">
+			<div class="panel-heading"><label for="keyName">Key name:</label></div>
+			<div class="panel-body">
+				<p id="keyName">
+					{{param?.keyName}}
+				</p>
+			</div>
+		</div>
+
+		<div *ngIf="param?.typeCd == 'STRING'" class="panel panel-default">
+			<div class="panel-heading"><label for="stringVal">String value:</label></div>
+			<div class="panel-body">
+				<p id="stringVal">
+					{{param?.stringVal}}
+				</p>
+			</div>
+		</div>
+
+		<div *ngIf="param?.typeCd == 'DATE'" class="panel panel-default">
+			<div class="panel-heading"><label for="dateVal">Date value:</label></div>
+			<div class="panel-body">
+				<p id="dateVal">
+					{{param?.dateVal | date: "dd.MM.yyyy HH:mm"}}
+				</p>
+			</div>
+		</div>
+
+		<div *ngIf="param?.typeCd == 'LONG'" class="panel panel-default">
+			<div class="panel-heading"><label for="longVal">Long value:</label></div>
+			<div class="panel-body">
+				<p id="longVal">
+					{{param?.longVal}}
+				</p>
+			</div>
+		</div>
+
+		<div *ngIf="param?.typeCd == 'DOUBLE'" class="panel panel-default">
+			<div class="panel-heading"><label for="doubleVal">Double value:</label></div>
+			<div class="panel-body">
+				<p id="doubleVal">
+					{{param?.jobKey}}
+				</p>
+			</div>
+		</div>
+
+		<div class="panel panel-default">
+			<div class="panel-heading"><label for="jobKey">Identifying:</label></div>
+			<div class="panel-body">
+				<p id="identifying">
+					{{param?.identifying}}
+				</p>
+			</div>
+		</div>
+	</div>
+
+</div>

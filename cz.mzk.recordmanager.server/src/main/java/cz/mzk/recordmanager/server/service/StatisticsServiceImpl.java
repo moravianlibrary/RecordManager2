@@ -2,11 +2,9 @@ package cz.mzk.recordmanager.server.service;
 
 
 import cz.mzk.recordmanager.api.model.PeriodDto;
-import cz.mzk.recordmanager.api.model.statistics.ActualStatisticsDto;
-import cz.mzk.recordmanager.api.model.statistics.DedupRecordsDto;
-import cz.mzk.recordmanager.api.model.statistics.IndexAllRecordsJobStatisticsDto;
-import cz.mzk.recordmanager.api.model.statistics.OaiHarvestJobStatisticsDto;
+import cz.mzk.recordmanager.api.model.statistics.*;
 import cz.mzk.recordmanager.api.service.StatisticsService;
+import org.hibernate.Criteria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -77,5 +75,23 @@ public class StatisticsServiceImpl implements StatisticsService{
 				"FROM dedup_records_st " +
 				"WHERE (start_time >= ? OR start_time IS NULL ) AND (end_time <= ? OR end_time IS NULL ) " +
 				"ORDER BY start_time DESC ", new BeanPropertyRowMapper<DedupRecordsDto>(DedupRecordsDto.class), startEnd.getStart(), startEnd.getEnd());
+	}
+
+	@Override
+	public StatisticDetailsDto getDetails(Long jobExecutionId) {
+
+		StatisticDetailsDto detailsDto =  jdbcTemplate.queryForObject("SELECT" +
+				"  *\n" +
+				"FROM batch_job_execution bje JOIN batch_job_instance bji ON bje.job_instance_id = bji.job_instance_id " +
+				"WHERE bje.job_execution_id = ?", new BeanPropertyRowMapper<StatisticDetailsDto>(StatisticDetailsDto.class), jobExecutionId);
+
+		List<JobParameterDto> jobParametersDto =
+				jdbcTemplate.query("SELECT * " +
+						"FROM batch_job_execution_params " +
+						"WHERE job_execution_id = ?" , new BeanPropertyRowMapper<JobParameterDto>(JobParameterDto.class), jobExecutionId);
+
+		detailsDto.setJobParameter(jobParametersDto);
+
+		return detailsDto;
 	}
 }

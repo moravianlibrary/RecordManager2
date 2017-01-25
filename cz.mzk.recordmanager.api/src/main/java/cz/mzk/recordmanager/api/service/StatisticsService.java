@@ -2,10 +2,7 @@ package cz.mzk.recordmanager.api.service;
 
 
 import cz.mzk.recordmanager.api.model.PeriodDto;
-import cz.mzk.recordmanager.api.model.statistics.ActualStatisticsDto;
-import cz.mzk.recordmanager.api.model.statistics.DedupRecordsDto;
-import cz.mzk.recordmanager.api.model.statistics.IndexAllRecordsJobStatisticsDto;
-import cz.mzk.recordmanager.api.model.statistics.OaiHarvestJobStatisticsDto;
+import cz.mzk.recordmanager.api.model.statistics.*;
 
 import java.util.Date;
 import java.util.List;
@@ -24,4 +21,6 @@ public interface StatisticsService {
 	List<DedupRecordsDto> getDedupRecordsStatistics(Integer offset);
 
 	List<DedupRecordsDto> getDedupRecordsStatisticsInPeriods(PeriodDto startEnd);
+
+	StatisticDetailsDto getDetails(Long jobExecutionId);
 }

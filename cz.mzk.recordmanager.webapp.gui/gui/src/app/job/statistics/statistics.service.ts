@@ -88,4 +88,11 @@ export class StatisticsService{
 		});
 	}
 
+	getDetals(jobExecutionId: number): Observable<any>{
+		return this.http.get(SERVER + "/statistics/details/" + jobExecutionId).map((response: Response)=>{
+			return response.json();
+		})
+
+	}
+
 }

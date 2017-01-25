@@ -8,6 +8,7 @@ import {ActualStatisticsComponent} from "./statistics/actual-statistic/actual-st
 import {AuthGuard} from "../login/auth.guard";
 import {IndexAllRecordsComponent} from "./statistics/index-all-records-statistic/index-all-records.component";
 import {DedupRecordsComponent} from "./statistics/dedup-records-statistics/dedup-records-statistics";
+import {DetailsComponent} from "./statistics/details/details.component";
 const jobRoutes: Routes = [
 	{
 		path: 'job',
@@ -42,6 +43,10 @@ const jobRoutes: Routes = [
 					{
 						path: 'dedup-records',
 						component: DedupRecordsComponent
+					},
+					{
+						path: 'details/:jobExecId',
+						component: DetailsComponent
 					}
 				]
 			}

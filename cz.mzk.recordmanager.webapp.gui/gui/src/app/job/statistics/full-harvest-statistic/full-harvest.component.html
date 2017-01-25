@@ -69,7 +69,7 @@
 
 			<tr *ngFor="let statistic of statistics | statusFilter: statuses | orderBy: [sortBy]">
 				<td>{{statistic.jobExecutionId}}</td>
-				<td><a (click)="routToConfig(statistic.importConfId)">{{statistic.importConfId}}</a></td>
+				<td>{{statistic.importConfId}}</td>
 				<td>{{statistic.libraryName}}</td>
 				<td><a [href]="'http://' + statistic.url" target="_blank">{{statistic?.url}}</a></td>
 				<td>{{statistic.startTime | date: "dd/MM/yyyy HH:mm"}}</td>
@@ -78,7 +78,7 @@
 				<td>{{statistic.fromParam | date: "dd/MM/yyyy HH:mm"}}</td>
 				<td>{{statistic.toParam | date: "dd/MM/yyyy HH:mm"}}</td>
 				<td>{{statistic.noOfRecords}}</td>
-				<td><a [routerLink]="['/oaiHarvestStats', statistic.jobExecutionId]"><i class="glyphicon glyphicon-triangle-right"></i></a></td>
+				<td><a [routerLink]="['../details', statistic.jobExecutionId]"><i class="glyphicon glyphicon-triangle-right"></i></a></td>
 			</tr>
 
 

@@ -7,9 +7,9 @@ import { Pipe, PipeTransform } from '@angular/core';
 export class KeyExtractorPipe implements PipeTransform {
 
   transform(value: any, args?: any): any {
-    let keys: string[] = [];
+    let keys: any[] = [];
     for (let key in value){
-      keys.push(key);
+      keys.push({k: key, v: value[key]});
     }
     return keys;
   }

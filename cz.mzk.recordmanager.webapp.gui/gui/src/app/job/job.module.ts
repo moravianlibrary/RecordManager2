@@ -17,6 +17,8 @@ import {StatusFilterPipe} from "../pipes/status-filter.pipe";
 import {SortControl} from "../shared/sort-control";
 import {IndexAllRecordsComponent} from "./statistics/index-all-records-statistic/index-all-records.component";
 import {DedupRecordsComponent} from "./statistics/dedup-records-statistics/dedup-records-statistics";
+import {DetailsComponent} from "./statistics/details/details.component";
+import {KeyExtractorPipe} from "../pipes/key-extractor.pipe";
 
 @NgModule({
 	imports: [
@@ -26,7 +28,7 @@ import {DedupRecordsComponent} from "./statistics/dedup-records-statistics/dedup
 		DatetimePickerModule,
 		IndexModule
 	],
-	providers: [JobRunnersService, StatisticsService, SortControl],
+	providers: [JobRunnersService, StatisticsService, SortControl, KeyExtractorPipe],
 	declarations: [
 		JobComponent,
 		JobRunnersComponent,
@@ -37,7 +39,8 @@ import {DedupRecordsComponent} from "./statistics/dedup-records-statistics/dedup
 		ActualStatisticsComponent,
 		StatusFilterPipe,
 		IndexAllRecordsComponent,
-		DedupRecordsComponent
+		DedupRecordsComponent,
+		DetailsComponent
 	]
 })
 export class JobModule{}
