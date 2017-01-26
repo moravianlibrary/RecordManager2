@@ -17,7 +17,18 @@ public class PatentsMetadataMarcRecord extends MetadataMarcRecord{
 	
 	@Override
 	public List<HarvestedRecordFormatEnum> getDetectedFormatList() {
-		return Collections.singletonList(HarvestedRecordFormatEnum.PATENTS);	
+		String f001 = underlayingMarc.getControlField("001");
+		if (f001 == null) return Collections.emptyList();
+		if (f001.endsWith("_B6")) {
+			return Collections.singletonList(HarvestedRecordFormatEnum.PATENTS_PATENTS);
+		}
+		if (f001.endsWith("_A3")) {
+			return Collections.singletonList(HarvestedRecordFormatEnum.PATENTS_PATENT_APPLICATIONS);
+		}
+		if (f001.endsWith("_U1")) {
+			return Collections.singletonList(HarvestedRecordFormatEnum.PATENTS_UTILITY_MODELS);
+		}
+		return Collections.emptyList();	
 	}
 
 	@Override
