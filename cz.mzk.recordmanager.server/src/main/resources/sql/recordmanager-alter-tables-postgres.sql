@@ -733,3 +733,8 @@ UPDATE harvested_record_format SET name='OTHER_COMPUTER_CARRIER' WHERE id=59;
 -- 25. 01. 2017 tomascejpek
 UPDATE import_conf SET base_weight=13 WHERE id in (308,314,328,335,336);
 UPDATE import_conf SET base_weight=10 WHERE id=313;
+
+-- 25. 01. 2017 tomascejpek
+INSERT INTO harvested_record_format(id, name) VALUES (61, 'PATENTS_UTILITY_MODELS');
+INSERT INTO harvested_record_format(id, name) VALUES (62, 'PATENTS_PATENT_APPLICATIONS');
+INSERT INTO harvested_record_format(id, name) VALUES (63, 'PATENTS_PATENTS');
