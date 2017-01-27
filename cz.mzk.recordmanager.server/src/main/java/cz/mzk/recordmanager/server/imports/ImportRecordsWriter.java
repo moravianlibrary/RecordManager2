@@ -126,8 +126,10 @@ public class ImportRecordsWriter implements ItemWriter<List<Record>>, StepExecut
 						hr.setDeleted(null);
 						hr.setRawRecord(recordContent);
 					}
-					harvestedRecordDao.persist(hr);
-					dedupKeysParser.parse(hr, metadata);
+					if (harvestConfiguration.isGenerateDedupKeys()) {
+						harvestedRecordDao.persist(hr);
+						dedupKeysParser.parse(hr, metadata);	
+					}
 					
 					if (harvestConfiguration.isFilteringEnabled() && !hr.getShouldBeProcessed()) {
 						logger.debug("Filtered record: " + hr.getUniqueId());

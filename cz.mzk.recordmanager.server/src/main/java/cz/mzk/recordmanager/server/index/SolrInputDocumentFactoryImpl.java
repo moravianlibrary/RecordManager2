@@ -44,7 +44,7 @@ public class SolrInputDocumentFactoryImpl implements SolrInputDocumentFactory, I
 
 	private static Logger logger = LoggerFactory.getLogger(SolrInputDocumentFactoryImpl.class);
 
-	private static final Pattern RECORDTYPE_PATTERN = Pattern.compile("^(AUDIO|VIDEO|OTHER|LEGISLATIVE)_(.*)$");
+	private static final Pattern RECORDTYPE_PATTERN = Pattern.compile("^(AUDIO|VIDEO|OTHER|LEGISLATIVE|PATENTS)_(.*)$");
 
 	private List<String> fieldsWithDash = Arrays.asList( //
 			"author2-role", //
