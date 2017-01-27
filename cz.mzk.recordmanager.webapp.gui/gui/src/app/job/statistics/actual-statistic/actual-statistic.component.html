@@ -38,16 +38,16 @@
 			</tr>
 
 
-			<tr *ngFor="let statistic of statistics | statusFilter: statuses | orderBy: [sortBy]">
+			<tr *ngFor="let statistic of statistics | statusFilter: statuses | orderBy: [sortBy]; let i = index">
 				<td>{{statistic.jobInstanceId}}</td>
 				<td>{{statistic.jobName}}</td>
 				<td>{{statistic.status}}</td>
 				<td>{{statistic.startTime | date: "dd/MM/yyyy HH:mm"}}</td>
 
 				<td>
-					<button data-toggle="collapse" class="btn btn-info" data-target="#demo">See the message</button>
+					<button data-toggle="collapse" class="btn btn-info" [attr.data-target]="'#' + i">See the message</button>
 
-					<div id="demo" class="collapse">
+					<div [attr.id]="i" class="collapse">
 						<code>{{statistic.exitMessage}}</code>
 					</div>
 				</td>
