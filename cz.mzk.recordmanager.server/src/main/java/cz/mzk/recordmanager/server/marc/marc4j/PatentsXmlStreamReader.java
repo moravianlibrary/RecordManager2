@@ -55,7 +55,8 @@ public class PatentsXmlStreamReader implements MarcReader{
     private static final String TEXT_300a = "1 patent";
     private static final String TEXT_500a_PUBLICATION = "Datum zveřejnění přihlášky: %s";
     private static final String TEXT_500a_APPLICATION = "Datum přihlášení: %s";
-    private static final String TEXT_500a_NUMBER = "Číslo přihlášky: %s";
+    private static final String TEXT_500a_APPL_NUMBER = "Číslo přihlášky: %s";
+    private static final String TEXT_500a_DOC_NUMBER = "Číslo dokumentu: %s";
     private static final String TEXT_655a = "patenty";
     private static final String TEXT_0722 = "Konspekt";
     private static final String TEXT_856y = "plný text";
@@ -83,6 +84,7 @@ public class PatentsXmlStreamReader implements MarcReader{
     private static final String ATTRIBUTE_ID = "file";
     private static final String ATTRIBUTE_LANG = "lang";
     private static final String ATTRIBUTE_SEQUENCE = "sequence";
+    private static final String ATTRIBUTE_DOC_NUMBER = "doc-number";
     
     private static final String PATENTS_MAP = "patents.map";
     
@@ -164,6 +166,7 @@ public class PatentsXmlStreamReader implements MarcReader{
 						addFields();
 						addIdentifier();					
 						addUrl();
+						addDocNumber();
 						break;
 					case ELEMENT_APPLICANT:
 					case ELEMENT_INVENTOR:
@@ -255,7 +258,7 @@ public class PatentsXmlStreamReader implements MarcReader{
 						break;
 					case ELEMENT_DOC_NUMBER:
 						if (appl_reference) {
-							add500aDocNumber(xmlReader.getElementText());
+							add500aApplDocNumber(xmlReader.getElementText());
 						}						
 						break;
 					}	
@@ -347,8 +350,10 @@ public class PatentsXmlStreamReader implements MarcReader{
 		}
     }
     
-    private void add500aDocNumber(String data) {
-    	record.addVariableField(factory.newDataField("500", ' ', ' ', "a", String.format(TEXT_500a_NUMBER, data)));
+    private void add500aApplDocNumber(String data) {
+    	if (record.getControlNumber() != null && !record.getControlNumber().endsWith("_A3")) {
+    		record.addVariableField(factory.newDataField("500", ' ', ' ', "a", String.format(TEXT_500a_APPL_NUMBER, data)));
+		}
 	}
     
     private void addField024(String data) {
@@ -361,6 +366,11 @@ public class PatentsXmlStreamReader implements MarcReader{
     
     private void addIdentifier() {
     	record.addVariableField(factory.newControlField("001", xmlReader.getAttributeValue(null, ATTRIBUTE_ID).replace(".xml", "")));
+	}
+    
+    private void addDocNumber() {
+    	record.addVariableField(factory.newDataField("500", ' ', ' ', "a", 
+    			String.format(TEXT_500a_DOC_NUMBER, xmlReader.getAttributeValue(null, ATTRIBUTE_DOC_NUMBER))));
 	}
     
     private void addField008(String date) {
