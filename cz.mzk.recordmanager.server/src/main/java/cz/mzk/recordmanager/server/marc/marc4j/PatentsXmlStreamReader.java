@@ -52,12 +52,16 @@ public class PatentsXmlStreamReader implements MarcReader{
     private static final String TEXT_0242 = "MPT";
     private static final String TEXT_260a = "Praha :";
     private static final String TEXT_260b = "Úřad průmyslového vlastnictví,";
-    private static final String TEXT_300a = "1 patent";
+    private static final String TEXT_300a_UTILITY_MODEL = "1 užitný vzor";
+    private static final String TEXT_300a_APPLICATION = "1 přihláška vynálezu";
+    private static final String TEXT_300a_PATENT = "1 patentový spis";
     private static final String TEXT_500a_PUBLICATION = "Datum zveřejnění přihlášky: %s";
     private static final String TEXT_500a_APPLICATION = "Datum přihlášení: %s";
     private static final String TEXT_500a_APPL_NUMBER = "Číslo přihlášky: %s";
     private static final String TEXT_500a_DOC_NUMBER = "Číslo dokumentu: %s";
-    private static final String TEXT_655a = "patenty";
+    private static final String TEXT_655a_UTILITY_MODEL = "užitné vzory";
+    private static final String TEXT_655a_APPLICATION = "přihlášky vynálezu";
+    private static final String TEXT_655a_PATENT = "patentové spisy";
     private static final String TEXT_0722 = "Konspekt";
     private static final String TEXT_856y = "plný text";
     
@@ -163,8 +167,8 @@ public class PatentsXmlStreamReader implements MarcReader{
 					case ELEMENT_RECORD_EP:
 					case ELEMENT_RECORD_CZ:
 						record = factory.newRecord();
-						addFields();
-						addIdentifier();					
+						addIdentifier();
+						addFields();	
 						addUrl();
 						addDocNumber();
 						break;
@@ -380,16 +384,33 @@ public class PatentsXmlStreamReader implements MarcReader{
 		}
 	}
     
-    private void addFields() {
-    	record.setLeader(factory.newLeader(TEXT_LEADER));
+	private void addFields() {
+		record.setLeader(factory.newLeader(TEXT_LEADER));
 
 		SimpleDateFormat sdf = new SimpleDateFormat(DATE_STRING_005);
 		record.addVariableField(factory.newControlField("005", sdf.format(new Date())));
 
-    	record.addVariableField(factory.newDataField("300", ' ', ' ', "a", TEXT_300a));
+		String f001 = record.getControlNumber();
+		if (f001 != null) {
+			String text300 = "";
+			String text655 = "";
+			if (A3_PATTERN.matcher(f001).matches()) {
+				text300 = TEXT_300a_APPLICATION;
+				text655 = TEXT_655a_APPLICATION;
+			}
+			else if (U1_PATTERN.matcher(f001).matches()) {
+				text300 = TEXT_300a_UTILITY_MODEL;
+				text655 = TEXT_655a_UTILITY_MODEL;
+			}
+			else if (B6_PATTERN.matcher(f001).matches()) {
+				text300 = TEXT_300a_PATENT;
+				text655 = TEXT_655a_PATENT;
+			}
+			record.addVariableField(factory.newDataField("300", ' ', ' ', "a", text300));
 
-    	record.addVariableField(factory.newDataField("655", '4', ' ', "a", TEXT_655a));
-    }
+	    	record.addVariableField(factory.newDataField("655", '4', ' ', "a", text655));
+		}
+	}
     
     private void addField260(String date) {
     	if (date != null && date.length() >= 4) {
