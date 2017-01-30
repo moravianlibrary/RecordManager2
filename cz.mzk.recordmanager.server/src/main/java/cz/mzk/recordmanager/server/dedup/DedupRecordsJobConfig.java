@@ -640,7 +640,7 @@ public class DedupRecordsJobConfig {
 				.listener(new StepProgressListener())
 				.<List<Long>, List<HarvestedRecord>> chunk(100)
 				.reader(dedupUuidClustersReader())
-				.processor(dedupSimpleKeysStepProsessor())
+				.processor(generalDedupClustersProcessor())
 				.writer(dedupSimpleKeysStepWriter())
 				.build();
 	}
