@@ -1,5 +1,6 @@
 <?xml version="1.0" ?>
 <schema name="VuFind Bibliographic Index" version="1.2">
+  <similarity class="org.apache.lucene.search.similarities.BM25Similarity"/>
   <types>
     <!-- Define fieldType long as it is needed by the _version_ field required by Solr 4.x -->
     <fieldType name="integer" class="solr.TrieField" type="integer"/>
