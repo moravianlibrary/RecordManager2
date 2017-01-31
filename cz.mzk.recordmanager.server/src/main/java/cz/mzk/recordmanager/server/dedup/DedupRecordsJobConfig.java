@@ -540,6 +540,7 @@ public class DedupRecordsJobConfig {
 	public Step dedupRestOfRecordsStep() throws Exception {
 		return steps.get("dedupRestOfRecordsStep")
 				.tasklet(dedupRestOfRecordsSqlTasklet())
+				.listener(new StepProgressListener())
 				.build();
 	}
 
