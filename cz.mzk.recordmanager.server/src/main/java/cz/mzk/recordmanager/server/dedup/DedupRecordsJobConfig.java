@@ -827,7 +827,7 @@ public class DedupRecordsJobConfig {
 	public Step dedupPeriodicalsIssnStep() throws Exception {
 		return steps.get("dedupPeriodicalsIssnStep")
 				.listener(new StepProgressListener())
-				.<List<Long>, List<HarvestedRecord>> chunk(100)
+				.<List<Long>, List<HarvestedRecord>> chunk(50)
 				.reader(dedupPeriodicalsIssnReader())
 				.processor(dedupPeriodicalsIssnProcessor())
 				.writer(dedupSimpleKeysStepWriter())
@@ -868,7 +868,7 @@ public class DedupRecordsJobConfig {
 	public Step dedupPeriodicalsCnbStep() throws Exception {
 		return steps.get("dedupPeriodicalsCnbStep")
 				.listener(new StepProgressListener())
-				.<List<Long>, List<HarvestedRecord>> chunk(100)
+				.<List<Long>, List<HarvestedRecord>> chunk(50)
 				.reader(dedupPeriodicalsCnbReader())
 				.processor(dedupPeriodicalsCnbProcessor())
 				.writer(dedupSimpleKeysStepWriter())
@@ -903,7 +903,7 @@ public class DedupRecordsJobConfig {
 	public Step dedupPeriodicalsCnbClustersStep() throws Exception {
 		return steps.get("dedupPeriodicalsCnbClustersStep")
 				.listener(new StepProgressListener())
-				.<List<Long>, List<HarvestedRecord>> chunk(100)
+				.<List<Long>, List<HarvestedRecord>> chunk(50)
 				.reader(dedupPeriodicalsCnbClustersStepReader())
 				.processor(generalDedupClustersProcessor())
 				.writer(dedupSimpleKeysStepWriter())
@@ -938,7 +938,7 @@ public class DedupRecordsJobConfig {
 	public Step dedupPeriodicalsIssnClustersStep() throws Exception {
 		return steps.get("dedupPeriodicalsIssnClustersStep")
 				.listener(new StepProgressListener())
-				.<List<Long>, List<HarvestedRecord>> chunk(100)
+				.<List<Long>, List<HarvestedRecord>> chunk(50)
 				.reader(dedupPeriodicalsIssnClustersStepReader())
 				.processor(generalDedupClustersProcessor())
 				.writer(dedupSimpleKeysStepWriter())
@@ -973,7 +973,7 @@ public class DedupRecordsJobConfig {
 	public Step dedupPeriodicalsOclcClustersStep() throws Exception {
 		return steps.get("dedupPeriodicalsOclcClustersStep")
 				.listener(new StepProgressListener())
-				.<List<Long>, List<HarvestedRecord>> chunk(100)
+				.<List<Long>, List<HarvestedRecord>> chunk(50)
 				.reader(dedupPeriodicalsOclcClustersStepReader())
 				.processor(generalDedupClustersProcessor())
 				.writer(dedupSimpleKeysStepWriter())
@@ -1051,7 +1051,7 @@ public class DedupRecordsJobConfig {
 	public Step processPeriodicalsSimilaritesResultsStep() throws Exception {
 		return steps.get("processPeriodicalsSimilaritesResultsStep")
 				.listener(new StepProgressListener())
-				.<List<Long>, List<HarvestedRecord>> chunk(100)
+				.<List<Long>, List<HarvestedRecord>> chunk(50)
 				.reader(dedupSimpleKeysReader(TMP_TABLE_PERIODICALS_SIMILARITY_IDS))
 				.processor(dedupSimpleKeysStepProsessor())
 				.writer(dedupSimpleKeysStepWriter())
@@ -1079,7 +1079,7 @@ public class DedupRecordsJobConfig {
 	public Step dedupPeriodicalsSfxStep() throws Exception {
 		return steps.get("dedupPeriodicalsSfxStep")
 				.listener(new StepProgressListener())
-				.<List<Long>, List<HarvestedRecord>> chunk(100)
+				.<List<Long>, List<HarvestedRecord>> chunk(50)
 				.reader(dedupSimpleKeysReader(TMP_TABLE_PERIODICALS_SFX))
 				.processor(dedupSimpleKeysStepProsessor())
 				.writer(dedupSimpleKeysStepWriter())
