@@ -409,7 +409,7 @@ public class DedupRecordsJobConfig {
 
 	@Bean(name = Constants.JOB_ID_DEDUP + ":dedupSimpleKeysCnbStep")
 	public Step dedupSimpleKeysCnbStep() throws Exception {
-		return steps.get("dedupSimpleKeysISBNStep")
+		return steps.get("dedupSimpleKeysCnbStep")
 				.listener(new StepProgressListener())
 				.<List<Long>, List<HarvestedRecord>> chunk(100)
 				.reader(dedupSimpleKeysCnbReader())
