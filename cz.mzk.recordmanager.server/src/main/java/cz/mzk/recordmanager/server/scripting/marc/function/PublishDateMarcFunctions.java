@@ -22,6 +22,7 @@ import cz.mzk.recordmanager.server.scripting.marc.MarcFunctionContext;
 @Component
 public class PublishDateMarcFunctions implements MarcRecordFunctions {
 
+	private static final int MIN_YEAR = 1199;
 	private static final int MAX_YEAR = Calendar.getInstance().get(Calendar.YEAR);
 
 	// 2004
@@ -188,7 +189,13 @@ public class PublishDateMarcFunctions implements MarcRecordFunctions {
 	private String getPublishDateForSortingForArticles(MarcFunctionContext ctx){
 		for(String year: ctx.record().getFields("773", "", '9')){
 			if(year.length() > 4) year = year.substring(0, 4);
-			if(SINGLE_YEAR_PATTERN.matcher(year).matches()) return year;
+			if (SINGLE_YEAR_PATTERN.matcher(year).matches()) {
+				int yearInt = Integer.parseInt(year);
+				if (MIN_YEAR < yearInt && yearInt <= MAX_YEAR+1) {
+					return year;
+				}
+				
+			}
 		}
 		
 		MarcRecord mr = ctx.record();
@@ -237,7 +244,12 @@ public class PublishDateMarcFunctions implements MarcRecordFunctions {
 				}
 			}
         }
-		if(!years.isEmpty()) return years.iterator().next().toString();
+		if (!years.isEmpty()) {
+			years.removeIf(year -> year <= MIN_YEAR || MAX_YEAR+1 < year);
+			if (!years.isEmpty()) {
+				return years.iterator().next().toString();
+			}
+		}
 		return null;
 	}
 	
