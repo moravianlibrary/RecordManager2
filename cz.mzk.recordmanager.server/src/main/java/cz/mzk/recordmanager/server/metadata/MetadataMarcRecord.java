@@ -596,9 +596,6 @@ public class MetadataMarcRecord implements MetadataRecord {
 			if(!f300a.matches(".*CD-ROM.*")) return HarvestedRecordFormatEnum.AUDIO_CD;
 		}
 		if(f300.matches("(?i).*zvukov([aáeé]|ych|ých)\\sdes(ka|ky|ek).*") && f300.matches("(?i).*(digital|12\\s*cm).*")) return HarvestedRecordFormatEnum.AUDIO_CD;
-
-		// AUDIO_DVD
-		if(ldr06.matches("(?i)[ij]") && f300a.matches("(?i).*dvd.*")) return HarvestedRecordFormatEnum.AUDIO_DVD;
 		
 		// AUDIO_LP
 		if(f300.matches("(?i).*gramofonov([aáeé]|ych|ých)\\sdes(ka|ky|ek).*")) return HarvestedRecordFormatEnum.AUDIO_LP;
@@ -624,6 +621,18 @@ public class MetadataMarcRecord implements MetadataRecord {
 		if(f336b.matches("(?i)spw|snd")) return HarvestedRecordFormatEnum.AUDIO_OTHER;
 		
 		return null;
+	}
+	
+	protected boolean isAudioDVD() {
+		String ldr06 = Character.toString(underlayingMarc.getLeader().getTypeOfRecord());
+		
+		String f300a = underlayingMarc.getField("300", 'a');
+		if(f300a == null) f300a = "";
+		
+		// AUDIO_DVD
+		if(ldr06.matches("(?i)[ij]") && f300a.matches("(?i).*dvd.*")) return true;
+		
+		return false;
 	}
 	
 	protected HarvestedRecordFormatEnum getVideoDocument(){
@@ -737,7 +746,10 @@ public class MetadataMarcRecord implements MetadataRecord {
 		if(isMicroform()) hrf.add(HarvestedRecordFormatEnum.OTHER_MICROFORMS);
 		if(isBraill()) hrf.add(HarvestedRecordFormatEnum.OTHER_BRAILLE);
 		HarvestedRecordFormatEnum audio = getAudioFormat();
-		if(audio != null) hrf.add(audio);
+		if(audio != null) {
+			hrf.add(audio);
+			if (isAudioDVD()) hrf.add(HarvestedRecordFormatEnum.AUDIO_DVD);
+		}
 		HarvestedRecordFormatEnum video = getVideoDocument();
 		if(video != null) hrf.add(video);
 		if(isComputerCarrier()) hrf.add(HarvestedRecordFormatEnum.OTHER_COMPUTER_CARRIER);
