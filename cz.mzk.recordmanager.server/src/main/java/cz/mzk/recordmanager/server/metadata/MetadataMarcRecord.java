@@ -623,7 +623,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 		return null;
 	}
 	
-	protected boolean isAudioDVD() {
+	protected boolean isDVD() {
 		String ldr06 = Character.toString(underlayingMarc.getLeader().getTypeOfRecord());
 		
 		String f300a = underlayingMarc.getField("300", 'a');
@@ -666,6 +666,8 @@ public class MetadataMarcRecord implements MetadataRecord {
 		String f338b = underlayingMarc.getField("338", 'b');
 		if(f338b == null) f338b = "";
 		
+		String f500 = underlayingMarc.getDataFields("500").toString();
+		
 		// Bluray
 		if(ldr06.matches("(?i)g") && f300.matches("(?i).*blu.*ray.*")) return HarvestedRecordFormatEnum.VIDEO_BLURAY;
 		
@@ -677,6 +679,8 @@ public class MetadataMarcRecord implements MetadataRecord {
 		// DVD
 		if(f007_00.matches("(?i)v") && f007_04.matches("(?i)v")) return HarvestedRecordFormatEnum.VIDEO_DVD;
 		if(f300a.matches(".*DVD[ -]?vide[oa].*")) return HarvestedRecordFormatEnum.VIDEO_DVD;
+		if (f300.matches("(?i).*videodisk.*")) return HarvestedRecordFormatEnum.VIDEO_DVD;
+		if (f500.matches("(?i).*videodisk.*")) return HarvestedRecordFormatEnum.VIDEO_DVD;
 		
 		// CD
 		if(ldr06.matches("(?i)g") && f300a.matches("(?i).*cd.*")) return HarvestedRecordFormatEnum.VIDEO_CD;
@@ -693,6 +697,11 @@ public class MetadataMarcRecord implements MetadataRecord {
 		if(f338b.matches("(?i)vr|vz|vc|mc|mf|mr|mo|mz")) return HarvestedRecordFormatEnum.VIDEO_OTHER;
 		
 		return null;
+	}
+	
+	protected boolean isVideoDVD() {
+		
+		return false;
 	}
 	
 	protected boolean isOthers(){
@@ -746,12 +755,13 @@ public class MetadataMarcRecord implements MetadataRecord {
 		if(isMicroform()) hrf.add(HarvestedRecordFormatEnum.OTHER_MICROFORMS);
 		if(isBraill()) hrf.add(HarvestedRecordFormatEnum.OTHER_BRAILLE);
 		HarvestedRecordFormatEnum audio = getAudioFormat();
-		if(audio != null) {
+		if (audio != null) {
 			hrf.add(audio);
-			if (isAudioDVD()) hrf.add(HarvestedRecordFormatEnum.AUDIO_DVD);
+			if (isDVD()) hrf.add(HarvestedRecordFormatEnum.AUDIO_DVD);
 		}
 		HarvestedRecordFormatEnum video = getVideoDocument();
 		if(video != null) hrf.add(video);
+		if (video != null && audio == null && isDVD()) hrf.add(HarvestedRecordFormatEnum.VIDEO_DVD);
 		if(isComputerCarrier()) hrf.add(HarvestedRecordFormatEnum.OTHER_COMPUTER_CARRIER);
 		if(isOthers()) hrf.add(HarvestedRecordFormatEnum.OTHER_OTHER);
 		if(hrf.isEmpty()) hrf.add(HarvestedRecordFormatEnum.OTHER_OTHER);
