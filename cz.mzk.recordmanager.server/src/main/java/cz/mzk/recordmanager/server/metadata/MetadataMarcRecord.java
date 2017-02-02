@@ -766,8 +766,13 @@ public class MetadataMarcRecord implements MetadataRecord {
 			if (isAudioDVD()) hrf.add(HarvestedRecordFormatEnum.AUDIO_DVD);
 		}
 		HarvestedRecordFormatEnum video = getVideoDocument();
-		if(video != null) hrf.add(video);
-		if (video != null && audio == null && isVideoDVD()) hrf.add(HarvestedRecordFormatEnum.VIDEO_DVD);
+		if (video != null) {
+			if (audio == null && isVideoDVD()) {
+				hrf.remove(HarvestedRecordFormatEnum.VIDEO_OTHER);
+				if (!hrf.contains(HarvestedRecordFormatEnum.VIDEO_DVD)) hrf.add(HarvestedRecordFormatEnum.VIDEO_DVD);
+			}
+			else hrf.add(video);
+		}
 		if(isComputerCarrier()) hrf.add(HarvestedRecordFormatEnum.OTHER_COMPUTER_CARRIER);
 		if(isOthers()) hrf.add(HarvestedRecordFormatEnum.OTHER_OTHER);
 		if(hrf.isEmpty()) hrf.add(HarvestedRecordFormatEnum.OTHER_OTHER);
