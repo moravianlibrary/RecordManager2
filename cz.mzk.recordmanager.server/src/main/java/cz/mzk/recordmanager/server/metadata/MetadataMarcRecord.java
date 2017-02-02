@@ -623,7 +623,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 		return null;
 	}
 	
-	protected boolean isDVD() {
+	protected boolean isAudioDVD() {
 		String ldr06 = Character.toString(underlayingMarc.getLeader().getTypeOfRecord());
 		
 		String f300a = underlayingMarc.getField("300", 'a');
@@ -700,8 +700,14 @@ public class MetadataMarcRecord implements MetadataRecord {
 	}
 	
 	protected boolean isVideoDVD() {
+		String f300a = underlayingMarc.getField("300", 'a');
+		if(f300a == null) f300a = "";
+		
+		// VIDEO_DVD
+		if(f300a.matches("(?i).*dvd.*")) return true;
 		
 		return false;
+
 	}
 	
 	protected boolean isOthers(){
@@ -757,11 +763,11 @@ public class MetadataMarcRecord implements MetadataRecord {
 		HarvestedRecordFormatEnum audio = getAudioFormat();
 		if (audio != null) {
 			hrf.add(audio);
-			if (isDVD()) hrf.add(HarvestedRecordFormatEnum.AUDIO_DVD);
+			if (isAudioDVD()) hrf.add(HarvestedRecordFormatEnum.AUDIO_DVD);
 		}
 		HarvestedRecordFormatEnum video = getVideoDocument();
 		if(video != null) hrf.add(video);
-		if (video != null && audio == null && isDVD()) hrf.add(HarvestedRecordFormatEnum.VIDEO_DVD);
+		if (video != null && audio == null && isVideoDVD()) hrf.add(HarvestedRecordFormatEnum.VIDEO_DVD);
 		if(isComputerCarrier()) hrf.add(HarvestedRecordFormatEnum.OTHER_COMPUTER_CARRIER);
 		if(isOthers()) hrf.add(HarvestedRecordFormatEnum.OTHER_OTHER);
 		if(hrf.isEmpty()) hrf.add(HarvestedRecordFormatEnum.OTHER_OTHER);
