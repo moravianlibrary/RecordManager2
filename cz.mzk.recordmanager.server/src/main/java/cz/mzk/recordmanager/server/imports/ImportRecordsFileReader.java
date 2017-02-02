@@ -120,7 +120,7 @@ public class ImportRecordsFileReader implements ItemReader<List<Record>> {
 
 	protected void initializeFilesReader() {
 		try {
-			if(!files.isEmpty()){
+			if(files != null && !files.isEmpty()){
 				String file = pathName+files.pop();
 				inStream = new FileInputStream(file);
 				reader = getMarcReader(inStream);
