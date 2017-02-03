@@ -762,8 +762,8 @@ public class MetadataMarcRecord implements MetadataRecord {
 		if(isBraill()) hrf.add(HarvestedRecordFormatEnum.OTHER_BRAILLE);
 		HarvestedRecordFormatEnum audio = getAudioFormat();
 		if (audio != null) {
-			hrf.add(audio);
 			if (isAudioDVD()) hrf.add(HarvestedRecordFormatEnum.AUDIO_DVD);
+			else hrf.add(audio);
 		}
 		HarvestedRecordFormatEnum video = getVideoDocument();
 		if (video != null) {
