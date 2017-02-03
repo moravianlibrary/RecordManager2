@@ -1,10 +1,9 @@
 <div class="page-header">
-	<h1>Full harvest statistics</h1>
+	<h1>Download import configurations statistics</h1>
 </div>
 
 <!--Preloader-->
 <div *ngIf="loading" class='uil-ring-css' style='transform:scale(0.6); right: 50%; left: 50%; position: fixed'><div></div></div>
-
 
 <div *ngIf="!loading">
 	<div class="panel panel-default">
@@ -28,9 +27,6 @@
 
 				<app-datetime-picker [description]="'End'" (emitDate)="setEnd($event)"></app-datetime-picker>
 
-				<app-datetime-picker [description]="'From'" (emitDate)="setFrom($event)"></app-datetime-picker>
-
-				<app-datetime-picker [description]="'To'" (emitDate)="setTo($event)"></app-datetime-picker>
 			</div>
 
 		</div>
@@ -57,9 +53,8 @@
 
 				<th>Status<i (click)="sortByMe('status')" [ngClass]="{'glyphicon': true, 'glyphicon-arrow-up': getArrow('status') && getVisibility('status'), 'glyphicon-arrow-down': !getArrow('status') && getVisibility('status'), 'glyphicon-sort': !getVisibility('status')}"></i></th>
 
-				<th>From<i (click)="sortByMe('fromParam')" [ngClass]="{'glyphicon': true, 'glyphicon-arrow-up': getArrow('fromParam') && getVisibility('fromParam'), 'glyphicon-arrow-down': !getArrow('fromParam') && getVisibility('fromParam'), 'glyphicon-sort': !getVisibility('fromParam')}"></i></th>
 
-				<th>To<i (click)="sortByMe('toParam')" [ngClass]="{'glyphicon': true, 'glyphicon-arrow-up': getArrow('toParam') && getVisibility('toParam'), 'glyphicon-arrow-down': !getArrow('toParam') && getVisibility('toParam'), 'glyphicon-sort': !getVisibility('toParam')}"></i></th>
+				<th>Duration<i (click)="sortByMe('duration')" [ngClass]="{'glyphicon': true, 'glyphicon-arrow-up': getArrow('importJobName') && getVisibility('importJobName'), 'glyphicon-arrow-down': !getArrow('importJobName') && getVisibility('importJobName'), 'glyphicon-sort': !getVisibility('importJobName')}"></i></th>
 
 				<th>Records<i (click)="sortByMe('noOfRecords')" [ngClass]="{'glyphicon': true, 'glyphicon-arrow-up': getArrow('noOfRecords') && getVisibility('noOfRecords'), 'glyphicon-arrow-down': !getArrow('noOfRecords') && getVisibility('noOfRecords'), 'glyphicon-sort': !getVisibility('noOfRecords')}"></i></th>
 
@@ -74,11 +69,10 @@
 				<td>{{statistic.importConfId}}</td>
 				<td>{{statistic.libraryName}}</td>
 				<td><a [href]="'http://' + statistic.url" target="_blank">{{statistic?.url}}</a></td>
-				<td>{{statistic.startTime | date: "dd/MM/yyyy HH:mm:ss"}}</td>
-				<td>{{statistic.endTime | date: "dd/MM/yyyy HH:mm:ss"}}</td>
+				<td>{{statistic.startTime | date: "dd/MM/yyyy HH:mm"}}</td>
+				<td>{{statistic.endTime | date: "dd/MM/yyyy HH:mm"}}</td>
 				<td>{{statistic.status}}</td>
-				<td>{{statistic.fromParam | date: "dd/MM/yyyy HH:mm"}}</td>
-				<td>{{statistic.toParam | date: "dd/MM/yyyy HH:mm"}}</td>
+				<td>{{statistic.importJobName}}</td>
 				<td>{{statistic.noOfRecords}}</td>
 				<td>{{statistic.duration | durationPipe}}</td>
 				<td><a [routerLink]="['../details', statistic.jobExecutionId]"><i class="glyphicon glyphicon-triangle-right"></i></a></td>

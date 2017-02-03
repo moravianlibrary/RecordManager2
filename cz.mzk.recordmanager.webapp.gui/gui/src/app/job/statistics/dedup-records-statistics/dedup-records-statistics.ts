@@ -19,6 +19,12 @@ export class DedupRecordsComponent extends StatisticsComponent implements OnInit
 		this.loading = true;
 		this.statisticsService.getDedupRecordsStatistics(this.offset).subscribe(res => {
 			res.forEach(st => {
+
+				if (st.startTime != null && st.endTime != null){
+					st.duration = st.endTime - st.startTime;
+				}else{
+					st.duration = null;
+				}
 				this.statistics.push(st);
 			});
 
@@ -42,6 +48,8 @@ export class DedupRecordsComponent extends StatisticsComponent implements OnInit
 		this.fields.push(new Field({'_name': 'endTime', '_style': new Style()}));
 
 		this.fields.push(new Field({'_name': 'status', '_style': new Style()}));
+
+		this.fields.push(new Field({'_name': 'duration', '_style': new Style()}));
 
 		this.sortByMe('jobExecutionId');
 

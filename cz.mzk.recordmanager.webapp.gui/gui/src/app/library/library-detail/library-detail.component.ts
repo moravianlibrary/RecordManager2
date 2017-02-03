@@ -13,7 +13,7 @@ export class LibraryDetailComponent implements OnInit{
 
 	libraryDetail: LibraryDetail;
 	library: Library = new Library;
-	selected: any;
+	selected: any = null;
 	loading: boolean;
 
 	constructor(private librariesService: LibraryDetailService, private route: ActivatedRoute, private router: Router){

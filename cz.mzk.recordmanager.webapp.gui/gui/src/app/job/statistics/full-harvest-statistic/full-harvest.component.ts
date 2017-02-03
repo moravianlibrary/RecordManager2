@@ -21,6 +21,11 @@ export class FullHarvestComponent extends StatisticsComponent implements OnInit{
 	getStatistics(){
 		this.statisticsService.getOaiFullHarvestStatistics(this.offset).subscribe(stats => {
 			stats.forEach(st => {
+				if (st.startTime != null && st.endTime != null){
+					st.duration = st.endTime - st.startTime;
+				}else{
+					st.duration = null;
+				}
 				this.statistics.push(st);
 			});
 			this.loading = false;
@@ -56,6 +61,8 @@ export class FullHarvestComponent extends StatisticsComponent implements OnInit{
 		this.fields.push(new Field({'_name': 'toParam', '_style': new Style()}));
 
 		this.fields.push(new Field({'_name': 'noOfRecords', '_style': new Style()}));
+
+		this.fields.push(new Field({'_name': 'duration', '_style': new Style()}));
 
 		this.sortByMe("jobExecutionId");
 

@@ -73,4 +73,17 @@ public class JobsStatisticsController {
 		return statisticsService.getDetails(jobExecutionId);
 	}
 
+	@RequestMapping(method = RequestMethod.GET, value = "downloadImportConfStatistics/{offset}")
+	@ResponseBody
+	public List<DownloadImportConfJobStatisticsDto> getDownloadImportConfJobStatistics(@PathVariable Integer offset) {
+		return statisticsService.getDownloadImportConfJobStatistics(offset);
+	}
+
+	@RequestMapping(method = RequestMethod.POST, value = "downloadImportConfStatistics/inPeriods")
+	@ResponseBody
+	public List<DownloadImportConfJobStatisticsDto> getDownloadImportConfJobStatisticsInPeriod(@RequestBody PeriodDto period){
+		return statisticsService.getDownloadImportConfJobStatisticsInPeriod(period);
+	}
+
+
 }

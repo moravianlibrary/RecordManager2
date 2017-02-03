@@ -38,6 +38,8 @@ export class ActualStatisticsComponent extends StatisticsComponent implements On
 
 		this.fields.push(new Field({'_name': 'startTime', '_style': new Style()}));
 
+		this.fields.push(new Field({'_name': 'duration', '_style': new Style()}));
+
 		this.sortByMe('jobInstanceId');
 
 		this.getActuals();

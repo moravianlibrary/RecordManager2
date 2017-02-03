@@ -51,6 +51,9 @@
 
 				<th>Status<i (click)="sortByMe('status')" [ngClass]="{'glyphicon': true, 'glyphicon-arrow-up': getArrow('status') && getVisibility('status'), 'glyphicon-arrow-down': !getArrow('status') && getVisibility('status'), 'glyphicon-sort': !getVisibility('status')}"></i></th>
 
+				<th>Duration<i (click)="sortByMe('duration')" [ngClass]="{'glyphicon': true, 'glyphicon-arrow-up': getArrow('duration') && getVisibility('duration'), 'glyphicon-arrow-down': !getArrow('duration') && getVisibility('duration'), 'glyphicon-sort': !getVisibility('duration')}"></i></th>
+
+
 				<th>Details</th>
 
 			</tr>
@@ -61,6 +64,7 @@
 				<td>{{statistic.startTime | date: "dd/MM/yyyy HH:mm"}}</td>
 				<td>{{statistic.endTime | date: "dd/MM/yyyy HH:mm"}}</td>
 				<td>{{statistic.status}}</td>
+				<td>{{statistic.duration | durationPipe}}</td>
 				<td><a [routerLink]="['../details', statistic.jobExecutionId]"><i class="glyphicon glyphicon-triangle-right"></i></a></td>
 			</tr>
 

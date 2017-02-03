@@ -19,6 +19,9 @@ import {IndexAllRecordsComponent} from "./statistics/index-all-records-statistic
 import {DedupRecordsComponent} from "./statistics/dedup-records-statistics/dedup-records-statistics";
 import {DetailsComponent} from "./statistics/details/details.component";
 import {KeyExtractorPipe} from "../pipes/key-extractor.pipe";
+import {DownloadImportConfComponent} from "./statistics/download-import-conf-statistics/download-import-conf-statistics";
+import {DurationPipe} from "../pipes/duration.pipe";
+
 
 @NgModule({
 	imports: [
@@ -28,7 +31,12 @@ import {KeyExtractorPipe} from "../pipes/key-extractor.pipe";
 		DatetimePickerModule,
 		IndexModule
 	],
-	providers: [JobRunnersService, StatisticsService, SortControl, KeyExtractorPipe],
+	providers: [
+		JobRunnersService,
+		StatisticsService,
+		SortControl,
+		KeyExtractorPipe,
+		DurationPipe],
 	declarations: [
 		JobComponent,
 		JobRunnersComponent,
@@ -40,7 +48,8 @@ import {KeyExtractorPipe} from "../pipes/key-extractor.pipe";
 		StatusFilterPipe,
 		IndexAllRecordsComponent,
 		DedupRecordsComponent,
-		DetailsComponent
+		DetailsComponent,
+		DownloadImportConfComponent
 	]
 })
 export class JobModule{}

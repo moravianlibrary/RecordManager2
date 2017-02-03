@@ -54,21 +54,22 @@
 
 						<h3>Configuration: </h3>
 
-						<div  *ngFor="let key of selected | keyExtractor">
 
-							<div class="form-group col-md-12" *ngIf="key.toLowerCase() == 'id'">
-								<label class="control-label">{{key}}:</label>
-								<input type="text" #field name="harvestId" class="form-control" [value]="selected[key]" disabled>
+						<div *ngFor="let key of selected | keyExtractor">
+
+							<div class="form-group col-md-12" *ngIf="key.k.toLowerCase() == 'id'">
+								<label class="control-label">{{key.k}}:</label>
+								<input type="text" #field name="harvestId" class="form-control" [value]="key.v" disabled>
 							</div>
 
-							<div class="form-group col-md-12" *ngIf="key.toLowerCase() == 'configurationtype'">
-								<label class="control-label">{{key}}:</label>
-								<input type="text"  name="harvestId" class="form-control" [value]="selected[key]" disabled>
+							<div class="form-group col-md-12" *ngIf="key.k.toLowerCase() == 'configurationtype'">
+								<label class="control-label">{{key.k}}:</label>
+								<input type="text"  name="harvestId" class="form-control" [value]="selected[key.k]" disabled>
 							</div>
 
-							<div class="form-group col-md-12" *ngIf="key.toLowerCase() != 'configurationtype' && key.toLowerCase() != 'id' && key.toLowerCase() != 'contact' && key.toLowerCase() != 'library'">
-								<label class="control-label">{{key}}:</label>
-								<input type="text" #field (input)="changeConfig(field, key)"  name="harvestId" class="form-control" [value]="selected[key]">
+							<div class="form-group col-md-12" *ngIf="key.k.toLowerCase() != 'configurationtype' && key.k.toLowerCase() != 'id' && key.k.toLowerCase() != 'contact' && key.k.toLowerCase() != 'library'">
+								<label class="control-label">{{key.k}}:</label>
+								<input type="text" #field (input)="changeConfig(field, key.k)"  name="harvestId" class="form-control" [value]="selected[key.k]">
 							</div>
 						</div>
 
@@ -77,14 +78,14 @@
 
 						<div *ngFor="let contactField of selected?.contact | keyExtractor">
 
-							<div class="form-group col-md-12" *ngIf="contactField.toLowerCase() == 'id'">
-								<label class="control-label">{{contactField}}:</label>
-								<input type="text" name="harvestId" class="form-control" [value]="selected?.contact[contactField]" disabled>
+							<div class="form-group col-md-12" *ngIf="contactField.k.toLowerCase() == 'id'">
+								<label class="control-label">{{contactField.k}}:</label>
+								<input type="text" name="harvestId" class="form-control" [value]="selected?.contact[contactField.k]" disabled>
 							</div>
 
-							<div class="form-group col-md-12" *ngIf="contactField.toLowerCase() != 'id'">
-								<label class="control-label">{{contactField}}:</label>
-								<input type="text" #field (input)="changeContact(field, contactField)"  name="harvestId" class="form-control" [value]="selected?.contact[contactField]">
+							<div class="form-group col-md-12" *ngIf="contactField.k.toLowerCase() != 'id'">
+								<label class="control-label">{{contactField.k}}:</label>
+								<input type="text" #field (input)="changeContact(field, contactField.k)"  name="harvestId" class="form-control" [value]="selected?.contact[contactField.k]">
 							</div>
 
 						</div>

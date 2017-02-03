@@ -88,6 +88,27 @@ export class StatisticsService{
 		});
 	}
 
+	getDownloadImportConfStatistics(offset: number): Observable<any>{
+		return this.http.get(SERVER + "/statistics/downloadImportConfStatistics/" + offset).map((res: Response) => {
+			return res.json();
+		})
+	}
+
+	getDownloadImportConfInPeriods(startDate: Date, endDate: Date): Observable<any>{
+		if (startDate == null) startDate = new Date(0);
+		if (endDate == null) endDate = new Date(Date.now());
+
+		var headers = new Headers({"Content-Type": 'application/json', 'Accept': 'application/json'});
+		let options = new RequestOptions({ headers: headers });
+
+		return this.http.post(SERVER + "/statistics/downloadImportConfStatistics/inPeriods",
+			JSON.stringify({start: startDate, end: endDate}),
+			options).map((res:Response) => {
+			return res.json();
+		});
+	}
+
+
 	getDetals(jobExecutionId: number): Observable<any>{
 		return this.http.get(SERVER + "/statistics/details/" + jobExecutionId).map((response: Response)=>{
 			return response.json();

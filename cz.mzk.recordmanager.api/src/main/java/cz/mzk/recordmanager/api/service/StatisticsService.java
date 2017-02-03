@@ -23,4 +23,8 @@ public interface StatisticsService {
 	List<DedupRecordsDto> getDedupRecordsStatisticsInPeriods(PeriodDto startEnd);
 
 	StatisticDetailsDto getDetails(Long jobExecutionId);
+
+	List<DownloadImportConfJobStatisticsDto> getDownloadImportConfJobStatistics(Integer offset);
+
+	List<DownloadImportConfJobStatisticsDto> getDownloadImportConfJobStatisticsInPeriod(PeriodDto startEnd);
 }

@@ -94,4 +94,21 @@ public class StatisticsServiceImpl implements StatisticsService{
 
 		return detailsDto;
 	}
+
+	@Override
+	public List<DownloadImportConfJobStatisticsDto> getDownloadImportConfJobStatistics(Integer offset) {
+		return jdbcTemplate.query("SELECT * " +
+				"FROM download_import_view " +
+				"ORDER BY start_time DESC " +
+				"LIMIT 10 " +
+				"OFFSET ?", new BeanPropertyRowMapper<DownloadImportConfJobStatisticsDto>(DownloadImportConfJobStatisticsDto.class), offset);
+	}
+
+	@Override
+	public List<DownloadImportConfJobStatisticsDto> getDownloadImportConfJobStatisticsInPeriod(PeriodDto startEnd) {
+		return jdbcTemplate.query("SELECT * " +
+				"FROM download_import_view " +
+				"WHERE (start_time >= ? OR start_time IS NULL ) AND (end_time <= ? OR end_time IS NULL ) " +
+				"ORDER BY start_time DESC ", new BeanPropertyRowMapper<DownloadImportConfJobStatisticsDto>(DownloadImportConfJobStatisticsDto.class), startEnd.getStart(), startEnd.getEnd());
+	}
 }
