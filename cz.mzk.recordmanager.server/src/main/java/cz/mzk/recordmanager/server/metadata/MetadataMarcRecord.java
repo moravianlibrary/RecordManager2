@@ -681,6 +681,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 		if(f300a.matches(".*DVD[ -]?vide[oa].*")) return HarvestedRecordFormatEnum.VIDEO_DVD;
 		if (f300.matches("(?i).*videodisk.*")) return HarvestedRecordFormatEnum.VIDEO_DVD;
 		if (f500.matches("(?i).*videodisk.*")) return HarvestedRecordFormatEnum.VIDEO_DVD;
+		if (f338b.matches("(?i)vd")) return HarvestedRecordFormatEnum.VIDEO_DVD;
 		
 		// CD
 		if(ldr06.matches("(?i)g") && f300a.matches("(?i).*cd.*")) return HarvestedRecordFormatEnum.VIDEO_CD;
