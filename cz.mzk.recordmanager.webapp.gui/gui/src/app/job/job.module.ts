@@ -21,6 +21,7 @@ import {DetailsComponent} from "./statistics/details/details.component";
 import {KeyExtractorPipe} from "../pipes/key-extractor.pipe";
 import {DownloadImportConfComponent} from "./statistics/download-import-conf-statistics/download-import-conf-statistics";
 import {DurationPipe} from "../pipes/duration.pipe";
+import {RegenerateDedupKeysComponent} from "./statistics/regenerate-dedup-keys-statistics/regenerate-dedup-keys-statistics.component";
 
 
 @NgModule({
@@ -49,7 +50,8 @@ import {DurationPipe} from "../pipes/duration.pipe";
 		IndexAllRecordsComponent,
 		DedupRecordsComponent,
 		DetailsComponent,
-		DownloadImportConfComponent
+		DownloadImportConfComponent,
+		RegenerateDedupKeysComponent
 	]
 })
 export class JobModule{}

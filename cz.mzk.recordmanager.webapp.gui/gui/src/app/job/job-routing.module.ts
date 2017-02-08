@@ -10,6 +10,7 @@ import {IndexAllRecordsComponent} from "./statistics/index-all-records-statistic
 import {DedupRecordsComponent} from "./statistics/dedup-records-statistics/dedup-records-statistics";
 import {DetailsComponent} from "./statistics/details/details.component";
 import {DownloadImportConfComponent} from "./statistics/download-import-conf-statistics/download-import-conf-statistics";
+import {RegenerateDedupKeysComponent} from "./statistics/regenerate-dedup-keys-statistics/regenerate-dedup-keys-statistics.component";
 const jobRoutes: Routes = [
 	{
 		path: 'job',
@@ -48,6 +49,10 @@ const jobRoutes: Routes = [
 					{
 						path: 'download-import-conf',
 						component: DownloadImportConfComponent
+					},
+					{
+						path: 'regenerate-dedup-keys',
+						component: RegenerateDedupKeysComponent
 					},
 					{
 						path: 'details/:jobExecId',

@@ -30,7 +30,7 @@ export class ActualStatisticsComponent extends StatisticsComponent implements On
 	ngOnInit(): void {
 		super.ngOnInit();
 
-		this.fields.push(new Field({'_name': 'jobInstanceId', '_style': new Style()}));
+		this.fields.push(new Field({'_name': 'jobExecutionId', '_style': new Style()}));
 
 		this.fields.push(new Field({'_name': 'jobName', '_style': new Style()}));
 
@@ -38,9 +38,7 @@ export class ActualStatisticsComponent extends StatisticsComponent implements On
 
 		this.fields.push(new Field({'_name': 'startTime', '_style': new Style()}));
 
-		this.fields.push(new Field({'_name': 'duration', '_style': new Style()}));
-
-		this.sortByMe('jobInstanceId');
+		this.sortByMe('jobExecutionId');
 
 		this.getActuals();
 	}

@@ -85,5 +85,17 @@ public class JobsStatisticsController {
 		return statisticsService.getDownloadImportConfJobStatisticsInPeriod(period);
 	}
 
+	@RequestMapping(method = RequestMethod.GET, value = "regenerateDedupKeysStatistics/{offset}")
+	@ResponseBody
+	public List<RegenerateDedupKeysJobStatisticsDto> getRegenerateDedupKeysJobStatistics(@PathVariable Integer offset){
+		return statisticsService.getRegenerateDedupKeysJobStatistics(offset);
+	}
+
+	@RequestMapping(method = RequestMethod.POST, value = "regenerateDedupKeysStatistics/inPeriods")
+	@ResponseBody
+	public List<RegenerateDedupKeysJobStatisticsDto> getRegenerateDedupKeysJobInPeriod(@RequestBody PeriodDto period){
+		return statisticsService.getRegenerateDedupKeysJobStatisticsInPeriod(period);
+	}
+
 
 }

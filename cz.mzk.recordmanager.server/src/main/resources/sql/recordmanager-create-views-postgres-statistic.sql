@@ -113,3 +113,15 @@ CREATE OR REPLACE VIEW download_import_view AS
   WHERE bji.job_name IN ('importOaiRecordsJob', 'downloadAndImportRecordsJob', 'antikvariatyImportRecordsJob', 'importRecordsJob')
   GROUP BY bje.job_execution_id,l.name,dic.url,dic.import_job_name, dic.format
 ;
+
+CREATE OR REPLACE VIEW regenerate_dedup_keys_view AS
+  SELECT
+    bje.job_execution_id,
+    bje.start_time,
+    bje.end_time,
+    bje.status
+  FROM batch_job_instance bji
+    JOIN batch_job_execution bje ON bje.job_instance_id = bji.job_instance_id
+  WHERE bji.job_name IN ('regenerateDedupKeysJob')
+  GROUP BY bje.job_execution_id
+;

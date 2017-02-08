@@ -1,25 +1,15 @@
 package cz.mzk.recordmanager.api.model.statistics;
 
-import java.io.Serializable;
+
 import java.util.Date;
 
-public class OaiHarvestJobStatisticsDto implements Serializable {
-
-	private static final long serialVersionUID = 1L;
-
-	private Long jobExecutionId;
+public class OaiHarvestJobStatisticsDto extends GeneralStatisticsDto {
 
 	private Long importConfId;
 
 	private String libraryName;
 
 	private String url;
-
-	private Date startTime;
-
-	private Date endTime;
-
-	private String status;
 
 	private Date fromParam;
 
@@ -52,30 +42,6 @@ public class OaiHarvestJobStatisticsDto implements Serializable {
 	}
 
 
-	public Date getStartTime() {
-		return startTime;
-	}
-
-	public void setStartTime(Date startTime) {
-		this.startTime = startTime;
-	}
-
-	public Date getEndTime() {
-		return endTime;
-	}
-
-	public void setEndTime(Date endTime) {
-		this.endTime = endTime;
-	}
-
-	public String getStatus() {
-		return status;
-	}
-
-	public void setStatus(String status) {
-		this.status = status;
-	}
-
 	public Date getFromParam() {
 		return fromParam;
 	}
@@ -100,12 +66,5 @@ public class OaiHarvestJobStatisticsDto implements Serializable {
 		this.noOfRecords = noOfRecords;
 	}
 
-	public Long getJobExecutionId() {
-		return jobExecutionId;
-	}
-
-	public void setJobExecutionId(Long jobExecutionId) {
-		this.jobExecutionId = jobExecutionId;
-	}
 
 }

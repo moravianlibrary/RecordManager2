@@ -58,8 +58,8 @@ export class StatisticsService{
 	getIndexAllRecordsStatisticsInPeriods(startDate: Date, endDate: Date, fromDate: Date, toDate: Date): Observable<any>{
 		if (startDate == null) startDate = new Date(0);
 		if (endDate == null) endDate = new Date(Date.now());
-		if (fromDate == null) fromDate = new Date(0);
-		if (toDate == null) toDate = new Date(Date.now());
+		// if (fromDate == null) fromDate = new Date(0);
+		// if (toDate == null) toDate = new Date(Date.now());
 
 		var headers = new Headers({"Content-Type": 'application/json', 'Accept': 'application/json'});
 		let options = new RequestOptions({ headers: headers });
@@ -112,8 +112,27 @@ export class StatisticsService{
 	getDetals(jobExecutionId: number): Observable<any>{
 		return this.http.get(SERVER + "/statistics/details/" + jobExecutionId).map((response: Response)=>{
 			return response.json();
-		})
+		});
+	}
 
+	getRegenerateDedupKeysStatistics(offset: number): Observable<any>{
+		return this.http.get(SERVER + "/statistics/regenerateDedupKeysStatistics/" + offset).map((res:Response) => {
+			return res.json();
+		});
+	}
+
+	getRegenerateDedupKeysInPeriod(startDate: Date, endDate: Date): Observable<any>{
+		if (startDate == null) startDate = new Date(0);
+		if (endDate == null) endDate = new Date(Date.now());
+
+		var headers = new Headers({"Content-Type": 'application/json', 'Accept': 'application/json'});
+		let options = new RequestOptions({ headers: headers });
+
+		return this.http.post(SERVER + "/statistics/regenerateDedupKeysStatistics/inPeriods",
+			JSON.stringify({start: startDate, end: endDate}),
+			options).map((res:Response) => {
+			return res.json();
+		});
 	}
 
 }

@@ -3,14 +3,10 @@ package cz.mzk.recordmanager.api.model.statistics;
 import java.util.Date;
 import java.util.List;
 
-public class StatisticDetailsDto {
-	private Long jobExecutionId;
+public class StatisticDetailsDto extends GeneralStatisticsDto{
 	private Long version;
 	private Long jobInstanceId;
 	private Date createTime;
-	private Date startTime;
-	private Date endTime;
-	private String status;
 	private String exitCode;
 	private String exitMessage;
 	private Date lastUpdated;
@@ -20,14 +16,6 @@ public class StatisticDetailsDto {
 
 	private List<JobParameterDto> jobParameter;
 
-
-	public Long getJobExecutionId() {
-		return jobExecutionId;
-	}
-
-	public void setJobExecutionId(Long jobExecutionId) {
-		this.jobExecutionId = jobExecutionId;
-	}
 
 	public Long getVersion() {
 		return version;
@@ -45,31 +33,6 @@ public class StatisticDetailsDto {
 		this.jobInstanceId = jobInstanceId;
 	}
 
-
-
-	public Date getStartTime() {
-		return startTime;
-	}
-
-	public void setStartTime(Date startTime) {
-		this.startTime = startTime;
-	}
-
-	public Date getEndTime() {
-		return endTime;
-	}
-
-	public void setEndTime(Date endTime) {
-		this.endTime = endTime;
-	}
-
-	public String getStatus() {
-		return status;
-	}
-
-	public void setStatus(String status) {
-		this.status = status;
-	}
 
 	public String getExitCode() {
 		return exitCode;

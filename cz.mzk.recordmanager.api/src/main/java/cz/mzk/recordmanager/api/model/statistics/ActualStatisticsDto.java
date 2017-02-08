@@ -6,7 +6,7 @@ import java.util.Date;
 
 public class ActualStatisticsDto {
 
-	private Long jobInstanceId;
+	private Long jobExecutionId;
 
 	private String jobName;
 
@@ -50,11 +50,11 @@ public class ActualStatisticsDto {
 		this.jobName = jobName;
 	}
 
-	public Long getJobInstanceId() {
-		return jobInstanceId;
+	public Long getJobExecutionId() {
+		return jobExecutionId;
 	}
 
-	public void setJobInstanceId(Long jobInstanceId) {
-		this.jobInstanceId = jobInstanceId;
+	public void setJobExecutionId(Long jobExecutionId) {
+		this.jobExecutionId = jobExecutionId;
 	}
 }

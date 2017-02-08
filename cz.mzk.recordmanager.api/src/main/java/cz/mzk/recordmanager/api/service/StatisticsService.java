@@ -27,4 +27,8 @@ public interface StatisticsService {
 	List<DownloadImportConfJobStatisticsDto> getDownloadImportConfJobStatistics(Integer offset);
 
 	List<DownloadImportConfJobStatisticsDto> getDownloadImportConfJobStatisticsInPeriod(PeriodDto startEnd);
+
+	List<RegenerateDedupKeysJobStatisticsDto> getRegenerateDedupKeysJobStatistics(Integer offset);
+
+	List<RegenerateDedupKeysJobStatisticsDto> getRegenerateDedupKeysJobStatisticsInPeriod(PeriodDto startEnd);
 }

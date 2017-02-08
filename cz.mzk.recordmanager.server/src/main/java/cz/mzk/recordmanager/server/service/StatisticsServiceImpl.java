@@ -19,7 +19,7 @@ public class StatisticsServiceImpl implements StatisticsService{
 
 	@Override
 	public List<ActualStatisticsDto> getActualStatisticsForThePeriod(Date starDate) {
-		return jdbcTemplate.query("SELECT bje.job_instance_id, bji.job_name, bje.status, bje.exit_message, bje.start_time\n" +
+		return jdbcTemplate.query("SELECT bje.job_execution_id, bji.job_name, bje.status, bje.exit_message, bje.start_time\n" +
 				"FROM batch_job_execution bje\n" +
 				"JOIN batch_job_instance bji ON bje.job_instance_id = bji.job_instance_id\n" +
 				"WHERE bje.start_time >= ?", new BeanPropertyRowMapper<ActualStatisticsDto>(ActualStatisticsDto.class), starDate);
@@ -56,7 +56,7 @@ public class StatisticsServiceImpl implements StatisticsService{
 	public List<IndexAllRecordsJobStatisticsDto> getIndexAllRecordsStatisticsInPeriods(PeriodDto startEnd, PeriodDto fromTo) {
 		return jdbcTemplate.query("SELECT * " +
 				"FROM index_all_records " +
-				"WHERE (start_time >= ? OR start_time IS NULL ) AND (end_time <= ? OR end_time IS NULL ) AND (from_param >= ? OR from_param IS NULL ) AND (to_param <= ? OR to_param IS NULL )" +
+				"WHERE (start_time >= ? OR start_time IS NULL ) AND (end_time <= ? OR end_time IS NULL ) AND (from_param = ?) AND (to_param = ?)" +
 				"ORDER BY start_time DESC ", new BeanPropertyRowMapper<IndexAllRecordsJobStatisticsDto>(IndexAllRecordsJobStatisticsDto.class), startEnd.getStart(), startEnd.getEnd(), fromTo.getStart(), fromTo.getEnd());
 	}
 
@@ -110,5 +110,22 @@ public class StatisticsServiceImpl implements StatisticsService{
 				"FROM download_import_view " +
 				"WHERE (start_time >= ? OR start_time IS NULL ) AND (end_time <= ? OR end_time IS NULL ) " +
 				"ORDER BY start_time DESC ", new BeanPropertyRowMapper<DownloadImportConfJobStatisticsDto>(DownloadImportConfJobStatisticsDto.class), startEnd.getStart(), startEnd.getEnd());
+	}
+
+	@Override
+	public List<RegenerateDedupKeysJobStatisticsDto> getRegenerateDedupKeysJobStatistics(Integer offset) {
+		return jdbcTemplate.query("SELECT * " +
+				"FROM regenerate_dedup_keys_view " +
+				"ORDER BY start_time DESC " +
+				"LIMIT 10 " +
+				"OFFSET ?", new BeanPropertyRowMapper<RegenerateDedupKeysJobStatisticsDto>(RegenerateDedupKeysJobStatisticsDto.class), offset);
+	}
+
+	@Override
+	public List<RegenerateDedupKeysJobStatisticsDto> getRegenerateDedupKeysJobStatisticsInPeriod(PeriodDto startEnd) {
+		return jdbcTemplate.query("SELECT * " +
+				"FROM regenerate_dedup_keys_view " +
+				"WHERE (start_time >= ? OR start_time IS NULL ) AND (end_time <= ? OR end_time IS NULL ) " +
+				"ORDER BY start_time DESC ", new BeanPropertyRowMapper<RegenerateDedupKeysJobStatisticsDto>(RegenerateDedupKeysJobStatisticsDto.class), startEnd.getStart(), startEnd.getEnd());
 	}
 }
