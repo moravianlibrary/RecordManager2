@@ -72,6 +72,7 @@ public class Constants {
 	public static final String PREFIX_AUTH				= "auth";
 	public static final String PREFIX_BMC				= "bmc";
 	public static final String PREFIX_CASLIN			= "caslin";
+	public static final String PREFIX_CBVK				= "cbvk";
 	public static final String PREFIX_KKVY				= "kkvy";
 	public static final String PREFIX_KRAM_KNAV			= "kram-knav";
 	public static final String PREFIX_KRAM_MZK			= "kram-mzk";

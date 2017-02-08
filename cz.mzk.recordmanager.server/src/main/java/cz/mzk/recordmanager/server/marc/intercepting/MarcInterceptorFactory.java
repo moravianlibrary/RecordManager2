@@ -23,8 +23,6 @@ public class MarcInterceptorFactory {
 	private ApplicationContext appCtx;
 	
 	public MarcRecordInterceptor getInterceptor(ImportConfiguration configuration, byte rawRecord[]) {
-		
-		
 		String prefix = configuration.getIdPrefix();
 		try {
 			Record record = parseRecord(rawRecord);
@@ -37,6 +35,7 @@ public class MarcInterceptorFactory {
 			case Constants.PREFIX_NLK: return new NlkMarcInterceptor(record);
 			case Constants.PREFIX_OPENLIB: return new OpenlibMarcInterceptor(record);
 			case Constants.PREFIX_KKVY: return new KkvyNormsMarcInterceptor(record);
+			case Constants.PREFIX_CBVK: return new CbvkMarcInterceptor(record);
 			default: return new DefaultMarcInterceptor(record);
 			}
 		} catch (InvalidMarcException ime) {
