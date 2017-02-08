@@ -15,9 +15,11 @@ export class MultiSelectComponent implements OnInit {
 
   @Input() isMultiple = true;
 
-  multiSelectContent: string = "Choose the following ...";
+  @Input() multiSelectContent: string = "Choose the following ...";
 
   @Output() onSelect = new EventEmitter<any[]>();
+
+  initSelectContent: string;
 
   inputValue: string = "";
 
@@ -45,12 +47,12 @@ export class MultiSelectComponent implements OnInit {
       if (singleSelected.length > 0)
         this.multiSelectContent = singleSelected[0].value;
       else
-        this.multiSelectContent = "Choose the following ...";
+        this.multiSelectContent = this.initSelectContent;
 
 
     }else {
       if (this.selected.length == 0){
-        this.multiSelectContent = "Choose the following ...";
+        this.multiSelectContent = this.initSelectContent;
       }else{
         if (this.selected.length <= this.itemsAmount){
           this.multiSelectContent = "";
@@ -72,6 +74,7 @@ export class MultiSelectComponent implements OnInit {
     return this.selected.find(obj => obj.id === item.id && obj.value === item.value) != null;
   }
   ngOnInit() {
+    this.initSelectContent = this.multiSelectContent
   }
 
 }

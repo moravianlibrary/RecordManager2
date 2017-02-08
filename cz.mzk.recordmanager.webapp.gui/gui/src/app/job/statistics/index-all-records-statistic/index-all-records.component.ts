@@ -62,6 +62,7 @@ export class IndexAllRecordsComponent extends StatisticsComponent implements OnI
 
 		this.sortByMe("jobExecutionId");
 
+
 		this.getIndexAllRecordsStats()
 	}
 
@@ -76,5 +77,6 @@ export class IndexAllRecordsComponent extends StatisticsComponent implements OnI
 			this.isMore = false;
 		});
 	}
+
 
 }

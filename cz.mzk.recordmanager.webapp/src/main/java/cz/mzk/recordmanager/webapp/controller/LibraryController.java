@@ -34,6 +34,7 @@ public class LibraryController {
 		return detail;
 	}
 
+
 	@RequestMapping(method = RequestMethod.DELETE, value = "{libraryId}")
 	@ResponseBody
 	public void removeLibrary(@PathVariable Long libraryId){

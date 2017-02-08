@@ -9,6 +9,7 @@ import cz.mzk.recordmanager.api.model.configurations.KrameriusConfigurationDto;
 import cz.mzk.recordmanager.api.model.configurations.OaiHarvestConfigurationDto;
 import cz.mzk.recordmanager.server.model.*;
 import cz.mzk.recordmanager.server.oai.dao.*;
+import org.hibernate.Criteria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -135,6 +136,7 @@ public class LibraryServiceImpl implements LibraryService {
 			return;
 		}
 	}
+
 
 	private DownloadImportConfiguration fillDownImpCon(DownloadImportConfiguration target, DownloadImportConfigurationDto src){
 		fillDownloadImportConfiguration(target, src);

@@ -11,6 +11,8 @@ export class DatetimePickerComponent implements OnInit {
 
   @Input() description: string = "";
 
+  @Input() initDate;
+
   refDate: Date;
 
   isTimeChooser: boolean = false;
@@ -86,6 +88,7 @@ export class DatetimePickerComponent implements OnInit {
 
   ngOnInit() {
     this.refDate = new Date();
+    this.pickedDate = this.initDate;
   }
 
   today(){

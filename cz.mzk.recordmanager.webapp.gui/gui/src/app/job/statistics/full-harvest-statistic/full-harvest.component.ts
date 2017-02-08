@@ -4,6 +4,7 @@ import {SortControl} from "../../../shared/sort-control";
 import {StatisticsComponent} from "../statistics.component";
 import {Field} from "../../../shared/field";
 import {Style} from "../../../shared/style";
+import {LibrariesService} from "../../../library/libraries/libraries.service";
 @Component({
 	selector: 'app-full-harvest',
 	templateUrl: './full-harvest.component.html',
@@ -12,9 +13,11 @@ import {Style} from "../../../shared/style";
 
 export class FullHarvestComponent extends StatisticsComponent implements OnInit{
 
+	libraries: any = [];
 
 
-	constructor(protected sortControl: SortControl, protected statisticsService: StatisticsService){
+
+	constructor(protected sortControl: SortControl, protected statisticsService: StatisticsService, protected librariesService: LibrariesService){
 		super(sortControl, statisticsService);
 	}
 
@@ -36,6 +39,12 @@ export class FullHarvestComponent extends StatisticsComponent implements OnInit{
 			}else {
 				this.isMore = false;
 			}
+		});
+	}
+
+	getLibraries(){
+		this.librariesService.getLibraries().subscribe(libs => {
+			this.libraries = libs;
 		});
 	}
 
@@ -67,6 +76,8 @@ export class FullHarvestComponent extends StatisticsComponent implements OnInit{
 		this.sortByMe("jobExecutionId");
 
 		this.getStatistics();
+
+		this.getLibraries();
 	}
 
 	nextPartOfStats(offset: number){

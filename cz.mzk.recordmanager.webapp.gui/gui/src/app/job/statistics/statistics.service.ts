@@ -68,7 +68,6 @@ export class StatisticsService{
 		return this.http.post(SERVER + "/statistics/indexAllRecordsStatistics/inPeriods",
 			JSON.stringify([{start: startDate, end: endDate}, {start: fromDate, end: toDate}]),
 			options).map((res:Response) => {
-			console.log(res);
 			return res.json();
 		});
 	}
