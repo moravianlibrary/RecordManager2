@@ -2,6 +2,7 @@ import {Injectable} from "@angular/core";
 import {Http, Headers, RequestOptions, Response} from "@angular/http";
 import {Observable} from "rxjs";
 import {SERVER} from "../../server";
+import {Library} from "../../model/library";
 @Injectable()
 export class StatisticsService{
 	constructor(private http: Http){}
@@ -26,7 +27,7 @@ export class StatisticsService{
 		})
 	}
 
-	getOaiFullHarvestStatisticsInPeriods(startDate: Date, endDate: Date, fromDate: Date, toDate: Date): Observable<any>{
+	getOaiFullHarvestStatisticsInPeriods(startDate: Date, endDate: Date, fromDate: Date, toDate: Date, libraries: Library[]): Observable<any>{
 		if (startDate == null) startDate = new Date(0);
 		if (endDate == null) endDate = new Date(Date.now());
 		if (fromDate == null) fromDate = new Date(0);
@@ -34,9 +35,14 @@ export class StatisticsService{
 
 		var headers = new Headers({"Content-Type": 'application/json', 'Accept': 'application/json'});
 		let options = new RequestOptions({ headers: headers });
+		console.log(libraries);
 
 		return this.http.post(SERVER + "/statistics/oaiHarvestStatistics/inPeriods",
-			JSON.stringify([{start: startDate, end: endDate}, {start: fromDate, end: toDate}]),
+			JSON.stringify({
+				startEnd: {start: startDate, end: endDate},
+				fromTo: {start: fromDate, end: toDate},
+				libraries: libraries
+			}),
 		options).map((res:Response) => {
 
 			return res.json();

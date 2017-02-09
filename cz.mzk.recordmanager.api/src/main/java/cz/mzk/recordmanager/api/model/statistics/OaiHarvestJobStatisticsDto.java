@@ -17,6 +17,8 @@ public class OaiHarvestJobStatisticsDto extends GeneralStatisticsDto {
 
 	private Long noOfRecords;
 
+	private Long libraryId;
+
 	public Long getImportConfId() {
 		return importConfId;
 	}
@@ -67,4 +69,11 @@ public class OaiHarvestJobStatisticsDto extends GeneralStatisticsDto {
 	}
 
 
+	public Long getLibraryId() {
+		return libraryId;
+	}
+
+	public void setLibraryId(Long libraryId) {
+		this.libraryId = libraryId;
+	}
 }

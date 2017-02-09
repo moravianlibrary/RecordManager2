@@ -1,6 +1,7 @@
 package cz.mzk.recordmanager.api.service;
 
 
+import cz.mzk.recordmanager.api.model.LibraryDto;
 import cz.mzk.recordmanager.api.model.PeriodDto;
 import cz.mzk.recordmanager.api.model.statistics.*;
 
@@ -12,7 +13,7 @@ public interface StatisticsService {
 
 	List<OaiHarvestJobStatisticsDto> getOaiHarvestJobStats(Integer offset);
 
-	List<OaiHarvestJobStatisticsDto> getOaiHarvestStatisticsInPeriods(PeriodDto startEnd, PeriodDto fromTo);
+	List<OaiHarvestJobStatisticsDto> getOaiHarvestStatisticsInPeriods(PeriodDto startEnd, PeriodDto fromTo, List<LibraryDto> libraries);
 
 	List<IndexAllRecordsJobStatisticsDto> getIndexAllRecordsStatistics(Integer offset);
 

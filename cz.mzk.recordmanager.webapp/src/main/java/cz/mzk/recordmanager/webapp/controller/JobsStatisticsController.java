@@ -1,6 +1,7 @@
 package cz.mzk.recordmanager.webapp.controller;
 
 
+import cz.mzk.recordmanager.api.model.LibraryDto;
 import cz.mzk.recordmanager.api.model.PeriodDto;
 import cz.mzk.recordmanager.api.model.statistics.*;
 import cz.mzk.recordmanager.api.service.StatisticsService;
@@ -29,9 +30,9 @@ public class JobsStatisticsController {
 
 	@RequestMapping(method = RequestMethod.POST, value = "oaiHarvestStatistics/inPeriods")
 	@ResponseBody
-	public List<OaiHarvestJobStatisticsDto> getOaiHarvestStatisticsInPeriods(@RequestBody List<PeriodDto> periods){
+	public List<OaiHarvestJobStatisticsDto> getOaiHarvestStatisticsInPeriods(@RequestBody PeriodsAndLibrariesDto periodsAndLibrariesDto){
 
-    	return statisticsService.getOaiHarvestStatisticsInPeriods(periods.get(0), periods.get(1));
+    	return statisticsService.getOaiHarvestStatisticsInPeriods(periodsAndLibrariesDto.getStartEnd(), periodsAndLibrariesDto.getFromTo(), periodsAndLibrariesDto.getLibraries());
 
 	}
 

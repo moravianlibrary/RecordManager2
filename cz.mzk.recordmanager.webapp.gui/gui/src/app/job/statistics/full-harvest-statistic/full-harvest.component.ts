@@ -5,6 +5,7 @@ import {StatisticsComponent} from "../statistics.component";
 import {Field} from "../../../shared/field";
 import {Style} from "../../../shared/style";
 import {LibrariesService} from "../../../library/libraries/libraries.service";
+import {Library} from "../../../model/library";
 @Component({
 	selector: 'app-full-harvest',
 	templateUrl: './full-harvest.component.html',
@@ -15,7 +16,7 @@ export class FullHarvestComponent extends StatisticsComponent implements OnInit{
 
 	libraries: any = [];
 
-
+	selectedLibraries: Library[]  = [];
 
 	constructor(protected sortControl: SortControl, protected statisticsService: StatisticsService, protected librariesService: LibrariesService){
 		super(sortControl, statisticsService);
@@ -44,7 +45,48 @@ export class FullHarvestComponent extends StatisticsComponent implements OnInit{
 
 	getLibraries(){
 		this.librariesService.getLibraries().subscribe(libs => {
-			this.libraries = libs;
+			libs.forEach(l => {
+				this.libraries.push({key: l.id, value: l.name || ""});
+			});
+		});
+	}
+
+
+	nextPartOfStats(offset: number){
+		this.offset = this.offset + offset;
+		this.getStatistics();
+	}
+
+	getStatisticsInPeriods(){
+		if (
+			this.startDate == null &&
+			this.endDate == null &&
+			this.fromParam == null &&
+			this.toParam == null
+		){
+			this.offset = 0;
+			this.statistics = [];
+			this.getStatistics();
+		}else{
+
+				this.statisticsService.getOaiFullHarvestStatisticsInPeriods(
+					this.startDate,
+					this.endDate,
+					this.fromParam,
+					this.toParam,
+					this.selectedLibraries
+				).subscribe(res => {
+					this.statistics = res;
+					this.offset = 0;
+					this.isMore = false;
+			});
+		}
+	}
+
+	selectLibrary(event: any){
+		this.selectedLibraries = [];
+		event.forEach(l => {
+			this.selectedLibraries.push(new Library({id: l.key, name: l.value}))
 		});
 	}
 
@@ -80,32 +122,5 @@ export class FullHarvestComponent extends StatisticsComponent implements OnInit{
 		this.getLibraries();
 	}
 
-	nextPartOfStats(offset: number){
-		this.offset = this.offset + offset;
-		this.getStatistics();
-	}
-
-	getStatisticsInPeriods(){
-		if (
-			this.startDate == null &&
-			this.endDate == null &&
-			this.fromParam == null &&
-			this.toParam == null
-		){
-			this.offset = 0;
-			this.statistics = [];
-			this.getStatistics();
-		}else{
-			this.statisticsService.getOaiFullHarvestStatisticsInPeriods(
-				this.startDate,
-				this.endDate,
-				this.fromParam,
-				this.toParam).subscribe(res => {
-				this.statistics = res;
-				this.offset = 0;
-				this.isMore = false;
-			});
-		}
-	}
 
 }
