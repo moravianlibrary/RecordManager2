@@ -71,10 +71,20 @@ export class RegenerateDedupKeysComponent extends StatisticsComponent implements
 			this.statistics = [];
 			this.getRegenerateDedupKeysStatistics();
 		}else{
+				this.loading = true;
 			this.statisticsService.getRegenerateDedupKeysInPeriod(
 				this.startDate,
 				this.endDate).subscribe(res => {
-				this.statistics = res;
+				this.statistics = [];
+				res.forEach(r => {
+					if (r.startTime != null && r.endTime != null){
+						r.duration = r.endTime - r.startTime;
+					}else{
+						r.duration = null;
+					}
+					this.statistics.push(r);
+				});
+				this.loading = false;
 				this.offset = 0;
 				this.isMore = false;
 			});

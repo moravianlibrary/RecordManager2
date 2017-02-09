@@ -82,10 +82,23 @@ export class DownloadImportConfComponent extends StatisticsComponent implements 
 			this.statistics = [];
 			this.getDownloadImportConfStatistics();
 		}else{
+			this.loading = false;
 			this.statisticsService.getDownloadImportConfInPeriods(
 				this.startDate,
 				this.endDate).subscribe(res => {
-				this.statistics = res;
+				this.statistics = [];
+
+				res.forEach(r => {
+					if (r.startTime != null && r.endTime != null){
+						r.duration = r.endTime - r.startTime;
+					}else{
+						r.duration = null;
+					}
+					this.statistics.push(r);
+				});
+
+				this.loading = false;
+
 				this.offset = 0;
 				this.isMore = false;
 			});

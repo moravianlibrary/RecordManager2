@@ -67,15 +67,37 @@ export class IndexAllRecordsComponent extends StatisticsComponent implements OnI
 	}
 
 	getStatisticsInPeriods(){
-		this.statisticsService.getIndexAllRecordsStatisticsInPeriods(
-			this.startDate,
-			this.endDate,
-			this.fromParam,
-			this.toParam).subscribe(res => {
-			this.statistics = res;
+		if (
+			this.startDate == null &&
+			this.endDate == null &&
+			this.fromParam == null &&
+			this.toParam == null
+		){
 			this.offset = 0;
-			this.isMore = false;
-		});
+			this.statistics = [];
+			this.getIndexAllRecordsStats();
+		}else{
+			this.loading = true;
+			this.statisticsService.getIndexAllRecordsStatisticsInPeriods(
+				this.startDate,
+				this.endDate,
+				this.fromParam,
+				this.toParam).subscribe(res => {
+				this.statistics = [];
+
+				res.forEach(r => {
+					if (r.startTime != null && r.endTime != null){
+						r.duration = r.endTime - r.startTime;
+					}else{
+						r.duration = null;
+					}
+					this.statistics.push(r);
+				});
+				this.loading = false;
+				this.offset = 0;
+				this.isMore = false;
+			});
+	}
 	}
 
 

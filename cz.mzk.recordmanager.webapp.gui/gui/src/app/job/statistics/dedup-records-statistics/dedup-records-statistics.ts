@@ -73,13 +73,24 @@ export class DedupRecordsComponent extends StatisticsComponent implements OnInit
 			this.statistics = [];
 			this.getDedupRecordsStatistics();
 		}else{
-			this.statisticsService.getDedupRecordsStatisticsInPeriods(
-				this.startDate,
-				this.endDate).subscribe(res => {
-				this.statistics = res;
-				this.offset = 0;
-				this.isMore = false;
-			});
+				this.loading = true;
+				this.statisticsService.getDedupRecordsStatisticsInPeriods(
+					this.startDate,
+					this.endDate).subscribe(res => {
+					this.statistics = [];
+
+					res.forEach(r => {
+						if (r.startTime != null && r.endTime != null){
+							r.duration = r.endTime - r.startTime;
+						}else{
+							r.duration = null;
+						}
+						this.statistics.push(r);
+					});
+					this.loading = false;
+					this.offset = 0;
+					this.isMore = false;
+				});
 		}
 	}
 }
