@@ -589,11 +589,15 @@ public class MetadataMarcRecord implements MetadataRecord {
 		if(f338b == null) f338b = "";
 				
 		// AUDIO_CD
-		if(f300.matches("(?i).*kompaktn[ií](ch)?\\sdisk(ů)?.*")) return HarvestedRecordFormatEnum.AUDIO_CD;
-		if(f500.matches("(?i).*kompaktn[ií](ch)?\\sdisk(ů)?.*")) return HarvestedRecordFormatEnum.AUDIO_CD;
+		for (String data : new String[]{f300, f500}) {
+			if(data.matches("(?i).*kompaktn[ií](ch)?\\sd[ei]sk(ů)?.*")) return HarvestedRecordFormatEnum.AUDIO_CD;
+		}
 		if(f300.matches("((?i).*zvukov[eéaá])\\sCD.*")) return HarvestedRecordFormatEnum.AUDIO_CD;
 		if(f300a.matches(".*CD.*")) {
 			if(!f300a.matches(".*CD-ROM.*")) return HarvestedRecordFormatEnum.AUDIO_CD;
+		}
+		for (String data : new String[]{f300, f500}) {
+			if(data.matches(".*CD-R.*") && !data.matches(".*CD-ROM.*")) return HarvestedRecordFormatEnum.AUDIO_CD;
 		}
 		if(f300.matches("(?i).*zvukov([aáeé]|ych|ých)\\sdes(ka|ky|ek).*") && f300.matches("(?i).*(digital|12\\s*cm).*")) return HarvestedRecordFormatEnum.AUDIO_CD;
 		if (f300.matches("(?i).*audiodisk.*")) return HarvestedRecordFormatEnum.AUDIO_CD;
