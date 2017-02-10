@@ -83,6 +83,7 @@ export class IndexAllRecordsComponent extends StatisticsComponent implements OnI
 				this.endDate,
 				this.fromParam,
 				this.toParam).subscribe(res => {
+					console.log(res);
 				this.statistics = [];
 
 				res.forEach(r => {
