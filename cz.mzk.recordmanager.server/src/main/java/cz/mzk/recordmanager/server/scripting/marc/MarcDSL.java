@@ -258,9 +258,9 @@ public class MarcDSL extends BaseDSL {
     	
     	Set<String> result = new HashSet<String>();
     	for(String publisher: publishers){
-    		String newPublisher = translate("publisher.map", publisher, null);
+    		List<String> newPublisher = translate("publisher.map", publisher, null);
     		if(newPublisher == null) result.add(publisher);
-    		else result.add(newPublisher);
+    		else result.addAll(newPublisher);
     	}
     	return new ArrayList<String>(result);
     }
@@ -323,7 +323,7 @@ public class MarcDSL extends BaseDSL {
     	for(DataField df: record.getDataFields("650")){
     		if(df.getSubfield('2') != null && df.getSubfield('2').getData().contains("psh")){
     			if(df.getSubfield('x') != null){ 
-    				subjects.add(toUpperCaseFirstChar(translate("psh.map", df.getSubfield('x').getData(), null)));
+    				subjects.addAll(toUpperCaseFirstChar(translate("psh.map", df.getSubfield('x').getData(), null)));
     			}
     		}
     	}
@@ -338,6 +338,13 @@ public class MarcDSL extends BaseDSL {
     protected String toUpperCaseFirstChar(String string){
     	if(string == null || string.isEmpty()) return null;
     	return string.substring(0,1).toUpperCase() + string.substring(1);
+    }
+    
+    protected List<String> toUpperCaseFirstChar(List<String> strings){
+    	if(strings == null || strings.isEmpty()) return null;
+    	List<String> results = new ArrayList<>();
+    	strings.forEach(string -> results.add(string.substring(0,1).toUpperCase() + string.substring(1)));
+    	return results;
     }
 
     public Set<String> getISBNISSNISMN(){
@@ -637,14 +644,14 @@ public class MarcDSL extends BaseDSL {
     			String subcat_name_source = df.getSubfield('x').getData().trim();
     			String cat_code_source = df.getSubfield('9').getData().trim();
     			
-    			String cat_code = translate(MAP_CATEGORY_SUBCATEGORY, subcat_code_source, null);
-    			if(!cat_code_source.equals(cat_code)) continue;
+    			List<String> cat_code = translate(MAP_CATEGORY_SUBCATEGORY, subcat_code_source, null);
+    			if(!cat_code.contains(cat_code_source)) continue;
 
-    			String subcat_name = translate(MAP_SUBCATEGORY_NAME, subcat_code_source, null);
+    			List<String> subcat_name = translate(MAP_SUBCATEGORY_NAME, subcat_code_source, null);
 
-    			if(subcat_name_source.equals(subcat_name)){
-	    			String category = translate(MAP_CONSPECTUS_CATEGORY, cat_code_source, null);
-	    			result.addAll(SolrUtils.createHierarchicFacetValues(category, subcat_name_source));
+    			if(subcat_name.contains(subcat_name_source)){
+    				List<String> category = translate(MAP_CONSPECTUS_CATEGORY, cat_code_source, null);
+	    			result.addAll(SolrUtils.createHierarchicFacetValues(category.get(0), subcat_name_source));
     			}
     		}
     	}

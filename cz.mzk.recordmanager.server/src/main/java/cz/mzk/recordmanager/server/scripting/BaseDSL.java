@@ -31,13 +31,13 @@ public abstract class BaseDSL {
 		this.stopWordsResolver = stopWordsResolver;
 	}
 
-	public String translate(String file, String input, String defaultValue)
+	public List<String> translate(String file, String input, List<String> defaultValue)
 			throws IOException {
 		if (input == null) {
 			return defaultValue;
 		}
 		Mapping mapping = propertyResolver.resolve(file);
-		String result = (String) mapping.get(input);
+		List<String> result = (List<String>) mapping.get(input);
 		if (result == null) {
 			result = defaultValue;
 		}
@@ -45,19 +45,19 @@ public abstract class BaseDSL {
 	}
 
 	public List<String> translate(String file, List<String> inputs,
-			String defaultValue) throws IOException {
+			List<String> defaultValue) throws IOException {
 		if (inputs == null) {
 			return Collections.emptyList();
 		}
 		List<String> translated = new ArrayList<String>();
 		Mapping mapping = propertyResolver.resolve(file);
 		for (String input : inputs) {
-			String result = (String) mapping.get(input);
+			List<String> result = (List<String>) mapping.get(input);
 			if (result == null) {
 				result = defaultValue;
 			}
 			if (result != null) {
-				translated.add(result);
+				translated.addAll(result);
 			}
 		}
 		return translated;

@@ -228,9 +228,9 @@ public class PatentsXmlStreamReader implements MarcReader{
 						String data = xmlReader.getElementText();
 						if (b072 && df != null && data.length() >= 4) {
 						    String s = data.substring(0, 4);
-						    String get = propertyResolver.resolve(PATENTS_MAP).get(s);
+						    List<String> get = propertyResolver.resolve(PATENTS_MAP).get(s);
 						    if (get != null) {
-						    	String temp[] = get.split("\\|");
+						    	String temp[] = get.get(0).split("\\|");
 						    	if (temp.length == 2) {
 									df.addSubfield(factory.newSubfield('a', temp[0]));
 									record.addVariableField(createField072(temp[1]));

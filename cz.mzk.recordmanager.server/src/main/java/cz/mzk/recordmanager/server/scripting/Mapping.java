@@ -5,8 +5,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -20,10 +22,10 @@ import java.util.Map;
  */
 public class Mapping {
 
-	private final Map<String, String> mapping;
+	private final Map<String, List<String>> mapping;
 
 	public Mapping(InputStream is) throws IOException {
-		Map<String, String> map = new HashMap<String, String>(); 
+		Map<String, List<String>> map = new HashMap<String, List<String>>(); 
 		BufferedReader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
 		String line = null;
 		while ((line = reader.readLine()) != null) {
@@ -31,7 +33,10 @@ public class Mapping {
 			if (splitted.length == 2) {
 				String key = trim(splitted[0]);
 				String val = trim(splitted[1]);
-				map.put(key, val);
+				List<String> values = map.get(key);
+				if (values == null)	values = new ArrayList<>();
+				values.add(val);
+				map.put(key, values);
 			}
 		}
 		this.mapping = Collections.unmodifiableMap(map);
@@ -42,7 +47,7 @@ public class Mapping {
 	 * 
 	 * 
 	 */
-	public String get(String key) {
+	public List<String> get(String key) {
 		return mapping.get(key);
 	}
 
