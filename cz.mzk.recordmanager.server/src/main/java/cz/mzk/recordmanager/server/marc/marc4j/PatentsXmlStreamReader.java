@@ -55,7 +55,9 @@ public class PatentsXmlStreamReader implements MarcReader{
     private static final String TEXT_300a_UTILITY_MODEL = "1 užitný vzor";
     private static final String TEXT_300a_APPLICATION = "1 přihláška vynálezu";
     private static final String TEXT_300a_PATENT = "1 patentový spis";
-    private static final String TEXT_500a_PUBLICATION = "Datum zveřejnění přihlášky: %s";
+    private static final String TEXT_500a_PUBLICATION_A3 = "Datum zveřejnění přihlášky: %s";
+    private static final String TEXT_500a_PUBLICATION_B6 = "Datum udělení patentu: %s";
+    private static final String TEXT_500a_PUBLICATION_U1 = "Datum zápisu užitného vzoru: %s";
     private static final String TEXT_500a_APPLICATION = "Datum přihlášení: %s";
     private static final String TEXT_500a_APPL_NUMBER = "Číslo přihlášky: %s";
     private static final String TEXT_500a_DOC_NUMBER = "Číslo dokumentu: %s";
@@ -100,6 +102,10 @@ public class PatentsXmlStreamReader implements MarcReader{
     private static final String B6_URL = "http://spisy.upv.cz/Patents/FullDocuments/%s/%s.pdf";
     private static final Pattern U1_PATTERN = Pattern.compile("St36_CZ_(\\d*)_U1");
     private static final String U1_URL = "http://spisy.upv.cz/UtilityModels/FullDocuments/FDUM%s/uv%s.pdf";
+    
+    private static final String PATENT_TYPE_A3 = "A3";
+    private static final String PATENT_TYPE_B6 = "B6";
+    private static final String PATENT_TYPE_U1 = "U1";
     
     private static final String DATE_ORIGIN_FORMAT = "yyyyMMdd";
     private static final String DATE_OUTPUT_FORMAT = "d. M. yyyy";
@@ -158,6 +164,7 @@ public class PatentsXmlStreamReader implements MarcReader{
         boolean abstratcs = false;
         boolean appl_reference = false;
         char date = ' ';
+        String patentType = "";
         
         try {
 			while(xmlReader.hasNext()){
@@ -167,8 +174,8 @@ public class PatentsXmlStreamReader implements MarcReader{
 					case ELEMENT_RECORD_EP:
 					case ELEMENT_RECORD_CZ:
 						record = factory.newRecord();
-						addIdentifier();
-						addFields();	
+						patentType = addIdentifier();
+						addFields(patentType);	
 						addUrl();
 						addDocNumber();
 						break;
@@ -253,7 +260,19 @@ public class PatentsXmlStreamReader implements MarcReader{
 						if (date == 'p') {
 							addField008(dateStr);
 							addField260(dateStr);
-							addField500aDate(TEXT_500a_PUBLICATION, dateStr);
+							switch (patentType) {
+							case PATENT_TYPE_A3:
+								addField500aDate(TEXT_500a_PUBLICATION_A3, dateStr);
+								break;
+							case PATENT_TYPE_B6:
+								addField500aDate(TEXT_500a_PUBLICATION_B6, dateStr);
+								break;
+							case PATENT_TYPE_U1:
+								addField500aDate(TEXT_500a_PUBLICATION_U1, dateStr);
+								break;
+							default:
+								break;
+							}
 						}
 						else if (date == 'a') {
 							addField500aDate(TEXT_500a_APPLICATION, dateStr);
@@ -262,7 +281,7 @@ public class PatentsXmlStreamReader implements MarcReader{
 						break;
 					case ELEMENT_DOC_NUMBER:
 						if (appl_reference) {
-							add500aApplDocNumber(xmlReader.getElementText());
+							add500aApplDocNumber(xmlReader.getElementText(), patentType);
 						}						
 						break;
 					}	
@@ -354,9 +373,9 @@ public class PatentsXmlStreamReader implements MarcReader{
 		}
     }
     
-    private void add500aApplDocNumber(String data) {
-    	if (record.getControlNumber() != null && !record.getControlNumber().endsWith("_A3")) {
-    		record.addVariableField(factory.newDataField("500", ' ', ' ', "a", String.format(TEXT_500a_APPL_NUMBER, data)));
+	private void add500aApplDocNumber(String data, String patentType) {
+		if (patentType.equals(PATENT_TYPE_B6)) {
+			record.addVariableField(factory.newDataField("500", ' ', ' ', "a", String.format(TEXT_500a_APPL_NUMBER, data)));
 		}
 	}
     
@@ -368,8 +387,14 @@ public class PatentsXmlStreamReader implements MarcReader{
 		}
 	}
     
-    private void addIdentifier() {
+    private String addIdentifier() {
     	record.addVariableField(factory.newControlField("001", xmlReader.getAttributeValue(null, ATTRIBUTE_ID).replace(".xml", "")));
+    	
+		if (A3_PATTERN.matcher(record.getControlNumber()).matches()) return PATENT_TYPE_A3;
+		if (B6_PATTERN.matcher(record.getControlNumber()).matches()) return PATENT_TYPE_B6;
+		if (U1_PATTERN.matcher(record.getControlNumber()).matches()) return PATENT_TYPE_U1;
+		
+		return "";
 	}
     
     private void addDocNumber() {
@@ -384,7 +409,7 @@ public class PatentsXmlStreamReader implements MarcReader{
 		}
 	}
     
-	private void addFields() {
+	private void addFields(String patentType) {
 		record.setLeader(factory.newLeader(TEXT_LEADER));
 
 		SimpleDateFormat sdf = new SimpleDateFormat(DATE_STRING_005);
@@ -394,15 +419,15 @@ public class PatentsXmlStreamReader implements MarcReader{
 		if (f001 != null) {
 			String text300 = "";
 			String text655 = "";
-			if (A3_PATTERN.matcher(f001).matches()) {
+			if (patentType.equals(PATENT_TYPE_A3)) {
 				text300 = TEXT_300a_APPLICATION;
 				text655 = TEXT_655a_APPLICATION;
 			}
-			else if (U1_PATTERN.matcher(f001).matches()) {
+			else if (patentType.equals(PATENT_TYPE_U1)) {
 				text300 = TEXT_300a_UTILITY_MODEL;
 				text655 = TEXT_655a_UTILITY_MODEL;
 			}
-			else if (B6_PATTERN.matcher(f001).matches()) {
+			else if (patentType.equals(PATENT_TYPE_B6)) {
 				text300 = TEXT_300a_PATENT;
 				text655 = TEXT_655a_PATENT;
 			}
