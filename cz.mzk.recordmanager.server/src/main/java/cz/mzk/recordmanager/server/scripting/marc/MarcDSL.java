@@ -645,11 +645,11 @@ public class MarcDSL extends BaseDSL {
     			String cat_code_source = df.getSubfield('9').getData().trim();
     			
     			List<String> cat_code = translate(MAP_CATEGORY_SUBCATEGORY, subcat_code_source, null);
-    			if(!cat_code.contains(cat_code_source)) continue;
+    			if(cat_code != null && !cat_code.contains(cat_code_source)) continue;
 
     			List<String> subcat_name = translate(MAP_SUBCATEGORY_NAME, subcat_code_source, null);
 
-    			if(subcat_name.contains(subcat_name_source)){
+    			if(subcat_name != null && subcat_name.contains(subcat_name_source)){
     				List<String> category = translate(MAP_CONSPECTUS_CATEGORY, cat_code_source, null);
 	    			result.addAll(SolrUtils.createHierarchicFacetValues(category.get(0), subcat_name_source));
     			}
