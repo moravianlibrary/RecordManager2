@@ -77,12 +77,14 @@
 2 = Náboženství
 2-1 = Přirozená teologie. Náboženská filozofie
 2-1 = Přirozená teologie. Náboženská filozofie. Religionistika
+2-1 = Přirozená teologie. Náboženská filozofie. Religionistika.
 2-23/-27 = Bible. Biblistika
 2-74 = Náboženské právo. Církevní právo
 21 = Prehistorická a primitivní náboženství
 22/24 = Náboženství Dálného východu. Indická náboženství. Hinduismus. Buddhismus
 25 = Náboženství, mytologie, kulty
 25 = Náboženství starověku
+25 = Náboženství starověku, mytologie, kulty
 26 = Judaismus
 27 = Křesťanství. Křesťanská církev všeobecně. Eklesiologie
 27-1/-2 = Křesťanská teologie. Dogmatická teologie
@@ -125,6 +127,8 @@
 91 = Geografie jako věda. Výzkum. Cestování
 911 = Obecná geografie. Systematická geografie
 912 = Mapy. Atlasy
+912 = Mapy. Atlasy. Glóby
+912:904 = Staré mapy
 912:51 = Matematická geografie
 913 = Regionální geografie
 913(3) = Geografie starověkého světa
@@ -221,6 +225,7 @@
 780.6 = Hudební nástroje a příslušenství
 781 = Hudební teorie
 782 = Divadelní hudba. Opera, opereta, muzikál
+782 =  Divadelní hudba. Opera
 783 = Církevní hudba. Duchovní hudba. Náboženská hudba
 784 = Vokální hudba
 785 = Instrumentální hudba. Symfonická hudba. Hudba pro více nástrojů
@@ -238,7 +243,7 @@
 547 = Organická chemie
 548 = Krystalografie
 003 = Systémy psaní a písma
-003 = 003 Systémy psaní a písma. Sémiotika (obecně)
+003 = Systémy psaní a písma. Sémiotika (obecně)
 80 = Filologie
 808 = Literární styl. Literární činnost a technika. Efektivní využívání jazyka. Spisovatelská činnost
 81 = Lingvistika. Jazyky
@@ -309,6 +314,7 @@
 821.161.1.09 = Ruská literatura (o ní)
 821.162.1.09 = Polská literatura (o ní)
 821.162.3.09 = Česká literatura (o ní)
+821.162.3.09 = Česká literatura - o ní
 821.162.4.09 = Slovenská literatura (o ní)
 821.163.09 = Jihoslovanské literatury (o nich)
 821.163.1.09 = Staroslověnská literatura (o ní)
@@ -343,9 +349,11 @@
 070 = Noviny. Tisk
 08 = Souborná díla
 09 = Rukopisy, prvotisky, staré tisky. Vzácná a pozoruhodná díla
+09 = Rukopisy, prvotisky, staré tisky
 093 = Prvotisky
 094 = Staré tisky
 094.5 = Tisky (19. stol.)
+094.5 = Tisky (19. století)
 095/096 = Vzácná díla
 316.77 = Informační věda
 655 = Polygrafie. Vydavatelství a knižní obchod
@@ -463,6 +471,7 @@
 626/627 = Vodní stavitelství. Vodní hospodářství
 628 = Sanitární technika. Vodárenství. Odpadové hospodářství. Světelná technika
 628 = Zdravotní technika. Úprava vody. Odpadové hospodářství. Světelná technika
+628 =  Sanitární technika. Úprava vody. Odpadové hospodářství. Světelná technika
 629 = Dopravní prostředky
 629.056.2 = Astronomická navigace
 64 = Domácí hospodářství
@@ -510,6 +519,7 @@
 691 = Stavební hmoty
 692 = Konstrukční prvky a části staveb
 693 = Zednické dílo
+693 = Zednické práce
 694 = Dřevěné stavby. Tesařství. Truhlářství
 696 = Instalace v budovách
 696 = Instalace
@@ -536,6 +546,7 @@
 72/79 = Výtvarné umění
 73 = Sochařství, keramika, porcelán, umělecké zpracování kovů
 74 = Kresba. Umělecká řemesla
+74 = Kresba. Design. Umělecká řemesla
 75 = Malířství
 76 = Grafické umění. Grafika
 77 = Fotografie. Fotografické postupy
