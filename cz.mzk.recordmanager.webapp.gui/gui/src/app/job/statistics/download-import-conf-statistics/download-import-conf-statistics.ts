@@ -61,6 +61,8 @@ export class DownloadImportConfComponent extends StatisticsComponent implements 
 
 		this.fields.push(new Field({'_name': 'duration', '_style': new Style()}));
 
+		this.fields.push(new Field({'_name': 'format', '_style': new Style()}));
+
 		this.sortByMe("jobExecutionId");
 
 		this.getDownloadImportConfStatistics();

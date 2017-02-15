@@ -12,7 +12,7 @@
 			<div class="row">
 				<div class="col-md-2">
 					<div class="input-group">
-						<app-multi-select [itemsAmount]="3" [options]="options" [placeholder]="'Status'" (onSelect)="selected($event)"></app-multi-select>
+						<app-multi-select [multiSelectContent]="'Choose the statuses'" [itemsAmount]="3" [options]="options" [placeholder]="'Status'" (onSelect)="selected($event)"></app-multi-select>
 					</div>
 				</div>
 				<div class="col-md-2">
@@ -60,6 +60,8 @@
 
 				<th>Duration<i (click)="sortByMe('duration')" [ngClass]="{'glyphicon': true, 'glyphicon-arrow-up': getArrow('duration') && getVisibility('duration'), 'glyphicon-arrow-down': !getArrow('duration') && getVisibility('duration'), 'glyphicon-sort': !getVisibility('duration')}"></i></th>
 
+				<th>Format<i (click)="sortByMe('format')" [ngClass]="{'glyphicon': true, 'glyphicon-arrow-up': getArrow('duration') && getVisibility('format'), 'glyphicon-arrow-down': !getArrow('format') && getVisibility('format'), 'glyphicon-sort': !getVisibility('format')}"></i></th>
+
 				<th>Details</th>
 			</tr>
 
@@ -72,9 +74,10 @@
 				<td>{{statistic.startTime | date: "dd/MM/yyyy HH:mm"}}</td>
 				<td>{{statistic.endTime | date: "dd/MM/yyyy HH:mm"}}</td>
 				<td>{{statistic.status}}</td>
-				<td>{{statistic.importJobName}}</td>
+				<td>{{statistic.duration}}</td>
 				<td>{{statistic.noOfRecords}}</td>
 				<td>{{statistic.duration | durationPipe}}</td>
+				<td>{{statistic.format}}</td>
 				<td><a [routerLink]="['../details', statistic.jobExecutionId]"><i class="glyphicon glyphicon-triangle-right"></i></a></td>
 			</tr>
 

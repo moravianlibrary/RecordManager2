@@ -10,6 +10,7 @@ import {LoginModule} from "./login/login.module";
 import {LibraryModule} from "./library/library.module";
 import {JobModule} from "./job/job.module";
 import {AppRoutingModule} from "./app-routing.module";
+import {AboutModule} from "./about/about.module";
 
 
 
@@ -26,7 +27,8 @@ import {AppRoutingModule} from "./app-routing.module";
       LibraryModule,
       LoginModule,
       JobModule,
-      AppRoutingModule
+      AppRoutingModule,
+      AboutModule
   ],
   providers: [],
   bootstrap: [AppComponent]
