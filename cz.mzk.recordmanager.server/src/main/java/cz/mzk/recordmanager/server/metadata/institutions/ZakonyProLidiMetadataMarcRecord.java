@@ -7,6 +7,7 @@ import java.util.List;
 import org.marc4j.marc.DataField;
 
 import cz.mzk.recordmanager.server.marc.MarcRecord;
+import cz.mzk.recordmanager.server.metadata.CitationRecordType;
 import cz.mzk.recordmanager.server.metadata.MetadataMarcRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecordFormat.HarvestedRecordFormatEnum;
 import cz.mzk.recordmanager.server.util.Constants;
@@ -117,4 +118,10 @@ public class ZakonyProLidiMetadataMarcRecord extends MetadataMarcRecord{
 	public List<String> getDefaultStatuses() {
 		return SolrUtils.createHierarchicFacetValues(Constants.DOCUMENT_AVAILABILITY_ONLINE, Constants.DOCUMENT_AVAILABILITY_ONLINE);
 	}
+	
+	@Override
+	public CitationRecordType getCitationFormat() {
+		return CitationRecordType.LAW;
+	}
+	
 }
