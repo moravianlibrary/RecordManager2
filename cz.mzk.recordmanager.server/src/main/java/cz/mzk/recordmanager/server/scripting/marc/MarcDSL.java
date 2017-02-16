@@ -342,7 +342,7 @@ public class MarcDSL extends BaseDSL {
     }
     
     protected List<String> toUpperCaseFirstChar(List<String> strings){
-    	if(strings == null || strings.isEmpty()) return null;
+    	if(strings == null || strings.isEmpty()) return Collections.emptyList();
     	List<String> results = new ArrayList<>();
     	strings.forEach(string -> results.add(string.substring(0,1).toUpperCase() + string.substring(1)));
     	return results;
