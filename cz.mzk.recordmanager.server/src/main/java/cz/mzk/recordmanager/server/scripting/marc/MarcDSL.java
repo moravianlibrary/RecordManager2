@@ -646,7 +646,7 @@ public class MarcDSL extends BaseDSL {
 				String cat_code_source = df.getSubfield('9').getData().trim();
 
 				List<String> cat_code = translate(MAP_CATEGORY_SUBCATEGORY, subcat_code_source, null);
-				if (cat_code != null && !cat_code.contains(cat_code_source)) continue;
+				if (cat_code == null || !cat_code.contains(cat_code_source)) continue;
 
 				List<String> subcat_name = translate(MAP_SUBCATEGORY_NAME, subcat_code_source, null);
 
