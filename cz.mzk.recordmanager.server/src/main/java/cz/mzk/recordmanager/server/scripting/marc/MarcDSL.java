@@ -47,6 +47,7 @@ public class MarcDSL extends BaseDSL {
 	private final static String MAP_SUBCATEGORY_NAME = "subcategory_name.map";
 	private final static String MAP_CONSPECTUS_NAMES = "conspectus_names.map";
 	private final static String MAP_CONSPECTUS_CATEGORY = "conspectus_category.map";
+	private final static String MAP_CONSPECTUS_SUBCAT_CAT_CHANGE = "conspectus_category_change.map";
 	
 	private final static Pattern FIELD_PATTERN = Pattern
 			.compile("([0-9]{3})([a-zA-Z0-9]*)");
@@ -645,9 +646,19 @@ public class MarcDSL extends BaseDSL {
 				String subcat_name_source = df.getSubfield('x').getData().trim();
 				String cat_code_source = df.getSubfield('9').getData().trim();
 
-				List<String> cat_code = translate(MAP_CATEGORY_SUBCATEGORY, subcat_code_source, null);
-				if (cat_code == null || !cat_code.contains(cat_code_source)) continue;
-
+				boolean cat_code_exists = false;
+				List<String> cat_code = translate(MAP_CONSPECTUS_SUBCAT_CAT_CHANGE, subcat_code_source, null);
+				if (cat_code != null) {
+					String[] split = cat_code.get(0).split("\\|");
+					if (split[1].equals(cat_code_source)) {
+						cat_code_source = split[0];
+						cat_code_exists = true;
+					}
+				}
+				if (!cat_code_exists) {
+					cat_code = translate(MAP_CATEGORY_SUBCATEGORY, subcat_code_source, null);
+					if (cat_code == null || !cat_code.contains(cat_code_source)) continue;
+				}
 				List<String> subcat_name = translate(MAP_SUBCATEGORY_NAME, subcat_code_source, null);
 
 				if (subcat_name != null && subcat_name.contains(subcat_name_source)) {
