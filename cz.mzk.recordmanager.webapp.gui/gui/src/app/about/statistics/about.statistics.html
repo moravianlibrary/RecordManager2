@@ -4,7 +4,7 @@
 <div class="panel panel-default">
 	<h4><b>Obecně</b></h4>
 	<section>
-		Statistiky běhu jednotlivých jobů se nacházejí ve rozbalovacím menu <em>Jobs</em>. Po zmačknutí, menu se "rozbáli" a objeví se pod-menu <em>Statistics</em>:
+		Statistiky běhu jednotlivých jobů se nacházejí ve rozbalovacím menu <em>Jobs</em>. Po zmačknutí, menu se rozbalí a objeví se pod-menu <em>Statistics</em>:
 		<br>
 		<img [src]="statisticsLocationPath" class="img-rounded">
 	</section>
@@ -13,14 +13,14 @@
 		Aktualně existuje 6 druhů statistik:
 		<ul>
 			<li><b>Actual</b> - zobrazuje průběh jobů za poslední tyden</li>
-			<li><b>Full havest</b> - zobrazuje statistiky posledních jobů kompletního sklízení</li>
+			<li><b>Full harvest</b> - zobrazuje statistiky posledních jobů kompletního sklízení</li>
 			<li><b>Index all records</b> - zobrazuje statistiky posledních jobů indexaci</li>
 			<li><b>Deduplicate records</b> - zobrazuje statistiky posledních jobů deduplikaci</li>
 			<li><b>Download and import configurations</b> - zobrazuje statistiky posledních jobů indexaci importovaní záznamů</li>
 			<li><b>Regenerate dedup keys</b> - zobrazuje statistiky posledních jobů přegenerování klíčů</li>
 		</ul>
 
-		Statistiky se nacházejí ve vlastních složkach a pro zobrazení statistik konkretního jobu je potřeba zvolit jednu ze složek:
+		Statistiky se nacházejí ve vlastních složkách a pro zobrazení statistik konkretního jobu je potřeba zvolit jednu ze složek:
 		<img [src]="statisticsTabsPath" class="img-rounded">
 	</section>
 
@@ -35,14 +35,14 @@
 		</ul>
 		Okaždem jobu se dá získat podrobnější informace kliknutím šipky ve sloupce <b>Details</b>.
 		<br>
-		Také některé statistiky, kromě informací uvedených výš, uvádějí specifické infromace relevantní pro konkretní job.
+		Také některé statistiky, kromě informací uvedených výš, uvádějí specifické informace relevantní pro konkretní job.
 		<br>
 		Statictiky o <b>Full harvest</b> jobu uvádějí:
 		<ul>
 			<li><b>Conf. ID</b> - což je identifikátorem konfigurace která se používala pří sklízení</li>
 			<li><b>Lib. name</b> - zkrátka názvu knihovný ze které se provádělo sklízení</li>
 			<li><b>URL</b> - odkaz na WEB stránku knihovny</li>
-			<li><b>From/To</b> - určují interval ve kterém by se měla provés aktualizace záznamu</li>
+			<li><b>From/To</b> - určují interval ve kterém by se měla provést aktualizace záznamu</li>
 			<li><b>Records</b> - počet sklízených záznamů</li>
 		</ul>
 	</section>
@@ -50,6 +50,7 @@
 	Statistiky o jobu <b>Index all records</b> navic uvádějí adresu solr <b>Solr URL</b>.
 	<br>
 	U statistik o jobu <b>Download import configurations</b> je informace o formátu konfigurace.
+
 
 
 	<h4><b>Filtrování</b></h4>
@@ -64,11 +65,11 @@
 	</section>
 
 	<section>
-		Pro nastavení parametrů pro pokročilé vyhledávání je potřeba zmačknout symbol kalendáře, po zmačknutí se otevře okno s kalendářem kde lze nastavít odpovidající parameter:
+		Pro nastavení parametrů pro pokročilé vyhledávání je potřeba zmačknout symbol kalendáře, po zmačknutí se otevře okno s kalendářem kde lze nastavit odpovídající parametr:
 		<br>
 		<img [src]="datePicker" class="img-rounded">
 		<br>
-		V tomto okně lze provádet nastavení datu a času. Pro rychlejší nastavní času lze zmačknout na hodnotu hodin(resp. minut) a otevře se panel s volbou hodin(resp. minut):
+		V tomto okně lze provádět nastavení datu a času. Pro rychlejší nastavení času lze zmáčknout na hodnotu hodin(resp. minut) a otevře se panel s volbou hodin(resp. minut):
 		<br>
 		<img [src]="hourMinute" class="img-rounded">
 		<br>
@@ -79,5 +80,10 @@
 		<br>
 	</section>
 
+	<section>
+		Pro zobrazení posledních 10 statistik je potřeba smazat hodnoty všech parametrů (<b>Start, End, From, To</b>) a zmáčknout <b>Search</b>.
+	</section>
+
 
 </div>
+

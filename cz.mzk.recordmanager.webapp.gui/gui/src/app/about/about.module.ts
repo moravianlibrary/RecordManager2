@@ -4,6 +4,7 @@ import {AboutRoutingModule} from "./about-routing.module";
 import {AboutComponent} from "./about.component";
 import {AboutStatisticsComponent} from "./statistics/about.statistics";
 import {AboutLibrariesComponent} from "./libraries/about.libraries";
+import {AboutJobsComponent} from "./jobs/about.jobs";
 
 @NgModule({
   imports: [
@@ -13,7 +14,8 @@ import {AboutLibrariesComponent} from "./libraries/about.libraries";
   declarations: [
       AboutComponent,
 	  AboutStatisticsComponent,
-	  AboutLibrariesComponent
+	  AboutLibrariesComponent,
+	  AboutJobsComponent
   ]
 })
 export class AboutModule { }

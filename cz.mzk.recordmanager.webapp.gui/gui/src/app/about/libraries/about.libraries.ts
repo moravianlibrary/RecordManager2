@@ -5,6 +5,9 @@ import {Component, OnInit} from "@angular/core";
 	styleUrls: ['./about.libraries.css']
 })
 export class AboutLibrariesComponent implements OnInit{
+	imagesRoot : string = "../../../images";
+	addLibrary : string = this.imagesRoot + "/AddLibrary.png";
+	addLibraryForm : string = this.imagesRoot + "/AddLibraryForm.png";
 	ngOnInit(): void {
 	}
 
