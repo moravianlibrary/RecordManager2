@@ -279,7 +279,7 @@
 811.9 = Umělé jazyky
 82 = Literatura. Literární život
 82-1/-8 = Literatura různých forem a žánrů (o ní)
-82-1/-8 = 82-1/-8 Literární formy a žánry (o nich)
+82-1/-8 = Literární formy a žánry (o nich)
 821.41.09 = Afroasijské (hamitosemitské) literatury (o nich)
 82-31/-34 = Milostná, dobrodružná, fantastická próza (o ní)
 82-31/-34 = Milostná, dobrodružná, vědeckofantastická próza (o ní)
@@ -350,6 +350,7 @@
 08 = Souborná díla
 09 = Rukopisy, prvotisky, staré tisky. Vzácná a pozoruhodná díla
 09 = Rukopisy, prvotisky, staré tisky
+091 = Rukopisy
 093 = Prvotisky
 094 = Staré tisky
 094.5 = Tisky (19. stol.)
