@@ -82,7 +82,10 @@ public class NlkMarcInterceptor extends DefaultMarcInterceptor{
 					
 					newRecord.addVariableField(newDf);
 				}
-				else{
+				else if (df.getTag().equals("990") || df.getTag().equals("991")) {
+					continue;
+				}
+				else {
 					newRecord.addVariableField(df);
 				}
 			}
