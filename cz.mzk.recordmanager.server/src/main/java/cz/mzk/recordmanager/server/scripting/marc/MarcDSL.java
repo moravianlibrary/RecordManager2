@@ -43,8 +43,8 @@ public class MarcDSL extends BaseDSL {
 	private final static String SUPPRESS = "<<[^<{2}]*>>";
 	private final static String TO_BLANK = "['\\[\\]\"`!()\\-{};:.,?/\\@*%=^_|~]";
 
-	private final static String MAP_CATEGORY_SUBCATEGORY = "category_subcategory.map";
-	private final static String MAP_SUBCATEGORY_NAME = "subcategory_name.map";
+	private final static String MAP_CATEGORY_SUBCATEGORY = "conspectus_category_subcategory.map";
+	private final static String MAP_SUBCATEGORY_NAME = "conspectus_subcategory_name.map";
 	private final static String MAP_CONSPECTUS_NAMES = "conspectus_names.map";
 	private final static String MAP_CONSPECTUS_CATEGORY = "conspectus_category.map";
 	private final static String MAP_CONSPECTUS_SUBCAT_CAT_CHANGE = "conspectus_category_change.map";
