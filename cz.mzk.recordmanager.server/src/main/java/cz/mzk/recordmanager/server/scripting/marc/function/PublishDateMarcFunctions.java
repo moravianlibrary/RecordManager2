@@ -3,11 +3,13 @@ package cz.mzk.recordmanager.server.scripting.marc.function;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import org.marc4j.marc.DataField;
@@ -23,7 +25,8 @@ import cz.mzk.recordmanager.server.scripting.marc.MarcFunctionContext;
 public class PublishDateMarcFunctions implements MarcRecordFunctions {
 
 	private static final int MIN_YEAR = 1199;
-	private static final int MAX_YEAR = Calendar.getInstance().get(Calendar.YEAR);
+	private static final int ACTUAL_YEAR = Calendar.getInstance().get(Calendar.YEAR);
+	private static final int MAX_YEAR = ACTUAL_YEAR + 1;
 
 	// 2004
 	private static final Pattern SINGLE_YEAR_PATTERN = Pattern
@@ -44,6 +47,8 @@ public class PublishDateMarcFunctions implements MarcRecordFunctions {
 	// [1991] or asi 1991
 	private static final Pattern FOUR_DIGIT_YEAR_PATTERN = Pattern
 			.compile("\\d{4}");
+	
+	private static final Pattern DIGITS_PATTERN = Pattern.compile("(\\d+)");
 	
 	public Set<Integer> parseRanges(Collection<String> ranges) {
 		Set<Integer> result = new TreeSet<>();
@@ -70,10 +75,14 @@ public class PublishDateMarcFunctions implements MarcRecordFunctions {
 				for (String year : years) {
 					result.add(Integer.parseInt(year));
 				}
-			} else if ((matcher = FOUR_DIGIT_YEAR_PATTERN.matcher(range)).find()){
-				int year = Integer.parseInt(matcher.group(0));
-				if(year == 9999) year = MAX_YEAR;
-				result.add(year);
+			} else if ((matcher = DIGITS_PATTERN.matcher(range)).find()) {
+				try {
+					int year = Integer.parseInt(matcher.group(0));
+					if(year == 9999) year = ACTUAL_YEAR;
+					result.add(year);
+				}
+				catch (NumberFormatException nfe) {
+				}
 			} else {
 //				logger.warn("Range '{}' not matched", range);
 			}
@@ -85,7 +94,7 @@ public class PublishDateMarcFunctions implements MarcRecordFunctions {
 		MarcRecord record = ctx.record();
 		Set<Integer> years = new TreeSet<Integer>();
 
-		years.addAll(getPublishDateFromFields(ctx));
+		years.addAll(parseRanges(getPublishDateFromFields(ctx)));
 
         String field008 = record.getControlField("008");
         years.addAll(parsePublishDateFrom008(field008));
@@ -93,21 +102,25 @@ public class PublishDateMarcFunctions implements MarcRecordFunctions {
         return years;
 	}
 
-	public Set<Integer> getPublishDateFromFields(MarcFunctionContext ctx){
+	public Set<String> getPublishDateFromFields(MarcFunctionContext ctx){
 		MarcRecord record = ctx.record();
-		Set<Integer> years = new TreeSet<Integer>();
+		Set<String> years = new TreeSet<>();
 
 		for(DataField datafield: record.getDataFields("264")){
 			if(datafield.getIndicator2() == '1'){
 				if(datafield.getSubfield('c') != null){
-					years.addAll(getPublishDateFromItem(datafield.getSubfield('c').getData()));
+					years.add(datafield.getSubfield('c').getData());
 				}
 			}
 		}
-		years.addAll(getPublishDateFromItems(ctx, "260", 'c'));
-		years.addAll(getPublishDateFromItems(ctx, "773", '9'));
-		years.addAll(getPublishDateFromItems(ctx, "996", 'y'));
-
+		years.addAll(record.getFields("260", 'c'));
+		years.addAll(record.getFields("773", '9'));
+		years.addAll(record.getFields("996", 'y'));
+		years.stream().map(y -> {
+			Matcher matcher;
+			if((matcher = FOUR_DIGIT_YEAR_PATTERN.matcher(y)).matches()) return matcher.group(0);
+			else return null;
+		}).collect(Collectors.toCollection(ArrayList::new));
 		return years;
 	}
 
@@ -141,8 +154,8 @@ public class PublishDateMarcFunctions implements MarcRecordFunctions {
 		else return result;
 		
 		if(type == 'd' || type == 'q' || type == 'c'){
-			if (to > MAX_YEAR) {
-	            to = MAX_YEAR;
+			if (to > ACTUAL_YEAR) {
+	            to = ACTUAL_YEAR;
 	        }
 			for (int year = from; year <= to; year++) {
 				result.add(year);
@@ -154,18 +167,6 @@ public class PublishDateMarcFunctions implements MarcRecordFunctions {
 		}
 		
 		return result;
-	}
-
-	private Set<Integer> getPublishDateFromItem(String data) {
-		List<String> ranges = new ArrayList<String>();
-		ranges.add(data);
-		return parseRanges(ranges);
-	}
-	
-	private Set<Integer> getPublishDateFromItems(MarcFunctionContext ctx, String tag, char subfield) {
-		MarcRecord record = ctx.record();
-		List<String> ranges = record.getFields(tag, "", subfield) ;
-		return parseRanges(ranges);
 	}
 
 	private List<Integer> range(int from, int to) {
@@ -191,7 +192,7 @@ public class PublishDateMarcFunctions implements MarcRecordFunctions {
 			if(year.length() > 4) year = year.substring(0, 4);
 			if (SINGLE_YEAR_PATTERN.matcher(year).matches()) {
 				int yearInt = Integer.parseInt(year);
-				if (MIN_YEAR < yearInt && yearInt <= MAX_YEAR+1) {
+				if (MIN_YEAR < yearInt && yearInt <= MAX_YEAR) {
 					return year;
 				}
 				
@@ -204,7 +205,7 @@ public class PublishDateMarcFunctions implements MarcRecordFunctions {
 			String yearS = field008.substring(7, 11);
 			if(SINGLE_YEAR_PATTERN.matcher(yearS).matches()) {
 				 int yearI = Integer.parseInt(yearS);
-				 if((1500 < yearI) && (yearI < (MAX_YEAR+1))){
+				 if((1500 < yearI) && (yearI < (MAX_YEAR))){
 					 return yearS;
 				 }
 			}
@@ -213,12 +214,10 @@ public class PublishDateMarcFunctions implements MarcRecordFunctions {
 	}
 	
 	private String getPublishDateForSortingForOthers(MarcFunctionContext ctx) {
-		Set<Integer> years = getPublishDateFromFields(ctx);
-
-		years = getPublishDateFromFields(ctx);
-
-		MarcRecord mr = ctx.record();
-		String field008 = mr.getControlField("008");
+		Set<Integer> years = new TreeSet<>();
+		years.addAll(parseRangesForSorting(getPublishDateFromFields(ctx)));
+		
+		String field008 = ctx.record().getControlField("008");
 
 		if (field008 != null && field008.length() >= 12) {
 			char type = field008.charAt(6);
@@ -232,7 +231,7 @@ public class PublishDateMarcFunctions implements MarcRecordFunctions {
 					if((SINGLE_YEAR_PATTERN.matcher(toString)).matches()){
 						to = Integer.parseInt(toString);
 					}
-					if(to <= MAX_YEAR+1) years.addAll(parsePublishDateFrom008(field008));
+					if(to <= MAX_YEAR) years.addAll(parsePublishDateFrom008(field008));
 				}
 				else if(field008.length() > 11){
 					String fromString = field008.substring(7, 11);
@@ -240,17 +239,37 @@ public class PublishDateMarcFunctions implements MarcRecordFunctions {
 					if((SINGLE_YEAR_PATTERN.matcher(fromString)).matches()){
 						from = Integer.parseInt(fromString);
 					}
-					if(from <= MAX_YEAR+1) years.addAll(parsePublishDateFrom008(field008));
+					if(from <= MAX_YEAR) years.addAll(parsePublishDateFrom008(field008));
 				}
 			}
         }
 		if (!years.isEmpty()) {
-			years.removeIf(year -> year <= MIN_YEAR || MAX_YEAR+1 < year);
+			years.removeIf(year -> year <= MIN_YEAR || MAX_YEAR < year);
 			if (!years.isEmpty()) {
 				return years.iterator().next().toString();
 			}
 		}
 		return null;
+	}
+	
+	private Set<Integer> parseRangesForSorting(Set<String> dates) {
+		if (dates == null) return Collections.emptySet();
+		Set<Integer> results = new TreeSet<>();
+		Matcher matcher;
+		for (String date : dates) {
+			Set<Integer> dateInt = parseRanges(Collections.singletonList(date));
+			if (dateInt.isEmpty()) {
+				if ((matcher = DIGITS_PATTERN.matcher(date)).find()) {
+					try {
+						int year = Integer.parseInt(matcher.group(0));
+						if (MIN_YEAR <= year && year <= MAX_YEAR) results.add(year);
+					} catch (NumberFormatException e) {
+					}
+				}
+			}
+			else results.addAll(dateInt);
+		}		
+		return results;
 	}
 	
 	public String getPublishDateDisplay(MarcFunctionContext ctx) {
