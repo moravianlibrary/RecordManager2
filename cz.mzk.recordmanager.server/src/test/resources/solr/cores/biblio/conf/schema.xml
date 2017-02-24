@@ -140,7 +140,7 @@
    <!-- Generic Fields -->
    <field name="language" type="string" indexed="false" stored="true" multiValued="true" docValues="true"/>
    <field name="format" type="string" indexed="true" stored="true" multiValued="true"/>
-   <field name="author" type="textProper" indexed="true" stored="true" termVectors="true"/>
+   <field name="author" type="textProper" indexed="true" stored="true" termVectors="true" omitNorms="true"/>
    <field name="author-letter" type="string" indexed="true" stored="true"/>
    <field name="authorStr" type="textFacet" indexed="true" stored="false"/>
    <field name="title" type="text" indexed="true" stored="true"/>
