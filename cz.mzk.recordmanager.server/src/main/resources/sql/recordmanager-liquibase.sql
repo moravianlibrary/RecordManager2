@@ -1002,3 +1002,8 @@ INSERT INTO harvested_record_format(id, name) VALUES (63, 'PATENTS_PATENTS');
 
 --changeset tomascejpek:48 context:cpk
 UPDATE import_conf SET generate_dedup_keys=false WHERE id=347;
+
+--changeset tomascejpek:49 context:cpk
+UPDATE import_conf SET id_prefix='muzibib' WHERE id=349;
+UPDATE library SET name='MUZIBIB' WHERE id=149;
+UPDATE import_conf SET generate_dedup_keys=false WHERE id=331;

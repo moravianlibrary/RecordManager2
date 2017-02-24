@@ -749,3 +749,8 @@ INSERT INTO harvested_record_format(id, name) VALUES (63, 'PATENTS_PATENTS');
 
 -- 27. 01. 2017 tomascejpek
 UPDATE import_conf SET generate_dedup_keys=false WHERE id=347;
+
+-- 24. 02. 2017 tomascejpek
+UPDATE import_conf SET id_prefix='muzibib' WHERE id=349;
+UPDATE library SET name='MUZIBIB' WHERE id=149;
+UPDATE import_conf SET generate_dedup_keys=false WHERE id=331;
