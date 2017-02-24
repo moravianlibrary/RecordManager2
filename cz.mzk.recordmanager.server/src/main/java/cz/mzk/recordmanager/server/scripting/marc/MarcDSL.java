@@ -43,9 +43,11 @@ public class MarcDSL extends BaseDSL {
 	private final static String SUPPRESS = "<<[^<{2}]*>>";
 	private final static String TO_BLANK = "['\\[\\]\"`!()\\-{};:.,?/\\@*%=^_|~]";
 
-	private final static String MAP_CATEGORY_SUBCATEGORY = "category_subcategory.map";
-	private final static String MAP_SUBCATEGORY_NAME = "subcategory_name.map";
+	private final static String MAP_CATEGORY_SUBCATEGORY = "conspectus_category_subcategory.map";
+	private final static String MAP_SUBCATEGORY_NAME = "conspectus_subcategory_name.map";
+	private final static String MAP_CONSPECTUS_NAMES = "conspectus_names.map";
 	private final static String MAP_CONSPECTUS_CATEGORY = "conspectus_category.map";
+	private final static String MAP_CONSPECTUS_SUBCAT_CAT_CHANGE = "conspectus_category_change.map";
 	
 	private final static Pattern FIELD_PATTERN = Pattern
 			.compile("([0-9]{3})([a-zA-Z0-9]*)");
@@ -258,9 +260,9 @@ public class MarcDSL extends BaseDSL {
     	
     	Set<String> result = new HashSet<String>();
     	for(String publisher: publishers){
-    		String newPublisher = translate("publisher.map", publisher, null);
+    		List<String> newPublisher = translate("publisher.map", publisher, null);
     		if(newPublisher == null) result.add(publisher);
-    		else result.add(newPublisher);
+    		else result.addAll(newPublisher);
     	}
     	return new ArrayList<String>(result);
     }
@@ -323,7 +325,7 @@ public class MarcDSL extends BaseDSL {
     	for(DataField df: record.getDataFields("650")){
     		if(df.getSubfield('2') != null && df.getSubfield('2').getData().contains("psh")){
     			if(df.getSubfield('x') != null){ 
-    				subjects.add(toUpperCaseFirstChar(translate("psh.map", df.getSubfield('x').getData(), null)));
+    				subjects.addAll(toUpperCaseFirstChar(translate("psh.map", df.getSubfield('x').getData(), null)));
     			}
     		}
     	}
@@ -338,6 +340,13 @@ public class MarcDSL extends BaseDSL {
     protected String toUpperCaseFirstChar(String string){
     	if(string == null || string.isEmpty()) return null;
     	return string.substring(0,1).toUpperCase() + string.substring(1);
+    }
+    
+    protected List<String> toUpperCaseFirstChar(List<String> strings){
+    	if(strings == null || strings.isEmpty()) return Collections.emptyList();
+    	List<String> results = new ArrayList<>();
+    	strings.forEach(string -> results.add(string.substring(0,1).toUpperCase() + string.substring(1)));
+    	return results;
     }
 
     public Set<String> getISBNISSNISMN(){
@@ -628,29 +637,46 @@ public class MarcDSL extends BaseDSL {
     	return result;
     }
     
-    public Set<String> getConspectus() throws IOException{
-    	Set<String> result = new HashSet<>();
-    	for(DataField df: record.getDataFields("072")){
-    		if((df.getSubfield('2') != null) && (df.getSubfield('2').getData().equals("Konspekt"))
-    				&& (df.getSubfield('9') != null) && (df.getSubfield('x') != null && (df.getSubfield('a') != null))){
-    			String subcat_code_source = df.getSubfield('a').getData().trim();
-    			String subcat_name_source = df.getSubfield('x').getData().trim();
-    			String cat_code_source = df.getSubfield('9').getData().trim();
-    			
-    			String cat_code = translate(MAP_CATEGORY_SUBCATEGORY, subcat_code_source, null);
-    			if(!cat_code_source.equals(cat_code)) continue;
+	public Set<String> getConspectus() throws IOException {
+		Set<String> result = new HashSet<>();
+		for (DataField df: record.getDataFields("072")) {
+			if ((df.getSubfield('2') != null) && (df.getSubfield('2').getData().equals("Konspekt"))
+					&& (df.getSubfield('9') != null) && (df.getSubfield('x') != null && (df.getSubfield('a') != null))) {
+				String subcat_code_source = df.getSubfield('a').getData().trim();
+				String subcat_name_source = df.getSubfield('x').getData().trim();
+				String cat_code_source = df.getSubfield('9').getData().trim();
 
-    			String subcat_name = translate(MAP_SUBCATEGORY_NAME, subcat_code_source, null);
+				boolean cat_code_exists = false;
+				List<String> cat_code = translate(MAP_CONSPECTUS_SUBCAT_CAT_CHANGE, subcat_code_source, null);
+				if (cat_code != null) {
+					String[] split = cat_code.get(0).split("\\|");
+					if (split[1].equals(cat_code_source)) {
+						cat_code_source = split[0];
+						cat_code_exists = true;
+					}
+				}
+				if (!cat_code_exists) {
+					cat_code = translate(MAP_CATEGORY_SUBCATEGORY, subcat_code_source, null);
+					if (cat_code == null || !cat_code.contains(cat_code_source)) continue;
+				}
+				List<String> subcat_name = translate(MAP_SUBCATEGORY_NAME, subcat_code_source, null);
 
-    			if(subcat_name_source.equals(subcat_name)){
-	    			String category = translate(MAP_CONSPECTUS_CATEGORY, cat_code_source, null);
-	    			result.addAll(SolrUtils.createHierarchicFacetValues(category, subcat_name_source));
-    			}
-    		}
-    	}
-    	
-    	return result;
-    }
+				if (subcat_name != null && subcat_name.contains(subcat_name_source)) {
+					String subcat_name_for_facet = null;
+					List<String> subcat_name_temp = translate(MAP_CONSPECTUS_NAMES, subcat_code_source + " - " + subcat_name_source, null);
+
+					if (subcat_name_temp != null && !subcat_name_temp.isEmpty()) {
+						subcat_name_for_facet = subcat_name_temp.get(0);
+					}
+					else subcat_name_for_facet = subcat_name_source;
+					List<String> category = translate(MAP_CONSPECTUS_CATEGORY, cat_code_source, null);
+					result.addAll(SolrUtils.createHierarchicFacetValues(category.get(0), subcat_name_for_facet));
+				}
+			}
+		}
+
+		return result;
+	}
     
     public Set<String> getAuthorAutocomplete(String tags){
     	Set<String> result = new HashSet<>();
