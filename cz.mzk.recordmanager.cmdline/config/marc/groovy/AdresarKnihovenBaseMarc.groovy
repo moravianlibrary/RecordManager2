@@ -13,3 +13,4 @@ emk_display = getFirstFieldForAdresar "EMKa"
 type_display = getFirstFieldForAdresar "TYPb"
 phone_display_mv = getFieldsForAdresar "TELa", SubfieldExtractionMethod.SEPARATED
 fax_display_mv = getFieldsForAdresar "FAXa", SubfieldExtractionMethod.SEPARATED
+note2_display = getFirstFieldForAdresar "POUa"
