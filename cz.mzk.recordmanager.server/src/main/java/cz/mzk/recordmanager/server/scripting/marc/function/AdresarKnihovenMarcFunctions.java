@@ -22,4 +22,14 @@ public class AdresarKnihovenMarcFunctions implements MarcRecordFunctions {
 		return ctx.record().getField(fieldTag, subFields.toCharArray());
 	}
 
+	public String getFirstFieldSeparatedForAdresar(MarcFunctionContext ctx, String tag, String separator) {
+		Matcher matcher = FIELD_PATTERN.matcher(tag);
+		if (!matcher.matches()) {
+			throw new IllegalArgumentException("Tag can't be parsed: " + tag);
+		}
+		String fieldTag = matcher.group(1);
+		String subFields = matcher.group(2);
+		return ctx.record().getField(fieldTag, separator, subFields.toCharArray());
+	}
+
 }
