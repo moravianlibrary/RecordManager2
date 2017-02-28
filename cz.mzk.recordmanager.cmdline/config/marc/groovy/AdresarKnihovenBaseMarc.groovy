@@ -1,3 +1,5 @@
+import cz.mzk.recordmanager.server.marc.SubfieldExtractionMethod;
+
 recordtype = "adresar"
 
 fullrecord = getFullrecord()
@@ -9,3 +11,4 @@ note_display = getFirstFieldForAdresar "POIa"
 ico_display = getFirstFieldForAdresar "ICOa"
 emk_display = getFirstFieldForAdresar "EMKa"
 type_display = getFirstFieldForAdresar "TYPb"
+phone_display_mv = getFieldsForAdresar "TELa", SubfieldExtractionMethod.SEPARATED
