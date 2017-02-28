@@ -387,3 +387,11 @@ CREATE TABLE inspiration (
   name					VARCHAR(128),
   FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE
 );
+
+CREATE TABLE adresar_knihoven (
+  id                   DECIMAL(10) PRIMARY KEY,
+  record_id            VARCHAR(128),
+  updated              TIMESTAMP,
+  format               VARCHAR(12) NOT NULL,
+  raw_record           BYTEA
+);
