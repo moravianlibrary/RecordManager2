@@ -11,6 +11,7 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import cz.mzk.recordmanager.server.model.AdresarKnihoven;
 import cz.mzk.recordmanager.server.model.DedupRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
 
@@ -41,6 +42,12 @@ public class DelegatingSolrRecordMapper implements SolrRecordMapper, Initializin
 
 	@Override
 	public Map<String, Object> map(HarvestedRecord record) {
+		SolrRecordMapper mapper = mapperByFormat.get(record.getFormat());
+		return mapper.map(record);
+	}
+	
+	@Override
+	public Map<String, Object> map(AdresarKnihoven record) {
 		SolrRecordMapper mapper = mapperByFormat.get(record.getFormat());
 		return mapper.map(record);
 	}

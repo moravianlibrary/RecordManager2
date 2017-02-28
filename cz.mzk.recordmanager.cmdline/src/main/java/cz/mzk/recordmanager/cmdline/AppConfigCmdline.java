@@ -31,6 +31,7 @@ import cz.mzk.recordmanager.server.imports.ObalkyKnihHarvestJobConfig;
 import cz.mzk.recordmanager.server.imports.ZakonyProLidiHarvestJobConfig;
 import cz.mzk.recordmanager.server.imports.inspirations.InspirationImportJobConfig;
 import cz.mzk.recordmanager.server.index.DeleteAllRecordsFromSolrJobConfig;
+import cz.mzk.recordmanager.server.index.IndexAdresarKnihovenToSolrJobConfig;
 import cz.mzk.recordmanager.server.index.IndexHarvestedRecordsToSolrJobConfig;
 import cz.mzk.recordmanager.server.index.IndexRecordsToSolrJobConfig;
 import cz.mzk.recordmanager.server.kramerius.fulltext.KrameriusFulltextJobConfig;
@@ -77,6 +78,7 @@ public class AppConfigCmdline {
 				CosmotronHarvestJobConfig.class,
 				DedupRecordsJobConfig.class,
 				IndexRecordsToSolrJobConfig.class,
+				IndexAdresarKnihovenToSolrJobConfig.class,
 				DeleteAllHarvestsJobConfig.class,
 				RegenerateDedupKeysJobConfig.class,
 				ImportRecordJobConfig.class,

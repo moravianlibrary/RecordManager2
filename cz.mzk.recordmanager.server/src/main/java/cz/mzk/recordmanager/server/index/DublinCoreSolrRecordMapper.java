@@ -14,6 +14,7 @@ import cz.mzk.recordmanager.server.ResourceProvider;
 import cz.mzk.recordmanager.server.dc.DublinCoreParser;
 import cz.mzk.recordmanager.server.dc.DublinCoreRecord;
 import cz.mzk.recordmanager.server.metadata.MetadataRecordFactory;
+import cz.mzk.recordmanager.server.model.AdresarKnihoven;
 import cz.mzk.recordmanager.server.model.DedupRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.scripting.MappingScript;
@@ -61,6 +62,12 @@ public class DublinCoreSolrRecordMapper implements SolrRecordMapper,
 	@Override
 	public Map<String, Object> map(HarvestedRecord record) {
 		return parseAsLocalRecord(record);
+	}
+	
+	@Override
+	public Map<String, Object> map(AdresarKnihoven record) {
+		// nothing to return
+		return null;
 	}
 
 	protected Map<String, Object> parseAsDedupRecord(HarvestedRecord record) {

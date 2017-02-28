@@ -25,6 +25,7 @@ import cz.mzk.recordmanager.server.index.enrich.HarvestedRecordEnricher;
 import cz.mzk.recordmanager.server.marc.MarcXmlParser;
 import cz.mzk.recordmanager.server.metadata.MetadataRecord;
 import cz.mzk.recordmanager.server.metadata.MetadataRecordFactory;
+import cz.mzk.recordmanager.server.model.AdresarKnihoven;
 import cz.mzk.recordmanager.server.model.DedupRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecordFormat.HarvestedRecordFormatEnum;
@@ -143,6 +144,21 @@ public class SolrInputDocumentFactoryImpl implements SolrInputDocumentFactory, I
 		return Collections.singletonList(mergedDocument);
 	}
 
+	@Override
+	public SolrInputDocument create(AdresarKnihoven record) {
+		try {
+			Map<String, Object> fields = mapper.map(record);
+			SolrInputDocument document = asSolrDocument(fields);
+			if (!document.containsKey(SolrFieldConstants.ID_FIELD)) {
+				document.addField(SolrFieldConstants.ID_FIELD, record.getRecordId());
+			}
+			return document;
+		} catch (Exception ex) {
+			logger.error(String.format("Exception thrown when indexing dedup_record with id=%s", record.getRecordId()), ex);
+			return null;
+		}
+	}
+	
 	@SuppressWarnings("unchecked")
 	protected void updateHoldings(String id, Map<String, Object> fields) {
 		List<String> holdings = (List<String>) fields.get(SolrFieldConstants.HOLDINGS_996_FIELD);

@@ -1,0 +1,3 @@
+recordtype = "adresar"
+
+fullrecord = getFullrecord()
