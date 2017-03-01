@@ -35,7 +35,7 @@ public class AdresarKnihovenMarcFunctions implements MarcRecordFunctions {
 		return ctx.record().getField(fieldTag, separator, subFields.toCharArray());
 	}
 
-	public List<String> getFieldsForAdresar(MarcFunctionContext ctx, String tags, SubfieldExtractionMethod method) {
+	public List<String> getFieldsForAdresar(MarcFunctionContext ctx, String tags, SubfieldExtractionMethod method, String separator) {
 		List<String> result = new ArrayList<>();
 		for (String tag : tags.split(":")) {
 			Matcher matcher = FIELD_PATTERN.matcher(tag);
@@ -44,7 +44,7 @@ public class AdresarKnihovenMarcFunctions implements MarcRecordFunctions {
 			}
 			String fieldTag = matcher.group(1);
 			String subFields = matcher.group(2);
-			result.addAll(ctx.record().getFields(fieldTag, null, method, " ", subFields.toCharArray()));
+			result.addAll(ctx.record().getFields(fieldTag, null, method, separator, subFields.toCharArray()));
 		}
 		return result;
 	}
