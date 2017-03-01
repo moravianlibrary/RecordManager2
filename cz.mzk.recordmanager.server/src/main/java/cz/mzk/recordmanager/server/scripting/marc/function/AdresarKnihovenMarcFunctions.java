@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.marc4j.marc.DataField;
 import org.springframework.stereotype.Component;
 
 import cz.mzk.recordmanager.server.marc.SubfieldExtractionMethod;
@@ -47,6 +48,23 @@ public class AdresarKnihovenMarcFunctions implements MarcRecordFunctions {
 			result.addAll(ctx.record().getFields(fieldTag, null, method, separator, subFields.toCharArray()));
 		}
 		return result;
+	}
+	
+	public List<String> adresarGetResponsibility(MarcFunctionContext ctx) {
+		List<String> results = new ArrayList<>();
+		char[] sfCodes = new char[]{'t', 'k', 'p', 'r', 'f', 'e'};
+		String[] separators = new String[]{" ", " ", " (", ") ; ", " ; ", ""};
+		for (DataField df : ctx.record().getDataFields("JMN")) {
+			StringBuilder sb = new StringBuilder();
+			for (int i = 0; i < separators.length; i++) {
+				if (df.getSubfield(sfCodes[i]) != null) {
+					sb.append(df.getSubfield(sfCodes[i]).getData());
+				}
+				sb.append(separators[i]);
+			}
+			results.add(sb.toString().trim());
+		}
+		return results;
 	}
 
 }
