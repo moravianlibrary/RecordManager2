@@ -20,3 +20,4 @@ directory_display = getFirstFieldSeparatedForAdresar "ADKuz", " | "
 url_display_mv = getFieldsForAdresar "URLuz", SubfieldExtractionMethod.JOINED, " | "
 function_display_mv = translate("adresar_function.map", getFieldsForAdresar("FCEa", SubfieldExtractionMethod.SEPARATED, null), null)
 services_display_mv = translate("adresar_services.map", getFieldsForAdresar("SLUa", SubfieldExtractionMethod.SEPARATED, null), null)
+projects_display_mv = translate("adresar_projects.map", getFieldsForAdresar("PRKa", SubfieldExtractionMethod.SEPARATED, null), null)
