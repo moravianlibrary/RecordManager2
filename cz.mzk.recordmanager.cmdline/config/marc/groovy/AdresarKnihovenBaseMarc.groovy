@@ -15,3 +15,4 @@ phone_display_mv = getFieldsForAdresar "TELa", SubfieldExtractionMethod.SEPARATE
 fax_display_mv = getFieldsForAdresar "FAXa", SubfieldExtractionMethod.SEPARATED
 note2_display = getFirstFieldForAdresar "POUa"
 branchurl_display = getFirstFieldForAdresar "POBu"
+branch_display = getFirstFieldSeparatedForAdresar "POBnamg", " | "
