@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import cz.mzk.recordmanager.server.marc.SubfieldExtractionMethod;
 import cz.mzk.recordmanager.server.scripting.marc.MarcFunctionContext;
+import cz.mzk.recordmanager.server.util.SolrUtils;
 
 @Component
 public class AdresarKnihovenMarcFunctions implements MarcRecordFunctions {
@@ -105,6 +106,15 @@ public class AdresarKnihovenMarcFunctions implements MarcRecordFunctions {
 			if (!sb.toString().isEmpty()) results.add(sb.toString().trim());
 		}
 		return results;
+	}
+	
+	public List<String> adresarGetRegionDistrictFacet(MarcFunctionContext ctx) {
+		String region = getFirstFieldForAdresar(ctx, "KRJa");
+		String district = getFirstFieldForAdresar(ctx, "KRJb");
+		if (region != null && district != null) {
+			return SolrUtils.createHierarchicFacetValues(getFirstFieldForAdresar(ctx, "KRJa"), getFirstFieldForAdresar(ctx, "KRJb"));
+		}
+		return null;
 	}
 
 }

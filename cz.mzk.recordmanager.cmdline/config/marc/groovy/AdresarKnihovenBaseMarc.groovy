@@ -29,3 +29,5 @@ mvs_display_mv = adresarGetEmailOrMvs "MVScu"
 town_search_txt = getFirstFieldForAdresar "MESa"
 region_search_txt = getFirstFieldForAdresar "KRJa"
 district_search_txt = getFirstFieldForAdresar "KRJb"
+
+region_disctrict_facet_str_mv = adresarGetRegionDistrictFacet()
