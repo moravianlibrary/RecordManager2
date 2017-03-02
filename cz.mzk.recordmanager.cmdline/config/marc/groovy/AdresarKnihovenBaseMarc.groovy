@@ -25,3 +25,7 @@ responsibility_display_mv = adresarGetResponsibility()
 address_display_mv = adresarGetAddress()
 email_display_mv = adresarGetEmailOrMvs "EMLuz"
 mvs_display_mv = adresarGetEmailOrMvs "MVScu"
+
+town_search_txt = getFirstFieldForAdresar "MESa"
+region_search_txt = getFirstFieldForAdresar "KRJa"
+district_search_txt = getFirstFieldForAdresar "KRJb"
