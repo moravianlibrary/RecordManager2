@@ -83,5 +83,28 @@ public class AdresarKnihovenMarcFunctions implements MarcRecordFunctions {
 		}
 		return results;
 	}
+	
+	public List<String> adresarGetEmailOrMvs(MarcFunctionContext ctx, String tag) {
+		List<String> results = new ArrayList<>();
+		Matcher matcher = FIELD_PATTERN.matcher(tag);
+		if (!matcher.matches()) {
+			throw new IllegalArgumentException("Tag can't be parsed: " + tag);
+		}
+		String fieldTag = matcher.group(1);
+		String subFields = matcher.group(2);
+		for (DataField df : ctx.record().getDataFields(fieldTag)) {
+			StringBuilder sb = new StringBuilder();
+			if (df.getSubfield(subFields.charAt(0)) != null) {
+				sb.append(df.getSubfield(subFields.charAt(0)).getData());
+			}
+			if (df.getSubfield(subFields.charAt(1)) != null) {
+				sb.append(" (");
+				sb.append(df.getSubfield(subFields.charAt(1)).getData());
+				sb.append(")");
+			}
+			if (!sb.toString().isEmpty()) results.add(sb.toString().trim());
+		}
+		return results;
+	}
 
 }

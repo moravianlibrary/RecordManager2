@@ -23,3 +23,5 @@ services_display_mv = translate("adresar_services.map", getFieldsForAdresar("SLU
 projects_display_mv = translate("adresar_projects.map", getFieldsForAdresar("PRKa", SubfieldExtractionMethod.SEPARATED, null), null)
 responsibility_display_mv = adresarGetResponsibility()
 address_display_mv = adresarGetAddress()
+email_display_mv = adresarGetEmailOrMvs "EMLuz"
+mvs_display_mv = adresarGetEmailOrMvs "MVScu"
