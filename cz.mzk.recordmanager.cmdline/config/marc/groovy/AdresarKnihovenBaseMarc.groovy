@@ -38,9 +38,11 @@ code_search_txt = getFirstFieldForAdresar "ZKRa"
 sigla_search_txt = getFirstFieldForAdresar "SGLa"
 responsibility_search_txt_mv = getFieldsForAdresar "JMNkp", SubfieldExtractionMethod.JOINED, " "
 note2_search_txt = getFirstFieldForAdresar "POUa"
+ils_search_txt = getFirstFieldForAdresar "KNSa"
 
 region_disctrict_facet_str_mv = adresarGetRegionDistrictFacet()
 function_facet_str_mv = translate("adresar_function.map", getFieldsForAdresar("FCEa", SubfieldExtractionMethod.SEPARATED, null), null)
 services_facet_str_mv = translate("adresar_services.map", getFieldsForAdresar("SLUa", SubfieldExtractionMethod.SEPARATED, null), null)
 projects_facet_str_mv = translate("adresar_projects.map", getFieldsForAdresar("PRKa", SubfieldExtractionMethod.SEPARATED, null), null)
 type_facet_str = getFirstFieldForAdresar "TYPb"
+ils_facet_str = getFirstFieldForAdresar "KNSa"
