@@ -25,6 +25,7 @@ responsibility_display_mv = adresarGetResponsibility()
 address_display_mv = adresarGetAddress()
 email_display_mv = adresarGetEmailOrMvs "EMLuz"
 mvs_display_mv = adresarGetEmailOrMvs "MVScu"
+reg_lib_display_mv = getFieldsForAdresar "PVKsn", SubfieldExtractionMethod.JOINED, " | "
 
 town_search_txt = getFirstFieldForAdresar "MESa"
 region_search_txt = getFirstFieldForAdresar "KRJa"
@@ -39,6 +40,7 @@ sigla_search_txt = getFirstFieldForAdresar "SGLa"
 responsibility_search_txt_mv = getFieldsForAdresar "JMNkp", SubfieldExtractionMethod.JOINED, " "
 note2_search_txt = getFirstFieldForAdresar "POUa"
 ils_search_txt = getFirstFieldForAdresar "KNSa"
+reg_lib_search_txt_mv = getFieldsForAdresar "PVKs", SubfieldExtractionMethod.JOINED, null
 
 region_disctrict_facet_str_mv = adresarGetRegionDistrictFacet()
 function_facet_str_mv = translate("adresar_function.map", getFieldsForAdresar("FCEa", SubfieldExtractionMethod.SEPARATED, null), null)
