@@ -32,6 +32,7 @@ district_search_txt = getFirstFieldForAdresar "KRJb"
 function_search_txt_mv = translate("adresar_function.map", getFieldsForAdresar("FCEa", SubfieldExtractionMethod.SEPARATED, null), null)
 type_search_txt = getFirstFieldForAdresar "TYPb"
 note_search_txt = getFirstFieldForAdresar "POIa"
+code_search_txt = getFirstFieldForAdresar "ZKRa"
 
 region_disctrict_facet_str_mv = adresarGetRegionDistrictFacet()
 function_facet_str_mv = translate("adresar_function.map", getFieldsForAdresar("FCEa", SubfieldExtractionMethod.SEPARATED, null), null)
