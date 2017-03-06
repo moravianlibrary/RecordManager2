@@ -27,6 +27,7 @@ email_display_mv = adresarGetEmailOrMvs "EMLuz"
 mvs_display_mv = adresarGetEmailOrMvs "MVScu"
 reg_lib_display_mv = getFieldsForAdresar "PVKsn", SubfieldExtractionMethod.JOINED, " | "
 name_alt_display_mv = adresarGetNameAlt " - "
+hours_display = adresarGetHours()
 
 town_search_txt = getFirstFieldForAdresar "MESa"
 region_search_txt = getFirstFieldForAdresar "KRJa"

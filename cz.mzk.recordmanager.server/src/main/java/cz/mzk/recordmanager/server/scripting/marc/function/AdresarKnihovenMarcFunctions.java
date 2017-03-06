@@ -1,21 +1,29 @@
 package cz.mzk.recordmanager.server.scripting.marc.function;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.marc4j.marc.DataField;
+import org.marc4j.marc.Subfield;
 import org.springframework.stereotype.Component;
 
+import cz.mzk.recordmanager.server.ClasspathResourceProvider;
 import cz.mzk.recordmanager.server.marc.SubfieldExtractionMethod;
+import cz.mzk.recordmanager.server.scripting.MappingResolver;
+import cz.mzk.recordmanager.server.scripting.ResourceMappingResolver;
 import cz.mzk.recordmanager.server.scripting.marc.MarcFunctionContext;
 import cz.mzk.recordmanager.server.util.SolrUtils;
 
 @Component
 public class AdresarKnihovenMarcFunctions implements MarcRecordFunctions {
 	
+	private static final MappingResolver propertyResolver = new ResourceMappingResolver(new ClasspathResourceProvider());
+	
 	private final static Pattern FIELD_PATTERN = Pattern.compile("([a-zA-Z0-9]{3})([a-zA-Z0-9]*)");
+	private final static String MAP_ADRESAR_HOURS = "adresar_hours.map";
 	
 	public String getFirstFieldForAdresar(MarcFunctionContext ctx, String tag) {
 		Matcher matcher = FIELD_PATTERN.matcher(tag);
@@ -134,6 +142,31 @@ public class AdresarKnihovenMarcFunctions implements MarcRecordFunctions {
 			}
 		}
 		return results;
+	}
+	
+	public String adresarGetHours(MarcFunctionContext ctx) {
+		String separator = " | ";
+		for (DataField df : ctx.record().getDataFields("OTD")) {
+			StringBuilder sb = new StringBuilder();
+			for (Subfield sf : df.getSubfields()) {
+				try {
+					List<String> get = propertyResolver.resolve(MAP_ADRESAR_HOURS).get(String.valueOf(sf.getCode()));
+					if (get != null) {
+						sb.append(get.get(0) + " " + sf.getData());
+						sb.append(separator);
+					}
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			String temp = sb.toString();
+			if (temp != null && !temp.isEmpty() && temp.endsWith(separator)) {
+				temp = temp.substring(0, temp.length() - separator.length());
+			}
+			return temp;
+		}
+		
+		return null;
 	}
 
 }
