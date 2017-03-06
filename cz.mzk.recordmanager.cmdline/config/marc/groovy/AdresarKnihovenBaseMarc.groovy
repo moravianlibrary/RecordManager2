@@ -43,6 +43,7 @@ ils_search_txt = getFirstFieldForAdresar "KNSa"
 reg_lib_search_txt_mv = getFieldsForAdresar "PVKs", SubfieldExtractionMethod.JOINED, null
 address_search_txt_mv = getFieldsForAdresar "ADRum", SubfieldExtractionMethod.JOINED, " "
 branch_search_txt = getFirstFieldSeparatedForAdresar "POBna", " "
+name_search_txt = getFirstFieldSeparatedForAdresar "NAZabc", " "
 
 region_disctrict_facet_str_mv = adresarGetRegionDistrictFacet()
 function_facet_str_mv = translate("adresar_function.map", getFieldsForAdresar("FCEa", SubfieldExtractionMethod.SEPARATED, null), null)
