@@ -1,8 +1,8 @@
 import cz.mzk.recordmanager.server.marc.SubfieldExtractionMethod;
 
 recordtype = "adresar"
-
 fullrecord = getFullrecord()
+lastupdated_str = getFirstFieldForAdresar "AKTa"
 
 sigla_display = getFirstFieldForAdresar "SGLa"
 name_display = getFirstFieldSeparatedForAdresar "NAZabc", " - "
