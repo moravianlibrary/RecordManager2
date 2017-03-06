@@ -116,5 +116,24 @@ public class AdresarKnihovenMarcFunctions implements MarcRecordFunctions {
 		}
 		return null;
 	}
+	
+	public List<String> adresarGetNameAlt(MarcFunctionContext ctx, String separator) {
+		List<String> results = new ArrayList<>();
+		for (DataField df : ctx.record().getDataFields("VAR")) {
+			if (df.getIndicator1() == '2') {
+				StringBuilder sb = new StringBuilder();
+				for (char code : new char[]{'a', 'b', 'c'}) {
+					if (df.getSubfield(code) != null) {
+						sb.append(df.getSubfield(code).getData());
+						sb.append(separator);
+					}
+				}
+				String temp = sb.toString();
+				if (temp.endsWith(separator)) temp = temp.substring(0, temp.length() - separator.length());
+				results.add(temp);
+			}
+		}
+		return results;
+	}
 
 }

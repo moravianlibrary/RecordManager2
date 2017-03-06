@@ -26,6 +26,7 @@ address_display_mv = adresarGetAddress()
 email_display_mv = adresarGetEmailOrMvs "EMLuz"
 mvs_display_mv = adresarGetEmailOrMvs "MVScu"
 reg_lib_display_mv = getFieldsForAdresar "PVKsn", SubfieldExtractionMethod.JOINED, " | "
+name_alt_display_mv = adresarGetNameAlt " - "
 
 town_search_txt = getFirstFieldForAdresar "MESa"
 region_search_txt = getFirstFieldForAdresar "KRJa"
@@ -44,6 +45,7 @@ reg_lib_search_txt_mv = getFieldsForAdresar "PVKs", SubfieldExtractionMethod.JOI
 address_search_txt_mv = getFieldsForAdresar "ADRum", SubfieldExtractionMethod.JOINED, " "
 branch_search_txt = getFirstFieldSeparatedForAdresar "POBna", " "
 name_search_txt = getFirstFieldSeparatedForAdresar "NAZabc", " "
+name_alt_search_txt_mv = adresarGetNameAlt " "
 
 region_disctrict_facet_str_mv = adresarGetRegionDistrictFacet()
 function_facet_str_mv = translate("adresar_function.map", getFieldsForAdresar("FCEa", SubfieldExtractionMethod.SEPARATED, null), null)
