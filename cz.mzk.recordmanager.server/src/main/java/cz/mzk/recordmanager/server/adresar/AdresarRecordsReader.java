@@ -25,17 +25,20 @@ public class AdresarRecordsReader implements ItemReader<List<Record>> {
 
 	private MarcReader reader;
 	
-	private static final int START_ID = 1;
-	private static final int LAST_ID = 10000;
+	private static final long START_ID = 1;
+	private static final long LAST_ID = 10000;
 	
-	private int recordId;
+	private long actualId;
+	private long stopId;
 	
 	private int batchSize = 20;
 	
 	private static final String ADRESAR_HARVEST_URL = "http://aleph.nkp.cz/X?op=find-doc&doc_num=%s&base=ADR";
 	
-	public AdresarRecordsReader(){
-		recordId = START_ID;
+	public AdresarRecordsReader(Long firstId, Long lastId, Long singleId){
+		actualId = firstId != null ? firstId : START_ID;
+		stopId = lastId != null ? lastId : LAST_ID;
+		if (singleId != null) actualId = stopId = singleId;
 	}
 	
 	@Override
@@ -63,15 +66,15 @@ public class AdresarRecordsReader implements ItemReader<List<Record>> {
 
 	protected void getNextRecord(){
 		try {
-			if(recordId <= LAST_ID){
-				logger.info("Harvesting: " + String.format(ADRESAR_HARVEST_URL, StringUtils.leftPad(Integer.toString(recordId), 9, '0')));
-				reader = new AdresarStreamReader(httpClient.executeGet(String.format(ADRESAR_HARVEST_URL, StringUtils.leftPad(Integer.toString(recordId), 9, '0'))));
+			if(actualId <= stopId){
+				logger.info("Harvesting: " + String.format(ADRESAR_HARVEST_URL, StringUtils.leftPad(Long.toString(actualId), 9, '0')));
+				reader = new AdresarStreamReader(httpClient.executeGet(String.format(ADRESAR_HARVEST_URL, StringUtils.leftPad(Long.toString(actualId), 9, '0'))));
 			}
 		} catch (IOException e) {
 			logger.warn(e.getMessage());
 		}
 		
-		recordId++;
+		actualId++;
 	}
 
 }

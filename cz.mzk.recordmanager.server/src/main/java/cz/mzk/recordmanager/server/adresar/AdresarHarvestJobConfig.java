@@ -13,6 +13,7 @@ import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -32,8 +33,10 @@ public class AdresarHarvestJobConfig {
 	@Autowired
 	private DataSource dataSource;
 	
+	public static final Long LONG_OVERRIDEN_BY_EXPRESSION = null;
+	
 	@Bean
-	public Job zakonyProLidiHarvestJob(
+	public Job adresarHarvestJob(
 			@Qualifier(Constants.JOB_IF_HARVEST_ADRESAR + ":step") Step step) {
 		return jobs.get(Constants.JOB_IF_HARVEST_ADRESAR) //
 				.validator(new AdresarHarvestJobParametersValidator())
@@ -48,15 +51,18 @@ public class AdresarHarvestJobConfig {
 	public Step step() throws Exception {
 		return steps.get(Constants.JOB_IF_HARVEST_ADRESAR + ":step")
 				.<List<Record>, List<Record>> chunk(10)//
-				.reader(harvestAdresarReader())//
+				.reader(harvestAdresarReader(LONG_OVERRIDEN_BY_EXPRESSION, LONG_OVERRIDEN_BY_EXPRESSION, LONG_OVERRIDEN_BY_EXPRESSION))//
 				.writer(harvestAdresarWriter()) //
 				.build();
 	}
 
 	@Bean(name=Constants.JOB_IF_HARVEST_ADRESAR + ":reader")
 	@StepScope
-	public ItemReader<List<Record>> harvestAdresarReader() {
-		return new AdresarRecordsReader();
+	public ItemReader<List<Record>> harvestAdresarReader(
+			@Value("#{jobParameters["+ Constants.JOB_PARAM_FIRST_ID + "]}") Long firstId,
+			@Value("#{jobParameters["+ Constants.JOB_PARAM_LAST_ID + "]}") Long lastId,
+			@Value("#{jobParameters["+ Constants.JOB_PARAM_SINGLE_ID + "]}") Long singleId) {
+		return new AdresarRecordsReader(firstId, lastId, singleId);
 	}
 
 	@Bean(name=Constants.JOB_IF_HARVEST_ADRESAR + ":writer")

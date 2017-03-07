@@ -52,6 +52,9 @@ public class Constants {
 	public static final String JOB_PARAM_RECORD_IDS		= "recordIds";
 	public static final String JOB_PARAM_START_TIME		= "startTime";
 	public static final String JOB_PARAM_UUID			= "uuid";
+	public static final String JOB_PARAM_FIRST_ID		= "firstId";
+	public static final String JOB_PARAM_LAST_ID		= "lastId";
+	public static final String JOB_PARAM_SINGLE_ID		= "singleId";
 
 	public static final String JOB_PARAM_TRUE_VALUE		= "true";
 	public static final String JOB_PARAM_ONE_VALUE		= "1";
