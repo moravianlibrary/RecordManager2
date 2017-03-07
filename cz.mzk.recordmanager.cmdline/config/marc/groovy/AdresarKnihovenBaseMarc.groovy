@@ -29,6 +29,7 @@ reg_lib_display_mv = getFieldsForAdresar "PVKsn", SubfieldExtractionMethod.JOINE
 name_alt_display_mv = adresarGetNameAlt " - "
 hours_display = adresarGetHours()
 region_display = getFirstFieldForAdresar "KRJa"
+district_display = getFirstFieldForAdresar "KRJb"
 
 town_search_txt = getFirstFieldForAdresar "MESa"
 region_search_txt = getFirstFieldForAdresar "KRJa"
