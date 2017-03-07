@@ -49,6 +49,7 @@ address_search_txt_mv = getFieldsForAdresar "ADRum", SubfieldExtractionMethod.JO
 branch_search_txt = getFirstFieldSeparatedForAdresar "POBna", " "
 name_search_txt = getFirstFieldSeparatedForAdresar "NAZabc", " "
 name_alt_search_txt_mv = adresarGetNameAlt " "
+cpk_code_search_txt = adresarGetCpkCode()
 
 region_disctrict_facet_str_mv = adresarGetRegionDistrictFacet()
 function_facet_str_mv = translate("adresar_function.map", getFieldsForAdresar("FCEa", SubfieldExtractionMethod.SEPARATED, null), null)

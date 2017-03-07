@@ -8,10 +8,14 @@ import java.util.regex.Pattern;
 
 import org.marc4j.marc.DataField;
 import org.marc4j.marc.Subfield;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import cz.mzk.recordmanager.server.ClasspathResourceProvider;
 import cz.mzk.recordmanager.server.marc.SubfieldExtractionMethod;
+import cz.mzk.recordmanager.server.model.Sigla;
+import cz.mzk.recordmanager.server.oai.dao.ImportConfigurationDAO;
+import cz.mzk.recordmanager.server.oai.dao.SiglaDAO;
 import cz.mzk.recordmanager.server.scripting.MappingResolver;
 import cz.mzk.recordmanager.server.scripting.ResourceMappingResolver;
 import cz.mzk.recordmanager.server.scripting.marc.MarcFunctionContext;
@@ -19,6 +23,12 @@ import cz.mzk.recordmanager.server.util.SolrUtils;
 
 @Component
 public class AdresarKnihovenMarcFunctions implements MarcRecordFunctions {
+	
+	@Autowired
+	private SiglaDAO siglaDao;
+	
+	@Autowired
+	private ImportConfigurationDAO configurationDAO;
 	
 	private static final MappingResolver propertyResolver = new ResourceMappingResolver(new ClasspathResourceProvider());
 	
@@ -166,6 +176,16 @@ public class AdresarKnihovenMarcFunctions implements MarcRecordFunctions {
 			return temp;
 		}
 		
+		return null;
+	}
+	
+	public String adresarGetCpkCode(MarcFunctionContext ctx) {
+		String siglaName;
+		if ((siglaName = getFirstFieldForAdresar(ctx, "SGLa")) != null) {
+			for (Sigla sigla : siglaDao.findSiglaByName(siglaName)) {
+				return configurationDAO.get(sigla.getUniqueId().getImportConfId()).getIdPrefix();
+			}
+		}
 		return null;
 	}
 
