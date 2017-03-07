@@ -1,6 +1,6 @@
 import cz.mzk.recordmanager.server.marc.SubfieldExtractionMethod;
 
-recordtype = "adresar"
+recordtype = "library"
 fullrecord = getFullrecord()
 lastupdated_str = getFirstFieldForAdresar "AKTa"
 
