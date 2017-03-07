@@ -46,7 +46,11 @@ public class AdresarRecordsReader implements ItemReader<List<Record>> {
 		}
 		while (reader.hasNext()) {
 			try {
-				batch.add(reader.next());
+				Record record = reader.next();
+				if (record != null && record.getVariableFields().size() == 2) {
+					logger.info(String.format("Empty record with id %s", record.getControlFields().get(0).getData()));
+				}
+				else batch.add(record);
 			} catch (MarcException e) {
 				logger.warn(e.getMessage());
 			}
