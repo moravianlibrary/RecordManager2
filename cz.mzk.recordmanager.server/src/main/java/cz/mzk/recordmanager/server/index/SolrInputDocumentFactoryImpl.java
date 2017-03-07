@@ -148,11 +148,19 @@ public class SolrInputDocumentFactoryImpl implements SolrInputDocumentFactory, I
 	public SolrInputDocument create(AdresarKnihoven record) {
 		try {
 			Map<String, Object> fields = mapper.map(record);
-			SolrInputDocument document = asSolrDocument(fields);
-			if (!document.containsKey(SolrFieldConstants.ID_FIELD)) {
-				document.addField(SolrFieldConstants.ID_FIELD, record.getRecordId());
-			}
-			return document;
+			String localId = "library." + record.getRecordId();
+			SolrInputDocument mergedDocument = asSolrDocument(fields);
+			mergedDocument.addField(SolrFieldConstants.ID_FIELD, record.getRecordId());
+			mergedDocument.addField(SolrFieldConstants.MERGED_FIELD, 1);
+			mergedDocument.addField(SolrFieldConstants.LOCAL_IDS_FIELD, localId);
+
+			SolrInputDocument localDocument = asSolrDocument(fields);
+			localDocument.addField(SolrFieldConstants.ID_FIELD, localId);
+			localDocument.addField(SolrFieldConstants.PARENT_ID, record.getRecordId());
+			localDocument.addField(SolrFieldConstants.MERGED_CHILD_FIELD, 1);
+
+			mergedDocument.addChildDocument(localDocument);
+			return mergedDocument;
 		} catch (Exception ex) {
 			logger.error(String.format("Exception thrown when indexing dedup_record with id=%s", record.getRecordId()), ex);
 			return null;
