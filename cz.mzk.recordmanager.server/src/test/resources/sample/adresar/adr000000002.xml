@@ -1,0 +1,160 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+<find-doc>
+	<record>
+		<metadata>
+			<oai_marc>
+				<fixfield id="LDR">-----nx--a22-----n--4500</fixfield>
+				<varfield id="SGL" i1=" " i2=" ">
+					<subfield label="a">ABA001</subfield>
+				</varfield>
+				<varfield id="NAZ" i1=" " i2=" ">
+					<subfield label="a">Národní knihovna České republiky
+					</subfield>
+					<subfield label="b">Knihovní fondy a služby</subfield>
+					<subfield label="c">Odbor služeb</subfield>
+				</varfield>
+				<varfield id="VAR" i1="1" i2=" ">
+					<subfield label="a">Národní knihovna ČR</subfield>
+					<subfield label="b">Knihovní fondy a služby</subfield>
+					<subfield label="c">Odbor služeb</subfield>
+				</varfield>
+				<varfield id="VAR" i1="2" i2=" ">
+					<subfield label="a">National Library of the Czech Republic
+					</subfield>
+					<subfield label="b">Library Collection and Services</subfield>
+					<subfield label="c">Public Services Division</subfield>
+				</varfield>
+				<varfield id="ZKR" i1=" " i2=" ">
+					<subfield label="a">NK ČR - NFS - OS</subfield>
+				</varfield>
+				<varfield id="ICO" i1=" " i2=" ">
+					<subfield label="a">00023221</subfield>
+					<subfield label="b">CZ00023221</subfield>
+				</varfield>
+				<varfield id="EMK" i1=" " i2=" ">
+					<subfield label="a">1602</subfield>
+				</varfield>
+				<varfield id="TYP" i1=" " i2=" ">
+					<subfield label="a">NK</subfield>
+					<subfield label="b">národní knihovna</subfield>
+				</varfield>
+				<varfield id="ADR" i1=" " i2=" ">
+					<subfield label="u">Klementinum 190</subfield>
+					<subfield label="c">110 00</subfield>
+					<subfield label="m">Praha 1</subfield>
+					<subfield label="g">50°5&apos;11.12&quot;N,
+						14°24&apos;56.61&quot;E</subfield>
+				</varfield>
+				<varfield id="MES" i1=" " i2=" ">
+					<subfield label="a">Praha</subfield>
+				</varfield>
+				<varfield id="KRJ" i1=" " i2=" ">
+					<subfield label="a">Hlavní město Praha</subfield>
+					<subfield label="b">Praha</subfield>
+				</varfield>
+				<varfield id="JMN" i1=" " i2=" ">
+					<subfield label="t">PhDr.</subfield>
+					<subfield label="k">Jana</subfield>
+					<subfield label="p">Huňová</subfield>
+					<subfield label="r">ředitelka odboru služeb</subfield>
+					<subfield label="f">221 663 293</subfield>
+					<subfield label="e">Jana.Hunova@nkp.cz</subfield>
+					<subfield label="o">Paní</subfield>
+				</varfield>
+				<varfield id="JMN" i1=" " i2=" ">
+					<subfield label="t">RSDr.</subfield>
+					<subfield label="k">Zdeněk</subfield>
+					<subfield label="p">Matušík</subfield>
+					<subfield label="r">vedoucí odd. studoven</subfield>
+					<subfield label="f">221 663 208</subfield>
+					<subfield label="e">zdenek.matusik@nkp.cz</subfield>
+					<subfield label="o">Pan</subfield>
+				</varfield>
+				<varfield id="TEL" i1=" " i2=" ">
+					<subfield label="a">221 663 248 (informace o fondu a službách
+						NK)</subfield>
+					<subfield label="a">221 663 111</subfield>
+					<subfield label="a">221 663 127 (MVS)</subfield>
+					<subfield label="a">221 663 239 (bibliografické informace)
+					</subfield>
+					<subfield label="a">221 663 201 (referenční centrum)
+					</subfield>
+				</varfield>
+				<varfield id="FAX" i1=" " i2=" ">
+					<subfield label="a">221 663 261</subfield>
+				</varfield>
+				<varfield id="EML" i1=" " i2=" ">
+					<subfield label="u">hala.os@nkp.cz</subfield>
+					<subfield label="z">informace</subfield>
+				</varfield>
+				<varfield id="EML" i1=" " i2=" ">
+					<subfield label="u">mvs@nkp.cz</subfield>
+					<subfield label="z">MVS</subfield>
+				</varfield>
+				<varfield id="EML" i1=" " i2=" ">
+					<subfield label="u">reference@nkp.cz</subfield>
+					<subfield label="z">bibliografické informace</subfield>
+				</varfield>
+				<varfield id="URL" i1=" " i2=" ">
+					<subfield label="u">http://www.nkp.cz</subfield>
+				</varfield>
+				<varfield id="URL" i1=" " i2=" ">
+					<subfield label="u">http://www.nkp.cz/sluzby</subfield>
+				</varfield>
+				<varfield id="URL" i1=" " i2=" ">
+					<subfield label="u">http://aleph.nkp.cz/F/?func=file&amp;file_name=find-b&amp;local_base=nkc
+					</subfield>
+					<subfield label="z">online katalog</subfield>
+				</varfield>
+				<varfield id="URL" i1=" " i2=" ">
+					<subfield label="u">http://aleph.nkp.cz/F/?func=file&amp;file_name=find-b&amp;local_base=skc
+					</subfield>
+					<subfield label="z">Souborný katalog ČR</subfield>
+				</varfield>
+				<varfield id="MVS" i1=" " i2=" ">
+					<subfield label="u">http://www.nkp.cz/pages/page.php3?page=sluz_cenik.htm
+					</subfield>
+				</varfield>
+				<varfield id="OTD" i1=" " i2=" ">
+					<subfield label="1">9:00-19:00</subfield>
+					<subfield label="2">9:00-19:00</subfield>
+					<subfield label="3">9:00-19:00</subfield>
+					<subfield label="4">9:00-19:00</subfield>
+					<subfield label="5">9:00-19:00</subfield>
+					<subfield label="s">9:00-19:00</subfield>
+					<subfield label="p">Aktuální provozní dobu naleznete na
+						http://www.nkp.cz/sluzby/dulezite-odkazy/provozni-doba</subfield>
+				</varfield>
+				<varfield id="POU" i1=" " i2=" ">
+					<subfield label="a">Všeobecné informace o Národní knihovně
+						jako celku - ABA000.</subfield>
+				</varfield>
+				<varfield id="POI" i1=" " i2=" ">
+					<subfield label="a">Oddělení anglické literatury (ABA002) bylo
+						v roce 1997 z organizačních důvodů zrušeno. Anglická literatura je
+						nyní součástí univerzálního fondu NK ČR a je běžně dostupná.
+					</subfield>
+				</varfield>
+				<varfield id="POI" i1=" " i2=" ">
+					<subfield label="a">Knihovní fond chebského františkánského
+						kláštera, jenž se nacházel v majetku Biskupství plzeňského
+						(nejdříve umístěn v Krajském muzeu Cheb, od roku 2005 deponován v
+						prostorách Kláštera premonstrátů Teplá), změnil vlastníka i místo
+						uložení – vlastníkem se prostřednictvím koupě stal stát zastoupený
+						NK ČR. Fond byl NK již kompletně převzat a po ošetření bude uložen
+						v prostorách NK ČR. (20090305)</subfield>
+				</varfield>
+				<varfield id="AKT" i1=" " i2=" ">
+					<subfield label="a">20170306</subfield>
+				</varfield>
+				<varfield id="DRL" i1=" " i2=" ">
+					<subfield label="a">http://aleph.nkp.cz/F/?func=direct&amp;doc_number=000000002&amp;local_base=ADR
+					</subfield>
+				</varfield>
+				<fixfield id="SYS">000000002</fixfield>
+			</oai_marc>
+		</metadata>
+	</record>
+	<session-id>7VY2JEJ3F12K8K1NDXPUKA7GGGP85CUNC14CCUDPNKBJDRCD9K
+	</session-id>
+</find-doc>
