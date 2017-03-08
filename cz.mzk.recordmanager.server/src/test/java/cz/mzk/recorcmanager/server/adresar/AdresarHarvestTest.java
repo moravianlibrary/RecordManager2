@@ -48,5 +48,22 @@ public class AdresarHarvestTest extends AbstractTest {
 		
 		Assert.assertNotNull(akDao.findByRecordId("000000001"));
 	}
+	
+	@Test
+	public void harvestEmptyRecord() throws Exception {
+		reset(httpClient);
+		InputStream response1 = this.getClass().getResourceAsStream("/sample/adresar/adr000010000.xml");
+		expect(httpClient.executeGet("http://aleph.nkp.cz/X?op=find-doc&doc_num=000010000&base=ADR")).andReturn(response1);
+		replay(httpClient);
+
+		Map<String, JobParameter> params = new HashMap<String, JobParameter>();
+		params.put(Constants.JOB_PARAM_SINGLE_ID, new JobParameter("10000"));
+		JobParameters jobParams = new JobParameters(params);
+		JobExecution exec = jobExecutor.execute(Constants.JOB_ID_HARVEST_ADRESAR, jobParams);
+		Assert.assertEquals(exec.getExitStatus(), ExitStatus.COMPLETED);
+		
+		// empty record is not in db
+		Assert.assertNull(akDao.findByRecordId("000010000"));
+	}
 
 }

@@ -1,0 +1,17 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+<find-doc>
+	<record>
+		<metadata>
+			<oai_marc>
+				<fixfield id="LDR">-----nx--a22-----n--4500</fixfield>
+				<varfield id="DRL" i1=" " i2=" ">
+					<subfield label="a">http://aleph.nkp.cz/F/?func=direct&amp;doc_number=000010000&amp;local_base=ADR
+					</subfield>
+				</varfield>
+				<fixfield id="SYS">000010000</fixfield>
+			</oai_marc>
+		</metadata>
+	</record>
+	<session-id>IP19UNX4NVYFTMV2HEM1297RI5APYDYIH71V4KIDXQRSD5CXDL
+	</session-id>
+</find-doc>
