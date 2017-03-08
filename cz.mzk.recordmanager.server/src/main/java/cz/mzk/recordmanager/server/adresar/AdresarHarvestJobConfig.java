@@ -37,8 +37,8 @@ public class AdresarHarvestJobConfig {
 	
 	@Bean
 	public Job adresarHarvestJob(
-			@Qualifier(Constants.JOB_IF_HARVEST_ADRESAR + ":step") Step step) {
-		return jobs.get(Constants.JOB_IF_HARVEST_ADRESAR) //
+			@Qualifier(Constants.JOB_ID_HARVEST_ADRESAR + ":step") Step step) {
+		return jobs.get(Constants.JOB_ID_HARVEST_ADRESAR) //
 				.validator(new AdresarHarvestJobParametersValidator())
 				.incrementer(UUIDIncrementer.INSTANCE) //
 				.listener(JobFailureListener.INSTANCE) //
@@ -47,16 +47,16 @@ public class AdresarHarvestJobConfig {
 				.build();
 	}
 
-	@Bean(name = Constants.JOB_IF_HARVEST_ADRESAR + ":step")
+	@Bean(name = Constants.JOB_ID_HARVEST_ADRESAR + ":step")
 	public Step step() throws Exception {
-		return steps.get(Constants.JOB_IF_HARVEST_ADRESAR + ":step")
+		return steps.get(Constants.JOB_ID_HARVEST_ADRESAR + ":step")
 				.<List<Record>, List<Record>> chunk(10)//
 				.reader(harvestAdresarReader(LONG_OVERRIDEN_BY_EXPRESSION, LONG_OVERRIDEN_BY_EXPRESSION, LONG_OVERRIDEN_BY_EXPRESSION))//
 				.writer(harvestAdresarWriter()) //
 				.build();
 	}
 
-	@Bean(name=Constants.JOB_IF_HARVEST_ADRESAR + ":reader")
+	@Bean(name=Constants.JOB_ID_HARVEST_ADRESAR + ":reader")
 	@StepScope
 	public ItemReader<List<Record>> harvestAdresarReader(
 			@Value("#{jobParameters["+ Constants.JOB_PARAM_FIRST_ID + "]}") Long firstId,
@@ -65,7 +65,7 @@ public class AdresarHarvestJobConfig {
 		return new AdresarRecordsReader(firstId, lastId, singleId);
 	}
 
-	@Bean(name=Constants.JOB_IF_HARVEST_ADRESAR + ":writer")
+	@Bean(name=Constants.JOB_ID_HARVEST_ADRESAR + ":writer")
 	@StepScope
 	public AdresarRecordsWriter harvestAdresarWriter() {
 		return new AdresarRecordsWriter();
