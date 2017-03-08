@@ -1,0 +1,120 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+<find-doc>
+	<record>
+		<metadata>
+			<oai_marc>
+				<fixfield id="LDR">-----nx--a22-----n--4500</fixfield>
+				<varfield id="SGL" i1=" " i2=" ">
+					<subfield label="a">ABA000</subfield>
+				</varfield>
+				<varfield id="NAZ" i1=" " i2=" ">
+					<subfield label="a">Národní knihovna České republiky
+					</subfield>
+				</varfield>
+				<varfield id="VAR" i1="1" i2=" ">
+					<subfield label="a">Národní knihovna ČR</subfield>
+				</varfield>
+				<varfield id="VAR" i1="2" i2=" ">
+					<subfield label="a">National Library of the Czech Republic
+					</subfield>
+				</varfield>
+				<varfield id="ZKR" i1=" " i2=" ">
+					<subfield label="a">NK ČR</subfield>
+				</varfield>
+				<varfield id="ICO" i1=" " i2=" ">
+					<subfield label="a">00023221</subfield>
+					<subfield label="b">CZ00023221</subfield>
+				</varfield>
+				<varfield id="EMK" i1=" " i2=" ">
+					<subfield label="a">1602</subfield>
+				</varfield>
+				<varfield id="TYP" i1=" " i2=" ">
+					<subfield label="a">NK</subfield>
+					<subfield label="b">národní knihovna</subfield>
+				</varfield>
+				<varfield id="FCE" i1=" " i2=" ">
+					<subfield label="a">05</subfield>
+				</varfield>
+				<varfield id="ADR" i1=" " i2=" ">
+					<subfield label="u">Klementinum 190</subfield>
+					<subfield label="c">110 00</subfield>
+					<subfield label="m">Praha 1</subfield>
+					<subfield label="g">50°5&apos;11.12&quot;N,
+						14°24&apos;56.61&quot;E</subfield>
+				</varfield>
+				<varfield id="MES" i1=" " i2=" ">
+					<subfield label="a">Praha</subfield>
+				</varfield>
+				<varfield id="KRJ" i1=" " i2=" ">
+					<subfield label="a">Hlavní město Praha</subfield>
+					<subfield label="b">Praha</subfield>
+				</varfield>
+				<varfield id="JMN" i1=" " i2=" ">
+					<subfield label="t">PhDr.</subfield>
+					<subfield label="k">Petr</subfield>
+					<subfield label="p">Kroupa</subfield>
+					<subfield label="r">ředitel</subfield>
+					<subfield label="f">221 663 262</subfield>
+					<subfield label="e">petr.kroupa@nkp.cz</subfield>
+					<subfield label="o">Pan</subfield>
+				</varfield>
+				<varfield id="TEL" i1=" " i2=" ">
+					<subfield label="a">221 663 111</subfield>
+					<subfield label="a">221 663 262 (sekretariát ředitele)
+					</subfield>
+				</varfield>
+				<varfield id="FAX" i1=" " i2=" ">
+					<subfield label="a">221 663 261</subfield>
+				</varfield>
+				<varfield id="EML" i1=" " i2=" ">
+					<subfield label="u">sekret.ur@nkp.cz</subfield>
+				</varfield>
+				<varfield id="URL" i1=" " i2=" ">
+					<subfield label="u">http://www.nkp.cz</subfield>
+				</varfield>
+				<varfield id="URL" i1=" " i2=" ">
+					<subfield label="u">http://www.nkp.cz/katalogy-a-db</subfield>
+					<subfield label="z">katalogy a databáze</subfield>
+				</varfield>
+				<varfield id="URL" i1=" " i2=" ">
+					<subfield label="u">http://aleph.nkp.cz/F/?func=file&amp;file_name=find-b&amp;local_base=nkc
+					</subfield>
+					<subfield label="z">online katalog</subfield>
+				</varfield>
+				<varfield id="URL" i1=" " i2=" ">
+					<subfield label="u">http://aleph.nkp.cz/F/?func=file&amp;file_name=find-b&amp;local_base=skc
+					</subfield>
+					<subfield label="z">Souborný katalog ČR</subfield>
+				</varfield>
+				<varfield id="MVS" i1=" " i2=" ">
+					<subfield label="a">MVS viz ABA001</subfield>
+				</varfield>
+				<varfield id="OTD" i1=" " i2=" ">
+					<subfield label="1">9:00-19:00</subfield>
+					<subfield label="2">9:00-19:00</subfield>
+					<subfield label="3">9:00-19:00</subfield>
+					<subfield label="4">9:00-19:00</subfield>
+					<subfield label="5">9:00-19:00</subfield>
+					<subfield label="s">9:00-19:00</subfield>
+					<subfield label="p">Aktuální provozní dobu naleznete na
+						http://www.nkp.cz/sluzby/dulezite-odkazy/provozni-doba</subfield>
+				</varfield>
+				<varfield id="POU" i1=" " i2=" ">
+					<subfield label="a">Jednotlivé složky, které mají vlastní
+						fondy a služby, mají samostatné sigly (ABA001, ABA003, ABA004,
+						ABA018, ABA019, ABA025).</subfield>
+				</varfield>
+				<varfield id="AKT" i1=" " i2=" ">
+					<subfield label="a">20161006</subfield>
+				</varfield>
+				<varfield id="DRL" i1=" " i2=" ">
+					<subfield label="a">http://aleph.nkp.cz/F/?func=direct&amp;doc_number=000000001&amp;local_base=ADR
+					</subfield>
+				</varfield>
+				<fixfield id="SYS">000000001</fixfield>
+			</oai_marc>
+		</metadata>
+	</record>
+	<session-id>T14YKTN4UVSIU32IV3FK9U71UHDHMFX7FEISMSPC7EVYF2XP7R
+	</session-id>
+</find-doc>
