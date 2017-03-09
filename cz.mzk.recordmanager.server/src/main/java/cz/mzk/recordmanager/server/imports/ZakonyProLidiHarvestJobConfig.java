@@ -61,15 +61,17 @@ public class ZakonyProLidiHarvestJobConfig {
 	public Step step() throws Exception {
 		return steps.get(Constants.JOB_ID_HARVEST_ZAKONYPROLIDI + ":step")
 				.<List<Record>, List<Record>> chunk(10)//
-				.reader(importZakonyProLidiReader())//
+				.reader(importZakonyProLidiReader(LONG_OVERRIDEN_BY_EXPRESSION, LONG_OVERRIDEN_BY_EXPRESSION))//
 				.writer(importZakonyProLidiWriter(LONG_OVERRIDEN_BY_EXPRESSION)) //
 				.build();
 	}
 
 	@Bean(name=Constants.JOB_ID_HARVEST_ZAKONYPROLIDI + ":reader")
 	@StepScope
-	public ItemReader<List<Record>> importZakonyProLidiReader() {
-		return new ZakonyProLidiRecordsReader();
+	public ItemReader<List<Record>> importZakonyProLidiReader(
+			@Value("#{jobParameters[" + Constants.JOB_PARAM_FROM_DATE + "]}") Long from,
+			@Value("#{jobParameters[" + Constants.JOB_PARAM_UNTIL_DATE + "]}") Long to) {
+		return new ZakonyProLidiRecordsReader(from, to);
 	}
 
 	@Bean(name=Constants.JOB_ID_HARVEST_ZAKONYPROLIDI + ":writer")
