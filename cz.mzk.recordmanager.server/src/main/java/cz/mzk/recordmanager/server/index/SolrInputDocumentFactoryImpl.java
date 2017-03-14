@@ -41,6 +41,7 @@ public class SolrInputDocumentFactoryImpl implements SolrInputDocumentFactory, I
 
 	private static final String INSTITUTION_LIBRARY = "Library";
 	private static final String INSTITUTION_OTHERS = "Others";
+	private static final String INSTITUTION_UNKNOWN = "unknown";
 
 	private static Logger logger = LoggerFactory.getLogger(SolrInputDocumentFactoryImpl.class);
 
@@ -201,26 +202,22 @@ public class SolrInputDocumentFactoryImpl implements SolrInputDocumentFactory, I
 		return SolrFieldConstants.UNKNOWN_INSTITUTION;
 	}
 	
-	protected List<String> getInstitution(HarvestedRecord record){
-		if(record.getHarvestedFrom() != null) {
-			if (record.getHarvestedFrom().isLibrary()) {
-				String city = MetadataUtils.normalize(getCityOfRecord(record));
-				String name = getInstitutionOfRecord(record);
-				if(name.equals(Constants.LIBRARY_NAME_NKP)){
-					String prefix = getPrefixOfNKPRecord(record);
-					return SolrUtils.createHierarchicFacetValues(INSTITUTION_LIBRARY, city, name, prefix);
-				}
-				
-				return SolrUtils.createHierarchicFacetValues(INSTITUTION_LIBRARY, city, name);
+	protected List<String> getInstitution(HarvestedRecord record) {
+		if (record.getHarvestedFrom() != null) {
+			String city = getCityOfRecord(record);
+			city = city == null ? INSTITUTION_UNKNOWN : MetadataUtils.normalize(city);
+			String name = getInstitutionOfRecord(record);
+			if (name.equals(Constants.LIBRARY_NAME_NKP)) {
+				String prefix = getPrefixOfNKPRecord(record);
+				return SolrUtils.createHierarchicFacetValues(INSTITUTION_LIBRARY, city, name, prefix);
 			}
-			else {
-				String name = getInstitutionOfRecord(record);
-				return SolrUtils.createHierarchicFacetValues(INSTITUTION_OTHERS, name);
-			}
+
+			String base = record.getHarvestedFrom().isLibrary() ? INSTITUTION_LIBRARY : INSTITUTION_OTHERS;
+			if (city.equals(INSTITUTION_UNKNOWN)) return SolrUtils.createHierarchicFacetValues(base, name);
+			else return SolrUtils.createHierarchicFacetValues(base, city, name);
 		}
-		
-		return SolrUtils.createHierarchicFacetValues(SolrFieldConstants.UNKNOWN_INSTITUTION);
-		
+
+		return SolrUtils.createHierarchicFacetValues(INSTITUTION_UNKNOWN);
 	}
 
 	protected List<String> getRecordType(HarvestedRecord record){

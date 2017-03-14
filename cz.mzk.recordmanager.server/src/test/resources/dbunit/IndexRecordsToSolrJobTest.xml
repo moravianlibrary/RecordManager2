@@ -3,7 +3,7 @@
   <RECORDMANAGER_KEY NAME="recordmanager" VAL="10"/>
 
   <LIBRARY ID="100" NAME="MZK" URL="www.mzk.cz" CATALOG_URL="vufind.mzk.cz" CITY="Brno"/>
-  <LIBRARY ID="400" NAME="AUTHORITY" URL="www.nkp.cz" CATALOG_URL="nkp.cz" CITY="[NULL]"/>
+  <LIBRARY ID="400" NAME="AUTHORITY" URL="www.nkp.cz" CATALOG_URL="nkp.cz"/>
 
   <CONTACT_PERSON ID="200" LIBRARY_ID="100" NAME="Jan Novak" EMAIL="jan.novak@neexistuje.cz" PHONE="728 123 456"/>
 
