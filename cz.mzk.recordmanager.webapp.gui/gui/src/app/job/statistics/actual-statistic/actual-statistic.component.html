@@ -1,0 +1,59 @@
+<div class="page-header">
+	<h1>Actual statistics</h1>
+</div>
+<div *ngIf="loading" class='uil-ring-css' style='transform:scale(0.6); right: 50%; left: 50%; position: fixed'><div></div></div>
+
+
+<div *ngIf="!loading">
+	<div class="panel panel-default">
+		<div class="panel-body">
+
+			<div class="row">
+				<div class="col-md-2">
+					<div class="input-group">
+						<app-multi-select [multiSelectContent]="'Choose the statuses'" [itemsAmount]="3" [options]="options" [placeholder]="'Status'" (onSelect)="selected($event)"></app-multi-select>
+					</div>
+				</div>
+			</div>
+			<br>
+		</div>
+	</div>
+
+
+	<div class="panel panel-default">
+		<!-- Default panel contents -->
+		<!-- Table -->
+		<table class="table">
+			<tr>
+				<th>ID<i (click)="sortByMe('jobExecutionId')" [ngClass]="{'glyphicon': true, 'glyphicon-arrow-up': getArrow('jobExecutionId') && getVisibility('jobExecutionId'), 'glyphicon-arrow-down': !getArrow('jobExecutionId') && getVisibility('jobExecutionId'), 'glyphicon-sort': !getVisibility('jobExecutionId')}"></i></th>
+
+				<th>Job name<i (click)="sortByMe('jobName')" [ngClass]="{'glyphicon': true, 'glyphicon-arrow-up': getArrow('jobName') && getVisibility('jobName'), 'glyphicon-arrow-down': !getArrow('jobName') && getVisibility('jobName'), 'glyphicon-sort': !getVisibility('jobName')}"></i></th>
+
+				<th>Status<i (click)="sortByMe('status')" [ngClass]="{'glyphicon': true, 'glyphicon-arrow-up': getArrow('status') && getVisibility('status'), 'glyphicon-arrow-down': !getArrow('status') && getVisibility('status'), 'glyphicon-sort': !getVisibility('status')}"></i></th>
+
+
+				<th>Start time<i (click)="sortByMe('startTime')" [ngClass]="{'glyphicon': true, 'glyphicon-arrow-up': getArrow('startTime') && getVisibility('startTime'), 'glyphicon-arrow-down': !getArrow('startTime') && getVisibility('startTime'), 'glyphicon-sort': !getVisibility('startTime')}"></i></th>
+
+				<th>Error message</th>
+
+				<th>Details</th>
+			</tr>
+
+
+			<tr *ngFor="let statistic of statistics | statusFilter: statuses | orderBy: [sortBy]; let i = index">
+				<td>{{statistic.jobExecutionId}}</td>
+				<td>{{statistic.jobName}}</td>
+				<td>{{statistic.status}}</td>
+				<td>{{statistic.startTime | date: "dd/MM/yyyy HH:mm"}}</td>
+				<td>
+					<button data-toggle="collapse" class="btn btn-info" [attr.data-target]="'#' + i">See the message</button>
+
+					<div [attr.id]="i" class="collapse">
+						<code>{{statistic.exitMessage}}</code>
+					</div>
+				</td>
+				<td><a [routerLink]="['../details', statistic.jobExecutionId]"><i class="glyphicon glyphicon-triangle-right"></i></a></td>
+			</tr>
+		</table>
+	</div>
+</div>

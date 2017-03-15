@@ -33,21 +33,21 @@ public class AntikvariatyRecord {
 	
 	@Column(name="url")
 	@XmlElement(name="url")
-    private String url;
+	private String url;
 	
 	@Column(name="title")
 	@XmlElement(name="title")
-    private String title;
+	private String title;
 	
 	@Column(name="updated")
-    @Temporal(TemporalType.TIMESTAMP)
+	@Temporal(TemporalType.TIMESTAMP)
 	@XmlElement(name="datestamp")
 	private Date updated;
-    
+
 	@Column(name="pub_year")
 	@XmlElement(name="date")
-    private Long publicationYear;
-    
+	private Long publicationYear;
+
 	@ElementCollection
 	@CollectionTable(name="antikvariaty_catids",joinColumns=@JoinColumn(name="antikvariaty_id"))
 	@Column(name="id_from_catalogue")

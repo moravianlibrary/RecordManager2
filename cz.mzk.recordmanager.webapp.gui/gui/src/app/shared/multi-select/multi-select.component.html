@@ -1,0 +1,20 @@
+<div class="dropdown">
+
+  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+    {{multiSelectContent}}
+    <span class="caret"></span>
+  </button>
+
+  <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+
+    <input [(ngModel)]="inputValue" type="text" class="form-control" [placeholder]="placeholder" aria-describedby="basic-addon1">
+
+
+
+      <li (click)="$event.stopPropagation();" *ngFor="let opt of options | typeahead: inputValue"><a *ngIf="isMultiple" (click)="selectMe(opt)" class="item">{{opt.value}} <i style="float: right;" [ngClass]="{'glyphicon': true, 'glyphicon-ok': true, 'hidden': !amISelected(opt)}"></i></a></li>
+
+
+    <li *ngFor="let opt of options | typeahead: inputValue"><a *ngIf="!isMultiple" (click)="selectMe(opt)" class="item">{{opt.value}} <i style="float: right;" [ngClass]="{'glyphicon': true, 'glyphicon-ok': true, 'hidden': !amISelected(opt)}"></i></a></li>
+  </ul>
+
+</div>

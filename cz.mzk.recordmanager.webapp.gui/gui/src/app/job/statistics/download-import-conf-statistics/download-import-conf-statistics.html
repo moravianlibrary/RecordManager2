@@ -1,0 +1,93 @@
+<div class="page-header">
+	<h1>Download import configurations statistics</h1>
+</div>
+
+<!--Preloader-->
+<div *ngIf="loading" class='uil-ring-css' style='transform:scale(0.6); right: 50%; left: 50%; position: fixed'><div></div></div>
+
+<div *ngIf="!loading">
+	<div class="panel panel-default">
+		<div class="panel-body">
+
+			<div class="row">
+				<div class="col-md-2">
+					<div class="input-group">
+						<app-multi-select [multiSelectContent]="'Choose the statuses'" [itemsAmount]="3" [options]="options" [placeholder]="'Status'" (onSelect)="selected($event)"></app-multi-select>
+					</div>
+				</div>
+				<div class="col-md-2">
+					<button class="btn btn-default" (click)="getStatisticsInPeriods()">Search</button>
+				</div>
+			</div>
+
+			<br>
+
+			<div class="row">
+				<app-datetime-picker [description]="'Start'" (emitDate)="setStart($event)"></app-datetime-picker>
+
+				<app-datetime-picker [description]="'End'" (emitDate)="setEnd($event)"></app-datetime-picker>
+
+			</div>
+
+		</div>
+	</div>
+
+
+	<div class="panel panel-default">
+		<!-- Default panel contents -->
+		<!-- Table -->
+		<table class="table">
+			<tr>
+				<th>ID<i (click)="sortByMe('jobExecutionId')" [ngClass]="{'glyphicon': true, 'glyphicon-arrow-up': getArrow('jobExecutionId') && getVisibility('jobExecutionId'), 'glyphicon-arrow-down': !getArrow('jobExecutionId') && getVisibility('jobExecutionId'), 'glyphicon-sort': !getVisibility('jobExecutionId')}"></i></th>
+
+				<th>Conf. ID.<i (click)="sortByMe('importConfId')" [ngClass]="{'glyphicon': true, 'glyphicon-arrow-up': getArrow('importConfId') && getVisibility('importConfId'), 'glyphicon-arrow-down': !getArrow('importConfId') && getVisibility('importConfId'), 'glyphicon-sort': !getVisibility('importConfId')}"></i></th>
+
+				<th>Lib. name<i (click)="sortByMe('libraryName')" [ngClass]="{'glyphicon': true, 'glyphicon-arrow-up': getArrow('libraryName') && getVisibility('libraryName'), 'glyphicon-arrow-down': !getArrow('libraryName') && getVisibility('libraryName'), 'glyphicon-sort': !getVisibility('libraryName')}"></i></th>
+
+				<th>URL<i (click)="sortByMe('url')" [ngClass]="{'glyphicon': true, 'glyphicon-arrow-up': getArrow('url') && getVisibility('url'), 'glyphicon-arrow-down': !getArrow('url') && getVisibility('url'), 'glyphicon-sort': !getVisibility('url')}"></i></th>
+
+
+				<th>Start<i (click)="sortByMe('startTime')" [ngClass]="{'glyphicon': true, 'glyphicon-arrow-up': getArrow('startTime') && getVisibility('startTime'), 'glyphicon-arrow-down': !getArrow('startTime') && getVisibility('startTime'), 'glyphicon-sort': !getVisibility('startTime')}"></i></th>
+
+				<th>End<i (click)="sortByMe('endTime')" [ngClass]="{'glyphicon': true, 'glyphicon-arrow-up': getArrow('endTime') && getVisibility('endTime'), 'glyphicon-arrow-down': !getArrow('endTime') && getVisibility('endTime'), 'glyphicon-sort': !getVisibility('endTime')}"></i></th>
+
+				<th>Status<i (click)="sortByMe('status')" [ngClass]="{'glyphicon': true, 'glyphicon-arrow-up': getArrow('status') && getVisibility('status'), 'glyphicon-arrow-down': !getArrow('status') && getVisibility('status'), 'glyphicon-sort': !getVisibility('status')}"></i></th>
+
+
+				<th>Duration<i (click)="sortByMe('duration')" [ngClass]="{'glyphicon': true, 'glyphicon-arrow-up': getArrow('importJobName') && getVisibility('importJobName'), 'glyphicon-arrow-down': !getArrow('importJobName') && getVisibility('importJobName'), 'glyphicon-sort': !getVisibility('importJobName')}"></i></th>
+
+				<th>Records<i (click)="sortByMe('noOfRecords')" [ngClass]="{'glyphicon': true, 'glyphicon-arrow-up': getArrow('noOfRecords') && getVisibility('noOfRecords'), 'glyphicon-arrow-down': !getArrow('noOfRecords') && getVisibility('noOfRecords'), 'glyphicon-sort': !getVisibility('noOfRecords')}"></i></th>
+
+				<th>Duration<i (click)="sortByMe('duration')" [ngClass]="{'glyphicon': true, 'glyphicon-arrow-up': getArrow('duration') && getVisibility('duration'), 'glyphicon-arrow-down': !getArrow('duration') && getVisibility('duration'), 'glyphicon-sort': !getVisibility('duration')}"></i></th>
+
+				<th>Format<i (click)="sortByMe('format')" [ngClass]="{'glyphicon': true, 'glyphicon-arrow-up': getArrow('duration') && getVisibility('format'), 'glyphicon-arrow-down': !getArrow('format') && getVisibility('format'), 'glyphicon-sort': !getVisibility('format')}"></i></th>
+
+				<th>Details</th>
+			</tr>
+
+
+			<tr *ngFor="let statistic of statistics | statusFilter: statuses | orderBy: [sortBy]">
+				<td>{{statistic.jobExecutionId}}</td>
+				<td>{{statistic.importConfId}}</td>
+				<td>{{statistic.libraryName}}</td>
+				<td><a [href]="'http://' + statistic.url" target="_blank">{{statistic?.url}}</a></td>
+				<td>{{statistic.startTime | date: "dd/MM/yyyy HH:mm"}}</td>
+				<td>{{statistic.endTime | date: "dd/MM/yyyy HH:mm"}}</td>
+				<td>{{statistic.status}}</td>
+				<td>{{statistic.duration}}</td>
+				<td>{{statistic.noOfRecords}}</td>
+				<td>{{statistic.duration | durationPipe}}</td>
+				<td>{{statistic.format}}</td>
+				<td><a [routerLink]="['../details', statistic.jobExecutionId]"><i class="glyphicon glyphicon-triangle-right"></i></a></td>
+			</tr>
+
+
+		</table>
+
+	</div>
+	<nav>
+		<ul class="pager" *ngIf="isMore">
+			<li><a (click)="nextPartOfStats(10)">Next 10 <i class="glyphicon glyphicon-arrow-down"></i></a></li>
+		</ul>
+	</nav>
+</div>

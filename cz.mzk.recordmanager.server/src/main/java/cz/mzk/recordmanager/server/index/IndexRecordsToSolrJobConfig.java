@@ -47,10 +47,10 @@ public class IndexRecordsToSolrJobConfig {
 	private static final int PAGE_SIZE = 5000;
 
 	@Autowired
-    private JobBuilderFactory jobs;
+	private JobBuilderFactory jobs;
 
-    @Autowired
-    private StepBuilderFactory steps;
+	@Autowired
+	private StepBuilderFactory steps;
 
 	@Autowired
 	private DataSource dataSource;
@@ -156,7 +156,7 @@ public class IndexRecordsToSolrJobConfig {
 		return reader;
 	}
 
-    @Bean(name="indexRecordsToSolrJob:updatedRecordsProcessor")
+	@Bean(name="indexRecordsToSolrJob:updatedRecordsProcessor")
 	@StepScope
 	public SolrRecordProcessor updatedRecordsProcessor() {
 		return new SolrRecordProcessor();
@@ -171,11 +171,11 @@ public class IndexRecordsToSolrJobConfig {
 		return processor;
 	}
 
-    @Bean(name="indexRecordsToSolrJob:updatedRecordsWriter")
-    @StepScope
-    public SolrIndexWriter updatedRecordsWriter(@Value("#{jobParameters[" + Constants.JOB_PARAM_SOLR_URL + "]}") String solrUrl) {
-    	return new SolrIndexWriter(solrUrl);
-    }
+	@Bean(name="indexRecordsToSolrJob:updatedRecordsWriter")
+	@StepScope
+	public SolrIndexWriter updatedRecordsWriter(@Value("#{jobParameters[" + Constants.JOB_PARAM_SOLR_URL + "]}") String solrUrl) {
+		return new SolrIndexWriter(solrUrl);
+	}
 
 
 	@Bean(name="indexRecordsToSolrJob:orphanedRecordsReader")
@@ -200,14 +200,14 @@ public class IndexRecordsToSolrJobConfig {
 		reader.setDataSource(dataSource);
 		if (from != null && to != null) {
 			Map<String, Object> parameterValues = new HashMap<String, Object>();
-    		parameterValues.put("from", from);
-    		parameterValues.put("to", to);
-    		reader.setParameterValues(parameterValues);
-    	}
+			parameterValues.put("from", from);
+			parameterValues.put("to", to);
+			reader.setParameterValues(parameterValues);
+		}
 		reader.setSaveState(true);
 		reader.afterPropertiesSet();
 		return reader;
-    }
+	}
 
 	@Bean(name="indexRecordsToSolrJob:orphanedRecordsWriter")
 	@StepScope

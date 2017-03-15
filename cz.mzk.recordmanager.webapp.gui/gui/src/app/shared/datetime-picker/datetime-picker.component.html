@@ -1,0 +1,97 @@
+<div class="col-md-3">
+  <div class="input-group">
+    <span class="input-group-addon" id="sizing-addon1">{{description}}</span>
+    <input readonly type="text" class="form-control" value="{{pickedDate | date: 'dd/MM/yyyy HH:mm'}}">
+    <div class="input-group-btn">
+
+      <button (click)="selectDate(null)" type="button" class="btn btn-default" ><i class="glyphicon glyphicon-remove-circle"></i></button>
+
+      <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="glyphicon glyphicon-calendar"></i></button>
+
+
+
+      <div (click)="$event.stopPropagation();" id="calendarDropDown" class="dropdown-menu dropdown-menu-right">
+
+
+        <div class="center">
+
+          <div class="side" style="float: left;" >
+            <i (click)="nextYear(-1); " class="glyphicon glyphicon-menu-left"></i> {{refDate | date: 'yyyy'}} <i (click)="nextYear(1); " class="glyphicon glyphicon-menu-right"></i>
+          </div>
+
+          <div class="side">
+            <button class="btn btn-default btn-xs" (click)="today()">Today</button>
+          </div>
+
+          <div class="side" style="float: right">
+            <i (click)="nextMonth(-1); " class="glyphicon glyphicon-menu-left"></i> {{refDate | date: 'MMM'}} <i (click)="nextMonth(1); " class="glyphicon glyphicon-menu-right"></i>
+          </div>
+
+        </div>
+
+
+          <table class="table">
+            <thead>
+              <tr>
+                <th *ngFor="let day of weekday">{{day}}</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr *ngFor="let days of getDaysOfMonth()">
+                <td *ngFor="let day of days"><button *ngIf="day?.day" [ngClass]="{'btn-default': !day.isSelected, 'btn-primary': day.isSelected}" class="btn btn-xs"  (click)="selectDate(day?.day)">{{day?.day | date: "dd"}}</button></td>
+              </tr>
+            </tbody>
+          </table>
+
+        <div class="center" *ngIf="pickedDate">
+
+          <div>
+            <div class="side ">
+              <button (click)="nextHour(1);" class="btn btn-default btn-sm" ><i class="glyphicon glyphicon-menu-up"></i></button>
+            </div>
+
+            <div class="side ">
+              <button (click)="nextMinute(1);" class="btn btn-default btn-sm" ><i class="glyphicon glyphicon-menu-up"></i></button>
+            </div>
+          </div>
+
+          <div>
+            <div class="side">
+              <h3 style="cursor: pointer" (click)="setHourSelection()">{{pickedDate | date: 'HH'}}</h3>
+            </div>
+
+            <div class="side">
+              <h3>:</h3>
+            </div>
+
+            <div class="side">
+              <h3 style="cursor: pointer" (click)="setMinuteSelection()">{{pickedDate | date: 'mm'}}</h3>
+            </div>
+          </div>
+
+          <div>
+            <div class="side ">
+              <button (click)="nextHour(-1);" class="btn btn-default btn-sm" ><i class="glyphicon glyphicon-menu-down"></i></button>
+            </div>
+
+            <div class="side ">
+              <button (click)="nextMinute(-1);" class="btn btn-default btn-sm" ><i class="glyphicon glyphicon-menu-down"></i></button>
+            </div>
+          </div>
+
+
+          <table *ngIf="isTimeChooser" class="table">
+            <tr *ngFor="let row of getTimeMatrix()">
+              <td *ngFor="let val of row"><button (click)="selectDate(val)" class="btn btn-default btn-xs">{{isHourSelection ?( val | date : 'HH' ) : ( val | date : 'mm' )}}</button></td>
+            </tr>
+          </table>
+
+
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</div>

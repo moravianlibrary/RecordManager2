@@ -188,7 +188,7 @@ public class DublinCoreRecordImpl implements DublinCoreRecord {
 		return new ArrayList<String>();
 	}
 
-    /* ADD */
+	/* ADD */
 
 	@Override
 	public void addContributor(String s) {

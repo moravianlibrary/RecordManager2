@@ -14,16 +14,16 @@ import javax.persistence.Table;
 public class Library extends AbstractDomainObject {
 	
 	public static final String TABLE_NAME = "library";
-	
+
 	@Column(name="name")
 	private String name;
-	
+
 	@Column(name="url")
 	private String url;
-	
+
 	@Column(name="catalog_url")
 	private String catalogUrl;
-	
+
 	@Column(name="city")
 	private String city;
 	

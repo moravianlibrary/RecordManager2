@@ -109,11 +109,11 @@ public class DublinCoreDSL extends BaseDSL {
 	}
 	
 	public List<String> getAuthorFind(){
-    	List<String> result = new ArrayList<String>();
-    	result.add(getAuthorDisplay());
-    	result.addAll(getAuthor2Display());
-    	return result;
-    }
+		List<String> result = new ArrayList<String>();
+		result.add(getAuthorDisplay());
+		result.addAll(getAuthor2Display());
+		return result;
+	}
 	
 	public String changeName(String name){
 		if(name == null || name.isEmpty()) return null;
@@ -190,22 +190,22 @@ public class DublinCoreDSL extends BaseDSL {
 		List<Isbn> isbns = dcMetadataRecord.getISBNs();
 		List<String> isbnsS = new ArrayList<String>();
 		
-	    for (Isbn n: isbns) {
-	    	String isbn = n.getIsbn().toString();
-	    	isbnsS.add(isbn);
-	    }
-	    return isbnsS;    
+		for (Isbn n: isbns) {
+			String isbn = n.getIsbn().toString();
+			isbnsS.add(isbn);
+		}
+		return isbnsS;
 	}
 	
 	public List<String> getISSNs() {
 		List<Issn> issns = dcMetadataRecord.getISSNs();
 		List<String> issnsS = new ArrayList<String>();
 		
-	    for (Issn n: issns) {
-	    	String issn = n.getIssn().toString();
-	    	issnsS.add(issn);
-	    }
-	    return issnsS;    
+		for (Issn n: issns) {
+			String issn = n.getIssn().toString();
+			issnsS.add(issn);
+		}
+		return issnsS;
 	}
 	
 

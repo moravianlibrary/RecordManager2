@@ -37,124 +37,124 @@ import cz.mzk.recordmanager.server.util.Constants;
 
 @Component
 public class MetadataRecordFactory {
-	
-	@Autowired 
-	private HarvestedRecordDAO harvestedRecordDao;
-	
-	@Autowired
-	private MarcXmlParser marcXmlParser;
-	
-	@Autowired
-	private DublinCoreParser dcParser;
-	
-	public MetadataRecord getMetadataRecord(HarvestedRecord record) {
-		if (record == null) {
-			return null;
-		}
 
-		ImportConfiguration configuration = record.getHarvestedFrom();
-		InputStream is = new ByteArrayInputStream(record.getRawRecord());
-		
-		String recordFormat = record.getFormat();
-		
-        if (Constants.METADATA_FORMAT_MARC21.equals(recordFormat) 
-        		|| Constants.METADATA_FORMAT_XML_MARC.equals(recordFormat)
-        		|| Constants.METADATA_FORMAT_MARC_CPK.equals(recordFormat)
-        		|| Constants.METADATA_FORMAT_OAI_MARCXML_CPK.equals(recordFormat)
-        		|| Constants.METADATA_FORMAT_MARC21E.equals(recordFormat)) {
-    		MarcRecord marcRec = marcXmlParser.parseRecord(is);
-			return getMetadataRecord(marcRec, configuration);
-		}
-        
-        if (Constants.METADATA_FORMAT_DUBLIN_CORE.equals(recordFormat)
-        		|| Constants.METADATA_FORMAT_ESE.equals(recordFormat)) {
-        	DublinCoreRecord dcRec = dcParser.parseRecord(is);
-        	return getMetadataRecord(dcRec, configuration);
+    @Autowired
+    private HarvestedRecordDAO harvestedRecordDao;
+
+    @Autowired
+    private MarcXmlParser marcXmlParser;
+
+    @Autowired
+    private DublinCoreParser dcParser;
+
+    public MetadataRecord getMetadataRecord(HarvestedRecord record) {
+        if (record == null) {
+            return null;
         }
-        
+
+        ImportConfiguration configuration = record.getHarvestedFrom();
+        InputStream is = new ByteArrayInputStream(record.getRawRecord());
+
+        String recordFormat = record.getFormat();
+
+        if (Constants.METADATA_FORMAT_MARC21.equals(recordFormat)
+                || Constants.METADATA_FORMAT_XML_MARC.equals(recordFormat)
+                || Constants.METADATA_FORMAT_MARC_CPK.equals(recordFormat)
+                || Constants.METADATA_FORMAT_OAI_MARCXML_CPK.equals(recordFormat)
+                || Constants.METADATA_FORMAT_MARC21E.equals(recordFormat)) {
+            MarcRecord marcRec = marcXmlParser.parseRecord(is);
+            return getMetadataRecord(marcRec, configuration);
+        }
+
+        if (Constants.METADATA_FORMAT_DUBLIN_CORE.equals(recordFormat)
+                || Constants.METADATA_FORMAT_ESE.equals(recordFormat)) {
+            DublinCoreRecord dcRec = dcParser.parseRecord(is);
+            return getMetadataRecord(dcRec, configuration);
+        }
+
         return null;
     }
-	
-	public MetadataRecord getMetadataRecord(MarcRecord marcRec, ImportConfiguration configuration){
-		String prefix = getPrefix(configuration);
-		switch (prefix) {
-		case Constants.PREFIX_MZK:
-			return new MzkMetadataMarcRecord(marcRec);
-		case Constants.PREFIX_NKP:
-			return new NkpMarcMetadataRecord(marcRec);
-		case Constants.PREFIX_TRE:
-		case Constants.PREFIX_MKUO:
-			return new TreMetadataMarcRecord(marcRec);
-		case Constants.PREFIX_MZKNORMS:
-			return new MzkNormsMetadataMarcRecord(marcRec);
-		case Constants.PREFIX_SFXJIBMZK:
-		case Constants.PREFIX_SFXJIBNLK:
-		case Constants.PREFIX_SFXKNAV:
-			return new SfxMetadataMarcRecord(marcRec);
-		case Constants.PREFIX_SFXJIBNLK_PERIODICALS:
-			return new SfxjibNlkPeriodicalsMetadataMarcRecord(marcRec);
-		case Constants.PREFIX_CASLIN:
-			return new SkatMarcMetadataRecord(marcRec);
-		case Constants.PREFIX_AUTH:
-			return new AuthMetadataMarcRecord(marcRec);
-		case Constants.PREFIX_OSOBNOSTI:
-			return new OsobnostiRegionuMetadataMarcRecord(marcRec);
-		case Constants.PREFIX_SVKUL:
-			return new SvkulMetadataMarcRecord(marcRec);
-		case Constants.PREFIX_VKOL:
-			return new VkolMarcMetadataRecord(marcRec);
-		case Constants.PREFIX_ZAKONY:
-			return new ZakonyProLidiMetadataMarcRecord(marcRec);
-		case Constants.PREFIX_MKP_EBOOKS:
-			return new MkpEbooksMetadataMarcRecord(marcRec);
-		case Constants.PREFIX_BMC:
-			return new BmcMetadataMarcRecord(marcRec);
-		case Constants.PREFIX_UPV:
-			return new PatentsMetadataMarcRecord(marcRec);
-		case Constants.PREFIX_OPENLIB:
-			return new OpenLibraryMetadataMarcRecord(marcRec);
-		default:
-			return new MetadataMarcRecord(marcRec);
-		}
-	}
-	
-	public MetadataRecord getMetadataRecord(DublinCoreRecord dcRec, ImportConfiguration configuration){
-		String prefix = getPrefix(configuration);
-		switch(prefix){
-		case Constants.PREFIX_KRAM_MZK:
-		case Constants.PREFIX_KRAM_NTK:
-		case Constants.PREFIX_KRAM_KNAV:
-		case Constants.PREFIX_KRAM_NKP:
-			return new KramDefaultMetadataDublinCoreRecord(dcRec);
-		case Constants.PREFIX_KRAM3_NKP:
-			return new Kram3NkpMetadataDublinCoreRecord(dcRec);
-		case Constants.PREFIX_MANUSCRIPTORIUM:
-			return new ManuscriptoriumMetadataDublinCoreRecord(dcRec);
-		default:
-			return getMetadataRecord(dcRec);
-    	}
-	}
-	
-	public MetadataRecord getMetadataRecord(HarvestedRecordUniqueId recordId) {
-		return getMetadataRecord(harvestedRecordDao.get(recordId));
-	}
-	
-	public MetadataRecord getMetadataRecord(MarcRecord marcRecord) {
-		MetadataRecord metadata = new MetadataMarcRecord(marcRecord);
-		return metadata;
-	}
 
-	public MetadataRecord getMetadataRecord(DublinCoreRecord dcRecord) {
-		MetadataRecord metadata = new MetadataDublinCoreRecord(dcRecord);
-		return metadata;
-	}
-	
-	private String getPrefix(ImportConfiguration configuration){
-		if (configuration != null) {
-			String prefix;
-			prefix = configuration.getIdPrefix();
-			return prefix == null ? "" : prefix;
-		}
-		return "";
-	}
+    public MetadataRecord getMetadataRecord(MarcRecord marcRec, ImportConfiguration configuration){
+        String prefix = getPrefix(configuration);
+        switch (prefix) {
+            case Constants.PREFIX_MZK:
+                return new MzkMetadataMarcRecord(marcRec);
+            case Constants.PREFIX_NKP:
+                return new NkpMarcMetadataRecord(marcRec);
+            case Constants.PREFIX_TRE:
+            case Constants.PREFIX_MKUO:
+                return new TreMetadataMarcRecord(marcRec);
+            case Constants.PREFIX_MZKNORMS:
+                return new MzkNormsMetadataMarcRecord(marcRec);
+            case Constants.PREFIX_SFXJIBMZK:
+            case Constants.PREFIX_SFXJIBNLK:
+            case Constants.PREFIX_SFXKNAV:
+                return new SfxMetadataMarcRecord(marcRec);
+            case Constants.PREFIX_SFXJIBNLK_PERIODICALS:
+                return new SfxjibNlkPeriodicalsMetadataMarcRecord(marcRec);
+            case Constants.PREFIX_CASLIN:
+                return new SkatMarcMetadataRecord(marcRec);
+            case Constants.PREFIX_AUTH:
+                return new AuthMetadataMarcRecord(marcRec);
+            case Constants.PREFIX_OSOBNOSTI:
+                return new OsobnostiRegionuMetadataMarcRecord(marcRec);
+            case Constants.PREFIX_SVKUL:
+                return new SvkulMetadataMarcRecord(marcRec);
+            case Constants.PREFIX_VKOL:
+                return new VkolMarcMetadataRecord(marcRec);
+            case Constants.PREFIX_ZAKONY:
+                return new ZakonyProLidiMetadataMarcRecord(marcRec);
+            case Constants.PREFIX_MKP_EBOOKS:
+                return new MkpEbooksMetadataMarcRecord(marcRec);
+            case Constants.PREFIX_BMC:
+                return new BmcMetadataMarcRecord(marcRec);
+            case Constants.PREFIX_UPV:
+                return new PatentsMetadataMarcRecord(marcRec);
+            case Constants.PREFIX_OPENLIB:
+                return new OpenLibraryMetadataMarcRecord(marcRec);
+            default:
+                return new MetadataMarcRecord(marcRec);
+        }
+    }
+
+    public MetadataRecord getMetadataRecord(DublinCoreRecord dcRec, ImportConfiguration configuration){
+        String prefix = getPrefix(configuration);
+        switch(prefix){
+            case Constants.PREFIX_KRAM_MZK:
+            case Constants.PREFIX_KRAM_NTK:
+            case Constants.PREFIX_KRAM_KNAV:
+            case Constants.PREFIX_KRAM_NKP:
+                return new KramDefaultMetadataDublinCoreRecord(dcRec);
+            case Constants.PREFIX_KRAM3_NKP:
+                return new Kram3NkpMetadataDublinCoreRecord(dcRec);
+            case Constants.PREFIX_MANUSCRIPTORIUM:
+                return new ManuscriptoriumMetadataDublinCoreRecord(dcRec);
+            default:
+                return getMetadataRecord(dcRec);
+        }
+    }
+
+    public MetadataRecord getMetadataRecord(HarvestedRecordUniqueId recordId) {
+        return getMetadataRecord(harvestedRecordDao.get(recordId));
+    }
+
+    public MetadataRecord getMetadataRecord(MarcRecord marcRecord) {
+        MetadataRecord metadata = new MetadataMarcRecord(marcRecord);
+        return metadata;
+    }
+
+    public MetadataRecord getMetadataRecord(DublinCoreRecord dcRecord) {
+        MetadataRecord metadata = new MetadataDublinCoreRecord(dcRecord);
+        return metadata;
+    }
+
+    private String getPrefix(ImportConfiguration configuration){
+        if (configuration != null) {
+            String prefix;
+            prefix = configuration.getIdPrefix();
+            return prefix == null ? "" : prefix;
+        }
+        return "";
+    }
 }

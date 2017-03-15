@@ -1,0 +1,109 @@
+<div class="panel-group">
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<h4 class="panel-title">
+				<a data-toggle="collapse" href="#collapseFullHarvest"><i class="glyphicon glyphicon-wrench"></i> Full harvest</a>
+			</h4>
+		</div>
+		<div id="collapseFullHarvest" class="panel-collapse collapse">
+			<div class="panel-body">
+				<app-single-job-runner [needId]="true" [whoAmI]="'fullHarvest'"></app-single-job-runner>
+			</div>
+		</div>
+	</div>
+
+
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<h4 class="panel-title">
+				<a data-toggle="collapse" href="#collapseIncrementalHarvest"><i class="glyphicon glyphicon-wrench"></i> Incremental harvest</a>
+			</h4>
+		</div>
+		<div id="collapseIncrementalHarvest" class="panel-collapse collapse">
+			<div class="panel-body">
+				<app-single-job-runner [needId]="true" [whoAmI]="'incrementalHarvest'"></app-single-job-runner>
+			</div>
+		</div>
+	</div>
+
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<h4 class="panel-title">
+				<a data-toggle="collapse" href="#collapseDeduplicate"><i class="glyphicon glyphicon-wrench"></i> Deduplicate</a>
+			</h4>
+		</div>
+		<div id="collapseDeduplicate" class="panel-collapse collapse">
+			<div class="panel-body">
+				<app-single-job-runner [needId]="false" [whoAmI]="'deduplicate'"></app-single-job-runner>
+			</div>
+		</div>
+	</div>
+
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<h4 class="panel-title">
+				<a data-toggle="collapse" href="#collapseIndex"><i class="glyphicon glyphicon-wrench"></i> Index</a>
+			</h4>
+		</div>
+		<div id="collapseIndex" class="panel-collapse collapse">
+			<div class="panel-body">
+				<app-single-job-runner [needId]="false" [whoAmI]="'index'"></app-single-job-runner>
+			</div>
+		</div>
+	</div>
+
+
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<h4 class="panel-title">
+				<a data-toggle="collapse" href="#collapseImportRecordsJobs"><i class="glyphicon glyphicon-wrench"></i> Import records</a>
+			</h4>
+		</div>
+		<div id="collapseImportRecordsJobs" class="panel-collapse collapse">
+			<div class="panel-body">
+				<app-import-records-job></app-import-records-job>
+			</div>
+		</div>
+	</div>
+
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<h4 class="panel-title">
+				<a data-toggle="collapse" href="#filterCaslinRecordsJob"><i class="glyphicon glyphicon-wrench"></i> Filter caslin records</a>
+			</h4>
+		</div>
+		<div id="filterCaslinRecordsJob" class="panel-collapse collapse">
+			<div class="panel-body">
+				<button (click)="runNoParamsJob('filterCaslinRecordsJob')" type="button" class="btn btn-primary">Run</button>
+			</div>
+		</div>
+	</div>
+
+
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<h4 class="panel-title">
+				<a data-toggle="collapse" href="#regenerateDedupKeysJob"><i class="glyphicon glyphicon-wrench"></i> Regenerate dedup keys</a>
+			</h4>
+		</div>
+		<div id="regenerateDedupKeysJob" class="panel-collapse collapse">
+			<div class="panel-body">
+				<button (click)="runNoParamsJob('regenerateDedupKeysJob')" type="button" class="btn btn-primary">Run</button>
+			</div>
+		</div>
+	</div>
+
+
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<h4 class="panel-title">
+				<a data-toggle="collapse" href="#regenerateMissingDedupKeysJob"><i class="glyphicon glyphicon-wrench"></i> Regenerate missing dedup keys</a>
+			</h4>
+		</div>
+		<div id="regenerateMissingDedupKeysJob" class="panel-collapse collapse">
+			<div class="panel-body">
+				<button (click)="runNoParamsJob('regenerateMissingDedupKeysJob')" type="button" class="btn btn-primary">Run</button>
+			</div>
+		</div>
+	</div>
+</div>

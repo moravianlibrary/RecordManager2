@@ -140,48 +140,48 @@ public class MarcDSL extends BaseDSL {
 		return "";
 	}
 
-    /*
-     * Get all fields starting with the 100 and ending with the 839
-     * This will ignore any "code" fields and only use textual fields
-     */
+	/*
+	 * Get all fields starting with the 100 and ending with the 839
+	 * This will ignore any "code" fields and only use textual fields
+	 */
 	public List<String> getAllFields() {
 		Map<String, List<DataField>> allFields = record.getAllFields();
 		List<String> result = new ArrayList<String>();
-        for (Entry<String, List<DataField>> entry : allFields.entrySet()) {
-        	int tag = -1;
-        	try {
-        		tag = Integer.parseInt(entry.getKey());
-        	} catch (NumberFormatException nfe) {
-        		continue;
-        	}
-            if ((tag < 100) || (tag >= 840)) {
-            	continue;
-            }
-            List<DataField> fields = entry.getValue();
-            StringBuffer buffer = new StringBuffer();
+		for (Entry<String, List<DataField>> entry : allFields.entrySet()) {
+			int tag = -1;
+			try {
+				tag = Integer.parseInt(entry.getKey());
+			} catch (NumberFormatException nfe) {
+				continue;
+			}
+			if ((tag < 100) || (tag >= 840)) {
+				continue;
+			}
+			List<DataField> fields = entry.getValue();
+			StringBuffer buffer = new StringBuffer();
 			for (DataField field : fields) {
-                List<Subfield> subfields = field.getSubfields();
-                Iterator<Subfield> subfieldsIter = subfields.iterator();
-                while (subfieldsIter.hasNext()) {
-                    Subfield subfield = (Subfield) subfieldsIter.next();
-                    if (buffer.length() > 0) {
-                        buffer.append(" " + subfield.getData());
-                    } else {
-                        buffer.append(subfield.getData());
-                    }
-                }
-            }
+				List<Subfield> subfields = field.getSubfields();
+				Iterator<Subfield> subfieldsIter = subfields.iterator();
+				while (subfieldsIter.hasNext()) {
+					Subfield subfield = (Subfield) subfieldsIter.next();
+					if (buffer.length() > 0) {
+						buffer.append(" " + subfield.getData());
+					} else {
+						buffer.append(subfield.getData());
+					}
+				}
+			}
 			result.add(buffer.toString());
-        }
-        return result;
+		}
+		return result;
 	}
 
-    /**
-     * Get the title (245ab) from a record, without non-filing chars as
-     * specified in 245 2nd indicator, and lowercased. 
-     * @param context - the marc record object
-     * @return 245a and 245b values concatenated, with trailing punct removed,
-     *         and with non-filing characters omitted. Null returned if no
+	/**
+	 * Get the title (245ab) from a record, without non-filing chars as
+	 * specified in 245 2nd indicator, and lowercased.
+	 * @param context - the marc record object
+	 * @return 245a and 245b values concatenated, with trailing punct removed,
+	 *	     and with non-filing characters omitted. Null returned if no
      *         title can be found. 
      * 
      * @see SolrIndexer#getTitle

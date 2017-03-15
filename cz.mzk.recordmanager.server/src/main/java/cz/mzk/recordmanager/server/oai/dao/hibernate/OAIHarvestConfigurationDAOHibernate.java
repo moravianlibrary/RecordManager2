@@ -10,4 +10,8 @@ public class OAIHarvestConfigurationDAOHibernate extends
 		AbstractDomainDAOHibernate<Long, OAIHarvestConfiguration> implements
 		OAIHarvestConfigurationDAO {
 
+	@Override
+	public void update(OAIHarvestConfiguration configuration) {
+		sessionFactory.getCurrentSession().update(configuration);
+	}
 }

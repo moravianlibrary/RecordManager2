@@ -10,4 +10,8 @@ public class KrameriusConfiurationDAOHibernate extends
 		AbstractDomainDAOHibernate<Long, KrameriusConfiguration> implements
 		KrameriusConfigurationDAO {
 
+	@Override
+	public void update(KrameriusConfiguration configuration) {
+		sessionFactory.getCurrentSession().update(configuration);
+	}
 }

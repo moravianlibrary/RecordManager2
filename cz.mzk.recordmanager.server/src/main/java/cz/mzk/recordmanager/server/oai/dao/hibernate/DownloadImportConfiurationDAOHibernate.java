@@ -10,4 +10,8 @@ public class DownloadImportConfiurationDAOHibernate extends
 		AbstractDomainDAOHibernate<Long, DownloadImportConfiguration> implements
 		DownloadImportConfigurationDAO {
 
+	@Override
+	public void update(DownloadImportConfiguration configuration) {
+		sessionFactory.getCurrentSession().update(configuration);
+	}
 }

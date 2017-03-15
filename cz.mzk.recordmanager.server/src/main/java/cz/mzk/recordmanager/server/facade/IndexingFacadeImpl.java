@@ -76,6 +76,11 @@ public class IndexingFacadeImpl implements IndexingFacade {
 	}
 
 	@Override
+	public void indexIndividualRecordsToSolrJob(String id) {
+		executeIndexIndividualJob(Constants.JOB_ID_SOLR_INDEX_INDIVIDUAL_RECORDS, null, id);
+	}
+
+	@Override
 	public void indexHarvestedRecords(String solrUrl) {
 		executeIndexJob(Constants.JOB_ID_SOLR_INDEX_HARVESTED_RECORDS, solrUrl, false);
 	}
@@ -128,4 +133,18 @@ public class IndexingFacadeImpl implements IndexingFacade {
 		jobExecutor.execute(jobName, params);
 	}
 
+	private void executeIndexIndividualJob(String jobName, String solrUrl, String id) {
+		if (solrUrl == null) {
+			if (defaultSolrUrl == null || defaultSolrUrl.isEmpty()) {
+				throw new IllegalArgumentException("Parameter solrUrl is required, no default given");
+			}
+			solrUrl = defaultSolrUrl;
+		}
+		Map<String, JobParameter> parameters = new HashMap<>();
+		parameters.put(Constants.JOB_PARAM_RECORD_IDS, new JobParameter(id));
+		parameters.put(Constants.JOB_PARAM_SOLR_URL, new JobParameter(solrUrl));
+
+		JobParameters params = new JobParameters(parameters);
+		jobExecutor.execute(jobName, params);
+	}
 }

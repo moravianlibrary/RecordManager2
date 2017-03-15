@@ -1,0 +1,52 @@
+<div id="wrapper">
+
+  <!-- Sidebar -->
+  <div id="sidebar-wrapper">
+    <ul class="sidebar-nav">
+      <li class="sidebar-brand">
+        <a routerLink="/library">
+          Record Manager 2
+        </a>
+      </li>
+      <li>
+        <a routerLink="/library">Libraries</a>
+      </li>
+      <li>
+        <a  data-toggle="collapse"  href="#jobsCollapse" aria-expanded="false" aria-controls="collapseExample">Jobs</a>
+
+        <div class="collapse" id="jobsCollapse">
+          <div class="well" id="collapsedWall">
+            <ul>
+              <li><a routerLink="job/runners">Run</a></li>
+              <li><a routerLink="job/statistics">Statistics</a></li>
+            </ul>
+          </div>
+        </div>
+      </li>
+      <!--<li>-->
+        <!--<a routerLink="oaiHarvestStats">Statistics</a>-->
+      <!--</li>-->
+      <li>
+        <a routerLink="/about">About</a>
+      </li>
+      <li>
+        <a routerLink="/login">{{logedInformation()}}</a>
+      </li>
+    </ul>
+  </div>
+  <!-- /#sidebar-wrapper -->
+
+
+  <!-- Page Content -->
+  <div id="page-content-wrapper">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-lg-12">
+          <router-outlet></router-outlet>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- /#page-content-wrapper -->
+
+</div>

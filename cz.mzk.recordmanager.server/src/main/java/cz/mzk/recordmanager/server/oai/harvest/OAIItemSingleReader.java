@@ -59,7 +59,7 @@ public class OAIItemSingleReader implements ItemReader<List<OAIRecord>>,
 	}
 
 	/**
-	 * Harvests record by Id
+	 * Harvests record by IdDto
 	 * 
 	 * @return single record in list or null if nothing is found
 	 */
@@ -70,13 +70,13 @@ public class OAIItemSingleReader implements ItemReader<List<OAIRecord>>,
 		}
 		
 		OAIGetRecord getRecord = harvester.getRecord(recordId);
-	    	    
+
 		if (getRecord == null) {
 			return null;
 		} else {
-		    /* <MJ.> has to finish on 2nd run.. overkill ;-) */
+			/* <MJ.> has to finish on 2nd run.. overkill ;-) */
 			finished = true;
-		    return Arrays.asList(getRecord.getRecord());
+			return Arrays.asList(getRecord.getRecord());
 		}
 	}
 

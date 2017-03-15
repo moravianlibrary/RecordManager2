@@ -58,7 +58,7 @@ public class OAIOneByOneItemReader implements ItemReader<List<OAIRecord>>,
 
 	private boolean finished = false;
 	
-    private static final int COMMIT_INTERVAL = 50;
+	private static final int COMMIT_INTERVAL = 50;
 	
 	public OAIOneByOneItemReader(Long confId, Date fromDate, Date untilDate, String resumptionToken) {
 		super();

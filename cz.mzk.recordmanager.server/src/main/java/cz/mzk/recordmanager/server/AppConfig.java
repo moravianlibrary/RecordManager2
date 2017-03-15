@@ -2,6 +2,9 @@ package cz.mzk.recordmanager.server;
 
 import javax.sql.DataSource;
 
+import cz.mzk.recordmanager.api.service.ImportConfigurationService;
+import cz.mzk.recordmanager.api.service.StatisticsService;
+import cz.mzk.recordmanager.server.service.*;
 import liquibase.exception.LiquibaseException;
 import liquibase.integration.spring.SpringLiquibase;
 
@@ -45,7 +48,6 @@ import cz.mzk.recordmanager.server.scripting.MappingResolver;
 import cz.mzk.recordmanager.server.scripting.ResourceMappingResolver;
 import cz.mzk.recordmanager.server.scripting.ResourceStopWordsResolver;
 import cz.mzk.recordmanager.server.scripting.StopWordsResolver;
-import cz.mzk.recordmanager.server.service.LibraryServiceImpl;
 import cz.mzk.recordmanager.server.solr.SolrServerFactory;
 import cz.mzk.recordmanager.server.solr.SolrServerFactoryImpl;
 import cz.mzk.recordmanager.server.util.ApacheHttpClient;
@@ -184,7 +186,10 @@ public class AppConfig extends DefaultBatchConfigurer {
 		taskExecutor.afterPropertiesSet();
 		return taskExecutor;
 	}
-
+	@Bean
+	public ImportConfigurationService importConfigurationService() {
+		return new ImportConfigurationServiceImpl();
+	}
 	@Override
 	public PlatformTransactionManager getTransactionManager() {
 		return transactionManager();
@@ -194,7 +199,10 @@ public class AppConfig extends DefaultBatchConfigurer {
 	public MappingResolver propertyResolver() {
 		return new CachingMappingResolver(new ResourceMappingResolver(resourceProvider));
 	}
-
+	@Bean
+	public Translator translator(){
+		return new Translator();
+	}
 	@Bean
 	public StopWordsResolver stopWordsResolver() {
 		return new CachingStopWordsResolver(new ResourceStopWordsResolver(resourceProvider));
@@ -217,6 +225,12 @@ public class AppConfig extends DefaultBatchConfigurer {
 	@Bean
 	public LibraryService libraryService() {
 		return new LibraryServiceImpl();
+	}
+
+
+	@Bean
+	public StatisticsService statisticsService(){
+		return new StatisticsServiceImpl();
 	}
 
 }

@@ -51,7 +51,7 @@ public class AbstractDomainDAOHibernate<ID extends Serializable, T> implements D
 	protected Class<T> getClassForPersistence() {
 		Class<?> clazz = this.getClass();
 		while (clazz.getSuperclass() != null 
-			    && !clazz.getSuperclass().equals(AbstractDomainDAOHibernate.class)) {
+				&& !clazz.getSuperclass().equals(AbstractDomainDAOHibernate.class)) {
 			clazz = clazz.getSuperclass();
 		}
 		if (clazz.getSuperclass() == null) {
@@ -65,5 +65,6 @@ public class AbstractDomainDAOHibernate<ID extends Serializable, T> implements D
 	public void flush() {
 		sessionFactory.getCurrentSession().flush();
 	}
+
 
 }

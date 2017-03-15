@@ -115,7 +115,7 @@ public class KrameriusFulltextProcessor implements
 			List<FulltextKramerius> pages;
 			if (model.equals("periodical")) {
 				logger.info("Using (periodical) fultexter \"for root\" for uuid "+rootUuid+".");
-			    pages = fulltexter.getFulltextForRoot(rootUuid);	
+				pages = fulltexter.getFulltextForRoot(rootUuid);
 			} else {
 				logger.info("Using (monograph/default) fultexter \"for parent\" for uuid "+rootUuid+".");
 				 pages = fulltexter

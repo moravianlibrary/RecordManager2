@@ -1,0 +1,10 @@
+i, a{
+  cursor: pointer;
+}
+.center {
+  text-align: center;
+}
+.side{
+  display: inline-block;
+}
+

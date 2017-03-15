@@ -62,54 +62,54 @@ public class InspirationImportWriter implements ItemWriter<Map<String, List<Stri
 				int added_ins = 0; // added inspiration records
 				int exists_ins = 0; // inspirations in db
 				int not_exists_rec = 0; // hr not in db
-			    for(String id: entry.getValue()){
-			    	Matcher matcher = PATTERN_ID.matcher(id);
-			    	if(matcher.matches()){
-			    		String id_prefix = matcher.group(1);
-			    		String record_id = matcher.group(2);
-			    		List<ImportConfiguration> confs = confDao.findByIdPrefix(id_prefix);
-			    		int counter = 0;
-			    		for(ImportConfiguration conf: confs){
-				    		if(conf == null) continue;
-				    		HarvestedRecord hr = hrDao.findByIdAndHarvestConfiguration(record_id, conf);
-				    		if(hr == null){
-				    			if(++counter == confs.size()) ++not_exists_rec;
-				    			continue;
-				    		}
-				    		
-				    		if(hrWithInspiration.contains(hr)){
-				    			// inspiration is already in db
-				    			hrWithInspiration.remove(hr);
-				    			++exists_ins;
-				    		}
-				    		else{ // add inspiration to hr 
-				    			List<Inspiration> result = hr.getInspiration();
-				    			Inspiration newInspiration = new Inspiration(entry.getKey());
-				    			newInspiration.setHarvestedRecordId(hr.getId());
-				    			result.add(newInspiration);
-				    			hr.setInspiration(result);
-				    			hr.setUpdated(new Date());
-				    			hrDao.persist(hr);
-				    			++added_ins;
-				    		}
-			    		}
-			    	}
-			    }
-			    // rest of records - delete inspiration
-			    for(HarvestedRecord hr: hrWithInspiration){
-			    	Inspiration delete = inspirationDao.findByHrIdAndName(hr.getId(), inspiration_name);
+				for(String id: entry.getValue()){
+					Matcher matcher = PATTERN_ID.matcher(id);
+					if(matcher.matches()){
+						String id_prefix = matcher.group(1);
+						String record_id = matcher.group(2);
+						List<ImportConfiguration> confs = confDao.findByIdPrefix(id_prefix);
+						int counter = 0;
+						for(ImportConfiguration conf: confs){
+							if(conf == null) continue;
+							HarvestedRecord hr = hrDao.findByIdAndHarvestConfiguration(record_id, conf);
+							if(hr == null){
+								if(++counter == confs.size()) ++not_exists_rec;
+								continue;
+							}
+
+							if(hrWithInspiration.contains(hr)){
+								// inspiration is already in db
+								hrWithInspiration.remove(hr);
+								++exists_ins;
+							}
+							else{ // add inspiration to hr
+								List<Inspiration> result = hr.getInspiration();
+								Inspiration newInspiration = new Inspiration(entry.getKey());
+								newInspiration.setHarvestedRecordId(hr.getId());
+								result.add(newInspiration);
+								hr.setInspiration(result);
+								hr.setUpdated(new Date());
+								hrDao.persist(hr);
+								++added_ins;
+							}
+						}
+					}
+				}
+				// rest of records - delete inspiration
+				for(HarvestedRecord hr: hrWithInspiration){
+					Inspiration delete = inspirationDao.findByHrIdAndName(hr.getId(), inspiration_name);
 					List<Inspiration> inspirations = hr.getInspiration();
 					inspirations.remove(delete);
 					hr.setInspiration(inspirations);
 					hr.setUpdated(new Date());
 					hrDao.persist(hr);
 					inspirationDao.delete(delete);
-			    }
-			    logger.info(String.format(TEXT_EXISTS, exists_ins));
-			    logger.info(String.format(TEXT_ADD, added_ins));
-			    logger.info(String.format(TEXT_RECORD_NOT_EXIST, not_exists_rec));
-			    logger.info(String.format(TEXT_DELETE, hrWithInspiration.size()));
-			    logger.info(String.format(TEXT_COMPLETE, inspiration_name));
+				}
+				logger.info(String.format(TEXT_EXISTS, exists_ins));
+				logger.info(String.format(TEXT_ADD, added_ins));
+				logger.info(String.format(TEXT_RECORD_NOT_EXIST, not_exists_rec));
+				logger.info(String.format(TEXT_DELETE, hrWithInspiration.size()));
+				logger.info(String.format(TEXT_COMPLETE, inspiration_name));
 			}
 		}
 	}

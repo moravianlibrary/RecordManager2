@@ -5,4 +5,6 @@ import cz.mzk.recordmanager.server.model.OAIHarvestConfiguration;
 public interface OAIHarvestConfigurationDAO extends
 		DomainDAO<Long, OAIHarvestConfiguration> {
 
+	void update(OAIHarvestConfiguration configuration);
+
 }

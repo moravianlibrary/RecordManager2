@@ -1,0 +1,77 @@
+<div class="page-header">
+	<h1>Libraries</h1>
+</div>
+<!--Preloader-->
+<div *ngIf="loading" class='uil-ring-css' style='transform:scale(0.6); right: 50%; left: 50%; position: fixed'><div></div></div>
+
+<div *ngIf="!loading">
+
+	<div class="panel panel-default">
+		<!-- Default panel contents -->
+		<!-- Table -->
+		<table class="table">
+			<tr>
+				<th>ID<i (click)="sortByMe('id')" [ngClass]="{'glyphicon': true, 'glyphicon-arrow-up': getArrow('id') && getVisibility('id'), 'glyphicon-arrow-down': !getArrow('id') && getVisibility('id'), 'glyphicon-sort': !getVisibility('id')}"></i></th>
+				<th>Name<i (click)="sortByMe('name')" [ngClass]="{'glyphicon': true, 'glyphicon-arrow-up': getArrow('name'), 'glyphicon-arrow-down': !getArrow('name'),  'glyphicon-sort': !getVisibility('name')}"></i></th>
+				<th>City<i (click)="sortByMe('city')" [ngClass]="{'glyphicon': true, 'glyphicon-arrow-up': getArrow('city'), 'glyphicon-arrow-down': !getArrow('city'),  'glyphicon-sort': !getVisibility('city')}"></i></th>
+				<th>URL<i (click)="sortByMe('url')" [ngClass]="{'glyphicon': true, 'glyphicon-arrow-up': getArrow('url'), 'glyphicon-arrow-down': !getArrow('url'),  'glyphicon-sort': !getVisibility('url')}"></i></th>
+				<th>Catalog URL<i (click)="sortByMe('catalogUrl')" [ngClass]="{'glyphicon': true, 'glyphicon-arrow-up': getArrow('catalogUrl'), 'glyphicon-arrow-down': !getArrow('catalogUrl'),  'glyphicon-sort': !getVisibility('catalogUrl')}"></i></th>
+				<th>Details</th>
+			</tr>
+
+			<tr *ngFor="let library of libraries | orderBy: [sortBy]">
+				<td>{{library.id}}</td>
+				<td>{{library.name}}</td>
+				<td>{{library.city}}</td>
+				<td><a [href]="'http://' + library.url" target="_blank">{{library?.url}}</a></td>
+				<td><a [href]="'http://' + library.catalogUrl" target="_blank">{{library?.catalogUrl}}</a></td>
+				<td><a [routerLink]="['/library', library.id]"><i class="glyphicon glyphicon-triangle-right"></i></a></td>
+			</tr>
+
+		</table>
+	</div>
+
+
+	<button *ngIf="isAuthenticated()" id="addLibraryBtn" type="button" class="btn btn-primary btn-circle btn-lg"><i class="glyphicon glyphicon glyphicon-plus" data-toggle="modal" data-target="#addLibraryModal"></i></button>
+
+</div>
+
+<div  class="modal fade" id="addLibraryModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="exampleModalLabel">Create new library</h4>
+			</div>
+			<div class="modal-body">
+				<form>
+
+					<div class="form-group">
+						<label for="name" class="control-label">Name:</label>
+						<input type="text" [(ngModel)]="newLibrary.name" name="libraryName" class="form-control" id="name">
+					</div>
+
+					<div class="form-group">
+						<label for="url" class="control-label">URL:</label>
+						<input type="url"  [(ngModel)]="newLibrary.url" name="libraryURL" class="form-control" id="url">
+					</div>
+
+					<div class="form-group">
+						<label for="catalorUrl" class="control-label">Catalog URL:</label>
+						<input type="url"  [(ngModel)]="newLibrary.catalogUrl" name="libraryCatalogURL" class="form-control" id="catalorUrl">
+					</div>
+
+					<div class="form-group">
+						<label for="catalorUrl" class="control-label">City:</label>
+						<input type="text"  [(ngModel)]="newLibrary.city" name="libraryCity" class="form-control" id="city">
+					</div>
+
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				<button type="button" class="btn btn-primary" (click)="createLibrary()" data-dismiss="modal"><i class="glyphicon glyphicon-floppy-save"></i> Save</button>
+			</div>
+		</div>
+	</div>
+</div>
