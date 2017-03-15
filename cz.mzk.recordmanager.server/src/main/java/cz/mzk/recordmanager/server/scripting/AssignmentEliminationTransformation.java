@@ -42,20 +42,20 @@ public class AssignmentEliminationTransformation implements ASTTransformation {
 		BlockStatement stm = source.getAST().getStatementBlock();
 		stm.visit(new CodeVisitorSupport() {
 			
-		    public void visitBinaryExpression(BinaryExpression exp) {
-		    	Expression left = exp.getLeftExpression();
-		    	Token op = exp.getOperation();
-		    	if (left instanceof VariableExpression && op.getType() == Types.ASSIGN) {
-		    		VariableExpression var = (VariableExpression) left;
-		    		String variable = var.getName();
-		    		variables.add(variable);
-		    		if (variablesToExclude.contains(variable)) {
-		    			logger.debug("Field {} is overriden, setting to null in {}", variable, source.getName());
-		    			exp.setRightExpression(CONSTANT_NULL);
-		    		}
-		    	}
-		    }
-		    
+			public void visitBinaryExpression(BinaryExpression exp) {
+				Expression left = exp.getLeftExpression();
+				Token op = exp.getOperation();
+				if (left instanceof VariableExpression && op.getType() == Types.ASSIGN) {
+					VariableExpression var = (VariableExpression) left;
+					String variable = var.getName();
+					variables.add(variable);
+					if (variablesToExclude.contains(variable)) {
+						logger.debug("Field {} is overriden, setting to null in {}", variable, source.getName());
+						exp.setRightExpression(CONSTANT_NULL);
+					}
+				}
+			}
+			
 		});
 		
 	}

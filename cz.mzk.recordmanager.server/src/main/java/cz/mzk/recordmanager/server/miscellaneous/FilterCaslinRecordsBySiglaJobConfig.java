@@ -92,12 +92,12 @@ public class FilterCaslinRecordsBySiglaJobConfig {
 	}
 	
 	@Bean(name = Constants.JOB_ID_FILTER_CASLIN+":threadPoolTaskExecutor")
-    public Executor poolTaskExecutor()
-    {
-        ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-        executor.setCorePoolSize(threadPoolSize);
-        executor.setMaxPoolSize(threadPoolSize);
-        executor.initialize();
-        return executor;
-    }
+	public Executor poolTaskExecutor()
+	{
+		ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+		executor.setCorePoolSize(threadPoolSize);
+		executor.setMaxPoolSize(threadPoolSize);
+		executor.initialize();
+		return executor;
+	}
 }

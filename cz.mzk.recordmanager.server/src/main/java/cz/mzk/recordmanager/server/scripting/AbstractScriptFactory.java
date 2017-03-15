@@ -32,9 +32,9 @@ public abstract class AbstractScriptFactory<T> implements MappingScriptFactory<T
 
 			ThreadLocal<MappingScript<T>> delegate = new ThreadLocal<MappingScript<T>>(){
 				
-			    protected MappingScript<T> initialValue() {
-			        return innerCreate(copy);
-			    }
+				protected MappingScript<T> initialValue() {
+					return innerCreate(copy);
+				}
 				
 			};
 			

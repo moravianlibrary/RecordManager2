@@ -181,44 +181,44 @@ public class MarcDSL extends BaseDSL {
 	 * specified in 245 2nd indicator, and lowercased.
 	 * @param context - the marc record object
 	 * @return 245a and 245b values concatenated, with trailing punct removed,
-	 *	     and with non-filing characters omitted. Null returned if no
-     *         title can be found. 
-     * 
-     * @see SolrIndexer#getTitle
-     */
-    public String getSortableTitle() {
-    	List<DataField> titleFields = record.getAllFields().get("245");
-    	if (titleFields == null || titleFields.isEmpty()) {
-    		return "";
-    	}
-        DataField titleField = titleFields.get(0);
-        if (titleField == null)
-            return "";
+	 *		 and with non-filing characters omitted. Null returned if no
+	 *		 title can be found. 
+	 * 
+	 * @see SolrIndexer#getTitle
+	 */
+	public String getSortableTitle() {
+		List<DataField> titleFields = record.getAllFields().get("245");
+		if (titleFields == null || titleFields.isEmpty()) {
+			return "";
+		}
+		DataField titleField = titleFields.get(0);
+		if (titleField == null)
+			return "";
 
-        int nonFilingInt = getInd2AsInt(titleField);
-        
-        List<Title> titles = metadataRecord.getTitle();
-        if (titles == null || titles.isEmpty()) return null;
-        String title = metadataRecord.getTitle().get(0).getTitleStr();
-        title = title.replaceAll(END_PUNCTUATION, EMPTY_SEPARATOR);
-        title = title.replaceAll(NUMBERS, "$1$2");
-        title = title.toLowerCase();
-        
-        //Skip non-filing chars, if possible. 
-        if (title.length() > nonFilingInt )  {
-          title = title.substring(nonFilingInt);          
-        }
-        
-        if ( title.length() == 0) {
-          return null;
-        }                
-        
-        title = title.replaceAll(SUPPRESS, EMPTY_SEPARATOR);
-        title = title.replaceAll(TO_BLANK, SPACE_SEPARATOR);
-        title = title.replaceAll(LEAD_SPACE, EMPTY_SEPARATOR);
-        title = title.replaceAll(PACK_SPACES, SPACE_SEPARATOR);
-        return title.trim();
-    }
+		int nonFilingInt = getInd2AsInt(titleField);
+		
+		List<Title> titles = metadataRecord.getTitle();
+		if (titles == null || titles.isEmpty()) return null;
+		String title = metadataRecord.getTitle().get(0).getTitleStr();
+		title = title.replaceAll(END_PUNCTUATION, EMPTY_SEPARATOR);
+		title = title.replaceAll(NUMBERS, "$1$2");
+		title = title.toLowerCase();
+		
+		//Skip non-filing chars, if possible. 
+		if (title.length() > nonFilingInt )  {
+		  title = title.substring(nonFilingInt);		  
+		}
+		
+		if ( title.length() == 0) {
+		  return null;
+		}				
+		
+		title = title.replaceAll(SUPPRESS, EMPTY_SEPARATOR);
+		title = title.replaceAll(TO_BLANK, SPACE_SEPARATOR);
+		title = title.replaceAll(LEAD_SPACE, EMPTY_SEPARATOR);
+		title = title.replaceAll(PACK_SPACES, SPACE_SEPARATOR);
+		return title.trim();
+	}
 
 	public String getFullrecord() {
 		return metadataRecord.export(IOFormat.ISO_2709);
@@ -236,63 +236,63 @@ public class MarcDSL extends BaseDSL {
 		return func.apply(context, args);
 	}
 	
-    protected int getInd2AsInt(DataField df) {
-        char ind2char = df.getIndicator2();
-        int result = 0;
-        if (Character.isDigit(ind2char))
-            result = Integer.valueOf(String.valueOf(ind2char));
-        return result;
-    }
-    
-    public List<String> getPublisherStrMv() throws IOException{
-    	Set<String> publishers = new HashSet<String>();
-    	for(DataField dataField: record.getDataFields("264")){
-    		if(dataField.getIndicator2() == '1'){
-    			dataField.getSubfields('b').stream().forEach(sf -> publishers.add(editPublisherName(sf.getData())));
-    		}
-    	}
-    	for(DataField dataField: record.getDataFields("928")){
-    		if(dataField.getIndicator1() == '9'){
-    			dataField.getSubfields('a').stream().forEach(sf -> publishers.add(editPublisherName(sf.getData())));
-    		}
-    	}
-    	getFields("260b:978ab").stream().forEach(str -> publishers.add(editPublisherName(str)));
-    	
-    	Set<String> result = new HashSet<String>();
-    	for(String publisher: publishers){
-    		List<String> newPublisher = translate("publisher.map", publisher, null);
-    		if(newPublisher == null) result.add(publisher);
-    		else result.addAll(newPublisher);
-    	}
-    	return new ArrayList<String>(result);
-    }
-    
-    public String editPublisherName(String name){
-    	name = name.replaceAll("[<>\\[\\]]", "");
-    	name = name.replaceAll("[,?\\s]+$", "");
-    	name = name.trim();
-    	return name;
-    }
-    
-    public List<String> getPublisher(){
-    	List<String> publishers = new ArrayList<String>();
-    	for(DataField dataField: record.getDataFields("264")){
-    		if(dataField.getIndicator2() == '1'){
-    			publishers.addAll(getFieldsTrim("264b"));
-    		}
-    	}
-    	publishers.addAll(getFieldsTrim("260b"));
-    	
-    	return publishers;
-    }
+	protected int getInd2AsInt(DataField df) {
+		char ind2char = df.getIndicator2();
+		int result = 0;
+		if (Character.isDigit(ind2char))
+			result = Integer.valueOf(String.valueOf(ind2char));
+		return result;
+	}
+	
+	public List<String> getPublisherStrMv() throws IOException{
+		Set<String> publishers = new HashSet<String>();
+		for(DataField dataField: record.getDataFields("264")){
+			if(dataField.getIndicator2() == '1'){
+				dataField.getSubfields('b').stream().forEach(sf -> publishers.add(editPublisherName(sf.getData())));
+			}
+		}
+		for(DataField dataField: record.getDataFields("928")){
+			if(dataField.getIndicator1() == '9'){
+				dataField.getSubfields('a').stream().forEach(sf -> publishers.add(editPublisherName(sf.getData())));
+			}
+		}
+		getFields("260b:978ab").stream().forEach(str -> publishers.add(editPublisherName(str)));
+		
+		Set<String> result = new HashSet<String>();
+		for(String publisher: publishers){
+			List<String> newPublisher = translate("publisher.map", publisher, null);
+			if(newPublisher == null) result.add(publisher);
+			else result.addAll(newPublisher);
+		}
+		return new ArrayList<String>(result);
+	}
+	
+	public String editPublisherName(String name){
+		name = name.replaceAll("[<>\\[\\]]", "");
+		name = name.replaceAll("[,?\\s]+$", "");
+		name = name.trim();
+		return name;
+	}
+	
+	public List<String> getPublisher(){
+		List<String> publishers = new ArrayList<String>();
+		for(DataField dataField: record.getDataFields("264")){
+			if(dataField.getIndicator2() == '1'){
+				publishers.addAll(getFieldsTrim("264b"));
+			}
+		}
+		publishers.addAll(getFieldsTrim("260b"));
+		
+		return publishers;
+	}
 
-    public Set<String> getFieldsTrim(String tags){
-    	Set<String> result = new HashSet<String>();
-    	for(String data: getFields(tags)){
-    		result.add(removeEndPunctuation(data));
-    	}
-    	return result;
-    }
+	public Set<String> getFieldsTrim(String tags){
+		Set<String> result = new HashSet<String>();
+		for(String data: getFields(tags)){
+			result.add(removeEndPunctuation(data));
+		}
+		return result;
+	}
 
 	public Set<String> getFieldsUnique(String tags) {
 		return this.getFieldsUnique(tags, SubfieldExtractionMethod.JOINED);
@@ -304,143 +304,143 @@ public class MarcDSL extends BaseDSL {
 		return result;
 	}
 
-    public String getFirstFieldTrim(String tags){
-    	return removeEndPunctuation(getFirstField(tags));
-    }
-    
-    public Set<String> getSubject(String tags) throws IOException{
-    	Set<String> subjects = new HashSet<String>();
+	public String getFirstFieldTrim(String tags){
+		return removeEndPunctuation(getFirstField(tags));
+	}
+	
+	public Set<String> getSubject(String tags) throws IOException{
+		Set<String> subjects = new HashSet<String>();
 
-    	for(String subject: getFields(tags)){
-    		subjects.add(toUpperCaseFirstChar(subject));
-    	}
-
-    	for(DataField df: record.getDataFields("653")){
-    		for(Subfield sf: df.getSubfields('a')){ 
-    			if(!sf.getData().matches("forma:.*|nosič:.*|způsob vydávání:.*|úroveň zpracování:.*"))
-    				subjects.add(toUpperCaseFirstChar(sf.getData()));
-    		}
-    	}
-    	
-    	for(DataField df: record.getDataFields("650")){
-    		if(df.getSubfield('2') != null && df.getSubfield('2').getData().contains("psh")){
-    			if(df.getSubfield('x') != null){ 
-    				subjects.addAll(toUpperCaseFirstChar(translate("psh.map", df.getSubfield('x').getData(), null)));
-    			}
-    		}
-    	}
-    	
-    	if (metadataRecord.filterSubjectFacet() != null) {
-    		return new HashSet<String>(filter(metadataRecord.filterSubjectFacet(), new ArrayList<String>(subjects)));
-    	}
-    	
-    	return subjects;
-    }
-    
-    protected String toUpperCaseFirstChar(String string){
-    	if(string == null || string.isEmpty()) return null;
-    	return string.substring(0,1).toUpperCase() + string.substring(1);
-    }
-    
-    protected List<String> toUpperCaseFirstChar(List<String> strings){
-    	if(strings == null || strings.isEmpty()) return Collections.emptyList();
-    	List<String> results = new ArrayList<>();
-    	strings.forEach(string -> results.add(string.substring(0,1).toUpperCase() + string.substring(1)));
-    	return results;
-    }
-
-    public Set<String> getISBNISSNISMN(){
-    	Set<String> result = new HashSet<String>();
-    	
-    	for(DataField df: record.getDataFields("024")){
-    		if(df.getIndicator1() == '2'){
-    			result.addAll(getFields("024az"));
-    		}
-    	}
-    	result.addAll(getFields("020az:022az:787xz:902a"));    	
-    	
-    	return result;
-    }
-    
-    public String getId001(){
-    	return record.getControlField("001");
-    }
-    
-    public Set<String> getTitleSeries(){
-    	Set<String> result = new HashSet<String>();
-    	result.addAll(getFieldsTrim("130adfgklnpst7:210a:222ab:240adklmprs:242ap:245abnp:246anp:247afp:"
-    			+ "440a:490anp:700klmnoprst7:710klmnoprst7:711klmnoprst7:730adklmprs7:740anp:765ts9:"
-    			+ "773kt:780st:785st:787st:800klmnoprst7:810klmnoprst7:811klmnoprst7:830aklmnoprst7"));
-    	for(DataField df: record.getDataFields("505")){
-    		if(df.getIndicator2() == '0'){
-    			result.addAll(getFieldsTrim("505t"));
-    		}
-    	}
-    	
-    	return result;
-    }
-    
-    public List<String> getHoldings996() {
-    	List<String> result = new ArrayList<>();
-    	Map<String, List<DataField>> allFields = record.getAllFields();
-    	
-    	List<DataField> list996 = allFields.get("996");
-    	if (list996 == null) {
-    		return result;
-    	}
-    	for (DataField dataField: list996) {
-    		StringBuilder currentSb = new StringBuilder();
-    		// 996 with '0' in subfield 'q'
-    		if (dataField.getSubfield('q') != null && dataField.getSubfields('q').equals("0")) {
-    			continue;
-    		}
-    		for (Subfield subfield: dataField.getSubfields()) {
-    			currentSb.append('$');
-    			currentSb.append(subfield.getCode());
-    			currentSb.append(subfield.getData());
-    		}
-    		result.add(currentSb.toString());
-    	}
-    	return result;
-    }
-    
-    public List<String> getUrls() {
-    	return metadataRecord.getUrls();
-    }
-    
-    public List<String> getSfxIds() {
-    	List<String> result = new ArrayList<>();
-    	for (DataField df: record.getDataFields("866")) {
-    		String subS = "", subX="";
-    		
-    		if (df.getSubfield('s') != null) {
-    			subS = df.getSubfield('s').getData();
-    		}
-    		if (df.getSubfield('x') != null) {
-    			subX = df.getSubfield('x').getData();
-    		}
-    		
-    		if (!subS.isEmpty()) {
-    			result.add(subS + "|" + subX);
-    		}
-    	}
-    	return result;
-    }
-
-    public Long getLoanRelevance(){
-		Long count = 0L;
-    	
-    	for(DataField df: record.getDataFields("996")){
-    		if(df.getSubfield('n') != null)
-    		try {
-    			count += Long.valueOf(df.getSubfield('n').getData());
-    		} catch (NumberFormatException nfe) {
-    		}			
+		for(String subject: getFields(tags)){
+			subjects.add(toUpperCaseFirstChar(subject));
 		}
-    	return count; 
-    }
 
-    public String getAuthorForSorting(){
+		for(DataField df: record.getDataFields("653")){
+			for(Subfield sf: df.getSubfields('a')){ 
+				if(!sf.getData().matches("forma:.*|nosič:.*|způsob vydávání:.*|úroveň zpracování:.*"))
+					subjects.add(toUpperCaseFirstChar(sf.getData()));
+			}
+		}
+		
+		for(DataField df: record.getDataFields("650")){
+			if(df.getSubfield('2') != null && df.getSubfield('2').getData().contains("psh")){
+				if(df.getSubfield('x') != null){ 
+					subjects.addAll(toUpperCaseFirstChar(translate("psh.map", df.getSubfield('x').getData(), null)));
+				}
+			}
+		}
+		
+		if (metadataRecord.filterSubjectFacet() != null) {
+			return new HashSet<String>(filter(metadataRecord.filterSubjectFacet(), new ArrayList<String>(subjects)));
+		}
+		
+		return subjects;
+	}
+	
+	protected String toUpperCaseFirstChar(String string){
+		if(string == null || string.isEmpty()) return null;
+		return string.substring(0,1).toUpperCase() + string.substring(1);
+	}
+	
+	protected List<String> toUpperCaseFirstChar(List<String> strings){
+		if(strings == null || strings.isEmpty()) return Collections.emptyList();
+		List<String> results = new ArrayList<>();
+		strings.forEach(string -> results.add(string.substring(0,1).toUpperCase() + string.substring(1)));
+		return results;
+	}
+
+	public Set<String> getISBNISSNISMN(){
+		Set<String> result = new HashSet<String>();
+		
+		for(DataField df: record.getDataFields("024")){
+			if(df.getIndicator1() == '2'){
+				result.addAll(getFields("024az"));
+			}
+		}
+		result.addAll(getFields("020az:022az:787xz:902a"));		
+		
+		return result;
+	}
+	
+	public String getId001(){
+		return record.getControlField("001");
+	}
+	
+	public Set<String> getTitleSeries(){
+		Set<String> result = new HashSet<String>();
+		result.addAll(getFieldsTrim("130adfgklnpst7:210a:222ab:240adklmprs:242ap:245abnp:246anp:247afp:"
+				+ "440a:490anp:700klmnoprst7:710klmnoprst7:711klmnoprst7:730adklmprs7:740anp:765ts9:"
+				+ "773kt:780st:785st:787st:800klmnoprst7:810klmnoprst7:811klmnoprst7:830aklmnoprst7"));
+		for(DataField df: record.getDataFields("505")){
+			if(df.getIndicator2() == '0'){
+				result.addAll(getFieldsTrim("505t"));
+			}
+		}
+		
+		return result;
+	}
+	
+	public List<String> getHoldings996() {
+		List<String> result = new ArrayList<>();
+		Map<String, List<DataField>> allFields = record.getAllFields();
+		
+		List<DataField> list996 = allFields.get("996");
+		if (list996 == null) {
+			return result;
+		}
+		for (DataField dataField: list996) {
+			StringBuilder currentSb = new StringBuilder();
+			// 996 with '0' in subfield 'q'
+			if (dataField.getSubfield('q') != null && dataField.getSubfields('q').equals("0")) {
+				continue;
+			}
+			for (Subfield subfield: dataField.getSubfields()) {
+				currentSb.append('$');
+				currentSb.append(subfield.getCode());
+				currentSb.append(subfield.getData());
+			}
+			result.add(currentSb.toString());
+		}
+		return result;
+	}
+	
+	public List<String> getUrls() {
+		return metadataRecord.getUrls();
+	}
+	
+	public List<String> getSfxIds() {
+		List<String> result = new ArrayList<>();
+		for (DataField df: record.getDataFields("866")) {
+			String subS = "", subX="";
+			
+			if (df.getSubfield('s') != null) {
+				subS = df.getSubfield('s').getData();
+			}
+			if (df.getSubfield('x') != null) {
+				subX = df.getSubfield('x').getData();
+			}
+			
+			if (!subS.isEmpty()) {
+				result.add(subS + "|" + subX);
+			}
+		}
+		return result;
+	}
+
+	public Long getLoanRelevance(){
+		Long count = 0L;
+		
+		for(DataField df: record.getDataFields("996")){
+			if(df.getSubfield('n') != null)
+			try {
+				count += Long.valueOf(df.getSubfield('n').getData());
+			} catch (NumberFormatException nfe) {
+			}			
+		}
+		return count; 
+	}
+
+	public String getAuthorForSorting(){
 		List<String> authors = getFields("100abcd:110abcd:111abcd:700abcd:710abcd:711abcd");
 		if(authors == null || authors.isEmpty()) return null;
 		String author = authors.get(0);
@@ -452,13 +452,13 @@ public class MarcDSL extends BaseDSL {
 		author = author.replaceAll(PACK_SPACES, SPACE_SEPARATOR);
 		if(author.isEmpty()) return null;
 		return author;
-    }
-    
-    public String getCitationRecordType(){
-    	return metadataRecord.getCitationFormat().getCitationType();
-    }
-    
-    public String getTitleDisplay(){
+	}
+	
+	public String getCitationRecordType(){
+		return metadataRecord.getCitationFormat().getCitationType();
+	}
+	
+	public String getTitleDisplay(){
 		DataField df = getFirstDataField("245");
 		if(df == null) return null;
 		
@@ -489,42 +489,42 @@ public class MarcDSL extends BaseDSL {
 			}
 			else endCharH = ' ';
 		}
-    	return removeEndPunctuation(sb.toString());
-    }
-    
-    protected String removeEndPunctuation(String data){
-    	if(data == null || data == "") return null;
-    	data = data.replaceAll("[,;:/\\s]+$", "");
-    	if(data.matches(".*[^\\.]\\.\\.$")) data = data.substring(0, data.length()-1);
-    	return data;
-    }
-    
-    public DataField getFirstDataField(String tag){
-    	List<DataField> list = record.getDataFields(tag);
-    	if(list.isEmpty()) return null;
-    	else return list.get(0);
-    }
+		return removeEndPunctuation(sb.toString());
+	}
+	
+	protected String removeEndPunctuation(String data){
+		if(data == null || data == "") return null;
+		data = data.replaceAll("[,;:/\\s]+$", "");
+		if(data.matches(".*[^\\.]\\.\\.$")) data = data.substring(0, data.length()-1);
+		return data;
+	}
+	
+	public DataField getFirstDataField(String tag){
+		List<DataField> list = record.getDataFields(tag);
+		if(list.isEmpty()) return null;
+		else return list.get(0);
+	}
 
 	public String getAuthorDisplay(){
-    	List<DataField> list = record.getDataFields("100");
-    	if(list.isEmpty()) return null;
+		List<DataField> list = record.getDataFields("100");
+		if(list.isEmpty()) return null;
 		DataField df = list.get(0);
 		String name = getNameForDisplay(df);
 		if(name.isEmpty()) return null;
 		else return name;
-    }
-    
-    public List<String> getAuthor2Display(){
-    	List<String> result = new ArrayList<String>();
-    	for(DataField df: record.getDataFields("700")){
-    		result.add(getNameForDisplay(df));
-    	}
-    	result.addAll(getFields("110ab:111ab:710ab:711ab"));
-    	return result;
-    }
-    
-    public String getNameForDisplay(DataField df) {
-    	StringBuilder sb = new StringBuilder();
+	}
+	
+	public List<String> getAuthor2Display(){
+		List<String> result = new ArrayList<String>();
+		for(DataField df: record.getDataFields("700")){
+			result.add(getNameForDisplay(df));
+		}
+		result.addAll(getFields("110ab:111ab:710ab:711ab"));
+		return result;
+	}
+	
+	public String getNameForDisplay(DataField df) {
+		StringBuilder sb = new StringBuilder();
 		sb.append(changeName(df));
 
 		for(char subfield: new char[]{'b', 'c', 'd'}){
@@ -534,19 +534,19 @@ public class MarcDSL extends BaseDSL {
 			}
 		}
 		return removeEndPunctuation(sb.toString().trim());
-    }
-    
-    public String getAuthorExact(){
-    	List<DataField> list = record.getDataFields("100");
-    	if(list.isEmpty()) return null;
+	}
+	
+	public String getAuthorExact(){
+		List<DataField> list = record.getDataFields("100");
+		if(list.isEmpty()) return null;
 		DataField df = list.get(0);
 		String name = getNameForExact(df);
 		if(name.isEmpty()) return null;
 		else return name;
-    }
-    
-    public String getNameForExact(DataField df) {
-    	StringBuilder sb = new StringBuilder();
+	}
+	
+	public String getNameForExact(DataField df) {
+		StringBuilder sb = new StringBuilder();
 		sb.append(changeName(df));
 
 		if(df.getSubfield('b') != null) {
@@ -555,10 +555,10 @@ public class MarcDSL extends BaseDSL {
 		}
 
 		return removeEndPunctuation(sb.toString().trim());
-    }
-    
-    public String changeName(DataField df){
-    	StringBuilder sb = new StringBuilder();
+	}
+	
+	public String changeName(DataField df){
+		StringBuilder sb = new StringBuilder();
 		if(df.getIndicator1() == '1'){
 			String suba = "";
 			if(df.getSubfield('a') != null) suba = df.getSubfield('a').getData();
@@ -576,17 +576,17 @@ public class MarcDSL extends BaseDSL {
 		}
 
 		return sb.toString();
-    }
-    
-    public List<String> getAuthorFind(){
-    	List<String> result = new ArrayList<String>();
-    	result.add(getAuthorDisplay());
-    	result.addAll(getAuthor2Display());
-    	return result;
-    }
-    
-    public Set<String> getAuthorityIds(String tags){
-    	Set<String> result = new HashSet<>();
+	}
+	
+	public List<String> getAuthorFind(){
+		List<String> result = new ArrayList<String>();
+		result.add(getAuthorDisplay());
+		result.addAll(getAuthor2Display());
+		return result;
+	}
+	
+	public Set<String> getAuthorityIds(String tags){
+		Set<String> result = new HashSet<>();
 		for (String tag : tags.split(":")) {
 			Matcher matcher = FIELD_PATTERN.matcher(tag);
 			if (!matcher.matches()) {
@@ -599,33 +599,33 @@ public class MarcDSL extends BaseDSL {
 				.forEach(s -> result.add(fieldTag + ":" + s));
 		}
 		return result;
-    }
-    
-    public List<String> getAuthAuthors(String tag){
-    	List<String> result = new ArrayList<>();
-    	for(DataField df: record.getDataFields(tag)){
-    		result.add(getNameForDisplay(df));
-    	}
-    	return result;
-    }
-    
-    public String getFirstAuthAuthor(String tag){
-    	List<String> result = getAuthAuthors(tag);
-    	if(result.isEmpty()) return null;
-    	return result.get(0);
-    }
-    
-    public List<String> getAuthorityUrl(String tags){
-    	List<String> urls = getFields(tags);
-    	if(urls.isEmpty()) return Collections.emptyList();
-    	if(urls.size() == 1) return urls;
-    	for(String url: urls){
-    		if(url.matches(".*wikipedia.*")) return Collections.singletonList(url);
-    	}
-    	return Collections.singletonList(urls.get(0));
-    }
-    
-    public List<String> getAuthIds(String tags){
+	}
+	
+	public List<String> getAuthAuthors(String tag){
+		List<String> result = new ArrayList<>();
+		for(DataField df: record.getDataFields(tag)){
+			result.add(getNameForDisplay(df));
+		}
+		return result;
+	}
+	
+	public String getFirstAuthAuthor(String tag){
+		List<String> result = getAuthAuthors(tag);
+		if(result.isEmpty()) return null;
+		return result.get(0);
+	}
+	
+	public List<String> getAuthorityUrl(String tags){
+		List<String> urls = getFields(tags);
+		if(urls.isEmpty()) return Collections.emptyList();
+		if(urls.size() == 1) return urls;
+		for(String url: urls){
+			if(url.matches(".*wikipedia.*")) return Collections.singletonList(url);
+		}
+		return Collections.singletonList(urls.get(0));
+	}
+	
+	public List<String> getAuthIds(String tags){
 		List<String> result = new ArrayList<>();
 		
 		for(String tag : tags.split(":")) {
@@ -634,9 +634,9 @@ public class MarcDSL extends BaseDSL {
 				else result.add(df.getSubfield('7').getData());
 			}
 		}
-    	return result;
-    }
-    
+		return result;
+	}
+	
 	public Set<String> getConspectus() throws IOException {
 		Set<String> result = new HashSet<>();
 		for (DataField df: record.getDataFields("072")) {
@@ -677,21 +677,21 @@ public class MarcDSL extends BaseDSL {
 
 		return result;
 	}
-    
-    public Set<String> getAuthorAutocomplete(String tags){
-    	Set<String> result = new HashSet<>();
-    	for(String s: getFields(tags)){
-    		result.add(s.replaceAll(",", ""));
-    	}
-    	return result;
-    }
-    
-    public String get773link(){
-    	for(DataField df: record.getDataFields("773")){
-    		for(char code: new char[]{'x', 'z', 't'}){
-    			Subfield sf = df.getSubfield(code);
-    			if(sf != null){
-    				switch (sf.getCode()) {
+	
+	public Set<String> getAuthorAutocomplete(String tags){
+		Set<String> result = new HashSet<>();
+		for(String s: getFields(tags)){
+			result.add(s.replaceAll(",", ""));
+		}
+		return result;
+	}
+	
+	public String get773link(){
+		for(DataField df: record.getDataFields("773")){
+			for(char code: new char[]{'x', 'z', 't'}){
+				Subfield sf = df.getSubfield(code);
+				if(sf != null){
+					switch (sf.getCode()) {
 					case 'x':
 						if(ISSNUtils.isValid(sf.getData())){
 							return LINK773_ISSN + sf.getData();
@@ -711,48 +711,48 @@ public class MarcDSL extends BaseDSL {
 					default:
 						break;
 					} 
-    			}
-    		}
-    	}
-    	
+				}
+			}
+		}
+		
 		return null;	
-    }
-    
-    public String get773display(){
-    	List<String> result = new ArrayList<>();
-    	for(DataField df: record.getDataFields("773")){
-    		for(char code: new char[]{'t', 'x', 'g'}){
-    			Subfield sf = df.getSubfield(code);
-    			if(code == 'x'){
-    				if(sf != null){
-    					if(sf.getData().startsWith("M")) result.add(DISPLAY773_ISMN + sf.getData());
-    					else result.add(DISPLAY773_ISSN + sf.getData());
-    				}
-    				else{
-    					sf = df.getSubfield('z');
-    					if(sf != null) result.add(DISPLAY773_ISBN + sf.getData());
-    				}
-    			}
-    			else{ // 't', 'g'
-    				if(sf == null) continue;
-    				result.add(sf.getData());
-    			}
-    		}
-    		if(!result.isEmpty()){
-    			return String.join(DISPLAY773_JOINER, result);
-    		}
-    	}
-    	return null;
-    }
-    
-    public String getAuthorityId(){
-    	return metadataRecord.getAuthorityId();
-    }
-    
-    /**
-     * remove dot at the end of 700d
-     */
-    public List<String> getAuthorFacet(String k){
+	}
+	
+	public String get773display(){
+		List<String> result = new ArrayList<>();
+		for(DataField df: record.getDataFields("773")){
+			for(char code: new char[]{'t', 'x', 'g'}){
+				Subfield sf = df.getSubfield(code);
+				if(code == 'x'){
+					if(sf != null){
+						if(sf.getData().startsWith("M")) result.add(DISPLAY773_ISMN + sf.getData());
+						else result.add(DISPLAY773_ISSN + sf.getData());
+					}
+					else{
+						sf = df.getSubfield('z');
+						if(sf != null) result.add(DISPLAY773_ISBN + sf.getData());
+					}
+				}
+				else{ // 't', 'g'
+					if(sf == null) continue;
+					result.add(sf.getData());
+				}
+			}
+			if(!result.isEmpty()){
+				return String.join(DISPLAY773_JOINER, result);
+			}
+		}
+		return null;
+	}
+	
+	public String getAuthorityId(){
+		return metadataRecord.getAuthorityId();
+	}
+	
+	/**
+	 * remove dot at the end of 700d
+	 */
+	public List<String> getAuthorFacet(String k){
 		Set<String> results = new HashSet<>();
 		results.addAll(getFields("100abcdq:975abcdq"));
 		char[] sfCodes = new char[]{'a', 'b', 'c', 'd', 'q'};
@@ -769,7 +769,7 @@ public class MarcDSL extends BaseDSL {
 			}
 			if (author != "") results.add(author.trim());
 		}
-    	return new ArrayList<>(results);
-    }
-    
+		return new ArrayList<>(results);
+	}
+	
 }

@@ -3,7 +3,7 @@ package cz.mzk.recordmanager.api.model.statistics;
 import java.util.Date;
 
 public abstract class GeneralStatisticsDto {
-    private Long jobExecutionId;
+private Long jobExecutionId;
     private Date startTime;
     private Date endTime;
     private String status;
