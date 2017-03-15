@@ -16,9 +16,9 @@ INSERT INTO library (id, name, url, catalog_url, city) VALUES (112, 'KKVY', 'kkv
 INSERT INTO library (id, name, url, catalog_url, city) VALUES (113, 'SVKHK', 'svkhk.cz', 'aleph2.svkhk.cz', 'Hradec Králové');
 INSERT INTO library (id, name, url, catalog_url, city) VALUES (114, 'SVKUL', 'svkul.cz', 'katalog.svkul.cz', 'Ústí nad Labem');
 INSERT INTO library (id, name, url, catalog_url, city) VALUES (115, 'VKOL', 'vkol.cz', 'www.vkol.cz/cs/katalog/', 'Olomouc');
-INSERT INTO library (id, name, url, catalog_url, city) VALUES (116, 'CASLIN', 'caslin.cz', 'aleph.nkp.cz', 'Praha');
+INSERT INTO library (id, name, url, catalog_url, city) VALUES (116, 'CASLIN', 'caslin.cz', 'aleph.nkp.cz', NULL);
 INSERT INTO library (id, name, url, catalog_url, city) VALUES (117, 'NKP2', 'nkp.cz', 'aleph.nkp.cz', 'Praha');
-INSERT INTO library (id, name, url, catalog_url, city) VALUES (119, 'ANL', 'nkp.cz', 'aleph.nkp.cz', NULL);
+INSERT INTO library (id, name, url, catalog_url, city) VALUES (119, 'ANL', 'nkp.cz', 'aleph.nkp.cz', 'Bibliography');
 INSERT INTO library (id, name, url, catalog_url, city) VALUES (120, 'MZKNORMS', 'mzk.cz', 'aleph.mzk.cz', NULL);
 INSERT INTO library (id, name, url, catalog_url, city) VALUES (121, 'SLK', 'nkp.cz', 'aleph.nkp.cz', 'Praha');
 INSERT INTO library (id, name, url, catalog_url, city) VALUES (122, 'KPSYS', '', '', 'KPSYS');
@@ -29,7 +29,7 @@ INSERT INTO library (id, name, url, catalog_url, city) VALUES (127, 'OPENLIB', '
 INSERT INTO library (id, name, url, catalog_url, city) VALUES (128, 'CBVK', 'cbvk.cz', 'katalog.cbvk.cz', 'České Budějovice');
 INSERT INTO library (id, name, url, catalog_url, city) VALUES (129, 'VKTATEST', 'knihovnatabor.cz', 'vkta.cz/Clavius', 'Tábor');
 INSERT INTO library (id, name, url, catalog_url, city) VALUES (130, 'KNAV', 'cas.cz', 'aleph.lib.cas.cz', 'Praha');
-INSERT INTO library (id, name, url, catalog_url, city) VALUES (131, 'BCBT', 'cas.cz', 'clavius.lib.cas.cz/katalog/', NULL);
+INSERT INTO library (id, name, url, catalog_url, city) VALUES (131, 'BCBT', 'cas.cz', 'clavius.lib.cas.cz/katalog/', 'Bibliography');
 INSERT INTO library (id, name, url, catalog_url, city) VALUES (132, 'KKKV', 'knihovnakv.cz', 'katalog.kvary.cz', 'Karlovy Vary');
 INSERT INTO library (id, name, url, catalog_url, city) VALUES (133, 'KKPC', 'kkpce.cz', 'aleph.knihovna-pardubice.cz', 'Pardubice');
 INSERT INTO library (id, name, url, catalog_url, city) VALUES (134, 'MKKH', 'knihovna-kh.cz', 'kutnahora.knihovny.net:8080/Carmen/', 'Kutná Hora');
@@ -40,13 +40,13 @@ INSERT INTO library (id, name, url, catalog_url, city) VALUES (138, 'IIR', 'iir.
 INSERT INTO library (id, name, url, catalog_url, city) VALUES (139, 'MANUSCRIPTORIUM', 'www.manuscriptorium.com', 'www.manuscriptorium.com', NULL);
 INSERT INTO library (id, name, url, catalog_url, city) VALUES (140, 'MKUO', 'knihovna-uo.cz', 'vufind.knihovna-uo.cz/vufind/', 'Ústí nad Orlicí');
 INSERT INTO library (id, name, url, catalog_url, city) VALUES (141, 'OSOBNOSTI', 'osobnostiregionu.cz', 'http://hledani.osobnostiregionu.cz/', NULL);
-INSERT INTO library (id, name, url, catalog_url, city) VALUES (142, 'BMC', 'nlk.cz', 'www.medvik.cz/bmc/', NULL);
+INSERT INTO library (id, name, url, catalog_url, city) VALUES (142, 'BMC', 'nlk.cz', 'www.medvik.cz/bmc/', 'Bibliography');
 INSERT INTO library (id, name, url, catalog_url, city) VALUES (143, 'KFBZ', 'kfbz.cz', 'katalog.kfbz.cz/', 'Zlín');
 INSERT INTO library (id, name, url, catalog_url, city) VALUES (144, 'ZAKONY', 'zakonyprolidi.cz', '', NULL);
 INSERT INTO library (id, name, url, catalog_url, city) VALUES (146, 'MKPR', 'http://knihovnaprerov.cz/', 'katalog.knihovnaprerov.cz/', 'Přerov');
 INSERT INTO library (id, name, url, catalog_url, city) VALUES (147, 'UPV', 'http://upv.cz/', 'https://isdv.upv.cz/webapp/pts.frm', NULL);
-INSERT INTO library (id, name, url, catalog_url, city) VALUES (148, 'NPMK', 'http://npmk.cz/', 'http://katalog.npmk.cz/', NULL);
-INSERT INTO library (id, name, url, catalog_url, city) VALUES (149, 'MUZIBIB', 'https://www.lib.cas.cz/', '', NULL);
+INSERT INTO library (id, name, url, catalog_url, city) VALUES (148, 'NPMK', 'http://npmk.cz/', 'http://katalog.npmk.cz/', 'Bibliography');
+INSERT INTO library (id, name, url, catalog_url, city) VALUES (149, 'MUZIBIB', 'https://www.lib.cas.cz/', '', 'Bibliography');
 INSERT INTO library (id, name, url, catalog_url, city) VALUES (400, 'AUTHORITY', 'nkp.cz', 'aleph.nkp.cz', NULL);
 
 INSERT INTO format(format, description) VALUES('marc21-xml', 'MARC21 XML');
