@@ -532,7 +532,7 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 
 	@Override
 	public String getSourceInfo() {
-		// TODO Auto-generated method stub
+		// Nothing to return
 		return null;
 	}
 
