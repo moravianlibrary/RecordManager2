@@ -454,7 +454,7 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 
 	@Override
 	public List<String> getLanguages() {
-		return Collections.emptyList();
+		return dcRecord.getLanguages();
 	}
 
 	@Override
