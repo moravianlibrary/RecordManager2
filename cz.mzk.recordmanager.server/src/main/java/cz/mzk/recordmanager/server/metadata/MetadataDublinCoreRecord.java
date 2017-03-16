@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import org.apache.commons.validator.routines.ISBNValidator;
 import org.slf4j.Logger;
@@ -454,7 +455,7 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 
 	@Override
 	public List<String> getLanguages() {
-		return dcRecord.getLanguages();
+		return dcRecord.getLanguages().stream().filter(lang -> lang.equals("eng") || lang.equals("cze")).collect(Collectors.toList());
 	}
 
 	@Override
