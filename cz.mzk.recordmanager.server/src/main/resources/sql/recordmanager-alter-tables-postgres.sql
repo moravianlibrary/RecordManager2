@@ -754,3 +754,6 @@ UPDATE import_conf SET generate_dedup_keys=false WHERE id=347;
 UPDATE import_conf SET id_prefix='muzibib' WHERE id=349;
 UPDATE library SET name='MUZIBIB' WHERE id=149;
 UPDATE import_conf SET generate_dedup_keys=false WHERE id=331;
+
+-- 22. 03. 2017 tomascejpek
+UPDATE import_conf SET filtering_enabled=true WHERE id=314;
