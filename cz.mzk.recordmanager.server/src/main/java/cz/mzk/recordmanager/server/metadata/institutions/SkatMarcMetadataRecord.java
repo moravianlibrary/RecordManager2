@@ -2,6 +2,8 @@ package cz.mzk.recordmanager.server.metadata.institutions;
 
 import java.util.regex.Matcher;
 
+import org.marc4j.marc.DataField;
+
 import cz.mzk.recordmanager.server.marc.MarcRecord;
 import cz.mzk.recordmanager.server.metadata.MetadataMarcRecord;
 
@@ -28,11 +30,17 @@ public class SkatMarcMetadataRecord extends MetadataMarcRecord {
 		return null;
 	}
 	
+	/**
+	 * filtered when there isn't any subfield q = 0
+	 */
 	@Override
-	public boolean matchFilter(){
-		if(underlayingMarc.getDataFields("996").isEmpty()) return false;
-		return true;
+	public boolean matchFilter() {
+		for (DataField df : underlayingMarc.getDataFields("996")) {
+			if (df.getSubfield('q') == null || !df.getSubfield('q').getData().equals("0")) {
+				return true;
+			}
+		}
+		return false;
 	}
-	
-	
+
 }
