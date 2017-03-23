@@ -1007,3 +1007,6 @@ UPDATE import_conf SET generate_dedup_keys=false WHERE id=347;
 UPDATE import_conf SET id_prefix='muzibib' WHERE id=349;
 UPDATE library SET name='MUZIBIB' WHERE id=149;
 UPDATE import_conf SET generate_dedup_keys=false WHERE id=331;
+
+--changeset tomascejpek:50 context:cpk
+UPDATE oai_harvest_conf SET set_spec='cpk' WHERE import_conf_id=302;

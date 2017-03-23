@@ -115,7 +115,7 @@ INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weig
 
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (300,'http://aleph.mzk.cz/OAI','MZK01-CPK','marc21','SECOND');
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (301,'http://oai.medvik.cz/medvik2cpk/oai',null,'xml-marc','DAY');
-INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (302,'http://web2.mlp.cz/cgi/oaie','complete','marc21e',null);
+INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (302,'http://web2.mlp.cz/cgi/oaie','cpk','marc21e',null);
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (303,'http://katalog.kjm.cz/l.dll',null,'marc21','DAY');
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (304,'http://aleph.nkp.cz/OAI','NKC','marc21','SECOND');
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (305,'http://sc.vpk.cz/cgi-bin/oai2',null,'marc21',null);
