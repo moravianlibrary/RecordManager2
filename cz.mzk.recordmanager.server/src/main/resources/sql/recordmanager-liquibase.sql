@@ -1010,3 +1010,6 @@ UPDATE import_conf SET generate_dedup_keys=false WHERE id=331;
 
 --changeset tomascejpek:50 context:cpk
 UPDATE oai_harvest_conf SET set_spec='cpk' WHERE import_conf_id=302;
+
+--changeset tomascejpek:51 context:cpk
+UPDATE import_conf SET filtering_enabled=true WHERE id=314;

@@ -757,3 +757,6 @@ UPDATE import_conf SET generate_dedup_keys=false WHERE id=331;
 
 -- 23. 03. 2017 tomascejpek
 UPDATE oai_harvest_conf SET set_spec='cpk' WHERE import_conf_id=302;
+
+-- 24. 03. 2017 tomascejpek
+UPDATE import_conf SET filtering_enabled=true WHERE id=314;
