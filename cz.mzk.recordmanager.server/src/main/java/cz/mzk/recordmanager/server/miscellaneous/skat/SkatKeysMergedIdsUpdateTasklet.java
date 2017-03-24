@@ -136,8 +136,10 @@ public class SkatKeysMergedIdsUpdateTasklet implements Tasklet {
 		session.createSQLQuery(query)
 			.setString(0, recordId)
 			.executeUpdate();
+
+		query = "UPDATE harvested_record SET next_dedup_flag=true WHERE record_id = ?";
+		session.createSQLQuery(query).setString(0, recordId).executeUpdate();
 	}
-	
 	
 	/**
 	 * return string representation of all ia prefixes from 'fromDate'
