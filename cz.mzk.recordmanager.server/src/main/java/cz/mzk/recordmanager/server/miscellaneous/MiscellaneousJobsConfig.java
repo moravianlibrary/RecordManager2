@@ -59,8 +59,6 @@ public class MiscellaneousJobsConfig {
 	@Autowired
 	private SkatKeyDAO skatKeysDao;
 	
-	private static final int SKAT_IMPORT_CONF_ID = 316;
-	
 	private static final Date DATE_OVERRIDEN_BY_EXPRESSION = null;
 	
 	@Bean
@@ -119,7 +117,7 @@ public class MiscellaneousJobsConfig {
 		pqpf.setWhereClause("WHERE import_conf_id = :conf_id and updated > :updated_time");
 		pqpf.setSortKey("id");
 		Map<String, Object> parameterValues = new HashMap<String, Object>();
-		parameterValues.put("conf_id", SKAT_IMPORT_CONF_ID);	
+		parameterValues.put("conf_id", Constants.IMPORT_CONF_ID_CASLIN);
 		parameterValues.put("updated_time", from);
 		reader.setParameterValues(parameterValues);
 		reader.setRowMapper(new LongValueRowMapper());

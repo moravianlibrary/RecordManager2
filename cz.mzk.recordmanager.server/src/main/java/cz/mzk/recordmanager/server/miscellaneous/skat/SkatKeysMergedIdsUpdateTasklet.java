@@ -24,6 +24,7 @@ import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import cz.mzk.recordmanager.server.util.Constants;
 import cz.mzk.recordmanager.server.util.HttpClient;
 import cz.mzk.recordmanager.server.util.UrlUtils;
 
@@ -130,15 +131,19 @@ public class SkatKeysMergedIdsUpdateTasklet implements Tasklet {
 		String query = "UPDATE skat_keys "
 				+ "SET manually_merged = TRUE "
 				+ "WHERE skat_record_id IN "
-				+ "(SELECT id FROM harvested_record WHERE record_id = ?"
+				+ "(SELECT id FROM harvested_record WHERE import_conf_id = ? AND record_id = ?"
 				+ ")";
 		Session session = sessionFactory.getCurrentSession();
 		session.createSQLQuery(query)
-			.setString(0, recordId)
+			.setLong(0, Constants.IMPORT_CONF_ID_CASLIN)
+			.setString(1, recordId)
 			.executeUpdate();
 
-		query = "UPDATE harvested_record SET next_dedup_flag=true WHERE record_id = ?";
-		session.createSQLQuery(query).setString(0, recordId).executeUpdate();
+		query = "UPDATE harvested_record SET next_dedup_flag=true WHERE import_conf_id = ? AND record_id = ?";
+		session.createSQLQuery(query)
+			.setLong(0, Constants.IMPORT_CONF_ID_CASLIN)
+			.setString(1, recordId)
+			.executeUpdate();
 	}
 	
 	/**

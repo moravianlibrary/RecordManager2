@@ -75,7 +75,7 @@ public class FilterCaslinRecordsBySiglaJobConfig {
 		pqpf.setWhereClause("WHERE import_conf_id = :conf_id and deleted is null");
 		pqpf.setSortKey("record_id");
 		Map<String, Object> parameterValues = new HashMap<String, Object>();
-		parameterValues.put("conf_id", 316L);
+		parameterValues.put("conf_id", Constants.IMPORT_CONF_ID_CASLIN);
 		reader.setParameterValues(parameterValues);
 		reader.setRowMapper(new HarvestedRecordIdRowMapper());
 		reader.setPageSize(20);
