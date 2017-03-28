@@ -32,7 +32,7 @@ public class DedupSkatKeysProcessor extends DedupSimpleKeysStepProcessor impleme
 	
 	@Override
 	public List<HarvestedRecord> process(List<Long> item) throws Exception {
-		if (item == null || item.size() < 3) {
+		if (item == null || item.size() < 2) {
 			return Collections.emptyList();
 		}
 		
