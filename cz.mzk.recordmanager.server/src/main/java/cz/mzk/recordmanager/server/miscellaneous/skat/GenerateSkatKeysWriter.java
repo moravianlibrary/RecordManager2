@@ -38,18 +38,25 @@ public class GenerateSkatKeysWriter implements ItemWriter<Set<SkatKey>>, StepExe
 
 	@Override
 	public void write(List<? extends Set<SkatKey>> items) throws Exception {
+		Long lastSkatId = -1L;
 		for (Set<SkatKey> list: items) {
 			for (SkatKey key: list) {
 				skatKeyDao.persist(key);
+
+				if (lastSkatId == key.getSkatKeyId().getSkatHarvestedRecordId()) continue;
 				List<Long> import_confs = siglas.get(key.getSkatKeyId().getSigla());
 				if (import_confs == null) continue;
 				for (Long import_conf: import_confs) {
 					String query = "UPDATE harvested_record SET next_dedup_flag=true WHERE import_conf_id = ? AND raw_001_id = ? ";
 					Session session = sessionFactory.getCurrentSession();
-					session.createSQLQuery(query)
+					int status = session.createSQLQuery(query)
 						.setLong(0, import_conf)
 						.setString(1, key.getSkatKeyId().getRecordId())
 						.executeUpdate();
+					if (status > 0) {
+						lastSkatId = key.getSkatKeyId().getSkatHarvestedRecordId();
+						break;
+					}
 				}
 			}
 		}
