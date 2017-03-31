@@ -17,6 +17,7 @@ public class AdresarHarvestJobParametersValidator extends
 	@Override
 	public Collection<JobParameterDeclaration> getParameters() {
 		return Arrays.asList(
+				param(Constants.JOB_PARAM_CONF_ID, ParameterType.LONG, true),
 				param(Constants.JOB_PARAM_FIRST_ID, ParameterType.STRING, false), //
 				param(Constants.JOB_PARAM_LAST_ID, ParameterType.STRING, false), //
 				param(Constants.JOB_PARAM_SINGLE_ID, ParameterType.STRING, false) //

@@ -14,10 +14,11 @@ import org.springframework.batch.core.JobParameter;
 import org.springframework.batch.core.JobParameters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.Assert;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import cz.mzk.recordmanager.server.AbstractTest;
-import cz.mzk.recordmanager.server.oai.dao.AdresarKnihovenDAO;
+import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordDAO;
 import cz.mzk.recordmanager.server.springbatch.JobExecutor;
 import cz.mzk.recordmanager.server.util.Constants;
 import cz.mzk.recordmanager.server.util.HttpClient;
@@ -31,7 +32,12 @@ public class AdresarHarvestTest extends AbstractTest {
 	private HttpClient httpClient;
 
 	@Autowired
-	private AdresarKnihovenDAO akDao;
+	private HarvestedRecordDAO hrDao;
+
+	@BeforeMethod
+	public void initDb() throws Exception {
+		dbUnitHelper.init("dbunit/ImportRecords.xml");
+	}
 
 	@Test
 	public void harvestSingleRecord() throws Exception {
@@ -41,12 +47,13 @@ public class AdresarHarvestTest extends AbstractTest {
 		replay(httpClient);
 
 		Map<String, JobParameter> params = new HashMap<String, JobParameter>();
+		params.put(Constants.JOB_PARAM_CONF_ID, new JobParameter(300L));
 		params.put(Constants.JOB_PARAM_SINGLE_ID, new JobParameter("1"));
 		JobParameters jobParams = new JobParameters(params);
 		JobExecution exec = jobExecutor.execute(Constants.JOB_ID_HARVEST_ADRESAR, jobParams);
 		Assert.assertEquals(exec.getExitStatus(), ExitStatus.COMPLETED);
 		
-		Assert.assertNotNull(akDao.findByRecordId("000000001"));
+		Assert.assertNotNull(hrDao.findByIdAndHarvestConfiguration("000000001", 300L));
 	}
 	
 	@Test
@@ -57,13 +64,14 @@ public class AdresarHarvestTest extends AbstractTest {
 		replay(httpClient);
 
 		Map<String, JobParameter> params = new HashMap<String, JobParameter>();
+		params.put(Constants.JOB_PARAM_CONF_ID, new JobParameter(300L));
 		params.put(Constants.JOB_PARAM_SINGLE_ID, new JobParameter("10000"));
 		JobParameters jobParams = new JobParameters(params);
 		JobExecution exec = jobExecutor.execute(Constants.JOB_ID_HARVEST_ADRESAR, jobParams);
 		Assert.assertEquals(exec.getExitStatus(), ExitStatus.COMPLETED);
 		
 		// empty record is not in db
-		Assert.assertNull(akDao.findByRecordId("000010000"));
+		Assert.assertNull(hrDao.findByIdAndHarvestConfiguration("000010000", 300L));
 	}
 	
 	@Test
@@ -76,14 +84,15 @@ public class AdresarHarvestTest extends AbstractTest {
 		replay(httpClient);
 
 		Map<String, JobParameter> params = new HashMap<String, JobParameter>();
+		params.put(Constants.JOB_PARAM_CONF_ID, new JobParameter(300L));
 		params.put(Constants.JOB_PARAM_FIRST_ID, new JobParameter("1"));
 		params.put(Constants.JOB_PARAM_LAST_ID, new JobParameter("2"));
 		JobParameters jobParams = new JobParameters(params);
 		JobExecution exec = jobExecutor.execute(Constants.JOB_ID_HARVEST_ADRESAR, jobParams);
 		Assert.assertEquals(exec.getExitStatus(), ExitStatus.COMPLETED);
 
-		Assert.assertNotNull(akDao.findByRecordId("000000001"));
-		Assert.assertNotNull(akDao.findByRecordId("000000002"));
+		Assert.assertNotNull(hrDao.findByIdAndHarvestConfiguration("000000001", 300L));
+		Assert.assertNotNull(hrDao.findByIdAndHarvestConfiguration("000000002", 300L));
 	}
 
 }

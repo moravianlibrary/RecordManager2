@@ -52,7 +52,7 @@ public class AdresarHarvestJobConfig {
 		return steps.get(Constants.JOB_ID_HARVEST_ADRESAR + ":step")
 				.<List<Record>, List<Record>> chunk(10)//
 				.reader(harvestAdresarReader(LONG_OVERRIDEN_BY_EXPRESSION, LONG_OVERRIDEN_BY_EXPRESSION, LONG_OVERRIDEN_BY_EXPRESSION))//
-				.writer(harvestAdresarWriter()) //
+				.writer(harvestAdresarWriter(LONG_OVERRIDEN_BY_EXPRESSION)) //
 				.build();
 	}
 
@@ -67,7 +67,7 @@ public class AdresarHarvestJobConfig {
 
 	@Bean(name=Constants.JOB_ID_HARVEST_ADRESAR + ":writer")
 	@StepScope
-	public AdresarRecordsWriter harvestAdresarWriter() {
-		return new AdresarRecordsWriter();
+	public AdresarRecordsWriter harvestAdresarWriter(@Value("#{jobParameters[" + Constants.JOB_PARAM_CONF_ID + "]}") Long configurationId) {
+		return new AdresarRecordsWriter(configurationId);
 	}
 }

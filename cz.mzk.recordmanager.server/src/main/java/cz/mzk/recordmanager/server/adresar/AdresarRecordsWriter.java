@@ -16,8 +16,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import cz.mzk.recordmanager.server.marc.ISOCharConvertor;
 import cz.mzk.recordmanager.server.marc.MarcRecord;
 import cz.mzk.recordmanager.server.marc.MarcRecordImpl;
-import cz.mzk.recordmanager.server.model.AdresarKnihoven;
-import cz.mzk.recordmanager.server.oai.dao.AdresarKnihovenDAO;
+import cz.mzk.recordmanager.server.model.HarvestedRecord;
+import cz.mzk.recordmanager.server.model.HarvestedRecord.HarvestedRecordUniqueId;
+import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordDAO;
 
 public class AdresarRecordsWriter implements ItemWriter<List<Record>> {
 	
@@ -27,8 +28,14 @@ public class AdresarRecordsWriter implements ItemWriter<List<Record>> {
 	protected SessionFactory sessionFactory;
 
 	@Autowired
-	public AdresarKnihovenDAO adresarDao;
-	
+	public HarvestedRecordDAO harvestedRecordDAO;
+
+	private Long configurationId;
+
+	public AdresarRecordsWriter(Long configurationId) {
+		this.configurationId = configurationId;
+	}
+
 	@Override
 	public void write(List<? extends List<Record>> items) throws Exception {
 		try {
@@ -48,20 +55,20 @@ public class AdresarRecordsWriter implements ItemWriter<List<Record>> {
 					}
 					MarcRecord marc = new MarcRecordImpl(currentRecord);
 					String recordId = marc.getControlField("SYS");
-					AdresarKnihoven ak = adresarDao.findByRecordId(recordId);
-					if (ak == null) {
-						ak = new AdresarKnihoven(recordId);
-						ak.setFormat("marc21-xml");
+					HarvestedRecord hr = harvestedRecordDAO.findByIdAndHarvestConfiguration(recordId, configurationId);
+					if (hr == null) {
+						hr = new HarvestedRecord(new HarvestedRecordUniqueId(configurationId, recordId));
+						hr.setFormat("marc21-xml");
 					}
-					ak.setUpdated(new Date());
+					hr.setUpdated(new Date());
 					ByteArrayOutputStream outStream = new ByteArrayOutputStream();
 					MarcWriter marcWriter = new MarcXmlWriter(outStream, true);
 					marcWriter.setConverter(ISOCharConvertor.INSTANCE);
 					marcWriter.write(currentRecord);
 					marcWriter.close();
-					ak.setRawRecord(outStream.toByteArray());
+					hr.setRawRecord(outStream.toByteArray());
 
-					adresarDao.persist(ak);
+					harvestedRecordDAO.persist(hr);
 				} catch (Exception e) {
 					logger.warn("Error occured in processing record");
 					throw e;
