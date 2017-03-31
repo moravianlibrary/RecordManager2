@@ -29,7 +29,6 @@ import cz.mzk.recordmanager.server.metadata.institutions.SvkulMetadataMarcRecord
 import cz.mzk.recordmanager.server.metadata.institutions.TreMetadataMarcRecord;
 import cz.mzk.recordmanager.server.metadata.institutions.VkolMarcMetadataRecord;
 import cz.mzk.recordmanager.server.metadata.institutions.ZakonyProLidiMetadataMarcRecord;
-import cz.mzk.recordmanager.server.model.AdresarKnihoven;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecord.HarvestedRecordUniqueId;
 import cz.mzk.recordmanager.server.model.ImportConfiguration;
@@ -134,11 +133,6 @@ public class MetadataRecordFactory {
 		default:
 			return getMetadataRecord(dcRec);
     	}
-	}
-	
-	public MetadataRecord getMetadataRecord(AdresarKnihoven adrRecord) {
-		MarcRecord marcRec = marcXmlParser.parseRecord(new ByteArrayInputStream(adrRecord.getRawRecord()));
-		return new MetadataMarcRecord(marcRec);
 	}
 	
 	public MetadataRecord getMetadataRecord(HarvestedRecordUniqueId recordId) {

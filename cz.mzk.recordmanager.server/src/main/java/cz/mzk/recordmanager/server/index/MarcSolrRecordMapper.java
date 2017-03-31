@@ -16,7 +16,6 @@ import cz.mzk.recordmanager.server.ResourceProvider;
 import cz.mzk.recordmanager.server.marc.MarcRecord;
 import cz.mzk.recordmanager.server.marc.MarcXmlParser;
 import cz.mzk.recordmanager.server.metadata.MetadataRecordFactory;
-import cz.mzk.recordmanager.server.model.AdresarKnihoven;
 import cz.mzk.recordmanager.server.model.DedupRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.model.ImportConfiguration;
@@ -47,8 +46,6 @@ public class MarcSolrRecordMapper implements SolrRecordMapper, InitializingBean 
 
 	private MappingScript<MarcFunctionContext> defaultHarvestedRecordMappingScript;
 
-	private MappingScript<MarcFunctionContext> adresarKnihovenMappingScript;
-	
 	@Override
 	public List<String> getSupportedFormats() {
 		return Collections.singletonList(FORMAT);
@@ -69,11 +66,6 @@ public class MarcSolrRecordMapper implements SolrRecordMapper, InitializingBean 
 		return parseAsLocalRecord(record);
 	}
 
-	@Override
-	public Map<String, Object> map(AdresarKnihoven record) {
-		return parseAsAdresarKnihovenRecord(record);
-	}
-	
 	protected Map<String, Object> parseAsDedupRecord(HarvestedRecord record) {
 		InputStream is = new ByteArrayInputStream(record.getRawRecord());
 		MarcRecord rec = marcXmlParser.parseRecord(is);
@@ -90,13 +82,6 @@ public class MarcSolrRecordMapper implements SolrRecordMapper, InitializingBean 
 		return getHarvestedMappingScript(record).parse(ctx);
 	}
 
-	protected Map<String, Object> parseAsAdresarKnihovenRecord(AdresarKnihoven record) {
-		InputStream is = new ByteArrayInputStream(record.getRawRecord());
-		MarcRecord rec = marcXmlParser.parseRecord(is);
-		MarcFunctionContext ctx = new MarcFunctionContext(rec, null, metadataRecordFactory.getMetadataRecord(record));
-		return getHarvestedMappingScript(record).parse(ctx);
-	}
-	
 	protected MappingScript<MarcFunctionContext> getDedupMappingScript(HarvestedRecord record) {
 		return dedupRecordMappingScript;
 	}
@@ -110,10 +95,6 @@ public class MarcSolrRecordMapper implements SolrRecordMapper, InitializingBean 
 		return script;
 	}
 
-	protected MappingScript<MarcFunctionContext> getHarvestedMappingScript(AdresarKnihoven record) {
-		return adresarKnihovenMappingScript;
-	}
-	
 	protected MappingScript<MarcFunctionContext> getScript(ImportConfiguration importConf) {
 		if (importConf.getMappingScript() != null) {
 			String[] scripts = importConf.getMappingScript().split(",");
@@ -139,8 +120,6 @@ public class MarcSolrRecordMapper implements SolrRecordMapper, InitializingBean 
 				resourceProvider.getResource("/marc/groovy/BaseMarc.groovy"));
 		defaultHarvestedRecordMappingScript = marcScriptFactory.create( //
 				resourceProvider.getResource("/marc/groovy/HarvestedRecordBaseMarc.groovy"));
-		adresarKnihovenMappingScript = marcScriptFactory.create(
-				resourceProvider.getResource("/marc/groovy/AdresarKnihovenBaseMarc.groovy"));
 	}
 
 }

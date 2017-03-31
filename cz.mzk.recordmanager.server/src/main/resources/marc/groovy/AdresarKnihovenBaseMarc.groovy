@@ -1,3 +1,0 @@
-recordtype = "adresar"
-
-fullrecord = getFullrecord()
