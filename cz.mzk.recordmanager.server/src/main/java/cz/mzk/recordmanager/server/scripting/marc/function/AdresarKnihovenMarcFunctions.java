@@ -72,14 +72,31 @@ public class AdresarKnihovenMarcFunctions implements MarcRecordFunctions {
 	public List<String> adresarGetResponsibility(MarcFunctionContext ctx) {
 		List<String> results = new ArrayList<>();
 		char[] sfCodes = new char[]{'t', 'k', 'p', 'r', 'f', 'e'};
-		String[] separators = new String[]{" ", " ", " (", ") ; ", " ; ", ""};
+		Subfield sf;
 		for (DataField df : ctx.record().getDataFields("JMN")) {
 			StringBuilder sb = new StringBuilder();
-			for (int i = 0; i < separators.length; i++) {
-				if (df.getSubfield(sfCodes[i]) != null) {
-					sb.append(df.getSubfield(sfCodes[i]).getData());
+			for (int i = 0; i < sfCodes.length; i++) {
+				if ((sf = df.getSubfield(sfCodes[i])) == null) continue;
+				switch (sf.getCode()) {
+				case 'k':
+				case 'p':
+					sb.append(" ");
+					sb.append(sf.getData());
+					break;
+				case 'r':
+					sb.append(" (");
+					sb.append(sf.getData());
+					sb.append(")");
+					break;
+				case 'f':
+				case 'e':
+					sb.append(" ; ");
+					sb.append(sf.getData());
+					break;
+				default:
+					sb.append(sf.getData());
+					break;
 				}
-				sb.append(separators[i]);
 			}
 			results.add(sb.toString().trim());
 		}
