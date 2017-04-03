@@ -105,15 +105,39 @@ public class AdresarKnihovenMarcFunctions implements MarcRecordFunctions {
 
 	public List<String> adresarGetAddress(MarcFunctionContext ctx) {
 		List<String> results = new ArrayList<>();
-		char[] sfCodes = new char[]{'u', 'c', 'm', 'p', 'q'};
-		String[] separators = new String[]{", ", " ", " (", ") [", "]"};
+		char[] sfCodes = new char[]{'u', 'c', 'm', 'p', 'g'};
+		Subfield sf;
 		for (DataField df : ctx.record().getDataFields("ADR")) {
 			StringBuilder sb = new StringBuilder();
-			for (int i = 0; i < separators.length; i++) {
-				if (df.getSubfield(sfCodes[i]) != null) {
-					sb.append(df.getSubfield(sfCodes[i]).getData());
+			boolean isData = false;
+			for (int i = 0; i < sfCodes.length; i++) {
+				if ((sf = df.getSubfield(sfCodes[i])) == null) continue;
+				switch (sf.getCode()) {
+				case 'c':
+					if (isData) sb.append(", ");
+					sb.append(sf.getData());
+					break;
+				case 'm':
+					if (isData) sb.append(" ");
+					sb.append(sf.getData());
+					break;
+				case 'p':
+					if (isData) sb.append(" ");
+					sb.append("(");
+					sb.append(sf.getData());
+					sb.append(")");
+					break;
+				case 'g':
+					if (isData) sb.append(" ");
+					sb.append("[");
+					sb.append(sf.getData());
+					sb.append("]");
+					break;
+				default:
+					sb.append(sf.getData());
+					break;
 				}
-				sb.append(separators[i]);
+				isData = true;
 			}
 			results.add(sb.toString().trim());
 		}
