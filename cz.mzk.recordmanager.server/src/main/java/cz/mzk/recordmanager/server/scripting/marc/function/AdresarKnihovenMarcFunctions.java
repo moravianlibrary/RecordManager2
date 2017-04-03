@@ -33,6 +33,7 @@ public class AdresarKnihovenMarcFunctions implements MarcRecordFunctions {
 	private static final MappingResolver propertyResolver = new ResourceMappingResolver(new ClasspathResourceProvider());
 	
 	private final static Pattern FIELD_PATTERN = Pattern.compile("([a-zA-Z0-9]{3})([a-zA-Z0-9]*)");
+	private final static Pattern GPS_PATTERN = Pattern.compile("(\\d+)°(\\d+)'([\\d\\.]+)\"([NSEW])");
 	private final static String MAP_ADRESAR_HOURS = "adresar_hours.map";
 	
 	public String getFirstFieldForAdresar(MarcFunctionContext ctx, String tag) {
@@ -226,6 +227,24 @@ public class AdresarKnihovenMarcFunctions implements MarcRecordFunctions {
 			for (Sigla sigla : siglaDao.findSiglaByName(siglaName)) {
 				return configurationDAO.get(sigla.getUniqueId().getImportConfId()).getIdPrefix();
 			}
+		}
+		return null;
+	}
+
+	public String adresarGetGps(MarcFunctionContext ctx) {
+		Matcher matcher;
+		for (String data : ctx.record().getFields("ADR", 'g')) {
+			matcher = GPS_PATTERN.matcher(data);
+			String latitude = null, longitude = null;
+			while (matcher.find()) {
+				double i = Double.valueOf(matcher.group(1))
+						+ (Double.valueOf(matcher.group(2)) / 60)
+						+ (Double.valueOf(matcher.group(3)) / 3600)
+						* (matcher.group(4).toLowerCase().equals("s|w") ? -1 : 1);
+				if (latitude == null) latitude = String.valueOf(i);
+				else longitude = String.valueOf(i);
+			}
+			if (latitude != null && longitude != null) return latitude + " " + longitude;
 		}
 		return null;
 	}

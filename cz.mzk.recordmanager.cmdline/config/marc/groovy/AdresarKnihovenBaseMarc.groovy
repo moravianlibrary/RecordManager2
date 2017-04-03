@@ -57,3 +57,5 @@ services_facet_str_mv = translate("adresar_services.map", getFieldsForAdresar("S
 projects_facet_str_mv = translate("adresar_projects.map", getFieldsForAdresar("PRKa", SubfieldExtractionMethod.SEPARATED, null), null)
 type_facet_str = getFirstFieldForAdresar "TYPb"
 ils_facet_str = getFirstFieldForAdresar "KNSa"
+
+gps_str = adresarGetGps()
