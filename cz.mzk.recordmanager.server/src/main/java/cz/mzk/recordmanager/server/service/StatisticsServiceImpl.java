@@ -78,18 +78,21 @@ public class StatisticsServiceImpl implements StatisticsService{
 	}
 
 	@Override
-	public List<IndexAllRecordsJobStatisticsDto> getIndexAllRecordsStatisticsInPeriods(PeriodDto startEnd, PeriodDto fromTo) {
+	public List<IndexAllRecordsJobStatisticsDto> getIndexAllRecordsStatisticsInPeriods(Date startDate,
+																					   Date endDate,
+																					   Date fromDate,
+																					   Date toDate) {
 
-		if (fromTo.getStart() == null){
+		if (fromDate.getTime() == 0){
 			return jdbcTemplate.query("SELECT * " +
 					"FROM index_all_records " +
 					"WHERE (start_time >= ? OR start_time IS NULL ) AND (end_time <= ? OR end_time IS NULL ) AND (from_param IS NULL)" +
-					"ORDER BY start_time DESC ", new BeanPropertyRowMapper<IndexAllRecordsJobStatisticsDto>(IndexAllRecordsJobStatisticsDto.class), startEnd.getStart(), startEnd.getEnd());
+					"ORDER BY start_time DESC ", new BeanPropertyRowMapper<IndexAllRecordsJobStatisticsDto>(IndexAllRecordsJobStatisticsDto.class), startDate, endDate);
 		}else {
 			return jdbcTemplate.query("SELECT * " +
 					"FROM index_all_records " +
 					"WHERE (start_time >= ? OR start_time IS NULL ) AND (end_time <= ? OR end_time IS NULL ) AND (from_param >= ?) AND ( to_param <= ? OR to_param IS NULL ) " +
-					"ORDER BY start_time DESC ", new BeanPropertyRowMapper<IndexAllRecordsJobStatisticsDto>(IndexAllRecordsJobStatisticsDto.class), startEnd.getStart(), startEnd.getEnd(), fromTo.getStart(), fromTo.getEnd());
+					"ORDER BY start_time DESC ", new BeanPropertyRowMapper<IndexAllRecordsJobStatisticsDto>(IndexAllRecordsJobStatisticsDto.class), startDate, endDate, fromDate, toDate);
 		}
 
 	}
@@ -104,11 +107,11 @@ public class StatisticsServiceImpl implements StatisticsService{
 	}
 
 	@Override
-	public List<DedupRecordsDto> getDedupRecordsStatisticsInPeriods(PeriodDto startEnd) {
+	public List<DedupRecordsDto> getDedupRecordsStatisticsInPeriods(Date startDate,  Date endDate) {
 		return jdbcTemplate.query("SELECT * " +
 				"FROM dedup_records_st " +
 				"WHERE (start_time >= ? OR start_time IS NULL ) AND (end_time <= ? OR end_time IS NULL ) " +
-				"ORDER BY start_time DESC ", new BeanPropertyRowMapper<DedupRecordsDto>(DedupRecordsDto.class), startEnd.getStart(), startEnd.getEnd());
+				"ORDER BY start_time DESC ", new BeanPropertyRowMapper<DedupRecordsDto>(DedupRecordsDto.class), startDate, endDate);
 	}
 
 	@Override
@@ -139,11 +142,11 @@ public class StatisticsServiceImpl implements StatisticsService{
 	}
 
 	@Override
-	public List<DownloadImportConfJobStatisticsDto> getDownloadImportConfJobStatisticsInPeriod(PeriodDto startEnd) {
+	public List<DownloadImportConfJobStatisticsDto> getDownloadImportConfJobStatisticsInPeriod(Date startDate, Date endDate) {
 		return jdbcTemplate.query("SELECT * " +
 				"FROM download_import_view " +
 				"WHERE (start_time >= ? OR start_time IS NULL ) AND (end_time <= ? OR end_time IS NULL ) " +
-				"ORDER BY start_time DESC ", new BeanPropertyRowMapper<DownloadImportConfJobStatisticsDto>(DownloadImportConfJobStatisticsDto.class), startEnd.getStart(), startEnd.getEnd());
+				"ORDER BY start_time DESC ", new BeanPropertyRowMapper<DownloadImportConfJobStatisticsDto>(DownloadImportConfJobStatisticsDto.class), startDate, endDate);
 	}
 
 	@Override
@@ -156,10 +159,10 @@ public class StatisticsServiceImpl implements StatisticsService{
 	}
 
 	@Override
-	public List<RegenerateDedupKeysJobStatisticsDto> getRegenerateDedupKeysJobStatisticsInPeriod(PeriodDto startEnd) {
+	public List<RegenerateDedupKeysJobStatisticsDto> getRegenerateDedupKeysJobStatisticsInPeriod(Date startDate, Date endDate) {
 		return jdbcTemplate.query("SELECT * " +
 				"FROM regenerate_dedup_keys_view " +
 				"WHERE (start_time >= ? OR start_time IS NULL ) AND (end_time <= ? OR end_time IS NULL ) " +
-				"ORDER BY start_time DESC ", new BeanPropertyRowMapper<RegenerateDedupKeysJobStatisticsDto>(RegenerateDedupKeysJobStatisticsDto.class), startEnd.getStart(), startEnd.getEnd());
+				"ORDER BY start_time DESC ", new BeanPropertyRowMapper<RegenerateDedupKeysJobStatisticsDto>(RegenerateDedupKeysJobStatisticsDto.class), startDate, endDate);
 	}
 }

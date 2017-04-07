@@ -5,6 +5,7 @@ import {LibrariesService} from "./libraries.service";
 import {Router} from "@angular/router";
 import {SortControl} from "../../shared/sort-control";
 import {Style} from "../../shared/style";
+import {Http} from "@angular/http";
 
 @Component({
 	selector: 'app-libraries',
@@ -22,7 +23,7 @@ export class LibrariesComponent implements OnInit{
 
 
 
-	constructor(private librariesService: LibrariesService, private router: Router, private sortControl: SortControl) {}
+	constructor(private librariesService: LibrariesService, private sortControl: SortControl) {}
 
 
 	getLibraries() {

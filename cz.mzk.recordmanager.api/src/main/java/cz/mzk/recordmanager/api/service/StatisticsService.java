@@ -17,19 +17,22 @@ public interface StatisticsService {
 
 	List<IndexAllRecordsJobStatisticsDto> getIndexAllRecordsStatistics(Integer offset);
 
-	List<IndexAllRecordsJobStatisticsDto> getIndexAllRecordsStatisticsInPeriods(PeriodDto startEnd, PeriodDto fromTo);
+	List<IndexAllRecordsJobStatisticsDto> getIndexAllRecordsStatisticsInPeriods(Date startDate,
+																				Date endDate,
+																				Date fromDate,
+																				Date toDate);
 
 	List<DedupRecordsDto> getDedupRecordsStatistics(Integer offset);
 
-	List<DedupRecordsDto> getDedupRecordsStatisticsInPeriods(PeriodDto startEnd);
+	List<DedupRecordsDto> getDedupRecordsStatisticsInPeriods(Date startDate,  Date endDate);
 
 	StatisticDetailsDto getDetails(Long jobExecutionId);
 
 	List<DownloadImportConfJobStatisticsDto> getDownloadImportConfJobStatistics(Integer offset);
 
-	List<DownloadImportConfJobStatisticsDto> getDownloadImportConfJobStatisticsInPeriod(PeriodDto startEnd);
+	List<DownloadImportConfJobStatisticsDto> getDownloadImportConfJobStatisticsInPeriod(Date startDate, Date endDate);
 
 	List<RegenerateDedupKeysJobStatisticsDto> getRegenerateDedupKeysJobStatistics(Integer offset);
 
-	List<RegenerateDedupKeysJobStatisticsDto> getRegenerateDedupKeysJobStatisticsInPeriod(PeriodDto startEnd);
+	List<RegenerateDedupKeysJobStatisticsDto> getRegenerateDedupKeysJobStatisticsInPeriod(Date startDate, Date endDate);
 }

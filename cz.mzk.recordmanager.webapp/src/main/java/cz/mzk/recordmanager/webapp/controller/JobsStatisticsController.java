@@ -7,6 +7,7 @@ import cz.mzk.recordmanager.api.model.statistics.*;
 import cz.mzk.recordmanager.api.service.StatisticsService;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -37,10 +38,10 @@ public class JobsStatisticsController {
 	}
 
 
-	@RequestMapping(method = RequestMethod.POST, value = "actuals")
+	@RequestMapping(method = RequestMethod.GET, value = "actuals")
 	@ResponseBody
-	public List<ActualStatisticsDto> getActualStatistics(@RequestParam("startDate") Date startDate){
-	return statisticsService.getActualStatisticsForThePeriod(startDate);
+	public List<ActualStatisticsDto> getActualStatistics(@RequestParam(value = "startDate") Long startDate){
+	return statisticsService.getActualStatisticsForThePeriod(new Date(startDate));
 	}
 
 
@@ -50,10 +51,15 @@ public class JobsStatisticsController {
 		return statisticsService.getIndexAllRecordsStatistics(offset);
 	}
 
-	@RequestMapping(method = RequestMethod.POST, value = "indexAllRecordsStatistics/inPeriods")
+
+	@RequestMapping(method = RequestMethod.GET, value = "indexAllRecordsStatistics/inPeriods")
 	@ResponseBody
-	public List<IndexAllRecordsJobStatisticsDto> getIndexAllRecordsStatisticsInPeriods(@RequestBody List<PeriodDto> periods){
-		return statisticsService.getIndexAllRecordsStatisticsInPeriods(periods.get(0), periods.get(1));
+	public List<IndexAllRecordsJobStatisticsDto> getIndexAllRecordsStatisticsInPeriods(@RequestParam(value = "startDate") Long startDate,
+																					   @RequestParam(value = "endDate") Long endDate,
+																					   @RequestParam(value = "fromDate") Long fromDate,
+																					   @RequestParam(value = "toDate") Long toDate
+																					   ){
+		return statisticsService.getIndexAllRecordsStatisticsInPeriods(new Date(startDate), new Date(endDate), new Date(fromDate), new Date(toDate));
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "dedupRecordsStatistics/{offset}")
@@ -62,10 +68,11 @@ public class JobsStatisticsController {
 		return statisticsService.getDedupRecordsStatistics(offset);
 	}
 
-	@RequestMapping(method = RequestMethod.POST, value = "dedupRecordsStatistics/inPeriods")
+	@RequestMapping(method = RequestMethod.GET, value = "dedupRecordsStatistics/inPeriods")
 	@ResponseBody
-	public List<DedupRecordsDto> getDedupRecordsStatisticsInPeriods(@RequestBody PeriodDto period){
-		return statisticsService.getDedupRecordsStatisticsInPeriods(period);
+	public List<DedupRecordsDto> getDedupRecordsStatisticsInPeriods(@RequestParam(value = "startDate") Long startDate,
+																	@RequestParam(value = "endDate") Long endDate){
+		return statisticsService.getDedupRecordsStatisticsInPeriods(new Date(startDate), new Date(endDate));
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "details/{jobExecutionId}")
@@ -80,10 +87,11 @@ public class JobsStatisticsController {
 		return statisticsService.getDownloadImportConfJobStatistics(offset);
 	}
 
-	@RequestMapping(method = RequestMethod.POST, value = "downloadImportConfStatistics/inPeriods")
+	@RequestMapping(method = RequestMethod.GET, value = "downloadImportConfStatistics/inPeriods")
 	@ResponseBody
-	public List<DownloadImportConfJobStatisticsDto> getDownloadImportConfJobStatisticsInPeriod(@RequestBody PeriodDto period){
-		return statisticsService.getDownloadImportConfJobStatisticsInPeriod(period);
+	public List<DownloadImportConfJobStatisticsDto> getDownloadImportConfJobStatisticsInPeriod(@RequestParam(value = "startDate") Long startDate,
+																							   @RequestParam(value = "endDate") Long endDate){
+		return statisticsService.getDownloadImportConfJobStatisticsInPeriod(new Date(startDate), new Date(endDate));
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "regenerateDedupKeysStatistics/{offset}")
@@ -92,10 +100,11 @@ public class JobsStatisticsController {
 		return statisticsService.getRegenerateDedupKeysJobStatistics(offset);
 	}
 
-	@RequestMapping(method = RequestMethod.POST, value = "regenerateDedupKeysStatistics/inPeriods")
+	@RequestMapping(method = RequestMethod.GET, value = "regenerateDedupKeysStatistics/inPeriods")
 	@ResponseBody
-	public List<RegenerateDedupKeysJobStatisticsDto> getRegenerateDedupKeysJobInPeriod(@RequestBody PeriodDto period){
-		return statisticsService.getRegenerateDedupKeysJobStatisticsInPeriod(period);
+	public List<RegenerateDedupKeysJobStatisticsDto> getRegenerateDedupKeysJobInPeriod(@RequestParam(value = "startDate") Long startDate,
+																					   @RequestParam(value = "endDate") Long endDate){
+		return statisticsService.getRegenerateDedupKeysJobStatisticsInPeriod(new Date(startDate), new Date(endDate));
 	}
 
 

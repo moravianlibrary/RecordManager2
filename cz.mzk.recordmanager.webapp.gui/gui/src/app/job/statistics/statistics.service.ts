@@ -16,9 +16,9 @@ export class StatisticsService{
 
 		let formData = new FormData();
 		formData.append("startDate", startTime);
-		return this.http.post(SERVER + "/statistics/actuals", formData, options).map((resp: Response) => {
+		return this.http.get(SERVER + "/statistics/actuals" + "?startDate=" + startTime.getTime()).map((resp: Response) => {
 			return resp.json();
-		});
+		})
 	}
 
 	getOaiFullHarvestStatistics(offset: number): Observable<any>{
@@ -36,6 +36,15 @@ export class StatisticsService{
 		var headers = new Headers({"Content-Type": 'application/json', 'Accept': 'application/json'});
 		let options = new RequestOptions({ headers: headers });
 		console.log(libraries);
+
+		// return this.http.get(SERVER + "/statistics/oaiHarvestStatistics/inPeriods" +
+		// 		"?startDate=" + startDate.getTime() +
+		// 		"?endDate=" + endDate.getTime() +
+		// 		"?fromDate=" + fromDate.getTime() +
+		// 		"?toDate=" + toDate.getTime()
+		// ).map((res: Response) => {
+		// 	return res.json();
+		// });
 
 		return this.http.post(SERVER + "/statistics/oaiHarvestStatistics/inPeriods",
 			JSON.stringify({
@@ -64,16 +73,16 @@ export class StatisticsService{
 	getIndexAllRecordsStatisticsInPeriods(startDate: Date, endDate: Date, fromDate: Date, toDate: Date): Observable<any>{
 		if (startDate == null) startDate = new Date(0);
 		if (endDate == null) endDate = new Date(Date.now());
-		// if (fromDate == null) fromDate = new Date(0);
-		// if (toDate == null) toDate = new Date(Date.now());
-
-		var headers = new Headers({"Content-Type": 'application/json', 'Accept': 'application/json'});
-		let options = new RequestOptions({ headers: headers });
+		if (fromDate == null) fromDate = new Date(0);
+		if (toDate == null) toDate = new Date(Date.now());
 
 
-		return this.http.post(SERVER + "/statistics/indexAllRecordsStatistics/inPeriods",
-			JSON.stringify([{start: startDate, end: endDate}, {start: fromDate, end: toDate}]),
-			options).map((res:Response) => {
+		return this.http.get(SERVER + "/statistics/indexAllRecordsStatistics/inPeriods" +
+			"?startDate=" + startDate.getTime() +
+			"&endDate=" + endDate.getTime() +
+			"&fromDate=" + fromDate.getTime() +
+			"&toDate=" + toDate.getTime()
+		).map((res: Response) => {
 			return res.json();
 		});
 	}
@@ -83,14 +92,12 @@ export class StatisticsService{
 		if (startDate == null) startDate = new Date(0);
 		if (endDate == null) endDate = new Date(Date.now());
 
-		var headers = new Headers({"Content-Type": 'application/json', 'Accept': 'application/json'});
-		let options = new RequestOptions({ headers: headers });
-
-		return this.http.post(SERVER + "/statistics/dedupRecordsStatistics/inPeriods",
-			JSON.stringify({start: startDate, end: endDate}),
-			options).map((res:Response) => {
+		return this.http.get(SERVER + "/statistics/dedupRecordsStatistics/inPeriods" +
+			"?startDate=" + startDate.getTime() +
+			"&endDate=" + endDate.getTime()
+		).map((res: Response) => {
 			return res.json();
-		});
+		})
 	}
 
 	getDownloadImportConfStatistics(offset: number): Observable<any>{
@@ -106,11 +113,13 @@ export class StatisticsService{
 		var headers = new Headers({"Content-Type": 'application/json', 'Accept': 'application/json'});
 		let options = new RequestOptions({ headers: headers });
 
-		return this.http.post(SERVER + "/statistics/downloadImportConfStatistics/inPeriods",
-			JSON.stringify({start: startDate, end: endDate}),
-			options).map((res:Response) => {
+		return this.http.get(SERVER + "/statistics/downloadImportConfStatistics/inPeriods" +
+			"?startDate=" + startDate.getTime() +
+			"&endDate=" + endDate.getTime()
+		).map((res: Response) => {
 			return res.json();
-		});
+		})
+
 	}
 
 
@@ -130,14 +139,12 @@ export class StatisticsService{
 		if (startDate == null) startDate = new Date(0);
 		if (endDate == null) endDate = new Date(Date.now());
 
-		var headers = new Headers({"Content-Type": 'application/json', 'Accept': 'application/json'});
-		let options = new RequestOptions({ headers: headers });
-
-		return this.http.post(SERVER + "/statistics/regenerateDedupKeysStatistics/inPeriods",
-			JSON.stringify({start: startDate, end: endDate}),
-			options).map((res:Response) => {
+		return this.http.get(SERVER + "/statistics/regenerateDedupKeysStatistics/inPeriods" +
+			"?startDate=" + startDate.getTime() +
+			"&endDate=" + endDate.getTime()
+		).map((res: Response) => {
 			return res.json();
-		});
+		})
 	}
 
 }
