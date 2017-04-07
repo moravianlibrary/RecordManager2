@@ -440,6 +440,7 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 	public List<Oclc> getOclcs() {
 		List<String> identifiers = dcRecord.getIdentifiers();
 		List<Oclc> oclcs = new ArrayList<>();
+		if (getLanguages().contains("cze")) return oclcs;
 		Matcher matcher;
 		
 		for (String f : identifiers) {

@@ -940,8 +940,8 @@ public class MetadataMarcRecord implements MetadataRecord {
 
 	@Override
 	public List<Oclc> getOclcs() {
-		
 		List<Oclc> result = new ArrayList<>();
+		if (getLanguages().contains("cze")) return result;
 		for (DataField df: underlayingMarc.getDataFields("035")) {
 			Subfield subA = df.getSubfield('a');
 			if (subA == null) {
