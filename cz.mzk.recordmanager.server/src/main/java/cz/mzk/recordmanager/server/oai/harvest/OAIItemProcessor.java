@@ -103,7 +103,8 @@ public class OAIItemProcessor implements ItemProcessor<List<OAIRecord>, List<Har
 			rec = new HarvestedRecord(id);
 			rec.setHarvestedFrom(configuration);
 			rec.setFormat(format);
-		} else if ((deleted && rec.getDeleted() != null) || Arrays.equals(recordContent, rec.getRawRecord())) {
+		} else if ((deleted && rec.getDeleted() != null && (rec.getRawRecord() == null || rec.getRawRecord().length == 0))
+				|| Arrays.equals(recordContent, rec.getRawRecord())) {
 			rec.setUpdated(new Date());
 			rec.setShouldBeProcessed(false);
 			return rec; // no change in record
