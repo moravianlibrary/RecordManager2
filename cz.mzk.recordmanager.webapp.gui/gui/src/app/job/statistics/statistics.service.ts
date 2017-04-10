@@ -35,23 +35,14 @@ export class StatisticsService{
 
 		var headers = new Headers({"Content-Type": 'application/json', 'Accept': 'application/json'});
 		let options = new RequestOptions({ headers: headers });
-		console.log(libraries);
 
-		// return this.http.get(SERVER + "/statistics/oaiHarvestStatistics/inPeriods" +
-		// 		"?startDate=" + startDate.getTime() +
-		// 		"?endDate=" + endDate.getTime() +
-		// 		"?fromDate=" + fromDate.getTime() +
-		// 		"?toDate=" + toDate.getTime()
-		// ).map((res: Response) => {
-		// 	return res.json();
-		// });
 
-		return this.http.post(SERVER + "/statistics/oaiHarvestStatistics/inPeriods",
-			JSON.stringify({
-				startEnd: {start: startDate, end: endDate},
-				fromTo: {start: fromDate, end: toDate},
-				libraries: libraries
-			}),
+		return this.http.post(SERVER + "/statistics/oaiHarvestStatistics/inPeriods" +
+			"?startDate=" + startDate.getTime() +
+			"&endDate=" + endDate.getTime() +
+			"&fromDate=" + fromDate.getTime() +
+			"&toDate=" + toDate.getTime(),
+			libraries,
 		options).map((res:Response) => {
 
 			return res.json();

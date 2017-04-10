@@ -13,7 +13,11 @@ public interface StatisticsService {
 
 	List<OaiHarvestJobStatisticsDto> getOaiHarvestJobStats(Integer offset);
 
-	List<OaiHarvestJobStatisticsDto> getOaiHarvestStatisticsInPeriods(PeriodDto startEnd, PeriodDto fromTo, List<LibraryDto> libraries);
+	List<OaiHarvestJobStatisticsDto> getOaiHarvestStatisticsInPeriods(Date start,
+																	  Date end,
+																	  Date from,
+																	  Date to,
+																	  List<LibraryDto> libraries);
 
 	List<IndexAllRecordsJobStatisticsDto> getIndexAllRecordsStatistics(Integer offset);
 

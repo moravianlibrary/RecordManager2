@@ -4,7 +4,7 @@ import {Observable} from "rxjs";
 import {Library} from "../../model/library";
 import {SERVER} from "../../server";
 import {ErrorHolder} from "../../shared/error-holder";
-import {LibraryDetail} from "../../model/library-detail";
+
 @Injectable()
 export class LibrariesService{
 	constructor(private http: Http) {
@@ -20,7 +20,7 @@ export class LibrariesService{
 		var headers = new Headers({"Content-Type": 'application/json'});
 		let options = new RequestOptions({ headers: headers });
 
-		return this.http.put(SERVER + "/library", JSON.stringify(library), options)
+		return this.http.post(SERVER + "/library", JSON.stringify(library), options)
 			.map((res: Response) =>  res.json());
 	}
 

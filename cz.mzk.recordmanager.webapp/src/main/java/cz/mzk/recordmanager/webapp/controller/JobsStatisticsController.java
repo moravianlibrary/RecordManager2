@@ -29,11 +29,20 @@ public class JobsStatisticsController {
 		return statisticsService.getOaiHarvestJobStats(offset);
 	}
 
+
 	@RequestMapping(method = RequestMethod.POST, value = "oaiHarvestStatistics/inPeriods")
 	@ResponseBody
-	public List<OaiHarvestJobStatisticsDto> getOaiHarvestStatisticsInPeriods(@RequestBody PeriodsAndLibrariesDto periodsAndLibrariesDto){
+	public List<OaiHarvestJobStatisticsDto> getOaiHarvestStatisticsInPeriods(@RequestParam(value = "startDate") Long startDate,
+																			 @RequestParam(value = "endDate") Long endDate,
+																			 @RequestParam(value = "fromDate") Long fromDate,
+																			 @RequestParam(value = "toDate") Long toDate,
+																			 @RequestBody List<LibraryDto> libraries){
 
-		return statisticsService.getOaiHarvestStatisticsInPeriods(periodsAndLibrariesDto.getStartEnd(), periodsAndLibrariesDto.getFromTo(), periodsAndLibrariesDto.getLibraries());
+		return statisticsService.getOaiHarvestStatisticsInPeriods(new Date(startDate),
+				new Date(endDate),
+				new Date(fromDate),
+				new Date(toDate),
+				libraries);
 
 	}
 

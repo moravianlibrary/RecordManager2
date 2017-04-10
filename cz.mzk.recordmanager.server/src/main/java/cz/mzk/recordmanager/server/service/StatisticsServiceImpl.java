@@ -37,13 +37,17 @@ public class StatisticsServiceImpl implements StatisticsService{
 	}
 
 	@Override
-	public List<OaiHarvestJobStatisticsDto> getOaiHarvestStatisticsInPeriods(PeriodDto startEnd, PeriodDto fromTo, List<LibraryDto> libraries) {
+	public List<OaiHarvestJobStatisticsDto> getOaiHarvestStatisticsInPeriods(Date start,
+																			 Date end,
+																			 Date from,
+																			 Date to,
+																			 List<LibraryDto> libraries) {
 		if (libraries != null && libraries.size() <=0){
 			return jdbcTemplate.query("SELECT * FROM oai_harvest_job_stat " +
 							"WHERE (start_time >= ? OR start_time IS NULL ) AND (end_time <= ? OR end_time IS NULL ) AND (oai_harvest_job_stat.from_param >= ? OR from_param IS NULL ) AND (oai_harvest_job_stat.to_param <= ? OR to_param IS NULL )" +
 							"ORDER BY start_time DESC ",
 					new BeanPropertyRowMapper<OaiHarvestJobStatisticsDto>(
-							OaiHarvestJobStatisticsDto.class),startEnd.getStart(), startEnd.getEnd(), fromTo.getStart(), fromTo.getEnd());
+							OaiHarvestJobStatisticsDto.class),start, end, from, to);
 		}else {
 			Set<Long> librariesIds = new HashSet<>();
 			libraries.forEach(lib -> {
@@ -53,10 +57,10 @@ public class StatisticsServiceImpl implements StatisticsService{
 			NamedParameterJdbcTemplate namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(jdbcTemplate);
 
 			MapSqlParameterSource params = new MapSqlParameterSource();
-			params.addValue("stime", startEnd.getStart());
-			params.addValue("etime", startEnd.getEnd());
-			params.addValue("fpar", fromTo.getStart());
-			params.addValue("tpar", fromTo.getEnd());
+			params.addValue("stime", start);
+			params.addValue("etime", end);
+			params.addValue("fpar", from);
+			params.addValue("tpar", to);
 			params.addValue("ids", librariesIds);
 			return namedParameterJdbcTemplate.query("SELECT * FROM oai_harvest_job_stat " +
 							"WHERE (start_time >= :stime OR start_time IS NULL ) AND (end_time <= :etime OR end_time IS NULL ) AND (oai_harvest_job_stat.from_param >= :fpar OR from_param IS NULL ) AND (oai_harvest_job_stat.to_param <= :tpar OR to_param IS NULL ) AND library_id IN (:ids) " +

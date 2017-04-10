@@ -47,7 +47,7 @@ public class LibraryController {
 		libraryService.removeConfiguration(configId);
 	}
 
-	@RequestMapping(method = RequestMethod.PUT)
+	@RequestMapping(method = RequestMethod.POST)
 	@ResponseBody
 	public LibraryDto createLibrary(@RequestBody LibraryDto libraryDto) {
 		return libraryService.updateOrCreateLibrary(libraryDto);
