@@ -41,7 +41,8 @@ public class RegenerateDedupKeysWriter implements ItemWriter<Long> {
 	public void write(List<? extends Long> ids) {
 		for (Long id : ids) {
 			HarvestedRecord rec = harvestedRecordDao.get(id);	
-			if (rec.getDeleted() != null || rec.getDedupKeysHash() != null || !rec.getHarvestedFrom().isGenerateDedupKeys()) {
+			if (rec.getDedupKeysHash() != null || !rec.getHarvestedFrom().isGenerateDedupKeys()
+					|| rec.getRawRecord() == null || rec.getRawRecord().length == 0) {
 				continue;
 			}
 			try {
