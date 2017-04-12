@@ -34,7 +34,7 @@ public class FaultTolerantProxy {
 					pause *= 2;
 				}
 			}
-			throw lastException;
+			throw lastException == null ? new Exception() : lastException;
 		}
 
 	}
