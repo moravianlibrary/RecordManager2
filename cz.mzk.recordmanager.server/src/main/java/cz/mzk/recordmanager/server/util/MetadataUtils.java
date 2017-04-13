@@ -6,6 +6,7 @@ import java.nio.charset.StandardCharsets;
 import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import org.apache.commons.validator.routines.ISBNValidator;
@@ -21,7 +22,11 @@ public class MetadataUtils {
 	private static final List<String> similarity_words = new BufferedReader(new InputStreamReader(
 			new ClasspathResourceProvider().getResource("/mapping/similarity_words.map"), StandardCharsets.UTF_8)) 
 			.lines().collect(Collectors.toCollection(ArrayList::new));
-	
+
+	public static final Pattern NUMBER_PATTERN = Pattern.compile("\\d");
+	public static final List<Pattern> PATTERNS = similarity_words.stream()
+			.map(w -> Pattern.compile("\\b" + w + "\\b", Pattern.CASE_INSENSITIVE)).collect(Collectors.toList());
+
 	public static boolean hasTrailingPunctuation(final String input) {
 		return input.matches(".*(([:;,=\\(\\[])|(\\s\\.))$");
 	}
@@ -56,11 +61,9 @@ public class MetadataUtils {
 	}
 	
 	protected static boolean similarityEnabled(String title) {
-		if(title.matches(".*\\d.*")) return false;
-		for(String word: similarity_words){
-			String titleStr = title.toLowerCase();
-			if(titleStr.matches(".*[\\p{Punct}\\s]+"+word+"[\\p{Punct}\\s]+.*") 
-					|| titleStr.startsWith(word) || titleStr.endsWith(word)){
+		if (NUMBER_PATTERN.matcher(title).find()) return false;
+		for (Pattern pattern: PATTERNS) {
+			if (pattern.matcher(title).find()) {
 				return false;
 			}
 		}
