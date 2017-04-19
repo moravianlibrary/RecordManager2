@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.Executor;
 
 import javax.sql.DataSource;
 
@@ -23,6 +24,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.task.TaskExecutor;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import cz.mzk.recordmanager.server.index.HarvestedRecordRowMapper;
 import cz.mzk.recordmanager.server.jdbc.LongValueRowMapper;
@@ -61,6 +63,9 @@ public class MiscellaneousJobsConfig {
 	
 	private static final Date DATE_OVERRIDEN_BY_EXPRESSION = null;
 	
+	@Value(value = "${recordmanager.threadPoolSize:#{1}}")
+	private int threadPoolSize = 1;
+
 	@Bean
 	public Job generateSkatKeysJob(
 			@Qualifier(Constants.JOB_ID_GENERATE_SKAT_DEDUP_KEYS + ":generateSkatKeysStep") Step generateSkatKeysStep,
@@ -72,7 +77,16 @@ public class MiscellaneousJobsConfig {
 				.next(updateStatMergedIdsStep)
 				.build();
 	}
-	
+
+	@Bean
+	public Job generateLocalSkatDedupKeysJob(
+			@Qualifier(Constants.JOB_ID_GENERATE_SKAT_DEDUP_KEYS + ":generateSkatKeysStep") Step generateSkatKeysStep) {
+		return jobs.get(Constants.JOB_ID_GENERATE_LOCAL_SKAT_DEDUP_KEYS)
+				.validator(new GenerateSkatKeysJobParameterValidator())
+				.start(generateSkatKeysStep)
+				.build();
+	}
+
 	@Bean(name = Constants.JOB_ID_GENERATE_SKAT_DEDUP_KEYS + ":updateStatMergedIdsStep")
 	public Step updateStatMergedIdsStep() throws Exception {
 		return steps.get("updateStatMergedIdsStep")
@@ -99,6 +113,7 @@ public class MiscellaneousJobsConfig {
 				.reader(generateSkatKeysReader(DATE_OVERRIDEN_BY_EXPRESSION))
 				.processor(generateSkatKeysProcessor())
 				.writer(generateSkatKeysWriter())
+				.taskExecutor((TaskExecutor) poolTaskExecutor())
 				.build();
 	}
 	
@@ -138,6 +153,15 @@ public class MiscellaneousJobsConfig {
 	@StepScope
 	public GenerateSkatKeysWriter generateSkatKeysWriter() {
 		return new GenerateSkatKeysWriter();
+	}
+
+	@Bean(name = "threadPoolTaskExecutor")
+	public Executor poolTaskExecutor() {
+		ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+		executor.setCorePoolSize(threadPoolSize);
+		executor.setMaxPoolSize(threadPoolSize);
+		executor.initialize();
+		return executor;
 	}
 
 }
