@@ -31,3 +31,4 @@ loanRelevance = getLoanRelevance();
 id001_search = getId001()
 
 barcodes = getBarcodes()
+format_display_mv = getFormat()

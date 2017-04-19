@@ -21,3 +21,4 @@ physical = getPhysicals();
 url = getUrls();
 
 barcodes = getBarcodes()
+format_display_mv = getFormat()

@@ -9,8 +9,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import org.apache.solr.common.SolrInputDocument;
@@ -23,11 +21,9 @@ import org.springframework.stereotype.Component;
 import cz.mzk.recordmanager.server.index.enrich.DedupRecordEnricher;
 import cz.mzk.recordmanager.server.index.enrich.HarvestedRecordEnricher;
 import cz.mzk.recordmanager.server.marc.MarcXmlParser;
-import cz.mzk.recordmanager.server.metadata.MetadataRecord;
 import cz.mzk.recordmanager.server.metadata.MetadataRecordFactory;
 import cz.mzk.recordmanager.server.model.DedupRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
-import cz.mzk.recordmanager.server.model.HarvestedRecordFormat.HarvestedRecordFormatEnum;
 import cz.mzk.recordmanager.server.model.ImportConfiguration;
 import cz.mzk.recordmanager.server.model.Inspiration;
 import cz.mzk.recordmanager.server.scripting.MappingResolver;
@@ -43,8 +39,6 @@ public class SolrInputDocumentFactoryImpl implements SolrInputDocumentFactory, I
 	private static final String INSTITUTION_OTHERS = "Others";
 
 	private static Logger logger = LoggerFactory.getLogger(SolrInputDocumentFactoryImpl.class);
-
-	private static final Pattern RECORDTYPE_PATTERN = Pattern.compile("^(AUDIO|VIDEO|OTHER|LEGISLATIVE|PATENTS)_(.*)$");
 
 	private List<String> fieldsWithDash = Arrays.asList( //
 			"author2-role", //
@@ -100,7 +94,6 @@ public class SolrInputDocumentFactoryImpl implements SolrInputDocumentFactory, I
 			document.addField(SolrFieldConstants.LOCAL_INSTITUTION_FIELD, getInstitution(record));
 			document.addField(SolrFieldConstants.MERGED_CHILD_FIELD, 1);
 			document.addField(SolrFieldConstants.WEIGHT, record.getWeight());
-			document.addField(SolrFieldConstants.RECORD_FORMAT_DISPLAY, getRecordType(record));
 			
 			return document;
 		} catch (Exception ex) {
@@ -128,7 +121,6 @@ public class SolrInputDocumentFactoryImpl implements SolrInputDocumentFactory, I
 		
 		Set<String> institutions = records.stream().map(rec -> getInstitution(rec)).flatMap(it -> it.stream()).collect(Collectors.toCollection(HashSet::new));
 		mergedDocument.addField(SolrFieldConstants.INSTITUTION_FIELD, institutions);
-		mergedDocument.addField(SolrFieldConstants.RECORD_FORMAT, getRecordType(record));
 		mergedDocument.addField(SolrFieldConstants.INSPIRATION, getInspirations(records));
 		
 		dedupRecordEnrichers.forEach(enricher -> enricher.enrich(dedupRecord, mergedDocument, childs));
@@ -220,22 +212,6 @@ public class SolrInputDocumentFactoryImpl implements SolrInputDocumentFactory, I
 		
 	}
 
-	protected List<String> getRecordType(HarvestedRecord record){
-		MetadataRecord metadata = metadataFactory.getMetadataRecord(record);
-		
-		List<String> result = new ArrayList<String>();
-		for (HarvestedRecordFormatEnum format: metadata.getDetectedFormatList()) {
-			Matcher matcher = RECORDTYPE_PATTERN.matcher(format.name());
-			if (matcher.matches()) {
-				result.addAll(SolrUtils.createHierarchicFacetValues(matcher.group(1), matcher.group(2)));
-			}
-			else {
-				result.addAll(SolrUtils.createHierarchicFacetValues(format.name()));
-			}
-		}
-		return result;
-	}
-	
 	protected Set<String> getInspirations(List<HarvestedRecord> records){
 		Set<String> result = new HashSet<String>();
 		

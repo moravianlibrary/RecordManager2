@@ -239,4 +239,9 @@ public class DublinCoreDSL extends BaseDSL {
 	public List<String> getBarcodes() {
 		return dcMetadataRecord.getBarcodes();
 	}
+
+	public List<String> getFormat() {
+		return SolrUtils.createRecordTypeHierarchicFacet(dcMetadataRecord.getDetectedFormatList());
+	}
+
 }

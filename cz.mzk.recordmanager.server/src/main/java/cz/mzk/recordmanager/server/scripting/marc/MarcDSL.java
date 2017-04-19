@@ -776,4 +776,8 @@ public class MarcDSL extends BaseDSL {
 		return metadataRecord.getBarcodes();
 	}
 
+	public List<String> getFormat() {
+		return SolrUtils.createRecordTypeHierarchicFacet(metadataRecord.getDetectedFormatList());
+	}
+
 }

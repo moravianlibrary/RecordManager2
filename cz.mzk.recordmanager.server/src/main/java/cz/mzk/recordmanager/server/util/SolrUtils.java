@@ -3,11 +3,14 @@ package cz.mzk.recordmanager.server.util;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.solr.client.solrj.util.ClientUtils;
 import org.apache.solr.common.SolrInputDocument;
@@ -15,6 +18,7 @@ import org.apache.solr.common.SolrInputDocument;
 import com.google.common.base.Preconditions;
 
 import cz.mzk.recordmanager.server.index.SolrFieldConstants;
+import cz.mzk.recordmanager.server.model.HarvestedRecordFormat.HarvestedRecordFormatEnum;
 
 public class SolrUtils {
 
@@ -23,6 +27,8 @@ public class SolrUtils {
 	private static final String RANGE_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss'Z'";
 
 	private static final char HIERARCHIC_FACET_SEPARATOR = '/';
+
+	private static final Pattern RECORDTYPE_PATTERN = Pattern.compile("^(AUDIO|VIDEO|OTHER|LEGISLATIVE|PATENTS)_(.*)$");
 
 	private static enum WEIGHT_DOC_COMPARATOR implements Comparator<SolrInputDocument> {
 		INSTANCE;
@@ -123,6 +129,24 @@ public class SolrUtils {
 			result.add(sb.toString());
 		}
 		return result;
+	}
+
+	public static List<String> createRecordTypeHierarchicFacet(HarvestedRecordFormatEnum format) {
+		Matcher matcher = RECORDTYPE_PATTERN.matcher(format.name());
+		if (matcher.matches()) {
+			return SolrUtils.createHierarchicFacetValues(matcher.group(1), matcher.group(2));
+		}
+		else {
+			return SolrUtils.createHierarchicFacetValues(format.name());
+		}
+	}
+
+	public static List<String> createRecordTypeHierarchicFacet(Collection<HarvestedRecordFormatEnum> formats) {
+		List<String> results = new ArrayList<>();
+		for (HarvestedRecordFormatEnum format : formats) {
+			results.addAll(createRecordTypeHierarchicFacet(format));
+		}
+		return results;
 	}
 
 }

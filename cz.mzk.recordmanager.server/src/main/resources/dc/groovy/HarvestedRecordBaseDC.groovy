@@ -19,3 +19,4 @@ isbn_display_mv = getISBNs()
 physical = getPhysicals();
 
 barcodes = getBarcodes()
+format_display_mv = getFormat()

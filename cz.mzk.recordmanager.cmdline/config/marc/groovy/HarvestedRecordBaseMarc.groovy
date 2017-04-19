@@ -38,3 +38,4 @@ f773_display = get773display();
 id001_str = getId001();
 
 barcodes = getBarcodes()
+format_display_mv = getFormat()
