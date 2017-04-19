@@ -770,6 +770,10 @@ public class MarcDSL extends BaseDSL {
 			if (author != "") results.add(author.trim());
 		}
     	return new ArrayList<>(results);
-    }
-    
+	}
+
+	public List<String> getBarcodes() {
+		return metadataRecord.getBarcodes();
+	}
+
 }

@@ -29,3 +29,5 @@ sfx_links = getSfxIds()
 loanRelevance = getLoanRelevance();
 
 id001_search = getId001()
+
+barcodes = getBarcodes()

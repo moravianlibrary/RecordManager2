@@ -17,3 +17,5 @@ publishDate_display = getFirstDate()
 isbn_display_mv = getISBNs()
 
 physical = getPhysicals();
+
+barcodes = getBarcodes()

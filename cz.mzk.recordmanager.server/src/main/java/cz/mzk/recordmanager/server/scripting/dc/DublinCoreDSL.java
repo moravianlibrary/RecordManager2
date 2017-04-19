@@ -235,4 +235,8 @@ public class DublinCoreDSL extends BaseDSL {
 	public List<String> getContents(){
 		return record.getContents();
 	}
+
+	public List<String> getBarcodes() {
+		return dcMetadataRecord.getBarcodes();
+	}
 }

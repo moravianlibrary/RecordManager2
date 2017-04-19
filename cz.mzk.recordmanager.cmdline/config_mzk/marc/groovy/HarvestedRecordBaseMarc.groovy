@@ -95,3 +95,5 @@ barcode_str_mv = getFields "996b"
 sysno_str = getMZKSysno()
 author_title_str = getMZKAuthorAndTitle()
 udc_str_mv = getFields "080a"
+
+barcodes = getBarcodes()

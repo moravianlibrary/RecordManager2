@@ -95,15 +95,12 @@ public class SolrInputDocumentFactoryImpl implements SolrInputDocumentFactory, I
 				document.addField(SolrFieldConstants.ID_FIELD, id);
 			}
 			
-			MetadataRecord metadataMarcRecord = metadataFactory.getMetadataRecord(record);
-			
 			harvestedRecordEnrichers.forEach(enricher -> enricher.enrich(record, document));
 			
 			document.addField(SolrFieldConstants.LOCAL_INSTITUTION_FIELD, getInstitution(record));
 			document.addField(SolrFieldConstants.MERGED_CHILD_FIELD, 1);
 			document.addField(SolrFieldConstants.WEIGHT, record.getWeight());
 			document.addField(SolrFieldConstants.RECORD_FORMAT_DISPLAY, getRecordType(record));
-			document.addField(SolrFieldConstants.BARCODES, metadataMarcRecord.getBarcodes());
 			
 			return document;
 		} catch (Exception ex) {

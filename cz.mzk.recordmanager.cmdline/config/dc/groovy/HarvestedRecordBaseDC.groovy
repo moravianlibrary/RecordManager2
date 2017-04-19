@@ -19,3 +19,5 @@ isbn_display_mv = getISBNs()
 physical = getPhysicals();
 
 url = getUrls();
+
+barcodes = getBarcodes()
