@@ -20,13 +20,10 @@ import org.springframework.stereotype.Component;
 
 import cz.mzk.recordmanager.server.index.enrich.DedupRecordEnricher;
 import cz.mzk.recordmanager.server.index.enrich.HarvestedRecordEnricher;
-import cz.mzk.recordmanager.server.marc.MarcXmlParser;
-import cz.mzk.recordmanager.server.metadata.MetadataRecordFactory;
 import cz.mzk.recordmanager.server.model.DedupRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.model.ImportConfiguration;
 import cz.mzk.recordmanager.server.model.Inspiration;
-import cz.mzk.recordmanager.server.scripting.MappingResolver;
 import cz.mzk.recordmanager.server.util.Constants;
 import cz.mzk.recordmanager.server.util.IndexingUtils;
 import cz.mzk.recordmanager.server.util.MetadataUtils;
@@ -62,21 +59,12 @@ public class SolrInputDocumentFactoryImpl implements SolrInputDocumentFactory, I
 		
 	@Autowired
 	private DelegatingSolrRecordMapper mapper;
-	
-	@Autowired
-	private MappingResolver propertyResolver;
-	
+
 	@Autowired
 	private List<DedupRecordEnricher> dedupRecordEnrichers;
 
 	@Autowired
 	private List<HarvestedRecordEnricher> harvestedRecordEnrichers;
-
-	@Autowired
-	private MetadataRecordFactory metadataFactory;
-
-	@Autowired
-	private MarcXmlParser marcXmlParser;
 
 	@Override
 	public SolrInputDocument create(HarvestedRecord record) {
