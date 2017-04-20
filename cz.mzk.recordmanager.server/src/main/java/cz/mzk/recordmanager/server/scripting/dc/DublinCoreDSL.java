@@ -244,4 +244,8 @@ public class DublinCoreDSL extends BaseDSL {
 		return SolrUtils.createRecordTypeHierarchicFacet(dcMetadataRecord.getDetectedFormatList());
 	}
 
+	public List<String> getInstitutionFacet() {
+		return SolrUtils.getInstitution(dcContext.harvestedRecord().getHarvestedFrom());
+	}
+
 }

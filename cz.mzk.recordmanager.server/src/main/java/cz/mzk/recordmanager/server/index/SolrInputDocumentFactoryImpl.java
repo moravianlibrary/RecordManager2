@@ -22,18 +22,12 @@ import cz.mzk.recordmanager.server.index.enrich.DedupRecordEnricher;
 import cz.mzk.recordmanager.server.index.enrich.HarvestedRecordEnricher;
 import cz.mzk.recordmanager.server.model.DedupRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
-import cz.mzk.recordmanager.server.model.ImportConfiguration;
 import cz.mzk.recordmanager.server.model.Inspiration;
-import cz.mzk.recordmanager.server.util.Constants;
 import cz.mzk.recordmanager.server.util.IndexingUtils;
-import cz.mzk.recordmanager.server.util.MetadataUtils;
 import cz.mzk.recordmanager.server.util.SolrUtils;
 
 @Component
 public class SolrInputDocumentFactoryImpl implements SolrInputDocumentFactory, InitializingBean {
-
-	private static final String INSTITUTION_LIBRARY = "Library";
-	private static final String INSTITUTION_OTHERS = "Others";
 
 	private static Logger logger = LoggerFactory.getLogger(SolrInputDocumentFactoryImpl.class);
 
@@ -78,8 +72,7 @@ public class SolrInputDocumentFactoryImpl implements SolrInputDocumentFactory, I
 			}
 			
 			harvestedRecordEnrichers.forEach(enricher -> enricher.enrich(record, document));
-			
-			document.addField(SolrFieldConstants.LOCAL_INSTITUTION_FIELD, getInstitution(record));
+
 			document.addField(SolrFieldConstants.MERGED_CHILD_FIELD, 1);
 			document.addField(SolrFieldConstants.WEIGHT, record.getWeight());
 			
@@ -106,9 +99,7 @@ public class SolrInputDocumentFactoryImpl implements SolrInputDocumentFactory, I
 		List<String> localIds = childs.stream().map(rec -> (String) rec.getFieldValue("id")).collect(Collectors.toCollection(ArrayList::new));
 		mergedDocument.addField(SolrFieldConstants.LOCAL_IDS_FIELD, localIds);
 		if(localIds.size() > 1) mergedDocument.addField(SolrFieldConstants.MERGED_RECORDS, 1);
-		
-		Set<String> institutions = records.stream().map(rec -> getInstitution(rec)).flatMap(it -> it.stream()).collect(Collectors.toCollection(HashSet::new));
-		mergedDocument.addField(SolrFieldConstants.INSTITUTION_FIELD, institutions);
+
 		mergedDocument.addField(SolrFieldConstants.INSPIRATION, getInspirations(records));
 		
 		dedupRecordEnrichers.forEach(enricher -> enricher.enrich(dedupRecord, mergedDocument, childs));
@@ -141,63 +132,6 @@ public class SolrInputDocumentFactoryImpl implements SolrInputDocumentFactory, I
 			document.addField(fName, fValue);
 		}
 		return document;
-	}
-
-	protected String getInstitutionOfRecord(HarvestedRecord hr) {
-		ImportConfiguration config = hr.getHarvestedFrom();
-		if (config != null
-				&& config.getLibrary() != null
-				&& config.getLibrary().getName() != null) {
-			return config.getLibrary().getName();
-		}
-		return SolrFieldConstants.UNKNOWN_INSTITUTION;
-	}
-	
-	protected String getCityOfRecord(HarvestedRecord hr) {
-		ImportConfiguration config = hr.getHarvestedFrom();
-		if (config != null
-				&& config.getLibrary() != null
-				&& config.getLibrary().getCity() != null) {
-			return config.getLibrary().getCity();
-		}
-		return SolrFieldConstants.UNKNOWN_INSTITUTION;
-	}
-	
-	protected String getPrefixOfNKPRecord(HarvestedRecord hr) {
-		ImportConfiguration config = hr.getHarvestedFrom();
-		if(config != null){
-			if(config.getId() != null){
-				if(config.getId() == Constants.IMPORT_CONF_ID_SLK) return Constants.LIBRARY_NAME_SLK;
-				if(config.getId() == Constants.IMPORT_CONF_ID_KKL) return Constants.LIBRARY_NAME_KKL;
-				if(config.getId() == Constants.IMPORT_CONF_ID_STT) return Constants.LIBRARY_NAME_STT;
-			}
-			if(config.getIdPrefix() != null) {
-				return config.getIdPrefix().toUpperCase();
-			}
-		}
-		return SolrFieldConstants.UNKNOWN_INSTITUTION;
-	}
-	
-	protected List<String> getInstitution(HarvestedRecord record){
-		if(record.getHarvestedFrom() != null) {
-			if (record.getHarvestedFrom().isLibrary()) {
-				String city = MetadataUtils.normalize(getCityOfRecord(record));
-				String name = getInstitutionOfRecord(record);
-				if(name.equals(Constants.LIBRARY_NAME_NKP)){
-					String prefix = getPrefixOfNKPRecord(record);
-					return SolrUtils.createHierarchicFacetValues(INSTITUTION_LIBRARY, city, name, prefix);
-				}
-				
-				return SolrUtils.createHierarchicFacetValues(INSTITUTION_LIBRARY, city, name);
-			}
-			else {
-				String name = getInstitutionOfRecord(record);
-				return SolrUtils.createHierarchicFacetValues(INSTITUTION_OTHERS, name);
-			}
-		}
-		
-		return SolrUtils.createHierarchicFacetValues(SolrFieldConstants.UNKNOWN_INSTITUTION);
-		
 	}
 
 	protected Set<String> getInspirations(List<HarvestedRecord> records){

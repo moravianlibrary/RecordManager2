@@ -19,6 +19,7 @@ import com.google.common.base.Preconditions;
 
 import cz.mzk.recordmanager.server.index.SolrFieldConstants;
 import cz.mzk.recordmanager.server.model.HarvestedRecordFormat.HarvestedRecordFormatEnum;
+import cz.mzk.recordmanager.server.model.ImportConfiguration;
 
 public class SolrUtils {
 
@@ -29,6 +30,9 @@ public class SolrUtils {
 	private static final char HIERARCHIC_FACET_SEPARATOR = '/';
 
 	private static final Pattern RECORDTYPE_PATTERN = Pattern.compile("^(AUDIO|VIDEO|OTHER|LEGISLATIVE|PATENTS)_(.*)$");
+	
+	private static final String INSTITUTION_LIBRARY = "Library";
+	private static final String INSTITUTION_OTHERS = "Others";
 
 	private static enum WEIGHT_DOC_COMPARATOR implements Comparator<SolrInputDocument> {
 		INSTANCE;
@@ -147,6 +151,58 @@ public class SolrUtils {
 			results.addAll(createRecordTypeHierarchicFacet(format));
 		}
 		return results;
+	}
+
+	protected static String getInstitutionOfRecord(ImportConfiguration config) {
+		if (config != null && config.getLibrary() != null
+				&& config.getLibrary().getName() != null) {
+			return config.getLibrary().getName();
+		}
+		return SolrFieldConstants.UNKNOWN_INSTITUTION;
+	}
+
+	protected static String getCityOfRecord(ImportConfiguration config) {
+		if (config != null && config.getLibrary() != null
+				&& config.getLibrary().getCity() != null) {
+			return config.getLibrary().getCity();
+		}
+		return SolrFieldConstants.UNKNOWN_INSTITUTION;
+	}
+
+	protected static String getPrefixOfNKPRecord(ImportConfiguration config) {
+		if (config != null) {
+			if (config.getId() != null) {
+				if (config.getId() == Constants.IMPORT_CONF_ID_SLK)
+					return Constants.LIBRARY_NAME_SLK;
+				if (config.getId() == Constants.IMPORT_CONF_ID_KKL)
+					return Constants.LIBRARY_NAME_KKL;
+				if (config.getId() == Constants.IMPORT_CONF_ID_STT)
+					return Constants.LIBRARY_NAME_STT;
+			}
+			if (config.getIdPrefix() != null) {
+				return config.getIdPrefix().toUpperCase();
+			}
+		}
+		return SolrFieldConstants.UNKNOWN_INSTITUTION;
+	}
+	
+	public static List<String> getInstitution(ImportConfiguration conf) {
+		if (conf != null) {
+			if (conf.isLibrary()) {
+				String city = MetadataUtils.normalize(getCityOfRecord(conf));
+				String name = getInstitutionOfRecord(conf);
+				if (name.equals(Constants.LIBRARY_NAME_NKP)) {
+					String prefix = getPrefixOfNKPRecord(conf);
+					return SolrUtils.createHierarchicFacetValues(INSTITUTION_LIBRARY, city, name, prefix);
+				}
+				return SolrUtils.createHierarchicFacetValues(INSTITUTION_LIBRARY, city, name);
+			}
+			else {
+				String name = getInstitutionOfRecord(conf);
+				return SolrUtils.createHierarchicFacetValues(INSTITUTION_OTHERS, name);
+			}
+		}
+		return SolrUtils.createHierarchicFacetValues(SolrFieldConstants.UNKNOWN_INSTITUTION);
 	}
 
 }
