@@ -3,6 +3,8 @@ import {LibraryDetail} from "../../model/library-detail";
 import {Library} from "../../model/library";
 import {LibraryDetailService} from "./library-detail.service";
 import {ActivatedRoute, Router, Params} from "@angular/router";
+import {ADMIN} from "../../roles";
+import {LoginService} from "../../login/login.service";
 @Component({
 	selector: 'app-library-detail',
 	templateUrl: './library-detail.component.html',
@@ -16,7 +18,7 @@ export class LibraryDetailComponent implements OnInit{
 	selected: any = null;
 	loading: boolean;
 
-	constructor(private librariesService: LibraryDetailService, private route: ActivatedRoute, private router: Router){
+	constructor(private librariesService: LibraryDetailService, private route: ActivatedRoute, private router: Router, private loginService: LoginService){
 	}
 
 	getLibraryDetails(libraryId: number) {
@@ -93,11 +95,8 @@ export class LibraryDetailComponent implements OnInit{
 		this.selected.contact[key] = field.value;
 	}
 
-	isAuthenticated(): boolean{
-		if (localStorage.getItem("currentUser")){
-			return true;
-		}
-		return false;
+	isAllowed(): boolean{
+		return this.loginService.getRoles().indexOf(ADMIN) !== -1;
 	}
 
 }

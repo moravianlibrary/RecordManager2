@@ -2,10 +2,10 @@ import {Component, OnInit} from "@angular/core";
 import {Library} from "../../model/library";
 import {Field} from "../../shared/field";
 import {LibrariesService} from "./libraries.service";
-import {Router} from "@angular/router";
 import {SortControl} from "../../shared/sort-control";
 import {Style} from "../../shared/style";
-import {Http} from "@angular/http";
+import {LoginService} from "../../login/login.service";
+import {ADMIN} from "../../roles";
 
 @Component({
 	selector: 'app-libraries',
@@ -23,7 +23,7 @@ export class LibrariesComponent implements OnInit{
 
 
 
-	constructor(private librariesService: LibrariesService, private sortControl: SortControl) {}
+	constructor(private librariesService: LibrariesService, private sortControl: SortControl, private loginService: LoginService) {}
 
 
 	getLibraries() {
@@ -40,7 +40,6 @@ export class LibrariesComponent implements OnInit{
 	}
 
 	ngOnInit() {
-
 		this.fields.push(new Field({'_name': 'id', '_style': new Style()}));
 
 		this.fields.push(new Field({'_name': 'name', '_style': new Style()}));
@@ -67,10 +66,7 @@ export class LibrariesComponent implements OnInit{
 		return this.sortControl.getVisibility(name, this.fields) == 'visible' ? true : false;
 	}
 
-	isAuthenticated(): boolean{
-		if (localStorage.getItem("currentUser")){
-			return true;
-		}
-		return false;
+	isAllowed(): boolean{
+		return this.loginService.getRoles().indexOf(ADMIN) !== -1;
 	}
 }

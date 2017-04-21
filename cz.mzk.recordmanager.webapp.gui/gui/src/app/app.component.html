@@ -23,14 +23,11 @@
           </div>
         </div>
       </li>
-      <!--<li>-->
-        <!--<a routerLink="oaiHarvestStats">Statistics</a>-->
-      <!--</li>-->
       <li>
         <a routerLink="/about">About</a>
       </li>
       <li>
-        <a routerLink="/login">{{logedInformation()}}</a>
+        <a  (click)="logout()">Logout</a>
       </li>
     </ul>
   </div>

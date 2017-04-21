@@ -34,7 +34,7 @@
 		</div>
 
 		<!--<button type="button" class="btn btn-danger" (click)="removeLibrary()"><i class="glyphicon glyphicon-trash"></i> Delete</button>-->
-		<button *ngIf="isAuthenticated()" type="button" class="btn btn-primary saveBtn" (click)="updateLibrary()"><i class="glyphicon glyphicon-floppy-save"></i> Save</button>
+		<button *ngIf="isAllowed()" type="button" class="btn btn-primary saveBtn" (click)="updateLibrary()"><i class="glyphicon glyphicon-floppy-save"></i> Save</button>
 
 	</form>
 
