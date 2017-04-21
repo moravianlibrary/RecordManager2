@@ -1,14 +1,28 @@
 package cz.mzk.recordmanager.api.model.user;
 
+import java.io.Serializable;
+import java.util.List;
 
-public abstract class UserDto {
-	private String login;
+public class UserDto implements Serializable {
+
+	private static final long serialVersionUID = 1L;
+
+	private final String login;
+
+	private final List<String> roles;
+
+	public UserDto(String login, List<String> roles) {
+		super();
+		this.login = login;
+		this.roles = roles;
+	}
 
 	public String getLogin() {
 		return login;
 	}
 
-	public void setLogin(String login) {
-		this.login = login;
+	public List<String> getRoles() {
+		return roles;
 	}
+
 }
