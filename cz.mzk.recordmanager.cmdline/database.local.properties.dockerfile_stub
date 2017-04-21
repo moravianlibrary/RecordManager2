@@ -13,3 +13,5 @@ liquibase.contexts=cpk
 recordmanager.threadPoolSize=THREAD_COUNT
 
 solr.url=SOLR_URL
+
+security.admins=xrosecky@mzk.cz, panov@mzk.cz
