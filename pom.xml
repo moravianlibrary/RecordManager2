@@ -13,6 +13,7 @@
 		<java.source.target.version>1.8</java.source.target.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<org.springframework.version>4.1.4.RELEASE</org.springframework.version>
+		<org.springframework.security.version>4.0.2.RELEASE</org.springframework.security.version>
 	</properties>
 
 	<build>
