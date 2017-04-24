@@ -16,9 +16,6 @@ export class JobRunnersComponent implements OnInit{
 		}
 	}
 
-	isAllowed(): boolean{
-		return this.loginService.getRoles().indexOf(ADMIN) !== -1;
-	}
 
 	ngOnInit(): void {
 	}

@@ -11,6 +11,7 @@ import {DedupRecordsComponent} from "./statistics/dedup-records-statistics/dedup
 import {DetailsComponent} from "./statistics/details/details.component";
 import {DownloadImportConfComponent} from "./statistics/download-import-conf-statistics/download-import-conf-statistics";
 import {RegenerateDedupKeysComponent} from "./statistics/regenerate-dedup-keys-statistics/regenerate-dedup-keys-statistics.component";
+import {AuthGuard} from "../login/auth.guard";
 const jobRoutes: Routes = [
 	{
 		path: 'job',
@@ -19,6 +20,7 @@ const jobRoutes: Routes = [
 			{
 				path: 'runners',
 				component: JobRunnersComponent,
+				canActivate: [AuthGuard]
 			},
 			{
 				path: 'statistics',

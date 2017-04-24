@@ -25,7 +25,7 @@ export class LoginService {
   }
 
   getRoles(): any{
-  	return JSON.parse(localStorage.getItem("currentUser")).roles;
+  	return localStorage.getItem("currentUser") !== null ? JSON.parse(localStorage.getItem("currentUser")).roles : [];
   }
 
 }

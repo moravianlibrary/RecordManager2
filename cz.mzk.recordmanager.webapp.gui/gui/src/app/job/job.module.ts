@@ -22,6 +22,7 @@ import {KeyExtractorPipe} from "../pipes/key-extractor.pipe";
 import {DownloadImportConfComponent} from "./statistics/download-import-conf-statistics/download-import-conf-statistics";
 import {DurationPipe} from "../pipes/duration.pipe";
 import {RegenerateDedupKeysComponent} from "./statistics/regenerate-dedup-keys-statistics/regenerate-dedup-keys-statistics.component";
+import {AuthGuard} from "../login/auth.guard";
 
 
 @NgModule({
@@ -37,6 +38,7 @@ import {RegenerateDedupKeysComponent} from "./statistics/regenerate-dedup-keys-s
 		StatisticsService,
 		SortControl,
 		KeyExtractorPipe,
+		AuthGuard,
 		DurationPipe],
 	declarations: [
 		JobComponent,
