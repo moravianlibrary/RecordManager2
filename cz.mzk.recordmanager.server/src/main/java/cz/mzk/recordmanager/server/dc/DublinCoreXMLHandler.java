@@ -30,10 +30,10 @@ public class DublinCoreXMLHandler extends DefaultHandler {
 	private static final String DC_TITLE="dc:title";
 	private static final String DC_TYPE="dc:type";
 	
-	private static final String ESE_TYPE = "ese:type";
-	private static final String ESE_RIGHTS = "ese:rights";
-	private static final String ESE_ISSHOWNAT = "ese:isShownAt";
-	private static final String ESE_DATAPROVIDER = "ese:dataProvider";
+	private static final String ESE_TYPE = "europeana:type";
+	private static final String ESE_RIGHTS = "europeana:rights";
+	private static final String ESE_ISSHOWNAT = "europeana:isShownAt";
+	private static final String ESE_DATAPROVIDER = "europeana:dataProvider";
 	
 	private static final String DCTERMS_EXTENT = "dcterms:extent";
 	private static final String DCTERMS_TABLE_OF_CONTENTS = "dcterms:tableOfContents";
@@ -44,7 +44,8 @@ public class DublinCoreXMLHandler extends DefaultHandler {
 //		this.elementStack.push(qName);
 
 		if ("oai_dc:dc".equals(qName)
-				|| "record".equals(qName)) {
+				|| "record".equals(qName)
+				|| "europeana:record".equals(qName)) {
 			// New DC Record instance
 			this.dcRecord = new DublinCoreRecordImpl();
 		}
