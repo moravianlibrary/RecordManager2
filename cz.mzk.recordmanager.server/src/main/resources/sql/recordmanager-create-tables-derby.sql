@@ -116,6 +116,7 @@ CREATE TABLE harvested_record (
   cluster_id           VARCHAR(20),
   pages                DECIMAL(10),
   source_info          VARCHAR(255),
+  tezaurus             VARCHAR(255),
   dedup_keys_hash      CHAR(40),
   next_dedup_flag      BOOLEAN DEFAULT TRUE,
   raw_record           BLOB,
