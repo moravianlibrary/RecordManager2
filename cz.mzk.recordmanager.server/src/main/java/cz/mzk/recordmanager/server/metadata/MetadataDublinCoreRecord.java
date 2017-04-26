@@ -556,4 +556,10 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 		return null;
 	}
 
+	@Override
+	public String getTezaurus() {
+		// implemented in institution specific classes
+		return null;
+	}
+
 }

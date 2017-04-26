@@ -85,6 +85,7 @@ public class Constants {
 	public static final String PREFIX_MKP_EBOOKS		= "mkpe";
 	public static final String PREFIX_MKUO				= "mkuo";
 	public static final String PREFIX_MZK				= "mzk";
+	public static final String PREFIX_PSH				= "psh";
 	public static final String PREFIX_MZKNORMS			= "unmz";
 	public static final String PREFIX_NKP				= "nkp";
 	public static final String PREFIX_NLK				= "nlk";
