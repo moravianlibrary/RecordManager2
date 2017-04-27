@@ -1,5 +1,6 @@
 package cz.mzk.recordmanager.server.index.enrich;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -21,11 +22,18 @@ public class VizFieldsHarvestedRecordEnricher implements
 
 	@Override
 	public void enrich(HarvestedRecord record, SolrInputDocument document) {
-		List<String> keys = document.getFieldValues(SolrFieldConstants.VIZ_DUMMY_FIELD)
-				.stream().map(object -> Objects.toString(object, null))
-				.collect(Collectors.toList());
+		if (document.containsKey(SolrFieldConstants.VIZ_DUMMY_FIELD)) {
+			Collection<Object> coll = document.getFieldValues(SolrFieldConstants.VIZ_DUMMY_FIELD);
+			if (coll != null && !coll.isEmpty()) {
+				List<String> keys = document
+						.getFieldValues(SolrFieldConstants.VIZ_DUMMY_FIELD)
+						.stream().map(object -> Objects.toString(object, null))
+						.collect(Collectors.toList());
 
-		mapper.parse(keys, document);
+				mapper.parse(keys, document);
+			}
+
+		}
 	}
 
 }
