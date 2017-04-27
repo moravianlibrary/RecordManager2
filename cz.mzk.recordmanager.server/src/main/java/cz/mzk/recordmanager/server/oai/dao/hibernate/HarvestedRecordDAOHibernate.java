@@ -87,7 +87,17 @@ public class HarvestedRecordDAOHibernate extends
 				.setParameter(1, id001)
 				.uniqueResult();
 	}
-	
+
+	@Override
+	public HarvestedRecord findByHarvestConfAndTezaurus(Long configurationId, String tezaurus) {
+		Session session = sessionFactory.getCurrentSession();
+		return (HarvestedRecord) session
+				.createQuery(
+						"from HarvestedRecord where uniqueId.harvestedFromId = ? and tezaurus = ?")
+				.setParameter(0, configurationId).setParameter(1, tezaurus)
+				.uniqueResult();
+	}
+
 	@Override
 	public List<HarvestedRecord> getByDedupRecord(DedupRecord dedupRecord) {
 		return getByDedupRecord(dedupRecord, false);
