@@ -28,4 +28,6 @@ public interface IndexingFacade {
 
 	public void reindexHarvestedRecords();
 
+	public void indexIndividualRecordsToSolrJob(String id);
+
 }

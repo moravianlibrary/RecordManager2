@@ -34,7 +34,9 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+import cz.mzk.recordmanager.api.service.ImportConfigurationService;
 import cz.mzk.recordmanager.api.service.LibraryService;
+import cz.mzk.recordmanager.api.service.StatisticsService;
 import cz.mzk.recordmanager.server.kramerius.harvest.KrameriusHarvesterFactory;
 import cz.mzk.recordmanager.server.kramerius.harvest.KrameriusHarvesterFactoryImpl;
 import cz.mzk.recordmanager.server.oai.harvest.OAIHarvesterFactory;
@@ -45,7 +47,10 @@ import cz.mzk.recordmanager.server.scripting.MappingResolver;
 import cz.mzk.recordmanager.server.scripting.ResourceMappingResolver;
 import cz.mzk.recordmanager.server.scripting.ResourceStopWordsResolver;
 import cz.mzk.recordmanager.server.scripting.StopWordsResolver;
+import cz.mzk.recordmanager.server.service.ImportConfigurationServiceImpl;
 import cz.mzk.recordmanager.server.service.LibraryServiceImpl;
+import cz.mzk.recordmanager.server.service.StatisticsServiceImpl;
+import cz.mzk.recordmanager.server.service.Translator;
 import cz.mzk.recordmanager.server.solr.SolrServerFactory;
 import cz.mzk.recordmanager.server.solr.SolrServerFactoryImpl;
 import cz.mzk.recordmanager.server.util.ApacheHttpClient;
@@ -217,6 +222,21 @@ public class AppConfig extends DefaultBatchConfigurer {
 	@Bean
 	public LibraryService libraryService() {
 		return new LibraryServiceImpl();
+	}
+
+	@Bean
+	public StatisticsService statisticsService(){
+		return new StatisticsServiceImpl();
+	}
+
+	@Bean
+	public ImportConfigurationService importConfigurationService() {
+		return new ImportConfigurationServiceImpl();
+	}
+
+	@Bean
+	public Translator translator(){
+		return new Translator();
 	}
 
 }

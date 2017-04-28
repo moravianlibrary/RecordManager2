@@ -7,6 +7,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import cz.mzk.recordmanager.server.model.DownloadImportConfiguration;
+import cz.mzk.recordmanager.server.oai.dao.DownloadImportConfigurationDAO;
+import cz.mzk.recordmanager.server.oai.dao.KrameriusConfigurationDAO;
+import cz.mzk.recordmanager.server.oai.dao.OAIHarvestConfigurationDAO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.ExitStatus;
@@ -44,6 +48,17 @@ public class HarvestingFacadeImpl implements HarvestingFacade {
 	@Autowired
 	private JobExecutor jobExecutor;
 
+	@Autowired
+	private OAIHarvestConfigurationDAO harvestConfigurationDAO;
+
+	@Autowired
+	private KrameriusConfigurationDAO krameriusConfigurationDAO;
+
+	@Autowired
+	private DownloadImportConfigurationDAO downloadImportConfigurationDAO;
+
+	@Autowired
+	private ImportRecordFacadeImpl importRecordFacade;
 	@Override
 	public void incrementalHarvest(OAIHarvestConfiguration conf) {
 		incrementalHarvest(conf.getId(), getJobName(conf));
@@ -53,7 +68,20 @@ public class HarvestingFacadeImpl implements HarvestingFacade {
 	public void incrementalHarvest(KrameriusConfiguration conf) {
 		incrementalHarvest(conf.getId(), getJobName(conf));
 	}
-	
+
+	@Override
+	public void incrementalHarvest(Long id) {
+		OAIHarvestConfiguration configuration = harvestConfigurationDAO.get(id);
+		if (configuration != null) {
+			incrementalHarvest(configuration);
+		} else {
+			KrameriusConfiguration krameriusConfiguration = krameriusConfigurationDAO.get(id);
+			if (krameriusConfiguration != null){
+				incrementalHarvest(krameriusConfiguration);
+			}
+		}
+	}
+
 	public void incrementalHarvest(long conf_id, String job_name){
 		LocalDateTime lastHarvestTime = getLastHarvest(conf_id, job_name);
 		Map<String, JobParameter> parameters = new HashMap<>();
@@ -72,14 +100,42 @@ public class HarvestingFacadeImpl implements HarvestingFacade {
 		}
 	}
 
-	@Override
-	public void fullHarvest(OAIHarvestConfiguration conf) {
+	public void fullHarvest(long id, String jobName){
 		Map<String, JobParameter> parameters = new HashMap<>();
-		parameters.put(Constants.JOB_PARAM_CONF_ID, new JobParameter(conf.getId()));
+		parameters.put(Constants.JOB_PARAM_CONF_ID, new JobParameter(id));
 		parameters.put(Constants.JOB_PARAM_START_TIME, new JobParameter(new Date()));
 		parameters.put(Constants.JOB_PARAM_REHARVEST, new JobParameter(Constants.JOB_PARAM_TRUE_VALUE));
 		JobParameters params = new JobParameters(parameters);
-		jobExecutor.execute(getJobName(conf), params);
+		jobExecutor.execute(jobName, params);
+	}
+
+	@Override
+	public void fullHarvest(OAIHarvestConfiguration conf) {
+		fullHarvest(conf.getId(), getJobName(conf));
+	}
+
+	@Override
+	public void fullHarvest(KrameriusConfiguration conf) {
+		fullHarvest(conf.getId(), getJobName(conf));
+	}
+
+	@Override
+	public void fullHarvest(Long id) {
+		OAIHarvestConfiguration configuration = harvestConfigurationDAO.get(id);
+		if (configuration != null) {
+			fullHarvest(configuration);
+		} else {
+			KrameriusConfiguration krameriusConfiguration = krameriusConfigurationDAO.get(id);
+
+			if (krameriusConfiguration != null) {
+				fullHarvest(krameriusConfiguration);
+			} else {
+				DownloadImportConfiguration downloadImportConfiguration =  downloadImportConfigurationDAO.get(id);
+				if (downloadImportConfiguration != null){
+					importRecordFacade.downloadAndImportRecordSJob(downloadImportConfiguration);
+				}
+			}
+		}
 	}
 
 	@Override
