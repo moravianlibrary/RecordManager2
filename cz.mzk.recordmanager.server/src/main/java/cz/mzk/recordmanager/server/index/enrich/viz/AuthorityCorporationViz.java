@@ -35,9 +35,9 @@ public class AuthorityCorporationViz extends AbstractAuthorityVizFields
 		String[] split = SPLITTER.split(value);
 		String enrichField = CORPORATION_MAP.get(split[1]);
 
-		List<String> results = super.getEnrichingValues(split[2], enrichField);
+		String result = super.getEnrichingValues(split[2], enrichField);
 
-		super.enrichSolrField(document, SolrFieldConstants.CORPORATION_VIZ_FIELD, results);
+		super.enrichSolrField(document, SolrFieldConstants.CORPORATION_VIZ_FIELD, result);
 	}
 
 }

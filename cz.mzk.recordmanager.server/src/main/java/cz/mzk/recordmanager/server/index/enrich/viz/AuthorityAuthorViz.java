@@ -33,9 +33,9 @@ public class AuthorityAuthorViz extends AbstractAuthorityVizFields implements
 		String[] split = SPLITTER.split(value);
 		String enrichField = AUTHOR_MAP.get(split[1]);
 
-		List<String> results = super.getEnrichingValues(split[2], enrichField);
+		String result = super.getEnrichingValues(split[2], enrichField);
 
-		super.enrichSolrField(document, SolrFieldConstants.AUTHOR_VIZ_FIELD, results);
+		super.enrichSolrField(document, SolrFieldConstants.AUTHOR_VIZ_FIELD, result);
 	}
 
 }
