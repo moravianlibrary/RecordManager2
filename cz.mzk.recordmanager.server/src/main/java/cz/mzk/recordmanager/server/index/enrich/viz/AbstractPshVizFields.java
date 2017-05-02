@@ -54,9 +54,9 @@ public abstract class AbstractPshVizFields {
 				for (DataField df : mr.getDataFields(enrichingField)) {
 					if (df.getSubfield('a') != null) {
 						results.add(df.getSubfield('a').getData());
+						cache.put(key, results);
 					}
 				}
-				cache.put(key, results);
 				return results;
 			}
 		}
@@ -69,9 +69,7 @@ public abstract class AbstractPshVizFields {
 			return;
 		}
 		if (document.containsKey(solrField)) {
-			System.out.println(document.getFieldNames());
 			Collection<Object> results = document.remove(solrField).getValues();
-			System.out.println(results);
 			results.addAll(newValues);
 			document.addField(solrField, results);
 		}

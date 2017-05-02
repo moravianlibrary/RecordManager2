@@ -75,11 +75,10 @@ public abstract class AbstractAuthorityVizFields {
 						.parseRecord(new ByteArrayInputStream(hr.getRawRecord()));
 				List<String> results = new ArrayList<>();
 				String value = mr.getField(enrichingField, 'a', 'b', 'c', 'd');
-				if (value != null) {
+				if (value != null && !value.isEmpty()) {
 					results.add(value);
+					cache.put(key, results);
 				}
-
-				cache.put(key, results);
 				return results;
 			}
 		}
