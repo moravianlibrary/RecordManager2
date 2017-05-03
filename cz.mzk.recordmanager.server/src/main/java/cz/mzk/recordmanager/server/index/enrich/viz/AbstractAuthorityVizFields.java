@@ -1,14 +1,12 @@
 package cz.mzk.recordmanager.server.index.enrich.viz;
 
 import java.io.ByteArrayInputStream;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
 
 import org.apache.commons.collections4.map.LRUMap;
-import org.apache.solr.common.SolrInputDocument;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import cz.mzk.recordmanager.server.marc.MarcRecord;
@@ -16,7 +14,7 @@ import cz.mzk.recordmanager.server.marc.MarcXmlParser;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordDAO;
 
-public abstract class AbstractAuthorityVizFields {
+public abstract class AbstractAuthorityVizFields extends AbstractVizFields {
 
 	@Autowired
 	private MarcXmlParser marcXmlParser;
@@ -26,30 +24,30 @@ public abstract class AbstractAuthorityVizFields {
 
 	protected static final Pattern SPLITTER = Pattern.compile("\\|");
 
-	protected final int LRU_CACHE_SIZE_FIELD_400 = 50000;
-	protected final int LRU_CACHE_SIZE_FIELD_410 = 30000;
-	protected final int LRU_CACHE_SIZE_FIELD_411 = 5000;
-	protected final int LRU_CACHE_SIZE_FIELD_448 = 200;
-	protected final int LRU_CACHE_SIZE_FIELD_450 = 10000;
-	protected final int LRU_CACHE_SIZE_FIELD_451 = 5000;
-	protected final int LRU_CACHE_SIZE_FIELD_455 = 300;
+	private static final int LRU_CACHE_SIZE_FIELD_400 = 50000;
+	private static final int LRU_CACHE_SIZE_FIELD_410 = 30000;
+	private static final int LRU_CACHE_SIZE_FIELD_411 = 5000;
+	private static final int LRU_CACHE_SIZE_FIELD_448 = 200;
+	private static final int LRU_CACHE_SIZE_FIELD_450 = 10000;
+	private static final int LRU_CACHE_SIZE_FIELD_451 = 5000;
+	private static final int LRU_CACHE_SIZE_FIELD_455 = 300;
 
-	protected final Map<String, String> field400Cache = Collections
+	private final Map<String, String> field400Cache = Collections
 			.synchronizedMap(new LRUMap<>(LRU_CACHE_SIZE_FIELD_400));
-	protected final Map<String, String> field410Cache = Collections
+	private final Map<String, String> field410Cache = Collections
 			.synchronizedMap(new LRUMap<>(LRU_CACHE_SIZE_FIELD_410));
-	protected final Map<String, String> field411Cache = Collections
+	private final Map<String, String> field411Cache = Collections
 			.synchronizedMap(new LRUMap<>(LRU_CACHE_SIZE_FIELD_411));
-	protected final Map<String, String> field448Cache = Collections
+	private final Map<String, String> field448Cache = Collections
 			.synchronizedMap(new LRUMap<>(LRU_CACHE_SIZE_FIELD_448));
-	protected final Map<String, String> field450Cache = Collections
+	private final Map<String, String> field450Cache = Collections
 			.synchronizedMap(new LRUMap<>(LRU_CACHE_SIZE_FIELD_450));
-	protected final Map<String, String> field451Cache = Collections
+	private final Map<String, String> field451Cache = Collections
 			.synchronizedMap(new LRUMap<>(LRU_CACHE_SIZE_FIELD_451));
-	protected final Map<String, String> field455Cache = Collections
+	private final Map<String, String> field455Cache = Collections
 			.synchronizedMap(new LRUMap<>(LRU_CACHE_SIZE_FIELD_455));
 
-	protected static Map<String, Map<String, String>> cacheMap = new HashMap<>();
+	private static Map<String, Map<String, String>> cacheMap = new HashMap<>();
 	{
 		cacheMap.put("400", field400Cache);
 		cacheMap.put("410", field410Cache);
@@ -60,6 +58,7 @@ public abstract class AbstractAuthorityVizFields {
 		cacheMap.put("455", field455Cache);
 	}
 
+	@Override
 	protected String getEnrichingValues(String key, String enrichingField) {
 		Map<String, String> cache = cacheMap.get(enrichingField);
 		if (cache.containsKey(key)) {
@@ -77,20 +76,6 @@ public abstract class AbstractAuthorityVizFields {
 			}
 		}
 		return null;
-	}
-
-	protected void enrichSolrField(SolrInputDocument document,
-			String solrField, String newValue) {
-		if (newValue == null || newValue.isEmpty()) {
-			return;
-		}
-		if (document.containsKey(solrField)) {
-			Collection<Object> results = document.remove(solrField).getValues();
-			results.add(newValue);
-			document.addField(solrField, results);
-		} else {
-			document.addField(solrField, newValue);
-		}
 	}
 
 }

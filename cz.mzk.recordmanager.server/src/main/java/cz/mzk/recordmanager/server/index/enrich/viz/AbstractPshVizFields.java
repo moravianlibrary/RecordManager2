@@ -1,14 +1,12 @@
 package cz.mzk.recordmanager.server.index.enrich.viz;
 
 import java.io.ByteArrayInputStream;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
 
 import org.apache.commons.collections4.map.LRUMap;
-import org.apache.solr.common.SolrInputDocument;
 import org.marc4j.marc.DataField;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -17,7 +15,7 @@ import cz.mzk.recordmanager.server.marc.MarcXmlParser;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordDAO;
 
-public abstract class AbstractPshVizFields {
+public abstract class AbstractPshVizFields extends AbstractVizFields {
 
 	@Autowired
 	private MarcXmlParser marcXmlParser;
@@ -27,7 +25,7 @@ public abstract class AbstractPshVizFields {
 
 	protected static final Pattern SPLITTER = Pattern.compile("\\|");
 
-	private final int LRU_CACHE_SIZE_FIELD_450 = 10000;
+	private static final int LRU_CACHE_SIZE_FIELD_450 = 10000;
 
 	private final Map<String, String> field450Cache = Collections
 			.synchronizedMap(new LRUMap<>(LRU_CACHE_SIZE_FIELD_450));
@@ -37,6 +35,7 @@ public abstract class AbstractPshVizFields {
 		cacheMap.put("450", field450Cache);
 	}
 
+	@Override
 	protected String getEnrichingValues(String key, String enrichingField) {
 		Map<String, String> cache = cacheMap.get(enrichingField);
 		if (cache.containsKey(key)) {
@@ -55,20 +54,6 @@ public abstract class AbstractPshVizFields {
 			}
 		}
 		return null;
-	}
-
-	protected void enrichSolrField(SolrInputDocument document,
-			String solrField, String newValue) {
-		if (newValue == null || newValue.isEmpty()) {
-			return;
-		}
-		if (document.containsKey(solrField)) {
-			Collection<Object> results = document.remove(solrField).getValues();
-			results.add(newValue);
-			document.addField(solrField, results);
-		} else {
-			document.addField(solrField, newValue);
-		}
 	}
 
 }
