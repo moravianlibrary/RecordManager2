@@ -208,5 +208,4 @@ public interface MetadataRecord {
 	
 	public List<String> getDefaultStatuses();
 	
-	public String getTezaurus();
 }

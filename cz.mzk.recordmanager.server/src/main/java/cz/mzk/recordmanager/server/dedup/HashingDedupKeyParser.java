@@ -144,11 +144,11 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 			record.setShortTitles(encapsulator.getShortTitles());
 			record.setTemporalDedupHash(computedHash);
 		} 
-
-		record.setTezaurus(metadataRecord.getTezaurus());
+		
 		record.setDedupKeysHash(computedHash);
 		record.setShouldBeProcessed(metadataRecord.matchFilter());
-
+		
+		
 		if (record.getOaiTimestamp() != null && record.getTemporalOldOaiTimestamp() != null
 				&& !record.getOaiTimestamp().equals(record.getTemporalOldOaiTimestamp())) {
 			oaiTimestampChanged = true;

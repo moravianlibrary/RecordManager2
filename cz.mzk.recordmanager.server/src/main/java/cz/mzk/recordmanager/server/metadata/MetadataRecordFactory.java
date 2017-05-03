@@ -22,7 +22,6 @@ import cz.mzk.recordmanager.server.metadata.institutions.NkpMarcMetadataRecord;
 import cz.mzk.recordmanager.server.metadata.institutions.OpenLibraryMetadataMarcRecord;
 import cz.mzk.recordmanager.server.metadata.institutions.OsobnostiRegionuMetadataMarcRecord;
 import cz.mzk.recordmanager.server.metadata.institutions.PatentsMetadataMarcRecord;
-import cz.mzk.recordmanager.server.metadata.institutions.PshMetadataMarcRecord;
 import cz.mzk.recordmanager.server.metadata.institutions.SfxMetadataMarcRecord;
 import cz.mzk.recordmanager.server.metadata.institutions.SfxjibNlkPeriodicalsMetadataMarcRecord;
 import cz.mzk.recordmanager.server.metadata.institutions.SkatMarcMetadataRecord;
@@ -114,8 +113,6 @@ public class MetadataRecordFactory {
 			return new PatentsMetadataMarcRecord(marcRec);
 		case Constants.PREFIX_OPENLIB:
 			return new OpenLibraryMetadataMarcRecord(marcRec);
-		case Constants.PREFIX_PSH:
-			return new PshMetadataMarcRecord(marcRec);
 		default:
 			return new MetadataMarcRecord(marcRec);
 		}

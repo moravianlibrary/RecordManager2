@@ -238,9 +238,6 @@ public class HarvestedRecord extends AbstractDomainObject {
 	@Column(name="source_info")
 	private String sourceInfo;
 	
-	@Column(name="tezaurus")
-	private String tezaurus;
-
 	/**
 	 * indicator variable used for filtering reasons
 	 */
@@ -596,14 +593,6 @@ public class HarvestedRecord extends AbstractDomainObject {
 
 	public void setShortTitles(List<ShortTitle> shortTitles) {
 		this.shortTitles = shortTitles;
-	}
-
-	public String getTezaurus() {
-		return tezaurus;
-	}
-
-	public void setTezaurus(String tezaurus) {
-		this.tezaurus = tezaurus;
 	}
 	
 }
