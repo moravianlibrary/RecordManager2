@@ -2,7 +2,6 @@ package cz.mzk.recordmanager.server.index.enrich.viz;
 
 import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -35,22 +34,22 @@ public abstract class AbstractAuthorityVizFields extends AbstractVizFields {
 	private static final int LRU_CACHE_SIZE_FIELD_451 = 5000;
 	private static final int LRU_CACHE_SIZE_FIELD_455 = 300;
 
-	private final Map<String, String> field400Cache = Collections
+	private final Map<String, List<String>> field400Cache = Collections
 			.synchronizedMap(new LRUMap<>(LRU_CACHE_SIZE_FIELD_400));
-	private final Map<String, String> field410Cache = Collections
+	private final Map<String, List<String>> field410Cache = Collections
 			.synchronizedMap(new LRUMap<>(LRU_CACHE_SIZE_FIELD_410));
-	private final Map<String, String> field411Cache = Collections
+	private final Map<String, List<String>> field411Cache = Collections
 			.synchronizedMap(new LRUMap<>(LRU_CACHE_SIZE_FIELD_411));
-	private final Map<String, String> field448Cache = Collections
+	private final Map<String, List<String>> field448Cache = Collections
 			.synchronizedMap(new LRUMap<>(LRU_CACHE_SIZE_FIELD_448));
-	private final Map<String, String> field450Cache = Collections
+	private final Map<String, List<String>> field450Cache = Collections
 			.synchronizedMap(new LRUMap<>(LRU_CACHE_SIZE_FIELD_450));
-	private final Map<String, String> field451Cache = Collections
+	private final Map<String, List<String>> field451Cache = Collections
 			.synchronizedMap(new LRUMap<>(LRU_CACHE_SIZE_FIELD_451));
-	private final Map<String, String> field455Cache = Collections
+	private final Map<String, List<String>> field455Cache = Collections
 			.synchronizedMap(new LRUMap<>(LRU_CACHE_SIZE_FIELD_455));
 
-	private static Map<String, Map<String, String>> cacheMap = new HashMap<>();
+	private static Map<String, Map<String, List<String>>> cacheMap = new HashMap<>();
 	{
 		cacheMap.put("400", field400Cache);
 		cacheMap.put("410", field410Cache);
@@ -63,18 +62,19 @@ public abstract class AbstractAuthorityVizFields extends AbstractVizFields {
 
 	@Override
 	protected List<String> getEnrichingValues(String key, String enrichingField) {
-		Map<String, String> cache = cacheMap.get(enrichingField);
+		Map<String, List<String>> cache = cacheMap.get(enrichingField);
 		if (cache.containsKey(key)) {
-			return new ArrayList<>(Arrays.asList(cache.get(key)));
+			return new ArrayList<>(cache.get(key));
 		} else {
 			HarvestedRecord hr = hrdao.findByHarvestConfAndRaw001Id(400L, key);
 			if (hr != null) {
 				MarcRecord mr = marcXmlParser
 						.parseRecord(new ByteArrayInputStream(hr.getRawRecord()));
-				String value = mr.getField(enrichingField, 'a', 'b', 'c', 'd');
-				if (value != null && !value.isEmpty()) {
-					cache.put(key, value);
-					return new ArrayList<>(Arrays.asList(value));
+				List<String> results = new ArrayList<>(mr.getFields(
+						enrichingField, "", 'a', 'b', 'c', 'd'));
+				if (!results.isEmpty()) {
+					cache.put(key, Collections.unmodifiableList(results));
+					return results;
 				}
 			}
 		}
