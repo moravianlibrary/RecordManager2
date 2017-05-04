@@ -1,5 +1,6 @@
 package cz.mzk.recordmanager.server.index.enrich.viz;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -23,7 +24,10 @@ public abstract class AbstractPshVizFields extends AbstractVizFields implements
 
 	@Override
 	protected List<String> getEnrichingValues(String key, String enrichingField) {
-		return mapping.get(key);
+		List<String> results = mapping.get(key);
+		// mapping returns unmodifiablelist
+		if (results != null) results = new ArrayList<>(results);
+		return results;
 	}
 
 	@Override
