@@ -33,10 +33,11 @@ public class Mapping {
 			if (splitted.length == 2) {
 				String key = trim(splitted[0]);
 				String val = trim(splitted[1]);
+				List<String> results = new ArrayList<>();
 				List<String> values = map.get(key);
-				if (values == null)	values = new ArrayList<>();
-				values.add(val);
-				map.put(key, values);
+				if (values != null) results = new ArrayList<>(values);
+				results.add(val);
+				map.put(key, Collections.unmodifiableList(results));
 			}
 		}
 		this.mapping = Collections.unmodifiableMap(map);
