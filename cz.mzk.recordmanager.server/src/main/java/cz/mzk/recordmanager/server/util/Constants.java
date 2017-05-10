@@ -83,6 +83,7 @@ public class Constants {
 	public static final String PREFIX_KRAM_NTK			= "kram-ntk";
 	public static final String PREFIX_KRAM3_NKP			= "kram3-nkp";
 	public static final String PREFIX_MANUSCRIPTORIUM	= "manuscript";
+	public static final String PREFIX_MESH				= "mesh";
 	public static final String PREFIX_MKP_EBOOKS		= "mkpe";
 	public static final String PREFIX_MKUO				= "mkuo";
 	public static final String PREFIX_MZK				= "mzk";
