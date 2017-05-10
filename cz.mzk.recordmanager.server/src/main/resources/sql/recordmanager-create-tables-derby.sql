@@ -291,3 +291,13 @@ CREATE TABLE inspiration (
   name					VARCHAR(128),
   CONSTRAINT inspiration_fk FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id)
 );
+
+CREATE TABLE tezaurus_record (
+  id                   DECIMAL(10) PRIMARY KEY,
+  import_conf_id       DECIMAL(10),
+  record_id            VARCHAR(128),
+  source_field         VARCHAR(15),
+  name                 VARCHAR(255),
+  raw_record           BLOB,
+  CONSTRAINT tezaurus_import_conf_fk FOREIGN KEY (import_conf_id) REFERENCES import_conf(id)
+);

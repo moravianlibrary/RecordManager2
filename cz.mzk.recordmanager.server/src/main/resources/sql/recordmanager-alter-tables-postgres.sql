@@ -760,3 +760,14 @@ UPDATE oai_harvest_conf SET set_spec='cpk' WHERE import_conf_id=302;
 
 -- 24. 03. 2017 tomascejpek
 UPDATE import_conf SET filtering_enabled=true WHERE id=314;
+
+-- 10. 05. 2017 tomascejpek
+CREATE TABLE tezaurus_record (
+  id                   DECIMAL(10) PRIMARY KEY,
+  import_conf_id       DECIMAL(10),
+  record_id            VARCHAR(128),
+  source_field         VARCHAR(15),
+  name                 VARCHAR(255),
+  raw_record           BYTEA,
+  FOREIGN KEY (import_conf_id) REFERENCES import_conf(id)
+);
