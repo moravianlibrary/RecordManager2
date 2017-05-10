@@ -26,6 +26,7 @@ import cz.mzk.recordmanager.server.model.Ismn;
 import cz.mzk.recordmanager.server.model.Issn;
 import cz.mzk.recordmanager.server.model.Oclc;
 import cz.mzk.recordmanager.server.model.ShortTitle;
+import cz.mzk.recordmanager.server.model.TezaurusRecord.TezaurusKey;
 import cz.mzk.recordmanager.server.model.Title;
 import cz.mzk.recordmanager.server.util.Constants;
 import cz.mzk.recordmanager.server.util.EANUtils;
@@ -1290,6 +1291,12 @@ public class MetadataMarcRecord implements MetadataRecord {
 	public List<String> getDefaultStatuses() {
 		// implemented in institution specific classes
 		return Collections.emptyList();
+	}
+
+	@Override
+	public TezaurusKey getTezaurusKey() {
+		// implemented in institution specific classes
+		return null;
 	}
 	
 }
