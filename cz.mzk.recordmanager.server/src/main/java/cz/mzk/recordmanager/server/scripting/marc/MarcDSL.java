@@ -601,13 +601,20 @@ public class MarcDSL extends BaseDSL {
 				switch (split[0]) {
 				case Constants.PREFIX_AUTH:
 					record.getFields(fieldTag, " ", subFields.toCharArray()).stream()
-							.forEach(s -> result.add(split[0] + "|" + fieldTag + "|" + s));
+							.forEach(s -> result.add(getVizFieldCode(split[0], fieldTag, s)));
 					break;
 				case Constants.PREFIX_PSH:
 					for (DataField df : record.getDataFields(fieldTag)) {
 						if (df.getSubfield('a') != null	&& df.getSubfield('2') != null
 								&& df.getSubfield('2').getData().equals(Constants.PREFIX_PSH)) {
-							result.add(split[0] + "|" + fieldTag + "|" + df.getSubfield('a').getData());
+							result.add(getVizFieldCode(split[0], fieldTag, df.getSubfield('a').getData()));
+						}
+					}
+				case Constants.PREFIX_MESH:
+					for (DataField df : record.getDataFields(fieldTag)) {
+						if (df.getSubfield('a') != null	&& df.getSubfield('2') != null
+								&& df.getSubfield('2').getData().equals("czmesh")) {
+							result.add(getVizFieldCode(split[0], fieldTag, df.getSubfield('a').getData().toLowerCase()));
 						}
 					}
 				default:
@@ -619,7 +626,11 @@ public class MarcDSL extends BaseDSL {
 
 		return result;
 	}
-    
+
+	private String getVizFieldCode(String source, String fieldTag, String value) {
+		return source + "|" + fieldTag + "|" + value;
+	}
+
     public List<String> getAuthAuthors(String tag){
     	List<String> result = new ArrayList<>();
     	for(DataField df: record.getDataFields(tag)){

@@ -22,4 +22,15 @@ public class TezaurusDAOHibernate extends
 				.uniqueResult();
 	}
 
+	@Override
+	public TezaurusRecord findByConfigAndSourceFieldAndName(
+			ImportConfiguration configuration, String sourceField, String name) {
+		Session session = sessionFactory.getCurrentSession();
+		return (TezaurusRecord) session
+				.createQuery(
+						"FROM TezaurusRecord WHERE harvestedFrom = ? AND tezaurusKey.sourceField = ? AND tezaurusKey.name = ?")
+				.setParameter(0, configuration).setParameter(1, sourceField)
+				.setParameter(2, name).uniqueResult();
+	}
+
 }

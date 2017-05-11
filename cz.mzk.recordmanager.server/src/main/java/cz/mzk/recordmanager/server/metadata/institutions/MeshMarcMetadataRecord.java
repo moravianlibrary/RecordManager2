@@ -15,7 +15,7 @@ public class MeshMarcMetadataRecord extends MetadataMarcRecord {
 		for (String field : new String[] { "150", "151", "155" }) {
 			String value = underlayingMarc.getField(field, 'a');
 			if (value != null) {
-				return new TezaurusKey(field, value);
+				return new TezaurusKey(field, value.toLowerCase());
 			}
 		}
 

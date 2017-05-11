@@ -8,4 +8,7 @@ public interface TezaurusDAO extends DomainDAO<Long, TezaurusRecord> {
 	public TezaurusRecord findByIdAndHarvestConfiguration(String recordId,
 			ImportConfiguration configuration);
 
+	public TezaurusRecord findByConfigAndSourceFieldAndName(
+			ImportConfiguration configuration, String sourceField, String name);
+
 }
