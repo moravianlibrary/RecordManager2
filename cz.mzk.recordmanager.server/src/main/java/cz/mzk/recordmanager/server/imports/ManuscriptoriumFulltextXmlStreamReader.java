@@ -24,6 +24,7 @@ public class ManuscriptoriumFulltextXmlStreamReader {
 	private static final String ELEMENT_COLOFON = "colofon";
 	private static final String ELEMENT_QUOTE = "quote";
 	private static final String ELEMENT_TITLE = "title";
+	private static final String ELEMENT_RUBRIC = "rubric";
 
 	/**
 	 * Constructs an instance with the specified input stream.
@@ -56,6 +57,7 @@ public class ManuscriptoriumFulltextXmlStreamReader {
 					case ELEMENT_COLOFON:
 					case ELEMENT_QUOTE:
 					case ELEMENT_TITLE:
+					case ELEMENT_RUBRIC:
 						String xmlFragment = readElementBody(eventReader);
 						if (!titles.contains(xmlFragment)) {
 							result += xmlFragment + "\n";
@@ -100,6 +102,9 @@ public class ManuscriptoriumFulltextXmlStreamReader {
 			xmlEvent.writeAsEncodedUnicode(buf);
 		}
 
-		return buf.getBuffer().toString();
+		String result = buf.getBuffer().toString();
+		result = result.replaceAll("<[^>]*>", "");
+
+		return result;
 	}
 }
