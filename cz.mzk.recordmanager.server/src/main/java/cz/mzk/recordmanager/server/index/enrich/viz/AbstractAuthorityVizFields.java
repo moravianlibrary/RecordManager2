@@ -71,7 +71,7 @@ public abstract class AbstractAuthorityVizFields extends AbstractVizFields {
 				MarcRecord mr = marcXmlParser
 						.parseRecord(new ByteArrayInputStream(hr.getRawRecord()));
 				List<String> results = Collections.unmodifiableList(mr.getFields(
-						enrichingField, "", 'a', 'b', 'c', 'd'));
+						enrichingField, " ", 'a', 'b', 'c', 'd'));
 				if (!results.isEmpty()) {
 					cache.put(key, results);
 					return new ArrayList<>(results);
