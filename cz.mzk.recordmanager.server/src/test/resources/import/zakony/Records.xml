@@ -1,0 +1,15 @@
+<Api1 Version="3.0" Base="https://www.zakonyprolidi.cz">
+	<YearDocList>
+		<DocInfo Href="/cs/1945-1" DocId="3165993" DocType="Dekret"
+			Collection="cs" Code="1945-1" Year="1945" Batch="1" Number="1"
+			Quote="1/1945 Sb."
+			Title="Ústavní dekret presidenta republiky o nové organisaci vlády a ministerstev v době přechodné"
+			DeclareDate="1945-04-02" PublishDate="1945-04-04" EffectFrom="1945-04-02"
+			EffectTill="1971-01-01" LastUpdate="2016-08-20" />
+		<DocInfo Href="/cs/1945-2" DocId="3165953" DocType="Vyhlaska"
+			Collection="cs" Code="1945-2" Year="1945" Batch="2" Number="2"
+			Quote="2/1945 Sb." Title="Vyhláška předsedy vlády o zrušení Státní rady"
+			DeclareDate="1945-04-04" PublishDate="1945-04-30" EffectFrom="1945-04-30"
+			LastUpdate="2016-03-22" />
+	</YearDocList>
+</Api1>

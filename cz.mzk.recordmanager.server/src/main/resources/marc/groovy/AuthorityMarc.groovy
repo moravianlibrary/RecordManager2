@@ -18,3 +18,6 @@ subject_facet_str_mv = getFields "100abcd"
 
 short_note_cs_display = translate("auth_short_note_cs.map", getId001(), null)
 short_note_en_display = translate("auth_short_note_en.map", getId001(), null)
+
+format_display_mv = getFormat()
+local_institution_facet_str_mv = getInstitutionFacet()

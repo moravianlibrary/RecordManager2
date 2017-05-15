@@ -46,9 +46,7 @@ public class SkatMarcInterceptor extends DefaultMarcInterceptor {
 		for (ControlField cf: super.getRecord().getControlFields()) {
 			newRecord.addVariableField(cf);
 		}
-		
-		List<DataField> list996 = new ArrayList<>();
-		
+
 		Map<String, List<DataField>> dfMap = marc.getAllFields();
 		for (String tag: new TreeSet<String>(dfMap.keySet())) {
 			for (DataField df: dfMap.get(tag)) {
@@ -80,7 +78,6 @@ public class SkatMarcInterceptor extends DefaultMarcInterceptor {
 										)
 								);
 					}
-					
 					String joinedContent = "";
 					if (df.getSubfield('r') != null) {
 						joinedContent += df.getSubfield('r').getData();
@@ -92,18 +89,23 @@ public class SkatMarcInterceptor extends DefaultMarcInterceptor {
 						newDf.addSubfield(
 								marcFactory.newSubfield('d', joinedContent));
 					}
-					
+					if (df.getSubfield('a') != null && cf.filter(df.getSubfield('a').getData())) {
+						newDf.addSubfield(marcFactory.newSubfield('q', "0"));
+					}
 					newDf.addSubfield(marcFactory.newSubfield('s', "NZ"));
-					list996.add(newDf);
+					newRecord.addVariableField(newDf);
+				} else if (df.getTag().equals("996")) {
+					if ((df.getSubfield('e') != null) && (cf.filter(df.getSubfield('e').getData()))
+							&& (df.getSubfield('q') == null || !df.getSubfield('q').getData().equals("0"))) {
+						df.addSubfield(marcFactory.newSubfield('q', "0"));
+					}
+					newRecord.addVariableField(df);
 				} else {
 					newRecord.addVariableField(df);
 				}
 			}
 		}
-		for(DataField df: cf.filter(list996)){
-			newRecord.addVariableField(df);
-		}
-		
+
 		return new MarcRecordImpl(newRecord).export(IOFormat.XML_MARC).getBytes(StandardCharsets.UTF_8);
 	}
 	

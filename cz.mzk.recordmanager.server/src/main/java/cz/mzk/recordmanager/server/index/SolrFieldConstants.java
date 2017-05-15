@@ -89,6 +89,8 @@ public class SolrFieldConstants {
 	public static final String CONSPECTUS_STR_MV = "conspectus_str_mv";
 	
 	public static final String MERGED_RECORDS = "merged_records_boolean";
+	
+	public static final String GENRE_FACET = "genre_facet_str_mv";
 
 	/**
 	 * dummy fields used for processing purposes only, shouldn't be indexed. Fields are deleted in AuthorityEnricher. 

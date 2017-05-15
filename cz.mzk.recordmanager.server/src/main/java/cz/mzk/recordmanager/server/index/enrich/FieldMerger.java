@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.solr.common.SolrInputDocument;
+import org.apache.solr.common.SolrInputField;
 
 public class FieldMerger {
 
@@ -39,6 +40,13 @@ public class FieldMerger {
 					.filter(rec -> rec != null)
 					.forEach(rec -> values.addAll(rec));
 			target.setField(field, values);
+		}
+	}
+	
+	public void renameField(SolrInputDocument source, String oldName, String newName) {
+		SolrInputField field = source.remove(oldName);
+		if (field != null) {
+			source.addField(newName, field);
 		}
 	}
 

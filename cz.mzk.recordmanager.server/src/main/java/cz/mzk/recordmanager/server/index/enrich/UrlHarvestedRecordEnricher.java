@@ -49,7 +49,7 @@ public class UrlHarvestedRecordEnricher implements HarvestedRecordEnricher {
 			Long importConfId = record.getHarvestedFrom().getId();
 			if (!krameriusBaseLinkMap.containsKey(importConfId)) {
 				KrameriusConfiguration kramConf = krameriusConfiguationDao.get(importConfId);
-				if (kramConf.getUrl() != null) {
+				if (kramConf != null && kramConf.getUrl() != null) {
 					String kramUrlBase = Pattern.compile("api/v\\d\\.\\d").matcher(kramConf.getUrl()).replaceAll("");
 					krameriusBaseLinkMap.put(importConfId, kramUrlBase);
 				}

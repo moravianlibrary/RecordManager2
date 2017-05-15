@@ -75,3 +75,4 @@ availability_id_str_mv = getFieldsUnique "996w"
 
 citation_record_type_str = getCitationRecordType();
 author_find = getAuthorFind();
+cpk_detected_format_facet_str_mv = getFormat()

@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import org.apache.commons.validator.routines.ISBNValidator;
 import org.slf4j.Logger;
@@ -439,6 +440,7 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 	public List<Oclc> getOclcs() {
 		List<String> identifiers = dcRecord.getIdentifiers();
 		List<Oclc> oclcs = new ArrayList<>();
+		if (getLanguages().contains("cze")) return oclcs;
 		Matcher matcher;
 		
 		for (String f : identifiers) {
@@ -454,7 +456,7 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 
 	@Override
 	public List<String> getLanguages() {
-		return Collections.emptyList();
+		return dcRecord.getLanguages().stream().filter(lang -> lang.equals("eng") || lang.equals("cze")).collect(Collectors.toList());
 	}
 
 	@Override
@@ -532,13 +534,13 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 
 	@Override
 	public String getSourceInfo() {
-		// TODO Auto-generated method stub
+		// Nothing to return
 		return null;
 	}
 
 	@Override
 	public List<Ean> getEANs() {
-		// TODO Auto-generated method stub
+		// Nothing to return
 		return Collections.emptyList();
 	}
 

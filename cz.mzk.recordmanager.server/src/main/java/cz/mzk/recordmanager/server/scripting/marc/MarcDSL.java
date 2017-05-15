@@ -120,7 +120,7 @@ public class MarcDSL extends BaseDSL {
 	public List<String> getLanguages() {
 		Set<String> languages = new HashSet<String>();
 		String f008 = record.getControlField("008");
-		if (f008 != null && f008.length() > 38) {
+		if (f008 != null && f008.length() >= 38) {
 			languages.add(f008.substring(35, 38));
 		}
 		languages.addAll(record.getFields("041", EMPTY_SEPARATOR, 'a'));
@@ -770,6 +770,18 @@ public class MarcDSL extends BaseDSL {
 			if (author != "") results.add(author.trim());
 		}
     	return new ArrayList<>(results);
-    }
-    
+	}
+
+	public List<String> getBarcodes() {
+		return metadataRecord.getBarcodes();
+	}
+
+	public List<String> getFormat() {
+		return SolrUtils.createRecordTypeHierarchicFacet(metadataRecord.getDetectedFormatList());
+	}
+
+	public List<String> getInstitutionFacet() {
+		return SolrUtils.getInstitution(context.harvestedRecord().getHarvestedFrom());
+	}
+
 }

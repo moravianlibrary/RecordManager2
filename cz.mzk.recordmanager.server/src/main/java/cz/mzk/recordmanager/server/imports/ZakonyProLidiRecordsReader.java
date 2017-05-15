@@ -19,32 +19,32 @@ import cz.mzk.recordmanager.server.util.HttpClient;
 public class ZakonyProLidiRecordsReader implements ItemReader<List<Record>> {
 
 	private static Logger logger = LoggerFactory.getLogger(ZakonyProLidiRecordsReader.class);
-	
+
 	@Autowired
 	private HttpClient httpClient;
 
 	private MarcReader reader;
-	
+
 	private static final int START_YEAR = 1945;
 	private static final int ACTUAL_YEAR = Calendar.getInstance().get(Calendar.YEAR);
-	
-	private int year;
-	private int end_year;
-	
+
+	private Long year;
+	private Long end_year;
+
 	private int batchSize = 20;
-	
+
 	private static final String ZAKONY_METADATA_URL = "http://www.zakonyprolidi.cz/api/v1/data.xml/YearDocList?apikey=test&Collection=cs&Year=";
-	
-	public ZakonyProLidiRecordsReader(){
-		year = START_YEAR;
-		end_year = ACTUAL_YEAR;
+
+	public ZakonyProLidiRecordsReader(Long from, Long to) {
+		year = from != null ? from : START_YEAR;
+		end_year = to != null ? to : ACTUAL_YEAR;
 	}
-	
+
 	@Override
-	public List<Record> read(){
+	public List<Record> read() {
 		List<Record> batch = new ArrayList<Record>();
-		
-		if(reader == null || !reader.hasNext()) {
+
+		if (reader == null || !reader.hasNext()) {
 			getNextYearData();
 		}
 		while (reader.hasNext()) {
@@ -60,16 +60,16 @@ public class ZakonyProLidiRecordsReader implements ItemReader<List<Record>> {
 		return batch.isEmpty() ? null : batch;
 	}
 
-	protected void getNextYearData(){
+	protected void getNextYearData() {
 		try {
-			if(year <= end_year){
+			if (year <= end_year) {
 				logger.info("Harvesting: " + ZAKONY_METADATA_URL+year);
 				reader = new ZakonyProLidiMetadataXmlStreamReader(httpClient.executeGet(ZAKONY_METADATA_URL+year));
 			}
 		} catch (IOException e) {
 			logger.warn(e.getMessage());
 		}
-		
+
 		year++;
 	}
 

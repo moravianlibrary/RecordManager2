@@ -46,13 +46,12 @@ public class DedupSimpleKeysStepWriter implements
 			for (HarvestedRecord hr: hrList) {
 				
 				// check whether is need to store current record
-				DedupRecord dr = hr.getDedupRecord();
-				if (dr != null) {
-					
-				}
-				
 				if (checkIfUpdateIsNeeded(hr)) {
-					harvestedRecordDAO.persist(hr);
+					String query = "UPDATE harvested_record SET dedup_record_id = ? WHERE id = ? ";
+					sessionFactory.getCurrentSession().createSQLQuery(query)
+							.setLong(0, hr.getDedupRecord().getId())
+							.setLong(1, hr.getId())
+							.executeUpdate();
 				}
 
 				totalCount++;
@@ -75,7 +74,7 @@ public class DedupSimpleKeysStepWriter implements
 		
 		DedupRecord dr = hr.getDedupRecord();
 		if (dr == null || dr.getUpdated() == null) {
-			return true;
+			return false;
 		}
 		
 		Date drUpdate = dr.getUpdated();

@@ -755,5 +755,11 @@ UPDATE import_conf SET id_prefix='muzibib' WHERE id=349;
 UPDATE library SET name='MUZIBIB' WHERE id=149;
 UPDATE import_conf SET generate_dedup_keys=false WHERE id=331;
 
--- 03. 04. 2017 tomascejpek
+-- 23. 03. 2017 tomascejpek
+UPDATE oai_harvest_conf SET set_spec='cpk' WHERE import_conf_id=302;
+
+-- 24. 03. 2017 tomascejpek
+UPDATE import_conf SET filtering_enabled=true WHERE id=314;
+
+-- 15. 05. 2017 tomascejpek
 ALTER TABLE import_conf ADD COLUMN mapping_dedup_script VARCHAR(256);
