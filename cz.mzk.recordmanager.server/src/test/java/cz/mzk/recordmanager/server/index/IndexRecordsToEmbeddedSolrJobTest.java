@@ -56,7 +56,7 @@ public class IndexRecordsToEmbeddedSolrJobTest extends AbstractSolrTest {
 			allDocsQuery.set("q", SolrFieldConstants.ID_FIELD+":*");
 			allDocsQuery.set("rows", 10000);
 			QueryResponse allDocsResponse = server.query(allDocsQuery);
-			Assert.assertEquals(allDocsResponse.getResults().size(), 81);
+			Assert.assertEquals(allDocsResponse.getResults().size(), 83);
 		}
 
 		{
@@ -97,6 +97,21 @@ public class IndexRecordsToEmbeddedSolrJobTest extends AbstractSolrTest {
 					document.getFieldValues(SolrFieldConstants.AUTHOR_VIZ_FIELD).stream() //
 							.anyMatch(s -> s.equals("Imaginarni, Karel, 1900-2000")), 
 					"Authority enrichment failed.");
+		}
+
+		{
+			SolrQuery authQuery = new SolrQuery();
+			authQuery.set("q", SolrFieldConstants.ID_FIELD + ":103");
+			QueryResponse docResponse = server.query(authQuery);
+			Assert.assertEquals(docResponse.getResults().size(), 1);
+			SolrDocument document = docResponse.getResults().get(0);
+			// check whether subject_viz field contains alternative name from mesh
+			System.out.println(document
+					.getFieldValues(SolrFieldConstants.SUBJECT_VIZ_FIELD));
+			Assert.assertTrue(
+					document.getFieldValues(SolrFieldConstants.SUBJECT_VIZ_FIELD).stream() //
+							.anyMatch(s -> s.equals("klinická onkologie")),
+					"Mesh enrichment failed.");
 		}
 
 		{
