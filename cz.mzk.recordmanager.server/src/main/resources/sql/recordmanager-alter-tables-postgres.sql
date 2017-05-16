@@ -771,3 +771,5 @@ CREATE TABLE tezaurus_record (
   raw_record           BYTEA,
   FOREIGN KEY (import_conf_id) REFERENCES import_conf(id)
 );
+CREATE INDEX tezaurus_id_idx ON tezaurus_record(import_conf_id,record_id);
+CREATE INDEX tezaurus_name_idx ON tezaurus_record(import_conf_id,source_field,name);

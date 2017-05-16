@@ -1013,3 +1013,16 @@ UPDATE oai_harvest_conf SET set_spec='cpk' WHERE import_conf_id=302;
 
 --changeset tomascejpek:51 context:cpk
 UPDATE import_conf SET filtering_enabled=true WHERE id=314;
+
+--changeset tomascejpek:52
+CREATE TABLE tezaurus_record (
+  id                   DECIMAL(10) PRIMARY KEY,
+  import_conf_id       DECIMAL(10),
+  record_id            VARCHAR(128),
+  source_field         VARCHAR(15),
+  name                 VARCHAR(255),
+  raw_record           BYTEA,
+  FOREIGN KEY (import_conf_id) REFERENCES import_conf(id)
+);
+CREATE INDEX tezaurus_id_idx ON tezaurus_record(import_conf_id,record_id);
+CREATE INDEX tezaurus_name_idx ON tezaurus_record(import_conf_id,source_field,name);
