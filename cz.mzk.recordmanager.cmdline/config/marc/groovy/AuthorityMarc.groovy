@@ -12,8 +12,6 @@ url = getAuthorityUrl "856u"
 
 id_authority = getId001()
 
-subjectKeywords_search_txt_mv = getFields "100abcd:400abcd:500abcd"
-people_search_txt_mv = getFields "100abcd:400abcd:500abcd"
 subject_facet_str_mv = getFields "100abcd"
 
 short_note_cs_display = translate("auth_short_note_cs.map", getId001(), null)
