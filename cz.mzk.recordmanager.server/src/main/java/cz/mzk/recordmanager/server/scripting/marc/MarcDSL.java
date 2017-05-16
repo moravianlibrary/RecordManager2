@@ -603,13 +603,6 @@ public class MarcDSL extends BaseDSL {
 					record.getFields(fieldTag, " ", subFields.toCharArray()).stream()
 							.forEach(s -> result.add(getVizFieldCode(split[0], fieldTag, s)));
 					break;
-				case Constants.PREFIX_PSH:
-					for (DataField df : record.getDataFields(fieldTag)) {
-						if (df.getSubfield('a') != null	&& df.getSubfield('2') != null
-								&& df.getSubfield('2').getData().equals(Constants.PREFIX_PSH)) {
-							result.add(getVizFieldCode(split[0], fieldTag, df.getSubfield('a').getData()));
-						}
-					}
 				case Constants.PREFIX_MESH:
 					for (DataField df : record.getDataFields(fieldTag)) {
 						if (df.getSubfield('a') != null	&& df.getSubfield('2') != null
