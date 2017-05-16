@@ -1,8 +1,11 @@
 package cz.mzk.recordmanager.server.index.enrich.viz;
 
 import java.io.ByteArrayInputStream;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
@@ -59,10 +62,10 @@ public abstract class AbstractAuthorityVizFields extends AbstractVizFields {
 	}
 
 	@Override
-	protected String getEnrichingValues(String key, String enrichingField) {
+	protected List<String> getEnrichingValues(String key, String enrichingField) {
 		Map<String, String> cache = cacheMap.get(enrichingField);
 		if (cache.containsKey(key)) {
-			return cache.get(key);
+			return new ArrayList<>(Arrays.asList(cache.get(key)));
 		} else {
 			HarvestedRecord hr = hrdao.findByHarvestConfAndRaw001Id(400L, key);
 			if (hr != null) {
@@ -71,7 +74,7 @@ public abstract class AbstractAuthorityVizFields extends AbstractVizFields {
 				String value = mr.getField(enrichingField, 'a', 'b', 'c', 'd');
 				if (value != null && !value.isEmpty()) {
 					cache.put(key, value);
-					return value;
+					return new ArrayList<>(Arrays.asList(value));
 				}
 			}
 		}

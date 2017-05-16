@@ -1,59 +1,33 @@
 package cz.mzk.recordmanager.server.index.enrich.viz;
 
-import java.io.ByteArrayInputStream;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 import java.util.regex.Pattern;
 
-import org.apache.commons.collections4.map.LRUMap;
-import org.marc4j.marc.DataField;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import cz.mzk.recordmanager.server.marc.MarcRecord;
-import cz.mzk.recordmanager.server.marc.MarcXmlParser;
-import cz.mzk.recordmanager.server.model.HarvestedRecord;
-import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordDAO;
+import cz.mzk.recordmanager.server.scripting.Mapping;
+import cz.mzk.recordmanager.server.scripting.MappingResolver;
 
-public abstract class AbstractPshVizFields extends AbstractVizFields {
-
-	@Autowired
-	private MarcXmlParser marcXmlParser;
-
-	@Autowired
-	private HarvestedRecordDAO hrdao;
+public abstract class AbstractPshVizFields extends AbstractVizFields implements
+		InitializingBean {
 
 	protected static final Pattern SPLITTER = Pattern.compile("\\|");
 
-	private static final int LRU_CACHE_SIZE_FIELD_450 = 10000;
+	@Autowired
+	private MappingResolver propertyResolver;
 
-	private final Map<String, String> field450Cache = Collections
-			.synchronizedMap(new LRUMap<>(LRU_CACHE_SIZE_FIELD_450));
+	private static Mapping mapping = null;
 
-	private static Map<String, Map<String, String>> cacheMap = new HashMap<>();
-	{
-		cacheMap.put("450", field450Cache);
+	private static final String PSH_MAP = "tezaurus_psh.map";
+
+	@Override
+	protected List<String> getEnrichingValues(String key, String enrichingField) {
+		return mapping.get(key);
 	}
 
 	@Override
-	protected String getEnrichingValues(String key, String enrichingField) {
-		Map<String, String> cache = cacheMap.get(enrichingField);
-		if (cache.containsKey(key)) {
-			return cache.get(key);
-		} else {
-			HarvestedRecord hr = hrdao.findByHarvestConfAndTezaurus(351L, key);
-			if (hr != null) {
-				MarcRecord mr = marcXmlParser
-						.parseRecord(new ByteArrayInputStream(hr.getRawRecord()));
-				for (DataField df : mr.getDataFields(enrichingField)) {
-					if (df.getSubfield('a') != null) {
-						cache.put(key, df.getSubfield('a').getData());
-						return df.getSubfield('a').getData();
-					}
-				}
-			}
-		}
-		return null;
+	public void afterPropertiesSet() throws Exception {
+		mapping = propertyResolver.resolve(PSH_MAP);
 	}
-
 }
