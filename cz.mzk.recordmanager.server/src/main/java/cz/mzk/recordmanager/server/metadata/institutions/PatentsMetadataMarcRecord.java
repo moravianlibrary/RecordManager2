@@ -1,7 +1,11 @@
 package cz.mzk.recordmanager.server.metadata.institutions;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.regex.Pattern;
+
+import org.marc4j.marc.DataField;
 
 import cz.mzk.recordmanager.server.marc.MarcRecord;
 import cz.mzk.recordmanager.server.metadata.CitationRecordType;
@@ -12,6 +16,8 @@ import cz.mzk.recordmanager.server.util.SolrUtils;
 
 public class PatentsMetadataMarcRecord extends MetadataMarcRecord{
 
+	private Pattern IPC = Pattern.compile("MPT|IPC", Pattern.CASE_INSENSITIVE);
+	
 	public PatentsMetadataMarcRecord(MarcRecord underlayingMarc) {
 		super(underlayingMarc);
 	}
@@ -46,5 +52,19 @@ public class PatentsMetadataMarcRecord extends MetadataMarcRecord{
 	public CitationRecordType getCitationFormat() {
 		return CitationRecordType.PATENT;
 	}
-	
+
+	@Override
+	public List<String> getInternationalPatentClassfication() {
+		List<String> results = new ArrayList<>();
+		for (DataField df : underlayingMarc.getDataFields("024")) {
+			if (df.getSubfield('2') != null
+					&& IPC.matcher(df.getSubfield('2').getData()).matches()) {
+				if (df.getSubfield('a') != null) {
+					results.add(df.getSubfield('a').getData());
+				}
+			}
+		}
+		return results;
+	}
+
 }

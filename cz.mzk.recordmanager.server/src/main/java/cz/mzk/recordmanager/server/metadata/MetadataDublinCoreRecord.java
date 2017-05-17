@@ -556,4 +556,10 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 		return null;
 	}
 
+	@Override
+	public List<String> getInternationalPatentClassfication() {
+		// implemented in institution specific classes
+		return null;
+	}
+
 }
