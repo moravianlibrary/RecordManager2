@@ -213,4 +213,6 @@ public interface MetadataRecord {
 
 	public TezaurusKey getTezaurusKey();
 
+	public Boolean getMetaproxyBool();
+
 }

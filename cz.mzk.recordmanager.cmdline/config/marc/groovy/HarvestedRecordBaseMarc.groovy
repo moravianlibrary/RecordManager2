@@ -33,3 +33,5 @@ conspectus_str_mv = getConspectus();
 link773_str = get773link();
 f773_display = get773display();
 id001_str = getId001();
+
+metaproxy_boolean = getMetaproxyBool()

@@ -601,7 +601,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 			if(data.matches(".*CD-R.*") && !data.matches(".*CD-ROM.*")) return HarvestedRecordFormatEnum.AUDIO_CD;
 		}
 		if(f300.matches("(?i).*zvukov([aáeé]|ych|ých)\\sdes(ka|ky|ek).*") && f300.matches("(?i).*(digital|12\\s*cm).*")) return HarvestedRecordFormatEnum.AUDIO_CD;
-		
+	
 		// AUDIO_LP
 		if(f300.matches("(?i).*gramofonov([aáeé]|ych|ých)\\sdes(ka|ky|ek).*")) return HarvestedRecordFormatEnum.AUDIO_LP;
 		if(f300.matches("(?i).*zvukov([aáeé]|ych|ých)\\sdes(ka|ky|ek).*") && f300.matches("(?i).*analog.*")) return HarvestedRecordFormatEnum.AUDIO_LP;
@@ -1301,6 +1301,11 @@ public class MetadataMarcRecord implements MetadataRecord {
 	public TezaurusKey getTezaurusKey() {
 		// implemented in institution specific classes
 		return null;
+	}
+
+	@Override
+	public Boolean getMetaproxyBool() {
+		return true;
 	}
 
 }

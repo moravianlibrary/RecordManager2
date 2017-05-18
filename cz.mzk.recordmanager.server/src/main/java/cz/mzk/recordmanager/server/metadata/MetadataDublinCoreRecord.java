@@ -569,4 +569,10 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 		return null;
 	}
 
+	@Override
+	public Boolean getMetaproxyBool() {
+		// Nothing to return
+		return null;
+	}
+
 }

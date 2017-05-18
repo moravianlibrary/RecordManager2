@@ -123,5 +123,10 @@ public class ZakonyProLidiMetadataMarcRecord extends MetadataMarcRecord{
 	public CitationRecordType getCitationFormat() {
 		return CitationRecordType.LAW;
 	}
-	
+
+	@Override
+	public Boolean getMetaproxyBool() {
+		return false;
+	}
+
 }

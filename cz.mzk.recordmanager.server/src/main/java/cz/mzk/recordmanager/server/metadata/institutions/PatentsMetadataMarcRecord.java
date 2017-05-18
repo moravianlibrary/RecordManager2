@@ -67,4 +67,9 @@ public class PatentsMetadataMarcRecord extends MetadataMarcRecord{
 		return results;
 	}
 
+	@Override
+	public Boolean getMetaproxyBool() {
+		return false;
+	}
+
 }
