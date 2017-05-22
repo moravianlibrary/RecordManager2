@@ -1291,5 +1291,11 @@ public class MetadataMarcRecord implements MetadataRecord {
 		// implemented in institution specific classes
 		return Collections.emptyList();
 	}
+
+	@Override
+	public List<String> getInternationalPatentClassfication() {
+		// implemented in institution specific classes
+		return null;
+	}
 	
 }

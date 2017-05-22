@@ -772,4 +772,8 @@ public class MarcDSL extends BaseDSL {
     	return new ArrayList<>(results);
     }
     
+    public List<String> getInternationalPatentClassfication() {
+    	return metadataRecord.getInternationalPatentClassfication();
+    }
+    
 }
