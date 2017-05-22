@@ -18,4 +18,9 @@ public class SfxMetadataMarcRecord extends MetadataMarcRecord{
 		return SolrUtils.createHierarchicFacetValues(Constants.DOCUMENT_AVAILABILITY_ONLINE, Constants.DOCUMENT_AVAILABILITY_UNKNOWN);
 	}
 
+	@Override
+	public Boolean getMetaproxyBool() {
+		return false;
+	}
+
 }
