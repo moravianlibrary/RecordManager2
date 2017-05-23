@@ -4,6 +4,8 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 import cz.mzk.recordmanager.server.dc.DublinCoreParser;
@@ -14,6 +16,8 @@ import cz.mzk.recordmanager.server.metadata.institutions.AuthMetadataMarcRecord;
 import cz.mzk.recordmanager.server.metadata.institutions.BmcMetadataMarcRecord;
 import cz.mzk.recordmanager.server.metadata.institutions.Kram3NkpMetadataDublinCoreRecord;
 import cz.mzk.recordmanager.server.metadata.institutions.KramDefaultMetadataDublinCoreRecord;
+import cz.mzk.recordmanager.server.metadata.institutions.KramMzkMetadataDublinCoreRecord;
+import cz.mzk.recordmanager.server.metadata.institutions.KramNkpMetadataDublinCoreRecord;
 import cz.mzk.recordmanager.server.metadata.institutions.ManuscriptoriumMetadataDublinCoreRecord;
 import cz.mzk.recordmanager.server.metadata.institutions.MkpEbooksMetadataMarcRecord;
 import cz.mzk.recordmanager.server.metadata.institutions.MzkMetadataMarcRecord;
@@ -46,7 +50,10 @@ public class MetadataRecordFactory {
 	
 	@Autowired
 	private DublinCoreParser dcParser;
-	
+
+	@Autowired
+	private ApplicationContext appCtx;
+
 	public MetadataRecord getMetadataRecord(HarvestedRecord record) {
 		if (record == null) {
 			return null;
@@ -122,9 +129,13 @@ public class MetadataRecordFactory {
 		String prefix = getPrefix(configuration);
 		switch(prefix){
 		case Constants.PREFIX_KRAM_MZK:
+			return new KramMzkMetadataDublinCoreRecord(dcRec);
+		case Constants.PREFIX_KRAM_NKP:
+			MetadataRecord mr = new KramNkpMetadataDublinCoreRecord(dcRec);
+			init(mr);
+			return mr;
 		case Constants.PREFIX_KRAM_NTK:
 		case Constants.PREFIX_KRAM_KNAV:
-		case Constants.PREFIX_KRAM_NKP:
 			return new KramDefaultMetadataDublinCoreRecord(dcRec);
 		case Constants.PREFIX_KRAM3_NKP:
 			return new Kram3NkpMetadataDublinCoreRecord(dcRec);
@@ -156,5 +167,11 @@ public class MetadataRecordFactory {
 			return prefix == null ? "" : prefix;
 		}
 		return "";
+	}
+
+	private void init(Object metadataRecord) {
+		AutowireCapableBeanFactory factory = appCtx.getAutowireCapableBeanFactory();
+		factory.autowireBean(metadataRecord);
+		factory.initializeBean(metadataRecord, "metadataRecord");
 	}
 }

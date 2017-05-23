@@ -102,10 +102,5 @@ public class SolrFieldConstants {
 	public static final String SUBJECT_AUTHORITY_DUMMY_FIELD = "_hidden_subject_dummy_field";
 	
 	public static final String GENRE_AUTHORITY_DUMMY_FIELD = "_hidden_genre_dummy_field";
-	
-	/**
-	 * dummy field for passing kramerius policy, removed in UrlEnricher
-	 */
-	public static final String KRAMERIUS_DUMMY_RIGTHS = "kramerius_dummy_rights";
 
 }
