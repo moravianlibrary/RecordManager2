@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import cz.mzk.recordmanager.server.dc.DublinCoreRecord;
 import cz.mzk.recordmanager.server.metadata.MetadataDublinCoreRecord;
+import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.model.KrameriusConfiguration;
 import cz.mzk.recordmanager.server.oai.dao.KrameriusConfigurationDAO;
 import cz.mzk.recordmanager.server.util.Constants;
@@ -22,13 +23,17 @@ public class KramDefaultMetadataDublinCoreRecord extends
 		super(dcRecord);
 	}
 
+	public KramDefaultMetadataDublinCoreRecord(DublinCoreRecord dcRecord,
+			HarvestedRecord hr) {
+		super(dcRecord, hr);
+	}
+
 	@Override
 	public List<String> getUrls() {
 		return super.getUrls();
 	}
 
 	public List<String> getUrlsByImportConfId(Long importConfId) {
-		System.out.println(krameriusConfiguationDao);
 		String kramUrl = null;
 		String kramUrlBase = null;
 		KrameriusConfiguration kramConf = krameriusConfiguationDao
@@ -42,7 +47,8 @@ public class KramDefaultMetadataDublinCoreRecord extends
 		String policy = dcRecord.getRights().stream()
 				.anyMatch(s -> s.matches(".*public.*")) ? Constants.DOCUMENT_AVAILABILITY_ONLINE
 				: Constants.DOCUMENT_AVAILABILITY_PROTECTED;
-		kramUrl = policy + "|" + kramUrlBase + getUniqueId() + "|";
+		kramUrl = policy + "|" + kramUrlBase
+				+ harvestedRecord.getUniqueId().getRecordId() + "|";
 		return Collections.singletonList(kramUrl);
 
 	}

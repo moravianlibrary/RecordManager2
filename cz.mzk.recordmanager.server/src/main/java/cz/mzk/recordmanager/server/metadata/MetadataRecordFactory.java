@@ -54,11 +54,14 @@ public class MetadataRecordFactory {
 	@Autowired
 	private ApplicationContext appCtx;
 
+	protected HarvestedRecord hr;
+	
 	public MetadataRecord getMetadataRecord(HarvestedRecord record) {
 		if (record == null) {
 			return null;
 		}
 
+		this.hr = record;
 		ImportConfiguration configuration = record.getHarvestedFrom();
 		InputStream is = new ByteArrayInputStream(record.getRawRecord());
 		
@@ -129,14 +132,14 @@ public class MetadataRecordFactory {
 		String prefix = getPrefix(configuration);
 		switch(prefix){
 		case Constants.PREFIX_KRAM_MZK:
-			return new KramMzkMetadataDublinCoreRecord(dcRec);
+			return new KramMzkMetadataDublinCoreRecord(dcRec, hr);
 		case Constants.PREFIX_KRAM_NKP:
-			MetadataRecord mr = new KramNkpMetadataDublinCoreRecord(dcRec);
+			MetadataRecord mr = new KramNkpMetadataDublinCoreRecord(dcRec, hr);
 			init(mr);
 			return mr;
 		case Constants.PREFIX_KRAM_NTK:
 		case Constants.PREFIX_KRAM_KNAV:
-			return new KramDefaultMetadataDublinCoreRecord(dcRec);
+			return new KramDefaultMetadataDublinCoreRecord(dcRec, hr);
 		case Constants.PREFIX_KRAM3_NKP:
 			return new Kram3NkpMetadataDublinCoreRecord(dcRec);
 		case Constants.PREFIX_MANUSCRIPTORIUM:

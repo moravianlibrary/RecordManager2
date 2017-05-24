@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import cz.mzk.recordmanager.server.dc.DublinCoreRecord;
+import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.model.ImportConfiguration;
 import cz.mzk.recordmanager.server.oai.dao.ImportConfigurationDAO;
 import cz.mzk.recordmanager.server.util.Constants;
@@ -18,6 +19,11 @@ public class KramNkpMetadataDublinCoreRecord extends
 
 	public KramNkpMetadataDublinCoreRecord(DublinCoreRecord dcRecord) {
 		super(dcRecord);
+	}
+
+	public KramNkpMetadataDublinCoreRecord(DublinCoreRecord dcRecord,
+			HarvestedRecord hr) {
+		super(dcRecord, hr);
 	}
 
 	@Override
