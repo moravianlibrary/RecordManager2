@@ -13,3 +13,14 @@ GROUP BY sk.skat_record_id
 HAVING bool_or(next_dedup_flag) IS TRUE AND bool_or(sk.manually_merged) IS NOT TRUE;
 
 CREATE INDEX tmp_skat_keys_rest_idx ON tmp_skat_keys_rest(row_id);
+DROP INDEX cluster_id_harvested_record_idx;
+DROP INDEX harvested_record_dedup_keys_hash_idx;
+DROP INDEX harvested_record_dedup_record_id_updated_idx;
+DROP INDEX harvested_record_import_conf_001_id_idx;
+DROP INDEX harvested_record_import_conf_id;
+-- DROP INDEX harvested_record_import_conf_id_record_id_key;
+DROP INDEX harvested_record_next_dedup_flag;
+DROP INDEX harvested_record_raw_001_id_idx;
+DROP INDEX harvested_record_source_info_idx;
+DROP INDEX harvested_record_tezaurus_idx;
+DROP INDEX harvested_record_updated_index;

@@ -27,3 +27,14 @@ HAVING COUNT(DISTINCT hr.id) > 1
   AND bool_or(next_dedup_flag) IS TRUE;
 
 CREATE INDEX tmp_auth_keys_idx ON tmp_auth_keys(row_id);
+
+DROP INDEX cluster_id_harvested_record_idx;
+DROP INDEX harvested_record_dedup_keys_hash_idx;
+DROP INDEX harvested_record_dedup_record_id_updated_idx;
+DROP INDEX harvested_record_import_conf_001_id_idx;
+DROP INDEX harvested_record_import_conf_id;
+DROP INDEX harvested_record_next_dedup_flag;
+DROP INDEX harvested_record_raw_001_id_idx;
+DROP INDEX harvested_record_source_info_idx;
+DROP INDEX harvested_record_tezaurus_idx;
+DROP INDEX harvested_record_updated_index;

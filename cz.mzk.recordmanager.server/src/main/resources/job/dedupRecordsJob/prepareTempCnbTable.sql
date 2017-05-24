@@ -1,3 +1,13 @@
+CREATE INDEX cluster_id_harvested_record_idx ON harvested_record USING btree (cluster_id);
+CREATE INDEX harvested_record_dedup_keys_hash_idx ON harvested_record USING btree (dedup_keys_hash);
+CREATE INDEX harvested_record_dedup_record_id_updated_idx ON harvested_record USING btree (dedup_record_id, updated);
+CREATE INDEX harvested_record_import_conf_001_id_idx ON harvested_record USING btree (import_conf_id, raw_001_id);
+CREATE INDEX harvested_record_import_conf_id ON harvested_record USING btree (import_conf_id);
+CREATE INDEX harvested_record_next_dedup_flag ON harvested_record USING btree (next_dedup_flag);
+CREATE INDEX harvested_record_raw_001_id_idx ON harvested_record USING btree (raw_001_id);
+CREATE INDEX harvested_record_source_info_idx ON harvested_record USING btree (source_info);
+CREATE INDEX harvested_record_updated_index ON harvested_record USING btree (updated);
+
 DROP TABLE IF EXISTS tmp_simmilar_books_cnb;
 
 CREATE TABLE tmp_simmilar_books_cnb AS
