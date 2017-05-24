@@ -53,15 +53,12 @@ public class MetadataRecordFactory {
 
 	@Autowired
 	private ApplicationContext appCtx;
-
-	protected HarvestedRecord hr;
 	
 	public MetadataRecord getMetadataRecord(HarvestedRecord record) {
 		if (record == null) {
 			return null;
 		}
 
-		this.hr = record;
 		ImportConfiguration configuration = record.getHarvestedFrom();
 		InputStream is = new ByteArrayInputStream(record.getRawRecord());
 		
@@ -79,7 +76,7 @@ public class MetadataRecordFactory {
         if (Constants.METADATA_FORMAT_DUBLIN_CORE.equals(recordFormat)
         		|| Constants.METADATA_FORMAT_ESE.equals(recordFormat)) {
         	DublinCoreRecord dcRec = dcParser.parseRecord(is);
-        	return getMetadataRecord(dcRec, configuration);
+			return getMetadataRecord(record, dcRec, configuration);
         }
         
         return null;
@@ -128,7 +125,7 @@ public class MetadataRecordFactory {
 		}
 	}
 	
-	public MetadataRecord getMetadataRecord(DublinCoreRecord dcRec, ImportConfiguration configuration){
+	public MetadataRecord getMetadataRecord(HarvestedRecord hr, DublinCoreRecord dcRec, ImportConfiguration configuration){
 		String prefix = getPrefix(configuration);
 		switch(prefix){
 		case Constants.PREFIX_KRAM_MZK:
