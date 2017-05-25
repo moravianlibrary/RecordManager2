@@ -9,14 +9,16 @@ import cz.mzk.recordmanager.server.model.ImportConfiguration;
 
 public interface HarvestedRecordDAO extends DomainDAO<Long, HarvestedRecord> {
 
+	public List<HarvestedRecord> findByIdsWithDedupRecord(List<Long> ids);
+
 	HarvestedRecord findByIdAndHarvestConfiguration(String recordId, ImportConfiguration configuration);
 
 	HarvestedRecord findByIdAndHarvestConfiguration(String recordId, Long configurationId);
 
 	HarvestedRecord findBySolrId(String solrId);
-	
+
 	HarvestedRecord findByHarvestConfAndRaw001Id(Long ConfigurationId, String id);
-	
+
 	HarvestedRecord findByHarvestConfAndTezaurus(Long configurationId, String tezaurus);
 
 	HarvestedRecord get(HarvestedRecordUniqueId uniqueId);
