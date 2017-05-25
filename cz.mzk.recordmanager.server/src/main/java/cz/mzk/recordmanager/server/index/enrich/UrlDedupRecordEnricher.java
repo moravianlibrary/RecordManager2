@@ -6,6 +6,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.solr.common.SolrInputDocument;
 import org.springframework.stereotype.Component;
@@ -24,6 +26,8 @@ public class UrlDedupRecordEnricher implements DedupRecordEnricher {
 	private static final String KRAMERIUS_URL = "http://kramerius";
 	private static final String KRAMERIUS_HANDLE = "handle/";
 	private static final String KRAMERIUS_IJSP = "i.jsp?pid=";
+	private static final Pattern KRAM_MZK_PATTERN = Pattern.compile("http://kramerius.mzk.cz.*(uuid:.*)");
+	private static final String DIGITALNIKNIHOVNA = "http://www.digitalniknihovna.cz/mzk/uuid/";
 	
 	@Override
 	public void enrich(DedupRecord record, SolrInputDocument mergedDocument,
@@ -118,6 +122,10 @@ public class UrlDedupRecordEnricher implements DedupRecordEnricher {
 	 * @return
 	 */
 	private String krameriusUrlParser(String url){
+		Matcher matcher;
+		if ((matcher = KRAM_MZK_PATTERN.matcher(url)).matches()) {
+			return DIGITALNIKNIHOVNA + matcher.group(1);
+		}
 		if(url.contains(KRAMERIUS_URL)){
 			return url.replace(KRAMERIUS_HANDLE, KRAMERIUS_IJSP);
 		}
