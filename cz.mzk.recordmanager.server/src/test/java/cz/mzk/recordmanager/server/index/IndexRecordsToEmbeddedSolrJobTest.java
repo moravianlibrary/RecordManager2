@@ -134,7 +134,7 @@ public class IndexRecordsToEmbeddedSolrJobTest extends AbstractSolrTest {
 			SolrDocument document = docResponse.getResults().get(0);
 			Assert.assertTrue(
 					document.getFieldValues(SolrFieldConstants.URL).stream()
-						.anyMatch(url -> url.equals("KRAM-MZK|online|http://kramerius.mzk.cz/search/i.jsp?pid=UUID:039764f8-d6db-11e0-b2cd-0050569d679d|"))
+						.anyMatch(url -> url.equals("kram-mzk|online|http://www.digitalniknihovna.cz/mzk/uuid/UUID:039764f8-d6db-11e0-b2cd-0050569d679d|"))
 			);
 		}
 
