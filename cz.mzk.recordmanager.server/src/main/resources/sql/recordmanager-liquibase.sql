@@ -1013,3 +1013,20 @@ UPDATE oai_harvest_conf SET set_spec='cpk' WHERE import_conf_id=302;
 
 --changeset tomascejpek:51 context:cpk
 UPDATE import_conf SET filtering_enabled=true WHERE id=314;
+
+--changeset tomascejpek:52
+CREATE TABLE tezaurus_record (
+  id                   DECIMAL(10) PRIMARY KEY,
+  import_conf_id       DECIMAL(10),
+  record_id            VARCHAR(128),
+  source_field         VARCHAR(15),
+  name                 VARCHAR(255),
+  raw_record           BYTEA,
+  FOREIGN KEY (import_conf_id) REFERENCES import_conf(id)
+);
+CREATE INDEX tezaurus_id_idx ON tezaurus_record(import_conf_id,record_id);
+CREATE INDEX tezaurus_name_idx ON tezaurus_record(import_conf_id,source_field,name);
+
+--changeset tomascejpek:53 context:cpk
+INSERT INTO import_conf (id,library_id,contact_person_id,id_prefix,base_weight,cluster_id_enabled,filtering_enabled,interception_enabled,is_library,harvest_frequency,mapping_script,generate_dedup_keys) VALUES (352,101,200,'mesh',0,false,false,false,false,'U',null,false);
+INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (352,NULL,NULL,'marc21',NULL);

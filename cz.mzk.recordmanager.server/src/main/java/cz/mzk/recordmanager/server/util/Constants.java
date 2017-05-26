@@ -25,6 +25,7 @@ public class Constants {
 	public static final String JOB_ID_IMPORT_OAI					= "importOaiRecordsJob";
 	public static final String JOB_ID_IMPORT_COSMOTRON_996			= "importCosmotron996RecordsJob";
 	public static final String JOB_ID_IMPORT_INSPIRATION			= "importInspirationJob";
+	public static final String JOB_ID_IMPORT_TEZAURUS				= "importTezaurusRecordsJob";
 	public static final String JOB_ID_DELETE_INSPIRATION			= "deleteInspirationJob";
 	public static final String JOB_ID_REGEN_DEDUP_KEYS				= "regenerateDedupKeysJob";
 	public static final String JOB_ID_REGEN_MISSING_DEDUP_KEYS		= "regenerateMissingDedupKeysJob";
@@ -82,6 +83,7 @@ public class Constants {
 	public static final String PREFIX_KRAM_NTK			= "kram-ntk";
 	public static final String PREFIX_KRAM3_NKP			= "kram3-nkp";
 	public static final String PREFIX_MANUSCRIPTORIUM	= "manuscript";
+	public static final String PREFIX_MESH				= "mesh";
 	public static final String PREFIX_MKP_EBOOKS		= "mkpe";
 	public static final String PREFIX_MKUO				= "mkuo";
 	public static final String PREFIX_MZK				= "mzk";

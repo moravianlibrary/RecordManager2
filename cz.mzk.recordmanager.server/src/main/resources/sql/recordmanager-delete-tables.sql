@@ -25,6 +25,7 @@ DELETE FROM antikvariaty_catids;
 DELETE FROM fulltext_kramerius;
 DELETE FROM inspiration;
 DELETE FROM harvested_record;
+DELETE FROM tezaurus_record;
 DELETE FROM import_conf;
 DELETE FROM contact_person;
 DELETE FROM library;

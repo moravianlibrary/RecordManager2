@@ -27,6 +27,7 @@ import cz.mzk.recordmanager.server.scripting.BaseDSL;
 import cz.mzk.recordmanager.server.scripting.MappingResolver;
 import cz.mzk.recordmanager.server.scripting.StopWordsResolver;
 import cz.mzk.recordmanager.server.scripting.function.RecordFunction;
+import cz.mzk.recordmanager.server.util.Constants;
 import cz.mzk.recordmanager.server.util.ISSNUtils;
 import cz.mzk.recordmanager.server.util.SolrUtils;
 
@@ -585,22 +586,44 @@ public class MarcDSL extends BaseDSL {
     	return result;
     }
     
-    public Set<String> getAuthorityIds(String tags){
-    	Set<String> result = new HashSet<>();
-		for (String tag : tags.split(":")) {
-			Matcher matcher = FIELD_PATTERN.matcher(tag);
-			if (!matcher.matches()) {
-				throw new IllegalArgumentException("Tag can't be parsed: "
-						+ tag);
+	public Set<String> getAuthorityIds(String tags) {
+		Set<String> result = new HashSet<>();
+		for (String tag : tags.split("\\|")) {
+			String[] split = tag.split("\\.");
+			for (String value : split[1].split(":")) {
+				Matcher matcher = FIELD_PATTERN.matcher(value);
+				if (!matcher.matches()) {
+					throw new IllegalArgumentException("Tag can't be parsed: "
+							+ value);
+				}
+				String fieldTag = matcher.group(1);
+				String subFields = matcher.group(2);
+				switch (split[0]) {
+				case Constants.PREFIX_AUTH:
+					record.getFields(fieldTag, " ", subFields.toCharArray()).stream()
+							.forEach(s -> result.add(getVizFieldCode(split[0], fieldTag, s)));
+					break;
+				case Constants.PREFIX_MESH:
+					for (DataField df : record.getDataFields(fieldTag)) {
+						if (df.getSubfield('a') != null	&& df.getSubfield('2') != null
+								&& df.getSubfield('2').getData().equals("czmesh")) {
+							result.add(getVizFieldCode(split[0], fieldTag, df.getSubfield('a').getData().toLowerCase()));
+						}
+					}
+				default:
+					break;
+				}
+
 			}
-			String fieldTag = matcher.group(1);
-			String subFields = matcher.group(2);
-			record.getFields(fieldTag, " ",	subFields.toCharArray()).stream()
-				.forEach(s -> result.add(fieldTag + ":" + s));
 		}
+
 		return result;
-    }
-    
+	}
+
+	private String getVizFieldCode(String source, String fieldTag, String value) {
+		return source + "|" + fieldTag + "|" + value;
+	}
+
     public List<String> getAuthAuthors(String tag){
     	List<String> result = new ArrayList<>();
     	for(DataField df: record.getDataFields(tag)){
