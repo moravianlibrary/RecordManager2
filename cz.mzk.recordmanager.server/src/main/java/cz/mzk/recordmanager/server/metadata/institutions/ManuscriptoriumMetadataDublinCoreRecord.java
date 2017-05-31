@@ -23,7 +23,7 @@ public class ManuscriptoriumMetadataDublinCoreRecord extends MetadataDublinCoreR
 	public List<String> getUrls() {
 		List<String> urls = super.getUrls();
 		if (urls == null) return null;
-		return urls.stream().map(url -> Constants.DOCUMENT_AVAILABILITY_UNKNOWN + "|" + url).collect(Collectors.toList());
+		return urls.stream().map(url -> Constants.DOCUMENT_AVAILABILITY_ONLINE + "|" + url).collect(Collectors.toList());
 	}
 
 }
