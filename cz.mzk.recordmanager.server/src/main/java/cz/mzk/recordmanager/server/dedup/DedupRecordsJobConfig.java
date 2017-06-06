@@ -4,14 +4,17 @@ import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.Future;
+
 import javax.sql.DataSource;
 
 import org.hibernate.SessionFactory;
+import org.hibernate.exception.LockAcquisitionException;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
@@ -446,9 +449,13 @@ public class DedupRecordsJobConfig {
 		return steps.get("dedupSimpleKeysIsbnStep")
 				.listener(new StepProgressListener())
 				.<List<Long>, List<HarvestedRecord>> chunk(100)
+				.faultTolerant()
+				.retry(LockAcquisitionException.class)
+				.retryLimit(10000)
 				.reader(dedupSimpleKeysIsbnReader(INTEGER_OVERRIDEN_BY_EXPRESSION))
 				.processor(dedupSimpleKeysStepProsessor())
-				.writer(dedupSimpleKeysStepWriter()).build();
+				.writer(dedupSimpleKeysStepWriter())
+				.build();
 	}
 
 	@Bean(name = Constants.JOB_ID_DEDUP + ":dedupSimpleKeysIsbnPartitionedStep")
@@ -696,6 +703,9 @@ public class DedupRecordsJobConfig {
 		return steps.get("dedupTitleAuthStep")
 				.listener(new StepProgressListener())
 				.<List<Long>, List<HarvestedRecord>> chunk(100)
+				.faultTolerant()
+				.retry(LockAcquisitionException.class)
+				.retryLimit(10000)
 				.reader(dedupTitleAuthReader(INTEGER_OVERRIDEN_BY_EXPRESSION))
 				.processor(dedupTitleAuthProcessor())
 				.writer(dedupSimpleKeysStepWriter()).build();
@@ -1323,7 +1333,7 @@ public class DedupRecordsJobConfig {
 		reader.setDataSource(dataSource);
 		if (modulo != null) {
 			Map<String, Object> parameterValues = new HashMap<String, Object>();
-			parameterValues.put("threads", this.partitionThreads );
+			parameterValues.put("threads", this.partitionThreads);
 			parameterValues.put("modulo", modulo);
 			reader.setParameterValues(parameterValues);
 		}
@@ -1382,17 +1392,17 @@ public class DedupRecordsJobConfig {
 	public class ArrayLongMapper implements RowMapper<List<Long>> {
 
 		@Override
-		public List<Long> mapRow(ResultSet arg0, int arg1) throws SQLException {
-			List<Long> hrs = new ArrayList<>();
-
-			String ids = arg0.getString("id_array");
-			for (String idStr : ids.split(",")) {
+		public List<Long> mapRow(ResultSet rs, int rowNum) throws SQLException {
+			String ids = rs.getString("id_array");
+			String[] idStrs = ids.split(",");
+			List<Long> hrs = new ArrayList<>(idStrs.length);
+			for (String idStr : idStrs) {
 				Long hrId = Long.valueOf(idStr);
 				hrs.add(hrId);
 			}
-
 			return hrs;
 		}
+
 	}
 
 }
