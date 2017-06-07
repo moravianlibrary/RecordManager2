@@ -51,6 +51,10 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 	public HarvestedRecord parse(HarvestedRecord record,
 			MetadataRecord metadataRecord) throws DedupKeyParserException {
 
+		record.setShouldBeProcessed(metadataRecord.matchFilter());
+		if (!record.getHarvestedFrom().isGenerateDedupKeys()) {
+			return record;
+		}
 		boolean dedupKeysChanged = false;
 		boolean oaiTimestampChanged = false;
 		
@@ -146,7 +150,6 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 		} 
 		
 		record.setDedupKeysHash(computedHash);
-		record.setShouldBeProcessed(metadataRecord.matchFilter());
 		
 		
 		if (record.getOaiTimestamp() != null && record.getTemporalOldOaiTimestamp() != null

@@ -4,6 +4,7 @@ import java.io.InputStream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.Assert;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import com.google.common.io.ByteStreams;
@@ -12,6 +13,8 @@ import cz.mzk.recordmanager.server.AbstractTest;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecord.HarvestedRecordUniqueId;
 import cz.mzk.recordmanager.server.model.HarvestedRecordFormat.HarvestedRecordFormatEnum;
+import cz.mzk.recordmanager.server.model.ImportConfiguration;
+import cz.mzk.recordmanager.server.oai.dao.ImportConfigurationDAO;
 
 public class MarcXmlDedupKeyParserTest extends AbstractTest {
 	
@@ -26,12 +29,22 @@ public class MarcXmlDedupKeyParserTest extends AbstractTest {
 	
 	@Autowired
 	private MarcXmlDedupKeyParser parser;
-	
+
+	@Autowired
+	private ImportConfigurationDAO importConfDao;
+
+	@BeforeMethod
+	public void initDb() throws Exception {
+		dbUnitHelper.init("dbunit/ImportRecords.xml");
+	}
+
 	@Test
 	public void parseCorrectRecord() throws Exception {
 		InputStream is = this.getClass().getResourceAsStream("/records/marcxml/MZK01-001439241.xml");
-		HarvestedRecordUniqueId id = new HarvestedRecordUniqueId(1L, "1");
-		HarvestedRecord record = new HarvestedRecord(id );
+		ImportConfiguration ic = importConfDao.get(300L);
+		HarvestedRecordUniqueId id = new HarvestedRecordUniqueId(ic, "1");
+		HarvestedRecord record = new HarvestedRecord(id);
+		record.setHarvestedFrom(ic);
 		record.setFormat("marc21-xml");
 		byte[] rawRecord = ByteStreams.toByteArray(is);
 		record.setRawRecord(rawRecord);
