@@ -2,6 +2,7 @@ package cz.mzk.recordmanager.server.scripting.marc.function;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -35,6 +36,15 @@ public class AdresarKnihovenMarcFunctions implements MarcRecordFunctions {
 	private final static Pattern FIELD_PATTERN = Pattern.compile("([a-zA-Z0-9]{3})([a-zA-Z0-9]*)");
 	private final static Pattern GPS_PATTERN = Pattern.compile("(\\d+)°(\\d+)'([\\d\\.]+)\"([NSEW])");
 	private final static String MAP_ADRESAR_HOURS = "adresar_hours.map";
+	private static final String MAP_LIBRARIES_RELEVANCE = "libraries_relevance.map";
+
+	private static final HashMap<String, Long> relevanceBySigla = new HashMap<>();
+	{
+		relevanceBySigla.put("ABA001", 14L);
+		relevanceBySigla.put("ABA008", 12L);
+		relevanceBySigla.put("ABA012", 12L);
+		relevanceBySigla.put("ABA013", 12L);
+	}
 	
 	public String getFirstFieldForAdresar(MarcFunctionContext ctx, String tag) {
 		Matcher matcher = FIELD_PATTERN.matcher(tag);
@@ -241,6 +251,39 @@ public class AdresarKnihovenMarcFunctions implements MarcRecordFunctions {
 			if (latitude != null && longitude != null) return latitude + " " + longitude;
 		}
 		return null;
+	}
+
+	public Long getLibraryRelevance(MarcFunctionContext ctx) {
+		for (DataField df : ctx.record().getDataFields("SGL")) {
+			if (df.getSubfield('a') != null
+					&& relevanceBySigla.containsKey(df.getSubfield('a')
+							.getData())) {
+				return relevanceBySigla.get(df.getSubfield('a').getData());
+			}
+		}
+
+		try {
+			for (DataField df : ctx.record().getDataFields("TYP")) {
+				List<String> results = null;
+				if (df.getSubfield('b') != null
+						&& (results = propertyResolver.resolve(
+								MAP_LIBRARIES_RELEVANCE).get(
+								df.getSubfield('b').getData())) != null) {
+					Long maxRelevance = 0L;
+					if (!results.isEmpty()) {
+						for (String rel : results) {
+							Long longRel = Long.valueOf(rel);
+							if (longRel > maxRelevance)
+								maxRelevance = longRel;
+						}
+						return maxRelevance;
+					}
+				}
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return 0L;
 	}
 
 }
