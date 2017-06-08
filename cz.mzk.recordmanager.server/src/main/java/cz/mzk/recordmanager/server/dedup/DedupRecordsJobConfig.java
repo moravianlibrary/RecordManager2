@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -206,7 +205,7 @@ public class DedupRecordsJobConfig {
 			@Qualifier(Constants.JOB_ID_DEDUP + ":prepareTempUuidClustersTableStep") Step prepareTempUuidClustersTableStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":dedupUuidClustersStep") Step dedupUuidClustersStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":prepareTempSkatKeysRestStep") Step prepareTempSkatKeysRestStep,
-			@Qualifier(Constants.JOB_ID_DEDUP + ":dedupSimpleKeysSkatRestStep") Step dedupSimpleKeysSkatRestStep,
+			@Qualifier(Constants.JOB_ID_DEDUP + ":dedupSimpleKeysSkatRestPartitionedStep") Step dedupSimpleKeysSkatRestStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":prepareDedupSimmilarityTableStep") Step prepareDedupSimmilarityTableStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":prepareDedupSimmilarTitlesStep") Step prepareDedupSimmilarTitles,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":processSimilaritesResultsStep") Step processSimilaritesResultsStep,
@@ -859,7 +858,7 @@ public class DedupRecordsJobConfig {
 	public Tasklet prepareTempSkatKeysRestTasklet() {
 		return new SqlCommandTasklet(prepareTempSkatKeysRest);
 	}
-		
+
 	@Bean(name = Constants.JOB_ID_DEDUP + ":prepareTempSkatKeysRestStep")
 	public Step prepareTempSkatKeysRestStep() {
 		return steps.get("prepareTempSkatKeysRestStep")
@@ -867,24 +866,37 @@ public class DedupRecordsJobConfig {
 				.listener(new StepProgressListener())
 				.build();
 	}
-		
+
 	@Bean(name = Constants.JOB_ID_DEDUP + ":dedupSimpleKeysSkatRestStep")
 	public Step dedupSimpleKeysSkatRestStep() throws Exception {
 		return steps.get("dedupSimpleKeysSkatRestStep")
 				.listener(new StepProgressListener())
 				.<List<Long>, List<HarvestedRecord>> chunk(100)
-				.reader(dedupSimpleKeysSkatRestReader())
+				.faultTolerant()
+				.retry(LockAcquisitionException.class)
+				.retryLimit(10000)
+				.reader(dedupSimpleKeysSkatRestReader(INTEGER_OVERRIDEN_BY_EXPRESSION))
 				.processor(dedupSkatKeysProcessor())
 				.writer(dedupSimpleKeysStepWriter())
 				.build();
 	}
-		
+
+	@Bean(name = Constants.JOB_ID_DEDUP + ":dedupSimpleKeysSkatRestPartitionedStep")
+	public Step dedupSimpleKeysSkatRestPartitionedStep() throws Exception {
+		return steps.get("dedupSimpleKeysSkatRestPartitionedStepStep")
+				.partitioner("slave", this.partioner()) //
+				.gridSize(this.partitionThreads)
+				.taskExecutor(this.taskExecutor)
+				.step(dedupSimpleKeysSkatRestStep())
+				.build();
+	}
+
 	@Bean(name = "dedupSimpleKeysSkatRestStep:reader")
 	@StepScope
-	public ItemReader<List<Long>> dedupSimpleKeysSkatRestReader() throws Exception {
+	public ItemReader<List<Long>> dedupSimpleKeysSkatRestReader(@Value("#{stepExecutionContext[modulo]}") Integer modulo) throws Exception {
 		return dedupSimpleKeysReader(TMP_TABLE_SKAT_KEYS_REST, INTEGER_OVERRIDEN_BY_EXPRESSION);
 	}	
-	
+
 	/**
 	 * Prepare title similarities deduplication
 	 */
