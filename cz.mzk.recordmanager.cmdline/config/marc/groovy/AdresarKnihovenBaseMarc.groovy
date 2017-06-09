@@ -59,4 +59,4 @@ type_facet_str_mv = getFieldsForAdresar "TYPb", SubfieldExtractionMethod.SEPARAT
 ils_facet_str = getFirstFieldForAdresar "KNSa"
 
 gps_str = adresarGetGps()
-library_relevance_str = getLibraryRelevance()
+library_relevance_int = getLibraryRelevance()
