@@ -236,6 +236,9 @@ public class DublinCoreDSL extends BaseDSL {
 		return record.getContents();
 	}
 
+	public boolean getIndexWhenMerged() {
+		return dcMetadataRecord.getIndexWhenMerged();
+
 	public List<String> getBarcodes() {
 		return dcMetadataRecord.getBarcodes();
 	}

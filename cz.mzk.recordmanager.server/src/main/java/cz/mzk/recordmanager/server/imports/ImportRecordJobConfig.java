@@ -219,5 +219,30 @@ public class ImportRecordJobConfig {
 	public ItemWriter<List<Record>> importCosmotron996RecordsWriter(@Value("#{jobParameters[" + Constants.JOB_PARAM_CONF_ID + "]}") Long configurationId) {
 		return new ImportCosmotron996RecordsWriter(configurationId);
 	}
+	
+	// import tezaurus
+	@Bean
+	public Job importTezaurusRecordsJob(
+			@Qualifier(Constants.JOB_ID_IMPORT_TEZAURUS +":importRecordsStep") Step importRecordsStep) {
+		return jobs.get(Constants.JOB_ID_IMPORT_TEZAURUS)
+				.validator(new ImportRecordsJobParametersValidator())
+				.listener(JobFailureListener.INSTANCE).flow(importRecordsStep)
+				.end().build();
+	}
+
+	@Bean(name=Constants.JOB_ID_IMPORT_TEZAURUS +":importRecordsStep")
+	public Step importTezaurusRecordsStep() throws Exception {
+		return steps.get(Constants.JOB_ID_IMPORT_TEZAURUS+"importRecordsStep")
+				.<List<Record>, List<Record>> chunk(20)//
+				.reader(importRecordsReader(STRING_OVERRIDEN_BY_EXPRESSION, STRING_OVERRIDEN_BY_EXPRESSION))//
+				.writer(importTezaurusRecordsWriter(LONG_OVERRIDEN_BY_EXPRESSION)) //
+				.build();
+	}
+
+	@Bean(name=Constants.JOB_ID_IMPORT_TEZAURUS +":writer")
+	@StepScope
+	public ItemWriter<List<Record>> importTezaurusRecordsWriter(@Value("#{jobParameters[" + Constants.JOB_PARAM_CONF_ID + "]}") Long configurationId) {
+		return new ImportTezaurusRecordsWriter(configurationId);
+	}
 
 }

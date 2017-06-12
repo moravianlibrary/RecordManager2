@@ -3,9 +3,6 @@ fullrecord = getFullRecord()
 
 local_statuses_facet_str_mv = getStatuses()
 
-_hidden_authority_dummy_field = ""
-kramerius_dummy_rights = getRights()
-
 title = getFirstTitle()
 title_display = getFirstTitle()
 
@@ -23,3 +20,4 @@ url = getUrls();
 barcodes = getBarcodes()
 format_display_mv = getFormat()
 local_institution_facet_str_mv = getInstitutionFacet()
+index_when_merged_boolean = getIndexWhenMerged()

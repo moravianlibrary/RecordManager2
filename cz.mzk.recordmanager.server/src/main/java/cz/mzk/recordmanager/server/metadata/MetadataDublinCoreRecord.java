@@ -15,12 +15,14 @@ import cz.mzk.recordmanager.server.dc.DublinCoreRecord;
 import cz.mzk.recordmanager.server.export.IOFormat;
 import cz.mzk.recordmanager.server.model.Cnb;
 import cz.mzk.recordmanager.server.model.Ean;
+import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecordFormat.HarvestedRecordFormatEnum;
 import cz.mzk.recordmanager.server.model.Isbn;
 import cz.mzk.recordmanager.server.model.Ismn;
 import cz.mzk.recordmanager.server.model.Issn;
 import cz.mzk.recordmanager.server.model.Oclc;
 import cz.mzk.recordmanager.server.model.ShortTitle;
+import cz.mzk.recordmanager.server.model.TezaurusRecord.TezaurusKey;
 import cz.mzk.recordmanager.server.model.Title;
 import cz.mzk.recordmanager.server.util.MetadataUtils;
 
@@ -30,6 +32,7 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 			.getLogger(MetadataDublinCoreRecord.class);
 
 	protected DublinCoreRecord dcRecord;
+	protected HarvestedRecord harvestedRecord = null;
 
 	protected final ISBNValidator isbnValidator = ISBNValidator
 			.getInstance(true);
@@ -63,11 +66,20 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 	protected static final String ISMN13_PREFIX = "9790";
 	
 	public MetadataDublinCoreRecord(DublinCoreRecord dcRecord) {
+		initRecords(dcRecord, null);
+	}
+	
+	public MetadataDublinCoreRecord(DublinCoreRecord dcRecord, HarvestedRecord hr) {
+		initRecords(dcRecord, hr);
+	}
+
+	protected void initRecords(DublinCoreRecord dcRecord, HarvestedRecord hr) {
 		if (dcRecord == null) {
 			throw new IllegalArgumentException(
 					"Creating MetadataDublinCoreRecord with NULL underlying dcRecord.");
 		}
 		this.dcRecord = dcRecord;
+		this.harvestedRecord = hr;
 	}
 
 	@Override
@@ -553,6 +565,24 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 	@Override
 	public List<String> getDefaultStatuses() {
 		// implemented in institution specific classes
+		return null;
+	}
+
+	@Override
+	public List<String> getInternationalPatentClassfication() {
+		// implemented in institution specific classes
+		return null;
+	}
+
+	@Override
+	public TezaurusKey getTezaurusKey() {
+		// implemented in institution specific classes
+		return null;
+	}
+
+	@Override
+	public Boolean getMetaproxyBool() {
+		// Nothing to return
 		return null;
 	}
 

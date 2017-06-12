@@ -4,6 +4,8 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 import cz.mzk.recordmanager.server.dc.DublinCoreParser;
@@ -15,7 +17,10 @@ import cz.mzk.recordmanager.server.metadata.institutions.BmcMetadataMarcRecord;
 import cz.mzk.recordmanager.server.metadata.institutions.Kram3NkpMetadataDublinCoreRecord;
 import cz.mzk.recordmanager.server.metadata.institutions.KramDefaultMetadataDublinCoreRecord;
 import cz.mzk.recordmanager.server.metadata.institutions.LibraryMetadataMarcRecord;
+import cz.mzk.recordmanager.server.metadata.institutions.KramMzkMetadataDublinCoreRecord;
+import cz.mzk.recordmanager.server.metadata.institutions.KramNkpMetadataDublinCoreRecord;
 import cz.mzk.recordmanager.server.metadata.institutions.ManuscriptoriumMetadataDublinCoreRecord;
+import cz.mzk.recordmanager.server.metadata.institutions.MeshMarcMetadataRecord;
 import cz.mzk.recordmanager.server.metadata.institutions.MkpEbooksMetadataMarcRecord;
 import cz.mzk.recordmanager.server.metadata.institutions.MzkMetadataMarcRecord;
 import cz.mzk.recordmanager.server.metadata.institutions.MzkNormsMetadataMarcRecord;
@@ -47,6 +52,9 @@ public class MetadataRecordFactory {
 	
 	@Autowired
 	private DublinCoreParser dcParser;
+
+	@Autowired
+	private ApplicationContext appCtx;
 	
 	public MetadataRecord getMetadataRecord(HarvestedRecord record) {
 		if (record == null) {
@@ -70,7 +78,7 @@ public class MetadataRecordFactory {
         if (Constants.METADATA_FORMAT_DUBLIN_CORE.equals(recordFormat)
         		|| Constants.METADATA_FORMAT_ESE.equals(recordFormat)) {
         	DublinCoreRecord dcRec = dcParser.parseRecord(is);
-        	return getMetadataRecord(dcRec, configuration);
+			return getMetadataRecord(record, dcRec, configuration);
         }
         
         return null;
@@ -114,6 +122,8 @@ public class MetadataRecordFactory {
 			return new PatentsMetadataMarcRecord(marcRec);
 		case Constants.PREFIX_OPENLIB:
 			return new OpenLibraryMetadataMarcRecord(marcRec);
+		case Constants.PREFIX_MESH:
+			return new MeshMarcMetadataRecord(marcRec);
 		case Constants.PREFIX_LIBRARY:
 			return new LibraryMetadataMarcRecord(marcRec);
 		default:
@@ -121,14 +131,18 @@ public class MetadataRecordFactory {
 		}
 	}
 	
-	public MetadataRecord getMetadataRecord(DublinCoreRecord dcRec, ImportConfiguration configuration){
+	public MetadataRecord getMetadataRecord(HarvestedRecord hr, DublinCoreRecord dcRec, ImportConfiguration configuration){
 		String prefix = getPrefix(configuration);
 		switch(prefix){
 		case Constants.PREFIX_KRAM_MZK:
+			return new KramMzkMetadataDublinCoreRecord(dcRec, hr);
+		case Constants.PREFIX_KRAM_NKP:
+			MetadataRecord mr = new KramNkpMetadataDublinCoreRecord(dcRec, hr);
+			init(mr);
+			return mr;
 		case Constants.PREFIX_KRAM_NTK:
 		case Constants.PREFIX_KRAM_KNAV:
-		case Constants.PREFIX_KRAM_NKP:
-			return new KramDefaultMetadataDublinCoreRecord(dcRec);
+			return new KramDefaultMetadataDublinCoreRecord(dcRec, hr);
 		case Constants.PREFIX_KRAM3_NKP:
 			return new Kram3NkpMetadataDublinCoreRecord(dcRec);
 		case Constants.PREFIX_MANUSCRIPTORIUM:
@@ -159,5 +173,11 @@ public class MetadataRecordFactory {
 			return prefix == null ? "" : prefix;
 		}
 		return "";
+	}
+
+	private void init(Object metadataRecord) {
+		AutowireCapableBeanFactory factory = appCtx.getAutowireCapableBeanFactory();
+		factory.autowireBean(metadataRecord);
+		factory.initializeBean(metadataRecord, "metadataRecord");
 	}
 }

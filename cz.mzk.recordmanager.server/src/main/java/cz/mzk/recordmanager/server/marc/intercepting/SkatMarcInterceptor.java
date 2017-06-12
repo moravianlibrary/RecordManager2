@@ -83,6 +83,7 @@ public class SkatMarcInterceptor extends DefaultMarcInterceptor {
 						joinedContent += df.getSubfield('r').getData();
 					}
 					if (df.getSubfield('s') != null) {
+						if (joinedContent != "") joinedContent += ", ";
 						joinedContent += df.getSubfield('s').getData();
 					}
 					if (!joinedContent.isEmpty()) {

@@ -12,6 +12,7 @@ import cz.mzk.recordmanager.server.model.Issn;
 import cz.mzk.recordmanager.server.model.Language;
 import cz.mzk.recordmanager.server.model.Oclc;
 import cz.mzk.recordmanager.server.model.ShortTitle;
+import cz.mzk.recordmanager.server.model.TezaurusRecord.TezaurusKey;
 import cz.mzk.recordmanager.server.model.Title;
 
 public interface MetadataRecord {
@@ -207,5 +208,15 @@ public interface MetadataRecord {
 	public List<ShortTitle> getShortTitles();
 	
 	public List<String> getDefaultStatuses();
-	
+
+	public List<String> getInternationalPatentClassfication();
+
+	public TezaurusKey getTezaurusKey();
+
+	public Boolean getMetaproxyBool();
+
+	default public boolean getIndexWhenMerged() {
+		return true;
+	}
+
 }
