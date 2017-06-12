@@ -253,12 +253,12 @@ public class AdresarKnihovenMarcFunctions implements MarcRecordFunctions {
 		return null;
 	}
 
-	public Long getLibraryRelevance(MarcFunctionContext ctx) {
+	public String getLibraryRelevance(MarcFunctionContext ctx) {
 		for (DataField df : ctx.record().getDataFields("SGL")) {
 			if (df.getSubfield('a') != null
 					&& relevanceBySigla.containsKey(df.getSubfield('a')
 							.getData())) {
-				return relevanceBySigla.get(df.getSubfield('a').getData());
+				return getStringRelevance(relevanceBySigla.get(df.getSubfield('a').getData()));
 			}
 		}
 
@@ -276,14 +276,21 @@ public class AdresarKnihovenMarcFunctions implements MarcRecordFunctions {
 							if (longRel > maxRelevance)
 								maxRelevance = longRel;
 						}
-						return maxRelevance;
+						return getStringRelevance(maxRelevance);
 					}
 				}
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return 0L;
+		return getStringRelevance(0L);
+	}
+
+	private String getStringRelevance(Long relevance) {
+		if (relevance < 10) {
+			return "0" + relevance.toString();
+		}
+		return relevance.toString();
 	}
 
 }
