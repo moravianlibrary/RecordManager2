@@ -35,3 +35,5 @@ f773_display = get773display();
 id001_str = getId001();
 
 metaproxy_boolean = getMetaproxyBool()
+
+index_when_merged_boolean = getIndexWhenMerged()

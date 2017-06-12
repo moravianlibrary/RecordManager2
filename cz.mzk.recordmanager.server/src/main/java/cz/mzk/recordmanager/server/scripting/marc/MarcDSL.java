@@ -586,7 +586,7 @@ public class MarcDSL extends BaseDSL {
     	return result;
     }
     
-    public Set<String> getAuthorityIds(String tags) {
+     public Set<String> getAuthorityIds(String tags) {
 		Set<String> result = new HashSet<>();
 		for (String tag : tags.split("\\|")) {
 			String[] split = tag.split("\\.");
@@ -801,6 +801,10 @@ public class MarcDSL extends BaseDSL {
 
 	public Boolean getMetaproxyBool() {
 		return metadataRecord.getMetaproxyBool();
+	}
+
+	public boolean getIndexWhenMerged() {
+		return metadataRecord.getIndexWhenMerged();
 	}
 
 }

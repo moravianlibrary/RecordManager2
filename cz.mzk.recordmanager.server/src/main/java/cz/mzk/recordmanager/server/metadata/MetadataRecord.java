@@ -215,4 +215,8 @@ public interface MetadataRecord {
 
 	public Boolean getMetaproxyBool();
 
+	default public boolean getIndexWhenMerged() {
+		return true;
+	}
+
 }

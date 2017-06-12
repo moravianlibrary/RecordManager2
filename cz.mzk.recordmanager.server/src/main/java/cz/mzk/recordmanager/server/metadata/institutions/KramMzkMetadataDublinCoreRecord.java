@@ -29,4 +29,9 @@ public class KramMzkMetadataDublinCoreRecord extends
 				+ harvestedRecord.getUniqueId().getRecordId() + "|");
 	}
 
+	@Override
+	public boolean getIndexWhenMerged() {
+		return false;
+	}
+
 }
