@@ -17,4 +17,4 @@ physical = getPhysicals();
 
 url = getUrls();
 
-index_when_merged_boolean = getIndexWhenMerged()
+_hidden_index_when_merged_boolean = getIndexWhenMerged()

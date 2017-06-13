@@ -36,4 +36,4 @@ id001_str = getId001();
 
 metaproxy_boolean = getMetaproxyBool()
 
-index_when_merged_boolean = getIndexWhenMerged()
+_hidden_index_when_merged_boolean = getIndexWhenMerged()
