@@ -300,7 +300,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 					Title title = new Title();
 					title.setTitleStr(builder.toString());
 					title.setOrderInRecord(++titleOrder);
-					title.setSimilarityEnabled(MetadataUtils.similarityEnabled(title));
+					title.setSimilarityEnabled(MetadataUtils.similarityEnabled(field, title));
 					result.add(title);
 				}
 			}
@@ -1276,7 +1276,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 					ShortTitle shortTitle = new ShortTitle();
 					shortTitle.setShortTitleStr(builder.toString());
 					shortTitle.setOrderInRecord(++shortTitleCounter);
-					shortTitle.setSimilarityEnabled(MetadataUtils.similarityEnabled(shortTitle));
+					shortTitle.setSimilarityEnabled(MetadataUtils.similarityEnabled(df, shortTitle));
 					results.add(shortTitle);
 				}
 			}
