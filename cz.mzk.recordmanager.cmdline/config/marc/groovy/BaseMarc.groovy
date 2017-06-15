@@ -58,7 +58,6 @@ ipc_search_txt_mv = getInternationalPatentClassfication()
 
 ean_str_mv = getEAN()
 source_title_facet_str = getFirstField "773t"
-genre_facet_str = getFirstField "655avxyz"
 conspectus_facet_str_mv = getFields "072x"
 publisher_str_mv = getPublisherStrMv()
 author_facet_str_mv = filter("author_facet.txt", getAuthorFacet())
