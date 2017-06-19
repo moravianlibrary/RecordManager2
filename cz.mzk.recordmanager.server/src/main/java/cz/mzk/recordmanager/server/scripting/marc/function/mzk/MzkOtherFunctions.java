@@ -23,6 +23,8 @@ import cz.mzk.recordmanager.server.scripting.marc.function.MarcRecordFunctions;
 @Component
 public class MzkOtherFunctions implements MarcRecordFunctions {
 
+	private final static String EMPTY_SEPARATOR = "";
+
 	private static Logger logger = LoggerFactory
 			.getLogger(MzkOtherFunctions.class);
 
@@ -178,6 +180,16 @@ public class MzkOtherFunctions implements MarcRecordFunctions {
 
 	public String getMZKPublisher(MarcFunctionContext ctx) {
 		return MoreObjects.firstNonNull(ctx.record().getField("260", 'b'), ctx.record().getField("260", 'b'));
+	}
+
+	public List<String> getMZKLanguages(MarcFunctionContext ctx) {
+		Set<String> languages = new HashSet<String>();
+		String f008 = ctx.record().getControlField("008");
+		if (f008 != null && f008.length() >= 38) {
+			languages.add(f008.substring(35, 38));
+		}
+		languages.addAll(ctx.record().getFields("041", EMPTY_SEPARATOR, 'a'));
+		return new ArrayList<String>(languages);
 	}
 
 }
