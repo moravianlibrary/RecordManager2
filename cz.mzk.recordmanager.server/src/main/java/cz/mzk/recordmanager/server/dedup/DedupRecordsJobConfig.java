@@ -34,7 +34,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.jdbc.core.RowMapper;
-
 import cz.mzk.recordmanager.server.dedup.clustering.NonperiodicalTitleClusterable;
 import cz.mzk.recordmanager.server.dedup.clustering.TitleClusterable;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
@@ -449,6 +448,7 @@ public class DedupRecordsJobConfig {
 				.listener(new StepProgressListener())
 				.<List<Long>, List<HarvestedRecord>> chunk(100)
 				.faultTolerant()
+				.keyGenerator(KeyGeneratorForList.INSTANCE)
 				.retry(LockAcquisitionException.class)
 				.retryLimit(10000)
 				.reader(dedupSimpleKeysIsbnReader(INTEGER_OVERRIDEN_BY_EXPRESSION))
@@ -703,6 +703,7 @@ public class DedupRecordsJobConfig {
 				.listener(new StepProgressListener())
 				.<List<Long>, List<HarvestedRecord>> chunk(100)
 				.faultTolerant()
+				.keyGenerator(KeyGeneratorForList.INSTANCE)
 				.retry(LockAcquisitionException.class)
 				.retryLimit(10000)
 				.reader(dedupTitleAuthReader(INTEGER_OVERRIDEN_BY_EXPRESSION))
@@ -873,6 +874,7 @@ public class DedupRecordsJobConfig {
 				.listener(new StepProgressListener())
 				.<List<Long>, List<HarvestedRecord>> chunk(100)
 				.faultTolerant()
+				.keyGenerator(KeyGeneratorForList.INSTANCE)
 				.retry(LockAcquisitionException.class)
 				.retryLimit(10000)
 				.reader(dedupSimpleKeysSkatRestReader(INTEGER_OVERRIDEN_BY_EXPRESSION))
@@ -1317,7 +1319,7 @@ public class DedupRecordsJobConfig {
 				.listener(new StepProgressListener())
 				.build();
 	}
-	
+
 	@Bean(name = "cleanupStap:cleanupTasklet")
 	@StepScope
 	public Tasklet cleanupTasklet() {
@@ -1333,7 +1335,7 @@ public class DedupRecordsJobConfig {
 		JdbcPagingItemReader<List<Long>> reader = new JdbcPagingItemReader<>();
 		SqlPagingQueryProviderFactoryBean pqpf = new SqlPagingQueryProviderFactoryBean();
 		pqpf.setDataSource(dataSource);
-		pqpf.setSelectClause("SELECT row_id,id_array");
+		pqpf.setSelectClause("SELECT row_id, id_array");
 		pqpf.setFromClause("FROM " + tablename);
 		if (modulo != null) {
 			pqpf.setWhereClause("WHERE row_id % :threads = :modulo");
@@ -1365,8 +1367,7 @@ public class DedupRecordsJobConfig {
 			throws Exception {
 		return new DedupSimpleKeysStepWriter();
 	}
-	
-	
+
 	/**
 	 * general processor for deduplication of clusters based on identifier (ISBN,ISSN,CNB,OCLC,ISMN)
 	 */
