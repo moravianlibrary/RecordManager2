@@ -128,7 +128,7 @@ public class MzkOtherFunctions implements MarcRecordFunctions {
 
 	private static final Map<String, Set<String>> ALLOWED_BASES = ImmutableMap.of(
 				"MZK01", ImmutableSet.of("33", "44", "99"), //
-				"MZK03", ImmutableSet.of("mzk", "rajhrad", "znojmo", "trebova", "dacice", "minorite")
+				"MZK03", ImmutableSet.of("mzk", "rajhrad", "znojmo", "trebova", "dacice", "minorite", "broumov")
 	);
 
 	private static final String BASE_PREFIX = "facet_base_";
