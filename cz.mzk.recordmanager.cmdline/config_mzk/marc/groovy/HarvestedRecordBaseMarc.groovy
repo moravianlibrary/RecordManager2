@@ -63,7 +63,7 @@ genre = getFields "655"
 geographic = getFields "651"
 
 topic_facet = getMZKTopicFacets()
-genre_facet = getFields "600v:610v:611v:630v:648v:650v:651v:655a:655v"
+genre_facet = getFields "655avxyz"
 geographic_facet = getFields "600z:610z:611z:630z:648z:650z:651a:651z:655z"
 
 url = getFields "856u"
