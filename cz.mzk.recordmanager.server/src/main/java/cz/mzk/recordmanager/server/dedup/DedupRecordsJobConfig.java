@@ -885,7 +885,7 @@ public class DedupRecordsJobConfig {
 
 	@Bean(name = Constants.JOB_ID_DEDUP + ":dedupSimpleKeysSkatRestPartitionedStep")
 	public Step dedupSimpleKeysSkatRestPartitionedStep() throws Exception {
-		return steps.get("dedupSimpleKeysSkatRestPartitionedStepStep")
+		return steps.get("dedupSimpleKeysSkatRestPartitionedStep")
 				.partitioner("slave", this.partioner()) //
 				.gridSize(this.partitionThreads)
 				.taskExecutor(this.taskExecutor)
@@ -896,8 +896,8 @@ public class DedupRecordsJobConfig {
 	@Bean(name = "dedupSimpleKeysSkatRestStep:reader")
 	@StepScope
 	public ItemReader<List<Long>> dedupSimpleKeysSkatRestReader(@Value("#{stepExecutionContext[modulo]}") Integer modulo) throws Exception {
-		return dedupSimpleKeysReader(TMP_TABLE_SKAT_KEYS_REST, INTEGER_OVERRIDEN_BY_EXPRESSION);
-	}	
+		return dedupSimpleKeysReader(TMP_TABLE_SKAT_KEYS_REST, modulo);
+	}
 
 	/**
 	 * Prepare title similarities deduplication
