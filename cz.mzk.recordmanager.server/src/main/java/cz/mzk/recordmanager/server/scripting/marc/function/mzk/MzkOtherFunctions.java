@@ -128,6 +128,12 @@ public class MzkOtherFunctions implements MarcRecordFunctions {
 		return result;
 	}
 
+	public Set<String> getMZKGenreFacets(MarcFunctionContext ctx, char ind2) {
+		Set<String> result = new HashSet<String>();
+		result.addAll(ctx.record().getFields("655", field -> field.getIndicator2() == ind2, " ", 'a', 'v', 'x',	'y', 'z'));
+		return result;
+	}
+
 	private static final Map<String, Set<String>> ALLOWED_BASES = ImmutableMap.of(
 				"MZK01", ImmutableSet.of("33", "44", "99"), //
 				"MZK03", ImmutableSet.of("mzk", "rajhrad", "znojmo", "trebova", "dacice", "minorite", "broumov")

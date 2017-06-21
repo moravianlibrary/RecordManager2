@@ -66,6 +66,8 @@ topic_cs_str_mv = record.getFields("650", { field -> field.getIndicator2() == '7
 topic_en_str_mv = record.getFields("650", { field -> field.getIndicator2() == '9' }, 'a' as char)
 topic_facet = getMZKTopicFacets()
 genre_facet = getFields "655avxyz"
+genre_cs_str_mv = getMZKGenreFacets('7' as char)
+genre_en_str_mv = getMZKGenreFacets('9' as char)
 geographic_facet = getFields "600z:610z:611z:630z:648z:650z:651a:651z:655z"
 
 url = getFields "856u"
