@@ -62,6 +62,8 @@ topic = getFields "600:610:630:650"
 genre = getFields "655"
 geographic = getFields "651"
 
+topic_cs_str_mv = record.getFields("650", { field -> field.getIndicator2() == '7' }, 'a' as char)
+topic_en_str_mv = record.getFields("650", { field -> field.getIndicator2() == '9' }, 'a' as char)
 topic_facet = getMZKTopicFacets()
 genre_facet = getFields "655avxyz"
 geographic_facet = getFields "600z:610z:611z:630z:648z:650z:651a:651z:655z"
