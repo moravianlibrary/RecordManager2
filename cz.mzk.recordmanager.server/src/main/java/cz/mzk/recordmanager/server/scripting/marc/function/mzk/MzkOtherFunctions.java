@@ -17,6 +17,7 @@ import com.google.common.base.MoreObjects;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 
+import cz.mzk.recordmanager.server.marc.SubfieldExtractionMethod;
 import cz.mzk.recordmanager.server.scripting.marc.MarcFunctionContext;
 import cz.mzk.recordmanager.server.scripting.marc.function.MarcRecordFunctions;
 
@@ -130,7 +131,16 @@ public class MzkOtherFunctions implements MarcRecordFunctions {
 
 	public Set<String> getMZKGenreFacets(MarcFunctionContext ctx, char ind2) {
 		Set<String> result = new HashSet<String>();
-		result.addAll(ctx.record().getFields("655", field -> field.getIndicator2() == ind2, " ", 'a', 'v', 'x',	'y', 'z'));
+		result.addAll(ctx.record().getFields("655", field -> field.getIndicator2() == ind2, SubfieldExtractionMethod.SEPARATED, null, 'a', 'v', 'x', 'y', 'z'));
+		return result;
+	}
+
+	public Set<String> getMZKGeographicFacets(MarcFunctionContext ctx, char ind2) {
+		Set<String> result = new HashSet<String>();
+		result.addAll(ctx.record().getFields("651", field -> field.getIndicator2() == ind2, SubfieldExtractionMethod.SEPARATED, null, 'a'));
+		for (String tag : new String[]{"600", "610","611","630","648","650","651","655"}) {
+			result.addAll(ctx.record().getFields(tag, field -> field.getIndicator2() == ind2, SubfieldExtractionMethod.SEPARATED, null, 'z'));
+		}
 		return result;
 	}
 

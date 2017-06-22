@@ -69,6 +69,8 @@ genre_facet = getFields "655avxyz"
 genre_cs_str_mv = getMZKGenreFacets('7' as char)
 genre_en_str_mv = getMZKGenreFacets('9' as char)
 geographic_facet = getFields "600z:610z:611z:630z:648z:650z:651a:651z:655z"
+geographic_cs_str_mv = getMZKGeographicFacets('7' as char)
+geographic_en_str_mv = getMZKGeographicFacets('9' as char)
 
 url = getFields "856u"
 
