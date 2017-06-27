@@ -1033,3 +1033,6 @@ INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granul
 
 --changeset tomascejpek:54
 ALTER TABLE import_conf ADD COLUMN mapping_dedup_script VARCHAR(256);
+
+--changeset tomascejpek:55 context:cpk
+UPDATE import_conf SET mapping_dedup_script='AuthorityMergedBaseMarc.groovy' WHERE id in (341,400);

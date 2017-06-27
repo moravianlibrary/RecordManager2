@@ -778,3 +778,6 @@ INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granul
 
 -- 12. 06. 2017 tomascejpek
 ALTER TABLE import_conf ADD COLUMN mapping_dedup_script VARCHAR(256);
+
+-- 27. 06. 2017 tomascejpek
+UPDATE import_conf SET mapping_dedup_script='AuthorityMergedBaseMarc.groovy' WHERE id in (341,400);
