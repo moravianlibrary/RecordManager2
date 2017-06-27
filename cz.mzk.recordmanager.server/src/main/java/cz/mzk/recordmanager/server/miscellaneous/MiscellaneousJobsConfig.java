@@ -31,6 +31,7 @@ import cz.mzk.recordmanager.server.jdbc.LongValueRowMapper;
 import cz.mzk.recordmanager.server.miscellaneous.skat.GenerateSkatKeysJobParameterValidator;
 import cz.mzk.recordmanager.server.miscellaneous.skat.GenerateSkatKeysProcessor;
 import cz.mzk.recordmanager.server.miscellaneous.skat.GenerateSkatKeysWriter;
+import cz.mzk.recordmanager.server.miscellaneous.skat.ManuallyMergedSkatDedupKeysTasklet;
 import cz.mzk.recordmanager.server.miscellaneous.skat.SkatKeysMergedIdsUpdateTasklet;
 import cz.mzk.recordmanager.server.model.SkatKey;
 import cz.mzk.recordmanager.server.oai.dao.SkatKeyDAO;
@@ -94,9 +95,7 @@ public class MiscellaneousJobsConfig {
 				.listener(new StepProgressListener())
 				.build();
 	}
-	
-	
-	
+
 	@Bean(name = "updateStatMergedIdsStep:updateStatMergedIdsTasklet")
 	@StepScope
 	public Tasklet updateStatMergedIdsStepTasklet(
@@ -104,7 +103,33 @@ public class MiscellaneousJobsConfig {
 		return new SkatKeysMergedIdsUpdateTasklet(fromDate);
 	}
 	
+	// generateManuallyMergedSkatDedupKeys
+	@Bean
+	public Job generateManuallyMergedSkatDedupKeysJob(
+			@Qualifier(Constants.JOB_ID_MANUALLY_MERGED_SKAT_DEDUP_KEYS + ":generateManuallyMergedSkatKeysStep") Step generateManuallyMergedSkatKeysStep) {
+		return jobs.get(Constants.JOB_ID_MANUALLY_MERGED_SKAT_DEDUP_KEYS)
+				.validator(new GenerateSkatKeysJobParameterValidator())
+				.start(generateManuallyMergedSkatKeysStep)
+				.build();
+	}
+
 	
+	@Bean(name = Constants.JOB_ID_MANUALLY_MERGED_SKAT_DEDUP_KEYS + ":generateManuallyMergedSkatKeysStep")
+	public Step generateManuallyMergedSkatKeysStep() throws Exception {
+		return steps.get("generateManuallyMergedSkatKeysStep")
+				.tasklet(generateManuallyMergedSkatKeysTasklet(DATE_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION))
+				.listener(new StepProgressListener())
+				.build();
+	}
+	
+	@Bean(name = Constants.JOB_ID_MANUALLY_MERGED_SKAT_DEDUP_KEYS+":generateManuallyMergedSkatKeysTasklet")
+	@StepScope
+	public Tasklet generateManuallyMergedSkatKeysTasklet(
+			@Value("#{jobParameters[" + Constants.JOB_PARAM_FROM_DATE + "]}") Date fromDate,
+			@Value("#{jobParameters[" + Constants.JOB_PARAM_UNTIL_DATE + "]}") Date toDate) {
+		return new ManuallyMergedSkatDedupKeysTasklet(fromDate, toDate);
+	}
+
 	@Bean(name = Constants.JOB_ID_GENERATE_SKAT_DEDUP_KEYS + ":generateSkatKeysStep")
 	public Step generateSkatKeysStep() throws Exception {
 		return steps.get("generateSkatKeysStep")
