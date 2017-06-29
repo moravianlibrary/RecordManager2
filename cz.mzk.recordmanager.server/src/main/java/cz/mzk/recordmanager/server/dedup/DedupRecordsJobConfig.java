@@ -1151,7 +1151,7 @@ public class DedupRecordsJobConfig {
 	/**
 	 * processor for deduplication of clusters based on identifier CNB
 	 */
-	@Bean(name = "generalDedupClustersProcessor")
+	@Bean(name = "dedupCNBClustersProcessor")
 	@StepScope
 	public ItemProcessor<List<Long>, List<HarvestedRecord>> dedupCNBClustersProcessor() {
 		return new DedupIdentifierCNBClustersProcessor();
