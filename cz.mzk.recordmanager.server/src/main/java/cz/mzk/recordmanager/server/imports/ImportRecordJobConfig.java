@@ -55,7 +55,7 @@ public class ImportRecordJobConfig {
 	public Step importRecordsStep() throws Exception {
 		return steps.get("importRecordsStep")
 				.<List<Record>, List<Record>> chunk(20)//
-				.reader(importRecordsReader(STRING_OVERRIDEN_BY_EXPRESSION, STRING_OVERRIDEN_BY_EXPRESSION))//
+				.reader(importRecordsReader(LONG_OVERRIDEN_BY_EXPRESSION, STRING_OVERRIDEN_BY_EXPRESSION, STRING_OVERRIDEN_BY_EXPRESSION))//
 				.writer(importRecordsWriter(LONG_OVERRIDEN_BY_EXPRESSION)) //
 				.build();
 	}
@@ -63,10 +63,11 @@ public class ImportRecordJobConfig {
 	@Bean(name=Constants.JOB_ID_IMPORT +":importRecordsReader")
 	@StepScope
 	public ItemReader<List<Record>> importRecordsReader(
+			@Value("#{jobParameters[" + Constants.JOB_PARAM_CONF_ID + "]}") Long configurationId,
 			@Value("#{jobParameters[" + Constants.JOB_PARAM_FORMAT + "]}") String strFormat,
 			@Value("#{jobParameters[" + Constants.JOB_PARAM_IN_FILE + "]}") String filename)
 			throws Exception {
-			return new ImportRecordsFileReader(filename, strFormat);
+			return new ImportRecordsFileReader(configurationId, filename, strFormat);
 	}
 
 	@Bean(name=Constants.JOB_ID_IMPORT +":writer")
@@ -209,7 +210,7 @@ public class ImportRecordJobConfig {
 	public Step importCosmotron996RecordsStep() throws Exception {
 		return steps.get(Constants.JOB_ID_IMPORT_COSMOTRON_996+"importRecordsStep")
 				.<List<Record>, List<Record>> chunk(20)//
-				.reader(importRecordsReader(STRING_OVERRIDEN_BY_EXPRESSION, STRING_OVERRIDEN_BY_EXPRESSION))//
+				.reader(importRecordsReader(LONG_OVERRIDEN_BY_EXPRESSION, STRING_OVERRIDEN_BY_EXPRESSION, STRING_OVERRIDEN_BY_EXPRESSION))//
 				.writer(importCosmotron996RecordsWriter(LONG_OVERRIDEN_BY_EXPRESSION)) //
 				.build();
 	}
@@ -234,7 +235,7 @@ public class ImportRecordJobConfig {
 	public Step importTezaurusRecordsStep() throws Exception {
 		return steps.get(Constants.JOB_ID_IMPORT_TEZAURUS+"importRecordsStep")
 				.<List<Record>, List<Record>> chunk(20)//
-				.reader(importRecordsReader(STRING_OVERRIDEN_BY_EXPRESSION, STRING_OVERRIDEN_BY_EXPRESSION))//
+				.reader(importRecordsReader(LONG_OVERRIDEN_BY_EXPRESSION, STRING_OVERRIDEN_BY_EXPRESSION, STRING_OVERRIDEN_BY_EXPRESSION))//
 				.writer(importTezaurusRecordsWriter(LONG_OVERRIDEN_BY_EXPRESSION)) //
 				.build();
 	}

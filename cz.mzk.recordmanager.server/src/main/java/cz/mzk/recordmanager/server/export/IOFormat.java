@@ -1,7 +1,7 @@
 package cz.mzk.recordmanager.server.export;
 
 public enum IOFormat {
-	LINE_MARC, ALEPH_MARC, ISO_2709, XML_MARC, DC_XML, XML_PATENTS, OSOBNOSTI_REGIONU;
+	LINE_MARC, ALEPH_MARC, ISO_2709, XML_MARC, DC_XML, XML_PATENTS, OSOBNOSTI_REGIONU, SFX;
 	
 	public static IOFormat stringToExportFormat(String strParam) {
 		if (strParam == null) {
@@ -24,6 +24,9 @@ public enum IOFormat {
 		}
 		if (strParam.matches("(?i)osobnosti")) {
 			return IOFormat.OSOBNOSTI_REGIONU;
+		}
+		if (strParam.matches("(?i)sfx")) {
+			return IOFormat.SFX;
 		}
 		return XML_MARC;
 	}

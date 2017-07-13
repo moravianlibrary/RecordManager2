@@ -28,13 +28,18 @@ import cz.mzk.recordmanager.server.marc.marc4j.MarcLineStreamReader;
 import cz.mzk.recordmanager.server.marc.marc4j.MarcXmlReader;
 import cz.mzk.recordmanager.server.marc.marc4j.OsobnostiRegionuXmlStreamReader;
 import cz.mzk.recordmanager.server.marc.marc4j.PatentsXmlStreamReader;
+import cz.mzk.recordmanager.server.marc.marc4j.SfxJibXmlStreamReader;
 import cz.mzk.recordmanager.server.model.DownloadImportConfiguration;
 import cz.mzk.recordmanager.server.oai.dao.DownloadImportConfigurationDAO;
+import cz.mzk.recordmanager.server.oai.dao.ImportConfigurationDAO;
 import cz.mzk.recordmanager.server.util.HttpClient;
 
 public class ImportRecordsFileReader implements ItemReader<List<Record>> {
 
 	private static Logger logger = LoggerFactory.getLogger(ImportRecordsFileReader.class);
+	
+	@Autowired
+	private ImportConfigurationDAO configDao;
 	
 	@Autowired
 	private DownloadImportConfigurationDAO dicDao;
@@ -56,10 +61,10 @@ public class ImportRecordsFileReader implements ItemReader<List<Record>> {
 
 	private String pathName = null;
 	
-	public ImportRecordsFileReader(String filename, String strFormat) throws FileNotFoundException {
+	public ImportRecordsFileReader(Long confId, String filename, String strFormat) throws FileNotFoundException {
 		format = IOFormat.stringToExportFormat(strFormat);
+		this.confId = confId;
 		getFilesName(filename);
-		initializeFilesReader();
 	}
 	
 	public ImportRecordsFileReader(Long confId) throws Exception {
@@ -72,7 +77,9 @@ public class ImportRecordsFileReader implements ItemReader<List<Record>> {
 			ParseException, NonTransientResourceException {
 		List<Record> batch = new ArrayList<Record>();
 		
-		if (reader == null) initializeDownloadReader();
+		if (reader == null) 
+			if (files == null) initializeDownloadReader();
+			else initializeFilesReader();
 		else if (!reader.hasNext()) initializeFilesReader();
 		while (reader.hasNext()) {
 			try {
@@ -99,6 +106,8 @@ public class ImportRecordsFileReader implements ItemReader<List<Record>> {
 			return new PatentsXmlStreamReader(inStream);
 		case OSOBNOSTI_REGIONU:
 			return new OsobnostiRegionuXmlStreamReader(inStream);
+		case SFX:
+			return new SfxJibXmlStreamReader(inStream, configDao.get(confId).getIdPrefix());
 		default:
 			return new MarcXmlReader(inStream);
 		}
