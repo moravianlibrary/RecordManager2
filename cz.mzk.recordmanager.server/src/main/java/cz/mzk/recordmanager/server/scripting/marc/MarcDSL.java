@@ -807,4 +807,8 @@ public class MarcDSL extends BaseDSL {
 		return metadataRecord.getIndexWhenMerged();
 	}
 
+	public String get003() {
+		return record.getControlField("003");
+	}
+
 }
