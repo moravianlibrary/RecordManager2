@@ -168,14 +168,18 @@ public class SfxJibXmlStreamReader implements MarcReader {
 						break;
 					case ELEMENT_DAYS_AVAILABLE:
 						String available = xmlReader.getElementText();
-						record.addVariableField(factory.newDataField("500",
-								' ', ' ', "a", "available: " + available));
+						if (record.getVariableField("500") != null) {
+							record.addVariableField(factory.newDataField("500",
+									' ', ' ', "a", "available: " + available));
+						}
 						embargo = "a" + available;
 						break;
 					case ELEMENT_DAYS_NOT_AVAILABLE:
 						String notAvailable = xmlReader.getElementText();
-						record.addVariableField(factory.newDataField("500", ' ', ' ', "a",
-										"not available: " + notAvailable));
+						if (record.getVariableField("500") != null) {
+							record.addVariableField(factory.newDataField("500",
+									' ', ' ', "a", "not available: " + notAvailable));
+						}
 						embargo = "n" + notAvailable;
 						break;
 					case ELEMENT_FROM:
