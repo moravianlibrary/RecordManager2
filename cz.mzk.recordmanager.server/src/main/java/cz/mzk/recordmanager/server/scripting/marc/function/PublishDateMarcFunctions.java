@@ -46,7 +46,7 @@ public class PublishDateMarcFunctions implements MarcRecordFunctions {
 
 	// [1991] or asi 1991
 	private static final Pattern FOUR_DIGIT_YEAR_PATTERN = Pattern
-			.compile("\\d{4}");
+			.compile("0*(\\d{4})");
 	
 	private static final Pattern DIGITS_PATTERN = Pattern.compile("(\\d+)");
 	
@@ -120,7 +120,7 @@ public class PublishDateMarcFunctions implements MarcRecordFunctions {
 		years.forEach(y -> {
 			Matcher matcher;
 			if ((matcher = FOUR_DIGIT_YEAR_PATTERN.matcher(y)).find())
-				results.add(matcher.group(0));
+				results.add(matcher.group(1));
 		});
 		return results;
 	}
