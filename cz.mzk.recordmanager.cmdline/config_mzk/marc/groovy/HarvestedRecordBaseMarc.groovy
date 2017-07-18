@@ -47,7 +47,7 @@ publishDate_display = record.getField("260", 'c' as char) ?: record.getFields("2
 placeOfPublication_txt_mv = record.getFields("260", 'a' as char) ?: record.getFields("264", { field -> field.getIndicator2() == '1' }, 'a' as char)
 publishDate = getPublishDate()
 publishDate_txt_mv = getPublishDate()
-publishDateSort = getPublishDateForSorting()
+publishDateSort = getPublishDateForSortingForMzk()
 
 physical = getFields "300abcefg:530abcd"
 dateSpan = getFields "362a"
