@@ -301,4 +301,15 @@ public class AdresarKnihovenMarcFunctions implements MarcRecordFunctions {
 		}
 		return null;
 	}
+
+	public List<String> adresarGetRegionDistrictTown(MarcFunctionContext ctx) {
+		String region = getFirstFieldForAdresar(ctx, "KRJa");
+		String district = getFirstFieldForAdresar(ctx, "KRJb");
+		String town = getFirstFieldForAdresar(ctx, "MESa");
+		if (region != null && district != null && town != null) {
+			return SolrUtils.createHierarchicFacetValues(region, district, town);
+		}
+		return null;
+	}
+
 }
