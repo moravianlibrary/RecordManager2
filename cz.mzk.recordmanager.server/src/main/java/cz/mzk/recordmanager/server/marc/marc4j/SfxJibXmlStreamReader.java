@@ -288,7 +288,11 @@ public class SfxJibXmlStreamReader implements MarcReader {
 				from = cal.get(Calendar.YEAR);
 				to = Calendar.getInstance().get(Calendar.YEAR);
 			} else {
-				from = Integer.valueOf(fromStr);
+				if (fromStr == null) {
+					from = cal.get(Calendar.YEAR);
+				} else {
+					from = Integer.valueOf(fromStr);
+				}
 				to = cal.get(Calendar.YEAR);
 			}
 		}
