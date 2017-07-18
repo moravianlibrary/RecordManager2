@@ -56,6 +56,7 @@ public class SfxJibXmlStreamReader implements MarcReader {
 	private static final String ELEMENT_FROM = "from";
 	private static final String ELEMENT_TO = "to";
 	private static final String ELEMENT_YEAR = "year";
+	private static final String ELEMENT_VOLUME = "volume";
 
 	private static final Pattern PREFIX = Pattern.compile(
 			"^((?:der|die|das|the|an) ).*", Pattern.CASE_INSENSITIVE);
@@ -112,6 +113,8 @@ public class SfxJibXmlStreamReader implements MarcReader {
 		String embargo = null;
 		String type = null;
 		Set<String> years = new TreeSet<>();
+		int volumeFirstYear = 0;
+		int volumeYear = 0;
 		try {
 			while (xmlReader.hasNext()) {
 				switch (xmlReader.getEventType()) {
@@ -189,11 +192,27 @@ public class SfxJibXmlStreamReader implements MarcReader {
 						coverage = "to";
 						break;
 					case ELEMENT_YEAR:
+						String year = xmlReader.getElementText();
 						if (coverage != null) {
 							if (coverage.equals("from")) {
-								from = xmlReader.getElementText();
+								from = year;
 							} else
-								to = xmlReader.getElementText();
+								to = year;
+						}
+						volumeYear = (year != null) ? Integer.valueOf(year) : 0;
+						break;
+					case ELEMENT_VOLUME:
+						if (volumeFirstYear < 0) { // error
+							break;
+						}
+						String volumeStr = xmlReader.getElementText();
+						if (volumeStr != null && volumeYear != 0) {
+							int volumeFirstYearLocal = volumeYear - Integer.valueOf(volumeStr) + 1;
+							if (volumeFirstYear == 0) {
+								volumeFirstYear = volumeFirstYearLocal; // new first year
+							} else if (volumeFirstYear != volumeFirstYearLocal) {
+								volumeFirstYear = -1; // error
+							}
 						}
 						break;
 					}
@@ -225,7 +244,7 @@ public class SfxJibXmlStreamReader implements MarcReader {
 								String.format(TEXT_008, year008)));
 						record.setLeader(factory.newLeader(SERIALS.contains(type) ? TEXT_LEADER_SERIAL
 								: TEXT_LEADER_MONOGRAPH));
-						generateFields996(years);
+						generateFields996(years, volumeFirstYear);
 						return sortFields(record);
 					case ELEMENT_FROM:
 					case ELEMENT_TO:
@@ -303,9 +322,15 @@ public class SfxJibXmlStreamReader implements MarcReader {
 		return years;
 	}
 
-	private void generateFields996(Set<String> years) {
-		years.forEach(y -> record.addVariableField(factory.newDataField("996",
-				' ', ' ', "y", y)));
+	private void generateFields996(Set<String> years, int volumeFirstYear) {
+		years.forEach(y -> {
+			DataField df = factory.newDataField("996", ' ', ' ', "y", y);
+			if (volumeFirstYear > 0) {
+				df.addSubfield(factory.newSubfield('v', String.valueOf(
+						Integer.valueOf(y) - volumeFirstYear + 1)));
+			}
+			record.addVariableField(df);
+		});
 	}
 
 	private Record sortFields(Record record) {
