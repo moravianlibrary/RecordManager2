@@ -293,4 +293,12 @@ public class AdresarKnihovenMarcFunctions implements MarcRecordFunctions {
 		return relevance.toString();
 	}
 
+	public String getPortal(MarcFunctionContext ctx) {
+		String siglaName;
+		if ((siglaName = getFirstFieldForAdresar(ctx, "SGLa")) != null
+				&& !siglaDao.findSiglaByName(siglaName).isEmpty()) {
+			return "SOURCE_IN_PORTAL";
+		}
+		return null;
+	}
 }
