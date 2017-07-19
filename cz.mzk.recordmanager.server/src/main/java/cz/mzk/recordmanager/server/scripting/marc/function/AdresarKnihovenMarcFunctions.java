@@ -37,6 +37,7 @@ public class AdresarKnihovenMarcFunctions implements MarcRecordFunctions {
 	private final static Pattern GPS_PATTERN = Pattern.compile("(\\d+)°(\\d+)'([\\d\\.]+)\"([NSEW])");
 	private final static String MAP_ADRESAR_HOURS = "adresar_hours.map";
 	private static final String MAP_LIBRARIES_RELEVANCE = "libraries_relevance.map";
+	private static final String PORTAL_FACET_TEXT = "KNIHOVNYCZ_YES";
 
 	private static final HashMap<String, Long> relevanceBySigla = new HashMap<>();
 	{
@@ -293,11 +294,11 @@ public class AdresarKnihovenMarcFunctions implements MarcRecordFunctions {
 		return relevance.toString();
 	}
 
-	public String getPortal(MarcFunctionContext ctx) {
+	public String getPortalFacet(MarcFunctionContext ctx) {
 		String siglaName;
 		if ((siglaName = getFirstFieldForAdresar(ctx, "SGLa")) != null
 				&& !siglaDao.findSiglaByName(siglaName).isEmpty()) {
-			return "SOURCE_IN_PORTAL";
+			return PORTAL_FACET_TEXT;
 		}
 		return null;
 	}

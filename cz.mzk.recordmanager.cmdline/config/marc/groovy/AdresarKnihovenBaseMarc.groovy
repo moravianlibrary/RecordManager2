@@ -60,5 +60,5 @@ ils_facet_str = getFirstFieldForAdresar "KNSa"
 
 gps_str = adresarGetGps()
 library_relevance_str = getLibraryRelevance()
-portal_str = getPortal()
+portal_facet_str = getPortalFacet()
 region_disctrict_town_str_mv = adresarGetRegionDistrictTown()
