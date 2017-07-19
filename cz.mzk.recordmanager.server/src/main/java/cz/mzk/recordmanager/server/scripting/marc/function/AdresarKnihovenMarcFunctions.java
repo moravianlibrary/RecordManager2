@@ -2,6 +2,7 @@ package cz.mzk.recordmanager.server.scripting.marc.function;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -38,6 +39,7 @@ public class AdresarKnihovenMarcFunctions implements MarcRecordFunctions {
 	private final static String MAP_ADRESAR_HOURS = "adresar_hours.map";
 	private static final String MAP_LIBRARIES_RELEVANCE = "libraries_relevance.map";
 	private static final String PORTAL_FACET_TEXT = "KNIHOVNYCZ_YES";
+	private static final String URL_COMMENT = "o regionalnich knihovnach";
 
 	private static final HashMap<String, Long> relevanceBySigla = new HashMap<>();
 	{
@@ -311,6 +313,19 @@ public class AdresarKnihovenMarcFunctions implements MarcRecordFunctions {
 			return SolrUtils.createHierarchicFacetValues(region, district, town);
 		}
 		return null;
+	}
+
+	public List<String> adresarGetUrlDisplay(MarcFunctionContext ctx) {
+		List<String> results = new ArrayList<>();
+		for (String tag : Arrays.asList("URL", "ADK")) {
+			for (DataField df : ctx.record().getDataFields(tag)) {
+				if (df.getSubfield('u') != null) {
+					results.add(df.getSubfield('u').getData() + " | "
+							+ (df.getSubfield('z') != null ? df.getSubfield('z').getData() : URL_COMMENT));
+				}
+			}
+		}
+		return results.isEmpty() ? null : results;
 	}
 
 }
