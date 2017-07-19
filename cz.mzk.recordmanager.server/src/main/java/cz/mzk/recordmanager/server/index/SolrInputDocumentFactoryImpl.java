@@ -126,9 +126,8 @@ public class SolrInputDocumentFactoryImpl implements SolrInputDocumentFactory, I
 		mergedDocument.addField(SolrFieldConstants.ID_FIELD, dedupRecord.getId());
 		mergedDocument.addField(SolrFieldConstants.MERGED_FIELD, 1);
 		mergedDocument.addField(SolrFieldConstants.WEIGHT, record.getWeight());
-		List<String> localIds = childs.stream().map(rec -> (String) rec.getFieldValue("id")).collect(Collectors.toCollection(ArrayList::new));
-		mergedDocument.addField(SolrFieldConstants.LOCAL_IDS_FIELD, localIds);
-		if(localIds.size() > 1) mergedDocument.addField(SolrFieldConstants.MERGED_RECORDS, 1);
+		mergedDocument.addField(SolrFieldConstants.LOCAL_IDS_FIELD, getLocalIds(childs));
+		if(childs.size() > 1) mergedDocument.addField(SolrFieldConstants.MERGED_RECORDS, 1);
 		
 		Set<String> institutions = records.stream().map(rec -> getInstitution(rec)).flatMap(it -> it.stream()).collect(Collectors.toCollection(HashSet::new));
 		mergedDocument.addField(SolrFieldConstants.INSTITUTION_FIELD, institutions);
@@ -246,6 +245,23 @@ public class SolrInputDocumentFactoryImpl implements SolrInputDocumentFactory, I
 		}
 		
 		return result;
+	}
+
+	protected List<String> getLocalIds(List<SolrInputDocument> childs) {
+		List<String> index = new ArrayList<>();
+		List<String> others = new ArrayList<>();
+		childs.forEach(rec -> {
+			if (rec.getFieldValue(SolrFieldConstants.INDEXING_WHEN_MERGED) == null
+					|| (boolean) rec
+							.getFieldValue(SolrFieldConstants.INDEXING_WHEN_MERGED))
+				index.add((String) rec
+						.getFieldValue(SolrFieldConstants.ID_FIELD));
+			else
+				others.add((String) rec
+						.getFieldValue(SolrFieldConstants.ID_FIELD));
+		});
+
+		return (index.size() > 0) ? index : others;
 	}
 
 	@Override

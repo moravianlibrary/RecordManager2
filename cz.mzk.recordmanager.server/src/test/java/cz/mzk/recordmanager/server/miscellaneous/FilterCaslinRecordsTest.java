@@ -1,7 +1,6 @@
 package cz.mzk.recordmanager.server.miscellaneous;
 
 import java.io.ByteArrayInputStream;
-import java.util.Collections;
 
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobParameters;
@@ -46,8 +45,7 @@ public class FilterCaslinRecordsTest extends AbstractTest{
 		
 		HarvestedRecord hr = hrDao.findByIdAndHarvestConfiguration("MZK01-000000135", 316L);
 		MarcRecord marcRecord = marcXmlParser.parseRecord(new ByteArrayInputStream(hr.getRawRecord()));
-
-		Assert.assertEquals(marcRecord.getDataFields("996"), Collections.emptyList());
+		Assert.assertEquals(marcRecord.getDataFields("996").size(), 2);
 		Assert.assertNotNull(hr.getDeleted());
 	}
 }

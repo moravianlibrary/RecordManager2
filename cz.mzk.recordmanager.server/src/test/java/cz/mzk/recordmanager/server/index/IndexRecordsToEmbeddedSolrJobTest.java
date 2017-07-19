@@ -56,7 +56,7 @@ public class IndexRecordsToEmbeddedSolrJobTest extends AbstractSolrTest {
 			allDocsQuery.set("q", SolrFieldConstants.ID_FIELD+":*");
 			allDocsQuery.set("rows", 10000);
 			QueryResponse allDocsResponse = server.query(allDocsQuery);
-			Assert.assertEquals(allDocsResponse.getResults().size(), 81);
+			Assert.assertEquals(allDocsResponse.getResults().size(), 83);
 		}
 
 		{
@@ -100,6 +100,21 @@ public class IndexRecordsToEmbeddedSolrJobTest extends AbstractSolrTest {
 		}
 
 		{
+			SolrQuery authQuery = new SolrQuery();
+			authQuery.set("q", SolrFieldConstants.ID_FIELD + ":103");
+			QueryResponse docResponse = server.query(authQuery);
+			Assert.assertEquals(docResponse.getResults().size(), 1);
+			SolrDocument document = docResponse.getResults().get(0);
+			// check whether subject_viz field contains alternative name from mesh
+			System.out.println(document
+					.getFieldValues(SolrFieldConstants.SUBJECT_VIZ_FIELD));
+			Assert.assertTrue(
+					document.getFieldValues(SolrFieldConstants.SUBJECT_VIZ_FIELD).stream() //
+							.anyMatch(s -> s.equals("klinická onkologie")),
+					"Mesh enrichment failed.");
+		}
+
+		{
 			SolrQuery dcQuery = new SolrQuery();
 			dcQuery.set("q", SolrFieldConstants.ID_FIELD+":100");
 			QueryResponse docResponse = server.query(dcQuery);
@@ -134,7 +149,7 @@ public class IndexRecordsToEmbeddedSolrJobTest extends AbstractSolrTest {
 			SolrDocument document = docResponse.getResults().get(0);
 			Assert.assertTrue(
 					document.getFieldValues(SolrFieldConstants.URL).stream()
-						.anyMatch(url -> url.equals("KRAM-MZK|online|http://kramerius.mzk.cz/search/i.jsp?pid=UUID:039764f8-d6db-11e0-b2cd-0050569d679d|"))
+						.anyMatch(url -> url.equals("kram-mzk|online|http://www.digitalniknihovna.cz/mzk/uuid/UUID:039764f8-d6db-11e0-b2cd-0050569d679d|"))
 			);
 		}
 

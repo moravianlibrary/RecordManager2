@@ -6,9 +6,11 @@ import java.nio.charset.StandardCharsets;
 import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import org.apache.commons.validator.routines.ISBNValidator;
+import org.marc4j.marc.DataField;
 
 import cz.mzk.recordmanager.server.ClasspathResourceProvider;
 import cz.mzk.recordmanager.server.model.ShortTitle;
@@ -21,9 +23,16 @@ public class MetadataUtils {
 	private static final List<String> similarity_words = new BufferedReader(new InputStreamReader(
 			new ClasspathResourceProvider().getResource("/mapping/similarity_words.map"), StandardCharsets.UTF_8)) 
 			.lines().collect(Collectors.toCollection(ArrayList::new));
-	
+
+	private static final Pattern TRAILINGPUNCTUATION_PATTERN = Pattern.compile(".*(([:;,=\\(\\[])|(\\s\\.))$");
+	public static final Pattern NUMBER_PATTERN = Pattern.compile("\\d");
+	public static final List<Pattern> PATTERNS = similarity_words.stream()
+			.map(w -> Pattern.compile("\\b" + w + "\\b", Pattern.CASE_INSENSITIVE)).collect(Collectors.toList());
+
+	private static final Pattern FIELD_245 = Pattern.compile("245");
+
 	public static boolean hasTrailingPunctuation(final String input) {
-		return input.matches(".*(([:;,=\\(\\[])|(\\s\\.))$");
+		return TRAILINGPUNCTUATION_PATTERN.matcher(input).matches();
 	}
 
 	public static String normalize(final String input) {
@@ -46,7 +55,22 @@ public class MetadataUtils {
 		String isbn13 = isbnValidator.validate(isbn);
 		return (isbn13 == null)? null: Long.valueOf(isbn13);
 	}
-	
+
+	public static boolean similarityEnabled(DataField df, Title title) {
+		return similarityEnabled(df, title.getTitleStr());
+	}
+
+	public static boolean similarityEnabled(DataField df, ShortTitle shortTitle) {
+		return similarityEnabled(df, shortTitle.getShortTitleStr());
+	}
+
+	protected static boolean similarityEnabled(DataField df, String title) {
+		if (FIELD_245.matcher(df.getTag()).matches() && df.getSubfield('n') != null) {
+			return false;
+		}
+		return similarityEnabled(title);
+	}
+
 	public static boolean similarityEnabled(Title title){
 		return similarityEnabled(title.getTitleStr());
 	}
@@ -56,11 +80,9 @@ public class MetadataUtils {
 	}
 	
 	protected static boolean similarityEnabled(String title) {
-		if(title.matches(".*\\d.*")) return false;
-		for(String word: similarity_words){
-			String titleStr = title.toLowerCase();
-			if(titleStr.matches(".*[\\p{Punct}\\s]+"+word+"[\\p{Punct}\\s]+.*") 
-					|| titleStr.startsWith(word) || titleStr.endsWith(word)){
+		if (NUMBER_PATTERN.matcher(title).find()) return false;
+		for (Pattern pattern: PATTERNS) {
+			if (pattern.matcher(title).find()) {
 				return false;
 			}
 		}

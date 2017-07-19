@@ -3,9 +3,6 @@ fullrecord = getFullRecord()
 
 local_statuses_facet_str_mv = getStatuses()
 
-_hidden_authority_dummy_field = ""
-kramerius_dummy_rights = getRights()
-
 title = getFirstTitle()
 title_display = getFirstTitle()
 
@@ -19,3 +16,5 @@ isbn_display_mv = getISBNs()
 physical = getPhysicals();
 
 url = getUrls();
+
+_hidden_index_when_merged_boolean = getIndexWhenMerged()

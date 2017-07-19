@@ -15,7 +15,6 @@ import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordDAO;
 import cz.mzk.recordmanager.server.solr.LoggingSolrIndexingExceptionHandler;
 import cz.mzk.recordmanager.server.solr.SolrServerFacade;
 import cz.mzk.recordmanager.server.solr.SolrServerFactory;
-import cz.mzk.recordmanager.server.solr.SolrServerFactoryImpl.Mode;
 import cz.mzk.recordmanager.server.util.SolrUtils;
 
 public class IndexIndividualRecordsTasklet implements Tasklet {

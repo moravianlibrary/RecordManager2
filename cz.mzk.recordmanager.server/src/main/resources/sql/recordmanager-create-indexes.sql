@@ -34,3 +34,6 @@ CREATE INDEX dedup_record_updated_idx ON dedup_record(updated);
 
 CREATE UNIQUE INDEX sigla_id_key ON sigla(id);
 CREATE INDEX sigla_sigla_idx ON sigla(sigla);
+
+CREATE INDEX tezaurus_id_idx ON tezaurus_record(import_conf_id,record_id);
+CREATE INDEX tezaurus_name_idx ON tezaurus_record(import_conf_id,source_field,name);

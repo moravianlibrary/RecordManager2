@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 
 import cz.mzk.recordmanager.server.model.Cnb;
 import cz.mzk.recordmanager.server.model.DedupRecord;
+import cz.mzk.recordmanager.server.model.Ean;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecord.HarvestedRecordUniqueId;
 import cz.mzk.recordmanager.server.model.HarvestedRecordFormat;
@@ -22,6 +23,7 @@ import cz.mzk.recordmanager.server.model.Isbn;
 import cz.mzk.recordmanager.server.model.Ismn;
 import cz.mzk.recordmanager.server.model.Issn;
 import cz.mzk.recordmanager.server.model.Oclc;
+import cz.mzk.recordmanager.server.model.ShortTitle;
 import cz.mzk.recordmanager.server.model.Title;
 import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordDAO;
 
@@ -85,7 +87,17 @@ public class HarvestedRecordDAOHibernate extends
 				.setParameter(1, id001)
 				.uniqueResult();
 	}
-	
+
+	@Override
+	public HarvestedRecord findByHarvestConfAndTezaurus(Long configurationId, String tezaurus) {
+		Session session = sessionFactory.getCurrentSession();
+		return (HarvestedRecord) session
+				.createQuery(
+						"from HarvestedRecord where uniqueId.harvestedFromId = ? and tezaurus = ?")
+				.setParameter(0, configurationId).setParameter(1, tezaurus)
+				.uniqueResult();
+	}
+
 	@Override
 	public List<HarvestedRecord> getByDedupRecord(DedupRecord dedupRecord) {
 		return getByDedupRecord(dedupRecord, false);
@@ -158,14 +170,23 @@ public class HarvestedRecordDAOHibernate extends
 		hr.setRaw001Id(null);
 		hr.setScale(null);
 		hr.setUuid(null);
-		
+		hr.setSourceInfo(null);
+		hr.setIssnSeries(null);
+		hr.setIssnSeriesOrder(null);
+		hr.setWeight(null);
 
 		List<Title> titles =  hr.getTitles();
 		hr.setTitles(new ArrayList<>());
 		for (Title t: titles) {
 			session.delete(t);
 		}
-		
+
+		List<ShortTitle> shortTitles = hr.getShortTitles();
+		hr.setShortTitles(new ArrayList<>());
+		for (ShortTitle st: shortTitles) {
+			session.delete(st);
+		}
+
 		List<Isbn> isbns =  hr.getIsbns();
 		hr.setIsbns(new ArrayList<>());
 		for (Isbn i: isbns) {
@@ -195,7 +216,13 @@ public class HarvestedRecordDAOHibernate extends
 		for (Cnb c: cnbs) {
 			session.delete(c);
 		}
-		
+
+		List<Ean> eans = hr.getEans();
+		hr.setEans(new ArrayList<>());
+		for (Ean ean : eans) {
+			session.delete(ean);
+		}
+
 		List<HarvestedRecordFormat> physicalFormats = hr.getPhysicalFormats();
 		hr.getPhysicalFormats().clear();
 		for (HarvestedRecordFormat hrf: physicalFormats) {

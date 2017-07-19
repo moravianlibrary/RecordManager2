@@ -1,1 +1,3 @@
 database.local.properties
+spy.log
+derby.log

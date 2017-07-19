@@ -1009,5 +1009,41 @@ UPDATE library SET name='MUZIBIB' WHERE id=149;
 UPDATE import_conf SET generate_dedup_keys=false WHERE id=331;
 
 --changeset tomascejpek:50 context:cpk
+UPDATE oai_harvest_conf SET set_spec='cpk' WHERE import_conf_id=302;
+
+--changeset tomascejpek:51 context:cpk
+UPDATE import_conf SET filtering_enabled=true WHERE id=314;
+
+--changeset tomascejpek:52
+CREATE TABLE tezaurus_record (
+  id                   DECIMAL(10) PRIMARY KEY,
+  import_conf_id       DECIMAL(10),
+  record_id            VARCHAR(128),
+  source_field         VARCHAR(15),
+  name                 VARCHAR(255),
+  raw_record           BYTEA,
+  FOREIGN KEY (import_conf_id) REFERENCES import_conf(id)
+);
+CREATE INDEX tezaurus_id_idx ON tezaurus_record(import_conf_id,record_id);
+CREATE INDEX tezaurus_name_idx ON tezaurus_record(import_conf_id,source_field,name);
+
+--changeset tomascejpek:53 context:cpk
+INSERT INTO import_conf (id,library_id,contact_person_id,id_prefix,base_weight,cluster_id_enabled,filtering_enabled,interception_enabled,is_library,harvest_frequency,mapping_script,generate_dedup_keys) VALUES (352,101,200,'mesh',0,false,false,false,false,'U',null,false);
+INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (352,NULL,NULL,'marc21',NULL);
+
+--changeset tomascejpek:54 context:cpk
+INSERT INTO library (id, name, url, catalog_url, city) VALUES (150, 'MKCHODOV', 'https://www.knihovnachodov.cz/', 'https://www.knihovnachodov.cz/Katalog/', 'Chodov');
+INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency) VALUES (350, 150, 200, 'mkchodov', 11, false, false, false, true, 'U');
+INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (350,'https://www.knihovnachodov.cz/Tritius/oai-provider','CPK_124','marc21',NULL);
+
+--changeset tomascejpek:55 context:cpk
+UPDATE import_conf SET filtering_enabled=true WHERE id=327;
+
+--changeset tomascejpek:56 context:cpk
+INSERT INTO library (id, name, url, catalog_url, city) VALUES (153, 'OKPB', 'http://www.okpb.cz', 'http://www.okpb.cz/clavius/', 'Opava');
+INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency) VALUES (353, 153, 200, 'okpb', 12, false, false, false, true, 'U');
+INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (353,'http://www.okpb.cz/clavius/l.dll','CPK','marc21',NULL);
+
+--changeset tomascejpek:57 context:cpk
 UPDATE library SET city='Bibliography' WHERE id in (119,131,142,148,149);
 UPDATE library SET city=NULL WHERE id=116;

@@ -58,7 +58,6 @@ cnb_search_str = getFirstField "015az"
 ean_str_mv = getEAN()
 subject_facet_str_mv = getSubject "600abcdfglnpqstyz:610abcdfgklnpstyz:611abcdefgklnpqstyz:630adfgklnpstyz2:648a:650avyz:651avxyz:964abcdefg:967ab"
 source_title_facet_str = getFirstField "773t"
-genre_facet_str = getFirstField "655avxyz"
 conspectus_facet_str_mv = getFields "072x"
 publisher_str_mv = getPublisherStrMv()
 author_facet_str_mv = getFields "100abcdq:110abc:111acdegq:700abcdq:710abc:711acdegq:975abcdq:976abc"

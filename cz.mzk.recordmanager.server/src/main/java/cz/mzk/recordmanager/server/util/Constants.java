@@ -25,15 +25,18 @@ public class Constants {
 	public static final String JOB_ID_IMPORT_OAI					= "importOaiRecordsJob";
 	public static final String JOB_ID_IMPORT_COSMOTRON_996			= "importCosmotron996RecordsJob";
 	public static final String JOB_ID_IMPORT_INSPIRATION			= "importInspirationJob";
+	public static final String JOB_ID_IMPORT_TEZAURUS				= "importTezaurusRecordsJob";
 	public static final String JOB_ID_DELETE_INSPIRATION			= "deleteInspirationJob";
 	public static final String JOB_ID_REGEN_DEDUP_KEYS				= "regenerateDedupKeysJob";
 	public static final String JOB_ID_REGEN_MISSING_DEDUP_KEYS		= "regenerateMissingDedupKeysJob";
 	public static final String JOB_ID_DELETE_ALL_RECORDS_FROM_SOLR	= "deleteAllRecordsFromSolrJob";
 	public static final String JOB_ID_GENERATE_SKAT_DEDUP_KEYS		= "generateSkatDedupKeys";
+	public static final String JOB_ID_GENERATE_LOCAL_SKAT_DEDUP_KEYS	= "generateLocalSkatDedupKeysJob";
 	public static final String JOB_ID_HARVEST_OBALKY_KNIH		= "obalkyKnihHarvestJob";
 	public static final String JOB_ID_HARVEST_ZAKONYPROLIDI			= "zakonyProLidiHarvestJob";
 	public static final String JOB_ID_FULLTEXT_ZAKONYPROLIDI		= "zakonyProLidiFulltextJob";
 	public static final String JOB_ID_FILTER_CASLIN					= "filterCaslinRecordsJob";
+	public static final String JOB_ID_FULLTEXT_MANUSCRIPTORIUM		= "manuscriptoriumFulltextJob";
 	
 	public static final String JOB_PARAM_CONF_ID 		= "configurationId";
 	public static final String JOB_PARAM_FROM_DATE 		= "from";
@@ -80,6 +83,7 @@ public class Constants {
 	public static final String PREFIX_KRAM_NTK			= "kram-ntk";
 	public static final String PREFIX_KRAM3_NKP			= "kram3-nkp";
 	public static final String PREFIX_MANUSCRIPTORIUM	= "manuscript";
+	public static final String PREFIX_MESH				= "mesh";
 	public static final String PREFIX_MKP_EBOOKS		= "mkpe";
 	public static final String PREFIX_MKUO				= "mkuo";
 	public static final String PREFIX_MZK				= "mzk";
@@ -104,6 +108,7 @@ public class Constants {
 	public static final String LIBRARY_NAME_SLK			= "SLK";
 	public static final String LIBRARY_NAME_STT			= "STT";
 	
+	public static final long IMPORT_CONF_ID_CASLIN 		= 316L;
 	public static final long IMPORT_CONF_ID_SLK			= 321L;
 	public static final long IMPORT_CONF_ID_KKL			= 325L;
 	public static final long IMPORT_CONF_ID_STT			= 326L;

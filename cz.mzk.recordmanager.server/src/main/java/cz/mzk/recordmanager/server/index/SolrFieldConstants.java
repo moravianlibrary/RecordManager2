@@ -89,6 +89,10 @@ public class SolrFieldConstants {
 	public static final String CONSPECTUS_STR_MV = "conspectus_str_mv";
 	
 	public static final String MERGED_RECORDS = "merged_records_boolean";
+	
+	public static final String GENRE_FACET = "genre_facet_str_mv";
+	
+	public static final String INDEXING_WHEN_MERGED = "_hidden_index_when_merged_boolean";
 
 	/**
 	 * dummy fields used for processing purposes only, shouldn't be indexed. Fields are deleted in AuthorityEnricher. 
@@ -100,10 +104,7 @@ public class SolrFieldConstants {
 	public static final String SUBJECT_AUTHORITY_DUMMY_FIELD = "_hidden_subject_dummy_field";
 	
 	public static final String GENRE_AUTHORITY_DUMMY_FIELD = "_hidden_genre_dummy_field";
-	
-	/**
-	 * dummy field for passing kramerius policy, removed in UrlEnricher
-	 */
-	public static final String KRAMERIUS_DUMMY_RIGTHS = "kramerius_dummy_rights";
+
+	public static final String VIZ_DUMMY_FIELD = "_hidden_viz_dummy_field";
 
 }
