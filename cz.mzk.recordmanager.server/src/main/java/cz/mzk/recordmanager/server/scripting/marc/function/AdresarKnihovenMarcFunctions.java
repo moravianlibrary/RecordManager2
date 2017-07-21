@@ -36,7 +36,7 @@ public class AdresarKnihovenMarcFunctions implements MarcRecordFunctions {
 	private final static Pattern FIELD_PATTERN = Pattern.compile("([a-zA-Z0-9]{3})([a-zA-Z0-9]*)");
 	private final static Pattern GPS_PATTERN = Pattern.compile("(\\d+)°(\\d+)'([\\d\\.]+)\"([NSEW])");
 	private final static String MAP_ADRESAR_HOURS = "adresar_hours.map";
-	private static final String MAP_LIBRARIES_RELEVANCE = "libraries_relevance.map";
+	private static final String MAP_LIBRARIES_RELEVANCE = "adresar_relevance.map";
 	private static final String PORTAL_FACET_TEXT = "KNIHOVNYCZ_YES";
 	private static final String URL_COMMENT = "o regionálních knihovnách";
 
