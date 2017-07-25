@@ -8,6 +8,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -19,17 +20,21 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.batch.core.StepContribution;
-import org.springframework.batch.core.scope.context.ChunkContext;
-import org.springframework.batch.core.step.tasklet.Tasklet;
-import org.springframework.batch.repeat.RepeatStatus;
+import org.springframework.batch.item.ItemReader;
+import org.springframework.batch.item.NonTransientResourceException;
+import org.springframework.batch.item.ParseException;
+import org.springframework.batch.item.UnexpectedInputException;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import cz.mzk.recordmanager.server.model.HarvestedRecord;
+import cz.mzk.recordmanager.server.model.SkatKey;
+import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordDAO;
+import cz.mzk.recordmanager.server.oai.dao.SkatKeyDAO;
 import cz.mzk.recordmanager.server.util.Constants;
 import cz.mzk.recordmanager.server.util.HttpClient;
 import cz.mzk.recordmanager.server.util.UrlUtils;
 
-public class ManuallyMergedSkatDedupKeysTasklet implements Tasklet {
+public class ManuallyMergedSkatDedupKeysReader implements ItemReader<Set<SkatKey>> {
 
 	@Autowired
 	private HttpClient httpClient;
@@ -37,8 +42,14 @@ public class ManuallyMergedSkatDedupKeysTasklet implements Tasklet {
 	@Autowired
 	private SessionFactory sessionFactory;
 
+	@Autowired
+	private SkatKeyDAO skatKeyDao;
+	
+	@Autowired
+	private HarvestedRecordDAO hrDao;
+	
 	private static Logger logger = LoggerFactory
-			.getLogger(ManuallyMergedSkatDedupKeysTasklet.class);
+			.getLogger(ManuallyMergedSkatDedupKeysReader.class);
 
 	private static final Pattern PATTERN = Pattern
 			.compile("http://aleph.nkp.cz/F/([A-Z0-9-]*)\\?func=short-mail-0");
@@ -51,7 +62,7 @@ public class ManuallyMergedSkatDedupKeysTasklet implements Tasklet {
 	private Set<String> downloadedKeys = new HashSet<>();
 	private Map<String, String> headers;
 
-	public ManuallyMergedSkatDedupKeysTasklet(Date fromDate, Date toDate) {
+	public ManuallyMergedSkatDedupKeysReader(Date fromDate, Date toDate) {
 		this.fromDate = fromDate;
 		this.toDate = toDate;
 		this.headers = Collections
@@ -60,8 +71,8 @@ public class ManuallyMergedSkatDedupKeysTasklet implements Tasklet {
 	}
 
 	@Override
-	public RepeatStatus execute(StepContribution contribution,
-			ChunkContext chunkContext) throws Exception {
+	public Set<SkatKey> read() throws Exception, UnexpectedInputException,
+			ParseException, NonTransientResourceException {
 		Matcher matcher;
 		Date date = fromDate;
 
@@ -94,8 +105,16 @@ public class ManuallyMergedSkatDedupKeysTasklet implements Tasklet {
 			date = DateUtils.addDays(date, 1); // next day
 			if (date.before(toDate)) sleep(120000, 180000); // wait 2-3 minutes
 		}
+		Set<SkatKey> results = new HashSet<>();
+		downloadedKeys.forEach(key -> {
+			HarvestedRecord hr = hrDao.findByIdAndHarvestConfiguration(key, Constants.IMPORT_CONF_ID_CASLIN);
+			if (hr != null) {
+				List<SkatKey> skatkeyList = skatKeyDao.getSkatKeysForRecord(hr.getId());
+				if (skatkeyList != null) results.addAll(skatkeyList);
+			}
+		});
 
-		return RepeatStatus.FINISHED;
+		return results;
 	}
 
 	protected void sleep(int min, int max) {

@@ -31,7 +31,7 @@ import cz.mzk.recordmanager.server.jdbc.LongValueRowMapper;
 import cz.mzk.recordmanager.server.miscellaneous.skat.GenerateSkatKeysJobParameterValidator;
 import cz.mzk.recordmanager.server.miscellaneous.skat.GenerateSkatKeysProcessor;
 import cz.mzk.recordmanager.server.miscellaneous.skat.GenerateSkatKeysWriter;
-import cz.mzk.recordmanager.server.miscellaneous.skat.ManuallyMergedSkatDedupKeysTasklet;
+import cz.mzk.recordmanager.server.miscellaneous.skat.ManuallyMergedSkatDedupKeysReader;
 import cz.mzk.recordmanager.server.miscellaneous.skat.SkatKeysMergedIdsUpdateTasklet;
 import cz.mzk.recordmanager.server.model.SkatKey;
 import cz.mzk.recordmanager.server.oai.dao.SkatKeyDAO;
@@ -117,17 +117,20 @@ public class MiscellaneousJobsConfig {
 	@Bean(name = Constants.JOB_ID_MANUALLY_MERGED_SKAT_DEDUP_KEYS + ":generateManuallyMergedSkatKeysStep")
 	public Step generateManuallyMergedSkatKeysStep() throws Exception {
 		return steps.get("generateManuallyMergedSkatKeysStep")
-				.tasklet(generateManuallyMergedSkatKeysTasklet(DATE_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION))
 				.listener(new StepProgressListener())
+				.<Set<SkatKey>, Set<SkatKey>> chunk(1)
+				.reader(generateManuallyMergedSkatKeysReader(DATE_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION))
+				.writer(generateSkatKeysWriter())
+				.taskExecutor((TaskExecutor) poolTaskExecutor())
 				.build();
 	}
 	
-	@Bean(name = Constants.JOB_ID_MANUALLY_MERGED_SKAT_DEDUP_KEYS+":generateManuallyMergedSkatKeysTasklet")
+	@Bean(name = Constants.JOB_ID_MANUALLY_MERGED_SKAT_DEDUP_KEYS+":generateManuallyMergedSkatKeysReader")
 	@StepScope
-	public Tasklet generateManuallyMergedSkatKeysTasklet(
+	public ItemReader<? extends Set<SkatKey>> generateManuallyMergedSkatKeysReader(
 			@Value("#{jobParameters[" + Constants.JOB_PARAM_FROM_DATE + "]}") Date fromDate,
 			@Value("#{jobParameters[" + Constants.JOB_PARAM_UNTIL_DATE + "]}") Date toDate) {
-		return new ManuallyMergedSkatDedupKeysTasklet(fromDate, toDate);
+		return new ManuallyMergedSkatDedupKeysReader(fromDate, toDate);
 	}
 
 	@Bean(name = Constants.JOB_ID_GENERATE_SKAT_DEDUP_KEYS + ":generateSkatKeysStep")
