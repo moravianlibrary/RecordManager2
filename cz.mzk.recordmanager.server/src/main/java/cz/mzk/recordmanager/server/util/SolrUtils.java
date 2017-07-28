@@ -33,6 +33,7 @@ public class SolrUtils {
 	
 	private static final String INSTITUTION_LIBRARY = "Library";
 	private static final String INSTITUTION_OTHERS = "Others";
+	private static final String INSTITUTION_UNKNOWN = "unknown";
 
 	private static enum WEIGHT_DOC_COMPARATOR implements Comparator<SolrInputDocument> {
 		INSTANCE;
@@ -186,23 +187,21 @@ public class SolrUtils {
 		return SolrFieldConstants.UNKNOWN_INSTITUTION;
 	}
 	
-	public static List<String> getInstitution(ImportConfiguration conf) {
-		if (conf != null) {
-			if (conf.isLibrary()) {
-				String city = MetadataUtils.normalize(getCityOfRecord(conf));
-				String name = getInstitutionOfRecord(conf);
-				if (name.equals(Constants.LIBRARY_NAME_NKP)) {
-					String prefix = getPrefixOfNKPRecord(conf);
-					return SolrUtils.createHierarchicFacetValues(INSTITUTION_LIBRARY, city, name, prefix);
-				}
-				return SolrUtils.createHierarchicFacetValues(INSTITUTION_LIBRARY, city, name);
+	public static List<String> getInstitution(ImportConfiguration config) {
+		if (config != null) {
+			String city = getCityOfRecord(config);
+			city = city == null ? INSTITUTION_UNKNOWN : MetadataUtils.normalize(city);
+			String name = getInstitutionOfRecord(config);
+			if (name.equals(Constants.LIBRARY_NAME_NKP)) {
+				String prefix = getPrefixOfNKPRecord(config);
+				return SolrUtils.createHierarchicFacetValues(INSTITUTION_LIBRARY, city, name, prefix);
 			}
-			else {
-				String name = getInstitutionOfRecord(conf);
-				return SolrUtils.createHierarchicFacetValues(INSTITUTION_OTHERS, name);
-			}
+			String base = config.isLibrary() ? INSTITUTION_LIBRARY : INSTITUTION_OTHERS;
+			if (city.equals(INSTITUTION_UNKNOWN)) return SolrUtils.createHierarchicFacetValues(base, name);
+			else return SolrUtils.createHierarchicFacetValues(base, city, name);
 		}
-		return SolrUtils.createHierarchicFacetValues(SolrFieldConstants.UNKNOWN_INSTITUTION);
+
+		return SolrUtils.createHierarchicFacetValues(INSTITUTION_UNKNOWN);
 	}
 
 }
