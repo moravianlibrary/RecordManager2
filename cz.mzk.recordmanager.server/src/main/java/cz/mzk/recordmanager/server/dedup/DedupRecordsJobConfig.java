@@ -573,7 +573,7 @@ public class DedupRecordsJobConfig {
 				.listener(new StepProgressListener())
 				.<List<Long>, List<HarvestedRecord>> chunk(100)
 				.reader(dedupCnbClustersReader())
-				.processor(generalDedupClustersProcessor())
+				.processor(dedupCNBClustersProcessor())
 				.writer(dedupSimpleKeysStepWriter())
 				.build();
 	}
@@ -1148,6 +1148,15 @@ public class DedupRecordsJobConfig {
 		return new DedupIdentifierClustersProcessor();
 	}
 	
+	/**
+	 * processor for deduplication of clusters based on identifier CNB
+	 */
+	@Bean(name = "dedupCNBClustersProcessor")
+	@StepScope
+	public ItemProcessor<List<Long>, List<HarvestedRecord>> dedupCNBClustersProcessor() {
+		return new DedupIdentifierCNBClustersProcessor();
+	}
+
 	/**
 	 * Record processor for deduplication of records based on Skat data
 	 * @return

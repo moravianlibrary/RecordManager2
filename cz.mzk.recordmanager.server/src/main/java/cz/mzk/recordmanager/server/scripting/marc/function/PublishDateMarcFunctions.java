@@ -9,7 +9,6 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import org.marc4j.marc.DataField;
@@ -116,12 +115,13 @@ public class PublishDateMarcFunctions implements MarcRecordFunctions {
 		years.addAll(record.getFields("260", 'c'));
 		years.addAll(record.getFields("773", '9'));
 		years.addAll(record.getFields("996", 'y'));
-		years.stream().map(y -> {
+		Set<String> results = new TreeSet<>();
+		years.forEach(y -> {
 			Matcher matcher;
-			if((matcher = FOUR_DIGIT_YEAR_PATTERN.matcher(y)).matches()) return matcher.group(0);
-			else return null;
-		}).collect(Collectors.toCollection(ArrayList::new));
-		return years;
+			if ((matcher = FOUR_DIGIT_YEAR_PATTERN.matcher(y)).find())
+				results.add(matcher.group(0));
+		});
+		return results;
 	}
 
 	public Set<Integer> parsePublishDateFrom008(String field008) {

@@ -72,10 +72,9 @@ public class SolrInputDocumentFactoryImpl implements SolrInputDocumentFactory, I
 			}
 			
 			harvestedRecordEnrichers.forEach(enricher -> enricher.enrich(record, document));
-
 			document.addField(SolrFieldConstants.MERGED_CHILD_FIELD, 1);
 			document.addField(SolrFieldConstants.WEIGHT, record.getWeight());
-			
+	
 			return document;
 		} catch (Exception ex) {
 			logger.error(String.format("Exception thrown when indexing dedup_record with id=%s", record.getUniqueId()), ex);

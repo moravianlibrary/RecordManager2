@@ -1,6 +1,8 @@
 package cz.mzk.recordmanager.server.imports;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import java.util.Date;
 import java.util.List;
 
@@ -19,7 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import cz.mzk.recordmanager.server.dedup.DelegatingDedupKeysParser;
 import cz.mzk.recordmanager.server.marc.ISOCharConvertor;
 import cz.mzk.recordmanager.server.marc.MarcRecord;
-import cz.mzk.recordmanager.server.marc.MarcRecordImpl;
+import cz.mzk.recordmanager.server.marc.MarcXmlParser;
 import cz.mzk.recordmanager.server.marc.intercepting.MarcInterceptorFactory;
 import cz.mzk.recordmanager.server.marc.intercepting.MarcRecordInterceptor;
 import cz.mzk.recordmanager.server.metadata.MetadataRecord;
@@ -64,6 +66,9 @@ public class ImportRecordsWriter implements ItemWriter<List<Record>>, StepExecut
 	@Autowired
 	protected SessionFactory sessionFactory;
 
+	@Autowired
+	private MarcXmlParser marcXmlParser;
+
 	private ImportConfiguration harvestConfiguration;
 
 	private Long configurationId;
@@ -88,7 +93,20 @@ public class ImportRecordsWriter implements ItemWriter<List<Record>>, StepExecut
 		for (List<Record> records : items) {
 			for (Record currentRecord : records) {
 				try {
-					MarcRecord marc = new MarcRecordImpl(currentRecord);
+					ByteArrayOutputStream outStream = new ByteArrayOutputStream();
+					MarcWriter marcWriter = new MarcXmlWriter(outStream, true);
+					marcWriter.setConverter(ISOCharConvertor.INSTANCE);
+					marcWriter.write(currentRecord);
+					marcWriter.close();
+					byte[] recordContent = outStream.toByteArray();
+					if (harvestConfiguration.isInterceptionEnabled()) {
+						MarcRecordInterceptor interceptor = marcInterceptorFactory.getInterceptor(harvestConfiguration, recordContent);
+						if (interceptor != null) {
+							recordContent = interceptor.intercept();
+						}
+					}
+					InputStream is = new ByteArrayInputStream(recordContent);
+					MarcRecord marc = marcXmlParser.parseRecord(is);
 					MetadataRecord metadata = metadataFactory.getMetadataRecord(marc, harvestConfiguration);
 					String recordId = metadata.getOAIRecordId();
 					if (recordId == null) {
@@ -106,18 +124,7 @@ public class ImportRecordsWriter implements ItemWriter<List<Record>>, StepExecut
 						hr.setHarvestedFrom(harvestConfiguration);
 					}
 					hr.setUpdated(new Date());
-					ByteArrayOutputStream outStream = new ByteArrayOutputStream();
-					MarcWriter marcWriter = new MarcXmlWriter(outStream, true);
-					marcWriter.setConverter(ISOCharConvertor.INSTANCE);
-					marcWriter.write(currentRecord);
-					marcWriter.close();
-					byte[] recordContent = outStream.toByteArray();
-					if (harvestConfiguration.isInterceptionEnabled()) {
-						MarcRecordInterceptor interceptor = marcInterceptorFactory.getInterceptor(harvestConfiguration, recordContent);
-						if (interceptor != null) {
-							recordContent = interceptor.intercept();
-						}
-					}
+					
 					if(metadata.isDeleted()) {
 						hr.setDeleted(new Date());
 						hr.setRawRecord(new byte[0]);
