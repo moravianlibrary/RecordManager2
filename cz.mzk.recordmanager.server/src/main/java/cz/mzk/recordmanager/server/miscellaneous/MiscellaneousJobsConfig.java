@@ -121,7 +121,6 @@ public class MiscellaneousJobsConfig {
 				.<Set<SkatKey>, Set<SkatKey>> chunk(1)
 				.reader(generateManuallyMergedSkatKeysReader(DATE_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION))
 				.writer(generateSkatKeysWriter())
-				.taskExecutor((TaskExecutor) poolTaskExecutor())
 				.build();
 	}
 	

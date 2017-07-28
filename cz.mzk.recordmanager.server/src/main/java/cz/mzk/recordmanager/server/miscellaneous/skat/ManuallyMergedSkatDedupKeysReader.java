@@ -44,10 +44,10 @@ public class ManuallyMergedSkatDedupKeysReader implements ItemReader<Set<SkatKey
 
 	@Autowired
 	private SkatKeyDAO skatKeyDao;
-	
+
 	@Autowired
 	private HarvestedRecordDAO hrDao;
-	
+
 	private static Logger logger = LoggerFactory
 			.getLogger(ManuallyMergedSkatDedupKeysReader.class);
 
@@ -56,14 +56,14 @@ public class ManuallyMergedSkatDedupKeysReader implements ItemReader<Set<SkatKey
 	private static final Pattern PATTERN2 = Pattern
 			.compile("(http://aleph.nkp.cz/exlibris/aleph/a22_1/tmp/[^\\.]*\\.sav)");
 
-	private Date fromDate = null;
 	private Date toDate = null;
+	private Date counterDate = null;
 	private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyyMMdd");
 	private Set<String> downloadedKeys = new HashSet<>();
 	private Map<String, String> headers;
 
 	public ManuallyMergedSkatDedupKeysReader(Date fromDate, Date toDate) {
-		this.fromDate = fromDate;
+		counterDate = fromDate;
 		this.toDate = toDate;
 		this.headers = Collections
 				.singletonMap("User-Agent",
@@ -74,15 +74,14 @@ public class ManuallyMergedSkatDedupKeysReader implements ItemReader<Set<SkatKey
 	public Set<SkatKey> read() throws Exception, UnexpectedInputException,
 			ParseException, NonTransientResourceException {
 		Matcher matcher;
-		Date date = fromDate;
 
 		if (toDate == null) {
 			toDate = new Date();
 		}
 		toDate = DateUtils.truncate(toDate, Calendar.DAY_OF_MONTH);
-		while (date.before(toDate)) {
+		while (counterDate.before(toDate)) {
 			downloadedKeys.clear();
-			String get = IOUtils.toString(harvest(prepareAlephBaseUrl(DATE_FORMAT.format(date))));
+			String get = IOUtils.toString(harvest(prepareAlephBaseUrl(DATE_FORMAT.format(counterDate))));
 
 			if (!(matcher = PATTERN.matcher(get)).find()) {
 				logger.info("Session not found!!!");
@@ -102,19 +101,22 @@ public class ManuallyMergedSkatDedupKeysReader implements ItemReader<Set<SkatKey
 					}
 				}
 			}
-			date = DateUtils.addDays(date, 1); // next day
-			if (date.before(toDate)) sleep(120000, 180000); // wait 2-3 minutes
+			counterDate = DateUtils.addDays(counterDate, 1); // next day
+			if (counterDate.before(toDate)) sleep(120000, 180000); // wait 2-3 minutes
+			Set<SkatKey> results = new HashSet<>();
+			//get skat keys 
+			downloadedKeys.forEach(key -> {
+				HarvestedRecord hr = hrDao.findByIdAndHarvestConfiguration(key, Constants.IMPORT_CONF_ID_CASLIN);
+				if (hr != null) {
+					List<SkatKey> skatkeyList = skatKeyDao.findSkatKeysBySkatId(hr.getId());
+					if (skatkeyList != null) results.addAll(skatkeyList);
+				}
+			});
+			results.forEach(key -> key.setManuallyMerged(true));
+			pushToDatabase(); // update caslin record
+			return results; // update skatKeys, local records from skatKeys
 		}
-		Set<SkatKey> results = new HashSet<>();
-		downloadedKeys.forEach(key -> {
-			HarvestedRecord hr = hrDao.findByIdAndHarvestConfiguration(key, Constants.IMPORT_CONF_ID_CASLIN);
-			if (hr != null) {
-				List<SkatKey> skatkeyList = skatKeyDao.getSkatKeysForRecord(hr.getId());
-				if (skatkeyList != null) results.addAll(skatkeyList);
-			}
-		});
-
-		return results;
+		return null;
 	}
 
 	protected void sleep(int min, int max) {
@@ -136,21 +138,11 @@ public class ManuallyMergedSkatDedupKeysReader implements ItemReader<Set<SkatKey
 		for (String currentKey : downloadedKeys) {
 			push(currentKey);
 		}
-		downloadedKeys.clear();
 	}
 
 	protected void push(String recordId) {
-		String query = "UPDATE skat_keys "
-				+ "SET manually_merged = TRUE "
-				+ "WHERE skat_record_id IN "
-				+ "(SELECT id FROM harvested_record WHERE import_conf_id = ? AND record_id = ?"
-				+ ")";
+		String query = "UPDATE harvested_record SET next_dedup_flag=true WHERE import_conf_id = ? AND record_id = ?";
 		Session session = sessionFactory.getCurrentSession();
-		session.createSQLQuery(query)
-				.setLong(0, Constants.IMPORT_CONF_ID_CASLIN)
-				.setString(1, recordId).executeUpdate();
-
-		query = "UPDATE harvested_record SET next_dedup_flag=true WHERE import_conf_id = ? AND record_id = ?";
 		session.createSQLQuery(query)
 				.setLong(0, Constants.IMPORT_CONF_ID_CASLIN)
 				.setString(1, recordId).executeUpdate();

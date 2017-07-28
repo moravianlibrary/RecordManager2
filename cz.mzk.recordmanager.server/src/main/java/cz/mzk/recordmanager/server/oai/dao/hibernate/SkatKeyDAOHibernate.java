@@ -51,4 +51,13 @@ public class SkatKeyDAOHibernate extends AbstractDomainDAOHibernate<SkatKeyCompo
 						.list();
 	}
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<SkatKey> findSkatKeysBySkatId(Long skatId) {
+		Session session = sessionFactory.getCurrentSession();
+		return (List<SkatKey>) session
+				.createQuery("FROM SkatKey WHERE skat_record_id = ?")
+				.setParameter(0, skatId).list();
+	}
+
 }
