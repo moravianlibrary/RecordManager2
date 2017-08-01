@@ -137,7 +137,7 @@ public class MiscellaneousJobsConfig {
 		return steps.get("generateSkatKeysStep")
 				.listener(new StepProgressListener())
 				.<Long, Set<SkatKey>> chunk(1000)
-				.reader(generateSkatKeysReader(DATE_OVERRIDEN_BY_EXPRESSION))
+				.reader(generateSkatKeysReader(DATE_OVERRIDEN_BY_EXPRESSION,DATE_OVERRIDEN_BY_EXPRESSION))
 				.processor(generateSkatKeysProcessor())
 				.writer(generateSkatKeysWriter())
 				.taskExecutor((TaskExecutor) poolTaskExecutor())
@@ -147,20 +147,22 @@ public class MiscellaneousJobsConfig {
 	@Bean(name = Constants.JOB_ID_GENERATE_SKAT_DEDUP_KEYS + ":generateSkatKeysReader")
 	@StepScope
 	public ItemReader<Long> generateSkatKeysReader(
-			@Value("#{jobParameters[" + Constants.JOB_PARAM_FROM_DATE + "]}") Date fromDate)
+			@Value("#{jobParameters[" + Constants.JOB_PARAM_FROM_DATE + "]}") Date fromDate,
+			@Value("#{jobParameters[" + Constants.JOB_PARAM_FROM_DATE + "]}") Date toDate)
 			throws Exception {
 		Date from = fromDate == null ? new Date(0) : fromDate;
-		
+		Date to = toDate == null ? new Date() : toDate;
 		JdbcPagingItemReader<Long> reader = new JdbcPagingItemReader<>();
 		SqlPagingQueryProviderFactoryBean pqpf = new SqlPagingQueryProviderFactoryBean();
 		pqpf.setDataSource(dataSource);
 		pqpf.setSelectClause("SELECT id");
 		pqpf.setFromClause("FROM harvested_record");
-		pqpf.setWhereClause("WHERE import_conf_id = :conf_id and updated > :updated_time");
+		pqpf.setWhereClause("WHERE import_conf_id = :conf_id AND updated > :updated_from AND updated < :updated_to");
 		pqpf.setSortKey("id");
 		Map<String, Object> parameterValues = new HashMap<String, Object>();
 		parameterValues.put("conf_id", Constants.IMPORT_CONF_ID_CASLIN);
-		parameterValues.put("updated_time", from);
+		parameterValues.put("updated_from", from);
+		parameterValues.put("updated_to", to);
 		reader.setParameterValues(parameterValues);
 		reader.setRowMapper(new LongValueRowMapper());
 		reader.setPageSize(100);
