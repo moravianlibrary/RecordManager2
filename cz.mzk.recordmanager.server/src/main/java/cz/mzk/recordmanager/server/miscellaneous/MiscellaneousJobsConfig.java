@@ -70,12 +70,12 @@ public class MiscellaneousJobsConfig {
 	@Bean
 	public Job generateSkatKeysJob(
 			@Qualifier(Constants.JOB_ID_GENERATE_SKAT_DEDUP_KEYS + ":generateSkatKeysStep") Step generateSkatKeysStep,
-			@Qualifier(Constants.JOB_ID_GENERATE_SKAT_DEDUP_KEYS + ":updateStatMergedIdsStep") Step updateStatMergedIdsStep
+			@Qualifier(Constants.JOB_ID_MANUALLY_MERGED_SKAT_DEDUP_KEYS + ":generateManuallyMergedSkatKeysStep") Step generateManuallyMergedSkatKeysStep
 			) {
 		return jobs.get(Constants.JOB_ID_GENERATE_SKAT_DEDUP_KEYS)
 				.validator(new GenerateSkatKeysJobParameterValidator())
 				.start(generateSkatKeysStep)
-				.next(updateStatMergedIdsStep)
+				.next(generateManuallyMergedSkatKeysStep)
 				.build();
 	}
 
@@ -89,6 +89,7 @@ public class MiscellaneousJobsConfig {
 	}
 
 	@Bean(name = Constants.JOB_ID_GENERATE_SKAT_DEDUP_KEYS + ":updateStatMergedIdsStep")
+	@Deprecated
 	public Step updateStatMergedIdsStep() throws Exception {
 		return steps.get("updateStatMergedIdsStep")
 				.tasklet(updateStatMergedIdsStepTasklet(DATE_OVERRIDEN_BY_EXPRESSION))
