@@ -302,3 +302,11 @@ CREATE TABLE tezaurus_record (
   raw_record           BLOB,
   CONSTRAINT tezaurus_import_conf_fk FOREIGN KEY (import_conf_id) REFERENCES import_conf(id)
 );
+
+CREATE TABLE publisher_number (
+  id                   DECIMAL(10) PRIMARY KEY,
+  harvested_record_id  DECIMAL(10),
+  publisher_number     VARCHAR(255),
+  order_in_record      DECIMAL(4),
+  CONSTRAINT publisher_number_fk FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id)
+);
