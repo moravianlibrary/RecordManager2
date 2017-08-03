@@ -25,6 +25,7 @@ import cz.mzk.recordmanager.server.model.Isbn;
 import cz.mzk.recordmanager.server.model.Ismn;
 import cz.mzk.recordmanager.server.model.Issn;
 import cz.mzk.recordmanager.server.model.Oclc;
+import cz.mzk.recordmanager.server.model.PublisherNumber;
 import cz.mzk.recordmanager.server.model.ShortTitle;
 import cz.mzk.recordmanager.server.model.TezaurusRecord.TezaurusKey;
 import cz.mzk.recordmanager.server.model.Title;
@@ -1306,6 +1307,18 @@ public class MetadataMarcRecord implements MetadataRecord {
 	@Override
 	public Boolean getMetaproxyBool() {
 		return true;
+	}
+
+	@Override
+	public List<PublisherNumber> getPublisherNumber() {
+		List<PublisherNumber> results = new ArrayList<>();
+		Long i = 0L;
+		for (DataField df : underlayingMarc.getDataFields("028")) {
+			if (df.getIndicator1() == '0' && df.getSubfield('a') != null) {
+				results.add(new PublisherNumber(df.getSubfield('a').getData(), ++i));
+			}
+		}
+		return results;
 	}
 
 }

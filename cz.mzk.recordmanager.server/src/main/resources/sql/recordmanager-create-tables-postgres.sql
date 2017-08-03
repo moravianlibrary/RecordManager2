@@ -398,3 +398,13 @@ CREATE TABLE tezaurus_record (
   raw_record           BYTEA,
   FOREIGN KEY (import_conf_id) REFERENCES import_conf(id)
 );
+
+CREATE TABLE publisher_number (
+  id                   DECIMAL(10) PRIMARY KEY,
+  harvested_record_id  DECIMAL(10),
+  publisher_number     VARCHAR(255),
+  order_in_record      DECIMAL(4),
+  FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE
+);
+COMMENT ON TABLE publisher_number IS 'dedup_keys: table contatining publisher numbers';
+CREATE INDEX publisher_number_harvested_record_idx ON publisher_number(harvested_record_id);

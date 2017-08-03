@@ -1063,3 +1063,14 @@ DELETE FROM download_import_conf WHERE import_conf_id in (321,325,326);
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (321,'http://aleph.nkp.cz/OAI','SLK-CPK','marc21',NULL);
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (325,'http://aleph.nkp.cz/OAI','KKL-CPK','marc21',NULL);
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (326,'http://aleph.nkp.cz/OAI','STT-CPK','marc21',NULL);
+
+--changeset tomascejpek:61
+CREATE TABLE publisher_number (
+  id                   DECIMAL(10) PRIMARY KEY,
+  harvested_record_id  DECIMAL(10),
+  publisher_number     VARCHAR(255),
+  order_in_record      DECIMAL(4),
+  FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE
+);
+COMMENT ON TABLE publisher_number IS 'dedup_keys: table contatining publisher numbers';
+CREATE INDEX publisher_number_harvested_record_idx ON publisher_number(harvested_record_id);
