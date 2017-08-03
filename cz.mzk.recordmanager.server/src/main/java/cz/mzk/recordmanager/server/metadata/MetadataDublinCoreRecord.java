@@ -21,6 +21,7 @@ import cz.mzk.recordmanager.server.model.Isbn;
 import cz.mzk.recordmanager.server.model.Ismn;
 import cz.mzk.recordmanager.server.model.Issn;
 import cz.mzk.recordmanager.server.model.Oclc;
+import cz.mzk.recordmanager.server.model.PublisherNumber;
 import cz.mzk.recordmanager.server.model.ShortTitle;
 import cz.mzk.recordmanager.server.model.TezaurusRecord.TezaurusKey;
 import cz.mzk.recordmanager.server.model.Title;
@@ -584,6 +585,11 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 	public Boolean getMetaproxyBool() {
 		// Nothing to return
 		return null;
+	}
+
+	@Override
+	public List<PublisherNumber> getPublisherNumber() {
+		return Collections.emptyList();
 	}
 
 }

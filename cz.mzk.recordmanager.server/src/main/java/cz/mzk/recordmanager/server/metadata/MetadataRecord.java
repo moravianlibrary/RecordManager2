@@ -220,8 +220,6 @@ public interface MetadataRecord {
 		return true;
 	}
 
-	default public List<PublisherNumber> getPublisherNumber() {
-		return null;
-	}
+	public List<PublisherNumber> getPublisherNumber();
 
 }
