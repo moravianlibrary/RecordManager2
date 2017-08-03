@@ -1,11 +1,15 @@
 package cz.mzk.recordmanager.server.scripting.marc.function;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import org.marc4j.marc.DataField;
 import org.marc4j.marc.Subfield;
@@ -42,11 +46,17 @@ public class AdresarKnihovenMarcFunctions implements MarcRecordFunctions {
 
 	private static final HashMap<String, Long> relevanceBySigla = new HashMap<>();
 	{
-		relevanceBySigla.put("ABA001", 14L);
-		relevanceBySigla.put("ABA008", 12L);
-		relevanceBySigla.put("ABA012", 12L);
-		relevanceBySigla.put("ABA013", 12L);
+		relevanceBySigla.put("ABA001", 16L);
+		relevanceBySigla.put("ABA008", 14L);
+		relevanceBySigla.put("ABA012", 14L);
+		relevanceBySigla.put("ABA013", 14L);
 	}
+	private static final List<String> REGION_IDS = new BufferedReader(new InputStreamReader(
+			new ClasspathResourceProvider().getResource("/mapping/adresar_region_libraries.map"), StandardCharsets.UTF_8))
+			.lines().collect(Collectors.toCollection(ArrayList::new));
+	private static final List<String> DISTRICT_IDS = new BufferedReader(new InputStreamReader(
+			new ClasspathResourceProvider().getResource("/mapping/adresar_district_libraries.map"), StandardCharsets.UTF_8))
+			.lines().collect(Collectors.toCollection(ArrayList::new));
 	
 	public String getFirstFieldForAdresar(MarcFunctionContext ctx, String tag) {
 		Matcher matcher = FIELD_PATTERN.matcher(tag);
@@ -256,6 +266,9 @@ public class AdresarKnihovenMarcFunctions implements MarcRecordFunctions {
 	}
 
 	public String getLibraryRelevance(MarcFunctionContext ctx) {
+		String id = ctx.harvestedRecord().getUniqueId().getRecordId();
+		if (REGION_IDS.contains(id)) return "12";
+		if (DISTRICT_IDS.contains(id)) return "11";
 		for (DataField df : ctx.record().getDataFields("SGL")) {
 			if (df.getSubfield('a') != null
 					&& relevanceBySigla.containsKey(df.getSubfield('a')
