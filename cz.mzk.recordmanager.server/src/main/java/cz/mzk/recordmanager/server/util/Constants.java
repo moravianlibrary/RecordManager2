@@ -32,6 +32,7 @@ public class Constants {
 	public static final String JOB_ID_DELETE_ALL_RECORDS_FROM_SOLR	= "deleteAllRecordsFromSolrJob";
 	public static final String JOB_ID_GENERATE_SKAT_DEDUP_KEYS		= "generateSkatDedupKeys";
 	public static final String JOB_ID_GENERATE_LOCAL_SKAT_DEDUP_KEYS	= "generateLocalSkatDedupKeysJob";
+	public static final String JOB_ID_MANUALLY_MERGED_SKAT_DEDUP_KEYS	= "generateManuallyMergedSkatDedupKeysJob";
 	public static final String JOB_ID_HARVEST_OBALKY_KNIH		= "obalkyKnihHarvestJob";
 	public static final String JOB_ID_HARVEST_ZAKONYPROLIDI			= "zakonyProLidiHarvestJob";
 	public static final String JOB_ID_FULLTEXT_ZAKONYPROLIDI		= "zakonyProLidiFulltextJob";
