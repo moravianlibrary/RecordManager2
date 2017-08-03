@@ -15,3 +15,4 @@ DROP TABLE inspiration;
 DROP TABLE ismn;
 DROP TABLE ean;
 DROP TABLE short_title;
+DROP TABLE publisher_number;

@@ -1057,3 +1057,14 @@ INSERT INTO library (id, name, url, catalog_url, city) VALUES (151, 'LIBRARY', '
 INSERT INTO import_conf (id,library_id,contact_person_id,id_prefix,base_weight,cluster_id_enabled,filtering_enabled,interception_enabled,is_library,harvest_frequency,generate_dedup_keys,mapping_script,mapping_dedup_script) VALUES (351, 151, 200, 'library', 0, false, true, false, false, 'U', false, 'AdresarKnihovenBaseMarc.groovy', 'AdresarKnihovenBaseMarc.groovy');
 INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format,extract_id_regex) VALUES (351,'local:/data/imports/aleph.ADR','importOaiRecordsJob',null,'[^:]+:(.*)');
 INSERT INTO sigla (id,import_conf_id,sigla) VALUES (36,304,'ABA000');
+
+--changeset tomascejpek:60
+CREATE TABLE publisher_number (
+  id                   DECIMAL(10) PRIMARY KEY,
+  harvested_record_id  DECIMAL(10),
+  publisher_number     VARCHAR(255),
+  order_in_record      DECIMAL(4),
+  FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE
+);
+COMMENT ON TABLE publisher_number IS 'dedup_keys: table contatining publisher numbers';
+CREATE INDEX publisher_number_harvested_record_idx ON publisher_number(harvested_record_id);

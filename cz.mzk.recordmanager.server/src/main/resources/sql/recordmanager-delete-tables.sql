@@ -17,6 +17,7 @@ DELETE FROM issn;
 DELETE FROM isbn;
 DELETE FROM ismn;
 DELETE FROM ean;
+DELETE FROM publisher_number;
 DELETE FROM harvested_record_format_link;
 DELETE FROM download_import_conf;
 DELETE FROM cnb;
