@@ -12,10 +12,10 @@ FROM harvested_record hr
   INNER JOIN publisher_number pn ON hr.id = pn.harvested_record_id 
   INNER JOIN title t ON hr.id = t.harvested_record_id
   INNER JOIN harvested_record_format_link hrl ON hr.id = hrl.harvested_record_id
-  LEFT OUTER JOIN tmp_audio_ids tpi ON hr.id = tpi.id
+  LEFT OUTER JOIN tmp_audio_ids tai ON hr.id = tai.id
 WHERE t.order_in_record = 1 
   AND pn.order_in_record = 1
-  AND tpi.id IS NOT NULL
+  AND tai.id IS NOT NULL
 GROUP BY pn.publisher_number,t.title,hr.publication_year,hrl.harvested_record_format_id
 HAVING COUNT(DISTINCT hr.id) > 1 
   AND count(DISTINCT dedup_record_id) + sum(case when dedup_record_id is null then 1 else 0 end) != 1
