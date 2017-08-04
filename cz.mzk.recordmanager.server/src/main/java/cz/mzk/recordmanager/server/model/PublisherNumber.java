@@ -10,6 +10,9 @@ public class PublisherNumber extends AbstractDomainObject {
 
 	public static final String TABLE_NAME = "publisher_number";
 
+	protected PublisherNumber() {
+	}
+
 	public PublisherNumber(String publisherNumber, Long orderInRecord) {
 		super();
 		this.publisherNumber = publisherNumber;
