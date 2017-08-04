@@ -106,8 +106,6 @@ public class IndexRecordsToEmbeddedSolrJobTest extends AbstractSolrTest {
 			Assert.assertEquals(docResponse.getResults().size(), 1);
 			SolrDocument document = docResponse.getResults().get(0);
 			// check whether subject_viz field contains alternative name from mesh
-			System.out.println(document
-					.getFieldValues(SolrFieldConstants.SUBJECT_VIZ_FIELD));
 			Assert.assertTrue(
 					document.getFieldValues(SolrFieldConstants.SUBJECT_VIZ_FIELD).stream() //
 							.anyMatch(s -> s.equals("klinická onkologie")),
