@@ -149,7 +149,7 @@ public class MiscellaneousJobsConfig {
 	@StepScope
 	public ItemReader<Long> generateSkatKeysReader(
 			@Value("#{jobParameters[" + Constants.JOB_PARAM_FROM_DATE + "]}") Date fromDate,
-			@Value("#{jobParameters[" + Constants.JOB_PARAM_FROM_DATE + "]}") Date toDate)
+			@Value("#{jobParameters[" + Constants.JOB_PARAM_UNTIL_DATE + "]}") Date toDate)
 			throws Exception {
 		Date from = fromDate == null ? new Date(0) : fromDate;
 		Date to = toDate == null ? new Date() : toDate;
