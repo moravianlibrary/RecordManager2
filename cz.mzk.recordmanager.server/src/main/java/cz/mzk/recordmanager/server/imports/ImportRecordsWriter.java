@@ -35,6 +35,7 @@ import cz.mzk.recordmanager.server.oai.dao.DownloadImportConfigurationDAO;
 import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordDAO;
 import cz.mzk.recordmanager.server.oai.dao.OAIHarvestConfigurationDAO;
 import cz.mzk.recordmanager.server.util.HibernateSessionSynchronizer;
+import cz.mzk.recordmanager.server.util.ProgressLogger;
 import cz.mzk.recordmanager.server.util.HibernateSessionSynchronizer.SessionBinder;
 import cz.mzk.recordmanager.server.util.RegexpExtractor;
 
@@ -75,8 +76,11 @@ public class ImportRecordsWriter implements ItemWriter<List<Record>>, StepExecut
 
 	private RegexpExtractor regexpExtractor;
 
+	private ProgressLogger progress;
+	
 	public ImportRecordsWriter(Long configurationId) {
 		this.configurationId = configurationId;
+		this.progress = new ProgressLogger(logger, 5000);
 	}
 
 	@Override
@@ -143,6 +147,8 @@ public class ImportRecordsWriter implements ItemWriter<List<Record>>, StepExecut
 					}
 
 					harvestedRecordDao.persist(hr);
+					
+					progress.incrementAndLogProgress();
 				} catch (Exception e) {
 					logger.warn("Error occured in processing record");
 					throw e;

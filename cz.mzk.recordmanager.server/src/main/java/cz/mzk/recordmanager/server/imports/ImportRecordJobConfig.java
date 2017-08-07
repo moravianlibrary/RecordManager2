@@ -24,6 +24,7 @@ import cz.mzk.recordmanager.server.oai.harvest.HarvestedRecordWriter;
 import cz.mzk.recordmanager.server.oai.harvest.OAIItemProcessor;
 import cz.mzk.recordmanager.server.oai.model.OAIRecord;
 import cz.mzk.recordmanager.server.springbatch.JobFailureListener;
+import cz.mzk.recordmanager.server.springbatch.StepProgressListener;
 import cz.mzk.recordmanager.server.springbatch.UUIDIncrementer;
 import cz.mzk.recordmanager.server.util.Constants;
 
@@ -54,6 +55,7 @@ public class ImportRecordJobConfig {
 	@Bean(name=Constants.JOB_ID_IMPORT +":importRecordsStep")
 	public Step importRecordsStep() throws Exception {
 		return steps.get("importRecordsStep")
+				.listener(new StepProgressListener())
 				.<List<Record>, List<Record>> chunk(20)//
 				.reader(importRecordsReader(STRING_OVERRIDEN_BY_EXPRESSION, STRING_OVERRIDEN_BY_EXPRESSION))//
 				.writer(importRecordsWriter(LONG_OVERRIDEN_BY_EXPRESSION)) //
