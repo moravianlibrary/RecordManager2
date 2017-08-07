@@ -94,6 +94,8 @@ public class SolrFieldConstants {
 	
 	public static final String INDEXING_WHEN_MERGED = "_hidden_index_when_merged_boolean";
 
+	public static final String SFX_SOURCE_TXT = "sfx_source_txt";
+
 	/**
 	 * dummy fields used for processing purposes only, shouldn't be indexed. Fields are deleted in AuthorityEnricher. 
 	 */
