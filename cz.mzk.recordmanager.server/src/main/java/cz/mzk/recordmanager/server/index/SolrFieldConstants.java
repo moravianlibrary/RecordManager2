@@ -97,13 +97,6 @@ public class SolrFieldConstants {
 	/**
 	 * dummy fields used for processing purposes only, shouldn't be indexed. Fields are deleted in AuthorityEnricher. 
 	 */
-	public static final String AUTHOR_AUTHORITY_DUMMY_FIELD = "_hidden_authority_dummy_field";
-	
-	public static final String CORPORATION_AUTHORITY_DUMMY_FIELD = "_hidden_corporation_dummy_field";
-	
-	public static final String SUBJECT_AUTHORITY_DUMMY_FIELD = "_hidden_subject_dummy_field";
-	
-	public static final String GENRE_AUTHORITY_DUMMY_FIELD = "_hidden_genre_dummy_field";
 
 	public static final String VIZ_DUMMY_FIELD = "_hidden_viz_dummy_field";
 
