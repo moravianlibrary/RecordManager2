@@ -586,7 +586,7 @@ public class MarcDSL extends BaseDSL {
     	return result;
     }
     
-     public Set<String> getAuthorityIds(String tags) {
+	public Set<String> getAuthorityIds(String tags) {
 		Set<String> result = new HashSet<>();
 		for (String tag : tags.split("\\|")) {
 			String[] split = tag.split("\\.");
@@ -805,6 +805,18 @@ public class MarcDSL extends BaseDSL {
 
 	public boolean getIndexWhenMerged() {
 		return metadataRecord.getIndexWhenMerged();
+	}
+
+	public List<String> getBarcodes() {
+		return metadataRecord.getBarcodes();
+	}
+
+	public List<String> getFormat() {
+		return SolrUtils.createRecordTypeHierarchicFacet(metadataRecord.getDetectedFormatList());
+	}
+
+	public List<String> getInstitutionFacet() {
+		return SolrUtils.getInstitution(context.harvestedRecord().getHarvestedFrom());
 	}
 
 	public String get003() {

@@ -16,6 +16,7 @@ import cz.mzk.recordmanager.server.metadata.institutions.AuthMetadataMarcRecord;
 import cz.mzk.recordmanager.server.metadata.institutions.BmcMetadataMarcRecord;
 import cz.mzk.recordmanager.server.metadata.institutions.Kram3NkpMetadataDublinCoreRecord;
 import cz.mzk.recordmanager.server.metadata.institutions.KramDefaultMetadataDublinCoreRecord;
+import cz.mzk.recordmanager.server.metadata.institutions.LibraryMetadataMarcRecord;
 import cz.mzk.recordmanager.server.metadata.institutions.KramMzkMetadataDublinCoreRecord;
 import cz.mzk.recordmanager.server.metadata.institutions.KramNkpMetadataDublinCoreRecord;
 import cz.mzk.recordmanager.server.metadata.institutions.ManuscriptoriumMetadataDublinCoreRecord;
@@ -123,6 +124,8 @@ public class MetadataRecordFactory {
 			return new OpenLibraryMetadataMarcRecord(marcRec);
 		case Constants.PREFIX_MESH:
 			return new MeshMarcMetadataRecord(marcRec);
+		case Constants.PREFIX_LIBRARY:
+			return new LibraryMetadataMarcRecord(marcRec);
 		default:
 			return new MetadataMarcRecord(marcRec);
 		}

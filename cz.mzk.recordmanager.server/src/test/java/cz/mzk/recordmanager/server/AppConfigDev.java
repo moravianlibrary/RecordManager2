@@ -24,6 +24,7 @@ import org.springframework.jdbc.datasource.init.DatabasePopulator;
 import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+import cz.mzk.recordmanager.server.adresar.AdresarHarvestJobConfig;
 import cz.mzk.recordmanager.server.dedup.DedupRecordsJobConfig;
 import cz.mzk.recordmanager.server.dedup.RegenerateDedupKeysJobConfig;
 import cz.mzk.recordmanager.server.export.ExportRecordsJobConfig;
@@ -122,7 +123,8 @@ public class AppConfigDev {
 				IndexHarvestedRecordsToSolrJobConfig.class,
 				ObalkyKnihHarvestJobConfig.class,
 				FilterCaslinRecordsBySiglaJobConfig.class,
-				ZakonyProLidiHarvestJobConfig.class
+				ZakonyProLidiHarvestJobConfig.class,
+				AdresarHarvestJobConfig.class
 			);
 	}
 

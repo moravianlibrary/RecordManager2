@@ -254,6 +254,8 @@
    <field name="short_note_en" type="string" indexed="true" stored="true"/>
    <!-- Doesn't need to be stored after successful testing -->
    <field name="loanRelevance" type="integer"  indexed="true"  stored="true"/>
+   <!--Indexed fields -->
+   <field name="region_disctrict_town_str_mv" type="string" indexed="true" stored="true" multiValued="true" docValues="false"/>
    <!-- Dynamic fields for customization without schema modification -->
    <dynamicField name="*_date" type="date" indexed="true" stored="true"/>
    <dynamicField name="*_date_mv" type="date" indexed="true" stored="true" multiValued="true"/>

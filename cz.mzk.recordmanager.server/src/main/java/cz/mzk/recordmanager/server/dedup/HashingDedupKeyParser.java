@@ -21,6 +21,7 @@ import cz.mzk.recordmanager.server.model.Isbn;
 import cz.mzk.recordmanager.server.model.Ismn;
 import cz.mzk.recordmanager.server.model.Issn;
 import cz.mzk.recordmanager.server.model.Oclc;
+import cz.mzk.recordmanager.server.model.PublisherNumber;
 import cz.mzk.recordmanager.server.model.ShortTitle;
 import cz.mzk.recordmanager.server.model.Title;
 import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordDAO;
@@ -51,6 +52,10 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 	public HarvestedRecord parse(HarvestedRecord record,
 			MetadataRecord metadataRecord) throws DedupKeyParserException {
 
+		record.setShouldBeProcessed(metadataRecord.matchFilter());
+		if (!record.getHarvestedFrom().isGenerateDedupKeys()) {
+			return record;
+		}
 		boolean dedupKeysChanged = false;
 		boolean oaiTimestampChanged = false;
 		
@@ -96,7 +101,7 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 		encapsulator.setRaw001Id(metadataRecord.getRaw001Id());
 		encapsulator.setSourceInfo(MetadataUtils.normalizeAndShorten(metadataRecord.getSourceInfo(), EFFECTIVE_SOURCE_INFO_LENGTH));
 		encapsulator.setEans(metadataRecord.getEANs());
-		
+		encapsulator.setPublisherNumbers(metadataRecord.getPublisherNumber());
 		encapsulator.setLanguages(new HashSet<>(metadataRecord.getLanguages()));
 		
 		
@@ -142,11 +147,11 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 			record.setSourceInfo(encapsulator.getSourceInfo());
 			record.setEans(encapsulator.getEans());
 			record.setShortTitles(encapsulator.getShortTitles());
+			record.setPublisherNumbers(metadataRecord.getPublisherNumber());
 			record.setTemporalDedupHash(computedHash);
 		} 
 		
 		record.setDedupKeysHash(computedHash);
-		record.setShouldBeProcessed(metadataRecord.matchFilter());
 		
 		
 		if (record.getOaiTimestamp() != null && record.getTemporalOldOaiTimestamp() != null
@@ -267,6 +272,10 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 					md.update(ean.getEan().byteValue());
 				}
 				
+				for (PublisherNumber publisherNumber: encapsulator.getPublisherNumbers()) {
+					md.update(publisherNumber.getPublisherNumber().getBytes("utf-8"));
+				}
+				
 				for (ShortTitle st: encapsulator.getShortTitles()) {
 					md.update(st.getShortTitleStr().getBytes("utf-8"));
 				}
@@ -318,6 +327,7 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 			encapsulator.setSourceInfo(hr.getSourceInfo());
 			encapsulator.setEans(hr.getEans());
 			encapsulator.setShortTitles(hr.getShortTitles());
+			encapsulator.setPublisherNumbers(hr.getPublisherNumbers());
 			
 			return computeHashValue(encapsulator);
 		}
@@ -333,6 +343,7 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 		Set<String> languages = new HashSet<>();
 		List<Ean> eans = new ArrayList<>();
 		List<ShortTitle> shortTitles = new ArrayList<>();
+		List<PublisherNumber> publisherNumbers = new ArrayList<>();
 		
 		Long publicationYear;
 		String authorString;
@@ -471,6 +482,12 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 		}
 		public void setShortTitles(List<ShortTitle> shortTitles) {
 			this.shortTitles = shortTitles;
+		}
+		public List<PublisherNumber> getPublisherNumbers() {
+			return publisherNumbers;
+		}
+		public void setPublisherNumbers(List<PublisherNumber> publisherNumbers) {
+			this.publisherNumbers = publisherNumbers;
 		}
 	}
 

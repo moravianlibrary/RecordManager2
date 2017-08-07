@@ -32,11 +32,14 @@ public class Constants {
 	public static final String JOB_ID_DELETE_ALL_RECORDS_FROM_SOLR	= "deleteAllRecordsFromSolrJob";
 	public static final String JOB_ID_GENERATE_SKAT_DEDUP_KEYS		= "generateSkatDedupKeys";
 	public static final String JOB_ID_GENERATE_LOCAL_SKAT_DEDUP_KEYS	= "generateLocalSkatDedupKeysJob";
+	public static final String JOB_ID_MANUALLY_MERGED_SKAT_DEDUP_KEYS	= "generateManuallyMergedSkatDedupKeysJob";
 	public static final String JOB_ID_HARVEST_OBALKY_KNIH		= "obalkyKnihHarvestJob";
 	public static final String JOB_ID_HARVEST_ZAKONYPROLIDI			= "zakonyProLidiHarvestJob";
 	public static final String JOB_ID_FULLTEXT_ZAKONYPROLIDI		= "zakonyProLidiFulltextJob";
 	public static final String JOB_ID_FILTER_CASLIN					= "filterCaslinRecordsJob";
+	public static final String JOB_ID_HARVEST_ADRESAR				= "adresarHarvestJob";
 	public static final String JOB_ID_FULLTEXT_MANUSCRIPTORIUM		= "manuscriptoriumFulltextJob";
+	public static final String JOB_ID_EXPORT_RECORDS_FOR_CLASSIFIER = "exportRecordsForClassifierJob";
 	
 	public static final String JOB_PARAM_CONF_ID 		= "configurationId";
 	public static final String JOB_PARAM_FROM_DATE 		= "from";
@@ -53,6 +56,9 @@ public class Constants {
 	public static final String JOB_PARAM_RECORD_IDS		= "recordIds";
 	public static final String JOB_PARAM_START_TIME		= "startTime";
 	public static final String JOB_PARAM_UUID			= "uuid";
+	public static final String JOB_PARAM_FIRST_ID		= "firstId";
+	public static final String JOB_PARAM_LAST_ID		= "lastId";
+	public static final String JOB_PARAM_SINGLE_ID		= "singleId";
 
 	public static final String JOB_PARAM_TRUE_VALUE		= "true";
 	public static final String JOB_PARAM_ONE_VALUE		= "1";
@@ -82,6 +88,7 @@ public class Constants {
 	public static final String PREFIX_KRAM_NKP			= "kram-nkp";
 	public static final String PREFIX_KRAM_NTK			= "kram-ntk";
 	public static final String PREFIX_KRAM3_NKP			= "kram3-nkp";
+	public static final String PREFIX_LIBRARY			= "library";
 	public static final String PREFIX_MANUSCRIPTORIUM	= "manuscript";
 	public static final String PREFIX_MESH				= "mesh";
 	public static final String PREFIX_MKP_EBOOKS		= "mkpe";

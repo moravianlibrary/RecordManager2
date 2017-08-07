@@ -5,15 +5,15 @@ import java.io.Serializable;
 public class OaiHarvestConfigurationDto implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	private Long id;
-	
+
 	private String url;
-	
+
 	private String set;
-	
+
 	private String metadataPrefix;
-	
+
 	private ContactPersonDto contactPerson;
 
 	public Long getId() {

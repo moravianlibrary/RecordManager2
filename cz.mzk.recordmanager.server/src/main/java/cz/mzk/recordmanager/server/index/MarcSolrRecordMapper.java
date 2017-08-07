@@ -18,7 +18,6 @@ import cz.mzk.recordmanager.server.marc.MarcXmlParser;
 import cz.mzk.recordmanager.server.metadata.MetadataRecordFactory;
 import cz.mzk.recordmanager.server.model.DedupRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
-import cz.mzk.recordmanager.server.model.ImportConfiguration;
 import cz.mzk.recordmanager.server.scripting.MappingScript;
 import cz.mzk.recordmanager.server.scripting.marc.MarcFunctionContext;
 import cz.mzk.recordmanager.server.scripting.marc.MarcScriptFactory;
@@ -40,11 +39,13 @@ public class MarcSolrRecordMapper implements SolrRecordMapper, InitializingBean 
 	@Autowired
 	private MetadataRecordFactory metadataRecordFactory;
 
-	private MappingScript<MarcFunctionContext> dedupRecordMappingScript;
+	private Map<Long, MappingScript<MarcFunctionContext>> dedupRecordMappingScripts = new ConcurrentHashMap<Long, MappingScript<MarcFunctionContext>>(10, 0.75f, 1);
 
 	private Map<Long, MappingScript<MarcFunctionContext>> harvestedRecordMappingScripts = new ConcurrentHashMap<Long, MappingScript<MarcFunctionContext>>(10, 0.75f, 1);
 
 	private MappingScript<MarcFunctionContext> defaultHarvestedRecordMappingScript;
+
+	private MappingScript<MarcFunctionContext> defaultDedupRecordMappingScript;
 
 	@Override
 	public List<String> getSupportedFormats() {
@@ -83,21 +84,26 @@ public class MarcSolrRecordMapper implements SolrRecordMapper, InitializingBean 
 	}
 
 	protected MappingScript<MarcFunctionContext> getDedupMappingScript(HarvestedRecord record) {
-		return dedupRecordMappingScript;
+		MappingScript<MarcFunctionContext> script = dedupRecordMappingScripts.get(record.getHarvestedFrom().getId());
+		if (script == null) {
+			script = getScript(record.getHarvestedFrom().getMappingDedupScript(), defaultDedupRecordMappingScript);
+			dedupRecordMappingScripts.put(record.getHarvestedFrom().getId(), script);
+		}
+		return script;
 	}
 
 	protected MappingScript<MarcFunctionContext> getHarvestedMappingScript(HarvestedRecord record) {
 		MappingScript<MarcFunctionContext> script = harvestedRecordMappingScripts.get(record.getHarvestedFrom().getId());
 		if (script == null) {
-			script = getScript(record.getHarvestedFrom());
+			script = getScript(record.getHarvestedFrom().getMappingScript(), defaultHarvestedRecordMappingScript);
 			harvestedRecordMappingScripts.put(record.getHarvestedFrom().getId(), script);
 		}
 		return script;
 	}
 
-	protected MappingScript<MarcFunctionContext> getScript(ImportConfiguration importConf) {
-		if (importConf.getMappingScript() != null) {
-			String[] scripts = importConf.getMappingScript().split(",");
+	protected MappingScript<MarcFunctionContext> getScript(String mappingScript, MappingScript<MarcFunctionContext> defaultScript) {
+		if (mappingScript != null) {
+			String[] scripts = mappingScript.split(",");
 			InputStream resources[] = new InputStream[scripts.length];
 			int index = 0;
 			for (String script : scripts) {
@@ -110,13 +116,13 @@ public class MarcSolrRecordMapper implements SolrRecordMapper, InitializingBean 
 			}
 			return marcScriptFactory.create(resources);
 		} else {
-			return defaultHarvestedRecordMappingScript;
+			return defaultScript;
 		}
 	}
 
 	@Override
 	public void afterPropertiesSet() throws Exception {
-		dedupRecordMappingScript = marcScriptFactory.create( //
+		defaultDedupRecordMappingScript = marcScriptFactory.create( //
 				resourceProvider.getResource("/marc/groovy/BaseMarc.groovy"));
 		defaultHarvestedRecordMappingScript = marcScriptFactory.create( //
 				resourceProvider.getResource("/marc/groovy/HarvestedRecordBaseMarc.groovy"));

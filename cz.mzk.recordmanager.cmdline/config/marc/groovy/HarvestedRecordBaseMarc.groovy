@@ -35,5 +35,7 @@ f773_display = get773display();
 id001_str = getId001();
 
 metaproxy_boolean = getMetaproxyBool()
-
+barcodes = getBarcodes()
+format_display_mv = getFormat()
+local_institution_facet_str_mv = getInstitutionFacet()
 _hidden_index_when_merged_boolean = getIndexWhenMerged()

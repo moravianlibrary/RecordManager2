@@ -11,6 +11,7 @@ import cz.mzk.recordmanager.server.model.Ismn;
 import cz.mzk.recordmanager.server.model.Issn;
 import cz.mzk.recordmanager.server.model.Language;
 import cz.mzk.recordmanager.server.model.Oclc;
+import cz.mzk.recordmanager.server.model.PublisherNumber;
 import cz.mzk.recordmanager.server.model.ShortTitle;
 import cz.mzk.recordmanager.server.model.TezaurusRecord.TezaurusKey;
 import cz.mzk.recordmanager.server.model.Title;
@@ -218,5 +219,7 @@ public interface MetadataRecord {
 	default public boolean getIndexWhenMerged() {
 		return true;
 	}
+
+	public List<PublisherNumber> getPublisherNumber();
 
 }

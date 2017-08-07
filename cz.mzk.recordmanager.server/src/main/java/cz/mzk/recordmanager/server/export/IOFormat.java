@@ -1,5 +1,8 @@
 package cz.mzk.recordmanager.server.export;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public enum IOFormat {
 	LINE_MARC, ALEPH_MARC, ISO_2709, XML_MARC, DC_XML, XML_PATENTS, OSOBNOSTI_REGIONU, SFX;
 	
@@ -30,4 +33,16 @@ public enum IOFormat {
 		}
 		return XML_MARC;
 	}
+
+	public static List<String> getStringifyFormats(){
+		List<String> stringifyFormat = new ArrayList<>();
+		stringifyFormat.add("line");
+		stringifyFormat.add("aleph");
+		stringifyFormat.add("iso");
+		stringifyFormat.add("dcxml");
+		stringifyFormat.add("patents");
+		stringifyFormat.add("osobnosti");
+		return stringifyFormat;
+	}
+
 }

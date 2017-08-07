@@ -56,6 +56,17 @@ public class ExportRecordsJobConfig {
 	}
 
 	@Bean
+	public Job exportRecordsForClassifierJob(
+			@Qualifier("exportRecordsForClassifierJob:exportRecordsForClassifierStep") Step exportRecordsForClassifierStep) {
+		return jobs.get(Constants.JOB_ID_EXPORT_RECORDS_FOR_CLASSIFIER)
+				.validator(new ExportRecordsJobParametersValidator())
+				.listener(JobFailureListener.INSTANCE)
+				.flow(exportRecordsForClassifierStep)
+				.end()
+				.build();
+	}
+
+	@Bean
 	public Job exportCosmotron996Job(
 			@Qualifier(Constants.JOB_ID_EXPORT_COSMOTRON_996+":exportCosmotron996Step") Step exportCosmotron996Step) {
 		return jobs.get(Constants.JOB_ID_EXPORT_COSMOTRON_996)
@@ -75,6 +86,19 @@ public class ExportRecordsJobConfig {
 				.writer(exportRecordsWriter(STRING_OVERRIDEN_BY_EXPRESSION)) //
 				.build();
 	}
+
+
+	@Bean(name = "exportRecordsForClassifierJob:exportRecordsForClassifierStep")
+	public Step exportRecordsForClassifierStep() throws Exception {
+		return steps.get("updateRecordsJobStep")
+				.<HarvestedRecordUniqueId, String> chunk(20)//
+				.reader(exportRecordsForClassifierReader(LONG_OVERRIDEN_BY_EXPRESSION)) //
+				.processor(exportRecordsForClassifierProcessor(STRING_OVERRIDEN_BY_EXPRESSION)) //
+				.writer(exportRecordsWriter(STRING_OVERRIDEN_BY_EXPRESSION)) //
+				.build();
+	}
+
+
 
 	@Bean(name = Constants.JOB_ID_EXPORT_COSMOTRON_996+":exportCosmotron996Step")
 	public Step exportCosmotron996Step() throws Exception {
@@ -97,6 +121,36 @@ public class ExportRecordsJobConfig {
 		pqpf.setSelectClause("SELECT import_conf_id, record_id");
 		pqpf.setFromClause("FROM harvested_record");
 		pqpf.setWhereClause("WHERE import_conf_id = :conf_id");
+		pqpf.setSortKey("record_id");
+		Map<String, Object> parameterValues = new HashMap<String, Object>();
+		parameterValues.put("conf_id", configId);
+		reader.setParameterValues(parameterValues);
+		reader.setRowMapper(new HarvestedRecordIdRowMapper());
+		reader.setPageSize(20);
+		reader.setQueryProvider(pqpf.getObject());
+		reader.setDataSource(dataSource);
+		reader.afterPropertiesSet();
+		return reader;
+	}
+
+	@Bean(name = "exportRecordsForClassifierJob:exportRecordsForClassifierReader")
+	@StepScope
+	public ItemReader<HarvestedRecordUniqueId> exportRecordsForClassifierReader(@Value("#{jobParameters["
+			+ Constants.JOB_PARAM_CONF_ID + "]}") Long configId)
+			throws Exception {
+		JdbcPagingItemReader<HarvestedRecordUniqueId> reader = new JdbcPagingItemReader<HarvestedRecordUniqueId>();
+		SqlPagingQueryProviderFactoryBean pqpf = new SqlPagingQueryProviderFactoryBean();
+		pqpf.setDataSource(dataSource);
+		pqpf.setSelectClause("SELECT import_conf_id, record_id");
+		pqpf.setFromClause("FROM harvested_record");
+		pqpf.setWhereClause("WHERE import_conf_id = :conf_id AND  dedup_record_id IN ( " +
+				"  SELECT dedup_record_id " +
+				"  FROM harvested_record " +
+				"  WHERE EXISTS( " +
+				"      SELECT 1 " +
+				"      FROM fulltext_kramerius " +
+				"      WHERE harvested_record.id = fulltext_kramerius.harvested_record_id " +
+				"  ))");
 		pqpf.setSortKey("record_id");
 		Map<String, Object> parameterValues = new HashMap<String, Object>();
 		parameterValues.put("conf_id", configId);
@@ -139,6 +193,15 @@ public class ExportRecordsJobConfig {
 		IOFormat iOFormat = IOFormat
 				.stringToExportFormat(strFormat);
 		return new ExportRecordsProcessor(iOFormat);
+	}
+
+	@Bean(name = "exportRecordsForClassifierJob:exportRecordsForClassifierProcessor")
+	@StepScope
+	public ExportRecordsForClassifierProcessor exportRecordsForClassifierProcessor(
+			@Value("#{jobParameters[" + Constants.JOB_PARAM_FORMAT + "]}") String strFormat) {
+		IOFormat iOFormat = IOFormat
+				.stringToExportFormat(strFormat);
+		return new ExportRecordsForClassifierProcessor(iOFormat);
 	}
 
 	@Bean(name = Constants.JOB_ID_EXPORT_COSMOTRON_996+":exportCosmotron996Procesor")

@@ -22,6 +22,7 @@ import cz.mzk.recordmanager.server.ClasspathResourceProvider;
 import cz.mzk.recordmanager.server.DelegatingResourceProvider;
 import cz.mzk.recordmanager.server.FileSystemResourceProvider;
 import cz.mzk.recordmanager.server.ResourceProvider;
+import cz.mzk.recordmanager.server.adresar.AdresarHarvestJobConfig;
 import cz.mzk.recordmanager.server.dedup.DedupRecordsJobConfig;
 import cz.mzk.recordmanager.server.dedup.RegenerateDedupKeysJobConfig;
 import cz.mzk.recordmanager.server.export.ExportRecordsJobConfig;
@@ -88,6 +89,7 @@ public class AppConfigCmdline {
 				ObalkyKnihHarvestJobConfig.class,
 				FilterCaslinRecordsBySiglaJobConfig.class,
 				ZakonyProLidiHarvestJobConfig.class,
+				AdresarHarvestJobConfig.class,
 				ManuscriptoriumFulltextJobConfig.class
 			);
 	}

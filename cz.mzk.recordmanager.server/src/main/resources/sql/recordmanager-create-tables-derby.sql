@@ -32,6 +32,7 @@ CREATE TABLE import_conf (
   is_library           BOOLEAN DEFAULT FALSE,
   harvest_frequency    CHAR(1) DEFAULT 'U',
   mapping_script       VARCHAR(256),
+  mapping_dedup_script VARCHAR(256),
   generate_dedup_keys  BOOLEAN DEFAULT TRUE,
   CONSTRAINT import_conf_library_id_fk        FOREIGN KEY (library_id)        REFERENCES library(id),
   CONSTRAINT import_conf_contact_person_id_fk FOREIGN KEY (contact_person_id) REFERENCES contact_person(id)
@@ -300,4 +301,12 @@ CREATE TABLE tezaurus_record (
   name                 VARCHAR(255),
   raw_record           BLOB,
   CONSTRAINT tezaurus_import_conf_fk FOREIGN KEY (import_conf_id) REFERENCES import_conf(id)
+);
+
+CREATE TABLE publisher_number (
+  id                   DECIMAL(10) PRIMARY KEY,
+  harvested_record_id  DECIMAL(10),
+  publisher_number     VARCHAR(255),
+  order_in_record      DECIMAL(4),
+  CONSTRAINT publisher_number_fk FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id)
 );
