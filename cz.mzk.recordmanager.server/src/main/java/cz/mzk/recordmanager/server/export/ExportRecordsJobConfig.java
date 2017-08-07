@@ -26,6 +26,7 @@ import cz.mzk.recordmanager.server.jdbc.Cosmotron996RowMapper;
 import cz.mzk.recordmanager.server.model.Cosmotron996;
 import cz.mzk.recordmanager.server.model.HarvestedRecord.HarvestedRecordUniqueId;
 import cz.mzk.recordmanager.server.springbatch.JobFailureListener;
+import cz.mzk.recordmanager.server.springbatch.StepProgressListener;
 import cz.mzk.recordmanager.server.util.Constants;
 
 @Configuration
@@ -77,9 +78,10 @@ public class ExportRecordsJobConfig {
 				.build();
 	}
 
-	@Bean(name = "exportRecordsJob:exportRecordsStep")
+	@Bean(name = Constants.JOB_ID_EXPORT+":exportRecordsStep")
 	public Step exportRecordsStep() throws Exception {
-		return steps.get("updateRecordsJobStep")
+		return steps.get("exportRecordsStep")
+				.listener(new StepProgressListener())
 				.<HarvestedRecordUniqueId, String> chunk(20)//
 				.reader(exportRecordsReader(LONG_OVERRIDEN_BY_EXPRESSION)) //
 				.processor(exportRecordsProcessor(STRING_OVERRIDEN_BY_EXPRESSION)) //
