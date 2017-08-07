@@ -1074,3 +1074,29 @@ CREATE TABLE publisher_number (
 );
 COMMENT ON TABLE publisher_number IS 'dedup_keys: table contatining publisher numbers';
 CREATE INDEX publisher_number_harvested_record_idx ON publisher_number(harvested_record_id);
+
+--changset tomascejpek:62
+DROP VIEW IF EXISTS oai_harvest_summary CASCADE;
+ALTER TABLE import_conf ALTER COLUMN id_prefix TYPE VARCHAR(15);
+CREATE OR REPLACE VIEW oai_harvest_summary AS
+WITH last_harvest_date AS (
+  SELECT
+    import_conf_id,
+    COALESCE(MAX(CASE WHEN status = 'COMPLETED' THEN to_param END), MAX(CASE WHEN status = 'COMPLETED' THEN end_time END)) last_successful_harvest_date,
+    COALESCE(MAX(CASE WHEN status = 'FAILED' THEN to_param END), MAX(CASE WHEN status = 'FAILED' THEN end_time END)) last_failed_harvest_date,
+    COALESCE(MIN(end_time), MIN(to_param)) first_harvest_date,
+    COUNT(1) no_of_harvests
+  FROM oai_harvest_job_stat
+  GROUP BY import_conf_id
+)
+SELECT ic.id, l.name, ic.id_prefix, ohc.url, ohc.set_spec, lhd.last_successful_harvest_date, lhd.last_failed_harvest_date, lhd.first_harvest_date, lhd.no_of_harvests
+FROM last_harvest_date lhd
+  JOIN import_conf ic ON ic.id = lhd.import_conf_id
+  LEFT JOIN oai_harvest_conf ohc ON ohc.import_conf_id = ic.id
+  LEFT JOIN kramerius_conf kc ON kc.import_conf_id = ic.id
+  JOIN library l ON l.id = ic.library_id
+;
+CREATE OR REPLACE VIEW oai_last_failed_harvests AS
+SELECT name, url, set_spec, last_failed_harvest_date
+FROM oai_harvest_summary
+WHERE last_failed_harvest_date > last_successful_harvest_date OR (last_failed_harvest_date IS NOT NULL AND last_successful_harvest_date IS NULL);
