@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<institutional_holdings>
+	<item type="electronic">
+		<sfx_id>954921332001</sfx_id>
+		<object_type>JOURNAL</object_type>
+		<title>Publishers Weekly</title>
+		<issn>0000-0019</issn>
+		<eissn>2150-4008</eissn>
+		<coverage>
+			<from>
+				<year>1997</year>
+			</from>
+			<to></to>
+		</coverage>
+		<coverage>
+			<from>
+				<year>1997</year>
+			</from>
+			<to></to>
+		</coverage>
+		<coverage>
+			<from>
+				<year>1997</year>
+			</from>
+			<to></to>
+		</coverage>
+		<coverage>
+			<from>
+				<year>1995</year>
+				<issue>48</issue>
+			</from>
+			<to></to>
+		</coverage>
+	</item>
+	<item type="electronic">
+		<sfx_id>954921332003</sfx_id>
+		<object_type>JOURNAL</object_type>
+		<title>Communications of the ACM</title>
+		<title>ASSOCIATION FOR COMPUTING MACHINERY COMMUNICATIONS OF THE ACM
+		</title>
+		<title>COMMUNICATIONS OF THE ASSOCIATION FOR COMPUTING MACHINERY
+		</title>
+		<title>ASSOCIATION FOR COMPUTING MACHINERY COMMUNICATIONS</title>
+		<issn>0001-0782</issn>
+		<eissn>1557-7317</eissn>
+		<coverage>
+			<from>
+				<year>1999</year>
+			</from>
+			<to></to>
+		</coverage>
+		<coverage>
+			<from>
+				<year>1965</year>
+			</from>
+			<to></to>
+		</coverage>
+	</item>
+	<item type="electronic">
+		<sfx_id>954921332004</sfx_id>
+		<object_type>NEWSPAPER</object_type>
+		<title>Planning</title>
+		<title>Planning (U.S.)</title>
+		<issn>0001-2610</issn>
+		<eissn>2162-4577</eissn>
+		<coverage>
+			<from>
+				<year>1993</year>
+			</from>
+			<to></to>
+		</coverage>
+		<coverage>
+			<from>
+				<year>1993</year>
+			</from>
+			<to></to>
+		</coverage>
+	</item>
+</institutional_holdings>
