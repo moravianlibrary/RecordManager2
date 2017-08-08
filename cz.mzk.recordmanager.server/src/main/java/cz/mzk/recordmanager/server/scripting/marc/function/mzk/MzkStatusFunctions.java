@@ -37,7 +37,8 @@ public class MzkStatusFunctions implements MarcRecordFunctions {
 
 	private static final List<String> ONLINE_URL_PREFIXES = Arrays.asList( //
 			"http://kramerius.mzk.cz/", //
-			"http://imageserver.mzk.cz/" //
+			"http://imageserver.mzk.cz/", //
+			"http://www.digitalniknihovna.cz"
 	);
 
 	private static enum AvailabilityStatus {
