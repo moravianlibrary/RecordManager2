@@ -1,6 +1,7 @@
 package cz.mzk.recordmanager.server.util;
 
 import java.util.Calendar;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.slf4j.Logger;
 
@@ -8,7 +9,8 @@ public class ProgressLogger {
 
 	private Logger logger;
 	private int logPeriod;
-	private int totalCount = 0;
+	private AtomicInteger totalCount = new AtomicInteger(0);
+
 	private long startTime = 0L;
 	private static final int DEFAULT_STEP = 10000;
 
@@ -32,15 +34,17 @@ public class ProgressLogger {
 	}
 
 	public void increment() {
-		++totalCount;
+		totalCount.incrementAndGet();
 	}
 
 	public void logProgress() {
-		if (totalCount % logPeriod == 0) {
+		int value = totalCount.get();
+		if (value % logPeriod == 0) {
 			long elapsedSecs = (Calendar.getInstance().getTimeInMillis() - startTime) / 1000;
 			if (elapsedSecs == 0) elapsedSecs = 1;
 			logger.info(String.format("Records: %,9d, processing speed %4d records/s",
-					totalCount, totalCount / elapsedSecs));
+					value, value / elapsedSecs));
 		}
 	}
+
 }

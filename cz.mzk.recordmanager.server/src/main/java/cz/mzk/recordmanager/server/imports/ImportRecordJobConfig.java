@@ -1,6 +1,7 @@
 package cz.mzk.recordmanager.server.imports;
 
 import java.util.List;
+import java.util.concurrent.Executor;
 
 import org.marc4j.marc.Record;
 import org.springframework.batch.core.Job;
@@ -16,6 +17,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.task.TaskExecutor;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import cz.mzk.recordmanager.server.model.AntikvariatyRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
@@ -41,6 +44,9 @@ public class ImportRecordJobConfig {
 
 	private static final Long LONG_OVERRIDEN_BY_EXPRESSION = null;
 
+	@Value(value = "${recordmanager.threadPoolSize:#{1}}")
+	private int threadPoolSize = 1;
+	
 	@Bean
 	public Job ImportRecordsJob(
 			@Qualifier(Constants.JOB_ID_IMPORT +":importRecordsStep") Step importRecordsStep) {
@@ -59,6 +65,7 @@ public class ImportRecordJobConfig {
 				.<List<Record>, List<Record>> chunk(20)//
 				.reader(importRecordsReader(STRING_OVERRIDEN_BY_EXPRESSION, STRING_OVERRIDEN_BY_EXPRESSION))//
 				.writer(importRecordsWriter(LONG_OVERRIDEN_BY_EXPRESSION)) //
+				.taskExecutor((TaskExecutor) poolTaskExecutor()) 
 				.build();
 	}
 
@@ -75,6 +82,29 @@ public class ImportRecordJobConfig {
 	@StepScope
 	public ImportRecordsWriter importRecordsWriter(@Value("#{jobParameters[" + Constants.JOB_PARAM_CONF_ID + "]}") Long configurationId) {
 		return new ImportRecordsWriter(configurationId);
+	}
+
+	// multi thread import
+	@Bean
+	public Job multiImportRecordsJob(
+			@Qualifier(Constants.JOB_ID_MULTI_THREADS_IMPORT +":importRecordsStep") Step multiImportRecordsStep) {
+		return jobs.get(Constants.JOB_ID_MULTI_THREADS_IMPORT)
+				.validator(new ImportRecordsJobParametersValidator())
+				.incrementer(UUIDIncrementer.INSTANCE)
+				.listener(JobFailureListener.INSTANCE)
+				.flow(multiImportRecordsStep)
+				.end().build();
+	}
+
+	@Bean(name=Constants.JOB_ID_MULTI_THREADS_IMPORT +":importRecordsStep")
+	public Step multiImportRecordsStep() throws Exception {
+		return steps.get("multiImportRecordsStep")
+				.listener(new StepProgressListener())
+				.<List<Record>, List<Record>> chunk(20)//
+				.reader(importRecordsReader(STRING_OVERRIDEN_BY_EXPRESSION, STRING_OVERRIDEN_BY_EXPRESSION))//
+				.writer(importRecordsWriter(LONG_OVERRIDEN_BY_EXPRESSION)) //
+				.taskExecutor((TaskExecutor) poolTaskExecutor())
+				.build();
 	}
 
 	// Download and import
@@ -245,6 +275,15 @@ public class ImportRecordJobConfig {
 	@StepScope
 	public ItemWriter<List<Record>> importTezaurusRecordsWriter(@Value("#{jobParameters[" + Constants.JOB_PARAM_CONF_ID + "]}") Long configurationId) {
 		return new ImportTezaurusRecordsWriter(configurationId);
+	}
+
+	@Bean(name = "threadPoolTaskExecutor")
+	public Executor poolTaskExecutor() {
+		ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+		executor.setCorePoolSize(threadPoolSize);
+		executor.setMaxPoolSize(threadPoolSize);
+		executor.initialize();
+		return executor;
 	}
 
 }
