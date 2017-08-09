@@ -3,6 +3,8 @@ package cz.mzk.recordmanager.server.export;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -11,11 +13,14 @@ import cz.mzk.recordmanager.server.marc.MarcXmlParser;
 import cz.mzk.recordmanager.server.metadata.MetadataRecordFactory;
 import cz.mzk.recordmanager.server.model.Cosmotron996;
 import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordDAO;
+import cz.mzk.recordmanager.server.util.ProgressLogger;
 
 public class ExportCosmotron996Processor implements ItemProcessor<Cosmotron996, String> {
 
 	private IOFormat iOFormat;
-	
+
+	private static Logger logger = LoggerFactory.getLogger(ExportCosmotron996Processor.class);
+
 	@Autowired
 	private MetadataRecordFactory metadataFactory;
 	
@@ -26,9 +31,12 @@ public class ExportCosmotron996Processor implements ItemProcessor<Cosmotron996, 
 	private HarvestedRecordDAO harvestedRecordDao;
 	
 	private static final String OAI_FIELD = "OAI";
-	
+
+	private ProgressLogger progressLogger;
+
 	public ExportCosmotron996Processor(IOFormat format) {
 		this.iOFormat = format;
+		progressLogger = new ProgressLogger(logger, 10000);
 	}
 	
 	@Override
@@ -39,6 +47,7 @@ public class ExportCosmotron996Processor implements ItemProcessor<Cosmotron996, 
 			if(marcRecord.getDataFields(OAI_FIELD).isEmpty()){
 				marcRecord.addDataField(OAI_FIELD, ' ', ' ', new String[]{"a", cosmo996.getRecordId()});
 			}
+			progressLogger.incrementAndLogProgress();
 			return marcRecord.export(iOFormat);
 		} 
 		return null;

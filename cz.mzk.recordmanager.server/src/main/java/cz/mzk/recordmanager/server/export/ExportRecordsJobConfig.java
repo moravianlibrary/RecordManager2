@@ -104,7 +104,8 @@ public class ExportRecordsJobConfig {
 
 	@Bean(name = Constants.JOB_ID_EXPORT_COSMOTRON_996+":exportCosmotron996Step")
 	public Step exportCosmotron996Step() throws Exception {
-		return steps.get("updateRecordsJobStep")
+		return steps.get("exportCosmotron996Step")
+				.listener(new StepProgressListener())
 				.<Cosmotron996, String> chunk(20)//
 				.reader(exportCosmotron996Reader(LONG_OVERRIDEN_BY_EXPRESSION)) //
 				.processor(exportCosmotron996Processor(STRING_OVERRIDEN_BY_EXPRESSION)) //
