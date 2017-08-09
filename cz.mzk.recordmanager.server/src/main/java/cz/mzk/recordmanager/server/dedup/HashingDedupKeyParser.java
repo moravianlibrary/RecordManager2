@@ -41,6 +41,7 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 	private final static int EFFECTIVE_TITLE_LENGTH = 255;
 	private final static int EFFECTIVE_SOURCE_INFO_LENGTH = 255;
 	private final static int EFFECTIVE_AUTHOR_LENGTH = 200;
+	private final static int EFFECTIVE_AUTHOR_AUTH_KEY_LENGTH = 50;
 	
 	@Autowired 
 	private HarvestedRecordFormatDAO harvestedRecordFormatDAO;
@@ -89,7 +90,7 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 		encapsulator.setPublicationYear(metadataRecord.getPublicationYear());
 		List<HarvestedRecordFormatEnum> formatEnums = metadataRecord.getDetectedFormatList();
 		encapsulator.setFormats(harvestedRecordFormatDAO.getFormatsFromEnums(formatEnums));
-		encapsulator.setAuthorAuthKey(metadataRecord.getAuthorAuthKey());
+		encapsulator.setAuthorAuthKey(MetadataUtils.shorten(metadataRecord.getAuthorAuthKey(), EFFECTIVE_AUTHOR_AUTH_KEY_LENGTH));
 		encapsulator.setAuthorString(MetadataUtils.normalizeAndShorten(metadataRecord.getAuthorString(), EFFECTIVE_AUTHOR_LENGTH));
 		encapsulator.setScale(metadataRecord.getScale());
 		encapsulator.setUuid(metadataRecord.getUUId());

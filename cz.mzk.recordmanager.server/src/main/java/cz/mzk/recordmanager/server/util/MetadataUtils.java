@@ -51,6 +51,11 @@ public class MetadataUtils {
 		return normalized.substring(0, Math.min(length, normalized.length()));
 	}
 
+	public static String shorten(String input, int length) {
+		if (input == null) return null;
+		return input.substring(0, Math.min(length, input.length()));
+	}
+
 	public static Long toISBN13(String isbn) {
 		String isbn13 = isbnValidator.validate(isbn);
 		return (isbn13 == null)? null: Long.valueOf(isbn13);
