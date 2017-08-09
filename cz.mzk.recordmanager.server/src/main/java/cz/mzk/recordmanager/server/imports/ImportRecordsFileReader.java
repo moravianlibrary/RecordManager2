@@ -68,7 +68,7 @@ public class ImportRecordsFileReader implements ItemReader<List<Record>> {
 	}
 	
 	@Override
-	public List<Record> read() throws Exception, UnexpectedInputException,
+	public synchronized List<Record> read() throws Exception, UnexpectedInputException,
 			ParseException, NonTransientResourceException {
 		List<Record> batch = new ArrayList<Record>();
 		
