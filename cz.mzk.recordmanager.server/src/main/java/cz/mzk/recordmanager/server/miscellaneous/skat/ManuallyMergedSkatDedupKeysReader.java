@@ -30,14 +30,13 @@ import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.model.SkatKey;
 import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordDAO;
 import cz.mzk.recordmanager.server.oai.dao.SkatKeyDAO;
+import cz.mzk.recordmanager.server.util.ApacheHttpClient;
 import cz.mzk.recordmanager.server.util.Constants;
-import cz.mzk.recordmanager.server.util.HttpClient;
 import cz.mzk.recordmanager.server.util.UrlUtils;
 
 public class ManuallyMergedSkatDedupKeysReader implements ItemReader<Set<SkatKey>> {
 
-	@Autowired
-	private HttpClient httpClient;
+	private ApacheHttpClient httpClient;
 
 	@Autowired
 	private SessionFactory sessionFactory;
@@ -131,6 +130,7 @@ public class ManuallyMergedSkatDedupKeysReader implements ItemReader<Set<SkatKey
 
 	protected InputStream harvest(String url) throws IOException {
 		logger.info("Harvesting from: " + url);
+		httpClient = new ApacheHttpClient();
 		return httpClient.executeGet(url, headers);
 	}
 
