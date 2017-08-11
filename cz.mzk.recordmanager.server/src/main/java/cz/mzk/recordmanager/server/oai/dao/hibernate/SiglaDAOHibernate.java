@@ -23,4 +23,13 @@ public class SiglaDAOHibernate extends AbstractDomainDAOHibernate<Long, Sigla>
 				.list();
 	}
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Sigla> findSiglaByImportConfId(Long id) {
+		Session session = sessionFactory.getCurrentSession();
+		return (List<Sigla>) session
+				.createQuery("from Sigla where import_conf_id = ?")
+				.setParameter(0, id).list();
+	}
+
 }
