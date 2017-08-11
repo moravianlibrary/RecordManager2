@@ -817,3 +817,7 @@ CREATE TABLE publisher_number (
 );
 COMMENT ON TABLE publisher_number IS 'dedup_keys: table contatining publisher numbers';
 CREATE INDEX publisher_number_harvested_record_idx ON publisher_number(harvested_record_id);
+
+-- 11. 08. 2017 tomascejpek
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (37, 343, 'ZLG001');
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (38, 346, 'PRG001');

@@ -283,3 +283,5 @@ INSERT INTO sigla (id, import_conf_id, sigla) VALUES (33, 340, 'UOG001');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (34, 340, 'UOG009');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (35, 340, 'UOG010');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (36, 304, 'ABA000');
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (37, 343, 'ZLG001');
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (38, 346, 'PRG001');
