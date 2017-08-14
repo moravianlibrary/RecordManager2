@@ -141,6 +141,17 @@ public class MarcDSL extends BaseDSL {
 		return "";
 	}
 
+	public Set<String> getCountries() {
+		Set<String> countries = new HashSet<>();
+		String f008 = record.getControlField("008");
+		if (f008 != null && f008.length() > 18) {
+			countries.add(f008.substring(15, 18).trim());
+		}
+		countries.addAll(getFields("044a", SubfieldExtractionMethod.SEPARATED));
+		countries.forEach(c -> c.trim());
+		return countries;
+	}
+
     /*
      * Get all fields starting with the 100 and ending with the 839
      * This will ignore any "code" fields and only use textual fields

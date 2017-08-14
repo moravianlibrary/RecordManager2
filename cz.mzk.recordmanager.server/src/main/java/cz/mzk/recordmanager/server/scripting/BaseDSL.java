@@ -2,6 +2,7 @@ package cz.mzk.recordmanager.server.scripting;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -44,7 +45,7 @@ public abstract class BaseDSL {
 		return result;
 	}
 
-	public List<String> translate(String file, List<String> inputs,
+	public List<String> translate(String file, Collection<String> inputs,
 			List<String> defaultValue) throws IOException {
 		if (inputs == null) {
 			return Collections.emptyList();

@@ -6,6 +6,7 @@ fullrecord = getFullrecord()
 
 language = translate("mzk_language.map", getLanguages(), null)
 country_str = translate("mzk_country.map", getCountry(), null)
+country_str_mv = translate("mzk_country.map", getCountries(), null)
 
 author = getFirstField "100abcd"
 author_exact = getAuthorExact()
