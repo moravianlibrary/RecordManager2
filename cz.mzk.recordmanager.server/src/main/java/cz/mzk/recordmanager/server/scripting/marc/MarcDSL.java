@@ -124,9 +124,7 @@ public class MarcDSL extends BaseDSL {
 		if (f008 != null && f008.length() >= 38) {
 			languages.add(f008.substring(35, 38));
 		}
-		languages.addAll(record.getFields("041", EMPTY_SEPARATOR, 'a'));
-		languages.addAll(record.getFields("041", EMPTY_SEPARATOR, 'd'));
-		languages.addAll(record.getFields("041", EMPTY_SEPARATOR, 'e'));
+		languages.addAll(getFields("041ade", SubfieldExtractionMethod.SEPARATED));
 		return new ArrayList<String>(languages);
 	}
 	

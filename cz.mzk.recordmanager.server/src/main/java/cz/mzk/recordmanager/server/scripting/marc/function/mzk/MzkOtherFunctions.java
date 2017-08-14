@@ -204,7 +204,7 @@ public class MzkOtherFunctions implements MarcRecordFunctions {
 		if (f008 != null && f008.length() >= 38) {
 			languages.add(f008.substring(35, 38));
 		}
-		languages.addAll(ctx.record().getFields("041", EMPTY_SEPARATOR, 'a'));
+		languages.addAll(ctx.record().getFields("041", field -> true, SubfieldExtractionMethod.SEPARATED, null, 'a'));
 		return new ArrayList<String>(languages);
 	}
 
