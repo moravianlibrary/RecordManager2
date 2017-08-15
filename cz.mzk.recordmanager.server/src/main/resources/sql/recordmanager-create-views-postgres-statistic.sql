@@ -35,7 +35,7 @@ WITH last_harvest_date AS (
   FROM oai_harvest_job_stat
   GROUP BY import_conf_id
 )
-SELECT l.name, ic.id_prefix, ohc.url, ohc.set_spec, lhd.last_successful_harvest_date, lhd.last_failed_harvest_date, lhd.first_harvest_date, lhd.no_of_harvests
+SELECT ic.id, l.name, ic.id_prefix, ohc.url, ohc.set_spec, lhd.last_successful_harvest_date, lhd.last_failed_harvest_date, lhd.first_harvest_date, lhd.no_of_harvests
 FROM last_harvest_date lhd
   JOIN import_conf ic ON ic.id = lhd.import_conf_id
   LEFT JOIN oai_harvest_conf ohc ON ohc.import_conf_id = ic.id

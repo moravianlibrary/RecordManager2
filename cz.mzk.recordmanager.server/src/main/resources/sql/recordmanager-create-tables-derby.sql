@@ -24,7 +24,7 @@ CREATE TABLE import_conf (
   id                   DECIMAL(10) PRIMARY KEY,
   library_id           DECIMAL(10),
   contact_person_id    DECIMAL(10),
-  id_prefix            VARCHAR(10),
+  id_prefix            VARCHAR(15),
   base_weight          DECIMAL(10),
   cluster_id_enabled   BOOLEAN DEFAULT FALSE,
   filtering_enabled    BOOLEAN DEFAULT FALSE,

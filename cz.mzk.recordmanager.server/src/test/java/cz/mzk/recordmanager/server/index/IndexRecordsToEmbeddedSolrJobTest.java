@@ -56,7 +56,7 @@ public class IndexRecordsToEmbeddedSolrJobTest extends AbstractSolrTest {
 			allDocsQuery.set("q", SolrFieldConstants.ID_FIELD+":*");
 			allDocsQuery.set("rows", 10000);
 			QueryResponse allDocsResponse = server.query(allDocsQuery);
-			Assert.assertEquals(allDocsResponse.getResults().size(), 83);
+			Assert.assertEquals(allDocsResponse.getResults().size(), 85);
 		}
 
 		{
@@ -187,6 +187,17 @@ public class IndexRecordsToEmbeddedSolrJobTest extends AbstractSolrTest {
 			SolrDocument document = docResponse.getResults().get(0);
 			Assert.assertEquals(document.get(SolrFieldConstants.USE_FOR), Collections.singletonList("Karel Imaginarni, 1900-2000"));
 			Assert.assertEquals(document.get(SolrFieldConstants.HEADING), "Jiří Šolc, 1900-2000");
+		}
+
+		{
+			// check sfx record
+			SolrQuery docQuery = new SolrQuery();
+			docQuery.set("q", SolrFieldConstants.ID_FIELD+":104");
+			QueryResponse docResponse = server.query(docQuery);
+			Assert.assertEquals(docResponse.getResults().size(), 1);
+			SolrDocument document = docResponse.getResults().get(0);
+			Assert.assertEquals(document.get(SolrFieldConstants.LOCAL_IDS_FIELD), Collections.singletonList("sfxjibmzk.1000000000000004"));
+			Assert.assertEquals(document.get(SolrFieldConstants.SFX_SOURCE_TXT), "mzk");
 		}
 	}
 
