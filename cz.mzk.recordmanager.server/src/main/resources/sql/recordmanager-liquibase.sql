@@ -1079,7 +1079,7 @@ CREATE INDEX publisher_number_harvested_record_idx ON publisher_number(harvested
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (37, 343, 'ZLG001');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (38, 346, 'PRG001');
 
---changset tomascejpek:63
+--changeset tomascejpek:63
 DROP VIEW IF EXISTS oai_harvest_summary CASCADE;
 ALTER TABLE import_conf ALTER COLUMN id_prefix TYPE VARCHAR(15);
 CREATE OR REPLACE VIEW oai_harvest_summary AS

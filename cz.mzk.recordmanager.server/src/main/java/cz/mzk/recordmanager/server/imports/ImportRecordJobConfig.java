@@ -102,7 +102,7 @@ public class ImportRecordJobConfig {
 		return steps.get("multiImportRecordsStep")
 				.listener(new StepProgressListener())
 				.<List<Record>, List<Record>> chunk(20)//
-				.reader(importRecordsReader(STRING_OVERRIDEN_BY_EXPRESSION, STRING_OVERRIDEN_BY_EXPRESSION))//
+				.reader(importRecordsReader(LONG_OVERRIDEN_BY_EXPRESSION, STRING_OVERRIDEN_BY_EXPRESSION, STRING_OVERRIDEN_BY_EXPRESSION))//
 				.writer(importRecordsWriter(LONG_OVERRIDEN_BY_EXPRESSION)) //
 				.taskExecutor((TaskExecutor) poolTaskExecutor())
 				.build();
