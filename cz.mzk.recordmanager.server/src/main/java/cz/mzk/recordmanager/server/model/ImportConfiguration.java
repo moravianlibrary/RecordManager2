@@ -72,6 +72,9 @@ public abstract class ImportConfiguration extends AbstractDomainObject {
 	@JoinColumn(name="import_conf_id", referencedColumnName="id")
 	private List<Sigla> siglas = new ArrayList<>();
 
+	@Column(name="item_id")
+	private String itemId;
+
 	public Library getLibrary() {
 		return library;
 	}
@@ -174,6 +177,14 @@ public abstract class ImportConfiguration extends AbstractDomainObject {
 
 	public void setSiglas(List<Sigla> siglas) {
 		this.siglas = siglas;
+	}
+
+	public String getItemId() {
+		return itemId;
+	}
+
+	public void setItemId(String itemId) {
+		this.itemId = itemId;
 	}
 
 }
