@@ -24,8 +24,6 @@ import cz.mzk.recordmanager.server.scripting.marc.function.MarcRecordFunctions;
 @Component
 public class MzkOtherFunctions implements MarcRecordFunctions {
 
-	private final static String EMPTY_SEPARATOR = "";
-
 	private static Logger logger = LoggerFactory
 			.getLogger(MzkOtherFunctions.class);
 
