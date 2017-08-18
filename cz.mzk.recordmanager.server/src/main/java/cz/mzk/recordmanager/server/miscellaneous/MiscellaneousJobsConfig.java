@@ -26,6 +26,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
+import cz.mzk.recordmanager.server.export.HarvestedRecordIdRowMapper;
 import cz.mzk.recordmanager.server.index.HarvestedRecordRowMapper;
 import cz.mzk.recordmanager.server.jdbc.LongValueRowMapper;
 import cz.mzk.recordmanager.server.miscellaneous.skat.GenerateSkatKeysJobParameterValidator;
@@ -34,7 +35,9 @@ import cz.mzk.recordmanager.server.miscellaneous.skat.GenerateSkatKeysWriter;
 import cz.mzk.recordmanager.server.miscellaneous.skat.ManuallyMergedSkatDedupKeysReader;
 import cz.mzk.recordmanager.server.miscellaneous.skat.SkatKeysMergedIdsUpdateTasklet;
 import cz.mzk.recordmanager.server.model.SkatKey;
+import cz.mzk.recordmanager.server.model.HarvestedRecord.HarvestedRecordUniqueId;
 import cz.mzk.recordmanager.server.oai.dao.SkatKeyDAO;
+import cz.mzk.recordmanager.server.springbatch.JobFailureListener;
 import cz.mzk.recordmanager.server.springbatch.StepProgressListener;
 import cz.mzk.recordmanager.server.util.Constants;
 
@@ -192,6 +195,54 @@ public class MiscellaneousJobsConfig {
 		executor.setMaxPoolSize(threadPoolSize);
 		executor.initialize();
 		return executor;
+	}
+
+	// generateItemIdJob
+	@Bean
+	public Job generateItemIdJob(
+			@Qualifier(Constants.JOB_ID_GENERATE_ITEM_ID + ":generateItemIdStep") Step generateItemIdStep) {
+		return jobs.get(Constants.JOB_ID_GENERATE_ITEM_ID)
+				.validator(new FilterCaslinRecordsJobParametersValidator())
+				.listener(JobFailureListener.INSTANCE)
+				.flow(generateItemIdStep)
+				.end()
+				.build();
+	}
+
+	@Bean(name = Constants.JOB_ID_GENERATE_ITEM_ID + ":generateItemIdStep")
+	public Step generateItemIdStep() throws Exception {
+		return steps.get("generateItemIdStep")
+				.listener(new StepProgressListener())
+				.<HarvestedRecordUniqueId, HarvestedRecordUniqueId> chunk(20)//
+				.reader(generateItemIdReader()) //
+				.writer(generateItemIdWriter()) //
+				.taskExecutor((TaskExecutor) poolTaskExecutor())
+				.build();
+	}
+
+	@Bean(name = Constants.JOB_ID_GENERATE_ITEM_ID + ":generateItemIdReader")
+	@StepScope
+	public synchronized ItemReader<HarvestedRecordUniqueId> generateItemIdReader()
+			throws Exception {
+		JdbcPagingItemReader<HarvestedRecordUniqueId> reader = new JdbcPagingItemReader<HarvestedRecordUniqueId>();
+		SqlPagingQueryProviderFactoryBean pqpf = new SqlPagingQueryProviderFactoryBean();
+		pqpf.setDataSource(dataSource);
+		pqpf.setSelectClause("SELECT id, import_conf_id, record_id");
+		pqpf.setFromClause("FROM harvested_record");
+		pqpf.setWhereClause("WHERE deleted is null");
+		pqpf.setSortKey("id");
+		reader.setRowMapper(new HarvestedRecordIdRowMapper());
+		reader.setPageSize(20);
+		reader.setQueryProvider(pqpf.getObject());
+		reader.setDataSource(dataSource);
+		reader.afterPropertiesSet();
+		return reader;
+	}
+
+	@Bean(name = Constants.JOB_ID_GENERATE_ITEM_ID + ":generateItemIdWriter")
+	@StepScope
+	public GenerateItemIdWriter generateItemIdWriter() {
+		return new GenerateItemIdWriter();
 	}
 
 }
