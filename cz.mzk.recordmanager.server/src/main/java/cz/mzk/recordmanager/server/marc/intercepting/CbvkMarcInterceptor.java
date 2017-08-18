@@ -38,7 +38,9 @@ public class CbvkMarcInterceptor extends DefaultMarcInterceptor {
 		for (String tag : new TreeSet<String>(dfMap.keySet())) { // sorted tags
 			for (DataField df : dfMap.get(tag)) {
 				// remove field 520
-				if (!df.getTag().equals("520")) newRecord.addVariableField(df);
+				if (df.getTag().equals("520")) continue; 
+				processField996(df);
+				newRecord.addVariableField(df);
 			}
 		}
 		return new MarcRecordImpl(newRecord).export(IOFormat.XML_MARC).getBytes(StandardCharsets.UTF_8);

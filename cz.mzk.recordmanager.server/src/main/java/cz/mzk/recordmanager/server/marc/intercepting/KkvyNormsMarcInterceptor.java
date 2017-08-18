@@ -41,6 +41,7 @@ public class KkvyNormsMarcInterceptor extends DefaultMarcInterceptor{
 				if (df.getTag().equals("996")) {
 					if (df.getSubfield('l') != null && df.getSubfield('l').getData().trim().equals("VF")) continue;
 				}
+				processField996(df);
 				newRecord.addVariableField(df);
 			}
 		}

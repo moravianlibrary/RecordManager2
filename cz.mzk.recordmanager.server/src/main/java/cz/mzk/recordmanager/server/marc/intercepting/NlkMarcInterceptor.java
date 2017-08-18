@@ -79,7 +79,7 @@ public class NlkMarcInterceptor extends DefaultMarcInterceptor{
 						}
 					}
 					else newDf = df;
-					
+					processField996(newDf);
 					newRecord.addVariableField(newDf);
 				}
 				else if (df.getTag().equals("990") || df.getTag().equals("991")) {
