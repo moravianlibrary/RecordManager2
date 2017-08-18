@@ -37,7 +37,7 @@ public class MarcInterceptorFactory {
 			case Constants.PREFIX_KKVY: return new KkvyNormsMarcInterceptor(record);
 			case Constants.PREFIX_CBVK: return new CbvkMarcInterceptor(record);
 			case Constants.PREFIX_BMC: return new BmcMarcInterceptor(record);
-			default: return new DefaultMarcInterceptor(record);
+			default: return new DefaultMarcInterceptor(record, configuration);
 			}
 		} catch (InvalidMarcException ime) {
 			return null;
