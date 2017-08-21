@@ -20,13 +20,22 @@ import cz.mzk.recordmanager.server.marc.marc4j.MarcFactoryImpl;
 import cz.mzk.recordmanager.server.marc.marc4j.RecordImpl;
 import cz.mzk.recordmanager.server.model.ImportConfiguration;
 import cz.mzk.recordmanager.server.model.Sigla;
-import cz.mzk.recordmanager.server.scripting.MappingResolver;
+import cz.mzk.recordmanager.server.scripting.Mapping;
 import cz.mzk.recordmanager.server.scripting.ResourceMappingResolver;
 
 public class DefaultMarcInterceptor implements MarcRecordInterceptor {
 
 	private static Logger logger = LoggerFactory.getLogger(DefaultMarcInterceptor.class);
-	private static final MappingResolver SIGLA_RESOLVER = new ResourceMappingResolver(new ClasspathResourceProvider());
+	private static Mapping SIGLA_MAPPING = null;
+	{
+		if (SIGLA_MAPPING == null) {
+			try {
+				SIGLA_MAPPING = new ResourceMappingResolver(new ClasspathResourceProvider()).resolve(SIGLA_MAP);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
 	private Record record;
 	private ImportConfiguration conf;
 	protected static final MarcFactory MARC_FACTORY = new MarcFactoryImpl();
@@ -36,7 +45,7 @@ public class DefaultMarcInterceptor implements MarcRecordInterceptor {
 	public DefaultMarcInterceptor(Record record) {
 		this.record = record;
 	}
-	
+
 	public DefaultMarcInterceptor(Record record, ImportConfiguration conf) {
 		this.record = record;
 		this.conf = conf;
@@ -64,11 +73,11 @@ public class DefaultMarcInterceptor implements MarcRecordInterceptor {
 
 	/**
 	 * add item id to field 996
+	 * 
 	 * @param df
 	 */
 	protected void processField996(DataField df) {
 		if (df.getTag().equals("996")) {
-			Long importConfId = conf.getId();
 			String itemIdType = conf.getItemId();
 			for (Subfield sf : df.getSubfields(ITEM_ID_SUBFIELD_CHAR)) {
 				df.removeSubfield(sf);
@@ -76,14 +85,10 @@ public class DefaultMarcInterceptor implements MarcRecordInterceptor {
 			boolean missing = false;
 			String sigla;
 			List<String> getSiglas = null;
-			try {
-				getSiglas = SIGLA_RESOLVER.resolve(SIGLA_MAP).get(importConfId.toString());
-			} catch (IOException e) {
-			}
+			getSiglas = SIGLA_MAPPING.get(conf.getId().toString());
 			if (getSiglas != null && !getSiglas.isEmpty()) {
 				sigla = getSiglas.get(0);
-			}
-			else {
+			} else {
 				List<Sigla> siglas = conf.getSiglas();
 				sigla = !siglas.isEmpty() ? siglas.get(0).getUniqueId().getSigla() : "";
 			}
@@ -93,18 +98,15 @@ public class DefaultMarcInterceptor implements MarcRecordInterceptor {
 				String u = df.getSubfield('u') != null ? df.getSubfield('u').getData() : "";
 				if (j.equals("") || w.equals("") || u.equals("")) missing = true;
 				else df.addSubfield(MARC_FACTORY.newSubfield(ITEM_ID_SUBFIELD_CHAR, sigla + "." + j + w + u));
-			}
-			else if (itemIdType.equals("tre")) {
+			} else if (itemIdType.equals("tre")) {
 				String w = df.getSubfield('w') != null ? df.getSubfield('w').getData() : "";
 				if (w.equals("")) missing = true;
 				else df.addSubfield(MARC_FACTORY.newSubfield(ITEM_ID_SUBFIELD_CHAR, sigla + "." + w));
-			}
-			else if (itemIdType.equals("nlk")) {
+			} else if (itemIdType.equals("nlk")) {
 				String a = df.getSubfield('a') != null ? df.getSubfield('a').getData() : "";
 				if (a.equals("")) missing = true;
 				else df.addSubfield(MARC_FACTORY.newSubfield(ITEM_ID_SUBFIELD_CHAR, sigla + "." + a));
-			}
-			else if (itemIdType.equals("svkul")) {
+			} else if (itemIdType.equals("svkul")) {
 				String b = df.getSubfield('b') != null ? df.getSubfield('b').getData() : "";
 				if (b.equals("")) missing = true;
 				else {
@@ -113,8 +115,7 @@ public class DefaultMarcInterceptor implements MarcRecordInterceptor {
 					}
 					df.addSubfield(MARC_FACTORY.newSubfield(ITEM_ID_SUBFIELD_CHAR, sigla + "." + b));
 				}
-			}
-			else if (itemIdType.equals("other")) {
+			} else if (itemIdType.equals("other")) {
 				String b = df.getSubfield('b') != null ? df.getSubfield('b').getData() : "";
 				if (b.equals("")) missing = true;
 				else df.addSubfield(MARC_FACTORY.newSubfield(ITEM_ID_SUBFIELD_CHAR, sigla + "." + b));
@@ -123,7 +124,7 @@ public class DefaultMarcInterceptor implements MarcRecordInterceptor {
 					conf.getId(), record.getControlNumber()));
 		}
 	}
-	
+
 	protected Record getRecord() {
 		return this.record;
 	}
