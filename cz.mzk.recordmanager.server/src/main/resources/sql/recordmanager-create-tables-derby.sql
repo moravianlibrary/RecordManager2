@@ -86,7 +86,7 @@ CREATE TABLE file_import_conf (
 );
 
 CREATE TABLE format (
-  format               VARCHAR(12) PRIMARY KEY,
+  format               VARCHAR(15) PRIMARY KEY,
   description          VARCHAR(255)
 );
 
@@ -104,7 +104,7 @@ CREATE TABLE harvested_record (
   updated              TIMESTAMP,
   deleted              TIMESTAMP,
   oai_timestamp        TIMESTAMP,
-  format               VARCHAR(12) NOT NULL,
+  format               VARCHAR(15) NOT NULL,
   dedup_record_id      DECIMAL(10),
   publication_year     DECIMAL(4),
   author_auth_key      VARCHAR(50),
@@ -222,7 +222,7 @@ CREATE TABLE authority_record (
   harvested            TIMESTAMP,
   updated              TIMESTAMP,
   deleted              TIMESTAMP,
-  format               VARCHAR(12) NOT NULL,
+  format               VARCHAR(15) NOT NULL,
   raw_record           BLOB,
   FOREIGN KEY (import_conf_id)      REFERENCES import_conf(id),
   FOREIGN KEY (format)              REFERENCES format(format),
