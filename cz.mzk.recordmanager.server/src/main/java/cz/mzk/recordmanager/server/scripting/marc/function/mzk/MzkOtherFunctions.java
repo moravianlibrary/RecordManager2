@@ -156,6 +156,9 @@ public class MzkOtherFunctions implements MarcRecordFunctions {
 
 	private static final String INFO_USA_BASE_SUFFIX = "infoUSA";
 
+	private static final String SPANISH_LIBRARY_VALUE = "Španělská knihovna";
+	private static final String SPANISH_LIBRARY_BASE_SUFFIX = "spanish_lib";
+
 	public List<String> getMZKBases(MarcFunctionContext ctx) {
 		String idParts[] = ctx.harvestedRecord().getUniqueId().getRecordId().split("-");
 		String base = idParts[0];
@@ -172,6 +175,9 @@ public class MzkOtherFunctions implements MarcRecordFunctions {
 		for (String field : ctx.record().getFields("996", 'l')) {
 			if (INFO_USA_VALUE.equals(field) || INFO_USA_VALUE2.equals(field)) {
 				result.add(primaryBase + BASE_SEPARATOR + INFO_USA_BASE_SUFFIX);
+				break;
+			} else if (SPANISH_LIBRARY_VALUE.equals(field)) {
+				result.add(primaryBase + BASE_SEPARATOR	+ SPANISH_LIBRARY_BASE_SUFFIX);
 				break;
 			}
 		}
