@@ -5,4 +5,6 @@ public interface MiscellaneousFacade {
 
 	public void runFilterCaslinRecordsJob();
 
+	public void runGenerateSkatDedupKeys();
+
 }
