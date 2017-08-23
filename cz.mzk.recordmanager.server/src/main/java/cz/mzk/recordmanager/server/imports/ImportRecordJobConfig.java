@@ -65,13 +65,12 @@ public class ImportRecordJobConfig {
 				.<List<Record>, List<Record>> chunk(20)//
 				.reader(importRecordsReader(LONG_OVERRIDEN_BY_EXPRESSION, STRING_OVERRIDEN_BY_EXPRESSION, STRING_OVERRIDEN_BY_EXPRESSION))//
 				.writer(importRecordsWriter(LONG_OVERRIDEN_BY_EXPRESSION)) //
-				.taskExecutor((TaskExecutor) poolTaskExecutor()) 
 				.build();
 	}
 
 	@Bean(name=Constants.JOB_ID_IMPORT +":importRecordsReader")
 	@StepScope
-	public ItemReader<List<Record>> importRecordsReader(
+	public synchronized ItemReader<List<Record>> importRecordsReader(
 			@Value("#{jobParameters[" + Constants.JOB_PARAM_CONF_ID + "]}") Long configurationId,
 			@Value("#{jobParameters[" + Constants.JOB_PARAM_FORMAT + "]}") String strFormat,
 			@Value("#{jobParameters[" + Constants.JOB_PARAM_IN_FILE + "]}") String filename)
