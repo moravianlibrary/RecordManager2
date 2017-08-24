@@ -12,7 +12,7 @@ mzk_visible_str = getMZKVisible()
 format = translate("mzk_format.map", getMZKFormat(), null)
 statuses = getMZKStatuses()
 
-language = translate("mzk_language.map", getLanguages(), null)
+language = translate("mzk_language.map", getMZKLanguages(), null)
 language_display_mv = translate("mzk_language.map", getLanguages(), null)
 
 country_txt = translate("mzk_country.map", getCountry(), null)
@@ -47,7 +47,7 @@ publishDate_display = record.getField("260", 'c' as char) ?: record.getFields("2
 placeOfPublication_txt_mv = record.getFields("260", 'a' as char) ?: record.getFields("264", { field -> field.getIndicator2() == '1' }, 'a' as char)
 publishDate = getPublishDate()
 publishDate_txt_mv = getPublishDate()
-publishDateSort = getPublishDateForSorting()
+publishDateSort = getPublishDateForSortingForMzk()
 
 physical = getFields "300abcefg:530abcd"
 dateSpan = getFields "362a"
@@ -62,9 +62,15 @@ topic = getFields "600:610:630:650"
 genre = getFields "655"
 geographic = getFields "651"
 
+topic_cs_str_mv = record.getFields("650", { field -> field.getIndicator2() == '7' }, 'a' as char)
+topic_en_str_mv = record.getFields("650", { field -> field.getIndicator2() == '9' }, 'a' as char)
 topic_facet = getMZKTopicFacets()
-genre_facet = getFields "600v:610v:611v:630v:648v:650v:651v:655a:655v"
+genre_facet = getFields "655avxyz"
+genre_cs_str_mv = getMZKGenreFacets('7' as char)
+genre_en_str_mv = getMZKGenreFacets('9' as char)
 geographic_facet = getFields "600z:610z:611z:630z:648z:650z:651a:651z:655z"
+geographic_cs_str_mv = getMZKGeographicFacets('7' as char)
+geographic_en_str_mv = getMZKGeographicFacets('9' as char)
 
 url = getFields "856u"
 

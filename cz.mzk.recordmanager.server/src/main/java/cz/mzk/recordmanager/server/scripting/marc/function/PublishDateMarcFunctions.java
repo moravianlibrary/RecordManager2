@@ -11,6 +11,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.IntStream;
 
+import org.apache.commons.lang3.StringUtils;
 import org.marc4j.marc.DataField;
 import org.springframework.stereotype.Component;
 
@@ -45,7 +46,7 @@ public class PublishDateMarcFunctions implements MarcRecordFunctions {
 
 	// [1991] or asi 1991
 	private static final Pattern FOUR_DIGIT_YEAR_PATTERN = Pattern
-			.compile("\\d{4}");
+			.compile("0*(\\d{4})");
 	
 	private static final Pattern DIGITS_PATTERN = Pattern.compile("(\\d+)");
 	
@@ -119,7 +120,7 @@ public class PublishDateMarcFunctions implements MarcRecordFunctions {
 		years.forEach(y -> {
 			Matcher matcher;
 			if ((matcher = FOUR_DIGIT_YEAR_PATTERN.matcher(y)).find())
-				results.add(matcher.group(0));
+				results.add(matcher.group(1));
 		});
 		return results;
 	}
@@ -183,10 +184,19 @@ public class PublishDateMarcFunctions implements MarcRecordFunctions {
 			return getPublishDateForSortingForArticles(ctx);
 		}
 		else{
+			return getPublishDateForSortingForOthersFilteredMinYear(ctx);
+		}
+	}
+
+	public String getPublishDateForSortingForMzk(MarcFunctionContext ctx) {
+		if (ctx.metadataRecord().getDetectedFormatList()
+				.contains(HarvestedRecordFormatEnum.ARTICLES)) {
+			return getPublishDateForSortingForArticles(ctx);
+		} else {
 			return getPublishDateForSortingForOthers(ctx);
 		}
 	}
-	
+
 	private String getPublishDateForSortingForArticles(MarcFunctionContext ctx){
 		for(String year: ctx.record().getFields("773", "", '9')){
 			if(year.length() > 4) year = year.substring(0, 4);
@@ -213,7 +223,7 @@ public class PublishDateMarcFunctions implements MarcRecordFunctions {
 		return null;
 	}
 	
-	private String getPublishDateForSortingForOthers(MarcFunctionContext ctx) {
+	private Set<Integer> getAllPublishDateForSortingForOthers(MarcFunctionContext ctx) {
 		Set<Integer> years = new TreeSet<>();
 		years.addAll(parseRangesForSorting(getPublishDateFromFields(ctx)));
 		
@@ -243,6 +253,12 @@ public class PublishDateMarcFunctions implements MarcRecordFunctions {
 				}
 			}
         }
+		return years;
+	}
+
+	private String getPublishDateForSortingForOthersFilteredMinYear(
+			MarcFunctionContext ctx) {
+		Set<Integer> years = getAllPublishDateForSortingForOthers(ctx);
 		if (!years.isEmpty()) {
 			years.removeIf(year -> year <= MIN_YEAR || MAX_YEAR < year);
 			if (!years.isEmpty()) {
@@ -251,7 +267,18 @@ public class PublishDateMarcFunctions implements MarcRecordFunctions {
 		}
 		return null;
 	}
-	
+
+	private String getPublishDateForSortingForOthers(MarcFunctionContext ctx) {
+		Set<Integer> years = getAllPublishDateForSortingForOthers(ctx);
+		if (!years.isEmpty()) {
+			years.removeIf(year -> year <= 0 || MAX_YEAR < year);
+			if (!years.isEmpty()) {
+				return StringUtils.leftPad(years.iterator().next().toString(), 4, '0');
+			}
+		}
+		return null;
+	}
+
 	private Set<Integer> parseRangesForSorting(Set<String> dates) {
 		if (dates == null) return Collections.emptySet();
 		Set<Integer> results = new TreeSet<>();

@@ -17,6 +17,7 @@ import com.google.common.base.MoreObjects;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 
+import cz.mzk.recordmanager.server.marc.SubfieldExtractionMethod;
 import cz.mzk.recordmanager.server.scripting.marc.MarcFunctionContext;
 import cz.mzk.recordmanager.server.scripting.marc.function.MarcRecordFunctions;
 
@@ -126,9 +127,24 @@ public class MzkOtherFunctions implements MarcRecordFunctions {
 		return result;
 	}
 
+	public Set<String> getMZKGenreFacets(MarcFunctionContext ctx, char ind2) {
+		Set<String> result = new HashSet<String>();
+		result.addAll(ctx.record().getFields("655", field -> field.getIndicator2() == ind2, SubfieldExtractionMethod.SEPARATED, null, 'a', 'v', 'x', 'y', 'z'));
+		return result;
+	}
+
+	public Set<String> getMZKGeographicFacets(MarcFunctionContext ctx, char ind2) {
+		Set<String> result = new HashSet<String>();
+		result.addAll(ctx.record().getFields("651", field -> field.getIndicator2() == ind2, SubfieldExtractionMethod.SEPARATED, null, 'a'));
+		for (String tag : new String[]{"600", "610","611","630","648","650","651","655"}) {
+			result.addAll(ctx.record().getFields(tag, field -> field.getIndicator2() == ind2, SubfieldExtractionMethod.SEPARATED, null, 'z'));
+		}
+		return result;
+	}
+
 	private static final Map<String, Set<String>> ALLOWED_BASES = ImmutableMap.of(
 				"MZK01", ImmutableSet.of("33", "44", "99"), //
-				"MZK03", ImmutableSet.of("mzk", "rajhrad", "znojmo", "trebova", "dacice", "minorite")
+				"MZK03", ImmutableSet.of("mzk", "rajhrad", "znojmo", "trebova", "dacice", "minorite", "broumov")
 	);
 
 	private static final String BASE_PREFIX = "facet_base_";
@@ -136,8 +152,12 @@ public class MzkOtherFunctions implements MarcRecordFunctions {
 	private static final String BASE_SEPARATOR = "_";
 
 	private static final String INFO_USA_VALUE = "USA";
+	private static final String INFO_USA_VALUE2 = "Info USA/3.patro";
 
 	private static final String INFO_USA_BASE_SUFFIX = "infoUSA";
+
+	private static final String SPANISH_LIBRARY_VALUE = "Španělská knihovna";
+	private static final String SPANISH_LIBRARY_BASE_SUFFIX = "spanish_lib";
 
 	public List<String> getMZKBases(MarcFunctionContext ctx) {
 		String idParts[] = ctx.harvestedRecord().getUniqueId().getRecordId().split("-");
@@ -153,8 +173,11 @@ public class MzkOtherFunctions implements MarcRecordFunctions {
 		}
 		// info USA
 		for (String field : ctx.record().getFields("996", 'l')) {
-			if (INFO_USA_VALUE.equals(field)) {
+			if (INFO_USA_VALUE.equals(field) || INFO_USA_VALUE2.equals(field)) {
 				result.add(primaryBase + BASE_SEPARATOR + INFO_USA_BASE_SUFFIX);
+				break;
+			} else if (SPANISH_LIBRARY_VALUE.equals(field)) {
+				result.add(primaryBase + BASE_SEPARATOR	+ SPANISH_LIBRARY_BASE_SUFFIX);
 				break;
 			}
 		}
@@ -177,6 +200,16 @@ public class MzkOtherFunctions implements MarcRecordFunctions {
 
 	public String getMZKPublisher(MarcFunctionContext ctx) {
 		return MoreObjects.firstNonNull(ctx.record().getField("260", 'b'), ctx.record().getField("260", 'b'));
+	}
+
+	public List<String> getMZKLanguages(MarcFunctionContext ctx) {
+		Set<String> languages = new HashSet<String>();
+		String f008 = ctx.record().getControlField("008");
+		if (f008 != null && f008.length() >= 38) {
+			languages.add(f008.substring(35, 38));
+		}
+		languages.addAll(ctx.record().getFields("041", field -> true, SubfieldExtractionMethod.SEPARATED, null, 'a'));
+		return new ArrayList<String>(languages);
 	}
 
 }
