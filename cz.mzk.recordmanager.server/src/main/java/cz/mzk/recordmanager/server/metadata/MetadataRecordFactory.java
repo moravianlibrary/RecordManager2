@@ -16,6 +16,7 @@ import cz.mzk.recordmanager.server.metadata.institutions.AuthMetadataMarcRecord;
 import cz.mzk.recordmanager.server.metadata.institutions.BmcMetadataMarcRecord;
 import cz.mzk.recordmanager.server.metadata.institutions.Kram3NkpMetadataDublinCoreRecord;
 import cz.mzk.recordmanager.server.metadata.institutions.KramDefaultMetadataDublinCoreRecord;
+import cz.mzk.recordmanager.server.metadata.institutions.KtdMetadataMarcRecord;
 import cz.mzk.recordmanager.server.metadata.institutions.LibraryMetadataMarcRecord;
 import cz.mzk.recordmanager.server.metadata.institutions.KramMzkMetadataDublinCoreRecord;
 import cz.mzk.recordmanager.server.metadata.institutions.KramNkpMetadataDublinCoreRecord;
@@ -126,6 +127,8 @@ public class MetadataRecordFactory {
 			return new MeshMarcMetadataRecord(marcRec);
 		case Constants.PREFIX_LIBRARY:
 			return new LibraryMetadataMarcRecord(marcRec);
+		case Constants.PREFIX_KTD:
+			return new KtdMetadataMarcRecord(marcRec);
 		default:
 			return new MetadataMarcRecord(marcRec);
 		}
