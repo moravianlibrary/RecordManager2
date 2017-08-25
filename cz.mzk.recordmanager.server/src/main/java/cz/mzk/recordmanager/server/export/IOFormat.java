@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public enum IOFormat {
-	LINE_MARC, ALEPH_MARC, ISO_2709, XML_MARC, DC_XML, XML_PATENTS, OSOBNOSTI_REGIONU, SFX;
+	LINE_MARC, ALEPH_MARC, ISO_2709, XML_MARC, DC_XML, XML_PATENTS, OSOBNOSTI_REGIONU, SFX, SFX_NLK;
 	
 	public static IOFormat stringToExportFormat(String strParam) {
 		if (strParam == null) {
@@ -31,6 +31,9 @@ public enum IOFormat {
 		if (strParam.matches("(?i)sfx")) {
 			return IOFormat.SFX;
 		}
+		if (strParam.matches("(?i)sfxnlk")) {
+			return IOFormat.SFX_NLK;
+		}
 		return XML_MARC;
 	}
 
@@ -42,6 +45,7 @@ public enum IOFormat {
 		stringifyFormat.add("dcxml");
 		stringifyFormat.add("patents");
 		stringifyFormat.add("osobnosti");
+		stringifyFormat.add("sfxnlk");
 		return stringifyFormat;
 	}
 

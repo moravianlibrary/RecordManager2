@@ -832,4 +832,7 @@ public class MarcDSL extends BaseDSL {
 		return record.getControlField("003");
 	}
 
+	public String getSfxUrl() {
+		return metadataRecord.getSfxUrl();
+	}
 }

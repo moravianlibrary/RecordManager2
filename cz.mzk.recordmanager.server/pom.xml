@@ -155,7 +155,14 @@
 			<artifactId>commons-lang3</artifactId>
 			<version>3.4</version>
 		</dependency>
-		
+
+		<!-- Commons csv -->
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-csv</artifactId>
+			<version>1.1</version>
+		</dependency>
+
 		<!--  Commons collections -->
 		<dependency>
 			<groupId>org.apache.commons</groupId>

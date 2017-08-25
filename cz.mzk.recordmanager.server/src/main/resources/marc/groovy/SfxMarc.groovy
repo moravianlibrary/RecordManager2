@@ -12,3 +12,4 @@ issn = getFields "022a"
 embargo_str = getFields "500a"
 publishDate_txt_mv = getPublishDate()
 volume_txt_mv = getFields "996v"
+sfx_url_txt = getFirstField "856u"

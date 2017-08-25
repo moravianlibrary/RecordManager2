@@ -222,4 +222,8 @@ public interface MetadataRecord {
 
 	public List<PublisherNumber> getPublisherNumber();
 
+	default public String getSfxUrl() {
+		return null;
+	}
+
 }

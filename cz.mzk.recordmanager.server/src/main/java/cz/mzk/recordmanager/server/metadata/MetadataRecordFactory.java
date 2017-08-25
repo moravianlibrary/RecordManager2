@@ -29,6 +29,7 @@ import cz.mzk.recordmanager.server.metadata.institutions.OpenLibraryMetadataMarc
 import cz.mzk.recordmanager.server.metadata.institutions.OsobnostiRegionuMetadataMarcRecord;
 import cz.mzk.recordmanager.server.metadata.institutions.PatentsMetadataMarcRecord;
 import cz.mzk.recordmanager.server.metadata.institutions.SfxMetadataMarcRecord;
+import cz.mzk.recordmanager.server.metadata.institutions.SfxjibNlkMetadataMarcRecord;
 import cz.mzk.recordmanager.server.metadata.institutions.SfxjibNlkPeriodicalsMetadataMarcRecord;
 import cz.mzk.recordmanager.server.metadata.institutions.SkatMarcMetadataRecord;
 import cz.mzk.recordmanager.server.metadata.institutions.SvkulMetadataMarcRecord;
@@ -97,9 +98,10 @@ public class MetadataRecordFactory {
 		case Constants.PREFIX_MZKNORMS:
 			return new MzkNormsMetadataMarcRecord(marcRec);
 		case Constants.PREFIX_SFXJIBMZK:
-		case Constants.PREFIX_SFXJIBNLK:
 		case Constants.PREFIX_SFXKNAV:
 			return new SfxMetadataMarcRecord(marcRec);
+		case Constants.PREFIX_SFXJIBNLK:
+			return new SfxjibNlkMetadataMarcRecord(marcRec);
 		case Constants.PREFIX_SFXJIBNLK_PERIODICALS:
 			return new SfxjibNlkPeriodicalsMetadataMarcRecord(marcRec);
 		case Constants.PREFIX_CASLIN:

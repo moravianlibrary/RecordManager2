@@ -28,6 +28,7 @@ import cz.mzk.recordmanager.server.marc.marc4j.MarcLineStreamReader;
 import cz.mzk.recordmanager.server.marc.marc4j.MarcXmlReader;
 import cz.mzk.recordmanager.server.marc.marc4j.OsobnostiRegionuXmlStreamReader;
 import cz.mzk.recordmanager.server.marc.marc4j.PatentsXmlStreamReader;
+import cz.mzk.recordmanager.server.marc.marc4j.SfxJibNlkCsvStreamReader;
 import cz.mzk.recordmanager.server.marc.marc4j.SfxJibXmlStreamReader;
 import cz.mzk.recordmanager.server.model.DownloadImportConfiguration;
 import cz.mzk.recordmanager.server.oai.dao.DownloadImportConfigurationDAO;
@@ -108,6 +109,8 @@ public class ImportRecordsFileReader implements ItemReader<List<Record>> {
 			return new OsobnostiRegionuXmlStreamReader(inStream);
 		case SFX:
 			return new SfxJibXmlStreamReader(inStream, configDao.get(confId).getIdPrefix());
+		case SFX_NLK:
+			return new SfxJibNlkCsvStreamReader(inStream, configDao.get(confId).getIdPrefix());
 		default:
 			return new MarcXmlReader(inStream);
 		}
