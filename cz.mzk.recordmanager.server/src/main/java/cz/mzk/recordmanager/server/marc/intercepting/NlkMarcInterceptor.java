@@ -19,14 +19,15 @@ import cz.mzk.recordmanager.server.marc.MarcRecord;
 import cz.mzk.recordmanager.server.marc.MarcRecordImpl;
 import cz.mzk.recordmanager.server.marc.marc4j.MarcFactoryImpl;
 import cz.mzk.recordmanager.server.marc.marc4j.RecordImpl;
+import cz.mzk.recordmanager.server.model.ImportConfiguration;
 
 
 public class NlkMarcInterceptor extends DefaultMarcInterceptor{
 
-	public NlkMarcInterceptor(Record record){
-		super(record);
+	public NlkMarcInterceptor(Record record, ImportConfiguration configuration, String recordId) {
+		super(record, configuration, recordId);
 	}
-	
+
 	@Override
 	public byte[] intercept(){
 		if(super.getRecord() == null){

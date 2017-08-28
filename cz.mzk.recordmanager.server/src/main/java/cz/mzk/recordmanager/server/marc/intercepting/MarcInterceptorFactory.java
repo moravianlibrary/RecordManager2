@@ -21,8 +21,12 @@ public class MarcInterceptorFactory {
 	
 	@Autowired
 	private ApplicationContext appCtx;
-	
+
 	public MarcRecordInterceptor getInterceptor(ImportConfiguration configuration, byte rawRecord[]) {
+		return getInterceptor(configuration, null, rawRecord);
+	}
+
+	public MarcRecordInterceptor getInterceptor(ImportConfiguration configuration, String recordId, byte rawRecord[]) {
 		String prefix = configuration.getIdPrefix();
 		try {
 			Record record = parseRecord(rawRecord);
@@ -32,12 +36,12 @@ public class MarcInterceptorFactory {
 				appCtx.getAutowireCapableBeanFactory().autowireBean(mri);
 				return mri;
 			case Constants.PREFIX_MZKNORMS: return new MzkNormsMarcInterceptor(record);
-			case Constants.PREFIX_NLK: return new NlkMarcInterceptor(record);
+			case Constants.PREFIX_NLK: return new NlkMarcInterceptor(record, configuration, recordId);
 			case Constants.PREFIX_OPENLIB: return new OpenlibMarcInterceptor(record);
-			case Constants.PREFIX_KKVY: return new KkvyNormsMarcInterceptor(record);
-			case Constants.PREFIX_CBVK: return new CbvkMarcInterceptor(record);
+			case Constants.PREFIX_KKVY: return new KkvyMarcInterceptor(record, configuration, recordId);
+			case Constants.PREFIX_CBVK: return new CbvkMarcInterceptor(record, configuration, recordId);
 			case Constants.PREFIX_BMC: return new BmcMarcInterceptor(record);
-			default: return new DefaultMarcInterceptor(record, configuration);
+			default: return new DefaultMarcInterceptor(record, configuration, recordId);
 			}
 		} catch (InvalidMarcException ime) {
 			return null;

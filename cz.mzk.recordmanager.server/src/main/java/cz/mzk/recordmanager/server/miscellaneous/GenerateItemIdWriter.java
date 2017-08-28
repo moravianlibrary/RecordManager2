@@ -44,7 +44,7 @@ public class GenerateItemIdWriter implements ItemWriter<HarvestedRecordUniqueId>
 				}
 
 				Record record = marcXmlParser.parseUnderlyingRecord(new ByteArrayInputStream(hr.getRawRecord()));
-				hr.setRawRecord(new DefaultMarcInterceptor(record, hr.getHarvestedFrom()).intercept());
+				hr.setRawRecord(new DefaultMarcInterceptor(record, hr.getHarvestedFrom(), uniqueId.getRecordId()).intercept());
 			}
 			catch(Exception ex){
 				logger.error(String.format("Exception thrown in harvested_record with id=%s", uniqueId), ex);

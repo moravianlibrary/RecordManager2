@@ -142,7 +142,7 @@ public class CosmotronItemProcessor implements ItemProcessor<List<OAIRecord>, Li
 		else{ // not deleted
 			byte[] recordContent = asByteArray(record.getMetadata().getElement());
 			if (configuration.isInterceptionEnabled()) {
-				MarcRecordInterceptor interceptor = marcInterceptorFactory.getInterceptor(configuration,recordContent);
+				MarcRecordInterceptor interceptor = marcInterceptorFactory.getInterceptor(configuration, recordId, recordContent);
 				if (interceptor != null) {
 					//in case of invalid MARC is error processed later
 					recordContent = interceptor.intercept();

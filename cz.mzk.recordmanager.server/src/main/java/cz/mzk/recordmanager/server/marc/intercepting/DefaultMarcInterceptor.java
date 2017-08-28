@@ -38,6 +38,7 @@ public class DefaultMarcInterceptor implements MarcRecordInterceptor {
 	}
 	private Record record;
 	private ImportConfiguration conf;
+	private String recordId;
 	protected static final MarcFactory MARC_FACTORY = new MarcFactoryImpl();
 	private static final char ITEM_ID_SUBFIELD_CHAR = 't';
 	private static final String SIGLA_MAP = "item_id_sigla.map";
@@ -46,9 +47,10 @@ public class DefaultMarcInterceptor implements MarcRecordInterceptor {
 		this.record = record;
 	}
 
-	public DefaultMarcInterceptor(Record record, ImportConfiguration conf) {
+	public DefaultMarcInterceptor(Record record, ImportConfiguration conf, String recordId) {
 		this.record = record;
 		this.conf = conf;
+		this.recordId = recordId;
 	}
 
 	@Override
@@ -97,7 +99,8 @@ public class DefaultMarcInterceptor implements MarcRecordInterceptor {
 				String w = df.getSubfield('w') != null ? df.getSubfield('w').getData() : "";
 				String u = df.getSubfield('u') != null ? df.getSubfield('u').getData() : "";
 				if (j.equals("") || w.equals("") || u.equals("")) missing = true;
-				else df.addSubfield(MARC_FACTORY.newSubfield(ITEM_ID_SUBFIELD_CHAR, sigla + "." + j + w + u));
+				else if (recordId != null) df.addSubfield(MARC_FACTORY.newSubfield(
+						ITEM_ID_SUBFIELD_CHAR, sigla + "." + recordId.replace("-", "") + "." + j + w + u));
 			} else if (itemIdType.equals("tre")) {
 				String w = df.getSubfield('w') != null ? df.getSubfield('w').getData() : "";
 				if (w.equals("")) missing = true;
