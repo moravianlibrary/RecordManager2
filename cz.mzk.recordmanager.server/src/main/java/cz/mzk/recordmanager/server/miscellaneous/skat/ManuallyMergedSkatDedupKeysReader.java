@@ -78,7 +78,7 @@ public class ManuallyMergedSkatDedupKeysReader implements ItemReader<Set<SkatKey
 			toDate = new Date();
 		}
 		toDate = DateUtils.truncate(toDate, Calendar.DAY_OF_MONTH);
-		while (counterDate.before(toDate)) {
+		while (!counterDate.after(toDate)) {
 			downloadedKeys.clear();
 			String get = IOUtils.toString(harvest(prepareAlephBaseUrl(DATE_FORMAT.format(counterDate))));
 
