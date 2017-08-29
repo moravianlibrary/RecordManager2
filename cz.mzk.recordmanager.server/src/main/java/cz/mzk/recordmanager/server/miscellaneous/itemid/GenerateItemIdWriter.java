@@ -1,4 +1,4 @@
-package cz.mzk.recordmanager.server.miscellaneous;
+package cz.mzk.recordmanager.server.miscellaneous.itemid;
 
 import java.io.ByteArrayInputStream;
 import java.util.List;
