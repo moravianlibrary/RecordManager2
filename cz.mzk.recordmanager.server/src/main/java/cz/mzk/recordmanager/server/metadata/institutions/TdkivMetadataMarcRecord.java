@@ -7,9 +7,9 @@ import cz.mzk.recordmanager.server.marc.MarcRecord;
 import cz.mzk.recordmanager.server.metadata.MetadataMarcRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecordFormat.HarvestedRecordFormatEnum;
 
-public class KtdMetadataMarcRecord extends MetadataMarcRecord {
+public class TdkivMetadataMarcRecord extends MetadataMarcRecord {
 
-	public KtdMetadataMarcRecord(MarcRecord underlayingMarc) {
+	public TdkivMetadataMarcRecord(MarcRecord underlayingMarc) {
 		super(underlayingMarc);
 	}
 

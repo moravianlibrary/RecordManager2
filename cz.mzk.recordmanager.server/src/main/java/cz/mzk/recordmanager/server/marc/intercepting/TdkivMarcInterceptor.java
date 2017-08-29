@@ -17,7 +17,7 @@ import cz.mzk.recordmanager.server.marc.MarcRecordImpl;
 import cz.mzk.recordmanager.server.marc.marc4j.MarcFactoryImpl;
 import cz.mzk.recordmanager.server.marc.marc4j.RecordImpl;
 
-public class KtdMarcInterceptor extends DefaultMarcInterceptor {
+public class TdkivMarcInterceptor extends DefaultMarcInterceptor {
 
 	private static final Pattern RECORD_ID = Pattern.compile("doc_number=([0-9]*)");
 	private static final String DATE_STRING_005 = "yyyyMMddHHmmss'.0'";
@@ -30,7 +30,7 @@ public class KtdMarcInterceptor extends DefaultMarcInterceptor {
 		TAGS.put("VYK", "678");
 	}
 
-	public KtdMarcInterceptor(Record record) {
+	public TdkivMarcInterceptor(Record record) {
 		super(record);
 	}
 
