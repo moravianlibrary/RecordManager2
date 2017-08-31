@@ -39,6 +39,8 @@ public class SfxJibXmlStreamReader implements MarcReader {
 	private static final String TEXT_LEADER_MONOGRAPH = "00710nam a2200229   4500";
 	private static final String TEXT_LEADER_SERIAL = "00710nas a2200229   4500";
 	private static final String TEXT_008 = "160323s%sxr     g      000 f cze";
+	private static final String TEXT_EMBARGO_NOT_AVAILABLE = "embargo_not_available ";
+	private static final String TEXT_EMBARGO_AVAILABLE = "embargo_available ";
 	private static final String DATE_STRING_005 = "yyyyMMddHHmmss'.0'";
 
 	private static final String ELEMENT_RECORD = "item";
@@ -171,17 +173,17 @@ public class SfxJibXmlStreamReader implements MarcReader {
 						break;
 					case ELEMENT_DAYS_AVAILABLE:
 						String available = xmlReader.getElementText();
-						if (record.getVariableField("500") != null) {
+						if (record.getVariableField("500") == null) {
 							record.addVariableField(factory.newDataField("500",
-									' ', ' ', "a", "available: " + available));
+									' ', ' ', "a", TEXT_EMBARGO_AVAILABLE + available));
 						}
 						embargo = "a" + available;
 						break;
 					case ELEMENT_DAYS_NOT_AVAILABLE:
 						String notAvailable = xmlReader.getElementText();
-						if (record.getVariableField("500") != null) {
+						if (record.getVariableField("500") == null) {
 							record.addVariableField(factory.newDataField("500",
-									' ', ' ', "a", "not available: " + notAvailable));
+									' ', ' ', "a", TEXT_EMBARGO_NOT_AVAILABLE + notAvailable));
 						}
 						embargo = "n" + notAvailable;
 						break;
