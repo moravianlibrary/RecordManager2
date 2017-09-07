@@ -21,6 +21,7 @@ public class TdkivMarcInterceptor extends DefaultMarcInterceptor {
 
 	private static final Pattern RECORD_ID = Pattern.compile("doc_number=([0-9]*)");
 	private static final String DATE_STRING_005 = "yyyyMMddHHmmss'.0'";
+	private static final String TEXT_856y = "heslo v České terminologické databázi knihovnictví a informační vědy";
 	private static final HashMap<String, String> TAGS = new HashMap<>();
 	{
 		TAGS.put("TER", "150");
@@ -67,6 +68,8 @@ public class TdkivMarcInterceptor extends DefaultMarcInterceptor {
 				df.setTag("750");
 				df.setIndicator1('0');
 				df.setIndicator2('7');
+			} else if (df.getTag().equals("DRL")) {
+				df = marcFactory.newDataField("856", '4', '1', "u", df.getSubfield('a').getData(), "y", TEXT_856y);
 			} else continue;
 			newRecord.addVariableField(df);
 		}
