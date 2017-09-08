@@ -28,7 +28,7 @@ public class SfxjibNlkMetadataMarcRecord extends MetadataMarcRecord {
 	}
 
 	@Override
-	public String getSfxUrl() {
+	public String getSfxUrl(String id) {
 		for (DataField df : underlayingMarc.getDataFields("856")) {
 			if (df.getSubfield('u') != null) return df.getSubfield('u').getData();
 		}

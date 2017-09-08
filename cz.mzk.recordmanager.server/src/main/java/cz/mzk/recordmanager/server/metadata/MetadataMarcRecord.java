@@ -2,8 +2,10 @@ package cz.mzk.recordmanager.server.metadata;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -32,6 +34,7 @@ import cz.mzk.recordmanager.server.model.Title;
 import cz.mzk.recordmanager.server.util.Constants;
 import cz.mzk.recordmanager.server.util.EANUtils;
 import cz.mzk.recordmanager.server.util.MetadataUtils;
+import cz.mzk.recordmanager.server.util.UrlUtils;
 
 public class MetadataMarcRecord implements MetadataRecord {
 	
@@ -1319,6 +1322,31 @@ public class MetadataMarcRecord implements MetadataRecord {
 			}
 		}
 		return results;
+	}
+
+	protected static final Map<String, String> SFX_PREFIX = new HashMap<>();
+	{
+		SFX_PREFIX.put("FREE", "ANY");
+		SFX_PREFIX.put("SVKOS", "MSVK");
+		SFX_PREFIX.put("CBVK", "JVKCB");
+		SFX_PREFIX.put("KVKL", "KVKLI");
+	}
+
+	protected String generateSfxUrl(String url, String id, Map<String, String> specificParams) {
+		Map<String, String> allParams = new HashMap<>();
+		allParams.put("url_ver", "Z39.88-2004");
+		allParams.put("sfx.ignore_date_threshold", "1");
+		allParams.put("rft.object_id", id);
+
+		String prefix = underlayingMarc.getControlField("003");
+		prefix = prefix.toUpperCase();
+		if (SFX_PREFIX.containsKey(prefix)) {
+			prefix = SFX_PREFIX.get(prefix);
+		}
+		allParams.put("sfx.institute", prefix);
+
+		allParams.putAll(specificParams);
+		return UrlUtils.buildUrl(url, allParams);
 	}
 
 }

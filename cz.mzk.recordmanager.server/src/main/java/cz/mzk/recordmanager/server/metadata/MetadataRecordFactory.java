@@ -16,9 +16,9 @@ import cz.mzk.recordmanager.server.metadata.institutions.AuthMetadataMarcRecord;
 import cz.mzk.recordmanager.server.metadata.institutions.BmcMetadataMarcRecord;
 import cz.mzk.recordmanager.server.metadata.institutions.Kram3NkpMetadataDublinCoreRecord;
 import cz.mzk.recordmanager.server.metadata.institutions.KramDefaultMetadataDublinCoreRecord;
-import cz.mzk.recordmanager.server.metadata.institutions.LibraryMetadataMarcRecord;
 import cz.mzk.recordmanager.server.metadata.institutions.KramMzkMetadataDublinCoreRecord;
 import cz.mzk.recordmanager.server.metadata.institutions.KramNkpMetadataDublinCoreRecord;
+import cz.mzk.recordmanager.server.metadata.institutions.LibraryMetadataMarcRecord;
 import cz.mzk.recordmanager.server.metadata.institutions.ManuscriptoriumMetadataDublinCoreRecord;
 import cz.mzk.recordmanager.server.metadata.institutions.MeshMarcMetadataRecord;
 import cz.mzk.recordmanager.server.metadata.institutions.MkpEbooksMetadataMarcRecord;
@@ -28,8 +28,11 @@ import cz.mzk.recordmanager.server.metadata.institutions.NkpMarcMetadataRecord;
 import cz.mzk.recordmanager.server.metadata.institutions.OpenLibraryMetadataMarcRecord;
 import cz.mzk.recordmanager.server.metadata.institutions.OsobnostiRegionuMetadataMarcRecord;
 import cz.mzk.recordmanager.server.metadata.institutions.PatentsMetadataMarcRecord;
+import cz.mzk.recordmanager.server.metadata.institutions.SfxDirectMetadataMarcRecord;
+import cz.mzk.recordmanager.server.metadata.institutions.SfxJibMetadataMarcRecord;
+import cz.mzk.recordmanager.server.metadata.institutions.SfxKnavMetadataMarcRecord;
 import cz.mzk.recordmanager.server.metadata.institutions.SfxMetadataMarcRecord;
-import cz.mzk.recordmanager.server.metadata.institutions.SfxjibNlkMetadataMarcRecord;
+import cz.mzk.recordmanager.server.metadata.institutions.SfxTechlibMetadataMarcRecord;
 import cz.mzk.recordmanager.server.metadata.institutions.SfxjibNlkPeriodicalsMetadataMarcRecord;
 import cz.mzk.recordmanager.server.metadata.institutions.SkatMarcMetadataRecord;
 import cz.mzk.recordmanager.server.metadata.institutions.SvkulMetadataMarcRecord;
@@ -97,13 +100,30 @@ public class MetadataRecordFactory {
 			return new TreMetadataMarcRecord(marcRec);
 		case Constants.PREFIX_MZKNORMS:
 			return new MzkNormsMetadataMarcRecord(marcRec);
-		case Constants.PREFIX_SFXJIBMZK:
 		case Constants.PREFIX_SFXKNAV:
 			return new SfxMetadataMarcRecord(marcRec);
-		case Constants.PREFIX_SFXJIBNLK:
-			return new SfxjibNlkMetadataMarcRecord(marcRec);
 		case Constants.PREFIX_SFXJIBNLK_PERIODICALS:
 			return new SfxjibNlkPeriodicalsMetadataMarcRecord(marcRec);
+		case Constants.PREFIX_SFXJIBCBVK:
+		case Constants.PREFIX_SFXJIBFREE:
+		case Constants.PREFIX_SFXJIBKFBZ:
+		case Constants.PREFIX_SFXJIBKVKL:
+		case Constants.PREFIX_SFXJIBMKP:
+		case Constants.PREFIX_SFXJIBMZK:
+		case Constants.PREFIX_SFXJIBNKP:
+		case Constants.PREFIX_SFXJIBSVKHK:
+		case Constants.PREFIX_SFXJIBSVKOS:
+		case Constants.PREFIX_SFXJIBVKOL:
+			return new SfxJibMetadataMarcRecord(marcRec);
+		case Constants.PREFIX_SFXJIBKNAV:
+			return new SfxKnavMetadataMarcRecord(marcRec);
+		case Constants.PREFIX_SFXTECHLIBNTK:
+		case Constants.PREFIX_SFXTECHLIBUOCHB:
+		case Constants.PREFIX_SFXTECHLIBVSCHT:
+			return new SfxTechlibMetadataMarcRecord(marcRec);
+		case Constants.PREFIX_SFXJIBNLK:
+		case Constants.PREFIX_SFXJIBMUNI:
+			return new SfxDirectMetadataMarcRecord(marcRec);
 		case Constants.PREFIX_CASLIN:
 			return new SkatMarcMetadataRecord(marcRec);
 		case Constants.PREFIX_AUTH:
