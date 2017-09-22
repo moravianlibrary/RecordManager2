@@ -1151,3 +1151,6 @@ INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format,extr
 DELETE FROM sigla WHERE id=21;
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (40, 350, 'SOG504');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (41, 353, 'OPG001');
+
+--changeset tomascejpek:69 context:cpk
+UPDATE oai_harvest_conf SET url='https://katalog.kfbz.cz/api/oai' WHERE import_conf_id=343;
