@@ -121,7 +121,7 @@ public class ZakonyProLidiMetadataMarcRecord extends MetadataMarcRecord{
 	
 	@Override
 	public CitationRecordType getCitationFormat() {
-		return CitationRecordType.LAW;
+		return CitationRecordType.BOOK;
 	}
 
 	@Override
