@@ -50,6 +50,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 	protected static final Pattern SCALE_PATTERN = Pattern.compile("\\d+[\\ \\^]*\\d+");
 	protected static final Pattern UUID_PATTERN = Pattern.compile("uuid:[\\w-]+");
 	protected static final Pattern OCLC_PATTERN= Pattern.compile("(\\(ocolc\\))(.*)", Pattern.CASE_INSENSITIVE);
+	protected static final Pattern PUBLISHER_NUMBER_PATTERN = Pattern.compile("([^\\W]*)");
 	protected static final String ISBN_CLEAR_REGEX = "[^0-9^X^x]";
 	protected static final String ISMN_CLEAR_REGEX = "[^0-9^M]";
 	protected static final String NOTE_FORMAT = "\\(.+\\)";
@@ -1315,7 +1316,8 @@ public class MetadataMarcRecord implements MetadataRecord {
 		Long i = 0L;
 		for (DataField df : underlayingMarc.getDataFields("028")) {
 			if (df.getIndicator1() == '0' && df.getSubfield('a') != null) {
-				results.add(new PublisherNumber(df.getSubfield('a').getData(), ++i));
+				String result = df.getSubfield('a').getData().toLowerCase().replaceAll("\\W", "");
+				results.add(new PublisherNumber(result, ++i));
 			}
 		}
 		return results;
