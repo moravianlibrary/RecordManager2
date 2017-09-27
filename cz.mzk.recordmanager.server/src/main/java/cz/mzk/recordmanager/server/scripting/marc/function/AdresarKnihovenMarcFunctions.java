@@ -276,15 +276,17 @@ public class AdresarKnihovenMarcFunctions implements MarcRecordFunctions {
 				return getStringRelevance(relevanceBySigla.get(df.getSubfield('a').getData()));
 			}
 		}
-
 		try {
+			Long maxRelevance = 0L;
+			for (String data : ctx.record().getFields("FCE", 'a')) {
+				if (data.equals("pověřená regionální funkcí")) maxRelevance = 10L;
+			}
 			for (DataField df : ctx.record().getDataFields("TYP")) {
 				List<String> results = null;
 				if (df.getSubfield('b') != null
 						&& (results = propertyResolver.resolve(
 								MAP_LIBRARIES_RELEVANCE).get(
 								df.getSubfield('b').getData())) != null) {
-					Long maxRelevance = 0L;
 					if (!results.isEmpty()) {
 						for (String rel : results) {
 							Long longRel = Long.valueOf(rel);
