@@ -119,13 +119,13 @@ public class CosmotronItemProcessor implements ItemProcessor<List<OAIRecord>, Li
 			else{
 				Cosmotron996 c996 = cosmotronDao.findByIdAndHarvestConfiguration(recordId, configuration);
 				if(c996 != null){ // is 996 record
-					HarvestedRecord parentHr = results.get(c996.getHarvestedRecord().getUniqueId().getRecordId());
-					if(parentHr == null) parentHr = c996.getHarvestedRecord();
+//					HarvestedRecord parentHr = results.get(c996.getHarvestedRecord().getUniqueId().getRecordId());
+//					if(parentHr == null) parentHr = c996.getHarvestedRecord();
 					c996.setUpdated(new Date());
 					c996.setDeleted(new Date());
 					c996.setRawRecord(new byte[0]);
-					c996.setHarvestedRecord(parentHr);
-					rec = CosmotronUtils.update996(parentHr, c996);
+//					c996.setHarvestedRecord(parentHr);
+//					rec = CosmotronUtils.update996(parentHr, c996);
 				}
 				else{ // others
 					// create new record
@@ -175,7 +175,7 @@ public class CosmotronItemProcessor implements ItemProcessor<List<OAIRecord>, Li
 						return null;					
 					}
 					else{
-						new996.setHarvestedRecord(parentHr);
+//						new996.setHarvestedRecord(parentHr);
 						rec = CosmotronUtils.update996(parentHr, new996);
 					}
 				}				
@@ -314,7 +314,7 @@ public class CosmotronItemProcessor implements ItemProcessor<List<OAIRecord>, Li
 	protected List<Cosmotron996> setHarvestedRecordTo996(HarvestedRecord hr, List<Cosmotron996> all996){
 		List<Cosmotron996> result = new ArrayList<>();
 		for(Cosmotron996 c996: all996){
-			c996.setHarvestedRecord(hr);
+//			c996.setHarvestedRecord(hr);
 			result.add(c996);
 		}
 		return result;		

@@ -42,7 +42,7 @@ public class OAIItemProcessor implements ItemProcessor<List<OAIRecord>, List<Har
 
 	private static final String DEFAULT_EXTRACT_ID_PATTERN = "[^:]+:[^:]+:([^:]+)";
 	
-	private static final String METADATA_ERROR = "metadataError";
+	protected static final String METADATA_ERROR = "metadataError";
 
 	@Autowired
 	protected HarvestedRecordDAO recordDao;
@@ -64,7 +64,7 @@ public class OAIItemProcessor implements ItemProcessor<List<OAIRecord>, List<Har
 
 	private String format;
 	
-	private ImportConfiguration configuration;
+	protected ImportConfiguration configuration;
 
 	private RegexpExtractor idExtractor;
 

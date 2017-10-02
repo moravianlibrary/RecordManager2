@@ -8,6 +8,7 @@ public class Constants {
 	public static final String JOB_ID_HARVEST_ONE_BY_ONE = "oaiHarvestOneByOneJob";
 	public static final String JOB_ID_HARVEST_KRAMERIUS = "krameriusHarvestJob";
 	public static final String JOB_ID_HARVEST_COSMOTRON = "cosmotronHarvestJob";
+	public static final String JOB_ID_NEW_HARVEST_COSMOTRON = "newCosmotronHarvestJob";
 	public static final String JOB_ID_FULLTEXT_KRAMERIUS = "krameriusFulltextJob";
 	public static final String JOB_ID_MISSING_FULLTEXT_KRAMERIUS = "krameriusMissingFulltextJob";
 	public static final String JOB_ID_HARVEST_SINGLE	= "oaiHarvestSingleRecordJob";

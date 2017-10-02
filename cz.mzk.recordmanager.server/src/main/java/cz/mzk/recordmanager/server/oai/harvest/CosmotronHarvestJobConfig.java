@@ -18,6 +18,7 @@ import org.springframework.context.annotation.Configuration;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.oai.model.OAIRecord;
 import cz.mzk.recordmanager.server.springbatch.JobFailureListener;
+import cz.mzk.recordmanager.server.springbatch.StepProgressListener;
 import cz.mzk.recordmanager.server.util.Constants;
 
 @Configuration
@@ -80,4 +81,40 @@ public class CosmotronHarvestJobConfig {
     		@Value("#{jobParameters[" + Constants.JOB_PARAM_DELETED_OUT_FILE + "]}") String deletedOutFile) {
     	return new CosmotronItemProcessor(deletedOutFile);
     }  
+
+    //
+    @Bean
+    public Job newCosmotronHarvestJob(
+    		@Qualifier(Constants.JOB_ID_NEW_HARVEST_COSMOTRON+":newCosmoStep") Step newCosmoStep) {
+        return jobs.get(Constants.JOB_ID_NEW_HARVEST_COSMOTRON) //
+        		.validator(new CosmotronHarvestJobParametersValidator()) //
+        		.listener(JobFailureListener.INSTANCE) //
+				.flow(newCosmoStep) //
+				.end()
+				.build();
+    }
+
+    @Bean(name=Constants.JOB_ID_NEW_HARVEST_COSMOTRON+":newCosmoStep")
+    public Step newCosmoStep() {
+        return steps.get("newCosmoStep") //
+        	.listener(new StepProgressListener())
+        	.<List<OAIRecord>, List<HarvestedRecord>> chunk(1) //
+            .reader(reader(LONG_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION, STRING_OVERRIDEN_BY_EXPRESSION)) //
+            .processor(oaiItemProcessor())
+            .writer(newCosmotronRecordsWriter(LONG_OVERRIDEN_BY_EXPRESSION)) //
+            .build();
+    }
+
+    @Bean(name=Constants.JOB_ID_NEW_HARVEST_COSMOTRON+":newCosmotronRecordsProcessor")
+    @StepScope
+    public OAIItemProcessor oaiItemProcessor() {
+    	return new OAIItemProcessor();
+    }   
+    
+    @Bean(name=Constants.JOB_ID_NEW_HARVEST_COSMOTRON+":newCosmotronRecordsWriter")
+    @StepScope
+    public newCosmotronRecordWriter newCosmotronRecordsWriter(@Value("#{jobParameters[" + Constants.JOB_PARAM_CONF_ID + "]}") Long configId) {
+    	return new newCosmotronRecordWriter(configId);
+    }
+
 }

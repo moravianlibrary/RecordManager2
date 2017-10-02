@@ -6,8 +6,6 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -17,17 +15,16 @@ import javax.persistence.TemporalType;
 public class Cosmotron996 extends AbstractDomainObject{
 	
 	public static final String TABLE_NAME = "cosmotron_996";
-
-	@ManyToOne(optional=false, fetch=FetchType.LAZY)
-	@JoinColumn(name="harvested_record_id", nullable=false, updatable=false, insertable=false)
-	private HarvestedRecord harvestedRecord;
 	
 	@Column(name="import_conf_id")
 	private Long harvestedFrom;
 	
 	@Column(name="record_id")
 	private String recordId;
-	
+
+	@Column(name="parent_record_id")
+	private String parentRecordId;
+
 	@Column(name="harvested")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date harvested = new Date();
@@ -44,12 +41,13 @@ public class Cosmotron996 extends AbstractDomainObject{
 	@Column(name="raw_record") 
 	private byte[] rawRecord;
 
-	public HarvestedRecord getHarvestedRecord() {
-		return harvestedRecord;
+	public Cosmotron996() {
+
 	}
 
-	public void setHarvestedRecord(HarvestedRecord harvestedRecord) {
-		this.harvestedRecord = harvestedRecord;
+	public Cosmotron996(String recordId, Long configId) {
+		this.recordId = recordId;
+		this.harvestedFrom = configId;
 	}
 
 	public Long getHarvestedFrom() {
@@ -100,12 +98,20 @@ public class Cosmotron996 extends AbstractDomainObject{
 		this.rawRecord = rawRecord;
 	}
 
+	public String getParentRecordId() {
+		return parentRecordId;
+	}
+
+	public void setParentRecordId(String parentRecordId) {
+		this.parentRecordId = parentRecordId;
+	}
+
 	@Override
 	public String toString() {
-		return "Cosmotron996 [harvestedRecordId=" + harvestedRecord
-				+ ", harvestedFromId=" + harvestedFrom + ", recordId="
-				+ recordId + ", harvested=" + harvested + ", updated="
-				+ updated + ", deleted=" + deleted + "]";
+		return "Cosmotron996 [harvestedFrom=" + harvestedFrom + ", recordId=" + recordId
+				+ ", parentRecordId=" + parentRecordId + ", harvested="
+				+ harvested + ", updated=" + updated + ", deleted=" + deleted
+				+ "]";
 	}
 
 

@@ -973,3 +973,8 @@ INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granul
 
 -- 20. 12. 2017 tomascejpek
 UPDATE oai_harvest_conf SET extract_id_regex='s/^(.*)/KKV01-$1/' WHERE import_conf_id=332;
+
+-- 23. 01. 2018 tomascejpek
+ALTER TABLE cosmotron_996 DROP CONSTRAINT cosmotron_996_harvested_record_id_fkey;
+ALTER TABLE cosmotron_996 ADD COLUMN parent_record_id VARCHAR(128);
+ALTER TABLE cosmotron_996 ADD CONSTRAINT cosmotron_996_uniqueid UNIQUE (record_id,import_conf_id);

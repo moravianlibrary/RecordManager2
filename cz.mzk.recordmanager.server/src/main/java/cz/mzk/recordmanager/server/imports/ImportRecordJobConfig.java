@@ -227,7 +227,8 @@ public class ImportRecordJobConfig {
     public ItemWriter<List<HarvestedRecord>> harvestedRecordWriter() {
     	return new HarvestedRecordWriter();
     }
-	
+
+	// import cosmotron 996
 	@Bean
 	public Job importCosmotron996RecordsJob(
 			@Qualifier(Constants.JOB_ID_IMPORT_COSMOTRON_996 +":importRecordsStep") Step importRecordsStep) {
@@ -248,7 +249,7 @@ public class ImportRecordJobConfig {
 
 	@Bean(name=Constants.JOB_ID_IMPORT_COSMOTRON_996 +":writer")
 	@StepScope
-	public ItemWriter<List<Record>> importCosmotron996RecordsWriter(@Value("#{jobParameters[" + Constants.JOB_PARAM_CONF_ID + "]}") Long configurationId) {
+	public ImportCosmotron996RecordsWriter importCosmotron996RecordsWriter(@Value("#{jobParameters[" + Constants.JOB_PARAM_CONF_ID + "]}") Long configurationId) {
 		return new ImportCosmotron996RecordsWriter(configurationId);
 	}
 	
