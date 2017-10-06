@@ -1095,11 +1095,17 @@ public class DedupRecordsJobConfig {
 				.listener(new StepProgressListener())
 				.<List<Long>, List<HarvestedRecord>> chunk(50)
 				.reader(dedupSimpleKeysReader(TMP_TABLE_PERIODICALS_SIMILARITY_IDS))
-				.processor(dedupSimpleKeysStepProsessor())
+				.processor(dedupPeriodicalsSimilaritesResultsSteprocessor())
 				.writer(dedupSimpleKeysStepWriter())
 				.build();
 	}
-	
+
+	@Bean(name = "processPeriodicalsSimilaritesResultsStep:processor")
+	@StepScope
+	public ItemProcessor<List<Long>, List<HarvestedRecord>> dedupPeriodicalsSimilaritesResultsSteprocessor() {
+		return new DedupPeriodicalsSimilaritesResultsProcessor();
+	}
+
 	/**
 	 * Deduplicate periodicals from for SFX-NLK
 	 */
