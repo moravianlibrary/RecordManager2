@@ -58,14 +58,15 @@ public class ImportTezaurusRecordsWriter implements ItemWriter<List<Record>> {
 					MetadataRecord metadata = metadataFactory
 							.getMetadataRecord(marc, config);
 					String recordId = metadata.getOAIRecordId();
+					if (recordId == null) recordId = metadata.getUniqueId();
 					TezaurusRecord tr = tezaurusDao
 							.findByIdAndHarvestConfiguration(recordId, config);
 					if (tr == null) {
 						tr = new TezaurusRecord();
 						tr.setRecordId(recordId);
 						tr.setHarvestedFrom(config);
-						tr.setTezaurusKey(metadata.getTezaurusKey());
 					}
+					tr.setTezaurusKey(metadata.getTezaurusKey());
 					ByteArrayOutputStream outStream = new ByteArrayOutputStream();
 					MarcWriter marcWriter = new MarcXmlWriter(outStream, true);
 					marcWriter.write(currentRecord);

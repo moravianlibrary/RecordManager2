@@ -12,6 +12,7 @@ import cz.mzk.recordmanager.server.dc.DublinCoreParser;
 import cz.mzk.recordmanager.server.dc.DublinCoreRecord;
 import cz.mzk.recordmanager.server.marc.MarcRecord;
 import cz.mzk.recordmanager.server.marc.MarcXmlParser;
+import cz.mzk.recordmanager.server.metadata.institutions.AgrovocMarcMetadataRecord;
 import cz.mzk.recordmanager.server.metadata.institutions.AuthMetadataMarcRecord;
 import cz.mzk.recordmanager.server.metadata.institutions.BmcMetadataMarcRecord;
 import cz.mzk.recordmanager.server.metadata.institutions.Kram3NkpMetadataDublinCoreRecord;
@@ -151,6 +152,8 @@ public class MetadataRecordFactory {
 			return new LibraryMetadataMarcRecord(marcRec);
 		case Constants.PREFIX_TDKIV:
 			return new TdkivMetadataMarcRecord(marcRec);
+		case Constants.PREFIX_AGROVOC:
+			return new AgrovocMarcMetadataRecord(marcRec);
 		default:
 			return new MetadataMarcRecord(marcRec);
 		}

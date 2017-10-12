@@ -80,6 +80,7 @@ public class Constants {
 	public static final String METADATA_FORMAT_DUBLIN_CORE = "dublinCore";
 	public static final String METADATA_FORMAT_ESE		= "ese";
 	
+	public static final String PREFIX_AGROVOC			= "agrovoc";
 	public static final String PREFIX_AUTH				= "auth";
 	public static final String PREFIX_BMC				= "bmc";
 	public static final String PREFIX_CASLIN			= "caslin";

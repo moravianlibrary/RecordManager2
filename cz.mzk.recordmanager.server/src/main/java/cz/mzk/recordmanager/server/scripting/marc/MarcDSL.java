@@ -613,12 +613,11 @@ public class MarcDSL extends BaseDSL {
 							.forEach(s -> result.add(getVizFieldCode(split[0], fieldTag, s)));
 					break;
 				case Constants.PREFIX_MESH:
-					for (DataField df : record.getDataFields(fieldTag)) {
-						if (df.getSubfield('a') != null	&& df.getSubfield('2') != null
-								&& df.getSubfield('2').getData().equals("czmesh")) {
-							result.add(getVizFieldCode(split[0], fieldTag, df.getSubfield('a').getData().toLowerCase()));
-						}
-					}
+					result.addAll(getTezauruForVizField(fieldTag, split[0], "czmesh"));
+					break;
+				case Constants.PREFIX_AGROVOC:
+					result.addAll(getTezauruForVizField(fieldTag, split[0], "agrovoc"));
+					break;
 				default:
 					break;
 				}
@@ -627,6 +626,17 @@ public class MarcDSL extends BaseDSL {
 		}
 
 		return result;
+	}
+
+	private Set<String> getTezauruForVizField(String fieldTag, String source, String subfield2) {
+		Set<String> results = new HashSet<>();
+		for (DataField df : record.getDataFields(fieldTag)) {
+			if (df.getSubfield('a') != null	&& df.getSubfield('2') != null
+					&& df.getSubfield('2').getData().equals(subfield2)) {
+				results.add(getVizFieldCode(source, fieldTag, df.getSubfield('a').getData().toLowerCase()));
+			}
+		}
+		return results;
 	}
 
 	private String getVizFieldCode(String source, String fieldTag, String value) {
