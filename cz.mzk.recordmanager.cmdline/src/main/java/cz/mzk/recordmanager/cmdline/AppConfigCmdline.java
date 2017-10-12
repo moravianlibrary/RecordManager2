@@ -38,6 +38,7 @@ import cz.mzk.recordmanager.server.kramerius.fulltext.KrameriusFulltextJobConfig
 import cz.mzk.recordmanager.server.kramerius.harvest.KrameriusHarvestJobConfig;
 import cz.mzk.recordmanager.server.miscellaneous.FilterCaslinRecordsBySiglaJobConfig;
 import cz.mzk.recordmanager.server.miscellaneous.MiscellaneousJobsConfig;
+import cz.mzk.recordmanager.server.miscellaneous.agrovoc.AgrovocConvertorJobConfig;
 import cz.mzk.recordmanager.server.oai.harvest.CosmotronHarvestJobConfig;
 import cz.mzk.recordmanager.server.oai.harvest.DeleteAllHarvestsJobConfig;
 import cz.mzk.recordmanager.server.oai.harvest.OAIHarvestJobConfig;
@@ -90,7 +91,8 @@ public class AppConfigCmdline {
 				FilterCaslinRecordsBySiglaJobConfig.class,
 				ZakonyProLidiHarvestJobConfig.class,
 				AdresarHarvestJobConfig.class,
-				ManuscriptoriumFulltextJobConfig.class
+				ManuscriptoriumFulltextJobConfig.class,
+				AgrovocConvertorJobConfig.class
 			);
 	}
 
