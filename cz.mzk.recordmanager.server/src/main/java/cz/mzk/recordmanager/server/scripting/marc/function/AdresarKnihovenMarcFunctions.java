@@ -4,9 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -339,6 +337,21 @@ public class AdresarKnihovenMarcFunctions implements MarcRecordFunctions {
 			}
 		}
 		return results.isEmpty() ? null : results;
+	}
+
+	public Set<String> getAllLibraryFields(MarcFunctionContext ctx) {
+		Set<String> results = new HashSet<>();
+		for (List<DataField> list : ctx.record().getAllFields().values()) {
+			StringBuffer sb = new StringBuffer();
+			for (DataField df : list) {
+				for (Subfield sf : df.getSubfields()) {
+					if (sb.length() > 0) sb.append(" ");
+					sb.append(sf.getData());
+				}
+			}
+			results.add(sb.toString());
+		}
+		return results;
 	}
 
 }
