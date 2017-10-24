@@ -49,7 +49,8 @@ public class PatentsXmlStreamReader implements MarcReader{
     private static final String TEXT_LEADER = "-----nam--22--------450-";
     private static final String TEXT_008_PART1 = "------e";
     private static final String TEXT_008_PART2 = "--------sj----------";
-    private static final String TEXT_0242 = "MPT";
+	private static final String TEXT_013b = "Česká republika";
+	private static final String TEXT_0242 = "MPT";
     private static final String TEXT_260a = "Praha :";
     private static final String TEXT_260b = "Úřad průmyslového vlastnictví,";
     private static final String TEXT_300a_UTILITY_MODEL = "1 užitný vzor";
@@ -165,8 +166,8 @@ public class PatentsXmlStreamReader implements MarcReader{
         boolean appl_reference = false;
         char date = ' ';
         String patentType = "";
-        
-        try {
+		String dateStr = "";
+		try {
 			while(xmlReader.hasNext()){
 				switch(xmlReader.getEventType()){
 				case XMLStreamReader.START_ELEMENT:
@@ -256,7 +257,7 @@ public class PatentsXmlStreamReader implements MarcReader{
 						date = 'a';
 						break;
 					case ELEMENT_DATE:
-						String dateStr = xmlReader.getElementText();
+						dateStr = xmlReader.getElementText();
 						if (date == 'p') {
 							addField008(dateStr);
 							addField260(dateStr);
@@ -281,7 +282,9 @@ public class PatentsXmlStreamReader implements MarcReader{
 						break;
 					case ELEMENT_DOC_NUMBER:
 						if (appl_reference) {
-							add500aApplDocNumber(xmlReader.getElementText(), patentType);
+							String docNumber = xmlReader.getElementText();
+							add500aApplDocNumber(docNumber, patentType);
+							addField013(docNumber, patentType, dateStr);
 						}						
 						break;
 					}	
@@ -489,6 +492,12 @@ public class PatentsXmlStreamReader implements MarcReader{
 			DataField df = factory.newDataField("856", '4', ' ', "u", url, "y", TEXT_856y);
 			record.addVariableField(df);
 		}
+	}
+
+	private void addField013(String docNumber, String patentType, String date) {
+		record.addVariableField(factory.newDataField("013", '#', '#',
+				"a", "CZ " + docNumber + " " + patentType, "b", TEXT_013b,
+				"c", patentType, "d", date));
 	}
 
     private Record sortFields(Record record){
