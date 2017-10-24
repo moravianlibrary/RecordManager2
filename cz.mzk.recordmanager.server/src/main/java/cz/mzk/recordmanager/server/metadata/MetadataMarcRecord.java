@@ -54,6 +54,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 	protected static final Pattern UUID_PATTERN = Pattern.compile("uuid:[\\w-]+");
 	protected static final Pattern OCLC_PATTERN= Pattern.compile("(\\(ocolc\\))(.*)", Pattern.CASE_INSENSITIVE);
 	protected static final Pattern PUBLISHER_NUMBER_PATTERN = Pattern.compile("([^\\W]*)");
+	protected static final Pattern CPK0_PATTERN = Pattern.compile("cpk0");
 	protected static final String ISBN_CLEAR_REGEX = "[^0-9^X^x]";
 	protected static final String ISMN_CLEAR_REGEX = "[^0-9^M]";
 	protected static final String NOTE_FORMAT = "\\(.+\\)";
@@ -1002,6 +1003,10 @@ public class MetadataMarcRecord implements MetadataRecord {
 	@Override
 	public boolean matchFilter() {
 		if (underlayingMarc.getDataFields("245").isEmpty()) return false;
+		for (DataField df : underlayingMarc.getDataFields("914")) {
+			if (df.getSubfield('a') != null
+					&& CPK0_PATTERN.matcher(df.getSubfield('a').getData()).matches()) return false;
+		}
 		// more rules in institution specific classes
 		return true;
 	}
