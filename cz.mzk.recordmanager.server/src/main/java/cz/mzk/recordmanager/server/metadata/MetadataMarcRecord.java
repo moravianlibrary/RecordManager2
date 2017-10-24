@@ -54,6 +54,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 	protected static final Pattern UUID_PATTERN = Pattern.compile("uuid:[\\w-]+");
 	protected static final Pattern OCLC_PATTERN= Pattern.compile("(\\(ocolc\\))(.*)", Pattern.CASE_INSENSITIVE);
 	protected static final Pattern PUBLISHER_NUMBER_PATTERN = Pattern.compile("([^\\W]*)");
+	protected static final Pattern METAPROXY_TAG_PATTERN = Pattern.compile("[17]..");
 	protected static final String ISBN_CLEAR_REGEX = "[^0-9^X^x]";
 	protected static final String ISMN_CLEAR_REGEX = "[^0-9^M]";
 	protected static final String NOTE_FORMAT = "\\(.+\\)";
@@ -1310,6 +1311,24 @@ public class MetadataMarcRecord implements MetadataRecord {
 
 	@Override
 	public Boolean getMetaproxyBool() {
+		Set<String> fieldTags = underlayingMarc.getAllFields().keySet();
+		if (underlayingMarc.getControlField("008") == null) return false;
+		if (!fieldTags.contains("300") || !fieldTags.contains("245")
+				|| (!fieldTags.contains("260") && !fieldTags.contains("264"))) return false;
+		boolean f245ind1 = false;
+		for (DataField df : underlayingMarc.getDataFields("245")) {
+			if (df.getIndicator1() == '0') f245ind1 = true;
+		}
+		if (!f245ind1) {
+			boolean f1xxOr7xx = false;
+			for (String tag : fieldTags) {
+				if (METAPROXY_TAG_PATTERN.matcher(tag).matches()) {
+					f1xxOr7xx = true;
+					break;
+				}
+			}
+			if (!f1xxOr7xx) return false;
+		}
 		return true;
 	}
 
