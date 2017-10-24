@@ -1001,7 +1001,8 @@ public class MetadataMarcRecord implements MetadataRecord {
 
 	@Override
 	public boolean matchFilter() {
-		// implemented only in institution specific classes
+		if (underlayingMarc.getDataFields("245").isEmpty()) return false;
+		// more rules in institution specific classes
 		return true;
 	}
 
