@@ -348,7 +348,11 @@ public class MetadataMarcRecord implements MetadataRecord {
 		
 		return false;		
 	}
-	
+
+	protected boolean isArticle773() {
+		return !underlayingMarc.getDataFields("773").isEmpty();
+	}
+
 	protected boolean isMap(){
 		String ldr06 = Character.toString(underlayingMarc.getLeader().getTypeOfRecord());
 		
@@ -766,6 +770,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 		if(isBook()) hrf.add(HarvestedRecordFormatEnum.BOOKS);
 		if(isPeriodical()) hrf.add(HarvestedRecordFormatEnum.PERIODICALS);
 		if(isArticle()) hrf.add(HarvestedRecordFormatEnum.ARTICLES);
+		if (isArticle773()) return Collections.singletonList(HarvestedRecordFormatEnum.ARTICLES);
 		if(isMap()) hrf.add(HarvestedRecordFormatEnum.MAPS);
 		if(isMusicalScores()) hrf.add(HarvestedRecordFormatEnum.MUSICAL_SCORES);
 		if(isVisualDocument()) hrf.add(HarvestedRecordFormatEnum.VISUAL_DOCUMENTS);
