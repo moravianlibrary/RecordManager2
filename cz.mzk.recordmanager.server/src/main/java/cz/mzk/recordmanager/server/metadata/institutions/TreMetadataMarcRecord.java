@@ -11,6 +11,7 @@ public class TreMetadataMarcRecord extends MetadataMarcRecord{
 	
 	@Override
 	public boolean matchFilter(){
+		if (!super.matchFilter()) return false;
 		if(underlayingMarc.getDataFields("996").isEmpty()) return false;
 		else return true;
 	}

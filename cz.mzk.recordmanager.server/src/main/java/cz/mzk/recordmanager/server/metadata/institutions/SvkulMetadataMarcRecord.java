@@ -23,6 +23,7 @@ public class SvkulMetadataMarcRecord extends MetadataMarcRecord {
 
 	@Override
 	public boolean matchFilter() {
+		if (!super.matchFilter()) return false;
 		String f001;
 		if ((f001 = underlayingMarc.getControlField("001")) != null && f001.startsWith("EZ")) {
 			for (DataField df : underlayingMarc.getDataFields("910")) {

@@ -22,6 +22,7 @@ public class OpenLibraryMetadataMarcRecord extends MetadataMarcRecord {
 
 	@Override
 	public boolean matchFilter() {
+		if (!super.matchFilter()) return false;
 		if (underlayingMarc.getDataFields("856").isEmpty()) {
 			return false;
 		}

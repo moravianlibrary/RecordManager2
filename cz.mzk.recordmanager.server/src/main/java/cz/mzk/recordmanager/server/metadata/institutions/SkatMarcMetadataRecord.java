@@ -35,6 +35,7 @@ public class SkatMarcMetadataRecord extends MetadataMarcRecord {
 	 */
 	@Override
 	public boolean matchFilter() {
+		if (!super.matchFilter()) return false;
 		for (DataField df : underlayingMarc.getDataFields("996")) {
 			if (df.getSubfield('q') == null || !df.getSubfield('q').getData().equals("0")) {
 				return true;
