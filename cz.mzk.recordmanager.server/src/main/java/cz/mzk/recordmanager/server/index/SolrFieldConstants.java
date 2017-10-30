@@ -48,6 +48,14 @@ public class SolrFieldConstants {
 
 	public static final String ISBN = "isbn";
 
+	public static final String ISSN = "issn";
+
+	public static final String ISMN_ISN = "ismn_isn_mv";
+
+	public static final String CNB_ISN = "cnb_isn_mv";
+
+	public static final String EAN_ISN = "ean_isn_mv";
+
 	public static final String NBN = "nbn_display";
 
 	public static final String LOCAL_STATUSES_FACET = "local_statuses_facet_str_mv";
