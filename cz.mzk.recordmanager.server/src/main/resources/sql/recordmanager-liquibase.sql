@@ -1162,3 +1162,14 @@ INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granul
 
 --changeset tomascejpek:71 context:cpk
 UPDATE import_conf SET filtering_enabled=true WHERE id in ('300','301','302','304','307','308','311','312','313','315','319','320','321','324','325','326','328','330','331','332','333','334','335','336','337','338','342','343','345','346','347','348','349','350','353');
+
+--changeset tomascejpek:72
+CREATE OR REPLACE VIEW dedup_record_orphaned AS
+SELECT
+  dr.id dedup_record_id,
+  GREATEST(dr.updated, (SELECT MAX(updated) FROM harvested_record hr WHERE hr.dedup_record_id = dr.id)) orphaned
+FROM
+  dedup_record dr
+WHERE
+  NOT EXISTS(SELECT 1 FROM harvested_record hr WHERE hr.dedup_record_id = dr.id and deleted is null)
+;

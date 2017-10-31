@@ -17,6 +17,16 @@ FROM
   dedup_record dr
 ;
 
+CREATE OR REPLACE VIEW dedup_record_orphaned AS
+SELECT
+  dr.id dedup_record_id,
+  GREATEST(dr.updated, (SELECT MAX(updated) FROM harvested_record hr WHERE hr.dedup_record_id = dr.id)) orphaned
+FROM
+  dedup_record dr
+WHERE
+  NOT EXISTS(SELECT 1 FROM harvested_record hr WHERE hr.dedup_record_id = dr.id and deleted is null)
+;
+
 CREATE MATERIALIZED VIEW dedup_record_last_update_mat AS
 SELECT
   dedup_record_id,
