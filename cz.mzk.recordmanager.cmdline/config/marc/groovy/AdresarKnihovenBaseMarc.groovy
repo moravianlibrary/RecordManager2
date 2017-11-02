@@ -61,3 +61,7 @@ gps_str = adresarGetGps()
 library_relevance_str = getLibraryRelevance()
 portal_facet_str = getPortalFacet()
 region_disctrict_town_str_mv = adresarGetRegionDistrictTown()
+
+// autocomplete
+town_str = town_autocomplete = getFirstFieldForAdresar "MESa"
+name_str = name_autocomplete = getFirstFieldSeparatedForAdresar "NAZabc", " "
