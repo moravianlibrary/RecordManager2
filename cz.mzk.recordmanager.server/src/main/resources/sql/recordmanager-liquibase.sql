@@ -1129,3 +1129,10 @@ INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format,extr
 
 --changeset tomascejpek:65
 ALTER TABLE import_conf ADD COLUMN item_id VARCHAR(15);
+
+--changeset tomascejpek:66 context:cpk
+UPDATE import_conf SET item_id='aleph',interception_enabled=true WHERE id in (300,304,307,313,315,321,324,325,326,330,335,337);
+UPDATE import_conf SET item_id='tre',interception_enabled=true WHERE id=306;
+UPDATE import_conf SET item_id='nlk',interception_enabled=true WHERE id=301;
+UPDATE import_conf SET item_id='svkul',interception_enabled=true WHERE id=314;
+UPDATE import_conf SET item_id='other',interception_enabled=true WHERE id in (302,308,311,312,328,334,336,338,340,343,346,350,353);
