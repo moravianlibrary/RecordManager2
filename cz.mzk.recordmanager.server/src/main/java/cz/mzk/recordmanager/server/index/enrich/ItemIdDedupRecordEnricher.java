@@ -9,14 +9,15 @@ import cz.mzk.recordmanager.server.index.SolrFieldConstants;
 import cz.mzk.recordmanager.server.model.DedupRecord;
 
 @Component
-public class HoldingsDedupRecordEnricher implements DedupRecordEnricher {
+public class ItemIdDedupRecordEnricher implements DedupRecordEnricher {
 
-	private final FieldMerger holdingsFieldMerger = new FieldMerger(SolrFieldConstants.HOLDINGS_996_FIELD);
+	private static final FieldMerger FIELD_MERGER = new FieldMerger(
+			SolrFieldConstants.ITEM_ID_TXT_MV);
 
 	@Override
 	public void enrich(DedupRecord record, SolrInputDocument mergedDocument,
 			List<SolrInputDocument> localRecords) {
-		holdingsFieldMerger.merge(localRecords, mergedDocument);
+		FIELD_MERGER.mergeAndRemoveFromSources(localRecords, mergedDocument);
 	}
 
 }

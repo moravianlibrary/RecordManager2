@@ -19,14 +19,15 @@ import cz.mzk.recordmanager.server.marc.MarcRecord;
 import cz.mzk.recordmanager.server.marc.MarcRecordImpl;
 import cz.mzk.recordmanager.server.marc.marc4j.MarcFactoryImpl;
 import cz.mzk.recordmanager.server.marc.marc4j.RecordImpl;
+import cz.mzk.recordmanager.server.model.ImportConfiguration;
 
 
 public class NlkMarcInterceptor extends DefaultMarcInterceptor{
 
-	public NlkMarcInterceptor(Record record){
-		super(record);
+	public NlkMarcInterceptor(Record record, ImportConfiguration configuration, String recordId) {
+		super(record, configuration, recordId);
 	}
-	
+
 	@Override
 	public byte[] intercept(){
 		if(super.getRecord() == null){
@@ -79,7 +80,7 @@ public class NlkMarcInterceptor extends DefaultMarcInterceptor{
 						}
 					}
 					else newDf = df;
-					
+					processField996(newDf);
 					newRecord.addVariableField(newDf);
 				}
 				else if (df.getTag().equals("990") || df.getTag().equals("991")) {

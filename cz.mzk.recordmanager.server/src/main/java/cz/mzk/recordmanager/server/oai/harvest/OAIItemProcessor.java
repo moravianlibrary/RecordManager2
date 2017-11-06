@@ -90,7 +90,7 @@ public class OAIItemProcessor implements ItemProcessor<List<OAIRecord>, List<Har
 				|| record.getMetadata().getElement().getTagName() == METADATA_ERROR;
 		byte[] recordContent = (deleted) ? null : asByteArray(record.getMetadata().getElement());
 		if (recordContent != null && configuration.isInterceptionEnabled()) {
-			MarcRecordInterceptor interceptor = marcInterceptorFactory.getInterceptor(configuration, recordContent);
+			MarcRecordInterceptor interceptor = marcInterceptorFactory.getInterceptor(configuration, recordId, recordContent);
 			if (interceptor != null) {
 				//in case of invalid MARC is error processed later
 				recordContent = interceptor.intercept();

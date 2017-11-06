@@ -90,7 +90,7 @@ public class ImportCosmotron996RecordsWriter implements ItemWriter<List<Record>>
 					marcWriter.close();
 					byte[] recordContent = outStream.toByteArray();
 					if (harvestConfiguration.isInterceptionEnabled()) {
-						MarcRecordInterceptor interceptor = marcInterceptorFactory.getInterceptor(harvestConfiguration,recordContent);
+						MarcRecordInterceptor interceptor = marcInterceptorFactory.getInterceptor(harvestConfiguration, recordId, recordContent);
 						if (interceptor != null) {
 							recordContent = interceptor.intercept();
 						}

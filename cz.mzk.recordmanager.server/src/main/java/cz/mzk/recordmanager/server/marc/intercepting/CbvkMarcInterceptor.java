@@ -13,11 +13,12 @@ import cz.mzk.recordmanager.server.export.IOFormat;
 import cz.mzk.recordmanager.server.marc.MarcRecord;
 import cz.mzk.recordmanager.server.marc.MarcRecordImpl;
 import cz.mzk.recordmanager.server.marc.marc4j.RecordImpl;
+import cz.mzk.recordmanager.server.model.ImportConfiguration;
 
 public class CbvkMarcInterceptor extends DefaultMarcInterceptor {
 
-	public CbvkMarcInterceptor(Record record) {
-		super(record);
+	public CbvkMarcInterceptor(Record record, ImportConfiguration configuration, String recordId) {
+		super(record, configuration, recordId);
 	}
 
 	@Override
@@ -38,7 +39,9 @@ public class CbvkMarcInterceptor extends DefaultMarcInterceptor {
 		for (String tag : new TreeSet<String>(dfMap.keySet())) { // sorted tags
 			for (DataField df : dfMap.get(tag)) {
 				// remove field 520
-				if (!df.getTag().equals("520")) newRecord.addVariableField(df);
+				if (df.getTag().equals("520")) continue; 
+				processField996(df);
+				newRecord.addVariableField(df);
 			}
 		}
 		return new MarcRecordImpl(newRecord).export(IOFormat.XML_MARC).getBytes(StandardCharsets.UTF_8);
