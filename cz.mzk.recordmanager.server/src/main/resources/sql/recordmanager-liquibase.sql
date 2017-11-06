@@ -1183,3 +1183,6 @@ UPDATE import_conf SET item_id='tre',interception_enabled=true WHERE id=306;
 UPDATE import_conf SET item_id='nlk',interception_enabled=true WHERE id=301;
 UPDATE import_conf SET item_id='svkul',interception_enabled=true WHERE id=314;
 UPDATE import_conf SET item_id='other',interception_enabled=true WHERE id in (302,308,311,312,328,334,336,338,340,343,346,350,353);
+
+--changeset tomascejpek:75 context:cpk
+UPDATE oai_harvest_conf SET url='https://www.knihovnachodov.cz/tritius/oai-provider' WHERE import_conf_id=350;
