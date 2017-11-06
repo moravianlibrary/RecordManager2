@@ -88,14 +88,18 @@ public class MarcDSL extends BaseDSL {
 		return record;
 	}
 
-	public String getFirstField(String tag) {
-		Matcher matcher = FIELD_PATTERN.matcher(tag);
-		if (!matcher.matches()) {
-			throw new IllegalArgumentException("Tag can't be parsed: " + tag);
+	public String getFirstField(String tags) {
+		for (String tag : tags.split(":")) {
+			Matcher matcher = FIELD_PATTERN.matcher(tag);
+			if (!matcher.matches()) {
+				throw new IllegalArgumentException("Tag can't be parsed: " + tag);
+			}
+			String fieldTag = matcher.group(1);
+			String subFields = matcher.group(2);
+			String result = record.getField(fieldTag, subFields.toCharArray());
+			if (result != null) return result;
 		}
-		String fieldTag = matcher.group(1);
-		String subFields = matcher.group(2);
-		return record.getField(fieldTag, subFields.toCharArray());
+		return null;
 	}
 
 	public List<String> getFields(String tags) {

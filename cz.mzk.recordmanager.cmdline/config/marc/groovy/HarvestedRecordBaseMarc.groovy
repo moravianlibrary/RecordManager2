@@ -7,6 +7,7 @@ title_sub_display = getFirstField "245b"
 author_display = getAuthorDisplay()
 author2_display_mv = getAuthor2Display()
 authority2_display_mv = getAuthIds("110:111:700:710:711")
+corp_author_display = getFirstField "110ab:111aq"
 
 publishDate_display = getPublishDateDisplay()
 
