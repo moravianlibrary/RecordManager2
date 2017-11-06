@@ -30,6 +30,7 @@ hours_display = adresarGetHours()
 region_display = getFirstFieldForAdresar "KRJa"
 district_display = getFirstFieldForAdresar "KRJb"
 
+allLibraryFields_txt_mv = getAllLibraryFields()
 town_search_txt = getFirstFieldForAdresar "MESa"
 region_search_txt = getFirstFieldForAdresar "KRJa"
 district_search_txt = getFirstFieldForAdresar "KRJb"
