@@ -226,4 +226,9 @@ public interface MetadataRecord {
 		return null;
 	}
 
+	public String getSourceInfoX();
+
+	public String getSourceInfoT();
+
+	public String getSourceInfoG();
 }

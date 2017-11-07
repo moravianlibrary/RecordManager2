@@ -241,7 +241,16 @@ public class HarvestedRecord extends AbstractDomainObject {
 	
 	@Column(name="source_info")
 	private String sourceInfo;
-	
+
+	@Column(name="source_info_t")
+	private String sourceInfoT;
+
+	@Column(name="source_info_x")
+	private String sourceInfoX;
+
+	@Column(name="source_info_g")
+	private String sourceInfoG;
+
 	/**
 	 * indicator variable used for filtering reasons
 	 */
@@ -606,5 +615,29 @@ public class HarvestedRecord extends AbstractDomainObject {
 	public void setPublisherNumbers(List<PublisherNumber> publisherNumbers) {
 		this.publisherNumbers = publisherNumbers;
 	}
-	
+
+	public String getSourceInfoX() {
+		return sourceInfoX;
+	}
+
+	public void setSourceInfoX(String sourceInfoX) {
+		this.sourceInfoX = sourceInfoX;
+	}
+
+	public String getSourceInfoG() {
+		return sourceInfoG;
+	}
+
+	public void setSourceInfoG(String sourceInfoG) {
+		this.sourceInfoG = sourceInfoG;
+	}
+
+	public String getSourceInfoT() {
+
+		return sourceInfoT;
+	}
+
+	public void setSourceInfoT(String sourceInfoT) {
+		this.sourceInfoT = sourceInfoT;
+	}
 }

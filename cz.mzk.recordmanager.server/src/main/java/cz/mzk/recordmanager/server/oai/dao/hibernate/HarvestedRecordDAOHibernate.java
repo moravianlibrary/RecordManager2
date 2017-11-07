@@ -171,6 +171,9 @@ public class HarvestedRecordDAOHibernate extends
 		hr.setScale(null);
 		hr.setUuid(null);
 		hr.setSourceInfo(null);
+		hr.setSourceInfoT(null);
+		hr.setSourceInfoX(null);
+		hr.setSourceInfoG(null);
 		hr.setIssnSeries(null);
 		hr.setIssnSeriesOrder(null);
 		hr.setWeight(null);

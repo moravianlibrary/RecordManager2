@@ -1356,6 +1356,21 @@ public class MetadataMarcRecord implements MetadataRecord {
 		return results;
 	}
 
+	@Override
+	public String getSourceInfoX() {
+		return underlayingMarc.getField("773", 'x');
+	}
+
+	@Override
+	public String getSourceInfoT() {
+		return underlayingMarc.getField("773", 't');
+	}
+
+	@Override
+	public String getSourceInfoG() {
+		return underlayingMarc.getField("773", 'g');
+	}
+
 	protected static final Map<String, String> SFX_PREFIX = new HashMap<>();
 	{
 		SFX_PREFIX.put("FREE", "ANY");

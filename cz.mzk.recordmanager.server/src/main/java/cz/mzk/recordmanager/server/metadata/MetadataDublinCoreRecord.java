@@ -592,4 +592,22 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 		return Collections.emptyList();
 	}
 
+	@Override
+	public String getSourceInfoX() {
+		// Nothing to return
+		return null;
+	}
+
+	@Override
+	public String getSourceInfoT() {
+		// Nothing to return
+		return null;
+	}
+
+	@Override
+	public String getSourceInfoG() {
+		// Nothing to return
+		return null;
+	}
+
 }
