@@ -82,9 +82,11 @@ public class DedupRecordsJobConfig {
 	private static final String TMP_TABLE_PERIODICALS_SIMILARITY_IDS = "tmp_periodicals_similarity_ids";
 	
 	private static final String TMP_TABLE_PERIODICALS_SFX = "tmp_periodicals_sfx";
-	
-	private static final String TMP_TABLE_ARTICLES = "tmp_simmilar_articles";
-	
+
+	private static final String TMP_TABLE_ARTICLES_XG = "tmp_simmilar_articles_xg";
+
+	private static final String TMP_TABLE_ARTICLES_TG = "tmp_simmilar_articles_tg";
+
 	@Autowired
 	private SessionFactory sessionFactory;
 
@@ -144,9 +146,11 @@ public class DedupRecordsJobConfig {
 	private String prepareTempPeriodicalsYearClustersSql = ResourceUtils.asString("job/dedupRecordsJob/prepareTempPeriodicalsYearCluster.sql");
 	
 	private String prepareTempPeriodicalsSfxSql = ResourceUtils.asString("job/dedupRecordsJob/prepareDedupSfxStep.sql");
-	
-	private String prepareTempArticlesTableSql = ResourceUtils.asString("job/dedupRecordsJob/prepareTempArticlesTable.sql");
-	
+
+	private String prepareTempArticlesXGTableSql = ResourceUtils.asString("job/dedupRecordsJob/prepareTempArticlesXGTable.sql");
+
+	private String prepareTempArticlesTGTableSql = ResourceUtils.asString("job/dedupRecordsJob/prepareTempArticlesTGTable.sql");
+
 	private String cleanupSql = ResourceUtils.asString("job/dedupRecordsJob/cleanup.sql");
 
 	public DedupRecordsJobConfig() throws IOException {
@@ -202,9 +206,10 @@ public class DedupRecordsJobConfig {
 			@Qualifier(Constants.JOB_ID_DEDUP + ":preparePeriodicalsYearClustersStep") Step preparePeriodicalsYearClustersStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":prepareDedupPeriodicalsYearClustersStep") Step prepareDedupPeriodicalsYearClustersStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":processPeriodicalsSimilaritesResultsStep") Step processPeriodicalsSimilaritesResultsStep,
-			@Qualifier(Constants.JOB_ID_DEDUP + ":prepareTempArticlesTableStep") Step prepareTempArticlesTableStep,
-			@Qualifier(Constants.JOB_ID_DEDUP + ":dedupArticlesStep") Step dedupArticlesStep,
-			
+			@Qualifier(Constants.JOB_ID_DEDUP + ":prepareTempArticlesXGTableStep") Step prepareTempArticlesXGTableStep,
+			@Qualifier(Constants.JOB_ID_DEDUP + ":dedupArticlesXGStep") Step dedupArticlesXGStep,
+			@Qualifier(Constants.JOB_ID_DEDUP + ":prepareTempArticlesTGTableStep") Step prepareTempArticlesTGTableStep,
+			@Qualifier(Constants.JOB_ID_DEDUP + ":dedupArticlesTGStep") Step dedupArticlesTGStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":dedupRestOfRecordsStep") Step dedupRestOfRecordsStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":cleanupStep") Step cleanupStep) {
 		return jobs.get(Constants.JOB_ID_DEDUP)
@@ -255,9 +260,10 @@ public class DedupRecordsJobConfig {
 				.next(preparePeriodicalsYearClustersStep)
 				.next(prepareDedupPeriodicalsYearClustersStep)
 				.next(processPeriodicalsSimilaritesResultsStep)
-				.next(prepareTempArticlesTableStep)
-				.next(dedupArticlesStep)
-				
+				.next(prepareTempArticlesXGTableStep)
+				.next(dedupArticlesXGStep)
+				.next(prepareTempArticlesTGTableStep)
+				.next(dedupArticlesTGStep)
 				.next(dedupRestOfRecordsStep)
 				.next(cleanupStep)
 				.build();
@@ -499,36 +505,75 @@ public class DedupRecordsJobConfig {
 	}
 	
 	/**
-	 * dedupArticlesStep Deduplicate audio having equal publication
-	 * year, author, sourceinfo and title
+	 * dedupArticlesXGStep Deduplicate audio having equal publication
+	 * year, author, sourceinfo_x, sourceinfo_g and title
 	 */
-	@Bean(name = "prepareTempTablesStep:prepareTempArticlesTableTasklet")
+	@Bean(name = "prepareTempTablesStep:prepareTempArticlesXGTableTasklet")
 	@StepScope
-	public Tasklet prepareTempArticlesTableTasklet() {
-		return new SqlCommandTasklet(prepareTempArticlesTableSql);
+	public Tasklet prepareTempArticlesXGTableTasklet() {
+		return new SqlCommandTasklet(prepareTempArticlesXGTableSql);
 	}
 
-	@Bean(name = Constants.JOB_ID_DEDUP + ":prepareTempArticlesTableStep")
-	public Step prepareTempArticlesTableStep() {
-		return steps.get("prepareTempArticlesTableStep")
+	@Bean(name = Constants.JOB_ID_DEDUP + ":prepareTempArticlesXGTableStep")
+	public Step prepareTempArticlesXGTableStep() {
+		return steps.get("prepareTempArticlesXGTableStep")
 				.listener(new StepProgressListener())
-				.tasklet(prepareTempArticlesTableTasklet()).build();
+				.tasklet(prepareTempArticlesXGTableTasklet()).build();
 	}
 
-	@Bean(name = Constants.JOB_ID_DEDUP + ":dedupArticlesStep")
-	public Step dedupArticlesStep() throws Exception {
-		return steps.get("dedupArticlesStep")
+	@Bean(name = Constants.JOB_ID_DEDUP + ":dedupArticlesXGStep")
+	public Step dedupArticlesXGStep() throws Exception {
+		return steps.get("dedupArticlesXGStep")
 				.listener(new StepProgressListener())
 				.<List<Long>, List<HarvestedRecord>> chunk(100)
-				.reader(dedupSimpleKeysArticlesReader())
+				.reader(dedupSimpleKeysArticlesXGReader())
 				.processor(dedupSimpleKeysStepProsessor())
 				.writer(dedupSimpleKeysStepWriter()).build();
 	}
 
-	@Bean(name = "dedupSimpleKeysArticlesStep:reader")
+	@Bean(name = "dedupSimpleKeysArticlesXGStep:reader")
 	@StepScope
-	public ItemReader<List<Long>> dedupSimpleKeysArticlesReader() throws Exception {
-		return dedupSimpleKeysReader(TMP_TABLE_ARTICLES);
+	public ItemReader<List<Long>> dedupSimpleKeysArticlesXGReader() throws Exception {
+		return dedupSimpleKeysReader(TMP_TABLE_ARTICLES_XG);
+	}
+
+	/**
+	 * dedupArticlesTGStep Deduplicate audio having equal publication
+	 * year, author, sourceinfo_t, sourceinfo_g and title
+	 */
+	@Bean(name = "prepareTempTablesStep:prepareTempArticlesTGTableTasklet")
+	@StepScope
+	public Tasklet prepareTempArticlesTGTableTasklet() {
+		return new SqlCommandTasklet(prepareTempArticlesTGTableSql);
+	}
+
+	@Bean(name = Constants.JOB_ID_DEDUP + ":prepareTempArticlesTGTableStep")
+	public Step prepareTempArticlesTGTableStep() {
+		return steps.get("prepareTempArticlesTGTableStep")
+				.listener(new StepProgressListener())
+				.tasklet(prepareTempArticlesTGTableTasklet()).build();
+	}
+
+	@Bean(name = Constants.JOB_ID_DEDUP + ":dedupArticlesTGStep")
+	public Step dedupArticlesTGStep() throws Exception {
+		return steps.get("dedupArticlesTGStep")
+				.listener(new StepProgressListener())
+				.<List<Long>, List<HarvestedRecord>> chunk(100)
+				.reader(dedupSimpleKeysArticlesTGReader())
+				.processor(dedupArticlesTGProcessor())
+				.writer(dedupSimpleKeysStepWriter()).build();
+	}
+
+	@Bean(name = "dedupSimpleKeysArticlesTGStep:reader")
+	@StepScope
+	public ItemReader<List<Long>> dedupSimpleKeysArticlesTGReader() throws Exception {
+		return dedupSimpleKeysReader(TMP_TABLE_ARTICLES_TG);
+	}
+
+	@Bean(name = "dedupArticlesTGProcessor")
+	@StepScope
+	public ItemProcessor<List<Long>, List<HarvestedRecord>> dedupArticlesTGProcessor() {
+		return new DedupArticlesTGProcessor();
 	}
 
 	/**
