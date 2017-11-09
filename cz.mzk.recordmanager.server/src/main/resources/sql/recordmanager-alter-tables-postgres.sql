@@ -925,3 +925,7 @@ UPDATE import_conf SET item_id='other',interception_enabled=true WHERE id in (30
 
 -- 06. 11. 2017 tomascejpek
 UPDATE oai_harvest_conf SET url='https://www.knihovnachodov.cz/tritius/oai-provider' WHERE import_conf_id=350;
+
+-- 09. 11. 2017 tomascejpek
+ALTER TABLE harvested_record ADD COLUMN upv_application_id VARCHAR(20);
+CREATE INDEX harvested_record_upv_appl_dx ON harvested_record(upv_application_id);

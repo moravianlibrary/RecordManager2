@@ -3,6 +3,7 @@ package cz.mzk.recordmanager.server.metadata.institutions;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.marc4j.marc.DataField;
@@ -17,6 +18,7 @@ import cz.mzk.recordmanager.server.util.SolrUtils;
 public class PatentsMetadataMarcRecord extends MetadataMarcRecord{
 
 	private Pattern IPC = Pattern.compile("MPT|IPC", Pattern.CASE_INSENSITIVE);
+	private static final Pattern APPLICATION_PATTERN = Pattern.compile("Číslo přihlášky: (.*)");
 	
 	public PatentsMetadataMarcRecord(MarcRecord underlayingMarc) {
 		super(underlayingMarc);
@@ -72,4 +74,18 @@ public class PatentsMetadataMarcRecord extends MetadataMarcRecord{
 		return false;
 	}
 
+	@Override
+	public String getUpvApplicationId() {
+		String f001 = underlayingMarc.getControlField("001");
+		if (f001 == null) return null;
+		if (f001.endsWith("_B6")) {
+			for (String data : underlayingMarc.getFields("500", 'a')) {
+				Matcher matcher = APPLICATION_PATTERN.matcher(data);
+				if (matcher.matches()) {
+					return matcher.group(1);
+				}
+			}
+		}
+		return null;
+	}
 }

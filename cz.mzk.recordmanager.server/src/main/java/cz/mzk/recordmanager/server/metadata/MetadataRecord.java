@@ -226,4 +226,8 @@ public interface MetadataRecord {
 		return null;
 	}
 
+	default String getUpvApplicationId() {
+		return null;
+	}
+
 }
