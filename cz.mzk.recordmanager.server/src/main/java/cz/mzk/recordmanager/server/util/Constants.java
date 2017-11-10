@@ -140,6 +140,7 @@ public class Constants {
 	public static final long IMPORT_CONF_ID_KKL			= 325L;
 	public static final long IMPORT_CONF_ID_STT			= 326L;
 	public static final long IMPORT_CONF_ID_ZAKONY		= 344L;
+	public static final long IMPORT_CONF_ID_UPV			= 347L;
 	public static final Long IMPORT_CONF_ID_AUTHORITY	= 400L;
 	
 	public static final String DOCUMENT_AVAILABILITY_ONLINE     = "online";

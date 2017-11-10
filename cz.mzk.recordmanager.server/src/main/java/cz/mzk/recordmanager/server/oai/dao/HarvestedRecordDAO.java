@@ -35,4 +35,8 @@ public interface HarvestedRecordDAO extends DomainDAO<Long, HarvestedRecord> {
 
 	public void updateTimestampOnly(HarvestedRecord hr);
 
+	boolean existsUpvApplicationId(String applId);
+
+	void deleteUpvApplicationRecord(String appId);
+
 }

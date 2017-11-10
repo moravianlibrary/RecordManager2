@@ -241,7 +241,10 @@ public class HarvestedRecord extends AbstractDomainObject {
 	
 	@Column(name="source_info")
 	private String sourceInfo;
-	
+
+	@Column(name="upv_application_id")
+	private String upvApplicationId;
+
 	/**
 	 * indicator variable used for filtering reasons
 	 */
@@ -606,5 +609,12 @@ public class HarvestedRecord extends AbstractDomainObject {
 	public void setPublisherNumbers(List<PublisherNumber> publisherNumbers) {
 		this.publisherNumbers = publisherNumbers;
 	}
-	
+
+	public String getUpvApplicationId() {
+		return upvApplicationId;
+	}
+
+	public void setUpvApplicationId(String upvApplicationId) {
+		this.upvApplicationId = upvApplicationId;
+	}
 }
