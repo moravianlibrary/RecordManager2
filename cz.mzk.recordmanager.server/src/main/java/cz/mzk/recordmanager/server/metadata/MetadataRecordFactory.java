@@ -143,7 +143,9 @@ public class MetadataRecordFactory {
 		case Constants.PREFIX_BMC:
 			return new BmcMetadataMarcRecord(marcRec);
 		case Constants.PREFIX_UPV:
-			return new PatentsMetadataMarcRecord(marcRec);
+			MetadataRecord mr = new PatentsMetadataMarcRecord(marcRec);
+			init(mr);
+			return mr;
 		case Constants.PREFIX_OPENLIB:
 			return new OpenLibraryMetadataMarcRecord(marcRec);
 		case Constants.PREFIX_MESH:

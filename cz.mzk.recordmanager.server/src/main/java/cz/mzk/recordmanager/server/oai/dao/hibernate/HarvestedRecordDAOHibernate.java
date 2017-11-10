@@ -1,8 +1,10 @@
 package cz.mzk.recordmanager.server.oai.dao.hibernate;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
+import cz.mzk.recordmanager.server.util.Constants;
 import org.hibernate.Criteria;
 import org.hibernate.NullPrecedence;
 import org.hibernate.Query;
@@ -149,19 +151,43 @@ public class HarvestedRecordDAOHibernate extends
 	}
 
 	@Override
+	public boolean existsUpvApplicationId(String applId) {
+		Session session = sessionFactory.getCurrentSession();
+		Criteria crit = session.createCriteria(HarvestedRecord.class);
+		crit.add(Restrictions.eq("upvApplicationId", applId));
+		crit.setProjection(Projections.id());
+		crit.setMaxResults(1);
+		return crit.uniqueResult() != null;
+	}
+
+	@Override
+	public void deleteUpvApplicationRecord(String appId) {
+		Session session = sessionFactory.getCurrentSession();
+		HarvestedRecord hr = (HarvestedRecord) session
+				.createQuery("from HarvestedRecord where uniqueId.harvestedFromId = ? and uniqueId.recordId = ?")
+				.setParameter(0, Constants.IMPORT_CONF_ID_UPV)
+				.setParameter(1, appId)
+				.uniqueResult();
+		if (hr != null) {
+			hr.setUpdated(new Date());
+			hr.setDeleted(new Date());
+			sessionFactory.getCurrentSession().persist(hr);
+		}
+	}
+
+	@Override
 	public void dropDedupKeys(HarvestedRecord hr) {
 		if (hr == null || hr.getId() == null) {
 			return;
 		}
-		
-		
+
 		Session session = sessionFactory.getCurrentSession();
 		// don't delete keys for not managed entities
 		if (!session.contains(hr)) {
 			System.out.println("NOT CONT");
 			return;
 		}
-		
+
 		hr.setAuthorAuthKey(null);
 		hr.setAuthorString(null);
 		hr.setClusterId(null);
@@ -192,25 +218,25 @@ public class HarvestedRecordDAOHibernate extends
 		for (Isbn i: isbns) {
 			session.delete(i);
 		}
-		
+
 		List<Issn> issns =  hr.getIssns();
 		hr.setIssns(new ArrayList<>());
 		for (Issn i: issns) {
 			session.delete(i);
 		}
-		
+
 		List<Ismn> ismns =  hr.getIsmns();
 		hr.setIsmns(new ArrayList<>());
 		for (Ismn i: ismns) {
 			session.delete(i);
 		}
-		
+
 		List<Oclc> oclcs = hr.getOclcs();
 		hr.setOclcs(new ArrayList<>());
 		for (Oclc o: oclcs) {
 			session.delete(o);
 		}
-		
+
 		List<Cnb> cnbs = hr.getCnb();
 		hr.setCnb(new ArrayList<>());
 		for (Cnb c: cnbs) {
@@ -228,7 +254,7 @@ public class HarvestedRecordDAOHibernate extends
 		for (HarvestedRecordFormat hrf: physicalFormats) {
 			session.delete(hrf);
 		}
-		
+
 		hr.setLanguages(new ArrayList<>());
 		session.update(hr);
 		session.flush();
