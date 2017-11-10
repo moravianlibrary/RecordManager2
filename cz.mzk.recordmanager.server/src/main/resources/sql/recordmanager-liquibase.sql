@@ -1195,3 +1195,5 @@ ADD COLUMN source_info_g VARCHAR(255);
 CREATE INDEX harvested_record_source_info_t_idx ON harvested_record(source_info_t);
 CREATE INDEX harvested_record_source_info_x_idx ON harvested_record(source_info_x);
 CREATE INDEX harvested_record_source_info_g_idx ON harvested_record(source_info_g);
+DROP INDEX IF EXISTS harvested_record_source_info_idx;
+ALTER TABLE harvested_record DROP COLUMN source_info;

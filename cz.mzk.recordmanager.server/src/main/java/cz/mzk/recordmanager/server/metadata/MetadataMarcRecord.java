@@ -1212,11 +1212,6 @@ public class MetadataMarcRecord implements MetadataRecord {
 	}
 
 	@Override
-	public String getSourceInfo() {
-		return underlayingMarc.getField("773", 't', 'x', 'g');
-	}
-
-	@Override
 	public List<Ean> getEANs() {
 		List<Ean> results = new ArrayList<>();
 		Long eanCounter = 0L;

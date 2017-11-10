@@ -546,12 +546,6 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 	}
 
 	@Override
-	public String getSourceInfo() {
-		// Nothing to return
-		return null;
-	}
-
-	@Override
 	public List<Ean> getEANs() {
 		// Nothing to return
 		return Collections.emptyList();

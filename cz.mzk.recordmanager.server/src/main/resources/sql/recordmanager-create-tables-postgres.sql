@@ -149,7 +149,6 @@ CREATE TABLE harvested_record (
   weight               DECIMAL(10),
   cluster_id           VARCHAR(20),
   pages                DECIMAL(10),
-  source_info          VARCHAR(255),
   source_info_t        VARCHAR(255),
   source_info_x        VARCHAR(30),
   source_info_g        VARCHAR(255),

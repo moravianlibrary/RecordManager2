@@ -201,8 +201,6 @@ public interface MetadataRecord {
 	 * @return
 	 */
 	public String filterSubjectFacet();
-
-	public String getSourceInfo();
 	
 	public List<Ean> getEANs();
 

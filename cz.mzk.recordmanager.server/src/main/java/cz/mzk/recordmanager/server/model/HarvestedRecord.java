@@ -238,9 +238,6 @@ public class HarvestedRecord extends AbstractDomainObject {
 	
 	@Column(name="next_dedup_flag")
 	private boolean nextDedupFlag = true;
-	
-	@Column(name="source_info")
-	private String sourceInfo;
 
 	@Column(name="source_info_t")
 	private String sourceInfoT;
@@ -582,14 +579,6 @@ public class HarvestedRecord extends AbstractDomainObject {
 
 	public void setInspiration(List<Inspiration> inspiration) {
 		this.inspiration = inspiration;
-	}
-
-	public String getSourceInfo() {
-		return sourceInfo;
-	}
-
-	public void setSourceInfo(String sourceInfo) {
-		this.sourceInfo = sourceInfo;
 	}
 
 	public List<Ean> getEans() {
