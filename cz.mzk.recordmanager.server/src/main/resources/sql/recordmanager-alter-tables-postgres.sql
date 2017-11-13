@@ -940,3 +940,14 @@ INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granul
 -- 10. 11. 2017 tomascejpek
 ALTER TABLE harvested_record ADD COLUMN upv_application_id VARCHAR(20);
 CREATE INDEX harvested_record_upv_appl_dx ON harvested_record(upv_application_id);
+
+-- 13. 11. 2017 tomascejpek
+ALTER TABLE harvested_record
+ADD COLUMN source_info_t VARCHAR(255),
+ADD COLUMN source_info_x VARCHAR(30),
+ADD COLUMN source_info_g VARCHAR(255);
+CREATE INDEX harvested_record_source_info_t_idx ON harvested_record(source_info_t);
+CREATE INDEX harvested_record_source_info_x_idx ON harvested_record(source_info_x);
+CREATE INDEX harvested_record_source_info_g_idx ON harvested_record(source_info_g);
+DROP INDEX IF EXISTS harvested_record_source_info_idx;
+ALTER TABLE harvested_record DROP COLUMN source_info;

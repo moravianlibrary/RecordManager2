@@ -42,6 +42,7 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 	private final static int EFFECTIVE_SOURCE_INFO_LENGTH = 255;
 	private final static int EFFECTIVE_AUTHOR_LENGTH = 200;
 	private final static int EFFECTIVE_AUTHOR_AUTH_KEY_LENGTH = 50;
+	private final static int EFFECTIVE_LENGTH_30 = 30;
 	
 	@Autowired 
 	private HarvestedRecordFormatDAO harvestedRecordFormatDAO;
@@ -101,7 +102,9 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 		encapsulator.setOclcs(metadataRecord.getOclcs());
 		encapsulator.setClusterId(metadataRecord.getClusterId());
 		encapsulator.setRaw001Id(metadataRecord.getRaw001Id());
-		encapsulator.setSourceInfo(MetadataUtils.normalizeAndShorten(metadataRecord.getSourceInfo(), EFFECTIVE_SOURCE_INFO_LENGTH));
+		encapsulator.setSourceInfoT(MetadataUtils.normalizeAndShorten(metadataRecord.getSourceInfoT(), EFFECTIVE_SOURCE_INFO_LENGTH));
+		encapsulator.setSourceInfoG(MetadataUtils.normalizeAndShorten(metadataRecord.getSourceInfoG(), EFFECTIVE_SOURCE_INFO_LENGTH));
+		encapsulator.setSourceInfoX(MetadataUtils.normalizeAndShorten(metadataRecord.getSourceInfoX(), EFFECTIVE_LENGTH_30));
 		encapsulator.setEans(metadataRecord.getEANs());
 		encapsulator.setPublisherNumbers(metadataRecord.getPublisherNumber());
 		encapsulator.setLanguages(new HashSet<>(metadataRecord.getLanguages()));
@@ -146,7 +149,9 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 			record.setLanguages(metadataRecord.getLanguages());
 			record.setClusterId(encapsulator.getClusterId());
 			record.setRaw001Id(encapsulator.getRaw001Id());
-			record.setSourceInfo(encapsulator.getSourceInfo());
+			record.setSourceInfoG(encapsulator.getSourceInfoG());
+			record.setSourceInfoX(encapsulator.getSourceInfoX());
+			record.setSourceInfoT(encapsulator.getSourceInfoT());
 			record.setEans(encapsulator.getEans());
 			record.setShortTitles(encapsulator.getShortTitles());
 			record.setPublisherNumbers(metadataRecord.getPublisherNumber());
@@ -265,9 +270,17 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 				if (encapsulator.getRaw001Id() != null) {
 					md.update(encapsulator.getRaw001Id().getBytes());
 				}
-				
-				if (encapsulator.getSourceInfo() != null) {
-					md.update(encapsulator.getSourceInfo().getBytes());
+
+				if (encapsulator.getSourceInfoT() != null) {
+					md.update(encapsulator.getSourceInfoT().getBytes());
+				}
+
+				if (encapsulator.getSourceInfoX() != null) {
+					md.update(encapsulator.getSourceInfoX().getBytes());
+				}
+
+				if (encapsulator.getSourceInfoG() != null) {
+					md.update(encapsulator.getSourceInfoG().getBytes());
 				}
 				
 				for (Ean ean: encapsulator.getEans()) {
@@ -326,11 +339,13 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 			encapsulator.setOclcs(hr.getOclcs());
 			encapsulator.setClusterId(hr.getClusterId());
 			encapsulator.setRaw001Id(hr.getRaw001Id());
-			encapsulator.setSourceInfo(hr.getSourceInfo());
 			encapsulator.setEans(hr.getEans());
 			encapsulator.setShortTitles(hr.getShortTitles());
 			encapsulator.setPublisherNumbers(hr.getPublisherNumbers());
-			
+			encapsulator.setSourceInfoG(hr.getSourceInfoG());
+			encapsulator.setSourceInfoX(hr.getSourceInfoX());
+			encapsulator.setSourceInfoT(hr.getSourceInfoT());
+
 			return computeHashValue(encapsulator);
 		}
 		
@@ -357,7 +372,9 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 		String issnSeriesOrder;
 		String clusterId;
 		String raw001Id;
-		String sourceInfo;
+		String sourceInfoX;
+		String sourceInfoT;
+		String sourceInfoG;
 		
 		public List<Ismn> getIsmns() {
 			return ismns;
@@ -467,12 +484,6 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 		public void setRaw001Id(String raw001Id) {
 			this.raw001Id = raw001Id;
 		}
-		public String getSourceInfo() {
-			return sourceInfo;
-		}
-		public void setSourceInfo(String sourceInfo) {
-			this.sourceInfo = sourceInfo;
-		}
 		public List<Ean> getEans() {
 			return eans;
 		}
@@ -490,6 +501,30 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 		}
 		public void setPublisherNumbers(List<PublisherNumber> publisherNumbers) {
 			this.publisherNumbers = publisherNumbers;
+		}
+
+		public String getSourceInfoX() {
+			return sourceInfoX;
+		}
+
+		public void setSourceInfoX(String sourceInfoX) {
+			this.sourceInfoX = sourceInfoX;
+		}
+
+		public String getSourceInfoT() {
+			return sourceInfoT;
+		}
+
+		public void setSourceInfoT(String sourceInfoT) {
+			this.sourceInfoT = sourceInfoT;
+		}
+
+		public String getSourceInfoG() {
+			return sourceInfoG;
+		}
+
+		public void setSourceInfoG(String sourceInfoG) {
+			this.sourceInfoG = sourceInfoG;
 		}
 	}
 

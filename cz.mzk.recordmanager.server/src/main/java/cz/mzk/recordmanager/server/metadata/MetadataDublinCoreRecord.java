@@ -546,12 +546,6 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 	}
 
 	@Override
-	public String getSourceInfo() {
-		// Nothing to return
-		return null;
-	}
-
-	@Override
 	public List<Ean> getEANs() {
 		// Nothing to return
 		return Collections.emptyList();
@@ -590,6 +584,24 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 	@Override
 	public List<PublisherNumber> getPublisherNumber() {
 		return Collections.emptyList();
+	}
+
+	@Override
+	public String getSourceInfoX() {
+		// Nothing to return
+		return null;
+	}
+
+	@Override
+	public String getSourceInfoT() {
+		// Nothing to return
+		return null;
+	}
+
+	@Override
+	public String getSourceInfoG() {
+		// Nothing to return
+		return null;
 	}
 
 }

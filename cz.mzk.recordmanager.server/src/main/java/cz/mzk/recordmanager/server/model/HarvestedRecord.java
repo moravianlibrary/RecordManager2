@@ -238,9 +238,15 @@ public class HarvestedRecord extends AbstractDomainObject {
 	
 	@Column(name="next_dedup_flag")
 	private boolean nextDedupFlag = true;
-	
-	@Column(name="source_info")
-	private String sourceInfo;
+
+	@Column(name="source_info_t")
+	private String sourceInfoT;
+
+	@Column(name="source_info_x")
+	private String sourceInfoX;
+
+	@Column(name="source_info_g")
+	private String sourceInfoG;
 
 	@Column(name="upv_application_id")
 	private String upvApplicationId;
@@ -578,14 +584,6 @@ public class HarvestedRecord extends AbstractDomainObject {
 		this.inspiration = inspiration;
 	}
 
-	public String getSourceInfo() {
-		return sourceInfo;
-	}
-
-	public void setSourceInfo(String sourceInfo) {
-		this.sourceInfo = sourceInfo;
-	}
-
 	public List<Ean> getEans() {
 		return eans;
 	}
@@ -616,5 +614,30 @@ public class HarvestedRecord extends AbstractDomainObject {
 
 	public void setUpvApplicationId(String upvApplicationId) {
 		this.upvApplicationId = upvApplicationId;
+	}
+
+	public String getSourceInfoX() {
+		return sourceInfoX;
+	}
+
+	public void setSourceInfoX(String sourceInfoX) {
+		this.sourceInfoX = sourceInfoX;
+	}
+
+	public String getSourceInfoG() {
+		return sourceInfoG;
+	}
+
+	public void setSourceInfoG(String sourceInfoG) {
+		this.sourceInfoG = sourceInfoG;
+	}
+
+	public String getSourceInfoT() {
+
+		return sourceInfoT;
+	}
+
+	public void setSourceInfoT(String sourceInfoT) {
+		this.sourceInfoT = sourceInfoT;
 	}
 }

@@ -201,8 +201,6 @@ public interface MetadataRecord {
 	 * @return
 	 */
 	public String filterSubjectFacet();
-
-	public String getSourceInfo();
 	
 	public List<Ean> getEANs();
 
@@ -229,5 +227,11 @@ public interface MetadataRecord {
 	default String getUpvApplicationId() {
 		return null;
 	}
+
+	public String getSourceInfoX();
+
+	public String getSourceInfoT();
+
+	public String getSourceInfoG();
 
 }

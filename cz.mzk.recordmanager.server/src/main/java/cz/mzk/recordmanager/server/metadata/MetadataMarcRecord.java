@@ -1212,11 +1212,6 @@ public class MetadataMarcRecord implements MetadataRecord {
 	}
 
 	@Override
-	public String getSourceInfo() {
-		return underlayingMarc.getField("773", 't', 'x', 'g');
-	}
-
-	@Override
 	public List<Ean> getEANs() {
 		List<Ean> results = new ArrayList<>();
 		Long eanCounter = 0L;
@@ -1354,6 +1349,21 @@ public class MetadataMarcRecord implements MetadataRecord {
 			}
 		}
 		return results;
+	}
+
+	@Override
+	public String getSourceInfoX() {
+		return underlayingMarc.getField("773", 'x');
+	}
+
+	@Override
+	public String getSourceInfoT() {
+		return underlayingMarc.getField("773", 't');
+	}
+
+	@Override
+	public String getSourceInfoG() {
+		return underlayingMarc.getField("773", 'g');
 	}
 
 	protected static final Map<String, String> SFX_PREFIX = new HashMap<>();
