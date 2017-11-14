@@ -1212,3 +1212,7 @@ CREATE INDEX harvested_record_source_info_x_idx ON harvested_record(source_info_
 CREATE INDEX harvested_record_source_info_g_idx ON harvested_record(source_info_g);
 DROP INDEX IF EXISTS harvested_record_source_info_idx;
 ALTER TABLE harvested_record DROP COLUMN source_info;
+
+--changeset tomascejpek:79 context:cpk
+INSERT INTO import_conf (id,library_id,contact_person_id,id_prefix,base_weight,cluster_id_enabled,filtering_enabled,interception_enabled,is_library,harvest_frequency,mapping_script,generate_dedup_keys,mapping_dedup_script) VALUES (1321,138,200,'sfxjibirel',8,false,false,false,true,'U','SfxMarcLocal.groovy',false,'SfxMarc.groovy');
+INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format,extract_id_regex) VALUES (1321,'http://sfx.jib.cz/sfxirel/cgi/public/get_file.cgi?file=institutional_holding-IREL.xml','downloadAndImportRecordsJob','sfx',null);

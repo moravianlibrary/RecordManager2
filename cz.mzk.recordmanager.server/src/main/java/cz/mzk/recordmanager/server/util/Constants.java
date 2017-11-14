@@ -122,6 +122,7 @@ public class Constants {
 	public static final String PREFIX_SFXJIBVKOL		= "sfxjibvkol";
 	public static final String PREFIX_SFXTECHLIBVSCHT		= "sfxjibvscht";
 	public static final String PREFIX_SFXJIBNLK_PERIODICALS	= "sfxnlkper";
+	public static final String PREFIX_SFXJIBIREL		= "sfxjibirel";
 	public static final String PREFIX_SFXKNAV			= "sfxknav";
 	public static final String PREFIX_SVKUL				= "svkul";
 	public static final String PREFIX_TRE				= "tre";
