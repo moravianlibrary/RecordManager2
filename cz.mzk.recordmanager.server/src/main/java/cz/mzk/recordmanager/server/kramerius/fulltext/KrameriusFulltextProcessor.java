@@ -128,11 +128,7 @@ public class KrameriusFulltextProcessor implements
 			}
 			
 			//delete old FulltextKramerius from database before adding new ones
-			if (!rec.getFulltextKramerius().isEmpty()) {
-				for (FulltextKramerius fm: rec.getFulltextKramerius()) {
-					fmDao.delete(fm);
-				}
-			}
+			fmDao.deleteFulltext(rec.getId());
 			
 			rec.setFulltextKramerius(pages);
 		} else {

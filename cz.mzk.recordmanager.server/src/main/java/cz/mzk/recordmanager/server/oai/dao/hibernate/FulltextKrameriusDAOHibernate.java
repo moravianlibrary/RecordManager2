@@ -38,4 +38,10 @@ public class FulltextKrameriusDAOHibernate extends
 		return jdbcTemplate.query(fullTextQuery, Collections.singletonMap("dedupRecordId", record.getId()), ROW_MAPPER);
 	}
 
+	@Override
+	public int deleteFulltext(long hr_id) {
+		return jdbcTemplate.update("DELETE FROM fulltext_kramerius fk WHERE fk.harvested_record_id = :harvestedRecordId",
+				Collections.singletonMap("harvestedRecordId", hr_id));
+	}
+
 }
