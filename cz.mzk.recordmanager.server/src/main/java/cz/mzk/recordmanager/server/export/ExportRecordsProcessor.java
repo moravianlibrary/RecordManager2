@@ -23,9 +23,6 @@ public class ExportRecordsProcessor implements ItemProcessor<HarvestedRecordUniq
 	private static Logger logger = LoggerFactory.getLogger(ExportRecordsProcessor.class);
 
 	@Autowired
-	private MetadataRecordFactory metadataFactory;
-	
-	@Autowired
 	private MarcXmlParser marcXmlParser;
 	
 	@Autowired
@@ -43,15 +40,19 @@ public class ExportRecordsProcessor implements ItemProcessor<HarvestedRecordUniq
 	@Override
 	public String process(HarvestedRecordUniqueId recordId) throws Exception {
 		HarvestedRecord record = harvestedRecordDao.get(recordId);
-		if (record != null && record.getRawRecord().length != 0) {
-			InputStream is = new ByteArrayInputStream(record.getRawRecord());
-			MarcRecord marcRecord = marcXmlParser.parseRecord(is);
-			if(marcRecord.getDataFields(OAI_FIELD).isEmpty()){
-				marcRecord.addDataField(OAI_FIELD, ' ', ' ', new String[]{"a", record.getUniqueId().getRecordId()});
+		try {
+			if (record != null && record.getRawRecord() != null && record.getRawRecord().length != 0) {
+				InputStream is = new ByteArrayInputStream(record.getRawRecord());
+				MarcRecord marcRecord = marcXmlParser.parseRecord(is);
+				if (marcRecord.getDataFields(OAI_FIELD).isEmpty()) {
+					marcRecord.addDataField(OAI_FIELD, ' ', ' ', new String[]{"a", record.getUniqueId().getRecordId()});
+				}
+				progressLogger.incrementAndLogProgress();
+				return marcRecord.export(iOFormat);
 			}
-			progressLogger.incrementAndLogProgress();
-			return marcRecord.export(iOFormat);
-		} 
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return null;
 	}
 

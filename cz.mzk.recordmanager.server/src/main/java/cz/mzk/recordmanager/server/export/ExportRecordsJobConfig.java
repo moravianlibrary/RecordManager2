@@ -83,7 +83,7 @@ public class ExportRecordsJobConfig {
 		return steps.get("exportRecordsStep")
 				.listener(new StepProgressListener())
 				.<HarvestedRecordUniqueId, String> chunk(20)//
-				.reader(exportRecordsReader(LONG_OVERRIDEN_BY_EXPRESSION)) //
+				.reader(exportRecordsReader(LONG_OVERRIDEN_BY_EXPRESSION, LONG_OVERRIDEN_BY_EXPRESSION)) //
 				.processor(exportRecordsProcessor(STRING_OVERRIDEN_BY_EXPRESSION)) //
 				.writer(exportRecordsWriter(STRING_OVERRIDEN_BY_EXPRESSION)) //
 				.build();
@@ -115,15 +115,16 @@ public class ExportRecordsJobConfig {
 
 	@Bean(name = "exportRecordsJob:exportRecordsReader")
 	@StepScope
-	public ItemReader<HarvestedRecordUniqueId> exportRecordsReader(@Value("#{jobParameters["
-			+ Constants.JOB_PARAM_CONF_ID + "]}") Long configId)
+	public ItemReader<HarvestedRecordUniqueId> exportRecordsReader(
+			@Value("#{jobParameters[" + Constants.JOB_PARAM_CONF_ID + "]}") Long configId,
+			@Value("#{jobParameters[" + Constants.JOB_PARAM_DELETED + "]}") Long deleted)
 			throws Exception {
 		JdbcPagingItemReader<HarvestedRecordUniqueId> reader = new JdbcPagingItemReader<HarvestedRecordUniqueId>();
 		SqlPagingQueryProviderFactoryBean pqpf = new SqlPagingQueryProviderFactoryBean();
 		pqpf.setDataSource(dataSource);
 		pqpf.setSelectClause("SELECT import_conf_id, record_id");
 		pqpf.setFromClause("FROM harvested_record");
-		pqpf.setWhereClause("WHERE import_conf_id = :conf_id");
+		pqpf.setWhereClause("WHERE import_conf_id = :conf_id" + (deleted == null ? " AND deleted IS NULL" : ""));
 		pqpf.setSortKey("record_id");
 		Map<String, Object> parameterValues = new HashMap<String, Object>();
 		parameterValues.put("conf_id", configId);
