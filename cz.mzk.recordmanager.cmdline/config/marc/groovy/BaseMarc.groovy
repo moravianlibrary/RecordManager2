@@ -36,9 +36,6 @@ publishDateSort = getPublishDateForSorting()
 dateSpan = getFields "362a"
 contents = getFields "505a:505t"
 
-isbn = getFields "020az"
-issn = getFields "022ayz:440x:490x:730x:776x:780x:785x"
-
 callnumber_str_mv = getFields "910b"
      
 topic = getFields "600:610:630:650"
