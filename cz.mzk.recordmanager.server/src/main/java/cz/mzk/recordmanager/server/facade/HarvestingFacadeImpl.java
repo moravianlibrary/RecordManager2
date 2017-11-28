@@ -178,6 +178,19 @@ public class HarvestingFacadeImpl implements HarvestingFacade {
 		return query(lastJobExecutionQuery, ImmutableMap.of("jobName", Constants.JOB_ID_HARVEST_OBALKY_KNIH));
 	}
 
+	@Override
+	public void incrementalFulltextJob(KrameriusConfiguration conf) {
+		incrementalHarvest(conf.getId(), Constants.JOB_ID_FULLTEXT_KRAMERIUS);
+	}
+
+	@Override
+	public void incrementalFulltextJob(Long id) {
+		KrameriusConfiguration krameriusConfiguration = krameriusConfigurationDAO.get(id);
+		if (krameriusConfiguration != null){
+			incrementalFulltextJob(krameriusConfiguration);
+		}
+	}
+
 	private LocalDateTime query(String query, Map<String, ?> params) {
 		List<Date> lastIndex = jdbcTemplate.queryForList(query, params, Date.class);
 		return (!lastIndex.isEmpty() && lastIndex.get(0) != null) ? LocalDateTime.ofInstant(lastIndex.get(0).toInstant(), ZoneId.systemDefault()) : null;
