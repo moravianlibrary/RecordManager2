@@ -12,6 +12,8 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import cz.mzk.recordmanager.server.model.Ean;
+import cz.mzk.recordmanager.server.model.HarvestedRecordFormat.HarvestedRecordFormatEnum;
 import org.apache.commons.validator.routines.ISBNValidator;
 import org.marc4j.marc.DataField;
 import org.marc4j.marc.Subfield;
@@ -848,5 +850,19 @@ public class MarcDSL extends BaseDSL {
 
 	public String getSfxUrl() {
 		return metadataRecord.getSfxUrl(context.harvestedRecord().getUniqueId().getRecordId());
+	}
+
+	public List<String> getIsmns() {
+		List<String> results = new ArrayList<>();
+		List<Ean> eans;
+		if (results.isEmpty() && (!(eans = metadataRecord.getEANs()).isEmpty())
+				&& metadataRecord.getDetectedFormatList().contains(HarvestedRecordFormatEnum.MUSICAL_SCORES)) {
+			for (Ean ean : eans) {
+				results.add((metadataRecord.getPublicationYear() >= 2008L) ? ean.getEan().toString()
+						: "M" + ean.getEan().toString().substring(4));
+			}
+		}
+		record.getFields("024", field -> field.getIndicator1() == '2','a');
+		return results;
 	}
 }

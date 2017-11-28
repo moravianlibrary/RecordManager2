@@ -11,7 +11,7 @@ corp_author_display = getFirstField "110ab:111aq"
 
 isbn = getFields "020az"
 issn = getFields "022ayz:440x:490x:730x:776x:780x:785x"
-ismn_isn_mv = record.getFields("024", { field -> field.getIndicator1() == '2' }, 'a' as char)
+ismn_isn_mv = getIsmns()
 cnb_isn_mv = getFieldsUnique "015az"
 ean_isn_mv = getEAN()
 
