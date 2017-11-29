@@ -858,7 +858,8 @@ public class MarcDSL extends BaseDSL {
 		if (results.isEmpty() && (!(eans = metadataRecord.getEANs()).isEmpty())
 				&& metadataRecord.getDetectedFormatList().contains(HarvestedRecordFormatEnum.MUSICAL_SCORES)) {
 			for (Ean ean : eans) {
-				results.add((metadataRecord.getPublicationYear() >= 2008L) ? ean.getEan().toString()
+				Long year = metadataRecord.getPublicationYear();
+				results.add((year != null && year >= 2008L) ? ean.getEan().toString()
 						: "M" + ean.getEan().toString().substring(4));
 			}
 		}
