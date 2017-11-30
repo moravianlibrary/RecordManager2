@@ -163,7 +163,8 @@ public class PatentsXmlStreamReader implements MarcReader{
         boolean firstCorporate = true; // first to field 110, others 710
         boolean b072 = false;
         boolean abstratcs = false;
-        boolean appl_reference = false;
+		boolean appl_reference = false;
+		boolean public_reference = false;
         char date = ' ';
         String patentType = "";
 		String dateStr = "";
@@ -250,6 +251,7 @@ public class PatentsXmlStreamReader implements MarcReader{
 						}
 						break;
 					case ELEMENT_PUBLICATION_REFERENCE:
+						public_reference = true;
 						date = 'p';
 						break;
 					case ELEMENT_APPLICATION_REFERENCE:
@@ -281,11 +283,13 @@ public class PatentsXmlStreamReader implements MarcReader{
 						date = ' ';
 						break;
 					case ELEMENT_DOC_NUMBER:
+						String docNumber = xmlReader.getElementText();
 						if (appl_reference) {
-							String docNumber = xmlReader.getElementText();
 							add500aApplDocNumber(docNumber, patentType);
+						}
+						else if (public_reference) {
 							addField013(docNumber, patentType, dateStr);
-						}						
+						}
 						break;
 					}	
 					break;
@@ -329,6 +333,9 @@ public class PatentsXmlStreamReader implements MarcReader{
 						return sortFields(record);
 					case ELEMENT_APPLICATION_REFERENCE:
 						appl_reference = false;
+						break;
+					case ELEMENT_PUBLICATION_REFERENCE:
+						public_reference = false;
 						break;
 					}
 					break;
