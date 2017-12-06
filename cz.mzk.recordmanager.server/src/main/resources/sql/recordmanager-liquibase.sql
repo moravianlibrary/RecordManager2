@@ -1219,3 +1219,7 @@ INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format,extr
 
 --changeset tomsacejpek:80 context:cpk
 UPDATE oai_harvest_conf SET url='http://kutnahora.tritius.cz/tritius/oai-provider' WHERE import_conf_id=334;
+
+--changeset tomascejpek:81 context:cpk
+UPDATE oai_harvest_conf SET url='https://kutnahora.tritius.cz/tritius/oai-provider' WHERE import_conf_id=334;
+UPDATE oai_harvest_conf SET url='http://katalog.kkvysociny.cz/clavius/l.dll' WHERE import_conf_id=312;
