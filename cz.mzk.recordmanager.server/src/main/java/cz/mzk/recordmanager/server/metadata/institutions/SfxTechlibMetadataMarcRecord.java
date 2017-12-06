@@ -20,7 +20,7 @@ public class SfxTechlibMetadataMarcRecord extends MetadataMarcRecord {
 
 	@Override
 	public String getSfxUrl(String id) {
-		return super.generateSfxUrl(SFX_URL, id, Collections.emptyMap());
+		return super.generateSfxUrl(SFX_URL, id, Collections.singletonMap("sfx.institute", getSfxInstitute()));
 	}
 
 }

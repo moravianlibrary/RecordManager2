@@ -1,5 +1,6 @@
 package cz.mzk.recordmanager.server.metadata.institutions;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,12 +23,7 @@ public class SfxKnavMetadataMarcRecord extends MetadataMarcRecord {
 
 	@Override
 	public String getSfxUrl(String id) {
-		Map<String, String> allParams = new HashMap<>();
-		allParams.put("url_ver", "Z39.88-2004");
-		allParams.put("sfx.ignore_date_threshold", "1");
-		allParams.put("rft.object_id", id);
-
-		return UrlUtils.buildUrl(SFX_URL, allParams);
+		return generateSfxUrl(SFX_URL, id, Collections.emptyMap());
 	}
 
 }

@@ -1366,29 +1366,27 @@ public class MetadataMarcRecord implements MetadataRecord {
 		return underlayingMarc.getField("773", 'g');
 	}
 
-	protected static final Map<String, String> SFX_PREFIX = new HashMap<>();
-	{
-		SFX_PREFIX.put("FREE", "ANY");
-		SFX_PREFIX.put("SVKOS", "MSVK");
-		SFX_PREFIX.put("CBVK", "JVKCB");
-		SFX_PREFIX.put("KVKL", "KVKLI");
-	}
-
 	protected String generateSfxUrl(String url, String id, Map<String, String> specificParams) {
 		Map<String, String> allParams = new HashMap<>();
 		allParams.put("url_ver", "Z39.88-2004");
 		allParams.put("sfx.ignore_date_threshold", "1");
 		allParams.put("rft.object_id", id);
 
-		String prefix = underlayingMarc.getControlField("003");
-		prefix = prefix.toUpperCase();
-		if (SFX_PREFIX.containsKey(prefix)) {
-			prefix = SFX_PREFIX.get(prefix);
-		}
-		allParams.put("sfx.institute", prefix);
-
 		allParams.putAll(specificParams);
 		return UrlUtils.buildUrl(url, allParams);
+	}
+
+	protected String getSfxInstitute() {
+		return getSfxInstitute(Collections.emptyMap());
+	}
+
+	protected String getSfxInstitute(Map<String, String> sfx_map) {
+		String prefix = underlayingMarc.getControlField("003");
+		prefix = prefix.toUpperCase();
+		if (sfx_map.containsKey(prefix)) {
+			prefix = sfx_map.get(prefix);
+		}
+		return prefix;
 	}
 
 }

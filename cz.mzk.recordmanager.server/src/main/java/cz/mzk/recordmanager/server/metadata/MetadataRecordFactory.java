@@ -3,6 +3,7 @@ package cz.mzk.recordmanager.server.metadata;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 
+import cz.mzk.recordmanager.server.metadata.institutions.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.context.ApplicationContext;
@@ -12,35 +13,6 @@ import cz.mzk.recordmanager.server.dc.DublinCoreParser;
 import cz.mzk.recordmanager.server.dc.DublinCoreRecord;
 import cz.mzk.recordmanager.server.marc.MarcRecord;
 import cz.mzk.recordmanager.server.marc.MarcXmlParser;
-import cz.mzk.recordmanager.server.metadata.institutions.AgrovocMarcMetadataRecord;
-import cz.mzk.recordmanager.server.metadata.institutions.AuthMetadataMarcRecord;
-import cz.mzk.recordmanager.server.metadata.institutions.BmcMetadataMarcRecord;
-import cz.mzk.recordmanager.server.metadata.institutions.Kram3NkpMetadataDublinCoreRecord;
-import cz.mzk.recordmanager.server.metadata.institutions.KramDefaultMetadataDublinCoreRecord;
-import cz.mzk.recordmanager.server.metadata.institutions.TdkivMetadataMarcRecord;
-import cz.mzk.recordmanager.server.metadata.institutions.KramMzkMetadataDublinCoreRecord;
-import cz.mzk.recordmanager.server.metadata.institutions.KramNkpMetadataDublinCoreRecord;
-import cz.mzk.recordmanager.server.metadata.institutions.LibraryMetadataMarcRecord;
-import cz.mzk.recordmanager.server.metadata.institutions.ManuscriptoriumMetadataDublinCoreRecord;
-import cz.mzk.recordmanager.server.metadata.institutions.MeshMarcMetadataRecord;
-import cz.mzk.recordmanager.server.metadata.institutions.MkpEbooksMetadataMarcRecord;
-import cz.mzk.recordmanager.server.metadata.institutions.MzkMetadataMarcRecord;
-import cz.mzk.recordmanager.server.metadata.institutions.MzkNormsMetadataMarcRecord;
-import cz.mzk.recordmanager.server.metadata.institutions.NkpMarcMetadataRecord;
-import cz.mzk.recordmanager.server.metadata.institutions.OpenLibraryMetadataMarcRecord;
-import cz.mzk.recordmanager.server.metadata.institutions.OsobnostiRegionuMetadataMarcRecord;
-import cz.mzk.recordmanager.server.metadata.institutions.PatentsMetadataMarcRecord;
-import cz.mzk.recordmanager.server.metadata.institutions.SfxDirectMetadataMarcRecord;
-import cz.mzk.recordmanager.server.metadata.institutions.SfxJibMetadataMarcRecord;
-import cz.mzk.recordmanager.server.metadata.institutions.SfxKnavMetadataMarcRecord;
-import cz.mzk.recordmanager.server.metadata.institutions.SfxMetadataMarcRecord;
-import cz.mzk.recordmanager.server.metadata.institutions.SfxTechlibMetadataMarcRecord;
-import cz.mzk.recordmanager.server.metadata.institutions.SfxjibNlkPeriodicalsMetadataMarcRecord;
-import cz.mzk.recordmanager.server.metadata.institutions.SkatMarcMetadataRecord;
-import cz.mzk.recordmanager.server.metadata.institutions.SvkulMetadataMarcRecord;
-import cz.mzk.recordmanager.server.metadata.institutions.TreMetadataMarcRecord;
-import cz.mzk.recordmanager.server.metadata.institutions.VkolMarcMetadataRecord;
-import cz.mzk.recordmanager.server.metadata.institutions.ZakonyProLidiMetadataMarcRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecord.HarvestedRecordUniqueId;
 import cz.mzk.recordmanager.server.model.ImportConfiguration;
@@ -116,8 +88,9 @@ public class MetadataRecordFactory {
 		case Constants.PREFIX_SFXJIBSVKHK:
 		case Constants.PREFIX_SFXJIBSVKOS:
 		case Constants.PREFIX_SFXJIBVKOL:
-		case Constants.PREFIX_SFXJIBIREL:
 			return new SfxJibMetadataMarcRecord(marcRec);
+		case Constants.PREFIX_SFXJIBIREL:
+			return new SfxJibIrelMetadataMarcRecord(marcRec);
 		case Constants.PREFIX_SFXJIBKNAV:
 			return new SfxKnavMetadataMarcRecord(marcRec);
 		case Constants.PREFIX_SFXTECHLIBNTK:
