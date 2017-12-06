@@ -292,21 +292,16 @@
  <copyField source="topic"    dest="spellingShingle"/>
  <!-- CopyFields for Faceting on Text -->
  <copyField source="title_full" dest="title_fullStr"/>
- <copyField source="title_full" dest="title_full_unstemmed"/>
  <copyField source="author" dest="authorStr"/>
  <copyField source="author2" dest="author2Str"/>
  <copyField source="author_additional" dest="author_additionalStr"/>
  <copyField source="publisher" dest="publisherStr"/>
- <copyField source="topic" dest="topic_unstemmed"/>
- <copyField source="allfields" dest="allfields_unstemmed"/>
- <copyField source="fulltext" dest="fulltext_unstemmed"/>
  <!-- CopyFields for Alphabetic Browse -->
  <copyField source="topic"    dest="topic_browse"/>
  <copyField source="author"    dest="author_browse"/>
  <copyField source="author2"    dest="author_browse"/>
  <!-- CopyFields for All Fields -->
  <copyField source="format"    dest="allfields"/>
- <copyField source="format"    dest="allfields_unstemmed"/>
  <!-- CopyFields for Autocomplete -->
  <copyField source="author_autocomplete" dest="author_str_mv"/>
  <copyField source="title_auto_str" dest="title_autocomplete"/>
