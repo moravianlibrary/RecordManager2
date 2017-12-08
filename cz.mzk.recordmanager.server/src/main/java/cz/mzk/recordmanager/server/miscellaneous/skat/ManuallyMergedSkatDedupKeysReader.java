@@ -1,31 +1,5 @@
 package cz.mzk.recordmanager.server.miscellaneous.skat;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.time.DateUtils;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.batch.item.ItemReader;
-import org.springframework.batch.item.NonTransientResourceException;
-import org.springframework.batch.item.ParseException;
-import org.springframework.batch.item.UnexpectedInputException;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.model.SkatKey;
 import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordDAO;
@@ -33,6 +7,21 @@ import cz.mzk.recordmanager.server.oai.dao.SkatKeyDAO;
 import cz.mzk.recordmanager.server.util.ApacheHttpClient;
 import cz.mzk.recordmanager.server.util.Constants;
 import cz.mzk.recordmanager.server.util.UrlUtils;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.time.DateUtils;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.batch.item.ItemReader;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class ManuallyMergedSkatDedupKeysReader implements ItemReader<Set<SkatKey>> {
 
@@ -50,10 +39,16 @@ public class ManuallyMergedSkatDedupKeysReader implements ItemReader<Set<SkatKey
 	private static Logger logger = LoggerFactory
 			.getLogger(ManuallyMergedSkatDedupKeysReader.class);
 
+	private static final String SKC_ID_PREFIX = "SKC01-";
+
+	private static final String ALEPH_URL_QUERY = "https://aleph.nkp.cz/F/";
+	private static final String ALEPH_URL_REGEX = "http[s]://aleph.nkp.cz/";
+
 	private static final Pattern PATTERN = Pattern
-			.compile("http://aleph.nkp.cz/F/([A-Z0-9-]*)\\?func=short-mail-0");
+			.compile(ALEPH_URL_REGEX + "F/([A-Z0-9-]*)\\?func=short-mail-0");
 	private static final Pattern PATTERN2 = Pattern
-			.compile("(http://aleph.nkp.cz/exlibris/aleph/a22_1/tmp/[^\\.]*\\.sav)");
+			.compile("(" + ALEPH_URL_REGEX + "exlibris/aleph/a22_1/tmp/[^.]*\\.sav)");
+	private static final Pattern SYSNO = Pattern.compile("System.cislo\\s*([0-9]+)");
 
 	private Date toDate = null;
 	private Date counterDate = null;
@@ -70,8 +65,7 @@ public class ManuallyMergedSkatDedupKeysReader implements ItemReader<Set<SkatKey
 	}
 
 	@Override
-	public Set<SkatKey> read() throws Exception, UnexpectedInputException,
-			ParseException, NonTransientResourceException {
+	public Set<SkatKey> read() throws Exception {
 		Matcher matcher;
 
 		if (toDate == null) {
@@ -91,9 +85,9 @@ public class ManuallyMergedSkatDedupKeysReader implements ItemReader<Set<SkatKey
 					logger.info("File with results not found!!!");
 				} else {
 					sleep(20000, 30000); // wait 20 - 30 seconds
-					SkatIdsStreamReader skatIdsStreamReader = new SkatIdsStreamReader(harvest(matcher.group(1)));
-					while (skatIdsStreamReader.hasNext()) {
-						String id = skatIdsStreamReader.next();
+					matcher = SYSNO.matcher(IOUtils.toString(harvest(matcher.group(1))));
+					while (matcher.find()) {
+						String id = SKC_ID_PREFIX + matcher.group(1);
 						if (id != null) {
 							downloadedKeys.add(id);
 						}
@@ -149,19 +143,17 @@ public class ManuallyMergedSkatDedupKeysReader implements ItemReader<Set<SkatKey
 	}
 
 	protected String prepareAlephBaseUrl(String date) {
-		String url = "http://aleph.nkp.cz/F/";
-
 		Map<String, String> params = new HashMap<>();
 		params.put("func", "find-c");
 		params.put("ccl_term", "ia=sl" + date + "*");
 		params.put("adjacent", "N");
 		params.put("local_base", "SKC");
 
-		return UrlUtils.buildUrl(url, params);
+		return UrlUtils.buildUrl(ALEPH_URL_QUERY, params);
 	}
 
 	protected String prepareAlephMailUrl(String context) {
-		String url = "http://aleph.nkp.cz/F/" + context;
+		String url = ALEPH_URL_QUERY + context;
 
 		Map<String, String> params = new HashMap<>();
 		params.put("func", "short-mail");
