@@ -1,124 +1,104 @@
 package cz.mzk.recordmanager.server.marc.marc4j;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
-import java.io.DataInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.Arrays;
-import java.util.regex.Pattern;
-
-import org.marc4j.Constants;
 import org.marc4j.MarcReader;
 import org.marc4j.marc.DataField;
-import org.marc4j.marc.Leader;
 import org.marc4j.marc.MarcFactory;
 import org.marc4j.marc.Record;
 
-public class MarcAlephStreamReader implements MarcReader{
+import java.io.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+public class MarcAlephStreamReader implements MarcReader {
+
+	private static final Pattern ID_PATTERN = Pattern.compile("^([^ ]*) .*$");
+	private static final Pattern LDR_PATTERN = Pattern.compile("^[^ ]* LDR   L (.*)$");
+	private static final Pattern CF_PATTERN = Pattern.compile("^[^ ]* ([\\w]{3})   L ((?!\\$\\$).*)$");
+	private static final Pattern DF_PATTERN = Pattern.compile("^[^ ]* ([\\w]{3})(.)(.) L (.*)$");
 	private BufferedReader br;
-
-    private MarcFactory factory;
-    
-    private static final Pattern LDR_PATTERN = Pattern.compile("^[^ ]* LDR.*$");
-    
-    private static final String LDR_TAG = "LDR";
-    
-    /**
-     * Constructs an instance with the specified input stream.
-     */
-    public MarcAlephStreamReader(InputStream input) {
-    	this(input, null);
-    }
+	private MarcFactory factory;
+	private String line = null;
+	private String lastRecordId = null;
 
 	/**
-     * Constructs an instance with the specified input stream.
-     */
-    public MarcAlephStreamReader(InputStream input, String encoding) {
-    	br = new BufferedReader(new InputStreamReader(
-                new DataInputStream((input.markSupported()) ? input
-                        : new BufferedInputStream(input))));
-        factory = MarcFactoryImpl.newInstance();
-    }
+	 * Constructs an instance with the specified input stream.
+	 */
+	public MarcAlephStreamReader(InputStream input) {
+		this(input, null);
+	}
 
-    /**
-     * Returns true if the iteration has more records, false otherwise.
-     */
-    public boolean hasNext() {
-    	try {
+	/**
+	 * Constructs an instance with the specified input stream.
+	 */
+	public MarcAlephStreamReader(InputStream input, String encoding) {
+		br = new BufferedReader(new InputStreamReader(
+				new DataInputStream((input.markSupported()) ? input
+						: new BufferedInputStream(input))));
+		factory = MarcFactoryImpl.newInstance();
+	}
+
+	/**
+	 * Returns true if the iteration has more records, false otherwise.
+	 */
+	public boolean hasNext() {
+		try {
 			return br.ready();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		return false;
-    }
+	}
 
-    /**
-     * Returns the next record in the iteration.
-     * 
-     * @return Record - the record object
-     */
-    public Record next() {
-        return nextRecord();
-    }
-    
-    private Record nextRecord() {
-    	try {
-    		Record rec = null;
-    		String newLine;
-			while((newLine = br.readLine()) != null){
-				if(newLine == "" || newLine.isEmpty()) return rec;
-	    		if(LDR_PATTERN.matcher(newLine).find()) rec = factory.newRecord();
-	    		parseLine(rec, newLine);
-	    	}
+	/**
+	 * Returns the next record in the iteration.
+	 *
+	 * @return Record - the record object
+	 */
+	public Record next() {
+		return nextRecord();
+	}
+
+	private Record nextRecord() {
+		try {
+			Record rec = factory.newRecord();
+			Matcher matcher;
+
+			parseLine(rec);
+
+			while ((line = br.readLine()) != null) {
+				if ((matcher = ID_PATTERN.matcher(line)).matches()) {
+					if (lastRecordId == null) { // get first record ID
+						lastRecordId = matcher.group(1);
+					} else if (!matcher.group(1).equals(lastRecordId)) {
+						lastRecordId = matcher.group(1);
+						return rec;
+					}
+				}
+				parseLine(rec);
+			}
 			return rec;
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
-    	return null;
+		return null;
 	}
 
-    private void parseLine(Record record, String newLine) {
-    	
-    	String arrayRec[] = newLine.split("\n");
-    	int idLength = arrayRec[0].indexOf(" ");
-    	int indexData = idLength+9;
-		String f001 = arrayRec[0].substring(0, idLength);
-		boolean exists001 = false;
-		
-    	for(String line : arrayRec) {
-			String tag = line.substring(idLength+1, idLength+4);
-			char ind1 = line.charAt(idLength+4);
-			char ind2 = line.charAt(idLength+5);
-			String data = line.substring(indexData);
-			
-			if(tag.matches(LDR_TAG)){
-				Leader ldr;
-		        ldr = factory.newLeader(data);
-		        record.setLeader(ldr);
+	private void parseLine(Record record) {
+		if (line == null || line.isEmpty() || line.length() == 0) return;
+		Matcher matcher;
+		if ((matcher = LDR_PATTERN.matcher(line)).matches()) {
+			record.setLeader(factory.newLeader(matcher.group(1)));
+		} else if ((matcher = CF_PATTERN.matcher(line)).matches()) {
+			record.addVariableField(factory.newControlField(matcher.group(1), matcher.group(2)));
+		} else if ((matcher = DF_PATTERN.matcher(line)).matches()) {
+			DataField df = factory.newDataField(matcher.group(1), matcher.group(2).charAt(0), matcher.group(3).charAt(0));
+			for (String data : matcher.group(4).split("\\$\\$")) {
+				if (data.length() > 1) { // sf code (1 char) + text
+					df.addSubfield(factory.newSubfield(data.charAt(0), data.substring(1)));
+				}
 			}
-			else if(Constants.CF_TAG_PATTERN.matcher(tag).find()){
-				record.addVariableField(factory.newControlField(tag, data));
-				if(tag.matches("001")) exists001 = true;
-			}
-			else{
-				DataField df = factory.newDataField(tag, ind1, ind2);
-				df = parseDataField(df, data);
-				record.addVariableField(df);
-			}
+			record.addVariableField(df);
 		}
-    	if(!exists001) record.addVariableField(factory.newControlField("001", f001));
-    }
+	}
 
-    private DataField parseDataField(DataField df, String data){
-    	String a[] = data.split("\\$\\$");
-    	for(String sbstr : Arrays.copyOfRange(a, 1, a.length)){
-    		df.addSubfield(factory.newSubfield(sbstr.charAt(0), sbstr.substring(1)));
-    	}
-    	
-    	return df;
-    }
 }
