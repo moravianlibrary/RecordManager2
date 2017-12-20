@@ -1,4 +1,4 @@
-package cz.mzk.recorcmanager.server.adresar;
+package cz.mzk.recordmanager.server.adresar;
 
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
