@@ -1,12 +1,9 @@
 package cz.mzk.recordmanager.server.metadata.institutions;
 
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
 
 import cz.mzk.recordmanager.server.marc.MarcRecord;
 import cz.mzk.recordmanager.server.metadata.MetadataMarcRecord;
-import cz.mzk.recordmanager.server.util.UrlUtils;
 
 public class SfxKnavMetadataMarcRecord extends MetadataMarcRecord {
 
