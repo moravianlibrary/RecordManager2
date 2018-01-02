@@ -87,9 +87,8 @@ public class ManuallyMergedSkatDedupKeysReader implements ItemReader<Set<SkatKey
 					sleep(20000, 30000); // wait 20 - 30 seconds
 					matcher = SYSNO.matcher(IOUtils.toString(harvest(matcher.group(1))));
 					while (matcher.find()) {
-						String id = SKC_ID_PREFIX + matcher.group(1);
-						if (id != null) {
-							downloadedKeys.add(id);
+						if (matcher.group(1) != null) {
+							downloadedKeys.add(SKC_ID_PREFIX + matcher.group(1));
 						}
 					}
 				}
