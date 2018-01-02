@@ -7,7 +7,6 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.regex.Matcher;
@@ -17,14 +16,11 @@ import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
+import cz.mzk.recordmanager.server.util.RecordUtils;
 import org.marc4j.MarcReader;
-import org.marc4j.marc.ControlField;
 import org.marc4j.marc.DataField;
 import org.marc4j.marc.MarcFactory;
 import org.marc4j.marc.Record;
-
-import cz.mzk.recordmanager.server.marc.MarcRecord;
-import cz.mzk.recordmanager.server.marc.MarcRecordImpl;
 
 public class SfxJibXmlStreamReader implements MarcReader {
 
@@ -247,7 +243,7 @@ public class SfxJibXmlStreamReader implements MarcReader {
 						record.setLeader(factory.newLeader(SERIALS.contains(type) ? TEXT_LEADER_SERIAL
 								: TEXT_LEADER_MONOGRAPH));
 						generateFields996(years, volumeFirstYear);
-						return sortFields(record);
+						return RecordUtils.sortFields(record);
 					case ELEMENT_FROM:
 					case ELEMENT_TO:
 						coverage = null;
@@ -333,22 +329,6 @@ public class SfxJibXmlStreamReader implements MarcReader {
 			}
 			record.addVariableField(df);
 		});
-	}
-
-	private Record sortFields(Record record) {
-		Record newRecord = factory.newRecord();
-		newRecord.setLeader(record.getLeader());
-		for (ControlField cf : record.getControlFields()) {
-			newRecord.addVariableField(cf);
-		}
-		MarcRecord marc = new MarcRecordImpl(record);
-		Map<String, List<DataField>> dfMap = marc.getAllFields();
-		for (String tag : new TreeSet<String>(dfMap.keySet())) { // sorted tags
-			for (DataField df : dfMap.get(tag)) {
-				newRecord.addVariableField(df);
-			}
-		}
-		return newRecord;
 	}
 
 }

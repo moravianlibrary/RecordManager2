@@ -15,6 +15,7 @@ import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
+import cz.mzk.recordmanager.server.util.RecordUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.text.WordUtils;
 import org.marc4j.MarcReader;
@@ -330,7 +331,7 @@ public class PatentsXmlStreamReader implements MarcReader{
 						while(xmlReader.hasNext() && xmlReader.getEventType()!=XMLStreamReader.START_ELEMENT){
 							xmlReader.next();
 						}
-						return sortFields(record);
+						return RecordUtils.sortFields(record);
 					case ELEMENT_APPLICATION_REFERENCE:
 						appl_reference = false;
 						break;
@@ -349,7 +350,7 @@ public class PatentsXmlStreamReader implements MarcReader{
 			e.printStackTrace();
 		}
 
-        return sortFields(record);
+        return RecordUtils.sortFields(record);
     }
 
 	private String getText() throws XMLStreamException {
@@ -522,22 +523,5 @@ public class PatentsXmlStreamReader implements MarcReader{
 				"a", "CZ " + docNumber + " " + patentType, "b", TEXT_013b,
 				"c", patentType, "d", date));
 	}
-
-    private Record sortFields(Record record){
-    	Record newRecord = factory.newRecord();
-		newRecord.setLeader(record.getLeader());
-		for(ControlField cf: record.getControlFields()){
-			newRecord.addVariableField(cf);
-		}
-		MarcRecord marc = new MarcRecordImpl(record);
-		Map<String, List<DataField>> dfMap = marc.getAllFields();
-		for(String tag: new TreeSet<String>(dfMap.keySet())){ // sorted tags
-			for(DataField df: dfMap.get(tag)){
-				newRecord.addVariableField(df);
-			}
-		}
-		
-		return newRecord;
-    }
 
 }

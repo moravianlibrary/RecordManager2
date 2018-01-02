@@ -3,22 +3,16 @@ package cz.mzk.recordmanager.server.marc.marc4j;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeSet;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
+import cz.mzk.recordmanager.server.util.RecordUtils;
 import org.marc4j.MarcReader;
-import org.marc4j.marc.ControlField;
 import org.marc4j.marc.DataField;
 import org.marc4j.marc.MarcFactory;
 import org.marc4j.marc.Record;
-
-import cz.mzk.recordmanager.server.marc.MarcRecord;
-import cz.mzk.recordmanager.server.marc.MarcRecordImpl;
 
 public class OsobnostiRegionuXmlStreamReader implements MarcReader{
 	
@@ -162,7 +156,7 @@ public class OsobnostiRegionuXmlStreamReader implements MarcReader{
 						}
 						addField678(sb.toString(), description);
 						addAuthor(primaryName);
-						return sortFields(record);
+						return RecordUtils.sortFields(record);
 					}
 					break;
 				}
@@ -238,23 +232,6 @@ public class OsobnostiRegionuXmlStreamReader implements MarcReader{
     
     private void newSubfield(DataField df, char code, String data){
     	df.addSubfield(factory.newSubfield(code, data));
-    }
-    
-    private Record sortFields(Record record){
-    	Record newRecord = factory.newRecord();
-				
-    	newRecord.setLeader(record.getLeader());
-    	for(ControlField cf: record.getControlFields()){
-    		newRecord.addVariableField(cf);
-    	}
-    	MarcRecord marc = new MarcRecordImpl(record);
-    	Map<String, List<DataField>> dfMap = marc.getAllFields();
-    	for(String tag: new TreeSet<String>(dfMap.keySet())){ // sorted tags
-    		for(DataField df: dfMap.get(tag)){
-    			newRecord.addVariableField(df);
-    		}
-    	}
-    	return newRecord;
     }
     
     private class Person{

@@ -10,26 +10,20 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
-import java.util.TreeSet;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import cz.mzk.recordmanager.server.util.RecordUtils;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.validator.routines.ISBNValidator;
 import org.marc4j.MarcReader;
-import org.marc4j.marc.ControlField;
-import org.marc4j.marc.DataField;
 import org.marc4j.marc.MarcFactory;
 import org.marc4j.marc.Record;
-
-import cz.mzk.recordmanager.server.marc.MarcRecord;
-import cz.mzk.recordmanager.server.marc.MarcRecordImpl;
 
 public class SfxJibNlkCsvStreamReader implements MarcReader {
 
@@ -107,7 +101,7 @@ public class SfxJibNlkCsvStreamReader implements MarcReader {
 		if (sfx.getType() != null) addDataField("300", ' ', ' ', "a", sfx.getType());
 		if (sfx.getUrl() != null) addDataField("856", ' ', ' ', "u", sfx.getUrl());
 		addYears(sfx);
-		sortFields(record);
+		RecordUtils.sortFields(record);
 		return record;
 	}
 
@@ -142,22 +136,6 @@ public class SfxJibNlkCsvStreamReader implements MarcReader {
 
 	private void generateFields996(Set<String> years) {
 		years.forEach(y -> addDataField("996", ' ', ' ', "y", y));
-	}
-
-	private Record sortFields(Record record) {
-		Record newRecord = factory.newRecord();
-		newRecord.setLeader(record.getLeader());
-		for (ControlField cf : record.getControlFields()) {
-			newRecord.addVariableField(cf);
-		}
-		MarcRecord marc = new MarcRecordImpl(record);
-		Map<String, List<DataField>> dfMap = marc.getAllFields();
-		for (String tag : new TreeSet<String>(dfMap.keySet())) { // sorted tags
-			for (DataField df : dfMap.get(tag)) {
-				newRecord.addVariableField(df);
-			}
-		}
-		return newRecord;
 	}
 
 	protected class SfxNlkRecord {
