@@ -1,42 +1,30 @@
 package cz.mzk.recordmanager.server.marc.marc4j;
 
+import cz.mzk.recordmanager.server.ClasspathResourceProvider;
+import cz.mzk.recordmanager.server.scripting.MappingResolver;
+import cz.mzk.recordmanager.server.scripting.ResourceMappingResolver;
+import cz.mzk.recordmanager.server.util.RecordUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.text.WordUtils;
+import org.marc4j.MarcReader;
+import org.marc4j.marc.DataField;
+import org.marc4j.marc.MarcFactory;
+import org.marc4j.marc.Record;
+
+import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
-import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.xml.stream.XMLInputFactory;
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamReader;
-
-import cz.mzk.recordmanager.server.util.RecordUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.text.WordUtils;
-import org.marc4j.MarcReader;
-import org.marc4j.marc.ControlField;
-import org.marc4j.marc.DataField;
-import org.marc4j.marc.MarcFactory;
-import org.marc4j.marc.Record;
-import org.springframework.beans.factory.annotation.Autowired;
-
-import cz.mzk.recordmanager.server.ClasspathResourceProvider;
-import cz.mzk.recordmanager.server.marc.MarcRecord;
-import cz.mzk.recordmanager.server.marc.MarcRecordImpl;
-import cz.mzk.recordmanager.server.marc.MarcXmlParser;
-import cz.mzk.recordmanager.server.scripting.MappingResolver;
-import cz.mzk.recordmanager.server.scripting.ResourceMappingResolver;
-
 public class PatentsXmlStreamReader implements MarcReader{
 
-	@Autowired
-	private MarcXmlParser marcXmlParser;
-	
 	private MappingResolver propertyResolver;
 	
     private Record record;
@@ -95,10 +83,10 @@ public class PatentsXmlStreamReader implements MarcReader{
     private static final String ATTRIBUTE_DOC_NUMBER = "doc-number";
     
     private static final String PATENTS_MAP = "patents.map";
-    
-    private static final Pattern PATTERN_024 = Pattern.compile("(.{4}\\s*\\d+\\/\\d+).*");
-    
-    private static final Pattern A3_PATTERN = Pattern.compile("St36_CZ_(\\d{4})-(\\d+)_A3");
+
+	private static final Pattern PATTERN_024 = Pattern.compile("(.{4}\\s*\\d+/\\d+).*");
+
+	private static final Pattern A3_PATTERN = Pattern.compile("St36_CZ_(\\d{4})-(\\d+)_A3");
     private static final String A3_URL = "http://spisy.upv.cz/Applications/%s/PPVCZ%s_%sA3.pdf";
     private static final Pattern B6_PATTERN = Pattern.compile("St36_CZ_(\\d*)_B6");
     private static final String B6_URL = "http://spisy.upv.cz/Patents/FullDocuments/%s/%s.pdf";
@@ -378,8 +366,8 @@ public class PatentsXmlStreamReader implements MarcReader{
     
     private void addAuthor(boolean personalOrCorporate, boolean b100, boolean b110, String name, String utext) {
     	if (name == null) return;
-    	String tag = null;
-    	if (personalOrCorporate) {
+		String tag;
+		if (personalOrCorporate) {
     		if (b100) tag = "100";
         	else tag = "700";
     		name = WordUtils.capitalizeFully(name);
@@ -494,7 +482,7 @@ public class PatentsXmlStreamReader implements MarcReader{
 		
 		matcher = B6_PATTERN.matcher(record.getControlNumber());
 		if (matcher.matches()) {
-			String dir = null;
+			String dir;
 			if (matcher.group(1).length() <= 3) dir = "0";
 			else {
 				dir = matcher.group(1).substring(0, matcher.group(1).length() - 3);
@@ -504,7 +492,7 @@ public class PatentsXmlStreamReader implements MarcReader{
 		
 		matcher = U1_PATTERN.matcher(record.getControlNumber());
 		if (matcher.matches()) {
-			String dir = null;
+			String dir;
 			if (matcher.group(1).length() <= 3) dir = "0000";
 			else {
 				dir = StringUtils.leftPad(matcher.group(1).substring(0, matcher.group(1).length() - 3), 4, '0');
