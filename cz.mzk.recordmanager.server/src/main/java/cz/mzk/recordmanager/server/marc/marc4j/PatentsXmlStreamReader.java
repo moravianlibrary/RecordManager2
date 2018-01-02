@@ -219,7 +219,7 @@ public class PatentsXmlStreamReader implements MarcReader{
 							abstratcs = true;
 						}
 						break;
-					case ELEMENT_CLASSIFICATION_IPCR:						
+					case ELEMENT_CLASSIFICATION_IPCR:
 						if(xmlReader.getAttributeValue(null, ATTRIBUTE_SEQUENCE).equals("1")){
 							df = factory.newDataField("653", ' ', ' ');
 							b072 = true;
@@ -245,7 +245,7 @@ public class PatentsXmlStreamReader implements MarcReader{
 					case ELEMENT_P:
 						if (abstratcs) {
 							df = factory.newDataField("520", '3', ' ');
-							df.addSubfield(factory.newSubfield('a', xmlReader.getElementText().trim()));
+							df.addSubfield(factory.newSubfield('a', getText().trim()));
 							record.addVariableField(df);
 							abstratcs = false;
 						}
@@ -349,9 +349,25 @@ public class PatentsXmlStreamReader implements MarcReader{
 			e.printStackTrace();
 		}
 
-        return record;
+        return sortFields(record);
     }
-    
+
+	private String getText() throws XMLStreamException {
+		String text = "";
+		while (xmlReader.hasNext()) {
+			xmlReader.next();
+			switch (xmlReader.getEventType()) {
+			case XMLStreamReader.END_ELEMENT:
+				if (xmlReader.getLocalName().equals(ELEMENT_P)) return text;
+				break;
+			case XMLStreamReader.CHARACTERS:
+				text += xmlReader.getText();
+				break;
+			}
+		}
+		return text;
+	}
+
     private boolean isAuthorAvailable(String name) {
     	if (name != null) {
     		return !name.equals(AUTHOR_NOT_AVAILABLE);
