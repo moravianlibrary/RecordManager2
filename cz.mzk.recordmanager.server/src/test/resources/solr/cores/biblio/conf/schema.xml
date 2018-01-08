@@ -250,7 +250,7 @@
    <field name="corporation_viz" type="textProper" indexed="true" stored="true" multiValued="true"/>
    <field name="subject_viz" type="textProper" indexed="true" stored="true" multiValued="true"/>
    <field name="genre_viz" type="textProper" indexed="true" stored="true" multiValued="true"/>
-   <field name="upv_ipc_search" type="upv" indexed="true" stored="true" multiValued="true"/>
+   <field name="upv_ipc_search" type="upv" indexed="true" stored="false" multiValued="true"/>
    <!-- Authority fields  -->
    <field name="heading" type="string" indexed="true" stored="true"/>
    <field name="use_for" type="string" indexed="true" stored="true" multiValued="true"/>
