@@ -1,14 +1,8 @@
 package cz.mzk.recordmanager.server.scripting.marc;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -51,6 +45,7 @@ public class MarcDSL extends BaseDSL {
 	private final static String MAP_CONSPECTUS_NAMES = "conspectus_names.map";
 	private final static String MAP_CONSPECTUS_CATEGORY = "conspectus_category.map";
 	private final static String MAP_CONSPECTUS_SUBCAT_CAT_CHANGE = "conspectus_category_change.map";
+	private final static String MAP_FORMAT_SEARCH = "format_search.map";
 	
 	private final static Pattern FIELD_PATTERN = Pattern
 			.compile("([0-9]{3})([a-zA-Z0-9]*)");
@@ -864,6 +859,19 @@ public class MarcDSL extends BaseDSL {
 			}
 		}
 		record.getFields("024", field -> field.getIndicator1() == '2','a');
+		return results;
+	}
+
+	public Set<String> getFormatForSearching() {
+		Set<String> results = new HashSet<>();
+		for (HarvestedRecordFormatEnum harvestedRecordFormatEnum : metadataRecord.getDetectedFormatList()) {
+			try {
+				List<String> data = translate(MAP_FORMAT_SEARCH, harvestedRecordFormatEnum.name().toLowerCase(), null);
+				if (data != null) results.addAll(Arrays.asList(data.get(0).split(";")));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 		return results;
 	}
 }
