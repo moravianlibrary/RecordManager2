@@ -10,7 +10,7 @@ import cz.mzk.recordmanager.server.metadata.MetadataMarcRecord;
 public class SfxjibNlkMetadataMarcRecord extends MetadataMarcRecord {
 
 	private static final Pattern URL = Pattern
-			.compile("http:\\/\\/www.medvik.cz\\/link\\/access.do");
+			.compile("http://www.medvik.cz/link/access.do");
 
 	public SfxjibNlkMetadataMarcRecord(MarcRecord underlayingMarc) {
 		super(underlayingMarc);

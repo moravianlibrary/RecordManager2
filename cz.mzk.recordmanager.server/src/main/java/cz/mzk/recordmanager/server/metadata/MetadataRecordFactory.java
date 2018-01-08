@@ -98,6 +98,7 @@ public class MetadataRecordFactory {
 		case Constants.PREFIX_SFXTECHLIBVSCHT:
 			return new SfxTechlibMetadataMarcRecord(marcRec);
 		case Constants.PREFIX_SFXJIBNLK:
+			return new SfxjibNlkMetadataMarcRecord(marcRec);
 		case Constants.PREFIX_SFXJIBMUNI:
 			return new SfxDirectMetadataMarcRecord(marcRec);
 		case Constants.PREFIX_CASLIN:
