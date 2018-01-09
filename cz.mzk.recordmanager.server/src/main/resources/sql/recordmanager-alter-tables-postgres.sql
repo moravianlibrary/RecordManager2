@@ -278,7 +278,7 @@ CREATE TABLE sigla (
 );
 
 -- 17.9.2015 mertam
-alter table sigla add CONSTRAINT sigla_import_conf_fk FOREIGN KEY (import_conf_id) REFERENCES import_conf(id)
+alter table sigla add CONSTRAINT sigla_import_conf_fk FOREIGN KEY (import_conf_id) REFERENCES import_conf(id);
 
 --18.9.2015 mertam 
 ALTER TABLE harvested_record ADD COLUMN raw_001_id VARCHAR(128); 
