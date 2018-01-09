@@ -119,14 +119,21 @@ public class MarcDSL extends BaseDSL {
 		return result;
 	}
 
-	public List<String> getLanguages() {
-		Set<String> languages = new HashSet<String>();
+	public Set<String> getLanguages() {
+		Set<String> languages = new HashSet<>();
 		String f008 = record.getControlField("008");
 		if (f008 != null && f008.length() >= 38) {
 			languages.add(f008.substring(35, 38));
 		}
 		languages.addAll(getFields("041ade", SubfieldExtractionMethod.SEPARATED));
-		return new ArrayList<String>(languages);
+
+		Set<String> results = new HashSet<>();
+		for (String language : languages) {
+			language = language.toLowerCase();
+			language = language.replaceAll("\\W", "");
+			results.add(language);
+		}
+		return results;
 	}
 	
 	public String getCountry(){
