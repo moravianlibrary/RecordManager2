@@ -83,7 +83,7 @@ public class Cluster<T extends Clusterable>  {
 	
 	/**
 	 * return set of titles that are similar enough to given {@link Clusterable}
-	 * @param title
+	 * @param titleId
 	 * @return
 	 */
 	public Set<Long> getSimilarTitles(Long titleId) {

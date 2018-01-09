@@ -31,7 +31,6 @@ public interface MarcRecord {
 	 * Get subfields of first field separated by default separator (ie. space)
 	 * 
 	 * @param tag
-	 * @param separator
 	 * @param subfields
 	 * @return
 	 */
