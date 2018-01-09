@@ -56,8 +56,8 @@ public class MetadataMarcRecord implements MetadataRecord {
 	protected static final Pattern PUBLISHER_NUMBER_PATTERN = Pattern.compile("([^\\W]*)");
 	protected static final Pattern CPK0_PATTERN = Pattern.compile("cpk0");
 	protected static final Pattern METAPROXY_TAG_PATTERN = Pattern.compile("[17]..");
-	protected static final String ISBN_CLEAR_REGEX = "[^0-9^X^x]";
-	protected static final String ISMN_CLEAR_REGEX = "[^0-9^M]";
+	protected static final String ISBN_CLEAR_REGEX = "[^0-9Xx]";
+	protected static final String ISMN_CLEAR_REGEX = "[^0-9M]";
 	protected static final String NOTE_FORMAT = "\\(.+\\)";
 	protected static final String BEGIN_BRACKET = "^\\(.*";
 	protected static final String END_BRACKET = ".*\\)$";

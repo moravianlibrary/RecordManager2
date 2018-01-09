@@ -54,7 +54,7 @@ public class MarcDSL extends BaseDSL {
 	
 	private final ISBNValidator isbnValidator = ISBNValidator.getInstance(true);
 	
-	private static final String ISBN_CLEAR_REGEX = "[^0-9^X^x]";
+	private static final String ISBN_CLEAR_REGEX = "[^0-9Xx]";
 	
 	private static final String LINK773_ISBN = "isbn:";
 	private static final String LINK773_ISSN = "issn:";

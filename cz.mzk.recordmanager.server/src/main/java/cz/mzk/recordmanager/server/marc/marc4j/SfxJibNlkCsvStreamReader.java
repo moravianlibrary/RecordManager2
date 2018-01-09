@@ -30,7 +30,7 @@ public class SfxJibNlkCsvStreamReader implements MarcReader {
 	private Record record;
 	private MarcFactory factory = new MarcFactoryImpl();
 	private final ISBNValidator isbnValidator = ISBNValidator.getInstance(true);
-	protected static final String ISBN_CLEAR_REGEX = "[^0-9^X^x]";
+	protected static final String ISBN_CLEAR_REGEX = "[^0-9Xx]";
 
 	private static final String TEXT_LEADER_MONOGRAPH = "00710nam a2200229   4500";
 	private static final String TEXT_LEADER_SERIAL = "00710nas a2200229   4500";
