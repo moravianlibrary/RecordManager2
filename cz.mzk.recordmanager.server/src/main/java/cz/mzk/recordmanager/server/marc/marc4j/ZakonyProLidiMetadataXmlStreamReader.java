@@ -93,7 +93,7 @@ public class ZakonyProLidiMetadataXmlStreamReader implements MarcReader{
     private static final SimpleDateFormat SDF_260 = new SimpleDateFormat(DATE_STRING_260);
     private static final SimpleDateFormat SDF_500 = new SimpleDateFormat(DATE_STRING_500);
     
-    private static final Pattern PATERN245 = Pattern.compile("(?i)((?:[^\\s]+\\s){0,1}(?:vyhláška|"
+    private static final Pattern PATERN245 = Pattern.compile("(?i)((?:[^\\s]+\\s)?(?:vyhláška|"
     		+ "zákon|nález ústavního soudu|nařízení vlády|vládní nařízení|sdělení|rozhodnutí))(.*)");
     
     /**

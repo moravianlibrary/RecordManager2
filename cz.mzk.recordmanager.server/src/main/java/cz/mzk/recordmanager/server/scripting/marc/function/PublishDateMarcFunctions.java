@@ -42,7 +42,7 @@ public class PublishDateMarcFunctions implements MarcRecordFunctions {
 
 	// 1989,1990,1991
 	private static final Pattern LIST_YEAR_PATTERN = Pattern
-			.compile("^([0-9]{4})(,[0-9]{4})+[,]{0,1}$");
+			.compile("^([0-9]{4})(,[0-9]{4})+[,]?$");
 
 	// [1991] or asi 1991
 	private static final Pattern FOUR_DIGIT_YEAR_PATTERN = Pattern
