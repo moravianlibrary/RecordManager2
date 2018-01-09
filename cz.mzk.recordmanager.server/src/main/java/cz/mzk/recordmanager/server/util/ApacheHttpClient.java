@@ -6,10 +6,11 @@ import java.io.InputStream;
 import java.util.Collections;
 import java.util.Map;
 
+import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
+import org.apache.http.impl.client.HttpClientBuilder;
 
 import com.google.common.io.Closeables;
 
@@ -17,7 +18,9 @@ import com.google.common.io.Closeables;
 public class ApacheHttpClient implements HttpClient, Closeable {
 
 	private final CloseableHttpClient httpClient;
-	
+
+	private static final int TIMEOUT = 300;
+
 	public static class ApacheHttpClientInputStream extends InputStream implements Closeable {
 
 		private final CloseableHttpResponse response;
@@ -80,7 +83,12 @@ public class ApacheHttpClient implements HttpClient, Closeable {
 	}
 
 	public ApacheHttpClient() {
-		this.httpClient = HttpClients.createDefault();
+		RequestConfig config = RequestConfig.custom()
+				.setConnectTimeout(TIMEOUT * 1000)
+				.setConnectionRequestTimeout(TIMEOUT * 1000)
+				.setSocketTimeout(TIMEOUT * 1000)
+				.build();
+		this.httpClient = HttpClientBuilder.create().setDefaultRequestConfig(config).build();
 	}
 
 	@Override
