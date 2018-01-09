@@ -69,8 +69,8 @@ public class MarcLineStreamReader implements MarcReader{
     		String newLine;
     		while(br.ready()){
     			newLine = br.readLine();
-    			if(newLine == "" || newLine.isEmpty()) return rec;
-    			if(LDR_PATTERN.matcher(newLine).find()) rec = factory.newRecord();
+				if (newLine.isEmpty()) return rec;
+				if(LDR_PATTERN.matcher(newLine).find()) rec = factory.newRecord();
     			parseLine(rec, newLine);
     		}
 

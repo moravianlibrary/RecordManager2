@@ -69,7 +69,7 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 			title.setTitleStr(MetadataUtils.normalizeAndShorten(
 						title.getTitleStr(),
 						EFFECTIVE_TITLE_LENGTH));
-			if (title.getTitleStr() == "") continue;
+			if (title.getTitleStr().isEmpty()) continue;
 			if (!titles.contains(title)) {
 				titles.add(title);
 			}
@@ -79,7 +79,7 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 		for (ShortTitle shortTitle: metadataRecord.getShortTitles()) {
 			shortTitle.setShortTitleStr(MetadataUtils.normalizeAndShorten(
 					shortTitle.getShortTitleStr(), EFFECTIVE_TITLE_LENGTH));
-			if (shortTitle.getShortTitleStr() == "") continue;
+			if (shortTitle.getShortTitleStr().isEmpty()) continue;
 			if (!shortTitles.contains(shortTitle)) {
 				shortTitles.add(shortTitle);
 			}

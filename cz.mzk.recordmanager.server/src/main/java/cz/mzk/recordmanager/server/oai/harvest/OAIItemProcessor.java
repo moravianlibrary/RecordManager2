@@ -87,7 +87,7 @@ public class OAIItemProcessor implements ItemProcessor<List<OAIRecord>, List<Har
 		HarvestedRecord rec = recordDao.findByIdAndHarvestConfiguration(
 				recordId, configuration);
 		boolean deleted = record.getHeader().isDeleted()
-				|| record.getMetadata().getElement().getTagName() == METADATA_ERROR;
+				|| record.getMetadata().getElement().getTagName().equals(METADATA_ERROR);
 		byte[] recordContent = (deleted) ? null : asByteArray(record.getMetadata().getElement());
 		if (recordContent != null && configuration.isInterceptionEnabled()) {
 			MarcRecordInterceptor interceptor = marcInterceptorFactory.getInterceptor(configuration, recordId, recordContent);

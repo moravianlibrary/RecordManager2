@@ -511,7 +511,7 @@ public class MarcDSL extends BaseDSL {
     }
     
     protected String removeEndPunctuation(String data){
-    	if(data == null || data == "") return null;
+    	if(data == null || data.isEmpty()) return null;
     	data = data.replaceAll("[,;:/\\s]+$", "");
     	if(data.matches(".*[^.]\\.\\.$")) data = data.substring(0, data.length()-1);
     	return data;
@@ -817,7 +817,7 @@ public class MarcDSL extends BaseDSL {
 					}
 				}
 			}
-			if (author != "") results.add(author.trim());
+			if (!author.isEmpty()) results.add(author.trim());
 		}
     	return new ArrayList<>(results);
     }
