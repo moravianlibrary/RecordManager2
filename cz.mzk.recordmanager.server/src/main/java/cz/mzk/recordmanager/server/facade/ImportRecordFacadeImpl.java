@@ -33,7 +33,7 @@ public class ImportRecordFacadeImpl implements ImportRecordFacade {
 	@Autowired
 	private JobExecutor jobExecutor;
 	
-	private static final Pattern LOCAL_IMPORT = Pattern.compile("^local:(.*\\/)([^\\/]*)");
+	private static final Pattern LOCAL_IMPORT = Pattern.compile("^local:(.*/)([^/]*)");
 	
 	private List<String> files = null;
 	

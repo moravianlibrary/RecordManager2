@@ -36,9 +36,9 @@ public class MarcDSL extends BaseDSL {
 	private final static String END_PUNCTUATION = "[:,=;/.]+$";
 	private final static String LEAD_SPACE = "^ *";
 	private final static String PACK_SPACES = " +";
-	private final static String NUMBERS = "([0-9])[\\.,]([0-9])";
+	private final static String NUMBERS = "([0-9])[.,]([0-9])";
 	private final static String SUPPRESS = "<<[^<{2}]*>>";
-	private final static String TO_BLANK = "['\\[\\]\"`!()\\-{};:.,?/\\@*%=^_|~]";
+	private final static String TO_BLANK = "['\\[\\]\"`!()\\-{};:.,?/@*%=^_|~]";
 
 	private final static String MAP_CATEGORY_SUBCATEGORY = "conspectus_category_subcategory.map";
 	private final static String MAP_SUBCATEGORY_NAME = "conspectus_subcategory_name.map";
@@ -513,7 +513,7 @@ public class MarcDSL extends BaseDSL {
     protected String removeEndPunctuation(String data){
     	if(data == null || data == "") return null;
     	data = data.replaceAll("[,;:/\\s]+$", "");
-    	if(data.matches(".*[^\\.]\\.\\.$")) data = data.substring(0, data.length()-1);
+    	if(data.matches(".*[^.]\\.\\.$")) data = data.substring(0, data.length()-1);
     	return data;
     }
     

@@ -24,7 +24,7 @@ public class MetadataUtils {
 			new ClasspathResourceProvider().getResource("/mapping/similarity_words.map"), StandardCharsets.UTF_8)) 
 			.lines().collect(Collectors.toCollection(ArrayList::new));
 
-	private static final Pattern TRAILINGPUNCTUATION_PATTERN = Pattern.compile(".*(([:;,=\\(\\[])|(\\s\\.))$");
+	private static final Pattern TRAILINGPUNCTUATION_PATTERN = Pattern.compile(".*(([:;,=(\\[])|(\\s\\.))$");
 	public static final Pattern NUMBER_PATTERN = Pattern.compile("\\d");
 	public static final List<Pattern> PATTERNS = similarity_words.stream()
 			.map(w -> Pattern.compile("\\b" + w + "\\b", Pattern.CASE_INSENSITIVE)).collect(Collectors.toList());

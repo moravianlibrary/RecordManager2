@@ -41,7 +41,7 @@ public class InspirationImportWriter implements ItemWriter<Map<String, List<Stri
 	public InspirationImportWriter() {
 	}
 	
-	private static final Pattern PATTERN_ID = Pattern.compile("([^\\.]*)\\.(.*)");
+	private static final Pattern PATTERN_ID = Pattern.compile("([^.]*)\\.(.*)");
 	
 	private static final String TEXT_INFO = "Importing inspiration '%s' with %s records";
 	private static final String TEXT_ADD = "Added %s inspirations";

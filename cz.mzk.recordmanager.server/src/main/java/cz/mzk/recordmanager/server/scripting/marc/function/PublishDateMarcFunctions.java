@@ -34,11 +34,11 @@ public class PublishDateMarcFunctions implements MarcRecordFunctions {
 
 	// 2001-2005, 2001/2002
 	private static final Pattern FULL_RANGE_YEAR_PATTERN = Pattern
-			.compile("^([0-9]{4})[\\-|\\/]([0-9]{4})$");
+			.compile("^([0-9]{4})[\\-|/]([0-9]{4})$");
 
 	// 1950-54
 	private static final Pattern SHORTEN_RANGE_YEAR_PATTERN = Pattern
-			.compile("^([0-9]{4})[\\-|\\/]([0-9]{2})$");
+			.compile("^([0-9]{4})[\\-|/]([0-9]{2})$");
 
 	// 1989,1990,1991
 	private static final Pattern LIST_YEAR_PATTERN = Pattern

@@ -79,7 +79,7 @@ public class MarcRecordFactory {
         			
         			// Subfield
         			if(value.length() > 2){
-        				Pattern pattern = Pattern.compile("\\$([a-zA-Z0-9])([^\\$]*)(.*)");
+        				Pattern pattern = Pattern.compile("\\$([a-zA-Z0-9])([^$]*)(.*)");
         				Matcher matcher = pattern.matcher(value);
         				while (matcher.find()) {
         					dataField.addSubfield(marcFactory.newSubfield(matcher.group(1).charAt(0), matcher.group(2)));

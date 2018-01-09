@@ -50,7 +50,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 	protected static final Pattern ISMN_PATTERN = Pattern.compile("([\\dM\\s\\-]*)(.*)");
 	protected static final Pattern ISSN_PATTERN = Pattern.compile("(\\d{4}-\\d{3}[\\dxX])(.*)");
 	protected static final Pattern EAN_PATTERN = Pattern.compile("([0-9]*)(.*)");
-	protected static final Pattern SCALE_PATTERN = Pattern.compile("\\d+[\\ \\^]*\\d+");
+	protected static final Pattern SCALE_PATTERN = Pattern.compile("\\d+[ ^]*\\d+");
 	protected static final Pattern UUID_PATTERN = Pattern.compile("uuid:[\\w-]+");
 	protected static final Pattern OCLC_PATTERN= Pattern.compile("(\\(ocolc\\))(.*)", Pattern.CASE_INSENSITIVE);
 	protected static final Pattern PUBLISHER_NUMBER_PATTERN = Pattern.compile("([^\\W]*)");
@@ -805,7 +805,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 		}
 		Matcher matcher = SCALE_PATTERN.matcher(scaleStr);
 		if (matcher.find()) {
-			String strValue = matcher.group(0).replaceAll("[\\ \\^]+", "");
+			String strValue = matcher.group(0).replaceAll("[ ^]+", "");
 			try {
 				return Long.valueOf(strValue);
 			} catch (NumberFormatException nfe) {

@@ -20,8 +20,8 @@ public class InspirationImportFileReader implements ItemReader<Map<String, List<
 
 	private BufferedReader br;
 	
-	private static final Pattern PATTERN_NAME = Pattern.compile("^\\[([^\\]]*)\\]$");
-	private static final Pattern PATTERN_ID = Pattern.compile("^[^\\.]*\\..*");
+	private static final Pattern PATTERN_NAME = Pattern.compile("^\\[([^]]*)]$");
+	private static final Pattern PATTERN_ID = Pattern.compile("^[^.]*\\..*");
 
 	public InspirationImportFileReader(String filename) throws FileNotFoundException {
 		br = new BufferedReader(new FileReader(new File(filename)));
