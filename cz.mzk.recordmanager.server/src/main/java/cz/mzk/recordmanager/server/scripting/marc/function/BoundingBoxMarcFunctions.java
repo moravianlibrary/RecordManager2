@@ -31,7 +31,7 @@ public strictfp class BoundingBoxMarcFunctions implements MarcRecordFunctions {
 	private static final String SOUTH = "s";
 
 	private static final Pattern PATTERN = Pattern
-			.compile("([eEwWnNsS]{1})(\\d{3})(\\d{2})(\\d{2})");
+			.compile("([eEwWnNsS])(\\d{3})(\\d{2})(\\d{2})");
 
 	private static final SpatialContext SPATIAL_CONTEXT = createSpatialContext();
 
