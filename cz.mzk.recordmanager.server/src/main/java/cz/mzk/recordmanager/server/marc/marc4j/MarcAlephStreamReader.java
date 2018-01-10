@@ -12,8 +12,8 @@ import java.util.regex.Pattern;
 public class MarcAlephStreamReader implements MarcReader {
 
 	private static final Pattern ID_PATTERN = Pattern.compile("^([^ ]*) .*$");
-	private static final Pattern LDR_PATTERN = Pattern.compile("^[^ ]* LDR   L (.*)$");
-	private static final Pattern CF_PATTERN = Pattern.compile("^[^ ]* ([\\w]{3})   L ((?!\\$\\$).*)$");
+	private static final Pattern LDR_PATTERN = Pattern.compile("^[^ ]* LDR {3}L (.*)$");
+	private static final Pattern CF_PATTERN = Pattern.compile("^[^ ]* ([\\w]{3}) {3}L ((?!\\$\\$).*)$");
 	private static final Pattern DF_PATTERN = Pattern.compile("^[^ ]* ([\\w]{3})(.)(.) L (.*)$");
 	private BufferedReader br;
 	private MarcFactory factory;
