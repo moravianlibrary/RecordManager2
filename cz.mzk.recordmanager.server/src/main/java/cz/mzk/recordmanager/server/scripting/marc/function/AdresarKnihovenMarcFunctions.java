@@ -218,18 +218,15 @@ public class AdresarKnihovenMarcFunctions implements MarcRecordFunctions {
 				try {
 					List<String> get = propertyResolver.resolve(MAP_ADRESAR_HOURS).get(String.valueOf(sf.getCode()));
 					if (get != null) {
+						if (sb.length() > 0) sb.append(separator);
 						sb.append(get.get(0) + " " + sf.getData());
-						sb.append(separator);
 					}
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
 			}
 			String temp = sb.toString();
-			if (temp != null && !temp.isEmpty() && temp.endsWith(separator)) {
-				temp = temp.substring(0, temp.length() - separator.length());
-			}
-			return temp;
+			if (!temp.isEmpty()) return temp;
 		}
 		
 		return null;
@@ -237,10 +234,10 @@ public class AdresarKnihovenMarcFunctions implements MarcRecordFunctions {
 	
 	public String adresarGetCpkCode(MarcFunctionContext ctx) {
 		String siglaName;
-		if ((siglaName = getFirstFieldForAdresar(ctx, "SGLa")) != null) {
-			for (Sigla sigla : siglaDao.findSiglaByName(siglaName)) {
-				return configurationDAO.get(sigla.getUniqueId().getImportConfId()).getIdPrefix();
-			}
+		List<Sigla> siglas;
+		if ((siglaName = getFirstFieldForAdresar(ctx, "SGLa")) != null
+				&& !(siglas = siglaDao.findSiglaByName(siglaName)).isEmpty()) {
+			return configurationDAO.get(siglas.get(0).getUniqueId().getImportConfId()).getIdPrefix();
 		}
 		return null;
 	}
