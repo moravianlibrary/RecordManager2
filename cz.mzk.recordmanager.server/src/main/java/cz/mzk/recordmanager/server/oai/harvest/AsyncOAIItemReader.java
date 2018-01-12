@@ -15,7 +15,6 @@ import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemStream;
 import org.springframework.batch.item.ItemStreamException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.support.TransactionTemplate;
 
 import cz.mzk.recordmanager.server.model.OAIGranularity;
 import cz.mzk.recordmanager.server.model.OAIHarvestConfiguration;
@@ -54,9 +53,6 @@ public class AsyncOAIItemReader implements ItemReader<List<OAIRecord>>, ItemStre
 
 	@Autowired
 	private OAIHarvesterFactory harvesterFactory;
-
-	@Autowired
-	private TransactionTemplate template;
 
 	@Autowired
 	private HibernateSessionSynchronizer hibernateSync;

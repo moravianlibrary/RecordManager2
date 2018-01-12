@@ -10,9 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import cz.mzk.recordmanager.server.marc.MarcRecord;
 import cz.mzk.recordmanager.server.marc.MarcXmlParser;
-import cz.mzk.recordmanager.server.metadata.MetadataRecordFactory;
 import cz.mzk.recordmanager.server.model.Cosmotron996;
-import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordDAO;
 import cz.mzk.recordmanager.server.util.ProgressLogger;
 
 public class ExportCosmotron996Processor implements ItemProcessor<Cosmotron996, String> {
@@ -22,13 +20,7 @@ public class ExportCosmotron996Processor implements ItemProcessor<Cosmotron996, 
 	private static Logger logger = LoggerFactory.getLogger(ExportCosmotron996Processor.class);
 
 	@Autowired
-	private MetadataRecordFactory metadataFactory;
-	
-	@Autowired
 	private MarcXmlParser marcXmlParser;
-	
-	@Autowired
-	private HarvestedRecordDAO harvestedRecordDao;
 	
 	private static final String OAI_FIELD = "OAI";
 

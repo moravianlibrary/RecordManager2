@@ -2,7 +2,6 @@ package cz.mzk.recordmanager.server.export;
 
 import cz.mzk.recordmanager.server.marc.MarcRecord;
 import cz.mzk.recordmanager.server.marc.MarcXmlParser;
-import cz.mzk.recordmanager.server.metadata.MetadataRecordFactory;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordDAO;
 import org.springframework.batch.item.ItemProcessor;
@@ -17,9 +16,6 @@ import java.io.InputStream;
 public class ExportRecordsForClassifierProcessor implements ItemProcessor<HarvestedRecord.HarvestedRecordUniqueId, String> {
 
 	private IOFormat iOFormat;
-
-	@Autowired
-	private MetadataRecordFactory metadataFactory;
 
 	@Autowired
 	private MarcXmlParser marcXmlParser;

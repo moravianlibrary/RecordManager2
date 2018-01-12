@@ -3,8 +3,6 @@ package cz.mzk.recordmanager.server.oai.harvest;
 import java.util.Date;
 import java.util.List;
 
-import javax.sql.DataSource;
-
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
@@ -36,10 +34,7 @@ public class CosmotronHarvestJobConfig {
 
     @Autowired
     private StepBuilderFactory steps;
-    
-    @Autowired
-	private DataSource dataSource;
-    
+
     @Bean
     public Job CosmotronHarvestJob(
     		@Qualifier(Constants.JOB_ID_HARVEST_COSMOTRON+":cosmoStep") Step cosmoStep) {

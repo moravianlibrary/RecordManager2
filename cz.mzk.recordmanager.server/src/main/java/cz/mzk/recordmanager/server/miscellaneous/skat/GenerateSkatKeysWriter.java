@@ -16,20 +16,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import cz.mzk.recordmanager.server.model.Sigla;
 import cz.mzk.recordmanager.server.model.SkatKey;
-import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordDAO;
-import cz.mzk.recordmanager.server.oai.dao.SiglaDAO;
 import cz.mzk.recordmanager.server.oai.dao.SkatKeyDAO;
 
 public class GenerateSkatKeysWriter implements ItemWriter<Set<SkatKey>>, StepExecutionListener {
 
 	@Autowired
 	private SkatKeyDAO skatKeyDao;
-
-	@Autowired
-	private HarvestedRecordDAO hrDao;
-
-	@Autowired
-	private SiglaDAO siglaDAO;
 
 	@Autowired
 	private SessionFactory sessionFactory;
@@ -73,7 +65,7 @@ public class GenerateSkatKeysWriter implements ItemWriter<Set<SkatKey>>, StepExe
 				import_conf.add(sigla.getUniqueId().getImportConfId());
 				siglas.put(sigla.getUniqueId().getSigla(), import_conf);
 			} else {
-				siglas.put(sigla.getUniqueId().getSigla(), new ArrayList<Long>(Arrays.asList(sigla.getUniqueId().getImportConfId())));
+				siglas.put(sigla.getUniqueId().getSigla(), new ArrayList<>(Arrays.asList(sigla.getUniqueId().getImportConfId())));
 			}
 		}
 	}

@@ -32,7 +32,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import cz.mzk.recordmanager.server.marc.MarcXmlParser;
 import cz.mzk.recordmanager.server.model.FulltextKramerius;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecord.HarvestedRecordUniqueId;
@@ -64,9 +63,6 @@ public class ManuscriptoriumFulltextWriter implements
 	private Transformer transformer;
 
 	private static final String TEI = "TEI";
-
-	@Autowired
-	private MarcXmlParser marcXmlParser;
 
 	@Override
 	public void write(List<? extends HarvestedRecordUniqueId> items)

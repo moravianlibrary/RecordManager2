@@ -37,9 +37,6 @@ public class OAIItemSingleReader implements ItemReader<List<OAIRecord>>,
 	private OAIHarvesterFactory harvesterFactory;
 
 	@Autowired
-	private HibernateSessionSynchronizer sync;
-
-	@Autowired
 	private HibernateSessionSynchronizer hibernateSync;
 
 	private OAIHarvester harvester;

@@ -14,7 +14,6 @@ import org.springframework.batch.item.ItemWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import cz.mzk.recordmanager.server.dedup.DelegatingDedupKeysParser;
 import cz.mzk.recordmanager.server.marc.MarcRecord;
 import cz.mzk.recordmanager.server.marc.MarcRecordImpl;
 import cz.mzk.recordmanager.server.marc.intercepting.MarcInterceptorFactory;
@@ -34,10 +33,7 @@ import cz.mzk.recordmanager.server.util.CosmotronUtils;
 public class ImportCosmotron996RecordsWriter implements ItemWriter<List<Record>> {
 	
 	private static Logger logger = LoggerFactory.getLogger(ImportCosmotron996RecordsWriter.class);
-	
-	@Autowired
-	private DelegatingDedupKeysParser dedupKeysParser;
-	
+
 	@Autowired
 	private OAIHarvestConfigurationDAO oaiHarvestConfigurationDao;
 	

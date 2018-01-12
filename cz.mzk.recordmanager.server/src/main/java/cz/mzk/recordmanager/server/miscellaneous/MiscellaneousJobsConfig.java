@@ -8,7 +8,6 @@ import java.util.concurrent.Executor;
 
 import javax.sql.DataSource;
 
-import org.hibernate.SessionFactory;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
@@ -27,7 +26,6 @@ import org.springframework.core.task.TaskExecutor;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import cz.mzk.recordmanager.server.export.HarvestedRecordIdRowMapper;
-import cz.mzk.recordmanager.server.index.HarvestedRecordRowMapper;
 import cz.mzk.recordmanager.server.jdbc.LongValueRowMapper;
 import cz.mzk.recordmanager.server.miscellaneous.itemid.GenerateItemIdJobParametersValidator;
 import cz.mzk.recordmanager.server.miscellaneous.itemid.GenerateItemIdWriter;
@@ -38,19 +36,12 @@ import cz.mzk.recordmanager.server.miscellaneous.skat.ManuallyMergedSkatDedupKey
 import cz.mzk.recordmanager.server.miscellaneous.skat.SkatKeysMergedIdsUpdateTasklet;
 import cz.mzk.recordmanager.server.model.SkatKey;
 import cz.mzk.recordmanager.server.model.HarvestedRecord.HarvestedRecordUniqueId;
-import cz.mzk.recordmanager.server.oai.dao.SkatKeyDAO;
 import cz.mzk.recordmanager.server.springbatch.JobFailureListener;
 import cz.mzk.recordmanager.server.springbatch.StepProgressListener;
 import cz.mzk.recordmanager.server.util.Constants;
 
 @Configuration
 public class MiscellaneousJobsConfig {
-	
-	@Autowired
-	private SessionFactory sessionFactory;
-
-	@Autowired
-	private TaskExecutor taskExecutor;
 
 	@Autowired
 	private JobBuilderFactory jobs;
@@ -60,13 +51,7 @@ public class MiscellaneousJobsConfig {
 	
 	@Autowired
 	private DataSource dataSource;
-	
-	@Autowired
-	private HarvestedRecordRowMapper harvestedRecordRowMapper;
-	
-	@Autowired
-	private SkatKeyDAO skatKeysDao;
-	
+
 	private static final Date DATE_OVERRIDEN_BY_EXPRESSION = null;
 	private static final Long LONG_OVERRIDEN_BY_EXPRESSION = null;
 
