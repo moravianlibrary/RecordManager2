@@ -127,16 +127,16 @@ public class SfxJibXmlStreamReader implements MarcReader {
 								xmlReader.getElementText()));
 						break;
 					case ELEMENT_ISSN:
-						isbns.add(getIssnField());
+						issns.add(getIsxnField("022"));
 						break;
 					case ELEMENT_EISSN:
-						isbns.add(0, getIssnField());
+						issns.add(0, getIsxnField("022"));
 						break;
 					case ELEMENT_ISBN:
-						isbns.add(getIsbnField());
+						isbns.add(getIsxnField("020"));
 						break;
 					case ELEMENT_EISBN:
-						isbns.add(0, getIsbnField());
+						isbns.add(0, getIsxnField("020"));
 						break;
 					case ELEMENT_OBJECT_TYPE:
 						type = xmlReader.getElementText();
@@ -281,12 +281,8 @@ public class SfxJibXmlStreamReader implements MarcReader {
 		record.addVariableField(factory.newControlField("005", sdf.format(new Date())));
 	}
 
-	private DataField getIsbnField() throws XMLStreamException {
-		return factory.newDataField("020", ' ', ' ', "a", xmlReader.getElementText());
-	}
-
-	private DataField getIssnField() throws XMLStreamException {
-		return factory.newDataField("022", ' ', ' ', "a", xmlReader.getElementText());
+	private DataField getIsxnField(String tag) throws XMLStreamException {
+		return factory.newDataField(tag, ' ', ' ', "a", xmlReader.getElementText());
 	}
 
 	private Set<String> generateYears(Set<String> years, String fromStr,
