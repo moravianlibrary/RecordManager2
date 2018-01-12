@@ -409,7 +409,7 @@ public class MarcDSL extends BaseDSL {
     	for (DataField dataField: list996) {
     		StringBuilder currentSb = new StringBuilder();
     		// 996 with '0' in subfield 'q'
-    		if (dataField.getSubfield('q') != null && dataField.getSubfields('q').equals("0")) {
+    		if (dataField.getSubfield('q') != null && dataField.getSubfield('q').getData().equals("0")) {
     			continue;
     		}
     		for (Subfield subfield: dataField.getSubfields()) {
