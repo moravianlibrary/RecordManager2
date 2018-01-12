@@ -15,19 +15,14 @@ import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.util.NamedList;
 import org.easymock.Capture;
 import org.easymock.EasyMock;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import cz.mzk.recordmanager.server.AbstractTest;
 import cz.mzk.recordmanager.server.model.FulltextKramerius;
 import cz.mzk.recordmanager.server.solr.SolrServerFacade;
-import cz.mzk.recordmanager.server.solr.SolrServerFactory;
 
 public class KrameriusFulltexterSolrTest extends AbstractTest {
-
-	@Autowired
-	private SolrServerFactory solrServerFactory;
 
 	private SolrServerFacade mockedSolrServer = EasyMock.createMock(SolrServerFacade.class);
 
@@ -63,7 +58,7 @@ public class KrameriusFulltexterSolrTest extends AbstractTest {
 
 		documents.add(pageA);
 		documents.add(page1);
-		documents.add(page1);
+		documents.add(page2);
 		NamedList<Object> solrResponse1 = new NamedList<Object>();
 		solrResponse1.add("response", documents);
 		expect(mockedSolrServer.query(and(capture(capturedQueryRequest), anyObject(SolrQuery.class)))).andReturn(new QueryResponse(solrResponse1, null));
