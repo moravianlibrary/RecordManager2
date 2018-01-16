@@ -75,6 +75,7 @@ public class HarvestedRecordFormat {
 		PATENTS_PATENT_APPLICATIONS(62L),
 		PATENTS_PATENTS(63L),
 		OTHER_DICTIONARY_ENTRY(64L),
+		AUDIO_BRAILLE(65L),
 		OTHER_UNSPECIFIED(100L);
 
 		private Long numValue;

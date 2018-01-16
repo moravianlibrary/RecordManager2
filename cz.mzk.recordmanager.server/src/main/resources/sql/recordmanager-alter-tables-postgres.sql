@@ -1006,3 +1006,6 @@ UPDATE import_conf SET item_id='other',interception_enabled=true WHERE id=356;
 -- 31. 01. 2018 tomascejpek
 DROP INDEX cosmotron_996_conf_id_parent_id_idx;
 CREATE INDEX cosmotron_996_conf_id_parent_id_idx ON cosmotron_996 (parent_record_id,import_conf_id);
+
+-- 01. 02. 2018 tomascejpek
+INSERT INTO harvested_record_format(id, name) VALUES (65, 'AUDIO_BRAILLE');

@@ -726,6 +726,17 @@ public class MetadataMarcRecord implements MetadataRecord {
 		return false;
 
 	}
+
+	private static final Pattern AB_MACAN = Pattern.compile(".*macan.*", Pattern.CASE_INSENSITIVE);
+
+	protected boolean isAudioBraille() {
+		for (String tag : new String[]{"260", "264"}) {
+			for (String f260b : underlayingMarc.getFields(tag, 'b')) {
+				if (AB_MACAN.matcher(f260b).matches()) return true;
+			}
+		}
+		return false;
+	}
 	
 	protected boolean isOthers(){
 		String ldr06 = Character.toString(underlayingMarc.getLeader().getTypeOfRecord());
@@ -782,6 +793,11 @@ public class MetadataMarcRecord implements MetadataRecord {
 		if (audio != null) {
 			if (isAudioDVD()) hrf.add(HarvestedRecordFormatEnum.AUDIO_DVD);
 			else hrf.add(audio);
+			if (isAudioBraille()) {
+				hrf.clear();
+				hrf.add(HarvestedRecordFormatEnum.AUDIO_BRAILLE);
+				return hrf;
+			}
 		}
 		HarvestedRecordFormatEnum video = getVideoDocument();
 		if (video != null) {
