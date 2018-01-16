@@ -3,6 +3,7 @@ package cz.mzk.recordmanager.server.imports;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -102,22 +103,27 @@ public class ImportRecordsWriter implements ItemWriter<List<Record>>, StepExecut
 					marcWriter.setConverter(ISOCharConvertor.INSTANCE);
 					marcWriter.write(currentRecord);
 					marcWriter.close();
+					// need recordId before interception
 					byte[] recordContent = outStream.toByteArray();
-					if (harvestConfiguration.isInterceptionEnabled()) {
-						MarcRecordInterceptor interceptor = marcInterceptorFactory.getInterceptor(harvestConfiguration, recordContent);
-						if (interceptor != null) {
-							recordContent = interceptor.intercept();
-						}
-					}
-					InputStream is = new ByteArrayInputStream(recordContent);
-					MarcRecord marc = marcXmlParser.parseRecord(is);
-					MetadataRecord metadata = metadataFactory.getMetadataRecord(marc, harvestConfiguration);
+					MetadataRecord metadata = parseMetadata(recordContent);
 					String recordId = metadata.getOAIRecordId();
 					if (recordId == null) {
 						recordId = metadata.getUniqueId();
 					}
 					if (regexpExtractor != null) {
 						recordId = regexpExtractor.extract(recordId);
+					}
+					if (harvestConfiguration.isInterceptionEnabled()) {
+						MarcRecordInterceptor interceptor = marcInterceptorFactory.getInterceptor(harvestConfiguration, recordId, recordContent);
+						if (interceptor != null) {
+							byte[] recordContentNew = interceptor.intercept();
+							if (!Arrays.equals(recordContent, recordContentNew)) {
+								// if record content was changed, parse metadata again
+								metadata = parseMetadata(recordContentNew);
+								// set intercepted content
+								recordContent = recordContentNew;
+							}
+						}
 					}
 					HarvestedRecord hr = harvestedRecordDao.findByIdAndHarvestConfiguration(recordId, configurationId);
 					if (hr == null){
@@ -155,6 +161,12 @@ public class ImportRecordsWriter implements ItemWriter<List<Record>>, StepExecut
 				}
 			}
 		}
+	}
+
+	private MetadataRecord parseMetadata(byte[] recordContent) {
+		InputStream is = new ByteArrayInputStream(recordContent);
+		MarcRecord marc = marcXmlParser.parseRecord(is);
+		return metadataFactory.getMetadataRecord(marc, harvestConfiguration);
 	}
 
 	@Override
