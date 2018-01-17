@@ -523,16 +523,16 @@ public class MarcDSL extends BaseDSL {
     	else return list.get(0);
     }
 
-	public String getAuthorDisplay(){
-    	List<DataField> list = record.getDataFields("100");
-    	if(list.isEmpty()) return null;
+	public String getAuthorDisplay() {
+		List<DataField> list = record.getDataFields("100");
+		if (list.isEmpty()) return null;
 		DataField df = list.get(0);
 		String name = getNameForDisplay(df);
-		if(name.isEmpty()) return null;
+		if (name != null && name.isEmpty()) return null;
 		else return name;
-    }
-    
-    public List<String> getAuthor2Display(){
+	}
+
+	public List<String> getAuthor2Display(){
     	List<String> result = new ArrayList<String>();
     	for(DataField df: record.getDataFields("700")){
     		result.add(getNameForDisplay(df));
@@ -553,17 +553,17 @@ public class MarcDSL extends BaseDSL {
 		}
 		return removeEndPunctuation(sb.toString().trim());
     }
-    
-    public String getAuthorExact(){
-    	List<DataField> list = record.getDataFields("100");
-    	if(list.isEmpty()) return null;
+
+	public String getAuthorExact() {
+		List<DataField> list = record.getDataFields("100");
+		if (list.isEmpty()) return null;
 		DataField df = list.get(0);
 		String name = getNameForExact(df);
-		if(name.isEmpty()) return null;
+		if (name != null && name.isEmpty()) return null;
 		else return name;
-    }
-    
-    public String getNameForExact(DataField df) {
+	}
+
+	public String getNameForExact(DataField df) {
     	StringBuilder sb = new StringBuilder();
 		sb.append(changeName(df));
 
