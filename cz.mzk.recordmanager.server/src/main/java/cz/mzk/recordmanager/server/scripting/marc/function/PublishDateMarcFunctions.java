@@ -83,8 +83,6 @@ public class PublishDateMarcFunctions implements MarcRecordFunctions {
 				}
 				catch (NumberFormatException nfe) {
 				}
-			} else {
-//				logger.warn("Range '{}' not matched", range);
 			}
 		}
 		return result;
