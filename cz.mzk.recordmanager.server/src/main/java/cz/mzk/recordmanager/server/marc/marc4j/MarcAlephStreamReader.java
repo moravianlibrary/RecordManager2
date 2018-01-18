@@ -84,7 +84,7 @@ public class MarcAlephStreamReader implements MarcReader {
 	}
 
 	private void parseLine(Record record) {
-		if (line == null || line.isEmpty() || line.length() == 0) return;
+		if (line == null || line.isEmpty()) return;
 		Matcher matcher;
 		if ((matcher = LDR_PATTERN.matcher(line)).matches()) {
 			record.setLeader(factory.newLeader(matcher.group(1)));
