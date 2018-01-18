@@ -3,9 +3,12 @@ package cz.mzk.recordmanager.server.scripting.marc;
 import java.io.IOException;
 import java.util.*;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
+import cz.mzk.recordmanager.server.metadata.ViewType;
 import cz.mzk.recordmanager.server.model.Ean;
 import cz.mzk.recordmanager.server.model.HarvestedRecordFormat.HarvestedRecordFormatEnum;
 import org.apache.commons.validator.routines.ISBNValidator;
@@ -880,5 +883,9 @@ public class MarcDSL extends BaseDSL {
 			}
 		}
 		return results;
+	}
+
+	public List<String> getViewType() {
+		return metadataRecord.getViewType().stream().map(t -> t.getValue()).collect(Collectors.toList());
 	}
 }

@@ -1,5 +1,6 @@
 package cz.mzk.recordmanager.server.metadata;
 
+import java.util.Collections;
 import java.util.List;
 
 import cz.mzk.recordmanager.server.export.IOFormat;
@@ -234,4 +235,7 @@ public interface MetadataRecord {
 
 	public String getSourceInfoG();
 
+	default List<ViewType> getViewType() {
+		return Collections.emptyList();
+	}
 }

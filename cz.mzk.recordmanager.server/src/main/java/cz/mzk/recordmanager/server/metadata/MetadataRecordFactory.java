@@ -131,6 +131,12 @@ public class MetadataRecordFactory {
 			return new TdkivMetadataMarcRecord(marcRec);
 		case Constants.PREFIX_AGROVOC:
 			return new AgrovocMarcMetadataRecord(marcRec);
+		case Constants.PREFIX_ANL:
+			return new AnlMetadataMarcRecord(marcRec);
+		case Constants.PREFIX_IIR:
+			return new IirMetadataMarcRecord(marcRec);
+		case Constants.PREFIX_KNAV:
+			return new KnavMetadataMarcRecord(marcRec);
 		default:
 			return new MetadataMarcRecord(marcRec);
 		}
