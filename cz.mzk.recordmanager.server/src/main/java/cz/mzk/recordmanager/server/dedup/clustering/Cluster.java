@@ -156,7 +156,7 @@ public class Cluster<T extends Clusterable>  {
 			clusters.get(gid1).add(currentKey);
 		}
 		// remove old cluster if necessary
-		if (gid1 != gid2) {
+		if (!gid1.equals(gid2)) {
 			clusters.remove(gid2);
 		}
 	}

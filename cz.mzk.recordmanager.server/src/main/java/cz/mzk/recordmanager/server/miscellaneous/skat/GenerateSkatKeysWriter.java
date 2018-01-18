@@ -35,7 +35,7 @@ public class GenerateSkatKeysWriter implements ItemWriter<Set<SkatKey>>, StepExe
 			for (SkatKey key: list) {
 				skatKeyDao.persist(key);
 
-				if (lastSkatId == key.getSkatKeyId().getSkatHarvestedRecordId()) continue;
+				if (lastSkatId.equals(key.getSkatKeyId().getSkatHarvestedRecordId())) continue;
 				List<Long> import_confs = siglas.get(key.getSkatKeyId().getSigla());
 				if (import_confs == null) continue;
 				for (Long import_conf: import_confs) {
