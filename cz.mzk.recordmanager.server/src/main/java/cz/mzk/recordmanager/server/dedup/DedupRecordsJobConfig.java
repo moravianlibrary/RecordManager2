@@ -48,7 +48,9 @@ public class DedupRecordsJobConfig {
 	private static final String TMP_TABLE_CNB = "tmp_simmilar_books_cnb";
 
 	private static final String TMP_TABLE_EAN = "tmp_simmilar_ean";
-	
+
+	private static final String TMP_TABLE_AUDIO_BRALLE = "tmp_simmilar_audio_braille";
+
 	private static final String TMP_TABLE_PUBLISHER_NUMBER = "tmp_simmilar_publisher_number";
 	
 	private static final String TMP_TABLE_CLUSTER = "tmp_cluster_ids";
@@ -110,6 +112,8 @@ public class DedupRecordsJobConfig {
 	private String prepareTempCnbTableSql = ResourceUtils.asString("job/dedupRecordsJob/prepareTempCnbTable.sql"); 
 
 	private String prepareTempEanTableSql = ResourceUtils.asString("job/dedupRecordsJob/prepareTempEanTable.sql");
+
+	private String prepareTempAudioBrailleTableSql = ResourceUtils.asString("job/dedupRecordsJob/prepareTempAudioBrailleTable.sql");
 
 	private String prepareTempPublisherNumberTableSql = ResourceUtils.asString("job/dedupRecordsJob/prepareTempPublisherNumberTable.sql");
 	
@@ -173,6 +177,8 @@ public class DedupRecordsJobConfig {
 			@Qualifier(Constants.JOB_ID_DEDUP + ":dedupSimpleKeysCnbStep") Step dedupSimpleKeysCnbStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":prepareTempEanTableStep") Step prepareTempEanTableStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":dedupSimpleKeysEanStep") Step dedupSimpleKeysEanStep,
+			@Qualifier(Constants.JOB_ID_DEDUP + ":prepareTempAudioBrailleTableStep") Step prepareTempAudioBrailleTableStep,
+			@Qualifier(Constants.JOB_ID_DEDUP + ":dedupSimpleKeysAudioBrailleStep") Step dedupSimpleKeysAudioBrailleStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":prepareTempPublisherNumberTableStep") Step prepareTempPublisherNumberTableStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":dedupSimpleKeysPublisherNumberStep") Step dedupSimpleKeysPublisherNumberStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":prepareTmpTitleAuthStep") Step prepareTmpTitleAuthStep,
@@ -227,6 +233,8 @@ public class DedupRecordsJobConfig {
 				.next(dedupTitleAuthStep)
 				.next(prepareTempEanTableStep)
 				.next(dedupSimpleKeysEanStep)
+				.next(prepareTempAudioBrailleTableStep)
+				.next(dedupSimpleKeysAudioBrailleStep)
 				.next(prepareTempPublisherNumberTableStep)
 				.next(dedupSimpleKeysPublisherNumberStep)
 				.next(prepareTempCnbClustersTableStep)
@@ -470,7 +478,40 @@ public class DedupRecordsJobConfig {
 	public ItemReader<List<Long>> dedupSimpleKeysEanReader() throws Exception {
 		return dedupSimpleKeysReader(TMP_TABLE_EAN);
 	}
-	
+
+	/**
+	 * dedupSimpleKeysAudioBrailleStep Deduplicate all audio
+	 * year, author, title and record type = AUDIO_BRAILLE
+	 */
+	@Bean(name = "prepareTempTablesStep:prepareTempAudioBrailleTableTasklet")
+	@StepScope
+	public Tasklet prepareTempAudioBrailleTableTasklet() {
+		return new SqlCommandTasklet(prepareTempAudioBrailleTableSql);
+	}
+
+	@Bean(name = Constants.JOB_ID_DEDUP + ":prepareTempAudioBrailleTableStep")
+	public Step prepareTempAudioBrailleTableStep() {
+		return steps.get("prepareTempAudioBrailleTableStep")
+				.listener(new StepProgressListener())
+				.tasklet(prepareTempAudioBrailleTableTasklet()).build();
+	}
+
+	@Bean(name = Constants.JOB_ID_DEDUP + ":dedupSimpleKeysAudioBrailleStep")
+	public Step dedupSimpleKeysAudioBrailleStep() throws Exception {
+		return steps.get("dedupSimpleKeysAudioBrailleStep")
+				.listener(new StepProgressListener())
+				.<List<Long>, List<HarvestedRecord>>chunk(100)
+				.reader(dedupSimpleKeysAudioBrailleReader())
+				.processor(dedupSimpleKeysStepProsessor())
+				.writer(dedupSimpleKeysStepWriter()).build();
+	}
+
+	@Bean(name = "dedupSimpleKeysAudioBrailleStep:reader")
+	@StepScope
+	public ItemReader<List<Long>> dedupSimpleKeysAudioBrailleReader() throws Exception {
+		return dedupSimpleKeysReader(TMP_TABLE_AUDIO_BRALLE);
+	}
+
 	/**
 	 * dedupSimpleKeysPublisherNumberStep Deduplicate all books having equal publication
 	 * year, publication_number and title
