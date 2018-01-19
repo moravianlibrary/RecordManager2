@@ -1,5 +1,8 @@
 package cz.mzk.recordmanager.server.dc;
 
+import cz.mzk.recordmanager.server.export.IOFormat;
+
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,7 +40,7 @@ public class DublinCoreRecordImpl implements DublinCoreRecord {
 		if (this.coverage != null) {
 			return this.coverage;
 		}
-		return new ArrayList<String>();
+		return new ArrayList<>();
 	}
 
 	
@@ -46,7 +49,7 @@ public class DublinCoreRecordImpl implements DublinCoreRecord {
 		if (this.contributor != null) {
 			return this.contributor;
 		}
-		return new ArrayList<String>();
+		return new ArrayList<>();
 	}
 	
 	@Override
@@ -54,7 +57,7 @@ public class DublinCoreRecordImpl implements DublinCoreRecord {
 		if (this.creator != null) {
 			return this.creator;
 		}
-		return new ArrayList<String>();
+		return new ArrayList<>();
 	}
 
 	
@@ -63,7 +66,7 @@ public class DublinCoreRecordImpl implements DublinCoreRecord {
 		if (this.date != null) {
 			return this.date;
 		}
-		return new ArrayList<String>();
+		return new ArrayList<>();
 	}
 
 	@Override
@@ -71,7 +74,7 @@ public class DublinCoreRecordImpl implements DublinCoreRecord {
 		if (this.description != null) {
 			return this.description;
 		}
-		return new ArrayList<String>();
+		return new ArrayList<>();
 	}
 	
 	@Override
@@ -79,7 +82,7 @@ public class DublinCoreRecordImpl implements DublinCoreRecord {
 		if (this.format != null) {
 			return this.format;
 		}
-		return new ArrayList<String>();
+		return new ArrayList<>();
 	}
 	
 	@Override
@@ -87,7 +90,7 @@ public class DublinCoreRecordImpl implements DublinCoreRecord {
 		if (this.identifier != null) {
 			return this.identifier;
 		}
-		return new ArrayList<String>();
+		return new ArrayList<>();
 	}
 
 	@Override
@@ -95,7 +98,7 @@ public class DublinCoreRecordImpl implements DublinCoreRecord {
 		if (this.language != null) {
 			return this.language;
 		}
-		return new ArrayList<String>();
+		return new ArrayList<>();
 	}
 
 	
@@ -104,7 +107,7 @@ public class DublinCoreRecordImpl implements DublinCoreRecord {
 		if (this.publisher != null) {
 			return this.publisher;
 		}
-		return new ArrayList<String>();
+		return new ArrayList<>();
 	}
 	
 	@Override
@@ -112,7 +115,7 @@ public class DublinCoreRecordImpl implements DublinCoreRecord {
 		if (this.relation != null) {
 			return this.relation;
 		}
-		return new ArrayList<String>();
+		return new ArrayList<>();
 	}
 	
 	
@@ -121,7 +124,7 @@ public class DublinCoreRecordImpl implements DublinCoreRecord {
 		if (this.rights != null) {
 			return this.rights;
 		}
-		return new ArrayList<String>();
+		return new ArrayList<>();
 	}
 	
 	@Override
@@ -129,7 +132,7 @@ public class DublinCoreRecordImpl implements DublinCoreRecord {
 		if (this.source != null) {
 			return this.source;
 		}
-		return new ArrayList<String>();
+		return new ArrayList<>();
 	}
 	
 	@Override
@@ -137,7 +140,7 @@ public class DublinCoreRecordImpl implements DublinCoreRecord {
 		if (this.subject != null) {
 			return this.subject;
 		}
-		return new ArrayList<String>();
+		return new ArrayList<>();
 	}
 	
 	@Override
@@ -145,7 +148,7 @@ public class DublinCoreRecordImpl implements DublinCoreRecord {
 		if (this.title != null) {
 			return this.title;
 		}
-		return new ArrayList<String>();
+		return new ArrayList<>();
 	}
 
 	@Override
@@ -153,7 +156,7 @@ public class DublinCoreRecordImpl implements DublinCoreRecord {
 		if (this.type != null) {
 			return this.type;
 		}
-		return new ArrayList<String>();
+		return new ArrayList<>();
 	}
 	
 	@Override
@@ -161,7 +164,7 @@ public class DublinCoreRecordImpl implements DublinCoreRecord {
 		if(this.url != null){
 			return this.url;
 		}
-		return new ArrayList<String>();
+		return new ArrayList<>();
 	}
 
 	@Override
@@ -169,7 +172,7 @@ public class DublinCoreRecordImpl implements DublinCoreRecord {
 		if(this.physical != null){
 			return this.physical;
 		}
-		return new ArrayList<String>();
+		return new ArrayList<>();
 	}
 
 	@Override
@@ -177,7 +180,7 @@ public class DublinCoreRecordImpl implements DublinCoreRecord {
 		if(this.content != null){
 			return this.content;
 		}
-		return new ArrayList<String>();
+		return new ArrayList<>();
 	}
 
 	@Override
@@ -185,7 +188,7 @@ public class DublinCoreRecordImpl implements DublinCoreRecord {
 		if(this.titleAlt != null){
 			return this.titleAlt;
 		}
-		return new ArrayList<String>();
+		return new ArrayList<>();
 	}
 
     /* ADD */
@@ -354,6 +357,14 @@ public class DublinCoreRecordImpl implements DublinCoreRecord {
 			return this.type.get(0);
 		}
 		return null;
+	}
+
+	@Override
+	public String export(IOFormat iOFormat) {
+		if (iOFormat.equals(IOFormat.DC_XML)) {
+			return rawRecord == null ? "" : new String(rawRecord, StandardCharsets.UTF_8);
+		}
+		return "";
 	}
 
 	@Override

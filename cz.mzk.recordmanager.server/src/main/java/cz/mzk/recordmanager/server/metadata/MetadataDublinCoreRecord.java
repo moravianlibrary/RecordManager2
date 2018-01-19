@@ -144,10 +144,7 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 
 	@Override
 	public String export(IOFormat iOFormat) {
-		if (iOFormat.equals(IOFormat.DC_XML)) {
-			return dcRecord.getRawRecord() == null ? "" : dcRecord.getRawRecord().toString();
-		}
-		return "";
+		return dcRecord.export(iOFormat);
 	}
 
 	@Override

@@ -1,5 +1,7 @@
 package cz.mzk.recordmanager.server.dc;
 
+import cz.mzk.recordmanager.server.export.IOFormat;
+
 import java.util.List;
 
 public interface DublinCoreRecord {
@@ -165,7 +167,10 @@ public interface DublinCoreRecord {
 
 	/* gets first title */
 	public String getFirstType();
-	
+
+	/* export record in given format */
+	String export(IOFormat iOFormat);
+
 	public byte[] getRawRecord();
 	
 	public void setRawRecord(byte[] rawRecord);
