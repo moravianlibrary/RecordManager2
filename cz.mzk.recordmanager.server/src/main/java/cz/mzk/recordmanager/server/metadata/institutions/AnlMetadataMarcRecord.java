@@ -15,6 +15,6 @@ public class AnlMetadataMarcRecord extends MetadataMarcRecord {
 
 	@Override
 	public List<ViewType> getViewType() {
-		return isIrelView() ? Collections.emptyList() : Collections.singletonList(ViewType.IREL);
+		return isIrelView() ? Collections.singletonList(ViewType.IREL) : Collections.emptyList();
 	}
 }
