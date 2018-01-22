@@ -196,19 +196,14 @@ public class DublinCoreDSL extends BaseDSL {
 	    }
 	    return isbnsS;    
 	}
-	
-	public List<String> getISSNs() {
-		List<Issn> issns = dcMetadataRecord.getISSNs();
-		List<String> issnsS = new ArrayList<String>();
-		
-	    for (Issn n: issns) {
-	    	String issn = n.getIssn().toString();
-	    	issnsS.add(issn);
-	    }
-	    return issnsS;    
-	}
-	
 
+	public List<String> getISSNs() {
+		List<String> result = new ArrayList<>();
+		for (Issn issn : dcMetadataRecord.getISSNs()) {
+			result.add(issn.getIssn());
+		}
+		return result;
+	}
 
 	public Object methodMissing(String methodName, Object args) {
 		RecordFunction<DublinCoreFunctionContext> func = functions.get(methodName);

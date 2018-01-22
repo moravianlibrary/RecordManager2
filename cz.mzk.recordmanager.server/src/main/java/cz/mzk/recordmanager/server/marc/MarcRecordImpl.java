@@ -238,13 +238,13 @@ public class MarcRecordImpl implements MarcRecord {
 	protected String exportToAlephMarc() {
 		StringBuilder out = new StringBuilder();
 		
-		out.append(record.getControlNumber().toString());
+		out.append(record.getControlNumber());
 		out.append(" LDR   L ");
 		out.append(record.getLeader().toString());
 		out.append('\n');
 		
 		for (ControlField field: record.getControlFields()) {
-			out.append(record.getControlNumber().toString());
+			out.append(record.getControlNumber());
 			out.append(" ");
 			out.append(field.getTag());
 			out.append("   L ");
@@ -253,7 +253,7 @@ public class MarcRecordImpl implements MarcRecord {
 		}
 		
 		for (DataField field: record.getDataFields()) {
-			out.append(record.getControlNumber().toString());
+			out.append(record.getControlNumber());
 			out.append(" ");
 			out.append(field.getTag());
 			out.append(field.getIndicator1());
