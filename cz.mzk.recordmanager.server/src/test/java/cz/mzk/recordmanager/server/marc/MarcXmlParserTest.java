@@ -20,7 +20,7 @@ public class MarcXmlParserTest extends AbstractTest {
 
 	@Autowired
 	private MarcXmlParser parser;
-	
+
 	@Autowired
 	private MetadataRecordFactory metadataFactory;
 
@@ -39,14 +39,13 @@ public class MarcXmlParserTest extends AbstractTest {
 		expectedTitle.setOrderInRecord(1L);
 		Assert.assertEquals(metadataRecord.getTitle().get(0), expectedTitle);
 
-		List<String> fields650 = marc.getFields("650", " ", new char[] { 'a',
-				'z' });
+		List<String> fields650 = marc.getFields("650", " ", 'a', 'z');
 		Assert.assertEquals(fields650.size(), 4);
 		Assert.assertTrue(fields650.contains("obce Česko"));
 		Assert.assertEquals(metadataRecord.getPublicationYear(), new Long(2014));
 		Assert.assertEquals(metadataRecord.getDetectedFormatList().size(), 1);
 		Assert.assertEquals(metadataRecord.getDetectedFormatList().get(0), HarvestedRecordFormatEnum.BOOKS);
-		
+
 		DataFieldMatcher matcher = field -> field.getIndicator1() == ' '
 				&& field.getIndicator2() == '7';
 		marc.getFields("072", matcher, " ", 'x');

@@ -21,7 +21,7 @@ public class ExportCosmotron996Processor implements ItemProcessor<Cosmotron996, 
 
 	@Autowired
 	private MarcXmlParser marcXmlParser;
-	
+
 	private static final String OAI_FIELD = "OAI";
 
 	private ProgressLogger progressLogger;
@@ -30,18 +30,18 @@ public class ExportCosmotron996Processor implements ItemProcessor<Cosmotron996, 
 		this.iOFormat = format;
 		progressLogger = new ProgressLogger(logger, 10000);
 	}
-	
+
 	@Override
 	public String process(Cosmotron996 cosmo996) throws Exception {
 		if (cosmo996 != null && cosmo996.getRawRecord().length != 0) {
 			InputStream is = new ByteArrayInputStream(cosmo996.getRawRecord());
 			MarcRecord marcRecord = marcXmlParser.parseRecord(is);
-			if(marcRecord.getDataFields(OAI_FIELD).isEmpty()){
-				marcRecord.addDataField(OAI_FIELD, ' ', ' ', new String[]{"a", cosmo996.getRecordId()});
+			if (marcRecord.getDataFields(OAI_FIELD).isEmpty()) {
+				marcRecord.addDataField(OAI_FIELD, ' ', ' ', "a", cosmo996.getRecordId());
 			}
 			progressLogger.incrementAndLogProgress();
 			return marcRecord.export(iOFormat);
-		} 
+		}
 		return null;
 	}
 

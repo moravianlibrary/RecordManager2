@@ -35,11 +35,11 @@ public class ExportRecordsForClassifierProcessor implements ItemProcessor<Harves
 		if (record != null && record.getRawRecord().length != 0) {
 			InputStream is = new ByteArrayInputStream(record.getRawRecord());
 			MarcRecord marcRecord = marcXmlParser.parseRecord(is);
-			if(marcRecord.getDataFields(OAI_FIELD).isEmpty()){
-				marcRecord.addDataField(OAI_FIELD, ' ', ' ', new String[]{"a", record.getUniqueId().getRecordId()});
+			if (marcRecord.getDataFields(OAI_FIELD).isEmpty()) {
+				marcRecord.addDataField(OAI_FIELD, ' ', ' ', "a", record.getUniqueId().getRecordId());
 			}
 
-			return marcRecord.getDataFields("080").isEmpty()  ? null: marcRecord.export(iOFormat);
+			return marcRecord.getDataFields("080").isEmpty() ? null : marcRecord.export(iOFormat);
 		}
 		return null;
 	}
