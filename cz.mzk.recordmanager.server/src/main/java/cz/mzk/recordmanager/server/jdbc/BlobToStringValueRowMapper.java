@@ -35,7 +35,7 @@ public class BlobToStringValueRowMapper implements RowMapper<String> {
 			
 			//sometimes there is no OCR, only structure => causes NullPointerException
 			if (is == null) {
-				return new String();
+				return "";
 			}
 			
 			return CharStreams.toString(new InputStreamReader(is, Charsets.UTF_8));

@@ -414,18 +414,16 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 	@Override
 	public String getUUId() {
 		List<String> identifiers = dcRecord.getIdentifiers();
-		String uuid = new String();
-		
-		Pattern p = DC_UUID_PATTERN;
+		String uuid = "";
 		Matcher m;
 
 		for (String f : identifiers) {
-			m = p.matcher(f);
-			if (m.find()) {			
+			m = DC_UUID_PATTERN.matcher(f);
+			if (m.find()) {
 				uuid = m.group(1).trim();
 			}
 		}
-		if(uuid.isEmpty()) return null;
+		if (uuid.isEmpty()) return null;
 		else return uuid;
 	}
 
