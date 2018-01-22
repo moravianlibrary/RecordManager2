@@ -43,7 +43,8 @@ public class AdresarKnihovenMarcFunctions implements MarcRecordFunctions {
 	private static final String URL_COMMENT = "o regionálních knihovnách";
 
 	private static final HashMap<String, Long> relevanceBySigla = new HashMap<>();
-	{
+
+	static {
 		relevanceBySigla.put("ABA001", 16L);
 		relevanceBySigla.put("ABA008", 14L);
 		relevanceBySigla.put("ABA012", 14L);

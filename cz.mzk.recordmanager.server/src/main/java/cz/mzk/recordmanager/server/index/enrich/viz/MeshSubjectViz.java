@@ -17,7 +17,8 @@ public class MeshSubjectViz extends AbstractMeshVizFields implements
 	private static final String SOURCE = Constants.PREFIX_MESH;
 
 	private static HashMap<String, String> SUBJECT_MAP = new HashMap<>();
-	{
+
+	static {
 		SUBJECT_MAP.put("650", "450");
 		SUBJECT_MAP.put("651", "451");
 	}
@@ -34,7 +35,7 @@ public class MeshSubjectViz extends AbstractMeshVizFields implements
 		String enrichField = SUBJECT_MAP.get(split[1]);
 
 		List<String> results = super.getEnrichingValues(split[2], enrichField);
-		
+
 		super.enrichSolrField(document, SolrFieldConstants.SUBJECT_VIZ_FIELD, results);
 	}
 

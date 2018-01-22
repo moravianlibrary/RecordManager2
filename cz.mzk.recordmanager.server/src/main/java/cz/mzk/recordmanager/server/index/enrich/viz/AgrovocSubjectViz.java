@@ -17,7 +17,8 @@ public class AgrovocSubjectViz extends AbstractAgrovocVizFields implements
 	private static final String SOURCE = Constants.PREFIX_AGROVOC;
 
 	private static HashMap<String, String> SUBJECT_MAP = new HashMap<>();
-	{
+
+	static {
 		SUBJECT_MAP.put("650", "450");
 	}
 
@@ -33,7 +34,7 @@ public class AgrovocSubjectViz extends AbstractAgrovocVizFields implements
 		String enrichField = SUBJECT_MAP.get(split[1]);
 
 		List<String> results = super.getEnrichingValues(split[2], enrichField);
-		
+
 		super.enrichSolrField(document, SolrFieldConstants.SUBJECT_VIZ_FIELD, results);
 	}
 

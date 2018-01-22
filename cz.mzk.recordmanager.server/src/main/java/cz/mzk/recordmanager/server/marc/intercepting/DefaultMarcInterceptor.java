@@ -26,8 +26,10 @@ import cz.mzk.recordmanager.server.scripting.ResourceMappingResolver;
 public class DefaultMarcInterceptor implements MarcRecordInterceptor {
 
 	private static Logger logger = LoggerFactory.getLogger(DefaultMarcInterceptor.class);
+	private static final String SIGLA_MAP = "item_id_sigla.map";
 	private static Mapping SIGLA_MAPPING = null;
-	{
+
+	static {
 		if (SIGLA_MAPPING == null) {
 			try {
 				SIGLA_MAPPING = new ResourceMappingResolver(new ClasspathResourceProvider()).resolve(SIGLA_MAP);
@@ -41,7 +43,6 @@ public class DefaultMarcInterceptor implements MarcRecordInterceptor {
 	private String recordId;
 	protected static final MarcFactory MARC_FACTORY = new MarcFactoryImpl();
 	private static final char ITEM_ID_SUBFIELD_CHAR = 't';
-	private static final String SIGLA_MAP = "item_id_sigla.map";
 
 	public DefaultMarcInterceptor(Record record) {
 		this.record = record;

@@ -17,7 +17,8 @@ public class AuthorityCorporationViz extends AbstractAuthorityVizFields
 	private static final String SOURCE = Constants.PREFIX_AUTH;
 
 	private static HashMap<String, String> CORPORATION_MAP = new HashMap<>();
-	{
+
+	static {
 		CORPORATION_MAP.put("110", "410");
 		CORPORATION_MAP.put("111", "411");
 		CORPORATION_MAP.put("710", "410");

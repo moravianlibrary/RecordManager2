@@ -19,8 +19,9 @@ public class SfxJibMetadataMarcRecord extends MetadataMarcRecord {
 		return false;
 	}
 
-	protected static final Map<String, String> SFX_PREFIX = new HashMap<>();
-	{
+	private static final Map<String, String> SFX_PREFIX = new HashMap<>();
+
+	static {
 		SFX_PREFIX.put("FREE", "ANY");
 		SFX_PREFIX.put("SVKOS", "MSVK");
 		SFX_PREFIX.put("CBVK", "JVKCB");

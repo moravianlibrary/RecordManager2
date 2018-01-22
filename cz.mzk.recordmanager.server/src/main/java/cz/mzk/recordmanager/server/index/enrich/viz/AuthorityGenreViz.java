@@ -17,7 +17,8 @@ public class AuthorityGenreViz extends AbstractAuthorityVizFields implements
 	private static final String SOURCE = Constants.PREFIX_AUTH;
 
 	private static HashMap<String, String> GENRE_MAP = new HashMap<>();
-	{
+
+	static {
 		GENRE_MAP.put("655", "455");
 	}
 
@@ -34,7 +35,7 @@ public class AuthorityGenreViz extends AbstractAuthorityVizFields implements
 
 		List<String> results = super.getEnrichingValues(split[2], enrichField);
 
-		super.enrichSolrField(document, SolrFieldConstants.GENRE_VIZ_FIELD,	results);
+		super.enrichSolrField(document, SolrFieldConstants.GENRE_VIZ_FIELD, results);
 	}
 
 }

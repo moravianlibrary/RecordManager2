@@ -17,7 +17,8 @@ public class AuthoritySubjectViz extends AbstractAuthorityVizFields implements
 	private static final String SOURCE = Constants.PREFIX_AUTH;
 
 	private static HashMap<String, String> SUBJECT_MAP = new HashMap<>();
-	{
+
+	static {
 		SUBJECT_MAP.put("600", "400");
 		SUBJECT_MAP.put("610", "410");
 		SUBJECT_MAP.put("611", "411");

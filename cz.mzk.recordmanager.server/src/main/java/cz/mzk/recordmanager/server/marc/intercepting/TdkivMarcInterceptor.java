@@ -23,7 +23,8 @@ public class TdkivMarcInterceptor extends DefaultMarcInterceptor {
 	private static final String DATE_STRING_005 = "yyyyMMddHHmmss'.0'";
 	private static final String TEXT_856y = "heslo v České terminologické databázi knihovnictví a informační vědy";
 	private static final HashMap<String, String> TAGS = new HashMap<>();
-	{
+
+	static {
 		TAGS.put("TER", "150");
 		TAGS.put("EKV", "450");
 		TAGS.put("PTE", "550");
