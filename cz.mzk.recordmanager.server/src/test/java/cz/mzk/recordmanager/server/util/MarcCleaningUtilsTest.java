@@ -1,15 +1,15 @@
 package cz.mzk.recordmanager.server.util;
 
-import java.util.Arrays;
-
 import org.testng.Assert;
 import org.testng.annotations.Test;
+
+import java.util.Collections;
 
 public class MarcCleaningUtilsTest {
 
 	@Test
 	public void cleanFacets() {
-		Assert.assertEquals(MarcCleaningUtils.cleanFacets(Arrays.asList("<foo")), Arrays.asList("<foo"));
+		Assert.assertEquals(MarcCleaningUtils.cleanFacets(Collections.singletonList("<foo")), Collections.singletonList("<foo"));
 	}
 
 }

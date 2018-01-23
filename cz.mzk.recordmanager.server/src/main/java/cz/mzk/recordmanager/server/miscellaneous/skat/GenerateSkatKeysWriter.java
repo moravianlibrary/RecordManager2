@@ -1,10 +1,6 @@
 package cz.mzk.recordmanager.server.miscellaneous.skat;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -65,7 +61,7 @@ public class GenerateSkatKeysWriter implements ItemWriter<Set<SkatKey>>, StepExe
 				import_conf.add(sigla.getUniqueId().getImportConfId());
 				siglas.put(sigla.getUniqueId().getSigla(), import_conf);
 			} else {
-				siglas.put(sigla.getUniqueId().getSigla(), new ArrayList<>(Arrays.asList(sigla.getUniqueId().getImportConfId())));
+				siglas.put(sigla.getUniqueId().getSigla(), new ArrayList<>(Collections.singletonList(sigla.getUniqueId().getImportConfId())));
 			}
 		}
 	}

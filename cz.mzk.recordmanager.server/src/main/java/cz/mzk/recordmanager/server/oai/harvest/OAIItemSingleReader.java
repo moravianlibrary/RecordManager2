@@ -1,6 +1,6 @@
 package cz.mzk.recordmanager.server.oai.harvest;
 
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.batch.core.ExitStatus;
@@ -19,10 +19,10 @@ import cz.mzk.recordmanager.server.oai.model.OAIRecord;
 import cz.mzk.recordmanager.server.util.HibernateSessionSynchronizer;
 import cz.mzk.recordmanager.server.util.HibernateSessionSynchronizer.SessionBinder;
 
-/** 
+/**
  * Reader for harvesting of single item specified by ID
- * @author mjtecka
  *
+ * @author mjtecka
  */
 
 @Component
@@ -48,7 +48,6 @@ public class OAIItemSingleReader implements ItemReader<List<OAIRecord>>,
 
 	private boolean finished = false;
 
-
 	public OAIItemSingleReader(Long confId, String recordId) {
 		super();
 		this.confId = confId;
@@ -57,7 +56,7 @@ public class OAIItemSingleReader implements ItemReader<List<OAIRecord>>,
 
 	/**
 	 * Harvests record by Id
-	 * 
+	 *
 	 * @return single record in list or null if nothing is found
 	 */
 	@Override
@@ -65,15 +64,15 @@ public class OAIItemSingleReader implements ItemReader<List<OAIRecord>>,
 		if (finished) {
 			return null;
 		}
-		
+
 		OAIGetRecord getRecord = harvester.getRecord(recordId);
-	    	    
+
 		if (getRecord == null) {
 			return null;
 		} else {
-		    /* <MJ.> has to finish on 2nd run.. overkill ;-) */
+			/* <MJ.> has to finish on 2nd run.. overkill ;-) */
 			finished = true;
-		    return Arrays.asList(getRecord.getRecord());
+			return Collections.singletonList(getRecord.getRecord());
 		}
 	}
 

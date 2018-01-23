@@ -1,24 +1,23 @@
 package cz.mzk.recordmanager.server.imports;
 
-import static cz.mzk.recordmanager.server.springbatch.JobParameterDeclaration.param;
-
-import java.util.Arrays;
-import java.util.Collection;
-
-import org.springframework.batch.core.JobParameter.ParameterType;
-
 import cz.mzk.recordmanager.server.springbatch.DefaultJobParametersValidator;
 import cz.mzk.recordmanager.server.springbatch.JobParameterDeclaration;
 import cz.mzk.recordmanager.server.util.Constants;
+import org.springframework.batch.core.JobParameter.ParameterType;
+
+import java.util.Collection;
+import java.util.Collections;
+
+import static cz.mzk.recordmanager.server.springbatch.JobParameterDeclaration.param;
 
 public class AntikvariatyImportJobParametersValidator extends
 		DefaultJobParametersValidator {
 
 	@Override
 	public Collection<JobParameterDeclaration> getParameters() {
-		return Arrays.asList(
+		return Collections.singletonList(
 				param(Constants.JOB_PARAM_CONF_ID, ParameterType.LONG, true)//
-				);
+		);
 	}
 
 }
