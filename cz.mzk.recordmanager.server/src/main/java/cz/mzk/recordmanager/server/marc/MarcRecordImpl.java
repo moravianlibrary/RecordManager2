@@ -190,25 +190,22 @@ public class MarcRecordImpl implements MarcRecord {
 		List<DataField> fieldList = dataFields.get(tag);
 		return fieldList.isEmpty() ? null : fieldList.get(0);
 	}
-	
-	
-	
+
 	/**
 	 * get all subfields of {@link DataField} with corresponding codes
+	 *
 	 * @param field
 	 * @param codes
 	 * @return {@link List} of matching {@link Subfield} objects
 	 */
 	public List<Subfield> getSubfields(DataField field, char[] codes) {
-		List<Subfield> sfList = new ArrayList<Subfield>();
+		List<Subfield> sfList = new ArrayList<>();
 		if (field == null) {
 			return sfList;
 		}
-		
-		for (Character c: codes) {
-			for (Subfield subF: field.getSubfields(c)) {
-				sfList.add(subF);
-			}
+
+		for (Character c : codes) {
+			sfList.addAll(field.getSubfields(c));
 		}
 		return sfList;
 	}

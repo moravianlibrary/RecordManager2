@@ -110,10 +110,10 @@ public class OAIOneByOneItemReader implements ItemReader<List<OAIRecord>>,
 		
 		return result.isEmpty() ? null : result;
 	}
-	
+
 	/**
 	 * prepares pendingHeadersQueue. Calls ListIdentfiers verb via OAI if there aren't
-	 * any pending headers left. 
+	 * any pending headers left.
 	 */
 	protected void prepareHeadersQueue() {
 		if (pendingHeadersQueue.isEmpty()) {
@@ -121,14 +121,12 @@ public class OAIOneByOneItemReader implements ItemReader<List<OAIRecord>>,
 				return;
 			}
 			OAIListIdentifiers listIdentifiers = harvester.listIdentifiers(resumptionToken);
-			for (OAIHeader currentHeader: listIdentifiers.getHeaders()) {
-				pendingHeadersQueue.add(currentHeader);
-			}
+			pendingHeadersQueue.addAll(listIdentifiers.getHeaders());
 			resumptionToken = listIdentifiers.getNextResumptionToken();
 			if (resumptionToken == null) {
 				finished = true;
 			}
-		}		
+		}
 	}  
 	
 	/**
