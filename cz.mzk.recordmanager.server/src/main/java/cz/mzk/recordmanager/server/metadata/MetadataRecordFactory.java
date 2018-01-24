@@ -21,19 +21,19 @@ import cz.mzk.recordmanager.server.util.Constants;
 
 @Component
 public class MetadataRecordFactory {
-	
-	@Autowired 
+
+	@Autowired
 	private HarvestedRecordDAO harvestedRecordDao;
-	
+
 	@Autowired
 	private MarcXmlParser marcXmlParser;
-	
+
 	@Autowired
 	private DublinCoreParser dcParser;
 
 	@Autowired
 	private ApplicationContext appCtx;
-	
+
 	public MetadataRecord getMetadataRecord(HarvestedRecord record) {
 		if (record == null) {
 			return null;
@@ -41,28 +41,28 @@ public class MetadataRecordFactory {
 
 		ImportConfiguration configuration = record.getHarvestedFrom();
 		InputStream is = new ByteArrayInputStream(record.getRawRecord());
-		
+
 		String recordFormat = record.getFormat();
-		
-        if (Constants.METADATA_FORMAT_MARC21.equals(recordFormat) 
-        		|| Constants.METADATA_FORMAT_XML_MARC.equals(recordFormat)
-        		|| Constants.METADATA_FORMAT_MARC_CPK.equals(recordFormat)
-        		|| Constants.METADATA_FORMAT_OAI_MARCXML_CPK.equals(recordFormat)
-        		|| Constants.METADATA_FORMAT_MARC21E.equals(recordFormat)) {
-    		MarcRecord marcRec = marcXmlParser.parseRecord(is);
+
+		if (Constants.METADATA_FORMAT_MARC21.equals(recordFormat)
+				|| Constants.METADATA_FORMAT_XML_MARC.equals(recordFormat)
+				|| Constants.METADATA_FORMAT_MARC_CPK.equals(recordFormat)
+				|| Constants.METADATA_FORMAT_OAI_MARCXML_CPK.equals(recordFormat)
+				|| Constants.METADATA_FORMAT_MARC21E.equals(recordFormat)) {
+			MarcRecord marcRec = marcXmlParser.parseRecord(is);
 			return getMetadataRecord(marcRec, configuration);
 		}
-        
-        if (Constants.METADATA_FORMAT_DUBLIN_CORE.equals(recordFormat)
-        		|| Constants.METADATA_FORMAT_ESE.equals(recordFormat)) {
-        	DublinCoreRecord dcRec = dcParser.parseRecord(is);
+
+		if (Constants.METADATA_FORMAT_DUBLIN_CORE.equals(recordFormat)
+				|| Constants.METADATA_FORMAT_ESE.equals(recordFormat)) {
+			DublinCoreRecord dcRec = dcParser.parseRecord(is);
 			return getMetadataRecord(record, dcRec, configuration);
-        }
-        
-        return null;
-    }
-	
-	public MetadataRecord getMetadataRecord(MarcRecord marcRec, ImportConfiguration configuration){
+		}
+
+		return null;
+	}
+
+	public MetadataRecord getMetadataRecord(MarcRecord marcRec, ImportConfiguration configuration) {
 		String prefix = getPrefix(configuration);
 		switch (prefix) {
 		case Constants.PREFIX_MZK:
@@ -131,14 +131,18 @@ public class MetadataRecordFactory {
 			return new TdkivMetadataMarcRecord(marcRec);
 		case Constants.PREFIX_AGROVOC:
 			return new AgrovocMarcMetadataRecord(marcRec);
+		case Constants.PREFIX_KVKL:
+		case Constants.PREFIX_CBVK:
+		case Constants.PREFIX_SVKKL:
+			return new CosmotronMetadataMarcRecord(marcRec);
 		default:
 			return new MetadataMarcRecord(marcRec);
 		}
 	}
-	
-	public MetadataRecord getMetadataRecord(HarvestedRecord hr, DublinCoreRecord dcRec, ImportConfiguration configuration){
+
+	public MetadataRecord getMetadataRecord(HarvestedRecord hr, DublinCoreRecord dcRec, ImportConfiguration configuration) {
 		String prefix = getPrefix(configuration);
-		switch(prefix){
+		switch (prefix) {
 		case Constants.PREFIX_KRAM_MZK:
 			return new KramMzkMetadataDublinCoreRecord(dcRec, hr);
 		case Constants.PREFIX_KRAM_NKP:
@@ -154,24 +158,22 @@ public class MetadataRecordFactory {
 			return new ManuscriptoriumMetadataDublinCoreRecord(dcRec);
 		default:
 			return getMetadataRecord(dcRec);
-    	}
+		}
 	}
-	
+
 	public MetadataRecord getMetadataRecord(HarvestedRecordUniqueId recordId) {
 		return getMetadataRecord(harvestedRecordDao.get(recordId));
 	}
-	
+
 	public MetadataRecord getMetadataRecord(MarcRecord marcRecord) {
-		MetadataRecord metadata = new MetadataMarcRecord(marcRecord);
-		return metadata;
+		return new MetadataMarcRecord(marcRecord);
 	}
 
 	public MetadataRecord getMetadataRecord(DublinCoreRecord dcRecord) {
-		MetadataRecord metadata = new MetadataDublinCoreRecord(dcRecord);
-		return metadata;
+		return new MetadataDublinCoreRecord(dcRecord);
 	}
-	
-	private String getPrefix(ImportConfiguration configuration){
+
+	private String getPrefix(ImportConfiguration configuration) {
 		if (configuration != null) {
 			String prefix;
 			prefix = configuration.getIdPrefix();

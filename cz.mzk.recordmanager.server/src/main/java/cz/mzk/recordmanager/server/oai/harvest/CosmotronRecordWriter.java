@@ -58,24 +58,22 @@ public class CosmotronRecordWriter extends HarvestedRecordWriter implements Item
 			// process not deleted record
 			InputStream is = new ByteArrayInputStream(hr.getRawRecord());
 			MarcRecord mr = marcXmlParser.parseRecord(is);
-			String parentRecordId = CosmotronUtils.get77308w(mr);
+			String parentRecordId = CosmotronUtils.getParentId(mr);
 			if (parentRecordId == null) {
 				super.writeRecord(hr); // new harvested_record
 			} else {
+				// new or updated 996 record
 				Cosmotron996 cr = cosmotronDao.findByIdAndHarvestConfiguration(recordId, configurationId);
 				if (cr == null) {
+					// create new record
 					cr = new Cosmotron996(recordId, configurationId);
 					cr.setHarvested(new Date());
 				}
 				cr.setParentRecordId(parentRecordId);
 				cr.setUpdated(new Date());
-				if (hr.getDeleted() != null) {
-					cr.setDeleted(new Date());
-					cr.setRawRecord(new byte[0]);
-				} else {
-					cr.setDeleted(null);
-					cr.setRawRecord(hr.getRawRecord());
-				}
+				cr.setDeleted(null);
+				cr.setRawRecord(hr.getRawRecord());
+
 				cosmotronDao.persist(cr);
 			}
 		} else super.writeRecord(hr); // process existing harvested record

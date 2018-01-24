@@ -278,4 +278,24 @@ public class CosmotronHarvestJobTest extends AbstractTest {
 		Assert.assertEquals(marcRecord.getDataFields("996").size(), 3);
 	}
 
+	@Test
+	public void testCosmotronArticle() throws Exception {
+		reset(httpClient);
+		InputStream response0 = this.getClass().getResourceAsStream("/sample/Identify.xml");
+		InputStream response1 = this.getClass().getResourceAsStream("/sample/cosmotron/Article.xml");
+		expect(httpClient.executeGet("http://katalog.cbvk.cz/i2/i2.ws.oai.cls?verb=Identify")).andReturn(response0);
+		expect(httpClient.executeGet("http://katalog.cbvk.cz/i2/i2.ws.oai.cls?verb=ListRecords&metadataPrefix=oai_marcxml_cpk")).andReturn(response1);
+		replay(httpClient);
+
+		final Long confID = 328L;
+		Map<String, JobParameter> params = new HashMap<>();
+		params.put(Constants.JOB_PARAM_CONF_ID, new JobParameter(confID));
+		JobExecution exec = jobExecutor.execute(Constants.JOB_ID_HARVEST_COSMOTRON, new JobParameters(params));
+		Assert.assertEquals(exec.getExitStatus(), ExitStatus.COMPLETED);
+
+		OAIHarvestConfiguration config = configDao.get(confID);
+		HarvestedRecord hr = recordDao.findByIdAndHarvestConfiguration("LiUsCat_r011834", config);
+		Assert.assertNotNull(hr);
+		Assert.assertNull(hr.getDeleted());
+	}
 }

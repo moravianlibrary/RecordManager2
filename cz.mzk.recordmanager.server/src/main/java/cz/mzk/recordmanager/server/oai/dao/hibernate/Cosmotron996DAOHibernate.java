@@ -1,13 +1,11 @@
 package cz.mzk.recordmanager.server.oai.dao.hibernate;
 
-import cz.mzk.recordmanager.server.model.HarvestedRecord;
-import cz.mzk.recordmanager.server.model.HarvestedRecord.HarvestedRecordUniqueId;
-import org.hibernate.Session;
-import org.springframework.stereotype.Component;
-
 import cz.mzk.recordmanager.server.model.Cosmotron996;
+import cz.mzk.recordmanager.server.model.HarvestedRecord.HarvestedRecordUniqueId;
 import cz.mzk.recordmanager.server.model.ImportConfiguration;
 import cz.mzk.recordmanager.server.oai.dao.Cosmotron996DAO;
+import org.hibernate.Session;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
@@ -18,12 +16,7 @@ public class Cosmotron996DAOHibernate extends AbstractDomainDAOHibernate<Long, C
 	@Override
 	public Cosmotron996 findByIdAndHarvestConfiguration(String recordId,
 			ImportConfiguration configuration) {
-		Session session = sessionFactory.getCurrentSession();
-		return (Cosmotron996) session
-				.createQuery(
-						"from Cosmotron996 where recordId = ? and harvestedFrom = ?")
-				.setParameter(0, recordId).setParameter(1, configuration.getId())
-				.uniqueResult();
+		return findByIdAndHarvestConfiguration(recordId, configuration.getId());
 	}
 
 	@Override
@@ -31,11 +24,9 @@ public class Cosmotron996DAOHibernate extends AbstractDomainDAOHibernate<Long, C
 			Long configurationId) {
 		Session session = sessionFactory.getCurrentSession();
 		return (Cosmotron996) session
-				.createQuery(
-						"from Cosmotron996 where recordId = ? and harvestedFrom = ?")
+				.createQuery("FROM Cosmotron996 WHERE recordId = ? AND harvestedFrom = ?")
 				.setParameter(0, recordId).setParameter(1, configurationId)
 				.uniqueResult();
-		
 	}
 
 	@SuppressWarnings("unchecked")

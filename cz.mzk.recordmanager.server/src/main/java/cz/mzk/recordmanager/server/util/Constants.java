@@ -93,6 +93,7 @@ public class Constants {
 	public static final String PREFIX_KRAM_NKP			= "kram-nkp";
 	public static final String PREFIX_KRAM_NTK			= "kram-ntk";
 	public static final String PREFIX_KRAM3_NKP			= "kram3-nkp";
+	public static final String PREFIX_KVKL				= "kvkl";
 	public static final String PREFIX_TDKIV				= "tdkiv";
 	public static final String PREFIX_LIBRARY			= "library";
 	public static final String PREFIX_MANUSCRIPTORIUM	= "manuscript";
@@ -125,6 +126,7 @@ public class Constants {
 	public static final String PREFIX_SFXJIBNLK_PERIODICALS	= "sfxnlkper";
 	public static final String PREFIX_SFXJIBIREL		= "sfxjibirel";
 	public static final String PREFIX_SFXKNAV			= "sfxknav";
+	public static final String PREFIX_SVKKL				= "svkkl";
 	public static final String PREFIX_SVKUL				= "svkul";
 	public static final String PREFIX_TRE				= "tre";
 	public static final String PREFIX_VKOL				= "vkol";
