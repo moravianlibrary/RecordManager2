@@ -37,15 +37,31 @@ public class CosmotronRecordWriter extends HarvestedRecordWriter implements Item
 		}
 	}
 
-	protected void processAndSave(HarvestedRecord hr) throws Exception {
+	private void processAndSave(HarvestedRecord hr) throws Exception {
 		if (hr.getId() == null) {
+			String recordId = hr.getUniqueId().getRecordId();
+			// save deleted record
+			if (hr.getDeleted() != null) {
+				Cosmotron996 deleted996;
+				if ((deleted996 = cosmotronDao.findByIdAndHarvestConfiguration(recordId, configurationId)) == null) {
+					// new deleted record
+					super.writeRecord(hr);
+				} else {
+					// delete existing 996 record
+					deleted996.setDeleted(new Date());
+					deleted996.setUpdated(new Date());
+					deleted996.setRawRecord(new byte[0]);
+					cosmotronDao.persist(deleted996);
+				}
+				return;
+			}
+			// process not deleted record
 			InputStream is = new ByteArrayInputStream(hr.getRawRecord());
 			MarcRecord mr = marcXmlParser.parseRecord(is);
 			String parentRecordId = CosmotronUtils.get77308w(mr);
 			if (parentRecordId == null) {
 				super.writeRecord(hr); // new harvested_record
 			} else {
-				String recordId = hr.getUniqueId().getRecordId();
 				Cosmotron996 cr = cosmotronDao.findByIdAndHarvestConfiguration(recordId, configurationId);
 				if (cr == null) {
 					cr = new Cosmotron996(recordId, configurationId);
@@ -62,7 +78,7 @@ public class CosmotronRecordWriter extends HarvestedRecordWriter implements Item
 				}
 				cosmotronDao.persist(cr);
 			}
-		} else super.writeRecord(hr); //
+		} else super.writeRecord(hr); // process existing harvested record
 	}
 
 }

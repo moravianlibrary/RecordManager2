@@ -53,8 +53,8 @@ public class CosmotronHarvestJobConfig {
 			@Qualifier(Constants.JOB_ID_HARVEST_COSMOTRON + ":update996Step") Step update996Step) {
 		return jobs.get(Constants.JOB_ID_HARVEST_COSMOTRON) //
 				.validator(new CosmotronHarvestJobParametersValidator()) //
-				//.start(cosmotronHarvestStep) //
-				.start(update996Step)
+				.start(cosmotronHarvestStep) //
+				.next(update996Step)
 				.build();
 	}
 

@@ -137,7 +137,7 @@ public class HarvestedRecord extends AbstractDomainObject {
 	
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name="harvested_record_id", referencedColumnName="id", nullable=false)
-	private List<Isbn> isbns = new ArrayList<Isbn>();
+	private List<Isbn> isbns = new ArrayList<>();
 	
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name="harvested_record_id", referencedColumnName="id", nullable=false)
@@ -149,15 +149,15 @@ public class HarvestedRecord extends AbstractDomainObject {
 
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name="harvested_record_id", referencedColumnName="id", nullable=false)
-	private List<Issn> issns = new ArrayList<Issn>();
+	private List<Issn> issns = new ArrayList<>();
 	
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name="harvested_record_id", referencedColumnName="id", nullable=false)
-	private List<Cnb> cnb = new ArrayList<Cnb>();
+	private List<Cnb> cnb = new ArrayList<>();
 	
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name="harvested_record_id", referencedColumnName="id", nullable=false)
-	private List<Title> titles = new ArrayList<Title>();
+	private List<Title> titles = new ArrayList<>();
 	
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name="harvested_record_id", referencedColumnName="id", nullable=false)
@@ -165,11 +165,11 @@ public class HarvestedRecord extends AbstractDomainObject {
 	
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name="harvested_record_id", referencedColumnName="id", nullable=false)
-	private List<Oclc> oclcs = new ArrayList<Oclc>();
+	private List<Oclc> oclcs = new ArrayList<>();
 	
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name="harvested_record_id", referencedColumnName="id", nullable=false)
-	private List<Ismn> ismns = new ArrayList<Ismn>();
+	private List<Ismn> ismns = new ArrayList<>();
 	
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name="harvested_record_id", referencedColumnName="id")
@@ -177,11 +177,7 @@ public class HarvestedRecord extends AbstractDomainObject {
 	
 	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.LAZY)
 	@JoinColumn(name="harvested_record_id", referencedColumnName="id")
-	private List<Inspiration> inspiration = new ArrayList<Inspiration>();
-	
-	@OneToMany(cascade = CascadeType.ALL)
-	@JoinColumn(name="harvested_record_id", referencedColumnName="id")
-	private List<Cosmotron996> cosmotron = new ArrayList<Cosmotron996>();
+	private List<Inspiration> inspiration = new ArrayList<>();
 
 	@OneToMany(mappedBy="id.harvestedRecordId", cascade = CascadeType.ALL, orphanRemoval=true)
 	@MapKey(name="id.langStr")
@@ -526,14 +522,6 @@ public class HarvestedRecord extends AbstractDomainObject {
 	@Override
 	public String toString() {
 		return String.format("HarvestedRecord[id=%s, uniqueId=%s]", getId(), getUniqueId());
-	}
-
-	public List<Cosmotron996> getCosmotron() {
-		return cosmotron;
-	}
-
-	public void setCosmotron(List<Cosmotron996> cosmotron) {
-		this.cosmotron = cosmotron;
 	}
 
 	public String getDedupKeysHash() {

@@ -13,7 +13,7 @@
   <OAI_HARVEST_CONF IMPORT_CONF_ID="301" URL="http://oai.medvik.cz/medvik2cpk/oai" METADATA_PREFIX="marc21" GRANULARITY="DAY" />
   <OAI_HARVEST_CONF IMPORT_CONF_ID="302" URL="http://katalog.kjm.cz/l.dll" METADATA_PREFIX="marc21" GRANULARITY="DAY" />
   <OAI_HARVEST_CONF IMPORT_CONF_ID="303" SET_SPEC="complete" URL="http://web2.mlp.cz/cgi/oai" METADATA_PREFIX="marc21" GRANULARITY="SECOND" />
-  <OAI_HARVEST_CONF IMPORT_CONF_ID="328" URL="http://katalog.cbvk.cz/i2/i2.ws.oai.cls" METADATA_PREFIX="oai_marcxml_cpk" GRANULARITY="DAY" />
+  <OAI_HARVEST_CONF IMPORT_CONF_ID="328" URL="http://katalog.cbvk.cz/i2/i2.ws.oai.cls" METADATA_PREFIX="oai_marcxml_cpk" GRANULARITY="DAY" EXTRACT_ID_REGEX="s/[^:]+:[^:]+:([^\\/]+)\\/([^\\/]+)/$1_$2/"/>
   <KRAMERIUS_CONF IMPORT_CONF_ID="99002" URL="http://k4.techlib.cz/search/api/v5.0" QUERY_ROWS="10" METADATA_STREAM="DC" />
   <DEDUP_RECORD ID="1"/>
   <FORMAT FORMAT="marc21-xml" DESCRIPTION="MARC21 XML"/>

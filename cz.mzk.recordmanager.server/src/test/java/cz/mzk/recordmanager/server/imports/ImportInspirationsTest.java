@@ -38,7 +38,7 @@ public class ImportInspirationsTest extends AbstractTest {
 		String file = this.getClass().getResource("/import/inspiration/inspirations.txt").getFile();
 
 		Job job = jobRegistry.getJob(Constants.JOB_ID_IMPORT_INSPIRATION);
-		Map<String, JobParameter> params = new HashMap<String, JobParameter>();
+		Map<String, JobParameter> params = new HashMap<>();
 		params.put(Constants.JOB_PARAM_IN_FILE, new JobParameter(file));
 		JobParameters jobParams = new JobParameters(params);
 		jobLauncher.run(job, jobParams);
@@ -46,7 +46,7 @@ public class ImportInspirationsTest extends AbstractTest {
 		Assert.assertEquals(insDao.findAll().size(), 3);
 
 		job = jobRegistry.getJob(Constants.JOB_ID_DELETE_INSPIRATION);
-		params = new HashMap<String, JobParameter>();
+		params = new HashMap<>();
 		params.put(Constants.JOB_PARAM_DELETE_INSPIRATION, new JobParameter("summer2016"));
 		jobParams = new JobParameters(params);
 		jobLauncher.run(job, jobParams);
