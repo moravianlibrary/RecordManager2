@@ -269,13 +269,13 @@ CREATE TABLE skat_keys (
 
 CREATE TABLE cosmotron_996 (
   id                   DECIMAL(10) PRIMARY KEY,
-  record_id            VARCHAR(128),
   import_conf_id       DECIMAL(10),
+  record_id            VARCHAR(128),
+  parent_record_id     VARCHAR(128),
   harvested            TIMESTAMP,
   updated              TIMESTAMP,
   deleted              TIMESTAMP,
-  raw_record           BLOB,
-  CONSTRAINT cosmotron_996_import_conf_id FOREIGN KEY (import_conf_id) REFERENCES import_conf(id)
+  raw_record           BLOB
 );
 
 CREATE TABLE obalkyknih_toc (

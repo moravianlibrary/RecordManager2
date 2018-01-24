@@ -364,14 +364,15 @@ CREATE TABLE cosmotron_996 (
   id                   DECIMAL(10) PRIMARY KEY,
   import_conf_id       DECIMAL(10),
   record_id            VARCHAR(128),
+  parent_record_id     VARCHAR(128),
   harvested            TIMESTAMP,
   updated              TIMESTAMP,
   deleted              TIMESTAMP,
   raw_record           BYTEA
- );
+);
 
 COMMENT ON TABLE cosmotron_996 IS 'records from cosmotron, used for periodicals';
- 
+
  CREATE TABLE obalkyknih_toc (
   id                   DECIMAL(10) PRIMARY KEY,
   book_id              DECIMAL(10),
