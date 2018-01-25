@@ -23,8 +23,6 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
-import java.util.TreeSet;
 
 public class CosmotronUpdate996Writer implements ItemWriter<HarvestedRecordUniqueId> {
 
@@ -55,6 +53,8 @@ public class CosmotronUpdate996Writer implements ItemWriter<HarvestedRecordUniqu
 	private void move996ToParentRecord(HarvestedRecordUniqueId parentUniqueId) {
 		List<Cosmotron996> childRecs = cosmotronDao.findByParentId(parentUniqueId);
 		HarvestedRecord parentRec = hrDao.get(parentUniqueId);
+		// ignore deleted HarvestedRecord
+		if (parentRec.getDeleted() != null) return;
 		updateMarc(parentRec, childRecs);
 		parentRec.setUpdated(new Date());
 		hrDao.persist(parentRec);
@@ -63,20 +63,15 @@ public class CosmotronUpdate996Writer implements ItemWriter<HarvestedRecordUniqu
 	private void updateMarc(HarvestedRecord parentRec, List<Cosmotron996> childRecs) {
 		InputStream is = new ByteArrayInputStream(parentRec.getRawRecord());
 		Record record = marcXmlParser.parseUnderlyingRecord(is);
-		MarcRecord marcRecord = new MarcRecordImpl(record);
 		Record newRecord = new RecordImpl();
-
-		newRecord.setLeader(marcRecord.getLeader());
+		newRecord.setLeader(record.getLeader());
 		for (ControlField cf : record.getControlFields()) {
 			newRecord.addVariableField(cf);
 		}
-		Map<String, List<DataField>> dfMap = marcRecord.getAllFields();
-		for (String tag : new TreeSet<>(dfMap.keySet())) { // sorted tags
-			for (DataField df : dfMap.get(tag)) {
-				// remove old fields 996
-				if (!df.getTag().equals("996")) {
-					newRecord.addVariableField(df);
-				}
+		for (DataField df : record.getDataFields()) {
+			// remove old fields 996
+			if (!df.getTag().equals("996")) {
+				newRecord.addVariableField(df);
 			}
 		}
 		for (Cosmotron996 new996 : childRecs) {
