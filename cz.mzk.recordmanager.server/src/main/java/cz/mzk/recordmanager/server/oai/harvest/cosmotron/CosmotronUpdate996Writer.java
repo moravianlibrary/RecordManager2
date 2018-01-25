@@ -18,8 +18,6 @@ import org.marc4j.marc.Record;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.List;
@@ -61,8 +59,7 @@ public class CosmotronUpdate996Writer implements ItemWriter<HarvestedRecordUniqu
 	}
 
 	private void updateMarc(HarvestedRecord parentRec, List<Cosmotron996> childRecs) {
-		InputStream is = new ByteArrayInputStream(parentRec.getRawRecord());
-		Record record = marcXmlParser.parseUnderlyingRecord(is);
+		Record record = marcXmlParser.parseUnderlyingRecord(parentRec.getRawRecord());
 		Record newRecord = new RecordImpl();
 		newRecord.setLeader(record.getLeader());
 		for (ControlField cf : record.getControlFields()) {
@@ -89,8 +86,7 @@ public class CosmotronUpdate996Writer implements ItemWriter<HarvestedRecordUniqu
 	}
 
 	private MarcRecord parseMarcRecord(byte[] rawRecord) {
-		InputStream is = new ByteArrayInputStream(rawRecord);
-		Record record = marcXmlParser.parseUnderlyingRecord(is);
+		Record record = marcXmlParser.parseUnderlyingRecord(rawRecord);
 		return new MarcRecordImpl(record);
 	}
 }

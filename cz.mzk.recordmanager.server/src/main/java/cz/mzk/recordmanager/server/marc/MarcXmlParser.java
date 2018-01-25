@@ -6,8 +6,12 @@ import org.marc4j.marc.Record;
 
 public interface MarcXmlParser {
 
-	public MarcRecord parseRecord(InputStream is);
+	MarcRecord parseRecord(InputStream is);
+
+	MarcRecord parseRecord(byte[] rawRecord);
 	
-	public Record parseUnderlyingRecord(InputStream is);
+	Record parseUnderlyingRecord(InputStream is);
+
+	Record parseUnderlyingRecord(byte[] rawRecord);
 
 }
