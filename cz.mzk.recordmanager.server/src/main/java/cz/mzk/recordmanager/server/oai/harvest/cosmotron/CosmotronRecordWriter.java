@@ -1,10 +1,11 @@
-package cz.mzk.recordmanager.server.oai.harvest;
+package cz.mzk.recordmanager.server.oai.harvest.cosmotron;
 
 import cz.mzk.recordmanager.server.marc.MarcRecord;
 import cz.mzk.recordmanager.server.marc.MarcXmlParser;
 import cz.mzk.recordmanager.server.model.Cosmotron996;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.oai.dao.Cosmotron996DAO;
+import cz.mzk.recordmanager.server.oai.harvest.HarvestedRecordWriter;
 import cz.mzk.recordmanager.server.util.CosmotronUtils;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.beans.factory.annotation.Autowired;

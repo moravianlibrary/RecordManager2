@@ -1,8 +1,10 @@
-package cz.mzk.recordmanager.server.oai.harvest;
+package cz.mzk.recordmanager.server.oai.harvest.cosmotron;
 
 import cz.mzk.recordmanager.server.export.HarvestedRecordIdRowMapper;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecord.HarvestedRecordUniqueId;
+import cz.mzk.recordmanager.server.oai.harvest.OAIItemProcessor;
+import cz.mzk.recordmanager.server.oai.harvest.OAIItemReader;
 import cz.mzk.recordmanager.server.oai.model.OAIRecord;
 import cz.mzk.recordmanager.server.springbatch.StepProgressListener;
 import cz.mzk.recordmanager.server.util.Constants;

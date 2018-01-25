@@ -1,4 +1,4 @@
-package cz.mzk.recordmanager.server.oai.harvest;
+package cz.mzk.recordmanager.server.oai.harvest.cosmotron;
 
 import java.util.Arrays;
 import java.util.Collection;

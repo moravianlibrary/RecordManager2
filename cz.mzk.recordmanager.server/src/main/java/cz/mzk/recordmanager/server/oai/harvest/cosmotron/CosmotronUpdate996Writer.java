@@ -1,4 +1,4 @@
-package cz.mzk.recordmanager.server.oai.harvest;
+package cz.mzk.recordmanager.server.oai.harvest.cosmotron;
 
 import cz.mzk.recordmanager.server.dedup.DelegatingDedupKeysParser;
 import cz.mzk.recordmanager.server.export.IOFormat;
