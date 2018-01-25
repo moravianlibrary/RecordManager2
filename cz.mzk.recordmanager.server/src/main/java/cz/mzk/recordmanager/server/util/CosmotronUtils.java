@@ -7,7 +7,7 @@ public class CosmotronUtils {
 
 	public static String getParentId(MarcRecord mr) {
 		String leader = mr.getLeader().toString();
-		if (leader.length() >= 8 && leader.substring(6,8).equals("aa")){
+		if (leader.length() >= 8 && leader.substring(6, 8).equals("aa")) {
 			// article, not record with 996 for periodicals
 			return null;
 		}
@@ -25,6 +25,10 @@ public class CosmotronUtils {
 			}
 		}
 		return null;
+	}
+
+	public static boolean existsFields996(MarcRecord mr) {
+		return !mr.getDataFields("996").isEmpty();
 	}
 
 	private static String parseIdFrom773(String s) {

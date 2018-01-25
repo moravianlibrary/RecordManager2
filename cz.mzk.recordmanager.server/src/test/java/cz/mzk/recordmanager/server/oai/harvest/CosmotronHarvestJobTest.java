@@ -298,4 +298,25 @@ public class CosmotronHarvestJobTest extends AbstractTest {
 		Assert.assertNotNull(hr);
 		Assert.assertNull(hr.getDeleted());
 	}
+
+	@Test
+	public void testRecordWithParentIdAndWithout996() throws Exception {
+		reset(httpClient);
+		InputStream response0 = this.getClass().getResourceAsStream("/sample/Identify.xml");
+		InputStream response1 = this.getClass().getResourceAsStream("/sample/cosmotron/ParentIdNot996.xml");
+		expect(httpClient.executeGet("http://katalog.cbvk.cz/i2/i2.ws.oai.cls?verb=Identify")).andReturn(response0);
+		expect(httpClient.executeGet("http://katalog.cbvk.cz/i2/i2.ws.oai.cls?verb=ListRecords&metadataPrefix=oai_marcxml_cpk")).andReturn(response1);
+		replay(httpClient);
+
+		final Long confID = 328L;
+		Map<String, JobParameter> params = new HashMap<>();
+		params.put(Constants.JOB_PARAM_CONF_ID, new JobParameter(confID));
+		JobExecution exec = jobExecutor.execute(Constants.JOB_ID_HARVEST_COSMOTRON, new JobParameters(params));
+		Assert.assertEquals(exec.getExitStatus(), ExitStatus.COMPLETED);
+
+		OAIHarvestConfiguration config = configDao.get(confID);
+		Cosmotron996 cosmoRec = cosmotronDao.findByIdAndHarvestConfiguration("CbvkUsCat_0000003", config);
+		Assert.assertNotNull(cosmoRec);
+		Assert.assertNotNull(cosmoRec.getDeleted());
+	}
 }
