@@ -12,12 +12,13 @@ public class CosmotronMetadataMarcRecord extends MetadataMarcRecord {
 
 	@Override
 	public boolean matchFilter() {
-		if (CosmotronUtils.getParentId(underlayingMarc) != null
-				&& underlayingMarc.getDataFields("996").isEmpty()) {
-			return false;
-		}
-
-		return true;
+		return CosmotronUtils.getParentId(underlayingMarc) == null
+				|| !underlayingMarc.getDataFields("996").isEmpty();
 	}
 
+	@Override
+	protected boolean isArticle773() {
+		String leader = underlayingMarc.getLeader().toString();
+		return leader.length() >= 8 && leader.substring(6, 8).equals("aa") && super.isArticle773();
+	}
 }
