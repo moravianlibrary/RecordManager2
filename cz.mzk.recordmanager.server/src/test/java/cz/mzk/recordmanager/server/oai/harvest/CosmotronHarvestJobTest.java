@@ -34,31 +34,31 @@ import cz.mzk.recordmanager.server.util.Constants;
 import cz.mzk.recordmanager.server.util.HttpClient;
 
 public class CosmotronHarvestJobTest extends AbstractTest {
-	
+
 	@Autowired
 	private JobExecutor jobExecutor;
-	
+
 	@Autowired
 	private HttpClient httpClient;
-	
+
 	@Autowired
 	private OAIHarvestConfigurationDAO configDao;
-	
+
 	@Autowired
 	private HarvestedRecordDAO recordDao;
-	
+
 	@Autowired
 	private Cosmotron996DAO cosmotronDao;
-	
+
 	@Autowired
 	private MarcXmlParser marcXmlParser;
-	
+
 	@BeforeMethod
 	public void initLocator() throws Exception {
 		dbUnitHelper.init("dbunit/OAIHarvestTest.xml");
 	}
-		
-	@Test 
+
+	@Test
 	public void testHarvestRecords() throws Exception {
 		reset(httpClient);
 		InputStream response0 = this.getClass().getResourceAsStream("/sample/Identify.xml");
@@ -66,13 +66,13 @@ public class CosmotronHarvestJobTest extends AbstractTest {
 		expect(httpClient.executeGet("http://aleph.mzk.cz/OAI?verb=Identify")).andReturn(response0);
 		expect(httpClient.executeGet("http://aleph.mzk.cz/OAI?verb=ListRecords&metadataPrefix=marc21")).andReturn(response1);
 		replay(httpClient);
-			
-		final Long confID = 300L;		
-		Map<String, JobParameter> params = new HashMap<String, JobParameter>();
-		params.put(Constants.JOB_PARAM_CONF_ID, new JobParameter(confID));			
+
+		final Long confID = 300L;
+		Map<String, JobParameter> params = new HashMap<>();
+		params.put(Constants.JOB_PARAM_CONF_ID, new JobParameter(confID));
 		JobExecution exec = jobExecutor.execute(Constants.JOB_ID_HARVEST_COSMOTRON, new JobParameters(params));
 		Assert.assertEquals(exec.getExitStatus(), ExitStatus.COMPLETED);
-		
+
 		HarvestedRecord hr = recordDao.findByIdAndHarvestConfiguration("MZK01-000213478", confID);
 		Assert.assertNotNull(hr);
 		InputStream is = new ByteArrayInputStream(hr.getRawRecord());
@@ -91,18 +91,18 @@ public class CosmotronHarvestJobTest extends AbstractTest {
 		expect(httpClient.executeGet("http://oai.medvik.cz/medvik2cpk/oai?verb=ListRecords&metadataPrefix=marc21")).andReturn(response1);
 		expect(httpClient.executeGet("http://oai.medvik.cz/medvik2cpk/oai?verb=ListRecords&resumptionToken=xaiutmvy00003")).andReturn(response2);
 		replay(httpClient);
-		
+
 		final Long confID = 301L;
-		Map<String, JobParameter> params = new HashMap<String, JobParameter>();
+		Map<String, JobParameter> params = new HashMap<>();
 		params.put(Constants.JOB_PARAM_CONF_ID, new JobParameter(confID));
 		JobExecution exec = jobExecutor.execute(Constants.JOB_ID_HARVEST_COSMOTRON, new JobParameters(params));
 		Assert.assertEquals(exec.getExitStatus(), ExitStatus.COMPLETED);
-		
+
 		HarvestedRecord record = recordDao.findByIdAndHarvestConfiguration("111111", confID);
 		Assert.assertNotNull(record, "Record not stored.");
 		Assert.assertNotNull(record.getDeleted());
 	}
-	
+
 	@Test
 	public void testDeletedRecord() throws Exception {
 		reset(httpClient);
@@ -111,19 +111,19 @@ public class CosmotronHarvestJobTest extends AbstractTest {
 		expect(httpClient.executeGet("http://katalog.cbvk.cz/i2/i2.ws.oai.cls?verb=Identify")).andReturn(response0);
 		expect(httpClient.executeGet("http://katalog.cbvk.cz/i2/i2.ws.oai.cls?verb=ListRecords&metadataPrefix=oai_marcxml_cpk")).andReturn(response1);
 		replay(httpClient);
-		
+
 		final Long confID = 328L;
-		Map<String, JobParameter> params = new HashMap<String, JobParameter>();
+		Map<String, JobParameter> params = new HashMap<>();
 		params.put(Constants.JOB_PARAM_CONF_ID, new JobParameter(confID));
 		JobExecution exec = jobExecutor.execute(Constants.JOB_ID_HARVEST_COSMOTRON, new JobParameters(params));
 		Assert.assertEquals(exec.getExitStatus(), ExitStatus.COMPLETED);
-		
-		HarvestedRecord record = recordDao.findByIdAndHarvestConfiguration("CbvkUsCat"+Constants.COSMOTRON_RECORD_ID_CHAR+"0000003", confID);
+
+		HarvestedRecord record = recordDao.findByIdAndHarvestConfiguration("CbvkUsCat" + Constants.COSMOTRON_RECORD_ID_CHAR + "0000003", confID);
 		Assert.assertNotNull(record, "Record not stored.");
 		Assert.assertNotNull(record.getDeleted());
 	}
-	
-	@Test 
+
+	@Test
 	public void testNotStored() throws Exception {
 		reset(httpClient);
 		InputStream response0 = this.getClass().getResourceAsStream("/sample/Identify.xml");
@@ -131,18 +131,18 @@ public class CosmotronHarvestJobTest extends AbstractTest {
 		expect(httpClient.executeGet("http://katalog.cbvk.cz/i2/i2.ws.oai.cls?verb=Identify")).andReturn(response0);
 		expect(httpClient.executeGet("http://katalog.cbvk.cz/i2/i2.ws.oai.cls?verb=ListRecords&metadataPrefix=oai_marcxml_cpk")).andReturn(response1);
 		replay(httpClient);
-			
-		final Long confID = 328L;		
-		Map<String, JobParameter> params = new HashMap<String, JobParameter>();
-		params.put(Constants.JOB_PARAM_CONF_ID, new JobParameter(confID));			
+
+		final Long confID = 328L;
+		Map<String, JobParameter> params = new HashMap<>();
+		params.put(Constants.JOB_PARAM_CONF_ID, new JobParameter(confID));
 		JobExecution exec = jobExecutor.execute(Constants.JOB_ID_HARVEST_COSMOTRON, new JobParameters(params));
 		Assert.assertEquals(exec.getExitStatus(), ExitStatus.COMPLETED);
-		
-		Assert.assertNull(recordDao.findByIdAndHarvestConfiguration("CbvkUsCat"+Constants.COSMOTRON_RECORD_ID_CHAR+"m0000003", confID));
-		Assert.assertNull(recordDao.findByIdAndHarvestConfiguration("CbvkUsCat"+Constants.COSMOTRON_RECORD_ID_CHAR+"m0000004", confID));
+
+		Assert.assertNull(recordDao.findByIdAndHarvestConfiguration("CbvkUsCat" + Constants.COSMOTRON_RECORD_ID_CHAR + "m0000003", confID));
+		Assert.assertNull(recordDao.findByIdAndHarvestConfiguration("CbvkUsCat" + Constants.COSMOTRON_RECORD_ID_CHAR + "m0000004", confID));
 	}
-	
-	@Test 
+
+	@Test
 	public void testNew996() throws Exception {
 		reset(httpClient);
 		InputStream response0 = this.getClass().getResourceAsStream("/sample/Identify.xml");
@@ -151,27 +151,27 @@ public class CosmotronHarvestJobTest extends AbstractTest {
 		expect(httpClient.executeGet("http://katalog.cbvk.cz/i2/i2.ws.oai.cls?verb=Identify")).andReturn(response0);
 		expect(httpClient.executeGet("http://katalog.cbvk.cz/i2/i2.ws.oai.cls?verb=ListRecords&metadataPrefix=oai_marcxml_cpk")).andReturn(response1);
 		expect(httpClient.executeGet("http://katalog.cbvk.cz/i2/i2.ws.oai.cls?verb=ListRecords&resumptionToken=12345")).andReturn(response2);
-		
+
 		replay(httpClient);
-			
-		final Long confID = 328L;		
-		Map<String, JobParameter> params = new HashMap<String, JobParameter>();
-		params.put(Constants.JOB_PARAM_CONF_ID, new JobParameter(confID));			
+
+		final Long confID = 328L;
+		Map<String, JobParameter> params = new HashMap<>();
+		params.put(Constants.JOB_PARAM_CONF_ID, new JobParameter(confID));
 		JobExecution exec = jobExecutor.execute(Constants.JOB_ID_HARVEST_COSMOTRON, new JobParameters(params));
 		Assert.assertEquals(exec.getExitStatus(), ExitStatus.COMPLETED);
-		
+
 		OAIHarvestConfiguration config = configDao.get(confID);
-		HarvestedRecord hr = recordDao.findByIdAndHarvestConfiguration("CbvkUsCat"+Constants.COSMOTRON_RECORD_ID_CHAR+"m0000002", config);
+		HarvestedRecord hr = recordDao.findByIdAndHarvestConfiguration("CbvkUsCat" + Constants.COSMOTRON_RECORD_ID_CHAR + "m0000002", config);
 		Assert.assertNotNull(hr);
-		Assert.assertNotNull(cosmotronDao.findByIdAndHarvestConfiguration("CbvkUsCat"+Constants.COSMOTRON_RECORD_ID_CHAR+"0000003", config));
-		Assert.assertNotNull(cosmotronDao.findByIdAndHarvestConfiguration("CbvkUsCat"+Constants.COSMOTRON_RECORD_ID_CHAR+"0000004", config));
+		Assert.assertNotNull(cosmotronDao.findByIdAndHarvestConfiguration("CbvkUsCat" + Constants.COSMOTRON_RECORD_ID_CHAR + "0000003", config));
+		Assert.assertNotNull(cosmotronDao.findByIdAndHarvestConfiguration("CbvkUsCat" + Constants.COSMOTRON_RECORD_ID_CHAR + "0000004", config));
 		InputStream is = new ByteArrayInputStream(hr.getRawRecord());
 		Record record = marcXmlParser.parseUnderlyingRecord(is);
 		MarcRecord marcRecord = new MarcRecordImpl(record);
 		Assert.assertEquals(marcRecord.getDataFields("996").size(), 5);
 	}
-	
-	@Test 
+
+	@Test
 	public void testDeleted996() throws Exception {
 		reset(httpClient);
 		InputStream response0 = this.getClass().getResourceAsStream("/sample/Identify.xml");
@@ -181,21 +181,21 @@ public class CosmotronHarvestJobTest extends AbstractTest {
 		expect(httpClient.executeGet("http://katalog.cbvk.cz/i2/i2.ws.oai.cls?verb=ListRecords&metadataPrefix=oai_marcxml_cpk")).andReturn(response1);
 		expect(httpClient.executeGet("http://katalog.cbvk.cz/i2/i2.ws.oai.cls?verb=ListRecords&resumptionToken=123456")).andReturn(response2);
 		replay(httpClient);
-			
-		final Long confID = 328L;		
-		Map<String, JobParameter> params = new HashMap<String, JobParameter>();
-		params.put(Constants.JOB_PARAM_CONF_ID, new JobParameter(confID));			
+
+		final Long confID = 328L;
+		Map<String, JobParameter> params = new HashMap<>();
+		params.put(Constants.JOB_PARAM_CONF_ID, new JobParameter(confID));
 		JobExecution exec = jobExecutor.execute(Constants.JOB_ID_HARVEST_COSMOTRON, new JobParameters(params));
 		Assert.assertEquals(exec.getExitStatus(), ExitStatus.COMPLETED);
-		
+
 		OAIHarvestConfiguration config = configDao.get(confID);
-		Assert.assertNotNull(recordDao.findByIdAndHarvestConfiguration("CbvkUsCat"+Constants.COSMOTRON_RECORD_ID_CHAR+"m0000002", config));
-		Cosmotron996 cosmo = cosmotronDao.findByIdAndHarvestConfiguration("CbvkUsCat"+Constants.COSMOTRON_RECORD_ID_CHAR+"0000003", config);
+		Assert.assertNotNull(recordDao.findByIdAndHarvestConfiguration("CbvkUsCat" + Constants.COSMOTRON_RECORD_ID_CHAR + "m0000002", config));
+		Cosmotron996 cosmo = cosmotronDao.findByIdAndHarvestConfiguration("CbvkUsCat" + Constants.COSMOTRON_RECORD_ID_CHAR + "0000003", config);
 		Assert.assertNotNull(cosmo);
 		Assert.assertNotNull(cosmo.getDeleted());
 	}
-	
-	@Test 
+
+	@Test
 	public void testUpdated996() throws Exception {
 		reset(httpClient);
 		InputStream response0 = this.getClass().getResourceAsStream("/sample/Identify.xml");
@@ -205,25 +205,25 @@ public class CosmotronHarvestJobTest extends AbstractTest {
 		expect(httpClient.executeGet("http://katalog.cbvk.cz/i2/i2.ws.oai.cls?verb=ListRecords&metadataPrefix=oai_marcxml_cpk")).andReturn(response1);
 		expect(httpClient.executeGet("http://katalog.cbvk.cz/i2/i2.ws.oai.cls?verb=ListRecords&resumptionToken=123456")).andReturn(response2);
 		replay(httpClient);
-			
-		final Long confID = 328L;		
-		Map<String, JobParameter> params = new HashMap<String, JobParameter>();
-		params.put(Constants.JOB_PARAM_CONF_ID, new JobParameter(confID));			
+
+		final Long confID = 328L;
+		Map<String, JobParameter> params = new HashMap<>();
+		params.put(Constants.JOB_PARAM_CONF_ID, new JobParameter(confID));
 		JobExecution exec = jobExecutor.execute(Constants.JOB_ID_HARVEST_COSMOTRON, new JobParameters(params));
 		Assert.assertEquals(exec.getExitStatus(), ExitStatus.COMPLETED);
-		
+
 		OAIHarvestConfiguration config = configDao.get(confID);
-		Assert.assertNotNull(recordDao.findByIdAndHarvestConfiguration("CbvkUsCat"+Constants.COSMOTRON_RECORD_ID_CHAR+"m0000002", config));
-		Cosmotron996 cosmo = cosmotronDao.findByIdAndHarvestConfiguration("CbvkUsCat"+Constants.COSMOTRON_RECORD_ID_CHAR+"0000003", config);
+		Assert.assertNotNull(recordDao.findByIdAndHarvestConfiguration("CbvkUsCat" + Constants.COSMOTRON_RECORD_ID_CHAR + "m0000002", config));
+		Cosmotron996 cosmo = cosmotronDao.findByIdAndHarvestConfiguration("CbvkUsCat" + Constants.COSMOTRON_RECORD_ID_CHAR + "0000003", config);
 		Assert.assertNotNull(cosmo);
-		
+
 		InputStream is = new ByteArrayInputStream(cosmo.getRawRecord());
 		Record record = marcXmlParser.parseUnderlyingRecord(is);
 		MarcRecord marcRecord = new MarcRecordImpl(record);
 		Assert.assertNotNull(marcRecord.getDataFields("100"));
 	}
-	
-	@Test 
+
+	@Test
 	public void testCopy996ToParentRecord() throws Exception {
 		reset(httpClient);
 		InputStream response0 = this.getClass().getResourceAsStream("/sample/Identify.xml");
@@ -233,24 +233,24 @@ public class CosmotronHarvestJobTest extends AbstractTest {
 		expect(httpClient.executeGet("http://katalog.cbvk.cz/i2/i2.ws.oai.cls?verb=ListRecords&metadataPrefix=oai_marcxml_cpk")).andReturn(response1);
 		expect(httpClient.executeGet("http://katalog.cbvk.cz/i2/i2.ws.oai.cls?verb=ListRecords&resumptionToken=123456")).andReturn(response2);
 		replay(httpClient);
-			
-		final Long confID = 328L;		
-		Map<String, JobParameter> params = new HashMap<String, JobParameter>();
-		params.put(Constants.JOB_PARAM_CONF_ID, new JobParameter(confID));			
+
+		final Long confID = 328L;
+		Map<String, JobParameter> params = new HashMap<>();
+		params.put(Constants.JOB_PARAM_CONF_ID, new JobParameter(confID));
 		JobExecution exec = jobExecutor.execute(Constants.JOB_ID_HARVEST_COSMOTRON, new JobParameters(params));
 		Assert.assertEquals(exec.getExitStatus(), ExitStatus.COMPLETED);
-		
+
 		OAIHarvestConfiguration config = configDao.get(confID);
-		HarvestedRecord hr = recordDao.findByIdAndHarvestConfiguration("CbvkUsCat"+Constants.COSMOTRON_RECORD_ID_CHAR+"m0000002", config);
+		HarvestedRecord hr = recordDao.findByIdAndHarvestConfiguration("CbvkUsCat" + Constants.COSMOTRON_RECORD_ID_CHAR + "m0000002", config);
 		Assert.assertNotNull(hr);
-		
+
 		InputStream is = new ByteArrayInputStream(hr.getRawRecord());
 		Record record = marcXmlParser.parseUnderlyingRecord(is);
 		MarcRecord marcRecord = new MarcRecordImpl(record);
 		Assert.assertEquals(marcRecord.getDataFields("996").size(), 2);
 	}
-	
-	@Test 
+
+	@Test
 	public void test996BeforeRecord() throws Exception {
 		reset(httpClient);
 		InputStream response0 = this.getClass().getResourceAsStream("/sample/Identify.xml");
@@ -258,24 +258,65 @@ public class CosmotronHarvestJobTest extends AbstractTest {
 		expect(httpClient.executeGet("http://katalog.cbvk.cz/i2/i2.ws.oai.cls?verb=Identify")).andReturn(response0);
 		expect(httpClient.executeGet("http://katalog.cbvk.cz/i2/i2.ws.oai.cls?verb=ListRecords&metadataPrefix=oai_marcxml_cpk")).andReturn(response1);
 		replay(httpClient);
-			
-		final Long confID = 328L;		
-		Map<String, JobParameter> params = new HashMap<String, JobParameter>();
-		params.put(Constants.JOB_PARAM_CONF_ID, new JobParameter(confID));			
+
+		final Long confID = 328L;
+		Map<String, JobParameter> params = new HashMap<>();
+		params.put(Constants.JOB_PARAM_CONF_ID, new JobParameter(confID));
 		JobExecution exec = jobExecutor.execute(Constants.JOB_ID_HARVEST_COSMOTRON, new JobParameters(params));
 		Assert.assertEquals(exec.getExitStatus(), ExitStatus.COMPLETED);
-		
+
 		OAIHarvestConfiguration config = configDao.get(confID);
-		HarvestedRecord hr = recordDao.findByIdAndHarvestConfiguration("CbvkUsCat"+Constants.COSMOTRON_RECORD_ID_CHAR+"m0000002", config);
+		HarvestedRecord hr = recordDao.findByIdAndHarvestConfiguration("CbvkUsCat" + Constants.COSMOTRON_RECORD_ID_CHAR + "m0000002", config);
 		Assert.assertNotNull(hr);
-		Assert.assertNotNull(cosmotronDao.findByIdAndHarvestConfiguration("CbvkUsCat"+Constants.COSMOTRON_RECORD_ID_CHAR+"0000003", config));
-		Assert.assertNotNull(cosmotronDao.findByIdAndHarvestConfiguration("CbvkUsCat"+Constants.COSMOTRON_RECORD_ID_CHAR+"0000004", config));
-		Assert.assertNotNull(cosmotronDao.findByIdAndHarvestConfiguration("CbvkUsCat"+Constants.COSMOTRON_RECORD_ID_CHAR+"0000005", config));
-		
+		Assert.assertNotNull(cosmotronDao.findByIdAndHarvestConfiguration("CbvkUsCat" + Constants.COSMOTRON_RECORD_ID_CHAR + "0000003", config));
+		Assert.assertNotNull(cosmotronDao.findByIdAndHarvestConfiguration("CbvkUsCat" + Constants.COSMOTRON_RECORD_ID_CHAR + "0000004", config));
+		Assert.assertNotNull(cosmotronDao.findByIdAndHarvestConfiguration("CbvkUsCat" + Constants.COSMOTRON_RECORD_ID_CHAR + "0000005", config));
+
 		InputStream is = new ByteArrayInputStream(hr.getRawRecord());
 		Record record = marcXmlParser.parseUnderlyingRecord(is);
 		MarcRecord marcRecord = new MarcRecordImpl(record);
 		Assert.assertEquals(marcRecord.getDataFields("996").size(), 3);
 	}
-	
+
+	@Test
+	public void testCosmotronArticle() throws Exception {
+		reset(httpClient);
+		InputStream response0 = this.getClass().getResourceAsStream("/sample/Identify.xml");
+		InputStream response1 = this.getClass().getResourceAsStream("/sample/cosmotron/Article.xml");
+		expect(httpClient.executeGet("http://katalog.cbvk.cz/i2/i2.ws.oai.cls?verb=Identify")).andReturn(response0);
+		expect(httpClient.executeGet("http://katalog.cbvk.cz/i2/i2.ws.oai.cls?verb=ListRecords&metadataPrefix=oai_marcxml_cpk")).andReturn(response1);
+		replay(httpClient);
+
+		final Long confID = 328L;
+		Map<String, JobParameter> params = new HashMap<>();
+		params.put(Constants.JOB_PARAM_CONF_ID, new JobParameter(confID));
+		JobExecution exec = jobExecutor.execute(Constants.JOB_ID_HARVEST_COSMOTRON, new JobParameters(params));
+		Assert.assertEquals(exec.getExitStatus(), ExitStatus.COMPLETED);
+
+		OAIHarvestConfiguration config = configDao.get(confID);
+		HarvestedRecord hr = recordDao.findByIdAndHarvestConfiguration("LiUsCat_r011834", config);
+		Assert.assertNotNull(hr);
+		Assert.assertNull(hr.getDeleted());
+	}
+
+	@Test
+	public void testRecordWithParentIdAndWithout996() throws Exception {
+		reset(httpClient);
+		InputStream response0 = this.getClass().getResourceAsStream("/sample/Identify.xml");
+		InputStream response1 = this.getClass().getResourceAsStream("/sample/cosmotron/ParentIdNot996.xml");
+		expect(httpClient.executeGet("http://katalog.cbvk.cz/i2/i2.ws.oai.cls?verb=Identify")).andReturn(response0);
+		expect(httpClient.executeGet("http://katalog.cbvk.cz/i2/i2.ws.oai.cls?verb=ListRecords&metadataPrefix=oai_marcxml_cpk")).andReturn(response1);
+		replay(httpClient);
+
+		final Long confID = 328L;
+		Map<String, JobParameter> params = new HashMap<>();
+		params.put(Constants.JOB_PARAM_CONF_ID, new JobParameter(confID));
+		JobExecution exec = jobExecutor.execute(Constants.JOB_ID_HARVEST_COSMOTRON, new JobParameters(params));
+		Assert.assertEquals(exec.getExitStatus(), ExitStatus.COMPLETED);
+
+		OAIHarvestConfiguration config = configDao.get(confID);
+		Cosmotron996 cosmoRec = cosmotronDao.findByIdAndHarvestConfiguration("CbvkUsCat_0000003", config);
+		Assert.assertNotNull(cosmoRec);
+		Assert.assertNotNull(cosmoRec.getDeleted());
+	}
 }

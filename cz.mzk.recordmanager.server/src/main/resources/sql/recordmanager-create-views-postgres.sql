@@ -34,3 +34,17 @@ SELECT
 FROM
   dedup_record_last_update
 ;
+
+CREATE OR REPLACE VIEW cosmotron_periodicals_last_update AS
+SELECT
+  hr.id harvested_record_id,
+  hr.import_conf_id,
+  hr.record_id,
+  GREATEST(hr.updated, (SELECT MAX(updated) FROM cosmotron_996 c996 WHERE c996.import_conf_id = hr.import_conf_id
+    AND c996.parent_record_id = hr.record_id)) last_update
+FROM
+  harvested_record hr
+WHERE
+  EXISTS(SELECT 1 FROM cosmotron_996 c996 WHERE c996.import_conf_id = hr.import_conf_id
+    AND c996.parent_record_id = hr.record_id)
+;

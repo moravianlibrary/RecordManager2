@@ -16,7 +16,7 @@ public class RegexpExtractor {
 		} else {
 			// \\/ is not separator
 			String[] parts = regex.split("(?<=[^\\\\])/");
-			this.extractor = Pattern.compile(parts[1]);
+			this.extractor = Pattern.compile(parts[1].replace("\\\\/", "/"));
 			this.replacement = parts[2];
 		}
 	}

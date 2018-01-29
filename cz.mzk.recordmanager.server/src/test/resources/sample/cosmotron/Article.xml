@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<OAI-PMH xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.openarchives.org/OAI/2.0/"
+         xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/
+         http://www.openarchives.org/OAI/2.0/OAI-PMH.xsd">
+    <responseDate>2015-11-13T09:18:40Z</responseDate>
+    <request verb="ListRecords" metadataPrefix="oai_marcxml_cpk"
+             set="CPK">http://katalog.cbvk.cz/i2/i2.ws.oai.cls
+    </request>
+    <ListRecords>
+        <record>
+            <header>
+                <identifier>oai:ipac.kvkli.cz:LiUsCat/r011834</identifier>
+                <datestamp>2008-06-07T10:49:03Z</datestamp>
+                <setSpec>CPK</setSpec>
+            </header>
+            <metadata>
+                <marc:record xmlns:marc="http://www.loc.gov/MARC21/slim"
+                             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                             xsi:schemaLocation="http://www.loc.gov/MARC21/slim
+                             http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd">
+                    <marc:leader>01018naa a2200289 a 4500</marc:leader>
+                    <marc:controlfield tag="001">r011834</marc:controlfield>
+                    <marc:controlfield tag="003">CZ-LiKVK</marc:controlfield>
+                    <marc:controlfield tag="005">20080607104903.7</marc:controlfield>
+                    <marc:controlfield tag="007">ta</marc:controlfield>
+                    <marc:controlfield tag="008">020621s2002----xr-a---e------000-0dcze--</marc:controlfield>
+                    <marc:datafield tag="040" ind1=" " ind2=" ">
+                        <marc:subfield code="a">LIA001</marc:subfield>
+                        <marc:subfield code="b">cze</marc:subfield>
+                    </marc:datafield>
+                    <marc:datafield tag="043" ind1=" " ind2=" ">
+                        <marc:subfield code="a">e-xr---</marc:subfield>
+                        <marc:subfield code="b">e-xr-li</marc:subfield>
+                        <marc:subfield code="2">czenas</marc:subfield>
+                    </marc:datafield>
+                    <marc:datafield tag="072" ind1=" " ind2="7">
+                        <marc:subfield code="x">divadlo</marc:subfield>
+                        <marc:subfield code="2">Konspekt</marc:subfield>
+                    </marc:datafield>
+                    <marc:datafield tag="072" ind1=" " ind2="7">
+                        <marc:subfield code="x">vlastivěda</marc:subfield>
+                        <marc:subfield code="2">Konspekt</marc:subfield>
+                    </marc:datafield>
+                    <marc:datafield tag="080" ind1=" " ind2=" ">
+                        <marc:subfield code="a">792.07</marc:subfield>
+                        <marc:subfield code="2">v</marc:subfield>
+                    </marc:datafield>
+                    <marc:datafield tag="080" ind1=" " ind2=" ">
+                        <marc:subfield code="a">908</marc:subfield>
+                        <marc:subfield code="2">v</marc:subfield>
+                    </marc:datafield>
+                    <marc:datafield tag="245" ind1="0" ind2="0">
+                        <marc:subfield code="a">Ivan Taller</marc:subfield>
+                    </marc:datafield>
+                    <marc:datafield tag="300" ind1=" " ind2=" ">
+                        <marc:subfield code="b">1 il.</marc:subfield>
+                    </marc:datafield>
+                    <marc:datafield tag="520" ind1="2" ind2=" ">
+                        <marc:subfield code="a">Portrét Ivana Tallera</marc:subfield>
+                    </marc:datafield>
+                    <marc:datafield tag="600" ind1="1" ind2="4">
+                        <marc:subfield code="7">jk01132032</marc:subfield>
+                        <marc:subfield code="a">Taller, Ivan,</marc:subfield>
+                        <marc:subfield code="d">1930-2001</marc:subfield>
+                    </marc:datafield>
+                    <marc:datafield tag="651" ind1=" " ind2="4">
+                        <marc:subfield code="7">ge128509</marc:subfield>
+                        <marc:subfield code="a">Liberec (Česko)</marc:subfield>
+                        <marc:subfield code="2">UN_AUTH_215</marc:subfield>
+                    </marc:datafield>
+                    <marc:datafield tag="653" ind1="0" ind2=" ">
+                        <marc:subfield code="a">dramatici</marc:subfield>
+                        <marc:subfield code="a">vlastivědní pracovníci</marc:subfield>
+                    </marc:datafield>
+                    <marc:datafield tag="773" ind1="0" ind2=" ">
+                        <marc:subfield code="7">nnas</marc:subfield>
+                        <marc:subfield code="t">V</marc:subfield>
+                        <marc:subfield code="x">1213-7375</marc:subfield>
+                        <marc:subfield code="g">Roč. 1, č. 2 (2002), s. 16</marc:subfield>
+                        <marc:subfield code="q">1:2</marc:subfield>
+                        <marc:subfield code="9">2002</marc:subfield>
+                        <marc:subfield code="w">li_us_cat*sg982763_2002_002_002</marc:subfield>
+                    </marc:datafield>
+                    <marc:datafield tag="910" ind1=" " ind2=" ">
+                        <marc:subfield code="a">LIA001</marc:subfield>
+                        <marc:subfield code="t">rs</marc:subfield>
+                    </marc:datafield>
+                </marc:record>
+            </metadata>
+        </record>
+    </ListRecords>
+</OAI-PMH>

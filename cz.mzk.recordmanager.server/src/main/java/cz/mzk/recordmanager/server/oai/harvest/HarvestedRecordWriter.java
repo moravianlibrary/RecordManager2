@@ -33,45 +33,46 @@ public class HarvestedRecordWriter implements ItemWriter<List<HarvestedRecord>> 
 	public void write(List<? extends List<HarvestedRecord>> records) throws Exception {
 		for (List<HarvestedRecord> list: records) {
 			for (HarvestedRecord record : list) {
-				if (record == null) {
-					continue;
-				}
-				if (!record.getShouldBeProcessed()) {
-					recordDao.updateTimestampOnly(record);
-					continue;
-				}
-				if (record.getDeleted() == null) {
-					try {
-						if (record.getId() == null) {
-							recordDao.persist(record);
-						}
-						dedupKeysParser.parse(record);
-						if (record.getHarvestedFrom().isFilteringEnabled() && !record.getShouldBeProcessed()) {
-							logger.debug("Filtered record: " + record.getUniqueId());
-							record.setDeleted(new Date());
-						}
-					} catch (DedupKeyParserException dkpe) {
-						logger.error(
-								"Dedup keys could not be generated for {}, exception thrown.",
-								record, dkpe);
-					} catch (InvalidMarcException ime) {
-						logger.warn("Skipping record due to invalid MARC {}", record.getUniqueId());
-					} catch (InvalidDcException dce) {
-						logger.warn("Skipping record due to invalid DublinCore {}", record.getUniqueId());
-					}
-					
-				}
-				else { // deleted records by institution - drop dedup kyes, metadata
-					recordDao.dropDedupKeys(record);
-					record.setRawRecord(new byte[0]);
-					record.setDedupKeysHash("");
-					record.setNextDedupFlag(true);
-				}
-				recordDao.persist(record);
+				writeRecord(record);
 			}
 		}
 		sessionFactory.getCurrentSession().flush();
 		sessionFactory.getCurrentSession().clear();
 	}
 
+	public void writeRecord(HarvestedRecord record) {
+		if (record == null) {
+			return;
+		}
+		if (!record.getShouldBeProcessed()) {
+			recordDao.updateTimestampOnly(record);
+			return;
+		}
+		if (record.getDeleted() == null) {
+			try {
+				if (record.getId() == null) {
+					recordDao.persist(record);
+				}
+				dedupKeysParser.parse(record);
+				if (record.getHarvestedFrom().isFilteringEnabled() && !record.getShouldBeProcessed()) {
+					logger.debug("Filtered record: " + record.getUniqueId());
+					record.setDeleted(new Date());
+				}
+			} catch (DedupKeyParserException dkpe) {
+				logger.error("Dedup keys could not be generated for {}, exception thrown.", record, dkpe);
+			} catch (InvalidMarcException ime) {
+				logger.warn("Skipping record due to invalid MARC {}", record.getUniqueId());
+			} catch (InvalidDcException dce) {
+				logger.warn("Skipping record due to invalid DublinCore {}", record.getUniqueId());
+			}
+
+		} else { // deleted records by institution - drop dedup kyes, metadata
+			recordDao.dropDedupKeys(record);
+			record.setRawRecord(new byte[0]);
+			record.setDedupKeysHash("");
+			record.setNextDedupFlag(true);
+		}
+		recordDao.persist(record);
+	}
+	
 }

@@ -158,7 +158,7 @@ INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granul
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (305,'http://sc.vpk.cz/cgi-bin/oai2',null,'marc21',null);
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity,extract_id_regex) VALUES (306,'http://opac.moderniknihovna.cz/cgi-bin/koha/oai.pl','CPK','marccpk',NULL,'UOG505:(.*)');
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (307,'http://aleph.techlib.cz/OAI','CPK','marc21','SECOND');
-INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (308,'http://ipac.kvkli.cz/i2/i2.ws.oai.cls','CPK1','oai_marcxml_cpk',NULL);
+INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity,extract_id_regex) VALUES (308,'http://ipac.kvkli.cz/i2/i2.ws.oai.cls','CPK1','oai_marcxml_cpk',NULL,'s/[^:]+:[^:]+:([^\\/]+)\\/([^\\/]+)/$1_$2/');
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (309,'http://sc.vpk.cz/cgi-bin/oai2',null,'marc21','SECOND');
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (311,'http://www.vkta.cz/Clavius/l.dll','CPK','marc21',NULL);
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (312,'http://katalog.kkvysociny.cz/clavius/l.dll','CPK','marc21',NULL);
@@ -176,7 +176,7 @@ INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granul
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (325,'http://aleph.nkp.cz/OAI','KKL-CPK','marc21',NULL);
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (326,'http://aleph.nkp.cz/OAI','STT-CPK','marc21',NULL);
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (327,NULL,NULL,'marc21',NULL);
-INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (328,'http://katalog.cbvk.cz/i2/i2.ws.oai.cls','CPK1','oai_marcxml_cpk',NULL);
+INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity,extract_id_regex) VALUES (328,'http://katalog.cbvk.cz/i2/i2.ws.oai.cls','CPK1','oai_marcxml_cpk',NULL,'s/[^:]+:[^:]+:([^\\/]+)\\/([^\\/]+)/$1_$2/');
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (329,'http://www.clavius.sk/carmentest/l.dll','CPK','marc21',NULL);
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (330,'http://aleph.lib.cas.cz/OAI','KNA','marc21',NULL);
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (331,NULL,NULL,'marc21',NULL);
@@ -184,7 +184,7 @@ INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granul
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (333,'http://aleph.knihovna-pardubice.cz/OAI','PAG_OAI_CPK_MARC21','marc21',NULL);
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (334,'https://kutnahora.tritius.cz/tritius/oai-provider','CPK','marc21',NULL);
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (335,'http://katalog.svkos.cz/OAI','MZK-CPK','marc21',NULL);
-INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (336,'http://svk7.svkkl.cz/i2/i2.ws.oai.cls','CPK1','oai_marcxml_cpk',NULL);
+INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity,extract_id_regex) VALUES (336,'http://svk7.svkkl.cz/i2/i2.ws.oai.cls','CPK1','oai_marcxml_cpk',NULL,'s/[^:]+:[^:]+:([^\\/]+)\\/([^\\/]+)/$1_$2/');
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (337,NULL,NULL,'marc21',NULL);
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (338,'http://katalogold.iir.cz:81/l.dll','CPK','marc21',NULL);
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (339,'http://dbase.aipberoun.cz/manu3/oai/','digitized-xr','ese',NULL);

@@ -33,7 +33,7 @@ public class ExportCosmotron996Processor implements ItemProcessor<Cosmotron996, 
 
 	@Override
 	public String process(Cosmotron996 cosmo996) throws Exception {
-		if (cosmo996 != null && cosmo996.getRawRecord().length != 0) {
+		if (cosmo996 != null && cosmo996.getRawRecord() != null && cosmo996.getRawRecord().length != 0) {
 			InputStream is = new ByteArrayInputStream(cosmo996.getRawRecord());
 			MarcRecord marcRecord = marcXmlParser.parseRecord(is);
 			if (marcRecord.getDataFields(OAI_FIELD).isEmpty()) {

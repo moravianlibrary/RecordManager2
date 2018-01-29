@@ -1,5 +1,6 @@
 package cz.mzk.recordmanager.server.marc;
 
+import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 
 import org.marc4j.RecordStack;
@@ -17,8 +18,7 @@ public class MarcXmlParserImpl implements MarcXmlParser {
 		try {
 			RecordStack queue = new RecordStack();
 			MarcXmlHandler handler = new MarcXmlHandler(queue);
-			org.marc4j.MarcXmlParser parser = new org.marc4j.MarcXmlParser(
-					handler);
+			org.marc4j.MarcXmlParser parser = new org.marc4j.MarcXmlParser(handler);
 			parser.parse(new InputSource(is));
 			Record record = queue.pop();
 			return new MarcRecordImpl(record);
@@ -28,18 +28,26 @@ public class MarcXmlParserImpl implements MarcXmlParser {
 	}
 
 	@Override
+	public MarcRecord parseRecord(byte[] rawRecord) {
+		return parseRecord(new ByteArrayInputStream(rawRecord));
+	}
+
+	@Override
 	public Record parseUnderlyingRecord(InputStream is) {
 		try {
 			RecordStack queue = new RecordStack();
 			MarcXmlHandler handler = new MarcXmlHandler(queue);
-			org.marc4j.MarcXmlParser parser = new org.marc4j.MarcXmlParser(
-					handler);
+			org.marc4j.MarcXmlParser parser = new org.marc4j.MarcXmlParser(handler);
 			parser.parse(new InputSource(is));
-			Record record = queue.pop();
-			return record;
+			return queue.pop();
 		} catch (org.marc4j.MarcException me) {
 			throw new InvalidMarcException(me.getMessage(), me);
 		}
+	}
+
+	@Override
+	public Record parseUnderlyingRecord(byte[] rawRecord) {
+		return parseUnderlyingRecord(new ByteArrayInputStream(rawRecord));
 	}
 
 }

@@ -977,3 +977,23 @@ UPDATE oai_harvest_conf SET extract_id_regex='s/^(.*)/KKV01-$1/' WHERE import_co
 -- 26. 01. 2017 tomascejpek
 DELETE FROM download_import_conf WHERE import_conf_id=319;
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (319,'http://aleph.nkp.cz/OAI','ANL','marc21',NULL);
+
+-- 29. 01. 2018 tomascejpek
+ALTER TABLE cosmotron_996 DROP CONSTRAINT cosmotron_996_harvested_record_id_fkey;
+ALTER TABLE cosmotron_996 ADD COLUMN parent_record_id VARCHAR(128);
+ALTER TABLE cosmotron_996 ADD CONSTRAINT cosmotron_996_uniqueid UNIQUE (record_id,import_conf_id);
+DROP INDEX IF EXISTS cosmotron_996_harvested_record_idx
+ALTER TABLE cosmotron_996 DROP COLUMN harvested_record_id;
+UPDATE oai_harvest_conf set extract_id_regex='s/[^:]+:[^:]+:([^\\/]+)\\/([^\\/]+)/$1_$2/' WHERE import_conf_id in (308,328,336);
+CREATE INDEX cosmotron_996_conf_id_parent_id_idx ON cosmotron_996(import_conf_id,parent_record_id);
+CREATE OR REPLACE VIEW cosmotron_periodicals_last_update AS
+  SELECT
+    hr.id harvested_record_id,
+    hr.import_conf_id,
+    hr.record_id,
+    GREATEST(hr.updated, (SELECT MAX(updated) FROM cosmotron_996 c996 WHERE c996.import_conf_id = hr.import_conf_id AND c996.parent_record_id = hr.record_id)) last_update
+  FROM
+    harvested_record hr
+  WHERE
+    EXISTS(SELECT 1 FROM cosmotron_996 c996 WHERE c996.import_conf_id = hr.import_conf_id AND c996.parent_record_id = hr.record_id)
+;
