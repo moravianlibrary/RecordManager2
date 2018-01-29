@@ -982,7 +982,7 @@ INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granul
 ALTER TABLE cosmotron_996 DROP CONSTRAINT cosmotron_996_harvested_record_id_fkey;
 ALTER TABLE cosmotron_996 ADD COLUMN parent_record_id VARCHAR(128);
 ALTER TABLE cosmotron_996 ADD CONSTRAINT cosmotron_996_uniqueid UNIQUE (record_id,import_conf_id);
-DROP INDEX IF EXISTS cosmotron_996_harvested_record_idx
+DROP INDEX IF EXISTS cosmotron_996_harvested_record_idx;
 ALTER TABLE cosmotron_996 DROP COLUMN harvested_record_id;
 UPDATE oai_harvest_conf set extract_id_regex='s/[^:]+:[^:]+:([^\\/]+)\\/([^\\/]+)/$1_$2/' WHERE import_conf_id in (308,328,336);
 CREATE INDEX cosmotron_996_conf_id_parent_id_idx ON cosmotron_996(import_conf_id,parent_record_id);
