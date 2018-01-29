@@ -126,7 +126,7 @@ public class CosmotronHarvestJobConfig {
 		String where = "WHERE import_conf_id = :conf_id";
 		parameterValues.put("conf_id", configId);
 		if (from != null) {
-			where += " last_update BETWEEN :from AND :to";
+			where += " AND last_update BETWEEN :from AND :to";
 			parameterValues.put("from", from);
 			parameterValues.put("to", to);
 		}
