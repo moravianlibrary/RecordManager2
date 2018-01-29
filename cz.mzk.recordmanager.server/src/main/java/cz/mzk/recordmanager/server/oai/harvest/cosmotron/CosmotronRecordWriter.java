@@ -78,6 +78,7 @@ public class CosmotronRecordWriter extends HarvestedRecordWriter implements Item
 					// record with parent id and without fields 996
 					// save and set deleted value
 					cr.setDeleted(new Date());
+					cr.setParentRecordId(null);
 				}
 				cosmotronDao.persist(cr);
 			}
