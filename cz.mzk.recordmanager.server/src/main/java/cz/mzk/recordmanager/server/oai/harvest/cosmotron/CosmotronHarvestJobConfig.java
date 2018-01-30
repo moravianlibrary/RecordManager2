@@ -101,7 +101,7 @@ public class CosmotronHarvestJobConfig {
 		return steps.get("update996Step") //
 				.listener(new StepProgressListener())
 				.<HarvestedRecordUniqueId, HarvestedRecordUniqueId>chunk(1) //
-				.reader(upate996Reader(LONG_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION)) //
+				.reader(upate996Reader(LONG_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION)) //
 				.writer(cosmotronUpdate996Writer()) //
 				.build();
 	}
@@ -111,12 +111,8 @@ public class CosmotronHarvestJobConfig {
 	public ItemReader<HarvestedRecordUniqueId> upate996Reader(
 			@Value("#{jobParameters[" + Constants.JOB_PARAM_CONF_ID + "]}") Long configId,
 			@Value("#{stepExecutionContext[" + Constants.JOB_PARAM_FROM_DATE + "] "
-					+ "?:jobParameters[ " + Constants.JOB_PARAM_FROM_DATE + "]}") Date from,
-			@Value("#{stepExecutionContext[" + Constants.JOB_PARAM_UNTIL_DATE + "]"
-					+ "?:jobParameters[" + Constants.JOB_PARAM_UNTIL_DATE + "]}") Date to) throws Exception {
-		if (from != null && to == null) {
-			to = new Date();
-		}
+					+ "?:jobParameters[ " + Constants.JOB_PARAM_FROM_DATE + "]}") Date from) throws Exception {
+
 		SqlPagingQueryProviderFactoryBean pqpf = new SqlPagingQueryProviderFactoryBean();
 		JdbcPagingItemReader<HarvestedRecordUniqueId> reader = new JdbcPagingItemReader<>();
 		Map<String, Object> parameterValues = new HashMap<>();
@@ -126,9 +122,8 @@ public class CosmotronHarvestJobConfig {
 		String where = "WHERE import_conf_id = :conf_id";
 		parameterValues.put("conf_id", configId);
 		if (from != null) {
-			where += " AND last_update BETWEEN :from AND :to";
+			where += " AND last_update AND updated>:from";
 			parameterValues.put("from", from);
-			parameterValues.put("to", to);
 		}
 		pqpf.setWhereClause(where);
 		pqpf.setSortKey("harvested_record_id");
