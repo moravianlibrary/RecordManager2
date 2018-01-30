@@ -1260,3 +1260,6 @@ CREATE OR REPLACE VIEW cosmotron_periodicals_last_update AS
 
 --changeset tomascejpek:86 context:cpk
 UPDATE oai_harvest_conf set extract_id_regex='s/[^:]+:[^:]+:([^\\/]+)\\/([^\\/]+)/$1_$2/' WHERE import_conf_id in (308,328,336);
+
+--changeset tomascejpek:87 context:cpk
+UPDATE oai_harvest_conf SET url='https://katalog1.kjd.pb.cz/l.dll' WHERE import_conf_id=356;

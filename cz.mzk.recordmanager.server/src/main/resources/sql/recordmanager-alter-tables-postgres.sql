@@ -997,3 +997,6 @@ CREATE OR REPLACE VIEW cosmotron_periodicals_last_update AS
   WHERE
     EXISTS(SELECT 1 FROM cosmotron_996 c996 WHERE c996.import_conf_id = hr.import_conf_id AND c996.parent_record_id = hr.record_id)
 ;
+
+-- 30. 01. 2018 tomascejpek
+UPDATE oai_harvest_conf SET url='https://katalog1.kjd.pb.cz/l.dll' WHERE import_conf_id=356;
