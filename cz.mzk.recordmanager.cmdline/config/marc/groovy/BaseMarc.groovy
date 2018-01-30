@@ -52,13 +52,11 @@ sourceTitle_search_txt_mv = getFieldsUnique "773adtkxz9"
 callNumber_search_txt_mv = getFieldsUnique "910b:996ch"
 publisher_search_txt_mv = getFieldsTrim "260b:264b:928a:978abcdg7"
 cnb_search_str = getFirstField "015az"
-ipc_search_txt_mv = getInternationalPatentClassfication()
 upv_ipc_search = getInternationalPatentClassfication()
 country_search_txt_mv = ListUtils.union(translate("mzk_country.map", getCountries(), null), translate("country_cs.map", getCountries(), null))
 language_search_txt_mv = ListUtils.union(translate("mzk_language.map", getLanguages(), null), translate("language_cs.map", getLanguages(), null))
 format_search_txt_mv = getFormatForSearching()
 
-ean_str_mv = getEAN()
 source_title_facet_str = getFirstField "773t"
 conspectus_facet_str_mv = getFields "072x"
 publisher_str_mv = getPublisherStrMv()

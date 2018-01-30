@@ -50,8 +50,6 @@ geographic_facet = getFields "600z:610z:611z:630z:648z:650z:651a:651z:655z"
 
 url = getFields "856u"
 
-ean_str_mv = getEAN()
-
 bbox_geo = getBoundingBox()
 bbox_geo_str = getBoundingBox()
 

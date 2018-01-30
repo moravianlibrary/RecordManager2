@@ -52,7 +52,6 @@ callNumber_search_txt_mv = getFieldsUnique "910b:996ch"
 publisher_search_txt_mv = getFieldsTrim "260b:264b:928a:978abcdg7"
 cnb_search_str = getFirstField "015az"
 
-ean_str_mv = getEAN()
 source_title_facet_str = getFirstField "773t"
 genre_facet_str = getFirstField "655avxyz"
 conspectus_facet_str_mv = getFields "072x"
