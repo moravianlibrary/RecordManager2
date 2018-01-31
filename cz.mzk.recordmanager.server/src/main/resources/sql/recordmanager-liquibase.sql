@@ -1267,3 +1267,7 @@ UPDATE oai_harvest_conf SET url='https://katalog1.kjd.pb.cz/l.dll' WHERE import_
 --changeset tomascejpek:88 context:cpk
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (42, 356, 'PBG001');
 UPDATE import_conf SET item_id='other',interception_enabled=true WHERE id=356;
+
+--changeset tomascejpek:89
+DROP INDEX cosmotron_996_conf_id_parent_id_idx;
+CREATE INDEX cosmotron_996_conf_id_parent_id_idx ON cosmotron_996 (parent_record_id,import_conf_id);
