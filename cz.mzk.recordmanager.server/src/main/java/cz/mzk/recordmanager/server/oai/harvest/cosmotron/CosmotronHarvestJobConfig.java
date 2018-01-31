@@ -122,7 +122,7 @@ public class CosmotronHarvestJobConfig {
 		String where = "WHERE import_conf_id = :conf_id";
 		parameterValues.put("conf_id", configId);
 		if (from != null) {
-			where += " AND last_update AND updated>:from";
+			where += " AND last_update > :from";
 			parameterValues.put("from", from);
 		}
 		pqpf.setWhereClause(where);
