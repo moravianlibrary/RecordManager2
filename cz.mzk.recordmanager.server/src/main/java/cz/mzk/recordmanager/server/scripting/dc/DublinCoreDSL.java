@@ -1,10 +1,7 @@
 package cz.mzk.recordmanager.server.scripting.dc;
 
 import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -32,7 +29,9 @@ public class DublinCoreDSL extends BaseDSL {
 
 	private final static Pattern AUTHOR_PATTERN = Pattern.compile("([^,]+),(.+)");
 	private final static Pattern MDT_PATTERN = Pattern.compile("[\\W0-9]+");
-	
+
+	private static final int ACTUAL_YEAR = Calendar.getInstance().get(Calendar.YEAR);
+
 	public DublinCoreDSL(DublinCoreFunctionContext dcContext,
 			MappingResolver propertyResolver, StopWordsResolver stopWordsResolver,
 			Map<String, RecordFunction<DublinCoreFunctionContext>> functions) {
@@ -129,11 +128,21 @@ public class DublinCoreDSL extends BaseDSL {
 		
 		return sb.toString();
 	}
-	
-	public String getFirstDate() {
-		return record.getFirstDate();
+
+	public Integer getFirstDate() {
+		try {
+			return Integer.valueOf(record.getFirstDate());
+		} catch (NumberFormatException e) {
+			return null;
+		}
 	}
-	
+
+	public List<Integer> getPublishDateForTimeline() {
+		Integer year = getFirstDate();
+		if (year != null && 800 <= year && year <= (ACTUAL_YEAR + 1)) return Collections.singletonList(year);
+		return null;
+	}
+
 	public List <String> getPublishers() {
 		return record.getPublishers();
 	}
