@@ -541,7 +541,7 @@ public class MarcRecordImplTest extends AbstractTest {
 		data.add("000 00000000");
 		data.add("007 fb");
 		data.add("245 $hhmatové písmo");
-		hrf.add(HarvestedRecordFormatEnum.OTHER_BRAILLE);
+		hrf.add(HarvestedRecordFormatEnum.BLIND_BRAILLE);
 		mri = MarcRecordFactory.recordFactory(data);
 		metadataRecord = metadataFactory.getMetadataRecord(mri);		
 		Assert.assertEquals(metadataRecord.getDetectedFormatList().toString(), hrf.toString());

@@ -1008,4 +1008,5 @@ DROP INDEX cosmotron_996_conf_id_parent_id_idx;
 CREATE INDEX cosmotron_996_conf_id_parent_id_idx ON cosmotron_996 (parent_record_id,import_conf_id);
 
 -- 01. 02. 2018 tomascejpek
-INSERT INTO harvested_record_format(id, name) VALUES (65, 'AUDIO_BRAILLE');
+INSERT INTO harvested_record_format(id, name) VALUES (65, 'BLIND_AUDIO');
+INSERT INTO harvested_record_format(id, name) VALUES (66, 'BLIND_BRAILLE');

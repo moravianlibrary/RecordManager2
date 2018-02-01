@@ -464,7 +464,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 		return false;
 	}
 		
-	protected boolean isBraill(){
+	protected boolean isBlindBraille(){
 		String f007 = underlayingMarc.getControlField("007");
 		String f007_00 = (f007 != null) && (f007.length() > 0) ? Character.toString(f007.charAt(0)) : "";
 		String f007_01 = (f007 != null) && (f007.length() > 1) ? Character.toString(f007.charAt(1)) : "";
@@ -729,7 +729,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 
 	private static final Pattern AB_MACAN = Pattern.compile(".*macan.*", Pattern.CASE_INSENSITIVE);
 
-	protected boolean isAudioBraille() {
+	protected boolean isBlindAudio() {
 		for (String tag : new String[]{"260", "264"}) {
 			for (String f260b : underlayingMarc.getFields(tag, 'b')) {
 				if (AB_MACAN.matcher(f260b).matches()) return true;
@@ -788,14 +788,14 @@ public class MetadataMarcRecord implements MetadataRecord {
 		if(isMusicalScores()) hrf.add(HarvestedRecordFormatEnum.MUSICAL_SCORES);
 		if(isVisualDocument()) hrf.add(HarvestedRecordFormatEnum.VISUAL_DOCUMENTS);
 		if(isMicroform()) hrf.add(HarvestedRecordFormatEnum.OTHER_MICROFORMS);
-		if(isBraill()) hrf.add(HarvestedRecordFormatEnum.OTHER_BRAILLE);
+		if(isBlindBraille()) hrf.add(HarvestedRecordFormatEnum.BLIND_BRAILLE);
 		HarvestedRecordFormatEnum audio = getAudioFormat();
 		if (audio != null) {
 			if (isAudioDVD()) hrf.add(HarvestedRecordFormatEnum.AUDIO_DVD);
 			else hrf.add(audio);
-			if (isAudioBraille()) {
+			if (isBlindAudio()) {
 				hrf.clear();
-				hrf.add(HarvestedRecordFormatEnum.AUDIO_BRAILLE);
+				hrf.add(HarvestedRecordFormatEnum.BLIND_AUDIO);
 				return hrf;
 			}
 		}

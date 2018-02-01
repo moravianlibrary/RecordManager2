@@ -29,7 +29,7 @@ public class SolrUtils {
 
 	private static final char HIERARCHIC_FACET_SEPARATOR = '/';
 
-	private static final Pattern RECORDTYPE_PATTERN = Pattern.compile("^(AUDIO|VIDEO|OTHER|LEGISLATIVE|PATENTS)_(.*)$");
+	private static final Pattern RECORDTYPE_PATTERN = Pattern.compile("^(AUDIO|VIDEO|OTHER|LEGISLATIVE|PATENTS|BLIND)_(.*)$");
 	
 	private static final String INSTITUTION_LIBRARY = "Library";
 	private static final String INSTITUTION_OTHERS = "Others";
