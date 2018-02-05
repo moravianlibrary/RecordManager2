@@ -56,9 +56,6 @@ public class IndexRecordsToSolrJobConfig {
 	private DataSource dataSource;
 
 	@Autowired
-	private HarvestedRecordRowMapper harvestedRecordRowMapper;
-
-	@Autowired
 	private SessionFactory sessionFactory;
 
 	@Autowired
@@ -140,13 +137,13 @@ public class IndexRecordsToSolrJobConfig {
 			pqpf.setWhereClause("WHERE last_update BETWEEN :from AND :to");
 		}
 		pqpf.setSortKey("dedup_record_id");
-		JdbcPagingItemReader<DedupRecord> reader = new JdbcPagingItemReader<DedupRecord>();
+		JdbcPagingItemReader<DedupRecord> reader = new JdbcPagingItemReader<>();
 		reader.setRowMapper(new DedupRecordRowMapper("dedup_record_id"));
 		reader.setPageSize(PAGE_SIZE);
 		reader.setQueryProvider(pqpf.getObject());
 		reader.setDataSource(dataSource);
 		if (from != null && to != null) {
-			Map<String, Object> parameterValues = new HashMap<String, Object>();
+			Map<String, Object> parameterValues = new HashMap<>();
 			parameterValues.put("from", from);
 			parameterValues.put("to", to);
 			reader.setParameterValues(parameterValues);
@@ -193,13 +190,13 @@ public class IndexRecordsToSolrJobConfig {
 			pqpf.setWhereClause("WHERE orphaned BETWEEN :from AND :to");
 		}
 		pqpf.setSortKey("dedup_record_id");
-		JdbcPagingItemReader<Long> reader = new JdbcPagingItemReader<Long>();
+		JdbcPagingItemReader<Long> reader = new JdbcPagingItemReader<>();
 		reader.setRowMapper(new LongValueRowMapper());
 		reader.setPageSize(100000);
 		reader.setQueryProvider(pqpf.getObject());
 		reader.setDataSource(dataSource);
 		if (from != null && to != null) {
-			Map<String, Object> parameterValues = new HashMap<String, Object>();
+			Map<String, Object> parameterValues = new HashMap<>();
     		parameterValues.put("from", from);
     		parameterValues.put("to", to);
     		reader.setParameterValues(parameterValues);
