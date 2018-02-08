@@ -39,6 +39,7 @@ public class AdresarKnihovenMarcFunctions implements MarcRecordFunctions {
 	private final static Pattern GPS_PATTERN = Pattern.compile("(\\d+)°(\\d+)'([\\d.]+)\"([NSEW])");
 	private final static String MAP_ADRESAR_HOURS = "adresar_hours.map";
 	private static final String MAP_LIBRARIES_RELEVANCE = "adresar_relevance.map";
+	private static final String MAP_LIBRARIES_REGION = "adresar_region.map";
 	private static final String PORTAL_FACET_TEXT = "KNIHOVNYCZ_YES";
 	private static final String URL_COMMENT = "o regionálních knihovnách";
 
@@ -182,12 +183,13 @@ public class AdresarKnihovenMarcFunctions implements MarcRecordFunctions {
 		}
 		return results;
 	}
-	
-	public List<String> adresarGetRegionDistrictFacet(MarcFunctionContext ctx) {
-		String region = getFirstFieldForAdresar(ctx, "KRJa");
+
+	public List<String> adresarGetRegionDistrictFacet(MarcFunctionContext ctx) throws IOException {
+		List<String> regions = propertyResolver.resolve(MAP_LIBRARIES_REGION).get(getFirstFieldForAdresar(ctx, "KRJa"));
+		String region = (regions == null) ? null : regions.get(0);
 		String district = getFirstFieldForAdresar(ctx, "KRJb");
 		if (region != null && district != null) {
-			return SolrUtils.createHierarchicFacetValues(getFirstFieldForAdresar(ctx, "KRJa"), getFirstFieldForAdresar(ctx, "KRJb"));
+			return SolrUtils.createHierarchicFacetValues(region, district);
 		}
 		return null;
 	}
