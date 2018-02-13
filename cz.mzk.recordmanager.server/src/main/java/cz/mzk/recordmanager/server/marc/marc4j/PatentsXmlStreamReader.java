@@ -87,11 +87,11 @@ public class PatentsXmlStreamReader implements MarcReader {
 	private static final Pattern PATTERN_024 = Pattern.compile("(.{4}\\s*\\d+/\\d+).*");
 
 	private static final Pattern A3_PATTERN = Pattern.compile("St36_CZ_(\\d{4})-(\\d+)_A3");
-	private static final String A3_URL = "http://spisy.upv.cz/Applications/%s/PPVCZ%s_%sA3.pdf";
+	private static final String A3_URL = "https://isdv.upv.cz/doc/FullFiles/Applications/%s/PPVCZ%s_%sA3.pdf";
 	private static final Pattern B6_PATTERN = Pattern.compile("St36_CZ_(\\d*)_B6");
-	private static final String B6_URL = "http://spisy.upv.cz/Patents/FullDocuments/%s/%s.pdf";
+	private static final String B6_URL = "https://isdv.upv.cz/doc/FullFiles/Patents/FullDocuments/%s/%s.pdf";
 	private static final Pattern U1_PATTERN = Pattern.compile("St36_CZ_(\\d*)_U1");
-	private static final String U1_URL = "http://spisy.upv.cz/UtilityModels/FullDocuments/FDUM%s/uv%s.pdf";
+	private static final String U1_URL = "https://isdv.upv.cz/doc/FullFiles/UtilityModels/FullDocuments/FDUM%s/uv%s.pdf";
 
 	private static final String PATENT_TYPE_A3 = "A3";
 	private static final String PATENT_TYPE_B6 = "B6";
