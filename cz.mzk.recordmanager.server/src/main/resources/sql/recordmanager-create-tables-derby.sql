@@ -312,3 +312,11 @@ CREATE TABLE publisher_number (
   order_in_record      DECIMAL(4),
   CONSTRAINT publisher_number_fk FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id)
 );
+
+CREATE TABLE classifier (
+  id                   DECIMAL(10) PRIMARY KEY,
+  harvested_record_id  DECIMAL(10),
+  value                VARCHAR(255),
+  relevance            DECIMAL(30),
+  CONSTRAINT classifier_fk   FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id)
+);

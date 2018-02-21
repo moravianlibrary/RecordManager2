@@ -1271,3 +1271,13 @@ UPDATE import_conf SET item_id='other',interception_enabled=true WHERE id=356;
 --changeset tomascejpek:89
 DROP INDEX cosmotron_996_conf_id_parent_id_idx;
 CREATE INDEX cosmotron_996_conf_id_parent_id_idx ON cosmotron_996 (parent_record_id,import_conf_id);
+
+--changeset tomascejpek:90
+CREATE TABLE classifier (
+  id                   DECIMAL(10) PRIMARY KEY,
+  harvested_record_id  DECIMAL(10),
+  value                VARCHAR(255),
+  relevance            DECIMAL(30),
+  FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE
+);
+CREATE INDEX classifier_harvested_record_idx ON classifier(harvested_record_id);

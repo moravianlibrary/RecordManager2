@@ -183,6 +183,10 @@ public class HarvestedRecord extends AbstractDomainObject {
 	@MapKey(name="id.langStr")
 	private Map<String, Language> languages = new HashMap<>();
 
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name="harvested_record_id", referencedColumnName="id", nullable=false)
+	private List<Classifier> classifiers = new ArrayList<>();
+
 	// TODO consider moving dedup keys to separate table
 	@Column(name="author_auth_key")
 	private String authorAuthKey;
@@ -627,5 +631,13 @@ public class HarvestedRecord extends AbstractDomainObject {
 
 	public void setSourceInfoT(String sourceInfoT) {
 		this.sourceInfoT = sourceInfoT;
+	}
+
+	public List<Classifier> getClassifiers() {
+		return classifiers;
+	}
+
+	public void setClassifiers(List<Classifier> classifiers) {
+		this.classifiers = classifiers;
 	}
 }
