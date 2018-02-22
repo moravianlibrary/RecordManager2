@@ -5,8 +5,6 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class PredictedRecord {
 
@@ -16,9 +14,9 @@ public class PredictedRecord {
 	private static final String NAME_ID = "ID";
 	private static final String NAME_BEST = "BEST_%d";
 	private static final String NAME_BEST_VAL = "BEST_%d_VAL";
-	private static final String PSEUDO_072 = "$a%s$x%s$9%s";
+//	private static final String PSEUDO_072 = "$a%s$x%s$9%s";
 
-	private static final Pattern PATTERN_PREDICTED_VALUE = Pattern.compile("(\\d*) (.*)->([^ ]*) (.*)");
+//	private static final Pattern PATTERN_PREDICTED_VALUE = Pattern.compile("(\\d*) (.*)->([^ ]*) (.*)");
 
 	private PredictedRecord(String recordId) {
 		this.recordId = recordId;
@@ -59,11 +57,11 @@ public class PredictedRecord {
 	}
 
 	private static String parsePredictedValue(String raw) {
-		Matcher matcher;
-		if ((matcher = PATTERN_PREDICTED_VALUE.matcher(raw)).matches()) {
-			return String.format(PSEUDO_072, matcher.group(3), matcher.group(4), matcher.group(1));
-		}
-		return "";
+//		Matcher matcher;
+//		if ((matcher = PATTERN_PREDICTED_VALUE.matcher(raw)).matches()) {
+//			return String.format(PSEUDO_072, matcher.group(3), matcher.group(4), matcher.group(1));
+//		}
+		return raw;
 	}
 
 	@Override

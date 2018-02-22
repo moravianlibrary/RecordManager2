@@ -106,6 +106,8 @@ public class SolrFieldConstants {
 	
 	public static final String ITEM_ID_TXT_MV = "item_id_txt_mv";
 
+	public static final String AUTO_CONSPECTUS_SEARCH = "auto_conspectus_txt_mv";
+
 	/**
 	 * dummy fields used for processing purposes only, shouldn't be indexed. Fields are deleted in AuthorityEnricher. 
 	 */

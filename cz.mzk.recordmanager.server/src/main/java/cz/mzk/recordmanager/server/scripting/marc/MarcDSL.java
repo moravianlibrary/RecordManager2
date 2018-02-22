@@ -5,7 +5,9 @@ import java.util.*;
 import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
+import cz.mzk.recordmanager.server.model.Classifier;
 import cz.mzk.recordmanager.server.model.Ean;
 import cz.mzk.recordmanager.server.model.HarvestedRecordFormat.HarvestedRecordFormatEnum;
 import org.apache.commons.validator.routines.ISBNValidator;
@@ -65,7 +67,9 @@ public class MarcDSL extends BaseDSL {
 	private static final String DISPLAY773_ISSN = "ISSN ";
 	private static final String DISPLAY773_ISBN = "ISBN ";
 	private static final String DISPLAY773_JOINER = ". -- ";
-	
+
+	private static final String AUTO_CONSPECTUS_DISPLAY_FORMAT = "%s (%s)";
+
 	private final MarcFunctionContext context;
 
 	private final MarcRecord record;
@@ -881,4 +885,15 @@ public class MarcDSL extends BaseDSL {
 		}
 		return results;
 	}
+
+	public List<String> getAutoCospectusDisplay() {
+		return context.harvestedRecord().getClassifiers().stream()
+				.map(c -> String.format(AUTO_CONSPECTUS_DISPLAY_FORMAT, c.getValue(), c.getRelevance()))
+				.collect(Collectors.toList());
+	}
+
+	public List<String> getAutoCospectusSearch() {
+		return context.harvestedRecord().getClassifiers().stream().map(Classifier::getValue).collect(Collectors.toList());
+	}
+
 }

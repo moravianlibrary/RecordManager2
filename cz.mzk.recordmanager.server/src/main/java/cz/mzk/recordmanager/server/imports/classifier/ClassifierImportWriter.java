@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Component
@@ -37,6 +38,7 @@ public class ClassifierImportWriter implements ItemWriter<PredictedRecord> {
 			}
 			hrDao.dropClassifiers(hr);
 			hr.setClassifiers(classifiers);
+			hr.setUpdated(new Date());
 			hrDao.persist(hr);
 		}
 	}
