@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import cz.mzk.recordmanager.server.model.*;
 import cz.mzk.recordmanager.server.util.Constants;
 import org.hibernate.Criteria;
 import org.hibernate.NullPrecedence;
@@ -14,19 +15,7 @@ import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Component;
 
-import cz.mzk.recordmanager.server.model.Cnb;
-import cz.mzk.recordmanager.server.model.DedupRecord;
-import cz.mzk.recordmanager.server.model.Ean;
-import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecord.HarvestedRecordUniqueId;
-import cz.mzk.recordmanager.server.model.HarvestedRecordFormat;
-import cz.mzk.recordmanager.server.model.ImportConfiguration;
-import cz.mzk.recordmanager.server.model.Isbn;
-import cz.mzk.recordmanager.server.model.Ismn;
-import cz.mzk.recordmanager.server.model.Issn;
-import cz.mzk.recordmanager.server.model.Oclc;
-import cz.mzk.recordmanager.server.model.ShortTitle;
-import cz.mzk.recordmanager.server.model.Title;
 import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordDAO;
 
 @Component
@@ -269,6 +258,27 @@ public class HarvestedRecordDAOHibernate extends
 		update.setParameter("id", hr.getId());
 		update.setParameter("updated", hr.getUpdated());
 		update.executeUpdate();
+	}
+
+	@Override
+	public void dropClassifiers(HarvestedRecord hr) {
+		if (hr == null || hr.getId() == null) {
+			return;
+		}
+		Session session = sessionFactory.getCurrentSession();
+		// don't delete keys for not managed entities
+		if (!session.contains(hr)) {
+			return;
+		}
+
+		List<Classifier> values = hr.getClassifiers();
+		hr.setClassifiers(new ArrayList<>());
+		for (Classifier value : values) {
+			session.delete(value);
+		}
+
+		session.update(hr);
+		session.flush();
 	}
 
 }

@@ -14,7 +14,7 @@ public class Classifier extends AbstractDomainObject {
 	private String value;
 
 	@Column(name = "relevance")
-	private String relevance;
+	private float relevance;
 
 	public String getValue() {
 		return value;
@@ -24,11 +24,11 @@ public class Classifier extends AbstractDomainObject {
 		this.value = value;
 	}
 
-	public String getRelevance() {
+	public float getRelevance() {
 		return relevance;
 	}
 
-	public void setRelevance(String relevance) {
+	public void setRelevance(float relevance) {
 		this.relevance = relevance;
 	}
 

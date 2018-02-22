@@ -415,6 +415,6 @@ CREATE TABLE classifier (
   id                   DECIMAL(10) PRIMARY KEY,
   harvested_record_id  DECIMAL(10),
   value                VARCHAR(255),
-  relevance            DECIMAL(30),
+  relevance            REAL,
   FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE
 );

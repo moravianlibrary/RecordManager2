@@ -39,4 +39,6 @@ public interface HarvestedRecordDAO extends DomainDAO<Long, HarvestedRecord> {
 
 	void deleteUpvApplicationRecord(String appId);
 
+	void dropClassifiers(HarvestedRecord hr);
+
 }

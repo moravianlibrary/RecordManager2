@@ -5,6 +5,7 @@ import java.io.File;
 
 import javax.sql.DataSource;
 
+import cz.mzk.recordmanager.server.imports.classifier.ClassifierImportJobConfig;
 import org.springframework.batch.core.configuration.support.ApplicationContextFactory;
 import org.springframework.batch.core.configuration.support.GenericApplicationContextFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -92,7 +93,8 @@ public class AppConfigCmdline {
 				ZakonyProLidiHarvestJobConfig.class,
 				AdresarHarvestJobConfig.class,
 				ManuscriptoriumFulltextJobConfig.class,
-				AgrovocConvertorJobConfig.class
+				AgrovocConvertorJobConfig.class,
+				ClassifierImportJobConfig.class
 			);
 	}
 
