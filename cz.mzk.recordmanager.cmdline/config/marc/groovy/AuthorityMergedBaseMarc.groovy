@@ -20,3 +20,5 @@ subjectKeywords_search_txt_mv = getFields "100abcd:400abcd:500abcd"
 people_search_txt_mv = getFields "100abcd:400abcd:500abcd"
 
 id_authority = getId001()
+
+bibliographic_details_display_mv = getFields "678a"
