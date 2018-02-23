@@ -1,6 +1,5 @@
 package cz.mzk.recordmanager.server.imports.classifier;
 
-import cz.mzk.recordmanager.server.imports.inspirations.InspirationImportJobParametersValidator;
 import cz.mzk.recordmanager.server.springbatch.JobFailureListener;
 import cz.mzk.recordmanager.server.util.Constants;
 import org.springframework.batch.core.Job;
@@ -18,6 +17,7 @@ import org.springframework.context.annotation.Configuration;
 public class ClassifierImportJobConfig {
 
 	private static final String STRING_OVERRIDEN_BY_EXPRESSION = null;
+	private static final Long LONG_OVERRIDEN_BY_EXPRESSION = null;
 
 	@Autowired
 	private JobBuilderFactory jobs;
@@ -29,7 +29,7 @@ public class ClassifierImportJobConfig {
 	public Job importClassifierRecordsJob(
 			@Qualifier(Constants.JOB_ID_IMPORT_CLASSIFIER + ":importClassifierStep") Step classifierImportStep) {
 		return jobs.get(Constants.JOB_ID_IMPORT_CLASSIFIER)
-				.validator(new InspirationImportJobParametersValidator())
+				.validator(new ClassifierImportJobParametersValidator())
 				.listener(JobFailureListener.INSTANCE).flow(classifierImportStep)
 				.end().build();
 	}
@@ -39,7 +39,7 @@ public class ClassifierImportJobConfig {
 		return steps.get("updateRecordsStep")
 				.<PredictedRecord, PredictedRecord>chunk(1)//
 				.reader(classifierFileReader(STRING_OVERRIDEN_BY_EXPRESSION))//
-				.writer(classifierImportWriter()) //
+				.writer(classifierImportWriter(LONG_OVERRIDEN_BY_EXPRESSION)) //
 				.build();
 	}
 
@@ -53,8 +53,8 @@ public class ClassifierImportJobConfig {
 
 	@Bean(name = Constants.JOB_ID_IMPORT_CLASSIFIER + ":writer")
 	@StepScope
-	public ClassifierImportWriter classifierImportWriter() {
-		return new ClassifierImportWriter();
+	public ClassifierImportWriter classifierImportWriter(@Value("#{jobParameters[" + Constants.JOB_PARAM_CONF_ID + "]}") Long configurationId) {
+		return new ClassifierImportWriter(configurationId);
 	}
 
 }

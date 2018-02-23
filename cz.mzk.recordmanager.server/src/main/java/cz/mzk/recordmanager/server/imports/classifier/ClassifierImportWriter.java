@@ -20,14 +20,17 @@ public class ClassifierImportWriter implements ItemWriter<PredictedRecord> {
 	@Autowired
 	private HarvestedRecordDAO hrDao;
 
-	public ClassifierImportWriter() {
+	private Long confId;
+
+	public ClassifierImportWriter(Long confId) {
+		this.confId = confId;
 	}
 
 	@Override
 	public void write(List<? extends PredictedRecord> items)
 			throws Exception {
 		for (PredictedRecord item : items) {
-			HarvestedRecord hr = hrDao.findByIdAndHarvestConfiguration(item.getRecordId(), 300L);
+			HarvestedRecord hr = hrDao.findByIdAndHarvestConfiguration(item.getRecordId(), confId);
 			if (hr == null) return;
 			List<Classifier> classifiers = new ArrayList<>();
 			for (Pair<String, Float> value : item.getValues()) {
