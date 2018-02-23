@@ -22,5 +22,5 @@ format_display_mv = getFormat()
 local_institution_facet_str_mv = getInstitutionFacet()
 
 authority_id_display = getId001()
-
 bibliographic_details_display_mv = getFields "678a"
+personal_name_display = getFirstField "100abd"
