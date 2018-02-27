@@ -8,7 +8,7 @@ heading_display = getFirstAuthAuthor "100"
 use_for = getAuthAuthors "400"
 see_also = getFields "500abcd"
 scope_note = getFields "678a"
-url = getAuthorityUrl "856u"
+url = getUrls()
 
 id_authority = getId001()
 

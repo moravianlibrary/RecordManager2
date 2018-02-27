@@ -664,17 +664,7 @@ public class MarcDSL extends BaseDSL {
     	if(result.isEmpty()) return null;
     	return result.get(0);
     }
-    
-    public List<String> getAuthorityUrl(String tags){
-    	List<String> urls = getFields(tags);
-    	if(urls.isEmpty()) return Collections.emptyList();
-    	if(urls.size() == 1) return urls;
-    	for(String url: urls){
-    		if(url.matches(".*wikipedia.*")) return Collections.singletonList(url);
-    	}
-    	return Collections.singletonList(urls.get(0));
-    }
-    
+
     public List<String> getAuthIds(String tags){
 		List<String> result = new ArrayList<>();
 		
