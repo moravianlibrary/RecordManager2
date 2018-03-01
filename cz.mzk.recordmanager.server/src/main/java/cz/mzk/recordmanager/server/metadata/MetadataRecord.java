@@ -1,237 +1,322 @@
 package cz.mzk.recordmanager.server.metadata;
 
+import cz.mzk.recordmanager.server.export.IOFormat;
+import cz.mzk.recordmanager.server.model.*;
+import cz.mzk.recordmanager.server.model.HarvestedRecordFormat.HarvestedRecordFormatEnum;
+import cz.mzk.recordmanager.server.model.TezaurusRecord.TezaurusKey;
+
 import java.util.List;
 
-import cz.mzk.recordmanager.server.export.IOFormat;
-import cz.mzk.recordmanager.server.model.Cnb;
-import cz.mzk.recordmanager.server.model.Ean;
-import cz.mzk.recordmanager.server.model.HarvestedRecordFormat.HarvestedRecordFormatEnum;
-import cz.mzk.recordmanager.server.model.Isbn;
-import cz.mzk.recordmanager.server.model.Ismn;
-import cz.mzk.recordmanager.server.model.Issn;
-import cz.mzk.recordmanager.server.model.Language;
-import cz.mzk.recordmanager.server.model.Oclc;
-import cz.mzk.recordmanager.server.model.PublisherNumber;
-import cz.mzk.recordmanager.server.model.ShortTitle;
-import cz.mzk.recordmanager.server.model.TezaurusRecord.TezaurusKey;
-import cz.mzk.recordmanager.server.model.Title;
-
 public interface MetadataRecord {
-	
+
 	/**
-	 * get all titles of record, first is the most important 
+	 * get all titles of record, first is the most important
+	 *
 	 * @return List<Title>
 	 */
-	public List<Title> getTitle();
-	
-	public Long getPublicationYear();
-	
+	List<Title> getTitle();
+
 	/**
-	 * export record in given format
-	 * @param iOFormat
-	 * @return
-	 */
-	public String export(IOFormat iOFormat);
-	
-	/**
-	 * get unique identifier of record. It must be Institution dependent.
-	 * @return
-	 */
-	public String getUniqueId();
-	
-	/**
-	 * get all ISBNs assigned to record
-	 * @return List<String>
-	 */
-	
-	public List<Isbn> getISBNs();
-	
-	/**
-	 * get all ISSNs assigned to record
-	 * @return List<String>
-	 */
-	
-	public List<Issn> getISSNs();
-	
-	/**
-	 * get all CNBs assigned to record
-	 * @return
-	 */
-	public List<Cnb> getCNBs();
-	
-	/**
-	 * get series ISSN
-	 * @return String or null
-	 */
-	public String getISSNSeries();
-	
-	/**
-	 * get ISSN series order
-	 * @return
-	 */
-	public String getISSNSeriesOrder();
-	
-	/**
-	 * get count of pages
-	 * @return page count or null
-	 */
-	public Long getPageCount();
-	
-	/**
-	 * get weight of record
-	 * @param baseWeight
+	 * get year of publication
+	 *
 	 * @return Long
 	 */
-	public Long getWeight(Long baseWeight);
-	
+	Long getPublicationYear();
+
 	/**
-	 * return list of detected formats
-	 * @return List<RecordFormat>
+	 * export record in given format
+	 *
+	 * @param iOFormat {@link IOFormat}
+	 * @return string representation of record
 	 */
-	public List<HarvestedRecordFormatEnum> getDetectedFormatList();
-	
+	String export(IOFormat iOFormat);
+
+	/**
+	 * get unique identifier of record. It must be Institution dependent.
+	 *
+	 * @return unique id
+	 */
+	String getUniqueId();
+
+	/**
+	 * get all {@link Isbn} assigned to record
+	 *
+	 * @return List<Isbn>
+	 */
+
+	List<Isbn> getISBNs();
+
+	/**
+	 * get all {@link Issn} assigned to record
+	 *
+	 * @return List<Issn>
+	 */
+
+	List<Issn> getISSNs();
+
+	/**
+	 * get all {@link Cnb} assigned to record
+	 *
+	 * @return List<Cnb>
+	 */
+	List<Cnb> getCNBs();
+
+	/**
+	 * get series ISSN
+	 *
+	 * @return String or null
+	 */
+	String getISSNSeries();
+
+	/**
+	 * get ISSN series order
+	 *
+	 * @return String or null
+	 */
+	String getISSNSeriesOrder();
+
+	/**
+	 * get count of pages
+	 *
+	 * @return page count or null
+	 */
+	Long getPageCount();
+
+	/**
+	 * get weight of record
+	 *
+	 * @param baseWeight from db
+	 * @return Long
+	 */
+	Long getWeight(Long baseWeight);
+
+	/**
+	 * return list of detected formats {@link HarvestedRecordFormatEnum}
+	 *
+	 * @return List<HarvestedRecordFormatEnum>
+	 */
+	List<HarvestedRecordFormatEnum> getDetectedFormatList();
+
 	/**
 	 * return scale of document (significant for maps only)
+	 *
 	 * @return Long or null
 	 */
-	public Long getScale();
-	
+	Long getScale();
+
 	/**
 	 * return UUID of ducument
-	 * @return
+	 *
+	 * @return String or null
 	 */
-	public String getUUId();
-	
+	String getUUId();
+
 	/**
 	 * get authority key for main author
-	 * @return
+	 *
+	 * @return String or null
 	 */
-	public String getAuthorAuthKey();
-	
+	String getAuthorAuthKey();
+
 	/**
 	 * get string representing main author
-	 * @return
+	 *
+	 * @return String or null
 	 */
-	public String getAuthorString();
-	
+	String getAuthorString();
+
 	/**
 	 * get cluster id of record
-	 * @return
+	 *
+	 * @return String or null
 	 */
-	public String getClusterId();
-	
+	String getClusterId();
+
 	/**
 	 * get list of {@link Oclc}
-	 * @return
+	 *
+	 * @return List<Oclc>
 	 */
-	public List<Oclc> getOclcs();
-	
+	List<Oclc> getOclcs();
+
 	/**
 	 * get list o {@link Language}
-	 * @return
+	 *
+	 * @return List<String>
 	 */
-	public List<String> getLanguages();
-	
+	List<String> getLanguages();
+
 	/**
 	 * Decide whether this record should be stored during importing/harvesting
+	 *
 	 * @return true if record should be stored, false otherwise
 	 */
-	public boolean matchFilter();
-	
+	boolean matchFilter();
+
 	/**
-	 * get record id
-	 * @return
+	 * get record id from OAI header
+	 *
+	 * @return String
 	 */
-	public String getOAIRecordId();
-	
+	String getOAIRecordId();
+
 	/**
 	 * return raw identifier from field 001
-	 * @return
+	 *
+	 * @return String
 	 */
-	public String getRaw001Id();
-	
-	
+	String getRaw001Id();
+
 	/**
 	 * return true if record is deleted from field DEL
-	 * @return
+	 *
+	 * @return Boolean
 	 */
-	public Boolean isDeleted();
-	
+	Boolean isDeleted();
+
 	/**
 	 * return record format for citation
-	 * @return
+	 *
+	 * @return {@link CitationRecordType}
 	 */
-	public CitationRecordType getCitationFormat();
-	
+	CitationRecordType getCitationFormat();
+
 	/**
 	 * return barcodes
-	 * @return
+	 *
+	 * @return List<String>
 	 */
-	default public List<String> getBarcodes(){
+	default List<String> getBarcodes() {
 		return null;
 	}
-	
+
 	/**
 	 * get all ISMNs assigned to record
+	 *
 	 * @return List<Ismn>
 	 */
-	public List<Ismn> getISMNs();
-	
+	List<Ismn> getISMNs();
+
 	/**
-	 * get authority ID
-	 * @return
+	 * get authority ID of main author
+	 *
+	 * @return String
 	 */
-	public String getAuthorityId();
+	String getAuthorityId();
 
 	/**
 	 * get urls
 	 * format: availability | link | comment
-	 * @return
+	 *
+	 * @return List<String>
 	 */
-	public List<String> getUrls();
+	List<String> getUrls();
 
 	/**
 	 * get rights value from Kramerius
-	 * @return
+	 *
+	 * @return String
 	 */
-	public String getPolicyKramerius();
-	
+	String getPolicyKramerius();
+
 	/**
 	 * get stopwords file name
-	 * @return
+	 *
+	 * @return String
 	 */
-	public String filterSubjectFacet();
-	
-	public List<Ean> getEANs();
+	String filterSubjectFacet();
 
-	public List<ShortTitle> getShortTitles();
-	
-	public List<String> getDefaultStatuses();
+	/**
+	 * get all {@link Ean} assigned to record
+	 *
+	 * @return List<Ean>
+	 */
+	List<Ean> getEANs();
 
-	public List<String> getInternationalPatentClassfication();
+	/**
+	 * get all {@link ShortTitle} assigned to record
+	 *
+	 * @return List<ShortTitle>
+	 */
+	List<ShortTitle> getShortTitles();
 
-	public TezaurusKey getTezaurusKey();
+	/**
+	 * get statuses with institution dependence
+	 *
+	 * @return List<String>
+	 */
+	List<String> getDefaultStatuses();
 
-	public Boolean getMetaproxyBool();
+	/**
+	 * get international patent classfication for UPV
+	 *
+	 * @return List<String>
+	 */
+	List<String> getInternationalPatentClassfication();
 
-	default public boolean getIndexWhenMerged() {
+	/**
+	 * get all {@link TezaurusKey} assigned to record
+	 *
+	 * @return List<TezaurusKey>
+	 */
+	TezaurusKey getTezaurusKey();
+
+	/**
+	 * get metaproxy permission
+	 *
+	 * @return Boolean
+	 */
+	Boolean getMetaproxyBool();
+
+	default boolean getIndexWhenMerged() {
 		return true;
 	}
 
-	public List<PublisherNumber> getPublisherNumber();
+	/**
+	 * get all {@link PublisherNumber} assigned to record
+	 *
+	 * @return List<PublisherNumber>
+	 */
+	List<PublisherNumber> getPublisherNumber();
 
-	default public String getSfxUrl(String id) {
+	/**
+	 * get sfx url
+	 *
+	 * @param id record id
+	 * @return String
+	 */
+	default String getSfxUrl(String id) {
 		return null;
 	}
 
+	/**
+	 * get application id, record id end with _B6
+	 *
+	 * @return String or null
+	 */
 	default String getUpvApplicationId() {
 		return null;
 	}
 
-	public String getSourceInfoX();
+	/**
+	 * get source info field 773, subfield x
+	 *
+	 * @return String or null
+	 */
+	String getSourceInfoX();
 
-	public String getSourceInfoT();
+	/**
+	 * get source info field 773, subfield t
+	 *
+	 * @return String or null
+	 */
+	String getSourceInfoT();
 
-	public String getSourceInfoG();
+	/**
+	 * get source info field 773, subfield g
+	 *
+	 * @return String or null
+	 */
+	String getSourceInfoG();
 
 }
