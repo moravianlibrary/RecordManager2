@@ -18,3 +18,5 @@ bibliographic_details_display_mv = getFields "678a"
 personal_name_display = getFirstAuthAuthor "100"
 alternative_name_display_mv = getAuthAuthors "400"
 source_display_mv = getFields "670a"
+pseudonym_name_display_mv = getAuthorityPseudonymsNames()
+pseudonym_ids_display_mv = getAuthorityPseudonymsIds()

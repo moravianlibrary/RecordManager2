@@ -871,4 +871,27 @@ public class MarcDSL extends BaseDSL {
 		}
 		return results;
 	}
+
+	private static final String AUTH_PSEUDONYMS_NAME = "%s %s";
+
+	public List<String> getAuthorityPseudonymsNames() {
+		List<String> results = new ArrayList<>();
+		for (DataField df : record.getDataFields("500")) {
+			results.add(String.format(AUTH_PSEUDONYMS_NAME,
+					getSubfieldAsString(df, 'a'), getSubfieldAsString(df, 'd')));
+		}
+		return results;
+	}
+
+	public List<String> getAuthorityPseudonymsIds() {
+		List<String> results = new ArrayList<>();
+		for (DataField df : record.getDataFields("500")) {
+			results.add(getSubfieldAsString(df, '7'));
+		}
+		return results;
+	}
+
+	private String getSubfieldAsString(DataField df, char subfieldCode) {
+		return df.getSubfield(subfieldCode) != null ? df.getSubfield(subfieldCode).getData() : "";
+	}
 }
