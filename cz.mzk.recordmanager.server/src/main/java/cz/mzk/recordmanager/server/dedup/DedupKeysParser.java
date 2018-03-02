@@ -7,13 +7,13 @@ import cz.mzk.recordmanager.server.model.HarvestedRecord;
 
 public interface DedupKeysParser {
 
-	public List<String> getSupportedFormats();
+	List<String> getSupportedFormats();
 
-	public HarvestedRecord parse(HarvestedRecord record) throws DedupKeyParserException;
+	HarvestedRecord parse(HarvestedRecord record) throws DedupKeyParserException;
 	
 	/**
 	 * reuses existing {@link MetadataRecord} object, otherwise acts the same way as parse({@link HarvestedRecord})
 	 */
-	public HarvestedRecord parse(HarvestedRecord record, MetadataRecord metadataRecord) throws DedupKeyParserException;
+	HarvestedRecord parse(HarvestedRecord record, MetadataRecord metadataRecord) throws DedupKeyParserException;
 
 }

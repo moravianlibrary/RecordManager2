@@ -79,7 +79,7 @@ public class HarvestedRecordFormat {
 
 		private Long numValue;
 		
-		private HarvestedRecordFormatEnum(Long numValue) {
+		HarvestedRecordFormatEnum(Long numValue) {
 			this.numValue = numValue;
 		}
 		

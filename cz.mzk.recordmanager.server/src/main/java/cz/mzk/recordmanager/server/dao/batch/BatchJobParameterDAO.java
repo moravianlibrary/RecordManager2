@@ -8,6 +8,6 @@ import cz.mzk.recordmanager.server.oai.dao.DomainDAO;
 
 public interface BatchJobParameterDAO extends DomainDAO<JobParamId, BatchJobParam> {
 
-	public List<BatchJobParam> findByJobExecutionId(Long jobInstanceId);
+	List<BatchJobParam> findByJobExecutionId(Long jobInstanceId);
 
 }

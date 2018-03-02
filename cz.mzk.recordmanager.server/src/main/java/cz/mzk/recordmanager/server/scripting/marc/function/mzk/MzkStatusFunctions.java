@@ -41,7 +41,7 @@ public class MzkStatusFunctions implements MarcRecordFunctions {
 			"http://www.digitalniknihovna.cz"
 	);
 
-	private static enum AvailabilityStatus {
+	private enum AvailabilityStatus {
 		ABSENT {
 			@Override
 			public boolean check(DataField df) {

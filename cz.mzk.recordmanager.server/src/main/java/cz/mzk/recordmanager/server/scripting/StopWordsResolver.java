@@ -5,6 +5,6 @@ import java.util.Set;
 
 public interface StopWordsResolver {
 
-	public Set<String> resolve(String file) throws IOException;
+	Set<String> resolve(String file) throws IOException;
 
 }

@@ -7,14 +7,14 @@ import org.springframework.batch.core.JobParameters;
 
 public interface JobExecutor {
 
-	public Collection<String> getJobNames();
+	Collection<String> getJobNames();
 
-	public Collection<JobParameterDeclaration> getParametersOfJob(String jobName);
+	Collection<JobParameterDeclaration> getParametersOfJob(String jobName);
 
-	public JobExecution execute(String jobName, JobParameters params, boolean forceRestart);
+	JobExecution execute(String jobName, JobParameters params, boolean forceRestart);
 
-	public JobExecution execute(String jobName, JobParameters parameters);
+	JobExecution execute(String jobName, JobParameters parameters);
 
-	public JobExecution restart(Long jobExecutionId);
+	JobExecution restart(Long jobExecutionId);
 
 }

@@ -8,7 +8,7 @@ import cz.mzk.recordmanager.server.model.Title;
 
 public interface TitleDAO extends DomainDAO<Long, Title> {
 
-	public List<NonperiodicalTitleClusterable> getTitleForDeduplicationByYear(Long year, int minPages, int maxPages, String lang);
+	List<NonperiodicalTitleClusterable> getTitleForDeduplicationByYear(Long year, int minPages, int maxPages, String lang);
 	
-	public List<TitleClusterable> getPeriodicalsTitleForDeduplication(Long year);
+	List<TitleClusterable> getPeriodicalsTitleForDeduplication(Long year);
 }

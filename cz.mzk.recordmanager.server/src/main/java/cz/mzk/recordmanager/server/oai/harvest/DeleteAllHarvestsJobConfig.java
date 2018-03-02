@@ -37,7 +37,7 @@ public class DeleteAllHarvestsJobConfig {
     		"DELETE FROM harvested_record" //
     );
     
-    private static enum DeleteAllHarvestsJobParameterValidator implements IntrospectiveJobParametersValidator {
+    private enum DeleteAllHarvestsJobParameterValidator implements IntrospectiveJobParametersValidator {
     	
     	INSTANCE;
 

@@ -5,10 +5,10 @@ import cz.mzk.recordmanager.server.model.TezaurusRecord;
 
 public interface TezaurusDAO extends DomainDAO<Long, TezaurusRecord> {
 
-	public TezaurusRecord findByIdAndHarvestConfiguration(String recordId,
-			ImportConfiguration configuration);
+	TezaurusRecord findByIdAndHarvestConfiguration(String recordId,
+												   ImportConfiguration configuration);
 
-	public TezaurusRecord findByConfigAndSourceFieldAndName(
+	TezaurusRecord findByConfigAndSourceFieldAndName(
 			ImportConfiguration configuration, String sourceField, String name);
 
 }

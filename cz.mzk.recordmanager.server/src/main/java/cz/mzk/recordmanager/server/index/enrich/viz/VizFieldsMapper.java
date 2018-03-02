@@ -6,14 +6,14 @@ import org.apache.solr.common.SolrInputDocument;
 
 public interface VizFieldsMapper {
 
-	public List<String> getSuppoprtedSources();
+	List<String> getSuppoprtedSources();
 
-	public default void parse(List<String> values, SolrInputDocument document) {
+	default void parse(List<String> values, SolrInputDocument document) {
 		for (String value : values) {
 			parse(value, document);
 		}
 	}
 
-	public void parse(String value, SolrInputDocument document);
+	void parse(String value, SolrInputDocument document);
 
 }

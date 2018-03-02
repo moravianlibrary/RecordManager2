@@ -20,6 +20,6 @@ import java.io.IOException;
  */
 public interface MappingResolver {
 
-	public Mapping resolve(String file) throws IOException;
+	Mapping resolve(String file) throws IOException;
 
 }

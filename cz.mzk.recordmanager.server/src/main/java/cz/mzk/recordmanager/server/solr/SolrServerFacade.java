@@ -11,17 +11,17 @@ import org.apache.solr.common.SolrInputDocument;
 
 public interface SolrServerFacade {
 
-	public void add(Collection<SolrInputDocument> docs, int commitWithinMs) throws IOException,
+	void add(Collection<SolrInputDocument> docs, int commitWithinMs) throws IOException,
 			SolrServerException;
 
-	public void commit() throws SolrServerException, IOException;
+	void commit() throws SolrServerException, IOException;
 
-	public QueryResponse query(SolrQuery query) throws SolrServerException;
+	QueryResponse query(SolrQuery query) throws SolrServerException;
 
-	public void deleteById(List<String> ids) throws SolrServerException, IOException;
+	void deleteById(List<String> ids) throws SolrServerException, IOException;
 
-	public void deleteByQuery(String query) throws SolrServerException, IOException;
+	void deleteByQuery(String query) throws SolrServerException, IOException;
 
-	public void deleteByQuery(String query, int commitWithinMs) throws SolrServerException, IOException;
+	void deleteByQuery(String query, int commitWithinMs) throws SolrServerException, IOException;
 
 }

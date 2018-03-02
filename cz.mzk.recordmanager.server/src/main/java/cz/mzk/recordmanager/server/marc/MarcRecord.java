@@ -12,9 +12,9 @@ import cz.mzk.recordmanager.server.export.IOFormat;
 
 public interface MarcRecord {
 	
-	public static final String EMPTY_SEPARATOR = "";
+	String EMPTY_SEPARATOR = "";
 
-	public String getControlField(String tag);
+	String getControlField(String tag);
 	
 	/**
 	 * Get subfields of first field separated by separator
@@ -24,7 +24,7 @@ public interface MarcRecord {
 	 * @param subfields
 	 * @return
 	 */
-	public String getField(String tag, String separator, char... subfields);
+	String getField(String tag, String separator, char... subfields);
 	
 	
 	/**
@@ -34,7 +34,7 @@ public interface MarcRecord {
 	 * @param subfields
 	 * @return
 	 */
-	public String getField(String tag, char... subfields);
+	String getField(String tag, char... subfields);
 	
 	/**
 	 * Extract given field with subfields separated by separator
@@ -44,7 +44,7 @@ public interface MarcRecord {
 	 * @param subfields
 	 * @return
 	 */
-	public List<String> getFields(String tag, String separator, char... subfields);
+	List<String> getFields(String tag, String separator, char... subfields);
 	
 	/**
 	 * Extract given field with subfields separated by separator filtered by matcher
@@ -55,7 +55,7 @@ public interface MarcRecord {
 	 * @param subfields
 	 * @return
 	 */
-	public List<String> getFields(String tag, DataFieldMatcher matcher, String separator, char... subfields);
+	List<String> getFields(String tag, DataFieldMatcher matcher, String separator, char... subfields);
 
 	/**
 	 * Extract given field with subfields separated by separator filtered by matcher
@@ -67,8 +67,8 @@ public interface MarcRecord {
 	 * @param subfields
 	 * @return
 	 */
-	public List<String> getFields(String tag, DataFieldMatcher matcher, SubfieldExtractionMethod method, String separator,
-			char... subfields);
+	List<String> getFields(String tag, DataFieldMatcher matcher, SubfieldExtractionMethod method, String separator,
+						   char... subfields);
 
 	/**
 	 * Extract given subfield from field filtered by matcher
@@ -78,7 +78,7 @@ public interface MarcRecord {
 	 * @param subfield
 	 * @return
 	 */
-	default public List<String> getFields(String tag, DataFieldMatcher matcher, char subfield) {
+	default List<String> getFields(String tag, DataFieldMatcher matcher, char subfield) {
 		return getFields(tag, matcher, EMPTY_SEPARATOR, subfield);
 	}
 	
@@ -89,31 +89,31 @@ public interface MarcRecord {
 	 * @param subfield
 	 * @return
 	 */
-	default public List<String> getFields(String tag, char subfield) {
+	default List<String> getFields(String tag, char subfield) {
 		return getFields(tag, MatchAllDataFieldMatcher.INSTANCE, EMPTY_SEPARATOR, subfield);
 	}
 	
-	public Map<String, List<DataField>> getAllFields();
+	Map<String, List<DataField>> getAllFields();
 	
 	/**
 	 * return all {@link DataField} having given tag
 	 * @param tag
 	 * @return
 	 */
-	public List<DataField> getDataFields(String tag);
+	List<DataField> getDataFields(String tag);
 	
 	/**
 	 * return all {@link ControlField} having given tag
 	 * @param tag
 	 * @return
 	 */
-	public List<ControlField> getControlFields(String tag);
+	List<ControlField> getControlFields(String tag);
 	
 	/**
 	 * return record {@link Leader}
 	 * @return
 	 */
-	public Leader getLeader();
+	Leader getLeader();
 	
 	/**
 	 * get all subfields of {@link DataField} with corresponding codes
@@ -121,9 +121,9 @@ public interface MarcRecord {
 	 * @param codes
 	 * @return {@link List} of matching {@link Subfield} objects
 	 */
-	public List<Subfield> getSubfields(DataField field, char[] codes);
+	List<Subfield> getSubfields(DataField field, char[] codes);
 	
-	public String export(IOFormat iOFormat);
+	String export(IOFormat iOFormat);
 
-	public void addDataField(String tag, char ind1, char ind2, String... subfields);
+	void addDataField(String tag, char ind1, char ind2, String... subfields);
 }

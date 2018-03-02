@@ -6,6 +6,6 @@ import org.springframework.batch.core.JobParametersValidator;
 
 public interface IntrospectiveJobParametersValidator extends JobParametersValidator {
 
-	public Collection<JobParameterDeclaration> getParameters();
+	Collection<JobParameterDeclaration> getParameters();
 
 }

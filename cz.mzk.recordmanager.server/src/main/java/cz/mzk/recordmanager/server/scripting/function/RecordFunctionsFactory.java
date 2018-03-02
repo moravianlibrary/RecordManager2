@@ -5,6 +5,6 @@ import java.util.Map;
 
 public interface RecordFunctionsFactory {
 
-	public <T, S extends Object> Map<String, RecordFunction<T>> create(Class<T> clazz, Collection<S> functions);
+	<T, S extends Object> Map<String, RecordFunction<T>> create(Class<T> clazz, Collection<S> functions);
 
 }

@@ -6,6 +6,6 @@ import cz.mzk.recordmanager.server.model.ImportConfiguration;
 
 public interface ImportConfigurationDAO extends DomainDAO<Long, ImportConfiguration>{
 
-	public List<ImportConfiguration> findByIdPrefix(String prefix);
+	List<ImportConfiguration> findByIdPrefix(String prefix);
 
 }

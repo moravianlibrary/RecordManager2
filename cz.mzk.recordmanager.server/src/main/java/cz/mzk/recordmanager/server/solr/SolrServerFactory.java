@@ -4,11 +4,11 @@ import cz.mzk.recordmanager.server.solr.SolrServerFactoryImpl.Mode;
 
 public interface SolrServerFactory {
 
-	public SolrServerFacade create(String url);
+	SolrServerFacade create(String url);
 
-	public SolrServerFacade create(String url, Mode mode);
+	SolrServerFacade create(String url, Mode mode);
 
-	public SolrServerFacade create(String url, Mode mode,
-			SolrIndexingExceptionHandler exceptionHandler);
+	SolrServerFacade create(String url, Mode mode,
+							SolrIndexingExceptionHandler exceptionHandler);
 
 }

@@ -15,7 +15,7 @@ public class MzkFormatFunctions implements MarcRecordFunctions {
 
 	private static final String UNKNOWN_FORMAT = "Unknown";
 
-	private static enum MZKFormat {
+	private enum MZKFormat {
 
 		PHOTOGRAPHY_FORMAT("Photography") {
 
@@ -95,7 +95,7 @@ public class MzkFormatFunctions implements MarcRecordFunctions {
 
 		private final String description;
 
-		private MZKFormat(String description) {
+		MZKFormat(String description) {
 			this.description = description;
 		}
 

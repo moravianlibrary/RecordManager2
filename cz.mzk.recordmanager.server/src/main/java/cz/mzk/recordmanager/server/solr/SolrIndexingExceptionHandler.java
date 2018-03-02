@@ -6,15 +6,15 @@ import org.apache.solr.common.SolrInputDocument;
 
 public interface SolrIndexingExceptionHandler {
 
-	public enum Action {
+	enum Action {
 		SKIP,
 		RETRY,
-		FALLBACK;
+		FALLBACK
 	}
 
-	public Action handle(Exception ex, Collection<SolrInputDocument> documents) throws SolrServerException;
+	Action handle(Exception ex, Collection<SolrInputDocument> documents) throws SolrServerException;
 
-	default public void ok() {
+	default void ok() {
 	}
 
 }

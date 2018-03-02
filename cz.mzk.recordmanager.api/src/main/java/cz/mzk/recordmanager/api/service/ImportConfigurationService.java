@@ -6,6 +6,6 @@ import java.util.List;
 
 public interface ImportConfigurationService {
 
-	public List<ImportConfigurationDto> getConfigurations();
+	List<ImportConfigurationDto> getConfigurations();
 
 }

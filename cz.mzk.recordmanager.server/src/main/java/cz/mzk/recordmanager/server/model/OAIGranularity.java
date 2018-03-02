@@ -11,7 +11,7 @@ public enum OAIGranularity {
 	private final String readableFormat;
 	private final String parseableFormat;
 	
-	private OAIGranularity(String readableFormat, String parsableFormat) {
+	OAIGranularity(String readableFormat, String parsableFormat) {
 		this.readableFormat = readableFormat;
 		this.parseableFormat = parsableFormat;
 	}

@@ -7,10 +7,10 @@ import cz.mzk.recordmanager.server.model.ObalkyKnihTOC;
 
 public interface ObalkyKnihTOCDAO extends DomainDAO<Long, ObalkyKnihTOC>  {
 
-	public List<ObalkyKnihTOC> findByExample(ObalkyKnihTOC example, boolean includeNullProperties, String... excludeProperties);
+	List<ObalkyKnihTOC> findByExample(ObalkyKnihTOC example, boolean includeNullProperties, String... excludeProperties);
 
-	public List<ObalkyKnihTOC> findByIsbn(Long isbn);
+	List<ObalkyKnihTOC> findByIsbn(Long isbn);
 
-	public List<ObalkyKnihTOC> query(ObalkyKnihTOCQuery query);
+	List<ObalkyKnihTOC> query(ObalkyKnihTOCQuery query);
 
 }

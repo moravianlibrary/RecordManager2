@@ -14,7 +14,7 @@ public class SolrServerFactoryImpl implements SolrServerFactory {
 
 	private static Logger logger = LoggerFactory.getLogger(SolrServerFactoryImpl.class);
 
-	public static enum Mode {
+	public enum Mode {
 
 		DEFAULT {
 

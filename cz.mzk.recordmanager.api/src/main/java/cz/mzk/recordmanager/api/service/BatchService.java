@@ -10,30 +10,30 @@ import cz.mzk.recordmanager.api.model.batch.BatchJobExecutionDTO;
 
 public interface BatchService {
 
-	public List<BatchJobExecutionDTO> getRunningJobExecutions();
+	List<BatchJobExecutionDTO> getRunningJobExecutions();
 
-	public BatchJobExecutionDTO getJobExecution(long id);
+	BatchJobExecutionDTO getJobExecution(long id);
 
-	public void restart(BatchJobExecutionDTO jobExecutionId);
+	void restart(BatchJobExecutionDTO jobExecutionId);
 
-	public BatchJobExecutionDTO getJobExecution(Long id);
+	BatchJobExecutionDTO getJobExecution(Long id);
 
-	public void runFullHarvest(List<IdDto> id);
+	void runFullHarvest(List<IdDto> id);
 
-	public void runIncrementalHarvest(List<IdDto> id);
+	void runIncrementalHarvest(List<IdDto> id);
 
-	public void runDeduplicate();
+	void runDeduplicate();
 
-	public void runIndex();
+	void runIndex();
 
-	public void runIndividualIndex(List<RecordIdDto> ids);
+	void runIndividualIndex(List<RecordIdDto> ids);
 
-	public void runImportRecordsJob(Long id, File file, String format);
+	void runImportRecordsJob(Long id, File file, String format);
 
-	public void runFilterCaslinRecordsJob();
+	void runFilterCaslinRecordsJob();
 
-	public void runRegenerateDedupKeysJob();
+	void runRegenerateDedupKeysJob();
 
-	public void runRegenerateMissingDedupKeysJob();
+	void runRegenerateMissingDedupKeysJob();
 
 }

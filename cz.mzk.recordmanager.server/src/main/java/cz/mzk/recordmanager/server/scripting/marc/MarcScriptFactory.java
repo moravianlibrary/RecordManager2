@@ -8,6 +8,6 @@ import cz.mzk.recordmanager.server.scripting.MappingScriptFactory;
 public interface MarcScriptFactory extends MappingScriptFactory<MarcFunctionContext> {
 	
 	@Override
-	public MappingScript<MarcFunctionContext> create(InputStream... scripts);
+	MappingScript<MarcFunctionContext> create(InputStream... scripts);
 
 }

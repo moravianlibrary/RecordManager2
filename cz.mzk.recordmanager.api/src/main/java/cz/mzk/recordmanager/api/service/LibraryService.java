@@ -8,18 +8,18 @@ import cz.mzk.recordmanager.api.model.LibraryDto;
 
 public interface LibraryService {
 
-	public List<LibraryDto> getLibraries();
+	List<LibraryDto> getLibraries();
 
-	public LibraryDetailDto getDetail(Long libraryId);
+	LibraryDetailDto getDetail(Long libraryId);
 
-	public LibraryDto updateOrCreateLibrary(LibraryDto libraryDto);
+	LibraryDto updateOrCreateLibrary(LibraryDto libraryDto);
 
-	public void removeLibrary(Long libraryId);
+	void removeLibrary(Long libraryId);
 
-	public void updateOrCreateConfig(ImportConfigurationDto config,
-			Long libraryId);
+	void updateOrCreateConfig(ImportConfigurationDto config,
+							  Long libraryId);
 
-	public void removeConfiguration(Long configId);
+	void removeConfiguration(Long configId);
 
 
 }
