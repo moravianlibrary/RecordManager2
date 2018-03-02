@@ -8,6 +8,6 @@ import cz.mzk.recordmanager.server.scripting.MappingScriptFactory;
 public interface DublinCoreScriptFactory extends MappingScriptFactory<DublinCoreFunctionContext> {
 	
 	@Override
-	public MappingScript<DublinCoreFunctionContext> create(InputStream... scripts);
+	MappingScript<DublinCoreFunctionContext> create(InputStream... scripts);
 
 }

@@ -12,6 +12,6 @@ import java.util.Map;
  */
 public interface MappingScript<T> {
 
-	public Map<String, Object> parse(T record);
+	Map<String, Object> parse(T record);
 
 }

@@ -9,8 +9,8 @@ import cz.mzk.recordmanager.server.model.HarvestedRecord;
 
 public interface SolrInputDocumentFactory {
 
-	public SolrInputDocument create(HarvestedRecord record);
+	SolrInputDocument create(HarvestedRecord record);
 
-	public List<SolrInputDocument> create(DedupRecord dedupRecord, List<HarvestedRecord> records);
+	List<SolrInputDocument> create(DedupRecord dedupRecord, List<HarvestedRecord> records);
 
 }

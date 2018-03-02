@@ -11,6 +11,6 @@ import org.marc4j.marc.DataField;
  */
 public interface DataFieldMatcher {
 	
-	public boolean matches(DataField field);
+	boolean matches(DataField field);
 
 }

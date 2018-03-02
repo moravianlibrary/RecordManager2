@@ -12,14 +12,14 @@ public interface Clusterable {
 	 * get unique identifier of object.
 	 * @return
 	 */
-	public Long getId();
+	Long getId();
 	
 	/**
 	 * 
 	 * @param other
 	 * @return integer representation of percentage matching between object [0, 100] 
 	 */
-	public int computeSimilarityPercentage(Clusterable other);
+	int computeSimilarityPercentage(Clusterable other);
 	
 	
 }

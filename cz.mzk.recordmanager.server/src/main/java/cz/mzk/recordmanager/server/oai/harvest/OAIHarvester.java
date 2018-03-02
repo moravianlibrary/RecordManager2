@@ -7,12 +7,12 @@ import cz.mzk.recordmanager.server.oai.model.OAIListRecords;
 
 public interface OAIHarvester {
 
-	public OAIListRecords listRecords(String resumptionToken);
+	OAIListRecords listRecords(String resumptionToken);
 
-	public OAIListIdentifiers listIdentifiers(String resumptionToken);
+	OAIListIdentifiers listIdentifiers(String resumptionToken);
 
-	public OAIGetRecord getRecord(String identifier);
+	OAIGetRecord getRecord(String identifier);
 
-	public OAIIdentify identify();
+	OAIIdentify identify();
 
 }

@@ -7,9 +7,9 @@ import cz.mzk.recordmanager.server.model.Inspiration;
 
 public interface InspirationDAO extends DomainDAO<Long, Inspiration> {
 	
-	public List<Inspiration> findByName(String name);
+	List<Inspiration> findByName(String name);
 	
-	public List<HarvestedRecord> fingHrByInspiraion(String name);
+	List<HarvestedRecord> fingHrByInspiraion(String name);
 	
-	public Inspiration findByHrIdAndName(Long id, String name);
+	Inspiration findByHrIdAndName(Long id, String name);
 }

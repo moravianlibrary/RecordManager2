@@ -8,8 +8,8 @@ import cz.mzk.recordmanager.server.oai.dao.DomainDAO;
 
 public interface BatchJobExecutionDAO extends DomainDAO<Long, BatchJobExecution> {
 
-	public List<BatchJobExecution> getExecutions(JobExecutionQueryDTO query); 
+	List<BatchJobExecution> getExecutions(JobExecutionQueryDTO query);
 	
-	public List<BatchJobExecution> getRunningExecutions();
+	List<BatchJobExecution> getRunningExecutions();
 	
 }

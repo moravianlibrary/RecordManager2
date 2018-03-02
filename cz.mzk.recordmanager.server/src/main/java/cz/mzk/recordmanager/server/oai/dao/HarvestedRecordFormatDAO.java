@@ -7,5 +7,5 @@ import cz.mzk.recordmanager.server.model.HarvestedRecordFormat.HarvestedRecordFo
 
 public interface HarvestedRecordFormatDAO extends DomainDAO<Long, HarvestedRecordFormat	> {
 
-	public List<HarvestedRecordFormat> getFormatsFromEnums(List<HarvestedRecordFormatEnum> enums);
+	List<HarvestedRecordFormat> getFormatsFromEnums(List<HarvestedRecordFormatEnum> enums);
 }

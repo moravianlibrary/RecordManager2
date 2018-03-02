@@ -5,6 +5,6 @@ import java.io.InputStream;
 
 public interface ResourceProvider {
 
-	public InputStream getResource(String resourcePath) throws IOException;
+	InputStream getResource(String resourcePath) throws IOException;
 
 }

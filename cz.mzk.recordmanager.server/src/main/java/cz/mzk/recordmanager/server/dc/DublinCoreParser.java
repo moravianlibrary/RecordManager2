@@ -4,6 +4,6 @@ import java.io.InputStream;
 
 public interface DublinCoreParser {
 
-	public DublinCoreRecord parseRecord(InputStream is);
+	DublinCoreRecord parseRecord(InputStream is);
 
 }

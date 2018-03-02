@@ -6,14 +6,14 @@ import cz.mzk.recordmanager.server.model.DownloadImportConfiguration;
 
 public interface ImportRecordFacade {
 
-	public void importFactory(DownloadImportConfiguration dic);
+	void importFactory(DownloadImportConfiguration dic);
 	
-	public void importFile(long importConfId, File file, String format);
+	void importFile(long importConfId, File file, String format);
 	
-	public void downloadAndImportRecordSJob(DownloadImportConfiguration dic);
+	void downloadAndImportRecordSJob(DownloadImportConfiguration dic);
 	
-	public void importOaiRecordsJob(long impotrConfId, String fileName);
+	void importOaiRecordsJob(long impotrConfId, String fileName);
 	
-	public void unpackAndImportRecordsJob(DownloadImportConfiguration dic);
+	void unpackAndImportRecordsJob(DownloadImportConfiguration dic);
 
 }

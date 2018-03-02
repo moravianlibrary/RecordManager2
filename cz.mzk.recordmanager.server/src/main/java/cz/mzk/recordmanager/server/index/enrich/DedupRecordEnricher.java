@@ -8,6 +8,6 @@ import cz.mzk.recordmanager.server.model.DedupRecord;
 
 public interface DedupRecordEnricher {
 
-	public void enrich(DedupRecord record, SolrInputDocument mergedDocument, List<SolrInputDocument> localRecords);
+	void enrich(DedupRecord record, SolrInputDocument mergedDocument, List<SolrInputDocument> localRecords);
 
 }

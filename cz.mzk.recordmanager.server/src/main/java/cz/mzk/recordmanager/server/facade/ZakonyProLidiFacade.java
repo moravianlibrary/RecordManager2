@@ -2,8 +2,8 @@ package cz.mzk.recordmanager.server.facade;
 
 public interface ZakonyProLidiFacade {
 
-	public void runZakonyProLidiHarvestJob();
+	void runZakonyProLidiHarvestJob();
 
-	public void runZakonyProLidiFulltextJob();
+	void runZakonyProLidiFulltextJob();
 	
 }

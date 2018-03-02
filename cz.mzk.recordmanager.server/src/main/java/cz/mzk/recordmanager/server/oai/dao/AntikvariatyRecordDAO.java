@@ -10,6 +10,6 @@ public interface AntikvariatyRecordDAO extends DomainDAO<Long, AntikvariatyRecor
 	 * @param dr
 	 * @return
 	 */
-	public String getLinkToAntikvariaty(DedupRecord dr);
+	String getLinkToAntikvariaty(DedupRecord dr);
 
 }

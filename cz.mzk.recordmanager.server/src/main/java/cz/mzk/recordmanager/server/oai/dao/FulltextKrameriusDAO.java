@@ -7,9 +7,9 @@ import cz.mzk.recordmanager.server.model.FulltextKramerius;
 
 public interface FulltextKrameriusDAO extends DomainDAO<Long, FulltextKramerius> {
 
-	public long getFullTextSize(DedupRecord record);
+	long getFullTextSize(DedupRecord record);
 
-	public List<String> getFullText(DedupRecord record);
+	List<String> getFullText(DedupRecord record);
 
 	int deleteFulltext(long hr_id);
 

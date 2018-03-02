@@ -4,6 +4,6 @@ import cz.mzk.recordmanager.server.model.AuthorityRecord;
 import cz.mzk.recordmanager.server.model.ImportConfiguration;
 
 public interface AuthorityRecordDAO extends DomainDAO<Long, AuthorityRecord> {
-	public AuthorityRecord findByIdAndHarvestConfiguration(String recordId, ImportConfiguration configuration);
-	public AuthorityRecord findByAuthKey(String AuthKey);
+	AuthorityRecord findByIdAndHarvestConfiguration(String recordId, ImportConfiguration configuration);
+	AuthorityRecord findByAuthKey(String AuthKey);
 }

@@ -8,37 +8,37 @@ import java.util.List;
 
 public interface StatisticsService {
 
-	public List<ActualStatisticsDto> getActualStatisticsForThePeriod(
+	List<ActualStatisticsDto> getActualStatisticsForThePeriod(
 			Date startDate);
 
-	public List<OaiHarvestJobStatisticsDto> getOaiHarvestJobStats(Integer offset);
+	List<OaiHarvestJobStatisticsDto> getOaiHarvestJobStats(Integer offset);
 
-	public List<OaiHarvestJobStatisticsDto> getOaiHarvestStatisticsInPeriods(
+	List<OaiHarvestJobStatisticsDto> getOaiHarvestStatisticsInPeriods(
 			Date start, Date end, Date from, Date to, List<LibraryDto> libraries);
 
-	public List<IndexAllRecordsJobStatisticsDto> getIndexAllRecordsStatistics(
+	List<IndexAllRecordsJobStatisticsDto> getIndexAllRecordsStatistics(
 			Integer offset);
 
-	public List<IndexAllRecordsJobStatisticsDto> getIndexAllRecordsStatisticsInPeriods(
+	List<IndexAllRecordsJobStatisticsDto> getIndexAllRecordsStatisticsInPeriods(
 			Date startDate, Date endDate, Date fromDate, Date toDate);
 
-	public List<DedupRecordsDto> getDedupRecordsStatistics(Integer offset);
+	List<DedupRecordsDto> getDedupRecordsStatistics(Integer offset);
 
-	public List<DedupRecordsDto> getDedupRecordsStatisticsInPeriods(
+	List<DedupRecordsDto> getDedupRecordsStatisticsInPeriods(
 			Date startDate, Date endDate);
 
-	public StatisticDetailsDto getDetails(Long jobExecutionId);
+	StatisticDetailsDto getDetails(Long jobExecutionId);
 
-	public List<DownloadImportConfJobStatisticsDto> getDownloadImportConfJobStatistics(
+	List<DownloadImportConfJobStatisticsDto> getDownloadImportConfJobStatistics(
 			Integer offset);
 
-	public List<DownloadImportConfJobStatisticsDto> getDownloadImportConfJobStatisticsInPeriod(
+	List<DownloadImportConfJobStatisticsDto> getDownloadImportConfJobStatisticsInPeriod(
 			Date startDate, Date endDate);
 
-	public List<RegenerateDedupKeysJobStatisticsDto> getRegenerateDedupKeysJobStatistics(
+	List<RegenerateDedupKeysJobStatisticsDto> getRegenerateDedupKeysJobStatistics(
 			Integer offset);
 
-	public List<RegenerateDedupKeysJobStatisticsDto> getRegenerateDedupKeysJobStatisticsInPeriod(
+	List<RegenerateDedupKeysJobStatisticsDto> getRegenerateDedupKeysJobStatisticsInPeriod(
 			Date startDate, Date endDate);
 
 }

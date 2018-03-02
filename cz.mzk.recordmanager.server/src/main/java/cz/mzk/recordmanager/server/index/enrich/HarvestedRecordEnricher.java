@@ -6,6 +6,6 @@ import cz.mzk.recordmanager.server.model.HarvestedRecord;
 
 public interface HarvestedRecordEnricher {
 
-	public void enrich(HarvestedRecord record, SolrInputDocument document);
+	void enrich(HarvestedRecord record, SolrInputDocument document);
 
 }

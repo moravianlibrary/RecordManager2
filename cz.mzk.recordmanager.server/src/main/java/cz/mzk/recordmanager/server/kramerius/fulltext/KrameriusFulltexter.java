@@ -7,8 +7,8 @@ import cz.mzk.recordmanager.server.model.FulltextKramerius;
 
 public interface KrameriusFulltexter {
 
-	public List<FulltextKramerius> getFulltextObjects(String rootUuid) throws IOException;
+	List<FulltextKramerius> getFulltextObjects(String rootUuid) throws IOException;
 
-	public List<FulltextKramerius> getFulltextForRoot(String rootUuid) throws IOException;
+	List<FulltextKramerius> getFulltextForRoot(String rootUuid) throws IOException;
 
 }
