@@ -9,7 +9,7 @@ public interface SolrIndexingExceptionHandler {
 	enum Action {
 		SKIP,
 		RETRY,
-		FALLBACK;
+		FALLBACK
 	}
 
 	Action handle(Exception ex, Collection<SolrInputDocument> documents) throws SolrServerException;
