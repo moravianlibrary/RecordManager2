@@ -27,12 +27,12 @@ mvs_display_mv = adresarGetEmailOrMvs "MVScu"
 reg_lib_display_mv = getFieldsForAdresar "PVKsn", SubfieldExtractionMethod.JOINED, " | "
 name_alt_display_mv = adresarGetNameAlt " - "
 hours_display = adresarGetHours()
-region_display = getFirstFieldForAdresar "KRJa"
+region_display = translate("adresar_region.map", getFirstFieldForAdresar("KRJa"), null)
 district_display = getFirstFieldForAdresar "KRJb"
 
 allLibraryFields_txt_mv = getAllLibraryFields()
 town_search_txt = getFirstFieldForAdresar "MESa"
-region_search_txt = getFirstFieldForAdresar "KRJa"
+region_search_txt = translate("adresar_region.map", getFirstFieldForAdresar("KRJa"), null)
 district_search_txt = getFirstFieldForAdresar "KRJb"
 function_search_txt_mv = getFieldsForAdresar("FCEa", SubfieldExtractionMethod.SEPARATED, null)
 services_search_txt_mv = getFieldsForAdresar("SLUa", SubfieldExtractionMethod.SEPARATED, null)
