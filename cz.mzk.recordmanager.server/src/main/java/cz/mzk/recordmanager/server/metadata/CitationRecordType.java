@@ -20,7 +20,7 @@ public enum CitationRecordType {
 	
 	private String format;
 	
-	private CitationRecordType(String format){
+	CitationRecordType(String format){
 		this.format = format;
 	}
 	

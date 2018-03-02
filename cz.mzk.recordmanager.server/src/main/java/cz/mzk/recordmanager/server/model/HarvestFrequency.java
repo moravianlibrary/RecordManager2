@@ -11,7 +11,7 @@ public enum HarvestFrequency implements CharValueEnum {
 
 	private final char value;
 
-	private HarvestFrequency(char value) {
+	HarvestFrequency(char value) {
 		this.value = value;
 	}
 

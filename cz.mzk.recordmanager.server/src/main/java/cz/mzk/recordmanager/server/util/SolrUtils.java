@@ -35,7 +35,7 @@ public class SolrUtils {
 	private static final String INSTITUTION_OTHERS = "Others";
 	private static final String INSTITUTION_UNKNOWN = "unknown";
 
-	private static enum WEIGHT_DOC_COMPARATOR implements Comparator<SolrInputDocument> {
+	private enum WEIGHT_DOC_COMPARATOR implements Comparator<SolrInputDocument> {
 		INSTANCE;
 
 		@Override
