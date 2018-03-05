@@ -1,7 +1,6 @@
 package cz.mzk.recordmanager.server.util.identifier;
 
 import cz.mzk.recordmanager.server.marc.marc4j.MarcFactoryImpl;
-import cz.mzk.recordmanager.server.model.Isbn;
 import org.marc4j.marc.DataField;
 import org.marc4j.marc.MarcFactory;
 import org.testng.Assert;
@@ -10,14 +9,6 @@ import org.testng.annotations.Test;
 public class ISBNUtilsTest {
 
 	private static final MarcFactory marcFactory = MarcFactoryImpl.newInstance();
-
-	private static Isbn createISBN(final long isbn, final String note) {
-		Isbn newIsbn = new Isbn();
-		newIsbn.setIsbn(isbn);
-		newIsbn.setOrderInRecord(1L);
-		newIsbn.setNote(note);
-		return newIsbn;
-	}
 
 	private static DataField isbnDataField(final String sfA, final String sfQ) {
 		DataField df = marcFactory.newDataField("020", ' ', ' ', "a", sfA);
@@ -70,11 +61,11 @@ public class ISBNUtilsTest {
 
 	@Test
 	public void createISBNTest() {
-		Assert.assertEquals(createISBN(9788020009807L, ""),
+		Assert.assertEquals(ISBNUtils.createIsbn(9788020009807L, 1L, ""),
 				ISBNUtils.createIsbn(isbnDataField("80-200-0980-9", "")));
-		Assert.assertEquals(createISBN(9783596263936L, "váz"),
+		Assert.assertEquals(ISBNUtils.createIsbn(9783596263936L, 1L, "váz"),
 				ISBNUtils.createIsbn(isbnDataField("3-596-26393-x", "(váz)")));
-		Assert.assertEquals(createISBN(9783596263936L, "note note2"),
+		Assert.assertEquals(ISBNUtils.createIsbn(9783596263936L, 1L, "note note2"),
 				ISBNUtils.createIsbn(isbnDataField("3-596-26393-x note", "(note2)")));
 	}
 

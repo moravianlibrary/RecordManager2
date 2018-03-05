@@ -49,12 +49,20 @@ public final class ISBNUtils {
 		return isbn;
 	}
 
+	public static Isbn createIsbn(final long isbn, final long orderInRecord, final String note) {
+		Isbn newIsbn = new Isbn();
+		newIsbn.setIsbn(isbn);
+		newIsbn.setOrderInRecord(orderInRecord);
+		newIsbn.setNote(note);
+		return newIsbn;
+	}
+
 	/**
 	 * @param rawIsbn String to be validated
 	 * @return String representation of ISBN 13 or exception
 	 */
 	static String toISBN13StringThrowing(final String rawIsbn) {
-		if (rawIsbn == null || rawIsbn.isEmpty()) throw new NoDataException(NO_USABLE_DATA);
+		if (rawIsbn == null || rawIsbn.trim().isEmpty()) throw new NoDataException(NO_USABLE_DATA);
 		String clearIsbnStr = ISBN_CLEAR_REGEX.matcher(rawIsbn).replaceAll("");
 		clearIsbnStr = ISBN_UPPER_X_REGEX.matcher(clearIsbnStr).replaceAll("X");
 		String validatedIsbn = VALIDATOR.validate(clearIsbnStr);
@@ -78,7 +86,7 @@ public final class ISBNUtils {
 	 * @param rawIsbn String to be validated
 	 * @return Long representation of ISBN 13 or exception
 	 */
-	static Long toISBN13LongThrowing(final String rawIsbn) {
+	public static Long toISBN13LongThrowing(final String rawIsbn) {
 		return Long.valueOf(toISBN13StringThrowing(rawIsbn));
 	}
 
@@ -86,7 +94,7 @@ public final class ISBNUtils {
 	 * @param rawIsbn String to be validated
 	 * @return Long representation of ISBN 13 or null
 	 */
-	static Long toISBN13Long(final String rawIsbn) {
+	public static Long toISBN13Long(final String rawIsbn) {
 		try {
 			return Long.valueOf(toISBN13StringThrowing(rawIsbn));
 		} catch (NumberFormatException | NoDataException nfe) {
