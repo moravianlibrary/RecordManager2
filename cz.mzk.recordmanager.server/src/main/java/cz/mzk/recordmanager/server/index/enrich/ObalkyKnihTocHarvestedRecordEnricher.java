@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import cz.mzk.recordmanager.server.util.identifier.ISBNUtils;
 import org.apache.solr.common.SolrInputDocument;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -14,7 +15,6 @@ import cz.mzk.recordmanager.server.index.SolrFieldConstants;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.model.ObalkyKnihTOC;
 import cz.mzk.recordmanager.server.oai.dao.ObalkyKnihTOCDAO;
-import cz.mzk.recordmanager.server.util.MetadataUtils;
 
 @Component
 public class ObalkyKnihTocHarvestedRecordEnricher implements HarvestedRecordEnricher {
@@ -42,9 +42,9 @@ public class ObalkyKnihTocHarvestedRecordEnricher implements HarvestedRecordEnri
 		if (isbns == null) {
 			return Collections.emptyList();
 		}
-		List<Long> isbnList = new ArrayList<Long>();
+		List<Long> isbnList = new ArrayList<>();
 		for (Object isbnAsObject : isbns) {
-			Long isbn = MetadataUtils.toISBN13((String) isbnAsObject);
+			Long isbn = ISBNUtils.toISBN13Long((String) isbnAsObject);
 			if (isbn != null) {
 				isbnList.add(isbn);
 			}
@@ -57,7 +57,7 @@ public class ObalkyKnihTocHarvestedRecordEnricher implements HarvestedRecordEnri
 		if (nbns == null) {
 			return Collections.emptyList();
 		}
-		List<String> nbnList = new ArrayList<String>();
+		List<String> nbnList = new ArrayList<>();
 		for (Object isbnAsObject : nbns) {
 			String nbn = (String) isbnAsObject;
 			if (nbn != null) {

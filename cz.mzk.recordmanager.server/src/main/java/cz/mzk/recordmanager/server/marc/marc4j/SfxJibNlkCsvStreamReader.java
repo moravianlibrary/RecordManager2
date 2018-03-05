@@ -16,11 +16,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import cz.mzk.recordmanager.server.util.RecordUtils;
+import cz.mzk.recordmanager.server.util.identifier.ISBNUtils;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.validator.routines.ISBNValidator;
 import org.marc4j.MarcReader;
 import org.marc4j.marc.MarcFactory;
 import org.marc4j.marc.Record;
@@ -29,8 +29,6 @@ public class SfxJibNlkCsvStreamReader implements MarcReader {
 
 	private Record record;
 	private MarcFactory factory = new MarcFactoryImpl();
-	private final ISBNValidator isbnValidator = ISBNValidator.getInstance(true);
-	protected static final String ISBN_CLEAR_REGEX = "[^0-9Xx]";
 
 	private static final String TEXT_LEADER_MONOGRAPH = "00710nam a2200229   4500";
 	private static final String TEXT_LEADER_SERIAL = "00710nas a2200229   4500";
@@ -159,7 +157,7 @@ public class SfxJibNlkCsvStreamReader implements MarcReader {
 			this.title = csv.get(1);
 			this.issn = csv.get(2);
 			this.eissn = csv.get(3);
-			this.isbn10 = csv.get(4);
+			this.isbn10 = ISBNUtils.toISBN13String(csv.get(4));
 			this.isbn13 = csv.get(5);
 			this.from = csv.get(6);
 			this.to = csv.get(7);
@@ -191,12 +189,8 @@ public class SfxJibNlkCsvStreamReader implements MarcReader {
 
 		public List<String> getIsbns() {
 			List<String> isbns = new ArrayList<>();
-			if (!isbn10.equals("")) {
-				String isbn10Str = isbnValidator.validate(isbn10.replaceAll(
-						ISBN_CLEAR_REGEX, "").replaceAll("x", "X"));
-				if (isbn10Str != null) isbns.add(isbn10Str);
-			}
-			if (!isbn13.equals("") && !isbns.contains(isbn13)) isbns.add(isbn13);
+			if (isbn10 != null) isbns.add(isbn10);
+			if (!isbn13.isEmpty() && !isbns.contains(isbn13)) isbns.add(isbn13);
 			return isbns.isEmpty() ? null : isbns;
 		}
 

@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import org.apache.commons.validator.routines.ISBNValidator;
 import org.marc4j.marc.DataField;
 
 import cz.mzk.recordmanager.server.ClasspathResourceProvider;
@@ -17,8 +16,6 @@ import cz.mzk.recordmanager.server.model.ShortTitle;
 import cz.mzk.recordmanager.server.model.Title;
 
 public class MetadataUtils {
-
-	private static final ISBNValidator isbnValidator = ISBNValidator.getInstance(true);
 
 	private static final List<String> similarity_words = new BufferedReader(new InputStreamReader(
 			new ClasspathResourceProvider().getResource("/mapping/similarity_words.map"), StandardCharsets.UTF_8)) 
@@ -54,11 +51,6 @@ public class MetadataUtils {
 	public static String shorten(String input, int length) {
 		if (input == null) return null;
 		return input.substring(0, Math.min(length, input.length()));
-	}
-
-	public static Long toISBN13(String isbn) {
-		String isbn13 = isbnValidator.validate(isbn);
-		return (isbn13 == null)? null: Long.valueOf(isbn13);
 	}
 
 	public static boolean similarityEnabled(DataField df, Title title) {

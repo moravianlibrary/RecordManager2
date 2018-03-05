@@ -8,7 +8,7 @@ import java.util.regex.Pattern;
 
 import cz.mzk.recordmanager.server.model.Ean;
 import cz.mzk.recordmanager.server.model.HarvestedRecordFormat.HarvestedRecordFormatEnum;
-import org.apache.commons.validator.routines.ISBNValidator;
+import cz.mzk.recordmanager.server.util.identifier.ISBNUtils;
 import org.marc4j.marc.DataField;
 import org.marc4j.marc.Subfield;
 
@@ -51,12 +51,8 @@ public class MarcDSL extends BaseDSL {
 			.compile("([0-9]{3})([a-zA-Z0-9]*)");
 	private final static Pattern AUTHOR_PATTERN = Pattern
 			.compile("([^,]+),(.+)");
-	
-	private final ISBNValidator isbnValidator = ISBNValidator.getInstance(true);
-	
-	private static final String ISBN_CLEAR_REGEX = "[^0-9Xx]";
-	
-	private static final String LINK773_ISBN = "isbn:";
+
+	private static final String LINK773_ISBN = "isbn:%s";
 	private static final String LINK773_ISSN = "issn:";
 	private static final String LINK773_ISMN = "ismn:";
 	private static final String LINK773_TITLE = "title:";
@@ -749,13 +745,9 @@ public class MarcDSL extends BaseDSL {
 						if(sf.getData().startsWith("M")) return LINK773_ISMN + sf.getData();
 						break;
 					case 'z':
-						String isbnStr = isbnValidator.validate(sf.getData().replaceAll(ISBN_CLEAR_REGEX,"").replaceAll("x", "X"));
-						isbnStr = isbnValidator.validate(isbnStr);
-						try {
-							return LINK773_ISBN + Long.valueOf(isbnStr);
-						} catch (Exception e) {
-							continue;
-						}
+						String isbn = ISBNUtils.toISBN13String(sf.getData());
+						if (isbn != null) return String.format(LINK773_ISBN, isbn);
+						else continue;
 					case 't':
 						return LINK773_TITLE + sf.getData();
 					default:
