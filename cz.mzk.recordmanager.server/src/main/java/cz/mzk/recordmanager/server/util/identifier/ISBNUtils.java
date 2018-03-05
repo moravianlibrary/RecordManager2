@@ -19,7 +19,7 @@ public final class ISBNUtils {
 	private static final Pattern ISBN_UPPER_X_REGEX = Pattern.compile("x");
 
 	private static final String NO_SUBFIELD = "No subfield 'a'";
-	private static final String NO_USABLE_DATA = "No usable data in subfield 'a'";
+	private static final String NO_USABLE_DATA = "No usable data";
 
 	private ISBNUtils() {
 	}
@@ -36,7 +36,7 @@ public final class ISBNUtils {
 		if (!matcherIsbn.find()) throw new NoDataException(NO_USABLE_DATA);
 
 		Isbn isbn = new Isbn();
-		isbn.setIsbn(toISBN13Long(matcherIsbn.group(1)));
+		isbn.setIsbn(toISBN13LongThrowing(matcherIsbn.group(1)));
 
 		List<String> notes = new ArrayList<>();
 		notes.add(parseNote(matcherIsbn.group(2)));
@@ -51,9 +51,10 @@ public final class ISBNUtils {
 
 	/**
 	 * @param rawIsbn String to be validated
-	 * @return String representation of ISBN 13
+	 * @return String representation of ISBN 13 or exception
 	 */
-	static String toISBN13String(final String rawIsbn) {
+	static String toISBN13StringThrowing(final String rawIsbn) {
+		if (rawIsbn == null || rawIsbn.isEmpty()) throw new NoDataException(NO_USABLE_DATA);
 		String clearIsbnStr = ISBN_CLEAR_REGEX.matcher(rawIsbn).replaceAll("");
 		clearIsbnStr = ISBN_UPPER_X_REGEX.matcher(clearIsbnStr).replaceAll("X");
 		String validatedIsbn = VALIDATOR.validate(clearIsbnStr);
@@ -63,10 +64,34 @@ public final class ISBNUtils {
 
 	/**
 	 * @param rawIsbn String to be validated
-	 * @return Long representation of ISBN 13
+	 * @return String representation of ISBN 13 or null
+	 */
+	public static String toISBN13String(final String rawIsbn) {
+		try {
+			return toISBN13StringThrowing(rawIsbn);
+		} catch (NumberFormatException | NoDataException nfe) {
+			return null;
+		}
+	}
+
+	/**
+	 * @param rawIsbn String to be validated
+	 * @return Long representation of ISBN 13 or exception
+	 */
+	static Long toISBN13LongThrowing(final String rawIsbn) {
+		return Long.valueOf(toISBN13StringThrowing(rawIsbn));
+	}
+
+	/**
+	 * @param rawIsbn String to be validated
+	 * @return Long representation of ISBN 13 or null
 	 */
 	static Long toISBN13Long(final String rawIsbn) {
-		return Long.valueOf(toISBN13String(rawIsbn));
+		try {
+			return Long.valueOf(toISBN13StringThrowing(rawIsbn));
+		} catch (NumberFormatException | NoDataException nfe) {
+			return null;
+		}
 	}
 
 	/**

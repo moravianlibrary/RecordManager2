@@ -28,27 +28,38 @@ public class ISBNUtilsTest {
 	@Test
 	public void toIsbn13Test() {
 		// valid isbn 10
-		Assert.assertEquals(ISBNUtils.toISBN13String("80-200-0980-9"), "9788020009807");
+		Assert.assertEquals(ISBNUtils.toISBN13StringThrowing("80-200-0980-9"), "9788020009807");
 		// valid isbn 10 with x
-		Assert.assertEquals(ISBNUtils.toISBN13String("3-596-26393-x"), "9783596263936");
+		Assert.assertEquals(ISBNUtils.toISBN13StringThrowing("3-596-26393-x"), "9783596263936");
 		// valid isbn 13
-		Assert.assertEquals(ISBNUtils.toISBN13String("9788086026923"), "9788086026923");
+		Assert.assertEquals(ISBNUtils.toISBN13StringThrowing("9788086026923"), "9788086026923");
 	}
 
 	@Test
 	public void toIsbn13LongTest() {
 		// valid isbn 10
-		Assert.assertEquals(ISBNUtils.toISBN13Long("80-200-0980-9").longValue(), 9788020009807L);
+		Assert.assertEquals(ISBNUtils.toISBN13LongThrowing("80-200-0980-9").longValue(), 9788020009807L);
 	}
 
 	@Test(expectedExceptions = NumberFormatException.class)
-	public void noValidISBN10Test() {
-		ISBNUtils.toISBN13String("80-200-0980-2");
+	public void noValidISBN10StringThrowingTest() {
+		ISBNUtils.toISBN13StringThrowing("80-200-0980-2");
 	}
 
 	@Test(expectedExceptions = NumberFormatException.class)
+	public void noValidISBN13StringThrowingTest() {
+		ISBNUtils.toISBN13StringThrowing("9788086026920");
+	}
+
+	@Test(expectedExceptions = NumberFormatException.class)
+	public void noValidISBN13LongThrowingTest() {
+		ISBNUtils.toISBN13LongThrowing("9788086026920");
+	}
+
+	@Test
 	public void noValidISBN13Test() {
-		ISBNUtils.toISBN13String("9788086026920");
+		Assert.assertNull(ISBNUtils.toISBN13String("9788086026920"));
+		Assert.assertNull(ISBNUtils.toISBN13Long("9788086026920"));
 	}
 
 	@Test
