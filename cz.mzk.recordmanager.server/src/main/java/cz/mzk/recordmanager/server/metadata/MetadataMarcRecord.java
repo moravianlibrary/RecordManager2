@@ -10,7 +10,8 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.validator.routines.ISBNValidator;
+import cz.mzk.recordmanager.server.util.identifier.ISBNUtils;
+import cz.mzk.recordmanager.server.util.identifier.NoDataException;
 import org.marc4j.marc.DataField;
 import org.marc4j.marc.Subfield;
 import org.slf4j.Logger;
@@ -41,12 +42,9 @@ public class MetadataMarcRecord implements MetadataRecord {
 	private static Logger logger = LoggerFactory.getLogger(MetadataMarcRecord.class);
 	
 	protected MarcRecord underlayingMarc;
-	
-	protected final ISBNValidator isbnValidator = ISBNValidator.getInstance(true);
 
 	protected static final Pattern PAGECOUNT_PATTERN = Pattern.compile("(\\d+)");
 	protected static final Pattern YEAR_PATTERN = Pattern.compile("\\d{4}");
-	protected static final Pattern ISBN_PATTERN = Pattern.compile("([\\dxX\\s\\-]*)(.*)");
 	protected static final Pattern ISMN_PATTERN = Pattern.compile("([\\dM\\s\\-]*)(.*)");
 	protected static final Pattern ISSN_PATTERN = Pattern.compile("(\\d{4}-\\d{3}[\\dxX])(.*)");
 	protected static final Pattern EAN_PATTERN = Pattern.compile("([0-9]*)(.*)");
@@ -56,7 +54,6 @@ public class MetadataMarcRecord implements MetadataRecord {
 	protected static final Pattern PUBLISHER_NUMBER_PATTERN = Pattern.compile("([^\\W]*)");
 	protected static final Pattern CPK0_PATTERN = Pattern.compile("cpk0");
 	protected static final Pattern METAPROXY_TAG_PATTERN = Pattern.compile("[17]..");
-	protected static final String ISBN_CLEAR_REGEX = "[^0-9Xx]";
 	protected static final String ISMN_CLEAR_REGEX = "[^0-9M]";
 	protected static final String NOTE_FORMAT = "\\(.+\\)";
 	protected static final String BEGIN_BRACKET = "^\\(.*";
@@ -195,59 +192,22 @@ public class MetadataMarcRecord implements MetadataRecord {
 	
 	@Override
 	public List<Isbn> getISBNs() {
-		List<Isbn> isbns = new ArrayList<Isbn>();
+		List<Isbn> isbns = new ArrayList<>();
 		Long isbnCounter = 0L;
+		Isbn isbn;
 
-		for(DataField field: underlayingMarc.getDataFields("020")){
-			Subfield subfieldA = field.getSubfield('a');
-			if (subfieldA == null) {
+		for (DataField df : underlayingMarc.getDataFields("020")) {
+			try {
+				isbn = ISBNUtils.createIsbn(df);
+			} catch (NoDataException nde) {
+				continue;
+			} catch (NumberFormatException nfe) {
+				logger.info(String.format("Invalid ISBN: %s", nfe.getMessage()));
 				continue;
 			}
-			
-			Isbn isbn = new Isbn();
-
-			Matcher matcher = ISBN_PATTERN.matcher(subfieldA.getData());
-
-			if (matcher.find()) {
-				String g1 = matcher.group(1);
-				if (g1 == null) {
-					continue;
-				}
-				String isbnStr = isbnValidator.validate(g1.replaceAll(ISBN_CLEAR_REGEX,"").replaceAll("x", "X"));
-				try {
-					if (isbnStr == null) {
-						throw new NumberFormatException();
-					}
-					Long isbn13 = Long.valueOf(isbnStr);
-					isbn.setIsbn(isbn13);
-				} catch (NumberFormatException nfe) {
-					logger.info(String.format("Invalid ISBN: %s", subfieldA.getData()));
-					continue;
-				}
-			}
-
-			
-			StringBuilder builder = new StringBuilder();
-			if(matcher.group(2).trim() != null){ 
-				String s = matcher.group(2).trim();
-				if(s.matches(NOTE_FORMAT)) {
-					builder.append(s.substring(1, s.length()-1));
-				}
-				else builder.append(s);
-				builder.append(" ");
-			}
-			for(Subfield subfieldQ: field.getSubfields('q')){
-				if(subfieldQ.getData().matches(NOTE_FORMAT)) {
-					builder.append(subfieldQ.getData().substring(1, subfieldQ.getData().length()-1));
-				}
-				else builder.append(subfieldQ.getData());
-				builder.append(" ");
-			}
-			isbn.setNote(builder.toString().trim());
 			isbn.setOrderInRecord(++isbnCounter);
 			isbns.add(isbn);
 		}
-		
 		return isbns;
 	}
 
