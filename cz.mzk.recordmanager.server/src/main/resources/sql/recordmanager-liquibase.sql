@@ -1276,3 +1276,7 @@ CREATE INDEX cosmotron_996_conf_id_parent_id_idx ON cosmotron_996 (parent_record
 INSERT INTO library (id, name, url, catalog_url, city) VALUES (163, 'PKJAK', 'http://npmk.cz/', 'http://katalog.npmk.cz/', 'Praha');
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id) VALUES (363, 163, 200, 'pkjak', 11, false, true, true, true, 'U', 'other');
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity,extract_id_regex) VALUES (363,'https://katalog.npmk.cz/api/oai','5','marc21',NULL,'oai:(.*)');
+
+--changeset tomascejpek:91
+INSERT INTO harvested_record_format(id, name) VALUES (65, 'BLIND_AUDIO');
+INSERT INTO harvested_record_format(id, name) VALUES (66, 'BLIND_BRAILLE');

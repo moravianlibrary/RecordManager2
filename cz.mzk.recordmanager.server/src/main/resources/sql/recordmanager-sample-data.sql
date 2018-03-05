@@ -302,6 +302,8 @@ INSERT INTO harvested_record_format(id, name) VALUES (61, 'PATENTS_UTILITY_MODEL
 INSERT INTO harvested_record_format(id, name) VALUES (62, 'PATENTS_PATENT_APPLICATIONS');
 INSERT INTO harvested_record_format(id, name) VALUES (63, 'PATENTS_PATENTS');
 INSERT INTO harvested_record_format(id, name) VALUES (64, 'OTHER_DICTIONARY_ENTRY');
+INSERT INTO harvested_record_format(id, name) VALUES (65, 'BLIND_AUDIO');
+INSERT INTO harvested_record_format(id, name) VALUES (66, 'BLIND_BRAILLE');
 INSERT INTO harvested_record_format(id, name) VALUES (100, 'OTHER_UNSPECIFIED');
 
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (1, 300, 'BOA001');
