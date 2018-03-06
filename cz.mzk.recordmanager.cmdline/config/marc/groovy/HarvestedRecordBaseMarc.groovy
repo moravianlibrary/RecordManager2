@@ -47,3 +47,5 @@ format_display_mv = getFormat()
 local_institution_facet_str_mv = getInstitutionFacet()
 _hidden_index_when_merged_boolean = getIndexWhenMerged()
 item_id_txt_mv = getFirstField "996t"
+author_search_txt_mv = toLowerCase(getFields("100abcd:110ab:111ab:700abcd:710ab:711ab"))
+title_search_txt_mv = toLowerCase(getFields("245abnp"))

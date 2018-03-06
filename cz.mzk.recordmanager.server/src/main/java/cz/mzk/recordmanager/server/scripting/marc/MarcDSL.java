@@ -5,6 +5,7 @@ import java.util.*;
 import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import cz.mzk.recordmanager.server.model.Ean;
 import cz.mzk.recordmanager.server.model.HarvestedRecordFormat.HarvestedRecordFormatEnum;
@@ -880,5 +881,9 @@ public class MarcDSL extends BaseDSL {
 			}
 		}
 		return results;
+	}
+
+	public Set<String> toLowerCase(Collection<String> collection) {
+		return collection.stream().map(String::toLowerCase).collect(Collectors.toSet());
 	}
 }
