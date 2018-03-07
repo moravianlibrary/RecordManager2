@@ -54,12 +54,6 @@ public class ISBNUtilsTest {
 	}
 
 	@Test
-	public void parseNoteTest() {
-		Assert.assertEquals(ISBNUtils.parseNote("(váz)"), "váz");
-		Assert.assertEquals(ISBNUtils.parseNote("váz"), "váz");
-	}
-
-	@Test
 	public void createISBNTest() {
 		Assert.assertEquals(ISBNUtils.createIsbn(9788020009807L, 1L, ""),
 				ISBNUtils.createIsbn(isbnDataField("80-200-0980-9", "")));

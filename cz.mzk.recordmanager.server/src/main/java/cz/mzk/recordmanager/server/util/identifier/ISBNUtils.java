@@ -14,12 +14,8 @@ public final class ISBNUtils {
 
 	private static final ISBNValidator VALIDATOR = ISBNValidator.getInstance(true);
 	private static final Pattern ISBN_PATTERN = Pattern.compile("([\\dxX\\s\\-]*)(.*)");
-	private static final Pattern NOTE_PATTERN = Pattern.compile("\\((.+)\\)");
 	private static final Pattern ISBN_CLEAR_REGEX = Pattern.compile("[^0-9Xx]");
 	private static final Pattern ISBN_UPPER_X_REGEX = Pattern.compile("x");
-
-	private static final String NO_SUBFIELD = "No subfield 'a'";
-	private static final String NO_USABLE_DATA = "No usable data";
 
 	private ISBNUtils() {
 	}
@@ -30,19 +26,19 @@ public final class ISBNUtils {
 	 */
 	public static Isbn createIsbn(final DataField rawDataField) {
 		Subfield subfieldA = rawDataField.getSubfield('a');
-		if (subfieldA == null) throw new NoDataException(NO_SUBFIELD);
+		if (subfieldA == null) throw new NoDataException(IdentifierUtils.NO_SUBFIELD);
 
 		Matcher matcherIsbn = ISBN_PATTERN.matcher(subfieldA.getData());
-		if (!matcherIsbn.find()) throw new NoDataException(NO_USABLE_DATA);
+		if (!matcherIsbn.find()) throw new NoDataException(IdentifierUtils.NO_USABLE_DATA);
 
 		Isbn isbn = new Isbn();
 		isbn.setIsbn(toISBN13LongThrowing(matcherIsbn.group(1)));
 
 		List<String> notes = new ArrayList<>();
-		notes.add(parseNote(matcherIsbn.group(2)));
+		notes.add(IdentifierUtils.parseNote(matcherIsbn.group(2)));
 
 		for (Subfield subfieldQ : rawDataField.getSubfields('q')) {
-			notes.add(parseNote(subfieldQ.getData()));
+			notes.add(IdentifierUtils.parseNote(subfieldQ.getData()));
 		}
 		isbn.setNote(String.join(" ", notes));
 		isbn.setOrderInRecord(1L);
@@ -62,7 +58,7 @@ public final class ISBNUtils {
 	 * @return String representation of ISBN 13 or exception
 	 */
 	static String toISBN13StringThrowing(final String rawIsbn) {
-		if (rawIsbn == null || rawIsbn.trim().isEmpty()) throw new NoDataException(NO_USABLE_DATA);
+		if (rawIsbn == null || rawIsbn.trim().isEmpty()) throw new NoDataException(IdentifierUtils.NO_USABLE_DATA);
 		String clearIsbnStr = ISBN_CLEAR_REGEX.matcher(rawIsbn).replaceAll("");
 		clearIsbnStr = ISBN_UPPER_X_REGEX.matcher(clearIsbnStr).replaceAll("X");
 		String validatedIsbn = VALIDATOR.validate(clearIsbnStr);
@@ -102,12 +98,4 @@ public final class ISBNUtils {
 		}
 	}
 
-	/**
-	 * @param rawNote String represention of note
-	 * @return String
-	 */
-	static String parseNote(final String rawNote) {
-		Matcher matcherNote;
-		return (matcherNote = NOTE_PATTERN.matcher(rawNote)).matches() ? matcherNote.group(1) : rawNote;
-	}
 }
