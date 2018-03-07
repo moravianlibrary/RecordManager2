@@ -1,5 +1,6 @@
 package cz.mzk.recordmanager.server.util;
 
+import cz.mzk.recordmanager.server.util.identifier.ISSNUtils;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 

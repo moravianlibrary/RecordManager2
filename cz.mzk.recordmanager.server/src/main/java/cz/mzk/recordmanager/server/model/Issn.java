@@ -4,7 +4,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
-import cz.mzk.recordmanager.server.util.ISSNUtils;
+import cz.mzk.recordmanager.server.util.identifier.ISSNUtils;
 
 @Entity
 @Table(name=Issn.TABLE_NAME)
