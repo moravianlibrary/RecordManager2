@@ -163,7 +163,6 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 
 		for (String identifier : dcRecord.getIdentifiers()) {
 			String rawIsbnStr = "";
-			System.out.println(identifier);
 			if ((matcher = DC_ISBN_PATTERN.matcher(identifier)).find()) rawIsbnStr = matcher.group(1);
 			else if (!DC_IDENTIFIER_PATTERN.matcher(identifier).matches()) rawIsbnStr = identifier;
 			Long isbnLong;
