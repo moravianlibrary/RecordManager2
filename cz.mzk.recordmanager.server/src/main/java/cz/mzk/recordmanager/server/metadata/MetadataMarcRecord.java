@@ -11,6 +11,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import cz.mzk.recordmanager.server.util.identifier.ISBNUtils;
+import cz.mzk.recordmanager.server.util.identifier.ISSNUtils;
 import cz.mzk.recordmanager.server.util.identifier.NoDataException;
 import org.marc4j.marc.DataField;
 import org.marc4j.marc.Subfield;
@@ -46,7 +47,6 @@ public class MetadataMarcRecord implements MetadataRecord {
 	protected static final Pattern PAGECOUNT_PATTERN = Pattern.compile("(\\d+)");
 	protected static final Pattern YEAR_PATTERN = Pattern.compile("\\d{4}");
 	protected static final Pattern ISMN_PATTERN = Pattern.compile("([\\dM\\s\\-]*)(.*)");
-	protected static final Pattern ISSN_PATTERN = Pattern.compile("(\\d{4}-\\d{3}[\\dxX])(.*)");
 	protected static final Pattern EAN_PATTERN = Pattern.compile("([0-9]*)(.*)");
 	protected static final Pattern SCALE_PATTERN = Pattern.compile("\\d+[ ^]*\\d+");
 	protected static final Pattern UUID_PATTERN = Pattern.compile("uuid:[\\w-]+");
@@ -83,54 +83,27 @@ public class MetadataMarcRecord implements MetadataRecord {
 		return id;
 	}
 
-	
-	
 	@Override
-	public List<Issn> getISSNs() {	
-        List<Issn> issns = new ArrayList<Issn>();
-        Long issnCounter = 0L;
-        
-        for(DataField field: underlayingMarc.getDataFields("022")){
-        	Subfield subfieldA = field.getSubfield('a');
-        	if(subfieldA == null){
-        		continue;
-        	}
-        	Issn issn = new Issn();
-        	
-        	Matcher matcher = ISSN_PATTERN.matcher(subfieldA.getData());
+	public List<Issn> getISSNs() {
+		List<Issn> results = new ArrayList<>();
+		Long issnCounter = 0L;
+		Issn issn;
+
+		for (DataField df : underlayingMarc.getDataFields("022")) {
 			try {
-				if(matcher.find()) {
-					if(!issn.issnValidator(matcher.group(1))){
-						throw new NumberFormatException();
-					}					
-					issn.setIssn(matcher.group(1));
-					
-					StringBuilder builder = new StringBuilder();
-					if(matcher.group(2).trim() != null){ 
-						String s = matcher.group(2).trim();
-						if(s.matches(NOTE_FORMAT)) {
-							builder.append(s.substring(1, s.length()-1));
-						}
-						else builder.append(s);
-						builder.append(" ");
-					}
-					
-					issn.setNote(builder.toString().trim());
-					issn.setOrderInRecord(++issnCounter);
-					issns.add(issn);
-				}
-				
-			} catch (NumberFormatException e) {
-				logger.info(String.format("Invalid ISSN: %s", subfieldA.getData()));
+				issn = ISSNUtils.createIssn(df);
+			} catch (NoDataException nde) {
+				continue;
+			} catch (NumberFormatException nfe) {
+				logger.info(String.format("Invalid ISSN: %s", nfe.getMessage()));
 				continue;
 			}
-        
-			
-        }        
-        
-		return issns;
+			issn.setOrderInRecord(++issnCounter);
+			results.add(issn);
+		}
+		return results;
 	}
-	
+
 	@Override
 	public List<Cnb> getCNBs() {
 		List<Cnb> cnbs = new ArrayList<Cnb>();
