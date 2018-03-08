@@ -8,6 +8,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import cz.mzk.recordmanager.server.util.identifier.ISBNUtils;
+import cz.mzk.recordmanager.server.util.identifier.ISSNUtils;
 import cz.mzk.recordmanager.server.util.identifier.NoDataException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,7 +38,6 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 	protected HarvestedRecord harvestedRecord = null;
 
 	protected static final Pattern YEAR_PATTERN = Pattern.compile("\\d{4}");
-	protected static final Pattern ISSN_PATTERN = Pattern.compile("(\\d{4}-\\d{3}[\\dxX])(.*)");
 	
 	protected static final Pattern DC_UUID_PATTERN = Pattern.compile("^uuid:(.*)",Pattern.CASE_INSENSITIVE);
 /*	protected static final Pattern DC_ISBN_PATTERN = Pattern
@@ -181,42 +181,23 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 
 	@Override
 	public List<Issn> getISSNs() {
-		List<String> identifiers = dcRecord.getIdentifiers();
-		List<Issn> issns = new ArrayList<Issn>();
+		List<Issn> results = new ArrayList<>();
 		Long issnCounter = 0L;
-		
-		Pattern p = DC_ISSN_PATTERN;
-		Matcher m;
+		Matcher matcher;
 
-		for (String id : identifiers) {
-			
-			m = p.matcher(id);
-			String dcIssn;
-			if(m.find()) dcIssn = m.group(1);
-			else{
-				if(DC_IDENTIFIER_PATTERN.matcher(id).matches()) continue;
-				dcIssn = id;
-			}
+		for (String identifier : dcRecord.getIdentifiers()) {
+			String rawIssnStr = "";
+			if ((matcher = DC_ISSN_PATTERN.matcher(identifier)).find()) rawIssnStr = matcher.group(1);
+			else if (!DC_IDENTIFIER_PATTERN.matcher(identifier).matches()) rawIssnStr = identifier;
 
-			Matcher matcher = ISSN_PATTERN.matcher(dcIssn);
-			
-			try {
-				if(matcher.find()) {
-					Issn issn = new Issn();
-					if(!issn.issnValidator(matcher.group(1).trim())){
-						throw new NumberFormatException();
-					}					
-					issn.setIssn(matcher.group(1).trim());						
-					issn.setNote("");
-					issn.setOrderInRecord(++issnCounter);
-					issns.add(issn);
-				}			
-			} catch (NumberFormatException e) {
-				logger.info(String.format("Invalid ISSN: %s", dcIssn));
+			String validIssn = ISSNUtils.getValidIssn(rawIssnStr);
+			if (validIssn == null) {
+				logger.info(String.format("Invalid ISSN: %s", rawIssnStr));
 				continue;
 			}
+			results.add(ISSNUtils.createIssn(validIssn, ++issnCounter, ""));
 		}
-		return issns;
+		return results;
 	}
 
 	@Override
