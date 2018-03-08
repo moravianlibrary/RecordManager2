@@ -46,11 +46,19 @@ public final class ISSNUtils {
 		return newIssn;
 	}
 
+	/**
+	 * @param issn String to be validated
+	 * @return true or false
+	 */
 	public static boolean isValid(final String issn) {
 		Matcher matcher = ISSN_PATTERN.matcher(issn);
 		return matcher.find() && isValidLocal(issn);
 	}
 
+	/**
+	 * @param issn String to be validated, without regex control
+	 * @return true or false
+	 */
 	private static boolean isValidLocal(final String issn) {
 		String tempIssn = ISSN_CLEAN.matcher(issn).replaceAll("");
 		int sum = 0;
