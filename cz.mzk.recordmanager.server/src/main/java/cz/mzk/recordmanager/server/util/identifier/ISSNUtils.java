@@ -52,7 +52,16 @@ public final class ISSNUtils {
 	 */
 	public static boolean isValid(final String issn) {
 		Matcher matcher = ISSN_PATTERN.matcher(issn);
-		return matcher.find() && isValidLocal(issn);
+		return matcher.find() && isValidLocal(matcher.group(1));
+	}
+
+	/**
+	 * @param issn String to be validated
+	 * @return valid issn as String or null
+	 */
+	public static String getValidIssn(final String issn) {
+		Matcher matcher = ISSN_PATTERN.matcher(issn);
+		return matcher.find() && isValidLocal(matcher.group(1)) ? matcher.group(1) : null;
 	}
 
 	/**

@@ -49,4 +49,13 @@ public class ISSNUtilsTest {
 		Assert.assertEquals(ISSNUtils.createIssn(issnDataField("0430-859X vaz", " (note)")),
 				ISSNUtils.createIssn("0430-859X", 1L, "vaz note"));
 	}
+
+	@Test
+	public void getValidIssn() {
+		// valid
+		Assert.assertEquals(ISSNUtils.getValidIssn("0317-8471"), "0317-8471");
+		Assert.assertEquals(ISSNUtils.getValidIssn("0317-8471 note"), "0317-8471");
+		// not valid
+		Assert.assertNull(ISSNUtils.getValidIssn(INVALID_ISSN_EXAMPLE));
+	}
 }
