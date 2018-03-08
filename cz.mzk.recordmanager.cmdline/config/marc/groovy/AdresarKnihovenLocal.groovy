@@ -19,11 +19,12 @@ responsibility_display_mv = adresarGetResponsibility()
 address_display_mv = adresarGetAddress()
 email_display_mv = adresarGetEmailOrMvs "EMLuz"
 mvs_display_mv = adresarGetEmailOrMvs "MVScu"
-//reg_lib_display_mv = getFieldsForAdresar "PVKsn", SubfieldExtractionMethod.JOINED, " | "
-//name_alt_display_mv = adresarGetNameAlt " - "
+reg_lib_display_mv = getFieldsForAdresar "PVKsn", SubfieldExtractionMethod.JOINED, " | "
+name_alt_display_mv = adresarGetNameAlt " - "
 hours_display = adresarGetHours()
 cpk_code_display = adresarGetCpkCode()
 gps_display = adresarGetGps()
+ico_display = getFirstFieldSeparatedForAdresar "ICOab", " - "
 lastupdated_display = getFirstFieldForAdresar "AKTa"
 
 library_relevance_str = getLibraryRelevance()
