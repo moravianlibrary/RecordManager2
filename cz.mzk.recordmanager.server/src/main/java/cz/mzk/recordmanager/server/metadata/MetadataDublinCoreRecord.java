@@ -8,6 +8,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import cz.mzk.recordmanager.server.util.identifier.ISBNUtils;
+import cz.mzk.recordmanager.server.util.identifier.ISMNUtils;
 import cz.mzk.recordmanager.server.util.identifier.ISSNUtils;
 import cz.mzk.recordmanager.server.util.identifier.NoDataException;
 import org.slf4j.Logger;
@@ -58,10 +59,6 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 			.compile(".*:.*",Pattern.CASE_INSENSITIVE);
 	
 	protected static final Pattern DC_TYPE_KRAMERIUS_PATTERN = Pattern.compile("^model:(.*)");
-
-	protected static final String ISMN_CLEAR_REGEX = "[^0-9^M]";
-	protected static final String ISMN10_PREFIX = "M";
-	protected static final String ISMN13_PREFIX = "9790";
 	
 	public MetadataDublinCoreRecord(DublinCoreRecord dcRecord) {
 		initRecords(dcRecord, null);
@@ -463,28 +460,26 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 
 	@Override
 	public List<Ismn> getISMNs() {
-		List<String> identifiers = dcRecord.getIdentifiers();
-		List<Ismn> ismns = new ArrayList<>();
-		Matcher matcher;
+		List<Ismn> results = new ArrayList<>();
 		Long ismnCounter = 0L;
-		
-		for (String f : identifiers) {
-			matcher = DC_ISMN_PATTERN.matcher(f);
-			if (matcher.find()) {
-				Ismn ismn = new Ismn();
-				String ismnStr = matcher.group(1).trim().replaceAll(ISMN_CLEAR_REGEX, "").replaceAll(ISMN10_PREFIX, ISMN13_PREFIX);
-				try {
-					if(ismnStr.length() != 13) throw new NumberFormatException();
-					ismn.setIsmn(Long.valueOf(ismnStr));
-					ismn.setOrderInRecord(++ismnCounter);
-				} catch (NumberFormatException nfe) {
-					logger.info(String.format("Invalid ISMN: %s", matcher.group(1).trim()));
-					continue;
-				}
-				ismns.add(ismn);
+		Matcher matcher;
+
+		for (String identifier : dcRecord.getIdentifiers()) {
+			String rawIsmnStr = "";
+			if ((matcher = DC_ISMN_PATTERN.matcher(identifier)).find()) rawIsmnStr = matcher.group(1);
+			else if (!DC_IDENTIFIER_PATTERN.matcher(identifier).matches()) rawIsmnStr = identifier;
+			Long validIsmnLong;
+			try {
+				validIsmnLong = ISMNUtils.toIsmn13LongThrowing(rawIsmnStr);
+			} catch (NoDataException nde) {
+				continue;
+			} catch (NumberFormatException nfe) {
+				logger.info(String.format("Invalid ISMN: %s", rawIsmnStr));
+				continue;
 			}
+			results.add(ISMNUtils.createIsmn(validIsmnLong, ++ismnCounter, ""));
 		}
-		return ismns;
+		return results;
 	}
 
 	@Override

@@ -11,6 +11,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import cz.mzk.recordmanager.server.util.identifier.ISBNUtils;
+import cz.mzk.recordmanager.server.util.identifier.ISMNUtils;
 import cz.mzk.recordmanager.server.util.identifier.ISSNUtils;
 import cz.mzk.recordmanager.server.util.identifier.NoDataException;
 import org.marc4j.marc.DataField;
@@ -46,7 +47,6 @@ public class MetadataMarcRecord implements MetadataRecord {
 
 	protected static final Pattern PAGECOUNT_PATTERN = Pattern.compile("(\\d+)");
 	protected static final Pattern YEAR_PATTERN = Pattern.compile("\\d{4}");
-	protected static final Pattern ISMN_PATTERN = Pattern.compile("([\\dM\\s\\-]*)(.*)");
 	protected static final Pattern EAN_PATTERN = Pattern.compile("([0-9]*)(.*)");
 	protected static final Pattern SCALE_PATTERN = Pattern.compile("\\d+[ ^]*\\d+");
 	protected static final Pattern UUID_PATTERN = Pattern.compile("uuid:[\\w-]+");
@@ -54,13 +54,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 	protected static final Pattern PUBLISHER_NUMBER_PATTERN = Pattern.compile("([^\\W]*)");
 	protected static final Pattern CPK0_PATTERN = Pattern.compile("cpk0");
 	protected static final Pattern METAPROXY_TAG_PATTERN = Pattern.compile("[17]..");
-	protected static final String ISMN_CLEAR_REGEX = "[^0-9M]";
 	protected static final String NOTE_FORMAT = "\\(.+\\)";
-	protected static final String BEGIN_BRACKET = "^\\(.*";
-	protected static final String END_BRACKET = ".*\\)$";
-	
-	protected static final String ISMN10_PREFIX = "M";
-	protected static final String ISMN13_PREFIX = "9790";
 	
 	protected static final Long MAX_PAGES = 10_000_000L;
 	
@@ -1041,58 +1035,23 @@ public class MetadataMarcRecord implements MetadataRecord {
 
 	@Override
 	public List<Ismn> getISMNs() {
-		List<Ismn> ismns = new ArrayList<>();
+		List<Ismn> results = new ArrayList<>();
 		Long ismnCounter = 0L;
-		
-		for(DataField df: underlayingMarc.getDataFields("024")){
-			Subfield sfA = df.getSubfield('a');
-			if((df.getIndicator1() == '2') && (sfA != null)){
-				
-				Matcher matcher = ISMN_PATTERN.matcher(sfA.getData());
-				if(!matcher.find()) continue;
-				String g1 = matcher.group(1); // ismn
-				if (g1 == null)	continue;				
-				
-				Ismn ismn = new Ismn();
-				String ismnStr = g1.replaceAll(ISMN_CLEAR_REGEX, "").replaceAll(ISMN10_PREFIX, ISMN13_PREFIX);
-				try {
-					if(ismnStr.length() != 13) throw new NumberFormatException();
-					ismn.setIsmn(Long.valueOf(ismnStr));
-				} catch (NumberFormatException nfe) {
-					logger.info(String.format("Invalid ISMN: %s", sfA.getData()));
-					continue;
-				}
-				
-				StringBuilder builder = new StringBuilder();
-				String g2 = matcher.group(2).trim();
-				if(g2 != null){ 
-					builder.append(trimNote(g2));
-					builder.append(" ");
-				}
-				
-				for(Subfield sfQ: df.getSubfields('q')){
-					if(sfQ == null) continue;
-					builder.append(trimNote(sfQ.getData()));
-					builder.append(" ");
-				}
-				ismn.setNote(builder.toString().trim());
-				ismn.setOrderInRecord(++ismnCounter);
-				ismns.add(ismn);
+		Ismn ismn;
+
+		for (DataField df : underlayingMarc.getDataFields("024")) {
+			try {
+				ismn = ISMNUtils.createIsmn(df);
+			} catch (NoDataException nde) {
+				continue;
+			} catch (NumberFormatException nfe) {
+				logger.info(String.format("Invalid ISMN: %s", nfe.getMessage()));
+				continue;
 			}
+			ismn.setOrderInRecord(++ismnCounter);
+			results.add(ismn);
 		}
-		
-		return ismns;
-	}
-	
-	protected String trimNote(String note){
-		int beginIndex = 0;
-		int endIndex = note.length();
-		if(note.matches(BEGIN_BRACKET)) beginIndex = 1;
-		if(note.matches(END_BRACKET)) --endIndex;
-		if(beginIndex <= endIndex) {
-			return note.substring(beginIndex, endIndex);
-		}
-		else return note;
+		return results;
 	}
 
 	@Override
