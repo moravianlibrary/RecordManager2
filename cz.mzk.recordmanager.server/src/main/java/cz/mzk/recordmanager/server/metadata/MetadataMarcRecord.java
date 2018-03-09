@@ -57,7 +57,10 @@ public class MetadataMarcRecord implements MetadataRecord {
 	protected static final Long MAX_PAGES = 10_000_000L;
 	
 	protected static final String DELETED_TAG = "YES";
-	
+	private static final String[] TITLE_TAGS = new String[]{"245", "240"};
+	private static final char[] SHORT_TITLE_SUBFIELDS = new char[]{'a', 'n', 'p'};
+	private static final char[] TITLE_SUBFIELDS = new char[]{'a', 'b', 'n', 'p'};
+
 	public MetadataMarcRecord(MarcRecord underlayingMarc) {
 		if (underlayingMarc == null) {
 			throw new IllegalArgumentException("Creating MetadataMarcRecord with NULL underlayingMarc.");
@@ -202,42 +205,28 @@ public class MetadataMarcRecord implements MetadataRecord {
 		} catch (NumberFormatException e) {}
 		return null;
 	}
-		
+
 	/**
-	 * get title of record
-	 * 
-	 * @return all 245a:245b.245n.245p and 240a:240b.240n.240p. If no title is
-	 *         found, list containing empty string is returned
+	 * get {@link Title} of record
+	 *
+	 * @return all 245abnp and 240abnp
 	 */
 	@Override
 	public List<Title> getTitle() {
-		final char titleSubfields[] = new char[]{'a','b','n','p'};
-		List<Title> result = new ArrayList<Title>();
-		
+		List<Title> result = new ArrayList<>();
 		Long titleOrder = 0L;
-		for (String key: new String[]{"245", "240"}) {
-			for (DataField field :underlayingMarc.getDataFields(key)) {
-				StringBuilder builder = new StringBuilder();
-				
-				for(Subfield subfield: field.getSubfields()){
-					if (MetadataUtils.hasTrailingPunctuation(builder.toString())) {
-						builder.append(" ");
-					}
-					if(Chars.contains(titleSubfields, subfield.getCode())){
-						builder.append(subfield.getData());
-					}
-				}
-				
-				if (builder.length() > 0) {
+		for (String key : TITLE_TAGS) {
+			for (DataField df : underlayingMarc.getDataFields(key)) {
+				String titleText = parseTitleValue(df, TITLE_SUBFIELDS);
+				if (!titleText.isEmpty()) {
 					Title title = new Title();
-					title.setTitleStr(builder.toString());
+					title.setTitleStr(titleText);
 					title.setOrderInRecord(++titleOrder);
-					title.setSimilarityEnabled(MetadataUtils.similarityEnabled(field, title));
+					title.setSimilarityEnabled(MetadataUtils.similarityEnabled(df, title));
 					result.add(title);
 				}
 			}
 		}
-
 		return result;
 	}
 
@@ -1138,37 +1127,48 @@ public class MetadataMarcRecord implements MetadataRecord {
 		return results;
 	}
 
+	/**
+	 * get {@link ShortTitle} of record
+	 *
+	 * @return all 245anp and 240anp, if not contains subfield 'b'
+	 */
 	@Override
 	public List<ShortTitle> getShortTitles() {
 		List<ShortTitle> results = new ArrayList<>();
 		Long shortTitleCounter = 0L;
-		char[] shortTitleSf = new char[]{'a', 'n', 'p'};
-		
-		for (String tag: new String[]{"245", "240"}) {
-			for (DataField df :underlayingMarc.getDataFields(tag)) {
+		for (String tag : TITLE_TAGS) {
+			for (DataField df : underlayingMarc.getDataFields(tag)) {
 				if (df.getSubfield('b') == null) continue;
-				
-				StringBuilder builder = new StringBuilder();
-				for(Subfield subfield: df.getSubfields()){
-					if (MetadataUtils.hasTrailingPunctuation(builder.toString())) {
-						builder.append(" ");
-					}
-					if(Chars.contains(shortTitleSf, subfield.getCode())){
-						builder.append(subfield.getData());
-					}
-				}
-
-				if (builder.length() > 0) {
+				String titleText = parseTitleValue(df, SHORT_TITLE_SUBFIELDS);
+				if (!titleText.isEmpty()) {
 					ShortTitle shortTitle = new ShortTitle();
-					shortTitle.setShortTitleStr(builder.toString());
+					shortTitle.setShortTitleStr(titleText);
 					shortTitle.setOrderInRecord(++shortTitleCounter);
 					shortTitle.setSimilarityEnabled(MetadataUtils.similarityEnabled(df, shortTitle));
 					results.add(shortTitle);
 				}
 			}
 		}
-
 		return results;
+	}
+
+	/**
+	 * join subfields data for {@link Title} or {@link ShortTitle}
+	 * @param DF {@link DataField}
+	 * @param SUBFIELDS result subfields, TITLE - abnp, SHORT_TITLE - anp
+	 * @return String
+	 */
+	private String parseTitleValue(final DataField DF, final char[] SUBFIELDS) {
+		StringBuilder builder = new StringBuilder();
+		for (Subfield subfield : DF.getSubfields()) {
+			if (MetadataUtils.hasTrailingPunctuation(builder.toString())) {
+				builder.append(" ");
+			}
+			if (Chars.contains(SUBFIELDS, subfield.getCode())) {
+				builder.append(subfield.getData());
+			}
+		}
+		return builder.toString().trim();
 	}
 
 	@Override
