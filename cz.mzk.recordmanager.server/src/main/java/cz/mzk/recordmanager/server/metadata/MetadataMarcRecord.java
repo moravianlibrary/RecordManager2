@@ -47,14 +47,12 @@ public class MetadataMarcRecord implements MetadataRecord {
 
 	protected static final Pattern PAGECOUNT_PATTERN = Pattern.compile("(\\d+)");
 	protected static final Pattern YEAR_PATTERN = Pattern.compile("\\d{4}");
-	protected static final Pattern EAN_PATTERN = Pattern.compile("([0-9]*)(.*)");
 	protected static final Pattern SCALE_PATTERN = Pattern.compile("\\d+[ ^]*\\d+");
 	protected static final Pattern UUID_PATTERN = Pattern.compile("uuid:[\\w-]+");
 	protected static final Pattern OCLC_PATTERN= Pattern.compile("(\\(ocolc\\))(.*)", Pattern.CASE_INSENSITIVE);
 	protected static final Pattern PUBLISHER_NUMBER_PATTERN = Pattern.compile("([^\\W]*)");
 	protected static final Pattern CPK0_PATTERN = Pattern.compile("cpk0");
 	protected static final Pattern METAPROXY_TAG_PATTERN = Pattern.compile("[17]..");
-	protected static final String NOTE_FORMAT = "\\(.+\\)";
 	
 	protected static final Long MAX_PAGES = 10_000_000L;
 	
@@ -1123,53 +1121,21 @@ public class MetadataMarcRecord implements MetadataRecord {
 	public List<Ean> getEANs() {
 		List<Ean> results = new ArrayList<>();
 		Long eanCounter = 0L;
-		for (DataField df: underlayingMarc.getDataFields("024")) {
-			if (df.getIndicator1() == '3' && df.getSubfield('a') != null) {
-				Matcher matcher = EAN_PATTERN.matcher(df.getSubfield('a').getData());
-				
-				if (matcher.find()) {
-					String g1 = matcher.group(1);
-					if (g1 == null) continue;
-					Ean ean = new Ean();
-					try {
-						if (EANUtils.isEAN13valid(g1)) {
-							ean.setEan(Long.valueOf(g1));
-						}
-						else throw new NumberFormatException();
-					} catch (NumberFormatException nfe) {
-						logger.info(String.format("Invalid EAN: %s", df.getSubfield('a').getData()));
-						continue;
-					}
-					
-					ean.setNote(parseNote(matcher.group(2), df.getSubfields('q')));
-					ean.setOrderInRecord(++eanCounter);
-					results.add(ean);
-				}
+		Ean ean;
+
+		for (DataField df : underlayingMarc.getDataFields("024")) {
+			try {
+				ean = EANUtils.createEan(df);
+			} catch (NoDataException nde) {
+				continue;
+			} catch (NumberFormatException nfe) {
+				logger.info(String.format("Invalid EAN: %s", nfe.getMessage()));
+				continue;
 			}
+			ean.setOrderInRecord(++eanCounter);
+			results.add(ean);
 		}
-		
 		return results;
-	}
-	
-	protected String parseNote(String note, List<Subfield> sfq) {
-		StringBuilder builder = new StringBuilder();
-		if(note.trim() != null){ 
-			String s = note.trim();
-			if(s.matches(NOTE_FORMAT)) {
-				builder.append(s.substring(1, s.length()-1));
-			}
-			else builder.append(s);
-			builder.append(" ");
-		}
-		for(Subfield subfieldQ: sfq){
-			if(subfieldQ.getData().matches(NOTE_FORMAT)) {
-				builder.append(subfieldQ.getData().substring(1, subfieldQ.getData().length()-1));
-			}
-			else builder.append(subfieldQ.getData());
-			builder.append(" ");
-		}
-		
-		return builder.toString().trim();
 	}
 
 	@Override
