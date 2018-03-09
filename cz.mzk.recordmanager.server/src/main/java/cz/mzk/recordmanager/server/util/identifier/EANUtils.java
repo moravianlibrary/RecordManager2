@@ -1,4 +1,4 @@
-package cz.mzk.recordmanager.server.util;
+package cz.mzk.recordmanager.server.util.identifier;
 
 import java.util.regex.Pattern;
 

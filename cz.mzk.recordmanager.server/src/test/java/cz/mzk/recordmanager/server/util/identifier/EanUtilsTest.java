@@ -1,4 +1,4 @@
-package cz.mzk.recordmanager.server.util;
+package cz.mzk.recordmanager.server.util.identifier;
 
 import org.testng.Assert;
 import org.testng.annotations.Test;
