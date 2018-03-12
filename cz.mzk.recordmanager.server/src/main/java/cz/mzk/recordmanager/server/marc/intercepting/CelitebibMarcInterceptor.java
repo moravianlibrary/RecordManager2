@@ -12,7 +12,9 @@ import java.util.regex.Pattern;
 public class CelitebibMarcInterceptor extends DefaultMarcInterceptor {
 
 	private static final Pattern FIELD_START = Pattern.compile("^[167]..$");
-	private static final MarcFactory factory = new MarcFactoryImpl();
+	private static final String TAG_773 = "773";
+	private static final String TAG_994 = "964";
+	private static final char CODE_X = 'x';
 
 	public CelitebibMarcInterceptor(Record record) {
 		super(record);
@@ -30,18 +32,18 @@ public class CelitebibMarcInterceptor extends DefaultMarcInterceptor {
 		}
 
 		for (DataField df : super.getRecord().getDataFields()) {
-			// remove subfield 'x' from fields 1xx, 6xx, 7xx
-			if (FIELD_START.matcher(df.getTag()).matches()) {
-				DataField newDf = factory.newDataField(df.getTag(), df.getIndicator1(), df.getIndicator2());
+			// remove subfield 'x' from fields 1xx, 6xx, 7xx (but not from 773)
+			if (FIELD_START.matcher(df.getTag()).matches() && !df.getTag().equals(TAG_773)) {
+				DataField newDf = MARC_FACTORY.newDataField(df.getTag(), df.getIndicator1(), df.getIndicator2());
 				for (Subfield subfield : df.getSubfields()) {
-					if (subfield.getCode() == 'x') continue;
+					if (subfield.getCode() == CODE_X) continue;
 					newDf.addSubfield(subfield);
 				}
 				newRecord.addVariableField(newDf);
 				continue;
 			}
 			// remove field 964
-			if (df.getTag().equals("964")) continue;
+			if (df.getTag().equals(TAG_994)) continue;
 			// default
 			newRecord.addVariableField(df);
 		}
