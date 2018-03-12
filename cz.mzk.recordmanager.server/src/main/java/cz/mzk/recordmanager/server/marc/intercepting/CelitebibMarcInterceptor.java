@@ -2,7 +2,6 @@ package cz.mzk.recordmanager.server.marc.intercepting;
 
 import cz.mzk.recordmanager.server.export.IOFormat;
 import cz.mzk.recordmanager.server.marc.MarcRecordImpl;
-import cz.mzk.recordmanager.server.marc.marc4j.MarcFactoryImpl;
 import cz.mzk.recordmanager.server.marc.marc4j.RecordImpl;
 import org.marc4j.marc.*;
 
