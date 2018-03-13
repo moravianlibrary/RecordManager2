@@ -1015,3 +1015,6 @@ INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granul
 -- 05. 03. 2018 tomascejpek
 INSERT INTO harvested_record_format(id, name) VALUES (65, 'BLIND_AUDIO');
 INSERT INTO harvested_record_format(id, name) VALUES (66, 'BLIND_BRAILLE');
+
+-- 13. 03. 2018 tomascejpek
+UPDATE import_conf SET mapping_script='AdresarKnihovenLocal.groovy' WHERE id=351;
