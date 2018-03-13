@@ -3,6 +3,8 @@ package cz.mzk.recordmanager.server.oai.dao.hibernate;
 import java.util.Collections;
 import java.util.List;
 
+import cz.mzk.recordmanager.server.model.HarvestedRecord;
+import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -36,6 +38,16 @@ public class FulltextKrameriusDAOHibernate extends
 	@Override
 	public List<String> getFullText(DedupRecord record) {
 		return jdbcTemplate.query(fullTextQuery, Collections.singletonMap("dedupRecordId", record.getId()), ROW_MAPPER);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<FulltextKramerius> findAll(long id) {
+		Session session = sessionFactory.getCurrentSession();
+		return (List<FulltextKramerius>) session
+				.createQuery("from FulltextKramerius where harvested_record_id = ?")
+				.setParameter(0, id)
+				.list();
 	}
 
 	@Override

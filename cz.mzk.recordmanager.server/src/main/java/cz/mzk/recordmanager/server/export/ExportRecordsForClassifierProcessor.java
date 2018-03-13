@@ -16,6 +16,13 @@ import org.springframework.batch.item.ItemProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.*;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Created by sergeyp on 7/13/17.
@@ -44,6 +51,9 @@ public class ExportRecordsForClassifierProcessor implements ItemProcessor<Harves
 
 	Writer writer = null;
 	Writer writerid = null;
+	Writer writermarc = null;
+	Writer writeraleph = null;
+	Writer writerxml = null;
 
 	@Override
 	public String process(HarvestedRecord.HarvestedRecordUniqueId recordId) throws Exception {
@@ -59,16 +69,24 @@ public class ExportRecordsForClassifierProcessor implements ItemProcessor<Harves
 			}
 			if (marcRecord.getDataFields("080").isEmpty() || !marcRecord.getDataFields("072").isEmpty()) return null;
 			else {
+				HarvestedRecord kramRec = null;
+				for (HarvestedRecord harvestedRecord : harvestedRecordDao.getByDedupRecord(record.getDedupRecord())) {
+					if (harvestedRecord.getUniqueId().getHarvestedFromId() == 99001) kramRec = harvestedRecord;
+				}
+				if (kramRec == null) return null;
 				try {
-					StringBuilder full = new StringBuilder();
-					for (String fk : kramDao.getFullText(record.getDedupRecord())) {
-						full.append(fk.replaceAll("(\\r|\\n)", ""));
-
+					new File("/home/tomas/fulltext/"+kramRec.getUniqueId().getRecordId()).mkdir();
+					for (FulltextKramerius fk : kramDao.findAll(kramRec.getId())) {
+						Path file = Paths.get("/home/tomas/fulltext/"+kramRec.getUniqueId().getRecordId()+"/"+fk.getUuidPage()+".txt");
+						Files.write(file, Collections.singletonList(new String(fk.getFulltext(), "UTF-8")), Charset.forName("UTF-8"));
 					}
-					writer.write(full.toString());
-					writer.write("\n");
 					writerid.write(record.getUniqueId().getRecordId());
 					writerid.write("\n");
+					writermarc.write(marcRecord.export(IOFormat.LINE_MARC));
+					writermarc.write("\n");
+					writeraleph.write(marcRecord.export(IOFormat.ALEPH_MARC));
+					writeraleph.write("\n");
+					writerxml.write(marcRecord.export(IOFormat.XML_MARC));
 				} catch (IOException ex) {
 					// report
 				}
@@ -85,6 +103,12 @@ public class ExportRecordsForClassifierProcessor implements ItemProcessor<Harves
 					new FileOutputStream("/home/tomas/fulltext.txt"), "utf-8"));
 			writerid = new BufferedWriter(new OutputStreamWriter(
 					new FileOutputStream("/home/tomas/classid.txt"), "utf-8"));
+			writermarc = new BufferedWriter(new OutputStreamWriter(
+					new FileOutputStream("/home/tomas/metadata.mrc"), "utf-8"));
+			writeraleph = new BufferedWriter(new OutputStreamWriter(
+					new FileOutputStream("/home/tomas/metadata.aleph"), "utf-8"));
+			writerxml = new BufferedWriter(new OutputStreamWriter(
+					new FileOutputStream("/home/tomas/metadata.xml"), "utf-8"));
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		} catch (FileNotFoundException e) {
@@ -97,6 +121,9 @@ public class ExportRecordsForClassifierProcessor implements ItemProcessor<Harves
 		try {
 			writer.close();
 			writerid.close();
+			writerxml.close();
+			writeraleph.close();
+			writermarc.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
