@@ -11,7 +11,7 @@ url = getFields "856u"
 
 authorCorporation_search_txt_mv = getFieldsUnique "100abcdq7:110abc7:111aceq7:700abcdq7:710abc7:711aceq7:800abcdq7:810abc7:811aceq7:975abcdq7:976abc7:978abcdg7"
 
-author_autocomplete = getAuthorAutocomplete("100abcdq:110abc:111acdegq:700abcdq:710abc:711acdegq:975abcdq:976abc")
+author_autocomplete = getAuthorAutocomplete("100abcdq:110abc:111acegq:700abcdq:710abc:711acegq:975abcdq:976abc")
 
 citation_record_type_str = getCitationRecordType();
 cpk_detected_format_facet_str_mv = getFormat()
