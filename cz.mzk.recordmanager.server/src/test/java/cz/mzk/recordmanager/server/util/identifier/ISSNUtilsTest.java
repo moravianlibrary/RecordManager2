@@ -50,12 +50,15 @@ public class ISSNUtilsTest {
 				ISSNUtils.createIssn("0430-859X", 1L, "vaz note"));
 	}
 
-	@Test
-	public void getValidIssn() {
-		// valid
-		Assert.assertEquals(ISSNUtils.getValidIssn("0317-8471"), "0317-8471");
-		Assert.assertEquals(ISSNUtils.getValidIssn("0317-8471 note"), "0317-8471");
+	@Test(expectedExceptions = NumberFormatException.class)
+	public void getValidIssnThrowingNotValid() {
 		// not valid
-		Assert.assertNull(ISSNUtils.getValidIssn(INVALID_ISSN_EXAMPLE));
+		Assert.assertNull(ISSNUtils.getValidIssnThrowing(INVALID_ISSN_EXAMPLE));
+	}
+
+	@Test(expectedExceptions = NoDataException.class)
+	public void getValidIssnThrowingEmpty() {
+		// empty string
+		Assert.assertNull(ISSNUtils.getValidIssnThrowing(""));
 	}
 }

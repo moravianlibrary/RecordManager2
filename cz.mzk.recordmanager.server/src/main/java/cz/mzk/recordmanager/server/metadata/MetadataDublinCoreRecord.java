@@ -186,9 +186,12 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 			String rawIssnStr = "";
 			if ((matcher = DC_ISSN_PATTERN.matcher(identifier)).find()) rawIssnStr = matcher.group(1);
 			else if (!DC_IDENTIFIER_PATTERN.matcher(identifier).matches()) rawIssnStr = identifier;
-
-			String validIssn = ISSNUtils.getValidIssn(rawIssnStr);
-			if (validIssn == null) {
+			String validIssn;
+			try {
+				validIssn = ISSNUtils.getValidIssnThrowing(rawIssnStr);
+			} catch (NoDataException nde) {
+				continue;
+			} catch (NumberFormatException nfe) {
 				logger.info(String.format("Invalid ISSN: %s", rawIssnStr));
 				continue;
 			}

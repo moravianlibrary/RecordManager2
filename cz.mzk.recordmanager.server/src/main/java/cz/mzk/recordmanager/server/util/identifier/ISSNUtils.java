@@ -57,11 +57,30 @@ public final class ISSNUtils {
 
 	/**
 	 * @param issn String to be validated
+	 * @return valid issn as String or exception
+	 */
+	public static String getValidIssnThrowing(final String issn) {
+		// empty string
+		if (issn.isEmpty()) throw new NoDataException(IdentifierUtils.NO_USABLE_DATA);
+		Matcher matcher = ISSN_PATTERN.matcher(issn);
+		// bad string
+		if (!matcher.find()) throw new NoDataException(IdentifierUtils.NO_USABLE_DATA);
+		// valid issn
+		if (isValidLocal(matcher.group(1))) return matcher.group(1);
+		// not valid issn
+		throw new NumberFormatException(issn);
+	}
+
+	/**
+	 * @param issn String to be validated
 	 * @return valid issn as String or null
 	 */
 	public static String getValidIssn(final String issn) {
-		Matcher matcher = ISSN_PATTERN.matcher(issn);
-		return matcher.find() && isValidLocal(matcher.group(1)) ? matcher.group(1) : null;
+		try {
+			return getValidIssnThrowing(issn);
+		} catch (NumberFormatException | NoDataException e) {
+			return null;
+		}
 	}
 
 	/**
