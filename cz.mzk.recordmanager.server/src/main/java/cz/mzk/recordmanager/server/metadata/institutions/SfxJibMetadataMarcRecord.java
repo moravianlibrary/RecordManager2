@@ -26,6 +26,7 @@ public class SfxJibMetadataMarcRecord extends MetadataMarcRecord {
 		SFX_PREFIX.put("SVKOS", "MSVK");
 		SFX_PREFIX.put("CBVK", "JVKCB");
 		SFX_PREFIX.put("KVKL", "KVKLI");
+		SFX_PREFIX.put("KFBZ", "KKFB");
 	}
 
 	protected Map<String, String> params = new HashMap<>();
