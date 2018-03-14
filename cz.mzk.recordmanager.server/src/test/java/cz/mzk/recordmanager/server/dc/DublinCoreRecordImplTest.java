@@ -64,6 +64,14 @@ public class DublinCoreRecordImplTest extends AbstractTest {
 		Assert.assertEquals(testTitle2, titleFromList);
 	}
 
+	/**
+	 * no short titles in Dublic Core
+	 */
+	@Test
+	public void getShortTitleTest() {
+		Assert.assertTrue(metadataFactory.getMetadataRecord(new DublinCoreRecordImpl()).getShortTitles().isEmpty());
+	}
+
 	@Test
 	public void getIdentifierTest() {
 		DublinCoreRecord rec = new DublinCoreRecordImpl();
