@@ -1,29 +1,16 @@
 package cz.mzk.recordmanager.server.dc;
 
-import java.util.List;
-
+import cz.mzk.recordmanager.server.AbstractTest;
+import cz.mzk.recordmanager.server.metadata.MetadataRecord;
+import cz.mzk.recordmanager.server.metadata.MetadataRecordFactory;
+import cz.mzk.recordmanager.server.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import cz.mzk.recordmanager.server.AbstractTest;
-import cz.mzk.recordmanager.server.marc.MarcXmlParser;
-import cz.mzk.recordmanager.server.metadata.MetadataRecord;
-import cz.mzk.recordmanager.server.metadata.MetadataRecordFactory;
-import cz.mzk.recordmanager.server.model.Cnb;
-import cz.mzk.recordmanager.server.model.Isbn;
-import cz.mzk.recordmanager.server.model.Ismn;
-import cz.mzk.recordmanager.server.model.Issn;
-import cz.mzk.recordmanager.server.model.Title;
-import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordDAO;
+import java.util.List;
 
 public class DublinCoreRecordImplTest extends AbstractTest {
-
-	@Autowired
-	private HarvestedRecordDAO hrdao;
-
-	@Autowired
-	private MarcXmlParser parser;
 
 	@Autowired
 	private MetadataRecordFactory metadataFactory;
@@ -122,11 +109,11 @@ public class DublinCoreRecordImplTest extends AbstractTest {
 		dcr.addTitle(titleStr);
 
 		metadataRecord = metadataFactory.getMetadataRecord(dcr);
-		
+
 		Title title = new Title();
 		title.setTitleStr(titleStr);
 		title.setOrderInRecord(1L);
-		
+
 		Assert.assertTrue(metadataRecord.getTitle().contains(title));
 	}
 
@@ -166,9 +153,9 @@ public class DublinCoreRecordImplTest extends AbstractTest {
 		MetadataRecord metadataRecord;
 
 		// from K4 NDK NK - uuid:2bc5f0f0-987e-11e2-9a08-005056827e52
-		String cnb1str = "ccnb:cnb000121063"; 
+		String cnb1str = "ccnb:cnb000121063";
 		//from Kram MZK - uuid:b602bb03-da24-4724-893d-23f9f3344498
-		String cnb2str = "ccnb: cnb000790921"; 
+		String cnb2str = "ccnb: cnb000790921";
 		String notCnbStr = "uuid:not:cnb:identifier";
 		dcr.addIdentifier(cnb1str);
 		dcr.addIdentifier(notCnbStr);
@@ -189,14 +176,14 @@ public class DublinCoreRecordImplTest extends AbstractTest {
 		cnb2.setCnb("cnb000790921");
 		Assert.assertTrue(cnbs.contains(cnb2));
 	}
-	
+
 	@Test
 	public void getISBNsTest() throws Exception {
 		DublinCoreRecord dcr = new DublinCoreRecordImpl();
 		MetadataRecord metadataRecord;
-		
-		String isbnstr = "isbn:80-214-1182-1"; 
-		String isbn2str = "0-582-53020-2"; 
+
+		String isbnstr = "isbn:80-214-1182-1";
+		String isbn2str = "0-582-53020-2";
 		String notIsbnStr = "uuid:not:cnb:identifier";
 		String noValidIsbnStr = "0-582-53020-255555";
 		dcr.addIdentifier(isbnstr);
@@ -206,7 +193,7 @@ public class DublinCoreRecordImplTest extends AbstractTest {
 
 		metadataRecord = metadataFactory.getMetadataRecord(dcr);
 		List<Isbn> isbns = metadataRecord.getISBNs();
-		
+
 		Isbn isbn1 = new Isbn();
 		isbn1.setIsbn(9788021411821L);
 		isbn1.setOrderInRecord(1L);
@@ -216,10 +203,10 @@ public class DublinCoreRecordImplTest extends AbstractTest {
 		isbn2.setIsbn(9780582530201L);
 		isbn2.setOrderInRecord(2L);
 		Assert.assertTrue(isbns.contains(isbn2));
-		
+
 		Assert.assertTrue(isbns.size() == 2);
 	}
-	
+
 	@Test
 	public void getISMNsTest() throws Exception {
 		DublinCoreRecord dcr = new DublinCoreRecordImpl();
@@ -239,5 +226,19 @@ public class DublinCoreRecordImplTest extends AbstractTest {
 		Assert.assertTrue(ismns.contains(ismn1));
 
 		Assert.assertTrue(ismns.size() == 1);
+	}
+
+	/**
+	 * no Ean in DublinCore
+	 */
+	@Test
+	public void getEANsTest() {
+		DublinCoreRecord dcr = new DublinCoreRecordImpl();
+		MetadataRecord metadataRecord;
+
+		metadataRecord = metadataFactory.getMetadataRecord(dcr);
+		List<Ean> eans = metadataRecord.getEANs();
+
+		Assert.assertTrue(eans.size() == 0);
 	}
 }
