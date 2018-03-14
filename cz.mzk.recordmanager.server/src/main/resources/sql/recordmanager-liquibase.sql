@@ -1280,3 +1280,6 @@ INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granul
 --changeset tomascejpek:91
 INSERT INTO harvested_record_format(id, name) VALUES (65, 'BLIND_AUDIO');
 INSERT INTO harvested_record_format(id, name) VALUES (66, 'BLIND_BRAILLE');
+
+--changeset tomascejpek:92 context:cpk
+UPDATE import_conf SET interception_enabled=true WHERE id=360;
