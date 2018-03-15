@@ -1018,3 +1018,6 @@ INSERT INTO harvested_record_format(id, name) VALUES (66, 'BLIND_BRAILLE');
 
 -- 12. 03. 2018 tomascejpek
 UPDATE import_conf SET interception_enabled=true WHERE id=360;
+
+-- 15. 03. 2018 tomascejpek
+UPDATE import_conf SET base_weight=11 WHERE id=349;

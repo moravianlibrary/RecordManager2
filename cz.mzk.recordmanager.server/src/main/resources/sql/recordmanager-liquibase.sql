@@ -1283,3 +1283,6 @@ INSERT INTO harvested_record_format(id, name) VALUES (66, 'BLIND_BRAILLE');
 
 --changeset tomascejpek:92 context:cpk
 UPDATE import_conf SET interception_enabled=true WHERE id=360;
+
+--changeset tomascejpek:93 context:cpk
+UPDATE import_conf SET base_weight=11 WHERE id=349;
