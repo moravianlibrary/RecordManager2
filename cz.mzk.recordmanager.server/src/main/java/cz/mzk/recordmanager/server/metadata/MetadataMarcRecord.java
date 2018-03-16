@@ -219,11 +219,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 			for (DataField df : underlayingMarc.getDataFields(key)) {
 				String titleText = parseTitleValue(df, TITLE_SUBFIELDS);
 				if (!titleText.isEmpty()) {
-					Title title = new Title();
-					title.setTitleStr(titleText);
-					title.setOrderInRecord(++titleOrder);
-					title.setSimilarityEnabled(MetadataUtils.similarityEnabled(df, title));
-					result.add(title);
+					result.add(Title.create(titleText, ++titleOrder, MetadataUtils.similarityEnabled(df, titleText)));
 				}
 			}
 		}

@@ -61,7 +61,7 @@ public class MetadataUtils {
 		return similarityEnabled(df, shortTitle.getShortTitleStr());
 	}
 
-	protected static boolean similarityEnabled(DataField df, String title) {
+	public static boolean similarityEnabled(DataField df, String title) {
 		if (FIELD_245.matcher(df.getTag()).matches() && df.getSubfield('n') != null) {
 			return false;
 		}
@@ -76,7 +76,7 @@ public class MetadataUtils {
 		return similarityEnabled(shortTitle.getShortTitleStr());
 	}
 	
-	protected static boolean similarityEnabled(String title) {
+	public static boolean similarityEnabled(String title) {
 		if (NUMBER_PATTERN.matcher(title).find()) return false;
 		for (Pattern pattern: PATTERNS) {
 			if (pattern.matcher(title).find()) {

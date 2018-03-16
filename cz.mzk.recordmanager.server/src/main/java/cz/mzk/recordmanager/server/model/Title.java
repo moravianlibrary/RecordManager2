@@ -18,7 +18,15 @@ public class Title extends AbstractDomainObject {
 
 	@Column(name="similarity_enabled")
 	private boolean similarityEnabled;
-	
+
+	public static Title create(final String title, final long orderInRecord, final boolean similarity) {
+		Title newTitle = new Title();
+		newTitle.setTitleStr(title);
+		newTitle.setOrderInRecord(orderInRecord);
+		newTitle.setSimilarityEnabled(similarity);
+		return newTitle;
+	}
+
 	public String getTitleStr() {
 		return title;
 	}

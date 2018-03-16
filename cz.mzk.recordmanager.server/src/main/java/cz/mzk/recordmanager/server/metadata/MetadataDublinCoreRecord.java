@@ -79,24 +79,17 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 
 	@Override
 	public List<Title> getTitle() {
-		List<Title> result = new ArrayList<Title>();
+		List<Title> result = new ArrayList<>();
 		List<String> dcTitles = dcRecord.getTitles();
 		Long titleOrder = 0L;
 		
 		for (String s: dcTitles) {
-			Title title = new Title();
-			title.setTitleStr(s);
-			title.setSimilarityEnabled(MetadataUtils.similarityEnabled(title));
-			title.setOrderInRecord(++titleOrder);
-			result.add(title);
+			result.add(Title.create(s, ++titleOrder, MetadataUtils.similarityEnabled(s)));
 		}
 		
 		/*returns "" if no title is found - same as MARC implementation*/
 		if (result.isEmpty()) {
-			Title title = new Title();
-			title.setTitleStr("");
-			title.setOrderInRecord(1L);
-			result.add(title);
+			result.add(Title.create("", 1L, false));
 		}
 		
 		return result;

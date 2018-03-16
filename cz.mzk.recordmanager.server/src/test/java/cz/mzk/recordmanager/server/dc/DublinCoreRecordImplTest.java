@@ -118,11 +118,7 @@ public class DublinCoreRecordImplTest extends AbstractTest {
 
 		metadataRecord = metadataFactory.getMetadataRecord(dcr);
 
-		Title title = new Title();
-		title.setTitleStr(titleStr);
-		title.setOrderInRecord(1L);
-
-		Assert.assertTrue(metadataRecord.getTitle().contains(title));
+		Assert.assertTrue(metadataRecord.getTitle().contains(Title.create(titleStr, 1L, false)));
 	}
 
 	@Test
