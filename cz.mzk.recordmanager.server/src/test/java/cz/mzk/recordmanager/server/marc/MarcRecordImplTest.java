@@ -5,7 +5,6 @@ import java.util.Collections;
 import java.util.List;
 
 import cz.mzk.recordmanager.server.model.*;
-import org.hamcrest.core.Is;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
@@ -208,12 +207,8 @@ public class MarcRecordImplTest extends AbstractTest {
 		mri = MarcRecordFactory.recordFactory(data);
 		metadataRecord = metadataFactory.getMetadataRecord(mri);
 		
-		ShortTitle expectedST1 = new ShortTitle();
-		expectedST1.setShortTitleStr("nap");
-		expectedST1.setOrderInRecord(1L);
-		ShortTitle expectedST2 = new ShortTitle();
-		expectedST2.setShortTitleStr("anp");
-		expectedST2.setOrderInRecord(2L);
+		ShortTitle expectedST1 = ShortTitle.create("nap", 1L, false);
+		ShortTitle expectedST2 = ShortTitle.create("anp", 2L, false);
 		
 		Assert.assertEquals(2, metadataRecord.getShortTitles().size());
 		Assert.assertEquals(metadataRecord.getShortTitles().get(0),expectedST1);

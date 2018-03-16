@@ -1137,11 +1137,8 @@ public class MetadataMarcRecord implements MetadataRecord {
 				if (df.getSubfield('b') == null) continue;
 				String titleText = parseTitleValue(df, SHORT_TITLE_SUBFIELDS);
 				if (!titleText.isEmpty()) {
-					ShortTitle shortTitle = new ShortTitle();
-					shortTitle.setShortTitleStr(titleText);
-					shortTitle.setOrderInRecord(++shortTitleCounter);
-					shortTitle.setSimilarityEnabled(MetadataUtils.similarityEnabled(df, shortTitle));
-					results.add(shortTitle);
+					results.add(ShortTitle.create(titleText, ++shortTitleCounter,
+							MetadataUtils.similarityEnabled(df, titleText)));
 				}
 			}
 		}
