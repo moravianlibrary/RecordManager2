@@ -140,19 +140,9 @@ public class DublinCoreRecordImplTest extends AbstractTest {
 		metadataRecord = metadataFactory.getMetadataRecord(dcr);
 		List<Issn> issns = metadataRecord.getISSNs();
 
-		Issn issn1 = new Issn();
-		issn1.setIssn("0322-9580");
-		issn1.setOrderInRecord(1L);
-		Assert.assertTrue(issns.contains(issn1));
-
-		Issn issnN = new Issn();
-		issnN.setIssn(notIssn);
-		Assert.assertFalse(issns.contains(issnN));
-
-		Issn issn2 = new Issn();
-		issn2.setIssn("1211-068X");
-		issn2.setOrderInRecord(2L);
-		Assert.assertTrue(issns.contains(issn2));
+		Assert.assertTrue(issns.contains(Issn.create("0322-9580", 1L, "")));
+		Assert.assertFalse(issns.contains(Issn.create(notIssn, 2L, "")));
+		Assert.assertTrue(issns.contains(Issn.create("1211-068X", 2L, "")));
 	}
 
 	@Test

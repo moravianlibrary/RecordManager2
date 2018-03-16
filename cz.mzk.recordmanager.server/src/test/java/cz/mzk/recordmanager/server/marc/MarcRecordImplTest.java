@@ -224,38 +224,29 @@ public class MarcRecordImplTest extends AbstractTest {
 	public void getISSNsTest() throws Exception {
 		MarcRecordImpl mri;
 		MetadataRecord metadataRecord;
-		List<String> data = new ArrayList<String>();
-		List<Issn> issns = new ArrayList<Issn>();
+		List<String> data = new ArrayList<>();
+		List<Issn> issns = new ArrayList<>();
 		Long issnCounter = 0L;
-		
-		data.add("022 $a2336-4815");
-		Issn issn = new Issn();
-		issn.setIssn("2336-4815");
-		issn.setOrderInRecord(++issnCounter);
-		issn.setNote("");
-		issns.add(issn);
-		data.add("022 $a1214-4029 (pozn)");
-		issn = new Issn();
-		issn.setIssn("1214-4029");
-		issn.setOrderInRecord(++issnCounter);
-		issn.setNote("pozn");
-		issns.add(issn);
-		data.add("022 $a0231-858X");
-		issn = new Issn();
-		issn.setIssn("0231-858X");
-		issn.setOrderInRecord(++issnCounter);
-		issn.setNote("");
-		issns.add(issn);
-		mri = MarcRecordFactory.recordFactory(data);
-		metadataRecord = metadataFactory.getMetadataRecord(mri);
-		Assert.assertEquals(metadataRecord.getISSNs().toString(),
-				issns.toString());
-		data.clear();
 
+		// no issn test
 		mri = MarcRecordFactory.recordFactory(data);
 		metadataRecord = metadataFactory.getMetadataRecord(mri);
 		Assert.assertEquals(metadataRecord.getISSNs(), Collections.EMPTY_LIST);
 		data.clear();
+
+		// create issn
+		data.add("022 $a2336-4815");
+		issns.add(Issn.create("2336-4815", ++issnCounter, ""));
+
+		data.add("022 $a1214-4029 (pozn)");
+		issns.add(Issn.create("1214-4029", ++issnCounter, "pozn"));
+
+		data.add("022 $a0231-858X");
+		issns.add(Issn.create("0231-858X", ++issnCounter, ""));
+
+		mri = MarcRecordFactory.recordFactory(data);
+		metadataRecord = metadataFactory.getMetadataRecord(mri);
+		Assert.assertEquals(metadataRecord.getISSNs().toString(), issns.toString());
 	}
 	
 	@Test
