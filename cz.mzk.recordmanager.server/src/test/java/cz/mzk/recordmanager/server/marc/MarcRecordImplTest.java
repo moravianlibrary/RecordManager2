@@ -941,26 +941,21 @@ public class MarcRecordImplTest extends AbstractTest {
 		MetadataRecord metadataRecord;
 		List<String> data = new ArrayList<>();
 		List<Ean> eanList = new ArrayList<>();
+
+		// no ean
+		mri = MarcRecordFactory.recordFactory(data);
+		metadataRecord = metadataFactory.getMetadataRecord(mri);
+		Assert.assertEquals(metadataRecord.getEANs(), Collections.EMPTY_LIST);
+
+		// create eans
 		data.add("024 3 $a4006381333931$q(brož.)");
-		Ean ean = new Ean();
-		ean.setEan(4006381333931L);
-		ean.setOrderInRecord(1L);
-		ean.setNote("brož.");
-		eanList.add(ean);
+		eanList.add(Ean.create(4006381333931L, 1L, "brož."));
 
 		data.add("024 3 $a4006381333931 note$q(sešity v obálce)");
-		ean = new Ean();
-		ean.setEan(4006381333931L);
-		ean.setOrderInRecord(2L);
-		ean.setNote("note sešity v obálce");
-		eanList.add(ean);
+		eanList.add(Ean.create(4006381333931L, 2L, "note sešity v obálce"));
 
 		data.add("024 3 $a4006381333931$q(Praha ;$qv hudebnině neuvedeno ;$qbrož.)");
-		ean = new Ean();
-		ean.setEan(4006381333931L);
-		ean.setOrderInRecord(3L);
-		ean.setNote("Praha v hudebnině neuvedeno ; brož.");
-		eanList.add(ean);
+		eanList.add(Ean.create(4006381333931L, 3L, "Praha v hudebnině neuvedeno ; brož."));
 
 		// invalid
 		data.add("024 3 $a73513536 (Brno)$q(Praha)");
@@ -970,13 +965,7 @@ public class MarcRecordImplTest extends AbstractTest {
 		List<Ean> results = metadataRecord.getEANs();
 		Assert.assertEquals(results.size(), eanList.size());
 		for (int i = 0; i < eanList.size(); i++) {
-			Assert.assertEquals(results.get(i), eanList.get(i), "EAN on position " + i + " differs.");
+			Assert.assertEquals(results.get(i), eanList.get(i), String.format("EAN on position %d differs.", i));
 		}
-
-		data.clear();
-		mri = MarcRecordFactory.recordFactory(data);
-		metadataRecord = metadataFactory.getMetadataRecord(mri);
-		Assert.assertEquals(metadataRecord.getEANs(), Collections.EMPTY_LIST);
-		data.clear();
 	}
 }
