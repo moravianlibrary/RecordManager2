@@ -19,6 +19,14 @@ public class Issn extends AbstractDomainObject {
 	@Column(name="note")
 	private String note = "";
 
+	public static Issn create(final String issn, final long orderInRecord, final String note) {
+		Issn newIssn = new Issn();
+		newIssn.setIssn(issn);
+		newIssn.setOrderInRecord(orderInRecord);
+		newIssn.setNote(note);
+		return newIssn;
+	}
+
 	public String getIssn() {
 		return issn;
 	}

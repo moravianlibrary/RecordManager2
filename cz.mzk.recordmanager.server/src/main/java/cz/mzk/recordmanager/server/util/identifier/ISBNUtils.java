@@ -45,14 +45,6 @@ public final class ISBNUtils {
 		return isbn;
 	}
 
-	public static Isbn createIsbn(final long isbn, final long orderInRecord, final String note) {
-		Isbn newIsbn = new Isbn();
-		newIsbn.setIsbn(isbn);
-		newIsbn.setOrderInRecord(orderInRecord);
-		newIsbn.setNote(note);
-		return newIsbn;
-	}
-
 	/**
 	 * @param rawIsbn String to be validated
 	 * @return String representation of ISBN 13 or exception

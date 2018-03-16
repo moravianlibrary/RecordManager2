@@ -37,23 +37,25 @@ public class EanUtilsTest {
 		ean.setEan(8593026341407L);
 		ean.setOrderInRecord(1L);
 		ean.setNote("note");
-		Assert.assertEquals(EANUtils.createEan(8593026341407L, 1L, "note"), ean);
+		Assert.assertEquals(Ean.create(8593026341407L, 1L, "note"), ean);
 	}
 
 	@Test
 	public void createEanFromDataFieldTest() {
 		Assert.assertEquals(EANUtils.createEan(eanDataField("8593026341407", "")),
-				EANUtils.createEan(8593026341407L, 1L, ""));
+				Ean.create(8593026341407L, 1L, ""));
 		Assert.assertEquals(EANUtils.createEan(eanDataField("8593026341407 vaz", "")),
-				EANUtils.createEan(8593026341407L, 1L, "vaz"));
+				Ean.create(8593026341407L, 1L, "vaz"));
 		Assert.assertEquals(EANUtils.createEan(eanDataField("8593026341407 vaz", " (note)")),
-				EANUtils.createEan(8593026341407L, 1L, "vaz note"));
+				Ean.create(8593026341407L, 1L, "vaz note"));
 	}
 
 	@Test
 	public void getValidEan() {
 		// valid
-		Assert.assertEquals(EANUtils.getEAN13Long(VALID_EAN).longValue(), 8593026341407L);
+		Long testValid = EANUtils.getEAN13Long(VALID_EAN);
+		Assert.assertNotNull(testValid);
+		Assert.assertEquals(testValid.longValue(), 8593026341407L);
 		// not valid
 		Assert.assertNull(EANUtils.getEAN13Long(INVALID_EAN), null);
 	}

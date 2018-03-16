@@ -23,17 +23,17 @@ public class ISMNUtilsTest {
 		ismn.setIsmn(9790260001251L);
 		ismn.setOrderInRecord(1L);
 		ismn.setNote("note");
-		Assert.assertEquals(ISMNUtils.createIsmn(9790260001251L, 1L, "note"), ismn);
+		Assert.assertEquals(Ismn.create(9790260001251L, 1L, "note"), ismn);
 	}
 
 	@Test
 	public void createIsmnFromDataFieldTest() {
 		Assert.assertEquals(ISMNUtils.createIsmn(ismnDataField("M-66056-061-7", "")),
-				ISMNUtils.createIsmn(9790660560617L, 1L, ""));
+				Ismn.create(9790660560617L, 1L, ""));
 		Assert.assertEquals(ISMNUtils.createIsmn(ismnDataField("M-66056-061-7 vaz", "")),
-				ISMNUtils.createIsmn(9790660560617L, 1L, "vaz"));
+				Ismn.create(9790660560617L, 1L, "vaz"));
 		Assert.assertEquals(ISMNUtils.createIsmn(ismnDataField("M-66056-061-7 vaz", " (note)")),
-				ISMNUtils.createIsmn(9790660560617L, 1L, "vaz note"));
+				Ismn.create(9790660560617L, 1L, "vaz note"));
 	}
 
 	@Test

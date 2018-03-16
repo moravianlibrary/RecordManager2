@@ -35,15 +35,7 @@ public final class ISSNUtils {
 		for (Subfield subfieldQ : rawDataField.getSubfields('q')) {
 			notes.add(IdentifierUtils.parseNote(subfieldQ.getData()));
 		}
-		return createIssn(matcherIssn.group(1), 1L, String.join(" ", notes));
-	}
-
-	public static Issn createIssn(final String issn, final long orderInRecord, final String note) {
-		Issn newIssn = new Issn();
-		newIssn.setIssn(issn);
-		newIssn.setOrderInRecord(orderInRecord);
-		newIssn.setNote(note);
-		return newIssn;
+		return Issn.create(matcherIssn.group(1), 1L, String.join(" ", notes));
 	}
 
 	/**

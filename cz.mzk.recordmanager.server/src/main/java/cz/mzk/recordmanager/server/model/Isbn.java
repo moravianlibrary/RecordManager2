@@ -19,6 +19,14 @@ public class Isbn extends AbstractDomainObject {
 	@Column(name="note")
 	private String note = "";
 
+	public static Isbn create(final long isbn, final long orderInRecord, final String note) {
+		Isbn newIsbn = new Isbn();
+		newIsbn.setIsbn(isbn);
+		newIsbn.setOrderInRecord(orderInRecord);
+		newIsbn.setNote(note);
+		return newIsbn;
+	}
+
 	public Long getIsbn() {
 		return isbn;
 	}

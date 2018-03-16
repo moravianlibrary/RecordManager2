@@ -39,15 +39,7 @@ public final class ISMNUtils {
 		for (Subfield subfieldQ : rawDataField.getSubfields('q')) {
 			notes.add(IdentifierUtils.parseNote(subfieldQ.getData()));
 		}
-		return createIsmn(validIsmn, 1L, String.join(" ", notes));
-	}
-
-	public static Ismn createIsmn(final Long ismn, final long orderInRecord, final String note) {
-		Ismn newIsmn = new Ismn();
-		newIsmn.setIsmn(ismn);
-		newIsmn.setOrderInRecord(orderInRecord);
-		newIsmn.setNote(note);
-		return newIsmn;
+		return Ismn.create(validIsmn, 1L, String.join(" ", notes));
 	}
 
 	/**

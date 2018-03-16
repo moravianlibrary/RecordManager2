@@ -37,17 +37,17 @@ public class ISSNUtilsTest {
 		issn.setIssn("0430-859X");
 		issn.setOrderInRecord(1L);
 		issn.setNote("note");
-		Assert.assertEquals(ISSNUtils.createIssn("0430-859X", 1L, "note"), issn);
+		Assert.assertEquals(Issn.create("0430-859X", 1L, "note"), issn);
 	}
 
 	@Test
 	public void createIssnFromDataFieldTest() {
 		Assert.assertEquals(ISSNUtils.createIssn(issnDataField("0430-859X", "")),
-				ISSNUtils.createIssn("0430-859X", 1L, ""));
+				Issn.create("0430-859X", 1L, ""));
 		Assert.assertEquals(ISSNUtils.createIssn(issnDataField("0430-859X vaz", "")),
-				ISSNUtils.createIssn("0430-859X", 1L, "vaz"));
+				Issn.create("0430-859X", 1L, "vaz"));
 		Assert.assertEquals(ISSNUtils.createIssn(issnDataField("0430-859X vaz", " (note)")),
-				ISSNUtils.createIssn("0430-859X", 1L, "vaz note"));
+				Issn.create("0430-859X", 1L, "vaz note"));
 	}
 
 	@Test(expectedExceptions = NumberFormatException.class)

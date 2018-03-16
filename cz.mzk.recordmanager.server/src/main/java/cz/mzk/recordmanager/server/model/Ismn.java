@@ -19,6 +19,14 @@ public class Ismn extends AbstractDomainObject {
 	@Column(name="note")
 	private String note = "";
 
+	public static Ismn create(final Long ismn, final long orderInRecord, final String note) {
+		Ismn newIsmn = new Ismn();
+		newIsmn.setIsmn(ismn);
+		newIsmn.setOrderInRecord(orderInRecord);
+		newIsmn.setNote(note);
+		return newIsmn;
+	}
+
 	public Long getIsmn() {
 		return ismn;
 	}

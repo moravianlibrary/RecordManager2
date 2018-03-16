@@ -171,7 +171,7 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 				logger.info(String.format("Invalid ISBN: %s", rawIsbnStr));
 				continue;
 			}
-			isbns.add(ISBNUtils.createIsbn(isbnLong, ++isbnCounter, ""));
+			isbns.add(Isbn.create(isbnLong, ++isbnCounter, ""));
 		}
 		return isbns;
 	}
@@ -195,7 +195,7 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 				logger.info(String.format("Invalid ISSN: %s", rawIssnStr));
 				continue;
 			}
-			results.add(ISSNUtils.createIssn(validIssn, ++issnCounter, ""));
+			results.add(Issn.create(validIssn, ++issnCounter, ""));
 		}
 		return results;
 	}
@@ -480,7 +480,7 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 				logger.info(String.format("Invalid ISMN: %s", rawIsmnStr));
 				continue;
 			}
-			results.add(ISMNUtils.createIsmn(validIsmnLong, ++ismnCounter, ""));
+			results.add(Ismn.create(validIsmnLong, ++ismnCounter, ""));
 		}
 		return results;
 	}

@@ -38,15 +38,7 @@ public final class EANUtils {
 		for (Subfield subfieldQ : rawDataField.getSubfields('q')) {
 			notes.add(IdentifierUtils.parseNote(subfieldQ.getData()));
 		}
-		return createEan(validEan, 1L, String.join(" ", notes));
-	}
-
-	public static Ean createEan(final Long ean, final long orderInRecord, final String note) {
-		Ean newEan = new Ean();
-		newEan.setEan(ean);
-		newEan.setOrderInRecord(orderInRecord);
-		newEan.setNote(note);
-		return newEan;
+		return Ean.create(validEan, 1L, String.join(" ", notes));
 	}
 
 	public static boolean isEAN13valid(final String ean) {
