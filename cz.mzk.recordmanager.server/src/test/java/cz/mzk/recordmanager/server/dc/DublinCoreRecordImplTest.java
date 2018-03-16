@@ -202,14 +202,10 @@ public class DublinCoreRecordImplTest extends AbstractTest {
 		metadataRecord = metadataFactory.getMetadataRecord(dcr);
 		List<Isbn> isbns = metadataRecord.getISBNs();
 
-		Isbn isbn1 = new Isbn();
-		isbn1.setIsbn(9788021411821L);
-		isbn1.setOrderInRecord(1L);
+		Isbn isbn1 = Isbn.create(9788021411821L, 1L, "");
 		Assert.assertTrue(isbns.contains(isbn1));
 
-		Isbn isbn2 = new Isbn();
-		isbn2.setIsbn(9780582530201L);
-		isbn2.setOrderInRecord(2L);
+		Isbn isbn2 = Isbn.create(9780582530201L, 2L, "");
 		Assert.assertTrue(isbns.contains(isbn2));
 
 		Assert.assertTrue(isbns.size() == 2);

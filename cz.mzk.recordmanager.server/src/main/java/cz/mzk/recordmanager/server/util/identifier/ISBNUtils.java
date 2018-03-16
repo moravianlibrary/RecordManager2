@@ -31,8 +31,7 @@ public final class ISBNUtils {
 		Matcher matcherIsbn = ISBN_PATTERN.matcher(subfieldA.getData());
 		if (!matcherIsbn.find()) throw new NoDataException(IdentifierUtils.NO_USABLE_DATA);
 
-		Isbn isbn = new Isbn();
-		isbn.setIsbn(toISBN13LongThrowing(matcherIsbn.group(1)));
+		Long isbnLong = toISBN13LongThrowing(matcherIsbn.group(1));
 
 		List<String> notes = new ArrayList<>();
 		notes.add(IdentifierUtils.parseNote(matcherIsbn.group(2)));
@@ -40,9 +39,8 @@ public final class ISBNUtils {
 		for (Subfield subfieldQ : rawDataField.getSubfields('q')) {
 			notes.add(IdentifierUtils.parseNote(subfieldQ.getData()));
 		}
-		isbn.setNote(String.join(" ", notes));
-		isbn.setOrderInRecord(1L);
-		return isbn;
+
+		return Isbn.create(isbnLong, 1L, String.join(" ", notes));
 	}
 
 	/**

@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.List;
 
 import cz.mzk.recordmanager.server.model.*;
+import org.hamcrest.core.Is;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
@@ -316,85 +317,55 @@ public class MarcRecordImplTest extends AbstractTest {
 	public void getISBNsTest() throws Exception {
 		MarcRecordImpl mri;
 		MetadataRecord metadataRecord;
-		List<String> data = new ArrayList<String>();
-		List<Isbn> isbnlist = new ArrayList<Isbn>();
+		List<String> data = new ArrayList<>();
+		List<Isbn> isbnlist = new ArrayList<>();
 
+		// no isbn test
+		mri = MarcRecordFactory.recordFactory(data);
+		metadataRecord = metadataFactory.getMetadataRecord(mri);
+		Assert.assertEquals(metadataRecord.getISBNs(), Collections.EMPTY_LIST);
+
+		// create isbns
 		data.add("020 $a9788086026923 (váz)");
-		Isbn isbn = new Isbn();
-		isbn.setIsbn(9788086026923L);
-		isbn.setOrderInRecord(1L);
-		isbn.setNote("váz");
-		isbnlist.add(isbn);
+		isbnlist.add(Isbn.create(9788086026923L, 1L, "váz"));
+
 		data.add("020 $a978-80-7250-482-4$q(váz)$q(q1)$qq2");
-		
-		isbn = new Isbn();
-		isbn.setIsbn(9788072504824L);
-		isbn.setOrderInRecord(2L);
-		isbn.setNote("váz q1 q2");
-		isbnlist.add(isbn);
+		isbnlist.add(Isbn.create(9788072504824L, 2L, "váz q1 q2"));
+
 		data.add("020 $a80-200-0980-9");
-		
-		isbn = new Isbn();
-		isbn.setIsbn(9788020009807L);
-		isbn.setOrderInRecord(3L);
-		isbnlist.add(isbn);
+		isbnlist.add(Isbn.create(9788020009807L, 3L, ""));
+
+		// invalid isbn
 		data.add("020 $a456");
-		
-		isbn = new Isbn();
-		isbn.setIsbn(9782011668554L);
-		isbn.setOrderInRecord(4L);
-		isbnlist.add(isbn);
+
+		isbnlist.add(Isbn.create(9782011668554L, 4L, ""));
 		data.add("020 $a2-01-16-6855-7");
-		
-		isbn = new Isbn();
-		isbn.setIsbn(9782980406003L);
-		isbn.setOrderInRecord(5L);
-		isbnlist.add(isbn);
+
+		isbnlist.add(Isbn.create(9782980406003L, 5L, ""));
 		data.add("020 $a2-9804060-07");
-		
-		isbn = new Isbn();
-		isbn.setIsbn(9783925967214L);
-		isbn.setOrderInRecord(6L);
-		isbnlist.add(isbn);
+
+		isbnlist.add(Isbn.create(9783925967214L, 6L, ""));
 		data.add("020 $a3-925 967-21-4");
-		
-		isbn = new Isbn();
-		isbn.setIsbn(9783925967214L);
-		isbn.setOrderInRecord(7L);
-		isbnlist.add(isbn);
+
+		isbnlist.add(Isbn.create(9783925967214L, 7L, ""));
 		data.add("020 $a  3-925 967-21-4");
-		
-		isbn = new Isbn();
-		isbn.setIsbn(9780521376679L);
-		isbn.setOrderInRecord(8L);
-		isbnlist.add(isbn);
+
+		isbnlist.add(Isbn.create(9780521376679L, 8L, ""));
 		data.add("020 $a052137667x");
-		
-		isbn = new Isbn();
-		isbn.setIsbn(9783596263936L);
-		isbn.setOrderInRecord(9L);
-		isbnlist.add(isbn);
+
+		isbnlist.add(Isbn.create(9783596263936L, 9L, ""));
 		data.add("020 $a3-596-26393-x");
-		
-		isbn = new Isbn();
-		isbn.setIsbn(9785268012866L);
-		isbn.setOrderInRecord(10L);
-		isbnlist.add(isbn);
+
+		isbnlist.add(Isbn.create(9785268012866L, 10L, ""));
 		data.add("020 $a5-268-01286-x");
-		
+
 		mri = MarcRecordFactory.recordFactory(data);
 		metadataRecord = metadataFactory.getMetadataRecord(mri);
 		List<Isbn> results = metadataRecord.getISBNs();
 		Assert.assertEquals(results.size(), isbnlist.size());
 		for (int i = 0; i < isbnlist.size(); i++) {
-			Assert.assertEquals(results.get(i), isbnlist.get(i), "ISBN on position " + i + " differs.");
+			Assert.assertEquals(results.get(i), isbnlist.get(i), String.format("ISBN on position %d differs.", i));
 		}
-		data.clear();
-
-		mri = MarcRecordFactory.recordFactory(data);
-		metadataRecord = metadataFactory.getMetadataRecord(mri);
-		Assert.assertEquals(metadataRecord.getISBNs(), Collections.EMPTY_LIST);
-		data.clear();
 	}
 	
 	@Test
