@@ -18,15 +18,6 @@ public class ISMNUtilsTest {
 	}
 
 	@Test
-	public void createIsmnObjectTest() {
-		Ismn ismn = new Ismn();
-		ismn.setIsmn(9790260001251L);
-		ismn.setOrderInRecord(1L);
-		ismn.setNote("note");
-		Assert.assertEquals(Ismn.create(9790260001251L, 1L, "note"), ismn);
-	}
-
-	@Test
 	public void createIsmnFromDataFieldTest() {
 		Assert.assertEquals(ISMNUtils.createIsmn(ismnDataField("M-66056-061-7", "")),
 				Ismn.create(9790660560617L, 1L, ""));

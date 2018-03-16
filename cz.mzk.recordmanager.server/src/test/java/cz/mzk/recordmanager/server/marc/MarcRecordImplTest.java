@@ -913,49 +913,35 @@ public class MarcRecordImplTest extends AbstractTest {
 	public void getISMNsTest() throws Exception {
 		MarcRecordImpl mri;
 		MetadataRecord metadataRecord;
-		List<String> data = new ArrayList<String>();
-		List<Ismn> ismnlist = new ArrayList<Ismn>();
+		List<String> data = new ArrayList<>();
+		List<Ismn> ismnlist = new ArrayList<>();
+
+		// no ismn test
+		mri = MarcRecordFactory.recordFactory(data);
+		metadataRecord = metadataFactory.getMetadataRecord(mri);
+		Assert.assertEquals(metadataRecord.getISMNs(), Collections.EMPTY_LIST);
+		data.clear();
+
+		// create ismn
 		data.add("024 2 $aM-2600-0224-1$q(brož.)");
-		Ismn ismn = new Ismn();
-		ismn.setIsmn(9790260002241L);
-		ismn.setOrderInRecord(1L);
-		ismn.setNote("brož.");
-		ismnlist.add(ismn);
+		ismnlist.add(Ismn.create(9790260002241L, 1L, "brož."));
 
 		data.add("024 2 $a979-0-2600-0125-1$q(sešity v obálce)");
-		ismn = new Ismn();
-		ismn.setIsmn(9790260001251L);
-		ismn.setOrderInRecord(2L);
-		ismn.setNote("sešity v obálce");
-		ismnlist.add(ismn);
+		ismnlist.add(Ismn.create(9790260001251L, 2L, "sešity v obálce"));
 
 		data.add("024 2 $aM-66056-061-7$q(Praha ;$qv hudebnině neuvedeno ;$qbrož.)");
-		ismn = new Ismn();
-		ismn.setIsmn(9790660560617L);
-		ismn.setOrderInRecord(3L);
-		ismn.setNote("Praha v hudebnině neuvedeno ; brož.");
-		ismnlist.add(ismn);
+		ismnlist.add(Ismn.create(9790660560617L, 3L, "Praha v hudebnině neuvedeno ; brož."));
 
 		data.add("024 2 $aM-66056-061-7 (Brno)$q(Praha)");
-		ismn = new Ismn();
-		ismn.setIsmn(9790660560617L);
-		ismn.setOrderInRecord(4L);
-		ismn.setNote("Brno Praha");
-		ismnlist.add(ismn);
+		ismnlist.add(Ismn.create(9790660560617L, 4L, "Brno Praha"));
 
 		mri = MarcRecordFactory.recordFactory(data);
 		metadataRecord = metadataFactory.getMetadataRecord(mri);
 		List<Ismn> results = metadataRecord.getISMNs();
 		Assert.assertEquals(results.size(), ismnlist.size());
 		for (int i = 0; i < ismnlist.size(); i++) {
-			Assert.assertEquals(results.get(i), ismnlist.get(i), "ISMN on position " + i + " differs.");
+			Assert.assertEquals(results.get(i), ismnlist.get(i), String.format("ISMN on position %d differs.", i));
 		}
-		data.clear();
-
-		mri = MarcRecordFactory.recordFactory(data);
-		metadataRecord = metadataFactory.getMetadataRecord(mri);
-		Assert.assertEquals(metadataRecord.getISMNs(), Collections.EMPTY_LIST);
-		data.clear();
 	}
 
 	@Test

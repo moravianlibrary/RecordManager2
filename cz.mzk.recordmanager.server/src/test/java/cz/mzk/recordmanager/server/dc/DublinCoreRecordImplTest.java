@@ -224,11 +224,7 @@ public class DublinCoreRecordImplTest extends AbstractTest {
 		metadataRecord = metadataFactory.getMetadataRecord(dcr);
 		List<Ismn> ismns = metadataRecord.getISMNs();
 
-		Ismn ismn1 = new Ismn();
-		ismn1.setIsmn(9790660510735L);
-		ismn1.setOrderInRecord(1L);
-		Assert.assertTrue(ismns.contains(ismn1));
-
+		Assert.assertTrue(ismns.contains(Ismn.create(9790660510735L, 1L, "")));
 		Assert.assertTrue(ismns.size() == 1);
 	}
 
