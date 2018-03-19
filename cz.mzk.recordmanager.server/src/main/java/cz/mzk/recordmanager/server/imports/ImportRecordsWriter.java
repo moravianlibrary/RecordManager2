@@ -131,15 +131,8 @@ public class ImportRecordsWriter implements ItemWriter<List<Record>>, StepExecut
 						hr.setHarvestedFrom(harvestConfiguration);
 					}
 					hr.setUpdated(new Date());
-					
-					if(metadata.isDeleted()) {
-						hr.setDeleted(new Date());
-						hr.setRawRecord(new byte[0]);
-					}
-					else {
-						hr.setDeleted(null);
-						hr.setRawRecord(recordContent);
-					}
+					hr.setDeleted(null);
+					hr.setRawRecord(recordContent);
 
 					harvestedRecordDao.persist(hr);
 					dedupKeysParser.parse(hr, metadata);

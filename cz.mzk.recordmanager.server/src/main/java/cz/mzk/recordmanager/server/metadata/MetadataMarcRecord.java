@@ -56,7 +56,6 @@ public class MetadataMarcRecord implements MetadataRecord {
 	
 	protected static final Long MAX_PAGES = 10_000_000L;
 	
-	protected static final String DELETED_TAG = "YES";
 	private static final String[] TITLE_TAGS = new String[]{"245", "240"};
 	private static final char[] SHORT_TITLE_SUBFIELDS = new char[]{'a', 'n', 'p'};
 	private static final char[] TITLE_SUBFIELDS = new char[]{'a', 'b', 'n', 'p'};
@@ -157,7 +156,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 		return maxPages < MAX_PAGES ? maxPages : MAX_PAGES;
 	}
 	
-	@Override
+		@Override
 	public List<Isbn> getISBNs() {
 		List<Isbn> isbns = new ArrayList<>();
 		Long isbnCounter = 0L;
@@ -948,13 +947,6 @@ public class MetadataMarcRecord implements MetadataRecord {
 	}
 
 	@Override
-	public Boolean isDeleted() {
-		String deleted = underlayingMarc.getField("DEL", 'a');
-		if(deleted != null && deleted.equals(DELETED_TAG)) return true;
-		else return false;
-	}
-	
-	@Override
 	public CitationRecordType getCitationFormat(){
 		String ldr06 = Character.toString(underlayingMarc.getLeader().getTypeOfRecord()).toLowerCase();
 		String ldr07 = Character.toString(underlayingMarc.getLeader().getImplDefined1()[0]).toLowerCase();
@@ -1155,6 +1147,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 		}
 		return builder.toString().trim();
 	}
+
 
 	@Override
 	public List<String> getDefaultStatuses() {

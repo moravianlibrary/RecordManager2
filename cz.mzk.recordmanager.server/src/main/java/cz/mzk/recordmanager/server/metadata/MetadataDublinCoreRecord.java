@@ -437,12 +437,6 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 	}
 
 	@Override
-	public Boolean isDeleted() {
-		// Nothing to return
-		return null;
-	}
-
-	@Override
 	public CitationRecordType getCitationFormat() {
 		// TODO Auto-generated method stub
 		return null;

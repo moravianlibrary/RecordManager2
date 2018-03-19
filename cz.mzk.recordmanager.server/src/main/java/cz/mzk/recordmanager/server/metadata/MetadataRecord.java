@@ -164,13 +164,6 @@ public interface MetadataRecord {
 	String getRaw001Id();
 
 	/**
-	 * return true if record is deleted from field DEL
-	 *
-	 * @return Boolean
-	 */
-	Boolean isDeleted();
-
-	/**
 	 * return record format for citation
 	 *
 	 * @return {@link CitationRecordType}
