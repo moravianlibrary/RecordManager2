@@ -878,7 +878,7 @@ public class MarcDSL extends BaseDSL {
 		List<String> results = new ArrayList<>();
 		for (DataField df : record.getDataFields("500")) {
 			results.add(String.format(AUTH_PSEUDONYMS_NAME,
-					getSubfieldAsString(df, 'a'), getSubfieldAsString(df, 'd')));
+					getSubfieldAsString(df, 'a'), getSubfieldAsString(df, 'd')).trim());
 		}
 		return results;
 	}
