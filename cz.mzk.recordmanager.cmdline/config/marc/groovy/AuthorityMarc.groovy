@@ -12,7 +12,7 @@ url = getAuthorityUrl "856u"
 
 id_authority = getId001()
 
-subject_facet_str_mv = getFields "100abcd"
+subject_facet_str_mv = subject_str_mv = getFields "100abcd"
 
 short_note_cs_display = translate("auth_short_note_cs.map", getId001(), null)
 short_note_en_display = translate("auth_short_note_en.map", getId001(), null)

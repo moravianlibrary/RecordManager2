@@ -313,8 +313,7 @@
  <!-- CopyFields for Autocomplete -->
  <copyField source="author_autocomplete" dest="author_str_mv"/>
  <copyField source="title_auto_str" dest="title_autocomplete"/>
- <copyField source="subject_facet_str_mv" dest="subject_autocomplete"/>
- <copyField source="subject_facet_str_mv" dest="subject_str_mv"/>
+ <copyField source="subject_str_mv" dest="subject_autocomplete"/>
  <!-- Default Boolean Operator -->
  <solrQueryParser defaultOperator="AND"/>
 </schema>
