@@ -55,7 +55,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 	protected static final Pattern METAPROXY_TAG_PATTERN = Pattern.compile("[17]..");
 
 	protected static final Long MAX_PAGES = 10_000_000L;
-	
+	private static final String INVALID_YEAR = "Invalid year: %s";
 	private static final String[] TITLE_TAGS = new String[]{"245", "240"};
 	private static final char[] SHORT_TITLE_SUBFIELDS = new char[]{'a', 'n', 'p'};
 	private static final char[] TITLE_SUBFIELDS = new char[]{'a', 'b', 'n', 'p'};
@@ -131,22 +131,23 @@ public class MetadataMarcRecord implements MetadataRecord {
 		}
 		return null;
 	}
-		
 
 	@Override
-	public Long getPageCount() {		
+	public Long getPageCount() {
 		String count = underlayingMarc.getField("300", 'a');
-		if(count == null){
+		if (count == null) {
 			return null;
 		}
-		
+
 		Long maxPages = -1L;
 		Matcher matcher = PAGECOUNT_PATTERN.matcher(count);
 		while (matcher.find()) {
 			try {
 				Long pages = Long.parseLong(matcher.group(0));
 				maxPages = pages > maxPages ? pages : maxPages;
-			} catch (NumberFormatException e) {}
+			} catch (NumberFormatException e) {
+				logger.info(String.format(INVALID_YEAR, matcher.group(0)));
+			}
 		}
 
 		if (maxPages < 1L) {
@@ -155,7 +156,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 
 		return maxPages < MAX_PAGES ? maxPages : MAX_PAGES;
 	}
-	
+
 	@Override
 	public List<Isbn> getISBNs() {
 		List<Isbn> isbns = new ArrayList<>();
@@ -182,7 +183,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 	 */
 	@Override
 	public Long getPublicationYear() {
-		
+
 		String year = underlayingMarc.getField("264", 'c');
 		if (year == null) {
 			year = underlayingMarc.getField("260", 'c');
@@ -200,7 +201,9 @@ public class MetadataMarcRecord implements MetadataRecord {
 			if (matcher.find()) {
 				return Long.parseLong(matcher.group(0));
 			}
-		} catch (NumberFormatException e) {}
+		} catch (NumberFormatException e) {
+			logger.info(String.format(INVALID_YEAR, matcher.group(0)));
+		}
 		return null;
 	}
 
@@ -229,7 +232,6 @@ public class MetadataMarcRecord implements MetadataRecord {
 		return underlayingMarc.export(iOFormat);
 	}
 
-	
 	protected boolean isBook(){		
 		String ldr06 = Character.toString(underlayingMarc.getLeader().getTypeOfRecord());
 		String ldr07 = Character.toString(underlayingMarc.getLeader().getImplDefined1()[0]);
