@@ -57,8 +57,7 @@ public class ImportTezaurusRecordsWriter implements ItemWriter<List<Record>> {
 					MarcRecord marc = new MarcRecordImpl(currentRecord);
 					MetadataRecord metadata = metadataFactory
 							.getMetadataRecord(marc, config);
-					String recordId = metadata.getOAIRecordId();
-					if (recordId == null) recordId = metadata.getUniqueId();
+					String recordId = metadata.getUniqueId();
 					TezaurusRecord tr = tezaurusDao
 							.findByIdAndHarvestConfiguration(recordId, config);
 					if (tr == null) {

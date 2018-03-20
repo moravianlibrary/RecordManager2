@@ -106,10 +106,7 @@ public class ImportRecordsWriter implements ItemWriter<List<Record>>, StepExecut
 					// need recordId before interception
 					byte[] recordContent = outStream.toByteArray();
 					MetadataRecord metadata = parseMetadata(recordContent);
-					String recordId = metadata.getOAIRecordId();
-					if (recordId == null) {
-						recordId = metadata.getUniqueId();
-					}
+					String recordId = metadata.getUniqueId();
 					if (regexpExtractor != null) {
 						recordId = regexpExtractor.extract(recordId);
 					}

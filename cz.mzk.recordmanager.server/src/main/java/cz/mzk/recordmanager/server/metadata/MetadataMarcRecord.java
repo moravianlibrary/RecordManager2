@@ -67,15 +67,14 @@ public class MetadataMarcRecord implements MetadataRecord {
 		}
 		this.underlayingMarc = underlayingMarc;
 	}
-	
+
 	@Override
 	public String getUniqueId() {
-		// TODO override this implementation in institution specific classes
-		String id = underlayingMarc.getControlField("001");
-		if (id == null) {
-			id = underlayingMarc.getField("995", 'a');
-		}
-		return id;
+		String id = underlayingMarc.getField("OAI", 'a');
+		if (id != null) return id;
+		id = underlayingMarc.getControlField("001");
+		if (id != null) return id;
+		return underlayingMarc.getField("995", 'a');
 	}
 
 	@Override
@@ -941,13 +940,6 @@ public class MetadataMarcRecord implements MetadataRecord {
 		}
 		// more rules in institution specific classes
 		return true;
-	}
-
-	@Override
-	public String getOAIRecordId() {
-		String oai = underlayingMarc.getField("OAI", 'a');
-		if(oai != null) return oai;
-		return null;
 	}
 
 	@Override

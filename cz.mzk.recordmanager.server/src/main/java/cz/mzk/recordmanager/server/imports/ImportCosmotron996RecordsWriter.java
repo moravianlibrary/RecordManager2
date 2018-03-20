@@ -62,7 +62,7 @@ public class ImportCosmotron996RecordsWriter implements ItemWriter<List<Record>>
 					MarcRecord marc = new MarcRecordImpl(currentRecord);
 					String parentId = CosmotronUtils.getParentId(marc);
 					MetadataRecord metadata = metadataFactory.getMetadataRecord(marc, harvestConfiguration);
-					String recordId = metadata.getOAIRecordId();
+					String recordId = metadata.getUniqueId();
 					Cosmotron996 c996 = cosmotron996Dao.findByIdAndHarvestConfiguration(recordId, configurationId);
 					if(c996 == null){
 						c996 = new Cosmotron996();

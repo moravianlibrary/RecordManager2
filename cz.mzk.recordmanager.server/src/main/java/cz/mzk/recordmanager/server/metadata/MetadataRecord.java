@@ -157,13 +157,6 @@ public interface MetadataRecord {
 	boolean matchFilter();
 
 	/**
-	 * get record id from OAI header
-	 *
-	 * @return String
-	 */
-	String getOAIRecordId();
-
-	/**
 	 * return raw identifier from field 001
 	 *
 	 * @return String

@@ -431,12 +431,6 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 	}
 
 	@Override
-	public String getOAIRecordId() {
-		// Nothing to return
-		return null;
-	}
-
-	@Override
 	public String getRaw001Id() {
 		// Nothing to return
 		return null;
