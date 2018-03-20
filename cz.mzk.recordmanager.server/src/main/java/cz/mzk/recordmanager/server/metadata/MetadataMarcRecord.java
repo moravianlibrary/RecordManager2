@@ -53,7 +53,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 	protected static final Pattern PUBLISHER_NUMBER_PATTERN = Pattern.compile("([^\\W]*)");
 	protected static final Pattern CPK0_PATTERN = Pattern.compile("cpk0");
 	protected static final Pattern METAPROXY_TAG_PATTERN = Pattern.compile("[17]..");
-	
+
 	protected static final Long MAX_PAGES = 10_000_000L;
 	
 	private static final String[] TITLE_TAGS = new String[]{"245", "240"};
@@ -156,7 +156,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 		return maxPages < MAX_PAGES ? maxPages : MAX_PAGES;
 	}
 	
-		@Override
+	@Override
 	public List<Isbn> getISBNs() {
 		List<Isbn> isbns = new ArrayList<>();
 		Long isbnCounter = 0L;
@@ -946,52 +946,57 @@ public class MetadataMarcRecord implements MetadataRecord {
 		return underlayingMarc.getControlField("001");
 	}
 
+	private static final Pattern CITATION_OR_AT = Pattern.compile("[at]");
+	private static final Pattern CITATION_OR_CDM = Pattern.compile("[cdm]");
+	private static final Pattern CITATION_OR_IS = Pattern.compile("[is]");
+	private static final Pattern CITATION_CONTRIBUTION =
+			Pattern.compile(".*sborník.*|.*proceedings.*|.*almanach.*", Pattern.CASE_INSENSITIVE);
+	private static final Pattern CITATION_OR_AB = Pattern.compile("[ab]");
+	private static final Pattern CITATION_OR_EF = Pattern.compile("[ef]");
+	private static final Pattern CITATION_OR_CDKGIJOPR = Pattern.compile("[cdkgijopr]");
+
 	@Override
-	public CitationRecordType getCitationFormat(){
+	public CitationRecordType getCitationFormat() {
 		String ldr06 = Character.toString(underlayingMarc.getLeader().getTypeOfRecord()).toLowerCase();
 		String ldr07 = Character.toString(underlayingMarc.getLeader().getImplDefined1()[0]).toLowerCase();
-		
-		Boolean exists85641 = false;
-		for(DataField df: underlayingMarc.getDataFields("856")){
-			if(df.getIndicator1() == '4' && df.getIndicator2() == '1'){
+
+		Boolean exists85641 = false; // url, for electronic version
+		for (DataField df : underlayingMarc.getDataFields("856")) {
+			if (df.getIndicator1() == '4' && df.getIndicator2() == '1') {
 				exists85641 = true;
 			}
 		}
-		
-		if(!underlayingMarc.getDataFields("502").isEmpty()){
+
+		if (!underlayingMarc.getDataFields("502").isEmpty()) {
 			return CitationRecordType.ACADEMIC_WORK;
 		}
-		
-		if(ldr06.matches("[at]") && ldr07.matches("[cdm]")){
-			if(exists85641) return CitationRecordType.ELECTRONIC_BOOK;
+
+		if (CITATION_OR_AT.matcher(ldr06).matches() && CITATION_OR_CDM.matcher(ldr07).matches()) {
+			if (exists85641) return CitationRecordType.ELECTRONIC_BOOK;
 			else return CitationRecordType.BOOK;
 		}
-		
-		if(ldr07.matches("[is]")){
-			if(exists85641) return CitationRecordType.ELECTRONIC_PERIODICAL;
+
+		if (CITATION_OR_IS.matcher(ldr07).matches()) {
+			if (exists85641) return CitationRecordType.ELECTRONIC_PERIODICAL;
 			else return CitationRecordType.PERIODICAL;
 		}
-		
-		Boolean matches = false;
-		for(DataField df: underlayingMarc.getDataFields("773")){
-			if(df.toString().matches("(?i).*sborník.*|.*proceedings.*|.*almanach.*")){
-				matches = true;
+
+		for (DataField df : underlayingMarc.getDataFields("773")) {
+			if (CITATION_CONTRIBUTION.matcher(df.toString()).matches()) {
+				if (exists85641) return CitationRecordType.ELECTRONIC_CONTRIBUTION_PROCEEDINGS;
+				else return CitationRecordType.CONTRIBUTION_PROCEEDINGS;
 			}
 		}
-		if(matches){
-			if(exists85641) return CitationRecordType.ELECTRONIC_CONTRIBUTION_PROCEEDINGS;
-			else return CitationRecordType.CONTRIBUTION_PROCEEDINGS;
-		}
-		
-		if(ldr07.matches("[ab]")){
-			if(exists85641) return CitationRecordType.ELECTRONIC_ARTICLE;
+
+		if (CITATION_OR_AB.matcher(ldr07).matches()) {
+			if (exists85641) return CitationRecordType.ELECTRONIC_ARTICLE;
 			else return CitationRecordType.ARTICLE;
 		}
-		
-		if(ldr06.matches("[ef]")) return CitationRecordType.MAPS;
-		
-		if(ldr06.matches("[cdkgijopr]")) return CitationRecordType.OTHERS;
-		
+
+		if (CITATION_OR_EF.matcher(ldr06).matches()) return CitationRecordType.MAPS;
+
+		if (CITATION_OR_CDKGIJOPR.matcher(ldr06).matches()) return CitationRecordType.OTHERS;
+
 		return CitationRecordType.ERROR;
 	}
 	
@@ -1147,7 +1152,6 @@ public class MetadataMarcRecord implements MetadataRecord {
 		}
 		return builder.toString().trim();
 	}
-
 
 	@Override
 	public List<String> getDefaultStatuses() {
