@@ -756,85 +756,88 @@ public class MetadataMarcRecord implements MetadataRecord {
 		return null;
 	}
 
-    @Override
+	private static final String[] FIELDS1XX = new String[]{"100", "110", "111", "130"};
+	private static final String[] FIELDS6XX = new String[]{"600", "610", "611", "630", "648", "650", "651", "653", "654",
+			"655", "656", "657", "658", "662", "690", "691", "692", "693", "694", "695", "696", "697", "698", "699"};
+	private static final String[] FIELDS7XX = new String[]{"700", "710", "711", "720", "730", "740", "751", "752", "753",
+			"754", "760", "762", "765", "767", "770", "772", "773", "774", "775", "776", "777", "780", "785", "786", "787"};
+	private static final Pattern WEIGHT_2_TO_4 = Pattern.compile("[2-4]");
+	private static final Pattern WEIGHT_05_TO_9 = Pattern.compile("[05-9]");
+	private static final Pattern WEIGHT_RDA = Pattern.compile("rda", Pattern.CASE_INSENSITIVE);
+
+	@Override
 	public Long getWeight(Long baseWeight) {
 		Long weight = 0L;
-		if(baseWeight != null) weight = baseWeight;
-		
-		String[] fields1xx = new String[]{"100", "110", "111", "130"};
-		String[] fields6xx = new String[]{"600", "610", "611", "630", "648", "650", "651", "653", "654", "655",
-				"656", "657", "658", "662", "690", "691", "692", "693", "694", "695", "696", "697", "698", "699"};
-		String[] fields7xx = new String[]{"700", "710", "711", "720", "730", "740", "751", "752", "753", "754", "760", 
-				"762", "765", "767", "770", "772", "773", "774", "775", "776", "777", "780", "785", "786", "787"};
-		
-		if(underlayingMarc.getDataFields("245").isEmpty()){
+		if (baseWeight != null) weight = baseWeight;
+
+		if (underlayingMarc.getDataFields("245").isEmpty()) {
 			return 0L;
 		}
 
 		String ldr17 = Character.toString(underlayingMarc.getLeader().getImplDefined2()[0]);
-		if(ldr17.matches("1")) weight -= 1;
-		else if(ldr17.matches("[2-4]")) weight -= 2;
-		else if(ldr17.matches("[05-9]")) weight -= 3;		
-		if(underlayingMarc.getControlField("008") == null) weight -= 1;
-		if(underlayingMarc.getDataFields("300").isEmpty()) weight -= 1;
-		
+		if (ldr17.equals("1")) weight -= 1;
+		else if (WEIGHT_2_TO_4.matcher(ldr17).matches()) weight -= 2;
+		else if (WEIGHT_05_TO_9.matcher(ldr17).matches()) weight -= 3;
+		if (underlayingMarc.getControlField("008") == null) weight -= 1;
+		if (underlayingMarc.getDataFields("300").isEmpty()) weight -= 1;
+
 		boolean exists1xx = false;
-		for (String key: fields1xx){
-			if(!underlayingMarc.getDataFields(key).isEmpty()){
+		for (String key : FIELDS1XX) {
+			if (!underlayingMarc.getDataFields(key).isEmpty()) {
 				exists1xx = true;
 				break;
 			}
 		}
 		boolean f245Ind1 = false;
-		for(DataField dataField: underlayingMarc.getDataFields("245")){
-			if(dataField.getIndicator1() == 0) f245Ind1 = true;
+		for (DataField dataField : underlayingMarc.getDataFields("245")) {
+			if (dataField.getIndicator1() == 0) f245Ind1 = true;
 		}
-		
-		if(!exists1xx && !f245Ind1){
+
+		if (!exists1xx && !f245Ind1) {
 			weight -= 1;
 		}
-		
-		if(!underlayingMarc.getDataFields("080").isEmpty() || !underlayingMarc.getDataFields("072").isEmpty()){
+
+		if (!underlayingMarc.getDataFields("080").isEmpty() || !underlayingMarc.getDataFields("072").isEmpty()) {
 			weight += 1;
 		}
-		if(!underlayingMarc.getDataFields("964").isEmpty()) weight += 1;
-		else{
-			for(String key: fields6xx){
-				if(!underlayingMarc.getDataFields(key).isEmpty()){
+		if (!underlayingMarc.getDataFields("964").isEmpty()) weight += 1;
+		else {
+			for (String key : FIELDS6XX) {
+				if (!underlayingMarc.getDataFields(key).isEmpty()) {
 					weight += 1;
 					break;
 				}
 			}
 		}
-		
-		if(!getISBNs().isEmpty() || !getISSNs().isEmpty() || !getCNBs().isEmpty()){
+
+		if (!getISBNs().isEmpty() || !getISSNs().isEmpty() || !getCNBs().isEmpty()) {
 			weight += 1;
 		}
-		
+
 		boolean exist7in1xx = false;
-		for(String key: fields1xx){
-			if(underlayingMarc.getField(key, '7') != null){
+		for (String key : FIELDS1XX) {
+			if (underlayingMarc.getField(key, '7') != null) {
 				weight += 1;
 				exist7in1xx = true;
 				break;
 			}
 		}
-		if(!exist7in1xx){
-			for(String key: fields7xx){
-				if(underlayingMarc.getField(key, '7') != null){
+		if (!exist7in1xx) {
+			for (String key : FIELDS7XX) {
+				if (underlayingMarc.getField(key, '7') != null) {
 					weight += 1;
 					break;
 				}
 			}
 		}
-		
-		for(String subfield: underlayingMarc.getFields("040", 'e')){
-			if(subfield.matches("(?i)rda")){
+
+		for (String subfield : underlayingMarc.getFields("040", 'e')) {
+			if (WEIGHT_RDA.matcher(subfield).matches()) {
 				weight += 1;
 				break;
 			}
 		}
-		
+
 		return weight;
 	}
 
