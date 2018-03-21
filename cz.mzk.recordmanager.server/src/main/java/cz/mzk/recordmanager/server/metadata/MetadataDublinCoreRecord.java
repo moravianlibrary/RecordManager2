@@ -322,23 +322,17 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 		
 		return model;
 	}
-	
-
 
 	@Override
 	public List<Cnb> getCNBs() {
 		List<String> identifiers = dcRecord.getIdentifiers();
-		List<Cnb> cnbs = new ArrayList<Cnb>();
-		
-		Pattern p = DC_CNB_PATTERN;
-		Matcher m;
+		List<Cnb> cnbs = new ArrayList<>();
+		Matcher matcher;
 
 		for (String f : identifiers) {
-			m = p.matcher(f);
-			if (m.find()) {			
-				Cnb cnb = new Cnb();        	
-    			cnb.setCnb(m.group(1).trim());			
-    			cnbs.add(cnb);
+			matcher = DC_CNB_PATTERN.matcher(f);
+			if (matcher.find()) {
+				cnbs.add(Cnb.create(matcher.group(1).trim()));
 			}
 		}
 		return cnbs;

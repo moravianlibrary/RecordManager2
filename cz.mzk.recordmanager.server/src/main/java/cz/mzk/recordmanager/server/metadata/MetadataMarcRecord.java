@@ -99,18 +99,15 @@ public class MetadataMarcRecord implements MetadataRecord {
 
 	@Override
 	public List<Cnb> getCNBs() {
-		List<Cnb> cnbs = new ArrayList<Cnb>();
-		
-		for(DataField field: underlayingMarc.getDataFields("015")){
-        	for(Subfield subfieldA: field.getSubfields('a')){
-        		if(subfieldA != null){
-        			Cnb cnb = new Cnb();        	
-        			cnb.setCnb(subfieldA.getData());			
-        			cnbs.add(cnb);
-        		}
-        	}
+		List<Cnb> cnbs = new ArrayList<>();
+
+		for (DataField field : underlayingMarc.getDataFields("015")) {
+			for (Subfield subfieldA : field.getSubfields('a')) {
+				if (subfieldA != null) {
+					cnbs.add(Cnb.create(subfieldA.getData()));
+				}
+			}
 		}
-        
 		return cnbs;
 	}
 

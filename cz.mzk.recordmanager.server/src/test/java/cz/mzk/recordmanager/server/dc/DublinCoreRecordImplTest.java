@@ -158,16 +158,13 @@ public class DublinCoreRecordImplTest extends AbstractTest {
 		metadataRecord = metadataFactory.getMetadataRecord(dcr);
 		List<Cnb> cnbs = metadataRecord.getCNBs();
 
-		Cnb cnb1 = new Cnb();
-		cnb1.setCnb("cnb000121063");
+		Cnb cnb1 = Cnb.create("cnb000121063");
 		Assert.assertTrue(cnbs.contains(cnb1));
 
-		Cnb cnbN = new Cnb();
-		cnbN.setCnb(notCnbStr);
+		Cnb cnbN = Cnb.create(notCnbStr);
 		Assert.assertFalse(cnbs.contains(cnbN));
 
-		Cnb cnb2 = new Cnb();
-		cnb2.setCnb("cnb000790921");
+		Cnb cnb2 = Cnb.create("cnb000790921");
 		Assert.assertTrue(cnbs.contains(cnb2));
 	}
 

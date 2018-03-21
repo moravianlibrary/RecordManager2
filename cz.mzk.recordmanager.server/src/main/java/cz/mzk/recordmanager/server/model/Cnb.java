@@ -21,6 +21,12 @@ public class Cnb extends AbstractDomainObject {
 		this.cnb = cnb;
 	}
 
+	public static Cnb create(final String cnb) {
+		Cnb newCnb = new Cnb();
+		newCnb.setCnb(cnb);
+		return newCnb;
+	}
+
 	@Override
 	public String toString() {
 		return "Cnb [cnb=" + cnb + "]";

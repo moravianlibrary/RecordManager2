@@ -243,29 +243,22 @@ public class MarcRecordImplTest extends AbstractTest {
 		metadataRecord = metadataFactory.getMetadataRecord(mri);
 		Assert.assertEquals(metadataRecord.getISSNs().toString(), issns.toString());
 	}
-	
+
 	@Test
 	public void getCNBsTest() throws Exception {
 		MarcRecordImpl mri;
 		MetadataRecord metadataRecord;
-		List<String> data = new ArrayList<String>();
-		List<Cnb> cnbs = new ArrayList<Cnb>();
-	
+		List<String> data = new ArrayList<>();
+		List<Cnb> cnbs = new ArrayList<>();
+
 		data.add("015 $acnb001816378");
-		Cnb cnb = new Cnb();
-		cnb.setCnb("cnb001816378");
-		cnbs.add(cnb);
+		cnbs.add(Cnb.create("cnb001816378"));
 		data.add("015 $acnb001723289$acnb001723290");
-		cnb = new Cnb();
-		cnb.setCnb("cnb001723289");
-		cnbs.add(cnb);
-		cnb = new Cnb();
-		cnb.setCnb("cnb001723290");
-		cnbs.add(cnb);
+		cnbs.add(Cnb.create("cnb001723289"));
+		cnbs.add(Cnb.create("cnb001723290"));
 		mri = MarcRecordFactory.recordFactory(data);
 		metadataRecord = metadataFactory.getMetadataRecord(mri);
-		Assert.assertEquals(metadataRecord.getCNBs().toString(),
-				cnbs.toString());
+		Assert.assertEquals(metadataRecord.getCNBs().toString(), cnbs.toString());
 		data.clear();
 	}
 
