@@ -15,15 +15,8 @@ import cz.mzk.recordmanager.server.metadata.CitationRecordType;
 import cz.mzk.recordmanager.server.metadata.MetadataRecord;
 import cz.mzk.recordmanager.server.metadata.MetadataRecordFactory;
 import cz.mzk.recordmanager.server.model.HarvestedRecordFormat.HarvestedRecordFormatEnum;
-import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordDAO;
 
 public class MarcRecordImplTest extends AbstractTest {
-
-	@Autowired
-	private HarvestedRecordDAO hrdao;
-
-	@Autowired
-	private MarcXmlParser parser;
 
 	@Autowired
 	private MetadataRecordFactory metadataFactory;
@@ -37,7 +30,7 @@ public class MarcRecordImplTest extends AbstractTest {
 	public void getPublicationYearTest() throws Exception {
 		MarcRecordImpl mri;
 		MetadataRecord metadataRecord;
-		List<String> data = new ArrayList<String>();
+		List<String> data = new ArrayList<>();
 		data.add("260 $c1977");
 		mri = MarcRecordFactory.recordFactory(data);
 		metadataRecord = metadataFactory.getMetadataRecord(mri);
@@ -160,7 +153,7 @@ public class MarcRecordImplTest extends AbstractTest {
 	public void getTitleTest() throws Exception{
 		MarcRecordImpl mri;
 		MetadataRecord metadataRecord;
-		List<String> data = new ArrayList<String>();
+		List<String> data = new ArrayList<>();
 
 		data.add("245 $nn$aa$pp$bb");
 		data.add("240 $aa$nn$bb$pp");
@@ -199,7 +192,7 @@ public class MarcRecordImplTest extends AbstractTest {
 	public void shortTitleTest() throws Exception {
 		MarcRecordImpl mri;
 		MetadataRecord metadataRecord;
-		List<String> data = new ArrayList<String>();
+		List<String> data = new ArrayList<>();
 
 		data.add("245 $nn$aa$pp$bb");
 		data.add("240 $aa$nn$bb$pp");
@@ -266,7 +259,7 @@ public class MarcRecordImplTest extends AbstractTest {
 	public void getPageCountTest() throws Exception {
 		MarcRecordImpl mri;
 		MetadataRecord metadataRecord;
-		List<String> data = new ArrayList<String>();
+		List<String> data = new ArrayList<>();
 
 		data.add("300 $a257 s.");
 		mri = MarcRecordFactory.recordFactory(data);
@@ -351,7 +344,7 @@ public class MarcRecordImplTest extends AbstractTest {
 	public void getWeightTest() throws Exception{
 		MarcRecordImpl mri;
 		MetadataRecord metadataRecord;
-		List<String> data = new ArrayList<String>();
+		List<String> data = new ArrayList<>();
 		
 		data.add("000 01234567890123456a");
 		data.add("008 asd");
@@ -373,7 +366,7 @@ public class MarcRecordImplTest extends AbstractTest {
 	public void getAuthorAuthStringTest() throws Exception{
 		MarcRecordImpl mri;
 		MetadataRecord metadataRecord;
-		List<String> data = new ArrayList<String>();
+		List<String> data = new ArrayList<>();
 		
 		data.add("100 $aEliska");
 		mri = MarcRecordFactory.recordFactory(data);
@@ -392,7 +385,7 @@ public class MarcRecordImplTest extends AbstractTest {
 	public void getAuthorAuthKeyTest() throws Exception{
 		MarcRecordImpl mri;
 		MetadataRecord metadataRecord;
-		List<String> data = new ArrayList<String>();
+		List<String> data = new ArrayList<>();
 		
 		data.add("100 $7aaa");
 		mri = MarcRecordFactory.recordFactory(data);
@@ -411,8 +404,8 @@ public class MarcRecordImplTest extends AbstractTest {
 	public void getDetectedFormatListTest() throws Exception {
 		MarcRecordImpl mri;
 		MetadataRecord metadataRecord;
-		List<String> data = new ArrayList<String>();
-		List<HarvestedRecordFormatEnum> hrf = new ArrayList<HarvestedRecordFormatEnum>();
+		List<String> data = new ArrayList<>();
+		List<HarvestedRecordFormatEnum> hrf = new ArrayList<>();
 		
 		// Books
 		data.add("000 00000000");
@@ -567,7 +560,7 @@ public class MarcRecordImplTest extends AbstractTest {
 	public void getScaleTest() throws Exception {
 		MarcRecordImpl mri;
 		MetadataRecord metadataRecord;
-		List<String> data = new ArrayList<String>();
+		List<String> data = new ArrayList<>();
 		
 		data.add("255 $aMěřítko 1:250 000");
 		mri = MarcRecordFactory.recordFactory(data);
@@ -610,7 +603,7 @@ public class MarcRecordImplTest extends AbstractTest {
 	public void getUUIDtest() throws Exception {
 		MarcRecordImpl mri;
 		MetadataRecord metadataRecord;
-		List<String> data = new ArrayList<String>();
+		List<String> data = new ArrayList<>();
 		
 		data.add("856 $uhttp://kramerius.nkp.cz/kramerius/handle/ABA001/1339741$yDigitalizovaný dokument");
 		mri = MarcRecordFactory.recordFactory(data);
@@ -635,7 +628,7 @@ public class MarcRecordImplTest extends AbstractTest {
 	public void getSeriesISSNtests() throws Exception {
 		MarcRecordImpl mri;
 		MetadataRecord metadataRecord;
-		List<String> data = new ArrayList<String>();
+		List<String> data = new ArrayList<>();
 		
 		data.add("490 $aVědecké spisy Vysokého učení technického v Brně. PhD Thesis,$x1213-4198 ;$vsv. 744");
 		mri = MarcRecordFactory.recordFactory(data);
@@ -656,7 +649,7 @@ public class MarcRecordImplTest extends AbstractTest {
 	public void getClusterIdTest() throws Exception{
 		MarcRecordImpl mri;
 		MetadataRecord metadataRecord;
-		List<String> data = new ArrayList<String>();
+		List<String> data = new ArrayList<>();
 		
 		data.add("001 0011");
 		mri = MarcRecordFactory.recordFactory(data);
@@ -724,7 +717,7 @@ public class MarcRecordImplTest extends AbstractTest {
 	public void getCitationFormatAcademicWork() throws Exception{
 		MarcRecordImpl mri;
 		MetadataRecord metadataRecord;
-		List<String> data = new ArrayList<String>();
+		List<String> data = new ArrayList<>();
 		
 		data.add("502 $atest");
 		mri = MarcRecordFactory.recordFactory(data);
@@ -737,7 +730,7 @@ public class MarcRecordImplTest extends AbstractTest {
 	public void getCitationFormatBook() throws Exception{
 		MarcRecordImpl mri;
 		MetadataRecord metadataRecord;
-		List<String> data = new ArrayList<String>();
+		List<String> data = new ArrayList<>();
 		
 		data.add("000 000000ac");
 		mri = MarcRecordFactory.recordFactory(data);
@@ -750,7 +743,7 @@ public class MarcRecordImplTest extends AbstractTest {
 	public void getCitationFormatElectronicBook() throws Exception{
 		MarcRecordImpl mri;
 		MetadataRecord metadataRecord;
-		List<String> data = new ArrayList<String>();
+		List<String> data = new ArrayList<>();
 		
 		data.add("000 000000td");
 		data.add("856 41$atest");
@@ -764,7 +757,7 @@ public class MarcRecordImplTest extends AbstractTest {
 	public void getCitationFormatPeriodical() throws Exception{
 		MarcRecordImpl mri;
 		MetadataRecord metadataRecord;
-		List<String> data = new ArrayList<String>();
+		List<String> data = new ArrayList<>();
 		
 		data.add("000 0000000i");
 		mri = MarcRecordFactory.recordFactory(data);
@@ -777,7 +770,7 @@ public class MarcRecordImplTest extends AbstractTest {
 	public void getCitationFormatElectronicPeriodical() throws Exception{
 		MarcRecordImpl mri;
 		MetadataRecord metadataRecord;
-		List<String> data = new ArrayList<String>();
+		List<String> data = new ArrayList<>();
 		
 		data.add("000 0000000s");
 		data.add("856 41$atest");
@@ -791,7 +784,7 @@ public class MarcRecordImplTest extends AbstractTest {
 	public void getCitationFormatContribution() throws Exception{
 		MarcRecordImpl mri;
 		MetadataRecord metadataRecord;
-		List<String> data = new ArrayList<String>();
+		List<String> data = new ArrayList<>();
 		
 		data.add("000 000000000");
 		data.add("773 $asborník");
@@ -805,7 +798,7 @@ public class MarcRecordImplTest extends AbstractTest {
 	public void getCitationFormatElectronicContribution() throws Exception{
 		MarcRecordImpl mri;
 		MetadataRecord metadataRecord;
-		List<String> data = new ArrayList<String>();
+		List<String> data = new ArrayList<>();
 		
 		data.add("000 000000000");
 		data.add("773 $aproceedings");
@@ -820,7 +813,7 @@ public class MarcRecordImplTest extends AbstractTest {
 	public void getCitationFormatArticle() throws Exception{
 		MarcRecordImpl mri;
 		MetadataRecord metadataRecord;
-		List<String> data = new ArrayList<String>();
+		List<String> data = new ArrayList<>();
 		
 		data.add("000 0000000a");
 		mri = MarcRecordFactory.recordFactory(data);
@@ -833,7 +826,7 @@ public class MarcRecordImplTest extends AbstractTest {
 	public void getCitationFormatElectronicArticles() throws Exception{
 		MarcRecordImpl mri;
 		MetadataRecord metadataRecord;
-		List<String> data = new ArrayList<String>();
+		List<String> data = new ArrayList<>();
 		
 		data.add("000 0000000b");
 		data.add("856 41$atest");
@@ -847,7 +840,7 @@ public class MarcRecordImplTest extends AbstractTest {
 	public void getCitationFormatMap() throws Exception{
 		MarcRecordImpl mri;
 		MetadataRecord metadataRecord;
-		List<String> data = new ArrayList<String>();
+		List<String> data = new ArrayList<>();
 		
 		data.add("000 000000e");
 		mri = MarcRecordFactory.recordFactory(data);
@@ -866,7 +859,7 @@ public class MarcRecordImplTest extends AbstractTest {
 	public void getCitationFormatOthers() throws Exception{
 		MarcRecordImpl mri;
 		MetadataRecord metadataRecord;
-		List<String> data = new ArrayList<String>();
+		List<String> data = new ArrayList<>();
 		
 		data.add("000 000000c");
 		mri = MarcRecordFactory.recordFactory(data);
@@ -879,7 +872,7 @@ public class MarcRecordImplTest extends AbstractTest {
 	public void getCitationFormatError() throws Exception{
 		MarcRecordImpl mri;
 		MetadataRecord metadataRecord;
-		List<String> data = new ArrayList<String>();
+		List<String> data = new ArrayList<>();
 		
 		data.add("000 00000000");
 		mri = MarcRecordFactory.recordFactory(data);
