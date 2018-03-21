@@ -65,7 +65,7 @@ public class DublinCoreRecordImplTest extends AbstractTest {
 	}
 
 	/**
-	 * no short titles in Dublic Core
+	 * no short titles in Dublin Core
 	 */
 	@Test
 	public void getShortTitleTest() {
@@ -223,5 +223,13 @@ public class DublinCoreRecordImplTest extends AbstractTest {
 		List<Ean> eans = metadataRecord.getEANs();
 
 		Assert.assertTrue(eans.size() == 0);
+	}
+
+	/**
+	 * no {@link PublisherNumber} in Dublin Core
+	 */
+	@Test
+	public void getPublisherNumberTest() {
+		Assert.assertTrue(metadataFactory.getMetadataRecord(new DublinCoreRecordImpl()).getPublisherNumber().isEmpty());
 	}
 }

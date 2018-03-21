@@ -956,4 +956,33 @@ public class MarcRecordImplTest extends AbstractTest {
 			Assert.assertEquals(results.get(i), eanList.get(i), String.format("EAN on position %d differs.", i));
 		}
 	}
+
+	@Test
+	public void getPublisherNumberTest() throws Exception {
+		MarcRecordImpl mri;
+		List<String> metadata = new ArrayList<>();
+		List<PublisherNumber> expected = new ArrayList<>();
+
+		// no publisher number
+		mri = MarcRecordFactory.recordFactory(metadata);
+		Assert.assertEquals(metadataFactory.getMetadataRecord(mri).getPublisherNumber(), Collections.emptyList());
+
+		// create publisher number
+		metadata.add("028 0 $a158989-2$bEso Music Production");
+		expected.add(new PublisherNumber("1589892", 1L));
+
+		metadata.add("028 01$aMP 5270$bKnihovna a tiskárna pro nevidomé K. E. Macana");
+		expected.add(new PublisherNumber("mp5270", 2L));
+
+		// invalid - indicator 1 is not '0'
+		metadata.add("028   $aMP 5270$bKnihovna a tiskárna pro nevidomé K. E. Macana");
+
+		mri = MarcRecordFactory.recordFactory(metadata);
+		List<PublisherNumber> results = metadataFactory.getMetadataRecord(mri).getPublisherNumber();
+		Assert.assertEquals(results.size(), expected.size());
+		for (int i = 0; i < expected.size(); i++) {
+			Assert.assertEquals(results.get(i), expected.get(i), String.format("Publisher Number on position %d differs.", i + 1));
+		}
+	}
+
 }
