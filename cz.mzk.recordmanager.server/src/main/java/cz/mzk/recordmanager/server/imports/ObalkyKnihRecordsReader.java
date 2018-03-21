@@ -3,6 +3,7 @@ package cz.mzk.recordmanager.server.imports;
 import java.io.IOException;
 import java.io.InputStream;
 
+import cz.mzk.recordmanager.server.util.identifier.ISBNUtils;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.NonTransientResourceException;
 import org.springframework.batch.item.ParseException;
@@ -14,7 +15,6 @@ import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 
 import cz.mzk.recordmanager.server.model.ObalkyKnihTOC;
 import cz.mzk.recordmanager.server.util.HttpClient;
-import cz.mzk.recordmanager.server.util.MetadataUtils;
 
 public class ObalkyKnihRecordsReader implements ItemReader<ObalkyKnihTOC> {
 
@@ -88,7 +88,7 @@ public class ObalkyKnihRecordsReader implements ItemReader<ObalkyKnihTOC> {
 			toc.setOclc(toc.getOclc().replace(OCLC_PREFIX, ""));
 		}
 		if (toc.getIsbnStr() != null) {
-				toc.setIsbn(MetadataUtils.toISBN13(toc.getIsbnStr()));
+				toc.setIsbn(ISBNUtils.toISBN13Long(toc.getIsbnStr()));
 		}
 	}
 

@@ -10,7 +10,10 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.validator.routines.ISBNValidator;
+import cz.mzk.recordmanager.server.util.identifier.ISBNUtils;
+import cz.mzk.recordmanager.server.util.identifier.ISMNUtils;
+import cz.mzk.recordmanager.server.util.identifier.ISSNUtils;
+import cz.mzk.recordmanager.server.util.identifier.NoDataException;
 import org.marc4j.marc.DataField;
 import org.marc4j.marc.Subfield;
 import org.slf4j.Logger;
@@ -32,7 +35,7 @@ import cz.mzk.recordmanager.server.model.ShortTitle;
 import cz.mzk.recordmanager.server.model.TezaurusRecord.TezaurusKey;
 import cz.mzk.recordmanager.server.model.Title;
 import cz.mzk.recordmanager.server.util.Constants;
-import cz.mzk.recordmanager.server.util.EANUtils;
+import cz.mzk.recordmanager.server.util.identifier.EANUtils;
 import cz.mzk.recordmanager.server.util.MetadataUtils;
 import cz.mzk.recordmanager.server.util.UrlUtils;
 
@@ -41,34 +44,23 @@ public class MetadataMarcRecord implements MetadataRecord {
 	private static Logger logger = LoggerFactory.getLogger(MetadataMarcRecord.class);
 	
 	protected MarcRecord underlayingMarc;
-	
-	protected final ISBNValidator isbnValidator = ISBNValidator.getInstance(true);
 
 	protected static final Pattern PAGECOUNT_PATTERN = Pattern.compile("(\\d+)");
 	protected static final Pattern YEAR_PATTERN = Pattern.compile("\\d{4}");
-	protected static final Pattern ISBN_PATTERN = Pattern.compile("([\\dxX\\s\\-]*)(.*)");
-	protected static final Pattern ISMN_PATTERN = Pattern.compile("([\\dM\\s\\-]*)(.*)");
-	protected static final Pattern ISSN_PATTERN = Pattern.compile("(\\d{4}-\\d{3}[\\dxX])(.*)");
-	protected static final Pattern EAN_PATTERN = Pattern.compile("([0-9]*)(.*)");
 	protected static final Pattern SCALE_PATTERN = Pattern.compile("\\d+[ ^]*\\d+");
 	protected static final Pattern UUID_PATTERN = Pattern.compile("uuid:[\\w-]+");
 	protected static final Pattern OCLC_PATTERN= Pattern.compile("(\\(ocolc\\))(.*)", Pattern.CASE_INSENSITIVE);
 	protected static final Pattern PUBLISHER_NUMBER_PATTERN = Pattern.compile("([^\\W]*)");
 	protected static final Pattern CPK0_PATTERN = Pattern.compile("cpk0");
 	protected static final Pattern METAPROXY_TAG_PATTERN = Pattern.compile("[17]..");
-	protected static final String ISBN_CLEAR_REGEX = "[^0-9Xx]";
-	protected static final String ISMN_CLEAR_REGEX = "[^0-9M]";
-	protected static final String NOTE_FORMAT = "\\(.+\\)";
-	protected static final String BEGIN_BRACKET = "^\\(.*";
-	protected static final String END_BRACKET = ".*\\)$";
-	
-	protected static final String ISMN10_PREFIX = "M";
-	protected static final String ISMN13_PREFIX = "9790";
 	
 	protected static final Long MAX_PAGES = 10_000_000L;
 	
 	protected static final String DELETED_TAG = "YES";
-	
+	private static final String[] TITLE_TAGS = new String[]{"245", "240"};
+	private static final char[] SHORT_TITLE_SUBFIELDS = new char[]{'a', 'n', 'p'};
+	private static final char[] TITLE_SUBFIELDS = new char[]{'a', 'b', 'n', 'p'};
+
 	public MetadataMarcRecord(MarcRecord underlayingMarc) {
 		if (underlayingMarc == null) {
 			throw new IllegalArgumentException("Creating MetadataMarcRecord with NULL underlayingMarc.");
@@ -86,54 +78,27 @@ public class MetadataMarcRecord implements MetadataRecord {
 		return id;
 	}
 
-	
-	
 	@Override
-	public List<Issn> getISSNs() {	
-        List<Issn> issns = new ArrayList<Issn>();
-        Long issnCounter = 0L;
-        
-        for(DataField field: underlayingMarc.getDataFields("022")){
-        	Subfield subfieldA = field.getSubfield('a');
-        	if(subfieldA == null){
-        		continue;
-        	}
-        	Issn issn = new Issn();
-        	
-        	Matcher matcher = ISSN_PATTERN.matcher(subfieldA.getData());
+	public List<Issn> getISSNs() {
+		List<Issn> results = new ArrayList<>();
+		Long issnCounter = 0L;
+		Issn issn;
+
+		for (DataField df : underlayingMarc.getDataFields("022")) {
 			try {
-				if(matcher.find()) {
-					if(!issn.issnValidator(matcher.group(1))){
-						throw new NumberFormatException();
-					}					
-					issn.setIssn(matcher.group(1));
-					
-					StringBuilder builder = new StringBuilder();
-					if(matcher.group(2).trim() != null){ 
-						String s = matcher.group(2).trim();
-						if(s.matches(NOTE_FORMAT)) {
-							builder.append(s.substring(1, s.length()-1));
-						}
-						else builder.append(s);
-						builder.append(" ");
-					}
-					
-					issn.setNote(builder.toString().trim());
-					issn.setOrderInRecord(++issnCounter);
-					issns.add(issn);
-				}
-				
-			} catch (NumberFormatException e) {
-				logger.info(String.format("Invalid ISSN: %s", subfieldA.getData()));
+				issn = ISSNUtils.createIssn(df);
+			} catch (NoDataException nde) {
+				continue;
+			} catch (NumberFormatException nfe) {
+				logger.info(String.format("Invalid ISSN: %s", nfe.getMessage()));
 				continue;
 			}
-        
-			
-        }        
-        
-		return issns;
+			issn.setOrderInRecord(++issnCounter);
+			results.add(issn);
+		}
+		return results;
 	}
-	
+
 	@Override
 	public List<Cnb> getCNBs() {
 		List<Cnb> cnbs = new ArrayList<Cnb>();
@@ -195,59 +160,22 @@ public class MetadataMarcRecord implements MetadataRecord {
 	
 	@Override
 	public List<Isbn> getISBNs() {
-		List<Isbn> isbns = new ArrayList<Isbn>();
+		List<Isbn> isbns = new ArrayList<>();
 		Long isbnCounter = 0L;
+		Isbn isbn;
 
-		for(DataField field: underlayingMarc.getDataFields("020")){
-			Subfield subfieldA = field.getSubfield('a');
-			if (subfieldA == null) {
+		for (DataField df : underlayingMarc.getDataFields("020")) {
+			try {
+				isbn = ISBNUtils.createIsbn(df);
+			} catch (NoDataException nde) {
+				continue;
+			} catch (NumberFormatException nfe) {
+				logger.info(String.format("Invalid ISBN: %s", nfe.getMessage()));
 				continue;
 			}
-			
-			Isbn isbn = new Isbn();
-
-			Matcher matcher = ISBN_PATTERN.matcher(subfieldA.getData());
-
-			if (matcher.find()) {
-				String g1 = matcher.group(1);
-				if (g1 == null) {
-					continue;
-				}
-				String isbnStr = isbnValidator.validate(g1.replaceAll(ISBN_CLEAR_REGEX,"").replaceAll("x", "X"));
-				try {
-					if (isbnStr == null) {
-						throw new NumberFormatException();
-					}
-					Long isbn13 = Long.valueOf(isbnStr);
-					isbn.setIsbn(isbn13);
-				} catch (NumberFormatException nfe) {
-					logger.info(String.format("Invalid ISBN: %s", subfieldA.getData()));
-					continue;
-				}
-			}
-
-			
-			StringBuilder builder = new StringBuilder();
-			if(matcher.group(2).trim() != null){ 
-				String s = matcher.group(2).trim();
-				if(s.matches(NOTE_FORMAT)) {
-					builder.append(s.substring(1, s.length()-1));
-				}
-				else builder.append(s);
-				builder.append(" ");
-			}
-			for(Subfield subfieldQ: field.getSubfields('q')){
-				if(subfieldQ.getData().matches(NOTE_FORMAT)) {
-					builder.append(subfieldQ.getData().substring(1, subfieldQ.getData().length()-1));
-				}
-				else builder.append(subfieldQ.getData());
-				builder.append(" ");
-			}
-			isbn.setNote(builder.toString().trim());
 			isbn.setOrderInRecord(++isbnCounter);
 			isbns.add(isbn);
 		}
-		
 		return isbns;
 	}
 
@@ -277,42 +205,24 @@ public class MetadataMarcRecord implements MetadataRecord {
 		} catch (NumberFormatException e) {}
 		return null;
 	}
-		
+
 	/**
-	 * get title of record
-	 * 
-	 * @return all 245a:245b.245n.245p and 240a:240b.240n.240p. If no title is
-	 *         found, list containing empty string is returned
+	 * get {@link Title} of record
+	 *
+	 * @return all 245abnp and 240abnp
 	 */
 	@Override
 	public List<Title> getTitle() {
-		final char titleSubfields[] = new char[]{'a','b','n','p'};
-		List<Title> result = new ArrayList<Title>();
-		
+		List<Title> result = new ArrayList<>();
 		Long titleOrder = 0L;
-		for (String key: new String[]{"245", "240"}) {
-			for (DataField field :underlayingMarc.getDataFields(key)) {
-				StringBuilder builder = new StringBuilder();
-				
-				for(Subfield subfield: field.getSubfields()){
-					if (MetadataUtils.hasTrailingPunctuation(builder.toString())) {
-						builder.append(" ");
-					}
-					if(Chars.contains(titleSubfields, subfield.getCode())){
-						builder.append(subfield.getData());
-					}
-				}
-				
-				if (builder.length() > 0) {
-					Title title = new Title();
-					title.setTitleStr(builder.toString());
-					title.setOrderInRecord(++titleOrder);
-					title.setSimilarityEnabled(MetadataUtils.similarityEnabled(field, title));
-					result.add(title);
+		for (String key : TITLE_TAGS) {
+			for (DataField df : underlayingMarc.getDataFields(key)) {
+				String titleText = parseTitleValue(df, TITLE_SUBFIELDS);
+				if (!titleText.isEmpty()) {
+					result.add(Title.create(titleText, ++titleOrder, MetadataUtils.similarityEnabled(df, titleText)));
 				}
 			}
 		}
-
 		return result;
 	}
 
@@ -1108,58 +1018,23 @@ public class MetadataMarcRecord implements MetadataRecord {
 
 	@Override
 	public List<Ismn> getISMNs() {
-		List<Ismn> ismns = new ArrayList<>();
+		List<Ismn> results = new ArrayList<>();
 		Long ismnCounter = 0L;
-		
-		for(DataField df: underlayingMarc.getDataFields("024")){
-			Subfield sfA = df.getSubfield('a');
-			if((df.getIndicator1() == '2') && (sfA != null)){
-				
-				Matcher matcher = ISMN_PATTERN.matcher(sfA.getData());
-				if(!matcher.find()) continue;
-				String g1 = matcher.group(1); // ismn
-				if (g1 == null)	continue;				
-				
-				Ismn ismn = new Ismn();
-				String ismnStr = g1.replaceAll(ISMN_CLEAR_REGEX, "").replaceAll(ISMN10_PREFIX, ISMN13_PREFIX);
-				try {
-					if(ismnStr.length() != 13) throw new NumberFormatException();
-					ismn.setIsmn(Long.valueOf(ismnStr));
-				} catch (NumberFormatException nfe) {
-					logger.info(String.format("Invalid ISMN: %s", sfA.getData()));
-					continue;
-				}
-				
-				StringBuilder builder = new StringBuilder();
-				String g2 = matcher.group(2).trim();
-				if(g2 != null){ 
-					builder.append(trimNote(g2));
-					builder.append(" ");
-				}
-				
-				for(Subfield sfQ: df.getSubfields('q')){
-					if(sfQ == null) continue;
-					builder.append(trimNote(sfQ.getData()));
-					builder.append(" ");
-				}
-				ismn.setNote(builder.toString().trim());
-				ismn.setOrderInRecord(++ismnCounter);
-				ismns.add(ismn);
+		Ismn ismn;
+
+		for (DataField df : underlayingMarc.getDataFields("024")) {
+			try {
+				ismn = ISMNUtils.createIsmn(df);
+			} catch (NoDataException nde) {
+				continue;
+			} catch (NumberFormatException nfe) {
+				logger.info(String.format("Invalid ISMN: %s", nfe.getMessage()));
+				continue;
 			}
+			ismn.setOrderInRecord(++ismnCounter);
+			results.add(ismn);
 		}
-		
-		return ismns;
-	}
-	
-	protected String trimNote(String note){
-		int beginIndex = 0;
-		int endIndex = note.length();
-		if(note.matches(BEGIN_BRACKET)) beginIndex = 1;
-		if(note.matches(END_BRACKET)) --endIndex;
-		if(beginIndex <= endIndex) {
-			return note.substring(beginIndex, endIndex);
-		}
-		else return note;
+		return results;
 	}
 
 	@Override
@@ -1231,86 +1106,62 @@ public class MetadataMarcRecord implements MetadataRecord {
 	public List<Ean> getEANs() {
 		List<Ean> results = new ArrayList<>();
 		Long eanCounter = 0L;
-		for (DataField df: underlayingMarc.getDataFields("024")) {
-			if (df.getIndicator1() == '3' && df.getSubfield('a') != null) {
-				Matcher matcher = EAN_PATTERN.matcher(df.getSubfield('a').getData());
-				
-				if (matcher.find()) {
-					String g1 = matcher.group(1);
-					if (g1 == null) continue;
-					Ean ean = new Ean();
-					try {
-						if (EANUtils.isEAN13valid(g1)) {
-							ean.setEan(Long.valueOf(g1));
-						}
-						else throw new NumberFormatException();
-					} catch (NumberFormatException nfe) {
-						logger.info(String.format("Invalid EAN: %s", df.getSubfield('a').getData()));
-						continue;
-					}
-					
-					ean.setNote(parseNote(matcher.group(2), df.getSubfields('q')));
-					ean.setOrderInRecord(++eanCounter);
-					results.add(ean);
-				}
+		Ean ean;
+
+		for (DataField df : underlayingMarc.getDataFields("024")) {
+			try {
+				ean = EANUtils.createEan(df);
+			} catch (NoDataException nde) {
+				continue;
+			} catch (NumberFormatException nfe) {
+				logger.info(String.format("Invalid EAN: %s", nfe.getMessage()));
+				continue;
 			}
+			ean.setOrderInRecord(++eanCounter);
+			results.add(ean);
 		}
-		
 		return results;
 	}
-	
-	protected String parseNote(String note, List<Subfield> sfq) {
-		StringBuilder builder = new StringBuilder();
-		if(note.trim() != null){ 
-			String s = note.trim();
-			if(s.matches(NOTE_FORMAT)) {
-				builder.append(s.substring(1, s.length()-1));
-			}
-			else builder.append(s);
-			builder.append(" ");
-		}
-		for(Subfield subfieldQ: sfq){
-			if(subfieldQ.getData().matches(NOTE_FORMAT)) {
-				builder.append(subfieldQ.getData().substring(1, subfieldQ.getData().length()-1));
-			}
-			else builder.append(subfieldQ.getData());
-			builder.append(" ");
-		}
-		
-		return builder.toString().trim();
-	}
 
+	/**
+	 * get {@link ShortTitle} of record
+	 *
+	 * @return all 245anp and 240anp, if not contains subfield 'b'
+	 */
 	@Override
 	public List<ShortTitle> getShortTitles() {
 		List<ShortTitle> results = new ArrayList<>();
 		Long shortTitleCounter = 0L;
-		char[] shortTitleSf = new char[]{'a', 'n', 'p'};
-		
-		for (String tag: new String[]{"245", "240"}) {
-			for (DataField df :underlayingMarc.getDataFields(tag)) {
+		for (String tag : TITLE_TAGS) {
+			for (DataField df : underlayingMarc.getDataFields(tag)) {
 				if (df.getSubfield('b') == null) continue;
-				
-				StringBuilder builder = new StringBuilder();
-				for(Subfield subfield: df.getSubfields()){
-					if (MetadataUtils.hasTrailingPunctuation(builder.toString())) {
-						builder.append(" ");
-					}
-					if(Chars.contains(shortTitleSf, subfield.getCode())){
-						builder.append(subfield.getData());
-					}
-				}
-
-				if (builder.length() > 0) {
-					ShortTitle shortTitle = new ShortTitle();
-					shortTitle.setShortTitleStr(builder.toString());
-					shortTitle.setOrderInRecord(++shortTitleCounter);
-					shortTitle.setSimilarityEnabled(MetadataUtils.similarityEnabled(df, shortTitle));
-					results.add(shortTitle);
+				String titleText = parseTitleValue(df, SHORT_TITLE_SUBFIELDS);
+				if (!titleText.isEmpty()) {
+					results.add(ShortTitle.create(titleText, ++shortTitleCounter,
+							MetadataUtils.similarityEnabled(df, titleText)));
 				}
 			}
 		}
-
 		return results;
+	}
+
+	/**
+	 * join subfields data for {@link Title} or {@link ShortTitle}
+	 * @param DF {@link DataField}
+	 * @param SUBFIELDS result subfields, TITLE - abnp, SHORT_TITLE - anp
+	 * @return String
+	 */
+	private String parseTitleValue(final DataField DF, final char[] SUBFIELDS) {
+		StringBuilder builder = new StringBuilder();
+		for (Subfield subfield : DF.getSubfields()) {
+			if (MetadataUtils.hasTrailingPunctuation(builder.toString())) {
+				builder.append(" ");
+			}
+			if (Chars.contains(SUBFIELDS, subfield.getCode())) {
+				builder.append(subfield.getData());
+			}
+		}
+		return builder.toString().trim();
 	}
 
 	@Override

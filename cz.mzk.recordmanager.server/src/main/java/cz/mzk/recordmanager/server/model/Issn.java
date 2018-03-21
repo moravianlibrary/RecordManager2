@@ -4,8 +4,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
-import cz.mzk.recordmanager.server.util.ISSNUtils;
-
 @Entity
 @Table(name=Issn.TABLE_NAME)
 public class Issn extends AbstractDomainObject {
@@ -20,6 +18,14 @@ public class Issn extends AbstractDomainObject {
 	
 	@Column(name="note")
 	private String note = "";
+
+	public static Issn create(final String issn, final long orderInRecord, final String note) {
+		Issn newIssn = new Issn();
+		newIssn.setIssn(issn);
+		newIssn.setOrderInRecord(orderInRecord);
+		newIssn.setNote(note);
+		return newIssn;
+	}
 
 	public String getIssn() {
 		return issn;
@@ -43,10 +49,6 @@ public class Issn extends AbstractDomainObject {
 
 	public void setNote(String note) {
 		this.note = note;
-	}
-	
-	public boolean issnValidator(String issn){
-		return ISSNUtils.isValid(issn);
 	}
 
 	@Override

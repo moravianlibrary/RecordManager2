@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import org.apache.commons.validator.routines.ISBNValidator;
 import org.marc4j.marc.DataField;
 
 import cz.mzk.recordmanager.server.ClasspathResourceProvider;
@@ -17,8 +16,6 @@ import cz.mzk.recordmanager.server.model.ShortTitle;
 import cz.mzk.recordmanager.server.model.Title;
 
 public class MetadataUtils {
-
-	private static final ISBNValidator isbnValidator = ISBNValidator.getInstance(true);
 
 	private static final List<String> similarity_words = new BufferedReader(new InputStreamReader(
 			new ClasspathResourceProvider().getResource("/mapping/similarity_words.map"), StandardCharsets.UTF_8)) 
@@ -56,11 +53,6 @@ public class MetadataUtils {
 		return input.substring(0, Math.min(length, input.length()));
 	}
 
-	public static Long toISBN13(String isbn) {
-		String isbn13 = isbnValidator.validate(isbn);
-		return (isbn13 == null)? null: Long.valueOf(isbn13);
-	}
-
 	public static boolean similarityEnabled(DataField df, Title title) {
 		return similarityEnabled(df, title.getTitleStr());
 	}
@@ -69,7 +61,7 @@ public class MetadataUtils {
 		return similarityEnabled(df, shortTitle.getShortTitleStr());
 	}
 
-	protected static boolean similarityEnabled(DataField df, String title) {
+	public static boolean similarityEnabled(DataField df, String title) {
 		if (FIELD_245.matcher(df.getTag()).matches() && df.getSubfield('n') != null) {
 			return false;
 		}
@@ -84,7 +76,7 @@ public class MetadataUtils {
 		return similarityEnabled(shortTitle.getShortTitleStr());
 	}
 	
-	protected static boolean similarityEnabled(String title) {
+	public static boolean similarityEnabled(String title) {
 		if (NUMBER_PATTERN.matcher(title).find()) return false;
 		for (Pattern pattern: PATTERNS) {
 			if (pattern.matcher(title).find()) {

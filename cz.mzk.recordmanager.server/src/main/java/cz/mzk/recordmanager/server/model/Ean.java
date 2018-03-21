@@ -19,6 +19,14 @@ public class Ean extends AbstractDomainObject {
 	@Column(name="note")
 	private String note = "";
 
+	public static Ean create(final Long ean, final long orderInRecord, final String note) {
+		Ean newEan = new Ean();
+		newEan.setEan(ean);
+		newEan.setOrderInRecord(orderInRecord);
+		newEan.setNote(note);
+		return newEan;
+	}
+
 	public Long getEan() {
 		return ean;
 	}

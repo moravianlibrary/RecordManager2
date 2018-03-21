@@ -18,7 +18,15 @@ public class ShortTitle extends AbstractDomainObject {
 
 	@Column(name="similarity_enabled")
 	private boolean similarityEnabled;
-	
+
+	public static ShortTitle create(final String shortTitle, final long orderInRecord, final boolean similarity) {
+		ShortTitle newShortTitle = new ShortTitle();
+		newShortTitle.setShortTitleStr(shortTitle);
+		newShortTitle.setOrderInRecord(orderInRecord);
+		newShortTitle.setSimilarityEnabled(similarity);
+		return newShortTitle;
+	}
+
 	public String getShortTitleStr() {
 		return shortTitle;
 	}

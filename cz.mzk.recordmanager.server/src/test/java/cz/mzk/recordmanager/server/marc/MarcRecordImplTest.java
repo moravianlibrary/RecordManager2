@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import cz.mzk.recordmanager.server.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
@@ -13,13 +14,7 @@ import cz.mzk.recordmanager.server.AbstractTest;
 import cz.mzk.recordmanager.server.metadata.CitationRecordType;
 import cz.mzk.recordmanager.server.metadata.MetadataRecord;
 import cz.mzk.recordmanager.server.metadata.MetadataRecordFactory;
-import cz.mzk.recordmanager.server.model.Cnb;
 import cz.mzk.recordmanager.server.model.HarvestedRecordFormat.HarvestedRecordFormatEnum;
-import cz.mzk.recordmanager.server.model.Isbn;
-import cz.mzk.recordmanager.server.model.Ismn;
-import cz.mzk.recordmanager.server.model.Issn;
-import cz.mzk.recordmanager.server.model.ShortTitle;
-import cz.mzk.recordmanager.server.model.Title;
 import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordDAO;
 
 public class MarcRecordImplTest extends AbstractTest {
@@ -212,12 +207,8 @@ public class MarcRecordImplTest extends AbstractTest {
 		mri = MarcRecordFactory.recordFactory(data);
 		metadataRecord = metadataFactory.getMetadataRecord(mri);
 		
-		ShortTitle expectedST1 = new ShortTitle();
-		expectedST1.setShortTitleStr("nap");
-		expectedST1.setOrderInRecord(1L);
-		ShortTitle expectedST2 = new ShortTitle();
-		expectedST2.setShortTitleStr("anp");
-		expectedST2.setOrderInRecord(2L);
+		ShortTitle expectedST1 = ShortTitle.create("nap", 1L, false);
+		ShortTitle expectedST2 = ShortTitle.create("anp", 2L, false);
 		
 		Assert.assertEquals(2, metadataRecord.getShortTitles().size());
 		Assert.assertEquals(metadataRecord.getShortTitles().get(0),expectedST1);
@@ -228,38 +219,29 @@ public class MarcRecordImplTest extends AbstractTest {
 	public void getISSNsTest() throws Exception {
 		MarcRecordImpl mri;
 		MetadataRecord metadataRecord;
-		List<String> data = new ArrayList<String>();
-		List<Issn> issns = new ArrayList<Issn>();
+		List<String> data = new ArrayList<>();
+		List<Issn> issns = new ArrayList<>();
 		Long issnCounter = 0L;
-		
-		data.add("022 $a2336-4815");
-		Issn issn = new Issn();
-		issn.setIssn("2336-4815");
-		issn.setOrderInRecord(++issnCounter);
-		issn.setNote("");
-		issns.add(issn);
-		data.add("022 $a1214-4029 (pozn)");
-		issn = new Issn();
-		issn.setIssn("1214-4029");
-		issn.setOrderInRecord(++issnCounter);
-		issn.setNote("pozn");
-		issns.add(issn);
-		data.add("022 $a0231-858X");
-		issn = new Issn();
-		issn.setIssn("0231-858X");
-		issn.setOrderInRecord(++issnCounter);
-		issn.setNote("");
-		issns.add(issn);
-		mri = MarcRecordFactory.recordFactory(data);
-		metadataRecord = metadataFactory.getMetadataRecord(mri);
-		Assert.assertEquals(metadataRecord.getISSNs().toString(),
-				issns.toString());
-		data.clear();
 
+		// no issn test
 		mri = MarcRecordFactory.recordFactory(data);
 		metadataRecord = metadataFactory.getMetadataRecord(mri);
 		Assert.assertEquals(metadataRecord.getISSNs(), Collections.EMPTY_LIST);
 		data.clear();
+
+		// create issn
+		data.add("022 $a2336-4815");
+		issns.add(Issn.create("2336-4815", ++issnCounter, ""));
+
+		data.add("022 $a1214-4029 (pozn)");
+		issns.add(Issn.create("1214-4029", ++issnCounter, "pozn"));
+
+		data.add("022 $a0231-858X");
+		issns.add(Issn.create("0231-858X", ++issnCounter, ""));
+
+		mri = MarcRecordFactory.recordFactory(data);
+		metadataRecord = metadataFactory.getMetadataRecord(mri);
+		Assert.assertEquals(metadataRecord.getISSNs().toString(), issns.toString());
 	}
 	
 	@Test
@@ -321,85 +303,55 @@ public class MarcRecordImplTest extends AbstractTest {
 	public void getISBNsTest() throws Exception {
 		MarcRecordImpl mri;
 		MetadataRecord metadataRecord;
-		List<String> data = new ArrayList<String>();
-		List<Isbn> isbnlist = new ArrayList<Isbn>();
+		List<String> data = new ArrayList<>();
+		List<Isbn> isbnlist = new ArrayList<>();
 
+		// no isbn test
+		mri = MarcRecordFactory.recordFactory(data);
+		metadataRecord = metadataFactory.getMetadataRecord(mri);
+		Assert.assertEquals(metadataRecord.getISBNs(), Collections.EMPTY_LIST);
+
+		// create isbns
 		data.add("020 $a9788086026923 (váz)");
-		Isbn isbn = new Isbn();
-		isbn.setIsbn(9788086026923L);
-		isbn.setOrderInRecord(1L);
-		isbn.setNote("váz");
-		isbnlist.add(isbn);
+		isbnlist.add(Isbn.create(9788086026923L, 1L, "váz"));
+
 		data.add("020 $a978-80-7250-482-4$q(váz)$q(q1)$qq2");
-		
-		isbn = new Isbn();
-		isbn.setIsbn(9788072504824L);
-		isbn.setOrderInRecord(2L);
-		isbn.setNote("váz q1 q2");
-		isbnlist.add(isbn);
+		isbnlist.add(Isbn.create(9788072504824L, 2L, "váz q1 q2"));
+
 		data.add("020 $a80-200-0980-9");
-		
-		isbn = new Isbn();
-		isbn.setIsbn(9788020009807L);
-		isbn.setOrderInRecord(3L);
-		isbnlist.add(isbn);
+		isbnlist.add(Isbn.create(9788020009807L, 3L, ""));
+
+		// invalid isbn
 		data.add("020 $a456");
-		
-		isbn = new Isbn();
-		isbn.setIsbn(9782011668554L);
-		isbn.setOrderInRecord(4L);
-		isbnlist.add(isbn);
+
+		isbnlist.add(Isbn.create(9782011668554L, 4L, ""));
 		data.add("020 $a2-01-16-6855-7");
-		
-		isbn = new Isbn();
-		isbn.setIsbn(9782980406003L);
-		isbn.setOrderInRecord(5L);
-		isbnlist.add(isbn);
+
+		isbnlist.add(Isbn.create(9782980406003L, 5L, ""));
 		data.add("020 $a2-9804060-07");
-		
-		isbn = new Isbn();
-		isbn.setIsbn(9783925967214L);
-		isbn.setOrderInRecord(6L);
-		isbnlist.add(isbn);
+
+		isbnlist.add(Isbn.create(9783925967214L, 6L, ""));
 		data.add("020 $a3-925 967-21-4");
-		
-		isbn = new Isbn();
-		isbn.setIsbn(9783925967214L);
-		isbn.setOrderInRecord(7L);
-		isbnlist.add(isbn);
+
+		isbnlist.add(Isbn.create(9783925967214L, 7L, ""));
 		data.add("020 $a  3-925 967-21-4");
-		
-		isbn = new Isbn();
-		isbn.setIsbn(9780521376679L);
-		isbn.setOrderInRecord(8L);
-		isbnlist.add(isbn);
+
+		isbnlist.add(Isbn.create(9780521376679L, 8L, ""));
 		data.add("020 $a052137667x");
-		
-		isbn = new Isbn();
-		isbn.setIsbn(9783596263936L);
-		isbn.setOrderInRecord(9L);
-		isbnlist.add(isbn);
+
+		isbnlist.add(Isbn.create(9783596263936L, 9L, ""));
 		data.add("020 $a3-596-26393-x");
-		
-		isbn = new Isbn();
-		isbn.setIsbn(9785268012866L);
-		isbn.setOrderInRecord(10L);
-		isbnlist.add(isbn);
+
+		isbnlist.add(Isbn.create(9785268012866L, 10L, ""));
 		data.add("020 $a5-268-01286-x");
-		
+
 		mri = MarcRecordFactory.recordFactory(data);
 		metadataRecord = metadataFactory.getMetadataRecord(mri);
 		List<Isbn> results = metadataRecord.getISBNs();
 		Assert.assertEquals(results.size(), isbnlist.size());
 		for (int i = 0; i < isbnlist.size(); i++) {
-			Assert.assertEquals(results.get(i), isbnlist.get(i), "ISBN on position " + i + " differs.");
+			Assert.assertEquals(results.get(i), isbnlist.get(i), String.format("ISBN on position %d differs.", i));
 		}
-		data.clear();
-
-		mri = MarcRecordFactory.recordFactory(data);
-		metadataRecord = metadataFactory.getMetadataRecord(mri);
-		Assert.assertEquals(metadataRecord.getISBNs(), Collections.EMPTY_LIST);
-		data.clear();
 	}
 	
 	@Test
@@ -947,48 +899,68 @@ public class MarcRecordImplTest extends AbstractTest {
 	public void getISMNsTest() throws Exception {
 		MarcRecordImpl mri;
 		MetadataRecord metadataRecord;
-		List<String> data = new ArrayList<String>();
-		List<Ismn> ismnlist = new ArrayList<Ismn>();
+		List<String> data = new ArrayList<>();
+		List<Ismn> ismnlist = new ArrayList<>();
+
+		// no ismn test
+		mri = MarcRecordFactory.recordFactory(data);
+		metadataRecord = metadataFactory.getMetadataRecord(mri);
+		Assert.assertEquals(metadataRecord.getISMNs(), Collections.EMPTY_LIST);
+		data.clear();
+
+		// create ismn
 		data.add("024 2 $aM-2600-0224-1$q(brož.)");
-		Ismn ismn = new Ismn();
-		ismn.setIsmn(9790260002241L);
-		ismn.setOrderInRecord(1L);
-		ismn.setNote("brož.");
-		ismnlist.add(ismn);
+		ismnlist.add(Ismn.create(9790260002241L, 1L, "brož."));
 
 		data.add("024 2 $a979-0-2600-0125-1$q(sešity v obálce)");
-		ismn = new Ismn();
-		ismn.setIsmn(9790260001251L);
-		ismn.setOrderInRecord(2L);
-		ismn.setNote("sešity v obálce");
-		ismnlist.add(ismn);
-		
+		ismnlist.add(Ismn.create(9790260001251L, 2L, "sešity v obálce"));
+
 		data.add("024 2 $aM-66056-061-7$q(Praha ;$qv hudebnině neuvedeno ;$qbrož.)");
-		ismn = new Ismn();
-		ismn.setIsmn(9790660560617L);
-		ismn.setOrderInRecord(3L);
-		ismn.setNote("Praha v hudebnině neuvedeno ; brož.");
-		ismnlist.add(ismn);
-		
+		ismnlist.add(Ismn.create(9790660560617L, 3L, "Praha v hudebnině neuvedeno ; brož."));
+
 		data.add("024 2 $aM-66056-061-7 (Brno)$q(Praha)");
-		ismn = new Ismn();
-		ismn.setIsmn(9790660560617L);
-		ismn.setOrderInRecord(4L);
-		ismn.setNote("Brno Praha");
-		ismnlist.add(ismn);
-		
+		ismnlist.add(Ismn.create(9790660560617L, 4L, "Brno Praha"));
+
 		mri = MarcRecordFactory.recordFactory(data);
 		metadataRecord = metadataFactory.getMetadataRecord(mri);
 		List<Ismn> results = metadataRecord.getISMNs();
 		Assert.assertEquals(results.size(), ismnlist.size());
 		for (int i = 0; i < ismnlist.size(); i++) {
-			Assert.assertEquals(results.get(i), ismnlist.get(i), "ISMN on position " + i + " differs.");
+			Assert.assertEquals(results.get(i), ismnlist.get(i), String.format("ISMN on position %d differs.", i));
 		}
-		data.clear();
+	}
+
+	@Test
+	public void getEANsTest() throws Exception {
+		MarcRecordImpl mri;
+		MetadataRecord metadataRecord;
+		List<String> data = new ArrayList<>();
+		List<Ean> eanList = new ArrayList<>();
+
+		// no ean
+		mri = MarcRecordFactory.recordFactory(data);
+		metadataRecord = metadataFactory.getMetadataRecord(mri);
+		Assert.assertEquals(metadataRecord.getEANs(), Collections.EMPTY_LIST);
+
+		// create eans
+		data.add("024 3 $a4006381333931$q(brož.)");
+		eanList.add(Ean.create(4006381333931L, 1L, "brož."));
+
+		data.add("024 3 $a4006381333931 note$q(sešity v obálce)");
+		eanList.add(Ean.create(4006381333931L, 2L, "note sešity v obálce"));
+
+		data.add("024 3 $a4006381333931$q(Praha ;$qv hudebnině neuvedeno ;$qbrož.)");
+		eanList.add(Ean.create(4006381333931L, 3L, "Praha v hudebnině neuvedeno ; brož."));
+
+		// invalid
+		data.add("024 3 $a73513536 (Brno)$q(Praha)");
 
 		mri = MarcRecordFactory.recordFactory(data);
 		metadataRecord = metadataFactory.getMetadataRecord(mri);
-		Assert.assertEquals(metadataRecord.getISMNs(), Collections.EMPTY_LIST);
-		data.clear();
+		List<Ean> results = metadataRecord.getEANs();
+		Assert.assertEquals(results.size(), eanList.size());
+		for (int i = 0; i < eanList.size(); i++) {
+			Assert.assertEquals(results.get(i), eanList.get(i), String.format("EAN on position %d differs.", i));
+		}
 	}
 }

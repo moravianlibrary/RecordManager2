@@ -7,7 +7,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import org.apache.commons.validator.routines.ISBNValidator;
+import cz.mzk.recordmanager.server.util.identifier.ISBNUtils;
+import cz.mzk.recordmanager.server.util.identifier.ISMNUtils;
+import cz.mzk.recordmanager.server.util.identifier.ISSNUtils;
+import cz.mzk.recordmanager.server.util.identifier.NoDataException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,18 +38,13 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 	protected DublinCoreRecord dcRecord;
 	protected HarvestedRecord harvestedRecord = null;
 
-	protected final ISBNValidator isbnValidator = ISBNValidator
-			.getInstance(true);
-
 	protected static final Pattern YEAR_PATTERN = Pattern.compile("\\d{4}");
-	protected static final Pattern ISSN_PATTERN = Pattern.compile("(\\d{4}-\\d{3}[\\dxX])(.*)");
-	protected static final Pattern ISBN_PATTERN = Pattern.compile("([\\dxX\\s\\-]*)(.*)");
 	
 	protected static final Pattern DC_UUID_PATTERN = Pattern.compile("^uuid:(.*)",Pattern.CASE_INSENSITIVE);
 /*	protected static final Pattern DC_ISBN_PATTERN = Pattern
 			.compile("isbn:(.*),Pattern.CASE_INSENSITIVE");
 */
-	protected static final Pattern DC_ISBN_PATTERN = Pattern
+	private static final Pattern DC_ISBN_PATTERN = Pattern
 			.compile("isbn:\\s*([\\dxX-]*)",Pattern.CASE_INSENSITIVE);
 	
 	protected static final Pattern DC_ISSN_PATTERN = Pattern
@@ -61,10 +59,6 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 			.compile(".*:.*",Pattern.CASE_INSENSITIVE);
 	
 	protected static final Pattern DC_TYPE_KRAMERIUS_PATTERN = Pattern.compile("^model:(.*)");
-
-	protected static final String ISMN_CLEAR_REGEX = "[^0-9^M]";
-	protected static final String ISMN10_PREFIX = "M";
-	protected static final String ISMN13_PREFIX = "9790";
 	
 	public MetadataDublinCoreRecord(DublinCoreRecord dcRecord) {
 		initRecords(dcRecord, null);
@@ -85,24 +79,17 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 
 	@Override
 	public List<Title> getTitle() {
-		List<Title> result = new ArrayList<Title>();
+		List<Title> result = new ArrayList<>();
 		List<String> dcTitles = dcRecord.getTitles();
 		Long titleOrder = 0L;
 		
 		for (String s: dcTitles) {
-			Title title = new Title();
-			title.setTitleStr(s);
-			title.setSimilarityEnabled(MetadataUtils.similarityEnabled(title));
-			title.setOrderInRecord(++titleOrder);
-			result.add(title);
+			result.add(Title.create(s, ++titleOrder, MetadataUtils.similarityEnabled(s)));
 		}
 		
 		/*returns "" if no title is found - same as MARC implementation*/
 		if (result.isEmpty()) {
-			Title title = new Title();
-			title.setTitleStr("");
-			title.setOrderInRecord(1L);
-			result.add(title);
+			result.add(Title.create("", 1L, false));
 		}
 		
 		return result;
@@ -153,87 +140,57 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 		return this.dcRecord.getFirstIdentifier();
 	}
 
+	/**
+	 * go through all identifiers, look for isbn:.*, validate isbn
+	 *
+	 * @return list of {@link Isbn}
+	 */
 	@Override
 	public List<Isbn> getISBNs() {
-		/*
-		 * go through all identifiers, look for isbn:.*, validate isbn, return isbn
-		 * list
-		 */
-		List<String> identifiers = dcRecord.getIdentifiers();
-		List<Isbn> isbns = new ArrayList<Isbn>();		
-		Pattern p = DC_ISBN_PATTERN;
-		Matcher m;
+		List<Isbn> isbns = new ArrayList<>();
+		Matcher matcher;
 		Long isbnCounter = 0L;
 
-		for (String f : identifiers) {
-
-			m = p.matcher(f);
-			String isbnStr;
-			if(m.find()){
-				isbnStr = m.group(1).trim();
+		for (String identifier : dcRecord.getIdentifiers()) {
+			String rawIsbnStr = "";
+			if ((matcher = DC_ISBN_PATTERN.matcher(identifier)).find()) rawIsbnStr = matcher.group(1);
+			else if (!DC_IDENTIFIER_PATTERN.matcher(identifier).matches()) rawIsbnStr = identifier;
+			Long isbnLong;
+			try {
+				isbnLong = ISBNUtils.toISBN13LongThrowing(rawIsbnStr);
+			} catch (NoDataException nde) {
+				continue;
+			} catch (NumberFormatException nfe) {
+				logger.info(String.format("Invalid ISBN: %s", rawIsbnStr));
+				continue;
 			}
-			else{
-				if(DC_IDENTIFIER_PATTERN.matcher(f).matches()) continue;
-				isbnStr = f.trim();
-			}
-
-			if(ISBN_PATTERN.matcher(isbnStr).find()){
-				try {
-					String isbnValidStr = isbnValidator.validate(isbnStr);
-					Isbn isbn = new Isbn();
-					isbn.setIsbn(Long.valueOf(isbnValidStr));
-
-					isbn.setNote("");
-					isbn.setOrderInRecord(++isbnCounter);
-
-					isbns.add(isbn);
-				} catch (NumberFormatException nfe) {
-					logger.info(String.format("Invalid ISBN: %s", isbnStr));
-					continue;
-				}
-			}
+			isbns.add(Isbn.create(isbnLong, ++isbnCounter, ""));
 		}
 		return isbns;
 	}
 
 	@Override
 	public List<Issn> getISSNs() {
-		List<String> identifiers = dcRecord.getIdentifiers();
-		List<Issn> issns = new ArrayList<Issn>();
+		List<Issn> results = new ArrayList<>();
 		Long issnCounter = 0L;
-		
-		Pattern p = DC_ISSN_PATTERN;
-		Matcher m;
+		Matcher matcher;
 
-		for (String id : identifiers) {
-			
-			m = p.matcher(id);
-			String dcIssn;
-			if(m.find()) dcIssn = m.group(1);
-			else{
-				if(DC_IDENTIFIER_PATTERN.matcher(id).matches()) continue;
-				dcIssn = id;
-			}
-
-			Matcher matcher = ISSN_PATTERN.matcher(dcIssn);
-			
+		for (String identifier : dcRecord.getIdentifiers()) {
+			String rawIssnStr = "";
+			if ((matcher = DC_ISSN_PATTERN.matcher(identifier)).find()) rawIssnStr = matcher.group(1);
+			else if (!DC_IDENTIFIER_PATTERN.matcher(identifier).matches()) rawIssnStr = identifier;
+			String validIssn;
 			try {
-				if(matcher.find()) {
-					Issn issn = new Issn();
-					if(!issn.issnValidator(matcher.group(1).trim())){
-						throw new NumberFormatException();
-					}					
-					issn.setIssn(matcher.group(1).trim());						
-					issn.setNote("");
-					issn.setOrderInRecord(++issnCounter);
-					issns.add(issn);
-				}			
-			} catch (NumberFormatException e) {
-				logger.info(String.format("Invalid ISSN: %s", dcIssn));
+				validIssn = ISSNUtils.getValidIssnThrowing(rawIssnStr);
+			} catch (NoDataException nde) {
+				continue;
+			} catch (NumberFormatException nfe) {
+				logger.info(String.format("Invalid ISSN: %s", rawIssnStr));
 				continue;
 			}
+			results.add(Issn.create(validIssn, ++issnCounter, ""));
 		}
-		return issns;
+		return results;
 	}
 
 	@Override
@@ -499,28 +456,26 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 
 	@Override
 	public List<Ismn> getISMNs() {
-		List<String> identifiers = dcRecord.getIdentifiers();
-		List<Ismn> ismns = new ArrayList<>();
-		Matcher matcher;
+		List<Ismn> results = new ArrayList<>();
 		Long ismnCounter = 0L;
-		
-		for (String f : identifiers) {
-			matcher = DC_ISMN_PATTERN.matcher(f);
-			if (matcher.find()) {
-				Ismn ismn = new Ismn();
-				String ismnStr = matcher.group(1).trim().replaceAll(ISMN_CLEAR_REGEX, "").replaceAll(ISMN10_PREFIX, ISMN13_PREFIX);
-				try {
-					if(ismnStr.length() != 13) throw new NumberFormatException();
-					ismn.setIsmn(Long.valueOf(ismnStr));
-					ismn.setOrderInRecord(++ismnCounter);
-				} catch (NumberFormatException nfe) {
-					logger.info(String.format("Invalid ISMN: %s", matcher.group(1).trim()));
-					continue;
-				}
-				ismns.add(ismn);
+		Matcher matcher;
+
+		for (String identifier : dcRecord.getIdentifiers()) {
+			String rawIsmnStr = "";
+			if ((matcher = DC_ISMN_PATTERN.matcher(identifier)).find()) rawIsmnStr = matcher.group(1);
+			else if (!DC_IDENTIFIER_PATTERN.matcher(identifier).matches()) rawIsmnStr = identifier;
+			Long validIsmnLong;
+			try {
+				validIsmnLong = ISMNUtils.toIsmn13LongThrowing(rawIsmnStr);
+			} catch (NoDataException nde) {
+				continue;
+			} catch (NumberFormatException nfe) {
+				logger.info(String.format("Invalid ISMN: %s", rawIsmnStr));
+				continue;
 			}
+			results.add(Ismn.create(validIsmnLong, ++ismnCounter, ""));
 		}
-		return ismns;
+		return results;
 	}
 
 	@Override
