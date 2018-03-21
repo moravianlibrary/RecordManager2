@@ -857,7 +857,7 @@ public class MarcDSL extends BaseDSL {
 						: "M" + ean.getEan().toString().substring(4));
 			}
 		}
-		record.getFields("024", field -> field.getIndicator1() == '2','a');
+		results.addAll(record.getFields("024", field -> field.getIndicator1() == '2','a'));
 		return results;
 	}
 
