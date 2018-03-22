@@ -1,51 +1,41 @@
 package cz.mzk.recordmanager.server.util;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
 import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
 import org.apache.commons.compress.compressors.gzip.GzipCompressorInputStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ExtractTarGz {
+import java.io.*;
+import java.nio.file.FileAlreadyExistsException;
 
-	private static Logger logger = LoggerFactory.getLogger(ExtractTarGz.class);
-	
+public final class ExtractTarGz {
+
+	private static final Logger logger = LoggerFactory.getLogger(ExtractTarGz.class);
+
 	public static void extractTarGz(File tarFile, File destFile) throws IOException {
 		logger.info("Extracting file: " + tarFile.getName());
-		destFile.mkdir();
-		TarArchiveInputStream tarIn = null;
+		if (destFile.exists()) throw new FileAlreadyExistsException(destFile.getAbsolutePath());
+		if (!destFile.mkdir()) throw new IOException("Can't make directory for " + destFile.getAbsolutePath());
 
-		tarIn = new TarArchiveInputStream(new GzipCompressorInputStream(
+		TarArchiveInputStream tarIn = new TarArchiveInputStream(new GzipCompressorInputStream(
 				new BufferedInputStream(new FileInputStream(tarFile))));
-
 		TarArchiveEntry tarEntry = tarIn.getNextTarEntry();
-		while (tarEntry != null) {// create a file with the same name as the
-									// tarEntry
+
+		while (tarEntry != null) {
+			// create a file with the same name as the tarEntry
 			File destPath = new File(destFile, tarEntry.getName());
 			if (tarEntry.isDirectory()) {
-				destPath.mkdirs();
+				if (!destPath.mkdirs()) logger.info("Can't make directory for " + destPath.getAbsolutePath());
 			} else {
-				destPath.createNewFile();
-				// byte [] btoRead = new byte[(int)tarEntry.getSize()];
+				if (!destPath.createNewFile()) logger.info("Name of file already exists " + destPath.getAbsolutePath());
+				BufferedOutputStream bout = new BufferedOutputStream(new FileOutputStream(destPath));
 				byte[] btoRead = new byte[1024];
-				// FileInputStream fin
-				// = new FileInputStream(destPath.getCanonicalPath());
-				BufferedOutputStream bout = new BufferedOutputStream(
-						new FileOutputStream(destPath));
-				int len = 0;
-
+				int len;
 				while ((len = tarIn.read(btoRead)) != -1) {
 					bout.write(btoRead, 0, len);
 				}
 				bout.close();
-				btoRead = null;
 			}
 			tarEntry = tarIn.getNextTarEntry();
 		}
