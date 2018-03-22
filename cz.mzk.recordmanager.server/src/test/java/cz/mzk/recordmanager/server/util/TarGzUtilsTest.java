@@ -33,10 +33,10 @@ public class TarGzUtilsTest {
 		File file = new File(TXT_FILE_PATH);
 		FileUtils.writeStringToFile(file, EXPECTED_STR, "UTF-8");
 		// compress
-		File tarGzFile = ExtractTarGz.compress(TXT_FILE_PATH, TAR_GZ_FILE_PATH);
+		File tarGzFile = TarGzUtils.compress(TXT_FILE_PATH, TAR_GZ_FILE_PATH);
 		// extract
 		File destTestDir = new File(EXTRACT_DIR);
-		ExtractTarGz.extractTarGz(tarGzFile, destTestDir);
+		TarGzUtils.extract(tarGzFile, destTestDir);
 		// extracted file to string
 		String actualStr = FileUtils.readFileToString(new File(EXTRACT_FILE), StandardCharsets.UTF_8);
 		// actual x expexted

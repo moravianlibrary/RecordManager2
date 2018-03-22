@@ -23,7 +23,7 @@ import cz.mzk.recordmanager.server.facade.exception.JobExecutionFailure;
 import cz.mzk.recordmanager.server.model.DownloadImportConfiguration;
 import cz.mzk.recordmanager.server.springbatch.JobExecutor;
 import cz.mzk.recordmanager.server.util.Constants;
-import cz.mzk.recordmanager.server.util.ExtractTarGz;
+import cz.mzk.recordmanager.server.util.TarGzUtils;
 
 @Component
 public class ImportRecordFacadeImpl implements ImportRecordFacade {
@@ -100,7 +100,7 @@ public class ImportRecordFacadeImpl implements ImportRecordFacade {
 			for (String tarFileName: files) {
 				File tarFile = new File(matcher.group(1), tarFileName);
 				try {
-					ExtractTarGz.extractTarGz(tarFile, destFile);
+					TarGzUtils.extract(tarFile, destFile);
 					logger.info("Importing file: " + tarFileName);
 					
 					switch (dic.getJobName()) {

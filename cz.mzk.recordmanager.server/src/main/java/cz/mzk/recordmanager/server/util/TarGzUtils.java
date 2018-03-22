@@ -12,11 +12,11 @@ import org.slf4j.LoggerFactory;
 import java.io.*;
 import java.nio.file.FileAlreadyExistsException;
 
-public final class ExtractTarGz {
+public final class TarGzUtils {
 
-	private static final Logger logger = LoggerFactory.getLogger(ExtractTarGz.class);
+	private static final Logger logger = LoggerFactory.getLogger(TarGzUtils.class);
 
-	public static void extractTarGz(File tarFile, File destFile) throws IOException {
+	public static void extract(File tarFile, File destFile) throws IOException {
 		logger.info("Extracting file: " + tarFile.getName());
 		if (destFile.exists()) throw new FileAlreadyExistsException(destFile.getAbsolutePath());
 		if (!destFile.mkdir()) throw new IOException("Can't make directory for " + destFile.getAbsolutePath());
