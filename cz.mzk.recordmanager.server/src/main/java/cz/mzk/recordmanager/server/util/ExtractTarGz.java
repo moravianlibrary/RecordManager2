@@ -2,7 +2,10 @@ package cz.mzk.recordmanager.server.util;
 
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
 import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
+import org.apache.commons.compress.archivers.tar.TarArchiveOutputStream;
 import org.apache.commons.compress.compressors.gzip.GzipCompressorInputStream;
+import org.apache.commons.compress.compressors.gzip.GzipCompressorOutputStream;
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,4 +44,52 @@ public final class ExtractTarGz {
 		}
 		tarIn.close();
 	}
+
+	public static File compress(String sourcePath, String targetPath) throws IOException {
+		FileOutputStream fOut = null;
+		BufferedOutputStream bOut = null;
+		GzipCompressorOutputStream gzOut = null;
+		TarArchiveOutputStream tOut = null;
+		File targetFile = new File(targetPath);
+		try {
+			fOut = new FileOutputStream(targetFile);
+			bOut = new BufferedOutputStream(fOut);
+			gzOut = new GzipCompressorOutputStream(bOut);
+			tOut = new TarArchiveOutputStream(gzOut);
+			tOut.setLongFileMode(TarArchiveOutputStream.LONGFILE_POSIX);
+			addFileToTarGz(tOut, sourcePath, "");
+		} finally {
+			if (tOut != null) {
+				tOut.finish();
+				tOut.close();
+			}
+			if (gzOut != null) gzOut.close();
+			if (bOut != null) bOut.close();
+			if (fOut != null) fOut.close();
+		}
+		return targetFile;
+	}
+
+	private static void addFileToTarGz(TarArchiveOutputStream tOut, String path, String base) throws IOException {
+		File file = new File(path);
+		String entryName = base + file.getName();
+		TarArchiveEntry tarEntry = new TarArchiveEntry(file, entryName);
+		tOut.putArchiveEntry(tarEntry);
+
+		if (file.isFile()) {
+			FileInputStream in = new FileInputStream(file);
+			IOUtils.copy(in, tOut);
+			in.close();
+			tOut.closeArchiveEntry();
+		} else {
+			tOut.closeArchiveEntry();
+			File[] children = file.listFiles();
+			if (children != null) {
+				for (File child : children) {
+					addFileToTarGz(tOut, child.getAbsolutePath(), entryName + "/");
+				}
+			}
+		}
+	}
+
 }
