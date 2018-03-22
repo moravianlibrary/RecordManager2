@@ -145,17 +145,10 @@ public class ExportRecordsJobConfig {
 		JdbcPagingItemReader<HarvestedRecordUniqueId> reader = new JdbcPagingItemReader<HarvestedRecordUniqueId>();
 		SqlPagingQueryProviderFactoryBean pqpf = new SqlPagingQueryProviderFactoryBean();
 		pqpf.setDataSource(dataSource);
-		pqpf.setSelectClause("SELECT import_conf_id, record_id");
+		pqpf.setSelectClause("SELECT id, import_conf_id, record_id");
 		pqpf.setFromClause("FROM harvested_record");
-		pqpf.setWhereClause("WHERE import_conf_id = :conf_id AND  dedup_record_id IN ( " +
-				"  SELECT dedup_record_id " +
-				"  FROM harvested_record " +
-				"  WHERE EXISTS( " +
-				"      SELECT 1 " +
-				"      FROM fulltext_kramerius " +
-				"      WHERE harvested_record.id = fulltext_kramerius.harvested_record_id " +
-				"  ))");
-		pqpf.setSortKey("record_id");
+		pqpf.setWhereClause("WHERE import_conf_id = :conf_id and deleted is null");
+		pqpf.setSortKey("id");
 		Map<String, Object> parameterValues = new HashMap<String, Object>();
 		parameterValues.put("conf_id", configId);
 		reader.setParameterValues(parameterValues);

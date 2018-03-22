@@ -9,9 +9,11 @@ import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecordFormat;
 import cz.mzk.recordmanager.server.oai.dao.FulltextKrameriusDAO;
 import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordDAO;
-import org.springframework.batch.core.ExitStatus;
-import org.springframework.batch.core.StepExecution;
-import org.springframework.batch.core.StepExecutionListener;
+import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
+import org.apache.commons.compress.archivers.tar.TarArchiveOutputStream;
+import org.apache.commons.compress.compressors.gzip.GzipCompressorOutputStream;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -20,14 +22,12 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
 
 /**
  * Created by sergeyp on 7/13/17.
  */
-public class ExportRecordsForClassifierProcessor implements ItemProcessor<HarvestedRecord.HarvestedRecordUniqueId, String>, StepExecutionListener {
+public class ExportRecordsForClassifierProcessor implements ItemProcessor<HarvestedRecord.HarvestedRecordUniqueId, String> {
 
 	private IOFormat iOFormat;
 
@@ -49,85 +49,91 @@ public class ExportRecordsForClassifierProcessor implements ItemProcessor<Harves
 		this.iOFormat = format;
 	}
 
-	Writer writer = null;
-	Writer writerid = null;
-	Writer writermarc = null;
-	Writer writeraleph = null;
-	Writer writerxml = null;
-
 	@Override
 	public String process(HarvestedRecord.HarvestedRecordUniqueId recordId) throws Exception {
+		System.out.println("jelen");
 		HarvestedRecord record = harvestedRecordDao.get(recordId);
-		if (record != null && record.getRawRecord().length != 0) {
-			MetadataRecord meta = metadataFactory.getMetadataRecord(record);
-			if (!meta.getLanguages().contains("cze") || !meta.getDetectedFormatList().contains(HarvestedRecordFormat.HarvestedRecordFormatEnum.BOOKS))
-				return null;
-			InputStream is = new ByteArrayInputStream(record.getRawRecord());
-			MarcRecord marcRecord = marcXmlParser.parseRecord(is);
-			if (marcRecord.getDataFields(OAI_FIELD).isEmpty()) {
-				marcRecord.addDataField(OAI_FIELD, ' ', ' ', "a", record.getUniqueId().getRecordId());
-			}
-			if (marcRecord.getDataFields("080").isEmpty() || !marcRecord.getDataFields("072").isEmpty()) return null;
-			else {
-				HarvestedRecord kramRec = null;
-				for (HarvestedRecord harvestedRecord : harvestedRecordDao.getByDedupRecord(record.getDedupRecord())) {
-					if (harvestedRecord.getUniqueId().getHarvestedFromId() == 99001) kramRec = harvestedRecord;
-				}
+//		if (record != null && record.getRawRecord().length != 0) {
+//			MetadataRecord meta = metadataFactory.getMetadataRecord(record);
+//			if (!meta.getLanguages().contains("cze") || !meta.getDetectedFormatList().contains(HarvestedRecordFormat.HarvestedRecordFormatEnum.BOOKS))
+//				return null;
+//			InputStream is = new ByteArrayInputStream(record.getRawRecord());
+//			MarcRecord marcRecord = marcXmlParser.parseRecord(is);
+//			if (marcRecord.getDataFields(OAI_FIELD).isEmpty()) {
+//				marcRecord.addDataField(OAI_FIELD, ' ', ' ', "a", record.getUniqueId().getRecordId());
+//			}
+//			if (marcRecord.getDataFields("080").isEmpty() || !marcRecord.getDataFields("072").isEmpty()) return null;
+//			else {
+				HarvestedRecord kramRec = harvestedRecordDao.get(recordId);
+//				for (HarvestedRecord harvestedRecord : harvestedRecordDao.getByDedupRecord(record.getDedupRecord())) {
+//					if (harvestedRecord.getUniqueId().getHarvestedFromId() == 99001) kramRec = harvestedRecord;
+//				}
 				if (kramRec == null) return null;
 				try {
-					new File("/home/tomas/fulltext/"+kramRec.getUniqueId().getRecordId()).mkdir();
+					String fulltextPath = "/home/tomas/fit/fulltext/";
+					String tar = "/media/tomas/4edb0925-bd26-491f-b4f0-dc583fd566cb/home/tomas/fulltext/";
+					new File(fulltextPath + kramRec.getUniqueId().getRecordId()).mkdir();
 					for (FulltextKramerius fk : kramDao.findAll(kramRec.getId())) {
-						Path file = Paths.get("/home/tomas/fulltext/"+kramRec.getUniqueId().getRecordId()+"/"+fk.getUuidPage()+".txt");
-						Files.write(file, Collections.singletonList(new String(fk.getFulltext(), "UTF-8")), Charset.forName("UTF-8"));
+						Path file = Paths.get(fulltextPath + kramRec.getUniqueId().getRecordId() + "/" + fk.getUuidPage() + ".txt");
+						try {
+							Files.write(file, Collections.singletonList(new String(fk.getFulltext(), "UTF-8")), Charset.forName("UTF-8"));
+						} catch (Exception e) {
+							System.out.println(e.getMessage());
+							continue;
+						}
 					}
-					writerid.write(record.getUniqueId().getRecordId());
-					writerid.write("\n");
-					writermarc.write(marcRecord.export(IOFormat.LINE_MARC));
-					writermarc.write("\n");
-					writeraleph.write(marcRecord.export(IOFormat.ALEPH_MARC));
-					writeraleph.write("\n");
-					writerxml.write(marcRecord.export(IOFormat.XML_MARC));
+					FileOutputStream fOut = null;
+					BufferedOutputStream bOut = null;
+					GzipCompressorOutputStream gzOut = null;
+					TarArchiveOutputStream tOut = null;
+
+					try {
+						String dirPath = fulltextPath + kramRec.getUniqueId().getRecordId() + "/";
+						String tarGzPath = tar + kramRec.getUniqueId().getRecordId() + ".tar.gz";
+						fOut = new FileOutputStream(new File(tarGzPath));
+						bOut = new BufferedOutputStream(fOut);
+						gzOut = new GzipCompressorOutputStream(bOut);
+						tOut = new TarArchiveOutputStream(gzOut);
+						tOut.setLongFileMode(TarArchiveOutputStream.LONGFILE_POSIX);
+						addFileToTarGz(tOut, dirPath, "");
+					} finally {
+						tOut.finish();
+						tOut.close();
+						gzOut.close();
+						bOut.close();
+						fOut.close();
+					}
+					FileUtils.deleteDirectory(new File(fulltextPath + kramRec.getUniqueId().getRecordId()));
 				} catch (IOException ex) {
 					// report
 				}
-				return marcRecord.export(iOFormat);
+				return "";
+//			}
+//		}
+//		return null;
+	}
+
+	private void addFileToTarGz(TarArchiveOutputStream tOut, String path, String base)
+			throws IOException {
+		File f = new File(path);
+		String entryName = base + f.getName();
+		TarArchiveEntry tarEntry = new TarArchiveEntry(f, entryName);
+		tOut.putArchiveEntry(tarEntry);
+
+		if (f.isFile()) {
+			FileInputStream in = new FileInputStream(f);
+			IOUtils.copy(in, tOut);
+			in.close();
+			tOut.closeArchiveEntry();
+		} else {
+			tOut.closeArchiveEntry();
+			File[] children = f.listFiles();
+			if (children != null) {
+				for (File child : children) {
+					addFileToTarGz(tOut, child.getAbsolutePath(), entryName + "/");
+				}
 			}
 		}
-		return null;
-	}
-
-	@Override
-	public void beforeStep(StepExecution stepExecution) {
-		try {
-			writer = new BufferedWriter(new OutputStreamWriter(
-					new FileOutputStream("/home/tomas/fulltext.txt"), "utf-8"));
-			writerid = new BufferedWriter(new OutputStreamWriter(
-					new FileOutputStream("/home/tomas/classid.txt"), "utf-8"));
-			writermarc = new BufferedWriter(new OutputStreamWriter(
-					new FileOutputStream("/home/tomas/metadata.mrc"), "utf-8"));
-			writeraleph = new BufferedWriter(new OutputStreamWriter(
-					new FileOutputStream("/home/tomas/metadata.aleph"), "utf-8"));
-			writerxml = new BufferedWriter(new OutputStreamWriter(
-					new FileOutputStream("/home/tomas/metadata.xml"), "utf-8"));
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
-	}
-
-	@Override
-	public ExitStatus afterStep(StepExecution stepExecution) {
-		try {
-			writer.close();
-			writerid.close();
-			writerxml.close();
-			writeraleph.close();
-			writermarc.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return null;
 	}
 
 //	@Override
