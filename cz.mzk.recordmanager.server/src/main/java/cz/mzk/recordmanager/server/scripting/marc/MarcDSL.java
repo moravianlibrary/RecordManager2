@@ -8,6 +8,7 @@ import java.util.regex.Pattern;
 
 import cz.mzk.recordmanager.server.model.Ean;
 import cz.mzk.recordmanager.server.model.HarvestedRecordFormat.HarvestedRecordFormatEnum;
+import cz.mzk.recordmanager.server.util.CleaningUtils;
 import org.apache.commons.validator.routines.ISBNValidator;
 import org.marc4j.marc.DataField;
 import org.marc4j.marc.Subfield;
@@ -46,6 +47,7 @@ public class MarcDSL extends BaseDSL {
 	private final static String MAP_CONSPECTUS_CATEGORY = "conspectus_category.map";
 	private final static String MAP_CONSPECTUS_SUBCAT_CAT_CHANGE = "conspectus_category_change.map";
 	private final static String MAP_FORMAT_SEARCH = "format_search.map";
+	private static final String MAP_PSH = "psh.map";
 	
 	private final static Pattern FIELD_PATTERN = Pattern
 			.compile("([0-9]{3})([a-zA-Z0-9]*)");
@@ -325,36 +327,37 @@ public class MarcDSL extends BaseDSL {
     public String getFirstFieldTrim(String tags){
     	return removeEndPunctuation(getFirstField(tags));
     }
-    
-    public Set<String> getSubject(String tags) throws IOException{
-    	Set<String> subjects = new HashSet<String>();
 
-    	for(String subject: getFields(tags)){
-    		subjects.add(toUpperCaseFirstChar(subject));
-    	}
+	private static final Pattern PATTERN_653A = Pattern.compile("forma:.*|nosič:.*|způsob vydávání:.*|úroveň zpracování:.*");
 
-    	for(DataField df: record.getDataFields("653")){
-    		for(Subfield sf: df.getSubfields('a')){ 
-    			if(!sf.getData().matches("forma:.*|nosič:.*|způsob vydávání:.*|úroveň zpracování:.*"))
-    				subjects.add(toUpperCaseFirstChar(sf.getData()));
-    		}
-    	}
-    	
-    	for(DataField df: record.getDataFields("650")){
-    		if(df.getSubfield('2') != null && df.getSubfield('2').getData().contains("psh")){
-    			if(df.getSubfield('x') != null){ 
-    				subjects.addAll(toUpperCaseFirstChar(translate("psh.map", df.getSubfield('x').getData(), null)));
-    			}
-    		}
-    	}
-    	
-    	if (metadataRecord.filterSubjectFacet() != null) {
-    		return new HashSet<String>(filter(metadataRecord.filterSubjectFacet(), new ArrayList<String>(subjects)));
-    	}
-    	
-    	return subjects;
-    }
-    
+	public Set<String> getSubject(String tags) throws IOException {
+		Set<String> subjects = new HashSet<>();
+
+		for (String subject : getFields(tags)) {
+			subjects.add(toUpperCaseFirstChar(subject));
+		}
+
+		for (DataField df : record.getDataFields("653")) {
+			for (Subfield sf : df.getSubfields('a')) {
+				if (!PATTERN_653A.matcher(sf.getData()).matches()) subjects.add(toUpperCaseFirstChar(sf.getData()));
+			}
+		}
+
+		for (DataField df : record.getDataFields("650")) {
+			if (df.getSubfield('2') != null && df.getSubfield('2').getData().contains("psh")) {
+				if (df.getSubfield('x') != null) {
+					subjects.addAll(toUpperCaseFirstChar(translate(MAP_PSH, df.getSubfield('x').getData(), null)));
+				}
+			}
+		}
+
+		if (metadataRecord.filterSubjectFacet() != null) {
+			subjects = new HashSet<>(filter(metadataRecord.filterSubjectFacet(), new ArrayList<>(subjects)));
+		}
+
+		return SolrUtils.removeEndParentheses(subjects);
+	}
+
     protected String toUpperCaseFirstChar(String string){
     	if(string == null || string.isEmpty()) return null;
     	return string.substring(0,1).toUpperCase() + string.substring(1);
@@ -727,16 +730,19 @@ public class MarcDSL extends BaseDSL {
 
 		return result;
 	}
-    
-    public Set<String> getAuthorAutocomplete(String tags){
-    	Set<String> result = new HashSet<>();
-    	for(String s: getFields(tags)){
-    		result.add(s.replaceAll(",", ""));
-    	}
-    	return result;
-    }
-    
-    public String get773link(){
+
+	private static final Pattern COMMA_PATTERN = Pattern.compile(",");
+
+	public Set<String> getAuthorAutocomplete(String tags) {
+		Set<String> result = new HashSet<>();
+		for (String author : getFields(tags)) {
+			author = CleaningUtils.replaceAll(author, COMMA_PATTERN, "");
+			result.add(SolrUtils.removeEndParentheses(author));
+		}
+		return result;
+	}
+
+	public String get773link(){
     	for(DataField df: record.getDataFields("773")){
     		for(char code: new char[]{'x', 'z', 't'}){
     			Subfield sf = df.getSubfield(code);
