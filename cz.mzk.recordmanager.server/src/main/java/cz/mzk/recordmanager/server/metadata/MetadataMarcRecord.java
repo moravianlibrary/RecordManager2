@@ -1257,7 +1257,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 	}
 
 	protected boolean isIrelView() {
-		return !isBraill() && !isMusicalScores() && !isVisualDocument();
+		return !isBlindBraille() && !isMusicalScores() && !isVisualDocument();
 	}
 
 }
