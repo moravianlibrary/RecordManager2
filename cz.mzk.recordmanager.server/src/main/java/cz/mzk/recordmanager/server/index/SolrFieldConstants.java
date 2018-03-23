@@ -106,6 +106,8 @@ public class SolrFieldConstants {
 	
 	public static final String ITEM_ID_TXT_MV = "item_id_txt_mv";
 
+	public static final String VIEW_TYPE_TXT_MV = "view_txt_mv";
+
 	/**
 	 * dummy fields used for processing purposes only, shouldn't be indexed. Fields are deleted in AuthorityEnricher. 
 	 */
