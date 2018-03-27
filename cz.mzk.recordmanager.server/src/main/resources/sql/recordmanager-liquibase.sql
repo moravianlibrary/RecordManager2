@@ -1286,3 +1286,6 @@ UPDATE import_conf SET interception_enabled=true WHERE id=360;
 
 --changeset tomascejpek:93 context:cpk
 UPDATE import_conf SET mapping_script='AdresarKnihovenLocal.groovy' WHERE id=351;
+
+--changeset tomascejpek:94 context:cpk
+UPDATE import_conf SET interception_enabled=TRUE WHERE id=342;

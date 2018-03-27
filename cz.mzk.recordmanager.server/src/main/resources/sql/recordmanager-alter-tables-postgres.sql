@@ -1021,3 +1021,6 @@ UPDATE import_conf SET interception_enabled=true WHERE id=360;
 
 -- 13. 03. 2018 tomascejpek
 UPDATE import_conf SET mapping_script='AdresarKnihovenLocal.groovy' WHERE id=351;
+
+-- 27. 03. 2018 tomascejpek
+UPDATE import_conf SET interception_enabled=true WHERE id=342;
