@@ -218,7 +218,7 @@ public class SolrUtils {
 	}
 
 	public static String removeEndParentheses(String value) {
-		if (value.endsWith(END_PARENTHESIS_STR) &&
+		if (value != null && value.endsWith(END_PARENTHESIS_STR) &&
 				(StringUtils.countMatches(value, START_PARENTHESIS_STR) < StringUtils.countMatches(value, END_PARENTHESIS_STR))) {
 			return CleaningUtils.replaceFirst(value, END_PARENTHESIS_PATTERN, "");
 		}
