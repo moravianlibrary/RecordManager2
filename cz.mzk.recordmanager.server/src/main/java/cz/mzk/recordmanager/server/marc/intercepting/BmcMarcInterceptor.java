@@ -15,9 +15,6 @@ import java.util.TreeSet;
 
 public class BmcMarcInterceptor extends DefaultMarcInterceptor {
 
-	private static final String LINK_STR = "https://www.medvik.cz/bmc/link.do?id=%s";
-	private static final String LINK_SF_Y = "záznam v BMČ";
-
 	public BmcMarcInterceptor(Record record) {
 		super(record);
 	}
@@ -42,13 +39,6 @@ public class BmcMarcInterceptor extends DefaultMarcInterceptor {
 				// remove field 990, 991
 				if (!df.getTag().equals("990") && !df.getTag().equals("991")) newRecord.addVariableField(df);
 			}
-		}
-		// add 856 as link + 001
-		if (newRecord.getControlNumber() != null) {
-			DataField linkDf = MARC_FACTORY.newDataField("856", '4', '0',
-					"u", String.format(LINK_STR, newRecord.getControlNumber()),
-					"y", LINK_SF_Y);
-			newRecord.addVariableField(linkDf);
 		}
 		return new MarcRecordImpl(newRecord).export(IOFormat.XML_MARC).getBytes(StandardCharsets.UTF_8);
 	}
