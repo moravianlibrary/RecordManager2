@@ -262,4 +262,19 @@ public class DublinCoreRecordImplTest extends AbstractTest {
 		Assert.assertEquals(metadataFactory.getMetadataRecord(dcr).getUUId(), "1");
 	}
 
+	/**
+	 * return first creator
+	 */
+	@Test
+	public void getAuthorStringTest() {
+		DublinCoreRecord dcr = new DublinCoreRecordImpl();
+
+		String creator1str = "creator 1";
+		String creator2str = "creator 2";
+		dcr.addCreator(creator1str);
+		dcr.addCreator(creator2str);
+
+		Assert.assertEquals(metadataFactory.getMetadataRecord(dcr).getAuthorString(), creator1str);
+	}
+
 }
