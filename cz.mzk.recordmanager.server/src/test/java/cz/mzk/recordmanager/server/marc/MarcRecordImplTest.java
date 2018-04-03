@@ -1,20 +1,19 @@
 package cz.mzk.recordmanager.server.marc;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
+import cz.mzk.recordmanager.server.AbstractTest;
+import cz.mzk.recordmanager.server.metadata.CitationRecordType;
+import cz.mzk.recordmanager.server.metadata.MetadataRecord;
+import cz.mzk.recordmanager.server.metadata.MetadataRecordFactory;
 import cz.mzk.recordmanager.server.model.*;
+import cz.mzk.recordmanager.server.model.HarvestedRecordFormat.HarvestedRecordFormatEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import cz.mzk.recordmanager.server.AbstractTest;
-import cz.mzk.recordmanager.server.metadata.CitationRecordType;
-import cz.mzk.recordmanager.server.metadata.MetadataRecord;
-import cz.mzk.recordmanager.server.metadata.MetadataRecordFactory;
-import cz.mzk.recordmanager.server.model.HarvestedRecordFormat.HarvestedRecordFormatEnum;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class MarcRecordImplTest extends AbstractTest {
 
@@ -976,6 +975,22 @@ public class MarcRecordImplTest extends AbstractTest {
 		for (int i = 0; i < expected.size(); i++) {
 			Assert.assertEquals(results.get(i), expected.get(i), String.format("Publisher Number on position %d differs.", i + 1));
 		}
+	}
+
+	@Test
+	public void getUniqueIdTest() throws Exception {
+		MarcRecordImpl mri;
+		List<String> metadataList = new ArrayList<>();
+
+		String id001 = "ID001";
+		metadataList.add(String.format("001 %s", id001));
+		mri = MarcRecordFactory.recordFactory(metadataList);
+		Assert.assertEquals(metadataFactory.getMetadataRecord(mri).getUniqueId(), id001);
+
+		String idOAI = "IDOAI";
+		metadataList.add(String.format("OAI   $a%s", idOAI));
+		mri = MarcRecordFactory.recordFactory(metadataList);
+		Assert.assertEquals(metadataFactory.getMetadataRecord(mri).getUniqueId(), idOAI);
 	}
 
 }

@@ -68,7 +68,7 @@ public class MarcRecordFactory {
     		// ControlField
     		else if(Pattern.matches("00[1-9]", key)) record.addVariableField(marcFactory.newControlField(key, value));
     		// DataField
-    		else if(Pattern.matches("\\d{3}", key)) {
+    		else if(Pattern.matches("\\w{3}", key)) {
     			if(value.isEmpty()) record.addVariableField(marcFactory.newDataField(key, ' ', ' '));
     			else if(value.length() >= 2){
     				// Indicators

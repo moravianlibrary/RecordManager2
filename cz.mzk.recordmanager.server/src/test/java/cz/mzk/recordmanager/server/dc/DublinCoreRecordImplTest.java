@@ -232,4 +232,20 @@ public class DublinCoreRecordImplTest extends AbstractTest {
 	public void getPublisherNumberTest() {
 		Assert.assertTrue(metadataFactory.getMetadataRecord(new DublinCoreRecordImpl()).getPublisherNumber().isEmpty());
 	}
+
+	/**
+	 * return first identifier
+	 */
+	@Test
+	public void getUniqueIdTest() {
+		DublinCoreRecord dcr = new DublinCoreRecordImpl();
+
+		String ID1str = "ID1";
+		String ID2str = "ID2";
+		dcr.addIdentifier(ID1str);
+		dcr.addIdentifier(ID2str);
+
+		Assert.assertEquals(metadataFactory.getMetadataRecord(dcr).getUniqueId(), ID1str);
+	}
+
 }
