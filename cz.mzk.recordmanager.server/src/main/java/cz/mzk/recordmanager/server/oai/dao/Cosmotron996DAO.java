@@ -1,7 +1,6 @@
 package cz.mzk.recordmanager.server.oai.dao;
 
 import cz.mzk.recordmanager.server.model.Cosmotron996;
-import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecord.HarvestedRecordUniqueId;
 import cz.mzk.recordmanager.server.model.ImportConfiguration;
 

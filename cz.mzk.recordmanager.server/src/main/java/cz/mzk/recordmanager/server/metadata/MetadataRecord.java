@@ -1,7 +1,6 @@
 package cz.mzk.recordmanager.server.metadata;
 
 import java.util.Collections;
-import java.util.List;
 
 import cz.mzk.recordmanager.server.export.IOFormat;
 import cz.mzk.recordmanager.server.model.*;

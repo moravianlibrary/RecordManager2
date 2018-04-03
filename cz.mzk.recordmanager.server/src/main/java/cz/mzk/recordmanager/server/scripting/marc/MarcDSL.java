@@ -3,12 +3,10 @@ package cz.mzk.recordmanager.server.scripting.marc;
 import java.io.IOException;
 import java.util.*;
 import java.util.Map.Entry;
-import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import cz.mzk.recordmanager.server.metadata.ViewType;
 import cz.mzk.recordmanager.server.model.Ean;
 import cz.mzk.recordmanager.server.model.HarvestedRecordFormat.HarvestedRecordFormatEnum;
 import cz.mzk.recordmanager.server.util.identifier.ISBNUtils;
