@@ -1038,4 +1038,34 @@ public class MarcRecordImplTest extends AbstractTest {
 		Assert.assertEquals(metadataFactory.getMetadataRecord(mri).getBarcodes(), Arrays.asList(barcode1Str, barcode2Str));
 	}
 
+	@Test
+	public void getMetaproxyBoolTest() throws Exception {
+		MarcRecordImpl mri;
+		List<String> metadataList = new ArrayList<>();
+
+		// no field 008 => false
+		mri = MarcRecordFactory.recordFactory(metadataList);
+		Assert.assertFalse(metadataFactory.getMetadataRecord(mri).getMetaproxyBool());
+		metadataList.add("008 960925s1891    gw ||||| |||||||||||eng|d");
+
+		// must contains fields 245, 260, 264 and 300
+		metadataList.add("245 $aa");
+		metadataList.add("260 $aa");
+		metadataList.add("264 $aa");
+		mri = MarcRecordFactory.recordFactory(metadataList);
+		Assert.assertFalse(metadataFactory.getMetadataRecord(mri).getMetaproxyBool());
+		metadataList.add("300 $aa");
+
+		// if no field 245 with ind1 = 0, must be any 1xx or 7xx
+		String field100 = "100 $aKarel";
+		metadataList.add(field100);
+		mri = MarcRecordFactory.recordFactory(metadataList);
+		Assert.assertTrue(metadataFactory.getMetadataRecord(mri).getMetaproxyBool());
+
+		metadataList.remove(field100);
+		metadataList.add("245 0 $a");
+		mri = MarcRecordFactory.recordFactory(metadataList);
+		Assert.assertTrue(metadataFactory.getMetadataRecord(mri).getMetaproxyBool());
+	}
+
 }
