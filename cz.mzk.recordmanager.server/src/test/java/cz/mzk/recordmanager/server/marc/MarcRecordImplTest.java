@@ -1013,4 +1013,15 @@ public class MarcRecordImplTest extends AbstractTest {
 		Assert.assertFalse(metadataFactory.getMetadataRecord(mri).matchFilter());
 	}
 
+	@Test
+	public void getRaw001IdTest() throws Exception {
+		MarcRecordImpl mri;
+		List<String> metadataList = new ArrayList<>();
+
+		String id001 = "ID1";
+		metadataList.add(String.format("001 %s", id001));
+		mri = MarcRecordFactory.recordFactory(metadataList);
+		Assert.assertEquals(metadataFactory.getMetadataRecord(mri).getRaw001Id(), id001);
+	}
+
 }
