@@ -1068,4 +1068,17 @@ public class MarcRecordImplTest extends AbstractTest {
 		Assert.assertTrue(metadataFactory.getMetadataRecord(mri).getMetaproxyBool());
 	}
 
+	@Test
+	public void getSourceInfoTest() throws Exception {
+		MarcRecordImpl mri;
+		List<String> metadataList = new ArrayList<>();
+		MetadataRecord metadataRecord;
+
+		metadataList.add("773 $gg$tt$xx");
+		mri = MarcRecordFactory.recordFactory(metadataList);
+		metadataRecord = metadataFactory.getMetadataRecord(mri);
+		Assert.assertEquals(metadataRecord.getSourceInfoG(), "g");
+		Assert.assertEquals(metadataRecord.getSourceInfoT(), "t");
+		Assert.assertEquals(metadataRecord.getSourceInfoX(), "x");
+	}
 }
