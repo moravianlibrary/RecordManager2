@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class DublinCoreRecordImplTest extends AbstractTest {
@@ -275,6 +276,20 @@ public class DublinCoreRecordImplTest extends AbstractTest {
 		dcr.addCreator(creator2str);
 
 		Assert.assertEquals(metadataFactory.getMetadataRecord(dcr).getAuthorString(), creator1str);
+	}
+
+	@Test
+	public void getLanguagesTest() {
+		DublinCoreRecord dcr = new DublinCoreRecordImpl();
+
+		String czeLang = "cze";
+		String engLang = "eng";
+		String badLang = "bad";
+		dcr.addLanguage(czeLang);
+		dcr.addLanguage(engLang);
+		dcr.addLanguage(badLang);
+
+		Assert.assertEquals(metadataFactory.getMetadataRecord(dcr).getLanguages(), Arrays.asList(czeLang, engLang));
 	}
 
 }
