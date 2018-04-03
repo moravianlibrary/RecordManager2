@@ -248,4 +248,18 @@ public class DublinCoreRecordImplTest extends AbstractTest {
 		Assert.assertEquals(metadataFactory.getMetadataRecord(dcr).getUniqueId(), ID1str);
 	}
 
+	@Test
+	public void getUUIDTest() {
+		DublinCoreRecord dcr = new DublinCoreRecordImpl();
+
+		// empty
+		Assert.assertNull(metadataFactory.getMetadataRecord(dcr).getUUId());
+
+		// uuid
+		dcr.addIdentifier("uuid:1");
+		dcr.addIdentifier("3"); // not valid uuid
+
+		Assert.assertEquals(metadataFactory.getMetadataRecord(dcr).getUUId(), "1");
+	}
+
 }
