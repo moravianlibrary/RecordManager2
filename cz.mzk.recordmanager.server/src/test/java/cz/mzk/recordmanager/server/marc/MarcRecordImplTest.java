@@ -993,4 +993,24 @@ public class MarcRecordImplTest extends AbstractTest {
 		Assert.assertEquals(metadataFactory.getMetadataRecord(mri).getUniqueId(), idOAI);
 	}
 
+	@Test
+	public void matchFilterTest() throws Exception {
+		MarcRecordImpl mri;
+		List<String> metadataList = new ArrayList<>();
+
+		// no field 245 => false
+		mri = MarcRecordFactory.recordFactory(metadataList);
+		Assert.assertFalse(metadataFactory.getMetadataRecord(mri).matchFilter());
+
+		// 245 => true
+		metadataList.add("245 $atitle");
+		mri = MarcRecordFactory.recordFactory(metadataList);
+		Assert.assertTrue(metadataFactory.getMetadataRecord(mri).matchFilter());
+
+		// 914 $acpk0 => false
+		metadataList.add("914 $acpk0");
+		mri = MarcRecordFactory.recordFactory(metadataList);
+		Assert.assertFalse(metadataFactory.getMetadataRecord(mri).matchFilter());
+	}
+
 }
