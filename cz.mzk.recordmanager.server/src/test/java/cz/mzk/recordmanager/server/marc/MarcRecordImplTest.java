@@ -12,6 +12,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -1022,6 +1023,19 @@ public class MarcRecordImplTest extends AbstractTest {
 		metadataList.add(String.format("001 %s", id001));
 		mri = MarcRecordFactory.recordFactory(metadataList);
 		Assert.assertEquals(metadataFactory.getMetadataRecord(mri).getRaw001Id(), id001);
+	}
+
+	@Test
+	public void getBarcodesTest() throws Exception {
+		MarcRecordImpl mri;
+		List<String> metadataList = new ArrayList<>();
+
+		String barcode1Str = "barcode1";
+		String barcode2Str = "barcode2";
+		metadataList.add(String.format("996 $b%s", barcode1Str));
+		metadataList.add(String.format("996 $b%s", barcode2Str));
+		mri = MarcRecordFactory.recordFactory(metadataList);
+		Assert.assertEquals(metadataFactory.getMetadataRecord(mri).getBarcodes(), Arrays.asList(barcode1Str, barcode2Str));
 	}
 
 }
