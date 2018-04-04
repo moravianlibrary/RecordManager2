@@ -51,7 +51,6 @@ public class MarcRecordFactory {
 	public static MarcRecordImpl recordFactory(List<String> data) throws Exception {
 		MarcFactory marcFactory = MarcFactoryImpl.newInstance();
 		Record record = marcFactory.newRecord();
-		record.addVariableField(marcFactory.newControlField("001", "0"));
 
 		for (String field : data) {
 			String key;

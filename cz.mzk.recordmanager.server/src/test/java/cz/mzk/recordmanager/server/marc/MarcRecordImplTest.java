@@ -983,6 +983,11 @@ public class MarcRecordImplTest extends AbstractTest {
 		MarcRecordImpl mri;
 		List<String> metadataList = new ArrayList<>();
 
+		String id995 = "ID995";
+		metadataList.add(String.format("995 $a%s", id995));
+		mri = MarcRecordFactory.recordFactory(metadataList);
+		Assert.assertEquals(metadataFactory.getMetadataRecord(mri).getUniqueId(), id995);
+
 		String id001 = "ID001";
 		metadataList.add(String.format("001 %s", id001));
 		mri = MarcRecordFactory.recordFactory(metadataList);
