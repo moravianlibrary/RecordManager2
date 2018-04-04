@@ -150,8 +150,7 @@ public class MarcDSL extends BaseDSL {
 		if (f008 != null && f008.length() > 18) {
 			countries.add(f008.substring(15, 18).trim());
 		}
-		countries.addAll(getFields("044a", SubfieldExtractionMethod.SEPARATED));
-		countries.forEach(c -> c.trim());
+		countries.addAll(getFields("044a", SubfieldExtractionMethod.SEPARATED).stream().map(String::trim).collect(Collectors.toSet()));
 		return countries;
 	}
 
