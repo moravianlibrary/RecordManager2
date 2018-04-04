@@ -1,8 +1,7 @@
 package cz.mzk.recordmanager.server.util;
 
+import cz.mzk.recordmanager.server.AbstractTest;
 import org.apache.commons.io.FileUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -12,21 +11,20 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
-public class TarGzUtilsTest {
+public class TarGzUtilsTest extends AbstractTest {
 
 	private static final String EXPECTED_STR = "Hello World!!!";
 	private static final String TXT_FILE_PATH = "target/test/test.txt";
 	private static final String TAR_GZ_FILE_PATH = "target/test/test.tar.gz";
 	private static final String EXTRACT_DIR = "target/test/extract/";
 	private static final String EXTRACT_FILE = "target/test/extract/test.txt";
-	private static Logger logger = LoggerFactory.getLogger(TarGzUtilsTest.class);
 
 	@AfterClass
 	@BeforeClass
 	public void cleanUp() {
 		for (String filename : new String[]{TXT_FILE_PATH, TAR_GZ_FILE_PATH, EXTRACT_FILE, EXTRACT_DIR}) {
 			File file = new File(filename);
-			if (file.delete()) logger.debug(String.format("file %s doesn't exist", filename));
+			if (!file.delete()) logger.debug(String.format("file %s doesn't exist", filename));
 		}
 	}
 

@@ -44,7 +44,7 @@ public class ExportRecordsJobTest extends AbstractTest {
 	public void cleanUp() {
 		for (String filename : new String[]{TEST_FILE_1, TEST_FILE_2, TEST_FILE_3, TEST_FILE_4, TEST_FILE_5}) {
 			File file = new File(filename);
-			file.delete();
+			if (!file.delete()) logger.debug(String.format("file %s doesn't exist", filename));
 		}
 	}
 
