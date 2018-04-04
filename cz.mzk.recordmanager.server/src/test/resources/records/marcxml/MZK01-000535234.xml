@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<collection xmlns="http://www.loc.gov/MARC21/slim">
+    <record>
+        <leader>00000cas a2200000 i 4500</leader>
+        <controlfield tag="001">cps20000927116</controlfield>
+        <controlfield tag="003">CZ PrNK</controlfield>
+        <controlfield tag="005">20171120140732.0</controlfield>
+        <controlfield tag="007">ta</controlfield>
+        <controlfield tag="008">000314c19989999xr mr p 0 b0cze</controlfield>
+        <datafield tag="015" ind1=" " ind2=" ">
+            <subfield code="a">cnb000927116</subfield>
+        </datafield>
+        <datafield tag="022" ind1=" " ind2=" ">
+            <subfield code="a">1212-1029</subfield>
+        </datafield>
+        <datafield tag="040" ind1=" " ind2=" ">
+            <subfield code="a">ABA001</subfield>
+            <subfield code="b">cze</subfield>
+            <subfield code="d">BOA001</subfield>
+            <subfield code="e">rda</subfield>
+        </datafield>
+        <datafield tag="072" ind1=" " ind2="7">
+            <subfield code="a">681</subfield>
+            <subfield code="x">Přesná mechanika a přístroje</subfield>
+            <subfield code="2">Konspekt</subfield>
+            <subfield code="9">19</subfield>
+        </datafield>
+        <datafield tag="080" ind1=" " ind2=" ">
+            <subfield code="a">681.84.081</subfield>
+            <subfield code="2">MRF</subfield>
+        </datafield>
+        <datafield tag="080" ind1=" " ind2=" ">
+            <subfield code="a">780.61/.66</subfield>
+            <subfield code="2">MRF</subfield>
+        </datafield>
+        <datafield tag="080" ind1=" " ind2=" ">
+            <subfield code="a">78</subfield>
+            <subfield code="2">MRF</subfield>
+        </datafield>
+        <datafield tag="080" ind1=" " ind2=" ">
+            <subfield code="a">(051.067)</subfield>
+            <subfield code="2">MRF</subfield>
+        </datafield>
+        <datafield tag="210" ind1="0" ind2=" ">
+            <subfield code="a">Music Store</subfield>
+            <subfield code="b">(Pardubice)</subfield>
+        </datafield>
+        <datafield tag="222" ind1=" " ind2="0">
+            <subfield code="a">Music Store</subfield>
+            <subfield code="b">(Pardubice)</subfield>
+        </datafield>
+        <datafield tag="245" ind1="0" ind2="0">
+            <subfield code="a">Music store :</subfield>
+            <subfield code="b">magazín o hudbě, technice a nástrojích</subfield>
+        </datafield>
+        <datafield tag="264" ind1=" " ind2="1">
+            <subfield code="a">Pardubice :</subfield>
+            <subfield code="b">ProMedia Czech,</subfield>
+            <subfield code="c">1998-</subfield>
+        </datafield>
+        <datafield tag="300" ind1=" " ind2=" ">
+            <subfield code="c">28 cm</subfield>
+        </datafield>
+        <datafield tag="310" ind1=" " ind2=" ">
+            <subfield code="a">1x měsíčně</subfield>
+        </datafield>
+        <datafield tag="336" ind1=" " ind2=" ">
+            <subfield code="a">text</subfield>
+            <subfield code="b">txt</subfield>
+            <subfield code="2">rdacontent</subfield>
+        </datafield>
+        <datafield tag="337" ind1=" " ind2=" ">
+            <subfield code="a">bez média</subfield>
+            <subfield code="b">n</subfield>
+            <subfield code="2">rdamedia</subfield>
+        </datafield>
+        <datafield tag="338" ind1=" " ind2=" ">
+            <subfield code="a">svazek</subfield>
+            <subfield code="b">nc</subfield>
+            <subfield code="2">rdacarrier</subfield>
+        </datafield>
+        <datafield tag="362" ind1="0" ind2=" ">
+            <subfield code="a">Roč. 1, č. 1 (květen/máj 1998)-</subfield>
+        </datafield>
+        <datafield tag="500" ind1=" " ind2=" ">
+            <subfield code="a">Od r. 1999 podnázev: časopis o hudbě, technice a nástrojích. - Od č. 6(2006) podnázev:
+                Music &amp; sound gear
+            </subfield>
+        </datafield>
+        <datafield tag="541" ind1=" " ind2=" ">
+            <subfield code="c">pv</subfield>
+        </datafield>
+        <datafield tag="500" ind1=" " ind2=" ">
+            <subfield code="a">Bez podnázvu</subfield>
+        </datafield>
+        <datafield tag="541" ind1=" " ind2=" ">
+            <subfield code="c">pv-cdr</subfield>
+        </datafield>
+        <datafield tag="650" ind1="0" ind2="7">
+            <subfield code="a">audiotechnika</subfield>
+            <subfield code="7">ph118666</subfield>
+            <subfield code="2">czenas</subfield>
+        </datafield>
+        <datafield tag="650" ind1="0" ind2="7">
+            <subfield code="a">hudební nástroje</subfield>
+            <subfield code="7">ph114725</subfield>
+            <subfield code="2">czenas</subfield>
+        </datafield>
+        <datafield tag="650" ind1="0" ind2="7">
+            <subfield code="a">hudba</subfield>
+            <subfield code="7">ph114719</subfield>
+            <subfield code="2">czenas</subfield>
+        </datafield>
+        <datafield tag="655" ind1=" " ind2="7">
+            <subfield code="a">specializované časopisy</subfield>
+            <subfield code="7">fd133565</subfield>
+            <subfield code="2">czenas</subfield>
+        </datafield>
+        <datafield tag="856" ind1="4" ind2="1">
+            <subfield code="u">http://www.digitalniknihovna.cz/mzk/uuid/uuid:f32ae430-fece-11e4-8ded-5ef3fc9ae867
+            </subfield>
+            <subfield code="y">Digitalizovaný dokument</subfield>
+            <subfield code="x">NDK</subfield>
+        </datafield>
+        <datafield tag="910" ind1="2" ind2=" ">
+            <subfield code="a">BOA001</subfield>
+            <subfield code="b">04260-1076.592</subfield>
+            <subfield code="b">CDR-1168.323</subfield>
+            <subfield code="r">1998,2000-16</subfield>
+            <subfield code="s">č. 6 (2006)</subfield>
+        </datafield>
+        <datafield tag="920" ind1=" " ind2=" ">
+            <subfield code="a">000535234</subfield>
+        </datafield>
+        <datafield tag="990" ind1=" " ind2=" ">
+            <subfield code="a">SE</subfield>
+        </datafield>
+        <datafield tag="995" ind1=" " ind2=" ">
+            <subfield code="a">01</subfield>
+        </datafield>
+        <datafield tag="991" ind1=" " ind2=" ">
+            <subfield code="t">Přílohy na CD-ROMu</subfield>
+        </datafield>
+        <datafield tag="996" ind1="6" ind2=" ">
+            <subfield code="b">2610122431</subfield>
+            <subfield code="c">04260-1076.592</subfield>
+            <subfield code="d">1998 1 1-2</subfield>
+            <subfield code="v">1</subfield>
+            <subfield code="y">1998</subfield>
+            <subfield code="l">MZK</subfield>
+            <subfield code="r">Sklad / do 1 hodiny</subfield>
+            <subfield code="n">0</subfield>
+            <subfield code="p">p.v.</subfield>
+            <subfield code="w">000535234</subfield>
+            <subfield code="u">000010</subfield>
+            <subfield code="a">1</subfield>
+            <subfield code="e">BOA001</subfield>
+            <subfield code="j">MZK50</subfield>
+            <subfield code="s">P</subfield>
+            <subfield code="t">BOA001.MZK01000535234.MZK50000535234000010</subfield>
+        </datafield>
+    </record>
+</collection>

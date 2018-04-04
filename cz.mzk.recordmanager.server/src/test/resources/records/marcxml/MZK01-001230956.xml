@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<collection xmlns="http://www.loc.gov/MARC21/slim">
+    <record>
+        <leader>00000njm a2200000 a 4500</leader>
+        <controlfield tag="001">001230956</controlfield>
+        <controlfield tag="003">CZ BrMZK</controlfield>
+        <controlfield tag="005">20120821082758.0</controlfield>
+        <controlfield tag="007">sd fsngnnmmned</controlfield>
+        <controlfield tag="008">120716s2012 xr munng cze d</controlfield>
+        <datafield tag="015" ind1=" " ind2=" ">
+            <subfield code="a">cnb002379778</subfield>
+        </datafield>
+        <datafield tag="024" ind1="3" ind2=" ">
+            <subfield code="a">8595082723418</subfield>
+        </datafield>
+        <datafield tag="028" ind1="0" ind2="1">
+            <subfield code="a">AV 034112-2</subfield>
+            <subfield code="b">Avik</subfield>
+        </datafield>
+        <datafield tag="040" ind1=" " ind2=" ">
+            <subfield code="a">BOA001</subfield>
+            <subfield code="b">cze</subfield>
+        </datafield>
+        <datafield tag="047" ind1=" " ind2=" ">
+            <subfield code="a">fm</subfield>
+            <subfield code="a">wz</subfield>
+            <subfield code="a">df</subfield>
+        </datafield>
+        <datafield tag="048" ind1=" " ind2=" ">
+            <subfield code="a">kz07</subfield>
+            <subfield code="a">pn01</subfield>
+            <subfield code="b">vu</subfield>
+        </datafield>
+        <datafield tag="072" ind1=" " ind2="7">
+            <subfield code="a">784</subfield>
+            <subfield code="x">Vokální hudba</subfield>
+            <subfield code="2">Konspekt</subfield>
+            <subfield code="9">9</subfield>
+        </datafield>
+        <datafield tag="080" ind1=" " ind2=" ">
+            <subfield code="a">784.4</subfield>
+            <subfield code="2">MRF</subfield>
+        </datafield>
+        <datafield tag="080" ind1=" " ind2=" ">
+            <subfield code="a">78.085.2</subfield>
+            <subfield code="2">MRF</subfield>
+        </datafield>
+        <datafield tag="080" ind1=" " ind2=" ">
+            <subfield code="a">78.085.321</subfield>
+            <subfield code="2">MRF</subfield>
+        </datafield>
+        <datafield tag="080" ind1=" " ind2=" ">
+            <subfield code="a">78.085.3</subfield>
+            <subfield code="2">MRF</subfield>
+        </datafield>
+        <datafield tag="080" ind1=" " ind2=" ">
+            <subfield code="a">(086.76)</subfield>
+            <subfield code="2">MRF</subfield>
+        </datafield>
+        <datafield tag="110" ind1="2" ind2=" ">
+            <subfield code="a">Plzeňští heligonkáři (hudební skupina)</subfield>
+            <subfield code="7">pna2005305992</subfield>
+        </datafield>
+        <datafield tag="245" ind1="1" ind2="0">
+            <subfield code="a">Vyhrávala kapela</subfield>
+            <subfield code="h">[zvukový záznam]</subfield>
+        </datafield>
+        <datafield tag="260" ind1=" " ind2=" ">
+            <subfield code="a">Plzeň :</subfield>
+            <subfield code="b">Avik,</subfield>
+            <subfield code="c">c2012</subfield>
+        </datafield>
+        <datafield tag="300" ind1=" " ind2=" ">
+            <subfield code="a">1 zvuková deska :</subfield>
+            <subfield code="b">digital ;</subfield>
+            <subfield code="c">12 cm</subfield>
+        </datafield>
+        <datafield tag="500" ind1=" " ind2=" ">
+            <subfield code="a">Hudba lidová, Jaromír Vejvoda a další</subfield>
+        </datafield>
+        <datafield tag="500" ind1=" " ind2=" ">
+            <subfield code="a">Kompaktní deska</subfield>
+        </datafield>
+        <datafield tag="505" ind1="0" ind2="0">
+            <subfield code="t">Kdyby ty muziky nebyly --</subfield>
+            <subfield code="t">Od hospody cestičkou --</subfield>
+            <subfield code="t">Vesnická romance --</subfield>
+            <subfield code="t">Mám doma koníčka --</subfield>
+            <subfield code="t">Čejkovická dědina --</subfield>
+            <subfield code="t">Kominíček --</subfield>
+            <subfield code="t">Bílá růže --</subfield>
+            <subfield code="t">Bílá pláž --</subfield>
+            <subfield code="t">V zeleném údolí --</subfield>
+            <subfield code="t">Soběkurská --</subfield>
+            <subfield code="t">Cestička k Mayrovce --</subfield>
+            <subfield code="t">Lístečku dubový --</subfield>
+            <subfield code="t">Dragouňátko --</subfield>
+            <subfield code="t">Je má --</subfield>
+            <subfield code="t">Byla noc krásná, májová --</subfield>
+            <subfield code="t">Vězeňský pláč --</subfield>
+            <subfield code="t">VYhrávala kapela</subfield>
+        </datafield>
+        <datafield tag="511" ind1="1" ind2=" ">
+            <subfield code="a">Plzeňští heligonkáři, kapelník Josef David ; zpívá Lenka Pospíšilová a další</subfield>
+        </datafield>
+        <datafield tag="518" ind1=" " ind2=" ">
+            <subfield code="a">Nahráno: leden a únor 2012, studio Ex-Avik</subfield>
+        </datafield>
+        <datafield tag="650" ind1="0" ind2="7">
+            <subfield code="a">lidové písně</subfield>
+            <subfield code="7">ph122317</subfield>
+            <subfield code="2">czenas</subfield>
+        </datafield>
+        <datafield tag="650" ind1="0" ind2="7">
+            <subfield code="a">valčíky</subfield>
+            <subfield code="7">ph224487</subfield>
+            <subfield code="2">czenas</subfield>
+        </datafield>
+        <datafield tag="650" ind1="0" ind2="7">
+            <subfield code="a">polky</subfield>
+            <subfield code="7">ph224419</subfield>
+            <subfield code="2">czenas</subfield>
+        </datafield>
+        <datafield tag="650" ind1="0" ind2="7">
+            <subfield code="a">tanga</subfield>
+            <subfield code="7">ph224476</subfield>
+            <subfield code="2">czenas</subfield>
+        </datafield>
+        <datafield tag="650" ind1="0" ind2="7">
+            <subfield code="a">waltzy</subfield>
+            <subfield code="7">ph224496</subfield>
+            <subfield code="2">czenas</subfield>
+        </datafield>
+        <datafield tag="655" ind1=" " ind2="7">
+            <subfield code="a">kompaktní desky</subfield>
+            <subfield code="7">fd201991</subfield>
+            <subfield code="2">czenas</subfield>
+        </datafield>
+        <datafield tag="700" ind1="1" ind2=" ">
+            <subfield code="a">Pospíšilová, Lenka</subfield>
+            <subfield code="7">jx20120713003</subfield>
+            <subfield code="4">sng</subfield>
+        </datafield>
+        <datafield tag="700" ind1="1" ind2=" ">
+            <subfield code="a">David, Josef</subfield>
+            <subfield code="7">jx20050905018</subfield>
+            <subfield code="4">cnd</subfield>
+        </datafield>
+        <datafield tag="910" ind1="2" ind2=" ">
+            <subfield code="a">BOA001</subfield>
+            <subfield code="b">CDR-1286.279</subfield>
+        </datafield>
+        <datafield tag="990" ind1=" " ind2=" ">
+            <subfield code="a">AV</subfield>
+        </datafield>
+        <datafield tag="991" ind1=" " ind2=" ">
+            <subfield code="b">201208</subfield>
+        </datafield>
+        <datafield tag="996" ind1="6" ind2=" ">
+            <subfield code="b">2610515882</subfield>
+            <subfield code="c">CDR-1286.279</subfield>
+            <subfield code="l">MZK</subfield>
+            <subfield code="r">Sklad / do 24 hodin</subfield>
+            <subfield code="n">0</subfield>
+            <subfield code="p">p.v.</subfield>
+            <subfield code="w">001265155</subfield>
+            <subfield code="u">000010</subfield>
+            <subfield code="a">1</subfield>
+            <subfield code="e">BOA001</subfield>
+            <subfield code="j">MZK50</subfield>
+            <subfield code="s">P</subfield>
+            <subfield code="t">BOA001.MZK01001230956.MZK50001265155000010</subfield>
+        </datafield>
+    </record>
+</collection>

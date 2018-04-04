@@ -1,0 +1,132 @@
+<collection xmlns="http://www.loc.gov/MARC21/slim">
+    <record>
+        <leader>00000nam a2200000 4500</leader>
+        <controlfield tag="001">001101044</controlfield>
+        <controlfield tag="003">CZ BrMZK</controlfield>
+        <controlfield tag="005">20100610121620.0</controlfield>
+        <controlfield tag="008">010907s2009 xr o f a 000 0 cze</controlfield>
+        <datafield tag="041" ind1="1" ind2=" ">
+            <subfield code="a">cze</subfield>
+            <subfield code="b">eng</subfield>
+            <subfield code="b">ger</subfield>
+        </datafield>
+        <datafield tag="043" ind1=" " ind2=" ">
+            <subfield code="a">e-xr---</subfield>
+            <subfield code="b">e-xr-jm</subfield>
+            <subfield code="2">czenas</subfield>
+        </datafield>
+        <datafield tag="045" ind1=" " ind2=" ">
+            <subfield code="a">x-x-</subfield>
+        </datafield>
+        <datafield tag="072" ind1=" " ind2="7">
+            <subfield code="a">71</subfield>
+            <subfield code="x">Územní plánování. Urbanismus. Památková péče</subfield>
+            <subfield code="2">Konspekt</subfield>
+            <subfield code="9">21</subfield>
+        </datafield>
+        <datafield tag="080" ind1=" " ind2=" ">
+            <subfield code="a">719</subfield>
+            <subfield code="2">MRF</subfield>
+        </datafield>
+        <datafield tag="080" ind1=" " ind2=" ">
+            <subfield code="a">711.523</subfield>
+            <subfield code="2">MRF</subfield>
+        </datafield>
+        <datafield tag="080" ind1=" " ind2=" ">
+            <subfield code="a">(437.322)</subfield>
+            <subfield code="2">MRF</subfield>
+        </datafield>
+        <datafield tag="080" ind1=" " ind2=" ">
+            <subfield code="a">72.071.1</subfield>
+            <subfield code="2">MRF</subfield>
+        </datafield>
+        <datafield tag="080" ind1=" " ind2=" ">
+            <subfield code="a">82-94</subfield>
+            <subfield code="2">MRF</subfield>
+        </datafield>
+        <datafield tag="080" ind1=" " ind2=" ">
+            <subfield code="a">(092)</subfield>
+            <subfield code="2">MRF</subfield>
+        </datafield>
+        <datafield tag="100" ind1="1" ind2=" ">
+            <subfield code="a">Černoušková, Dagmar,</subfield>
+            <subfield code="d">1965-</subfield>
+            <subfield code="7">xx0024354</subfield>
+            <subfield code="4">aut</subfield>
+        </datafield>
+        <datafield tag="245" ind1="1" ind2="0">
+            <subfield code="a">K životnímu jubileu architekta Josefa Němce a k výročí Státního ústavu pro rekonstrukce
+                památkových měst a objektů /
+            </subfield>
+            <subfield code="c">Dagmar Černoušková</subfield>
+        </datafield>
+        <datafield tag="300" ind1=" " ind2=" ">
+            <subfield code="b">13 il.</subfield>
+        </datafield>
+        <datafield tag="500" ind1=" " ind2=" ">
+            <subfield code="a">13 fot.</subfield>
+        </datafield>
+        <datafield tag="546" ind1=" " ind2=" ">
+            <subfield code="a">Anglické a německé resumé</subfield>
+        </datafield>
+        <datafield tag="600" ind1="1" ind2="7">
+            <subfield code="a">Němec, Josef,</subfield>
+            <subfield code="d">1928-</subfield>
+            <subfield code="7">jn99240000801</subfield>
+            <subfield code="2">czenas</subfield>
+        </datafield>
+        <datafield tag="610" ind1="2" ind2="4">
+            <subfield code="a">Státní ústav pro rekonstrukce památkových měst a objektů</subfield>
+        </datafield>
+        <datafield tag="650" ind1="0" ind2="7">
+            <subfield code="a">památková péče</subfield>
+            <subfield code="7">ph123918</subfield>
+            <subfield code="x">městská historická centra</subfield>
+            <subfield code="z">Brno (Česko)</subfield>
+            <subfield code="y">20. stol.</subfield>
+            <subfield code="2">czenas</subfield>
+        </datafield>
+        <datafield tag="650" ind1="0" ind2="7">
+            <subfield code="a">architekti</subfield>
+            <subfield code="7">ph118582</subfield>
+            <subfield code="x">biografie</subfield>
+            <subfield code="2">czenas</subfield>
+        </datafield>
+        <datafield tag="650" ind1="0" ind2="9">
+            <subfield code="a">historic preservation</subfield>
+            <subfield code="x">historical town centers</subfield>
+            <subfield code="z">Brno (Czech Republic)</subfield>
+            <subfield code="2">eczenas</subfield>
+        </datafield>
+        <datafield tag="650" ind1="0" ind2="9">
+            <subfield code="a">architects</subfield>
+            <subfield code="x">biography</subfield>
+            <subfield code="2">eczenas</subfield>
+        </datafield>
+        <datafield tag="655" ind1=" " ind2="7">
+            <subfield code="a">biografie</subfield>
+            <subfield code="7">fd131909</subfield>
+            <subfield code="2">czenas</subfield>
+        </datafield>
+        <datafield tag="655" ind1=" " ind2="9">
+            <subfield code="a">biography</subfield>
+            <subfield code="2">eczenas</subfield>
+        </datafield>
+        <datafield tag="773" ind1="0" ind2=" ">
+            <subfield code="t">Brno v minulosti a dnes</subfield>
+            <subfield code="d">Brno : Statutární město Brno, Archiv města Brna</subfield>
+            <subfield code="x">0524-689X</subfield>
+            <subfield code="z">978-80-86736-15-0</subfield>
+            <subfield code="g">[Sv.] 22, (2008), s. 365-377, 407-408</subfield>
+            <subfield code="q">22</subfield>
+            <subfield code="9">2009</subfield>
+        </datafield>
+        <datafield tag="910" ind1=" " ind2=" ">
+            <subfield code="a">BOA001</subfield>
+            <subfield code="t">rs</subfield>
+        </datafield>
+        <datafield tag="990" ind1=" " ind2=" ">
+            <subfield code="a">BK</subfield>
+        </datafield>
+    </record>
+</collection>
