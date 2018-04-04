@@ -1,14 +1,13 @@
 package cz.mzk.recordmanager.server.marc;
 
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
+import cz.mzk.recordmanager.server.marc.marc4j.MarcFactoryImpl;
 import org.marc4j.marc.DataField;
 import org.marc4j.marc.MarcFactory;
 import org.marc4j.marc.Record;
 
-import cz.mzk.recordmanager.server.marc.marc4j.MarcFactoryImpl;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class MarcRecordFactory {
 	
@@ -43,54 +42,58 @@ public class MarcRecordFactory {
 	 *   tag's value, perhaps with internal Subfields
 	 *   example - indicators set on ' ': "991 $b201503$cNOV$gg$en"
 	 */
-	public static MarcRecordImpl recordFactory(List<String> data) throws Exception{    	    	
-    	MarcFactory marcFactory = MarcFactoryImpl.newInstance();
-    	Record record = marcFactory.newRecord();
-    	record.addVariableField(marcFactory.newControlField("001", "0"));
-    	
-    	for(String field : data) {
-    		String key;
-    		String value;
-    		
-    		if(field.length() >= 3){
-    			key = field.substring(0,3);
-    			value = (field.length() > 3) ? field.substring(4, field.length()) : "";
-    		}
-    		else continue;
-    		
-    		// Leader
-    		if(Pattern.matches("000", key)) {
-    			if(value.length() > 24) value = value.substring(0, 24);
-    			else value = String.format("%-24s", value);
-    			record.setLeader(marcFactory.newLeader(value));
-    			
-    		}
-    		// ControlField
-    		else if(Pattern.matches("00[1-9]", key)) record.addVariableField(marcFactory.newControlField(key, value));
-    		// DataField
-    		else if(Pattern.matches("\\w{3}", key)) {
-    			if(value.isEmpty()) record.addVariableField(marcFactory.newDataField(key, ' ', ' '));
-    			else if(value.length() >= 2){
-    				// Indicators
-        			DataField dataField;
-        			if(value.charAt(0) == '$') dataField = marcFactory.newDataField(key, ' ', ' ');
-        			else if(value.charAt(1) == '$') dataField = marcFactory.newDataField(key, value.charAt(0), ' ');
-        			else dataField = marcFactory.newDataField(key, value.charAt(0), value.charAt(1));
-        			
-        			// Subfield
-        			if(value.length() > 2){
-        				Pattern pattern = Pattern.compile("\\$([a-zA-Z0-9])([^$]*)(.*)");
-        				Matcher matcher = pattern.matcher(value);
-        				while (matcher.find()) {
-        					dataField.addSubfield(marcFactory.newSubfield(matcher.group(1).charAt(0), matcher.group(2)));
-        				    matcher = pattern.matcher(matcher.group(3));
-        				}
-        			}
-        			record.addVariableField(dataField);         			
-    			}    			    				
-    		}
-    	}
-    	
-	    return new MarcRecordImpl(record); 
-    }
+
+	private static final Pattern LEADER = Pattern.compile("0{3}");
+	private static final Pattern CONTROLFIELD = Pattern.compile("00[1-9]");
+	private static final Pattern DATAFIELD = Pattern.compile("\\w{3}");
+	private static final Pattern SUBFIELD = Pattern.compile("\\$([a-zA-Z0-9])([^$]*)");
+
+	public static MarcRecordImpl recordFactory(List<String> data) throws Exception {
+		MarcFactory marcFactory = MarcFactoryImpl.newInstance();
+		Record record = marcFactory.newRecord();
+		record.addVariableField(marcFactory.newControlField("001", "0"));
+
+		for (String field : data) {
+			String key;
+			String value;
+
+			if (field.length() >= 3) {
+				key = field.substring(0, 3);
+				value = (field.length() > 3) ? field.substring(4, field.length()) : "";
+			} else continue;
+
+			// Leader
+			if (LEADER.matcher(key).matches()) {
+				if (value.length() > 24) value = value.substring(0, 24);
+				else value = String.format("%-24s", value);
+				record.setLeader(marcFactory.newLeader(value));
+
+			}
+			// ControlField
+			else if (CONTROLFIELD.matcher(key).matches())
+				record.addVariableField(marcFactory.newControlField(key, value));
+				// DataField
+			else if (DATAFIELD.matcher(key).matches()) {
+				if (value.isEmpty()) record.addVariableField(marcFactory.newDataField(key, ' ', ' '));
+				else if (value.length() >= 2) {
+					// Indicators
+					DataField dataField;
+					if (value.charAt(0) == '$') dataField = marcFactory.newDataField(key, ' ', ' ');
+					else if (value.charAt(1) == '$') dataField = marcFactory.newDataField(key, value.charAt(0), ' ');
+					else dataField = marcFactory.newDataField(key, value.charAt(0), value.charAt(1));
+
+					// Subfield
+					if (value.length() > 2) {
+						Matcher matcher = SUBFIELD.matcher(value);
+						while (matcher.find()) {
+							dataField.addSubfield(marcFactory.newSubfield(matcher.group(1).charAt(0), matcher.group(2)));
+						}
+					}
+					record.addVariableField(dataField);
+				}
+			}
+		}
+
+		return new MarcRecordImpl(record);
+	}
 }
