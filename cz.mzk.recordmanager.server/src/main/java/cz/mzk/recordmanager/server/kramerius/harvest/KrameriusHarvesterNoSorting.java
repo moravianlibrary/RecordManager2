@@ -173,7 +173,7 @@ public class KrameriusHarvesterNoSorting {
 		while (iterator.hasNext()) {
 			String key = (String) iterator.next();
 			String value = query.get(key);
-			queryString.append(key + ":" + value);
+			queryString.append(key).append(":").append(value);
 			if (iterator.hasNext()) {
 				queryString.append(" AND ");
 			}

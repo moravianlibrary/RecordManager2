@@ -124,7 +124,7 @@ public class OsobnostiRegionuXmlStreamReader implements MarcReader{
 							break;
 						case ATTR_NAME_FIELD:
 							if(sb.length() == 0) sb.append(xmlReader.getElementText());
-							else sb.append(", " + xmlReader.getElementText());
+							else sb.append(", ").append(xmlReader.getElementText());
 							break;
 						case ATTR_NAME_DESCRIPTION:
 							description = xmlReader.getElementText();

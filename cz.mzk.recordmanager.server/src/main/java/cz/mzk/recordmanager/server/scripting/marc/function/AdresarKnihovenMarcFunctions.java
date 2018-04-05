@@ -222,7 +222,7 @@ public class AdresarKnihovenMarcFunctions implements MarcRecordFunctions {
 					List<String> get = propertyResolver.resolve(MAP_ADRESAR_HOURS).get(String.valueOf(sf.getCode()));
 					if (get != null) {
 						if (sb.length() > 0) sb.append(separator);
-						sb.append(get.get(0) + " " + sf.getData());
+						sb.append(get.get(0)).append(" ").append(sf.getData());
 					}
 				} catch (IOException e) {
 					e.printStackTrace();
