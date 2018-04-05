@@ -154,40 +154,26 @@ public class MarcDSL extends BaseDSL {
 		return countries;
 	}
 
-    /*
-     * Get all fields starting with the 100 and ending with the 839
-     * This will ignore any "code" fields and only use textual fields
-     */
+	/**
+	 * Get all fields starting with the 100 and ending with the 839
+	 * This will ignore any "code" fields and only use textual fields
+	 */
 	public List<String> getAllFields() {
 		Map<String, List<DataField>> allFields = record.getAllFields();
-		List<String> result = new ArrayList<String>();
-        for (Entry<String, List<DataField>> entry : allFields.entrySet()) {
-        	int tag = -1;
-        	try {
-        		tag = Integer.parseInt(entry.getKey());
-        	} catch (NumberFormatException nfe) {
-        		continue;
-        	}
-            if ((tag < 100) || (tag >= 840)) {
-            	continue;
-            }
-            List<DataField> fields = entry.getValue();
-            StringBuffer buffer = new StringBuffer();
-			for (DataField field : fields) {
-                List<Subfield> subfields = field.getSubfields();
-                Iterator<Subfield> subfieldsIter = subfields.iterator();
-                while (subfieldsIter.hasNext()) {
-                    Subfield subfield = (Subfield) subfieldsIter.next();
-                    if (buffer.length() > 0) {
-                        buffer.append(" " + subfield.getData());
-                    } else {
-                        buffer.append(subfield.getData());
-                    }
-                }
-            }
-			result.add(buffer.toString());
-        }
-        return result;
+		List<String> results = new ArrayList<>();
+		for (Entry<String, List<DataField>> entry : allFields.entrySet()) {
+			int tag;
+			try {
+				tag = Integer.parseInt(entry.getKey());
+			} catch (NumberFormatException nfe) {
+				continue;
+			}
+			if ((tag < 100) || (tag >= 840)) {
+				continue;
+			}
+			results.add(SolrUtils.getAllFieldsString(entry.getValue()));
+		}
+		return results;
 	}
 
     /**

@@ -341,15 +341,8 @@ public class AdresarKnihovenMarcFunctions implements MarcRecordFunctions {
 
 	public Set<String> getAllLibraryFields(MarcFunctionContext ctx) {
 		Set<String> results = new HashSet<>();
-		for (List<DataField> list : ctx.record().getAllFields().values()) {
-			StringBuffer sb = new StringBuffer();
-			for (DataField df : list) {
-				for (Subfield sf : df.getSubfields()) {
-					if (sb.length() > 0) sb.append(" ");
-					sb.append(sf.getData());
-				}
-			}
-			results.add(sb.toString());
+		for (Map.Entry<String, List<DataField>> entry : ctx.record().getAllFields().entrySet()) {
+			results.add(SolrUtils.getAllFieldsString(entry.getValue()));
 		}
 		return results;
 	}

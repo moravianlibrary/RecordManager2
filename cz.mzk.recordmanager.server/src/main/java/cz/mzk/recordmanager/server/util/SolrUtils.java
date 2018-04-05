@@ -20,6 +20,8 @@ import com.google.common.base.Preconditions;
 import cz.mzk.recordmanager.server.index.SolrFieldConstants;
 import cz.mzk.recordmanager.server.model.HarvestedRecordFormat.HarvestedRecordFormatEnum;
 import cz.mzk.recordmanager.server.model.ImportConfiguration;
+import org.marc4j.marc.DataField;
+import org.marc4j.marc.Subfield;
 
 public class SolrUtils {
 
@@ -204,4 +206,14 @@ public class SolrUtils {
 		return SolrUtils.createHierarchicFacetValues(INSTITUTION_UNKNOWN);
 	}
 
+	public static String getAllFieldsString(final List<DataField> dataFields) {
+		StringBuilder builder = new StringBuilder();
+		for (DataField df : dataFields) {
+			for (Subfield subfield : df.getSubfields()) {
+				if (builder.length() > 0) builder.append(" ");
+				builder.append(subfield.getData());
+			}
+		}
+		return builder.toString();
+	}
 }
