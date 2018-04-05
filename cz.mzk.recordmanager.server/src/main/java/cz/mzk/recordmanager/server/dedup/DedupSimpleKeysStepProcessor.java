@@ -134,9 +134,9 @@ public class DedupSimpleKeysStepProcessor implements
 	 * decide whether two records should match or not
 	 * It's supposed to be overridden in children implementations
 	 * 
-	 * @param hrA
-	 * @param hrB
-	 * @return
+	 * @param hrA {@link HarvestedRecord}
+	 * @param hrB {@link HarvestedRecord}
+	 * @return true
 	 */
 	protected boolean matchRecords(HarvestedRecord hrA, HarvestedRecord hrB) {
 		return true;

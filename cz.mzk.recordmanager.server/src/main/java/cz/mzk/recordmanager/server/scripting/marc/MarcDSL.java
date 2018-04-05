@@ -178,13 +178,10 @@ public class MarcDSL extends BaseDSL {
 
     /**
      * Get the title (245ab) from a record, without non-filing chars as
-     * specified in 245 2nd indicator, and lowercased. 
-     * @param context - the marc record object
+     * specified in 245 2nd indicator, and lowercased.
      * @return 245a and 245b values concatenated, with trailing punct removed,
      *         and with non-filing characters omitted. Null returned if no
-     *         title can be found. 
-     * 
-     * @see SolrIndexer#getTitle
+     *         title can be found.
      */
     public String getSortableTitle() {
     	List<DataField> titleFields = record.getAllFields().get("245");

@@ -63,7 +63,7 @@ public class OAIHarvesterImpl implements OAIHarvester {
 
 	/**
 	 * send ListRecords request
-	 * @param resumptionToken
+	 * @param resumptionToken {@link String} value from the previous request
 	 * @return {@link OAIListRecords}
 	 */
 	@Override
@@ -75,7 +75,7 @@ public class OAIHarvesterImpl implements OAIHarvester {
 	
 	/**
 	 * send ListIdentifiers request
-	 * @param resumptionToken
+	 * @param resumptionToken {@link String} value from the previous request
 	 * @return {@link OAIListIdentifiers}
 	 */
 	@Override
@@ -87,7 +87,7 @@ public class OAIHarvesterImpl implements OAIHarvester {
 	
 	/**
 	 * send GetRecordRequest
-	 * @param identifier
+	 * @param identifier OAI identifier of record
 	 * @return {@link OAIGetRecord}
 	 */
 	@Override
@@ -113,7 +113,7 @@ public class OAIHarvesterImpl implements OAIHarvester {
 	 * Send OAI request and unmarshall response.
 	 * If request failes, content of document is logged and 
 	 * request is performed once again
-	 * @param url
+	 * @param url URL of next resumptionToken
 	 * @param preLogMessage message used for logging purposes, URL is injected via {} notation
 	 * @param postLogMessage message used for logging purposes, URL is injected via {} notation
 	 * @return {@link OAIRoot}
@@ -137,11 +137,11 @@ public class OAIHarvesterImpl implements OAIHarvester {
 
 	/**
 	 * Send OAI request and unmarshall response 
-	 * @param url
+	 * @param url URL of next resumptionToken
 	 * @param preLogMessage message used for logging purposes, URL is injected via {} notation
 	 * @param postLogMessage message used for logging purposes, URL is injected via {} notation
 	 * @return {@link OAIRoot}
-	 * @throws OaiErrorException 
+	 * @throws OaiErrorException OAI error
 	 */
 	protected OAIRoot sendOaiRequestThrowing(String url, String preLogMessage, String postLogMessage) throws OaiErrorException {
 		if (!preLogMessage.isEmpty()) {
@@ -177,10 +177,10 @@ public class OAIHarvesterImpl implements OAIHarvester {
 	
 	/**
 	 * Create URL for OAI request from given arguments and stored parmeters
-	 * @param resumptionToken
-	 * @param verb
-	 * @param recordIdentifier
-	 * @return
+	 * @param resumptionToken {@link String} value from the previous request
+	 * @param verb {@link String } type of harvest
+	 * @param recordIdentifier {@link String} Id of single record
+	 * @return {@link String} URL
 	 */
 	protected String createUrl(String resumptionToken, String verb, String recordIdentifier) {
 		Map<String, String> params = new LinkedHashMap<String, String>();

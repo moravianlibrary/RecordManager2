@@ -14,8 +14,9 @@ public class SfxLinkHarvestedRecordEnricher implements HarvestedRecordEnricher {
 
 	/**
 	 * add institution prefix to sfx links
-	 * @param record
-	 * @param document
+	 *
+	 * @param record   {@link HarvestedRecord}
+	 * @param document {@link SolrInputDocument}
 	 */
 	@Override
 	public void enrich(HarvestedRecord record, SolrInputDocument document) {

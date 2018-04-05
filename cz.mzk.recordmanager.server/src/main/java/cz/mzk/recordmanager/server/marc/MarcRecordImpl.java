@@ -167,8 +167,8 @@ public class MarcRecordImpl implements MarcRecord {
 
 	/**
 	 * get first code subfield from first field having given tag
-	 * @param tag
-	 * @param code
+	 * @param tag {@link DataField} tag
+	 * @param code {@link Subfield} code
 	 * @return {@link Subfield} or null
 	 */
 	protected Subfield getSubfield(String tag, char code) {
@@ -183,7 +183,7 @@ public class MarcRecordImpl implements MarcRecord {
 	
 	/**
 	 * get first {@link DataField} with given tag
-	 * @param tag
+	 * @param tag {@link DataField} tag
 	 * @return {@link DataField} or null
 	 */
 	protected DataField getDataField(String tag) {
@@ -194,8 +194,8 @@ public class MarcRecordImpl implements MarcRecord {
 	/**
 	 * get all subfields of {@link DataField} with corresponding codes
 	 *
-	 * @param field
-	 * @param codes
+	 * @param field {@link DataField}
+	 * @param codes {@link Subfield} codes
 	 * @return {@link List} of matching {@link Subfield} objects
 	 */
 	public List<Subfield> getSubfields(DataField field, char[] codes) {

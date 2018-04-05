@@ -77,7 +77,7 @@ public class DefaultMarcInterceptor implements MarcRecordInterceptor {
 	/**
 	 * add item id to field 996
 	 * 
-	 * @param df
+	 * @param df {@link DataField}
 	 */
 	protected void processField996(DataField df) {
 		if (df.getTag().equals("996")) {

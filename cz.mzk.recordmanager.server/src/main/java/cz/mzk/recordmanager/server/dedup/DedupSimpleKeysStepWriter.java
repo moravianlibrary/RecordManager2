@@ -63,7 +63,7 @@ public class DedupSimpleKeysStepWriter implements
 	}
 	
 	/**
-	 * @param hr
+	 * @param hr {@link HarvestedRecord}
 	 * @return False if harvested record was updated before it's dedupRecord updated time
 	 */
 	protected boolean checkIfUpdateIsNeeded(HarvestedRecord hr) {

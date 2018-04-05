@@ -120,7 +120,7 @@ public class SolrUtils {
 	 * 0/Brno/
 	 * 1/Brno/MZK/
 	 *
-	 * @param values
+	 * @param values input values
 	 * @return hierarchic facet values
 	 */
 	public static List<String> createHierarchicFacetValues(String...values) {

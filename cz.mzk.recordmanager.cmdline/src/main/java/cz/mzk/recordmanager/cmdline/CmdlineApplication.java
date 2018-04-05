@@ -106,9 +106,9 @@ public class CmdlineApplication {
 
 	/**
 	 * create {@link JobParameters} object from command line arguments
-	 * 
-	 * @param args
-	 * @return
+	 *
+	 * @param args command line arguments
+	 * @return {@link JobParameters}
 	 */
 	private static JobParameters createJobParams(String[] args) {
 		Map<String, JobParameter> params = new HashMap<String, JobParameter>();

@@ -26,7 +26,7 @@ public enum OAIGranularity {
 	
 	/**
 	 * 
-	 * @param date 
+	 * @param date {@link Date}
 	 * @return {@link String} representation of given day.  
 	 */
 	public String dateToString(final Date date) {
@@ -51,7 +51,7 @@ public enum OAIGranularity {
 	/**
 	 * convert given string representing date to {@link Date} object using 
 	 * most precise granularity available 
-	 * @param strDate
+	 * @param strDate String representation of Date
 	 * @return Date if string can be converted, null otherwise
 	 */
 	public static Date stringToDate(final String strDate) {

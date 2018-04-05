@@ -75,7 +75,7 @@ public class Cluster<T extends Clusterable>  {
 
 	/**
 	 * Return true if cluster is initialized (i.e. computations on input data were finished)
-	 * @return
+	 * @return true if cluster is initialized
 	 */
 	public boolean isInialized() {
 		return isInitialized;
@@ -83,8 +83,8 @@ public class Cluster<T extends Clusterable>  {
 	
 	/**
 	 * return set of titles that are similar enough to given {@link Clusterable}
-	 * @param titleId
-	 * @return
+	 * @param titleId {@link Long} title id
+	 * @return set of titles
 	 */
 	public Set<Long> getSimilarTitles(Long titleId) {
 		if (!isInitialized) {
@@ -98,8 +98,7 @@ public class Cluster<T extends Clusterable>  {
 	}
 	
 	/**
-	 * return List of sets, each sets contains identifiers of similar records
-	 * @return
+	 * @return List of sets, each sets contains identifiers of similar records
 	 */
 	public List<Set<Long>> getClusters() {
 		if (!isInitialized) {

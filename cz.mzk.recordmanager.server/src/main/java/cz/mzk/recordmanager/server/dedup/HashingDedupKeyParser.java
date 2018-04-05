@@ -190,8 +190,8 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 	
 	/**
 	 * Compute SHA1 hash of deduplication keys from given {@link DedupKeysencapsulator}
-	 * @param encapsulator
-	 * @return
+	 * @param encapsulator {@link DedupKeysencapsulator}
+	 * @return Hash as String
 	 */
 	protected String computeHashValue(final DedupKeysencapsulator encapsulator) {
 	
@@ -316,8 +316,8 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 		
 		/**
 		 * compute SHA-1 hash of deduplication keys for given {@link HarvestedRecord}
-		 * @param hr
-		 * @return
+		 * @param hr {@link HarvestedRecord}
+		 * @return Hash as String
 		 */
 		protected String computeHashValue(final HarvestedRecord hr) {
 			DedupKeysencapsulator encapsulator = new DedupKeysencapsulator();

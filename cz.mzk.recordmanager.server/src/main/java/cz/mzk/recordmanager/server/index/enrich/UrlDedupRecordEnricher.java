@@ -45,9 +45,9 @@ public class UrlDedupRecordEnricher implements DedupRecordEnricher {
 	}
 
 	/**
-	 * urls format "institution code"|"policy code"|"url"
-	 * @param values
-	 * @return
+	 *
+	 * @param values urls format "institution code"|"policy code"|"url"
+	 * @return List of unique urls
 	 */
 	private List<String> urlsFilter(Set<Object> values){
 		List<String> results = new ArrayList<>();
@@ -118,8 +118,8 @@ public class UrlDedupRecordEnricher implements DedupRecordEnricher {
 	 * kramerius url formats
 	 * http://kramerius.mzk.cz/search/i.jsp?pid=uuid:...
 	 * http://kramerius.mzk.cz/search/handle/uuid:...
-	 * @param url
-	 * @return
+	 * @param url {@link String}
+	 * @return parsed Url
 	 */
 	private String krameriusUrlParser(String url){
 		Matcher matcher;

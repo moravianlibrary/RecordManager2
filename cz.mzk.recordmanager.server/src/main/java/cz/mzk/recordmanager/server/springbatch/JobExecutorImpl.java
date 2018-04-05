@@ -251,9 +251,9 @@ public class JobExecutorImpl implements JobExecutor {
 	
 	/**
 	 * get last date when job having given name was successfully completed
-	 * @param jobName
-	 * @param importConfId
-	 * @return
+	 * @param jobName job name
+	 * @param importConfId id of import configuration
+	 * @return last date when job having given name was successfully completed
 	 */
 	private Date getIncrementalStartingDate(String jobName, Long importConfId) {
 		Date maxEndTime = null;

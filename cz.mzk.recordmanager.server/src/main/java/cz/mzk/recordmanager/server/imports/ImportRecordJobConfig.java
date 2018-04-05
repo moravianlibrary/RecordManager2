@@ -205,8 +205,8 @@ public class ImportRecordJobConfig {
 	 * filename format:
 	 * 1) /directory/file.txt - takes file file.txt
 	 * 2) /directory/ - takes all files from directory
-	 * @param filename
-	 * @return
+	 * @param filename name of input file
+	 * @return {@link ImportOaiRecordsFileReader}
 	 */
 	@Bean(name=Constants.JOB_ID_IMPORT_OAI +":importRecordsReader")
 	@StepScope

@@ -7,8 +7,9 @@ public interface AntikvariatyRecordDAO extends DomainDAO<Long, AntikvariatyRecor
 
 	/**
 	 * Get URL to antikvariaty from DedupRecord
-	 * @param dr
-	 * @return
+	 *
+	 * @param dr {@link DedupRecord}
+	 * @return {@link String} URL to Antikvariaty
 	 */
 	String getLinkToAntikvariaty(DedupRecord dr);
 

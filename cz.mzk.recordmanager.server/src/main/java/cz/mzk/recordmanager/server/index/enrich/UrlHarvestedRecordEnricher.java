@@ -4,25 +4,20 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.solr.common.SolrInputDocument;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import cz.mzk.recordmanager.server.index.SolrFieldConstants;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
-import cz.mzk.recordmanager.server.oai.dao.KrameriusConfigurationDAO;
 
 @Component
 public class UrlHarvestedRecordEnricher implements HarvestedRecordEnricher {
 
-	@Autowired
-	private KrameriusConfigurationDAO krameriusConfiguationDao;
-
 	/**
 	 * generate links in standard format "institution code"|"policy code"|"url"
 	 * removes field KRAMERIUS_DUMMY_RIGTHS from document
-	 * @param record
-	 * @param document
-	 * @return
+	 *
+	 * @param record   {@link HarvestedRecord}
+	 * @param document {@link SolrInputDocument}
 	 */
 	@Override
 	public void enrich(HarvestedRecord record, SolrInputDocument document) {

@@ -21,8 +21,9 @@ public class CaslinFilter {
 
 	/**
 	 * is sigla in db table 'sigla'?
-	 * @param sigla
-	 * @return 
+	 *
+	 * @param sigla {@link String} sigla
+	 * @return {@link Boolean}
 	 */
 	public boolean filter(String sigla) {
 		if (sigla == null) return false;

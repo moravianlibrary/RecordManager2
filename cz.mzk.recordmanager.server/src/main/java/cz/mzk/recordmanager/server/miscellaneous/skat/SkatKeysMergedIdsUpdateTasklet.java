@@ -149,7 +149,8 @@ public class SkatKeysMergedIdsUpdateTasklet implements Tasklet {
 	/**
 	 * return string representation of all ia prefixes from 'fromDate'
 	 *  up to current month.
-	 * @return
+	 * @return string representation of all ia prefixes
+	 *
 	 */
 	protected List<String> preparePrefixes() {
 		List<String> result = new ArrayList<>();

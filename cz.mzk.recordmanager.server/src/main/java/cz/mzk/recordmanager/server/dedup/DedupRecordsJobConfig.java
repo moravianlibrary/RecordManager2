@@ -1292,7 +1292,7 @@ public class DedupRecordsJobConfig {
 
 	/**
 	 * Record processor for deduplication of records based on Skat data
-	 * @return
+	 * @return {@link DedupSkatKeysProcessor}
 	 */
 	@Bean(name = "dedupSkatKeys:processor")
 	@StepScope

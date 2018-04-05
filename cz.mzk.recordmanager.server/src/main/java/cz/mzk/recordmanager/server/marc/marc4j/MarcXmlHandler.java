@@ -77,7 +77,7 @@ public class MarcXmlHandler extends org.marc4j.MarcXmlHandler {
 	/**
 	 * Default constructor.
 	 * 
-	 * @param queue
+	 * @param queue - a queue of records read
 	 */
 	public MarcXmlHandler(RecordStack queue) {
 		super(queue);
@@ -146,9 +146,9 @@ public class MarcXmlHandler extends org.marc4j.MarcXmlHandler {
 	/**
 	 * An event fired as characters are consumed.
 	 * 
-	 * @param ch
-	 * @param start
-	 * @param length
+	 * @param ch - an array of characters to output
+	 * @param start - the offset into that array to start writing from
+	 * @param length - the number of characters to write
 	 */
 	public void characters(char[] ch, int start, int length)
 			throws SAXException {
@@ -160,9 +160,9 @@ public class MarcXmlHandler extends org.marc4j.MarcXmlHandler {
 	/**
 	 * An event fired at the end of an element.
 	 * 
-	 * @param uri
-	 * @param name
-	 * @param qName
+	 * @param uri - the uri
+	 * @param name - the name
+	 * @param qName - the qname
 	 */
 	public void endElement(String uri, String name, String qName)
 			throws SAXException {
