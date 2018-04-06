@@ -165,12 +165,10 @@ public class ZakonyProLidiMetadataXmlStreamReader implements MarcReader{
 				xmlReader.next();
 				
 			}
-		} catch (XMLStreamException e) {
-			e.printStackTrace();
-		} catch (ParseException e) {
+		} catch (XMLStreamException | ParseException e) {
 			e.printStackTrace();
 		}
-		
+
 		return null;
 	}
 	

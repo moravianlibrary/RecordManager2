@@ -325,9 +325,7 @@ public class PatentsXmlStreamReader implements MarcReader {
 				xmlReader.next();
 
 			}
-		} catch (XMLStreamException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
+		} catch (XMLStreamException | IOException e) {
 			e.printStackTrace();
 		}
 

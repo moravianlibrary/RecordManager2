@@ -131,10 +131,7 @@ public class MarcISO2709StreamReader implements MarcReader {
         try {
             parseLeader(ldr, byteArray);
             directoryLength = ldr.getBaseAddressOfData() - (24 + 1);
-        } catch (IOException e) {
-            throw new MarcException("error parsing leader with data: " +
-                    new String(byteArray), e);
-        } catch (MarcException e) {
+        } catch (IOException | MarcException e) {
             throw new MarcException("error parsing leader with data: " +
                     new String(byteArray), e);
         }
