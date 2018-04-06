@@ -13,29 +13,24 @@ public class TitleSimilarityWriter implements ItemWriter<List<Set<Long>>> {
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
 	
-	String tablename;
+	private String tablename;
 	
 	public TitleSimilarityWriter(String tablename) {
 		this.tablename = tablename;
 	}
-	
+
+	private static final String INSERT_SQL = "INSERT INTO %s VALUES (nextval('tmp_table_id_seq'),('%s'))";
+
 	@Override
 	public void write(List<? extends List<Set<Long>>> items) throws Exception {
 		
 		List<String> commands = new ArrayList<>();
-		
+
 		for (List<Set<Long>> item: items) {
 			for (Set<Long> idSet: item) {
 				if (idSet.size() > 1) {
 					String[] ids = idSet.stream().map(e -> e.toString()).toArray(String[]::new);
-					StringBuilder builder = new StringBuilder();
-					builder.append("INSERT INTO ");
-					builder.append(tablename);
-					builder.append(" VALUES (nextval('tmp_table_id_seq'),");
-					builder.append("('");
-					builder.append(String.join(",", ids));
-					builder.append("'))");
-					commands.add(builder.toString());
+					commands.add(String.format(INSERT_SQL, tablename, String.join(",", ids)));
 				}
 			}
 		}
