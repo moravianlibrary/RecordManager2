@@ -782,17 +782,17 @@ public class MarcDSL extends BaseDSL {
 		results.addAll(getFields("100abcdq:975abcdq"));
 		char[] sfCodes = new char[]{'a', 'b', 'c', 'd', 'q'};
 		for (DataField df : record.getDataFields("700")) {
-			String author = "";
+			StringBuilder author = new StringBuilder();
 			for (char c : sfCodes) {
 				if (df.getSubfield(c) != null) {
-					author += df.getSubfield(c).getData() + " ";
+					author.append(df.getSubfield(c).getData()).append(" ");
 					if (c == 'd') {
-						author = author.trim();
-						if (author.endsWith(".")) author = author.substring(0, author.length()-1);
+						author = new StringBuilder(author.toString().trim());
+						if (author.toString().endsWith(".")) author = new StringBuilder(author.substring(0, author.length() - 1));
 					}
 				}
 			}
-			if (!author.isEmpty()) results.add(author.trim());
+			if (author.length() > 0) results.add(author.toString().trim());
 		}
     	return new ArrayList<>(results);
     }

@@ -145,7 +145,7 @@ public class PatentsXmlStreamReader implements MarcReader {
 		record = null;
 
 		DataField df = null;
-		String name = null;
+		StringBuilder name = null;
 		boolean firstAuthor = true; // first to field 100, others 700
 		boolean author = true;
 		boolean authorAvailable = true;
@@ -176,16 +176,16 @@ public class PatentsXmlStreamReader implements MarcReader {
 						author = true;
 						break;
 					case ELEMENT_ORGNAME:
-						name = xmlReader.getElementText();
+						name = new StringBuilder(xmlReader.getElementText());
 						author = false;
 						break;
 					case ELEMENT_FIRST_NAME:
-						if (name == null) name = xmlReader.getElementText();
-						else name += ", " + xmlReader.getElementText();
+						if (name == null) name = new StringBuilder(xmlReader.getElementText());
+						else name.append(", ").append(xmlReader.getElementText());
 						break;
 					case ELEMENT_LAST_NAME:
-						if (name == null) name = xmlReader.getElementText();
-						else name = xmlReader.getElementText() + ", " + name;
+						if (name == null) name = new StringBuilder(xmlReader.getElementText());
+						else name.insert(0, xmlReader.getElementText() + ", ");
 						break;
 					case ELEMENT_INVENTION_TITLE:
 						df = factory.newDataField("TMP", ' ', ' ');
@@ -281,24 +281,24 @@ public class PatentsXmlStreamReader implements MarcReader {
 				case XMLStreamReader.END_ELEMENT:
 					switch (xmlReader.getLocalName()) {
 					case ELEMENT_APPLICANT:
-						if (isAuthorAvailable(name)) {
-							addAuthor(author, firstAuthor, firstCorporate, name, "pta");
+						if (isAuthorAvailable(name.toString())) {
+							addAuthor(author, firstAuthor, firstCorporate, name.toString(), "pta");
 							if (author) firstAuthor = false;
 							else firstCorporate = false;
 						} else authorAvailable = false;
 						name = null;
 						break;
 					case ELEMENT_INVENTOR:
-						if (isAuthorAvailable(name)) {
-							addAuthor(author, firstAuthor, firstCorporate, name, "inv");
+						if (isAuthorAvailable(name.toString())) {
+							addAuthor(author, firstAuthor, firstCorporate, name.toString(), "inv");
 							if (author) firstAuthor = false;
 							else firstCorporate = false;
 						} else authorAvailable = false;
 						name = null;
 						break;
 					case ELEMENT_AGENT:
-						if (isAuthorAvailable(name)) {
-							addAuthor(author, firstAuthor, firstCorporate, name, "pth");
+						if (isAuthorAvailable(name.toString())) {
+							addAuthor(author, firstAuthor, firstCorporate, name.toString(), "pth");
 							if (author) firstAuthor = false;
 							else firstCorporate = false;
 						} else authorAvailable = false;
@@ -335,19 +335,19 @@ public class PatentsXmlStreamReader implements MarcReader {
 	}
 
 	private String getText() throws XMLStreamException {
-		String text = "";
+		StringBuilder text = new StringBuilder();
 		while (xmlReader.hasNext()) {
 			xmlReader.next();
 			switch (xmlReader.getEventType()) {
 			case XMLStreamReader.END_ELEMENT:
-				if (xmlReader.getLocalName().equals(ELEMENT_P)) return text;
+				if (xmlReader.getLocalName().equals(ELEMENT_P)) return text.toString();
 				break;
 			case XMLStreamReader.CHARACTERS:
-				text += xmlReader.getText();
+				text.append(xmlReader.getText());
 				break;
 			}
 		}
-		return text;
+		return text.toString();
 	}
 
 	private boolean isAuthorAvailable(String name) {

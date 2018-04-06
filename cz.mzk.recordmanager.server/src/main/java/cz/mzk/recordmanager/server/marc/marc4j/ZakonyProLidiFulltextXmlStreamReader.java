@@ -47,7 +47,7 @@ public class ZakonyProLidiFulltextXmlStreamReader {
 	
 	public String next() {
 		boolean fulltext = false;
-		String result = "";
+		StringBuilder result = new StringBuilder();
 		int countDiv = 0;
 		while (eventReader.hasNext()) {
 			try {
@@ -65,7 +65,7 @@ public class ZakonyProLidiFulltextXmlStreamReader {
 					case ELEMENT_P:
 						if(fulltext){
 							String xmlFragment = readElementBody(eventReader);
-				            result += xmlFragment + "\n";
+				            result.append(xmlFragment).append("\n");
 						}
 						break;
 					default:
@@ -88,7 +88,7 @@ public class ZakonyProLidiFulltextXmlStreamReader {
 				e.printStackTrace();
 			}
 		}
-		return result;
+		return result.toString();
 	}
 	
 	protected String readElementBody(XMLEventReader eventReader) throws XMLStreamException {

@@ -168,17 +168,17 @@ public class DublinCoreDSL extends BaseDSL {
 	}
 	
 	public String getDescriptionText() {
-		String result="";
+		StringBuilder result= new StringBuilder();
 		List<String> descriptions = record.getDescriptions();
 		
 		if (descriptions == null) {
 			return null;
 		} else {	
 			for (String s: descriptions) {
-				result += s;
+				result.append(s);
 			}
 		}
-		return result;
+		return result.toString();
 		
 	}
 	

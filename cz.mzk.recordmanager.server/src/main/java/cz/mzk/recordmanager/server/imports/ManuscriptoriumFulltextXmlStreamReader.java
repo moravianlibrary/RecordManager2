@@ -44,7 +44,7 @@ public class ManuscriptoriumFulltextXmlStreamReader {
 	}
 
 	public String next() {
-		String result = "";
+		StringBuilder result = new StringBuilder();
 		List<String> titles = new ArrayList<>();
 		while (eventReader.hasNext()) {
 			try {
@@ -60,7 +60,7 @@ public class ManuscriptoriumFulltextXmlStreamReader {
 					case ELEMENT_RUBRIC:
 						String xmlFragment = readElementBody(eventReader);
 						if (!titles.contains(xmlFragment)) {
-							result += xmlFragment + "\n";
+							result.append(xmlFragment).append("\n");
 							titles.add(xmlFragment);
 						}
 
@@ -76,7 +76,7 @@ public class ManuscriptoriumFulltextXmlStreamReader {
 				e.printStackTrace();
 			}
 		}
-		return result;
+		return result.toString();
 	}
 
 	protected String readElementBody(XMLEventReader eventReader)
