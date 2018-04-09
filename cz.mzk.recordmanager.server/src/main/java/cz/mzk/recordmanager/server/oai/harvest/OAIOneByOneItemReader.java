@@ -32,18 +32,20 @@ import cz.mzk.recordmanager.server.util.HibernateSessionSynchronizer.SessionBind
 @StepScope
 public class OAIOneByOneItemReader implements ItemReader<List<OAIRecord>>,
 		StepExecutionListener, ItemStream {
-	
+
 	@Autowired
 	private OAIHarvestConfigurationDAO configDao;
-	
+
 	@Autowired
 	private HibernateSessionSynchronizer hibernateSync;
-	
+
 	@Autowired
 	private OAIHarvesterFactory harvesterFactory;
-	
-	private OAIHarvester harvester;
-	
+
+	private OAIHarvester harvesterIdentifiers;
+
+	private OAIHarvester harvesterGetRecord;
+
 	// configuration
 	private Long confId;
 
@@ -53,13 +55,13 @@ public class OAIOneByOneItemReader implements ItemReader<List<OAIRecord>>,
 
 	// state
 	private String resumptionToken;
-	
-	private Queue<OAIHeader> pendingHeadersQueue = new LinkedList<OAIHeader>();
+
+	private Queue<OAIHeader> pendingHeadersQueue = new LinkedList<>();
 
 	private boolean finished = false;
-	
-    private static final int COMMIT_INTERVAL = 50;
-	
+
+	private static final int COMMIT_INTERVAL = 50;
+
 	public OAIOneByOneItemReader(Long confId, Date fromDate, Date untilDate, String resumptionToken) {
 		super();
 		this.confId = confId;
@@ -67,23 +69,28 @@ public class OAIOneByOneItemReader implements ItemReader<List<OAIRecord>>,
 		this.untilDate = untilDate;
 		this.resumptionToken = resumptionToken;
 	}
-	
+
 	@Override
 	public void beforeStep(final StepExecution stepExecution) {
 		try (SessionBinder sess = hibernateSync.register()) {
 			OAIHarvestConfiguration conf = configDao.get(confId);
-			OAIHarvesterParams params = new OAIHarvesterParams();
-			params.setUrl(conf.getUrl());
-			params.setMetadataPrefix(conf.getMetadataPrefix());
-			params.setSet(conf.getSet());
-			params.setGranularity(conf.getGranularity());
-			params.setFrom(fromDate);
-			params.setUntil(untilDate);
-			harvester = harvesterFactory.create(params);
+			OAIHarvesterParams paramsIdentifiers = new OAIHarvesterParams();
+			paramsIdentifiers.setUrl(conf.getUrl());
+			paramsIdentifiers.setMetadataPrefix(conf.getMetadataPrefix());
+			paramsIdentifiers.setSet(conf.getSet());
+			paramsIdentifiers.setGranularity(conf.getGranularity());
+			paramsIdentifiers.setFrom(fromDate);
+			paramsIdentifiers.setUntil(untilDate);
+			harvesterIdentifiers = harvesterFactory.create(paramsIdentifiers);
 			processIdentify(conf);
 			conf = configDao.get(confId);
-			params.setGranularity(conf.getGranularity());
-			harvester = harvesterFactory.create(params);
+			paramsIdentifiers.setGranularity(conf.getGranularity());
+			harvesterIdentifiers = harvesterFactory.create(paramsIdentifiers);
+			// GetRecord without from and until
+			OAIHarvesterParams paramsGetRecord = new OAIHarvesterParams();
+			paramsGetRecord.setUrl(conf.getUrl());
+			paramsGetRecord.setMetadataPrefix(conf.getMetadataPrefix());
+			harvesterGetRecord = harvesterFactory.create(paramsGetRecord);
 		}
 	}
 
@@ -99,15 +106,15 @@ public class OAIOneByOneItemReader implements ItemReader<List<OAIRecord>>,
 	@Override
 	public List<OAIRecord> read() {
 		prepareHeadersQueue();
-		List<OAIRecord> result = new ArrayList<OAIRecord>();
-		for (int i = 0; i < Math.min(COMMIT_INTERVAL,pendingHeadersQueue.size()); i++) {
+		List<OAIRecord> result = new ArrayList<>();
+		for (int i = 0; i < Math.min(COMMIT_INTERVAL, pendingHeadersQueue.size()); i++) {
 			OAIHeader header = pendingHeadersQueue.poll();
-			OAIGetRecord oaiGetRecord = harvester.getRecord(header.getIdentifier());
+			OAIGetRecord oaiGetRecord = harvesterGetRecord.getRecord(header.getIdentifier());
 			if (oaiGetRecord != null && oaiGetRecord.getRecord() != null) {
 				result.add(oaiGetRecord.getRecord());
 			}
 		}
-		
+
 		return result.isEmpty() ? null : result;
 	}
 
@@ -120,21 +127,21 @@ public class OAIOneByOneItemReader implements ItemReader<List<OAIRecord>>,
 			if (finished) {
 				return;
 			}
-			OAIListIdentifiers listIdentifiers = harvester.listIdentifiers(resumptionToken);
+			OAIListIdentifiers listIdentifiers = harvesterIdentifiers.listIdentifiers(resumptionToken);
 			pendingHeadersQueue.addAll(listIdentifiers.getHeaders());
 			resumptionToken = listIdentifiers.getNextResumptionToken();
 			if (resumptionToken == null) {
 				finished = true;
 			}
 		}
-	}  
-	
+	}
+
 	/**
 	 * process Identify request and update stored
 	 * {@link OAIHarvestConfiguration}
 	 */
 	protected void processIdentify(OAIHarvestConfiguration conf) {
-		OAIIdentify identify = harvester.identify();
+		OAIIdentify identify = harvesterIdentifiers.identify();
 		conf.setGranularity(OAIGranularity.stringToOAIGranularity(identify
 				.getGranularity()));
 		configDao.persist(conf);
@@ -152,7 +159,7 @@ public class OAIOneByOneItemReader implements ItemReader<List<OAIRecord>>,
 	public void update(ExecutionContext ctx)
 			throws ItemStreamException {
 		ctx.putString("resumptionToken", resumptionToken);
-		
+
 	}
 
 	@Override
