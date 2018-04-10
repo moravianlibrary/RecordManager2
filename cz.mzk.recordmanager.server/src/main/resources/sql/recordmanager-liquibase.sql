@@ -1288,6 +1288,7 @@ UPDATE import_conf SET interception_enabled=true WHERE id=360;
 UPDATE import_conf SET mapping_script='AdresarKnihovenLocal.groovy' WHERE id=351;
 
 --changeset tomascejpek:94
+DROP VIEW IF EXISTS oai_harvest_job_stat CASCADE;
 CREATE OR REPLACE VIEW oai_harvest_job_stat AS
 SELECT
   bje.job_execution_id,
@@ -1312,6 +1313,29 @@ FROM batch_job_instance bji
   JOIN library l ON l.id = ic.library_id
 WHERE bji.job_name IN ('oaiHarvestJob', 'oaiReharvestJob', 'oaiPartitionedHarvestJob', 'cosmotronHarvestJob', 'krameriusHarvestJob', 'krameriusHarvestNoSortingJob', 'oaiHarvestOneByOneJob')
 GROUP BY bje.job_execution_id,l.name,ohc.url,ohc.set_spec,from_param.date_val,to_param.date_val
+;
+CREATE OR REPLACE VIEW oai_harvest_summary AS
+WITH last_harvest_date AS (
+  SELECT
+    import_conf_id,
+    COALESCE(MAX(CASE WHEN status = 'COMPLETED' THEN to_param END), MAX(CASE WHEN status = 'COMPLETED' THEN end_time END)) last_successful_harvest_date,
+    COALESCE(MAX(CASE WHEN status = 'FAILED' THEN to_param END), MAX(CASE WHEN status = 'FAILED' THEN end_time END)) last_failed_harvest_date,
+    COALESCE(MIN(end_time), MIN(to_param)) first_harvest_date,
+    COUNT(1) no_of_harvests
+  FROM oai_harvest_job_stat
+  GROUP BY import_conf_id
+)
+SELECT ic.id, l.name, ic.id_prefix, ohc.url, ohc.set_spec, lhd.last_successful_harvest_date, lhd.last_failed_harvest_date, lhd.first_harvest_date, lhd.no_of_harvests
+FROM last_harvest_date lhd
+  JOIN import_conf ic ON ic.id = lhd.import_conf_id
+  LEFT JOIN oai_harvest_conf ohc ON ohc.import_conf_id = ic.id
+  LEFT JOIN kramerius_conf kc ON kc.import_conf_id = ic.id
+  JOIN library l ON l.id = ic.library_id
+;
+CREATE OR REPLACE VIEW oai_last_failed_harvests AS
+SELECT name, url, set_spec, last_failed_harvest_date
+FROM oai_harvest_summary
+WHERE last_failed_harvest_date > last_successful_harvest_date OR (last_failed_harvest_date IS NOT NULL AND last_successful_harvest_date IS NULL)
 ;
 
 --changeset tomascejpek:95 context:cpk
