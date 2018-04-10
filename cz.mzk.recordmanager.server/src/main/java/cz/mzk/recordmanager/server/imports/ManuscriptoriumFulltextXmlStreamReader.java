@@ -1,17 +1,18 @@
 package cz.mzk.recordmanager.server.imports;
 
-import java.io.InputStream;
-import java.io.StringWriter;
-import java.util.ArrayList;
-import java.util.List;
+import com.ctc.wstx.exc.WstxEOFException;
+import com.ctc.wstx.exc.WstxParsingException;
+import cz.mzk.recordmanager.server.util.CleaningUtils;
+import cz.mzk.recordmanager.server.util.XMLEventReaderUtils;
 
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.XMLEvent;
-
-import com.ctc.wstx.exc.WstxEOFException;
-import com.ctc.wstx.exc.WstxParsingException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Pattern;
 
 public class ManuscriptoriumFulltextXmlStreamReader {
 
@@ -71,7 +72,7 @@ public class ManuscriptoriumFulltextXmlStreamReader {
 				}
 			} catch (WstxEOFException e) {
 				break;
-			} catch (WstxParsingException e) {
+			} catch (WstxParsingException ignore) {
 			} catch (XMLStreamException e) {
 				e.printStackTrace();
 			}
@@ -79,32 +80,10 @@ public class ManuscriptoriumFulltextXmlStreamReader {
 		return result.toString();
 	}
 
-	protected String readElementBody(XMLEventReader eventReader)
-			throws XMLStreamException {
-		StringWriter buf = new StringWriter();
+	private static final Pattern REPLACE = Pattern.compile("<[^>]*>");
 
-		int depth = 0;
-		while (eventReader.hasNext()) {
-			// peek event
-			XMLEvent xmlEvent = eventReader.peek();
-
-			if (xmlEvent.isStartElement())
-				++depth;
-			else if (xmlEvent.isEndElement()) {
-				--depth;
-				// reached END_ELEMENT tag?
-				// break loop, leave event in stream
-				if (depth < 0)
-					break;
-			}
-
-			xmlEvent = eventReader.nextEvent();
-			xmlEvent.writeAsEncodedUnicode(buf);
-		}
-
-		String result = buf.getBuffer().toString();
-		result = result.replaceAll("<[^>]*>", "");
-
-		return result;
+	private static String readElementBody(final XMLEventReader eventReader) throws XMLStreamException {
+		String result = XMLEventReaderUtils.readElementBody(eventReader);
+		return CleaningUtils.replaceAll(result, REPLACE, "");
 	}
 }
