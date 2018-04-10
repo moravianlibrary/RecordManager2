@@ -2,7 +2,6 @@ package cz.mzk.recordmanager.server.miscellaneous;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.Executor;
 
 import javax.sql.DataSource;
 
@@ -16,11 +15,9 @@ import org.springframework.batch.item.database.JdbcPagingItemReader;
 import org.springframework.batch.item.database.support.SqlPagingQueryProviderFactoryBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.task.TaskExecutor;
-import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import cz.mzk.recordmanager.server.export.HarvestedRecordIdRowMapper;
 import cz.mzk.recordmanager.server.model.HarvestedRecord.HarvestedRecordUniqueId;
@@ -29,7 +26,7 @@ import cz.mzk.recordmanager.server.util.Constants;
 
 @Configuration
 public class FilterCaslinRecordsBySiglaJobConfig {
-	
+
 	@Autowired
 	private JobBuilderFactory jobs;
 
@@ -39,12 +36,12 @@ public class FilterCaslinRecordsBySiglaJobConfig {
 	@Autowired
 	private DataSource dataSource;
 
-	@Value(value = "${recordmanager.threadPoolSize:#{1}}")
-	private int threadPoolSize = 1;
-	
+	@Autowired
+	private TaskExecutor taskExecutor;
+
 	@Bean
 	public Job filterCaslinRecordsJob(
-			@Qualifier(Constants.JOB_ID_FILTER_CASLIN+":filterCaslinRecordsStep") Step filterCaslinRecordsStep) {
+			@Qualifier(Constants.JOB_ID_FILTER_CASLIN + ":filterCaslinRecordsStep") Step filterCaslinRecordsStep) {
 		return jobs.get(Constants.JOB_ID_FILTER_CASLIN)
 				.validator(new FilterCaslinRecordsJobParametersValidator())
 				.listener(JobFailureListener.INSTANCE)
@@ -52,29 +49,29 @@ public class FilterCaslinRecordsBySiglaJobConfig {
 				.end()
 				.build();
 	}
-	
-	@Bean(name = Constants.JOB_ID_FILTER_CASLIN+":filterCaslinRecordsStep")
+
+	@Bean(name = Constants.JOB_ID_FILTER_CASLIN + ":filterCaslinRecordsStep")
 	public Step filterCaslinRecordsStep() throws Exception {
 		return steps.get("updateRecordsStep")
-				.<HarvestedRecordUniqueId, HarvestedRecordUniqueId> chunk(20)//
+				.<HarvestedRecordUniqueId, HarvestedRecordUniqueId>chunk(20)//
 				.reader(caslinRecordsReader()) //
 				.writer(caslinRecordsWriter()) //
-				.taskExecutor((TaskExecutor) poolTaskExecutor()) 
+				.taskExecutor(taskExecutor)
 				.build();
 	}
-	
-	@Bean(name = Constants.JOB_ID_FILTER_CASLIN+":caslinRecordsReader")
+
+	@Bean(name = Constants.JOB_ID_FILTER_CASLIN + ":caslinRecordsReader")
 	@StepScope
 	public synchronized ItemReader<HarvestedRecordUniqueId> caslinRecordsReader()
 			throws Exception {
-		JdbcPagingItemReader<HarvestedRecordUniqueId> reader = new JdbcPagingItemReader<HarvestedRecordUniqueId>();
+		JdbcPagingItemReader<HarvestedRecordUniqueId> reader = new JdbcPagingItemReader<>();
 		SqlPagingQueryProviderFactoryBean pqpf = new SqlPagingQueryProviderFactoryBean();
 		pqpf.setDataSource(dataSource);
 		pqpf.setSelectClause("SELECT import_conf_id, record_id");
 		pqpf.setFromClause("FROM harvested_record");
 		pqpf.setWhereClause("WHERE import_conf_id = :conf_id and deleted is null");
 		pqpf.setSortKey("record_id");
-		Map<String, Object> parameterValues = new HashMap<String, Object>();
+		Map<String, Object> parameterValues = new HashMap<>();
 		parameterValues.put("conf_id", Constants.IMPORT_CONF_ID_CASLIN);
 		reader.setParameterValues(parameterValues);
 		reader.setRowMapper(new HarvestedRecordIdRowMapper());
@@ -84,20 +81,11 @@ public class FilterCaslinRecordsBySiglaJobConfig {
 		reader.afterPropertiesSet();
 		return reader;
 	}
-	
-	@Bean(name = Constants.JOB_ID_FILTER_CASLIN+":filterCaslinRecordsWriter")
+
+	@Bean(name = Constants.JOB_ID_FILTER_CASLIN + ":filterCaslinRecordsWriter")
 	@StepScope
 	public FilterCaslinRecordsWriter caslinRecordsWriter() {
 		return new FilterCaslinRecordsWriter();
 	}
-	
-	@Bean(name = Constants.JOB_ID_FILTER_CASLIN+":threadPoolTaskExecutor")
-    public Executor poolTaskExecutor()
-    {
-        ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-        executor.setCorePoolSize(threadPoolSize);
-        executor.setMaxPoolSize(threadPoolSize);
-        executor.initialize();
-        return executor;
-    }
+
 }

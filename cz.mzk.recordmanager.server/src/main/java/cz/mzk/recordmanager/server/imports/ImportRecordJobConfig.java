@@ -1,7 +1,6 @@
 package cz.mzk.recordmanager.server.imports;
 
 import java.util.List;
-import java.util.concurrent.Executor;
 
 import org.marc4j.marc.Record;
 import org.springframework.batch.core.Job;
@@ -18,7 +17,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.task.TaskExecutor;
-import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import cz.mzk.recordmanager.server.model.AntikvariatyRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
@@ -40,16 +38,16 @@ public class ImportRecordJobConfig {
 	@Autowired
 	private StepBuilderFactory steps;
 
+	@Autowired
+	private TaskExecutor taskExecutor;
+
 	private static final String STRING_OVERRIDEN_BY_EXPRESSION = null;
 
 	private static final Long LONG_OVERRIDEN_BY_EXPRESSION = null;
 
-	@Value(value = "${recordmanager.threadPoolSize:#{1}}")
-	private int threadPoolSize = 1;
-	
 	@Bean
 	public Job ImportRecordsJob(
-			@Qualifier(Constants.JOB_ID_IMPORT +":importRecordsStep") Step importRecordsStep) {
+			@Qualifier(Constants.JOB_ID_IMPORT + ":importRecordsStep") Step importRecordsStep) {
 		return jobs.get(Constants.JOB_ID_IMPORT)
 				.validator(new ImportRecordsJobParametersValidator())
 				.incrementer(UUIDIncrementer.INSTANCE)
@@ -58,27 +56,27 @@ public class ImportRecordJobConfig {
 				.end().build();
 	}
 
-	@Bean(name=Constants.JOB_ID_IMPORT +":importRecordsStep")
+	@Bean(name = Constants.JOB_ID_IMPORT + ":importRecordsStep")
 	public Step importRecordsStep() throws Exception {
 		return steps.get("importRecordsStep")
 				.listener(new StepProgressListener())
-				.<List<Record>, List<Record>> chunk(20)//
+				.<List<Record>, List<Record>>chunk(20)//
 				.reader(importRecordsReader(LONG_OVERRIDEN_BY_EXPRESSION, STRING_OVERRIDEN_BY_EXPRESSION, STRING_OVERRIDEN_BY_EXPRESSION))//
 				.writer(importRecordsWriter(LONG_OVERRIDEN_BY_EXPRESSION)) //
 				.build();
 	}
 
-	@Bean(name=Constants.JOB_ID_IMPORT +":importRecordsReader")
+	@Bean(name = Constants.JOB_ID_IMPORT + ":importRecordsReader")
 	@StepScope
 	public synchronized ItemReader<List<Record>> importRecordsReader(
 			@Value("#{jobParameters[" + Constants.JOB_PARAM_CONF_ID + "]}") Long configurationId,
 			@Value("#{jobParameters[" + Constants.JOB_PARAM_FORMAT + "]}") String strFormat,
 			@Value("#{jobParameters[" + Constants.JOB_PARAM_IN_FILE + "]}") String filename)
 			throws Exception {
-			return new ImportRecordsFileReader(configurationId, filename, strFormat);
+		return new ImportRecordsFileReader(configurationId, filename, strFormat);
 	}
 
-	@Bean(name=Constants.JOB_ID_IMPORT +":writer")
+	@Bean(name = Constants.JOB_ID_IMPORT + ":writer")
 	@StepScope
 	public ImportRecordsWriter importRecordsWriter(@Value("#{jobParameters[" + Constants.JOB_PARAM_CONF_ID + "]}") Long configurationId) {
 		return new ImportRecordsWriter(configurationId);
@@ -87,7 +85,7 @@ public class ImportRecordJobConfig {
 	// multi thread import
 	@Bean
 	public Job multiImportRecordsJob(
-			@Qualifier(Constants.JOB_ID_MULTI_THREADS_IMPORT +":importRecordsStep") Step multiImportRecordsStep) {
+			@Qualifier(Constants.JOB_ID_MULTI_THREADS_IMPORT + ":importRecordsStep") Step multiImportRecordsStep) {
 		return jobs.get(Constants.JOB_ID_MULTI_THREADS_IMPORT)
 				.validator(new ImportRecordsJobParametersValidator())
 				.incrementer(UUIDIncrementer.INSTANCE)
@@ -96,21 +94,21 @@ public class ImportRecordJobConfig {
 				.end().build();
 	}
 
-	@Bean(name=Constants.JOB_ID_MULTI_THREADS_IMPORT +":importRecordsStep")
+	@Bean(name = Constants.JOB_ID_MULTI_THREADS_IMPORT + ":importRecordsStep")
 	public Step multiImportRecordsStep() throws Exception {
 		return steps.get("multiImportRecordsStep")
 				.listener(new StepProgressListener())
-				.<List<Record>, List<Record>> chunk(20)//
+				.<List<Record>, List<Record>>chunk(20)//
 				.reader(importRecordsReader(LONG_OVERRIDEN_BY_EXPRESSION, STRING_OVERRIDEN_BY_EXPRESSION, STRING_OVERRIDEN_BY_EXPRESSION))//
 				.writer(importRecordsWriter(LONG_OVERRIDEN_BY_EXPRESSION)) //
-				.taskExecutor((TaskExecutor) poolTaskExecutor())
+				.taskExecutor(taskExecutor)
 				.build();
 	}
 
 	// Download and import
 	@Bean
 	public Job DownloadAndImportRecordsJob(
-			@Qualifier(Constants.JOB_ID_DOWNLOAD_IMPORT +":downloadImportRecordsStep") Step downloadImportRecordsStep) {
+			@Qualifier(Constants.JOB_ID_DOWNLOAD_IMPORT + ":downloadImportRecordsStep") Step downloadImportRecordsStep) {
 		return jobs.get(Constants.JOB_ID_DOWNLOAD_IMPORT)
 				.validator(new DownloadAndImportRecordsJobParametersValidator())
 				.incrementer(UUIDIncrementer.INSTANCE)
@@ -119,32 +117,31 @@ public class ImportRecordJobConfig {
 				.end().build();
 	}
 
-	@Bean(name=Constants.JOB_ID_DOWNLOAD_IMPORT +":downloadImportRecordsStep")
+	@Bean(name = Constants.JOB_ID_DOWNLOAD_IMPORT + ":downloadImportRecordsStep")
 	public Step downloadImportRecordsStep() throws Exception {
 		return steps.get("downloadImportRecordsStep")
-				.<List<Record>, List<Record>> chunk(20)//
+				.<List<Record>, List<Record>>chunk(20)//
 				.reader(downloadImportRecordsReader(LONG_OVERRIDEN_BY_EXPRESSION))//
 				.writer(importRecordsWriter(LONG_OVERRIDEN_BY_EXPRESSION)) //
 				.build();
 	}
-	
-	@Bean(name=Constants.JOB_ID_DOWNLOAD_IMPORT +":importRecordsReader")
+
+	@Bean(name = Constants.JOB_ID_DOWNLOAD_IMPORT + ":importRecordsReader")
 	@StepScope
 	public ItemReader<List<Record>> downloadImportRecordsReader(
 			@Value("#{jobParameters[" + Constants.JOB_PARAM_CONF_ID + "]}") Long confId)
 			throws Exception {
-			return new ImportRecordsFileReader(confId);
+		return new ImportRecordsFileReader(confId);
 	}
-	
-	
-	@Bean(name=Constants.JOB_ID_IMPORT + ":afterHarvestStep")
+
+	@Bean(name = Constants.JOB_ID_IMPORT + ":afterHarvestStep")
 	public Step afterHarvestStep() {
 		return steps.get("afterHarvestStep") //
 				.tasklet(afterHarvestTasklet()) //
 				.build();
 	}
 
-	@Bean(name=Constants.JOB_ID_IMPORT + ":afterHarvestTasklet")
+	@Bean(name = Constants.JOB_ID_IMPORT + ":afterHarvestTasklet")
 	@StepScope
 	public Tasklet afterHarvestTasklet() {
 		return new AfterHarvestTasklet();
@@ -153,29 +150,29 @@ public class ImportRecordJobConfig {
 	// Antikvariaty
 	@Bean
 	public Job AntikvariatyImportRecordsJob(
-			@Qualifier(Constants.JOB_ID_IMPORT_ANTIKVARIATY +":importRecordsStep") Step importRecordsStep) {
+			@Qualifier(Constants.JOB_ID_IMPORT_ANTIKVARIATY + ":importRecordsStep") Step importRecordsStep) {
 		return jobs.get(Constants.JOB_ID_IMPORT_ANTIKVARIATY)
 				.validator(new AntikvariatyImportJobParametersValidator())
 				.listener(JobFailureListener.INSTANCE).flow(importRecordsStep)
 				.end().build();
 	}
 
-	@Bean(name=Constants.JOB_ID_IMPORT_ANTIKVARIATY +":importRecordsStep")
+	@Bean(name = Constants.JOB_ID_IMPORT_ANTIKVARIATY + ":importRecordsStep")
 	public Step importAntikvariatyRecordsStep() throws Exception {
 		return steps.get("antikvariaty:importRecordsStep")
-				.<AntikvariatyRecord, AntikvariatyRecord> chunk(10)//
+				.<AntikvariatyRecord, AntikvariatyRecord>chunk(10)//
 				.reader(importAntikvariatyReader(LONG_OVERRIDEN_BY_EXPRESSION))//
 				.writer(importAntikvariatyWriter()) //
 				.build();
 	}
 
-	@Bean(name=Constants.JOB_ID_IMPORT_ANTIKVARIATY + ":reader")
+	@Bean(name = Constants.JOB_ID_IMPORT_ANTIKVARIATY + ":reader")
 	@StepScope
 	public ItemReader<AntikvariatyRecord> importAntikvariatyReader(@Value("#{jobParameters[" + Constants.JOB_PARAM_CONF_ID + "]}") Long configId) throws Exception {
 		return new AntikvariatyRecordsReader(configId);
 	}
 
-	@Bean(name=Constants.JOB_ID_IMPORT_ANTIKVARIATY + ":writer")
+	@Bean(name = Constants.JOB_ID_IMPORT_ANTIKVARIATY + ":writer")
 	@StepScope
 	public ItemWriter<AntikvariatyRecord> importAntikvariatyWriter() {
 		return new AntikvariatyRecordsWriter();
@@ -184,17 +181,17 @@ public class ImportRecordJobConfig {
 	// Oai format
 	@Bean
 	public Job OaiImportRecordsJob(
-			@Qualifier(Constants.JOB_ID_IMPORT_OAI +":importRecordsStep") Step importRecordsStep) {
+			@Qualifier(Constants.JOB_ID_IMPORT_OAI + ":importRecordsStep") Step importRecordsStep) {
 		return jobs.get(Constants.JOB_ID_IMPORT_OAI)
 				.validator(new ImportOaiRecordsJobParametersValidator())
 				.listener(JobFailureListener.INSTANCE).flow(importRecordsStep)
 				.end().build();
 	}
 
-	@Bean(name=Constants.JOB_ID_IMPORT_OAI +":importRecordsStep")
+	@Bean(name = Constants.JOB_ID_IMPORT_OAI + ":importRecordsStep")
 	public Step importOaiRecordsStep() throws Exception {
-		return steps.get(Constants.JOB_ID_IMPORT_OAI+"importRecordsStep")
-				.<List<OAIRecord>, List<HarvestedRecord>> chunk(100)//
+		return steps.get(Constants.JOB_ID_IMPORT_OAI + "importRecordsStep")
+				.<List<OAIRecord>, List<HarvestedRecord>>chunk(100)//
 				.reader(importOaiRecordsReader(STRING_OVERRIDEN_BY_EXPRESSION))//
 				.processor(oaiItemProcessor())
 				.writer(harvestedRecordWriter()) //
@@ -205,86 +202,78 @@ public class ImportRecordJobConfig {
 	 * filename format:
 	 * 1) /directory/file.txt - takes file file.txt
 	 * 2) /directory/ - takes all files from directory
+	 *
 	 * @param filename name of input file
 	 * @return {@link ImportOaiRecordsFileReader}
 	 */
-	@Bean(name=Constants.JOB_ID_IMPORT_OAI +":importRecordsReader")
+	@Bean(name = Constants.JOB_ID_IMPORT_OAI + ":importRecordsReader")
 	@StepScope
 	public ItemReader<List<OAIRecord>> importOaiRecordsReader(
 			@Value("#{jobParameters[" + Constants.JOB_PARAM_IN_FILE + "]}") String filename)
 			throws Exception {
-			return new ImportOaiRecordsFileReader(filename);
+		return new ImportOaiRecordsFileReader(filename);
 	}
 
-	@Bean(name=Constants.JOB_ID_IMPORT_OAI+":processor")
-    @StepScope
-    public OAIItemProcessor oaiItemProcessor() {
-    	return new OAIItemProcessor();
-    }
+	@Bean(name = Constants.JOB_ID_IMPORT_OAI + ":processor")
+	@StepScope
+	public OAIItemProcessor oaiItemProcessor() {
+		return new OAIItemProcessor();
+	}
 
-	@Bean(name=Constants.JOB_ID_IMPORT_OAI+":HarvestedRecordWriter")
-    @StepScope
-    public ItemWriter<List<HarvestedRecord>> harvestedRecordWriter() {
-    	return new HarvestedRecordWriter();
-    }
+	@Bean(name = Constants.JOB_ID_IMPORT_OAI + ":HarvestedRecordWriter")
+	@StepScope
+	public ItemWriter<List<HarvestedRecord>> harvestedRecordWriter() {
+		return new HarvestedRecordWriter();
+	}
 
 	// import cosmotron 996
 	@Bean
 	public Job importCosmotron996RecordsJob(
-			@Qualifier(Constants.JOB_ID_IMPORT_COSMOTRON_996 +":importRecordsStep") Step importRecordsStep) {
+			@Qualifier(Constants.JOB_ID_IMPORT_COSMOTRON_996 + ":importRecordsStep") Step importRecordsStep) {
 		return jobs.get(Constants.JOB_ID_IMPORT_COSMOTRON_996)
 				.validator(new ImportRecordsJobParametersValidator())
 				.listener(JobFailureListener.INSTANCE).flow(importRecordsStep)
 				.end().build();
 	}
 
-	@Bean(name=Constants.JOB_ID_IMPORT_COSMOTRON_996 +":importRecordsStep")
+	@Bean(name = Constants.JOB_ID_IMPORT_COSMOTRON_996 + ":importRecordsStep")
 	public Step importCosmotron996RecordsStep() throws Exception {
-		return steps.get(Constants.JOB_ID_IMPORT_COSMOTRON_996+"importRecordsStep")
-				.<List<Record>, List<Record>> chunk(20)//
+		return steps.get(Constants.JOB_ID_IMPORT_COSMOTRON_996 + "importRecordsStep")
+				.<List<Record>, List<Record>>chunk(20)//
 				.reader(importRecordsReader(LONG_OVERRIDEN_BY_EXPRESSION, STRING_OVERRIDEN_BY_EXPRESSION, STRING_OVERRIDEN_BY_EXPRESSION))//
 				.writer(importCosmotron996RecordsWriter(LONG_OVERRIDEN_BY_EXPRESSION)) //
 				.build();
 	}
 
-	@Bean(name=Constants.JOB_ID_IMPORT_COSMOTRON_996 +":writer")
+	@Bean(name = Constants.JOB_ID_IMPORT_COSMOTRON_996 + ":writer")
 	@StepScope
 	public ImportCosmotron996RecordsWriter importCosmotron996RecordsWriter(@Value("#{jobParameters[" + Constants.JOB_PARAM_CONF_ID + "]}") Long configurationId) {
 		return new ImportCosmotron996RecordsWriter(configurationId);
 	}
-	
+
 	// import tezaurus
 	@Bean
 	public Job importTezaurusRecordsJob(
-			@Qualifier(Constants.JOB_ID_IMPORT_TEZAURUS +":importRecordsStep") Step importRecordsStep) {
+			@Qualifier(Constants.JOB_ID_IMPORT_TEZAURUS + ":importRecordsStep") Step importRecordsStep) {
 		return jobs.get(Constants.JOB_ID_IMPORT_TEZAURUS)
 				.validator(new ImportRecordsJobParametersValidator())
 				.listener(JobFailureListener.INSTANCE).flow(importRecordsStep)
 				.end().build();
 	}
 
-	@Bean(name=Constants.JOB_ID_IMPORT_TEZAURUS +":importRecordsStep")
+	@Bean(name = Constants.JOB_ID_IMPORT_TEZAURUS + ":importRecordsStep")
 	public Step importTezaurusRecordsStep() throws Exception {
-		return steps.get(Constants.JOB_ID_IMPORT_TEZAURUS+"importRecordsStep")
-				.<List<Record>, List<Record>> chunk(20)//
+		return steps.get(Constants.JOB_ID_IMPORT_TEZAURUS + "importRecordsStep")
+				.<List<Record>, List<Record>>chunk(20)//
 				.reader(importRecordsReader(LONG_OVERRIDEN_BY_EXPRESSION, STRING_OVERRIDEN_BY_EXPRESSION, STRING_OVERRIDEN_BY_EXPRESSION))//
 				.writer(importTezaurusRecordsWriter(LONG_OVERRIDEN_BY_EXPRESSION)) //
 				.build();
 	}
 
-	@Bean(name=Constants.JOB_ID_IMPORT_TEZAURUS +":writer")
+	@Bean(name = Constants.JOB_ID_IMPORT_TEZAURUS + ":writer")
 	@StepScope
 	public ItemWriter<List<Record>> importTezaurusRecordsWriter(@Value("#{jobParameters[" + Constants.JOB_PARAM_CONF_ID + "]}") Long configurationId) {
 		return new ImportTezaurusRecordsWriter(configurationId);
-	}
-
-	@Bean(name = "threadPoolTaskExecutor")
-	public Executor poolTaskExecutor() {
-		ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-		executor.setCorePoolSize(threadPoolSize);
-		executor.setMaxPoolSize(threadPoolSize);
-		executor.initialize();
-		return executor;
 	}
 
 }
