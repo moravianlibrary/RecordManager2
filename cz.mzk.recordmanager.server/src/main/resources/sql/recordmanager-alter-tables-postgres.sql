@@ -259,7 +259,7 @@ CREATE TABLE fulltext_monography
   page character varying(20),
   fulltext bytea,
   CONSTRAINT fulltext_monography_pkey PRIMARY KEY (id),
-  CONSTRAINT fulltext_monography_harvested_record_id_fk FOREIGN KEY (harvested_record_id)
+  CONSTRAINT fulltext_monography_harvested_record_id_fk FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE
 ); 
 
 -- 16. 9. 2015 mertam
