@@ -1286,3 +1286,33 @@ UPDATE import_conf SET interception_enabled=true WHERE id=360;
 
 --changeset tomascejpek:93 context:cpk
 UPDATE import_conf SET mapping_script='AdresarKnihovenLocal.groovy' WHERE id=351;
+
+--changeset tomascejpek:94
+CREATE OR REPLACE VIEW oai_harvest_job_stat AS
+SELECT
+  bje.job_execution_id,
+  (array_agg(ic.id))[1]  import_conf_id,
+  l.name library_name,
+  ohc.url url,
+  ohc.set_spec,
+  bje.start_time,
+  bje.end_time,
+  bje.status,
+  from_param.date_val from_param,
+  to_param.date_val to_param,
+  (SELECT sum(read_count) FROM batch_step_execution bse WHERE bse.job_execution_id = bje.job_execution_id) no_of_records
+FROM batch_job_instance bji
+  JOIN batch_job_execution bje ON bje.job_instance_id = bji.job_instance_id
+  JOIN batch_job_execution_params conf_id_param ON conf_id_param.job_execution_id = bje.job_execution_id AND conf_id_param.key_name = 'configurationId'
+  LEFT JOIN batch_job_execution_params to_param ON to_param.job_execution_id = bje.job_execution_id AND to_param.key_name = 'to'
+  LEFT JOIN batch_job_execution_params from_param ON from_param.job_execution_id = bje.job_execution_id AND from_param.key_name = 'from'
+  LEFT JOIN oai_harvest_conf ohc ON ohc.import_conf_id = conf_id_param.long_val
+  LEFT JOIN kramerius_conf kc ON kc.import_conf_id = conf_id_param.long_val
+  JOIN import_conf ic ON ic.id = ohc.import_conf_id OR ic.id = kc.import_conf_id
+  JOIN library l ON l.id = ic.library_id
+WHERE bji.job_name IN ('oaiHarvestJob', 'oaiReharvestJob', 'oaiPartitionedHarvestJob', 'cosmotronHarvestJob', 'krameriusHarvestJob', 'krameriusHarvestNoSortingJob', 'oaiHarvestOneByOneJob')
+GROUP BY bje.job_execution_id,l.name,ohc.url,ohc.set_spec,from_param.date_val,to_param.date_val
+;
+
+--changeset tomascejpek:95 context:cpk
+UPDATE oai_harvest_conf SET harvest_job_name='oaiHarvestOneByOneJob' WHERE import_conf_id in (301,342);

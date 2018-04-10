@@ -20,7 +20,7 @@ FROM batch_job_instance bji
   LEFT JOIN kramerius_conf kc ON kc.import_conf_id = conf_id_param.long_val
   JOIN import_conf ic ON ic.id = ohc.import_conf_id OR ic.id = kc.import_conf_id
   JOIN library l ON l.id = ic.library_id
-WHERE bji.job_name IN ('oaiHarvestJob', 'oaiReharvestJob', 'oaiPartitionedHarvestJob', 'cosmotronHarvestJob', 'krameriusHarvestJob', 'krameriusHarvestNoSortingJob')
+WHERE bji.job_name IN ('oaiHarvestJob', 'oaiReharvestJob', 'oaiPartitionedHarvestJob', 'cosmotronHarvestJob', 'krameriusHarvestJob', 'krameriusHarvestNoSortingJob', 'oaiHarvestOneByOneJob')
 GROUP BY bje.job_execution_id,l.name,ohc.url,ohc.set_spec,from_param.date_val,to_param.date_val
 ;
 

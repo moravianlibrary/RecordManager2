@@ -1,10 +1,6 @@
 package cz.mzk.recordmanager.server.oai.harvest;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
+import java.util.*;
 
 import org.springframework.batch.core.ExitStatus;
 import org.springframework.batch.core.StepExecution;
@@ -96,7 +92,6 @@ public class OAIOneByOneItemReader implements ItemReader<List<OAIRecord>>,
 
 	@Override
 	public ExitStatus afterStep(StepExecution stepExecution) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -107,8 +102,10 @@ public class OAIOneByOneItemReader implements ItemReader<List<OAIRecord>>,
 	public List<OAIRecord> read() {
 		prepareHeadersQueue();
 		List<OAIRecord> result = new ArrayList<>();
+		Set<String> idsInToken = new HashSet<>();
 		for (int i = 0; i < Math.min(COMMIT_INTERVAL, pendingHeadersQueue.size()); i++) {
 			OAIHeader header = pendingHeadersQueue.poll();
+			if (!idsInToken.add(header.getIdentifier())) continue; // harvest only once
 			OAIGetRecord oaiGetRecord = harvesterGetRecord.getRecord(header.getIdentifier());
 			if (oaiGetRecord != null && oaiGetRecord.getRecord() != null) {
 				result.add(oaiGetRecord.getRecord());
@@ -128,9 +125,10 @@ public class OAIOneByOneItemReader implements ItemReader<List<OAIRecord>>,
 				return;
 			}
 			OAIListIdentifiers listIdentifiers = harvesterIdentifiers.listIdentifiers(resumptionToken);
+			if (listIdentifiers == null) return; // 'no records match'
 			pendingHeadersQueue.addAll(listIdentifiers.getHeaders());
 			resumptionToken = listIdentifiers.getNextResumptionToken();
-			if (resumptionToken == null) {
+			if (resumptionToken == null || resumptionToken.isEmpty()) {
 				finished = true;
 			}
 		}
