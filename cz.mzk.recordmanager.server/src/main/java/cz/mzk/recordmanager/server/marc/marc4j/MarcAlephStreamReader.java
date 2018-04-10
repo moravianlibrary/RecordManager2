@@ -15,6 +15,7 @@ public class MarcAlephStreamReader implements MarcReader {
 	private static final Pattern LDR_PATTERN = Pattern.compile("^[^ ]* LDR {3}L (.*)$");
 	private static final Pattern CF_PATTERN = Pattern.compile("^[^ ]* ([\\w]{3}) {3}L ((?!\\$\\$).*)$");
 	private static final Pattern DF_PATTERN = Pattern.compile("^[^ ]* ([\\w]{3})(.)(.) L (.*)$");
+	private static final Pattern DOUBLE_DOLLAR_PATTERN = Pattern.compile("\\$\\$");
 	private BufferedReader br;
 	private MarcFactory factory;
 	private String line = null;
@@ -88,11 +89,14 @@ public class MarcAlephStreamReader implements MarcReader {
 		Matcher matcher;
 		if ((matcher = LDR_PATTERN.matcher(line)).matches()) {
 			record.setLeader(factory.newLeader(matcher.group(1)));
+			if ((matcher = ID_PATTERN.matcher(line)).matches()) {
+				record.addVariableField(factory.newControlField("001", matcher.group(1)));
+			}
 		} else if ((matcher = CF_PATTERN.matcher(line)).matches()) {
 			record.addVariableField(factory.newControlField(matcher.group(1), matcher.group(2)));
 		} else if ((matcher = DF_PATTERN.matcher(line)).matches()) {
 			DataField df = factory.newDataField(matcher.group(1), matcher.group(2).charAt(0), matcher.group(3).charAt(0));
-			for (String data : matcher.group(4).split("\\$\\$")) {
+			for (String data : DOUBLE_DOLLAR_PATTERN.split(matcher.group(4))) {
 				if (data.length() > 1) { // sf code (1 char) + text
 					df.addSubfield(factory.newSubfield(data.charAt(0), data.substring(1)));
 				}
