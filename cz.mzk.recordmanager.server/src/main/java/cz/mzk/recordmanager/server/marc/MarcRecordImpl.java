@@ -1,5 +1,6 @@
 package cz.mzk.recordmanager.server.marc;
 
+import cz.mzk.recordmanager.server.util.MarcRecordUtils;
 import info.freelibrary.marc4j.impl.LeaderImpl;
 
 import java.io.ByteArrayOutputStream;
@@ -27,42 +28,40 @@ import cz.mzk.recordmanager.server.marc.marc4j.MarcFactoryImpl;
 public class MarcRecordImpl implements MarcRecord {
 
 	private static final String DEFAULT_SEPARATOR = " ";
-	
-	private static final String EMPTY_STRING = "";
 
 	protected final Record record;
-	
+
 	protected final Map<String, List<DataField>> dataFields;
-	
+
 	protected final Map<String, List<ControlField>> controlFields;
-	
+
 	public MarcRecordImpl(Record record) {
 		super();
 		this.record = record;
-		this.controlFields = new HashMap<String, List<ControlField>>();
-		for (ControlField field: record.getControlFields()) {
+		this.controlFields = new HashMap<>();
+		for (ControlField field : record.getControlFields()) {
 			List<ControlField> list;
 			if (controlFields.containsKey(field.getTag())) {
 				list = controlFields.get(field.getTag());
 			} else {
-				list = new ArrayList<ControlField>();
+				list = new ArrayList<>();
 			}
 			list.add(field);
 			controlFields.put(field.getTag(), list);
 		}
-		this.dataFields = new HashMap<String, List<DataField>>();
-		for (DataField field: record.getDataFields()) {
+		this.dataFields = new HashMap<>();
+		for (DataField field : record.getDataFields()) {
 			List<DataField> list;
 			if (dataFields.containsKey(field.getTag())) {
 				list = dataFields.get(field.getTag());
 			} else {
-				list = new ArrayList<DataField>();
+				list = new ArrayList<>();
 			}
 			list.add(field);
 			dataFields.put(field.getTag(), list);
 		}
 	}
-	
+
 	@Override
 	public String getControlField(String tag) {
 		List<ControlField> fields = controlFields.get(tag);
@@ -72,7 +71,7 @@ public class MarcRecordImpl implements MarcRecord {
 			return fields.get(0).getData();
 		}
 	}
-	
+
 	@Override
 	public String getField(String tag, char... subfields) {
 		return getField(tag, DEFAULT_SEPARATOR, subfields);
@@ -82,26 +81,25 @@ public class MarcRecordImpl implements MarcRecord {
 	public String getField(String tag, String separator, char... subfields) {
 		List<DataField> fields = dataFields.get(tag);
 		if (fields != null && fields.size() > 0) {
-			String content = parseSubfields((DataField) fields.get(0), separator, subfields);
+			String content = parseSubfields(fields.get(0), separator, subfields);
 			if (content != null && !content.trim().isEmpty()) {
 				return content;
 			}
 		}
 		return null;
 	}
-	
+
 	public List<String> getFields(String tag, String separator, char... subfields) {
 		return getFields(tag, MatchAllDataFieldMatcher.INSTANCE, separator, subfields);
 	}
-	
+
 	@Override
-	public List<String> getFields(String tag, DataFieldMatcher matcher, String separator,
-			char... subfields) {
+	public List<String> getFields(String tag, DataFieldMatcher matcher, String separator, char... subfields) {
 		List<DataField> fields = dataFields.get(tag);
 		if (fields == null) {
 			return Collections.emptyList();
 		}
-		List<String> result = new ArrayList<String>(fields.size());
+		List<String> result = new ArrayList<>(fields.size());
 		for (DataField field : fields) {
 			if (matcher.matches(field)) {
 				String content = parseSubfields(field, separator, subfields);
@@ -115,7 +113,7 @@ public class MarcRecordImpl implements MarcRecord {
 
 	@Override
 	public List<String> getFields(String tag, DataFieldMatcher matcher, SubfieldExtractionMethod method, String separator,
-			char... subfields) {
+								  char... subfields) {
 		if (matcher == null) {
 			matcher = MatchAllDataFieldMatcher.INSTANCE;
 		}
@@ -123,7 +121,7 @@ public class MarcRecordImpl implements MarcRecord {
 		if (fields == null) {
 			return Collections.emptyList();
 		}
-		List<String> result = new ArrayList<String>(fields.size());
+		List<String> result = new ArrayList<>(fields.size());
 		for (DataField field : fields) {
 			if (matcher.matches(field)) {
 				List<String> sfValues = parseSubfields(field, separator, method, subfields);
@@ -150,24 +148,13 @@ public class MarcRecordImpl implements MarcRecord {
 	}
 
 	protected String parseSubfields(DataField df, String separator, char... subfields) {
-		StringBuilder sb = new StringBuilder();
-		String sep = EMPTY_STRING;
-		for (char subfield : subfields) {
-			List<Subfield> sfl = df.getSubfields(subfield);
-			if (sfl != null && !sfl.isEmpty()) {
-				for (Subfield sf : sfl) {
-					sb.append(sep);
-					sb.append(sf.getData());
-					sep = separator;
-				}
-			}
-		}
-		return sb.toString();
+		return MarcRecordUtils.parseSubfields(df, separator, subfields);
 	}
 
 	/**
 	 * get first code subfield from first field having given tag
-	 * @param tag {@link DataField} tag
+	 *
+	 * @param tag  {@link DataField} tag
 	 * @param code {@link Subfield} code
 	 * @return {@link Subfield} or null
 	 */
@@ -176,13 +163,14 @@ public class MarcRecordImpl implements MarcRecord {
 		if (field == null) {
 			return null;
 		}
-		
+
 		List<Subfield> subfields = getSubfields(field, new char[]{code});
-		return subfields.isEmpty() ? null : subfields.get(0);	 
+		return subfields.isEmpty() ? null : subfields.get(0);
 	}
-	
+
 	/**
 	 * get first {@link DataField} with given tag
+	 *
 	 * @param tag {@link DataField} tag
 	 * @return {@link DataField} or null
 	 */
@@ -209,7 +197,7 @@ public class MarcRecordImpl implements MarcRecord {
 		}
 		return sfList;
 	}
-	
+
 	protected boolean isControlTag(final String tag) {
 		return tag.startsWith("00");
 	}
@@ -227,20 +215,20 @@ public class MarcRecordImpl implements MarcRecord {
 			return exportToXML();
 		}
 	}
-	
+
 	protected String exportToLineMarc() {
 		return record.toString();
 	}
-	
+
 	protected String exportToAlephMarc() {
 		StringBuilder out = new StringBuilder();
-		
+
 		out.append(record.getControlNumber());
 		out.append(" LDR   L ");
 		out.append(record.getLeader().toString());
 		out.append('\n');
-		
-		for (ControlField field: record.getControlFields()) {
+
+		for (ControlField field : record.getControlFields()) {
 			out.append(record.getControlNumber());
 			out.append(" ");
 			out.append(field.getTag());
@@ -248,25 +236,25 @@ public class MarcRecordImpl implements MarcRecord {
 			out.append(field.getData());
 			out.append("\n");
 		}
-		
-		for (DataField field: record.getDataFields()) {
+
+		for (DataField field : record.getDataFields()) {
 			out.append(record.getControlNumber());
 			out.append(" ");
 			out.append(field.getTag());
 			out.append(field.getIndicator1());
 			out.append(field.getIndicator2());
 			out.append(" L ");
-			for (Subfield sfield: field.getSubfields()){
+			for (Subfield sfield : field.getSubfields()) {
 				out.append("$$");
 				out.append(sfield.getCode());
 				out.append(sfield.getData());
-			}			
+			}
 			out.append("\n");
-		}		
-		
+		}
+
 		return out.toString();
 	}
-	
+
 	protected String exportToIso2709() {
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
 		MarcWriter writer = new MarcStreamWriter(stream, "UTF-8", true);
