@@ -33,20 +33,14 @@ public class UrlEnricherTest extends AbstractTest {
 	private static final String MZKKRAM_PROT_URL = "MZK-KRAM|protected|http://kramerius.mzk.cz/search/i.jsp?pid=uuid:df686290-a590-11e2-8b87-005056827e51|";
 	private static final String MZKKRAM_UNKN_URL = "MZK|unknown|http://kramerius.mzk.cz/search/handle/uuid:df686290-a590-11e2-8b87-005056827e51|";
 
-	private SolrInputDocument newField(String url) {
-		SolrInputDocument doc = new SolrInputDocument();
-		doc.addField(SolrFieldConstants.URL, url);
-		return doc;
-	}
-
 	@Test
 	public void notDuplicitUrlTest() {
 		DedupRecord dr = new DedupRecord();
 		SolrInputDocument merged = new SolrInputDocument();
 		List<SolrInputDocument> local = new ArrayList<>();
-		local.add(newField(MZK_ONLINE_MZK_URL));
-		local.add(newField(MZK_UNKNOWN_TRE_URL));
-		local.add(newField(MZK_PROTECTED_BRNO_URL));
+		local.add(EnricherUtils.createDocument(SolrFieldConstants.URL, MZK_ONLINE_MZK_URL));
+		local.add(EnricherUtils.createDocument(SolrFieldConstants.URL, MZK_UNKNOWN_TRE_URL));
+		local.add(EnricherUtils.createDocument(SolrFieldConstants.URL, MZK_PROTECTED_BRNO_URL));
 
 		List<String> result = new ArrayList<>();
 		result.add(MZK_ONLINE_MZK_URL);
@@ -64,10 +58,10 @@ public class UrlEnricherTest extends AbstractTest {
 		DedupRecord dr = new DedupRecord();
 		SolrInputDocument merged = new SolrInputDocument();
 		List<SolrInputDocument> local = new ArrayList<>();
-		local.add(newField(MZK_ONLINE_MZK_URL));
-		local.add(newField(TRE_ONLINE_MZK_URL));
-		local.add(newField(MZK_UNKNOWN_MZK_URL));
-		local.add(newField(MZK_PROTECTED_MZK_URL));
+		local.add(EnricherUtils.createDocument(SolrFieldConstants.URL, MZK_ONLINE_MZK_URL));
+		local.add(EnricherUtils.createDocument(SolrFieldConstants.URL, TRE_ONLINE_MZK_URL));
+		local.add(EnricherUtils.createDocument(SolrFieldConstants.URL, MZK_UNKNOWN_MZK_URL));
+		local.add(EnricherUtils.createDocument(SolrFieldConstants.URL, MZK_PROTECTED_MZK_URL));
 
 		List<String> result = new ArrayList<>();
 		result.add(MZK_ONLINE_MZK_URL);
@@ -84,11 +78,11 @@ public class UrlEnricherTest extends AbstractTest {
 		DedupRecord dr = new DedupRecord();
 		SolrInputDocument merged = new SolrInputDocument();
 		List<SolrInputDocument> local = new ArrayList<>();
-		local.add(newField(MZK_UNKNOWN_MZK_TEXT_URL));
-		local.add(newField(TRE_UNKNOWN_MZK_TEXT_URL));
-		local.add(newField(MZK_UNKNOWN_BRNO_URL));
-		local.add(newField(TRE_UNKNOWN_BRNO_URL));
-		local.add(newField(MZK_UNKNOWN_TRE_URL));
+		local.add(EnricherUtils.createDocument(SolrFieldConstants.URL, MZK_UNKNOWN_MZK_TEXT_URL));
+		local.add(EnricherUtils.createDocument(SolrFieldConstants.URL, TRE_UNKNOWN_MZK_TEXT_URL));
+		local.add(EnricherUtils.createDocument(SolrFieldConstants.URL, MZK_UNKNOWN_BRNO_URL));
+		local.add(EnricherUtils.createDocument(SolrFieldConstants.URL, TRE_UNKNOWN_BRNO_URL));
+		local.add(EnricherUtils.createDocument(SolrFieldConstants.URL, MZK_UNKNOWN_TRE_URL));
 
 		List<String> result = new ArrayList<>();
 		result.add(MZK_UNKNOWN_TRE_URL);
@@ -106,8 +100,8 @@ public class UrlEnricherTest extends AbstractTest {
 		DedupRecord dr = new DedupRecord();
 		SolrInputDocument merged = new SolrInputDocument();
 		List<SolrInputDocument> local = new ArrayList<>();
-		local.add(newField(TRE_UNKNOWN_MZK_URL));
-		local.add(newField(MZK_PROTECTED_MZK_URL));
+		local.add(EnricherUtils.createDocument(SolrFieldConstants.URL, TRE_UNKNOWN_MZK_URL));
+		local.add(EnricherUtils.createDocument(SolrFieldConstants.URL, MZK_PROTECTED_MZK_URL));
 
 		List<String> result = new ArrayList<>();
 		result.add(MZK_PROTECTED_MZK_URL);
@@ -123,8 +117,8 @@ public class UrlEnricherTest extends AbstractTest {
 		DedupRecord dr = new DedupRecord();
 		List<SolrInputDocument> local = new ArrayList<>();
 		SolrInputDocument merged = new SolrInputDocument();
-		local.add(newField(MZKKRAM_PROT_URL));
-		local.add(newField(MZKKRAM_UNKN_URL));
+		local.add(EnricherUtils.createDocument(SolrFieldConstants.URL, MZKKRAM_PROT_URL));
+		local.add(EnricherUtils.createDocument(SolrFieldConstants.URL, MZKKRAM_UNKN_URL));
 
 		List<String> result = new ArrayList<>();
 		result.add(MZKKRAM_PROT_URL);

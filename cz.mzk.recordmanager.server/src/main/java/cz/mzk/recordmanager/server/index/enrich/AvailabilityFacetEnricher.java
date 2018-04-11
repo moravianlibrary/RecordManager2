@@ -1,88 +1,89 @@
 package cz.mzk.recordmanager.server.index.enrich;
 
+import cz.mzk.recordmanager.server.index.SolrFieldConstants;
+import cz.mzk.recordmanager.server.model.DedupRecord;
+import cz.mzk.recordmanager.server.util.Constants;
+import cz.mzk.recordmanager.server.util.SolrUtils;
+import org.apache.solr.common.SolrInputDocument;
+import org.springframework.stereotype.Component;
+
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.solr.common.SolrInputDocument;
-import org.springframework.stereotype.Component;
-
-import cz.mzk.recordmanager.server.index.SolrFieldConstants;
-import cz.mzk.recordmanager.server.model.DedupRecord;
-import cz.mzk.recordmanager.server.util.Constants;
-import cz.mzk.recordmanager.server.util.SolrUtils;
-
 @Component
 public class AvailabilityFacetEnricher implements DedupRecordEnricher {
-	
-	private final List<String> ONLINE_STATUSES = SolrUtils.createHierarchicFacetValues(
+
+	private static final List<String> ONLINE_STATUSES = SolrUtils.createHierarchicFacetValues(
 			Constants.DOCUMENT_AVAILABILITY_ONLINE, Constants.DOCUMENT_AVAILABILITY_ONLINE);
-	private final List<String> ONLINE_UNKNOWN_STATUSES = SolrUtils.createHierarchicFacetValues(
+	private static final List<String> ONLINE_UNKNOWN_STATUSES = SolrUtils.createHierarchicFacetValues(
 			Constants.DOCUMENT_AVAILABILITY_ONLINE, Constants.DOCUMENT_AVAILABILITY_UNKNOWN);
 
+	/**
+	 * if any local document contains status online/online or online/unknown
+	 * copy this status to others
+	 *
+	 * @param record         {@link DedupRecord}
+	 * @param mergedDocument {@link SolrInputDocument}
+	 * @param localRecords   List of {@link SolrInputDocument}
+	 */
 	@Override
 	public void enrich(DedupRecord record, SolrInputDocument mergedDocument,
-			List<SolrInputDocument> localRecords) {
-		boolean online = localRecords.stream().anyMatch(rec -> isOnline(rec));
-		if (online) {
-			localRecords.forEach(doc -> {
+					   List<SolrInputDocument> localRecords) {
+		Set<String> enrichingStatuses = new HashSet<>();
+		if (localRecords.stream().anyMatch(AvailabilityFacetEnricher::isOnline))
+			enrichingStatuses.addAll(ONLINE_STATUSES);
+		if (localRecords.stream().anyMatch(AvailabilityFacetEnricher::isOnlineUnknown))
+			enrichingStatuses.addAll(ONLINE_UNKNOWN_STATUSES);
+		if (!enrichingStatuses.isEmpty()) {
+			for (SolrInputDocument localRecord : localRecords) {
 				Set<Object> statuses = new HashSet<>();
-				if (doc.getFieldValues(SolrFieldConstants.LOCAL_STATUSES_FACET) != null) {
-					statuses.addAll(doc.getFieldValues(SolrFieldConstants.LOCAL_STATUSES_FACET));
+				if (localRecord.getFieldValues(SolrFieldConstants.LOCAL_STATUSES_FACET) != null) {
+					statuses.addAll(localRecord.getFieldValues(SolrFieldConstants.LOCAL_STATUSES_FACET));
 				}
-				statuses.addAll(ONLINE_STATUSES);
-				doc.setField(SolrFieldConstants.LOCAL_STATUSES_FACET, statuses);
-				
-			});
+				statuses.addAll(enrichingStatuses);
+				localRecord.setField(SolrFieldConstants.LOCAL_STATUSES_FACET, statuses);
+			}
 		}
-		boolean unknown = localRecords.stream().anyMatch(rec -> isOnlineUnknown(rec));
-		if (unknown) {
-			localRecords.forEach(doc -> {
-				Set<Object> statuses = new HashSet<>();
-				if (doc.getFieldValues(SolrFieldConstants.LOCAL_STATUSES_FACET) != null) {
-					statuses.addAll(doc.getFieldValues(SolrFieldConstants.LOCAL_STATUSES_FACET));
-				}
-				statuses.addAll(ONLINE_UNKNOWN_STATUSES);
-				doc.setField(SolrFieldConstants.LOCAL_STATUSES_FACET, statuses);
-			});
-		}
-
 		// remove status facets from merged document
 		mergedDocument.remove(SolrFieldConstants.LOCAL_STATUSES_FACET);
 	}
 
-	protected boolean isOnline(SolrInputDocument doc) {
+	/**
+	 * @param doc {@link SolrInputDocument}
+	 * @return true if contains "1/online/online" in solr field for statuses or URL with online status
+	 */
+	private static boolean isOnline(final SolrInputDocument doc) {
 		// contains 1/online/online/ ?
 		Collection<Object> statuses = doc.getFieldValues(SolrFieldConstants.LOCAL_STATUSES_FACET);
 		if (statuses == null) return false;
-		for (Object status: statuses) {
+		for (Object status : statuses) {
 			if (ONLINE_STATUSES.get(1).equals(status)) return true;
 		}
-		
 		// contains online URL?
 		Collection<Object> urls = doc.getFieldValues(SolrFieldConstants.URL);
 		if (urls == null) {
 			return false;
 		}
 		for (Object url : urls) {
-			String[] splited = ((String) url).split("\\|");
-			if (Constants.DOCUMENT_AVAILABILITY_ONLINE.equalsIgnoreCase(splited[1])) {
-				return true;
-			}
+			if (((String) url).startsWith(Constants.DOCUMENT_AVAILABILITY_ONLINE)) return true;
 		}
 		return false;
 	}
 
-	protected boolean isOnlineUnknown(SolrInputDocument doc){
+	/**
+	 * @param doc {@link SolrInputDocument}
+	 * @return true if contains "1/online/unknown" in solr field for statuses
+	 */
+	private static boolean isOnlineUnknown(final SolrInputDocument doc) {
 		// contains 1/online/unknown ?
 		Collection<Object> statuses = doc.getFieldValues(SolrFieldConstants.LOCAL_STATUSES_FACET);
 		if (statuses == null) return false;
-		for (Object status: statuses) {
+		for (Object status : statuses) {
 			if (ONLINE_UNKNOWN_STATUSES.get(1).equals(status)) return true;
 		}
-		
 		return false;
 	}
-	
+
 }
