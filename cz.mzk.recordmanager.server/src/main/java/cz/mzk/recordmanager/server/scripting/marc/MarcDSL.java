@@ -643,17 +643,7 @@ public class MarcDSL extends BaseDSL {
     	if(result.isEmpty()) return null;
     	return result.get(0);
     }
-    
-    public List<String> getAuthorityUrl(String tags){
-    	List<String> urls = getFields(tags);
-    	if(urls.isEmpty()) return Collections.emptyList();
-    	if(urls.size() == 1) return urls;
-    	for(String url: urls){
-    		if(url.matches(".*wikipedia.*")) return Collections.singletonList(url);
-    	}
-    	return Collections.singletonList(urls.get(0));
-    }
-    
+
     public List<String> getAuthIds(String tags){
 		List<String> result = new ArrayList<>();
 		
@@ -859,5 +849,28 @@ public class MarcDSL extends BaseDSL {
 
 	public List<String> getViewType() {
 		return metadataRecord.getViewType().stream().map(t -> t.getValue()).collect(Collectors.toList());
+	}
+
+	private static final String AUTH_PSEUDONYMS_NAME = "%s %s";
+
+	public List<String> getAuthorityPseudonymsNames() {
+		List<String> results = new ArrayList<>();
+		for (DataField df : record.getDataFields("500")) {
+			results.add(String.format(AUTH_PSEUDONYMS_NAME,
+					getSubfieldAsString(df, 'a'), getSubfieldAsString(df, 'd')).trim());
+		}
+		return results;
+	}
+
+	public List<String> getAuthorityPseudonymsIds() {
+		List<String> results = new ArrayList<>();
+		for (DataField df : record.getDataFields("500")) {
+			results.add(getSubfieldAsString(df, '7'));
+		}
+		return results;
+	}
+
+	private String getSubfieldAsString(DataField df, char subfieldCode) {
+		return df.getSubfield(subfieldCode) != null ? df.getSubfield(subfieldCode).getData() : "";
 	}
 }

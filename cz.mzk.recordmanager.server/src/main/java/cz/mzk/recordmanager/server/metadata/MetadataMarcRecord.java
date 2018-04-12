@@ -1074,12 +1074,16 @@ public class MetadataMarcRecord implements MetadataRecord {
     		} else if (subZ != null) {
     			comment = subZ;
     		}
-    		
-    		result.add(availability + "|" + link + "|" + comment);
-    	}
+
+			result.add(generateUrl(availability, link, comment));
+		}
     	
     	return result;
     }
+
+	protected String generateUrl(String availability, String link, String comment) {
+		return availability + "|" + link + "|" + comment;
+	}
 
 	@Override
 	public String getPolicyKramerius() {
