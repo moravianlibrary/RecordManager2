@@ -3,6 +3,7 @@ package cz.mzk.recordmanager.server.metadata;
 import java.util.Collections;
 
 import cz.mzk.recordmanager.server.export.IOFormat;
+import cz.mzk.recordmanager.server.metadata.view.ViewTypeEnum;
 import cz.mzk.recordmanager.server.model.*;
 import cz.mzk.recordmanager.server.model.HarvestedRecordFormat.HarvestedRecordFormatEnum;
 import cz.mzk.recordmanager.server.model.TezaurusRecord.TezaurusKey;
@@ -307,7 +308,7 @@ public interface MetadataRecord {
 	 */
 	String getSourceInfoG();
 
-	default List<ViewType> getViewType() {
+	default List<ViewTypeEnum> getViewType() {
 		return Collections.emptyList();
 	}
 }

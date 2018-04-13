@@ -10,7 +10,7 @@ import java.util.regex.Matcher;
 import java.util.stream.Collectors;
 
 import cz.mzk.recordmanager.server.ClasspathResourceProvider;
-import cz.mzk.recordmanager.server.metadata.ViewType;
+import cz.mzk.recordmanager.server.metadata.view.ViewTypeEnum;
 import org.marc4j.marc.DataField;
 
 import cz.mzk.recordmanager.server.marc.MarcRecord;
@@ -58,10 +58,10 @@ public class SkatMarcMetadataRecord extends MetadataMarcRecord {
 	}
 
 	@Override
-	public List<ViewType> getViewType() {
+	public List<ViewTypeEnum> getViewType() {
 		for (String data : underlayingMarc.getFields("996", 'e')) {
 			if (IREL_SIGLAS.contains(data.trim()) && isIrelView())
-				return Collections.singletonList(ViewType.IREL);
+				return Collections.singletonList(ViewTypeEnum.IREL);
 		}
 		return Collections.emptyList();
 	}
