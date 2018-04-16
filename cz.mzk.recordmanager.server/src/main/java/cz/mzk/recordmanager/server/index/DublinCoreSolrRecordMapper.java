@@ -59,23 +59,22 @@ public class DublinCoreSolrRecordMapper implements SolrRecordMapper,
 	}
 
 	@Override
-	public Map<String, Object> map(HarvestedRecord record) {
-		return parseAsLocalRecord(record);
+	public Map<String, Object> map(HarvestedRecord hrRecord) {
+		return parseAsLocalRecord(hrRecord);
 	}
 
-	protected Map<String, Object> parseAsDedupRecord(HarvestedRecord record) {
-		InputStream is = new ByteArrayInputStream(record.getRawRecord());
-		MappingScript<DublinCoreFunctionContext> script = getMappingScript(record);
-		DublinCoreRecord rec = parser.parseRecord(is);
-		DublinCoreFunctionContext dcContext = new DublinCoreFunctionContext(rec, record, metadataRecordFactory.getMetadataRecord(record));
-		Map<String, Object> fields = script.parse(dcContext);
-		return fields;
+	protected Map<String, Object> parseAsDedupRecord(HarvestedRecord hrRecord) {
+		InputStream is = new ByteArrayInputStream(hrRecord.getRawRecord());
+		MappingScript<DublinCoreFunctionContext> script = getMappingScript(hrRecord);
+		DublinCoreRecord dcRecord = parser.parseRecord(is);
+		DublinCoreFunctionContext dcContext = new DublinCoreFunctionContext(dcRecord, hrRecord, metadataRecordFactory.getMetadataRecord(hrRecord, dcRecord));
+		return script.parse(dcContext);
 	}
 	
-	protected Map<String, Object> parseAsLocalRecord(HarvestedRecord record){
-		InputStream is = new ByteArrayInputStream(record.getRawRecord());
-		DublinCoreRecord rec = parser.parseRecord(is);
-		DublinCoreFunctionContext dcContext = new DublinCoreFunctionContext(rec, record, metadataRecordFactory.getMetadataRecord(record));
+	protected Map<String, Object> parseAsLocalRecord(HarvestedRecord hrRecord){
+		InputStream is = new ByteArrayInputStream(hrRecord.getRawRecord());
+		DublinCoreRecord dcRecord = parser.parseRecord(is);
+		DublinCoreFunctionContext dcContext = new DublinCoreFunctionContext(dcRecord, hrRecord, metadataRecordFactory.getMetadataRecord(hrRecord, dcRecord));
 		return harvestedRecordMappingScript.parse(dcContext);
 	}
 

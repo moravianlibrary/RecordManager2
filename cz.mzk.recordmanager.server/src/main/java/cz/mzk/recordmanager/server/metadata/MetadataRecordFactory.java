@@ -56,7 +56,7 @@ public class MetadataRecordFactory {
 		if (Constants.METADATA_FORMAT_DUBLIN_CORE.equals(recordFormat)
 				|| Constants.METADATA_FORMAT_ESE.equals(recordFormat)) {
 			DublinCoreRecord dcRec = dcParser.parseRecord(is);
-			return getMetadataRecord(record, dcRec, configuration);
+			return getMetadataRecord(record, dcRec);
 		}
 
 		return null;
@@ -148,8 +148,16 @@ public class MetadataRecordFactory {
 		}
 	}
 
-	public MetadataRecord getMetadataRecord(HarvestedRecord hr, DublinCoreRecord dcRec, ImportConfiguration configuration) {
-		String prefix = getPrefix(configuration);
+	public MetadataRecord getMetadataRecord(HarvestedRecord hr, MarcRecord mr) {
+		return getMetadataRecord(mr, hr.getHarvestedFrom());
+	}
+
+	public MetadataRecord getMetadataRecord(MarcRecord marcRecord) {
+		return new MetadataMarcRecord(marcRecord);
+	}
+
+	public MetadataRecord getMetadataRecord(HarvestedRecord hr, DublinCoreRecord dcRec) {
+		String prefix = getPrefix(hr.getHarvestedFrom());
 		switch (prefix) {
 		case Constants.PREFIX_KRAM_MZK:
 			return new KramMzkMetadataDublinCoreRecord(dcRec, hr);
@@ -171,10 +179,6 @@ public class MetadataRecordFactory {
 
 	public MetadataRecord getMetadataRecord(HarvestedRecordUniqueId recordId) {
 		return getMetadataRecord(harvestedRecordDao.get(recordId));
-	}
-
-	public MetadataRecord getMetadataRecord(MarcRecord marcRecord) {
-		return new MetadataMarcRecord(marcRecord);
 	}
 
 	public MetadataRecord getMetadataRecord(DublinCoreRecord dcRecord) {

@@ -29,16 +29,16 @@ import cz.mzk.recordmanager.server.model.HarvestedRecord.HarvestedRecordUniqueId
 import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordDAO;
 import cz.mzk.recordmanager.server.util.CaslinFilter;
 
-public class FilterCaslinRecordsWriter implements ItemWriter<HarvestedRecordUniqueId>{
+public class FilterCaslinRecordsWriter implements ItemWriter<HarvestedRecordUniqueId> {
 
 	private static Logger logger = LoggerFactory.getLogger(SolrRecordProcessor.class);
-	
+
 	@Autowired
 	private HarvestedRecordDAO hrDao;
-	
+
 	@Autowired
 	private MetadataRecordFactory mrFactory;
-	
+
 	@Autowired
 	private MarcXmlParser marcXmlParser;
 
@@ -48,12 +48,12 @@ public class FilterCaslinRecordsWriter implements ItemWriter<HarvestedRecordUniq
 	@Override
 	public void write(List<? extends HarvestedRecordUniqueId> items)
 			throws Exception {
-		
-		for(HarvestedRecordUniqueId uniqueId: items){
-			try{
+
+		for (HarvestedRecordUniqueId uniqueId : items) {
+			try {
 				HarvestedRecord hr = hrDao.get(uniqueId);
-				
-				if(hr == null || hr.getRawRecord().length == 0) continue;
+
+				if (hr == null || hr.getRawRecord().length == 0) continue;
 				MarcRecord marc = marcXmlParser.parseRecord(new ByteArrayInputStream(hr.getRawRecord()));
 				Record record = marcXmlParser.parseUnderlyingRecord(new ByteArrayInputStream(hr.getRawRecord()));
 				Boolean updated = false;
@@ -65,11 +65,11 @@ public class FilterCaslinRecordsWriter implements ItemWriter<HarvestedRecordUniq
 				}
 
 				Map<String, List<DataField>> dfMap = marc.getAllFields();
-				for (String tag : new TreeSet<String>(dfMap.keySet())) {
+				for (String tag : new TreeSet<>(dfMap.keySet())) {
 					for (DataField df : dfMap.get(tag)) {
 						// add $q0 when sigla is in db
 						if (df.getTag().equals("996")) {
-							if (caslinFilter.filter(df.getSubfield('e').getData()) 
+							if (caslinFilter.filter(df.getSubfield('e').getData())
 									&& (df.getSubfield('q') == null || !df.getSubfield('q').getData().equals("0"))) {
 								df.addSubfield(marcFactory.newSubfield('q', "0"));
 								updated = true;
@@ -79,18 +79,17 @@ public class FilterCaslinRecordsWriter implements ItemWriter<HarvestedRecordUniq
 					}
 				}
 				hr.setRawRecord(new MarcRecordImpl(newRecord).export(IOFormat.XML_MARC).getBytes(StandardCharsets.UTF_8));
-				if(hr.getDeleted() == null && !mrFactory.getMetadataRecord(hr).matchFilter()){
+				if (hr.getDeleted() == null && !mrFactory.getMetadataRecord(hr, marc).matchFilter()) {
 					hr.setDeleted(new Date());
 					updated = true;
 				}
-				if(updated){
+				if (updated) {
 					hr.setUpdated(new Date());
 					hrDao.persist(hr);
 				}
-			}
-			catch(Exception ex){
+			} catch (Exception ex) {
 				logger.error(String.format("Exception thrown when filtering harvested_record with id=%s", uniqueId), ex);
 			}
-		}	
+		}
 	}
 }

@@ -67,36 +67,35 @@ public class MarcSolrRecordMapper implements SolrRecordMapper, InitializingBean 
 		return parseAsLocalRecord(record);
 	}
 
-	protected Map<String, Object> parseAsDedupRecord(HarvestedRecord record) {
-		InputStream is = new ByteArrayInputStream(record.getRawRecord());
-		MarcRecord rec = marcXmlParser.parseRecord(is);
-		MappingScript<MarcFunctionContext> script = getDedupMappingScript(record);
-		MarcFunctionContext ctx = new MarcFunctionContext(rec, record, metadataRecordFactory.getMetadataRecord(record));
-		Map<String, Object> result = script.parse(ctx);
-		return result;
+	protected Map<String, Object> parseAsDedupRecord(HarvestedRecord hrRecord) {
+		InputStream is = new ByteArrayInputStream(hrRecord.getRawRecord());
+		MarcRecord marcRecord = marcXmlParser.parseRecord(is);
+		MappingScript<MarcFunctionContext> script = getDedupMappingScript(hrRecord);
+		MarcFunctionContext ctx = new MarcFunctionContext(marcRecord, hrRecord, metadataRecordFactory.getMetadataRecord(hrRecord, marcRecord));
+		return script.parse(ctx);
 	}
 
-	protected Map<String, Object> parseAsLocalRecord(HarvestedRecord record) {
-		InputStream is = new ByteArrayInputStream(record.getRawRecord());
-		MarcRecord rec = marcXmlParser.parseRecord(is);
-		MarcFunctionContext ctx = new MarcFunctionContext(rec, record, metadataRecordFactory.getMetadataRecord(record));
-		return getHarvestedMappingScript(record).parse(ctx);
+	protected Map<String, Object> parseAsLocalRecord(HarvestedRecord hrRecord) {
+		InputStream is = new ByteArrayInputStream(hrRecord.getRawRecord());
+		MarcRecord marcRecord = marcXmlParser.parseRecord(is);
+		MarcFunctionContext ctx = new MarcFunctionContext(marcRecord, hrRecord, metadataRecordFactory.getMetadataRecord(hrRecord, marcRecord));
+		return getHarvestedMappingScript(hrRecord).parse(ctx);
 	}
 
-	protected MappingScript<MarcFunctionContext> getDedupMappingScript(HarvestedRecord record) {
-		MappingScript<MarcFunctionContext> script = dedupRecordMappingScripts.get(record.getHarvestedFrom().getId());
+	protected MappingScript<MarcFunctionContext> getDedupMappingScript(HarvestedRecord hrRecord) {
+		MappingScript<MarcFunctionContext> script = dedupRecordMappingScripts.get(hrRecord.getHarvestedFrom().getId());
 		if (script == null) {
-			script = getScript(record.getHarvestedFrom().getMappingDedupScript(), defaultDedupRecordMappingScript);
-			dedupRecordMappingScripts.put(record.getHarvestedFrom().getId(), script);
+			script = getScript(hrRecord.getHarvestedFrom().getMappingDedupScript(), defaultDedupRecordMappingScript);
+			dedupRecordMappingScripts.put(hrRecord.getHarvestedFrom().getId(), script);
 		}
 		return script;
 	}
 
-	protected MappingScript<MarcFunctionContext> getHarvestedMappingScript(HarvestedRecord record) {
-		MappingScript<MarcFunctionContext> script = harvestedRecordMappingScripts.get(record.getHarvestedFrom().getId());
+	protected MappingScript<MarcFunctionContext> getHarvestedMappingScript(HarvestedRecord hrRecord) {
+		MappingScript<MarcFunctionContext> script = harvestedRecordMappingScripts.get(hrRecord.getHarvestedFrom().getId());
 		if (script == null) {
-			script = getScript(record.getHarvestedFrom().getMappingScript(), defaultHarvestedRecordMappingScript);
-			harvestedRecordMappingScripts.put(record.getHarvestedFrom().getId(), script);
+			script = getScript(hrRecord.getHarvestedFrom().getMappingScript(), defaultHarvestedRecordMappingScript);
+			harvestedRecordMappingScripts.put(hrRecord.getHarvestedFrom().getId(), script);
 		}
 		return script;
 	}
