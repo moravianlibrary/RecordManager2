@@ -2,6 +2,7 @@ package cz.mzk.recordmanager.server;
 
 import javax.sql.DataSource;
 
+import cz.mzk.recordmanager.server.scripting.*;
 import liquibase.exception.LiquibaseException;
 import liquibase.integration.spring.SpringLiquibase;
 
@@ -41,12 +42,6 @@ import cz.mzk.recordmanager.server.kramerius.harvest.KrameriusHarvesterFactory;
 import cz.mzk.recordmanager.server.kramerius.harvest.KrameriusHarvesterFactoryImpl;
 import cz.mzk.recordmanager.server.oai.harvest.OAIHarvesterFactory;
 import cz.mzk.recordmanager.server.oai.harvest.OAIHarvesterFactoryImpl;
-import cz.mzk.recordmanager.server.scripting.CachingMappingResolver;
-import cz.mzk.recordmanager.server.scripting.CachingStopWordsResolver;
-import cz.mzk.recordmanager.server.scripting.MappingResolver;
-import cz.mzk.recordmanager.server.scripting.ResourceMappingResolver;
-import cz.mzk.recordmanager.server.scripting.ResourceStopWordsResolver;
-import cz.mzk.recordmanager.server.scripting.StopWordsResolver;
 import cz.mzk.recordmanager.server.service.ImportConfigurationServiceImpl;
 import cz.mzk.recordmanager.server.service.LibraryServiceImpl;
 import cz.mzk.recordmanager.server.service.StatisticsServiceImpl;
@@ -203,6 +198,11 @@ public class AppConfig extends DefaultBatchConfigurer {
 	@Bean
 	public StopWordsResolver stopWordsResolver() {
 		return new CachingStopWordsResolver(new ResourceStopWordsResolver(resourceProvider));
+	}
+
+	@Bean
+	public ListResolver listResolver() {
+		return new CachingListResolver(new ResourceListResolver(resourceProvider));
 	}
 
 	@Bean

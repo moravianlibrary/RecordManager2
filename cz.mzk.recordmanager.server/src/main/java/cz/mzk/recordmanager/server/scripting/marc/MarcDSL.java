@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 
 import cz.mzk.recordmanager.server.model.Ean;
 import cz.mzk.recordmanager.server.model.HarvestedRecordFormat.HarvestedRecordFormatEnum;
+import cz.mzk.recordmanager.server.scripting.ListResolver;
 import cz.mzk.recordmanager.server.util.identifier.ISBNUtils;
 import org.marc4j.marc.DataField;
 import org.marc4j.marc.Subfield;
@@ -70,8 +71,8 @@ public class MarcDSL extends BaseDSL {
 	private final Map<String, RecordFunction<MarcFunctionContext>> functions;
 	
 	public MarcDSL(MarcFunctionContext context, MappingResolver propertyResolver, StopWordsResolver stopWordsResolver,
-			Map<String, RecordFunction<MarcFunctionContext>> functions) {
-		super(propertyResolver, stopWordsResolver);
+			ListResolver listResolver, Map<String, RecordFunction<MarcFunctionContext>> functions) {
+		super(propertyResolver, stopWordsResolver, listResolver);
 		this.context = context;
 		this.record = context.record();
 		this.functions = functions;

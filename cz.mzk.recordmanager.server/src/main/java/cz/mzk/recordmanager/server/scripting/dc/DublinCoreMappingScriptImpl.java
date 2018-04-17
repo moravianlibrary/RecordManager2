@@ -1,5 +1,6 @@
 package cz.mzk.recordmanager.server.scripting.dc;
 
+import cz.mzk.recordmanager.server.scripting.ListResolver;
 import groovy.lang.Binding;
 import groovy.util.DelegatingScript;
 
@@ -21,22 +22,26 @@ public class DublinCoreMappingScriptImpl implements MappingScript<DublinCoreFunc
 
 	private final StopWordsResolver stopWordsResolver;
 
+	private final ListResolver listResolver;
+
 	private final Map<String, RecordFunction<DublinCoreFunctionContext>> functions;
 
-	public DublinCoreMappingScriptImpl(Binding binding, List<DelegatingScript> scripts, 
-			MappingResolver propertyResolver, StopWordsResolver stopWordsResolver, Map<String, RecordFunction<DublinCoreFunctionContext>> functions) {
+	public DublinCoreMappingScriptImpl(Binding binding, List<DelegatingScript> scripts,
+			MappingResolver propertyResolver, StopWordsResolver stopWordsResolver, ListResolver listResolver,
+			Map<String, RecordFunction<DublinCoreFunctionContext>> functions) {
 		super();
 		this.scripts = scripts;
 		this.binding = binding;
 		this.propertyResolver = propertyResolver;
 		this.stopWordsResolver = stopWordsResolver;
+		this.listResolver = listResolver;
 		this.functions = functions;
 	}
 
 	@Override
 	public Map<String, Object> parse(DublinCoreFunctionContext dcContext) {
 		binding.getVariables().clear();
-		DublinCoreDSL delegate = new DublinCoreDSL(dcContext, propertyResolver, stopWordsResolver, functions);
+		DublinCoreDSL delegate = new DublinCoreDSL(dcContext, propertyResolver, stopWordsResolver, listResolver, functions);
 		for (DelegatingScript script : scripts) {
 			script.setDelegate(delegate);
 			script.run();

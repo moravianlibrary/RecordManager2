@@ -1,5 +1,6 @@
 package cz.mzk.recordmanager.server.scripting.dc;
 
+import cz.mzk.recordmanager.server.scripting.*;
 import groovy.lang.Binding;
 import groovy.util.DelegatingScript;
 
@@ -12,10 +13,6 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import cz.mzk.recordmanager.server.scripting.AbstractScriptFactory;
-import cz.mzk.recordmanager.server.scripting.MappingResolver;
-import cz.mzk.recordmanager.server.scripting.MappingScript;
-import cz.mzk.recordmanager.server.scripting.StopWordsResolver;
 import cz.mzk.recordmanager.server.scripting.dc.function.DublinCoreRecordFunctions;
 import cz.mzk.recordmanager.server.scripting.function.RecordFunction;
 import cz.mzk.recordmanager.server.scripting.function.RecordFunctionsFactory;
@@ -33,21 +30,24 @@ public class DublinCoreScriptFactoryImpl extends AbstractScriptFactory<DublinCor
 	@Autowired
 	private StopWordsResolver stopWordsResolver;
 
-	@Autowired(required=false)
+	@Autowired
+	private ListResolver listResolver;
+
+	@Autowired(required = false)
 	private List<DublinCoreRecordFunctions> functionsList;
 
 	private Map<String, RecordFunction<DublinCoreFunctionContext>> functions = new HashMap<>();
 
 	@Override
 	public MappingScript<DublinCoreFunctionContext> create(InputStream... scriptsSource) {
-		return (MappingScript<DublinCoreFunctionContext>) super.create(scriptsSource);
+		return super.create(scriptsSource);
 	}
 
 	@Override
 	protected MappingScript<DublinCoreFunctionContext> create(final Binding binding,
 			final List<DelegatingScript> scripts) {
 		return new DublinCoreMappingScriptImpl(binding, scripts, propertyResolver,
-				stopWordsResolver, functions);
+				stopWordsResolver, listResolver, functions);
 	}
 
 	@Override
