@@ -1,5 +1,7 @@
 package cz.mzk.recordmanager.server.scripting;
 
+import com.google.common.collect.Sets;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -72,8 +74,13 @@ public abstract class BaseDSL {
 		return values.stream().filter(value -> !stopWords.contains(value)).collect(Collectors.toCollection(ArrayList::new));
 	}
 
-	public boolean exists(String listFile, String value) throws IOException {
+	public boolean contains(String listFile, String value) throws IOException {
 		return listResolver.resolve(listFile).contains(value);
 	}
+
+	public boolean containsAny(String listFile, Collection<String> values) throws IOException {
+		return !Collections.disjoint(listResolver.resolve(listFile), values);
+	}
+
 
 }

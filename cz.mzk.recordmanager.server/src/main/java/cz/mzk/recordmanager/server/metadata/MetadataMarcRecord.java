@@ -1251,8 +1251,14 @@ public class MetadataMarcRecord implements MetadataRecord {
 		return prefix;
 	}
 
-	protected boolean isIrelView() {
+	@Override
+	public boolean isIrelView() {
 		return !isBlindBraille() && !isMusicalScores() && !isVisualDocument();
+	}
+
+	@Override
+	public boolean isTechView() {
+		return !isBlindBraille() && !isMusicalScores();
 	}
 
 }

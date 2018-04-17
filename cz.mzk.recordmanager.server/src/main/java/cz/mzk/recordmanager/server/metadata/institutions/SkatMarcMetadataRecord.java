@@ -6,6 +6,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.stream.Collectors;
 
@@ -23,7 +24,7 @@ public class SkatMarcMetadataRecord extends MetadataMarcRecord {
 	}
 
 	private static final List<String> IREL_SIGLAS = new BufferedReader(new InputStreamReader(
-			new ClasspathResourceProvider().getResource("/mapping/view_irel_siglas.map"), StandardCharsets.UTF_8))
+			new ClasspathResourceProvider().getResource("/list/view/irel_caslin.txt"), StandardCharsets.UTF_8))
 			.lines().collect(Collectors.toCollection(ArrayList::new));
 
 	@Override
@@ -64,5 +65,10 @@ public class SkatMarcMetadataRecord extends MetadataMarcRecord {
 				return Collections.singletonList(ViewTypeEnum.IREL);
 		}
 		return Collections.emptyList();
+	}
+
+	@Override
+	public Set<String> getCaslinSiglas() {
+		return underlayingMarc.getFields("996", 'e').stream().map(String::trim).collect(Collectors.toSet());
 	}
 }

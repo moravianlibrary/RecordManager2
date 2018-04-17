@@ -9,6 +9,7 @@ import cz.mzk.recordmanager.server.model.HarvestedRecordFormat.HarvestedRecordFo
 import cz.mzk.recordmanager.server.model.TezaurusRecord.TezaurusKey;
 
 import java.util.List;
+import java.util.Set;
 
 public interface MetadataRecord {
 
@@ -310,5 +311,17 @@ public interface MetadataRecord {
 
 	default List<ViewTypeEnum> getViewType() {
 		return Collections.emptyList();
+	}
+
+	default boolean isIrelView() {
+		return false;
+	}
+
+	default boolean isTechView() {
+		return false;
+	}
+
+	default Set<String> getCaslinSiglas() {
+		return Collections.emptySet();
 	}
 }

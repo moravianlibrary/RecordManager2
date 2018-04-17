@@ -7,6 +7,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import cz.mzk.recordmanager.server.metadata.view.ViewTypeEnum;
 import cz.mzk.recordmanager.server.model.Ean;
 import cz.mzk.recordmanager.server.model.HarvestedRecordFormat.HarvestedRecordFormatEnum;
 import cz.mzk.recordmanager.server.scripting.ListResolver;
@@ -848,8 +849,16 @@ public class MarcDSL extends BaseDSL {
 		return results;
 	}
 
-	public List<String> getViewType() {
-		return metadataRecord.getViewType().stream().map(t -> t.getValue()).collect(Collectors.toList());
+	public Set<String> getViewType() throws IOException {
+		Set<String> results = new HashSet<>();
+		String idPrefix = context.harvestedRecord().getHarvestedFrom().getIdPrefix();
+		Set<String> siglas = metadataRecord.getCaslinSiglas();
+		for (String type : ViewTypeEnum.getPossibleValues(metadataRecord)) {
+			if (contains(String.format("view/%s.txt", type), idPrefix)
+					|| (!siglas.isEmpty() && containsAny(String.format("view/%s_caslin.txt", type), siglas)))
+				results.add(type);
+		}
+		return results;
 	}
 
 	private static final String AUTH_PSEUDONYMS_NAME = "%s %s";
