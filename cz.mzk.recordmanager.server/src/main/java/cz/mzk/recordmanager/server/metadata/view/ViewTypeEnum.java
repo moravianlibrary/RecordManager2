@@ -19,18 +19,22 @@ public enum ViewTypeEnum {
 		return value;
 	}
 
+	/**
+	 * @param metadataRecord {@link MetadataRecord} of actual record
+	 * @return {@link List} of possible {@link ViewTypeEnum} values for input {@link MetadataRecord}
+	 */
 	public static List<String> getPossibleValues(final MetadataRecord metadataRecord) {
 		List<String> results = new ArrayList<>();
-		for (ViewTypeEnum viewTypeEnum : ViewTypeEnum.values()) {
-			switch (viewTypeEnum) {
+		for (ViewTypeEnum viewType : ViewTypeEnum.values()) {
+			switch (viewType) {
 			case IREL:
-				if (metadataRecord.isIrelView()) results.add(viewTypeEnum.getValue());
+				if (metadataRecord.isIrelView()) results.add(viewType.getValue());
 				break;
 			case TECH:
-				if (metadataRecord.isTechView()) results.add(viewTypeEnum.getValue());
+				if (metadataRecord.isTechView()) results.add(viewType.getValue());
 				break;
 			default:
-				results.add(viewTypeEnum.getValue());
+				results.add(viewType.getValue());
 			}
 		}
 		return results;

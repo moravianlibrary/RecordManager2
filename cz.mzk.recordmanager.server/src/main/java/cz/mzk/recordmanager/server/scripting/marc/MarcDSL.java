@@ -849,14 +849,26 @@ public class MarcDSL extends BaseDSL {
 		return results;
 	}
 
-	public Set<String> getViewType() throws IOException {
+	private static final String VIEW_FILE = "view/%s.txt";
+	private static final String VIEW_CASLIN_FILE = "view/%s_caslin.txt";
+
+	/**
+	 * @return {@link Set} of string values of {@link ViewTypeEnum}
+	 */
+	public Set<String> getViewType() {
 		Set<String> results = new HashSet<>();
 		String idPrefix = context.harvestedRecord().getHarvestedFrom().getIdPrefix();
 		Set<String> siglas = metadataRecord.getCaslinSiglas();
 		for (String type : ViewTypeEnum.getPossibleValues(metadataRecord)) {
-			if (contains(String.format("view/%s.txt", type), idPrefix)
-					|| (!siglas.isEmpty() && containsAny(String.format("view/%s_caslin.txt", type), siglas)))
-				results.add(type);
+			try {
+				if (contains(String.format(VIEW_FILE, type), idPrefix)) results.add(type);
+			} catch (IOException ignore) {
+			}
+			try {
+				if (!siglas.isEmpty() && containsAny(String.format(VIEW_CASLIN_FILE, type), siglas))
+					results.add(type);
+			} catch (IOException ignore) {
+			}
 		}
 		return results;
 	}

@@ -3,6 +3,7 @@ package cz.mzk.recordmanager.server.metadata;
 import java.util.Collections;
 
 import cz.mzk.recordmanager.server.export.IOFormat;
+import cz.mzk.recordmanager.server.metadata.view.ViewTypeEnum;
 import cz.mzk.recordmanager.server.model.*;
 import cz.mzk.recordmanager.server.model.HarvestedRecordFormat.HarvestedRecordFormatEnum;
 import cz.mzk.recordmanager.server.model.TezaurusRecord.TezaurusKey;
@@ -308,14 +309,27 @@ public interface MetadataRecord {
 	 */
 	String getSourceInfoG();
 
+	/**
+	 * Decide if this record has {@link ViewTypeEnum#IREL}
+	 *
+	 * @return true or false
+	 */
 	default boolean isIrelView() {
 		return false;
 	}
 
+	/**
+	 * Decide if this record has {@link ViewTypeEnum#TECH}
+	 * @return true or false
+	 */
 	default boolean isTechView() {
 		return false;
 	}
 
+	/**
+	 * get siglas from caslin
+	 * @return {@link Set} of String
+	 */
 	default Set<String> getCaslinSiglas() {
 		return Collections.emptySet();
 	}
