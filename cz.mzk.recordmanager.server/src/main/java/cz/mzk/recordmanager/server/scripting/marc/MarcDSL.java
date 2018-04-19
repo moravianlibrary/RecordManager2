@@ -618,8 +618,8 @@ public class MarcDSL extends BaseDSL {
 	private Set<String> getTezauruForVizField(String fieldTag, String source, String subfield2) {
 		Set<String> results = new HashSet<>();
 		for (DataField df : record.getDataFields(fieldTag)) {
-			if (df.getSubfield('a') != null	&& df.getSubfield('2') != null
-					&& df.getSubfield('2').getData().equals(subfield2)) {
+			if (df.getSubfield('a') != null && !df.getSubfield('a').getData().isEmpty()
+					&& df.getSubfield('2') != null && df.getSubfield('2').getData().equals(subfield2)) {
 				results.add(getVizFieldCode(source, fieldTag, df.getSubfield('a').getData().toLowerCase()));
 			}
 		}
