@@ -1082,3 +1082,6 @@ INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granul
 
 -- 12. 04. 2018 tomascejpek
 UPDATE import_conf SET interception_enabled=true WHERE id=342;
+
+-- 19. 04. 2018 tomas.cejpek
+UPDATE oai_harvest_conf SET url='https://ipac.svkkl.cz/i2/i2.ws.oai.cls' WHERE import_conf_id=336;
