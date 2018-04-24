@@ -3,16 +3,23 @@ package cz.mzk.recordmanager.server.util;
 import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
+import java.security.KeyManagementException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
 import java.util.Collections;
 import java.util.Map;
 
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.conn.ssl.*;
 import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClientBuilder;
 
 import com.google.common.io.Closeables;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.ssl.SSLContexts;
+
+import javax.net.ssl.SSLContext;
 
 // Thread safe
 public class ApacheHttpClient implements HttpClient, Closeable {
@@ -88,7 +95,18 @@ public class ApacheHttpClient implements HttpClient, Closeable {
 				.setConnectionRequestTimeout(TIMEOUT * 1000)
 				.setSocketTimeout(TIMEOUT * 1000)
 				.build();
-		this.httpClient = HttpClientBuilder.create().setDefaultRequestConfig(config).build();
+		SSLContext sslContext = null;
+		try {
+			sslContext = SSLContexts.custom()
+					.loadTrustMaterial(new TrustAllStrategy())
+					.build();
+		} catch (NoSuchAlgorithmException | KeyStoreException | KeyManagementException e) {
+			e.printStackTrace();
+		}
+		this.httpClient = HttpClients.custom()
+				.setSSLContext(sslContext)
+				.setDefaultRequestConfig(config)
+				.build();
 	}
 
 	@Override
