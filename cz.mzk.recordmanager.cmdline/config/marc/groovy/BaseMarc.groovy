@@ -53,6 +53,7 @@ callNumber_search_txt_mv = getFieldsUnique "910b:996ch"
 publisher_search_txt_mv = getFieldsTrim "260b:264b:928a:978abcdg7"
 cnb_search_str = getFirstField "015az"
 upv_ipc_search = getInternationalPatentClassfication()
+upv_txt_mv = getInternationalPatentClassfication()
 country_search_txt_mv = ListUtils.union(translate("mzk_country.map", getCountries(), null), translate("country_cs.map", getCountries(), null))
 language_search_txt_mv = ListUtils.union(translate("mzk_language.map", getLanguages(), null), translate("language_cs.map", getLanguages(), null))
 format_search_txt_mv = getFormatForSearching()
