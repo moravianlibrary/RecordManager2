@@ -20,6 +20,7 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.ssl.SSLContexts;
 
 import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSocketFactory;
 
 // Thread safe
 public class ApacheHttpClient implements HttpClient, Closeable {
@@ -95,16 +96,17 @@ public class ApacheHttpClient implements HttpClient, Closeable {
 				.setConnectionRequestTimeout(TIMEOUT * 1000)
 				.setSocketTimeout(TIMEOUT * 1000)
 				.build();
-		SSLContext sslContext = null;
+		SSLConnectionSocketFactory sslsf = null;
 		try {
-			sslContext = SSLContexts.custom()
+			SSLContext sslContext = SSLContexts.custom()
 					.loadTrustMaterial(new TrustAllStrategy())
 					.build();
+			sslsf = new SSLConnectionSocketFactory(sslContext, NoopHostnameVerifier.INSTANCE);
 		} catch (NoSuchAlgorithmException | KeyStoreException | KeyManagementException e) {
 			e.printStackTrace();
 		}
 		this.httpClient = HttpClients.custom()
-				.setSSLContext(sslContext)
+				.setSSLSocketFactory(sslsf)
 				.setDefaultRequestConfig(config)
 				.build();
 	}
