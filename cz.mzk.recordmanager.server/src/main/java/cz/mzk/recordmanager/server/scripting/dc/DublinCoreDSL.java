@@ -61,17 +61,17 @@ public class DublinCoreDSL extends BaseDSL {
 		}
 		return rights.stream().anyMatch(s -> s.matches(".*public.*")) ? Constants.DOCUMENT_AVAILABILITY_ONLINE : Constants.DOCUMENT_AVAILABILITY_PROTECTED;
 	}
-	
+
 	public List<String> getOtherTitles() {
 		List<String> titles = record.getTitles();
-		
-		if(titles.size() <= 1) titles.clear();
+
+		if (titles.size() <= 1) titles.clear();
 		else titles.subList(1, titles.size());
-		
-		if(record.getTitleAlts() != null) titles.addAll(record.getTitleAlts());
-		return null;
+
+		if (record.getTitleAlts() != null) titles.addAll(record.getTitleAlts());
+		return titles;
 	}
-	
+
 	public String getFirstCreator() {
 		return record.getFirstCreator();
 	}

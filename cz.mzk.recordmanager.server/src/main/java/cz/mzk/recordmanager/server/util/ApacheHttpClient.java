@@ -20,7 +20,6 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.ssl.SSLContexts;
 
 import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSocketFactory;
 
 // Thread safe
 public class ApacheHttpClient implements HttpClient, Closeable {
