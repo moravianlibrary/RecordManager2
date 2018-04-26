@@ -1,5 +1,6 @@
 package cz.mzk.recordmanager.server.export;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -69,7 +70,7 @@ public class ExportRecordsJobConfig {
 
 	@Bean
 	public Job exportCosmotron996Job(
-			@Qualifier(Constants.JOB_ID_EXPORT_COSMOTRON_996+":exportCosmotron996Step") Step exportCosmotron996Step) {
+			@Qualifier(Constants.JOB_ID_EXPORT_COSMOTRON_996 + ":exportCosmotron996Step") Step exportCosmotron996Step) {
 		return jobs.get(Constants.JOB_ID_EXPORT_COSMOTRON_996)
 				.validator(new ExportRecordsJobParametersValidator())
 				.listener(JobFailureListener.INSTANCE)
@@ -78,35 +79,32 @@ public class ExportRecordsJobConfig {
 				.build();
 	}
 
-	@Bean(name = Constants.JOB_ID_EXPORT+":exportRecordsStep")
+	@Bean(name = Constants.JOB_ID_EXPORT + ":exportRecordsStep")
 	public Step exportRecordsStep() throws Exception {
 		return steps.get("exportRecordsStep")
 				.listener(new StepProgressListener())
-				.<HarvestedRecordUniqueId, String> chunk(20)//
-				.reader(exportRecordsReader(LONG_OVERRIDEN_BY_EXPRESSION, LONG_OVERRIDEN_BY_EXPRESSION)) //
+				.<HarvestedRecordUniqueId, String>chunk(20)//
+				.reader(exportRecordsReader(LONG_OVERRIDEN_BY_EXPRESSION, LONG_OVERRIDEN_BY_EXPRESSION, STRING_OVERRIDEN_BY_EXPRESSION)) //
 				.processor(exportRecordsProcessor(STRING_OVERRIDEN_BY_EXPRESSION)) //
 				.writer(exportRecordsWriter(STRING_OVERRIDEN_BY_EXPRESSION)) //
 				.build();
 	}
 
-
 	@Bean(name = "exportRecordsForClassifierJob:exportRecordsForClassifierStep")
 	public Step exportRecordsForClassifierStep() throws Exception {
 		return steps.get("updateRecordsJobStep")
-				.<HarvestedRecordUniqueId, String> chunk(20)//
+				.<HarvestedRecordUniqueId, String>chunk(20)//
 				.reader(exportRecordsForClassifierReader(LONG_OVERRIDEN_BY_EXPRESSION)) //
 				.processor(exportRecordsForClassifierProcessor(STRING_OVERRIDEN_BY_EXPRESSION)) //
 				.writer(exportRecordsWriter(STRING_OVERRIDEN_BY_EXPRESSION)) //
 				.build();
 	}
 
-
-
-	@Bean(name = Constants.JOB_ID_EXPORT_COSMOTRON_996+":exportCosmotron996Step")
+	@Bean(name = Constants.JOB_ID_EXPORT_COSMOTRON_996 + ":exportCosmotron996Step")
 	public Step exportCosmotron996Step() throws Exception {
 		return steps.get("exportCosmotron996Step")
 				.listener(new StepProgressListener())
-				.<Cosmotron996, String> chunk(20)//
+				.<Cosmotron996, String>chunk(20)//
 				.reader(exportCosmotron996Reader(LONG_OVERRIDEN_BY_EXPRESSION)) //
 				.processor(exportCosmotron996Processor(STRING_OVERRIDEN_BY_EXPRESSION)) //
 				.writer(exportRecordsWriter(STRING_OVERRIDEN_BY_EXPRESSION)) //
@@ -117,17 +115,22 @@ public class ExportRecordsJobConfig {
 	@StepScope
 	public ItemReader<HarvestedRecordUniqueId> exportRecordsReader(
 			@Value("#{jobParameters[" + Constants.JOB_PARAM_CONF_ID + "]}") Long configId,
-			@Value("#{jobParameters[" + Constants.JOB_PARAM_DELETED + "]}") Long deleted)
+			@Value("#{jobParameters[" + Constants.JOB_PARAM_DELETED + "]}") Long deleted,
+			@Value("#{jobParameters[" + Constants.JOB_PARAM_RECORD_IDS + "]}") String recordIds)
 			throws Exception {
-		JdbcPagingItemReader<HarvestedRecordUniqueId> reader = new JdbcPagingItemReader<HarvestedRecordUniqueId>();
+		JdbcPagingItemReader<HarvestedRecordUniqueId> reader = new JdbcPagingItemReader<>();
 		SqlPagingQueryProviderFactoryBean pqpf = new SqlPagingQueryProviderFactoryBean();
 		pqpf.setDataSource(dataSource);
 		pqpf.setSelectClause("SELECT import_conf_id, record_id");
 		pqpf.setFromClause("FROM harvested_record");
-		pqpf.setWhereClause("WHERE import_conf_id = :conf_id" + (deleted == null ? " AND deleted IS NULL" : ""));
+		pqpf.setWhereClause("WHERE import_conf_id = :conf_id" +
+				(deleted == null ? " AND deleted IS NULL" : "") +
+				(recordIds != null ? " AND record_id IN (:record_id)" : "")
+		);
 		pqpf.setSortKey("record_id");
-		Map<String, Object> parameterValues = new HashMap<String, Object>();
+		Map<String, Object> parameterValues = new HashMap<>();
 		parameterValues.put("conf_id", configId);
+		if (recordIds != null) parameterValues.put("record_id", Arrays.asList(recordIds.split(",")));
 		reader.setParameterValues(parameterValues);
 		reader.setRowMapper(new HarvestedRecordIdRowMapper());
 		reader.setPageSize(20);
@@ -142,7 +145,7 @@ public class ExportRecordsJobConfig {
 	public ItemReader<HarvestedRecordUniqueId> exportRecordsForClassifierReader(@Value("#{jobParameters["
 			+ Constants.JOB_PARAM_CONF_ID + "]}") Long configId)
 			throws Exception {
-		JdbcPagingItemReader<HarvestedRecordUniqueId> reader = new JdbcPagingItemReader<HarvestedRecordUniqueId>();
+		JdbcPagingItemReader<HarvestedRecordUniqueId> reader = new JdbcPagingItemReader<>();
 		SqlPagingQueryProviderFactoryBean pqpf = new SqlPagingQueryProviderFactoryBean();
 		pqpf.setDataSource(dataSource);
 		pqpf.setSelectClause("SELECT import_conf_id, record_id");
@@ -156,7 +159,7 @@ public class ExportRecordsJobConfig {
 				"      WHERE harvested_record.id = fulltext_kramerius.harvested_record_id " +
 				"  ))");
 		pqpf.setSortKey("record_id");
-		Map<String, Object> parameterValues = new HashMap<String, Object>();
+		Map<String, Object> parameterValues = new HashMap<>();
 		parameterValues.put("conf_id", configId);
 		reader.setParameterValues(parameterValues);
 		reader.setRowMapper(new HarvestedRecordIdRowMapper());
@@ -167,19 +170,19 @@ public class ExportRecordsJobConfig {
 		return reader;
 	}
 
-	@Bean(name = Constants.JOB_ID_EXPORT_COSMOTRON_996+":exportCosmotron996Reader")
+	@Bean(name = Constants.JOB_ID_EXPORT_COSMOTRON_996 + ":exportCosmotron996Reader")
 	@StepScope
 	public ItemReader<Cosmotron996> exportCosmotron996Reader(@Value("#{jobParameters["
 			+ Constants.JOB_PARAM_CONF_ID + "]}") Long configId)
 			throws Exception {
-		JdbcPagingItemReader<Cosmotron996> reader = new JdbcPagingItemReader<Cosmotron996>();
+		JdbcPagingItemReader<Cosmotron996> reader = new JdbcPagingItemReader<>();
 		SqlPagingQueryProviderFactoryBean pqpf = new SqlPagingQueryProviderFactoryBean();
 		pqpf.setDataSource(dataSource);
 		pqpf.setSelectClause("SELECT *");
 		pqpf.setFromClause("FROM cosmotron_996");
 		pqpf.setWhereClause("WHERE import_conf_id = :conf_id");
 		pqpf.setSortKey("record_id");
-		Map<String, Object> parameterValues = new HashMap<String, Object>();
+		Map<String, Object> parameterValues = new HashMap<>();
 		parameterValues.put("conf_id", configId);
 		reader.setParameterValues(parameterValues);
 		reader.setRowMapper(new Cosmotron996RowMapper());
@@ -208,7 +211,7 @@ public class ExportRecordsJobConfig {
 		return new ExportRecordsForClassifierProcessor(iOFormat);
 	}
 
-	@Bean(name = Constants.JOB_ID_EXPORT_COSMOTRON_996+":exportCosmotron996Procesor")
+	@Bean(name = Constants.JOB_ID_EXPORT_COSMOTRON_996 + ":exportCosmotron996Procesor")
 	@StepScope
 	public ExportCosmotron996Processor exportCosmotron996Processor(
 			@Value("#{jobParameters[" + Constants.JOB_PARAM_FORMAT + "]}") String strFormat) {
@@ -221,11 +224,11 @@ public class ExportRecordsJobConfig {
 	@StepScope
 	public FlatFileItemWriter<String> exportRecordsWriter(@Value("#{jobParameters["
 			+ Constants.JOB_PARAM_OUT_FILE + "]}") String filename) throws Exception {
-		FlatFileItemWriter<String> fileWritter = new FlatFileItemWriter<String>();
+		FlatFileItemWriter<String> fileWritter = new FlatFileItemWriter<>();
 		fileWritter.setAppendAllowed(false);
 		fileWritter.setShouldDeleteIfExists(true);
 		fileWritter.setEncoding("UTF-8");
-		fileWritter.setLineAggregator(new PassThroughLineAggregator<String>());
+		fileWritter.setLineAggregator(new PassThroughLineAggregator<>());
 		fileWritter.setResource(new FileSystemResource(filename));
 		fileWritter.afterPropertiesSet();
 		return fileWritter;

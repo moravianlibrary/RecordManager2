@@ -20,7 +20,8 @@ public class ExportRecordsJobParametersValidator extends
 				param(Constants.JOB_PARAM_CONF_ID, ParameterType.LONG, true), //
 				param(Constants.JOB_PARAM_FORMAT, ParameterType.STRING, true),
 				param(Constants.JOB_PARAM_OUT_FILE, ParameterType.STRING, true), //
-				param(Constants.JOB_PARAM_DELETED, ParameterType.LONG, false)
+				param(Constants.JOB_PARAM_DELETED, ParameterType.LONG, false),
+				param(Constants.JOB_PARAM_RECORD_IDS, ParameterType.STRING, false)
 				);
 	}
 
