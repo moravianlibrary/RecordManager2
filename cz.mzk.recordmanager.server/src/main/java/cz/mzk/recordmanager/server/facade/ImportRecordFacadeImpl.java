@@ -123,7 +123,18 @@ public class ImportRecordFacadeImpl implements ImportRecordFacade {
 			}
 		}
 	}
-	
+
+	@Override
+	public void harvestInspirationsJob() {
+		Map<String, JobParameter> parameters = new HashMap<>();
+		parameters.put(Constants.JOB_PARAM_REPEAT, new JobParameter(Constants.JOB_PARAM_ONE_VALUE));
+		JobParameters params = new JobParameters(parameters);
+		JobExecution exec = jobExecutor.execute(Constants.JOB_ID_IMPORT_INSPIRATION, params);
+		if (!ExitStatus.COMPLETED.equals(exec.getExitStatus())) {
+			throw new JobExecutionFailure(Constants.JOB_ID_IMPORT_INSPIRATION + " failed", exec);
+		}
+	}
+
 	private void deleteFile(File file) {
 		logger.info("Delete file: " + file.getAbsolutePath());
 		FileUtils.deleteQuietly(file);
