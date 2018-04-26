@@ -22,14 +22,14 @@ public class InspirationDeleteWriter implements ItemWriter<Long> {
 
 	@Autowired
 	private InspirationDAO insDao;
-	
+
 	@Override
 	public void write(List<? extends Long> items) throws Exception {
-		for(Long id: items){
+		for (Long id : items) {
 			Inspiration ins = insDao.get(id);
-			if(ins == null) continue;
+			if (ins == null) continue;
 			HarvestedRecord hr = hrDao.get(ins.getHarvestedRecordId());
-			if(hr == null) continue;
+			if (hr == null) continue;
 			List<Inspiration> inspirations = hr.getInspiration();
 			inspirations.remove(ins);
 			hr.setInspiration(inspirations);

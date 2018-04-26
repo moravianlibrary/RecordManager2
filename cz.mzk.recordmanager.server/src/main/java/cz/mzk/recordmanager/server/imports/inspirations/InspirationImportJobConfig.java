@@ -39,66 +39,66 @@ public class InspirationImportJobConfig {
 
 	@Bean
 	public Job inspirationImportJob(
-			@Qualifier(Constants.JOB_ID_IMPORT_INSPIRATION +":importInspirationStep") Step inspirationImportStep) {
+			@Qualifier(Constants.JOB_ID_IMPORT_INSPIRATION + ":importInspirationStep") Step inspirationImportStep) {
 		return jobs.get(Constants.JOB_ID_IMPORT_INSPIRATION)
 				.validator(new InspirationImportJobParametersValidator())
 				.listener(JobFailureListener.INSTANCE).flow(inspirationImportStep)
 				.end().build();
 	}
 
-	@Bean(name=Constants.JOB_ID_IMPORT_INSPIRATION +":importInspirationStep")
+	@Bean(name = Constants.JOB_ID_IMPORT_INSPIRATION + ":importInspirationStep")
 	public Step inspirationImportStep() throws Exception {
 		return steps.get("updateRecordsJobStep")
-				.<Map<String, List<String>>, Map<String, List<String>>> chunk(1)//
+				.<Map<String, List<String>>, Map<String, List<String>>>chunk(1)//
 				.reader(inspirationFileReader(STRING_OVERRIDEN_BY_EXPRESSION))//
 				.writer(InspirationImportWriter()) //
 				.build();
 	}
 
-	@Bean(name=Constants.JOB_ID_IMPORT_INSPIRATION +":importInspirationReader")
+	@Bean(name = Constants.JOB_ID_IMPORT_INSPIRATION + ":importInspirationReader")
 	@StepScope
 	public InspirationImportFileReader inspirationFileReader(
 			@Value("#{jobParameters[" + Constants.JOB_PARAM_IN_FILE + "]}") String filename)
 			throws Exception {
-			return new InspirationImportFileReader(filename);
+		return new InspirationImportFileReader(filename);
 	}
-	
-	@Bean(name=Constants.JOB_ID_IMPORT_INSPIRATION +":writer")
+
+	@Bean(name = Constants.JOB_ID_IMPORT_INSPIRATION + ":writer")
 	@StepScope
-	public InspirationImportWriter InspirationImportWriter(){
+	public InspirationImportWriter InspirationImportWriter() {
 		return new InspirationImportWriter();
 	}
 
 	@Bean
 	public Job inspirationDeleteJob(
-			@Qualifier(Constants.JOB_ID_DELETE_INSPIRATION +":deleteInspirationStep") Step inspirationDeleteStep) {
+			@Qualifier(Constants.JOB_ID_DELETE_INSPIRATION + ":deleteInspirationStep") Step inspirationDeleteStep) {
 		return jobs.get(Constants.JOB_ID_DELETE_INSPIRATION)
 				.validator(new InspirationDeleteJobParametersValidator())
 				.listener(JobFailureListener.INSTANCE).flow(inspirationDeleteStep)
 				.end().build();
 	}
 
-	@Bean(name=Constants.JOB_ID_DELETE_INSPIRATION +":deleteInspirationStep")
+	@Bean(name = Constants.JOB_ID_DELETE_INSPIRATION + ":deleteInspirationStep")
 	public Step inspirationDeleteStep() throws Exception {
 		return steps.get("updateRecordsJobStep")
-				.<Long, Long> chunk(1)//
+				.<Long, Long>chunk(1)//
 				.reader(inspirationDeleteReader(STRING_OVERRIDEN_BY_EXPRESSION))//
 				.writer(InspirationDeleteWriter()) //
 				.build();
 	}
 
-	@Bean(name=Constants.JOB_ID_DELETE_INSPIRATION +":deleteInspirationReader")
+	@Bean(name = Constants.JOB_ID_DELETE_INSPIRATION + ":deleteInspirationReader")
 	@StepScope
 	public ItemReader<Long> inspirationDeleteReader(
-			@Value("#{jobParameters[" + Constants.JOB_PARAM_DELETE_INSPIRATION + "]}") String name) throws Exception{
-		JdbcPagingItemReader<Long> reader = new JdbcPagingItemReader<Long>();
+			@Value("#{jobParameters[" + Constants.JOB_PARAM_DELETE_INSPIRATION + "]}") String name) throws Exception {
+		JdbcPagingItemReader<Long> reader = new JdbcPagingItemReader<>();
 		SqlPagingQueryProviderFactoryBean pqpf = new SqlPagingQueryProviderFactoryBean();
 		pqpf.setDataSource(dataSource);
 		pqpf.setSelectClause("SELECT id");
 		pqpf.setFromClause("FROM inspiration");
 		pqpf.setWhereClause("WHERE name = :name");
 		pqpf.setSortKey("id");
-		Map<String, Object> parameterValues = new HashMap<String, Object>();
+		Map<String, Object> parameterValues = new HashMap<>();
 		parameterValues.put("name", name);
 		reader.setParameterValues(parameterValues);
 		reader.setRowMapper(new InspirationIdRowMapper());
@@ -108,11 +108,11 @@ public class InspirationImportJobConfig {
 		reader.afterPropertiesSet();
 		return reader;
 	}
-	
-	@Bean(name=Constants.JOB_ID_DELETE_INSPIRATION +":writer")
+
+	@Bean(name = Constants.JOB_ID_DELETE_INSPIRATION + ":writer")
 	@StepScope
-	public InspirationDeleteWriter InspirationDeleteWriter(){
+	public InspirationDeleteWriter InspirationDeleteWriter() {
 		return new InspirationDeleteWriter();
-	}	
+	}
 }
 

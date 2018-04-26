@@ -16,7 +16,7 @@ public class InspirationImportJobParametersValidator extends
 	@Override
 	public Collection<JobParameterDeclaration> getParameters() {
 		return Collections.singletonList(
-				param(Constants.JOB_PARAM_IN_FILE, ParameterType.STRING, true)//
+				param(Constants.JOB_PARAM_IN_FILE, ParameterType.STRING, false)//
 		);
 	}
 
