@@ -13,3 +13,4 @@ liquibase.contexts=cpk
 recordmanager.threadPoolSize=THREAD_COUNT
 
 solr.url=SOLR_URL
+vufind.url=VUFIND_URL
