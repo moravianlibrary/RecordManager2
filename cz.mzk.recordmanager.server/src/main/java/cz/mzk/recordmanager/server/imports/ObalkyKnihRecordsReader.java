@@ -3,11 +3,9 @@ package cz.mzk.recordmanager.server.imports;
 import java.io.IOException;
 import java.io.InputStream;
 
+import cz.mzk.recordmanager.server.util.MetadataUtils;
 import cz.mzk.recordmanager.server.util.identifier.ISBNUtils;
 import org.springframework.batch.item.ItemReader;
-import org.springframework.batch.item.NonTransientResourceException;
-import org.springframework.batch.item.ParseException;
-import org.springframework.batch.item.UnexpectedInputException;
 import org.springframework.batch.item.xml.StaxEventItemReader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
@@ -25,6 +23,8 @@ public class ObalkyKnihRecordsReader implements ItemReader<ObalkyKnihTOC> {
 
 	private static final String OCLC_PREFIX = "(OCoLC)";
 
+	private static final int EFFECTIVE_LENGHT = 32;
+
 	private StaxEventItemReader<ObalkyKnihTOC> reader;
 
 	private static class FixingInputStream extends InputStream {
@@ -37,7 +37,7 @@ public class ObalkyKnihRecordsReader implements ItemReader<ObalkyKnihTOC> {
 
 		@Override
 		public int read() throws IOException {
-			int nextByte = -1;
+			int nextByte;
 			while ((nextByte = delegate.read()) == 12) continue;
 			return nextByte;
 		}
@@ -45,9 +45,7 @@ public class ObalkyKnihRecordsReader implements ItemReader<ObalkyKnihTOC> {
 	}
 
 	@Override
-	public ObalkyKnihTOC read() throws Exception,
-			UnexpectedInputException, ParseException,
-			NonTransientResourceException {
+	public ObalkyKnihTOC read() throws Exception {
 		if (reader == null) {
 			initializeReader();
 		}
@@ -60,7 +58,7 @@ public class ObalkyKnihRecordsReader implements ItemReader<ObalkyKnihTOC> {
 
 	protected void initializeReader() throws Exception {
 		try {
-			reader = new StaxEventItemReader<ObalkyKnihTOC>();
+			reader = new StaxEventItemReader<>();
 			reader.setResource(new InputStreamResource(httpClient.executeGet(OBALKY_KNIH_TOC_URL)) {
 
 				@Override
@@ -90,6 +88,9 @@ public class ObalkyKnihRecordsReader implements ItemReader<ObalkyKnihTOC> {
 		if (toc.getIsbnStr() != null) {
 				toc.setIsbn(ISBNUtils.toISBN13Long(toc.getIsbnStr()));
 		}
+		toc.setNbn(MetadataUtils.shorten(toc.getNbn(), EFFECTIVE_LENGHT));
+		toc.setOclc(MetadataUtils.shorten(toc.getOclc(), EFFECTIVE_LENGHT));
+		toc.setEan(MetadataUtils.shorten(toc.getEan(), EFFECTIVE_LENGHT));
 	}
 
 }
