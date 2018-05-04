@@ -338,13 +338,4 @@ public class AdresarKnihovenMarcFunctions implements MarcRecordFunctions {
 		}
 		return results.isEmpty() ? null : results;
 	}
-
-	public Set<String> getAllLibraryFields(MarcFunctionContext ctx) {
-		Set<String> results = new HashSet<>();
-		for (Map.Entry<String, List<DataField>> entry : ctx.record().getAllFields().entrySet()) {
-			results.add(SolrUtils.getAllFieldsString(entry.getValue()));
-		}
-		return results;
-	}
-
 }
