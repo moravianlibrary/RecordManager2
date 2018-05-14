@@ -91,6 +91,7 @@ public class Constants {
 	public static final String PREFIX_CBVK				= "cbvk";
 	public static final String PREFIX_CELITEBIB			= "celitebib";
 	public static final String PREFIX_IIR				= "iir";
+	public static final String PREFIX_KKKV				= "kkkv";
 	public static final String PREFIX_KKVY				= "kkvy";
 	public static final String PREFIX_KNAV				= "knav";
 	public static final String PREFIX_KRAM_KNAV			= "kram-knav";

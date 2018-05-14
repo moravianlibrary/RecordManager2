@@ -143,6 +143,8 @@ public class MetadataRecordFactory {
 			return new IirMetadataMarcRecord(marcRec);
 		case Constants.PREFIX_KNAV:
 			return new KnavMetadataMarcRecord(marcRec);
+		case Constants.PREFIX_KKKV:
+			return new KkkvMetadataMarcRecord(marcRec);
 		default:
 			return new MetadataMarcRecord(marcRec);
 		}
