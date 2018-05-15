@@ -6,6 +6,9 @@ import java.util.Map;
 
 import javax.sql.DataSource;
 
+import cz.mzk.recordmanager.server.export.sfx.ExportSfxRecordsJobParametersValidator;
+import cz.mzk.recordmanager.server.export.sfx.ExportSfxRecordsProcessor;
+import cz.mzk.recordmanager.server.export.sfx.ExportSfxRecordsWriter;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
@@ -24,7 +27,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.FileSystemResource;
 
 import cz.mzk.recordmanager.server.jdbc.Cosmotron996RowMapper;
+import cz.mzk.recordmanager.server.jdbc.DedupRecordRowMapper;
 import cz.mzk.recordmanager.server.model.Cosmotron996;
+import cz.mzk.recordmanager.server.model.DedupRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecord.HarvestedRecordUniqueId;
 import cz.mzk.recordmanager.server.springbatch.JobFailureListener;
 import cz.mzk.recordmanager.server.springbatch.StepProgressListener;
@@ -232,6 +237,59 @@ public class ExportRecordsJobConfig {
 		fileWritter.setResource(new FileSystemResource(filename));
 		fileWritter.afterPropertiesSet();
 		return fileWritter;
+	}
+
+	// sfx
+	@Bean
+	public Job exportSfxRecordsJob(
+			@Qualifier(Constants.JOB_ID_EXPORT_SFX + ":exportSfxRecordsStep") Step exportSfxRecordsStep) {
+		return jobs.get(Constants.JOB_ID_EXPORT_SFX)
+				.validator(new ExportSfxRecordsJobParametersValidator())
+				.listener(JobFailureListener.INSTANCE)
+				.flow(exportSfxRecordsStep)
+				.end()
+				.build();
+	}
+
+	@Bean(name = Constants.JOB_ID_EXPORT_SFX + ":exportSfxRecordsStep")
+	public Step exportSfxRecordsStep() throws Exception {
+		return steps.get("exportSfxRecordsStep")
+				.listener(new StepProgressListener())
+				.<DedupRecord, String>chunk(20)//
+				.reader(exportSfxRecordsReader()) //
+				.processor(exportSfxRecordsProcessor()) //
+				.writer(exportSfxRecordsWriter(STRING_OVERRIDEN_BY_EXPRESSION)) //
+				.build();
+	}
+
+	@Bean(name = Constants.JOB_ID_EXPORT_SFX + ":exportSfxRecordsReader")
+	@StepScope
+	public ItemReader<DedupRecord> exportSfxRecordsReader() throws Exception {
+		JdbcPagingItemReader<DedupRecord> reader = new JdbcPagingItemReader<>();
+		SqlPagingQueryProviderFactoryBean pqpf = new SqlPagingQueryProviderFactoryBean();
+		pqpf.setDataSource(dataSource);
+		pqpf.setSelectClause("SELECT DISTINCT dedup_record_id");
+		pqpf.setFromClause("FROM harvested_record");
+		pqpf.setSortKey("dedup_record_id");
+		reader.setRowMapper(new DedupRecordRowMapper("dedup_record_id"));
+		reader.setPageSize(20);
+		reader.setQueryProvider(pqpf.getObject());
+		reader.setDataSource(dataSource);
+		reader.afterPropertiesSet();
+		return reader;
+	}
+
+	@Bean(name = Constants.JOB_ID_EXPORT_SFX + ":exportRecordsProcesor")
+	@StepScope
+	public ExportSfxRecordsProcessor exportSfxRecordsProcessor() {
+		return new ExportSfxRecordsProcessor();
+	}
+
+	@Bean(name = Constants.JOB_ID_EXPORT_SFX + ":exportSfxRecordsWriter")
+	@StepScope
+	public ExportSfxRecordsWriter exportSfxRecordsWriter(@Value("#{jobParameters["
+			+ Constants.JOB_PARAM_OUT_FILE + "]}") String filename) throws Exception {
+		return new ExportSfxRecordsWriter(filename);
 	}
 
 }

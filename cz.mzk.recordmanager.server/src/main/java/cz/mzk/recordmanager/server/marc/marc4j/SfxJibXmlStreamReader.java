@@ -16,6 +16,7 @@ import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
+import cz.mzk.recordmanager.server.util.constants.SfxConstants;
 import cz.mzk.recordmanager.server.util.RecordUtils;
 import org.marc4j.MarcReader;
 import org.marc4j.marc.DataField;
@@ -38,23 +39,6 @@ public class SfxJibXmlStreamReader implements MarcReader {
 	private static final String TEXT_EMBARGO_NOT_AVAILABLE = "embargo_not_available ";
 	private static final String TEXT_EMBARGO_AVAILABLE = "embargo_available ";
 	private static final String DATE_STRING_005 = "yyyyMMddHHmmss'.0'";
-
-	private static final String ELEMENT_RECORD = "item";
-	private static final String ELEMENT_ID = "sfx_id";
-	private static final String ELEMENT_ISSN = "issn";
-	private static final String ELEMENT_EISSN = "eissn";
-	private static final String ELEMENT_ISBN = "isbn";
-	private static final String ELEMENT_EISBN = "eisbn";
-	private static final String ELEMENT_OBJECT_TYPE = "object_type";
-	private static final String ELEMENT_AUTHOR = "author";
-	private static final String ELEMENT_TITLE = "title";
-	private static final String ELEMENT_DAYS_AVAILABLE = "days_available";
-	private static final String ELEMENT_DAYS_NOT_AVAILABLE = "days_not_available";
-	private static final String ELEMENT_COVERAGE = "coverage";
-	private static final String ELEMENT_FROM = "from";
-	private static final String ELEMENT_TO = "to";
-	private static final String ELEMENT_YEAR = "year";
-	private static final String ELEMENT_VOLUME = "volume";
 
 	private static final Pattern PREFIX = Pattern.compile(
 			"^((?:der|die|das|the|an) ).*", Pattern.CASE_INSENSITIVE);
@@ -118,32 +102,32 @@ public class SfxJibXmlStreamReader implements MarcReader {
 				switch (xmlReader.getEventType()) {
 				case XMLStreamReader.START_ELEMENT:
 					switch (xmlReader.getLocalName()) {
-					case ELEMENT_RECORD:
+					case SfxConstants.ELEMENT_ITEM:
 						record = factory.newRecord();
 						addFields();
 						break;
-					case ELEMENT_ID:
+					case SfxConstants.ELEMENT_SFX_ID:
 						record.addVariableField(factory.newControlField("001",
 								xmlReader.getElementText()));
 						break;
-					case ELEMENT_ISSN:
+					case SfxConstants.ELEMENT_ISSN:
 						issns.add(getIsxnField("022"));
 						break;
-					case ELEMENT_EISSN:
+					case SfxConstants.ELEMENT_EISSN:
 						issns.add(0, getIsxnField("022"));
 						break;
-					case ELEMENT_ISBN:
+					case SfxConstants.ELEMENT_ISBN:
 						isbns.add(getIsxnField("020"));
 						break;
-					case ELEMENT_EISBN:
+					case SfxConstants.ELEMENT_EISBN:
 						isbns.add(0, getIsxnField("020"));
 						break;
-					case ELEMENT_OBJECT_TYPE:
+					case SfxConstants.ELEMENT_OBJECT_TYPE:
 						type = xmlReader.getElementText();
 						record.addVariableField(factory.newDataField("300",
 								' ', ' ', "a", type));
 						break;
-					case ELEMENT_AUTHOR:
+					case SfxConstants.ELEMENT_AUTHOR:
 						if (record.getVariableField("100") == null) {
 							record.addVariableField(factory.newDataField("100",
 									'1', '#', "a", xmlReader.getElementText()));
@@ -152,7 +136,7 @@ public class SfxJibXmlStreamReader implements MarcReader {
 									'1', '0', "a", xmlReader.getElementText()));
 						}
 						break;
-					case ELEMENT_TITLE:
+					case SfxConstants.ELEMENT_TITLE:
 						if (record.getVariableField("245") == null) {
 							String data = xmlReader.getElementText();
 							Matcher matcher;
@@ -167,7 +151,7 @@ public class SfxJibXmlStreamReader implements MarcReader {
 									'0', '3', "a", xmlReader.getElementText()));
 						}
 						break;
-					case ELEMENT_DAYS_AVAILABLE:
+					case SfxConstants.ELEMENT_DAYS_AVAILABLE:
 						String available = xmlReader.getElementText();
 						if (record.getVariableField("500") == null) {
 							record.addVariableField(factory.newDataField("500",
@@ -175,7 +159,7 @@ public class SfxJibXmlStreamReader implements MarcReader {
 						}
 						embargo = "a" + available;
 						break;
-					case ELEMENT_DAYS_NOT_AVAILABLE:
+					case SfxConstants.ELEMENT_DAYS_NOT_AVAILABLE:
 						String notAvailable = xmlReader.getElementText();
 						if (record.getVariableField("500") == null) {
 							record.addVariableField(factory.newDataField("500",
@@ -183,13 +167,13 @@ public class SfxJibXmlStreamReader implements MarcReader {
 						}
 						embargo = "n" + notAvailable;
 						break;
-					case ELEMENT_FROM:
+					case SfxConstants.ELEMENT_FROM:
 						coverage = "from";
 						break;
-					case ELEMENT_TO:
+					case SfxConstants.ELEMENT_TO:
 						coverage = "to";
 						break;
-					case ELEMENT_YEAR:
+					case SfxConstants.ELEMENT_YEAR:
 						String year = xmlReader.getElementText();
 						if (coverage != null) {
 							if (coverage.equals("from")) {
@@ -199,7 +183,7 @@ public class SfxJibXmlStreamReader implements MarcReader {
 						}
 						volumeYear = (year != null) ? Integer.valueOf(year) : 0;
 						break;
-					case ELEMENT_VOLUME:
+					case SfxConstants.ELEMENT_VOLUME:
 						if (volumeFirstYear < 0) { // error
 							break;
 						}
@@ -217,7 +201,7 @@ public class SfxJibXmlStreamReader implements MarcReader {
 					break;
 				case XMLStreamReader.END_ELEMENT:
 					switch (xmlReader.getLocalName()) {
-					case ELEMENT_RECORD:
+					case SfxConstants.ELEMENT_ITEM:
 						while (xmlReader.hasNext()
 								&& xmlReader.getEventType() != XMLStreamReader.START_ELEMENT) {
 							xmlReader.next();
@@ -244,11 +228,11 @@ public class SfxJibXmlStreamReader implements MarcReader {
 								: TEXT_LEADER_MONOGRAPH));
 						generateFields996(years, volumeFirstYear);
 						return RecordUtils.sortFields(record);
-					case ELEMENT_FROM:
-					case ELEMENT_TO:
+					case SfxConstants.ELEMENT_FROM:
+					case SfxConstants.ELEMENT_TO:
 						coverage = null;
 						break;
-					case ELEMENT_COVERAGE:
+					case SfxConstants.ELEMENT_COVERAGE:
 						try {
 							if (Integer.valueOf(from) < minFrom) {
 								minFrom = Integer.valueOf(from);
