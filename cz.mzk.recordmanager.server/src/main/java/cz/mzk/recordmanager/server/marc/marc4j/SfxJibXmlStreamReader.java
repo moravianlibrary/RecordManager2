@@ -96,7 +96,7 @@ public class SfxJibXmlStreamReader implements MarcReader {
 
 	/**
 	 * Returns the next record in the iteration.
-	 * 
+	 *
 	 * @return Record - the record object
 	 */
 	public Record next() {
@@ -225,7 +225,7 @@ public class SfxJibXmlStreamReader implements MarcReader {
 						isbns.forEach(df -> record.addVariableField(df));
 						issns.forEach(df -> record.addVariableField(df));
 						String year008 = "        ";
-						String year260 = "";
+						String year260;
 						if (minFrom != Integer.MAX_VALUE) {
 							if (SERIALS.contains(type)) {
 								year260 = String.valueOf(minFrom)
@@ -256,9 +256,10 @@ public class SfxJibXmlStreamReader implements MarcReader {
 							if (maxTo < Integer.valueOf(to)) {
 								maxTo = Integer.valueOf(to);
 							}
-						} catch (Exception e) {
+						} catch (Exception ignore) {
 						}
 						generateYears(years, from, to, embargo);
+						record.addVariableField(generateCoverageField(from, to, embargo));
 						from = to = embargo = null;
 						break;
 					}
@@ -285,12 +286,11 @@ public class SfxJibXmlStreamReader implements MarcReader {
 		return factory.newDataField(tag, ' ', ' ', "a", xmlReader.getElementText());
 	}
 
-	private Set<String> generateYears(Set<String> years, String fromStr,
-			String toStr, String embargo) {
+	private void generateYears(Set<String> years, String fromStr, String toStr, String embargo) {
 		int from;
 		int to;
 		if (embargo == null) {
-			if (fromStr == null) return years;
+			if (fromStr == null) return;
 			from = Integer.valueOf(fromStr);
 			to = (toStr == null) ? Calendar.getInstance().get(Calendar.YEAR)
 					: Integer.valueOf(toStr);
@@ -313,7 +313,6 @@ public class SfxJibXmlStreamReader implements MarcReader {
 		for (int i = from; i <= to; i++) {
 			years.add(String.valueOf(i));
 		}
-		return years;
 	}
 
 	private void generateFields996(Set<String> years, int volumeFirstYear) {
@@ -325,6 +324,14 @@ public class SfxJibXmlStreamReader implements MarcReader {
 			}
 			record.addVariableField(df);
 		});
+	}
+
+	private DataField generateCoverageField(String from, String to, String embargo) {
+		DataField df = factory.newDataField("COV", ' ', ' ');
+		if (from != null) df.addSubfield(factory.newSubfield('a', from));
+		if (to != null) df.addSubfield(factory.newSubfield('b', to));
+		if (embargo != null) df.addSubfield(factory.newSubfield('c', embargo));
+		return df;
 	}
 
 }

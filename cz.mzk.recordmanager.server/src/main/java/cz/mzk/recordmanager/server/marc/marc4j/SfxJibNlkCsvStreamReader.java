@@ -22,6 +22,7 @@ import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 import org.apache.commons.io.IOUtils;
 import org.marc4j.MarcReader;
+import org.marc4j.marc.DataField;
 import org.marc4j.marc.MarcFactory;
 import org.marc4j.marc.Record;
 
@@ -41,8 +42,8 @@ public class SfxJibNlkCsvStreamReader implements MarcReader {
 	private static final Pattern YEAR = Pattern.compile("\\d{4}");
 	private String idPrefix;
 	private Iterator<CSVRecord> iterator;
-	private CSVParser parser;
 	private AtomicInteger id = new AtomicInteger(0);
+
 	/**
 	 * Constructs an instance with the specified input stream.
 	 */
@@ -53,7 +54,7 @@ public class SfxJibNlkCsvStreamReader implements MarcReader {
 
 	private void initializeReader(InputStream input) {
 		try {
-			parser = new CSVParser(new StringReader(IOUtils.toString(input, StandardCharsets.UTF_8)), CSVFormat.EXCEL);
+			CSVParser parser = new CSVParser(new StringReader(IOUtils.toString(input, StandardCharsets.UTF_8)), CSVFormat.EXCEL);
 			iterator = parser.iterator();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -69,7 +70,7 @@ public class SfxJibNlkCsvStreamReader implements MarcReader {
 
 	/**
 	 * Returns the next record in the iteration.
-	 * 
+	 *
 	 * @return Record - the record object
 	 */
 	public Record next() {
@@ -84,8 +85,8 @@ public class SfxJibNlkCsvStreamReader implements MarcReader {
 		SimpleDateFormat sdf = new SimpleDateFormat(DATE_STRING_005);
 		record.addVariableField(factory.newControlField("005", sdf.format(new Date())));
 		record.addVariableField(factory.newControlField("008", String.format(
-						TEXT_008, (sfx.getFrom() == null ? "    " : sfx.getFrom())
-								+ (sfx.getTo() == null ? (sfx.isBook() ? "    "	: "9999") : sfx.getTo()))));
+				TEXT_008, (sfx.getFrom() == null ? "    " : sfx.getFrom())
+						+ (sfx.getTo() == null ? (sfx.isBook() ? "    " : "9999") : sfx.getTo()))));
 		if (sfx.getIsbns() != null) sfx.getIsbns().forEach(i -> addDataField("020", ' ', ' ', "a", i));
 		if (sfx.getIssns() != null) sfx.getIssns().forEach(i -> addDataField("022", ' ', ' ', "a", i));
 		if (sfx.getAuthor() != null) addDataField("100", '1', '#', "a", sfx.getAuthor());
@@ -116,12 +117,12 @@ public class SfxJibNlkCsvStreamReader implements MarcReader {
 			generateYears(years, sfx.getFrom(), sfx.getTo());
 			addDataField("260", ' ', ' ', "c", sfx.getFrom() + "-" + (sfx.getTo() == null ? "" : sfx.getTo()));
 		}
+		addCoverageField(sfx);
 		generateFields996(years);
 	}
 
-	private Set<String> generateYears(Set<String> years, String fromStr,
-			String toStr) {
-		if (fromStr == null) return years;
+	private void generateYears(Set<String> years, String fromStr, String toStr) {
+		if (fromStr == null) return;
 		int from = Integer.valueOf(fromStr);
 		int to = (toStr == null) ? Calendar.getInstance().get(Calendar.YEAR)
 				: Integer.valueOf(toStr);
@@ -129,7 +130,17 @@ public class SfxJibNlkCsvStreamReader implements MarcReader {
 		for (int i = from; i <= to; i++) {
 			years.add(String.valueOf(i));
 		}
-		return years;
+	}
+
+	private void addCoverageField(SfxNlkRecord sfx) {
+		if (sfx.getYear() != null) {
+			record.addVariableField(factory.newDataField("COV", ' ', ' ', "a", sfx.getYear(), "b", sfx.getYear()));
+			return;
+		}
+		if (sfx.getFrom() == null) return;
+		DataField df = factory.newDataField("COV", ' ', ' ', "a", sfx.getFrom());
+		if (sfx.getTo() != null) df.addSubfield(factory.newSubfield('b', sfx.getTo()));
+		record.addVariableField(df);
 	}
 
 	private void generateFields996(Set<String> years) {
@@ -152,7 +163,7 @@ public class SfxJibNlkCsvStreamReader implements MarcReader {
 		private String url;
 		private String author;
 
-		public SfxNlkRecord(CSVRecord csv) {
+		SfxNlkRecord(CSVRecord csv) {
 			this.type = csv.get(0);
 			this.title = csv.get(1);
 			this.issn = csv.get(2);
