@@ -89,6 +89,8 @@ public class DedupRecordsJobConfig {
 
 	private static final String TMP_TABLE_ARTICLES_TG = "tmp_simmilar_articles_tg";
 
+	private static final String TMP_TABLE_SFX_ID = "tmp_simmilar_sfx_id";
+
 	@Autowired
 	private SessionFactory sessionFactory;
 
@@ -157,6 +159,8 @@ public class DedupRecordsJobConfig {
 
 	private String cleanupSql = ResourceUtils.asString("job/dedupRecordsJob/cleanup.sql");
 
+	private String prepareTempSfxIdSql = ResourceUtils.asString("job/dedupRecordsJob/prepareTempSfxIdTable.sql");
+
 	public DedupRecordsJobConfig() throws IOException {
 	}
 	
@@ -171,6 +175,8 @@ public class DedupRecordsJobConfig {
 			@Qualifier(Constants.JOB_ID_DEDUP + ":dedupClusterIdsStep") Step dedupClusterIdsStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":prepareTempSkatKeysManuallyMergedStep") Step prepareTempSkatKeysManuallyMergedStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":dedupSimpleKeysSkatManuallyMergedStep") Step dedupSimpleKeysSkatManuallyMergedStep,
+			@Qualifier(Constants.JOB_ID_DEDUP + ":prepareTempSfxIdTableStep") Step prepareTempSfxIdTableStep,
+			@Qualifier(Constants.JOB_ID_DEDUP + ":dedupSimpleKeysSfxIdStep") Step dedupSimpleKeysSfxIdStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":prepareTempIsbnTableStep") Step prepareTempIsbnTableStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":dedupSimpleKeysIsbnStep") Step dedupSimpleKeysISBNStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":prepareTempCnbTableStep") Step prepareTempCnbTableStep,
@@ -196,7 +202,7 @@ public class DedupRecordsJobConfig {
 			@Qualifier(Constants.JOB_ID_DEDUP + ":processSimilaritesResultsStep") Step processSimilaritesResultsStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":prepareTempIsmnClustersTableStep") Step prepareTempIsmnClustersTableStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":dedupIsmnClustersStep") Step dedupIsmnClustersStep,
-			
+
 			@Qualifier(Constants.JOB_ID_DEDUP + ":prepareDedupPeriodicalsIssnStep") Step prepareDedupPeriodicalsIssnStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":dedupPeriodicalsIssnStep") Step dedupPeriodicalsIssnStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":prepareDedupPeriodicalsCnbStep") Step prepareDedupPeriodicalsCnbStep,
@@ -272,6 +278,8 @@ public class DedupRecordsJobConfig {
 				.next(dedupArticlesXGStep)
 				.next(prepareTempArticlesTGTableStep)
 				.next(dedupArticlesTGStep)
+				.next(prepareTempSfxIdTableStep)
+				.next(dedupSimpleKeysSfxIdStep)
 				.next(dedupRestOfRecordsStep)
 				.next(cleanupStep)
 				.build();
@@ -377,7 +385,38 @@ public class DedupRecordsJobConfig {
 		return dedupSimpleKeysReader(TMP_TABLE_SKAT_KEYS_MANUALLY_MERGED);
 	}
 
-	
+	/**
+	 * dedupSimpleKeysSfxStep Deduplicate all sfx
+	 */
+	@Bean(name = "prepareTempTablesStep:prepareTempSfxIdTableTasklet")
+	@StepScope
+	public Tasklet prepareTempSfxIdTableTasklet() {
+		return new SqlCommandTasklet(prepareTempSfxIdSql);
+	}
+
+	@Bean(name = Constants.JOB_ID_DEDUP + ":prepareTempSfxIdTableStep")
+	public Step prepareTempSfxIdTableStep() {
+		return steps.get("prepareTempSfxIdTableStep")
+				.listener(new StepProgressListener())
+				.tasklet(prepareTempSfxIdTableTasklet()).build();
+	}
+
+	@Bean(name = Constants.JOB_ID_DEDUP + ":dedupSimpleKeysSfxIdStep")
+	public Step dedupSimpleKeysSfxIdStep() throws Exception {
+		return steps.get("dedupSimpleKeysSfxIdStep")
+				.listener(new StepProgressListener())
+				.<List<Long>, List<HarvestedRecord>>chunk(100)
+				.reader(dedupSimpleKeysSfxIdReader())
+				.processor(dedupSimpleKeysStepProsessor())
+				.writer(dedupSimpleKeysStepWriter()).build();
+	}
+
+	@Bean(name = "dedupSimpleKeysSfxIdStep:reader")
+	@StepScope
+	public ItemReader<List<Long>> dedupSimpleKeysSfxIdReader() throws Exception {
+		return dedupSimpleKeysReader(TMP_TABLE_SFX_ID);
+	}
+
 	/**
 	 * dedupSimpleKeysIsbnStep Deduplicate all books having equal publication
 	 * year, ISBN and title
