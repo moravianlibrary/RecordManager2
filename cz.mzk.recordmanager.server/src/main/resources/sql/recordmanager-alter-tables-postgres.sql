@@ -1114,3 +1114,6 @@ UPDATE oai_harvest_conf SET url='https://www.okpb.cz/clavius/l.dll' WHERE import
 UPDATE oai_harvest_conf SET url='https://aleph.lib.cas.cz/OAI' WHERE import_conf_id=358;
 UPDATE oai_harvest_conf SET url='https://aleph.lib.cas.cz/OAI' WHERE import_conf_id=360;
 UPDATE oai_harvest_conf SET url='https://aleph.nkp.cz/OAI' WHERE import_conf_id=400;
+
+-- 17. 05. 2018 tomascejpek
+UPDATE import_conf SET interception_enabled=TRUE WHERE id=332;
