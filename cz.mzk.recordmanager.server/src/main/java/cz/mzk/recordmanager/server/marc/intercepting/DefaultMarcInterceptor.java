@@ -1,17 +1,5 @@
 package cz.mzk.recordmanager.server.marc.intercepting;
 
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.util.List;
-
-import org.marc4j.marc.ControlField;
-import org.marc4j.marc.DataField;
-import org.marc4j.marc.MarcFactory;
-import org.marc4j.marc.Record;
-import org.marc4j.marc.Subfield;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import cz.mzk.recordmanager.server.ClasspathResourceProvider;
 import cz.mzk.recordmanager.server.export.IOFormat;
 import cz.mzk.recordmanager.server.marc.MarcRecord;
@@ -19,9 +7,17 @@ import cz.mzk.recordmanager.server.marc.MarcRecordImpl;
 import cz.mzk.recordmanager.server.marc.marc4j.MarcFactoryImpl;
 import cz.mzk.recordmanager.server.marc.marc4j.RecordImpl;
 import cz.mzk.recordmanager.server.model.ImportConfiguration;
+import cz.mzk.recordmanager.server.model.ItemId;
 import cz.mzk.recordmanager.server.model.Sigla;
 import cz.mzk.recordmanager.server.scripting.Mapping;
 import cz.mzk.recordmanager.server.scripting.ResourceMappingResolver;
+import org.marc4j.marc.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.util.List;
 
 public class DefaultMarcInterceptor implements MarcRecordInterceptor {
 
@@ -38,6 +34,7 @@ public class DefaultMarcInterceptor implements MarcRecordInterceptor {
 			}
 		}
 	}
+
 	private Record record;
 	private ImportConfiguration conf;
 	private String recordId;
@@ -76,57 +73,29 @@ public class DefaultMarcInterceptor implements MarcRecordInterceptor {
 
 	/**
 	 * add item id to field 996
-	 * 
+	 *
 	 * @param df {@link DataField}
 	 */
 	protected void processField996(DataField df) {
-		if (df.getTag().equals("996")) {
-			String itemIdType = conf.getItemId();
-			for (Subfield sf : df.getSubfields(ITEM_ID_SUBFIELD_CHAR)) {
-				df.removeSubfield(sf);
-			}
-			boolean missing = false;
-			String sigla;
-			List<String> getSiglas = null;
-			getSiglas = SIGLA_MAPPING.get(conf.getId().toString());
-			if (getSiglas != null && !getSiglas.isEmpty()) {
-				sigla = getSiglas.get(0);
-			} else {
-				List<Sigla> siglas = conf.getSiglas();
-				sigla = !siglas.isEmpty() ? siglas.get(0).getUniqueId().getSigla() : "";
-			}
-			if (itemIdType.equals("aleph")) {
-				String j = df.getSubfield('j') != null ? df.getSubfield('j').getData().toUpperCase() : "";
-				String w = df.getSubfield('w') != null ? df.getSubfield('w').getData() : "";
-				String u = df.getSubfield('u') != null ? df.getSubfield('u').getData() : "";
-				if (j.equals("") || w.equals("") || u.equals("")) missing = true;
-				else if (recordId != null) df.addSubfield(MARC_FACTORY.newSubfield(
-						ITEM_ID_SUBFIELD_CHAR, sigla + "." + recordId.replace("-", "") + "." + j + w + u));
-			} else if (itemIdType.equals("tre")) {
-				String w = df.getSubfield('w') != null ? df.getSubfield('w').getData() : "";
-				if (w.equals("")) missing = true;
-				else df.addSubfield(MARC_FACTORY.newSubfield(ITEM_ID_SUBFIELD_CHAR, sigla + "." + w));
-			} else if (itemIdType.equals("nlk")) {
-				String a = df.getSubfield('a') != null ? df.getSubfield('a').getData() : "";
-				if (a.equals("")) missing = true;
-				else df.addSubfield(MARC_FACTORY.newSubfield(ITEM_ID_SUBFIELD_CHAR, sigla + "." + a));
-			} else if (itemIdType.equals("svkul")) {
-				String b = df.getSubfield('b') != null ? df.getSubfield('b').getData() : "";
-				if (b.equals("")) missing = true;
-				else {
-					if (b.startsWith("31480") && b.length() >= 8) {
-						b = b.substring(5);
-					}
-					df.addSubfield(MARC_FACTORY.newSubfield(ITEM_ID_SUBFIELD_CHAR, sigla + "." + b));
-				}
-			} else if (itemIdType.equals("other")) {
-				String b = df.getSubfield('b') != null ? df.getSubfield('b').getData() : "";
-				if (b.equals("")) missing = true;
-				else df.addSubfield(MARC_FACTORY.newSubfield(ITEM_ID_SUBFIELD_CHAR, sigla + "." + b));
-			}
-			if (missing) logger.info(String.format("Missing data for itemId: import_confid=%d, 001=%s",
-					conf.getId(), record.getControlNumber()));
+		if (!df.getTag().equals("996")) return;
+		// remove old subfield
+		for (Subfield sf : df.getSubfields(ITEM_ID_SUBFIELD_CHAR)) {
+			df.removeSubfield(sf);
 		}
+		String sigla;
+		List<String> getSiglas;
+		getSiglas = SIGLA_MAPPING.get(conf.getId().toString());
+		if (getSiglas != null && !getSiglas.isEmpty()) {
+			sigla = getSiglas.get(0);
+		} else {
+			List<Sigla> siglas = conf.getSiglas();
+			sigla = siglas.isEmpty() ? "" : siglas.get(0).getUniqueId().getSigla();
+		}
+		Subfield itemIdSubfield = ItemId.getItemIdSubfield(conf.getItemId(), df, sigla, recordId);
+		if (itemIdSubfield == null) logger.info(String.format("Missing data for itemId: import_confid=%d, 001=%s",
+				conf.getId(), record.getControlNumber()));
+		else df.addSubfield(itemIdSubfield);
+
 	}
 
 	protected Record getRecord() {
