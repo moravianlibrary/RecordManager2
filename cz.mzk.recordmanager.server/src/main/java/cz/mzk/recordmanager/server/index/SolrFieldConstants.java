@@ -79,6 +79,8 @@ public class SolrFieldConstants {
 	public static final String PEOPLE_SEARCH = "people_search_txt_mv";
 	
 	public static final String SUBJECT_FACET = "subject_facet_str_mv";
+
+	public static final String SUBJECT_STR_MV = "subject_str_mv"; // for autocomplete
 	
 	public static final String ID_AUTHORITY = "id_authority";
 	

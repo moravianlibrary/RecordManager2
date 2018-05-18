@@ -2,16 +2,11 @@ package cz.mzk.recordmanager.server.util;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.solr.client.solrj.util.ClientUtils;
 import org.apache.solr.common.SolrInputDocument;
 
@@ -215,5 +210,31 @@ public class SolrUtils {
 			}
 		}
 		return builder.toString();
+	}
+
+	/**
+	 * remove end parenthesis from the end of value if there is no start parenthesis
+	 * for author and subject autocomplete
+	 * @param collection of values
+	 * @return {@link Set} of filtered values
+	 */
+	private static final Pattern END_PARENTHESIS_PATTERN = Pattern.compile("\\)$");
+	private static final String START_PARENTHESIS_STR = "(";
+	private static final String END_PARENTHESIS_STR = ")";
+
+	public static Set<String> removeEndParentheses(Collection<String> collection) {
+		Set<String> results = new HashSet<>();
+		for (String value : collection) {
+			results.add(removeEndParentheses(value));
+		}
+		return results;
+	}
+
+	public static String removeEndParentheses(String value) {
+		if (value != null && value.endsWith(END_PARENTHESIS_STR) &&
+				(StringUtils.countMatches(value, START_PARENTHESIS_STR) < StringUtils.countMatches(value, END_PARENTHESIS_STR))) {
+			return CleaningUtils.replaceFirst(value, END_PARENTHESIS_PATTERN, "");
+		}
+		return value;
 	}
 }

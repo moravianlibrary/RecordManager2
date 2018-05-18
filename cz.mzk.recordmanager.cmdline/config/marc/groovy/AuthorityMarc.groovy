@@ -4,7 +4,7 @@ url = getUrls()
 
 // facets
 local_institution_facet_str_mv = getInstitutionFacet()
-subject_facet_str_mv = getFields "100abcd"
+subject_facet_str_mv = subject_str_mv = getFields "100abcd"
 
 // display fields
 alternative_name_display_mv = getAuthAuthors "400"

@@ -11,7 +11,8 @@ import cz.mzk.recordmanager.server.model.DedupRecord;
 @Component
 public class SubjectFacetEnricher implements DedupRecordEnricher {
 
-	private final FieldMerger holdingsFieldMerger = new FieldMerger(SolrFieldConstants.SUBJECT_FACET);
+	private final FieldMerger holdingsFieldMerger = new FieldMerger(SolrFieldConstants.SUBJECT_FACET,
+			SolrFieldConstants.SUBJECT_STR_MV);
 
 	@Override
 	public void enrich(DedupRecord record, SolrInputDocument mergedDocument,

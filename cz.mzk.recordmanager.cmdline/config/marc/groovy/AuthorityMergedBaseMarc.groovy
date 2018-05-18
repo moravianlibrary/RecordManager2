@@ -4,7 +4,7 @@ fullrecord = getFullrecord()
 citation_record_type_str = getCitationRecordType()
 
 // autocompete
-author_autocomplete = getAuthorAutocomplete("100abcdq:110abc:111acdegq:700abcdq:710abc:711acdegq:975abcdq:976abc")
+author_autocomplete = getAuthorAutocomplete("100abcdq:110abc:111acegq:700abcdq:710abc:711acegq:975abcdq:976abc")
 
 // facets
 cpk_detected_format_facet_str_mv = getFormat()

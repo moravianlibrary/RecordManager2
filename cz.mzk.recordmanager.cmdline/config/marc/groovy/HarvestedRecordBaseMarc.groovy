@@ -24,6 +24,7 @@ nbn_display = getFirstField "015a"
 url = getUrls()
 local_statuses_facet_str_mv = getStatuses()
 subject_facet_str_mv = getSubject "600abcdfglnpqstyz:610abcdfgklnpstyz:611abcdefgklnpqstyz:630adfgklnpstyz:648a:650avyz:651avxyz:964abcdefg:967ab"
+subject_str_mv = getSubject "600abcdfglnpqstyz:610abcdfgklnpstyz:611abcefgklpqstyz:630adfgklnpstyz:648a:650avyz:651avxyz:964abcdefg:967ab"
 genre_facet_str_mv = getFields "655avxyz"
 holdings_996_str_mv = getHoldings996()
 

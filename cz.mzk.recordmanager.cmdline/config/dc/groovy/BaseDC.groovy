@@ -22,5 +22,5 @@ topic = getSubjects()
 url = getUrls();
 contents = getContents();
 
-subject_facet_str_mv = filter("subject_facet.txt", getSubjectFacet())
+subject_facet_str_mv = subject_str_mv = filter("subject_facet.txt", getSubjectFacet())
 cpk_detected_format_facet_str_mv = getFormat()
