@@ -7,7 +7,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import cz.mzk.recordmanager.server.metadata.view.ViewTypeEnum;
+import cz.mzk.recordmanager.server.metadata.view.ViewType;
 import cz.mzk.recordmanager.server.model.Ean;
 import cz.mzk.recordmanager.server.model.HarvestedRecordFormat.HarvestedRecordFormatEnum;
 import cz.mzk.recordmanager.server.scripting.ListResolver;
@@ -853,13 +853,13 @@ public class MarcDSL extends BaseDSL {
 	private static final String VIEW_CASLIN_FILE = "view/%s_caslin.txt";
 
 	/**
-	 * @return {@link Set} of string values of {@link ViewTypeEnum}
+	 * @return {@link Set} of string values of {@link ViewType}
 	 */
 	public Set<String> getViewType() {
 		Set<String> results = new HashSet<>();
 		String idPrefix = context.harvestedRecord().getHarvestedFrom().getIdPrefix();
 		Set<String> siglas = metadataRecord.getCaslinSiglas();
-		for (String type : ViewTypeEnum.getPossibleValues(metadataRecord)) {
+		for (String type : ViewType.getPossibleValues(metadataRecord)) {
 			try {
 				if (contains(String.format(VIEW_FILE, type), idPrefix)) results.add(type);
 			} catch (IOException ignore) {

@@ -3,7 +3,6 @@ package cz.mzk.recordmanager.server.metadata;
 import java.util.Collections;
 
 import cz.mzk.recordmanager.server.export.IOFormat;
-import cz.mzk.recordmanager.server.metadata.view.ViewTypeEnum;
 import cz.mzk.recordmanager.server.model.*;
 import cz.mzk.recordmanager.server.model.HarvestedRecordFormat.HarvestedRecordFormatEnum;
 import cz.mzk.recordmanager.server.model.TezaurusRecord.TezaurusKey;
@@ -100,6 +99,33 @@ public interface MetadataRecord {
 	 * @return List<HarvestedRecordFormatEnum>
 	 */
 	List<HarvestedRecordFormatEnum> getDetectedFormatList();
+
+	/**
+	 * Decide if this record has {@link HarvestedRecordFormatEnum#BLIND_BRAILLE}
+	 *
+	 * @return true or false
+	 */
+	default boolean isBlindBraille() {
+		return false;
+	}
+
+	/**
+	 * Decide if this record has {@link HarvestedRecordFormatEnum#MUSICAL_SCORES}
+	 *
+	 * @return true or false
+	 */
+	default boolean isMusicalScores() {
+		return false;
+	}
+
+	/**
+	 * Decide if this record has {@link HarvestedRecordFormatEnum#VIDEO_DOCUMENTS}
+	 *
+	 * @return true or false
+	 */
+	default boolean isVisualDocument() {
+		return false;
+	}
 
 	/**
 	 * return scale of document (significant for maps only)
@@ -308,23 +334,6 @@ public interface MetadataRecord {
 	 * @return String or null
 	 */
 	String getSourceInfoG();
-
-	/**
-	 * Decide if this record has {@link ViewTypeEnum#IREL}
-	 *
-	 * @return true or false
-	 */
-	default boolean isIrelView() {
-		return false;
-	}
-
-	/**
-	 * Decide if this record has {@link ViewTypeEnum#TECH}
-	 * @return true or false
-	 */
-	default boolean isTechView() {
-		return false;
-	}
 
 	/**
 	 * get siglas from caslin
