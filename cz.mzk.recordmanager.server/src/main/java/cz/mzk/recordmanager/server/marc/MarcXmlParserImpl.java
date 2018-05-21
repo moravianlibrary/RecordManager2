@@ -3,6 +3,7 @@ package cz.mzk.recordmanager.server.marc;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 
+import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import org.marc4j.RecordStack;
 import org.marc4j.marc.Record;
 import org.springframework.stereotype.Component;
@@ -33,6 +34,11 @@ public class MarcXmlParserImpl implements MarcXmlParser {
 	}
 
 	@Override
+	public MarcRecord parseRecord(HarvestedRecord hr) {
+		return parseRecord(hr.getRawRecord());
+	}
+
+	@Override
 	public Record parseUnderlyingRecord(InputStream is) {
 		try {
 			RecordStack queue = new RecordStack();
@@ -48,6 +54,11 @@ public class MarcXmlParserImpl implements MarcXmlParser {
 	@Override
 	public Record parseUnderlyingRecord(byte[] rawRecord) {
 		return parseUnderlyingRecord(new ByteArrayInputStream(rawRecord));
+	}
+
+	@Override
+	public Record parseUnderlyingRecord(HarvestedRecord hr) {
+		return parseUnderlyingRecord(hr.getRawRecord());
 	}
 
 }
