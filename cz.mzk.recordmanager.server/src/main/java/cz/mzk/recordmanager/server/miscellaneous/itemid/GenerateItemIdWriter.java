@@ -1,6 +1,5 @@
 package cz.mzk.recordmanager.server.miscellaneous.itemid;
 
-import java.io.ByteArrayInputStream;
 import java.util.List;
 
 import org.marc4j.marc.Record;
@@ -43,7 +42,7 @@ public class GenerateItemIdWriter implements ItemWriter<HarvestedRecordUniqueId>
 					continue;
 				}
 
-				Record record = marcXmlParser.parseUnderlyingRecord(new ByteArrayInputStream(hr.getRawRecord()));
+				Record record = marcXmlParser.parseUnderlyingRecord(hr);
 				hr.setRawRecord(new DefaultMarcInterceptor(record, hr.getHarvestedFrom(), uniqueId.getRecordId()).intercept());
 			}
 			catch(Exception ex){

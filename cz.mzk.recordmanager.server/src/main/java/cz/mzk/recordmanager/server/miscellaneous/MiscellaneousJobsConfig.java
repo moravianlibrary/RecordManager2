@@ -198,7 +198,7 @@ public class MiscellaneousJobsConfig {
 		JdbcPagingItemReader<HarvestedRecordUniqueId> reader = new JdbcPagingItemReader<>();
 		SqlPagingQueryProviderFactoryBean pqpf = new SqlPagingQueryProviderFactoryBean();
 		pqpf.setDataSource(dataSource);
-		pqpf.setSelectClause("SELECT id, import_conf_id, record_id");
+		pqpf.setSelectClause("SELECT import_conf_id, record_id");
 		pqpf.setFromClause("FROM harvested_record");
 		String where = "WHERE deleted is null";
 		if (confId != null) {
@@ -208,7 +208,7 @@ public class MiscellaneousJobsConfig {
 			reader.setParameterValues(parameterValues);
 		}
 		pqpf.setWhereClause(where);
-		pqpf.setSortKey("id");
+		pqpf.setSortKey("record_id");
 
 		reader.setRowMapper(new HarvestedRecordIdRowMapper());
 		reader.setPageSize(20);
