@@ -51,6 +51,8 @@ public class UrlEnricherTest extends AbstractTest {
 		ue.enrich(dr, merged, local);
 
 		Assert.assertTrue(merged.getFieldValues(SolrFieldConstants.URL).containsAll(result));
+		// removed URL field from all local records
+		local.forEach(l -> Assert.assertNull(l.getFieldValues(SolrFieldConstants.URL)));
 	}
 
 	@Test
