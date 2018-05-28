@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import cz.mzk.recordmanager.server.util.CleaningUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import cz.mzk.recordmanager.server.dc.DublinCoreRecord;
@@ -19,12 +20,14 @@ public class KramDefaultMetadataDublinCoreRecord extends
 	@Autowired
 	private KrameriusConfigurationDAO krameriusConfiguationDao;
 
+	private static final Pattern PUBLIC_RIGHTS_PATTERN = Pattern.compile(".*public.*");
+	private static final Pattern API_PATTERN = Pattern.compile("api/v\\d\\.\\d");
+
 	public KramDefaultMetadataDublinCoreRecord(DublinCoreRecord dcRecord) {
 		super(dcRecord);
 	}
 
-	public KramDefaultMetadataDublinCoreRecord(DublinCoreRecord dcRecord,
-			HarvestedRecord hr) {
+	public KramDefaultMetadataDublinCoreRecord(DublinCoreRecord dcRecord, HarvestedRecord hr) {
 		super(dcRecord, hr);
 	}
 
@@ -34,23 +37,17 @@ public class KramDefaultMetadataDublinCoreRecord extends
 	}
 
 	public List<String> getUrlsByImportConfId(Long importConfId) {
-		String kramUrl = null;
 		String kramUrlBase = null;
-		KrameriusConfiguration kramConf = krameriusConfiguationDao
-				.get(importConfId);
+		KrameriusConfiguration kramConf = krameriusConfiguationDao.get(importConfId);
 		if (kramConf != null && kramConf.getUrl() != null) {
-			kramUrlBase = Pattern.compile("api/v\\d\\.\\d")
-					.matcher(kramConf.getUrl()).replaceAll("")
-					+ "i.jsp?pid=";
+			kramUrlBase = CleaningUtils.replaceAll(kramConf.getUrl(), API_PATTERN, "") + "i.jsp?pid=";
 		}
 
 		String policy = dcRecord.getRights().stream()
-				.anyMatch(s -> s.matches(".*public.*")) ? Constants.DOCUMENT_AVAILABILITY_ONLINE
+				.anyMatch(s -> PUBLIC_RIGHTS_PATTERN.matcher(s).matches())
+				? Constants.DOCUMENT_AVAILABILITY_ONLINE
 				: Constants.DOCUMENT_AVAILABILITY_PROTECTED;
-		kramUrl = policy + "|" + kramUrlBase
-				+ harvestedRecord.getUniqueId().getRecordId() + "|";
-		return Collections.singletonList(kramUrl);
-
+		return Collections.singletonList(policy + '|' + kramUrlBase + harvestedRecord.getUniqueId().getRecordId() + '|');
 	}
 
 }

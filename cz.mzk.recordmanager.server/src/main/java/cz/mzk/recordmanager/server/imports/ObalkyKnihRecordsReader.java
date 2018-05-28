@@ -2,7 +2,9 @@ package cz.mzk.recordmanager.server.imports;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.regex.Pattern;
 
+import cz.mzk.recordmanager.server.util.CleaningUtils;
 import cz.mzk.recordmanager.server.util.MetadataUtils;
 import cz.mzk.recordmanager.server.util.identifier.ISBNUtils;
 import org.springframework.batch.item.ItemReader;
@@ -22,6 +24,8 @@ public class ObalkyKnihRecordsReader implements ItemReader<ObalkyKnihTOC> {
 	private static final String OBALKY_KNIH_TOC_URL = "http://www.obalkyknih.cz/api/toc.xml";
 
 	private static final String OCLC_PREFIX = "(OCoLC)";
+
+	private static final Pattern OCLC_PREFIX_PATTERN = Pattern.compile(OCLC_PREFIX);
 
 	private static final int EFFECTIVE_LENGHT = 32;
 
@@ -81,9 +85,9 @@ public class ObalkyKnihRecordsReader implements ItemReader<ObalkyKnihTOC> {
 		}
 	}
 
-	protected void normalize(ObalkyKnihTOC toc) {
+	private void normalize(ObalkyKnihTOC toc) {
 		if (toc.getOclc() != null && toc.getOclc().startsWith(OCLC_PREFIX)) {
-			toc.setOclc(toc.getOclc().replace(OCLC_PREFIX, ""));
+			toc.setOclc(CleaningUtils.replaceAll(toc.getOclc(), OCLC_PREFIX_PATTERN, ""));
 		}
 		if (toc.getIsbnStr() != null) {
 				toc.setIsbn(ISBNUtils.toISBN13Long(toc.getIsbnStr()));

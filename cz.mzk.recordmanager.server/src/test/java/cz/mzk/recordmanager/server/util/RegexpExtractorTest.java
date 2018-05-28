@@ -23,4 +23,10 @@ public class RegexpExtractorTest {
 		Assert.assertEquals(extractor.extract("oai:kramerius.nkp.cz:p-ABA001/1"), "p-ABA001_1");
 	}
 
+	@Test
+	public void replacingCosmotronExtractor() {
+		RegexpExtractor extractor = new RegexpExtractor("s/[^:]+:[^:]+:([^\\\\/]+)\\\\/([^\\\\/]+)/$1_$2/");
+		Assert.assertEquals(extractor.extract("oai:katalog.cbvk.cz:CbvkUsCat/m0000003"), "CbvkUsCat_m0000003");
+	}
+
 }

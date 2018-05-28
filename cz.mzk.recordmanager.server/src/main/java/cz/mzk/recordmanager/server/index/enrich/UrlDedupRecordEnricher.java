@@ -118,7 +118,7 @@ public class UrlDedupRecordEnricher implements DedupRecordEnricher {
 			return DIGITALNIKNIHOVNA + matcher.group(1);
 		}
 		if (url.contains(KRAMERIUS_URL)) {
-			return CleaningUtils.replaceFirst(url, KRAMERIUS_HANDLE, KRAMERIUS_IJSP);
+			return CleaningUtils.replaceAll(url, KRAMERIUS_HANDLE, KRAMERIUS_IJSP);
 		}
 		return url;
 	}
