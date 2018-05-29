@@ -17,14 +17,16 @@ import cz.mzk.recordmanager.server.model.Title;
 
 public class MetadataUtils {
 
-	private static final List<String> similarity_words = new BufferedReader(new InputStreamReader(
+	private static final List<String> SIMILARITY_WORDS = new BufferedReader(new InputStreamReader(
 			new ClasspathResourceProvider().getResource("/mapping/similarity_words.map"), StandardCharsets.UTF_8)) 
 			.lines().collect(Collectors.toCollection(ArrayList::new));
 
 	private static final Pattern TRAILINGPUNCTUATION_PATTERN = Pattern.compile(".*(([:;,=(\\[])|(\\s\\.))$");
-	public static final Pattern NUMBER_PATTERN = Pattern.compile("\\d");
-	public static final List<Pattern> PATTERNS = similarity_words.stream()
+	private static final Pattern NUMBER_PATTERN = Pattern.compile("\\d");
+	private static final List<Pattern> PATTERNS = SIMILARITY_WORDS.stream()
 			.map(w -> Pattern.compile("\\b" + w + "\\b", Pattern.CASE_INSENSITIVE)).collect(Collectors.toList());
+	private static final Pattern NORMALIZE_DIACRITICS_PATTERN = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
+	private static final Pattern NORMALIZE_NON_WORD_PATTERN = Pattern.compile("\\W");
 
 	private static final Pattern FIELD_245 = Pattern.compile("245");
 
@@ -33,11 +35,11 @@ public class MetadataUtils {
 	}
 
 	public static String normalize(final String input) {
-		return input == null ? null : Normalizer
-				.normalize(input, Normalizer.Form.NFD)
-				.replaceAll("\\p{InCombiningDiacriticalMarks}+", "")
-				.replaceAll("\\W", "")
-				.toLowerCase();
+		if (input == null) return null;
+		String result = Normalizer.normalize(input, Normalizer.Form.NFD);
+		result = CleaningUtils.replaceAll(result, NORMALIZE_DIACRITICS_PATTERN, "");
+		result = CleaningUtils.replaceAll(result, NORMALIZE_NON_WORD_PATTERN, "");
+		return result.toLowerCase();
 	}
 
 	public static String normalizeAndShorten(final String input, int length) {
