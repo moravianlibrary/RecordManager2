@@ -36,6 +36,8 @@ public class CosmotronRecordWriter extends HarvestedRecordWriter implements Item
 				processAndSave(record);
 			}
 		}
+		sessionFactory.getCurrentSession().flush();
+		sessionFactory.getCurrentSession().clear();
 	}
 
 	private void processAndSave(HarvestedRecord hr) throws Exception {
