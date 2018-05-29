@@ -12,7 +12,8 @@ import cz.mzk.recordmanager.server.model.DedupRecord;
 public class InstitutionDedupRecordEnricher implements DedupRecordEnricher {
 
 	private final FieldMerger copyField = new FieldMerger(
-			SolrFieldConstants.LOCAL_INSTITUTION_FIELD);
+			SolrFieldConstants.LOCAL_INSTITUTION_FIELD,
+			SolrFieldConstants.INSTITUTION_VIEW_FIELD);
 
 	@Override
 	public void enrich(DedupRecord record, SolrInputDocument mergedDocument,
