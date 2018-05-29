@@ -35,7 +35,7 @@ public enum ItemId implements StringValueEnum {
 		@Override
 		protected String createSubfield(final DataField df, final String sigla, final String recordId) {
 			String a = df.getSubfield('a') != null ? df.getSubfield('a').getData() : "";
-			if (a.equals("")) return null;
+			if (a.isEmpty()) return null;
 			return String.format(OTHER_STRING, sigla, a);
 		}
 	},
@@ -44,7 +44,7 @@ public enum ItemId implements StringValueEnum {
 		@Override
 		protected String createSubfield(final DataField df, final String sigla, final String recordId) {
 			String b = df.getSubfield('b') != null ? df.getSubfield('b').getData() : "";
-			if (b.equals("")) return null;
+			if (b.isEmpty()) return null;
 			if (b.startsWith("31480") && b.length() >= 8) {
 				b = b.substring(5);
 			}
@@ -56,7 +56,7 @@ public enum ItemId implements StringValueEnum {
 		@Override
 		protected String createSubfield(final DataField df, final String sigla, final String recordId) {
 			String b = df.getSubfield('b') != null ? df.getSubfield('b').getData() : "";
-			if (b.equals("")) return null;
+			if (b.isEmpty()) return null;
 			return String.format(OTHER_STRING, sigla, b);
 		}
 	};
