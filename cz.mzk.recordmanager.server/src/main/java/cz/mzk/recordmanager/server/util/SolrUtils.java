@@ -151,7 +151,7 @@ public class SolrUtils {
 		return results;
 	}
 
-	protected static String getInstitutionOfRecord(ImportConfiguration config) {
+	public static String getInstitutionOfRecord(ImportConfiguration config) {
 		if (config != null && config.getLibrary() != null
 				&& config.getLibrary().getName() != null) {
 			return config.getLibrary().getName();

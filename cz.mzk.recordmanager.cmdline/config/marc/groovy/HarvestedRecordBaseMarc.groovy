@@ -49,3 +49,4 @@ local_institution_facet_str_mv = getInstitutionFacet()
 _hidden_index_when_merged_boolean = getIndexWhenMerged()
 item_id_txt_mv = getFirstField "996t"
 view_txt_mv = getViewType()
+institution_view_facet_str_mv = getInstitutionViewFacet()
