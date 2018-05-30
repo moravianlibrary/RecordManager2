@@ -1,52 +1,45 @@
 package cz.mzk.recordmanager.server.export;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public enum IOFormat {
-	LINE_MARC, ALEPH_MARC, ISO_2709, XML_MARC, DC_XML, XML_PATENTS, OSOBNOSTI_REGIONU, SFX, SFX_NLK;
-	
+	LINE_MARC("line"),
+	ALEPH_MARC("aleph"),
+	ISO_2709("iso"),
+	XML_MARC("xml"),
+	DC_XML("dcxml"),
+	XML_PATENTS("patents"),
+	OSOBNOSTI_REGIONU("osobnosti"),
+	SFX("sfx"),
+	SFX_NLK("sfxnlk");
+
+	private static final Map<IOFormat, Pattern> FORMAT_PATTERNS = Arrays.stream(IOFormat.values()).collect(
+			Collectors.toMap(
+					f -> f,
+					f -> Pattern.compile(f.format, Pattern.CASE_INSENSITIVE)
+			)
+	);
+	private String format;
+
+	IOFormat(String format) {
+		this.format = format;
+	}
+
 	public static IOFormat stringToExportFormat(String strParam) {
 		if (strParam == null) {
 			return XML_MARC;
 		}
-		if (strParam.matches("(?i)line")) {
-			return LINE_MARC;
-		}
-		if (strParam.matches("(?i)aleph")) {
-			return ALEPH_MARC;
-		}
-		if (strParam.matches("(?i)iso")) {
-			return ISO_2709;
-		}
-		if (strParam.matches("(?i)dcxml")) {
-			return DC_XML;
-		}
-		if (strParam.matches("(?i)patents")) {
-			return IOFormat.XML_PATENTS;
-		}
-		if (strParam.matches("(?i)osobnosti")) {
-			return IOFormat.OSOBNOSTI_REGIONU;
-		}
-		if (strParam.matches("(?i)sfx")) {
-			return IOFormat.SFX;
-		}
-		if (strParam.matches("(?i)sfxnlk")) {
-			return IOFormat.SFX_NLK;
+		for (Map.Entry<IOFormat, Pattern> entry : FORMAT_PATTERNS.entrySet()) {
+			if (entry.getValue().matcher(strParam).matches()) return entry.getKey();
 		}
 		return XML_MARC;
 	}
 
-	public static List<String> getStringifyFormats(){
-		List<String> stringifyFormat = new ArrayList<>();
-		stringifyFormat.add("line");
-		stringifyFormat.add("aleph");
-		stringifyFormat.add("iso");
-		stringifyFormat.add("dcxml");
-		stringifyFormat.add("patents");
-		stringifyFormat.add("osobnosti");
-		stringifyFormat.add("sfxnlk");
-		return stringifyFormat;
+	public static List<String> getStringifyFormats() {
+		return Arrays.stream(IOFormat.values()).map(f -> f.format).collect(Collectors.toList());
 	}
-
 }

@@ -3,6 +3,7 @@ package cz.mzk.recordmanager.server.marc.marc4j;
 import cz.mzk.recordmanager.server.ClasspathResourceProvider;
 import cz.mzk.recordmanager.server.scripting.MappingResolver;
 import cz.mzk.recordmanager.server.scripting.ResourceMappingResolver;
+import cz.mzk.recordmanager.server.util.CleaningUtils;
 import cz.mzk.recordmanager.server.util.RecordUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.text.WordUtils;
@@ -85,6 +86,9 @@ public class PatentsXmlStreamReader implements MarcReader {
 	private static final String PATENTS_MAP = "patents.map";
 
 	private static final Pattern PATTERN_024 = Pattern.compile("(.{4}\\s*\\d+/\\d+).*");
+	private static final Pattern WHITE_SPACES_PATTERN = Pattern.compile("\\s+");
+	private static final Pattern XML_PATTERN = Pattern.compile(".xml");
+	private static final Pattern SPLIT_072 = Pattern.compile(" - ");
 
 	private static final Pattern A3_PATTERN = Pattern.compile("St36_CZ_(\\d{4})-(\\d+)_A3");
 	private static final String A3_URL = "https://isdv.upv.cz/doc/FullFiles/Applications/%s/PPVCZ%s_%sA3.pdf";
@@ -349,10 +353,7 @@ public class PatentsXmlStreamReader implements MarcReader {
 	}
 
 	private boolean isAuthorAvailable(String name) {
-		if (name != null) {
-			return !name.equals(AUTHOR_NOT_AVAILABLE);
-		}
-		return true;
+		return name == null || !name.equals(AUTHOR_NOT_AVAILABLE);
 	}
 
 	private void addAuthor(boolean personalOrCorporate, boolean b100, boolean b110, String name, String utext) {
@@ -366,7 +367,8 @@ public class PatentsXmlStreamReader implements MarcReader {
 			if (b110) tag = "110";
 			else tag = "710";
 		}
-		record.addVariableField(factory.newDataField(tag, '1', ' ', "a", name.replaceAll("\\s+", " "), "u", utext));
+		record.addVariableField(factory.newDataField(tag, '1', ' ',
+				"a", CleaningUtils.replaceAll(name, WHITE_SPACES_PATTERN, " "), "u", utext));
 	}
 
 	private void addField500aDate(String text, String date) {
@@ -388,12 +390,13 @@ public class PatentsXmlStreamReader implements MarcReader {
 		Matcher matcher = PATTERN_024.matcher(data);
 		if (matcher.matches()) {
 			record.addVariableField(factory.newDataField("024", '7', ' ', "a",
-					matcher.group(1).replaceAll("\\s+", " "), "2", TEXT_0242));
+					CleaningUtils.replaceAll(matcher.group(1), WHITE_SPACES_PATTERN, " "), "2", TEXT_0242));
 		}
 	}
 
 	private String addIdentifier() {
-		record.addVariableField(factory.newControlField("001", xmlReader.getAttributeValue(null, ATTRIBUTE_ID).replace(".xml", "")));
+		record.addVariableField(factory.newControlField("001", CleaningUtils.replaceAll(
+				xmlReader.getAttributeValue(null, ATTRIBUTE_ID), XML_PATTERN, "")));
 
 		if (A3_PATTERN.matcher(record.getControlNumber()).matches()) return PATENT_TYPE_A3;
 		if (B6_PATTERN.matcher(record.getControlNumber()).matches()) return PATENT_TYPE_B6;
@@ -451,7 +454,7 @@ public class PatentsXmlStreamReader implements MarcReader {
 	}
 
 	private DataField createField072(String text) {
-		String temp[] = text.split(" - ");
+		String temp[] = SPLIT_072.split(text);
 		DataField df = factory.newDataField("072", '7', ' ');
 		df.addSubfield(factory.newSubfield('a', temp[0].split(" ")[1]));
 		df.addSubfield(factory.newSubfield('x', temp[1]));

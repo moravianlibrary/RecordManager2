@@ -188,13 +188,13 @@ public class SfxJibNlkCsvStreamReader implements MarcReader {
 		}
 
 		public String getTitle() {
-			return title.equals("") ? null : title;
+			return title.isEmpty() ? null : title;
 		}
 
 		public List<String> getIssns() {
 			List<String> issns = new ArrayList<>();
-			if (!eissn.equals("")) issns.add(eissn);
-			if (!issn.equals("") && !issns.contains(issn)) issns.add(issn);
+			if (!eissn.isEmpty()) issns.add(eissn);
+			if (!issn.isEmpty() && !issns.contains(issn)) issns.add(issn);
 			return issns.isEmpty() ? null : issns;
 		}
 
@@ -218,23 +218,23 @@ public class SfxJibNlkCsvStreamReader implements MarcReader {
 		}
 
 		public String getYear() {
-			return year.equals("") ? null : year;
+			return year.isEmpty() ? null : year;
 		}
 
 		public String getResource() {
-			return resource.equals("") ? null : resource;
+			return resource.isEmpty() ? null : resource;
 		}
 
 		public String getSubject() {
-			return subject.equals("") ? null : subject;
+			return subject.isEmpty() ? null : subject;
 		}
 
 		public String getUrl() {
-			return url.equals("") ? null : url;
+			return url.isEmpty() ? null : url;
 		}
 
 		public String getAuthor() {
-			return author.equals("") ? null : author;
+			return author.isEmpty() ? null : author;
 		}
 
 		@Override

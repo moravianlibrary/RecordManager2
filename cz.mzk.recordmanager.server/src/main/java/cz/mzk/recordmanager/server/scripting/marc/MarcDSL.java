@@ -35,12 +35,6 @@ public class MarcDSL extends BaseDSL {
 
 	private final static String EMPTY_SEPARATOR = "";
 	private final static String SPACE_SEPARATOR = " ";
-	private final static String END_PUNCTUATION = "[:,=;/.]+$";
-	private final static String LEAD_SPACE = "^ *";
-	private final static String PACK_SPACES = " +";
-	private final static String NUMBERS = "([0-9])[.,]([0-9])";
-	private final static String SUPPRESS = "<<[^<{2}]*>>";
-	private final static String TO_BLANK = "['\\[\\]\"`!()\\-{};:.,?/@*%=^_|~]";
 
 	private final static String MAP_CATEGORY_SUBCATEGORY = "conspectus_category_subcategory.map";
 	private final static String MAP_SUBCATEGORY_NAME = "conspectus_subcategory_name.map";
@@ -50,10 +44,19 @@ public class MarcDSL extends BaseDSL {
 	private final static String MAP_FORMAT_SEARCH = "format_search.map";
 	private static final String MAP_PSH = "psh.map";
 	
-	private final static Pattern FIELD_PATTERN = Pattern
-			.compile("([0-9]{3})([a-zA-Z0-9]*)");
-	private final static Pattern AUTHOR_PATTERN = Pattern
-			.compile("([^,]+),(.+)");
+	private static final Pattern FIELD_PATTERN = Pattern.compile("([0-9]{3})([a-zA-Z0-9]*)");
+	private static final Pattern AUTHOR_PATTERN = Pattern.compile("([^,]+),(.+)");
+	private static final Pattern NON_WORD_PATTERN = Pattern.compile("\\W");
+	private static final Pattern PUBLISHER_NAME_BRACKET_PATTERN = Pattern.compile("[<>\\[\\]]");
+	private static final Pattern PUBLISHER_NAME_CLEAN_END_PATTERN = Pattern.compile("[,?\\s]+$");
+	private static final Pattern REMOVE_END_PUNCTUATION_PATTERN = Pattern.compile("[,;:/\\s]+$");
+	private static final Pattern MATCH_END_PUNCTUATION_PATTERN = Pattern.compile(".*[^.]\\.\\.$");
+	private static final Pattern TITLE_END_PUNCTUATION = Pattern.compile("[:,=;/.]+$");
+	private static final Pattern TITLE_LEAD_SPACE = Pattern.compile("^ *");
+	private static final Pattern TITLE_PACK_SPACES = Pattern.compile(" +");
+	private static final Pattern TITLE_NUMBERS = Pattern.compile("([0-9])[.,]([0-9])");
+	private static final Pattern TITLE_SUPPRESS = Pattern.compile("<<[^<{2}]*>>");
+	private static final Pattern TITLE_TO_BLANK = Pattern.compile("['\\[\\]\"`!()\\-{};:.,?/@*%=^_|~]");
 
 	private static final String LINK773_ISBN = "isbn:%s";
 	private static final String LINK773_ISSN = "issn:";
@@ -129,7 +132,7 @@ public class MarcDSL extends BaseDSL {
 		Set<String> results = new HashSet<>();
 		for (String language : languages) {
 			language = language.toLowerCase();
-			language = language.replaceAll("\\W", "");
+			language = CleaningUtils.replaceAll(language, NON_WORD_PATTERN, "");
 			results.add(language);
 		}
 		return results;
@@ -178,46 +181,44 @@ public class MarcDSL extends BaseDSL {
 		return results;
 	}
 
-    /**
-     * Get the title (245ab) from a record, without non-filing chars as
-     * specified in 245 2nd indicator, and lowercased.
-     * @return 245a and 245b values concatenated, with trailing punct removed,
-     *         and with non-filing characters omitted. Null returned if no
-     *         title can be found.
-     */
-    public String getSortableTitle() {
-    	List<DataField> titleFields = record.getAllFields().get("245");
-    	if (titleFields == null || titleFields.isEmpty()) {
-    		return "";
-    	}
-        DataField titleField = titleFields.get(0);
-        if (titleField == null)
-            return "";
+	/**
+	 * Get the title (245ab) from a record, without non-filing chars as
+	 * specified in 245 2nd indicator, and lowercased.
+	 *
+	 * @return 245a and 245b values concatenated, with trailing punct removed,
+	 * and with non-filing characters omitted. Null returned if no
+	 * title can be found.
+	 */
+	public String getSortableTitle() {
+		List<DataField> titleFields = record.getAllFields().get("245");
+		if (titleFields == null || titleFields.isEmpty()) {
+			return "";
+		}
+		DataField titleField = titleFields.get(0);
+		if (titleField == null) return "";
 
-        int nonFilingInt = getInd2AsInt(titleField);
-        
-        List<Title> titles = metadataRecord.getTitle();
-        if (titles == null || titles.isEmpty()) return null;
-        String title = metadataRecord.getTitle().get(0).getTitleStr();
-        title = title.replaceAll(END_PUNCTUATION, EMPTY_SEPARATOR);
-        title = title.replaceAll(NUMBERS, "$1$2");
-        title = title.toLowerCase();
-        
-        //Skip non-filing chars, if possible. 
-        if (title.length() > nonFilingInt )  {
-          title = title.substring(nonFilingInt);          
-        }
-        
-        if ( title.length() == 0) {
-          return null;
-        }                
-        
-        title = title.replaceAll(SUPPRESS, EMPTY_SEPARATOR);
-        title = title.replaceAll(TO_BLANK, SPACE_SEPARATOR);
-        title = title.replaceAll(LEAD_SPACE, EMPTY_SEPARATOR);
-        title = title.replaceAll(PACK_SPACES, SPACE_SEPARATOR);
-        return title.trim();
-    }
+		int nonFilingInt = getInd2AsInt(titleField);
+
+		List<Title> titles = metadataRecord.getTitle();
+		if (titles == null || titles.isEmpty()) return null;
+		String title = metadataRecord.getTitle().get(0).getTitleStr();
+		title = CleaningUtils.replaceAll(title, TITLE_END_PUNCTUATION, EMPTY_SEPARATOR);
+		title = CleaningUtils.replaceAll(title, TITLE_NUMBERS, "$1$2");
+		title = title.toLowerCase();
+
+		//Skip non-filing chars, if possible.
+		if (title.length() > nonFilingInt) {
+			title = title.substring(nonFilingInt);
+		}
+
+		if (title.isEmpty()) return null;
+
+		title = CleaningUtils.replaceAll(title, TITLE_SUPPRESS, EMPTY_SEPARATOR);
+		title = CleaningUtils.replaceAll(title, TITLE_TO_BLANK, SPACE_SEPARATOR);
+		title = CleaningUtils.replaceAll(title, TITLE_LEAD_SPACE, EMPTY_SEPARATOR);
+		title = CleaningUtils.replaceAll(title, TITLE_PACK_SPACES, SPACE_SEPARATOR);
+		return title.trim();
+	}
 
 	public String getFullrecord() {
 		return metadataRecord.export(IOFormat.ISO_2709);
@@ -265,15 +266,14 @@ public class MarcDSL extends BaseDSL {
     	}
     	return new ArrayList<String>(result);
     }
-    
-    public String editPublisherName(String name){
-    	name = name.replaceAll("[<>\\[\\]]", "");
-    	name = name.replaceAll("[,?\\s]+$", "");
-    	name = name.trim();
-    	return name;
-    }
-    
-    public List<String> getPublisher(){
+
+	public String editPublisherName(String name) {
+		name = CleaningUtils.replaceAll(name, PUBLISHER_NAME_BRACKET_PATTERN, "");
+		name = CleaningUtils.replaceAll(name, PUBLISHER_NAME_CLEAN_END_PATTERN, "");
+		return name.trim();
+	}
+
+	public List<String> getPublisher(){
     	List<String> publishers = new ArrayList<String>();
     	for(DataField dataField: record.getDataFields("264")){
     		if(dataField.getIndicator2() == '1'){
@@ -440,21 +440,21 @@ public class MarcDSL extends BaseDSL {
     	return count; 
     }
 
-    public String getAuthorForSorting(){
+	public String getAuthorForSorting() {
 		List<String> authors = getFields("100abcd:110abcd:111abcd:700abcd:710abcd:711abcd");
-		if(authors == null || authors.isEmpty()) return null;
+		if (authors == null || authors.isEmpty()) return null;
 		String author = authors.get(0);
 		author = author.toLowerCase();
-		author = author.replaceAll(END_PUNCTUATION, EMPTY_SEPARATOR);
-		author = author.replaceAll(SUPPRESS, EMPTY_SEPARATOR);
-		author = author.replaceAll(TO_BLANK, SPACE_SEPARATOR);
-		author = author.replaceAll(LEAD_SPACE, EMPTY_SEPARATOR);
-		author = author.replaceAll(PACK_SPACES, SPACE_SEPARATOR);
-		if(author.isEmpty()) return null;
+		author = CleaningUtils.replaceAll(author, TITLE_END_PUNCTUATION, EMPTY_SEPARATOR);
+		author = CleaningUtils.replaceAll(author, TITLE_SUPPRESS, EMPTY_SEPARATOR);
+		author = CleaningUtils.replaceAll(author, TITLE_TO_BLANK, SPACE_SEPARATOR);
+		author = CleaningUtils.replaceAll(author, TITLE_LEAD_SPACE, EMPTY_SEPARATOR);
+		author = CleaningUtils.replaceAll(author, TITLE_PACK_SPACES, SPACE_SEPARATOR);
+		if (author.isEmpty()) return null;
 		return author;
-    }
-    
-    public String getCitationRecordType(){
+	}
+
+	public String getCitationRecordType(){
     	return metadataRecord.getCitationFormat().getCitationType();
     }
     
@@ -491,15 +491,15 @@ public class MarcDSL extends BaseDSL {
 		}
     	return removeEndPunctuation(sb.toString());
     }
-    
-    protected String removeEndPunctuation(String data){
-    	if(data == null || data.isEmpty()) return null;
-    	data = data.replaceAll("[,;:/\\s]+$", "");
-    	if(data.matches(".*[^.]\\.\\.$")) data = data.substring(0, data.length()-1);
-    	return data;
-    }
-    
-    public DataField getFirstDataField(String tag){
+
+	protected String removeEndPunctuation(String data) {
+		if (data == null || data.isEmpty()) return null;
+		data = CleaningUtils.replaceAll(data, REMOVE_END_PUNCTUATION_PATTERN, "");
+		if (MATCH_END_PUNCTUATION_PATTERN.matcher(data).matches()) data = data.substring(0, data.length() - 1);
+		return data;
+	}
+
+	public DataField getFirstDataField(String tag){
     	List<DataField> list = record.getDataFields(tag);
     	if(list.isEmpty()) return null;
     	else return list.get(0);

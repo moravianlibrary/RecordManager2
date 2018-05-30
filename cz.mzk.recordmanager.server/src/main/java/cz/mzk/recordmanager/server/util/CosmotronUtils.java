@@ -3,7 +3,12 @@ package cz.mzk.recordmanager.server.util;
 import cz.mzk.recordmanager.server.marc.MarcRecord;
 import org.marc4j.marc.DataField;
 
+import java.util.regex.Pattern;
+
 public class CosmotronUtils {
+
+	private static final Pattern PATTERN_REPLACE_ID = Pattern.compile("_us_cat\\*");
+	private static final String ID_REPLACEMENT = "UsCat" + Constants.COSMOTRON_RECORD_ID_CHAR;
 
 	public static String getParentId(MarcRecord mr) {
 		String leader = mr.getLeader().toString();
@@ -31,10 +36,10 @@ public class CosmotronUtils {
 		return !mr.getDataFields("996").isEmpty();
 	}
 
-	private static String parseIdFrom773(String s) {
-		s = Character.toUpperCase(s.charAt(0)) + s.substring(1);
-		s = s.replaceAll("_us_cat\\*", "UsCat" + Constants.COSMOTRON_RECORD_ID_CHAR);
-		return s;
+	private static String parseIdFrom773(String id) {
+		id = Character.toUpperCase(id.charAt(0)) + id.substring(1);
+		id = CleaningUtils.replaceAll(id, PATTERN_REPLACE_ID, ID_REPLACEMENT);
+		return id;
 	}
 
 }

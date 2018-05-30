@@ -32,6 +32,7 @@ public class DublinCoreDSL extends BaseDSL {
 
 	private final static Pattern AUTHOR_PATTERN = Pattern.compile("([^,]+),(.+)");
 	private final static Pattern MDT_PATTERN = Pattern.compile("[\\W0-9]+");
+	private static final Pattern PUBLIC_RIGHTS_PATTERN = Pattern.compile(".*public.*");
 	
 	public DublinCoreDSL(DublinCoreFunctionContext dcContext,
 			MappingResolver propertyResolver, StopWordsResolver stopWordsResolver,
@@ -59,7 +60,9 @@ public class DublinCoreDSL extends BaseDSL {
 		if (rights == null || rights.isEmpty()) {
 			return Constants.DOCUMENT_AVAILABILITY_UNKNOWN;
 		}
-		return rights.stream().anyMatch(s -> s.matches(".*public.*")) ? Constants.DOCUMENT_AVAILABILITY_ONLINE : Constants.DOCUMENT_AVAILABILITY_PROTECTED;
+		return rights.stream().anyMatch(s -> PUBLIC_RIGHTS_PATTERN.matcher(s).matches())
+				? Constants.DOCUMENT_AVAILABILITY_ONLINE
+				: Constants.DOCUMENT_AVAILABILITY_PROTECTED;
 	}
 
 	public List<String> getOtherTitles() {

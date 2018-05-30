@@ -48,7 +48,7 @@ public class MarcRecordFactory {
 	private static final Pattern DATAFIELD = Pattern.compile("\\w{3}");
 	private static final Pattern SUBFIELD = Pattern.compile("\\$([a-zA-Z0-9])([^$]*)");
 
-	public static MarcRecordImpl recordFactory(List<String> data) throws Exception {
+	public static MarcRecordImpl recordFactory(List<String> data) {
 		MarcFactory marcFactory = MarcFactoryImpl.newInstance();
 		Record record = marcFactory.newRecord();
 

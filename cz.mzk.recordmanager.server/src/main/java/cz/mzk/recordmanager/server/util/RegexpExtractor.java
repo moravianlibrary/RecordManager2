@@ -5,6 +5,9 @@ import java.util.regex.Pattern;
 
 public class RegexpExtractor {
 
+	private static final Pattern SPLIT = Pattern.compile("(?<=[^\\\\])/");
+	private static final Pattern REPLACE_PATTERN = Pattern.compile("\\\\/", Pattern.LITERAL);
+
 	private final Pattern extractor;
 
 	private final String replacement;
@@ -15,8 +18,8 @@ public class RegexpExtractor {
 			this.replacement = null;
 		} else {
 			// \\/ is not separator
-			String[] parts = regex.split("(?<=[^\\\\])/");
-			this.extractor = Pattern.compile(parts[1].replace("\\\\/", "/"));
+			String[] parts = SPLIT.split(regex);
+			this.extractor = Pattern.compile(CleaningUtils.replaceAll(parts[1], REPLACE_PATTERN, "/"));
 			this.replacement = parts[2];
 		}
 	}
