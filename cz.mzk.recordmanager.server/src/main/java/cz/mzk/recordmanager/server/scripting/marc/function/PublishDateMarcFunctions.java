@@ -100,6 +100,12 @@ public class PublishDateMarcFunctions implements MarcRecordFunctions {
         return years;
 	}
 
+	public Set<Integer> getPublishDateForTimeline(MarcFunctionContext ctx) {
+		Set<Integer> years = getPublishDate(ctx);
+		years.removeIf(y -> y < 800 || y > MAX_YEAR);
+		return years;
+	}
+
 	public Set<String> getPublishDateFromFields(MarcFunctionContext ctx){
 		MarcRecord record = ctx.record();
 		Set<String> years = new TreeSet<>();
