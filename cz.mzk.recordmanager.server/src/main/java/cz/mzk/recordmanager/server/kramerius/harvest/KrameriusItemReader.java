@@ -1,9 +1,10 @@
 package cz.mzk.recordmanager.server.kramerius.harvest;
 
-import java.io.IOException;
-import java.util.Date;
-import java.util.List;
-
+import cz.mzk.recordmanager.server.model.HarvestedRecord;
+import cz.mzk.recordmanager.server.model.KrameriusConfiguration;
+import cz.mzk.recordmanager.server.oai.dao.KrameriusConfigurationDAO;
+import cz.mzk.recordmanager.server.util.HibernateSessionSynchronizer;
+import cz.mzk.recordmanager.server.util.HibernateSessionSynchronizer.SessionBinder;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.springframework.batch.core.ExitStatus;
 import org.springframework.batch.core.StepExecution;
@@ -16,13 +17,9 @@ import org.springframework.batch.item.ItemStreamException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.google.common.collect.Iterables;
-
-import cz.mzk.recordmanager.server.model.HarvestedRecord;
-import cz.mzk.recordmanager.server.model.KrameriusConfiguration;
-import cz.mzk.recordmanager.server.oai.dao.KrameriusConfigurationDAO;
-import cz.mzk.recordmanager.server.util.HibernateSessionSynchronizer;
-import cz.mzk.recordmanager.server.util.HibernateSessionSynchronizer.SessionBinder;
+import java.io.IOException;
+import java.util.Date;
+import java.util.List;
 
 @Component
 @StepScope
@@ -38,17 +35,13 @@ public class KrameriusItemReader implements ItemReader<List<HarvestedRecord>>,
 	@Autowired
 	private HibernateSessionSynchronizer hibernateSync;
 
-	private KrameriusHarvester kHarvester;
+	private IKrameriusHarvester kHarvester;
 
 	// configuration
 	private Long confId;
 
 	private Date fromDate;
 	private Date untilDate;
-
-	private String nextPid = null;
-
-	private boolean finished = false;
 
 	public KrameriusItemReader(Long confId, Date fromDate, Date untilDate) {
 		super();
@@ -59,22 +52,11 @@ public class KrameriusItemReader implements ItemReader<List<HarvestedRecord>>,
 
 	@Override
 	public List<HarvestedRecord> read() throws SolrServerException, IOException {
-		if (finished) {
-			return null;
-		}
-
 		// get uuids
-		List<String> uuids = kHarvester.getUuids(nextPid);
-		String previousPid = nextPid;
-		nextPid = Iterables.getLast(uuids, null);
-
-		// get metadata
-		List<HarvestedRecord> records = kHarvester.getRecords(uuids);
-
-		finished = uuids.isEmpty() || (previousPid != null && previousPid.equals(nextPid));
-
+		List<String> uuids = kHarvester.getNextUuids();
+		if (uuids == null) return null;
 		// return metadata
-		return records;
+		return kHarvester.getRecords(uuids);
 	}
 
 	@Override
@@ -82,7 +64,8 @@ public class KrameriusItemReader implements ItemReader<List<HarvestedRecord>>,
 		try (SessionBinder sess = hibernateSync.register()) {
 			KrameriusConfiguration conf = configDao.get(confId);
 			if (conf == null) {
-				throw new IllegalArgumentException(String.format("OAI harvest configuration with id=%s not found", confId));
+				throw new IllegalArgumentException(String.format(
+						"Kramerius harvest configuration with id=%s not found", confId));
 			}
 			KrameriusHarvesterParams params = new KrameriusHarvesterParams();
 			params.setUrl(conf.getUrl());
@@ -102,13 +85,13 @@ public class KrameriusItemReader implements ItemReader<List<HarvestedRecord>>,
 	@Override
 	public void open(ExecutionContext ctx) throws ItemStreamException {
 		if (ctx.containsKey("nextPid")) {
-			nextPid = ctx.getString("nextPid");
+			kHarvester.setNextPid(ctx.getString("nextPid"));
 		}
 	}
 
 	@Override
 	public void update(ExecutionContext ctx) throws ItemStreamException {
-		ctx.putString("nextPid", nextPid);
+		ctx.putString("nextPid", kHarvester.getNextPid());
 	}
 
 	@Override

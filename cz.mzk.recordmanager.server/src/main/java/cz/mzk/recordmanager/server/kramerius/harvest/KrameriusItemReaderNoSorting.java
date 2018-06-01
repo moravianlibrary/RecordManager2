@@ -36,18 +36,13 @@ public class KrameriusItemReaderNoSorting implements ItemReader<List<HarvestedRe
 	@Autowired
 	private HibernateSessionSynchronizer hibernateSync;
 
-	private KrameriusHarvesterNoSorting kHarvester;
-	private KrameriusConfiguration conf;
+	private IKrameriusHarvester kHarvester;
 
 	// configuration
 	private Long confId;
 
 	private Date fromDate;
 	private Date untilDate;
-
-	private int start = 0;
-
-	private boolean finished = false;
 
 	public KrameriusItemReaderNoSorting(Long confId, Date fromDate, Date untilDate) {
 		super();
@@ -58,31 +53,17 @@ public class KrameriusItemReaderNoSorting implements ItemReader<List<HarvestedRe
 
 	@Override
 	public List<HarvestedRecord> read() throws SolrServerException, IOException {
-		if (finished) {
-			return null;
-		}
-
 		// get uuids
-		List<String> uuids = kHarvester.getUuids(start);
-
-		// get metadata
-		List<HarvestedRecord> records = kHarvester.getRecords(uuids);
-
-		Long queryRows = conf.getQueryRows();
-		if (start < kHarvester.getNumFound()) {
-			start += queryRows.intValue();
-		} else {
-			finished = true;
-		}
-
+		List<String> uuids = kHarvester.getNextUuids();
+		if (uuids == null) return null;
 		// return metadata
-		return records;
+		return kHarvester.getRecords(uuids);
 	}
 
 	@Override
 	public void beforeStep(StepExecution stepExecution) {
 		try (SessionBinder sess = hibernateSync.register()) {
-			conf = configDao.get(confId);
+			KrameriusConfiguration conf = configDao.get(confId);
 			if (conf == null) {
 				throw new IllegalArgumentException(String.format(
 						"Kramerius harvest configuration with id=%s not found", confId));
@@ -105,13 +86,13 @@ public class KrameriusItemReaderNoSorting implements ItemReader<List<HarvestedRe
 	@Override
 	public void open(ExecutionContext ctx) throws ItemStreamException {
 		if (ctx.containsKey("start")) {
-			start = ctx.getInt("start");
+			kHarvester.setStart(ctx.getInt("start"));
 		}
 	}
 
 	@Override
 	public void update(ExecutionContext ctx) throws ItemStreamException {
-		ctx.putInt("start", start);
+		ctx.putInt("start", kHarvester.getStart());
 	}
 
 	@Override

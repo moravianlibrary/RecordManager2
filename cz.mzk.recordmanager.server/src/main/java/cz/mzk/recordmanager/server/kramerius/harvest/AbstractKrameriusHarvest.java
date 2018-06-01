@@ -1,14 +1,17 @@
 package cz.mzk.recordmanager.server.kramerius.harvest;
 
+import cz.mzk.recordmanager.server.kramerius.FedoraModels;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.solr.SolrServerFacade;
 import cz.mzk.recordmanager.server.solr.SolrServerFactory;
 import cz.mzk.recordmanager.server.solr.SolrServerFactoryImpl;
 import cz.mzk.recordmanager.server.util.HttpClient;
+import cz.mzk.recordmanager.server.util.SolrUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.QueryResponse;
+import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,7 +21,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class AbstractKrameriusHarvest {
+public abstract class AbstractKrameriusHarvest implements IKrameriusHarvester {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(AbstractKrameriusHarvest.class);
 
@@ -32,12 +35,30 @@ public abstract class AbstractKrameriusHarvest {
 
 	protected SolrServerFactory solrServerFactory;
 
+	private int start = 0;
+
+	private String nextPid = "";
+
 	protected AbstractKrameriusHarvest(HttpClient httpClient, SolrServerFactory solrServerFactory,
 									   KrameriusHarvesterParams parameters, Long harvestedFrom) {
 		this.harvestedFrom = harvestedFrom;
 		this.params = parameters;
 		this.httpClient = httpClient;
 		this.solrServerFactory = solrServerFactory;
+	}
+
+	@Override
+	public List<HarvestedRecord> getRecords(List<String> uuids) throws IOException {
+		List<HarvestedRecord> records = new ArrayList<>();
+		for (String uuid : uuids) {
+			HarvestedRecord hr = downloadRecord(uuid);
+			if (hr != null) {
+				records.add(hr);
+			} else {
+				LOGGER.debug("Skipping HarvestedRecord with uuid: " + uuid + " [null value returned]");
+			}
+		}
+		return records;
 	}
 
 	public HarvestedRecord downloadRecord(String uuid) throws IOException {
@@ -70,19 +91,6 @@ public abstract class AbstractKrameriusHarvest {
 		return resultingUrl;
 	}
 
-	protected List<HarvestedRecord> getRecords(List<String> uuids) throws IOException {
-		List<HarvestedRecord> records = new ArrayList<>();
-		for (String uuid : uuids) {
-			HarvestedRecord hr = downloadRecord(uuid);
-			if (hr != null) {
-				records.add(hr);
-			} else {
-				LOGGER.debug("Skipping HarvestedRecord with uuid: " + uuid + " [null value returned]");
-			}
-		}
-		return records;
-	}
-
 	protected SolrDocumentList executeSolrQuery(SolrQuery query) throws SolrServerException {
 		SolrServerFacade solr = solrServerFactory.create(params.getUrl(), SolrServerFactoryImpl.Mode.KRAMERIUS);
 		SolrDocumentList documents;
@@ -95,5 +103,54 @@ public abstract class AbstractKrameriusHarvest {
 					"SolrServerException for model: %s, url:%s", params.getModel(), params.getUrl()));
 		}
 		return documents;
+	}
+
+	protected static List<String> getUuids(SolrDocumentList documents, String idField) throws SolrServerException {
+		List<String> uuids = new ArrayList<>();
+		for (SolrDocument document : documents) {
+			for (Object pid : document.getFieldValues(idField)) {
+				uuids.add(pid.toString());
+			}
+		}
+		return uuids;
+	}
+
+	protected SolrQuery getBasicQuery(String... fields) {
+		SolrQuery query = new SolrQuery();
+		query.setQuery("*:*");
+
+		//works with all possible models in single configuration
+		String harvestedModelsStatement = String.join(" OR ", FedoraModels.HARVESTED_MODELS);
+		query.add("fq", harvestedModelsStatement);
+
+		if (params.getFrom() != null || params.getUntil() != null) {
+			String range = SolrUtils.createDateRange(params.getFrom(), params.getUntil());
+			query.add("fq", SolrUtils.createFieldQuery("modified_date", range));
+		}
+
+		query.setFields(fields);
+		query.setRows((params.getQueryRows() != null) ? params.getQueryRows().intValue() : 10);
+		query.setTimeAllowed(MAX_TIME_ALLOWED);
+		return query;
+	}
+
+	@Override
+	public Integer getStart() {
+		return start;
+	}
+
+	@Override
+	public void setStart(int start) {
+		this.start = start;
+	}
+
+	@Override
+	public String getNextPid() {
+		return nextPid;
+	}
+
+	@Override
+	public void setNextPid(String nextPid) {
+		this.nextPid = nextPid;
 	}
 }

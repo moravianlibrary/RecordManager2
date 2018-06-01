@@ -1,18 +1,16 @@
 package cz.mzk.recordmanager.server.kramerius.harvest;
 
-import cz.mzk.recordmanager.server.kramerius.FedoraModels;
+import com.google.common.collect.Iterables;
 import cz.mzk.recordmanager.server.solr.SolrServerFactory;
 import cz.mzk.recordmanager.server.util.HttpClient;
 import cz.mzk.recordmanager.server.util.SolrUtils;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrQuery.ORDER;
 import org.apache.solr.client.solrj.SolrServerException;
-import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class KrameriusHarvester extends AbstractKrameriusHarvest {
@@ -27,45 +25,28 @@ public class KrameriusHarvester extends AbstractKrameriusHarvest {
 		super(httpClient, solrServerFactory, parameters, harvestedFrom);
 	}
 
-	public List<String> getUuids(String nextPid) throws SolrServerException {
-		List<String> uuids = new ArrayList<>();
+	@Override
+	public List<String> getNextUuids() throws SolrServerException {
+		SolrDocumentList documents = executeSolrQuery(getUuidQuery(PID_FIELD));
 
-		SolrDocumentList documents = sendRequest(nextPid, PID_FIELD);
+		if (documents.isEmpty()) return null;
 
-		for (SolrDocument document : documents) {
-			for (Object pid : document.getFieldValues(PID_FIELD)) {
-				uuids.add(pid.toString());
-			}
-		}
+		List<String> uuids = getUuids(documents, PID_FIELD);
+		setNextPid(Iterables.getLast(uuids, null));
+
 		return uuids;
 	}
 
-	private SolrDocumentList sendRequest(String nextPid, String... fields) throws SolrServerException {
-		SolrQuery query = new SolrQuery();
-		query.setQuery("*:*");
+	private SolrQuery getUuidQuery(String... fields) throws SolrServerException {
+		SolrQuery query = getBasicQuery(fields);
 
-		//works with all possible models in single configuration
-		String harvestedModelsStatement = String.join(" OR ", FedoraModels.HARVESTED_MODELS);
-		query.add("fq",  harvestedModelsStatement);
-
-		if (params.getFrom() != null || params.getUntil() != null) {
-			String range = SolrUtils.createDateRange(params.getFrom(), params.getUntil());
-			query.add("fq", SolrUtils.createFieldQuery("modified_date", range));
-		}
-
-		query.setFields(fields);
-		query.setRows((params.getQueryRows() != null) ? params.getQueryRows().intValue() : 10);
-		query.setTimeAllowed(MAX_TIME_ALLOWED);
-
-
-
-		if (nextPid != null) {
-			query.add("fq", SolrUtils.createFieldQuery(PID_FIELD, SolrUtils.createRange(nextPid, null)));
+		if (getNextPid() != null) {
+			query.add("fq", SolrUtils.createFieldQuery(PID_FIELD, SolrUtils.createRange(getNextPid(), null)));
 		}
 		query.setSort(PID_FIELD, ORDER.asc);
-		LOGGER.info("nextPid: {}", nextPid);
+		LOGGER.info("nextPid: {}", getNextPid());
 
-		return executeSolrQuery(query);
+		return query;
 	}
 
 }
