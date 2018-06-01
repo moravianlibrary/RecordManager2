@@ -1,7 +1,9 @@
 package cz.mzk.recordmanager.server.kramerius.harvest;
 
+import java.io.IOException;
 import java.util.List;
 
+import org.apache.solr.client.solrj.SolrServerException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -32,39 +34,47 @@ public class KrameriusHarvesterTest extends AbstractKrameriusTest {
 			Assert.assertNotNull(record);
 		}
 	}
-	
-	
+
 	//Kramerius Harvester without sorting
 	@Test
-	public void harvesterNoServerResponse() throws Exception{
+	public void harvesterNoServerResponse() throws Exception {
 		initHttpClientWithException();
 		initSolrServerWithException();
 		KrameriusHarvesterParams parameters = new KrameriusHarvesterParams();
 		parameters.setUrl("http://k4.techlib.cz/search/api/v5.0");
 		parameters.setMetadataStream("DC");
 		KrameriusHarvester harvester = new KrameriusHarvester(httpClient, solrServerFactory, parameters, 1L);
-		
-		//1st response with IOException => uuid list is empty
-		List<String> uuids = harvester.getUuids(null);
-		Assert.assertTrue(uuids.isEmpty());
-		
+
+		//1st response with SolrServerException => uuid list is empty
+		try {
+			harvester.getUuids(null);
+			Assert.fail();
+		} catch (SolrServerException ignore) {
+		}
+
 		//2nd response with SolrServerException => uuid list is empty
-		uuids = harvester.getUuids(null);
-		Assert.assertTrue(uuids.isEmpty());
+		try {
+			harvester.getUuids(null);
+			Assert.fail();
+		} catch (SolrServerException ignore) {
+		}
 
 		//3rd response is => OK
-		uuids = harvester.getUuids(null);
+		List<String> uuids = harvester.getUuids(null);
 		Assert.assertFalse(uuids.isEmpty());
 
 		//1st DC download - server responds with IOException, download returns null;
-		HarvestedRecord record = harvester.downloadRecord(uuids.get(0));
-		Assert.assertNull(record);
-		
+		try {
+			harvester.downloadRecord(uuids.get(0));
+			Assert.fail();
+		} catch (IOException ignore) {
+		}
+
 		//2nd DC download - OK
-		record = harvester.downloadRecord(uuids.get(1));
+		HarvestedRecord record = harvester.downloadRecord(uuids.get(1));
 		Assert.assertNotNull(record);
-			
+
 	}
-	
+
 
 }

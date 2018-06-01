@@ -1,8 +1,10 @@
 package cz.mzk.recordmanager.server.kramerius.harvest;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.solr.client.solrj.SolrServerException;
 import org.springframework.batch.core.ExitStatus;
 import org.springframework.batch.core.StepExecution;
 import org.springframework.batch.core.StepExecutionListener;
@@ -13,7 +15,6 @@ import org.springframework.batch.item.ItemStream;
 import org.springframework.batch.item.ItemStreamException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.support.TransactionTemplate;
 
 import com.google.common.collect.Iterables;
 
@@ -35,16 +36,9 @@ public class KrameriusItemReader implements ItemReader<List<HarvestedRecord>>,
 	private KrameriusHarvesterFactory harvesterFactory;
 
 	@Autowired
-	private TransactionTemplate template;
-
-	@Autowired
-	private HibernateSessionSynchronizer sync;
-
-	@Autowired
 	private HibernateSessionSynchronizer hibernateSync;
 
 	private KrameriusHarvester kHarvester;
-	private KrameriusConfiguration conf;
 
 	// configuration
 	private Long confId;
@@ -64,7 +58,7 @@ public class KrameriusItemReader implements ItemReader<List<HarvestedRecord>>,
 	}
 
 	@Override
-	public List<HarvestedRecord> read() {
+	public List<HarvestedRecord> read() throws SolrServerException, IOException {
 		if (finished) {
 			return null;
 		}
@@ -73,12 +67,12 @@ public class KrameriusItemReader implements ItemReader<List<HarvestedRecord>>,
 		List<String> uuids = kHarvester.getUuids(nextPid);
 		String previousPid = nextPid;
 		nextPid = Iterables.getLast(uuids, null);
-		
+
 		// get metadata
 		List<HarvestedRecord> records = kHarvester.getRecords(uuids);
 
 		finished = uuids.isEmpty() || (previousPid != null && previousPid.equals(nextPid));
-		
+
 		// return metadata
 		return records;
 	}
@@ -86,7 +80,7 @@ public class KrameriusItemReader implements ItemReader<List<HarvestedRecord>>,
 	@Override
 	public void beforeStep(StepExecution stepExecution) {
 		try (SessionBinder sess = hibernateSync.register()) {
-			conf = configDao.get(confId);
+			KrameriusConfiguration conf = configDao.get(confId);
 			if (conf == null) {
 				throw new IllegalArgumentException(String.format("OAI harvest configuration with id=%s not found", confId));
 			}
