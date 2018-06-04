@@ -19,6 +19,8 @@ public class BmcMarcInterceptor extends DefaultMarcInterceptor {
 		super(record);
 	}
 
+	private static final String CZMESH = "czmesh";
+
 	@Override
 	public byte[] intercept() {
 		if (super.getRecord() == null) {
@@ -36,8 +38,23 @@ public class BmcMarcInterceptor extends DefaultMarcInterceptor {
 		Map<String, List<DataField>> dfMap = marc.getAllFields();
 		for (String tag : new TreeSet<>(dfMap.keySet())) { // sorted tags
 			for (DataField df : dfMap.get(tag)) {
+				switch (df.getTag()) {
+				case "650":
+				case "651":
+				case "655":
+					// add subfield $2 with value czmesh if ind2 = '2' and there is no $2mesh
+					if (df.getIndicator2() == '2' && df.getSubfields('2').stream().noneMatch(s -> s.getData().contains(CZMESH))) {
+						df.addSubfield(MARC_FACTORY.newSubfield('2', CZMESH));
+					}
+					newRecord.addVariableField(df);
+					break;
 				// remove field 990, 991
-				if (!df.getTag().equals("990") && !df.getTag().equals("991")) newRecord.addVariableField(df);
+				case "990":
+				case "991":
+					break;
+				default:
+					newRecord.addVariableField(df);
+				}
 			}
 		}
 		return new MarcRecordImpl(newRecord).export(IOFormat.XML_MARC).getBytes(StandardCharsets.UTF_8);
