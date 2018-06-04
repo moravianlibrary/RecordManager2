@@ -37,7 +37,7 @@ public abstract class AbstractKrameriusHarvest implements IKrameriusHarvester {
 
 	private int start = 0;
 
-	private String nextPid = "";
+	private String lastPid = "";
 
 	protected AbstractKrameriusHarvest(HttpClient httpClient, SolrServerFactory solrServerFactory,
 									   KrameriusHarvesterParams parameters, Long harvestedFrom) {
@@ -145,12 +145,12 @@ public abstract class AbstractKrameriusHarvest implements IKrameriusHarvester {
 	}
 
 	@Override
-	public String getNextPid() {
-		return nextPid;
+	public String getLastPid() {
+		return lastPid;
 	}
 
 	@Override
-	public void setNextPid(String nextPid) {
-		this.nextPid = nextPid;
+	public void setLastPid(String lastPid) {
+		this.lastPid = lastPid;
 	}
 }

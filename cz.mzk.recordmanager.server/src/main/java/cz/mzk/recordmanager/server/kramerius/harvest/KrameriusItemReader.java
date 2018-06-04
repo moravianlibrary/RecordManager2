@@ -87,7 +87,7 @@ public class KrameriusItemReader implements ItemReader<List<HarvestedRecord>>,
 	@Override
 	public void open(ExecutionContext ctx) throws ItemStreamException {
 		if (ctx.containsKey("nextPid")) {
-			kHarvester.setNextPid(ctx.getString("nextPid"));
+			kHarvester.setLastPid(ctx.getString("nextPid"));
 		}
 		if (ctx.containsKey("start")) {
 			kHarvester.setStart(ctx.getInt("start"));
@@ -96,7 +96,7 @@ public class KrameriusItemReader implements ItemReader<List<HarvestedRecord>>,
 
 	@Override
 	public void update(ExecutionContext ctx) throws ItemStreamException {
-		ctx.putString("nextPid", kHarvester.getNextPid());
+		ctx.putString("nextPid", kHarvester.getLastPid());
 		ctx.putInt("start", kHarvester.getStart());
 	}
 

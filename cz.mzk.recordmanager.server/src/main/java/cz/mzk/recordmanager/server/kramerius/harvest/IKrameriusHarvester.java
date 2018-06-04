@@ -16,7 +16,7 @@ public interface IKrameriusHarvester {
 
 	void setStart(int start);
 
-	String getNextPid();
+	String getLastPid();
 
-	void setNextPid(String nextPid);
+	void setLastPid(String lastPid);
 }

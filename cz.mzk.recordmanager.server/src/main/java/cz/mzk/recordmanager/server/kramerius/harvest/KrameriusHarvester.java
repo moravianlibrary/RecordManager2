@@ -29,10 +29,13 @@ public class KrameriusHarvester extends AbstractKrameriusHarvest {
 	public List<String> getNextUuids() throws SolrServerException {
 		SolrDocumentList documents = executeSolrQuery(getUuidQuery(PID_FIELD));
 
-		if (documents.isEmpty()) return null;
+		if (getLastPid() == null || documents.isEmpty()) return null;
 
 		List<String> uuids = getUuids(documents, PID_FIELD);
-		setNextPid(Iterables.getLast(uuids, null));
+
+		String nextUuid = Iterables.getLast(uuids, null);
+		if (getLastPid().equals(nextUuid)) setLastPid(null);
+		else setLastPid(nextUuid);
 
 		return uuids;
 	}
@@ -40,11 +43,11 @@ public class KrameriusHarvester extends AbstractKrameriusHarvest {
 	private SolrQuery getUuidQuery(String... fields) throws SolrServerException {
 		SolrQuery query = getBasicQuery(fields);
 
-		if (getNextPid() != null) {
-			query.add("fq", SolrUtils.createFieldQuery(PID_FIELD, SolrUtils.createRange(getNextPid(), null)));
+		if (getLastPid() != null && !getLastPid().isEmpty()) {
+			query.add("fq", SolrUtils.createFieldQuery(PID_FIELD, SolrUtils.createRange(getLastPid(), null)));
 		}
 		query.setSort(PID_FIELD, ORDER.asc);
-		LOGGER.info("nextPid: {}", getNextPid());
+		LOGGER.info("nextPid: {}", getLastPid());
 
 		return query;
 	}
