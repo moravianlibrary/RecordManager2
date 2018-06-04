@@ -112,6 +112,10 @@ public class SolrFieldConstants {
 
 	public static final String VIEW_TYPE_TXT_MV = "view_txt_mv";
 
+	public static final String AUTHOR_SEARCH_TXT_MV = "author_search_txt_mv";
+
+	public static final String TITLE_SEARCH_TXT_MV = "title_search_txt_mv";
+
 	/**
 	 * dummy fields used for processing purposes only, shouldn't be indexed. Fields are deleted in AuthorityEnricher. 
 	 */

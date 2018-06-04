@@ -883,4 +883,9 @@ public class MarcDSL extends BaseDSL {
 	private String getSubfieldAsString(DataField df, char subfieldCode) {
 		return df.getSubfield(subfieldCode) != null ? df.getSubfield(subfieldCode).getData() : "";
 	}
+
+	public Set<String> toLowerCase(Collection<String> collection) {
+		return collection.stream().map(String::toLowerCase).collect(Collectors.toSet());
+	}
+
 }
