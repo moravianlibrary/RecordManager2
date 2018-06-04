@@ -42,12 +42,14 @@ public class KrameriusItemReader implements ItemReader<List<HarvestedRecord>>,
 
 	private Date fromDate;
 	private Date untilDate;
+	private String type;
 
-	public KrameriusItemReader(Long confId, Date fromDate, Date untilDate) {
+	public KrameriusItemReader(Long confId, Date fromDate, Date untilDate, String type) {
 		super();
 		this.confId = confId;
 		this.fromDate = fromDate;
 		this.untilDate = untilDate;
+		this.type = type;
 	}
 
 	@Override
@@ -73,7 +75,7 @@ public class KrameriusItemReader implements ItemReader<List<HarvestedRecord>>,
 			params.setQueryRows(conf.getQueryRows());
 			params.setFrom(fromDate);
 			params.setUntil(untilDate);
-			kHarvester = harvesterFactory.create(params, confId);
+			kHarvester = harvesterFactory.create(type == null ? "" : type, params, confId);
 		}
 	}
 
@@ -87,11 +89,15 @@ public class KrameriusItemReader implements ItemReader<List<HarvestedRecord>>,
 		if (ctx.containsKey("nextPid")) {
 			kHarvester.setNextPid(ctx.getString("nextPid"));
 		}
+		if (ctx.containsKey("start")) {
+			kHarvester.setStart(ctx.getInt("start"));
+		}
 	}
 
 	@Override
 	public void update(ExecutionContext ctx) throws ItemStreamException {
 		ctx.putString("nextPid", kHarvester.getNextPid());
+		ctx.putInt("start", kHarvester.getStart());
 	}
 
 	@Override

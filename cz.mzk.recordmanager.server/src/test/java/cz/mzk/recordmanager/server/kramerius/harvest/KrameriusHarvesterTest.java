@@ -28,7 +28,7 @@ public class KrameriusHarvesterTest extends AbstractKrameriusTest {
 		parameters.setUrl("http://k4.techlib.cz/search/api/v5.0");
 		parameters.setMetadataStream("DC");
 		KrameriusHarvester harvester = new KrameriusHarvester(httpClient, solrServerFactory, parameters, 1L);
-		List<String> uuids = harvester.getUuids(null);
+		List<String> uuids = harvester.getNextUuids();
 		for (String uuid : uuids) {
 			HarvestedRecord record = harvester.downloadRecord(uuid);
 			Assert.assertNotNull(record);
@@ -47,20 +47,20 @@ public class KrameriusHarvesterTest extends AbstractKrameriusTest {
 
 		//1st response with SolrServerException => uuid list is empty
 		try {
-			harvester.getUuids(null);
+			harvester.getNextUuids();
 			Assert.fail();
 		} catch (SolrServerException ignore) {
 		}
 
 		//2nd response with SolrServerException => uuid list is empty
 		try {
-			harvester.getUuids(null);
+			harvester.getNextUuids();
 			Assert.fail();
 		} catch (SolrServerException ignore) {
 		}
 
 		//3rd response is => OK
-		List<String> uuids = harvester.getUuids(null);
+		List<String> uuids = harvester.getNextUuids();
 		Assert.assertFalse(uuids.isEmpty());
 
 		//1st DC download - server responds with IOException, download returns null;

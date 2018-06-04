@@ -13,16 +13,15 @@ public class KrameriusHarvesterFactoryImpl implements KrameriusHarvesterFactory 
 	@Autowired
 	private SolrServerFactory solrServerFactory;
 
+	private static final String SORTING = "sorting";
+
 	@Override
-	public KrameriusHarvester create(KrameriusHarvesterParams parameters,
-			Long confId) {
-		return new KrameriusHarvester(httpClient, solrServerFactory, parameters, confId);
+	public IKrameriusHarvester create(String type, KrameriusHarvesterParams parameters, Long confId) {
+		switch (type.toLowerCase()) {
+		case SORTING:
+			return new KrameriusHarvester(httpClient, solrServerFactory, parameters, confId);
+		default:
+			return new KrameriusHarvesterNoSorting(httpClient, solrServerFactory, parameters, confId);
+		}
 	}
-
-	/*no paging*/
-	public KrameriusHarvesterNoSorting createNoSorting(KrameriusHarvesterParams parameters,
-			Long confId) {
-		return new KrameriusHarvesterNoSorting(httpClient, solrServerFactory, parameters, confId);
-	}
-
 }
