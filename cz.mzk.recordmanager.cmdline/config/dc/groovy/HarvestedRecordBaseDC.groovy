@@ -12,6 +12,7 @@ author2_display_mv = getAuthor2Display()
 publishDate_display = getFirstDate()
 
 isbn_display_mv = getISBNs()
+oclc_display_mv = getOclcs()
 
 physical = getPhysicals();
 

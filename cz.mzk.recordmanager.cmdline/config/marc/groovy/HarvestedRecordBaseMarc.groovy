@@ -20,6 +20,7 @@ publishDate_display = getPublishDateDisplay()
 ean_display_mv = getEAN()
 isbn_display_mv = getFieldsTrim "020a"
 nbn_display = getFirstField "015a"
+oclc_display_mv = getOclcs()
 
 url = getUrls()
 local_statuses_facet_str_mv = getStatuses()

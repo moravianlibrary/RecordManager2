@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 
 import cz.mzk.recordmanager.server.model.Ean;
 import cz.mzk.recordmanager.server.model.HarvestedRecordFormat.HarvestedRecordFormatEnum;
+import cz.mzk.recordmanager.server.model.Oclc;
 import cz.mzk.recordmanager.server.util.CleaningUtils;
 import cz.mzk.recordmanager.server.util.identifier.ISBNUtils;
 import org.marc4j.marc.DataField;
@@ -886,6 +887,10 @@ public class MarcDSL extends BaseDSL {
 
 	public Set<String> toLowerCase(Collection<String> collection) {
 		return collection.stream().map(String::toLowerCase).collect(Collectors.toSet());
+	}
+
+	public Set<String> getOclcs() {
+		return context.metadataRecord().getOclcs().stream().map(Oclc::getOclcStr).collect(Collectors.toSet());
 	}
 
 }

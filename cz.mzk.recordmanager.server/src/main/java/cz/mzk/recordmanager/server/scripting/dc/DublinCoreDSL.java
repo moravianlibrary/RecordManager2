@@ -4,11 +4,13 @@ import java.nio.charset.Charset;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import cz.mzk.recordmanager.server.dc.DublinCoreRecord;
 import cz.mzk.recordmanager.server.metadata.MetadataRecord;
 import cz.mzk.recordmanager.server.model.Isbn;
 import cz.mzk.recordmanager.server.model.Issn;
+import cz.mzk.recordmanager.server.model.Oclc;
 import cz.mzk.recordmanager.server.scripting.BaseDSL;
 import cz.mzk.recordmanager.server.scripting.MappingResolver;
 import cz.mzk.recordmanager.server.scripting.StopWordsResolver;
@@ -257,6 +259,10 @@ public class DublinCoreDSL extends BaseDSL {
 
 	public List<String> getInstitutionFacet() {
 		return SolrUtils.getInstitution(dcContext.harvestedRecord().getHarvestedFrom());
+	}
+
+	public Set<String> getOclcs() {
+		return dcContext.metadataRecord().getOclcs().stream().map(Oclc::getOclcStr).collect(Collectors.toSet());
 	}
 
 }
