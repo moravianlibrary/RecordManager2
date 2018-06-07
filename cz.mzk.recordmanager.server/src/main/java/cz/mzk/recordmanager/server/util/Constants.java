@@ -114,6 +114,7 @@ public class Constants {
 	public static final String PREFIX_OPENLIB			= "openlib";
 	public static final String PREFIX_OSOBNOSTI			= "osobnosti";
 	public static final String PREFIX_PKJAK				= "pkjak";
+	public static final String PREFIX_RKKA				= "rkka";
 	public static final String PREFIX_SFXJIBCBVK		= "sfxjibcbvk";
 	public static final String PREFIX_SFXJIBFREE		= "sfxjibfree";
 	public static final String PREFIX_SFXJIBKFBZ		= "sfxjibkfbz";

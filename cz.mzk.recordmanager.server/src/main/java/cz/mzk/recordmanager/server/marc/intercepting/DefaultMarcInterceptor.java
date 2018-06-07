@@ -78,6 +78,8 @@ public class DefaultMarcInterceptor implements MarcRecordInterceptor {
 	 */
 	protected void processField996(DataField df) {
 		if (!df.getTag().equals("996")) return;
+		ItemId itemId = conf.getItemId();
+		if(itemId == null) return;
 		// remove old subfield
 		for (Subfield sf : df.getSubfields(ITEM_ID_SUBFIELD_CHAR)) {
 			df.removeSubfield(sf);
@@ -91,7 +93,7 @@ public class DefaultMarcInterceptor implements MarcRecordInterceptor {
 			List<Sigla> siglas = conf.getSiglas();
 			sigla = siglas.isEmpty() ? "" : siglas.get(0).getUniqueId().getSigla();
 		}
-		Subfield itemIdSubfield = ItemId.getItemIdSubfield(conf.getItemId(), df, sigla, recordId);
+		Subfield itemIdSubfield = ItemId.getItemIdSubfield(itemId, df, sigla, recordId);
 		if (itemIdSubfield == null) logger.info(String.format("Missing data for itemId: import_confid=%d, 001=%s",
 				conf.getId(), record.getControlNumber()));
 		else df.addSubfield(itemIdSubfield);
