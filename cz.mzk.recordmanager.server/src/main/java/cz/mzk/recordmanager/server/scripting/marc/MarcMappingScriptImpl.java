@@ -1,5 +1,6 @@
 package cz.mzk.recordmanager.server.scripting.marc;
 
+import cz.mzk.recordmanager.server.scripting.ListResolver;
 import groovy.lang.Binding;
 import groovy.util.DelegatingScript;
 
@@ -22,22 +23,26 @@ public class MarcMappingScriptImpl implements MappingScript<MarcFunctionContext>
 
 	private final StopWordsResolver stopWordsResolver;
 
+	private final ListResolver listResolver;
+
 	private final Map<String, RecordFunction<MarcFunctionContext>> functions;
-	
-	public MarcMappingScriptImpl(Binding binding, List<DelegatingScript> scripts, 
-			MappingResolver propertyResolver, StopWordsResolver stopWordsResolver, Map<String, RecordFunction<MarcFunctionContext>> functions) {
+
+	public MarcMappingScriptImpl(Binding binding, List<DelegatingScript> scripts,
+			MappingResolver propertyResolver, StopWordsResolver stopWordsResolver, ListResolver listResolver,
+			Map<String, RecordFunction<MarcFunctionContext>> functions) {
 		super();
 		this.scripts = scripts;
 		this.binding = binding;
 		this.propertyResolver = propertyResolver;
 		this.stopWordsResolver = stopWordsResolver;
+		this.listResolver = listResolver;
 		this.functions = functions;
 	}
 
 	@Override
 	public Map<String, Object> parse(MarcFunctionContext ctx) {
 		binding.getVariables().clear();
-		MarcDSL delegate = new MarcDSL(ctx, propertyResolver, stopWordsResolver, functions);
+		MarcDSL delegate = new MarcDSL(ctx, propertyResolver, stopWordsResolver, listResolver, functions);
 		for (DelegatingScript script : scripts) {
 			script.setDelegate(delegate);
 			script.run();

@@ -10,6 +10,7 @@ import cz.mzk.recordmanager.server.metadata.MetadataRecord;
 import cz.mzk.recordmanager.server.model.Isbn;
 import cz.mzk.recordmanager.server.model.Issn;
 import cz.mzk.recordmanager.server.scripting.BaseDSL;
+import cz.mzk.recordmanager.server.scripting.ListResolver;
 import cz.mzk.recordmanager.server.scripting.MappingResolver;
 import cz.mzk.recordmanager.server.scripting.StopWordsResolver;
 import cz.mzk.recordmanager.server.scripting.function.RecordFunction;
@@ -34,9 +35,9 @@ public class DublinCoreDSL extends BaseDSL {
 	private static final int ACTUAL_YEAR = Calendar.getInstance().get(Calendar.YEAR);
 
 	public DublinCoreDSL(DublinCoreFunctionContext dcContext,
-			MappingResolver propertyResolver, StopWordsResolver stopWordsResolver,
+			MappingResolver propertyResolver, StopWordsResolver stopWordsResolver, ListResolver listResolver,
 			Map<String, RecordFunction<DublinCoreFunctionContext>> functions) {
-		super(propertyResolver, stopWordsResolver);
+		super(propertyResolver, stopWordsResolver, listResolver);
 		this.dcContext = dcContext;
 		this.record = dcContext.record();
 		this.functions = functions;

@@ -7,9 +7,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import cz.mzk.recordmanager.server.metadata.view.ViewType;
 import cz.mzk.recordmanager.server.model.Ean;
 import cz.mzk.recordmanager.server.model.HarvestedRecordFormat.HarvestedRecordFormatEnum;
 import cz.mzk.recordmanager.server.util.CleaningUtils;
+import cz.mzk.recordmanager.server.scripting.ListResolver;
 import cz.mzk.recordmanager.server.util.identifier.ISBNUtils;
 import org.marc4j.marc.DataField;
 import org.marc4j.marc.Subfield;
@@ -75,8 +77,8 @@ public class MarcDSL extends BaseDSL {
 	private final Map<String, RecordFunction<MarcFunctionContext>> functions;
 	
 	public MarcDSL(MarcFunctionContext context, MappingResolver propertyResolver, StopWordsResolver stopWordsResolver,
-			Map<String, RecordFunction<MarcFunctionContext>> functions) {
-		super(propertyResolver, stopWordsResolver);
+			ListResolver listResolver, Map<String, RecordFunction<MarcFunctionContext>> functions) {
+		super(propertyResolver, stopWordsResolver, listResolver);
 		this.context = context;
 		this.record = context.record();
 		this.functions = functions;
@@ -857,8 +859,28 @@ public class MarcDSL extends BaseDSL {
 		return results;
 	}
 
-	public List<String> getViewType() {
-		return metadataRecord.getViewType().stream().map(t -> t.getValue()).collect(Collectors.toList());
+	private static final String VIEW_FILE = "view/%s.txt";
+	private static final String VIEW_CASLIN_FILE = "view/%s_caslin.txt";
+
+	/**
+	 * @return {@link Set} of string values of {@link ViewType}
+	 */
+	public Set<String> getViewType() {
+		Set<String> results = new HashSet<>();
+		String idPrefix = context.harvestedRecord().getHarvestedFrom().getIdPrefix();
+		Set<String> siglas = metadataRecord.getCaslinSiglas();
+		for (String type : ViewType.getPossibleValues(metadataRecord)) {
+			try {
+				if (contains(String.format(VIEW_FILE, type), idPrefix)) results.add(type);
+			} catch (IOException ignore) {
+			}
+			try {
+				if (!siglas.isEmpty() && containsAny(String.format(VIEW_CASLIN_FILE, type), siglas))
+					results.add(type);
+			} catch (IOException ignore) {
+			}
+		}
+		return results;
 	}
 
 	private static final String AUTH_PSEUDONYMS_NAME = "%s %s";

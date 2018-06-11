@@ -68,6 +68,7 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 		for (String s : dcRecord.getTitles()) {
 			result.add(Title.create(s, ++titleOrder, MetadataUtils.similarityEnabled(s)));
 		}
+
 		return result;
 	}
 
@@ -164,8 +165,8 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 		if (isBook()) hrf.add(HarvestedRecordFormatEnum.BOOKS);
 		if (isPeriodical()) hrf.add(HarvestedRecordFormatEnum.PERIODICALS);
 		if (isMap()) hrf.add(HarvestedRecordFormatEnum.MAPS);
-		if (isVisual()) hrf.add(HarvestedRecordFormatEnum.VISUAL_DOCUMENTS);
-		if (isMusicalScore()) hrf.add(HarvestedRecordFormatEnum.MUSICAL_SCORES);
+		if (isVisualDocument()) hrf.add(HarvestedRecordFormatEnum.VISUAL_DOCUMENTS);
+		if (isMusicalScores()) hrf.add(HarvestedRecordFormatEnum.MUSICAL_SCORES);
 		if (isAudioDocument()) hrf.add(HarvestedRecordFormatEnum.AUDIO_OTHER);
 		if (isOtherDocument()) hrf.add(HarvestedRecordFormatEnum.OTHER_OTHER);
 		return hrf;
@@ -204,7 +205,8 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 		return false;
 	}
 
-	protected boolean isVisual() {
+	@Override
+	public boolean isVisualDocument() {
 		List<String> type = dcRecord.getTypes();
 		for (String f : type) {
 			// Kramerius specific
@@ -215,7 +217,8 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 		return false;
 	}
 
-	protected boolean isMusicalScore() {
+	@Override
+	public boolean isMusicalScores() {
 		List<String> type = dcRecord.getTypes();
 		for (String f : type) {
 			// Kramerius specific

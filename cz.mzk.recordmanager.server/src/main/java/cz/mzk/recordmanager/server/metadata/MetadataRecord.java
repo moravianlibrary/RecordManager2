@@ -8,6 +8,7 @@ import cz.mzk.recordmanager.server.model.HarvestedRecordFormat.HarvestedRecordFo
 import cz.mzk.recordmanager.server.model.TezaurusRecord.TezaurusKey;
 
 import java.util.List;
+import java.util.Set;
 
 public interface MetadataRecord {
 
@@ -98,6 +99,33 @@ public interface MetadataRecord {
 	 * @return List<HarvestedRecordFormatEnum>
 	 */
 	List<HarvestedRecordFormatEnum> getDetectedFormatList();
+
+	/**
+	 * Decide if this record has {@link HarvestedRecordFormatEnum#BLIND_BRAILLE}
+	 *
+	 * @return true or false
+	 */
+	default boolean isBlindBraille() {
+		return false;
+	}
+
+	/**
+	 * Decide if this record has {@link HarvestedRecordFormatEnum#MUSICAL_SCORES}
+	 *
+	 * @return true or false
+	 */
+	default boolean isMusicalScores() {
+		return false;
+	}
+
+	/**
+	 * Decide if this record has {@link HarvestedRecordFormatEnum#VIDEO_DOCUMENTS}
+	 *
+	 * @return true or false
+	 */
+	default boolean isVisualDocument() {
+		return false;
+	}
 
 	/**
 	 * return scale of document (significant for maps only)
@@ -307,7 +335,11 @@ public interface MetadataRecord {
 	 */
 	String getSourceInfoG();
 
-	default List<ViewType> getViewType() {
-		return Collections.emptyList();
+	/**
+	 * get siglas from caslin
+	 * @return {@link Set} of String
+	 */
+	default Set<String> getCaslinSiglas() {
+		return Collections.emptySet();
 	}
 }

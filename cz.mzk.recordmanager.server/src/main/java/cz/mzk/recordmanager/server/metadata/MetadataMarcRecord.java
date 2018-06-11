@@ -285,8 +285,9 @@ public class MetadataMarcRecord implements MetadataRecord {
 		
 		return false;		
 	}
-	
-	protected boolean isMusicalScores(){
+
+	@Override
+	public boolean isMusicalScores() {
 		String ldr06 = Character.toString(underlayingMarc.getLeader().getTypeOfRecord());
 		
 		String f006 = underlayingMarc.getControlField("006");
@@ -309,8 +310,9 @@ public class MetadataMarcRecord implements MetadataRecord {
 		
 		return false;		
 	}
-	
-	protected boolean isVisualDocument(){
+
+	@Override
+	public boolean isVisualDocument() {
 		String ldr06 = Character.toString(underlayingMarc.getLeader().getTypeOfRecord());
 		
 		String f006 = underlayingMarc.getControlField("006");
@@ -370,8 +372,9 @@ public class MetadataMarcRecord implements MetadataRecord {
 		
 		return false;
 	}
-		
-	protected boolean isBlindBraille(){
+
+	@Override
+	public boolean isBlindBraille() {
 		String f007 = underlayingMarc.getControlField("007");
 		String f007_00 = (f007 != null) && (f007.length() > 0) ? Character.toString(f007.charAt(0)) : "";
 		String f007_01 = (f007 != null) && (f007.length() > 1) ? Character.toString(f007.charAt(1)) : "";
@@ -1249,10 +1252,6 @@ public class MetadataMarcRecord implements MetadataRecord {
 			prefix = sfx_map.get(prefix);
 		}
 		return prefix;
-	}
-
-	protected boolean isIrelView() {
-		return !isBlindBraille() && !isMusicalScores() && !isVisualDocument();
 	}
 
 }

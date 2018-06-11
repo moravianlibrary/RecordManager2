@@ -1,30 +1,18 @@
 package cz.mzk.recordmanager.server.metadata.institutions;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.stream.Collectors;
-
-import cz.mzk.recordmanager.server.ClasspathResourceProvider;
-import cz.mzk.recordmanager.server.metadata.ViewType;
-import org.marc4j.marc.DataField;
-
 import cz.mzk.recordmanager.server.marc.MarcRecord;
 import cz.mzk.recordmanager.server.metadata.MetadataMarcRecord;
+import org.marc4j.marc.DataField;
+
+import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.stream.Collectors;
 
 public class SkatMarcMetadataRecord extends MetadataMarcRecord {
 
 	public SkatMarcMetadataRecord(MarcRecord underlayingMarc) {
 		super(underlayingMarc);
 	}
-
-	private static final List<String> IREL_SIGLAS = new BufferedReader(new InputStreamReader(
-			new ClasspathResourceProvider().getResource("/mapping/view_irel_siglas.map"), StandardCharsets.UTF_8))
-			.lines().collect(Collectors.toCollection(ArrayList::new));
 
 	@Override
 	public String getUUId() {
@@ -42,7 +30,7 @@ public class SkatMarcMetadataRecord extends MetadataMarcRecord {
 		}
 		return null;
 	}
-	
+
 	/**
 	 * filtered when there isn't any subfield q = 0
 	 */
@@ -58,11 +46,7 @@ public class SkatMarcMetadataRecord extends MetadataMarcRecord {
 	}
 
 	@Override
-	public List<ViewType> getViewType() {
-		for (String data : underlayingMarc.getFields("996", 'e')) {
-			if (IREL_SIGLAS.contains(data.trim()) && isIrelView())
-				return Collections.singletonList(ViewType.IREL);
-		}
-		return Collections.emptyList();
+	public Set<String> getCaslinSiglas() {
+		return underlayingMarc.getFields("996", 'e').stream().map(String::trim).collect(Collectors.toSet());
 	}
 }
