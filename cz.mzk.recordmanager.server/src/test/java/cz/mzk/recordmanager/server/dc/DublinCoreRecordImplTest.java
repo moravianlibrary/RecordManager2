@@ -91,25 +91,21 @@ public class DublinCoreRecordImplTest extends AbstractTest {
 
 		identifierFromList = rec.getIdentifiers().get(1);
 		Assert.assertEquals(testIdentifier2, identifierFromList);
-
 	}
 
 	/* --- _Metadata_ DublinCoreRecord tests --- */
 	@Test
 	public void getPublicationYearTest() throws Exception {
-
 		DublinCoreRecord dcr = new DublinCoreRecordImpl();
 		MetadataRecord metadataRecord;
 
 		dcr.addDate("1982");
 		metadataRecord = metadataFactory.getMetadataRecord(dcr);
-		Assert.assertEquals(metadataRecord.getPublicationYear().longValue(),
-				1982);
+		Assert.assertEquals(metadataRecord.getPublicationYear().longValue(), 1982);
 	}
 
 	@Test
 	public void getPublicationTitleTest() throws Exception {
-
 		DublinCoreRecord dcr = new DublinCoreRecordImpl();
 		MetadataRecord metadataRecord;
 
@@ -223,7 +219,7 @@ public class DublinCoreRecordImplTest extends AbstractTest {
 		metadataRecord = metadataFactory.getMetadataRecord(dcr);
 		List<Ean> eans = metadataRecord.getEANs();
 
-		Assert.assertTrue(eans.size() == 0);
+		Assert.assertTrue(eans.isEmpty());
 	}
 
 	/**

@@ -49,7 +49,7 @@ public class KrameriusHarvester {
 		this.harvestedFrom = harvestedFrom;
 	}
 
-	public List<String> getUuids(String nextPid) {
+	public List<String> getUuids(String nextPid) throws SolrServerException {
 		List<String> uuids = new ArrayList<String>();
 
 		SolrDocumentList documents = sendRequest(nextPid);
@@ -65,7 +65,7 @@ public class KrameriusHarvester {
 	/*
 	 * Return unparsed(!) HarvestedRecord (most of variables are not set yet)
 	 */
-	public HarvestedRecord downloadRecord(String uuid) {
+	public HarvestedRecord downloadRecord(String uuid) throws IOException {
 		String recordId = uuid;
 		HarvestedRecordUniqueId id = new HarvestedRecordUniqueId(harvestedFrom, recordId);
 		HarvestedRecord unparsedHr = new HarvestedRecord(id);
@@ -80,9 +80,8 @@ public class KrameriusHarvester {
 			}
 			unparsedHr.setRawRecord(IOUtils.toByteArray(is));
 		} catch (IOException ioe) {
-			logger.error("Harvesting record from: " + url + " caused IOException!");
 			logger.error(ioe.getMessage());
-			return null;
+			throw new IOException("Harvesting record from: " + url + " caused IOException!");
 		}
 
 		return unparsedHr;
@@ -100,7 +99,7 @@ public class KrameriusHarvester {
 		return resultingUrl;
 	}
 
-	public List<HarvestedRecord> getRecords(List<String> uuids) {
+	public List<HarvestedRecord> getRecords(List<String> uuids) throws IOException {
 		List<HarvestedRecord> records = new ArrayList<HarvestedRecord>();
 
 		for (String uuid : uuids) {
@@ -115,7 +114,7 @@ public class KrameriusHarvester {
 		return records;
 	}
 
-	public SolrDocumentList sendRequest(String nextPid) {
+	public SolrDocumentList sendRequest(String nextPid) throws SolrServerException {
 		SolrDocumentList documents = new SolrDocumentList();
 
 		SolrServerFacade solr = solrServerFactory.create(params.getUrl(), Mode.KRAMERIUS);
@@ -146,9 +145,9 @@ public class KrameriusHarvester {
 			QueryResponse response = solr.query(query);
 			documents = response.getResults();
 		 } catch (SolrServerException sse) {
-			logger.error("Harvesting list of uuids from Kramerius API: caused SolrServerException for model: %s, url:%s and nextPid:%s", params.getModel(), params.getUrl(), nextPid);
 			logger.error(sse.getMessage());
-			return new SolrDocumentList();
+			throw new SolrServerException(String.format("Harvesting list of uuids from Kramerius API: caused " +
+					"SolrServerException for model: %s, url:%s and nextPid:%s", params.getModel(), params.getUrl(), nextPid));
 		}
 		return documents;
 	}
