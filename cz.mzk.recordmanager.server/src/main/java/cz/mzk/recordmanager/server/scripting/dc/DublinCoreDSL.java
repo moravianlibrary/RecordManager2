@@ -4,6 +4,7 @@ import java.nio.charset.Charset;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import cz.mzk.recordmanager.server.dc.DublinCoreRecord;
 import cz.mzk.recordmanager.server.metadata.MetadataRecord;
@@ -258,6 +259,17 @@ public class DublinCoreDSL extends BaseDSL {
 
 	public List<String> getInstitutionFacet() {
 		return SolrUtils.getInstitution(dcContext.harvestedRecord().getHarvestedFrom());
+	}
+
+	public Set<String> getAllCreatorsForSearching() {
+		Set<String> results = new HashSet<>();
+		results.addAll(dcContext.record().getCreators());
+		results.addAll(dcContext.record().getContributors());
+		return results.stream().map(String::toLowerCase).collect(Collectors.toSet());
+	}
+
+	public Set<String> getAllTitlesForSeraching() {
+		return dcContext.record().getTitles().stream().map(String::toLowerCase).collect(Collectors.toSet());
 	}
 
 }
