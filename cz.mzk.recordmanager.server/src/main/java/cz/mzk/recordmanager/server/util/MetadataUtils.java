@@ -88,4 +88,11 @@ public class MetadataUtils {
 		return true;
 	}
 
+	public static boolean containsChar(char[] array, char charToFind) {
+		for (char c : array) {
+			if (c == charToFind) return true;
+		}
+		return false;
+	}
+
 }
