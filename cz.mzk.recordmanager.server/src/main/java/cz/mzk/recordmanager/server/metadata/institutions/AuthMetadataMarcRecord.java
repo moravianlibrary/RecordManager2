@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.List;
 
 import cz.mzk.recordmanager.server.util.Constants;
+import cz.mzk.recordmanager.server.util.MetadataUtils;
 import org.marc4j.marc.DataField;
 import org.marc4j.marc.Subfield;
 
@@ -47,7 +48,7 @@ public class AuthMetadataMarcRecord extends MetadataMarcRecord{
 	public List<String> getUrls() {
 		List<String> results = super.getUrls(Constants.DOCUMENT_AVAILABILITY_ONLINE);
 		for (String link : underlayingMarc.getFields("998", 'a')) {
-			results.add(generateUrl(Constants.DOCUMENT_AVAILABILITY_ONLINE, link, ""));
+			results.add(MetadataUtils.generateUrl(Constants.DOCUMENT_AVAILABILITY_ONLINE, link, ""));
 		}
 		return results;
 	}

@@ -5,6 +5,8 @@ import cz.mzk.recordmanager.server.metadata.CitationRecordType;
 import cz.mzk.recordmanager.server.metadata.MetadataRecord;
 import cz.mzk.recordmanager.server.metadata.MetadataRecordFactory;
 import cz.mzk.recordmanager.server.model.*;
+import cz.mzk.recordmanager.server.util.Constants;
+import cz.mzk.recordmanager.server.util.MetadataUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
@@ -925,5 +927,30 @@ public class MarcRecordImplTest extends AbstractTest {
 		Assert.assertEquals(metadataRecord.getSourceInfoG(), "g");
 		Assert.assertEquals(metadataRecord.getSourceInfoT(), "t");
 		Assert.assertEquals(metadataRecord.getSourceInfoX(), "x");
+	}
+
+	@Test
+	public void getUrls() {
+		MarcRecordImpl mri;
+		List<String> metadataList = new ArrayList<>();
+		List<String> results = new ArrayList<>();
+
+		metadataList.add("856 $ulink");
+		results.add(MetadataUtils.generateUrl(Constants.DOCUMENT_AVAILABILITY_UNKNOWN, "link", ""));
+
+		metadataList.add("856 $ulink$3comment3$ycommenty$zcommentz");
+		results.add(MetadataUtils.generateUrl(Constants.DOCUMENT_AVAILABILITY_UNKNOWN, "link", "comment3 (commentz)"));
+
+		metadataList.add("856 $ulink$ycommenty$zcommentz");
+		results.add(MetadataUtils.generateUrl(Constants.DOCUMENT_AVAILABILITY_UNKNOWN, "link", "commenty (commentz)"));
+
+		metadataList.add("856 $ulink$zcommentz");
+		results.add(MetadataUtils.generateUrl(Constants.DOCUMENT_AVAILABILITY_UNKNOWN, "link", "commentz"));
+
+		metadataList.add("856 $ulink$3comment3");
+		results.add(MetadataUtils.generateUrl(Constants.DOCUMENT_AVAILABILITY_UNKNOWN, "link", "comment3"));
+
+		mri = MarcRecordFactory.recordFactory(metadataList);
+		Assert.assertEquals(metadataFactory.getMetadataRecord(mri).getUrls(), results);
 	}
 }

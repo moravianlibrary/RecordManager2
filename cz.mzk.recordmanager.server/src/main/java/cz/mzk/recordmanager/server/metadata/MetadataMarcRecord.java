@@ -4,6 +4,7 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import cz.mzk.recordmanager.server.util.CleaningUtils;
 import cz.mzk.recordmanager.server.util.identifier.ISBNUtils;
 import cz.mzk.recordmanager.server.util.identifier.ISMNUtils;
 import cz.mzk.recordmanager.server.util.identifier.ISSNUtils;
@@ -39,14 +40,17 @@ public class MetadataMarcRecord implements MetadataRecord {
 
 	protected MarcRecord underlayingMarc;
 
-	protected static final Pattern PAGECOUNT_PATTERN = Pattern.compile("(\\d+)");
-	protected static final Pattern YEAR_PATTERN = Pattern.compile("\\d{4}");
-	protected static final Pattern SCALE_PATTERN = Pattern.compile("\\d+[ ^]*\\d+");
+	private static final Pattern PAGECOUNT_PATTERN = Pattern.compile("(\\d+)");
+	private static final Pattern YEAR_PATTERN = Pattern.compile("\\d{4}");
+	private static final Pattern SCALE_PATTERN = Pattern.compile("\\d+[ ^]*\\d+");
 	protected static final Pattern UUID_PATTERN = Pattern.compile("uuid:[\\w-]+");
-	protected static final Pattern OCLC_PATTERN= Pattern.compile("(\\(ocolc\\))(.*)", Pattern.CASE_INSENSITIVE);
-	protected static final Pattern PUBLISHER_NUMBER_PATTERN = Pattern.compile("\\W");
-	protected static final Pattern CPK0_PATTERN = Pattern.compile("cpk0");
-	protected static final Pattern METAPROXY_TAG_PATTERN = Pattern.compile("[17]..");
+	private static final Pattern OCLC_PATTERN = Pattern.compile("(\\(ocolc\\))(.*)", Pattern.CASE_INSENSITIVE);
+	private static final Pattern PUBLISHER_NUMBER_PATTERN = Pattern.compile("\\W");
+	private static final Pattern CPK0_PATTERN = Pattern.compile("cpk0");
+	private static final Pattern METAPROXY_TAG_PATTERN = Pattern.compile("[17]..");
+	private static final Pattern SCALE_REPLACE = Pattern.compile("[ ^]+");
+
+	// formats
 	private static final Pattern KARTOGRAFICKY_DOKUMENT = Pattern.compile("kartografický\\sdokument", Pattern.CASE_INSENSITIVE);
 	private static final Pattern START_CR = Pattern.compile("^cr", Pattern.CASE_INSENSITIVE);
 	private static final Pattern HUDEBNINA = Pattern.compile("hudebnina", Pattern.CASE_INSENSITIVE);
@@ -86,11 +90,11 @@ public class MetadataMarcRecord implements MetadataRecord {
 	private static final Pattern VIDEO_OTHER_F338 = Pattern.compile("vr|vz|vc|mc|mf|mr|mo|mz");
 	private static final Pattern OTHER_F336 = Pattern.compile("tcf|tdm|tdf", Pattern.CASE_INSENSITIVE);
 
-	protected static final Long MAX_PAGES = 10_000_000L;
+	private static final Long MAX_PAGES = 10_000_000L;
 	private static final String INVALID_YEAR = "Invalid year: %s";
-	private static final String[] TITLE_TAGS = new String[]{"245", "240"};
-	private static final char[] SHORT_TITLE_SUBFIELDS = new char[]{'a', 'n', 'p'};
-	private static final char[] TITLE_SUBFIELDS = new char[]{'a', 'b', 'n', 'p'};
+	private static final String[] TITLE_TAGS = {"245", "240"};
+	private static final char[] SHORT_TITLE_SUBFIELDS = {'a', 'n', 'p'};
+	private static final char[] TITLE_SUBFIELDS = {'a', 'b', 'n', 'p'};
 
 	private static final char[] ARRAY_AT = {'a', 't'};
 	private static final char[] ARRAY_CDM = {'c', 'd', 'm'};
@@ -108,6 +112,8 @@ public class MetadataMarcRecord implements MetadataRecord {
 	private static final char[] ARRAY_VM = {'v', 'm'};
 	private static final char[] ARRAY_OPR = {'o', 'p', 'r'};
 	private static final char[] ARRAY_OQ = {'o', 'q'};
+
+	private static final String URL_COMMENT_FORMAT = "%s (%s)";
 
 	public MetadataMarcRecord(MarcRecord underlayingMarc) {
 		if (underlayingMarc == null) {
@@ -728,7 +734,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 		}
 		Matcher matcher = SCALE_PATTERN.matcher(scaleStr);
 		if (matcher.find()) {
-			String strValue = matcher.group(0).replaceAll("[ ^]+", "");
+			String strValue = CleaningUtils.replaceAll(matcher.group(0), SCALE_REPLACE, "");
 			try {
 				return Long.valueOf(strValue);
 			} catch (NumberFormatException nfe) {
@@ -755,10 +761,10 @@ public class MetadataMarcRecord implements MetadataRecord {
 		return null;
 	}
 
-	private static final String[] FIELDS1XX = new String[]{"100", "110", "111", "130"};
-	private static final String[] FIELDS6XX = new String[]{"600", "610", "611", "630", "648", "650", "651", "653", "654",
+	private static final String[] FIELDS1XX = {"100", "110", "111", "130"};
+	private static final String[] FIELDS6XX = {"600", "610", "611", "630", "648", "650", "651", "653", "654",
 			"655", "656", "657", "658", "662", "690", "691", "692", "693", "694", "695", "696", "697", "698", "699"};
-	private static final String[] FIELDS7XX = new String[]{"700", "710", "711", "720", "730", "740", "751", "752", "753",
+	private static final String[] FIELDS7XX = {"700", "710", "711", "720", "730", "740", "751", "752", "753",
 			"754", "760", "762", "765", "767", "770", "772", "773", "774", "775", "776", "777", "780", "785", "786", "787"};
 	private static final Pattern WEIGHT_2_TO_4 = Pattern.compile("[2-4]");
 	private static final Pattern WEIGHT_05_TO_9 = Pattern.compile("[05-9]");
@@ -901,7 +907,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 		Set<String> result = new HashSet<>();
 		for (DataField df: underlayingMarc.getDataFields("041")) {
 			for (Subfield subA: df.getSubfields('a')) {
-				String lang = null;
+				String lang;
 				if (subA.getData().toLowerCase().equals("cze")) {
 					lang = "cze";
 				} else if (subA.getData().toLowerCase().equals("eng")) {
@@ -1038,7 +1044,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 	public List<String> getUrls(){
 		return getUrls(Constants.DOCUMENT_AVAILABILITY_UNKNOWN);
 	}
-	
+
 	protected List<String> getUrls(String availability) {
     	List<String> result = new ArrayList<>();
     	
@@ -1048,7 +1054,6 @@ public class MetadataMarcRecord implements MetadataRecord {
     		}
     		String link = df.getSubfield('u').getData();
     		String comment = "";
-    		
     		String sub3 = null,subY = null,subZ = null;
     		
     		if (df.getSubfield('3') != null) {
@@ -1060,30 +1065,19 @@ public class MetadataMarcRecord implements MetadataRecord {
     		if (df.getSubfield('z') != null) {
     			subZ = df.getSubfield('z').getData();
     		}
-    		
+
     		if (sub3 != null) {
-    			comment = sub3;
-    			if (subZ != null) {
-    				comment += " (" + subZ + ")";
-    			}
-    		} else if (subY != null) {
-    			comment = subY;
-    			if (subZ != null) {
-    				comment += " (" + subZ + ")";
-    			}
-    		} else if (subZ != null) {
+				comment = (subZ != null) ? String.format(URL_COMMENT_FORMAT, sub3, subZ) : sub3;
+			} else if (subY != null) {
+				comment = (subZ != null) ? String.format(URL_COMMENT_FORMAT, subY, subZ) : subY;
+			} else if (subZ != null) {
     			comment = subZ;
     		}
-
-			result.add(generateUrl(availability, link, comment));
+			result.add(MetadataUtils.generateUrl(availability, link, comment));
 		}
     	
     	return result;
     }
-
-	protected String generateUrl(String availability, String link, String comment) {
-		return availability + "|" + link + "|" + comment;
-	}
 
 	@Override
 	public String getPolicyKramerius() {
@@ -1150,7 +1144,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 		StringBuilder builder = new StringBuilder();
 		for (Subfield subfield : DF.getSubfields()) {
 			if (MetadataUtils.hasTrailingPunctuation(builder.toString())) {
-				builder.append(" ");
+				builder.append(' ');
 			}
 			if (Chars.contains(SUBFIELDS, subfield.getCode())) {
 				builder.append(subfield.getData());

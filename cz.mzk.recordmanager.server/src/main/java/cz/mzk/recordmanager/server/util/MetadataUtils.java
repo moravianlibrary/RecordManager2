@@ -95,4 +95,8 @@ public class MetadataUtils {
 		return false;
 	}
 
+	public static String generateUrl(String availability, String link, String comment) {
+		return availability + '|' + link + '|' + comment;
+	}
+
 }
