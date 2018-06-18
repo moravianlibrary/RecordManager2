@@ -1,38 +1,24 @@
 package cz.mzk.recordmanager.server.metadata;
 
-import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
+import com.google.common.primitives.Chars;
+import cz.mzk.recordmanager.server.export.IOFormat;
+import cz.mzk.recordmanager.server.marc.MarcRecord;
+import cz.mzk.recordmanager.server.model.*;
+import cz.mzk.recordmanager.server.model.HarvestedRecordFormat.HarvestedRecordFormatEnum;
+import cz.mzk.recordmanager.server.model.TezaurusRecord.TezaurusKey;
 import cz.mzk.recordmanager.server.util.CleaningUtils;
-import cz.mzk.recordmanager.server.util.identifier.ISBNUtils;
-import cz.mzk.recordmanager.server.util.identifier.ISMNUtils;
-import cz.mzk.recordmanager.server.util.identifier.ISSNUtils;
-import cz.mzk.recordmanager.server.util.identifier.NoDataException;
+import cz.mzk.recordmanager.server.util.Constants;
+import cz.mzk.recordmanager.server.util.MetadataUtils;
+import cz.mzk.recordmanager.server.util.UrlUtils;
+import cz.mzk.recordmanager.server.util.identifier.*;
 import org.marc4j.marc.DataField;
 import org.marc4j.marc.Subfield;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.primitives.Chars;
-
-import cz.mzk.recordmanager.server.export.IOFormat;
-import cz.mzk.recordmanager.server.marc.MarcRecord;
-import cz.mzk.recordmanager.server.model.Cnb;
-import cz.mzk.recordmanager.server.model.Ean;
-import cz.mzk.recordmanager.server.model.HarvestedRecordFormat.HarvestedRecordFormatEnum;
-import cz.mzk.recordmanager.server.model.Isbn;
-import cz.mzk.recordmanager.server.model.Ismn;
-import cz.mzk.recordmanager.server.model.Issn;
-import cz.mzk.recordmanager.server.model.Oclc;
-import cz.mzk.recordmanager.server.model.PublisherNumber;
-import cz.mzk.recordmanager.server.model.ShortTitle;
-import cz.mzk.recordmanager.server.model.TezaurusRecord.TezaurusKey;
-import cz.mzk.recordmanager.server.model.Title;
-import cz.mzk.recordmanager.server.util.Constants;
-import cz.mzk.recordmanager.server.util.identifier.EANUtils;
-import cz.mzk.recordmanager.server.util.MetadataUtils;
-import cz.mzk.recordmanager.server.util.UrlUtils;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class MetadataMarcRecord implements MetadataRecord {
 
@@ -295,12 +281,12 @@ public class MetadataMarcRecord implements MetadataRecord {
 				|| f006_00 == 'a';
 	}
 
-	protected boolean isPeriodical(){
+	protected boolean isPeriodical() {
 		char ldr07 = Character.toLowerCase(underlayingMarc.getLeader().getImplDefined1()[0]);
 		return MetadataUtils.containsChar(ARRAY_IS, ldr07);
 	}
 
-	protected boolean isArticle(){
+	protected boolean isArticle() {
 		char ldr07 = Character.toLowerCase(underlayingMarc.getLeader().getImplDefined1()[0]);
 		return MetadataUtils.containsChar(ARRAY_AB, ldr07);
 	}
@@ -309,20 +295,20 @@ public class MetadataMarcRecord implements MetadataRecord {
 		return !underlayingMarc.getDataFields("773").isEmpty();
 	}
 
-	protected boolean isMap(){
+	protected boolean isMap() {
 		char ldr06 = Character.toLowerCase(underlayingMarc.getLeader().getTypeOfRecord());
 
 		String f006 = underlayingMarc.getControlField("006");
 		char f006_00 = (f006 != null && !f006.isEmpty()) ? Character.toLowerCase(f006.charAt(0)) : ' ';
 
-	    String f007 = underlayingMarc.getControlField("007");
+		String f007 = underlayingMarc.getControlField("007");
 		char f007_00 = (f007 != null && !f007.isEmpty()) ? Character.toLowerCase(f007.charAt(0)) : ' ';
 
 		String f245h = underlayingMarc.getField("245", 'h');
-		if(f245h == null) f245h = "";
+		if (f245h == null) f245h = "";
 
 		String f336b = underlayingMarc.getField("336", 'b');
-		if(f336b == null) f336b = "";
+		if (f336b == null) f336b = "";
 
 		return MetadataUtils.containsChar(ARRAY_EF, ldr06)
 				|| MetadataUtils.containsChar(ARRAY_EF, f006_00)
@@ -339,10 +325,10 @@ public class MetadataMarcRecord implements MetadataRecord {
 		char f006_00 = (f006 != null) && (!f006.isEmpty()) ? Character.toLowerCase(f006.charAt(0)) : ' ';
 
 		String f245h = underlayingMarc.getField("245", 'h');
-		if(f245h == null) f245h = "";
+		if (f245h == null) f245h = "";
 
 		String f336b = underlayingMarc.getField("336", 'b');
-		if(f336b == null) f336b = "";
+		if (f336b == null) f336b = "";
 
 		return MetadataUtils.containsChar(ARRAY_CD, ldr06)
 				|| (MetadataUtils.containsChar(ARRAY_CD, f006_00) && HUDEBNINA.matcher(f245h).find())
@@ -363,16 +349,16 @@ public class MetadataMarcRecord implements MetadataRecord {
 		char f007_00 = (f007 != null) && !f007.isEmpty() ? Character.toLowerCase(f007.charAt(0)) : ' ';
 
 		String f245h = underlayingMarc.getField("245", 'h');
-		if(f245h == null) f245h = "";
+		if (f245h == null) f245h = "";
 
 		String f336b = underlayingMarc.getField("336", 'b');
-		if(f336b == null) f336b = "";
+		if (f336b == null) f336b = "";
 
 		String f337b = underlayingMarc.getField("337", 'b');
-		if(f337b == null) f337b = "";
+		if (f337b == null) f337b = "";
 
 		String f338b = underlayingMarc.getField("338", 'b');
-		if(f338b == null) f338b = "";
+		if (f338b == null) f338b = "";
 
 		return MetadataUtils.containsChar(ARRAY_KG, ldr06)
 				|| MetadataUtils.containsChar(ARRAY_KG, f007_00)
@@ -386,7 +372,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 				|| START_G.matcher(f338b).find();
 	}
 
-	protected boolean isMicroform(){
+	protected boolean isMicroform() {
 		char ldr06 = Character.toLowerCase(underlayingMarc.getLeader().getTypeOfRecord());
 
 		String f007 = underlayingMarc.getControlField("007");
@@ -397,13 +383,13 @@ public class MetadataMarcRecord implements MetadataRecord {
 		char f008_29 = (f008 != null) && (f008.length() > 29) ? Character.toLowerCase(f008.charAt(29)) : ' ';
 
 		String f245h = underlayingMarc.getField("245", 'h');
-		if(f245h == null) f245h = "";
+		if (f245h == null) f245h = "";
 
 		String f337b = underlayingMarc.getField("337", 'b');
-		if(f337b == null) f337b = "";
+		if (f337b == null) f337b = "";
 
 		String f338b = underlayingMarc.getField("338", 'b');
-		if(f338b == null) f338b = "";
+		if (f338b == null) f338b = "";
 
 		return (MetadataUtils.containsChar(ARRAY_ACDPT, ldr06) && MetadataUtils.containsChar(ARRAY_ABC, f008_23))
 				|| (MetadataUtils.containsChar(ARRAY_EFK, ldr06) && f008_29 == 'b')
@@ -420,10 +406,10 @@ public class MetadataMarcRecord implements MetadataRecord {
 		char f007_01 = (f007 != null) && (f007.length() > 1) ? Character.toLowerCase(f007.charAt(1)) : ' ';
 
 		String f245h = underlayingMarc.getField("245", 'h');
-		if(f245h == null) f245h = "";
+		if (f245h == null) f245h = "";
 
 		String f336b = underlayingMarc.getField("336", 'b');
-		if(f336b == null) f336b = "";
+		if (f336b == null) f336b = "";
 
 		return (f007_00 == 'f' && f007_01 == 'b' && HMATOVE_PISMO.matcher(f245h).find())
 				|| (f007_00 == 't' && f007_01 == 'c')
@@ -454,7 +440,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 				|| f338b.equalsIgnoreCase("cr");
 	}
 
-	protected boolean isComputerCarrier(){
+	protected boolean isComputerCarrier() {
 		char ldr06 = Character.toLowerCase(underlayingMarc.getLeader().getTypeOfRecord());
 
 		String f006 = underlayingMarc.getControlField("006");
@@ -470,16 +456,16 @@ public class MetadataMarcRecord implements MetadataRecord {
 		char f008_29 = (f008 != null) && (f008.length() > 29) ? Character.toLowerCase(f008.charAt(29)) : ' ';
 
 		String f245h = underlayingMarc.getField("245", 'h');
-		if(f245h == null) f245h = "";
+		if (f245h == null) f245h = "";
 
 		String f300a = underlayingMarc.getField("300", 'a');
-		if(f300a == null) f300a = "";
+		if (f300a == null) f300a = "";
 
 		String f336b = underlayingMarc.getField("336", 'b');
-		if(f336b == null) f336b = "";
+		if (f336b == null) f336b = "";
 
 		String f338b = underlayingMarc.getField("338", 'b');
-		if(f338b == null) f338b = "";
+		if (f338b == null) f338b = "";
 
 		return ELEKTRONICKY_ZDROJ.matcher(f245h).find()
 				|| (MetadataUtils.containsChar(ARRAY_ACDIJPT, ldr06) && f008_23 == 's')
@@ -495,33 +481,33 @@ public class MetadataMarcRecord implements MetadataRecord {
 				|| COMP_CARRIER_338B.matcher(f338b).matches();
 	}
 
-	protected HarvestedRecordFormatEnum getAudioFormat(){
+	protected HarvestedRecordFormatEnum getAudioFormat() {
 		char ldr06 = Character.toLowerCase(underlayingMarc.getLeader().getTypeOfRecord());
 
 		String f006 = underlayingMarc.getControlField("006");
 		char f006_00 = (f006 != null) && !f006.isEmpty() ? Character.toLowerCase(f006.charAt(0)) : ' ';
 
-	    String f007 = underlayingMarc.getControlField("007");
+		String f007 = underlayingMarc.getControlField("007");
 		char f007_00 = (f007 != null) && !f007.isEmpty() ? Character.toLowerCase(f007.charAt(0)) : ' ';
 		char f007_01 = (f007 != null) && (f007.length() > 1) ? Character.toLowerCase(f007.charAt(1)) : ' ';
 
 		String f245h = underlayingMarc.getField("245", 'h');
-		if(f245h == null) f245h = "";
+		if (f245h == null) f245h = "";
 
 		String f300 = underlayingMarc.getDataFields("300").toString();
 		String f500 = underlayingMarc.getDataFields("500").toString();
 
 		String f300a = underlayingMarc.getField("300", 'a');
-		if(f300a == null) f300a = "";
+		if (f300a == null) f300a = "";
 
 		String f336b = underlayingMarc.getField("336", 'b');
-		if(f336b == null) f336b = "";
+		if (f336b == null) f336b = "";
 
 		String f337b = underlayingMarc.getField("337", 'b');
-		if(f337b == null) f337b = "";
+		if (f337b == null) f337b = "";
 
 		String f338b = underlayingMarc.getField("338", 'b');
-		if(f338b == null) f338b = "";
+		if (f338b == null) f338b = "";
 
 		// AUDIO_CD
 		for (String data : new String[]{f300, f500}) {
@@ -566,13 +552,13 @@ public class MetadataMarcRecord implements MetadataRecord {
 		char ldr06 = Character.toLowerCase(underlayingMarc.getLeader().getTypeOfRecord());
 
 		String f300a = underlayingMarc.getField("300", 'a');
-		if(f300a == null) f300a = "";
+		if (f300a == null) f300a = "";
 
 		// DVD
 		return (ldr06 == 'i' || ldr06 == 'j') && DVD.matcher(f300a).find();
 	}
 
-	protected HarvestedRecordFormatEnum getVideoDocument(){
+	protected HarvestedRecordFormatEnum getVideoDocument() {
 		char ldr06 = Character.toLowerCase(underlayingMarc.getLeader().getTypeOfRecord());
 
 		String f006 = underlayingMarc.getControlField("006");
@@ -587,21 +573,21 @@ public class MetadataMarcRecord implements MetadataRecord {
 		char f008_33 = (f008 != null) && (f008.length() > 33) ? Character.toLowerCase(f008.charAt(33)) : ' ';
 
 		String f245h = underlayingMarc.getField("245", 'h');
-		if(f245h == null) f245h = "";
+		if (f245h == null) f245h = "";
 
 		String f300 = underlayingMarc.getDataFields("300").toString();
 
 		String f300a = underlayingMarc.getField("300", 'a');
-		if(f300a == null) f300a = "";
+		if (f300a == null) f300a = "";
 
 		String f336b = underlayingMarc.getField("336", 'b');
-		if(f336b == null) f336b = "";
+		if (f336b == null) f336b = "";
 
 		String f337b = underlayingMarc.getField("337", 'b');
-		if(f337b == null) f337b = "";
+		if (f337b == null) f337b = "";
 
 		String f338b = underlayingMarc.getField("338", 'b');
-		if(f338b == null) f338b = "";
+		if (f338b == null) f338b = "";
 
 		String f500 = underlayingMarc.getDataFields("500").toString();
 
@@ -641,7 +627,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 
 	protected boolean isVideoDVD() {
 		String f300a = underlayingMarc.getField("300", 'a');
-		if(f300a == null) f300a = "";
+		if (f300a == null) f300a = "";
 
 		// VIDEO_DVD
 		return DVD.matcher(f300a).find();
@@ -657,27 +643,27 @@ public class MetadataMarcRecord implements MetadataRecord {
 		}
 		return false;
 	}
-	
-	protected boolean isOthers(){
+
+	protected boolean isOthers() {
 		char ldr06 = Character.toLowerCase(underlayingMarc.getLeader().getTypeOfRecord());
-		
+
 		String f006 = underlayingMarc.getControlField("006");
 		char f006_00 = (f006 != null) && !f006.isEmpty() ? Character.toLowerCase(f006.charAt(0)) : ' ';
-		
+
 		String f007 = underlayingMarc.getControlField("007");
 		char f007_00 = (f007 != null) && !f007.isEmpty() ? Character.toLowerCase(f007.charAt(0)) : ' ';
-		
+
 		String f008 = underlayingMarc.getControlField("008");
 		char f008_33 = (f008 != null) && (f008.length() > 33) ? Character.toLowerCase(f008.charAt(33)) : ' ';
-		
+
 		String f336b = underlayingMarc.getField("336", 'b');
-		if(f336b == null) f336b = "";
-		
+		if (f336b == null) f336b = "";
+
 		String f337b = underlayingMarc.getField("337", 'b');
-		if(f337b == null) f337b = "";
-				
+		if (f337b == null) f337b = "";
+
 		String f338b = underlayingMarc.getField("338", 'b');
-		if(f338b == null) f338b = "";
+		if (f338b == null) f338b = "";
 
 		return MetadataUtils.containsChar(ARRAY_OPR, ldr06)
 				|| (f006_00 == 'o' && f007_00 == 'o')
@@ -688,20 +674,20 @@ public class MetadataMarcRecord implements MetadataRecord {
 				|| (f337b.equalsIgnoreCase("x") || f337b.equalsIgnoreCase("z"))
 				|| f338b.equalsIgnoreCase("zu");
 	}
-	
+
 	@Override
 	public List<HarvestedRecordFormatEnum> getDetectedFormatList() {
 		List<HarvestedRecordFormatEnum> hrf = new ArrayList<>();
-		
-		if(isBook()) hrf.add(HarvestedRecordFormatEnum.BOOKS);
-		if(isPeriodical()) hrf.add(HarvestedRecordFormatEnum.PERIODICALS);
-		if(isArticle()) hrf.add(HarvestedRecordFormatEnum.ARTICLES);
+
+		if (isBook()) hrf.add(HarvestedRecordFormatEnum.BOOKS);
+		if (isPeriodical()) hrf.add(HarvestedRecordFormatEnum.PERIODICALS);
+		if (isArticle()) hrf.add(HarvestedRecordFormatEnum.ARTICLES);
 		if (isArticle773()) return Collections.singletonList(HarvestedRecordFormatEnum.ARTICLES);
-		if(isMap()) hrf.add(HarvestedRecordFormatEnum.MAPS);
-		if(isMusicalScores()) hrf.add(HarvestedRecordFormatEnum.MUSICAL_SCORES);
-		if(isVisualDocument()) hrf.add(HarvestedRecordFormatEnum.VISUAL_DOCUMENTS);
-		if(isMicroform()) hrf.add(HarvestedRecordFormatEnum.OTHER_MICROFORMS);
-		if(isBlindBraille()) hrf.add(HarvestedRecordFormatEnum.BLIND_BRAILLE);
+		if (isMap()) hrf.add(HarvestedRecordFormatEnum.MAPS);
+		if (isMusicalScores()) hrf.add(HarvestedRecordFormatEnum.MUSICAL_SCORES);
+		if (isVisualDocument()) hrf.add(HarvestedRecordFormatEnum.VISUAL_DOCUMENTS);
+		if (isMicroform()) hrf.add(HarvestedRecordFormatEnum.OTHER_MICROFORMS);
+		if (isBlindBraille()) hrf.add(HarvestedRecordFormatEnum.BLIND_BRAILLE);
 		HarvestedRecordFormatEnum audio = getAudioFormat();
 		if (audio != null) {
 			if (isAudioDVD()) hrf.add(HarvestedRecordFormatEnum.AUDIO_DVD);
@@ -716,13 +702,12 @@ public class MetadataMarcRecord implements MetadataRecord {
 		if (video != null) {
 			if (isVideoDVD()) {
 				if (!hrf.contains(HarvestedRecordFormatEnum.VIDEO_DVD)) hrf.add(HarvestedRecordFormatEnum.VIDEO_DVD);
-			}
-			else hrf.add(video);
+			} else hrf.add(video);
 		}
-		if(isComputerCarrier()) hrf.add(HarvestedRecordFormatEnum.OTHER_COMPUTER_CARRIER);
-		if(isOthers()) hrf.add(HarvestedRecordFormatEnum.OTHER_OTHER);
-		if(hrf.isEmpty()) hrf.add(HarvestedRecordFormatEnum.OTHER_OTHER);
-		
+		if (isComputerCarrier()) hrf.add(HarvestedRecordFormatEnum.OTHER_COMPUTER_CARRIER);
+		if (isOthers()) hrf.add(HarvestedRecordFormatEnum.OTHER_OTHER);
+		if (hrf.isEmpty()) hrf.add(HarvestedRecordFormatEnum.OTHER_OTHER);
+
 		return hrf;
 	}
 
@@ -750,7 +735,6 @@ public class MetadataMarcRecord implements MetadataRecord {
 		if (baseStr == null) {
 			return null;
 		}
-
 		Matcher matcher = UUID_PATTERN.matcher(baseStr);
 		if (matcher.find()) {
 			String uuidStr = matcher.group(0);
@@ -849,27 +833,25 @@ public class MetadataMarcRecord implements MetadataRecord {
 	@Override
 	public String getAuthorAuthKey() {
 		String f100s7 = underlayingMarc.getField("100", '7');
-		if(f100s7 != null){
+		if (f100s7 != null) {
 			return f100s7;
 		}
-		
 		String f700s7 = underlayingMarc.getField("700", '7');
-		if(f700s7 != null){
+		if (f700s7 != null) {
 			return f700s7;
 		}
 		return null;
-		
+
 	}
 
 	@Override
 	public String getAuthorString() {
 		String f100a = underlayingMarc.getField("100", 'a');
-		if(f100a != null){
+		if (f100a != null) {
 			return f100a;
 		}
-		
 		String f700a = underlayingMarc.getField("700", 'a');
-		if(f700a != null){
+		if (f700a != null) {
 			return f700a;
 		}
 		return null;
@@ -885,19 +867,17 @@ public class MetadataMarcRecord implements MetadataRecord {
 	public List<Oclc> getOclcs() {
 		List<Oclc> result = new ArrayList<>();
 		if (getLanguages().contains("cze")) return result;
-		for (DataField df: underlayingMarc.getDataFields("035")) {
+		for (DataField df : underlayingMarc.getDataFields("035")) {
 			Subfield subA = df.getSubfield('a');
 			if (subA == null) {
 				continue;
 			}
-			
 			Matcher matcher = OCLC_PATTERN.matcher(subA.getData());
 			if (matcher.matches() && matcher.groupCount() >= 2) {
 				Oclc oclc = new Oclc();
 				oclc.setOclcStr(matcher.group(2));
 				result.add(oclc);
 			}
-			
 		}
 		return result;
 	}
@@ -905,20 +885,19 @@ public class MetadataMarcRecord implements MetadataRecord {
 	@Override
 	public List<String> getLanguages() {
 		Set<String> result = new HashSet<>();
-		for (DataField df: underlayingMarc.getDataFields("041")) {
-			for (Subfield subA: df.getSubfields('a')) {
+		for (DataField df : underlayingMarc.getDataFields("041")) {
+			for (Subfield subA : df.getSubfields('a')) {
 				String lang;
 				if (subA.getData().toLowerCase().equals("cze")) {
 					lang = "cze";
 				} else if (subA.getData().toLowerCase().equals("eng")) {
-					lang = "eng"; 
+					lang = "eng";
 				} else {
 					lang = "oth";
 				}
 				result.add(lang);
 			}
 		}
-		
 		if (result.isEmpty()) {
 			String cf = underlayingMarc.getControlField("008");
 			if (cf != null && cf.length() > 39) {
@@ -927,14 +906,13 @@ public class MetadataMarcRecord implements MetadataRecord {
 				if (substr.toLowerCase().equals("cze")) {
 					lang = "cze";
 				} else if (substr.toLowerCase().equals("eng")) {
-					lang = "eng"; 
+					lang = "eng";
 				}
 				if (lang != null) {
 					result.add(lang);
 				}
 			}
 		}
-		
 		return new ArrayList<>(result);
 	}
 
@@ -1007,9 +985,9 @@ public class MetadataMarcRecord implements MetadataRecord {
 
 		return CitationRecordType.ERROR;
 	}
-	
+
 	@Override
-	public List<String> getBarcodes(){
+	public List<String> getBarcodes() {
 		return underlayingMarc.getFields("996", 'b');
 	}
 
@@ -1039,45 +1017,44 @@ public class MetadataMarcRecord implements MetadataRecord {
 		// implemented only in institution specific classes
 		return null;
 	}
-	
+
 	@Override
-	public List<String> getUrls(){
+	public List<String> getUrls() {
 		return getUrls(Constants.DOCUMENT_AVAILABILITY_UNKNOWN);
 	}
 
 	protected List<String> getUrls(String availability) {
-    	List<String> result = new ArrayList<>();
-    	
-    	for (DataField df: underlayingMarc.getDataFields("856")) {
-    		if (df.getSubfield('u') == null) {
-    			continue;
-    		}
-    		String link = df.getSubfield('u').getData();
-    		String comment = "";
-    		String sub3 = null,subY = null,subZ = null;
-    		
-    		if (df.getSubfield('3') != null) {
-    			sub3 = df.getSubfield('3').getData();
-    		}
-    		if (df.getSubfield('y') != null) {
-    			subY = df.getSubfield('y').getData();
-    		}
-    		if (df.getSubfield('z') != null) {
-    			subZ = df.getSubfield('z').getData();
-    		}
+		List<String> result = new ArrayList<>();
 
-    		if (sub3 != null) {
+		for (DataField df : underlayingMarc.getDataFields("856")) {
+			if (df.getSubfield('u') == null) {
+				continue;
+			}
+			String link = df.getSubfield('u').getData();
+			String comment = "";
+			String sub3 = null, subY = null, subZ = null;
+
+			if (df.getSubfield('3') != null) {
+				sub3 = df.getSubfield('3').getData();
+			}
+			if (df.getSubfield('y') != null) {
+				subY = df.getSubfield('y').getData();
+			}
+			if (df.getSubfield('z') != null) {
+				subZ = df.getSubfield('z').getData();
+			}
+
+			if (sub3 != null) {
 				comment = (subZ != null) ? String.format(URL_COMMENT_FORMAT, sub3, subZ) : sub3;
 			} else if (subY != null) {
 				comment = (subZ != null) ? String.format(URL_COMMENT_FORMAT, subY, subZ) : subY;
 			} else if (subZ != null) {
-    			comment = subZ;
-    		}
+				comment = subZ;
+			}
 			result.add(MetadataUtils.generateUrl(availability, link, comment));
 		}
-    	
-    	return result;
-    }
+		return result;
+	}
 
 	@Override
 	public String getPolicyKramerius() {
@@ -1136,7 +1113,8 @@ public class MetadataMarcRecord implements MetadataRecord {
 
 	/**
 	 * join subfields data for {@link Title} or {@link ShortTitle}
-	 * @param DF {@link DataField}
+	 *
+	 * @param DF        {@link DataField}
 	 * @param SUBFIELDS result subfields, TITLE - abnp, SHORT_TITLE - anp
 	 * @return String
 	 */
