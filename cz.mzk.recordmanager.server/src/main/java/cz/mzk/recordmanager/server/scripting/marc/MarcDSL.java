@@ -463,9 +463,9 @@ public class MarcDSL extends BaseDSL {
     public String getTitleDisplay(){
 		DataField df = getFirstDataField("245");
 		if(df == null) return null;
-		
-		final char titleSubfields[] = new char[]{'a','b','n','p'};
-		final char sfhPunctuation[] = new char[]{'.',',',':'};
+
+		final char titleSubfields[] = {'a', 'b', 'n', 'p'};
+		final char sfhPunctuation[] = {'.', ',', ':'};
 		char endCharH = ' ';
 		StringBuilder sb = new StringBuilder();
 
@@ -778,7 +778,7 @@ public class MarcDSL extends BaseDSL {
     public List<String> getAuthorFacet(String k){
 		Set<String> results = new HashSet<>();
 		results.addAll(getFields("100abcdq:975abcdq"));
-		char[] sfCodes = new char[]{'a', 'b', 'c', 'd', 'q'};
+		char[] sfCodes = {'a', 'b', 'c', 'd', 'q'};
 		for (DataField df : record.getDataFields("700")) {
 			StringBuilder author = new StringBuilder();
 			for (char c : sfCodes) {

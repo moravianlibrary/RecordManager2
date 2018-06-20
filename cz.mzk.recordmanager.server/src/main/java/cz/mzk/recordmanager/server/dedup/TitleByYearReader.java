@@ -25,7 +25,7 @@ public class TitleByYearReader implements ItemReader<List<NonperiodicalTitleClus
 	
 	private static final Long MAX_YEAR = 2015L;
 	
-	private String[] langCodes = new String[]{"cze","eng", "oth"};
+	private String[] langCodes = {"cze","eng", "oth"};
 	
 	private Long currentYear = MIN_YEAR;
 	
