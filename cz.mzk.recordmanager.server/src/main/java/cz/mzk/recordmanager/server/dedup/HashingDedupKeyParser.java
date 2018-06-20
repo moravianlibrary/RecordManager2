@@ -159,14 +159,9 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 		} 
 		
 		record.setDedupKeysHash(computedHash);
-		
-		
-		if (record.getOaiTimestamp() != null && record.getTemporalOldOaiTimestamp() != null
-				&& !record.getOaiTimestamp().equals(record.getTemporalOldOaiTimestamp())) {
-			oaiTimestampChanged = true;
-		} else {
-			oaiTimestampChanged = false;
-		}
+
+		oaiTimestampChanged = record.getOaiTimestamp() != null && record.getTemporalOldOaiTimestamp() != null
+				&& !record.getOaiTimestamp().equals(record.getTemporalOldOaiTimestamp());
 		
 		
 		// decide whether record should be deduplicated
