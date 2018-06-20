@@ -436,7 +436,7 @@ public class MarcDSL extends BaseDSL {
     		if(df.getSubfield('n') != null)
     		try {
     			count += Long.valueOf(df.getSubfield('n').getData());
-    		} catch (NumberFormatException nfe) {
+    		} catch (NumberFormatException ignored) {
     		}			
 		}
     	return count; 

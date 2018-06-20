@@ -80,8 +80,7 @@ public class PublishDateMarcFunctions implements MarcRecordFunctions {
 					int year = Integer.parseInt(matcher.group(0));
 					if(year == 9999) year = ACTUAL_YEAR;
 					result.add(year);
-				}
-				catch (NumberFormatException nfe) {
+				} catch (NumberFormatException ignored) {
 				}
 			}
 		}
@@ -294,7 +293,7 @@ public class PublishDateMarcFunctions implements MarcRecordFunctions {
 					try {
 						int year = Integer.parseInt(matcher.group(0));
 						if (MIN_YEAR <= year && year <= MAX_YEAR) results.add(year);
-					} catch (NumberFormatException e) {
+					} catch (NumberFormatException ignored) {
 					}
 				}
 			}

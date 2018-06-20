@@ -23,8 +23,7 @@ public class LoanRelevanceEnricher implements DedupRecordEnricher{
 				if(localRecord.getFieldValue(SolrFieldConstants.LOAN_RELEVANCE_FIELD) != null){
 					try{
 						count += Long.valueOf(localRecord.getFieldValue(SolrFieldConstants.LOAN_RELEVANCE_FIELD).toString());
-					}
-					catch(NumberFormatException nfe){
+					} catch (NumberFormatException ignored) {
 					}
 				}
 			}

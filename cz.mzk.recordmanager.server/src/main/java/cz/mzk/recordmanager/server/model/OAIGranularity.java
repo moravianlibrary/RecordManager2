@@ -60,7 +60,8 @@ public enum OAIGranularity {
 			try {
 				SimpleDateFormat sdf = new SimpleDateFormat(gran.getparseableFormat());
 				return sdf.parse(strDate);
-			} catch (ParseException e) {}
+			} catch (ParseException ignored) {
+			}
 		}
 		return null;
 	}
