@@ -32,7 +32,7 @@ public class FullTextEnricher implements DedupRecordEnricher {
 		}
 		if (size >= maxFullTextSize) {
 			logger.warn("Fulltext size {} B for dedup record {} is bigger than limit {} B for fulltext indexing",
-					new Object[]{ size, record, maxFullTextSize});
+					size, record, maxFullTextSize);
 			return;
 		}
 		LazyFulltextFieldImpl fetcher = new LazyFulltextFieldImpl(fulltextKrameriusDAO, record);
