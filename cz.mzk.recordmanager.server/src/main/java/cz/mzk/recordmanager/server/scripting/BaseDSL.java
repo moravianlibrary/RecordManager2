@@ -1,7 +1,5 @@
 package cz.mzk.recordmanager.server.scripting;
 
-import com.google.common.collect.Sets;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
