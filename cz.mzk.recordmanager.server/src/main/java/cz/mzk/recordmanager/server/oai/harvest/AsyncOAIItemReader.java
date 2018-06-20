@@ -115,7 +115,7 @@ public class AsyncOAIItemReader implements ItemReader<List<OAIRecord>>, ItemStre
 			resumptionToken = ctx.getString("resumptionToken");
 			lastReturnedResumptionToken = resumptionToken;
 		}
-		harvestingThread = new Thread((Runnable) this::queueWriter);
+		harvestingThread = new Thread(this::queueWriter);
 		harvestingThread.start();
 	}
 

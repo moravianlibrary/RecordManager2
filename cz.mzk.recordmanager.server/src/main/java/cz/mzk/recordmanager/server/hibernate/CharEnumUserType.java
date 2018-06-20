@@ -109,7 +109,7 @@ public class CharEnumUserType implements UserType, ParameterizedType {
 			throw new IllegalArgumentException(String.format("Class %s is not enum", enumClassName)); 
 		}
 		for (CharValueEnum constant : constants) {
-			values.put((Character) constant.getValue(), constant);
+			values.put(constant.getValue(), constant);
 		}
 	}
 

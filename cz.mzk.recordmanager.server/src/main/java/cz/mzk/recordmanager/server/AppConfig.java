@@ -110,7 +110,7 @@ public class AppConfig extends DefaultBatchConfigurer {
 		JobExplorerFactoryBean jobExplorerFactoryBean = new JobExplorerFactoryBean();
 		jobExplorerFactoryBean.setDataSource(dataSource);
 		jobExplorerFactoryBean.afterPropertiesSet();
-		return (JobExplorer) jobExplorerFactoryBean.getObject();
+		return jobExplorerFactoryBean.getObject();
 	}
 
 	@Bean
@@ -134,7 +134,7 @@ public class AppConfig extends DefaultBatchConfigurer {
 		jobRepository.setDataSource(dataSource);
 		jobRepository.setTransactionManager(transactionManager());
 		jobRepository.afterPropertiesSet();
-		return (JobRepository) jobRepository.getObject();
+		return jobRepository.getObject();
 	}
 
 	@Bean

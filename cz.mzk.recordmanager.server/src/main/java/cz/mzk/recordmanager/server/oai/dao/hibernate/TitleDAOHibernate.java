@@ -41,7 +41,7 @@ public class TitleDAOHibernate extends AbstractDomainDAOHibernate<Long, Title>
 							case "pages": title.setPages(((BigDecimal)tuple[i]).longValue()); break;
 							case "isbn":
 								if (tuple[i] != null) {
-									title.setIsbn(((BigDecimal)tuple[i]).toString()); break;
+									title.setIsbn(tuple[i].toString()); break;
 								}
 							case "cnb": 
 								if (tuple[i] != null) {

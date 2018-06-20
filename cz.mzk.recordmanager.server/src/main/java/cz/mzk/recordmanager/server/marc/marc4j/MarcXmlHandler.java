@@ -93,7 +93,7 @@ public class MarcXmlHandler extends org.marc4j.MarcXmlHandler {
 			Attributes atts) throws SAXException {
 
 		String realname = (name.length() == 0) ? qName : name;
-		Integer elementType = (Integer) elementMap.get(realname);
+		Integer elementType = elementMap.get(realname);
 
 		if (elementType == null) {
 			return;
@@ -167,7 +167,7 @@ public class MarcXmlHandler extends org.marc4j.MarcXmlHandler {
 	public void endElement(String uri, String name, String qName)
 			throws SAXException {
 		String realname = (name.length() == 0) ? qName : name;
-		Integer elementType = (Integer) elementMap.get(realname);
+		Integer elementType = elementMap.get(realname);
 
 		if (elementType == null) {
 			return;
