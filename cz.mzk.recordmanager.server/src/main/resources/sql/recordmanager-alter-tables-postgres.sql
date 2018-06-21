@@ -1138,3 +1138,7 @@ INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granul
 UPDATE oai_harvest_conf SET url='https://library.upol.cz/i2/i2.ws.oai.cls' WHERE import_conf_id=359;
 UPDATE oai_harvest_conf SET url='https://aleph.svkpk.cz/OAI',set_spec='PNA01-CPK-MARC21' WHERE import_conf_id=337;
 UPDATE oai_harvest_conf SET url='https://aleph.lib.cas.cz/OAI' WHERE import_conf_id=349;
+
+-- 20. 06. 2018 tomascejpek
+ALTER TABLE harvested_record ADD COLUMN sigla VARCHAR(10);
+CREATE INDEX harvested_record_sigla_idx ON harvested_record(sigla);
