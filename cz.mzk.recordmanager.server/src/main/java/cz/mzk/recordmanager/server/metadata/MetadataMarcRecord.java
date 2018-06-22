@@ -1,64 +1,105 @@
 package cz.mzk.recordmanager.server.metadata;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import cz.mzk.recordmanager.server.util.identifier.ISBNUtils;
-import cz.mzk.recordmanager.server.util.identifier.ISMNUtils;
-import cz.mzk.recordmanager.server.util.identifier.ISSNUtils;
-import cz.mzk.recordmanager.server.util.identifier.NoDataException;
+import com.google.common.primitives.Chars;
+import cz.mzk.recordmanager.server.export.IOFormat;
+import cz.mzk.recordmanager.server.marc.MarcRecord;
+import cz.mzk.recordmanager.server.model.*;
+import cz.mzk.recordmanager.server.model.HarvestedRecordFormat.HarvestedRecordFormatEnum;
+import cz.mzk.recordmanager.server.model.TezaurusRecord.TezaurusKey;
+import cz.mzk.recordmanager.server.util.CleaningUtils;
+import cz.mzk.recordmanager.server.util.Constants;
+import cz.mzk.recordmanager.server.util.MetadataUtils;
+import cz.mzk.recordmanager.server.util.UrlUtils;
+import cz.mzk.recordmanager.server.util.identifier.*;
 import org.marc4j.marc.DataField;
 import org.marc4j.marc.Subfield;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.primitives.Chars;
-
-import cz.mzk.recordmanager.server.export.IOFormat;
-import cz.mzk.recordmanager.server.marc.MarcRecord;
-import cz.mzk.recordmanager.server.model.Cnb;
-import cz.mzk.recordmanager.server.model.Ean;
-import cz.mzk.recordmanager.server.model.HarvestedRecordFormat.HarvestedRecordFormatEnum;
-import cz.mzk.recordmanager.server.model.Isbn;
-import cz.mzk.recordmanager.server.model.Ismn;
-import cz.mzk.recordmanager.server.model.Issn;
-import cz.mzk.recordmanager.server.model.Oclc;
-import cz.mzk.recordmanager.server.model.PublisherNumber;
-import cz.mzk.recordmanager.server.model.ShortTitle;
-import cz.mzk.recordmanager.server.model.TezaurusRecord.TezaurusKey;
-import cz.mzk.recordmanager.server.model.Title;
-import cz.mzk.recordmanager.server.util.Constants;
-import cz.mzk.recordmanager.server.util.identifier.EANUtils;
-import cz.mzk.recordmanager.server.util.MetadataUtils;
-import cz.mzk.recordmanager.server.util.UrlUtils;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class MetadataMarcRecord implements MetadataRecord {
-	
+
 	private static Logger logger = LoggerFactory.getLogger(MetadataMarcRecord.class);
-	
+
 	protected MarcRecord underlayingMarc;
 
-	protected static final Pattern PAGECOUNT_PATTERN = Pattern.compile("(\\d+)");
-	protected static final Pattern YEAR_PATTERN = Pattern.compile("\\d{4}");
-	protected static final Pattern SCALE_PATTERN = Pattern.compile("\\d+[ ^]*\\d+");
+	private static final Pattern PAGECOUNT_PATTERN = Pattern.compile("(\\d+)");
+	private static final Pattern YEAR_PATTERN = Pattern.compile("\\d{4}");
+	private static final Pattern SCALE_PATTERN = Pattern.compile("\\d+[ ^]*\\d+");
 	protected static final Pattern UUID_PATTERN = Pattern.compile("uuid:[\\w-]+");
-	protected static final Pattern OCLC_PATTERN= Pattern.compile("(\\(ocolc\\))(.*)", Pattern.CASE_INSENSITIVE);
-	protected static final Pattern PUBLISHER_NUMBER_PATTERN = Pattern.compile("\\W");
-	protected static final Pattern CPK0_PATTERN = Pattern.compile("cpk0");
-	protected static final Pattern METAPROXY_TAG_PATTERN = Pattern.compile("[17]..");
+	private static final Pattern OCLC_PATTERN = Pattern.compile("(\\(ocolc\\))(.*)", Pattern.CASE_INSENSITIVE);
+	private static final Pattern PUBLISHER_NUMBER_PATTERN = Pattern.compile("\\W");
+	private static final Pattern CPK0_PATTERN = Pattern.compile("cpk0");
+	private static final Pattern METAPROXY_TAG_PATTERN = Pattern.compile("[17]..");
+	private static final Pattern SCALE_REPLACE = Pattern.compile("[ ^]+");
 
-	protected static final Long MAX_PAGES = 10_000_000L;
+	// formats
+	private static final Pattern KARTOGRAFICKY_DOKUMENT = Pattern.compile("kartografick[yý]\\sdokument", Pattern.CASE_INSENSITIVE);
+	private static final Pattern START_CR = Pattern.compile("^cr", Pattern.CASE_INSENSITIVE);
+	private static final Pattern HUDEBNINA = Pattern.compile("hudebnina", Pattern.CASE_INSENSITIVE);
+	private static final Pattern GRAFIKA = Pattern.compile("grafika", Pattern.CASE_INSENSITIVE);
+	private static final Pattern START_G = Pattern.compile("^g", Pattern.CASE_INSENSITIVE);
+	private static final Pattern MIKRODOKUMENT = Pattern.compile("mikrodokument", Pattern.CASE_INSENSITIVE);
+	private static final Pattern START_H = Pattern.compile("^h", Pattern.CASE_INSENSITIVE);
+	private static final Pattern HMATOVE_PISMO = Pattern.compile("hmatov[eé]\\sp[ií]smo", Pattern.CASE_INSENSITIVE);
+	private static final Pattern MACAN = Pattern.compile("macan", Pattern.CASE_INSENSITIVE);
+	private static final Pattern ELEKTRONICKY_ZDROJ = Pattern.compile("elektronick[yý]\\szdroj", Pattern.CASE_INSENSITIVE);
+	private static final Pattern MULTIMEDIUM = Pattern.compile("multim[eé]dium", Pattern.CASE_INSENSITIVE);
+	private static final Pattern CD_ROM = Pattern.compile("cd-rom", Pattern.CASE_INSENSITIVE);
+	private static final Pattern DISKETA = Pattern.compile("disketa", Pattern.CASE_INSENSITIVE);
+	private static final Pattern COMP_CARRIER_338B = Pattern.compile("ck|cb|cd|ce|ca|cf|ch|cz", Pattern.CASE_INSENSITIVE);
+	private static final Pattern DVD = Pattern.compile("dvd", Pattern.CASE_INSENSITIVE);
+	private static final Pattern KOMPAKTNI_DISK = Pattern.compile("kompaktn[ií](?:ch)?\\sd[ei]sk[uů]?", Pattern.CASE_INSENSITIVE);
+	private static final Pattern ZVUKOVE_CD = Pattern.compile("zvukov[eéaá]\\sCD", Pattern.CASE_INSENSITIVE);
+	private static final Pattern CD = Pattern.compile("CD", Pattern.CASE_INSENSITIVE);
+	private static final Pattern CD_R = Pattern.compile("CD-R", Pattern.CASE_INSENSITIVE);
+	private static final Pattern ZVUKOVA_DESKA = Pattern.compile("zvukov(?:[aáeé]|ych|ých)\\sdes(?:ka|ky|ek)", Pattern.CASE_INSENSITIVE);
+	private static final Pattern DIGITAL_OR_12CM = Pattern.compile("digital|12\\s*cm", Pattern.CASE_INSENSITIVE);
+	private static final Pattern GRAMOFONOVA_DESKA = Pattern.compile("gramofonov(?:[aáeé]|ych|ých)\\sdes(?:ka|ky|ek)", Pattern.CASE_INSENSITIVE);
+	private static final Pattern ANALOG = Pattern.compile("analog", Pattern.CASE_INSENSITIVE);
+	private static final Pattern LP_OR_SP = Pattern.compile("LP|SP");
+	private static final Pattern ZVUKOVA_KAZETA = Pattern.compile("zvukov(?:a|á|e|é|ych|ých)\\skaze(?:ta|ty|t)", Pattern.CASE_INSENSITIVE);
+	private static final Pattern MAGNETOFONOVA_KAZETA = Pattern.compile("magnetofonov(?:a|á|e|é|ych|ých)\\skaze(?:ta|ty|t)", Pattern.CASE_INSENSITIVE);
+	private static final Pattern ZVUKOVY_ZAZNAM = Pattern.compile("zvukov[yý]\\sz[aá]znam", Pattern.CASE_INSENSITIVE);
+	private static final Pattern START_S = Pattern.compile("^s", Pattern.CASE_INSENSITIVE);
+	private static final Pattern MC_OR_KZ_MGK = Pattern.compile("mc|kz|mgk", Pattern.CASE_INSENSITIVE);
+	private static final Pattern BLURAY = Pattern.compile("blu.*ray", Pattern.CASE_INSENSITIVE);
+	private static final Pattern VHS = Pattern.compile("vhs", Pattern.CASE_INSENSITIVE);
+	private static final Pattern VIDEOKAZETA = Pattern.compile("videokazet[ay]?", Pattern.CASE_INSENSITIVE);
+	private static final Pattern DVD_VIDEO = Pattern.compile("DVD[ -]?vide[oa]");
+	private static final Pattern VIDEODISK = Pattern.compile("videodisk", Pattern.CASE_INSENSITIVE);
+	private static final Pattern VIDEOZAZNAM = Pattern.compile("videoz[aá]znam", Pattern.CASE_INSENSITIVE);
+	private static final Pattern START_V = Pattern.compile("^v", Pattern.CASE_INSENSITIVE);
+	private static final Pattern VIDEO_OTHER_F338 = Pattern.compile("vr|vz|vc|mc|mf|mr|mo|mz");
+	private static final Pattern OTHER_F336 = Pattern.compile("tcf|tdm|tdf", Pattern.CASE_INSENSITIVE);
+
+	private static final Long MAX_PAGES = 10_000_000L;
 	private static final String INVALID_YEAR = "Invalid year: %s";
-	private static final String[] TITLE_TAGS = new String[]{"245", "240"};
-	private static final char[] SHORT_TITLE_SUBFIELDS = new char[]{'a', 'n', 'p'};
-	private static final char[] TITLE_SUBFIELDS = new char[]{'a', 'b', 'n', 'p'};
+	private static final String[] TITLE_TAGS = {"245", "240"};
+	private static final char[] SHORT_TITLE_SUBFIELDS = {'a', 'n', 'p'};
+	private static final char[] TITLE_SUBFIELDS = {'a', 'b', 'n', 'p'};
+
+	private static final char[] ARRAY_AT = {'a', 't'};
+	private static final char[] ARRAY_CDM = {'c', 'd', 'm'};
+	private static final char[] ARRAY_IS = {'i', 's'};
+	private static final char[] ARRAY_AB = {'a', 'b'};
+	private static final char[] ARRAY_EF = {'e', 'f'};
+	private static final char[] ARRAY_CD = {'c', 'd'};
+	private static final char[] ARRAY_KG = {'k', 'g'};
+	private static final char[] ARRAY_ACDPT = {'a', 'c', 'd', 'p', 't'};
+	private static final char[] ARRAY_ABC = {'a', 'b', 'c'};
+	private static final char[] ARRAY_EFK = {'e', 'f', 'k'};
+	private static final char[] ARRAY_ACDIJPT = {'a', 'c', 'd', 'i', 'j', 'p', 't'};
+	private static final char[] ARRAY_EFGKOPR = {'e', 'f', 'g', 'k', 'o', 'p', 'r'};
+	private static final char[] ARRAY_ZGEIGT = {'z', 'g', 'e', 'i', 'q', 't'};
+	private static final char[] ARRAY_VM = {'v', 'm'};
+	private static final char[] ARRAY_OPR = {'o', 'p', 'r'};
+	private static final char[] ARRAY_OQ = {'o', 'q'};
+
+	private static final String URL_COMMENT_FORMAT = "%s (%s)";
 
 	public MetadataMarcRecord(MarcRecord underlayingMarc) {
 		if (underlayingMarc == null) {
@@ -113,16 +154,16 @@ public class MetadataMarcRecord implements MetadataRecord {
 
 	@Override
 	public String getISSNSeries() {
-		String result = underlayingMarc.getField("490", 'x'); 
+		String result = underlayingMarc.getField("490", 'x');
 		if (result != null) {
 			return result.substring(0, Math.min(result.length(), 300));
 		}
 		return null;
 	}
-	
+
 	@Override
 	public String getISSNSeriesOrder() {
-		String result = underlayingMarc.getField("490", 'v'); 
+		String result = underlayingMarc.getField("490", 'v');
 		if (result != null) {
 			return result.substring(0, Math.min(result.length(), 300));
 		}
@@ -229,476 +270,424 @@ public class MetadataMarcRecord implements MetadataRecord {
 		return underlayingMarc.export(iOFormat);
 	}
 
-	protected boolean isBook(){		
-		String ldr06 = Character.toString(underlayingMarc.getLeader().getTypeOfRecord());
-		String ldr07 = Character.toString(underlayingMarc.getLeader().getImplDefined1()[0]);
-		
+	protected boolean isBook() {
+		char ldr06 = Character.toLowerCase(underlayingMarc.getLeader().getTypeOfRecord());
+		char ldr07 = Character.toLowerCase(underlayingMarc.getLeader().getImplDefined1()[0]);
+
 		String f006 = underlayingMarc.getControlField("006");
-	    String f006_00 = (f006 != null) && (f006.length() > 0) ? Character.toString(f006.charAt(0)) : "";
-		
-		if(ldr06.matches("(?i)[at]") && ldr07.matches("(?i)[cdm]"))	return true;				
-		if(f006_00.matches("(?i)[a]")) return true;
-		
-		return false;		
+		char f006_00 = (f006 != null && !f006.isEmpty()) ? Character.toLowerCase(f006.charAt(0)) : ' ';
+
+		return (MetadataUtils.containsChar(ARRAY_AT, ldr06) && MetadataUtils.containsChar(ARRAY_CDM, ldr07))
+				|| f006_00 == 'a';
 	}
-	
-	protected boolean isPeriodical(){
-		String ldr07 = Character.toString(underlayingMarc.getLeader().getImplDefined1()[0]);
-		
-		if(ldr07.matches("(?i)[is]")) return true;		
-		
-		return false;		
+
+	protected boolean isPeriodical() {
+		char ldr07 = Character.toLowerCase(underlayingMarc.getLeader().getImplDefined1()[0]);
+		return MetadataUtils.containsChar(ARRAY_IS, ldr07);
 	}
-	
-	protected boolean isArticle(){
-		String ldr07 = Character.toString(underlayingMarc.getLeader().getImplDefined1()[0]);
-		
-		if(ldr07.matches("(?i)[ab]")) return true;		
-		
-		return false;		
+
+	protected boolean isArticle() {
+		char ldr07 = Character.toLowerCase(underlayingMarc.getLeader().getImplDefined1()[0]);
+		return MetadataUtils.containsChar(ARRAY_AB, ldr07);
 	}
 
 	protected boolean isArticle773() {
 		return !underlayingMarc.getDataFields("773").isEmpty();
 	}
 
-	protected boolean isMap(){
-		String ldr06 = Character.toString(underlayingMarc.getLeader().getTypeOfRecord());
-		
+	protected boolean isMap() {
+		char ldr06 = Character.toLowerCase(underlayingMarc.getLeader().getTypeOfRecord());
+
 		String f006 = underlayingMarc.getControlField("006");
-		String f006_00 = (f006 != null) && (f006.length() > 0) ? Character.toString(f006.charAt(0)) : "";
-		
-	    String f007 = underlayingMarc.getControlField("007");
-	    String f007_00 = (f007 != null) && (f007.length() > 0) ? Character.toString(f007.charAt(0)) : "";
-		
-		String f245h = underlayingMarc.getField("245", 'h');		
-		if(f245h == null) f245h = "";
-		
+		char f006_00 = (f006 != null && !f006.isEmpty()) ? Character.toLowerCase(f006.charAt(0)) : ' ';
+
+		String f007 = underlayingMarc.getControlField("007");
+		char f007_00 = (f007 != null && !f007.isEmpty()) ? Character.toLowerCase(f007.charAt(0)) : ' ';
+
+		String f245h = underlayingMarc.getField("245", 'h');
+		if (f245h == null) f245h = "";
+
 		String f336b = underlayingMarc.getField("336", 'b');
-		if(f336b == null) f336b = "";
-		
-		if(ldr06.matches("(?i)[ef]")) return true;
-		if(f006_00.matches("(?i)[ef]")) return true;
-		if(f245h.matches("(?i).*kartografický\\sdokument.*")) return true;
-		if(f007_00.matches("(?i)a")) return true;
-		if(f336b.matches("(?i)cr.*")) return true;
-		
-		return false;		
+		if (f336b == null) f336b = "";
+
+		return MetadataUtils.containsChar(ARRAY_EF, ldr06)
+				|| MetadataUtils.containsChar(ARRAY_EF, f006_00)
+				|| KARTOGRAFICKY_DOKUMENT.matcher(f245h).find()
+				|| f007_00 == 'a'
+				|| START_CR.matcher(f336b).find();
 	}
 
 	@Override
 	public boolean isMusicalScores() {
-		String ldr06 = Character.toString(underlayingMarc.getLeader().getTypeOfRecord());
-		
-		String f006 = underlayingMarc.getControlField("006");
-		String f006_00 = (f006 != null) && (f006.length() > 0) ? Character.toString(f006.charAt(0)) : "";
-		
-		String f245h = underlayingMarc.getField("245", 'h');		
-		if(f245h == null) f245h = "";
-		
-		String f336b = underlayingMarc.getField("336", 'b');
-		if(f336b == null) f336b = "";
+		char ldr06 = Character.toLowerCase(underlayingMarc.getLeader().getTypeOfRecord());
 
-		if(ldr06.matches("(?i)[cd]"))return true;
-		if(f006_00.matches("(?i)[cd]") && f245h.matches("(?i).*hudebnina.*")){
-			return true;
-		}
-		if(f336b.equalsIgnoreCase("tcm")) return true;
-		if(f336b.equalsIgnoreCase("ntm")) return true;
-		if(f336b.equalsIgnoreCase("ntv")) return true;
-		if(f336b.equalsIgnoreCase("tcn")) return true;
-		
-		return false;		
+		String f006 = underlayingMarc.getControlField("006");
+		char f006_00 = (f006 != null) && (!f006.isEmpty()) ? Character.toLowerCase(f006.charAt(0)) : ' ';
+
+		String f245h = underlayingMarc.getField("245", 'h');
+		if (f245h == null) f245h = "";
+
+		String f336b = underlayingMarc.getField("336", 'b');
+		if (f336b == null) f336b = "";
+
+		return MetadataUtils.containsChar(ARRAY_CD, ldr06)
+				|| (MetadataUtils.containsChar(ARRAY_CD, f006_00) && HUDEBNINA.matcher(f245h).find())
+				|| f336b.equalsIgnoreCase("tcm")
+				|| f336b.equalsIgnoreCase("ntm")
+				|| f336b.equalsIgnoreCase("ntv")
+				|| f336b.equalsIgnoreCase("tcn");
 	}
 
 	@Override
 	public boolean isVisualDocument() {
-		String ldr06 = Character.toString(underlayingMarc.getLeader().getTypeOfRecord());
-		
+		char ldr06 = Character.toLowerCase(underlayingMarc.getLeader().getTypeOfRecord());
+
 		String f006 = underlayingMarc.getControlField("006");
-		String f006_00 = (f006 != null) && (f006.length() > 0) ? Character.toString(f006.charAt(0)) : "";
-		
+		char f006_00 = (f006 != null) && !f006.isEmpty() ? Character.toLowerCase(f006.charAt(0)) : ' ';
+
 		String f007 = underlayingMarc.getControlField("007");
-	    String f007_00 = (f007 != null) && (f007.length() > 0) ? Character.toString(f007.charAt(0)) : "";
-		
-		String f245h = underlayingMarc.getField("245", 'h');		
-		if(f245h == null) f245h = "";
+		char f007_00 = (f007 != null) && !f007.isEmpty() ? Character.toLowerCase(f007.charAt(0)) : ' ';
+
+		String f245h = underlayingMarc.getField("245", 'h');
+		if (f245h == null) f245h = "";
 
 		String f336b = underlayingMarc.getField("336", 'b');
-		if(f336b == null) f336b = "";
-		
-		String f337b = underlayingMarc.getField("337", 'b');
-		if(f337b == null) f337b = "";
-		
-		String f338b = underlayingMarc.getField("338", 'b');
-		if(f338b == null) f338b = "";
-		
-		if(ldr06.matches("(?i)[kg]")) return true;		
-		if(f007_00.matches("(?i)[kg]")) return true;
-		if(f245h.matches("(?i).*grafika.*")) return true;
-		if(f006_00.matches("(?i)[kg]")) return true;
-		if(f336b.matches("(?i)sti|tci|cri|crt")) return true;
-		if(f337b.matches("(?i)g")) return true;
-		if(f338b.matches("(?i)g.*")) return true;		
-		
-		return false;		
-	}
-	
-	protected boolean isMicroform(){
-		String ldr06 = Character.toString(underlayingMarc.getLeader().getTypeOfRecord());
-				
-		String f007 = underlayingMarc.getControlField("007");
-	    String f007_00 = (f007 != null) && (f007.length() > 0) ? Character.toString(f007.charAt(0)) : "";
-		
-		String f008 = underlayingMarc.getControlField("008");
-	    String f008_23 = (f008 != null) && (f008.length() > 23) ? Character.toString(f008.charAt(23)) : "";
-	    String f008_29 = (f008 != null) && (f008.length() > 29) ? Character.toString(f008.charAt(29)) : "";
+		if (f336b == null) f336b = "";
 
-		String f245h = underlayingMarc.getField("245", 'h');		
-		if(f245h == null) f245h = "";
-		
 		String f337b = underlayingMarc.getField("337", 'b');
-		if(f337b == null) f337b = "";
-		
+		if (f337b == null) f337b = "";
+
 		String f338b = underlayingMarc.getField("338", 'b');
-		if(f338b == null) f338b = "";
-		
-		if(ldr06.matches("(?i)[acdpt]") && f008_23.matches("(?i)[abc]")) return true;
-		if(ldr06.matches("(?i)[efk]") && f008_29.matches("(?i)b")) return true;
-		if(f007_00.matches("(?i)h")) return true;
-		if(f245h.matches("(?i).*mikrodokument.*")) return true;
-		if(f337b.matches("(?i)h")) return true;
-		if(f338b.matches("(?i)h.*")) return true;
-		
-		return false;
+		if (f338b == null) f338b = "";
+
+		return MetadataUtils.containsChar(ARRAY_KG, ldr06)
+				|| MetadataUtils.containsChar(ARRAY_KG, f007_00)
+				|| GRAFIKA.matcher(f245h).find()
+				|| MetadataUtils.containsChar(ARRAY_KG, f006_00)
+				|| f336b.equalsIgnoreCase("sti")
+				|| f336b.equalsIgnoreCase("tci")
+				|| f336b.equalsIgnoreCase("cri")
+				|| f336b.equalsIgnoreCase("crt")
+				|| f337b.equalsIgnoreCase("g")
+				|| START_G.matcher(f338b).find();
+	}
+
+	protected boolean isMicroform() {
+		char ldr06 = Character.toLowerCase(underlayingMarc.getLeader().getTypeOfRecord());
+
+		String f007 = underlayingMarc.getControlField("007");
+		char f007_00 = (f007 != null) && !f007.isEmpty() ? Character.toLowerCase(f007.charAt(0)) : ' ';
+
+		String f008 = underlayingMarc.getControlField("008");
+		char f008_23 = (f008 != null) && (f008.length() > 23) ? Character.toLowerCase(f008.charAt(23)) : ' ';
+		char f008_29 = (f008 != null) && (f008.length() > 29) ? Character.toLowerCase(f008.charAt(29)) : ' ';
+
+		String f245h = underlayingMarc.getField("245", 'h');
+		if (f245h == null) f245h = "";
+
+		String f337b = underlayingMarc.getField("337", 'b');
+		if (f337b == null) f337b = "";
+
+		String f338b = underlayingMarc.getField("338", 'b');
+		if (f338b == null) f338b = "";
+
+		return (MetadataUtils.containsChar(ARRAY_ACDPT, ldr06) && MetadataUtils.containsChar(ARRAY_ABC, f008_23))
+				|| (MetadataUtils.containsChar(ARRAY_EFK, ldr06) && f008_29 == 'b')
+				|| f007_00 == 'h'
+				|| MIKRODOKUMENT.matcher(f245h).find()
+				|| f337b.equalsIgnoreCase("h")
+				|| START_H.matcher(f338b).find();
 	}
 
 	@Override
 	public boolean isBlindBraille() {
 		String f007 = underlayingMarc.getControlField("007");
-		String f007_00 = (f007 != null) && (f007.length() > 0) ? Character.toString(f007.charAt(0)) : "";
-		String f007_01 = (f007 != null) && (f007.length() > 1) ? Character.toString(f007.charAt(1)) : "";
-
-		String f245h = underlayingMarc.getField("245", 'h');		
-		if(f245h == null) f245h = "";
-		
-		String f336b = underlayingMarc.getField("336", 'b');
-		if(f336b == null) f336b = "";
-
-		if(f007_00.matches("(?i)f") && f007_01.matches("(?i)b") && f245h.matches("(?i).*hmatové\\spísmo.*")){
-			return true;
-		}
-		
-		if(f007_00.matches("(?i)t") && f007_01.matches("(?i)c")){
-			return true;
-		}
-		if(f336b.matches("(?i)tct|tcm|tci|tcf")) return true;
-		
-		return false;
-	}
-	
-	protected boolean isElectronicSource() {
-		String ldr06 = Character.toString(underlayingMarc.getLeader().getTypeOfRecord());
-		
-		String f006 = underlayingMarc.getControlField("006");
-		String f006_00 = (f006 != null) && (f006.length() > 0) ? Character.toString(f006.charAt(0)) : "";
-		String f006_06 = (f006 != null) && (f006.length() > 6) ? Character.toString(f006.charAt(6)) : "";
-		
-		String f008 = underlayingMarc.getControlField("008");
-		String f008_23 = (f008 != null) && (f008.length() > 23) ? Character.toString(f008.charAt(23)) : "";
-		String f008_29 = (f008 != null) && (f008.length() > 29) ? Character.toString(f008.charAt(29)) : "";
-		
-		String f338b = underlayingMarc.getField("338", 'b');
-		if (f338b == null) f338b = "";
-		
-		if (ldr06.matches("(?i)[acdijpt]") && f008_23.matches("(?i)[oq]")) {
-			return true;
-		}
-		if (f006_00.matches("(?i)[acdijpt]") && f006_06.matches("(?i)[oq]")) {
-			return true;
-		}
-		if (ldr06.matches("(?i)[efgkopr]") && f008_29.matches("(?i)[oq]")) {
-			return true;
-		}
-		if (f006_00.matches("(?i)[efgkopr]") && f006_06.matches("(?i)[oq]")) {
-			return true;
-		}
-		if (f338b.matches("(?i)cr")) return true;
-		
-		return false;
-	}
-
-	protected boolean isComputerCarrier(){
-		String ldr06 = Character.toString(underlayingMarc.getLeader().getTypeOfRecord());
-		
-		String f006 = underlayingMarc.getControlField("006");
-		String f006_00 = (f006 != null) && (f006.length() > 0) ? Character.toString(f006.charAt(0)) : "";
-		String f006_06 = (f006 != null) && (f006.length() > 6) ? Character.toString(f006.charAt(6)) : "";
-		
-		String f007 = underlayingMarc.getControlField("007");
-		String f007_00 = (f007 != null) && (f007.length() > 0) ? Character.toString(f007.charAt(0)) : "";
-		String f007_01 = (f007 != null) && (f007.length() > 1) ? Character.toString(f007.charAt(1)) : "";
-		
-		String f008 = underlayingMarc.getControlField("008");
-		String f008_23 = (f008 != null) && (f008.length() > 23) ? Character.toString(f008.charAt(23)) : "";
-		String f008_29 = (f008 != null) && (f008.length() > 29) ? Character.toString(f008.charAt(29)) : "";
+		char f007_00 = (f007 != null) && !f007.isEmpty() ? Character.toLowerCase(f007.charAt(0)) : ' ';
+		char f007_01 = (f007 != null) && (f007.length() > 1) ? Character.toLowerCase(f007.charAt(1)) : ' ';
 
 		String f245h = underlayingMarc.getField("245", 'h');
-		if(f245h == null) f245h = "";
-		
-		String f300a = underlayingMarc.getField("300", 'a');
-		if(f300a == null) f300a = "";
-		
+		if (f245h == null) f245h = "";
+
 		String f336b = underlayingMarc.getField("336", 'b');
-		if(f336b == null) f336b = "";
-		
-		String f338b = underlayingMarc.getField("338", 'b');
-		if(f338b == null) f338b = "";
-		
-		if(f245h.matches("(?i).*elektronický\\szdroj.*")){
-			return true;
-		}
-		if(ldr06.matches("(?i)[acdijpt]") && f008_23.matches("(?i)s")){
-			return true;
-		}
-		if(f006_00.matches("(?i)[acdijpt]") && f006_06.matches("(?i)s")){
-			return true;
-		}
-		if(ldr06.matches("(?i)[efgkopr]") && f008_29.matches("(?i)s")){
-			return true;
-		}
-		if(f006_00.matches("(?i)[efgkopr]") && f006_06.matches("(?i)s")){
-			return true;
-		}
-		if(ldr06.matches("(?i)m") && f006_00.matches("(?i)m")){
-			return true;
-		}
-		if(ldr06.matches("(?i)m") && f245h.matches("(?i).*multim[eé]dium.*") && f300a.matches("(?i).*cd-rom.*")) return true;
-		if(f007_00.matches("(?i)c") && !f007_01.matches("(?i)r")) return true;
-		if(f300a.matches("(?i).*disketa.*")) return true;
-		if(f336b.matches("(?i)cod|cop")) return true;
-		if(f338b.matches("(?i)ck|cb|cd|ce|ca|cf|ch|cz")) return true;
-		
-		return false;
+		if (f336b == null) f336b = "";
+
+		return (f007_00 == 'f' && f007_01 == 'b' && HMATOVE_PISMO.matcher(f245h).find())
+				|| (f007_00 == 't' && f007_01 == 'c')
+				|| f336b.equalsIgnoreCase("tct")
+				|| f336b.equalsIgnoreCase("tcm")
+				|| f336b.equalsIgnoreCase("tci")
+				|| f336b.equalsIgnoreCase("tcf");
 	}
-	
-	protected HarvestedRecordFormatEnum getAudioFormat(){
-		String ldr06 = Character.toString(underlayingMarc.getLeader().getTypeOfRecord());
-		
+
+	protected boolean isElectronicSource() {
+		char ldr06 = Character.toLowerCase(underlayingMarc.getLeader().getTypeOfRecord());
+
 		String f006 = underlayingMarc.getControlField("006");
-	    String f006_00 = (f006 != null) && (f006.length() > 0) ? Character.toString(f006.charAt(0)) : "";
-		
-	    String f007 = underlayingMarc.getControlField("007");
-	    String f007_00 = (f007 != null) && (f007.length() > 0) ? Character.toString(f007.charAt(0)) : "";
-	    String f007_01 = (f007 != null) && (f007.length() > 1) ? Character.toString(f007.charAt(1)) : "";
-	    	    
-		String f245h = underlayingMarc.getField("245", 'h');		
-		if(f245h == null) f245h = "";
-		
+		char f006_00 = (f006 != null) && !f006.isEmpty() ? Character.toLowerCase(f006.charAt(0)) : ' ';
+		char f006_06 = (f006 != null) && (f006.length() > 6) ? Character.toLowerCase(f006.charAt(6)) : ' ';
+
+		String f008 = underlayingMarc.getControlField("008");
+		char f008_23 = (f008 != null) && (f008.length() > 23) ? Character.toLowerCase(f008.charAt(23)) : ' ';
+		char f008_29 = (f008 != null) && (f008.length() > 29) ? Character.toLowerCase(f008.charAt(29)) : ' ';
+
+		String f338b = underlayingMarc.getField("338", 'b');
+		if (f338b == null) f338b = "";
+
+		return (MetadataUtils.containsChar(ARRAY_ACDIJPT, ldr06) && MetadataUtils.containsChar(ARRAY_OQ, f008_23))
+				|| (MetadataUtils.containsChar(ARRAY_ACDIJPT, f006_00) && MetadataUtils.containsChar(ARRAY_OQ, f006_06))
+				|| (MetadataUtils.containsChar(ARRAY_EFGKOPR, ldr06) && MetadataUtils.containsChar(ARRAY_OQ, f008_29))
+				|| (MetadataUtils.containsChar(ARRAY_EFGKOPR, f006_00) && MetadataUtils.containsChar(ARRAY_OQ, f006_06))
+				|| f338b.equalsIgnoreCase("cr");
+	}
+
+	protected boolean isComputerCarrier() {
+		char ldr06 = Character.toLowerCase(underlayingMarc.getLeader().getTypeOfRecord());
+
+		String f006 = underlayingMarc.getControlField("006");
+		char f006_00 = (f006 != null) && !f006.isEmpty() ? Character.toLowerCase(f006.charAt(0)) : ' ';
+		char f006_06 = (f006 != null) && (f006.length() > 6) ? Character.toLowerCase(f006.charAt(6)) : ' ';
+
+		String f007 = underlayingMarc.getControlField("007");
+		char f007_00 = (f007 != null) && !f007.isEmpty() ? Character.toLowerCase(f007.charAt(0)) : ' ';
+		char f007_01 = (f007 != null) && (f007.length() > 1) ? Character.toLowerCase(f007.charAt(1)) : ' ';
+
+		String f008 = underlayingMarc.getControlField("008");
+		char f008_23 = (f008 != null) && (f008.length() > 23) ? Character.toLowerCase(f008.charAt(23)) : ' ';
+		char f008_29 = (f008 != null) && (f008.length() > 29) ? Character.toLowerCase(f008.charAt(29)) : ' ';
+
+		String f245h = underlayingMarc.getField("245", 'h');
+		if (f245h == null) f245h = "";
+
+		String f300a = underlayingMarc.getField("300", 'a');
+		if (f300a == null) f300a = "";
+
+		String f336b = underlayingMarc.getField("336", 'b');
+		if (f336b == null) f336b = "";
+
+		String f338b = underlayingMarc.getField("338", 'b');
+		if (f338b == null) f338b = "";
+
+		return ELEKTRONICKY_ZDROJ.matcher(f245h).find()
+				|| (MetadataUtils.containsChar(ARRAY_ACDIJPT, ldr06) && f008_23 == 's')
+				|| (MetadataUtils.containsChar(ARRAY_ACDIJPT, f006_00) && f006_06 == 's')
+				|| (MetadataUtils.containsChar(ARRAY_EFGKOPR, ldr06) && f008_29 == 's')
+				|| (MetadataUtils.containsChar(ARRAY_EFGKOPR, f006_00) && f006_06 == 's')
+				|| (ldr06 == 'm' && f006_00 == 'm')
+				|| (ldr06 == 'm' && MULTIMEDIUM.matcher(f245h).find() && CD_ROM.matcher(f300a).find())
+				|| (f007_00 == 'c' && f007_01 != 'r')
+				|| DISKETA.matcher(f300a).find()
+				|| f336b.equalsIgnoreCase("cod")
+				|| f336b.equalsIgnoreCase("cop")
+				|| COMP_CARRIER_338B.matcher(f338b).matches();
+	}
+
+	protected HarvestedRecordFormatEnum getAudioFormat() {
+		char ldr06 = Character.toLowerCase(underlayingMarc.getLeader().getTypeOfRecord());
+
+		String f006 = underlayingMarc.getControlField("006");
+		char f006_00 = (f006 != null) && !f006.isEmpty() ? Character.toLowerCase(f006.charAt(0)) : ' ';
+
+		String f007 = underlayingMarc.getControlField("007");
+		char f007_00 = (f007 != null) && !f007.isEmpty() ? Character.toLowerCase(f007.charAt(0)) : ' ';
+		char f007_01 = (f007 != null) && (f007.length() > 1) ? Character.toLowerCase(f007.charAt(1)) : ' ';
+
+		String f245h = underlayingMarc.getField("245", 'h');
+		if (f245h == null) f245h = "";
+
 		String f300 = underlayingMarc.getDataFields("300").toString();
 		String f500 = underlayingMarc.getDataFields("500").toString();
-		
+
 		String f300a = underlayingMarc.getField("300", 'a');
-		if(f300a == null) f300a = "";
-		
+		if (f300a == null) f300a = "";
+
 		String f336b = underlayingMarc.getField("336", 'b');
-		if(f336b == null) f336b = "";
-		
+		if (f336b == null) f336b = "";
+
 		String f337b = underlayingMarc.getField("337", 'b');
-		if(f337b == null) f337b = "";
-				
+		if (f337b == null) f337b = "";
+
 		String f338b = underlayingMarc.getField("338", 'b');
-		if(f338b == null) f338b = "";
-				
+		if (f338b == null) f338b = "";
+
 		// AUDIO_CD
 		for (String data : new String[]{f300, f500}) {
-			if(data.matches("(?i).*kompaktn[ií](ch)?\\sd[ei]sk(ů)?.*")) return HarvestedRecordFormatEnum.AUDIO_CD;
+			if (KOMPAKTNI_DISK.matcher(data).find()
+					|| (CD_R.matcher(data).find() && !CD_ROM.matcher(data).find()))
+				return HarvestedRecordFormatEnum.AUDIO_CD;
 		}
-		if(f300.matches("((?i).*zvukov[eéaá])\\sCD.*")) return HarvestedRecordFormatEnum.AUDIO_CD;
-		if(f300a.matches(".*CD.*")) {
-			if(!f300a.matches(".*CD-ROM.*")) return HarvestedRecordFormatEnum.AUDIO_CD;
-		}
-		for (String data : new String[]{f300, f500}) {
-			if(data.matches(".*CD-R.*") && !data.matches(".*CD-ROM.*")) return HarvestedRecordFormatEnum.AUDIO_CD;
-		}
-		if(f300.matches("(?i).*zvukov([aáeé]|ych|ých)\\sdes(ka|ky|ek).*") && f300.matches("(?i).*(digital|12\\s*cm).*")) return HarvestedRecordFormatEnum.AUDIO_CD;
-	
+		if (ZVUKOVE_CD.matcher(f300).find()
+				|| (CD.matcher(f300a).find() && !CD_ROM.matcher(f300a).find())
+				|| (ZVUKOVA_DESKA.matcher(f300).find() && DIGITAL_OR_12CM.matcher(f300).find()))
+			return HarvestedRecordFormatEnum.AUDIO_CD;
+
 		// AUDIO_LP
-		if(f300.matches("(?i).*gramofonov([aáeé]|ych|ých)\\sdes(ka|ky|ek).*")) return HarvestedRecordFormatEnum.AUDIO_LP;
-		if(f300.matches("(?i).*zvukov([aáeé]|ych|ých)\\sdes(ka|ky|ek).*") && f300.matches("(?i).*analog.*")) return HarvestedRecordFormatEnum.AUDIO_LP;
-		if(f300a.matches(".*LP.*")) return HarvestedRecordFormatEnum.AUDIO_LP;
-		if(f300a.matches(".*SP.*")) return HarvestedRecordFormatEnum.AUDIO_LP;
-		
+		if (GRAMOFONOVA_DESKA.matcher(f300).find()
+				|| (ZVUKOVA_DESKA.matcher(f300).find() && ANALOG.matcher(f300).find())
+				|| LP_OR_SP.matcher(f300a).find())
+			return HarvestedRecordFormatEnum.AUDIO_LP;
+
 		// AUDIO_CASSETTE
-		if(f007_00.matches("(?i)s") && f338b.matches("(?i)ss")) return HarvestedRecordFormatEnum.AUDIO_CASSETTE;
-		if(f007_00.matches("(?i)s") && f007_01.matches("(?i)[zgeiqt]")) return HarvestedRecordFormatEnum.AUDIO_CASSETTE;
-		if(f300.matches("(?i).*zvukov(a|á|e|é|ych|ých)\\skaze(ta|ty|t).*")) return HarvestedRecordFormatEnum.AUDIO_CASSETTE;
-		if(f300.matches("(?i).*(mc|kz|mgk).*")) return HarvestedRecordFormatEnum.AUDIO_CASSETTE;
-		if(f300.matches("(?i).*magnetofonov(a|á|e|é|ych|ých)\\skaze(ta|ty|t).*")) return HarvestedRecordFormatEnum.AUDIO_CASSETTE;
-		
+		if ((f007_00 == 's' && f338b.equalsIgnoreCase("ss"))
+				|| (f007_00 == 's' && MetadataUtils.containsChar(ARRAY_ZGEIGT, f007_01))
+				|| ZVUKOVA_KAZETA.matcher(f300).find()
+				|| MC_OR_KZ_MGK.matcher(f300).find()
+				|| MAGNETOFONOVA_KAZETA.matcher(f300).find())
+			return HarvestedRecordFormatEnum.AUDIO_CASSETTE;
+
 		// AUDIO_OTHER
-		if(ldr06.matches("(?i)[ij]")) return HarvestedRecordFormatEnum.AUDIO_OTHER;
-		if(f007_00.matches("(?i)s")) return HarvestedRecordFormatEnum.AUDIO_OTHER;
-		if(f245h.matches("(?i).*zvukový\\száznam.*")) return HarvestedRecordFormatEnum.AUDIO_OTHER;
-		if(f337b.matches("(?i)s")) return HarvestedRecordFormatEnum.AUDIO_OTHER;
-		if(f006_00.matches("(?i)[ij]")) return HarvestedRecordFormatEnum.AUDIO_OTHER;
-		if(f338b.matches("(?i)s.*")) return HarvestedRecordFormatEnum.AUDIO_OTHER;
-		if(f007_00.matches("(?i)i")) return HarvestedRecordFormatEnum.AUDIO_OTHER;
-		if(f336b.matches("(?i)spw|snd")) return HarvestedRecordFormatEnum.AUDIO_OTHER;
-		
+		if ((ldr06 == 'i' || ldr06 == 'j')
+				|| f007_00 == 's'
+				|| ZVUKOVY_ZAZNAM.matcher(f245h).find()
+				|| f337b.equalsIgnoreCase("s")
+				|| (f006_00 == 'i' || f006_00 == 'j')
+				|| START_S.matcher(f338b).find()
+				|| f007_00 == 'i'
+				|| (f336b.equalsIgnoreCase("spw") || f336b.equalsIgnoreCase("snd")))
+			return HarvestedRecordFormatEnum.AUDIO_OTHER;
+
 		return null;
 	}
-	
+
 	protected boolean isAudioDVD() {
-		String ldr06 = Character.toString(underlayingMarc.getLeader().getTypeOfRecord());
-		
+		char ldr06 = Character.toLowerCase(underlayingMarc.getLeader().getTypeOfRecord());
+
 		String f300a = underlayingMarc.getField("300", 'a');
-		if(f300a == null) f300a = "";
-		
-		// AUDIO_DVD
-		if(ldr06.matches("(?i)[ij]") && f300a.matches("(?i).*dvd.*")) return true;
-		
-		return false;
-	}
-	
-	protected HarvestedRecordFormatEnum getVideoDocument(){
-		String ldr06 = Character.toString(underlayingMarc.getLeader().getTypeOfRecord());
-		
-		String f006 = underlayingMarc.getControlField("006");
-		String f006_00 = (f006 != null) && (f006.length() > 0) ? Character.toString(f006.charAt(0)) : "";
-	    String f006_16 = (f006 != null) && (f006.length() > 16) ? Character.toString(f006.charAt(16)) : "";
-		
-		String f007 = underlayingMarc.getControlField("007");
-	    String f007_00 = (f007 != null) && (f007.length() > 0) ? Character.toString(f007.charAt(0)) : "";
-	    String f007_04 = (f007 != null) && (f007.length() > 4) ? Character.toString(f007.charAt(4)) : "";
-		
-	    String f008 = underlayingMarc.getControlField("008");
-	    String f008_33 = (f008 != null) && (f008.length() > 33) ? Character.toString(f008.charAt(33)) : "";
-	    
-	    String f245h = underlayingMarc.getField("245", 'h');		
-		if(f245h == null) f245h = "";
-		
-		String f300 = underlayingMarc.getDataFields("300").toString();
-		
-		String f300a = underlayingMarc.getField("300", 'a');
-		if(f300a == null) f300a = "";
-		
-		String f336b = underlayingMarc.getField("336", 'b');
-		if(f336b == null) f336b = "";
-		
-		String f337b = underlayingMarc.getField("337", 'b');
-		if(f337b == null) f337b = "";
-		
-		String f338b = underlayingMarc.getField("338", 'b');
-		if(f338b == null) f338b = "";
-		
-		String f500 = underlayingMarc.getDataFields("500").toString();
-		
-		// Bluray
-		if(ldr06.matches("(?i)g") && f300.matches("(?i).*blu.*ray.*")) return HarvestedRecordFormatEnum.VIDEO_BLURAY;
-		
-		// VHS
-		if(f300.matches("(?i).*vhs.*")) return HarvestedRecordFormatEnum.VIDEO_VHS;
-		if(f007_00.matches("(?i)v") && f007_04.matches("(?i)b")) return HarvestedRecordFormatEnum.VIDEO_VHS;
-		if(f300a.matches("(?i).*videokazet[ay]?.*")) return HarvestedRecordFormatEnum.VIDEO_VHS;
-		
+		if (f300a == null) f300a = "";
+
 		// DVD
-		if(f007_00.matches("(?i)v") && f007_04.matches("(?i)v")) return HarvestedRecordFormatEnum.VIDEO_DVD;
-		if(f300a.matches(".*DVD[ -]?vide[oa].*")) return HarvestedRecordFormatEnum.VIDEO_DVD;
-		if (f300.matches("(?i).*videodisk.*")) return HarvestedRecordFormatEnum.VIDEO_DVD;
-		if (f500.matches("(?i).*videodisk.*")) return HarvestedRecordFormatEnum.VIDEO_DVD;
-		if (f338b.matches("(?i)vd")) return HarvestedRecordFormatEnum.VIDEO_DVD;
-		
+		return (ldr06 == 'i' || ldr06 == 'j') && DVD.matcher(f300a).find();
+	}
+
+	protected HarvestedRecordFormatEnum getVideoDocument() {
+		char ldr06 = Character.toLowerCase(underlayingMarc.getLeader().getTypeOfRecord());
+
+		String f006 = underlayingMarc.getControlField("006");
+		char f006_00 = (f006 != null) && !f006.isEmpty() ? Character.toLowerCase(f006.charAt(0)) : ' ';
+		char f006_16 = (f006 != null) && (f006.length() > 16) ? Character.toLowerCase(f006.charAt(16)) : ' ';
+
+		String f007 = underlayingMarc.getControlField("007");
+		char f007_00 = (f007 != null) && !f007.isEmpty() ? Character.toLowerCase(f007.charAt(0)) : ' ';
+		char f007_04 = (f007 != null) && (f007.length() > 4) ? Character.toLowerCase(f007.charAt(4)) : ' ';
+
+		String f008 = underlayingMarc.getControlField("008");
+		char f008_33 = (f008 != null) && (f008.length() > 33) ? Character.toLowerCase(f008.charAt(33)) : ' ';
+
+		String f245h = underlayingMarc.getField("245", 'h');
+		if (f245h == null) f245h = "";
+
+		String f300 = underlayingMarc.getDataFields("300").toString();
+
+		String f300a = underlayingMarc.getField("300", 'a');
+		if (f300a == null) f300a = "";
+
+		String f336b = underlayingMarc.getField("336", 'b');
+		if (f336b == null) f336b = "";
+
+		String f337b = underlayingMarc.getField("337", 'b');
+		if (f337b == null) f337b = "";
+
+		String f338b = underlayingMarc.getField("338", 'b');
+		if (f338b == null) f338b = "";
+
+		String f500 = underlayingMarc.getDataFields("500").toString();
+
+		// Bluray
+		if (ldr06 == 'g' && BLURAY.matcher(f300).find()) return HarvestedRecordFormatEnum.VIDEO_BLURAY;
+
+		// VHS
+		if (VHS.matcher(f300).find()
+				|| (f007_00 == 'v' && f007_04 == 'b')
+				|| VIDEOKAZETA.matcher(f300a).find())
+			return HarvestedRecordFormatEnum.VIDEO_VHS;
+
+		// DVD
+		if ((f007_00 == 'v' && f007_04 == 'v')
+				|| DVD_VIDEO.matcher(f300a).find()
+				|| VIDEODISK.matcher(f300).find()
+				|| VIDEODISK.matcher(f500).find()
+				|| f338b.equalsIgnoreCase("vd"))
+			return HarvestedRecordFormatEnum.VIDEO_DVD;
+
 		// CD
-		if(ldr06.matches("(?i)g") && f300a.matches("(?i).*cd.*")) return HarvestedRecordFormatEnum.VIDEO_CD;
-		
+		if (ldr06 == 'g' && CD.matcher(f300a).find()) return HarvestedRecordFormatEnum.VIDEO_CD;
+
 		// others
-		if(f007_00.matches("(?i)[vm]")) return HarvestedRecordFormatEnum.VIDEO_OTHER;
-		if(f245h.matches("(?i).*videozáznam.*")) return HarvestedRecordFormatEnum.VIDEO_OTHER;
-		if(f337b.matches("(?i)v")) return HarvestedRecordFormatEnum.VIDEO_OTHER;
-		if(ldr06.matches("(?i)g") && f008_33.matches("(?i)[mv]")) return HarvestedRecordFormatEnum.VIDEO_OTHER;
-		if(f006_00.matches("(?i)g") && f006_16.matches("(?i)[mv]")) return HarvestedRecordFormatEnum.VIDEO_OTHER;
-		if(f338b.matches("(?i)v.*")) return HarvestedRecordFormatEnum.VIDEO_OTHER;
-		if(f336b.matches("(?i)tdi|tdm")) return HarvestedRecordFormatEnum.VIDEO_OTHER;
-		
-		if(f338b.matches("(?i)vr|vz|vc|mc|mf|mr|mo|mz")) return HarvestedRecordFormatEnum.VIDEO_OTHER;
-		
+		if (MetadataUtils.containsChar(ARRAY_VM, f007_00)
+				|| VIDEOZAZNAM.matcher(f245h).find()
+				|| f337b.equalsIgnoreCase("v")
+				|| (ldr06 == 'g' && MetadataUtils.containsChar(ARRAY_VM, f008_33))
+				|| (f006_00 == 'g' && MetadataUtils.containsChar(ARRAY_VM, f006_16))
+				|| START_V.matcher(f338b).find()
+				|| (f336b.equalsIgnoreCase("tdi") || f336b.equalsIgnoreCase("tdm"))
+				|| VIDEO_OTHER_F338.matcher(f338b).matches())
+			return HarvestedRecordFormatEnum.VIDEO_OTHER;
+
 		return null;
 	}
-	
+
 	protected boolean isVideoDVD() {
 		String f300a = underlayingMarc.getField("300", 'a');
-		if(f300a == null) f300a = "";
-		
+		if (f300a == null) f300a = "";
+
 		// VIDEO_DVD
-		if(f300a.matches("(?i).*dvd.*")) return true;
-		
-		return false;
-
+		return DVD.matcher(f300a).find();
 	}
-
-	private static final Pattern AB_MACAN = Pattern.compile(".*macan.*", Pattern.CASE_INSENSITIVE);
 
 	protected boolean isBlindAudio() {
 		for (String tag : new String[]{"260", "264"}) {
 			for (String f260b : underlayingMarc.getFields(tag, 'b')) {
-				if (AB_MACAN.matcher(f260b).matches()) return true;
+				if (MACAN.matcher(f260b).find()) {
+					return true;
+				}
 			}
 		}
 		return false;
 	}
-	
-	protected boolean isOthers(){
-		String ldr06 = Character.toString(underlayingMarc.getLeader().getTypeOfRecord());
-		
-		String f006 = underlayingMarc.getControlField("006");
-		String f006_00 = (f006 != null) && (f006.length() > 0) ? Character.toString(f006.charAt(0)) : "";
-		
-		String f007 = underlayingMarc.getControlField("007");
-		String f007_00 = (f007 != null) && (f007.length() > 0) ? Character.toString(f007.charAt(0)) : "";
-		
-		String f008 = underlayingMarc.getControlField("008");
-		String f008_33 = (f008 != null) && (f008.length() > 33) ? Character.toString(f008.charAt(33)) : "";
-		
-		String f336b = underlayingMarc.getField("336", 'b');
-		if(f336b == null) f336b = "";
-		
-		String f337b = underlayingMarc.getField("337", 'b');
-		if(f337b == null) f337b = "";
-				
-		String f338b = underlayingMarc.getField("338", 'b');
-		if(f338b == null) f338b = "";
-		
-		if(ldr06.matches("(?i)o")) return true;
-		if(f006_00.matches("(?i)o") && f007_00.matches("(?i)o")) return true;
-		
-		if(ldr06.matches("(?i)p")) return true;
 
-		if(ldr06.matches("(?i)r")) return true;
-		if(f336b.matches("(?i)tcf|tdm|tdf")) return true;
-		if(f008_33.matches("(?i)d")) return true;
-		if(f006_00.matches("(?i)r")) return true;
-		
-		if(f007_00.matches("(?i)z") && f336b.matches("(?i)zzz")) return true;
-		if(f337b.matches("(?i)[xz]")) return true;
-		if(f338b.matches("(?i)zu")) return true;
-		
-		return false;
+	protected boolean isOthers() {
+		char ldr06 = Character.toLowerCase(underlayingMarc.getLeader().getTypeOfRecord());
+
+		String f006 = underlayingMarc.getControlField("006");
+		char f006_00 = (f006 != null) && !f006.isEmpty() ? Character.toLowerCase(f006.charAt(0)) : ' ';
+
+		String f007 = underlayingMarc.getControlField("007");
+		char f007_00 = (f007 != null) && !f007.isEmpty() ? Character.toLowerCase(f007.charAt(0)) : ' ';
+
+		String f008 = underlayingMarc.getControlField("008");
+		char f008_33 = (f008 != null) && (f008.length() > 33) ? Character.toLowerCase(f008.charAt(33)) : ' ';
+
+		String f336b = underlayingMarc.getField("336", 'b');
+		if (f336b == null) f336b = "";
+
+		String f337b = underlayingMarc.getField("337", 'b');
+		if (f337b == null) f337b = "";
+
+		String f338b = underlayingMarc.getField("338", 'b');
+		if (f338b == null) f338b = "";
+
+		return MetadataUtils.containsChar(ARRAY_OPR, ldr06)
+				|| (f006_00 == 'o' && f007_00 == 'o')
+				|| OTHER_F336.matcher(f336b).matches()
+				|| f008_33 == 'd'
+				|| f006_00 == 'r'
+				|| (f007_00 == 'z' && f336b.equalsIgnoreCase("zzz"))
+				|| (f337b.equalsIgnoreCase("x") || f337b.equalsIgnoreCase("z"))
+				|| f338b.equalsIgnoreCase("zu");
 	}
-	
+
 	@Override
 	public List<HarvestedRecordFormatEnum> getDetectedFormatList() {
-		List<HarvestedRecordFormatEnum> hrf = new ArrayList<HarvestedRecordFormatEnum>();
-		
-		if(isBook()) hrf.add(HarvestedRecordFormatEnum.BOOKS);
-		if(isPeriodical()) hrf.add(HarvestedRecordFormatEnum.PERIODICALS);
-		if(isArticle()) hrf.add(HarvestedRecordFormatEnum.ARTICLES);
+		List<HarvestedRecordFormatEnum> hrf = new ArrayList<>();
+
+		if (isBook()) hrf.add(HarvestedRecordFormatEnum.BOOKS);
+		if (isPeriodical()) hrf.add(HarvestedRecordFormatEnum.PERIODICALS);
+		if (isArticle()) hrf.add(HarvestedRecordFormatEnum.ARTICLES);
 		if (isArticle773()) return Collections.singletonList(HarvestedRecordFormatEnum.ARTICLES);
-		if(isMap()) hrf.add(HarvestedRecordFormatEnum.MAPS);
-		if(isMusicalScores()) hrf.add(HarvestedRecordFormatEnum.MUSICAL_SCORES);
-		if(isVisualDocument()) hrf.add(HarvestedRecordFormatEnum.VISUAL_DOCUMENTS);
-		if(isMicroform()) hrf.add(HarvestedRecordFormatEnum.OTHER_MICROFORMS);
-		if(isBlindBraille()) hrf.add(HarvestedRecordFormatEnum.BLIND_BRAILLE);
+		if (isMap()) hrf.add(HarvestedRecordFormatEnum.MAPS);
+		if (isMusicalScores()) hrf.add(HarvestedRecordFormatEnum.MUSICAL_SCORES);
+		if (isVisualDocument()) hrf.add(HarvestedRecordFormatEnum.VISUAL_DOCUMENTS);
+		if (isMicroform()) hrf.add(HarvestedRecordFormatEnum.OTHER_MICROFORMS);
+		if (isBlindBraille()) hrf.add(HarvestedRecordFormatEnum.BLIND_BRAILLE);
 		HarvestedRecordFormatEnum audio = getAudioFormat();
 		if (audio != null) {
 			if (isAudioDVD()) hrf.add(HarvestedRecordFormatEnum.AUDIO_DVD);
@@ -713,13 +702,12 @@ public class MetadataMarcRecord implements MetadataRecord {
 		if (video != null) {
 			if (isVideoDVD()) {
 				if (!hrf.contains(HarvestedRecordFormatEnum.VIDEO_DVD)) hrf.add(HarvestedRecordFormatEnum.VIDEO_DVD);
-			}
-			else hrf.add(video);
+			} else hrf.add(video);
 		}
-		if(isComputerCarrier()) hrf.add(HarvestedRecordFormatEnum.OTHER_COMPUTER_CARRIER);
-		if(isOthers()) hrf.add(HarvestedRecordFormatEnum.OTHER_OTHER);
-		if(hrf.isEmpty()) hrf.add(HarvestedRecordFormatEnum.OTHER_OTHER);
-		
+		if (isComputerCarrier()) hrf.add(HarvestedRecordFormatEnum.OTHER_COMPUTER_CARRIER);
+		if (isOthers()) hrf.add(HarvestedRecordFormatEnum.OTHER_OTHER);
+		if (hrf.isEmpty()) hrf.add(HarvestedRecordFormatEnum.OTHER_OTHER);
+
 		return hrf;
 	}
 
@@ -731,7 +719,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 		}
 		Matcher matcher = SCALE_PATTERN.matcher(scaleStr);
 		if (matcher.find()) {
-			String strValue = matcher.group(0).replaceAll("[ ^]+", "");
+			String strValue = CleaningUtils.replaceAll(matcher.group(0), SCALE_REPLACE, "");
 			try {
 				return Long.valueOf(strValue);
 			} catch (NumberFormatException nfe) {
@@ -747,7 +735,6 @@ public class MetadataMarcRecord implements MetadataRecord {
 		if (baseStr == null) {
 			return null;
 		}
-
 		Matcher matcher = UUID_PATTERN.matcher(baseStr);
 		if (matcher.find()) {
 			String uuidStr = matcher.group(0);
@@ -758,10 +745,10 @@ public class MetadataMarcRecord implements MetadataRecord {
 		return null;
 	}
 
-	private static final String[] FIELDS1XX = new String[]{"100", "110", "111", "130"};
-	private static final String[] FIELDS6XX = new String[]{"600", "610", "611", "630", "648", "650", "651", "653", "654",
+	private static final String[] FIELDS1XX = {"100", "110", "111", "130"};
+	private static final String[] FIELDS6XX = {"600", "610", "611", "630", "648", "650", "651", "653", "654",
 			"655", "656", "657", "658", "662", "690", "691", "692", "693", "694", "695", "696", "697", "698", "699"};
-	private static final String[] FIELDS7XX = new String[]{"700", "710", "711", "720", "730", "740", "751", "752", "753",
+	private static final String[] FIELDS7XX = {"700", "710", "711", "720", "730", "740", "751", "752", "753",
 			"754", "760", "762", "765", "767", "770", "772", "773", "774", "775", "776", "777", "780", "785", "786", "787"};
 	private static final Pattern WEIGHT_2_TO_4 = Pattern.compile("[2-4]");
 	private static final Pattern WEIGHT_05_TO_9 = Pattern.compile("[05-9]");
@@ -846,27 +833,25 @@ public class MetadataMarcRecord implements MetadataRecord {
 	@Override
 	public String getAuthorAuthKey() {
 		String f100s7 = underlayingMarc.getField("100", '7');
-		if(f100s7 != null){
+		if (f100s7 != null) {
 			return f100s7;
 		}
-		
 		String f700s7 = underlayingMarc.getField("700", '7');
-		if(f700s7 != null){
+		if (f700s7 != null) {
 			return f700s7;
 		}
 		return null;
-		
+
 	}
 
 	@Override
 	public String getAuthorString() {
 		String f100a = underlayingMarc.getField("100", 'a');
-		if(f100a != null){
+		if (f100a != null) {
 			return f100a;
 		}
-		
 		String f700a = underlayingMarc.getField("700", 'a');
-		if(f700a != null){
+		if (f700a != null) {
 			return f700a;
 		}
 		return null;
@@ -882,19 +867,17 @@ public class MetadataMarcRecord implements MetadataRecord {
 	public List<Oclc> getOclcs() {
 		List<Oclc> result = new ArrayList<>();
 		if (getLanguages().contains("cze")) return result;
-		for (DataField df: underlayingMarc.getDataFields("035")) {
+		for (DataField df : underlayingMarc.getDataFields("035")) {
 			Subfield subA = df.getSubfield('a');
 			if (subA == null) {
 				continue;
 			}
-			
 			Matcher matcher = OCLC_PATTERN.matcher(subA.getData());
 			if (matcher.matches() && matcher.groupCount() >= 2) {
 				Oclc oclc = new Oclc();
 				oclc.setOclcStr(matcher.group(2));
 				result.add(oclc);
 			}
-			
 		}
 		return result;
 	}
@@ -902,20 +885,19 @@ public class MetadataMarcRecord implements MetadataRecord {
 	@Override
 	public List<String> getLanguages() {
 		Set<String> result = new HashSet<>();
-		for (DataField df: underlayingMarc.getDataFields("041")) {
-			for (Subfield subA: df.getSubfields('a')) {
-				String lang = null;
+		for (DataField df : underlayingMarc.getDataFields("041")) {
+			for (Subfield subA : df.getSubfields('a')) {
+				String lang;
 				if (subA.getData().toLowerCase().equals("cze")) {
 					lang = "cze";
 				} else if (subA.getData().toLowerCase().equals("eng")) {
-					lang = "eng"; 
+					lang = "eng";
 				} else {
 					lang = "oth";
 				}
 				result.add(lang);
 			}
 		}
-		
 		if (result.isEmpty()) {
 			String cf = underlayingMarc.getControlField("008");
 			if (cf != null && cf.length() > 39) {
@@ -924,15 +906,14 @@ public class MetadataMarcRecord implements MetadataRecord {
 				if (substr.toLowerCase().equals("cze")) {
 					lang = "cze";
 				} else if (substr.toLowerCase().equals("eng")) {
-					lang = "eng"; 
+					lang = "eng";
 				}
 				if (lang != null) {
 					result.add(lang);
 				}
 			}
 		}
-		
-		return new ArrayList<String>(result);
+		return new ArrayList<>(result);
 	}
 
 	@Override
@@ -1004,9 +985,9 @@ public class MetadataMarcRecord implements MetadataRecord {
 
 		return CitationRecordType.ERROR;
 	}
-	
+
 	@Override
-	public List<String> getBarcodes(){
+	public List<String> getBarcodes() {
 		return underlayingMarc.getFields("996", 'b');
 	}
 
@@ -1036,56 +1017,43 @@ public class MetadataMarcRecord implements MetadataRecord {
 		// implemented only in institution specific classes
 		return null;
 	}
-	
+
 	@Override
-	public List<String> getUrls(){
+	public List<String> getUrls() {
 		return getUrls(Constants.DOCUMENT_AVAILABILITY_UNKNOWN);
 	}
-	
+
 	protected List<String> getUrls(String availability) {
-    	List<String> result = new ArrayList<>();
-    	
-    	for (DataField df: underlayingMarc.getDataFields("856")) {
-    		if (df.getSubfield('u') == null) {
-    			continue;
-    		}
-    		String link = df.getSubfield('u').getData();
-    		String comment = "";
-    		
-    		String sub3 = null,subY = null,subZ = null;
-    		
-    		if (df.getSubfield('3') != null) {
-    			sub3 = df.getSubfield('3').getData();
-    		}
-    		if (df.getSubfield('y') != null) {
-    			subY = df.getSubfield('y').getData();
-    		}
-    		if (df.getSubfield('z') != null) {
-    			subZ = df.getSubfield('z').getData();
-    		}
-    		
-    		if (sub3 != null) {
-    			comment = sub3;
-    			if (subZ != null) {
-    				comment += " (" + subZ + ")";
-    			}
-    		} else if (subY != null) {
-    			comment = subY;
-    			if (subZ != null) {
-    				comment += " (" + subZ + ")";
-    			}
-    		} else if (subZ != null) {
-    			comment = subZ;
-    		}
+		List<String> result = new ArrayList<>();
 
-			result.add(generateUrl(availability, link, comment));
+		for (DataField df : underlayingMarc.getDataFields("856")) {
+			if (df.getSubfield('u') == null) {
+				continue;
+			}
+			String link = df.getSubfield('u').getData();
+			String comment = "";
+			String sub3 = null, subY = null, subZ = null;
+
+			if (df.getSubfield('3') != null) {
+				sub3 = df.getSubfield('3').getData();
+			}
+			if (df.getSubfield('y') != null) {
+				subY = df.getSubfield('y').getData();
+			}
+			if (df.getSubfield('z') != null) {
+				subZ = df.getSubfield('z').getData();
+			}
+
+			if (sub3 != null) {
+				comment = (subZ != null) ? String.format(URL_COMMENT_FORMAT, sub3, subZ) : sub3;
+			} else if (subY != null) {
+				comment = (subZ != null) ? String.format(URL_COMMENT_FORMAT, subY, subZ) : subY;
+			} else if (subZ != null) {
+				comment = subZ;
+			}
+			result.add(MetadataUtils.generateUrl(availability, link, comment));
 		}
-    	
-    	return result;
-    }
-
-	protected String generateUrl(String availability, String link, String comment) {
-		return availability + "|" + link + "|" + comment;
+		return result;
 	}
 
 	@Override
@@ -1145,7 +1113,8 @@ public class MetadataMarcRecord implements MetadataRecord {
 
 	/**
 	 * join subfields data for {@link Title} or {@link ShortTitle}
-	 * @param DF {@link DataField}
+	 *
+	 * @param DF        {@link DataField}
 	 * @param SUBFIELDS result subfields, TITLE - abnp, SHORT_TITLE - anp
 	 * @return String
 	 */
@@ -1153,7 +1122,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 		StringBuilder builder = new StringBuilder();
 		for (Subfield subfield : DF.getSubfields()) {
 			if (MetadataUtils.hasTrailingPunctuation(builder.toString())) {
-				builder.append(" ");
+				builder.append(' ');
 			}
 			if (Chars.contains(SUBFIELDS, subfield.getCode())) {
 				builder.append(subfield.getData());

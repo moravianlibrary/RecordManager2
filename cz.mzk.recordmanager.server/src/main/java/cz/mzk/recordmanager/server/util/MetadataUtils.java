@@ -88,4 +88,15 @@ public class MetadataUtils {
 		return true;
 	}
 
+	public static boolean containsChar(char[] array, char charToFind) {
+		for (char c : array) {
+			if (c == charToFind) return true;
+		}
+		return false;
+	}
+
+	public static String generateUrl(String availability, String link, String comment) {
+		return availability + '|' + link + '|' + comment;
+	}
+
 }
