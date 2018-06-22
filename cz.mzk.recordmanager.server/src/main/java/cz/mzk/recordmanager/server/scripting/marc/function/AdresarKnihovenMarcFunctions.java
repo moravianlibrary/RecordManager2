@@ -338,4 +338,8 @@ public class AdresarKnihovenMarcFunctions implements MarcRecordFunctions {
 		}
 		return results.isEmpty() ? null : results;
 	}
+
+	public String getRegionalLibrary(MarcFunctionContext ctx) {
+		return ctx.metadataRecord().getRegionalLibrary();
+	}
 }

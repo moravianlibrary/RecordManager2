@@ -336,10 +336,28 @@ public interface MetadataRecord {
 	String getSourceInfoG();
 
 	/**
-	 * get siglas from caslin
+	 * get siglas from caslin records
 	 * @return {@link Set} of String
 	 */
 	default Set<String> getCaslinSiglas() {
 		return Collections.emptySet();
+	}
+
+	/**
+	 * get sigla from field SGLa, only for libraries
+	 *
+	 * @return sigla as String
+	 */
+	default String getLibrarySigla() {
+		return null;
+	}
+
+	/**
+	 * get id and name of reginal library, only for libraries
+	 *
+	 * @return regional library id | name
+	 */
+	default String getRegionalLibrary() {
+		return null;
 	}
 }

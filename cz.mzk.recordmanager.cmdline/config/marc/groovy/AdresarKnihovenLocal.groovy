@@ -23,6 +23,7 @@ note_display = getFirstFieldForAdresar "POIa"
 phone_display_mv = getFieldsForAdresar "TELa", SubfieldExtractionMethod.SEPARATED, null
 projects_display_mv = getFieldsForAdresar("PRKa", SubfieldExtractionMethod.SEPARATED, null)
 reg_lib_display_mv = getFieldsForAdresar "PVKsn", SubfieldExtractionMethod.JOINED, " | "
+reg_lib_id_display_mv = getRegionalLibrary()
 responsibility_display_mv = adresarGetResponsibility()
 services_display_mv = getFieldsForAdresar("SLUa", SubfieldExtractionMethod.SEPARATED, null)
 sigla_display = getFirstFieldForAdresar "SGLa"
