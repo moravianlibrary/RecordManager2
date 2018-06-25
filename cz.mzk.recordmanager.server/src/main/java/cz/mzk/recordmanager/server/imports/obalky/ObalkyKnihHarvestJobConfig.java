@@ -1,4 +1,4 @@
-package cz.mzk.recordmanager.server.imports;
+package cz.mzk.recordmanager.server.imports.obalky;
 
 import javax.sql.DataSource;
 

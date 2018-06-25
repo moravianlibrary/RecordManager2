@@ -1,4 +1,4 @@
-package cz.mzk.recordmanager.server.imports;
+package cz.mzk.recordmanager.server.imports.antikvariaty;
 
 import cz.mzk.recordmanager.server.springbatch.DefaultJobParametersValidator;
 import cz.mzk.recordmanager.server.springbatch.JobParameterDeclaration;

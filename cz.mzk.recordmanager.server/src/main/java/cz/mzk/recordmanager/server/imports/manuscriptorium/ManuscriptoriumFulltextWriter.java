@@ -1,4 +1,4 @@
-package cz.mzk.recordmanager.server.imports;
+package cz.mzk.recordmanager.server.imports.manuscriptorium;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;

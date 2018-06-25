@@ -1,4 +1,4 @@
-package cz.mzk.recordmanager.server.imports;
+package cz.mzk.recordmanager.server.imports.antikvariaty;
 
 import java.util.Date;
 import java.util.List;

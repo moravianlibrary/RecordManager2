@@ -1,4 +1,4 @@
-package cz.mzk.recordmanager.server.imports;
+package cz.mzk.recordmanager.server.imports.zakony;
 
 import java.io.IOException;
 import java.util.Collections;

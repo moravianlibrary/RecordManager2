@@ -2,6 +2,9 @@ package cz.mzk.recordmanager.server.imports;
 
 import java.util.List;
 
+import cz.mzk.recordmanager.server.imports.antikvariaty.AntikvariatyImportJobParametersValidator;
+import cz.mzk.recordmanager.server.imports.antikvariaty.AntikvariatyRecordsReader;
+import cz.mzk.recordmanager.server.imports.antikvariaty.AntikvariatyRecordsWriter;
 import org.marc4j.marc.Record;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;

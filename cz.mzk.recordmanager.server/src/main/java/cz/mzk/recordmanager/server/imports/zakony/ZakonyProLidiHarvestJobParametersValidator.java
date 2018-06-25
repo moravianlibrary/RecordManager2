@@ -1,4 +1,4 @@
-package cz.mzk.recordmanager.server.imports;
+package cz.mzk.recordmanager.server.imports.zakony;
 
 import static cz.mzk.recordmanager.server.springbatch.JobParameterDeclaration.param;
 

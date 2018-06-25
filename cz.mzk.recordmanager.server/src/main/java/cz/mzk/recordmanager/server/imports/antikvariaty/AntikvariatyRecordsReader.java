@@ -1,4 +1,4 @@
-package cz.mzk.recordmanager.server.imports;
+package cz.mzk.recordmanager.server.imports.antikvariaty;
 
 import java.util.ArrayList;
 import java.util.HashSet;

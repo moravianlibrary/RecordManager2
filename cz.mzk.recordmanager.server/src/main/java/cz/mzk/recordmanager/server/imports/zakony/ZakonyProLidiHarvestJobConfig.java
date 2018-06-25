@@ -1,10 +1,13 @@
-package cz.mzk.recordmanager.server.imports;
+package cz.mzk.recordmanager.server.imports.zakony;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.sql.DataSource;
 
+import cz.mzk.recordmanager.server.imports.ImportRecordsWriter;
+import org.marc4j.marc.Record;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
@@ -29,7 +32,7 @@ import cz.mzk.recordmanager.server.springbatch.UUIDIncrementer;
 import cz.mzk.recordmanager.server.util.Constants;
 
 @Configuration
-public class ManuscriptoriumFulltextJobConfig {
+public class ZakonyProLidiHarvestJobConfig {
 	
 	@Autowired
 	private JobBuilderFactory jobs;
@@ -41,12 +44,48 @@ public class ManuscriptoriumFulltextJobConfig {
 	private DataSource dataSource;
 
 	private static final Long LONG_OVERRIDEN_BY_EXPRESSION = null;
+	
+	// harvest metadata
+	@Bean
+	public Job zakonyProLidiHarvestJob(
+			@Qualifier(Constants.JOB_ID_HARVEST_ZAKONYPROLIDI + ":step") Step step) {
+		return jobs.get(Constants.JOB_ID_HARVEST_ZAKONYPROLIDI) //
+				.validator(new ZakonyProLidiHarvestJobParametersValidator())
+				.incrementer(UUIDIncrementer.INSTANCE) //
+				.listener(JobFailureListener.INSTANCE) //
+				.flow(step) //
+				.end() //
+				.build();
+	}
+
+	@Bean(name = Constants.JOB_ID_HARVEST_ZAKONYPROLIDI + ":step")
+	public Step step() throws Exception {
+		return steps.get(Constants.JOB_ID_HARVEST_ZAKONYPROLIDI + ":step")
+				.<List<Record>, List<Record>> chunk(10)//
+				.reader(importZakonyProLidiReader(LONG_OVERRIDEN_BY_EXPRESSION, LONG_OVERRIDEN_BY_EXPRESSION))//
+				.writer(importZakonyProLidiWriter(LONG_OVERRIDEN_BY_EXPRESSION)) //
+				.build();
+	}
+
+	@Bean(name=Constants.JOB_ID_HARVEST_ZAKONYPROLIDI + ":reader")
+	@StepScope
+	public ItemReader<List<Record>> importZakonyProLidiReader(
+			@Value("#{jobParameters[" + Constants.JOB_PARAM_FROM_DATE + "]}") Long from,
+			@Value("#{jobParameters[" + Constants.JOB_PARAM_UNTIL_DATE + "]}") Long to) {
+		return new ZakonyProLidiRecordsReader(from, to);
+	}
+
+	@Bean(name=Constants.JOB_ID_HARVEST_ZAKONYPROLIDI + ":writer")
+	@StepScope
+	public ImportRecordsWriter importZakonyProLidiWriter(@Value("#{jobParameters[" + Constants.JOB_PARAM_CONF_ID + "]}") Long configurationId) {
+		return new ImportRecordsWriter(configurationId);
+	}
 
 	// fulltext harvest
 	@Bean
-	public Job manuscriptoriumFulltextJob(
-			@Qualifier(Constants.JOB_ID_FULLTEXT_MANUSCRIPTORIUM + ":fulltextStep") Step fulltextStep) {
-		return jobs.get(Constants.JOB_ID_FULLTEXT_MANUSCRIPTORIUM) //
+	public Job zakonyProLidiFulltextJob(
+			@Qualifier(Constants.JOB_ID_FULLTEXT_ZAKONYPROLIDI + ":fulltextStep") Step fulltextStep) {
+		return jobs.get(Constants.JOB_ID_FULLTEXT_ZAKONYPROLIDI) //
 				.validator(new ZakonyProLidiHarvestJobParametersValidator())
 				.incrementer(UUIDIncrementer.INSTANCE) //
 				.listener(JobFailureListener.INSTANCE) //
@@ -55,18 +94,18 @@ public class ManuscriptoriumFulltextJobConfig {
 				.build();
 	}
 
-	@Bean(name = Constants.JOB_ID_FULLTEXT_MANUSCRIPTORIUM + ":fulltextStep")
+	@Bean(name = Constants.JOB_ID_FULLTEXT_ZAKONYPROLIDI + ":fulltextStep")
 	public Step fulltextStep() throws Exception {
-		return steps.get(Constants.JOB_ID_FULLTEXT_MANUSCRIPTORIUM + ":fulltextStep")
-				.<HarvestedRecordUniqueId, HarvestedRecordUniqueId> chunk(10)//
-				.reader(manuscriptoriumFulltextReader(LONG_OVERRIDEN_BY_EXPRESSION))//
-				.writer(manuscriptoriumFulltextWriter()) //
+		return steps.get(Constants.JOB_ID_FULLTEXT_ZAKONYPROLIDI + ":fulltextStep")
+				.<HarvestedRecordUniqueId, HarvestedRecordUniqueId> chunk(1)//
+				.reader(zakonyProLidiFulltextReader(LONG_OVERRIDEN_BY_EXPRESSION))//
+				.writer(zakonyProLidiFulltextWriter()) //
 				.build();
 	}
 
-	@Bean(name=Constants.JOB_ID_FULLTEXT_MANUSCRIPTORIUM + ":reader")
+	@Bean(name=Constants.JOB_ID_FULLTEXT_ZAKONYPROLIDI + ":reader")
 	@StepScope
-	public ItemReader<HarvestedRecordUniqueId> manuscriptoriumFulltextReader(@Value("#{jobParameters[" + Constants.JOB_PARAM_CONF_ID + "]}") Long configId)
+	public ItemReader<HarvestedRecordUniqueId> zakonyProLidiFulltextReader(@Value("#{jobParameters[" + Constants.JOB_PARAM_CONF_ID + "]}") Long configId)
 			throws Exception {
 		JdbcPagingItemReader<HarvestedRecordUniqueId> reader = new JdbcPagingItemReader<HarvestedRecordUniqueId>();
 		SqlPagingQueryProviderFactoryBean pqpf = new SqlPagingQueryProviderFactoryBean();
@@ -74,7 +113,7 @@ public class ManuscriptoriumFulltextJobConfig {
 		pqpf.setSelectClause("SELECT import_conf_id, record_id");
 		pqpf.setFromClause("FROM harvested_record");
 		pqpf.setWhereClause("WHERE import_conf_id = :conf_id and deleted is null");
-		pqpf.setSortKeys(ImmutableMap.of("record_id", Order.ASCENDING));
+		pqpf.setSortKeys(ImmutableMap.of("record_id", Order.DESCENDING));
 		Map<String, Object> parameterValues = new HashMap<String, Object>();
 		parameterValues.put("conf_id", configId);
 		reader.setParameterValues(parameterValues);
@@ -86,10 +125,10 @@ public class ManuscriptoriumFulltextJobConfig {
 		return reader;
 	}
 
-	@Bean(name=Constants.JOB_ID_FULLTEXT_MANUSCRIPTORIUM + ":writer")
+	@Bean(name=Constants.JOB_ID_FULLTEXT_ZAKONYPROLIDI + ":writer")
 	@StepScope
-	public ManuscriptoriumFulltextWriter manuscriptoriumFulltextWriter() {
-		return new ManuscriptoriumFulltextWriter();
+	public ZakonyProLidiFulltextWriter zakonyProLidiFulltextWriter() {
+		return new ZakonyProLidiFulltextWriter();
 	}
 	
 }

@@ -1,4 +1,4 @@
-package cz.mzk.recordmanager.server.imports;
+package cz.mzk.recordmanager.server.imports.obalky;
 
 import java.io.IOException;
 import java.io.InputStream;

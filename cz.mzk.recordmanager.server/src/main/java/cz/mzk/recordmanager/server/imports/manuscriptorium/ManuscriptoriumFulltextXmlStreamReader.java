@@ -1,4 +1,4 @@
-package cz.mzk.recordmanager.server.imports;
+package cz.mzk.recordmanager.server.imports.manuscriptorium;
 
 import com.ctc.wstx.exc.WstxEOFException;
 import com.ctc.wstx.exc.WstxParsingException;
