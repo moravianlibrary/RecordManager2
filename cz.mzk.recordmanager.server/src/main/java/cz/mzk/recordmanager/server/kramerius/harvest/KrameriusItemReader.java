@@ -1,33 +1,27 @@
 package cz.mzk.recordmanager.server.kramerius.harvest;
 
-import java.io.IOException;
-import java.util.Date;
-import java.util.List;
-
-import org.apache.solr.client.solrj.SolrServerException;
-import org.springframework.batch.core.ExitStatus;
-import org.springframework.batch.core.StepExecution;
-import org.springframework.batch.core.StepExecutionListener;
-import org.springframework.batch.core.configuration.annotation.StepScope;
-import org.springframework.batch.item.ExecutionContext;
-import org.springframework.batch.item.ItemReader;
-import org.springframework.batch.item.ItemStream;
-import org.springframework.batch.item.ItemStreamException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-import com.google.common.collect.Iterables;
-
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.model.KrameriusConfiguration;
 import cz.mzk.recordmanager.server.oai.dao.KrameriusConfigurationDAO;
 import cz.mzk.recordmanager.server.util.HibernateSessionSynchronizer;
 import cz.mzk.recordmanager.server.util.HibernateSessionSynchronizer.SessionBinder;
+import org.apache.solr.client.solrj.SolrServerException;
+import org.springframework.batch.core.ExitStatus;
+import org.springframework.batch.core.StepExecution;
+import org.springframework.batch.core.StepExecutionListener;
+import org.springframework.batch.core.configuration.annotation.StepScope;
+import org.springframework.batch.item.ItemReader;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import java.io.IOException;
+import java.util.Date;
+import java.util.List;
 
 @Component
 @StepScope
 public class KrameriusItemReader implements ItemReader<List<HarvestedRecord>>,
-		ItemStream, StepExecutionListener {
+		StepExecutionListener {
 
 	@Autowired
 	private KrameriusConfigurationDAO configDao;
@@ -45,36 +39,23 @@ public class KrameriusItemReader implements ItemReader<List<HarvestedRecord>>,
 
 	private Date fromDate;
 	private Date untilDate;
+	private String type;
 
-	private String nextPid = null;
-
-	private boolean finished = false;
-
-	public KrameriusItemReader(Long confId, Date fromDate, Date untilDate) {
+	public KrameriusItemReader(Long confId, Date fromDate, Date untilDate, String type) {
 		super();
 		this.confId = confId;
 		this.fromDate = fromDate;
 		this.untilDate = untilDate;
+		this.type = type;
 	}
 
 	@Override
 	public List<HarvestedRecord> read() throws SolrServerException, IOException {
-		if (finished) {
-			return null;
-		}
-
 		// get uuids
-		List<String> uuids = kHarvester.getUuids(nextPid);
-		String previousPid = nextPid;
-		nextPid = Iterables.getLast(uuids, null);
-
-		// get metadata
-		List<HarvestedRecord> records = kHarvester.getRecords(uuids);
-
-		finished = uuids.isEmpty() || (previousPid != null && previousPid.equals(nextPid));
-
+		List<String> uuids = kHarvester.getNextUuids();
+		if (uuids == null) return null;
 		// return metadata
-		return records;
+		return kHarvester.getRecords(uuids);
 	}
 
 	@Override
@@ -82,7 +63,8 @@ public class KrameriusItemReader implements ItemReader<List<HarvestedRecord>>,
 		try (SessionBinder sess = hibernateSync.register()) {
 			KrameriusConfiguration conf = configDao.get(confId);
 			if (conf == null) {
-				throw new IllegalArgumentException(String.format("OAI harvest configuration with id=%s not found", confId));
+				throw new IllegalArgumentException(String.format(
+						"Kramerius harvest configuration with id=%s not found", confId));
 			}
 			KrameriusHarvesterParams params = new KrameriusHarvesterParams();
 			params.setUrl(conf.getUrl());
@@ -90,29 +72,13 @@ public class KrameriusItemReader implements ItemReader<List<HarvestedRecord>>,
 			params.setQueryRows(conf.getQueryRows());
 			params.setFrom(fromDate);
 			params.setUntil(untilDate);
-			kHarvester = harvesterFactory.create(params, confId);
+			kHarvester = harvesterFactory.create(type == null ? "" : type, params, confId);
 		}
 	}
 
 	@Override
 	public ExitStatus afterStep(StepExecution stepExecution) {
 		return null;
-	}
-
-	@Override
-	public void open(ExecutionContext ctx) throws ItemStreamException {
-		if (ctx.containsKey("nextPid")) {
-			nextPid = ctx.getString("nextPid");
-		}
-	}
-
-	@Override
-	public void update(ExecutionContext ctx) throws ItemStreamException {
-		ctx.putString("nextPid", nextPid);
-	}
-
-	@Override
-	public void close() throws ItemStreamException {
 	}
 
 }

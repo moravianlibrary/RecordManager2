@@ -64,6 +64,7 @@ public class Constants {
 	public static final String JOB_PARAM_LAST_ID		= "lastId";
 	public static final String JOB_PARAM_SINGLE_ID		= "singleId";
 	public static final String JOB_PARAM_DELETED		= "deleted"; // for export
+	public static final String JOB_PARAM_TYPE			= "type";
 
 	public static final String JOB_PARAM_TRUE_VALUE		= "true";
 	public static final String JOB_PARAM_ONE_VALUE		= "1";

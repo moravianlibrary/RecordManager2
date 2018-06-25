@@ -63,10 +63,10 @@ public class AbstractKrameriusTest extends AbstractTest {
 		doc2.addField("PID", "uuid:0095bca0-614f-11e2-bcfd-0800200c9a66");
 		documents.add(doc1);
 		documents.add(doc2);
-		NamedList<Object> solrResponse1 = new NamedList<Object>();
+		NamedList<Object> solrResponse1 = new NamedList<>();
 		solrResponse1.add("response", documents);
 		expect(mockedSolrServer.query(and(capture(capturedQueryRequest), anyObject(SolrQuery.class)))).andReturn(new QueryResponse(solrResponse1, null));
-		NamedList<Object> solrResponse2 = new NamedList<Object>();
+		NamedList<Object> solrResponse2 = new NamedList<>();
 		solrResponse2.add("response", new SolrDocumentList());
 		expect(mockedSolrServer.query(and(capture(capturedQueryRequest), anyObject(SolrQuery.class)))).andReturn(new QueryResponse(solrResponse2, null));
 		replay(mockedSolrServer);
@@ -74,8 +74,8 @@ public class AbstractKrameriusTest extends AbstractTest {
 		KrameriusHarvesterParams parameters = new KrameriusHarvesterParams();
 		parameters.setUrl("http://k4.techlib.cz/search/api/v5.0");
 		parameters.setMetadataStream("DC");
-		KrameriusHarvester harvester = new KrameriusHarvester(httpClient, solrServerFactory, parameters, 1L);
-		List<String> uuids = harvester.getUuids(null);
+		KrameriusHarvesterSorting harvester = new KrameriusHarvesterSorting(httpClient, solrServerFactory, parameters, 1L);
+		List<String> uuids = harvester.getNextUuids();
 		for (String uuid : uuids) {
 			HarvestedRecord record = harvester.downloadRecord(uuid);
 			Assert.assertNotNull(record);
@@ -105,7 +105,7 @@ public class AbstractKrameriusTest extends AbstractTest {
 		doc2.addField("PID", "uuid:0095bca0-614f-11e2-bcfd-0800200c9a66");
 		documents.add(doc1);
 		documents.add(doc2);
-		NamedList<Object> solrResponse1 = new NamedList<Object>();
+		NamedList<Object> solrResponse1 = new NamedList<>();
 		solrResponse1.add("response", documents);
 		//1st response - SolrServerExceptions
 		expect(mockedSolrServer.query(and(capture(capturedQueryRequest), anyObject(SolrQuery.class)))).andThrow(new SolrServerException("Bad status code: 500"));
