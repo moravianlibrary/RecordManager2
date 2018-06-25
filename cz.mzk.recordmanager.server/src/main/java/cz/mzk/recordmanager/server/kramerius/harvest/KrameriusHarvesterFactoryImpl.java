@@ -16,10 +16,10 @@ public class KrameriusHarvesterFactoryImpl implements KrameriusHarvesterFactory 
 	private static final String SORTING = "sorting";
 
 	@Override
-	public IKrameriusHarvester create(String type, KrameriusHarvesterParams parameters, Long confId) {
+	public KrameriusHarvester create(String type, KrameriusHarvesterParams parameters, Long confId) {
 		switch (type.toLowerCase()) {
 		case SORTING:
-			return new KrameriusHarvester(httpClient, solrServerFactory, parameters, confId);
+			return new KrameriusHarvesterSorting(httpClient, solrServerFactory, parameters, confId);
 		default:
 			return new KrameriusHarvesterNoSorting(httpClient, solrServerFactory, parameters, confId);
 		}

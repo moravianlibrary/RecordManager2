@@ -21,11 +21,11 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class AbstractKrameriusHarvest implements IKrameriusHarvester {
+public abstract class KrameriusHarvesterImpl implements KrameriusHarvester {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(AbstractKrameriusHarvest.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(KrameriusHarvesterImpl.class);
 
-	protected static final int MAX_TIME_ALLOWED = 100_000;
+	private static final int MAX_TIME_ALLOWED = 100_000;
 
 	protected Long harvestedFrom;
 
@@ -35,12 +35,8 @@ public abstract class AbstractKrameriusHarvest implements IKrameriusHarvester {
 
 	protected SolrServerFactory solrServerFactory;
 
-	private int start = 0;
-
-	private String lastPid = "";
-
-	protected AbstractKrameriusHarvest(HttpClient httpClient, SolrServerFactory solrServerFactory,
-									   KrameriusHarvesterParams parameters, Long harvestedFrom) {
+	protected KrameriusHarvesterImpl(HttpClient httpClient, SolrServerFactory solrServerFactory,
+									 KrameriusHarvesterParams parameters, Long harvestedFrom) {
 		this.harvestedFrom = harvestedFrom;
 		this.params = parameters;
 		this.httpClient = httpClient;
@@ -134,23 +130,4 @@ public abstract class AbstractKrameriusHarvest implements IKrameriusHarvester {
 		return query;
 	}
 
-	@Override
-	public Integer getStart() {
-		return start;
-	}
-
-	@Override
-	public void setStart(int start) {
-		this.start = start;
-	}
-
-	@Override
-	public String getLastPid() {
-		return lastPid;
-	}
-
-	@Override
-	public void setLastPid(String lastPid) {
-		this.lastPid = lastPid;
-	}
 }

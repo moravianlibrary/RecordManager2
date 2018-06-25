@@ -10,13 +10,15 @@ import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
-public class KrameriusHarvesterNoSorting extends AbstractKrameriusHarvest {
+public class KrameriusHarvesterNoSorting extends KrameriusHarvesterImpl {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(KrameriusHarvesterNoSorting.class);
 
 	private static final String PID_FIELD = "PID";
 
 	private Long numFound = 0L;
+
+	private Integer start = 0;
 
 	public KrameriusHarvesterNoSorting(HttpClient httpClient, SolrServerFactory solrServerFactory,
 			KrameriusHarvesterParams parameters, Long harvestedFrom) {
@@ -25,13 +27,13 @@ public class KrameriusHarvesterNoSorting extends AbstractKrameriusHarvest {
 
 	@Override
 	public List<String> getNextUuids() throws SolrServerException {
-		if (getStart() > 0 && getStart() >= numFound) return null;
+		if (start > 0 && start >= numFound) return null;
 
 		SolrDocumentList documents = executeSolrQuery(getUuidQuery(PID_FIELD));
 		numFound = documents.getNumFound();
 
 		Long queryRows = params.getQueryRows() != null ? params.getQueryRows() : 10;
-		setStart(getStart() + queryRows.intValue());
+		start += queryRows.intValue();
 
 		return getUuids(documents, PID_FIELD);
 	}
@@ -39,8 +41,8 @@ public class KrameriusHarvesterNoSorting extends AbstractKrameriusHarvest {
 	private SolrQuery getUuidQuery(String... fields) throws SolrServerException {
 		SolrQuery query = getBasicQuery(fields);
 
-		if (getStart() != null) {
-			query.setStart(getStart());
+		if (start != null) {
+			query.setStart(start);
 		}
 		LOGGER.info("query: {}", query.getQuery());
 		return query;

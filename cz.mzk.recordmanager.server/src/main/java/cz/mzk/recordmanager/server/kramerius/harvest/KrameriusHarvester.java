@@ -1,55 +1,15 @@
 package cz.mzk.recordmanager.server.kramerius.harvest;
 
-import com.google.common.collect.Iterables;
-import cz.mzk.recordmanager.server.solr.SolrServerFactory;
-import cz.mzk.recordmanager.server.util.HttpClient;
-import cz.mzk.recordmanager.server.util.SolrUtils;
-import org.apache.solr.client.solrj.SolrQuery;
-import org.apache.solr.client.solrj.SolrQuery.ORDER;
+import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import org.apache.solr.client.solrj.SolrServerException;
-import org.apache.solr.common.SolrDocumentList;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.util.List;
 
-public class KrameriusHarvester extends AbstractKrameriusHarvest {
+public interface KrameriusHarvester {
 
-	private static final Logger LOGGER = LoggerFactory
-			.getLogger(KrameriusHarvester.class);
+	List<String> getNextUuids() throws SolrServerException;
 
-	private static String PID_FIELD = "PID";
-
-	public KrameriusHarvester(HttpClient httpClient, SolrServerFactory solrServerFactory,
-			KrameriusHarvesterParams parameters, Long harvestedFrom) {
-		super(httpClient, solrServerFactory, parameters, harvestedFrom);
-	}
-
-	@Override
-	public List<String> getNextUuids() throws SolrServerException {
-		SolrDocumentList documents = executeSolrQuery(getUuidQuery(PID_FIELD));
-
-		if (getLastPid() == null || documents.isEmpty()) return null;
-
-		List<String> uuids = getUuids(documents, PID_FIELD);
-
-		String nextUuid = Iterables.getLast(uuids, null);
-		if (getLastPid().equals(nextUuid)) setLastPid(null);
-		else setLastPid(nextUuid);
-
-		return uuids;
-	}
-
-	private SolrQuery getUuidQuery(String... fields) throws SolrServerException {
-		SolrQuery query = getBasicQuery(fields);
-
-		if (getLastPid() != null && !getLastPid().isEmpty()) {
-			query.add("fq", SolrUtils.createFieldQuery(PID_FIELD, SolrUtils.createRange(getLastPid(), null)));
-		}
-		query.setSort(PID_FIELD, ORDER.asc);
-		LOGGER.info("nextPid: {}", getLastPid());
-
-		return query;
-	}
+	List<HarvestedRecord> getRecords(List<String> uuids) throws IOException;
 
 }

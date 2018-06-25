@@ -10,10 +10,7 @@ import org.springframework.batch.core.ExitStatus;
 import org.springframework.batch.core.StepExecution;
 import org.springframework.batch.core.StepExecutionListener;
 import org.springframework.batch.core.configuration.annotation.StepScope;
-import org.springframework.batch.item.ExecutionContext;
 import org.springframework.batch.item.ItemReader;
-import org.springframework.batch.item.ItemStream;
-import org.springframework.batch.item.ItemStreamException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -24,7 +21,7 @@ import java.util.List;
 @Component
 @StepScope
 public class KrameriusItemReader implements ItemReader<List<HarvestedRecord>>,
-		ItemStream, StepExecutionListener {
+		StepExecutionListener {
 
 	@Autowired
 	private KrameriusConfigurationDAO configDao;
@@ -35,7 +32,7 @@ public class KrameriusItemReader implements ItemReader<List<HarvestedRecord>>,
 	@Autowired
 	private HibernateSessionSynchronizer hibernateSync;
 
-	private IKrameriusHarvester kHarvester;
+	private KrameriusHarvester kHarvester;
 
 	// configuration
 	private Long confId;
@@ -82,26 +79,6 @@ public class KrameriusItemReader implements ItemReader<List<HarvestedRecord>>,
 	@Override
 	public ExitStatus afterStep(StepExecution stepExecution) {
 		return null;
-	}
-
-	@Override
-	public void open(ExecutionContext ctx) throws ItemStreamException {
-		if (ctx.containsKey("nextPid")) {
-			kHarvester.setLastPid(ctx.getString("nextPid"));
-		}
-		if (ctx.containsKey("start")) {
-			kHarvester.setStart(ctx.getInt("start"));
-		}
-	}
-
-	@Override
-	public void update(ExecutionContext ctx) throws ItemStreamException {
-		ctx.putString("nextPid", kHarvester.getLastPid());
-		ctx.putInt("start", kHarvester.getStart());
-	}
-
-	@Override
-	public void close() throws ItemStreamException {
 	}
 
 }

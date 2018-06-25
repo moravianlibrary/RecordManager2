@@ -27,7 +27,7 @@ public class KrameriusHarvesterTest extends AbstractKrameriusTest {
 		KrameriusHarvesterParams parameters = new KrameriusHarvesterParams();
 		parameters.setUrl("http://k4.techlib.cz/search/api/v5.0");
 		parameters.setMetadataStream("DC");
-		KrameriusHarvester harvester = new KrameriusHarvester(httpClient, solrServerFactory, parameters, 1L);
+		KrameriusHarvesterSorting harvester = new KrameriusHarvesterSorting(httpClient, solrServerFactory, parameters, 1L);
 		List<String> uuids = harvester.getNextUuids();
 		for (String uuid : uuids) {
 			HarvestedRecord record = harvester.downloadRecord(uuid);
@@ -43,7 +43,7 @@ public class KrameriusHarvesterTest extends AbstractKrameriusTest {
 		KrameriusHarvesterParams parameters = new KrameriusHarvesterParams();
 		parameters.setUrl("http://k4.techlib.cz/search/api/v5.0");
 		parameters.setMetadataStream("DC");
-		KrameriusHarvester harvester = new KrameriusHarvester(httpClient, solrServerFactory, parameters, 1L);
+		KrameriusHarvesterSorting harvester = new KrameriusHarvesterSorting(httpClient, solrServerFactory, parameters, 1L);
 
 		//1st response with SolrServerException => uuid list is empty
 		try {
