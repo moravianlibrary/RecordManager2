@@ -115,7 +115,7 @@ public class SfxJibNlkCsvStreamReader implements MarcReader {
 			years.add(sfx.getYear());
 		} else if (sfx.getFrom() != null) {
 			generateYears(years, sfx.getFrom(), sfx.getTo());
-			addDataField("260", ' ', ' ', "c", sfx.getFrom() + "-" + (sfx.getTo() == null ? "" : sfx.getTo()));
+			addDataField("260", ' ', ' ', "c", sfx.getFrom() + '-' + (sfx.getTo() == null ? "" : sfx.getTo()));
 		}
 		addCoverageField(sfx);
 		generateFields996(years);
@@ -244,7 +244,7 @@ public class SfxJibNlkCsvStreamReader implements MarcReader {
 					+ isbn10 + ", isbn13=" + isbn13 + ", from=" + from
 					+ ", to=" + to + ", year=" + year + ", resource="
 					+ resource + ", subject=" + subject + ", url=" + url
-					+ ", author=" + author + "]";
+					+ ", author=" + author + ']';
 		}
 	}
 }

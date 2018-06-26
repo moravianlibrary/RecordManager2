@@ -68,6 +68,6 @@ public class KrameriusHarvesterParams {
 	public String toString() {
 		return "KrameriusHarvesterParams [url=" + url + ", metadataStream="
 				+ metadataStream + ", model=" + model + ", queryRows="
-				+ queryRows + ", from=" + from + ", until=" + until + "]";
+				+ queryRows + ", from=" + from + ", until=" + until + ']';
 	}
 }

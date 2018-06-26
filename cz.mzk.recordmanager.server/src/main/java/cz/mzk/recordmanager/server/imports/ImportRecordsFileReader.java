@@ -146,12 +146,12 @@ public class ImportRecordsFileReader implements ItemReader<List<Record>> {
 		files = new ArrayDeque<String>();
 		File f = new File(filename);
 		if (f.isFile()) {
-			pathName = f.getParent()+"/";
+			pathName = f.getParent()+ '/';
 			files.push(f.getName());
 		}
 		else {
 			for (File file: f.listFiles()) {
-				pathName = file.getParent()+"/";
+				pathName = file.getParent()+ '/';
 				files.push(file.getName());
 			}
 		}

@@ -86,7 +86,7 @@ public final class TarGzUtils {
 			File[] children = file.listFiles();
 			if (children != null) {
 				for (File child : children) {
-					addFileToTarGz(tOut, child.getAbsolutePath(), entryName + "/");
+					addFileToTarGz(tOut, child.getAbsolutePath(), entryName + '/');
 				}
 			}
 		}

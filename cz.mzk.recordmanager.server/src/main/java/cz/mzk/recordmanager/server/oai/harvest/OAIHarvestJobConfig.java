@@ -194,9 +194,9 @@ public class OAIHarvestJobConfig {
     public OAIItemReader reader(@Value("#{jobParameters[" + Constants.JOB_PARAM_CONF_ID + "]}") Long configId, 
     		@Value("#{stepExecutionContext[" + Constants.JOB_PARAM_FROM_DATE + "] "
     				+ "?:jobParameters[ " + Constants.JOB_PARAM_FROM_DATE +"]}") Date from,
-    		@Value("#{stepExecutionContext[" + Constants.JOB_PARAM_UNTIL_DATE+"]"
+    		@Value("#{stepExecutionContext[" + Constants.JOB_PARAM_UNTIL_DATE+ ']'
     				+ "?:jobParameters[" + Constants.JOB_PARAM_UNTIL_DATE +"]}") Date to,
-    		@Value("#{stepExecutionContext[" + Constants.JOB_PARAM_RESUMPTION_TOKEN+"]"
+    		@Value("#{stepExecutionContext[" + Constants.JOB_PARAM_RESUMPTION_TOKEN+ ']'
     	    		+ "?:jobParameters[" + Constants.JOB_PARAM_RESUMPTION_TOKEN +"]}") String resumptionToken) {
     	return new OAIItemReader(configId, from, to, resumptionToken);
     }
@@ -206,9 +206,9 @@ public class OAIHarvestJobConfig {
 	public AsyncOAIItemReader asyncReader(@Value("#{jobParameters[" + Constants.JOB_PARAM_CONF_ID + "]}") Long configId, 
 			@Value("#{stepExecutionContext[" + Constants.JOB_PARAM_FROM_DATE + "] "
 					+ "?:jobParameters[ " + Constants.JOB_PARAM_FROM_DATE +"]}") Date from,
-			@Value("#{stepExecutionContext[" + Constants.JOB_PARAM_UNTIL_DATE+"]"
+			@Value("#{stepExecutionContext[" + Constants.JOB_PARAM_UNTIL_DATE+ ']'
 					+ "?:jobParameters[" + Constants.JOB_PARAM_UNTIL_DATE +"]}") Date to,
-			@Value("#{stepExecutionContext[" + Constants.JOB_PARAM_RESUMPTION_TOKEN+"]"
+			@Value("#{stepExecutionContext[" + Constants.JOB_PARAM_RESUMPTION_TOKEN+ ']'
 					+ "?:jobParameters[" + Constants.JOB_PARAM_RESUMPTION_TOKEN +"]}") String resumptionToken) {
 		return new AsyncOAIItemReader(configId, from, to, resumptionToken);
 	}
@@ -236,9 +236,9 @@ public class OAIHarvestJobConfig {
     public OAIOneByOneItemReader oneByOneItemReader(@Value("#{jobParameters[" + Constants.JOB_PARAM_CONF_ID + "]}") Long configId, 
     		@Value("#{stepExecutionContext[" + Constants.JOB_PARAM_FROM_DATE + "] "
     				+ "?:jobParameters[ " + Constants.JOB_PARAM_FROM_DATE +"]}") Date from,
-    		@Value("#{stepExecutionContext[" + Constants.JOB_PARAM_UNTIL_DATE+"]"
+    		@Value("#{stepExecutionContext[" + Constants.JOB_PARAM_UNTIL_DATE+ ']'
     				+ "?:jobParameters[" + Constants.JOB_PARAM_UNTIL_DATE +"]}") Date to,
-    	    @Value("#{stepExecutionContext[" + Constants.JOB_PARAM_RESUMPTION_TOKEN+"]"
+    	    @Value("#{stepExecutionContext[" + Constants.JOB_PARAM_RESUMPTION_TOKEN+ ']'
     	       		+ "?:jobParameters[" + Constants.JOB_PARAM_RESUMPTION_TOKEN +"]}") String resumptionToken){
     	return new OAIOneByOneItemReader(configId, from, to, resumptionToken);
     }

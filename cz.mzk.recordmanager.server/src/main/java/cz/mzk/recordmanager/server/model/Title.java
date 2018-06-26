@@ -54,7 +54,7 @@ public class Title extends AbstractDomainObject {
 	@Override
 	public String toString() {
 		return "Title [title=" + title + ", orderInRecord=" + orderInRecord
-				+ "]";
+				+ ']';
 	}
 
 	@Override

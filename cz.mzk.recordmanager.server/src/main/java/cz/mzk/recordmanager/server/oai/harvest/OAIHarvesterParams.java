@@ -70,7 +70,7 @@ public class OAIHarvesterParams {
 	public String toString() {
 		return "OAIHarvesterParams [url=" + url + ", metadataPrefix="
 				+ metadataPrefix + ", set=" + set + ", granularity="
-				+ granularity + ", from=" + from + ", until=" + until + "]";
+				+ granularity + ", from=" + from + ", until=" + until + ']';
 	}
 	
 	

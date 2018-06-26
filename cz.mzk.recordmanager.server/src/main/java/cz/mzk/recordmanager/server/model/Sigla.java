@@ -56,7 +56,7 @@ public class Sigla extends AbstractDomainObject{
 		@Override
 		public String toString() {
 			return "SiglaUniqueId [sigla=" + sigla + ", importConfId="
-					+ importConfId + "]";
+					+ importConfId + ']';
 		}
 	}
 	
@@ -72,7 +72,7 @@ public class Sigla extends AbstractDomainObject{
 
 	@Override
 	public String toString() {
-		return "Sigla [uniqueId=" + uniqueId + "]";
+		return "Sigla [uniqueId=" + uniqueId + ']';
 	}
 
 }

@@ -85,7 +85,7 @@ public class Language {
 
 	@Override
 	public String toString() {
-		return "Language [langStr=" + id.getLangStr() + "]";
+		return "Language [langStr=" + id.getLangStr() + ']';
 	}
 
 	@Override

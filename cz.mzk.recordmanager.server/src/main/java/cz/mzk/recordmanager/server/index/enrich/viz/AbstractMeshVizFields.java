@@ -67,7 +67,7 @@ public abstract class AbstractMeshVizFields extends AbstractVizFields {
 			return new ArrayList<>(cache.get(key));
 		} else {
 			TezaurusRecord tr = tezaurusDao.findByConfigAndSourceFieldAndName(
-					config, "1" + enrichingField.substring(1), key);
+					config, '1' + enrichingField.substring(1), key);
 			if (tr != null) {
 				MarcRecord mr = marcXmlParser
 						.parseRecord(new ByteArrayInputStream(tr.getRawRecord()));

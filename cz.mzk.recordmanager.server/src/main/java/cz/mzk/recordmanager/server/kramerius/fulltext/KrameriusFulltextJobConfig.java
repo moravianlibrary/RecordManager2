@@ -112,7 +112,7 @@ public class KrameriusFulltextJobConfig {
 					+ "] " + "?:jobParameters[ "
 					+ Constants.JOB_PARAM_FROM_DATE + "]}") Date from,
 			@Value("#{stepExecutionContext[" + Constants.JOB_PARAM_UNTIL_DATE
-					+ "]" + "?:jobParameters[" + Constants.JOB_PARAM_UNTIL_DATE
+					+ ']' + "?:jobParameters[" + Constants.JOB_PARAM_UNTIL_DATE
 					+ "]}") Date to) throws Exception {
 
 		Timestamp fromStamp = null;
@@ -167,7 +167,7 @@ public class KrameriusFulltextJobConfig {
 					+ "] " + "?:jobParameters[ "
 					+ Constants.JOB_PARAM_FROM_DATE + "]}") Date from,
 			@Value("#{stepExecutionContext[" + Constants.JOB_PARAM_UNTIL_DATE
-					+ "]" + "?:jobParameters[" + Constants.JOB_PARAM_UNTIL_DATE
+					+ ']' + "?:jobParameters[" + Constants.JOB_PARAM_UNTIL_DATE
 					+ "]}") Date to) throws Exception {
 		JdbcPagingItemReader<HarvestedRecord> reader = new JdbcPagingItemReader<>();
 		SqlPagingQueryProviderFactoryBean pqpf = new SqlPagingQueryProviderFactoryBean();

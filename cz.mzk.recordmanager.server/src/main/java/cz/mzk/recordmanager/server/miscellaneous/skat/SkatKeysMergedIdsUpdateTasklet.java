@@ -132,7 +132,7 @@ public class SkatKeysMergedIdsUpdateTasklet implements Tasklet {
 				+ "SET manually_merged = TRUE "
 				+ "WHERE skat_record_id IN "
 				+ "(SELECT id FROM harvested_record WHERE import_conf_id = ? AND record_id = ?"
-				+ ")";
+				+ ')';
 		Session session = sessionFactory.getCurrentSession();
 		session.createSQLQuery(query)
 			.setLong(0, Constants.IMPORT_CONF_ID_CASLIN)

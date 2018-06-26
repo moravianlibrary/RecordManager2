@@ -59,7 +59,7 @@ public class TezaurusRecord extends AbstractDomainObject {
 		@Override
 		public String toString() {
 			return "TezaurusKey [sourceField=" + sourceField + ", name=" + name
-					+ "]";
+					+ ']';
 		}
 	}
 
@@ -108,7 +108,7 @@ public class TezaurusRecord extends AbstractDomainObject {
 	@Override
 	public String toString() {
 		return "TezaurusRecord [recordId=" + recordId + ", harvestedFrom="
-				+ harvestedFrom + ", tezaurusKey=" + tezaurusKey + "]";
+				+ harvestedFrom + ", tezaurusKey=" + tezaurusKey + ']';
 	}
 
 }

@@ -84,6 +84,6 @@ public class Ismn extends AbstractDomainObject {
 	@Override
 	public String toString() {
 		return "ismn [ismn=" + ismn + ", orderInRecord=" + orderInRecord
-				+ ", note=" + note + "]";
+				+ ", note=" + note + ']';
 	}
 }

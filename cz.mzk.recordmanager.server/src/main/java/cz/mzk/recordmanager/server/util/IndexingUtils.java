@@ -16,7 +16,7 @@ public class IndexingUtils {
 		if (matcher.matches()) {
 			suffix = matcher.group(1);
 		}
-		String id = ((prefix != null) ? prefix + "." : "") + suffix;
+		String id = ((prefix != null) ? prefix + '.' : "") + suffix;
 		return id;
 	}
 

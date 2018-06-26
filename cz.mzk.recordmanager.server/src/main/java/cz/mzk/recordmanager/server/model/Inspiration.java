@@ -42,7 +42,7 @@ public class Inspiration extends AbstractDomainObject{
 	@Override
 	public String toString() {
 		return "Inspiration [harvestedRecordId=" + harvestedRecordId
-				+ ", name=" + name + "]";
+				+ ", name=" + name + ']';
 	}
 	
 }

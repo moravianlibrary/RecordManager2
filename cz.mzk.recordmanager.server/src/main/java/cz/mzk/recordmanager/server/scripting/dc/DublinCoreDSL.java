@@ -126,7 +126,7 @@ public class DublinCoreDSL extends BaseDSL {
 		Matcher matcher = AUTHOR_PATTERN.matcher(name);
 		if(matcher.matches()){
 			sb.append(matcher.group(2));
-			sb.append(" ");
+			sb.append(' ');
 			sb.append(matcher.group(1));
 		}
 		else return name;

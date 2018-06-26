@@ -100,7 +100,7 @@ public class AlphaNumericControlFieldImpl extends VariableFieldImpl implements C
      * @return A string representation of this control field
      */
     public String toString() {
-        return super.toString() + " " + getData();
+        return super.toString() + ' ' + getData();
     }
 
     /**

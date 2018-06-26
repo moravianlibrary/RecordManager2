@@ -19,7 +19,7 @@ public class Kram3NkpMetadataDublinCoreRecord extends KramDefaultMetadataDublinC
 		List<String> result = new ArrayList<>();
 		for (String item : dcRecord.getIdentifiers()) {
 			if (HTTP_PATTERN.matcher(item).matches()) {
-				result.add("unknown|"+item+"|");
+				result.add("unknown|"+item+ '|');
 			}
 		}
 		result.addAll(super.getUrls());

@@ -110,7 +110,7 @@ public class SkatKey {
 		public String toString() {
 			return "SkatKeyCompositeId [skatHarvestedRecordId="
 					+ skatHarvestedRecordId + ", sigla=" + sigla
-					+ ", recordId=" + recordId + "]";
+					+ ", recordId=" + recordId + ']';
 		}
 		
 	}
@@ -172,7 +172,7 @@ public class SkatKey {
 
 	@Override
 	public String toString() {
-		return "SkatKey [skatKeyId=" + skatKeyId + "]";
+		return "SkatKey [skatKeyId=" + skatKeyId + ']';
 	}
 	
 }

@@ -157,7 +157,7 @@ public class SfxJibXmlStreamReader implements MarcReader {
 							record.addVariableField(factory.newDataField("500",
 									' ', ' ', "a", TEXT_EMBARGO_AVAILABLE + available));
 						}
-						embargo = "a" + available;
+						embargo = 'a' + available;
 						break;
 					case SfxConstants.ELEMENT_DAYS_NOT_AVAILABLE:
 						String notAvailable = xmlReader.getElementText();
@@ -165,7 +165,7 @@ public class SfxJibXmlStreamReader implements MarcReader {
 							record.addVariableField(factory.newDataField("500",
 									' ', ' ', "a", TEXT_EMBARGO_NOT_AVAILABLE + notAvailable));
 						}
-						embargo = "n" + notAvailable;
+						embargo = 'n' + notAvailable;
 						break;
 					case SfxConstants.ELEMENT_FROM:
 						coverage = "from";
@@ -213,7 +213,7 @@ public class SfxJibXmlStreamReader implements MarcReader {
 						if (minFrom != Integer.MAX_VALUE) {
 							if (SERIALS.contains(type)) {
 								year260 = String.valueOf(minFrom)
-										+ "-" + ((minFrom < maxTo) ? String.valueOf(maxTo) : "");
+										+ '-' + ((minFrom < maxTo) ? String.valueOf(maxTo) : "");
 								year008 = String.valueOf(minFrom) + ((maxTo == 0) ? "9999" : maxTo);
 							} else {
 								year260 = String.valueOf(minFrom);

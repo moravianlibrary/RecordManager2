@@ -54,7 +54,7 @@ public class AntikvariatyRecordsReader implements ItemReader<AntikvariatyRecord>
 		ListIterator<String> iter = item.getCatalogueIds().listIterator();
 		while (iter.hasNext()) {
 			String text = iter.next();
-			int pos = text.indexOf(")");
+			int pos = text.indexOf(')');
 			if (pos > 0) {
 				String id = text.substring(++pos);
 				if (id.isEmpty()) {

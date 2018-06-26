@@ -61,7 +61,7 @@ public class ManuscriptoriumFulltextXmlStreamReader {
 					case ELEMENT_RUBRIC:
 						String xmlFragment = readElementBody(eventReader);
 						if (!titles.contains(xmlFragment)) {
-							result.append(xmlFragment).append("\n");
+							result.append(xmlFragment).append('\n');
 							titles.add(xmlFragment);
 						}
 

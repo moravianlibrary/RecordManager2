@@ -75,7 +75,7 @@ public class PublisherNumber extends AbstractDomainObject {
 	@Override
 	public String toString() {
 		return "PublisherNumber [publisherNumber=" + publisherNumber
-				+ ", orderInRecord=" + orderInRecord + "]";
+				+ ", orderInRecord=" + orderInRecord + ']';
 	}
 
 }

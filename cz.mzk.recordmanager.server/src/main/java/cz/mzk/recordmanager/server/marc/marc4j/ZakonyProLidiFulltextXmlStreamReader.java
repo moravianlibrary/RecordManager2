@@ -66,7 +66,7 @@ public class ZakonyProLidiFulltextXmlStreamReader {
 					case ELEMENT_P:
 						if (fulltext) {
 							String xmlFragment = readElementBody(eventReader);
-							result.append(xmlFragment).append("\n");
+							result.append(xmlFragment).append('\n');
 						}
 						break;
 					default:

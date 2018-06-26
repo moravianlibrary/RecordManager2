@@ -230,16 +230,16 @@ public class MarcRecordImpl implements MarcRecord {
 
 		for (ControlField field : record.getControlFields()) {
 			out.append(record.getControlNumber());
-			out.append(" ");
+			out.append(' ');
 			out.append(field.getTag());
 			out.append("   L ");
 			out.append(field.getData());
-			out.append("\n");
+			out.append('\n');
 		}
 
 		for (DataField field : record.getDataFields()) {
 			out.append(record.getControlNumber());
-			out.append(" ");
+			out.append(' ');
 			out.append(field.getTag());
 			out.append(field.getIndicator1());
 			out.append(field.getIndicator2());
@@ -249,7 +249,7 @@ public class MarcRecordImpl implements MarcRecord {
 				out.append(sfield.getCode());
 				out.append(sfield.getData());
 			}
-			out.append("\n");
+			out.append('\n');
 		}
 
 		return out.toString();

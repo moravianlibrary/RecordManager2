@@ -111,7 +111,7 @@ public class Cosmotron996 extends AbstractDomainObject{
 		return "Cosmotron996 [harvestedFrom=" + harvestedFrom + ", recordId=" + recordId
 				+ ", parentRecordId=" + parentRecordId + ", harvested="
 				+ harvested + ", updated=" + updated + ", deleted=" + deleted
-				+ "]";
+				+ ']';
 	}
 
 

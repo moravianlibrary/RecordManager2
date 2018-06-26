@@ -257,7 +257,7 @@ public class OsobnostiRegionuXmlStreamReader implements MarcReader{
 		
 		public String getDate() {
 			if(birth.isEmpty() && death.isEmpty()) return "";
-			return birth+"-"+death;
+			return birth+ '-' +death;
 		}
 		
 		public void setBirth(String birth) {

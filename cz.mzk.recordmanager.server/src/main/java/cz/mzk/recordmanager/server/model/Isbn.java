@@ -84,6 +84,6 @@ public class Isbn extends AbstractDomainObject {
 	@Override
 	public String toString() {
 		return "Isbn [isbn=" + isbn + ", orderInRecord=" + orderInRecord
-				+ ", note=" + note + "]";
+				+ ", note=" + note + ']';
 	}
 }

@@ -81,11 +81,11 @@ public class ImportOaiRecordsFileReader implements ItemReader<List<OAIRecord>> {
 		files = new ArrayDeque<String>();
 		File f = new File(filename);
 		if(f.isFile()){ // file
-			pathName = f.getParent()+"/";
+			pathName = f.getParent()+ '/';
 			files.push(f.getName());
 		}
 		else{ // directory
-			pathName = f.getPath()+"/";
+			pathName = f.getPath()+ '/';
 			for(File file: f.listFiles()){
 				files.push(file.getName());
 			}

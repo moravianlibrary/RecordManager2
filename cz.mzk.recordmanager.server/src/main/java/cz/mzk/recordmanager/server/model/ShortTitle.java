@@ -55,7 +55,7 @@ public class ShortTitle extends AbstractDomainObject {
 	public String toString() {
 		return "ShortTitle [shortTitle=" + shortTitle + ", orderInRecord="
 				+ orderInRecord + ", similarityEnabled=" + similarityEnabled
-				+ "]";
+				+ ']';
 	}
 
 	@Override

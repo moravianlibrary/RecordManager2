@@ -36,7 +36,7 @@ public class OAIIdentify {
 	@Override
 	public String toString() {
 		return "OAIIdentify [granularity=" + granularity + ", deletedRecord="
-				+ deletedRecord + "]";
+				+ deletedRecord + ']';
 	}
 
 }

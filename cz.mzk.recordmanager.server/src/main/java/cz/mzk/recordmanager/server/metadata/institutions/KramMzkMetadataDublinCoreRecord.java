@@ -27,9 +27,9 @@ public class KramMzkMetadataDublinCoreRecord extends
 		String policy = dcRecord.getRights().stream()
 				.anyMatch(s -> PUBLIC_RIGHTS_PATTERN.matcher(s).matches()) ? Constants.DOCUMENT_AVAILABILITY_ONLINE
 				: Constants.DOCUMENT_AVAILABILITY_PROTECTED;
-		return Collections.singletonList(policy + "|"
+		return Collections.singletonList(policy + '|'
 				+ "http://www.digitalniknihovna.cz/mzk/uuid/"
-				+ harvestedRecord.getUniqueId().getRecordId() + "|");
+				+ harvestedRecord.getUniqueId().getRecordId() + '|');
 	}
 
 	@Override

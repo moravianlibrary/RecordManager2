@@ -84,6 +84,6 @@ public class Ean extends AbstractDomainObject {
 	@Override
 	public String toString() {
 		return "Ean [ean=" + ean + ", orderInRecord=" + orderInRecord
-				+ ", note=" + note + "]";
+				+ ", note=" + note + ']';
 	}
 }

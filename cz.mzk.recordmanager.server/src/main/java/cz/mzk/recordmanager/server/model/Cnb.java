@@ -29,7 +29,7 @@ public class Cnb extends AbstractDomainObject {
 
 	@Override
 	public String toString() {
-		return "Cnb [cnb=" + cnb + "]";
+		return "Cnb [cnb=" + cnb + ']';
 	}
 	
 	@Override

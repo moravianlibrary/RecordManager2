@@ -34,7 +34,7 @@ public class UrlHarvestedRecordEnricher implements HarvestedRecordEnricher {
 		document.remove(SolrFieldConstants.URL);
 
 		Set<String> result = new HashSet<>();
-		urls.stream().forEach(url -> result.add(institutionCode + "|" + url));
+		urls.stream().forEach(url -> result.add(institutionCode + '|' + url));
 		document.addField(SolrFieldConstants.URL, result);
 	}
 

@@ -72,7 +72,7 @@ public class NonperiodicalTitleClusterable extends TitleClusterable {
 		return "NonperiodicalTitleClusterable [id=" + this.getId() + ", harvestedRecordId="
 				+ harvestedRecordId + ", title=" + this.getTitle() + ", isbn=" + isbn
 				+ ", cnb=" + cnb + ", authorStr=" + authorStr + ", pages="
-				+ pages + "]";
+				+ pages + ']';
 	}
 
 	@Override

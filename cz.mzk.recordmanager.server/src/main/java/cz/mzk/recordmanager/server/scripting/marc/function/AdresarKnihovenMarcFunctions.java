@@ -103,13 +103,13 @@ public class AdresarKnihovenMarcFunctions implements MarcRecordFunctions {
 				switch (sf.getCode()) {
 				case 'k':
 				case 'p':
-					sb.append(" ");
+					sb.append(' ');
 					sb.append(sf.getData());
 					break;
 				case 'r':
 					sb.append(" (");
 					sb.append(sf.getData());
-					sb.append(")");
+					sb.append(')');
 					break;
 				case 'f':
 				case 'e':
@@ -141,14 +141,14 @@ public class AdresarKnihovenMarcFunctions implements MarcRecordFunctions {
 					sb.append(sf.getData());
 					break;
 				case 'm':
-					if (isData) sb.append(" ");
+					if (isData) sb.append(' ');
 					sb.append(sf.getData());
 					break;
 				case 'p':
-					if (isData) sb.append(" ");
-					sb.append("(");
+					if (isData) sb.append(' ');
+					sb.append('(');
 					sb.append(sf.getData());
-					sb.append(")");
+					sb.append(')');
 					break;
 				default:
 					sb.append(sf.getData());
@@ -177,7 +177,7 @@ public class AdresarKnihovenMarcFunctions implements MarcRecordFunctions {
 			if (df.getSubfield(subFields.charAt(1)) != null) {
 				sb.append(" (");
 				sb.append(df.getSubfield(subFields.charAt(1)).getData());
-				sb.append(")");
+				sb.append(')');
 			}
 			if (!sb.toString().isEmpty()) results.add(sb.toString().trim());
 		}
@@ -222,7 +222,7 @@ public class AdresarKnihovenMarcFunctions implements MarcRecordFunctions {
 					List<String> get = propertyResolver.resolve(MAP_ADRESAR_HOURS).get(String.valueOf(sf.getCode()));
 					if (get != null) {
 						if (sb.length() > 0) sb.append(separator);
-						sb.append(get.get(0)).append(" ").append(sf.getData());
+						sb.append(get.get(0)).append(' ').append(sf.getData());
 					}
 				} catch (IOException e) {
 					e.printStackTrace();
@@ -258,7 +258,7 @@ public class AdresarKnihovenMarcFunctions implements MarcRecordFunctions {
 				if (latitude == null) latitude = String.valueOf(i);
 				else longitude = String.valueOf(i);
 			}
-			if (latitude != null && longitude != null) return latitude + " " + longitude;
+			if (latitude != null && longitude != null) return latitude + ' ' + longitude;
 		}
 		return null;
 	}
@@ -303,7 +303,7 @@ public class AdresarKnihovenMarcFunctions implements MarcRecordFunctions {
 
 	private String getStringRelevance(Long relevance) {
 		if (relevance < 10) {
-			return "0" + relevance.toString();
+			return '0' + relevance.toString();
 		}
 		return relevance.toString();
 	}

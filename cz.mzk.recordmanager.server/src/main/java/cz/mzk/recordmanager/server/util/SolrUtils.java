@@ -205,7 +205,7 @@ public class SolrUtils {
 		StringBuilder builder = new StringBuilder();
 		for (DataField df : dataFields) {
 			for (Subfield subfield : df.getSubfields()) {
-				if (builder.length() > 0) builder.append(" ");
+				if (builder.length() > 0) builder.append(' ');
 				builder.append(subfield.getData());
 			}
 		}

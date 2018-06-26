@@ -499,7 +499,7 @@ public class PatentsXmlStreamReader implements MarcReader {
 
 	private void addField013(String docNumber, String patentType, String date) {
 		record.addVariableField(factory.newDataField("013", '#', '#',
-				"a", "CZ " + docNumber + " " + patentType, "b", TEXT_013b,
+				"a", "CZ " + docNumber + ' ' + patentType, "b", TEXT_013b,
 				"c", patentType, "d", date));
 	}
 

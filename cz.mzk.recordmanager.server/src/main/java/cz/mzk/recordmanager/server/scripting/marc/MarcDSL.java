@@ -423,7 +423,7 @@ public class MarcDSL extends BaseDSL {
     		}
     		
     		if (!subS.isEmpty()) {
-    			result.add(subS + "|" + subX);
+    			result.add(subS + '|' + subX);
     		}
     	}
     	return result;
@@ -483,11 +483,11 @@ public class MarcDSL extends BaseDSL {
 				// print punctuation from h
 				if(endCharH != ' '){
 					sb.append(endCharH);
-					sb.append(" ");
+					sb.append(' ');
 					endCharH = ' ';
 				}
 				sb.append(sf.getData());
-				sb.append(" ");
+				sb.append(' ');
 			}
 			else endCharH = ' ';
 		}
@@ -531,7 +531,7 @@ public class MarcDSL extends BaseDSL {
 
 		for(char subfield: new char[]{'b', 'c', 'd'}){
 			if(df.getSubfield(subfield) != null) {
-				sb.append(" ");
+				sb.append(' ');
 				sb.append(df.getSubfield(subfield).getData());
 			}
 		}
@@ -552,7 +552,7 @@ public class MarcDSL extends BaseDSL {
 		sb.append(changeName(df));
 
 		if(df.getSubfield('b') != null) {
-			sb.append(" ");
+			sb.append(' ');
 			sb.append(df.getSubfield('b').getData());
 		}
 
@@ -567,9 +567,9 @@ public class MarcDSL extends BaseDSL {
 			Matcher matcher = AUTHOR_PATTERN.matcher(suba);
 			if(matcher.matches()){
 				sb.append(removeEndPunctuation(matcher.group(2)));
-				sb.append(" ");
+				sb.append(' ');
 				sb.append(matcher.group(1));
-				sb.append(",");
+				sb.append(',');
 			}
 			else sb.append(suba);
 		}
@@ -632,7 +632,7 @@ public class MarcDSL extends BaseDSL {
 	}
 
 	private String getVizFieldCode(String source, String fieldTag, String value) {
-		return source + "|" + fieldTag + "|" + value;
+		return source + '|' + fieldTag + '|' + value;
 	}
 
     public List<String> getAuthAuthors(String tag){
@@ -783,7 +783,7 @@ public class MarcDSL extends BaseDSL {
 			StringBuilder author = new StringBuilder();
 			for (char c : sfCodes) {
 				if (df.getSubfield(c) != null) {
-					author.append(df.getSubfield(c).getData()).append(" ");
+					author.append(df.getSubfield(c).getData()).append(' ');
 					if (c == 'd') {
 						author = new StringBuilder(author.toString().trim());
 						if (author.toString().endsWith(".")) author = new StringBuilder(author.substring(0, author.length() - 1));
@@ -839,7 +839,7 @@ public class MarcDSL extends BaseDSL {
 			for (Ean ean : eans) {
 				Long year = metadataRecord.getPublicationYear();
 				results.add((year != null && year >= 2008L) ? ean.getEan().toString()
-						: "M" + ean.getEan().toString().substring(4));
+						: 'M' + ean.getEan().toString().substring(4));
 			}
 		}
 		results.addAll(record.getFields("024", field -> field.getIndicator1() == '2','a'));

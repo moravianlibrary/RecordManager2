@@ -104,7 +104,7 @@ public class AntikvariatyRecord {
 
 	@Override
 	public String toString() {
-		return "AntikvariatyRecord [url=" + url + ", updated=" + updated + "]";
+		return "AntikvariatyRecord [url=" + url + ", updated=" + updated + ']';
 	}	
 	
 }

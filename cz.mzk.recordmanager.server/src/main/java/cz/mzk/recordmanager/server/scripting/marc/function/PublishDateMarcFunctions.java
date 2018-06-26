@@ -311,7 +311,7 @@ public class PublishDateMarcFunctions implements MarcRecordFunctions {
 				if(df.getSubfield('c') != null) {
 					String year = df.getSubfield('c').getData().trim();
 					if(year.length() > 0 && year.endsWith("]") && !year.startsWith("[")){ 
-						return "[" + year;
+						return '[' + year;
 					}
 					return year;
 				}
