@@ -2,9 +2,9 @@ package cz.mzk.recordmanager.server.miscellaneous;
 
 import cz.mzk.recordmanager.server.export.HarvestedRecordIdRowMapper;
 import cz.mzk.recordmanager.server.jdbc.LongValueRowMapper;
+import cz.mzk.recordmanager.server.miscellaneous.caslin.keys.*;
 import cz.mzk.recordmanager.server.miscellaneous.itemid.GenerateItemIdJobParametersValidator;
 import cz.mzk.recordmanager.server.miscellaneous.itemid.GenerateItemIdWriter;
-import cz.mzk.recordmanager.server.miscellaneous.skat.*;
 import cz.mzk.recordmanager.server.model.HarvestedRecord.HarvestedRecordUniqueId;
 import cz.mzk.recordmanager.server.model.SkatKey;
 import cz.mzk.recordmanager.server.springbatch.JobFailureListener;

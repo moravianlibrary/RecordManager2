@@ -1,4 +1,4 @@
-package cz.mzk.recordmanager.server.miscellaneous;
+package cz.mzk.recordmanager.server.miscellaneous.caslin.filter;
 
 import java.util.HashMap;
 import java.util.Map;

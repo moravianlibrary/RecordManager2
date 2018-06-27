@@ -1,4 +1,4 @@
-package cz.mzk.recordmanager.server.miscellaneous;
+package cz.mzk.recordmanager.server.miscellaneous.caslin.filter;
 
 import cz.mzk.recordmanager.server.springbatch.DefaultJobParametersValidator;
 import cz.mzk.recordmanager.server.springbatch.JobParameterDeclaration;

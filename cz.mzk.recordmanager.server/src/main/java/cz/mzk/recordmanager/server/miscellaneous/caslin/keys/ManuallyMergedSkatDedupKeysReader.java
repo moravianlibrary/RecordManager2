@@ -1,4 +1,4 @@
-package cz.mzk.recordmanager.server.miscellaneous.skat;
+package cz.mzk.recordmanager.server.miscellaneous.caslin.keys;
 
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.model.SkatKey;
@@ -93,7 +93,7 @@ public class ManuallyMergedSkatDedupKeysReader implements ItemReader<Set<SkatKey
 			counterDate = DateUtils.addDays(counterDate, 1); // next day
 			if (counterDate.before(toDate)) sleep(120000, 180000); // wait 2-3 minutes
 			Set<SkatKey> results = new HashSet<>();
-			//get skat keys
+			//get caslin keys
 			downloadedKeys.forEach(key -> {
 				HarvestedRecord hr = hrDao.findByIdAndHarvestConfiguration(key, Constants.IMPORT_CONF_ID_CASLIN);
 				if (hr != null) {

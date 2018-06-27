@@ -36,7 +36,7 @@ import cz.mzk.recordmanager.server.index.IndexHarvestedRecordsToSolrJobConfig;
 import cz.mzk.recordmanager.server.index.IndexRecordsToSolrJobConfig;
 import cz.mzk.recordmanager.server.kramerius.fulltext.KrameriusFulltextJobConfig;
 import cz.mzk.recordmanager.server.kramerius.harvest.KrameriusHarvestJobConfig;
-import cz.mzk.recordmanager.server.miscellaneous.FilterCaslinRecordsBySiglaJobConfig;
+import cz.mzk.recordmanager.server.miscellaneous.caslin.filter.FilterCaslinRecordsBySiglaJobConfig;
 import cz.mzk.recordmanager.server.miscellaneous.MiscellaneousJobsConfig;
 import cz.mzk.recordmanager.server.miscellaneous.agrovoc.AgrovocConvertorJobConfig;
 import cz.mzk.recordmanager.server.oai.harvest.cosmotron.CosmotronHarvestJobConfig;

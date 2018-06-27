@@ -1,4 +1,4 @@
-package cz.mzk.recordmanager.server.miscellaneous;
+package cz.mzk.recordmanager.server.miscellaneous.caslin.filter;
 
 import java.io.ByteArrayInputStream;
 import java.nio.charset.StandardCharsets;

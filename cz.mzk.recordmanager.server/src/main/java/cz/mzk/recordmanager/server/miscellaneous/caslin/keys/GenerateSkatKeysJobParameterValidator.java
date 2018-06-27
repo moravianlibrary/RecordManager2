@@ -1,4 +1,4 @@
-package cz.mzk.recordmanager.server.miscellaneous.skat;
+package cz.mzk.recordmanager.server.miscellaneous.caslin.keys;
 
 import static cz.mzk.recordmanager.server.springbatch.JobParameterDeclaration.param;
 
