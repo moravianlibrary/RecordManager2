@@ -1,84 +1,62 @@
 package cz.mzk.recordmanager.server.imports;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Deque;
-import java.util.List;
-
+import cz.mzk.recordmanager.server.export.IOFormat;
+import cz.mzk.recordmanager.server.marc.marc4j.*;
+import cz.mzk.recordmanager.server.model.DownloadImportConfiguration;
+import cz.mzk.recordmanager.server.oai.dao.DownloadImportConfigurationDAO;
+import cz.mzk.recordmanager.server.oai.dao.ImportConfigurationDAO;
+import cz.mzk.recordmanager.server.util.HttpClient;
 import org.marc4j.MarcException;
 import org.marc4j.MarcReader;
 import org.marc4j.marc.Record;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.item.ItemReader;
-import org.springframework.batch.item.NonTransientResourceException;
-import org.springframework.batch.item.ParseException;
-import org.springframework.batch.item.UnexpectedInputException;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import cz.mzk.recordmanager.server.export.IOFormat;
-import cz.mzk.recordmanager.server.marc.marc4j.MarcAlephStreamReader;
-import cz.mzk.recordmanager.server.marc.marc4j.MarcISO2709StreamReader;
-import cz.mzk.recordmanager.server.marc.marc4j.MarcLineStreamReader;
-import cz.mzk.recordmanager.server.marc.marc4j.MarcXmlReader;
-import cz.mzk.recordmanager.server.marc.marc4j.OsobnostiRegionuXmlStreamReader;
-import cz.mzk.recordmanager.server.marc.marc4j.PatentsXmlStreamReader;
-import cz.mzk.recordmanager.server.marc.marc4j.SfxJibNlkCsvStreamReader;
-import cz.mzk.recordmanager.server.marc.marc4j.SfxJibXmlStreamReader;
-import cz.mzk.recordmanager.server.model.DownloadImportConfiguration;
-import cz.mzk.recordmanager.server.oai.dao.DownloadImportConfigurationDAO;
-import cz.mzk.recordmanager.server.oai.dao.ImportConfigurationDAO;
-import cz.mzk.recordmanager.server.util.HttpClient;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ImportRecordsFileReader implements ItemReader<List<Record>> {
 
 	private static Logger logger = LoggerFactory.getLogger(ImportRecordsFileReader.class);
-	
+
 	@Autowired
 	private ImportConfigurationDAO configDao;
-	
+
 	@Autowired
 	private DownloadImportConfigurationDAO dicDao;
-	
-	@Autowired 
-	private HttpClient httpClient;
-	
-	private MarcReader reader;
-	
-	private IOFormat format;
-	
-	private FileInputStream inStream;
-	
-	private Long confId;
-	
-	private int batchSize = 20;
-	
-	private Deque<String> files = null;
 
-	private String pathName = null;
-	
+	@Autowired
+	private HttpClient httpClient;
+
+	private MarcReader reader;
+
+	private IOFormat format;
+
+	private Long confId;
+
+	private int batchSize = 20;
+
+	private List<String> files = null;
+
 	public ImportRecordsFileReader(Long confId, String filename, String strFormat) throws FileNotFoundException {
 		format = IOFormat.stringToExportFormat(strFormat);
 		this.confId = confId;
 		getFilesName(filename);
 	}
-	
+
 	public ImportRecordsFileReader(Long confId) throws Exception {
 		this.confId = confId;
 		this.reader = null;
 	}
-	
+
 	@Override
-	public synchronized List<Record> read() throws Exception, UnexpectedInputException,
-			ParseException, NonTransientResourceException {
-		List<Record> batch = new ArrayList<Record>();
-		
-		if (reader == null) 
+	public synchronized List<Record> read() throws Exception {
+		List<Record> batch = new ArrayList<>();
+
+		if (reader == null)
 			if (files == null) initializeDownloadReader();
 			else initializeFilesReader();
 		else if (!reader.hasNext()) initializeFilesReader();
@@ -94,8 +72,8 @@ public class ImportRecordsFileReader implements ItemReader<List<Record>> {
 		}
 		return batch.isEmpty() ? null : batch;
 	}
-	
-	protected MarcReader getMarcReader(InputStream inStream) {
+
+	private MarcReader getMarcReader(InputStream inStream) {
 		switch (format) {
 		case LINE_MARC:
 			return new MarcLineStreamReader(inStream);
@@ -115,8 +93,8 @@ public class ImportRecordsFileReader implements ItemReader<List<Record>> {
 			return new MarcXmlReader(inStream);
 		}
 	}
-	
-	protected void initializeDownloadReader() throws IOException{
+
+	private void initializeDownloadReader() throws IOException {
 		DownloadImportConfiguration config = dicDao.get(confId);
 		if (config == null) {
 			throw new IllegalArgumentException(String.format("Configuration with id=%s not found.", confId));
@@ -126,33 +104,33 @@ public class ImportRecordsFileReader implements ItemReader<List<Record>> {
 			throw new IllegalArgumentException(
 					String.format("Missing url in DownloadImportConfiguration with id=%s.", confId));
 		}
-		this.format = IOFormat.stringToExportFormat(config.getFormat());		
+		this.format = IOFormat.stringToExportFormat(config.getFormat());
 		this.reader = getMarcReader(httpClient.executeGet(url));
 	}
 
-	protected void initializeFilesReader() {
+	private void initializeFilesReader() {
 		try {
 			if(files != null && !files.isEmpty()){
-				String file = pathName+files.pop();
-				inStream = new FileInputStream(file);
+				FileInputStream inStream = new FileInputStream(files.remove(0));
 				reader = getMarcReader(inStream);
 			}
 		} catch (FileNotFoundException e) {
 			logger.warn(e.getMessage());
 		}
 	}
-	
-	protected void getFilesName(String filename) {
-		files = new ArrayDeque<String>();
+
+	private void getFilesName(String filename) {
+		if (files == null) files = new ArrayList<>();
 		File f = new File(filename);
 		if (f.isFile()) {
-			pathName = f.getParent()+ '/';
-			files.push(f.getName());
+			files.add(f.getAbsolutePath());
 		}
 		else {
-			for (File file: f.listFiles()) {
-				pathName = file.getParent()+ '/';
-				files.push(file.getName());
+			File[] listFiles = f.listFiles();
+			if (listFiles == null) return;
+			for (File file : listFiles) {
+				if (file.isDirectory()) getFilesName(file.getAbsolutePath());
+				else files.add(file.getAbsolutePath());
 			}
 		}
 	}
