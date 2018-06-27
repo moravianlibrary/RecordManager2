@@ -7,8 +7,8 @@ import org.springframework.batch.core.JobParameter;
 import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.JobParametersInvalidException;
 
+import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 
 import static cz.mzk.recordmanager.server.springbatch.JobParameterDeclaration.param;
 
@@ -21,8 +21,9 @@ public class UpdateCaslinRecordsViewValidator extends DefaultJobParametersValida
 
 	@Override
 	public Collection<JobParameterDeclaration> getParameters() {
-		return Collections.singletonList(
-				param(Constants.JOB_PARAM_VIEW, JobParameter.ParameterType.STRING, true)
+		return Arrays.asList(
+				param(Constants.JOB_PARAM_VIEW, JobParameter.ParameterType.STRING, true),
+				param(Constants.JOB_PARAM_UNTIL_DATE, JobParameter.ParameterType.DATE, false)
 		);
 	}
 

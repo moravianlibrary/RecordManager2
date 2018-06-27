@@ -41,10 +41,13 @@ public class UpdateCaslinRecordsViewWriter implements ItemWriter<HarvestedRecord
 
 	private String viewName;
 
+	private Date until;
+
 	private static final String VIEW_FILE = "view/%s_caslin.txt";
 
-	public UpdateCaslinRecordsViewWriter(String view) {
-		this.viewName = view;
+	public UpdateCaslinRecordsViewWriter(String viewName, Date until) {
+		this.viewName = viewName;
+		this.until = until == null ? new Date() : until;
 	}
 
 	@Override
@@ -64,7 +67,7 @@ public class UpdateCaslinRecordsViewWriter implements ItemWriter<HarvestedRecord
 				for (String sigla : marcRecord.getFields("996", 'e')) {
 					if (!viewSiglaList.contains(sigla.trim())) continue;
 					DedupRecord dr = hr.getDedupRecord();
-					if (dr == null) break;
+					if (dr == null || dr.getUpdated().after(until)) break;
 					dr.setUpdated(new Date());
 					drDao.persist(dr);
 					break;

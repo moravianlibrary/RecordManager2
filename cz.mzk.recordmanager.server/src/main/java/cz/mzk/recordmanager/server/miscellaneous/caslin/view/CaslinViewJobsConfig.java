@@ -21,6 +21,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.task.TaskExecutor;
 
 import javax.sql.DataSource;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -39,6 +40,7 @@ public class CaslinViewJobsConfig {
 	@Autowired
 	private TaskExecutor taskExecutor;
 
+	private static final Date DATE_OVERRIDEN_BY_EXPRESSION = null;
 	private static final String STRING_OVERRIDEN_BY_EXPRESSION = null;
 
 	// updateCaslinRecordsViewJob
@@ -59,7 +61,7 @@ public class CaslinViewJobsConfig {
 				.listener(new StepProgressListener())
 				.<HarvestedRecordUniqueId, HarvestedRecordUniqueId>chunk(1)//
 				.reader(updateCaslinRecordsViewReader()) //
-				.writer(updateCaslinRecordsViewWriter(STRING_OVERRIDEN_BY_EXPRESSION)) //
+				.writer(updateCaslinRecordsViewWriter(STRING_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION)) //
 				.taskExecutor(taskExecutor)
 				.build();
 	}
@@ -90,9 +92,10 @@ public class CaslinViewJobsConfig {
 	@Bean(name = Constants.JOB_ID_UPDATE_CASLIN_VIEW + ":updateCaslinRecordsViewWriter")
 	@StepScope
 	public UpdateCaslinRecordsViewWriter updateCaslinRecordsViewWriter(
-			@Value("#{jobParameters[" + Constants.JOB_PARAM_VIEW + "]}") String view
+			@Value("#{jobParameters[" + Constants.JOB_PARAM_VIEW + "]}") String view,
+			@Value("#{jobParameters[" + Constants.JOB_PARAM_UNTIL_DATE + "]}") Date until
 	) {
-		return new UpdateCaslinRecordsViewWriter(view);
+		return new UpdateCaslinRecordsViewWriter(view, until);
 	}
 
 }
