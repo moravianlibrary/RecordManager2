@@ -36,6 +36,7 @@ public class Constants {
 	public static final String JOB_ID_GENERATE_LOCAL_SKAT_DEDUP_KEYS	= "generateLocalSkatDedupKeysJob";
 	public static final String JOB_ID_MANUALLY_MERGED_SKAT_DEDUP_KEYS	= "generateManuallyMergedSkatDedupKeysJob";
 	public static final String JOB_ID_GENERATE_ITEM_ID				= "generateItemIdJob";
+	public static final String JOB_ID_UPDATE_CASLIN_VIEW			= "updateCaslinRecordsViewJob";
 	public static final String JOB_ID_HARVEST_OBALKY_KNIH		= "obalkyKnihHarvestJob";
 	public static final String JOB_ID_HARVEST_ZAKONYPROLIDI			= "zakonyProLidiHarvestJob";
 	public static final String JOB_ID_FULLTEXT_ZAKONYPROLIDI		= "zakonyProLidiFulltextJob";
@@ -65,6 +66,7 @@ public class Constants {
 	public static final String JOB_PARAM_SINGLE_ID		= "singleId";
 	public static final String JOB_PARAM_DELETED		= "deleted"; // for export
 	public static final String JOB_PARAM_TYPE			= "type";
+	public static final String JOB_PARAM_VIEW			= "view";
 
 	public static final String JOB_PARAM_TRUE_VALUE		= "true";
 	public static final String JOB_PARAM_ONE_VALUE		= "1";
