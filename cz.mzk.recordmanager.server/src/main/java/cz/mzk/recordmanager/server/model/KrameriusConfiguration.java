@@ -100,4 +100,9 @@ public class KrameriusConfiguration extends ImportConfiguration {
 		this.harvestJobName = harvestJobName;
 	}
 
+	@Override
+	public String toString() {
+		return String.format("%s[id=%s, url='%s', urlSolr='%s']", this.getClass().getSimpleName(),
+				this.getId(), this.getUrl(), this.getUrlSolr());
+	}
 }
