@@ -53,7 +53,7 @@ public class RegenerateDedupKeysWriter implements ItemWriter<Long> {
 			} catch (InvalidMarcException ime) {
 				logger.warn("Invalid Marc in record: " + rec.getId());
 			} catch (Exception e) {
-				logger.warn("Skipping record due to error: " + e.toString());
+				logger.warn("Skipping record due to error: " + e);
 			}
 
 			

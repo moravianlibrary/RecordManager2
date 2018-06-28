@@ -166,21 +166,25 @@ public class DublinCoreDSL extends BaseDSL {
 		}
 		return result;
 	}
-	
-	public String getAllFields() {
-		String result ="";
-		if (!record.getCreators().isEmpty()) {result = result + record.getCreators().toString();}
-		if (!record.getContributors().isEmpty()) {result = result + record.getContributors().toString();}
-		if (!record.getLanguages().isEmpty()) {result = result + record.getLanguages().toString();}
-		if (!record.getSubjects().isEmpty()) {result = result + record.getSubjects().toString();}
-		if (!record.getTitles().isEmpty()) {result = result + record.getTitles().toString();}
-		if (!record.getPublishers().isEmpty()) {result = result + record.getPublishers().toString();}
-		if (!record.getDates().isEmpty()) {result = result + record.getDates().toString();}
-		/* more to come..*/
-//		System.out.println("getAllFields: " + result);
-		return result;
+
+	public List<String> getAllFields() {
+		List<String> resultsList = new ArrayList<>();
+		resultsList.addAll(record.getContributors());
+		resultsList.addAll(record.getCoverages());
+		resultsList.addAll(record.getCreators());
+		resultsList.addAll(record.getDates());
+		resultsList.addAll(record.getDescriptions());
+		resultsList.addAll(record.getFormats());
+		resultsList.addAll(record.getIdentifiers());
+		resultsList.addAll(record.getLanguages());
+		resultsList.addAll(record.getPublishers());
+		resultsList.addAll(record.getSubjects());
+		resultsList.addAll(record.getTitles());
+		resultsList.addAll(record.getTitleAlts());
+		resultsList.addAll(record.getContents());
+		return resultsList;
 	}
-	
+
 	public String getDescriptionText() {
 		StringBuilder result= new StringBuilder();
 		List<String> descriptions = record.getDescriptions();

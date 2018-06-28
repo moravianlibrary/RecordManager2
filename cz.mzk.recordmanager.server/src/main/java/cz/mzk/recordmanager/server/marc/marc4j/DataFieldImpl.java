@@ -233,7 +233,7 @@ public class DataFieldImpl extends info.freelibrary.marc4j.impl.VariableFieldImp
         sb.append(getIndicator2());
 
         for (Subfield subfield : mySubfields) {
-            sb.append(subfield.toString());
+            sb.append(subfield);
         }
 
         return sb.toString();

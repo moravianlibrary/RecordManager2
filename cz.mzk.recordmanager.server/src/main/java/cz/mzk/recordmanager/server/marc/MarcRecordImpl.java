@@ -225,7 +225,7 @@ public class MarcRecordImpl implements MarcRecord {
 
 		out.append(record.getControlNumber());
 		out.append(" LDR   L ");
-		out.append(record.getLeader().toString());
+		out.append(record.getLeader());
 		out.append('\n');
 
 		for (ControlField field : record.getControlFields()) {

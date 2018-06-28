@@ -81,7 +81,7 @@ public class KrameriusFulltextProcessor implements
 
 	@Override
 	public HarvestedRecord process(HarvestedRecord item) throws Exception {
-		logger.debug("Processing Harvested Record: " + item.toString()
+		logger.debug("Processing Harvested Record: " + item
 				+ " uniqueId: " + item.getUniqueId());
 
 		String policy;
