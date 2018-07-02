@@ -10,6 +10,7 @@ import cz.mzk.recordmanager.server.dc.DublinCoreRecord;
 import cz.mzk.recordmanager.server.metadata.MetadataRecord;
 import cz.mzk.recordmanager.server.model.Isbn;
 import cz.mzk.recordmanager.server.model.Issn;
+import cz.mzk.recordmanager.server.model.Oclc;
 import cz.mzk.recordmanager.server.scripting.BaseDSL;
 import cz.mzk.recordmanager.server.scripting.ListResolver;
 import cz.mzk.recordmanager.server.scripting.MappingResolver;
@@ -274,6 +275,10 @@ public class DublinCoreDSL extends BaseDSL {
 
 	public Set<String> getAllTitlesForSeraching() {
 		return dcContext.record().getTitles().stream().map(String::toLowerCase).collect(Collectors.toSet());
+	}
+
+	public Set<String> getOclcs() {
+		return dcContext.metadataRecord().getOclcs().stream().map(Oclc::getOclcStr).collect(Collectors.toSet());
 	}
 
 }
