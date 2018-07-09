@@ -27,7 +27,12 @@ public class SolrUtils {
 	private static final char HIERARCHIC_FACET_SEPARATOR = '/';
 
 	private static final Pattern RECORDTYPE_PATTERN = Pattern.compile("^(AUDIO|VIDEO|OTHER|LEGISLATIVE|PATENTS|BLIND)_(.*)$");
-	
+	private static final Pattern PUBLISHER_NAME_BRACKET_PATTERN = Pattern.compile("[<>\\[\\]]");
+	private static final Pattern PUBLISHER_NAME_CLEAN_END_PATTERN = Pattern.compile("[,?\\s]+$");
+	private static final Pattern REMOVE_END_PUNCTUATION_PATTERN = Pattern.compile("[,;:/\\s]+$");
+	private static final Pattern MATCH_END_PUNCTUATION_PATTERN = Pattern.compile("[^.]\\.\\.$");
+	private static final Pattern AUTHOR_PATTERN = Pattern.compile("([^,]+),(.+)");
+
 	private static final String INSTITUTION_LIBRARY = "Library";
 	private static final String INSTITUTION_OTHERS = "Others";
 	private static final String INSTITUTION_UNKNOWN = "unknown";
@@ -237,4 +242,87 @@ public class SolrUtils {
 		}
 		return value;
 	}
+
+	public static int getInd2AsInt(DataField df) {
+		char ind2char = df.getIndicator2();
+		return Character.isDigit(ind2char) ? Integer.valueOf(String.valueOf(ind2char)) : 0;
+	}
+
+	public static String cleanPublisherName(String name) {
+		name = CleaningUtils.replaceAll(name, PUBLISHER_NAME_BRACKET_PATTERN, "");
+		name = CleaningUtils.replaceAll(name, PUBLISHER_NAME_CLEAN_END_PATTERN, "");
+		return name.trim();
+	}
+
+	public static String toUpperCaseFirstChar(String string) {
+		if (string == null || string.isEmpty()) return null;
+		return string.substring(0, 1).toUpperCase() + string.substring(1);
+	}
+
+	public static List<String> toUpperCaseFirstChar(List<String> strings) {
+		if (strings == null || strings.isEmpty()) return Collections.emptyList();
+		List<String> results = new ArrayList<>();
+		strings.forEach(string -> results.add(string.substring(0, 1).toUpperCase() + string.substring(1)));
+		return results;
+	}
+
+	public static String removeEndPunctuation(String data) {
+		if (data == null || data.isEmpty()) return null;
+		data = CleaningUtils.replaceAll(data, REMOVE_END_PUNCTUATION_PATTERN, "");
+		if (MATCH_END_PUNCTUATION_PATTERN.matcher(data).find()) data = data.substring(0, data.length() - 1);
+		return data;
+	}
+
+	public static String getNameForDisplay(DataField df) {
+		StringBuilder sb = new StringBuilder();
+		sb.append(changeName(df));
+
+		for (char subfield : new char[]{'b', 'c', 'd'}) {
+			if (df.getSubfield(subfield) != null) {
+				sb.append(' ');
+				sb.append(df.getSubfield(subfield).getData());
+			}
+		}
+		return removeEndPunctuation(sb.toString().trim());
+	}
+
+	private static String changeName(DataField df) {
+		StringBuilder sb = new StringBuilder();
+		if (df.getIndicator1() == '1') {
+			String suba = "";
+			if (df.getSubfield('a') != null) suba = df.getSubfield('a').getData();
+			Matcher matcher = AUTHOR_PATTERN.matcher(suba);
+			if (matcher.matches()) {
+				sb.append(removeEndPunctuation(matcher.group(2)));
+				sb.append(' ');
+				sb.append(matcher.group(1));
+				sb.append(',');
+			} else sb.append(suba);
+		} else {
+			if (df.getSubfield('a') != null) sb.append(df.getSubfield('a').getData());
+		}
+
+		return sb.toString();
+	}
+
+	public static String getNameForExact(DataField df) {
+		StringBuilder sb = new StringBuilder();
+		sb.append(SolrUtils.changeName(df));
+
+		if (df.getSubfield('b') != null) {
+			sb.append(' ');
+			sb.append(df.getSubfield('b').getData());
+		}
+
+		return removeEndPunctuation(sb.toString().trim());
+	}
+
+	public static String getVizFieldCode(String source, String fieldTag, String value) {
+		return source + '|' + fieldTag + '|' + value;
+	}
+
+	public static String getSubfieldAsString(DataField df, char subfieldCode) {
+		return df.getSubfield(subfieldCode) != null ? df.getSubfield(subfieldCode).getData() : "";
+	}
+
 }

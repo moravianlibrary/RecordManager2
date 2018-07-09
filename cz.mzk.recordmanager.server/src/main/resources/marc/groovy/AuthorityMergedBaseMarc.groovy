@@ -73,4 +73,4 @@ cpk_detected_format_facet_str_mv = getFormat()
 subjectKeywords_search_txt_mv = getFields "100abcd:400abcd:500abcd"
 people_search_txt_mv = getFields "100abcd:400abcd:500abcd"
 
-id_authority = getId001()
+id_authority = getControlField("001")

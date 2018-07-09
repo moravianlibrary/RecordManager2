@@ -26,18 +26,19 @@ import cz.mzk.recordmanager.server.util.SolrUtils;
 
 @Component
 public class AdresarKnihovenMarcFunctions implements MarcRecordFunctions {
-	
+
 	@Autowired
 	private SiglaDAO siglaDao;
-	
+
 	@Autowired
 	private ImportConfigurationDAO configurationDAO;
-	
+
 	private static final MappingResolver propertyResolver = new ResourceMappingResolver(new ClasspathResourceProvider());
-	
-	private final static Pattern FIELD_PATTERN = Pattern.compile("([a-zA-Z0-9]{3})([a-zA-Z0-9]*)");
-	private final static Pattern GPS_PATTERN = Pattern.compile("(\\d+)°(\\d+)'([\\d.]+)\"([NSEW])");
-	private final static String MAP_ADRESAR_HOURS = "adresar_hours.map";
+
+	private static final Pattern FIELD_PATTERN = Pattern.compile("([a-zA-Z0-9]{3})([a-zA-Z0-9]*)");
+	private static final Pattern GPS_PATTERN = Pattern.compile("(\\d+)°(\\d+)'([\\d.]+)\"([NSEW])");
+	private static final Pattern SPLIT_COLON = Pattern.compile(":");
+	private static final String MAP_ADRESAR_HOURS = "adresar_hours.map";
 	private static final String MAP_LIBRARIES_RELEVANCE = "adresar_relevance.map";
 	private static final String MAP_LIBRARIES_REGION = "adresar_region.map";
 	private static final String PORTAL_FACET_TEXT = "KNIHOVNYCZ_YES";
@@ -51,13 +52,14 @@ public class AdresarKnihovenMarcFunctions implements MarcRecordFunctions {
 		relevanceBySigla.put("ABA012", 14L);
 		relevanceBySigla.put("ABA013", 14L);
 	}
+
 	private static final List<String> REGION_IDS = new BufferedReader(new InputStreamReader(
 			new ClasspathResourceProvider().getResource("/mapping/adresar_region_libraries.map"), StandardCharsets.UTF_8))
 			.lines().collect(Collectors.toCollection(ArrayList::new));
 	private static final List<String> DISTRICT_IDS = new BufferedReader(new InputStreamReader(
 			new ClasspathResourceProvider().getResource("/mapping/adresar_district_libraries.map"), StandardCharsets.UTF_8))
 			.lines().collect(Collectors.toCollection(ArrayList::new));
-	
+
 	public String getFirstFieldForAdresar(MarcFunctionContext ctx, String tag) {
 		Matcher matcher = FIELD_PATTERN.matcher(tag);
 		if (!matcher.matches()) {
@@ -80,7 +82,7 @@ public class AdresarKnihovenMarcFunctions implements MarcRecordFunctions {
 
 	public List<String> getFieldsForAdresar(MarcFunctionContext ctx, String tags, SubfieldExtractionMethod method, String separator) {
 		List<String> result = new ArrayList<>();
-		for (String tag : tags.split(":")) {
+		for (String tag : SPLIT_COLON.split(tags)) {
 			Matcher matcher = FIELD_PATTERN.matcher(tag);
 			if (!matcher.matches()) {
 				throw new IllegalArgumentException("Tag can't be parsed: " + tag);
@@ -91,15 +93,15 @@ public class AdresarKnihovenMarcFunctions implements MarcRecordFunctions {
 		}
 		return result;
 	}
-	
+
 	public List<String> adresarGetResponsibility(MarcFunctionContext ctx) {
 		List<String> results = new ArrayList<>();
 		char[] sfCodes = {'t', 'k', 'p', 'r', 'f', 'e'};
 		Subfield sf;
 		for (DataField df : ctx.record().getDataFields("JMN")) {
 			StringBuilder sb = new StringBuilder();
-			for (int i = 0; i < sfCodes.length; i++) {
-				if ((sf = df.getSubfield(sfCodes[i])) == null) continue;
+			for (char sfCode : sfCodes) {
+				if ((sf = df.getSubfield(sfCode)) == null) continue;
 				switch (sf.getCode()) {
 				case 'k':
 				case 'p':
@@ -133,8 +135,8 @@ public class AdresarKnihovenMarcFunctions implements MarcRecordFunctions {
 		for (DataField df : ctx.record().getDataFields("ADR")) {
 			StringBuilder sb = new StringBuilder();
 			boolean isData = false;
-			for (int i = 0; i < sfCodes.length; i++) {
-				if ((sf = df.getSubfield(sfCodes[i])) == null) continue;
+			for (char sfCode : sfCodes) {
+				if ((sf = df.getSubfield(sfCode)) == null) continue;
 				switch (sf.getCode()) {
 				case 'c':
 					if (isData) sb.append(", ");
@@ -160,7 +162,7 @@ public class AdresarKnihovenMarcFunctions implements MarcRecordFunctions {
 		}
 		return results;
 	}
-	
+
 	public List<String> adresarGetEmailOrMvs(MarcFunctionContext ctx, String tag) {
 		List<String> results = new ArrayList<>();
 		Matcher matcher = FIELD_PATTERN.matcher(tag);
@@ -193,7 +195,7 @@ public class AdresarKnihovenMarcFunctions implements MarcRecordFunctions {
 		}
 		return null;
 	}
-	
+
 	public List<String> adresarGetNameAlt(MarcFunctionContext ctx, String separator) {
 		List<String> results = new ArrayList<>();
 		for (DataField df : ctx.record().getDataFields("VAR")) {
@@ -212,7 +214,7 @@ public class AdresarKnihovenMarcFunctions implements MarcRecordFunctions {
 		}
 		return results;
 	}
-	
+
 	public String adresarGetHours(MarcFunctionContext ctx) {
 		String separator = " | ";
 		for (DataField df : ctx.record().getDataFields("OTD")) {
@@ -231,10 +233,9 @@ public class AdresarKnihovenMarcFunctions implements MarcRecordFunctions {
 			String temp = sb.toString();
 			if (!temp.isEmpty()) return temp;
 		}
-		
 		return null;
 	}
-	
+
 	public String adresarGetCpkCode(MarcFunctionContext ctx) {
 		String siglaName;
 		List<Sigla> siglas;
@@ -270,7 +271,7 @@ public class AdresarKnihovenMarcFunctions implements MarcRecordFunctions {
 		for (DataField df : ctx.record().getDataFields("SGL")) {
 			if (df.getSubfield('a') != null
 					&& relevanceBySigla.containsKey(df.getSubfield('a')
-							.getData())) {
+					.getData())) {
 				return getStringRelevance(relevanceBySigla.get(df.getSubfield('a').getData()));
 			}
 		}
@@ -280,11 +281,11 @@ public class AdresarKnihovenMarcFunctions implements MarcRecordFunctions {
 				if (data.equals("pověřená regionální funkcí")) maxRelevance = 10L;
 			}
 			for (DataField df : ctx.record().getDataFields("TYP")) {
-				List<String> results = null;
+				List<String> results;
 				if (df.getSubfield('b') != null
 						&& (results = propertyResolver.resolve(
-								MAP_LIBRARIES_RELEVANCE).get(
-								df.getSubfield('b').getData())) != null) {
+						MAP_LIBRARIES_RELEVANCE).get(
+						df.getSubfield('b').getData())) != null) {
 					if (!results.isEmpty()) {
 						for (String rel : results) {
 							Long longRel = Long.valueOf(rel);
@@ -329,7 +330,7 @@ public class AdresarKnihovenMarcFunctions implements MarcRecordFunctions {
 
 	public List<String> adresarGetUrlDisplay(MarcFunctionContext ctx) {
 		List<String> results = new ArrayList<>();
-		results.addAll(ctx.record().getFields("URL", " | ", 'u','z'));
+		results.addAll(ctx.record().getFields("URL", " | ", 'u', 'z'));
 		for (DataField df : ctx.record().getDataFields("ADK")) {
 			if (df.getSubfield('u') != null) {
 				results.add(df.getSubfield('u').getData() + " | "

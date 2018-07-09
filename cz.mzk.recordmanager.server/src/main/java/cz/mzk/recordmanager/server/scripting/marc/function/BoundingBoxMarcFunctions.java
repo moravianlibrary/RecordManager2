@@ -36,7 +36,7 @@ public strictfp class BoundingBoxMarcFunctions implements MarcRecordFunctions {
 	private static final SpatialContext SPATIAL_CONTEXT = createSpatialContext();
 
 	public String getBoundingBoxAsPolygon(MarcFunctionContext ctx) {
-		double points[] =  parseBoundingBox(ctx.record());
+		double points[] = parseBoundingBox(ctx.record());
 		if (points == null) {
 			return null;
 		}
@@ -49,7 +49,7 @@ public strictfp class BoundingBoxMarcFunctions implements MarcRecordFunctions {
 	}
 
 	public String getBoundingBox(MarcFunctionContext ctx) {
-		double points[] =  parseBoundingBox(ctx.record());
+		double points[] = parseBoundingBox(ctx.record());
 		if (points == null) {
 			return null;
 		}
@@ -59,7 +59,7 @@ public strictfp class BoundingBoxMarcFunctions implements MarcRecordFunctions {
 
 	@Deprecated
 	public String getBoundingBoxAsPolygon(MarcRecord rec) {
-		double points[] =  parseBoundingBox(rec);
+		double points[] = parseBoundingBox(rec);
 		if (points == null) {
 			return null;
 		}
@@ -73,7 +73,7 @@ public strictfp class BoundingBoxMarcFunctions implements MarcRecordFunctions {
 
 	@Deprecated
 	public String getBoundingBox(MarcRecord record) {
-		double points[] =  parseBoundingBox(record);
+		double points[] = parseBoundingBox(record);
 		if (points == null) {
 			return null;
 		}
@@ -81,7 +81,7 @@ public strictfp class BoundingBoxMarcFunctions implements MarcRecordFunctions {
 				points[0], points[1], points[2], points[3]);
 	}
 
-	protected double[] parseBoundingBox(MarcRecord record) {
+	private double[] parseBoundingBox(MarcRecord record) {
 		List<DataField> fields = record.getAllFields().get("034");
 		if (fields == null || fields.isEmpty()) {
 			return null;
@@ -95,15 +95,14 @@ public strictfp class BoundingBoxMarcFunctions implements MarcRecordFunctions {
 		double east = coordinateToDecimal(origEast);
 		double north = coordinateToDecimal(origNorth);
 		double south = coordinateToDecimal(origSouth);
-		double longitude = Double.NaN;
-		double latitude = Double.NaN;
+		double longitude;
+		double latitude;
 		if (!Double.isNaN(west) && !Double.isNaN(north)) {
 			if (!Double.isNaN(east)) {
 				longitude = (west + east) / 2.0;
 			} else {
 				longitude = west;
 			}
-
 			if (!Double.isNaN(south)) {
 				latitude = (north + south) / 2;
 			} else {
@@ -113,8 +112,7 @@ public strictfp class BoundingBoxMarcFunctions implements MarcRecordFunctions {
 					|| (latitude < -90 || latitude > 90)) {
 				logger.warn(
 						"Discarding invalid coordinates {}, {}  decoded from w={}, e={}, n={}, s={}",
-						longitude, latitude, origWest, origEast, origNorth,
-						origSouth);
+						longitude, latitude, origWest, origEast, origNorth, origSouth);
 			} else {
 				if (Double.isNaN(north) || Double.isNaN(south)
 						|| Double.isNaN(east) || Double.isNaN(north)) {
@@ -123,8 +121,7 @@ public strictfp class BoundingBoxMarcFunctions implements MarcRecordFunctions {
 							origWest, origEast, origNorth, origSouth);
 				} else {
 					if (west < east && south < north) {
-						return new double[]{ west, south, east,
-								north};
+						return new double[]{west, south, east, north};
 					} else {
 						logger.warn(
 								"INVALID RECORD missig coordinate w={} e={} n={} s={}",
@@ -175,8 +172,7 @@ public strictfp class BoundingBoxMarcFunctions implements MarcRecordFunctions {
 		String spatialContextFactoryClass = "com.spatial4j.core.context.jts.JtsSpatialContextFactory";
 		Map<String, String> args = Collections.singletonMap("spatialContextFactory", spatialContextFactoryClass);
 		ClassLoader classLoader = BoundingBoxMarcFunctions.class.getClassLoader();
-		SpatialContext ctx = SpatialContextFactory.makeSpatialContext(args, classLoader);
-		return ctx;
+		return SpatialContextFactory.makeSpatialContext(args, classLoader);
 	}
 
 }

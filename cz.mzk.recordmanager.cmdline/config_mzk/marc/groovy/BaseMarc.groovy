@@ -63,7 +63,7 @@ issnIsbnIsmn_search_str_mv = getISBNISSNISMN()
 sourceTitle_search_txt_mv = getFieldsUnique "773adtkxz9"
 callNumber_search_txt_mv = getFieldsUnique "910b:996ch", SEPARATED
 publisher_search_str_mv = getFieldsTrim "260b:264b:928a:978abcdg7"
-id001_search_str = getId001()
+id001_search_str = getControlField("001")
 cnb_search_str = getFirstField "015az"
 
 ean_str_mv = getEAN()

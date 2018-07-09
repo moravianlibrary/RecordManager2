@@ -35,13 +35,13 @@ sfx_links = getSfxIds()
 
 loanRelevance = getLoanRelevance();
 
-id001_search = getId001();
+id001_search = getControlField("001")
 
 conspectus_str_mv = getConspectus();
 
 link773_str = get773link();
 f773_display = get773display();
-id001_str = getId001();
+id001_str = getControlField("001")
 
 metaproxy_boolean = getMetaproxyBool()
 barcodes = getBarcodes()

@@ -25,7 +25,7 @@ sfx_links = getSfxIds()
 
 loanRelevance = getLoanRelevance();
 
-id001_search = getId001()
+id001_search = getControlField("001")
 
 barcodes = getBarcodes()
 format_display_mv = getFormat()

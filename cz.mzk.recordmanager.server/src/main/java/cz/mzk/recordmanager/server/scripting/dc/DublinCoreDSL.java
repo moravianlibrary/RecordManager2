@@ -1,11 +1,5 @@
 package cz.mzk.recordmanager.server.scripting.dc;
 
-import java.nio.charset.Charset;
-import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
-
 import cz.mzk.recordmanager.server.dc.DublinCoreRecord;
 import cz.mzk.recordmanager.server.metadata.MetadataRecord;
 import cz.mzk.recordmanager.server.model.Isbn;
@@ -19,15 +13,21 @@ import cz.mzk.recordmanager.server.scripting.function.RecordFunction;
 import cz.mzk.recordmanager.server.util.Constants;
 import cz.mzk.recordmanager.server.util.SolrUtils;
 
+import java.nio.charset.Charset;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+
 public class DublinCoreDSL extends BaseDSL {
 
 	private final Charset UTF8_CHARSET = Charset.forName("UTF-8");
-	
+
 	private final DublinCoreRecord record;
 	private MetadataRecord dcMetadataRecord;
-	
-	private DublinCoreFunctionContext dcContext; 
-	
+
+	private DublinCoreFunctionContext dcContext;
+
 	private final Map<String, RecordFunction<DublinCoreFunctionContext>> functions;
 
 	private final static Pattern AUTHOR_PATTERN = Pattern.compile("([^,]+),(.+)");
@@ -37,8 +37,8 @@ public class DublinCoreDSL extends BaseDSL {
 	private static final int ACTUAL_YEAR = Calendar.getInstance().get(Calendar.YEAR);
 
 	public DublinCoreDSL(DublinCoreFunctionContext dcContext,
-			MappingResolver propertyResolver, StopWordsResolver stopWordsResolver, ListResolver listResolver,
-			Map<String, RecordFunction<DublinCoreFunctionContext>> functions) {
+						 MappingResolver propertyResolver, StopWordsResolver stopWordsResolver, ListResolver listResolver,
+						 Map<String, RecordFunction<DublinCoreFunctionContext>> functions) {
 		super(propertyResolver, stopWordsResolver, listResolver);
 		this.dcContext = dcContext;
 		this.record = dcContext.record();
@@ -49,11 +49,11 @@ public class DublinCoreDSL extends BaseDSL {
 	public String getFirstTitle() {
 		return record.getFirstTitle();
 	}
-	
+
 	public String getFullRecord() {
 		return record.getRawRecord() == null ? "" : new String(record.getRawRecord(), UTF8_CHARSET);
 	}
-	
+
 	public String getRights() {
 		List<String> rights = record.getRights();
 		if (dcContext.harvestedRecord().getHarvestedFrom().getIdPrefix().equals(Constants.PREFIX_KRAM3_NKP)) {
@@ -80,7 +80,7 @@ public class DublinCoreDSL extends BaseDSL {
 	public String getFirstCreator() {
 		return record.getFirstCreator();
 	}
-	
+
 	public List<String> getOtherCreators() {
 		List<String> creators = record.getCreators();
 		List<String> contributors = record.getContributors();
@@ -89,49 +89,47 @@ public class DublinCoreDSL extends BaseDSL {
 		}
 		if (!contributors.isEmpty()) {
 			creators.addAll(contributors); //adds all contributors to other creators
-		} 
+		}
 		if (creators.isEmpty()) {
 			return null;
 		}
 		return creators;
 	}
-	
-	public String getAuthorDisplay(){
+
+	public String getAuthorDisplay() {
 		return changeName(getFirstCreator());
 	}
-	
-	public List<String> getAuthor2Display(){
+
+	public List<String> getAuthor2Display() {
 		List<String> authors = getOtherCreators();
-		if(authors == null) return Collections.emptyList();
-		
-		List<String> result = new ArrayList<String>();
-		for(String name: authors){
+		if (authors == null) return Collections.emptyList();
+
+		List<String> result = new ArrayList<>();
+		for (String name : authors) {
 			String newName = changeName(name);
-			if(newName != null) result.add(newName);
+			if (newName != null) result.add(newName);
 		}
-		
 		return result;
 	}
-	
-	public List<String> getAuthorFind(){
-    	List<String> result = new ArrayList<String>();
-    	result.add(getAuthorDisplay());
-    	result.addAll(getAuthor2Display());
-    	return result;
-    }
-	
-	public String changeName(String name){
-		if(name == null || name.isEmpty()) return null;
-		
+
+	public List<String> getAuthorFind() {
+		List<String> result = new ArrayList<>();
+		result.add(getAuthorDisplay());
+		result.addAll(getAuthor2Display());
+		return result;
+	}
+
+	public String changeName(String name) {
+		if (name == null || name.isEmpty()) return null;
+
 		StringBuilder sb = new StringBuilder();
 		Matcher matcher = AUTHOR_PATTERN.matcher(name);
-		if(matcher.matches()){
+		if (matcher.matches()) {
 			sb.append(matcher.group(2));
 			sb.append(' ');
 			sb.append(matcher.group(1));
-		}
-		else return name;
-		
+		} else return name;
+
 		return sb.toString();
 	}
 
@@ -149,21 +147,21 @@ public class DublinCoreDSL extends BaseDSL {
 		return null;
 	}
 
-	public List <String> getPublishers() {
+	public List<String> getPublishers() {
 		return record.getPublishers();
 	}
-	
-	public List <String> getSubjects() {
+
+	public List<String> getSubjects() {
 		return record.getSubjects();
 	}
-	
-	public List<String> getSubjectFacet(){
+
+	public List<String> getSubjectFacet() {
 		List<String> subjects = getSubjects();
-		if(subjects == null || subjects.isEmpty()) return subjects;
-		
-		List<String> result = new ArrayList<String>();
-		for(String subject: subjects){
-			if(!MDT_PATTERN.matcher(subject).matches()) result.add(subject);
+		if (subjects == null || subjects.isEmpty()) return subjects;
+
+		List<String> result = new ArrayList<>();
+		for (String subject : subjects) {
+			if (!MDT_PATTERN.matcher(subject).matches()) result.add(subject);
 		}
 		return result;
 	}
@@ -187,33 +185,32 @@ public class DublinCoreDSL extends BaseDSL {
 	}
 
 	public String getDescriptionText() {
-		StringBuilder result= new StringBuilder();
+		StringBuilder result = new StringBuilder();
 		List<String> descriptions = record.getDescriptions();
-		
+
 		if (descriptions == null) {
 			return null;
-		} else {	
-			for (String s: descriptions) {
+		} else {
+			for (String s : descriptions) {
 				result.append(s);
 			}
 		}
 		return result.toString();
-		
 	}
-	
+
 	public String getPolicy() {
 		return dcMetadataRecord.getPolicyKramerius();
 	}
-	
+
 	public List<String> getISBNs() {
 		List<Isbn> isbns = dcMetadataRecord.getISBNs();
-		List<String> isbnsS = new ArrayList<String>();
-		
-	    for (Isbn n: isbns) {
-	    	String isbn = n.getIsbn().toString();
-	    	isbnsS.add(isbn);
-	    }
-	    return isbnsS;    
+		List<String> isbnsS = new ArrayList<>();
+
+		for (Isbn n : isbns) {
+			String isbn = n.getIsbn().toString();
+			isbnsS.add(isbn);
+		}
+		return isbnsS;
 	}
 
 	public List<String> getISSNs() {
@@ -231,22 +228,22 @@ public class DublinCoreDSL extends BaseDSL {
 		}
 		return func.apply(dcContext, args);
 	}
-	
+
 	public List<String> getStatuses() {
 		List<String> statuses = dcContext.metadataRecord().getDefaultStatuses();
 		if (statuses != null && !statuses.isEmpty()) return statuses;
 		return SolrUtils.createHierarchicFacetValues(Constants.DOCUMENT_AVAILABILITY_ONLINE, getRights());
 	}
-	
-	public List<String> getUrls(){
+
+	public List<String> getUrls() {
 		return dcMetadataRecord.getUrls();
 	}
-	
-	public List<String> getPhysicals(){
+
+	public List<String> getPhysicals() {
 		return record.getPhysicals();
 	}
 
-	public List<String> getContents(){
+	public List<String> getContents() {
 		return record.getContents();
 	}
 

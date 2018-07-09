@@ -1,15 +1,19 @@
 package cz.mzk.recordmanager.server.util;
 
-import java.util.Arrays;
-import java.util.List;
-
+import cz.mzk.recordmanager.server.index.SolrFieldConstants;
+import cz.mzk.recordmanager.server.marc.marc4j.MarcFactoryImpl;
 import org.apache.solr.common.SolrInputDocument;
+import org.marc4j.marc.MarcFactory;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import cz.mzk.recordmanager.server.index.SolrFieldConstants;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 public class SolrUtilsTest {
+
+	private static final MarcFactory MARC_FACTORY = MarcFactoryImpl.newInstance();
 
 	@Test
 	public void createHierarchicFacetValues1() {
@@ -54,6 +58,61 @@ public class SolrUtilsTest {
 		Assert.assertEquals((Object) childs.get(0), b);
 		Assert.assertEquals((Object) childs.get(1), c);
 		Assert.assertEquals((Object) childs.get(2), a);
+	}
+
+	@Test
+	public void removeEndParenthesesTest() {
+		Assert.assertTrue(SolrUtils.removeEndParentheses(Collections.singletonList("(test))")).contains("(test)"));
+	}
+
+	@Test
+	public void getInd2AsIntTest() {
+		Assert.assertEquals(SolrUtils.getInd2AsInt(MARC_FACTORY.newDataField("100", '0', '5')), 5);
+		Assert.assertEquals(SolrUtils.getInd2AsInt(MARC_FACTORY.newDataField("100", '0', ' ')), 0);
+	}
+
+	@Test
+	public void cleanPublisherNameTest() {
+		Assert.assertEquals(SolrUtils.cleanPublisherName("  t<es>t n[a]me  ?"), "test name");
+	}
+
+	@Test
+	public void toUpperCaseFirstCharTest() {
+		Assert.assertEquals(SolrUtils.toUpperCaseFirstChar("test name"), "Test name");
+	}
+
+	@Test
+	public void removeEndPunctuationTest() {
+		Assert.assertEquals(SolrUtils.removeEndPunctuation("test name,:"), "test name");
+		Assert.assertEquals(SolrUtils.removeEndPunctuation("test name."), "test name.");
+		Assert.assertEquals(SolrUtils.removeEndPunctuation("test name.."), "test name.");
+	}
+
+	@Test
+	public void getNameForDisplay() {
+		Assert.assertEquals(SolrUtils.getNameForDisplay(MARC_FACTORY.newDataField(
+				"100", '1', ' ', "a", "Name, Test ,", "b", "testb", "c", "testc")),
+				"Test Name, testb testc");
+	}
+
+	@Test
+	public void getNameForExact() {
+		Assert.assertEquals(SolrUtils.getNameForExact(MARC_FACTORY.newDataField(
+				"100", '1', ' ', "a", "Name, Test ,", "b", "testb", "c", "testc")),
+				"Test Name, testb");
+	}
+
+	@Test
+	public void getVizFieldCode() {
+		Assert.assertEquals(SolrUtils.getVizFieldCode("source", "tag", "value"), "source|tag|value");
+	}
+
+	@Test
+	public void getSubfieldAsString() {
+		Assert.assertEquals(SolrUtils.getSubfieldAsString(MARC_FACTORY.newDataField(
+				"100", '1', ' ', "a", "Name, Test ,"), 'a'), "Name, Test ,");
+		Assert.assertEquals(SolrUtils.getSubfieldAsString(MARC_FACTORY.newDataField(
+				"100", '1', ' ', "a", "Name, Test ,"), 'b'), "");
 	}
 
 }

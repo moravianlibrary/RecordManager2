@@ -10,7 +10,7 @@ see_also = getFields "500abcd"
 scope_note = getFields "678a"
 url = getUrls()
 
-id_authority = getId001()
+id_authority = getControlField("001")
 
 subject_facet_str_mv = getFields "100abcd"
 
