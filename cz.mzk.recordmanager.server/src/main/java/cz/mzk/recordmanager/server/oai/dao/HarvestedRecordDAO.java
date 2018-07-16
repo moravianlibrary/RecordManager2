@@ -41,4 +41,6 @@ public interface HarvestedRecordDAO extends DomainDAO<Long, HarvestedRecord> {
 
 	String getIdBySigla(String sigla);
 
+	String getRecordIdBy001(Long ConfigurationId, String id);
+
 }

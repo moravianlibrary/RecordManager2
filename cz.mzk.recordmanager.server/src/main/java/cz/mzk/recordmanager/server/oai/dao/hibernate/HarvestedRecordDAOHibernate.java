@@ -1,9 +1,8 @@
 package cz.mzk.recordmanager.server.oai.dao.hibernate;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
+import cz.mzk.recordmanager.server.model.*;
+import cz.mzk.recordmanager.server.model.HarvestedRecord.HarvestedRecordUniqueId;
+import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordDAO;
 import cz.mzk.recordmanager.server.util.Constants;
 import org.hibernate.Criteria;
 import org.hibernate.NullPrecedence;
@@ -14,20 +13,10 @@ import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Component;
 
-import cz.mzk.recordmanager.server.model.Cnb;
-import cz.mzk.recordmanager.server.model.DedupRecord;
-import cz.mzk.recordmanager.server.model.Ean;
-import cz.mzk.recordmanager.server.model.HarvestedRecord;
-import cz.mzk.recordmanager.server.model.HarvestedRecord.HarvestedRecordUniqueId;
-import cz.mzk.recordmanager.server.model.HarvestedRecordFormat;
-import cz.mzk.recordmanager.server.model.ImportConfiguration;
-import cz.mzk.recordmanager.server.model.Isbn;
-import cz.mzk.recordmanager.server.model.Ismn;
-import cz.mzk.recordmanager.server.model.Issn;
-import cz.mzk.recordmanager.server.model.Oclc;
-import cz.mzk.recordmanager.server.model.ShortTitle;
-import cz.mzk.recordmanager.server.model.Title;
-import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordDAO;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
 
 @Component
 public class HarvestedRecordDAOHibernate extends
@@ -184,6 +173,19 @@ public class HarvestedRecordDAOHibernate extends
 				.uniqueResult();
 		return (hr != null) ? hr.getHarvestedFrom().getIdPrefix() + '.' + hr.getUniqueId().getRecordId() : null;
 
+	}
+
+	@Override
+	public String getRecordIdBy001(Long configurationId, String id001) {
+		Session session = sessionFactory.getCurrentSession();
+		Criteria crit = session.createCriteria(HarvestedRecord.class);
+		crit.add(Restrictions.eq("uniqueId.harvestedFromId", configurationId));
+		crit.add(Restrictions.eq("raw001Id", id001));
+		crit.add(Restrictions.isNull("deleted"));
+		crit.setProjection(Projections.property("uniqueId.recordId"));
+		crit.setMaxResults(1);
+		Iterator iterator = crit.list().iterator();
+		return (iterator.hasNext()) ? (String) iterator.next() : null;
 	}
 
 	@Override

@@ -116,6 +116,16 @@ public class SolrFieldConstants {
 
 	public static final String TITLE_SEARCH_TXT_MV = "title_search_txt_mv";
 
+	public static final String AUTHOR_AUTHORITY_DISPLAY = "author_authority_display";
+
+	public static final String AUTHOR_AUTHORITY_ID_DISPLAY = "author_authority_id_display";
+
+	public static final String AUTHORITY2_DISPLAY_MV = "authority2_display_mv";
+
+	public static final String AUTHOR2_AUTHORITY_ID_DISPLAY_MV = "author2_authority_id_display_mv";
+
+	public static final String PSEUDONYM_IDS_DISPLAY_MV = "pseudonym_ids_display_mv";
+
 	/**
 	 * dummy fields used for processing purposes only, shouldn't be indexed. Fields are deleted in AuthorityEnricher. 
 	 */

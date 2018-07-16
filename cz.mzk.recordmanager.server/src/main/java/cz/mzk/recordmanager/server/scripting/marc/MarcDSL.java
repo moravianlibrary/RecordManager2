@@ -485,6 +485,10 @@ public class MarcDSL extends BaseDSL {
 		return result;
 	}
 
+	public String getAuthorAuthorityDisplay() {
+		return record.getField("100", '7');
+	}
+
 	public String getAuthorExact() {
 		List<DataField> list = record.getDataFields("100");
 		if (list.isEmpty()) return null;
