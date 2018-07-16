@@ -1141,3 +1141,7 @@ UPDATE oai_harvest_conf SET url='https://aleph.lib.cas.cz/OAI' WHERE import_conf
 
 -- 25. 06. 2018 tomascejpek
 UPDATE kramerius_conf SET harvest_job_name='krameriusHarvestJob' WHERE import_conf_id=99001;
+
+-- 16. 07. 2018 tomascejpek
+ALTER TABLE harvested_record ADD COLUMN sigla VARCHAR(10);
+CREATE INDEX harvested_record_sigla_idx ON harvested_record(sigla);

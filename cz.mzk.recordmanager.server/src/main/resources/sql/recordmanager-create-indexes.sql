@@ -8,6 +8,7 @@ CREATE INDEX harvested_record_upv_appl_dx ON harvested_record(upv_application_id
 CREATE INDEX harvested_record_source_info_t_idx ON harvested_record(source_info_t);
 CREATE INDEX harvested_record_source_info_x_idx ON harvested_record(source_info_x);
 CREATE INDEX harvested_record_source_info_g_idx ON harvested_record(source_info_g);
+CREATE INDEX harvested_record_sigla_idx ON harvested_record(sigla);
 
 CREATE INDEX cnb_harvested_record_idx ON cnb(harvested_record_id);
 CREATE INDEX title_harvested_record_idx ON title(harvested_record_id);

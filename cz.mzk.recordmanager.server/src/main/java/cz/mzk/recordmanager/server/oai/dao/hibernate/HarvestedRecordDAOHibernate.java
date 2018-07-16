@@ -176,6 +176,17 @@ public class HarvestedRecordDAOHibernate extends
 	}
 
 	@Override
+	public String getIdBySigla(String sigla) {
+		Session session = sessionFactory.getCurrentSession();
+		HarvestedRecord hr = (HarvestedRecord) session
+				.createQuery("from HarvestedRecord where sigla = ?")
+				.setParameter(0, sigla)
+				.uniqueResult();
+		return (hr != null) ? hr.getHarvestedFrom().getIdPrefix() + '.' + hr.getUniqueId().getRecordId() : null;
+
+	}
+
+	@Override
 	public void dropDedupKeys(HarvestedRecord hr) {
 		if (hr == null || hr.getId() == null) {
 			return;

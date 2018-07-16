@@ -126,7 +126,9 @@ public class MetadataRecordFactory {
 		case Constants.PREFIX_MESH:
 			return new MeshMarcMetadataRecord(marcRec);
 		case Constants.PREFIX_LIBRARY:
-			return new LibraryMetadataMarcRecord(marcRec);
+			MetadataRecord mrLib = new LibraryMetadataMarcRecord(marcRec);
+			init(mrLib);
+			return mrLib;
 		case Constants.PREFIX_TDKIV:
 			return new TdkivMetadataMarcRecord(marcRec);
 		case Constants.PREFIX_AGROVOC:

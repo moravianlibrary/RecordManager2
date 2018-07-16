@@ -153,6 +153,7 @@ CREATE TABLE harvested_record (
   source_info_t        VARCHAR(255),
   source_info_x        VARCHAR(30),
   source_info_g        VARCHAR(255),
+  sigla                VARCHAR(10),
   dedup_keys_hash      CHAR(40),
   next_dedup_flag      BOOLEAN DEFAULT TRUE,
   raw_record           BYTEA,

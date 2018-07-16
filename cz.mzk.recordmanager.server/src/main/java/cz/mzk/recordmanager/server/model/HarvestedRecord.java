@@ -247,6 +247,9 @@ public class HarvestedRecord extends AbstractDomainObject {
 	@Column(name="upv_application_id")
 	private String upvApplicationId;
 
+	@Column(name = "sigla")
+	private String sigla;
+
 	/**
 	 * indicator variable used for filtering reasons
 	 */
@@ -627,5 +630,13 @@ public class HarvestedRecord extends AbstractDomainObject {
 
 	public void setSourceInfoT(String sourceInfoT) {
 		this.sourceInfoT = sourceInfoT;
+	}
+
+	public String getSigla() {
+		return sigla;
+	}
+
+	public void setSigla(String sigla) {
+		this.sigla = sigla;
 	}
 }
