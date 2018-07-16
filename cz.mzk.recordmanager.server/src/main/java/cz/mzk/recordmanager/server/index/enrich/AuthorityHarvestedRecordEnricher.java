@@ -54,8 +54,7 @@ public class AuthorityHarvestedRecordEnricher implements HarvestedRecordEnricher
 				String record_id = getValue(authority_id);
 				results.add(record_id == null ? "" : record_id);
 			}
-			document.removeField(SolrFieldConstants.PSEUDONYM_IDS_DISPLAY_MV);
-			document.addField(SolrFieldConstants.PSEUDONYM_IDS_DISPLAY_MV, results);
+			document.addField(SolrFieldConstants.PSEUDONYM_RECORD_IDS_DISPLAY_MV, results);
 		}
 	}
 
