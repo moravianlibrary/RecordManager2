@@ -374,8 +374,14 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 
 	@Override
 	public boolean matchFilter() {
-		// implemented only in institution specific classes
-		return true;
+		boolean isTitle = false;
+		for (Title title : getTitle()) {
+			if (!title.getTitleStr().isEmpty()) {
+				isTitle = true;
+				break;
+			}
+		}
+		return isTitle;
 	}
 
 	@Override
