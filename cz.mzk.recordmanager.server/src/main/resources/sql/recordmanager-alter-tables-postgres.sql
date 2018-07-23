@@ -1145,3 +1145,6 @@ UPDATE kramerius_conf SET harvest_job_name='krameriusHarvestJob' WHERE import_co
 -- 16. 07. 2018 tomascejpek
 ALTER TABLE harvested_record ADD COLUMN sigla VARCHAR(10);
 CREATE INDEX harvested_record_sigla_idx ON harvested_record(sigla);
+
+-- 23. 07. 2018 tomascejpek
+UPDATE import_conf SET filtering_enabled=TRUE WHERE id in (339,99001);
