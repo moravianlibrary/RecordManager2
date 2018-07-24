@@ -1415,3 +1415,23 @@ CREATE INDEX harvested_record_sigla_idx ON harvested_record(sigla);
 
 --changeset tomascejpek:104 context:cpk
 UPDATE import_conf SET filtering_enabled=TRUE WHERE id in (339,99001);
+
+--changeset tomascejpek:105
+CREATE TABLE authority (
+  id                   DECIMAL(10) PRIMARY KEY,
+  harvested_record_id  DECIMAL(10),
+  authority_id         VARCHAR(20),
+  FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE
+);
+COMMENT ON TABLE authority IS 'dedup_keys: table contatining authority ids';
+CREATE INDEX authority_harvested_record_idx ON authority(harvested_record_id);
+CREATE INDEX authority_idx ON authority(authority_id);
+CREATE TABLE authority (
+  id                   DECIMAL(10) PRIMARY KEY,
+  harvested_record_id  DECIMAL(10),
+  authority_id         VARCHAR(20),
+  FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE
+);
+COMMENT ON TABLE authority IS 'dedup_keys: table contatining authority ids';
+CREATE INDEX authority_harvested_record_idx ON authority(harvested_record_id);
+CREATE INDEX authority_idx ON authority(authority_id);
