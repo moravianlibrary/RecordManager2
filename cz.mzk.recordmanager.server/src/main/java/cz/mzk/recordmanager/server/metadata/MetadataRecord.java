@@ -149,6 +149,15 @@ public interface MetadataRecord {
 	String getAuthorAuthKey();
 
 	/**
+	 * get authority keys for all authors
+	 *
+	 * @return String or null
+	 */
+	default List<Authority> getAllAuthorAuthKey() {
+		return null;
+	}
+
+	/**
 	 * get string representing main author
 	 *
 	 * @return String or null
@@ -215,7 +224,7 @@ public interface MetadataRecord {
 
 	/**
 	 * get authority ID of main author
-	 *
+	 * only for authority records
 	 * @return String
 	 */
 	String getAuthorityId();

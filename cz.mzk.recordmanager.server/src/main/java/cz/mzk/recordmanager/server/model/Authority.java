@@ -13,6 +13,12 @@ public class Authority extends AbstractDomainObject {
 	@Column(name = "authority_id")
 	private String authorityId;
 
+	public static Authority create(final String id) {
+		Authority newAuthority = new Authority();
+		newAuthority.setAuthorityId(id);
+		return newAuthority;
+	}
+
 	public String getAuthorityId() {
 		return authorityId;
 	}
