@@ -69,16 +69,6 @@ public class OAIHarvestJobConfig {
     }
 
     @Bean
-    public Job oaiHarvestAuthorityJob(@Qualifier("oaiHarvestJob:authStep") Step step) {
-        return jobs.get("oaiHarvestAuthorityJob") //
-        		.validator(new OAIHarvestJobParametersValidator()) //
-        		.listener(JobFailureListener.INSTANCE) //
-				.flow(step) //
-				.end() //
-				.build();
-	}
-
-    @Bean
     public Job oaiHarvestOneByOneJob(@Qualifier("oaiHarvestJob:harvestOneByOneStep") Step step1, @Qualifier("oaiHarvestJob:afterHarvestStep") Step step2) {
         return jobs.get(Constants.JOB_ID_HARVEST_ONE_BY_ONE) //
         		.validator(new OAIHarvestJobParametersValidator()) //
@@ -133,15 +123,6 @@ public class OAIHarvestJobConfig {
                  .processor(oaiItemProcessor())
                  .writer(harvestedRecordWriter()) //
                  .build();
-    }
-    
-    @Bean(name="oaiHarvestJob:authStep")
-    public Step authorityStep() {
-        return steps.get("authStep") //
-            .<List<OAIRecord>, List<OAIRecord>> chunk(1) //
-            .reader(reader(LONG_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION, STRING_OVERRIDEN_BY_EXPRESSION)) //
-            .writer(authWriter()) //
-            .build();
     }
     
     @Bean(name="oaiHarvestJob:partioner")
@@ -223,12 +204,6 @@ public class OAIHarvestJobConfig {
     @StepScope
     public OAIItemProcessor oaiItemProcessor() {
     	return new OAIItemProcessor();
-    }   
-    
-    @Bean(name="oaiHarvestJob:authwriter")
-    @StepScope
-    public OAIAuthItemWriter authWriter() {
-    	return new OAIAuthItemWriter();
     }
     
     @Bean(name="oaiHarvestJob:oneByOneReader")

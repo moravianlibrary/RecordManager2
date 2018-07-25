@@ -1148,3 +1148,6 @@ CREATE INDEX harvested_record_sigla_idx ON harvested_record(sigla);
 
 -- 23. 07. 2018 tomascejpek
 UPDATE import_conf SET filtering_enabled=TRUE WHERE id in (339,99001);
+
+-- 25. 07. 2018 tomascejpek
+DROP TABLE authority_record;

@@ -1415,3 +1415,6 @@ CREATE INDEX harvested_record_sigla_idx ON harvested_record(sigla);
 
 --changeset tomascejpek:104 context:cpk
 UPDATE import_conf SET filtering_enabled=TRUE WHERE id in (339,99001);
+
+--changeset tomascejpek:105
+DROP TABLE authority_record;

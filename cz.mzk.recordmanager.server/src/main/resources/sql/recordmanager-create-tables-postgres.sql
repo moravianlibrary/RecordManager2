@@ -292,23 +292,6 @@ CREATE TABLE harvested_record_format_link (
 
 COMMENT ON TABLE harvested_record_format_link IS 'link table';
 
-CREATE TABLE authority_record (
-  id                   DECIMAL(10) PRIMARY KEY,
-  import_conf_id       DECIMAL(10),
-  oai_record_id        VARCHAR(128),
-  authority_code       VARCHAR(128),
-  harvested            TIMESTAMP,
-  updated              TIMESTAMP,
-  deleted              TIMESTAMP,
-  format               VARCHAR(15) NOT NULL,
-  raw_record           BYTEA,
-  CONSTRAINT authority_record_import_conf_fk  FOREIGN KEY (import_conf_id)      REFERENCES import_conf(id),
-  CONSTRAINT authority_record_format_fk       FOREIGN KEY (format)              REFERENCES format(format),
-  CONSTRAINT authority_code_unique UNIQUE(authority_code)
-);
-
-COMMENT ON TABLE authority_record IS 'table holding authority records information';
-
 CREATE TABLE antikvariaty (
   id                   DECIMAL(10) PRIMARY KEY,
   updated              TIMESTAMP,
