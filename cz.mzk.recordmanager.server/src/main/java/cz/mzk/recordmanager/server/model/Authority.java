@@ -10,6 +10,9 @@ public class Authority extends AbstractDomainObject {
 
 	public static final String TABLE_NAME = "authority";
 
+	@Column(name = "harvested_record_id")
+	private Long harvestedRecordId;
+
 	@Column(name = "authority_id")
 	private String authorityId;
 

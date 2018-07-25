@@ -184,7 +184,7 @@ public class HarvestedRecord extends AbstractDomainObject {
 	private Map<String, Language> languages = new HashMap<>();
 
 	@OneToMany(cascade = CascadeType.ALL)
-	@JoinColumn(name="harvested_record_id", referencedColumnName="id", nullable=false)
+	@JoinColumn(name = "harvested_record_id", referencedColumnName = "id")
 	private List<Authority> authorities = new ArrayList<>();
 
 	// TODO consider moving dedup keys to separate table
