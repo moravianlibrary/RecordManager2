@@ -59,6 +59,7 @@ public class MarcDSL extends BaseDSL {
 	private static final Pattern SPLIT_SEMICOLON = Pattern.compile(";");
 	private static final Pattern SPLIT_DOT = Pattern.compile("\\.");
 	private static final Pattern SPLIT_VERTICAL_BAR = Pattern.compile("\\|");
+	private static final Pattern Z_CYKLU_787 = Pattern.compile("^z cyklu", Pattern.CASE_INSENSITIVE);
 
 	private static final String LINK773_ISBN = "isbn:%s";
 	private static final String LINK773_ISSN = "issn:";
@@ -810,4 +811,18 @@ public class MarcDSL extends BaseDSL {
 		if (!metadataRecord.genreFacet()) return Collections.emptySet();
 		return new HashSet<>(getFields(tags));
 	}
+
+	public List<String> getSeriesForSearching() {
+		return record.getFields("787", field -> field.getIndicator1() == '0' && field.getIndicator2() == '8'
+				&& field.getSubfield('i') != null
+				&& Z_CYKLU_787.matcher(field.getSubfield('i').getData()).find(), 't');
+	}
+
+	public List<String> getSeriesForDisplay() {
+		return record.getFields("787", field -> field.getIndicator1() == '0' && field.getIndicator2() == '8'
+						&& field.getSubfield('i') != null
+						&& Z_CYKLU_787.matcher(field.getSubfield('i').getData()).find(),
+				SubfieldExtractionMethod.JOINED, "|", 't', 'g');
+	}
+
 }
