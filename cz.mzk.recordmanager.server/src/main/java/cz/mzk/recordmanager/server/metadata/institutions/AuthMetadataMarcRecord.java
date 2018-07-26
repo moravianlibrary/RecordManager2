@@ -3,7 +3,6 @@ package cz.mzk.recordmanager.server.metadata.institutions;
 import cz.mzk.recordmanager.server.marc.MarcRecord;
 import cz.mzk.recordmanager.server.metadata.MetadataMarcRecord;
 import cz.mzk.recordmanager.server.model.Authority;
-import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecordFormat.HarvestedRecordFormatEnum;
 import cz.mzk.recordmanager.server.util.Constants;
 import cz.mzk.recordmanager.server.util.MetadataUtils;
@@ -17,14 +16,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Pattern;
 
 public class AuthMetadataMarcRecord extends MetadataMarcRecord {
 
 	@Autowired
 	protected SessionFactory sessionFactory;
 
-	private static final String FILTER_682I_START = "Záhlaví";
-	private static final String FILTER_682I_END = "bylo nahrazeno záhlavím";
+	private static final Pattern FILTER_682 = Pattern.compile("bylo nahrazeno z[aá]hlav[ií]m", Pattern.CASE_INSENSITIVE);
 
 	public AuthMetadataMarcRecord(MarcRecord underlayingMarc) {
 		super(underlayingMarc);
@@ -32,9 +31,8 @@ public class AuthMetadataMarcRecord extends MetadataMarcRecord {
 
 	@Override
 	public boolean matchFilter() {
-		for (String data : underlayingMarc.getFields("682", 'i')) {
-			data = data.trim();
-			if (data.startsWith(FILTER_682I_START) && data.endsWith(FILTER_682I_END)) {
+		for (DataField df : underlayingMarc.getDataFields("682")) {
+			if (FILTER_682.matcher(df.toString()).find()) {
 				Session session = sessionFactory.getCurrentSession();
 				Query update = session.createQuery("UPDATE HarvestedRecord SET updated = :updated WHERE id in " +
 						"(SELECT harvestedRecordId FROM Authority WHERE authorityId = :auth_id)");
