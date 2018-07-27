@@ -24,6 +24,7 @@ public class AuthMetadataMarcRecord extends MetadataMarcRecord {
 	protected SessionFactory sessionFactory;
 
 	private static final Pattern FILTER_682 = Pattern.compile("bylo nahrazeno z[aá]hlav[ií]m", Pattern.CASE_INSENSITIVE);
+	private static final Pattern FILTER_682_DUPLICITA = Pattern.compile("duplicita", Pattern.CASE_INSENSITIVE);
 
 	public AuthMetadataMarcRecord(MarcRecord underlayingMarc) {
 		super(underlayingMarc);
@@ -32,7 +33,7 @@ public class AuthMetadataMarcRecord extends MetadataMarcRecord {
 	@Override
 	public boolean matchFilter() {
 		for (DataField df : underlayingMarc.getDataFields("682")) {
-			if (FILTER_682.matcher(df.toString()).find()) {
+			if (FILTER_682.matcher(df.toString()).find() || FILTER_682_DUPLICITA.matcher(df.toString()).find()) {
 				Session session = sessionFactory.getCurrentSession();
 				Query update = session.createQuery("UPDATE HarvestedRecord SET updated = :updated WHERE id in " +
 						"(SELECT harvestedRecordId FROM Authority WHERE authorityId = :auth_id)");
