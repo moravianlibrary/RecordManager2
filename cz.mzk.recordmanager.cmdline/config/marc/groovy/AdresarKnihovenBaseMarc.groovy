@@ -11,8 +11,8 @@ code_search_txt = getFirstFieldForAdresar "ZKRa"
 cpk_code_search_txt = adresarGetCpkCode()
 function_search_txt_mv = getFieldsForAdresar("FCEa", SubfieldExtractionMethod.SEPARATED, null)
 ils_search_txt = getFirstFieldForAdresar "KNSa"
-name_alt_search_txt_mv = adresarGetNameAlt " "
-name_search_txt = getFirstFieldSeparatedForAdresar "NAZabc", " "
+name_alt_search_txt_mv = getFirstFieldSeparatedForAdresar "VARabc", " "
+name_search_txt = getFirstFieldSeparatedForAdresar "NAZabcd", " "
 note2_search_txt = getFirstFieldForAdresar "POUa"
 note_search_txt = getFirstFieldForAdresar "POIa"
 projects_search_txt_mv = getFieldsForAdresar("PRKa", SubfieldExtractionMethod.SEPARATED, null)
@@ -35,10 +35,10 @@ type_facet_str_mv = getFieldsForAdresar "TYPb", SubfieldExtractionMethod.SEPARAT
 region_disctrict_town_str_mv = adresarGetRegionDistrictTown()
 
 // autocomplete
-name_str = name_autocomplete = getFirstFieldSeparatedForAdresar "NAZabc", " "
+name_str = name_autocomplete = getFirstFieldSeparatedForAdresar "NAZabcd", " "
 town_str = town_autocomplete = getFirstFieldForAdresar "MESa"
 
 // map
 address_map_display_mv = getFieldsForAdresar "ADRum", SubfieldExtractionMethod.JOINED, " "
 gps_display = adresarGetGps()
-name_display = getFirstFieldSeparatedForAdresar "NAZabc", " - "
+name_display = getFirstFieldSeparatedForAdresar "NAZabcd", " - "
