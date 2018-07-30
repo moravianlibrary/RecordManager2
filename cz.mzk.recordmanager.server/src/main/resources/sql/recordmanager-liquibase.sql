@@ -1415,3 +1415,6 @@ CREATE INDEX harvested_record_sigla_idx ON harvested_record(sigla);
 
 --changeset tomascejpek:104 context:cpk
 UPDATE import_conf SET filtering_enabled=TRUE WHERE id in (339,99001);
+
+--changeset tomascejpek:105 context:cpk
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (39, 337, 'PNA001');
