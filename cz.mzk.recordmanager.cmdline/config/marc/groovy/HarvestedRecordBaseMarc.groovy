@@ -55,3 +55,4 @@ institution_view_facet_str_mv = getInstitutionViewFacet()
 author_search_txt_mv = toLowerCase(getFields("100abcd:110ab:111ab:700abcd:710ab:711ab"))
 title_search_txt_mv = toLowerCase(getFields("245abnp"))
 summary_display_mv = getFields "520a"
+publisher_display_mv = getPublisherLocal()
