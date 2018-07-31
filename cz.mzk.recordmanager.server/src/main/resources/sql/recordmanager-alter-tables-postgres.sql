@@ -1151,3 +1151,6 @@ UPDATE import_conf SET filtering_enabled=TRUE WHERE id in (339,99001);
 
 -- 30. 07. 2018 tomascejpek
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (39, 337, 'PNA001');
+
+-- 31. 07. 2018 tomascejpek
+DROP TABLE authority_record;

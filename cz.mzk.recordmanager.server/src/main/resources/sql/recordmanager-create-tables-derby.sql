@@ -219,21 +219,6 @@ CREATE TABLE harvested_record_format_link (
   CONSTRAINT format_link_hr_format_fk FOREIGN KEY (harvested_record_format_id) REFERENCES harvested_record_format(id)
 );
 
-CREATE TABLE authority_record (
-  id                   DECIMAL(10) PRIMARY KEY,
-  import_conf_id       DECIMAL(10),
-  oai_record_id        VARCHAR(128),
-  authority_code       VARCHAR(128),
-  harvested            TIMESTAMP,
-  updated              TIMESTAMP,
-  deleted              TIMESTAMP,
-  format               VARCHAR(15) NOT NULL,
-  raw_record           BLOB,
-  FOREIGN KEY (import_conf_id)      REFERENCES import_conf(id),
-  FOREIGN KEY (format)              REFERENCES format(format),
-  CONSTRAINT authority_code_unique UNIQUE(authority_code)
-);
-
 CREATE TABLE antikvariaty (
   id                   DECIMAL(10) PRIMARY KEY,
   updated              TIMESTAMP,
