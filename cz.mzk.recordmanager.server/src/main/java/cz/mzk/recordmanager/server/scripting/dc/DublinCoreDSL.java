@@ -278,4 +278,8 @@ public class DublinCoreDSL extends BaseDSL {
 		return dcContext.metadataRecord().getOclcs().stream().map(Oclc::getOclcStr).collect(Collectors.toSet());
 	}
 
+	public List<String> getLanguages() {
+		return record.getLanguages();
+	}
+
 }

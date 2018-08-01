@@ -276,6 +276,13 @@ public class MarcDSL extends BaseDSL {
 		return publishers;
 	}
 
+	public List<String> getPublisherLocal() {
+		List<String> results = new ArrayList<>();
+		results.addAll(getFields("260b"));
+		if (results.isEmpty()) getFields("264b");
+		return results;
+	}
+
 	public Set<String> getFieldsTrim(String tags) {
 		Set<String> result = new HashSet<>();
 		for (String data : getFields(tags)) {
