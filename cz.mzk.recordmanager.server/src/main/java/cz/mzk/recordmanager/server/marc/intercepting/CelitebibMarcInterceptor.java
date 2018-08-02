@@ -12,7 +12,8 @@ public class CelitebibMarcInterceptor extends DefaultMarcInterceptor {
 
 	private static final Pattern FIELD_START = Pattern.compile("^[167]..$");
 	private static final String TAG_773 = "773";
-	private static final String TAG_994 = "964";
+	private static final String TAG_964 = "964";
+	private static final String TAG_CAT = "CAT";
 	private static final char CODE_X = 'x';
 
 	public CelitebibMarcInterceptor(Record record) {
@@ -41,8 +42,8 @@ public class CelitebibMarcInterceptor extends DefaultMarcInterceptor {
 				newRecord.addVariableField(newDf);
 				continue;
 			}
-			// remove field 964
-			if (df.getTag().equals(TAG_994)) continue;
+			// remove field 964, CAT
+			if (df.getTag().equals(TAG_964) || df.getTag().equals(TAG_CAT)) continue;
 			// default
 			newRecord.addVariableField(df);
 		}
