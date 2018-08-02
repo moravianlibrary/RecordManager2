@@ -813,6 +813,10 @@ public class MarcDSL extends BaseDSL {
 		return collection.stream().map(String::toLowerCase).collect(Collectors.toSet());
 	}
 
+	public String toLowerCase(String text) {
+		return text.toLowerCase();
+	}
+
 	public Set<String> getOclcs() {
 		return context.metadataRecord().getOclcs().stream().map(Oclc::getOclcStr).collect(Collectors.toSet());
 	}
