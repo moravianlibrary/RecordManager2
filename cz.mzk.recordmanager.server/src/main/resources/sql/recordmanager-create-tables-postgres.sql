@@ -395,3 +395,13 @@ CREATE TABLE publisher_number (
 );
 COMMENT ON TABLE publisher_number IS 'dedup_keys: table contatining publisher numbers';
 CREATE INDEX publisher_number_harvested_record_idx ON publisher_number(harvested_record_id);
+
+CREATE TABLE authority (
+  id                   DECIMAL(10) PRIMARY KEY,
+  harvested_record_id  DECIMAL(10),
+  authority_id         VARCHAR(20),
+  FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE
+);
+COMMENT ON TABLE authority IS 'dedup_keys: table contatining authority ids';
+CREATE INDEX authority_harvested_record_idx ON authority(harvested_record_id);
+CREATE INDEX authority_idx ON authority(authority_id);

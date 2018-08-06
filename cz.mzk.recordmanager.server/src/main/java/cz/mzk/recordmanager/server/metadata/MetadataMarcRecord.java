@@ -19,6 +19,7 @@ import org.slf4j.LoggerFactory;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class MetadataMarcRecord implements MetadataRecord {
 
@@ -79,6 +80,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 	private static final Long MAX_PAGES = 10_000_000L;
 	private static final String INVALID_YEAR = "Invalid year: %s";
 	private static final String[] TITLE_TAGS = {"245", "240"};
+	private static final String[] AUTHORITY_ID_TAGS = {"100", "110", "111", "700", "710", "711"};
 	private static final char[] SHORT_TITLE_SUBFIELDS = {'a', 'n', 'p'};
 	private static final char[] TITLE_SUBFIELDS = {'a', 'b', 'n', 'p'};
 
@@ -1223,4 +1225,10 @@ public class MetadataMarcRecord implements MetadataRecord {
 		return prefix;
 	}
 
+	@Override
+	public List<Authority> getAllAuthorAuthKey() {
+		Set<String> ids = Arrays.stream(AUTHORITY_ID_TAGS)
+				.flatMap(tag -> underlayingMarc.getFields(tag, '7').stream()).collect(Collectors.toSet());
+		return ids.stream().map(Authority::create).collect(Collectors.toList());
+	}
 }

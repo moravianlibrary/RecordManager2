@@ -1154,3 +1154,14 @@ INSERT INTO sigla (id, import_conf_id, sigla) VALUES (39, 337, 'PNA001');
 
 -- 31. 07. 2018 tomascejpek
 DROP TABLE authority_record;
+
+-- 06. 08. 2018 tomascejpek
+CREATE TABLE authority (
+  id                   DECIMAL(10) PRIMARY KEY,
+  harvested_record_id  DECIMAL(10),
+  authority_id         VARCHAR(20),
+  FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE
+);
+COMMENT ON TABLE authority IS 'table contatining authority ids';
+CREATE INDEX authority_harvested_record_idx ON authority(harvested_record_id);
+CREATE INDEX authority_idx ON authority(authority_id);

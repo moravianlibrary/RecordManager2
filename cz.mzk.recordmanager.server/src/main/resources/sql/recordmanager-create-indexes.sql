@@ -24,6 +24,10 @@ CREATE INDEX cosmotron_996_conf_id_parent_id_idx ON cosmotron_996 (parent_record
 CREATE INDEX cosmotron_996_record_id_import_conf_idx ON cosmotron_996(record_id, import_conf_id);
 CREATE INDEX inspiration_harvested_record_idx ON inspiration(harvested_record_id);
 CREATE INDEX publisher_number_harvested_record_idx ON publisher_number(harvested_record_id);
+CREATE INDEX authority_harvested_record_idx ON authority(harvested_record_id);
+CREATE INDEX authority_idx ON authority(authority_id);
+CREATE INDEX authority_code_idx ON authority_record(authority_code);
+
 CREATE INDEX fulltext_kramerius_harvested_record_idx ON fulltext_kramerius(harvested_record_id);
 
 CREATE INDEX obalkyknih_toc_book_idx ON obalkyknih_toc(book_id);

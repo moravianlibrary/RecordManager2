@@ -270,7 +270,32 @@ public class HarvestedRecordDAOHibernate extends
 			session.delete(hrf);
 		}
 
+		List<Authority> authorities = hr.getAuthorities();
+		hr.setAuthorities(new ArrayList<>());
+		for (Authority authority : authorities) {
+			session.delete(authority);
+		}
+
 		hr.setLanguages(new ArrayList<>());
+		session.update(hr);
+		session.flush();
+	}
+
+	@Override
+	public void dropAuthorities(HarvestedRecord hr) {
+		if (hr == null || hr.getId() == null) {
+			return;
+		}
+		Session session = sessionFactory.getCurrentSession();
+		// don't delete keys for not managed entities
+		if (!session.contains(hr)) {
+			return;
+		}
+		List<Authority> authorities = hr.getAuthorities();
+		hr.setAuthorities(new ArrayList<>());
+		for (Authority authority : authorities) {
+			session.delete(authority);
+		}
 		session.update(hr);
 		session.flush();
 	}

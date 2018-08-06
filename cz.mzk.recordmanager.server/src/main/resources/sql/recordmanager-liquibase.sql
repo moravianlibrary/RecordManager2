@@ -1421,3 +1421,14 @@ INSERT INTO sigla (id, import_conf_id, sigla) VALUES (39, 337, 'PNA001');
 
 --changeset tomascejpek:106
 DROP TABLE authority_record;
+
+--changeset tomascejpek:107
+CREATE TABLE authority (
+  id                   DECIMAL(10) PRIMARY KEY,
+  harvested_record_id  DECIMAL(10),
+  authority_id         VARCHAR(20),
+  FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE
+);
+COMMENT ON TABLE authority IS 'table contatining authority ids';
+CREATE INDEX authority_harvested_record_idx ON authority(harvested_record_id);
+CREATE INDEX authority_idx ON authority(authority_id);

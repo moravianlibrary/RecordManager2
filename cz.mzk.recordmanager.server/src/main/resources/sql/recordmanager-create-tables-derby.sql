@@ -298,3 +298,10 @@ CREATE TABLE publisher_number (
   order_in_record      DECIMAL(4),
   CONSTRAINT publisher_number_fk FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id)
 );
+
+CREATE TABLE authority (
+  id                   DECIMAL(10) PRIMARY KEY,
+  harvested_record_id  DECIMAL(10),
+  authority_id         VARCHAR(20),
+  CONSTRAINT authority_fk FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id)
+);

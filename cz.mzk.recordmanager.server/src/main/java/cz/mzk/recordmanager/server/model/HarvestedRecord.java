@@ -170,7 +170,7 @@ public class HarvestedRecord extends AbstractDomainObject {
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name="harvested_record_id", referencedColumnName="id", nullable=false)
 	private List<Ismn> ismns = new ArrayList<>();
-	
+
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name="harvested_record_id", referencedColumnName="id")
 	private List<FulltextKramerius> fulltextKramerius = new ArrayList<>();
@@ -182,6 +182,10 @@ public class HarvestedRecord extends AbstractDomainObject {
 	@OneToMany(mappedBy="id.harvestedRecordId", cascade = CascadeType.ALL, orphanRemoval=true)
 	@MapKey(name="id.langStr")
 	private Map<String, Language> languages = new HashMap<>();
+
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name = "harvested_record_id", referencedColumnName = "id")
+	private List<Authority> authorities = new ArrayList<>();
 
 	// TODO consider moving dedup keys to separate table
 	@Column(name="author_auth_key")
@@ -638,5 +642,13 @@ public class HarvestedRecord extends AbstractDomainObject {
 
 	public void setSigla(String sigla) {
 		this.sigla = sigla;
+	}
+
+	public List<Authority> getAuthorities() {
+		return authorities;
+	}
+
+	public void setAuthorities(List<Authority> authorities) {
+		this.authorities = authorities;
 	}
 }

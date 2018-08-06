@@ -9,21 +9,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import cz.mzk.recordmanager.server.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import cz.mzk.recordmanager.server.metadata.MetadataRecord;
-import cz.mzk.recordmanager.server.model.Cnb;
-import cz.mzk.recordmanager.server.model.Ean;
-import cz.mzk.recordmanager.server.model.HarvestedRecord;
-import cz.mzk.recordmanager.server.model.HarvestedRecordFormat;
 import cz.mzk.recordmanager.server.model.HarvestedRecordFormat.HarvestedRecordFormatEnum;
-import cz.mzk.recordmanager.server.model.Isbn;
-import cz.mzk.recordmanager.server.model.Ismn;
-import cz.mzk.recordmanager.server.model.Issn;
-import cz.mzk.recordmanager.server.model.Oclc;
-import cz.mzk.recordmanager.server.model.PublisherNumber;
-import cz.mzk.recordmanager.server.model.ShortTitle;
-import cz.mzk.recordmanager.server.model.Title;
 import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordDAO;
 import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordFormatDAO;
 import cz.mzk.recordmanager.server.util.MetadataUtils;
@@ -58,6 +48,8 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 		record.setUpvApplicationId(metadataRecord.getUpvApplicationId()); // not dedup key
 		record.setSigla(metadataRecord.getLibrarySigla()); // not dedup key
 		if (!record.getHarvestedFrom().isGenerateDedupKeys()) {
+			harvestedRecordDao.dropAuthorities(record);
+			record.setAuthorities(metadataRecord.getAllAuthorAuthKey());
 			return record;
 		}
 		boolean dedupKeysChanged = false;
@@ -109,8 +101,7 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 		encapsulator.setEans(metadataRecord.getEANs());
 		encapsulator.setPublisherNumbers(metadataRecord.getPublisherNumber());
 		encapsulator.setLanguages(new HashSet<>(metadataRecord.getLanguages()));
-		
-		
+
 
 		String computedHash = computeHashValue(encapsulator);
 		String oldHash = record.getDedupKeysHash();
@@ -157,8 +148,10 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 			record.setShortTitles(encapsulator.getShortTitles());
 			record.setPublisherNumbers(metadataRecord.getPublisherNumber());
 			record.setTemporalDedupHash(computedHash);
-		} 
-		
+		} else {
+			harvestedRecordDao.dropAuthorities(record);
+		}
+		record.setAuthorities(metadataRecord.getAllAuthorAuthKey());
 		record.setDedupKeysHash(computedHash);
 
 		oaiTimestampChanged = record.getOaiTimestamp() != null && record.getTemporalOldOaiTimestamp() != null
