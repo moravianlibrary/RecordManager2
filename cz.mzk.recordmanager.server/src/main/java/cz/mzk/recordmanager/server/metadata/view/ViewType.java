@@ -17,6 +17,18 @@ public enum ViewType {
 		protected boolean match(final MetadataRecord mr) {
 			return !mr.isBlindBraille() && !mr.isMusicalScores();
 		}
+	},
+	MUS("mus") {
+		@Override
+		protected boolean match(MetadataRecord mr) {
+			return true;
+		}
+	},
+	KIV("kiv") {
+		@Override
+		protected boolean match(MetadataRecord mr) {
+			return true;
+		}
 	};
 
 	private String value;

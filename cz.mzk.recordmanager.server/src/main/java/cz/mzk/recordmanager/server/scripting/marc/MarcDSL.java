@@ -774,11 +774,11 @@ public class MarcDSL extends BaseDSL {
 	 */
 	public Set<String> getViewType() {
 		Set<String> results = new HashSet<>();
-		String idPrefix = context.harvestedRecord().getHarvestedFrom().getIdPrefix();
+		Long importConfId = context.harvestedRecord().getHarvestedFrom().getId();
 		Set<String> siglas = metadataRecord.getCaslinSiglas();
 		for (String type : ViewType.getPossibleValues(metadataRecord)) {
 			try {
-				if (contains(String.format(VIEW_FILE, type), idPrefix)) results.add(type);
+				if (contains(String.format(VIEW_FILE, type), importConfId.toString())) results.add(type);
 			} catch (IOException ignore) {
 			}
 			try {
