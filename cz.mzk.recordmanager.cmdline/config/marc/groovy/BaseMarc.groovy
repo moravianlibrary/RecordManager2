@@ -50,7 +50,6 @@ authorCorporation_search_txt_mv = getFieldsUnique "100abcdq7:110abc7:111aceq7:70
 subjectKeywords_search_txt_mv = getFieldsUnique "072x:600abcdfgqklmprstxyz7:610abcklmprstxyz7:611aceqklmprstxyz7:630afpxyz7:648axyz7:650avxyz7:651avxyz7:653a:655avxyz7:964abcdefg:967abc"
 issnIsbnIsmn_search_str_mv = getISBNISSNISMN()
 sourceTitle_search_txt_mv = getFieldsUnique "773adtkxz9"
-callNumber_search_txt_mv = getFieldsUnique "910b:996ch"
 publisher_search_txt_mv = getFieldsTrim "260b:264b:928a:978abcdg7"
 cnb_search_str = getFirstField "015az"
 upv_ipc_search = getInternationalPatentClassfication()
