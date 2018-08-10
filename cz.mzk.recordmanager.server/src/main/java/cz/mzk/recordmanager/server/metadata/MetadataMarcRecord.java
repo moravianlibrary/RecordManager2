@@ -76,6 +76,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 	private static final Pattern START_V = Pattern.compile("^v", Pattern.CASE_INSENSITIVE);
 	private static final Pattern VIDEO_OTHER_F338 = Pattern.compile("vr|vz|vc|mc|mf|mr|mo|mz");
 	private static final Pattern OTHER_F336 = Pattern.compile("tcf|tdm|tdf", Pattern.CASE_INSENSITIVE);
+	private static final Pattern FOTOGRAFIE = Pattern.compile("fotografie", Pattern.CASE_INSENSITIVE);
 
 	private static final Long MAX_PAGES = 10_000_000L;
 	private static final String INVALID_YEAR = "Invalid year: %s";
@@ -353,6 +354,9 @@ public class MetadataMarcRecord implements MetadataRecord {
 		String f245h = underlayingMarc.getField("245", 'h');
 		if (f245h == null) f245h = "";
 
+		String f300a = underlayingMarc.getField("300", 'a');
+		if (f300a == null) f300a = "";
+
 		String f336b = underlayingMarc.getField("336", 'b');
 		if (f336b == null) f336b = "";
 
@@ -371,7 +375,8 @@ public class MetadataMarcRecord implements MetadataRecord {
 				|| f336b.equalsIgnoreCase("cri")
 				|| f336b.equalsIgnoreCase("crt")
 				|| f337b.equalsIgnoreCase("g")
-				|| START_G.matcher(f338b).find();
+				|| START_G.matcher(f338b).find()
+				|| FOTOGRAFIE.matcher(f300a).find();
 	}
 
 	protected boolean isMicroform() {
