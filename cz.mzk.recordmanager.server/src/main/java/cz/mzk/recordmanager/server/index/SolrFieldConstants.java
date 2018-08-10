@@ -128,6 +128,8 @@ public class SolrFieldConstants {
 
 	public static final String PSEUDONYM_RECORD_IDS_DISPLAY_MV = "pseudonym_record_ids_display_mv";
 
+	public static final String CALLNUMBER_SEARCH_TXT_MV = "callNumber_search_txt_mv";
+
 	/**
 	 * dummy fields used for processing purposes only, shouldn't be indexed. Fields are deleted in AuthorityEnricher. 
 	 */
