@@ -683,8 +683,11 @@ public class MetadataMarcRecord implements MetadataRecord {
 		List<HarvestedRecordFormatEnum> hrf = new ArrayList<>();
 
 		if (isBook()) {
-			if (isMacan()) hrf.add(HarvestedRecordFormatEnum.BLIND_BRAILLE);
-			else hrf.add(HarvestedRecordFormatEnum.BOOKS);
+			if (isMacan()) {
+				hrf.add(HarvestedRecordFormatEnum.BLIND_BRAILLE);
+				return hrf;
+			}
+			hrf.add(HarvestedRecordFormatEnum.BOOKS);
 		}
 		if (isPeriodical()) hrf.add(HarvestedRecordFormatEnum.PERIODICALS);
 		if (isArticle()) hrf.add(HarvestedRecordFormatEnum.ARTICLES);
