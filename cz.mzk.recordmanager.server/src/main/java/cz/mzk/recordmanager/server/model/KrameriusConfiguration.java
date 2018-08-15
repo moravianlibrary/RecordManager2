@@ -35,7 +35,10 @@ public class KrameriusConfiguration extends ImportConfiguration {
 
 	@Column(name="harvest_job_name")
 	private String harvestJobName;
-	
+
+	@Column(name = "collection")
+	private String collection;
+
 	public String getUrl() {
 		return url;
 	}
@@ -98,6 +101,14 @@ public class KrameriusConfiguration extends ImportConfiguration {
 
 	public void setHarvestJobName(String harvestJobName) {
 		this.harvestJobName = harvestJobName;
+	}
+
+	public String getCollection() {
+		return collection;
+	}
+
+	public void setCollection(String collection) {
+		this.collection = collection;
 	}
 
 	@Override
