@@ -56,6 +56,7 @@ public class KrameriusItemProcessor implements
 			rec.setFormat(format);
 		}
 		rec.setUpdated(new Date());
+		rec.setDeleted(null);
 		rec.setRawRecord(hrIncomplete.getRawRecord());
 		return rec;
 	}
