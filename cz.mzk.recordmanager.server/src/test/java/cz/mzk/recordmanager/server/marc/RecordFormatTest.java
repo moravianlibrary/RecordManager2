@@ -206,6 +206,11 @@ public class RecordFormatTest extends AbstractTest {
 		data.add("338 $bgtest");
 		metadataRecord = metadataFactory.getMetadataRecord(MarcRecordFactory.recordFactory(data));
 		Assert.assertTrue(metadataRecord.getDetectedFormatList().contains(HarvestedRecordFormatEnum.VISUAL_DOCUMENTS));
+
+		data.clear();
+		data.add("300 $atestFOTOGRAFIEtest");
+		metadataRecord = metadataFactory.getMetadataRecord(MarcRecordFactory.recordFactory(data));
+		Assert.assertTrue(metadataRecord.getDetectedFormatList().contains(HarvestedRecordFormatEnum.VISUAL_DOCUMENTS));
 	}
 
 	@Test
