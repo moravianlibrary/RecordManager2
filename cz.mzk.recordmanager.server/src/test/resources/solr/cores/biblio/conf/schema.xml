@@ -300,14 +300,9 @@
  <copyField source="topic"    dest="spellingShingle"/>
  <!-- CopyFields for Faceting on Text -->
  <copyField source="title_full" dest="title_fullStr"/>
- <copyField source="author" dest="authorStr"/>
- <copyField source="author2" dest="author2Str"/>
- <copyField source="author_additional" dest="author_additionalStr"/>
  <copyField source="publisher" dest="publisherStr"/>
  <!-- CopyFields for Alphabetic Browse -->
  <copyField source="topic"    dest="topic_browse"/>
- <copyField source="author"    dest="author_browse"/>
- <copyField source="author2"    dest="author_browse"/>
  <!-- CopyFields for All Fields -->
  <copyField source="format"    dest="allfields"/>
  <!-- CopyFields for Autocomplete -->

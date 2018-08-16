@@ -4,7 +4,6 @@ fullrecord = getFullRecord()
 allfields = getAllFields()
 
 author = getFirstCreator()
-author_search = getFirstCreator()
 author2 = getOtherCreators()
 author_find = getAuthorFind();
 
