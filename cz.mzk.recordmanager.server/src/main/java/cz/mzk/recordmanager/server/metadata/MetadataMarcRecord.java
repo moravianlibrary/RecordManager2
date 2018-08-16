@@ -484,30 +484,18 @@ public class MetadataMarcRecord implements MetadataRecord {
 				|| COMP_CARRIER_338B.matcher(f338b).matches();
 	}
 
+	private static final Pattern AUDIO_CD_AUDIODISC = Pattern.compile("audiodisk", Pattern.CASE_INSENSITIVE);
+
 	protected HarvestedRecordFormatEnum getAudioFormat() {
-		char ldr06 = Character.toLowerCase(underlayingMarc.getLeader().getTypeOfRecord());
-
-		String f006 = underlayingMarc.getControlField("006");
-		char f006_00 = (f006 != null) && !f006.isEmpty() ? Character.toLowerCase(f006.charAt(0)) : ' ';
-
 		String f007 = underlayingMarc.getControlField("007");
 		char f007_00 = (f007 != null) && !f007.isEmpty() ? Character.toLowerCase(f007.charAt(0)) : ' ';
 		char f007_01 = (f007 != null) && (f007.length() > 1) ? Character.toLowerCase(f007.charAt(1)) : ' ';
-
-		String f245h = underlayingMarc.getField("245", 'h');
-		if (f245h == null) f245h = "";
 
 		String f300 = underlayingMarc.getDataFields("300").toString();
 		String f500 = underlayingMarc.getDataFields("500").toString();
 
 		String f300a = underlayingMarc.getField("300", 'a');
 		if (f300a == null) f300a = "";
-
-		String f336b = underlayingMarc.getField("336", 'b');
-		if (f336b == null) f336b = "";
-
-		String f337b = underlayingMarc.getField("337", 'b');
-		if (f337b == null) f337b = "";
 
 		String f338b = underlayingMarc.getField("338", 'b');
 		if (f338b == null) f338b = "";
@@ -538,17 +526,43 @@ public class MetadataMarcRecord implements MetadataRecord {
 			return HarvestedRecordFormatEnum.AUDIO_CASSETTE;
 
 		// AUDIO_OTHER
-		if ((ldr06 == 'i' || ldr06 == 'j')
+		if (isAudioOther()) {
+			if (AUDIO_CD_AUDIODISC.matcher(f300).find()) return HarvestedRecordFormatEnum.AUDIO_CD;
+			else return HarvestedRecordFormatEnum.AUDIO_OTHER;
+		}
+
+		return null;
+	}
+
+	private boolean isAudioOther() {
+		char ldr06 = Character.toLowerCase(underlayingMarc.getLeader().getTypeOfRecord());
+
+		String f006 = underlayingMarc.getControlField("006");
+		char f006_00 = (f006 != null) && (!f006.isEmpty()) ? Character.toLowerCase(f006.charAt(0)) : ' ';
+
+		String f007 = underlayingMarc.getControlField("007");
+		char f007_00 = (f007 != null) && (!f007.isEmpty()) ? Character.toLowerCase(f007.charAt(0)) : ' ';
+
+		String f245h = underlayingMarc.getField("245", 'h');
+		if (f245h == null) f245h = "";
+
+		String f336b = underlayingMarc.getField("336", 'b');
+		if (f336b == null) f336b = "";
+
+		String f337b = underlayingMarc.getField("337", 'b');
+		if (f337b == null) f337b = "";
+
+		String f338b = underlayingMarc.getField("338", 'b');
+		if (f338b == null) f338b = "";
+
+		return (ldr06 == 'i' || ldr06 == 'j')
 				|| f007_00 == 's'
 				|| ZVUKOVY_ZAZNAM.matcher(f245h).find()
 				|| f337b.equalsIgnoreCase("s")
 				|| (f006_00 == 'i' || f006_00 == 'j')
 				|| START_S.matcher(f338b).find()
 				|| f007_00 == 'i'
-				|| (f336b.equalsIgnoreCase("spw") || f336b.equalsIgnoreCase("snd")))
-			return HarvestedRecordFormatEnum.AUDIO_OTHER;
-
-		return null;
+				|| (f336b.equalsIgnoreCase("spw") || f336b.equalsIgnoreCase("snd"));
 	}
 
 	protected boolean isAudioDVD() {
