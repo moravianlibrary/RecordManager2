@@ -47,6 +47,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 	private static final Pattern START_H = Pattern.compile("^h", Pattern.CASE_INSENSITIVE);
 	private static final Pattern HMATOVE_PISMO = Pattern.compile("hmatov[eé]\\sp[ií]smo", Pattern.CASE_INSENSITIVE);
 	private static final Pattern MACAN = Pattern.compile("macan", Pattern.CASE_INSENSITIVE);
+	private static final Pattern KTN = Pattern.compile("ktn", Pattern.CASE_INSENSITIVE);
 	private static final Pattern ELEKTRONICKY_ZDROJ = Pattern.compile("elektronick[yý]\\szdroj", Pattern.CASE_INSENSITIVE);
 	private static final Pattern MULTIMEDIUM = Pattern.compile("multim[eé]dium", Pattern.CASE_INSENSITIVE);
 	private static final Pattern CD_ROM = Pattern.compile("cd-rom", Pattern.CASE_INSENSITIVE);
@@ -635,10 +636,10 @@ public class MetadataMarcRecord implements MetadataRecord {
 		return DVD.matcher(f300a).find();
 	}
 
-	protected boolean isBlindAudio() {
+	protected boolean isMacan() {
 		for (String tag : new String[]{"260", "264"}) {
 			for (String f260b : underlayingMarc.getFields(tag, 'b')) {
-				if (MACAN.matcher(f260b).find()) {
+				if (MACAN.matcher(f260b).find() || KTN.matcher(f260b).find()) {
 					return true;
 				}
 			}
@@ -681,7 +682,13 @@ public class MetadataMarcRecord implements MetadataRecord {
 	public List<HarvestedRecordFormatEnum> getDetectedFormatList() {
 		List<HarvestedRecordFormatEnum> hrf = new ArrayList<>();
 
-		if (isBook()) hrf.add(HarvestedRecordFormatEnum.BOOKS);
+		if (isBook()) {
+			if (isMacan()) {
+				hrf.add(HarvestedRecordFormatEnum.BLIND_BRAILLE);
+				return hrf;
+			}
+			hrf.add(HarvestedRecordFormatEnum.BOOKS);
+		}
 		if (isPeriodical()) hrf.add(HarvestedRecordFormatEnum.PERIODICALS);
 		if (isArticle()) hrf.add(HarvestedRecordFormatEnum.ARTICLES);
 		if (isArticle773()) return Collections.singletonList(HarvestedRecordFormatEnum.ARTICLES);
@@ -694,7 +701,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 		if (audio != null) {
 			if (isAudioDVD()) hrf.add(HarvestedRecordFormatEnum.AUDIO_DVD);
 			else hrf.add(audio);
-			if (isBlindAudio()) {
+			if (isMacan()) {
 				hrf.clear();
 				hrf.add(HarvestedRecordFormatEnum.BLIND_AUDIO);
 				return hrf;

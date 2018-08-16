@@ -266,6 +266,15 @@ public class RecordFormatTest extends AbstractTest {
 			metadataRecord = metadataFactory.getMetadataRecord(MarcRecordFactory.recordFactory(data));
 			Assert.assertTrue(metadataRecord.getDetectedFormatList().contains(HarvestedRecordFormatEnum.BLIND_BRAILLE));
 		}
+
+		// BOOK AND (macan || ktn)
+		for (String dfTag : new String[]{"260", "264"}) {
+			data.clear();
+			data.add("000 000000Ac000");
+			data.add(dfTag + " $btestMAcan test");
+			metadataRecord = metadataFactory.getMetadataRecord(MarcRecordFactory.recordFactory(data));
+			Assert.assertTrue(metadataRecord.getDetectedFormatList().contains(HarvestedRecordFormatEnum.BLIND_BRAILLE));
+		}
 	}
 
 	@Test
@@ -655,6 +664,14 @@ public class RecordFormatTest extends AbstractTest {
 			data.clear();
 			data.add("000 000000i0000");
 			data.add(dfTag + " $btestMAcan test");
+			metadataRecord = metadataFactory.getMetadataRecord(MarcRecordFactory.recordFactory(data));
+			Assert.assertTrue(metadataRecord.getDetectedFormatList().contains(HarvestedRecordFormatEnum.BLIND_AUDIO));
+		}
+
+		for (String dfTag : new String[]{"260", "264"}) {
+			data.clear();
+			data.add("000 000000i0000");
+			data.add(dfTag + " $btestktn test");
 			metadataRecord = metadataFactory.getMetadataRecord(MarcRecordFactory.recordFactory(data));
 			Assert.assertTrue(metadataRecord.getDetectedFormatList().contains(HarvestedRecordFormatEnum.BLIND_AUDIO));
 		}
