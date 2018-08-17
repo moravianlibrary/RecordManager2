@@ -2,7 +2,7 @@ DROP TABLE IF EXISTS tmp_periodicals_sfx;
 
 CREATE TABLE tmp_periodicals_sfx AS
 SELECT 
-  nextval('tmp_table_id_seq') as row_id,
+  nextval('tmp_table_id_seq') AS row_id,
   array_to_string(array_agg(safe_titles.harvested_record_id), ',')  id_array
 FROM (
   SELECT harvested_record_id,title FROM title 
@@ -13,6 +13,6 @@ LEFT OUTER JOIN tmp_periodicals_ids tpi ON hr.id = tpi.id
 WHERE tps.id IS NOT NULL
 GROUP BY safe_titles.title
 HAVING count(safe_titles.title) > 1
-  AND count(DISTINCT hr2.dedup_record_id) + sum(case when hr2.dedup_record_id IS NULL THEN 1 else 0 END) != 1
+  AND count(DISTINCT hr2.dedup_record_id) + sum(CASE WHEN hr2.dedup_record_id IS NULL THEN 1 ELSE 0 END) != 1;
   
 CREATE INDEX tmp_periodicals_sfx ON tmp_oclc_clusters(row_id);
