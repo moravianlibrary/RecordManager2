@@ -60,15 +60,19 @@ public class ImportRecordsFileReader implements ItemReader<List<Record>> {
 			if (files == null) initializeDownloadReader();
 			else initializeFilesReader();
 		else if (!reader.hasNext()) initializeFilesReader();
-		while (reader.hasNext()) {
-			try {
-				batch.add(reader.next());
-			} catch (MarcException e) {
-				logger.warn(e.getMessage());
+		try {
+			while (reader.hasNext()) {
+				try {
+					batch.add(reader.next());
+				} catch (MarcException e) {
+					logger.warn(e.getMessage());
+				}
+				if (batch.size() >= batchSize) {
+					break;
+				}
 			}
-			if (batch.size() >= batchSize) {
-				break;
-			}
+		} catch (MarcException e) {
+			return null;
 		}
 		return batch.isEmpty() ? null : batch;
 	}

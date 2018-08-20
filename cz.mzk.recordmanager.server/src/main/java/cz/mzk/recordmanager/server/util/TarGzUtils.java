@@ -20,7 +20,6 @@ public final class TarGzUtils {
 		logger.info("Extracting file: " + tarFile.getName());
 		if (destFile.exists()) throw new FileAlreadyExistsException(destFile.getAbsolutePath());
 		if (!destFile.mkdir()) throw new IOException("Can't make directory for " + destFile.getAbsolutePath());
-
 		TarArchiveInputStream tarIn = new TarArchiveInputStream(new GzipCompressorInputStream(
 				new BufferedInputStream(new FileInputStream(tarFile))));
 		TarArchiveEntry tarEntry = tarIn.getNextTarEntry();
@@ -31,6 +30,9 @@ public final class TarGzUtils {
 			if (tarEntry.isDirectory()) {
 				if (!destPath.mkdirs()) logger.info("Can't make directory for " + destPath.getAbsolutePath());
 			} else {
+				if (!destPath.getParentFile().exists() && !destPath.getParentFile().mkdirs()) {
+					logger.info("Can't make directory for " + destPath.getAbsolutePath());
+				}
 				if (!destPath.createNewFile()) logger.info("Name of file already exists " + destPath.getAbsolutePath());
 				BufferedOutputStream bout = new BufferedOutputStream(new FileOutputStream(destPath));
 				byte[] btoRead = new byte[1024];
