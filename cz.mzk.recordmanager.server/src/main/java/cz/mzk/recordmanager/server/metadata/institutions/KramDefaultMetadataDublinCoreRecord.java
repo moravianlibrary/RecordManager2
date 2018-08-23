@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 import cz.mzk.recordmanager.server.util.CleaningUtils;
+import cz.mzk.recordmanager.server.util.MetadataUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import cz.mzk.recordmanager.server.dc.DublinCoreRecord;
@@ -42,12 +43,16 @@ public class KramDefaultMetadataDublinCoreRecord extends
 		if (kramConf != null && kramConf.getUrl() != null) {
 			kramUrlBase = CleaningUtils.replaceAll(kramConf.getUrl(), API_PATTERN, "") + "i.jsp?pid=";
 		}
+		return generateUrl(kramUrlBase);
+	}
 
+	public List<String> generateUrl(String kramUrlBase) {
 		String policy = dcRecord.getRights().stream()
 				.anyMatch(s -> PUBLIC_RIGHTS_PATTERN.matcher(s).matches())
 				? Constants.DOCUMENT_AVAILABILITY_ONLINE
 				: Constants.DOCUMENT_AVAILABILITY_PROTECTED;
-		return Collections.singletonList(policy + '|' + kramUrlBase + harvestedRecord.getUniqueId().getRecordId() + '|');
+		return Collections.singletonList(MetadataUtils.generateUrl(
+				policy, kramUrlBase + harvestedRecord.getUniqueId().getRecordId(), ""));
 	}
 
 }

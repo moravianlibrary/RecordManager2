@@ -18,11 +18,12 @@ public class UrlDedupRecordEnricher implements DedupRecordEnricher {
 	private static final String PROTECTED = "protected";
 	private static final String SPLITTER = "\\|";
 	private static final String JOINER = "|";
-	private static final String KRAMERIUS_URL = "http://kramerius";
+	private static final Pattern KRAMERIUS_URL = Pattern.compile("^http[s]?://kramerius");
 	private static final Pattern KRAMERIUS_HANDLE = Pattern.compile("handle/");
 	private static final String KRAMERIUS_IJSP = "i.jsp?pid=";
 	private static final Pattern KRAM_MZK_PATTERN = Pattern.compile("http://kramerius.mzk.cz.*(uuid:.*)");
 	private static final String DIGITALNIKNIHOVNA = "http://www.digitalniknihovna.cz/mzk/uuid/";
+	private static final Pattern URL = Pattern.compile("(http[s]?://)?(.*)");
 
 	@Override
 	public void enrich(DedupRecord record, SolrInputDocument mergedDocument,
@@ -53,6 +54,10 @@ public class UrlDedupRecordEnricher implements DedupRecordEnricher {
 			} else {
 				String spliturl[] = obj.toString().split(SPLITTER);
 				String parsedUrl = krameriusUrlParser(spliturl[2]);
+				Matcher matcher;
+				if ((matcher = URL.matcher(parsedUrl)).matches()) {
+					parsedUrl = matcher.group(2);
+				}
 				if (urlsMap.containsKey(parsedUrl)) {
 					List<String> completeUrls = urlsMap.get(parsedUrl);
 					if (completeUrls.contains(obj.toString())) continue;
@@ -67,7 +72,6 @@ public class UrlDedupRecordEnricher implements DedupRecordEnricher {
 				}
 			}
 		}
-
 		for (String url : urlsMap.keySet()) {
 			List<String> completeUrls = urlsMap.get(url);
 			boolean online = false;
@@ -117,7 +121,7 @@ public class UrlDedupRecordEnricher implements DedupRecordEnricher {
 		if ((matcher = KRAM_MZK_PATTERN.matcher(url)).matches()) {
 			return DIGITALNIKNIHOVNA + matcher.group(1);
 		}
-		if (url.contains(KRAMERIUS_URL)) {
+		if (KRAMERIUS_URL.matcher(url).find()) {
 			return CleaningUtils.replaceAll(url, KRAMERIUS_HANDLE, KRAMERIUS_IJSP);
 		}
 		return url;

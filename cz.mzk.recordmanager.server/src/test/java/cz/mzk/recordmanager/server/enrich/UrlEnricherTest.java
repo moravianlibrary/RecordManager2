@@ -94,7 +94,7 @@ public class UrlEnricherTest extends AbstractTest {
 		UrlDedupRecordEnricher ue = new UrlDedupRecordEnricher();
 		ue.enrich(dr, merged, local);
 
-		Assert.assertEquals(merged.getFieldValues(SolrFieldConstants.URL).toArray(), result.toArray());
+		Assert.assertTrue(merged.getFieldValues(SolrFieldConstants.URL).containsAll(result));
 	}
 
 	@Test

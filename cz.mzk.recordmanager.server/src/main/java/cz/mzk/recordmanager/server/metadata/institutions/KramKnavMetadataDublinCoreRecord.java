@@ -15,6 +15,11 @@ public class KramKnavMetadataDublinCoreRecord extends
 	}
 
 	@Override
+	public List<String> getUrls() {
+		return generateUrl("https://kramerius.lib.cas.cz/search/handle/");
+	}
+
+	@Override
 	public List<Title> getTitle() {
 		List<Title> titles = super.getTitle();
 		if (titles.size() > 1) {
