@@ -1440,3 +1440,7 @@ INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format,extr
 --changeset tomascejpek:109 context:cpk
 DELETE FROM oai_harvest_conf WHERE import_conf_id=332;
 INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format,extract_id_regex) VALUES (332,'local:/data/imports/kkkv_upd','importRecordsJob','xml','s/^(.*)/KKV01-$1/');
+
+--changeset tomascejpek:110 context:cpk
+UPDATE import_conf SET item_id='aleph' WHERE id=332;
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (43, 332, 'KVG001');

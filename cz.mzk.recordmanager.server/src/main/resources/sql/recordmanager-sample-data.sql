@@ -103,7 +103,7 @@ INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weig
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency) VALUES (329, 129, 200, 'vktatest', 10, false, false, false, true, 'U');
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id) VALUES (330, 130, 200, 'knav', 11, false, true, true, true, 'D', 'aleph');
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency,generate_dedup_keys) VALUES (331, 131, 200, 'bcbt', 8, false, true, false, false, 'U',false);
-INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency) VALUES (332, 132, 200, 'kkkv', 12, false, true, true, true, 'U');
+INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id) VALUES (332, 132, 200, 'kkkv', 12, false, true, true, true, 'U', 'aleph');
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency) VALUES (333, 133, 200, 'kkpc', 11, false, true, false, true, 'U');
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id) VALUES (334, 134, 200, 'mkkh', 11, false, true, true, true, 'D', 'other');
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id) VALUES (335, 135, 200, 'svkos', 13, false, true, true, true, 'U', 'aleph');
@@ -364,3 +364,4 @@ INSERT INTO sigla (id, import_conf_id, sigla) VALUES (39, 337, 'PNA001');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (40, 350, 'SOG504');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (41, 353, 'OPG001');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (42, 356, 'PBG001');
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (43, 332, 'KVG001');
