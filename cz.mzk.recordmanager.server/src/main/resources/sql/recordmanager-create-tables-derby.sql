@@ -64,10 +64,11 @@ CREATE TABLE kramerius_conf (
   url_solr                    VARCHAR(128),
   query_rows                  DECIMAL(10),
   metadata_stream             VARCHAR(128),
-  auth_token	              VARCHAR(128),
+  auth_token                  VARCHAR(128),
   fulltext_harvest_type       VARCHAR(128) DEFAULT 'fedora',
   download_private_fulltexts  BOOLEAN DEFAULT FALSE,
   harvest_job_name            VARCHAR(128),
+  collection                  VARCHAR(128),
   CONSTRAINT kramerius_conf_import_conf_fk FOREIGN KEY (import_conf_id) REFERENCES import_conf(id)
 );
 

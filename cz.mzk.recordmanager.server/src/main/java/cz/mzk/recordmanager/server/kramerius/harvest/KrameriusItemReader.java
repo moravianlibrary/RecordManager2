@@ -72,6 +72,7 @@ public class KrameriusItemReader implements ItemReader<List<HarvestedRecord>>,
 			params.setQueryRows(conf.getQueryRows());
 			params.setFrom(fromDate);
 			params.setUntil(untilDate);
+			params.setCollection(conf.getCollection());
 			kHarvester = harvesterFactory.create(type == null ? "" : type, params, confId);
 		}
 	}

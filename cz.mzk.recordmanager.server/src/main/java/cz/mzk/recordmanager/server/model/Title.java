@@ -1,5 +1,7 @@
 package cz.mzk.recordmanager.server.model;
 
+import cz.mzk.recordmanager.server.util.MetadataUtils;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -24,6 +26,14 @@ public class Title extends AbstractDomainObject {
 		newTitle.setTitleStr(title);
 		newTitle.setOrderInRecord(orderInRecord);
 		newTitle.setSimilarityEnabled(similarity);
+		return newTitle;
+	}
+
+	public static Title create(final String title, final long orderInRecord) {
+		Title newTitle = new Title();
+		newTitle.setTitleStr(title);
+		newTitle.setOrderInRecord(orderInRecord);
+		newTitle.setSimilarityEnabled(MetadataUtils.similarityEnabled(title));
 		return newTitle;
 	}
 

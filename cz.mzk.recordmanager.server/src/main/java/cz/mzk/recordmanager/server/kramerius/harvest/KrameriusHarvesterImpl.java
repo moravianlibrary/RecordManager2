@@ -118,7 +118,9 @@ public abstract class KrameriusHarvesterImpl implements KrameriusHarvester {
 		//works with all possible models in single configuration
 		String harvestedModelsStatement = String.join(" OR ", FedoraModels.HARVESTED_MODELS);
 		query.add("fq", harvestedModelsStatement);
-
+		if (params.getCollection() != null) {
+			query.add("fq", SolrUtils.createFieldQuery("collection", params.getCollection()));
+		}
 		if (params.getFrom() != null || params.getUntil() != null) {
 			String range = SolrUtils.createDateRange(params.getFrom(), params.getUntil());
 			query.add("fq", SolrUtils.createFieldQuery("modified_date", range));

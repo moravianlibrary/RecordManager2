@@ -166,8 +166,9 @@ public class MetadataRecordFactory {
 			MetadataRecord mr = new KramNkpMetadataDublinCoreRecord(dcRec, hr);
 			init(mr);
 			return mr;
-		case Constants.PREFIX_KRAM_NTK:
 		case Constants.PREFIX_KRAM_KNAV:
+			return new KramKnavMetadataDublinCoreRecord(dcRec, hr);
+		case Constants.PREFIX_KRAM_NTK:
 			return new KramDefaultMetadataDublinCoreRecord(dcRec, hr);
 		case Constants.PREFIX_KRAM3_NKP:
 			return new Kram3NkpMetadataDublinCoreRecord(dcRec);
