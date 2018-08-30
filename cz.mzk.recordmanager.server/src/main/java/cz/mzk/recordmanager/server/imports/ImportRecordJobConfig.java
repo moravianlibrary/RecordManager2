@@ -194,7 +194,7 @@ public class ImportRecordJobConfig {
 	@Bean(name = Constants.JOB_ID_IMPORT_OAI + ":importRecordsStep")
 	public Step importOaiRecordsStep() throws Exception {
 		return steps.get(Constants.JOB_ID_IMPORT_OAI + "importRecordsStep")
-				.<List<OAIRecord>, List<HarvestedRecord>>chunk(100)//
+				.<List<OAIRecord>, List<HarvestedRecord>>chunk(1)//
 				.reader(importOaiRecordsReader(STRING_OVERRIDEN_BY_EXPRESSION))//
 				.processor(oaiItemProcessor())
 				.writer(harvestedRecordWriter()) //
