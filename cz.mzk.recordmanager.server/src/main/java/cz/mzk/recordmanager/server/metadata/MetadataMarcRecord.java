@@ -275,8 +275,8 @@ public class MetadataMarcRecord implements MetadataRecord {
 	}
 
 	protected boolean isBook() {
-		char ldr06 = Character.toLowerCase(underlayingMarc.getLeader().getTypeOfRecord());
-		char ldr07 = Character.toLowerCase(underlayingMarc.getLeader().getImplDefined1()[0]);
+		char ldr06 = getLeaderChar(underlayingMarc.getLeader().getTypeOfRecord());
+		char ldr07 = getLeaderChar(underlayingMarc.getLeader().getImplDefined1()[0]);
 
 		String f006 = underlayingMarc.getControlField("006");
 		char f006_00 = (f006 != null && !f006.isEmpty()) ? Character.toLowerCase(f006.charAt(0)) : ' ';
@@ -286,12 +286,12 @@ public class MetadataMarcRecord implements MetadataRecord {
 	}
 
 	protected boolean isPeriodical() {
-		char ldr07 = Character.toLowerCase(underlayingMarc.getLeader().getImplDefined1()[0]);
+		char ldr07 = getLeaderChar(underlayingMarc.getLeader().getImplDefined1()[0]);
 		return MetadataUtils.containsChar(ARRAY_IS, ldr07);
 	}
 
 	protected boolean isArticle() {
-		char ldr07 = Character.toLowerCase(underlayingMarc.getLeader().getImplDefined1()[0]);
+		char ldr07 = getLeaderChar(underlayingMarc.getLeader().getImplDefined1()[0]);
 		return MetadataUtils.containsChar(ARRAY_AB, ldr07);
 	}
 
@@ -300,7 +300,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 	}
 
 	protected boolean isMap() {
-		char ldr06 = Character.toLowerCase(underlayingMarc.getLeader().getTypeOfRecord());
+		char ldr06 = getLeaderChar(underlayingMarc.getLeader().getTypeOfRecord());
 
 		String f006 = underlayingMarc.getControlField("006");
 		char f006_00 = (f006 != null && !f006.isEmpty()) ? Character.toLowerCase(f006.charAt(0)) : ' ';
@@ -323,7 +323,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 
 	@Override
 	public boolean isMusicalScores() {
-		char ldr06 = Character.toLowerCase(underlayingMarc.getLeader().getTypeOfRecord());
+		char ldr06 = getLeaderChar(underlayingMarc.getLeader().getTypeOfRecord());
 
 		String f006 = underlayingMarc.getControlField("006");
 		char f006_00 = (f006 != null) && (!f006.isEmpty()) ? Character.toLowerCase(f006.charAt(0)) : ' ';
@@ -344,7 +344,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 
 	@Override
 	public boolean isVisualDocument() {
-		char ldr06 = Character.toLowerCase(underlayingMarc.getLeader().getTypeOfRecord());
+		char ldr06 = getLeaderChar(underlayingMarc.getLeader().getTypeOfRecord());
 
 		String f006 = underlayingMarc.getControlField("006");
 		char f006_00 = (f006 != null) && !f006.isEmpty() ? Character.toLowerCase(f006.charAt(0)) : ' ';
@@ -381,7 +381,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 	}
 
 	protected boolean isMicroform() {
-		char ldr06 = Character.toLowerCase(underlayingMarc.getLeader().getTypeOfRecord());
+		char ldr06 = getLeaderChar(underlayingMarc.getLeader().getTypeOfRecord());
 
 		String f007 = underlayingMarc.getControlField("007");
 		char f007_00 = (f007 != null) && !f007.isEmpty() ? Character.toLowerCase(f007.charAt(0)) : ' ';
@@ -428,7 +428,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 	}
 
 	protected boolean isElectronicSource() {
-		char ldr06 = Character.toLowerCase(underlayingMarc.getLeader().getTypeOfRecord());
+		char ldr06 = getLeaderChar(underlayingMarc.getLeader().getTypeOfRecord());
 
 		String f006 = underlayingMarc.getControlField("006");
 		char f006_00 = (f006 != null) && !f006.isEmpty() ? Character.toLowerCase(f006.charAt(0)) : ' ';
@@ -449,7 +449,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 	}
 
 	protected boolean isComputerCarrier() {
-		char ldr06 = Character.toLowerCase(underlayingMarc.getLeader().getTypeOfRecord());
+		char ldr06 = getLeaderChar(underlayingMarc.getLeader().getTypeOfRecord());
 
 		String f006 = underlayingMarc.getControlField("006");
 		char f006_00 = (f006 != null) && !f006.isEmpty() ? Character.toLowerCase(f006.charAt(0)) : ' ';
@@ -540,7 +540,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 	}
 
 	private boolean isAudioOther() {
-		char ldr06 = Character.toLowerCase(underlayingMarc.getLeader().getTypeOfRecord());
+		char ldr06 = getLeaderChar(underlayingMarc.getLeader().getTypeOfRecord());
 
 		String f006 = underlayingMarc.getControlField("006");
 		char f006_00 = (f006 != null) && (!f006.isEmpty()) ? Character.toLowerCase(f006.charAt(0)) : ' ';
@@ -571,7 +571,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 	}
 
 	protected boolean isAudioDVD() {
-		char ldr06 = Character.toLowerCase(underlayingMarc.getLeader().getTypeOfRecord());
+		char ldr06 = getLeaderChar(underlayingMarc.getLeader().getTypeOfRecord());
 
 		String f300a = underlayingMarc.getField("300", 'a');
 		if (f300a == null) f300a = "";
@@ -581,7 +581,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 	}
 
 	protected HarvestedRecordFormatEnum getVideoDocument() {
-		char ldr06 = Character.toLowerCase(underlayingMarc.getLeader().getTypeOfRecord());
+		char ldr06 = getLeaderChar(underlayingMarc.getLeader().getTypeOfRecord());
 
 		String f006 = underlayingMarc.getControlField("006");
 		char f006_00 = (f006 != null) && !f006.isEmpty() ? Character.toLowerCase(f006.charAt(0)) : ' ';
@@ -667,7 +667,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 	}
 
 	protected boolean isOthers() {
-		char ldr06 = Character.toLowerCase(underlayingMarc.getLeader().getTypeOfRecord());
+		char ldr06 = getLeaderChar(underlayingMarc.getLeader().getTypeOfRecord());
 
 		String f006 = underlayingMarc.getControlField("006");
 		char f006_00 = (f006 != null) && !f006.isEmpty() ? Character.toLowerCase(f006.charAt(0)) : ' ';
@@ -695,6 +695,10 @@ public class MetadataMarcRecord implements MetadataRecord {
 				|| (f007_00 == 'z' && f336b.equalsIgnoreCase("zzz"))
 				|| (f337b.equalsIgnoreCase("x") || f337b.equalsIgnoreCase("z"))
 				|| f338b.equalsIgnoreCase("zu");
+	}
+
+	protected char getLeaderChar(final char c) {
+		return Character.toLowerCase(c);
 	}
 
 	@Override
