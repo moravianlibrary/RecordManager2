@@ -45,7 +45,8 @@ public class Constants {
 	public static final String JOB_ID_FULLTEXT_MANUSCRIPTORIUM		= "manuscriptoriumFulltextJob";
 	public static final String JOB_ID_EXPORT_RECORDS_FOR_CLASSIFIER = "exportRecordsForClassifierJob";
 	public static final String JOB_ID_AGROVOC_CONVERTOR				= "convertAgrovocRecordsJob";
-	
+	public static final String JOB_ID_IMPORT_ANOTATIONS				= "importAnotationsObalkyJob";
+
 	public static final String JOB_PARAM_CONF_ID 		= "configurationId";
 	public static final String JOB_PARAM_FROM_DATE 		= "from";
 	public static final String JOB_PARAM_UNTIL_DATE 	= "to";

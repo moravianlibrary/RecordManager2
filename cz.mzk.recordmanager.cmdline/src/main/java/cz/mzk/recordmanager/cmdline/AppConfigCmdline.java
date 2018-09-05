@@ -5,6 +5,7 @@ import java.io.File;
 
 import javax.sql.DataSource;
 
+import cz.mzk.recordmanager.server.imports.obalky.anotations.AnotationsHarvestJobConfig;
 import cz.mzk.recordmanager.server.miscellaneous.caslin.view.CaslinViewJobsConfig;
 import org.springframework.batch.core.configuration.support.ApplicationContextFactory;
 import org.springframework.batch.core.configuration.support.GenericApplicationContextFactory;
@@ -94,7 +95,9 @@ public class AppConfigCmdline {
 				AdresarHarvestJobConfig.class,
 				ManuscriptoriumFulltextJobConfig.class,
 				AgrovocConvertorJobConfig.class,
-				CaslinViewJobsConfig.class
+				CaslinViewJobsConfig.class,
+				AnotationsHarvestJobConfig.class
+
 			);
 	}
 

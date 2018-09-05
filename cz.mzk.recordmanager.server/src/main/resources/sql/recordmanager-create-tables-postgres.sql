@@ -395,7 +395,6 @@ CREATE TABLE publisher_number (
   FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE
 );
 COMMENT ON TABLE publisher_number IS 'dedup_keys: table contatining publisher numbers';
-CREATE INDEX publisher_number_harvested_record_idx ON publisher_number(harvested_record_id);
 
 CREATE TABLE authority (
   id                   DECIMAL(10) PRIMARY KEY,
@@ -404,5 +403,13 @@ CREATE TABLE authority (
   FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE
 );
 COMMENT ON TABLE authority IS 'dedup_keys: table contatining authority ids';
-CREATE INDEX authority_harvested_record_idx ON authority(harvested_record_id);
-CREATE INDEX authority_idx ON authority(authority_id);
+
+CREATE TABLE obalkyknih_anotation (
+  id                   DECIMAL(10) PRIMARY KEY,
+  nbn                  VARCHAR(32),
+  oclc                 VARCHAR(32),
+  isbn                 VARCHAR(13),
+  anotation            VARCHAR(1048576)
+);
+
+COMMENT ON TABLE obalkyknih_anotation IS 'downloaded anotations from obalkyknih.cz';
