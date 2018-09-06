@@ -409,6 +409,7 @@ CREATE TABLE obalkyknih_anotation (
   nbn                  VARCHAR(32),
   oclc                 VARCHAR(32),
   isbn                 VARCHAR(13),
+  updated              TIMESTAMP,
   anotation            VARCHAR(1048576)
 );
 

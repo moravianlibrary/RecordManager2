@@ -1,6 +1,7 @@
 package cz.mzk.recordmanager.server.model;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 @Table(name = ObalkyKnihAnotation.TABLE_NAME)
@@ -23,6 +24,10 @@ public class ObalkyKnihAnotation extends AbstractDomainObject {
 
 	@Embedded
 	private BibInfo bibInfo = new BibInfo();
+
+	@Column(name = "updated")
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date updated = new Date();
 
 	@Column(name = "anotation")
 	private String anotation;
@@ -57,5 +62,13 @@ public class ObalkyKnihAnotation extends AbstractDomainObject {
 
 	public void setAnotation(String anotation) {
 		this.anotation = anotation;
+	}
+
+	public Date getUpdated() {
+		return updated;
+	}
+
+	public void setUpdated(Date updated) {
+		this.updated = updated;
 	}
 }

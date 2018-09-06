@@ -5,7 +5,6 @@ import cz.mzk.recordmanager.server.springbatch.JobParameterDeclaration;
 import cz.mzk.recordmanager.server.util.Constants;
 import org.springframework.batch.core.JobParameter.ParameterType;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 
