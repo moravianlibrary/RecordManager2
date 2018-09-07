@@ -9,6 +9,8 @@ public class ObalkyKnihAnotation extends AbstractDomainObject {
 
 	public static final String TABLE_NAME = "obalkyknih_anotation";
 
+	private static final int EFFECTIVE_LENGHT = 32;
+
 	@Embeddable
 	private static class BibInfo {
 
@@ -20,6 +22,15 @@ public class ObalkyKnihAnotation extends AbstractDomainObject {
 
 		@Column(name = "isbn")
 		public String isbn;
+
+		@Override
+		public String toString() {
+			return "BibInfo{" +
+					"nbn='" + nbn + '\'' +
+					", oclc='" + oclc + '\'' +
+					", isbn='" + isbn + '\'' +
+					'}';
+		}
 	}
 
 	@Embedded
@@ -37,6 +48,9 @@ public class ObalkyKnihAnotation extends AbstractDomainObject {
 	}
 
 	public void setNbn(String nbn) {
+		if (nbn != null && nbn.length() > EFFECTIVE_LENGHT) {
+			nbn = nbn.substring(0, EFFECTIVE_LENGHT);
+		}
 		this.bibInfo.nbn = nbn;
 	}
 
@@ -45,6 +59,9 @@ public class ObalkyKnihAnotation extends AbstractDomainObject {
 	}
 
 	public void setOclc(String oclc) {
+		if (oclc != null && oclc.length() > EFFECTIVE_LENGHT) {
+			oclc = oclc.substring(0, EFFECTIVE_LENGHT);
+		}
 		this.bibInfo.oclc = oclc;
 	}
 
@@ -70,5 +87,14 @@ public class ObalkyKnihAnotation extends AbstractDomainObject {
 
 	public void setUpdated(Date updated) {
 		this.updated = updated;
+	}
+
+	@Override
+	public String toString() {
+		return "ObalkyKnihAnotation{" +
+				"bibInfo=" + bibInfo +
+				", updated=" + updated +
+				", anotation='" + anotation + '\'' +
+				'}';
 	}
 }
