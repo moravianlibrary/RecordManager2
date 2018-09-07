@@ -13,7 +13,8 @@ public class FromLocalToDedupEnricher implements DedupRecordEnricher {
 	private final FieldMerger holdingsFieldMerger = new FieldMerger(
 			SolrFieldConstants.AUTHOR_SEARCH_TXT_MV,
 			SolrFieldConstants.TITLE_SEARCH_TXT_MV,
-			SolrFieldConstants.CALLNUMBER_SEARCH_TXT_MV
+			SolrFieldConstants.CALLNUMBER_SEARCH_TXT_MV,
+			SolrFieldConstants.OBALKY_ANOTATION
 	);
 
 	@Override

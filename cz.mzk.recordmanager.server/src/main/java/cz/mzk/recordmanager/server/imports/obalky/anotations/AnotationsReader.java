@@ -27,7 +27,8 @@ public class AnotationsReader implements ItemReader<ObalkyKnihAnotation> {
 
 	private static final String ANOTATIONS_URL = "http://www.obalkyknih.cz/dumpdb/anotace.txt";
 
-	private static final Pattern LINE_PARSER = Pattern.compile("(\\S*)\\s+(\\S*)\\s+(?:\\(OCoLC\\))?(\\S*)\\s+([-0-9]{10} [:0-9]{8})(.*)");
+	private static final Pattern LINE_PARSER =
+			Pattern.compile("(\\S*)\\s+(\\S*)\\s+(?:\\(OCoLC\\))?(\\S*)\\s+([-0-9]{10} [:0-9]{8})\\s+(.*)");
 
 	private static final SimpleDateFormat UPDATED_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
