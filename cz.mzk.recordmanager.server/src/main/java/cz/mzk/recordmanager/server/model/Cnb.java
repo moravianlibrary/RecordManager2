@@ -9,7 +9,10 @@ import javax.persistence.Table;
 public class Cnb extends AbstractDomainObject {
 	
 	public static final String TABLE_NAME = "cnb";
-	
+
+	@Column(name = "harvested_record_id", updatable = false, insertable = false)
+	private Long harvestedRecordId;
+
 	@Column(name="cnb")
 	private String cnb;
 

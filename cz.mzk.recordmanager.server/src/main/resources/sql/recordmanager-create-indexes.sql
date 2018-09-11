@@ -47,3 +47,7 @@ CREATE INDEX sigla_sigla_idx ON sigla(sigla);
 
 CREATE INDEX tezaurus_id_idx ON tezaurus_record(import_conf_id,record_id);
 CREATE INDEX tezaurus_name_idx ON tezaurus_record(import_conf_id,source_field,name);
+
+CREATE INDEX isbn_idx ON isbn(isbn);
+CREATE INDEX cnb_idx ON cnb(cnb);
+CREATE INDEX oclc_idx ON oclc(oclc);

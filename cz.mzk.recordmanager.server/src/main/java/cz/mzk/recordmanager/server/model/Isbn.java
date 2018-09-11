@@ -9,7 +9,10 @@ import javax.persistence.Table;
 public class Isbn extends AbstractDomainObject {
 	
 	public static final String TABLE_NAME = "isbn";
-	
+
+	@Column(name = "harvested_record_id", updatable = false, insertable = false)
+	private Long harvestedRecordId;
+
 	@Column(name="isbn")
 	private Long isbn;
 	
