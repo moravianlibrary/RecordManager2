@@ -31,7 +31,6 @@ public class AnotationsHarvestJobConfig {
 
 	private static final String STRING_OVERRIDEN_BY_EXPRESSION = null;
 
-	// harvest metadata
 	@Bean
 	public Job importAnotationsObalkyJob(
 			@Qualifier(Constants.JOB_ID_IMPORT_ANOTATIONS + ":importStep") Step importStep) {
