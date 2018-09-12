@@ -412,5 +412,4 @@ CREATE TABLE obalkyknih_anotation (
   updated              TIMESTAMP,
   anotation            VARCHAR(1048576)
 );
-
 COMMENT ON TABLE obalkyknih_anotation IS 'downloaded anotations from obalkyknih.cz';

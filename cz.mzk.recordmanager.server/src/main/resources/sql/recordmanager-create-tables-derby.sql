@@ -306,3 +306,12 @@ CREATE TABLE authority (
   authority_id         VARCHAR(20),
   CONSTRAINT authority_fk FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id)
 );
+
+CREATE TABLE obalkyknih_anotation (
+  id                   DECIMAL(10) PRIMARY KEY,
+  nbn                  VARCHAR(32),
+  oclc                 VARCHAR(32),
+  isbn                 DECIMAL(13),
+  updated              TIMESTAMP,
+  anotation            BLOB
+);
