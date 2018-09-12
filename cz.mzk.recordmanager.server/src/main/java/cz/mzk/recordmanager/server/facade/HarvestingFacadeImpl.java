@@ -204,4 +204,8 @@ public class HarvestingFacadeImpl implements HarvestingFacade {
 		return MoreObjects.firstNonNull(conf.getHarvestJobName(), Constants.JOB_ID_HARVEST_KRAMERIUS);
 	}
 
+	@Override
+	public void obalkyKnihAnotations() {
+		jobExecutor.execute(Constants.JOB_ID_IMPORT_ANOTATIONS, new JobParameters());
+	}
 }

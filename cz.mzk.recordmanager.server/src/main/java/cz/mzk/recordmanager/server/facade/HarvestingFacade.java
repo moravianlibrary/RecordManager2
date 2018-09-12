@@ -34,4 +34,7 @@ public interface HarvestingFacade {
 	void incrementalFulltextJob(KrameriusConfiguration conf);
 
 	void incrementalFulltextJob(Long id);
+
+	void obalkyKnihAnotations();
+
 }
