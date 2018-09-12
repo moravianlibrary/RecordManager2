@@ -47,7 +47,11 @@ public class AnotationsReader implements ItemReader<ObalkyKnihAnotation> {
 			Matcher matcher = LINE_PARSER.matcher(line);
 			if (!matcher.matches()) continue;
 			ObalkyKnihAnotation newAnotation = new ObalkyKnihAnotation();
-			newAnotation.setIsbn(matcher.group(1).equals("\\N") ? null : matcher.group(1));
+			try {
+				newAnotation.setIsbn(Long.parseLong(matcher.group(1)));
+			} catch (NumberFormatException nfe) {
+				newAnotation.setIsbn(null);
+			}
 			newAnotation.setNbn(matcher.group(2).equals("\\N") ? null : matcher.group(2));
 			newAnotation.setOclc(matcher.group(3).equals("\\N") ? null : matcher.group(3));
 			newAnotation.setUpdated(UPDATED_FORMAT.parse(matcher.group(4)));

@@ -21,7 +21,7 @@ public class ObalkyKnihAnotation extends AbstractDomainObject {
 		public String oclc;
 
 		@Column(name = "isbn")
-		public String isbn;
+		public Long isbn;
 
 		@Override
 		public String toString() {
@@ -65,11 +65,11 @@ public class ObalkyKnihAnotation extends AbstractDomainObject {
 		this.bibInfo.oclc = oclc;
 	}
 
-	public String getIsbn() {
+	public Long getIsbn() {
 		return bibInfo.isbn;
 	}
 
-	public void setIsbn(String isbn) {
+	public void setIsbn(Long isbn) {
 		this.bibInfo.isbn = isbn;
 	}
 

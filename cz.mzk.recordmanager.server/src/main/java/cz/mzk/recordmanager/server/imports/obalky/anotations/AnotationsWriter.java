@@ -60,7 +60,7 @@ public class AnotationsWriter implements ItemWriter<ObalkyKnihAnotation> {
 	private void updateHr(ObalkyKnihAnotation anotation) {
 		Set<HarvestedRecord> hrToUpdate = new HashSet<>();
 		try {
-			if (anotation.getIsbn() != null) hrToUpdate.addAll(isbnDAO.findHrByIsbn(Long.valueOf(anotation.getIsbn())));
+			if (anotation.getIsbn() != null) hrToUpdate.addAll(isbnDAO.findHrByIsbn(anotation.getIsbn()));
 		} catch (NumberFormatException ignore) {
 		}
 		if (anotation.getOclc() != null) hrToUpdate.addAll(oclcDAO.findHrByOclc(anotation.getOclc()));
