@@ -40,7 +40,11 @@ public class DailyScript implements Runnable {
 
 	@Override
 	public void run() {
-		importFacade.harvestInspirationsJob();
+		try {
+			importFacade.harvestInspirationsJob();
+		} catch (JobExecutionFailure jfe) {
+			logger.error(String.format("Harvest of inspirations failed"));
+		}
 		// Obalky knih harvest (new table of content is published every 3rd day of the month)
 		LocalDateTime now = LocalDateTime.now();
 		if (now.getDayOfMonth() > 3) {
