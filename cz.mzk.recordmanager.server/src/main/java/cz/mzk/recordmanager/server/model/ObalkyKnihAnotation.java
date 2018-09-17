@@ -40,6 +40,10 @@ public class ObalkyKnihAnotation extends AbstractDomainObject {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date updated = new Date();
 
+	@Column(name = "last_harvest")
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date lastHarvest = new Date();
+
 	@Column(name = "anotation")
 	private String anotation;
 
@@ -87,6 +91,14 @@ public class ObalkyKnihAnotation extends AbstractDomainObject {
 
 	public void setUpdated(Date updated) {
 		this.updated = updated;
+	}
+
+	public Date getLastHarvest() {
+		return lastHarvest;
+	}
+
+	public void setLastHarvest(Date lastHarvest) {
+		this.lastHarvest = lastHarvest;
 	}
 
 	@Override

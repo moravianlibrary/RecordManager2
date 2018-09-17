@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.*;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -55,6 +56,7 @@ public class AnotationsReader implements ItemReader<ObalkyKnihAnotation> {
 			newAnotation.setNbn(matcher.group(2).equals("\\N") ? null : matcher.group(2));
 			newAnotation.setOclc(matcher.group(3).equals("\\N") ? null : matcher.group(3));
 			newAnotation.setUpdated(UPDATED_FORMAT.parse(matcher.group(4)));
+			newAnotation.setLastHarvest(new Date());
 			newAnotation.setAnotation(matcher.group(5));
 			if (newAnotation.getIsbn() == null && newAnotation.getNbn() == null && newAnotation.getOclc() == null)
 				continue;

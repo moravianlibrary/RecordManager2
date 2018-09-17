@@ -32,23 +32,22 @@ public class AnotationsWriter implements ItemWriter<ObalkyKnihAnotation> {
 	private OclcDAO oclcDAO;
 
 	@Autowired
-	private HarvestedRecordDAO harvestedRecordDAO;
-
-	@Autowired
 	private DedupRecordDAO dedupRecordDAO;
 
 	@Override
 	public void write(List<? extends ObalkyKnihAnotation> items) throws Exception {
 		for (ObalkyKnihAnotation newAnotation : items) {
-			List<ObalkyKnihAnotation> anotations = anotationDAO.findByExample(newAnotation, true, "updated", "anotation");
+			List<ObalkyKnihAnotation> anotations = anotationDAO.findByExample(newAnotation, true, "updated", "lastHarvest", "anotation");
 			if (anotations.isEmpty()) { // new anotation
 				anotationDAO.persist(newAnotation);
 				updateHr(newAnotation);
 			} else { //exists in db
 				ObalkyKnihAnotation anotation = anotations.get(0);
-				if (anotation.getUpdated().compareTo(newAnotation.getUpdated()) == 0) continue; // same
-				anotation.setUpdated(newAnotation.getUpdated());
-				anotation.setAnotation(newAnotation.getAnotation());
+				if (anotation.getUpdated().compareTo(newAnotation.getUpdated()) != 0) {
+					anotation.setUpdated(newAnotation.getUpdated());
+					anotation.setAnotation(newAnotation.getAnotation());
+				}
+				anotation.setLastHarvest(new Date());
 				anotationDAO.persist(anotation);
 				updateHr(anotation);
 			}

@@ -1459,8 +1459,10 @@ CREATE TABLE obalkyknih_anotation (
   oclc                 VARCHAR(32),
   isbn                 DECIMAL(13),
   updated              TIMESTAMP,
+  last_harvest         TIMESTAMP,
   anotation            VARCHAR(1048576)
 );
+COMMENT ON TABLE obalkyknih_anotation IS 'downloaded anotations from obalkyknih.cz';
 CREATE INDEX obalkyknih_anotation_oclc_idx ON obalkyknih_anotation(oclc);
 CREATE INDEX obalkyknih_anotation_isbn_idx ON obalkyknih_anotation(isbn);
 CREATE INDEX obalkyknih_anotation_nbn_idx ON obalkyknih_anotation(nbn);

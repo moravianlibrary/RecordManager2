@@ -313,5 +313,6 @@ CREATE TABLE obalkyknih_anotation (
   oclc                 VARCHAR(32),
   isbn                 DECIMAL(13),
   updated              TIMESTAMP,
+  last_harvest         TIMESTAMP,
   anotation            VARCHAR(32672)
 );
