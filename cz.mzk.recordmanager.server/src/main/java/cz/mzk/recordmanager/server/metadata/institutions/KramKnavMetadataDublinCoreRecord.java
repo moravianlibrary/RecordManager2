@@ -31,4 +31,10 @@ public class KramKnavMetadataDublinCoreRecord extends
 		}
 		return titles;
 	}
+
+	@Override
+	public boolean getIndexWhenMerged() {
+		return false;
+	}
+
 }
