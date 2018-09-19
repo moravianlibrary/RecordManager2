@@ -279,7 +279,7 @@ public class MarcDSL extends BaseDSL {
 	public List<String> getPublisherLocal() {
 		List<String> results = new ArrayList<>();
 		results.addAll(getFields("260b"));
-		if (results.isEmpty()) getFields("264b");
+		if (results.isEmpty()) results.addAll(getFields("264b"));
 		return results;
 	}
 
