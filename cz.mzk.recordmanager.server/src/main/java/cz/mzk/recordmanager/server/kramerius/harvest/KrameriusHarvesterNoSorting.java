@@ -2,6 +2,7 @@ package cz.mzk.recordmanager.server.kramerius.harvest;
 
 import cz.mzk.recordmanager.server.solr.SolrServerFactory;
 import cz.mzk.recordmanager.server.util.HttpClient;
+import cz.mzk.recordmanager.server.util.MODSTransformer;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.common.SolrDocumentList;
@@ -21,8 +22,8 @@ public class KrameriusHarvesterNoSorting extends KrameriusHarvesterImpl {
 	private Integer start = 0;
 
 	public KrameriusHarvesterNoSorting(HttpClient httpClient, SolrServerFactory solrServerFactory,
-			KrameriusHarvesterParams parameters, Long harvestedFrom) {
-		super(httpClient, solrServerFactory, parameters, harvestedFrom);
+									   KrameriusHarvesterParams parameters, Long harvestedFrom, MODSTransformer modsTransformer) {
+		super(httpClient, solrServerFactory, parameters, harvestedFrom, modsTransformer);
 	}
 
 	@Override

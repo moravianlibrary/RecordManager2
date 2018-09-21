@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
+import cz.mzk.recordmanager.server.util.MODSTransformer;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.QueryResponse;
@@ -39,6 +40,9 @@ public class AbstractKrameriusTest extends AbstractTest {
 
 	@Autowired
 	private SolrServerFactory solrServerFactory;
+
+	@Autowired
+	private MODSTransformer modsTransformer;
 
 	private SolrServerFacade mockedSolrServer = EasyMock.createMock(SolrServerFacade.class);
 
@@ -74,7 +78,7 @@ public class AbstractKrameriusTest extends AbstractTest {
 		KrameriusHarvesterParams parameters = new KrameriusHarvesterParams();
 		parameters.setUrl("http://k4.techlib.cz/search/api/v5.0");
 		parameters.setMetadataStream("DC");
-		KrameriusHarvesterSorting harvester = new KrameriusHarvesterSorting(httpClient, solrServerFactory, parameters, 1L);
+		KrameriusHarvesterSorting harvester = new KrameriusHarvesterSorting(httpClient, solrServerFactory, parameters, 1L, modsTransformer);
 		List<String> uuids = harvester.getNextUuids();
 		for (String uuid : uuids) {
 			HarvestedRecord record = harvester.downloadRecord(uuid);

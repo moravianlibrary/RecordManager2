@@ -12,7 +12,7 @@ public class KrameriusFormatResolverImpl implements KrameriusFormatResolver {
 
 	static {
 		formats.put("DC", "dublinCore");
-		formats.put("BIBLIO_MODS", "MODS"); // for possible future use of MODS
+		formats.put("BIBLIO_MODS", "marc21-xml"); // for possible future use of MODS
 	}
 
 	@Override

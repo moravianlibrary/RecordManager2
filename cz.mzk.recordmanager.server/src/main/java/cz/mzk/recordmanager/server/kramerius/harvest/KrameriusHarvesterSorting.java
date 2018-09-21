@@ -3,6 +3,7 @@ package cz.mzk.recordmanager.server.kramerius.harvest;
 import com.google.common.collect.Iterables;
 import cz.mzk.recordmanager.server.solr.SolrServerFactory;
 import cz.mzk.recordmanager.server.util.HttpClient;
+import cz.mzk.recordmanager.server.util.MODSTransformer;
 import cz.mzk.recordmanager.server.util.SolrUtils;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrQuery.ORDER;
@@ -23,8 +24,8 @@ public class KrameriusHarvesterSorting extends KrameriusHarvesterImpl {
 	private String lastPid = "";
 
 	public KrameriusHarvesterSorting(HttpClient httpClient, SolrServerFactory solrServerFactory,
-									 KrameriusHarvesterParams parameters, Long harvestedFrom) {
-		super(httpClient, solrServerFactory, parameters, harvestedFrom);
+									 KrameriusHarvesterParams parameters, Long harvestedFrom, MODSTransformer modsTransformer) {
+		super(httpClient, solrServerFactory, parameters, harvestedFrom, modsTransformer);
 	}
 
 	@Override

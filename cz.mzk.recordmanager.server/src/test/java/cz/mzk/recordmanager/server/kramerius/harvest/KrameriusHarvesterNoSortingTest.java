@@ -3,6 +3,7 @@ package cz.mzk.recordmanager.server.kramerius.harvest;
 import java.io.IOException;
 import java.util.List;
 
+import cz.mzk.recordmanager.server.util.MODSTransformer;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.Assert;
@@ -20,6 +21,9 @@ public class KrameriusHarvesterNoSortingTest extends AbstractKrameriusTest {
 	@Autowired
 	private SolrServerFactory solrServerFactory;
 
+	@Autowired
+	private MODSTransformer modsTransformer;
+
 	//Kramerius Harvester with sorting
 	@Test
 	public void downloadRecord() throws Exception {
@@ -27,7 +31,7 @@ public class KrameriusHarvesterNoSortingTest extends AbstractKrameriusTest {
 		KrameriusHarvesterParams parameters = new KrameriusHarvesterParams();
 		parameters.setUrl("http://k4.techlib.cz/search/api/v5.0");
 		parameters.setMetadataStream("DC");
-		KrameriusHarvesterNoSorting harvester = new KrameriusHarvesterNoSorting(httpClient, solrServerFactory, parameters, 1L);
+		KrameriusHarvesterNoSorting harvester = new KrameriusHarvesterNoSorting(httpClient, solrServerFactory, parameters, 1L, modsTransformer);
 		List<String> uuids = harvester.getNextUuids();
 		for (String uuid : uuids) {
 			HarvestedRecord record = harvester.downloadRecord(uuid);
@@ -43,7 +47,7 @@ public class KrameriusHarvesterNoSortingTest extends AbstractKrameriusTest {
 		KrameriusHarvesterParams parameters = new KrameriusHarvesterParams();
 		parameters.setUrl("http://k4.techlib.cz/search/api/v5.0");
 		parameters.setMetadataStream("DC");
-		KrameriusHarvesterNoSorting harvester = new KrameriusHarvesterNoSorting(httpClient, solrServerFactory, parameters, 1L);
+		KrameriusHarvesterNoSorting harvester = new KrameriusHarvesterNoSorting(httpClient, solrServerFactory, parameters, 1L, modsTransformer);
 
 		//1st response with SolrServerException => uuid list is empty
 		try {
