@@ -130,7 +130,7 @@ public class SolrFieldConstants {
 
 	public static final String CALLNUMBER_SEARCH_TXT_MV = "callNumber_search_txt_mv";
 
-	public static final String OBALKY_ANOTATION = "obalky_anotation_txt_mv";
+	public static final String OBALKY_ANNOTATION = "obalky_annotation_txt_mv";
 
 	/**
 	 * dummy fields used for processing purposes only, shouldn't be indexed. Fields are deleted in AuthorityEnricher. 

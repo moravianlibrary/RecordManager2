@@ -404,13 +404,13 @@ CREATE TABLE authority (
 );
 COMMENT ON TABLE authority IS 'dedup_keys: table contatining authority ids';
 
-CREATE TABLE obalkyknih_anotation (
+CREATE TABLE obalkyknih_annotation (
   id                   DECIMAL(10) PRIMARY KEY,
   nbn                  VARCHAR(32),
   oclc                 VARCHAR(32),
   isbn                 DECIMAL(13),
   updated              TIMESTAMP,
   last_harvest         TIMESTAMP,
-  anotation            VARCHAR(1048576)
+  annotation           VARCHAR(1048576)
 );
-COMMENT ON TABLE obalkyknih_anotation IS 'downloaded anotations from obalkyknih.cz';
+COMMENT ON TABLE obalkyknih_annotation IS 'downloaded annotations from obalkyknih.cz';

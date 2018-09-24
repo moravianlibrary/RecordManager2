@@ -35,4 +35,4 @@ DELETE FROM skat_keys;
 DELETE FROM recordmanager_key;
 DELETE FROM dedup_record;
 DELETE FROM obalkyknih_toc;
-DELETE FROM obalkyknih_anotation;
+DELETE FROM obalkyknih_annotation;

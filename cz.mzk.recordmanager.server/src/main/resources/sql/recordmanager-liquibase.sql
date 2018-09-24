@@ -1453,19 +1453,19 @@ INSERT INTO import_conf (id,library_id,contact_person_id,id_prefix,base_weight,c
 INSERT INTO kramerius_conf (import_conf_id,url,url_solr,query_rows,metadata_stream,auth_token,fulltext_harvest_type,download_private_fulltexts,harvest_job_name,collection) VALUES (99003,'https://cdk.lib.cas.cz/search/api/v5.0','https://cdk.lib.cas.cz/solr-select-only/k4',20,'DC',null,'solr',true,'krameriusHarvestJob','vc:c4bb27af-3a51-4ac2-95c7-fd393b489e26');
 
 --changeset tomascejpek:113
-CREATE TABLE obalkyknih_anotation (
+CREATE TABLE obalkyknih_annotation (
   id                   DECIMAL(10) PRIMARY KEY,
   nbn                  VARCHAR(32),
   oclc                 VARCHAR(32),
   isbn                 DECIMAL(13),
   updated              TIMESTAMP,
   last_harvest         TIMESTAMP,
-  anotation            VARCHAR(1048576)
+  annotation           VARCHAR(1048576)
 );
-COMMENT ON TABLE obalkyknih_anotation IS 'downloaded anotations from obalkyknih.cz';
-CREATE INDEX obalkyknih_anotation_oclc_idx ON obalkyknih_anotation(oclc);
-CREATE INDEX obalkyknih_anotation_isbn_idx ON obalkyknih_anotation(isbn);
-CREATE INDEX obalkyknih_anotation_nbn_idx ON obalkyknih_anotation(nbn);
+COMMENT ON TABLE obalkyknih_annotation IS 'downloaded annotations from obalkyknih.cz';
+CREATE INDEX obalkyknih_annotation_oclc_idx ON obalkyknih_annotation(oclc);
+CREATE INDEX obalkyknih_annotation_isbn_idx ON obalkyknih_annotation(isbn);
+CREATE INDEX obalkyknih_annotation_nbn_idx ON obalkyknih_annotation(nbn);
 CREATE INDEX isbn_idx ON isbn(isbn);
 CREATE INDEX cnb_idx ON cnb(cnb);
 CREATE INDEX oclc_idx ON oclc(oclc);

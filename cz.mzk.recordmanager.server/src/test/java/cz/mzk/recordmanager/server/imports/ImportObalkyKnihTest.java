@@ -1,9 +1,9 @@
 package cz.mzk.recordmanager.server.imports;
 
 import cz.mzk.recordmanager.server.AbstractTest;
-import cz.mzk.recordmanager.server.model.ObalkyKnihAnotation;
+import cz.mzk.recordmanager.server.model.ObalkyKnihAnnotation;
 import cz.mzk.recordmanager.server.model.ObalkyKnihTOC;
-import cz.mzk.recordmanager.server.oai.dao.ObalkyKnihAnotationDAO;
+import cz.mzk.recordmanager.server.oai.dao.ObalkyKnihAnnotationDAO;
 import cz.mzk.recordmanager.server.oai.dao.ObalkyKnihTOCDAO;
 import cz.mzk.recordmanager.server.util.Constants;
 import cz.mzk.recordmanager.server.util.HttpClient;
@@ -39,7 +39,7 @@ public class ImportObalkyKnihTest extends AbstractTest {
 	private ObalkyKnihTOCDAO obalkyKnihTOCDao;
 
 	@Autowired
-	private ObalkyKnihAnotationDAO obalkyKnihAnotationDAO;
+	private ObalkyKnihAnnotationDAO obalkyKnihAnnotationDAO;
 
 	@BeforeMethod
 	public void before() throws Exception {
@@ -66,16 +66,16 @@ public class ImportObalkyKnihTest extends AbstractTest {
 	}
 
 	@Test
-	public void anotations() throws Exception {
-		String file = this.getClass().getResource("/import/obalkyknih/anotations.txt").getFile();
+	public void annotations() throws Exception {
+		String file = this.getClass().getResource("/import/obalkyknih/annotations.txt").getFile();
 
-		Job job = jobRegistry.getJob(Constants.JOB_ID_IMPORT_ANOTATIONS);
+		Job job = jobRegistry.getJob(Constants.JOB_ID_IMPORT_ANNOTATIONS);
 		Map<String, JobParameter> params = new HashMap<>();
 		params.put(Constants.JOB_PARAM_IN_FILE, new JobParameter(file));
 		JobParameters jobParams = new JobParameters(params);
 		jobLauncher.run(job, jobParams);
 
-		List<ObalkyKnihAnotation> results = obalkyKnihAnotationDAO.findAll();
+		List<ObalkyKnihAnnotation> results = obalkyKnihAnnotationDAO.findAll();
 		Assert.assertTrue(results.size() == 2);
 		Assert.assertTrue(results.get(0).getIsbn().equals(9780545010221L)
 				&& results.get(0).getNbn() == null

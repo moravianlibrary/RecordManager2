@@ -1,6 +1,6 @@
-package cz.mzk.recordmanager.server.imports.obalky.anotations;
+package cz.mzk.recordmanager.server.imports.obalky.annotations;
 
-import cz.mzk.recordmanager.server.model.ObalkyKnihAnotation;
+import cz.mzk.recordmanager.server.model.ObalkyKnihAnnotation;
 import cz.mzk.recordmanager.server.util.HttpClient;
 import cz.mzk.recordmanager.server.util.ProgressLogger;
 import org.slf4j.Logger;
@@ -14,9 +14,9 @@ import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class AnotationsReader implements ItemReader<ObalkyKnihAnotation> {
+public class AnnotationsReader implements ItemReader<ObalkyKnihAnnotation> {
 
-	private static Logger logger = LoggerFactory.getLogger(AnotationsReader.class);
+	private static Logger logger = LoggerFactory.getLogger(AnnotationsReader.class);
 
 	@Autowired
 	private HttpClient httpClient;
@@ -26,48 +26,48 @@ public class AnotationsReader implements ItemReader<ObalkyKnihAnotation> {
 
 	private BufferedReader reader = null;
 
-	private static final String ANOTATIONS_URL = "http://www.obalkyknih.cz/dumpdb/anotace.txt";
+	private static final String ANNOTATIONS_URL = "http://www.obalkyknih.cz/dumpdb/anotace.txt";
 
 	private static final Pattern LINE_PARSER =
 			Pattern.compile("(\\S*)\\s+(\\S*)\\s+(?:\\(OCoLC\\))?(\\S*)\\s+([-0-9]{10} [:0-9]{8})\\s+(.*)");
 
 	private static final SimpleDateFormat UPDATED_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-	public AnotationsReader(String filename) {
+	public AnnotationsReader(String filename) {
 		this.filename = filename;
 	}
 
 	private ProgressLogger progressLogger = new ProgressLogger(logger, 5000);
 
 	@Override
-	public synchronized ObalkyKnihAnotation read() throws Exception {
+	public synchronized ObalkyKnihAnnotation read() throws Exception {
 		if (reader == null) initializeReader();
 		while (reader.ready()) {
 			progressLogger.incrementAndLogProgress();
 			String line = reader.readLine();
 			Matcher matcher = LINE_PARSER.matcher(line);
 			if (!matcher.matches()) continue;
-			ObalkyKnihAnotation newAnotation = new ObalkyKnihAnotation();
+			ObalkyKnihAnnotation newAnnotation = new ObalkyKnihAnnotation();
 			try {
-				newAnotation.setIsbn(Long.parseLong(matcher.group(1)));
+				newAnnotation.setIsbn(Long.parseLong(matcher.group(1)));
 			} catch (NumberFormatException nfe) {
-				newAnotation.setIsbn(null);
+				newAnnotation.setIsbn(null);
 			}
-			newAnotation.setNbn(matcher.group(2).equals("\\N") ? null : matcher.group(2));
-			newAnotation.setOclc(matcher.group(3).equals("\\N") ? null : matcher.group(3));
-			newAnotation.setUpdated(UPDATED_FORMAT.parse(matcher.group(4)));
-			newAnotation.setLastHarvest(new Date());
-			newAnotation.setAnotation(matcher.group(5));
-			if (newAnotation.getIsbn() == null && newAnotation.getNbn() == null && newAnotation.getOclc() == null)
+			newAnnotation.setNbn(matcher.group(2).equals("\\N") ? null : matcher.group(2));
+			newAnnotation.setOclc(matcher.group(3).equals("\\N") ? null : matcher.group(3));
+			newAnnotation.setUpdated(UPDATED_FORMAT.parse(matcher.group(4)));
+			newAnnotation.setLastHarvest(new Date());
+			newAnnotation.setAnnotation(matcher.group(5));
+			if (newAnnotation.getIsbn() == null && newAnnotation.getNbn() == null && newAnnotation.getOclc() == null)
 				continue;
-			return newAnotation;
+			return newAnnotation;
 		}
 		return null;
 	}
 
 	protected void initializeReader() throws IOException {
 		if (filename != null) reader = new BufferedReader(new FileReader(new File(filename)));
-		else reader = new BufferedReader(new InputStreamReader(httpClient.executeGet(ANOTATIONS_URL)));
+		else reader = new BufferedReader(new InputStreamReader(httpClient.executeGet(ANNOTATIONS_URL)));
 	}
 
 }

@@ -1,4 +1,4 @@
-package cz.mzk.recordmanager.server.imports.obalky.anotations;
+package cz.mzk.recordmanager.server.imports.obalky.annotations;
 
 import cz.mzk.recordmanager.server.springbatch.DefaultJobParametersValidator;
 import cz.mzk.recordmanager.server.springbatch.JobParameterDeclaration;
@@ -10,7 +10,7 @@ import java.util.Collections;
 
 import static cz.mzk.recordmanager.server.springbatch.JobParameterDeclaration.param;
 
-public class AnotationsHarvestJobParametersValidator extends
+public class AnnotationsHarvestJobParametersValidator extends
 		DefaultJobParametersValidator {
 
 	@Override

@@ -205,7 +205,7 @@ public class HarvestingFacadeImpl implements HarvestingFacade {
 	}
 
 	@Override
-	public void obalkyKnihAnotations() {
-		jobExecutor.execute(Constants.JOB_ID_IMPORT_ANOTATIONS, new JobParameters());
+	public void obalkyKnihAnnotations() {
+		jobExecutor.execute(Constants.JOB_ID_IMPORT_ANNOTATIONS, new JobParameters());
 	}
 }

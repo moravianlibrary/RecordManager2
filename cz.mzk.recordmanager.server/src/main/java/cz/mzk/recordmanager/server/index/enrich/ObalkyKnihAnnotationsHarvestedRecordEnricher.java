@@ -3,8 +3,8 @@ package cz.mzk.recordmanager.server.index.enrich;
 import cz.mzk.recordmanager.api.model.query.ObalkyKnihTOCQuery;
 import cz.mzk.recordmanager.server.index.SolrFieldConstants;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
-import cz.mzk.recordmanager.server.model.ObalkyKnihAnotation;
-import cz.mzk.recordmanager.server.oai.dao.ObalkyKnihAnotationDAO;
+import cz.mzk.recordmanager.server.model.ObalkyKnihAnnotation;
+import cz.mzk.recordmanager.server.oai.dao.ObalkyKnihAnnotationDAO;
 import cz.mzk.recordmanager.server.util.identifier.ISBNUtils;
 import org.apache.solr.common.SolrInputDocument;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,10 +16,10 @@ import java.util.Collections;
 import java.util.List;
 
 @Component
-public class ObalkyKnihAnotationsHarvestedRecordEnricher implements HarvestedRecordEnricher {
+public class ObalkyKnihAnnotationsHarvestedRecordEnricher implements HarvestedRecordEnricher {
 
 	@Autowired
-	private ObalkyKnihAnotationDAO obalkyKnihAnotationDao;
+	private ObalkyKnihAnnotationDAO obalkyKnihAnnotationDao;
 
 	@Override
 	public void enrich(HarvestedRecord record, SolrInputDocument document) {
@@ -33,8 +33,8 @@ public class ObalkyKnihAnotationsHarvestedRecordEnricher implements HarvestedRec
 		query.setIsbns(isbns);
 		query.setNbns(nbns);
 		query.setOclcs(oclcs);
-		for (ObalkyKnihAnotation anotation : obalkyKnihAnotationDao.findByIdentifiers(query)) {
-			document.addField(SolrFieldConstants.OBALKY_ANOTATION, anotation.getAnotation());
+		for (ObalkyKnihAnnotation annotation : obalkyKnihAnnotationDao.findByIdentifiers(query)) {
+			document.addField(SolrFieldConstants.OBALKY_ANNOTATION, annotation.getAnnotation());
 		}
 	}
 

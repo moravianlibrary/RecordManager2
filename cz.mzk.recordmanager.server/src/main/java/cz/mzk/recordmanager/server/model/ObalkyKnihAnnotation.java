@@ -4,10 +4,10 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name = ObalkyKnihAnotation.TABLE_NAME)
-public class ObalkyKnihAnotation extends AbstractDomainObject {
+@Table(name = ObalkyKnihAnnotation.TABLE_NAME)
+public class ObalkyKnihAnnotation extends AbstractDomainObject {
 
-	public static final String TABLE_NAME = "obalkyknih_anotation";
+	public static final String TABLE_NAME = "obalkyknih_annotation";
 
 	private static final int EFFECTIVE_LENGHT = 32;
 
@@ -44,8 +44,8 @@ public class ObalkyKnihAnotation extends AbstractDomainObject {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date lastHarvest = new Date();
 
-	@Column(name = "anotation")
-	private String anotation;
+	@Column(name = "annotation")
+	private String annotation;
 
 	public String getNbn() {
 		return bibInfo.nbn;
@@ -77,12 +77,12 @@ public class ObalkyKnihAnotation extends AbstractDomainObject {
 		this.bibInfo.isbn = isbn;
 	}
 
-	public String getAnotation() {
-		return anotation;
+	public String getAnnotation() {
+		return annotation;
 	}
 
-	public void setAnotation(String anotation) {
-		this.anotation = anotation;
+	public void setAnnotation(String annotation) {
+		this.annotation = annotation;
 	}
 
 	public Date getUpdated() {
@@ -103,10 +103,10 @@ public class ObalkyKnihAnotation extends AbstractDomainObject {
 
 	@Override
 	public String toString() {
-		return "ObalkyKnihAnotation{" +
+		return "ObalkyKnihAnnotation{" +
 				"bibInfo=" + bibInfo +
 				", updated=" + updated +
-				", anotation='" + anotation + '\'' +
+				", annotation='" + annotation + '\'' +
 				'}';
 	}
 }
