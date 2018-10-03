@@ -20,7 +20,9 @@ public class AnnotationsWriter extends AnnotationsAbstract implements ItemWriter
 	@Override
 	public void write(List<? extends ObalkyKnihAnnotation> items) throws Exception {
 		for (ObalkyKnihAnnotation newAnnotation : items) {
-			List<ObalkyKnihAnnotation> annotations = annotationDAO.findByExample(newAnnotation, true, "updated", "lastHarvest", "annotation");
+			if (newAnnotation.getIsbn() == null && newAnnotation.getCnb() == null && newAnnotation.getOclc() == null)
+				continue;
+			List<ObalkyKnihAnnotation> annotations = annotationDAO.findByBookId(newAnnotation.getBookId());
 			if (annotations.isEmpty()) { // new annotation
 				annotationDAO.persist(newAnnotation);
 				updateHr(newAnnotation);

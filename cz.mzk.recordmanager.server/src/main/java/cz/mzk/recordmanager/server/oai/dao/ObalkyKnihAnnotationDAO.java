@@ -11,4 +11,6 @@ public interface ObalkyKnihAnnotationDAO extends DomainDAO<Long, ObalkyKnihAnnot
 
 	List<ObalkyKnihAnnotation> findByIdentifiers(ObalkyKnihTOCQuery query);
 
+	List<ObalkyKnihAnnotation> findByBookId(Long book_id);
+
 }

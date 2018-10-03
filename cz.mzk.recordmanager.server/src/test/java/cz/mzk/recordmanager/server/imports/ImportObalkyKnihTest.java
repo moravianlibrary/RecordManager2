@@ -67,7 +67,7 @@ public class ImportObalkyKnihTest extends AbstractTest {
 
 	@Test
 	public void annotations() throws Exception {
-		String file = this.getClass().getResource("/import/obalkyknih/annotations.txt").getFile();
+		String file = this.getClass().getResource("/import/obalkyknih/annotations.xml").getFile();
 
 		Job job = jobRegistry.getJob(Constants.JOB_ID_IMPORT_ANNOTATIONS);
 		Map<String, JobParameter> params = new HashMap<>();
@@ -78,12 +78,11 @@ public class ImportObalkyKnihTest extends AbstractTest {
 		List<ObalkyKnihAnnotation> results = obalkyKnihAnnotationDAO.findAll();
 		Assert.assertTrue(results.size() == 2);
 		Assert.assertTrue(results.get(0).getIsbn().equals(9780545010221L)
-				&& results.get(0).getNbn() == null
+				&& results.get(0).getCnb() == null
 				&& results.get(0).getOclc() == null);
 		Assert.assertTrue(results.get(1).getIsbn().equals(9788071820642L)
-				&& results.get(1).getNbn().equals("cnb000604854")
+				&& results.get(1).getCnb().equals("cnb000604854")
 				&& results.get(1).getOclc().equals("41216972"));
-
 	}
 
 }

@@ -309,7 +309,8 @@ CREATE TABLE authority (
 
 CREATE TABLE obalkyknih_annotation (
   id                   DECIMAL(10) PRIMARY KEY,
-  nbn                  VARCHAR(32),
+  book_id              DECIMAL(10),
+  cnb                  VARCHAR(32),
   oclc                 VARCHAR(32),
   isbn                 DECIMAL(13),
   updated              TIMESTAMP,

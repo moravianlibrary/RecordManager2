@@ -38,7 +38,8 @@ CREATE INDEX obalkyknih_toc_nbn_idx ON obalkyknih_toc(nbn);
 
 CREATE INDEX obalkyknih_annotation_oclc_idx ON obalkyknih_annotation(oclc);
 CREATE INDEX obalkyknih_annotation_isbn_idx ON obalkyknih_annotation(isbn);
-CREATE INDEX obalkyknih_annotation_nbn_idx ON obalkyknih_annotation(nbn);
+CREATE INDEX obalkyknih_annotation_cnb_idx ON obalkyknih_annotation(cnb);
+CREATE INDEX obalkyknih_annotation_bookid_idx ON obalkyknih_annotation(book_id);
 
 CREATE INDEX dedup_record_updated_idx ON dedup_record(updated);
 

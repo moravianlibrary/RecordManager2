@@ -35,7 +35,7 @@ public class AnnotationsAbstract {
 		} catch (NumberFormatException ignore) {
 		}
 		if (annotation.getOclc() != null) hrToUpdate.addAll(oclcDAO.findHrByOclc(annotation.getOclc()));
-		if (annotation.getNbn() != null) hrToUpdate.addAll(cnbDAO.findHrByCnb(annotation.getNbn()));
+		if (annotation.getCnb() != null) hrToUpdate.addAll(cnbDAO.findHrByCnb(annotation.getCnb()));
 		Set<DedupRecord> drToUpdate = hrToUpdate.stream().filter(hr -> hr.getDedupRecord() != null)
 				.map(HarvestedRecord::getDedupRecord).collect(Collectors.toSet());
 		for (DedupRecord dr : drToUpdate) {

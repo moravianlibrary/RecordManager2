@@ -5,6 +5,7 @@ import cz.mzk.recordmanager.api.model.query.ObalkyKnihTOCQuery;
 import cz.mzk.recordmanager.server.model.ObalkyKnihAnnotation;
 import cz.mzk.recordmanager.server.oai.dao.ObalkyKnihAnnotationDAO;
 import org.hibernate.Criteria;
+import org.hibernate.Session;
 import org.hibernate.criterion.Example;
 import org.hibernate.criterion.Junction;
 import org.hibernate.criterion.Restrictions;
@@ -49,5 +50,14 @@ public class ObalkyKnihAnnotationDAOHibernate extends
 			oper.add(Restrictions.in("bibInfo.nbn", query.getNbns()));
 		}
 		return (List<ObalkyKnihAnnotation>) crit.list();
+	}
+
+	@Override
+	@SuppressWarnings("unchecked")
+	public List<ObalkyKnihAnnotation> findByBookId(Long book_id) {
+		Session session = sessionFactory.getCurrentSession();
+		Criteria crit = session.createCriteria(ObalkyKnihAnnotation.class);
+		crit.add(Restrictions.eq("bookId", book_id));
+		return crit.list();
 	}
 }

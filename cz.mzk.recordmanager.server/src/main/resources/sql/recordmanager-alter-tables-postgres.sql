@@ -1188,7 +1188,8 @@ INSERT INTO kramerius_conf (import_conf_id,url,url_solr,query_rows,metadata_stre
 -- 12. 09. 2018 tomascejpek
 CREATE TABLE obalkyknih_annotation (
   id                   DECIMAL(10) PRIMARY KEY,
-  nbn                  VARCHAR(32),
+  book_id              DECIMAL(10),
+  cnb                  VARCHAR(32),
   oclc                 VARCHAR(32),
   isbn                 DECIMAL(13),
   updated              TIMESTAMP,
@@ -1198,7 +1199,8 @@ CREATE TABLE obalkyknih_annotation (
 COMMENT ON TABLE obalkyknih_annotation IS 'downloaded annotations from obalkyknih.cz';
 CREATE INDEX obalkyknih_annotation_oclc_idx ON obalkyknih_annotation(oclc);
 CREATE INDEX obalkyknih_annotation_isbn_idx ON obalkyknih_annotation(isbn);
-CREATE INDEX obalkyknih_annotation_nbn_idx ON obalkyknih_annotation(nbn);
+CREATE INDEX obalkyknih_annotation_cnb_idx ON obalkyknih_annotation(cnb);
+CREATE INDEX obalkyknih_annotation_bookid_idx ON obalkyknih_annotation(book_id);
 CREATE INDEX isbn_idx ON isbn(isbn);
 CREATE INDEX cnb_idx ON cnb(cnb);
 CREATE INDEX oclc_idx ON oclc(oclc);
