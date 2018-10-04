@@ -121,10 +121,12 @@ public class Constants {
 	public static final String PREFIX_SFXJIBCBVK		= "sfxjibcbvk";
 	public static final String PREFIX_SFXJIBFREE		= "sfxjibfree";
 	public static final String PREFIX_SFXJIBKFBZ		= "sfxjibkfbz";
+	public static final String PREFIX_SFXJIBKIV			= "sfxjibkiv";
 	public static final String PREFIX_SFXJIBKNAV		= "sfxjibknav";
 	public static final String PREFIX_SFXJIBKVKL		= "sfxjibkvkl";
 	public static final String PREFIX_SFXJIBMKP			= "sfxjibmkp";
 	public static final String PREFIX_SFXJIBMUNI		= "sfxjibmuni";
+	public static final String PREFIX_SFXJIBMUS			= "sfxjibmus";
 	public static final String PREFIX_SFXJIBMZK			= "sfxjibmzk";
 	public static final String PREFIX_SFXJIBNKP			= "sfxjibnkp";
 	public static final String PREFIX_SFXJIBNLK			= "sfxjibnlk";
@@ -133,12 +135,11 @@ public class Constants {
 	public static final String PREFIX_SFXJIBSVKOS		= "sfxjibsvkos";
 	public static final String PREFIX_SFXTECHLIBUOCHB	= "sfxjibuochb";
 	public static final String PREFIX_SFXJIBSVKPK		= "sfxjibsvkpk";
+	public static final String PREFIX_SFXJIBTECH		= "sfxjibtech";
 	public static final String PREFIX_SFXJIBVKOL		= "sfxjibvkol";
 	public static final String PREFIX_SFXTECHLIBVSCHT	= "sfxjibvscht";
 	public static final String PREFIX_SFXJIBNLK_PERIODICALS	= "sfxnlkper";
 	public static final String PREFIX_SFXJIBIREL		= "sfxjibirel";
-	public static final String PREFIX_SFXJIBKIV			= "sfxjibkiv";
-	public static final String PREFIX_SFXJIBMUS			= "sfxjibmus";
 	public static final String PREFIX_SFXKNAV			= "sfxknav";
 	public static final String PREFIX_SVKKL				= "svkkl";
 	public static final String PREFIX_SVKUL				= "svkul";
