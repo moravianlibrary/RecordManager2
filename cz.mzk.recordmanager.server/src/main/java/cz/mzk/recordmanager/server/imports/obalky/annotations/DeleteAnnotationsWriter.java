@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
-public class deleteAnnotationsWriter extends AnnotationsAbstract implements ItemWriter<ObalkyKnihAnnotation> {
+public class DeleteAnnotationsWriter extends AnnotationsAbstract implements ItemWriter<ObalkyKnihAnnotation> {
 
 	@Autowired
 	protected SessionFactory sessionFactory;

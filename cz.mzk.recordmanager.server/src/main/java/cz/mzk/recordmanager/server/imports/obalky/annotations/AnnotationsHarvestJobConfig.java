@@ -16,7 +16,6 @@ import org.springframework.batch.item.database.support.SqlPagingQueryProviderFac
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.task.TaskExecutor;
@@ -40,23 +39,21 @@ public class AnnotationsHarvestJobConfig {
 	private DataSource dataSource;
 
 	@Autowired
-	private ApplicationContext appCtx;
-
-	@Autowired
 	private TaskExecutor taskExecutor;
 
 	private static final String STRING_OVERRIDEN_BY_EXPRESSION = null;
 
+	private static final Date DATE_OVERRIDEN_BY_EXPRESSION = null;
+
 	@Bean
 	public Job importAnnotationsObalkyJob(
-			@Qualifier(Constants.JOB_ID_IMPORT_ANNOTATIONS + ":importStep") Step importStep,
-			@Qualifier(Constants.JOB_ID_IMPORT_ANNOTATIONS + ":deleteStep") Step deleteStep) {
+			@Qualifier(Constants.JOB_ID_IMPORT_ANNOTATIONS + ":importStep") Step importStep) {
 		return jobs.get(Constants.JOB_ID_IMPORT_ANNOTATIONS) //
 				.validator(new AnnotationsHarvestJobParametersValidator())
 				.incrementer(UUIDIncrementer.INSTANCE) //
 				.listener(JobFailureListener.INSTANCE) //
-				.start(importStep) //
-				.next(deleteStep)
+				.flow(importStep)
+				.end()
 				.build();
 	}
 
@@ -67,7 +64,6 @@ public class AnnotationsHarvestJobConfig {
 				.<ObalkyKnihAnnotation, ObalkyKnihAnnotation>chunk(20)//
 				.reader(importAnnotationsReader(STRING_OVERRIDEN_BY_EXPRESSION))//
 				.writer(importAnnotationsWriter()) //
-				.taskExecutor(taskExecutor)
 				.build();
 	}
 
@@ -83,29 +79,47 @@ public class AnnotationsHarvestJobConfig {
 		return new AnnotationsWriter();
 	}
 
-	@Bean(name = Constants.JOB_ID_IMPORT_ANNOTATIONS + ":deleteStep")
+	@Bean
+	public Job deleteAnnotationsObalkyJob(
+			@Qualifier(Constants.JOB_ID_DELETE_ANNOTATIONS + ":deleteStep") Step deleteStep) {
+		return jobs.get(Constants.JOB_ID_DELETE_ANNOTATIONS) //
+				.validator(new DeleteAnnotationsJobParametersValidator())
+				.incrementer(UUIDIncrementer.INSTANCE) //
+				.listener(JobFailureListener.INSTANCE) //
+				.flow(deleteStep)
+				.end()
+				.build();
+	}
+
+	@Bean(name = Constants.JOB_ID_DELETE_ANNOTATIONS + ":deleteStep")
 	public Step deleteStep() throws Exception {
 		return steps.get("deleteAnnotationsStep")
 				.listener(new StepProgressListener())
 				.<ObalkyKnihAnnotation, ObalkyKnihAnnotation>chunk(20)//
-				.reader(deleteAnnotationsReader())//
+				.reader(deleteAnnotationsReader(DATE_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION))//
 				.writer(deleteAnnotationsWriter()) //
 				.taskExecutor(taskExecutor)
 				.build();
 	}
 
-	@Bean(name = Constants.JOB_ID_IMPORT_ANNOTATIONS + ":deleteReader")
+	@Bean(name = Constants.JOB_ID_DELETE_ANNOTATIONS + ":deleteReader")
 	@StepScope
-	public ItemReader<ObalkyKnihAnnotation> deleteAnnotationsReader() throws Exception {
+	public ItemReader<ObalkyKnihAnnotation> deleteAnnotationsReader(
+			@Value("#{jobParameters[" + Constants.JOB_PARAM_FROM_DATE + "]}") Date from,
+			@Value("#{jobParameters[" + Constants.JOB_PARAM_UNTIL_DATE + "]}") Date to
+	) throws Exception {
+		if (from == null) from = new Date(0);
+		if (to == null) to = new Date();
 		JdbcPagingItemReader<ObalkyKnihAnnotation> reader = new JdbcPagingItemReader<>();
 		SqlPagingQueryProviderFactoryBean pqpf = new SqlPagingQueryProviderFactoryBean();
 		pqpf.setDataSource(dataSource);
 		pqpf.setSelectClause("SELECT *");
 		pqpf.setFromClause("FROM obalkyknih_annotation");
-		pqpf.setWhereClause("WHERE last_harvest < :start_time");
+		pqpf.setWhereClause("WHERE last_harvest BETWEEN :from AND :to");
 		pqpf.setSortKey("id");
 		Map<String, Object> parameterValues = new HashMap<>();
-		parameterValues.put("start_time", new Date(appCtx.getStartupDate()));
+		parameterValues.put("from", from);
+		parameterValues.put("to", to);
 		reader.setParameterValues(parameterValues);
 		reader.setRowMapper(new BeanPropertyRowMapper<>(ObalkyKnihAnnotation.class));
 		reader.setPageSize(20);
@@ -115,10 +129,10 @@ public class AnnotationsHarvestJobConfig {
 		return reader;
 	}
 
-	@Bean(name = Constants.JOB_ID_IMPORT_ANNOTATIONS + ":deleteWriter")
+	@Bean(name = Constants.JOB_ID_DELETE_ANNOTATIONS + ":deleteWriter")
 	@StepScope
-	public deleteAnnotationsWriter deleteAnnotationsWriter() {
-		return new deleteAnnotationsWriter();
+	public DeleteAnnotationsWriter deleteAnnotationsWriter() {
+		return new DeleteAnnotationsWriter();
 	}
 
 }
