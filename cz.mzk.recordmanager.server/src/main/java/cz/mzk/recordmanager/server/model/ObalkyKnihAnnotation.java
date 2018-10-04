@@ -34,7 +34,7 @@ public class ObalkyKnihAnnotation extends AbstractDomainObject {
 		@Override
 		public String toString() {
 			return "BibInfo{" +
-					"nbn='" + cnb + '\'' +
+					"cnb='" + cnb + '\'' +
 					", oclc='" + oclc + '\'' +
 					", isbn='" + isbn + '\'' +
 					'}';

@@ -47,7 +47,7 @@ public class ObalkyKnihAnnotationDAOHibernate extends
 			oper.add(Restrictions.in("bibInfo.oclc", query.getOclcs()));
 		}
 		if (query.getNbns() != null && !query.getNbns().isEmpty()) {
-			oper.add(Restrictions.in("bibInfo.nbn", query.getNbns()));
+			oper.add(Restrictions.in("bibInfo.cnb", query.getNbns()));
 		}
 		return (List<ObalkyKnihAnnotation>) crit.list();
 	}
