@@ -12,8 +12,8 @@
 
 	<xsl:include href="MARC21slimUtils.xsl"/>
 	
-	<xsl:output method="xml" indent="yes" encoding="UTF-8"/>
-
+	<xsl:output method="xml" omit-xml-declaration="yes" indent="yes" encoding="UTF-8"/>
+	<xsl:strip-space elements="*"/>
 	<xsl:template match="/">
 			<xsl:apply-templates/>
 	</xsl:template>
@@ -2367,4 +2367,35 @@
 			</xsl:choose>
 		</xsl:variable>
 -->
+	<!-- customized implementation -->
+	<xsl:template match="mods:identifier[@type='ccnb']">
+		<xsl:call-template name="datafield">
+			<xsl:with-param name="tag">015</xsl:with-param>
+			<xsl:with-param name="subfields">
+				<marc:subfield code="a">
+					<xsl:value-of select="."/>
+				</marc:subfield>
+			</xsl:with-param>
+		</xsl:call-template>
+	</xsl:template>
+	<xsl:template match="mods:identifier[@type='oclc']">
+		<xsl:call-template name="datafield">
+			<xsl:with-param name="tag">035</xsl:with-param>
+			<xsl:with-param name="subfields">
+				<marc:subfield code="a">(ocolc)<xsl:value-of select="."/>
+				</marc:subfield>
+			</xsl:with-param>
+		</xsl:call-template>
+	</xsl:template>
+	<xsl:template match="mods:language[mods:languageTerm[@authority='iso639-2b']]">
+		<xsl:call-template name="datafield">
+			<xsl:with-param name="tag">041</xsl:with-param>
+			<xsl:with-param name="ind1">0</xsl:with-param>
+			<xsl:with-param name="subfields">
+				<marc:subfield code='a'>
+					<xsl:value-of select="."/>
+				</marc:subfield>
+			</xsl:with-param>
+		</xsl:call-template>
+	</xsl:template>
 </xsl:stylesheet>
