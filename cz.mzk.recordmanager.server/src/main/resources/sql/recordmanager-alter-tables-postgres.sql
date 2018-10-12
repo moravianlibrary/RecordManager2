@@ -1220,3 +1220,10 @@ INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granul
 INSERT INTO library (id, name, url, catalog_url, city) VALUES (184, 'MKZN', 'https://www.knihovnazn.cz/', 'https://baze.knihovnazn.cz/katalog/', 'Znojmo');
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency) VALUES (384, 184, 200, 'mkzn', 11, false, true, false, true, 'U');
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (384,'https://baze.knihovnazn.cz/katalog/l.dll','CPK','marc21',NULL);
+
+INSERT INTO library (id, name, url, catalog_url, city) VALUES (185, 'VFU', 'https://sis.vfu.cz/', 'https://katalog.vfu.cz/Carmen/', 'Brno');
+INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency) VALUES (385, 185, 200, 'vfu', 11, false, true, false, true, 'U');
+INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (385,'http://195.113.198.88:8080/katalog/l.dll','CPK','marc21',NULL);
+INSERT INTO library (id, name, url, catalog_url, city) VALUES (186, 'MKML', 'https://knihovnaml.cz/', 'https://carmen.knihovnaml.cz/Carmen/', 'Mariánské Lázně');
+INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency) VALUES (386, 186, 200, 'mkml', 11, false, true, false, true, 'U');
+INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (386,'https://clavius.knihovnaml.cz/l.dll','CPK','marc21',NULL);
