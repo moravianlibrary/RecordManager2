@@ -100,7 +100,9 @@ public class Constants {
 	public static final String PREFIX_KRAM_KNAV			= "kram-knav";
 	public static final String PREFIX_KRAM_MZK			= "kram-mzk";
 	public static final String PREFIX_KRAM_NKP			= "kram-nkp";
+	public static final String PREFIX_KRAM_NLK			= "kram-nlk";
 	public static final String PREFIX_KRAM_NTK			= "kram-ntk";
+	public static final String PREFIX_KRAM_SVKUL		= "kram-svkul";
 	public static final String PREFIX_KRAM3_NKP			= "kram3-nkp";
 	public static final String PREFIX_KVKL				= "kvkl";
 	public static final String PREFIX_TDKIV				= "tdkiv";
