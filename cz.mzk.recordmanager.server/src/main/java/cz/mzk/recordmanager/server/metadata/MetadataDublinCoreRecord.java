@@ -252,6 +252,7 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 	}
 
 	/* there may be more than one rights value in Kramerius, but only one "policy:.*" */
+	@Override
 	public String getPolicyKramerius() {
 		List<String> rights = dcRecord.getRights();
 		String policy = "unknown";
@@ -265,6 +266,7 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 		return policy;
 	}
 
+	@Override
 	public String getModelKramerius() {
 		List<String> types = dcRecord.getTypes();
 		Matcher m;
