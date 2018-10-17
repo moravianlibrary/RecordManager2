@@ -34,7 +34,7 @@ public class KrameriusFulltexterSolrTest extends AbstractTest {
 		Assert.assertEquals(pages.size(), 3);
 	}
 
-	public void prepare() throws Exception {
+	private void prepare() throws Exception {
 		Capture<SolrQuery> capturedQueryRequest = EasyMock.newCapture();
 		SolrDocumentList documents = new SolrDocumentList();
 
@@ -43,23 +43,26 @@ public class KrameriusFulltexterSolrTest extends AbstractTest {
 		pageA.addField(KrameriusSolrConstants.FULLTEXT_FIELD, "stranka A");
 		pageA.addField(KrameriusSolrConstants.PAGE_NUMBER_FIELD, "[A]");
 		pageA.addField(KrameriusSolrConstants.PAGE_ORDER_FIELD, "1A");
+		pageA.addField(KrameriusSolrConstants.POLICY_FIELD, "public");
 
 		SolrDocument page1 = new SolrDocument();
 		page1.addField(KrameriusSolrConstants.PID_FIELD, "uuid:0095bca0-614f-11e2-bcfd-0800200c9a66");
 		page1.addField(KrameriusSolrConstants.FULLTEXT_FIELD, "stranka 1");
 		page1.addField(KrameriusSolrConstants.PAGE_NUMBER_FIELD, "[1]");
 		page1.addField(KrameriusSolrConstants.PAGE_ORDER_FIELD, "1");
+		page1.addField(KrameriusSolrConstants.POLICY_FIELD, "public");
 
 		SolrDocument page2 = new SolrDocument();
 		page2.addField(KrameriusSolrConstants.PID_FIELD, "uuid:0095bca0-614f-11e2-bcfd-0800200c9a66");
 		page2.addField(KrameriusSolrConstants.FULLTEXT_FIELD, "stranka 2");
 		page2.addField(KrameriusSolrConstants.PAGE_NUMBER_FIELD, "[2]");
 		page2.addField(KrameriusSolrConstants.PAGE_ORDER_FIELD, "2");
+		page2.addField(KrameriusSolrConstants.POLICY_FIELD, "public");
 
 		documents.add(pageA);
 		documents.add(page1);
 		documents.add(page2);
-		NamedList<Object> solrResponse1 = new NamedList<Object>();
+		NamedList<Object> solrResponse1 = new NamedList<>();
 		solrResponse1.add("response", documents);
 		expect(mockedSolrServer.query(and(capture(capturedQueryRequest), anyObject(SolrQuery.class)))).andReturn(new QueryResponse(solrResponse1, null));
 		replay(mockedSolrServer);

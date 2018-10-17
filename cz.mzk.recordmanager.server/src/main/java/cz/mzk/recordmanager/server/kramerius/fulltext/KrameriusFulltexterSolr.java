@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.response.QueryResponse;
@@ -24,11 +25,14 @@ public class KrameriusFulltexterSolr implements KrameriusFulltexter {
 	private static Logger logger = LoggerFactory
 			.getLogger(KrameriusFulltexterSolr.class);
 
-	private static final String FL_FIELDS = String.join(",", UUID_FIELD, FULLTEXT_FIELD, PAGE_NUMBER_FIELD, PAGE_ORDER_FIELD, PID_FIELD);
+	private static final String FL_FIELDS = String.join(",", UUID_FIELD, FULLTEXT_FIELD, PAGE_NUMBER_FIELD,
+			PAGE_ORDER_FIELD, PID_FIELD, POLICY_FIELD);
 
 	private static final int MAX_PAGES = 1000;  // number of pages requested in single SOLR query
 	
 	private static final int PAGE_LIMIT = 50000; // maximal number of downloaded pages for 1 document
+
+	private static final Pattern POLICY_PUBLIC = Pattern.compile("public");
 
 	private final SolrServerFacade solr;
 
@@ -105,7 +109,8 @@ public class KrameriusFulltexterSolr implements KrameriusFulltexter {
 			logger.debug("Harvesting fulltext from Kramerius for page uuid: {}", uuid);
 			String fulltext = (String) document.getFieldValue(FULLTEXT_FIELD);
 			String pageNum = (String) document.getFieldValue(PAGE_NUMBER_FIELD);
-			
+			String policy = (String) document.getFieldValue(POLICY_FIELD);
+
 			pageNum = (pageNum == null) ? String.valueOf(order) : pageNum;
 			//TODO data sometimes contain garbage values - this should be considered fallback solution
 			pageNum = pageNum.length() > 50 ? pageNum.substring(0, 50) : pageNum; 
@@ -116,6 +121,7 @@ public class KrameriusFulltexterSolr implements KrameriusFulltexter {
 			}
 			page.setOrder(order);
 			page.setPage(pageNum);
+			page.setPrivate(!POLICY_PUBLIC.matcher(policy).matches());
 			pages.add(page);
 		}
 		return pages;
