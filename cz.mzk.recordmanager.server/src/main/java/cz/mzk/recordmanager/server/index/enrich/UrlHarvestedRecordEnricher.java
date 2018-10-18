@@ -1,16 +1,24 @@
 package cz.mzk.recordmanager.server.index.enrich;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import org.apache.solr.common.SolrInputDocument;
-import org.springframework.stereotype.Component;
-
 import cz.mzk.recordmanager.server.index.SolrFieldConstants;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
+import cz.mzk.recordmanager.server.oai.dao.FulltextKrameriusDAO;
+import cz.mzk.recordmanager.server.util.CleaningUtils;
+import org.apache.solr.common.SolrInputDocument;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import java.util.HashSet;
+import java.util.Set;
+import java.util.regex.Pattern;
 
 @Component
 public class UrlHarvestedRecordEnricher implements HarvestedRecordEnricher {
+
+	@Autowired
+	private FulltextKrameriusDAO fulltextKrameriusDAO;
+
+	private static final Pattern UNKNOWN = Pattern.compile("unknown");
 
 	/**
 	 * generate links in standard format "institution code"|"policy code"|"url"
@@ -34,8 +42,15 @@ public class UrlHarvestedRecordEnricher implements HarvestedRecordEnricher {
 		document.remove(SolrFieldConstants.URL);
 
 		Set<String> result = new HashSet<>();
-		urls.stream().forEach(url -> result.add(institutionCode + '|' + url));
+		urls.forEach(url -> result.add(institutionCode + '|' + updateKrameriusPolicy(record, url)));
 		document.addField(SolrFieldConstants.URL, result);
+	}
+
+	private String updateKrameriusPolicy(HarvestedRecord hr, String url) {
+		if (hr.getHarvestedFrom().getIdPrefix().startsWith("kram-") && url.startsWith("unknown")) {
+			url = CleaningUtils.replaceFirst(url, UNKNOWN, fulltextKrameriusDAO.getPolicy(hr.getId()));
+		}
+		return url;
 	}
 
 }
