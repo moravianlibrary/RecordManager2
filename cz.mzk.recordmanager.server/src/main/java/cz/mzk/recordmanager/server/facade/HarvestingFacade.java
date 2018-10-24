@@ -35,6 +35,6 @@ public interface HarvestingFacade {
 
 	void incrementalFulltextJob(Long id);
 
-	void obalkyKnihAnnotations();
+	void incrementalObalkyKnihAnnotationsJob();
 
 }
