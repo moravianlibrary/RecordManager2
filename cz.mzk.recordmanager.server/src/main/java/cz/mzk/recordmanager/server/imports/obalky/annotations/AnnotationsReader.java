@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.xml.StaxEventItemReader;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 
@@ -30,12 +31,21 @@ public class AnnotationsReader implements ItemReader<ObalkyKnihAnnotation> {
 	@Autowired
 	private HttpClient httpClient;
 
-
 	private String filename = null;
+
+	private Date from = null;
 
 	private StaxEventItemReader<ObalkyKnihAnnotation> reader;
 
-	private static final String ANNOTATIONS_URL = "http://www.obalkyknih.cz/dumpdb/anotace.txt";
+	@Value(value = "${ok_username:#{null}}")
+	private String USERNAME = "";
+
+	@Value(value = "${ok_password:#{null}}")
+	private String PASSWORD = "";
+
+	private static final String ANNOTATIONS_URL_FORMAT = "https://%s:%s@servis.obalkyknih.cz/export/okcz_annotation.php%s";
+
+	private static final String ANNORATIONS_URL_PARAMS_FORMAT = "?last_change=%tY-%tm-%td";
 
 	private static final String OCLC_PREFIX = "(OCoLC)";
 
@@ -43,13 +53,14 @@ public class AnnotationsReader implements ItemReader<ObalkyKnihAnnotation> {
 
 	private static final SimpleDateFormat UPDATED_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-	public AnnotationsReader(String filename) {
-		this.filename = filename;
-	}
-
 	private ProgressLogger progressLogger = new ProgressLogger(logger, 5000);
 
 	private static final int EFFECTIVE_LENGHT = 32;
+
+	public AnnotationsReader(String filename, Date from) {
+		this.filename = filename;
+		this.from = from;
+	}
 
 	@Override
 	public synchronized ObalkyKnihAnnotation read() throws Exception {
@@ -69,7 +80,7 @@ public class AnnotationsReader implements ItemReader<ObalkyKnihAnnotation> {
 			reader = new StaxEventItemReader<>();
 			InputStream is;
 			if (filename != null) is = new FileInputStream(new File(filename));
-			else is = httpClient.executeGet(ANNOTATIONS_URL);
+			else is = httpClient.executeGet(createUrl());
 			reader.setResource(new InputStreamResource(is));
 			reader.setFragmentRootElementName("book");
 			Jaxb2Marshaller unmarshaller = new Jaxb2Marshaller();
@@ -99,6 +110,11 @@ public class AnnotationsReader implements ItemReader<ObalkyKnihAnnotation> {
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
+	}
+
+	private String createUrl() {
+		String params = from == null ? "" : String.format(ANNORATIONS_URL_PARAMS_FORMAT, from, from, from);
+		return String.format(ANNOTATIONS_URL_FORMAT, USERNAME, PASSWORD, params);
 	}
 
 }

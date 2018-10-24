@@ -62,15 +62,17 @@ public class AnnotationsHarvestJobConfig {
 		return steps.get("importAnnotationsStep")
 				.listener(new StepProgressListener())
 				.<ObalkyKnihAnnotation, ObalkyKnihAnnotation>chunk(20)//
-				.reader(importAnnotationsReader(STRING_OVERRIDEN_BY_EXPRESSION))//
+				.reader(importAnnotationsReader(STRING_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION))//
 				.writer(importAnnotationsWriter()) //
 				.build();
 	}
 
 	@Bean(name = Constants.JOB_ID_IMPORT_ANNOTATIONS + "reader")
 	@StepScope
-	public AnnotationsReader importAnnotationsReader(@Value("#{jobParameters[" + Constants.JOB_PARAM_IN_FILE + "]}") String filename) {
-		return new AnnotationsReader(filename);
+	public AnnotationsReader importAnnotationsReader(
+			@Value("#{jobParameters[" + Constants.JOB_PARAM_IN_FILE + "]}") String filename,
+			@Value("#{jobParameters[" + Constants.JOB_PARAM_FROM_DATE + "]}") Date from) {
+		return new AnnotationsReader(filename, from);
 	}
 
 	@Bean(name = Constants.JOB_ID_IMPORT_ANNOTATIONS + ":writer")
