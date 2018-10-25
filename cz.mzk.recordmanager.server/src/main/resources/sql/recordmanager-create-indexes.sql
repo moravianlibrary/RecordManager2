@@ -36,6 +36,11 @@ CREATE INDEX obalkyknih_toc_ean_idx ON obalkyknih_toc(ean);
 CREATE INDEX obalkyknih_toc_isbn_idx ON obalkyknih_toc(isbn);
 CREATE INDEX obalkyknih_toc_nbn_idx ON obalkyknih_toc(nbn);
 
+CREATE INDEX obalkyknih_annotation_oclc_idx ON obalkyknih_annotation(oclc);
+CREATE INDEX obalkyknih_annotation_isbn_idx ON obalkyknih_annotation(isbn);
+CREATE INDEX obalkyknih_annotation_cnb_idx ON obalkyknih_annotation(cnb);
+CREATE INDEX obalkyknih_annotation_bookid_idx ON obalkyknih_annotation(book_id);
+
 CREATE INDEX dedup_record_updated_idx ON dedup_record(updated);
 
 CREATE UNIQUE INDEX sigla_id_key ON sigla(id);
@@ -43,3 +48,7 @@ CREATE INDEX sigla_sigla_idx ON sigla(sigla);
 
 CREATE INDEX tezaurus_id_idx ON tezaurus_record(import_conf_id,record_id);
 CREATE INDEX tezaurus_name_idx ON tezaurus_record(import_conf_id,source_field,name);
+
+CREATE INDEX isbn_idx ON isbn(isbn);
+CREATE INDEX cnb_idx ON cnb(cnb);
+CREATE INDEX oclc_idx ON oclc(oclc);

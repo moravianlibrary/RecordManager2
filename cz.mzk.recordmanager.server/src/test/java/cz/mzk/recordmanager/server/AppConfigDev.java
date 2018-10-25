@@ -7,6 +7,7 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
+import cz.mzk.recordmanager.server.imports.obalky.annotations.AnnotationsHarvestJobConfig;
 import cz.mzk.recordmanager.server.marc.ItemIdTest;
 import cz.mzk.recordmanager.server.marc.MarcInterceptionTest;
 import org.apache.solr.client.solrj.embedded.EmbeddedSolrServer;
@@ -127,6 +128,7 @@ public class AppConfigDev {
 				FilterCaslinRecordsBySiglaJobConfig.class,
 				ZakonyProLidiHarvestJobConfig.class,
 				AdresarHarvestJobConfig.class,
+				AnnotationsHarvestJobConfig.class,
 				MarcInterceptionTest.class,
 				ItemIdTest.class
 			);

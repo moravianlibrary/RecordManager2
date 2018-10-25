@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<obalkyknih date="2018-10-02 01:48:39" last_change="all">
+    <book>
+        <bibinfo>
+            <ean13>9780545010221</ean13>
+        </bibinfo>
+        <book_id>1</book_id>
+        <book_metadata_change>2011-11-11 11:11:11</book_metadata_change>
+        <annotation>annotation1</annotation>
+    </book>
+    <book>
+        <bibinfo>
+            <ean13>9788071820642</ean13>
+            <cnb>cnb000604854</cnb>
+            <oclc>(OCoLC)41216972</oclc>
+        </bibinfo>
+        <book_id>2</book_id>
+        <book_metadata_change>2011-11-11 11:11:11</book_metadata_change>
+        <annotation>annotation2</annotation>
+    </book>
+</obalkyknih>

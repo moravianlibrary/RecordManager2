@@ -60,6 +60,8 @@ public class SolrFieldConstants {
 
 	public static final String NBN = "nbn_display";
 
+	public static final String OCLC_DISPLAY = "oclc_display_mv";
+
 	public static final String LOCAL_STATUSES_FACET = "local_statuses_facet_str_mv";
 	
 	public static final String SFX_LINKS_FIELD = "sfx_links";
@@ -129,6 +131,8 @@ public class SolrFieldConstants {
 	public static final String PSEUDONYM_RECORD_IDS_DISPLAY_MV = "pseudonym_record_ids_display_mv";
 
 	public static final String CALLNUMBER_SEARCH_TXT_MV = "callNumber_search_txt_mv";
+
+	public static final String OBALKY_ANNOTATION = "obalky_annotation_txt_mv";
 
 	/**
 	 * dummy fields used for processing purposes only, shouldn't be indexed. Fields are deleted in AuthorityEnricher. 

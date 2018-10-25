@@ -14,3 +14,6 @@ recordmanager.threadPoolSize=THREAD_COUNT
 
 solr.url=SOLR_URL
 vufind.url=VUFIND_URL
+
+ok_username=OK_USERNAME
+ok_password=OK_PASSWORD

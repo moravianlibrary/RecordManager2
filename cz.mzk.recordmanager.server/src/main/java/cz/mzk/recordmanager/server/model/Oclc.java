@@ -9,7 +9,10 @@ import javax.persistence.Table;
 public class Oclc extends AbstractDomainObject {
 	
 	public static final String TABLE_NAME = "oclc";
-	
+
+	@Column(name = "harvested_record_id", updatable = false, insertable = false)
+	private Long harvestedRecordId;
+
 	@Column(name="oclc")
 	public String oclcStr;
 

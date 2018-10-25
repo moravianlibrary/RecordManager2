@@ -1195,3 +1195,23 @@ INSERT INTO import_conf (id,library_id,contact_person_id,id_prefix,base_weight,c
 INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format,extract_id_regex) VALUES (1324,'http://sfx.jib.cz/sfxkiv3/cgi/public/get_file.cgi?file=institutional_holding.xml','downloadAndImportRecordsJob','sfx',null);
 INSERT INTO import_conf (id,library_id,contact_person_id,id_prefix,base_weight,cluster_id_enabled,filtering_enabled,interception_enabled,is_library,harvest_frequency,mapping_script,generate_dedup_keys,mapping_dedup_script) VALUES (1325,107,200,'sfxjibtech',8,false,false,false,true,'U','SfxMarcLocal.groovy',false,'SfxMarc.groovy');
 INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format,extract_id_regex) VALUES (1325,'http://sfx.techlib.cz/sfxlcl41/cgi/public/get_file.cgi?file=institutional_holding-NTK.xml','downloadAndImportRecordsJob','sfx',null);
+
+-- 25. 10. 2018 tomascejpek
+CREATE TABLE obalkyknih_annotation (
+  id                   DECIMAL(10) PRIMARY KEY,
+  book_id              DECIMAL(10),
+  cnb                  VARCHAR(32),
+  oclc                 VARCHAR(32),
+  isbn                 DECIMAL(13),
+  updated              TIMESTAMP,
+  last_harvest         TIMESTAMP,
+  annotation           VARCHAR(1048576)
+);
+COMMENT ON TABLE obalkyknih_annotation IS 'downloaded annotations from obalkyknih.cz';
+CREATE INDEX obalkyknih_annotation_oclc_idx ON obalkyknih_annotation(oclc);
+CREATE INDEX obalkyknih_annotation_isbn_idx ON obalkyknih_annotation(isbn);
+CREATE INDEX obalkyknih_annotation_cnb_idx ON obalkyknih_annotation(cnb);
+CREATE INDEX obalkyknih_annotation_bookid_idx ON obalkyknih_annotation(book_id);
+CREATE INDEX isbn_idx ON isbn(isbn);
+CREATE INDEX cnb_idx ON cnb(cnb);
+CREATE INDEX oclc_idx ON oclc(oclc);
