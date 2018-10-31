@@ -37,15 +37,12 @@ public abstract class KrameriusHarvesterImpl implements KrameriusHarvester {
 
 	protected SolrServerFactory solrServerFactory;
 
-	private MODSTransformer modsTransformer;
-
 	protected KrameriusHarvesterImpl(HttpClient httpClient, SolrServerFactory solrServerFactory,
-									 KrameriusHarvesterParams parameters, Long harvestedFrom, MODSTransformer modsTransformer) {
+									 KrameriusHarvesterParams parameters, Long harvestedFrom) {
 		this.harvestedFrom = harvestedFrom;
 		this.params = parameters;
 		this.httpClient = httpClient;
 		this.solrServerFactory = solrServerFactory;
-		this.modsTransformer = modsTransformer;
 	}
 
 	@Override
@@ -142,7 +139,7 @@ public abstract class KrameriusHarvesterImpl implements KrameriusHarvester {
 	private byte[] parseRawData(InputStream is) throws TransformerException, IOException {
 		switch (params.getMetadataStream()) {
 		case "BIBLIO_MODS":
-			return modsTransformer.transform(is).toByteArray();
+			return new MODSTransformer().transform(is).toByteArray();
 		default:
 			return IOUtils.toByteArray(is);
 		}

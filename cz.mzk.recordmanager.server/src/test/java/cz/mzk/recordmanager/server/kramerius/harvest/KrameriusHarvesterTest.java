@@ -1,17 +1,15 @@
 package cz.mzk.recordmanager.server.kramerius.harvest;
 
-import java.io.IOException;
-import java.util.List;
-
-import cz.mzk.recordmanager.server.util.MODSTransformer;
+import cz.mzk.recordmanager.server.model.HarvestedRecord;
+import cz.mzk.recordmanager.server.solr.SolrServerFactory;
+import cz.mzk.recordmanager.server.util.HttpClient;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import cz.mzk.recordmanager.server.model.HarvestedRecord;
-import cz.mzk.recordmanager.server.solr.SolrServerFactory;
-import cz.mzk.recordmanager.server.util.HttpClient;
+import java.io.IOException;
+import java.util.List;
 
 public class KrameriusHarvesterTest extends AbstractKrameriusTest {
 
@@ -21,9 +19,6 @@ public class KrameriusHarvesterTest extends AbstractKrameriusTest {
 	@Autowired
 	private SolrServerFactory solrServerFactory;
 
-	@Autowired
-	private MODSTransformer modsTransformer;
-
 	//Kramerius Harvester with sorting
 	@Test
 	public void downloadRecord() throws Exception {
@@ -31,7 +26,7 @@ public class KrameriusHarvesterTest extends AbstractKrameriusTest {
 		KrameriusHarvesterParams parameters = new KrameriusHarvesterParams();
 		parameters.setUrl("http://k4.techlib.cz/search/api/v5.0");
 		parameters.setMetadataStream("DC");
-		KrameriusHarvesterSorting harvester = new KrameriusHarvesterSorting(httpClient, solrServerFactory, parameters, 1L, modsTransformer);
+		KrameriusHarvesterSorting harvester = new KrameriusHarvesterSorting(httpClient, solrServerFactory, parameters, 1L);
 		List<String> uuids = harvester.getNextUuids();
 		for (String uuid : uuids) {
 			HarvestedRecord record = harvester.downloadRecord(uuid);
@@ -47,7 +42,7 @@ public class KrameriusHarvesterTest extends AbstractKrameriusTest {
 		KrameriusHarvesterParams parameters = new KrameriusHarvesterParams();
 		parameters.setUrl("http://k4.techlib.cz/search/api/v5.0");
 		parameters.setMetadataStream("DC");
-		KrameriusHarvesterSorting harvester = new KrameriusHarvesterSorting(httpClient, solrServerFactory, parameters, 1L, modsTransformer);
+		KrameriusHarvesterSorting harvester = new KrameriusHarvesterSorting(httpClient, solrServerFactory, parameters, 1L);
 
 		//1st response with SolrServerException => uuid list is empty
 		try {
