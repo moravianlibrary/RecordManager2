@@ -4,8 +4,13 @@ import cz.mzk.recordmanager.server.marc.MarcRecord;
 import cz.mzk.recordmanager.server.metadata.MetadataMarcRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class KramDefaultMetadataMarcRecord extends
 		MetadataMarcRecord {
+
+	private static Pattern UUID = Pattern.compile("uuid:(.*)");
 
 	public KramDefaultMetadataMarcRecord(MarcRecord underlayingMarc, HarvestedRecord hr) {
 		super(underlayingMarc, hr);
@@ -13,7 +18,11 @@ public class KramDefaultMetadataMarcRecord extends
 
 	@Override
 	public String getUUId() {
-		return harvestedRecord.getUniqueId().getRecordId();
+		Matcher matcher;
+		if ((matcher = UUID.matcher(harvestedRecord.getUniqueId().getRecordId())).matches()) {
+			return matcher.group(1);
+		}
+		return null;
 	}
 
 	@Override
