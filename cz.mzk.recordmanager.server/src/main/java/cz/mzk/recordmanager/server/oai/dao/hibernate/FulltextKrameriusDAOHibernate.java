@@ -4,6 +4,7 @@ import cz.mzk.recordmanager.server.jdbc.BlobToStringValueRowMapper;
 import cz.mzk.recordmanager.server.model.DedupRecord;
 import cz.mzk.recordmanager.server.model.FulltextKramerius;
 import cz.mzk.recordmanager.server.oai.dao.FulltextKrameriusDAO;
+import cz.mzk.recordmanager.server.util.Constants;
 import cz.mzk.recordmanager.server.util.ResourceUtils;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
@@ -56,7 +57,8 @@ public class FulltextKrameriusDAOHibernate extends
 		crit.setProjection(Projections.property("isPrivate"));
 		crit.setMaxResults(1);
 		Iterator iterator = crit.list().iterator();
-		return (iterator.hasNext()) ? (Boolean) iterator.next() ? "protected" : "public" : "unknown";
+		return (iterator.hasNext()) ? (Boolean) iterator.next() ? Constants.DOCUMENT_AVAILABILITY_PROTECTED
+				: Constants.DOCUMENT_AVAILABILITY_ONLINE : Constants.DOCUMENT_AVAILABILITY_UNKNOWN;
 	}
 
 }

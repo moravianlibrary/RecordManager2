@@ -158,6 +158,10 @@ public class MetadataRecordFactory {
 			return new KramDefaultMetadataMarcRecord(marcRec, hr);
 		case Constants.PREFIX_KRAM_MZK:
 			return new KramMzkMetadataMarcRecord(marcRec, hr);
+		case Constants.PREFIX_KRAM_NLK:
+			return new KramNlkMetadataMarcRecord(marcRec, hr);
+		case Constants.PREFIX_KRAM_SVKUL:
+			return new KramSvkulMetadataMarcRecord(marcRec, hr);
 		default:
 			return new MetadataMarcRecord(marcRec);
 		}
@@ -182,10 +186,6 @@ public class MetadataRecordFactory {
 			return mr;
 		case Constants.PREFIX_KRAM_KNAV:
 			return new KramKnavMetadataDublinCoreRecord(dcRec, hr);
-		case Constants.PREFIX_KRAM_NLK:
-			return new KramNlkMetadataDublinCoreRecord(dcRec, hr);
-		case Constants.PREFIX_KRAM_SVKUL:
-			return new KramSvkulMetadataDublinCoreRecord(dcRec, hr);
 		case Constants.PREFIX_KRAM_NTK:
 			return new KramDefaultMetadataDublinCoreRecord(dcRec, hr);
 		case Constants.PREFIX_KRAM3_NKP:

@@ -71,7 +71,7 @@ public class AvailabilityFacetEnricher implements DedupRecordEnricher {
 			return false;
 		}
 		for (Object url : urls) {
-			if (((String) url).contains("|public|")) return true;
+			if (((String) url).contains(Constants.DOCUMENT_AVAILABILITY_ONLINE)) return true;
 		}
 		return false;
 	}
@@ -92,14 +92,14 @@ public class AvailabilityFacetEnricher implements DedupRecordEnricher {
 
 	/**
 	 * @param doc {@link SolrInputDocument}
-	 * @return true if contains "|protected|" in solr field for url
+	 * @return true if contains "protected" in solr field for url
 	 */
 	private static boolean isProtected(final SolrInputDocument doc) {
 		// contains protected URL?
 		Collection<Object> urls = doc.getFieldValues(SolrFieldConstants.URL);
 		if (urls == null) return false;
 		for (Object url : urls) {
-			if (((String) url).contains("|protected|")) return true;
+			if (((String) url).contains(Constants.DOCUMENT_AVAILABILITY_PROTECTED)) return true;
 		}
 		return false;
 	}
