@@ -155,7 +155,7 @@ public class MetadataRecordFactory {
 		case Constants.PREFIX_KKKV:
 			return new KkkvMetadataMarcRecord(marcRec);
 		case Constants.PREFIX_KRAM_KNAV:
-			return new KramDefaultMetadataMarcRecord(marcRec, hr);
+			return new KramKnavMetadataMarcRecord(marcRec, hr);
 		case Constants.PREFIX_KRAM_MZK:
 			return new KramMzkMetadataMarcRecord(marcRec, hr);
 		case Constants.PREFIX_KRAM_NLK:
