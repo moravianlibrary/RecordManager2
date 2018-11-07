@@ -53,8 +53,8 @@ public class KrameriusItemProcessor implements
 		if (rec == null) {
 			rec = hrIncomplete;
 			rec.setHarvestedFrom(configuration);
-			rec.setFormat(format);
 		}
+		rec.setFormat(format);
 		rec.setUpdated(new Date());
 		rec.setDeleted(null);
 		rec.setRawRecord(hrIncomplete.getRawRecord());
