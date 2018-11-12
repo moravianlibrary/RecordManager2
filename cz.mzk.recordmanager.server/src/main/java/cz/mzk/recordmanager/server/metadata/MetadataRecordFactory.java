@@ -150,6 +150,8 @@ public class MetadataRecordFactory {
 			return new PkjakMetadataMarcRecord(marcRec);
 		case Constants.PREFIX_KKKV:
 			return new KkkvMetadataMarcRecord(marcRec);
+		case Constants.PREFIX_MKP:
+			return new MkpMetadataMarcRecord(marcRec);
 		default:
 			return new MetadataMarcRecord(marcRec);
 		}

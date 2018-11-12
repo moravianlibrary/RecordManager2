@@ -306,6 +306,7 @@ public class MarcDSL extends BaseDSL {
 	}
 
 	public Set<String> getSubject(String tags) throws IOException {
+		if (!metadataRecord.subjectFacet()) return Collections.emptySet();
 		Set<String> subjects = new HashSet<>();
 
 		for (String subject : getFields(tags)) {
@@ -821,4 +822,8 @@ public class MarcDSL extends BaseDSL {
 		return context.metadataRecord().getOclcs().stream().map(Oclc::getOclcStr).collect(Collectors.toSet());
 	}
 
+	public Set<String> getGenreFacet(String tags) {
+		if (!metadataRecord.genreFacet()) return Collections.emptySet();
+		return new HashSet<>(getFields(tags));
+	}
 }

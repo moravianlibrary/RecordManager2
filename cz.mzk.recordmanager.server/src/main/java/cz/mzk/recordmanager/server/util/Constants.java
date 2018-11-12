@@ -109,6 +109,7 @@ public class Constants {
 	public static final String PREFIX_LIBRARY			= "library";
 	public static final String PREFIX_MANUSCRIPTORIUM	= "manuscript";
 	public static final String PREFIX_MESH				= "mesh";
+	public static final String PREFIX_MKP				= "mkp";
 	public static final String PREFIX_MKP_EBOOKS		= "mkpe";
 	public static final String PREFIX_MKUO				= "mkuo";
 	public static final String PREFIX_MZK				= "mzk";

@@ -369,4 +369,22 @@ public interface MetadataRecord {
 	default String getRegionalLibrary() {
 		return null;
 	}
+
+	/**
+	 * Decide whether this record should have subject facet
+	 *
+	 * @return true ot false
+	 */
+	default boolean subjectFacet() {
+		return true;
+	}
+
+	/**
+	 * Decide whether this record should have genre facet
+	 *
+	 * @return true ot false
+	 */
+	default boolean genreFacet() {
+		return true;
+	}
 }
