@@ -309,7 +309,7 @@ public class MarcDSL extends BaseDSL {
 		if (!metadataRecord.subjectFacet()) return Collections.emptySet();
 		Set<String> subjects = new HashSet<>();
 
-		for (String subject : getFields(tags)) {
+		for (String subject : getFields(tags, SubfieldExtractionMethod.SEPARATED)) {
 			subjects.add(SolrUtils.toUpperCaseFirstChar(subject));
 		}
 
