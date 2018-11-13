@@ -1,14 +1,19 @@
 package cz.mzk.recordmanager.server.index.enrich;
 
+import cz.mzk.recordmanager.server.ClasspathResourceProvider;
 import cz.mzk.recordmanager.server.index.SolrFieldConstants;
 import cz.mzk.recordmanager.server.model.DedupRecord;
 import cz.mzk.recordmanager.server.util.CleaningUtils;
 import org.apache.solr.common.SolrInputDocument;
 import org.springframework.stereotype.Component;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 @Component
 public class UrlDedupRecordEnricher implements DedupRecordEnricher {
@@ -24,6 +29,12 @@ public class UrlDedupRecordEnricher implements DedupRecordEnricher {
 	private static final Pattern KRAM_MZK_PATTERN = Pattern.compile("http://kramerius.mzk.cz.*(uuid:.*)");
 	private static final String DIGITALNIKNIHOVNA = "http://www.digitalniknihovna.cz/mzk/uuid/";
 	private static final Pattern URL = Pattern.compile("(http[s]?://)?(.*)");
+
+	private static final List<String> URL_FILTER_LIST = new BufferedReader(new InputStreamReader(
+			new ClasspathResourceProvider().getResource("/stopwords/url.txt"), StandardCharsets.UTF_8))
+			.lines().collect(Collectors.toCollection(ArrayList::new));
+	private static final List<Pattern> URL_PATTERNS = URL_FILTER_LIST.stream()
+			.map(url -> Pattern.compile(url, Pattern.CASE_INSENSITIVE)).collect(Collectors.toList());
 
 	@Override
 	public void enrich(DedupRecord record, SolrInputDocument mergedDocument,
@@ -47,12 +58,13 @@ public class UrlDedupRecordEnricher implements DedupRecordEnricher {
 	private List<String> urlsFilter(Set<Object> values) {
 		List<String> results = new ArrayList<>();
 		Map<String, List<String>> urlsMap = new HashMap<>();
-
+		values = filter(values);
 		for (Object obj : values) {
-			if (obj.toString().split(SPLITTER).length < 3) {
-				results.add(obj.toString());
+			String url = obj.toString();
+			if (url.split(SPLITTER).length < 3) {
+				results.add(url);
 			} else {
-				String spliturl[] = obj.toString().split(SPLITTER);
+				String spliturl[] = url.split(SPLITTER);
 				String parsedUrl = krameriusUrlParser(spliturl[2]);
 				Matcher matcher;
 				if ((matcher = URL.matcher(parsedUrl)).matches()) {
@@ -60,14 +72,14 @@ public class UrlDedupRecordEnricher implements DedupRecordEnricher {
 				}
 				if (urlsMap.containsKey(parsedUrl)) {
 					List<String> completeUrls = urlsMap.get(parsedUrl);
-					if (completeUrls.contains(obj.toString())) continue;
+					if (completeUrls.contains(url)) continue;
 //					online url at the beginning
-					if (spliturl[1].equals(ONLINE)) completeUrls.add(0, obj.toString());
-					else completeUrls.add(obj.toString());
+					if (spliturl[1].equals(ONLINE)) completeUrls.add(0, url);
+					else completeUrls.add(url);
 					urlsMap.put(parsedUrl, completeUrls);
 				} else {
 					List<String> list = new ArrayList<>();
-					list.add(obj.toString());
+					list.add(url);
 					urlsMap.put(parsedUrl, list);
 				}
 			}
@@ -125,6 +137,18 @@ public class UrlDedupRecordEnricher implements DedupRecordEnricher {
 			return CleaningUtils.replaceAll(url, KRAMERIUS_HANDLE, KRAMERIUS_IJSP);
 		}
 		return url;
+	}
+
+	/**
+	 * remove unneeded url
+	 *
+	 * @param urls original
+	 * @return filtered urls
+	 */
+	private Set<Object> filter(Set<Object> urls) {
+		return urls.stream().filter(
+				url -> URL_PATTERNS.stream().noneMatch(pat -> pat.matcher(url.toString()).find()))
+				.collect(Collectors.toSet());
 	}
 
 }
