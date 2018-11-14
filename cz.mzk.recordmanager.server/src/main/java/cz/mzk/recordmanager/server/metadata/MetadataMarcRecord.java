@@ -1257,4 +1257,14 @@ public class MetadataMarcRecord implements MetadataRecord {
 				.flatMap(tag -> underlayingMarc.getFields(tag, '7').stream()).collect(Collectors.toSet());
 		return ids.stream().map(Authority::create).collect(Collectors.toList());
 	}
+
+	@Override
+	public List<String> getConspectusSubcategory() {
+		return underlayingMarc.getFields("072", 'a');
+	}
+
+	@Override
+	public List<String> getConspectusCategory() {
+		return underlayingMarc.getFields("072", '9');
+	}
 }

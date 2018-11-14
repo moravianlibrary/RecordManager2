@@ -158,6 +158,8 @@ public class Constants {
 	public static final String LIBRARY_NAME_STT			= "STT";
 	
 	public static final long IMPORT_CONF_ID_CASLIN 		= 316L;
+	public static final long IMPORT_CONF_ID_ANL 		= 319L;
+	public static final long IMPORT_CONF_ID_UNMZ 		= 320L;
 	public static final long IMPORT_CONF_ID_SLK			= 321L;
 	public static final long IMPORT_CONF_ID_KKL			= 325L;
 	public static final long IMPORT_CONF_ID_STT			= 326L;

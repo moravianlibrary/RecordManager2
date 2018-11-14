@@ -387,4 +387,12 @@ public interface MetadataRecord {
 	default boolean genreFacet() {
 		return true;
 	}
+
+	default List<String> getConspectusSubcategory() {
+		return Collections.emptyList();
+	}
+
+	default List<String> getConspectusCategory() {
+		return Collections.emptyList();
+	}
 }
