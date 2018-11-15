@@ -388,11 +388,8 @@ public interface MetadataRecord {
 		return true;
 	}
 
-	default List<String> getConspectusSubcategory() {
+	default List<String> getConspectusForView() {
 		return Collections.emptyList();
 	}
 
-	default List<String> getConspectusCategory() {
-		return Collections.emptyList();
-	}
 }

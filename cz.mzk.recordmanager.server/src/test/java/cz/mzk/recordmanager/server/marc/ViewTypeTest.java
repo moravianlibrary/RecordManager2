@@ -30,6 +30,6 @@ public class ViewTypeTest extends AbstractTest {
 		MetadataRecord metadataRecord = metadataFactory.getMetadataRecord(mri);
 		System.out.println(ViewType.getPossibleValues(metadataRecord, resolver, 300L));
 		Assert.assertTrue(ViewType.getPossibleValues(metadataRecord, resolver, 300L).containsAll(
-				Arrays.asList(ViewType.IREL.getValue(), ViewType.KIV.getValue(), ViewType.TECH.getValue())));
+				Arrays.asList(ViewType.IREL.getValue(), ViewType.KIV.getValue())));
 	}
 }

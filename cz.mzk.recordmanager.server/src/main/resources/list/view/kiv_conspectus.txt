@@ -1,29 +1,29 @@
-00
-01
-02
-021
-022
-023
-025
-025.3/.4
-026/027
-026
-027
-028
-09
-095/096
-316.77
-655
-003
-004
-004.3
-004.4/.6
-004.7
-007
-377
-621.39
-686
-77
-72
-930
-347.7
+subcat 00
+subcat 01
+subcat 02
+subcat 021
+subcat 022
+subcat 023
+subcat 025
+subcat 025.3/.4
+subcat 026/027
+subcat 026
+subcat 027
+subcat 028
+subcat 09
+subcat 095/096
+subcat 316.77
+subcat 655
+subcat 003
+subcat 004
+subcat 004.3
+subcat 004.4/.6
+subcat 004.7
+subcat 007
+subcat 377
+subcat 621.39
+subcat 686
+subcat 77
+subcat 72
+subcat 930
+subcat 347.7

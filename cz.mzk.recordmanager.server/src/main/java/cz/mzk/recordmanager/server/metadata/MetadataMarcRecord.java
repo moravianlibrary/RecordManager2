@@ -1259,12 +1259,13 @@ public class MetadataMarcRecord implements MetadataRecord {
 	}
 
 	@Override
-	public List<String> getConspectusSubcategory() {
-		return underlayingMarc.getFields("072", 'a');
+	public List<String> getConspectusForView() {
+		List<String> subCat = underlayingMarc.getFields("072", 'a');
+		List<String> cat = underlayingMarc.getFields("072", '9');
+		List<String> results = new ArrayList<>();
+		results.addAll(subCat.stream().map(name -> "subcat " + name).collect(Collectors.toList()));
+		results.addAll(cat.stream().map(name -> "cat " + name).collect(Collectors.toList()));
+		return results;
 	}
 
-	@Override
-	public List<String> getConspectusCategory() {
-		return underlayingMarc.getFields("072", '9');
-	}
 }

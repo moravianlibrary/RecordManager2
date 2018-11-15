@@ -16,7 +16,7 @@ public enum ViewType {
 			if (importConfId.equals(Constants.IMPORT_CONF_ID_UNMZ) || importConfId.equals(Constants.IMPORT_CONF_ID_UPV))
 				return false;
 			return contains(resolver, String.format(INST_FILE, getValue()), importConfId.toString())
-					|| containsAny(resolver, String.format(CONSPECTUS_FILE, getValue()), mr.getConspectusCategory());
+					|| containsAny(resolver, String.format(CONSPECTUS_FILE, getValue()), conspectus);
 
 		}
 	},
@@ -26,7 +26,7 @@ public enum ViewType {
 								Set<String> siglas, List<String> conspectus) throws IOException {
 			if (mr.isBlindBraille() || mr.isMusicalScores()) return false;
 			return contains(resolver, String.format(INST_FILE, getValue()), importConfId.toString())
-					|| containsAny(resolver, String.format(CASLIN_FILE, getValue()), siglas);
+					|| containsAny(resolver, String.format(CONSPECTUS_FILE, getValue()), conspectus);
 		}
 	},
 	MUS("mus") {
@@ -64,7 +64,7 @@ public enum ViewType {
 	public static List<String> getPossibleValues(final MetadataRecord mr, ListResolver resolver, Long config) {
 		List<String> results = new ArrayList<>();
 		Set<String> siglas = mr.getCaslinSiglas();
-		List<String> conspectus = mr.getConspectusSubcategory();
+		List<String> conspectus = mr.getConspectusForView();
 		for (ViewType viewType : ViewType.values()) {
 			try {
 				if (viewType.match(mr, resolver, config, siglas, conspectus)) results.add(viewType.getValue());
