@@ -12,6 +12,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.regex.Pattern;
 
 @Component
 public class ViewTypeDedupRecordEnricher implements DedupRecordEnricher {
@@ -19,10 +20,12 @@ public class ViewTypeDedupRecordEnricher implements DedupRecordEnricher {
 	private static final FieldMerger fieldMerger = new FieldMerger(
 			SolrFieldConstants.VIEW_TYPE_TXT_MV);
 
+	private static final Pattern SPLITTER = Pattern.compile("_");
+
 	private static final List<String> MUSICAL_SCORE = SolrUtils.createHierarchicFacetValues(
 			HarvestedRecordFormatEnum.MUSICAL_SCORES.name());
 	private static final List<String> BLIND_BRAILLE = SolrUtils.createHierarchicFacetValues(
-			HarvestedRecordFormatEnum.BLIND_BRAILLE.name());
+			SPLITTER.split(HarvestedRecordFormatEnum.BLIND_BRAILLE.name()));
 	private static final List<String> VISUAL_DOCUMENTS = SolrUtils.createHierarchicFacetValues(
 			HarvestedRecordFormatEnum.VISUAL_DOCUMENTS.name());
 	private static final List<String> REMOVE_FORMATS = Arrays.asList(
