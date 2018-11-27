@@ -125,6 +125,7 @@ CREATE TABLE harvested_record (
   sigla                VARCHAR(10),
   dedup_keys_hash      CHAR(40),
   next_dedup_flag      BOOLEAN DEFAULT TRUE,
+  biblio_linker_id     DECIMAL(10),
   raw_record           BLOB,
   CONSTRAINT harvested_record_pk                     PRIMARY KEY (id),
   CONSTRAINT harvester_record_unique_id              UNIQUE (import_conf_id, record_id),
@@ -316,4 +317,9 @@ CREATE TABLE obalkyknih_annotation (
   updated              TIMESTAMP,
   last_harvest         TIMESTAMP,
   annotation           VARCHAR(32672)
+);
+
+CREATE TABLE biblio_linker (
+  id                   DECIMAL(10) PRIMARY KEY,
+  updated              TIMESTAMP
 );

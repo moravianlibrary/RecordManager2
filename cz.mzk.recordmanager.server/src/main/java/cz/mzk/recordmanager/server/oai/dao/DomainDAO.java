@@ -20,4 +20,6 @@ public interface DomainDAO<ID extends Serializable, T> {
 
 	void flush();
 
+	T saveOrUpdate(T object);
+
 }

@@ -1215,3 +1215,11 @@ CREATE INDEX obalkyknih_annotation_bookid_idx ON obalkyknih_annotation(book_id);
 CREATE INDEX isbn_idx ON isbn(isbn);
 CREATE INDEX cnb_idx ON cnb(cnb);
 CREATE INDEX oclc_idx ON oclc(oclc);
+
+-- 26. 11. 2018 tomascejpek
+CREATE SEQUENCE biblio_linker_seq_id MINVALUE 1;
+CREATE TABLE biblio_linker (
+  id                   DECIMAL(10) DEFAULT NEXTVAL('"biblio_linker_seq_id"')  PRIMARY KEY,
+  updated              TIMESTAMP
+);
+ALTER TABLE harvested_record ADD COLUMN biblio_linker_id DECIMAL(10);

@@ -12,6 +12,7 @@ public class Constants {
 	public static final String JOB_ID_MISSING_FULLTEXT_KRAMERIUS = "krameriusMissingFulltextJob";
 	public static final String JOB_ID_HARVEST_SINGLE	= "oaiHarvestSingleRecordJob";
 	public static final String JOB_ID_DEDUP				= "dedupRecordsJob";
+	public static final String JOB_ID_BIBLIO_LINKER		= "biblioLinkerJob";
 	public static final String JOB_ID_SOLR_INDEX_ALL_RECORDS		= "indexAllRecordsToSolrJob";
 	public static final String JOB_ID_SOLR_INDEX_HARVESTED_RECORDS	= "indexHarvestedRecordsToSolrJob";
 	public static final String JOB_ID_SOLR_INDEX					= "indexRecordsToSolrJob";

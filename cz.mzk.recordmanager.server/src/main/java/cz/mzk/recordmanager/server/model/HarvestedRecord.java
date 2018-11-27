@@ -223,7 +223,11 @@ public class HarvestedRecord extends AbstractDomainObject {
 	@ManyToOne(optional=true, fetch=FetchType.LAZY)
 	@JoinColumn(name="dedup_record_id", nullable=true)
 	private DedupRecord dedupRecord;
-	
+
+	@ManyToOne(optional=true, fetch=FetchType.LAZY)
+	@JoinColumn(name="biblio_linker_id", nullable=true)
+	private BiblioLinker biblioLinker;
+
 	@Column(name="weight")
 	private Long weight;
 	
@@ -650,5 +654,13 @@ public class HarvestedRecord extends AbstractDomainObject {
 
 	public void setAuthorities(List<Authority> authorities) {
 		this.authorities = authorities;
+	}
+
+	public BiblioLinker getBiblioLinker() {
+		return biblioLinker;
+	}
+
+	public void setBiblioLinker(BiblioLinker biblioLinker) {
+		this.biblioLinker = biblioLinker;
 	}
 }

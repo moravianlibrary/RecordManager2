@@ -157,6 +157,7 @@ CREATE TABLE harvested_record (
   sigla                VARCHAR(10),
   dedup_keys_hash      CHAR(40),
   next_dedup_flag      BOOLEAN DEFAULT TRUE,
+  biblio_linker_id     DECIMAL(10),
   raw_record           BYTEA,
   UNIQUE (import_conf_id, record_id),
   FOREIGN KEY (import_conf_id) REFERENCES import_conf(id),
@@ -415,3 +416,9 @@ CREATE TABLE obalkyknih_annotation (
   annotation           VARCHAR(1048576)
 );
 COMMENT ON TABLE obalkyknih_annotation IS 'downloaded annotations from obalkyknih.cz';
+
+CREATE SEQUENCE biblio_linker_seq_id MINVALUE 1;
+CREATE TABLE biblio_linker (
+  id                   DECIMAL(10) DEFAULT NEXTVAL('"biblio_linker_seq_id"')  PRIMARY KEY,
+  updated              TIMESTAMP
+);
