@@ -1,6 +1,7 @@
 package cz.mzk.recordmanager.server.bibliolinker;
 
 import cz.mzk.recordmanager.server.model.BiblioLinker;
+import cz.mzk.recordmanager.server.model.DedupRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.oai.dao.BiblioLinkerDAO;
 import cz.mzk.recordmanager.server.oai.dao.DedupRecordDAO;
@@ -12,9 +13,8 @@ import org.springframework.batch.item.ItemProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Generic implementation of of ItemProcessor
@@ -37,16 +37,19 @@ public class BiblioLinkerSimpleKeysStepProcessor implements
 
 	@Override
 	public List<HarvestedRecord> process(List<Long> idList) throws Exception {
-		List<HarvestedRecord> hrList = new ArrayList<>();
+		Set<HarvestedRecord> hrs = new HashSet<>();
 
 		// get all local records
 		for (Long id : idList) {
-			hrList.addAll(harvestedRecordDao.getByDedupRecordWithDeleted(dedupRecordDAO.get(id)));
+			hrs.addAll(harvestedRecordDao.getByDedupRecordWithDeleted(dedupRecordDAO.get(id)));
 		}
+		Set<DedupRecord> drs = hrs.stream().map(HarvestedRecord::getDedupRecord).collect(Collectors.toSet());
+		Set<BiblioLinker> bls = hrs.stream().map(HarvestedRecord::getBiblioLinker).collect(Collectors.toSet());
+		hrs.addAll(harvestedRecordDao.getByDedupRecordAndNotBiblioLinker(drs, bls));
 
 		// get any BiblioLinkerRecord
 		BiblioLinker bl = null;
-		for (HarvestedRecord hr : hrList) {
+		for (HarvestedRecord hr : hrs) {
 			if (hr.getBiblioLinker() != null) {
 				bl = hr.getBiblioLinker();
 				break;
@@ -61,7 +64,7 @@ public class BiblioLinkerSimpleKeysStepProcessor implements
 		}
 
 		List<HarvestedRecord> update = new ArrayList<>();
-		for (HarvestedRecord hr : hrList) {
+		for (HarvestedRecord hr : hrs) {
 			if (hr.getBiblioLinker() != bl) {
 				hr.setBiblioLinker(bl);
 				update.add(hr);

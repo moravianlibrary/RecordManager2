@@ -13,10 +13,7 @@ import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 @Component
 public class HarvestedRecordDAOHibernate extends
@@ -308,5 +305,16 @@ public class HarvestedRecordDAOHibernate extends
 		update.setParameter("updated", hr.getUpdated());
 		update.executeUpdate();
 	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public Collection<HarvestedRecord> getByDedupRecordAndNotBiblioLinker(Collection<DedupRecord> drs, Collection<BiblioLinker> bls) {
+		Session session = sessionFactory.getCurrentSession();
+		Criteria crit = session.createCriteria(HarvestedRecord.class);
+		crit.add(Restrictions.and(Restrictions.in("biblioLinker", bls),
+				Restrictions.not(Restrictions.in("dedupRecord", drs))));
+		return crit.list();
+	}
+
 
 }

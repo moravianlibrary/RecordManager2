@@ -1,7 +1,9 @@
 package cz.mzk.recordmanager.server.oai.dao;
 
+import java.util.Collection;
 import java.util.List;
 
+import cz.mzk.recordmanager.server.model.BiblioLinker;
 import cz.mzk.recordmanager.server.model.DedupRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecord.HarvestedRecordUniqueId;
@@ -44,5 +46,7 @@ public interface HarvestedRecordDAO extends DomainDAO<Long, HarvestedRecord> {
 	String getIdBySigla(String sigla);
 
 	String getRecordIdBy001(Long ConfigurationId, String id);
+
+	Collection<HarvestedRecord> getByDedupRecordAndNotBiblioLinker(Collection<DedupRecord> drs, Collection<BiblioLinker> bls);
 
 }
