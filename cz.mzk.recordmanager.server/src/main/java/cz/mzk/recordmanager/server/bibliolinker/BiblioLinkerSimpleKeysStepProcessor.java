@@ -35,7 +35,7 @@ public class BiblioLinkerSimpleKeysStepProcessor implements
 
 		// get all local records
 		for (Long id : idList) {
-			hrList.addAll(harvestedRecordDao.getByDedupRecord(dedupRecordDAO.get(id)));
+			hrList.addAll(harvestedRecordDao.getByDedupRecordWithDeleted(dedupRecordDAO.get(id)));
 		}
 
 		// get any BiblioLinkerRecord
