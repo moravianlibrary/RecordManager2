@@ -5,6 +5,9 @@ import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.oai.dao.BiblioLinkerDAO;
 import cz.mzk.recordmanager.server.oai.dao.DedupRecordDAO;
 import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordDAO;
+import cz.mzk.recordmanager.server.util.ProgressLogger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -28,6 +31,9 @@ public class BiblioLinkerSimpleKeysStepProcessor implements
 
 	@Autowired
 	private BiblioLinkerDAO biblioLinkerDAO;
+
+	private static Logger logger = LoggerFactory.getLogger(BiblioLinkerSimpleKeysStepProcessor.class);
+	private ProgressLogger progressLogger = new ProgressLogger(logger, 1000);
 
 	@Override
 	public List<HarvestedRecord> process(List<Long> idList) throws Exception {
@@ -54,10 +60,14 @@ public class BiblioLinkerSimpleKeysStepProcessor implements
 			bl = biblioLinkerDAO.persist(bl);
 		}
 
+		List<HarvestedRecord> update = new ArrayList<>();
 		for (HarvestedRecord hr : hrList) {
-			hr.setBiblioLinker(bl);
+			if (hr.getBiblioLinker() != bl) {
+				hr.setBiblioLinker(bl);
+				update.add(hr);
+			}
+			progressLogger.incrementAndLogProgress();
 		}
-
-		return hrList;
+		return update;
 	}
 }
