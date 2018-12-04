@@ -39,13 +39,18 @@ public class BiblioLinkerSimpleKeysStepProcessor implements
 	public List<HarvestedRecord> process(List<Long> idList) throws Exception {
 		Set<HarvestedRecord> hrs = new HashSet<>();
 
-		// get all local records
+		// get all dedup records
+		Set<DedupRecord> drs = new HashSet<>();
 		for (Long id : idList) {
-			hrs.addAll(harvestedRecordDao.getByDedupRecordWithDeleted(dedupRecordDAO.get(id)));
+			drs.add(dedupRecordDAO.get(id));
 		}
-		Set<DedupRecord> drs = hrs.stream().map(HarvestedRecord::getDedupRecord).collect(Collectors.toSet());
+		// get local records by dedup_record_id
+		for (DedupRecord dr : drs) {
+			hrs.addAll(harvestedRecordDao.getByDedupRecordWithDeleted(dr));
+		}
+		// get local records by biblio_record_id
 		Set<BiblioLinker> bls = hrs.stream().map(HarvestedRecord::getBiblioLinker).collect(Collectors.toSet());
-		hrs.addAll(harvestedRecordDao.getByDedupRecordAndNotBiblioLinker(drs, bls));
+		hrs.addAll(harvestedRecordDao.getByBiblioLinkerAndNotDedupRecord(drs, bls));
 
 		// get any BiblioLinkerRecord
 		BiblioLinker bl = null;
@@ -55,7 +60,6 @@ public class BiblioLinkerSimpleKeysStepProcessor implements
 				break;
 			}
 		}
-
 		if (bl == null) {
 			// create new
 			bl = new BiblioLinker();
@@ -63,14 +67,26 @@ public class BiblioLinkerSimpleKeysStepProcessor implements
 			bl = biblioLinkerDAO.persist(bl);
 		}
 
-		List<HarvestedRecord> update = new ArrayList<>();
+		// set biblio_linker_id, update if needed
+		Set<HarvestedRecord> update = new HashSet<>();
 		for (HarvestedRecord hr : hrs) {
-			if (hr.getBiblioLinker() != bl) {
+			if (hr.getBiblioLinker() != bl || hr.isBiblioLinkerSimilar()) {
 				hr.setBiblioLinker(bl);
+				hr.setBiblioLinkerSimilar(false);
 				update.add(hr);
 			}
 			progressLogger.incrementAndLogProgress();
 		}
-		return update;
+
+		// choose one record for next job (similarity)
+		for (HarvestedRecord hr : hrs) {
+			if (hr.getDeleted() == null) {
+				hr.setBiblioLinkerSimilar(true);
+				update.add(hr);
+				break;
+			}
+		}
+
+		return new ArrayList<>(update);
 	}
 }

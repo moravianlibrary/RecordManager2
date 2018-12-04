@@ -1223,3 +1223,4 @@ CREATE TABLE biblio_linker (
   updated              TIMESTAMP
 );
 ALTER TABLE harvested_record ADD COLUMN biblio_linker_id DECIMAL(10);
+ALTER TABLE harvested_record ADD COLUMN biblio_linker_similar BOOLEAN DEFAULT FALSE;

@@ -308,7 +308,7 @@ public class HarvestedRecordDAOHibernate extends
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public Collection<HarvestedRecord> getByDedupRecordAndNotBiblioLinker(Collection<DedupRecord> drs, Collection<BiblioLinker> bls) {
+	public Collection<HarvestedRecord> getByBiblioLinkerAndNotDedupRecord(Collection<DedupRecord> drs, Collection<BiblioLinker> bls) {
 		Session session = sessionFactory.getCurrentSession();
 		Criteria crit = session.createCriteria(HarvestedRecord.class);
 		crit.add(Restrictions.and(Restrictions.in("biblioLinker", bls),
