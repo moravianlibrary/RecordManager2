@@ -55,6 +55,8 @@ public class BiblioLinkerJobConfig {
 
 	private String prepareBLTempTitleAuthTableSql = ResourceUtils.asString("job/biblioLinkerJob/prepareBLTempTitleAuth.sql");
 
+	private String prepareBLSTempAuthTableSql = ResourceUtils.asString("job/biblioLinkerJob/prepareBLSTempAuth.sql");
+
 	@Bean
 	public Job biblioLinkerJob(
 			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER + ":initBLStep") Step initBLStep,
@@ -119,6 +121,34 @@ public class BiblioLinkerJobConfig {
 	public ItemReader<List<Long>> blTempTitleAuthStepReader() throws Exception {
 		return blSimpleKeysReader(TMP_BL_TABLE_TITLE_AUTH);
 	}
+
+	/**
+	 *
+	 */
+	@Bean
+	public Job biblioLinkerSimilarJob(
+			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":prepareBLSTempAuthStep") Step prepareBLSTempAuthStep
+	) {
+		return jobs.get(Constants.JOB_ID_BIBLIO_LINKER_SIMILAR)
+				.validator(new DedupRecordsJobParametersValidator())
+				.start(prepareBLSTempAuthStep)
+				.build();
+	}
+
+	@Bean(name = Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":prepareBLSTempAuthTasklet")
+	@StepScope
+	public Tasklet prepareBLSTempAuthTasklet() {
+		return new SqlCommandTasklet(prepareBLSTempAuthTableSql);
+	}
+
+	@Bean(name = Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":prepareBLSTempAuthStep")
+	public Step prepareBLSTempAuthStep() {
+		return steps.get("prepareBLSTempAuthStep")
+				.tasklet(prepareBLSTempAuthTasklet())
+				.listener(new StepProgressListener())
+				.build();
+	}
+
 
 	/**
 	 * Generic components
