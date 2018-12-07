@@ -1224,3 +1224,9 @@ CREATE TABLE biblio_linker (
 );
 ALTER TABLE harvested_record ADD COLUMN biblio_linker_id DECIMAL(10);
 ALTER TABLE harvested_record ADD COLUMN biblio_linker_similar BOOLEAN DEFAULT FALSE;
+CREATE TABLE biblio_linker_similar (
+  id                   DECIMAL(10) PRIMARY KEY,
+  harvested_record_id  DECIMAL(10),
+  url_id               VARCHAR(128),
+  FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE
+);

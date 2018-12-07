@@ -51,11 +51,13 @@ public class BiblioLinkerJobConfig {
 
 	private static final String TMP_BL_TABLE_TITLE_AUTH = "tmp_bl_title_auth";
 
+	private static final String TMP_BL_TABLE_AUTH = "tmp_bls_auth";
+
 	private String initBiblioLinkerSql = ResourceUtils.asString("job/biblioLinkerJob/initBiblioLinker.sql");
 
 	private String prepareBLTempTitleAuthTableSql = ResourceUtils.asString("job/biblioLinkerJob/prepareBLTempTitleAuth.sql");
 
-	private String prepareBLSTempAuthTableSql = ResourceUtils.asString("job/biblioLinkerJob/prepareBLSTempAuth.sql");
+	private String prepareBLSimilarTempAuthTableSql = ResourceUtils.asString("job/biblioLinkerJob/prepareBLSTempAuth.sql");
 
 	@Bean
 	public Job biblioLinkerJob(
@@ -119,7 +121,7 @@ public class BiblioLinkerJobConfig {
 	@Bean(name = "blTitleAuth:reader")
 	@StepScope
 	public ItemReader<List<Long>> blTempTitleAuthStepReader() throws Exception {
-		return blSimpleKeysReader(TMP_BL_TABLE_TITLE_AUTH);
+		return blSimpleKeysReader(TMP_BL_TABLE_TITLE_AUTH, "dedup_record_id");
 	}
 
 	/**
@@ -127,38 +129,61 @@ public class BiblioLinkerJobConfig {
 	 */
 	@Bean
 	public Job biblioLinkerSimilarJob(
-			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":prepareBLSTempAuthStep") Step prepareBLSTempAuthStep
+			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":prepareBLSimilarTempAuthStep") Step prepareBLSimilarTempAuthStep,
+			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":blSimilarTempAuthStep") Step blSimilarTempAuthStep
 	) {
 		return jobs.get(Constants.JOB_ID_BIBLIO_LINKER_SIMILAR)
 				.validator(new DedupRecordsJobParametersValidator())
-				.start(prepareBLSTempAuthStep)
+				.start(prepareBLSimilarTempAuthStep)
+				.next(blSimilarTempAuthStep)
 				.build();
 	}
 
-	@Bean(name = Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":prepareBLSTempAuthTasklet")
+	@Bean(name = Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":prepareBLSimilarTempAuthTasklet")
 	@StepScope
-	public Tasklet prepareBLSTempAuthTasklet() {
-		return new SqlCommandTasklet(prepareBLSTempAuthTableSql);
+	public Tasklet prepareBLSimilarTempAuthTasklet() {
+		return new SqlCommandTasklet(prepareBLSimilarTempAuthTableSql);
 	}
 
-	@Bean(name = Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":prepareBLSTempAuthStep")
-	public Step prepareBLSTempAuthStep() {
-		return steps.get("prepareBLSTempAuthStep")
-				.tasklet(prepareBLSTempAuthTasklet())
+	@Bean(name = Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":prepareBLSimilarTempAuthStep")
+	public Step prepareBLSimilarTempAuthStep() {
+		return steps.get("prepareBLSimilarTempAuthStep")
+				.tasklet(prepareBLSimilarTempAuthTasklet())
 				.listener(new StepProgressListener())
 				.build();
 	}
 
+	@Bean(name = Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":blSimilarTempAuthStep")
+	public Step blSimilarTempAuthStep() throws Exception {
+		return steps.get("blSimilarTempAuthStep")
+				.listener(new StepProgressListener())
+				.<List<Long>, List<HarvestedRecord>>chunk(100)
+				.reader(blSimilarTempAuthStepReader())
+				.processor(blSimilarSimpleStepProsessor())
+				.writer(blSimpleKeysStepWriter())
+				.build();
+	}
+
+	@Bean(name = "blSimilarTitleAuth:reader")
+	@StepScope
+	public ItemReader<List<Long>> blSimilarTempAuthStepReader() throws Exception {
+		return blSimpleKeysReader(TMP_BL_TABLE_AUTH, "local_record_id");
+	}
+
+	@Bean(name = "blSimilarSimple:processor")
+	@StepScope
+	public ItemProcessor<List<Long>, List<HarvestedRecord>> blSimilarSimpleStepProsessor() {
+		return new BiblioLinkerSimilarSimpleStepProcessor();
+	}
 
 	/**
 	 * Generic components
 	 */
-	private ItemReader<List<Long>> blSimpleKeysReader(String tablename)
-			throws Exception {
+	private ItemReader<List<Long>> blSimpleKeysReader(String tablename, String column) throws Exception {
 		JdbcPagingItemReader<List<Long>> reader = new JdbcPagingItemReader<>();
 		SqlPagingQueryProviderFactoryBean pqpf = new SqlPagingQueryProviderFactoryBean();
 		pqpf.setDataSource(dataSource);
-		pqpf.setSelectClause("SELECT row_id,dedup_record_id");
+		pqpf.setSelectClause("SELECT row_id," + column + " ids");
 		pqpf.setFromClause("FROM " + tablename);
 		pqpf.setSortKey("row_id");
 		reader.setRowMapper(new ArrayLongMapper());
@@ -187,7 +212,7 @@ public class BiblioLinkerJobConfig {
 		@Override
 		public List<Long> mapRow(ResultSet arg0, int arg1) throws SQLException {
 			List<Long> hrs = new ArrayList<>();
-			String ids = arg0.getString("dedup_record_id");
+			String ids = arg0.getString("ids");
 			for (String idStr : ids.split(",")) {
 				Long hrId = Long.valueOf(idStr);
 				hrs.add(hrId);

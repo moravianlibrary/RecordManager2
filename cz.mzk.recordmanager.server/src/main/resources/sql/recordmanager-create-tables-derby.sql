@@ -324,3 +324,10 @@ CREATE TABLE biblio_linker (
   id                   DECIMAL(10) PRIMARY KEY,
   updated              TIMESTAMP
 );
+
+CREATE TABLE biblio_linker_similar (
+  id                   DECIMAL(10) PRIMARY KEY,
+  harvested_record_id  DECIMAL(10),
+  url_id               VARCHAR(128),
+  CONSTRAINT biblio_linker_similar_fk FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id)
+);
