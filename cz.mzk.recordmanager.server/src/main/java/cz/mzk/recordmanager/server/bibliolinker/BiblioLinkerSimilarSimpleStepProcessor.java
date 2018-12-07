@@ -48,6 +48,7 @@ public class BiblioLinkerSimilarSimpleStepProcessor implements
 			for (HarvestedRecord hrInner : hrIds.keySet()) {
 				if (hrOuter == hrInner) continue;
 				similarIds.add(BiblioLinkerSimiliar.create(hrIds.get(hrInner)));
+				if (similarIds.size() > 5) break;
 			}
 			hrOuter.setBiblioLinkerSimiliarUrls(similarIds);
 		}
