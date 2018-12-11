@@ -8,6 +8,7 @@ SELECT nextval('tmp_bl_id_seq') AS row_id,
 FROM harvested_record hr
 INNER JOIN title t ON hr.id=t.harvested_record_id
 WHERE hr.author_auth_key IS NOT NULL
-GROUP BY hr.author_auth_key, t.title;
+GROUP BY hr.author_auth_key, t.title
+HAVING count(*)>1;
 
 CREATE INDEX tmp_bl_title_auth_idx ON tmp_bl_title_auth(row_id);
