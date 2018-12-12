@@ -14,6 +14,8 @@ public interface DomainDAO<ID extends Serializable, T> {
 
 	List<T> findAll();
 
+	List<T> findByIds(List<ID> ids);
+
 	T persist(T object);
 
 	void delete(T object);

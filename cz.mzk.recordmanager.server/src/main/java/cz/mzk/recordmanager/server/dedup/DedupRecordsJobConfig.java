@@ -4,13 +4,16 @@ import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.Future;
 
 import javax.sql.DataSource;
 
 import org.hibernate.SessionFactory;
+import org.hibernate.exception.LockAcquisitionException;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
@@ -26,15 +29,16 @@ import org.springframework.batch.item.database.JdbcPagingItemReader;
 import org.springframework.batch.item.database.support.SqlPagingQueryProviderFactoryBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.jdbc.core.RowMapper;
-
 import cz.mzk.recordmanager.server.dedup.clustering.NonperiodicalTitleClusterable;
 import cz.mzk.recordmanager.server.dedup.clustering.TitleClusterable;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.springbatch.DelegatingHibernateProcessor;
+import cz.mzk.recordmanager.server.springbatch.IntegerModuloPartitioner;
 import cz.mzk.recordmanager.server.springbatch.SqlCommandTasklet;
 import cz.mzk.recordmanager.server.springbatch.StepProgressListener;
 import cz.mzk.recordmanager.server.util.Constants;
@@ -42,6 +46,8 @@ import cz.mzk.recordmanager.server.util.ResourceUtils;
 
 @Configuration
 public class DedupRecordsJobConfig {
+
+	private static final Integer INTEGER_OVERRIDEN_BY_EXPRESSION = null;
 
 	private static final String TMP_TABLE_ISBN = "tmp_simmilar_books_isbn";
 
@@ -90,6 +96,8 @@ public class DedupRecordsJobConfig {
 	private static final String TMP_TABLE_ARTICLES_TG = "tmp_simmilar_articles_tg";
 
 	private static final String TMP_TABLE_SFX_ID = "tmp_simmilar_sfx_id";
+
+	private int partitionThreads = 4;
 
 	@Autowired
 	private SessionFactory sessionFactory;
@@ -178,7 +186,7 @@ public class DedupRecordsJobConfig {
 			@Qualifier(Constants.JOB_ID_DEDUP + ":prepareTempSfxIdTableStep") Step prepareTempSfxIdTableStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":dedupSimpleKeysSfxIdStep") Step dedupSimpleKeysSfxIdStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":prepareTempIsbnTableStep") Step prepareTempIsbnTableStep,
-			@Qualifier(Constants.JOB_ID_DEDUP + ":dedupSimpleKeysIsbnStep") Step dedupSimpleKeysISBNStep,
+			@Qualifier(Constants.JOB_ID_DEDUP + ":dedupSimpleKeysIsbnPartitionedStep") Step dedupSimpleKeysISBNStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":prepareTempCnbTableStep") Step prepareTempCnbTableStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":dedupSimpleKeysCnbStep") Step dedupSimpleKeysCnbStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":prepareTempEanTableStep") Step prepareTempEanTableStep,
@@ -188,7 +196,7 @@ public class DedupRecordsJobConfig {
 			@Qualifier(Constants.JOB_ID_DEDUP + ":prepareTempPublisherNumberTableStep") Step prepareTempPublisherNumberTableStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":dedupSimpleKeysPublisherNumberStep") Step dedupSimpleKeysPublisherNumberStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":prepareTmpTitleAuthStep") Step prepareTmpTitleAuthStep,
-			@Qualifier(Constants.JOB_ID_DEDUP + ":dedupTitleAuthStep") Step dedupTitleAuthStep,
+			@Qualifier(Constants.JOB_ID_DEDUP + ":dedupTitleAuthPartitionedStep") Step dedupTitleAuthStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":prepareTempCnbClustersTableStep") Step prepareTempCnbClustersTableStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":dedupCnbClustersStep") Step dedupCnbClustersStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":prepareTempOclcClustersTableStep") Step prepareTempOclcClustersTableStep,
@@ -196,7 +204,7 @@ public class DedupRecordsJobConfig {
 			@Qualifier(Constants.JOB_ID_DEDUP + ":prepareTempUuidClustersTableStep") Step prepareTempUuidClustersTableStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":dedupUuidClustersStep") Step dedupUuidClustersStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":prepareTempSkatKeysRestStep") Step prepareTempSkatKeysRestStep,
-			@Qualifier(Constants.JOB_ID_DEDUP + ":dedupSimpleKeysSkatRestStep") Step dedupSimpleKeysSkatRestStep,
+			@Qualifier(Constants.JOB_ID_DEDUP + ":dedupSimpleKeysSkatRestPartitionedStep") Step dedupSimpleKeysSkatRestStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":prepareDedupSimmilarityTableStep") Step prepareDedupSimmilarityTableStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":prepareDedupSimmilarTitlesStep") Step prepareDedupSimmilarTitles,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":processSimilaritesResultsStep") Step processSimilaritesResultsStep,
@@ -346,7 +354,7 @@ public class DedupRecordsJobConfig {
 	@Bean(name = "dedupClusterId:reader")
 	@StepScope
 	public ItemReader<List<Long>> dedupClusterIdReader() throws Exception {
-		return dedupSimpleKeysReader(TMP_TABLE_CLUSTER);
+		return dedupSimpleKeysReader(TMP_TABLE_CLUSTER, INTEGER_OVERRIDEN_BY_EXPRESSION);
 	}
 
 	/**
@@ -382,7 +390,7 @@ public class DedupRecordsJobConfig {
 	@Bean(name = "dedupSimpleKeysSkatManuallyMergedStep:reader")
 	@StepScope
 	public ItemReader<List<Long>> dedupSimpleKeysSkatManuallyMergedReader() throws Exception {
-		return dedupSimpleKeysReader(TMP_TABLE_SKAT_KEYS_MANUALLY_MERGED);
+		return dedupSimpleKeysReader(TMP_TABLE_SKAT_KEYS_MANUALLY_MERGED, INTEGER_OVERRIDEN_BY_EXPRESSION);
 	}
 
 	/**
@@ -414,7 +422,7 @@ public class DedupRecordsJobConfig {
 	@Bean(name = "dedupSimpleKeysSfxIdStep:reader")
 	@StepScope
 	public ItemReader<List<Long>> dedupSimpleKeysSfxIdReader() throws Exception {
-		return dedupSimpleKeysReader(TMP_TABLE_SFX_ID);
+		return dedupSimpleKeysReader(TMP_TABLE_SFX_ID, INTEGER_OVERRIDEN_BY_EXPRESSION);
 	}
 
 	/**
@@ -439,15 +447,30 @@ public class DedupRecordsJobConfig {
 		return steps.get("dedupSimpleKeysIsbnStep")
 				.listener(new StepProgressListener())
 				.<List<Long>, List<HarvestedRecord>> chunk(100)
-				.reader(dedupSimpleKeysIsbnReader())
+				.faultTolerant()
+				.keyGenerator(KeyGeneratorForList.INSTANCE)
+				.retry(LockAcquisitionException.class)
+				.retryLimit(10000)
+				.reader(dedupSimpleKeysIsbnReader(INTEGER_OVERRIDEN_BY_EXPRESSION))
 				.processor(dedupSimpleKeysStepProsessor())
-				.writer(dedupSimpleKeysStepWriter()).build();
+				.writer(dedupSimpleKeysStepWriter())
+				.build();
 	}
 
-	@Bean(name = "dedupSimpleKeysIsbnStep:reader")
+	@Bean(name = Constants.JOB_ID_DEDUP + ":dedupSimpleKeysIsbnPartitionedStep")
+	public Step dedupSimpleKeysIsbnPartitionedStep() throws Exception {
+		return steps.get("dedupSimpleKeysIsbnPartitionedStep")
+				.partitioner("dedupSimpleKeysIsbnPartitionedStepSlave", this.partioner()) //
+				.taskExecutor(this.taskExecutor)
+				.gridSize(this.partitionThreads)
+				.step(dedupSimpleKeysIsbnStep())
+				.build();
+	}
+
+	@Bean(name = Constants.JOB_ID_DEDUP + ":dedupSimpleKeysIsbnStepReader")
 	@StepScope
-	public ItemReader<List<Long>> dedupSimpleKeysIsbnReader() throws Exception {
-		return dedupSimpleKeysReader(TMP_TABLE_ISBN);
+	public ItemReader<List<Long>> dedupSimpleKeysIsbnReader(@Value("#{stepExecutionContext[modulo]}") Integer modulo) throws Exception {
+		return dedupSimpleKeysReader(TMP_TABLE_ISBN, modulo);
 	}
 
 	/**
@@ -482,7 +505,7 @@ public class DedupRecordsJobConfig {
 	@Bean(name = "dedupSimpleKeysCnbStep:reader")
 	@StepScope
 	public ItemReader<List<Long>> dedupSimpleKeysCnbReader() throws Exception {
-		return dedupSimpleKeysReader(TMP_TABLE_CNB);
+		return dedupSimpleKeysReader(TMP_TABLE_CNB, INTEGER_OVERRIDEN_BY_EXPRESSION);
 	}
 
 	/**
@@ -515,7 +538,7 @@ public class DedupRecordsJobConfig {
 	@Bean(name = "dedupSimpleKeysEanStep:reader")
 	@StepScope
 	public ItemReader<List<Long>> dedupSimpleKeysEanReader() throws Exception {
-		return dedupSimpleKeysReader(TMP_TABLE_EAN);
+		return dedupSimpleKeysReader(TMP_TABLE_EAN, INTEGER_OVERRIDEN_BY_EXPRESSION);
 	}
 
 	/**
@@ -548,7 +571,7 @@ public class DedupRecordsJobConfig {
 	@Bean(name = "dedupSimpleKeysBlindAudioStep:reader")
 	@StepScope
 	public ItemReader<List<Long>> dedupSimpleKeysBlindAudioReader() throws Exception {
-		return dedupSimpleKeysReader(TMP_TABLE_BLIND_AUDIO);
+		return dedupSimpleKeysReader(TMP_TABLE_BLIND_AUDIO, INTEGER_OVERRIDEN_BY_EXPRESSION);
 	}
 
 	/**
@@ -581,7 +604,7 @@ public class DedupRecordsJobConfig {
 	@Bean(name = "dedupSimpleKeysPublisherNumberStep:reader")
 	@StepScope
 	public ItemReader<List<Long>> dedupSimpleKeysPublisherNumberReader() throws Exception {
-		return dedupSimpleKeysReader(TMP_TABLE_PUBLISHER_NUMBER);
+		return dedupSimpleKeysReader(TMP_TABLE_PUBLISHER_NUMBER, INTEGER_OVERRIDEN_BY_EXPRESSION);
 	}
 	
 	/**
@@ -614,7 +637,7 @@ public class DedupRecordsJobConfig {
 	@Bean(name = "dedupSimpleKeysArticlesXGStep:reader")
 	@StepScope
 	public ItemReader<List<Long>> dedupSimpleKeysArticlesXGReader() throws Exception {
-		return dedupSimpleKeysReader(TMP_TABLE_ARTICLES_XG);
+		return dedupSimpleKeysReader(TMP_TABLE_ARTICLES_XG, INTEGER_OVERRIDEN_BY_EXPRESSION);
 	}
 
 	/**
@@ -647,7 +670,7 @@ public class DedupRecordsJobConfig {
 	@Bean(name = "dedupSimpleKeysArticlesTGStep:reader")
 	@StepScope
 	public ItemReader<List<Long>> dedupSimpleKeysArticlesTGReader() throws Exception {
-		return dedupSimpleKeysReader(TMP_TABLE_ARTICLES_TG);
+		return dedupSimpleKeysReader(TMP_TABLE_ARTICLES_TG, INTEGER_OVERRIDEN_BY_EXPRESSION);
 	}
 
 	@Bean(name = "dedupArticlesTGProcessor")
@@ -679,15 +702,29 @@ public class DedupRecordsJobConfig {
 		return steps.get("dedupTitleAuthStep")
 				.listener(new StepProgressListener())
 				.<List<Long>, List<HarvestedRecord>> chunk(100)
-				.reader(dedupTitleAuthReader())
+				.faultTolerant()
+				.keyGenerator(KeyGeneratorForList.INSTANCE)
+				.retry(LockAcquisitionException.class)
+				.retryLimit(10000)
+				.reader(dedupTitleAuthReader(INTEGER_OVERRIDEN_BY_EXPRESSION))
 				.processor(dedupTitleAuthProcessor())
 				.writer(dedupSimpleKeysStepWriter()).build();
 	}
 
-	@Bean(name = "dedupTitleAuth:reader")
+	@Bean(name = Constants.JOB_ID_DEDUP + ":dedupTitleAuthPartitionedStep")
+	public Step dedupTitleAuthPartitionedStep() throws Exception {
+		return steps.get("dedupTitleAuthPartitionedStep")
+				.partitioner("slave", this.partioner()) //
+				.gridSize(this.partitionThreads)
+				.taskExecutor(this.taskExecutor)
+				.step(dedupTitleAuthStep())
+				.build();
+	}
+
+	@Bean(name = Constants.JOB_ID_DEDUP + ":dedupTitleAuthReader")
 	@StepScope
-	public ItemReader<List<Long>> dedupTitleAuthReader() throws Exception {
-		return dedupSimpleKeysReader(TMP_TABLE_AUTH_TITLE);
+	public ItemReader<List<Long>> dedupTitleAuthReader(@Value("#{stepExecutionContext[modulo]}") Integer modulo) throws Exception {
+		return dedupSimpleKeysReader(TMP_TABLE_AUTH_TITLE, modulo);
 	}
 
 	@Bean(name = "dedupTitleAuthStep:processor")
@@ -730,7 +767,7 @@ public class DedupRecordsJobConfig {
 	@Bean(name = "dedupCnbClustersStep:reader")
 	@StepScope
 	public ItemReader<List<Long>> dedupCnbClustersReader() throws Exception {
-		return dedupSimpleKeysReader(TMP_TABLE_CNB_CLUSTERS);
+		return dedupSimpleKeysReader(TMP_TABLE_CNB_CLUSTERS, INTEGER_OVERRIDEN_BY_EXPRESSION);
 	}
 
 	@Bean(name = Constants.JOB_ID_DEDUP + ":dedupCnbClustersStep")
@@ -764,7 +801,7 @@ public class DedupRecordsJobConfig {
 	@Bean(name = "dedupOclcClustersStep:reader")
 	@StepScope
 	public ItemReader<List<Long>> dedupOclcClustersReader() throws Exception {
-		return dedupSimpleKeysReader(TMP_TABLE_OCLC_CLUSTERS);
+		return dedupSimpleKeysReader(TMP_TABLE_OCLC_CLUSTERS, INTEGER_OVERRIDEN_BY_EXPRESSION);
 	}
 
 	@Bean(name = Constants.JOB_ID_DEDUP + ":dedupOclcClustersStep")
@@ -798,7 +835,7 @@ public class DedupRecordsJobConfig {
 	@Bean(name = "dedupUuidClustersStep:reader")
 	@StepScope
 	public ItemReader<List<Long>> dedupUuidClustersReader() throws Exception {
-		return dedupSimpleKeysReader(TMP_TABLE_UUID_CLUSTERS);
+		return dedupSimpleKeysReader(TMP_TABLE_UUID_CLUSTERS, INTEGER_OVERRIDEN_BY_EXPRESSION);
 	}
 	
 	@Bean(name = Constants.JOB_ID_DEDUP + ":dedupUuidClustersStep")
@@ -822,7 +859,7 @@ public class DedupRecordsJobConfig {
 	public Tasklet prepareTempSkatKeysRestTasklet() {
 		return new SqlCommandTasklet(prepareTempSkatKeysRest);
 	}
-		
+
 	@Bean(name = Constants.JOB_ID_DEDUP + ":prepareTempSkatKeysRestStep")
 	public Step prepareTempSkatKeysRestStep() {
 		return steps.get("prepareTempSkatKeysRestStep")
@@ -830,24 +867,38 @@ public class DedupRecordsJobConfig {
 				.listener(new StepProgressListener())
 				.build();
 	}
-		
+
 	@Bean(name = Constants.JOB_ID_DEDUP + ":dedupSimpleKeysSkatRestStep")
 	public Step dedupSimpleKeysSkatRestStep() throws Exception {
 		return steps.get("dedupSimpleKeysSkatRestStep")
 				.listener(new StepProgressListener())
 				.<List<Long>, List<HarvestedRecord>> chunk(100)
-				.reader(dedupSimpleKeysSkatRestReader())
+				.faultTolerant()
+				.keyGenerator(KeyGeneratorForList.INSTANCE)
+				.retry(LockAcquisitionException.class)
+				.retryLimit(10000)
+				.reader(dedupSimpleKeysSkatRestReader(INTEGER_OVERRIDEN_BY_EXPRESSION))
 				.processor(dedupSkatKeysProcessor())
 				.writer(dedupSimpleKeysStepWriter())
 				.build();
 	}
-		
+
+	@Bean(name = Constants.JOB_ID_DEDUP + ":dedupSimpleKeysSkatRestPartitionedStep")
+	public Step dedupSimpleKeysSkatRestPartitionedStep() throws Exception {
+		return steps.get("dedupSimpleKeysSkatRestPartitionedStep")
+				.partitioner("slave", this.partioner()) //
+				.gridSize(this.partitionThreads)
+				.taskExecutor(this.taskExecutor)
+				.step(dedupSimpleKeysSkatRestStep())
+				.build();
+	}
+
 	@Bean(name = "dedupSimpleKeysSkatRestStep:reader")
 	@StepScope
-	public ItemReader<List<Long>> dedupSimpleKeysSkatRestReader() throws Exception {
-		return dedupSimpleKeysReader(TMP_TABLE_SKAT_KEYS_REST);
-	}	
-	
+	public ItemReader<List<Long>> dedupSimpleKeysSkatRestReader(@Value("#{stepExecutionContext[modulo]}") Integer modulo) throws Exception {
+		return dedupSimpleKeysReader(TMP_TABLE_SKAT_KEYS_REST, modulo);
+	}
+
 	/**
 	 * Prepare title similarities deduplication
 	 */
@@ -903,7 +954,6 @@ public class DedupRecordsJobConfig {
 		writer.setDelegate(simpleSimmilarityWriter());
 		writer.afterPropertiesSet();
 		return writer;
-	
 	}
 	
 	@Bean(name="prepareDedupSimmilarTitlesStep:simpleSimmilarityWriter")
@@ -920,7 +970,7 @@ public class DedupRecordsJobConfig {
 		return steps.get("processSimilaritesResultsStep")
 				.listener(new StepProgressListener())
 				.<List<Long>, List<HarvestedRecord>> chunk(100)
-				.reader(dedupSimpleKeysReader(TMP_TABLE_SIMILARITY_IDS))
+				.reader(dedupSimpleKeysReader(TMP_TABLE_SIMILARITY_IDS, INTEGER_OVERRIDEN_BY_EXPRESSION))
 				.processor(dedupSimpleKeysStepProsessor())
 				.writer(dedupSimpleKeysStepWriter())
 				.build();
@@ -946,7 +996,7 @@ public class DedupRecordsJobConfig {
 	@Bean(name = "dedupIsmnClustersStep:reader")
 	@StepScope
 	public ItemReader<List<Long>> dedupIsmnClustersReader() throws Exception {
-		return dedupSimpleKeysReader(TMP_TABLE_ISMN_CLUSTERS);
+		return dedupSimpleKeysReader(TMP_TABLE_ISMN_CLUSTERS, INTEGER_OVERRIDEN_BY_EXPRESSION);
 	}
 
 	@Bean(name = Constants.JOB_ID_DEDUP + ":dedupIsmnClustersStep")
@@ -959,7 +1009,7 @@ public class DedupRecordsJobConfig {
 				.writer(dedupSimpleKeysStepWriter())
 				.build();
 	}
-	
+
 	/**
 	 * Deduplicate periodicals using ISSN and title
 	 */
@@ -981,7 +1031,7 @@ public class DedupRecordsJobConfig {
 	@Bean(name = "dedupPeriodicalsIssnStep:reader")
 	@StepScope
 	public ItemReader<List<Long>> dedupPeriodicalsIssnReader() throws Exception {
-		return dedupSimpleKeysReader(TMP_TABLE_PERIODICALS_ISSN);
+		return dedupSimpleKeysReader(TMP_TABLE_PERIODICALS_ISSN, INTEGER_OVERRIDEN_BY_EXPRESSION);
 	}
 	
 	@Bean(name = "dedupPeriodicalsIssnStep:processor")
@@ -1022,7 +1072,7 @@ public class DedupRecordsJobConfig {
 	@Bean(name = "dedupPeriodicalsCnbStep:reader")
 	@StepScope
 	public ItemReader<List<Long>> dedupPeriodicalsCnbReader() throws Exception {
-		return dedupSimpleKeysReader(TMP_TABLE_PERIODICALS_CNB);
+		return dedupSimpleKeysReader(TMP_TABLE_PERIODICALS_CNB, INTEGER_OVERRIDEN_BY_EXPRESSION);
 	}
 	
 	@Bean(name = "dedupPeriodicalsCnbStep:processor")
@@ -1063,7 +1113,7 @@ public class DedupRecordsJobConfig {
 	@Bean(name = "dedupPeriodicalsCnbClustersStep:reader")
 	@StepScope
 	public ItemReader<List<Long>> dedupPeriodicalsCnbClustersStepReader() throws Exception {
-		return dedupSimpleKeysReader(TMP_TABLE_PERIODICALS_CNB_CLUSTERS);
+		return dedupSimpleKeysReader(TMP_TABLE_PERIODICALS_CNB_CLUSTERS, INTEGER_OVERRIDEN_BY_EXPRESSION);
 	}
 
 	@Bean(name = Constants.JOB_ID_DEDUP + ":dedupPeriodicalsCnbClustersStep")
@@ -1098,7 +1148,7 @@ public class DedupRecordsJobConfig {
 	@Bean(name = "dedupPeriodicalsIssnClustersStep:reader")
 	@StepScope
 	public ItemReader<List<Long>> dedupPeriodicalsIssnClustersStepReader() throws Exception {
-		return dedupSimpleKeysReader(TMP_TABLE_PERIODICALS_ISSN_CLUSTERS);
+		return dedupSimpleKeysReader(TMP_TABLE_PERIODICALS_ISSN_CLUSTERS, INTEGER_OVERRIDEN_BY_EXPRESSION);
 	}
 
 	@Bean(name = Constants.JOB_ID_DEDUP + ":dedupPeriodicalsIssnClustersStep")
@@ -1133,7 +1183,7 @@ public class DedupRecordsJobConfig {
 	@Bean(name = "dedupPeriodicalsOclcClustersStep:reader")
 	@StepScope
 	public ItemReader<List<Long>> dedupPeriodicalsOclcClustersStepReader() throws Exception {
-		return dedupSimpleKeysReader(TMP_TABLE_PERIODICALS_OCLC_CLUSTERS);
+		return dedupSimpleKeysReader(TMP_TABLE_PERIODICALS_OCLC_CLUSTERS, INTEGER_OVERRIDEN_BY_EXPRESSION);
 	}
 
 	@Bean(name = Constants.JOB_ID_DEDUP + ":dedupPeriodicalsOclcClustersStep")
@@ -1219,7 +1269,7 @@ public class DedupRecordsJobConfig {
 		return steps.get("processPeriodicalsSimilaritesResultsStep")
 				.listener(new StepProgressListener())
 				.<List<Long>, List<HarvestedRecord>> chunk(50)
-				.reader(dedupSimpleKeysReader(TMP_TABLE_PERIODICALS_SIMILARITY_IDS))
+				.reader(dedupSimpleKeysReader(TMP_TABLE_PERIODICALS_SIMILARITY_IDS, INTEGER_OVERRIDEN_BY_EXPRESSION))
 				.processor(dedupPeriodicalsSimilaritesResultsSteprocessor())
 				.writer(dedupSimpleKeysStepWriter())
 				.build();
@@ -1253,13 +1303,11 @@ public class DedupRecordsJobConfig {
 		return steps.get("dedupPeriodicalsSfxStep")
 				.listener(new StepProgressListener())
 				.<List<Long>, List<HarvestedRecord>> chunk(50)
-				.reader(dedupSimpleKeysReader(TMP_TABLE_PERIODICALS_SFX))
+				.reader(dedupSimpleKeysReader(TMP_TABLE_PERIODICALS_SFX, INTEGER_OVERRIDEN_BY_EXPRESSION))
 				.processor(dedupSimpleKeysStepProsessor())
 				.writer(dedupSimpleKeysStepWriter())
 				.build();
 	}
-	
-	
 
 	/**
 	 * Cleanup
@@ -1271,7 +1319,7 @@ public class DedupRecordsJobConfig {
 				.listener(new StepProgressListener())
 				.build();
 	}
-	
+
 	@Bean(name = "cleanupStap:cleanupTasklet")
 	@StepScope
 	public Tasklet cleanupTasklet() {
@@ -1280,23 +1328,33 @@ public class DedupRecordsJobConfig {
 
 	/**
 	 * Generic components
-	*/
-	public ItemReader<List<Long>> dedupSimpleKeysReader(String tablename)
+	 */
+	@StepScope
+	public ItemReader<List<Long>> dedupSimpleKeysReader(String tablename, @Value("#{stepExecutionContext[modulo]}") Integer modulo)
 			throws Exception {
 		JdbcPagingItemReader<List<Long>> reader = new JdbcPagingItemReader<>();
 		SqlPagingQueryProviderFactoryBean pqpf = new SqlPagingQueryProviderFactoryBean();
 		pqpf.setDataSource(dataSource);
-		pqpf.setSelectClause("SELECT row_id,id_array");
+		pqpf.setSelectClause("SELECT row_id, id_array");
 		pqpf.setFromClause("FROM " + tablename);
+		if (modulo != null) {
+			pqpf.setWhereClause("WHERE row_id % :threads = :modulo");
+		}
 		pqpf.setSortKey("row_id");
 		reader.setRowMapper(new ArrayLongMapper());
 		reader.setPageSize(100);
 		reader.setQueryProvider(pqpf.getObject());
 		reader.setDataSource(dataSource);
+		if (modulo != null) {
+			Map<String, Object> parameterValues = new HashMap<String, Object>();
+			parameterValues.put("threads", this.partitionThreads);
+			parameterValues.put("modulo", modulo);
+			reader.setParameterValues(parameterValues);
+		}
 		reader.afterPropertiesSet();
 		return reader;
 	}
-	
+
 	@Bean(name = "dedupSimpleKeys:processor")
 	@StepScope
 	public ItemProcessor<List<Long>, List<HarvestedRecord>> dedupSimpleKeysStepProsessor() {
@@ -1309,8 +1367,7 @@ public class DedupRecordsJobConfig {
 			throws Exception {
 		return new DedupSimpleKeysStepWriter();
 	}
-	
-	
+
 	/**
 	 * general processor for deduplication of clusters based on identifier (ISBN,ISSN,CNB,OCLC,ISMN)
 	 */
@@ -1339,20 +1396,26 @@ public class DedupRecordsJobConfig {
 		return new DedupSkatKeysProcessor();
 	}
 
+	@Bean(name=Constants.JOB_ID_DEDUP + ":dedupSimpleKeysPartioner")
+	@StepScope
+	public IntegerModuloPartitioner partioner() {
+		return new IntegerModuloPartitioner();
+	}
+
 	public class ArrayLongMapper implements RowMapper<List<Long>> {
 
 		@Override
-		public List<Long> mapRow(ResultSet arg0, int arg1) throws SQLException {
-			List<Long> hrs = new ArrayList<>();
-
-			String ids = arg0.getString("id_array");
-			for (String idStr : ids.split(",")) {
+		public List<Long> mapRow(ResultSet rs, int rowNum) throws SQLException {
+			String ids = rs.getString("id_array");
+			String[] idStrs = ids.split(",");
+			List<Long> hrs = new ArrayList<>(idStrs.length);
+			for (String idStr : idStrs) {
 				Long hrId = Long.valueOf(idStr);
 				hrs.add(hrId);
 			}
-
 			return hrs;
 		}
+
 	}
 
 }
