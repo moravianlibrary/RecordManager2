@@ -1,17 +1,11 @@
 package cz.mzk.recordmanager.server.kramerius.harvest;
 
-import static org.easymock.EasyMock.and;
-import static org.easymock.EasyMock.anyObject;
-import static org.easymock.EasyMock.capture;
-import static org.easymock.EasyMock.eq;
-import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.replay;
-import static org.easymock.EasyMock.reset;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.List;
-
+import cz.mzk.recordmanager.server.AbstractTest;
+import cz.mzk.recordmanager.server.model.HarvestedRecord;
+import cz.mzk.recordmanager.server.solr.SolrServerFacade;
+import cz.mzk.recordmanager.server.solr.SolrServerFactory;
+import cz.mzk.recordmanager.server.solr.SolrServerFactoryImpl.Mode;
+import cz.mzk.recordmanager.server.util.HttpClient;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.QueryResponse;
@@ -23,12 +17,11 @@ import org.easymock.EasyMock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.Assert;
 
-import cz.mzk.recordmanager.server.AbstractTest;
-import cz.mzk.recordmanager.server.model.HarvestedRecord;
-import cz.mzk.recordmanager.server.solr.SolrServerFacade;
-import cz.mzk.recordmanager.server.solr.SolrServerFactory;
-import cz.mzk.recordmanager.server.solr.SolrServerFactoryImpl.Mode;
-import cz.mzk.recordmanager.server.util.HttpClient;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.List;
+
+import static org.easymock.EasyMock.*;
 
 public class AbstractKrameriusTest extends AbstractTest {
 

@@ -33,6 +33,8 @@ public class UrlEnricherTest extends AbstractTest {
 	private static final String MZKKRAM_PROT_URL = "MZK-KRAM|protected|http://kramerius.mzk.cz/search/i.jsp?pid=uuid:df686290-a590-11e2-8b87-005056827e51|";
 	private static final String MZKKRAM_UNKN_URL = "MZK|unknown|http://kramerius.mzk.cz/search/handle/uuid:df686290-a590-11e2-8b87-005056827e51|";
 
+	private static final String TOC_NKP = "toc.nkp.cz";
+
 	@Test
 	public void notDuplicitUrlTest() {
 		DedupRecord dr = new DedupRecord();
@@ -41,6 +43,7 @@ public class UrlEnricherTest extends AbstractTest {
 		local.add(EnricherUtils.createDocument(SolrFieldConstants.URL, MZK_ONLINE_MZK_URL));
 		local.add(EnricherUtils.createDocument(SolrFieldConstants.URL, MZK_UNKNOWN_TRE_URL));
 		local.add(EnricherUtils.createDocument(SolrFieldConstants.URL, MZK_PROTECTED_BRNO_URL));
+		local.add(EnricherUtils.createDocument(SolrFieldConstants.URL, TOC_NKP));
 
 		List<String> result = new ArrayList<>();
 		result.add(MZK_ONLINE_MZK_URL);

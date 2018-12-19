@@ -1,8 +1,10 @@
 package cz.mzk.recordmanager.server;
 
 import javax.sql.DataSource;
+import javax.xml.transform.TransformerConfigurationException;
 
 import cz.mzk.recordmanager.server.scripting.*;
+import cz.mzk.recordmanager.server.util.MODSTransformer;
 import liquibase.exception.LiquibaseException;
 import liquibase.integration.spring.SpringLiquibase;
 
@@ -51,6 +53,8 @@ import cz.mzk.recordmanager.server.solr.SolrServerFactoryImpl;
 import cz.mzk.recordmanager.server.util.ApacheHttpClient;
 import cz.mzk.recordmanager.server.util.HibernateSessionSynchronizer;
 import cz.mzk.recordmanager.server.util.HttpClient;
+
+import java.io.IOException;
 
 @Configuration
 @EnableBatchProcessing(modular = true)
@@ -237,6 +241,11 @@ public class AppConfig extends DefaultBatchConfigurer {
 	@Bean
 	public Translator translator(){
 		return new Translator();
+	}
+
+	@Bean
+	public MODSTransformer modsTransformer() throws TransformerConfigurationException, IOException {
+		return new MODSTransformer();
 	}
 
 }

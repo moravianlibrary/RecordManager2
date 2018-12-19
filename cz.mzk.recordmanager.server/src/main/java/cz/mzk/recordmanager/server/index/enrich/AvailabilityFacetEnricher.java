@@ -19,6 +19,8 @@ public class AvailabilityFacetEnricher implements DedupRecordEnricher {
 			Constants.DOCUMENT_AVAILABILITY_ONLINE, Constants.DOCUMENT_AVAILABILITY_ONLINE);
 	private static final List<String> ONLINE_UNKNOWN_STATUSES = SolrUtils.createHierarchicFacetValues(
 			Constants.DOCUMENT_AVAILABILITY_ONLINE, Constants.DOCUMENT_AVAILABILITY_UNKNOWN);
+	private static final List<String> PROTECTED_STATUSES = SolrUtils.createHierarchicFacetValues(
+			Constants.DOCUMENT_AVAILABILITY_ONLINE, Constants.DOCUMENT_AVAILABILITY_PROTECTED);
 
 	/**
 	 * if any local document contains status online/online or online/unknown
@@ -36,6 +38,8 @@ public class AvailabilityFacetEnricher implements DedupRecordEnricher {
 			enrichingStatuses.addAll(ONLINE_STATUSES);
 		if (localRecords.stream().anyMatch(AvailabilityFacetEnricher::isOnlineUnknown))
 			enrichingStatuses.addAll(ONLINE_UNKNOWN_STATUSES);
+		if (localRecords.stream().anyMatch(AvailabilityFacetEnricher::isProtected))
+			enrichingStatuses.addAll(PROTECTED_STATUSES);
 		if (!enrichingStatuses.isEmpty()) {
 			for (SolrInputDocument localRecord : localRecords) {
 				Set<Object> statuses = new HashSet<>();
@@ -61,13 +65,13 @@ public class AvailabilityFacetEnricher implements DedupRecordEnricher {
 		for (Object status : statuses) {
 			if (ONLINE_STATUSES.get(1).equals(status)) return true;
 		}
-		// contains online URL?
+		// contains public URL?
 		Collection<Object> urls = doc.getFieldValues(SolrFieldConstants.URL);
 		if (urls == null) {
 			return false;
 		}
 		for (Object url : urls) {
-			if (((String) url).startsWith(Constants.DOCUMENT_AVAILABILITY_ONLINE)) return true;
+			if (((String) url).contains(Constants.DOCUMENT_AVAILABILITY_ONLINE)) return true;
 		}
 		return false;
 	}
@@ -82,6 +86,20 @@ public class AvailabilityFacetEnricher implements DedupRecordEnricher {
 		if (statuses == null) return false;
 		for (Object status : statuses) {
 			if (ONLINE_UNKNOWN_STATUSES.get(1).equals(status)) return true;
+		}
+		return false;
+	}
+
+	/**
+	 * @param doc {@link SolrInputDocument}
+	 * @return true if contains "protected" in solr field for url
+	 */
+	private static boolean isProtected(final SolrInputDocument doc) {
+		// contains protected URL?
+		Collection<Object> urls = doc.getFieldValues(SolrFieldConstants.URL);
+		if (urls == null) return false;
+		for (Object url : urls) {
+			if (((String) url).contains(Constants.DOCUMENT_AVAILABILITY_PROTECTED)) return true;
 		}
 		return false;
 	}

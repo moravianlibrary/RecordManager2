@@ -1,0 +1,12 @@
+cat 2
+cat 4
+cat 6
+cat 10
+cat 12
+cat 13
+cat 14
+cat 19
+cat 23
+cat 24
+subcat 16
+subcat 71

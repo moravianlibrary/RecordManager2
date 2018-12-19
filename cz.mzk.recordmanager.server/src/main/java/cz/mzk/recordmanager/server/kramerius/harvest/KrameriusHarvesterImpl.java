@@ -6,6 +6,7 @@ import cz.mzk.recordmanager.server.solr.SolrServerFacade;
 import cz.mzk.recordmanager.server.solr.SolrServerFactory;
 import cz.mzk.recordmanager.server.solr.SolrServerFactoryImpl;
 import cz.mzk.recordmanager.server.util.HttpClient;
+import cz.mzk.recordmanager.server.util.MODSTransformer;
 import cz.mzk.recordmanager.server.util.SolrUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.solr.client.solrj.SolrQuery;
@@ -16,6 +17,7 @@ import org.apache.solr.common.SolrDocumentList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.xml.transform.TransformerException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -68,10 +70,12 @@ public abstract class KrameriusHarvesterImpl implements KrameriusHarvester {
 				is.mark(Integer.MAX_VALUE);
 				is.reset();
 			}
-			unparsedHr.setRawRecord(IOUtils.toByteArray(is));
+			unparsedHr.setRawRecord(parseRawData(is));
 		} catch (IOException ioe) {
 			LOGGER.error(ioe.getMessage());
 			throw new IOException("Harvesting record from: " + url + " caused IOException!");
+		} catch (TransformerException e) {
+			e.printStackTrace();
 		}
 		return unparsedHr;
 	}
@@ -130,6 +134,15 @@ public abstract class KrameriusHarvesterImpl implements KrameriusHarvester {
 		query.setRows((params.getQueryRows() != null) ? params.getQueryRows().intValue() : 10);
 		query.setTimeAllowed(MAX_TIME_ALLOWED);
 		return query;
+	}
+
+	private byte[] parseRawData(InputStream is) throws TransformerException, IOException {
+		switch (params.getMetadataStream()) {
+		case "BIBLIO_MODS":
+			return new MODSTransformer().transform(is).toByteArray();
+		default:
+			return IOUtils.toByteArray(is);
+		}
 	}
 
 }

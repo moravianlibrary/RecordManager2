@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import cz.mzk.recordmanager.server.oai.dao.DomainDAO;
@@ -33,6 +34,14 @@ public class AbstractDomainDAOHibernate<ID extends Serializable, T> implements D
 	@Override
 	public List<T> findAll() {
 		Criteria crit = sessionFactory.getCurrentSession().createCriteria(persistenceClass);
+		return (List<T>) crit.list();
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<T> findByIds(List<ID> ids) {
+		Criteria crit = sessionFactory.getCurrentSession().createCriteria(persistenceClass);
+		crit.add(Restrictions.in("id", ids));
 		return (List<T>) crit.list();
 	}
 

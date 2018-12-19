@@ -245,6 +245,15 @@ public interface MetadataRecord {
 	String getPolicyKramerius();
 
 	/**
+	 * get model from Kramerius
+	 *
+	 * @return String
+	 */
+	default String getModelKramerius() {
+		return "unknown";
+	}
+
+	/**
 	 * get stopwords file name
 	 *
 	 * @return String
@@ -369,4 +378,27 @@ public interface MetadataRecord {
 	default String getRegionalLibrary() {
 		return null;
 	}
+
+	/**
+	 * Decide whether this record should have subject facet
+	 *
+	 * @return true ot false
+	 */
+	default boolean subjectFacet() {
+		return true;
+	}
+
+	/**
+	 * Decide whether this record should have genre facet
+	 *
+	 * @return true ot false
+	 */
+	default boolean genreFacet() {
+		return true;
+	}
+
+	default List<String> getConspectusForView() {
+		return Collections.emptyList();
+	}
+
 }

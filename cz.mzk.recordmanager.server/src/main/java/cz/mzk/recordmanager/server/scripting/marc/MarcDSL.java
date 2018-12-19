@@ -306,9 +306,10 @@ public class MarcDSL extends BaseDSL {
 	}
 
 	public Set<String> getSubject(String tags) throws IOException {
+		if (!metadataRecord.subjectFacet()) return Collections.emptySet();
 		Set<String> subjects = new HashSet<>();
 
-		for (String subject : getFields(tags)) {
+		for (String subject : getFields(tags, SubfieldExtractionMethod.SEPARATED)) {
 			subjects.add(SolrUtils.toUpperCaseFirstChar(subject));
 		}
 
@@ -766,28 +767,12 @@ public class MarcDSL extends BaseDSL {
 		return results;
 	}
 
-	private static final String VIEW_FILE = "view/%s.txt";
-	private static final String VIEW_CASLIN_FILE = "view/%s_caslin.txt";
-
 	/**
 	 * @return {@link Set} of string values of {@link ViewType}
 	 */
 	public Set<String> getViewType() {
-		Set<String> results = new HashSet<>();
 		Long importConfId = context.harvestedRecord().getHarvestedFrom().getId();
-		Set<String> siglas = metadataRecord.getCaslinSiglas();
-		for (String type : ViewType.getPossibleValues(metadataRecord)) {
-			try {
-				if (contains(String.format(VIEW_FILE, type), importConfId.toString())) results.add(type);
-			} catch (IOException ignore) {
-			}
-			try {
-				if (!siglas.isEmpty() && containsAny(String.format(VIEW_CASLIN_FILE, type), siglas))
-					results.add(type);
-			} catch (IOException ignore) {
-			}
-		}
-		return results;
+		return new HashSet<>(ViewType.getPossibleValues(metadataRecord, listResolver, importConfId));
 	}
 
 	private static final String AUTH_PSEUDONYMS_NAME = "%s %s";
@@ -821,4 +806,8 @@ public class MarcDSL extends BaseDSL {
 		return context.metadataRecord().getOclcs().stream().map(Oclc::getOclcStr).collect(Collectors.toSet());
 	}
 
+	public Set<String> getGenreFacet(String tags) {
+		if (!metadataRecord.genreFacet()) return Collections.emptySet();
+		return new HashSet<>(getFields(tags));
+	}
 }

@@ -1,16 +1,15 @@
 package cz.mzk.recordmanager.server.kramerius.harvest;
 
-import java.io.IOException;
-import java.util.List;
-
+import cz.mzk.recordmanager.server.model.HarvestedRecord;
+import cz.mzk.recordmanager.server.solr.SolrServerFactory;
+import cz.mzk.recordmanager.server.util.HttpClient;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import cz.mzk.recordmanager.server.model.HarvestedRecord;
-import cz.mzk.recordmanager.server.solr.SolrServerFactory;
-import cz.mzk.recordmanager.server.util.HttpClient;
+import java.io.IOException;
+import java.util.List;
 
 public class KrameriusHarvesterNoSortingTest extends AbstractKrameriusTest {
 

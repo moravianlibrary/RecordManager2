@@ -5,6 +5,7 @@ import cz.mzk.recordmanager.server.model.HarvestedRecord.HarvestedRecordUniqueId
 import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordDAO;
 import cz.mzk.recordmanager.server.util.Constants;
 import org.hibernate.Criteria;
+import org.hibernate.FetchMode;
 import org.hibernate.NullPrecedence;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -19,6 +20,15 @@ import java.util.*;
 public class HarvestedRecordDAOHibernate extends
 		AbstractDomainDAOHibernate<Long, HarvestedRecord> implements
 		HarvestedRecordDAO {
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<HarvestedRecord> findByIdsWithDedupRecord(List<Long> ids) {
+		Criteria crit = sessionFactory.getCurrentSession().createCriteria(HarvestedRecord.class);
+		crit.add(Restrictions.in("id", ids));
+		crit.setFetchMode("dedupRecord", FetchMode.JOIN);
+		return (List<HarvestedRecord>) crit.list();
+	}
 
 	@Override
 	public HarvestedRecord findByIdAndHarvestConfiguration(String recordId,

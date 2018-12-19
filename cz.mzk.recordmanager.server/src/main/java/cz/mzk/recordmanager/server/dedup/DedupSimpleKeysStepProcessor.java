@@ -1,6 +1,5 @@
 package cz.mzk.recordmanager.server.dedup;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -29,36 +28,23 @@ import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordDAO;
 public class DedupSimpleKeysStepProcessor implements
 		ItemProcessor<List<Long>, List<HarvestedRecord>> {
 
+	private static Logger logger = LoggerFactory.getLogger(DedupSimpleKeysStepProcessor.class);
+
 	@Autowired
 	private HarvestedRecordDAO harvestedRecordDao;
 	
 	@Autowired
 	private DedupRecordDAO dedupRecordDAO;
 	
-	private static Logger logger = LoggerFactory.getLogger(DedupSimpleKeysStepProcessor.class);
-	
 	@Override
 	public List<HarvestedRecord> process(List<Long> idList) throws Exception {
-		List<HarvestedRecord> hrList = new ArrayList<>();
+		List<HarvestedRecord> hrList = harvestedRecordDao.findByIds(idList);
 		// count of DedupRecord in current batch
 		Multiset<DedupRecord> dedupMap = HashMultiset.create();
+		hrList.stream().filter(rec -> rec.getDedupRecord() != null).forEach(rec -> dedupMap.add(rec.getDedupRecord()));
 		// Map of records that shoul be updated after processing of batch
 		// used in merging two different DedupRecords into one
 		Map<DedupRecord, Set<DedupRecord>> updateDedupRecordsMap = new HashMap<>();
-		
-		
-		for(Long id: idList) {
-			HarvestedRecord currentHr = harvestedRecordDao.get(id);
-			if (currentHr == null) {
-				logger.warn("Missing record with id: " + id);
-				continue;
-			} 
-			DedupRecord currentDr = currentHr.getDedupRecord();
-			if (currentDr != null) {
-				dedupMap.add(currentDr);
-			}
-			hrList.add(currentHr);
-		}
 
 		for (int i = 0; i < hrList.size(); i++) {
 			HarvestedRecord outerRec = hrList.get(i);

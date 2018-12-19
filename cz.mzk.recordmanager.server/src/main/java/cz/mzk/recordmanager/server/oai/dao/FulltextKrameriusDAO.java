@@ -13,4 +13,6 @@ public interface FulltextKrameriusDAO extends DomainDAO<Long, FulltextKramerius>
 
 	int deleteFulltext(long hr_id);
 
+	String getPolicy(Long harvested_record_id);
+
 }

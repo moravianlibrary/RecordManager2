@@ -26,7 +26,7 @@ public abstract class BaseDSL {
 
 	private final StopWordsResolver stopWordsResolver;
 
-	private final ListResolver listResolver;
+	protected final ListResolver listResolver;
 
 	public BaseDSL(MappingResolver propertyResolver, StopWordsResolver stopWordsResolver, ListResolver listResolver) {
 		super();

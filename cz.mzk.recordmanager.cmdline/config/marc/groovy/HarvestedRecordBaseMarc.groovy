@@ -27,7 +27,7 @@ url = getUrls()
 local_statuses_facet_str_mv = getStatuses()
 subject_facet_str_mv = getSubject "600abcdfglnpqstyz:610abcdfgklnpstyz:611abcdefgklnpqstyz:630adfgklnpstyz:648a:650avyz:651avxyz:964abcdefg:967ab"
 subject_str_mv = getSubject "600abcdfglnpqstyz:610abcdfgklnpstyz:611abcefgklpqstyz:630adfgklnpstyz:648a:650avyz:651avxyz:964abcdefg:967ab"
-genre_facet_str_mv = getFields "655avxyz"
+genre_facet_str_mv = getGenreFacet "655avxyz"
 holdings_996_str_mv = getHoldings996()
 
 _hidden_viz_dummy_field = getAuthorityIds "auth.1007:1107:1117:6007:6107:6117:6487:6507:6517:6557:7007:7107:7117|mesh.650a:651a:655a|agrovoc.650a"
