@@ -28,7 +28,6 @@ public class ViewTypeTest extends AbstractTest {
 		data.add("072   $a00$91");
 		MarcRecordImpl mri = MarcRecordFactory.recordFactory(data);
 		MetadataRecord metadataRecord = metadataFactory.getMetadataRecord(mri);
-		System.out.println(ViewType.getPossibleValues(metadataRecord, resolver, 300L));
 		Assert.assertTrue(ViewType.getPossibleValues(metadataRecord, resolver, 300L).containsAll(
 				Arrays.asList(ViewType.IREL.getValue(), ViewType.KIV.getValue())));
 	}
