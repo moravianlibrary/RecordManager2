@@ -4,6 +4,8 @@ fullrecord = getFullrecord()
 
 title = getFirstField "150a"
 
+view_txt_mv = getViewType()
+
 english_display = getFirstField "750a"
 explanation_display = getFirstField "678a"
 relative_display_mv = getFields "550a"
@@ -15,3 +17,4 @@ url = getUrls()
 
 subject_facet_str_mv = subject_str_mv = Arrays.asList("Knihovnictví", "Informační věda")
 local_institution_facet_str_mv = getInstitutionFacet()
+institution_view_facet_str_mv = getInstitutionViewFacet()
