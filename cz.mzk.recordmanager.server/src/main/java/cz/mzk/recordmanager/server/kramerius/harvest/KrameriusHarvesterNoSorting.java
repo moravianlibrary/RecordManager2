@@ -21,7 +21,7 @@ public class KrameriusHarvesterNoSorting extends KrameriusHarvesterImpl {
 	private Integer start = 0;
 
 	public KrameriusHarvesterNoSorting(HttpClient httpClient, SolrServerFactory solrServerFactory,
-			KrameriusHarvesterParams parameters, Long harvestedFrom) {
+									   KrameriusHarvesterParams parameters, Long harvestedFrom) {
 		super(httpClient, solrServerFactory, parameters, harvestedFrom);
 	}
 

@@ -20,4 +20,6 @@ public class KrameriusSolrConstants {
 
 	public static final String PAGE_ORDER_FIELD = "title_sort";
 
+	public static final String POLICY_FIELD = "dostupnost";
+
 }

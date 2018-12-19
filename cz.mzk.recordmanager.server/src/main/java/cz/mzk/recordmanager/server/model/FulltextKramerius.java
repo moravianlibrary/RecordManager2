@@ -11,7 +11,10 @@ import javax.persistence.Table;
 public class FulltextKramerius extends AbstractDomainObject {
 
 	public static final String TABLE_NAME = "fulltext_kramerius";
-	
+
+	@Column(name = "harvested_record_id")
+	private Long harvestedRecordId;
+
 	@Column(name="uuid_page")
 	private String uuidPage;
 	

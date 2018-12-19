@@ -1,21 +1,8 @@
 package cz.mzk.recordmanager.server.kramerius.fulltext;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-import java.util.List;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.batch.core.ExitStatus;
-import org.springframework.batch.core.StepExecution;
-import org.springframework.batch.core.StepExecutionListener;
-import org.springframework.batch.item.ItemProcessor;
-import org.springframework.beans.factory.annotation.Autowired;
-
-import cz.mzk.recordmanager.server.dc.DublinCoreParser;
-import cz.mzk.recordmanager.server.dc.DublinCoreRecord;
 import cz.mzk.recordmanager.server.dc.InvalidDcException;
-import cz.mzk.recordmanager.server.metadata.MetadataDublinCoreRecord;
+import cz.mzk.recordmanager.server.metadata.MetadataRecord;
+import cz.mzk.recordmanager.server.metadata.MetadataRecordFactory;
 import cz.mzk.recordmanager.server.model.FulltextKramerius;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.model.KrameriusConfiguration;
@@ -24,6 +11,17 @@ import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordDAO;
 import cz.mzk.recordmanager.server.oai.dao.KrameriusConfigurationDAO;
 import cz.mzk.recordmanager.server.util.HibernateSessionSynchronizer;
 import cz.mzk.recordmanager.server.util.HibernateSessionSynchronizer.SessionBinder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.batch.core.ExitStatus;
+import org.springframework.batch.core.StepExecution;
+import org.springframework.batch.core.StepExecutionListener;
+import org.springframework.batch.item.ItemProcessor;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class KrameriusFulltextProcessor implements
 		ItemProcessor<HarvestedRecord, HarvestedRecord>, StepExecutionListener {
@@ -48,8 +46,9 @@ public class KrameriusFulltextProcessor implements
 	@Autowired
 	private HibernateSessionSynchronizer sync;
 
+
 	@Autowired
-	private DublinCoreParser parser;
+	private MetadataRecordFactory metadataRecordFactory;
 
 	// configuration
 	private Long confId;
@@ -90,15 +89,12 @@ public class KrameriusFulltextProcessor implements
 		// read complete HarvestedRecord using DAO
 		HarvestedRecord rec = recordDao.findByIdAndHarvestConfiguration(item
 				.getUniqueId().getRecordId(), confId);
-		
-		
-		InputStream is = new ByteArrayInputStream(rec.getRawRecord());
+		MetadataRecord mr;
 		// get Kramerius policy from record
 		try {
-			DublinCoreRecord dcRecord = parser.parseRecord(is);
-			MetadataDublinCoreRecord mdrc = new MetadataDublinCoreRecord(dcRecord);
-			policy = mdrc.getPolicyKramerius();
-			model = mdrc.getModelKramerius();
+			mr = metadataRecordFactory.getMetadataRecord(rec);
+			policy = mr.getPolicyKramerius();
+			model = mr.getModelKramerius();
 		} catch ( InvalidDcException e) {
 			logger.warn("InvalidDcException for record with id:" + item.getUniqueId());
 			logger.warn(e.getMessage());
@@ -111,17 +107,27 @@ public class KrameriusFulltextProcessor implements
 			logger.debug("Processor: privacy condition fulfilled, reading pages");
 
 			String rootUuid = rec.getUniqueId().getRecordId();
-			
-			List<FulltextKramerius> pages;
-			if (model.equals("periodical")) {
-				logger.info("Using (periodical) fultexter \"for root\" for uuid "+rootUuid+ '.');
-			    pages = fulltexter.getFulltextForRoot(rootUuid);	
-			} else {
-				logger.info("Using (monograph/default) fultexter \"for parent\" for uuid "+rootUuid+ '.');
-				 pages = fulltexter
-					.getFulltextObjects(rootUuid);
+
+			List<String> fulltexterMethod;
+			if (model.equals("periodical") || (model.equals("unknown") && !mr.getISSNs().isEmpty())) {
+				fulltexterMethod = Arrays.asList("periodical", "monograph");
+			} else fulltexterMethod = Arrays.asList("monograph", "periodical");
+
+			List<FulltextKramerius> pages = new ArrayList<>();
+			for (String method : fulltexterMethod) {
+				switch (method) {
+				case "periodical":
+					logger.info("Using (periodical) fultexter \"for root\" for uuid " + rootUuid + '.');
+					pages = fulltexter.getFulltextForRoot(rootUuid);
+					break;
+				default:
+					logger.info("Using (monograph/default) fultexter \"for parent\" for uuid " + rootUuid + '.');
+					pages = fulltexter.getFulltextObjects(rootUuid);
+					break;
+				}
+				if (!pages.isEmpty()) break;
 			}
-				
+
 			// if we got empty list in pages => do nothing, return original record
 			if (pages.isEmpty()) {
 				return rec;

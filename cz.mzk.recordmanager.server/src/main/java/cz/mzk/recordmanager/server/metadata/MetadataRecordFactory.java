@@ -50,7 +50,7 @@ public class MetadataRecordFactory {
 				|| Constants.METADATA_FORMAT_OAI_MARCXML_CPK.equals(recordFormat)
 				|| Constants.METADATA_FORMAT_MARC21E.equals(recordFormat)) {
 			MarcRecord marcRec = marcXmlParser.parseRecord(is);
-			return getMetadataRecord(marcRec, configuration);
+			return getMetadataRecord(record, marcRec, configuration);
 		}
 
 		if (Constants.METADATA_FORMAT_DUBLIN_CORE.equals(recordFormat)
@@ -63,6 +63,10 @@ public class MetadataRecordFactory {
 	}
 
 	public MetadataRecord getMetadataRecord(MarcRecord marcRec, ImportConfiguration configuration) {
+		return getMetadataRecord(null, marcRec, configuration);
+	}
+
+	public MetadataRecord getMetadataRecord(HarvestedRecord hr, MarcRecord marcRec, ImportConfiguration configuration) {
 		String prefix = getPrefix(configuration);
 		switch (prefix) {
 		case Constants.PREFIX_MZK:
@@ -172,13 +176,21 @@ public class MetadataRecordFactory {
 		case Constants.PREFIX_MKZN:
 		case Constants.PREFIX_VFU:
 			return new ClaviusMetadataMarcRecord(marcRec);
+		case Constants.PREFIX_KRAM_KNAV:
+			return new KramKnavMetadataMarcRecord(marcRec, hr);
+		case Constants.PREFIX_KRAM_MZK:
+			return new KramMzkMetadataMarcRecord(marcRec, hr);
+		case Constants.PREFIX_KRAM_NLK:
+			return new KramNlkMetadataMarcRecord(marcRec, hr);
+		case Constants.PREFIX_KRAM_SVKUL:
+			return new KramSvkulMetadataMarcRecord(marcRec, hr);
 		default:
 			return new MetadataMarcRecord(marcRec);
 		}
 	}
 
 	public MetadataRecord getMetadataRecord(HarvestedRecord hr, MarcRecord mr) {
-		return getMetadataRecord(mr, hr.getHarvestedFrom());
+		return getMetadataRecord(hr, mr, hr.getHarvestedFrom());
 	}
 
 	public MetadataRecord getMetadataRecord(MarcRecord marcRecord) {

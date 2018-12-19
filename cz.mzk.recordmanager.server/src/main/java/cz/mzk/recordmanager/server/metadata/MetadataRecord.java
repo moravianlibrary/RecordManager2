@@ -245,6 +245,15 @@ public interface MetadataRecord {
 	String getPolicyKramerius();
 
 	/**
+	 * get model from Kramerius
+	 *
+	 * @return String
+	 */
+	default String getModelKramerius() {
+		return "unknown";
+	}
+
+	/**
 	 * get stopwords file name
 	 *
 	 * @return String

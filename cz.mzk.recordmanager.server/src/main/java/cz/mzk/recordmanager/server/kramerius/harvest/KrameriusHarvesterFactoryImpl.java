@@ -1,9 +1,8 @@
 package cz.mzk.recordmanager.server.kramerius.harvest;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
 import cz.mzk.recordmanager.server.solr.SolrServerFactory;
 import cz.mzk.recordmanager.server.util.HttpClient;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class KrameriusHarvesterFactoryImpl implements KrameriusHarvesterFactory {
 

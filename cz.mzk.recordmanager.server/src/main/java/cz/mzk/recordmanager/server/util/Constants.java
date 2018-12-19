@@ -88,7 +88,7 @@ public class Constants {
 	public static final String METADATA_FORMAT_DUBLIN_CORE = "dublinCore";
 	public static final String METADATA_FORMAT_ESE		= "ese";
 
-public static final String PREFIX_AGROVOC			= "agrovoc";
+	public static final String PREFIX_AGROVOC			= "agrovoc";
 	public static final String PREFIX_ANL				= "anl";
 	public static final String PREFIX_AUTH				= "auth";
 	public static final String PREFIX_BMC				= "bmc";
@@ -106,7 +106,9 @@ public static final String PREFIX_AGROVOC			= "agrovoc";
 	public static final String PREFIX_KRAM_KNAV			= "kram-knav";
 	public static final String PREFIX_KRAM_MZK			= "kram-mzk";
 	public static final String PREFIX_KRAM_NKP			= "kram-nkp";
+	public static final String PREFIX_KRAM_NLK			= "kram-nlk";
 	public static final String PREFIX_KRAM_NTK			= "kram-ntk";
+	public static final String PREFIX_KRAM_SVKUL		= "kram-svkul";
 	public static final String PREFIX_KVKL				= "kvkl";
 	public static final String PREFIX_LIBRARY			= "library";
 	public static final String PREFIX_MANUSCRIPTORIUM	= "manuscript";

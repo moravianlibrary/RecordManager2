@@ -27,6 +27,8 @@ public class MetadataMarcRecord implements MetadataRecord {
 
 	protected MarcRecord underlayingMarc;
 
+	protected HarvestedRecord harvestedRecord;
+
 	private static final Pattern PAGECOUNT_PATTERN = Pattern.compile("(\\d+)");
 	private static final Pattern YEAR_PATTERN = Pattern.compile("\\d{4}");
 	private static final Pattern SCALE_PATTERN = Pattern.compile("\\d+[ ^]*\\d+");
@@ -106,10 +108,20 @@ public class MetadataMarcRecord implements MetadataRecord {
 	private static final String URL_COMMENT_FORMAT = "%s (%s)";
 
 	public MetadataMarcRecord(MarcRecord underlayingMarc) {
+		initRecords(underlayingMarc, null);
+	}
+
+	public MetadataMarcRecord(MarcRecord underlayingMarc, HarvestedRecord hr) {
+		initRecords(underlayingMarc, hr);
+	}
+
+	private void initRecords(MarcRecord underlayingMarc, HarvestedRecord hr) {
 		if (underlayingMarc == null) {
-			throw new IllegalArgumentException("Creating MetadataMarcRecord with NULL underlayingMarc.");
+			throw new IllegalArgumentException(
+					"Creating MetadataMarcRecord with NULL underlayingMarc.");
 		}
 		this.underlayingMarc = underlayingMarc;
+		this.harvestedRecord = hr;
 	}
 
 	@Override
@@ -1091,7 +1103,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 	@Override
 	public String getPolicyKramerius() {
 		// Nothing to return
-		return null;
+		return "unknown";
 	}
 
 	@Override
