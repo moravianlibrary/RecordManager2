@@ -131,6 +131,7 @@ public class ImportRecordsWriter implements ItemWriter<List<Record>>, StepExecut
 						hr.setHarvestedFrom(harvestConfiguration);
 					}
 					hr.setUpdated(new Date());
+					hr.setLastHarvest(new Date());
 					hr.setDeleted(null);
 					hr.setRawRecord(recordContent);
 

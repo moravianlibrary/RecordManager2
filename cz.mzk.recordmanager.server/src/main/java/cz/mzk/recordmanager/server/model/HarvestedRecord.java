@@ -123,7 +123,11 @@ public class HarvestedRecord extends AbstractDomainObject {
 	@Column(name="updated")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date updated = harvested;
-	
+
+	@Column(name="last_harvest")
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date lastHarvest = harvested;
+
 	@Column(name="deleted")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date deleted;
@@ -650,5 +654,13 @@ public class HarvestedRecord extends AbstractDomainObject {
 
 	public void setAuthorities(List<Authority> authorities) {
 		this.authorities = authorities;
+	}
+
+	public Date getLastHarvest() {
+		return lastHarvest;
+	}
+
+	public void setLastHarvest(Date lastHarvest) {
+		this.lastHarvest = lastHarvest;
 	}
 }

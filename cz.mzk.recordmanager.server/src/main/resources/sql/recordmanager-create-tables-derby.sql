@@ -105,6 +105,7 @@ CREATE TABLE harvested_record (
   harvested            TIMESTAMP,
   updated              TIMESTAMP,
   deleted              TIMESTAMP,
+  last_harvest         TIMESTAMP,
   oai_timestamp        TIMESTAMP,
   format               VARCHAR(15) NOT NULL,
   dedup_record_id      DECIMAL(10),

@@ -313,9 +313,9 @@ public class HarvestedRecordDAOHibernate extends
 	@Override
 	public void updateTimestampOnly(HarvestedRecord hr) {
 		Session session = sessionFactory.getCurrentSession();
-		Query update = session.createQuery("UPDATE HarvestedRecord set updated = :updated WHERE id = :id");
+		Query update = session.createQuery("UPDATE HarvestedRecord set lastHarvest = :lastHarvest WHERE id = :id");
 		update.setParameter("id", hr.getId());
-		update.setParameter("updated", hr.getUpdated());
+		update.setParameter("lastHarvest", hr.getLastHarvest());
 		update.executeUpdate();
 	}
 

@@ -61,6 +61,7 @@ public class AdresarRecordsWriter implements ItemWriter<List<Record>> {
 						hr.setFormat("marc21-xml");
 					}
 					hr.setUpdated(new Date());
+					hr.setLastHarvest(new Date());
 					ByteArrayOutputStream outStream = new ByteArrayOutputStream();
 					MarcWriter marcWriter = new MarcXmlWriter(outStream, true);
 					marcWriter.setConverter(ISOCharConvertor.INSTANCE);
