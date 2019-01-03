@@ -1491,3 +1491,4 @@ INSERT INTO kramerius_conf (import_conf_id,url,url_solr,query_rows,metadata_stre
 
 --changeset tomascejpek:117
 ALTER TABLE harvested_record ADD COLUMN last_harvest TIMESTAMP;
+CREATE INDEX harvested_record_last_harvest_idx ON harvested_record(last_harvest);
