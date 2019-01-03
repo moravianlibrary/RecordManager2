@@ -39,4 +39,10 @@ public class KramDefaultMetadataMarcRecord extends
 		return Collections.singletonList(MetadataUtils.generateUrl(getPolicyKramerius(), kramUrlBase +
 				harvestedRecord.getUniqueId().getRecordId(), URL_COMMENT));
 	}
+
+	@Override
+	public boolean getIndexWhenMerged() {
+		return false;
+	}
+
 }

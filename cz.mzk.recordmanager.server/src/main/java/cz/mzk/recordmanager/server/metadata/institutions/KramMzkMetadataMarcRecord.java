@@ -16,9 +16,4 @@ public class KramMzkMetadataMarcRecord extends KramDefaultMetadataMarcRecord {
 		return generateUrl("http://www.digitalniknihovna.cz/mzk/uuid/");
 	}
 
-	@Override
-	public boolean getIndexWhenMerged() {
-		return false;
-	}
-
 }
