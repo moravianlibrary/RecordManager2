@@ -1582,3 +1582,22 @@ INSERT INTO sigla (id, import_conf_id, sigla) VALUES (51, 377, 'HKG001');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (52, 378, 'PIG501');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (57, 383, 'FMG502');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (60, 386, 'CHG501');
+
+--changeset tomascejpek:125
+ALTER TABLE library ADD COLUMN region VARCHAR(2);
+
+--changeset tomascejpek:126 context:cpk
+UPDATE library SET region='PR' WHERE id in (101,102,104,105,107,121,123,125,126,130,138,163);
+UPDATE library SET region='JM' WHERE id in (100,103,161,171,174,184,185);
+UPDATE library SET region='SC' WHERE id in (134,136,156,170,172,176);
+UPDATE library SET region='KV' WHERE id in (132,150,186,188);
+UPDATE library SET region='MS' WHERE id in (135,153,168,169,175,179,183);
+UPDATE library SET region='VY' WHERE id in (112,180);
+UPDATE library SET region='KH' WHERE id in (113,177);
+UPDATE library SET region='LI' WHERE id in (108);
+UPDATE library SET region='JC' WHERE id in (111,128,173,178,181);
+UPDATE library SET region='OL' WHERE id in (115,146,159,182,183);
+UPDATE library SET region='PA' WHERE id in (106,133,140);
+UPDATE library SET region='PL' WHERE id in (137);
+UPDATE library SET region='ZL' WHERE id in (143,187);
+UPDATE library SET region='US' WHERE id in (114);
