@@ -263,6 +263,10 @@ public class DublinCoreDSL extends BaseDSL {
 		return SolrUtils.getInstitution(dcContext.harvestedRecord().getHarvestedFrom());
 	}
 
+	public List<String> getRegionInstitutionFacet() {
+		return SolrUtils.getRegionInstitution(dcContext.harvestedRecord().getHarvestedFrom());
+	}
+
 	public Set<String> getAllCreatorsForSearching() {
 		Set<String> results = new HashSet<>();
 		results.addAll(dcContext.record().getCreators());

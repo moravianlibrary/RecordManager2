@@ -188,7 +188,15 @@ public class SolrUtils {
 		}
 		return SolrFieldConstants.UNKNOWN_INSTITUTION;
 	}
-	
+
+	protected static String getRegionOfRecord(ImportConfiguration config) {
+		if (config != null && config.getLibrary() != null
+				&& config.getLibrary().getRegion() != null) {
+			return config.getLibrary().getRegion();
+		}
+		return SolrFieldConstants.UNKNOWN_INSTITUTION;
+	}
+
 	public static List<String> getInstitution(ImportConfiguration config) {
 		if (config != null) {
 			String city = getCityOfRecord(config);
@@ -201,6 +209,23 @@ public class SolrUtils {
 			String base = config.isLibrary() ? INSTITUTION_LIBRARY : INSTITUTION_OTHERS;
 			if (city.equals(INSTITUTION_UNKNOWN)) return SolrUtils.createHierarchicFacetValues(base, name);
 			else return SolrUtils.createHierarchicFacetValues(base, city, name);
+		}
+
+		return SolrUtils.createHierarchicFacetValues(INSTITUTION_UNKNOWN);
+	}
+
+	public static List<String> getRegionInstitution(ImportConfiguration config) {
+		if (config != null) {
+			String region = getRegionOfRecord(config);
+			region = region == null ? INSTITUTION_UNKNOWN : region;
+			String name = getInstitutionOfRecord(config);
+			if (name.equals(Constants.LIBRARY_NAME_NKP)) {
+				String prefix = getPrefixOfNKPRecord(config);
+				return SolrUtils.createHierarchicFacetValues(INSTITUTION_LIBRARY, region, name, prefix);
+			}
+			String base = config.isLibrary() ? INSTITUTION_LIBRARY : INSTITUTION_OTHERS;
+			if (region.equals(INSTITUTION_UNKNOWN)) return SolrUtils.createHierarchicFacetValues(base, name);
+			else return SolrUtils.createHierarchicFacetValues(base, region, name);
 		}
 
 		return SolrUtils.createHierarchicFacetValues(INSTITUTION_UNKNOWN);

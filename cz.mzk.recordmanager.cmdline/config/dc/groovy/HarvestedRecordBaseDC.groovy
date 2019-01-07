@@ -8,6 +8,7 @@ _hidden_index_when_merged_boolean = getIndexWhenMerged()
 
 // facet
 local_institution_facet_str_mv = getInstitutionFacet()
+local_region_institution_facet_str_mv = getRegionInstitutionFacet()
 local_statuses_facet_str_mv = getStatuses()
 
 // search

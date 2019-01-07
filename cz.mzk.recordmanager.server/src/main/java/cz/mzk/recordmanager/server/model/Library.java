@@ -26,6 +26,9 @@ public class Library extends AbstractDomainObject {
 	
 	@Column(name="city")
 	private String city;
+
+	@Column(name = "region")
+	private String region;
 	
 	@OneToMany(cascade=CascadeType.ALL, mappedBy="library", orphanRemoval=true)
 	private List<ImportConfiguration> inputConfigurations = new ArrayList<ImportConfiguration>();
@@ -72,5 +75,12 @@ public class Library extends AbstractDomainObject {
 	public List<ContactPerson> getContacts() {
 		return contacts;
 	}
-	
+
+	public String getRegion() {
+		return region;
+	}
+
+	public void setRegion(String region) {
+		this.region = region;
+	}
 }
