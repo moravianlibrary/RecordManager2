@@ -130,6 +130,11 @@ public class ImportRecordsWriter implements ItemWriter<List<Record>>, StepExecut
 						hr.setFormat("marc21-xml");
 						hr.setHarvestedFrom(harvestConfiguration);
 					}
+					else if (Arrays.equals(recordContent, hr.getRawRecord())) {
+						hr.setLastHarvest(new Date());
+						harvestedRecordDao.persist(hr);
+						continue;
+					}
 					hr.setUpdated(new Date());
 					hr.setLastHarvest(new Date());
 					hr.setDeleted(null);
