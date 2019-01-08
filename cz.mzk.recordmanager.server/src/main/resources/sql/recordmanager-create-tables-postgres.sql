@@ -11,7 +11,7 @@ CREATE TABLE library (
   url                  VARCHAR(128),
   catalog_url          VARCHAR(128),
   city                 VARCHAR(60),
-  region               VARCHAR(2)
+  region               VARCHAR(15)
 );
 
 COMMENT ON TABLE library IS '';

@@ -1584,7 +1584,7 @@ INSERT INTO sigla (id, import_conf_id, sigla) VALUES (57, 383, 'FMG502');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (60, 386, 'CHG501');
 
 --changeset tomascejpek:125
-ALTER TABLE library ADD COLUMN region VARCHAR(2);
+ALTER TABLE library ADD COLUMN region VARCHAR(15);
 
 --changeset tomascejpek:126 context:cpk
 UPDATE library SET region='PR' WHERE id in (101,102,104,105,107,121,123,125,126,130,138,163);
@@ -1601,3 +1601,4 @@ UPDATE library SET region='PA' WHERE id in (106,133,140);
 UPDATE library SET region='PL' WHERE id in (137);
 UPDATE library SET region='ZL' WHERE id in (143,187);
 UPDATE library SET region='US' WHERE id in (114);
+UPDATE library SET region='bibliography' WHERE id in (119,131,142,148,149,155,158,160,165,166);
