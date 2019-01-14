@@ -1284,3 +1284,11 @@ INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granul
 INSERT INTO library (id, name, url, catalog_url, city) VALUES (188, 'MKOSTROV', 'https://katalog.mkostrov.cz/', 'https://mkostrov.cz/', 'Ostrov');
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency) VALUES (388, 188, 200, 'mkostrov', 11, false, true, false, true, 'U');
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (388,'https://katalog.mkostrov.cz/tritius/oai-provider','CPK','marc21',NULL);
+
+-- 14. 01. 2019 tomascejpek
+INSERT INTO library (id, name, url, catalog_url, city) VALUES (189, 'MKBER', 'https://www.knihovnaberoun.cz/', 'https://beroun.knihovny.net/Clavius/', 'Beroun');
+INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency) VALUES (389, 189, 200, 'mkber', 11, false, true, false, true, 'U');
+INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (389,'https://beroun.knihovny.net/Clavius/l.dll','CPK','marc21',NULL);
+INSERT INTO library (id, name, url, catalog_url, city) VALUES (190, 'MKMOST', 'http://www.knihovnamost.cz/', 'https://most.tritius.cz/', 'Most');
+INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency) VALUES (390, 190, 200, 'mkmost', 11, false, true, false, true, 'U');
+INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (390,'https://most.tritius.cz/tritius/oai-provider','CPK','marc21',NULL);
