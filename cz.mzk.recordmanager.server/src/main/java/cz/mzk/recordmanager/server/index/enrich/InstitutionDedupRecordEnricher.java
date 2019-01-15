@@ -21,8 +21,11 @@ public class InstitutionDedupRecordEnricher implements DedupRecordEnricher {
 			List<SolrInputDocument> localRecords) {
 		copyField.merge(localRecords, mergedDocument);
 		copyField.renameField(mergedDocument,
-				SolrFieldConstants.LOCAL_REGION_INSTITUTION_FIELD,
+				SolrFieldConstants.LOCAL_INSTITUTION_FIELD,
 				SolrFieldConstants.INSTITUTION_FIELD);
+		copyField.renameField(mergedDocument,
+				SolrFieldConstants.LOCAL_REGION_INSTITUTION_FIELD,
+				SolrFieldConstants.REGION_INSTITUTION_FIELD);
 	}
 
 }
