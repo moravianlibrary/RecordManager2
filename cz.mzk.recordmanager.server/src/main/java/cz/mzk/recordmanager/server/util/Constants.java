@@ -25,6 +25,7 @@ public class Constants {
 	public static final String JOB_ID_DOWNLOAD_IMPORT				= "downloadAndImportRecordsJob";
 	public static final String JOB_ID_IMPORT_ANTIKVARIATY			= "antikvariatyImportRecordsJob";
 	public static final String JOB_ID_IMPORT_OAI					= "importOaiRecordsJob";
+	public static final String JOB_ID_IMPORT_OAI_COSMOTRON			= "importOaiCosmotronRecordsJob";
 	public static final String JOB_ID_IMPORT_COSMOTRON_996			= "importCosmotron996RecordsJob";
 	public static final String JOB_ID_IMPORT_INSPIRATION			= "importInspirationJob";
 	public static final String JOB_ID_IMPORT_TEZAURUS				= "importTezaurusRecordsJob";

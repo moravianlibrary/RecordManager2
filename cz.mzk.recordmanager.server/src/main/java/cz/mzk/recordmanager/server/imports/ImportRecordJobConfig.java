@@ -5,6 +5,7 @@ import java.util.List;
 import cz.mzk.recordmanager.server.imports.antikvariaty.AntikvariatyImportJobParametersValidator;
 import cz.mzk.recordmanager.server.imports.antikvariaty.AntikvariatyRecordsReader;
 import cz.mzk.recordmanager.server.imports.antikvariaty.AntikvariatyRecordsWriter;
+import cz.mzk.recordmanager.server.oai.harvest.cosmotron.CosmotronRecordWriter;
 import org.marc4j.marc.Record;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
@@ -201,6 +202,26 @@ public class ImportRecordJobConfig {
 				.build();
 	}
 
+	// Oai cosmotron format
+	@Bean
+	public Job OaiImportCosmotronRecordsJob(
+			@Qualifier(Constants.JOB_ID_IMPORT_OAI_COSMOTRON + ":importRecordsStep") Step importRecordsStep) {
+		return jobs.get(Constants.JOB_ID_IMPORT_OAI_COSMOTRON)
+				.validator(new ImportOaiRecordsJobParametersValidator())
+				.listener(JobFailureListener.INSTANCE).flow(importRecordsStep)
+				.end().build();
+	}
+
+	@Bean(name = Constants.JOB_ID_IMPORT_OAI_COSMOTRON + ":importRecordsStep")
+	public Step importOaiCosmotronRecordsStep() throws Exception {
+		return steps.get(Constants.JOB_ID_IMPORT_OAI_COSMOTRON + "importRecordsStep")
+				.<List<OAIRecord>, List<HarvestedRecord>>chunk(1)//
+				.reader(importOaiRecordsReader(STRING_OVERRIDEN_BY_EXPRESSION))//
+				.processor(oaiItemProcessor())
+				.writer(cosmotronRecordsWriter(LONG_OVERRIDEN_BY_EXPRESSION)) //
+				.build();
+	}
+
 	/**
 	 * filename format:
 	 * 1) /directory/file.txt - takes file file.txt
@@ -227,6 +248,13 @@ public class ImportRecordJobConfig {
 	@StepScope
 	public ItemWriter<List<HarvestedRecord>> harvestedRecordWriter() {
 		return new HarvestedRecordWriter();
+	}
+
+	@Bean(name = Constants.JOB_ID_HARVEST_COSMOTRON + ":cosmotronRecordsWriter")
+	@StepScope
+	public CosmotronRecordWriter cosmotronRecordsWriter(
+			@Value("#{jobParameters[" + Constants.JOB_PARAM_CONF_ID + "]}") Long configId) {
+		return new CosmotronRecordWriter(configId);
 	}
 
 	// import cosmotron 996
