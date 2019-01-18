@@ -76,6 +76,18 @@ public class IndexRecordsToSolrJobConfig {
 	}
 
 	@Bean
+	public Job indexOrphanedRecordsToSolrJob(
+			@Qualifier("indexRecordsToSolrJob:deleteOrphanedRecordsStep") Step deleteOrphanedRecordsStep) {
+		return jobs.get(Constants.JOB_ID_SOLR_INDEX_ORPHANED_RECORDS)
+				.validator(new IndexRecordsToSolrJobParametersValidator())
+				.incrementer(UUIDIncrementer.INSTANCE)
+				.listener(JobFailureListener.INSTANCE)
+				.flow(deleteOrphanedRecordsStep)
+				.end()
+				.build();
+	}
+
+	@Bean
 	public Job indexIndividualRecordsToSolrJob(@Qualifier("indexRecordsToSolrJob:indexIndividualRecordsStep") Step step) {
 		return jobs.get(Constants.JOB_ID_SOLR_INDEX_INDIVIDUAL_RECORDS)
 				.validator(new IndexIndividualRecordsToSolrJobParametersValidator())

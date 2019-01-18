@@ -13,6 +13,7 @@ public class Constants {
 	public static final String JOB_ID_HARVEST_SINGLE	= "oaiHarvestSingleRecordJob";
 	public static final String JOB_ID_DEDUP				= "dedupRecordsJob";
 	public static final String JOB_ID_SOLR_INDEX_ALL_RECORDS		= "indexAllRecordsToSolrJob";
+	public static final String JOB_ID_SOLR_INDEX_ORPHANED_RECORDS	= "indexOrphanedRecordsToSolrJob";
 	public static final String JOB_ID_SOLR_INDEX_HARVESTED_RECORDS	= "indexHarvestedRecordsToSolrJob";
 	public static final String JOB_ID_SOLR_INDEX					= "indexRecordsToSolrJob";
 	public static final String JOB_ID_SOLR_INDEX_INDIVIDUAL_RECORDS	= "indexIndividualRecordsToSolrJob";
