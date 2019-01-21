@@ -401,4 +401,7 @@ public interface MetadataRecord {
 		return Collections.emptyList();
 	}
 
+	default String getConspectusForBiblioLinker() {
+		return null;
+	}
 }

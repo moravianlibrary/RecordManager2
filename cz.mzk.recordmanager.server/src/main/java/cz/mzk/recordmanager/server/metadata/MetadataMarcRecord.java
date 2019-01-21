@@ -11,6 +11,7 @@ import cz.mzk.recordmanager.server.util.Constants;
 import cz.mzk.recordmanager.server.util.MetadataUtils;
 import cz.mzk.recordmanager.server.util.UrlUtils;
 import cz.mzk.recordmanager.server.util.identifier.*;
+import org.apache.commons.lang3.tuple.Pair;
 import org.marc4j.marc.DataField;
 import org.marc4j.marc.Subfield;
 import org.slf4j.Logger;
@@ -1284,4 +1285,24 @@ public class MetadataMarcRecord implements MetadataRecord {
 		return results;
 	}
 
+	private static List<Pair<String, Character>> CONSPECTUS_FIEDS = new ArrayList<>();
+
+	static {
+		CONSPECTUS_FIEDS.add(Pair.of("650", '7'));
+		CONSPECTUS_FIEDS.add(Pair.of("072", 'a'));
+		CONSPECTUS_FIEDS.add(Pair.of("650", 'a'));
+		CONSPECTUS_FIEDS.add(Pair.of("600", '7'));
+		CONSPECTUS_FIEDS.add(Pair.of("600", 'a'));
+		CONSPECTUS_FIEDS.add(Pair.of("440", 'a'));
+		CONSPECTUS_FIEDS.add(Pair.of("490", 'a'));
+	}
+
+	@Override
+	public String getConspectusForBiblioLinker() {
+		for (Pair<String, Character> field : CONSPECTUS_FIEDS) {
+			List<String> values = underlayingMarc.getFields(field.getKey(), field.getValue());
+			if (!values.isEmpty()) return values.get(0);
+		}
+		return null;
+	}
 }

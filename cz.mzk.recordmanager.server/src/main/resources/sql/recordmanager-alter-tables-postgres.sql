@@ -1236,3 +1236,4 @@ CREATE TABLE biblio_linker_similar (
   url_id               VARCHAR(128),
   FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE
 );
+ALTER TABLE harvested_record ADD COLUMN bl_conspectus VARCHAR(255);

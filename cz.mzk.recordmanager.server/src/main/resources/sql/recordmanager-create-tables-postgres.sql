@@ -159,6 +159,7 @@ CREATE TABLE harvested_record (
   next_dedup_flag      BOOLEAN DEFAULT TRUE,
   biblio_linker_id     DECIMAL(10),
   biblio_linker_similar BOOLEAN DEFAULT FALSE,
+  bl_conspectus        VARCHAR(255),
   raw_record           BYTEA,
   UNIQUE (import_conf_id, record_id),
   FOREIGN KEY (import_conf_id) REFERENCES import_conf(id),

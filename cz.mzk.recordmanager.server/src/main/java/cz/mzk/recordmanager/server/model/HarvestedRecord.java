@@ -235,6 +235,9 @@ public class HarvestedRecord extends AbstractDomainObject {
 	@Column(name="biblio_linker_similar")
 	private boolean biblioLinkerSimilar = false;
 
+	@Column(name = "bl_conspectus")
+	private String blConspectus;
+
 	@Column(name="weight")
 	private Long weight;
 	
@@ -685,5 +688,13 @@ public class HarvestedRecord extends AbstractDomainObject {
 
 	public void setBiblioLinkerSimiliarUrls(List<BiblioLinkerSimiliar> biblioLinkerSimiliarUrls) {
 		this.biblioLinkerSimiliarUrls = biblioLinkerSimiliarUrls;
+	}
+
+	public String getBlConspectus() {
+		return blConspectus;
+	}
+
+	public void setBlConspectus(String blConspectus) {
+		this.blConspectus = blConspectus;
 	}
 }

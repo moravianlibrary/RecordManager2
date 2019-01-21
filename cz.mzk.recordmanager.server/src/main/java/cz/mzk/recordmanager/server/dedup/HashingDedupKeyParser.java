@@ -30,6 +30,7 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 
 	private final static int EFFECTIVE_TITLE_LENGTH = 255;
 	private final static int EFFECTIVE_SOURCE_INFO_LENGTH = 255;
+	private final static int EFFECTIVE_BL_CONSPECTUS_LENGTH = 255;
 	private final static int EFFECTIVE_AUTHOR_LENGTH = 200;
 	private final static int EFFECTIVE_AUTHOR_AUTH_KEY_LENGTH = 50;
 	private final static int EFFECTIVE_LENGTH_30 = 30;
@@ -101,7 +102,7 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 		encapsulator.setEans(metadataRecord.getEANs());
 		encapsulator.setPublisherNumbers(metadataRecord.getPublisherNumber());
 		encapsulator.setLanguages(new HashSet<>(metadataRecord.getLanguages()));
-
+		encapsulator.setBlConspectus(MetadataUtils.normalizeAndShorten(metadataRecord.getConspectusForBiblioLinker(), EFFECTIVE_BL_CONSPECTUS_LENGTH));
 
 		String computedHash = computeHashValue(encapsulator);
 		String oldHash = record.getDedupKeysHash();
@@ -147,6 +148,7 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 			record.setEans(encapsulator.getEans());
 			record.setShortTitles(encapsulator.getShortTitles());
 			record.setPublisherNumbers(metadataRecord.getPublisherNumber());
+			record.setBlConspectus(encapsulator.getBlConspectus());
 			record.setTemporalDedupHash(computedHash);
 		} else {
 			harvestedRecordDao.dropAuthorities(record);
@@ -283,6 +285,10 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 				for (ShortTitle st: encapsulator.getShortTitles()) {
 					md.update(st.getShortTitleStr().getBytes("utf-8"));
 				}
+
+				if (encapsulator.getBlConspectus() != null) {
+					md.update(encapsulator.getBlConspectus().getBytes());
+				}
 				
 				byte[] hash = md.digest();
 				StringBuilder sb = new StringBuilder();
@@ -334,6 +340,7 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 			encapsulator.setSourceInfoG(hr.getSourceInfoG());
 			encapsulator.setSourceInfoX(hr.getSourceInfoX());
 			encapsulator.setSourceInfoT(hr.getSourceInfoT());
+			encapsulator.setBlConspectus(hr.getBlConspectus());
 
 			return computeHashValue(encapsulator);
 		}
@@ -364,6 +371,7 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 		String sourceInfoX;
 		String sourceInfoT;
 		String sourceInfoG;
+		String blConspectus;
 		
 		public List<Ismn> getIsmns() {
 			return ismns;
@@ -514,6 +522,14 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 
 		public void setSourceInfoG(String sourceInfoG) {
 			this.sourceInfoG = sourceInfoG;
+		}
+
+		public String getBlConspectus() {
+			return blConspectus;
+		}
+
+		public void setBlConspectus(String blConspectus) {
+			this.blConspectus = blConspectus;
 		}
 	}
 
