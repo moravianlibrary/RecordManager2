@@ -1296,3 +1296,6 @@ INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granul
 -- 16. 01. 2019 tomascejpek
 UPDATE import_conf SET interception_enabled=true, item_id='other' WHERE id>=370 AND id<=390;
 UPDATE import_conf SET interception_enabled=true, item_id='aleph' WHERE id=333;
+
+-- 22. 01. 2019 tomascejpek
+UPDATE oai_harvest_conf SET url='https://tritius.knihovnachodov.cz/tritius/oai-provider' WHERE import_conf_id=350;
