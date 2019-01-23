@@ -1299,3 +1299,7 @@ UPDATE import_conf SET interception_enabled=true, item_id='aleph' WHERE id=333;
 
 -- 22. 01. 2019 tomascejpek
 UPDATE oai_harvest_conf SET url='https://tritius.knihovnachodov.cz/tritius/oai-provider' WHERE import_conf_id=350;
+
+-- 22. 01. 2019 tomascejpek
+UPDATE download_import_conf SET url='http://sfx.techlib.cz/sfxlcl41/cgi/public/get_file.cgi?file=institutional_holding-NTK.xml' WHERE import_conf_id=1318;
+UPDATE download_import_conf SET import_job_name='downloadAndImportRecordsJob' WHERE import_conf_id=1318;
