@@ -1303,3 +1303,8 @@ UPDATE oai_harvest_conf SET url='https://tritius.knihovnachodov.cz/tritius/oai-p
 -- 22. 01. 2019 tomascejpek
 UPDATE download_import_conf SET url='http://sfx.techlib.cz/sfxlcl41/cgi/public/get_file.cgi?file=institutional_holding-NTK.xml' WHERE import_conf_id=1318;
 UPDATE download_import_conf SET import_job_name='downloadAndImportRecordsJob' WHERE import_conf_id=1318;
+
+-- 29. 01. 2019 tomascejpek
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (45, 371, 'BVG001');
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (48, 374, 'HOG001');
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (58, 384, 'ZNG001');
