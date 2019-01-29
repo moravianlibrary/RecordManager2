@@ -1575,3 +1575,10 @@ UPDATE download_import_conf SET import_job_name='downloadAndImportRecordsJob' WH
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (45, 371, 'BVG001');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (48, 374, 'HOG001');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (58, 384, 'ZNG001');
+
+--changeset tomascejpek:124 context:cpk
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (44, 370, 'ABG503');
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (51, 377, 'HKG001');
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (52, 378, 'PIG501');
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (57, 383, 'FMG502');
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (60, 386, 'CHG501');
