@@ -1,8 +1,8 @@
 package cz.mzk.recordmanager.server.bibliolinker;
 
+import cz.mzk.recordmanager.server.model.BiblioLinkerSimilarType;
 import cz.mzk.recordmanager.server.model.BiblioLinkerSimiliar;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
-import cz.mzk.recordmanager.server.oai.dao.BiblioLinkerSimilarDAO;
 import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordDAO;
 import cz.mzk.recordmanager.server.util.ProgressLogger;
 import org.slf4j.Logger;
@@ -11,10 +11,7 @@ import org.springframework.batch.item.ItemProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Generic implementation of of ItemProcessor
@@ -26,12 +23,19 @@ public class BiblioLinkerSimilarSimpleStepProcessor implements
 	@Autowired
 	private HarvestedRecordDAO harvestedRecordDao;
 
-	@Autowired
-	private BiblioLinkerSimilarDAO biblioLinkerSimilarDAO;
 
 	private static Logger logger = LoggerFactory.getLogger(BiblioLinkerSimilarSimpleStepProcessor.class);
 
 	private ProgressLogger progressLogger = new ProgressLogger(logger, 1000);
+
+	private BiblioLinkerSimilarType type;
+
+	public BiblioLinkerSimilarSimpleStepProcessor() {
+	}
+
+	public BiblioLinkerSimilarSimpleStepProcessor(BiblioLinkerSimilarType type) {
+		this.type = type;
+	}
 
 	@Override
 	public List<HarvestedRecord> process(List<Long> idList) throws Exception {
@@ -43,14 +47,13 @@ public class BiblioLinkerSimilarSimpleStepProcessor implements
 			progressLogger.incrementAndLogProgress();
 		}
 		for (HarvestedRecord hrOuter : hrIds.keySet()) {
-			List<BiblioLinkerSimiliar> similarIds = new ArrayList<>();
-			hrOuter.getBiblioLinkerSimiliarUrls().forEach(id -> biblioLinkerSimilarDAO.delete(id));
+			Set<BiblioLinkerSimiliar> similarIds = new TreeSet<>(hrOuter.getBiblioLinkerSimiliarUrls());
 			for (HarvestedRecord hrInner : hrIds.keySet()) {
 				if (hrOuter == hrInner) continue;
-				similarIds.add(BiblioLinkerSimiliar.create(hrIds.get(hrInner)));
+				similarIds.add(BiblioLinkerSimiliar.create(hrIds.get(hrInner), type));
 				if (similarIds.size() >= 5) break;
 			}
-			hrOuter.setBiblioLinkerSimiliarUrls(similarIds);
+			hrOuter.setBiblioLinkerSimiliarUrls(new ArrayList<>(similarIds));
 		}
 		return new ArrayList<>(hrIds.keySet());
 	}

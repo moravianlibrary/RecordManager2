@@ -1,6 +1,7 @@
 package cz.mzk.recordmanager.server.bibliolinker;
 
 import cz.mzk.recordmanager.server.dedup.DedupRecordsJobParametersValidator;
+import cz.mzk.recordmanager.server.model.BiblioLinkerSimilarType;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.springbatch.SqlCommandTasklet;
 import cz.mzk.recordmanager.server.springbatch.StepProgressListener;
@@ -55,11 +56,15 @@ public class BiblioLinkerJobConfig {
 
 	private static final String TMP_BLS_TABLE_AUTH = "tmp_bls_auth";
 
+	private static final String TMP_BLS_TABLE_AUTH_CONSPECTUS = "tmp_bls_auth_conspectus";
+
 	private String initBiblioLinkerSql = ResourceUtils.asString("job/biblioLinkerJob/initBiblioLinker.sql");
 
 	private String prepareBLTempTitleAuthTableSql = ResourceUtils.asString("job/biblioLinkerJob/prepareBLTempTitleAuth.sql");
 
 	private String prepareBLTempRestDedupTableSql = ResourceUtils.asString("job/biblioLinkerJob/prepareBLTempRestDedup.sql");
+
+	private String prepareBLSimilarTempAuthConspectusTableSql = ResourceUtils.asString("job/biblioLinkerJob/prepareBLSTempAuthConspectus.sql");
 
 	private String prepareBLSimilarTempAuthTableSql = ResourceUtils.asString("job/biblioLinkerJob/prepareBLSTempAuth.sql");
 
@@ -167,20 +172,67 @@ public class BiblioLinkerJobConfig {
 	}
 
 	/**
-	 *
+	 * biblioLinkerSimilarJob
 	 */
 	@Bean
 	public Job biblioLinkerSimilarJob(
+			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":prepareBLSimilarTempAuthConspectusStep") Step prepareBLSimilarTempAuthConspectusStep,
+			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":blSimilarTempAuthConspectusStep") Step blSimilarTempAuthConspectusStep,
 			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":prepareBLSimilarTempAuthStep") Step prepareBLSimilarTempAuthStep,
 			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":blSimilarTempAuthStep") Step blSimilarTempAuthStep
 	) {
 		return jobs.get(Constants.JOB_ID_BIBLIO_LINKER_SIMILAR)
 				.validator(new DedupRecordsJobParametersValidator())
-				.start(prepareBLSimilarTempAuthStep)
+				.start(prepareBLSimilarTempAuthConspectusStep)
+				.next(blSimilarTempAuthConspectusStep)
+				.next(prepareBLSimilarTempAuthStep)
 				.next(blSimilarTempAuthStep)
 				.build();
 	}
 
+	/**
+	 * same autority, conspectus
+	 */
+	@Bean(name = Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":prepareBLSimilarTempAuthConspectusTasklet")
+	@StepScope
+	public Tasklet prepareBLSimilarTempAuthConspectusTasklet() {
+		return new SqlCommandTasklet(prepareBLSimilarTempAuthConspectusTableSql);
+	}
+
+	@Bean(name = Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":prepareBLSimilarTempAuthConspectusStep")
+	public Step prepareBLSimilarTempAuthConspectusStep() {
+		return steps.get("prepareBLSimilarTempAuthConspectusStep")
+				.tasklet(prepareBLSimilarTempAuthConspectusTasklet())
+				.listener(new StepProgressListener())
+				.build();
+	}
+
+	@Bean(name = Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":blSimilarTempAuthConspectusStep")
+	public Step blSimilarTempAuthConspectusStep() throws Exception {
+		return steps.get("blSimilarTempAuthConspectusStep")
+				.listener(new StepProgressListener())
+				.<List<Long>, List<HarvestedRecord>>chunk(100)
+				.reader(blSimilarTempAuthConspectusStepReader())
+				.processor(blSimilarAuthConspectusStepProsessor())
+				.writer(blSimpleKeysStepWriter())
+				.build();
+	}
+
+	@Bean(name = "blSimilarTitleAuth:reader")
+	@StepScope
+	public ItemReader<List<Long>> blSimilarTempAuthConspectusStepReader() throws Exception {
+		return blSimpleKeysReader(TMP_BLS_TABLE_AUTH_CONSPECTUS, "local_record_id");
+	}
+
+	@Bean(name = "blSimilarAuthConspectus:processor")
+	@StepScope
+	public ItemProcessor<List<Long>, List<HarvestedRecord>> blSimilarAuthConspectusStepProsessor() {
+		return new BiblioLinkerSimilarSimpleStepProcessor(BiblioLinkerSimilarType.AUTH_CONSPECTUS);
+	}
+
+	/**
+	 * same autority
+	 */
 	@Bean(name = Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":prepareBLSimilarTempAuthTasklet")
 	@StepScope
 	public Tasklet prepareBLSimilarTempAuthTasklet() {
@@ -201,21 +253,21 @@ public class BiblioLinkerJobConfig {
 				.listener(new StepProgressListener())
 				.<List<Long>, List<HarvestedRecord>>chunk(100)
 				.reader(blSimilarTempAuthStepReader())
-				.processor(blSimilarSimpleStepProsessor())
+				.processor(blSimilarAuthStepProsessor())
 				.writer(blSimpleKeysStepWriter())
 				.build();
 	}
 
-	@Bean(name = "blSimilarTitleAuth:reader")
+	@Bean(name = "blSimilarAuth:reader")
 	@StepScope
 	public ItemReader<List<Long>> blSimilarTempAuthStepReader() throws Exception {
 		return blSimpleKeysReader(TMP_BLS_TABLE_AUTH, "local_record_id");
 	}
 
-	@Bean(name = "blSimilarSimple:processor")
+	@Bean(name = "blSimilarAuth:processor")
 	@StepScope
-	public ItemProcessor<List<Long>, List<HarvestedRecord>> blSimilarSimpleStepProsessor() {
-		return new BiblioLinkerSimilarSimpleStepProcessor();
+	public ItemProcessor<List<Long>, List<HarvestedRecord>> blSimilarAuthStepProsessor() {
+		return new BiblioLinkerSimilarSimpleStepProcessor(BiblioLinkerSimilarType.AUTH);
 	}
 
 	/**
