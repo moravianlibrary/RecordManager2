@@ -80,8 +80,8 @@ INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (185, 'VFU
 INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (186, 'MKML', 'https://knihovnaml.cz/', 'https://carmen.knihovnaml.cz/Carmen/', 'Mariánské Lázně', 'KV');
 INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (187, 'KNIR', 'https://knir.cz/', 'https://knir.cz/opacsql/', 'Rožnov pod Radhoštěm', 'ZL');
 INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (188, 'MKOSTROV', 'https://katalog.mkostrov.cz/', 'https://mkostrov.cz/', 'Ostrov', 'KV');
-INSERT INTO library (id, name, url, catalog_url, city) VALUES (189, 'MKBER', 'https://www.knihovnaberoun.cz/', 'https://beroun.knihovny.net/Clavius/', 'Beroun');
-INSERT INTO library (id, name, url, catalog_url, city) VALUES (190, 'MKMOST', 'http://www.knihovnamost.cz/', 'https://most.tritius.cz/', 'Most');
+INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (189, 'MKBER', 'https://www.knihovnaberoun.cz/', 'https://beroun.knihovny.net/Clavius/', 'Beroun', 'SC');
+INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (190, 'MKMOST', 'http://www.knihovnamost.cz/', 'https://most.tritius.cz/', 'Most', 'US');
 INSERT INTO library (id, name, url, catalog_url, city) VALUES (400, 'AUTHORITY', 'nkp.cz', 'aleph.nkp.cz', NULL);
 
 INSERT INTO contact_person (id, library_id, name, email, phone) VALUES (200, 100, 'Jan Novak', 'jan.novak@neexistuje.cz', '728 123 456');

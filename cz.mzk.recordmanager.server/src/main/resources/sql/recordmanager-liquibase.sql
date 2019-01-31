@@ -1589,7 +1589,7 @@ ALTER TABLE library ADD COLUMN region VARCHAR(15);
 --changeset tomascejpek:126 context:cpk
 UPDATE library SET region='PR' WHERE id in (101,102,104,105,107,121,123,125,126,130,138,163);
 UPDATE library SET region='JM' WHERE id in (100,103,161,171,174,184,185);
-UPDATE library SET region='SC' WHERE id in (134,136,156,170,172,176);
+UPDATE library SET region='SC' WHERE id in (134,136,156,170,172,176,189);
 UPDATE library SET region='KV' WHERE id in (132,150,186,188);
 UPDATE library SET region='MS' WHERE id in (135,153,168,169,175,179,183);
 UPDATE library SET region='VY' WHERE id in (112,180);
@@ -1600,5 +1600,5 @@ UPDATE library SET region='OL' WHERE id in (115,146,159,182);
 UPDATE library SET region='PA' WHERE id in (106,133,140);
 UPDATE library SET region='PL' WHERE id in (137);
 UPDATE library SET region='ZL' WHERE id in (143,187);
-UPDATE library SET region='US' WHERE id in (114);
+UPDATE library SET region='US' WHERE id in (114,190);
 UPDATE library SET region='bibliography' WHERE id in (119,131,142,148,149,155,158,160,165,166);
