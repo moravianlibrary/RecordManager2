@@ -1,16 +1,8 @@
 package cz.mzk.recordmanager.server.model;
 
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.Table;
-import javax.persistence.Transient;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
+import javax.persistence.*;
+import javax.xml.bind.annotation.*;
+import java.util.Date;
 
 @Entity
 @Table(name=ObalkyKnihTOC.TABLE_NAME)
@@ -52,6 +44,20 @@ public class ObalkyKnihTOC extends AbstractDomainObject {
 	@Embedded
 	@XmlElement(name="bibinfo")
 	private BibInfo bibInfo = new BibInfo();
+
+	@XmlElement(name = "book_metadata_change")
+	@Transient
+	private String updatedStr;
+
+	@Column(name = "updated")
+	@XmlTransient
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date updated;
+
+	@Column(name = "last_harvest")
+	@XmlTransient
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date lastHarvest = new Date();
 
 	@Column(name="toc")
 	@XmlElement(name="toc")
@@ -114,4 +120,27 @@ public class ObalkyKnihTOC extends AbstractDomainObject {
 		this.toc = toc;
 	}
 
+	public String getUpdatedStr() {
+		return updatedStr;
+	}
+
+	public void setUpdatedStr(String updatedStr) {
+		this.updatedStr = updatedStr;
+	}
+
+	public Date getUpdated() {
+		return updated;
+	}
+
+	public void setUpdated(Date updated) {
+		this.updated = updated;
+	}
+
+	public Date getLastHarvest() {
+		return lastHarvest;
+	}
+
+	public void setLastHarvest(Date lastHarvest) {
+		this.lastHarvest = lastHarvest;
+	}
 }

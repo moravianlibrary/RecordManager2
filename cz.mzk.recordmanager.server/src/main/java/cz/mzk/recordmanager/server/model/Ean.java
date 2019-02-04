@@ -9,7 +9,10 @@ import javax.persistence.Table;
 public class Ean extends AbstractDomainObject {
 	
 	public static final String TABLE_NAME = "ean";
-	
+
+	@Column(name = "harvested_record_id", updatable = false, insertable = false)
+	private Long harvestedRecordId;
+
 	@Column(name="ean")
 	private Long ean;
 	

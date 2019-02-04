@@ -1,17 +1,17 @@
 package cz.mzk.recordmanager.server.oai.dao.hibernate;
 
-import java.util.List;
-
+import cz.mzk.recordmanager.api.model.query.LogicalOperator;
+import cz.mzk.recordmanager.api.model.query.ObalkyKnihTOCQuery;
+import cz.mzk.recordmanager.server.model.ObalkyKnihTOC;
+import cz.mzk.recordmanager.server.oai.dao.ObalkyKnihTOCDAO;
 import org.hibernate.Criteria;
+import org.hibernate.Session;
 import org.hibernate.criterion.Example;
 import org.hibernate.criterion.Junction;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Component;
 
-import cz.mzk.recordmanager.api.model.query.LogicalOperator;
-import cz.mzk.recordmanager.api.model.query.ObalkyKnihTOCQuery;
-import cz.mzk.recordmanager.server.model.ObalkyKnihTOC;
-import cz.mzk.recordmanager.server.oai.dao.ObalkyKnihTOCDAO;
+import java.util.List;
 
 @Component
 public class ObalkyKnihTOCDAOHibernate extends
@@ -61,4 +61,12 @@ public class ObalkyKnihTOCDAOHibernate extends
 		return (List<ObalkyKnihTOC>) crit.list();
 	}
 
+	@Override
+	@SuppressWarnings("unchecked")
+	public List<ObalkyKnihTOC> findByBookId(Long book_id) {
+		Session session = sessionFactory.getCurrentSession();
+		Criteria crit = session.createCriteria(ObalkyKnihTOC.class);
+		crit.add(Restrictions.eq("bookId", book_id));
+		return crit.list();
+	}
 }

@@ -367,6 +367,8 @@ COMMENT ON TABLE cosmotron_996 IS 'records from cosmotron, used for periodicals'
   oclc                 VARCHAR(32),
   ean                  VARCHAR(32),
   isbn                 DECIMAL(13),
+  updated              TIMESTAMP,
+  last_harvest         TIMESTAMP,
   toc                  VARCHAR(1048576)
 );
 

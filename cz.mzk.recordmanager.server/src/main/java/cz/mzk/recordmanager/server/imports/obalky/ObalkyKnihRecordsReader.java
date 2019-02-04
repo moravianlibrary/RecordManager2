@@ -1,35 +1,59 @@
 package cz.mzk.recordmanager.server.imports.obalky;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.regex.Pattern;
-
+import cz.mzk.recordmanager.server.model.ObalkyKnihTOC;
 import cz.mzk.recordmanager.server.util.CleaningUtils;
+import cz.mzk.recordmanager.server.util.HttpClient;
 import cz.mzk.recordmanager.server.util.MetadataUtils;
 import cz.mzk.recordmanager.server.util.identifier.ISBNUtils;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.xml.StaxEventItemReader;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 
-import cz.mzk.recordmanager.server.model.ObalkyKnihTOC;
-import cz.mzk.recordmanager.server.util.HttpClient;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.regex.Pattern;
 
 public class ObalkyKnihRecordsReader implements ItemReader<ObalkyKnihTOC> {
 
 	@Autowired
 	private HttpClient httpClient;
 
-	private static final String OBALKY_KNIH_TOC_URL = "http://www.obalkyknih.cz/api/toc.xml";
+	private String filename = null;
+
+	private Date from = null;
+
+	private static final String OBALKY_KNIH_TOC_URL_FORMAT = "https://%s:%s@servis.obalkyknih.cz/export/okcz_toc.php%s";
+
+	private static final String OBALKY_KNIH_TOC_URL_PARAM_FORMAT = "?last_change=%tY-%tm-%td";
 
 	private static final String OCLC_PREFIX = "(OCoLC)";
 
-	private static final Pattern OCLC_PREFIX_PATTERN = Pattern.compile(OCLC_PREFIX);
+	private static final Pattern OCLC_PREFIX_PATTERN = Pattern.compile("\\(OCoLC\\)");
 
 	private static final int EFFECTIVE_LENGHT = 32;
 
 	private StaxEventItemReader<ObalkyKnihTOC> reader;
+
+	private static final SimpleDateFormat UPDATED_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+	@Value(value = "${ok_username:#{null}}")
+	private String USERNAME = "";
+
+	@Value(value = "${ok_password:#{null}}")
+	private String PASSWORD = "";
+
+	public ObalkyKnihRecordsReader(String filename, Date from) {
+		this.filename = filename;
+		this.from = from;
+	}
 
 	private static class FixingInputStream extends InputStream {
 
@@ -63,7 +87,10 @@ public class ObalkyKnihRecordsReader implements ItemReader<ObalkyKnihTOC> {
 	protected void initializeReader() throws Exception {
 		try {
 			reader = new StaxEventItemReader<>();
-			reader.setResource(new InputStreamResource(httpClient.executeGet(OBALKY_KNIH_TOC_URL)) {
+			InputStream is;
+			if (filename != null) is = new FileInputStream(new File(filename));
+			else is = httpClient.executeGet(createUrl());
+			reader.setResource(new InputStreamResource(is) {
 
 				@Override
 				public InputStream getInputStream() throws IOException,
@@ -90,11 +117,22 @@ public class ObalkyKnihRecordsReader implements ItemReader<ObalkyKnihTOC> {
 			toc.setOclc(CleaningUtils.replaceAll(toc.getOclc(), OCLC_PREFIX_PATTERN, ""));
 		}
 		if (toc.getIsbnStr() != null) {
-				toc.setIsbn(ISBNUtils.toISBN13Long(toc.getIsbnStr()));
+			toc.setIsbn(ISBNUtils.toISBN13Long(toc.getIsbnStr()));
 		}
 		toc.setNbn(MetadataUtils.shorten(toc.getNbn(), EFFECTIVE_LENGHT));
 		toc.setOclc(MetadataUtils.shorten(toc.getOclc(), EFFECTIVE_LENGHT));
 		toc.setEan(MetadataUtils.shorten(toc.getEan(), EFFECTIVE_LENGHT));
+		toc.setLastHarvest(new Date());
+		try {
+			toc.setUpdated(UPDATED_FORMAT.parse(toc.getUpdatedStr()));
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private String createUrl() {
+		String params = from == null ? "" : String.format(OBALKY_KNIH_TOC_URL_PARAM_FORMAT, from, from, from);
+		return String.format(OBALKY_KNIH_TOC_URL_FORMAT, USERNAME, PASSWORD, params);
 	}
 
 }

@@ -1333,3 +1333,7 @@ UPDATE library SET region='PL' WHERE id in (137);
 UPDATE library SET region='ZL' WHERE id in (143,187);
 UPDATE library SET region='US' WHERE id in (114,190);
 UPDATE library SET region='bibliography' WHERE id in (119,131,142,148,149,155,158,160,165,166);
+
+-- 04. 02. 2019 tomascejpek
+ALTER TABLE obalkyknih_toc ADD updated TIMESTAMP;
+ALTER TABLE obalkyknih_toc ADD last_harvest TIMESTAMP;
