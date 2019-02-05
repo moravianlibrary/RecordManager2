@@ -54,6 +54,8 @@ public class BiblioLinkerJobConfig {
 
 	private static final String TMP_BL_TABLE_REST_DEDUP = "tmp_bl_rest_dedup";
 
+	private static final String TMP_BL_TABLE_ORPHANED = "tmp_bl_orphaned";
+
 	private static final String TMP_BLS_TABLE_AUTH = "tmp_bls_auth";
 
 	private static final String TMP_BLS_TABLE_AUTH_CONSPECTUS = "tmp_bls_auth_conspectus";
@@ -63,6 +65,8 @@ public class BiblioLinkerJobConfig {
 	private String prepareBLTempTitleAuthTableSql = ResourceUtils.asString("job/biblioLinkerJob/prepareBLTempTitleAuth.sql");
 
 	private String prepareBLTempRestDedupTableSql = ResourceUtils.asString("job/biblioLinkerJob/prepareBLTempRestDedup.sql");
+
+	private String prepareBLTempOrphanedTableSql = ResourceUtils.asString("job/biblioLinkerJob/prepareBLTempOrphaned.sql");
 
 	private String prepareBLSimilarTempAuthConspectusTableSql = ResourceUtils.asString("job/biblioLinkerJob/prepareBLSTempAuthConspectus.sql");
 
@@ -74,7 +78,9 @@ public class BiblioLinkerJobConfig {
 			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER + ":prepareBLTempTitleAuthStep") Step prepareBLTempTitleAuthStep,
 			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER + ":blTempTitleAuthStep") Step blTempTitleAuthStep,
 			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER + ":prepareBLTempRestDedupStep") Step prepareBLTempRestDedupStep,
-			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER + ":blTempRestDedupStep") Step blTempRestDedupStep
+			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER + ":blTempRestDedupStep") Step blTempRestDedupStep,
+			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER + ":prepareBLTempOrphanedStep") Step prepareBLTempOrphanedStep,
+			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER + ":blTempOrphanedStep") Step blTempOrphanedStep
 	) {
 		return jobs.get(Constants.JOB_ID_BIBLIO_LINKER)
 				.validator(new DedupRecordsJobParametersValidator())
@@ -83,6 +89,8 @@ public class BiblioLinkerJobConfig {
 				.next(blTempTitleAuthStep)
 				.next(prepareBLTempRestDedupStep)
 				.next(blTempRestDedupStep)
+				.next(prepareBLTempOrphanedStep)
+				.next(blTempOrphanedStep)
 				.build();
 	}
 
@@ -104,7 +112,7 @@ public class BiblioLinkerJobConfig {
 	}
 
 	/**
-	 *
+	 * merge records with same title and authority
 	 */
 	@Bean(name = Constants.JOB_ID_BIBLIO_LINKER + ":prepareBLTempTitleAuthTasklet")
 	@StepScope
@@ -138,7 +146,7 @@ public class BiblioLinkerJobConfig {
 	}
 
 	/**
-	 *
+	 * more records with same dedup_record
 	 */
 	@Bean(name = Constants.JOB_ID_BIBLIO_LINKER + ":prepareBLTempRestDedupTasklet")
 	@StepScope
@@ -169,6 +177,40 @@ public class BiblioLinkerJobConfig {
 	@StepScope
 	public ItemReader<List<Long>> blTempRestDedupStepReader() throws Exception {
 		return blSimpleKeysReader(TMP_BL_TABLE_REST_DEDUP, "dedup_record_id");
+	}
+
+	/**
+	 * orphaned records
+	 */
+	@Bean(name = Constants.JOB_ID_BIBLIO_LINKER + ":prepareBLTempOrphanedTasklet")
+	@StepScope
+	public Tasklet prepareBLTempOrphanedTasklet() {
+		return new SqlCommandTasklet(prepareBLTempOrphanedTableSql);
+	}
+
+	@Bean(name = Constants.JOB_ID_BIBLIO_LINKER + ":prepareBLTempOrphanedStep")
+	public Step prepareBLTempOrphanedStep() {
+		return steps.get("prepareBLTempOrphanedStep")
+				.tasklet(prepareBLTempOrphanedTasklet())
+				.listener(new StepProgressListener())
+				.build();
+	}
+
+	@Bean(name = Constants.JOB_ID_BIBLIO_LINKER + ":blTempOrphanedStep")
+	public Step blTempOrphanedStep() throws Exception {
+		return steps.get("blTempOrphanedStep")
+				.listener(new StepProgressListener())
+				.<List<Long>, List<HarvestedRecord>>chunk(100)
+				.reader(blTempOrphanedStepReader())
+				.processor(blSimpleKeysStepProsessor())
+				.writer(blSimpleKeysStepWriter())
+				.build();
+	}
+
+	@Bean(name = "blOrphaned:reader")
+	@StepScope
+	public ItemReader<List<Long>> blTempOrphanedStepReader() throws Exception {
+		return blSimpleKeysReader(TMP_BL_TABLE_ORPHANED, "dedup_record_id");
 	}
 
 	/**
