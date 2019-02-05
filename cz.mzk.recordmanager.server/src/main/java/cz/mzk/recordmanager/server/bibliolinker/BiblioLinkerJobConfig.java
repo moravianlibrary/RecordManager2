@@ -1,13 +1,16 @@
 package cz.mzk.recordmanager.server.bibliolinker;
 
 import cz.mzk.recordmanager.server.dedup.DedupRecordsJobParametersValidator;
+import cz.mzk.recordmanager.server.dedup.KeyGeneratorForList;
 import cz.mzk.recordmanager.server.model.BiblioLinkerSimilarType;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
+import cz.mzk.recordmanager.server.springbatch.IntegerModuloPartitioner;
 import cz.mzk.recordmanager.server.springbatch.SqlCommandTasklet;
 import cz.mzk.recordmanager.server.springbatch.StepProgressListener;
 import cz.mzk.recordmanager.server.util.Constants;
 import cz.mzk.recordmanager.server.util.ResourceUtils;
 import org.hibernate.SessionFactory;
+import org.hibernate.exception.LockAcquisitionException;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
@@ -21,6 +24,7 @@ import org.springframework.batch.item.database.JdbcPagingItemReader;
 import org.springframework.batch.item.database.support.SqlPagingQueryProviderFactoryBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.task.TaskExecutor;
@@ -30,7 +34,9 @@ import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Configuration
 public class BiblioLinkerJobConfig {
@@ -72,13 +78,17 @@ public class BiblioLinkerJobConfig {
 
 	private String prepareBLSimilarTempAuthTableSql = ResourceUtils.asString("job/biblioLinkerJob/prepareBLSTempAuth.sql");
 
+	private static final Integer INTEGER_OVERRIDEN_BY_EXPRESSION = null;
+
+	private int partitionThreads = 4;
+
 	@Bean
 	public Job biblioLinkerJob(
 			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER + ":initBLStep") Step initBLStep,
 			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER + ":prepareBLTempTitleAuthStep") Step prepareBLTempTitleAuthStep,
-			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER + ":blTempTitleAuthStep") Step blTempTitleAuthStep,
+			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER + ":blTempTitleAuthPartitionedStep") Step blTempTitleAuthStep,
 			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER + ":prepareBLTempRestDedupStep") Step prepareBLTempRestDedupStep,
-			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER + ":blTempRestDedupStep") Step blTempRestDedupStep,
+			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER + ":blTempRestDedupPartitionedStep") Step blTempRestDedupStep,
 			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER + ":prepareBLTempOrphanedStep") Step prepareBLTempOrphanedStep,
 			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER + ":blTempOrphanedStep") Step blTempOrphanedStep
 	) {
@@ -133,16 +143,32 @@ public class BiblioLinkerJobConfig {
 		return steps.get("blTempTitleAuthStep")
 				.listener(new StepProgressListener())
 				.<List<Long>, List<HarvestedRecord>>chunk(100)
-				.reader(blTempTitleAuthStepReader())
+				.faultTolerant()
+				.keyGenerator(KeyGeneratorForList.INSTANCE)
+				.retry(LockAcquisitionException.class)
+				.retryLimit(10000)
+				.reader(blTempTitleAuthStepReader(INTEGER_OVERRIDEN_BY_EXPRESSION))
 				.processor(blSimpleKeysStepProsessor())
 				.writer(blSimpleKeysStepWriter())
 				.build();
 	}
 
+	@Bean(name = Constants.JOB_ID_BIBLIO_LINKER + ":blTempTitleAuthPartitionedStep")
+	public Step blTempTitleAuthPartitionedStep() throws Exception {
+		return steps.get("blTempTitleAuthPartitionedStep")
+				.partitioner("blTempTitleAuthPartitionedStepSlave", this.partioner()) //
+				.taskExecutor(this.taskExecutor)
+				.gridSize(this.partitionThreads)
+				.step(blSimilarTempAuthStep())
+				.build();
+	}
+
 	@Bean(name = "blTitleAuth:reader")
 	@StepScope
-	public ItemReader<List<Long>> blTempTitleAuthStepReader() throws Exception {
-		return blSimpleKeysReader(TMP_BL_TABLE_TITLE_AUTH, "dedup_record_id");
+	public ItemReader<List<Long>> blTempTitleAuthStepReader(
+			@Value("#{stepExecutionContext[modulo]}") Integer modulo
+	) throws Exception {
+		return blSimpleKeysReader(TMP_BL_TABLE_TITLE_AUTH, "dedup_record_id", modulo);
 	}
 
 	/**
@@ -167,16 +193,31 @@ public class BiblioLinkerJobConfig {
 		return steps.get("blTempRestDedupStep")
 				.listener(new StepProgressListener())
 				.<List<Long>, List<HarvestedRecord>>chunk(100)
-				.reader(blTempRestDedupStepReader())
+				.faultTolerant()
+				.keyGenerator(KeyGeneratorForList.INSTANCE)
+				.retry(LockAcquisitionException.class)
+				.retryLimit(10000)
+				.reader(blTempRestDedupStepReader(INTEGER_OVERRIDEN_BY_EXPRESSION))
 				.processor(blSimpleKeysStepProsessor())
 				.writer(blSimpleKeysStepWriter())
 				.build();
 	}
 
+	@Bean(name = Constants.JOB_ID_BIBLIO_LINKER + ":blTempRestDedupPartitionedStep")
+	public Step blTempRestDedupPartitionedStep() throws Exception {
+		return steps.get("blTempRestDedupPartitionedStep")
+				.partitioner("blTempRestDedupPartitionedStepSlave", this.partioner()) //
+				.taskExecutor(this.taskExecutor)
+				.gridSize(this.partitionThreads)
+				.step(blSimilarTempAuthStep())
+				.build();
+	}
+
 	@Bean(name = "blRestDedup:reader")
 	@StepScope
-	public ItemReader<List<Long>> blTempRestDedupStepReader() throws Exception {
-		return blSimpleKeysReader(TMP_BL_TABLE_REST_DEDUP, "dedup_record_id");
+	public ItemReader<List<Long>> blTempRestDedupStepReader(
+			@Value("#{stepExecutionContext[modulo]}") Integer modulo) throws Exception {
+		return blSimpleKeysReader(TMP_BL_TABLE_REST_DEDUP, "dedup_record_id", modulo);
 	}
 
 	/**
@@ -210,7 +251,7 @@ public class BiblioLinkerJobConfig {
 	@Bean(name = "blOrphaned:reader")
 	@StepScope
 	public ItemReader<List<Long>> blTempOrphanedStepReader() throws Exception {
-		return blSimpleKeysReader(TMP_BL_TABLE_ORPHANED, "dedup_record_id");
+		return blSimpleKeysReader(TMP_BL_TABLE_ORPHANED, "dedup_record_id", INTEGER_OVERRIDEN_BY_EXPRESSION);
 	}
 
 	/**
@@ -219,9 +260,9 @@ public class BiblioLinkerJobConfig {
 	@Bean
 	public Job biblioLinkerSimilarJob(
 			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":prepareBLSimilarTempAuthConspectusStep") Step prepareBLSimilarTempAuthConspectusStep,
-			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":blSimilarTempAuthConspectusStep") Step blSimilarTempAuthConspectusStep,
+			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":blSimilarTempAuthConspectusPartitionedStep") Step blSimilarTempAuthConspectusStep,
 			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":prepareBLSimilarTempAuthStep") Step prepareBLSimilarTempAuthStep,
-			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":blSimilarTempAuthStep") Step blSimilarTempAuthStep
+			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":blSimilarTempAuthPartitionedStep") Step blSimilarTempAuthStep
 	) {
 		return jobs.get(Constants.JOB_ID_BIBLIO_LINKER_SIMILAR)
 				.validator(new DedupRecordsJobParametersValidator())
@@ -254,16 +295,32 @@ public class BiblioLinkerJobConfig {
 		return steps.get("blSimilarTempAuthConspectusStep")
 				.listener(new StepProgressListener())
 				.<List<Long>, List<HarvestedRecord>>chunk(100)
-				.reader(blSimilarTempAuthConspectusStepReader())
+				.faultTolerant()
+				.keyGenerator(KeyGeneratorForList.INSTANCE)
+				.retry(LockAcquisitionException.class)
+				.retryLimit(10000)
+				.reader(blSimilarTempAuthConspectusStepReader(INTEGER_OVERRIDEN_BY_EXPRESSION))
 				.processor(blSimilarAuthConspectusStepProsessor())
 				.writer(blSimpleKeysStepWriter())
 				.build();
 	}
 
+	@Bean(name = Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":blSimilarTempAuthConspectusPartitionedStep")
+	public Step blSimilarTempAuthConspectusPartitionedStep() throws Exception {
+		return steps.get("blSimilarTempAuthConspectusPartitionedStep")
+				.partitioner("blSimilarTempAuthConspectusPartitionedStepSlave", this.partioner()) //
+				.taskExecutor(this.taskExecutor)
+				.gridSize(this.partitionThreads)
+				.step(blSimilarTempAuthConspectusStep())
+				.build();
+	}
+
 	@Bean(name = "blSimilarTitleAuth:reader")
 	@StepScope
-	public ItemReader<List<Long>> blSimilarTempAuthConspectusStepReader() throws Exception {
-		return blSimpleKeysReader(TMP_BLS_TABLE_AUTH_CONSPECTUS, "local_record_id");
+	public ItemReader<List<Long>> blSimilarTempAuthConspectusStepReader(
+			@Value("#{stepExecutionContext[modulo]}") Integer modulo
+	) throws Exception {
+		return blSimpleKeysReader(TMP_BLS_TABLE_AUTH_CONSPECTUS, "local_record_id", modulo);
 	}
 
 	@Bean(name = "blSimilarAuthConspectus:processor")
@@ -294,16 +351,32 @@ public class BiblioLinkerJobConfig {
 		return steps.get("blSimilarTempAuthStep")
 				.listener(new StepProgressListener())
 				.<List<Long>, List<HarvestedRecord>>chunk(100)
-				.reader(blSimilarTempAuthStepReader())
+				.faultTolerant()
+				.keyGenerator(KeyGeneratorForList.INSTANCE)
+				.retry(LockAcquisitionException.class)
+				.retryLimit(10000)
+				.reader(blSimilarTempAuthStepReader(INTEGER_OVERRIDEN_BY_EXPRESSION))
 				.processor(blSimilarAuthStepProsessor())
 				.writer(blSimpleKeysStepWriter())
 				.build();
 	}
 
+	@Bean(name = Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":blSimilarTempAuthPartitionedStep")
+	public Step blSimilarTempAuthPartitionedStep() throws Exception {
+		return steps.get("blSimilarTempAuthPartitionedStep")
+				.partitioner("blSimilarTempAuthPartitionedStepSlave", this.partioner()) //
+				.taskExecutor(this.taskExecutor)
+				.gridSize(this.partitionThreads)
+				.step(blSimilarTempAuthStep())
+				.build();
+	}
+
 	@Bean(name = "blSimilarAuth:reader")
 	@StepScope
-	public ItemReader<List<Long>> blSimilarTempAuthStepReader() throws Exception {
-		return blSimpleKeysReader(TMP_BLS_TABLE_AUTH, "local_record_id");
+	public ItemReader<List<Long>> blSimilarTempAuthStepReader(
+			@Value("#{stepExecutionContext[modulo]}") Integer modulo
+	) throws Exception {
+		return blSimpleKeysReader(TMP_BLS_TABLE_AUTH, "local_record_id", modulo);
 	}
 
 	@Bean(name = "blSimilarAuth:processor")
@@ -315,17 +388,28 @@ public class BiblioLinkerJobConfig {
 	/**
 	 * Generic components
 	 */
-	private ItemReader<List<Long>> blSimpleKeysReader(String tablename, String column) throws Exception {
+	private ItemReader<List<Long>> blSimpleKeysReader(
+			String tablename, String column,
+			@Value("#{stepExecutionContext[modulo]}") Integer modulo) throws Exception {
 		JdbcPagingItemReader<List<Long>> reader = new JdbcPagingItemReader<>();
 		SqlPagingQueryProviderFactoryBean pqpf = new SqlPagingQueryProviderFactoryBean();
 		pqpf.setDataSource(dataSource);
 		pqpf.setSelectClause("SELECT row_id," + column + " ids");
 		pqpf.setFromClause("FROM " + tablename);
+		if (modulo != null) {
+			pqpf.setWhereClause("WHERE row_id % :threads = :modulo");
+		}
 		pqpf.setSortKey("row_id");
 		reader.setRowMapper(new ArrayLongMapper());
 		reader.setPageSize(100);
 		reader.setQueryProvider(pqpf.getObject());
 		reader.setDataSource(dataSource);
+		if (modulo != null) {
+			Map<String, Object> parameterValues = new HashMap<>();
+			parameterValues.put("threads", this.partitionThreads);
+			parameterValues.put("modulo", modulo);
+			reader.setParameterValues(parameterValues);
+		}
 		reader.afterPropertiesSet();
 		return reader;
 	}
@@ -341,6 +425,12 @@ public class BiblioLinkerJobConfig {
 	public ItemWriter<List<HarvestedRecord>> blSimpleKeysStepWriter()
 			throws Exception {
 		return new BiblioLinkerSimpleKeysStepWriter();
+	}
+
+	@Bean(name = Constants.JOB_ID_BIBLIO_LINKER + ":blSimpleKeysPartioner")
+	@StepScope
+	public IntegerModuloPartitioner partioner() {
+		return new IntegerModuloPartitioner();
 	}
 
 	public class ArrayLongMapper implements RowMapper<List<Long>> {
