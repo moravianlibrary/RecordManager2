@@ -45,6 +45,9 @@ public class DailyScript implements Runnable {
 	@Override
 	public void run() {
 		harvestingFacade.incrementalObalkyKnihAnnotationsJob();
+		harvestingFacade.incrementalObalkyKnihTocHarvest();
+		zakonyFacade.runZakonyProLidiHarvestJob();
+		zakonyFacade.runZakonyProLidiFulltextJob();
 		oaiHarvestConfigurationDAO.findAll().each { conf ->
 			if (conf.harvestFrequency == HarvestFrequency.WEEKLY) {
 				try {
@@ -72,8 +75,6 @@ public class DailyScript implements Runnable {
 				}
 			}
 		}
-		zakonyFacade.runZakonyProLidiHarvestJob();
-		zakonyFacade.runZakonyProLidiFulltextJob();
 	}
 
 }

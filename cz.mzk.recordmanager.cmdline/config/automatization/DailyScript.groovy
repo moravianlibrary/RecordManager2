@@ -45,14 +45,6 @@ public class DailyScript implements Runnable {
 		} catch (JobExecutionFailure jfe) {
 			logger.error(String.format("Harvest of inspirations failed"));
 		}
-		// Obalky knih harvest (new table of content is published every 3rd day of the month)
-		LocalDateTime now = LocalDateTime.now();
-		if (now.getDayOfMonth() > 3) {
-			LocalDateTime lastHarvest = harvestingFacade.getLastObalkyKnihHarvest();
-			if (lastHarvest == null || lastHarvest.getMonth() != now.getMonth()) {
-				harvestingFacade.obalkyKnihHarvest();
-			}
-		}
 
 		oaiHarvestConfigurationDAO.findAll().each { conf ->
 			if (conf.harvestFrequency == HarvestFrequency.DAILY) {

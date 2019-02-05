@@ -29,6 +29,8 @@ public interface HarvestingFacade {
 
 	void obalkyKnihHarvest();
 
+	void incrementalObalkyKnihTocHarvest();
+
 	LocalDateTime getLastObalkyKnihHarvest();
 
 	void incrementalFulltextJob(KrameriusConfiguration conf);

@@ -174,6 +174,15 @@ public class HarvestingFacadeImpl implements HarvestingFacade {
 	}
 
 	@Override
+	public void incrementalObalkyKnihTocHarvest() {
+		Map<String, JobParameter> parameters = new HashMap<>();
+		LocalDateTime ldt = query(lastJobExecutionQuery, ImmutableMap.of("jobName", Constants.JOB_ID_HARVEST_OBALKY_KNIH));
+		if (ldt != null)
+			parameters.put(Constants.JOB_PARAM_FROM_DATE, new JobParameter(Date.from(ldt.atZone(ZoneId.systemDefault()).toInstant())));
+		jobExecutor.execute(Constants.JOB_ID_HARVEST_OBALKY_KNIH, new JobParameters(parameters));
+	}
+
+	@Override
 	public LocalDateTime getLastObalkyKnihHarvest() {
 		return query(lastJobExecutionQuery, ImmutableMap.of("jobName", Constants.JOB_ID_HARVEST_OBALKY_KNIH));
 	}
