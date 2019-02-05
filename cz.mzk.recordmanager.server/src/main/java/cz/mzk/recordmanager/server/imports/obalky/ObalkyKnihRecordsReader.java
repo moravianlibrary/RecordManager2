@@ -4,7 +4,10 @@ import cz.mzk.recordmanager.server.model.ObalkyKnihTOC;
 import cz.mzk.recordmanager.server.util.CleaningUtils;
 import cz.mzk.recordmanager.server.util.HttpClient;
 import cz.mzk.recordmanager.server.util.MetadataUtils;
+import cz.mzk.recordmanager.server.util.ProgressLogger;
 import cz.mzk.recordmanager.server.util.identifier.ISBNUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.xml.StaxEventItemReader;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +47,10 @@ public class ObalkyKnihRecordsReader implements ItemReader<ObalkyKnihTOC> {
 
 	private static final SimpleDateFormat UPDATED_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
+	private static Logger logger = LoggerFactory.getLogger(ObalkyKnihRecordsReader.class);
+
+	private ProgressLogger progressLogger = new ProgressLogger(logger, 5000);
+
 	@Value(value = "${ok_username:#{null}}")
 	private String USERNAME = "";
 
@@ -74,6 +81,7 @@ public class ObalkyKnihRecordsReader implements ItemReader<ObalkyKnihTOC> {
 
 	@Override
 	public ObalkyKnihTOC read() throws Exception {
+		progressLogger.incrementAndLogProgress();
 		if (reader == null) {
 			initializeReader();
 		}
