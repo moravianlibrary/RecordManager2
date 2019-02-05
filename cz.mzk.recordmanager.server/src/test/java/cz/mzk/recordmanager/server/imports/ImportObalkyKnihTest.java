@@ -50,7 +50,7 @@ public class ImportObalkyKnihTest extends AbstractTest {
 	public void run() throws Exception {
 		reset(httpClient);
 		InputStream response = this.getClass().getResourceAsStream("/obalkyknih/toc.xml");
-		expect(httpClient.executeGet("http://www.obalkyknih.cz/api/toc.xml")).andReturn(response);
+		expect(httpClient.executeGet("https://:@servis.obalkyknih.cz/export/okcz_toc.php")).andReturn(response);
 		replay(httpClient);
 
 		Job job = jobRegistry.getJob(Constants.JOB_ID_HARVEST_OBALKY_KNIH);
