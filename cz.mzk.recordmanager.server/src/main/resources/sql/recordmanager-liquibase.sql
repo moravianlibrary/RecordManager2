@@ -1606,3 +1606,6 @@ UPDATE library SET region='bibliography' WHERE id in (119,131,142,148,149,155,15
 --changeset tomascejpek:127
 ALTER TABLE obalkyknih_toc ADD updated TIMESTAMP;
 ALTER TABLE obalkyknih_toc ADD last_harvest TIMESTAMP;
+
+--changeset tomascejpek:128
+CREATE INDEX ean_idx ON ean(ean);

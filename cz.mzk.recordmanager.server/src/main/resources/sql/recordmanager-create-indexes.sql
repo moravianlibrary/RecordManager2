@@ -53,3 +53,4 @@ CREATE INDEX tezaurus_name_idx ON tezaurus_record(import_conf_id,source_field,na
 CREATE INDEX isbn_idx ON isbn(isbn);
 CREATE INDEX cnb_idx ON cnb(cnb);
 CREATE INDEX oclc_idx ON oclc(oclc);
+CREATE INDEX ean_idx ON ean(ean);
