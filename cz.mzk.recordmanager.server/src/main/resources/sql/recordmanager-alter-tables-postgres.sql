@@ -1340,3 +1340,7 @@ ALTER TABLE obalkyknih_toc ADD last_harvest TIMESTAMP;
 
 -- 06. 02. 2019 tomascejpek
 CREATE INDEX ean_idx ON ean(ean);
+
+-- 06. 02. 2019 tomascejpek
+DELETE FROM oai_harvest_conf WHERE import_conf_id=344;
+INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format,extract_id_regex) VALUES (344,null,null,null,null);
