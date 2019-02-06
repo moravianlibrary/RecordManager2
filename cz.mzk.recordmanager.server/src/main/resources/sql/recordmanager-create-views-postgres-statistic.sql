@@ -59,3 +59,39 @@ WHERE bji.job_name IN ('indexRecordsToSolrJob', 'indexAllRecordsToSolrJob', 'ind
   AND bje.status = 'COMPLETED'
 GROUP BY params1.string_val
 ;
+
+CREATE OR REPLACE VIEW import_job_stat AS
+SELECT
+  bje.job_execution_id,
+  (array_agg(conf_id_param.long_val))[1] import_conf_id,
+  bje.start_time,
+  bje.end_time,
+  bje.status,
+  from_param.date_val from_param,
+  to_param.date_val to_param
+FROM batch_job_instance bji
+  JOIN batch_job_execution bje ON bje.job_instance_id = bji.job_instance_id
+  JOIN batch_job_execution_params conf_id_param ON conf_id_param.job_execution_id = bje.job_execution_id AND conf_id_param.key_name = 'configurationId'
+  LEFT JOIN batch_job_execution_params to_param ON to_param.job_execution_id = bje.job_execution_id AND to_param.key_name = 'to'
+  LEFT JOIN batch_job_execution_params from_param ON from_param.job_execution_id = bje.job_execution_id AND from_param.key_name = 'from'
+  JOIN download_import_conf dic ON dic.import_conf_id = conf_id_param.long_val
+WHERE bji.job_name IN ('importRecordsJob', 'multiImportRecordsJob', 'importOaiRecordsJob', 'downloadAndImportRecordsJob', 'zakonyProLidiHarvestJob')
+GROUP BY bje.job_execution_id,from_param.date_val,to_param.date_val
+;
+
+CREATE OR REPLACE VIEW import_summary AS
+WITH last_harvest_date AS (
+  SELECT
+    import_conf_id,
+    COALESCE(MAX(CASE WHEN status = 'COMPLETED' THEN to_param END), MAX(CASE WHEN status = 'COMPLETED' THEN end_time END)) last_successful_harvest_date,
+    COALESCE(MAX(CASE WHEN status = 'FAILED' THEN to_param END), MAX(CASE WHEN status = 'FAILED' THEN end_time END)) last_failed_harvest_date,
+    COALESCE(MIN(end_time), MIN(to_param)) first_harvest_date
+  FROM import_job_stat
+  GROUP BY import_conf_id
+)
+SELECT ic.id, l.name, ic.id_prefix, dic.url, dic.import_job_name, lhd.last_successful_harvest_date, lhd.last_failed_harvest_date
+FROM last_harvest_date lhd
+  JOIN import_conf ic ON ic.id = lhd.import_conf_id
+  LEFT JOIN download_import_conf dic ON dic.import_conf_id = ic.id
+  JOIN library l ON l.id = ic.library_id
+;
