@@ -6,6 +6,7 @@ public enum BiblioLinkerSimilarType implements StringValueEnum {
 
 	AUTH("auth"),
 	AUTH_CONSPECTUS("auth+conspectus"),
+	CONSPECTUS("conspectus"),
 	UNSPECIFIED("unspecified");
 
 	private final String value;
