@@ -163,7 +163,7 @@ public class BiblioLinkerJobConfig {
 				.partitioner("blTempTitleAuthPartitionedStepSlave", this.partioner()) //
 				.taskExecutor(this.taskExecutor)
 				.gridSize(this.partitionThreads)
-				.step(blSimilarTempAuthStep())
+				.step(blTempTitleAuthStep())
 				.build();
 	}
 
@@ -213,7 +213,7 @@ public class BiblioLinkerJobConfig {
 				.partitioner("blTempRestDedupPartitionedStepSlave", this.partioner()) //
 				.taskExecutor(this.taskExecutor)
 				.gridSize(this.partitionThreads)
-				.step(blSimilarTempAuthStep())
+				.step(blTempRestDedupStep())
 				.build();
 	}
 
