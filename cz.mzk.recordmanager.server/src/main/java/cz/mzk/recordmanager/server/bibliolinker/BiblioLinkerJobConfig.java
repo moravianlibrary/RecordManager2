@@ -94,7 +94,7 @@ public class BiblioLinkerJobConfig {
 			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER + ":prepareBLTempRestDedupStep") Step prepareBLTempRestDedupStep,
 			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER + ":blTempRestDedupPartitionedStep") Step blTempRestDedupStep,
 			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER + ":prepareBLTempOrphanedStep") Step prepareBLTempOrphanedStep,
-			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER + ":blTempOrphanedStep") Step blTempOrphanedStep
+			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER + ":blTempOrphanedPartitionedStep") Step blTempOrphanedStep
 	) {
 		return jobs.get(Constants.JOB_ID_BIBLIO_LINKER)
 				.validator(new DedupRecordsJobParametersValidator())
@@ -246,16 +246,31 @@ public class BiblioLinkerJobConfig {
 		return steps.get("blTempOrphanedStep")
 				.listener(new StepProgressListener())
 				.<List<Long>, List<HarvestedRecord>>chunk(100)
-				.reader(blTempOrphanedStepReader())
+				.faultTolerant()
+				.keyGenerator(KeyGeneratorForList.INSTANCE)
+				.retry(LockAcquisitionException.class)
+				.retryLimit(10000)
+				.reader(blTempOrphanedStepReader(INTEGER_OVERRIDEN_BY_EXPRESSION))
 				.processor(blSimpleKeysStepProsessor())
 				.writer(blSimpleKeysStepWriter())
 				.build();
 	}
 
+	@Bean(name = Constants.JOB_ID_BIBLIO_LINKER + ":blTempOrphanedPartitionedStep")
+	public Step blTempOrphanedPartitionedStep() throws Exception {
+		return steps.get("blTempOrphanedPartitionedStep")
+				.partitioner("blTempOrphanedPartitionedStepSlave", this.partioner()) //
+				.taskExecutor(this.taskExecutor)
+				.gridSize(this.partitionThreads)
+				.step(blTempRestDedupStep())
+				.build();
+	}
+
 	@Bean(name = "blOrphaned:reader")
 	@StepScope
-	public ItemReader<List<Long>> blTempOrphanedStepReader() throws Exception {
-		return blSimpleKeysReader(TMP_BL_TABLE_ORPHANED, "dedup_record_id", INTEGER_OVERRIDEN_BY_EXPRESSION);
+	public ItemReader<List<Long>> blTempOrphanedStepReader(
+			@Value("#{stepExecutionContext[modulo]}") Integer modulo) throws Exception {
+		return blSimpleKeysReader(TMP_BL_TABLE_ORPHANED, "dedup_record_id", modulo);
 	}
 
 	/**
