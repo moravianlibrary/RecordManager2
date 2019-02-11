@@ -712,7 +712,10 @@ public class MarcDSL extends BaseDSL {
 	}
 
 	public Boolean getMetaproxyBool() {
-		return metadataRecord.getMetaproxyBool();
+		if (this.context.harvestedRecord().getHarvestedFrom().isMetaproxyEnabled()) {
+			return metadataRecord.getMetaproxyBool();
+		}
+		return false;
 	}
 
 	public boolean getIndexWhenMerged() {

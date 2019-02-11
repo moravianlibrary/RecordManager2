@@ -14,11 +14,6 @@ public class SfxJibKivMetadataMarcRecord extends MetadataMarcRecord {
 	}
 
 	@Override
-	public Boolean getMetaproxyBool() {
-		return false;
-	}
-
-	@Override
 	public String getSfxUrl(String id) {
 		return super.generateSfxUrl(SFX_URL, id, Collections.singletonMap("sid", "cpk"));
 	}

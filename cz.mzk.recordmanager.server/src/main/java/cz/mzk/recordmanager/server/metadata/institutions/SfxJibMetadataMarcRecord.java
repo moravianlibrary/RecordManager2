@@ -14,11 +14,6 @@ public class SfxJibMetadataMarcRecord extends MetadataMarcRecord {
 		super(underlayingMarc);
 	}
 
-	@Override
-	public Boolean getMetaproxyBool() {
-		return false;
-	}
-
 	private static final Map<String, String> SFX_PREFIX = new HashMap<>();
 
 	static {

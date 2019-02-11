@@ -76,11 +76,6 @@ public class PatentsMetadataMarcRecord extends MetadataMarcRecord{
 	}
 
 	@Override
-	public Boolean getMetaproxyBool() {
-		return false;
-	}
-
-	@Override
 	public String getUpvApplicationId() {
 		String f001 = underlayingMarc.getControlField("001");
 		if (f001 == null) return null;

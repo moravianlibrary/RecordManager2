@@ -12,11 +12,6 @@ public class SfxDirectMetadataMarcRecord extends MetadataMarcRecord {
 	}
 
 	@Override
-	public Boolean getMetaproxyBool() {
-		return false;
-	}
-
-	@Override
 	public String getSfxUrl(String id) {
 		for (DataField df : underlayingMarc.getDataFields("856")) {
 			if (df.getSubfield('u') != null) return df.getSubfield('u').getData();

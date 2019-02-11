@@ -24,9 +24,4 @@ public class MzkNormsMetadataMarcRecord extends MetadataMarcRecord{
 		return CitationRecordType.NORMS;
 	}
 
-	@Override
-	public Boolean getMetaproxyBool() {
-		return false;
-	}
-
 }

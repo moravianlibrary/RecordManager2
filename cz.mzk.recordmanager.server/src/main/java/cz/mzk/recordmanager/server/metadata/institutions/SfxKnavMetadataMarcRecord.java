@@ -14,11 +14,6 @@ public class SfxKnavMetadataMarcRecord extends MetadataMarcRecord {
 	}
 
 	@Override
-	public Boolean getMetaproxyBool() {
-		return false;
-	}
-
-	@Override
 	public String getSfxUrl(String id) {
 		return generateSfxUrl(SFX_URL, id, Collections.emptyMap());
 	}
