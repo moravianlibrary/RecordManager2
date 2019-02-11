@@ -1649,3 +1649,6 @@ FROM last_harvest_date lhd
   LEFT JOIN download_import_conf dic ON dic.import_conf_id = ic.id
   JOIN library l ON l.id = ic.library_id
 ;
+
+--changeset tomascejpek:131
+ALTER TABLE import_conf ADD COLUMN metaproxy_enabled BOOLEAN DEFAULT FALSE;

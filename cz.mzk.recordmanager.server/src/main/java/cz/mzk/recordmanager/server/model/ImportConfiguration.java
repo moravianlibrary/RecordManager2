@@ -81,6 +81,9 @@ public abstract class ImportConfiguration extends AbstractDomainObject {
 	@Column(name = "item_id")
 	private ItemId itemId;
 
+	@Column(name="metaproxy_enabled")
+	private boolean metaproxyEnabled = false;
+
 	public Library getLibrary() {
 		return library;
 	}
@@ -193,4 +196,11 @@ public abstract class ImportConfiguration extends AbstractDomainObject {
 		this.itemId = itemId;
 	}
 
+	public boolean isMetaproxyEnabled() {
+		return metaproxyEnabled;
+	}
+
+	public void setMetaproxyEnabled(boolean metaproxyEnabled) {
+		this.metaproxyEnabled = metaproxyEnabled;
+	}
 }
