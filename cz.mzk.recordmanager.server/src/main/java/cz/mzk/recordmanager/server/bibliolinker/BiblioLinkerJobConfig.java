@@ -262,7 +262,7 @@ public class BiblioLinkerJobConfig {
 				.partitioner("blTempOrphanedPartitionedStepSlave", this.partioner()) //
 				.taskExecutor(this.taskExecutor)
 				.gridSize(this.partitionThreads)
-				.step(blTempRestDedupStep())
+				.step(blTempOrphanedStep())
 				.build();
 	}
 
