@@ -1652,3 +1652,6 @@ FROM last_harvest_date lhd
 
 --changeset tomascejpek:131
 ALTER TABLE import_conf ADD COLUMN metaproxy_enabled BOOLEAN DEFAULT FALSE;
+
+--changeset tomascejpek:132 context:cpk
+UPDATE import_conf SET metaproxy_enabled=TRUE WHERE id IN (300,301,304,307,308,313,314,315,316,321,325,326,328,330,335,336,337,338,343);

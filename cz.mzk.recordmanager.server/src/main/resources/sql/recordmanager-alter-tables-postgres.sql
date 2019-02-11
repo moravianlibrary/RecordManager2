@@ -1383,3 +1383,4 @@ CREATE OR REPLACE VIEW import_summary AS
 
 -- 11. 02. 2019 tomascejpek
 ALTER TABLE import_conf ADD COLUMN metaproxy_enabled BOOLEAN DEFAULT FALSE;
+UPDATE import_conf SET metaproxy_enabled=TRUE WHERE id IN (300,301,304,307,308,313,314,315,316,321,325,326,328,330,335,336,337,338,343);
