@@ -164,12 +164,14 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 		if (dedupKeysChanged) {
 			// new record or change in keys
 			record.setNextDedupFlag(true);
+			record.setNextBiblioLinkerFlag(true);
 		} else {
 			// key are equal
 			if (oaiTimestampChanged) {
 				// neither keys neither oai timestamp changed, 
 				// don't deduplicate
 				record.setNextDedupFlag(false);
+				record.setNextBiblioLinkerFlag(false);
 			} else {
 				// keys are same but timestamp changed
 				// keep previsous dedup flag

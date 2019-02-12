@@ -1238,3 +1238,4 @@ CREATE TABLE biblio_linker_similar (
   FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE
 );
 ALTER TABLE harvested_record ADD COLUMN bl_conspectus VARCHAR(255);
+ALTER TABLE harvested_record ADD COLUMN next_biblio_linker_flag BOOLEAN DEFAULT FALSE;

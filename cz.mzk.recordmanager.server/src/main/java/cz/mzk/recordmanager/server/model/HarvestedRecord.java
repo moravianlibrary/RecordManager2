@@ -268,6 +268,9 @@ public class HarvestedRecord extends AbstractDomainObject {
 	@Column(name = "sigla")
 	private String sigla;
 
+	@Column(name="next_biblio_linker_flag")
+	private boolean nextBiblioLinkerFlag = true;
+
 	/**
 	 * indicator variable used for filtering reasons
 	 */
@@ -696,5 +699,13 @@ public class HarvestedRecord extends AbstractDomainObject {
 
 	public void setBlConspectus(String blConspectus) {
 		this.blConspectus = blConspectus;
+	}
+
+	public boolean isNextBiblioLinkerFlag() {
+		return nextBiblioLinkerFlag;
+	}
+
+	public void setNextBiblioLinkerFlag(boolean nextBiblioLinkerFlag) {
+		this.nextBiblioLinkerFlag = nextBiblioLinkerFlag;
 	}
 }

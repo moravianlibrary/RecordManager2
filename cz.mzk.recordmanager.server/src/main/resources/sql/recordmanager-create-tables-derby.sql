@@ -128,6 +128,7 @@ CREATE TABLE harvested_record (
   biblio_linker_id     DECIMAL(10),
   biblio_linker_similar BOOLEAN DEFAULT FALSE,
   bl_conspectus        VARCHAR(255),
+  next_biblio_linker_flag BOOLEAN DEFAULT FALSE,
   raw_record           BLOB,
   CONSTRAINT harvested_record_pk                     PRIMARY KEY (id),
   CONSTRAINT harvester_record_unique_id              UNIQUE (import_conf_id, record_id),
