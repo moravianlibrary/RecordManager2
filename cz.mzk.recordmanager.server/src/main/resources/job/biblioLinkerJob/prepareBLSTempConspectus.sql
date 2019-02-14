@@ -7,8 +7,8 @@ SELECT nextval('tmp_bl_id_seq') AS row_id,
   array_to_string(array_agg(DISTINCT hr.bl_conspectus), ',') bl_conspectus
 FROM harvested_record hr
 JOIN import_conf ic ON hr.import_conf_id=ic.id
-WHERE hr.bl_conspectus IS NOT NULL AND hr.biblio_linker_similar IS TRUE
-GROUP BY hr.bl_conspectus
-HAVING count(*)>1;
+WHERE hr.bl_conspectus IS NOT NULL
+GROUP BY hr.bl_conspectus, ic.id_prefix
+HAVING count(DISTINCT biblio_linker_id)>1;
 
 CREATE INDEX tmp_bls_conspectus_idx ON tmp_bls_conspectus(row_id);
