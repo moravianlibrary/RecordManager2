@@ -111,7 +111,7 @@ public class BiblioLinkerJobConfig {
 	/**
 	 * Init biblio linker
 	 */
-	@Bean(name = "initTasklet")
+	@Bean(name = "initBLTasklet")
 	@StepScope
 	public Tasklet initBLTasklet() {
 		return new SqlCommandTasklet(initBiblioLinkerSql);
