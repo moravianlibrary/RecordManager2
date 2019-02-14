@@ -174,6 +174,7 @@ public class Constants {
 	public static final String PREFIX_TDKIV				= "tdkiv";
 	public static final String PREFIX_TRE				= "tre";
 	public static final String PREFIX_UPV				= "upv";
+	public static final String PREFIX_UZEI				= "uzei";
 	public static final String PREFIX_VFU				= "vfu";
 	public static final String PREFIX_VKOL				= "vkol";
 	public static final String PREFIX_ZAKONY			= "zakony";
