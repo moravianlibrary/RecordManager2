@@ -6,6 +6,7 @@ import cz.mzk.recordmanager.server.marc.MarcRecord;
 import cz.mzk.recordmanager.server.marc.SubfieldExtractionMethod;
 import cz.mzk.recordmanager.server.metadata.MetadataRecord;
 import cz.mzk.recordmanager.server.metadata.view.ViewType;
+import cz.mzk.recordmanager.server.model.BiblioLinkerSimiliar;
 import cz.mzk.recordmanager.server.model.Ean;
 import cz.mzk.recordmanager.server.model.HarvestedRecordFormat.HarvestedRecordFormatEnum;
 import cz.mzk.recordmanager.server.model.Oclc;
@@ -809,5 +810,9 @@ public class MarcDSL extends BaseDSL {
 	public Set<String> getGenreFacet(String tags) {
 		if (!metadataRecord.genreFacet()) return Collections.emptySet();
 		return new HashSet<>(getFields(tags));
+	}
+
+	public List<String> getSimilar() {
+		return context.harvestedRecord().getBiblioLinkerSimiliarUrls().stream().map(BiblioLinkerSimiliar::getUrlId).collect(Collectors.toList());
 	}
 }

@@ -57,3 +57,4 @@ callNumber_search_txt_mv = getFieldsUnique "910b:996ch"
 summary_display_mv = getFields "520a"
 publisher_display_mv = getPublisherLocal()
 institution_view_facet_str_mv = getInstitutionViewFacet()
+similar_str_mv = getSimilar()
