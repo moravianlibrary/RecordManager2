@@ -327,5 +327,13 @@ public class HarvestedRecordDAOHibernate extends
 		return crit.list();
 	}
 
-
+	@SuppressWarnings("unchecked")
+	@Override
+	public Collection<HarvestedRecord> getByBiblioLinkerId(Long blId) {
+		Session session = sessionFactory.getCurrentSession();
+		return (List<HarvestedRecord>) session
+				.createQuery("from HarvestedRecord where biblio_linker_id = ?")
+				.setParameter(0, blId)
+				.list();
+	}
 }

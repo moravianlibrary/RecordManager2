@@ -23,7 +23,6 @@ public class BiblioLinkerSimilarSimpleStepProcessor implements
 	@Autowired
 	private HarvestedRecordDAO harvestedRecordDao;
 
-
 	private static Logger logger = LoggerFactory.getLogger(BiblioLinkerSimilarSimpleStepProcessor.class);
 
 	private ProgressLogger progressLogger = new ProgressLogger(logger, 1000);
@@ -38,23 +37,49 @@ public class BiblioLinkerSimilarSimpleStepProcessor implements
 	}
 
 	@Override
-	public List<HarvestedRecord> process(List<Long> idList) throws Exception {
-		Map<HarvestedRecord, String> hrIds = new HashMap<>();
-		for (Long id : idList) {
-			HarvestedRecord hr = harvestedRecordDao.get(id);
-			String urlId = hr.getHarvestedFrom().getIdPrefix() + '.' + hr.getUniqueId().getRecordId();
-			hrIds.put(hr, urlId);
-			progressLogger.incrementAndLogProgress();
+	public List<HarvestedRecord> process(List<Long> biblioIdsList) throws Exception {
+		Map<Long, Collection<HarvestedRecord>> records = new HashMap<>();
+		for (Long blId : new HashSet<>(biblioIdsList)) {
+			records.put(blId, harvestedRecordDao.getByBiblioLinkerId(blId));
 		}
-		for (HarvestedRecord hrOuter : hrIds.keySet()) {
-			Set<BiblioLinkerSimiliar> similarIds = new TreeSet<>(hrOuter.getBiblioLinkerSimiliarUrls());
-			for (HarvestedRecord hrInner : hrIds.keySet()) {
-				if (hrOuter == hrInner) continue;
-				similarIds.add(BiblioLinkerSimiliar.create(hrIds.get(hrInner), type));
-				if (similarIds.size() >= 5) break;
+		for (Long blOuter : records.keySet()) {
+			for (HarvestedRecord hr : records.get(blOuter)) {
+				Set<BiblioLinkerSimiliar> similarIds = new TreeSet<>(hr.getBiblioLinkerSimiliarUrls());
+				for (Long blInner : records.keySet()) {
+					if (blOuter.equals(blInner)) continue;
+					HarvestedRecord searched = findSameInstitution(hr, records.get(blInner));
+					if (searched == null) continue;
+					similarIds.add(BiblioLinkerSimiliar.create(getUrlId(searched), type));
+					if (similarIds.size() >= 5) break;
+				}
+				hr.setBiblioLinkerSimiliarUrls(new ArrayList<>(similarIds));
+				progressLogger.incrementAndLogProgress();
 			}
-			hrOuter.setBiblioLinkerSimiliarUrls(new ArrayList<>(similarIds));
 		}
-		return new ArrayList<>(hrIds.keySet());
+		return getAllRecords(records);
 	}
+
+	private static HarvestedRecord findSameInstitution(final HarvestedRecord source, final Collection<HarvestedRecord> searched) {
+		String institutionPrefix = source.getHarvestedFrom().getIdPrefix();
+		for (HarvestedRecord hr : searched) {
+			if (hr.getDeleted() != null) continue; // deleted record
+			if (hr.getHarvestedFrom().getIdPrefix().equals(institutionPrefix)) {
+				return hr;
+			}
+		}
+		return null;
+	}
+
+	private static String getUrlId(final HarvestedRecord hr) {
+		return hr.getHarvestedFrom().getIdPrefix() + '.' + hr.getUniqueId().getRecordId();
+	}
+
+	private static List<HarvestedRecord> getAllRecords(final Map<Long, Collection<HarvestedRecord>> map) {
+		List<HarvestedRecord> results = new ArrayList<>();
+		for (Collection<HarvestedRecord> hrs : map.values()) {
+			results.addAll(hrs);
+		}
+		return results;
+	}
+
 }

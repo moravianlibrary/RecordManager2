@@ -9,7 +9,6 @@ import cz.mzk.recordmanager.server.springbatch.SqlCommandTasklet;
 import cz.mzk.recordmanager.server.springbatch.StepProgressListener;
 import cz.mzk.recordmanager.server.util.Constants;
 import cz.mzk.recordmanager.server.util.ResourceUtils;
-import org.hibernate.SessionFactory;
 import org.hibernate.exception.LockAcquisitionException;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
@@ -40,9 +39,6 @@ import java.util.Map;
 
 @Configuration
 public class BiblioLinkerJobConfig {
-
-	@Autowired
-	private SessionFactory sessionFactory;
 
 	@Autowired
 	private TaskExecutor taskExecutor;
@@ -317,7 +313,7 @@ public class BiblioLinkerJobConfig {
 	public Step blSimilarTempAuthConspectusStep() throws Exception {
 		return steps.get("blSimilarTempAuthConspectusStep")
 				.listener(new StepProgressListener())
-				.<List<Long>, List<HarvestedRecord>>chunk(100)
+				.<List<Long>, List<HarvestedRecord>>chunk(10)
 				.faultTolerant()
 				.keyGenerator(KeyGeneratorForList.INSTANCE)
 				.retry(LockAcquisitionException.class)
@@ -343,7 +339,7 @@ public class BiblioLinkerJobConfig {
 	public ItemReader<List<Long>> blSimilarTempAuthConspectusStepReader(
 			@Value("#{stepExecutionContext[modulo]}") Integer modulo
 	) throws Exception {
-		return blSimpleKeysReader(TMP_BLS_TABLE_AUTH_CONSPECTUS, "local_record_id", modulo);
+		return blSimpleKeysReader(TMP_BLS_TABLE_AUTH_CONSPECTUS, "biblio_linker_id", modulo);
 	}
 
 	@Bean(name = "blSimilarAuthConspectus:processor")
@@ -373,7 +369,7 @@ public class BiblioLinkerJobConfig {
 	public Step blSimilarTempConspectusStep() throws Exception {
 		return steps.get("blSimilarTempConspectusStep")
 				.listener(new StepProgressListener())
-				.<List<Long>, List<HarvestedRecord>>chunk(100)
+				.<List<Long>, List<HarvestedRecord>>chunk(10)
 				.faultTolerant()
 				.keyGenerator(KeyGeneratorForList.INSTANCE)
 				.retry(LockAcquisitionException.class)
@@ -399,7 +395,7 @@ public class BiblioLinkerJobConfig {
 	public ItemReader<List<Long>> blSimilarTempConspectusStepReader(
 			@Value("#{stepExecutionContext[modulo]}") Integer modulo
 	) throws Exception {
-		return blSimpleKeysReader(TMP_BLS_TABLE_CONSPECTUS, "local_record_id", modulo);
+		return blSimpleKeysReader(TMP_BLS_TABLE_CONSPECTUS, "biblio_linker_id", modulo);
 	}
 
 	@Bean(name = "blSimilarConspectus:processor")
@@ -429,7 +425,7 @@ public class BiblioLinkerJobConfig {
 	public Step blSimilarTempAuthStep() throws Exception {
 		return steps.get("blSimilarTempAuthStep")
 				.listener(new StepProgressListener())
-				.<List<Long>, List<HarvestedRecord>>chunk(100)
+				.<List<Long>, List<HarvestedRecord>>chunk(10)
 				.faultTolerant()
 				.keyGenerator(KeyGeneratorForList.INSTANCE)
 				.retry(LockAcquisitionException.class)
@@ -455,7 +451,7 @@ public class BiblioLinkerJobConfig {
 	public ItemReader<List<Long>> blSimilarTempAuthStepReader(
 			@Value("#{stepExecutionContext[modulo]}") Integer modulo
 	) throws Exception {
-		return blSimpleKeysReader(TMP_BLS_TABLE_AUTH, "local_record_id", modulo);
+		return blSimpleKeysReader(TMP_BLS_TABLE_AUTH, "biblio_linker_id", modulo);
 	}
 
 	@Bean(name = "blSimilarAuth:processor")
