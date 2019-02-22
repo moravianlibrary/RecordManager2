@@ -2,7 +2,7 @@ DROP TABLE IF EXISTS tmp_bls_conspectus;
 
 CREATE TABLE tmp_bls_conspectus AS
 SELECT nextval('tmp_bl_id_seq') AS row_id,
-  array_to_string(array_agg(hr.biblio_linker_id), ',') biblio_linker_id,
+  array_to_string(array_agg(DISTINCT hr.biblio_linker_id), ',') biblio_linker_id,
   array_to_string(array_agg(hr.id), ',') local_record_id,
   array_to_string(array_agg(DISTINCT hr.bl_conspectus), ',') bl_conspectus
 FROM harvested_record hr
