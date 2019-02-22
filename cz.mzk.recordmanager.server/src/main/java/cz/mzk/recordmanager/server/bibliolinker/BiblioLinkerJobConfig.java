@@ -369,7 +369,7 @@ public class BiblioLinkerJobConfig {
 	public Step blSimilarTempConspectusStep() throws Exception {
 		return steps.get("blSimilarTempConspectusStep")
 				.listener(new StepProgressListener())
-				.<List<Long>, List<HarvestedRecord>>chunk(10)
+				.<List<Long>, List<HarvestedRecord>>chunk(1)
 				.faultTolerant()
 				.keyGenerator(KeyGeneratorForList.INSTANCE)
 				.retry(LockAcquisitionException.class)
@@ -425,7 +425,7 @@ public class BiblioLinkerJobConfig {
 	public Step blSimilarTempAuthStep() throws Exception {
 		return steps.get("blSimilarTempAuthStep")
 				.listener(new StepProgressListener())
-				.<List<Long>, List<HarvestedRecord>>chunk(10)
+				.<List<Long>, List<HarvestedRecord>>chunk(1)
 				.faultTolerant()
 				.keyGenerator(KeyGeneratorForList.INSTANCE)
 				.retry(LockAcquisitionException.class)

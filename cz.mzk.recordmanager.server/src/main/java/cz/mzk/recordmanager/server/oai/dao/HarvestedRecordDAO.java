@@ -53,4 +53,6 @@ public interface HarvestedRecordDAO extends DomainDAO<Long, HarvestedRecord> {
 
 	Collection<HarvestedRecord> getByBiblioLinkerId(Long blId);
 
+	Collection<HarvestedRecord> getByBiblioLinkerIds(List<Long> blId);
+
 }

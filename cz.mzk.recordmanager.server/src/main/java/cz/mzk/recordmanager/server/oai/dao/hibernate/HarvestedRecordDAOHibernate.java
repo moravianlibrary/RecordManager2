@@ -336,4 +336,14 @@ public class HarvestedRecordDAOHibernate extends
 				.setParameter(0, blId)
 				.list();
 	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public Collection<HarvestedRecord> getByBiblioLinkerIds(List<Long> blId) {
+		Session session = sessionFactory.getCurrentSession();
+		return (List<HarvestedRecord>) session
+				.createQuery("from HarvestedRecord where biblio_linker_id in (:blIds)")
+				.setParameterList("blIds", blId)
+				.list();
+	}
 }

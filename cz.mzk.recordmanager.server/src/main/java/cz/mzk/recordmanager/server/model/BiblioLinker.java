@@ -7,8 +7,10 @@ import java.util.Date;
 @Table(name= BiblioLinker.TABLE_NAME)
 public class BiblioLinker extends AbstractDomainObject {
 
-//	TODO consider usage of database sequence in id
 	public static final String TABLE_NAME = "biblio_linker";
+
+	@Column(name = "id", updatable = false, insertable = false)
+	private Long id;
 
 	@Column(name="updated")
 	@Temporal(TemporalType.TIMESTAMP)
@@ -20,6 +22,16 @@ public class BiblioLinker extends AbstractDomainObject {
 
 	public void setUpdated(Date updated) {
 		this.updated = updated;
+	}
+
+	@Override
+	public Long getId() {
+		return id;
+	}
+
+	@Override
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	@Override

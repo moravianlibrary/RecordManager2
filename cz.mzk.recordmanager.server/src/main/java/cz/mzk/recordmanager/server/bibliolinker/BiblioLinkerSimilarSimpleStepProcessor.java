@@ -38,11 +38,9 @@ public class BiblioLinkerSimilarSimpleStepProcessor implements
 
 	@Override
 	public List<HarvestedRecord> process(List<Long> biblioIdsList) throws Exception {
-		Map<Long, Collection<HarvestedRecord>> records = new HashMap<>();
+		Map<Long, Collection<HarvestedRecord>> records;
 		Set<HarvestedRecord> toUpdate = new HashSet<>();
-		for (Long blId : new HashSet<>(biblioIdsList)) {
-			records.put(blId, harvestedRecordDao.getByBiblioLinkerId(blId));
-		}
+		records = sortrecords(harvestedRecordDao.getByBiblioLinkerIds(biblioIdsList));
 		for (Long blOuter : records.keySet()) {
 			for (HarvestedRecord hr : records.get(blOuter)) {
 				Set<BiblioLinkerSimiliar> similarIds = new TreeSet<>(hr.getBiblioLinkerSimiliarUrls());
@@ -80,6 +78,19 @@ public class BiblioLinkerSimilarSimpleStepProcessor implements
 		List<HarvestedRecord> results = new ArrayList<>();
 		for (Collection<HarvestedRecord> hrs : map.values()) {
 			results.addAll(hrs);
+		}
+		return results;
+	}
+
+	private static Map<Long, Collection<HarvestedRecord>> sortrecords(final Collection<HarvestedRecord> hrs) {
+		Map<Long, Collection<HarvestedRecord>> results = new HashMap<>();
+		for (HarvestedRecord hr : hrs) {
+			Long blId = hr.getBiblioLinker().getId();
+			if (results.containsKey(blId)) {
+				results.computeIfPresent(blId, (key, value) -> value).add(hr);
+			} else {
+				results.computeIfAbsent(blId, key -> new ArrayList<>()).add(hr);
+			}
 		}
 		return results;
 	}
