@@ -39,6 +39,7 @@ public class BiblioLinkerSimilarSimpleStepProcessor implements
 	@Override
 	public List<HarvestedRecord> process(List<Long> biblioIdsList) throws Exception {
 		Map<Long, Collection<HarvestedRecord>> records = new HashMap<>();
+		Set<HarvestedRecord> toUpdate = new HashSet<>();
 		for (Long blId : new HashSet<>(biblioIdsList)) {
 			records.put(blId, harvestedRecordDao.getByBiblioLinkerId(blId));
 		}
@@ -46,17 +47,18 @@ public class BiblioLinkerSimilarSimpleStepProcessor implements
 			for (HarvestedRecord hr : records.get(blOuter)) {
 				Set<BiblioLinkerSimiliar> similarIds = new TreeSet<>(hr.getBiblioLinkerSimiliarUrls());
 				for (Long blInner : records.keySet()) {
+					if (similarIds.size() >= 5) break;
 					if (blOuter.equals(blInner)) continue;
 					HarvestedRecord searched = findSameInstitution(hr, records.get(blInner));
 					if (searched == null) continue;
 					similarIds.add(BiblioLinkerSimiliar.create(getUrlId(searched), type));
-					if (similarIds.size() >= 5) break;
+					toUpdate.add(hr);
 				}
 				hr.setBiblioLinkerSimiliarUrls(new ArrayList<>(similarIds));
 				progressLogger.incrementAndLogProgress();
 			}
 		}
-		return getAllRecords(records);
+		return new ArrayList<>(toUpdate);
 	}
 
 	private static HarvestedRecord findSameInstitution(final HarvestedRecord source, final Collection<HarvestedRecord> searched) {
