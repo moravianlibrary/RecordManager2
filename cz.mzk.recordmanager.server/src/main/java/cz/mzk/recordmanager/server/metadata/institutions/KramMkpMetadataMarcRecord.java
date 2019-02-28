@@ -13,7 +13,7 @@ public class KramMkpMetadataMarcRecord extends KramDefaultMetadataMarcRecord {
 
 	@Override
 	public List<String> getUrls() {
-		return generateUrl("http://kramerius4.mlp.cz/search/handle/");
+		return generateUrl("http://digitalniknihovna.mlp.cz/");
 	}
 
 	@Override
