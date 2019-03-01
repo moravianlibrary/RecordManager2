@@ -1655,3 +1655,8 @@ ALTER TABLE import_conf ADD COLUMN metaproxy_enabled BOOLEAN DEFAULT FALSE;
 
 --changeset tomascejpek:132 context:cpk
 UPDATE import_conf SET metaproxy_enabled=TRUE WHERE id IN (300,301,304,307,308,313,314,315,316,321,325,326,328,330,335,336,337,338,343);
+
+--changeset tomascejpek:133 context:cpk
+UPDATE oai_harvest_conf SET set_spec = '3' WHERE import_conf_id = 342;
+INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency) VALUES (393, 142, 200, 'bmc', 8, false, true, true, false, 'U');
+INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity,harvest_job_name) VALUES (393,'http://oai.medvik.cz/bmc/oai','79','xml-marc',NULL,'oaiHarvestOneByOneJob');
