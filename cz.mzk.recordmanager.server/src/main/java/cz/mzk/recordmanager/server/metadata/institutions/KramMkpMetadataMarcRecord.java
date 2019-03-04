@@ -16,9 +16,4 @@ public class KramMkpMetadataMarcRecord extends KramDefaultMetadataMarcRecord {
 		return generateUrl("http://digitalniknihovna.mlp.cz/");
 	}
 
-	@Override
-	public boolean getIndexWhenMerged() {
-		return true;
-	}
-
 }

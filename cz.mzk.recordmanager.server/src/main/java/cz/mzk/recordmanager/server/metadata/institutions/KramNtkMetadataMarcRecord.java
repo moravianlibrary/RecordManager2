@@ -16,9 +16,4 @@ public class KramNtkMetadataMarcRecord extends KramDefaultMetadataMarcRecord {
 		return generateUrl("https://kramerius.techlib.cz/kramerius-web-client/view/");
 	}
 
-	@Override
-	public boolean getIndexWhenMerged() {
-		return true;
-	}
-
 }

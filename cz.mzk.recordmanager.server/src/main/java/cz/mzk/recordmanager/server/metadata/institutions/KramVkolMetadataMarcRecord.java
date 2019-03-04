@@ -16,9 +16,4 @@ public class KramVkolMetadataMarcRecord extends KramDefaultMetadataMarcRecord {
 		return generateUrl("http://kramerius.kr-olomoucky.cz/search/handle/");
 	}
 
-	@Override
-	public boolean getIndexWhenMerged() {
-		return true;
-	}
-
 }
