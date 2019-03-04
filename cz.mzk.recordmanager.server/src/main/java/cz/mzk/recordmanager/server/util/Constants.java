@@ -89,7 +89,7 @@ public class Constants {
 	public static final String METADATA_FORMAT_MARC21E     = "marc21e";
 	public static final String METADATA_FORMAT_DUBLIN_CORE = "dublinCore";
 	public static final String METADATA_FORMAT_ESE		= "ese";
-
+	
 	public static final String PREFIX_AGROVOC			= "agrovoc";
 	public static final String PREFIX_ANL				= "anl";
 	public static final String PREFIX_AUTH				= "auth";
@@ -105,12 +105,16 @@ public class Constants {
 	public static final String PREFIX_KNAV				= "knav";
 	public static final String PREFIX_KNEP				= "knep";
 	public static final String PREFIX_KRAM3_NKP			= "kram3-nkp";
+	public static final String PREFIX_KRAM_CBVK			= "kram-cbvk";
 	public static final String PREFIX_KRAM_KNAV			= "kram-knav";
 	public static final String PREFIX_KRAM_MZK			= "kram-mzk";
 	public static final String PREFIX_KRAM_NKP			= "kram-nkp";
 	public static final String PREFIX_KRAM_NLK			= "kram-nlk";
 	public static final String PREFIX_KRAM_NTK			= "kram-ntk";
+	public static final String PREFIX_KRAM_MKP			= "kram-mkp";
+	public static final String PREFIX_KRAM_SVKHK		= "kram-svkhk";
 	public static final String PREFIX_KRAM_SVKUL		= "kram-svkul";
+	public static final String PREFIX_KRAM_VKOL			= "kram-vkol";
 	public static final String PREFIX_KVKL				= "kvkl";
 	public static final String PREFIX_LIBRARY			= "library";
 	public static final String PREFIX_MANUSCRIPTORIUM	= "manuscript";
@@ -173,7 +177,7 @@ public class Constants {
 	public static final String PREFIX_VFU				= "vfu";
 	public static final String PREFIX_VKOL				= "vkol";
 	public static final String PREFIX_ZAKONY			= "zakony";
-	
+
 	public static final String LIBRARY_NAME_KKL			= "KKL";
 	public static final String LIBRARY_NAME_NKP			= "NKP";
 	public static final String LIBRARY_NAME_SLK			= "SLK";
