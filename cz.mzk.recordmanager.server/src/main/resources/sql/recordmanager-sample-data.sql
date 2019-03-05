@@ -82,6 +82,7 @@ INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (187, 'KNI
 INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (188, 'MKOSTROV', 'https://katalog.mkostrov.cz/', 'https://mkostrov.cz/', 'Ostrov', 'KV');
 INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (189, 'MKBER', 'https://www.knihovnaberoun.cz/', 'https://beroun.knihovny.net/Clavius/', 'Beroun', 'SC');
 INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (190, 'MKMOST', 'http://www.knihovnamost.cz/', 'https://most.tritius.cz/', 'Most', 'US');
+INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (191, 'UZEI', 'https://www.uzei.cz/', 'https://aleph.uzei.cz/', 'Praha', 'PR');
 INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (192, 'KKDVY', 'https://www.kkdvyskov.cz/', 'https://www.library.sk/arl-vy/', 'Vyškov', 'JM');
 INSERT INTO library (id, name, url, catalog_url, city) VALUES (400, 'AUTHORITY', 'nkp.cz', 'aleph.nkp.cz', NULL);
 
@@ -183,6 +184,7 @@ INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weig
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id) VALUES (388, 188, 200, 'mkostrov', 11, false, true, true, true, 'U', 'other');
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id) VALUES (389, 189, 200, 'mkber', 11, false, true, true, true, 'U', 'other');
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id) VALUES (390, 190, 200, 'mkmost', 11, false, true, true, true, 'U', 'other');
+INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id) VALUES (391, 191, 200, 'uzei', 11, false, true, true, true, 'U', 'aleph');
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id) VALUES (392, 192, 200, 'kkdvy', 11, false, true, true, true, 'U', 'other');
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency) VALUES (393, 142, 200, 'bmc', 8, false, true, true, false, 'U');
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency,mapping_script,mapping_dedup_script) VALUES (400, 400, 200, 'auth', 0, false, true, false, false, 'D','AuthorityMarc.groovy', 'AuthorityMergedBaseMarc.groovy');
@@ -327,6 +329,7 @@ INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format) VAL
 INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format,extract_id_regex) VALUES (344,null,null,null,null);
 INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format,extract_id_regex) VALUES (351,'local:/data/imports/aleph.ADR','importOaiRecordsJob',null,'[^:]+:(.*)');
 INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format,extract_id_regex) VALUES (354,'local:/data/imports/aleph.KTD','importOaiRecordsJob',null,'[^:]+:(.*)');
+INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format) VALUES (391,null,'importRecordsJob','xml');
 INSERT INTO download_import_conf (import_conf_id,url,import_job_name) VALUES (500,'http://muj-antikvariat.cz/oai-all.xml','antikvariatyImportRecordsJob');
 INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format,extract_id_regex) VALUES (1305,'http://sfx.jib.cz/sfxlcl3/cgi/public/get_file.cgi?file=institutional_holding-NKP.xml','downloadAndImportRecordsJob','sfx',null);
 INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format,extract_id_regex) VALUES (1306,'http://sfx.jib.cz/sfxlcl3/cgi/public/get_file.cgi?file=institutional_holding-VKOL.xml','downloadAndImportRecordsJob','sfx',null);
