@@ -169,6 +169,11 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 		if (isMusicalScores()) hrf.add(HarvestedRecordFormatEnum.MUSICAL_SCORES);
 		if (isAudioDocument()) hrf.add(HarvestedRecordFormatEnum.AUDIO_OTHER);
 		if (isOtherDocument()) hrf.add(HarvestedRecordFormatEnum.OTHER_OTHER);
+
+		if (hrf.size() > 1 && hrf.contains(HarvestedRecordFormatEnum.BOOKS)) {
+			hrf.remove(HarvestedRecordFormatEnum.BOOKS);
+		}
+
 		return hrf;
 	}
 

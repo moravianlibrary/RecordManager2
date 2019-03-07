@@ -752,6 +752,10 @@ public class MetadataMarcRecord implements MetadataRecord {
 		if (isOthers()) hrf.add(HarvestedRecordFormatEnum.OTHER_OTHER);
 		if (hrf.isEmpty()) hrf.add(HarvestedRecordFormatEnum.OTHER_OTHER);
 
+		if (hrf.size() > 1 && hrf.contains(HarvestedRecordFormatEnum.BOOKS)) {
+			hrf.remove(HarvestedRecordFormatEnum.BOOKS);
+		}
+
 		return hrf;
 	}
 
