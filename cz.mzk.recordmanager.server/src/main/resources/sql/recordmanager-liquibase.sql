@@ -1682,3 +1682,9 @@ INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granul
 INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (191, 'UZEI', 'https://www.uzei.cz/', 'https://aleph.uzei.cz/', 'Praha', 'PR');
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id) VALUES (391, 191, 200, 'uzei', 11, false, true, true, true, 'U', 'aleph');
 INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format) VALUES (391,null,'importRecordsJob','xml');
+
+--changeset tomascejpek:137 context:cpk
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (47, 373, 'CKG001');
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (49, 375, 'OPG503');
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (54, 380, 'PEG001');
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (55, 381, 'PIG001');
