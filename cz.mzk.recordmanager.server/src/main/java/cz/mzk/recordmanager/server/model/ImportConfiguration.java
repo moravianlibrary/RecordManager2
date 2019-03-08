@@ -84,6 +84,9 @@ public abstract class ImportConfiguration extends AbstractDomainObject {
 	@Column(name="metaproxy_enabled")
 	private boolean metaproxyEnabled = false;
 
+	@Column(name = "ziskej_enabled")
+	private boolean ziskejEnabled = false;
+
 	public Library getLibrary() {
 		return library;
 	}
@@ -202,5 +205,13 @@ public abstract class ImportConfiguration extends AbstractDomainObject {
 
 	public void setMetaproxyEnabled(boolean metaproxyEnabled) {
 		this.metaproxyEnabled = metaproxyEnabled;
+	}
+
+	public boolean isZiskejEnabled() {
+		return ziskejEnabled;
+	}
+
+	public void setZiskejEnabled(boolean ziskejEnabled) {
+		this.ziskejEnabled = ziskejEnabled;
 	}
 }

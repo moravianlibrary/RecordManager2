@@ -832,4 +832,8 @@ public class MarcDSL extends BaseDSL {
 				SubfieldExtractionMethod.JOINED, "|", 't', 'g');
 	}
 
+	public boolean getZiskejBool() {
+		return context.harvestedRecord().getHarvestedFrom().isZiskejEnabled();
+	}
+
 }
