@@ -49,7 +49,7 @@ public class BiblioLinkerSimilarSimpleStepProcessor implements
 					if (blOuter.equals(blInner)) continue;
 					HarvestedRecord searched = findSameInstitution(hr, records.get(blInner));
 					if (searched == null) continue;
-					similarIds.add(BiblioLinkerSimiliar.create(getUrlId(searched), type));
+					similarIds.add(BiblioLinkerSimiliar.create(getUrlId(searched), searched, type));
 					toUpdate.add(hr);
 				}
 				hr.setBiblioLinkerSimiliarUrls(new ArrayList<>(similarIds));

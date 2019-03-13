@@ -66,6 +66,8 @@ public class BiblioLinkerJobConfig {
 
 	private String initBiblioLinkerSql = ResourceUtils.asString("job/biblioLinkerJob/initBiblioLinker.sql");
 
+	private String initBiblioLinkerSimilarSql = ResourceUtils.asString("job/biblioLinkerJob/initBiblioLinkerSimilar.sql");
+
 	private String prepareBLTempTitleAuthTableSql = ResourceUtils.asString("job/biblioLinkerJob/prepareBLTempTitleAuth.sql");
 
 	private String prepareBLTempRestDedupTableSql = ResourceUtils.asString("job/biblioLinkerJob/prepareBLTempRestDedup.sql");
@@ -274,6 +276,7 @@ public class BiblioLinkerJobConfig {
 	 */
 	@Bean
 	public Job biblioLinkerSimilarJob(
+			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":initBLSStep") Step initBLSStep,
 			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":prepareBLSimilarTempAuthConspectusStep") Step prepareBLSimilarTempAuthConspectusStep,
 			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":blSimilarTempAuthConspectusPartitionedStep") Step blSimilarTempAuthConspectusStep,
 			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":prepareBLSimilarTempConspectusStep") Step prepareBLSimilarTempConspectusStep,
@@ -283,12 +286,30 @@ public class BiblioLinkerJobConfig {
 	) {
 		return jobs.get(Constants.JOB_ID_BIBLIO_LINKER_SIMILAR)
 				.validator(new DedupRecordsJobParametersValidator())
-				.start(prepareBLSimilarTempAuthConspectusStep)
+				.start(initBLSStep)
+				.next(prepareBLSimilarTempAuthConspectusStep)
 				.next(blSimilarTempAuthConspectusStep)
 				.next(prepareBLSimilarTempConspectusStep)
 				.next(blSimilarTempConspectustep)
 				.next(prepareBLSimilarTempAuthStep)
 				.next(blSimilarTempAuthStep)
+				.build();
+	}
+
+	/**
+	 * Init biblio linker similar job
+	 */
+	@Bean(name = "initBLSTasklet")
+	@StepScope
+	public Tasklet initBLSTasklet() {
+		return new SqlCommandTasklet(initBiblioLinkerSimilarSql);
+	}
+
+	@Bean(name = Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":initBLSStep")
+	public Step initBLSStep() {
+		return steps.get("initBLSTasklet")
+				.tasklet(initBLSTasklet())
+				.listener(new StepProgressListener())
 				.build();
 	}
 

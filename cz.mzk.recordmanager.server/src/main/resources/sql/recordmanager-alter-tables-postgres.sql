@@ -1233,6 +1233,7 @@ ALTER TABLE harvested_record ADD COLUMN biblio_linker_similar BOOLEAN DEFAULT FA
 CREATE TABLE biblio_linker_similar (
   id                   DECIMAL(10) PRIMARY KEY,
   harvested_record_id  DECIMAL(10),
+  harvested_record_similar_id DECIMAL(10),
   url_id               VARCHAR(128),
   type                 VARCHAR(20),
   FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE

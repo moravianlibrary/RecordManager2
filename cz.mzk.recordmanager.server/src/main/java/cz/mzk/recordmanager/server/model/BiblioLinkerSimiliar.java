@@ -13,6 +13,9 @@ public class BiblioLinkerSimiliar extends AbstractDomainObject implements Compar
 
 	public static final String TABLE_NAME = "biblio_linker_similar";
 
+	@Column(name = "harvested_record_similar_id")
+	private Long harvestedRecordSimilarId;
+
 	@Column(name = "url_id")
 	private String urlId;
 
@@ -25,8 +28,9 @@ public class BiblioLinkerSimiliar extends AbstractDomainObject implements Compar
 	@Column(name = "type")
 	private BiblioLinkerSimilarType type;
 
-	public static BiblioLinkerSimiliar create(final String id, final BiblioLinkerSimilarType type) {
+	public static BiblioLinkerSimiliar create(final String id, final HarvestedRecord similarRecord, final BiblioLinkerSimilarType type) {
 		BiblioLinkerSimiliar newBLSimilar = new BiblioLinkerSimiliar();
+		newBLSimilar.setHarvestedRecordSimilarId(similarRecord.getId());
 		newBLSimilar.setUrlId(id);
 		newBLSimilar.setType(type);
 		return newBLSimilar;
@@ -46,6 +50,14 @@ public class BiblioLinkerSimiliar extends AbstractDomainObject implements Compar
 
 	public void setType(BiblioLinkerSimilarType type) {
 		this.type = type;
+	}
+
+	public Long getHarvestedRecordSimilarId() {
+		return harvestedRecordSimilarId;
+	}
+
+	public void setHarvestedRecordSimilarId(Long harvestedRecordSimilarId) {
+		this.harvestedRecordSimilarId = harvestedRecordSimilarId;
 	}
 
 	@Override

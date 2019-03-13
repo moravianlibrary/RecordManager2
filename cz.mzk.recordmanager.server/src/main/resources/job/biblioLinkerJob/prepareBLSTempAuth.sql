@@ -9,6 +9,7 @@ FROM harvested_record hr
 JOIN import_conf ic ON hr.import_conf_id=ic.id
 WHERE hr.author_auth_key IS NOT NULL
 GROUP BY hr.author_auth_key
-HAVING count(DISTINCT biblio_linker_id)>1;
+HAVING COUNT(DISTINCT biblio_linker_id)>1
+  AND bool_or(next_biblio_linker_flag) IS TRUE;
 
 CREATE INDEX tmp_bls_auth_idx ON tmp_bls_auth(row_id);

@@ -9,6 +9,8 @@ FROM harvested_record hr
 JOIN import_conf ic ON hr.import_conf_id=ic.id
 WHERE hr.bl_conspectus IS NOT NULL
 GROUP BY hr.bl_conspectus
-HAVING count(DISTINCT biblio_linker_id)>1;
+HAVING COUNT(DISTINCT biblio_linker_id)>1
+  AND COUNT(*)<30000
+  AND bool_or(next_biblio_linker_flag) IS TRUE;
 
 CREATE INDEX tmp_bls_conspectus_idx ON tmp_bls_conspectus(row_id);
