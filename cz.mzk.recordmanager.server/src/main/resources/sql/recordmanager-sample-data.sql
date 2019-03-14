@@ -231,12 +231,12 @@ INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granul
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (305,'http://sc.vpk.cz/cgi-bin/oai2',null,'marc21',null);
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity,extract_id_regex) VALUES (306,'https://opac.moderniknihovna.cz/cgi-bin/koha/oai.pl','CPK','marccpk',NULL,'UOG505:(.*)');
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (307,'https://aleph.techlib.cz/OAI','CPK','marc21','SECOND');
-INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity,extract_id_regex) VALUES (308,'https://ipac.kvkli.cz/i2/i2.ws.oai.cls','CPK1','oai_marcxml_cpk',NULL,'s/[^:]+:[^:]+:([^\\/]+)\\/([^\\/]+)/$1_$2/');
+INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity,extract_id_regex) VALUES (308,'https://ipac.kvkli.cz/arl-li/cs/oai/','CPK','oai_marcxml_cpk',NULL,'s/[^:]+:[^:]+:[^:]+:(.+)/LiUsCat_$1/');
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (309,'http://sc.vpk.cz/cgi-bin/oai2',null,'marc21','SECOND');
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (311,'https://www.vkta.cz/Clavius/l.dll','CPK','marc21',NULL);
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (312,'https://katalog.kkvysociny.cz/clavius/l.dll','CPK','marc21',NULL);
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (313,'https://aleph.svkhk.cz/OAI','HKAOAI','marc21',NULL);
-INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (314,'http://katalog.svkul.cz/l.dll','CPK','marc21',NULL);
+INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (314,'https://katalog.svkul.cz/l.dll','CPK','marc21',NULL);
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (315,'https://aleph.vkol.cz/OAI','VKOLOAI','marc21',NULL);
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (316,'https://aleph.nkp.cz/OAI','SKC','marc21',NULL);
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (317,'http://aleph.nkp.cz/OAI','NKC-CPK','marc21',NULL);

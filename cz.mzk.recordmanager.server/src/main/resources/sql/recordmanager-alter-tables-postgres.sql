@@ -1417,3 +1417,7 @@ INSERT INTO sigla (id, import_conf_id, sigla) VALUES (47, 373, 'CKG001');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (49, 375, 'OPG503');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (54, 380, 'PEG001');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (55, 381, 'PIG001');
+
+-- 14. 03. 2019 tomascejpek
+UPDATE oai_harvest_conf SET url='https://ipac.kvkli.cz/arl-li/cs/oai/',set_spec='CPK',extract_id_regex='s/[^:]+:[^:]+:[^:]+:(.+)/LiUsCat_$1/' WHERE import_conf_id=308;
+UPDATE oai_harvest_conf SET url='https://katalog.svkul.cz/l.dll' WHERE import_conf_id=314;
