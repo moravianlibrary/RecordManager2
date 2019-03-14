@@ -18,6 +18,13 @@ SELECT hrfl.harvested_record_id AS id FROM harvested_record_format_link hrfl
   WHERE hrf.name ~* '^AUDIO';
 CREATE INDEX tmp_audio_ids_idx ON tmp_audio_ids(id);
 
+DROP TABLE IF EXISTS tmp_video_ids;
+CREATE TABLE tmp_video_ids AS
+SELECT hrfl.harvested_record_id AS id FROM harvested_record_format_link hrfl
+  INNER JOIN harvested_record_format hrf ON hrf.id = hrfl.harvested_record_format_id
+  WHERE hrf.name ~* '^VIDEO';
+CREATE INDEX tmp_video_ids_idx ON tmp_video_ids(id);
+
 DROP TABLE IF EXISTS tmp_sfx_conf_ids;
 CREATE TABLE tmp_sfx_conf_ids AS
 SELECT id AS import_conf_id FROM import_conf

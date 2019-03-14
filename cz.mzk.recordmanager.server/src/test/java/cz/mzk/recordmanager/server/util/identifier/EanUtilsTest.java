@@ -15,6 +15,8 @@ public class EanUtilsTest {
 
 	private static final String INVALID_EAN = "1234567891232";
 
+	private static final String VALID_EAN_WITHOUT_ZERO = "615068902687";
+
 	private static DataField eanDataField(final String sfA, final String sfQ) {
 		DataField df = MARC_FACTORY.newDataField("024", '3', ' ', "a", sfA);
 		if (!sfQ.isEmpty()) df.addSubfield(MARC_FACTORY.newSubfield('q', sfQ));
@@ -29,6 +31,11 @@ public class EanUtilsTest {
 	@Test
 	public void isInvalid() {
 		Assert.assertFalse(EANUtils.isEAN13valid(INVALID_EAN));
+	}
+
+	@Test
+	public void isValidWithoutZero() {
+		Assert.assertTrue(EANUtils.isEAN13valid(VALID_EAN_WITHOUT_ZERO));
 	}
 
 	@Test

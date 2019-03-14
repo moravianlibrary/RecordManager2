@@ -42,16 +42,18 @@ public final class EANUtils {
 	}
 
 	public static boolean isEAN13valid(final String ean) {
-		if (EAN_PATTERN.matcher(ean).matches()) {
+		// add 0 when length is 12, 13 is OK
+		String localEan = (ean.length() == 12) ? '0' + ean : ean;
+		if (EAN_PATTERN.matcher(localEan).matches()) {
 			int sumOdd = 0;
 			int sumEven = 0;
 			for (int i = 1; i < 13; i++) {
-				if (i % 2 == 0) sumEven += Character.getNumericValue(ean.charAt(i));
-				else sumOdd += Character.getNumericValue(ean.charAt(i));
+				if (i % 2 == 0) sumEven += Character.getNumericValue(localEan.charAt(i));
+				else sumOdd += Character.getNumericValue(localEan.charAt(i));
 			}
 
 			sumOdd *= 3;
-			int sum = sumEven + sumOdd + Character.getNumericValue(ean.charAt(0));
+			int sum = sumEven + sumOdd + Character.getNumericValue(localEan.charAt(0));
 			if (sum % 10 == 0) return true;
 		}
 

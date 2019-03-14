@@ -13,9 +13,10 @@ FROM harvested_record hr
   INNER JOIN title t ON hr.id = t.harvested_record_id
   INNER JOIN harvested_record_format_link hrl ON hr.id = hrl.harvested_record_id
   LEFT OUTER JOIN tmp_audio_ids tpi ON hr.id = tpi.id
+  LEFT OUTER JOIN tmp_video_ids tvi ON hr.id = tvi.id
 WHERE t.order_in_record = 1 
   AND e.order_in_record = 1
-  AND tpi.id IS NOT NULL
+  AND (tpi.id IS NOT NULL OR tvi.id IS NOT NULL)
 GROUP BY e.ean,t.title,hr.publication_year,hrl.harvested_record_format_id
 HAVING COUNT(DISTINCT hr.id) > 1 
   AND count(DISTINCT dedup_record_id) + sum(case when dedup_record_id is null then 1 else 0 end) != 1
