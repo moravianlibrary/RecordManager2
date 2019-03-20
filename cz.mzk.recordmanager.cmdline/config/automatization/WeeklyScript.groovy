@@ -1,7 +1,6 @@
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import java.time.LocalDateTime;
 
 import cz.mzk.recordmanager.server.facade.HarvestingFacade;
 import cz.mzk.recordmanager.server.facade.ImportRecordFacade;
@@ -44,10 +43,18 @@ public class DailyScript implements Runnable {
 
 	@Override
 	public void run() {
-		harvestingFacade.incrementalObalkyKnihAnnotationsJob();
-		harvestingFacade.incrementalObalkyKnihTocHarvest();
-		zakonyFacade.runZakonyProLidiHarvestJob();
-		zakonyFacade.runZakonyProLidiFulltextJob();
+		try {
+			harvestingFacade.incrementalObalkyKnihAnnotationsJob();
+			harvestingFacade.incrementalObalkyKnihTocHarvest();
+		} catch (JobExecutionFailure jfe) {
+			logger.error(String.format("Incremental harvest of ObalkyKnih failed"), jfe);
+		}
+		try {
+			zakonyFacade.runZakonyProLidiHarvestJob();
+			zakonyFacade.runZakonyProLidiFulltextJob();
+		} catch (JobExecutionFailure jfe) {
+			logger.error(String.format("Incremental harvest of ZakonyProLidi failed"), jfe);
+		}
 		oaiHarvestConfigurationDAO.findAll().each { conf ->
 			if (conf.harvestFrequency == HarvestFrequency.WEEKLY) {
 				try {

@@ -219,6 +219,7 @@ public class HarvestingFacadeImpl implements HarvestingFacade {
 		LocalDateTime ldt = query(lastJobExecutionQuery, ImmutableMap.of("jobName", Constants.JOB_ID_IMPORT_ANNOTATIONS));
 		if (ldt != null)
 			parameters.put(Constants.JOB_PARAM_FROM_DATE, new JobParameter(Date.from(ldt.atZone(ZoneId.systemDefault()).toInstant())));
+		parameters.put(Constants.JOB_PARAM_REPEAT, new JobParameter(Constants.JOB_PARAM_ONE_VALUE));
 		jobExecutor.execute(Constants.JOB_ID_IMPORT_ANNOTATIONS, new JobParameters(parameters));
 	}
 }

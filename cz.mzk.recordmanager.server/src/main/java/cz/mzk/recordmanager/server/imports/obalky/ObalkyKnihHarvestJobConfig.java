@@ -2,6 +2,7 @@ package cz.mzk.recordmanager.server.imports.obalky;
 
 import cz.mzk.recordmanager.server.model.ObalkyKnihTOC;
 import cz.mzk.recordmanager.server.springbatch.JobFailureListener;
+import cz.mzk.recordmanager.server.springbatch.StepProgressListener;
 import cz.mzk.recordmanager.server.springbatch.UUIDIncrementer;
 import cz.mzk.recordmanager.server.util.Constants;
 import org.springframework.batch.core.Job;
@@ -47,6 +48,7 @@ public class ObalkyKnihHarvestJobConfig {
 	@Bean(name = Constants.JOB_ID_HARVEST_OBALKY_KNIH + ":step")
 	public Step step() throws Exception {
 		return steps.get(Constants.JOB_ID_HARVEST_OBALKY_KNIH + ":step")
+				.listener(new StepProgressListener())
 				.<ObalkyKnihTOC, ObalkyKnihTOC> chunk(10)//
 				.reader(importObalkyKnihReader(STRING_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION))//
 				.writer(importObalkyKnihWriter()) //
