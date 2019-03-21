@@ -18,4 +18,9 @@ public class MkpMetadataMarcRecord extends MetadataMarcRecord {
 	public boolean genreFacet() {
 		return false;
 	}
+
+	@Override
+	public boolean matchFilter() {
+		return !super.isArticle() || super.isArticle773();
+	}
 }
