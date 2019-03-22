@@ -262,8 +262,8 @@ public class SfxJibXmlStreamReader implements MarcReader {
 		if (matcher.matches()) {
 			record.addVariableField(factory.newControlField("003", matcher.group(1)));
 		}
-		SimpleDateFormat sdf = new SimpleDateFormat(DATE_STRING_005);
-		record.addVariableField(factory.newControlField("005", sdf.format(new Date())));
+//		SimpleDateFormat sdf = new SimpleDateFormat(DATE_STRING_005);
+//		record.addVariableField(factory.newControlField("005", sdf.format(new Date())));
 	}
 
 	private DataField getIsxnField(String tag) throws XMLStreamException {
