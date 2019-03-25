@@ -62,7 +62,7 @@ INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (166, 'HIS
 INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (168, 'MKFM', 'https://www.knihovnafm.cz/', 'http://katalog.mkmistek.cz:8080/Carmen/', 'Frýdek-Místek', 'MS');
 INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (169, 'RKKA', 'http://rkka.cz/', 'http://rkka.cz:8085/opac?dom=RKKA&fn=*SearchForm', 'Karvina', 'MS');
 INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (170, 'KNEP', 'http://www.knihovna.brandysnl.cz/', 'https://carmen.knihovna.brandysnl.cz/', 'Brandýs nad Labem', 'SC');
-INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (171, 'MKBREC', 'https://www.mkkl.cz/', 'https://katalog.mkkl.cz/katalog/', 'Břeclav', 'JM');
+INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (171, 'MKBREC', 'https://www.knihovnabreclav.cz/', 'https://breclav.knihovny.net/Carmen', 'Břeclav', 'JM');
 INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (172, 'CMUZ', 'http://muzeumcaslav.cz/knihovna/', 'http://caslav.knihovny.net/clavius/', 'Čáslav', 'SC');
 INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (173, 'MKCK', 'http://www.knih-ck.cz/', 'http://db.knih-ck.cz:8090/Carmen/', 'Český Krumlov', 'JC');
 INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (174, 'MKHOD', 'https://www.knihovnahod.cz/', 'https://hodonin.knihovny.net/katalog/', 'Hodonín', 'JM');
@@ -253,7 +253,7 @@ INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granul
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (329,'http://www.clavius.sk/carmentest/l.dll','CPK','marc21',NULL);
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (330,'https://aleph.lib.cas.cz/OAI','KNA','marc21',NULL);
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (331,NULL,NULL,'marc21',NULL);
-INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (333,'http://aleph.knihovna-pardubice.cz/OAI','PAG_OAI_CPK_MARC21','marc21',NULL);
+INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (333,'https://aleph.knihovna-pardubice.cz/OAI','PAG_OAI_CPK_MARC21','marc21',NULL);
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (334,'https://kutnahora.tritius.cz/tritius/oai-provider','CPK','marc21',NULL);
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (335,'https://katalog.svkos.cz/OAI','MZK-CPK','marc21',NULL);
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity,extract_id_regex) VALUES (336,'https://ipac.svkkl.cz/i2/i2.ws.oai.cls','CPK1','oai_marcxml_cpk',NULL,'s/[^:]+:[^:]+:([^\\/]+)\\/([^\\/]+)/$1_$2/');

@@ -1421,3 +1421,7 @@ INSERT INTO sigla (id, import_conf_id, sigla) VALUES (55, 381, 'PIG001');
 -- 14. 03. 2019 tomascejpek
 UPDATE oai_harvest_conf SET url='https://ipac.kvkli.cz/arl-li/cs/oai/',set_spec='CPK',extract_id_regex='s/[^:]+:[^:]+:[^:]+:(.+)/LiUsCat_$1/' WHERE import_conf_id=308;
 UPDATE oai_harvest_conf SET url='https://katalog.svkul.cz/l.dll' WHERE import_conf_id=314;
+
+-- 25. 03. 2019 tomascejpek
+UPDATE library SET url='https://www.knihovnabreclav.cz/',catalog_url='https://breclav.knihovny.net/Carmen' WHERE id=171;
+UPDATE oai_harvest_conf SET url='https://aleph.knihovna-pardubice.cz/OAI',set_spec='PAG_OAI_CPK_MARC21' WHERE import_conf_id=333;
