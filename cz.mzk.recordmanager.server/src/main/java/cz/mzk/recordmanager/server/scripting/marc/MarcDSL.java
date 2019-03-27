@@ -731,10 +731,6 @@ public class MarcDSL extends BaseDSL {
 		return SolrUtils.createRecordTypeHierarchicFacet(metadataRecord.getDetectedFormatList());
 	}
 
-	public List<String> getInstitutionFacet() {
-		return SolrUtils.getInstitution(context.harvestedRecord().getHarvestedFrom());
-	}
-
 	public List<String> getRegionInstitutionFacet() {
 		return SolrUtils.getRegionInstitution(context.harvestedRecord().getHarvestedFrom());
 	}

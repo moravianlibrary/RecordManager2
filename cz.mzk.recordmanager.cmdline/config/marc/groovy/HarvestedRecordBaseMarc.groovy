@@ -47,7 +47,6 @@ id001_str = getControlField("001")
 metaproxy_boolean = getMetaproxyBool()
 barcodes = getBarcodes()
 format_display_mv = getFormat()
-local_institution_facet_str_mv = getInstitutionFacet()
 local_region_institution_facet_str_mv = getRegionInstitutionFacet()
 _hidden_index_when_merged_boolean = getIndexWhenMerged()
 item_id_txt_mv = getFirstField "996t"
