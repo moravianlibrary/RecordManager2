@@ -22,8 +22,6 @@ import cz.mzk.recordmanager.server.util.Constants;
 
 public class IndexIndividualRecordsToSolrJobTest extends AbstractSolrTest {
 
-	private static final String SOLR_URL = "http://localhost:8080/solr";
-
 	@Autowired
 	private JobRegistry jobRegistry;
 
@@ -39,7 +37,7 @@ public class IndexIndividualRecordsToSolrJobTest extends AbstractSolrTest {
 	public void execute() throws Exception {
 		SolrServerFacade server = solrServerFactory.create(SOLR_URL);
 		Job job = jobRegistry.getJob("indexIndividualRecordsToSolrJob");
-		Map<String, JobParameter> params = new HashMap<String, JobParameter>();
+		Map<String, JobParameter> params = new HashMap<>();
 		params.put(Constants.JOB_PARAM_SOLR_URL, new JobParameter(SOLR_URL));
 		params.put(Constants.JOB_PARAM_RECORD_IDS, new JobParameter("MZK.MZK01-000000117"));
 		JobParameters jobParams = new JobParameters(params);

@@ -14,6 +14,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<org.springframework.version>4.1.4.RELEASE</org.springframework.version>
 		<org.springframework.security.version>4.0.2.RELEASE</org.springframework.security.version>
+		<org.apache.solr>8.7.0</org.apache.solr>
 	</properties>
 
 	<build>

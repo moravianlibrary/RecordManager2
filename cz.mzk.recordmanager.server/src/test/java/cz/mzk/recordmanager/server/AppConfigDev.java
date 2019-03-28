@@ -14,7 +14,9 @@ import cz.mzk.recordmanager.server.miscellaneous.fit.classifier.ClassifierJobCon
 import cz.mzk.recordmanager.server.miscellaneous.fit.fulltextAnalyser.FulltextAnalyserJobConfig;
 import cz.mzk.recordmanager.server.miscellaneous.fit.semanticEnrichment.SemanticEnrichmentJobConfig;
 import cz.mzk.recordmanager.server.miscellaneous.ziskej.ZiskejLibrariesJobConfig;
+import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.embedded.EmbeddedSolrServer;
+import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import org.apache.solr.core.CoreContainer;
 import org.easymock.EasyMock;
 import org.springframework.batch.core.configuration.support.ApplicationContextFactory;
@@ -56,7 +58,7 @@ import cz.mzk.recordmanager.server.util.HttpClient;
 @EnableTransactionManagement
 @PropertySource(value={"classpath:database.test.properties", "classpath:database.test.local.properties"}, ignoreResourceNotFound=true)
 public class AppConfigDev {
-	
+
 	private List<String> resources = Arrays.asList(
 			"sql/recordmanager-create-tables-derby.sql",
 			"org/springframework/batch/core/schema-derby.sql",
@@ -97,12 +99,12 @@ public class AppConfigDev {
     	return EasyMock.createMock(SolrServerFactory.class);
     }
 
-	@Bean(destroyMethod = "shutdown")
-	public EmbeddedSolrServer embeddedSolrServer() throws IOException {
+	@Bean
+	public SolrClient embeddedSolrServer() throws IOException {
 		File solrHome = new File("src/test/resources/solr/cores/");
 		File configFile = new File(solrHome, "solr.xml");
 		CoreContainer container = CoreContainer.createAndLoad(
-				solrHome.getCanonicalPath(), configFile);
+				solrHome.toPath(), configFile.toPath());
 		return new EmbeddedSolrServer(container, "biblio");
 	}
 

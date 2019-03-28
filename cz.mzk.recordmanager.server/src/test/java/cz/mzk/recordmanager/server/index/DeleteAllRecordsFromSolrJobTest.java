@@ -20,14 +20,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import cz.mzk.recordmanager.server.AbstractTest;
 import cz.mzk.recordmanager.server.solr.SolrServerFacade;
 import cz.mzk.recordmanager.server.solr.SolrServerFactory;
 import cz.mzk.recordmanager.server.util.Constants;
 
-public class DeleteAllRecordsFromSolrJobTest extends AbstractTest {
-
-	private static final String SOLR_URL = "http://localhost:8080/solr";
+public class DeleteAllRecordsFromSolrJobTest extends AbstractSolrTest {
 
 	@Autowired
 	private JobRegistry jobRegistry;
@@ -49,7 +46,7 @@ public class DeleteAllRecordsFromSolrJobTest extends AbstractTest {
 		mockedSolrServer.commit();
 		replay(solrServerFactory, mockedSolrServer);
 		Job job = jobRegistry.getJob("deleteAllRecordsFromSolrJob");
-		Map<String, JobParameter> params = new HashMap<String, JobParameter>();
+		Map<String, JobParameter> params = new HashMap<>();
 		params.put(Constants.JOB_PARAM_SOLR_URL, new JobParameter(SOLR_URL, true));
 		JobParameters jobParams = new JobParameters(params);
 		JobExecution execution = jobLauncher.run(job, jobParams);
@@ -67,7 +64,7 @@ public class DeleteAllRecordsFromSolrJobTest extends AbstractTest {
 		mockedSolrServer.commit();
 		replay(solrServerFactory, mockedSolrServer);
 		Job job = jobRegistry.getJob("deleteAllRecordsFromSolrJob");
-		Map<String, JobParameter> params = new HashMap<String, JobParameter>();
+		Map<String, JobParameter> params = new HashMap<>();
 		params.put(Constants.JOB_PARAM_SOLR_URL, new JobParameter(SOLR_URL, true));
 		params.put(Constants.JOB_PARAM_SOLR_QUERY, new JobParameter(query, true));
 		JobParameters jobParams = new JobParameters(params);

@@ -1,11 +1,7 @@
 package cz.mzk.recordmanager.server.solr;
 
 import org.apache.http.client.HttpClient;
-import org.apache.solr.client.solrj.SolrServer;
-import org.apache.solr.client.solrj.impl.BinaryRequestWriter;
-import org.apache.solr.client.solrj.impl.BinaryResponseParser;
-import org.apache.solr.client.solrj.impl.HttpSolrServer;
-import org.apache.solr.client.solrj.impl.XMLResponseParser;
+import org.apache.solr.client.solrj.impl.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,8 +15,8 @@ public class SolrServerFactoryImpl implements SolrServerFactory {
 		DEFAULT {
 
 			@Override
-			public SolrServer create(String url) {
-				HttpSolrServer solr = new HttpSolrServer(url);
+			public HttpSolrClient create(String url) {
+				HttpSolrClient solr = new HttpSolrClient.Builder(url).build();
 				solr.setParser(new BinaryResponseParser());
 				solr.setRequestWriter(new BinaryRequestWriter());
 				return solr;
@@ -31,8 +27,8 @@ public class SolrServerFactoryImpl implements SolrServerFactory {
 		DEFAULT_XML {
 
 			@Override
-			public SolrServer create(String url) {
-				HttpSolrServer solr = new HttpSolrServer(url);
+			public HttpSolrClient create(String url) {
+				HttpSolrClient solr = new HttpSolrClient.Builder(url).build();
 				solr.setParser(new XMLResponseParser());
 				return solr;
 			}
@@ -42,9 +38,9 @@ public class SolrServerFactoryImpl implements SolrServerFactory {
 		KRAMERIUS_DIRECT {
 
 			@Override
-			public SolrServer create(String url) {
+			public HttpSolrClient create(String url) {
 				HttpClient client  = new KrameriusHttpClient();
-				HttpSolrServer solr = new HttpSolrServer(url, client);
+				HttpSolrClient solr = new HttpSolrClient.Builder(url).withHttpClient(client).build();
 				solr.setParser(new XMLResponseParser());
 				return solr;
 			}
@@ -56,9 +52,9 @@ public class SolrServerFactoryImpl implements SolrServerFactory {
 			private final String REQUEST_PATH = "/search";
 
 			@Override
-			public SolrServer create(String url) {
+			public HttpSolrClient create(String url) {
 				HttpClient client  = new KrameriusHttpClient();
-				HttpSolrServer solr = new HttpSolrServer(url, client);
+				HttpSolrClient solr = new HttpSolrClient.Builder(url).withHttpClient(client).build();
 				solr.setParser(new XMLResponseParser());
 				return solr;
 			}
@@ -70,7 +66,7 @@ public class SolrServerFactoryImpl implements SolrServerFactory {
 
 		};
 
-		public abstract SolrServer create(String url);
+		public abstract HttpSolrClient create(String url);
 
 		public String getRequestPath() {
 			return null;
@@ -87,7 +83,7 @@ public class SolrServerFactoryImpl implements SolrServerFactory {
 			mode = (javabin) ? Mode.DEFAULT : Mode.DEFAULT_XML;
 		}
 		logger.info("About to create SolrServerFacade for url: {}", (mode.getRequestPath() == null) ? url : url +  mode.getRequestPath());
-		SolrServer server = mode.create(url);
+		HttpSolrClient server = mode.create(url);
 		return new SolrServerFacadeImpl(server, exceptionHandler, mode.getRequestPath());
 	}
 

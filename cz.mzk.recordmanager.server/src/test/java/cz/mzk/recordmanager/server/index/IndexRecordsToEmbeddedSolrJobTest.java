@@ -25,8 +25,6 @@ import cz.mzk.recordmanager.server.util.Constants;
 
 public class IndexRecordsToEmbeddedSolrJobTest extends AbstractSolrTest {
 
-	private static final String SOLR_URL = "http://localhost:8080/solr";
-
 	@Autowired
 	private JobRegistry jobRegistry;
 
@@ -45,7 +43,7 @@ public class IndexRecordsToEmbeddedSolrJobTest extends AbstractSolrTest {
 	public void execute() throws Exception {
 		SolrServerFacade server = solrServerFactory.create(SOLR_URL);
 		Job job = jobRegistry.getJob("indexAllRecordsToSolrJob");
-		Map<String, JobParameter> params = new HashMap<String, JobParameter>();
+		Map<String, JobParameter> params = new HashMap<>();
 		params.put(Constants.JOB_PARAM_SOLR_URL, new JobParameter(SOLR_URL));
 		JobParameters jobParams = new JobParameters(params);
 		JobExecution execution = jobLauncher.run(job, jobParams);
@@ -88,20 +86,22 @@ public class IndexRecordsToEmbeddedSolrJobTest extends AbstractSolrTest {
 
 		{
 			SolrQuery authQuery = new SolrQuery();
-			authQuery.set("q", SolrFieldConstants.ID_FIELD+":73");
+			authQuery.set("q", SolrFieldConstants.ID_FIELD + ":73");
+			authQuery.set("fl", SolrFieldConstants.AUTHOR_VIZ_FIELD);
 			QueryResponse docResponse = server.query(authQuery);
 			Assert.assertEquals(docResponse.getResults().size(), 1);
 			SolrDocument document = docResponse.getResults().get(0);
 			// check whether author_search field contains alternative name from authority record
 			Assert.assertTrue(
 					document.getFieldValues(SolrFieldConstants.AUTHOR_VIZ_FIELD).stream() //
-							.anyMatch(s -> s.equals("Imaginarni, Karel, 1900-2000")), 
+							.anyMatch(s -> s.equals("Imaginarni, Karel, 1900-2000")),
 					"Authority enrichment failed.");
 		}
 
 		{
 			SolrQuery authQuery = new SolrQuery();
 			authQuery.set("q", SolrFieldConstants.ID_FIELD + ":103");
+			authQuery.set("fl", SolrFieldConstants.SUBJECT_VIZ_FIELD);
 			QueryResponse docResponse = server.query(authQuery);
 			Assert.assertEquals(docResponse.getResults().size(), 1);
 			SolrDocument document = docResponse.getResults().get(0);
@@ -114,7 +114,8 @@ public class IndexRecordsToEmbeddedSolrJobTest extends AbstractSolrTest {
 
 		{
 			SolrQuery dcQuery = new SolrQuery();
-			dcQuery.set("q", SolrFieldConstants.ID_FIELD+":100");
+			dcQuery.set("q", SolrFieldConstants.ID_FIELD + ":100");
+			dcQuery.set("fl", SolrFieldConstants.RECORDTYPE, SolrFieldConstants.RECORDTYPE_FORMAT, SolrFieldConstants.FULLTEXT_FIELD);
 			QueryResponse docResponse = server.query(dcQuery);
 			Assert.assertEquals(docResponse.getResults().size(), 1);
 			SolrDocument document = docResponse.getResults().get(0);
@@ -170,21 +171,23 @@ public class IndexRecordsToEmbeddedSolrJobTest extends AbstractSolrTest {
 			Assert.assertEquals(docResponse.getResults().size(), 0);
 		}
 
-		{ 
+		{
 			// check dedup record for authority record
 			SolrQuery docQuery = new SolrQuery();
-			docQuery.set("q", SolrFieldConstants.ID_FIELD+":102");
+			docQuery.set("q", SolrFieldConstants.ID_FIELD + ":102");
+			docQuery.set("fl", SolrFieldConstants.ID_AUTHORITY, SolrFieldConstants.AUTHOR_FIELD);
 			QueryResponse docResponse = server.query(docQuery);
 			Assert.assertEquals(docResponse.getResults().size(), 1);
 			SolrDocument document = docResponse.getResults().get(0);
 			Assert.assertEquals(document.get(SolrFieldConstants.ID_AUTHORITY), "aut000001");
 			Assert.assertFalse(document.containsKey(SolrFieldConstants.AUTHOR_FIELD));
 		}
-		
-		{ 
+
+		{
 			// check authority record
 			SolrQuery docQuery = new SolrQuery();
-			docQuery.set("q", SolrFieldConstants.ID_FIELD+":auth.AUT10-000051020");
+			docQuery.set("q", SolrFieldConstants.ID_FIELD + ":auth.AUT10-000051020");
+			docQuery.set("fl", SolrFieldConstants.USE_FOR, SolrFieldConstants.HEADING);
 			QueryResponse docResponse = server.query(docQuery);
 			Assert.assertEquals(docResponse.getResults().size(), 1);
 			SolrDocument document = docResponse.getResults().get(0);
