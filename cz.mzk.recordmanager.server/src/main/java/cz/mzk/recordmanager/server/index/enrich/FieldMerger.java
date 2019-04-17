@@ -42,12 +42,16 @@ public class FieldMerger {
 			target.setField(field, values);
 		}
 	}
-	
+
 	public void renameField(SolrInputDocument source, String oldName, String newName) {
 		SolrInputField field = source.remove(oldName);
 		if (field != null) {
 			source.addField(newName, field);
 		}
+	}
+
+	public void copyField(SolrInputDocument doc, String sourceName, String targetName) {
+		if (doc.containsKey(sourceName)) doc.addField(targetName, doc.getField(sourceName));
 	}
 
 }
