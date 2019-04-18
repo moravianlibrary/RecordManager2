@@ -1696,3 +1696,6 @@ UPDATE oai_harvest_conf SET url='https://katalog.svkul.cz/l.dll' WHERE import_co
 --changeset tomascejpek:139 context:cpk
 UPDATE library SET url='https://www.knihovnabreclav.cz/',catalog_url='https://breclav.knihovny.net/Carmen' WHERE id=171;
 UPDATE oai_harvest_conf SET url='https://aleph.knihovna-pardubice.cz/OAI',set_spec='PAG_OAI_CPK_MARC21' WHERE import_conf_id=333;
+
+--changeset tomascejpek:140 context:cpk
+UPDATE oai_harvest_conf SET set_spec='CPK_1' WHERE import_conf_id=350;
