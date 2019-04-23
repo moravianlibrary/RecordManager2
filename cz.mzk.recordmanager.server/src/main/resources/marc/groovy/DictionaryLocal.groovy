@@ -16,6 +16,5 @@ format_display_mv = getFormat()
 url = getUrls()
 
 subject_facet_str_mv = subject_str_mv = Arrays.asList("Knihovnictví", "Informační věda")
-local_institution_facet_str_mv = getInstitutionFacet()
 local_region_institution_facet_str_mv = getRegionInstitutionFacet()
 institution_view_facet_str_mv = getInstitutionViewFacet()
