@@ -22,10 +22,13 @@ public class FromLocalToDedupEnricher implements DedupRecordEnricher {
 			SolrFieldConstants.MONOGRAPHIC_SERIES_DISPLAY_MV
 	);
 
+	private final FieldMerger copyDedup = new FieldMerger();
+
 	@Override
 	public void enrich(DedupRecord record, SolrInputDocument mergedDocument,
 					   List<SolrInputDocument> localRecords) {
 		mergeAndRemove.mergeAndRemoveFromSources(localRecords, mergedDocument);
 		merge.merge(localRecords, mergedDocument);
+		copyDedup.copyField(mergedDocument, SolrFieldConstants.OBALKY_ANNOTATION, SolrFieldConstants.SUMMARY_DISPLAY_MV);
 	}
 }

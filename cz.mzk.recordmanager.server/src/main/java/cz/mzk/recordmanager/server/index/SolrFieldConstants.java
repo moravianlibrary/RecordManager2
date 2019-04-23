@@ -142,6 +142,8 @@ public class SolrFieldConstants {
 
 	public static final String MONOGRAPHIC_SERIES_DISPLAY_MV = "monographic_series_display_mv";
 
+	public static final String SUMMARY_DISPLAY_MV = "summary_display_mv";
+
 	/**
 	 * dummy fields used for processing purposes only, shouldn't be indexed. Fields are deleted in AuthorityEnricher. 
 	 */
