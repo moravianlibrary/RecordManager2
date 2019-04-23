@@ -43,7 +43,7 @@ public class DailyScript implements Runnable {
 		try {
 			importFacade.harvestInspirationsJob();
 		} catch (JobExecutionFailure jfe) {
-			logger.error(String.format("Harvest of inspirations failed"));
+			logger.error(String.format("Harvest of inspirations failed"), jfe);
 		}
 
 		oaiHarvestConfigurationDAO.findAll().each { conf ->
