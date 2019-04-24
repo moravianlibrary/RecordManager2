@@ -140,10 +140,14 @@ public class SolrFieldConstants {
 
 	public static final String SUMMARY_DISPLAY_MV = "summary_display_mv";
 
+	public static final String ZISKEJ_BOOLEAN = "ziskej_boolean";
+
 	/**
-	 * dummy fields used for processing purposes only, shouldn't be indexed. Fields are deleted in AuthorityEnricher. 
+	 * dummy fields used for processing purposes only, shouldn't be indexed.
 	 */
 
 	public static final String VIZ_DUMMY_FIELD = "_hidden_viz_dummy_field";
+
+	public static final String ZISKEJ_BOOLEAN_HIDDEN = "_hidden_ziskej_boolean";
 
 }

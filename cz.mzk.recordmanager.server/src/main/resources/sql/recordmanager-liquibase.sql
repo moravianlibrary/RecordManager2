@@ -1699,3 +1699,11 @@ UPDATE oai_harvest_conf SET url='https://aleph.knihovna-pardubice.cz/OAI',set_sp
 
 --changeset tomascejpek:140 context:cpk
 UPDATE oai_harvest_conf SET set_spec='CPK_1' WHERE import_conf_id=350;
+
+--changeset tomascejpek:141
+ALTER TABLE import_conf ADD COLUMN ziskej_enabled BOOLEAN DEFAULT FALSE;
+
+--changeset tomascejpek:142 context:cpk
+UPDATE import_conf SET ziskej_enabled=TRUE WHERE id IN (300,301,302,304,306,307,308,311,312,313,314,315,316,319,321,
+  324,325,326,328,330,331,332,333,334,335,336,337,338,340,342,343,346,348,349,350,353,356,358,359,360,361,362,363,364,
+  365,366,367,368,369,370,371,372,373,374,375,376,377,378,379,380,381,382,383,384,385,386,387,388,389,390,391,392,393);
