@@ -45,6 +45,13 @@ public enum ViewType {
 			return contains(resolver, String.format(INST_FILE, getValue()), importConfId.toString())
 					|| containsAny(resolver, String.format(CONSPECTUS_FILE, getValue()), conspectus);
 		}
+	},
+	BRNO("brno") {
+		@Override
+		protected boolean match(MetadataRecord mr, ListResolver resolver, Long importConfId,
+								Set<String> siglas, List<String> conspectus) throws IOException {
+			return contains(resolver, String.format(INST_FILE, getValue()), importConfId.toString());
+		}
 	};
 
 	private String value;
