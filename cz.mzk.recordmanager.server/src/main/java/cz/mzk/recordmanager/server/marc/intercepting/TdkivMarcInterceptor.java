@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import cz.mzk.recordmanager.server.util.RecordUtils;
 import org.marc4j.marc.ControlField;
 import org.marc4j.marc.DataField;
 import org.marc4j.marc.MarcFactory;
@@ -30,6 +31,7 @@ public class TdkivMarcInterceptor extends DefaultMarcInterceptor {
 		TAGS.put("PTE", "550");
 		TAGS.put("ZDR", "650");
 		TAGS.put("VYK", "678");
+		TAGS.put("AUT", "AUT");
 	}
 
 	public TdkivMarcInterceptor(Record record) {
@@ -75,7 +77,7 @@ public class TdkivMarcInterceptor extends DefaultMarcInterceptor {
 			newRecord.addVariableField(df);
 		}
 
-		return new MarcRecordImpl(newRecord).export(IOFormat.XML_MARC).getBytes(StandardCharsets.UTF_8);
+		return new MarcRecordImpl(RecordUtils.sortFields(newRecord)).export(IOFormat.XML_MARC).getBytes(StandardCharsets.UTF_8);
 	}
 
 }

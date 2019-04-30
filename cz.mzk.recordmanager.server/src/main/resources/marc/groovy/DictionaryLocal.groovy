@@ -12,6 +12,7 @@ relative_display_mv = getFields "550a"
 alternative_display_mv = getFields "450a"
 source_display = getFirstField "650a"
 format_display_mv = getFormat()
+author_term_display_mv = getFields "AUTa"
 
 url = getUrls()
 

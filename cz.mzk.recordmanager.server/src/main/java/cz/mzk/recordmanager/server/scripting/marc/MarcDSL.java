@@ -45,7 +45,7 @@ public class MarcDSL extends BaseDSL {
 	private final static String MAP_FORMAT_SEARCH = "format_search.map";
 	private static final String MAP_PSH = "psh.map";
 
-	private static final Pattern FIELD_PATTERN = Pattern.compile("([0-9]{3})([a-zA-Z0-9]*)");
+	private static final Pattern FIELD_PATTERN = Pattern.compile("([a-zA-Z0-9]{3})([a-zA-Z0-9]*)");
 	private static final Pattern NON_WORD_PATTERN = Pattern.compile("\\W");
 	private static final Pattern TITLE_END_PUNCTUATION = Pattern.compile("[:,=;/.]+$");
 	private static final Pattern TITLE_LEAD_SPACE = Pattern.compile("^ *");
