@@ -220,8 +220,6 @@ public class MetadataRecordFactory {
 			return mr;
 		case Constants.PREFIX_KRAM_KNAV:
 			return new KramKnavMetadataDublinCoreRecord(dcRec, hr);
-		case Constants.PREFIX_KRAM_NTK:
-			return new KramDefaultMetadataDublinCoreRecord(dcRec, hr);
 		case Constants.PREFIX_KRAM3_NKP:
 			return new Kram3NkpMetadataDublinCoreRecord(dcRec);
 		case Constants.PREFIX_MANUSCRIPTORIUM:
