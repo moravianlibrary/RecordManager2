@@ -1710,3 +1710,6 @@ UPDATE import_conf SET ziskej_enabled=TRUE WHERE id IN (300,301,302,304,306,307,
 
 --changeset tomascejpek:143 context:cpk
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (50, 376, 'KLG002');
+
+--changeset tomascejpek:144 context:cpk
+UPDATE kramerius_conf SET query_rows=50,metadata_stream='BIBLIO_MODS',collection='"vc:c4bb27af-3a51-4ac2-95c7-fd393b489e26"' WHERE import_conf_id=99003;
