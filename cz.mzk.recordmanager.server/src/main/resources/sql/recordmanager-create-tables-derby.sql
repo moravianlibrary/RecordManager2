@@ -142,7 +142,7 @@ CREATE TABLE isbn (
   isbn                 DECIMAL(13),
   order_in_record      DECIMAL(4),
   note                 VARCHAR(150),
-  CONSTRAINT isbn_fk   FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id)
+  CONSTRAINT isbn_fk   FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE
 );
 
 CREATE TABLE ean (
@@ -151,7 +151,7 @@ CREATE TABLE ean (
   ean                  DECIMAL(13),
   order_in_record      DECIMAL(4),
   note                 VARCHAR(150),
-  CONSTRAINT ean_fk    FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id)
+  CONSTRAINT ean_fk    FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE
 );
 
 CREATE TABLE ismn (
@@ -160,7 +160,7 @@ CREATE TABLE ismn (
   ismn                 DECIMAL(13),
   order_in_record      DECIMAL(4),
   note                 VARCHAR(150),
-  CONSTRAINT ismn_fk   FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id)
+  CONSTRAINT ismn_fk   FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE
 );
 
 CREATE TABLE issn (
@@ -169,14 +169,14 @@ CREATE TABLE issn (
   issn                 VARCHAR(9),
   order_in_record      DECIMAL(4),
   note                 VARCHAR(100),
-  CONSTRAINT issn_fk   FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id)
+  CONSTRAINT issn_fk   FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE
 );
 
 CREATE TABLE cnb (
   id                   DECIMAL(10) PRIMARY KEY,
   harvested_record_id  DECIMAL(10),
   cnb                  VARCHAR(100),
-  CONSTRAINT cnb_fk    FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id)
+  CONSTRAINT cnb_fk    FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE
 );
 
 CREATE TABLE title (
@@ -185,7 +185,7 @@ CREATE TABLE title (
   title                VARCHAR(255),
   order_in_record      DECIMAL(4),
   similarity_enabled   BOOLEAN DEFAULT FALSE,
-  CONSTRAINT title_fk  FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id)
+  CONSTRAINT title_fk  FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE
 );
 
 CREATE TABLE short_title (
@@ -194,21 +194,21 @@ CREATE TABLE short_title (
   short_title          VARCHAR(255),
   order_in_record      DECIMAL(4),
   similarity_enabled   BOOLEAN DEFAULT FALSE,
-  CONSTRAINT short_title_fk  FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id)
+  CONSTRAINT short_title_fk  FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE
 );
 
 CREATE TABLE oclc (
   id                   DECIMAL(10) PRIMARY KEY,
   harvested_record_id  DECIMAL(10),
   oclc                 VARCHAR(20),
-  CONSTRAINT oclc_fk   FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id)
+  CONSTRAINT oclc_fk   FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE
 );
 
 CREATE TABLE language (
   harvested_record_id  DECIMAL(10),
   lang                 VARCHAR(5),
   CONSTRAINT language_pk PRIMARY KEY (harvested_record_id, lang),
-  CONSTRAINT language_fk  FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id)
+  CONSTRAINT language_fk  FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE
 );
 
 CREATE TABLE harvested_record_format (
@@ -220,7 +220,7 @@ CREATE TABLE harvested_record_format_link (
   harvested_record_id            DECIMAL(10),
   harvested_record_format_id     DECIMAL(10),
   CONSTRAINT record_link_pk           PRIMARY KEY (harvested_record_id, harvested_record_format_id), 
-  CONSTRAINT format_link_hr_id_fk     FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id),
+  CONSTRAINT format_link_hr_id_fk     FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE,
   CONSTRAINT format_link_hr_format_fk FOREIGN KEY (harvested_record_format_id) REFERENCES harvested_record_format(id)
 );
 
@@ -282,10 +282,10 @@ CREATE TABLE obalkyknih_toc (
 );
 
 CREATE TABLE inspiration (
-  id					DECIMAL(10) PRIMARY KEY,
-  harvested_record_id	DECIMAL(10),
-  name					VARCHAR(128),
-  CONSTRAINT inspiration_fk FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id)
+  id                   DECIMAL(10) PRIMARY KEY,
+  harvested_record_id  DECIMAL(10),
+  name                 VARCHAR(128),
+  CONSTRAINT inspiration_fk FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE
 );
 
 CREATE TABLE tezaurus_record (
@@ -303,14 +303,14 @@ CREATE TABLE publisher_number (
   harvested_record_id  DECIMAL(10),
   publisher_number     VARCHAR(255),
   order_in_record      DECIMAL(4),
-  CONSTRAINT publisher_number_fk FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id)
+  CONSTRAINT publisher_number_fk FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE
 );
 
 CREATE TABLE authority (
   id                   DECIMAL(10) PRIMARY KEY,
   harvested_record_id  DECIMAL(10),
   authority_id         VARCHAR(20),
-  CONSTRAINT authority_fk FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id)
+  CONSTRAINT authority_fk FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE
 );
 
 CREATE TABLE obalkyknih_annotation (
