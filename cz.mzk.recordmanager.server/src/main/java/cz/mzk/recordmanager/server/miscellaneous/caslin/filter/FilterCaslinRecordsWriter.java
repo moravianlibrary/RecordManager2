@@ -69,7 +69,7 @@ public class FilterCaslinRecordsWriter implements ItemWriter<HarvestedRecordUniq
 					for (DataField df : dfMap.get(tag)) {
 						// add $q0 when sigla is in db
 						if (df.getTag().equals("996")) {
-							if (caslinFilter.filter(df.getSubfield('e').getData())
+							if (((df.getSubfield('e') == null) || caslinFilter.filter(df.getSubfield('e').getData()))
 									&& (df.getSubfield('q') == null || !df.getSubfield('q').getData().equals("0"))) {
 								df.addSubfield(marcFactory.newSubfield('q', "0"));
 								updated = true;

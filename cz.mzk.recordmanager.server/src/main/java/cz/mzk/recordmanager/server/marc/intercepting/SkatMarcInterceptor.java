@@ -96,7 +96,7 @@ public class SkatMarcInterceptor extends DefaultMarcInterceptor {
 					newDf.addSubfield(marcFactory.newSubfield('s', "NZ"));
 					newRecord.addVariableField(newDf);
 				} else if (df.getTag().equals("996")) {
-					if ((df.getSubfield('e') != null) && (cf.filter(df.getSubfield('e').getData()))
+					if (((df.getSubfield('e') == null) || cf.filter(df.getSubfield('e').getData()))
 							&& (df.getSubfield('q') == null || !df.getSubfield('q').getData().equals("0"))) {
 						df.addSubfield(marcFactory.newSubfield('q', "0"));
 					}
