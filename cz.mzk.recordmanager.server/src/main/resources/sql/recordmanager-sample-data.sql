@@ -1,7 +1,7 @@
 INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (100, 'MZK', 'www.mzk.cz', 'vufind.mzk.cz', 'Brno', 'JM');
 INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (101, 'NLK', 'medvik.cz', 'medivk.cz', 'Praha', 'PR');
 INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (102, 'MKP', 'www.mlp.cz', 'search.mlp.cz', 'Praha', 'PR');
-INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (103, 'KJM', 'kjm.cz', 'http://katalog.kjm.cz:8080/Carmen/', 'Brno', 'JM');
+INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (103, 'KJM', 'kjm.cz', 'https://katalog.kjm.cz', 'Brno', 'JM');
 INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (104, 'NKP', 'nkp.cz', 'aleph.nkp.cz', 'Praha', 'PR');
 INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (105, 'VPK', 'vpk.cz', 'vpk.cz', 'Praha', 'PR');
 INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (106, 'TRE', 'katalogknih.cz', 'vufind.katalogknih.c', 'Česká Třebová', 'PA');
@@ -101,7 +101,7 @@ INSERT INTO format(format, description) VALUES('ese', 'Dublin Core');
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id, metaproxy_enabled, ziskej_enabled) VALUES (300, 100, 200, 'mzk', 13, true, true, true, true, 'D', 'aleph', true, true);
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id, metaproxy_enabled, ziskej_enabled) VALUES (301, 101, 200, 'nlk', 14, false, true, true, true, 'D', 'nlk', true, true);
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id, ziskej_enabled) VALUES (302, 102, 200, 'mkp', 8, false, true, true, true, 'D', 'other', true);
-INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency) VALUES (303, 103, 200, 'kjm', 0, false, false, false, true, 'U');
+INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id, ziskej_enabled) VALUES (303, 103, 200, 'kjm', 11, false, true, true, true, 'U', 'other', true);
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id, metaproxy_enabled, ziskej_enabled) VALUES (304, 104, 200, 'nkp', 14, true, true, true, true, 'D', 'aleph', true, true);
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency) VALUES (305, 105, 200, 'vpk', 14, false, false, false, true, 'U');
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id, ziskej_enabled) VALUES (306, 106, 200, 'tre', 11, false, true, true, true, 'D', 'tre', true);
@@ -231,7 +231,7 @@ INSERT INTO import_conf (id,library_id,contact_person_id,id_prefix,base_weight,c
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (300,'https://aleph.mzk.cz/OAI','MZK01-CPK','marc21','SECOND');
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity,harvest_job_name) VALUES (301,'http://oai.medvik.cz/medvik2cpk/oai',null,'xml-marc','DAY','oaiHarvestOneByOneJob');
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (302,'https://web2.mlp.cz/cgi/oaie','cpk','marc21e',null);
-INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (303,'http://katalog.kjm.cz/l.dll',null,'marc21','DAY');
+INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity,extract_id_regex,harvest_job_name) VALUES (303,'https://katalog.kjm.cz/oai','KJMCPKDATE','oai_marcxml_cpk','DAY','s/[^:]+:[^:]+:([^\\/]+)\\/([^\\/]+)/$1_$2/','cosmotronHarvestJob');
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (304,'https://aleph.nkp.cz/OAI','NKC','marc21','SECOND');
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (305,'http://sc.vpk.cz/cgi-bin/oai2',null,'marc21',null);
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity,extract_id_regex) VALUES (306,'https://opac.moderniknihovna.cz/cgi-bin/koha/oai.pl','CPK','marccpk',NULL,'UOG505:(.*)');
