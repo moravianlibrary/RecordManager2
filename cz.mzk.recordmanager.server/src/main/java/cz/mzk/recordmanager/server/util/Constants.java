@@ -153,6 +153,7 @@ public class Constants {
 	public static final String PREFIX_SFXJIBKIV			= "sfxjibkiv";
 	public static final String PREFIX_SFXJIBKNAV		= "sfxjibknav";
 	public static final String PREFIX_SFXJIBKVKL		= "sfxjibkvkl";
+	public static final String PREFIX_SFXJIBMKHK		= "sfxjibmkhk";
 	public static final String PREFIX_SFXJIBMKP			= "sfxjibmkp";
 	public static final String PREFIX_SFXJIBMUNI		= "sfxjibmuni";
 	public static final String PREFIX_SFXJIBMUS			= "sfxjibmus";
