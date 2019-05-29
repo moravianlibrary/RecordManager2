@@ -1444,3 +1444,16 @@ UPDATE kramerius_conf SET query_rows=50,metadata_stream='BIBLIO_MODS',collection
 -- 20. 05. 2019 tomascejpek
 INSERT INTO import_conf (id,library_id,contact_person_id,id_prefix,base_weight,cluster_id_enabled,filtering_enabled,interception_enabled,is_library,harvest_frequency,mapping_script,generate_dedup_keys,mapping_dedup_script) VALUES (1326,177,200,'sfxjibmkhk',8,false,false,false,true,'U','SfxMarcLocal.groovy',false,'SfxMarc.groovy');
 INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format,extract_id_regex) VALUES (1326,'https://sfx.knihovny.cz/sfxlcl3/cgi/public/get_file.cgi?file=institutional_holding-KMHK.xml','downloadAndImportRecordsJob','sfx',null);
+
+-- 29. 05. 2019 tomascejpek
+UPDATE download_import_conf SET url='https://sfx.knihovny.cz/sfxlcl3/cgi/public/get_file.cgi?file=institutional_holding-NKP.xml' WHERE import_conf_id=1305;
+UPDATE download_import_conf SET url='https://sfx.knihovny.cz/sfxlcl3/cgi/public/get_file.cgi?file=institutional_holding-VKOL.xml' WHERE import_conf_id=1306;
+UPDATE download_import_conf SET url='https://sfx.knihovny.cz/sfxlcl3/cgi/public/get_file.cgi?file=institutional_holding-JVKCB.xml' WHERE import_conf_id=1307;
+UPDATE download_import_conf SET url='https://sfx.knihovny.cz/sfxlcl3/cgi/public/get_file.cgi?file=institutional_holding-KKFB.xml' WHERE import_conf_id=1308;
+UPDATE download_import_conf SET url='https://sfx.knihovny.cz/sfxlcl3/cgi/public/get_file.cgi?file=institutional_holding-KVKLI.xml' WHERE import_conf_id=1309;
+UPDATE download_import_conf SET url='https://sfx.knihovny.cz/sfxlcl3/cgi/public/get_file.cgi?file=institutional_holding-MKP.xml' WHERE import_conf_id=1310;
+UPDATE download_import_conf SET url='https://sfx.knihovny.cz/sfxlcl3/cgi/public/get_file.cgi?file=institutional_holding-MSVK.xml' WHERE import_conf_id=1311;
+UPDATE download_import_conf SET url='https://sfx.knihovny.cz/sfxlcl3/cgi/public/get_file.cgi?file=institutional_holding-SVKHK.xml' WHERE import_conf_id=1312;
+UPDATE download_import_conf SET url='https://sfx.knihovny.cz/sfxlcl3/cgi/public/get_file.cgi?file=institutional_holding-MZK.xml' WHERE import_conf_id=1314;
+UPDATE download_import_conf SET url='https://sfx.knihovny.cz/sfxlcl3/cgi/public/get_file.cgi?file=institutional_holding.xml' WHERE import_conf_id=1315;
+UPDATE download_import_conf SET url='https://sfx.knihovny.cz/sfxlcl3/cgi/public/get_file.cgi?file=institutional_holding-SVKPL.xml' WHERE import_conf_id=1322;
