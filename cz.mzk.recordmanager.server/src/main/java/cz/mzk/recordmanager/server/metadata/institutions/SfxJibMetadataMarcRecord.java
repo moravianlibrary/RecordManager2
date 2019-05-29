@@ -8,7 +8,7 @@ import java.util.Map;
 
 public class SfxJibMetadataMarcRecord extends MetadataMarcRecord {
 
-	private static final String SFX_URL = "http://sfx.jib.cz/sfxlcl3";
+	private static final String SFX_URL = "http://sfx.knihovny.cz/sfxlcl3";
 
 	public SfxJibMetadataMarcRecord(MarcRecord underlayingMarc) {
 		super(underlayingMarc);
