@@ -29,6 +29,7 @@ public abstract class AbstractAuthorityVizFields extends AbstractVizFields {
 	private static final int LRU_CACHE_SIZE_FIELD_400 = 50000;
 	private static final int LRU_CACHE_SIZE_FIELD_410 = 30000;
 	private static final int LRU_CACHE_SIZE_FIELD_411 = 5000;
+	private static final int LRU_CACHE_SIZE_FIELD_430 = 5000;
 	private static final int LRU_CACHE_SIZE_FIELD_448 = 200;
 	private static final int LRU_CACHE_SIZE_FIELD_450 = 10000;
 	private static final int LRU_CACHE_SIZE_FIELD_451 = 5000;
@@ -40,6 +41,8 @@ public abstract class AbstractAuthorityVizFields extends AbstractVizFields {
 			.synchronizedMap(new LRUMap<>(LRU_CACHE_SIZE_FIELD_410));
 	private final Map<String, List<String>> field411Cache = Collections
 			.synchronizedMap(new LRUMap<>(LRU_CACHE_SIZE_FIELD_411));
+	private final Map<String, List<String>> field430Cache = Collections
+			.synchronizedMap(new LRUMap<>(LRU_CACHE_SIZE_FIELD_430));
 	private final Map<String, List<String>> field448Cache = Collections
 			.synchronizedMap(new LRUMap<>(LRU_CACHE_SIZE_FIELD_448));
 	private final Map<String, List<String>> field450Cache = Collections
@@ -54,6 +57,7 @@ public abstract class AbstractAuthorityVizFields extends AbstractVizFields {
 		cacheMap.put("400", field400Cache);
 		cacheMap.put("410", field410Cache);
 		cacheMap.put("411", field411Cache);
+		cacheMap.put("430", field430Cache);
 		cacheMap.put("448", field448Cache);
 		cacheMap.put("450", field450Cache);
 		cacheMap.put("451", field451Cache);

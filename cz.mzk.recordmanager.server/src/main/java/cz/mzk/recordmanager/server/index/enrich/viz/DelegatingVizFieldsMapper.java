@@ -1,14 +1,15 @@
 package cz.mzk.recordmanager.server.index.enrich.viz;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import com.google.common.collect.Lists;
 import org.apache.solr.common.SolrInputDocument;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Component
 public class DelegatingVizFieldsMapper implements VizFieldsMapper,
@@ -17,7 +18,7 @@ public class DelegatingVizFieldsMapper implements VizFieldsMapper,
 	@Autowired
 	private List<VizFieldsMapper> vizMappers;
 
-	private Map<String, VizFieldsMapper> mappersBySource = new HashMap<>();
+	private Map<String, List<VizFieldsMapper>> mappersBySource = new HashMap<>();
 
 	@Override
 	public List<String> getSuppoprtedSources() {
@@ -28,7 +29,9 @@ public class DelegatingVizFieldsMapper implements VizFieldsMapper,
 	public void afterPropertiesSet() throws Exception {
 		for (VizFieldsMapper vizMapper : vizMappers) {
 			for (String source : vizMapper.getSuppoprtedSources()) {
-				mappersBySource.put(source, vizMapper);
+				if (mappersBySource.containsKey(source)) {
+					mappersBySource.get(source).add(vizMapper);
+				} else mappersBySource.put(source, Lists.newArrayList(vizMapper));
 			}
 		}
 	}
@@ -36,7 +39,9 @@ public class DelegatingVizFieldsMapper implements VizFieldsMapper,
 	@Override
 	public void parse(String value, SolrInputDocument document) {
 		String[] split = value.split("\\|");
-		mappersBySource.get(split[0] + split[1]).parse(value, document);
+		for (VizFieldsMapper mapper : mappersBySource.get(split[0] + split[1])) {
+			mapper.parse(value, document);
+		}
 	}
 
 }

@@ -15,7 +15,8 @@ public class VizFieldsDedupRecordEnricher implements DedupRecordEnricher {
 			SolrFieldConstants.SUBJECT_VIZ_FIELD,
 			SolrFieldConstants.GENRE_VIZ_FIELD,
 			SolrFieldConstants.CORPORATION_VIZ_FIELD,
-			SolrFieldConstants.AUTHOR_VIZ_FIELD);
+			SolrFieldConstants.AUTHOR_VIZ_FIELD,
+			SolrFieldConstants.UNIFTITLE_VIZ_FIELD);
 
 	@Override
 	public void enrich(DedupRecord record, SolrInputDocument mergedDocument,

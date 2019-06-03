@@ -53,6 +53,8 @@ public class SolrFieldConstants {
 	public static final String SUBJECT_VIZ_FIELD = "subject_viz";
 	
 	public static final String GENRE_VIZ_FIELD = "genre_viz";
+
+	public static final String UNIFTITLE_VIZ_FIELD = "uniftitle_viz";
 	
 	public static final String URL = "url";
 

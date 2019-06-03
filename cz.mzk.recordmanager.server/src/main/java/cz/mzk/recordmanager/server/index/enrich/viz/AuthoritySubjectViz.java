@@ -22,6 +22,7 @@ public class AuthoritySubjectViz extends AbstractAuthorityVizFields implements
 		SUBJECT_MAP.put("600", "400");
 		SUBJECT_MAP.put("610", "410");
 		SUBJECT_MAP.put("611", "411");
+		SUBJECT_MAP.put("630", "430");
 		SUBJECT_MAP.put("648", "448");
 		SUBJECT_MAP.put("650", "450");
 		SUBJECT_MAP.put("651", "451");
