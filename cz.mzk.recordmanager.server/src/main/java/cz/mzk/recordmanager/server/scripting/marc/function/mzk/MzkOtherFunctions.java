@@ -176,7 +176,7 @@ public class MzkOtherFunctions implements MarcRecordFunctions {
 			if (INFO_USA_VALUE.equals(field) || INFO_USA_VALUE2.equals(field)) {
 				result.add(primaryBase + BASE_SEPARATOR + INFO_USA_BASE_SUFFIX);
 				break;
-			} else if (SPANISH_LIBRARY_VALUE.equals(field)) {
+			} else if (field != null && field.contains(SPANISH_LIBRARY_VALUE)) {
 				result.add(primaryBase + BASE_SEPARATOR	+ SPANISH_LIBRARY_BASE_SUFFIX);
 				break;
 			}
