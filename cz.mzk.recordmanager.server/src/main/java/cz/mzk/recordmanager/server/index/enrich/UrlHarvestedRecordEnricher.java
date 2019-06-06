@@ -47,7 +47,8 @@ public class UrlHarvestedRecordEnricher implements HarvestedRecordEnricher {
 	}
 
 	private String updateKrameriusPolicy(HarvestedRecord hr, String url) {
-		if (hr.getHarvestedFrom().getIdPrefix().startsWith("kram-") && url.startsWith("unknown")) {
+		if (hr.getHarvestedFrom().getIdPrefix() != null && hr.getHarvestedFrom().getIdPrefix().startsWith("kram-")
+				&& url.startsWith("unknown")) {
 			url = CleaningUtils.replaceFirst(url, UNKNOWN, fulltextKrameriusDAO.getPolicy(hr.getId()));
 		}
 		return url;
