@@ -333,7 +333,7 @@ INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format) VAL
 INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format,extract_id_regex) VALUES (344,null,null,null,null);
 INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format,extract_id_regex) VALUES (351,'local:/data/imports/aleph.ADR','importOaiRecordsJob',null,'[^:]+:(.*)');
 INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format,extract_id_regex) VALUES (354,'local:/data/imports/aleph.KTD','importOaiRecordsJob',null,'[^:]+:(.*)');
-INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format) VALUES (391,null,'importRecordsJob','xml');
+INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format,extract_id_regex) VALUES (391,'local:/data/imports/uzp01_upd','importRecordsJob','xml','s/^(.*)/UZP01-$1/');
 INSERT INTO download_import_conf (import_conf_id,url,import_job_name) VALUES (500,'http://muj-antikvariat.cz/oai-all.xml','antikvariatyImportRecordsJob');
 INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format,extract_id_regex) VALUES (1305,'https://sfx.knihovny.cz/sfxlcl3/cgi/public/get_file.cgi?file=institutional_holding-NKP.xml','downloadAndImportRecordsJob','sfx',null);
 INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format,extract_id_regex) VALUES (1306,'https://sfx.knihovny.cz/sfxlcl3/cgi/public/get_file.cgi?file=institutional_holding-VKOL.xml','downloadAndImportRecordsJob','sfx',null);

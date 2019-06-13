@@ -1742,3 +1742,6 @@ INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granul
 
 --changeset tomascejpek:149 context:cpk
 UPDATE oai_harvest_conf SET set_spec='CPK_1' WHERE import_conf_id=388;
+
+--changeset tomascejpek:150 context:cpk
+UPDATE download_import_conf SET extract_id_regex='s/^(.*)/UZP01-$1/',url='local:/data/imports/uzp01_upd' WHERE import_conf_id=391;
