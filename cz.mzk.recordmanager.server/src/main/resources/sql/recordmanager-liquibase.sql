@@ -1730,3 +1730,7 @@ UPDATE download_import_conf SET url='https://sfx.knihovny.cz/sfxlcl3/cgi/public/
 UPDATE download_import_conf SET url='https://sfx.knihovny.cz/sfxlcl3/cgi/public/get_file.cgi?file=institutional_holding-MZK.xml' WHERE import_conf_id=1314;
 UPDATE download_import_conf SET url='https://sfx.knihovny.cz/sfxlcl3/cgi/public/get_file.cgi?file=institutional_holding.xml' WHERE import_conf_id=1315;
 UPDATE download_import_conf SET url='https://sfx.knihovny.cz/sfxlcl3/cgi/public/get_file.cgi?file=institutional_holding-SVKPL.xml' WHERE import_conf_id=1322;
+
+--changeset tomascejpek:147 context:cpk
+UPDATE oai_harvest_conf SET harvest_job_name='cosmotronHarvestJob' WHERE import_conf_id=392;
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (66, 392, 'VYG001');
