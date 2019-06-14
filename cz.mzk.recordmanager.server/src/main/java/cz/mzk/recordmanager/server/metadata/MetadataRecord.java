@@ -404,4 +404,28 @@ public interface MetadataRecord {
 	default String getConspectusForBiblioLinker() {
 		return null;
 	}
+
+	default List<BLTitle> getBLTitle(){
+		return Collections.emptyList();
+	}
+
+	default List<Field240245> getField240245() {
+		return Collections.emptyList();
+	}
+
+	default String getBiblioLinkerAuthor(){
+		return null;
+	}
+
+	default String getBiblioLinkerAuthorAuth(){
+		return null;
+	}
+
+	default String getBiblioLinkerPublisher() {
+		return null;
+	}
+
+	default String getBiblioLinkerSeries() {
+		return null;
+	}
 }

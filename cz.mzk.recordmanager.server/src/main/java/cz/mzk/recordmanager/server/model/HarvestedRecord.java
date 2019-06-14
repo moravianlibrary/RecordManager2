@@ -176,6 +176,14 @@ public class HarvestedRecord extends AbstractDomainObject {
 	private List<BiblioLinkerSimiliar> biblioLinkerSimiliarUrls = new ArrayList<>();
 
 	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name="harvested_record_id", referencedColumnName="id", nullable=false)
+	private List<BLTitle> blTitles = new ArrayList<>();
+
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name = "harvested_record_id", referencedColumnName = "id", nullable = false)
+	private List<Field240245> field240245s = new ArrayList<>();
+
+	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name="harvested_record_id", referencedColumnName="id")
 	private List<FulltextKramerius> fulltextKramerius = new ArrayList<>();
 	
@@ -270,6 +278,18 @@ public class HarvestedRecord extends AbstractDomainObject {
 
 	@Column(name="next_biblio_linker_flag")
 	private boolean nextBiblioLinkerFlag = true;
+
+	@Column(name = "bl_author")
+	private String blAuthor;
+
+	@Column(name = "bl_author_auth_key")
+	private String blAuthorAuthKey;
+
+	@Column(name = "bl_publisher")
+	private String blPublisher;
+
+	@Column(name = "bl_series")
+	private String blSeries;
 
 	/**
 	 * indicator variable used for filtering reasons
@@ -707,5 +727,53 @@ public class HarvestedRecord extends AbstractDomainObject {
 
 	public void setNextBiblioLinkerFlag(boolean nextBiblioLinkerFlag) {
 		this.nextBiblioLinkerFlag = nextBiblioLinkerFlag;
+	}
+
+	public List<BLTitle> getBlTitles() {
+		return blTitles;
+	}
+
+	public void setBlTitles(List<BLTitle> blTitles) {
+		this.blTitles = blTitles;
+	}
+
+	public String getBlAuthor() {
+		return blAuthor;
+	}
+
+	public void setBlAuthor(String blAuthor) {
+		this.blAuthor = blAuthor;
+	}
+
+	public String getBlAuthorAuthKey() {
+		return blAuthorAuthKey;
+	}
+
+	public void setBlAuthorAuthKey(String blAuthorAuthKey) {
+		this.blAuthorAuthKey = blAuthorAuthKey;
+	}
+
+	public String getBlPublisher() {
+		return blPublisher;
+	}
+
+	public void setBlPublisher(String blPublisher) {
+		this.blPublisher = blPublisher;
+	}
+
+	public String getBlSeries() {
+		return blSeries;
+	}
+
+	public void setBlSeries(String blSeries) {
+		this.blSeries = blSeries;
+	}
+
+	public List<Field240245> getField240245s() {
+		return field240245s;
+	}
+
+	public void setField240245s(List<Field240245> field240245s) {
+		this.field240245s = field240245s;
 	}
 }

@@ -39,6 +39,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 	private static final Pattern CPK0_PATTERN = Pattern.compile("cpk0");
 	private static final Pattern METAPROXY_TAG_PATTERN = Pattern.compile("[17]..");
 	private static final Pattern SCALE_REPLACE = Pattern.compile("[ ^]+");
+	private static final Pattern FIELD130A = Pattern.compile("(.*)\\([^)]*\\)$");
 
 	// formats
 	private static final Pattern KARTOGRAFICKY_DOKUMENT = Pattern.compile("kartografick[yý]\\sdokument", Pattern.CASE_INSENSITIVE);
@@ -932,15 +933,15 @@ public class MetadataMarcRecord implements MetadataRecord {
 		Set<String> result = new HashSet<>();
 		for (DataField df : underlayingMarc.getDataFields("041")) {
 			for (Subfield subA : df.getSubfields('a')) {
-				String lang;
+				String lang = null;
 				if (subA.getData().toLowerCase().equals("cze")) {
 					lang = "cze";
 				} else if (subA.getData().toLowerCase().equals("eng")) {
 					lang = "eng";
-				} else {
-					lang = "oth";
+				} else if (subA.getData().length() == 3) {
+					lang = subA.getData().toLowerCase();
 				}
-				result.add(lang);
+				if (lang != null) result.add(lang);
 			}
 		}
 		if (result.isEmpty()) {
@@ -952,10 +953,8 @@ public class MetadataMarcRecord implements MetadataRecord {
 					lang = "cze";
 				} else if (substr.toLowerCase().equals("eng")) {
 					lang = "eng";
-				}
-				if (lang != null) {
-					result.add(lang);
-				}
+				} else lang = substr;
+				result.add(lang);
 			}
 		}
 		return new ArrayList<>(result);
@@ -1304,5 +1303,98 @@ public class MetadataMarcRecord implements MetadataRecord {
 			if (!values.isEmpty()) return values.get(0);
 		}
 		return null;
+	}
+
+	/**
+	 * get {@link BLTitle} of record
+	 *
+	 * @return
+	 */
+	@Override
+	public List<BLTitle> getBLTitle() {
+		List<BLTitle> result = new ArrayList<>();
+		for (DataField df : underlayingMarc.getDataFields("765")) {
+			String titleText = parseTitleValue(df, new char[]{'t'});
+			if (!titleText.isEmpty()) {
+				result.add(BLTitle.create(titleText));
+			}
+		}
+		for (String tag : new String[]{"210", "222"})
+			for (DataField df : underlayingMarc.getDataFields(tag)) {
+				String titleText = parseTitleValue(df, new char[]{'a'});
+				if (!titleText.isEmpty()) {
+					result.add(BLTitle.create(titleText));
+				}
+			}
+		for (DataField df : underlayingMarc.getDataFields("700")) {
+			String titleText = parseTitleValue(df, new char[]{'t', 'n', 'p'});
+			if (!titleText.isEmpty()) {
+				result.add(BLTitle.create(titleText));
+			}
+		}
+		for (DataField df : underlayingMarc.getDataFields("710")) {
+			String titleText = parseTitleValue(df, new char[]{'t', 'p'});
+			if (!titleText.isEmpty()) {
+				result.add(BLTitle.create(titleText));
+			}
+		}
+		for (String tag : new String[]{"130", "730"}) {
+			for (DataField df : underlayingMarc.getDataFields(tag)) {
+				String titleText = parseTitleValue(df, new char[]{'a'});
+				Matcher matcher;
+				if ((matcher = FIELD130A.matcher(titleText)).matches()) titleText = matcher.group(1);
+				titleText += parseTitleValue(df, new char[]{'n', 'p'});
+				if (!titleText.isEmpty()) {
+					result.add(BLTitle.create(titleText));
+				}
+			}
+		}
+		return result;
+	}
+
+	private String getFields(String fields) {
+		for (String field : fields.split(":")) {
+			String tag = field.substring(0, 3);
+			String codes = field.substring(2);
+			String result = underlayingMarc.getField(tag, codes.toCharArray());
+			if (result != null) return result;
+		}
+		return null;
+	}
+
+	@Override
+	public String getBiblioLinkerAuthor() {
+		return getFields("100a:110abcdn:111acdn:700a:710abcdn:711acdn");
+	}
+
+	@Override
+	public String getBiblioLinkerAuthorAuth() {
+		return getFields("1007:1107:1117:7007:7107:7117");
+	}
+
+	@Override
+	public String getBiblioLinkerPublisher() {
+		return getFields("264b:260b:260f:928a");
+	}
+
+	@Override
+	public String getBiblioLinkerSeries() {
+		return getFields("440a:490a");
+	}
+
+	@Override
+	public List<Field240245> getField240245() {
+		List<Field240245> results = new ArrayList<>();
+		for (String tag : new String[]{"240", "245", "246"}) {
+			for (DataField df : underlayingMarc.getDataFields(tag)) {
+				if (df.getSubfield('n') == null && df.getSubfield('p') == null) continue;
+				if (df.getSubfield('a') == null) continue;
+				results.add(Field240245.create(df.getSubfield('a').getData()));
+				if (df.getSubfield('b') != null) {
+					results.add(Field240245.create(df.getSubfield('a').getData() + df.getSubfield('b').getData()));
+				}
+			}
+		}
+		return results;
 	}
 }

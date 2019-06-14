@@ -20,9 +20,9 @@ import cz.mzk.recordmanager.server.util.MetadataUtils;
 
 /**
  * Abstract DedupKeyParser implementation
- * 
+ *
  * This implementation solves problem with repeated creation of deduplication keys
- * 
+ *
  * @author mertam
  *
  */
@@ -34,13 +34,14 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 	private final static int EFFECTIVE_AUTHOR_LENGTH = 200;
 	private final static int EFFECTIVE_AUTHOR_AUTH_KEY_LENGTH = 50;
 	private final static int EFFECTIVE_LENGTH_30 = 30;
-	
-	@Autowired 
+	private final static int EFFECTIVE_LENGTH_200 = 200;
+
+	@Autowired
 	private HarvestedRecordFormatDAO harvestedRecordFormatDAO;
-	
+
 	@Autowired
 	private HarvestedRecordDAO harvestedRecordDao;
-	
+
 	@Override
 	public HarvestedRecord parse(HarvestedRecord record,
 			MetadataRecord metadataRecord) throws DedupKeyParserException {
@@ -55,9 +56,9 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 		}
 		boolean dedupKeysChanged = false;
 		boolean oaiTimestampChanged = false;
-		
+
 		DedupKeysencapsulator encapsulator = new DedupKeysencapsulator();
-		
+
 		List<Title> titles = new ArrayList<>();
 		for (Title title: metadataRecord.getTitle()) {
 			title.setTitleStr(MetadataUtils.normalizeAndShorten(
@@ -79,6 +80,29 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 			}
 		}
 		encapsulator.setShortTitles(shortTitles);
+		List<BLTitle> blTitles = new ArrayList<>();
+		for (BLTitle blTitle : metadataRecord.getBLTitle()) {
+			blTitle.setBLTitleStr(MetadataUtils.normalizeAndShorten(
+					blTitle.getBLTitleStr(),
+					EFFECTIVE_TITLE_LENGTH));
+			if (blTitle.getBLTitleStr().isEmpty()) continue;
+			if (!blTitles.contains(blTitle)) {
+				blTitles.add(blTitle);
+			}
+		}
+		encapsulator.setBlTitles(blTitles);
+		List<Field240245> field240245s = new ArrayList<>();
+		for (Field240245 field240245 : metadataRecord.getField240245()) {
+			field240245.setField240245Str(MetadataUtils.normalizeAndShorten(
+					field240245.getField240245Str(),
+					EFFECTIVE_TITLE_LENGTH));
+			if (field240245.getField240245Str().isEmpty()) continue;
+			if (!field240245s.contains(field240245)) {
+				field240245s.add(field240245);
+			}
+		}
+		encapsulator.setField240245(field240245s);
+
 		encapsulator.setIsbns(metadataRecord.getISBNs());
 		encapsulator.setIssns(metadataRecord.getISSNs());
 		encapsulator.setIsmns(metadataRecord.getISMNs());
@@ -103,12 +127,14 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 		encapsulator.setPublisherNumbers(metadataRecord.getPublisherNumber());
 		encapsulator.setLanguages(new HashSet<>(metadataRecord.getLanguages()));
 		encapsulator.setBlConspectus(MetadataUtils.normalizeAndShorten(metadataRecord.getConspectusForBiblioLinker(), EFFECTIVE_BL_CONSPECTUS_LENGTH));
-
+		encapsulator.setBlAuthor(MetadataUtils.normalizeAndShorten(metadataRecord.getBiblioLinkerAuthor(), EFFECTIVE_AUTHOR_LENGTH));
+		encapsulator.setBlAuthorAuthKey(MetadataUtils.shorten(metadataRecord.getBiblioLinkerAuthorAuth(), EFFECTIVE_AUTHOR_AUTH_KEY_LENGTH));
+		encapsulator.setBlPublisher(MetadataUtils.normalizeAndShorten(metadataRecord.getBiblioLinkerPublisher(), EFFECTIVE_LENGTH_200));
+		encapsulator.setBlSeries(MetadataUtils.normalizeAndShorten(metadataRecord.getBiblioLinkerSeries(), EFFECTIVE_LENGTH_200));
 		String computedHash = computeHashValue(encapsulator);
 		String oldHash = record.getDedupKeysHash();
 		String temporalHash = record.getTemporalDedupHash() == null ? "0000000000000000000000000000000000000000" : record.getTemporalDedupHash();
-		
-		
+
 		// decide whether keys changed and should be updated in database
 		// if temporal hash matches current hash, keys won't be updated
 		// this prevents errors during processing one record multiple times
@@ -117,11 +143,11 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 				(oldHash == null || oldHash.isEmpty() || !computedHash.equals(oldHash))) {
 			// keys changed, updated in database
 			dedupKeysChanged = true;
-			
+
 			// drop old keys
 			harvestedRecordDao.dropDedupKeys(record);
 			if(record.getHarvestedFrom() != null) record.setWeight(metadataRecord.getWeight(record.getHarvestedFrom().getBaseWeight()));
-			
+
 			// assign new keys
 			record.setTitles(encapsulator.getTitles());
 			record.setIsbns(encapsulator.getIsbns());
@@ -136,7 +162,7 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 			record.setUuid(encapsulator.getUuid());
 			record.setPages(encapsulator.getPages());
 			record.setIssnSeries(encapsulator.getIssnSeries());
-			
+
 			record.setIssnSeriesOrder(encapsulator.getIssnSeriesOrder());
 			record.setOclcs(encapsulator.getOclcs());
 			record.setLanguages(metadataRecord.getLanguages());
@@ -149,6 +175,12 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 			record.setShortTitles(encapsulator.getShortTitles());
 			record.setPublisherNumbers(metadataRecord.getPublisherNumber());
 			record.setBlConspectus(encapsulator.getBlConspectus());
+			record.setBlTitles(encapsulator.getBlTitles());
+			record.setBlAuthor(encapsulator.getBlAuthor());
+			record.setBlAuthorAuthKey(encapsulator.getBlAuthorAuthKey());
+			record.setBlPublisher(encapsulator.getBlPublisher());
+			record.setBlSeries(encapsulator.getBlSeries());
+			record.setField240245s(encapsulator.getField240245());
 			record.setTemporalDedupHash(computedHash);
 		} else {
 			harvestedRecordDao.dropAuthorities(record);
@@ -158,8 +190,7 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 
 		oaiTimestampChanged = record.getOaiTimestamp() != null && record.getTemporalOldOaiTimestamp() != null
 				&& !record.getOaiTimestamp().equals(record.getTemporalOldOaiTimestamp());
-		
-		
+
 		// decide whether record should be deduplicated
 		if (dedupKeysChanged) {
 			// new record or change in keys
@@ -180,87 +211,87 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 		}
 		return record;
 	}
-	
+
 	/**
 	 * Compute SHA1 hash of deduplication keys from given {@link DedupKeysencapsulator}
 	 * @param encapsulator {@link DedupKeysencapsulator}
 	 * @return Hash as String
 	 */
 	protected String computeHashValue(final DedupKeysencapsulator encapsulator) {
-	
-			try {
+
+		try {
 				// change of hash function also requires changes in database row
 				MessageDigest md = MessageDigest.getInstance("SHA-1");
-				
-				for (Title t: encapsulator.getTitles()) {
+
+			for (Title t : encapsulator.getTitles()) {
 					md.update(t.getTitleStr().getBytes("utf-8"));
 				}
-				
-				for (Isbn i: encapsulator.getIsbns()) {
+
+			for (Isbn i : encapsulator.getIsbns()) {
 					md.update(i.getIsbn().byteValue());
 				}
-				
-				for (Issn i: encapsulator.getIssns()) {
+
+			for (Issn i : encapsulator.getIssns()) {
 					md.update(i.getIssn().getBytes());
 				}
-				
-				for (Ismn i: encapsulator.getIsmns()) {
+
+			for (Ismn i : encapsulator.getIsmns()) {
 					md.update(i.getIsmn().byteValue());
 				}
-				
-				for (Cnb c: encapsulator.getCnbs()) {
+
+			for (Cnb c : encapsulator.getCnbs()) {
 					md.update(c.getCnb().getBytes());
 				}
-				
-				if (encapsulator.getPublicationYear() != null) {
+
+			if (encapsulator.getPublicationYear() != null) {
 					md.update(encapsulator.getPublicationYear().byteValue());
 				}
-				
-				for (HarvestedRecordFormat hrfe: encapsulator.getFormats()) {
+
+			for (HarvestedRecordFormat hrfe : encapsulator.getFormats()) {
 					md.update(hrfe.getName().getBytes());
 				}
-				
-				if (encapsulator.getAuthorAuthKey() != null) {
+
+			if (encapsulator.getAuthorAuthKey() != null) {
 					md.update(encapsulator.getAuthorAuthKey().getBytes());
-				} 
-				
+			}
+
 				if (encapsulator.getAuthorString() != null) {
 					md.update(encapsulator.getAuthorString().getBytes());
 				}
-				
-				if (encapsulator.getScale() != null) {
+
+			if (encapsulator.getScale() != null) {
 					md.update(encapsulator.getScale().byteValue());
 				}
-				
-				if (encapsulator.getUuid() != null) {
+
+			if (encapsulator.getUuid() != null) {
 					md.update(encapsulator.getUuid().getBytes());
 				}
-				
-				if (encapsulator.getPages() != null) {
+
+			if (encapsulator.getPages() != null) {
 					md.update(encapsulator.getPages().byteValue());
 				}
-				
-				if (encapsulator.getIssnSeries() != null) {
+
+			if (encapsulator.getIssnSeries() != null) {
 					md.update(encapsulator.getIssnSeries().getBytes());
 				}
-				
-				if (encapsulator.getIssnSeriesOrder() != null) {
+
+			if (encapsulator.getIssnSeriesOrder() != null) {
 					md.update(encapsulator.getIssnSeriesOrder().getBytes());
 				}
-				
-				for (Oclc o: encapsulator.getOclcs()) {
+
+			for (Oclc o : encapsulator.getOclcs()) {
 					md.update(o.getOclcStr().getBytes());
 				}
-				
-				for (String l: encapsulator.getLanguages()) {
+
+			for (String l : encapsulator.getLanguages()) {
 					md.update(l.getBytes());
 				}
-				
-				if (encapsulator.getClusterId() != null) {
+
+			if (encapsulator.getClusterId() != null) {
 					md.update(encapsulator.getClusterId().getBytes());
 				}
-				
-				if (encapsulator.getRaw001Id() != null) {
+
+			if (encapsulator.getRaw001Id() != null) {
 					md.update(encapsulator.getRaw001Id().getBytes());
 				}
 
@@ -275,50 +306,75 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 				if (encapsulator.getSourceInfoG() != null) {
 					md.update(encapsulator.getSourceInfoG().getBytes());
 				}
-				
-				for (Ean ean: encapsulator.getEans()) {
+
+			if (encapsulator.getBlAuthor() != null) {
+				md.update(encapsulator.getBlAuthor().getBytes());
+			}
+
+			if (encapsulator.getBlAuthorAuthKey() != null) {
+				md.update(encapsulator.getBlAuthorAuthKey().getBytes());
+			}
+
+			if (encapsulator.getBlPublisher() != null) {
+				md.update(encapsulator.getBlPublisher().getBytes());
+			}
+
+			if (encapsulator.getBlSeries() != null) {
+				md.update(encapsulator.getBlSeries().getBytes());
+			}
+
+
+			for (Ean ean: encapsulator.getEans()) {
 					md.update(ean.getEan().byteValue());
 				}
-				
-				for (PublisherNumber publisherNumber: encapsulator.getPublisherNumbers()) {
+
+			for (PublisherNumber publisherNumber : encapsulator.getPublisherNumbers()) {
 					md.update(publisherNumber.getPublisherNumber().getBytes("utf-8"));
 				}
-				
-				for (ShortTitle st: encapsulator.getShortTitles()) {
+
+			for (ShortTitle st : encapsulator.getShortTitles()) {
 					md.update(st.getShortTitleStr().getBytes("utf-8"));
 				}
+
+			for (BLTitle blTitle : encapsulator.getBlTitles()) {
+				md.update(blTitle.getBLTitleStr().getBytes("utf-8"));
+			}
+
+			for (Field240245 field240245 : encapsulator.getField240245()) {
+				md.update(field240245.getField240245Str().getBytes("utf-8"));
+			}
 
 				if (encapsulator.getBlConspectus() != null) {
 					md.update(encapsulator.getBlConspectus().getBytes());
 				}
-				
-				byte[] hash = md.digest();
+
+			byte[] hash = md.digest();
 				StringBuilder sb = new StringBuilder();
 			    for (byte b : hash) {
 			        sb.append(String.format("%02x", b));
 			    }
-			    
-			    return sb.toString();
-				
-			} catch (NoSuchAlgorithmException e) {
+
+			return sb.toString();
+
+		} catch (NoSuchAlgorithmException e) {
 				// should never be thrown, SHA-1 is required by Java specification
-			} 
+		}
 			catch (UnsupportedEncodingException uee) {
 				throw new DedupKeyParserException("Uncoding problems in hash computation", uee);
 			}
-			
-			return "";
+
+		return "";
 
 		}
-		
-		/**
+
+	/**
 		 * compute SHA-1 hash of deduplication keys for given {@link HarvestedRecord}
 		 * @param hr {@link HarvestedRecord}
 		 * @return Hash as String
 		 */
 		protected String computeHashValue(final HarvestedRecord hr) {
 			DedupKeysencapsulator encapsulator = new DedupKeysencapsulator();
-			
+
 			encapsulator.setTitles(hr.getTitles());
 			encapsulator.setIsbns(hr.getIsbns());
 			encapsulator.setIssns(hr.getIssns());
@@ -343,10 +399,15 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 			encapsulator.setSourceInfoX(hr.getSourceInfoX());
 			encapsulator.setSourceInfoT(hr.getSourceInfoT());
 			encapsulator.setBlConspectus(hr.getBlConspectus());
-
+			encapsulator.setBlTitles(hr.getBlTitles());
+			encapsulator.setBlAuthor(hr.getBlAuthor());
+			encapsulator.setBlAuthorAuthKey(hr.getBlAuthorAuthKey());
+			encapsulator.setBlPublisher(hr.getBlPublisher());
+			encapsulator.setBlSeries(hr.getBlSeries());
+			encapsulator.setField240245(hr.getField240245s());
 			return computeHashValue(encapsulator);
 		}
-		
+
 	protected class DedupKeysencapsulator {
 		List<Title> titles = new ArrayList<>();
 		List<Isbn> isbns = new ArrayList<>();
@@ -359,7 +420,9 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 		List<Ean> eans = new ArrayList<>();
 		List<ShortTitle> shortTitles = new ArrayList<>();
 		List<PublisherNumber> publisherNumbers = new ArrayList<>();
-		
+		List<BLTitle> blTitles = new ArrayList<>();
+		List<Field240245> field240245 = new ArrayList<>();
+
 		Long publicationYear;
 		String authorString;
 		String authorAuthKey;
@@ -374,7 +437,11 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 		String sourceInfoT;
 		String sourceInfoG;
 		String blConspectus;
-		
+		String blAuthor;
+		String blAuthorAuthKey;
+		String blPublisher;
+		String blSeries;
+
 		public List<Ismn> getIsmns() {
 			return ismns;
 		}
@@ -532,6 +599,54 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 
 		public void setBlConspectus(String blConspectus) {
 			this.blConspectus = blConspectus;
+		}
+
+		public String getBlAuthor() {
+			return blAuthor;
+		}
+
+		public void setBlAuthor(String blAuthor) {
+			this.blAuthor = blAuthor;
+		}
+
+		public String getBlAuthorAuthKey() {
+			return blAuthorAuthKey;
+		}
+
+		public void setBlAuthorAuthKey(String blAuthorAuthKey) {
+			this.blAuthorAuthKey = blAuthorAuthKey;
+		}
+
+		public String getBlPublisher() {
+			return blPublisher;
+		}
+
+		public void setBlPublisher(String blPublisher) {
+			this.blPublisher = blPublisher;
+		}
+
+		public List<BLTitle> getBlTitles() {
+			return blTitles;
+		}
+
+		public void setBlTitles(List<BLTitle> blTitles) {
+			this.blTitles = blTitles;
+		}
+
+		public String getBlSeries() {
+			return blSeries;
+		}
+
+		public void setBlSeries(String blSeries) {
+			this.blSeries = blSeries;
+		}
+
+		public List<Field240245> getField240245() {
+			return field240245;
+		}
+
+		public void setField240245(List<Field240245> field240245) {
+			this.field240245 = field240245;
 		}
 	}
 

@@ -1240,3 +1240,27 @@ CREATE TABLE biblio_linker_similar (
 );
 ALTER TABLE harvested_record ADD COLUMN bl_conspectus VARCHAR(255);
 ALTER TABLE harvested_record ADD COLUMN next_biblio_linker_flag BOOLEAN DEFAULT FALSE;
+
+-- 06. 05. 2019 tomascejpek
+CREATE TABLE bl_title (
+  id                   DECIMAL(10) PRIMARY KEY,
+  harvested_record_id  DECIMAL(10),
+  title                VARCHAR(255),
+  FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE
+);
+CREATE INDEX bl_title_harvested_record_idx ON bl_title(harvested_record_id);
+CREATE TABLE field240245 (
+  id                   DECIMAL(10) PRIMARY KEY,
+  harvested_record_id  DECIMAL(10),
+  title                VARCHAR(255),
+  FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE
+);
+CREATE INDEX field240245_harvested_record_idx ON field240245(harvested_record_id);
+ALTER TABLE harvested_record ADD COLUMN bl_author VARCHAR(200);
+CREATE INDEX harvested_record_bl_author_idx ON harvested_record(bl_author);
+ALTER TABLE harvested_record ADD COLUMN bl_author_auth_key VARCHAR(200);
+CREATE INDEX harvested_record_bl_author_auth_key_idx ON harvested_record(bl_author_auth_key);
+ALTER TABLE harvested_record ADD COLUMN bl_publisher VARCHAR(200);
+CREATE INDEX harvested_record_bl_publisher_idx ON harvested_record(bl_publisher);
+ALTER TABLE harvested_record ADD COLUMN bl_series VARCHAR(200);
+CREATE INDEX harvested_record_bl_series_idx ON harvested_record(bl_series);
