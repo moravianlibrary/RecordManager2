@@ -54,6 +54,8 @@ public class BiblioLinkerJobConfig {
 
 	private static final String TMP_BL_TABLE_TITLE_AUTH = "tmp_bl_title_auth";
 
+	private static final String TMP_BL_TABLE_TITLE_AUTH_AUDIO = "tmp_bl_title_auth_audio";
+
 	private static final String TMP_BL_TABLE_REST_DEDUP = "tmp_bl_rest_dedup";
 
 	private static final String TMP_BL_TABLE_ORPHANED = "tmp_bl_orphaned";
@@ -69,6 +71,8 @@ public class BiblioLinkerJobConfig {
 	private String initBiblioLinkerSimilarSql = ResourceUtils.asString("job/biblioLinkerJob/initBiblioLinkerSimilar.sql");
 
 	private String prepareBLTempTitleAuthTableSql = ResourceUtils.asString("job/biblioLinkerJob/prepareBLTempTitleAuth.sql");
+
+	private String prepareBLTempTitleAuthAudioTableSql = ResourceUtils.asString("job/biblioLinkerJob/prepareBLTempTitleAuthAudio.sql");
 
 	private String prepareBLTempRestDedupTableSql = ResourceUtils.asString("job/biblioLinkerJob/prepareBLTempRestDedup.sql");
 
@@ -89,6 +93,8 @@ public class BiblioLinkerJobConfig {
 			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER + ":initBLStep") Step initBLStep,
 			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER + ":prepareBLTempTitleAuthStep") Step prepareBLTempTitleAuthStep,
 			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER + ":blTempTitleAuthPartitionedStep") Step blTempTitleAuthStep,
+			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER + ":prepareBLTempTitleAuthAudioStep") Step prepareBLTempTitleAuthAudioStep,
+			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER + ":blTempTitleAuthAudioPartitionedStep") Step blTempTitleAuthAudioStep,
 			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER + ":prepareBLTempRestDedupStep") Step prepareBLTempRestDedupStep,
 			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER + ":blTempRestDedupPartitionedStep") Step blTempRestDedupStep,
 			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER + ":prepareBLTempOrphanedStep") Step prepareBLTempOrphanedStep,
@@ -99,6 +105,8 @@ public class BiblioLinkerJobConfig {
 				.start(initBLStep)
 				.next(prepareBLTempTitleAuthStep)
 				.next(blTempTitleAuthStep)
+				.next(prepareBLTempTitleAuthAudioStep)
+				.next(blTempTitleAuthAudioStep)
 				.next(prepareBLTempRestDedupStep)
 				.next(blTempRestDedupStep)
 				.next(prepareBLTempOrphanedStep)
@@ -171,6 +179,56 @@ public class BiblioLinkerJobConfig {
 			@Value("#{stepExecutionContext[modulo]}") Integer modulo
 	) throws Exception {
 		return blSimpleKeysReader(TMP_BL_TABLE_TITLE_AUTH, "dedup_record_id", modulo);
+	}
+
+	/**
+	 * merge audio records with same title and authority
+	 */
+	@Bean(name = Constants.JOB_ID_BIBLIO_LINKER + ":prepareBLTempTitleAuthAudioTasklet")
+	@StepScope
+	public Tasklet prepareBLTempTitleAuthAudioTasklet() {
+		return new SqlCommandTasklet(prepareBLTempTitleAuthAudioTableSql);
+	}
+
+	@Bean(name = Constants.JOB_ID_BIBLIO_LINKER + ":prepareBLTempTitleAuthAudioStep")
+	public Step prepareBLTempTitleAuthAudioStep() {
+		return steps.get("prepareBLTempTitleAuthAudioStep")
+				.tasklet(prepareBLTempTitleAuthAudioTasklet())
+				.listener(new StepProgressListener())
+				.build();
+	}
+
+	@Bean(name = Constants.JOB_ID_BIBLIO_LINKER + ":blTempTitleAuthAudioStep")
+	public Step blTempTitleAuthAudioStep() throws Exception {
+		return steps.get("blTempTitleAuthAudioStep")
+				.listener(new StepProgressListener())
+				.<List<Long>, List<HarvestedRecord>>chunk(10)
+				.faultTolerant()
+				.keyGenerator(KeyGeneratorForList.INSTANCE)
+				.retry(LockAcquisitionException.class)
+				.retryLimit(10000)
+				.reader(blTempTitleAuthAudioStepReader(INTEGER_OVERRIDEN_BY_EXPRESSION))
+				.processor(blSimpleKeysStepProsessor())
+				.writer(blSimpleKeysStepWriter())
+				.build();
+	}
+
+	@Bean(name = Constants.JOB_ID_BIBLIO_LINKER + ":blTempTitleAuthAudioPartitionedStep")
+	public Step blTempTitleAuthAudioPartitionedStep() throws Exception {
+		return steps.get("blTempTitleAuthAudioPartitionedStep")
+				.partitioner("blTempTitleAuthAudioPartitionedStepSlave", this.partioner()) //
+				.taskExecutor(this.taskExecutor)
+				.gridSize(this.partitionThreads)
+				.step(blTempTitleAuthAudioStep())
+				.build();
+	}
+
+	@Bean(name = "blTitleAuthAudio:reader")
+	@StepScope
+	public ItemReader<List<Long>> blTempTitleAuthAudioStepReader(
+			@Value("#{stepExecutionContext[modulo]}") Integer modulo
+	) throws Exception {
+		return blSimpleKeysReader(TMP_BL_TABLE_TITLE_AUTH_AUDIO, "dedup_record_id", modulo);
 	}
 
 	/**
