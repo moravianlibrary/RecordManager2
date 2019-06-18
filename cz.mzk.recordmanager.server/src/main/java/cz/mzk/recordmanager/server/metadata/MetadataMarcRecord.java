@@ -1397,4 +1397,18 @@ public class MetadataMarcRecord implements MetadataRecord {
 		}
 		return results;
 	}
+
+	private static List<String> STOP_WORDS_650 = Arrays.asList("d006801", "ph115615", "ph128175", "ph114390",
+			"ph116858", "ph116861", "d005260", "ph114056", "d005260", "ph135292");
+
+	@Override
+	public String getBiblioLinkerTopicKey() {
+		for (DataField df : underlayingMarc.getDataFields("650")) {
+			if (df.getIndicator1() != '2' && df.getSubfield('7') != null) {
+				if (STOP_WORDS_650.contains(df.getSubfield('7').getData())) continue;
+				return df.getSubfield('7').getData();
+			}
+		}
+		return getFields("6517:072a");
+	}
 }

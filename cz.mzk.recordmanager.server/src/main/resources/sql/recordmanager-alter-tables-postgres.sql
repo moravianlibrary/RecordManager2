@@ -1264,3 +1264,5 @@ ALTER TABLE harvested_record ADD COLUMN bl_publisher VARCHAR(200);
 CREATE INDEX harvested_record_bl_publisher_idx ON harvested_record(bl_publisher);
 ALTER TABLE harvested_record ADD COLUMN bl_series VARCHAR(200);
 CREATE INDEX harvested_record_bl_series_idx ON harvested_record(bl_series);
+ALTER TABLE harvested_record ADD COLUMN bl_topic_key VARCHAR(200);
+CREATE INDEX harvested_record_bl_topic_key_idx ON harvested_record(bl_topic_key);

@@ -428,4 +428,8 @@ public interface MetadataRecord {
 	default String getBiblioLinkerSeries() {
 		return null;
 	}
+
+	default String getBiblioLinkerTopicKey() {
+		return null;
+	}
 }

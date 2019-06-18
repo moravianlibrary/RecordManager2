@@ -131,6 +131,7 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 		encapsulator.setBlAuthorAuthKey(MetadataUtils.shorten(metadataRecord.getBiblioLinkerAuthorAuth(), EFFECTIVE_AUTHOR_AUTH_KEY_LENGTH));
 		encapsulator.setBlPublisher(MetadataUtils.normalizeAndShorten(metadataRecord.getBiblioLinkerPublisher(), EFFECTIVE_LENGTH_200));
 		encapsulator.setBlSeries(MetadataUtils.normalizeAndShorten(metadataRecord.getBiblioLinkerSeries(), EFFECTIVE_LENGTH_200));
+		encapsulator.setBlTopicKey(MetadataUtils.normalizeAndShorten(metadataRecord.getBiblioLinkerTopicKey(), EFFECTIVE_LENGTH_200));
 		String computedHash = computeHashValue(encapsulator);
 		String oldHash = record.getDedupKeysHash();
 		String temporalHash = record.getTemporalDedupHash() == null ? "0000000000000000000000000000000000000000" : record.getTemporalDedupHash();
@@ -181,6 +182,7 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 			record.setBlPublisher(encapsulator.getBlPublisher());
 			record.setBlSeries(encapsulator.getBlSeries());
 			record.setField240245s(encapsulator.getField240245());
+			record.setBlTopicKey(encapsulator.getBlTopicKey());
 			record.setTemporalDedupHash(computedHash);
 		} else {
 			harvestedRecordDao.dropAuthorities(record);
@@ -323,6 +325,9 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 				md.update(encapsulator.getBlSeries().getBytes());
 			}
 
+			if (encapsulator.getBlTopicKey() != null) {
+				md.update(encapsulator.getBlTopicKey().getBytes());
+			}
 
 			for (Ean ean: encapsulator.getEans()) {
 					md.update(ean.getEan().byteValue());
@@ -405,6 +410,7 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 			encapsulator.setBlPublisher(hr.getBlPublisher());
 			encapsulator.setBlSeries(hr.getBlSeries());
 			encapsulator.setField240245(hr.getField240245s());
+			encapsulator.setBlTopicKey(hr.getBlTopicKey());
 			return computeHashValue(encapsulator);
 		}
 
@@ -441,6 +447,7 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 		String blAuthorAuthKey;
 		String blPublisher;
 		String blSeries;
+		String blTopicKey;
 
 		public List<Ismn> getIsmns() {
 			return ismns;
@@ -647,6 +654,14 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 
 		public void setField240245(List<Field240245> field240245) {
 			this.field240245 = field240245;
+		}
+
+		public String getBlTopicKey() {
+			return blTopicKey;
+		}
+
+		public void setBlTopicKey(String blTopicKey) {
+			this.blTopicKey = blTopicKey;
 		}
 	}
 

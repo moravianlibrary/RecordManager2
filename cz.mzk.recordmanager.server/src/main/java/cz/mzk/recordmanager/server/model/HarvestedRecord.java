@@ -291,6 +291,9 @@ public class HarvestedRecord extends AbstractDomainObject {
 	@Column(name = "bl_series")
 	private String blSeries;
 
+	@Column(name = "bl_topic_key")
+	private String blTopicKey;
+
 	/**
 	 * indicator variable used for filtering reasons
 	 */
@@ -775,5 +778,13 @@ public class HarvestedRecord extends AbstractDomainObject {
 
 	public void setField240245s(List<Field240245> field240245s) {
 		this.field240245s = field240245s;
+	}
+
+	public String getBlTopicKey() {
+		return blTopicKey;
+	}
+
+	public void setBlTopicKey(String blTopicKey) {
+		this.blTopicKey = blTopicKey;
 	}
 }
