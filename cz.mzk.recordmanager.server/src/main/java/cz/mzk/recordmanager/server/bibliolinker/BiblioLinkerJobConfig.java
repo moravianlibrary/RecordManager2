@@ -58,6 +58,8 @@ public class BiblioLinkerJobConfig {
 
 	private static final String TMP_BL_TABLE_TITLE_AUTH_VIDEO = "tmp_bl_title_auth_video";
 
+	private static final String TMP_BL_TABLE_TITLE_AUTH_MUSICAL_SCORE = "tmp_bl_title_auth_ms";
+
 	private static final String TMP_BL_TABLE_REST_DEDUP = "tmp_bl_rest_dedup";
 
 	private static final String TMP_BL_TABLE_ORPHANED = "tmp_bl_orphaned";
@@ -77,6 +79,8 @@ public class BiblioLinkerJobConfig {
 	private String prepareBLTempTitleAuthAudioTableSql = ResourceUtils.asString("job/biblioLinkerJob/prepareBLTempTitleAuthAudio.sql");
 
 	private String prepareBLTempTitleAuthVideoTableSql = ResourceUtils.asString("job/biblioLinkerJob/prepareBLTempTitleAuthVideo.sql");
+
+	private String prepareBLTempTitleAuthMusicalScoreTableSql = ResourceUtils.asString("job/biblioLinkerJob/prepareBLTempTitleAuthMusicalScore.sql");
 
 	private String prepareBLTempRestDedupTableSql = ResourceUtils.asString("job/biblioLinkerJob/prepareBLTempRestDedup.sql");
 
@@ -101,6 +105,8 @@ public class BiblioLinkerJobConfig {
 			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER + ":blTempTitleAuthAudioPartitionedStep") Step blTempTitleAuthAudioStep,
 			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER + ":prepareBLTempTitleAuthVideoStep") Step prepareBLTempTitleAuthVideoStep,
 			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER + ":blTempTitleAuthVideoPartitionedStep") Step blTempTitleAuthVideoStep,
+			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER + ":prepareBLTempTitleAuthMusicalScoreStep") Step prepareBLTempTitleAuthMusicalScoreStep,
+			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER + ":blTempTitleAuthMusicalScorePartitionedStep") Step blTempTitleAuthMusicalScoreStep,
 			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER + ":prepareBLTempRestDedupStep") Step prepareBLTempRestDedupStep,
 			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER + ":blTempRestDedupPartitionedStep") Step blTempRestDedupStep,
 			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER + ":prepareBLTempOrphanedStep") Step prepareBLTempOrphanedStep,
@@ -115,6 +121,8 @@ public class BiblioLinkerJobConfig {
 				.next(blTempTitleAuthAudioStep)
 				.next(prepareBLTempTitleAuthVideoStep)
 				.next(blTempTitleAuthVideoStep)
+				.next(prepareBLTempTitleAuthMusicalScoreStep)
+				.next(blTempTitleAuthMusicalScoreStep)
 				.next(prepareBLTempRestDedupStep)
 				.next(blTempRestDedupStep)
 				.next(prepareBLTempOrphanedStep)
@@ -287,6 +295,57 @@ public class BiblioLinkerJobConfig {
 			@Value("#{stepExecutionContext[modulo]}") Integer modulo
 	) throws Exception {
 		return blSimpleKeysReader(TMP_BL_TABLE_TITLE_AUTH_VIDEO, "dedup_record_id", modulo);
+	}
+
+
+	/**
+	 * merge MusicalScore records with same title and authority
+	 */
+	@Bean(name = Constants.JOB_ID_BIBLIO_LINKER + ":prepareBLTempTitleAuthMusicalScoreTasklet")
+	@StepScope
+	public Tasklet prepareBLTempTitleAuthMusicalScoreTasklet() {
+		return new SqlCommandTasklet(prepareBLTempTitleAuthMusicalScoreTableSql);
+	}
+
+	@Bean(name = Constants.JOB_ID_BIBLIO_LINKER + ":prepareBLTempTitleAuthMusicalScoreStep")
+	public Step prepareBLTempTitleAuthMusicalScoreStep() {
+		return steps.get("prepareBLTempTitleAuthMusicalScoreStep")
+				.tasklet(prepareBLTempTitleAuthMusicalScoreTasklet())
+				.listener(new StepProgressListener())
+				.build();
+	}
+
+	@Bean(name = Constants.JOB_ID_BIBLIO_LINKER + ":blTempTitleAuthMusicalScoreStep")
+	public Step blTempTitleAuthMusicalScoreStep() throws Exception {
+		return steps.get("blTempTitleAuthMusicalScoreStep")
+				.listener(new StepProgressListener())
+				.<List<Long>, List<HarvestedRecord>>chunk(10)
+				.faultTolerant()
+				.keyGenerator(KeyGeneratorForList.INSTANCE)
+				.retry(LockAcquisitionException.class)
+				.retryLimit(10000)
+				.reader(blTempTitleAuthMusicalScoreStepReader(INTEGER_OVERRIDEN_BY_EXPRESSION))
+				.processor(blSimpleKeysStepProsessor())
+				.writer(blSimpleKeysStepWriter())
+				.build();
+	}
+
+	@Bean(name = Constants.JOB_ID_BIBLIO_LINKER + ":blTempTitleAuthMusicalScorePartitionedStep")
+	public Step blTempTitleAuthMusicalScorePartitionedStep() throws Exception {
+		return steps.get("blTempTitleAuthMusicalScorePartitionedStep")
+				.partitioner("blTempTitleAuthMusicalScorePartitionedStepSlave", this.partioner()) //
+				.taskExecutor(this.taskExecutor)
+				.gridSize(this.partitionThreads)
+				.step(blTempTitleAuthMusicalScoreStep())
+				.build();
+	}
+
+	@Bean(name = "blTitleAuthMusicalScore:reader")
+	@StepScope
+	public ItemReader<List<Long>> blTempTitleAuthMusicalScoreStepReader(
+			@Value("#{stepExecutionContext[modulo]}") Integer modulo
+	) throws Exception {
+		return blSimpleKeysReader(TMP_BL_TABLE_TITLE_AUTH_MUSICAL_SCORE, "dedup_record_id", modulo);
 	}
 
 	/**
