@@ -70,6 +70,8 @@ public class BiblioLinkerJobConfig {
 
 	private static final String TMP_BL_TABLE_TITLE_LANG_PERIODICAL = "tmp_bl_title_lang_periodical";
 
+	private static final String TMP_BL_TABLE_TITLE_TOPIC = "tmp_bl_title_topic";
+
 	private static final String TMP_BL_TABLE_REST_DEDUP = "tmp_bl_rest_dedup";
 
 	private static final String TMP_BL_TABLE_ORPHANED = "tmp_bl_orphaned";
@@ -101,6 +103,8 @@ public class BiblioLinkerJobConfig {
 	private String prepareBLTempTitleAuthorMusicalScoreTableSql = ResourceUtils.asString("job/biblioLinkerJob/prepareBLTempTitleAuthorMusicalScore.sql");
 
 	private String prepareBLTempTitleLangPeriodicalTableSql = ResourceUtils.asString("job/biblioLinkerJob/prepareBLTempTitleLangPeriodical.sql");
+
+	private String prepareBLTempTitleTopicTableSql = ResourceUtils.asString("job/biblioLinkerJob/prepareBLTempTitleTopic.sql");
 
 	private String prepareBLTempRestDedupTableSql = ResourceUtils.asString("job/biblioLinkerJob/prepareBLTempRestDedup.sql");
 
@@ -137,6 +141,8 @@ public class BiblioLinkerJobConfig {
 			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER + ":blTempTitleAuthorMusicalScorePartitionedStep") Step blTempTitleAuthorMusicalScoreStep,
 			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER + ":prepareBLTempTitleLangPeriodicalStep") Step prepareBLTempTitleLangPeriodicalStep,
 			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER + ":blTempTitleLangPeriodicalPartitionedStep") Step blTempTitleLangPeriodicalStep,
+			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER + ":prepareBLTempTitleTopicStep") Step prepareBLTempTitleTopicStep,
+			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER + ":blTempTitleTopicPartitionedStep") Step blTempTitleTopicStep,
 			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER + ":prepareBLTempRestDedupStep") Step prepareBLTempRestDedupStep,
 			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER + ":blTempRestDedupPartitionedStep") Step blTempRestDedupStep,
 			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER + ":prepareBLTempOrphanedStep") Step prepareBLTempOrphanedStep,
@@ -163,6 +169,8 @@ public class BiblioLinkerJobConfig {
 				.next(blTempTitleAuthorMusicalScoreStep)
 				.next(prepareBLTempTitleLangPeriodicalStep)
 				.next(blTempTitleLangPeriodicalStep)
+				.next(prepareBLTempTitleTopicStep)
+				.next(blTempTitleTopicStep)
 				.next(prepareBLTempRestDedupStep)
 				.next(blTempRestDedupStep)
 				.next(prepareBLTempOrphanedStep)
@@ -635,6 +643,55 @@ public class BiblioLinkerJobConfig {
 			@Value("#{stepExecutionContext[modulo]}") Integer modulo
 	) throws Exception {
 		return blSimpleKeysReader(TMP_BL_TABLE_TITLE_LANG_PERIODICAL, "dedup_record_id", modulo);
+	}
+	/**
+	 * merge books, maps, musical score records with same title, topic key, language and record format
+	 */
+	@Bean(name = Constants.JOB_ID_BIBLIO_LINKER + ":prepareBLTempTitleTopicTasklet")
+	@StepScope
+	public Tasklet prepareBLTempTitleTopicTasklet() {
+		return new SqlCommandTasklet(prepareBLTempTitleTopicTableSql);
+	}
+
+	@Bean(name = Constants.JOB_ID_BIBLIO_LINKER + ":prepareBLTempTitleTopicStep")
+	public Step prepareBLTempTitleTopicStep() {
+		return steps.get("prepareBLTempTitleTopicStep")
+				.tasklet(prepareBLTempTitleTopicTasklet())
+				.listener(new StepProgressListener())
+				.build();
+	}
+
+	@Bean(name = Constants.JOB_ID_BIBLIO_LINKER + ":blTempTitleTopicStep")
+	public Step blTempTitleTopicStep() throws Exception {
+		return steps.get("blTempTitleTopicStep")
+				.listener(new StepProgressListener())
+				.<List<Long>, List<HarvestedRecord>>chunk(100)
+				.faultTolerant()
+				.keyGenerator(KeyGeneratorForList.INSTANCE)
+				.retry(LockAcquisitionException.class)
+				.retryLimit(10000)
+				.reader(blTempTitleTopicStepReader(INTEGER_OVERRIDEN_BY_EXPRESSION))
+				.processor(blSimpleKeysStepProsessor())
+				.writer(blSimpleKeysStepWriter())
+				.build();
+	}
+
+	@Bean(name = Constants.JOB_ID_BIBLIO_LINKER + ":blTempTitleTopicPartitionedStep")
+	public Step blTempTitleTopiclPartitionedStep() throws Exception {
+		return steps.get("blTempTitleTopicPartitionedStep")
+				.partitioner("blTempTitleTopicPartitionedStepSlave", this.partioner()) //
+				.taskExecutor(this.taskExecutor)
+				.gridSize(this.partitionThreads)
+				.step(blTempTitleTopicStep())
+				.build();
+	}
+
+	@Bean(name = "blTitleTopic:reader")
+	@StepScope
+	public ItemReader<List<Long>> blTempTitleTopicStepReader(
+			@Value("#{stepExecutionContext[modulo]}") Integer modulo
+	) throws Exception {
+		return blSimpleKeysReader(TMP_BL_TABLE_TITLE_TOPIC, "dedup_record_id", modulo);
 	}
 
 	/**
