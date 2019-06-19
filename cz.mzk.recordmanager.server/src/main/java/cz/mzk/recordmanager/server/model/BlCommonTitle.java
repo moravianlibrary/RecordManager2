@@ -5,25 +5,25 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = Field240245.TABLE_NAME)
-public class Field240245 extends AbstractDomainObject {
+@Table(name = BlCommonTitle.TABLE_NAME)
+public class BlCommonTitle extends AbstractDomainObject {
 
-	public static final String TABLE_NAME = "field240245";
+	public static final String TABLE_NAME = "bl_common_title";
 
 	@Column(name = "title")
 	private String title = "";
 
-	public static Field240245 create(final String value) {
-		Field240245 newTitle = new Field240245();
-		newTitle.setField240245Str(value);
+	public static BlCommonTitle create(final String value) {
+		BlCommonTitle newTitle = new BlCommonTitle();
+		newTitle.setBlCommonTitleStr(value);
 		return newTitle;
 	}
 
-	public String getField240245Str() {
+	public String getBlCommonTitleStr() {
 		return title;
 	}
 
-	public void setField240245Str(String title) {
+	public void setBlCommonTitleStr(String title) {
 		this.title = title;
 	}
 
@@ -38,7 +38,7 @@ public class Field240245 extends AbstractDomainObject {
 		if (o == null || getClass() != o.getClass()) return false;
 		if (!super.equals(o)) return false;
 
-		Field240245 blTitle = (Field240245) o;
+		BlCommonTitle blTitle = (BlCommonTitle) o;
 
 		return title.equals(blTitle.title);
 	}

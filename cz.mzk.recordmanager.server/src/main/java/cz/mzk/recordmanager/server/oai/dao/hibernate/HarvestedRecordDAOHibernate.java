@@ -289,10 +289,10 @@ public class HarvestedRecordDAOHibernate extends
 			session.delete(blTitle);
 		}
 
-		List<Field240245> field240245s = hr.getField240245s();
-		hr.setField240245s(new ArrayList<>());
-		for (Field240245 field240245 : field240245s) {
-			session.delete(field240245);
+		List<BlCommonTitle> blCommonTitles = hr.getBlCommonTitle();
+		hr.setBlCommonTitle(new ArrayList<>());
+		for (BlCommonTitle blCommonTitle : blCommonTitles) {
+			session.delete(blCommonTitle);
 		}
 
 		hr.setLanguages(new ArrayList<>());

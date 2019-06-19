@@ -91,17 +91,17 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 			}
 		}
 		encapsulator.setBlTitles(blTitles);
-		List<Field240245> field240245s = new ArrayList<>();
-		for (Field240245 field240245 : metadataRecord.getField240245()) {
-			field240245.setField240245Str(MetadataUtils.normalizeAndShorten(
-					field240245.getField240245Str(),
+		List<BlCommonTitle> blCommonTitles = new ArrayList<>();
+		for (BlCommonTitle blCommonTitle : metadataRecord.getBiblioLinkerCommonTitle()) {
+			blCommonTitle.setBlCommonTitleStr(MetadataUtils.normalizeAndShorten(
+					blCommonTitle.getBlCommonTitleStr(),
 					EFFECTIVE_TITLE_LENGTH));
-			if (field240245.getField240245Str().isEmpty()) continue;
-			if (!field240245s.contains(field240245)) {
-				field240245s.add(field240245);
+			if (blCommonTitle.getBlCommonTitleStr().isEmpty()) continue;
+			if (!blCommonTitles.contains(blCommonTitle)) {
+				blCommonTitles.add(blCommonTitle);
 			}
 		}
-		encapsulator.setField240245(field240245s);
+		encapsulator.setBlCommonTitle(blCommonTitles);
 
 		encapsulator.setIsbns(metadataRecord.getISBNs());
 		encapsulator.setIssns(metadataRecord.getISSNs());
@@ -181,7 +181,7 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 			record.setBlAuthorAuthKey(encapsulator.getBlAuthorAuthKey());
 			record.setBlPublisher(encapsulator.getBlPublisher());
 			record.setBlSeries(encapsulator.getBlSeries());
-			record.setField240245s(encapsulator.getField240245());
+			record.setBlCommonTitle(encapsulator.getBlCommonTitle());
 			record.setBlTopicKey(encapsulator.getBlTopicKey());
 			record.setTemporalDedupHash(computedHash);
 		} else {
@@ -345,8 +345,8 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 				md.update(blTitle.getBLTitleStr().getBytes("utf-8"));
 			}
 
-			for (Field240245 field240245 : encapsulator.getField240245()) {
-				md.update(field240245.getField240245Str().getBytes("utf-8"));
+			for (BlCommonTitle blCommonTitle : encapsulator.getBlCommonTitle()) {
+				md.update(blCommonTitle.getBlCommonTitleStr().getBytes("utf-8"));
 			}
 
 				if (encapsulator.getBlConspectus() != null) {
@@ -409,8 +409,8 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 			encapsulator.setBlAuthorAuthKey(hr.getBlAuthorAuthKey());
 			encapsulator.setBlPublisher(hr.getBlPublisher());
 			encapsulator.setBlSeries(hr.getBlSeries());
-			encapsulator.setField240245(hr.getField240245s());
 			encapsulator.setBlTopicKey(hr.getBlTopicKey());
+			encapsulator.setBlCommonTitle(hr.getBlCommonTitle());
 			return computeHashValue(encapsulator);
 		}
 
@@ -427,7 +427,7 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 		List<ShortTitle> shortTitles = new ArrayList<>();
 		List<PublisherNumber> publisherNumbers = new ArrayList<>();
 		List<BLTitle> blTitles = new ArrayList<>();
-		List<Field240245> field240245 = new ArrayList<>();
+		List<BlCommonTitle> blCommonTitle = new ArrayList<>();
 
 		Long publicationYear;
 		String authorString;
@@ -648,12 +648,12 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 			this.blSeries = blSeries;
 		}
 
-		public List<Field240245> getField240245() {
-			return field240245;
+		public List<BlCommonTitle> getBlCommonTitle() {
+			return blCommonTitle;
 		}
 
-		public void setField240245(List<Field240245> field240245) {
-			this.field240245 = field240245;
+		public void setBlCommonTitle(List<BlCommonTitle> blCommonTitle) {
+			this.blCommonTitle = blCommonTitle;
 		}
 
 		public String getBlTopicKey() {
@@ -663,6 +663,7 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 		public void setBlTopicKey(String blTopicKey) {
 			this.blTopicKey = blTopicKey;
 		}
+
 	}
 
 }

@@ -1249,13 +1249,13 @@ CREATE TABLE bl_title (
   FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE
 );
 CREATE INDEX bl_title_harvested_record_idx ON bl_title(harvested_record_id);
-CREATE TABLE field240245 (
+CREATE TABLE bl_common_title (
   id                   DECIMAL(10) PRIMARY KEY,
   harvested_record_id  DECIMAL(10),
   title                VARCHAR(255),
   FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE
 );
-CREATE INDEX field240245_harvested_record_idx ON field240245(harvested_record_id);
+CREATE INDEX bl_common_title_harvested_record_idx ON bl_common_title(harvested_record_id);
 ALTER TABLE harvested_record ADD COLUMN bl_author VARCHAR(200);
 CREATE INDEX harvested_record_bl_author_idx ON harvested_record(bl_author);
 ALTER TABLE harvested_record ADD COLUMN bl_author_auth_key VARCHAR(200);

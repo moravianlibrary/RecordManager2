@@ -1382,16 +1382,25 @@ public class MetadataMarcRecord implements MetadataRecord {
 		return getFields("440a:490a");
 	}
 
+	private static Pattern Z_CYKLU = Pattern.compile("z cyklu:", Pattern.CASE_INSENSITIVE);
+
 	@Override
-	public List<Field240245> getField240245() {
-		List<Field240245> results = new ArrayList<>();
+	public List<BlCommonTitle> getBiblioLinkerCommonTitle() {
+		List<BlCommonTitle> results = new ArrayList<>();
+		for (DataField df : underlayingMarc.getDataFields("787")) {
+			if (df.getSubfield('t') != null && df.getSubfield('i') != null
+					&& Z_CYKLU.matcher(df.getSubfield('i').getData()).matches()) {
+				results.add(BlCommonTitle.create(df.getSubfield('t').getData()));
+			}
+		}
+		if (!results.isEmpty()) return results;
 		for (String tag : new String[]{"240", "245", "246"}) {
 			for (DataField df : underlayingMarc.getDataFields(tag)) {
 				if (df.getSubfield('n') == null && df.getSubfield('p') == null) continue;
 				if (df.getSubfield('a') == null) continue;
-				results.add(Field240245.create(df.getSubfield('a').getData()));
+				results.add(BlCommonTitle.create(df.getSubfield('a').getData()));
 				if (df.getSubfield('b') != null) {
-					results.add(Field240245.create(df.getSubfield('a').getData() + df.getSubfield('b').getData()));
+					results.add(BlCommonTitle.create(df.getSubfield('a').getData() + df.getSubfield('b').getData()));
 				}
 			}
 		}
@@ -1411,4 +1420,5 @@ public class MetadataMarcRecord implements MetadataRecord {
 		}
 		return getFields("6517:072a");
 	}
+
 }

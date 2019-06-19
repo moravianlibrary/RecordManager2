@@ -409,7 +409,7 @@ public interface MetadataRecord {
 		return Collections.emptyList();
 	}
 
-	default List<Field240245> getField240245() {
+	default List<BlCommonTitle> getBiblioLinkerCommonTitle() {
 		return Collections.emptyList();
 	}
 

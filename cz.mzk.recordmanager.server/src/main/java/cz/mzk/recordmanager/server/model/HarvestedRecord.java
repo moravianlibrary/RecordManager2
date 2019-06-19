@@ -181,7 +181,7 @@ public class HarvestedRecord extends AbstractDomainObject {
 
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name = "harvested_record_id", referencedColumnName = "id", nullable = false)
-	private List<Field240245> field240245s = new ArrayList<>();
+	private List<BlCommonTitle> blCommonTitle = new ArrayList<>();
 
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name="harvested_record_id", referencedColumnName="id")
@@ -772,12 +772,12 @@ public class HarvestedRecord extends AbstractDomainObject {
 		this.blSeries = blSeries;
 	}
 
-	public List<Field240245> getField240245s() {
-		return field240245s;
+	public List<BlCommonTitle> getBlCommonTitle() {
+		return blCommonTitle;
 	}
 
-	public void setField240245s(List<Field240245> field240245s) {
-		this.field240245s = field240245s;
+	public void setBlCommonTitle(List<BlCommonTitle> blCommonTitle) {
+		this.blCommonTitle = blCommonTitle;
 	}
 
 	public String getBlTopicKey() {
