@@ -4,9 +4,7 @@ import cz.mzk.recordmanager.server.hibernate.StringValueEnum;
 
 public enum BiblioLinkerSimilarType implements StringValueEnum {
 
-	AUTH("auth"),
-	AUTH_CONSPECTUS("auth+conspectus"),
-	CONSPECTUS("conspectus"),
+	AUTH_COMMON_TITLE("auth+common_title"),
 	UNSPECIFIED("unspecified");
 
 	private final String value;
