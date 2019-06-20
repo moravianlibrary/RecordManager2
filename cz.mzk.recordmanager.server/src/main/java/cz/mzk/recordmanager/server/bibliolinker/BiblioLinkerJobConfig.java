@@ -799,7 +799,7 @@ public class BiblioLinkerJobConfig {
 				.partitioner("blTempTitleTopicVideoPartitionedStepSlave", this.partioner()) //
 				.taskExecutor(this.taskExecutor)
 				.gridSize(this.partitionThreads)
-				.step(blTempTitleTopicStep())
+				.step(blTempTitleTopicVideoStep())
 				.build();
 	}
 
