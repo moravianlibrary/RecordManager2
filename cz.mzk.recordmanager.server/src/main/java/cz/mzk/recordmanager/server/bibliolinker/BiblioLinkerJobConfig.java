@@ -82,6 +82,8 @@ public class BiblioLinkerJobConfig {
 
 	private static final String TMP_BLS_TABLE_AUTH_COMMON_TITLE = "tmp_bls_auth_common_title";
 
+	private static final String TMP_BLS_TABLE_AUTHOR_COMMON_TITLE = "tmp_bls_author_common_title";
+
 	private String initBiblioLinkerSql = ResourceUtils.asString("job/biblioLinkerJob/initBiblioLinker.sql");
 
 	private String initBiblioLinkerSimilarSql = ResourceUtils.asString("job/biblioLinkerJob/initBiblioLinkerSimilar.sql");
@@ -116,6 +118,9 @@ public class BiblioLinkerJobConfig {
 
 	private String prepareBLSimilarTempAuthCommonTitleTableSql =
 			ResourceUtils.asString("job/biblioLinkerJob/prepareBLSTempAuthKeyCommonTitle.sql");
+
+	private String prepareBLSimilarTempAuthorCommonTitleTableSql =
+			ResourceUtils.asString("job/biblioLinkerJob/prepareBLSTempAuthorKeyCommonTitle.sql");
 
 	private static final Integer INTEGER_OVERRIDEN_BY_EXPRESSION = null;
 
@@ -909,13 +914,17 @@ public class BiblioLinkerJobConfig {
 	public Job biblioLinkerSimilarJob(
 			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":initBLSStep") Step initBLSStep,
 			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":prepareBLSimilarTempAuthCommonTitleStep") Step prepareBLSimilarTempAuthCommonTitleStep,
-			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":blSimilarTempAuthCommonTitlePartitionedStep") Step blSimilarTempAuthCommonTitleStep
+			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":blSimilarTempAuthCommonTitlePartitionedStep") Step blSimilarTempAuthCommonTitleStep,
+			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":prepareBLSimilarTempAuthorCommonTitleStep") Step prepareBLSimilarTempAuthorCommonTitleStep,
+			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":blSimilarTempAuthorCommonTitlePartitionedStep") Step blSimilarTempAuthorCommonTitleStep
 	) {
 		return jobs.get(Constants.JOB_ID_BIBLIO_LINKER_SIMILAR)
 				.validator(new DedupRecordsJobParametersValidator())
 				.start(initBLSStep)
 				.next(prepareBLSimilarTempAuthCommonTitleStep)
 				.next(blSimilarTempAuthCommonTitleStep)
+				.next(prepareBLSimilarTempAuthorCommonTitleStep)
+				.next(blSimilarTempAuthorCommonTitleStep)
 				.build();
 	}
 
@@ -990,6 +999,62 @@ public class BiblioLinkerJobConfig {
 	@StepScope
 	public ItemProcessor<List<Long>, List<HarvestedRecord>> blSimilarAuthCommonTitleStepProsessor() {
 		return new BiblioLinkerSimilarSimpleStepProcessor(BiblioLinkerSimilarType.AUTH_COMMON_TITLE);
+	}
+
+	/**
+	 * same autor, common title, language, format
+	 */
+	@Bean(name = Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":prepareBLSimilarTempAuthorCommonTitleTasklet")
+	@StepScope
+	public Tasklet prepareBLSimilarTempAuthorCommonTitleTasklet() {
+		return new SqlCommandTasklet(prepareBLSimilarTempAuthorCommonTitleTableSql);
+	}
+
+	@Bean(name = Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":prepareBLSimilarTempAuthorCommonTitleStep")
+	public Step prepareBLSimilarTempAuthorCommonTitleStep() {
+		return steps.get("prepareBLSimilarTempAuthorCommonTitleStep")
+				.tasklet(prepareBLSimilarTempAuthorCommonTitleTasklet())
+				.listener(new StepProgressListener())
+				.build();
+	}
+
+	@Bean(name = Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":blSimilarTempAuthorCommonTitleStep")
+	public Step blSimilarTempAuthorCommonTitleStep() throws Exception {
+		return steps.get("blSimilarTempAuthorCommonTitleStep")
+				.listener(new StepProgressListener())
+				.<List<Long>, List<HarvestedRecord>>chunk(10)
+				.faultTolerant()
+				.keyGenerator(KeyGeneratorForList.INSTANCE)
+				.retry(LockAcquisitionException.class)
+				.retryLimit(10000)
+				.reader(blSimilarTempAuthorCommonTitleStepReader(INTEGER_OVERRIDEN_BY_EXPRESSION))
+				.processor(blSimilarAuthorCommonTitleStepProsessor())
+				.writer(blSimpleKeysStepWriter())
+				.build();
+	}
+
+	@Bean(name = Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":blSimilarTempAuthorCommonTitlePartitionedStep")
+	public Step blSimilarTempAuthorCommonTitlePartitionedStep() throws Exception {
+		return steps.get("blSimilarTempAuthorCommonTitlePartitionedStep")
+				.partitioner("blSimilarTempAuthorCommonTitlePartitionedStepSlave", this.partioner()) //
+				.taskExecutor(this.taskExecutor)
+				.gridSize(this.partitionThreads)
+				.step(blSimilarTempAuthorCommonTitleStep())
+				.build();
+	}
+
+	@Bean(name = "blSimilarAuthorCommonTitle:reader")
+	@StepScope
+	public ItemReader<List<Long>> blSimilarTempAuthorCommonTitleStepReader(
+			@Value("#{stepExecutionContext[modulo]}") Integer modulo
+	) throws Exception {
+		return blSimpleKeysReader(TMP_BLS_TABLE_AUTHOR_COMMON_TITLE, "biblio_linker_id", modulo);
+	}
+
+	@Bean(name = "blSimilarAuthorCommonTitle:processor")
+	@StepScope
+	public ItemProcessor<List<Long>, List<HarvestedRecord>> blSimilarAuthorCommonTitleStepProsessor() {
+		return new BiblioLinkerSimilarSimpleStepProcessor(BiblioLinkerSimilarType.AUTHOR_COMMON_TITLE);
 	}
 
 	/**
