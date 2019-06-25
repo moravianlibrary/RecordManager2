@@ -1,5 +1,7 @@
 package cz.mzk.recordmanager.server.model;
 
+import cz.mzk.recordmanager.server.util.MetadataUtils;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -24,7 +26,7 @@ public class BLTitlePlus extends AbstractDomainObject {
 	}
 
 	public void setBLTitlePlusStr(String title_plus) {
-		this.titlePlus = title_plus;
+		this.titlePlus = MetadataUtils.normalizeAndShorten(title_plus, 255);
 	}
 
 	@Override
