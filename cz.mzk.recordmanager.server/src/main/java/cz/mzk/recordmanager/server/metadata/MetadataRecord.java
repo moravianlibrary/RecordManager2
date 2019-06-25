@@ -440,4 +440,8 @@ public interface MetadataRecord {
 	default List<BLEntityAuthKey> getBiblioLinkerEntityAuthKey() {
 		return Collections.emptyList();
 	}
+
+	default List<BLTitlePlus> getBiblioLinkerTitlePlus() {
+		return Collections.emptyList();
+	}
 }

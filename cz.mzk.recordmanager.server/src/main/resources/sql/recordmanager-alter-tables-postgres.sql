@@ -1270,6 +1270,13 @@ CREATE TABLE bl_entity_auth_key (
   FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE
 );
 CREATE INDEX bl_entity_auth_key_harvested_record_idx ON bl_entity_auth_key(harvested_record_id);
+CREATE TABLE bl_title_plus (
+  id                   DECIMAL(10) PRIMARY KEY,
+  harvested_record_id  DECIMAL(10),
+  title_plus           VARCHAR(255),
+  FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE
+);
+CREATE INDEX bl_title_plus_harvested_record_idx ON bl_title_plus(harvested_record_id);
 ALTER TABLE harvested_record ADD COLUMN bl_author VARCHAR(200);
 CREATE INDEX harvested_record_bl_author_idx ON harvested_record(bl_author);
 ALTER TABLE harvested_record ADD COLUMN bl_author_auth_key VARCHAR(200);

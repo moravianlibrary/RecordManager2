@@ -312,6 +312,12 @@ public class HarvestedRecordDAOHibernate extends
 			session.delete(blEntityAuthKey);
 		}
 
+		List<BLTitlePlus> blTitlePluses = hr.getBlTitlePluses();
+		hr.setBlTitlePluses(new ArrayList<>());
+		for (BLTitlePlus blTitlePlus : blTitlePluses) {
+			session.delete(blTitlePlus);
+		}
+
 		hr.setLanguages(new ArrayList<>());
 		session.update(hr);
 		session.flush();

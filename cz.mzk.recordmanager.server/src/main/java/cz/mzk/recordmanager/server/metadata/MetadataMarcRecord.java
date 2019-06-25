@@ -1392,7 +1392,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 		return getFirstField("440a:490a");
 	}
 
-	private static Pattern Z_CYKLU = Pattern.compile("z cyklu:", Pattern.CASE_INSENSITIVE);
+	private static final Pattern Z_CYKLU = Pattern.compile("z cyklu:", Pattern.CASE_INSENSITIVE);
 
 	@Override
 	public List<BlCommonTitle> getBiblioLinkerCommonTitle() {
@@ -1417,7 +1417,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 		return results;
 	}
 
-	private static List<String> STOP_WORDS_650 = Arrays.asList("d006801", "ph115615", "ph128175", "ph114390",
+	private static final List<String> STOP_WORDS_650 = Arrays.asList("d006801", "ph115615", "ph128175", "ph114390",
 			"ph116858", "ph116861", "d005260", "ph114056", "d005260", "ph135292");
 
 	@Override
@@ -1454,5 +1454,23 @@ public class MetadataMarcRecord implements MetadataRecord {
 		results.addAll(getFields("1007:1107:6007:6107:7007:7107:1117:6117:7117"));
 		return results.stream().filter(s -> !s.contains("kn20081114008"))
 				.map(BLEntityAuthKey::create).collect(Collectors.toList());
+	}
+
+	private static final Pattern TITLE_PLUS_REMOVE = Pattern.compile("\\([^)]*\\)");
+
+	@Override
+	public List<BLTitlePlus> getBiblioLinkerTitlePlus() {
+		Set<String> results = new HashSet<>();
+		for (DataField df : underlayingMarc.getDataFields("630")) {
+			String temp = "";
+			if (df.getSubfield('a') != null) {
+				temp = CleaningUtils.replaceFirst(df.getSubfield('a').getData(), TITLE_PLUS_REMOVE, "");
+			}
+			temp += df.getSubfield('n') != null ? df.getSubfield('n').getData() : "";
+			temp += df.getSubfield('p') != null ? df.getSubfield('p').getData() : "";
+			if (!temp.isEmpty()) results.add(temp);
+		}
+		results.addAll(getFields("600tnp:610tp"));
+		return results.stream().map(BLTitlePlus::create).collect(Collectors.toList());
 	}
 }
