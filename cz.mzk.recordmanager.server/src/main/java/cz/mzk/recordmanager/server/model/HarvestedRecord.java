@@ -184,6 +184,14 @@ public class HarvestedRecord extends AbstractDomainObject {
 	private List<BlCommonTitle> blCommonTitle = new ArrayList<>();
 
 	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name = "harvested_record_id", referencedColumnName = "id", nullable = false)
+	private List<BLEntity> blEntity = new ArrayList<>();
+
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name = "harvested_record_id", referencedColumnName = "id", nullable = false)
+	private List<BLEntityAuthKey> blEntityAuthKey = new ArrayList<>();
+
+	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name="harvested_record_id", referencedColumnName="id")
 	private List<FulltextKramerius> fulltextKramerius = new ArrayList<>();
 	
@@ -786,5 +794,21 @@ public class HarvestedRecord extends AbstractDomainObject {
 
 	public void setBlTopicKey(String blTopicKey) {
 		this.blTopicKey = blTopicKey;
+	}
+
+	public List<BLEntity> getBlEntity() {
+		return blEntity;
+	}
+
+	public void setBlEntity(List<BLEntity> blEntity) {
+		this.blEntity = blEntity;
+	}
+
+	public List<BLEntityAuthKey> getBlEntityAuthKey() {
+		return blEntityAuthKey;
+	}
+
+	public void setBlEntityAuthKey(List<BLEntityAuthKey> blEntityAuthKey) {
+		this.blEntityAuthKey = blEntityAuthKey;
 	}
 }

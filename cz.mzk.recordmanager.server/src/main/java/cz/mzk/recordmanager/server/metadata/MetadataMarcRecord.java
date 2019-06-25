@@ -1352,7 +1352,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 		return result;
 	}
 
-	private String getFields(String fields) {
+	private String getFirstField(String fields) {
 		for (String field : fields.split(":")) {
 			String tag = field.substring(0, 3);
 			String codes = field.substring(2);
@@ -1362,24 +1362,34 @@ public class MetadataMarcRecord implements MetadataRecord {
 		return null;
 	}
 
+	private List<String> getFields(String fields) {
+		List<String> results = new ArrayList<>();
+		for (String field : fields.split(":")) {
+			String tag = field.substring(0, 3);
+			String codes = field.substring(2);
+			results.addAll(underlayingMarc.getFields(tag, " ", codes.toCharArray()));
+		}
+		return results;
+	}
+
 	@Override
 	public String getBiblioLinkerAuthor() {
-		return getFields("100a:110abcdn:111acdn:700a:710abcdn:711acdn");
+		return getFirstField("100a:110abcdn:111acdn:700a:710abcdn:711acdn");
 	}
 
 	@Override
 	public String getBiblioLinkerAuthorAuth() {
-		return getFields("1007:1107:1117:7007:7107:7117");
+		return getFirstField("1007:1107:1117:7007:7107:7117");
 	}
 
 	@Override
 	public String getBiblioLinkerPublisher() {
-		return getFields("264b:260b:260f:928a");
+		return getFirstField("264b:260b:260f:928a");
 	}
 
 	@Override
 	public String getBiblioLinkerSeries() {
-		return getFields("440a:490a");
+		return getFirstField("440a:490a");
 	}
 
 	private static Pattern Z_CYKLU = Pattern.compile("z cyklu:", Pattern.CASE_INSENSITIVE);
@@ -1418,7 +1428,31 @@ public class MetadataMarcRecord implements MetadataRecord {
 				return df.getSubfield('7').getData();
 			}
 		}
-		return getFields("6517:072a");
+		return getFirstField("6517:072a");
 	}
 
+	@Override
+	public List<BLEntity> getBiblioLinkerEntity() {
+		Set<String> results = new HashSet<>();
+		for (String tag : new String[]{"100", "160", "170"}) {
+			for (DataField df : underlayingMarc.getDataFields(tag)) {
+				String temp = (df.getSubfield('a') != null) ? df.getSubfield('a').getData() : "";
+				if (df.getSubfield('d') != null) {
+					Matcher matcher = YEAR_PATTERN.matcher(df.getSubfield('d').getData());
+					if (matcher.find()) temp += matcher.group(0);
+				}
+				results.add(temp);
+			}
+		}
+		results.addAll(getFields("110abcdn:610abcdn:710abcdn:100u:700u:314a:111acdn:611acdn:711acdn"));
+		return results.stream().filter(s -> !s.contains("ebrary")).map(BLEntity::create).collect(Collectors.toList());
+	}
+
+	@Override
+	public List<BLEntityAuthKey> getBiblioLinkerEntityAuthKey() {
+		Set<String> results = new HashSet<>();
+		results.addAll(getFields("1007:1107:6007:6107:7007:7107:1117:6117:7117"));
+		return results.stream().filter(s -> !s.contains("kn20081114008"))
+				.map(BLEntityAuthKey::create).collect(Collectors.toList());
+	}
 }

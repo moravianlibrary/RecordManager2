@@ -300,6 +300,18 @@ public class HarvestedRecordDAOHibernate extends
 			session.delete(blCommonTitle);
 		}
 
+		List<BLEntity> blEntities = hr.getBlEntity();
+		hr.setBlEntity(new ArrayList<>());
+		for (BLEntity blEntity : blEntities) {
+			session.delete(blEntity);
+		}
+
+		List<BLEntityAuthKey> blEntityAuthKeys = hr.getBlEntityAuthKey();
+		hr.setBlEntityAuthKey(new ArrayList<>());
+		for (BLEntityAuthKey blEntityAuthKey : blEntityAuthKeys) {
+			session.delete(blEntityAuthKey);
+		}
+
 		hr.setLanguages(new ArrayList<>());
 		session.update(hr);
 		session.flush();

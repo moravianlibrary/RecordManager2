@@ -432,4 +432,12 @@ public interface MetadataRecord {
 	default String getBiblioLinkerTopicKey() {
 		return null;
 	}
+
+	default List<BLEntity> getBiblioLinkerEntity() {
+		return Collections.emptyList();
+	}
+
+	default List<BLEntityAuthKey> getBiblioLinkerEntityAuthKey() {
+		return Collections.emptyList();
+	}
 }

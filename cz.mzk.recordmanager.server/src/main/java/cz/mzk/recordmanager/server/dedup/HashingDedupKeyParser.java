@@ -132,6 +132,8 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 		encapsulator.setBlPublisher(MetadataUtils.normalizeAndShorten(metadataRecord.getBiblioLinkerPublisher(), EFFECTIVE_LENGTH_200));
 		encapsulator.setBlSeries(MetadataUtils.normalizeAndShorten(metadataRecord.getBiblioLinkerSeries(), EFFECTIVE_LENGTH_200));
 		encapsulator.setBlTopicKey(MetadataUtils.normalizeAndShorten(metadataRecord.getBiblioLinkerTopicKey(), EFFECTIVE_LENGTH_200));
+		encapsulator.setBlEntities(metadataRecord.getBiblioLinkerEntity());
+		encapsulator.setBlEntityAuthKeys(metadataRecord.getBiblioLinkerEntityAuthKey());
 		String computedHash = computeHashValue(encapsulator);
 		String oldHash = record.getDedupKeysHash();
 		String temporalHash = record.getTemporalDedupHash() == null ? "0000000000000000000000000000000000000000" : record.getTemporalDedupHash();
@@ -183,6 +185,8 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 			record.setBlSeries(encapsulator.getBlSeries());
 			record.setBlCommonTitle(encapsulator.getBlCommonTitle());
 			record.setBlTopicKey(encapsulator.getBlTopicKey());
+			record.setBlEntity(encapsulator.getBlEntities());
+			record.setBlEntityAuthKey(encapsulator.getBlEntityAuthKeys());
 			record.setTemporalDedupHash(computedHash);
 		} else {
 			harvestedRecordDao.dropAuthorities(record);
@@ -349,6 +353,14 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 				md.update(blCommonTitle.getBlCommonTitleStr().getBytes("utf-8"));
 			}
 
+			for (BLEntity blEntity : encapsulator.getBlEntities()) {
+				md.update(blEntity.getBLEntityStr().getBytes("utf-8"));
+			}
+
+			for (BLEntityAuthKey blEntityAuthKey : encapsulator.getBlEntityAuthKeys()) {
+				md.update(blEntityAuthKey.getBLEntityAuthKeyStr().getBytes("utf-8"));
+			}
+
 				if (encapsulator.getBlConspectus() != null) {
 					md.update(encapsulator.getBlConspectus().getBytes());
 				}
@@ -411,6 +423,8 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 			encapsulator.setBlSeries(hr.getBlSeries());
 			encapsulator.setBlTopicKey(hr.getBlTopicKey());
 			encapsulator.setBlCommonTitle(hr.getBlCommonTitle());
+			encapsulator.setBlEntities(hr.getBlEntity());
+			encapsulator.setBlEntityAuthKeys(hr.getBlEntityAuthKey());
 			return computeHashValue(encapsulator);
 		}
 
@@ -428,6 +442,8 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 		List<PublisherNumber> publisherNumbers = new ArrayList<>();
 		List<BLTitle> blTitles = new ArrayList<>();
 		List<BlCommonTitle> blCommonTitle = new ArrayList<>();
+		List<BLEntity> blEntities = new ArrayList<>();
+		List<BLEntityAuthKey> blEntityAuthKeys = new ArrayList<>();
 
 		Long publicationYear;
 		String authorString;
@@ -664,6 +680,21 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 			this.blTopicKey = blTopicKey;
 		}
 
+		public List<BLEntity> getBlEntities() {
+			return blEntities;
+		}
+
+		public void setBlEntities(List<BLEntity> blEntities) {
+			this.blEntities = blEntities;
+		}
+
+		public List<BLEntityAuthKey> getBlEntityAuthKeys() {
+			return blEntityAuthKeys;
+		}
+
+		public void setBlEntityAuthKeys(List<BLEntityAuthKey> blEntityAuthKeys) {
+			this.blEntityAuthKeys = blEntityAuthKeys;
+		}
 	}
 
 }
