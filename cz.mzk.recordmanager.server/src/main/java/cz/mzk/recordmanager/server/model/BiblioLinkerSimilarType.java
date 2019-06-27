@@ -13,6 +13,8 @@ public enum BiblioLinkerSimilarType implements StringValueEnum {
 	TITLE_ENTITY_LANG("title+entity"),
 	TITLE_ENTITY_AUTH_KEY_LANG("title+entity_auth"),
 	TOPIC_KEY_LANG("topic_key+lang"),
+	AUTH_KEY_FORMAT_LANG("auth+format+lang"),
+	AUTHOR_FORMAT_LANG("author+format+lang"),
 	UNSPECIFIED("unspecified");
 
 	private final String value;
