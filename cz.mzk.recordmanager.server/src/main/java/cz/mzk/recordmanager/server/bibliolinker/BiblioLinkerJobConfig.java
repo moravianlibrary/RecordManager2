@@ -88,6 +88,10 @@ public class BiblioLinkerJobConfig {
 
 	private static final String TMP_BLS_TABLE_AUTHOR_TITLE_LANG = "tmp_bls_author_title_lang";
 
+	private static final String TMP_BLS_TABLE_AUTH_KEY_TITLE = "tmp_bls_auth_key_title";
+
+	private static final String TMP_BLS_TABLE_AUTHOR_TITLE = "tmp_bls_author_title";
+
 	private String initBiblioLinkerSql = ResourceUtils.asString("job/biblioLinkerJob/initBiblioLinker.sql");
 
 	private String initBiblioLinkerSimilarSql = ResourceUtils.asString("job/biblioLinkerJob/initBiblioLinkerSimilar.sql");
@@ -131,6 +135,12 @@ public class BiblioLinkerJobConfig {
 
 	private String prepareBLSimilarTempAuthorTitleLangTableSql =
 			ResourceUtils.asString("job/biblioLinkerJob/prepareBLSTempAuthorTitleLang.sql");
+
+	private String prepareBLSimilarTempAuthKeyTitleAudioMusicalScoreTableSql =
+			ResourceUtils.asString("job/biblioLinkerJob/prepareBLSTempAuthKeyTitleAudioMusicalScore.sql");
+
+	private String prepareBLSimilarTempAuthorTitleAudioMusicalScoreTableSql =
+			ResourceUtils.asString("job/biblioLinkerJob/prepareBLSTempAuthorTitleAudioMusicalScore.sql");
 
 	private static final Integer INTEGER_OVERRIDEN_BY_EXPRESSION = null;
 
@@ -930,7 +940,11 @@ public class BiblioLinkerJobConfig {
 			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":prepareBLSimilarTempAuthKeyTitleLangStep") Step prepareBLSimilarTempAuthKeyTitleLangStep,
 			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":blSimilarTempAuthKeyTitleLangPartitionedStep") Step blSimilarTempAuthKeyTitleLangStep,
 			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":prepareBLSimilarTempAuthorTitleLangStep") Step prepareBLSimilarTempAuthorTitleLangStep,
-			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":blSimilarTempAuthorTitleLangPartitionedStep") Step blSimilarTempAuthorTitleLangStep
+			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":blSimilarTempAuthorTitleLangPartitionedStep") Step blSimilarTempAuthorTitleLangStep,
+			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":prepareBLSimilarTempAuthKeyTitleAudioMusicalScoreStep") Step prepareBLSimilarTempAuthKeyTitleStep,
+			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":blSimilarTempAuthKeyTitleAudioMusicalScorePartitionedStep") Step blSimilarTempAuthKeyTitleStep,
+			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":prepareBLSimilarTempAuthorTitleAudioMusicalScoreStep") Step prepareBLSimilarTempAuthorTitleStep,
+			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":blSimilarTempAuthorTitleAudioMusicalScorePartitionedStep") Step blSimilarTempAuthorTitleStep
 	) {
 		return jobs.get(Constants.JOB_ID_BIBLIO_LINKER_SIMILAR)
 				.validator(new DedupRecordsJobParametersValidator())
@@ -943,6 +957,10 @@ public class BiblioLinkerJobConfig {
 				.next(blSimilarTempAuthKeyTitleLangStep)
 				.next(prepareBLSimilarTempAuthorTitleLangStep)
 				.next(blSimilarTempAuthorTitleLangStep)
+				.next(prepareBLSimilarTempAuthKeyTitleStep)
+				.next(blSimilarTempAuthKeyTitleStep)
+				.next(prepareBLSimilarTempAuthorTitleStep)
+				.next(blSimilarTempAuthorTitleStep)
 				.build();
 	}
 
@@ -1185,6 +1203,119 @@ public class BiblioLinkerJobConfig {
 	@StepScope
 	public ItemProcessor<List<Long>, List<HarvestedRecord>> blSimilarAuthorTitleLangStepProsessor() {
 		return new BiblioLinkerSimilarSimpleStepProcessor(BiblioLinkerSimilarType.AUTHOR_TTILE_LANG);
+	}
+
+	/**
+	 * same authority, title, for audio, musical score
+	 */
+	@Bean(name = Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":prepareBLSimilarTempAuthKeyTitleAudioMusicalScoreTasklet")
+	@StepScope
+	public Tasklet prepareBLSimilarTempAuthKeyTitleAudioMusicalScoreTasklet() {
+		return new SqlCommandTasklet(prepareBLSimilarTempAuthKeyTitleAudioMusicalScoreTableSql);
+	}
+
+	@Bean(name = Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":prepareBLSimilarTempAuthKeyTitleAudioMusicalScoreStep")
+	public Step prepareBLSimilarTempAuthKeyTitleAudioMusicalScoreStep() {
+		return steps.get("prepareBLSimilarTempAuthKeyTitleAudioMusicalScoreStep")
+				.tasklet(prepareBLSimilarTempAuthKeyTitleAudioMusicalScoreTasklet())
+				.listener(new StepProgressListener())
+				.build();
+	}
+
+	@Bean(name = Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":blSimilarTempAuthKeyTitleAudioMusicalScoreStep")
+	public Step blSimilarTempAuthKeyTitleAudioMusicalScoreStep() throws Exception {
+		return steps.get("blSimilarTempAuthKeyTitleAudioMusicalScoreStep")
+				.listener(new StepProgressListener())
+				.<List<Long>, List<HarvestedRecord>>chunk(10)
+				.faultTolerant()
+				.keyGenerator(KeyGeneratorForList.INSTANCE)
+				.retry(LockAcquisitionException.class)
+				.retryLimit(10000)
+				.reader(blSimilarTempAuthKeyTitleAudioMusicalScoreStepReader(INTEGER_OVERRIDEN_BY_EXPRESSION))
+				.processor(blSimilarAuthKeyTitleAudioMusicalScoreStepProsessor())
+				.writer(blSimpleKeysStepWriter())
+				.build();
+	}
+
+	@Bean(name = Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":blSimilarTempAuthKeyTitleAudioMusicalScorePartitionedStep")
+	public Step blSimilarTempAuthKeyTitleAudioMusicalScorePartitionedStep() throws Exception {
+		return steps.get("blSimilarTempAuthKeyTitleAudioMusicalScorePartitionedStep")
+				.partitioner("blSimilarTempAuthKeyTitleAudioMusicalScorePartitionedStepSlave", this.partioner()) //
+				.taskExecutor(this.taskExecutor)
+				.gridSize(this.partitionThreads)
+				.step(blSimilarTempAuthKeyTitleAudioMusicalScoreStep())
+				.build();
+	}
+
+	@Bean(name = "blSimilarAuthKeyTitleAudioMusicalScore:reader")
+	@StepScope
+	public ItemReader<List<Long>> blSimilarTempAuthKeyTitleAudioMusicalScoreStepReader(
+			@Value("#{stepExecutionContext[modulo]}") Integer modulo
+	) throws Exception {
+		return blSimpleKeysReader(TMP_BLS_TABLE_AUTH_KEY_TITLE, "biblio_linker_id", modulo);
+	}
+
+	@Bean(name = "blSimilarAuthKeyTitleAudioMusicalScore:processor")
+	@StepScope
+	public ItemProcessor<List<Long>, List<HarvestedRecord>> blSimilarAuthKeyTitleAudioMusicalScoreStepProsessor() {
+		return new BiblioLinkerSimilarSimpleStepProcessor(BiblioLinkerSimilarType.AUTH_TTILE);
+	}
+
+
+	/**
+	 * same author, title, for audio, musical score
+	 */
+	@Bean(name = Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":prepareBLSimilarTempAuthorTitleAudioMusicalScoreTasklet")
+	@StepScope
+	public Tasklet prepareBLSimilarTempAuthorTitleAudioMusicalScoreTasklet() {
+		return new SqlCommandTasklet(prepareBLSimilarTempAuthorTitleAudioMusicalScoreTableSql);
+	}
+
+	@Bean(name = Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":prepareBLSimilarTempAuthorTitleAudioMusicalScoreStep")
+	public Step prepareBLSimilarTempAuthorTitleAudioMusicalScoreStep() {
+		return steps.get("prepareBLSimilarTempAuthorTitleAudioMusicalScoreStep")
+				.tasklet(prepareBLSimilarTempAuthorTitleAudioMusicalScoreTasklet())
+				.listener(new StepProgressListener())
+				.build();
+	}
+
+	@Bean(name = Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":blSimilarTempAuthorTitleAudioMusicalScoreStep")
+	public Step blSimilarTempAuthorTitleAudioMusicalScoreStep() throws Exception {
+		return steps.get("blSimilarTempAuthorTitleAudioMusicalScoreStep")
+				.listener(new StepProgressListener())
+				.<List<Long>, List<HarvestedRecord>>chunk(10)
+				.faultTolerant()
+				.keyGenerator(KeyGeneratorForList.INSTANCE)
+				.retry(LockAcquisitionException.class)
+				.retryLimit(10000)
+				.reader(blSimilarTempAuthorTitleAudioMusicalScoreStepReader(INTEGER_OVERRIDEN_BY_EXPRESSION))
+				.processor(blSimilarAuthorTitleAudioMusicalScoreStepProsessor())
+				.writer(blSimpleKeysStepWriter())
+				.build();
+	}
+
+	@Bean(name = Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":blSimilarTempAuthorTitleAudioMusicalScorePartitionedStep")
+	public Step blSimilarTempAuthorTitleAudioMusicalScorePartitionedStep() throws Exception {
+		return steps.get("blSimilarTempAuthorTitleAudioMusicalScorePartitionedStep")
+				.partitioner("blSimilarTempAuthorTitleAudioMusicalScorePartitionedStepSlave", this.partioner()) //
+				.taskExecutor(this.taskExecutor)
+				.gridSize(this.partitionThreads)
+				.step(blSimilarTempAuthorTitleAudioMusicalScoreStep())
+				.build();
+	}
+
+	@Bean(name = "blSimilarAuthorTitleAudioMusicalScore:reader")
+	@StepScope
+	public ItemReader<List<Long>> blSimilarTempAuthorTitleAudioMusicalScoreStepReader(
+			@Value("#{stepExecutionContext[modulo]}") Integer modulo
+	) throws Exception {
+		return blSimpleKeysReader(TMP_BLS_TABLE_AUTHOR_TITLE, "biblio_linker_id", modulo);
+	}
+
+	@Bean(name = "blSimilarAuthorTitleAudioMusicalScore:processor")
+	@StepScope
+	public ItemProcessor<List<Long>, List<HarvestedRecord>> blSimilarAuthorTitleAudioMusicalScoreStepProsessor() {
+		return new BiblioLinkerSimilarSimpleStepProcessor(BiblioLinkerSimilarType.AUTHOR_TTILE);
 	}
 
 	/**
