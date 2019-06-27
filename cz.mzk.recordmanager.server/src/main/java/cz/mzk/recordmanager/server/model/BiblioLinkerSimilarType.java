@@ -6,6 +6,8 @@ public enum BiblioLinkerSimilarType implements StringValueEnum {
 
 	AUTH_COMMON_TITLE("auth+common_title"),
 	AUTHOR_COMMON_TITLE("author+common_title"),
+	AUTH_TTILE_LANG("auth+title+lang"),
+	AUTHOR_TTILE_LANG("author+title+lang"),
 	UNSPECIFIED("unspecified");
 
 	private final String value;
