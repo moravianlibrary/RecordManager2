@@ -1739,3 +1739,6 @@ INSERT INTO sigla (id, import_conf_id, sigla) VALUES (66, 392, 'VYG001');
 INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (197, 'MKTRUT', 'https://www.mktrutnov.cz/', 'https://trutnov.tritius.cz/', 'Trutnov', 'KH');
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id, ziskej_enabled) VALUES (397, 197, 200, 'mktrut', 11, false, true, true, true, 'U', 'other', true);
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (397,'https://trutnov.tritius.cz/tritius/oai-provider','CPK_1','marc21',NULL);
+
+--changeset tomascejpek:149 context:cpk
+UPDATE oai_harvest_conf SET set_spec='CPK_1' WHERE import_conf_id=388;
