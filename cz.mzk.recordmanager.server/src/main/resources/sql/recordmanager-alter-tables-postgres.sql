@@ -1482,3 +1482,8 @@ INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format) VAL
 UPDATE library SET catalog_url='https://katalog.kjm.cz' WHERE id=103;
 UPDATE import_conf SET base_weight=11,filtering_enabled=TRUE,interception_enabled=TRUE,item_id='other',ziskej_enabled=TRUE WHERE id=303;
 UPDATE oai_harvest_conf SET url='https://katalog.kjm.cz/oai',set_spec='KJMCPKDATE',metadata_prefix='oai_marcxml_cpk',extract_id_regex='s/[^:]+:[^:]+:([^\\/]+)\\/([^\\/]+)/$1_$2/',harvest_job_name='cosmotronHarvestJob' WHERE import_conf_id=303;
+
+-- 22. 07. 2019 tomascejpek
+INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (198, 'KNIHKM', 'https://www.knihkm.cz/', 'https://kromeriz.tritius.cz/', 'Kroměříž', 'ZL');
+INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id, ziskej_enabled) VALUES (398, 198, 200, 'knihkm', 11, false, true, true, true, 'U', 'other', true);
+INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (398,'https://kromeriz.tritius.cz/tritius/oai-provider','CPK_1','marc21',NULL);
