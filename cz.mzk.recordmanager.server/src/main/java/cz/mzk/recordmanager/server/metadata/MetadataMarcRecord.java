@@ -1434,7 +1434,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 	@Override
 	public List<BLEntity> getBiblioLinkerEntity() {
 		Set<String> results = new HashSet<>();
-		for (String tag : new String[]{"100", "160", "170"}) {
+		for (String tag : new String[]{"100", "600", "700"}) {
 			for (DataField df : underlayingMarc.getDataFields(tag)) {
 				String temp = (df.getSubfield('a') != null) ? df.getSubfield('a').getData() : "";
 				if (df.getSubfield('d') != null) {
