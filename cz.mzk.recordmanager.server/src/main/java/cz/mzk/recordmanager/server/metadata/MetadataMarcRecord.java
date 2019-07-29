@@ -1355,7 +1355,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 	private String getFirstField(String fields) {
 		for (String field : fields.split(":")) {
 			String tag = field.substring(0, 3);
-			String codes = field.substring(2);
+			String codes = field.substring(3);
 			String result = underlayingMarc.getField(tag, codes.toCharArray());
 			if (result != null) return result;
 		}
@@ -1366,7 +1366,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 		List<String> results = new ArrayList<>();
 		for (String field : fields.split(":")) {
 			String tag = field.substring(0, 3);
-			String codes = field.substring(2);
+			String codes = field.substring(3);
 			results.addAll(underlayingMarc.getFields(tag, " ", codes.toCharArray()));
 		}
 		return results;
