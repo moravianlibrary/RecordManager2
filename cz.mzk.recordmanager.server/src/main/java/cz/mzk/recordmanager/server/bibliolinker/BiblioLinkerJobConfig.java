@@ -112,6 +112,10 @@ public class BiblioLinkerJobConfig {
 
 	private static final String TMP_BLS_TABLE_SERIES_PUBLISHER_LANG = "tmp_bls_series_publisher_lang";
 
+	private static final String TMP_BLS_TABLE_SOURCE_INFO_X_TOPIC_KEY = "tmp_bls_source_info_x_topic_key";
+
+	private static final String TMP_BLS_TABLE_SOURCE_INFO_T_TOPIC_KEY = "tmp_bls_source_info_t_topic_key";
+
 	private String initBiblioLinkerSql = ResourceUtils.asString("job/biblioLinkerJob/initBiblioLinker.sql");
 
 	private String initBiblioLinkerSimilarSql = ResourceUtils.asString("job/biblioLinkerJob/initBiblioLinkerSimilar.sql");
@@ -191,6 +195,12 @@ public class BiblioLinkerJobConfig {
 
 	private String prepareBLSimilarTempSeriesPublisherLangTableSql =
 			ResourceUtils.asString("job/biblioLinkerJob/prepareBLSTempSeriesPublisherLang.sql");
+
+	private String prepareBLSimilarTempSourceInfoXTopicKeyTableSql =
+			ResourceUtils.asString("job/biblioLinkerJob/prepareBLSTempSourceInfoXTopicKey.sql");
+
+	private String prepareBLSimilarTempSourceInfoTTopicKeyTableSql =
+			ResourceUtils.asString("job/biblioLinkerJob/prepareBLSTempSourceInfoTTopicKey.sql");
 
 	private static final Integer INTEGER_OVERRIDEN_BY_EXPRESSION = null;
 
@@ -1014,7 +1024,11 @@ public class BiblioLinkerJobConfig {
 			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":prepareBLSimilarTempIssnSeriesStep") Step prepareBLSimilarTempIssnSeriesStep,
 			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":blSimilarTempIssnSeriesPartitionedStep") Step blSimilarTempIssnSeriesStep,
 			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":prepareBLSimilarTempSeriesPublisherLangStep") Step prepareBLSimilarTempSeriesPublisherLangStep,
-			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":blSimilarTempSeriesPublisherLangPartitionedStep") Step blSimilarTempSeriesPublisherLangStep
+			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":blSimilarTempSeriesPublisherLangPartitionedStep") Step blSimilarTempSeriesPublisherLangStep,
+			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":prepareBLSimilarTempSourceInfoXTopicKeyStep") Step prepareBLSimilarTempSourceInfoXTopicKeyStep,
+			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":blSimilarTempSourceInfoXTopicKeyPartitionedStep") Step blSimilarTempSourceInfoXTopicKeyStep,
+			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":prepareBLSimilarTempSourceInfoTTopicKeyStep") Step prepareBLSimilarTempSourceInfoTTopicKeyStep,
+			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":blSimilarTempSourceInfoTTopicKeyPartitionedStep") Step blSimilarTempSourceInfoTTopicKeyStep
 	) {
 		return jobs.get(Constants.JOB_ID_BIBLIO_LINKER_SIMILAR)
 				.validator(new DedupRecordsJobParametersValidator())
@@ -1051,6 +1065,10 @@ public class BiblioLinkerJobConfig {
 				.next(blSimilarTempIssnSeriesStep)
 				.next(prepareBLSimilarTempSeriesPublisherLangStep)
 				.next(blSimilarTempSeriesPublisherLangStep)
+				.next(prepareBLSimilarTempSourceInfoXTopicKeyStep)
+				.next(blSimilarTempSourceInfoXTopicKeyStep)
+				.next(prepareBLSimilarTempSourceInfoTTopicKeyStep)
+				.next(blSimilarTempSourceInfoTTopicKeyStep)
 				.build();
 	}
 
@@ -1965,6 +1983,118 @@ public class BiblioLinkerJobConfig {
 	@StepScope
 	public ItemProcessor<List<Long>, List<HarvestedRecord>> blSimilarSeriesPublisherLangStepProsessor() {
 		return new BiblioLinkerSimilarSimpleStepProcessor(BiblioLinkerSimilarType.SERIES_PUBLISHE_LANG);
+	}
+
+	/**
+	 * same source_info_x, topic_key for articles
+	 */
+	@Bean(name = Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":prepareBLSimilarTempSourceInfoXTopicKeyTasklet")
+	@StepScope
+	public Tasklet prepareBLSimilarTempSourceInfoXTopicKeyTasklet() {
+		return new SqlCommandTasklet(prepareBLSimilarTempSourceInfoXTopicKeyTableSql);
+	}
+
+	@Bean(name = Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":prepareBLSimilarTempSourceInfoXTopicKeyStep")
+	public Step prepareBLSimilarTempSourceInfoXTopicKeyStep() {
+		return steps.get("prepareBLSimilarTempSourceInfoXTopicKeyStep")
+				.tasklet(prepareBLSimilarTempSourceInfoXTopicKeyTasklet())
+				.listener(new StepProgressListener())
+				.build();
+	}
+
+	@Bean(name = Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":blSimilarTempSourceInfoXTopicKeyStep")
+	public Step blSimilarTempSourceInfoXTopicKeyStep() throws Exception {
+		return steps.get("blSimilarTempSourceInfoXTopicKeyStep")
+				.listener(new StepProgressListener())
+				.<List<Long>, List<HarvestedRecord>>chunk(10)
+				.faultTolerant()
+				.keyGenerator(KeyGeneratorForList.INSTANCE)
+				.retry(LockAcquisitionException.class)
+				.retryLimit(10000)
+				.reader(blSimilarTempSourceInfoXTopicKeyStepReader(INTEGER_OVERRIDEN_BY_EXPRESSION))
+				.processor(blSimilarSourceInfoXTopicKeyStepProsessor())
+				.writer(blSimpleKeysStepWriter())
+				.build();
+	}
+
+	@Bean(name = Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":blSimilarTempSourceInfoXTopicKeyPartitionedStep")
+	public Step blSimilarTempSourceInfoXTopicKeyPartitionedStep() throws Exception {
+		return steps.get("blSimilarTempSourceInfoXTopicKeyPartitionedStep")
+				.partitioner("blSimilarTempSourceInfoXTopicKeyPartitionedStepSlave", this.partioner()) //
+				.taskExecutor(this.taskExecutor)
+				.gridSize(this.partitionThreads)
+				.step(blSimilarTempSourceInfoXTopicKeyStep())
+				.build();
+	}
+
+	@Bean(name = "blSimilarSourceInfoXTopicKey:reader")
+	@StepScope
+	public ItemReader<List<Long>> blSimilarTempSourceInfoXTopicKeyStepReader(
+			@Value("#{stepExecutionContext[modulo]}") Integer modulo
+	) throws Exception {
+		return blSimpleKeysReader(TMP_BLS_TABLE_SOURCE_INFO_X_TOPIC_KEY, "biblio_linker_id", modulo);
+	}
+
+	@Bean(name = "blSimilarSourceInfoXTopicKey:processor")
+	@StepScope
+	public ItemProcessor<List<Long>, List<HarvestedRecord>> blSimilarSourceInfoXTopicKeyStepProsessor() {
+		return new BiblioLinkerSimilarSimpleStepProcessor(BiblioLinkerSimilarType.SOURCE_INFO_X_TOPIC_KEY);
+	}
+
+	/**
+	 * same source_info_t, topic_key for articles
+	 */
+	@Bean(name = Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":prepareBLSimilarTempSourceInfoTTopicKeyTasklet")
+	@StepScope
+	public Tasklet prepareBLSimilarTempSourceInfoTTopicKeyTasklet() {
+		return new SqlCommandTasklet(prepareBLSimilarTempSourceInfoTTopicKeyTableSql);
+	}
+
+	@Bean(name = Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":prepareBLSimilarTempSourceInfoTTopicKeyStep")
+	public Step prepareBLSimilarTempSourceInfoTTopicKeyStep() {
+		return steps.get("prepareBLSimilarTempSourceInfoTTopicKeyStep")
+				.tasklet(prepareBLSimilarTempSourceInfoTTopicKeyTasklet())
+				.listener(new StepProgressListener())
+				.build();
+	}
+
+	@Bean(name = Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":blSimilarTempSourceInfoTTopicKeyStep")
+	public Step blSimilarTempSourceInfoTTopicKeyStep() throws Exception {
+		return steps.get("blSimilarTempSourceInfoTTopicKeyStep")
+				.listener(new StepProgressListener())
+				.<List<Long>, List<HarvestedRecord>>chunk(10)
+				.faultTolerant()
+				.keyGenerator(KeyGeneratorForList.INSTANCE)
+				.retry(LockAcquisitionException.class)
+				.retryLimit(10000)
+				.reader(blSimilarTempSourceInfoTTopicKeyStepReader(INTEGER_OVERRIDEN_BY_EXPRESSION))
+				.processor(blSimilarSourceInfoTTopicKeyStepProsessor())
+				.writer(blSimpleKeysStepWriter())
+				.build();
+	}
+
+	@Bean(name = Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":blSimilarTempSourceInfoTTopicKeyPartitionedStep")
+	public Step blSimilarTempSourceInfoTTopicKeyPartitionedStep() throws Exception {
+		return steps.get("blSimilarTempSourceInfoTTopicKeyPartitionedStep")
+				.partitioner("blSimilarTempSourceInfoTTopicKeyPartitionedStepSlave", this.partioner()) //
+				.taskExecutor(this.taskExecutor)
+				.gridSize(this.partitionThreads)
+				.step(blSimilarTempSourceInfoTTopicKeyStep())
+				.build();
+	}
+
+	@Bean(name = "blSimilarSourceInfoTTopicKey:reader")
+	@StepScope
+	public ItemReader<List<Long>> blSimilarTempSourceInfoTTopicKeyStepReader(
+			@Value("#{stepExecutionContext[modulo]}") Integer modulo
+	) throws Exception {
+		return blSimpleKeysReader(TMP_BLS_TABLE_SOURCE_INFO_T_TOPIC_KEY, "biblio_linker_id", modulo);
+	}
+
+	@Bean(name = "blSimilarSourceInfoTTopicKey:processor")
+	@StepScope
+	public ItemProcessor<List<Long>, List<HarvestedRecord>> blSimilarSourceInfoTTopicKeyStepProsessor() {
+		return new BiblioLinkerSimilarSimpleStepProcessor(BiblioLinkerSimilarType.SOURCE_INFO_T_TOPIC_KEY);
 	}
 
 	/**
