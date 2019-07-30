@@ -110,6 +110,8 @@ public class BiblioLinkerJobConfig {
 
 	private static final String TMP_BLS_TABLE_ISSN_SERIES = "tmp_bls_issn_series";
 
+	private static final String TMP_BLS_TABLE_SERIES_PUBLISHER_LANG = "tmp_bls_series_publisher_lang";
+
 	private String initBiblioLinkerSql = ResourceUtils.asString("job/biblioLinkerJob/initBiblioLinker.sql");
 
 	private String initBiblioLinkerSimilarSql = ResourceUtils.asString("job/biblioLinkerJob/initBiblioLinkerSimilar.sql");
@@ -186,6 +188,9 @@ public class BiblioLinkerJobConfig {
 
 	private String prepareBLSimilarTempIssnSeriesTableSql =
 			ResourceUtils.asString("job/biblioLinkerJob/prepareBLSTempIssnSeries.sql");
+
+	private String prepareBLSimilarTempSeriesPublisherLangTableSql =
+			ResourceUtils.asString("job/biblioLinkerJob/prepareBLSTempSeriesPublisherLang.sql");
 
 	private static final Integer INTEGER_OVERRIDEN_BY_EXPRESSION = null;
 
@@ -1007,7 +1012,9 @@ public class BiblioLinkerJobConfig {
 			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":prepareBLSimilarTempTitlePlusLangStep") Step prepareBLSimilarTempTitlePlusLangStep,
 			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":blSimilarTempTitlePlusLangPartitionedStep") Step blSimilarTempTitlePlusLangStep,
 			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":prepareBLSimilarTempIssnSeriesStep") Step prepareBLSimilarTempIssnSeriesStep,
-			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":blSimilarTempIssnSeriesPartitionedStep") Step blSimilarTempIssnSeriesStep
+			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":blSimilarTempIssnSeriesPartitionedStep") Step blSimilarTempIssnSeriesStep,
+			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":prepareBLSimilarTempSeriesPublisherLangStep") Step prepareBLSimilarTempSeriesPublisherLangStep,
+			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":blSimilarTempSeriesPublisherLangPartitionedStep") Step blSimilarTempSeriesPublisherLangStep
 	) {
 		return jobs.get(Constants.JOB_ID_BIBLIO_LINKER_SIMILAR)
 				.validator(new DedupRecordsJobParametersValidator())
@@ -1042,6 +1049,8 @@ public class BiblioLinkerJobConfig {
 				.next(blSimilarTempTitlePlusLangStep)
 				.next(prepareBLSimilarTempIssnSeriesStep)
 				.next(blSimilarTempIssnSeriesStep)
+				.next(prepareBLSimilarTempSeriesPublisherLangStep)
+				.next(blSimilarTempSeriesPublisherLangStep)
 				.build();
 	}
 
@@ -1900,6 +1909,62 @@ public class BiblioLinkerJobConfig {
 	@StepScope
 	public ItemProcessor<List<Long>, List<HarvestedRecord>> blSimilarIssnSeriesStepProsessor() {
 		return new BiblioLinkerSimilarSimpleStepProcessor(BiblioLinkerSimilarType.ISSN_SERIES);
+	}
+
+	/**
+	 * same series, publisher, lang
+	 */
+	@Bean(name = Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":prepareBLSimilarTempSeriesPublisherLangTasklet")
+	@StepScope
+	public Tasklet prepareBLSimilarTempSeriesPublisherLangTasklet() {
+		return new SqlCommandTasklet(prepareBLSimilarTempSeriesPublisherLangTableSql);
+	}
+
+	@Bean(name = Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":prepareBLSimilarTempSeriesPublisherLangStep")
+	public Step prepareBLSimilarTempSeriesPublisherLangStep() {
+		return steps.get("prepareBLSimilarTempSeriesPublisherLangStep")
+				.tasklet(prepareBLSimilarTempSeriesPublisherLangTasklet())
+				.listener(new StepProgressListener())
+				.build();
+	}
+
+	@Bean(name = Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":blSimilarTempSeriesPublisherLangStep")
+	public Step blSimilarTempSeriesPublisherLangStep() throws Exception {
+		return steps.get("blSimilarTempSeriesPublisherLangStep")
+				.listener(new StepProgressListener())
+				.<List<Long>, List<HarvestedRecord>>chunk(10)
+				.faultTolerant()
+				.keyGenerator(KeyGeneratorForList.INSTANCE)
+				.retry(LockAcquisitionException.class)
+				.retryLimit(10000)
+				.reader(blSimilarTempSeriesPublisherLangStepReader(INTEGER_OVERRIDEN_BY_EXPRESSION))
+				.processor(blSimilarSeriesPublisherLangStepProsessor())
+				.writer(blSimpleKeysStepWriter())
+				.build();
+	}
+
+	@Bean(name = Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":blSimilarTempSeriesPublisherLangPartitionedStep")
+	public Step blSimilarTempSeriesPublisherLangPartitionedStep() throws Exception {
+		return steps.get("blSimilarTempSeriesPublisherLangPartitionedStep")
+				.partitioner("blSimilarTempSeriesPublisherLangPartitionedStepSlave", this.partioner()) //
+				.taskExecutor(this.taskExecutor)
+				.gridSize(this.partitionThreads)
+				.step(blSimilarTempSeriesPublisherLangStep())
+				.build();
+	}
+
+	@Bean(name = "blSimilarSeriesPublisherLang:reader")
+	@StepScope
+	public ItemReader<List<Long>> blSimilarTempSeriesPublisherLangStepReader(
+			@Value("#{stepExecutionContext[modulo]}") Integer modulo
+	) throws Exception {
+		return blSimpleKeysReader(TMP_BLS_TABLE_SERIES_PUBLISHER_LANG, "biblio_linker_id", modulo);
+	}
+
+	@Bean(name = "blSimilarSeriesPublisherLang:processor")
+	@StepScope
+	public ItemProcessor<List<Long>, List<HarvestedRecord>> blSimilarSeriesPublisherLangStepProsessor() {
+		return new BiblioLinkerSimilarSimpleStepProcessor(BiblioLinkerSimilarType.SERIES_PUBLISHE_LANG);
 	}
 
 	/**
