@@ -1302,23 +1302,12 @@ public class MetadataMarcRecord implements MetadataRecord {
 				result.add(BLTitle.create(titleText));
 			}
 		}
-		for (String tag : new String[]{"210", "222"})
+		for (String tag : new String[]{"210", "222"}) {
 			for (DataField df : underlayingMarc.getDataFields(tag)) {
 				String titleText = parseTitleValue(df, new char[]{'a'});
 				if (!titleText.isEmpty()) {
 					result.add(BLTitle.create(titleText));
 				}
-			}
-		for (DataField df : underlayingMarc.getDataFields("700")) {
-			String titleText = parseTitleValue(df, new char[]{'t', 'n', 'p'});
-			if (!titleText.isEmpty()) {
-				result.add(BLTitle.create(titleText));
-			}
-		}
-		for (DataField df : underlayingMarc.getDataFields("710")) {
-			String titleText = parseTitleValue(df, new char[]{'t', 'p'});
-			if (!titleText.isEmpty()) {
-				result.add(BLTitle.create(titleText));
 			}
 		}
 		for (String tag : new String[]{"130", "730"}) {
