@@ -1454,6 +1454,6 @@ public class MetadataMarcRecord implements MetadataRecord {
 			if (!temp.isEmpty()) results.add(temp);
 		}
 		results.addAll(getFields("600tnp:610tp"));
-		return results.stream().map(BLTitlePlus::create).collect(Collectors.toList());
+		return results.stream().limit(3).map(BLTitlePlus::create).collect(Collectors.toList());
 	}
 }
