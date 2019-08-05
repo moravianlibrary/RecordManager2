@@ -131,7 +131,7 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 		encapsulator.setBlAuthorAuthKey(MetadataUtils.shorten(metadataRecord.getBiblioLinkerAuthorAuth(), EFFECTIVE_AUTHOR_AUTH_KEY_LENGTH));
 		encapsulator.setBlPublisher(MetadataUtils.normalizeAndShorten(metadataRecord.getBiblioLinkerPublisher(), EFFECTIVE_LENGTH_200));
 		encapsulator.setBlSeries(MetadataUtils.normalizeAndShorten(metadataRecord.getBiblioLinkerSeries(), EFFECTIVE_LENGTH_200));
-		encapsulator.setBlTopicKey(MetadataUtils.normalizeAndShorten(metadataRecord.getBiblioLinkerTopicKey(), EFFECTIVE_LENGTH_200));
+		encapsulator.setBlTopicKey(metadataRecord.getBiblioLinkerTopicKey());
 		encapsulator.setBlEntities(metadataRecord.getBiblioLinkerEntity());
 		encapsulator.setBlEntityAuthKeys(metadataRecord.getBiblioLinkerEntityAuthKey());
 		encapsulator.setBlTitlePluses(metadataRecord.getBiblioLinkerTitlePlus());
@@ -331,10 +331,6 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 				md.update(encapsulator.getBlSeries().getBytes());
 			}
 
-			if (encapsulator.getBlTopicKey() != null) {
-				md.update(encapsulator.getBlTopicKey().getBytes());
-			}
-
 			for (Ean ean: encapsulator.getEans()) {
 					md.update(ean.getEan().byteValue());
 				}
@@ -365,6 +361,10 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 
 			for (BLTitlePlus blTitlePlus : encapsulator.getBlTitlePluses()) {
 				md.update(blTitlePlus.getBLTitlePlusStr().getBytes("utf-8"));
+			}
+
+			for (BLTopicKey blTopicKey : encapsulator.getBlTopicKey()) {
+				md.update(blTopicKey.getBLTopicKeyStr().getBytes("utf-8"));
 			}
 
 				if (encapsulator.getBlConspectus() != null) {
@@ -452,6 +452,7 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 		List<BLEntity> blEntities = new ArrayList<>();
 		List<BLEntityAuthKey> blEntityAuthKeys = new ArrayList<>();
 		List<BLTitlePlus> blTitlePluses = new ArrayList<>();
+		List<BLTopicKey> blTopicKey = new ArrayList<>();
 
 		Long publicationYear;
 		String authorString;
@@ -471,7 +472,6 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 		String blAuthorAuthKey;
 		String blPublisher;
 		String blSeries;
-		String blTopicKey;
 
 		public List<Ismn> getIsmns() {
 			return ismns;
@@ -680,14 +680,6 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 			this.blCommonTitle = blCommonTitle;
 		}
 
-		public String getBlTopicKey() {
-			return blTopicKey;
-		}
-
-		public void setBlTopicKey(String blTopicKey) {
-			this.blTopicKey = blTopicKey;
-		}
-
 		public List<BLEntity> getBlEntities() {
 			return blEntities;
 		}
@@ -710,6 +702,14 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 
 		public void setBlTitlePluses(List<BLTitlePlus> blTitlePluses) {
 			this.blTitlePluses = blTitlePluses;
+		}
+
+		public List<BLTopicKey> getBlTopicKey() {
+			return blTopicKey;
+		}
+
+		public void setBlTopicKey(List<BLTopicKey> blTopicKey) {
+			this.blTopicKey = blTopicKey;
 		}
 	}
 

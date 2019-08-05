@@ -196,6 +196,10 @@ public class HarvestedRecord extends AbstractDomainObject {
 	private List<BLTitlePlus> blTitlePluses = new ArrayList<>();
 
 	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name = "harvested_record_id", referencedColumnName = "id", nullable = false)
+	private List<BLTopicKey> blTopicKey = new ArrayList<>();
+
+	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name="harvested_record_id", referencedColumnName="id")
 	private List<FulltextKramerius> fulltextKramerius = new ArrayList<>();
 	
@@ -302,9 +306,6 @@ public class HarvestedRecord extends AbstractDomainObject {
 
 	@Column(name = "bl_series")
 	private String blSeries;
-
-	@Column(name = "bl_topic_key")
-	private String blTopicKey;
 
 	/**
 	 * indicator variable used for filtering reasons
@@ -792,14 +793,6 @@ public class HarvestedRecord extends AbstractDomainObject {
 		this.blCommonTitle = blCommonTitle;
 	}
 
-	public String getBlTopicKey() {
-		return blTopicKey;
-	}
-
-	public void setBlTopicKey(String blTopicKey) {
-		this.blTopicKey = blTopicKey;
-	}
-
 	public List<BLEntity> getBlEntity() {
 		return blEntity;
 	}
@@ -822,5 +815,13 @@ public class HarvestedRecord extends AbstractDomainObject {
 
 	public void setBlTitlePluses(List<BLTitlePlus> blTitlePluses) {
 		this.blTitlePluses = blTitlePluses;
+	}
+
+	public List<BLTopicKey> getBlTopicKey() {
+		return blTopicKey;
+	}
+
+	public void setBlTopicKey(List<BLTopicKey> blTopicKey) {
+		this.blTopicKey = blTopicKey;
 	}
 }

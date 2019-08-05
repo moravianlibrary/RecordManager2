@@ -1393,14 +1393,20 @@ public class MetadataMarcRecord implements MetadataRecord {
 			"ph116858", "ph116861", "d005260", "ph114056", "d005260", "ph135292");
 
 	@Override
-	public String getBiblioLinkerTopicKey() {
-		for (DataField df : underlayingMarc.getDataFields("650")) {
-			if (df.getIndicator1() != '2' && df.getSubfield('7') != null) {
-				if (STOP_WORDS_650.contains(df.getSubfield('7').getData())) continue;
-				return df.getSubfield('7').getData();
+	public List<BLTopicKey> getBiblioLinkerTopicKey() {
+		List<String> results = new ArrayList<>();
+		if (isMap()) {
+			for (DataField df : underlayingMarc.getDataFields("650")) {
+				if (df.getIndicator1() != '2' && df.getSubfield('7') != null) {
+					if (STOP_WORDS_650.contains(df.getSubfield('7').getData())) continue;
+					if (!results.contains(df.getSubfield('7').getData())) results.add(df.getSubfield('7').getData());
+				}
 			}
 		}
-		return getFirstField("6517:072a");
+		for (String topicValue : getFields("6517")) {
+			if (!results.contains(topicValue)) results.add(topicValue);
+		}
+		return results.stream().limit(3).map(BLTopicKey::create).collect(Collectors.toList());
 	}
 
 	@Override
