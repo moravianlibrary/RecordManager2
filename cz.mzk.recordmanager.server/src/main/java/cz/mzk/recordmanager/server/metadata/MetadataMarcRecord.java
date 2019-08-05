@@ -1,6 +1,7 @@
 package cz.mzk.recordmanager.server.metadata;
 
 import com.google.common.primitives.Chars;
+import cz.mzk.recordmanager.server.adresar.AdresarHarvestJobConfig;
 import cz.mzk.recordmanager.server.export.IOFormat;
 import cz.mzk.recordmanager.server.marc.MarcRecord;
 import cz.mzk.recordmanager.server.model.*;
@@ -105,6 +106,9 @@ public class MetadataMarcRecord implements MetadataRecord {
 	private static final char[] ARRAY_VM = {'v', 'm'};
 	private static final char[] ARRAY_OPR = {'o', 'p', 'r'};
 	private static final char[] ARRAY_OQ = {'o', 'q'};
+
+	private static final List<String> ENTITY_RELATIONSHIP =
+			Arrays.asList("aut", "edt", "cmp", "ivr", "ive", "org", "drt", "ant", "ctb", "ccp");
 
 	private static final String URL_COMMENT_FORMAT = "%s (%s)";
 
@@ -1412,25 +1416,56 @@ public class MetadataMarcRecord implements MetadataRecord {
 	@Override
 	public List<BLEntity> getBiblioLinkerEntity() {
 		Set<String> results = new HashSet<>();
-		for (String tag : new String[]{"100", "600", "700"}) {
-			for (DataField df : underlayingMarc.getDataFields(tag)) {
-				String temp = (df.getSubfield('a') != null) ? df.getSubfield('a').getData() : "";
-				if (df.getSubfield('d') != null) {
-					Matcher matcher = YEAR_PATTERN.matcher(df.getSubfield('d').getData());
-					if (matcher.find()) temp += matcher.group(0);
-				}
-				results.add(temp);
-			}
+		results.addAll(getBiblioLinkerEntityPart("1", false));
+		if (results.isEmpty()) {
+			results.addAll(getBiblioLinkerEntityPart("7", false).stream().limit(1).collect(Collectors.toSet()));
 		}
-		results.addAll(getFields("110abcdn:610abcdn:710abcdn:100u:700u:314a:111acdn:611acdn:711acdn"));
+		results.addAll(getBiblioLinkerEntityPart("7", true).stream().limit(3).collect(Collectors.toSet()));
+		results.addAll(getBiblioLinkerEntityPart("6", false).stream().limit(3).collect(Collectors.toSet()));
+		results.addAll(getFields("100u:700u:314a"));
 		return results.stream().filter(s -> !s.contains("ebrary")).map(BLEntity::create).collect(Collectors.toList());
+	}
+
+	private Set<String> getBiblioLinkerEntityPart(String tag, boolean filter) {
+		Set<String> results = new HashSet<>();
+		for (DataField df : underlayingMarc.getDataFields(tag + "00")) {
+			if (filter && df.getSubfield('4') != null
+					&& !ENTITY_RELATIONSHIP.contains(df.getSubfield('4').getData())) {
+				continue;
+			}
+			if (df.getSubfield('a') == null) continue;
+			String temp = df.getSubfield('a').getData();
+			if (df.getSubfield('d') != null) {
+				Matcher matcher = YEAR_PATTERN.matcher(df.getSubfield('d').getData());
+				if (matcher.find()) temp += matcher.group(0);
+			}
+			results.add(temp);
+		}
+		results.addAll(getFields(tag + "10abcdn:" + tag + "11acdn"));
+		return results;
 	}
 
 	@Override
 	public List<BLEntityAuthKey> getBiblioLinkerEntityAuthKey() {
 		Set<String> results = new HashSet<>();
-		results.addAll(getFields("1007:1107:6007:6107:7007:7107:1117:6117:7117"));
-		return results.stream().filter(s -> !s.contains("kn20081114008"))
+		results.addAll(getFields("1007:1107:1117").stream().limit(3).collect(Collectors.toList()));
+		if (results.isEmpty()) {
+			String value = getFirstField("7007:7107:7117:6007:6107:6117");
+			if (value != null) results.add(value);
+		}
+		Set<String> results7xx = new HashSet<>();
+		for (String tag : new String[]{"700", "710", "711"}) {
+			for (DataField df : underlayingMarc.getDataFields(tag)) {
+				if (results7xx.size() >= 3) break;
+				if (df.getSubfield('7') != null && df.getSubfield('4') != null
+						&& ENTITY_RELATIONSHIP.contains(df.getSubfield('4').getData())) {
+					results7xx.add(df.getSubfield('7').getData());
+				}
+			}
+		}
+		results.addAll(results7xx);
+		results.addAll(getFields("6007:6107:6117").stream().limit(3).collect(Collectors.toSet()));
+		return results.stream().filter(s -> !s.contains("kn20081114008")).limit(3)
 				.map(BLEntityAuthKey::create).collect(Collectors.toList());
 	}
 
