@@ -1428,6 +1428,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 
 	private Set<String> getBiblioLinkerEntityPart(String tag, boolean filter) {
 		Set<String> results = new HashSet<>();
+		results.addAll(getFields(tag + "007:" + tag + "107:" + tag + "117").stream().limit(3).collect(Collectors.toList()));
 		for (DataField df : underlayingMarc.getDataFields(tag + "00")) {
 			if (filter && df.getSubfield('4') != null
 					&& !ENTITY_RELATIONSHIP.contains(df.getSubfield('4').getData())) {
