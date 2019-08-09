@@ -109,6 +109,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 
 	private static final List<String> ENTITY_RELATIONSHIP =
 			Arrays.asList("aut", "edt", "cmp", "ivr", "ive", "org", "drt", "ant", "ctb", "ccp");
+	private static final List<String> AUTHOR_RELATIONSHIP = Arrays.asList("ccp", "ant", "aut");
 
 	private static final String URL_COMMENT_FORMAT = "%s (%s)";
 
@@ -1348,9 +1349,74 @@ public class MetadataMarcRecord implements MetadataRecord {
 		return results;
 	}
 
+	private static final List<HarvestedRecordFormatEnum> BL_AUTHOR_VIDEO =
+			Arrays.asList(HarvestedRecordFormatEnum.VIDEO_BLURAY,
+					HarvestedRecordFormatEnum.VIDEO_CD,
+					HarvestedRecordFormatEnum.VIDEO_DOCUMENTS,
+					HarvestedRecordFormatEnum.VIDEO_DVD,
+					HarvestedRecordFormatEnum.VIDEO_OTHER,
+					HarvestedRecordFormatEnum.VIDEO_VHS);
+
 	@Override
 	public String getBiblioLinkerAuthor() {
-		return getFirstField("100a:110abcdn:111acdn:700a:710abcdn:711acdn");
+		String result;
+		if (!Collections.disjoint(getDetectedFormatList(), BL_AUTHOR_VIDEO)) {
+			result = getBiblioLinkerAuthorPart("1", true);
+			if (result != null) return result;
+			result = getBiblioLinkerAuthorPart("7", true);
+			if (result != null) return result;
+		}
+		result = getBiblioLinkerAuthorPart("1", false);
+		if (result != null) return result;
+		return getBiblioLinkerAuthorPart("7", false);
+	}
+
+	private String getBiblioLinkerAuthorPart(String tagPrefix, boolean filter) {
+		for (String tag : new String[]{tagPrefix + "00", tagPrefix + "10", tagPrefix + "11"}) {
+			for (DataField df : underlayingMarc.getDataFields(tag)) {
+				if (filter && (df.getSubfield('4') == null
+						|| !AUTHOR_RELATIONSHIP.contains(df.getSubfield('4').getData()))) {
+					continue;
+				}
+				if (df.getSubfield('7') != null) return df.getSubfield('7').getData();
+			}
+		}
+		for (DataField df : underlayingMarc.getDataFields(tagPrefix + "00")) {
+			if (filter && (df.getSubfield('4') == null
+					|| !AUTHOR_RELATIONSHIP.contains(df.getSubfield('4').getData()))) {
+				continue;
+			}
+			if (df.getSubfield('a') == null) continue;
+			String result = df.getSubfield('a').getData();
+			if (df.getSubfield('d') != null) {
+				Matcher matcher = YEAR_PATTERN.matcher(df.getSubfield('d').getData());
+				if (matcher.find()) result += matcher.group(0);
+			}
+			if (result != null) return result;
+		}
+		for (DataField df : underlayingMarc.getDataFields(tagPrefix + "10")) {
+			if (filter && (df.getSubfield('4') == null
+					|| !AUTHOR_RELATIONSHIP.contains(df.getSubfield('4').getData()))) {
+				continue;
+			}
+			StringBuilder result = new StringBuilder();
+			for (char code : new char[]{'a', 'b', 'c', 'd', 'n'}) {
+				result.append(df.getSubfield(code) != null ? df.getSubfield(code) : "");
+			}
+			if (result.length() > 0) return result.toString();
+		}
+		for (DataField df : underlayingMarc.getDataFields(tagPrefix + "11")) {
+			if (filter && (df.getSubfield('4') == null
+					|| !AUTHOR_RELATIONSHIP.contains(df.getSubfield('4').getData()))) {
+				continue;
+			}
+			StringBuilder result = new StringBuilder();
+			for (char code : new char[]{'a', 'c', 'd', 'n'}) {
+				result.append(df.getSubfield(code) != null ? df.getSubfield(code) : "");
+			}
+			if (result.length() > 0) return result.toString();
+		}
+		return null;
 	}
 
 	@Override
