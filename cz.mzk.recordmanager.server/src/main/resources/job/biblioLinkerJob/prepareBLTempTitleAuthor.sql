@@ -13,11 +13,6 @@ FROM (
        UNION
        SELECT
          harvested_record_id,
-         short_title
-       FROM short_title
-       UNION
-       SELECT
-         harvested_record_id,
          title
        FROM bl_title
      ) titles

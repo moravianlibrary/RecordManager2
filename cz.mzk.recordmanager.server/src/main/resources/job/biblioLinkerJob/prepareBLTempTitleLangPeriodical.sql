@@ -13,18 +13,13 @@ FROM (
     UNION
     SELECT
       harvested_record_id,
-      short_title
-    FROM short_title
-    UNION
-    SELECT
-      harvested_record_id,
       title
     FROM bl_title
   ) titles
   INNER JOIN harvested_record hr ON hr.id=titles.harvested_record_id
   INNER JOIN harvested_record_format_link hrfl ON hr.id = hrfl.harvested_record_id
   INNER JOIN language l ON l.harvested_record_id = hr.id
-WHERE dedup_record_id IS NOT NULL AND hrfl.harvested_record_format_id=5
+WHERE dedup_record_id IS NOT NULL AND hrfl.harvested_record_format_id=2
 GROUP BY titles.title, l.lang
 HAVING COUNT(*)>1
   AND COUNT(DISTINCT biblio_linker_id) + SUM(CASE WHEN biblio_linker_id IS NULL THEN 1 ELSE 0 END) != 1
