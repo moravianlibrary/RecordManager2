@@ -1772,7 +1772,7 @@ INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granul
 --changeset tomascejpek:155 context:cpk
 UPDATE library SET catalog_url='https://fmi.tritius.cz/' WHERE id=168;
 UPDATE import_conf SET item_id='other' WHERE id=368;
-UPDATE oai_harvest_conf SET url=' https://fmi.tritius.cz/tritius/oai-provider',set_spec='CPK_1' WHERE import_conf_id=368;
+UPDATE oai_harvest_conf SET url='https://fmi.tritius.cz/tritius/oai-provider',set_spec='CPK_1' WHERE import_conf_id=368;
 
 --changeset tomascejpek:156 context:cpk
 INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (202, 'MKPLZEN', 'https://knihovna.plzen.eu/', 'https://tritius.plzen.eu/', 'Plzeň', 'PL');
