@@ -663,7 +663,7 @@ public class BiblioLinkerJobConfig {
 				.partitioner("blTempTitleAuthorMusicalScorePartitionedStepSlave", this.partioner()) //
 				.taskExecutor(this.taskExecutor)
 				.gridSize(this.partitionThreads)
-				.step(blTempTitleAuthMusicalScoreStep())
+				.step(blTempTitleAuthorMusicalScoreStep())
 				.build();
 	}
 
