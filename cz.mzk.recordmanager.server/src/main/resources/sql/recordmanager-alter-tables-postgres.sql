@@ -1482,3 +1482,7 @@ INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format) VAL
 UPDATE library SET catalog_url='https://katalog.kjm.cz' WHERE id=103;
 UPDATE import_conf SET base_weight=11,filtering_enabled=TRUE,interception_enabled=TRUE,item_id='other',ziskej_enabled=TRUE WHERE id=303;
 UPDATE oai_harvest_conf SET url='https://katalog.kjm.cz/oai',set_spec='KJMCPKDATE',metadata_prefix='oai_marcxml_cpk',extract_id_regex='s/[^:]+:[^:]+:([^\\/]+)\\/([^\\/]+)/$1_$2/',harvest_job_name='cosmotronHarvestJob' WHERE import_conf_id=303;
+
+-- 15. 8. 2019 tomascejpek
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (65, 333, 'PAG001');
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (62, 388, 'KVG501');
