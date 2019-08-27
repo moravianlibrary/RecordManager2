@@ -40,23 +40,37 @@ public class BiblioLinkerSimilarSimpleStepProcessor implements
 	public List<HarvestedRecord> process(List<Long> biblioIdsList) throws Exception {
 		Map<Long, Collection<HarvestedRecord>> records;
 		Set<HarvestedRecord> toUpdate = new HashSet<>();
+		Set<BiblioLinkerSimiliar> similarIds;
+		Set<HarvestedRecord> similarHr;
+		HarvestedRecord searched;
+		// get all records by BiblioLinker id
 		records = sortrecords(harvestedRecordDao.getByBiblioLinkerIds(biblioIdsList));
 		for (Long blOuter : records.keySet()) {
 			for (HarvestedRecord hr : records.get(blOuter)) {
-				Set<BiblioLinkerSimiliar> similarIds = new TreeSet<>(hr.getBiblioLinkerSimiliarUrls());
+				similarIds = new TreeSet<>(hr.getBiblioLinkerSimiliarUrls());
+				similarHr = new HashSet<>();
 				for (Long blInner : records.keySet()) {
-					if (similarIds.size() >= 5) break;
+					// same BibliLinker groups
 					if (blOuter.equals(blInner)) continue;
-					HarvestedRecord searched = findSameInstitution(hr, records.get(blInner));
+					searched = findSameInstitution(hr, records.get(blInner));
 					if (searched == null) continue;
-					similarIds.add(BiblioLinkerSimiliar.create(getUrlId(searched), searched, type));
-					toUpdate.add(hr);
+					if (isSimilar(hr, searched, similarHr)) {
+						similarIds.add(BiblioLinkerSimiliar.create(getUrlId(searched), searched, type));
+						similarHr.add(searched);
+						// new similar record, must be updated
+						toUpdate.add(hr);
+					}
+					if (similarIds.size() >= 5) break;
 				}
 				hr.setBiblioLinkerSimiliarUrls(new ArrayList<>(similarIds));
 				progressLogger.incrementAndLogProgress();
 			}
 		}
 		return new ArrayList<>(toUpdate);
+	}
+
+	protected boolean isSimilar(HarvestedRecord hr1, HarvestedRecord hr2, Set<HarvestedRecord> similars) {
+		return true;
 	}
 
 	private static HarvestedRecord findSameInstitution(final HarvestedRecord source, final Collection<HarvestedRecord> searched) {

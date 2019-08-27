@@ -1279,7 +1279,7 @@ public class BiblioLinkerJobConfig {
 	@Bean(name = "blSimilarAuthorTitle:processor")
 	@StepScope
 	public ItemProcessor<List<Long>, List<HarvestedRecord>> blSimilarAuthorTitleStepProsessor() {
-		return new BiblioLinkerSimilarSimpleStepProcessor(BiblioLinkerSimilarType.AUTHOR_TITLE);
+		return new BiblioLinkerSimilarAuthorTitleStepProcessor(BiblioLinkerSimilarType.AUTHOR_TITLE);
 	}
 
 	/**
