@@ -1,7 +1,6 @@
 package cz.mzk.recordmanager.server.metadata;
 
 import com.google.common.primitives.Chars;
-import cz.mzk.recordmanager.server.adresar.AdresarHarvestJobConfig;
 import cz.mzk.recordmanager.server.export.IOFormat;
 import cz.mzk.recordmanager.server.marc.MarcRecord;
 import cz.mzk.recordmanager.server.model.*;
@@ -1482,7 +1481,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 	@Override
 	public List<BLEntity> getBiblioLinkerEntity() {
 		Set<String> results = new HashSet<>();
-		results.addAll(getBiblioLinkerEntityPart("1", false));
+		results.addAll(getBiblioLinkerEntityPart("1", false).stream().limit(1).collect(Collectors.toSet()));
 		if (results.isEmpty()) {
 			results.addAll(getBiblioLinkerEntityPart("7", false).stream().limit(1).collect(Collectors.toSet()));
 		}
@@ -1494,7 +1493,8 @@ public class MetadataMarcRecord implements MetadataRecord {
 
 	private Set<String> getBiblioLinkerEntityPart(String tag, boolean filter) {
 		Set<String> results = new HashSet<>();
-		results.addAll(getFields(tag + "007:" + tag + "107:" + tag + "117").stream().limit(3).collect(Collectors.toList()));
+		results.addAll(getBiblioLinkerEntityValue(tag + "007:" + tag + "107:" + tag + "117", filter)
+				.stream().limit(3).collect(Collectors.toList()));
 		for (DataField df : underlayingMarc.getDataFields(tag + "00")) {
 			if (filter && (df.getSubfield('4') == null
 					|| !ENTITY_RELATIONSHIP.contains(df.getSubfield('4').getData()))) {
@@ -1508,7 +1508,27 @@ public class MetadataMarcRecord implements MetadataRecord {
 			}
 			results.add(temp);
 		}
-		results.addAll(getFields(tag + "10abcdn:" + tag + "11acdn"));
+		results.addAll(getBiblioLinkerEntityValue(tag + "10abcdn:" + tag + "11acdn", filter));
+		return results;
+	}
+
+	private Set<String> getBiblioLinkerEntityValue(String fields, boolean filter) {
+		Set<String> results = new HashSet<>();
+		for (String field : fields.split(":")) {
+			String tag = field.substring(0, 3);
+			String codes = field.substring(3);
+			for (DataField df : underlayingMarc.getDataFields(tag)) {
+				if (filter && (df.getSubfield('4') == null
+						|| !ENTITY_RELATIONSHIP.contains(df.getSubfield('4').getData()))) {
+					continue;
+				}
+				StringBuilder entityValue = new StringBuilder();
+				for (char c : codes.toCharArray()) {
+					entityValue.append(df.getSubfield(c));
+				}
+				if (entityValue.length() > 0) results.add(entityValue.toString());
+			}
+		}
 		return results;
 	}
 
