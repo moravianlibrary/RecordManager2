@@ -1135,7 +1135,7 @@ public class BiblioLinkerJobConfig {
 	public Step blSimilarTempAuthorCommonTitleStep() throws Exception {
 		return steps.get("blSimilarTempAuthorCommonTitleStep")
 				.listener(new StepProgressListener())
-				.<List<Long>, List<HarvestedRecord>>chunk(10)
+				.<List<Long>, List<HarvestedRecord>>chunk(1)
 				.faultTolerant()
 				.keyGenerator(KeyGeneratorForList.INSTANCE)
 				.retry(LockAcquisitionException.class)
@@ -1247,7 +1247,7 @@ public class BiblioLinkerJobConfig {
 	public Step blSimilarTempAuthorTitleStep() throws Exception {
 		return steps.get("blSimilarTempAuthorTitleStep")
 				.listener(new StepProgressListener())
-				.<List<Long>, List<HarvestedRecord>>chunk(10)
+				.<List<Long>, List<HarvestedRecord>>chunk(1)
 				.faultTolerant()
 				.keyGenerator(KeyGeneratorForList.INSTANCE)
 				.retry(LockAcquisitionException.class)
@@ -1527,7 +1527,7 @@ public class BiblioLinkerJobConfig {
 	public Step blSimilarTempTopicKeyStep() throws Exception {
 		return steps.get("blSimilarTempTopicKeyStep")
 				.listener(new StepProgressListener())
-				.<List<Long>, List<HarvestedRecord>>chunk(10)
+				.<List<Long>, List<HarvestedRecord>>chunk(1)
 				.faultTolerant()
 				.keyGenerator(KeyGeneratorForList.INSTANCE)
 				.retry(LockAcquisitionException.class)
@@ -1751,7 +1751,7 @@ public class BiblioLinkerJobConfig {
 	public Step blSimilarTempEntityStep() throws Exception {
 		return steps.get("blSimilarTempEntityStep")
 				.listener(new StepProgressListener())
-				.<List<Long>, List<HarvestedRecord>>chunk(10)
+				.<List<Long>, List<HarvestedRecord>>chunk(1)
 				.faultTolerant()
 				.keyGenerator(KeyGeneratorForList.INSTANCE)
 				.retry(LockAcquisitionException.class)
@@ -1863,7 +1863,7 @@ public class BiblioLinkerJobConfig {
 	public Step blSimilarTempIssnSeriesStep() throws Exception {
 		return steps.get("blSimilarTempIssnSeriesStep")
 				.listener(new StepProgressListener())
-				.<List<Long>, List<HarvestedRecord>>chunk(10)
+				.<List<Long>, List<HarvestedRecord>>chunk(1)
 				.faultTolerant()
 				.keyGenerator(KeyGeneratorForList.INSTANCE)
 				.retry(LockAcquisitionException.class)
@@ -1919,7 +1919,7 @@ public class BiblioLinkerJobConfig {
 	public Step blSimilarTempSeriesPublisherStep() throws Exception {
 		return steps.get("blSimilarTempSeriesPublisherStep")
 				.listener(new StepProgressListener())
-				.<List<Long>, List<HarvestedRecord>>chunk(10)
+				.<List<Long>, List<HarvestedRecord>>chunk(1)
 				.faultTolerant()
 				.keyGenerator(KeyGeneratorForList.INSTANCE)
 				.retry(LockAcquisitionException.class)
@@ -2087,7 +2087,7 @@ public class BiblioLinkerJobConfig {
 	public Step blSimilarTempConspectusStep() throws Exception {
 		return steps.get("blSimilarTempConspectusStep")
 				.listener(new StepProgressListener())
-				.<List<Long>, List<HarvestedRecord>>chunk(10)
+				.<List<Long>, List<HarvestedRecord>>chunk(1)
 				.faultTolerant()
 				.keyGenerator(KeyGeneratorForList.INSTANCE)
 				.retry(LockAcquisitionException.class)
@@ -2138,7 +2138,7 @@ public class BiblioLinkerJobConfig {
 		}
 		pqpf.setSortKey("row_id");
 		reader.setRowMapper(new ArrayLongMapper());
-		reader.setPageSize(100);
+		reader.setPageSize(10);
 		reader.setQueryProvider(pqpf.getObject());
 		reader.setDataSource(dataSource);
 		if (modulo != null) {
