@@ -2113,7 +2113,7 @@ public class BiblioLinkerJobConfig {
 	public ItemReader<List<Long>> blSimilarTempConspectusStepReader(
 			@Value("#{stepExecutionContext[modulo]}") Integer modulo
 	) throws Exception {
-		return blSimpleKeysReader(TMP_BLS_TABLE_SOURCE_INFO_T_TOPIC_KEY, "biblio_linker_id", modulo);
+		return blSimpleKeysReader(TMP_BLS_TABLE_CONSPECTUS, "biblio_linker_id", modulo);
 	}
 
 	@Bean(name = "blSimilarConspectus:processor")
