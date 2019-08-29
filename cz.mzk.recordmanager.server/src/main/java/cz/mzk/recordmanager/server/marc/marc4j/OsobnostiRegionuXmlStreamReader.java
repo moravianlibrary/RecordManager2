@@ -56,9 +56,9 @@ public class OsobnostiRegionuXmlStreamReader implements MarcReader{
     private static final String INSTITUTION_TRE = "Městská knihovna Česká Třebová";
     private static final String INSTITUTION_MKUO = "Městská knihovna Ústí nad Orlicí";
     
-    private static final String URL_WOMAN = "http://www.osobnostiregionu.cz/components/com_osobnosti/images/no_photo_woman_fp.png";
-    private static final String URL_MAN = "http://www.osobnostiregionu.cz/components/com_osobnosti/images/no_photo_man_fp.png";
-    
+    private static final String URL_WOMAN = "https://www.osobnostiregionu.cz/components/com_osobnosti/images/no_photo_woman_fp.png";
+    private static final String URL_MAN = "https://www.osobnostiregionu.cz/components/com_osobnosti/images/no_photo_man_fp.png";
+
     private static final String NEW_LINE = "\n";
     
     /**
