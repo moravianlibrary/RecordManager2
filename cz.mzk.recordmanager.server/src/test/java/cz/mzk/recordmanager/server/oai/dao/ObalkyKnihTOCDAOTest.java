@@ -32,7 +32,7 @@ public class ObalkyKnihTOCDAOTest extends AbstractTest {
 	@Test
 	public void queryByIsbn() {
 		ObalkyKnihTOCQuery query = new ObalkyKnihTOCQuery();
-		query.setIsbn(9788021007543L);
+		query.setEan("9788021007543");
 		List<ObalkyKnihTOC> tocs = obalkyKnihTOCDao.query(query);
 		Assert.assertEquals(tocs.size(), 1);
 		Assert.assertEquals(tocs.get(0).getBookId(), (Long) 3L);
@@ -41,7 +41,7 @@ public class ObalkyKnihTOCDAOTest extends AbstractTest {
 	@Test
 	public void queryByIsbns() {
 		ObalkyKnihTOCQuery query = new ObalkyKnihTOCQuery();
-		query.setIsbns(Arrays.asList(9788074700781L, 1234567890123L));
+		query.setEans(Arrays.asList("9788074700781","1234567890123"));
 		List<ObalkyKnihTOC> tocs = obalkyKnihTOCDao.query(query);
 		Assert.assertEquals(tocs.size(), 1);
 		Assert.assertEquals(tocs.get(0).getBookId(), (Long) 1L);
@@ -61,7 +61,7 @@ public class ObalkyKnihTOCDAOTest extends AbstractTest {
 		ObalkyKnihTOCQuery query = new ObalkyKnihTOCQuery();
 		query.setLogicalOperator(LogicalOperator.OR);
 		query.setNbn("cnb000081537");
-		query.setIsbn(9788085622270L);
+		query.setEan("9788085622270");
 		List<ObalkyKnihTOC> tocs = obalkyKnihTOCDao.query(query);
 		Assert.assertEquals(tocs.size(), 2);
 	}

@@ -16,7 +16,7 @@ public class ObalkyKnihTOC extends AbstractDomainObject {
 	private static class BibInfo {
 
 		@Column(name="nbn")
-		@XmlElement(name="nbn")
+		@XmlElement(name="cnb")
 		public String nbn;
 
 		@Column(name="oclc")
@@ -24,7 +24,7 @@ public class ObalkyKnihTOC extends AbstractDomainObject {
 		public String oclc;
 
 		@Column(name="ean")
-		@XmlElement(name="ean")
+		@XmlElement(name="ean13")
 		public String ean;
 
 		@XmlElement(name="isbn")

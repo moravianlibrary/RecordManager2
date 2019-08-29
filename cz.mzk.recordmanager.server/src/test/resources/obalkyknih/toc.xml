@@ -4,9 +4,9 @@
 	<book>
 		<book_id>4</book_id>
 		<bibinfo>
-			<nbn>nkc20050699750</nbn>
+			<cnb>nkc20050699750</cnb>
 			<oclc>4077641</oclc>
-			<isbn>978-80-7204-890-8</isbn>
+			<ean13>9788072048908</ean13>
 		</bibinfo>
 		<book_metadata_change>2019-02-01 07:13:49</book_metadata_change>
 		<toc>ČÍSLO 1 -- A. KAŽDODENNOST -- Zdeněk Měřínský-Rudolf Procházka: K
@@ -73,9 +73,9 @@
 	<book>
 		<book_id>5</book_id>
 		<bibinfo>
-			<ean>978-80-85009-54-5</ean>
+			<ean13>9788085009545</ean13>
 			<isbn>80-85009-54-4</isbn>
-			<nbn>cnb002154615</nbn>
+			<cnb>cnb002154615</cnb>
 			<oclc>85707819</oclc>
 		</bibinfo>
 		<book_metadata_change>2019-02-01 07:13:49</book_metadata_change>

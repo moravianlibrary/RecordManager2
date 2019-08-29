@@ -24,27 +24,29 @@ public class ObalkyKnihTocHarvestedRecordEnricher implements HarvestedRecordEnri
 
 	@Override
 	public void enrich(HarvestedRecord record, SolrInputDocument document) {
-		List<Long> isbns = getIsbns(document);
-		List<String> nbns = getNbns(document);
+		List<String> isbns = getIsbns(document);
+		List<String> nbns = getNbns(document, SolrFieldConstants.NBN);
+		List<String> oclcs = getNbns(document, SolrFieldConstants.OCLC_DISPLAY);
 		if (isbns.isEmpty() && nbns.isEmpty()) {
 			return;
 		}
 		ObalkyKnihTOCQuery query = new ObalkyKnihTOCQuery();
-		query.setIsbns(isbns);
+		query.setEans(isbns);
 		query.setNbns(nbns);
+		query.setOclcs(oclcs);
 		for (ObalkyKnihTOC toc : obalkyKnihTOCDao.query(query)) {
 			document.addField(SolrFieldConstants.TOC, toc.getToc());
 		}
 	}
 
-	private List<Long> getIsbns(SolrInputDocument document) {
+	private List<String> getIsbns(SolrInputDocument document) {
 		Collection<Object> isbns = document.getFieldValues(SolrFieldConstants.ISBN);
 		if (isbns == null) {
 			return Collections.emptyList();
 		}
-		List<Long> isbnList = new ArrayList<>();
+		List<String> isbnList = new ArrayList<>();
 		for (Object isbnAsObject : isbns) {
-			Long isbn = ISBNUtils.toISBN13Long((String) isbnAsObject);
+			String isbn = ISBNUtils.toISBN13String((String) isbnAsObject);
 			if (isbn != null) {
 				isbnList.add(isbn);
 			}
@@ -52,14 +54,14 @@ public class ObalkyKnihTocHarvestedRecordEnricher implements HarvestedRecordEnri
 		return isbnList;
 	}
 
-	private List<String> getNbns(SolrInputDocument document) {
-		Collection<Object> nbns = document.getFieldValues(SolrFieldConstants.NBN);
+	private List<String> getNbns(SolrInputDocument document, String fieldName) {
+		Collection<Object> nbns = document.getFieldValues(fieldName);
 		if (nbns == null) {
 			return Collections.emptyList();
 		}
 		List<String> nbnList = new ArrayList<>();
-		for (Object isbnAsObject : nbns) {
-			String nbn = (String) isbnAsObject;
+		for (Object nbnAsObject : nbns) {
+			String nbn = (String) nbnAsObject;
 			if (nbn != null) {
 				nbnList.add(nbn);
 			}
