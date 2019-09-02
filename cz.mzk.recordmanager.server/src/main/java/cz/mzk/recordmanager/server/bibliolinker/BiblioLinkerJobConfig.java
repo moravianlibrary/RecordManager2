@@ -118,6 +118,8 @@ public class BiblioLinkerJobConfig {
 
 	private static final String TMP_BLS_TABLE_CONSPECTUS = "tmp_bls_conspectus";
 
+	private static final String TMP_BLS_TABLE_AUTH = "tmp_bls_auth";
+
 	private String initBiblioLinkerSql = ResourceUtils.asString("job/biblioLinkerJob/initBiblioLinker.sql");
 
 	private String initBiblioLinkerSimilarSql = ResourceUtils.asString("job/biblioLinkerJob/initBiblioLinkerSimilar.sql");
@@ -206,6 +208,9 @@ public class BiblioLinkerJobConfig {
 
 	private String prepareBLSimilarTempConspectusTableSql =
 			ResourceUtils.asString("job/biblioLinkerJob/prepareBLSTempConspectus.sql");
+
+	private String prepareBLSimilarTempAuthTableSql =
+			ResourceUtils.asString("job/biblioLinkerJob/prepareBLSTempAuth.sql");
 
 	private static final Integer INTEGER_OVERRIDEN_BY_EXPRESSION = null;
 
@@ -1019,7 +1024,9 @@ public class BiblioLinkerJobConfig {
 			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":prepareBLSimilarTempSourceInfoTTopicKeyStep") Step prepareBLSimilarTempSourceInfoTTopicKeyStep,
 			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":blSimilarTempSourceInfoTTopicKeyPartitionedStep") Step blSimilarTempSourceInfoTTopicKeyStep,
 			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":prepareBLSimilarTempConspectusStep") Step prepareBLSimilarTempConspectusStep,
-			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":blSimilarTempConspectusPartitionedStep") Step blSimilarTempConspectusStep
+			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":blSimilarTempConspectusPartitionedStep") Step blSimilarTempConspectusStep,
+			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":prepareBLSimilarTempAuthStep") Step prepareBLSimilarTempAuthStep,
+			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":blSimilarTempAuthPartitionedStep") Step blSimilarTempAuthStep
 	) {
 		return jobs.get(Constants.JOB_ID_BIBLIO_LINKER_SIMILAR)
 				.validator(new DedupRecordsJobParametersValidator())
@@ -1038,6 +1045,8 @@ public class BiblioLinkerJobConfig {
 				.next(blSimilarTempTopicKeyStep)
 				.next(prepareBLSimilarTempConspectusStep)
 				.next(blSimilarTempConspectusStep)
+				.next(prepareBLSimilarTempAuthStep)
+				.next(blSimilarTempAuthStep)
 				.build();
 	}
 
@@ -2121,6 +2130,63 @@ public class BiblioLinkerJobConfig {
 	public ItemProcessor<List<Long>, List<HarvestedRecord>> blSimilarConspectusStepProsessor() {
 		return new BiblioLinkerSimilarSimpleStepProcessor(BiblioLinkerSimilarType.CONSPECTUS);
 	}
+
+	/**
+	 * same author_auth_key
+	 */
+	@Bean(name = Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":prepareBLSimilarTempAuthTasklet")
+	@StepScope
+	public Tasklet prepareBLSimilarTempAuthTasklet() {
+		return new SqlCommandTasklet(prepareBLSimilarTempAuthTableSql);
+	}
+
+	@Bean(name = Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":prepareBLSimilarTempAuthStep")
+	public Step prepareBLSimilarTempAuthStep() {
+		return steps.get("prepareBLSimilarTempAuthStep")
+				.tasklet(prepareBLSimilarTempAuthTasklet())
+				.listener(new StepProgressListener())
+				.build();
+	}
+
+	@Bean(name = Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":blSimilarTempAuthStep")
+	public Step blSimilarTempAuthStep() throws Exception {
+		return steps.get("blSimilarTempAuthStep")
+				.listener(new StepProgressListener())
+				.<List<Long>, List<HarvestedRecord>>chunk(1)
+				.faultTolerant()
+				.keyGenerator(KeyGeneratorForList.INSTANCE)
+				.retry(LockAcquisitionException.class)
+				.retryLimit(10000)
+				.reader(blSimilarTempAuthStepReader(INTEGER_OVERRIDEN_BY_EXPRESSION))
+				.processor(blSimilarAuthStepProsessor())
+				.writer(blSimpleKeysStepWriter())
+				.build();
+	}
+
+	@Bean(name = Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":blSimilarTempAuthPartitionedStep")
+	public Step blSimilarTempAuthPartitionedStep() throws Exception {
+		return steps.get("blSimilarTempAuthPartitionedStep")
+				.partitioner("blSimilarTempAuthPartitionedStepSlave", this.partioner()) //
+				.taskExecutor(this.taskExecutor)
+				.gridSize(this.partitionThreads)
+				.step(blSimilarTempAuthStep())
+				.build();
+	}
+
+	@Bean(name = "blSimilarAuth:reader")
+	@StepScope
+	public ItemReader<List<Long>> blSimilarTempAuthStepReader(
+			@Value("#{stepExecutionContext[modulo]}") Integer modulo
+	) throws Exception {
+		return blSimpleKeysReader(TMP_BLS_TABLE_AUTH, "biblio_linker_id", modulo);
+	}
+
+	@Bean(name = "blSimilarAuth:processor")
+	@StepScope
+	public ItemProcessor<List<Long>, List<HarvestedRecord>> blSimilarAuthStepProsessor() {
+		return new BiblioLinkerSimilarSimpleStepProcessor(BiblioLinkerSimilarType.AUTH);
+	}
+
 
 	/**
 	 * Generic components
