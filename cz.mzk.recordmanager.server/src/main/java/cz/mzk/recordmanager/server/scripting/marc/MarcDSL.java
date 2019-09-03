@@ -832,4 +832,8 @@ public class MarcDSL extends BaseDSL {
 		return context.harvestedRecord().getHarvestedFrom().isZiskejEnabled();
 	}
 
+	public String getAuthorityRecordId() {
+		return metadataRecord.getAuthorityRecordId();
+	}
+
 }

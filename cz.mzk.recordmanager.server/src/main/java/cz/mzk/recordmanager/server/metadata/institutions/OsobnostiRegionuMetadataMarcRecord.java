@@ -16,5 +16,10 @@ public class OsobnostiRegionuMetadataMarcRecord extends AuthMetadataMarcRecord{
 	public List<String> getDefaultStatuses() {
 		return SolrUtils.createHierarchicFacetValues(Constants.DOCUMENT_AVAILABILITY_ONLINE, Constants.DOCUMENT_AVAILABILITY_ONLINE);
 	}
-	
+
+	@Override
+	public String getAuthorityRecordId() {
+		return null;
+	}
+
 }

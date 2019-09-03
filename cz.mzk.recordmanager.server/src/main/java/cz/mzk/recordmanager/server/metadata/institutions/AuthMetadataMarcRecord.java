@@ -79,4 +79,9 @@ public class AuthMetadataMarcRecord extends MetadataMarcRecord {
 	public List<Authority> getAllAuthorAuthKey() {
 		return null;
 	}
+
+	@Override
+	public String getAuthorityRecordId() {
+		return underlayingMarc.getControlField("001");
+	}
 }
