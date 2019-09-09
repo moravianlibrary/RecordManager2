@@ -1483,6 +1483,26 @@ UPDATE library SET catalog_url='https://katalog.kjm.cz' WHERE id=103;
 UPDATE import_conf SET base_weight=11,filtering_enabled=TRUE,interception_enabled=TRUE,item_id='other',ziskej_enabled=TRUE WHERE id=303;
 UPDATE oai_harvest_conf SET url='https://katalog.kjm.cz/oai',set_spec='KJMCPKDATE',metadata_prefix='oai_marcxml_cpk',extract_id_regex='s/[^:]+:[^:]+:([^\\/]+)\\/([^\\/]+)/$1_$2/',harvest_job_name='cosmotronHarvestJob' WHERE import_conf_id=303;
 
--- 15. 8. 2019 tomascejpek
+-- 15. 08. 2019 tomascejpek
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (65, 333, 'PAG001');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (62, 388, 'KVG501');
+
+-- 09. 09. 2019 tomascejpek
+INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (198, 'KNIHKM', 'https://www.knihkm.cz/', 'https://kromeriz.tritius.cz/', 'Kroměříž', 'ZL');
+INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id, ziskej_enabled) VALUES (398, 198, 200, 'knihkm', 11, false, true, true, true, 'U', 'other', true);
+INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (398,'https://kromeriz.tritius.cz/tritius/oai-provider','CPK_1','marc21',NULL);
+INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (199, 'MKCHOM', 'https://www.chomutovskaknihovna.cz/', 'https://chomutovskaknihovna.tritius.cz/', 'Chomutov', 'US');
+INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id, ziskej_enabled) VALUES (399, 199, 200, 'mkchom', 11, false, true, true, true, 'U', 'other', true);
+INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (399,'https://chomutovskaknihovna.tritius.cz/tritius/oai-provider','CPK_1','marc21',NULL);
+INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (201, 'MKKOLIN', 'https://knihovnakolin.cz/', 'https://tritius.knihovnakolin.cz/', 'Kolin', 'SC');
+INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id, ziskej_enabled) VALUES (401, 201, 200, 'mkkolin', 11, false, true, true, true, 'U', 'other', true);
+INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (401,'https://tritius.knihovnakolin.cz/tritius/oai-provider','CPK_1','marc21',NULL);
+UPDATE library SET catalog_url='https://fmi.tritius.cz/' WHERE id=168;
+UPDATE import_conf SET item_id='other' WHERE id=368;
+UPDATE oai_harvest_conf SET url='https://fmi.tritius.cz/tritius/oai-provider',set_spec='CPK_1' WHERE import_conf_id=368;
+INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (202, 'MKPLZEN', 'https://knihovna.plzen.eu/', 'https://tritius.plzen.eu/', 'Plzeň', 'PL');
+INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id, ziskej_enabled) VALUES (402, 202, 200, 'mkplzen', 11, false, true, true, true, 'U', 'other', true);
+INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (402,'https://tritius.plzen.eu/tritius/oai-provider','CPK_1','marc21',NULL);
+UPDATE library SET name='MKSVIT',catalog_url='https://booksy.tritius.cz/',region='PA' WHERE id=164;
+UPDATE import_conf SET id_prefix='mksvit',item_id='other' WHERE id=364;
+UPDATE oai_harvest_conf SET url='https://booksy.tritius.cz/tritius/oai-provider',set_spec='CPK_1' WHERE import_conf_id=364;
