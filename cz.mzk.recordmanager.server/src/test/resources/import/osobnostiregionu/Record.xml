@@ -18,8 +18,8 @@
 		<field name="field">odbojáři</field>
 		<field name="field">oběti nacismu</field>
 		<field name="institution">Městská knihovna Česká Třebová</field>
-		<field name="url">http://www.osobnostiregionu.cz/osoby/5-miloslav-privratsky-1923-1944</field>
+		<field name="url">https://www.osobnostiregionu.cz/osoby/5-miloslav-privratsky-1923-1944</field>
 		<field name="source">www (Českotřebovský zpravodaj - Kalendárium), cit.	15.07.2011</field>
-		<field name="previewImageUrl">http://www.osobnostiregionu.cz/components/com_osobnosti/images/no_photo_man_fp.png</field>
+		<field name="previewImageUrl">https://www.osobnostiregionu.cz/components/com_osobnosti/images/no_photo_man_fp.png</field>
 	</doc>
 </add>
