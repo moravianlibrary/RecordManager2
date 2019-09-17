@@ -1534,3 +1534,8 @@ UPDATE oai_harvest_conf SET url='https://tritius.knihovnatrinec.cz/tritius/oai-p
 
 -- 27. 09. 2019 tomascejpek
 UPDATE oai_harvest_conf SET url='https://pribram.tritius.cz/tritius/oai-provider',set_spec='CPK_1' WHERE import_conf_id=356;
+
+-- 02. 10. 2019 tomascejpek
+INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (209, 'MKCL', 'http://www.knihovna-cl.cz/', 'https://tritius.knihovna-cl.cz/', 'Česká Lípa', 'LI');
+INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id, ziskej_enabled) VALUES (409, 209, 200, 'mkcl', 11, false, true, true, true, 'U', 'other', true);
+INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (409,'https://tritius.knihovna-cl.cz/tritius/oai-provider','CPK_1','marc21',NULL);
