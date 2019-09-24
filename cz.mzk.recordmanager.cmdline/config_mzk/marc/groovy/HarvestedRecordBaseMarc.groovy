@@ -54,7 +54,7 @@ dateSpan = getFields "362a"
 edition = getFirstField "250a"
 contents = getFields "505a:505t"
 
-isbn = getFields "020a"
+isbn = getFields "020a:902a"
 isbn_display_mv = getFields "020a"
 issn = getFields "022a:440x:490x:730x:776x:780x:785x"
 
