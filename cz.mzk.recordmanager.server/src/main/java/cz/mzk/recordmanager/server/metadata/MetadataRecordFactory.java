@@ -150,6 +150,7 @@ public class MetadataRecordFactory {
 		case Constants.PREFIX_KVKL:
 		case Constants.PREFIX_CBVK:
 		case Constants.PREFIX_SVKKL:
+		case Constants.PREFIX_UPOL:
 			return new CosmotronMetadataMarcRecord(marcRec);
 		case Constants.PREFIX_PKJAK:
 			return new PkjakMetadataMarcRecord(marcRec);
