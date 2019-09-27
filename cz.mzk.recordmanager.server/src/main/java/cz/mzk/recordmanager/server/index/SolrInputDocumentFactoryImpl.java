@@ -65,7 +65,6 @@ public class SolrInputDocumentFactoryImpl implements SolrInputDocumentFactory, I
 		try {
 			Map<String, Object> fields = mapper.map(record);
 			String id = IndexingUtils.getSolrId(record);
-			updateHoldings(id, fields);
 			SolrInputDocument document = asSolrDocument(fields);
 			if (!document.containsKey(SolrFieldConstants.ID_FIELD)) {
 				document.addField(SolrFieldConstants.ID_FIELD, id);
@@ -106,18 +105,6 @@ public class SolrInputDocumentFactoryImpl implements SolrInputDocumentFactory, I
 			logger.info("Mapping of dedupRecord with id = {} finished", dedupRecord.getId());
 		}
 		return Collections.singletonList(mergedDocument);
-	}
-
-	@SuppressWarnings("unchecked")
-	protected void updateHoldings(String id, Map<String, Object> fields) {
-		List<String> holdings = (List<String>) fields.get(SolrFieldConstants.HOLDINGS_996_FIELD);
-		if (holdings != null) {
-			List<String> updatedHoldings = new ArrayList<>();
-			for (String oldHolding: holdings) {
-				updatedHoldings.add(oldHolding + "$z" + id);
-				}
-			fields.put(SolrFieldConstants.HOLDINGS_996_FIELD, updatedHoldings);
-		}
 	}
 
 	protected SolrInputDocument asSolrDocument(Map<String, Object> fields) {
