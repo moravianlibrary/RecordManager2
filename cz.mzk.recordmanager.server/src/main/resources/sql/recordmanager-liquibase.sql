@@ -1802,3 +1802,6 @@ UPDATE oai_harvest_conf SET set_spec='KJMALL' WHERE import_conf_id=303;
 
 --changeset tomascejpek:157 context:cpk
 UPDATE oai_harvest_conf SET url='https://tritius.knihovnatrinec.cz/tritius/oai-provider',set_spec='CPK_1' WHERE import_conf_id=383;
+
+--changeset tomascejpek:158 context:cpk
+UPDATE oai_harvest_conf SET url='https://pribram.tritius.cz/tritius/oai-provider',set_spec='CPK_1' WHERE import_conf_id=356;
