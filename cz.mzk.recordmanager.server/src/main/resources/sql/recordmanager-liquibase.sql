@@ -1796,3 +1796,6 @@ INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granul
 
 --changeset tomascejpek:155 context:cpk
 UPDATE oai_harvest_conf SET set_spec='CPK_1' WHERE import_conf_id=334;
+
+--changeset tomascejpek:156 context:cpk
+UPDATE oai_harvest_conf SET set_spec='KJMALL' WHERE import_conf_id=303;
