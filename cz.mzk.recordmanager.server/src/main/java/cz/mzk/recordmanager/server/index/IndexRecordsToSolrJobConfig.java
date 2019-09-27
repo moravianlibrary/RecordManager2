@@ -1,10 +1,6 @@
 package cz.mzk.recordmanager.server.index;
 
-import java.util.Arrays;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.Future;
 
 import javax.sql.DataSource;
@@ -41,6 +37,8 @@ public class IndexRecordsToSolrJobConfig {
 	private static final Date DATE_OVERRIDEN_BY_EXPRESSION = null;
 
 	private static final String STRING_OVERRIDEN_BY_EXPRESSION = null;
+
+	public static final Long LONG_OVERRIDEN_BY_EXPRESSION = null;
 
 	private static final int CHUNK_SIZE = 250;
 
@@ -102,7 +100,8 @@ public class IndexRecordsToSolrJobConfig {
 	public Step updateRecordsStep() throws Exception {
 		return steps.get("updateRecordsJobStep")
 			.<DedupRecord, Future<List<SolrInputDocument>>> chunk(CHUNK_SIZE) //
-			.reader(updatedRecordsReader(DATE_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION)) //
+				.reader(updatedRecordsReader(DATE_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION,
+						LONG_OVERRIDEN_BY_EXPRESSION)) //
 			.processor(asyncUpdatedRecordsProcessor()) //
 			.writer(updatedRecordsWriter(STRING_OVERRIDEN_BY_EXPRESSION)) //
 			.build();
@@ -136,7 +135,8 @@ public class IndexRecordsToSolrJobConfig {
 	@StepScope
 	public JdbcPagingItemReader<DedupRecord> updatedRecordsReader(
 			@Value("#{jobParameters[" + Constants.JOB_PARAM_FROM_DATE + "]}") Date from,
-			@Value("#{jobParameters[" + Constants.JOB_PARAM_UNTIL_DATE + "]}") Date to)
+			@Value("#{jobParameters[" + Constants.JOB_PARAM_UNTIL_DATE + "]}") Date to,
+			@Value("#{jobParameters[" + Constants.JOB_PARAM_RECORD_ID + "]}") Long startDedupId)
 			throws Exception {
 		if (from != null && to == null) {
 			to = new Date();
@@ -145,8 +145,19 @@ public class IndexRecordsToSolrJobConfig {
 		pqpf.setDataSource(dataSource);
 		pqpf.setSelectClause("SELECT dedup_record_id");
 		pqpf.setFromClause("FROM dedup_record_last_update");
+		List<String> whereClause = new ArrayList<>();
+		Map<String, Object> parameterValues = new HashMap<>();
 		if (from != null && to != null) {
-			pqpf.setWhereClause("WHERE last_update BETWEEN :from AND :to");
+			whereClause.add("last_update BETWEEN :from AND :to");
+			parameterValues.put("from", from);
+			parameterValues.put("to", to);
+		}
+		if (startDedupId != null) {
+			whereClause.add("dedup_record_id >= :startDedupId");
+			parameterValues.put("startDedupId", startDedupId);
+		}
+		if (!whereClause.isEmpty()) {
+			pqpf.setWhereClause("WHERE " + String.join(" AND ", whereClause));
 		}
 		pqpf.setSortKey("dedup_record_id");
 		JdbcPagingItemReader<DedupRecord> reader = new JdbcPagingItemReader<>();
@@ -154,12 +165,8 @@ public class IndexRecordsToSolrJobConfig {
 		reader.setPageSize(PAGE_SIZE);
 		reader.setQueryProvider(pqpf.getObject());
 		reader.setDataSource(dataSource);
-		if (from != null && to != null) {
-			Map<String, Object> parameterValues = new HashMap<>();
-			parameterValues.put("from", from);
-			parameterValues.put("to", to);
-			reader.setParameterValues(parameterValues);
-		}
+		if (!parameterValues.isEmpty()) reader.setParameterValues(parameterValues);
+
 		reader.setSaveState(true);
 		reader.afterPropertiesSet();
 		return reader;

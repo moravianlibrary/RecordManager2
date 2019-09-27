@@ -20,7 +20,8 @@ public class IndexRecordsToSolrJobParametersValidator extends
 				param(Constants.JOB_PARAM_FROM_DATE, ParameterType.DATE, false), //
 				param(Constants.JOB_PARAM_UNTIL_DATE, ParameterType.DATE, false), //
 				param(Constants.JOB_PARAM_SOLR_URL, ParameterType.STRING, true), //
-				param(Constants.JOB_PARAM_CONF_ID, ParameterType.LONG, false) //
+				param(Constants.JOB_PARAM_CONF_ID, ParameterType.LONG, false), //
+				param(Constants.JOB_PARAM_RECORD_ID, ParameterType.STRING, false) //
 		);
 	}
 
