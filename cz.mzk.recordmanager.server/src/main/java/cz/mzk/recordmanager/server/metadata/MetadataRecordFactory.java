@@ -197,6 +197,8 @@ public class MetadataRecordFactory {
 			return new KramVkolMetadataMarcRecord(marcRec, hr);
 		case Constants.PREFIX_UZEI:
 			return new UzeiMetadataMarcRecord(marcRec);
+		case Constants.PREFIX_RKKA:
+			return new RkkaMarcMetadataRecord(marcRec);
 		default:
 			return new MetadataMarcRecord(marcRec);
 		}

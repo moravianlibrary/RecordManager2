@@ -61,7 +61,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 	private static final Pattern CD = Pattern.compile("CD", Pattern.CASE_INSENSITIVE);
 	private static final Pattern CD_R = Pattern.compile("CD-R", Pattern.CASE_INSENSITIVE);
 	private static final Pattern ZVUKOVA_DESKA = Pattern.compile("zvukov(?:[aáeé]|ych|ých)\\sdes(?:ka|ky|ek)", Pattern.CASE_INSENSITIVE);
-	private static final Pattern DIGITAL_OR_12CM = Pattern.compile("digital|12\\s*cm", Pattern.CASE_INSENSITIVE);
+	protected static final Pattern DIGITAL_OR_12CM = Pattern.compile("digital|12\\s*cm", Pattern.CASE_INSENSITIVE);
 	private static final Pattern GRAMOFONOVA_DESKA = Pattern.compile("gramofonov(?:[aáeé]|ych|ých)\\sdes(?:ka|ky|ek)", Pattern.CASE_INSENSITIVE);
 	private static final Pattern ANALOG = Pattern.compile("analog", Pattern.CASE_INSENSITIVE);
 	private static final Pattern LP_OR_SP = Pattern.compile("LP|SP");
@@ -90,6 +90,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 
 	private static final char[] ARRAY_AT = {'a', 't'};
 	private static final char[] ARRAY_CDM = {'c', 'd', 'm'};
+	protected static final char[] ARRAY_IJ = {'i', 'j'};
 	private static final char[] ARRAY_IS = {'i', 's'};
 	private static final char[] ARRAY_AB = {'a', 'b'};
 	private static final char[] ARRAY_EF = {'e', 'f'};
@@ -509,7 +510,6 @@ public class MetadataMarcRecord implements MetadataRecord {
 		char f007_01 = (f007 != null) && (f007.length() > 1) ? Character.toLowerCase(f007.charAt(1)) : ' ';
 
 		String f300 = underlayingMarc.getDataFields("300").toString();
-		String f500 = underlayingMarc.getDataFields("500").toString();
 
 		String f300a = underlayingMarc.getField("300", 'a');
 		if (f300a == null) f300a = "";
@@ -518,15 +518,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 		if (f338b == null) f338b = "";
 
 		// AUDIO_CD
-		for (String data : new String[]{f300, f500}) {
-			if (KOMPAKTNI_DISK.matcher(data).find()
-					|| (CD_R.matcher(data).find() && !CD_ROM.matcher(data).find()))
-				return HarvestedRecordFormatEnum.AUDIO_CD;
-		}
-		if (ZVUKOVE_CD.matcher(f300).find()
-				|| (CD.matcher(f300a).find() && !CD_ROM.matcher(f300a).find())
-				|| (ZVUKOVA_DESKA.matcher(f300).find() && DIGITAL_OR_12CM.matcher(f300).find()))
-			return HarvestedRecordFormatEnum.AUDIO_CD;
+		if (isAudioCD()) return HarvestedRecordFormatEnum.AUDIO_CD;
 
 		// AUDIO_LP
 		if (GRAMOFONOVA_DESKA.matcher(f300).find()
@@ -549,6 +541,22 @@ public class MetadataMarcRecord implements MetadataRecord {
 		}
 
 		return null;
+	}
+
+	protected boolean isAudioCD() {
+		String f300 = underlayingMarc.getDataFields("300").toString();
+		String f500 = underlayingMarc.getDataFields("500").toString();
+		String f300a = underlayingMarc.getField("300", 'a');
+		if (f300a == null) f300a = "";
+
+		for (String data : new String[]{f300, f500}) {
+			if (KOMPAKTNI_DISK.matcher(data).find()
+					|| (CD_R.matcher(data).find() && !CD_ROM.matcher(data).find()))
+				return true;
+		}
+		return ZVUKOVE_CD.matcher(f300).find()
+				|| (CD.matcher(f300a).find() && !CD_ROM.matcher(f300a).find())
+				|| (ZVUKOVA_DESKA.matcher(f300).find() && DIGITAL_OR_12CM.matcher(f300).find());
 	}
 
 	private boolean isAudioOther() {
