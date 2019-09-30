@@ -182,7 +182,7 @@ public class DedupRecordsJobConfig {
 			@Qualifier(Constants.JOB_ID_DEDUP + ":prepareTempClusterIdStep") Step prepareTempClusterIdStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":dedupClusterIdsStep") Step dedupClusterIdsStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":prepareTempSkatKeysManuallyMergedStep") Step prepareTempSkatKeysManuallyMergedStep,
-			@Qualifier(Constants.JOB_ID_DEDUP + ":dedupSimpleKeysSkatManuallyMergedStep") Step dedupSimpleKeysSkatManuallyMergedStep,
+			@Qualifier(Constants.JOB_ID_DEDUP + ":dedupSimpleKeysSkatManuallyMergedPartitionedStep") Step dedupSimpleKeysSkatManuallyMergedStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":prepareTempSfxIdTableStep") Step prepareTempSfxIdTableStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":dedupSimpleKeysSfxIdStep") Step dedupSimpleKeysSfxIdStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":prepareTempIsbnTableStep") Step prepareTempIsbnTableStep,
@@ -381,16 +381,31 @@ public class DedupRecordsJobConfig {
 		return steps.get("dedupSimpleKeysSkatManuallyMergedStep")
 				.listener(new StepProgressListener())
 				.<List<Long>, List<HarvestedRecord>> chunk(100)
-				.reader(dedupSimpleKeysSkatManuallyMergedReader())
+				.faultTolerant()
+				.keyGenerator(KeyGeneratorForList.INSTANCE)
+				.retry(LockAcquisitionException.class)
+				.retryLimit(10000)
+				.reader(dedupSimpleKeysSkatManuallyMergedReader(INTEGER_OVERRIDEN_BY_EXPRESSION))
 				.processor(dedupSimpleKeysStepProsessor())
 				.writer(dedupSimpleKeysStepWriter())
 				.build();
 	}
-	
+
+	@Bean(name = Constants.JOB_ID_DEDUP + ":dedupSimpleKeysSkatManuallyMergedPartitionedStep")
+	public Step dedupSimpleKeysSkatManuallyMergedPartitionedStep() throws Exception {
+		return steps.get("dedupSimpleKeysSkatManuallyMergedPartitionedStep")
+				.partitioner("dedupSimpleKeysSkatManuallyMergedPartitionedStepSlave", this.partioner()) //
+				.taskExecutor(this.taskExecutor)
+				.gridSize(this.partitionThreads)
+				.step(dedupSimpleKeysSkatManuallyMergedStep())
+				.build();
+	}
+
 	@Bean(name = "dedupSimpleKeysSkatManuallyMergedStep:reader")
 	@StepScope
-	public ItemReader<List<Long>> dedupSimpleKeysSkatManuallyMergedReader() throws Exception {
-		return dedupSimpleKeysReader(TMP_TABLE_SKAT_KEYS_MANUALLY_MERGED, INTEGER_OVERRIDEN_BY_EXPRESSION);
+	public ItemReader<List<Long>> dedupSimpleKeysSkatManuallyMergedReader(
+			@Value("#{stepExecutionContext[modulo]}") Integer modulo) throws Exception {
+		return dedupSimpleKeysReader(TMP_TABLE_SKAT_KEYS_MANUALLY_MERGED, modulo);
 	}
 
 	/**
