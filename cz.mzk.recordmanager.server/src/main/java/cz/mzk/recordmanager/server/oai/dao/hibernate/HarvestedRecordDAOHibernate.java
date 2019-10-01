@@ -226,7 +226,6 @@ public class HarvestedRecordDAOHibernate extends
 		hr.setBlAuthor(null);
 		hr.setBlPublisher(null);
 		hr.setBlSeries(null);
-		hr.setBlTopicKey(null);
 
 		List<Title> titles =  hr.getTitles();
 		hr.setTitles(new ArrayList<>());
@@ -316,6 +315,12 @@ public class HarvestedRecordDAOHibernate extends
 		hr.setBlTitlePluses(new ArrayList<>());
 		for (BLTitlePlus blTitlePlus : blTitlePluses) {
 			session.delete(blTitlePlus);
+		}
+
+		List<BLTopicKey> blTopicKeys = hr.getBlTopicKey();
+		hr.setBlTopicKey(new ArrayList<>());
+		for (BLTopicKey blTopicKey : blTopicKeys) {
+			session.delete(blTopicKey);
 		}
 
 		hr.setLanguages(new ArrayList<>());

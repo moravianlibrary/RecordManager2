@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import cz.mzk.recordmanager.server.model.BLTopicKey;
 import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordDAO;
 import org.marc4j.marc.DataField;
 
@@ -126,6 +127,15 @@ public class PatentsMetadataMarcRecord extends MetadataMarcRecord{
 		}
 
 		return null;
+	}
+
+	@Override
+	public List<BLTopicKey> getBiblioLinkerTopicKey() {
+		List<BLTopicKey> result = new ArrayList<>();
+		for (String value : underlayingMarc.getFields("072", 'a')) {
+			result.add(BLTopicKey.create(value));
+		}
+		return result;
 	}
 
 }

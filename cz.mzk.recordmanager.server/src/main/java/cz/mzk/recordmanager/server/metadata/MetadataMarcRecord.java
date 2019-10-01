@@ -1463,19 +1463,23 @@ public class MetadataMarcRecord implements MetadataRecord {
 
 	@Override
 	public List<BLTopicKey> getBiblioLinkerTopicKey() {
-		List<String> results = new ArrayList<>();
+		List<BLTopicKey> results = new ArrayList<>();
+		Set<String> topicKey = new TreeSet<>();
 		if (isMap()) {
 			for (DataField df : underlayingMarc.getDataFields("650")) {
 				if (df.getIndicator1() != '2' && df.getSubfield('7') != null) {
 					if (STOP_WORDS_650.contains(df.getSubfield('7').getData())) continue;
-					if (!results.contains(df.getSubfield('7').getData())) results.add(df.getSubfield('7').getData());
+					if (!topicKey.contains(df.getSubfield('7').getData())) topicKey.add(df.getSubfield('7').getData());
 				}
 			}
 		}
 		for (String topicValue : getFields("6517")) {
-			if (!results.contains(topicValue)) results.add(topicValue);
+			if (!topicKey.contains(topicValue)) topicKey.add(topicValue);
 		}
-		return results.stream().limit(3).map(BLTopicKey::create).collect(Collectors.toList());
+		results.addAll(topicKey.stream().limit(3).map(BLTopicKey::create).collect(Collectors.toList()));
+		String conspectus = getFirstField("072a");
+		if (conspectus != null) results.add(BLTopicKey.create(conspectus));
+		return results;
 	}
 
 	@Override
