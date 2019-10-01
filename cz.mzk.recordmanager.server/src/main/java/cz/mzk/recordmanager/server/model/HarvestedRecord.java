@@ -189,14 +189,6 @@ public class HarvestedRecord extends AbstractDomainObject {
 
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name = "harvested_record_id", referencedColumnName = "id", nullable = false)
-	private List<BLEntityAuthKey> blEntityAuthKey = new ArrayList<>();
-
-	@OneToMany(cascade = CascadeType.ALL)
-	@JoinColumn(name = "harvested_record_id", referencedColumnName = "id", nullable = false)
-	private List<BLTitlePlus> blTitlePluses = new ArrayList<>();
-
-	@OneToMany(cascade = CascadeType.ALL)
-	@JoinColumn(name = "harvested_record_id", referencedColumnName = "id", nullable = false)
 	private List<BLTopicKey> blTopicKey = new ArrayList<>();
 
 	@OneToMany(cascade = CascadeType.ALL)
@@ -259,9 +251,6 @@ public class HarvestedRecord extends AbstractDomainObject {
 	@Column(name="biblio_linker_similar")
 	private boolean biblioLinkerSimilar = false;
 
-	@Column(name = "bl_conspectus")
-	private String blConspectus;
-
 	@Column(name="weight")
 	private Long weight;
 	
@@ -297,9 +286,6 @@ public class HarvestedRecord extends AbstractDomainObject {
 
 	@Column(name = "bl_author")
 	private String blAuthor;
-
-	@Column(name = "bl_author_auth_key")
-	private String blAuthorAuthKey;
 
 	@Column(name = "bl_publisher")
 	private String blPublisher;
@@ -729,14 +715,6 @@ public class HarvestedRecord extends AbstractDomainObject {
 		this.biblioLinkerSimiliarUrls = biblioLinkerSimiliarUrls;
 	}
 
-	public String getBlConspectus() {
-		return blConspectus;
-	}
-
-	public void setBlConspectus(String blConspectus) {
-		this.blConspectus = blConspectus;
-	}
-
 	public boolean isNextBiblioLinkerFlag() {
 		return nextBiblioLinkerFlag;
 	}
@@ -759,14 +737,6 @@ public class HarvestedRecord extends AbstractDomainObject {
 
 	public void setBlAuthor(String blAuthor) {
 		this.blAuthor = blAuthor;
-	}
-
-	public String getBlAuthorAuthKey() {
-		return blAuthorAuthKey;
-	}
-
-	public void setBlAuthorAuthKey(String blAuthorAuthKey) {
-		this.blAuthorAuthKey = blAuthorAuthKey;
 	}
 
 	public String getBlPublisher() {
@@ -799,22 +769,6 @@ public class HarvestedRecord extends AbstractDomainObject {
 
 	public void setBlEntity(List<BLEntity> blEntity) {
 		this.blEntity = blEntity;
-	}
-
-	public List<BLEntityAuthKey> getBlEntityAuthKey() {
-		return blEntityAuthKey;
-	}
-
-	public void setBlEntityAuthKey(List<BLEntityAuthKey> blEntityAuthKey) {
-		this.blEntityAuthKey = blEntityAuthKey;
-	}
-
-	public List<BLTitlePlus> getBlTitlePluses() {
-		return blTitlePluses;
-	}
-
-	public void setBlTitlePluses(List<BLTitlePlus> blTitlePluses) {
-		this.blTitlePluses = blTitlePluses;
 	}
 
 	public List<BLTopicKey> getBlTopicKey() {

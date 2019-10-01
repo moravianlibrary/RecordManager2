@@ -1238,7 +1238,6 @@ CREATE TABLE biblio_linker_similar (
   type                 VARCHAR(20),
   FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE
 );
-ALTER TABLE harvested_record ADD COLUMN bl_conspectus VARCHAR(255);
 ALTER TABLE harvested_record ADD COLUMN next_biblio_linker_flag BOOLEAN DEFAULT FALSE;
 
 -- 06. 05. 2019 tomascejpek
@@ -1263,20 +1262,6 @@ CREATE TABLE bl_entity (
   FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE
 );
 CREATE INDEX bl_entity_harvested_record_idx ON bl_entity(harvested_record_id);
-CREATE TABLE bl_entity_auth_key (
-  id                   DECIMAL(10) PRIMARY KEY,
-  harvested_record_id  DECIMAL(10),
-  entity_auth_key      VARCHAR(50),
-  FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE
-);
-CREATE INDEX bl_entity_auth_key_harvested_record_idx ON bl_entity_auth_key(harvested_record_id);
-CREATE TABLE bl_title_plus (
-  id                   DECIMAL(10) PRIMARY KEY,
-  harvested_record_id  DECIMAL(10),
-  title_plus           VARCHAR(255),
-  FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE
-);
-CREATE INDEX bl_title_plus_harvested_record_idx ON bl_title_plus(harvested_record_id);
 CREATE TABLE bl_topic_key (
   id                   DECIMAL(10) PRIMARY KEY,
   harvested_record_id  DECIMAL(10),
@@ -1286,8 +1271,6 @@ CREATE TABLE bl_topic_key (
 CREATE INDEX bl_topic_key_harvested_record_idx ON bl_topic_key(harvested_record_id);
 ALTER TABLE harvested_record ADD COLUMN bl_author VARCHAR(200);
 CREATE INDEX harvested_record_bl_author_idx ON harvested_record(bl_author);
-ALTER TABLE harvested_record ADD COLUMN bl_author_auth_key VARCHAR(200);
-CREATE INDEX harvested_record_bl_author_auth_key_idx ON harvested_record(bl_author_auth_key);
 ALTER TABLE harvested_record ADD COLUMN bl_publisher VARCHAR(200);
 CREATE INDEX harvested_record_bl_publisher_idx ON harvested_record(bl_publisher);
 ALTER TABLE harvested_record ADD COLUMN bl_series VARCHAR(200);

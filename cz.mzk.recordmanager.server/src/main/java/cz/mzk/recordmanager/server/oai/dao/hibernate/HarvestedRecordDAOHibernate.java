@@ -222,7 +222,6 @@ public class HarvestedRecordDAOHibernate extends
 		hr.setIssnSeries(null);
 		hr.setIssnSeriesOrder(null);
 		hr.setWeight(null);
-		hr.setBlAuthorAuthKey(null);
 		hr.setBlAuthor(null);
 		hr.setBlPublisher(null);
 		hr.setBlSeries(null);
@@ -303,18 +302,6 @@ public class HarvestedRecordDAOHibernate extends
 		hr.setBlEntity(new ArrayList<>());
 		for (BLEntity blEntity : blEntities) {
 			session.delete(blEntity);
-		}
-
-		List<BLEntityAuthKey> blEntityAuthKeys = hr.getBlEntityAuthKey();
-		hr.setBlEntityAuthKey(new ArrayList<>());
-		for (BLEntityAuthKey blEntityAuthKey : blEntityAuthKeys) {
-			session.delete(blEntityAuthKey);
-		}
-
-		List<BLTitlePlus> blTitlePluses = hr.getBlTitlePluses();
-		hr.setBlTitlePluses(new ArrayList<>());
-		for (BLTitlePlus blTitlePlus : blTitlePluses) {
-			session.delete(blTitlePlus);
 		}
 
 		List<BLTopicKey> blTopicKeys = hr.getBlTopicKey();

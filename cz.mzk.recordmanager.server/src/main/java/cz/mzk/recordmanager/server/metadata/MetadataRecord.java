@@ -401,10 +401,6 @@ public interface MetadataRecord {
 		return Collections.emptyList();
 	}
 
-	default String getConspectusForBiblioLinker() {
-		return null;
-	}
-
 	default List<BLTitle> getBLTitle(){
 		return Collections.emptyList();
 	}
@@ -414,10 +410,6 @@ public interface MetadataRecord {
 	}
 
 	default String getBiblioLinkerAuthor(){
-		return null;
-	}
-
-	default String getBiblioLinkerAuthorAuth(){
 		return null;
 	}
 
@@ -437,11 +429,4 @@ public interface MetadataRecord {
 		return Collections.emptyList();
 	}
 
-	default List<BLEntityAuthKey> getBiblioLinkerEntityAuthKey() {
-		return Collections.emptyList();
-	}
-
-	default List<BLTitlePlus> getBiblioLinkerTitlePlus() {
-		return Collections.emptyList();
-	}
 }

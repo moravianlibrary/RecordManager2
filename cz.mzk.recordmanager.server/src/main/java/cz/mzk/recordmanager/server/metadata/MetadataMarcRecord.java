@@ -1287,11 +1287,6 @@ public class MetadataMarcRecord implements MetadataRecord {
 		return results;
 	}
 
-	@Override
-	public String getConspectusForBiblioLinker() {
-		return getFirstField("072a");
-	}
-
 	/**
 	 * get {@link BLTitle} of record
 	 *
@@ -1419,11 +1414,6 @@ public class MetadataMarcRecord implements MetadataRecord {
 	}
 
 	@Override
-	public String getBiblioLinkerAuthorAuth() {
-		return getFirstField("1007:1107:1117:7007:7107:7117");
-	}
-
-	@Override
 	public String getBiblioLinkerPublisher() {
 		return getFirstField("264b:260b:260f:928a");
 	}
@@ -1536,45 +1526,4 @@ public class MetadataMarcRecord implements MetadataRecord {
 		return results;
 	}
 
-	@Override
-	public List<BLEntityAuthKey> getBiblioLinkerEntityAuthKey() {
-		Set<String> results = new HashSet<>();
-		results.addAll(getFields("1007:1107:1117").stream().limit(3).collect(Collectors.toList()));
-		if (results.isEmpty()) {
-			String value = getFirstField("7007:7107:7117:6007:6107:6117");
-			if (value != null) results.add(value);
-		}
-		Set<String> results7xx = new HashSet<>();
-		for (String tag : new String[]{"700", "710", "711"}) {
-			for (DataField df : underlayingMarc.getDataFields(tag)) {
-				if (results7xx.size() >= 3) break;
-				if (df.getSubfield('7') != null && df.getSubfield('4') != null
-						&& ENTITY_RELATIONSHIP.contains(df.getSubfield('4').getData())) {
-					results7xx.add(df.getSubfield('7').getData());
-				}
-			}
-		}
-		results.addAll(results7xx);
-		results.addAll(getFields("6007:6107:6117").stream().limit(3).collect(Collectors.toSet()));
-		return results.stream().filter(s -> !s.contains("kn20081114008")).limit(3)
-				.map(BLEntityAuthKey::create).collect(Collectors.toList());
-	}
-
-	private static final Pattern TITLE_PLUS_REMOVE = Pattern.compile("\\([^)]*\\)");
-
-	@Override
-	public List<BLTitlePlus> getBiblioLinkerTitlePlus() {
-		Set<String> results = new HashSet<>();
-		for (DataField df : underlayingMarc.getDataFields("630")) {
-			String temp = "";
-			if (df.getSubfield('a') != null) {
-				temp = CleaningUtils.replaceFirst(df.getSubfield('a').getData(), TITLE_PLUS_REMOVE, "");
-			}
-			temp += df.getSubfield('n') != null ? df.getSubfield('n').getData() : "";
-			temp += df.getSubfield('p') != null ? df.getSubfield('p').getData() : "";
-			if (!temp.isEmpty()) results.add(temp);
-		}
-		results.addAll(getFields("600tnp:610tp"));
-		return results.stream().limit(3).map(BLTitlePlus::create).collect(Collectors.toList());
-	}
 }
