@@ -1,10 +1,17 @@
 package cz.mzk.recordmanager.server.bibliolinker;
 
+import cz.mzk.recordmanager.server.marc.MarcXmlParser;
+import cz.mzk.recordmanager.server.metadata.MetadataRecord;
+import cz.mzk.recordmanager.server.metadata.MetadataRecordFactory;
 import cz.mzk.recordmanager.server.model.BiblioLinkerSimilarType;
 import cz.mzk.recordmanager.server.model.BiblioLinkerSimiliar;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
+import cz.mzk.recordmanager.server.model.HarvestedRecordFormat.HarvestedRecordFormatEnum;
 import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordDAO;
 import cz.mzk.recordmanager.server.util.ProgressLogger;
+import cz.mzk.recordmanager.server.util.SolrUtils;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.item.ItemProcessor;
@@ -12,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Generic implementation of of ItemProcessor
@@ -22,6 +30,12 @@ public class BiblioLinkerSimilarSimpleStepProcessor implements
 
 	@Autowired
 	private HarvestedRecordDAO harvestedRecordDao;
+
+	@Autowired
+	private MetadataRecordFactory mrf;
+
+	@Autowired
+	private MarcXmlParser marcXmlParser;
 
 	private static Logger logger = LoggerFactory.getLogger(BiblioLinkerSimilarSimpleStepProcessor.class);
 
@@ -84,8 +98,36 @@ public class BiblioLinkerSimilarSimpleStepProcessor implements
 		return null;
 	}
 
-	private static String getUrlId(final HarvestedRecord hr) {
-		return hr.getHarvestedFrom().getIdPrefix() + '.' + hr.getUniqueId().getRecordId();
+	private String getUrlId(final HarvestedRecord hr) {
+		JSONObject sampleObject = new JSONObject();
+		MetadataRecord mr = mrf.getMetadataRecord(hr);
+		List<String> isn;
+		sampleObject.put("id", hr.getHarvestedFrom().getIdPrefix() + '.' + hr.getUniqueId().getRecordId());
+		List<HarvestedRecordFormatEnum> formats =mr.getDetectedFormatList();
+		if (!formats.isEmpty()) {
+			List<String> hierarchicFormats = SolrUtils.createRecordTypeHierarchicFacet(formats.get(0));
+			sampleObject.put("format", hierarchicFormats.get(hierarchicFormats.size()-1));
+		}
+		sampleObject.put("author", mr.getAuthorString());
+		sampleObject.put("title", mr.getTitle().isEmpty() ? "" : mr.getTitle().get(0).getTitleStr());
+		if (!mr.getCNBs().isEmpty()) {
+			sampleObject.put("cnb", mr.getCNBs().get(0).getCnb());
+		}
+		isn = mr.getISBNs().stream().map(i -> i.getIsbn().toString()).collect(Collectors.toList());
+		if (!isn.isEmpty()) sampleObject.put("isbn", createJSONArray(isn));
+		isn = mr.getISMNs().stream().map(i -> i.getIsmn().toString()).collect(Collectors.toList());
+		if (!isn.isEmpty()) sampleObject.put("ismn", createJSONArray(isn));
+		isn = mr.getISSNs().stream().map(i -> i.getIssn()).collect(Collectors.toList());
+		if (!isn.isEmpty()) sampleObject.put("issn", createJSONArray(isn));
+		isn = mr.getEANs().stream().map(i -> i.getEan().toString()).collect(Collectors.toList());
+		if (!isn.isEmpty()) sampleObject.put("ean", createJSONArray(isn));
+		return sampleObject.toString();
+	}
+
+	private static JSONArray createJSONArray(List<String> isn) {
+		JSONArray result = new JSONArray();
+		isn.forEach(result::put);
+		return result;
 	}
 
 	private static List<HarvestedRecord> getAllRecords(final Map<Long, Collection<HarvestedRecord>> map) {
