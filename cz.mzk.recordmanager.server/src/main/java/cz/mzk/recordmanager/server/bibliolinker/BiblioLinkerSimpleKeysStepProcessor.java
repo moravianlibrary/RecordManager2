@@ -79,14 +79,17 @@ public class BiblioLinkerSimpleKeysStepProcessor implements
 		}
 
 		// choose one record for next job (similarity)
+		HarvestedRecord bestRecord = hrs.iterator().next();
 		for (HarvestedRecord hr : hrs) {
-			if (hr.getDeleted() == null) {
-				hr.setBiblioLinkerSimilar(true);
-				update.add(hr);
-				break;
+			if (hr.getDeleted() == null && hr.getWeight() != null) {
+				if (bestRecord.getWeight() == null || bestRecord.getWeight() < hr.getWeight()) bestRecord = hr;
 			}
 		}
+		bestRecord.setBiblioLinkerSimilar(true);
+		update.add(bestRecord);
 
 		return new ArrayList<>(update);
 	}
+
+
 }
