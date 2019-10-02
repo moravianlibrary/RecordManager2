@@ -52,14 +52,6 @@ public class BiblioLinkerJobConfig {
 	@Autowired
 	private DataSource dataSource;
 
-	private static final String TMP_BL_TABLE_TITLE_AUTH = "tmp_bl_title_auth";
-
-	private static final String TMP_BL_TABLE_TITLE_AUTH_AUDIO = "tmp_bl_title_auth_audio";
-
-	private static final String TMP_BL_TABLE_TITLE_AUTH_VIDEO = "tmp_bl_title_auth_video";
-
-	private static final String TMP_BL_TABLE_TITLE_AUTH_MUSICAL_SCORE = "tmp_bl_title_auth_ms";
-
 	private static final String TMP_BL_TABLE_TITLE_AUTHOR = "tmp_bl_title_author";
 
 	private static final String TMP_BL_TABLE_TITLE_AUTHOR_AUDIO = "tmp_bl_title_author_audio";
@@ -70,12 +62,6 @@ public class BiblioLinkerJobConfig {
 
 	private static final String TMP_BL_TABLE_TITLE_LANG_PERIODICAL = "tmp_bl_title_lang_periodical";
 
-	private static final String TMP_BL_TABLE_TITLE_TOPIC = "tmp_bl_title_topic";
-
-	private static final String TMP_BL_TABLE_TITLE_TOPIC_AUDIO = "tmp_bl_title_topic_audio";
-
-	private static final String TMP_BL_TABLE_TITLE_TOPIC_VIDEO = "tmp_bl_title_topic_video";
-
 	private static final String TMP_BL_TABLE_REST_DEDUP = "tmp_bl_rest_dedup";
 
 	private static final String TMP_BL_TABLE_ORPHANED = "tmp_bl_orphaned";
@@ -85,8 +71,6 @@ public class BiblioLinkerJobConfig {
 	private static final String TMP_BLS_TABLE_AUTHOR_COMMON_TITLE = "tmp_bls_author_common_title";
 
 	private static final String TMP_BLS_TABLE_AUTH_KEY_TITLE_LANG = "tmp_bls_auth_key_title_lang";
-
-	private static final String TMP_BLS_TABLE_AUTHOR_TITLE_LANG = "tmp_bls_author_title_lang";
 
 	private static final String TMP_BLS_TABLE_AUTH_KEY_TITLE = "tmp_bls_auth_key_title";
 
@@ -124,14 +108,6 @@ public class BiblioLinkerJobConfig {
 
 	private String initBiblioLinkerSimilarSql = ResourceUtils.asString("job/biblioLinkerJob/initBiblioLinkerSimilar.sql");
 
-	private String prepareBLTempTitleAuthTableSql = ResourceUtils.asString("job/biblioLinkerJob/prepareBLTempTitleAuth.sql");
-
-	private String prepareBLTempTitleAuthAudioTableSql = ResourceUtils.asString("job/biblioLinkerJob/prepareBLTempTitleAuthAudio.sql");
-
-	private String prepareBLTempTitleAuthVideoTableSql = ResourceUtils.asString("job/biblioLinkerJob/prepareBLTempTitleAuthVideo.sql");
-
-	private String prepareBLTempTitleAuthMusicalScoreTableSql = ResourceUtils.asString("job/biblioLinkerJob/prepareBLTempTitleAuthMusicalScore.sql");
-
 	private String prepareBLTempTitleAuthorTableSql = ResourceUtils.asString("job/biblioLinkerJob/prepareBLTempTitleAuthor.sql");
 
 	private String prepareBLTempTitleAuthorAudioTableSql = ResourceUtils.asString("job/biblioLinkerJob/prepareBLTempTitleAuthorAudio.sql");
@@ -141,12 +117,6 @@ public class BiblioLinkerJobConfig {
 	private String prepareBLTempTitleAuthorMusicalScoreTableSql = ResourceUtils.asString("job/biblioLinkerJob/prepareBLTempTitleAuthorMusicalScore.sql");
 
 	private String prepareBLTempTitleLangPeriodicalTableSql = ResourceUtils.asString("job/biblioLinkerJob/prepareBLTempTitleLangPeriodical.sql");
-
-	private String prepareBLTempTitleTopicTableSql = ResourceUtils.asString("job/biblioLinkerJob/prepareBLTempTitleTopic.sql");
-
-	private String prepareBLTempTitleTopicAudioTableSql = ResourceUtils.asString("job/biblioLinkerJob/prepareBLTempTitleTopicAudio.sql");
-
-	private String prepareBLTempTitleTopicVideoTableSql = ResourceUtils.asString("job/biblioLinkerJob/prepareBLTempTitleTopicVideo.sql");
 
 	private String prepareBLTempRestDedupTableSql = ResourceUtils.asString("job/biblioLinkerJob/prepareBLTempRestDedup.sql");
 
@@ -219,14 +189,6 @@ public class BiblioLinkerJobConfig {
 	@Bean
 	public Job biblioLinkerJob(
 			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER + ":initBLStep") Step initBLStep,
-			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER + ":prepareBLTempTitleAuthStep") Step prepareBLTempTitleAuthStep,
-			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER + ":blTempTitleAuthPartitionedStep") Step blTempTitleAuthStep,
-			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER + ":prepareBLTempTitleAuthAudioStep") Step prepareBLTempTitleAuthAudioStep,
-			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER + ":blTempTitleAuthAudioPartitionedStep") Step blTempTitleAuthAudioStep,
-			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER + ":prepareBLTempTitleAuthVideoStep") Step prepareBLTempTitleAuthVideoStep,
-			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER + ":blTempTitleAuthVideoPartitionedStep") Step blTempTitleAuthVideoStep,
-			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER + ":prepareBLTempTitleAuthMusicalScoreStep") Step prepareBLTempTitleAuthMusicalScoreStep,
-			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER + ":blTempTitleAuthMusicalScorePartitionedStep") Step blTempTitleAuthMusicalScoreStep,
 			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER + ":prepareBLTempTitleAuthorStep") Step prepareBLTempTitleAuthorStep,
 			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER + ":blTempTitleAuthorPartitionedStep") Step blTempTitleAuthorStep,
 			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER + ":prepareBLTempTitleAuthorAudioStep") Step prepareBLTempTitleAuthorAudioStep,
@@ -237,12 +199,6 @@ public class BiblioLinkerJobConfig {
 			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER + ":blTempTitleAuthorMusicalScorePartitionedStep") Step blTempTitleAuthorMusicalScoreStep,
 			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER + ":prepareBLTempTitleLangPeriodicalStep") Step prepareBLTempTitleLangPeriodicalStep,
 			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER + ":blTempTitleLangPeriodicalPartitionedStep") Step blTempTitleLangPeriodicalStep,
-			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER + ":prepareBLTempTitleTopicStep") Step prepareBLTempTitleTopicStep,
-			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER + ":blTempTitleTopicPartitionedStep") Step blTempTitleTopicStep,
-			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER + ":prepareBLTempTitleTopicAudioStep") Step prepareBLTempTitleTopicAudioStep,
-			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER + ":blTempTitleTopicAudioPartitionedStep") Step blTempTitleTopicAudioStep,
-			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER + ":prepareBLTempTitleTopicVideoStep") Step prepareBLTempTitleTopicVideoStep,
-			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER + ":blTempTitleTopicVideoPartitionedStep") Step blTempTitleTopicVideoStep,
 			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER + ":prepareBLTempRestDedupStep") Step prepareBLTempRestDedupStep,
 			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER + ":blTempRestDedupPartitionedStep") Step blTempRestDedupStep,
 			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER + ":prepareBLTempOrphanedStep") Step prepareBLTempOrphanedStep,
@@ -283,206 +239,6 @@ public class BiblioLinkerJobConfig {
 				.tasklet(initBLTasklet())
 				.listener(new StepProgressListener())
 				.build();
-	}
-
-	/**
-	 * merge records with same title and authority
-	 */
-	@Bean(name = Constants.JOB_ID_BIBLIO_LINKER + ":prepareBLTempTitleAuthTasklet")
-	@StepScope
-	public Tasklet prepareBLTempTitleAuthTasklet() {
-		return new SqlCommandTasklet(prepareBLTempTitleAuthTableSql);
-	}
-
-	@Bean(name = Constants.JOB_ID_BIBLIO_LINKER + ":prepareBLTempTitleAuthStep")
-	public Step prepareBLTempTitleAuthStep() {
-		return steps.get("prepareBLTempTitleAuthStep")
-				.tasklet(prepareBLTempTitleAuthTasklet())
-				.listener(new StepProgressListener())
-				.build();
-	}
-
-	@Bean(name = Constants.JOB_ID_BIBLIO_LINKER + ":blTempTitleAuthStep")
-	public Step blTempTitleAuthStep() throws Exception {
-		return steps.get("blTempTitleAuthStep")
-				.listener(new StepProgressListener())
-				.<List<Long>, List<HarvestedRecord>>chunk(100)
-				.faultTolerant()
-				.keyGenerator(KeyGeneratorForList.INSTANCE)
-				.retry(LockAcquisitionException.class)
-				.retryLimit(10000)
-				.reader(blTempTitleAuthStepReader(INTEGER_OVERRIDEN_BY_EXPRESSION))
-				.processor(blSimpleKeysStepProsessor())
-				.writer(blSimpleKeysStepWriter())
-				.build();
-	}
-
-	@Bean(name = Constants.JOB_ID_BIBLIO_LINKER + ":blTempTitleAuthPartitionedStep")
-	public Step blTempTitleAuthPartitionedStep() throws Exception {
-		return steps.get("blTempTitleAuthPartitionedStep")
-				.partitioner("blTempTitleAuthPartitionedStepSlave", this.partioner()) //
-				.taskExecutor(this.taskExecutor)
-				.gridSize(this.partitionThreads)
-				.step(blTempTitleAuthStep())
-				.build();
-	}
-
-	@Bean(name = "blTitleAuth:reader")
-	@StepScope
-	public ItemReader<List<Long>> blTempTitleAuthStepReader(
-			@Value("#{stepExecutionContext[modulo]}") Integer modulo
-	) throws Exception {
-		return blSimpleKeysReader(TMP_BL_TABLE_TITLE_AUTH, "dedup_record_id", modulo);
-	}
-
-	/**
-	 * merge audio records with same title and authority
-	 */
-	@Bean(name = Constants.JOB_ID_BIBLIO_LINKER + ":prepareBLTempTitleAuthAudioTasklet")
-	@StepScope
-	public Tasklet prepareBLTempTitleAuthAudioTasklet() {
-		return new SqlCommandTasklet(prepareBLTempTitleAuthAudioTableSql);
-	}
-
-	@Bean(name = Constants.JOB_ID_BIBLIO_LINKER + ":prepareBLTempTitleAuthAudioStep")
-	public Step prepareBLTempTitleAuthAudioStep() {
-		return steps.get("prepareBLTempTitleAuthAudioStep")
-				.tasklet(prepareBLTempTitleAuthAudioTasklet())
-				.listener(new StepProgressListener())
-				.build();
-	}
-
-	@Bean(name = Constants.JOB_ID_BIBLIO_LINKER + ":blTempTitleAuthAudioStep")
-	public Step blTempTitleAuthAudioStep() throws Exception {
-		return steps.get("blTempTitleAuthAudioStep")
-				.listener(new StepProgressListener())
-				.<List<Long>, List<HarvestedRecord>>chunk(10)
-				.faultTolerant()
-				.keyGenerator(KeyGeneratorForList.INSTANCE)
-				.retry(LockAcquisitionException.class)
-				.retryLimit(10000)
-				.reader(blTempTitleAuthAudioStepReader(INTEGER_OVERRIDEN_BY_EXPRESSION))
-				.processor(blSimpleKeysStepProsessor())
-				.writer(blSimpleKeysStepWriter())
-				.build();
-	}
-
-	@Bean(name = Constants.JOB_ID_BIBLIO_LINKER + ":blTempTitleAuthAudioPartitionedStep")
-	public Step blTempTitleAuthAudioPartitionedStep() throws Exception {
-		return steps.get("blTempTitleAuthAudioPartitionedStep")
-				.partitioner("blTempTitleAuthAudioPartitionedStepSlave", this.partioner()) //
-				.taskExecutor(this.taskExecutor)
-				.gridSize(this.partitionThreads)
-				.step(blTempTitleAuthAudioStep())
-				.build();
-	}
-
-	@Bean(name = "blTitleAuthAudio:reader")
-	@StepScope
-	public ItemReader<List<Long>> blTempTitleAuthAudioStepReader(
-			@Value("#{stepExecutionContext[modulo]}") Integer modulo
-	) throws Exception {
-		return blSimpleKeysReader(TMP_BL_TABLE_TITLE_AUTH_AUDIO, "dedup_record_id", modulo);
-	}
-
-	/**
-	 * merge video records with same title and authority
-	 */
-	@Bean(name = Constants.JOB_ID_BIBLIO_LINKER + ":prepareBLTempTitleAuthVideoTasklet")
-	@StepScope
-	public Tasklet prepareBLTempTitleAuthVideoTasklet() {
-		return new SqlCommandTasklet(prepareBLTempTitleAuthVideoTableSql);
-	}
-
-	@Bean(name = Constants.JOB_ID_BIBLIO_LINKER + ":prepareBLTempTitleAuthVideoStep")
-	public Step prepareBLTempTitleAuthVideoStep() {
-		return steps.get("prepareBLTempTitleAuthVideoStep")
-				.tasklet(prepareBLTempTitleAuthVideoTasklet())
-				.listener(new StepProgressListener())
-				.build();
-	}
-
-	@Bean(name = Constants.JOB_ID_BIBLIO_LINKER + ":blTempTitleAuthVideoStep")
-	public Step blTempTitleAuthVideoStep() throws Exception {
-		return steps.get("blTempTitleAuthVideoStep")
-				.listener(new StepProgressListener())
-				.<List<Long>, List<HarvestedRecord>>chunk(10)
-				.faultTolerant()
-				.keyGenerator(KeyGeneratorForList.INSTANCE)
-				.retry(LockAcquisitionException.class)
-				.retryLimit(10000)
-				.reader(blTempTitleAuthVideoStepReader(INTEGER_OVERRIDEN_BY_EXPRESSION))
-				.processor(blSimpleKeysStepProsessor())
-				.writer(blSimpleKeysStepWriter())
-				.build();
-	}
-
-	@Bean(name = Constants.JOB_ID_BIBLIO_LINKER + ":blTempTitleAuthVideoPartitionedStep")
-	public Step blTempTitleAuthVideoPartitionedStep() throws Exception {
-		return steps.get("blTempTitleAuthVideoPartitionedStep")
-				.partitioner("blTempTitleAuthVideoPartitionedStepSlave", this.partioner()) //
-				.taskExecutor(this.taskExecutor)
-				.gridSize(this.partitionThreads)
-				.step(blTempTitleAuthVideoStep())
-				.build();
-	}
-
-	@Bean(name = "blTitleAuthVideo:reader")
-	@StepScope
-	public ItemReader<List<Long>> blTempTitleAuthVideoStepReader(
-			@Value("#{stepExecutionContext[modulo]}") Integer modulo
-	) throws Exception {
-		return blSimpleKeysReader(TMP_BL_TABLE_TITLE_AUTH_VIDEO, "dedup_record_id", modulo);
-	}
-
-	/**
-	 * merge MusicalScore records with same title and authority
-	 */
-	@Bean(name = Constants.JOB_ID_BIBLIO_LINKER + ":prepareBLTempTitleAuthMusicalScoreTasklet")
-	@StepScope
-	public Tasklet prepareBLTempTitleAuthMusicalScoreTasklet() {
-		return new SqlCommandTasklet(prepareBLTempTitleAuthMusicalScoreTableSql);
-	}
-
-	@Bean(name = Constants.JOB_ID_BIBLIO_LINKER + ":prepareBLTempTitleAuthMusicalScoreStep")
-	public Step prepareBLTempTitleAuthMusicalScoreStep() {
-		return steps.get("prepareBLTempTitleAuthMusicalScoreStep")
-				.tasklet(prepareBLTempTitleAuthMusicalScoreTasklet())
-				.listener(new StepProgressListener())
-				.build();
-	}
-
-	@Bean(name = Constants.JOB_ID_BIBLIO_LINKER + ":blTempTitleAuthMusicalScoreStep")
-	public Step blTempTitleAuthMusicalScoreStep() throws Exception {
-		return steps.get("blTempTitleAuthMusicalScoreStep")
-				.listener(new StepProgressListener())
-				.<List<Long>, List<HarvestedRecord>>chunk(10)
-				.faultTolerant()
-				.keyGenerator(KeyGeneratorForList.INSTANCE)
-				.retry(LockAcquisitionException.class)
-				.retryLimit(10000)
-				.reader(blTempTitleAuthMusicalScoreStepReader(INTEGER_OVERRIDEN_BY_EXPRESSION))
-				.processor(blSimpleKeysStepProsessor())
-				.writer(blSimpleKeysStepWriter())
-				.build();
-	}
-
-	@Bean(name = Constants.JOB_ID_BIBLIO_LINKER + ":blTempTitleAuthMusicalScorePartitionedStep")
-	public Step blTempTitleAuthMusicalScorePartitionedStep() throws Exception {
-		return steps.get("blTempTitleAuthMusicalScorePartitionedStep")
-				.partitioner("blTempTitleAuthMusicalScorePartitionedStepSlave", this.partioner()) //
-				.taskExecutor(this.taskExecutor)
-				.gridSize(this.partitionThreads)
-				.step(blTempTitleAuthMusicalScoreStep())
-				.build();
-	}
-
-	@Bean(name = "blTitleAuthMusicalScore:reader")
-	@StepScope
-	public ItemReader<List<Long>> blTempTitleAuthMusicalScoreStepReader(
-			@Value("#{stepExecutionContext[modulo]}") Integer modulo
-	) throws Exception {
-		return blSimpleKeysReader(TMP_BL_TABLE_TITLE_AUTH_MUSICAL_SCORE, "dedup_record_id", modulo);
 	}
 
 	/**
@@ -733,156 +489,6 @@ public class BiblioLinkerJobConfig {
 			@Value("#{stepExecutionContext[modulo]}") Integer modulo
 	) throws Exception {
 		return blSimpleKeysReader(TMP_BL_TABLE_TITLE_LANG_PERIODICAL, "dedup_record_id", modulo);
-	}
-
-	/**
-	 * merge books, maps, musical score records with same title, topic key, language and record format
-	 */
-	@Bean(name = Constants.JOB_ID_BIBLIO_LINKER + ":prepareBLTempTitleTopicTasklet")
-	@StepScope
-	public Tasklet prepareBLTempTitleTopicTasklet() {
-		return new SqlCommandTasklet(prepareBLTempTitleTopicTableSql);
-	}
-
-	@Bean(name = Constants.JOB_ID_BIBLIO_LINKER + ":prepareBLTempTitleTopicStep")
-	public Step prepareBLTempTitleTopicStep() {
-		return steps.get("prepareBLTempTitleTopicStep")
-				.tasklet(prepareBLTempTitleTopicTasklet())
-				.listener(new StepProgressListener())
-				.build();
-	}
-
-	@Bean(name = Constants.JOB_ID_BIBLIO_LINKER + ":blTempTitleTopicStep")
-	public Step blTempTitleTopicStep() throws Exception {
-		return steps.get("blTempTitleTopicStep")
-				.listener(new StepProgressListener())
-				.<List<Long>, List<HarvestedRecord>>chunk(100)
-				.faultTolerant()
-				.keyGenerator(KeyGeneratorForList.INSTANCE)
-				.retry(LockAcquisitionException.class)
-				.retryLimit(10000)
-				.reader(blTempTitleTopicStepReader(INTEGER_OVERRIDEN_BY_EXPRESSION))
-				.processor(blSimpleKeysStepProsessor())
-				.writer(blSimpleKeysStepWriter())
-				.build();
-	}
-
-	@Bean(name = Constants.JOB_ID_BIBLIO_LINKER + ":blTempTitleTopicPartitionedStep")
-	public Step blTempTitleTopicPartitionedStep() throws Exception {
-		return steps.get("blTempTitleTopicPartitionedStep")
-				.partitioner("blTempTitleTopicPartitionedStepSlave", this.partioner()) //
-				.taskExecutor(this.taskExecutor)
-				.gridSize(this.partitionThreads)
-				.step(blTempTitleTopicStep())
-				.build();
-	}
-
-	@Bean(name = "blTitleTopic:reader")
-	@StepScope
-	public ItemReader<List<Long>> blTempTitleTopicStepReader(
-			@Value("#{stepExecutionContext[modulo]}") Integer modulo
-	) throws Exception {
-		return blSimpleKeysReader(TMP_BL_TABLE_TITLE_TOPIC, "dedup_record_id", modulo);
-	}
-
-	/**
-	 * merge audio records with same title, topic key
-	 */
-	@Bean(name = Constants.JOB_ID_BIBLIO_LINKER + ":prepareBLTempTitleTopicAudioTasklet")
-	@StepScope
-	public Tasklet prepareBLTempTitleTopicAudioTasklet() {
-		return new SqlCommandTasklet(prepareBLTempTitleTopicAudioTableSql);
-	}
-
-	@Bean(name = Constants.JOB_ID_BIBLIO_LINKER + ":prepareBLTempTitleTopicAudioStep")
-	public Step prepareBLTempTitleTopicAudioStep() {
-		return steps.get("prepareBLTempTitleTopicAudioStep")
-				.tasklet(prepareBLTempTitleTopicAudioTasklet())
-				.listener(new StepProgressListener())
-				.build();
-	}
-
-	@Bean(name = Constants.JOB_ID_BIBLIO_LINKER + ":blTempTitleTopicAudioStep")
-	public Step blTempTitleTopicAudioStep() throws Exception {
-		return steps.get("blTempTitleTopicAudioStep")
-				.listener(new StepProgressListener())
-				.<List<Long>, List<HarvestedRecord>>chunk(10)
-				.faultTolerant()
-				.keyGenerator(KeyGeneratorForList.INSTANCE)
-				.retry(LockAcquisitionException.class)
-				.retryLimit(10000)
-				.reader(blTempTitleTopicAudioStepReader(INTEGER_OVERRIDEN_BY_EXPRESSION))
-				.processor(blSimpleKeysStepProsessor())
-				.writer(blSimpleKeysStepWriter())
-				.build();
-	}
-
-	@Bean(name = Constants.JOB_ID_BIBLIO_LINKER + ":blTempTitleTopicAudioPartitionedStep")
-	public Step blTempTitleTopicAudioPartitionedStep() throws Exception {
-		return steps.get("blTempTitleTopicAudioPartitionedStep")
-				.partitioner("blTempTitleTopicAudioPartitionedStepSlave", this.partioner()) //
-				.taskExecutor(this.taskExecutor)
-				.gridSize(this.partitionThreads)
-				.step(blTempTitleTopicAudioStep())
-				.build();
-	}
-
-	@Bean(name = "blTitleTopicAudio:reader")
-	@StepScope
-	public ItemReader<List<Long>> blTempTitleTopicAudioStepReader(
-			@Value("#{stepExecutionContext[modulo]}") Integer modulo
-	) throws Exception {
-		return blSimpleKeysReader(TMP_BL_TABLE_TITLE_TOPIC_AUDIO, "dedup_record_id", modulo);
-	}
-
-	/**
-	 * merge video records with same title, topic key
-	 */
-	@Bean(name = Constants.JOB_ID_BIBLIO_LINKER + ":prepareBLTempTitleTopicVideoTasklet")
-	@StepScope
-	public Tasklet prepareBLTempTitleTopicVideoTasklet() {
-		return new SqlCommandTasklet(prepareBLTempTitleTopicVideoTableSql);
-	}
-
-	@Bean(name = Constants.JOB_ID_BIBLIO_LINKER + ":prepareBLTempTitleTopicVideoStep")
-	public Step prepareBLTempTitleTopicVideoStep() {
-		return steps.get("prepareBLTempTitleTopicVideoStep")
-				.tasklet(prepareBLTempTitleTopicVideoTasklet())
-				.listener(new StepProgressListener())
-				.build();
-	}
-
-	@Bean(name = Constants.JOB_ID_BIBLIO_LINKER + ":blTempTitleTopicVideoStep")
-	public Step blTempTitleTopicVideoStep() throws Exception {
-		return steps.get("blTempTitleTopicVideoStep")
-				.listener(new StepProgressListener())
-				.<List<Long>, List<HarvestedRecord>>chunk(100)
-				.faultTolerant()
-				.keyGenerator(KeyGeneratorForList.INSTANCE)
-				.retry(LockAcquisitionException.class)
-				.retryLimit(10000)
-				.reader(blTempTitleTopicVideoStepReader(INTEGER_OVERRIDEN_BY_EXPRESSION))
-				.processor(blSimpleKeysStepProsessor())
-				.writer(blSimpleKeysStepWriter())
-				.build();
-	}
-
-	@Bean(name = Constants.JOB_ID_BIBLIO_LINKER + ":blTempTitleTopicVideoPartitionedStep")
-	public Step blTempTitleTopicVideoPartitionedStep() throws Exception {
-		return steps.get("blTempTitleTopicVideoPartitionedStep")
-				.partitioner("blTempTitleTopicVideoPartitionedStepSlave", this.partioner()) //
-				.taskExecutor(this.taskExecutor)
-				.gridSize(this.partitionThreads)
-				.step(blTempTitleTopicVideoStep())
-				.build();
-	}
-
-	@Bean(name = "blTitleTopicVideo:reader")
-	@StepScope
-	public ItemReader<List<Long>> blTempTitleTopicVideoStepReader(
-			@Value("#{stepExecutionContext[modulo]}") Integer modulo
-	) throws Exception {
-		return blSimpleKeysReader(TMP_BL_TABLE_TITLE_TOPIC_VIDEO, "dedup_record_id", modulo);
 	}
 
 	/**
