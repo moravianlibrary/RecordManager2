@@ -1,13 +1,20 @@
 package cz.mzk.recordmanager.server.metadata.institutions;
 
-import java.util.List;
-
 import cz.mzk.recordmanager.server.marc.MarcRecord;
 import cz.mzk.recordmanager.server.metadata.MetadataMarcRecord;
 import cz.mzk.recordmanager.server.util.Constants;
+import cz.mzk.recordmanager.server.util.MetadataUtils;
 import cz.mzk.recordmanager.server.util.SolrUtils;
+import org.marc4j.marc.DataField;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Pattern;
 
 public class MkpEbooksMetadataMarcRecord extends MetadataMarcRecord {
+
+	private static final Pattern URL_Y_PATTERN = Pattern.compile("Plný text");
+	private static final String URL_COMMENT = "Stáhněte zdarma (%s)";
 
 	public MkpEbooksMetadataMarcRecord(MarcRecord underlayingMarc) {
 		super(underlayingMarc);
@@ -15,12 +22,21 @@ public class MkpEbooksMetadataMarcRecord extends MetadataMarcRecord {
 
 	@Override
 	public List<String> getUrls() {
-		return getUrls(Constants.DOCUMENT_AVAILABILITY_ONLINE);
+		List<String> results = new ArrayList<>();
+		for (DataField df : underlayingMarc.getDataFields("856")) {
+			if (df.getSubfield('y') != null
+					&& URL_Y_PATTERN.matcher(df.getSubfield('y').getData()).find()
+					&& df.getSubfield('u') != null
+					&& df.getSubfield('q') != null) {
+				results.add(MetadataUtils.generateUrl(Constants.DOCUMENT_AVAILABILITY_ONLINE,
+						df.getSubfield('u').getData(), String.format(URL_COMMENT, df.getSubfield('q').getData())));
+			}
+		}
+		return results;
 	}
-	
+
 	@Override
 	public List<String> getDefaultStatuses() {
 		return SolrUtils.createHierarchicFacetValues(Constants.DOCUMENT_AVAILABILITY_ONLINE, Constants.DOCUMENT_AVAILABILITY_ONLINE);
 	}
-	
 }

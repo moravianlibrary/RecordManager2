@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 @Component
 public class UrlHarvestedRecordEnricher implements HarvestedRecordEnricher {
@@ -19,6 +20,7 @@ public class UrlHarvestedRecordEnricher implements HarvestedRecordEnricher {
 	private FulltextKrameriusDAO fulltextKrameriusDAO;
 
 	private static final Pattern UNKNOWN = Pattern.compile("unknown");
+	private static final Pattern OBALKA = Pattern.compile("\\|obálka", Pattern.CASE_INSENSITIVE);
 
 	/**
 	 * generate links in standard format "institution code"|"policy code"|"url"
@@ -43,7 +45,8 @@ public class UrlHarvestedRecordEnricher implements HarvestedRecordEnricher {
 
 		Set<String> result = new HashSet<>();
 		urls.forEach(url -> result.add(institutionCode + '|' + updateKrameriusPolicy(record, url)));
-		document.addField(SolrFieldConstants.URL, result);
+		document.addField(SolrFieldConstants.URL,
+				result.stream().filter(url -> !OBALKA.matcher(url).find()).collect(Collectors.toSet()));
 	}
 
 	private String updateKrameriusPolicy(HarvestedRecord hr, String url) {
