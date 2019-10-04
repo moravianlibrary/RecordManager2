@@ -68,7 +68,7 @@ public class BiblioLinkerSimiliar extends AbstractDomainObject implements Compar
 
 		BiblioLinkerSimiliar that = (BiblioLinkerSimiliar) o;
 
-		if (!urlId.equals(that.urlId)) return false;
+		if (!harvestedRecordSimilarId.equals(that.harvestedRecordSimilarId)) return false;
 		return type == that.type;
 	}
 
