@@ -429,7 +429,7 @@ CREATE TABLE biblio_linker_similar (
   id                   DECIMAL(10) PRIMARY KEY,
   harvested_record_id  DECIMAL(10),
   harvested_record_similar_id DECIMAL(10),
-  url_id               VARCHAR(128),
+  url_id               TEXT,
   type                 VARCHAR(20),
   FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE
 );
