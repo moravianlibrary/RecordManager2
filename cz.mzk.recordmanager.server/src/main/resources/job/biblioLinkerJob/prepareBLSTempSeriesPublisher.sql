@@ -9,6 +9,7 @@ SELECT nextval('tmp_bl_id_seq') AS row_id,
 FROM harvested_record hr
   INNER JOIN harvested_record_format_link hrfl ON hr.id = hrfl.harvested_record_id
 WHERE hr.bl_series IS NOT NULL AND hr.bl_publisher IS NOT NULL AND hrfl.harvested_record_format_id NOT IN (2,3)
+      AND biblio_linker_similar IS TRUE
 GROUP BY hr.bl_series, hr.bl_publisher
 HAVING COUNT(DISTINCT biblio_linker_id)>1
   AND bool_or(next_biblio_linker_flag) IS TRUE;

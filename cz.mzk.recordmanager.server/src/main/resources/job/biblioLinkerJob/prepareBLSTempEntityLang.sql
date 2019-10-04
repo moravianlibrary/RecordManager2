@@ -10,6 +10,7 @@ FROM harvested_record hr
   INNER JOIN language l ON l.harvested_record_id = hr.id
   INNER JOIN bl_entity e ON e.harvested_record_id = hr.id
 WHERE l.lang='cze' AND hrfl.harvested_record_format_id IN (1,3,4,5,12,13,14,15,16,17,18,19,20,21,22,23)
+      AND biblio_linker_similar IS TRUE
 GROUP BY e.entity
 HAVING COUNT(DISTINCT biblio_linker_id)>1 AND COUNT(DISTINCT biblio_linker_id)<1000
   AND bool_or(next_biblio_linker_flag) IS TRUE;
