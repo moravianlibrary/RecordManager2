@@ -429,4 +429,8 @@ public interface MetadataRecord {
 		return Collections.emptyList();
 	}
 
+	default List<BLLanguage> getBiblioLinkerLanguages() {
+		return Collections.emptyList();
+	}
+
 }

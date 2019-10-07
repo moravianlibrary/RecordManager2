@@ -936,15 +936,15 @@ public class MetadataMarcRecord implements MetadataRecord {
 		Set<String> result = new HashSet<>();
 		for (DataField df : underlayingMarc.getDataFields("041")) {
 			for (Subfield subA : df.getSubfields('a')) {
-				String lang = null;
+				String lang;
 				if (subA.getData().toLowerCase().equals("cze")) {
 					lang = "cze";
 				} else if (subA.getData().toLowerCase().equals("eng")) {
 					lang = "eng";
-				} else if (subA.getData().length() == 3) {
-					lang = subA.getData().toLowerCase();
+				} else {
+					lang = "oth";
 				}
-				if (lang != null) result.add(lang);
+				result.add(lang);
 			}
 		}
 		if (result.isEmpty()) {
@@ -956,8 +956,35 @@ public class MetadataMarcRecord implements MetadataRecord {
 					lang = "cze";
 				} else if (substr.toLowerCase().equals("eng")) {
 					lang = "eng";
-				} else lang = substr;
-				result.add(lang);
+				}
+				if (lang != null) {
+					result.add(lang);
+				}
+			}
+		}
+		return new ArrayList<>(result);
+	}
+
+	@Override
+	public List<BLLanguage> getBiblioLinkerLanguages() {
+		Set<BLLanguage> result = new HashSet<>();
+		for (String lang : getFields("041a")) {
+			if (lang.length() == 3) {
+				result.add(BLLanguage.create(lang.toLowerCase()));
+			}
+		}
+		if (!result.isEmpty()) return new ArrayList<>(result);
+		for (String lang : getFields("041d")) {
+			if (lang.length() == 3) {
+				result.add(BLLanguage.create(lang.toLowerCase()));
+			}
+		}
+		if (!result.isEmpty()) return new ArrayList<>(result);
+		String cf = underlayingMarc.getControlField("008");
+		if (cf != null && cf.length() > 39) {
+			String substr = cf.substring(35, 38);
+			if (substr.length() == 3) {
+				result.add(BLLanguage.create(substr.toLowerCase()));
 			}
 		}
 		return new ArrayList<>(result);

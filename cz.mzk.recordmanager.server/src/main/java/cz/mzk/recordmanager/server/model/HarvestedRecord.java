@@ -204,6 +204,10 @@ public class HarvestedRecord extends AbstractDomainObject {
 	private Map<String, Language> languages = new HashMap<>();
 
 	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name = "harvested_record_id", referencedColumnName = "id", nullable = false)
+	private List<BLLanguage> blLanguages = new ArrayList<>();
+
+	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name = "harvested_record_id", referencedColumnName = "id")
 	private List<Authority> authorities = new ArrayList<>();
 
@@ -777,5 +781,13 @@ public class HarvestedRecord extends AbstractDomainObject {
 
 	public void setBlTopicKey(List<BLTopicKey> blTopicKey) {
 		this.blTopicKey = blTopicKey;
+	}
+
+	public List<BLLanguage> getBlLanguages() {
+		return blLanguages;
+	}
+
+	public void setBlLanguages(List<BLLanguage> blLanguages) {
+		this.blLanguages = blLanguages;
 	}
 }

@@ -131,6 +131,7 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 		encapsulator.setBlSeries(MetadataUtils.normalizeAndShorten(metadataRecord.getBiblioLinkerSeries(), EFFECTIVE_LENGTH_200));
 		encapsulator.setBlTopicKey(metadataRecord.getBiblioLinkerTopicKey());
 		encapsulator.setBlEntities(metadataRecord.getBiblioLinkerEntity());
+		encapsulator.setBlLanguages(metadataRecord.getBiblioLinkerLanguages());
 		String computedHash = computeHashValue(encapsulator);
 		String oldHash = record.getDedupKeysHash();
 		String temporalHash = record.getTemporalDedupHash() == null ? "0000000000000000000000000000000000000000" : record.getTemporalDedupHash();
@@ -181,6 +182,7 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 			record.setBlCommonTitle(encapsulator.getBlCommonTitle());
 			record.setBlTopicKey(encapsulator.getBlTopicKey());
 			record.setBlEntity(encapsulator.getBlEntities());
+			record.setBlLanguages(encapsulator.getBlLanguages());
 			record.setTemporalDedupHash(computedHash);
 		} else {
 			harvestedRecordDao.dropAuthorities(record);
@@ -347,6 +349,10 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 				md.update(blTopicKey.getBLTopicKeyStr().getBytes("utf-8"));
 			}
 
+			for (BLLanguage blLanguage : encapsulator.getBlLanguages()) {
+				md.update(blLanguage.getBLLanguageStr().getBytes("utf-8"));
+			}
+
 			byte[] hash = md.digest();
 				StringBuilder sb = new StringBuilder();
 			    for (byte b : hash) {
@@ -404,6 +410,7 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 			encapsulator.setBlTopicKey(hr.getBlTopicKey());
 			encapsulator.setBlCommonTitle(hr.getBlCommonTitle());
 			encapsulator.setBlEntities(hr.getBlEntity());
+			encapsulator.setBlLanguages(hr.getBlLanguages());
 			return computeHashValue(encapsulator);
 		}
 
@@ -416,6 +423,7 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 		List<Oclc> oclcs = new ArrayList<>();
 		List<HarvestedRecordFormat> formats = new ArrayList<>();
 		Set<String> languages = new HashSet<>();
+		List<BLLanguage> blLanguages = new ArrayList<>();
 		List<Ean> eans = new ArrayList<>();
 		List<ShortTitle> shortTitles = new ArrayList<>();
 		List<PublisherNumber> publisherNumbers = new ArrayList<>();
@@ -646,6 +654,14 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 
 		public void setBlTopicKey(List<BLTopicKey> blTopicKey) {
 			this.blTopicKey = blTopicKey;
+		}
+
+		public List<BLLanguage> getBlLanguages() {
+			return blLanguages;
+		}
+
+		public void setBlLanguages(List<BLLanguage> blLanguages) {
+			this.blLanguages = blLanguages;
 		}
 	}
 

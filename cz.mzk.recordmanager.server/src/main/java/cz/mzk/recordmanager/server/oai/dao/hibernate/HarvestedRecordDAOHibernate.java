@@ -310,6 +310,12 @@ public class HarvestedRecordDAOHibernate extends
 			session.delete(blTopicKey);
 		}
 
+		List<BLLanguage> blLanguages = hr.getBlLanguages();
+		hr.setBlLanguages(new ArrayList<>());
+		for (BLLanguage blLanguage : blLanguages) {
+			session.delete(blLanguage);
+		}
+
 		hr.setLanguages(new ArrayList<>());
 		session.update(hr);
 		session.flush();

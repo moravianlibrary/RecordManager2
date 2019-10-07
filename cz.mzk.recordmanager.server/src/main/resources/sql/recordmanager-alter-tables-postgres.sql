@@ -1275,3 +1275,10 @@ ALTER TABLE harvested_record ADD COLUMN bl_publisher VARCHAR(200);
 CREATE INDEX harvested_record_bl_publisher_idx ON harvested_record(bl_publisher);
 ALTER TABLE harvested_record ADD COLUMN bl_series VARCHAR(200);
 CREATE INDEX harvested_record_bl_series_idx ON harvested_record(bl_series);
+CREATE TABLE bl_language (
+  id                   DECIMAL(10) PRIMARY KEY,
+  harvested_record_id  DECIMAL(10),
+  lang                 VARCHAR(5),
+  FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE
+);
+CREATE INDEX bl_language_harvested_record_idx ON bl_language(harvested_record_id);
