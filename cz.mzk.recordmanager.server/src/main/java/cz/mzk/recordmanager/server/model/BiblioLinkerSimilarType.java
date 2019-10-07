@@ -24,6 +24,7 @@ public enum BiblioLinkerSimilarType implements StringValueEnum {
 	SOURCE_INFO_T_TOPIC_KEY("sinfot+topic_key"),
 	CONSPECTUS("conspectus"),
 	AUTH("authority"),
+	ENTITY_LANGUAGE("entity+lang"),
 	UNSPECIFIED("unspecified");
 
 	private final String value;
