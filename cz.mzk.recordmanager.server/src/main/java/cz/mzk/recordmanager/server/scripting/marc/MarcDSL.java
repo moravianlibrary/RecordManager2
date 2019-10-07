@@ -813,6 +813,7 @@ public class MarcDSL extends BaseDSL {
 	}
 
 	public List<String> getSimilar() {
-		return context.harvestedRecord().getBiblioLinkerSimiliarUrls().stream().map(BiblioLinkerSimiliar::getUrlId).collect(Collectors.toList());
+		return context.harvestedRecord().getBiblioLinkerSimiliarUrls().stream().limit(5)
+				.map(BiblioLinkerSimiliar::getUrlId).collect(Collectors.toList());
 	}
 }
