@@ -30,11 +30,9 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 
 	private final static int EFFECTIVE_TITLE_LENGTH = 255;
 	private final static int EFFECTIVE_SOURCE_INFO_LENGTH = 255;
-	private final static int EFFECTIVE_BL_CONSPECTUS_LENGTH = 255;
 	private final static int EFFECTIVE_AUTHOR_LENGTH = 200;
 	private final static int EFFECTIVE_AUTHOR_AUTH_KEY_LENGTH = 50;
 	private final static int EFFECTIVE_LENGTH_30 = 30;
-	private final static int EFFECTIVE_LENGTH_200 = 200;
 
 	@Autowired
 	private HarvestedRecordFormatDAO harvestedRecordFormatDAO;
@@ -80,28 +78,6 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 			}
 		}
 		encapsulator.setShortTitles(shortTitles);
-		List<BLTitle> blTitles = new ArrayList<>();
-		for (BLTitle blTitle : metadataRecord.getBLTitle()) {
-			blTitle.setBLTitleStr(MetadataUtils.normalizeAndShorten(
-					blTitle.getBLTitleStr(),
-					EFFECTIVE_TITLE_LENGTH));
-			if (blTitle.getBLTitleStr().isEmpty()) continue;
-			if (!blTitles.contains(blTitle)) {
-				blTitles.add(blTitle);
-			}
-		}
-		encapsulator.setBlTitles(blTitles);
-		List<BlCommonTitle> blCommonTitles = new ArrayList<>();
-		for (BlCommonTitle blCommonTitle : metadataRecord.getBiblioLinkerCommonTitle()) {
-			blCommonTitle.setBlCommonTitleStr(MetadataUtils.normalizeAndShorten(
-					blCommonTitle.getBlCommonTitleStr(),
-					EFFECTIVE_TITLE_LENGTH));
-			if (blCommonTitle.getBlCommonTitleStr().isEmpty()) continue;
-			if (!blCommonTitles.contains(blCommonTitle)) {
-				blCommonTitles.add(blCommonTitle);
-			}
-		}
-		encapsulator.setBlCommonTitle(blCommonTitles);
 
 		encapsulator.setIsbns(metadataRecord.getISBNs());
 		encapsulator.setIssns(metadataRecord.getISSNs());
@@ -126,12 +102,6 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 		encapsulator.setEans(metadataRecord.getEANs());
 		encapsulator.setPublisherNumbers(metadataRecord.getPublisherNumber());
 		encapsulator.setLanguages(new HashSet<>(metadataRecord.getLanguages()));
-		encapsulator.setBlAuthor(MetadataUtils.normalizeAndShorten(metadataRecord.getBiblioLinkerAuthor(), EFFECTIVE_AUTHOR_LENGTH));
-		encapsulator.setBlPublisher(MetadataUtils.normalizeAndShorten(metadataRecord.getBiblioLinkerPublisher(), EFFECTIVE_LENGTH_200));
-		encapsulator.setBlSeries(MetadataUtils.normalizeAndShorten(metadataRecord.getBiblioLinkerSeries(), EFFECTIVE_LENGTH_200));
-		encapsulator.setBlTopicKey(metadataRecord.getBiblioLinkerTopicKey());
-		encapsulator.setBlEntities(metadataRecord.getBiblioLinkerEntity());
-		encapsulator.setBlLanguages(metadataRecord.getBiblioLinkerLanguages());
 		String computedHash = computeHashValue(encapsulator);
 		String oldHash = record.getDedupKeysHash();
 		String temporalHash = record.getTemporalDedupHash() == null ? "0000000000000000000000000000000000000000" : record.getTemporalDedupHash();
@@ -175,14 +145,6 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 			record.setEans(encapsulator.getEans());
 			record.setShortTitles(encapsulator.getShortTitles());
 			record.setPublisherNumbers(metadataRecord.getPublisherNumber());
-			record.setBlTitles(encapsulator.getBlTitles());
-			record.setBlAuthor(encapsulator.getBlAuthor());
-			record.setBlPublisher(encapsulator.getBlPublisher());
-			record.setBlSeries(encapsulator.getBlSeries());
-			record.setBlCommonTitle(encapsulator.getBlCommonTitle());
-			record.setBlTopicKey(encapsulator.getBlTopicKey());
-			record.setBlEntity(encapsulator.getBlEntities());
-			record.setBlLanguages(encapsulator.getBlLanguages());
 			record.setTemporalDedupHash(computedHash);
 		} else {
 			harvestedRecordDao.dropAuthorities(record);
@@ -197,14 +159,12 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 		if (dedupKeysChanged) {
 			// new record or change in keys
 			record.setNextDedupFlag(true);
-			record.setNextBiblioLinkerFlag(true);
 		} else {
 			// key are equal
 			if (oaiTimestampChanged) {
 				// neither keys neither oai timestamp changed, 
 				// don't deduplicate
 				record.setNextDedupFlag(false);
-				record.setNextBiblioLinkerFlag(false);
 			} else {
 				// keys are same but timestamp changed
 				// keep previsous dedup flag
@@ -309,18 +269,6 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 					md.update(encapsulator.getSourceInfoG().getBytes());
 				}
 
-			if (encapsulator.getBlAuthor() != null) {
-				md.update(encapsulator.getBlAuthor().getBytes());
-			}
-
-			if (encapsulator.getBlPublisher() != null) {
-				md.update(encapsulator.getBlPublisher().getBytes());
-			}
-
-			if (encapsulator.getBlSeries() != null) {
-				md.update(encapsulator.getBlSeries().getBytes());
-			}
-
 			for (Ean ean: encapsulator.getEans()) {
 					md.update(ean.getEan().byteValue());
 				}
@@ -332,26 +280,6 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 			for (ShortTitle st : encapsulator.getShortTitles()) {
 					md.update(st.getShortTitleStr().getBytes("utf-8"));
 				}
-
-			for (BLTitle blTitle : encapsulator.getBlTitles()) {
-				md.update(blTitle.getBLTitleStr().getBytes("utf-8"));
-			}
-
-			for (BlCommonTitle blCommonTitle : encapsulator.getBlCommonTitle()) {
-				md.update(blCommonTitle.getBlCommonTitleStr().getBytes("utf-8"));
-			}
-
-			for (BLEntity blEntity : encapsulator.getBlEntities()) {
-				md.update(blEntity.getBLEntityStr().getBytes("utf-8"));
-			}
-
-			for (BLTopicKey blTopicKey : encapsulator.getBlTopicKey()) {
-				md.update(blTopicKey.getBLTopicKeyStr().getBytes("utf-8"));
-			}
-
-			for (BLLanguage blLanguage : encapsulator.getBlLanguages()) {
-				md.update(blLanguage.getBLLanguageStr().getBytes("utf-8"));
-			}
 
 			byte[] hash = md.digest();
 				StringBuilder sb = new StringBuilder();
@@ -403,14 +331,6 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 			encapsulator.setSourceInfoG(hr.getSourceInfoG());
 			encapsulator.setSourceInfoX(hr.getSourceInfoX());
 			encapsulator.setSourceInfoT(hr.getSourceInfoT());
-			encapsulator.setBlTitles(hr.getBlTitles());
-			encapsulator.setBlAuthor(hr.getBlAuthor());
-			encapsulator.setBlPublisher(hr.getBlPublisher());
-			encapsulator.setBlSeries(hr.getBlSeries());
-			encapsulator.setBlTopicKey(hr.getBlTopicKey());
-			encapsulator.setBlCommonTitle(hr.getBlCommonTitle());
-			encapsulator.setBlEntities(hr.getBlEntity());
-			encapsulator.setBlLanguages(hr.getBlLanguages());
 			return computeHashValue(encapsulator);
 		}
 
@@ -423,14 +343,9 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 		List<Oclc> oclcs = new ArrayList<>();
 		List<HarvestedRecordFormat> formats = new ArrayList<>();
 		Set<String> languages = new HashSet<>();
-		List<BLLanguage> blLanguages = new ArrayList<>();
 		List<Ean> eans = new ArrayList<>();
 		List<ShortTitle> shortTitles = new ArrayList<>();
 		List<PublisherNumber> publisherNumbers = new ArrayList<>();
-		List<BLTitle> blTitles = new ArrayList<>();
-		List<BlCommonTitle> blCommonTitle = new ArrayList<>();
-		List<BLEntity> blEntities = new ArrayList<>();
-		List<BLTopicKey> blTopicKey = new ArrayList<>();
 
 		Long publicationYear;
 		String authorString;
@@ -445,9 +360,6 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 		String sourceInfoX;
 		String sourceInfoT;
 		String sourceInfoG;
-		String blAuthor;
-		String blPublisher;
-		String blSeries;
 
 		public List<Ismn> getIsmns() {
 			return ismns;
@@ -598,70 +510,6 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 
 		public void setSourceInfoG(String sourceInfoG) {
 			this.sourceInfoG = sourceInfoG;
-		}
-
-		public String getBlAuthor() {
-			return blAuthor;
-		}
-
-		public void setBlAuthor(String blAuthor) {
-			this.blAuthor = blAuthor;
-		}
-
-		public String getBlPublisher() {
-			return blPublisher;
-		}
-
-		public void setBlPublisher(String blPublisher) {
-			this.blPublisher = blPublisher;
-		}
-
-		public List<BLTitle> getBlTitles() {
-			return blTitles;
-		}
-
-		public void setBlTitles(List<BLTitle> blTitles) {
-			this.blTitles = blTitles;
-		}
-
-		public String getBlSeries() {
-			return blSeries;
-		}
-
-		public void setBlSeries(String blSeries) {
-			this.blSeries = blSeries;
-		}
-
-		public List<BlCommonTitle> getBlCommonTitle() {
-			return blCommonTitle;
-		}
-
-		public void setBlCommonTitle(List<BlCommonTitle> blCommonTitle) {
-			this.blCommonTitle = blCommonTitle;
-		}
-
-		public List<BLEntity> getBlEntities() {
-			return blEntities;
-		}
-
-		public void setBlEntities(List<BLEntity> blEntities) {
-			this.blEntities = blEntities;
-		}
-
-		public List<BLTopicKey> getBlTopicKey() {
-			return blTopicKey;
-		}
-
-		public void setBlTopicKey(List<BLTopicKey> blTopicKey) {
-			this.blTopicKey = blTopicKey;
-		}
-
-		public List<BLLanguage> getBlLanguages() {
-			return blLanguages;
-		}
-
-		public void setBlLanguages(List<BLLanguage> blLanguages) {
-			this.blLanguages = blLanguages;
 		}
 	}
 

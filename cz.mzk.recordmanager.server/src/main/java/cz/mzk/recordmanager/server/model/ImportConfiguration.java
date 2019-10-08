@@ -68,6 +68,9 @@ public abstract class ImportConfiguration extends AbstractDomainObject {
 	@Column(name="generate_dedup_keys")
 	private boolean generateDedupKeys = true;
 
+	@Column(name = "generate_biblio_linker_keys")
+	private boolean generateBiblioLinkerKeys = true;
+
 	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
 	@JoinColumn(name="import_conf_id", referencedColumnName="id")
 	private List<Sigla> siglas = new ArrayList<>();
@@ -193,4 +196,11 @@ public abstract class ImportConfiguration extends AbstractDomainObject {
 		this.itemId = itemId;
 	}
 
+	public boolean isGenerateBiblioLinkerKeys() {
+		return generateBiblioLinkerKeys;
+	}
+
+	public void setGenerateBiblioLinkerKeys(boolean generateBiblioLinkerKeys) {
+		this.generateBiblioLinkerKeys = generateBiblioLinkerKeys;
+	}
 }

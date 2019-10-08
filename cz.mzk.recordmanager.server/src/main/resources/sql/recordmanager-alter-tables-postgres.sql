@@ -1230,6 +1230,9 @@ CREATE TABLE biblio_linker (
 );
 ALTER TABLE harvested_record ADD COLUMN biblio_linker_id DECIMAL(10);
 ALTER TABLE harvested_record ADD COLUMN biblio_linker_similar BOOLEAN DEFAULT FALSE;
+ALTER TABLE harvested_record ADD COLUMN next_biblio_linker_flag BOOLEAN DEFAULT TRUE;
+ALTER TABLE harvested_record ADD COLUMN next_biblio_linker_similar_flag BOOLEAN DEFAULT TRUE;
+ALTER TABLE harvested_record ADD COLUMN biblio_linker_keys_hash CHAR(40);
 CREATE TABLE biblio_linker_similar (
   id                   DECIMAL(10) PRIMARY KEY,
   harvested_record_id  DECIMAL(10),
@@ -1238,7 +1241,6 @@ CREATE TABLE biblio_linker_similar (
   type                 VARCHAR(20),
   FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE
 );
-ALTER TABLE harvested_record ADD COLUMN next_biblio_linker_flag BOOLEAN DEFAULT FALSE;
 
 -- 06. 05. 2019 tomascejpek
 CREATE TABLE bl_title (
@@ -1282,3 +1284,4 @@ CREATE TABLE bl_language (
   FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE
 );
 CREATE INDEX bl_language_harvested_record_idx ON bl_language(harvested_record_id);
+ALTER TABLE import_conf ADD COLUMN generate_biblio_linker_keys BOOLEAN DEFAULT(TRUE);

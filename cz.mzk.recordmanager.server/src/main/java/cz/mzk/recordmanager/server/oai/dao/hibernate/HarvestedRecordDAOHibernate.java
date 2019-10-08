@@ -222,9 +222,6 @@ public class HarvestedRecordDAOHibernate extends
 		hr.setIssnSeries(null);
 		hr.setIssnSeriesOrder(null);
 		hr.setWeight(null);
-		hr.setBlAuthor(null);
-		hr.setBlPublisher(null);
-		hr.setBlSeries(null);
 
 		List<Title> titles =  hr.getTitles();
 		hr.setTitles(new ArrayList<>());
@@ -286,6 +283,28 @@ public class HarvestedRecordDAOHibernate extends
 			session.delete(authority);
 		}
 
+		hr.setLanguages(new ArrayList<>());
+		session.update(hr);
+		session.flush();
+	}
+
+	@Override
+	public void dropBilioLinkerKeys(HarvestedRecord hr) {
+		if (hr == null || hr.getId() == null) {
+			return;
+		}
+
+		Session session = sessionFactory.getCurrentSession();
+		// don't delete keys for not managed entities
+		if (!session.contains(hr)) {
+			System.out.println("NOT CONT");
+			return;
+		}
+
+		hr.setBlAuthor(null);
+		hr.setBlPublisher(null);
+		hr.setBlSeries(null);
+
 		List<BLTitle> blTitles = hr.getBlTitles();
 		hr.setBlTitles(new ArrayList<>());
 		for (BLTitle blTitle : blTitles) {
@@ -316,7 +335,6 @@ public class HarvestedRecordDAOHibernate extends
 			session.delete(blLanguage);
 		}
 
-		hr.setLanguages(new ArrayList<>());
 		session.update(hr);
 		session.flush();
 	}

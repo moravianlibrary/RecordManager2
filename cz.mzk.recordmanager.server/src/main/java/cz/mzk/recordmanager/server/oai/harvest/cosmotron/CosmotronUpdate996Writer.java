@@ -1,6 +1,5 @@
 package cz.mzk.recordmanager.server.oai.harvest.cosmotron;
 
-import cz.mzk.recordmanager.server.dedup.DelegatingDedupKeysParser;
 import cz.mzk.recordmanager.server.export.IOFormat;
 import cz.mzk.recordmanager.server.marc.MarcRecord;
 import cz.mzk.recordmanager.server.marc.MarcRecordImpl;
@@ -29,9 +28,6 @@ public class CosmotronUpdate996Writer implements ItemWriter<HarvestedRecordUniqu
 
 	@Autowired
 	protected Cosmotron996DAO cosmotronDao;
-
-	@Autowired
-	protected DelegatingDedupKeysParser dedupKeysParser;
 
 	@Autowired
 	protected SessionFactory sessionFactory;

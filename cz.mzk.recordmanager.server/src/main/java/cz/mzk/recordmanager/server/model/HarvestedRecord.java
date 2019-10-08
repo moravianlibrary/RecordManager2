@@ -288,6 +288,12 @@ public class HarvestedRecord extends AbstractDomainObject {
 	@Column(name="next_biblio_linker_flag")
 	private boolean nextBiblioLinkerFlag = true;
 
+	@Column(name = "next_biblio_linker_similar_flag")
+	private boolean nextBiblioLinkerSimilarFlag = true;
+
+	@Column(name = "biblio_linker_keys_hash")
+	private String biblioLinkerKeysHash = "";
+
 	@Column(name = "bl_author")
 	private String blAuthor;
 
@@ -314,7 +320,12 @@ public class HarvestedRecord extends AbstractDomainObject {
 	 */
 	@Transient
 	private String temporalDedupHash;
-	
+
+	/**
+	 * Temporal indicator variable used for biblio linker
+	 */
+	@Transient
+	private String temporalBiblioLinkerHash;
 	
 	public HarvestedRecord() {
 	}
@@ -614,6 +625,14 @@ public class HarvestedRecord extends AbstractDomainObject {
 		this.temporalDedupHash = temporalDedupHash;
 	}
 
+	public String getTemporalBiblioLinkerHash() {
+		return temporalBiblioLinkerHash;
+	}
+
+	public void setTemporalBiblioLinkerHash(String temporalBiblioLinkerHash) {
+		this.temporalBiblioLinkerHash = temporalBiblioLinkerHash;
+	}
+
 	public List<Inspiration> getInspiration() {
 		return inspiration;
 	}
@@ -789,5 +808,21 @@ public class HarvestedRecord extends AbstractDomainObject {
 
 	public void setBlLanguages(List<BLLanguage> blLanguages) {
 		this.blLanguages = blLanguages;
+	}
+
+	public boolean isNextBiblioLinkerSimilarFlag() {
+		return nextBiblioLinkerSimilarFlag;
+	}
+
+	public void setNextBiblioLinkerSimilarFlag(boolean nextBiblioLinkerSimilarFlag) {
+		this.nextBiblioLinkerSimilarFlag = nextBiblioLinkerSimilarFlag;
+	}
+
+	public String getBiblioLinkerKeysHash() {
+		return biblioLinkerKeysHash;
+	}
+
+	public void setBiblioLinkerKeysHash(String biblioLinkerKeysHash) {
+		this.biblioLinkerKeysHash = biblioLinkerKeysHash;
 	}
 }

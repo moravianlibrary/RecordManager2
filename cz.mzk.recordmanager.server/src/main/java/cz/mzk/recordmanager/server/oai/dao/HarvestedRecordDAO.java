@@ -37,6 +37,8 @@ public interface HarvestedRecordDAO extends DomainDAO<Long, HarvestedRecord> {
 	
 	void dropDedupKeys(HarvestedRecord hr);
 
+	void dropBilioLinkerKeys(HarvestedRecord hr);
+
 	void dropAuthorities(HarvestedRecord hr);
 
 	void updateTimestampOnly(HarvestedRecord hr);

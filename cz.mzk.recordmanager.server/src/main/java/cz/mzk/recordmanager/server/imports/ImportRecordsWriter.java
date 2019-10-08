@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import cz.mzk.recordmanager.server.bibliolinker.keys.DelegatingBiblioLinkerKeysParser;
 import org.hibernate.SessionFactory;
 import org.marc4j.MarcWriter;
 import org.marc4j.MarcXmlWriter;
@@ -46,7 +47,10 @@ public class ImportRecordsWriter implements ItemWriter<List<Record>>, StepExecut
 	
 	@Autowired
 	private DelegatingDedupKeysParser dedupKeysParser;
-	
+
+	@Autowired
+	protected DelegatingBiblioLinkerKeysParser biblioLinkerKeysParser;
+
 	@Autowired
 	private OAIHarvestConfigurationDAO oaiHarvestConfigurationDao;
 	
@@ -136,6 +140,7 @@ public class ImportRecordsWriter implements ItemWriter<List<Record>>, StepExecut
 
 					harvestedRecordDao.persist(hr);
 					dedupKeysParser.parse(hr, metadata);
+					biblioLinkerKeysParser.parse(hr, metadata);
 
 					if (harvestConfiguration.isFilteringEnabled() && !hr.getShouldBeProcessed()) {
 						logger.debug("Filtered record: " + hr.getUniqueId());
