@@ -1545,7 +1545,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 				}
 				StringBuilder entityValue = new StringBuilder();
 				for (char c : codes.toCharArray()) {
-					entityValue.append(df.getSubfield(c));
+					if (df.getSubfield(c) != null) entityValue.append(df.getSubfield(c).getData());
 				}
 				if (entityValue.length() > 0) results.add(entityValue.toString());
 			}
