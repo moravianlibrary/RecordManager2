@@ -43,6 +43,11 @@ public class BiblioLinkerSimilarSimpleStepProcessor implements
 
 	private BiblioLinkerSimilarType type;
 
+	private static final List<BiblioLinkerSimilarType> ONLY_EMPTY_SIMILAR =
+			new ArrayList<>(Collections.singletonList(BiblioLinkerSimilarType.ENTITY_LANGUAGE));
+
+	private static final int MAX_SIMILARS = 5;
+
 	public BiblioLinkerSimilarSimpleStepProcessor() {
 	}
 
@@ -62,6 +67,7 @@ public class BiblioLinkerSimilarSimpleStepProcessor implements
 		for (Long blOuter : records.keySet()) {
 			for (HarvestedRecord hr : records.get(blOuter)) {
 				similarIds = new TreeSet<>(hr.getBiblioLinkerSimiliarUrls());
+				if (!similarIds.isEmpty() && ONLY_EMPTY_SIMILAR.contains(type)) continue;
 				similarHr = new HashSet<>();
 				for (Long blInner : records.keySet()) {
 					// same BibliLinker groups
@@ -74,7 +80,7 @@ public class BiblioLinkerSimilarSimpleStepProcessor implements
 						// new similar record, must be updated
 						toUpdate.add(hr);
 					}
-					if (similarIds.size() >= 5) break;
+					if (similarIds.size() >= MAX_SIMILARS) break;
 				}
 				hr.setBiblioLinkerSimiliarUrls(new ArrayList<>(similarIds));
 				progressLogger.incrementAndLogProgress();
