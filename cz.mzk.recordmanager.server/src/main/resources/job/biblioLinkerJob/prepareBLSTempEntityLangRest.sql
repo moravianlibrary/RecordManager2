@@ -11,6 +11,7 @@ FROM harvested_record hr
   INNER JOIN bl_entity e ON e.harvested_record_id = hr.id
 GROUP BY e.entity, l.lang
 HAVING COUNT(DISTINCT biblio_linker_id)>1
-  AND bool_or(next_biblio_linker_similar_flag) IS TRUE;
+  AND bool_or(next_biblio_linker_similar_flag) IS TRUE
+  AND COUNT(hr.id)<10000;
 
 CREATE INDEX tmp_bls_entity_language_rest_idx ON tmp_bls_entity_lang_rest(row_id);
