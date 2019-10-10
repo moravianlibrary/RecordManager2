@@ -15,6 +15,6 @@ FROM harvested_record hr
 WHERE hr.bl_author IS NOT NULL AND hrfl.harvested_record_format_id!=2 AND biblio_linker_similar IS TRUE
 GROUP BY hr.bl_author, ct.title, l.lang, hrfl.harvested_record_format_id
 HAVING COUNT(DISTINCT biblio_linker_id)>1
-  AND bool_or(next_biblio_linker_flag) IS TRUE;
+  AND bool_or(next_biblio_linker_similar_flag) IS TRUE;
 
 CREATE INDEX tmp_bls_author_common_title_idx ON tmp_bls_author_common_title(row_id);

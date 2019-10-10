@@ -13,7 +13,7 @@ WHERE hr.bl_topic_key IS NOT NULL
       AND biblio_linker_similar IS TRUE
 GROUP BY hr.bl_topic_key
 HAVING COUNT(DISTINCT biblio_linker_id)>1
-  AND bool_or(next_biblio_linker_flag) IS TRUE
+  AND bool_or(next_biblio_linker_similar_flag) IS TRUE
   AND COUNT(hr.id)<10000
   AND COUNT(DISTINCT biblio_linker_id)<500;
 

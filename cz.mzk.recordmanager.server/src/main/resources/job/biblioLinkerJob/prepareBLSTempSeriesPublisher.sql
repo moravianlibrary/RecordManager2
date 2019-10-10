@@ -12,6 +12,6 @@ WHERE hr.bl_series IS NOT NULL AND hr.bl_publisher IS NOT NULL AND hrfl.harveste
       AND biblio_linker_similar IS TRUE
 GROUP BY hr.bl_series, hr.bl_publisher
 HAVING COUNT(DISTINCT biblio_linker_id)>1
-  AND bool_or(next_biblio_linker_flag) IS TRUE;
+  AND bool_or(next_biblio_linker_similar_flag) IS TRUE;
 
 CREATE INDEX tmp_bls_series_publisher_idx ON tmp_bls_series_publisher(row_id);

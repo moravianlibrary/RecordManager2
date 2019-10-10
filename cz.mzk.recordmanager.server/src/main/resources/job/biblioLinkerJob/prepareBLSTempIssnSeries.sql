@@ -11,6 +11,6 @@ WHERE hr.issn_series IS NOT NULL AND hrfl.harvested_record_format_id=1
       AND biblio_linker_similar IS TRUE
 GROUP BY hr.issn_series
 HAVING COUNT(DISTINCT biblio_linker_id)>1
-  AND BOOL_OR(next_biblio_linker_flag) IS TRUE;
+  AND BOOL_OR(next_biblio_linker_similar_flag) IS TRUE;
 
 CREATE INDEX tmp_bls_issn_series_idx ON tmp_bls_issn_series(row_id);
