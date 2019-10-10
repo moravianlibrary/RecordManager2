@@ -7,7 +7,7 @@ SELECT nextval('tmp_bl_id_seq') AS row_id,
   e.entity
 FROM harvested_record hr
   INNER JOIN harvested_record_format_link hrfl ON hr.id = hrfl.harvested_record_id
-  INNER JOIN language l ON l.harvested_record_id = hr.id
+  INNER JOIN bl_language l ON l.harvested_record_id = hr.id
   INNER JOIN bl_entity e ON e.harvested_record_id = hr.id
 WHERE l.lang='cze' AND hrfl.harvested_record_format_id IN (1,3,4,5,12,13,14,15,16,17,18,19,20,21,22,23)
       AND biblio_linker_similar IS TRUE

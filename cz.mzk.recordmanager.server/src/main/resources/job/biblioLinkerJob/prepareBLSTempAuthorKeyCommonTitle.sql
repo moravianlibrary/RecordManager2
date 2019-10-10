@@ -10,7 +10,7 @@ SELECT nextval('tmp_bl_id_seq') AS row_id,
   hrfl.harvested_record_format_id
 FROM harvested_record hr
   INNER JOIN harvested_record_format_link hrfl ON hr.id = hrfl.harvested_record_id
-  INNER JOIN language l ON l.harvested_record_id = hr.id
+  INNER JOIN bl_language l ON l.harvested_record_id = hr.id
   INNER JOIN bl_common_title ct ON ct.harvested_record_id = hr.id
 WHERE hr.bl_author IS NOT NULL AND hrfl.harvested_record_format_id!=2 AND biblio_linker_similar IS TRUE
 GROUP BY hr.bl_author, ct.title, l.lang, hrfl.harvested_record_format_id

@@ -18,7 +18,7 @@ FROM (
      ) titles
   INNER JOIN harvested_record hr ON hr.id=titles.harvested_record_id
   INNER JOIN harvested_record_format_link hrfl ON hrfl.harvested_record_id = hr.id
-  INNER JOIN language l ON l.harvested_record_id = hr.id
+  INNER JOIN bl_language l ON l.harvested_record_id = hr.id
 WHERE hr.bl_author IS NOT NULL AND dedup_record_id IS NOT NULL AND hrfl.harvested_record_format_id IN (1,4)
 GROUP BY titles.title, hr.bl_author, l.lang, hrfl.harvested_record_format_id
 HAVING COUNT(*)>1
