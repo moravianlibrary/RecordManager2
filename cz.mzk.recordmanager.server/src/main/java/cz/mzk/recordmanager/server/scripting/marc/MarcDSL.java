@@ -439,35 +439,7 @@ public class MarcDSL extends BaseDSL {
 	}
 
 	public String getTitleDisplay() {
-		DataField df = getFirstDataField("245");
-		if (df == null) return null;
-
-		final char titleSubfields[] = {'a', 'b', 'n', 'p'};
-		final char sfhPunctuation[] = {'.', ',', ':'};
-		char endCharH = ' ';
-		StringBuilder sb = new StringBuilder();
-
-		for (Subfield sf : df.getSubfields()) {
-			// get last punctuation from 'h'
-			if (sf.getCode() == 'h') {
-				String data = sf.getData().trim();
-				if (!data.isEmpty()) {
-					if (Chars.contains(sfhPunctuation, data.charAt(data.length() - 1))) {
-						endCharH = data.charAt(data.length() - 1);
-					}
-				}
-			} else if (Chars.contains(titleSubfields, sf.getCode())) {
-				// print punctuation from h
-				if (endCharH != ' ') {
-					sb.append(endCharH);
-					sb.append(' ');
-					endCharH = ' ';
-				}
-				sb.append(sf.getData());
-				sb.append(' ');
-			} else endCharH = ' ';
-		}
-		return SolrUtils.removeEndPunctuation(sb.toString());
+		return metadataRecord.getTitleDisplay();
 	}
 
 	public DataField getFirstDataField(String tag) {

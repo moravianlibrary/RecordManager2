@@ -46,7 +46,7 @@ public class DublinCoreDSL extends BaseDSL {
 	}
 
 	public String getFirstTitle() {
-		return record.getFirstTitle();
+		return dcMetadataRecord.getTitleDisplay();
 	}
 
 	public String getFullRecord() {

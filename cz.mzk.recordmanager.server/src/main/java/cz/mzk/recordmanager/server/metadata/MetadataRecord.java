@@ -437,4 +437,8 @@ public interface MetadataRecord {
 		return null;
 	}
 
+	default String getTitleDisplay() {
+		return null;
+	}
+
 }

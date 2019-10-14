@@ -503,4 +503,9 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 	public String getAuthorDisplay() {
 		return SolrUtils.changeNameDC(dcRecord.getFirstCreator());
 	}
+
+	@Override
+	public String getTitleDisplay() {
+		return dcRecord.getFirstTitle();
+	}
 }
