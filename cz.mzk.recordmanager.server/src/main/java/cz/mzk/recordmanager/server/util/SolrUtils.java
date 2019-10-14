@@ -275,7 +275,7 @@ public class SolrUtils {
 
 	public static String getNameForDisplay(DataField df) {
 		StringBuilder sb = new StringBuilder();
-		sb.append(changeName(df));
+		sb.append(changeNameMarc(df));
 
 		for (char subfield : new char[]{'b', 'c', 'd'}) {
 			if (df.getSubfield(subfield) != null) {
@@ -286,7 +286,7 @@ public class SolrUtils {
 		return removeEndPunctuation(sb.toString().trim());
 	}
 
-	private static String changeName(DataField df) {
+	private static String changeNameMarc(DataField df) {
 		StringBuilder sb = new StringBuilder();
 		if (df.getIndicator1() == '1') {
 			String suba = "";
@@ -305,9 +305,23 @@ public class SolrUtils {
 		return sb.toString();
 	}
 
+	public static String changeNameDC(String name) {
+		if (name == null || name.isEmpty()) return null;
+
+		StringBuilder sb = new StringBuilder();
+		Matcher matcher = AUTHOR_PATTERN.matcher(name);
+		if (matcher.matches()) {
+			sb.append(matcher.group(2));
+			sb.append(' ');
+			sb.append(matcher.group(1));
+		} else return name;
+
+		return sb.toString();
+	}
+
 	public static String getNameForExact(DataField df) {
 		StringBuilder sb = new StringBuilder();
-		sb.append(SolrUtils.changeName(df));
+		sb.append(SolrUtils.changeNameMarc(df));
 
 		if (df.getSubfield('b') != null) {
 			sb.append(' ');

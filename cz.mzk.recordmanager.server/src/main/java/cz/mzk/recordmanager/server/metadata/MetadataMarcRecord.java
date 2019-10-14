@@ -6,10 +6,7 @@ import cz.mzk.recordmanager.server.marc.MarcRecord;
 import cz.mzk.recordmanager.server.model.*;
 import cz.mzk.recordmanager.server.model.HarvestedRecordFormat.HarvestedRecordFormatEnum;
 import cz.mzk.recordmanager.server.model.TezaurusRecord.TezaurusKey;
-import cz.mzk.recordmanager.server.util.CleaningUtils;
-import cz.mzk.recordmanager.server.util.Constants;
-import cz.mzk.recordmanager.server.util.MetadataUtils;
-import cz.mzk.recordmanager.server.util.UrlUtils;
+import cz.mzk.recordmanager.server.util.*;
 import cz.mzk.recordmanager.server.util.identifier.*;
 import org.marc4j.marc.DataField;
 import org.marc4j.marc.Subfield;
@@ -1555,4 +1552,13 @@ public class MetadataMarcRecord implements MetadataRecord {
 		return results;
 	}
 
+	@Override
+	public String getAuthorDisplay() {
+		List<DataField> list = underlayingMarc.getDataFields("100");
+		if (list.isEmpty()) return null;
+		DataField df = list.get(0);
+		String name = SolrUtils.getNameForDisplay(df);
+		if (name != null && name.isEmpty()) return null;
+		else return name;
+	}
 }

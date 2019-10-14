@@ -477,12 +477,7 @@ public class MarcDSL extends BaseDSL {
 	}
 
 	public String getAuthorDisplay() {
-		List<DataField> list = record.getDataFields("100");
-		if (list.isEmpty()) return null;
-		DataField df = list.get(0);
-		String name = SolrUtils.getNameForDisplay(df);
-		if (name != null && name.isEmpty()) return null;
-		else return name;
+		return metadataRecord.getAuthorDisplay();
 	}
 
 	public List<String> getAuthor2Display() {

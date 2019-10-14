@@ -15,7 +15,6 @@ import cz.mzk.recordmanager.server.util.SolrUtils;
 
 import java.nio.charset.Charset;
 import java.util.*;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -97,7 +96,7 @@ public class DublinCoreDSL extends BaseDSL {
 	}
 
 	public String getAuthorDisplay() {
-		return changeName(getFirstCreator());
+		return dcMetadataRecord.getAuthorDisplay();
 	}
 
 	public List<String> getAuthor2Display() {
@@ -106,7 +105,7 @@ public class DublinCoreDSL extends BaseDSL {
 
 		List<String> result = new ArrayList<>();
 		for (String name : authors) {
-			String newName = changeName(name);
+			String newName = SolrUtils.changeNameDC(name);
 			if (newName != null) result.add(newName);
 		}
 		return result;
@@ -117,20 +116,6 @@ public class DublinCoreDSL extends BaseDSL {
 		result.add(getAuthorDisplay());
 		result.addAll(getAuthor2Display());
 		return result;
-	}
-
-	public String changeName(String name) {
-		if (name == null || name.isEmpty()) return null;
-
-		StringBuilder sb = new StringBuilder();
-		Matcher matcher = AUTHOR_PATTERN.matcher(name);
-		if (matcher.matches()) {
-			sb.append(matcher.group(2));
-			sb.append(' ');
-			sb.append(matcher.group(1));
-		} else return name;
-
-		return sb.toString();
 	}
 
 	public Integer getFirstDate() {

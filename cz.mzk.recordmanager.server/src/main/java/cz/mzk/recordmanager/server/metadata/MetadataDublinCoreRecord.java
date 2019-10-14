@@ -6,6 +6,7 @@ import cz.mzk.recordmanager.server.model.*;
 import cz.mzk.recordmanager.server.model.HarvestedRecordFormat.HarvestedRecordFormatEnum;
 import cz.mzk.recordmanager.server.model.TezaurusRecord.TezaurusKey;
 import cz.mzk.recordmanager.server.util.MetadataUtils;
+import cz.mzk.recordmanager.server.util.SolrUtils;
 import cz.mzk.recordmanager.server.util.identifier.ISBNUtils;
 import cz.mzk.recordmanager.server.util.identifier.ISMNUtils;
 import cz.mzk.recordmanager.server.util.identifier.ISSNUtils;
@@ -498,4 +499,8 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 		return null;
 	}
 
+	@Override
+	public String getAuthorDisplay() {
+		return SolrUtils.changeNameDC(dcRecord.getFirstCreator());
+	}
 }

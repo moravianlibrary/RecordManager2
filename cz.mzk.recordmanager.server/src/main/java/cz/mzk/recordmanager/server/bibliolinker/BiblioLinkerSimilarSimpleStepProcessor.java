@@ -114,7 +114,7 @@ public class BiblioLinkerSimilarSimpleStepProcessor implements
 			List<String> hierarchicFormats = SolrUtils.createRecordTypeHierarchicFacet(formats.get(0));
 			sampleObject.put("format", hierarchicFormats.get(hierarchicFormats.size()-1));
 		}
-		sampleObject.put("author", mr.getAuthorString());
+		sampleObject.put("author", mr.getAuthorDisplay());
 		sampleObject.put("title", mr.getTitle().isEmpty() ? "" : mr.getTitle().get(0).getTitleStr());
 		if (!mr.getCNBs().isEmpty()) {
 			sampleObject.put("cnb", mr.getCNBs().get(0).getCnb());

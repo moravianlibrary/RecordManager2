@@ -433,4 +433,8 @@ public interface MetadataRecord {
 		return Collections.emptyList();
 	}
 
+	default String getAuthorDisplay() {
+		return null;
+	}
+
 }
