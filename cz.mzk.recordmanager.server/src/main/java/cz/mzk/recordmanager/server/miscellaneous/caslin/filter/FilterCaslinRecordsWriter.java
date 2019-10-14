@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeSet;
 
+import cz.mzk.recordmanager.server.util.ProgressLogger;
 import org.marc4j.marc.ControlField;
 import org.marc4j.marc.DataField;
 import org.marc4j.marc.MarcFactory;
@@ -17,7 +18,6 @@ import org.springframework.batch.item.ItemWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import cz.mzk.recordmanager.server.export.IOFormat;
-import cz.mzk.recordmanager.server.index.SolrRecordProcessor;
 import cz.mzk.recordmanager.server.marc.MarcRecord;
 import cz.mzk.recordmanager.server.marc.MarcRecordImpl;
 import cz.mzk.recordmanager.server.marc.MarcXmlParser;
@@ -31,7 +31,7 @@ import cz.mzk.recordmanager.server.util.CaslinFilter;
 
 public class FilterCaslinRecordsWriter implements ItemWriter<HarvestedRecordUniqueId> {
 
-	private static Logger logger = LoggerFactory.getLogger(SolrRecordProcessor.class);
+	private static Logger logger = LoggerFactory.getLogger(FilterCaslinRecordsWriter.class);
 
 	@Autowired
 	private HarvestedRecordDAO hrDao;
@@ -45,6 +45,12 @@ public class FilterCaslinRecordsWriter implements ItemWriter<HarvestedRecordUniq
 	@Autowired
 	private CaslinFilter caslinFilter;
 
+	private ProgressLogger progressLogger;
+
+	public FilterCaslinRecordsWriter() {
+		this.progressLogger = new ProgressLogger(logger, 10000);
+	}
+
 	@Override
 	public void write(List<? extends HarvestedRecordUniqueId> items)
 			throws Exception {
@@ -54,6 +60,7 @@ public class FilterCaslinRecordsWriter implements ItemWriter<HarvestedRecordUniq
 				HarvestedRecord hr = hrDao.get(uniqueId);
 
 				if (hr == null || hr.getRawRecord().length == 0) continue;
+				progressLogger.incrementAndLogProgress();
 				MarcRecord marc = marcXmlParser.parseRecord(new ByteArrayInputStream(hr.getRawRecord()));
 				Record record = marcXmlParser.parseUnderlyingRecord(new ByteArrayInputStream(hr.getRawRecord()));
 				Boolean updated = false;
