@@ -33,7 +33,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 	private static final Pattern YEAR_PATTERN = Pattern.compile("\\d{4}");
 	private static final Pattern SCALE_PATTERN = Pattern.compile("\\d+[ ^]*\\d+");
 	protected static final Pattern UUID_PATTERN = Pattern.compile("uuid:[\\w-]+");
-	private static final Pattern OCLC_PATTERN = Pattern.compile("(\\(ocolc\\))(.*)", Pattern.CASE_INSENSITIVE);
+	private static final Pattern OCLC_PATTERN = Pattern.compile("(\\(ocolc\\))(.+)", Pattern.CASE_INSENSITIVE);
 	private static final Pattern PUBLISHER_NUMBER_PATTERN = Pattern.compile("\\W");
 	private static final Pattern CPK0_PATTERN = Pattern.compile("cpk0");
 	private static final Pattern METAPROXY_TAG_PATTERN = Pattern.compile("[17]..");

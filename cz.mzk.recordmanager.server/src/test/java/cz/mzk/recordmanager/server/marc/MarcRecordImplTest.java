@@ -510,6 +510,7 @@ public class MarcRecordImplTest extends AbstractTest {
 		final String oclc2 = "ocn123456789";
 		data.add("035 $a(OCoLC)" + oclc1);
 		data.add("035 $a(OCoLC)" + oclc2);
+		data.add("035 $a(OCoLC)"); // empty value
 		
 		mri = MarcRecordFactory.recordFactory(data);
 		metadataRecord = metadataFactory.getMetadataRecord(mri);
