@@ -6,11 +6,8 @@ import cz.mzk.recordmanager.server.marc.MarcRecord;
 import cz.mzk.recordmanager.server.marc.SubfieldExtractionMethod;
 import cz.mzk.recordmanager.server.metadata.MetadataRecord;
 import cz.mzk.recordmanager.server.metadata.view.ViewType;
-import cz.mzk.recordmanager.server.model.BiblioLinkerSimiliar;
-import cz.mzk.recordmanager.server.model.Ean;
+import cz.mzk.recordmanager.server.model.*;
 import cz.mzk.recordmanager.server.model.HarvestedRecordFormat.HarvestedRecordFormatEnum;
-import cz.mzk.recordmanager.server.model.Oclc;
-import cz.mzk.recordmanager.server.model.Title;
 import cz.mzk.recordmanager.server.scripting.BaseDSL;
 import cz.mzk.recordmanager.server.scripting.ListResolver;
 import cz.mzk.recordmanager.server.scripting.MappingResolver;
@@ -780,7 +777,19 @@ public class MarcDSL extends BaseDSL {
 	}
 
 	public List<String> getSimilar() {
-		return context.harvestedRecord().getBiblioLinkerSimiliarUrls().stream().limit(5)
-				.map(BiblioLinkerSimiliar::getUrlId).collect(Collectors.toList());
+		Set<BiblioLinkerSimiliar> similars = new HashSet<>();
+		List<BiblioLinkerSimilarType> types = new ArrayList<>();
+		for (BiblioLinkerSimiliar bls : context.harvestedRecord().getBiblioLinkerSimiliarUrls()) {
+			if (types.contains(bls.getType())) continue;
+			types.add(bls.getType());
+			similars.add(bls);
+			if (similars.size() >= 5) break;
+		}
+		for (BiblioLinkerSimiliar bls : context.harvestedRecord().getBiblioLinkerSimiliarUrls()) {
+			if (similars.size() >= 5) break;
+			if (similars.contains(bls)) continue;
+			similars.add(bls);
+		}
+		return similars.stream().map(BiblioLinkerSimiliar::getUrlId).collect(Collectors.toList());
 	}
 }
