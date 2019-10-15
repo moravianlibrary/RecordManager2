@@ -980,7 +980,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 		}
 		if (!result.isEmpty()) return new ArrayList<>(result);
 		String cf = underlayingMarc.getControlField("008");
-		if (cf != null && cf.length() > 39) {
+		if (cf != null && cf.length() >= 38) {
 			String substr = cf.substring(35, 38).trim();
 			if (substr.length() == 3) {
 				result.add(BLLanguage.create(substr.toLowerCase()));
