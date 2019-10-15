@@ -1,6 +1,5 @@
 package cz.mzk.recordmanager.server.bibliolinker;
 
-import cz.mzk.recordmanager.server.marc.MarcXmlParser;
 import cz.mzk.recordmanager.server.metadata.MetadataRecord;
 import cz.mzk.recordmanager.server.metadata.MetadataRecordFactory;
 import cz.mzk.recordmanager.server.model.BiblioLinkerSimilarType;
@@ -33,9 +32,6 @@ public class BiblioLinkerSimilarSimpleStepProcessor implements
 
 	@Autowired
 	private MetadataRecordFactory mrf;
-
-	@Autowired
-	private MarcXmlParser marcXmlParser;
 
 	private static Logger logger = LoggerFactory.getLogger(BiblioLinkerSimilarSimpleStepProcessor.class);
 
@@ -134,14 +130,6 @@ public class BiblioLinkerSimilarSimpleStepProcessor implements
 		JSONArray result = new JSONArray();
 		isn.forEach(result::put);
 		return result;
-	}
-
-	private static List<HarvestedRecord> getAllRecords(final Map<Long, Collection<HarvestedRecord>> map) {
-		List<HarvestedRecord> results = new ArrayList<>();
-		for (Collection<HarvestedRecord> hrs : map.values()) {
-			results.addAll(hrs);
-		}
-		return results;
 	}
 
 	private static Map<Long, Collection<HarvestedRecord>> sortrecords(final Collection<HarvestedRecord> hrs) {
