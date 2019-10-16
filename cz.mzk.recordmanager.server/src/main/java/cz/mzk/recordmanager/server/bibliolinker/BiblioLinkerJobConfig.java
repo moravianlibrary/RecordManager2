@@ -122,6 +122,12 @@ public class BiblioLinkerJobConfig {
 	private String prepareBLSimilarTempEntityLangRestTableSql =
 			ResourceUtils.asString("job/biblioLinkerJob/prepareBLSTempEntityLangRest.sql");
 
+	private String blCleanupSql =
+			ResourceUtils.asString("job/biblioLinkerJob/blCleanup.sql");
+
+	private String blSimilarCleanupSql =
+			ResourceUtils.asString("job/biblioLinkerJob/blSimilarCleanup.sql");
+
 	private static final Integer INTEGER_OVERRIDEN_BY_EXPRESSION = null;
 
 	private int partitionThreads = 4;
@@ -144,7 +150,8 @@ public class BiblioLinkerJobConfig {
 			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER + ":prepareBLTempRestDedupStep") Step prepareBLTempRestDedupStep,
 			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER + ":blTempRestDedupPartitionedStep") Step blTempRestDedupStep,
 			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER + ":prepareBLTempOrphanedStep") Step prepareBLTempOrphanedStep,
-			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER + ":blTempOrphanedPartitionedStep") Step blTempOrphanedStep
+			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER + ":blTempOrphanedPartitionedStep") Step blTempOrphanedStep,
+			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER + ":blCleanupStep") Step blCleanupStep
 	) {
 		return jobs.get(Constants.JOB_ID_BIBLIO_LINKER)
 				.validator(new DedupRecordsJobParametersValidator())
@@ -163,6 +170,7 @@ public class BiblioLinkerJobConfig {
 				.next(blTempRestDedupStep)
 				.next(prepareBLTempOrphanedStep)
 				.next(blTempOrphanedStep)
+				.next(blCleanupStep)
 				.build();
 	}
 
@@ -532,6 +540,23 @@ public class BiblioLinkerJobConfig {
 	}
 
 	/**
+	 * Cleanup
+	 */
+	@Bean(name = Constants.JOB_ID_BIBLIO_LINKER + ":blCleanupStep")
+	public Step blCleanupStep() {
+		return steps.get("blCleanupStep")
+				.tasklet(blcleanupTasklet())
+				.listener(new StepProgressListener())
+				.build();
+	}
+
+	@Bean(name = "blCleanupStep:blcleanupTasklet")
+	@StepScope
+	public Tasklet blcleanupTasklet() {
+		return new SqlCommandTasklet(blCleanupSql);
+	}
+
+	/**
 	 * biblioLinkerSimilarJob
 	 */
 	@Bean
@@ -550,7 +575,8 @@ public class BiblioLinkerJobConfig {
 			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":prepareBLSimilarTempSeriesPublisherStep") Step prepareBLSimilarTempSeriesPublisherStep,
 			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":blSimilarTempSeriesPublisherPartitionedStep") Step blSimilarTempSeriesPublisherStep,
 			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":prepareBLSimilarTempEntityLangRestStep") Step prepareBLSimilarTempEntityLangRestStep,
-			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":blSimilarTempEntityLangRestPartitionedStep") Step blSimilarTempEntityLangRestStep
+			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":blSimilarTempEntityLangRestPartitionedStep") Step blSimilarTempEntityLangRestStep,
+			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":blSimilarCleanupStep") Step blSimilarCleanupStep
 	) {
 		return jobs.get(Constants.JOB_ID_BIBLIO_LINKER_SIMILAR)
 				.validator(new DedupRecordsJobParametersValidator())
@@ -569,6 +595,7 @@ public class BiblioLinkerJobConfig {
 				.next(blSimilarTempTopicKeyStep)
 				.next(prepareBLSimilarTempEntityLangRestStep)
 				.next(blSimilarTempEntityLangRestStep)
+				.next(blSimilarCleanupStep)
 				.build();
 	}
 
@@ -1037,6 +1064,22 @@ public class BiblioLinkerJobConfig {
 		return new BiblioLinkerSimilarSimpleStepProcessor(BiblioLinkerSimilarType.ENTITY_LANGUAGE);
 	}
 
+	/**
+	 * Cleanup BLS
+	 */
+	@Bean(name = Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":blSimilarCleanupStep")
+	public Step blSimilarCleanupStep() {
+		return steps.get("blSimilarCleanupStep")
+				.tasklet(blSimilarcleanupTasklet())
+				.listener(new StepProgressListener())
+				.build();
+	}
+
+	@Bean(name = "blSimilarCleanupStep:blSimilarcleanupTasklet")
+	@StepScope
+	public Tasklet blSimilarcleanupTasklet() {
+		return new SqlCommandTasklet(blSimilarCleanupSql);
+	}
 
 	/**
 	 * Generic components
