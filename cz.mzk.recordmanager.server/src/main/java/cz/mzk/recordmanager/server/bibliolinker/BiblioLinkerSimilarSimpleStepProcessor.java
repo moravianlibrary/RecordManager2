@@ -37,12 +37,12 @@ public class BiblioLinkerSimilarSimpleStepProcessor implements
 
 	private ProgressLogger progressLogger = new ProgressLogger(logger, 1000);
 
-	private BiblioLinkerSimilarType type;
+	protected BiblioLinkerSimilarType type;
 
 	private static final List<BiblioLinkerSimilarType> ONLY_EMPTY_SIMILAR =
 			new ArrayList<>(Collections.singletonList(BiblioLinkerSimilarType.ENTITY_LANGUAGE));
 
-	private static final int MAX_SIMILARS = 5;
+	protected static final int MAX_SIMILARS = 5;
 
 	public BiblioLinkerSimilarSimpleStepProcessor() {
 	}

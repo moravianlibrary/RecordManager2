@@ -11,6 +11,7 @@ public enum BiblioLinkerSimilarType implements StringValueEnum {
 	ISSN_SERIES("issn_series"),
 	SERIES_PUBLISHE("series+publ"),
 	ENTITY_LANGUAGE("entity+lang"),
+	REST("rest"),
 	UNSPECIFIED("unspecified");
 
 	private final String value;

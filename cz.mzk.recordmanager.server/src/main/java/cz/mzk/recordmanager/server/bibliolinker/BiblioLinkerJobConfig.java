@@ -80,6 +80,8 @@ public class BiblioLinkerJobConfig {
 
 	private static final String TMP_BLS_TABLE_ENTITY_LANGUAGE_REST = "tmp_bls_entity_lang_rest";
 
+	private static final String TMP_BLS_TABLE_REST = "tmp_bls_rest";
+
 	private String initBiblioLinkerSql = ResourceUtils.asString("job/biblioLinkerJob/initBiblioLinker.sql");
 
 	private String initBiblioLinkerSimilarSql = ResourceUtils.asString("job/biblioLinkerJob/initBiblioLinkerSimilar.sql");
@@ -121,6 +123,9 @@ public class BiblioLinkerJobConfig {
 
 	private String prepareBLSimilarTempEntityLangRestTableSql =
 			ResourceUtils.asString("job/biblioLinkerJob/prepareBLSTempEntityLangRest.sql");
+
+	private String prepareBLSimilarTempRestTableSql =
+			ResourceUtils.asString("job/biblioLinkerJob/prepareBLSTempRest.sql");
 
 	private String blCleanupSql =
 			ResourceUtils.asString("job/biblioLinkerJob/blCleanup.sql");
@@ -576,6 +581,8 @@ public class BiblioLinkerJobConfig {
 			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":blSimilarTempSeriesPublisherPartitionedStep") Step blSimilarTempSeriesPublisherStep,
 			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":prepareBLSimilarTempEntityLangRestStep") Step prepareBLSimilarTempEntityLangRestStep,
 			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":blSimilarTempEntityLangRestPartitionedStep") Step blSimilarTempEntityLangRestStep,
+			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":prepareBLSimilarTempRestStep") Step prepareBLSimilarTempRestStep,
+			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":blSimilarTempRestPartitionedStep") Step blSimilarTempRestStep,
 			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":blSimilarCleanupStep") Step blSimilarCleanupStep
 	) {
 		return jobs.get(Constants.JOB_ID_BIBLIO_LINKER_SIMILAR)
@@ -595,6 +602,8 @@ public class BiblioLinkerJobConfig {
 				.next(blSimilarTempTopicKeyStep)
 				.next(prepareBLSimilarTempEntityLangRestStep)
 				.next(blSimilarTempEntityLangRestStep)
+				.next(prepareBLSimilarTempRestStep)
+				.next(blSimilarTempRestStep)
 				.next(blSimilarCleanupStep)
 				.build();
 	}
@@ -1062,6 +1071,62 @@ public class BiblioLinkerJobConfig {
 	@StepScope
 	public ItemProcessor<List<Long>, List<HarvestedRecord>> blSimilarEntityLangRestStepProsessor() {
 		return new BiblioLinkerSimilarSimpleStepProcessor(BiblioLinkerSimilarType.ENTITY_LANGUAGE);
+	}
+
+	/**
+	 * only records without similar
+	 */
+	@Bean(name = Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":prepareBLSimilarTempRestTasklet")
+	@StepScope
+	public Tasklet prepareBLSimilarTempRestTasklet() {
+		return new SqlCommandTasklet(prepareBLSimilarTempRestTableSql);
+	}
+
+	@Bean(name = Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":prepareBLSimilarTempRestStep")
+	public Step prepareBLSimilarTempRestStep() {
+		return steps.get("prepareBLSimilarTempRestStep")
+				.tasklet(prepareBLSimilarTempRestTasklet())
+				.listener(new StepProgressListener())
+				.build();
+	}
+
+	@Bean(name = Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":blSimilarTempRestStep")
+	public Step blSimilarTempRestStep() throws Exception {
+		return steps.get("blSimilarTempRestStep")
+				.listener(new StepProgressListener())
+				.<List<Long>, List<HarvestedRecord>>chunk(1)
+				.faultTolerant()
+				.keyGenerator(KeyGeneratorForList.INSTANCE)
+				.retry(LockAcquisitionException.class)
+				.retryLimit(RETRY_LIMIT)
+				.reader(blSimilarTempRestStepReader(INTEGER_OVERRIDEN_BY_EXPRESSION))
+				.processor(blSimilarRestStepProsessor())
+				.writer(blSimpleKeysStepWriter())
+				.build();
+	}
+
+	@Bean(name = Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":blSimilarTempRestPartitionedStep")
+	public Step blSimilarTempRestPartitionedStep() throws Exception {
+		return steps.get("blSimilarTempRestPartitionedStep")
+				.partitioner("blSimilarTempRestPartitionedStepSlave", this.partioner()) //
+				.taskExecutor(this.taskExecutor)
+				.gridSize(this.partitionThreads)
+				.step(blSimilarTempRestStep())
+				.build();
+	}
+
+	@Bean(name = "blSimilarRest:reader")
+	@StepScope
+	public ItemReader<List<Long>> blSimilarTempRestStepReader(
+			@Value("#{stepExecutionContext[modulo]}") Integer modulo
+	) throws Exception {
+		return blSimpleKeysReader(TMP_BLS_TABLE_REST, "biblio_linker_id", modulo);
+	}
+
+	@Bean(name = "blSimilarRest:processor")
+	@StepScope
+	public ItemProcessor<List<Long>, List<HarvestedRecord>> blSimilarRestStepProsessor() {
+		return new BiblioLinkerSimilarRestStepProcessor(BiblioLinkerSimilarType.REST);
 	}
 
 	/**

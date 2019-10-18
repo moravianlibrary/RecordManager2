@@ -36,6 +36,14 @@ public class BiblioLinkerSimiliar extends AbstractDomainObject implements Compar
 		return newBLSimilar;
 	}
 
+	public static BiblioLinkerSimiliar create(final String id, final Long similarRecordId, final BiblioLinkerSimilarType type) {
+		BiblioLinkerSimiliar newBLSimilar = new BiblioLinkerSimiliar();
+		newBLSimilar.setHarvestedRecordSimilarId(similarRecordId);
+		newBLSimilar.setUrlId(id);
+		newBLSimilar.setType(type);
+		return newBLSimilar;
+	}
+
 	public void setUrlId(String urlId) {
 		this.urlId = urlId;
 	}
