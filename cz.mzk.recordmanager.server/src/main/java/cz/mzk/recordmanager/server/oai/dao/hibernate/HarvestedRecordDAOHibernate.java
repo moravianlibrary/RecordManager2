@@ -393,7 +393,7 @@ public class HarvestedRecordDAOHibernate extends
 	public Collection<HarvestedRecord> getByBiblioLinkerIds(List<Long> blId) {
 		Session session = sessionFactory.getCurrentSession();
 		return (List<HarvestedRecord>) session
-				.createQuery("from HarvestedRecord where biblio_linker_id in (:blIds)")
+				.createQuery("from HarvestedRecord where biblio_linker_id in (:blIds) and deleted is null")
 				.setParameterList("blIds", blId)
 				.list();
 	}

@@ -62,6 +62,7 @@ public class BiblioLinkerSimilarSimpleStepProcessor implements
 		records = sortrecords(harvestedRecordDao.getByBiblioLinkerIds(biblioIdsList));
 		for (Long blOuter : records.keySet()) {
 			for (HarvestedRecord hr : records.get(blOuter)) {
+				if (hr.getDeleted() != null) continue;
 				similarIds = new TreeSet<>(hr.getBiblioLinkerSimiliarUrls());
 				if (!similarIds.isEmpty() && ONLY_EMPTY_SIMILAR.contains(type)) continue;
 				similarHr = new HashSet<>();

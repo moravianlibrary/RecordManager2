@@ -48,6 +48,7 @@ public class BiblioLinkerSimilarRestStepProcessor extends BiblioLinkerSimilarSim
 			Collection<BiblioLinkerSimiliar> bls = blSimilarDao.getByBilioLinkerId(blId, MAX_SIMILARS);
 			if (bls.isEmpty()) continue;
 			for (HarvestedRecord hr : hrs) {
+				if (hr.getDeleted() != null) continue;
 				List<BiblioLinkerSimiliar> newBls = new ArrayList<>();
 				for (BiblioLinkerSimiliar bl : bls) {
 					newBls.add(BiblioLinkerSimiliar.create(bl.getUrlId(), bl.getHarvestedRecordSimilarId(), bl.getType()));
