@@ -51,7 +51,7 @@ public class BiblioLinkerSimilarRestStepProcessor extends BiblioLinkerSimilarSim
 				if (hr.getDeleted() != null) continue;
 				List<BiblioLinkerSimiliar> newBls = new ArrayList<>();
 				for (BiblioLinkerSimiliar bl : bls) {
-					newBls.add(BiblioLinkerSimiliar.create(bl.getUrlId(), bl.getHarvestedRecordSimilarId(), bl.getType()));
+					newBls.add(BiblioLinkerSimiliar.create(bl.getUrlId(), bl.getHarvestedRecordSimilarId(), type));
 				}
 				hr.setBiblioLinkerSimiliarUrls(newBls);
 				toUpdate.add(hr);
