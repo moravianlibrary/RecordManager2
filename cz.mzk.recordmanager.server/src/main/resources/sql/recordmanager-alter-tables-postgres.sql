@@ -1229,7 +1229,7 @@ CREATE TABLE biblio_linker (
   updated              TIMESTAMP
 );
 ALTER TABLE harvested_record ADD COLUMN biblio_linker_id DECIMAL(10);
-CREATE INDEX hr_biblilinker_dedup_record_id_idx ON harvested_record(dedup_record,biblio_linker_id);
+CREATE INDEX hr_biblilinker_dedup_record_id_idx ON harvested_record(dedup_record_id,biblio_linker_id);
 ALTER TABLE harvested_record ADD COLUMN biblio_linker_similar BOOLEAN DEFAULT FALSE;
 ALTER TABLE harvested_record ADD COLUMN next_biblio_linker_flag BOOLEAN DEFAULT TRUE;
 CREATE INDEX hr_next_biblio_linker_flag_ids ON harvested_record(next_biblio_linker_flag);

@@ -9,7 +9,7 @@ CREATE INDEX harvested_record_source_info_t_idx ON harvested_record(source_info_
 CREATE INDEX harvested_record_source_info_x_idx ON harvested_record(source_info_x);
 CREATE INDEX harvested_record_source_info_g_idx ON harvested_record(source_info_g);
 CREATE INDEX harvested_record_sigla_idx ON harvested_record(sigla);
-CREATE INDEX hr_biblilinker_dedup_record_id_idx ON harvested_record(dedup_record,biblio_linker_id);
+CREATE INDEX hr_biblilinker_dedup_record_id_idx ON harvested_record(dedup_record_id,biblio_linker_id);
 CREATE INDEX hr_next_biblio_linker_flag_ids ON harvested_record(next_biblio_linker_flag);
 CREATE INDEX hr_next_biblio_linker_similar_flag_ids ON harvested_record(next_biblio_linker_similar_flag);
 
