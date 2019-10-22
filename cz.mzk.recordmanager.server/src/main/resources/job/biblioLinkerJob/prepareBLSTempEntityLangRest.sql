@@ -1,3 +1,6 @@
+UPDATE harvested_record hr SET next_biblio_linker_similar_flag=FALSE WHERE next_biblio_linker_similar_flag=TRUE
+  AND EXISTS (SELECT 1 FROM biblio_linker_similar bls WHERE hr.id=bls.harvested_record_id);
+
 DROP TABLE IF EXISTS tmp_bls_entity_lang_rest;
 
 CREATE TABLE tmp_bls_entity_lang_rest AS
