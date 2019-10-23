@@ -168,7 +168,8 @@ CREATE TABLE harvested_record (
   raw_record           BYTEA,
   UNIQUE (import_conf_id, record_id),
   FOREIGN KEY (import_conf_id) REFERENCES import_conf(id),
-  FOREIGN KEY (format)              REFERENCES format(format)
+  FOREIGN KEY (format)         REFERENCES format(format),
+  FOREIGN KEY (biblio_linker_id) REFERENCES biblio_linker(id)
 );
 
 COMMENT ON TABLE harvested_record IS 'basic table, contains full records in raw form';
@@ -426,12 +427,13 @@ COMMENT ON TABLE obalkyknih_annotation IS 'downloaded annotations from obalkykni
 
 CREATE SEQUENCE biblio_linker_seq_id MINVALUE 1;
 CREATE TABLE biblio_linker (
-  id                   DECIMAL(10) DEFAULT NEXTVAL('"biblio_linker_seq_id"')  PRIMARY KEY,
+  id                   DECIMAL(10) DEFAULT NEXTVAL('"biblio_linker_seq_id"') PRIMARY KEY,
   updated              TIMESTAMP
 );
 
+CREATE SEQUENCE biblio_linker_similar_seq_id MINVALUE 1;
 CREATE TABLE biblio_linker_similar (
-  id                   DECIMAL(10) PRIMARY KEY,
+  id                   DECIMAL(10) DEFAULT NEXTVAL('"biblio_linker_similar_seq_id"') PRIMARY KEY,
   harvested_record_id  DECIMAL(10),
   harvested_record_similar_id DECIMAL(10),
   url_id               TEXT,

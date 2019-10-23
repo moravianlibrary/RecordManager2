@@ -1229,6 +1229,7 @@ CREATE TABLE biblio_linker (
   updated              TIMESTAMP
 );
 ALTER TABLE harvested_record ADD COLUMN biblio_linker_id DECIMAL(10);
+ALTER TABLE harvested_record ADD CONSTRAINT harvested_record_biblio_linker_fk FOREIGN KEY (biblio_linker_id) REFERENCES biblio_linker(id);
 CREATE INDEX hr_biblilinker_dedup_record_id_idx ON harvested_record(dedup_record_id,biblio_linker_id);
 ALTER TABLE harvested_record ADD COLUMN biblio_linker_similar BOOLEAN DEFAULT FALSE;
 ALTER TABLE harvested_record ADD COLUMN next_biblio_linker_flag BOOLEAN DEFAULT TRUE;
@@ -1239,8 +1240,9 @@ ALTER TABLE harvested_record ADD COLUMN biblio_linker_keys_hash CHAR(40);
 ALTER TABLE harvested_record ADD COLUMN bl_author VARCHAR(200);
 ALTER TABLE harvested_record ADD COLUMN bl_publisher VARCHAR(200);
 ALTER TABLE harvested_record ADD COLUMN bl_series VARCHAR(200);
+CREATE SEQUENCE biblio_linker_similar_seq_id MINVALUE 1;
 CREATE TABLE biblio_linker_similar (
-  id                   DECIMAL(10) PRIMARY KEY,
+  id                   DECIMAL(10) DEFAULT NEXTVAL('"biblio_linker_similar_seq_id"') PRIMARY KEY,
   harvested_record_id  DECIMAL(10),
   harvested_record_similar_id DECIMAL(10),
   url_id               TEXT,
