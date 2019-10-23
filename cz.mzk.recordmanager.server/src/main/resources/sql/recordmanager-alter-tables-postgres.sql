@@ -1228,18 +1228,19 @@ CREATE TABLE biblio_linker (
   id                   DECIMAL(10) DEFAULT NEXTVAL('"biblio_linker_seq_id"')  PRIMARY KEY,
   updated              TIMESTAMP
 );
-ALTER TABLE harvested_record ADD COLUMN biblio_linker_id DECIMAL(10);
+ALTER TABLE harvested_record
+  ADD COLUMN biblio_linker_id DECIMAL(10),
+  ADD COLUMN biblio_linker_similar BOOLEAN DEFAULT FALSE,
+  ADD COLUMN next_biblio_linker_flag BOOLEAN DEFAULT TRUE,
+  ADD COLUMN next_biblio_linker_similar_flag BOOLEAN DEFAULT TRUE,
+  ADD COLUMN biblio_linker_keys_hash CHAR(40),
+  ADD COLUMN bl_author VARCHAR(200),
+  ADD COLUMN bl_publisher VARCHAR(200),
+  ADD COLUMN bl_series VARCHAR(200);
 ALTER TABLE harvested_record ADD CONSTRAINT harvested_record_biblio_linker_fk FOREIGN KEY (biblio_linker_id) REFERENCES biblio_linker(id);
 CREATE INDEX hr_biblilinker_dedup_record_id_idx ON harvested_record(dedup_record_id,biblio_linker_id);
-ALTER TABLE harvested_record ADD COLUMN biblio_linker_similar BOOLEAN DEFAULT FALSE;
-ALTER TABLE harvested_record ADD COLUMN next_biblio_linker_flag BOOLEAN DEFAULT TRUE;
 CREATE INDEX hr_next_biblio_linker_flag_ids ON harvested_record(next_biblio_linker_flag);
-ALTER TABLE harvested_record ADD COLUMN next_biblio_linker_similar_flag BOOLEAN DEFAULT TRUE;
 CREATE INDEX hr_next_biblio_linker_similar_flag_ids ON harvested_record(next_biblio_linker_similar_flag);
-ALTER TABLE harvested_record ADD COLUMN biblio_linker_keys_hash CHAR(40);
-ALTER TABLE harvested_record ADD COLUMN bl_author VARCHAR(200);
-ALTER TABLE harvested_record ADD COLUMN bl_publisher VARCHAR(200);
-ALTER TABLE harvested_record ADD COLUMN bl_series VARCHAR(200);
 CREATE SEQUENCE biblio_linker_similar_seq_id MINVALUE 1;
 CREATE TABLE biblio_linker_similar (
   id                   DECIMAL(10) DEFAULT NEXTVAL('"biblio_linker_similar_seq_id"') PRIMARY KEY,
