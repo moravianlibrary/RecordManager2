@@ -79,10 +79,13 @@ public class HarvestedRecordWriter implements ItemWriter<List<HarvestedRecord>> 
 
 		} else { // deleted records by institution - drop dedup kyes, metadata
 			recordDao.dropDedupKeys(record);
+			recordDao.dropBilioLinkerKeys(record);
 			record.setRawRecord(new byte[0]);
 			record.setDedupKeysHash("");
+			record.setBiblioLinkerKeysHash("");
 			record.setNextDedupFlag(true);
 			record.setNextBiblioLinkerFlag(true);
+			record.setNextBiblioLinkerSimilarFlag(true);
 		}
 		recordDao.persist(record);
 	}
