@@ -49,6 +49,7 @@ public class Constants {
 	public static final String JOB_ID_AGROVOC_CONVERTOR				= "convertAgrovocRecordsJob";
 	public static final String JOB_ID_IMPORT_ANNOTATIONS 			= "importAnnotationsObalkyJob";
 	public static final String JOB_ID_DELETE_ANNOTATIONS 			= "deleteAnnotationsObalkyJob";
+	public static final String JOB_ID_REGENERATE_BL_KEYS 			= "regenerateBiblioLinkerKeysJob";
 
 	public static final String JOB_PARAM_CONF_ID 		= "configurationId";
 	public static final String JOB_PARAM_FROM_DATE 		= "from";
