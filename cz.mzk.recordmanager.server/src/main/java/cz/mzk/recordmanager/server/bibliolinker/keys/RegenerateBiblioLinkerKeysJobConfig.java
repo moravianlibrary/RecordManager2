@@ -39,7 +39,7 @@ public class RegenerateBiblioLinkerKeysJobConfig {
 	@Autowired
 	private TaskExecutor taskExecutor;
 
-	private static final String STRING_OVERRIDEN_BY_EXPRESSION = null;
+	private static final Long LONG_OVERRIDEN_BY_EXPRESSION = null;
 
 	@Bean
 	public Job RegenerateBiblioLinkerKeysJob(
@@ -56,7 +56,7 @@ public class RegenerateBiblioLinkerKeysJobConfig {
 		return steps.get("regenBiblioLinkerKeysStep")
 				.listener(new StepProgressListener())
 				.<Long, Long>chunk(1)//
-				.reader(regenarateBiblioLinkerKeysReader(STRING_OVERRIDEN_BY_EXPRESSION))//
+				.reader(regenarateBiblioLinkerKeysReader(LONG_OVERRIDEN_BY_EXPRESSION))//
 				.writer(regenarateBiblioLinkerKeysWriter()) //
 				.taskExecutor(taskExecutor)
 				.build();
@@ -65,7 +65,7 @@ public class RegenerateBiblioLinkerKeysJobConfig {
 	@Bean(name = Constants.JOB_ID_REGENERATE_BL_KEYS + ":regenarateBiblioLinkerKeysReader")
 	@StepScope
 	public ItemReader<Long> regenarateBiblioLinkerKeysReader(
-			@Value("#{jobParameters[" + Constants.JOB_PARAM_RECORD_ID + "]}") String startRecordId
+			@Value("#{jobParameters[" + Constants.JOB_PARAM_RECORD_ID + "]}") Long startRecordId
 	) throws Exception {
 		JdbcPagingItemReader<Long> reader = new JdbcPagingItemReader<>();
 		SqlPagingQueryProviderFactoryBean pqpf = new SqlPagingQueryProviderFactoryBean();
@@ -73,7 +73,7 @@ public class RegenerateBiblioLinkerKeysJobConfig {
 		pqpf.setSelectClause("SELECT id");
 		pqpf.setFromClause("FROM harvested_record hr");
 		if (startRecordId != null) {
-			pqpf.setWhereClause("WHERE id>:startId");
+			pqpf.setWhereClause("WHERE id > :startId");
 			Map<String, Object> parameterValues = new HashMap<>();
 			parameterValues.put("startId", startRecordId);
 			reader.setParameterValues(parameterValues);
