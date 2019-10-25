@@ -21,7 +21,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.task.TaskExecutor;
 
 import javax.sql.DataSource;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Configuration
@@ -62,6 +64,28 @@ public class RegenerateBiblioLinkerKeysJobConfig {
 				.build();
 	}
 
+	//
+	@Bean
+	public Job RegenerateBiblioLinkerMissingKeysJob(
+			@Qualifier(Constants.JOB_ID_REGENERATE_BL_MISSING_KEYS + ":regenBiblioLinkerMissingKeysStep") Step regenBiblioLinkerMissingKeysStep) {
+		return jobs.get(Constants.JOB_ID_REGENERATE_BL_MISSING_KEYS)
+				.validator(new RegenerateBiblioLInkerJobParametersValidator())
+				.listener(JobFailureListener.INSTANCE)
+				.start(regenBiblioLinkerMissingKeysStep)
+				.build();
+	}
+
+	@Bean(name = Constants.JOB_ID_REGENERATE_BL_MISSING_KEYS + ":regenBiblioLinkerMissingKeysStep")
+	public Step regenBiblioLinkerMissingKeysStep() throws Exception {
+		return steps.get("regenBiblioLinkerMissingKeysStep")
+				.listener(new StepProgressListener())
+				.<Long, Long>chunk(1)//
+				.reader(regenarateBiblioLinkerMissingKeysReader(LONG_OVERRIDEN_BY_EXPRESSION))//
+				.writer(regenarateBiblioLinkerKeysWriter()) //
+				.taskExecutor(taskExecutor)
+				.build();
+	}
+
 	@Bean(name = Constants.JOB_ID_REGENERATE_BL_KEYS + ":regenarateBiblioLinkerKeysReader")
 	@StepScope
 	public ItemReader<Long> regenarateBiblioLinkerKeysReader(
@@ -82,6 +106,37 @@ public class RegenerateBiblioLinkerKeysJobConfig {
 		reader.setRowMapper(new LongValueRowMapper());
 		reader.setPageSize(100);
 		reader.setQueryProvider(pqpf.getObject());
+		reader.setDataSource(dataSource);
+		reader.afterPropertiesSet();
+		return reader;
+	}
+
+	@Bean(name = Constants.JOB_ID_REGENERATE_BL_KEYS + ":regenarateBiblioLinkerMissingKeysReader")
+	@StepScope
+	public ItemReader<Long> regenarateBiblioLinkerMissingKeysReader(
+			@Value("#{jobParameters[" + Constants.JOB_PARAM_RECORD_ID + "]}") Long startRecordId
+	) throws Exception {
+		JdbcPagingItemReader<Long> reader = new JdbcPagingItemReader<>();
+		SqlPagingQueryProviderFactoryBean pqpf = new SqlPagingQueryProviderFactoryBean();
+		pqpf.setDataSource(dataSource);
+		pqpf.setSelectClause("SELECT id");
+		pqpf.setFromClause("FROM harvested_record hr");
+		List<String> whereClause = new ArrayList<>();
+		Map<String, Object> parameterValues = new HashMap<>();
+		if (startRecordId != null) {
+			pqpf.setWhereClause("id > :startId");
+			parameterValues.put("startId", startRecordId);
+
+		}
+		whereClause.add("biblio_linker_keys_hash is null");
+		if (!whereClause.isEmpty()) {
+			pqpf.setWhereClause("WHERE " + String.join(" AND ", whereClause));
+		}
+		pqpf.setSortKey("id");
+		reader.setRowMapper(new LongValueRowMapper());
+		reader.setPageSize(100);
+		reader.setQueryProvider(pqpf.getObject());
+		reader.setParameterValues(parameterValues);
 		reader.setDataSource(dataSource);
 		reader.afterPropertiesSet();
 		return reader;
