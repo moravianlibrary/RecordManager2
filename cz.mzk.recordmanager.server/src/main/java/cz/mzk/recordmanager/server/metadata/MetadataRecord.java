@@ -410,6 +410,11 @@ public interface MetadataRecord {
 		return Collections.emptyList();
 	}
 
+	/**
+	 * get all {@link BlCommonTitle} for biblio linker
+	 *
+	 * @return list of {@link BlCommonTitle}
+	 */
 	default List<BlCommonTitle> getBiblioLinkerCommonTitle() {
 		return Collections.emptyList();
 	}

@@ -975,4 +975,37 @@ public class MarcRecordImplTest extends AbstractTest {
 		Assert.assertTrue(expected.containsAll(metadataRecord.getBiblioLinkerTitle()));
 		Assert.assertEquals(expected.size(), data.size());
 	}
+
+	@Test
+	public void getBiblioLinkerCommonTitle() {
+		MarcRecordImpl mri;
+		MetadataRecord metadataRecord;
+		List<String> data = new ArrayList<>();
+		List<BlCommonTitle> expected = new ArrayList<>();
+
+		data.add("787 $tTitle1"); // not BLCommonTitle
+		data.add("787 $tTitle2$iz cyklu:");
+		expected.add(BlCommonTitle.create("Title2"));
+		data.add("240 $aTitle3$pp");
+
+		mri = MarcRecordFactory.recordFactory(data);
+		metadataRecord = metadataFactory.getMetadataRecord(mri);
+		Assert.assertTrue(expected.containsAll(metadataRecord.getBiblioLinkerCommonTitle()));
+		Assert.assertEquals(metadataRecord.getBiblioLinkerCommonTitle().size(), expected.size());
+
+		data.clear();
+		expected.clear();
+
+		data.add("240 $aTitle3$pp");
+		expected.add(BlCommonTitle.create("Title3"));
+		data.add("240 $aTitle4a$bTitle4b$nn");
+		expected.add(BlCommonTitle.create("Title4a"));
+		expected.add(BlCommonTitle.create("Title4aTitle4b"));
+		data.add("240 $aTitle5a$bTitle5b"); // not BLCommonTitle
+
+		mri = MarcRecordFactory.recordFactory(data);
+		metadataRecord = metadataFactory.getMetadataRecord(mri);
+		Assert.assertTrue(expected.containsAll(metadataRecord.getBiblioLinkerCommonTitle()));
+		Assert.assertEquals(metadataRecord.getBiblioLinkerCommonTitle().size(), expected.size());
+	}
 }

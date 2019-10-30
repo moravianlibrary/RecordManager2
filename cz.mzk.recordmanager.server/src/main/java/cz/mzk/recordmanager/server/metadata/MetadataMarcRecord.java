@@ -78,6 +78,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 	private static final Pattern VIDEO_OTHER_F338 = Pattern.compile("vr|vz|vc|mc|mf|mr|mo|mz");
 	private static final Pattern OTHER_F336 = Pattern.compile("tcf|tdm|tdf", Pattern.CASE_INSENSITIVE);
 	private static final Pattern FOTOGRAFIE = Pattern.compile("fotografie", Pattern.CASE_INSENSITIVE);
+	private static final Pattern Z_CYKLU = Pattern.compile("z cyklu:", Pattern.CASE_INSENSITIVE);
 
 	private static final Long MAX_PAGES = 10_000_000L;
 	private static final String INVALID_YEAR = "Invalid year: %s";
@@ -1450,8 +1451,12 @@ public class MetadataMarcRecord implements MetadataRecord {
 		return getFirstField("440a:490a");
 	}
 
-	private static final Pattern Z_CYKLU = Pattern.compile("z cyklu:", Pattern.CASE_INSENSITIVE);
-
+	/**
+	 * 787t when subfield $i matches {@link #Z_CYKLU}
+	 * OR 24[056]$a, 24[056]$ab (IF $p OR $n)
+	 *
+	 * @return list of {@link BlCommonTitle}
+	 */
 	@Override
 	public List<BlCommonTitle> getBiblioLinkerCommonTitle() {
 		List<BlCommonTitle> results = new ArrayList<>();
