@@ -38,7 +38,7 @@ public abstract class HashingBiblioLinkerKeyParser implements BiblioLinkerKeysPa
 		BiblioLinkerKeysencapsulator encapsulator = new BiblioLinkerKeysencapsulator();
 
 		List<BLTitle> blTitles = new ArrayList<>();
-		for (BLTitle blTitle : metadataRecord.getBLTitle()) {
+		for (BLTitle blTitle : metadataRecord.getBiblioLinkerTitle()) {
 			blTitle.setBLTitleStr(MetadataUtils.normalizeAndShorten(
 					blTitle.getBLTitleStr(),
 					EFFECTIVE_TITLE_LENGTH));

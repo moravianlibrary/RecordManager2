@@ -953,4 +953,26 @@ public class MarcRecordImplTest extends AbstractTest {
 		mri = MarcRecordFactory.recordFactory(metadataList);
 		Assert.assertEquals(metadataFactory.getMetadataRecord(mri).getUrls(), results);
 	}
+
+	@Test
+	public void getBiblioLinkerTitle() {
+		MarcRecordImpl mri;
+		MetadataRecord metadataRecord;
+		List<String> data = new ArrayList<>();
+		List<BLTitle> expected = new ArrayList<>();
+
+		data.add("765 $tTitle1");
+		expected.add(BLTitle.create("Title1"));
+		data.add("210 $aTitle2");
+		expected.add(BLTitle.create("Title2"));
+		data.add("222 $aTitle3");
+		expected.add(BLTitle.create("Title3"));
+		data.add("130 $aTitle4(text)$nn$pp");
+		expected.add(BLTitle.create("Title4np"));
+
+		mri = MarcRecordFactory.recordFactory(data);
+		metadataRecord = metadataFactory.getMetadataRecord(mri);
+		Assert.assertTrue(expected.containsAll(metadataRecord.getBiblioLinkerTitle()));
+		Assert.assertEquals(expected.size(), data.size());
+	}
 }

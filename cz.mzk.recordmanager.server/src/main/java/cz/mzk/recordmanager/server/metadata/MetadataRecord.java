@@ -401,7 +401,12 @@ public interface MetadataRecord {
 		return Collections.emptyList();
 	}
 
-	default List<BLTitle> getBLTitle(){
+	/**
+	 * get all {@link BLTitle} for biblio linker
+	 *
+	 * @return list of {@link BLTitle}
+	 */
+	default List<BLTitle> getBiblioLinkerTitle(){
 		return Collections.emptyList();
 	}
 

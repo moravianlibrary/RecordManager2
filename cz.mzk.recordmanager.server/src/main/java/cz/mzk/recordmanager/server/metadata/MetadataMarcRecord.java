@@ -1314,12 +1314,13 @@ public class MetadataMarcRecord implements MetadataRecord {
 	}
 
 	/**
-	 * get {@link BLTitle} of record
+	 * 765a, 210a, 222a
+	 * 130anp, 730anp - without text in parentheses in subfield a
 	 *
-	 * @return
+	 * @return list of {@link BLTitle}
 	 */
 	@Override
-	public List<BLTitle> getBLTitle() {
+	public List<BLTitle> getBiblioLinkerTitle() {
 		List<BLTitle> result = new ArrayList<>();
 		for (DataField df : underlayingMarc.getDataFields("765")) {
 			String titleText = parseTitleValue(df, new char[]{'t'});
