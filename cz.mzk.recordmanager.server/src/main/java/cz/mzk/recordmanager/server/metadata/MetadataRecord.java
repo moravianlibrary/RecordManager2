@@ -428,6 +428,11 @@ public interface MetadataRecord {
 		return null;
 	}
 
+	/**
+	 * get publisher for biblio linker
+	 *
+	 * @return String
+	 */
 	default String getBiblioLinkerPublisher() {
 		return null;
 	}

@@ -1446,6 +1446,11 @@ public class MetadataMarcRecord implements MetadataRecord {
 		return null;
 	}
 
+	/**
+	 * first of 264b, 260b, 260f, 928a
+	 *
+	 * @return String
+	 */
 	@Override
 	public String getBiblioLinkerPublisher() {
 		return getFirstField("264b:260b:260f:928a");
