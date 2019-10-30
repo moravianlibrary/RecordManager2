@@ -129,6 +129,11 @@ public class PatentsMetadataMarcRecord extends MetadataMarcRecord{
 		return null;
 	}
 
+	/**
+	 * 072a
+	 *
+	 * @return List of {@link BLTopicKey}
+	 */
 	@Override
 	public List<BLTopicKey> getBiblioLinkerTopicKey() {
 		List<BLTopicKey> result = new ArrayList<>();

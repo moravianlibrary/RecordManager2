@@ -446,6 +446,11 @@ public interface MetadataRecord {
 		return null;
 	}
 
+	/**
+	 * get {@link BLTopicKey} for biblio linker
+	 *
+	 * @return List of {@link BLTopicKey}
+	 */
 	default List<BLTopicKey> getBiblioLinkerTopicKey() {
 		return Collections.emptyList();
 	}

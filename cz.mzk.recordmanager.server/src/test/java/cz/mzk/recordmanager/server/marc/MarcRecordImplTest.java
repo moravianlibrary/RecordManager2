@@ -1060,4 +1060,38 @@ public class MarcRecordImplTest extends AbstractTest {
 		metadataRecord = metadataFactory.getMetadataRecord(mri);
 		Assert.assertEquals(metadataRecord.getBiblioLinkerSeries(), "Series1");
 	}
+
+	@Test
+	public void getBiblioLinkerTopicKey() {
+		MarcRecordImpl mri;
+		MetadataRecord metadataRecord;
+		List<String> data = new ArrayList<>();
+		List<BLTopicKey> expected = new ArrayList<>();
+
+		data.add("6502 $aNotTopicKey");
+		data.add("651 $7cTopicKey1");
+		expected.add(BLTopicKey.create("cTopicKey1"));
+		data.add("651 $7bTopicKey2");
+		expected.add(BLTopicKey.create("bTopicKey2"));
+		data.add("651 $7aTopicKey3");
+		expected.add(BLTopicKey.create("aTopicKey3"));
+		data.add("651 $7dNotTopicKey2"); // get only 3 values
+
+		mri = MarcRecordFactory.recordFactory(data);
+		metadataRecord = metadataFactory.getMetadataRecord(mri);
+		Assert.assertTrue(expected.containsAll(metadataRecord.getBiblioLinkerTopicKey()));
+		Assert.assertEquals(metadataRecord.getBiblioLinkerTopicKey().size(), expected.size());
+
+		data.clear();
+		expected.clear();
+		data.add("000 ------e"); // map
+		data.add("650 $7TopicKey1");
+		expected.add(BLTopicKey.create("TopicKey1"));
+		data.add("650 2 $7NotTopicKey");
+
+		mri = MarcRecordFactory.recordFactory(data);
+		metadataRecord = metadataFactory.getMetadataRecord(mri);
+		Assert.assertTrue(expected.containsAll(metadataRecord.getBiblioLinkerTopicKey()));
+		Assert.assertEquals(metadataRecord.getBiblioLinkerTopicKey().size(), expected.size());
+	}
 }

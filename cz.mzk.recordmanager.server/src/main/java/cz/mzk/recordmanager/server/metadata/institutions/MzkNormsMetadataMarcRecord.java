@@ -31,6 +31,11 @@ public class MzkNormsMetadataMarcRecord extends MetadataMarcRecord{
 		return false;
 	}
 
+	/**
+	 * 084a
+	 *
+	 * @return List of {@link BLTopicKey}
+	 */
 	@Override
 	public List<BLTopicKey> getBiblioLinkerTopicKey() {
 		List<BLTopicKey> result = new ArrayList<>();

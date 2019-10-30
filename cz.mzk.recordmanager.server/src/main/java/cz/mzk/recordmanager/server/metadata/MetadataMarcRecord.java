@@ -107,7 +107,8 @@ public class MetadataMarcRecord implements MetadataRecord {
 	private static final List<String> ENTITY_RELATIONSHIP =
 			Arrays.asList("aut", "edt", "cmp", "ivr", "ive", "org", "drt", "ant", "ctb", "ccp");
 	private static final List<String> BL_AUTHOR_RELATIONSHIP = Arrays.asList("ccp", "ant", "aut");
-
+	private static final List<String> BL_TOPIC_KEY_STOP_WORDS_650 = Arrays.asList("d006801", "ph115615", "ph128175", "ph114390",
+			"ph116858", "ph116861", "d005260", "ph114056", "d005260", "ph135292");
 	private static final List<HarvestedRecordFormatEnum> BL_AUTHOR_VIDEO =
 			Arrays.asList(HarvestedRecordFormatEnum.VIDEO_BLURAY,
 					HarvestedRecordFormatEnum.VIDEO_CD,
@@ -1495,9 +1496,15 @@ public class MetadataMarcRecord implements MetadataRecord {
 		return results;
 	}
 
-	private static final List<String> STOP_WORDS_650 = Arrays.asList("d006801", "ph115615", "ph128175", "ph114390",
-			"ph116858", "ph116861", "d005260", "ph114056", "d005260", "ph135292");
-
+	/**
+	 * first 3 values alphabetically
+	 * map: 650 ind1!=2 subfield 7, subfield 7 not contains any of {@link #BL_TOPIC_KEY_STOP_WORDS_650}
+	 * other: 651 subfield 7
+	 * <p>
+	 * first of 072a
+	 *
+	 * @return List of {@link BLTopicKey}
+	 */
 	@Override
 	public List<BLTopicKey> getBiblioLinkerTopicKey() {
 		List<BLTopicKey> results = new ArrayList<>();
@@ -1505,7 +1512,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 		if (isMap()) {
 			for (DataField df : underlayingMarc.getDataFields("650")) {
 				if (df.getIndicator1() != '2' && df.getSubfield('7') != null) {
-					if (STOP_WORDS_650.contains(df.getSubfield('7').getData())) continue;
+					if (BL_TOPIC_KEY_STOP_WORDS_650.contains(df.getSubfield('7').getData())) continue;
 					if (!topicKey.contains(df.getSubfield('7').getData())) topicKey.add(df.getSubfield('7').getData());
 				}
 			}

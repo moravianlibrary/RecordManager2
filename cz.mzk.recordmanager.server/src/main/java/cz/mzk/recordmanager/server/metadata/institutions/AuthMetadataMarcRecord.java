@@ -84,6 +84,11 @@ public class AuthMetadataMarcRecord extends MetadataMarcRecord {
 		return null;
 	}
 
+	/**
+	 * 374a or 372a or 370c
+	 *
+	 * @return List of {@link BLTopicKey}
+	 */
 	@Override
 	public List<BLTopicKey> getBiblioLinkerTopicKey() {
 		List<BLTopicKey> result = new ArrayList<>();
