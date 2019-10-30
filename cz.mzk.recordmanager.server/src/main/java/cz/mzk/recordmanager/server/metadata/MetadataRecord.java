@@ -419,6 +419,11 @@ public interface MetadataRecord {
 		return Collections.emptyList();
 	}
 
+	/**
+	 * get author for biblio linker
+	 *
+	 * @return String
+	 */
 	default String getBiblioLinkerAuthor(){
 		return null;
 	}

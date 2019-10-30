@@ -106,7 +106,15 @@ public class MetadataMarcRecord implements MetadataRecord {
 
 	private static final List<String> ENTITY_RELATIONSHIP =
 			Arrays.asList("aut", "edt", "cmp", "ivr", "ive", "org", "drt", "ant", "ctb", "ccp");
-	private static final List<String> AUTHOR_RELATIONSHIP = Arrays.asList("ccp", "ant", "aut");
+	private static final List<String> BL_AUTHOR_RELATIONSHIP = Arrays.asList("ccp", "ant", "aut");
+
+	private static final List<HarvestedRecordFormatEnum> BL_AUTHOR_VIDEO =
+			Arrays.asList(HarvestedRecordFormatEnum.VIDEO_BLURAY,
+					HarvestedRecordFormatEnum.VIDEO_CD,
+					HarvestedRecordFormatEnum.VIDEO_DOCUMENTS,
+					HarvestedRecordFormatEnum.VIDEO_DVD,
+					HarvestedRecordFormatEnum.VIDEO_OTHER,
+					HarvestedRecordFormatEnum.VIDEO_VHS);
 
 	private static final String URL_COMMENT_FORMAT = "%s (%s)";
 
@@ -1371,14 +1379,11 @@ public class MetadataMarcRecord implements MetadataRecord {
 		return results;
 	}
 
-	private static final List<HarvestedRecordFormatEnum> BL_AUTHOR_VIDEO =
-			Arrays.asList(HarvestedRecordFormatEnum.VIDEO_BLURAY,
-					HarvestedRecordFormatEnum.VIDEO_CD,
-					HarvestedRecordFormatEnum.VIDEO_DOCUMENTS,
-					HarvestedRecordFormatEnum.VIDEO_DVD,
-					HarvestedRecordFormatEnum.VIDEO_OTHER,
-					HarvestedRecordFormatEnum.VIDEO_VHS);
-
+	/**
+	 * get author for biblio linker
+	 *
+	 * @return String
+	 */
 	@Override
 	public String getBiblioLinkerAuthor() {
 		String result;
@@ -1397,7 +1402,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 		for (String tag : new String[]{tagPrefix + "00", tagPrefix + "10", tagPrefix + "11"}) {
 			for (DataField df : underlayingMarc.getDataFields(tag)) {
 				if (filter && (df.getSubfield('4') == null
-						|| !AUTHOR_RELATIONSHIP.contains(df.getSubfield('4').getData()))) {
+						|| !BL_AUTHOR_RELATIONSHIP.contains(df.getSubfield('4').getData()))) {
 					continue;
 				}
 				if (df.getSubfield('7') != null) return df.getSubfield('7').getData();
@@ -1405,7 +1410,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 		}
 		for (DataField df : underlayingMarc.getDataFields(tagPrefix + "00")) {
 			if (filter && (df.getSubfield('4') == null
-					|| !AUTHOR_RELATIONSHIP.contains(df.getSubfield('4').getData()))) {
+					|| !BL_AUTHOR_RELATIONSHIP.contains(df.getSubfield('4').getData()))) {
 				continue;
 			}
 			if (df.getSubfield('a') == null) continue;
@@ -1418,7 +1423,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 		}
 		for (DataField df : underlayingMarc.getDataFields(tagPrefix + "10")) {
 			if (filter && (df.getSubfield('4') == null
-					|| !AUTHOR_RELATIONSHIP.contains(df.getSubfield('4').getData()))) {
+					|| !BL_AUTHOR_RELATIONSHIP.contains(df.getSubfield('4').getData()))) {
 				continue;
 			}
 			StringBuilder result = new StringBuilder();
@@ -1429,7 +1434,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 		}
 		for (DataField df : underlayingMarc.getDataFields(tagPrefix + "11")) {
 			if (filter && (df.getSubfield('4') == null
-					|| !AUTHOR_RELATIONSHIP.contains(df.getSubfield('4').getData()))) {
+					|| !BL_AUTHOR_RELATIONSHIP.contains(df.getSubfield('4').getData()))) {
 				continue;
 			}
 			StringBuilder result = new StringBuilder();
