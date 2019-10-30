@@ -1046,4 +1046,18 @@ public class MarcRecordImplTest extends AbstractTest {
 		metadataRecord = metadataFactory.getMetadataRecord(mri);
 		Assert.assertEquals(metadataRecord.getBiblioLinkerPublisher(), "Publisher1");
 	}
+
+	@Test
+	public void getBiblioLinkerSeries() {
+		MarcRecordImpl mri;
+		MetadataRecord metadataRecord;
+		List<String> data = new ArrayList<>();
+
+		data.add("440 $aSeries1");
+		data.add("490 $aSeries2");
+
+		mri = MarcRecordFactory.recordFactory(data);
+		metadataRecord = metadataFactory.getMetadataRecord(mri);
+		Assert.assertEquals(metadataRecord.getBiblioLinkerSeries(), "Series1");
+	}
 }

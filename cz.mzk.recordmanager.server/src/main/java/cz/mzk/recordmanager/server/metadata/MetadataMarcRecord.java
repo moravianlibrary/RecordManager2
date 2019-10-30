@@ -1456,6 +1456,11 @@ public class MetadataMarcRecord implements MetadataRecord {
 		return getFirstField("264b:260b:260f:928a");
 	}
 
+	/**
+	 * first of 440a, 490a
+	 *
+	 * @return String
+	 */
 	@Override
 	public String getBiblioLinkerSeries() {
 		return getFirstField("440a:490a");

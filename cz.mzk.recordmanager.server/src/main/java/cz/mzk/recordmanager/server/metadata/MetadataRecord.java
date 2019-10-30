@@ -437,6 +437,11 @@ public interface MetadataRecord {
 		return null;
 	}
 
+	/**
+	 * get series for biblio linker
+	 *
+	 * @return String
+	 */
 	default String getBiblioLinkerSeries() {
 		return null;
 	}
