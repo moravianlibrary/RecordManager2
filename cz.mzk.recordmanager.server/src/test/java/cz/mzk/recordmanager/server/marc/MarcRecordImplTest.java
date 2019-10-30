@@ -973,7 +973,7 @@ public class MarcRecordImplTest extends AbstractTest {
 		mri = MarcRecordFactory.recordFactory(data);
 		metadataRecord = metadataFactory.getMetadataRecord(mri);
 		Assert.assertTrue(expected.containsAll(metadataRecord.getBiblioLinkerTitle()));
-		Assert.assertEquals(expected.size(), data.size());
+		Assert.assertEquals(metadataRecord.getBiblioLinkerTitle().size(), expected.size());
 	}
 
 	@Test
