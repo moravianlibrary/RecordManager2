@@ -216,6 +216,9 @@ public class HarvestedRecord extends AbstractDomainObject {
 	@Column(name = "publisher")
 	private String publisher;
 
+	@Column(name = "edition")
+	private String edition;
+
 	@OneToMany
 	@JoinTable(
 	   name = "harvested_record_format_link", 
@@ -673,5 +676,13 @@ public class HarvestedRecord extends AbstractDomainObject {
 
 	public void setPublisher(String publisher) {
 		this.publisher = publisher;
+	}
+
+	public String getEdition() {
+		return edition;
+	}
+
+	public void setEdition(String edition) {
+		this.edition = edition;
 	}
 }

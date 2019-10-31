@@ -130,6 +130,7 @@ CREATE TABLE harvested_record (
   dedup_keys_hash      CHAR(40),
   next_dedup_flag      BOOLEAN DEFAULT TRUE,
   publisher            VARCHAR(100),
+  edition              VARCHAR(10),
   raw_record           BLOB,
   CONSTRAINT harvested_record_pk                     PRIMARY KEY (id),
   CONSTRAINT harvester_record_unique_id              UNIQUE (import_conf_id, record_id),

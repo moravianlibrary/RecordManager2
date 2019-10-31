@@ -29,7 +29,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 
 	protected HarvestedRecord harvestedRecord;
 
-	private static final Pattern PAGECOUNT_PATTERN = Pattern.compile("(\\d+)");
+	private static final Pattern NUMBER_PATTERN = Pattern.compile("(\\d+)");
 	private static final Pattern YEAR_PATTERN = Pattern.compile("\\d{4}");
 	private static final Pattern SCALE_PATTERN = Pattern.compile("\\d+[ ^]*\\d+");
 	protected static final Pattern UUID_PATTERN = Pattern.compile("uuid:[\\w-]+");
@@ -195,7 +195,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 		}
 
 		Long maxPages = -1L;
-		Matcher matcher = PAGECOUNT_PATTERN.matcher(count);
+		Matcher matcher = NUMBER_PATTERN.matcher(count);
 		while (matcher.find()) {
 			try {
 				Long pages = Long.parseLong(matcher.group(0));
@@ -1306,5 +1306,17 @@ public class MetadataMarcRecord implements MetadataRecord {
 		String publisher = underlayingMarc.getField("260", 'b');
 		if (publisher != null) return publisher;
 		return underlayingMarc.getField("264", 'b');
+	}
+
+	/**
+	 * first number from 250a
+	 *
+	 * @return String
+	 */
+	@Override
+	public String getEdition() {
+		Matcher matcher = NUMBER_PATTERN.matcher(underlayingMarc.getField("250", 'a'));
+		if (matcher.find()) return matcher.group(0);
+		return null;
 	}
 }

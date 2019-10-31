@@ -413,4 +413,13 @@ public interface MetadataRecord {
 		return null;
 	}
 
+	/**
+	 * get edition for deduplication
+	 *
+	 * @return String
+	 */
+	default String getEdition() {
+		return null;
+	}
+
 }
