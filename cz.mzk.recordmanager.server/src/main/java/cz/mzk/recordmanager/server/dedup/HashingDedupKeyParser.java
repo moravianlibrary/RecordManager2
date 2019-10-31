@@ -34,7 +34,7 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 	private final static int EFFECTIVE_AUTHOR_AUTH_KEY_LENGTH = 50;
 	private final static int EFFECTIVE_LENGTH_EDITION = 10;
 	private final static int EFFECTIVE_LENGTH_30 = 30;
-	private final static int EFFECTIVE_LENGTH_100 = 100;
+	private final static int EFFECTIVE_LENGTH_PUBLISHER = 100;
 	
 	@Autowired 
 	private HarvestedRecordFormatDAO harvestedRecordFormatDAO;
@@ -103,7 +103,7 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 		encapsulator.setEans(metadataRecord.getEANs());
 		encapsulator.setPublisherNumbers(metadataRecord.getPublisherNumber());
 		encapsulator.setLanguages(new HashSet<>(metadataRecord.getLanguages()));
-		encapsulator.setPublisher(MetadataUtils.normalizeAndShorten(metadataRecord.getPublisher(), EFFECTIVE_LENGTH_100));
+		encapsulator.setPublisher(MetadataUtils.normalizeAndShorten(metadataRecord.getPublisher(), EFFECTIVE_LENGTH_PUBLISHER));
 		encapsulator.setEdition(MetadataUtils.shorten(metadataRecord.getEdition(), EFFECTIVE_LENGTH_EDITION));
 
 		String computedHash = computeHashValue(encapsulator);
