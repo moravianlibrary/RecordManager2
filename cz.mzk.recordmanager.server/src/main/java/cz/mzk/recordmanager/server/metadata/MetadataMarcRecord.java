@@ -1315,7 +1315,9 @@ public class MetadataMarcRecord implements MetadataRecord {
 	 */
 	@Override
 	public String getEdition() {
-		Matcher matcher = NUMBER_PATTERN.matcher(underlayingMarc.getField("250", 'a'));
+		String data = underlayingMarc.getField("250", 'a');
+		if (data == null) return null;
+		Matcher matcher = NUMBER_PATTERN.matcher(data);
 		if (matcher.find()) return matcher.group(0);
 		return null;
 	}
