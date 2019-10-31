@@ -404,4 +404,13 @@ public interface MetadataRecord {
 		return null;
 	}
 
+	/**
+	 * get publisher for deduplication
+	 *
+	 * @return String
+	 */
+	default String getPublisher() {
+		return null;
+	}
+
 }

@@ -1296,4 +1296,15 @@ public class MetadataMarcRecord implements MetadataRecord {
 		return results;
 	}
 
+	/**
+	 * first of 260b, 264b
+	 *
+	 * @return String
+	 */
+	@Override
+	public String getPublisher() {
+		String publisher = underlayingMarc.getField("260", 'b');
+		if (publisher != null) return publisher;
+		return underlayingMarc.getField("264", 'b');
+	}
 }

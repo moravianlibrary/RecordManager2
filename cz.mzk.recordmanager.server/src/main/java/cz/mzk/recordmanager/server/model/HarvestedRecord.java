@@ -213,6 +213,9 @@ public class HarvestedRecord extends AbstractDomainObject {
 	@Column(name="publication_year")
 	private Long publicationYear;
 
+	@Column(name = "publisher")
+	private String publisher;
+
 	@OneToMany
 	@JoinTable(
 	   name = "harvested_record_format_link", 
@@ -662,5 +665,13 @@ public class HarvestedRecord extends AbstractDomainObject {
 
 	public void setLastHarvest(Date lastHarvest) {
 		this.lastHarvest = lastHarvest;
+	}
+
+	public String getPublisher() {
+		return publisher;
+	}
+
+	public void setPublisher(String publisher) {
+		this.publisher = publisher;
 	}
 }

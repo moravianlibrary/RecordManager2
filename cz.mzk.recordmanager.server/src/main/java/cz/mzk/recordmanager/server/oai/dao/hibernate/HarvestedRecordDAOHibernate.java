@@ -225,6 +225,7 @@ public class HarvestedRecordDAOHibernate extends
 		hr.setIssnSeries(null);
 		hr.setIssnSeriesOrder(null);
 		hr.setWeight(null);
+		hr.setPublisher(null);
 
 		List<Title> titles =  hr.getTitles();
 		hr.setTitles(new ArrayList<>());
