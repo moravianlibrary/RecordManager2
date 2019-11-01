@@ -1526,6 +1526,14 @@ public class MetadataMarcRecord implements MetadataRecord {
 		return results;
 	}
 
+	/**
+	 * first of 100$7, 110$7, 111$7, 100$ad(YYYY), 110$abcdn, 111$acdn, 700$7, 710$7, 711$7, 700$ad(YYYY), 710$abcdn, 711$acdn
+	 * first 3: 700$7, 710$7, 711$7, 700$ad(YYYY), 710$abcdn, 711$acdn and $4 exists in {@link #ENTITY_RELATIONSHIP}
+	 * first 3: 600$7, 610$7, 611$7, 600$ad(YYYY), 610$abcdn, 611$acdn
+	 * 100u, 700u, 314a
+	 *
+	 * @return List of {@link BLEntity}
+	 */
 	@Override
 	public List<BLEntity> getBiblioLinkerEntity() {
 		Set<String> results = new HashSet<>();
@@ -1539,8 +1547,13 @@ public class MetadataMarcRecord implements MetadataRecord {
 		return results.stream().filter(s -> !s.contains("ebrary")).map(BLEntity::create).collect(Collectors.toList());
 	}
 
-	private Set<String> getBiblioLinkerEntityPart(String tag, boolean filter) {
-		Set<String> results = new HashSet<>();
+	/**
+	 * @param tag    first char of tag
+	 * @param filter subfield $4 exists in {@link #ENTITY_RELATIONSHIP}
+	 * @return Set of entities
+	 */
+	private Set<String> getBiblioLinkerEntityPart(final String tag, final boolean filter) {
+		Set<String> results = new LinkedHashSet<>();
 		results.addAll(getBiblioLinkerEntityValue(tag + "007:" + tag + "107:" + tag + "117", filter)
 				.stream().limit(3).collect(Collectors.toList()));
 		for (DataField df : underlayingMarc.getDataFields(tag + "00")) {
@@ -1560,8 +1573,15 @@ public class MetadataMarcRecord implements MetadataRecord {
 		return results;
 	}
 
-	private Set<String> getBiblioLinkerEntityValue(String fields, boolean filter) {
-		Set<String> results = new HashSet<>();
+	/**
+	 * get values from fields
+	 *
+	 * @param fields format: tag + subfields, e.g. 100ab, separated by colon, e.g. 100ab:700ab
+	 * @param filter subfield $4 exists in {@link #ENTITY_RELATIONSHIP}
+	 * @return Set of entities
+	 */
+	private Set<String> getBiblioLinkerEntityValue(final String fields, final boolean filter) {
+		Set<String> results = new LinkedHashSet<>();
 		for (String field : fields.split(":")) {
 			String tag = field.substring(0, 3);
 			String codes = field.substring(3);

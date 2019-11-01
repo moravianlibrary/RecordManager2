@@ -1094,4 +1094,28 @@ public class MarcRecordImplTest extends AbstractTest {
 		Assert.assertTrue(expected.containsAll(metadataRecord.getBiblioLinkerTopicKey()));
 		Assert.assertEquals(metadataRecord.getBiblioLinkerTopicKey().size(), expected.size());
 	}
+
+	@Test
+	public void getBiblioLinkerEntity() {
+		MarcRecordImpl mri;
+		MetadataRecord metadataRecord;
+		List<String> data = new ArrayList<>();
+		List<BLEntity> expected = new ArrayList<>();
+
+		data.add("100 $7Entity1");
+		expected.add(BLEntity.create("Entity1"));
+		data.add("700 $7NotEntity1"); // without $4
+		data.add("700 $7Entity2$4aut");
+		expected.add(BLEntity.create("Entity2"));
+		data.add("700 $7Entity3$4aut");
+		expected.add(BLEntity.create("Entity3"));
+		data.add("700 $7Entity4$4aut");
+		expected.add(BLEntity.create("Entity4"));
+		data.add("700 $7NotEntity2$4aut"); // only 3 values from 700 where $4 has allowed value
+
+		mri = MarcRecordFactory.recordFactory(data);
+		metadataRecord = metadataFactory.getMetadataRecord(mri);
+		Assert.assertTrue(expected.containsAll(metadataRecord.getBiblioLinkerEntity()));
+		Assert.assertEquals(metadataRecord.getBiblioLinkerEntity().size(), expected.size());
+	}
 }

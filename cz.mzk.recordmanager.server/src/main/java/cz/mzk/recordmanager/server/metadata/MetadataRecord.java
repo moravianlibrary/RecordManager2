@@ -455,6 +455,11 @@ public interface MetadataRecord {
 		return Collections.emptyList();
 	}
 
+	/**
+	 * get {@link BLEntity} for biblio linker
+	 *
+	 * @return List of {@link BLEntity}
+	 */
 	default List<BLEntity> getBiblioLinkerEntity() {
 		return Collections.emptyList();
 	}
