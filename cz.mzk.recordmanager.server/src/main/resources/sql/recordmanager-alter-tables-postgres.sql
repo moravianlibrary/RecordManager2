@@ -1551,4 +1551,4 @@ INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granul
 -- 31. 10. 2019 tomascejpek
 ALTER TABLE harvested_record ADD COLUMN publisher VARCHAR(100);
 ALTER TABLE harvested_record ADD COLUMN edition VARCHAR(10);
-
+ALTER TABLE harvested_record ADD COLUMN disadvantaged BOOLEAN DEFAULT(TRUE);

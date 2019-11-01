@@ -219,6 +219,9 @@ public class HarvestedRecord extends AbstractDomainObject {
 	@Column(name = "edition")
 	private String edition;
 
+	@Column(name = "disadvantaged")
+	private boolean disadvantaged;
+
 	@OneToMany
 	@JoinTable(
 	   name = "harvested_record_format_link", 
@@ -684,5 +687,13 @@ public class HarvestedRecord extends AbstractDomainObject {
 
 	public void setEdition(String edition) {
 		this.edition = edition;
+	}
+
+	public boolean isDisadvantaged() {
+		return disadvantaged;
+	}
+
+	public void setDisadvantaged(boolean disadvantaged) {
+		this.disadvantaged = disadvantaged;
 	}
 }
