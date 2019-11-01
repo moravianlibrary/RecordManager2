@@ -55,7 +55,7 @@ public class SkatMarcInterceptor extends DefaultMarcInterceptor {
 					 * MAPPING
 					 * 910 a = 996e
 					 * 910 b = 996c
-					 * 910 r + s  = 996 d
+					 * 910 r, s ; l = 996 d
 					 * 910x = 996w
 					 * 910p = 996p 
 					 */
@@ -85,6 +85,10 @@ public class SkatMarcInterceptor extends DefaultMarcInterceptor {
 					if (df.getSubfield('s') != null) {
 						if (!joinedContent.isEmpty()) joinedContent += ", ";
 						joinedContent += df.getSubfield('s').getData();
+					}
+					if (df.getSubfield('l') != null) {
+						if (!joinedContent.isEmpty()) joinedContent += " ; ";
+						joinedContent += "Online: " + df.getSubfield('l').getData();
 					}
 					if (!joinedContent.isEmpty()) {
 						newDf.addSubfield(
