@@ -30,8 +30,8 @@ public class RegenerateBiblioLinkerKeysWriter implements ItemWriter<Long> {
 	@Override
 	public void write(List<? extends Long> ids) {
 		for (Long id : ids) {
-			progressLogger.incrementAndLogProgress();
 			HarvestedRecord rec = harvestedRecordDao.get(id);
+			progressLogger.incrementAndLogProgress(rec);
 			if (!rec.getHarvestedFrom().isGenerateBiblioLinkerKeys()
 					|| rec.getRawRecord() == null || rec.getRawRecord().length == 0) {
 				if (rec.getBiblioLinkerKeysHash() != null && !rec.getBiblioLinkerKeysHash().equals("")) {
