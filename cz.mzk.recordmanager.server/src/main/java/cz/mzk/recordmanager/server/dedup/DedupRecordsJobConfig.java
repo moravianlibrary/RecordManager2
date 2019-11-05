@@ -101,6 +101,8 @@ public class DedupRecordsJobConfig {
 
 	private static final String TMP_TABLE_DISADVANTAGED_EDITION = "tmp_disadvantaged_edition";
 
+	private static final String TMP_TABLE_DISADVANTAGED_PAGES = "tmp_disadvantaged_pages";
+
 	private int partitionThreads = 4;
 
 	@Autowired
@@ -177,6 +179,8 @@ public class DedupRecordsJobConfig {
 
 	private String prepareTempDisadvantagedEditionSql = ResourceUtils.asString("job/dedupRecordsJob/prepareTempDisadvantagedEditionTable.sql");
 
+	private String prepareTempDisadvantagedPagesSql = ResourceUtils.asString("job/dedupRecordsJob/prepareTempDisadvantagedPagesTable.sql");
+
 	public DedupRecordsJobConfig() throws IOException {
 	}
 	
@@ -242,6 +246,8 @@ public class DedupRecordsJobConfig {
 			@Qualifier(Constants.JOB_ID_DEDUP + ":dedupDisadvantagedPublisherPartitionedStep") Step dedupDisadvantagedPublisherStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":prepareTempDisadvantagedEditionTableStep") Step prepareTempDisadvantagedEditionTableStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":dedupDisadvantagedEditionPartitionedStep") Step dedupDisadvantagedEditionStep,
+			@Qualifier(Constants.JOB_ID_DEDUP + ":prepareTempDisadvantagedPagesTableStep") Step prepareTempDisadvantagedPagesTableStep,
+			@Qualifier(Constants.JOB_ID_DEDUP + ":dedupDisadvantagedPagesPartitionedStep") Step dedupDisadvantagedPagesStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":dedupRestOfRecordsStep") Step dedupRestOfRecordsStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":cleanupStep") Step cleanupStep) {
 		return jobs.get(Constants.JOB_ID_DEDUP)
@@ -304,6 +310,8 @@ public class DedupRecordsJobConfig {
 				.next(dedupDisadvantagedPublisherStep)
 				.next(prepareTempDisadvantagedEditionTableStep)
 				.next(dedupDisadvantagedEditionStep)
+				.next(prepareTempDisadvantagedPagesTableStep)
+				.next(dedupDisadvantagedPagesStep)
 				.next(dedupRestOfRecordsStep)
 				.next(cleanupStep)
 				.build();
@@ -1438,6 +1446,56 @@ public class DedupRecordsJobConfig {
 	public ItemReader<List<Long>> dedupSimpleKeysDisadvantagedEditionReader(
 			@Value("#{stepExecutionContext[modulo]}") Integer modulo) throws Exception {
 		return dedupSimpleKeysReader(TMP_TABLE_DISADVANTAGED_EDITION, modulo);
+	}
+
+	/**
+	 * prepareTempDisadvantagedPagesTableStep Deduplicate all disadvantaged records with same short_title,
+	 * author_string, pages, publication_year
+	 */
+	@Bean(name = Constants.JOB_ID_DEDUP + ":prepareTempDisadvantagedPagesTasklet")
+	@StepScope
+	public Tasklet prepareTempDisadvantagedPagesTasklet() {
+		return new SqlCommandTasklet(prepareTempDisadvantagedPagesSql);
+	}
+
+	@Bean(name = Constants.JOB_ID_DEDUP + ":prepareTempDisadvantagedPagesTableStep")
+	public Step prepareTempDisadvantagedPagesStep() {
+		return steps.get("prepareTempDisadvantagedPagesStep")
+				.tasklet(prepareTempDisadvantagedPagesTasklet())
+				.listener(new StepProgressListener())
+				.build();
+	}
+
+	@Bean(name = Constants.JOB_ID_DEDUP + ":dedupDisadvantagedPagesStep")
+	public Step dedupDisadvantagedPagesStep() throws Exception {
+		return steps.get("dedupDisadvantagedPagesStep")
+				.listener(new StepProgressListener())
+				.<List<Long>, List<HarvestedRecord>>chunk(1)
+				.faultTolerant()
+				.keyGenerator(KeyGeneratorForList.INSTANCE)
+				.retry(LockAcquisitionException.class)
+				.retryLimit(10000)
+				.reader(dedupSimpleKeysDisadvantagedPagesReader(INTEGER_OVERRIDEN_BY_EXPRESSION))
+				.processor(dedupSimpleKeysStepProsessor())
+				.writer(dedupSimpleKeysStepWriter())
+				.build();
+	}
+
+	@Bean(name = Constants.JOB_ID_DEDUP + ":dedupDisadvantagedPagesPartitionedStep")
+	public Step dedupSimpleKeysDisadvantagedPagesPartitionedStep() throws Exception {
+		return steps.get("dedupSimpleKeysDisadvantagedPagesPartitionedStep")
+				.partitioner("dedupSimpleKeysDisadvantagedPagesPartitionedStepSlave", this.partioner()) //
+				.taskExecutor(this.taskExecutor)
+				.gridSize(this.partitionThreads)
+				.step(dedupDisadvantagedPagesStep())
+				.build();
+	}
+
+	@Bean(name = "dedupDisadvantagedPagesStep:reader")
+	@StepScope
+	public ItemReader<List<Long>> dedupSimpleKeysDisadvantagedPagesReader(
+			@Value("#{stepExecutionContext[modulo]}") Integer modulo) throws Exception {
+		return dedupSimpleKeysReader(TMP_TABLE_DISADVANTAGED_PAGES, modulo);
 	}
 
 	/**
