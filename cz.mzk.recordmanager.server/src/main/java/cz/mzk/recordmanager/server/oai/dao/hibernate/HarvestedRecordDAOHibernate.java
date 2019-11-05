@@ -240,6 +240,12 @@ public class HarvestedRecordDAOHibernate extends
 			session.delete(st);
 		}
 
+		List<AnpTitle> anpTitles = hr.getAnpTitles();
+		hr.setAnpTitles(new ArrayList<>());
+		for (AnpTitle st : anpTitles) {
+			session.delete(st);
+		}
+
 		List<Isbn> isbns =  hr.getIsbns();
 		hr.setIsbns(new ArrayList<>());
 		for (Isbn i: isbns) {

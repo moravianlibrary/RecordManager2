@@ -80,6 +80,18 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 			}
 		}
 		encapsulator.setShortTitles(shortTitles);
+		// anp titles
+		List<AnpTitle> anpTitles = new ArrayList<>();
+		for (AnpTitle anpTitle : metadataRecord.getAnpTitle()) {
+			anpTitle.setAnpTitle(MetadataUtils.normalizeAndShorten(
+					anpTitle.getAnpTitle(), EFFECTIVE_TITLE_LENGTH));
+			if (anpTitle.getAnpTitle().isEmpty()) continue;
+			if (!anpTitles.contains(anpTitle)) {
+				anpTitles.add(anpTitle);
+			}
+		}
+		encapsulator.setAnpTitles(anpTitles);
+
 		encapsulator.setIsbns(metadataRecord.getISBNs());
 		encapsulator.setIssns(metadataRecord.getISSNs());
 		encapsulator.setIsmns(metadataRecord.getISMNs());
@@ -152,6 +164,7 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 			record.setPublisherNumbers(metadataRecord.getPublisherNumber());
 			record.setPublisher(encapsulator.getPublisher());
 			record.setEdition(encapsulator.getEdition());
+			record.setAnpTitles(encapsulator.getAnpTitles());
 			record.setTemporalDedupHash(computedHash);
 		} else {
 			harvestedRecordDao.dropAuthorities(record);
@@ -289,6 +302,10 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 					md.update(st.getShortTitleStr().getBytes("utf-8"));
 				}
 
+				for (AnpTitle st : encapsulator.getAnpTitles()) {
+					md.update(st.getAnpTitle().getBytes("utf-8"));
+				}
+
 				if (encapsulator.getPublisher() != null) {
 					md.update(encapsulator.getPublisher().getBytes());
 				}
@@ -349,6 +366,7 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 			encapsulator.setSourceInfoT(hr.getSourceInfoT());
 			encapsulator.setPublisher(hr.getPublisher());
 			encapsulator.setEdition(hr.getEdition());
+			encapsulator.setAnpTitles(hr.getAnpTitles());
 
 			return computeHashValue(encapsulator);
 		}
@@ -364,6 +382,7 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 		Set<String> languages = new HashSet<>();
 		List<Ean> eans = new ArrayList<>();
 		List<ShortTitle> shortTitles = new ArrayList<>();
+		List<AnpTitle> anpTitles = new ArrayList<>();
 		List<PublisherNumber> publisherNumbers = new ArrayList<>();
 		
 		Long publicationYear;
@@ -547,6 +566,14 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 
 		public void setEdition(String edition) {
 			this.edition = edition;
+		}
+
+		public List<AnpTitle> getAnpTitles() {
+			return anpTitles;
+		}
+
+		public void setAnpTitles(List<AnpTitle> anpTitles) {
+			this.anpTitles = anpTitles;
 		}
 	}
 

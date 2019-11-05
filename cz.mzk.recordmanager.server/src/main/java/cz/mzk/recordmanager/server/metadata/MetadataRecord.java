@@ -422,4 +422,13 @@ public interface MetadataRecord {
 		return null;
 	}
 
+	/**
+	 * get anp title for deduplication
+	 *
+	 * @return Set of {@link AnpTitle}
+	 */
+	default Set<AnpTitle> getAnpTitle() {
+		return null;
+	}
+
 }

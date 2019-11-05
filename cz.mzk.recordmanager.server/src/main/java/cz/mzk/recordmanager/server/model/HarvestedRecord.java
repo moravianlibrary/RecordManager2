@@ -166,7 +166,11 @@ public class HarvestedRecord extends AbstractDomainObject {
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name="harvested_record_id", referencedColumnName="id", nullable=false)
 	private List<ShortTitle> shortTitles = new ArrayList<>();
-	
+
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name="harvested_record_id", referencedColumnName="id", nullable=false)
+	private List<AnpTitle> anpTitles = new ArrayList<>();
+
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name="harvested_record_id", referencedColumnName="id", nullable=false)
 	private List<Oclc> oclcs = new ArrayList<>();
@@ -695,5 +699,13 @@ public class HarvestedRecord extends AbstractDomainObject {
 
 	public void setDisadvantaged(boolean disadvantaged) {
 		this.disadvantaged = disadvantaged;
+	}
+
+	public List<AnpTitle> getAnpTitles() {
+		return anpTitles;
+	}
+
+	public void setAnpTitles(List<AnpTitle> anpTitles) {
+		this.anpTitles = anpTitles;
 	}
 }

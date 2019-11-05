@@ -326,3 +326,11 @@ CREATE TABLE obalkyknih_annotation (
   last_harvest         TIMESTAMP,
   annotation           VARCHAR(32672)
 );
+
+CREATE TABLE anp_title (
+  id                   DECIMAL(10) PRIMARY KEY,
+  harvested_record_id  DECIMAL(10),
+  anp_title            VARCHAR(255),
+  similarity_enabled   BOOLEAN DEFAULT FALSE,
+  CONSTRAINT anp_title_fk FOREIGN KEY (harvested_record_id) REFERENCES harvested_record (id) ON DELETE CASCADE
+);
