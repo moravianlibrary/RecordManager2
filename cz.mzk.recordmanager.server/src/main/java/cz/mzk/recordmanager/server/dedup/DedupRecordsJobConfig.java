@@ -97,6 +97,8 @@ public class DedupRecordsJobConfig {
 
 	private static final String TMP_TABLE_SFX_ID = "tmp_simmilar_sfx_id";
 
+	private static final String TMP_TABLE_DISADVANTAGED_PUBLISHER = "tmp_disadvantaged_publisher";
+
 	private int partitionThreads = 4;
 
 	@Autowired
@@ -169,6 +171,8 @@ public class DedupRecordsJobConfig {
 
 	private String prepareTempSfxIdSql = ResourceUtils.asString("job/dedupRecordsJob/prepareTempSfxIdTable.sql");
 
+	private String prepareTempDisadvantagedPublisherSql = ResourceUtils.asString("job/dedupRecordsJob/prepareTempDisadvantagedPublisherTable.sql");
+
 	public DedupRecordsJobConfig() throws IOException {
 	}
 	
@@ -230,6 +234,8 @@ public class DedupRecordsJobConfig {
 			@Qualifier(Constants.JOB_ID_DEDUP + ":dedupArticlesXGStep") Step dedupArticlesXGStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":prepareTempArticlesTGTableStep") Step prepareTempArticlesTGTableStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":dedupArticlesTGStep") Step dedupArticlesTGStep,
+			@Qualifier(Constants.JOB_ID_DEDUP + ":prepareTempDisadvantagedPublisherTableStep") Step prepareTempDisadvantagedPublisherTableStep,
+			@Qualifier(Constants.JOB_ID_DEDUP + ":dedupDisadvantagedPublisherPartitionedStep") Step dedupDisadvantagedPublisherStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":dedupRestOfRecordsStep") Step dedupRestOfRecordsStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":cleanupStep") Step cleanupStep) {
 		return jobs.get(Constants.JOB_ID_DEDUP)
@@ -288,6 +294,8 @@ public class DedupRecordsJobConfig {
 				.next(dedupArticlesTGStep)
 				.next(prepareTempSfxIdTableStep)
 				.next(dedupSimpleKeysSfxIdStep)
+				.next(prepareTempDisadvantagedPublisherTableStep)
+				.next(dedupDisadvantagedPublisherStep)
 				.next(dedupRestOfRecordsStep)
 				.next(cleanupStep)
 				.build();
@@ -1322,6 +1330,56 @@ public class DedupRecordsJobConfig {
 				.processor(dedupSimpleKeysStepProsessor())
 				.writer(dedupSimpleKeysStepWriter())
 				.build();
+	}
+
+	/**
+	 * prepareTempDisadvantagedPublisherTableStep Deduplicate all disadvantaged records with same short_title,
+	 * author_string, publisher, publication_year
+	 */
+	@Bean(name = Constants.JOB_ID_DEDUP + ":prepareTempDisadvantagedPublisherTasklet")
+	@StepScope
+	public Tasklet prepareTempDisadvantagedPublisherTasklet() {
+		return new SqlCommandTasklet(prepareTempDisadvantagedPublisherSql);
+	}
+
+	@Bean(name = Constants.JOB_ID_DEDUP + ":prepareTempDisadvantagedPublisherTableStep")
+	public Step prepareTempDisadvantagedPublisherStep() {
+		return steps.get("prepareTempDisadvantagedPublisherStep")
+				.tasklet(prepareTempDisadvantagedPublisherTasklet())
+				.listener(new StepProgressListener())
+				.build();
+	}
+
+	@Bean(name = Constants.JOB_ID_DEDUP + ":dedupDisadvantagedPublisherStep")
+	public Step dedupDisadvantagedPublisherStep() throws Exception {
+		return steps.get("dedupDisadvantagedPublisherStep")
+				.listener(new StepProgressListener())
+				.<List<Long>, List<HarvestedRecord>>chunk(1)
+				.faultTolerant()
+				.keyGenerator(KeyGeneratorForList.INSTANCE)
+				.retry(LockAcquisitionException.class)
+				.retryLimit(10000)
+				.reader(dedupSimpleKeysDisadvantagedPublisherReader(INTEGER_OVERRIDEN_BY_EXPRESSION))
+				.processor(dedupSimpleKeysStepProsessor())
+				.writer(dedupSimpleKeysStepWriter())
+				.build();
+	}
+
+	@Bean(name = Constants.JOB_ID_DEDUP + ":dedupDisadvantagedPublisherPartitionedStep")
+	public Step dedupSimpleKeysDisadvantagedPublisherPartitionedStep() throws Exception {
+		return steps.get("dedupSimpleKeysDisadvantagedPublisherPartitionedStep")
+				.partitioner("dedupSimpleKeysDisadvantagedPublisherPartitionedStepSlave", this.partioner()) //
+				.taskExecutor(this.taskExecutor)
+				.gridSize(this.partitionThreads)
+				.step(dedupDisadvantagedPublisherStep())
+				.build();
+	}
+
+	@Bean(name = "dedupDisadvantagedPublisherStep:reader")
+	@StepScope
+	public ItemReader<List<Long>> dedupSimpleKeysDisadvantagedPublisherReader(
+			@Value("#{stepExecutionContext[modulo]}") Integer modulo) throws Exception {
+		return dedupSimpleKeysReader(TMP_TABLE_DISADVANTAGED_PUBLISHER, modulo);
 	}
 
 	/**
