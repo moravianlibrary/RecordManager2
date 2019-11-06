@@ -972,6 +972,11 @@ public class MetadataMarcRecord implements MetadataRecord {
 		return new ArrayList<>(result);
 	}
 
+	/**
+	 * 041a or 041d or 008 char 35-37
+	 *
+	 * @return List of {@link BLLanguage}
+	 */
 	@Override
 	public List<BLLanguage> getBiblioLinkerLanguages() {
 		Set<BLLanguage> result = new HashSet<>();

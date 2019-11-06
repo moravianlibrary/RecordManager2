@@ -464,6 +464,11 @@ public interface MetadataRecord {
 		return Collections.emptyList();
 	}
 
+	/**
+	 * get {@link BLLanguage} for biblio linker
+	 *
+	 * @return List of {@link BLLanguage}
+	 */
 	default List<BLLanguage> getBiblioLinkerLanguages() {
 		return Collections.emptyList();
 	}

@@ -1118,4 +1118,41 @@ public class MarcRecordImplTest extends AbstractTest {
 		Assert.assertTrue(expected.containsAll(metadataRecord.getBiblioLinkerEntity()));
 		Assert.assertEquals(metadataRecord.getBiblioLinkerEntity().size(), expected.size());
 	}
+
+	@Test
+	public void getBiblioLinkerLanguage() {
+		MarcRecordImpl mri;
+		MetadataRecord metadataRecord;
+		List<String> data = new ArrayList<>();
+		List<BLLanguage> expected = new ArrayList<>();
+
+		data.add("041 $aCze");
+		expected.add(BLLanguage.create("cze"));
+		data.add("041 $dEng");
+
+		mri = MarcRecordFactory.recordFactory(data);
+		metadataRecord = metadataFactory.getMetadataRecord(mri);
+		Assert.assertTrue(expected.containsAll(metadataRecord.getBiblioLinkerLanguages()));
+		Assert.assertEquals(metadataRecord.getBiblioLinkerLanguages().size(), expected.size());
+
+		data.clear();
+		expected.clear();
+		data.add("041 $dCze");
+		expected.add(BLLanguage.create("cze"));
+
+		mri = MarcRecordFactory.recordFactory(data);
+		metadataRecord = metadataFactory.getMetadataRecord(mri);
+		Assert.assertTrue(expected.containsAll(metadataRecord.getBiblioLinkerLanguages()));
+		Assert.assertEquals(metadataRecord.getBiblioLinkerLanguages().size(), expected.size());
+
+		data.clear();
+		expected.clear();
+		data.add("008 -----------------------------------CZE");
+		expected.add(BLLanguage.create("cze"));
+
+		mri = MarcRecordFactory.recordFactory(data);
+		metadataRecord = metadataFactory.getMetadataRecord(mri);
+		Assert.assertTrue(expected.containsAll(metadataRecord.getBiblioLinkerLanguages()));
+		Assert.assertEquals(metadataRecord.getBiblioLinkerLanguages().size(), expected.size());
+	}
 }
