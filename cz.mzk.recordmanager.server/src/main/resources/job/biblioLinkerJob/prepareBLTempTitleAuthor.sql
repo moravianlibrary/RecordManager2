@@ -7,7 +7,7 @@ SELECT nextval('tmp_bl_id_seq') AS row_id,
     array_to_string(array_agg(DISTINCT candidates.title), ',') title
 FROM (
   SELECT
-    array_to_string(array_agg(DISTINCT hr.dedup_record_id), ',') dedup_record_id,
+    array_to_string(array_agg(DISTINCT hr.dedup_record_id ORDER BY hr.dedup_record_id), ',') dedup_record_id,
     hr.bl_author AS author,
     titles.title AS title
   FROM (
