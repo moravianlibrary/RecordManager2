@@ -1148,7 +1148,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 	/**
 	 * get {@link ShortTitle} of record
 	 *
-	 * @return all 245anp and 240anp, if not contains subfield 'b'
+	 * @return all 245anp and 240anp, if contains subfield 'b'
 	 */
 	@Override
 	public List<ShortTitle> getShortTitles() {
