@@ -4,6 +4,7 @@ import cz.mzk.recordmanager.server.marc.InvalidMarcException;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordDAO;
 import cz.mzk.recordmanager.server.util.ProgressLogger;
+import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.configuration.annotation.StepScope;
@@ -24,6 +25,9 @@ public class RegenerateBiblioLinkerKeysWriter implements ItemWriter<Long> {
 
 	@Autowired
 	protected DelegatingBiblioLinkerKeysParser biblioLinkerKeysParser;
+
+	@Autowired
+	protected SessionFactory sessionFactory;
 
 	private ProgressLogger progressLogger = new ProgressLogger(logger, 10000);
 
@@ -52,5 +56,7 @@ public class RegenerateBiblioLinkerKeysWriter implements ItemWriter<Long> {
 				logger.warn("Skipping record due to error: " + e);
 			}
 		}
+		sessionFactory.getCurrentSession().flush();
+		sessionFactory.getCurrentSession().clear();
 	}
 }
