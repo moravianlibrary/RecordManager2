@@ -31,6 +31,7 @@ public class Constants {
 	public static final String JOB_ID_IMPORT_INSPIRATION			= "importInspirationJob";
 	public static final String JOB_ID_IMPORT_TEZAURUS				= "importTezaurusRecordsJob";
 	public static final String JOB_ID_DELETE_INSPIRATION			= "deleteInspirationJob";
+	public static final String JOB_ID_DROP_DEDUP_KEYS				= "dropDedupKeysJob";
 	public static final String JOB_ID_REGEN_DEDUP_KEYS				= "regenerateDedupKeysJob";
 	public static final String JOB_ID_REGEN_MISSING_DEDUP_KEYS		= "regenerateMissingDedupKeysJob";
 	public static final String JOB_ID_DELETE_ALL_RECORDS_FROM_SOLR	= "deleteAllRecordsFromSolrJob";
