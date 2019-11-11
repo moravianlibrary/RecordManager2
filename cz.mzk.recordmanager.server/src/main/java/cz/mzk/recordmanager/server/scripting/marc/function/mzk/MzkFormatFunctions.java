@@ -1,5 +1,6 @@
 package cz.mzk.recordmanager.server.scripting.marc.function.mzk;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.marc4j.marc.DataField;
@@ -76,7 +77,6 @@ public class MzkFormatFunctions implements MarcRecordFunctions {
 		},
 
 		LAWS_OR_OTHERS("LawsOrOthers") {
-
 			@Override
 			public boolean match(MarcFunctionContext ctx) {
 				Leader leader = ctx.record().getLeader();
@@ -89,6 +89,23 @@ public class MzkFormatFunctions implements MarcRecordFunctions {
 				}
 				String format = field000.substring(5, 8);
 				return (format.equals("nai") || format.equals("cai"));
+			}
+
+		},
+
+		MICROFORM("Microform") {
+
+			private final List<String> microformValues = Arrays.asList("MF", "Mfš", "PK-MF", "PK-Mfš", "TK-MF",
+					"TK-Mfš", "Skř.17", "PK-Skř.17", "TK-Skř.17");
+
+			@Override
+			public boolean match(MarcFunctionContext ctx) {
+				for (String data : ctx.record().getFields("910", 'b')) {
+					for (String microformValue : microformValues) {
+						if (data.startsWith(microformValue)) return true;
+					}
+				}
+				return false;
 			}
 
 		};
