@@ -180,6 +180,7 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 		if (dedupKeysChanged) {
 			// new record or change in keys
 			record.setNextDedupFlag(true);
+			record.setDisadvantaged(true);
 		} else {
 			// key are equal
 			if (oaiTimestampChanged) {

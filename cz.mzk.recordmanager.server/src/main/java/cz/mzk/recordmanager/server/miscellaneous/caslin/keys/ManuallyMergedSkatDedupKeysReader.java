@@ -131,7 +131,7 @@ public class ManuallyMergedSkatDedupKeysReader implements ItemReader<Set<SkatKey
 	}
 
 	private void push(String recordId) {
-		String query = "UPDATE harvested_record SET next_dedup_flag=TRUE WHERE import_conf_id = ? AND record_id = ?";
+		String query = "UPDATE harvested_record SET next_dedup_flag=TRUE,disadvantaged=TRUE WHERE import_conf_id = ? AND record_id = ?";
 		Session session = sessionFactory.getCurrentSession();
 		session.createSQLQuery(query)
 				.setLong(0, Constants.IMPORT_CONF_ID_CASLIN)

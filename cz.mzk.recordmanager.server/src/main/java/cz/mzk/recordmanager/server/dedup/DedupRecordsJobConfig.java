@@ -1377,7 +1377,7 @@ public class DedupRecordsJobConfig {
 				.retryLimit(10000)
 				.reader(dedupSimpleKeysDisadvantagedPublisherReader(INTEGER_OVERRIDEN_BY_EXPRESSION))
 				.processor(dedupSimpleKeysStepProsessor())
-				.writer(dedupSimpleKeysStepWriter())
+				.writer(dedupDisadvantagedKeysStepWriter())
 				.build();
 	}
 
@@ -1427,7 +1427,7 @@ public class DedupRecordsJobConfig {
 				.retryLimit(10000)
 				.reader(dedupSimpleKeysDisadvantagedEditionReader(INTEGER_OVERRIDEN_BY_EXPRESSION))
 				.processor(dedupSimpleKeysStepProsessor())
-				.writer(dedupSimpleKeysStepWriter())
+				.writer(dedupDisadvantagedKeysStepWriter())
 				.build();
 	}
 
@@ -1477,7 +1477,7 @@ public class DedupRecordsJobConfig {
 				.retryLimit(10000)
 				.reader(dedupSimpleKeysDisadvantagedPagesReader(INTEGER_OVERRIDEN_BY_EXPRESSION))
 				.processor(dedupSimpleKeysStepProsessor())
-				.writer(dedupSimpleKeysStepWriter())
+				.writer(dedupDisadvantagedKeysStepWriter())
 				.build();
 	}
 
@@ -1555,6 +1555,13 @@ public class DedupRecordsJobConfig {
 	public ItemWriter<List<HarvestedRecord>> dedupSimpleKeysStepWriter()
 			throws Exception {
 		return new DedupSimpleKeysStepWriter();
+	}
+
+	@Bean(name = "dedupDisadvantagedKeys:writer")
+	@StepScope
+	public ItemWriter<List<HarvestedRecord>> dedupDisadvantagedKeysStepWriter()
+			throws Exception {
+		return new DedupDisadvantagedKeysStepWriter();
 	}
 
 	/**
