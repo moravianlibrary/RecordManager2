@@ -2,11 +2,14 @@ package cz.mzk.recordmanager.server.metadata.institutions;
 
 import cz.mzk.recordmanager.server.marc.MarcRecord;
 import cz.mzk.recordmanager.server.metadata.MetadataMarcRecord;
+import cz.mzk.recordmanager.server.model.BLTopicKey;
 import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordDAO;
 import org.marc4j.marc.DataField;
 import org.marc4j.marc.Subfield;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Pattern;
@@ -71,5 +74,18 @@ public class LibraryMetadataMarcRecord extends MetadataMarcRecord {
 			}
 		}
 		return null;
+	}
+
+	@Override
+	public List<BLTopicKey> getBiblioLinkerTopicKey() {
+		List<BLTopicKey> results = new ArrayList<>();
+		String city = underlayingMarc.getField("MES", 'a');
+		String district = underlayingMarc.getField("KRJ", 'b');
+		String type = underlayingMarc.getField("TYP", 'a');
+		if (type != null && city != null) results.add(BLTopicKey.create("1" + type + city));
+		if (type != null && district != null) results.add(BLTopicKey.create("2" + type + district));
+		if (city != null) results.add(BLTopicKey.create("3" + city));
+		if (district != null) results.add(BLTopicKey.create("4" + district));
+		return results;
 	}
 }
