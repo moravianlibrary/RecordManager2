@@ -8,8 +8,8 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = BiblioLinkerSimiliar.TABLE_NAME)
-public class BiblioLinkerSimiliar extends AbstractDomainObject implements Comparable {
+@Table(name = BiblioLinkerSimilar.TABLE_NAME)
+public class BiblioLinkerSimilar extends AbstractDomainObject implements Comparable {
 
 	public static final String TABLE_NAME = "biblio_linker_similar";
 
@@ -28,16 +28,16 @@ public class BiblioLinkerSimiliar extends AbstractDomainObject implements Compar
 	@Column(name = "type")
 	private BiblioLinkerSimilarType type;
 
-	public static BiblioLinkerSimiliar create(final String id, final HarvestedRecord similarRecord, final BiblioLinkerSimilarType type) {
-		BiblioLinkerSimiliar newBLSimilar = new BiblioLinkerSimiliar();
+	public static BiblioLinkerSimilar create(final String id, final HarvestedRecord similarRecord, final BiblioLinkerSimilarType type) {
+		BiblioLinkerSimilar newBLSimilar = new BiblioLinkerSimilar();
 		newBLSimilar.setHarvestedRecordSimilarId(similarRecord.getId());
 		newBLSimilar.setUrlId(id);
 		newBLSimilar.setType(type);
 		return newBLSimilar;
 	}
 
-	public static BiblioLinkerSimiliar create(final String id, final Long similarRecordId, final BiblioLinkerSimilarType type) {
-		BiblioLinkerSimiliar newBLSimilar = new BiblioLinkerSimiliar();
+	public static BiblioLinkerSimilar create(final String id, final Long similarRecordId, final BiblioLinkerSimilarType type) {
+		BiblioLinkerSimilar newBLSimilar = new BiblioLinkerSimilar();
 		newBLSimilar.setHarvestedRecordSimilarId(similarRecordId);
 		newBLSimilar.setUrlId(id);
 		newBLSimilar.setType(type);
@@ -74,7 +74,7 @@ public class BiblioLinkerSimiliar extends AbstractDomainObject implements Compar
 		if (o == null || getClass() != o.getClass()) return false;
 		if (!super.equals(o)) return false;
 
-		BiblioLinkerSimiliar that = (BiblioLinkerSimiliar) o;
+		BiblioLinkerSimilar that = (BiblioLinkerSimilar) o;
 
 		if (!harvestedRecordSimilarId.equals(that.harvestedRecordSimilarId)) return false;
 		return type == that.type;
@@ -90,7 +90,7 @@ public class BiblioLinkerSimiliar extends AbstractDomainObject implements Compar
 
 	@Override
 	public String toString() {
-		return "BiblioLinkerSimiliar{" +
+		return "BiblioLinkerSimilar{" +
 				"urlId='" + urlId + '\'' +
 				", type=" + type +
 				'}';
@@ -99,7 +99,7 @@ public class BiblioLinkerSimiliar extends AbstractDomainObject implements Compar
 	@Override
 	public int compareTo(Object o) {
 		if (this == o || o == null || this.getClass() != o.getClass()) return 0;
-		BiblioLinkerSimiliar other = (BiblioLinkerSimiliar) o;
+		BiblioLinkerSimilar other = (BiblioLinkerSimilar) o;
 		return urlId.compareTo(other.getUrlId());
 	}
 }

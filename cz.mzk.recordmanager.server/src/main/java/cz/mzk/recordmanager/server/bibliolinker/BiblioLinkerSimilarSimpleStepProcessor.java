@@ -2,8 +2,8 @@ package cz.mzk.recordmanager.server.bibliolinker;
 
 import cz.mzk.recordmanager.server.metadata.MetadataRecord;
 import cz.mzk.recordmanager.server.metadata.MetadataRecordFactory;
+import cz.mzk.recordmanager.server.model.BiblioLinkerSimilar;
 import cz.mzk.recordmanager.server.model.BiblioLinkerSimilarType;
-import cz.mzk.recordmanager.server.model.BiblioLinkerSimiliar;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecordFormat.HarvestedRecordFormatEnum;
 import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordDAO;
@@ -55,7 +55,7 @@ public class BiblioLinkerSimilarSimpleStepProcessor implements
 	public List<HarvestedRecord> process(List<Long> biblioIdsList) throws Exception {
 		Map<Long, Collection<HarvestedRecord>> records;
 		Set<HarvestedRecord> toUpdate = new HashSet<>();
-		Set<BiblioLinkerSimiliar> similarIds;
+		Set<BiblioLinkerSimilar> similarIds;
 		Set<HarvestedRecord> similarHr;
 		HarvestedRecord searched;
 		// get all records by BiblioLinker id
@@ -63,7 +63,7 @@ public class BiblioLinkerSimilarSimpleStepProcessor implements
 		for (Long blOuter : records.keySet()) {
 			for (HarvestedRecord hr : records.get(blOuter)) {
 				if (hr.getDeleted() != null) continue;
-				similarIds = new TreeSet<>(hr.getBiblioLinkerSimiliarUrls());
+				similarIds = new TreeSet<>(hr.getBiblioLinkerSimilarUrls());
 				if (!similarIds.isEmpty() && ONLY_EMPTY_SIMILAR.contains(type)) continue;
 				similarHr = new HashSet<>();
 				for (Long blInner : records.keySet()) {
@@ -72,14 +72,14 @@ public class BiblioLinkerSimilarSimpleStepProcessor implements
 					searched = findSameInstitution(hr, records.get(blInner));
 					if (searched == null) continue;
 					if (isSimilar(hr, searched, similarHr)) {
-						similarIds.add(BiblioLinkerSimiliar.create(getUrlId(searched), searched, type));
+						similarIds.add(BiblioLinkerSimilar.create(getUrlId(searched), searched, type));
 						similarHr.add(searched);
 						// new similar record, must be updated
 						toUpdate.add(hr);
 					}
 					if (similarIds.size() >= MAX_SIMILARS) break;
 				}
-				hr.setBiblioLinkerSimiliarUrls(new ArrayList<>(similarIds));
+				hr.setBiblioLinkerSimilarUrls(new ArrayList<>(similarIds));
 				progressLogger.incrementAndLogProgress();
 			}
 		}

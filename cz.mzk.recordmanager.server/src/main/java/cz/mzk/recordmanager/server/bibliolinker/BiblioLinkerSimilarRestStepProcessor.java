@@ -1,7 +1,7 @@
 package cz.mzk.recordmanager.server.bibliolinker;
 
+import cz.mzk.recordmanager.server.model.BiblioLinkerSimilar;
 import cz.mzk.recordmanager.server.model.BiblioLinkerSimilarType;
-import cz.mzk.recordmanager.server.model.BiblioLinkerSimiliar;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.oai.dao.BiblioLinkerSimilarDAO;
 import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordDAO;
@@ -45,15 +45,15 @@ public class BiblioLinkerSimilarRestStepProcessor extends BiblioLinkerSimilarSim
 		List<HarvestedRecord> toUpdate = new ArrayList<>();
 		for (Long blId : biblioIdsList) {
 			Collection<HarvestedRecord> hrs = harvestedRecordDao.getByBiblioLinkerIdAndSimilarFlag(blId);
-			Collection<BiblioLinkerSimiliar> bls = blSimilarDao.getByBilioLinkerId(blId, MAX_SIMILARS);
+			Collection<BiblioLinkerSimilar> bls = blSimilarDao.getByBilioLinkerId(blId, MAX_SIMILARS);
 			if (bls.isEmpty()) continue;
 			for (HarvestedRecord hr : hrs) {
 				if (hr.getDeleted() != null) continue;
-				List<BiblioLinkerSimiliar> newBls = new ArrayList<>();
-				for (BiblioLinkerSimiliar bl : bls) {
-					newBls.add(BiblioLinkerSimiliar.create(bl.getUrlId(), bl.getHarvestedRecordSimilarId(), type));
+				List<BiblioLinkerSimilar> newBls = new ArrayList<>();
+				for (BiblioLinkerSimilar bl : bls) {
+					newBls.add(BiblioLinkerSimilar.create(bl.getUrlId(), bl.getHarvestedRecordSimilarId(), type));
 				}
-				hr.setBiblioLinkerSimiliarUrls(newBls);
+				hr.setBiblioLinkerSimilarUrls(newBls);
 				toUpdate.add(hr);
 				progressLogger.incrementAndLogProgress();
 			}

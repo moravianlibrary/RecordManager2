@@ -1,10 +1,10 @@
 package cz.mzk.recordmanager.server.oai.dao;
 
-import cz.mzk.recordmanager.server.model.BiblioLinkerSimiliar;
+import cz.mzk.recordmanager.server.model.BiblioLinkerSimilar;
 
 import java.util.List;
 
-public interface BiblioLinkerSimilarDAO extends DomainDAO<Long, BiblioLinkerSimiliar> {
+public interface BiblioLinkerSimilarDAO extends DomainDAO<Long, BiblioLinkerSimilar> {
 
-	List<BiblioLinkerSimiliar> getByBilioLinkerId(Long blId, int limit);
+	List<BiblioLinkerSimilar> getByBilioLinkerId(Long blId, int limit);
 }

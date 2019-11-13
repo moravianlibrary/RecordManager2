@@ -173,7 +173,7 @@ public class HarvestedRecord extends AbstractDomainObject {
 
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name="harvested_record_id", referencedColumnName="id", nullable=false)
-	private List<BiblioLinkerSimiliar> biblioLinkerSimiliarUrls = new ArrayList<>();
+	private List<BiblioLinkerSimilar> biblioLinkerSimilarUrls = new ArrayList<>();
 
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name="harvested_record_id", referencedColumnName="id", nullable=false)
@@ -733,12 +733,12 @@ public class HarvestedRecord extends AbstractDomainObject {
 		this.biblioLinkerSimilar = biblioLinkerSimilar;
 	}
 
-	public List<BiblioLinkerSimiliar> getBiblioLinkerSimiliarUrls() {
-		return biblioLinkerSimiliarUrls;
+	public List<BiblioLinkerSimilar> getBiblioLinkerSimilarUrls() {
+		return biblioLinkerSimilarUrls;
 	}
 
-	public void setBiblioLinkerSimiliarUrls(List<BiblioLinkerSimiliar> biblioLinkerSimiliarUrls) {
-		this.biblioLinkerSimiliarUrls = biblioLinkerSimiliarUrls;
+	public void setBiblioLinkerSimilarUrls(List<BiblioLinkerSimilar> biblioLinkerSimilarUrls) {
+		this.biblioLinkerSimilarUrls = biblioLinkerSimilarUrls;
 	}
 
 	public boolean isNextBiblioLinkerFlag() {

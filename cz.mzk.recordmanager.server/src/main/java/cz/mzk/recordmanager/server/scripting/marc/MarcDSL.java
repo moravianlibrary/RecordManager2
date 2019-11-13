@@ -1,6 +1,5 @@
 package cz.mzk.recordmanager.server.scripting.marc;
 
-import com.google.common.primitives.Chars;
 import cz.mzk.recordmanager.server.export.IOFormat;
 import cz.mzk.recordmanager.server.marc.MarcRecord;
 import cz.mzk.recordmanager.server.marc.SubfieldExtractionMethod;
@@ -777,19 +776,19 @@ public class MarcDSL extends BaseDSL {
 	}
 
 	public List<String> getSimilar() {
-		Set<BiblioLinkerSimiliar> similars = new HashSet<>();
+		Set<BiblioLinkerSimilar> similars = new HashSet<>();
 		List<BiblioLinkerSimilarType> types = new ArrayList<>();
-		for (BiblioLinkerSimiliar bls : context.harvestedRecord().getBiblioLinkerSimiliarUrls()) {
+		for (BiblioLinkerSimilar bls : context.harvestedRecord().getBiblioLinkerSimilarUrls()) {
 			if (types.contains(bls.getType())) continue;
 			types.add(bls.getType());
 			similars.add(bls);
 			if (similars.size() >= 5) break;
 		}
-		for (BiblioLinkerSimiliar bls : context.harvestedRecord().getBiblioLinkerSimiliarUrls()) {
+		for (BiblioLinkerSimilar bls : context.harvestedRecord().getBiblioLinkerSimilarUrls()) {
 			if (similars.size() >= 5) break;
 			if (similars.contains(bls)) continue;
 			similars.add(bls);
 		}
-		return similars.stream().map(BiblioLinkerSimiliar::getUrlId).collect(Collectors.toList());
+		return similars.stream().map(BiblioLinkerSimilar::getUrlId).collect(Collectors.toList());
 	}
 }
