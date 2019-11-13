@@ -162,6 +162,7 @@ CREATE TABLE harvested_record (
   next_biblio_linker_flag BOOLEAN DEFAULT TRUE,
   next_biblio_linker_similar_flag BOOLEAN DEFAULT TRUE,
   biblio_linker_keys_hash CHAR(40),
+  bl_disadvantaged     BOOLEAN DEFAULT TRUE,
   bl_author            VARCHAR(200),
   bl_publisher         VARCHAR(200),
   bl_series            VARCHAR(200),

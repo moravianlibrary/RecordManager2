@@ -1234,6 +1234,7 @@ ALTER TABLE harvested_record
   ADD COLUMN next_biblio_linker_flag BOOLEAN DEFAULT TRUE,
   ADD COLUMN next_biblio_linker_similar_flag BOOLEAN DEFAULT TRUE,
   ADD COLUMN biblio_linker_keys_hash CHAR(40),
+  ADD COLUMN bl_disadvantaged BOOLEAN DEFAULT TRUE,
   ADD COLUMN bl_author VARCHAR(200),
   ADD COLUMN bl_publisher VARCHAR(200),
   ADD COLUMN bl_series VARCHAR(200);

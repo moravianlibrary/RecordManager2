@@ -6,7 +6,7 @@ SET updated=localtimestamp
 WHERE id IN (SELECT DISTINCT dedup_record_id FROM harvested_record WHERE next_biblio_linker_flag=TRUE AND biblio_linker_id IS NOT NULL);
 
 UPDATE harvested_record
-SET biblio_linker_id=NULL,next_biblio_linker_flag=TRUE,next_biblio_linker_similar_flag=TRUE
+SET biblio_linker_id=NULL,next_biblio_linker_flag=TRUE,next_biblio_linker_similar_flag=TRUE,bl_disadvantaged=TRUE
 WHERE biblio_linker_id IN (SELECT DISTINCT biblio_linker_id FROM harvested_record WHERE next_biblio_linker_flag=TRUE AND biblio_linker_id IS NOT NULL);
 
 DROP TABLE IF EXISTS tmp_video_ids;

@@ -1136,7 +1136,7 @@ public class BiblioLinkerJobConfig {
 	@Bean(name = "blSimilarEntityLangRest:processor")
 	@StepScope
 	public ItemProcessor<List<Long>, List<HarvestedRecord>> blSimilarEntityLangRestStepProsessor() {
-		return new BiblioLinkerSimilarEntityLangRestStepProcessor(BiblioLinkerSimilarType.ENTITY_LANGUAGE);
+		return new BiblioLinkerSimilarSimpleStepProcessor(BiblioLinkerSimilarType.ENTITY_LANGUAGE);
 	}
 
 	/**

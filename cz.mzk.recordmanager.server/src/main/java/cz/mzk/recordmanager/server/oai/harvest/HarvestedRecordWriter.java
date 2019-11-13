@@ -86,6 +86,7 @@ public class HarvestedRecordWriter implements ItemWriter<List<HarvestedRecord>> 
 			record.setNextDedupFlag(true);
 			record.setNextBiblioLinkerFlag(true);
 			record.setNextBiblioLinkerSimilarFlag(true);
+			record.setBlDisadvantaged(true);
 		}
 		recordDao.persist(record);
 	}

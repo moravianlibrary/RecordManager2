@@ -104,6 +104,7 @@ public abstract class HashingBiblioLinkerKeyParser implements BiblioLinkerKeysPa
 			// new record or change in keys
 			record.setNextBiblioLinkerFlag(true);
 			record.setNextBiblioLinkerSimilarFlag(true);
+			record.setBlDisadvantaged(true);
 		} else {
 			// key are equal
 			if (oaiTimestampChanged) {

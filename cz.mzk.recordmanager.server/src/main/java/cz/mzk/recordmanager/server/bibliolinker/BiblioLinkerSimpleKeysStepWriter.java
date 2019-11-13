@@ -22,6 +22,7 @@ public class BiblioLinkerSimpleKeysStepWriter implements
 			throws Exception {
 		for (List<HarvestedRecord> hrList : arg0) {
 			for (HarvestedRecord hr : hrList) {
+				hr.setBlDisadvantaged(false);
 				harvestedRecordDAO.saveOrUpdate(hr);
 			}
 		}

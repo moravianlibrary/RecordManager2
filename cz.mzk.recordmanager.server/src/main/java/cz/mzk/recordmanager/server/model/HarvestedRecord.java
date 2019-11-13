@@ -294,6 +294,9 @@ public class HarvestedRecord extends AbstractDomainObject {
 	@Column(name = "biblio_linker_keys_hash")
 	private String biblioLinkerKeysHash = "";
 
+	@Column(name = "bl_disadvantaged")
+	private boolean blDisadvantaged = true;
+
 	@Column(name = "bl_author")
 	private String blAuthor;
 
@@ -824,5 +827,13 @@ public class HarvestedRecord extends AbstractDomainObject {
 
 	public void setBiblioLinkerKeysHash(String biblioLinkerKeysHash) {
 		this.biblioLinkerKeysHash = biblioLinkerKeysHash;
+	}
+
+	public boolean isBlDisadvantaged() {
+		return blDisadvantaged;
+	}
+
+	public void setBlDisadvantaged(boolean blDisadvantaged) {
+		this.blDisadvantaged = blDisadvantaged;
 	}
 }
