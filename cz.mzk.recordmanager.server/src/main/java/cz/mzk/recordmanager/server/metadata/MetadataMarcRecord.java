@@ -1323,19 +1323,17 @@ public class MetadataMarcRecord implements MetadataRecord {
 	}
 
 	/**
-	 * 240anp, 245anp
+	 * 245anp
 	 *
 	 * @return Set of {@link AnpTitle}
 	 */
 	@Override
 	public Set<AnpTitle> getAnpTitle() {
 		Set<AnpTitle> results = new HashSet<>();
-		for (String tag : TITLE_TAGS) {
-			for (DataField df : underlayingMarc.getDataFields(tag)) {
-				String titleText = parseTitleValue(df, SHORT_TITLE_SUBFIELDS);
-				if (!titleText.isEmpty()) {
-					results.add(AnpTitle.create(titleText, MetadataUtils.similarityEnabled(df, titleText)));
-				}
+		for (DataField df : underlayingMarc.getDataFields("245")) {
+			String titleText = parseTitleValue(df, SHORT_TITLE_SUBFIELDS);
+			if (!titleText.isEmpty()) {
+				results.add(AnpTitle.create(titleText, MetadataUtils.similarityEnabled(df, titleText)));
 			}
 		}
 		return results;
