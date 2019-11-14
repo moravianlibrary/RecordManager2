@@ -73,6 +73,7 @@ public class Constants {
 	public static final String JOB_PARAM_DELETED		= "deleted"; // for export
 	public static final String JOB_PARAM_TYPE			= "type";
 	public static final String JOB_PARAM_VIEW			= "view";
+	public static final String JOB_PARAM_UPDATE_TIMESTAMP = "updateTimestamp";
 
 	public static final String JOB_PARAM_TRUE_VALUE		= "true";
 	public static final String JOB_PARAM_ONE_VALUE		= "1";

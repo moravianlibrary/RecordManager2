@@ -1,6 +1,6 @@
 package cz.mzk.recordmanager.server.bibliolinker;
 
-import cz.mzk.recordmanager.server.dedup.DedupRecordsJobParametersValidator;
+import cz.mzk.recordmanager.server.bibliolinker.keys.BiblioLinkerJobParametersValidator;
 import cz.mzk.recordmanager.server.dedup.KeyGeneratorForList;
 import cz.mzk.recordmanager.server.model.BiblioLinkerSimilarType;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
@@ -164,7 +164,7 @@ public class BiblioLinkerJobConfig {
 			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER + ":blCleanupStep") Step blCleanupStep
 	) {
 		return jobs.get(Constants.JOB_ID_BIBLIO_LINKER)
-				.validator(new DedupRecordsJobParametersValidator())
+				.validator(new BiblioLinkerJobParametersValidator())
 				.start(initBLStep)
 				.next(prepareBLTempTitleAuthorStep)
 				.next(blTempTitleAuthorStep)
@@ -229,7 +229,7 @@ public class BiblioLinkerJobConfig {
 				.retryLimit(RETRY_LIMIT)
 				.reader(blTempTitleAuthorStepReader(INTEGER_OVERRIDEN_BY_EXPRESSION))
 				.processor(blSimpleKeysStepProsessor())
-				.writer(blSimpleKeysStepWriter())
+				.writer(blSimpleBlWriter())
 				.build();
 	}
 
@@ -279,7 +279,7 @@ public class BiblioLinkerJobConfig {
 				.retryLimit(RETRY_LIMIT)
 				.reader(blTempTitleAuthorAudioStepReader(INTEGER_OVERRIDEN_BY_EXPRESSION))
 				.processor(blSimpleKeysStepProsessor())
-				.writer(blSimpleKeysStepWriter())
+				.writer(blSimpleBlWriter())
 				.build();
 	}
 
@@ -329,7 +329,7 @@ public class BiblioLinkerJobConfig {
 				.retryLimit(RETRY_LIMIT)
 				.reader(blTempTitleAuthorVideoStepReader(INTEGER_OVERRIDEN_BY_EXPRESSION))
 				.processor(blSimpleKeysStepProsessor())
-				.writer(blSimpleKeysStepWriter())
+				.writer(blSimpleBlWriter())
 				.build();
 	}
 
@@ -379,7 +379,7 @@ public class BiblioLinkerJobConfig {
 				.retryLimit(RETRY_LIMIT)
 				.reader(blTempTitleAuthorMusicalScoreStepReader(INTEGER_OVERRIDEN_BY_EXPRESSION))
 				.processor(blSimpleKeysStepProsessor())
-				.writer(blSimpleKeysStepWriter())
+				.writer(blSimpleBlWriter())
 				.build();
 	}
 
@@ -429,7 +429,7 @@ public class BiblioLinkerJobConfig {
 				.retryLimit(2 * RETRY_LIMIT)
 				.reader(blTempTitleLangPeriodicalStepReader(INTEGER_OVERRIDEN_BY_EXPRESSION))
 				.processor(blSimpleKeysStepProsessor())
-				.writer(blSimpleKeysStepWriter())
+				.writer(blSimpleBlWriter())
 				.build();
 	}
 
@@ -479,7 +479,7 @@ public class BiblioLinkerJobConfig {
 				.retryLimit(RETRY_LIMIT)
 				.reader(blTempRestDedupStepReader(INTEGER_OVERRIDEN_BY_EXPRESSION))
 				.processor(blSimpleKeysStepProsessor())
-				.writer(blSimpleKeysStepWriter())
+				.writer(blSimpleBlWriter())
 				.build();
 	}
 
@@ -528,7 +528,7 @@ public class BiblioLinkerJobConfig {
 				.retryLimit(RETRY_LIMIT)
 				.reader(blTempOrphanedStepReader(INTEGER_OVERRIDEN_BY_EXPRESSION))
 				.processor(blSimpleKeysStepProsessor())
-				.writer(blSimpleKeysStepWriter())
+				.writer(blSimpleBlWriter())
 				.build();
 	}
 
@@ -593,7 +593,7 @@ public class BiblioLinkerJobConfig {
 			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":blSimilarCleanupStep") Step blSimilarCleanupStep
 	) {
 		return jobs.get(Constants.JOB_ID_BIBLIO_LINKER_SIMILAR)
-				.validator(new DedupRecordsJobParametersValidator())
+				.validator(new BiblioLinkerJobParametersValidator())
 				.start(initBLSStep)
 				.next(prepareBLSimilarTempAuthorCommonTitleStep)
 				.next(blSimilarTempAuthorCommonTitleStep)
@@ -662,7 +662,7 @@ public class BiblioLinkerJobConfig {
 				.retryLimit(RETRY_LIMIT)
 				.reader(blSimilarTempAuthorCommonTitleStepReader(INTEGER_OVERRIDEN_BY_EXPRESSION))
 				.processor(blSimilarAuthorCommonTitleStepProsessor())
-				.writer(blSimpleKeysStepWriter())
+				.writer(blSimpleSimilarWriter(INTEGER_OVERRIDEN_BY_EXPRESSION))
 				.build();
 	}
 
@@ -718,7 +718,7 @@ public class BiblioLinkerJobConfig {
 				.retryLimit(RETRY_LIMIT)
 				.reader(blSimilarTempAuthorTitleStepReader(INTEGER_OVERRIDEN_BY_EXPRESSION))
 				.processor(blSimilarAuthorTitleStepProsessor())
-				.writer(blSimpleKeysStepWriter())
+				.writer(blSimpleSimilarWriter(INTEGER_OVERRIDEN_BY_EXPRESSION))
 				.build();
 	}
 
@@ -774,7 +774,7 @@ public class BiblioLinkerJobConfig {
 				.retryLimit(RETRY_LIMIT)
 				.reader(blSimilarTempAuthorTitleAudioMusicalScoreStepReader(INTEGER_OVERRIDEN_BY_EXPRESSION))
 				.processor(blSimilarAuthorTitleAudioMusicalScoreStepProsessor())
-				.writer(blSimpleKeysStepWriter())
+				.writer(blSimpleSimilarWriter(INTEGER_OVERRIDEN_BY_EXPRESSION))
 				.build();
 	}
 
@@ -830,7 +830,7 @@ public class BiblioLinkerJobConfig {
 				.retryLimit(2 * RETRY_LIMIT)
 				.reader(blSimilarTempTopicKeyStepReader(INTEGER_OVERRIDEN_BY_EXPRESSION))
 				.processor(blSimilarTopicKeyStepProsessor())
-				.writer(blSimpleKeysStepWriter())
+				.writer(blSimpleSimilarWriter(INTEGER_OVERRIDEN_BY_EXPRESSION))
 				.build();
 	}
 
@@ -886,7 +886,7 @@ public class BiblioLinkerJobConfig {
 				.retryLimit(RETRY_LIMIT)
 				.reader(blSimilarTempEntityStepReader(INTEGER_OVERRIDEN_BY_EXPRESSION))
 				.processor(blSimilarEntityStepProsessor())
-				.writer(blSimpleKeysStepWriter())
+				.writer(blSimpleSimilarWriter(INTEGER_OVERRIDEN_BY_EXPRESSION))
 				.build();
 	}
 
@@ -942,7 +942,7 @@ public class BiblioLinkerJobConfig {
 				.retryLimit(RETRY_LIMIT)
 				.reader(blSimilarTempIssnSeriesStepReader(INTEGER_OVERRIDEN_BY_EXPRESSION))
 				.processor(blSimilarIssnSeriesStepProsessor())
-				.writer(blSimpleKeysStepWriter())
+				.writer(blSimpleSimilarWriter(INTEGER_OVERRIDEN_BY_EXPRESSION))
 				.build();
 	}
 
@@ -998,7 +998,7 @@ public class BiblioLinkerJobConfig {
 				.retryLimit(RETRY_LIMIT)
 				.reader(blSimilarTempSeriesPublisherStepReader(INTEGER_OVERRIDEN_BY_EXPRESSION))
 				.processor(blSimilarSeriesPublisherStepProsessor())
-				.writer(blSimpleKeysStepWriter())
+				.writer(blSimpleSimilarWriter(INTEGER_OVERRIDEN_BY_EXPRESSION))
 				.build();
 	}
 
@@ -1054,7 +1054,7 @@ public class BiblioLinkerJobConfig {
 				.retryLimit(RETRY_LIMIT)
 				.reader(blSimilarTempLibrariesStepReader(INTEGER_OVERRIDEN_BY_EXPRESSION))
 				.processor(blSimilarLibrariesStepProsessor())
-				.writer(blSimpleKeysStepWriter())
+				.writer(blSimpleSimilarWriter(INTEGER_OVERRIDEN_BY_EXPRESSION))
 				.build();
 	}
 
@@ -1111,7 +1111,7 @@ public class BiblioLinkerJobConfig {
 				.retryLimit(2 * RETRY_LIMIT)
 				.reader(blSimilarTempEntityLangRestStepReader(INTEGER_OVERRIDEN_BY_EXPRESSION))
 				.processor(blSimilarEntityLangRestStepProsessor())
-				.writer(blSimpleKeysStepWriter())
+				.writer(blSimpleSimilarWriter(INTEGER_OVERRIDEN_BY_EXPRESSION))
 				.build();
 	}
 
@@ -1167,7 +1167,7 @@ public class BiblioLinkerJobConfig {
 				.retryLimit(RETRY_LIMIT)
 				.reader(blSimilarTempRestStepReader(INTEGER_OVERRIDEN_BY_EXPRESSION))
 				.processor(blSimilarRestStepProsessor())
-				.writer(blSimpleKeysStepWriter())
+				.writer(blSimpleSimilarWriter(INTEGER_OVERRIDEN_BY_EXPRESSION))
 				.build();
 	}
 
@@ -1247,11 +1247,18 @@ public class BiblioLinkerJobConfig {
 		return new BiblioLinkerSimpleKeysStepProcessor();
 	}
 
-	@Bean(name = "blSimpleKeys:writer")
+	@Bean(name = "blSimpleBl:writer")
 	@StepScope
-	public ItemWriter<List<HarvestedRecord>> blSimpleKeysStepWriter()
-			throws Exception {
-		return new BiblioLinkerSimpleKeysStepWriter();
+	public ItemWriter<List<HarvestedRecord>> blSimpleBlWriter() throws Exception {
+		return new BiblioLinkerSimpleKeysStepWriter(0);
+	}
+
+	@Bean(name = "blSimpleSimilar:writer")
+	@StepScope
+	public ItemWriter<List<HarvestedRecord>> blSimpleSimilarWriter(
+			@Value("#{jobParameters[" + Constants.JOB_PARAM_UPDATE_TIMESTAMP + "]}") Integer updateTimestamp
+	) throws Exception {
+		return new BiblioLinkerSimpleKeysStepWriter(updateTimestamp);
 	}
 
 	@Bean(name = Constants.JOB_ID_BIBLIO_LINKER + ":blSimpleKeysPartioner")
