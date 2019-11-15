@@ -72,6 +72,8 @@ public class BiblioLinkerJobConfig {
 
 	private static final String TMP_BLS_TABLE_TOPIC_KEY = "tmp_bls_topic_key";
 
+	private static final String TMP_BLS_TABLE_TOPIC_KEY_SPEC_DOCS = "tmp_bls_topic_key_spec_docs";
+
 	private static final String TMP_BLS_TABLE_ENTITY = "tmp_bls_entity";
 
 	private static final String TMP_BLS_TABLE_ISSN_SERIES = "tmp_bls_issn_series";
@@ -113,6 +115,9 @@ public class BiblioLinkerJobConfig {
 
 	private String prepareBLSimilarTempTopicKeyTableSql =
 			ResourceUtils.asString("job/biblioLinkerJob/prepareBLSTempTopicKey.sql");
+
+	private String prepareBLSimilarTempTopicKeySpecDocsTableSql =
+			ResourceUtils.asString("job/biblioLinkerJob/prepareBLSTempTopicKeySpecialDocuments.sql");
 
 	private String prepareBLSimilarTempEntityTableSql =
 			ResourceUtils.asString("job/biblioLinkerJob/prepareBLSTempEntityLang.sql");
@@ -578,6 +583,8 @@ public class BiblioLinkerJobConfig {
 			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":blSimilarTempAuthorTitlePartitionedStep") Step blSimilarTempAuthorTitleStep,
 			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":prepareBLSimilarTempTopicKeyStep") Step prepareBLSimilarTempTopicKeyStep,
 			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":blSimilarTempTopicKeyPartitionedStep") Step blSimilarTempTopicKeyStep,
+			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":prepareBLSimilarTempTopicKeySpecDocsStep") Step prepareBLSimilarTempTopicKeySpecDocsStep,
+			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":blSimilarTempTopicKeySpecDocsPartitionedStep") Step blSimilarTempTopicKeySpecDocsStep,
 			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":prepareBLSimilarTempEntityStep") Step prepareBLSimilarTempEntityStep,
 			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":blSimilarTempEntityPartitionedStep") Step blSimilarTempEntityStep,
 			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":prepareBLSimilarTempIssnSeriesStep") Step prepareBLSimilarTempIssnSeriesStep,
@@ -605,6 +612,8 @@ public class BiblioLinkerJobConfig {
 				.next(blSimilarTempSeriesPublisherStep)
 				.next(prepareBLSimilarTempEntityStep)
 				.next(blSimilarTempEntityStep)
+				.next(prepareBLSimilarTempTopicKeySpecDocsStep)
+				.next(blSimilarTempTopicKeySpecDocsStep)
 				.next(prepareBLSimilarTempTopicKeyStep)
 				.next(blSimilarTempTopicKeyStep)
 				.next(prepareBLSimilarTempLibrariesStep)
@@ -855,6 +864,62 @@ public class BiblioLinkerJobConfig {
 	@Bean(name = "blSimilarTopicKey:processor")
 	@StepScope
 	public ItemProcessor<List<Long>, List<HarvestedRecord>> blSimilarTopicKeyStepProsessor() {
+		return new BiblioLinkerSimilarSimpleStepProcessor(BiblioLinkerSimilarType.TOPIC_KEY);
+	}
+
+	/**
+	 * same topic_key, language for periodicals - patents, authorities
+	 */
+	@Bean(name = Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":prepareBLSimilarTempTopicKeySpecDocsTasklet")
+	@StepScope
+	public Tasklet prepareBLSimilarTempTopicKeySpecDocsTasklet() {
+		return new SqlCommandTasklet(prepareBLSimilarTempTopicKeySpecDocsTableSql);
+	}
+
+	@Bean(name = Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":prepareBLSimilarTempTopicKeySpecDocsStep")
+	public Step prepareBLSimilarTempTopicKeySpecDocsStep() {
+		return steps.get("prepareBLSimilarTempTopicKeySpecDocsStep")
+				.tasklet(prepareBLSimilarTempTopicKeySpecDocsTasklet())
+				.listener(new StepProgressListener())
+				.build();
+	}
+
+	@Bean(name = Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":blSimilarTempTopicKeySpecDocsStep")
+	public Step blSimilarTempTopicKeySpecDocsStep() throws Exception {
+		return steps.get("blSimilarTempTopicKeySpecDocsStep")
+				.listener(new StepProgressListener())
+				.<List<Long>, List<HarvestedRecord>>chunk(1)
+				.faultTolerant()
+				.keyGenerator(KeyGeneratorForList.INSTANCE)
+				.retry(LockAcquisitionException.class)
+				.retryLimit(2 * RETRY_LIMIT)
+				.reader(blSimilarTempTopicKeySpecDocsStepReader(INTEGER_OVERRIDEN_BY_EXPRESSION))
+				.processor(blSimilarTopicKeySpecDocsStepProsessor())
+				.writer(blSimpleSimilarWriter(INTEGER_OVERRIDEN_BY_EXPRESSION))
+				.build();
+	}
+
+	@Bean(name = Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":blSimilarTempTopicKeySpecDocsPartitionedStep")
+	public Step blSimilarTempTopicKeySpecDocsPartitionedStep() throws Exception {
+		return steps.get("blSimilarTempTopicKeySpecDocsPartitionedStep")
+				.partitioner("blSimilarTempTopicKeySpecDocsPartitionedStepSlave", this.partioner()) //
+				.taskExecutor(this.taskExecutor)
+				.gridSize(this.partitionThreads)
+				.step(blSimilarTempTopicKeySpecDocsStep())
+				.build();
+	}
+
+	@Bean(name = "blSimilarTopicKeySpecDocs:reader")
+	@StepScope
+	public ItemReader<List<Long>> blSimilarTempTopicKeySpecDocsStepReader(
+			@Value("#{stepExecutionContext[modulo]}") Integer modulo
+	) throws Exception {
+		return blSimpleKeysReader(TMP_BLS_TABLE_TOPIC_KEY_SPEC_DOCS, "biblio_linker_id", modulo);
+	}
+
+	@Bean(name = "blSimilarTopicKeySpecDocs:processor")
+	@StepScope
+	public ItemProcessor<List<Long>, List<HarvestedRecord>> blSimilarTopicKeySpecDocsStepProsessor() {
 		return new BiblioLinkerSimilarSimpleStepProcessor(BiblioLinkerSimilarType.TOPIC_KEY);
 	}
 
