@@ -1821,3 +1821,6 @@ INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granul
 
 --changeset tomascejpek:162 context:cpk
 UPDATE oai_harvest_conf SET url='https://katalog.svkul.cz/tritius/oai-provider',set_spec='CPK_2' WHERE import_conf_id=314;
+
+--changeset tomascejpek:163 context:cpk
+UPDATE oai_harvest_conf SET set_spec='CPK_1' WHERE import_conf_id=390;
