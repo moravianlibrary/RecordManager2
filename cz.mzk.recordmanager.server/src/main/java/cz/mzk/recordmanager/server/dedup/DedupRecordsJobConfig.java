@@ -716,7 +716,7 @@ public class DedupRecordsJobConfig {
 	public Step dedupTitleAuthStep() throws Exception {
 		return steps.get("dedupTitleAuthStep")
 				.listener(new StepProgressListener())
-				.<List<Long>, List<HarvestedRecord>> chunk(100)
+				.<List<Long>, List<HarvestedRecord>> chunk(10)
 				.faultTolerant()
 				.keyGenerator(KeyGeneratorForList.INSTANCE)
 				.retry(LockAcquisitionException.class)
