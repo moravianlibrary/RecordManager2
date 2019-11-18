@@ -71,7 +71,6 @@ public class HarvestedRecordWriter implements ItemWriter<List<HarvestedRecord>> 
 			record.setRawRecord(new byte[0]);
 			record.setDedupKeysHash("");
 			record.setNextDedupFlag(true);
-			record.setDisadvantaged(true);
 		}
 		recordDao.persist(record);
 	}
