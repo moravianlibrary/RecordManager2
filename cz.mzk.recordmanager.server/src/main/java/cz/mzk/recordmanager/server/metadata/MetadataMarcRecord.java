@@ -62,6 +62,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 	private static final Pattern CD_R = Pattern.compile("CD-R", Pattern.CASE_INSENSITIVE);
 	private static final Pattern ZVUKOVA_DESKA = Pattern.compile("zvukov(?:[aáeé]|ych|ých)\\sdes(?:ka|ky|ek)", Pattern.CASE_INSENSITIVE);
 	protected static final Pattern DIGITAL_OR_12CM = Pattern.compile("digital|12\\s*cm", Pattern.CASE_INSENSITIVE);
+	private static final Pattern CM30 = Pattern.compile("30\\s*cm", Pattern.CASE_INSENSITIVE);
 	private static final Pattern GRAMOFONOVA_DESKA = Pattern.compile("gramofonov(?:[aáeé]|ych|ých)\\sdes(?:ka|ky|ek)", Pattern.CASE_INSENSITIVE);
 	private static final Pattern ANALOG = Pattern.compile("analog", Pattern.CASE_INSENSITIVE);
 	private static final Pattern LP_OR_SP = Pattern.compile("LP|SP");
@@ -517,13 +518,18 @@ public class MetadataMarcRecord implements MetadataRecord {
 		String f338b = underlayingMarc.getField("338", 'b');
 		if (f338b == null) f338b = "";
 
+		String f245h = underlayingMarc.getField("245", 'h');
+		if (f245h == null) f245h = "";
+
 		// AUDIO_CD
 		if (isAudioCD()) return HarvestedRecordFormatEnum.AUDIO_CD;
 
 		// AUDIO_LP
 		if (GRAMOFONOVA_DESKA.matcher(f300).find()
 				|| (ZVUKOVA_DESKA.matcher(f300).find() && ANALOG.matcher(f300).find())
-				|| LP_OR_SP.matcher(f300a).find())
+				|| LP_OR_SP.matcher(f300a).find()
+				|| ((ZVUKOVY_ZAZNAM.matcher(f245h).find() || ZVUKOVA_DESKA.matcher(f300).find())
+				&& CM30.matcher(f300).find()))
 			return HarvestedRecordFormatEnum.AUDIO_LP;
 
 		// AUDIO_CASSETTE
