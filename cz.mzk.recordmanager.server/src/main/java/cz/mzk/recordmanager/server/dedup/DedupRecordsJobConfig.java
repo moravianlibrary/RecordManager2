@@ -344,7 +344,7 @@ public class DedupRecordsJobConfig {
 	public Step dedupClusterIdsStep() throws Exception {
 		return steps.get("dedupClusterIdsStep")
 				.listener(new StepProgressListener())
-				.<List<Long>, List<HarvestedRecord>> chunk(100)
+				.<List<Long>, List<HarvestedRecord>> chunk(10)
 				.reader(dedupClusterIdReader())
 				.processor(dedupSimpleKeysStepProsessor())
 				.writer(dedupSimpleKeysStepWriter())
@@ -380,7 +380,7 @@ public class DedupRecordsJobConfig {
 	public Step dedupSimpleKeysSkatManuallyMergedStep() throws Exception {
 		return steps.get("dedupSimpleKeysSkatManuallyMergedStep")
 				.listener(new StepProgressListener())
-				.<List<Long>, List<HarvestedRecord>> chunk(100)
+				.<List<Long>, List<HarvestedRecord>> chunk(10)
 				.faultTolerant()
 				.keyGenerator(KeyGeneratorForList.INSTANCE)
 				.retry(LockAcquisitionException.class)
@@ -428,7 +428,7 @@ public class DedupRecordsJobConfig {
 	public Step dedupSimpleKeysSfxIdStep() throws Exception {
 		return steps.get("dedupSimpleKeysSfxIdStep")
 				.listener(new StepProgressListener())
-				.<List<Long>, List<HarvestedRecord>>chunk(100)
+				.<List<Long>, List<HarvestedRecord>>chunk(10)
 				.reader(dedupSimpleKeysSfxIdReader())
 				.processor(dedupSimpleKeysStepProsessor())
 				.writer(dedupSimpleKeysStepWriter()).build();
@@ -461,7 +461,7 @@ public class DedupRecordsJobConfig {
 	public Step dedupSimpleKeysIsbnStep() throws Exception {
 		return steps.get("dedupSimpleKeysIsbnStep")
 				.listener(new StepProgressListener())
-				.<List<Long>, List<HarvestedRecord>> chunk(100)
+				.<List<Long>, List<HarvestedRecord>> chunk(10)
 				.faultTolerant()
 				.keyGenerator(KeyGeneratorForList.INSTANCE)
 				.retry(LockAcquisitionException.class)
@@ -510,7 +510,7 @@ public class DedupRecordsJobConfig {
 	public Step dedupSimpleKeysCnbStep() throws Exception {
 		return steps.get("dedupSimpleKeysCnbStep")
 				.listener(new StepProgressListener())
-				.<List<Long>, List<HarvestedRecord>> chunk(100)
+				.<List<Long>, List<HarvestedRecord>> chunk(10)
 				.reader(dedupSimpleKeysCnbReader())
 				.processor(dedupSimpleKeysStepProsessor())
 				.writer(dedupSimpleKeysStepWriter()).build();
@@ -544,7 +544,7 @@ public class DedupRecordsJobConfig {
 	public Step dedupSimpleKeysEanStep() throws Exception {
 		return steps.get("dedupSimpleKeysEanStep")
 				.listener(new StepProgressListener())
-				.<List<Long>, List<HarvestedRecord>> chunk(100)
+				.<List<Long>, List<HarvestedRecord>> chunk(10)
 				.reader(dedupSimpleKeysEanReader())
 				.processor(dedupSimpleKeysStepProsessor())
 				.writer(dedupSimpleKeysStepWriter()).build();
@@ -577,7 +577,7 @@ public class DedupRecordsJobConfig {
 	public Step dedupSimpleKeysBlindAudioStep() throws Exception {
 		return steps.get("dedupSimpleKeysBlindAudioStep")
 				.listener(new StepProgressListener())
-				.<List<Long>, List<HarvestedRecord>>chunk(100)
+				.<List<Long>, List<HarvestedRecord>>chunk(10)
 				.reader(dedupSimpleKeysBlindAudioReader())
 				.processor(dedupSimpleKeysStepProsessor())
 				.writer(dedupSimpleKeysStepWriter()).build();
@@ -610,7 +610,7 @@ public class DedupRecordsJobConfig {
 	public Step dedupSimpleKeysPublisherNumberStep() throws Exception {
 		return steps.get("dedupSimpleKeysPublisherNumberStep")
 				.listener(new StepProgressListener())
-				.<List<Long>, List<HarvestedRecord>> chunk(100)
+				.<List<Long>, List<HarvestedRecord>> chunk(10)
 				.reader(dedupSimpleKeysPublisherNumberReader())
 				.processor(dedupSimpleKeysStepProsessor())
 				.writer(dedupSimpleKeysStepWriter()).build();
@@ -643,7 +643,7 @@ public class DedupRecordsJobConfig {
 	public Step dedupArticlesXGStep() throws Exception {
 		return steps.get("dedupArticlesXGStep")
 				.listener(new StepProgressListener())
-				.<List<Long>, List<HarvestedRecord>> chunk(100)
+				.<List<Long>, List<HarvestedRecord>> chunk(10)
 				.reader(dedupSimpleKeysArticlesXGReader())
 				.processor(dedupSimpleKeysStepProsessor())
 				.writer(dedupSimpleKeysStepWriter()).build();
@@ -676,7 +676,7 @@ public class DedupRecordsJobConfig {
 	public Step dedupArticlesTGStep() throws Exception {
 		return steps.get("dedupArticlesTGStep")
 				.listener(new StepProgressListener())
-				.<List<Long>, List<HarvestedRecord>> chunk(100)
+				.<List<Long>, List<HarvestedRecord>> chunk(10)
 				.reader(dedupSimpleKeysArticlesTGReader())
 				.processor(dedupArticlesTGProcessor())
 				.writer(dedupSimpleKeysStepWriter()).build();
@@ -789,7 +789,7 @@ public class DedupRecordsJobConfig {
 	public Step dedupCnbClustersStep() throws Exception {
 		return steps.get("dedupCnbClustersTableStep")
 				.listener(new StepProgressListener())
-				.<List<Long>, List<HarvestedRecord>> chunk(100)
+				.<List<Long>, List<HarvestedRecord>> chunk(10)
 				.reader(dedupCnbClustersReader())
 				.processor(dedupCNBClustersProcessor())
 				.writer(dedupSimpleKeysStepWriter())
@@ -823,7 +823,7 @@ public class DedupRecordsJobConfig {
 	public Step dedupOclcClustersStep() throws Exception {
 		return steps.get("dedupOclcClustersTableStep")
 				.listener(new StepProgressListener())
-				.<List<Long>, List<HarvestedRecord>> chunk(100)
+				.<List<Long>, List<HarvestedRecord>> chunk(10)
 				.reader(dedupOclcClustersReader())
 				.processor(generalDedupClustersProcessor())
 				.writer(dedupSimpleKeysStepWriter())
@@ -857,7 +857,7 @@ public class DedupRecordsJobConfig {
 	public Step dedupUuidClustersStep() throws Exception {
 		return steps.get("dedupUuidClustersStep")
 				.listener(new StepProgressListener())
-				.<List<Long>, List<HarvestedRecord>> chunk(100)
+				.<List<Long>, List<HarvestedRecord>> chunk(10)
 				.reader(dedupUuidClustersReader())
 				.processor(generalDedupClustersProcessor())
 				.writer(dedupSimpleKeysStepWriter())
@@ -887,7 +887,7 @@ public class DedupRecordsJobConfig {
 	public Step dedupSimpleKeysSkatRestStep() throws Exception {
 		return steps.get("dedupSimpleKeysSkatRestStep")
 				.listener(new StepProgressListener())
-				.<List<Long>, List<HarvestedRecord>> chunk(100)
+				.<List<Long>, List<HarvestedRecord>> chunk(10)
 				.faultTolerant()
 				.keyGenerator(KeyGeneratorForList.INSTANCE)
 				.retry(LockAcquisitionException.class)
@@ -984,7 +984,7 @@ public class DedupRecordsJobConfig {
 	public Step processSimilaritesResultsStep() throws Exception {
 		return steps.get("processSimilaritesResultsStep")
 				.listener(new StepProgressListener())
-				.<List<Long>, List<HarvestedRecord>> chunk(100)
+				.<List<Long>, List<HarvestedRecord>> chunk(10)
 				.reader(dedupSimpleKeysReader(TMP_TABLE_SIMILARITY_IDS, INTEGER_OVERRIDEN_BY_EXPRESSION))
 				.processor(dedupSimpleKeysStepProsessor())
 				.writer(dedupSimpleKeysStepWriter())
@@ -1018,7 +1018,7 @@ public class DedupRecordsJobConfig {
 	public Step dedupIsmnClustersStep() throws Exception {
 		return steps.get("dedupIsmnClustersTableStep")
 				.listener(new StepProgressListener())
-				.<List<Long>, List<HarvestedRecord>> chunk(100)
+				.<List<Long>, List<HarvestedRecord>> chunk(10)
 				.reader(dedupIsmnClustersReader())
 				.processor(generalDedupClustersProcessor())
 				.writer(dedupSimpleKeysStepWriter())
