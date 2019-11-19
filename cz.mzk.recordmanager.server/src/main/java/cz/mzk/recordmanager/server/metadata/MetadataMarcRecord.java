@@ -544,10 +544,13 @@ public class MetadataMarcRecord implements MetadataRecord {
 	}
 
 	protected boolean isAudioCD() {
+		char ldr06 = getLeaderChar(underlayingMarc.getLeader().getTypeOfRecord());
 		String f300 = underlayingMarc.getDataFields("300").toString();
 		String f500 = underlayingMarc.getDataFields("500").toString();
 		String f300a = underlayingMarc.getField("300", 'a');
 		if (f300a == null) f300a = "";
+		String f245h = underlayingMarc.getField("245", 'h');
+		if (f245h == null) f245h = "";
 
 		for (String data : new String[]{f300, f500}) {
 			if (KOMPAKTNI_DISK.matcher(data).find()
@@ -556,7 +559,9 @@ public class MetadataMarcRecord implements MetadataRecord {
 		}
 		return ZVUKOVE_CD.matcher(f300).find()
 				|| (CD.matcher(f300a).find() && !CD_ROM.matcher(f300a).find())
-				|| (ZVUKOVA_DESKA.matcher(f300).find() && DIGITAL_OR_12CM.matcher(f300).find());
+				|| (ZVUKOVA_DESKA.matcher(f300).find() && DIGITAL_OR_12CM.matcher(f300).find())
+				|| ((MetadataUtils.containsChar(ARRAY_IJ, ldr06) || ZVUKOVY_ZAZNAM.matcher(f245h).find())
+				&& DIGITAL_OR_12CM.matcher(f300).find());
 	}
 
 	private boolean isAudioOther() {
