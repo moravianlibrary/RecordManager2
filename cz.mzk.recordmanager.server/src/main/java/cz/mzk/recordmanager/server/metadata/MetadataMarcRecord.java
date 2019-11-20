@@ -1297,24 +1297,26 @@ public class MetadataMarcRecord implements MetadataRecord {
 	}
 
 	/**
-	 * first of 260b, 264b
+	 * first of 260b, 264b, books only
 	 *
 	 * @return String
 	 */
 	@Override
 	public String getPublisher() {
+		if (!getDetectedFormatList().contains(HarvestedRecordFormatEnum.BOOKS)) return null;
 		String publisher = underlayingMarc.getField("260", 'b');
 		if (publisher != null) return publisher;
 		return underlayingMarc.getField("264", 'b');
 	}
 
 	/**
-	 * first number from 250a
+	 * first number from 250a, books only
 	 *
 	 * @return String
 	 */
 	@Override
 	public String getEdition() {
+		if (!getDetectedFormatList().contains(HarvestedRecordFormatEnum.BOOKS)) return null;
 		String data = underlayingMarc.getField("250", 'a');
 		if (data == null) return null;
 		Matcher matcher = NUMBER_PATTERN.matcher(data);
@@ -1323,12 +1325,13 @@ public class MetadataMarcRecord implements MetadataRecord {
 	}
 
 	/**
-	 * 245anp
+	 * 245anp, books only
 	 *
 	 * @return Set of {@link AnpTitle}
 	 */
 	@Override
 	public Set<AnpTitle> getAnpTitle() {
+		if (!getDetectedFormatList().contains(HarvestedRecordFormatEnum.BOOKS)) return null;
 		Set<AnpTitle> results = new HashSet<>();
 		for (DataField df : underlayingMarc.getDataFields("245")) {
 			String titleText = parseTitleValue(df, SHORT_TITLE_SUBFIELDS);
