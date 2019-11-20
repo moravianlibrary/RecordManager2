@@ -103,15 +103,12 @@ public abstract class HashingBiblioLinkerKeyParser implements BiblioLinkerKeysPa
 		if (biblioLinkerKeysChanged) {
 			// new record or change in keys
 			record.setNextBiblioLinkerFlag(true);
-			record.setNextBiblioLinkerSimilarFlag(true);
-			record.setBlDisadvantaged(true);
 		} else {
 			// key are equal
 			if (oaiTimestampChanged) {
 				// neither keys neither oai timestamp changed, 
 				// don't bl
 				record.setNextBiblioLinkerFlag(false);
-				record.setNextBiblioLinkerSimilarFlag(false);
 			} else {
 				// keys are same but timestamp changed
 				// keep previsous bl flag
