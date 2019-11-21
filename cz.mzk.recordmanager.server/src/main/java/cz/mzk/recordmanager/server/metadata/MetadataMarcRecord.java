@@ -1331,7 +1331,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 	 */
 	@Override
 	public Set<AnpTitle> getAnpTitle() {
-		if (!getDetectedFormatList().contains(HarvestedRecordFormatEnum.BOOKS)) return null;
+		if (!getDetectedFormatList().contains(HarvestedRecordFormatEnum.BOOKS)) return Collections.emptySet();
 		Set<AnpTitle> results = new HashSet<>();
 		for (DataField df : underlayingMarc.getDataFields("245")) {
 			String titleText = parseTitleValue(df, SHORT_TITLE_SUBFIELDS);

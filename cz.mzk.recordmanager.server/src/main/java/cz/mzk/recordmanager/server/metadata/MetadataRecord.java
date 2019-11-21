@@ -428,7 +428,7 @@ public interface MetadataRecord {
 	 * @return Set of {@link AnpTitle}
 	 */
 	default Set<AnpTitle> getAnpTitle() {
-		return null;
+		return Collections.emptySet();
 	}
 
 }
