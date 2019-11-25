@@ -119,7 +119,7 @@ public class MiscellaneousJobsConfig {
 	public Step generateSkatKeysStep() throws Exception {
 		return steps.get("generateSkatKeysStep")
 				.listener(new StepProgressListener())
-				.<Long, Set<SkatKey>>chunk(1000)
+				.<Long, Set<SkatKey>>chunk(100)
 				.reader(generateSkatKeysReader(DATE_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION))
 				.processor(generateSkatKeysProcessor())
 				.writer(generateSkatKeysWriter())

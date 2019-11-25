@@ -74,11 +74,20 @@ public class GenerateSkatKeysProcessor implements ItemProcessor<Long, Set<SkatKe
 		Set<SkatKey> newKeys = new HashSet<>();
 		for(SkatKey current: parsedKeys) {
 			if (existingKeys.contains(current)) {
+				existingKeys.remove(current);
 				continue;
 			}
 			newKeys.add(current);
 		}
-
+		// dedup if old keys exists
+		if (!existingKeys.isEmpty()) {
+			hr.setNextDedupFlag(true);
+			harvestedRecordDao.persist(hr);
+		}
+		// delete old keys
+		for (SkatKey existingKey : existingKeys) {
+			skatKeyDao.delete(existingKey);
+		}
 		return newKeys;
 	}
 
