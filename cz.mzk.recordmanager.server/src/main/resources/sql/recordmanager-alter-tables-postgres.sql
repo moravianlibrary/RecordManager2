@@ -1560,3 +1560,6 @@ INSERT INTO sigla (id, import_conf_id, sigla) VALUES (71, 397, 'TUG001');
 
 -- 29. 11. 2019 tomascejpek
 UPDATE oai_harvest_conf set extract_id_regex='s/[^:]+:[^:]+:([^\\/]+)\\/([^\\/]+)/$1_$2/' WHERE import_conf_id=359;
+
+-- 29. 11. 2019 tomascejpek
+UPDATE oai_harvest_conf SET url='https://brandysnl.tritius.cz/tritius/oai-provider',set_spec='CPK_1' WHERE import_conf_id=370;
