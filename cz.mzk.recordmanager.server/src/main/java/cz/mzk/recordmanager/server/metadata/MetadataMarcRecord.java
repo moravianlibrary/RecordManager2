@@ -6,10 +6,7 @@ import cz.mzk.recordmanager.server.marc.MarcRecord;
 import cz.mzk.recordmanager.server.model.*;
 import cz.mzk.recordmanager.server.model.HarvestedRecordFormat.HarvestedRecordFormatEnum;
 import cz.mzk.recordmanager.server.model.TezaurusRecord.TezaurusKey;
-import cz.mzk.recordmanager.server.util.CleaningUtils;
-import cz.mzk.recordmanager.server.util.Constants;
-import cz.mzk.recordmanager.server.util.MetadataUtils;
-import cz.mzk.recordmanager.server.util.UrlUtils;
+import cz.mzk.recordmanager.server.util.*;
 import cz.mzk.recordmanager.server.util.identifier.*;
 import org.marc4j.marc.DataField;
 import org.marc4j.marc.Subfield;
@@ -1326,6 +1323,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 
 	/**
 	 * 245anp, books only
+	 * numbers less than 10 converted to roman numerals
 	 *
 	 * @return Set of {@link AnpTitle}
 	 */
@@ -1336,7 +1334,9 @@ public class MetadataMarcRecord implements MetadataRecord {
 		for (DataField df : underlayingMarc.getDataFields("245")) {
 			String titleText = parseTitleValue(df, SHORT_TITLE_SUBFIELDS);
 			if (!titleText.isEmpty()) {
-				results.add(AnpTitle.create(titleText, MetadataUtils.similarityEnabled(df, titleText)));
+				boolean similarity = MetadataUtils.similarityEnabled(df, titleText);
+				titleText = RomanNumeralsUtils.getRomanNumerals(titleText);
+				results.add(AnpTitle.create(titleText, similarity));
 			}
 		}
 		return results;
