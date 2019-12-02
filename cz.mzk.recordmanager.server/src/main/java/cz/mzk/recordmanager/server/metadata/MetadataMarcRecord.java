@@ -1,6 +1,7 @@
 package cz.mzk.recordmanager.server.metadata;
 
 import com.google.common.primitives.Chars;
+import cz.mzk.recordmanager.server.ClasspathResourceProvider;
 import cz.mzk.recordmanager.server.export.IOFormat;
 import cz.mzk.recordmanager.server.marc.MarcRecord;
 import cz.mzk.recordmanager.server.model.*;
@@ -13,6 +14,9 @@ import org.marc4j.marc.Subfield;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -104,6 +108,13 @@ public class MetadataMarcRecord implements MetadataRecord {
 	private static final char[] ARRAY_OQ = {'o', 'q'};
 
 	private static final String URL_COMMENT_FORMAT = "%s (%s)";
+
+	private static final List<String> ANP_TITLE_REMOVE_WORDS = new BufferedReader(new InputStreamReader(
+			new ClasspathResourceProvider().getResource("/list/anp_title_remove_words.txt"), StandardCharsets.UTF_8))
+			.lines().collect(Collectors.toCollection(ArrayList::new));
+
+	private static final List<Pattern> ANP_TITLE_REMOVE_WORDS_PATTERNS = ANP_TITLE_REMOVE_WORDS.stream()
+			.map(w -> Pattern.compile("\\b" + w + "\\b", Pattern.CASE_INSENSITIVE)).collect(Collectors.toList());
 
 	public MetadataMarcRecord(MarcRecord underlayingMarc) {
 		initRecords(underlayingMarc, null);
@@ -1336,6 +1347,9 @@ public class MetadataMarcRecord implements MetadataRecord {
 			if (!titleText.isEmpty()) {
 				boolean similarity = MetadataUtils.similarityEnabled(df, titleText);
 				titleText = RomanNumeralsUtils.getRomanNumerals(titleText);
+				for (Pattern pattern : ANP_TITLE_REMOVE_WORDS_PATTERNS) {
+					titleText = CleaningUtils.replaceAll(titleText, pattern, "");
+				}
 				results.add(AnpTitle.create(titleText, similarity));
 			}
 		}
