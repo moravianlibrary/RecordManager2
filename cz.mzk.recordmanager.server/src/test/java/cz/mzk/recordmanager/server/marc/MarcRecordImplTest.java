@@ -244,7 +244,7 @@ public class MarcRecordImplTest extends AbstractTest {
 
 		data.add("015 $acnb001816378");
 		cnbs.add(Cnb.create("cnb001816378"));
-		data.add("015 $acnb001723289$acnb001723290");
+		data.add("015 $atestcnb001723289$acnb001723290");
 		cnbs.add(Cnb.create("cnb001723289"));
 		cnbs.add(Cnb.create("cnb001723290"));
 		mri = MarcRecordFactory.recordFactory(data);

@@ -38,6 +38,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 	private static final Pattern CPK0_PATTERN = Pattern.compile("cpk0");
 	private static final Pattern METAPROXY_TAG_PATTERN = Pattern.compile("[17]..");
 	private static final Pattern SCALE_REPLACE = Pattern.compile("[ ^]+");
+	private static final Pattern CNB_PATTERN = Pattern.compile("cnb[0-9]+");
 
 	// formats
 	private static final Pattern KARTOGRAFICKY_DOKUMENT = Pattern.compile("kartografick[yý]\\sdokument", Pattern.CASE_INSENSITIVE);
@@ -159,11 +160,11 @@ public class MetadataMarcRecord implements MetadataRecord {
 	@Override
 	public List<Cnb> getCNBs() {
 		List<Cnb> cnbs = new ArrayList<>();
-
+		Matcher matcher;
 		for (DataField field : underlayingMarc.getDataFields("015")) {
 			for (Subfield subfieldA : field.getSubfields('a')) {
-				if (subfieldA != null) {
-					cnbs.add(Cnb.create(subfieldA.getData()));
+				if (subfieldA != null && (matcher = CNB_PATTERN.matcher(subfieldA.getData())).find()) {
+					cnbs.add(Cnb.create(matcher.group(0)));
 				}
 			}
 		}
