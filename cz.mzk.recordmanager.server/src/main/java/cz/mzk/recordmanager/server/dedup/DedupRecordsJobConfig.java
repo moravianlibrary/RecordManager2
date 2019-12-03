@@ -108,6 +108,8 @@ public class DedupRecordsJobConfig {
 
 	private static final String TMP_TABLE_DISADVANTAGED_CNB_PAGES = "tmp_disadvantaged_cnb_pages";
 
+	private static final String TMP_TABLE_DISADVANTAGED_CNB_TITLE = "tmp_disadvantaged_cnb_title";
+
 	private int partitionThreads = 4;
 
 	@Autowired
@@ -191,6 +193,9 @@ public class DedupRecordsJobConfig {
 	private String prepareTempDisadvantagedCnbPagesSql =
 			ResourceUtils.asString("job/dedupRecordsJob/prepareTempDisadvantagedCnbPagesTable.sql");
 
+	private String prepareTempDisadvantagedCnbTitleSql =
+			ResourceUtils.asString("job/dedupRecordsJob/prepareTempDisadvantagedCnbTitleTable.sql");
+
 	public DedupRecordsJobConfig() throws IOException {
 	}
 	
@@ -262,6 +267,8 @@ public class DedupRecordsJobConfig {
 			@Qualifier(Constants.JOB_ID_DEDUP + ":dedupDisadvantagedIsbnPartitionedStep") Step dedupDisadvantagedIsbnStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":prepareTempDisadvantagedCnbPagesTableStep") Step prepareTempDisadvantagedCnbPagesTableStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":dedupDisadvantagedCnbPagesPartitionedStep") Step dedupDisadvantagedCnbPagesStep,
+			@Qualifier(Constants.JOB_ID_DEDUP + ":prepareTempDisadvantagedCnbTitleTableStep") Step prepareTempDisadvantagedCnbTitleTableStep,
+			@Qualifier(Constants.JOB_ID_DEDUP + ":dedupDisadvantagedCnbTitlePartitionedStep") Step dedupDisadvantagedCnbTitleStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":dedupRestOfRecordsStep") Step dedupRestOfRecordsStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":cleanupStep") Step cleanupStep) {
 		return jobs.get(Constants.JOB_ID_DEDUP)
@@ -330,6 +337,8 @@ public class DedupRecordsJobConfig {
 				.next(dedupDisadvantagedIsbnStep)
 				.next(prepareTempDisadvantagedCnbPagesTableStep)
 				.next(dedupDisadvantagedCnbPagesStep)
+				.next(prepareTempDisadvantagedCnbTitleTableStep)
+				.next(dedupDisadvantagedCnbTitleStep)
 				.next(dedupRestOfRecordsStep)
 				.next(cleanupStep)
 				.build();
@@ -1615,6 +1624,57 @@ public class DedupRecordsJobConfig {
 			@Value("#{stepExecutionContext[modulo]}") Integer modulo) throws Exception {
 		return dedupSimpleKeysReader(TMP_TABLE_DISADVANTAGED_CNB_PAGES, modulo);
 	}
+
+	/**
+	 * prepareTempDisadvantagedCnbTitleTableStep Deduplicate all disadvantaged records with same cnb,
+	 * title
+	 */
+	@Bean(name = Constants.JOB_ID_DEDUP + ":prepareTempDisadvantagedCnbTitleTasklet")
+	@StepScope
+	public Tasklet prepareTempDisadvantagedCnbTitleTasklet() {
+		return new SqlCommandTasklet(prepareTempDisadvantagedCnbTitleSql);
+	}
+
+	@Bean(name = Constants.JOB_ID_DEDUP + ":prepareTempDisadvantagedCnbTitleTableStep")
+	public Step prepareTempDisadvantagedCnbTitleStep() {
+		return steps.get("prepareTempDisadvantagedCnbTitleStep")
+				.tasklet(prepareTempDisadvantagedCnbTitleTasklet())
+				.listener(new StepProgressListener())
+				.build();
+	}
+
+	@Bean(name = Constants.JOB_ID_DEDUP + ":dedupDisadvantagedCnbTitleStep")
+	public Step dedupDisadvantagedCnbTitleStep() throws Exception {
+		return steps.get("dedupDisadvantagedCnbTitleStep")
+				.listener(new StepProgressListener())
+				.<List<Long>, List<HarvestedRecord>>chunk(10)
+				.faultTolerant()
+				.keyGenerator(KeyGeneratorForList.INSTANCE)
+				.retry(LockAcquisitionException.class)
+				.retryLimit(10000)
+				.reader(dedupSimpleKeysDisadvantagedCnbTitleReader(INTEGER_OVERRIDEN_BY_EXPRESSION))
+				.processor(dedupSimpleKeysStepProsessor())
+				.writer(dedupDisadvantagedKeysStepWriter())
+				.build();
+	}
+
+	@Bean(name = Constants.JOB_ID_DEDUP + ":dedupDisadvantagedCnbTitlePartitionedStep")
+	public Step dedupSimpleKeysDisadvantagedCnbTitlePartitionedStep() throws Exception {
+		return steps.get("dedupSimpleKeysDisadvantagedCnbTitlePartitionedStep")
+				.partitioner("dedupSimpleKeysDisadvantagedCnbTitlePartitionedStepSlave", this.partioner()) //
+				.taskExecutor(this.taskExecutor)
+				.gridSize(this.partitionThreads)
+				.step(dedupDisadvantagedCnbTitleStep())
+				.build();
+	}
+
+	@Bean(name = "dedupDisadvantagedCnbTitleStep:reader")
+	@StepScope
+	public ItemReader<List<Long>> dedupSimpleKeysDisadvantagedCnbTitleReader(
+			@Value("#{stepExecutionContext[modulo]}") Integer modulo) throws Exception {
+		return dedupSimpleKeysReader(TMP_TABLE_DISADVANTAGED_CNB_TITLE, modulo);
+	}
+
 
 	/**
 	 * Cleanup
