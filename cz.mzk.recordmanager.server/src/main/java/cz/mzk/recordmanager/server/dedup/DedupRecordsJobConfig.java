@@ -103,6 +103,8 @@ public class DedupRecordsJobConfig {
 
 	private static final String TMP_TABLE_DISADVANTAGED_PAGES = "tmp_disadvantaged_pages";
 
+	private static final String TMP_TABLE_DISADVANTAGED_ISBN = "tmp_disadvantaged_isbn";
+
 	private int partitionThreads = 4;
 
 	@Autowired
@@ -181,6 +183,8 @@ public class DedupRecordsJobConfig {
 
 	private String prepareTempDisadvantagedPagesSql = ResourceUtils.asString("job/dedupRecordsJob/prepareTempDisadvantagedPagesTable.sql");
 
+	private String prepareTempDisadvantagedIsbnSql = ResourceUtils.asString("job/dedupRecordsJob/prepareTempDisadvantagedIsbnTable.sql");
+
 	public DedupRecordsJobConfig() throws IOException {
 	}
 	
@@ -248,6 +252,8 @@ public class DedupRecordsJobConfig {
 			@Qualifier(Constants.JOB_ID_DEDUP + ":dedupDisadvantagedEditionPartitionedStep") Step dedupDisadvantagedEditionStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":prepareTempDisadvantagedPagesTableStep") Step prepareTempDisadvantagedPagesTableStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":dedupDisadvantagedPagesPartitionedStep") Step dedupDisadvantagedPagesStep,
+			@Qualifier(Constants.JOB_ID_DEDUP + ":prepareTempDisadvantagedIsbnTableStep") Step prepareTempDisadvantagedIsbnTableStep,
+			@Qualifier(Constants.JOB_ID_DEDUP + ":dedupDisadvantagedIsbnPartitionedStep") Step dedupDisadvantagedIsbnStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":dedupRestOfRecordsStep") Step dedupRestOfRecordsStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":cleanupStep") Step cleanupStep) {
 		return jobs.get(Constants.JOB_ID_DEDUP)
@@ -312,6 +318,8 @@ public class DedupRecordsJobConfig {
 				.next(dedupDisadvantagedEditionStep)
 				.next(prepareTempDisadvantagedPagesTableStep)
 				.next(dedupDisadvantagedPagesStep)
+				.next(prepareTempDisadvantagedIsbnTableStep)
+				.next(dedupDisadvantagedIsbnStep)
 				.next(dedupRestOfRecordsStep)
 				.next(cleanupStep)
 				.build();
@@ -1496,6 +1504,56 @@ public class DedupRecordsJobConfig {
 	public ItemReader<List<Long>> dedupSimpleKeysDisadvantagedPagesReader(
 			@Value("#{stepExecutionContext[modulo]}") Integer modulo) throws Exception {
 		return dedupSimpleKeysReader(TMP_TABLE_DISADVANTAGED_PAGES, modulo);
+	}
+
+	/**
+	 * prepareTempDisadvantagedIsbnTableStep Deduplicate all disadvantaged records with same isbn,
+	 * anp_title, pages, publication_year
+	 */
+	@Bean(name = Constants.JOB_ID_DEDUP + ":prepareTempDisadvantagedIsbnTasklet")
+	@StepScope
+	public Tasklet prepareTempDisadvantagedIsbnTasklet() {
+		return new SqlCommandTasklet(prepareTempDisadvantagedIsbnSql);
+	}
+
+	@Bean(name = Constants.JOB_ID_DEDUP + ":prepareTempDisadvantagedIsbnTableStep")
+	public Step prepareTempDisadvantagedIsbnStep() {
+		return steps.get("prepareTempDisadvantagedIsbnStep")
+				.tasklet(prepareTempDisadvantagedIsbnTasklet())
+				.listener(new StepProgressListener())
+				.build();
+	}
+
+	@Bean(name = Constants.JOB_ID_DEDUP + ":dedupDisadvantagedIsbnStep")
+	public Step dedupDisadvantagedIsbnStep() throws Exception {
+		return steps.get("dedupDisadvantagedIsbnStep")
+				.listener(new StepProgressListener())
+				.<List<Long>, List<HarvestedRecord>>chunk(10)
+				.faultTolerant()
+				.keyGenerator(KeyGeneratorForList.INSTANCE)
+				.retry(LockAcquisitionException.class)
+				.retryLimit(10000)
+				.reader(dedupSimpleKeysDisadvantagedIsbnReader(INTEGER_OVERRIDEN_BY_EXPRESSION))
+				.processor(dedupSimpleKeysStepProsessor())
+				.writer(dedupDisadvantagedKeysStepWriter())
+				.build();
+	}
+
+	@Bean(name = Constants.JOB_ID_DEDUP + ":dedupDisadvantagedIsbnPartitionedStep")
+	public Step dedupSimpleKeysDisadvantagedIsbnPartitionedStep() throws Exception {
+		return steps.get("dedupSimpleKeysDisadvantagedIsbnPartitionedStep")
+				.partitioner("dedupSimpleKeysDisadvantagedIsbnPartitionedStepSlave", this.partioner()) //
+				.taskExecutor(this.taskExecutor)
+				.gridSize(this.partitionThreads)
+				.step(dedupDisadvantagedIsbnStep())
+				.build();
+	}
+
+	@Bean(name = "dedupDisadvantagedIsbnStep:reader")
+	@StepScope
+	public ItemReader<List<Long>> dedupSimpleKeysDisadvantagedIsbnReader(
+			@Value("#{stepExecutionContext[modulo]}") Integer modulo) throws Exception {
+		return dedupSimpleKeysReader(TMP_TABLE_DISADVANTAGED_ISBN, modulo);
 	}
 
 	/**
