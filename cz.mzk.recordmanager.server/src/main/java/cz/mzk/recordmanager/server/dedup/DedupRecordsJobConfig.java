@@ -110,6 +110,8 @@ public class DedupRecordsJobConfig {
 
 	private static final String TMP_TABLE_DISADVANTAGED_CNB_TITLE = "tmp_disadvantaged_cnb_title";
 
+	private static final String TMP_TABLE_DISADVANTAGED_ISMN = "tmp_disadvantaged_Ismn";
+
 	private int partitionThreads = 4;
 
 	@Autowired
@@ -196,6 +198,9 @@ public class DedupRecordsJobConfig {
 	private String prepareTempDisadvantagedCnbTitleSql =
 			ResourceUtils.asString("job/dedupRecordsJob/prepareTempDisadvantagedCnbTitleTable.sql");
 
+	private String prepareTempDisadvantagedIsmnSql =
+			ResourceUtils.asString("job/dedupRecordsJob/prepareTempDisadvantagedIsmnTable.sql");
+
 	public DedupRecordsJobConfig() throws IOException {
 	}
 	
@@ -269,6 +274,8 @@ public class DedupRecordsJobConfig {
 			@Qualifier(Constants.JOB_ID_DEDUP + ":dedupDisadvantagedCnbPagesPartitionedStep") Step dedupDisadvantagedCnbPagesStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":prepareTempDisadvantagedCnbTitleTableStep") Step prepareTempDisadvantagedCnbTitleTableStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":dedupDisadvantagedCnbTitlePartitionedStep") Step dedupDisadvantagedCnbTitleStep,
+			@Qualifier(Constants.JOB_ID_DEDUP + ":prepareTempDisadvantagedIsmnTableStep") Step prepareTempDisadvantagedIsmnTableStep,
+			@Qualifier(Constants.JOB_ID_DEDUP + ":dedupDisadvantagedIsmnPartitionedStep") Step dedupDisadvantagedIsmnStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":dedupRestOfRecordsStep") Step dedupRestOfRecordsStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":cleanupStep") Step cleanupStep) {
 		return jobs.get(Constants.JOB_ID_DEDUP)
@@ -339,6 +346,8 @@ public class DedupRecordsJobConfig {
 				.next(dedupDisadvantagedCnbPagesStep)
 				.next(prepareTempDisadvantagedCnbTitleTableStep)
 				.next(dedupDisadvantagedCnbTitleStep)
+				.next(prepareTempDisadvantagedIsmnTableStep)
+				.next(dedupDisadvantagedIsmnStep)
 				.next(dedupRestOfRecordsStep)
 				.next(cleanupStep)
 				.build();
@@ -1675,6 +1684,55 @@ public class DedupRecordsJobConfig {
 		return dedupSimpleKeysReader(TMP_TABLE_DISADVANTAGED_CNB_TITLE, modulo);
 	}
 
+	/**
+	 * prepareTempDisadvantagedIsmnTableStep Deduplicate all disadvantaged records with same ismn,
+	 * publication_year, pages, pages greater than 3
+	 */
+	@Bean(name = Constants.JOB_ID_DEDUP + ":prepareTempDisadvantagedIsmnTasklet")
+	@StepScope
+	public Tasklet prepareTempDisadvantagedIsmnTasklet() {
+		return new SqlCommandTasklet(prepareTempDisadvantagedIsmnSql);
+	}
+
+	@Bean(name = Constants.JOB_ID_DEDUP + ":prepareTempDisadvantagedIsmnTableStep")
+	public Step prepareTempDisadvantagedIsmnStep() {
+		return steps.get("prepareTempDisadvantagedIsmnStep")
+				.tasklet(prepareTempDisadvantagedIsmnTasklet())
+				.listener(new StepProgressListener())
+				.build();
+	}
+
+	@Bean(name = Constants.JOB_ID_DEDUP + ":dedupDisadvantagedIsmnStep")
+	public Step dedupDisadvantagedIsmnStep() throws Exception {
+		return steps.get("dedupDisadvantagedIsmnStep")
+				.listener(new StepProgressListener())
+				.<List<Long>, List<HarvestedRecord>>chunk(10)
+				.faultTolerant()
+				.keyGenerator(KeyGeneratorForList.INSTANCE)
+				.retry(LockAcquisitionException.class)
+				.retryLimit(10000)
+				.reader(dedupSimpleKeysDisadvantagedIsmnReader(INTEGER_OVERRIDEN_BY_EXPRESSION))
+				.processor(dedupSimpleKeysStepProsessor())
+				.writer(dedupDisadvantagedKeysStepWriter())
+				.build();
+	}
+
+	@Bean(name = Constants.JOB_ID_DEDUP + ":dedupDisadvantagedIsmnPartitionedStep")
+	public Step dedupSimpleKeysDisadvantagedIsmnPartitionedStep() throws Exception {
+		return steps.get("dedupSimpleKeysDisadvantagedIsmnPartitionedStep")
+				.partitioner("dedupSimpleKeysDisadvantagedIsmnPartitionedStepSlave", this.partioner()) //
+				.taskExecutor(this.taskExecutor)
+				.gridSize(this.partitionThreads)
+				.step(dedupDisadvantagedIsmnStep())
+				.build();
+	}
+
+	@Bean(name = "dedupDisadvantagedIsmnStep:reader")
+	@StepScope
+	public ItemReader<List<Long>> dedupSimpleKeysDisadvantagedIsmnReader(
+			@Value("#{stepExecutionContext[modulo]}") Integer modulo) throws Exception {
+		return dedupSimpleKeysReader(TMP_TABLE_DISADVANTAGED_ISMN, modulo);
+	}
 
 	/**
 	 * Cleanup
