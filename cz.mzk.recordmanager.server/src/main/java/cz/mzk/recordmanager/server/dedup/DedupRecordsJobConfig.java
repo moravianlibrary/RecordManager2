@@ -12,6 +12,7 @@ import java.util.concurrent.Future;
 
 import javax.sql.DataSource;
 
+import cz.mzk.recordmanager.server.model.HarvestedRecordFormat.HarvestedRecordFormatEnum;
 import org.hibernate.SessionFactory;
 import org.hibernate.exception.LockAcquisitionException;
 import org.springframework.batch.core.Job;
@@ -105,6 +106,8 @@ public class DedupRecordsJobConfig {
 
 	private static final String TMP_TABLE_DISADVANTAGED_ISBN = "tmp_disadvantaged_isbn";
 
+	private static final String TMP_TABLE_DISADVANTAGED_CNB_PAGES = "tmp_disadvantaged_cnb_pages";
+
 	private int partitionThreads = 4;
 
 	@Autowired
@@ -185,6 +188,9 @@ public class DedupRecordsJobConfig {
 
 	private String prepareTempDisadvantagedIsbnSql = ResourceUtils.asString("job/dedupRecordsJob/prepareTempDisadvantagedIsbnTable.sql");
 
+	private String prepareTempDisadvantagedCnbPagesSql =
+			ResourceUtils.asString("job/dedupRecordsJob/prepareTempDisadvantagedCnbPagesTable.sql");
+
 	public DedupRecordsJobConfig() throws IOException {
 	}
 	
@@ -254,6 +260,8 @@ public class DedupRecordsJobConfig {
 			@Qualifier(Constants.JOB_ID_DEDUP + ":dedupDisadvantagedPagesPartitionedStep") Step dedupDisadvantagedPagesStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":prepareTempDisadvantagedIsbnTableStep") Step prepareTempDisadvantagedIsbnTableStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":dedupDisadvantagedIsbnPartitionedStep") Step dedupDisadvantagedIsbnStep,
+			@Qualifier(Constants.JOB_ID_DEDUP + ":prepareTempDisadvantagedCnbPagesTableStep") Step prepareTempDisadvantagedCnbPagesTableStep,
+			@Qualifier(Constants.JOB_ID_DEDUP + ":dedupDisadvantagedCnbPagesPartitionedStep") Step dedupDisadvantagedCnbPagesStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":dedupRestOfRecordsStep") Step dedupRestOfRecordsStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":cleanupStep") Step cleanupStep) {
 		return jobs.get(Constants.JOB_ID_DEDUP)
@@ -320,6 +328,8 @@ public class DedupRecordsJobConfig {
 				.next(dedupDisadvantagedPagesStep)
 				.next(prepareTempDisadvantagedIsbnTableStep)
 				.next(dedupDisadvantagedIsbnStep)
+				.next(prepareTempDisadvantagedCnbPagesTableStep)
+				.next(dedupDisadvantagedCnbPagesStep)
 				.next(dedupRestOfRecordsStep)
 				.next(cleanupStep)
 				.build();
@@ -1554,6 +1564,56 @@ public class DedupRecordsJobConfig {
 	public ItemReader<List<Long>> dedupSimpleKeysDisadvantagedIsbnReader(
 			@Value("#{stepExecutionContext[modulo]}") Integer modulo) throws Exception {
 		return dedupSimpleKeysReader(TMP_TABLE_DISADVANTAGED_ISBN, modulo);
+	}
+
+	/**
+	 * prepareTempDisadvantagedCnbPagesTableStep Deduplicate all disadvantaged records with same cnb,
+	 * pages, without format {@link HarvestedRecordFormatEnum#MUSICAL_SCORES}
+	 */
+	@Bean(name = Constants.JOB_ID_DEDUP + ":prepareTempDisadvantagedCnbPagesTasklet")
+	@StepScope
+	public Tasklet prepareTempDisadvantagedCnbPagesTasklet() {
+		return new SqlCommandTasklet(prepareTempDisadvantagedCnbPagesSql);
+	}
+
+	@Bean(name = Constants.JOB_ID_DEDUP + ":prepareTempDisadvantagedCnbPagesTableStep")
+	public Step prepareTempDisadvantagedCnbPagesStep() {
+		return steps.get("prepareTempDisadvantagedCnbPagesStep")
+				.tasklet(prepareTempDisadvantagedCnbPagesTasklet())
+				.listener(new StepProgressListener())
+				.build();
+	}
+
+	@Bean(name = Constants.JOB_ID_DEDUP + ":dedupDisadvantagedCnbPagesStep")
+	public Step dedupDisadvantagedCnbPagesStep() throws Exception {
+		return steps.get("dedupDisadvantagedCnbPagesStep")
+				.listener(new StepProgressListener())
+				.<List<Long>, List<HarvestedRecord>>chunk(10)
+				.faultTolerant()
+				.keyGenerator(KeyGeneratorForList.INSTANCE)
+				.retry(LockAcquisitionException.class)
+				.retryLimit(10000)
+				.reader(dedupSimpleKeysDisadvantagedCnbPagesReader(INTEGER_OVERRIDEN_BY_EXPRESSION))
+				.processor(dedupSimpleKeysStepProsessor())
+				.writer(dedupDisadvantagedKeysStepWriter())
+				.build();
+	}
+
+	@Bean(name = Constants.JOB_ID_DEDUP + ":dedupDisadvantagedCnbPagesPartitionedStep")
+	public Step dedupSimpleKeysDisadvantagedCnbPagesPartitionedStep() throws Exception {
+		return steps.get("dedupSimpleKeysDisadvantagedCnbPagesPartitionedStep")
+				.partitioner("dedupSimpleKeysDisadvantagedCnbPagesPartitionedStepSlave", this.partioner()) //
+				.taskExecutor(this.taskExecutor)
+				.gridSize(this.partitionThreads)
+				.step(dedupDisadvantagedCnbPagesStep())
+				.build();
+	}
+
+	@Bean(name = "dedupDisadvantagedCnbPagesStep:reader")
+	@StepScope
+	public ItemReader<List<Long>> dedupSimpleKeysDisadvantagedCnbPagesReader(
+			@Value("#{stepExecutionContext[modulo]}") Integer modulo) throws Exception {
+		return dedupSimpleKeysReader(TMP_TABLE_DISADVANTAGED_CNB_PAGES, modulo);
 	}
 
 	/**
