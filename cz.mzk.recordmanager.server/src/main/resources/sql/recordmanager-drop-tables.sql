@@ -16,6 +16,7 @@ DROP TABLE ismn;
 DROP TABLE ean;
 DROP TABLE short_title;
 DROP TABLE publisher_number;
+DROP TABLE anp_title;
 DROP TABLE authority;
 DROP TABLE obalkyknih_toc;
 DROP TABLE obalkyknih_annotation;

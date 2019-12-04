@@ -28,6 +28,7 @@ CREATE INDEX publisher_number_harvested_record_idx ON publisher_number(harvested
 CREATE INDEX authority_harvested_record_idx ON authority(harvested_record_id);
 CREATE INDEX authority_idx ON authority(authority_id);
 CREATE INDEX authority_code_idx ON authority_record(authority_code);
+CREATE INDEX anp_title_harvested_record_idx ON anp_title(harvested_record_id);
 
 CREATE INDEX fulltext_kramerius_harvested_record_idx ON fulltext_kramerius(harvested_record_id);
 
