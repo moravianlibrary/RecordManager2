@@ -4,10 +4,23 @@ import cz.mzk.recordmanager.server.marc.MarcRecord;
 import cz.mzk.recordmanager.server.metadata.MetadataMarcRecord;
 import cz.mzk.recordmanager.server.util.MetadataUtils;
 
-public class RkkaMarcMetadataRecord extends MetadataMarcRecord {
+public class RkkaMetadataMarcRecord extends MetadataMarcRecord {
 
-	public RkkaMarcMetadataRecord(MarcRecord underlayingMarc) {
+	public RkkaMetadataMarcRecord(MarcRecord underlayingMarc) {
 		super(underlayingMarc);
+	}
+
+	@Override
+	public String getAuthorAuthKey() {
+		for (String tag : new String[]{"100", "700"}) {
+			for (char subfield : new char[]{'7', '0'}) {
+				String authKey = underlayingMarc.getField(tag, subfield);
+				if (authKey != null) {
+					return authKey;
+				}
+			}
+		}
+		return null;
 	}
 
 	@Override

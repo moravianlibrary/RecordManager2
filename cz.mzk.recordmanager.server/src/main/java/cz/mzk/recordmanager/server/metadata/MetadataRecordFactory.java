@@ -199,7 +199,7 @@ public class MetadataRecordFactory {
 		case Constants.PREFIX_UZEI:
 			return new UzeiMetadataMarcRecord(marcRec);
 		case Constants.PREFIX_RKKA:
-			return new RkkaMarcMetadataRecord(marcRec);
+			return new RkkaMetadataMarcRecord(marcRec);
 		default:
 			return new MetadataMarcRecord(marcRec);
 		}
