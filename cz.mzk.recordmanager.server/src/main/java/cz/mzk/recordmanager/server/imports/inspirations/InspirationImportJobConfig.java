@@ -6,6 +6,7 @@ import java.util.Map;
 
 import javax.sql.DataSource;
 
+import cz.mzk.recordmanager.server.springbatch.StepProgressListener;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
@@ -48,7 +49,8 @@ public class InspirationImportJobConfig {
 
 	@Bean(name = Constants.JOB_ID_IMPORT_INSPIRATION + ":importInspirationStep")
 	public Step inspirationImportStep() throws Exception {
-		return steps.get("updateRecordsJobStep")
+		return steps.get("importInspirationStep")
+				.listener(new StepProgressListener())
 				.<Map<String, List<String>>, Map<String, List<String>>>chunk(1)//
 				.reader(inspirationFileReader(STRING_OVERRIDEN_BY_EXPRESSION))//
 				.writer(InspirationImportWriter()) //
@@ -80,7 +82,8 @@ public class InspirationImportJobConfig {
 
 	@Bean(name = Constants.JOB_ID_DELETE_INSPIRATION + ":deleteInspirationStep")
 	public Step inspirationDeleteStep() throws Exception {
-		return steps.get("updateRecordsJobStep")
+		return steps.get("deleteInspirationStep")
+				.listener(new StepProgressListener())
 				.<Long, Long>chunk(1)//
 				.reader(inspirationDeleteReader(STRING_OVERRIDEN_BY_EXPRESSION))//
 				.writer(InspirationDeleteWriter()) //
