@@ -311,6 +311,10 @@ public class MarcDSL extends BaseDSL {
 			subjects.add(SolrUtils.toUpperCaseFirstChar(subject));
 		}
 
+		for (String subject : getFields("650avyz", SubfieldExtractionMethod.SEPARATED)) {
+			subjects.add(SolrUtils.toUpperCaseFirstChar(subject.toLowerCase()));
+		}
+
 		for (DataField df : record.getDataFields("653")) {
 			for (Subfield sf : df.getSubfields('a')) {
 				if (!PATTERN_653A.matcher(sf.getData()).matches())
