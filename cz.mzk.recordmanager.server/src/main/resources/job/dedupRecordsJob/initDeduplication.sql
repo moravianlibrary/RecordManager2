@@ -34,5 +34,5 @@ SET updated=localtimestamp
 WHERE id IN (SELECT dedup_record_id FROM harvested_record WHERE next_dedup_flag=TRUE AND dedup_record_id IS NOT NULL GROUP BY dedup_record_id);
 
 UPDATE harvested_record
-SET dedup_record_id=NULL,next_dedup_flag=TRUE
+SET dedup_record_id=NULL,next_dedup_flag=TRUE,next_biblio_linker_flag=TRUE
 WHERE dedup_record_id IN (SELECT DISTINCT dedup_record_id FROM harvested_record WHERE next_dedup_flag=TRUE AND dedup_record_id IS NOT NULL);
