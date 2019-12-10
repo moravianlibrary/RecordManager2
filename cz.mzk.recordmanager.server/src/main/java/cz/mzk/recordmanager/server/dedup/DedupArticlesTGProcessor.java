@@ -8,6 +8,10 @@ import cz.mzk.recordmanager.server.model.HarvestedRecord;
 public class DedupArticlesTGProcessor extends
 		DedupSimpleKeysStepProcessor {
 
+	public DedupArticlesTGProcessor(boolean disadvantagedStep) {
+		super(disadvantagedStep);
+	}
+
 	/**
 	 * On the input are two {@link HarvestedRecord}s, having same source_info_x
 	 */

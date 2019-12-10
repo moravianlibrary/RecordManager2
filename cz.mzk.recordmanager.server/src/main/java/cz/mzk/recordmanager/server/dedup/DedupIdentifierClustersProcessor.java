@@ -15,6 +15,10 @@ public class DedupIdentifierClustersProcessor extends DedupSimpleKeysStepProcess
 
 	private static final int TITLE_PREFIX_BOUNDARY = 8;
 
+	public DedupIdentifierClustersProcessor(boolean disadvantagedStep) {
+		super(disadvantagedStep);
+	}
+
 	/**
 	 * On the input are two {@link HarvestedRecord}s, having same identifier (CNB,ISBN,ISSN,OCLC) and common format.
 	 * <p>

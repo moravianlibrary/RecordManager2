@@ -751,7 +751,7 @@ public class DedupRecordsJobConfig {
 	@Bean(name = "dedupArticlesTGProcessor")
 	@StepScope
 	public ItemProcessor<List<Long>, List<HarvestedRecord>> dedupArticlesTGProcessor() {
-		return new DedupArticlesTGProcessor();
+		return new DedupArticlesTGProcessor(false);
 	}
 
 	/**
@@ -805,7 +805,7 @@ public class DedupRecordsJobConfig {
 	@Bean(name = "dedupTitleAuthStep:processor")
 	@StepScope
 	public ItemProcessor<List<Long>, List<HarvestedRecord>> dedupTitleAuthProcessor() {
-		return new DedupTitleAuthItemProcessor();
+		return new DedupTitleAuthItemProcessor(false);
 	}
 
 	@Bean(name = "dedupRestOfRecordsStep:dedupRestTasklet")
@@ -1112,7 +1112,7 @@ public class DedupRecordsJobConfig {
 	@Bean(name = "dedupPeriodicalsIssnStep:processor")
 	@StepScope
 	public ItemProcessor<List<Long>, List<HarvestedRecord>> dedupPeriodicalsIssnProcessor() {
-		return new DedupSimpleKeysStepProcessor();
+		return new DedupSimpleKeysStepProcessor(false);
 	}
 
 	@Bean(name = Constants.JOB_ID_DEDUP + ":dedupPeriodicalsIssnStep")
@@ -1153,7 +1153,7 @@ public class DedupRecordsJobConfig {
 	@Bean(name = "dedupPeriodicalsCnbStep:processor")
 	@StepScope
 	public ItemProcessor<List<Long>, List<HarvestedRecord>> dedupPeriodicalsCnbProcessor() {
-		return new DedupSimpleKeysStepProcessor();
+		return new DedupSimpleKeysStepProcessor(false);
 	}
 
 	@Bean(name = Constants.JOB_ID_DEDUP + ":dedupPeriodicalsCnbStep")
@@ -1353,7 +1353,7 @@ public class DedupRecordsJobConfig {
 	@Bean(name = "processPeriodicalsSimilaritesResultsStep:processor")
 	@StepScope
 	public ItemProcessor<List<Long>, List<HarvestedRecord>> dedupPeriodicalsSimilaritesResultsSteprocessor() {
-		return new DedupPeriodicalsSimilaritesResultsProcessor();
+		return new DedupPeriodicalsSimilaritesResultsProcessor(false);
 	}
 
 	/**
@@ -1412,7 +1412,7 @@ public class DedupRecordsJobConfig {
 				.retry(LockAcquisitionException.class)
 				.retryLimit(10000)
 				.reader(dedupSimpleKeysDisadvantagedPublisherReader(INTEGER_OVERRIDEN_BY_EXPRESSION))
-				.processor(dedupSimpleKeysStepProsessor())
+				.processor(dedupDisadvantagedKeysStepProsessor())
 				.writer(dedupDisadvantagedKeysStepWriter())
 				.build();
 	}
@@ -1462,7 +1462,7 @@ public class DedupRecordsJobConfig {
 				.retry(LockAcquisitionException.class)
 				.retryLimit(10000)
 				.reader(dedupSimpleKeysDisadvantagedEditionReader(INTEGER_OVERRIDEN_BY_EXPRESSION))
-				.processor(dedupSimpleKeysStepProsessor())
+				.processor(dedupDisadvantagedKeysStepProsessor())
 				.writer(dedupDisadvantagedKeysStepWriter())
 				.build();
 	}
@@ -1512,7 +1512,7 @@ public class DedupRecordsJobConfig {
 				.retry(LockAcquisitionException.class)
 				.retryLimit(10000)
 				.reader(dedupSimpleKeysDisadvantagedPagesReader(INTEGER_OVERRIDEN_BY_EXPRESSION))
-				.processor(dedupSimpleKeysStepProsessor())
+				.processor(dedupDisadvantagedKeysStepProsessor())
 				.writer(dedupDisadvantagedKeysStepWriter())
 				.build();
 	}
@@ -1562,7 +1562,7 @@ public class DedupRecordsJobConfig {
 				.retry(LockAcquisitionException.class)
 				.retryLimit(10000)
 				.reader(dedupSimpleKeysDisadvantagedIsbnReader(INTEGER_OVERRIDEN_BY_EXPRESSION))
-				.processor(dedupSimpleKeysStepProsessor())
+				.processor(dedupDisadvantagedKeysStepProsessor())
 				.writer(dedupDisadvantagedKeysStepWriter())
 				.build();
 	}
@@ -1612,7 +1612,7 @@ public class DedupRecordsJobConfig {
 				.retry(LockAcquisitionException.class)
 				.retryLimit(10000)
 				.reader(dedupSimpleKeysDisadvantagedCnbPagesReader(INTEGER_OVERRIDEN_BY_EXPRESSION))
-				.processor(dedupSimpleKeysStepProsessor())
+				.processor(dedupDisadvantagedKeysStepProsessor())
 				.writer(dedupDisadvantagedKeysStepWriter())
 				.build();
 	}
@@ -1662,7 +1662,7 @@ public class DedupRecordsJobConfig {
 				.retry(LockAcquisitionException.class)
 				.retryLimit(10000)
 				.reader(dedupSimpleKeysDisadvantagedCnbTitleReader(INTEGER_OVERRIDEN_BY_EXPRESSION))
-				.processor(dedupSimpleKeysStepProsessor())
+				.processor(dedupDisadvantagedKeysStepProsessor())
 				.writer(dedupDisadvantagedKeysStepWriter())
 				.build();
 	}
@@ -1712,7 +1712,7 @@ public class DedupRecordsJobConfig {
 				.retry(LockAcquisitionException.class)
 				.retryLimit(10000)
 				.reader(dedupSimpleKeysDisadvantagedIsmnReader(INTEGER_OVERRIDEN_BY_EXPRESSION))
-				.processor(dedupSimpleKeysStepProsessor())
+				.processor(dedupDisadvantagedKeysStepProsessor())
 				.writer(dedupDisadvantagedKeysStepWriter())
 				.build();
 	}
@@ -1783,7 +1783,13 @@ public class DedupRecordsJobConfig {
 	@Bean(name = "dedupSimpleKeys:processor")
 	@StepScope
 	public ItemProcessor<List<Long>, List<HarvestedRecord>> dedupSimpleKeysStepProsessor() {
-		return new DedupSimpleKeysStepProcessor();
+		return new DedupSimpleKeysStepProcessor(false);
+	}
+
+	@Bean(name = "dedupDisadvantagedKeys:processor")
+	@StepScope
+	public ItemProcessor<List<Long>, List<HarvestedRecord>> dedupDisadvantagedKeysStepProsessor() {
+		return new DedupSimpleKeysStepProcessor(true);
 	}
 
 	@Bean(name = "dedupSimpleKeys:writer")
@@ -1806,7 +1812,7 @@ public class DedupRecordsJobConfig {
 	@Bean(name = "generalDedupClustersProcessor")
 	@StepScope
 	public ItemProcessor<List<Long>, List<HarvestedRecord>> generalDedupClustersProcessor() {
-		return new DedupIdentifierClustersProcessor();
+		return new DedupIdentifierClustersProcessor(false);
 	}
 	
 	/**
@@ -1815,7 +1821,7 @@ public class DedupRecordsJobConfig {
 	@Bean(name = "dedupCNBClustersProcessor")
 	@StepScope
 	public ItemProcessor<List<Long>, List<HarvestedRecord>> dedupCNBClustersProcessor() {
-		return new DedupIdentifierCNBClustersProcessor();
+		return new DedupIdentifierCNBClustersProcessor(false);
 	}
 
 	/**
@@ -1825,7 +1831,7 @@ public class DedupRecordsJobConfig {
 	@Bean(name = "dedupSkatKeys:processor")
 	@StepScope
 	public ItemProcessor<List<Long>, List<HarvestedRecord>> dedupSkatKeysProcessor() {
-		return new DedupSkatKeysProcessor();
+		return new DedupSkatKeysProcessor(false);
 	}
 
 	@Bean(name=Constants.JOB_ID_DEDUP + ":dedupSimpleKeysPartioner")

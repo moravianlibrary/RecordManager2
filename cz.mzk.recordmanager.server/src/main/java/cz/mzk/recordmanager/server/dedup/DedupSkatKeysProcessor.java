@@ -29,7 +29,14 @@ public class DedupSkatKeysProcessor extends DedupSimpleKeysStepProcessor impleme
 
 	@Autowired
 	private HarvestedRecordDAO harvestedRecordDao;
-	
+
+	public DedupSkatKeysProcessor() {
+	}
+
+	public DedupSkatKeysProcessor(boolean disadvantagedStep) {
+		super(disadvantagedStep);
+	}
+
 	@Override
 	public List<HarvestedRecord> process(List<Long> item) throws Exception {
 		if (item == null || item.size() < 2) {
