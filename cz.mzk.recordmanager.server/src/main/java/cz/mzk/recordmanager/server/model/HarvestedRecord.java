@@ -224,7 +224,7 @@ public class HarvestedRecord extends AbstractDomainObject {
 	private String edition;
 
 	@Column(name = "disadvantaged")
-	private boolean disadvantaged;
+	private boolean disadvantaged = true;
 
 	@OneToMany
 	@JoinTable(
