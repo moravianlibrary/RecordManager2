@@ -166,7 +166,11 @@ public class HarvestedRecord extends AbstractDomainObject {
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name="harvested_record_id", referencedColumnName="id", nullable=false)
 	private List<ShortTitle> shortTitles = new ArrayList<>();
-	
+
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name="harvested_record_id", referencedColumnName="id", nullable=false)
+	private List<AnpTitle> anpTitles = new ArrayList<>();
+
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name="harvested_record_id", referencedColumnName="id", nullable=false)
 	private List<Oclc> oclcs = new ArrayList<>();
@@ -212,6 +216,15 @@ public class HarvestedRecord extends AbstractDomainObject {
 	
 	@Column(name="publication_year")
 	private Long publicationYear;
+
+	@Column(name = "publisher")
+	private String publisher;
+
+	@Column(name = "edition")
+	private String edition;
+
+	@Column(name = "disadvantaged")
+	private boolean disadvantaged = true;
 
 	@OneToMany
 	@JoinTable(
@@ -662,5 +675,37 @@ public class HarvestedRecord extends AbstractDomainObject {
 
 	public void setLastHarvest(Date lastHarvest) {
 		this.lastHarvest = lastHarvest;
+	}
+
+	public String getPublisher() {
+		return publisher;
+	}
+
+	public void setPublisher(String publisher) {
+		this.publisher = publisher;
+	}
+
+	public String getEdition() {
+		return edition;
+	}
+
+	public void setEdition(String edition) {
+		this.edition = edition;
+	}
+
+	public boolean isDisadvantaged() {
+		return disadvantaged;
+	}
+
+	public void setDisadvantaged(boolean disadvantaged) {
+		this.disadvantaged = disadvantaged;
+	}
+
+	public List<AnpTitle> getAnpTitles() {
+		return anpTitles;
+	}
+
+	public void setAnpTitles(List<AnpTitle> anpTitles) {
+		this.anpTitles = anpTitles;
 	}
 }

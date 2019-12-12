@@ -12,6 +12,10 @@ import cz.mzk.recordmanager.server.model.Issn;
  */
 public class DedupPeriodicalsSimilaritesResultsProcessor extends DedupSimpleKeysStepProcessor {
 
+	public DedupPeriodicalsSimilaritesResultsProcessor(boolean disadvantagedStep) {
+		super(disadvantagedStep);
+	}
+
 	@Override
 	protected boolean matchRecords(HarvestedRecord hrA, HarvestedRecord hrB) {
 

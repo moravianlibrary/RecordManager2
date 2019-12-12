@@ -954,4 +954,23 @@ public class MarcRecordImplTest extends AbstractTest {
 		mri = MarcRecordFactory.recordFactory(metadataList);
 		Assert.assertEquals(metadataFactory.getMetadataRecord(mri).getUrls(), results);
 	}
+
+	@Test
+	public void getPublisher() {
+		MarcRecordImpl mri;
+		List<String> data = new ArrayList<>();
+		data.add("260 $bPublisher1");
+		data.add("264 $bPublisher2");
+		mri = MarcRecordFactory.recordFactory(data);
+		Assert.assertEquals(metadataFactory.getMetadataRecord(mri).getPublisher(), "Publisher1");
+	}
+
+	@Test
+	public void getEdition() {
+		MarcRecordImpl mri;
+		List<String> data = new ArrayList<>();
+		data.add("250 $aEdition1");
+		mri = MarcRecordFactory.recordFactory(data);
+		Assert.assertEquals(metadataFactory.getMetadataRecord(mri).getEdition(), "1");
+	}
 }

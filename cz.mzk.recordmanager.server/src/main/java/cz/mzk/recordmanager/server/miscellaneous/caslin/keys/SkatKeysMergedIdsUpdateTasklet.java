@@ -139,7 +139,7 @@ public class SkatKeysMergedIdsUpdateTasklet implements Tasklet {
 			.setString(1, recordId)
 			.executeUpdate();
 
-		query = "UPDATE harvested_record SET next_dedup_flag=true WHERE import_conf_id = ? AND record_id = ?";
+		query = "UPDATE harvested_record SET next_dedup_flag=TRUE WHERE import_conf_id = ? AND record_id = ?";
 		session.createSQLQuery(query)
 			.setLong(0, Constants.IMPORT_CONF_ID_CASLIN)
 			.setString(1, recordId)

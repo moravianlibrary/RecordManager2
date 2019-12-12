@@ -15,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import cz.mzk.recordmanager.server.model.DedupRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
-import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordDAO;
 
 public class DedupSimpleKeysStepWriter implements
 		ItemWriter<List<HarvestedRecord>> {
@@ -23,17 +22,14 @@ public class DedupSimpleKeysStepWriter implements
 	private static Logger logger = LoggerFactory.getLogger(DedupSimpleKeysStepWriter.class);
 
 	private static int LOG_PERIOD = 1000;
-	
-	private int totalCount = 0;
-	
-	@Autowired
-	private HarvestedRecordDAO harvestedRecordDAO;
+
+	protected int totalCount = 0;
 
 	@Autowired
 	protected SessionFactory sessionFactory;
 
-	long startTime;
-	
+	protected long startTime;
+
 	@PostConstruct
 	public void initialize() throws SQLException  {
 		startTime = Calendar.getInstance().getTimeInMillis();
@@ -47,7 +43,7 @@ public class DedupSimpleKeysStepWriter implements
 				
 				// check whether is need to store current record
 				if (checkIfUpdateIsNeeded(hr)) {
-					String query = "UPDATE harvested_record SET dedup_record_id = ? WHERE id = ? ";
+					String query = "UPDATE harvested_record SET dedup_record_id = ? ,disadvantaged=FALSE WHERE id = ? ";
 					sessionFactory.getCurrentSession().createSQLQuery(query)
 							.setLong(0, hr.getDedupRecord().getId())
 							.setLong(1, hr.getId())

@@ -404,4 +404,31 @@ public interface MetadataRecord {
 		return null;
 	}
 
+	/**
+	 * get publisher for deduplication
+	 *
+	 * @return String
+	 */
+	default String getPublisher() {
+		return null;
+	}
+
+	/**
+	 * get edition for deduplication
+	 *
+	 * @return String
+	 */
+	default String getEdition() {
+		return null;
+	}
+
+	/**
+	 * get anp title for deduplication
+	 *
+	 * @return Set of {@link AnpTitle}
+	 */
+	default Set<AnpTitle> getAnpTitle() {
+		return Collections.emptySet();
+	}
+
 }

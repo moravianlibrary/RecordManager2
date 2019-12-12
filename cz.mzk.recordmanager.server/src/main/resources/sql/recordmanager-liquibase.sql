@@ -1834,3 +1834,17 @@ UPDATE oai_harvest_conf set extract_id_regex='s/[^:]+:[^:]+:([^\\/]+)\\/([^\\/]+
 
 --changeset tomascejpek:166 context:cpk
 UPDATE oai_harvest_conf SET url='https://brandysnl.tritius.cz/tritius/oai-provider',set_spec='CPK_1' WHERE import_conf_id=370;
+
+--changeset tomascejpek:167
+ALTER TABLE harvested_record ADD COLUMN publisher VARCHAR(100);
+ALTER TABLE harvested_record ADD COLUMN edition VARCHAR(10);
+ALTER TABLE harvested_record ADD COLUMN disadvantaged BOOLEAN DEFAULT(TRUE);
+CREATE INDEX harvested_record_disadvantaged_idx ON harvested_record(disadvantaged);
+CREATE TABLE anp_title (
+  id                   DECIMAL(10) PRIMARY KEY,
+  harvested_record_id  DECIMAL(10),
+  anp_title            VARCHAR(255),
+  similarity_enabled   BOOLEAN DEFAULT FALSE,
+  FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE
+);
+CREATE INDEX anp_title_harvested_record_idx ON anp_title(harvested_record_id);

@@ -225,6 +225,8 @@ public class HarvestedRecordDAOHibernate extends
 		hr.setIssnSeries(null);
 		hr.setIssnSeriesOrder(null);
 		hr.setWeight(null);
+		hr.setPublisher(null);
+		hr.setEdition(null);
 
 		List<Title> titles =  hr.getTitles();
 		hr.setTitles(new ArrayList<>());
@@ -235,6 +237,12 @@ public class HarvestedRecordDAOHibernate extends
 		List<ShortTitle> shortTitles = hr.getShortTitles();
 		hr.setShortTitles(new ArrayList<>());
 		for (ShortTitle st: shortTitles) {
+			session.delete(st);
+		}
+
+		List<AnpTitle> anpTitles = hr.getAnpTitles();
+		hr.setAnpTitles(new ArrayList<>());
+		for (AnpTitle st : anpTitles) {
 			session.delete(st);
 		}
 

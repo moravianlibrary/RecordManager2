@@ -161,6 +161,9 @@ CREATE TABLE harvested_record (
   sigla                VARCHAR(10),
   dedup_keys_hash      CHAR(40),
   next_dedup_flag      BOOLEAN DEFAULT TRUE,
+  publisher            VARCHAR(100),
+  edition              VARCHAR(10),
+  disadvantaged        BOOLEAN DEFAULT TRUE,
   raw_record           BYTEA,
   UNIQUE (import_conf_id, record_id),
   FOREIGN KEY (import_conf_id) REFERENCES import_conf(id),
@@ -421,3 +424,11 @@ CREATE TABLE obalkyknih_annotation (
   annotation           VARCHAR(1048576)
 );
 COMMENT ON TABLE obalkyknih_annotation IS 'downloaded annotations from obalkyknih.cz';
+
+CREATE TABLE anp_title (
+  id                   DECIMAL(10) PRIMARY KEY,
+  harvested_record_id  DECIMAL(10),
+  anp_title            VARCHAR(255),
+  similarity_enabled   BOOLEAN DEFAULT FALSE,
+  FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE
+);

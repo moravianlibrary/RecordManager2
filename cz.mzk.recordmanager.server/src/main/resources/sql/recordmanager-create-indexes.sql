@@ -10,6 +10,7 @@ CREATE INDEX harvested_record_source_info_x_idx ON harvested_record(source_info_
 CREATE INDEX harvested_record_source_info_g_idx ON harvested_record(source_info_g);
 CREATE INDEX harvested_record_sigla_idx ON harvested_record(sigla);
 CREATE INDEX harvested_record_last_harvest_idx ON harvested_record(last_harvest);
+CREATE INDEX harvested_record_disadvantaged_idx ON harvested_record(disadvantaged);
 
 CREATE INDEX cnb_harvested_record_idx ON cnb(harvested_record_id);
 CREATE INDEX title_harvested_record_idx ON title(harvested_record_id);
@@ -28,6 +29,7 @@ CREATE INDEX publisher_number_harvested_record_idx ON publisher_number(harvested
 CREATE INDEX authority_harvested_record_idx ON authority(harvested_record_id);
 CREATE INDEX authority_idx ON authority(authority_id);
 CREATE INDEX authority_code_idx ON authority_record(authority_code);
+CREATE INDEX anp_title_harvested_record_idx ON anp_title(harvested_record_id);
 
 CREATE INDEX fulltext_kramerius_harvested_record_idx ON fulltext_kramerius(harvested_record_id);
 

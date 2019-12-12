@@ -10,6 +10,10 @@ import cz.mzk.recordmanager.server.model.HarvestedRecord;
 public class DedupIdentifierCNBClustersProcessor extends
 		DedupIdentifierClustersProcessor {
 
+	public DedupIdentifierCNBClustersProcessor(boolean disadvantagedStep) {
+		super(disadvantagedStep);
+	}
+
 	/**
 	 * On the input are two {@link HarvestedRecord}s, having same identifier CNB
 	 * and common format.

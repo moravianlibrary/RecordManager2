@@ -18,7 +18,11 @@ import cz.mzk.recordmanager.server.util.DeduplicationUtils;
 public class DedupTitleAuthItemProcessor extends DedupSimpleKeysStepProcessor {
 	
 	public static final int PAGES_MATCH_PERCENTAGE = 90;
-	
+
+	public DedupTitleAuthItemProcessor(boolean disadvantagedStep) {
+		super(disadvantagedStep);
+	}
+
 	/**
 	 * Records match if their count of pages doesn't differ more than 100 - PAGES_MATCH_PERCENTAGE %.
 	 */

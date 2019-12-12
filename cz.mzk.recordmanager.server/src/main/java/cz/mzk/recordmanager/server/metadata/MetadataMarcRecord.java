@@ -1,21 +1,22 @@
 package cz.mzk.recordmanager.server.metadata;
 
 import com.google.common.primitives.Chars;
+import cz.mzk.recordmanager.server.ClasspathResourceProvider;
 import cz.mzk.recordmanager.server.export.IOFormat;
 import cz.mzk.recordmanager.server.marc.MarcRecord;
 import cz.mzk.recordmanager.server.model.*;
 import cz.mzk.recordmanager.server.model.HarvestedRecordFormat.HarvestedRecordFormatEnum;
 import cz.mzk.recordmanager.server.model.TezaurusRecord.TezaurusKey;
-import cz.mzk.recordmanager.server.util.CleaningUtils;
-import cz.mzk.recordmanager.server.util.Constants;
-import cz.mzk.recordmanager.server.util.MetadataUtils;
-import cz.mzk.recordmanager.server.util.UrlUtils;
+import cz.mzk.recordmanager.server.util.*;
 import cz.mzk.recordmanager.server.util.identifier.*;
 import org.marc4j.marc.DataField;
 import org.marc4j.marc.Subfield;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -29,7 +30,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 
 	protected HarvestedRecord harvestedRecord;
 
-	private static final Pattern PAGECOUNT_PATTERN = Pattern.compile("(\\d+)");
+	private static final Pattern NUMBER_PATTERN = Pattern.compile("(\\d+)");
 	private static final Pattern YEAR_PATTERN = Pattern.compile("\\d{4}");
 	private static final Pattern SCALE_PATTERN = Pattern.compile("\\d+[ ^]*\\d+");
 	protected static final Pattern UUID_PATTERN = Pattern.compile("uuid:[\\w-]+");
@@ -109,6 +110,13 @@ public class MetadataMarcRecord implements MetadataRecord {
 	private static final char[] ARRAY_OQ = {'o', 'q'};
 
 	private static final String URL_COMMENT_FORMAT = "%s (%s)";
+
+	private static final List<String> ANP_TITLE_REMOVE_WORDS = new BufferedReader(new InputStreamReader(
+			new ClasspathResourceProvider().getResource("/list/anp_title_remove_words.txt"), StandardCharsets.UTF_8))
+			.lines().collect(Collectors.toCollection(ArrayList::new));
+
+	private static final List<Pattern> ANP_TITLE_REMOVE_WORDS_PATTERNS = ANP_TITLE_REMOVE_WORDS.stream()
+			.map(w -> Pattern.compile("\\b" + w + "\\b", Pattern.CASE_INSENSITIVE)).collect(Collectors.toList());
 
 	public MetadataMarcRecord(MarcRecord underlayingMarc) {
 		initRecords(underlayingMarc, null);
@@ -197,7 +205,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 		}
 
 		Long maxPages = -1L;
-		Matcher matcher = PAGECOUNT_PATTERN.matcher(count);
+		Matcher matcher = NUMBER_PATTERN.matcher(count);
 		while (matcher.find()) {
 			try {
 				Long pages = Long.parseLong(matcher.group(0));
@@ -1308,4 +1316,55 @@ public class MetadataMarcRecord implements MetadataRecord {
 		return results;
 	}
 
+	/**
+	 * first of 260b, 264b, books only
+	 *
+	 * @return String
+	 */
+	@Override
+	public String getPublisher() {
+		if (!getDetectedFormatList().contains(HarvestedRecordFormatEnum.BOOKS)) return null;
+		String publisher = underlayingMarc.getField("260", 'b');
+		if (publisher != null) return publisher;
+		return underlayingMarc.getField("264", 'b');
+	}
+
+	/**
+	 * first number from 250a, books only
+	 *
+	 * @return String
+	 */
+	@Override
+	public String getEdition() {
+		if (!getDetectedFormatList().contains(HarvestedRecordFormatEnum.BOOKS)) return null;
+		String data = underlayingMarc.getField("250", 'a');
+		if (data == null) return null;
+		Matcher matcher = NUMBER_PATTERN.matcher(data);
+		if (matcher.find()) return matcher.group(0);
+		return null;
+	}
+
+	/**
+	 * 245anp, books only
+	 * numbers less than 10 converted to roman numerals
+	 *
+	 * @return Set of {@link AnpTitle}
+	 */
+	@Override
+	public Set<AnpTitle> getAnpTitle() {
+		if (!getDetectedFormatList().contains(HarvestedRecordFormatEnum.BOOKS)) return Collections.emptySet();
+		Set<AnpTitle> results = new HashSet<>();
+		for (DataField df : underlayingMarc.getDataFields("245")) {
+			String titleText = parseTitleValue(df, SHORT_TITLE_SUBFIELDS);
+			if (!titleText.isEmpty()) {
+				boolean similarity = MetadataUtils.similarityEnabled(df, titleText);
+				titleText = RomanNumeralsUtils.getRomanNumerals(titleText);
+				for (Pattern pattern : ANP_TITLE_REMOVE_WORDS_PATTERNS) {
+					titleText = CleaningUtils.replaceAll(titleText, pattern, "");
+				}
+				results.add(AnpTitle.create(titleText, similarity));
+			}
+		}
+		return results;
+	}
 }

@@ -32,7 +32,9 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 	private final static int EFFECTIVE_SOURCE_INFO_LENGTH = 255;
 	private final static int EFFECTIVE_AUTHOR_LENGTH = 200;
 	private final static int EFFECTIVE_AUTHOR_AUTH_KEY_LENGTH = 50;
+	private final static int EFFECTIVE_LENGTH_EDITION = 10;
 	private final static int EFFECTIVE_LENGTH_30 = 30;
+	private final static int EFFECTIVE_LENGTH_PUBLISHER = 100;
 	
 	@Autowired 
 	private HarvestedRecordFormatDAO harvestedRecordFormatDAO;
@@ -78,6 +80,18 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 			}
 		}
 		encapsulator.setShortTitles(shortTitles);
+		// anp titles
+		List<AnpTitle> anpTitles = new ArrayList<>();
+		for (AnpTitle anpTitle : metadataRecord.getAnpTitle()) {
+			anpTitle.setAnpTitle(MetadataUtils.normalizeAndShorten(
+					anpTitle.getAnpTitle(), EFFECTIVE_TITLE_LENGTH));
+			if (anpTitle.getAnpTitle().isEmpty()) continue;
+			if (!anpTitles.contains(anpTitle)) {
+				anpTitles.add(anpTitle);
+			}
+		}
+		encapsulator.setAnpTitles(anpTitles);
+
 		encapsulator.setIsbns(metadataRecord.getISBNs());
 		encapsulator.setIssns(metadataRecord.getISSNs());
 		encapsulator.setIsmns(metadataRecord.getISMNs());
@@ -101,7 +115,8 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 		encapsulator.setEans(metadataRecord.getEANs());
 		encapsulator.setPublisherNumbers(metadataRecord.getPublisherNumber());
 		encapsulator.setLanguages(new HashSet<>(metadataRecord.getLanguages()));
-
+		encapsulator.setPublisher(MetadataUtils.normalizeAndShorten(metadataRecord.getPublisher(), EFFECTIVE_LENGTH_PUBLISHER));
+		encapsulator.setEdition(MetadataUtils.shorten(metadataRecord.getEdition(), EFFECTIVE_LENGTH_EDITION));
 
 		String computedHash = computeHashValue(encapsulator);
 		String oldHash = record.getDedupKeysHash();
@@ -147,6 +162,9 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 			record.setEans(encapsulator.getEans());
 			record.setShortTitles(encapsulator.getShortTitles());
 			record.setPublisherNumbers(metadataRecord.getPublisherNumber());
+			record.setPublisher(encapsulator.getPublisher());
+			record.setEdition(encapsulator.getEdition());
+			record.setAnpTitles(encapsulator.getAnpTitles());
 			record.setTemporalDedupHash(computedHash);
 		} else {
 			harvestedRecordDao.dropAuthorities(record);
@@ -283,7 +301,19 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 				for (ShortTitle st: encapsulator.getShortTitles()) {
 					md.update(st.getShortTitleStr().getBytes("utf-8"));
 				}
-				
+
+				for (AnpTitle st : encapsulator.getAnpTitles()) {
+					md.update(st.getAnpTitle().getBytes("utf-8"));
+				}
+
+				if (encapsulator.getPublisher() != null) {
+					md.update(encapsulator.getPublisher().getBytes());
+				}
+
+				if (encapsulator.getEdition() != null) {
+					md.update(encapsulator.getEdition().getBytes());
+				}
+
 				byte[] hash = md.digest();
 				StringBuilder sb = new StringBuilder();
 			    for (byte b : hash) {
@@ -334,6 +364,9 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 			encapsulator.setSourceInfoG(hr.getSourceInfoG());
 			encapsulator.setSourceInfoX(hr.getSourceInfoX());
 			encapsulator.setSourceInfoT(hr.getSourceInfoT());
+			encapsulator.setPublisher(hr.getPublisher());
+			encapsulator.setEdition(hr.getEdition());
+			encapsulator.setAnpTitles(hr.getAnpTitles());
 
 			return computeHashValue(encapsulator);
 		}
@@ -349,6 +382,7 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 		Set<String> languages = new HashSet<>();
 		List<Ean> eans = new ArrayList<>();
 		List<ShortTitle> shortTitles = new ArrayList<>();
+		List<AnpTitle> anpTitles = new ArrayList<>();
 		List<PublisherNumber> publisherNumbers = new ArrayList<>();
 		
 		Long publicationYear;
@@ -364,6 +398,8 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 		String sourceInfoX;
 		String sourceInfoT;
 		String sourceInfoG;
+		String publisher;
+		String edition;
 		
 		public List<Ismn> getIsmns() {
 			return ismns;
@@ -514,6 +550,30 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 
 		public void setSourceInfoG(String sourceInfoG) {
 			this.sourceInfoG = sourceInfoG;
+		}
+
+		public String getPublisher() {
+			return publisher;
+		}
+
+		public void setPublisher(String publisher) {
+			this.publisher = publisher;
+		}
+
+		public String getEdition() {
+			return edition;
+		}
+
+		public void setEdition(String edition) {
+			this.edition = edition;
+		}
+
+		public List<AnpTitle> getAnpTitles() {
+			return anpTitles;
+		}
+
+		public void setAnpTitles(List<AnpTitle> anpTitles) {
+			this.anpTitles = anpTitles;
 		}
 	}
 

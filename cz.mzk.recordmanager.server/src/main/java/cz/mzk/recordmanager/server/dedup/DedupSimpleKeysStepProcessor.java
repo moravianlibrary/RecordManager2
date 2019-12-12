@@ -35,7 +35,16 @@ public class DedupSimpleKeysStepProcessor implements
 	
 	@Autowired
 	private DedupRecordDAO dedupRecordDAO;
-	
+
+	protected boolean disadvantagedStep;
+
+	public DedupSimpleKeysStepProcessor() {
+	}
+
+	public DedupSimpleKeysStepProcessor(boolean disadvantagedStep) {
+		this.disadvantagedStep = disadvantagedStep;
+	}
+
 	@Override
 	public List<HarvestedRecord> process(List<Long> idList) throws Exception {
 		List<HarvestedRecord> hrList = harvestedRecordDao.findByIds(idList);
@@ -52,6 +61,10 @@ public class DedupSimpleKeysStepProcessor implements
 				HarvestedRecord innerRec = hrList.get(j);
 				
 				if (matchRecords(outerRec,innerRec)) {
+					if (!disadvantagedStep) {
+						outerRec.setDisadvantaged(false);
+						innerRec.setDisadvantaged(false);
+					}
 					//merge records, both already have assigned DedupRecord
 					if (outerRec.getDedupRecord() != null && innerRec.getDedupRecord() != null) {
 						if (sameDedupRecords(outerRec.getDedupRecord(), innerRec.getDedupRecord())) {
@@ -95,7 +108,7 @@ public class DedupSimpleKeysStepProcessor implements
 					dr.setUpdated(new Date());
 					outerRec.setDedupRecord(dr);
 					innerRec.setDedupRecord(dr);
-					
+
 					dedupMap.add(dr);
 					
 				}

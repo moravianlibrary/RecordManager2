@@ -4,9 +4,12 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.sql.DataSource;
 
+import cz.mzk.recordmanager.server.springbatch.*;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.JobParametersInvalidException;
@@ -21,6 +24,7 @@ import org.springframework.batch.item.database.JdbcPagingItemReader;
 import org.springframework.batch.item.database.support.SqlPagingQueryProviderFactoryBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.task.TaskExecutor;
@@ -28,10 +32,6 @@ import org.springframework.core.task.TaskExecutor;
 import com.google.common.io.CharStreams;
 
 import cz.mzk.recordmanager.server.jdbc.LongValueRowMapper;
-import cz.mzk.recordmanager.server.springbatch.IntrospectiveJobParametersValidator;
-import cz.mzk.recordmanager.server.springbatch.JobFailureListener;
-import cz.mzk.recordmanager.server.springbatch.JobParameterDeclaration;
-import cz.mzk.recordmanager.server.springbatch.SqlCommandTasklet;
 import cz.mzk.recordmanager.server.util.Constants;
 
 @Configuration
@@ -49,54 +49,85 @@ public class RegenerateDedupKeysJobConfig {
 	@Autowired
 	private TaskExecutor taskExecutor;
 
+	private static final Long LONG_OVERRIDEN_BY_EXPRESSION = null;
+
 	private String dropOldDedupKeysSql = CharStreams.toString(new InputStreamReader(getClass() //
 			.getClassLoader().getResourceAsStream("job/regenerateDedupKeysJob/dropDedupKeys.sql"), "UTF-8"));
 
 	public RegenerateDedupKeysJobConfig() throws IOException {
 	}
 
+	// regenerate
 	@Bean
 	public Job RegenerateDedupKeysJob(
-			@Qualifier(Constants.JOB_ID_REGEN_DEDUP_KEYS + ":dropOldDedupKeysStep") Step dropOldDedupKeysStep,
-			@Qualifier(Constants.JOB_ID_REGEN_DEDUP_KEYS + ":regenarateDedupKeysStep") Step regenDedupKeysStep) {
+			@Qualifier(Constants.JOB_ID_REGEN_DEDUP_KEYS + ":regenerateDedupKeysStep") Step regenDedupKeysStep) {
 		return jobs.get(Constants.JOB_ID_REGEN_DEDUP_KEYS)
-				.validator(new RegenerateDedupKeysJobParameters())
-				.listener(JobFailureListener.INSTANCE)
-				.start(dropOldDedupKeysStep)
-				.next(regenDedupKeysStep)
-				.build();
-	}
-
-	@Bean
-	public Job RegenerateMissingDedupKeysJob(
-			@Qualifier(Constants.JOB_ID_REGEN_DEDUP_KEYS + ":regenarateDedupKeysStep") Step regenDedupKeysStep) {
-		return jobs.get(Constants.JOB_ID_REGEN_MISSING_DEDUP_KEYS)
-				.validator(new RegenerateDedupKeysJobParameters())
+				.validator(new RegenerateJobParametersValidator())
 				.listener(JobFailureListener.INSTANCE)
 				.start(regenDedupKeysStep)
 				.build();
 	}
 
-	@Bean(name = Constants.JOB_ID_REGEN_DEDUP_KEYS + ":dropOldDedupKeysStep")
-	public Step prepareTempCnbnTableStep() {
-		return steps.get("dropOldDedupKeysStep")
-				.tasklet(dropOldDedupKeysTasklet())
-				.build();
-	}
-
-	@Bean(name = Constants.JOB_ID_REGEN_DEDUP_KEYS + ":regenarateDedupKeysStep")
+	@Bean(name = Constants.JOB_ID_REGEN_DEDUP_KEYS + ":regenerateDedupKeysStep")
 	public Step regenerateDedupKeysStep() throws Exception {
-		return steps.get("regenarateDedupKeysStep")
+		return steps.get("regenerateDedupKeysStep")
+				.listener(new StepProgressListener())
 				.<Long, Long>chunk(100)//
-				.reader(reader())//
+				.reader(reader(LONG_OVERRIDEN_BY_EXPRESSION))//
 				.writer(writer()) //
 				.taskExecutor(taskExecutor)
 				.build();
 	}
 
-	@Bean(name = Constants.JOB_ID_REGEN_DEDUP_KEYS + ":regenarateDedupKeysReader")
+	@Bean(name = Constants.JOB_ID_REGEN_DEDUP_KEYS + ":regenerateDedupKeysReader")
 	@StepScope
-	public ItemReader<Long> reader() throws Exception {
+	public ItemReader<Long> reader(
+			@Value("#{jobParameters[" + Constants.JOB_PARAM_RECORD_ID + "]}") Long startRecordId
+	) throws Exception {
+		JdbcPagingItemReader<Long> reader = new JdbcPagingItemReader<>();
+		SqlPagingQueryProviderFactoryBean pqpf = new SqlPagingQueryProviderFactoryBean();
+		pqpf.setDataSource(dataSource);
+		pqpf.setSelectClause("SELECT id");
+		pqpf.setFromClause("FROM harvested_record hr");
+		if (startRecordId != null) {
+			pqpf.setWhereClause("WHERE id > :startId");
+			Map<String, Object> parameterValues = new HashMap<>();
+			parameterValues.put("startId", startRecordId);
+			reader.setParameterValues(parameterValues);
+		}
+		pqpf.setSortKey("id");
+		reader.setRowMapper(new LongValueRowMapper());
+		reader.setPageSize(100);
+		reader.setQueryProvider(pqpf.getObject());
+		reader.setDataSource(dataSource);
+		reader.afterPropertiesSet();
+		return reader;
+	}
+
+	// missing
+	@Bean
+	public Job RegenerateMissingDedupKeysJob(
+			@Qualifier(Constants.JOB_ID_REGEN_MISSING_DEDUP_KEYS + ":regenerateMissingDedupKeysStep") Step regenerateMissingDedupKeysStep) {
+		return jobs.get(Constants.JOB_ID_REGEN_MISSING_DEDUP_KEYS)
+				.validator(new RegenerateDedupKeysJobParameters())
+				.listener(JobFailureListener.INSTANCE)
+				.start(regenerateMissingDedupKeysStep)
+				.build();
+	}
+
+	@Bean(name = Constants.JOB_ID_REGEN_MISSING_DEDUP_KEYS + ":regenerateMissingDedupKeysStep")
+	public Step regenerateMissingDedupKeysStep() throws Exception {
+		return steps.get("regenerateMissingDedupKeysStep")
+				.<Long, Long>chunk(100)//
+				.reader(readerMissing())//
+				.writer(writer()) //
+				.taskExecutor(taskExecutor)
+				.build();
+	}
+
+	@Bean(name = Constants.JOB_ID_REGEN_MISSING_DEDUP_KEYS + ":regenerateMissingDedupKeysReader")
+	@StepScope
+	public ItemReader<Long> readerMissing() throws Exception {
 		JdbcPagingItemReader<Long> reader = new JdbcPagingItemReader<>();
 		SqlPagingQueryProviderFactoryBean pqpf = new SqlPagingQueryProviderFactoryBean();
 		pqpf.setDataSource(dataSource);
@@ -112,16 +143,35 @@ public class RegenerateDedupKeysJobConfig {
 		return reader;
 	}
 
-	@Bean(name = Constants.JOB_ID_REGEN_DEDUP_KEYS + ":regenarateDedupKeysWriter")
-	@StepScope
-	public ItemWriter<Long> writer() throws Exception {
-		return new RegenerateDedupKeysWriter();
+	// drop keys
+	@Bean
+	public Job DropDedupKeysJob(
+			@Qualifier(Constants.JOB_ID_DROP_DEDUP_KEYS + ":dropOldDedupKeysStep") Step dropOldDedupKeysStep) {
+		return jobs.get(Constants.JOB_ID_DROP_DEDUP_KEYS)
+				.validator(new RegenerateDedupKeysJobParameters())
+				.listener(JobFailureListener.INSTANCE)
+				.start(dropOldDedupKeysStep)
+				.build();
 	}
 
-	@Bean(name = Constants.JOB_ID_REGEN_DEDUP_KEYS + ":dropOldDedupKeysTasklet")
+	@Bean(name = Constants.JOB_ID_DROP_DEDUP_KEYS + ":dropOldDedupKeysStep")
+	public Step dropOldDedupKeysStep() {
+		return steps.get("dropOldDedupKeysStep")
+				.tasklet(dropOldDedupKeysTasklet())
+				.build();
+	}
+
+	@Bean(name = Constants.JOB_ID_DROP_DEDUP_KEYS + ":dropOldDedupKeysTasklet")
 	@StepScope
 	public Tasklet dropOldDedupKeysTasklet() {
 		return new SqlCommandTasklet(dropOldDedupKeysSql.split(";"));
+	}
+
+	// writer
+	@Bean(name = Constants.JOB_ID_REGEN_DEDUP_KEYS + ":regenerateDedupKeysWriter")
+	@StepScope
+	public ItemWriter<Long> writer() throws Exception {
+		return new RegenerateDedupKeysWriter();
 	}
 
 	public class RegenerateDedupKeysJobParameters implements IntrospectiveJobParametersValidator {

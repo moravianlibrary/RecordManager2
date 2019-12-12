@@ -35,7 +35,8 @@ public class GenerateSkatKeysWriter implements ItemWriter<Set<SkatKey>>, StepExe
 				List<Long> import_confs = siglas.get(key.getSkatKeyId().getSigla());
 				if (import_confs == null) continue;
 				for (Long import_conf: import_confs) {
-					String query = "UPDATE harvested_record SET next_dedup_flag=true WHERE import_conf_id = ? AND raw_001_id = ? ";
+					String query = "UPDATE harvested_record SET next_dedup_flag=TRUE" +
+							" WHERE import_conf_id = ? AND raw_001_id = ? ";
 					Session session = sessionFactory.getCurrentSession();
 					int status = session.createSQLQuery(query)
 						.setLong(0, import_conf)
