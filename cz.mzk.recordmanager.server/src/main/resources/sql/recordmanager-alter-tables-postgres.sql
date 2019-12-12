@@ -1552,6 +1552,7 @@ INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granul
 ALTER TABLE harvested_record ADD COLUMN publisher VARCHAR(100);
 ALTER TABLE harvested_record ADD COLUMN edition VARCHAR(10);
 ALTER TABLE harvested_record ADD COLUMN disadvantaged BOOLEAN DEFAULT(TRUE);
+CREATE INDEX harvested_record_disadvantaged_idx ON harvested_record(disadvantaged);
 CREATE TABLE anp_title (
   id                   DECIMAL(10) PRIMARY KEY,
   harvested_record_id  DECIMAL(10),

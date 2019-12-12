@@ -1818,3 +1818,17 @@ UPDATE oai_harvest_conf SET set_spec='default' WHERE import_conf_id=343;
 INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (210, 'MKSEM', 'https://www.knihovnasemily.cz', 'https://semily.tritius.cz/', 'Semily', 'LI');
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id, ziskej_enabled) VALUES (410, 210, 200, 'mksem', 11, false, true, true, true, 'U', 'other', true);
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (410,'https://semily.tritius.cz/tritius/oai-provider','CPK_1','marc21',NULL);
+
+--changeset tomascejpek:162
+ALTER TABLE harvested_record ADD COLUMN publisher VARCHAR(100);
+ALTER TABLE harvested_record ADD COLUMN edition VARCHAR(10);
+ALTER TABLE harvested_record ADD COLUMN disadvantaged BOOLEAN DEFAULT(TRUE);
+CREATE INDEX harvested_record_disadvantaged_idx ON harvested_record(disadvantaged);
+CREATE TABLE anp_title (
+  id                   DECIMAL(10) PRIMARY KEY,
+  harvested_record_id  DECIMAL(10),
+  anp_title            VARCHAR(255),
+  similarity_enabled   BOOLEAN DEFAULT FALSE,
+  FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE
+);
+CREATE INDEX anp_title_harvested_record_idx ON anp_title(harvested_record_id);

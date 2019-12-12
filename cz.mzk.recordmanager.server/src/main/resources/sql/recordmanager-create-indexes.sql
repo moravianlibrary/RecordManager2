@@ -10,6 +10,7 @@ CREATE INDEX harvested_record_source_info_x_idx ON harvested_record(source_info_
 CREATE INDEX harvested_record_source_info_g_idx ON harvested_record(source_info_g);
 CREATE INDEX harvested_record_sigla_idx ON harvested_record(sigla);
 CREATE INDEX harvested_record_last_harvest_idx ON harvested_record(last_harvest);
+CREATE INDEX harvested_record_disadvantaged_idx ON harvested_record(disadvantaged);
 
 CREATE INDEX cnb_harvested_record_idx ON cnb(harvested_record_id);
 CREATE INDEX title_harvested_record_idx ON title(harvested_record_id);
