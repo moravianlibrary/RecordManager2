@@ -973,4 +973,206 @@ public class MarcRecordImplTest extends AbstractTest {
 		mri = MarcRecordFactory.recordFactory(data);
 		Assert.assertEquals(metadataFactory.getMetadataRecord(mri).getEdition(), "1");
 	}
+
+	@Test
+	public void getBiblioLinkerTitle() {
+		MarcRecordImpl mri;
+		MetadataRecord metadataRecord;
+		List<String> data = new ArrayList<>();
+		List<BLTitle> expected = new ArrayList<>();
+
+		data.add("765 $tTitle1");
+		expected.add(BLTitle.create("Title1"));
+		data.add("210 $aTitle2");
+		expected.add(BLTitle.create("Title2"));
+		data.add("222 $aTitle3");
+		expected.add(BLTitle.create("Title3"));
+		data.add("130 $aTitle4(text)$nn$pp");
+		expected.add(BLTitle.create("Title4np"));
+
+		mri = MarcRecordFactory.recordFactory(data);
+		metadataRecord = metadataFactory.getMetadataRecord(mri);
+		Assert.assertTrue(expected.containsAll(metadataRecord.getBiblioLinkerTitle()));
+		Assert.assertEquals(metadataRecord.getBiblioLinkerTitle().size(), expected.size());
+	}
+
+	@Test
+	public void getBiblioLinkerCommonTitle() {
+		MarcRecordImpl mri;
+		MetadataRecord metadataRecord;
+		List<String> data = new ArrayList<>();
+		List<BlCommonTitle> expected = new ArrayList<>();
+
+		data.add("787 $tTitle1"); // not BLCommonTitle
+		data.add("787 $tTitle2$iz cyklu:");
+		expected.add(BlCommonTitle.create("Title2"));
+		data.add("240 $aTitle3$pp");
+
+		mri = MarcRecordFactory.recordFactory(data);
+		metadataRecord = metadataFactory.getMetadataRecord(mri);
+		Assert.assertTrue(expected.containsAll(metadataRecord.getBiblioLinkerCommonTitle()));
+		Assert.assertEquals(metadataRecord.getBiblioLinkerCommonTitle().size(), expected.size());
+
+		data.clear();
+		expected.clear();
+
+		data.add("240 $aTitle3$pp");
+		expected.add(BlCommonTitle.create("Title3"));
+		data.add("240 $aTitle4a$bTitle4b$nn");
+		expected.add(BlCommonTitle.create("Title4a"));
+		expected.add(BlCommonTitle.create("Title4aTitle4b"));
+		data.add("240 $aTitle5a$bTitle5b"); // not BLCommonTitle
+
+		mri = MarcRecordFactory.recordFactory(data);
+		metadataRecord = metadataFactory.getMetadataRecord(mri);
+		Assert.assertTrue(expected.containsAll(metadataRecord.getBiblioLinkerCommonTitle()));
+		Assert.assertEquals(metadataRecord.getBiblioLinkerCommonTitle().size(), expected.size());
+	}
+
+	@Test
+	public void getBiblioLinkerAuthor() {
+		MarcRecordImpl mri;
+		MetadataRecord metadataRecord;
+		List<String> data = new ArrayList<>();
+
+		data.add("100 $7123456");
+		data.add("100 $aa(2000)$dd");
+
+		mri = MarcRecordFactory.recordFactory(data);
+		metadataRecord = metadataFactory.getMetadataRecord(mri);
+		Assert.assertEquals(metadataRecord.getBiblioLinkerAuthor(), "123456");
+
+		data.clear();
+		data.add("000 ------g");
+		data.add("300 $aCD");
+		data.add("100 $7123456");
+		data.add("100 $7789$4ccp");
+
+		mri = MarcRecordFactory.recordFactory(data);
+		metadataRecord = metadataFactory.getMetadataRecord(mri);
+		Assert.assertEquals(metadataRecord.getBiblioLinkerAuthor(), "789");
+	}
+
+	@Test
+	public void getBiblioLinkerPublisher() {
+		MarcRecordImpl mri;
+		MetadataRecord metadataRecord;
+		List<String> data = new ArrayList<>();
+
+		data.add("264 $bPublisher1");
+		data.add("260 $bPublisher2");
+
+		mri = MarcRecordFactory.recordFactory(data);
+		metadataRecord = metadataFactory.getMetadataRecord(mri);
+		Assert.assertEquals(metadataRecord.getBiblioLinkerPublisher(), "Publisher1");
+	}
+
+	@Test
+	public void getBiblioLinkerSeries() {
+		MarcRecordImpl mri;
+		MetadataRecord metadataRecord;
+		List<String> data = new ArrayList<>();
+
+		data.add("440 $aSeries1");
+		data.add("490 $aSeries2");
+
+		mri = MarcRecordFactory.recordFactory(data);
+		metadataRecord = metadataFactory.getMetadataRecord(mri);
+		Assert.assertEquals(metadataRecord.getBiblioLinkerSeries(), "Series1");
+	}
+
+	@Test
+	public void getBiblioLinkerTopicKey() {
+		MarcRecordImpl mri;
+		MetadataRecord metadataRecord;
+		List<String> data = new ArrayList<>();
+		List<BLTopicKey> expected = new ArrayList<>();
+
+		data.add("6502 $aNotTopicKey");
+		data.add("651 $7cTopicKey1");
+		expected.add(BLTopicKey.create("cTopicKey1"));
+		data.add("651 $7bTopicKey2");
+		expected.add(BLTopicKey.create("bTopicKey2"));
+		data.add("651 $7aTopicKey3");
+		expected.add(BLTopicKey.create("aTopicKey3"));
+		data.add("651 $7dNotTopicKey2"); // get only 3 values
+
+		mri = MarcRecordFactory.recordFactory(data);
+		metadataRecord = metadataFactory.getMetadataRecord(mri);
+		Assert.assertTrue(expected.containsAll(metadataRecord.getBiblioLinkerTopicKey()));
+		Assert.assertEquals(metadataRecord.getBiblioLinkerTopicKey().size(), expected.size());
+
+		data.clear();
+		expected.clear();
+		data.add("000 ------e"); // map
+		data.add("650 $7TopicKey1");
+		expected.add(BLTopicKey.create("TopicKey1"));
+		data.add("650 2 $7NotTopicKey");
+
+		mri = MarcRecordFactory.recordFactory(data);
+		metadataRecord = metadataFactory.getMetadataRecord(mri);
+		Assert.assertTrue(expected.containsAll(metadataRecord.getBiblioLinkerTopicKey()));
+		Assert.assertEquals(metadataRecord.getBiblioLinkerTopicKey().size(), expected.size());
+	}
+
+	@Test
+	public void getBiblioLinkerEntity() {
+		MarcRecordImpl mri;
+		MetadataRecord metadataRecord;
+		List<String> data = new ArrayList<>();
+		List<BLEntity> expected = new ArrayList<>();
+
+		data.add("100 $7Entity1");
+		expected.add(BLEntity.create("Entity1"));
+		data.add("700 $7NotEntity1"); // without $4
+		data.add("700 $7Entity2$4aut");
+		expected.add(BLEntity.create("Entity2"));
+		data.add("700 $7Entity3$4aut");
+		expected.add(BLEntity.create("Entity3"));
+		data.add("700 $7Entity4$4aut");
+		expected.add(BLEntity.create("Entity4"));
+		data.add("700 $7NotEntity2$4aut"); // only 3 values from 700 where $4 has allowed value
+
+		mri = MarcRecordFactory.recordFactory(data);
+		metadataRecord = metadataFactory.getMetadataRecord(mri);
+		Assert.assertTrue(expected.containsAll(metadataRecord.getBiblioLinkerEntity()));
+		Assert.assertEquals(metadataRecord.getBiblioLinkerEntity().size(), expected.size());
+	}
+
+	@Test
+	public void getBiblioLinkerLanguage() {
+		MarcRecordImpl mri;
+		MetadataRecord metadataRecord;
+		List<String> data = new ArrayList<>();
+		List<BLLanguage> expected = new ArrayList<>();
+
+		data.add("041 $aCze");
+		expected.add(BLLanguage.create("cze"));
+		data.add("041 $dEng");
+
+		mri = MarcRecordFactory.recordFactory(data);
+		metadataRecord = metadataFactory.getMetadataRecord(mri);
+		Assert.assertTrue(expected.containsAll(metadataRecord.getBiblioLinkerLanguages()));
+		Assert.assertEquals(metadataRecord.getBiblioLinkerLanguages().size(), expected.size());
+
+		data.clear();
+		expected.clear();
+		data.add("041 $dCze");
+		expected.add(BLLanguage.create("cze"));
+
+		mri = MarcRecordFactory.recordFactory(data);
+		metadataRecord = metadataFactory.getMetadataRecord(mri);
+		Assert.assertTrue(expected.containsAll(metadataRecord.getBiblioLinkerLanguages()));
+		Assert.assertEquals(metadataRecord.getBiblioLinkerLanguages().size(), expected.size());
+
+		data.clear();
+		expected.clear();
+		data.add("008 -----------------------------------CZE");
+		expected.add(BLLanguage.create("cze"));
+
+		mri = MarcRecordFactory.recordFactory(data);
+		metadataRecord = metadataFactory.getMetadataRecord(mri);
+		Assert.assertTrue(expected.containsAll(metadataRecord.getBiblioLinkerLanguages()));
+		Assert.assertEquals(metadataRecord.getBiblioLinkerLanguages().size(), expected.size());
+	}
 }

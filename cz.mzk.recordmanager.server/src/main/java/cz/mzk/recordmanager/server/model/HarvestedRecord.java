@@ -123,11 +123,9 @@ public class HarvestedRecord extends AbstractDomainObject {
 	@Column(name="updated")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date updated = harvested;
-
 	@Column(name="last_harvest")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date lastHarvest = harvested;
-
 	@Column(name="deleted")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date deleted;
@@ -166,11 +164,9 @@ public class HarvestedRecord extends AbstractDomainObject {
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name="harvested_record_id", referencedColumnName="id", nullable=false)
 	private List<ShortTitle> shortTitles = new ArrayList<>();
-
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name="harvested_record_id", referencedColumnName="id", nullable=false)
 	private List<AnpTitle> anpTitles = new ArrayList<>();
-
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name="harvested_record_id", referencedColumnName="id", nullable=false)
 	private List<Oclc> oclcs = new ArrayList<>();
@@ -178,6 +174,25 @@ public class HarvestedRecord extends AbstractDomainObject {
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name="harvested_record_id", referencedColumnName="id", nullable=false)
 	private List<Ismn> ismns = new ArrayList<>();
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name="harvested_record_id", referencedColumnName="id", nullable=false)
+	private List<BiblioLinkerSimilar> biblioLinkerSimilarUrls = new ArrayList<>();
+
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name="harvested_record_id", referencedColumnName="id", nullable=false)
+	private List<BLTitle> blTitles = new ArrayList<>();
+
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name = "harvested_record_id", referencedColumnName = "id", nullable = false)
+	private List<BlCommonTitle> blCommonTitle = new ArrayList<>();
+
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name = "harvested_record_id", referencedColumnName = "id", nullable = false)
+	private List<BLEntity> blEntity = new ArrayList<>();
+
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name = "harvested_record_id", referencedColumnName = "id", nullable = false)
+	private List<BLTopicKey> blTopicKey = new ArrayList<>();
 
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name="harvested_record_id", referencedColumnName="id")
@@ -190,6 +205,9 @@ public class HarvestedRecord extends AbstractDomainObject {
 	@OneToMany(mappedBy="id.harvestedRecordId", cascade = CascadeType.ALL, orphanRemoval=true)
 	@MapKey(name="id.langStr")
 	private Map<String, Language> languages = new HashMap<>();
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name = "harvested_record_id", referencedColumnName = "id", nullable = false)
+	private List<BLLanguage> blLanguages = new ArrayList<>();
 
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name = "harvested_record_id", referencedColumnName = "id")
@@ -216,7 +234,6 @@ public class HarvestedRecord extends AbstractDomainObject {
 	
 	@Column(name="publication_year")
 	private Long publicationYear;
-
 	@Column(name = "publisher")
 	private String publisher;
 
@@ -240,7 +257,12 @@ public class HarvestedRecord extends AbstractDomainObject {
 	@ManyToOne(optional=true, fetch=FetchType.LAZY)
 	@JoinColumn(name="dedup_record_id", nullable=true)
 	private DedupRecord dedupRecord;
-	
+	@ManyToOne(optional=true, fetch=FetchType.LAZY)
+	@JoinColumn(name="biblio_linker_id", nullable=true)
+	private BiblioLinker biblioLinker;
+
+	@Column(name="biblio_linker_similar")
+	private boolean biblioLinkerSimilar = false;
 	@Column(name="weight")
 	private Long weight;
 	
@@ -270,6 +292,26 @@ public class HarvestedRecord extends AbstractDomainObject {
 
 	@Column(name = "sigla")
 	private String sigla;
+	@Column(name="next_biblio_linker_flag")
+	private boolean nextBiblioLinkerFlag = true;
+
+	@Column(name = "next_biblio_linker_similar_flag")
+	private boolean nextBiblioLinkerSimilarFlag = true;
+
+	@Column(name = "biblio_linker_keys_hash")
+	private String biblioLinkerKeysHash = "";
+
+	@Column(name = "bl_disadvantaged")
+	private boolean blDisadvantaged = true;
+
+	@Column(name = "bl_author")
+	private String blAuthor;
+
+	@Column(name = "bl_publisher")
+	private String blPublisher;
+
+	@Column(name = "bl_series")
+	private String blSeries;
 
 	/**
 	 * indicator variable used for filtering reasons
@@ -288,7 +330,11 @@ public class HarvestedRecord extends AbstractDomainObject {
 	 */
 	@Transient
 	private String temporalDedupHash;
-	
+	/**
+	 * Temporal indicator variable used for biblio linker
+	 */
+	@Transient
+	private String temporalBiblioLinkerHash;
 	
 	public HarvestedRecord() {
 	}
@@ -588,6 +634,14 @@ public class HarvestedRecord extends AbstractDomainObject {
 		this.temporalDedupHash = temporalDedupHash;
 	}
 
+	public String getTemporalBiblioLinkerHash() {
+		return temporalBiblioLinkerHash;
+	}
+
+	public void setTemporalBiblioLinkerHash(String temporalBiblioLinkerHash) {
+		this.temporalBiblioLinkerHash = temporalBiblioLinkerHash;
+	}
+
 	public List<Inspiration> getInspiration() {
 		return inspiration;
 	}
@@ -707,5 +761,125 @@ public class HarvestedRecord extends AbstractDomainObject {
 
 	public void setAnpTitles(List<AnpTitle> anpTitles) {
 		this.anpTitles = anpTitles;
+	}
+
+	public BiblioLinker getBiblioLinker() {
+		return biblioLinker;
+	}
+
+	public void setBiblioLinker(BiblioLinker biblioLinker) {
+		this.biblioLinker = biblioLinker;
+	}
+
+	public boolean isBiblioLinkerSimilar() {
+		return biblioLinkerSimilar;
+	}
+
+	public void setBiblioLinkerSimilar(boolean biblioLinkerSimilar) {
+		this.biblioLinkerSimilar = biblioLinkerSimilar;
+	}
+
+	public List<BiblioLinkerSimilar> getBiblioLinkerSimilarUrls() {
+		return biblioLinkerSimilarUrls;
+	}
+
+	public void setBiblioLinkerSimilarUrls(List<BiblioLinkerSimilar> biblioLinkerSimilarUrls) {
+		this.biblioLinkerSimilarUrls = biblioLinkerSimilarUrls;
+	}
+
+	public boolean isNextBiblioLinkerFlag() {
+		return nextBiblioLinkerFlag;
+	}
+
+	public void setNextBiblioLinkerFlag(boolean nextBiblioLinkerFlag) {
+		this.nextBiblioLinkerFlag = nextBiblioLinkerFlag;
+	}
+
+	public List<BLTitle> getBlTitles() {
+		return blTitles;
+	}
+
+	public void setBlTitles(List<BLTitle> blTitles) {
+		this.blTitles = blTitles;
+	}
+
+	public String getBlAuthor() {
+		return blAuthor;
+	}
+
+	public void setBlAuthor(String blAuthor) {
+		this.blAuthor = blAuthor;
+	}
+
+	public String getBlPublisher() {
+		return blPublisher;
+	}
+
+	public void setBlPublisher(String blPublisher) {
+		this.blPublisher = blPublisher;
+	}
+
+	public String getBlSeries() {
+		return blSeries;
+	}
+
+	public void setBlSeries(String blSeries) {
+		this.blSeries = blSeries;
+	}
+
+	public List<BlCommonTitle> getBlCommonTitle() {
+		return blCommonTitle;
+	}
+
+	public void setBlCommonTitle(List<BlCommonTitle> blCommonTitle) {
+		this.blCommonTitle = blCommonTitle;
+	}
+
+	public List<BLEntity> getBlEntity() {
+		return blEntity;
+	}
+
+	public void setBlEntity(List<BLEntity> blEntity) {
+		this.blEntity = blEntity;
+	}
+
+	public List<BLTopicKey> getBlTopicKey() {
+		return blTopicKey;
+	}
+
+	public void setBlTopicKey(List<BLTopicKey> blTopicKey) {
+		this.blTopicKey = blTopicKey;
+	}
+
+	public List<BLLanguage> getBlLanguages() {
+		return blLanguages;
+	}
+
+	public void setBlLanguages(List<BLLanguage> blLanguages) {
+		this.blLanguages = blLanguages;
+	}
+
+	public boolean isNextBiblioLinkerSimilarFlag() {
+		return nextBiblioLinkerSimilarFlag;
+	}
+
+	public void setNextBiblioLinkerSimilarFlag(boolean nextBiblioLinkerSimilarFlag) {
+		this.nextBiblioLinkerSimilarFlag = nextBiblioLinkerSimilarFlag;
+	}
+
+	public String getBiblioLinkerKeysHash() {
+		return biblioLinkerKeysHash;
+	}
+
+	public void setBiblioLinkerKeysHash(String biblioLinkerKeysHash) {
+		this.biblioLinkerKeysHash = biblioLinkerKeysHash;
+	}
+
+	public boolean isBlDisadvantaged() {
+		return blDisadvantaged;
+	}
+
+	public void setBlDisadvantaged(boolean blDisadvantaged) {
+		this.blDisadvantaged = blDisadvantaged;
 	}
 }

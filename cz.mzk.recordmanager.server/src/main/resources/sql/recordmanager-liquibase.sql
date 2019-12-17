@@ -1854,3 +1854,72 @@ UPDATE oai_harvest_conf SET url='https://tritius.knihovnaprerov.cz/tritius/oai-p
 
 --changeset tomascejpek:169 context:cpk
 UPDATE oai_harvest_conf SET url='https://tritius.kkvysociny.cz/tritius/oai-provider',set_spec='CPK_1' WHERE import_conf_id=312;
+
+--changeset tomascejpek:170
+CREATE SEQUENCE biblio_linker_seq_id MINVALUE 1;
+CREATE TABLE biblio_linker (
+  id                   DECIMAL(10) DEFAULT NEXTVAL('"biblio_linker_seq_id"')  PRIMARY KEY,
+  updated              TIMESTAMP
+);
+ALTER TABLE harvested_record
+  ADD COLUMN biblio_linker_id DECIMAL(10),
+  ADD COLUMN biblio_linker_similar BOOLEAN DEFAULT FALSE,
+  ADD COLUMN next_biblio_linker_flag BOOLEAN DEFAULT TRUE,
+  ADD COLUMN next_biblio_linker_similar_flag BOOLEAN DEFAULT TRUE,
+  ADD COLUMN biblio_linker_keys_hash CHAR(40),
+  ADD COLUMN bl_disadvantaged BOOLEAN DEFAULT TRUE,
+  ADD COLUMN bl_author VARCHAR(200),
+  ADD COLUMN bl_publisher VARCHAR(200),
+  ADD COLUMN bl_series VARCHAR(200);
+ALTER TABLE harvested_record ADD CONSTRAINT harvested_record_biblio_linker_fk FOREIGN KEY (biblio_linker_id) REFERENCES biblio_linker(id);
+CREATE INDEX hr_biblilinker_dedup_record_id_idx ON harvested_record(biblio_linker_id,dedup_record_id);
+CREATE INDEX hr_next_biblio_linker_flag_ids ON harvested_record(next_biblio_linker_flag);
+CREATE INDEX hr_next_biblio_linker_similar_flag_ids ON harvested_record(next_biblio_linker_similar_flag);
+CREATE SEQUENCE biblio_linker_similar_seq_id MINVALUE 1;
+CREATE TABLE biblio_linker_similar (
+  id                   DECIMAL(10) DEFAULT NEXTVAL('"biblio_linker_similar_seq_id"') PRIMARY KEY,
+  harvested_record_id  DECIMAL(10),
+  harvested_record_similar_id DECIMAL(10),
+  url_id               TEXT,
+  type                 VARCHAR(20),
+  FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE
+);
+CREATE INDEX bls_harvested_record_id_idx ON biblio_linker_similar(harvested_record_id);
+CREATE TABLE bl_title (
+  id                   DECIMAL(10) PRIMARY KEY,
+  harvested_record_id  DECIMAL(10),
+  title                VARCHAR(255),
+  FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE
+);
+CREATE INDEX bl_title_harvested_record_idx ON bl_title(harvested_record_id);
+CREATE TABLE bl_common_title (
+  id                   DECIMAL(10) PRIMARY KEY,
+  harvested_record_id  DECIMAL(10),
+  title                VARCHAR(255),
+  FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE
+);
+CREATE INDEX bl_common_title_harvested_record_idx ON bl_common_title(harvested_record_id);
+CREATE TABLE bl_entity (
+  id                   DECIMAL(10) PRIMARY KEY,
+  harvested_record_id  DECIMAL(10),
+  entity               VARCHAR(200),
+  FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE
+);
+CREATE INDEX bl_entity_harvested_record_idx ON bl_entity(harvested_record_id);
+CREATE TABLE bl_topic_key (
+  id                   DECIMAL(10) PRIMARY KEY,
+  harvested_record_id  DECIMAL(10),
+  topic_key            VARCHAR(20),
+  FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE
+);
+CREATE INDEX bl_topic_key_harvested_record_idx ON bl_topic_key(harvested_record_id);
+CREATE TABLE bl_language (
+  id                   DECIMAL(10) PRIMARY KEY,
+  harvested_record_id  DECIMAL(10),
+  lang                 VARCHAR(5),
+  FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE
+);
+CREATE INDEX bl_language_harvested_record_idx ON bl_language(harvested_record_id);
+ALTER TABLE import_conf ADD COLUMN generate_biblio_linker_keys BOOLEAN DEFAULT TRUE;
+UPDATE import_conf SET generate_biblio_linker_keys=FALSE
+WHERE id IN (344,354,1300,1301,1302,1304,1305,1306,1307,1308,1309,1310,1311,1312,1313,1314,1315,1316,1318,1319,1320,1321,1322,1323,1324,1325,1326);

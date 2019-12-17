@@ -20,9 +20,9 @@ import cz.mzk.recordmanager.server.util.MetadataUtils;
 
 /**
  * Abstract DedupKeyParser implementation
- * 
+ *
  * This implementation solves problem with repeated creation of deduplication keys
- * 
+ *
  * @author mertam
  *
  */
@@ -35,13 +35,13 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 	private final static int EFFECTIVE_LENGTH_EDITION = 10;
 	private final static int EFFECTIVE_LENGTH_30 = 30;
 	private final static int EFFECTIVE_LENGTH_PUBLISHER = 100;
-	
-	@Autowired 
+
+	@Autowired
 	private HarvestedRecordFormatDAO harvestedRecordFormatDAO;
-	
+
 	@Autowired
 	private HarvestedRecordDAO harvestedRecordDao;
-	
+
 	@Override
 	public HarvestedRecord parse(HarvestedRecord record,
 			MetadataRecord metadataRecord) throws DedupKeyParserException {
@@ -56,9 +56,9 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 		}
 		boolean dedupKeysChanged = false;
 		boolean oaiTimestampChanged = false;
-		
+
 		DedupKeysencapsulator encapsulator = new DedupKeysencapsulator();
-		
+
 		List<Title> titles = new ArrayList<>();
 		for (Title title: metadataRecord.getTitle()) {
 			title.setTitleStr(MetadataUtils.normalizeAndShorten(
@@ -91,7 +91,6 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 			}
 		}
 		encapsulator.setAnpTitles(anpTitles);
-
 		encapsulator.setIsbns(metadataRecord.getISBNs());
 		encapsulator.setIssns(metadataRecord.getISSNs());
 		encapsulator.setIsmns(metadataRecord.getISMNs());
@@ -121,8 +120,7 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 		String computedHash = computeHashValue(encapsulator);
 		String oldHash = record.getDedupKeysHash();
 		String temporalHash = record.getTemporalDedupHash() == null ? "0000000000000000000000000000000000000000" : record.getTemporalDedupHash();
-		
-		
+
 		// decide whether keys changed and should be updated in database
 		// if temporal hash matches current hash, keys won't be updated
 		// this prevents errors during processing one record multiple times
@@ -131,11 +129,11 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 				(oldHash == null || oldHash.isEmpty() || !computedHash.equals(oldHash))) {
 			// keys changed, updated in database
 			dedupKeysChanged = true;
-			
+
 			// drop old keys
 			harvestedRecordDao.dropDedupKeys(record);
 			if(record.getHarvestedFrom() != null) record.setWeight(metadataRecord.getWeight(record.getHarvestedFrom().getBaseWeight()));
-			
+
 			// assign new keys
 			record.setTitles(encapsulator.getTitles());
 			record.setIsbns(encapsulator.getIsbns());
@@ -150,7 +148,6 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 			record.setUuid(encapsulator.getUuid());
 			record.setPages(encapsulator.getPages());
 			record.setIssnSeries(encapsulator.getIssnSeries());
-			
 			record.setIssnSeriesOrder(encapsulator.getIssnSeriesOrder());
 			record.setOclcs(encapsulator.getOclcs());
 			record.setLanguages(metadataRecord.getLanguages());
@@ -174,8 +171,7 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 
 		oaiTimestampChanged = record.getOaiTimestamp() != null && record.getTemporalOldOaiTimestamp() != null
 				&& !record.getOaiTimestamp().equals(record.getTemporalOldOaiTimestamp());
-		
-		
+
 		// decide whether record should be deduplicated
 		if (dedupKeysChanged) {
 			// new record or change in keys
@@ -194,87 +190,68 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 		}
 		return record;
 	}
-	
+
 	/**
 	 * Compute SHA1 hash of deduplication keys from given {@link DedupKeysencapsulator}
 	 * @param encapsulator {@link DedupKeysencapsulator}
 	 * @return Hash as String
 	 */
 	protected String computeHashValue(final DedupKeysencapsulator encapsulator) {
-	
-			try {
+		try {
 				// change of hash function also requires changes in database row
 				MessageDigest md = MessageDigest.getInstance("SHA-1");
-				
-				for (Title t: encapsulator.getTitles()) {
+			for (Title t : encapsulator.getTitles()) {
 					md.update(t.getTitleStr().getBytes("utf-8"));
 				}
-				
-				for (Isbn i: encapsulator.getIsbns()) {
+			for (Isbn i : encapsulator.getIsbns()) {
 					md.update(i.getIsbn().byteValue());
 				}
-				
-				for (Issn i: encapsulator.getIssns()) {
+			for (Issn i : encapsulator.getIssns()) {
 					md.update(i.getIssn().getBytes());
 				}
-				
-				for (Ismn i: encapsulator.getIsmns()) {
+			for (Ismn i : encapsulator.getIsmns()) {
 					md.update(i.getIsmn().byteValue());
 				}
-				
-				for (Cnb c: encapsulator.getCnbs()) {
+			for (Cnb c : encapsulator.getCnbs()) {
 					md.update(c.getCnb().getBytes());
 				}
-				
-				if (encapsulator.getPublicationYear() != null) {
+			if (encapsulator.getPublicationYear() != null) {
 					md.update(encapsulator.getPublicationYear().byteValue());
 				}
-				
-				for (HarvestedRecordFormat hrfe: encapsulator.getFormats()) {
+			for (HarvestedRecordFormat hrfe : encapsulator.getFormats()) {
 					md.update(hrfe.getName().getBytes());
 				}
-				
-				if (encapsulator.getAuthorAuthKey() != null) {
+			if (encapsulator.getAuthorAuthKey() != null) {
 					md.update(encapsulator.getAuthorAuthKey().getBytes());
-				} 
-				
+			}
 				if (encapsulator.getAuthorString() != null) {
 					md.update(encapsulator.getAuthorString().getBytes());
 				}
-				
-				if (encapsulator.getScale() != null) {
+			if (encapsulator.getScale() != null) {
 					md.update(encapsulator.getScale().byteValue());
 				}
-				
-				if (encapsulator.getUuid() != null) {
+			if (encapsulator.getUuid() != null) {
 					md.update(encapsulator.getUuid().getBytes());
 				}
-				
-				if (encapsulator.getPages() != null) {
+			if (encapsulator.getPages() != null) {
 					md.update(encapsulator.getPages().byteValue());
 				}
-				
-				if (encapsulator.getIssnSeries() != null) {
+			if (encapsulator.getIssnSeries() != null) {
 					md.update(encapsulator.getIssnSeries().getBytes());
 				}
-				
-				if (encapsulator.getIssnSeriesOrder() != null) {
+			if (encapsulator.getIssnSeriesOrder() != null) {
 					md.update(encapsulator.getIssnSeriesOrder().getBytes());
 				}
-				
-				for (Oclc o: encapsulator.getOclcs()) {
+			for (Oclc o : encapsulator.getOclcs()) {
 					md.update(o.getOclcStr().getBytes());
 				}
-				
-				for (String l: encapsulator.getLanguages()) {
+			for (String l : encapsulator.getLanguages()) {
 					md.update(l.getBytes());
 				}
-				
-				if (encapsulator.getClusterId() != null) {
+			if (encapsulator.getClusterId() != null) {
 					md.update(encapsulator.getClusterId().getBytes());
 				}
-				
-				if (encapsulator.getRaw001Id() != null) {
+			if (encapsulator.getRaw001Id() != null) {
 					md.update(encapsulator.getRaw001Id().getBytes());
 				}
 
@@ -289,16 +266,16 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 				if (encapsulator.getSourceInfoG() != null) {
 					md.update(encapsulator.getSourceInfoG().getBytes());
 				}
-				
-				for (Ean ean: encapsulator.getEans()) {
+
+			for (Ean ean: encapsulator.getEans()) {
 					md.update(ean.getEan().byteValue());
 				}
-				
-				for (PublisherNumber publisherNumber: encapsulator.getPublisherNumbers()) {
+
+			for (PublisherNumber publisherNumber : encapsulator.getPublisherNumbers()) {
 					md.update(publisherNumber.getPublisherNumber().getBytes("utf-8"));
 				}
-				
-				for (ShortTitle st: encapsulator.getShortTitles()) {
+
+			for (ShortTitle st: encapsulator.getShortTitles()) {
 					md.update(st.getShortTitleStr().getBytes("utf-8"));
 				}
 
@@ -319,28 +296,25 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 			    for (byte b : hash) {
 			        sb.append(String.format("%02x", b));
 			    }
-			    
-			    return sb.toString();
-				
-			} catch (NoSuchAlgorithmException e) {
+			return sb.toString();
+
+		} catch (NoSuchAlgorithmException e) {
 				// should never be thrown, SHA-1 is required by Java specification
-			} 
+		}
 			catch (UnsupportedEncodingException uee) {
 				throw new DedupKeyParserException("Uncoding problems in hash computation", uee);
 			}
-			
-			return "";
+		return "";
 
 		}
-		
-		/**
+	/**
 		 * compute SHA-1 hash of deduplication keys for given {@link HarvestedRecord}
 		 * @param hr {@link HarvestedRecord}
 		 * @return Hash as String
 		 */
 		protected String computeHashValue(final HarvestedRecord hr) {
 			DedupKeysencapsulator encapsulator = new DedupKeysencapsulator();
-			
+
 			encapsulator.setTitles(hr.getTitles());
 			encapsulator.setIsbns(hr.getIsbns());
 			encapsulator.setIssns(hr.getIssns());
@@ -370,7 +344,7 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 
 			return computeHashValue(encapsulator);
 		}
-		
+
 	protected class DedupKeysencapsulator {
 		List<Title> titles = new ArrayList<>();
 		List<Isbn> isbns = new ArrayList<>();
@@ -384,7 +358,7 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 		List<ShortTitle> shortTitles = new ArrayList<>();
 		List<AnpTitle> anpTitles = new ArrayList<>();
 		List<PublisherNumber> publisherNumbers = new ArrayList<>();
-		
+
 		Long publicationYear;
 		String authorString;
 		String authorAuthKey;
@@ -400,7 +374,7 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 		String sourceInfoG;
 		String publisher;
 		String edition;
-		
+
 		public List<Ismn> getIsmns() {
 			return ismns;
 		}

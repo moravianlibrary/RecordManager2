@@ -12,6 +12,8 @@ public class Constants {
 	public static final String JOB_ID_MISSING_FULLTEXT_KRAMERIUS = "krameriusMissingFulltextJob";
 	public static final String JOB_ID_HARVEST_SINGLE	= "oaiHarvestSingleRecordJob";
 	public static final String JOB_ID_DEDUP				= "dedupRecordsJob";
+	public static final String JOB_ID_BIBLIO_LINKER		= "biblioLinkerJob";
+	public static final String JOB_ID_BIBLIO_LINKER_SIMILAR	= "biblioLinkerSimilarJob";
 	public static final String JOB_ID_SOLR_INDEX_ALL_RECORDS		= "indexAllRecordsToSolrJob";
 	public static final String JOB_ID_SOLR_INDEX_ORPHANED_RECORDS	= "indexOrphanedRecordsToSolrJob";
 	public static final String JOB_ID_SOLR_INDEX_HARVESTED_RECORDS	= "indexHarvestedRecordsToSolrJob";
@@ -50,6 +52,8 @@ public class Constants {
 	public static final String JOB_ID_AGROVOC_CONVERTOR				= "convertAgrovocRecordsJob";
 	public static final String JOB_ID_IMPORT_ANNOTATIONS 			= "importAnnotationsObalkyJob";
 	public static final String JOB_ID_DELETE_ANNOTATIONS 			= "deleteAnnotationsObalkyJob";
+	public static final String JOB_ID_REGENERATE_BL_KEYS 			= "regenerateBiblioLinkerKeysJob";
+	public static final String JOB_ID_REGENERATE_BL_MISSING_KEYS	= "regenerateBiblioLinkerMissingKeysJob";
 
 	public static final String JOB_PARAM_CONF_ID 		= "configurationId";
 	public static final String JOB_PARAM_FROM_DATE 		= "from";
@@ -72,6 +76,7 @@ public class Constants {
 	public static final String JOB_PARAM_DELETED		= "deleted"; // for export
 	public static final String JOB_PARAM_TYPE			= "type";
 	public static final String JOB_PARAM_VIEW			= "view";
+	public static final String JOB_PARAM_UPDATE_TIMESTAMP = "updateTimestamp";
 
 	public static final String JOB_PARAM_TRUE_VALUE		= "true";
 	public static final String JOB_PARAM_ONE_VALUE		= "1";

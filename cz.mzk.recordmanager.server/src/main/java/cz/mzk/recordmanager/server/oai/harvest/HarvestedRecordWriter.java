@@ -3,6 +3,9 @@ package cz.mzk.recordmanager.server.oai.harvest;
 import java.util.Date;
 import java.util.List;
 
+import cz.mzk.recordmanager.server.bibliolinker.keys.DelegatingBiblioLinkerKeysParser;
+import cz.mzk.recordmanager.server.metadata.MetadataRecord;
+import cz.mzk.recordmanager.server.metadata.MetadataRecordFactory;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,6 +28,12 @@ public class HarvestedRecordWriter implements ItemWriter<List<HarvestedRecord>> 
 
 	@Autowired
 	protected DelegatingDedupKeysParser dedupKeysParser;
+
+	@Autowired
+	protected DelegatingBiblioLinkerKeysParser biblioLinkerKeysParser;
+
+	@Autowired
+	private MetadataRecordFactory metadataFactory;
 
 	@Autowired
 	protected SessionFactory sessionFactory;
@@ -53,7 +62,9 @@ public class HarvestedRecordWriter implements ItemWriter<List<HarvestedRecord>> 
 				if (record.getId() == null) {
 					recordDao.persist(record);
 				}
-				dedupKeysParser.parse(record);
+				MetadataRecord metadataRecord = metadataFactory.getMetadataRecord(record);
+				dedupKeysParser.parse(record, metadataRecord);
+				biblioLinkerKeysParser.parse(record, metadataRecord);
 				if (record.getHarvestedFrom().isFilteringEnabled() && !record.getShouldBeProcessed()) {
 					logger.debug("Filtered record: " + record.getUniqueId());
 					record.setDeleted(new Date());
@@ -68,8 +79,10 @@ public class HarvestedRecordWriter implements ItemWriter<List<HarvestedRecord>> 
 
 		} else { // deleted records by institution - drop dedup kyes, metadata
 			recordDao.dropDedupKeys(record);
+			recordDao.dropBilioLinkerKeys(record);
 			record.setRawRecord(new byte[0]);
 			record.setDedupKeysHash("");
+			record.setBiblioLinkerKeysHash("");
 			record.setNextDedupFlag(true);
 		}
 		recordDao.persist(record);

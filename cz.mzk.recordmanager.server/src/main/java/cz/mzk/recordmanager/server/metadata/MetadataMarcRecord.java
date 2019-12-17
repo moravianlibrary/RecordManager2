@@ -40,6 +40,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 	private static final Pattern METAPROXY_TAG_PATTERN = Pattern.compile("[17]..");
 	private static final Pattern SCALE_REPLACE = Pattern.compile("[ ^]+");
 	private static final Pattern CNB_PATTERN = Pattern.compile("cnb[0-9]+");
+	private static final Pattern FIELD130A = Pattern.compile("(.*)\\([^)]*\\)$");
 
 	// formats
 	private static final Pattern KARTOGRAFICKY_DOKUMENT = Pattern.compile("kartografick[yý]\\sdokument", Pattern.CASE_INSENSITIVE);
@@ -83,6 +84,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 	private static final Pattern VIDEO_OTHER_F338 = Pattern.compile("vr|vz|vc|mc|mf|mr|mo|mz");
 	private static final Pattern OTHER_F336 = Pattern.compile("tcf|tdm|tdf", Pattern.CASE_INSENSITIVE);
 	private static final Pattern FOTOGRAFIE = Pattern.compile("fotografie", Pattern.CASE_INSENSITIVE);
+	private static final Pattern Z_CYKLU = Pattern.compile("z cyklu:", Pattern.CASE_INSENSITIVE);
 
 	private static final Long MAX_PAGES = 10_000_000L;
 	private static final String INVALID_YEAR = "Invalid year: %s";
@@ -108,9 +110,20 @@ public class MetadataMarcRecord implements MetadataRecord {
 	private static final char[] ARRAY_VM = {'v', 'm'};
 	private static final char[] ARRAY_OPR = {'o', 'p', 'r'};
 	private static final char[] ARRAY_OQ = {'o', 'q'};
+	private static final List<String> ENTITY_RELATIONSHIP =
+			Arrays.asList("aut", "edt", "cmp", "ivr", "ive", "org", "drt", "ant", "ctb", "ccp");
+	private static final List<String> BL_AUTHOR_RELATIONSHIP = Arrays.asList("ccp", "ant", "aut");
+	private static final List<String> BL_TOPIC_KEY_STOP_WORDS_650 = Arrays.asList("d006801", "ph115615", "ph128175", "ph114390",
+			"ph116858", "ph116861", "d005260", "ph114056", "d005260", "ph135292");
+	private static final List<HarvestedRecordFormatEnum> BL_AUTHOR_VIDEO =
+			Arrays.asList(HarvestedRecordFormatEnum.VIDEO_BLURAY,
+					HarvestedRecordFormatEnum.VIDEO_CD,
+					HarvestedRecordFormatEnum.VIDEO_DOCUMENTS,
+					HarvestedRecordFormatEnum.VIDEO_DVD,
+					HarvestedRecordFormatEnum.VIDEO_OTHER,
+					HarvestedRecordFormatEnum.VIDEO_VHS);
 
 	private static final String URL_COMMENT_FORMAT = "%s (%s)";
-
 	private static final List<String> ANP_TITLE_REMOVE_WORDS = new BufferedReader(new InputStreamReader(
 			new ClasspathResourceProvider().getResource("/list/anp_title_remove_words.txt"), StandardCharsets.UTF_8))
 			.lines().collect(Collectors.toCollection(ArrayList::new));
@@ -168,6 +181,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 	@Override
 	public List<Cnb> getCNBs() {
 		List<Cnb> cnbs = new ArrayList<>();
+
 		Matcher matcher;
 		for (DataField field : underlayingMarc.getDataFields("015")) {
 			for (Subfield subfieldA : field.getSubfields('a')) {
@@ -529,7 +543,6 @@ public class MetadataMarcRecord implements MetadataRecord {
 
 		String f245h = underlayingMarc.getField("245", 'h');
 		if (f245h == null) f245h = "";
-
 		// AUDIO_CD
 		if (isAudioCD()) return HarvestedRecordFormatEnum.AUDIO_CD;
 
@@ -783,7 +796,6 @@ public class MetadataMarcRecord implements MetadataRecord {
 		if (hrf.size() > 1 && hrf.contains(HarvestedRecordFormatEnum.BOOKS)) {
 			hrf.remove(HarvestedRecordFormatEnum.BOOKS);
 		}
-
 		return hrf;
 	}
 
@@ -987,6 +999,38 @@ public class MetadataMarcRecord implements MetadataRecord {
 				if (lang != null) {
 					result.add(lang);
 				}
+			}
+		}
+		return new ArrayList<>(result);
+	}
+
+	/**
+	 * 041a or 041d or 008 char 35-37
+	 *
+	 * @return List of {@link BLLanguage}
+	 */
+	@Override
+	public List<BLLanguage> getBiblioLinkerLanguages() {
+		Set<BLLanguage> result = new HashSet<>();
+		for (String lang : getFields("041a")) {
+			lang = lang.trim();
+			if (lang.length() == 3) {
+				result.add(BLLanguage.create(lang.toLowerCase()));
+			}
+		}
+		if (!result.isEmpty()) return new ArrayList<>(result);
+		for (String lang : getFields("041d")) {
+			lang = lang.trim();
+			if (lang.length() == 3) {
+				result.add(BLLanguage.create(lang.toLowerCase()));
+			}
+		}
+		if (!result.isEmpty()) return new ArrayList<>(result);
+		String cf = underlayingMarc.getControlField("008");
+		if (cf != null && cf.length() >= 38) {
+			String substr = cf.substring(35, 38).trim();
+			if (substr.length() == 3) {
+				result.add(BLLanguage.create(substr.toLowerCase()));
 			}
 		}
 		return new ArrayList<>(result);
@@ -1366,5 +1410,326 @@ public class MetadataMarcRecord implements MetadataRecord {
 			}
 		}
 		return results;
+	}
+
+	/**
+	 * 765a, 210a, 222a
+	 * 130anp, 730anp - without text in parentheses in subfield a
+	 *
+	 * @return list of {@link BLTitle}
+	 */
+	@Override
+	public List<BLTitle> getBiblioLinkerTitle() {
+		List<BLTitle> result = new ArrayList<>();
+		for (DataField df : underlayingMarc.getDataFields("765")) {
+			String titleText = parseTitleValue(df, new char[]{'t'});
+			if (!titleText.isEmpty()) {
+				result.add(BLTitle.create(titleText));
+			}
+		}
+		for (String tag : new String[]{"210", "222"}) {
+			for (DataField df : underlayingMarc.getDataFields(tag)) {
+				String titleText = parseTitleValue(df, new char[]{'a'});
+				if (!titleText.isEmpty()) {
+					result.add(BLTitle.create(titleText));
+				}
+			}
+		}
+		for (String tag : new String[]{"130", "730"}) {
+			for (DataField df : underlayingMarc.getDataFields(tag)) {
+				String titleText = parseTitleValue(df, new char[]{'a'});
+				Matcher matcher;
+				if ((matcher = FIELD130A.matcher(titleText)).matches()) titleText = matcher.group(1);
+				titleText += parseTitleValue(df, new char[]{'n', 'p'});
+				if (!titleText.isEmpty()) {
+					result.add(BLTitle.create(titleText));
+				}
+			}
+		}
+		return result;
+	}
+
+	private String getFirstField(String fields) {
+		for (String field : fields.split(":")) {
+			String tag = field.substring(0, 3);
+			String codes = field.substring(3);
+			String result = underlayingMarc.getField(tag, codes.toCharArray());
+			if (result != null) return result;
+		}
+		return null;
+	}
+
+	private List<String> getFields(String fields) {
+		List<String> results = new ArrayList<>();
+		for (String field : fields.split(":")) {
+			String tag = field.substring(0, 3);
+			String codes = field.substring(3);
+			results.addAll(underlayingMarc.getFields(tag, " ", codes.toCharArray()));
+		}
+		return results;
+	}
+
+	/**
+	 * get author for biblio linker
+	 *
+	 * @return String
+	 */
+	@Override
+	public String getBiblioLinkerAuthor() {
+		String result;
+		if (!Collections.disjoint(getDetectedFormatList(), BL_AUTHOR_VIDEO)) {
+			result = getBiblioLinkerAuthorPart("1", true);
+			if (result != null) return result;
+			result = getBiblioLinkerAuthorPart("7", true);
+			if (result != null) return result;
+		}
+		result = getBiblioLinkerAuthorPart("1", false);
+		if (result != null) return result;
+		return getBiblioLinkerAuthorPart("7", false);
+	}
+
+	private String getBiblioLinkerAuthorPart(String tagPrefix, boolean filter) {
+		for (String tag : new String[]{tagPrefix + "00", tagPrefix + "10", tagPrefix + "11"}) {
+			for (DataField df : underlayingMarc.getDataFields(tag)) {
+				if (filter && (df.getSubfield('4') == null
+						|| !BL_AUTHOR_RELATIONSHIP.contains(df.getSubfield('4').getData()))) {
+					continue;
+				}
+				if (df.getSubfield('7') != null) return df.getSubfield('7').getData();
+			}
+		}
+		for (DataField df : underlayingMarc.getDataFields(tagPrefix + "00")) {
+			if (filter && (df.getSubfield('4') == null
+					|| !BL_AUTHOR_RELATIONSHIP.contains(df.getSubfield('4').getData()))) {
+				continue;
+			}
+			if (df.getSubfield('a') == null) continue;
+			String result = df.getSubfield('a').getData();
+			if (df.getSubfield('d') != null) {
+				Matcher matcher = YEAR_PATTERN.matcher(df.getSubfield('d').getData());
+				if (matcher.find()) result += matcher.group(0);
+			}
+			if (result != null) return result;
+		}
+		for (DataField df : underlayingMarc.getDataFields(tagPrefix + "10")) {
+			if (filter && (df.getSubfield('4') == null
+					|| !BL_AUTHOR_RELATIONSHIP.contains(df.getSubfield('4').getData()))) {
+				continue;
+			}
+			StringBuilder result = new StringBuilder();
+			for (char code : new char[]{'a', 'b', 'c', 'd', 'n'}) {
+				result.append(df.getSubfield(code) != null ? df.getSubfield(code) : "");
+			}
+			if (result.length() > 0) return result.toString();
+		}
+		for (DataField df : underlayingMarc.getDataFields(tagPrefix + "11")) {
+			if (filter && (df.getSubfield('4') == null
+					|| !BL_AUTHOR_RELATIONSHIP.contains(df.getSubfield('4').getData()))) {
+				continue;
+			}
+			StringBuilder result = new StringBuilder();
+			for (char code : new char[]{'a', 'c', 'd', 'n'}) {
+				result.append(df.getSubfield(code) != null ? df.getSubfield(code) : "");
+			}
+			if (result.length() > 0) return result.toString();
+		}
+		return null;
+	}
+
+	/**
+	 * first of 264b, 260b, 260f, 928a
+	 *
+	 * @return String
+	 */
+	@Override
+	public String getBiblioLinkerPublisher() {
+		return getFirstField("264b:260b:260f:928a");
+	}
+
+	/**
+	 * first of 440a, 490a
+	 *
+	 * @return String
+	 */
+	@Override
+	public String getBiblioLinkerSeries() {
+		return getFirstField("440a:490a");
+	}
+
+	/**
+	 * 787t when subfield $i matches {@link #Z_CYKLU}
+	 * OR 24[056]$a, 24[056]$ab (IF $p OR $n)
+	 *
+	 * @return list of {@link BlCommonTitle}
+	 */
+	@Override
+	public List<BlCommonTitle> getBiblioLinkerCommonTitle() {
+		List<BlCommonTitle> results = new ArrayList<>();
+		for (DataField df : underlayingMarc.getDataFields("787")) {
+			if (df.getSubfield('t') != null && df.getSubfield('i') != null
+					&& Z_CYKLU.matcher(df.getSubfield('i').getData()).matches()) {
+				results.add(BlCommonTitle.create(df.getSubfield('t').getData()));
+			}
+		}
+		if (!results.isEmpty()) return results;
+		for (String tag : new String[]{"240", "245", "246"}) {
+			for (DataField df : underlayingMarc.getDataFields(tag)) {
+				if (df.getSubfield('n') == null && df.getSubfield('p') == null) continue;
+				if (df.getSubfield('a') == null) continue;
+				results.add(BlCommonTitle.create(df.getSubfield('a').getData()));
+				if (df.getSubfield('b') != null) {
+					results.add(BlCommonTitle.create(df.getSubfield('a').getData() + df.getSubfield('b').getData()));
+				}
+			}
+		}
+		return results;
+	}
+
+	/**
+	 * first 3 values alphabetically
+	 * map: 650 ind1!=2 subfield 7, subfield 7 not contains any of {@link #BL_TOPIC_KEY_STOP_WORDS_650}
+	 * other: 651 subfield 7
+	 * <p>
+	 * first of 072a
+	 *
+	 * @return List of {@link BLTopicKey}
+	 */
+	@Override
+	public List<BLTopicKey> getBiblioLinkerTopicKey() {
+		List<BLTopicKey> results = new ArrayList<>();
+		Set<String> topicKey = new TreeSet<>();
+		if (isMap()) {
+			for (DataField df : underlayingMarc.getDataFields("650")) {
+				if (df.getIndicator1() != '2' && df.getSubfield('7') != null) {
+					if (BL_TOPIC_KEY_STOP_WORDS_650.contains(df.getSubfield('7').getData())) continue;
+					if (!topicKey.contains(df.getSubfield('7').getData())) topicKey.add(df.getSubfield('7').getData());
+				}
+			}
+		}
+		for (String topicValue : getFields("6517")) {
+			if (!topicKey.contains(topicValue)) topicKey.add(topicValue);
+		}
+		results.addAll(topicKey.stream().limit(3).map(BLTopicKey::create).collect(Collectors.toList()));
+		String conspectus = getFirstField("072a");
+		if (conspectus != null) results.add(BLTopicKey.create(conspectus));
+		return results;
+	}
+
+	/**
+	 * first of 100$7, 110$7, 111$7, 100$ad(YYYY), 110$abcdn, 111$acdn, 700$7, 710$7, 711$7, 700$ad(YYYY), 710$abcdn, 711$acdn
+	 * first 3: 700$7, 710$7, 711$7, 700$ad(YYYY), 710$abcdn, 711$acdn and $4 exists in {@link #ENTITY_RELATIONSHIP}
+	 * first 3: 600$7, 610$7, 611$7, 600$ad(YYYY), 610$abcdn, 611$acdn
+	 * 100u, 700u, 314a
+	 *
+	 * @return List of {@link BLEntity}
+	 */
+	@Override
+	public List<BLEntity> getBiblioLinkerEntity() {
+		Set<String> results = new HashSet<>();
+		results.addAll(getBiblioLinkerEntityPart("1", false).stream().limit(1).collect(Collectors.toSet()));
+		if (results.isEmpty()) {
+			results.addAll(getBiblioLinkerEntityPart("7", false).stream().limit(1).collect(Collectors.toSet()));
+		}
+		results.addAll(getBiblioLinkerEntityPart("7", true).stream().limit(3).collect(Collectors.toSet()));
+		results.addAll(getBiblioLinkerEntityPart("6", false).stream().limit(3).collect(Collectors.toSet()));
+		results.addAll(getFields("100u:700u:314a"));
+		return results.stream().filter(s -> !s.contains("ebrary")).map(BLEntity::create).collect(Collectors.toList());
+	}
+
+	/**
+	 * @param tag    first char of tag
+	 * @param filter subfield $4 exists in {@link #ENTITY_RELATIONSHIP}
+	 * @return Set of entities
+	 */
+	private Set<String> getBiblioLinkerEntityPart(final String tag, final boolean filter) {
+		Set<String> results = new LinkedHashSet<>();
+		results.addAll(getBiblioLinkerEntityValue(tag + "007:" + tag + "107:" + tag + "117", filter)
+				.stream().limit(3).collect(Collectors.toList()));
+		for (DataField df : underlayingMarc.getDataFields(tag + "00")) {
+			if (filter && (df.getSubfield('4') == null
+					|| !ENTITY_RELATIONSHIP.contains(df.getSubfield('4').getData()))) {
+				continue;
+			}
+			if (df.getSubfield('a') == null) continue;
+			String temp = df.getSubfield('a').getData();
+			if (df.getSubfield('d') != null) {
+				Matcher matcher = YEAR_PATTERN.matcher(df.getSubfield('d').getData());
+				if (matcher.find()) temp += matcher.group(0);
+			}
+			results.add(temp);
+		}
+		results.addAll(getBiblioLinkerEntityValue(tag + "10abcdn:" + tag + "11acdn", filter));
+		return results;
+	}
+
+	/**
+	 * get values from fields
+	 *
+	 * @param fields format: tag + subfields, e.g. 100ab, separated by colon, e.g. 100ab:700ab
+	 * @param filter subfield $4 exists in {@link #ENTITY_RELATIONSHIP}
+	 * @return Set of entities
+	 */
+	private Set<String> getBiblioLinkerEntityValue(final String fields, final boolean filter) {
+		Set<String> results = new LinkedHashSet<>();
+		for (String field : fields.split(":")) {
+			String tag = field.substring(0, 3);
+			String codes = field.substring(3);
+			for (DataField df : underlayingMarc.getDataFields(tag)) {
+				if (filter && (df.getSubfield('4') == null
+						|| !ENTITY_RELATIONSHIP.contains(df.getSubfield('4').getData()))) {
+					continue;
+				}
+				StringBuilder entityValue = new StringBuilder();
+				for (char c : codes.toCharArray()) {
+					if (df.getSubfield(c) != null) entityValue.append(df.getSubfield(c).getData());
+				}
+				if (entityValue.length() > 0) results.add(entityValue.toString());
+			}
+		}
+		return results;
+	}
+
+	@Override
+	public String getAuthorDisplay() {
+		List<DataField> list = underlayingMarc.getDataFields("100");
+		if (list.isEmpty()) return null;
+		DataField df = list.get(0);
+		String name = SolrUtils.getNameForDisplay(df);
+		if (name != null && name.isEmpty()) return null;
+		else return name;
+	}
+
+	@Override
+	public String getTitleDisplay() {
+		List<DataField> dfs = underlayingMarc.getDataFields("245");
+		if (dfs.isEmpty()) return null;
+		DataField df = dfs.get(0);
+
+		final char titleSubfields[] = {'a', 'b', 'n', 'p'};
+		final char sfhPunctuation[] = {'.', ',', ':'};
+		char endCharH = ' ';
+		StringBuilder sb = new StringBuilder();
+
+		for (Subfield sf : df.getSubfields()) {
+			// get last punctuation from 'h'
+			if (sf.getCode() == 'h') {
+				String data = sf.getData().trim();
+				if (!data.isEmpty()) {
+					if (Chars.contains(sfhPunctuation, data.charAt(data.length() - 1))) {
+						endCharH = data.charAt(data.length() - 1);
+					}
+				}
+			} else if (Chars.contains(titleSubfields, sf.getCode())) {
+				// print punctuation from h
+				if (endCharH != ' ') {
+					sb.append(endCharH);
+					sb.append(' ');
+					endCharH = ' ';
+				}
+				sb.append(sf.getData());
+				sb.append(' ');
+			} else endCharH = ' ';
+		}
+		return SolrUtils.removeEndPunctuation(sb.toString());
 	}
 }

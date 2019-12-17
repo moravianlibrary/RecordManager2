@@ -14,10 +14,7 @@ import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 @Component
 public class HarvestedRecordDAOHibernate extends
@@ -300,6 +297,57 @@ public class HarvestedRecordDAOHibernate extends
 	}
 
 	@Override
+	public void dropBilioLinkerKeys(HarvestedRecord hr) {
+		if (hr == null || hr.getId() == null) {
+			return;
+		}
+
+		Session session = sessionFactory.getCurrentSession();
+		// don't delete keys for not managed entities
+		if (!session.contains(hr)) {
+			System.out.println("NOT CONT");
+			return;
+		}
+
+		hr.setBlAuthor(null);
+		hr.setBlPublisher(null);
+		hr.setBlSeries(null);
+
+		List<BLTitle> blTitles = hr.getBlTitles();
+		hr.setBlTitles(new ArrayList<>());
+		for (BLTitle blTitle : blTitles) {
+			session.delete(blTitle);
+		}
+
+		List<BlCommonTitle> blCommonTitles = hr.getBlCommonTitle();
+		hr.setBlCommonTitle(new ArrayList<>());
+		for (BlCommonTitle blCommonTitle : blCommonTitles) {
+			session.delete(blCommonTitle);
+		}
+
+		List<BLEntity> blEntities = hr.getBlEntity();
+		hr.setBlEntity(new ArrayList<>());
+		for (BLEntity blEntity : blEntities) {
+			session.delete(blEntity);
+		}
+
+		List<BLTopicKey> blTopicKeys = hr.getBlTopicKey();
+		hr.setBlTopicKey(new ArrayList<>());
+		for (BLTopicKey blTopicKey : blTopicKeys) {
+			session.delete(blTopicKey);
+		}
+
+		List<BLLanguage> blLanguages = hr.getBlLanguages();
+		hr.setBlLanguages(new ArrayList<>());
+		for (BLLanguage blLanguage : blLanguages) {
+			session.delete(blLanguage);
+		}
+
+		session.update(hr);
+		session.flush();
+	}
+
+	@Override
 	public void dropAuthorities(HarvestedRecord hr) {
 		if (hr == null || hr.getId() == null) {
 			return;
@@ -327,4 +375,44 @@ public class HarvestedRecordDAOHibernate extends
 		update.executeUpdate();
 	}
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public Collection<HarvestedRecord> getByBiblioLinkerAndNotDedupRecord(Collection<DedupRecord> drs, Collection<BiblioLinker> bls) {
+		if (bls.isEmpty()) return Collections.emptySet();
+		Session session = sessionFactory.getCurrentSession();
+		Criteria crit = session.createCriteria(HarvestedRecord.class);
+		crit.add(Restrictions.and(Restrictions.in("biblioLinker", bls),
+				Restrictions.not(Restrictions.in("dedupRecord", drs))));
+		return crit.list();
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public Collection<HarvestedRecord> getByBiblioLinkerId(Long blId) {
+		Session session = sessionFactory.getCurrentSession();
+		return (List<HarvestedRecord>) session
+				.createQuery("from HarvestedRecord where biblio_linker_id = ?")
+				.setParameter(0, blId)
+				.list();
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public Collection<HarvestedRecord> getByBiblioLinkerIds(List<Long> blId) {
+		Session session = sessionFactory.getCurrentSession();
+		return (List<HarvestedRecord>) session
+				.createQuery("from HarvestedRecord where biblio_linker_id in (:blIds) and deleted is null")
+				.setParameterList("blIds", blId)
+				.list();
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public Collection<HarvestedRecord> getByBiblioLinkerIdAndSimilarFlag(Long blId) {
+		Session session = sessionFactory.getCurrentSession();
+		return (List<HarvestedRecord>) session
+				.createQuery("from HarvestedRecord where biblio_linker_id = ? and bl_disadvantaged is true")
+				.setParameter(0, blId)
+				.list();
+	}
 }

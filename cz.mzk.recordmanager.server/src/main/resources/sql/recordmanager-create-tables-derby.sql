@@ -38,6 +38,7 @@ CREATE TABLE import_conf (
   item_id              VARCHAR(15),
   metaproxy_enabled    BOOLEAN DEFAULT FALSE,
   ziskej_enabled       BOOLEAN DEFAULT FALSE,
+  generate_biblio_linker_keys BOOLEAN DEFAULT TRUE,
   CONSTRAINT import_conf_library_id_fk        FOREIGN KEY (library_id)        REFERENCES library(id),
   CONSTRAINT import_conf_contact_person_id_fk FOREIGN KEY (contact_person_id) REFERENCES contact_person(id)
 );
@@ -132,6 +133,15 @@ CREATE TABLE harvested_record (
   publisher            VARCHAR(100),
   edition              VARCHAR(10),
   disadvantaged        BOOLEAN DEFAULT TRUE,
+  biblio_linker_id     DECIMAL(10),
+  biblio_linker_similar BOOLEAN DEFAULT FALSE,
+  next_biblio_linker_flag BOOLEAN DEFAULT TRUE,
+  next_biblio_linker_similar_flag BOOLEAN DEFAULT TRUE,
+  biblio_linker_keys_hash CHAR(40),
+  bl_disadvantaged     BOOLEAN DEFAULT TRUE,
+  bl_author            VARCHAR(200),
+  bl_publisher         VARCHAR(200),
+  bl_series            VARCHAR(200),
   raw_record           BLOB,
   CONSTRAINT harvested_record_pk                     PRIMARY KEY (id),
   CONSTRAINT harvester_record_unique_id              UNIQUE (import_conf_id, record_id),
@@ -333,4 +343,53 @@ CREATE TABLE anp_title (
   anp_title            VARCHAR(255),
   similarity_enabled   BOOLEAN DEFAULT FALSE,
   CONSTRAINT anp_title_fk FOREIGN KEY (harvested_record_id) REFERENCES harvested_record (id) ON DELETE CASCADE
+);
+
+CREATE TABLE biblio_linker (
+  id                   DECIMAL(10) PRIMARY KEY,
+  updated              TIMESTAMP
+);
+
+CREATE TABLE biblio_linker_similar (
+  id                   DECIMAL(10) PRIMARY KEY,
+  harvested_record_id  DECIMAL(10),
+  harvested_record_similar_id DECIMAL(10),
+  url_id               BLOB,
+  type                 VARCHAR(20),
+  CONSTRAINT bls_fk FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id)
+);
+
+CREATE TABLE bl_title (
+  id                   DECIMAL(10) PRIMARY KEY,
+  harvested_record_id  DECIMAL(10),
+  title                VARCHAR(255),
+  CONSTRAINT bl_title_fk FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id)
+);
+
+CREATE TABLE bl_common_title (
+  id                   DECIMAL(10) PRIMARY KEY,
+  harvested_record_id  DECIMAL(10),
+  title                VARCHAR(255),
+  CONSTRAINT bl_common_title_fk FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id)
+);
+
+CREATE TABLE bl_entity (
+  id                   DECIMAL(10) PRIMARY KEY,
+  harvested_record_id  DECIMAL(10),
+  entity               VARCHAR(200),
+  CONSTRAINT bl_entity_fk FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id)
+);
+
+CREATE TABLE bl_topic_key (
+  id                   DECIMAL(10) PRIMARY KEY,
+  harvested_record_id  DECIMAL(10),
+  topic_key            VARCHAR(20),
+  CONSTRAINT bl_topic_key_fk FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id)
+);
+
+CREATE TABLE bl_language (
+  id                   DECIMAL(10) PRIMARY KEY,
+  harvested_record_id  DECIMAL(10),
+  lang                 VARCHAR(5),
+  CONSTRAINT bl_language_fk FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id)
 );

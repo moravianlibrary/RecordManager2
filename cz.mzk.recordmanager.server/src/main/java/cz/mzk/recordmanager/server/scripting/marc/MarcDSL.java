@@ -1,15 +1,12 @@
 package cz.mzk.recordmanager.server.scripting.marc;
 
-import com.google.common.primitives.Chars;
 import cz.mzk.recordmanager.server.export.IOFormat;
 import cz.mzk.recordmanager.server.marc.MarcRecord;
 import cz.mzk.recordmanager.server.marc.SubfieldExtractionMethod;
 import cz.mzk.recordmanager.server.metadata.MetadataRecord;
 import cz.mzk.recordmanager.server.metadata.view.ViewType;
-import cz.mzk.recordmanager.server.model.Ean;
+import cz.mzk.recordmanager.server.model.*;
 import cz.mzk.recordmanager.server.model.HarvestedRecordFormat.HarvestedRecordFormatEnum;
-import cz.mzk.recordmanager.server.model.Oclc;
-import cz.mzk.recordmanager.server.model.Title;
 import cz.mzk.recordmanager.server.scripting.BaseDSL;
 import cz.mzk.recordmanager.server.scripting.ListResolver;
 import cz.mzk.recordmanager.server.scripting.MappingResolver;
@@ -415,35 +412,7 @@ public class MarcDSL extends BaseDSL {
 	}
 
 	public String getTitleDisplay() {
-		DataField df = getFirstDataField("245");
-		if (df == null) return null;
-
-		final char titleSubfields[] = {'a', 'b', 'n', 'p'};
-		final char sfhPunctuation[] = {'.', ',', ':'};
-		char endCharH = ' ';
-		StringBuilder sb = new StringBuilder();
-
-		for (Subfield sf : df.getSubfields()) {
-			// get last punctuation from 'h'
-			if (sf.getCode() == 'h') {
-				String data = sf.getData().trim();
-				if (!data.isEmpty()) {
-					if (Chars.contains(sfhPunctuation, data.charAt(data.length() - 1))) {
-						endCharH = data.charAt(data.length() - 1);
-					}
-				}
-			} else if (Chars.contains(titleSubfields, sf.getCode())) {
-				// print punctuation from h
-				if (endCharH != ' ') {
-					sb.append(endCharH);
-					sb.append(' ');
-					endCharH = ' ';
-				}
-				sb.append(sf.getData());
-				sb.append(' ');
-			} else endCharH = ' ';
-		}
-		return SolrUtils.removeEndPunctuation(sb.toString());
+		return metadataRecord.getTitleDisplay();
 	}
 
 	public DataField getFirstDataField(String tag) {
@@ -453,12 +422,7 @@ public class MarcDSL extends BaseDSL {
 	}
 
 	public String getAuthorDisplay() {
-		List<DataField> list = record.getDataFields("100");
-		if (list.isEmpty()) return null;
-		DataField df = list.get(0);
-		String name = SolrUtils.getNameForDisplay(df);
-		if (name != null && name.isEmpty()) return null;
-		else return name;
+		return metadataRecord.getAuthorDisplay();
 	}
 
 	public List<String> getAuthor2Display() {
@@ -790,7 +754,6 @@ public class MarcDSL extends BaseDSL {
 		if (!metadataRecord.genreFacet()) return Collections.emptySet();
 		return new HashSet<>(getFields(tags));
 	}
-
 	public List<String> getSeriesForSearching() {
 		return record.getFields("787", field -> field.getIndicator1() == '0' && field.getIndicator2() == '8'
 				&& field.getSubfield('i') != null
@@ -812,4 +775,20 @@ public class MarcDSL extends BaseDSL {
 		return metadataRecord.getAuthorityRecordId();
 	}
 
+	public List<String> getSimilar() {
+		Set<BiblioLinkerSimilar> similars = new HashSet<>();
+		List<BiblioLinkerSimilarType> types = new ArrayList<>();
+		for (BiblioLinkerSimilar bls : context.harvestedRecord().getBiblioLinkerSimilarUrls()) {
+			if (types.contains(bls.getType())) continue;
+			types.add(bls.getType());
+			similars.add(bls);
+			if (similars.size() >= 5) break;
+		}
+		for (BiblioLinkerSimilar bls : context.harvestedRecord().getBiblioLinkerSimilarUrls()) {
+			if (similars.size() >= 5) break;
+			if (similars.contains(bls)) continue;
+			similars.add(bls);
+		}
+		return similars.stream().map(BiblioLinkerSimilar::getUrlId).collect(Collectors.toList());
+	}
 }

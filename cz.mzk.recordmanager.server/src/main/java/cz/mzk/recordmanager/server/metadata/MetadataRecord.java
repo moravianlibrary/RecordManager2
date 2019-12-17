@@ -431,4 +431,84 @@ public interface MetadataRecord {
 		return Collections.emptySet();
 	}
 
+	/**
+	 * get all {@link BLTitle} for biblio linker
+	 *
+	 * @return list of {@link BLTitle}
+	 */
+	default List<BLTitle> getBiblioLinkerTitle(){
+		return Collections.emptyList();
+	}
+
+	/**
+	 * get all {@link BlCommonTitle} for biblio linker
+	 *
+	 * @return list of {@link BlCommonTitle}
+	 */
+	default List<BlCommonTitle> getBiblioLinkerCommonTitle() {
+		return Collections.emptyList();
+	}
+
+	/**
+	 * get author for biblio linker
+	 *
+	 * @return String
+	 */
+	default String getBiblioLinkerAuthor(){
+		return null;
+	}
+
+	/**
+	 * get publisher for biblio linker
+	 *
+	 * @return String
+	 */
+	default String getBiblioLinkerPublisher() {
+		return null;
+	}
+
+	/**
+	 * get series for biblio linker
+	 *
+	 * @return String
+	 */
+	default String getBiblioLinkerSeries() {
+		return null;
+	}
+
+	/**
+	 * get {@link BLTopicKey} for biblio linker
+	 *
+	 * @return List of {@link BLTopicKey}
+	 */
+	default List<BLTopicKey> getBiblioLinkerTopicKey() {
+		return Collections.emptyList();
+	}
+
+	/**
+	 * get {@link BLEntity} for biblio linker
+	 *
+	 * @return List of {@link BLEntity}
+	 */
+	default List<BLEntity> getBiblioLinkerEntity() {
+		return Collections.emptyList();
+	}
+
+	/**
+	 * get {@link BLLanguage} for biblio linker
+	 *
+	 * @return List of {@link BLLanguage}
+	 */
+	default List<BLLanguage> getBiblioLinkerLanguages() {
+		return Collections.emptyList();
+	}
+
+	default String getAuthorDisplay() {
+		return null;
+	}
+
+	default String getTitleDisplay() {
+		return null;
+	}
+
 }

@@ -11,6 +11,9 @@ CREATE INDEX harvested_record_source_info_g_idx ON harvested_record(source_info_
 CREATE INDEX harvested_record_sigla_idx ON harvested_record(sigla);
 CREATE INDEX harvested_record_last_harvest_idx ON harvested_record(last_harvest);
 CREATE INDEX harvested_record_disadvantaged_idx ON harvested_record(disadvantaged);
+CREATE INDEX hr_biblilinker_dedup_record_id_idx ON harvested_record(biblio_linker_id,dedup_record_id);
+CREATE INDEX hr_next_biblio_linker_flag_ids ON harvested_record(next_biblio_linker_flag);
+CREATE INDEX hr_next_biblio_linker_similar_flag_ids ON harvested_record(next_biblio_linker_similar_flag);
 
 CREATE INDEX cnb_harvested_record_idx ON cnb(harvested_record_id);
 CREATE INDEX title_harvested_record_idx ON title(harvested_record_id);
@@ -30,7 +33,12 @@ CREATE INDEX authority_harvested_record_idx ON authority(harvested_record_id);
 CREATE INDEX authority_idx ON authority(authority_id);
 CREATE INDEX authority_code_idx ON authority_record(authority_code);
 CREATE INDEX anp_title_harvested_record_idx ON anp_title(harvested_record_id);
-
+CREATE INDEX bls_harvested_record_id_idx ON biblio_linker_similar(harvested_record_id);
+CREATE INDEX bl_title_harvested_record_idx ON bl_title(harvested_record_id);
+CREATE INDEX bl_common_title_harvested_record_idx ON bl_common_title(harvested_record_id);
+CREATE INDEX bl_entity_harvested_record_idx ON bl_entity(harvested_record_id);
+CREATE INDEX bl_topic_key_harvested_record_idx ON bl_topic_key(harvested_record_id);
+CREATE INDEX bl_language_harvested_record_idx ON bl_language(harvested_record_id);
 CREATE INDEX fulltext_kramerius_harvested_record_idx ON fulltext_kramerius(harvested_record_id);
 
 CREATE INDEX obalkyknih_toc_book_idx ON obalkyknih_toc(book_id);

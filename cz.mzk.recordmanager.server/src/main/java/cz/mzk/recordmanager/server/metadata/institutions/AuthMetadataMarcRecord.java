@@ -1,8 +1,11 @@
 package cz.mzk.recordmanager.server.metadata.institutions;
 
 import cz.mzk.recordmanager.server.marc.MarcRecord;
+import cz.mzk.recordmanager.server.marc.MatchAllDataFieldMatcher;
+import cz.mzk.recordmanager.server.marc.SubfieldExtractionMethod;
 import cz.mzk.recordmanager.server.metadata.MetadataMarcRecord;
 import cz.mzk.recordmanager.server.model.Authority;
+import cz.mzk.recordmanager.server.model.BLTopicKey;
 import cz.mzk.recordmanager.server.model.HarvestedRecordFormat.HarvestedRecordFormatEnum;
 import cz.mzk.recordmanager.server.util.Constants;
 import cz.mzk.recordmanager.server.util.MetadataUtils;
@@ -13,6 +16,7 @@ import org.marc4j.marc.DataField;
 import org.marc4j.marc.Subfield;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -83,5 +87,25 @@ public class AuthMetadataMarcRecord extends MetadataMarcRecord {
 	@Override
 	public String getAuthorityRecordId() {
 		return underlayingMarc.getControlField("001");
+	}
+
+	/**
+	 * 374a or 372a or 370c
+	 *
+	 * @return List of {@link BLTopicKey}
+	 */
+	@Override
+	public List<BLTopicKey> getBiblioLinkerTopicKey() {
+		List<BLTopicKey> result = new ArrayList<>();
+		List<String> values = underlayingMarc.getFields("374", MatchAllDataFieldMatcher.INSTANCE,
+				SubfieldExtractionMethod.SEPARATED, "", 'a');
+		if (values.isEmpty()) values = underlayingMarc.getFields("372", MatchAllDataFieldMatcher.INSTANCE,
+				SubfieldExtractionMethod.SEPARATED, "", 'a');
+		if (values.isEmpty()) values = underlayingMarc.getFields("370", MatchAllDataFieldMatcher.INSTANCE,
+				SubfieldExtractionMethod.SEPARATED, "", 'c');
+		for (String value : values) {
+			result.add(BLTopicKey.create(value));
+		}
+		return result;
 	}
 }

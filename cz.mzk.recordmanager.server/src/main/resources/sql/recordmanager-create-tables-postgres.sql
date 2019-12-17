@@ -164,10 +164,20 @@ CREATE TABLE harvested_record (
   publisher            VARCHAR(100),
   edition              VARCHAR(10),
   disadvantaged        BOOLEAN DEFAULT TRUE,
+  biblio_linker_id     DECIMAL(10),
+  biblio_linker_similar BOOLEAN DEFAULT FALSE,
+  next_biblio_linker_flag BOOLEAN DEFAULT TRUE,
+  next_biblio_linker_similar_flag BOOLEAN DEFAULT TRUE,
+  biblio_linker_keys_hash CHAR(40),
+  bl_disadvantaged     BOOLEAN DEFAULT TRUE,
+  bl_author            VARCHAR(200),
+  bl_publisher         VARCHAR(200),
+  bl_series            VARCHAR(200),
   raw_record           BYTEA,
   UNIQUE (import_conf_id, record_id),
   FOREIGN KEY (import_conf_id) REFERENCES import_conf(id),
-  FOREIGN KEY (format)              REFERENCES format(format)
+  FOREIGN KEY (format)         REFERENCES format(format),
+  FOREIGN KEY (biblio_linker_id) REFERENCES biblio_linker(id)
 );
 
 COMMENT ON TABLE harvested_record IS 'basic table, contains full records in raw form';
@@ -430,5 +440,56 @@ CREATE TABLE anp_title (
   harvested_record_id  DECIMAL(10),
   anp_title            VARCHAR(255),
   similarity_enabled   BOOLEAN DEFAULT FALSE,
+  FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE
+);
+
+CREATE SEQUENCE biblio_linker_seq_id MINVALUE 1;
+CREATE TABLE biblio_linker (
+  id                   DECIMAL(10) DEFAULT NEXTVAL('"biblio_linker_seq_id"') PRIMARY KEY,
+  updated              TIMESTAMP
+);
+
+CREATE SEQUENCE biblio_linker_similar_seq_id MINVALUE 1;
+CREATE TABLE biblio_linker_similar (
+  id                   DECIMAL(10) DEFAULT NEXTVAL('"biblio_linker_similar_seq_id"') PRIMARY KEY,
+  harvested_record_id  DECIMAL(10),
+  harvested_record_similar_id DECIMAL(10),
+  url_id               TEXT,
+  type                 VARCHAR(20),
+  FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE
+);
+
+CREATE TABLE bl_title (
+  id                   DECIMAL(10) PRIMARY KEY,
+  harvested_record_id  DECIMAL(10),
+  title                VARCHAR(255),
+  FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE
+);
+
+CREATE TABLE bl_common_title (
+  id                   DECIMAL(10) PRIMARY KEY,
+  harvested_record_id  DECIMAL(10),
+  title                VARCHAR(255),
+  FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE
+);
+
+CREATE TABLE bl_entity (
+  id                   DECIMAL(10) PRIMARY KEY,
+  harvested_record_id  DECIMAL(10),
+  entity               VARCHAR(200),
+  FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE
+);
+
+CREATE TABLE bl_topic_key (
+  id                   DECIMAL(10) PRIMARY KEY,
+  harvested_record_id  DECIMAL(10),
+  topic_key            VARCHAR(20),
+  FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE
+);
+
+CREATE TABLE bl_language (
+  id                   DECIMAL(10) PRIMARY KEY,
+  harvested_record_id  DECIMAL(10),
+  lang                 VARCHAR(5),
   FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE
 );
