@@ -356,40 +356,40 @@ CREATE TABLE biblio_linker_similar (
   harvested_record_similar_id DECIMAL(10),
   url_id               BLOB,
   type                 VARCHAR(20),
-  CONSTRAINT bls_fk FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id)
+  CONSTRAINT bls_fk FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE
 );
 
 CREATE TABLE bl_title (
   id                   DECIMAL(10) PRIMARY KEY,
   harvested_record_id  DECIMAL(10),
   title                VARCHAR(255),
-  CONSTRAINT bl_title_fk FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id)
+  CONSTRAINT bl_title_fk FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE
 );
 
 CREATE TABLE bl_common_title (
   id                   DECIMAL(10) PRIMARY KEY,
   harvested_record_id  DECIMAL(10),
   title                VARCHAR(255),
-  CONSTRAINT bl_common_title_fk FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id)
+  CONSTRAINT bl_common_title_fk FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE
 );
 
 CREATE TABLE bl_entity (
   id                   DECIMAL(10) PRIMARY KEY,
   harvested_record_id  DECIMAL(10),
   entity               VARCHAR(200),
-  CONSTRAINT bl_entity_fk FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id)
+  CONSTRAINT bl_entity_fk FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE
 );
 
 CREATE TABLE bl_topic_key (
   id                   DECIMAL(10) PRIMARY KEY,
   harvested_record_id  DECIMAL(10),
   topic_key            VARCHAR(20),
-  CONSTRAINT bl_topic_key_fk FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id)
+  CONSTRAINT bl_topic_key_fk FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE
 );
 
 CREATE TABLE bl_language (
   id                   DECIMAL(10) PRIMARY KEY,
   harvested_record_id  DECIMAL(10),
   lang                 VARCHAR(5),
-  CONSTRAINT bl_language_fk FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id)
+  CONSTRAINT bl_language_fk FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE
 );
