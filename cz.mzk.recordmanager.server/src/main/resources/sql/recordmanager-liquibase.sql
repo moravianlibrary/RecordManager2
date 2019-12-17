@@ -1851,3 +1851,6 @@ CREATE INDEX anp_title_harvested_record_idx ON anp_title(harvested_record_id);
 
 --changeset tomascejpek:168 context:cpk
 UPDATE oai_harvest_conf SET url='https://tritius.knihovnaprerov.cz/tritius/oai-provider',set_spec='CPK_1' WHERE import_conf_id=346;
+
+--changeset tomascejpek:169 context:cpk
+UPDATE oai_harvest_conf SET url='https://tritius.kkvysociny.cz/tritius/oai-provider',set_spec='CPK_1' WHERE import_conf_id=312;
