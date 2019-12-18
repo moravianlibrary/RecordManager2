@@ -75,7 +75,7 @@ public class MarcDSL extends BaseDSL {
 	private final Map<String, RecordFunction<MarcFunctionContext>> functions;
 
 	public MarcDSL(MarcFunctionContext context, MappingResolver propertyResolver, StopWordsResolver stopWordsResolver,
-				   ListResolver listResolver, Map<String, RecordFunction<MarcFunctionContext>> functions) {
+			ListResolver listResolver, Map<String, RecordFunction<MarcFunctionContext>> functions) {
 		super(propertyResolver, stopWordsResolver, listResolver);
 		this.context = context;
 		this.record = context.record();
@@ -754,17 +754,26 @@ public class MarcDSL extends BaseDSL {
 		if (!metadataRecord.genreFacet()) return Collections.emptySet();
 		return new HashSet<>(getFields(tags));
 	}
-	public List<String> getSeriesForSearching() {
-		return record.getFields("787", field -> field.getIndicator1() == '0' && field.getIndicator2() == '8'
+
+	public Set<String> getSeriesForSearching() {
+		List<String> results = record.getFields("787", field -> field.getIndicator1() == '0' && field.getIndicator2() == '8'
 				&& field.getSubfield('i') != null
 				&& Z_CYKLU_787.matcher(field.getSubfield('i').getData()).find(), 't');
+		return results.stream().map(String::trim).collect(Collectors.toSet());
 	}
 
-	public List<String> getSeriesForDisplay() {
-		return record.getFields("787", field -> field.getIndicator1() == '0' && field.getIndicator2() == '8'
-						&& field.getSubfield('i') != null
-						&& Z_CYKLU_787.matcher(field.getSubfield('i').getData()).find(),
-				SubfieldExtractionMethod.JOINED, "|", 't', 'g');
+	public Set<String> getSeriesForDisplay() {
+		Set<String> results = new HashSet<>();
+		for (DataField df : record.getDataFields("787")) {
+			if (df.getIndicator1() == '0' && df.getIndicator2() == '8'
+					&& df.getSubfield('i') != null
+					&& Z_CYKLU_787.matcher(df.getSubfield('i').getData()).find()) {
+				String sfT = df.getSubfield('t') == null ? "" : df.getSubfield('t').getData().trim();
+				String sfG = df.getSubfield('g') == null ? "" : df.getSubfield('g').getData().trim();
+				results.add(sfT + '|' + sfG);
+			}
+		}
+		return results;
 	}
 
 	public boolean getZiskejBool() {
