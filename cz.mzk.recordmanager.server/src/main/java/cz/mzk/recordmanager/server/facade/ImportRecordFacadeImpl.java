@@ -58,6 +58,7 @@ public class ImportRecordFacadeImpl implements ImportRecordFacade {
 		parameters.put(Constants.JOB_PARAM_IN_FILE, new JobParameter(file.getAbsolutePath()));
 		parameters.put(Constants.JOB_PARAM_FORMAT, new JobParameter(format));
 		parameters.put(Constants.JOB_PARAM_CONF_ID, new JobParameter(importConfId));
+		parameters.put(Constants.JOB_PARAM_REPEAT, new JobParameter(Constants.JOB_PARAM_ONE_VALUE));
 		JobParameters params = new JobParameters(parameters);
 		JobExecution exec = jobExecutor.execute(Constants.JOB_ID_IMPORT, params);
 		if (!ExitStatus.COMPLETED.equals(exec.getExitStatus())) {
