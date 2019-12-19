@@ -32,7 +32,7 @@ public class RegenerateDedupKeysWriter implements ItemWriter<Long> {
 		for (Long id : ids) {
 			HarvestedRecord rec = harvestedRecordDao.get(id);
 
-			progressLogger.incrementAndLogProgress();
+			progressLogger.incrementAndLogProgress(rec);
 			if (!rec.getHarvestedFrom().isGenerateDedupKeys()
 					|| rec.getRawRecord() == null || rec.getRawRecord().length == 0) {
 				if (rec.getDedupKeysHash() != null && !rec.getDedupKeysHash().equals("")) {
