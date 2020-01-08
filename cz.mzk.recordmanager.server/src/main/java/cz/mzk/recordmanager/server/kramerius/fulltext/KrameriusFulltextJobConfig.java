@@ -7,6 +7,7 @@ import java.util.Map;
 
 import javax.sql.DataSource;
 
+import cz.mzk.recordmanager.server.springbatch.StepProgressListener;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
@@ -69,6 +70,7 @@ public class KrameriusFulltextJobConfig {
 	public Step step() throws Exception {
 		return steps
 				.get("step")
+				.listener(new StepProgressListener())
 				.<HarvestedRecord, HarvestedRecord>chunk(1)
 				.reader(reader(LONG_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION))
 				.processor(krameriusFulltextProcessor(LONG_OVERRIDEN_BY_EXPRESSION))
@@ -92,6 +94,7 @@ public class KrameriusFulltextJobConfig {
 	public Step missingStep() throws Exception {
 		return steps
 				.get("step")
+				.listener(new StepProgressListener())
 				.<HarvestedRecord, HarvestedRecord>chunk(1)
 				.reader(missingReader(LONG_OVERRIDEN_BY_EXPRESSION, STRING_OVERRIDEN_BY_EXPRESSION, STRING_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION))
 				.processor(krameriusFulltextProcessor(LONG_OVERRIDEN_BY_EXPRESSION))
