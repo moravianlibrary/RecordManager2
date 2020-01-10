@@ -518,4 +518,9 @@ public interface MetadataRecord {
 	default boolean isZiskej() {
 		return false;
 	}
+
+	default Long getLoanRelevance() {
+		return null;
+	}
+
 }

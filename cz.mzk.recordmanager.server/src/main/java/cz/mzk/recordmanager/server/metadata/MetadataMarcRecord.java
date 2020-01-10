@@ -1791,4 +1791,19 @@ public class MetadataMarcRecord implements MetadataRecord {
 		}
 		return false;
 	}
+
+	@Override
+	public Long getLoanRelevance() {
+		Long count = 0L;
+		boolean exists = false;
+		for (DataField df : underlayingMarc.getDataFields("996")) {
+			if (df.getSubfield('n') != null)
+				try {
+					count += Long.valueOf(df.getSubfield('n').getData());
+					exists = true;
+				} catch (NumberFormatException ignored) {
+				}
+		}
+		return exists ? count : null;
+	}
 }

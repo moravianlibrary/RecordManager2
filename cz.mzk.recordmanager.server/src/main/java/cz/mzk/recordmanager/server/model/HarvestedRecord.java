@@ -314,6 +314,9 @@ public class HarvestedRecord extends AbstractDomainObject {
 	@Column(name = "bl_series")
 	private String blSeries;
 
+	@Column(name="loans")
+	private Long loans;
+
 	/**
 	 * indicator variable used for filtering reasons
 	 */
@@ -898,5 +901,13 @@ public class HarvestedRecord extends AbstractDomainObject {
 
 	public void setFitProjects(Set<HarvestedRecordFitProject> fitProjects) {
 		this.fitProjects = fitProjects;
+	}
+
+	public Long getLoans() {
+		return loans;
+	}
+
+	public void setLoans(Long loans) {
+		this.loans = loans;
 	}
 }
