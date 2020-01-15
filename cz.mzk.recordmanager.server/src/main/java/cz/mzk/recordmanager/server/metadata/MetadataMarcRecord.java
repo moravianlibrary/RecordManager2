@@ -993,7 +993,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 		}
 		if (result.isEmpty()) {
 			String cf = underlayingMarc.getControlField("008");
-			if (cf != null && cf.length() > 39) {
+			if (cf != null && cf.length() >= 38) {
 				String substr = cf.substring(35, 38);
 				String lang = null;
 				if (substr.toLowerCase().equals("cze")) {
