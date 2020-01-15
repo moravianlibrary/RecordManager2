@@ -789,20 +789,32 @@ public class MarcDSL extends BaseDSL {
 		return new HashSet<>(getFields(tags));
 	}
 
+	/**
+	 * get 787t if ind1=0, ind2=8, $i matches {@link #Z_CYKLU_787}
+	 *
+	 * @return List of strings
+	 */
 	public Set<String> getSeriesForSearching() {
 		List<String> results = record.getFields("787", field -> field.getIndicator1() == '0' && field.getIndicator2() == '8'
+				&& field.getSubfield('t') != null
 				&& field.getSubfield('i') != null
 				&& Z_CYKLU_787.matcher(field.getSubfield('i').getData()).find(), 't');
 		return results.stream().map(String::trim).collect(Collectors.toSet());
 	}
 
+	/**
+	 * get 787tg if ind1=0, ind2=8, $i matches {@link #Z_CYKLU_787}
+	 *
+	 * @return 787t|787g
+	 */
 	public Set<String> getSeriesForDisplay() {
 		Set<String> results = new HashSet<>();
 		for (DataField df : record.getDataFields("787")) {
 			if (df.getIndicator1() == '0' && df.getIndicator2() == '8'
 					&& df.getSubfield('i') != null
+					&& df.getSubfield('t') != null
 					&& Z_CYKLU_787.matcher(df.getSubfield('i').getData()).find()) {
-				String sfT = df.getSubfield('t') == null ? "" : df.getSubfield('t').getData().trim();
+				String sfT = df.getSubfield('t').getData().trim();
 				String sfG = df.getSubfield('g') == null ? "" : df.getSubfield('g').getData().trim();
 				results.add(sfT + '|' + sfG);
 			}
