@@ -72,7 +72,7 @@ public class KrameriusFulltextJobConfig {
 				.get("step")
 				.listener(new StepProgressListener())
 				.<HarvestedRecord, HarvestedRecord>chunk(1)
-				.reader(reader(LONG_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION))
+				.reader(reader(LONG_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION, STRING_OVERRIDEN_BY_EXPRESSION))
 				.processor(krameriusFulltextProcessor(LONG_OVERRIDEN_BY_EXPRESSION))
 				.writer(krameriusFulltextWriter())
 				.build();
@@ -105,7 +105,6 @@ public class KrameriusFulltextJobConfig {
 	/* reads document uuids for given config (may be limited by update date)
 	 * returns ItemReader for HarvestedRecord(s)
 	 */
-
 	@Bean(name = "krameriusFulltextJob:reader")
 	@StepScope
 	public ItemReader<HarvestedRecord> reader(
@@ -116,10 +115,10 @@ public class KrameriusFulltextJobConfig {
 					+ Constants.JOB_PARAM_FROM_DATE + "]}") Date from,
 			@Value("#{stepExecutionContext[" + Constants.JOB_PARAM_UNTIL_DATE
 					+ ']' + "?:jobParameters[" + Constants.JOB_PARAM_UNTIL_DATE
-					+ "]}") Date to) throws Exception {
-
-		Timestamp fromStamp = null;
-		Timestamp toStamp = null;
+					+ "]}") Date to,
+			@Value("#{stepExecutionContext[" + Constants.JOB_PARAM_FULLTEXT_FIRST
+					+ ']' + "?:jobParameters[" + Constants.JOB_PARAM_FULLTEXT_FIRST
+					+ "]}") String firstId) throws Exception {
 
 		JdbcPagingItemReader<HarvestedRecord> reader = new JdbcPagingItemReader<>();
 		SqlPagingQueryProviderFactoryBean pqpf = new SqlPagingQueryProviderFactoryBean();
@@ -127,33 +126,29 @@ public class KrameriusFulltextJobConfig {
 		pqpf.setSelectClause("SELECT *");
 		pqpf.setFromClause("FROM harvested_record");
 
+		Map<String, Object> parameterValues = new HashMap<>();
+		parameterValues.put("configId", configId);
 		String whereClause = "WHERE import_conf_id = :configId";
 		if (from != null) {
-			fromStamp = new Timestamp(from.getTime());
 			whereClause += " AND updated >= :from";
+			parameterValues.put("from", new Timestamp(from.getTime()));
 		}
 		if (to != null) {
-			toStamp = new Timestamp(to.getTime());
 			whereClause += " AND updated <= :to";
+			parameterValues.put("to", new Timestamp(to.getTime()));
 		}
-
-		if (configId != null) {
-			pqpf.setWhereClause(whereClause);
+		if (firstId != null) {
+			whereClause += " AND record_id >= :recordId";
+			parameterValues.put("recordId", firstId);
 		}
-
+		pqpf.setWhereClause(whereClause);
 		pqpf.setSortKeys(ImmutableMap.of("import_conf_id",
 				Order.ASCENDING, "record_id", Order.ASCENDING));
 		reader.setRowMapper(harvestedRecordRowMapper);
 		reader.setPageSize(PAGE_SIZE);
 		reader.setQueryProvider(pqpf.getObject());
 		reader.setDataSource(dataSource);
-		if (configId != null) {
-			Map<String, Object> parameterValues = new HashMap<>();
-			parameterValues.put("configId", configId);
-			parameterValues.put("from", fromStamp);
-			parameterValues.put("to", toStamp);
-			reader.setParameterValues(parameterValues);
-		}
+		reader.setParameterValues(parameterValues);
 		reader.afterPropertiesSet();
 
 		return reader;
