@@ -124,11 +124,11 @@ public class MetadataMarcRecord implements MetadataRecord {
 					HarvestedRecordFormatEnum.VIDEO_VHS);
 
 	private static final String URL_COMMENT_FORMAT = "%s (%s)";
-	private static final List<String> ANP_TITLE_REMOVE_WORDS = new BufferedReader(new InputStreamReader(
-			new ClasspathResourceProvider().getResource("/list/anp_title_remove_words.txt"), StandardCharsets.UTF_8))
+	private static final List<String> TITLE_REMOVE_WORDS = new BufferedReader(new InputStreamReader(
+			new ClasspathResourceProvider().getResource("/list/title_remove_words.txt"), StandardCharsets.UTF_8))
 			.lines().collect(Collectors.toCollection(ArrayList::new));
 
-	private static final List<Pattern> ANP_TITLE_REMOVE_WORDS_PATTERNS = ANP_TITLE_REMOVE_WORDS.stream()
+	private static final List<Pattern> TITLE_REMOVE_WORDS_PATTERNS = TITLE_REMOVE_WORDS.stream()
 			.map(w -> Pattern.compile("\\b" + w + "\\b", Pattern.CASE_INSENSITIVE)).collect(Collectors.toList());
 
 	public MetadataMarcRecord(MarcRecord underlayingMarc) {
@@ -299,7 +299,12 @@ public class MetadataMarcRecord implements MetadataRecord {
 			for (DataField df : underlayingMarc.getDataFields(key)) {
 				String titleText = parseTitleValue(df, TITLE_SUBFIELDS);
 				if (!titleText.isEmpty()) {
-					result.add(Title.create(titleText, ++titleOrder, MetadataUtils.similarityEnabled(df, titleText)));
+					boolean similarity = MetadataUtils.similarityEnabled(df, titleText);
+					titleText = RomanNumeralsUtils.getRomanNumerals(titleText);
+					for (Pattern pattern : TITLE_REMOVE_WORDS_PATTERNS) {
+						titleText = CleaningUtils.replaceAll(titleText, pattern, "");
+					}
+					result.add(Title.create(titleText, ++titleOrder, similarity));
 				}
 			}
 		}
@@ -1223,8 +1228,12 @@ public class MetadataMarcRecord implements MetadataRecord {
 				if (df.getSubfield('b') == null) continue;
 				String titleText = parseTitleValue(df, SHORT_TITLE_SUBFIELDS);
 				if (!titleText.isEmpty()) {
-					results.add(ShortTitle.create(titleText, ++shortTitleCounter,
-							MetadataUtils.similarityEnabled(df, titleText)));
+					boolean similarity = MetadataUtils.similarityEnabled(df, titleText);
+					titleText = RomanNumeralsUtils.getRomanNumerals(titleText);
+					for (Pattern pattern : TITLE_REMOVE_WORDS_PATTERNS) {
+						titleText = CleaningUtils.replaceAll(titleText, pattern, "");
+					}
+					results.add(ShortTitle.create(titleText, ++shortTitleCounter, similarity));
 				}
 			}
 		}
@@ -1403,7 +1412,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 			if (!titleText.isEmpty()) {
 				boolean similarity = MetadataUtils.similarityEnabled(df, titleText);
 				titleText = RomanNumeralsUtils.getRomanNumerals(titleText);
-				for (Pattern pattern : ANP_TITLE_REMOVE_WORDS_PATTERNS) {
+				for (Pattern pattern : TITLE_REMOVE_WORDS_PATTERNS) {
 					titleText = CleaningUtils.replaceAll(titleText, pattern, "");
 				}
 				results.add(AnpTitle.create(titleText, similarity));
