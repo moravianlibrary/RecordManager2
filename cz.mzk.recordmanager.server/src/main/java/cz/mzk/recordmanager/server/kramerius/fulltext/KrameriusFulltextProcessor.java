@@ -11,6 +11,7 @@ import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordDAO;
 import cz.mzk.recordmanager.server.oai.dao.KrameriusConfigurationDAO;
 import cz.mzk.recordmanager.server.util.HibernateSessionSynchronizer;
 import cz.mzk.recordmanager.server.util.HibernateSessionSynchronizer.SessionBinder;
+import org.marc4j.marc.InvalidMARCException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.ExitStatus;
@@ -99,6 +100,14 @@ public class KrameriusFulltextProcessor implements
 			logger.warn("InvalidDcException for record with id:" + item.getUniqueId());
 			logger.warn(e.getMessage());
 			//doesn't do anything, just returns rec from DAO and writes a message into log
+			return rec;
+		} catch (InvalidMARCException e) {
+			logger.warn("InvalidMarcException for record with id:" + item.getUniqueId());
+			logger.warn(e.getMessage());
+			//doesn't do anything, just returns rec from DAO and writes a message into log
+			return rec;
+		} catch (Exception e) {
+			logger.warn(e.getMessage());
 			return rec;
 		}
 
