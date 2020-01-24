@@ -1663,5 +1663,8 @@ INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (211, 'MKJ
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id, ziskej_enabled) VALUES (411, 211, 200, 'mkjar', 11, false, true, true, true, 'U', 'other', true);
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (411,'https://jaromer.tritius.cz/tritius/oai-provider','CPK_1','marc21',NULL);
 
---21. 01. 2020 tomascejpek
+-- 21. 01. 2020 tomascejpek
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (67, 391, 'ABA009');
+
+-- 24. 01. 2019 tomascejpek
+UPDATE oai_harvest_conf SET url='https://chodov.tritius.cz/tritius/oai-provider' WHERE import_conf_id=350;
