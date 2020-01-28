@@ -22,7 +22,7 @@ public class AfterHarvestTasklet implements Tasklet {
 	private static Logger logger = LoggerFactory.getLogger(AfterHarvestTasklet.class);
 
 	private static final String UPDATE_QUERY = "UPDATE harvested_record SET deleted = :deleted WHERE " +
-			" import_conf_id = :importConfId and updated < :executed";
+			" import_conf_id = :importConfId and last_harvest < :executed";
 
 	@Autowired
 	private NamedParameterJdbcTemplate jdbcTemplate;
