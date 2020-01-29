@@ -53,7 +53,6 @@ public class MiscellaneousFacadeImpl implements MiscellaneousFacade {
 				Date lastIndexedDate = Date.from(lastIndexed.atZone(ZoneId.systemDefault()).toInstant());
 				parameters.put(Constants.JOB_PARAM_FROM_DATE, new JobParameter(lastIndexedDate));
 				Calendar cal = Calendar.getInstance();
-				cal.add(Calendar.DAY_OF_YEAR, -1);
 				parameters.put(Constants.JOB_PARAM_UNTIL_DATE, new JobParameter(cal.getTime()));
 				JobParameters params = new JobParameters(parameters);
 				SimpleDateFormat sdf = new SimpleDateFormat(DATE_STRING_SKAT_KEYS);
