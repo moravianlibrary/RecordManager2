@@ -15,8 +15,9 @@ public class DailyScript implements Runnable {
 	@Autowired
 	private HarvestingFacade harvestingFacade;
 
+	@Autowired
 	private OAIHarvestConfigurationDAO oaiHarvestConfigurationDAO;
-	
+
 	@Autowired
 	private KrameriusConfigurationDAO krameriusConfigurationDAO;
 
