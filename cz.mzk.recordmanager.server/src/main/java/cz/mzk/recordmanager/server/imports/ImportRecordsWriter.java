@@ -126,6 +126,11 @@ public class ImportRecordsWriter implements ItemWriter<List<Record>>, StepExecut
 							}
 						}
 					}
+					if (recordId == null) { // record without record_id
+						logger.info("Record without ID");
+						logger.debug(new String(recordContent));
+						continue;
+					}
 					HarvestedRecord hr = harvestedRecordDao.findByIdAndHarvestConfiguration(recordId, configurationId);
 					if (hr == null){
 						HarvestedRecordUniqueId id = new HarvestedRecordUniqueId(harvestConfiguration, recordId);
