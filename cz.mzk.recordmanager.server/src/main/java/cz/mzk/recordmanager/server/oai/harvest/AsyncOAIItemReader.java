@@ -165,6 +165,7 @@ public class AsyncOAIItemReader implements ItemReader<List<OAIRecord>>, ItemStre
 			while (true) {
 				OAIListRecords listRecords = harvester.listRecords(resumptionToken);
 				resumptionToken = (listRecords != null)? listRecords.getNextResumptionToken() : null;
+				if (resumptionToken != null && resumptionToken.isEmpty()) resumptionToken = null;
 				if (listRecords == null || listRecords.getRecords() == null
 						|| listRecords.getRecords().isEmpty()) {
 					failed = false;
