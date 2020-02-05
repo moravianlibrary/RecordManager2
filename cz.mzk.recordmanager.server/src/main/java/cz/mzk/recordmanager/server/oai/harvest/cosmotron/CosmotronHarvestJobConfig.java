@@ -3,6 +3,7 @@ package cz.mzk.recordmanager.server.oai.harvest.cosmotron;
 import cz.mzk.recordmanager.server.export.HarvestedRecordIdRowMapper;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecord.HarvestedRecordUniqueId;
+import cz.mzk.recordmanager.server.oai.harvest.AsyncOAIItemReader;
 import cz.mzk.recordmanager.server.oai.harvest.OAIItemProcessor;
 import cz.mzk.recordmanager.server.oai.harvest.OAIItemReader;
 import cz.mzk.recordmanager.server.oai.model.OAIRecord;
@@ -48,6 +49,9 @@ public class CosmotronHarvestJobConfig {
 	@Autowired
 	private DataSource dataSource;
 
+	@Value(value = "${oai_harvest.async_reader:#{false}}")
+	private boolean asyncReader = false;
+
 	//
 	@Bean
 	public Job cosmotronHarvestJob(
@@ -62,10 +66,16 @@ public class CosmotronHarvestJobConfig {
 
 	@Bean(name = Constants.JOB_ID_HARVEST_COSMOTRON + ":cosmotronHarvestStep")
 	public Step harvestStep() {
+		ItemReader<List<OAIRecord>> reader;
+		if (this.asyncReader) {
+			reader = asyncReader(LONG_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION, STRING_OVERRIDEN_BY_EXPRESSION);
+		} else {
+			reader = reader(LONG_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION, STRING_OVERRIDEN_BY_EXPRESSION);
+		}
 		return steps.get("cosmotronHarvestStep") //
 				.listener(new StepProgressListener())
 				.<List<OAIRecord>, List<HarvestedRecord>>chunk(1) //
-				.reader(reader(LONG_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION, STRING_OVERRIDEN_BY_EXPRESSION)) //
+				.reader(reader) //
 				.processor(oaiItemProcessor())
 				.writer(cosmotronRecordsWriter(LONG_OVERRIDEN_BY_EXPRESSION)) //
 				.build();
@@ -81,6 +91,18 @@ public class CosmotronHarvestJobConfig {
 								@Value("#{stepExecutionContext[" + Constants.JOB_PARAM_RESUMPTION_TOKEN + ']'
 										+ "?:jobParameters[" + Constants.JOB_PARAM_RESUMPTION_TOKEN + "]}") String resumptionToken) {
 		return new OAIItemReader(configId, from, to, resumptionToken);
+	}
+
+	@Bean(name = "oaiHarvestJob:asyncReader")
+	@StepScope
+	public AsyncOAIItemReader asyncReader(@Value("#{jobParameters[" + Constants.JOB_PARAM_CONF_ID + "]}") Long configId,
+			@Value("#{stepExecutionContext[" + Constants.JOB_PARAM_FROM_DATE + "] "
+					+ "?:jobParameters[ " + Constants.JOB_PARAM_FROM_DATE + "]}") Date from,
+			@Value("#{stepExecutionContext[" + Constants.JOB_PARAM_UNTIL_DATE + ']'
+					+ "?:jobParameters[" + Constants.JOB_PARAM_UNTIL_DATE + "]}") Date to,
+			@Value("#{stepExecutionContext[" + Constants.JOB_PARAM_RESUMPTION_TOKEN + ']'
+					+ "?:jobParameters[" + Constants.JOB_PARAM_RESUMPTION_TOKEN + "]}") String resumptionToken) {
+		return new AsyncOAIItemReader(configId, from, to, resumptionToken);
 	}
 
 	@Bean(name = Constants.JOB_ID_HARVEST_COSMOTRON + ":cosmotronRecordsProcessor")
