@@ -33,7 +33,8 @@ public class AbstractDomainDAOHibernate<ID extends Serializable, T> implements D
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<T> findAll() {
-		Criteria crit = sessionFactory.getCurrentSession().createCriteria(persistenceClass);
+		Criteria crit = sessionFactory.getCurrentSession().createCriteria(persistenceClass)
+				.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		return (List<T>) crit.list();
 	}
 
