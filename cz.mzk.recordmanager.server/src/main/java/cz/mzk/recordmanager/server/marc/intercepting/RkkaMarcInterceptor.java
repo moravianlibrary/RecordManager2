@@ -49,11 +49,17 @@ public class RkkaMarcInterceptor extends DefaultMarcInterceptor {
 				}
 				if (df.getTag().equals("996")) {
 					// ignore field 996 when $l not contains KM,KO,KA,KD,K2,K1,KN,K6,K4,K7,KI,KU,K8,K9,KF,KC
-					Subfield sb = df.getSubfield('l');
-					if (sb != null && !SFL.contains(sb.getData())) continue;
-					df = DawinciUtils.createSubfieldD(df);
-					processField996(df);
-					newRecord.addVariableField(df);
+					Subfield sfL = df.getSubfield('l');
+					if (sfL != null && !SFL.contains(sfL.getData())) continue;
+					DataField newDf = MARC_FACTORY.newDataField(df.getTag(), df.getIndicator1(), df.getIndicator2());
+					for (Subfield sf : df.getSubfields()) {
+						if (sf.getCode() == 'a') { // trim subfield $a
+							newDf.addSubfield(MARC_FACTORY.newSubfield('a', sf.getData().trim()));
+						} else newDf.addSubfield(sf);
+					}
+					newDf = DawinciUtils.createSubfieldD(newDf);
+					processField996(newDf);
+					newRecord.addVariableField(newDf);
 				} else {
 					newRecord.addVariableField(df);
 				}
