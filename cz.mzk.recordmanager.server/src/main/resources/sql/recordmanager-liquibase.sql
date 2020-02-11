@@ -1939,3 +1939,6 @@ INSERT INTO sigla (id, import_conf_id, sigla) VALUES (67, 391, 'ABA009');
 
 --changeset tomascejpek:174 context:cpk
 UPDATE oai_harvest_conf SET url='https://chodov.tritius.cz/tritius/oai-provider' WHERE import_conf_id=350;
+
+--changeset tomascejpek:175 context:cpk
+UPDATE oai_harvest_conf SET url='https://tritius.knihovnachodov.cz/tritius/oai-provider' WHERE import_conf_id=350;

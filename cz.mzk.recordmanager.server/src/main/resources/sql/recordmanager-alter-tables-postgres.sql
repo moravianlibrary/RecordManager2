@@ -1668,3 +1668,6 @@ INSERT INTO sigla (id, import_conf_id, sigla) VALUES (67, 391, 'ABA009');
 
 -- 24. 01. 2019 tomascejpek
 UPDATE oai_harvest_conf SET url='https://chodov.tritius.cz/tritius/oai-provider' WHERE import_conf_id=350;
+
+-- 11. 02. 2019 tomascejpek
+UPDATE oai_harvest_conf SET url='https://tritius.knihovnachodov.cz/tritius/oai-provider' WHERE import_conf_id=350;
