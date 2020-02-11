@@ -227,7 +227,7 @@ public class BiblioLinkerJobConfig {
 	public Step blTempTitleAuthorStep() throws Exception {
 		return steps.get("blTempTitleAuthStep")
 				.listener(new StepProgressListener())
-				.<List<Long>, List<HarvestedRecord>>chunk(100)
+				.<List<Long>, List<HarvestedRecord>>chunk(10)
 				.faultTolerant()
 				.keyGenerator(KeyGeneratorForList.INSTANCE)
 				.retry(LockAcquisitionException.class)
@@ -1293,7 +1293,7 @@ public class BiblioLinkerJobConfig {
 		}
 		pqpf.setSortKey("row_id");
 		reader.setRowMapper(new ArrayLongMapper());
-		reader.setPageSize(10);
+		reader.setPageSize(100);
 		reader.setQueryProvider(pqpf.getObject());
 		reader.setDataSource(dataSource);
 		if (modulo != null) {
