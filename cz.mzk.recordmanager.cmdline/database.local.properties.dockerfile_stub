@@ -17,3 +17,5 @@ vufind.url=VUFIND_URL
 
 ok_username=OK_USERNAME
 ok_password=OK_PASSWORD
+
+oai_harvest.async_reader=true
