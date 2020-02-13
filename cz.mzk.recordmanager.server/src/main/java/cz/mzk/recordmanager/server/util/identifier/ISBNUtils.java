@@ -47,7 +47,7 @@ public final class ISBNUtils {
 	 * @param rawIsbn String to be validated
 	 * @return String representation of ISBN 13 or exception
 	 */
-	static String toISBN13StringThrowing(final String rawIsbn) {
+	public static String toISBN13StringThrowing(final String rawIsbn) {
 		if (rawIsbn == null || rawIsbn.trim().isEmpty()) throw new NoDataException(IdentifierUtils.NO_USABLE_DATA);
 		String clearIsbnStr = ISBN_CLEAR_REGEX.matcher(rawIsbn).replaceAll("");
 		clearIsbnStr = ISBN_UPPER_X_REGEX.matcher(clearIsbnStr).replaceAll("X");

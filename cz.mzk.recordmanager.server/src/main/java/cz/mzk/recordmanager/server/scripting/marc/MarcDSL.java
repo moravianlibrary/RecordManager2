@@ -17,6 +17,7 @@ import cz.mzk.recordmanager.server.util.Constants;
 import cz.mzk.recordmanager.server.util.SolrUtils;
 import cz.mzk.recordmanager.server.util.identifier.ISBNUtils;
 import cz.mzk.recordmanager.server.util.identifier.ISSNUtils;
+import org.apache.commons.validator.routines.ISBNValidator;
 import org.marc4j.marc.DataField;
 import org.marc4j.marc.Subfield;
 
@@ -67,6 +68,8 @@ public class MarcDSL extends BaseDSL {
 	private static final String DISPLAY773_ISSN = "ISSN ";
 	private static final String DISPLAY773_ISBN = "ISBN ";
 	private static final String DISPLAY773_JOINER = ". -- ";
+
+	private static final ISBNValidator ISBN_VALIDATOR = ISBNValidator.getInstance(true);
 
 	private final MarcFunctionContext context;
 
@@ -347,6 +350,18 @@ public class MarcDSL extends BaseDSL {
 		}
 		result.addAll(getFields("020az:022az:787xz:902a"));
 
+		return result;
+	}
+
+	public Set<String> getIsbnForSearching(String tags) {
+		Set<String> result = new HashSet<>();
+		for (String isbn : getFields(tags, SubfieldExtractionMethod.SEPARATED)) {
+			result.add(isbn);
+			try {
+				if (ISBN_VALIDATOR.isValidISBN10(isbn)) result.add(ISBNUtils.toISBN13StringThrowing(isbn));
+			} catch (NumberFormatException ignore) {
+			}
+		}
 		return result;
 	}
 

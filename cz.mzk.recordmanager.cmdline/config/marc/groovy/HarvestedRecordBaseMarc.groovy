@@ -10,7 +10,7 @@ author2_display_mv = getAuthor2Display()
 authority2_display_mv = getAuthIds("110:111:700:710:711")
 corp_author_display = getFirstField "110ab:111aq"
 
-isbn = getFields "020az"
+isbn = getIsbnForSearching "020az:902a"
 issn = getFields "022ayz:440x:490x:730x:776x:780x:785x"
 ismn_isn_mv = getIsmns()
 cnb_isn_mv = getFieldsUnique "015az"
