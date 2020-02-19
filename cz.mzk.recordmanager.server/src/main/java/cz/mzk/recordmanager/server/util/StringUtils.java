@@ -1,6 +1,7 @@
 package cz.mzk.recordmanager.server.util;
 
 import cz.mzk.recordmanager.server.model.Title;
+import org.apache.commons.text.similarity.LevenshteinDistance;
 
 public class StringUtils {
 	
@@ -50,8 +51,9 @@ public class StringUtils {
 		}
 
 		int maxDiff = (int) Math.ceil(minLength * (1 - (double) (matchBoundary / 100)));
-		
-		int distance = org.apache.commons.lang3.StringUtils.getLevenshteinDistance(strA, strB, maxDiff);
+
+		LevenshteinDistance ld = new LevenshteinDistance(maxDiff);
+		int distance = ld.apply(strA, strB);
 		if (distance < 0) {
 			return MIN_MATCH_BOUNDARY;
 		}
