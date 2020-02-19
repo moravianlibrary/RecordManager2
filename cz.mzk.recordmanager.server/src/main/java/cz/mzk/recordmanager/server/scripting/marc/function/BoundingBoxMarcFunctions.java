@@ -10,6 +10,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.spatial4j.core.exception.InvalidShapeException;
+import com.spatial4j.core.io.WKTReader;
 import org.marc4j.marc.DataField;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -160,7 +161,7 @@ public strictfp class BoundingBoxMarcFunctions implements MarcRecordFunctions {
 
 	private boolean isValid(String shape, MarcFunctionContext ctx) {
 		try {
-			SPATIAL_CONTEXT.readShapeFromWkt(shape);
+			((WKTReader) SPATIAL_CONTEXT.getFormats().getWktReader()).parse(shape);
 			return true;
 		} catch (ParseException | InvalidShapeException pe) {
 			logger.warn("Record {} has invalid shape: {}, error: {}",
