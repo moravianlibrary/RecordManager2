@@ -37,7 +37,7 @@ public class MzkOtherFunctions implements MarcRecordFunctions {
 		if (f991b.length() > 6) {
 			f991b = f991b.substring(0, 6);
 		}
-		return (NumberUtils.isNumber(f991b)) ? f991b : null;
+		return (NumberUtils.isCreatable(f991b)) ? f991b : null;
 	}
 
 	private static final String HIDDEN = "hidden";
