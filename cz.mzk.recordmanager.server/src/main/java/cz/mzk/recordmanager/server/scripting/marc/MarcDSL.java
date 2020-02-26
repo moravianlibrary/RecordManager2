@@ -265,8 +265,8 @@ public class MarcDSL extends BaseDSL {
 		return new ArrayList<>(result);
 	}
 
-	public List<String> getPublisher() {
-		List<String> publishers = new ArrayList<>();
+	public Set<String> getPublisher() {
+		Set<String> publishers = new HashSet<>();
 		for (DataField dataField : record.getDataFields("264")) {
 			if (dataField.getIndicator2() == '1') {
 				publishers.addAll(getFieldsTrim("264b"));
