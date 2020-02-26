@@ -1686,3 +1686,12 @@ UPDATE oai_harvest_conf SET url='https://katalog.knihmil.cz/LANius/l.dll' WHERE 
 
 -- 10. 03. 2019 tomascejpek
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (76, 364, 'SVG001');
+
+-- 11. 03. 2019 tomascejpek
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (78, 369, 'KAG001');
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (79, 403, 'KAG001');
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (80, 404, 'KAG001');
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (81, 405, 'KAG001');
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (82, 406, 'KAG001');
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (83, 407, 'KAG001');
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (84, 408, 'KAG001');

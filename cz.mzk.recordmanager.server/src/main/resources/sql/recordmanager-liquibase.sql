@@ -1957,3 +1957,12 @@ UPDATE oai_harvest_conf SET url='https://katalog.knihmil.cz/LANius/l.dll' WHERE 
 
 --changeset tomascejpek:180 context:cpk
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (76, 364, 'SVG001');
+
+--changeset tomascejpek:181 context:cpk
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (78, 369, 'KAG001');
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (79, 403, 'KAG001');
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (80, 404, 'KAG001');
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (81, 405, 'KAG001');
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (82, 406, 'KAG001');
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (83, 407, 'KAG001');
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (84, 408, 'KAG001');
