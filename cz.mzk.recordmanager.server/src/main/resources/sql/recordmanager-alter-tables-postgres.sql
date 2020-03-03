@@ -1671,3 +1671,6 @@ UPDATE oai_harvest_conf SET url='https://chodov.tritius.cz/tritius/oai-provider'
 
 -- 11. 02. 2019 tomascejpek
 UPDATE oai_harvest_conf SET url='https://tritius.knihovnachodov.cz/tritius/oai-provider' WHERE import_conf_id=350;
+
+-- 03. 03. 2019 tomascejpek
+UPDATE oai_harvest_conf SET url='https://tritius.booksy.cz/tritius/oai-provider' WHERE import_conf_id=364;
