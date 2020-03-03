@@ -6,9 +6,11 @@ import cz.mzk.recordmanager.server.marc.MarcRecordImpl;
 import cz.mzk.recordmanager.server.marc.MarcXmlParser;
 import cz.mzk.recordmanager.server.marc.marc4j.RecordImpl;
 import cz.mzk.recordmanager.server.model.Cosmotron996;
+import cz.mzk.recordmanager.server.model.DedupRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecord.HarvestedRecordUniqueId;
 import cz.mzk.recordmanager.server.oai.dao.Cosmotron996DAO;
+import cz.mzk.recordmanager.server.oai.dao.DedupRecordDAO;
 import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordDAO;
 import org.hibernate.SessionFactory;
 import org.marc4j.marc.ControlField;
@@ -25,6 +27,9 @@ public class CosmotronUpdate996Writer implements ItemWriter<HarvestedRecordUniqu
 
 	@Autowired
 	protected HarvestedRecordDAO hrDao;
+
+	@Autowired
+	protected DedupRecordDAO drDao;
 
 	@Autowired
 	protected Cosmotron996DAO cosmotronDao;
@@ -50,7 +55,11 @@ public class CosmotronUpdate996Writer implements ItemWriter<HarvestedRecordUniqu
 		// ignore deleted HarvestedRecord
 		if (parentRec.getDeleted() != null) return;
 		updateMarc(parentRec, childRecs);
-		parentRec.setUpdated(new Date());
+		DedupRecord dr = parentRec.getDedupRecord();
+		if (dr != null) {
+			dr.setUpdated(new Date());
+			drDao.persist(dr);
+		}
 		hrDao.persist(parentRec);
 	}
 
