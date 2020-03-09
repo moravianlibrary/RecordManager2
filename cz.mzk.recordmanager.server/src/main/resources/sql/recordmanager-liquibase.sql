@@ -1951,3 +1951,6 @@ UPDATE oai_harvest_conf SET url='https://katalog-usti.knihovna-uo.cz/cgi-bin/koh
 
 --changeset tomascejpek:178 context:cpk
 UPDATE oai_harvest_conf SET url='https://db.knih-ck.cz/clavius/l.dll' WHERE import_conf_id=373;
+
+--changeset tomascejpek:179 context:cpk
+UPDATE oai_harvest_conf SET url='https://katalog.knihmil.cz/LANius/l.dll' WHERE import_conf_id=378;
