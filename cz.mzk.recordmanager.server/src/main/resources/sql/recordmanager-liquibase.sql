@@ -1945,3 +1945,6 @@ UPDATE oai_harvest_conf SET url='https://tritius.knihovnachodov.cz/tritius/oai-p
 
 --changeset tomascejpek:176 context:cpk
 UPDATE oai_harvest_conf SET url='https://tritius.booksy.cz/tritius/oai-provider' WHERE import_conf_id=364;
+
+--changeset tomascejpek:177 context:cpk
+UPDATE oai_harvest_conf SET url='https://katalog-usti.knihovna-uo.cz/cgi-bin/koha/oai.pl' WHERE import_conf_id=340;
