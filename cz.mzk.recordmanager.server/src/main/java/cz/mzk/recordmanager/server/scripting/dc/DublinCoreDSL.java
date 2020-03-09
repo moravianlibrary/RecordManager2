@@ -216,7 +216,7 @@ public class DublinCoreDSL extends BaseDSL {
 
 	public List<String> getStatuses() {
 		List<String> statuses = dcContext.metadataRecord().getDefaultStatuses();
-		if (statuses != null && !statuses.isEmpty()) return statuses;
+		if (statuses != null && !statuses.isEmpty()) return SolrUtils.createHierarchicFacetValues(statuses);
 		return SolrUtils.createHierarchicFacetValues(Constants.DOCUMENT_AVAILABILITY_ONLINE, getRights());
 	}
 

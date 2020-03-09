@@ -16,7 +16,6 @@ import cz.mzk.recordmanager.server.metadata.CitationRecordType;
 import cz.mzk.recordmanager.server.metadata.MetadataMarcRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecordFormat.HarvestedRecordFormatEnum;
 import cz.mzk.recordmanager.server.util.Constants;
-import cz.mzk.recordmanager.server.util.SolrUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class PatentsMetadataMarcRecord extends MetadataMarcRecord{
@@ -55,7 +54,7 @@ public class PatentsMetadataMarcRecord extends MetadataMarcRecord{
 
 	@Override
 	public List<String> getDefaultStatuses() {
-		return SolrUtils.createHierarchicFacetValues(Constants.DOCUMENT_AVAILABILITY_ONLINE, Constants.DOCUMENT_AVAILABILITY_ONLINE);
+		return Collections.singletonList(Constants.DOCUMENT_AVAILABILITY_ONLINE);
 	}
 	
 	@Override

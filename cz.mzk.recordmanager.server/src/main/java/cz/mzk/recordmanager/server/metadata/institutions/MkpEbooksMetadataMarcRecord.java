@@ -5,10 +5,10 @@ import cz.mzk.recordmanager.server.metadata.MetadataMarcRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.util.Constants;
 import cz.mzk.recordmanager.server.util.MetadataUtils;
-import cz.mzk.recordmanager.server.util.SolrUtils;
 import org.marc4j.marc.DataField;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -39,6 +39,6 @@ public class MkpEbooksMetadataMarcRecord extends MetadataMarcRecord {
 
 	@Override
 	public List<String> getDefaultStatuses() {
-		return SolrUtils.createHierarchicFacetValues(Constants.DOCUMENT_AVAILABILITY_ONLINE, Constants.DOCUMENT_AVAILABILITY_ONLINE);
+		return Collections.singletonList(Constants.DOCUMENT_AVAILABILITY_ONLINE);
 	}
 }

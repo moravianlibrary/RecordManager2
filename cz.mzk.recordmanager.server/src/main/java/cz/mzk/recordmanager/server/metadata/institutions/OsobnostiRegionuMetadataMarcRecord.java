@@ -1,11 +1,11 @@
 package cz.mzk.recordmanager.server.metadata.institutions;
 
-import java.util.List;
-
 import cz.mzk.recordmanager.server.marc.MarcRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.util.Constants;
-import cz.mzk.recordmanager.server.util.SolrUtils;
+
+import java.util.Collections;
+import java.util.List;
 
 public class OsobnostiRegionuMetadataMarcRecord extends AuthMetadataMarcRecord{
 
@@ -15,7 +15,7 @@ public class OsobnostiRegionuMetadataMarcRecord extends AuthMetadataMarcRecord{
 	
 	@Override
 	public List<String> getDefaultStatuses() {
-		return SolrUtils.createHierarchicFacetValues(Constants.DOCUMENT_AVAILABILITY_ONLINE, Constants.DOCUMENT_AVAILABILITY_ONLINE);
+		return Collections.singletonList(Constants.DOCUMENT_AVAILABILITY_ONLINE);
 	}
 
 	@Override

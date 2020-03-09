@@ -1,5 +1,6 @@
 package cz.mzk.recordmanager.server.metadata.institutions;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -8,7 +9,6 @@ import cz.mzk.recordmanager.server.metadata.MetadataDublinCoreRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.util.Constants;
 import cz.mzk.recordmanager.server.util.MetadataUtils;
-import cz.mzk.recordmanager.server.util.SolrUtils;
 
 public class ManuscriptoriumMetadataDublinCoreRecord extends MetadataDublinCoreRecord{
 
@@ -18,7 +18,7 @@ public class ManuscriptoriumMetadataDublinCoreRecord extends MetadataDublinCoreR
 
 	@Override
 	public List<String> getDefaultStatuses() {
-		return SolrUtils.createHierarchicFacetValues(Constants.DOCUMENT_AVAILABILITY_ONLINE, Constants.DOCUMENT_AVAILABILITY_ONLINE);
+		return Collections.singletonList(Constants.DOCUMENT_AVAILABILITY_ONLINE);
 	}
 
 	@Override

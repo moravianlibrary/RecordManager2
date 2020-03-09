@@ -26,12 +26,22 @@ public class GetStatusesMarcFunctions implements MarcRecordFunctions {
 
 	private final static String FREESTACK = "0";
 
+	// hierarchic statuses
 	public List<String> getStatuses(MarcFunctionContext ctx) {
 		MarcRecord record = ctx.record();
 		List<String> statuses = new ArrayList<>();
 		statuses.addAll(ctx.metadataRecord().getDefaultStatuses());
 		if (statuses.isEmpty()) statuses.addAll(getStatusFrom856(record, "856"));
 		statuses.addAll(getStatuses(record, "996"));
+		return SolrUtils.createHierarchicFacetValues(statuses);
+	}
+
+	// statuses without hierarchy
+	public List<String> getStatusesSimple(MarcFunctionContext ctx) {
+		MarcRecord record = ctx.record();
+		List<String> statuses = new ArrayList<>();
+		statuses.addAll(ctx.metadataRecord().getDefaultStatuses());
+		if (statuses.isEmpty()) statuses.addAll(getStatusFrom856(record, "856"));
 		return statuses;
 	}
 
@@ -40,7 +50,7 @@ public class GetStatusesMarcFunctions implements MarcRecordFunctions {
 		for (DataField field : record.getDataFields(statusField)) {
 			if ((field.getSubfield('3') == null || !STOP_WORDS.matcher(field.getSubfield('3').getData()).find())
 					|| (field.getSubfield('y') == null || !STOP_WORDS.matcher(field.getSubfield('y').getData()).find())) {
-				result.addAll(SolrUtils.createHierarchicFacetValues(Constants.DOCUMENT_AVAILABILITY_ONLINE, Constants.DOCUMENT_AVAILABILITY_UNKNOWN));
+				result.add(Constants.DOCUMENT_AVAILABILITY_UNKNOWN);
 			}
 		}
 		return result;
@@ -81,13 +91,13 @@ public class GetStatusesMarcFunctions implements MarcRecordFunctions {
 			}
 		}
 		if (absent) {
-			statuses.addAll(SolrUtils.createHierarchicFacetValues("absent"));
+			statuses.add(Constants.DOCUMENT_AVAILABILITY_ABSENT);
 		}
 		if (present) {
-			statuses.addAll(SolrUtils.createHierarchicFacetValues("present"));
+			statuses.add(Constants.DOCUMENT_AVAILABILITY_PRESENT);
 		}
 		if (freestack) {
-			statuses.addAll(SolrUtils.createHierarchicFacetValues("freestack"));
+			statuses.add(Constants.DOCUMENT_AVAILABILITY_FREESTACK);
 		}
 		return statuses;
 	}

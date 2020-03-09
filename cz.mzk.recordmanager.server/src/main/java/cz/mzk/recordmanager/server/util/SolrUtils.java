@@ -1,22 +1,20 @@
 package cz.mzk.recordmanager.server.util;
 
+import com.google.common.base.Preconditions;
+import cz.mzk.recordmanager.server.index.SolrFieldConstants;
+import cz.mzk.recordmanager.server.model.HarvestedRecordFormat.HarvestedRecordFormatEnum;
+import cz.mzk.recordmanager.server.model.ImportConfiguration;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.solr.client.solrj.util.ClientUtils;
+import org.apache.solr.common.SolrInputDocument;
+import org.marc4j.marc.DataField;
+import org.marc4j.marc.Subfield;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import org.apache.commons.lang3.StringUtils;
-import org.apache.solr.client.solrj.util.ClientUtils;
-import org.apache.solr.common.SolrInputDocument;
-
-import com.google.common.base.Preconditions;
-
-import cz.mzk.recordmanager.server.index.SolrFieldConstants;
-import cz.mzk.recordmanager.server.model.HarvestedRecordFormat.HarvestedRecordFormatEnum;
-import cz.mzk.recordmanager.server.model.ImportConfiguration;
-import org.marc4j.marc.DataField;
-import org.marc4j.marc.Subfield;
 
 public class SolrUtils {
 
@@ -136,6 +134,18 @@ public class SolrUtils {
 			result.add(sb.toString());
 		}
 		return result;
+	}
+
+	public static List<String> createHierarchicFacetValues(final Collection<String> statuses) {
+		List<String> results = new ArrayList<>();
+		for (String status : statuses) {
+			if (status.equals(Constants.DOCUMENT_AVAILABILITY_UNKNOWN)
+					|| status.equals(Constants.DOCUMENT_AVAILABILITY_ONLINE)
+					|| status.equals(Constants.DOCUMENT_AVAILABILITY_PROTECTED)) {
+				results.addAll(createHierarchicFacetValues(Constants.DOCUMENT_AVAILABILITY_ONLINE, status));
+			} else results.addAll(createHierarchicFacetValues(status));
+		}
+		return results;
 	}
 
 	public static List<String> createRecordTypeHierarchicFacet(HarvestedRecordFormatEnum format) {
