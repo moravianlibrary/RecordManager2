@@ -1683,3 +1683,6 @@ UPDATE oai_harvest_conf SET url='https://db.knih-ck.cz/clavius/l.dll' WHERE impo
 
 -- 09. 03. 2019 tomascejpek
 UPDATE oai_harvest_conf SET url='https://katalog.knihmil.cz/LANius/l.dll' WHERE import_conf_id=378;
+
+-- 10. 03. 2019 tomascejpek
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (76, 364, 'SVG001');

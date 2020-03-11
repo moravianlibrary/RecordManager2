@@ -1954,3 +1954,6 @@ UPDATE oai_harvest_conf SET url='https://db.knih-ck.cz/clavius/l.dll' WHERE impo
 
 --changeset tomascejpek:179 context:cpk
 UPDATE oai_harvest_conf SET url='https://katalog.knihmil.cz/LANius/l.dll' WHERE import_conf_id=378;
+
+--changeset tomascejpek:180 context:cpk
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (76, 364, 'SVG001');
