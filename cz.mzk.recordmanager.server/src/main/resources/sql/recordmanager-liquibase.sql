@@ -2107,3 +2107,7 @@ UPDATE oai_harvest_conf SET url='https://kmhk.tritius.cz/tritius/oai-provider',s
 
 --changeset tomascejpek:195
 ALTER TABLE kramerius_conf ADD COLUMN availability_harvest_frequency CHAR(1) DEFAULT 'U';
+
+--changeset tomascejpek:196
+ALTER TABLE import_conf ADD COLUMN indexed BOOLEAN DEFAULT TRUE;
+

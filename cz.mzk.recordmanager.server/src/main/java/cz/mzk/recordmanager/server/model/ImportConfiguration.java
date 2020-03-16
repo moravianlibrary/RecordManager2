@@ -90,6 +90,9 @@ public abstract class ImportConfiguration extends AbstractDomainObject {
 	@Column(name = "ziskej_enabled")
 	private boolean ziskejEnabled = false;
 
+	@Column(name = "indexed")
+	private boolean indexed = true;
+
 	public Library getLibrary() {
 		return library;
 	}
@@ -224,5 +227,13 @@ public abstract class ImportConfiguration extends AbstractDomainObject {
 
 	public void setGenerateBiblioLinkerKeys(boolean generateBiblioLinkerKeys) {
 		this.generateBiblioLinkerKeys = generateBiblioLinkerKeys;
+	}
+
+	public boolean isIndexed() {
+		return indexed;
+	}
+
+	public void setIndexed(boolean indexed) {
+		this.indexed = indexed;
 	}
 }
