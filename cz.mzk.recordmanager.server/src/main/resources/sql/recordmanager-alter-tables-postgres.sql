@@ -1666,28 +1666,28 @@ INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granul
 -- 21. 01. 2020 tomascejpek
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (67, 391, 'ABA009');
 
--- 24. 01. 2019 tomascejpek
+-- 24. 01. 2020 tomascejpek
 UPDATE oai_harvest_conf SET url='https://chodov.tritius.cz/tritius/oai-provider' WHERE import_conf_id=350;
 
--- 11. 02. 2019 tomascejpek
+-- 11. 02. 2020 tomascejpek
 UPDATE oai_harvest_conf SET url='https://tritius.knihovnachodov.cz/tritius/oai-provider' WHERE import_conf_id=350;
 
--- 03. 03. 2019 tomascejpek
+-- 03. 03. 2020 tomascejpek
 UPDATE oai_harvest_conf SET url='https://tritius.booksy.cz/tritius/oai-provider' WHERE import_conf_id=364;
 
--- 09. 03. 2019 tomascejpek
+-- 09. 03. 2020 tomascejpek
 UPDATE oai_harvest_conf SET url='https://katalog-usti.knihovna-uo.cz/cgi-bin/koha/oai.pl' WHERE import_conf_id=340;
 
--- 09. 03. 2019 tomascejpek
+-- 09. 03. 2020 tomascejpek
 UPDATE oai_harvest_conf SET url='https://db.knih-ck.cz/clavius/l.dll' WHERE import_conf_id=373;
 
--- 09. 03. 2019 tomascejpek
+-- 09. 03. 2020 tomascejpek
 UPDATE oai_harvest_conf SET url='https://katalog.knihmil.cz/LANius/l.dll' WHERE import_conf_id=378;
 
--- 10. 03. 2019 tomascejpek
+-- 10. 03. 2020 tomascejpek
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (76, 364, 'SVG001');
 
--- 11. 03. 2019 tomascejpek
+-- 11. 03. 2020 tomascejpek
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (78, 369, 'KAG001');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (79, 403, 'KAG001');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (80, 404, 'KAG001');
