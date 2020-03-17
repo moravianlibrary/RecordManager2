@@ -290,7 +290,7 @@ INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granul
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity,extract_id_regex) VALUES (340,'https://katalog-usti.knihovna-uo.cz/cgi-bin/koha/oai.pl','CPK','marccpk',NULL,'UOG001:(.*)');
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity,harvest_job_name) VALUES (342,'http://oai.medvik.cz/bmc/oai','3','xml-marc',NULL,'oaiHarvestOneByOneJob');
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (343,'https://katalog.kfbz.cz/api/oai','default','marc21',NULL);
-INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity, extract_id_regex, harvest_job_name) VALUES (345, 'https://web2.mlp.cz/cgi/oai', 'ebook', 'marc21', null, null, null);
+INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity, extract_id_regex, harvest_job_name) VALUES (345, 'https://web2.mlp.cz/cgi/oaie', 'ebook', 'marc21', null, null, null);
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (346,'https://tritius.knihovnaprerov.cz/tritius/oai-provider','CPK_1','marc21',NULL);
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (347,NULL,NULL,'marc21',NULL);
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (348,'https://katalog.npmk.cz/api/oai','4','marc21',NULL);
