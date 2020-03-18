@@ -1,5 +1,6 @@
 package cz.mzk.recordmanager.server.index;
 
+import java.util.ArrayList;
 import java.util.List;
 import org.apache.solr.common.SolrInputDocument;
 import org.slf4j.Logger;
@@ -24,7 +25,10 @@ public class SolrRecordProcessor implements ItemProcessor<DedupRecord, List<Solr
 	public List<SolrInputDocument> process(DedupRecord dedupRecord) throws Exception {
 		logger.debug("About to process dedup_record with id={}", dedupRecord.getId());
 		try {
-			List<HarvestedRecord> records = harvestedRecordDao.getByDedupRecord(dedupRecord);
+			List<HarvestedRecord> records = new ArrayList<>();
+			for (HarvestedRecord record : harvestedRecordDao.getByDedupRecord(dedupRecord)) {
+				if (record.getHarvestedFrom().isIndexed()) records.add(record);
+			}
 			if (records.isEmpty()) {
 				return null;
 			}

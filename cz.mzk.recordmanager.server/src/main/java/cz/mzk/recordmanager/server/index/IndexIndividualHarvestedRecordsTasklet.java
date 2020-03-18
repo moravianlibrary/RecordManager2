@@ -50,8 +50,10 @@ public class IndexIndividualHarvestedRecordsTasklet implements Tasklet {
 			if (rec == null) {
 				throw new IllegalArgumentException(String.format("Harvested record %s not found", solrId));
 			}
-			SolrInputDocument document = solrInputDocumentFactory.create(rec);
-			documents.add(SolrUtils.removeHiddenFields(document));
+			if (rec.getHarvestedFrom().isIndexed()) {
+				SolrInputDocument document = solrInputDocumentFactory.create(rec);
+				documents.add(SolrUtils.removeHiddenFields(document));
+			}
 		}
 		solrServer.add(documents, commitWithinMs);
 		solrServer.commit();
