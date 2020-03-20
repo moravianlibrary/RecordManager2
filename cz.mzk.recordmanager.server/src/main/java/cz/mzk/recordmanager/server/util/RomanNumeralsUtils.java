@@ -14,7 +14,7 @@ public final class RomanNumeralsUtils {
 		ROMAN_NUMERALS.put(Pattern.compile("\\b3\\b"), "III");
 		ROMAN_NUMERALS.put(Pattern.compile("\\b4\\b"), "IV");
 		ROMAN_NUMERALS.put(Pattern.compile("\\b5\\b"), "V");
-		ROMAN_NUMERALS.put(Pattern.compile("\\b6\\b"), "VII");
+		ROMAN_NUMERALS.put(Pattern.compile("\\b6\\b"), "VI");
 		ROMAN_NUMERALS.put(Pattern.compile("\\b7\\b"), "VII");
 		ROMAN_NUMERALS.put(Pattern.compile("\\b8\\b"), "VIII");
 		ROMAN_NUMERALS.put(Pattern.compile("\\b9\\b"), "IX");
