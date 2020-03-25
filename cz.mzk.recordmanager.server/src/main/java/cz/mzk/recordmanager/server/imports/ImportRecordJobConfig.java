@@ -165,15 +165,17 @@ public class ImportRecordJobConfig {
 	public Step importAntikvariatyRecordsStep() throws Exception {
 		return steps.get("antikvariaty:importRecordsStep")
 				.<AntikvariatyRecord, AntikvariatyRecord>chunk(10)//
-				.reader(importAntikvariatyReader(LONG_OVERRIDEN_BY_EXPRESSION))//
+				.reader(importAntikvariatyReader(LONG_OVERRIDEN_BY_EXPRESSION, STRING_OVERRIDEN_BY_EXPRESSION))//
 				.writer(importAntikvariatyWriter()) //
 				.build();
 	}
 
 	@Bean(name = Constants.JOB_ID_IMPORT_ANTIKVARIATY + ":reader")
 	@StepScope
-	public ItemReader<AntikvariatyRecord> importAntikvariatyReader(@Value("#{jobParameters[" + Constants.JOB_PARAM_CONF_ID + "]}") Long configId) throws Exception {
-		return new AntikvariatyRecordsReader(configId);
+	public ItemReader<AntikvariatyRecord> importAntikvariatyReader(
+			@Value("#{jobParameters[" + Constants.JOB_PARAM_CONF_ID + "]}") Long configId,
+			@Value("#{jobParameters[" + Constants.JOB_PARAM_IN_FILE + "]}") String filename) throws Exception {
+		return new AntikvariatyRecordsReader(configId, filename);
 	}
 
 	@Bean(name = Constants.JOB_ID_IMPORT_ANTIKVARIATY + ":writer")
