@@ -2,6 +2,7 @@ package cz.mzk.recordmanager.server.metadata.institutions;
 
 import cz.mzk.recordmanager.server.marc.MarcRecord;
 import cz.mzk.recordmanager.server.metadata.MetadataMarcRecord;
+import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.util.Constants;
 import cz.mzk.recordmanager.server.util.MetadataUtils;
 import cz.mzk.recordmanager.server.util.SolrUtils;
@@ -16,8 +17,8 @@ public class MkpEbooksMetadataMarcRecord extends MetadataMarcRecord {
 	private static final Pattern URL_Y_PATTERN = Pattern.compile("Plný text");
 	private static final String URL_COMMENT = "Stáhněte zdarma (%s)";
 
-	public MkpEbooksMetadataMarcRecord(MarcRecord underlayingMarc) {
-		super(underlayingMarc);
+	public MkpEbooksMetadataMarcRecord(MarcRecord underlayingMarc, HarvestedRecord hr) {
+		super(underlayingMarc, hr);
 	}
 
 	@Override
@@ -28,7 +29,8 @@ public class MkpEbooksMetadataMarcRecord extends MetadataMarcRecord {
 					&& URL_Y_PATTERN.matcher(df.getSubfield('y').getData()).find()
 					&& df.getSubfield('u') != null
 					&& df.getSubfield('q') != null) {
-				results.add(MetadataUtils.generateUrl(Constants.DOCUMENT_AVAILABILITY_ONLINE,
+				results.add(MetadataUtils.generateUrl(harvestedRecord.getHarvestedFrom().getIdPrefix(),
+						Constants.DOCUMENT_AVAILABILITY_ONLINE,
 						df.getSubfield('u').getData(), String.format(URL_COMMENT, df.getSubfield('q').getData())));
 			}
 		}

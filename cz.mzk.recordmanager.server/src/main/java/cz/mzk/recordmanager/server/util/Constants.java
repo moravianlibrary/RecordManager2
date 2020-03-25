@@ -100,6 +100,7 @@ public class Constants {
 	public static final String PREFIX_ANL				= "anl";
 	public static final String PREFIX_AUTH				= "auth";
 	public static final String PREFIX_BMC				= "bmc";
+	public static final String PREFIX_BOOKPORT			= "bookport";
 	public static final String PREFIX_CASLIN			= "caslin";
 	public static final String PREFIX_CBVK				= "cbvk";
 	public static final String PREFIX_CELITEBIB			= "celitebib";

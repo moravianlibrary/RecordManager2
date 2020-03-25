@@ -2,6 +2,7 @@ package cz.mzk.recordmanager.server.metadata.institutions;
 
 import cz.mzk.recordmanager.server.marc.MarcRecord;
 import cz.mzk.recordmanager.server.metadata.MetadataMarcRecord;
+import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.util.Constants;
 
 import java.util.ArrayList;
@@ -12,8 +13,8 @@ public class BmcMetadataMarcRecord extends MetadataMarcRecord{
 	private static final String SUBJECT_FACET_FILE = "subject_facet_bmc.txt";
 	private static final String LINK_STR = "%s|https://www.medvik.cz/bmc/link.do?id=%s|záznam v BMČ";
 
-	public BmcMetadataMarcRecord(MarcRecord underlayingMarc){
-		super(underlayingMarc);		
+	public BmcMetadataMarcRecord(MarcRecord underlayingMarc, HarvestedRecord hr) {
+		super(underlayingMarc, hr);
 	}
 
 	@Override

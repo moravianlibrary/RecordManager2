@@ -51,7 +51,7 @@ public class KramDefaultMetadataDublinCoreRecord extends
 				.anyMatch(s -> PUBLIC_RIGHTS_PATTERN.matcher(s).matches())
 				? Constants.DOCUMENT_AVAILABILITY_ONLINE
 				: Constants.DOCUMENT_AVAILABILITY_PROTECTED;
-		return Collections.singletonList(MetadataUtils.generateUrl(
+		return Collections.singletonList(MetadataUtils.generateUrl(harvestedRecord.getHarvestedFrom().getIdPrefix(),
 				policy, kramUrlBase + harvestedRecord.getUniqueId().getRecordId(), ""));
 	}
 

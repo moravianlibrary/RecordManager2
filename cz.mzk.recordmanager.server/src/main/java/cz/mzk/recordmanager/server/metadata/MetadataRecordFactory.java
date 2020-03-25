@@ -70,18 +70,18 @@ public class MetadataRecordFactory {
 		String prefix = getPrefix(configuration);
 		switch (prefix) {
 		case Constants.PREFIX_MZK:
-			return new MzkMetadataMarcRecord(marcRec);
+			return new MzkMetadataMarcRecord(marcRec, hr);
 		case Constants.PREFIX_NKP:
-			return new NkpMarcMetadataRecord(marcRec);
+			return new NkpMarcMetadataRecord(marcRec, hr);
 		case Constants.PREFIX_TRE:
 		case Constants.PREFIX_MKUO:
-			return new TreMetadataMarcRecord(marcRec);
+			return new TreMetadataMarcRecord(marcRec, hr);
 		case Constants.PREFIX_MZKNORMS:
-			return new MzkNormsMetadataMarcRecord(marcRec);
+			return new MzkNormsMetadataMarcRecord(marcRec, hr);
 		case Constants.PREFIX_SFXKNAV:
-			return new SfxMetadataMarcRecord(marcRec);
+			return new SfxMetadataMarcRecord(marcRec, hr);
 		case Constants.PREFIX_SFXJIBNLK_PERIODICALS:
-			return new SfxjibNlkPeriodicalsMetadataMarcRecord(marcRec);
+			return new SfxjibNlkPeriodicalsMetadataMarcRecord(marcRec, hr);
 		case Constants.PREFIX_SFXJIBCBVK:
 		case Constants.PREFIX_SFXJIBFREE:
 		case Constants.PREFIX_SFXJIBKFBZ:
@@ -94,70 +94,70 @@ public class MetadataRecordFactory {
 		case Constants.PREFIX_SFXJIBSVKPK:
 		case Constants.PREFIX_SFXJIBVKOL:
 		case Constants.PREFIX_SFXJIBMKHK:
-			return new SfxJibMetadataMarcRecord(marcRec);
+			return new SfxJibMetadataMarcRecord(marcRec, hr);
 		case Constants.PREFIX_SFXJIBIREL:
-			return new SfxJibIrelMetadataMarcRecord(marcRec);
+			return new SfxJibIrelMetadataMarcRecord(marcRec, hr);
 		case Constants.PREFIX_SFXJIBKIV:
-			return new SfxJibKivMetadataMarcRecord(marcRec);
+			return new SfxJibKivMetadataMarcRecord(marcRec, hr);
 		case Constants.PREFIX_SFXJIBMUS:
-			return new SfxJibMusMetadataMarcRecord(marcRec);
+			return new SfxJibMusMetadataMarcRecord(marcRec, hr);
 		case Constants.PREFIX_SFXJIBTECH:
-			return new SfxJibTechMetadataMarcRecord(marcRec);
+			return new SfxJibTechMetadataMarcRecord(marcRec, hr);
 		case Constants.PREFIX_SFXJIBKNAV:
-			return new SfxKnavMetadataMarcRecord(marcRec);
+			return new SfxKnavMetadataMarcRecord(marcRec, hr);
 		case Constants.PREFIX_SFXTECHLIBNTK:
 		case Constants.PREFIX_SFXTECHLIBUOCHB:
 		case Constants.PREFIX_SFXTECHLIBVSCHT:
-			return new SfxTechlibMetadataMarcRecord(marcRec);
+			return new SfxTechlibMetadataMarcRecord(marcRec, hr);
 		case Constants.PREFIX_SFXJIBNLK:
-			return new SfxjibNlkMetadataMarcRecord(marcRec);
+			return new SfxjibNlkMetadataMarcRecord(marcRec, hr);
 		case Constants.PREFIX_SFXJIBMUNI:
-			return new SfxDirectMetadataMarcRecord(marcRec);
+			return new SfxDirectMetadataMarcRecord(marcRec, hr);
 		case Constants.PREFIX_CASLIN:
-			return new SkatMarcMetadataRecord(marcRec);
+			return new SkatMarcMetadataRecord(marcRec, hr);
 		case Constants.PREFIX_AUTH:
-			MetadataRecord mrAuth = new AuthMetadataMarcRecord(marcRec);
+			MetadataRecord mrAuth = new AuthMetadataMarcRecord(marcRec, hr);
 			init(mrAuth);
 			return mrAuth;
 		case Constants.PREFIX_OSOBNOSTI:
-			return new OsobnostiRegionuMetadataMarcRecord(marcRec);
+			return new OsobnostiRegionuMetadataMarcRecord(marcRec, hr);
 		case Constants.PREFIX_SVKUL:
-			return new SvkulMetadataMarcRecord(marcRec);
+			return new SvkulMetadataMarcRecord(marcRec, hr);
 		case Constants.PREFIX_VKOL:
-			return new VkolMarcMetadataRecord(marcRec);
+			return new VkolMarcMetadataRecord(marcRec, hr);
 		case Constants.PREFIX_ZAKONY:
-			return new ZakonyProLidiMetadataMarcRecord(marcRec);
+			return new ZakonyProLidiMetadataMarcRecord(marcRec, hr);
 		case Constants.PREFIX_MKP_EBOOKS:
-			return new MkpEbooksMetadataMarcRecord(marcRec);
+			return new MkpEbooksMetadataMarcRecord(marcRec, hr);
 		case Constants.PREFIX_BMC:
-			return new BmcMetadataMarcRecord(marcRec);
+			return new BmcMetadataMarcRecord(marcRec, hr);
 		case Constants.PREFIX_UPV:
-			MetadataRecord mr = new PatentsMetadataMarcRecord(marcRec);
+			MetadataRecord mr = new PatentsMetadataMarcRecord(marcRec, hr);
 			init(mr);
 			return mr;
 		case Constants.PREFIX_OPENLIB:
-			return new OpenLibraryMetadataMarcRecord(marcRec);
+			return new OpenLibraryMetadataMarcRecord(marcRec, hr);
 		case Constants.PREFIX_MESH:
-			return new MeshMarcMetadataRecord(marcRec);
+			return new MeshMarcMetadataRecord(marcRec, hr);
 		case Constants.PREFIX_LIBRARY:
-			MetadataRecord mrLib = new LibraryMetadataMarcRecord(marcRec);
+			MetadataRecord mrLib = new LibraryMetadataMarcRecord(marcRec, hr);
 			init(mrLib);
 			return mrLib;
 		case Constants.PREFIX_TDKIV:
-			return new TdkivMetadataMarcRecord(marcRec);
+			return new TdkivMetadataMarcRecord(marcRec, hr);
 		case Constants.PREFIX_AGROVOC:
-			return new AgrovocMarcMetadataRecord(marcRec);
+			return new AgrovocMarcMetadataRecord(marcRec, hr);
 		case Constants.PREFIX_KVKL:
 		case Constants.PREFIX_CBVK:
 		case Constants.PREFIX_SVKKL:
 		case Constants.PREFIX_UPOL:
-			return new CosmotronMetadataMarcRecord(marcRec);
+			return new CosmotronMetadataMarcRecord(marcRec, hr);
 		case Constants.PREFIX_PKJAK:
-			return new PkjakMetadataMarcRecord(marcRec);
+			return new PkjakMetadataMarcRecord(marcRec, hr);
 		case Constants.PREFIX_KKKV:
-			return new KkkvMetadataMarcRecord(marcRec);
+			return new KkkvMetadataMarcRecord(marcRec, hr);
 		case Constants.PREFIX_MKP:
-			return new MkpMetadataMarcRecord(marcRec);
+			return new MkpMetadataMarcRecord(marcRec, hr);
 		case Constants.PREFIX_CMUZ:
 		case Constants.PREFIX_KKVY:
 		case Constants.PREFIX_KNEP:
@@ -177,7 +177,7 @@ public class MetadataRecordFactory {
 		case Constants.PREFIX_MKTRI:
 		case Constants.PREFIX_MKZN:
 		case Constants.PREFIX_VFU:
-			return new ClaviusMetadataMarcRecord(marcRec);
+			return new ClaviusMetadataMarcRecord(marcRec, hr);
 		case Constants.PREFIX_KRAM_KNAV:
 			return new KramKnavMetadataMarcRecord(marcRec, hr);
 		case Constants.PREFIX_KRAM_MZK:
@@ -197,11 +197,13 @@ public class MetadataRecordFactory {
 		case Constants.PREFIX_KRAM_VKOL:
 			return new KramVkolMetadataMarcRecord(marcRec, hr);
 		case Constants.PREFIX_UZEI:
-			return new UzeiMetadataMarcRecord(marcRec);
+			return new UzeiMetadataMarcRecord(marcRec, hr);
 		case Constants.PREFIX_RKKA:
-			return new RkkaMetadataMarcRecord(marcRec);
+			return new RkkaMetadataMarcRecord(marcRec, hr);
+		case Constants.PREFIX_BOOKPORT:
+			return new BookportMetadataMarcRecord(marcRec, hr);
 		default:
-			return new MetadataMarcRecord(marcRec);
+			return new MetadataMarcRecord(marcRec, hr);
 		}
 	}
 
@@ -225,11 +227,11 @@ public class MetadataRecordFactory {
 		case Constants.PREFIX_KRAM_KNAV:
 			return new KramKnavMetadataDublinCoreRecord(dcRec, hr);
 		case Constants.PREFIX_KRAM3_NKP:
-			return new Kram3NkpMetadataDublinCoreRecord(dcRec);
+			return new Kram3NkpMetadataDublinCoreRecord(dcRec, hr);
 		case Constants.PREFIX_MANUSCRIPTORIUM:
-			return new ManuscriptoriumMetadataDublinCoreRecord(dcRec);
+			return new ManuscriptoriumMetadataDublinCoreRecord(dcRec, hr);
 		default:
-			return getMetadataRecord(dcRec);
+			return new MetadataDublinCoreRecord(dcRec, hr);
 		}
 	}
 

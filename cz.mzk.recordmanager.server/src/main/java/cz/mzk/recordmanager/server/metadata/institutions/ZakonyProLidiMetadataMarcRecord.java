@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
+import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import org.marc4j.marc.DataField;
 
 import cz.mzk.recordmanager.server.marc.MarcRecord;
@@ -81,9 +82,9 @@ public class ZakonyProLidiMetadataMarcRecord extends MetadataMarcRecord{
     	TYPES.put(TEXT_RAD, HarvestedRecordFormatEnum.LEGISLATIVE_CODE);
     	TYPES.put(TEXT_OSTATNI, HarvestedRecordFormatEnum.LEGISLATIVE_OTHERS);
     }
-	
-	public ZakonyProLidiMetadataMarcRecord(MarcRecord underlayingMarc) {
-		super(underlayingMarc);
+
+	public ZakonyProLidiMetadataMarcRecord(MarcRecord underlayingMarc, HarvestedRecord hr) {
+		super(underlayingMarc, hr);
 	}
 	
 	@Override

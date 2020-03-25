@@ -21,6 +21,7 @@ public class UrlHarvestedRecordEnricher implements HarvestedRecordEnricher {
 
 	private static final Pattern UNKNOWN = Pattern.compile("unknown");
 	private static final Pattern OBALKA = Pattern.compile("\\|obálka", Pattern.CASE_INSENSITIVE);
+	private static final Pattern KRAM_AVAILABILITY = Pattern.compile("^[^|]+\\|unknown|", Pattern.CASE_INSENSITIVE);
 
 	/**
 	 * generate links in standard format "institution code"|"policy code"|"url"
@@ -31,7 +32,6 @@ public class UrlHarvestedRecordEnricher implements HarvestedRecordEnricher {
 	 */
 	@Override
 	public void enrich(HarvestedRecord record, SolrInputDocument document) {
-		String institutionCode = record.getHarvestedFrom().getIdPrefix();
 		Set<String> urls = new HashSet<>();
 		if (document.containsKey(SolrFieldConstants.URL)) {
 			for (Object obj: document.getFieldValues(SolrFieldConstants.URL)) {
@@ -42,16 +42,15 @@ public class UrlHarvestedRecordEnricher implements HarvestedRecordEnricher {
 		}
 
 		document.remove(SolrFieldConstants.URL);
-
 		Set<String> result = new HashSet<>();
-		urls.forEach(url -> result.add(institutionCode + '|' + updateKrameriusPolicy(record, url)));
+		urls.forEach(url -> result.add(updateKrameriusPolicy(record, url)));
 		document.addField(SolrFieldConstants.URL,
 				result.stream().filter(url -> !OBALKA.matcher(url).find()).collect(Collectors.toSet()));
 	}
 
 	private String updateKrameriusPolicy(HarvestedRecord hr, String url) {
 		if (hr.getHarvestedFrom().getIdPrefix() != null && hr.getHarvestedFrom().getIdPrefix().startsWith("kram-")
-				&& url.startsWith("unknown")) {
+				&& KRAM_AVAILABILITY.matcher(url).find()) {
 			url = CleaningUtils.replaceFirst(url, UNKNOWN, fulltextKrameriusDAO.getPolicy(hr.getId()));
 		}
 		return url;

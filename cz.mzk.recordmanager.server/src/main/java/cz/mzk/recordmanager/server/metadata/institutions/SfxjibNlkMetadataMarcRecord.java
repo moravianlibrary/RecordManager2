@@ -2,6 +2,7 @@ package cz.mzk.recordmanager.server.metadata.institutions;
 
 import java.util.regex.Pattern;
 
+import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import org.marc4j.marc.DataField;
 
 import cz.mzk.recordmanager.server.marc.MarcRecord;
@@ -12,8 +13,8 @@ public class SfxjibNlkMetadataMarcRecord extends MetadataMarcRecord {
 	private static final Pattern URL = Pattern
 			.compile("http://www.medvik.cz/link/access.do");
 
-	public SfxjibNlkMetadataMarcRecord(MarcRecord underlayingMarc) {
-		super(underlayingMarc);
+	public SfxjibNlkMetadataMarcRecord(MarcRecord underlayingMarc, HarvestedRecord hr) {
+		super(underlayingMarc, hr);
 	}
 
 	@Override

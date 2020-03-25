@@ -7,6 +7,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import cz.mzk.recordmanager.server.model.BLTopicKey;
+import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordDAO;
 import org.marc4j.marc.DataField;
 
@@ -26,9 +27,9 @@ public class PatentsMetadataMarcRecord extends MetadataMarcRecord{
 	private Pattern IPC = Pattern.compile("MPT|IPC", Pattern.CASE_INSENSITIVE);
 	private static final Pattern APPLICATION_PATTERN = Pattern.compile("Číslo přihlášky: (.*)");
 	private static final Pattern DOCNUMBER_PATTERN = Pattern.compile("St36_CZ_([^_]*)_A3");
-	
-	public PatentsMetadataMarcRecord(MarcRecord underlayingMarc) {
-		super(underlayingMarc);
+
+	public PatentsMetadataMarcRecord(MarcRecord underlayingMarc, HarvestedRecord hr) {
+		super(underlayingMarc, hr);
 	}
 	
 	@Override

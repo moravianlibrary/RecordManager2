@@ -2,6 +2,7 @@ package cz.mzk.recordmanager.server.metadata.institutions;
 
 import cz.mzk.recordmanager.server.marc.MarcRecord;
 import cz.mzk.recordmanager.server.metadata.MetadataMarcRecord;
+import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecordFormat.HarvestedRecordFormatEnum;
 
 import java.util.ArrayList;
@@ -13,8 +14,8 @@ public class ClaviusMetadataMarcRecord extends MetadataMarcRecord {
 	private static final Pattern ID_START_LEADER = Pattern.compile("^(?:AV|ZK)", Pattern.CASE_INSENSITIVE);
 	private static final Pattern ID_START_OTHERS = Pattern.compile("^(?:SH)", Pattern.CASE_INSENSITIVE);
 
-	public ClaviusMetadataMarcRecord(MarcRecord underlayingMarc) {
-		super(underlayingMarc);
+	public ClaviusMetadataMarcRecord(MarcRecord underlayingMarc, HarvestedRecord hr) {
+		super(underlayingMarc, hr);
 	}
 
 	@Override

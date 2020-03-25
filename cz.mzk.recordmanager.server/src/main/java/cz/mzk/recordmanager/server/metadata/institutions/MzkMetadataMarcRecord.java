@@ -2,6 +2,7 @@ package cz.mzk.recordmanager.server.metadata.institutions;
 
 import cz.mzk.recordmanager.server.marc.MarcRecord;
 import cz.mzk.recordmanager.server.metadata.MetadataMarcRecord;
+import cz.mzk.recordmanager.server.model.HarvestedRecord;
 
 import java.util.regex.Pattern;
 
@@ -9,8 +10,8 @@ public class MzkMetadataMarcRecord extends MetadataMarcRecord {
 
 	private static final Pattern CLUSTER_ID_PATTERN = Pattern.compile("00.*");
 
-	public MzkMetadataMarcRecord(MarcRecord underlayingMarc) {
-		super(underlayingMarc);
+	public MzkMetadataMarcRecord(MarcRecord underlayingMarc, HarvestedRecord hr) {
+		super(underlayingMarc, hr);
 	}
 
 	@Override

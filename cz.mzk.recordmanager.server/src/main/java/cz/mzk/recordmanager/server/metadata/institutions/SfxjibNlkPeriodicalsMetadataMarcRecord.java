@@ -3,12 +3,13 @@ package cz.mzk.recordmanager.server.metadata.institutions;
 import java.util.List;
 
 import cz.mzk.recordmanager.server.marc.MarcRecord;
+import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecordFormat.HarvestedRecordFormatEnum;
 
 public class SfxjibNlkPeriodicalsMetadataMarcRecord extends SfxMetadataMarcRecord{
 
-	public SfxjibNlkPeriodicalsMetadataMarcRecord(MarcRecord underlayingMarc) {
-		super(underlayingMarc);
+	public SfxjibNlkPeriodicalsMetadataMarcRecord(MarcRecord underlayingMarc, HarvestedRecord hr) {
+		super(underlayingMarc, hr);
 	}
 
 	@Override

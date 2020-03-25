@@ -2,6 +2,7 @@ package cz.mzk.recordmanager.server.metadata.institutions;
 
 import cz.mzk.recordmanager.server.marc.MarcRecord;
 import cz.mzk.recordmanager.server.metadata.MetadataMarcRecord;
+import cz.mzk.recordmanager.server.model.HarvestedRecord;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -10,8 +11,8 @@ public class SfxJibMetadataMarcRecord extends MetadataMarcRecord {
 
 	private static final String SFX_URL = "http://sfx.knihovny.cz/sfxlcl3";
 
-	public SfxJibMetadataMarcRecord(MarcRecord underlayingMarc) {
-		super(underlayingMarc);
+	public SfxJibMetadataMarcRecord(MarcRecord underlayingMarc, HarvestedRecord hr) {
+		super(underlayingMarc, hr);
 	}
 
 	private static final Map<String, String> SFX_PREFIX = new HashMap<>();

@@ -1,5 +1,6 @@
 package cz.mzk.recordmanager.server.marc;
 
+import cz.mzk.recordmanager.api.model.OaiHarvestConfigurationDto;
 import cz.mzk.recordmanager.server.AbstractTest;
 import cz.mzk.recordmanager.server.metadata.CitationRecordType;
 import cz.mzk.recordmanager.server.metadata.MetadataRecord;
@@ -935,24 +936,29 @@ public class MarcRecordImplTest extends AbstractTest {
 		MarcRecordImpl mri;
 		List<String> metadataList = new ArrayList<>();
 		List<String> results = new ArrayList<>();
+		String idPrefix = "mzk";
 
 		metadataList.add("856 $ulink");
-		results.add(MetadataUtils.generateUrl(Constants.DOCUMENT_AVAILABILITY_UNKNOWN, "link", ""));
+		results.add(MetadataUtils.generateUrl(idPrefix, Constants.DOCUMENT_AVAILABILITY_UNKNOWN, "link", ""));
 
 		metadataList.add("856 $ulink$3comment3$ycommenty$zcommentz");
-		results.add(MetadataUtils.generateUrl(Constants.DOCUMENT_AVAILABILITY_UNKNOWN, "link", "comment3 (commentz)"));
+		results.add(MetadataUtils.generateUrl(idPrefix, Constants.DOCUMENT_AVAILABILITY_UNKNOWN, "link", "comment3 (commentz)"));
 
 		metadataList.add("856 $ulink$ycommenty$zcommentz");
-		results.add(MetadataUtils.generateUrl(Constants.DOCUMENT_AVAILABILITY_UNKNOWN, "link", "commenty (commentz)"));
+		results.add(MetadataUtils.generateUrl(idPrefix, Constants.DOCUMENT_AVAILABILITY_UNKNOWN, "link", "commenty (commentz)"));
 
 		metadataList.add("856 $ulink$zcommentz");
-		results.add(MetadataUtils.generateUrl(Constants.DOCUMENT_AVAILABILITY_UNKNOWN, "link", "commentz"));
+		results.add(MetadataUtils.generateUrl(idPrefix, Constants.DOCUMENT_AVAILABILITY_UNKNOWN, "link", "commentz"));
 
 		metadataList.add("856 $ulink$3comment3");
-		results.add(MetadataUtils.generateUrl(Constants.DOCUMENT_AVAILABILITY_UNKNOWN, "link", "comment3"));
+		results.add(MetadataUtils.generateUrl(idPrefix, Constants.DOCUMENT_AVAILABILITY_UNKNOWN, "link", "comment3"));
 
 		mri = MarcRecordFactory.recordFactory(metadataList);
-		Assert.assertEquals(metadataFactory.getMetadataRecord(mri).getUrls(), results);
+		HarvestedRecord hr = new HarvestedRecord();
+		OAIHarvestConfiguration conf = new OAIHarvestConfiguration();
+		conf.setIdPrefix(idPrefix);
+		hr.setHarvestedFrom(conf);
+		Assert.assertEquals(metadataFactory.getMetadataRecord(hr, mri).getUrls(), results);
 	}
 
 	@Test

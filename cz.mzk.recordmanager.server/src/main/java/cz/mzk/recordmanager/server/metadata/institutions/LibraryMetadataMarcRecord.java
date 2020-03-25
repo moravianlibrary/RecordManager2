@@ -3,6 +3,7 @@ package cz.mzk.recordmanager.server.metadata.institutions;
 import cz.mzk.recordmanager.server.marc.MarcRecord;
 import cz.mzk.recordmanager.server.metadata.MetadataMarcRecord;
 import cz.mzk.recordmanager.server.model.BLTopicKey;
+import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordDAO;
 import org.marc4j.marc.DataField;
 import org.marc4j.marc.Subfield;
@@ -26,8 +27,8 @@ public class LibraryMetadataMarcRecord extends MetadataMarcRecord {
 
 	private static final Map<String, String> siglaCache = new ConcurrentHashMap<>(16, 0.9f, 1);
 
-	public LibraryMetadataMarcRecord(MarcRecord underlayingMarc) {
-		super(underlayingMarc);
+	public LibraryMetadataMarcRecord(MarcRecord underlayingMarc, HarvestedRecord hr) {
+		super(underlayingMarc, hr);
 	}
 
 	@Override

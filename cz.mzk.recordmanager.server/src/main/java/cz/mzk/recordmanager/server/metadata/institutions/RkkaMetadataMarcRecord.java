@@ -2,12 +2,13 @@ package cz.mzk.recordmanager.server.metadata.institutions;
 
 import cz.mzk.recordmanager.server.marc.MarcRecord;
 import cz.mzk.recordmanager.server.metadata.MetadataMarcRecord;
+import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.util.MetadataUtils;
 
 public class RkkaMetadataMarcRecord extends MetadataMarcRecord {
 
-	public RkkaMetadataMarcRecord(MarcRecord underlayingMarc) {
-		super(underlayingMarc);
+	public RkkaMetadataMarcRecord(MarcRecord underlayingMarc, HarvestedRecord hr) {
+		super(underlayingMarc, hr);
 	}
 
 	@Override

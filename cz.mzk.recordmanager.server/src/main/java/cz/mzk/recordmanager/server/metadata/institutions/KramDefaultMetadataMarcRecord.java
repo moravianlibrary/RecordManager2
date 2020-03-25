@@ -36,8 +36,8 @@ public class KramDefaultMetadataMarcRecord extends
 	}
 
 	public List<String> generateUrl(String kramUrlBase) {
-		return Collections.singletonList(MetadataUtils.generateUrl(getPolicyKramerius(), kramUrlBase +
-				harvestedRecord.getUniqueId().getRecordId(), URL_COMMENT));
+		return Collections.singletonList(MetadataUtils.generateUrl(harvestedRecord.getHarvestedFrom().getIdPrefix(),
+				getPolicyKramerius(), kramUrlBase + harvestedRecord.getUniqueId().getRecordId(), URL_COMMENT));
 	}
 
 	@Override

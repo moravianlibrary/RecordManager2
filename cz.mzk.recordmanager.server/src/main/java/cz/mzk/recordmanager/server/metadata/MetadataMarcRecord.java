@@ -1176,7 +1176,8 @@ public class MetadataMarcRecord implements MetadataRecord {
 			} else if (subZ != null) {
 				comment = subZ;
 			}
-			result.add(MetadataUtils.generateUrl(availability, link, comment));
+			result.add(MetadataUtils.generateUrl(harvestedRecord.getHarvestedFrom().getIdPrefix(),
+					availability, link, comment));
 		}
 		return result;
 	}

@@ -6,6 +6,7 @@ import cz.mzk.recordmanager.server.marc.SubfieldExtractionMethod;
 import cz.mzk.recordmanager.server.metadata.MetadataMarcRecord;
 import cz.mzk.recordmanager.server.model.Authority;
 import cz.mzk.recordmanager.server.model.BLTopicKey;
+import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecordFormat.HarvestedRecordFormatEnum;
 import cz.mzk.recordmanager.server.util.Constants;
 import cz.mzk.recordmanager.server.util.MetadataUtils;
@@ -30,8 +31,8 @@ public class AuthMetadataMarcRecord extends MetadataMarcRecord {
 	private static final Pattern FILTER_682 = Pattern.compile("bylo nahrazeno z[aá]hlav[ií]m", Pattern.CASE_INSENSITIVE);
 	private static final Pattern FILTER_682_DUPLICITA = Pattern.compile("duplicita", Pattern.CASE_INSENSITIVE);
 
-	public AuthMetadataMarcRecord(MarcRecord underlayingMarc) {
-		super(underlayingMarc);
+	public AuthMetadataMarcRecord(MarcRecord underlayingMarc, HarvestedRecord hr) {
+		super(underlayingMarc, hr);
 	}
 
 	@Override
@@ -74,7 +75,8 @@ public class AuthMetadataMarcRecord extends MetadataMarcRecord {
 	public List<String> getUrls() {
 		List<String> results = super.getUrls(Constants.DOCUMENT_AVAILABILITY_ONLINE);
 		for (String link : underlayingMarc.getFields("998", 'a')) {
-			results.add(MetadataUtils.generateUrl(Constants.DOCUMENT_AVAILABILITY_ONLINE, link, ""));
+			results.add(MetadataUtils.generateUrl(harvestedRecord.getHarvestedFrom().getIdPrefix(),
+					Constants.DOCUMENT_AVAILABILITY_ONLINE, link, ""));
 		}
 		return results;
 	}
