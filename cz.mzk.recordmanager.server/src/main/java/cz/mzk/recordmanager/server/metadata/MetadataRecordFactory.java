@@ -116,9 +116,7 @@ public class MetadataRecordFactory {
 		case Constants.PREFIX_CASLIN:
 			return new SkatMarcMetadataRecord(marcRec, hr);
 		case Constants.PREFIX_AUTH:
-			MetadataRecord mrAuth = new AuthMetadataMarcRecord(marcRec, hr);
-			init(mrAuth);
-			return mrAuth;
+			return init(new AuthMetadataMarcRecord(marcRec, hr));
 		case Constants.PREFIX_OSOBNOSTI:
 			return new OsobnostiRegionuMetadataMarcRecord(marcRec, hr);
 		case Constants.PREFIX_SVKUL:
@@ -132,17 +130,13 @@ public class MetadataRecordFactory {
 		case Constants.PREFIX_BMC:
 			return new BmcMetadataMarcRecord(marcRec, hr);
 		case Constants.PREFIX_UPV:
-			MetadataRecord mr = new PatentsMetadataMarcRecord(marcRec, hr);
-			init(mr);
-			return mr;
+			return init(new PatentsMetadataMarcRecord(marcRec, hr));
 		case Constants.PREFIX_OPENLIB:
 			return new OpenLibraryMetadataMarcRecord(marcRec, hr);
 		case Constants.PREFIX_MESH:
 			return new MeshMarcMetadataRecord(marcRec, hr);
 		case Constants.PREFIX_LIBRARY:
-			MetadataRecord mrLib = new LibraryMetadataMarcRecord(marcRec, hr);
-			init(mrLib);
-			return mrLib;
+			return init(new LibraryMetadataMarcRecord(marcRec, hr));
 		case Constants.PREFIX_TDKIV:
 			return new TdkivMetadataMarcRecord(marcRec, hr);
 		case Constants.PREFIX_AGROVOC:
@@ -181,7 +175,7 @@ public class MetadataRecordFactory {
 		case Constants.PREFIX_KRAM_KNAV:
 			return new KramKnavMetadataMarcRecord(marcRec, hr);
 		case Constants.PREFIX_KRAM_MZK:
-			return new KramMzkMetadataMarcRecord(marcRec, hr);
+			return init(new KramMzkMetadataMarcRecord(marcRec, hr));
 		case Constants.PREFIX_KRAM_NLK:
 			return new KramNlkMetadataMarcRecord(marcRec, hr);
 		case Constants.PREFIX_KRAM_SVKUL:
@@ -252,9 +246,10 @@ public class MetadataRecordFactory {
 		return "";
 	}
 
-	private void init(Object metadataRecord) {
+	private MetadataRecord init(MetadataRecord metadataRecord) {
 		AutowireCapableBeanFactory factory = appCtx.getAutowireCapableBeanFactory();
 		factory.autowireBean(metadataRecord);
 		factory.initializeBean(metadataRecord, "metadataRecord");
+		return metadataRecord;
 	}
 }

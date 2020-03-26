@@ -36,8 +36,20 @@ public class KramDefaultMetadataMarcRecord extends
 	}
 
 	public List<String> generateUrl(String kramUrlBase) {
-		return Collections.singletonList(MetadataUtils.generateUrl(harvestedRecord.getHarvestedFrom().getIdPrefix(),
-				getPolicyKramerius(), kramUrlBase + harvestedRecord.getUniqueId().getRecordId(), URL_COMMENT));
+		return generateUrl(kramUrlBase, getPolicyKramerius());
+	}
+
+	public List<String> generateUrl(String kramUrlBase, String policy) {
+		return generateUrl(kramUrlBase, policy, URL_COMMENT);
+	}
+
+	public List<String> generateUrl(String kramUrlBase, String policy, String comment) {
+		return generateUrl(harvestedRecord.getHarvestedFrom().getIdPrefix(), kramUrlBase, policy, comment);
+	}
+
+	public List<String> generateUrl(String source, String kramUrlBase, String policy, String comment) {
+		return Collections.singletonList(MetadataUtils.generateUrl(source, policy,
+				kramUrlBase + harvestedRecord.getUniqueId().getRecordId(), comment));
 	}
 
 	@Override
