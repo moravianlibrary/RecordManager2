@@ -28,7 +28,7 @@ public class KramMzkMetadataMarcRecord extends KramDefaultMetadataMarcRecord {
 
 		results.addAll(generateUrl("http://www.digitalniknihovna.cz/mzk/uuid/", policy));
 		if (Constants.DOCUMENT_AVAILABILITY_PROTECTED.equals(policy))
-			results.addAll(generateUrl("https://kramerius-vs.mzk.cz/view/", policy, KRAM_VS_COMMENT));
+			results.addAll(generateUrl("mzk-vs", "https://kramerius-vs.mzk.cz/view/", policy, KRAM_VS_COMMENT));
 		return results;
 	}
 
