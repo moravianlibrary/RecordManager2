@@ -14,6 +14,9 @@ public class KramMzkMetadataMarcRecord extends KramDefaultMetadataMarcRecord {
 	@Autowired
 	private FulltextKrameriusDAO fulltextKrameriusDAO;
 
+	private static final String KRAM_VS_COMMENT = "Určeno pro pedagogy a vědecké pracovníky institucí " +
+			"na úrovni vysokých škol a jejich studenty";
+
 	public KramMzkMetadataMarcRecord(MarcRecord underlayingMarc, HarvestedRecord hr) {
 		super(underlayingMarc, hr);
 	}
@@ -25,7 +28,7 @@ public class KramMzkMetadataMarcRecord extends KramDefaultMetadataMarcRecord {
 
 		results.addAll(generateUrl("http://www.digitalniknihovna.cz/mzk/uuid/", policy));
 		if (Constants.DOCUMENT_AVAILABILITY_PROTECTED.equals(policy))
-			results.addAll(generateUrl("https://kramerius-vs.mzk.cz/view/", policy));
+			results.addAll(generateUrl("https://kramerius-vs.mzk.cz/view/", policy, KRAM_VS_COMMENT));
 		return results;
 	}
 
