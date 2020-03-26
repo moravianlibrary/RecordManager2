@@ -15,7 +15,7 @@ public class BookportMetadataMarcRecord extends MetadataMarcRecord {
 
 	private static final String COMMENT = "Registrovaní uživatelé knihovny získají knihu po přihlášení přes eduID.cz na Bookportu";
 
-	private static final List<String> SOURCES = Arrays.asList("ntk", "nlk");
+	private static final List<String> SOURCES = Arrays.asList("ntk", "nlk", "knav", "vkol");
 
 	public BookportMetadataMarcRecord(MarcRecord underlayingMarc, HarvestedRecord hr) {
 		super(underlayingMarc, hr);
