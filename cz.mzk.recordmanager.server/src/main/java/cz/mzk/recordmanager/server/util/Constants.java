@@ -61,6 +61,7 @@ public class Constants {
 	public static final String JOB_ID_SEMANTIC_ENRICHMENT			= "semanticEnrichmentJob";
 	public static final String JOB_ID_IMPORT_KNOWLEDGE_BASE			= "importKnowledgeBaseJob";
 	public static final String JOB_ID_CLASSIFIER					= "classifierJob";
+	public static final String JOB_ID_REGEN_DNNT					= "regenerateDnntKeysJob";
 
 	public static final String JOB_PARAM_CONF_ID 		= "configurationId";
 	public static final String JOB_PARAM_FROM_DATE 		= "from";

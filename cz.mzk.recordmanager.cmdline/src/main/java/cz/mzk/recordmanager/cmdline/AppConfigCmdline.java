@@ -13,6 +13,7 @@ import cz.mzk.recordmanager.server.miscellaneous.fit.classifier.ClassifierJobCon
 import cz.mzk.recordmanager.server.miscellaneous.fit.fulltextAnalyser.FulltextAnalyserJobConfig;
 import cz.mzk.recordmanager.server.miscellaneous.caslin.view.CaslinViewJobsConfig;
 import cz.mzk.recordmanager.server.miscellaneous.fit.semanticEnrichment.SemanticEnrichmentJobConfig;
+import cz.mzk.recordmanager.server.miscellaneous.dnnt.DnntJobConfig;
 import cz.mzk.recordmanager.server.miscellaneous.ziskej.ZiskejLibrariesJobConfig;
 import org.springframework.batch.core.configuration.support.ApplicationContextFactory;
 import org.springframework.batch.core.configuration.support.GenericApplicationContextFactory;
@@ -112,7 +113,8 @@ public class AppConfigCmdline {
 				ZiskejLibrariesJobConfig.class,
 				FulltextAnalyserJobConfig.class,
 				SemanticEnrichmentJobConfig.class,
-				ClassifierJobConfig.class
+				ClassifierJobConfig.class,
+				DnntJobConfig.class
 			);
 	}
 

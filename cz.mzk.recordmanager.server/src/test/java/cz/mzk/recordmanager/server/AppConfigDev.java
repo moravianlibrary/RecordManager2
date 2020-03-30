@@ -13,6 +13,7 @@ import cz.mzk.recordmanager.server.marc.MarcInterceptionTest;
 import cz.mzk.recordmanager.server.miscellaneous.fit.classifier.ClassifierJobConfig;
 import cz.mzk.recordmanager.server.miscellaneous.fit.fulltextAnalyser.FulltextAnalyserJobConfig;
 import cz.mzk.recordmanager.server.miscellaneous.fit.semanticEnrichment.SemanticEnrichmentJobConfig;
+import cz.mzk.recordmanager.server.miscellaneous.dnnt.DnntJobConfig;
 import cz.mzk.recordmanager.server.miscellaneous.ziskej.ZiskejLibrariesJobConfig;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.embedded.EmbeddedSolrServer;
@@ -140,7 +141,8 @@ public class AppConfigDev {
 				ZiskejLibrariesJobConfig.class,
 				FulltextAnalyserJobConfig.class,
 				SemanticEnrichmentJobConfig.class,
-				ClassifierJobConfig.class
+				ClassifierJobConfig.class,
+				DnntJobConfig.class
 			);
 	}
 
