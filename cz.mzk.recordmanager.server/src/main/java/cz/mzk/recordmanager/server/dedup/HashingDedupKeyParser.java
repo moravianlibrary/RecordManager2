@@ -1,22 +1,17 @@
 package cz.mzk.recordmanager.server.dedup;
 
-import java.io.UnsupportedEncodingException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import cz.mzk.recordmanager.server.model.*;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import cz.mzk.recordmanager.server.metadata.MetadataRecord;
+import cz.mzk.recordmanager.server.model.*;
 import cz.mzk.recordmanager.server.model.HarvestedRecordFormat.HarvestedRecordFormatEnum;
 import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordDAO;
 import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordFormatDAO;
 import cz.mzk.recordmanager.server.util.MetadataUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.*;
 
 /**
  * Abstract DedupKeyParser implementation
@@ -35,6 +30,7 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 	private final static int EFFECTIVE_LENGTH_EDITION = 10;
 	private final static int EFFECTIVE_LENGTH_30 = 30;
 	private final static int EFFECTIVE_LENGTH_PUBLISHER = 100;
+	private final static int EFFECTIVE_LENGTH_CALLNUMBER = 100;
 
 	@Autowired
 	private HarvestedRecordFormatDAO harvestedRecordFormatDAO;
@@ -50,6 +46,7 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 		record.setUpvApplicationId(metadataRecord.getUpvApplicationId()); // not dedup key
 		record.setSigla(metadataRecord.getLibrarySigla()); // not dedup key
 		record.setLoans(metadataRecord.getLoanRelevance()); // not dedup key
+		record.setCallnumber(MetadataUtils.shorten(metadataRecord.getCallnumber(), EFFECTIVE_LENGTH_CALLNUMBER));
 		if (!record.getHarvestedFrom().isGenerateDedupKeys()) {
 			harvestedRecordDao.dropOtherKeys(record);
 			record.setUuids(metadataRecord.getUuids()); // not dedup key

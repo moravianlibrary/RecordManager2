@@ -1,9 +1,11 @@
 package cz.mzk.recordmanager.server.miscellaneous.dnnt;
 
 import cz.mzk.recordmanager.server.marc.InvalidMarcException;
+import cz.mzk.recordmanager.server.metadata.MetadataRecord;
 import cz.mzk.recordmanager.server.metadata.MetadataRecordFactory;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordDAO;
+import cz.mzk.recordmanager.server.util.MetadataUtils;
 import cz.mzk.recordmanager.server.util.ProgressLogger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,9 +43,15 @@ public class DnntWriter implements ItemWriter<Long> {
 			}
 			try {
 				Long oldLoans = rec.getLoans();
-				Long newLoans = mrfactory.getMetadataRecord(rec).getLoanRelevance();
-				if (!Objects.equals(oldLoans, newLoans) && newLoans != 0) {
+				String oldCallNumber = rec.getCallnumber();
+				MetadataRecord mr = mrfactory.getMetadataRecord(rec);
+				Long newLoans = mr.getLoanRelevance();
+				String newCallNumber = mr.getCallnumber();
+				if ((!Objects.equals(oldLoans, newLoans)
+						&& !Objects.equals(newLoans, 0L))
+						|| !Objects.equals(oldCallNumber, newCallNumber)) {
 					rec.setLoans(newLoans);
+					rec.setCallnumber(MetadataUtils.shorten(newCallNumber, 100));
 					harvestedRecordDao.saveOrUpdate(rec);
 				}
 			} catch (InvalidMarcException ime) {
@@ -51,7 +59,6 @@ public class DnntWriter implements ItemWriter<Long> {
 			} catch (Exception e) {
 				logger.warn("Skipping record due to error: " + e);
 			}
-
 		}
 	}
 }

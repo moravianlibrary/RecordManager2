@@ -523,4 +523,8 @@ public interface MetadataRecord {
 		return null;
 	}
 
+	default String getCallnumber() {
+		return null;
+	}
+
 }

@@ -2102,4 +2102,5 @@ UPDATE kramerius_conf SET url='https://kramerius.kvkli.cz/search/api/v5.0' WHERE
 
 -- 22. 01. 2021 tomascejpek
 ALTER TABLE harvested_record ADD COLUMN loans DECIMAL(10);
+ALTER TABLE harvested_record ADD COLUMN callnumber VARCHAR(100);
 
