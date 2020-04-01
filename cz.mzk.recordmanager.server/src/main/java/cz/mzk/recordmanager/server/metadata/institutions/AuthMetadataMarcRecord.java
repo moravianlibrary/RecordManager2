@@ -17,10 +17,7 @@ import org.marc4j.marc.DataField;
 import org.marc4j.marc.Subfield;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.regex.Pattern;
 
 public class AuthMetadataMarcRecord extends MetadataMarcRecord {
@@ -74,6 +71,12 @@ public class AuthMetadataMarcRecord extends MetadataMarcRecord {
 	@Override
 	public List<String> getUrls() {
 		List<String> results = super.getUrls(Constants.DOCUMENT_AVAILABILITY_ONLINE);
+		for (DataField df : underlayingMarc.getDataFields("670")) {
+			if (df.getSubfield('u') == null) continue;
+			results.add(MetadataUtils.generateUrl(harvestedRecord.getHarvestedFrom().getIdPrefix(),
+					Constants.DOCUMENT_AVAILABILITY_ONLINE, df.getSubfield('u').getData(),
+					df.getSubfield('b') != null ? df.getSubfield('b').getData() : ""));
+		}
 		for (String link : underlayingMarc.getFields("998", 'a')) {
 			results.add(MetadataUtils.generateUrl(harvestedRecord.getHarvestedFrom().getIdPrefix(),
 					Constants.DOCUMENT_AVAILABILITY_ONLINE, link, ""));
