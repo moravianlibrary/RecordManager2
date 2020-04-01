@@ -38,7 +38,7 @@ public class MzkMetadataMarcRecord extends MetadataMarcRecord {
 		callNumbers.addAll(underlayingMarc.getFields("910", MatchAllDataFieldMatcher.INSTANCE,
 				SubfieldExtractionMethod.SEPARATED, "", 'b'));
 		callNumbers.addAll(underlayingMarc.getFields("996", MatchAllDataFieldMatcher.INSTANCE,
-				SubfieldExtractionMethod.SEPARATED, "", 'c'));
+				SubfieldExtractionMethod.SEPARATED, "", 'c', 'h'));
 		results.addAll(callNumbers.stream().filter(field -> !field.startsWith("TK") && !field.startsWith("PK"))
 				.collect(Collectors.toList()));
 		if (results.isEmpty() && !callNumbers.isEmpty()) {
