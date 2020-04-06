@@ -1,5 +1,5 @@
-recordtype = "dublinCore"
-record_format = "dublinCore"
+recordtype = "dublincore"
+record_format = "dublincore"
 
 fullrecord = getFullRecord()
 
