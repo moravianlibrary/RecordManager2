@@ -1,4 +1,4 @@
-recordtype = "dublinCore"
+recordtype = "dublincore"
 fullrecord = getFullRecord()
 
 allfields = getAllFields()
