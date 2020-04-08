@@ -93,6 +93,8 @@ public class ImportRecordsFileReader implements ItemReader<List<Record>> {
 			return new SfxJibXmlStreamReader(inStream, configDao.get(confId).getIdPrefix());
 		case SFX_NLK:
 			return new SfxJibNlkCsvStreamReader(inStream, configDao.get(confId).getIdPrefix());
+		case MUNIPRESS:
+			return new MunipressCsvStreamReader(inStream);
 		default:
 			return new MarcXmlReader(inStream);
 		}

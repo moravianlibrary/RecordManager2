@@ -15,7 +15,8 @@ public enum IOFormat {
 	XML_PATENTS("patents"),
 	OSOBNOSTI_REGIONU("osobnosti"),
 	SFX("sfx"),
-	SFX_NLK("sfxnlk");
+	SFX_NLK("sfxnlk"),
+	MUNIPRESS("munipress");
 
 	private static final Map<IOFormat, Pattern> FORMAT_PATTERNS = Arrays.stream(IOFormat.values()).collect(
 			Collectors.toMap(
