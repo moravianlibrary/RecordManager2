@@ -5,6 +5,7 @@ import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.marc4j.MarcReader;
 import org.marc4j.marc.DataField;
 import org.marc4j.marc.MarcFactory;
@@ -68,6 +69,7 @@ public class MunipressCsvStreamReader implements MarcReader {
 
 	private static final String DATE_STRING_005 = "yyyyMMddHHmmss'.0'";
 	private static final SimpleDateFormat SDF_005 = new SimpleDateFormat(DATE_STRING_005);
+	private static final String FORMAT_008 = "191107s%s xr             %s";
 
 	private static final Pattern PATTERN_AUTHOR = Pattern.compile("([^ ]*) ([^ ]*)\\s*(\\(ed\\.\\))?", Pattern.CASE_INSENSITIVE);
 	private static final Pattern PATTERN_AUTHOR_MORE = Pattern.compile("(.*)\\$(.*)\\s*(\\(ed\\.\\))?", Pattern.CASE_INSENSITIVE);
@@ -108,6 +110,8 @@ public class MunipressCsvStreamReader implements MarcReader {
 		createLeader();
 		createId(csv.get(HEADER_ID));
 		create005();
+		create008(csv.get(HEADER_ROK_TISK).isEmpty() ? csv.get(HEADER_ROK_EL) : csv.get(HEADER_ROK_TISK),
+				csv.get(HEADER_JAZYKY));
 		create020(csv.get(HEADER_ISBN_TISK));
 		create020(csv.get(HEADER_ISBN_EL));
 		create041(csv.get(HEADER_JAZYKY));
@@ -124,6 +128,7 @@ public class MunipressCsvStreamReader implements MarcReader {
 		create264(csv.get(HEADER_ROK_TISK).isEmpty() ? csv.get(HEADER_ROK_EL) : csv.get(HEADER_ROK_TISK));
 		addDataField("336", ' ', ' ', "a", "text", "b", "txt", "2", "rdacontent");
 		addDataField("337", ' ', ' ', "a", csv.get(HEADER_ISBN_TISK).isEmpty() ? "počítač" : "bez média", "b", "n", "2", "rdamedia");
+		create490(csv.get(HEADER_EDICE), csv.get(HEADER_CISLO_SVAZKU));
 		addDataField("338", ' ', ' ', "a", csv.get(HEADER_ISBN_TISK).isEmpty() ? "on line zdroj" : "svazek", "b", "nc", "2", "rdacarrier");
 		addDataField("500", ' ', ' ', "a", TEXT_500A_1);
 		addDataField("500", ' ', ' ', "a", TEXT_500A_2);
@@ -154,8 +159,10 @@ public class MunipressCsvStreamReader implements MarcReader {
 		record.addVariableField(factory.newControlField("005", SDF_005.format(new Date())));
 	}
 
-	private void create008() {
-
+	private void create008(final String year, final String lang) {
+		String localYear = year.isEmpty() ? StringUtils.repeat(' ', 4) : year;
+		String localLang = lang.isEmpty() ? StringUtils.repeat(' ', 3) : lang.split(",")[0];
+		record.addVariableField(factory.newControlField("008", String.format(FORMAT_008, localYear, localLang)));
 	}
 
 	private void create020(final String isbns) {
