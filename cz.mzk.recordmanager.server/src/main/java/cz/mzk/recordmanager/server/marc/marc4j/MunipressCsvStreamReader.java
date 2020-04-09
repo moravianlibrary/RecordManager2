@@ -138,7 +138,7 @@ public class MunipressCsvStreamReader implements MarcReader {
 		if (!csv.get(HEADER_ZANR).isEmpty()) addDataField("655", '7', ' ', "a", csv.get(HEADER_ZANR));
 		if (!csv.get(HEADER_TYP_PUBLIKACE).isEmpty()) addDataField("655", '7', ' ', "a", csv.get(HEADER_TYP_PUBLIKACE));
 		if (!csv.get(HEADER_ODKAZ).isEmpty())
-			addDataField("856", '4', '1', "a", csv.get(HEADER_ODKAZ), "y", "Plný text");
+			addDataField("856", '4', '1', "u", csv.get(HEADER_ODKAZ), "y", "Plný text");
 		addDataField("710", ' ', '2', "a", "Masarykova univerzita", "7", "kn20010709056", "4", "pbl");
 		return RecordUtils.sortFields(record);
 	}
