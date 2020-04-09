@@ -9,6 +9,7 @@ import cz.mzk.recordmanager.server.model.HarvestedRecordFormat.HarvestedRecordFo
 import cz.mzk.recordmanager.server.model.TezaurusRecord.TezaurusKey;
 import cz.mzk.recordmanager.server.util.*;
 import cz.mzk.recordmanager.server.util.identifier.*;
+import org.apache.commons.lang3.tuple.Pair;
 import org.marc4j.marc.DataField;
 import org.marc4j.marc.Subfield;
 import org.slf4j.Logger;
@@ -130,6 +131,12 @@ public class MetadataMarcRecord implements MetadataRecord {
 
 	private static final List<Pattern> TITLE_REMOVE_WORDS_PATTERNS = TITLE_REMOVE_WORDS.stream()
 			.map(w -> Pattern.compile("\\b" + w + "\\b", Pattern.CASE_INSENSITIVE)).collect(Collectors.toList());
+
+	private static final List<Pair<Pattern, String>> SOURCE_INFO_G_PATTERNS =
+			FileUtils.openFile("/list/source_info_g_patterns.txt").stream().map(line -> {
+				String[] split = line.split(" = ");
+				return Pair.of(Pattern.compile("\\b" + split[0] + "\\b", Pattern.CASE_INSENSITIVE), split[1]);
+			}).collect(Collectors.toList());
 
 	public MetadataMarcRecord(MarcRecord underlayingMarc) {
 		initRecords(underlayingMarc, null);
@@ -1327,7 +1334,12 @@ public class MetadataMarcRecord implements MetadataRecord {
 
 	@Override
 	public String getSourceInfoG() {
-		return underlayingMarc.getField("773", 'g');
+		String result = underlayingMarc.getField("773", 'g');
+		if (result == null) return null;
+		for (Pair<Pattern, String> pattern : SOURCE_INFO_G_PATTERNS) {
+			result = CleaningUtils.replaceAll(result, pattern.getLeft(), pattern.getRight());
+		}
+		return result;
 	}
 
 	protected String generateSfxUrl(String url, String id, Map<String, String> specificParams) {
