@@ -71,8 +71,8 @@ public class MunipressCsvStreamReader implements MarcReader {
 	private static final SimpleDateFormat SDF_005 = new SimpleDateFormat(DATE_STRING_005);
 	private static final String FORMAT_008 = "191107s%s xr             %s";
 
-	private static final Pattern PATTERN_AUTHOR = Pattern.compile("([^ ]*) ([^ ]*)\\s*(\\(ed\\.\\))?", Pattern.CASE_INSENSITIVE);
-	private static final Pattern PATTERN_AUTHOR_MORE = Pattern.compile("(.*)\\$(.*)\\s*(\\(ed\\.\\))?", Pattern.CASE_INSENSITIVE);
+	private static final Pattern PATTERN_AUTHOR = Pattern.compile("\\s*([^\\s]+)\\s+([^\\s]+)\\s*(\\(ed\\.\\))?", Pattern.CASE_INSENSITIVE);
+	private static final Pattern PATTERN_AUTHOR_MORE = Pattern.compile("(.+)\\$(.+)\\s*(\\(ed\\.\\))?", Pattern.CASE_INSENSITIVE);
 
 	/**
 	 * Constructs an instance with the specified input stream.
