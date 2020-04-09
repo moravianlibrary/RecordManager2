@@ -1,5 +1,6 @@
 package cz.mzk.recordmanager.server.marc.marc4j;
 
+import cz.mzk.recordmanager.server.util.CleaningUtils;
 import cz.mzk.recordmanager.server.util.RecordUtils;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
@@ -73,6 +74,7 @@ public class MunipressCsvStreamReader implements MarcReader {
 
 	private static final Pattern PATTERN_AUTHOR = Pattern.compile("\\s*([^\\s]+)\\s+([^\\s]+)\\s*(\\(ed\\.\\))?", Pattern.CASE_INSENSITIVE);
 	private static final Pattern PATTERN_AUTHOR_MORE = Pattern.compile("(.+)\\$(.+)\\s*(\\(ed\\.\\))?", Pattern.CASE_INSENSITIVE);
+	private static final Pattern PATTERN_COMMA = Pattern.compile(",", Pattern.CASE_INSENSITIVE);
 
 	/**
 	 * Constructs an instance with the specified input stream.
@@ -135,6 +137,7 @@ public class MunipressCsvStreamReader implements MarcReader {
 		if (!csv.get(HEADER_ABSTRAKT).isEmpty()) addDataField("520", ' ', ' ', "a", csv.get(HEADER_ABSTRAKT));
 		if (!csv.get(HEADER_ABSTRAKT_EN).isEmpty()) addDataField("520", ' ', ' ', "a", csv.get(HEADER_ABSTRAKT_EN));
 		if (!csv.get(HEADER_KEYWORDS).isEmpty()) addDataField("653", ' ', ' ', "a", csv.get(HEADER_KEYWORDS));
+		create650(csv.get(HEADER_OBORY));
 		if (!csv.get(HEADER_ZANR).isEmpty()) addDataField("655", '7', ' ', "a", csv.get(HEADER_ZANR));
 		if (!csv.get(HEADER_TYP_PUBLIKACE).isEmpty()) addDataField("655", '7', ' ', "a", csv.get(HEADER_TYP_PUBLIKACE));
 		if (!csv.get(HEADER_ODKAZ).isEmpty())
@@ -218,6 +221,13 @@ public class MunipressCsvStreamReader implements MarcReader {
 		DataField df = factory.newDataField("490", '1', ' ');
 		if (!edition.isEmpty()) df.addSubfield(factory.newSubfield('a', edition + " ;"));
 		if (!number.isEmpty()) df.addSubfield(factory.newSubfield('v', number));
+		record.addVariableField(df);
+	}
+
+	private void create650(final String conspectus) {
+		if (conspectus.isEmpty()) return;
+		DataField df = factory.newDataField("650", '0', '7', "a",
+				CleaningUtils.replaceAll(conspectus, PATTERN_COMMA, ";").toLowerCase());
 		record.addVariableField(df);
 	}
 
