@@ -144,6 +144,7 @@ public class Constants {
 	public static final String PREFIX_MKTRI				= "mktri";
 	public static final String PREFIX_MKUO				= "mkuo";
 	public static final String PREFIX_MKZN				= "mkzn";
+	public static final String PREFIX_MUNIPRESS			= "munipress";
 	public static final String PREFIX_MZK				= "mzk";
 	public static final String PREFIX_MZKNORMS			= "unmz";
 	public static final String PREFIX_NKP				= "nkp";

@@ -196,6 +196,8 @@ public class MetadataRecordFactory {
 			return new RkkaMetadataMarcRecord(marcRec, hr);
 		case Constants.PREFIX_BOOKPORT:
 			return new BookportMetadataMarcRecord(marcRec, hr);
+		case Constants.PREFIX_MUNIPRESS:
+			return new MunipressMetadataMarcRecord(marcRec, hr);
 		default:
 			return new MetadataMarcRecord(marcRec, hr);
 		}
