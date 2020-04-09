@@ -217,9 +217,9 @@ public class MunipressCsvStreamReader implements MarcReader {
 	}
 
 	private void create490(final String edition, final String number) {
-		if (edition.isEmpty() && number.isEmpty()) return;
+		if (edition.isEmpty()) return;
 		DataField df = factory.newDataField("490", '1', ' ');
-		if (!edition.isEmpty()) df.addSubfield(factory.newSubfield('a', edition + " ;"));
+		df.addSubfield(factory.newSubfield('a', edition + " ;"));
 		if (!number.isEmpty()) df.addSubfield(factory.newSubfield('v', number));
 		record.addVariableField(df);
 	}
