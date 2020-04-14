@@ -24,22 +24,22 @@ public class AntikvariatyRecordsWriter implements ItemWriter<AntikvariatyRecord>
 				if (recId == null) {
 					continue;
 				}
-				
+				newRecord.setLastHarvest(new Date());
 				AntikvariatyRecord oldRecord = antikvariatyRecordDao.get(recId);
 				if (oldRecord == null) {
 					// persist new record
 					antikvariatyRecordDao.persist(newRecord);
 					continue;
 				}
-				
 				Date newUpdated = newRecord.getUpdated() == null ? new Date(0L) : newRecord.getUpdated();
 				if (oldRecord.getUpdated() == null || newUpdated.compareTo(oldRecord.getUpdated()) > 0) {
 					// replace existing record
 					antikvariatyRecordDao.delete(oldRecord);
 					antikvariatyRecordDao.persist(newRecord);
+				} else {
+					oldRecord.setLastHarvest(new Date());
+					antikvariatyRecordDao.saveOrUpdate(oldRecord);
 				}
 			}
-		
 	}
-
 }

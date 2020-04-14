@@ -25,34 +25,38 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class AntikvariatyRecord {
 
 	public static final String TABLE_NAME = "antikvariaty";
-	
+
 	@Id
 	@Column(name="id")
 	@XmlElement(name="identifier")
 	private Long id;
-	
+
 	@Column(name="url")
 	@XmlElement(name="url")
     private String url;
-	
+
 	@Column(name="title")
 	@XmlElement(name="title")
     private String title;
-	
+
 	@Column(name="updated")
     @Temporal(TemporalType.TIMESTAMP)
 	@XmlElement(name="datestamp")
 	private Date updated;
-    
+
 	@Column(name="pub_year")
 	@XmlElement(name="date")
     private Long publicationYear;
-    
+
 	@ElementCollection
 	@CollectionTable(name="antikvariaty_catids",joinColumns=@JoinColumn(name="antikvariaty_id"))
 	@Column(name="id_from_catalogue")
 	@XmlElement(name="ctlno")
 	private List<String> catalogueIds = new ArrayList<>();
+
+	@Column(name = "last_harvest")
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date lastHarvest;
 
 	public Long getId() {
 		return id;
@@ -89,7 +93,7 @@ public class AntikvariatyRecord {
 	public Long getPublicationYear() {
 		return publicationYear;
 	}
-	
+
 	public void setPublicationYear(Long publicationYear) {
 		this.publicationYear = publicationYear;
 	}
@@ -102,9 +106,17 @@ public class AntikvariatyRecord {
 		this.catalogueIds = catalogueIds;
 	}
 
+	public Date getLastHarvest() {
+		return lastHarvest;
+	}
+
+	public void setLastHarvest(Date lastHarvest) {
+		this.lastHarvest = lastHarvest;
+	}
+
 	@Override
 	public String toString() {
 		return "AntikvariatyRecord [url=" + url + ", updated=" + updated + ']';
-	}	
-	
+	}
+
 }

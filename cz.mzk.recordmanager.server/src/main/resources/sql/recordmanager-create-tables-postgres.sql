@@ -315,7 +315,8 @@ CREATE TABLE antikvariaty (
   updated              TIMESTAMP,
   url                  VARCHAR(500),
   title                VARCHAR(255),
-  pub_year             DECIMAL(5)
+  pub_year             DECIMAL(5),
+  last_harvest         TIMESTAMP
 );
 
 COMMENT ON TABLE antikvariaty IS 'data from muj-antikvariat.cz, used for record enrichment';

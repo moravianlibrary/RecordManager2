@@ -1698,3 +1698,6 @@ INSERT INTO sigla (id, import_conf_id, sigla) VALUES (84, 408, 'KAG001');
 
 -- 17. 03. 2020 tomascejpek
 UPDATE oai_harvest_conf SET url='https://web2.mlp.cz/cgi/oaie' WHERE import_conf_id=345;
+
+-- 14. 04. 2020 tomascejpek
+ALTER TABLE antikvariaty ADD COLUMN last_harvest TIMESTAMP;
