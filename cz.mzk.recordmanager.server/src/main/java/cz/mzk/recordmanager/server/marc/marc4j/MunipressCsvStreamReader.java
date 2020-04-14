@@ -1,6 +1,5 @@
 package cz.mzk.recordmanager.server.marc.marc4j;
 
-import cz.mzk.recordmanager.server.util.CleaningUtils;
 import cz.mzk.recordmanager.server.util.RecordUtils;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
@@ -62,8 +61,8 @@ public class MunipressCsvStreamReader implements MarcReader {
 	private static final String HEADER_ODKAZ = "odkaz_munispace";
 	private static final String HEADER_AUTOR_X = "autor_%d";
 
-	private static final String TEXT_500A_1 = "Vydala Masarykova univerzita Brno";
-	private static final String TEXT_500A_2 = "Tato metadata vznikla konverzí z dat, která nebyla vytvořena dle knihovnických standardů.";
+	private static final String TEXT_500A = "Tato metadata vznikla konverzí z dat, která nebyla vytvořena dle " +
+			"knihovnických standardů.";
 
 	private static final int MAX_AUTHOR = 33;
 	private List<String> authors_260c;
@@ -132,10 +131,8 @@ public class MunipressCsvStreamReader implements MarcReader {
 		addDataField("337", ' ', ' ', "a", csv.get(HEADER_ISBN_TISK).isEmpty() ? "počítač" : "bez média", "b", "n", "2", "rdamedia");
 		create490(csv.get(HEADER_EDICE), csv.get(HEADER_CISLO_SVAZKU));
 		addDataField("338", ' ', ' ', "a", csv.get(HEADER_ISBN_TISK).isEmpty() ? "online zdroj" : "svazek", "b", "nc", "2", "rdacarrier");
-		addDataField("500", ' ', ' ', "a", TEXT_500A_1);
-		addDataField("500", ' ', ' ', "a", TEXT_500A_2);
 		if (!csv.get(HEADER_ABSTRAKT).isEmpty()) addDataField("520", ' ', ' ', "a", csv.get(HEADER_ABSTRAKT));
-		if (!csv.get(HEADER_ABSTRAKT_EN).isEmpty()) addDataField("520", ' ', ' ', "a", csv.get(HEADER_ABSTRAKT_EN));
+		addDataField("590", ' ', ' ', "a", TEXT_500A);
 		if (!csv.get(HEADER_KEYWORDS).isEmpty()) addDataField("653", ' ', ' ', "a", csv.get(HEADER_KEYWORDS));
 		create650(csv.get(HEADER_OBORY));
 		if (!csv.get(HEADER_ZANR).isEmpty()) addDataField("655", '7', ' ', "a", csv.get(HEADER_ZANR));
@@ -176,10 +173,10 @@ public class MunipressCsvStreamReader implements MarcReader {
 	}
 
 	private void create041(final String langs) {
-		if (langs.isEmpty()) return;
+		if (langs.split(",").length <= 1) return;
 		DataField df = factory.newDataField("041", ' ', ' ');
 		for (String lang : langs.split(",")) {
-			df.addSubfield(factory.newSubfield('a', lang));
+			df.addSubfield(factory.newSubfield('a', lang.trim()));
 		}
 		record.addVariableField(df);
 	}
@@ -226,9 +223,9 @@ public class MunipressCsvStreamReader implements MarcReader {
 
 	private void create650(final String conspectus) {
 		if (conspectus.isEmpty()) return;
-		DataField df = factory.newDataField("650", '0', '7', "a",
-				CleaningUtils.replaceAll(conspectus, PATTERN_COMMA, ";").toLowerCase());
-		record.addVariableField(df);
+		for (String value : conspectus.split(";")) {
+			record.addVariableField(factory.newDataField("650", '0', '7', "a", value.trim().toLowerCase()));
+		}
 	}
 
 }
