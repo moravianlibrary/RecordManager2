@@ -23,6 +23,7 @@ public class Constants {
 	public static final String JOB_ID_EXPORT						= "exportRecordsJob";
 	public static final String JOB_ID_EXPORT_COSMOTRON_996			= "exportCosmotron996Job";
 	public static final String JOB_ID_EXPORT_SFX					= "exportSfxRecordsJob";
+	public static final String JOB_ID_EXPORT_MARC_FIELDS			= "exportMarcFieldsJob";
 	public static final String JOB_ID_IMPORT						= "importRecordsJob";
 	public static final String JOB_ID_MULTI_THREADS_IMPORT			= "multiImportRecordsJob";
 	public static final String JOB_ID_DOWNLOAD_IMPORT				= "downloadAndImportRecordsJob";
@@ -79,6 +80,7 @@ public class Constants {
 	public static final String JOB_PARAM_TYPE			= "type";
 	public static final String JOB_PARAM_VIEW			= "view";
 	public static final String JOB_PARAM_UPDATE_TIMESTAMP = "updateTimestamp";
+	public static final String JOB_PARAM_FIELDS			= "fields";
 
 	public static final String JOB_PARAM_TRUE_VALUE		= "true";
 	public static final String JOB_PARAM_ONE_VALUE		= "1";
