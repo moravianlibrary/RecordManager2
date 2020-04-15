@@ -23,7 +23,7 @@ INSERT INTO library (id, name, url, catalog_url, city) VALUES (122, 'KPSYS', '',
 INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (123, 'CNB', 'nkp.cz', 'aleph.nkp.cz', 'Praha', 'PR');
 INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (125, 'KKL', 'nkp.cz', 'aleph.nkp.cz', 'Praha', 'PR');
 INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (126, 'STT', 'nkp.cz', 'aleph.nkp.cz', 'Praha', 'PR');
-INSERT INTO library (id, name, url, catalog_url, city) VALUES (127, 'OPENLIB', 'openlibrary.org', '', NULL);
+INSERT INTO library (id, name, url, catalog_url, city) VALUES (127, 'OPENLIB', 'openlibrary.org', '', 'ebook');
 INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (128, 'CBVK', 'cbvk.cz', 'katalog.cbvk.cz', 'České Budějovice', 'JC');
 INSERT INTO library (id, name, url, catalog_url, city) VALUES (129, 'VKTATEST', 'knihovnatabor.cz', 'vkta.cz/Clavius', 'Tábor');
 INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (130, 'KNAV', 'cas.cz', 'aleph.lib.cas.cz', 'Praha', 'PR');
@@ -94,7 +94,7 @@ INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (209, 'MKC
 INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (210, 'MKSEM', 'https://www.knihovnasemily.cz', 'https://semily.tritius.cz/', 'Semily', 'LI');
 INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (211, 'MKJAR', 'http://www.knihovnajaromer.cz/', 'https://jaromer.tritius.cz/', 'Jaroměř', 'KH');
 INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (212, 'MKHOL', 'https://knihovna.holesov.info/', 'https://tritius.holesov.info/', 'Holešov', 'ZL');
-INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (213, 'BOOKPORT', 'https://www.bookport.cz/', '', null, null);
+INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (213, 'BOOKPORT', 'https://www.bookport.cz/', '', null, 'ebook');
 INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (214, 'MUNIPRESS', 'https://www.press.muni.cz/', '', null, 'ebook');
 INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (215, 'MKKLAT', 'http://www.knih-kt.cz/', 'https://klatovy.tritius.cz/', 'Klatovy', 'PL');
 INSERT INTO library (id, name, url, catalog_url, city) VALUES (400, 'AUTHORITY', 'nkp.cz', 'aleph.nkp.cz', NULL);

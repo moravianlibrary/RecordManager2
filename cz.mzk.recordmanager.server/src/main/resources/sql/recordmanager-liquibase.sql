@@ -2008,3 +2008,6 @@ ORDER BY hr.weight DESC;
 --changeset tomascejpek:188 context:cpk
 UPDATE download_import_conf SET url='https://muj-antikvariat.cz/assets/obalkyknih.xml' WHERE import_conf_id=500;
 
+--changeset tomascejpek:189 context:cpk
+UPDATE library SET region='ebook' WHERE id in (127,213);
+

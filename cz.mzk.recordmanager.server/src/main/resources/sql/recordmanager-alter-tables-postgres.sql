@@ -1735,3 +1735,6 @@ FROM harvested_record hr
 ORDER BY hr.weight DESC;
 UPDATE download_import_conf SET url='https://muj-antikvariat.cz/assets/obalkyknih.xml' WHERE import_conf_id=500;
 
+-- 28. 04. 2020 tomascejpek
+UPDATE library SET region='ebook' WHERE id in (127,213);
+
