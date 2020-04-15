@@ -1,18 +1,22 @@
 package cz.mzk.recordmanager.server.export;
 
+import cz.mzk.recordmanager.server.marc.MarcRecord;
 import cz.mzk.recordmanager.server.marc.MarcXmlParser;
-import cz.mzk.recordmanager.server.model.HarvestedRecord.HarvestedRecordUniqueId;
+import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordDAO;
 import cz.mzk.recordmanager.server.util.ProgressLogger;
+import org.marc4j.marc.DataField;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.util.Arrays;
 import java.util.List;
 
-public class ExportMarcFieldsProcessor implements ItemProcessor<HarvestedRecordUniqueId, String> {
+public class ExportMarcFieldsProcessor implements ItemProcessor<Long, String> {
 
 	private IOFormat iOFormat;
 
@@ -35,8 +39,29 @@ public class ExportMarcFieldsProcessor implements ItemProcessor<HarvestedRecordU
 	}
 
 	@Override
-	public String process(HarvestedRecordUniqueId recordId) throws Exception {
-
+	public String process(Long id) {
+		HarvestedRecord record = harvestedRecordDao.get(id);
+		try {
+			if (record == null || record.getDeleted() != null || record.getRawRecord() == null
+					|| record.getRawRecord().length == 0) return null;
+			progressLogger.incrementAndLogProgress();
+			InputStream is = new ByteArrayInputStream(record.getRawRecord());
+			MarcRecord marcRecord = marcXmlParser.parseRecord(is);
+			StringBuilder result = new StringBuilder();
+			for (String tag : marcFields) {
+				String field = marcRecord.getControlField(tag);
+				if (field != null) {
+					result.append(field);
+					continue;
+				}
+				for (DataField dataField : marcRecord.getDataFields(tag)) {
+					result.append(dataField.toString());
+				}
+			}
+			return result.toString();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return null;
 	}
 
