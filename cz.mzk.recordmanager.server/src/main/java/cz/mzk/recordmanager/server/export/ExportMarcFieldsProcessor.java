@@ -58,7 +58,7 @@ public class ExportMarcFieldsProcessor implements ItemProcessor<Long, String> {
 					result.append(dataField.toString());
 				}
 			}
-			return result.toString();
+			return result.toString().isEmpty() ? null : result.toString();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
