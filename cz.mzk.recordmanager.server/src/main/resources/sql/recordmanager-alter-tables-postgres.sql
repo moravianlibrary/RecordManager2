@@ -1701,3 +1701,13 @@ UPDATE oai_harvest_conf SET url='https://web2.mlp.cz/cgi/oaie' WHERE import_conf
 
 -- 14. 04. 2020 tomascejpek
 ALTER TABLE antikvariaty ADD COLUMN last_harvest TIMESTAMP;
+CREATE OR REPLACE VIEW antikvariaty_url_view AS
+SELECT
+  hr.dedup_record_id,
+  a.url,
+  a.updated,
+  a.last_harvest
+FROM harvested_record hr
+  INNER JOIN antikvariaty_catids ac on hr.cluster_id = ac.id_from_catalogue
+  INNER JOIN antikvariaty a on ac.antikvariaty_id = a.id
+ORDER BY hr.weight DESC;
