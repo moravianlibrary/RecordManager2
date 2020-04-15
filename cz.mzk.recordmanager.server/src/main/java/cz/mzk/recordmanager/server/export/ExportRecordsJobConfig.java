@@ -360,7 +360,7 @@ public class ExportRecordsJobConfig {
 	public Step exportMarcFieldsStep() throws Exception {
 		return steps.get("exportMarcFieldsStep")
 				.listener(new StepProgressListener())
-				.<Long, String>chunk(1)//
+				.<Long, String>chunk(200)//
 				.reader(exportMarcFieldsReader(STRING_OVERRIDEN_BY_EXPRESSION)) //
 				.processor(exportMarcFieldsProcesor(STRING_OVERRIDEN_BY_EXPRESSION, STRING_OVERRIDEN_BY_EXPRESSION)) //
 				.writer(exportRecordsWriter(STRING_OVERRIDEN_BY_EXPRESSION)) //
