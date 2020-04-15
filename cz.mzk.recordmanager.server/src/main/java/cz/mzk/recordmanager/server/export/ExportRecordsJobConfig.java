@@ -9,6 +9,7 @@ import javax.sql.DataSource;
 import cz.mzk.recordmanager.server.export.sfx.ExportSfxRecordsJobParametersValidator;
 import cz.mzk.recordmanager.server.export.sfx.ExportSfxRecordsProcessor;
 import cz.mzk.recordmanager.server.export.sfx.ExportSfxRecordsWriter;
+import cz.mzk.recordmanager.server.jdbc.LongValueRowMapper;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
@@ -359,7 +360,7 @@ public class ExportRecordsJobConfig {
 	public Step exportMarcFieldsStep() throws Exception {
 		return steps.get("exportMarcFieldsStep")
 				.listener(new StepProgressListener())
-				.<HarvestedRecordUniqueId, String>chunk(1)//
+				.<Long, String>chunk(1)//
 				.reader(exportMarcFieldsReader(STRING_OVERRIDEN_BY_EXPRESSION)) //
 				.processor(exportMarcFieldsProcesor(STRING_OVERRIDEN_BY_EXPRESSION, STRING_OVERRIDEN_BY_EXPRESSION)) //
 				.writer(exportRecordsWriter(STRING_OVERRIDEN_BY_EXPRESSION)) //
@@ -368,13 +369,13 @@ public class ExportRecordsJobConfig {
 
 	@Bean(name = Constants.JOB_ID_EXPORT_MARC_FIELDS + ":exportMarcFieldsReader")
 	@StepScope
-	public ItemReader<HarvestedRecordUniqueId> exportMarcFieldsReader(
+	public ItemReader<Long> exportMarcFieldsReader(
 			@Value("#{jobParameters[" + Constants.JOB_PARAM_CONF_ID + "]}") String configId)
 			throws Exception {
-		JdbcPagingItemReader<HarvestedRecordUniqueId> reader = new JdbcPagingItemReader<>();
+		JdbcPagingItemReader<Long> reader = new JdbcPagingItemReader<>();
 		SqlPagingQueryProviderFactoryBean pqpf = new SqlPagingQueryProviderFactoryBean();
 		pqpf.setDataSource(dataSource);
-		pqpf.setSelectClause("SELECT import_conf_id, record_id");
+		pqpf.setSelectClause("SELECT id");
 		pqpf.setFromClause("FROM harvested_record");
 		if (configId != null) {
 			Map<String, Object> parameterValues = new HashMap<>();
@@ -382,8 +383,8 @@ public class ExportRecordsJobConfig {
 			parameterValues.put("conf_id", Arrays.asList(configId.split(",")));
 			reader.setParameterValues(parameterValues);
 		}
-		pqpf.setSortKey("record_id");
-		reader.setRowMapper(new HarvestedRecordIdRowMapper());
+		pqpf.setSortKey("id");
+		reader.setRowMapper(new LongValueRowMapper());
 		reader.setPageSize(200);
 		reader.setQueryProvider(pqpf.getObject());
 		reader.setDataSource(dataSource);
@@ -396,8 +397,7 @@ public class ExportRecordsJobConfig {
 	public ExportMarcFieldsProcessor exportMarcFieldsProcesor(
 			@Value("#{jobParameters[" + Constants.JOB_PARAM_FORMAT + "]}") String strFormat,
 			@Value("#{jobParameters[" + Constants.JOB_PARAM_FIELDS + "]}") String marcFields) {
-		IOFormat iOFormat = IOFormat
-				.stringToExportFormat(strFormat);
+		IOFormat iOFormat = IOFormat.stringToExportFormat(strFormat);
 		return new ExportMarcFieldsProcessor(iOFormat, marcFields);
 	}
 
