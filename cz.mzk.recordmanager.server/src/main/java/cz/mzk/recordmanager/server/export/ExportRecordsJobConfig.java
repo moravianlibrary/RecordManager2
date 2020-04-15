@@ -343,4 +343,62 @@ public class ExportRecordsJobConfig {
 		return reader;
 	}
 
+	// export marc fields
+	@Bean
+	public Job exportMarcFieldsJob(
+			@Qualifier(Constants.JOB_ID_EXPORT_MARC_FIELDS + ":exportMarcFieldsStep") Step exportMarcFieldsStep) {
+		return jobs.get(Constants.JOB_ID_EXPORT_MARC_FIELDS)
+				.validator(new ExportMarcFieldsJobParametersValidator())
+				.listener(JobFailureListener.INSTANCE)
+				.flow(exportMarcFieldsStep)
+				.end()
+				.build();
+	}
+
+	@Bean(name = Constants.JOB_ID_EXPORT_MARC_FIELDS + ":exportMarcFieldsStep")
+	public Step exportMarcFieldsStep() throws Exception {
+		return steps.get("exportMarcFieldsStep")
+				.listener(new StepProgressListener())
+				.<HarvestedRecordUniqueId, String>chunk(1)//
+				.reader(exportMarcFieldsReader(STRING_OVERRIDEN_BY_EXPRESSION)) //
+				.processor(exportMarcFieldsProcesor(STRING_OVERRIDEN_BY_EXPRESSION, STRING_OVERRIDEN_BY_EXPRESSION)) //
+				.writer(exportRecordsWriter(STRING_OVERRIDEN_BY_EXPRESSION)) //
+				.build();
+	}
+
+	@Bean(name = Constants.JOB_ID_EXPORT_MARC_FIELDS + ":exportMarcFieldsReader")
+	@StepScope
+	public ItemReader<HarvestedRecordUniqueId> exportMarcFieldsReader(
+			@Value("#{jobParameters[" + Constants.JOB_PARAM_CONF_ID + "]}") String configId)
+			throws Exception {
+		JdbcPagingItemReader<HarvestedRecordUniqueId> reader = new JdbcPagingItemReader<>();
+		SqlPagingQueryProviderFactoryBean pqpf = new SqlPagingQueryProviderFactoryBean();
+		pqpf.setDataSource(dataSource);
+		pqpf.setSelectClause("SELECT import_conf_id, record_id");
+		pqpf.setFromClause("FROM harvested_record");
+		if (configId != null) {
+			Map<String, Object> parameterValues = new HashMap<>();
+			pqpf.setWhereClause("WHERE import_conf_id IN (:conf_id)");
+			parameterValues.put("conf_id", Arrays.asList(configId.split(",")));
+			reader.setParameterValues(parameterValues);
+		}
+		pqpf.setSortKey("record_id");
+		reader.setRowMapper(new HarvestedRecordIdRowMapper());
+		reader.setPageSize(200);
+		reader.setQueryProvider(pqpf.getObject());
+		reader.setDataSource(dataSource);
+		reader.afterPropertiesSet();
+		return reader;
+	}
+
+	@Bean(name = Constants.JOB_ID_EXPORT_MARC_FIELDS + ":exportMarcFieldsProcesor")
+	@StepScope
+	public ExportMarcFieldsProcessor exportMarcFieldsProcesor(
+			@Value("#{jobParameters[" + Constants.JOB_PARAM_FORMAT + "]}") String strFormat,
+			@Value("#{jobParameters[" + Constants.JOB_PARAM_FIELDS + "]}") String marcFields) {
+		IOFormat iOFormat = IOFormat
+				.stringToExportFormat(strFormat);
+		return new ExportMarcFieldsProcessor(iOFormat, marcFields);
+	}
+
 }
