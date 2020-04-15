@@ -52,13 +52,15 @@ public class ExportMarcFieldsProcessor implements ItemProcessor<Long, String> {
 				String field = marcRecord.getControlField(tag);
 				if (field != null) {
 					result.append(field);
+					result.append("\n");
 					continue;
 				}
 				for (DataField dataField : marcRecord.getDataFields(tag)) {
 					result.append(dataField.toString());
+					result.append("\n");
 				}
 			}
-			return result.toString().isEmpty() ? null : result.toString();
+			return result.toString().isEmpty() ? null : result.toString().trim();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
