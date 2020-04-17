@@ -30,34 +30,21 @@ public class MunipressCsvStreamReader implements MarcReader {
 	private Iterator<CSVRecord> iterator;
 
 	private static final String HEADER_ID = "id";
-	private static final String HEADER_FAKULTA = "fakulta";
-	private static final String HEADER_VYDAVATEL = "vydavatel";
 	private static final String HEADER_NAZEV_ORIG = "nazev_original";
 	private static final String HEADER_PODNAZEV = "podnazev";
-	private static final String HEADER_NAZEV_CZ = "nazev_cz";
-	private static final String HEADER_NAZEV_EN = "nazev_en";
-	private static final String HEADER_PODNAZEV_CZ = "podnazev_cz";
-	private static final String HEADER_PODNAZEV_EN = "podnazev_en";
 	private static final String HEADER_ISBN_TISK = "isbn_tistena_verze";
 	private static final String HEADER_ISBN_EL = "isbn_el_formaty";
 	private static final String HEADER_ROK_EL = "rok_vydani_el_verze";
 	private static final String HEADER_ROK_TISK = "rok_vydani_tistena";
 	private static final String HEADER_ABSTRAKT = "abstrakt";
-	private static final String HEADER_ABSTRAKT_EN = "abstrakt_en";
 	private static final String HEADER_OBORY = "obory";
 	private static final String HEADER_JAZYKY = "jazyky";
 	private static final String HEADER_EDICE = "edice";
 	private static final String HEADER_CISLO_SVAZKU = "cislo_svazku";
 	private static final String HEADER_TYP_PUBLIKACE = "typ_publikace";
 	private static final String HEADER_ZANR = "zanr";
-	private static final String HEADER_ISBN_KOEDICE = "isbn_koedice";
-	private static final String HEADER_KOEDICE = "koedice";
-	private static final String HEADER_ISSN_PRINT = "issn_print";
-	private static final String HEADER_ISSN_ONLINE = "issn_online";
-	private static final String HEADER_DOI = "doi";
 	private static final String HEADER_PORADI_VYDANI = "poradi_vydani";
 	private static final String HEADER_KEYWORDS = "keywords_cz";
-	private static final String HEADER_KEYWORDS_EN = "keywords_en";
 	private static final String HEADER_ODKAZ = "odkaz_munispace";
 	private static final String HEADER_AUTOR_X = "autor_%d";
 
@@ -71,9 +58,11 @@ public class MunipressCsvStreamReader implements MarcReader {
 	private static final SimpleDateFormat SDF_005 = new SimpleDateFormat(DATE_STRING_005);
 	private static final String FORMAT_008 = "191007s%s||||xr||||||||||||||||||%s||";
 
-	private static final Pattern PATTERN_AUTHOR = Pattern.compile("\\s*([^\\s]+)\\s+([^\\s]+)\\s*(\\(ed\\.\\))?", Pattern.CASE_INSENSITIVE);
-	private static final Pattern PATTERN_AUTHOR_MORE = Pattern.compile("(.+)\\$(.+)\\s*(\\(ed\\.\\))?", Pattern.CASE_INSENSITIVE);
-	private static final Pattern PATTERN_COMMA = Pattern.compile(",", Pattern.CASE_INSENSITIVE);
+	private static final Pattern PATTERN_AUTHOR =
+			Pattern.compile("\\s*([^\\s]+)\\s+([^\\s]+)\\s*(\\(ed\\.\\))?", Pattern.CASE_INSENSITIVE);
+	private static final Pattern PATTERN_AUTHOR_MORE =
+			Pattern.compile("(.+)\\$(.+)\\s*(\\(ed\\.\\))?", Pattern.CASE_INSENSITIVE);
+
 
 	/**
 	 * Constructs an instance with the specified input stream.

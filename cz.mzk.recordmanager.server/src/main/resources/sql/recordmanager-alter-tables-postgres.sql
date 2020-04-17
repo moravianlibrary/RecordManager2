@@ -1704,7 +1704,7 @@ INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (213, 'BOO
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency) VALUES (413, 213, 200, 'bookport', 11, false, true, true, false, 'U');
 INSERT INTO download_import_conf (import_conf_id,url,import_job_name, format) VALUES (413,'https://www.bookport.cz/marc21.xml','importRecordsJob','xml');
 
--- 08. 03. 2020 tomascejpek
+-- 17. 04. 2020 tomascejpek
 INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (214, 'MUNIPRESS', 'https://www.press.muni.cz/', '', null, 'ebook');
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency) VALUES (414, 214, 200, 'munipress', 11, false, true, true, false, 'U');
 INSERT INTO download_import_conf (import_conf_id,url,import_job_name, format) VALUES (414,null,null,null);
