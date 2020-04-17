@@ -250,7 +250,7 @@ CREATE TABLE antikvariaty_catids (
   id_from_catalogue   VARCHAR(100), 
   antikvariaty_id     DECIMAL(10),
   CONSTRAINT antikvariaty_catids_pk PRIMARY KEY (id_from_catalogue, antikvariaty_id),
-  CONSTRAINT antikvariaty_catids_fk FOREIGN KEY (antikvariaty_id) REFERENCES antikvariaty(id)
+  CONSTRAINT antikvariaty_catids_fk FOREIGN KEY (antikvariaty_id) REFERENCES antikvariaty(id) ON DELETE CASCADE
 );
 
 CREATE TABLE fulltext_kramerius (

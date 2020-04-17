@@ -1701,6 +1701,8 @@ UPDATE oai_harvest_conf SET url='https://web2.mlp.cz/cgi/oaie' WHERE import_conf
 
 -- 14. 04. 2020 tomascejpek
 ALTER TABLE antikvariaty ADD COLUMN last_harvest TIMESTAMP;
+ALTER TABLE antikvariaty_catids DROP CONSTRAINT antikvariaty_catids_fk;
+ALTER TABLE antikvariaty_catids ADD CONSTRAINT antikvariaty_catids_fk FOREIGN KEY (antikvariaty_id) REFERENCES antikvariaty(id) ON DELETE CASCADE;
 CREATE OR REPLACE VIEW antikvariaty_url_view AS
 SELECT
   hr.dedup_record_id,

@@ -1969,3 +1969,18 @@ INSERT INTO sigla (id, import_conf_id, sigla) VALUES (84, 408, 'KAG001');
 
 --changeset tomascejpek:182 context:cpk
 UPDATE oai_harvest_conf SET url='https://web2.mlp.cz/cgi/oaie' WHERE import_conf_id=345;
+
+--changeset tomascejpek:183
+ALTER TABLE antikvariaty ADD COLUMN last_harvest TIMESTAMP;
+ALTER TABLE antikvariaty_catids DROP CONSTRAINT antikvariaty_catids_fk;
+ALTER TABLE antikvariaty_catids ADD CONSTRAINT antikvariaty_catids_fk FOREIGN KEY (antikvariaty_id) REFERENCES antikvariaty(id) ON DELETE CASCADE;
+CREATE OR REPLACE VIEW antikvariaty_url_view AS
+SELECT
+  hr.dedup_record_id,
+  a.url,
+  a.updated,
+  a.last_harvest
+FROM harvested_record hr
+  INNER JOIN antikvariaty_catids ac on hr.cluster_id = ac.id_from_catalogue
+  INNER JOIN antikvariaty a on ac.antikvariaty_id = a.id
+ORDER BY hr.weight DESC;

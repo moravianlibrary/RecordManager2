@@ -20,7 +20,7 @@ WHERE
   NOT EXISTS(SELECT 1 FROM harvested_record hr WHERE hr.dedup_record_id = dr.id and deleted is null)
 ;
 
-CREATE OR REPLACE VIEW antikvariaty_url_view AS
+CREATE VIEW antikvariaty_url_view AS
 SELECT
   hr.dedup_record_id, 
   a.url,
