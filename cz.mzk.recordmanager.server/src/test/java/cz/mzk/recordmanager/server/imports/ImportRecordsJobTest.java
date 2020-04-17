@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
+import cz.mzk.recordmanager.server.export.IOFormat;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobParameter;
 import org.springframework.batch.core.JobParameters;
@@ -63,6 +64,8 @@ public class ImportRecordsJobTest extends AbstractTest {
 	private String testFileOsobnosti1;
 	private String testFileOsobnosti2;
 	private String testFileSfx1;
+	private String testFileMunipress1;
+	private String testFileMunipress2;
 
 	@BeforeClass
 	public void init() {
@@ -84,6 +87,8 @@ public class ImportRecordsJobTest extends AbstractTest {
 		testFileOsobnosti1 = this.getClass().getResource("/import/osobnostiregionu/Record.xml").getFile();
 		testFileOsobnosti2 = this.getClass().getResource("/import/osobnostiregionu/OsobnostiRecords.xml").getFile();
 		testFileSfx1 = this.getClass().getResource("/import/sfx/Records.xml").getFile();
+		testFileMunipress1 = this.getClass().getResource("/import/munipress/simple.csv").getFile();
+		testFileMunipress2 = this.getClass().getResource("/import/munipress/multi.csv").getFile();
 	}
 
 	@BeforeMethod
@@ -180,6 +185,24 @@ public class ImportRecordsJobTest extends AbstractTest {
 		Assert.assertFalse(mr.getDataFields("100").isEmpty());
 		Assert.assertFalse(mr.getDataFields("670").isEmpty());
 		Assert.assertEquals(mr.getDataFields("856").size(), 1);
+	}
+
+	@Test
+	public void testSimpleImportMunipress() throws Exception {
+		Job job = jobRegistry.getJob(Constants.JOB_ID_IMPORT);
+		Map<String, JobParameter> params = new HashMap<>();
+		params.put(Constants.JOB_PARAM_CONF_ID, new JobParameter(300L));
+		params.put(Constants.JOB_PARAM_IN_FILE, new JobParameter(testFileMunipress1));
+		params.put(Constants.JOB_PARAM_FORMAT, new JobParameter(IOFormat.MUNIPRESS.toString()));
+		JobParameters jobParams = new JobParameters(params);
+		jobLauncher.run(job, jobParams);
+
+		HarvestedRecord hr = harvestedRecordDao.findByIdAndHarvestConfiguration("2349", 300L);
+		Assert.assertNotNull(hr);
+		InputStream is = new ByteArrayInputStream(hr.getRawRecord());
+		MarcRecord mr = new MarcRecordImpl(marcXmlParser.parseUnderlyingRecord(is));
+		Assert.assertFalse(mr.getDataFields("100").isEmpty());
+		Assert.assertFalse(mr.getDataFields("856").isEmpty());
 	}
 
 	@Test
@@ -341,5 +364,20 @@ public class ImportRecordsJobTest extends AbstractTest {
 		Assert.assertNotNull(harvestedRecordDao.findByIdAndHarvestConfiguration("1", 300L));
 		Assert.assertNotNull(harvestedRecordDao.findByIdAndHarvestConfiguration("2", 300L));
 		Assert.assertNotNull(harvestedRecordDao.findByIdAndHarvestConfiguration("3", 300L));
+	}
+
+	@Test
+	public void testMultipleImportMunipress() throws Exception {
+		Job job = jobRegistry.getJob(Constants.JOB_ID_IMPORT);
+		Map<String, JobParameter> params = new HashMap<>();
+		params.put(Constants.JOB_PARAM_CONF_ID, new JobParameter(300L));
+		params.put(Constants.JOB_PARAM_IN_FILE, new JobParameter(testFileMunipress2));
+		params.put(Constants.JOB_PARAM_FORMAT, new JobParameter(IOFormat.MUNIPRESS.toString()));
+		JobParameters jobParams = new JobParameters(params);
+		jobLauncher.run(job, jobParams);
+
+		Assert.assertNotNull(harvestedRecordDao.findByIdAndHarvestConfiguration("2349", 300L));
+		Assert.assertNotNull(harvestedRecordDao.findByIdAndHarvestConfiguration("2415", 300L));
+		Assert.assertNotNull(harvestedRecordDao.findByIdAndHarvestConfiguration("2632", 300L));
 	}
 }
