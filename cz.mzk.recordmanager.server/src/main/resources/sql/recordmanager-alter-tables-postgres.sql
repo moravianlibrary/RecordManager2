@@ -1713,3 +1713,6 @@ FROM harvested_record hr
   INNER JOIN antikvariaty_catids ac on hr.cluster_id = ac.id_from_catalogue
   INNER JOIN antikvariaty a on ac.antikvariaty_id = a.id
 ORDER BY hr.weight DESC;
+
+-- 17. 04. 2020 tomascejpek
+UPDATE download_import_conf SET url='https://muj-antikvariat.cz/assets/obalkyknih.xml' WHERE import_conf_id=500;
