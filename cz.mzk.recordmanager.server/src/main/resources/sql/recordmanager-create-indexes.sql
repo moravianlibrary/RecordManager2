@@ -52,6 +52,8 @@ CREATE INDEX obalkyknih_annotation_isbn_idx ON obalkyknih_annotation(isbn);
 CREATE INDEX obalkyknih_annotation_cnb_idx ON obalkyknih_annotation(cnb);
 CREATE INDEX obalkyknih_annotation_bookid_idx ON obalkyknih_annotation(book_id);
 
+CREATE INDEX antik_catids_ids ON antikvariaty_catids(antikvariaty_id);
+
 CREATE INDEX dedup_record_updated_idx ON dedup_record(updated);
 
 CREATE UNIQUE INDEX sigla_id_key ON sigla(id);
