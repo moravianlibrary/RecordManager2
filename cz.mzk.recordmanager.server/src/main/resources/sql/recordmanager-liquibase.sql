@@ -1971,7 +1971,7 @@ INSERT INTO sigla (id, import_conf_id, sigla) VALUES (84, 408, 'KAG001');
 UPDATE oai_harvest_conf SET url='https://web2.mlp.cz/cgi/oaie' WHERE import_conf_id=345;
 
 --changeset tomascejpek:183
-ALTER TABLE antikvariaty ADD COLUMN last_harvest TIMESTAMP;
+ALTER TABLE antikvariaty ADD COLUMN last_harvest TIMESTAMP, ADD COLUMN updated_original TIMESTAMP;
 ALTER TABLE antikvariaty_catids DROP CONSTRAINT antikvariaty_catids_fk;
 ALTER TABLE antikvariaty_catids ADD CONSTRAINT antikvariaty_catids_fk FOREIGN KEY (antikvariaty_id) REFERENCES antikvariaty(id) ON DELETE CASCADE;
 CREATE INDEX antik_catids_ids ON antikvariaty_catids(antikvariaty_id);

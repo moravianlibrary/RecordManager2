@@ -243,7 +243,8 @@ CREATE TABLE antikvariaty (
   url                  VARCHAR(500),
   title                VARCHAR(255),
   pub_year             DECIMAL(5),
-  last_harvest         TIMESTAMP
+  last_harvest         TIMESTAMP,
+  updated_original     TIMESTAMP
 );
 
 CREATE TABLE antikvariaty_catids (

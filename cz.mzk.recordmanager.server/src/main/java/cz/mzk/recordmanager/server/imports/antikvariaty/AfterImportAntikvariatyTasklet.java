@@ -26,16 +26,14 @@ public class AfterImportAntikvariatyTasklet implements Tasklet {
 			"SELECT dedup_record_id FROM antikvariaty_url_view WHERE last_harvest < :started)";
 	private static final String DELETE_QUERY = "DELETE FROM antikvariaty where last_harvest < :started";
 
-	private final String lastJobExecutionQuery = ResourceUtils.asString("sql/query/LastJobExecutionQuery.sql");
+	private final String lastJobExecutionQuery = ResourceUtils.asString("sql/query/LastJobExecutionEndTimeQuery.sql");
 
 	@Autowired
 	private NamedParameterJdbcTemplate jdbcTemplate;
 
 	@Override
-	public RepeatStatus execute(StepContribution contribution,
-								ChunkContext chunkContext) throws Exception {
-		Date started = chunkContext.getStepContext().getStepExecution().getJobExecution()
-				.getCreateTime();
+	public RepeatStatus execute(StepContribution contribution,ChunkContext chunkContext)  {
+		Date started = chunkContext.getStepContext().getStepExecution().getJobExecution().getCreateTime();
 		Date lastExecution = lastCompletedExecution(Constants.JOB_ID_IMPORT_ANTIKVARIATY);
 		if (lastExecution == null) lastExecution = new Date(0);
 
