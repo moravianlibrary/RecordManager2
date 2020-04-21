@@ -1742,3 +1742,5 @@ UPDATE library SET region='ebook' WHERE id in (127,213);
 ALTER TABLE cosmotron_996 ADD COLUMN last_harvest TIMESTAMP;
 CREATE INDEX cosmotron_996_last_harvest_idx ON cosmotron_996(last_harvest);
 
+-- 11. 05. 2020 tomascejpek
+INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (99004,'http://kramerius5.nkp.cz/oaiprovider','monograph','oai_dc',NULL);
