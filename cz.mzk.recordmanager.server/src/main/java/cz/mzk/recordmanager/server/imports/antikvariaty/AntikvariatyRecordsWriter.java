@@ -2,6 +2,7 @@ package cz.mzk.recordmanager.server.imports.antikvariaty;
 
 import cz.mzk.recordmanager.server.model.AntikvariatyRecord;
 import cz.mzk.recordmanager.server.oai.dao.AntikvariatyRecordDAO;
+import org.hibernate.SessionFactory;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -12,6 +13,9 @@ public class AntikvariatyRecordsWriter implements ItemWriter<AntikvariatyRecord>
 
 	@Autowired
 	private AntikvariatyRecordDAO antikvariatyRecordDao;
+
+	@Autowired
+	private SessionFactory sessionFactory;
 
 	@Override
 	public void write(List<? extends AntikvariatyRecord> items) {
@@ -38,5 +42,7 @@ public class AntikvariatyRecordsWriter implements ItemWriter<AntikvariatyRecord>
 				antikvariatyRecordDao.saveOrUpdate(oldRecord);
 			}
 		}
+		sessionFactory.getCurrentSession().flush();
+		sessionFactory.getCurrentSession().clear();
 	}
 }
