@@ -780,7 +780,7 @@ public class DedupRecordsJobConfig {
 				.faultTolerant()
 				.keyGenerator(KeyGeneratorForList.INSTANCE)
 				.retry(LockAcquisitionException.class)
-				.retryLimit(10000)
+				.retryLimit(20000)
 				.reader(dedupTitleAuthReader(INTEGER_OVERRIDEN_BY_EXPRESSION))
 				.processor(dedupTitleAuthProcessor())
 				.writer(dedupSimpleKeysStepWriter()).build();
