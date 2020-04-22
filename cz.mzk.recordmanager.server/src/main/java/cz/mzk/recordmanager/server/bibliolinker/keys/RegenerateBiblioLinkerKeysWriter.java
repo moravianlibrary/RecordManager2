@@ -51,9 +51,9 @@ public class RegenerateBiblioLinkerKeysWriter implements ItemWriter<Long> {
 				if (rec.getBiblioLinkerKeysHash() != null && rec.getBiblioLinkerKeysHash().equals(oldHash)) continue;
 				harvestedRecordDao.saveOrUpdate(rec);
 			} catch (InvalidMarcException ime) {
-				logger.warn("Invalid Marc in record: " + rec.getId());
+				logger.warn("Invalid Marc in record: {}", rec.getId());
 			} catch (Exception e) {
-				logger.warn("Skipping record due to error: " + e);
+				logger.warn("Skipping record {} due to error: {}", rec.getId(), e);
 			}
 		}
 		sessionFactory.getCurrentSession().flush();
