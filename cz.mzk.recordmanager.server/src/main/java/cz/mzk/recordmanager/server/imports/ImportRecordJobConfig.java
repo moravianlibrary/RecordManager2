@@ -2,9 +2,11 @@ package cz.mzk.recordmanager.server.imports;
 
 import java.util.List;
 
+import cz.mzk.recordmanager.server.imports.antikvariaty.AfterImportAntikvariatyTasklet;
 import cz.mzk.recordmanager.server.imports.antikvariaty.AntikvariatyImportJobParametersValidator;
 import cz.mzk.recordmanager.server.imports.antikvariaty.AntikvariatyRecordsReader;
 import cz.mzk.recordmanager.server.imports.antikvariaty.AntikvariatyRecordsWriter;
+import cz.mzk.recordmanager.server.oai.harvest.ReharvestJobExecutionDecider;
 import cz.mzk.recordmanager.server.oai.harvest.cosmotron.CosmotronRecordWriter;
 import org.marc4j.marc.Record;
 import org.springframework.batch.core.Job;
@@ -12,6 +14,7 @@ import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepScope;
+import org.springframework.batch.core.job.flow.FlowExecutionStatus;
 import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
@@ -154,32 +157,54 @@ public class ImportRecordJobConfig {
 	// Antikvariaty
 	@Bean
 	public Job AntikvariatyImportRecordsJob(
-			@Qualifier(Constants.JOB_ID_IMPORT_ANTIKVARIATY + ":importRecordsStep") Step importRecordsStep) {
+			@Qualifier(Constants.JOB_ID_IMPORT_ANTIKVARIATY + ":importRecordsStep") Step importRecordsStep,
+			@Qualifier(Constants.JOB_ID_IMPORT_ANTIKVARIATY + ":udpateRecordsStep") Step updateRecordsStep) {
 		return jobs.get(Constants.JOB_ID_IMPORT_ANTIKVARIATY)
 				.validator(new AntikvariatyImportJobParametersValidator())
-				.listener(JobFailureListener.INSTANCE).flow(importRecordsStep)
-				.end().build();
+				.listener(JobFailureListener.INSTANCE)
+				.flow(importRecordsStep)
+				.next(ReharvestJobExecutionDecider.INSTANCE).on(ReharvestJobExecutionDecider.REHARVEST_FLOW_STATUS.toString()).to(updateRecordsStep) //
+				.from(ReharvestJobExecutionDecider.INSTANCE).on(FlowExecutionStatus.COMPLETED.toString()).end()
+				.end()
+				.build();
 	}
 
 	@Bean(name = Constants.JOB_ID_IMPORT_ANTIKVARIATY + ":importRecordsStep")
 	public Step importAntikvariatyRecordsStep() throws Exception {
 		return steps.get("antikvariaty:importRecordsStep")
+				.listener(new StepProgressListener())
 				.<AntikvariatyRecord, AntikvariatyRecord>chunk(10)//
-				.reader(importAntikvariatyReader(LONG_OVERRIDEN_BY_EXPRESSION))//
+				.reader(importAntikvariatyReader(LONG_OVERRIDEN_BY_EXPRESSION, STRING_OVERRIDEN_BY_EXPRESSION))//
 				.writer(importAntikvariatyWriter()) //
 				.build();
 	}
 
 	@Bean(name = Constants.JOB_ID_IMPORT_ANTIKVARIATY + ":reader")
 	@StepScope
-	public ItemReader<AntikvariatyRecord> importAntikvariatyReader(@Value("#{jobParameters[" + Constants.JOB_PARAM_CONF_ID + "]}") Long configId) throws Exception {
-		return new AntikvariatyRecordsReader(configId);
+	public ItemReader<AntikvariatyRecord> importAntikvariatyReader(
+			@Value("#{jobParameters[" + Constants.JOB_PARAM_CONF_ID + "]}") Long configId,
+			@Value("#{jobParameters[" + Constants.JOB_PARAM_IN_FILE + "]}") String filename) throws Exception {
+		return new AntikvariatyRecordsReader(configId, filename);
 	}
 
 	@Bean(name = Constants.JOB_ID_IMPORT_ANTIKVARIATY + ":writer")
 	@StepScope
 	public ItemWriter<AntikvariatyRecord> importAntikvariatyWriter() {
 		return new AntikvariatyRecordsWriter();
+	}
+
+	@Bean(name = Constants.JOB_ID_IMPORT_ANTIKVARIATY + ":udpateRecordsStep")
+	public Step updateRecordsStep() {
+		return steps.get(Constants.JOB_ID_IMPORT_ANTIKVARIATY + ":udpateRecordsStep") //
+				.listener(new StepProgressListener())
+				.tasklet(afterImportAntikvariatyTasklet()) //
+				.build();
+	}
+
+	@Bean(name = Constants.JOB_ID_IMPORT_ANTIKVARIATY + ":afterImportAntikvariatyTasklet")
+	@StepScope
+	public Tasklet afterImportAntikvariatyTasklet() {
+		return new AfterImportAntikvariatyTasklet();
 	}
 
 	// Oai format

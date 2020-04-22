@@ -1988,3 +1988,23 @@ INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granul
 --changeset tomascejpek:186 context:cpk
 INSERT INTO import_conf (id,library_id,contact_person_id,id_prefix,base_weight,cluster_id_enabled,filtering_enabled,interception_enabled,is_library,harvest_frequency,mapping_script,generate_dedup_keys,mapping_dedup_script,item_id) VALUES (99017,191,200,'kram-uzei',8,false,true,false,true,'U',null,true,null,null);
 INSERT INTO kramerius_conf (import_conf_id,url,url_solr,query_rows,metadata_stream,auth_token,fulltext_harvest_type,download_private_fulltexts,harvest_job_name,collection) VALUES (99017,'https://cdk.lib.cas.cz/search/api/v5.0','https://cdk.lib.cas.cz/solr-select-only/k4',50,'BIBLIO_MODS',null,'solr',true,'krameriusHarvestJob','"vc:91a19b3d-8271-4889-8652-6c9d5864bd1b"');
+
+--changeset tomascejpek:187
+ALTER TABLE antikvariaty ADD COLUMN last_harvest TIMESTAMP, ADD COLUMN updated_original TIMESTAMP;
+ALTER TABLE antikvariaty_catids DROP CONSTRAINT antikvariaty_catids_fk;
+ALTER TABLE antikvariaty_catids ADD CONSTRAINT antikvariaty_catids_fk FOREIGN KEY (antikvariaty_id) REFERENCES antikvariaty(id) ON DELETE CASCADE;
+CREATE INDEX antik_catids_ids ON antikvariaty_catids(antikvariaty_id);
+CREATE OR REPLACE VIEW antikvariaty_url_view AS
+SELECT
+  hr.dedup_record_id,
+  a.url,
+  a.updated,
+  a.last_harvest
+FROM harvested_record hr
+  INNER JOIN antikvariaty_catids ac on hr.cluster_id = ac.id_from_catalogue
+  INNER JOIN antikvariaty a on ac.antikvariaty_id = a.id
+ORDER BY hr.weight DESC;
+
+--changeset tomascejpek:188 context:cpk
+UPDATE download_import_conf SET url='https://muj-antikvariat.cz/assets/obalkyknih.xml' WHERE import_conf_id=500;
+

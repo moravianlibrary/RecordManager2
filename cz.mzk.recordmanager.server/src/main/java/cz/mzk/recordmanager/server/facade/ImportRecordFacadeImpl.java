@@ -1,14 +1,14 @@
 package cz.mzk.recordmanager.server.facade;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.google.common.collect.ImmutableMap;
+import cz.mzk.recordmanager.server.util.ResourceUtils;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,6 +17,7 @@ import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobParameter;
 import org.springframework.batch.core.JobParameters;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import cz.mzk.recordmanager.server.facade.exception.JobExecutionFailure;
@@ -32,11 +33,16 @@ public class ImportRecordFacadeImpl implements ImportRecordFacade {
 	
 	@Autowired
 	private JobExecutor jobExecutor;
-	
+
+	@Autowired
+	private NamedParameterJdbcTemplate jdbcTemplate;
+
 	private static final Pattern LOCAL_IMPORT = Pattern.compile("^local:(.*/)([^/]*)");
 	
 	private List<String> files = null;
-	
+
+	private final String lastJobExecutionQuery = ResourceUtils.asString("sql/query/LastJobExecutionQuery.sql");
+
 	@Override
 	public void importFactory(DownloadImportConfiguration dic) {
 		if (dic.getUrl() != null && LOCAL_IMPORT.matcher(dic.getUrl()).matches()) {
@@ -150,6 +156,29 @@ public class ImportRecordFacadeImpl implements ImportRecordFacade {
 			if (fileName.startsWith(fileNamePrefix)) {
 				files.add(fileName);
 			}
+		}
+	}
+
+	private LocalDateTime query(String query, Map<String, ?> params) {
+		List<Date> lastIndex = jdbcTemplate.queryForList(query, params, Date.class);
+		return (!lastIndex.isEmpty() && lastIndex.get(0) != null) ? LocalDateTime.ofInstant(lastIndex.get(0).toInstant(), ZoneId.systemDefault()) : null;
+	}
+
+	@Override
+	public LocalDateTime getLastCompletedExecution(String jobName) {
+		return query(lastJobExecutionQuery, ImmutableMap.of("jobName", jobName));
+	}
+
+	@Override
+	public void reharvestAntikvariaty() {
+		Map<String, JobParameter> parameters = new HashMap<>();
+		parameters.put(Constants.JOB_PARAM_CONF_ID, new JobParameter(Constants.IMPORT_CONF_ID_ANTIKVARIATY));
+		parameters.put(Constants.JOB_PARAM_REPEAT, new JobParameter(Constants.JOB_PARAM_ONE_VALUE));
+		parameters.put(Constants.JOB_PARAM_REHARVEST, new JobParameter(Constants.JOB_PARAM_TRUE_VALUE));
+		JobParameters params = new JobParameters(parameters);
+		JobExecution exec = jobExecutor.execute(Constants.JOB_ID_IMPORT_ANTIKVARIATY, params);
+		if (!ExitStatus.COMPLETED.equals(exec.getExitStatus())) {
+			throw new JobExecutionFailure("Reharvest failed", exec);
 		}
 	}
 

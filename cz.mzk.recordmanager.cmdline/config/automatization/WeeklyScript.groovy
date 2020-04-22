@@ -55,6 +55,11 @@ public class DailyScript implements Runnable {
 		} catch (JobExecutionFailure jfe) {
 			logger.error(String.format("Incremental harvest of ZakonyProLidi failed"), jfe);
 		}
+		try {
+			importFacade.reharvestAntikvariaty();
+		} catch (JobExecutionFailure jfe) {
+			logger.error(String.format("Reharvest of Antikvariaty failed"), jfe);
+		}
 		oaiHarvestConfigurationDAO.findAll().each { conf ->
 			if (conf.harvestFrequency == HarvestFrequency.WEEKLY) {
 				try {

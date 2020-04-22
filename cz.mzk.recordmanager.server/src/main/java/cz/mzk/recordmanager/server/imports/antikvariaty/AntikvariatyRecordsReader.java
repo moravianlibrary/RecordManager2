@@ -1,9 +1,15 @@
 package cz.mzk.recordmanager.server.imports.antikvariaty;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.ListIterator;
 
+import cz.mzk.recordmanager.server.util.ProgressLogger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.xml.StaxEventItemReader;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +24,11 @@ import cz.mzk.recordmanager.server.util.MetadataUtils;
 
 public class AntikvariatyRecordsReader implements ItemReader<AntikvariatyRecord> {
 
+	private static Logger logger = LoggerFactory.getLogger(AntikvariatyRecordsReader.class);
+
 	private Long configId;
+
+	private String filename;
 
 	private final static int EFFECTIVE_TITLE_LENGTH = 255;
 	
@@ -28,10 +38,13 @@ public class AntikvariatyRecordsReader implements ItemReader<AntikvariatyRecord>
 	@Autowired
 	private DownloadImportConfigurationDAO configDao;
 
-	private StaxEventItemReader<AntikvariatyRecord> reader;	
+	private StaxEventItemReader<AntikvariatyRecord> reader;
 
-	public AntikvariatyRecordsReader(Long configId) {
+	private ProgressLogger progressLogger = new ProgressLogger(logger);
+
+	public AntikvariatyRecordsReader(final Long configId, final String filename) {
 		this.configId = configId;
+		this.filename = filename;
 	}
 
 	@Override
@@ -43,6 +56,7 @@ public class AntikvariatyRecordsReader implements ItemReader<AntikvariatyRecord>
 		if (item != null) {
 			fixCatalogueIds(item);
 			shortenTitle(item);
+			progressLogger.incrementAndLogProgress();
 		}
 		return item;
 	}
@@ -73,20 +87,26 @@ public class AntikvariatyRecordsReader implements ItemReader<AntikvariatyRecord>
 	protected void shortenTitle(AntikvariatyRecord item){
 		item.setTitle(MetadataUtils.normalizeAndShorten(item.getTitle(), EFFECTIVE_TITLE_LENGTH));
 	}
-	
-	protected void initializeReader() throws Exception {
-		DownloadImportConfiguration config = configDao.get(configId);
-		if (config == null) {
-			throw new IllegalArgumentException(String.format("Configuration with id=%s not found.", configId));
-		}
-		String url = config.getUrl();
-		if (url == null || url.isEmpty()) {
-			throw new IllegalArgumentException(
-					String.format("Missing url in DownloadImportConfiguration with id=%s.", configId));
+
+	protected void initializeReader() throws IOException, RuntimeException {
+		InputStream is;
+		if (filename == null) {
+			DownloadImportConfiguration config = configDao.get(configId);
+			if (config == null) {
+				throw new IllegalArgumentException(String.format("Configuration with id=%s not found.", configId));
+			}
+			String url = config.getUrl();
+			if (url == null || url.isEmpty()) {
+				throw new IllegalArgumentException(
+						String.format("Missing url in DownloadImportConfiguration with id=%s.", configId));
+			}
+			is = httpClient.executeGet(url);
+		} else {
+			is = new FileInputStream(filename);
 		}
 		try {
-			reader = new StaxEventItemReader<AntikvariatyRecord>();
-			reader.setResource(new InputStreamResource(httpClient.executeGet(url)));
+			reader = new StaxEventItemReader<>();
+			reader.setResource(new InputStreamResource(is));
 			reader.setFragmentRootElementName("record");
 			Jaxb2Marshaller unmarshaller = new Jaxb2Marshaller();
 			unmarshaller.setClassesToBeBound(AntikvariatyRecord.class);
