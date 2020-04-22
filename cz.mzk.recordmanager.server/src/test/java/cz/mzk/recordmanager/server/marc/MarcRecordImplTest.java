@@ -1,6 +1,5 @@
 package cz.mzk.recordmanager.server.marc;
 
-import cz.mzk.recordmanager.api.model.OaiHarvestConfigurationDto;
 import cz.mzk.recordmanager.server.AbstractTest;
 import cz.mzk.recordmanager.server.metadata.CitationRecordType;
 import cz.mzk.recordmanager.server.metadata.MetadataRecord;
@@ -927,6 +926,20 @@ public class MarcRecordImplTest extends AbstractTest {
 		mri = MarcRecordFactory.recordFactory(metadataList);
 		metadataRecord = metadataFactory.getMetadataRecord(mri);
 		Assert.assertEquals(metadataRecord.getSourceInfoG(), "g");
+		Assert.assertEquals(metadataRecord.getSourceInfoT(), "t");
+		Assert.assertEquals(metadataRecord.getSourceInfoX(), "x");
+	}
+
+	@Test
+	public void getSourceInfoGFilteringTest() throws Exception {
+		MarcRecordImpl mri;
+		List<String> metadataList = new ArrayList<>();
+		MetadataRecord metadataRecord;
+
+		metadataList.add("773 $gabstrakt$tt$xx");
+		mri = MarcRecordFactory.recordFactory(metadataList);
+		metadataRecord = metadataFactory.getMetadataRecord(mri);
+		Assert.assertEquals(metadataRecord.getSourceInfoG(), "abst");
 		Assert.assertEquals(metadataRecord.getSourceInfoT(), "t");
 		Assert.assertEquals(metadataRecord.getSourceInfoX(), "x");
 	}
