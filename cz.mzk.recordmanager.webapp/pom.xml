@@ -15,7 +15,7 @@
 	</parent>
 
 	<properties>
-		<jackson.version>2.9.10.3</jackson.version>
+		<jackson.version>2.9.10.4</jackson.version>
 		<jaxb-api.version>2.2.11</jaxb-api.version>
 	</properties>
 
