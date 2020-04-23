@@ -18,7 +18,8 @@ public class ImportOaiRecordsJobParametersValidator extends
 	public Collection<JobParameterDeclaration> getParameters() {
 		return Arrays.asList(
 				param(Constants.JOB_PARAM_CONF_ID, ParameterType.LONG, true), //
-				param(Constants.JOB_PARAM_IN_FILE, ParameterType.STRING, true)//
+				param(Constants.JOB_PARAM_IN_FILE, ParameterType.STRING, true), //
+				param(Constants.JOB_PARAM_REHARVEST, ParameterType.STRING, false)//
 				);
 	}
 

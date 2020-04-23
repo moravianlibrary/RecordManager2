@@ -54,12 +54,15 @@ public class ImportRecordJobConfig {
 
 	@Bean
 	public Job ImportRecordsJob(
-			@Qualifier(Constants.JOB_ID_IMPORT + ":importRecordsStep") Step importRecordsStep) {
+			@Qualifier(Constants.JOB_ID_IMPORT + ":importRecordsStep") Step importRecordsStep,
+			@Qualifier(Constants.JOB_ID_IMPORT + ":afterHarvestStep") Step afterHarvestStep) {
 		return jobs.get(Constants.JOB_ID_IMPORT)
 				.validator(new ImportRecordsJobParametersValidator())
 				.incrementer(UUIDIncrementer.INSTANCE)
 				.listener(JobFailureListener.INSTANCE)
 				.flow(importRecordsStep)
+				.next(ReharvestJobExecutionDecider.INSTANCE).on(ReharvestJobExecutionDecider.REHARVEST_FLOW_STATUS.toString()).to(afterHarvestStep) //
+				.from(ReharvestJobExecutionDecider.INSTANCE).on(FlowExecutionStatus.COMPLETED.toString()).end() //
 				.end().build();
 	}
 
@@ -92,12 +95,15 @@ public class ImportRecordJobConfig {
 	// multi thread import
 	@Bean
 	public Job multiImportRecordsJob(
-			@Qualifier(Constants.JOB_ID_MULTI_THREADS_IMPORT + ":importRecordsStep") Step multiImportRecordsStep) {
+			@Qualifier(Constants.JOB_ID_MULTI_THREADS_IMPORT + ":importRecordsStep") Step multiImportRecordsStep,
+			@Qualifier(Constants.JOB_ID_IMPORT + ":afterHarvestStep") Step afterHarvestStep) {
 		return jobs.get(Constants.JOB_ID_MULTI_THREADS_IMPORT)
 				.validator(new ImportRecordsJobParametersValidator())
 				.incrementer(UUIDIncrementer.INSTANCE)
 				.listener(JobFailureListener.INSTANCE)
 				.flow(multiImportRecordsStep)
+				.next(ReharvestJobExecutionDecider.INSTANCE).on(ReharvestJobExecutionDecider.REHARVEST_FLOW_STATUS.toString()).to(afterHarvestStep) //
+				.from(ReharvestJobExecutionDecider.INSTANCE).on(FlowExecutionStatus.COMPLETED.toString()).end() //
 				.end().build();
 	}
 
@@ -115,12 +121,15 @@ public class ImportRecordJobConfig {
 	// Download and import
 	@Bean
 	public Job DownloadAndImportRecordsJob(
-			@Qualifier(Constants.JOB_ID_DOWNLOAD_IMPORT + ":downloadImportRecordsStep") Step downloadImportRecordsStep) {
+			@Qualifier(Constants.JOB_ID_DOWNLOAD_IMPORT + ":downloadImportRecordsStep") Step downloadImportRecordsStep,
+			@Qualifier(Constants.JOB_ID_IMPORT + ":afterHarvestStep") Step afterHarvestStep) {
 		return jobs.get(Constants.JOB_ID_DOWNLOAD_IMPORT)
 				.validator(new DownloadAndImportRecordsJobParametersValidator())
 				.incrementer(UUIDIncrementer.INSTANCE)
 				.listener(JobFailureListener.INSTANCE)
 				.flow(downloadImportRecordsStep)
+				.next(ReharvestJobExecutionDecider.INSTANCE).on(ReharvestJobExecutionDecider.REHARVEST_FLOW_STATUS.toString()).to(afterHarvestStep) //
+				.from(ReharvestJobExecutionDecider.INSTANCE).on(FlowExecutionStatus.COMPLETED.toString()).end() //
 				.end().build();
 	}
 
@@ -144,6 +153,7 @@ public class ImportRecordJobConfig {
 	@Bean(name = Constants.JOB_ID_IMPORT + ":afterHarvestStep")
 	public Step afterHarvestStep() {
 		return steps.get("afterHarvestStep") //
+				.listener(new StepProgressListener())
 				.tasklet(afterHarvestTasklet()) //
 				.build();
 	}
@@ -210,10 +220,14 @@ public class ImportRecordJobConfig {
 	// Oai format
 	@Bean
 	public Job OaiImportRecordsJob(
-			@Qualifier(Constants.JOB_ID_IMPORT_OAI + ":importRecordsStep") Step importRecordsStep) {
+			@Qualifier(Constants.JOB_ID_IMPORT_OAI + ":importRecordsStep") Step importRecordsStep,
+			@Qualifier(Constants.JOB_ID_IMPORT + ":afterHarvestStep") Step afterHarvestStep) {
 		return jobs.get(Constants.JOB_ID_IMPORT_OAI)
 				.validator(new ImportOaiRecordsJobParametersValidator())
-				.listener(JobFailureListener.INSTANCE).flow(importRecordsStep)
+				.listener(JobFailureListener.INSTANCE)
+				.flow(importRecordsStep)
+				.next(ReharvestJobExecutionDecider.INSTANCE).on(ReharvestJobExecutionDecider.REHARVEST_FLOW_STATUS.toString()).to(afterHarvestStep) //
+				.from(ReharvestJobExecutionDecider.INSTANCE).on(FlowExecutionStatus.COMPLETED.toString()).end() //
 				.end().build();
 	}
 

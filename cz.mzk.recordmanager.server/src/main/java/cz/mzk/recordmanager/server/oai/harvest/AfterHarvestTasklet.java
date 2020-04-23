@@ -21,8 +21,9 @@ public class AfterHarvestTasklet implements Tasklet {
 
 	private static Logger logger = LoggerFactory.getLogger(AfterHarvestTasklet.class);
 
-	private static final String UPDATE_QUERY = "UPDATE harvested_record SET deleted = :deleted WHERE " +
-			" import_conf_id = :importConfId and last_harvest < :executed";
+	private static final String UPDATE_QUERY = "UPDATE harvested_record " +
+			"SET deleted = :deleted, updated = :deleted " +
+			"WHERE import_conf_id = :importConfId AND last_harvest < :executed AND deleted is null";
 
 	@Autowired
 	private NamedParameterJdbcTemplate jdbcTemplate;
@@ -33,7 +34,7 @@ public class AfterHarvestTasklet implements Tasklet {
 		JobParameters params = chunkContext.getStepContext().getStepExecution().getJobExecution()
 				.getJobParameters();
 		Long configId = params.getLong(Constants.JOB_PARAM_CONF_ID);
-		Date started = params.getDate(Constants.JOB_PARAM_START_TIME);
+		Date started = chunkContext.getStepContext().getStepExecution().getJobExecution().getCreateTime();
 		if (started == null) {
 			return RepeatStatus.FINISHED;
 		}
