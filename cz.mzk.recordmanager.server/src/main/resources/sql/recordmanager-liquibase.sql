@@ -2378,3 +2378,8 @@ UPDATE import_conf SET item_id='other' WHERE id=332;
 --changeset tomascejpek:234 context:cpk
 UPDATE kramerius_conf SET url='https://kramerius.mzk.cz/search/api/v5.0' WHERE import_conf_id=99001;
 UPDATE kramerius_conf SET url='https://kramerius.kvkli.cz/search/api/v5.0' WHERE import_conf_id=99021;
+
+--changeset tomascejpek:235
+ALTER TABLE harvested_record ADD COLUMN loans DECIMAL(10);
+ALTER TABLE harvested_record ADD COLUMN callnumber VARCHAR(100);
+

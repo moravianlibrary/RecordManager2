@@ -179,6 +179,8 @@ CREATE TABLE harvested_record (
   bl_author            VARCHAR(200),
   bl_publisher         VARCHAR(200),
   bl_series            VARCHAR(200),
+  loans                DECIMAL(10),
+  callnumber           VARCHAR(100),
   raw_record           BYTEA,
   UNIQUE (import_conf_id, record_id),
   FOREIGN KEY (import_conf_id) REFERENCES import_conf(id),
