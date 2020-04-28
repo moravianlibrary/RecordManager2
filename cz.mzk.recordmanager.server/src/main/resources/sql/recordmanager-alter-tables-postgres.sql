@@ -2164,3 +2164,8 @@ CREATE TABLE title_old_spelling (
   value                VARCHAR(128)
 );
 CREATE INDEX title_old_spelling_key_idx ON title_old_spelling(key);
+
+-- 25. 03. 2021 tomascejpek
+INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (216, 'CZTCPK', '', '', null, 'bibliography');
+INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency) VALUES (416, 216, 200, 'cztcpk', 11, false, true, true, false, 'U');
+INSERT INTO download_import_conf (import_conf_id,url,import_job_name, format) VALUES (416,null,null,null);
