@@ -2011,3 +2011,7 @@ UPDATE download_import_conf SET url='https://muj-antikvariat.cz/assets/obalkykni
 --changeset tomascejpek:189 context:cpk
 UPDATE library SET region='ebook' WHERE id in (127,213);
 
+--changeset tomascejpek:190
+ALTER TABLE cosmotron_996 ADD COLUMN last_harvest TIMESTAMP;
+CREATE INDEX cosmotron_996_last_harvest_idx ON cosmotron_996(last_harvest);
+

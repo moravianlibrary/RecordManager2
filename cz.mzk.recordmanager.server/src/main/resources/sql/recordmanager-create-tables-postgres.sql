@@ -372,6 +372,7 @@ CREATE TABLE cosmotron_996 (
   harvested            TIMESTAMP,
   updated              TIMESTAMP,
   deleted              TIMESTAMP,
+  last_harvest         TIMESTAMP,
   raw_record           BYTEA
 );
 

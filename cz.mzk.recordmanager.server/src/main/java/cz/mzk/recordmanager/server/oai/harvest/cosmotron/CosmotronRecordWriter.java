@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -40,7 +41,7 @@ public class CosmotronRecordWriter extends HarvestedRecordWriter implements Item
 		sessionFactory.getCurrentSession().clear();
 	}
 
-	private void processAndSave(HarvestedRecord hr) throws Exception {
+	private void processAndSave(HarvestedRecord hr) {
 		if (hr.getId() == null) {
 			String recordId = hr.getUniqueId().getRecordId();
 			// save deleted record
@@ -54,6 +55,7 @@ public class CosmotronRecordWriter extends HarvestedRecordWriter implements Item
 					deleted996.setDeleted(new Date());
 					deleted996.setUpdated(new Date());
 					deleted996.setRawRecord(new byte[0]);
+					deleted996.setLastHarvest(new Date());
 					cosmotronDao.persist(deleted996);
 				}
 				return;
@@ -71,10 +73,16 @@ public class CosmotronRecordWriter extends HarvestedRecordWriter implements Item
 					// create new record
 					cr = new Cosmotron996(recordId, configurationId);
 					cr.setHarvested(new Date());
+				} else if (hr.getRawRecord() == null || hr.getRawRecord().length == 0
+						|| Arrays.equals(cr.getRawRecord(), hr.getRawRecord())) {
+					cr.setLastHarvest(new Date());
+					cosmotronDao.persist(cr);
+					return;
 				}
 				cr.setParentRecordId(parentRecordId);
 				cr.setUpdated(new Date());
 				cr.setDeleted(null);
+				cr.setLastHarvest(new Date());
 				cr.setRawRecord(hr.getRawRecord());
 				if (!CosmotronUtils.existsFields996(mr)) {
 					// record with parent id and without fields 996

@@ -66,3 +66,5 @@ CREATE INDEX isbn_idx ON isbn(isbn);
 CREATE INDEX cnb_idx ON cnb(cnb);
 CREATE INDEX oclc_idx ON oclc(oclc);
 CREATE INDEX ean_idx ON ean(ean);
+
+CREATE INDEX cosmotron_996_last_harvest_idx ON cosmotron_996(last_harvest);

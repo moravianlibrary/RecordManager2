@@ -1738,3 +1738,7 @@ UPDATE download_import_conf SET url='https://muj-antikvariat.cz/assets/obalkykni
 -- 28. 04. 2020 tomascejpek
 UPDATE library SET region='ebook' WHERE id in (127,213);
 
+-- 07. 05. 2020 tomascejpek
+ALTER TABLE cosmotron_996 ADD COLUMN last_harvest TIMESTAMP;
+CREATE INDEX cosmotron_996_last_harvest_idx ON cosmotron_996(last_harvest);
+

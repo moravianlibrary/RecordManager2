@@ -13,12 +13,12 @@ import javax.persistence.TemporalType;
 @Entity
 @Table(name=Cosmotron996.TABLE_NAME)
 public class Cosmotron996 extends AbstractDomainObject{
-	
+
 	public static final String TABLE_NAME = "cosmotron_996";
-	
+
 	@Column(name="import_conf_id")
 	private Long harvestedFrom;
-	
+
 	@Column(name="record_id")
 	private String recordId;
 
@@ -28,17 +28,21 @@ public class Cosmotron996 extends AbstractDomainObject{
 	@Column(name="harvested")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date harvested = new Date();
-	
+
 	@Column(name="updated")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date updated = harvested;
-	
+
 	@Column(name="deleted")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date deleted;
-	
+
+	@Column(name = "last_harvest")
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date lastHarvest;
+
 	@Basic(fetch = FetchType.LAZY)
-	@Column(name="raw_record") 
+	@Column(name = "raw_record")
 	private byte[] rawRecord;
 
 	public Cosmotron996() {
@@ -104,6 +108,14 @@ public class Cosmotron996 extends AbstractDomainObject{
 
 	public void setParentRecordId(String parentRecordId) {
 		this.parentRecordId = parentRecordId;
+	}
+
+	public Date getLastHarvest() {
+		return lastHarvest;
+	}
+
+	public void setLastHarvest(Date lastHarvest) {
+		this.lastHarvest = lastHarvest;
 	}
 
 	@Override
