@@ -1,8 +1,8 @@
-package cz.mzk.recordmanager.server.oai.harvest;
+package cz.mzk.recordmanager.server.oai.harvest.cosmotron;
 
-import java.util.Date;
-import java.util.Map;
-
+import com.google.common.collect.ImmutableMap;
+import cz.mzk.recordmanager.server.oai.harvest.AfterHarvestTasklet;
+import cz.mzk.recordmanager.server.util.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.JobParameters;
@@ -10,27 +10,22 @@ import org.springframework.batch.core.StepContribution;
 import org.springframework.batch.core.scope.context.ChunkContext;
 import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.repeat.RepeatStatus;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
-import com.google.common.collect.ImmutableMap;
+import java.util.Date;
+import java.util.Map;
 
-import cz.mzk.recordmanager.server.util.Constants;
+public class AfterCosmotronHarvestTasklet extends AfterHarvestTasklet implements Tasklet {
 
-public class AfterHarvestTasklet implements Tasklet {
+	private static Logger logger = LoggerFactory.getLogger(AfterCosmotronHarvestTasklet.class);
 
-	private static Logger logger = LoggerFactory.getLogger(AfterHarvestTasklet.class);
-
-	private static final String UPDATE_QUERY = "UPDATE harvested_record " +
+	private static final String UPDATE_QUERY = "UPDATE cosmotron_996 " +
 			"SET deleted = :deleted, updated = :deleted " +
 			"WHERE import_conf_id = :importConfId AND last_harvest < :executed AND deleted is null";
 
-	@Autowired
-	protected NamedParameterJdbcTemplate jdbcTemplate;
-
 	@Override
 	public RepeatStatus execute(StepContribution contribution,
-			ChunkContext chunkContext) throws Exception {
+								ChunkContext chunkContext) throws Exception {
+		super.execute(contribution, chunkContext);
 		JobParameters params = chunkContext.getStepContext().getStepExecution().getJobExecution()
 				.getJobParameters();
 		Long configId = params.getLong(Constants.JOB_PARAM_CONF_ID);
@@ -44,7 +39,7 @@ public class AfterHarvestTasklet implements Tasklet {
 				"executed", started
 		);
 		int updated = jdbcTemplate.update(UPDATE_QUERY, updateParams);
-		logger.info("{} harvested records updated before '{}' mark as deleted " +
+		logger.info("{} cosmotron 996 records updated before '{}' mark as deleted " +
 				"for import_conf_id={}", updated, started, configId);
 		return RepeatStatus.FINISHED;
 	}

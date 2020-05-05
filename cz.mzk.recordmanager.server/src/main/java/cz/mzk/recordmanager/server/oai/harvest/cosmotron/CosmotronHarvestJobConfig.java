@@ -6,7 +6,9 @@ import cz.mzk.recordmanager.server.model.HarvestedRecord.HarvestedRecordUniqueId
 import cz.mzk.recordmanager.server.oai.harvest.AsyncOAIItemReader;
 import cz.mzk.recordmanager.server.oai.harvest.OAIItemProcessor;
 import cz.mzk.recordmanager.server.oai.harvest.OAIItemReader;
+import cz.mzk.recordmanager.server.oai.harvest.ReharvestJobExecutionDecider;
 import cz.mzk.recordmanager.server.oai.model.OAIRecord;
+import cz.mzk.recordmanager.server.springbatch.JobFailureListener;
 import cz.mzk.recordmanager.server.springbatch.StepProgressListener;
 import cz.mzk.recordmanager.server.util.Constants;
 import org.springframework.batch.core.Job;
@@ -14,6 +16,8 @@ import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepScope;
+import org.springframework.batch.core.job.flow.FlowExecutionStatus;
+import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.database.JdbcPagingItemReader;
 import org.springframework.batch.item.database.support.SqlPagingQueryProviderFactoryBean;
@@ -56,11 +60,16 @@ public class CosmotronHarvestJobConfig {
 	@Bean
 	public Job cosmotronHarvestJob(
 			@Qualifier(Constants.JOB_ID_HARVEST_COSMOTRON + ":cosmotronHarvestStep") Step cosmotronHarvestStep,
-			@Qualifier(Constants.JOB_ID_HARVEST_COSMOTRON + ":update996Step") Step update996Step) {
+			@Qualifier(Constants.JOB_ID_HARVEST_COSMOTRON + ":update996Step") Step update996Step,
+			@Qualifier(Constants.JOB_ID_HARVEST_COSMOTRON + ":afterCosmotronHarvestStep") Step afterCosmotronHarvestStep) {
 		return jobs.get(Constants.JOB_ID_HARVEST_COSMOTRON) //
 				.validator(new CosmotronHarvestJobParametersValidator()) //
-				.start(cosmotronHarvestStep) //
+				.listener(JobFailureListener.INSTANCE)
+				.flow(cosmotronHarvestStep) //
 				.next(update996Step)
+				.next(ReharvestJobExecutionDecider.INSTANCE).on(ReharvestJobExecutionDecider.REHARVEST_FLOW_STATUS.toString()).to(afterCosmotronHarvestStep) //
+				.from(ReharvestJobExecutionDecider.INSTANCE).on(FlowExecutionStatus.COMPLETED.toString()).end() //
+				.end()
 				.build();
 	}
 
@@ -96,12 +105,12 @@ public class CosmotronHarvestJobConfig {
 	@Bean(name = "oaiHarvestJob:asyncReader")
 	@StepScope
 	public AsyncOAIItemReader asyncReader(@Value("#{jobParameters[" + Constants.JOB_PARAM_CONF_ID + "]}") Long configId,
-			@Value("#{stepExecutionContext[" + Constants.JOB_PARAM_FROM_DATE + "] "
-					+ "?:jobParameters[ " + Constants.JOB_PARAM_FROM_DATE + "]}") Date from,
-			@Value("#{stepExecutionContext[" + Constants.JOB_PARAM_UNTIL_DATE + ']'
-					+ "?:jobParameters[" + Constants.JOB_PARAM_UNTIL_DATE + "]}") Date to,
-			@Value("#{stepExecutionContext[" + Constants.JOB_PARAM_RESUMPTION_TOKEN + ']'
-					+ "?:jobParameters[" + Constants.JOB_PARAM_RESUMPTION_TOKEN + "]}") String resumptionToken) {
+										  @Value("#{stepExecutionContext[" + Constants.JOB_PARAM_FROM_DATE + "] "
+												  + "?:jobParameters[ " + Constants.JOB_PARAM_FROM_DATE + "]}") Date from,
+										  @Value("#{stepExecutionContext[" + Constants.JOB_PARAM_UNTIL_DATE + ']'
+												  + "?:jobParameters[" + Constants.JOB_PARAM_UNTIL_DATE + "]}") Date to,
+										  @Value("#{stepExecutionContext[" + Constants.JOB_PARAM_RESUMPTION_TOKEN + ']'
+												  + "?:jobParameters[" + Constants.JOB_PARAM_RESUMPTION_TOKEN + "]}") String resumptionToken) {
 		return new AsyncOAIItemReader(configId, from, to, resumptionToken);
 	}
 
@@ -163,5 +172,19 @@ public class CosmotronHarvestJobConfig {
 	@StepScope
 	public CosmotronUpdate996Writer cosmotronUpdate996Writer() {
 		return new CosmotronUpdate996Writer();
+	}
+
+	@Bean(name = Constants.JOB_ID_HARVEST_COSMOTRON + ":afterCosmotronHarvestStep")
+	public Step afterCosmotronHarvestStep() {
+		return steps.get(Constants.JOB_ID_HARVEST_COSMOTRON + ":afterCosmotronHarvestStep") //
+				.listener(new StepProgressListener())
+				.tasklet(afterCosmotronHarvestTasklet()) //
+				.build();
+	}
+
+	@Bean(name = Constants.JOB_ID_HARVEST_COSMOTRON + ":afterCosmotronHarvestTasklet")
+	@StepScope
+	public Tasklet afterCosmotronHarvestTasklet() {
+		return new AfterCosmotronHarvestTasklet();
 	}
 }
