@@ -292,4 +292,55 @@ public class ExportRecordsJobConfig {
 		return new ExportSfxRecordsWriter(filename);
 	}
 
+	//
+	@Bean
+	public Job exportDuplicityJob(
+			@Qualifier(Constants.JOB_ID_EXPORT_DUPLICITY + ":exportDuplicityStep") Step exportDuplicityStep) {
+		return jobs.get(Constants.JOB_ID_EXPORT_DUPLICITY)
+				.validator(new ExportRecordsJobParametersValidator())
+				.listener(JobFailureListener.INSTANCE)
+				.flow(exportDuplicityStep)
+				.end()
+				.build();
+	}
+
+	@Bean(name = Constants.JOB_ID_EXPORT_DUPLICITY + ":exportDuplicityStep")
+	public Step exportDuplicityStep() throws Exception {
+		return steps.get("exportRecordsStep")
+				.listener(new StepProgressListener())
+				.<HarvestedRecordUniqueId, String>chunk(50)//
+				.reader(exportDuplicityReader(LONG_OVERRIDEN_BY_EXPRESSION, LONG_OVERRIDEN_BY_EXPRESSION, STRING_OVERRIDEN_BY_EXPRESSION)) //
+				.processor(exportRecordsProcessor(STRING_OVERRIDEN_BY_EXPRESSION)) //
+				.writer(exportRecordsWriter(STRING_OVERRIDEN_BY_EXPRESSION)) //
+				.build();
+	}
+
+	@Bean(name = Constants.JOB_ID_EXPORT_DUPLICITY + ":exportDuplicityReader")
+	@StepScope
+	public ItemReader<HarvestedRecordUniqueId> exportDuplicityReader(
+			@Value("#{jobParameters[" + Constants.JOB_PARAM_CONF_ID + "]}") Long configId,
+			@Value("#{jobParameters[" + Constants.JOB_PARAM_DELETED + "]}") Long deleted,
+			@Value("#{jobParameters[" + Constants.JOB_PARAM_RECORD_IDS + "]}") String recordIds)
+			throws Exception {
+		JdbcPagingItemReader<HarvestedRecordUniqueId> reader = new JdbcPagingItemReader<>();
+		SqlPagingQueryProviderFactoryBean pqpf = new SqlPagingQueryProviderFactoryBean();
+		pqpf.setDataSource(dataSource);
+		pqpf.setSelectClause("SELECT import_conf_id, record_id");
+		pqpf.setFromClause("FROM harvested_record");
+		pqpf.setWhereClause("WHERE import_conf_id= :conf_id and deleted is null and dedup_record_id in " +
+				"(select dedup_record_id from harvested_record where import_conf_id= :conf_id and deleted is null " +
+				"GROUP BY dedup_record_id HAVING count(*) > 1)"
+		);
+		pqpf.setSortKey("record_id");
+		Map<String, Object> parameterValues = new HashMap<>();
+		parameterValues.put("conf_id", configId);
+		reader.setParameterValues(parameterValues);
+		reader.setRowMapper(new HarvestedRecordIdRowMapper());
+		reader.setPageSize(5000);
+		reader.setQueryProvider(pqpf.getObject());
+		reader.setDataSource(dataSource);
+		reader.afterPropertiesSet();
+		return reader;
+	}
+
 }
