@@ -65,10 +65,10 @@ public class CosmotronHarvestJobConfig {
 		return jobs.get(Constants.JOB_ID_HARVEST_COSMOTRON) //
 				.validator(new CosmotronHarvestJobParametersValidator()) //
 				.listener(JobFailureListener.INSTANCE)
-				.flow(cosmotronHarvestStep) //
-				.next(update996Step)
+				.start(cosmotronHarvestStep) //
 				.next(ReharvestJobExecutionDecider.INSTANCE).on(ReharvestJobExecutionDecider.REHARVEST_FLOW_STATUS.toString()).to(afterCosmotronHarvestStep) //
-				.from(ReharvestJobExecutionDecider.INSTANCE).on(FlowExecutionStatus.COMPLETED.toString()).end() //
+				.from(ReharvestJobExecutionDecider.INSTANCE).on(FlowExecutionStatus.COMPLETED.toString()).to(update996Step)
+				.from(afterCosmotronHarvestStep).on(FlowExecutionStatus.COMPLETED.toString()).to(update996Step) //
 				.end()
 				.build();
 	}
