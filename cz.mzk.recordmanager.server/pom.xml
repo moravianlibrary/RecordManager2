@@ -58,13 +58,13 @@
 		<dependency>
 			<groupId>org.springframework.batch</groupId>
 			<artifactId>spring-batch-core</artifactId>
-			<version>3.0.2.RELEASE</version>
+			<version>3.0.9.RELEASE</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.springframework.batch</groupId>
 			<artifactId>spring-batch-integration</artifactId>
-			<version>3.0.2.RELEASE</version>
+			<version>3.0.9.RELEASE</version>
 		</dependency>
 
 		<!-- Hibernate -->
