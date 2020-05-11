@@ -213,6 +213,10 @@ public class HarvestedRecord extends AbstractDomainObject {
 	@JoinColumn(name = "harvested_record_id", referencedColumnName = "id")
 	private List<Authority> authorities = new ArrayList<>();
 
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name = "harvested_record_id", referencedColumnName = "id")
+	private List<Uuid> uuids = new ArrayList<>();
+
 	// TODO consider moving dedup keys to separate table
 	@Column(name="author_auth_key")
 	private String authorAuthKey;
@@ -882,4 +886,13 @@ public class HarvestedRecord extends AbstractDomainObject {
 	public void setBlDisadvantaged(boolean blDisadvantaged) {
 		this.blDisadvantaged = blDisadvantaged;
 	}
+
+	public List<Uuid> getUuids() {
+		return uuids;
+	}
+
+	public void setUuids(List<Uuid> uuids) {
+		this.uuids = uuids;
+	}
+
 }

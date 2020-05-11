@@ -172,26 +172,17 @@ public class MetadataRecordFactory {
 		case Constants.PREFIX_MKZN:
 		case Constants.PREFIX_VFU:
 			return new ClaviusMetadataMarcRecord(marcRec, hr);
-		case Constants.PREFIX_KRAM_KNAV:
-			return new KramKnavMetadataMarcRecord(marcRec, hr);
 		case Constants.PREFIX_KRAM_MZK:
-			return init(new KramMzkMetadataMarcRecord(marcRec, hr));
+		case Constants.PREFIX_KRAM_KNAV:
 		case Constants.PREFIX_KRAM_NLK:
-			return new KramNlkMetadataMarcRecord(marcRec, hr);
 		case Constants.PREFIX_KRAM_SVKUL:
-			return new KramSvkulMetadataMarcRecord(marcRec, hr);
 		case Constants.PREFIX_KRAM_CBVK:
-			return new KramCbvkMetadataMarcRecord(marcRec, hr);
 		case Constants.PREFIX_KRAM_NTK:
-			return new KramNtkMetadataMarcRecord(marcRec, hr);
 		case Constants.PREFIX_KRAM_MKP:
-			return new KramMkpMetadataMarcRecord(marcRec, hr);
 		case Constants.PREFIX_KRAM_SVKHK:
-			return new KramSvkhkMetadataMarcRecord(marcRec, hr);
 		case Constants.PREFIX_KRAM_VKOL:
-			return new KramVkolMetadataMarcRecord(marcRec, hr);
 		case Constants.PREFIX_KRAM_UZEI:
-			return new KramUzeiMetadataMarcRecord(marcRec, hr);
+			return init(new KramDefaultMetadataMarcRecord(marcRec, hr));
 		case Constants.PREFIX_UZEI:
 			return new UzeiMetadataMarcRecord(marcRec, hr);
 		case Constants.PREFIX_RKKA:
@@ -217,15 +208,12 @@ public class MetadataRecordFactory {
 		String prefix = getPrefix(hr.getHarvestedFrom());
 		switch (prefix) {
 		case Constants.PREFIX_KRAM_MZK:
-			return new KramMzkMetadataDublinCoreRecord(dcRec, hr);
 		case Constants.PREFIX_KRAM_NKP:
-			MetadataRecord mr = new KramNkpMetadataDublinCoreRecord(dcRec, hr);
-			init(mr);
-			return mr;
+			return init(new KramDefaultMetadataDublinCoreRecord(dcRec, hr));
 		case Constants.PREFIX_KRAM_KNAV:
-			return new KramKnavMetadataDublinCoreRecord(dcRec, hr);
+			return init(new KramKnavMetadataDublinCoreRecord(dcRec, hr));
 		case Constants.PREFIX_KRAM3_NKP:
-			return new Kram3NkpMetadataDublinCoreRecord(dcRec, hr);
+			return init(new Kram3NkpMetadataDublinCoreRecord(dcRec, hr));
 		case Constants.PREFIX_MANUSCRIPTORIUM:
 			return new ManuscriptoriumMetadataDublinCoreRecord(dcRec, hr);
 		default:

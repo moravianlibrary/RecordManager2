@@ -1,16 +1,16 @@
 package cz.mzk.recordmanager.server.enrich;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.solr.common.SolrInputDocument;
-import org.testng.Assert;
-import org.testng.annotations.Test;
-
 import cz.mzk.recordmanager.server.AbstractTest;
 import cz.mzk.recordmanager.server.index.SolrFieldConstants;
 import cz.mzk.recordmanager.server.index.enrich.UrlDedupRecordEnricher;
 import cz.mzk.recordmanager.server.model.DedupRecord;
+import org.apache.solr.common.SolrInputDocument;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.testng.Assert;
+import org.testng.annotations.Test;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class UrlEnricherTest extends AbstractTest {
 
@@ -34,6 +34,9 @@ public class UrlEnricherTest extends AbstractTest {
 	private static final String MZKKRAM_UNKN_URL = "MZK|unknown|http://kramerius.mzk.cz/search/handle/uuid:df686290-a590-11e2-8b87-005056827e51|";
 
 	private static final String TOC_NKP = "toc.nkp.cz";
+
+	@Autowired
+	private UrlDedupRecordEnricher urlDedupRecordEnricher;
 
 	@Test
 	public void notDuplicitUrlTest() {
@@ -63,6 +66,7 @@ public class UrlEnricherTest extends AbstractTest {
 		DedupRecord dr = new DedupRecord();
 		SolrInputDocument merged = new SolrInputDocument();
 		List<SolrInputDocument> local = new ArrayList<>();
+		local.add(EnricherUtils.createDocument(SolrFieldConstants.URL, MZK_ONLINE_MZK_URL));
 		local.add(EnricherUtils.createDocument(SolrFieldConstants.URL, MZK_ONLINE_MZK_URL));
 		local.add(EnricherUtils.createDocument(SolrFieldConstants.URL, TRE_ONLINE_MZK_URL));
 		local.add(EnricherUtils.createDocument(SolrFieldConstants.URL, MZK_UNKNOWN_MZK_URL));
@@ -127,8 +131,7 @@ public class UrlEnricherTest extends AbstractTest {
 
 		List<String> result = new ArrayList<>();
 		result.add(MZKKRAM_PROT_URL);
-		UrlDedupRecordEnricher ue = new UrlDedupRecordEnricher();
-		ue.enrich(dr, merged, local);
+		urlDedupRecordEnricher.enrich(dr, merged, local);
 		Assert.assertEquals(merged.getFieldValues(SolrFieldConstants.URL).toArray(), result.toArray());
 	}
 }

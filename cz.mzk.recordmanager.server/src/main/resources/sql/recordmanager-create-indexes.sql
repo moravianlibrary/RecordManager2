@@ -40,6 +40,7 @@ CREATE INDEX bl_entity_harvested_record_idx ON bl_entity(harvested_record_id);
 CREATE INDEX bl_topic_key_harvested_record_idx ON bl_topic_key(harvested_record_id);
 CREATE INDEX bl_language_harvested_record_idx ON bl_language(harvested_record_id);
 CREATE INDEX fulltext_kramerius_harvested_record_idx ON fulltext_kramerius(harvested_record_id);
+CREATE INDEX uuid_harvested_record_idx ON uuid(harvested_record_id);
 
 CREATE INDEX obalkyknih_toc_book_idx ON obalkyknih_toc(book_id);
 CREATE INDEX obalkyknih_toc_oclc_idx ON obalkyknih_toc(oclc);
@@ -68,3 +69,4 @@ CREATE INDEX oclc_idx ON oclc(oclc);
 CREATE INDEX ean_idx ON ean(ean);
 
 CREATE INDEX cosmotron_996_last_harvest_idx ON cosmotron_996(last_harvest);
+CREATE INDEX kram_availability_conf_uuid_idx ON kram_availability(import_conf_id, uuid);

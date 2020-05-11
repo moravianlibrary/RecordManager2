@@ -26,7 +26,6 @@ public class Kram3NkpMetadataDublinCoreRecord extends KramDefaultMetadataDublinC
 						Constants.DOCUMENT_AVAILABILITY_UNKNOWN, item, ""));
 			}
 		}
-		result.addAll(super.getUrls());
 		return result;
 	}
 

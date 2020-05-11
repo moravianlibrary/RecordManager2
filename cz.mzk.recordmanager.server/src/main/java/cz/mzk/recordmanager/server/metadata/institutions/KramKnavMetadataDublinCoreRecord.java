@@ -9,14 +9,8 @@ import java.util.List;
 public class KramKnavMetadataDublinCoreRecord extends
 		KramDefaultMetadataDublinCoreRecord {
 
-	public KramKnavMetadataDublinCoreRecord(DublinCoreRecord dcRecord,
-											HarvestedRecord hr) {
+	public KramKnavMetadataDublinCoreRecord(DublinCoreRecord dcRecord, HarvestedRecord hr) {
 		super(dcRecord, hr);
-	}
-
-	@Override
-	public List<String> getUrls() {
-		return generateUrl("https://kramerius.lib.cas.cz/search/handle/");
 	}
 
 	@Override
@@ -30,11 +24,6 @@ public class KramKnavMetadataDublinCoreRecord extends
 			titles.add(Title.create(mergedTitle.toString(), titles.size() + 1));
 		}
 		return titles;
-	}
-
-	@Override
-	public boolean getIndexWhenMerged() {
-		return false;
 	}
 
 }

@@ -59,7 +59,7 @@ public class KrameriusFulltextJobTest extends AbstractTest {
 		InputStream children = this.getClass().getResourceAsStream("/sample/kramerius/children.json");
 		InputStream ocr1 = getClass().getResourceAsStream("/sample/kramerius/ocr1.txt");
 		InputStream ocr2 = getClass().getResourceAsStream("/sample/kramerius/ocr2.txt");
-		expect(httpClient.executeGet(BASE_API_URL + "/item/UUID:039764f8-d6db-11e0-b2cd-0050569d679d/children")).andReturn(children);
+		expect(httpClient.executeGet(BASE_API_URL + "/item/uuid:039764f8-d6db-11e0-b2cd-0050569d679d/children")).andReturn(children);
 		expect(httpClient.executeGet(eq(BASE_API_URL + "/item/uuid:f5a22336-2fd8-11e0-83a8-0050569d679d/streams/TEXT_OCR"), anyObject())).andReturn(ocr1);
 		expect(httpClient.executeGet(eq(BASE_API_URL + "/item/uuid:f64abf47-2fd8-11e0-83a8-0050569d679d/streams/TEXT_OCR"), anyObject())).andReturn(ocr2);
 		replay(httpClient);

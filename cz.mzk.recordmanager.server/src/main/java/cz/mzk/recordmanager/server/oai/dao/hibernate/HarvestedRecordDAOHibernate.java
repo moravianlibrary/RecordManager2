@@ -285,13 +285,10 @@ public class HarvestedRecordDAOHibernate extends
 			session.delete(hrf);
 		}
 
-		List<Authority> authorities = hr.getAuthorities();
-		hr.setAuthorities(new ArrayList<>());
-		for (Authority authority : authorities) {
-			session.delete(authority);
-		}
-
 		hr.setLanguages(new ArrayList<>());
+
+		dropOtherKeys(hr);
+
 		session.update(hr);
 		session.flush();
 	}
@@ -348,7 +345,7 @@ public class HarvestedRecordDAOHibernate extends
 	}
 
 	@Override
-	public void dropAuthorities(HarvestedRecord hr) {
+	public void dropOtherKeys(HarvestedRecord hr) {
 		if (hr == null || hr.getId() == null) {
 			return;
 		}
@@ -361,6 +358,11 @@ public class HarvestedRecordDAOHibernate extends
 		hr.setAuthorities(new ArrayList<>());
 		for (Authority authority : authorities) {
 			session.delete(authority);
+		}
+		List<Uuid> uuids = hr.getUuids();
+		hr.setUuids(new ArrayList<>());
+		for (Uuid uuid : uuids) {
+			session.delete(uuid);
 		}
 		session.update(hr);
 		session.flush();

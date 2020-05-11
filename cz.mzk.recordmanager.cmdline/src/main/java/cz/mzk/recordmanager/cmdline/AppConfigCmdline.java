@@ -7,6 +7,7 @@ import javax.sql.DataSource;
 
 import cz.mzk.recordmanager.server.bibliolinker.BiblioLinkerJobConfig;
 import cz.mzk.recordmanager.server.bibliolinker.keys.RegenerateBiblioLinkerKeysJobConfig;
+import cz.mzk.recordmanager.server.imports.kramAvailability.KramAvailabilityJobConfig;
 import cz.mzk.recordmanager.server.imports.obalky.annotations.AnnotationsHarvestJobConfig;
 import cz.mzk.recordmanager.server.miscellaneous.caslin.view.CaslinViewJobsConfig;
 import org.springframework.batch.core.configuration.support.ApplicationContextFactory;
@@ -100,7 +101,8 @@ public class AppConfigCmdline {
 				CaslinViewJobsConfig.class,
 				AnnotationsHarvestJobConfig.class,
 				BiblioLinkerJobConfig.class,
-				RegenerateBiblioLinkerKeysJobConfig.class
+				RegenerateBiblioLinkerKeysJobConfig.class,
+				KramAvailabilityJobConfig.class
 			);
 	}
 

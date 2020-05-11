@@ -1746,3 +1746,83 @@ CREATE INDEX cosmotron_996_last_harvest_idx ON cosmotron_996(last_harvest);
 INSERT INTO import_conf (id,library_id,contact_person_id,id_prefix,base_weight,cluster_id_enabled,filtering_enabled,interception_enabled,is_library,harvest_frequency,mapping_script,generate_dedup_keys,mapping_dedup_script,item_id) VALUES (99004,104,200,'kram-nkp', 8,false,true,false,true,'U',null,true,null,null);
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (99004,'http://kramerius5.nkp.cz/oaiprovider','monograph','oai_dc',NULL);
 INSERT INTO kramerius_conf (import_conf_id,url,url_solr,query_rows,metadata_stream,auth_token,fulltext_harvest_type,download_private_fulltexts,harvest_job_name,collection) VALUES (99004,'https://kramerius5.nkp.cz/search/api/v5.0',null,50,'DC',null,'fedora',true,null,null);
+
+-- 12. 05. 2020 tomascejpek
+CREATE TABLE kram_availability (
+  id                SERIAL,
+  import_conf_id    DECIMAL(10) NOT NULL,
+  uuid              VARCHAR(100) NOT NULL,
+  availability      VARCHAR(20) NOT NULL,
+  dnnt              BOOLEAN DEFAULT FALSE,
+  updated           TIMESTAMP NOT NULL,
+  last_harvest      TIMESTAMP NOT NULL,
+  CONSTRAINT kram_availability_pk PRIMARY KEY(id),
+  FOREIGN KEY (import_conf_id) REFERENCES import_conf(id)
+);
+CREATE INDEX kram_availability_conf_uuid_idx ON kram_availability(import_conf_id, uuid);
+CREATE TABLE uuid (
+  id                   DECIMAL(10) PRIMARY KEY,
+  harvested_record_id  DECIMAL(10),
+  uuid                 VARCHAR(100),
+  FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE
+);
+CREATE INDEX uuid_harvested_record_idx ON uuid(harvested_record_id);
+CREATE VIEW kram_availability_view AS
+SELECT
+  hr.dedup_record_id,
+  ka.import_conf_id,
+  ka.uuid,
+  ka.updated,
+  ka.last_harvest
+FROM harvested_record hr
+  INNER JOIN uuid on uuid.harvested_record_id = hr.id
+  INNER JOIN kram_availability ka on ka.uuid = uuid.uuid
+;
+ALTER TABLE kramerius_conf ADD COLUMN availability_source_url VARCHAR(128);
+ALTER TABLE kramerius_conf ADD COLUMN availability_dest_url VARCHAR(128);
+CREATE OR REPLACE VIEW kram_availability_job_stat AS
+SELECT
+  bje.job_execution_id,
+  (array_agg(conf_id_param.long_val))[1] import_conf_id,
+  bje.start_time,
+  bje.end_time,
+  bje.status
+FROM batch_job_instance bji
+  JOIN batch_job_execution bje ON bje.job_instance_id = bji.job_instance_id
+  JOIN batch_job_execution_params conf_id_param ON conf_id_param.job_execution_id = bje.job_execution_id AND conf_id_param.key_name = 'configurationId'
+  JOIN kramerius_conf kc ON kc.import_conf_id = conf_id_param.long_val
+WHERE bji.job_name IN ('harvestKramAvailabilityJob')
+GROUP BY bje.job_execution_id
+;
+CREATE OR REPLACE VIEW kram_availability_summary AS
+WITH last_harvest_date AS (
+  SELECT
+    import_conf_id,
+    MAX(CASE WHEN status = 'COMPLETED' THEN start_time END) last_successful_harvest_date,
+    MAX(CASE WHEN status = 'FAILED' THEN start_time END) last_failed_harvest_date
+  FROM kram_availability_job_stat
+  GROUP BY import_conf_id
+)
+SELECT ic.id,
+       l.name,
+       ic.id_prefix,
+       CASE WHEN kc.availability_source_url IS NOT NULL THEN kc.availability_source_url ELSE kc.url END url,
+       lhd.last_successful_harvest_date,
+       lhd.last_failed_harvest_date
+FROM last_harvest_date lhd
+  JOIN import_conf ic ON ic.id = lhd.import_conf_id
+  LEFT JOIN kramerius_conf kc ON kc.import_conf_id = ic.id
+  JOIN library l ON l.id = ic.library_id
+  ORDER BY lhd.last_successful_harvest_date DESC NULLS LAST
+;
+UPDATE kramerius_conf SET availability_source_url='https://kramerius.lib.cas.cz/search/api/v5.0',availability_dest_url='https://kramerius.lib.cas.cz/search/handle/' WHERE import_conf_id=99003;
+UPDATE kramerius_conf SET availability_source_url='https://kramerius4.mlp.cz/search/api/v5.0',availability_dest_url='https://digitalniknihovna.mlp.cz/' WHERE import_conf_id=99015;
+UPDATE kramerius_conf SET availability_source_url='http://kramerius.kr-olomoucky.cz/search/api/v5.0',availability_dest_url='https://kramerius.kr-olomoucky.cz/search/handle/' WHERE import_conf_id=99012;
+UPDATE kramerius_conf SET availability_source_url='https://kramerius.svkul.cz/search/api/v5.0',availability_dest_url='https://kramerius.svkul.cz/search/handle/' WHERE import_conf_id=99011;
+UPDATE kramerius_conf SET availability_source_url='https://kramerius4.svkhk.cz/search/api/v5.0',availability_dest_url='https://kramerius.svkhk.cz/search/handle/' WHERE import_conf_id=99014;
+UPDATE kramerius_conf SET availability_source_url='https://kramerius.techlib.cz/search/api/v5.0',availability_dest_url='https://kramerius.techlib.cz/kramerius-web-client/view/' WHERE import_conf_id=99016;
+UPDATE kramerius_conf SET availability_source_url='https://kramerius.cbvk.cz/search/api/v5.0',availability_dest_url='https://kramerius.cbvk.cz/search/handle/' WHERE import_conf_id=99013;
+UPDATE kramerius_conf SET availability_source_url='https://kramerius.medvik.cz/search/api/v5.0',availability_dest_url='https://kramerius.medvik.cz/search/handle/' WHERE import_conf_id=99010;
+UPDATE kramerius_conf SET availability_source_url='https://kramerius.uzei.cz/search/api/v5.0',availability_dest_url='http://dk.uzei.cz/uzei/uuid/' WHERE import_conf_id=99017;
+UPDATE kramerius_conf SET availability_dest_url='http://www.digitalniknihovna.cz/mzk/uuid/' WHERE import_conf_id=99001;
+

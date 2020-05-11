@@ -50,7 +50,8 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 		record.setUpvApplicationId(metadataRecord.getUpvApplicationId()); // not dedup key
 		record.setSigla(metadataRecord.getLibrarySigla()); // not dedup key
 		if (!record.getHarvestedFrom().isGenerateDedupKeys()) {
-			harvestedRecordDao.dropAuthorities(record);
+			harvestedRecordDao.dropOtherKeys(record);
+			record.setUuids(metadataRecord.getUuids()); // not dedup key
 			record.setAuthorities(metadataRecord.getAllAuthorAuthKey());
 			return record;
 		}
@@ -116,6 +117,7 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 		encapsulator.setLanguages(new HashSet<>(metadataRecord.getLanguages()));
 		encapsulator.setPublisher(MetadataUtils.normalizeAndShorten(metadataRecord.getPublisher(), EFFECTIVE_LENGTH_PUBLISHER));
 		encapsulator.setEdition(MetadataUtils.shorten(metadataRecord.getEdition(), EFFECTIVE_LENGTH_EDITION));
+		encapsulator.setUuids(metadataRecord.getUuids()); // not dedup key
 
 		String computedHash = computeHashValue(encapsulator);
 		String oldHash = record.getDedupKeysHash();
@@ -162,10 +164,12 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 			record.setPublisher(encapsulator.getPublisher());
 			record.setEdition(encapsulator.getEdition());
 			record.setAnpTitles(encapsulator.getAnpTitles());
+			record.setUuids(encapsulator.getUuids());
 			record.setTemporalDedupHash(computedHash);
 		} else {
-			harvestedRecordDao.dropAuthorities(record);
+			harvestedRecordDao.dropOtherKeys(record);
 		}
+		record.setUuids(metadataRecord.getUuids());
 		record.setAuthorities(metadataRecord.getAllAuthorAuthKey());
 		record.setDedupKeysHash(computedHash);
 
@@ -358,6 +362,7 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 		List<ShortTitle> shortTitles = new ArrayList<>();
 		List<AnpTitle> anpTitles = new ArrayList<>();
 		List<PublisherNumber> publisherNumbers = new ArrayList<>();
+		List<Uuid> uuids = new ArrayList<>();
 
 		Long publicationYear;
 		String authorString;
@@ -544,6 +549,14 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 
 		public List<AnpTitle> getAnpTitles() {
 			return anpTitles;
+		}
+
+		public List<Uuid> getUuids() {
+			return uuids;
+		}
+
+		public void setUuids(List<Uuid> uuids) {
+			this.uuids = uuids;
 		}
 
 		public void setAnpTitles(List<AnpTitle> anpTitles) {

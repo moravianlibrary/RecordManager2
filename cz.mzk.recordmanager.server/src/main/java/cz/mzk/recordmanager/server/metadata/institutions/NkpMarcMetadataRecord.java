@@ -9,10 +9,10 @@ public class NkpMarcMetadataRecord extends MetadataMarcRecord {
 	public NkpMarcMetadataRecord(MarcRecord underlayingMarc, HarvestedRecord hr) {
 		super(underlayingMarc, hr);
 	}
-	
+
 	@Override
 	public String getClusterId() {
 		return underlayingMarc.getControlField("001");
-	} 
+	}
 
 }

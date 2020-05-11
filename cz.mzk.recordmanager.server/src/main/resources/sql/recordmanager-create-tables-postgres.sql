@@ -95,6 +95,8 @@ CREATE TABLE kramerius_conf (
   download_private_fulltexts  BOOLEAN DEFAULT FALSE,
   harvest_job_name            VARCHAR(128),
   collection                  VARCHAR(128),
+  availability_source_url     VARCHAR(128),
+  availability_dest_url       VARCHAR(128),
   CONSTRAINT kramerius_conf_import_conf_fk FOREIGN KEY (import_conf_id) REFERENCES import_conf(id)
 );
 
@@ -495,4 +497,23 @@ CREATE TABLE bl_language (
   harvested_record_id  DECIMAL(10),
   lang                 VARCHAR(5),
   FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE
+);
+
+CREATE TABLE uuid (
+  id                   DECIMAL(10) PRIMARY KEY,
+  harvested_record_id  DECIMAL(10),
+  uuid                 VARCHAR(100),
+  FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE
+);
+
+CREATE TABLE kram_availability (
+  id                SERIAL,
+  import_conf_id    DECIMAL(10) NOT NULL,
+  uuid              VARCHAR(100) NOT NULL,
+  availability      VARCHAR(20) NOT NULL,
+  dnnt              BOOLEAN DEFAULT FALSE,
+  updated           TIMESTAMP NOT NULL,
+  last_harvest      TIMESTAMP NOT NULL,
+  CONSTRAINT kram_availability_pk PRIMARY KEY(id),
+  FOREIGN KEY (import_conf_id) REFERENCES import_conf(id)
 );

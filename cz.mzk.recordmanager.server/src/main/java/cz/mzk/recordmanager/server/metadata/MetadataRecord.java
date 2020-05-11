@@ -511,4 +511,7 @@ public interface MetadataRecord {
 		return null;
 	}
 
+	default List<Uuid> getUuids() {
+		return Collections.emptyList();
+	}
 }

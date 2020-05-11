@@ -50,3 +50,15 @@ WHERE
   EXISTS(SELECT 1 FROM cosmotron_996 c996 WHERE c996.import_conf_id = hr.import_conf_id
     AND c996.parent_record_id = hr.record_id)
 ;
+
+CREATE VIEW kram_availability_view AS
+SELECT
+  hr.dedup_record_id,
+  ka.import_conf_id,
+  ka.uuid,
+  ka.updated,
+  ka.last_harvest
+FROM harvested_record hr
+  INNER JOIN uuid on uuid.harvested_record_id = hr.id
+  INNER JOIN kram_availability ka on ka.uuid = uuid.uuid
+;

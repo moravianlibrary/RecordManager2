@@ -3,8 +3,12 @@ package cz.mzk.recordmanager.server.index.enrich;
 import cz.mzk.recordmanager.server.ClasspathResourceProvider;
 import cz.mzk.recordmanager.server.index.SolrFieldConstants;
 import cz.mzk.recordmanager.server.model.DedupRecord;
-import cz.mzk.recordmanager.server.util.CleaningUtils;
+import cz.mzk.recordmanager.server.model.EVersionUrl;
+import cz.mzk.recordmanager.server.model.KramAvailability;
+import cz.mzk.recordmanager.server.oai.dao.KramAvailabilityDAO;
+import cz.mzk.recordmanager.server.util.Constants;
 import org.apache.solr.common.SolrInputDocument;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.BufferedReader;
@@ -18,17 +22,10 @@ import java.util.stream.Collectors;
 @Component
 public class UrlDedupRecordEnricher implements DedupRecordEnricher {
 
-	private static final String ONLINE = "online";
-	private static final String UNKNOWN = "unknown";
-	private static final String PROTECTED = "protected";
-	private static final String SPLITTER = "\\|";
-	private static final String JOINER = "|";
-	private static final Pattern KRAMERIUS_URL = Pattern.compile("^http[s]?://kramerius");
-	private static final Pattern KRAMERIUS_HANDLE = Pattern.compile("handle/");
-	private static final String KRAMERIUS_IJSP = "i.jsp?pid=";
-	private static final Pattern KRAM_MZK_PATTERN = Pattern.compile("http://kramerius.mzk.cz.*(uuid:.*)");
-	private static final String DIGITALNIKNIHOVNA = "http://www.digitalniknihovna.cz/mzk/uuid/";
-	private static final Pattern URL = Pattern.compile("(http[s]?://)?(.*)");
+	@Autowired
+	private KramAvailabilityDAO kramAvailabilityDAO;
+
+	private static final Pattern UUID_PATTERN = Pattern.compile("uuid:[\\w-]+");
 
 	private static final List<String> URL_FILTER_LIST = new BufferedReader(new InputStreamReader(
 			new ClasspathResourceProvider().getResource("/stopwords/url.txt"), StandardCharsets.UTF_8))
@@ -57,86 +54,74 @@ public class UrlDedupRecordEnricher implements DedupRecordEnricher {
 	 */
 	private List<String> urlsFilter(Set<Object> values) {
 		List<String> results = new ArrayList<>();
-		Map<String, List<String>> urlsMap = new HashMap<>();
 		values = filter(values);
+		Map<String, TreeSet<EVersionUrl>> urls = new HashMap<>();
 		for (Object obj : values) {
-			String url = obj.toString();
-			if (url.split(SPLITTER).length < 3) {
-				results.add(url);
-			} else {
-				String spliturl[] = url.split(SPLITTER);
-				String parsedUrl = krameriusUrlParser(spliturl[2]);
-				Matcher matcher;
-				if ((matcher = URL.matcher(parsedUrl)).matches()) {
-					parsedUrl = matcher.group(2);
-				}
-				if (urlsMap.containsKey(parsedUrl)) {
-					List<String> completeUrls = urlsMap.get(parsedUrl);
-					if (completeUrls.contains(url)) continue;
-//					online url at the beginning
-					if (spliturl[1].equals(ONLINE)) completeUrls.add(0, url);
-					else completeUrls.add(url);
-					urlsMap.put(parsedUrl, completeUrls);
-				} else {
-					List<String> list = new ArrayList<>();
-					list.add(url);
-					urlsMap.put(parsedUrl, list);
-				}
+			EVersionUrl url;
+			try {
+				url = EVersionUrl.create(obj.toString());
+			} catch (Exception e) {
+				e.printStackTrace();
+				continue;
 			}
+			addToMap(urls, url);
 		}
-		for (String url : urlsMap.keySet()) {
-			List<String> completeUrls = urlsMap.get(url);
+		generateUrlFromKramAvailability(urls);
+		for (String key : urls.keySet()) {
 			boolean online = false;
-			List<String> unknownlist = new ArrayList<>();
-			List<String> protectedlist = new ArrayList<>();
-			for (String value : completeUrls) {
-				String spliturl[] = value.split(SPLITTER);
-				if (spliturl[1].equals(ONLINE)) {
-					results.add(value);
+			boolean protect = false;
+			for (EVersionUrl url : urls.get(key).descendingSet()) {
+				if (url.getAvailability().equals(Constants.DOCUMENT_AVAILABILITY_ONLINE)) {
+					results.add(url.toString());
 					online = true;
-				} else {
-					if (online) break;
-					if (spliturl[1].equals(PROTECTED)) protectedlist.add(value);
-					if (spliturl[1].equals(UNKNOWN)) unknownlist.add(value);
+				}
+				if (!online && url.getAvailability().equals(Constants.DOCUMENT_AVAILABILITY_PROTECTED)) {
+					results.add(url.toString());
+					protect = true;
 				}
 			}
-			if (!protectedlist.isEmpty()) results.addAll(protectedlist);
-			else {
-				if (unknownlist.size() == 1) results.addAll(unknownlist);
-				if (unknownlist.size() > 1) {
-					results.add(urlUpdaterAndJoiner(unknownlist.get(0), 0, UNKNOWN));
+			if (!online && !protect) {
+				if (urls.get(key).size() == 1) {
+					results.add(urls.get(key).first().toString());
+				} else {
+					EVersionUrl url = urls.get(key).first();
+					url.setSource("unknown");
+					results.add(url.toString());
 				}
 			}
 		}
 		return results;
 	}
 
-	private String urlUpdaterAndJoiner(String url, int index, String newValue) {
-		String spliturl[] = url.split(SPLITTER);
-		spliturl[index] = newValue;
-		StringBuilder sb = new StringBuilder();
-		sb.append(String.join(JOINER, spliturl));
-		if (spliturl.length == 3) sb.append(JOINER);
-		return sb.toString();
+	private void addToMap(Map<String, TreeSet<EVersionUrl>> urls, EVersionUrl url) {
+		Matcher matcher;
+		String mapKey;
+
+		if ((matcher = UUID_PATTERN.matcher(url.getLink())).find()) {
+			mapKey = matcher.group(0);
+		} else mapKey = url.getLink();
+
+		if (urls.containsKey(mapKey)) {
+			urls.computeIfPresent(mapKey, (key, value) -> value).add(url);
+		} else {
+			urls.computeIfAbsent(mapKey, key -> new TreeSet<>()).add(url);
+		}
 	}
 
-	/**
-	 * kramerius url formats
-	 * http://kramerius.mzk.cz/search/i.jsp?pid=uuid:...
-	 * http://kramerius.mzk.cz/search/handle/uuid:...
-	 *
-	 * @param url {@link String}
-	 * @return parsed Url
-	 */
-	private String krameriusUrlParser(String url) {
-		Matcher matcher;
-		if ((matcher = KRAM_MZK_PATTERN.matcher(url)).matches()) {
-			return DIGITALNIKNIHOVNA + matcher.group(1);
+	private void generateUrlFromKramAvailability(Map<String, TreeSet<EVersionUrl>> urls) {
+		for (String key : urls.keySet()) {
+			if (!key.startsWith("uuid:")) continue;
+			for (KramAvailability kramAvailability : kramAvailabilityDAO.getByUuid(key)) {
+				addToMap(urls, EVersionUrl.create(kramAvailability));
+				if (kramAvailability.getHarvestedFrom().getIdPrefix().equals(Constants.PREFIX_KRAM_MZK)
+						&& kramAvailability.getAvailability().equals("private")) {
+					addToMap(urls, EVersionUrl.create(Constants.PREFIX_KRAM_MZK_VS,
+							kramAvailability.getAvailability(),
+							"https://kramerius-vs.mzk.cz/view/" + key,
+							Constants.KRAM_VS_COMMENT));
+				}
+			}
 		}
-		if (KRAMERIUS_URL.matcher(url).find()) {
-			return CleaningUtils.replaceAll(url, KRAMERIUS_HANDLE, KRAMERIUS_IJSP);
-		}
-		return url;
 	}
 
 	/**

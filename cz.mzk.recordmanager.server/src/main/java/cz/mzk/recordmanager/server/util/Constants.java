@@ -54,6 +54,7 @@ public class Constants {
 	public static final String JOB_ID_DELETE_ANNOTATIONS 			= "deleteAnnotationsObalkyJob";
 	public static final String JOB_ID_REGENERATE_BL_KEYS 			= "regenerateBiblioLinkerKeysJob";
 	public static final String JOB_ID_REGENERATE_BL_MISSING_KEYS	= "regenerateBiblioLinkerMissingKeysJob";
+	public static final String JOB_ID_HARVEST_KRAM_AVAILABILITY		= "harvestKramAvailabilityJob";
 
 	public static final String JOB_PARAM_CONF_ID 		= "configurationId";
 	public static final String JOB_PARAM_FROM_DATE 		= "from";
@@ -115,6 +116,8 @@ public class Constants {
 	public static final String PREFIX_KRAM_CBVK			= "kram-cbvk";
 	public static final String PREFIX_KRAM_KNAV			= "kram-knav";
 	public static final String PREFIX_KRAM_MZK			= "kram-mzk";
+	public static final String PREFIX_KRAM_MZK_VS		= "kram-mzk-vs";
+	public static final String PREFIX_KRAM_NKP_VS = "kram-nk-vs";
 	public static final String PREFIX_KRAM_NKP			= "kram-nkp";
 	public static final String PREFIX_KRAM_NLK			= "kram-nlk";
 	public static final String PREFIX_KRAM_NTK			= "kram-ntk";
@@ -217,4 +220,8 @@ public class Constants {
 
 	public static final String COSMOTRON_RECORD_ID_CHAR = "_";
 
+	public static final String KRAM_VS_COMMENT = "Určeno pro pedagogy a vědecké pracovníky institucí " +
+			"na úrovni vysokých škol a jejich studenty";
+
+	public static final String KRAM_EVERSION_COMMENT = "Digitalizovaný dokument";
 }	

@@ -39,6 +39,12 @@ public class KrameriusConfiguration extends ImportConfiguration {
 	@Column(name = "collection")
 	private String collection;
 
+	@Column(name = "availability_source_url")
+	private String availabilitySourceUrl;
+
+	@Column(name = "availability_dest_url")
+	private String availabilityDestUrl;
+
 	public String getUrl() {
 		return url;
 	}
@@ -109,6 +115,22 @@ public class KrameriusConfiguration extends ImportConfiguration {
 
 	public void setCollection(String collection) {
 		this.collection = collection;
+	}
+
+	public String getAvailabilitySourceUrl() {
+		return (availabilitySourceUrl == null) ? url : availabilitySourceUrl;
+	}
+
+	public void setAvailabilitySourceUrl(String availabilitySourceUrl) {
+		this.availabilitySourceUrl = availabilitySourceUrl;
+	}
+
+	public String getAvailabilityDestUrl() {
+		return availabilityDestUrl;
+	}
+
+	public void setAvailabilityDestUrl(String availabilityDestUrl) {
+		this.availabilityDestUrl = availabilityDestUrl;
 	}
 
 	@Override
