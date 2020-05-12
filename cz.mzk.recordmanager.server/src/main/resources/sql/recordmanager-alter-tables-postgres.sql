@@ -1815,14 +1815,14 @@ FROM last_harvest_date lhd
   JOIN library l ON l.id = ic.library_id
   ORDER BY lhd.last_successful_harvest_date DESC NULLS LAST
 ;
-UPDATE kramerius_conf SET availability_source_url='https://kramerius.lib.cas.cz/search/api/v5.0',availability_dest_url='https://kramerius.lib.cas.cz/search/handle/' WHERE import_conf_id=99003;
-UPDATE kramerius_conf SET availability_source_url='https://kramerius4.mlp.cz/search/api/v5.0',availability_dest_url='https://digitalniknihovna.mlp.cz/' WHERE import_conf_id=99015;
-UPDATE kramerius_conf SET availability_source_url='http://kramerius.kr-olomoucky.cz/search/api/v5.0',availability_dest_url='https://kramerius.kr-olomoucky.cz/search/handle/' WHERE import_conf_id=99012;
-UPDATE kramerius_conf SET availability_source_url='https://kramerius.svkul.cz/search/api/v5.0',availability_dest_url='https://kramerius.svkul.cz/search/handle/' WHERE import_conf_id=99011;
-UPDATE kramerius_conf SET availability_source_url='https://kramerius4.svkhk.cz/search/api/v5.0',availability_dest_url='https://kramerius.svkhk.cz/search/handle/' WHERE import_conf_id=99014;
-UPDATE kramerius_conf SET availability_source_url='https://kramerius.techlib.cz/search/api/v5.0',availability_dest_url='https://kramerius.techlib.cz/kramerius-web-client/view/' WHERE import_conf_id=99016;
-UPDATE kramerius_conf SET availability_source_url='https://kramerius.cbvk.cz/search/api/v5.0',availability_dest_url='https://kramerius.cbvk.cz/search/handle/' WHERE import_conf_id=99013;
-UPDATE kramerius_conf SET availability_source_url='https://kramerius.medvik.cz/search/api/v5.0',availability_dest_url='https://kramerius.medvik.cz/search/handle/' WHERE import_conf_id=99010;
-UPDATE kramerius_conf SET availability_source_url='https://kramerius.uzei.cz/search/api/v5.0',availability_dest_url='http://dk.uzei.cz/uzei/uuid/' WHERE import_conf_id=99017;
 UPDATE kramerius_conf SET availability_dest_url='http://www.digitalniknihovna.cz/mzk/uuid/' WHERE import_conf_id=99001;
-
+UPDATE kramerius_conf SET availability_dest_url='http://kramerius5.nkp.cz/uuid/' WHERE import_conf_id=99004;
+UPDATE kramerius_conf SET availability_source_url='https://kramerius.lib.cas.cz/search/api/v5.0',availability_dest_url='https://kramerius.lib.cas.cz/search/handle/' WHERE import_conf_id=99003;
+UPDATE kramerius_conf SET availability_source_url='https://kramerius.medvik.cz/search/api/v5.0',availability_dest_url='https://kramerius.medvik.cz/search/handle/' WHERE import_conf_id=99010;
+UPDATE kramerius_conf SET availability_source_url='https://kramerius.svkul.cz/search/api/v5.0',availability_dest_url='https://kramerius.svkul.cz/search/handle/' WHERE import_conf_id=99011;
+UPDATE kramerius_conf SET availability_source_url='http://kramerius.kr-olomoucky.cz/search/api/v5.0',availability_dest_url='https://kramerius.kr-olomoucky.cz/search/handle/' WHERE import_conf_id=99012;
+UPDATE kramerius_conf SET availability_source_url='https://kramerius.cbvk.cz/search/api/v5.0',availability_dest_url='https://kramerius.cbvk.cz/search/handle/' WHERE import_conf_id=99013;
+UPDATE kramerius_conf SET availability_source_url='https://kramerius4.svkhk.cz/search/api/v5.0',availability_dest_url='https://kramerius.svkhk.cz/search/handle/' WHERE import_conf_id=99014;
+UPDATE kramerius_conf SET availability_source_url='https://kramerius4.mlp.cz/search/api/v5.0',availability_dest_url='https://digitalniknihovna.mlp.cz/' WHERE import_conf_id=99015;
+UPDATE kramerius_conf SET availability_source_url='https://kramerius.techlib.cz/search/api/v5.0',availability_dest_url='https://kramerius.techlib.cz/kramerius-web-client/view/' WHERE import_conf_id=99016;
+UPDATE kramerius_conf SET availability_source_url='https://kramerius.uzei.cz/search/api/v5.0',availability_dest_url='http://dk.uzei.cz/uzei/uuid/' WHERE import_conf_id=99017;
