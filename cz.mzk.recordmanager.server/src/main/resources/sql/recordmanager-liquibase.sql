@@ -2101,3 +2101,7 @@ UPDATE kramerius_conf SET availability_source_url='https://kramerius4.svkhk.cz/s
 UPDATE kramerius_conf SET availability_source_url='https://kramerius4.mlp.cz/search/api/v5.0',availability_dest_url='https://digitalniknihovna.mlp.cz/' WHERE import_conf_id=99015;
 UPDATE kramerius_conf SET availability_source_url='https://kramerius.techlib.cz/search/api/v5.0',availability_dest_url='https://kramerius.techlib.cz/kramerius-web-client/view/' WHERE import_conf_id=99016;
 UPDATE kramerius_conf SET availability_source_url='https://kramerius.uzei.cz/search/api/v5.0',availability_dest_url='http://dk.uzei.cz/uzei/uuid/' WHERE import_conf_id=99017;
+
+--changeset tomascejpek:194 context:cpk
+UPDATE oai_harvest_conf SET url='https://kmhk.tritius.cz/tritius/oai-provider',set_spec='CPK_1' WHERE import_conf_id=377;
+
