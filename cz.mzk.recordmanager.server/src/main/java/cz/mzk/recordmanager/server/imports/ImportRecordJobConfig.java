@@ -292,9 +292,9 @@ public class ImportRecordJobConfig {
 	 * 2) /directory/ - takes all files from directory
 	 *
 	 * @param filename name of input file
-	 * @return {@link ImportOaiRecordsFileReader}
+	 * @return {@link AsyncImportOaiRecordsFileReader}
 	 */
-	@Bean(name = Constants.JOB_ID_IMPORT_OAI + ":importRecordsReader")
+	@Bean(name = Constants.JOB_ID_IMPORT_OAI + ":asyncImportRecordsReader")
 	@StepScope
 	public AsyncImportOaiRecordsFileReader asyncImportOaiRecordsReader(
 			@Value("#{jobParameters[" + Constants.JOB_PARAM_IN_FILE + "]}") String filename) {
