@@ -52,6 +52,9 @@ public class ImportRecordJobConfig {
 
 	private static final Long LONG_OVERRIDEN_BY_EXPRESSION = null;
 
+	@Value(value = "${oai_harvest.async_reader:#{false}}")
+	private boolean asyncReader = false;
+
 	@Bean
 	public Job ImportRecordsJob(
 			@Qualifier(Constants.JOB_ID_IMPORT + ":importRecordsStep") Step importRecordsStep,
@@ -233,9 +236,15 @@ public class ImportRecordJobConfig {
 
 	@Bean(name = Constants.JOB_ID_IMPORT_OAI + ":importRecordsStep")
 	public Step importOaiRecordsStep() throws Exception {
+		ItemReader<List<OAIRecord>> reader;
+		if (this.asyncReader) {
+			reader = asyncImportOaiRecordsReader(STRING_OVERRIDEN_BY_EXPRESSION);
+		} else {
+			reader = importOaiRecordsReader(STRING_OVERRIDEN_BY_EXPRESSION);
+		}
 		return steps.get(Constants.JOB_ID_IMPORT_OAI + "importRecordsStep")
 				.<List<OAIRecord>, List<HarvestedRecord>>chunk(1)//
-				.reader(importOaiRecordsReader(STRING_OVERRIDEN_BY_EXPRESSION))//
+				.reader(reader)//
 				.processor(oaiItemProcessor())
 				.writer(harvestedRecordWriter()) //
 				.build();
@@ -275,6 +284,21 @@ public class ImportRecordJobConfig {
 			@Value("#{jobParameters[" + Constants.JOB_PARAM_IN_FILE + "]}") String filename)
 			throws Exception {
 		return new ImportOaiRecordsFileReader(filename);
+	}
+
+	/**
+	 * filename format:
+	 * 1) /directory/file.txt - takes file file.txt
+	 * 2) /directory/ - takes all files from directory
+	 *
+	 * @param filename name of input file
+	 * @return {@link ImportOaiRecordsFileReader}
+	 */
+	@Bean(name = Constants.JOB_ID_IMPORT_OAI + ":importRecordsReader")
+	@StepScope
+	public AsyncImportOaiRecordsFileReader asyncImportOaiRecordsReader(
+			@Value("#{jobParameters[" + Constants.JOB_PARAM_IN_FILE + "]}") String filename) {
+		return new AsyncImportOaiRecordsFileReader(filename);
 	}
 
 	@Bean(name = Constants.JOB_ID_IMPORT_OAI + ":processor")
