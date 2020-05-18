@@ -113,13 +113,6 @@ public class UrlDedupRecordEnricher implements DedupRecordEnricher {
 			if (!key.startsWith("uuid:")) continue;
 			for (KramAvailability kramAvailability : kramAvailabilityDAO.getByUuid(key)) {
 				addToMap(urls, EVersionUrl.create(kramAvailability));
-				if (kramAvailability.getHarvestedFrom().getIdPrefix().equals(Constants.PREFIX_KRAM_MZK)
-						&& kramAvailability.getAvailability().equals("private")) {
-					addToMap(urls, EVersionUrl.create(Constants.PREFIX_KRAM_MZK_VS,
-							kramAvailability.getAvailability(),
-							"https://kramerius-vs.mzk.cz/view/" + key,
-							Constants.KRAM_VS_COMMENT));
-				}
 			}
 		}
 	}

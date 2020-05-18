@@ -116,8 +116,6 @@ public class Constants {
 	public static final String PREFIX_KRAM_CBVK			= "kram-cbvk";
 	public static final String PREFIX_KRAM_KNAV			= "kram-knav";
 	public static final String PREFIX_KRAM_MZK			= "kram-mzk";
-	public static final String PREFIX_KRAM_MZK_VS		= "kram-mzk-vs";
-	public static final String PREFIX_KRAM_NKP_VS = "kram-nk-vs";
 	public static final String PREFIX_KRAM_NKP			= "kram-nkp";
 	public static final String PREFIX_KRAM_NLK			= "kram-nlk";
 	public static final String PREFIX_KRAM_NTK			= "kram-ntk";
@@ -219,9 +217,6 @@ public class Constants {
 	public static final String JOB_PARAM_RECORD_ID		= "recordId";
 
 	public static final String COSMOTRON_RECORD_ID_CHAR = "_";
-
-	public static final String KRAM_VS_COMMENT = "Určeno pro pedagogy a vědecké pracovníky institucí " +
-			"na úrovni vysokých škol a jejich studenty";
 
 	public static final String KRAM_EVERSION_COMMENT = "Digitalizovaný dokument";
 }	
