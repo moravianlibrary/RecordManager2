@@ -3,6 +3,8 @@ package cz.mzk.recordmanager.server.imports;
 import cz.mzk.recordmanager.server.oai.harvest.OaiErrorException;
 import cz.mzk.recordmanager.server.oai.model.OAIRecord;
 import cz.mzk.recordmanager.server.oai.model.OAIRoot;
+import cz.mzk.recordmanager.server.util.CleaningUtils;
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.item.ExecutionContext;
@@ -12,11 +14,9 @@ import org.springframework.batch.item.ItemStreamException;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
+import javax.xml.bind.UnmarshalException;
 import javax.xml.bind.Unmarshaller;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -30,7 +30,7 @@ public class AsyncImportOaiRecordsFileReader implements ItemReader<List<OAIRecor
 
 	private static final List<OAIRecord> IMPORT_FAILED_SENTINEL = Collections.emptyList();
 
-	private InputStream is;
+	private byte[] bytes;
 
 	private final Unmarshaller unmarshaller;
 
@@ -77,11 +77,19 @@ public class AsyncImportOaiRecordsFileReader implements ItemReader<List<OAIRecor
 					break;
 				}
 				try {
+					InputStream is = new ByteArrayInputStream(bytes);
 					if (is.markSupported()) {
 						is.mark(Integer.MAX_VALUE);
 						is.reset();
 					}
-					OAIRoot oaiRoot = (OAIRoot) unmarshaller.unmarshal(is);
+					OAIRoot oaiRoot;
+					try {
+						oaiRoot = (OAIRoot) unmarshaller.unmarshal(is);
+					} catch (UnmarshalException ex) {
+						logger.warn("Invalid XML characters");
+						oaiRoot = (OAIRoot) unmarshaller.unmarshal(
+								CleaningUtils.removeInvalidXMLCharacters(new ByteArrayInputStream(bytes)));
+					}
 					is.close();
 					if (oaiRoot.getOaiError() != null) {
 						throw new OaiErrorException(oaiRoot.getOaiError().getMessage());
@@ -132,8 +140,10 @@ public class AsyncImportOaiRecordsFileReader implements ItemReader<List<OAIRecor
 	private synchronized boolean initializeInputStream() {
 		if (files.isEmpty()) return false;
 		try {
-			is = new FileInputStream(files.remove(0)); // next file
-		} catch (FileNotFoundException e) {
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			IOUtils.copy(new FileInputStream(files.remove(0)), baos); // next file
+			bytes = baos.toByteArray();
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		return true;

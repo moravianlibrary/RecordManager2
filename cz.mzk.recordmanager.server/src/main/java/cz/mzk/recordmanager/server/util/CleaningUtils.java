@@ -1,5 +1,11 @@
 package cz.mzk.recordmanager.server.util;
 
+import org.apache.commons.io.IOUtils;
+
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -7,6 +13,8 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class CleaningUtils {
+
+	private static Pattern invalidXMLChar = Pattern.compile("[^\\u0009\\u000A\\u000D\\u0020-\\uD7FF\\uE000-\\uFFFD\\u10000-\\u10FFF]+");
 
 	public static List<String> replaceFirst(List<String> input, Pattern pattern, String replacement) {
 		return input.stream().map(it -> replace(it, pattern, replacement, false)).collect(Collectors.toCollection(ArrayList::new));
@@ -39,6 +47,12 @@ public class CleaningUtils {
 			return (all) ? matcher.replaceAll(replacement) : matcher.replaceFirst(replacement);
 		}
 		return input;
+	}
+
+	public static InputStream removeInvalidXMLCharacters(InputStream is) throws IOException {
+		String s = IOUtils.toString(is, StandardCharsets.UTF_8);
+		s = replaceAll(s, invalidXMLChar, "");
+		return new ByteArrayInputStream(s.getBytes(StandardCharsets.UTF_8));
 	}
 
 }

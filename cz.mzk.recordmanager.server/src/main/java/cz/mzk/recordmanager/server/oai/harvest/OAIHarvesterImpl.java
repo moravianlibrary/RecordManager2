@@ -1,7 +1,6 @@
 package cz.mzk.recordmanager.server.oai.harvest;
 
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -9,8 +8,10 @@ import java.util.Set;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
+import javax.xml.bind.UnmarshalException;
 import javax.xml.bind.Unmarshaller;
 
+import cz.mzk.recordmanager.server.util.CleaningUtils;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -148,13 +149,24 @@ public class OAIHarvesterImpl implements OAIHarvester {
 			logger.info(preLogMessage, url);
 		}
 		String rawMessage = "";
-		try (InputStream is = httpClient.executeGet(url)) {
+		try (InputStream isResult = httpClient.executeGet(url)){
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			IOUtils.copy(isResult, baos);
+			byte[] bytes = baos.toByteArray();
+			InputStream is = new ByteArrayInputStream(bytes);
 			if (is.markSupported()) {
 				is.mark(Integer.MAX_VALUE);
 				rawMessage = IOUtils.toString(is);
 				is.reset();
 			}
-			OAIRoot oaiRoot = (OAIRoot) unmarshaller.unmarshal(is);
+			OAIRoot oaiRoot;
+			try {
+				oaiRoot = (OAIRoot) unmarshaller.unmarshal(is);
+			} catch (UnmarshalException ex) {
+				logger.warn("Invalid XML characters");
+				oaiRoot = (OAIRoot) unmarshaller.unmarshal(
+						CleaningUtils.removeInvalidXMLCharacters(new ByteArrayInputStream(bytes)));
+			}
 			if (!postLogMessage.isEmpty()) {
 				logger.info(postLogMessage, url);
 			}
