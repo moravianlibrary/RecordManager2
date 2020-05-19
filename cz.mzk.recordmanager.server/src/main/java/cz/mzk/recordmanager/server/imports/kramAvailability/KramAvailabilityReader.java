@@ -4,12 +4,16 @@ import cz.mzk.recordmanager.server.model.KramAvailability;
 import cz.mzk.recordmanager.server.model.KrameriusConfiguration;
 import cz.mzk.recordmanager.server.oai.dao.KrameriusConfigurationDAO;
 import cz.mzk.recordmanager.server.util.HttpClient;
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 public class KramAvailabilityReader implements ItemReader<KramAvailability> {
 
@@ -62,9 +66,12 @@ public class KramAvailabilityReader implements ItemReader<KramAvailability> {
 		String localUrl = String.format(url, source, ROWS, start++ * ROWS);
 		int error = 0;
 		while (true) {
-			try {
+			try (InputStream is = httpClient.executeGet(localUrl)) {
+				ByteArrayOutputStream baos = new ByteArrayOutputStream();
+				IOUtils.copy(is, baos);
+				byte[] bytes = baos.toByteArray();
 				logger.info(localUrl);
-				reader = new KramAvailabilityXmlStreamReader(httpClient.executeGet(localUrl));
+				reader = new KramAvailabilityXmlStreamReader(new ByteArrayInputStream(bytes));
 				error = 0;
 				break;
 			} catch (IOException e) {
