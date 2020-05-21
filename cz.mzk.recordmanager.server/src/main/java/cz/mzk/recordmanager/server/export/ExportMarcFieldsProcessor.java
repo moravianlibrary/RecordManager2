@@ -51,12 +51,14 @@ public class ExportMarcFieldsProcessor implements ItemProcessor<Long, String> {
 			for (String tag : marcFields) {
 				String field = marcRecord.getControlField(tag);
 				if (field != null) {
-					result.append(field);
+					result.append(record.getHarvestedFrom().getIdPrefix() + "." +
+							record.getUniqueId().getRecordId() + " " + field);
 					result.append("\n");
 					continue;
 				}
 				for (DataField dataField : marcRecord.getDataFields(tag)) {
-					result.append(dataField.toString());
+					result.append(record.getHarvestedFrom().getIdPrefix() + "." +
+							record.getUniqueId().getRecordId() + " " + dataField.toString());
 					result.append("\n");
 				}
 			}

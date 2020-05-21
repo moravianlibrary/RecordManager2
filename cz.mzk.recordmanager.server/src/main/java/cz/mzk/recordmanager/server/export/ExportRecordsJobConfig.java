@@ -35,6 +35,7 @@ import cz.mzk.recordmanager.server.model.HarvestedRecord.HarvestedRecordUniqueId
 import cz.mzk.recordmanager.server.springbatch.JobFailureListener;
 import cz.mzk.recordmanager.server.springbatch.StepProgressListener;
 import cz.mzk.recordmanager.server.util.Constants;
+import org.springframework.core.task.TaskExecutor;
 
 @Configuration
 public class ExportRecordsJobConfig {
@@ -47,6 +48,9 @@ public class ExportRecordsJobConfig {
 
 	@Autowired
 	private DataSource dataSource;
+
+	@Autowired
+	private TaskExecutor taskExecutor;
 
 	private static final String STRING_OVERRIDEN_BY_EXPRESSION = null;
 
@@ -228,7 +232,7 @@ public class ExportRecordsJobConfig {
 
 	@Bean(name = "exportRecordsJob:exportRecordsWriter")
 	@StepScope
-	public FlatFileItemWriter<String> exportRecordsWriter(@Value("#{jobParameters["
+	public synchronized FlatFileItemWriter<String> exportRecordsWriter(@Value("#{jobParameters["
 			+ Constants.JOB_PARAM_OUT_FILE + "]}") String filename) throws Exception {
 		FlatFileItemWriter<String> fileWritter = new FlatFileItemWriter<>();
 		fileWritter.setAppendAllowed(false);
@@ -364,12 +368,13 @@ public class ExportRecordsJobConfig {
 				.reader(exportMarcFieldsReader(STRING_OVERRIDEN_BY_EXPRESSION)) //
 				.processor(exportMarcFieldsProcesor(STRING_OVERRIDEN_BY_EXPRESSION, STRING_OVERRIDEN_BY_EXPRESSION)) //
 				.writer(exportRecordsWriter(STRING_OVERRIDEN_BY_EXPRESSION)) //
+				.taskExecutor(taskExecutor)
 				.build();
 	}
 
 	@Bean(name = Constants.JOB_ID_EXPORT_MARC_FIELDS + ":exportMarcFieldsReader")
 	@StepScope
-	public ItemReader<Long> exportMarcFieldsReader(
+	public synchronized ItemReader<Long> exportMarcFieldsReader(
 			@Value("#{jobParameters[" + Constants.JOB_PARAM_CONF_ID + "]}") String configId)
 			throws Exception {
 		JdbcPagingItemReader<Long> reader = new JdbcPagingItemReader<>();
