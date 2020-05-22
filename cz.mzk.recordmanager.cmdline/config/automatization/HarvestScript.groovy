@@ -32,7 +32,7 @@ public class DailyScript implements Runnable {
 				}
 			}
 		}
-		krameriusConfigurationDAO.findAll().each { conf ->
+		krameriusConfigurationDAO.getAllWithoutOaiConfigs().each { conf ->
 			if (conf.harvestFrequency == HarvestFrequency.DAILY) {
 				try {
 					harvestingFacade.incrementalHarvest(conf)
