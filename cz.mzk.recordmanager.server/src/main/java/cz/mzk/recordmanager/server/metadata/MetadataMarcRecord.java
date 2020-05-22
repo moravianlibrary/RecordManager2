@@ -1758,10 +1758,12 @@ public class MetadataMarcRecord implements MetadataRecord {
 	@Override
 	public List<Uuid> getUuids() {
 		Set<Uuid> results = new HashSet<>();
-		for (String url : underlayingMarc.getFields("856", 'u')) {
-			Matcher matcher = UUID_PATTERN.matcher(url);
-			if (matcher.find()) {
-				results.add(Uuid.create(matcher.group(0)));
+		for (String tag : new String[]{"856", "911"}) {
+			for (String url : underlayingMarc.getFields(tag, 'u')) {
+				Matcher matcher = UUID_PATTERN.matcher(url);
+				if (matcher.find()) {
+					results.add(Uuid.create(matcher.group(0)));
+				}
 			}
 		}
 		return new ArrayList<>(results);
