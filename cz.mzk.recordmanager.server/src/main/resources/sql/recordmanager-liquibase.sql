@@ -2105,3 +2105,5 @@ UPDATE kramerius_conf SET availability_source_url='https://kramerius.uzei.cz/sea
 --changeset tomascejpek:194 context:cpk
 UPDATE oai_harvest_conf SET url='https://kmhk.tritius.cz/tritius/oai-provider',set_spec='CPK_1' WHERE import_conf_id=377;
 
+--changeset tomascejpek:195
+ALTER TABLE kramerius_conf ADD COLUMN availability_harvest_frequency CHAR(1) DEFAULT 'U';

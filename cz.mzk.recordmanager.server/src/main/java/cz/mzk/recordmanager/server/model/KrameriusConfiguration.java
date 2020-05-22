@@ -1,5 +1,8 @@
 package cz.mzk.recordmanager.server.model;
 
+import org.hibernate.annotations.Parameter;
+import org.hibernate.annotations.Type;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.PrimaryKeyJoinColumn;
@@ -44,6 +47,15 @@ public class KrameriusConfiguration extends ImportConfiguration {
 
 	@Column(name = "availability_dest_url")
 	private String availabilityDestUrl;
+
+	@Type(
+			type = "cz.mzk.recordmanager.server.hibernate.CharEnumUserType",
+			parameters = {
+					@Parameter(name = "enumClassName", value = "cz.mzk.recordmanager.server.model.HarvestFrequency"),
+			}
+	)
+	@Column(name = "availability_harvest_frequency")
+	private HarvestFrequency availabilityHarvestFrequency = HarvestFrequency.UNSPECIFIED;
 
 	public String getUrl() {
 		return url;
@@ -131,6 +143,14 @@ public class KrameriusConfiguration extends ImportConfiguration {
 
 	public void setAvailabilityDestUrl(String availabilityDestUrl) {
 		this.availabilityDestUrl = availabilityDestUrl;
+	}
+
+	public HarvestFrequency getAvailabilityHarvestFrequency() {
+		return availabilityHarvestFrequency;
+	}
+
+	public void setAvailabilityHarvestFrequency(HarvestFrequency availabilityHarvestFrequency) {
+		this.availabilityHarvestFrequency = availabilityHarvestFrequency;
 	}
 
 	@Override

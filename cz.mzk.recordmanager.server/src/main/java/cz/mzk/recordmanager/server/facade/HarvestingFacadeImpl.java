@@ -222,4 +222,12 @@ public class HarvestingFacadeImpl implements HarvestingFacade {
 		parameters.put(Constants.JOB_PARAM_REPEAT, new JobParameter(Constants.JOB_PARAM_ONE_VALUE));
 		jobExecutor.execute(Constants.JOB_ID_IMPORT_ANNOTATIONS, new JobParameters(parameters));
 	}
+
+	@Override
+	public void fullKramAvailability(KrameriusConfiguration conf) {
+		Map<String, JobParameter> parameters = new HashMap<>();
+		parameters.put(Constants.JOB_PARAM_CONF_ID, new JobParameter(conf.getId()));
+		parameters.put(Constants.JOB_PARAM_REHARVEST, new JobParameter(Constants.JOB_PARAM_TRUE_VALUE));
+		jobExecutor.execute(Constants.JOB_ID_HARVEST_KRAM_AVAILABILITY, new JobParameters(parameters));
+	}
 }

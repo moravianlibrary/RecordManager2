@@ -39,4 +39,6 @@ public interface HarvestingFacade {
 
 	void incrementalObalkyKnihAnnotationsJob();
 
+	void fullKramAvailability(KrameriusConfiguration conf);
+
 }
