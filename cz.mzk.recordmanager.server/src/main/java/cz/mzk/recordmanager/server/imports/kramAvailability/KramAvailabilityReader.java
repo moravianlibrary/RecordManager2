@@ -31,7 +31,7 @@ public class KramAvailabilityReader implements ItemReader<KramAvailability> {
 
 	private KramAvailabilityXmlStreamReader reader;
 
-	private static final String url = "%s/search?fl=dostupnost,dnnt,PID&q=level:0&rows=%d&start=%d";
+	private static final String url = "%s/search?fl=dostupnost,dnnt,PID&q=level:0&rows=%d&start=%d&wt=xml";
 
 	private String source;
 	private static final int ROWS = 100;
@@ -52,7 +52,7 @@ public class KramAvailabilityReader implements ItemReader<KramAvailability> {
 				result = reader.next();
 				if (result != null) result.setHarvestedFrom(config);
 			} catch (Exception e) {
-				e.printStackTrace();
+				throw new RuntimeException(e);
 			}
 		}
 		return result;
