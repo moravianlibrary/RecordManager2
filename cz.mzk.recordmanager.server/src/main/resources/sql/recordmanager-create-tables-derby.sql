@@ -76,6 +76,7 @@ CREATE TABLE kramerius_conf (
   collection                  VARCHAR(128),
   availability_source_url     VARCHAR(128),
   availability_dest_url       VARCHAR(128),
+  dnnt_dest_url               VARCHAR(128),
   availability_harvest_frequency CHAR(1) DEFAULT 'U',
   CONSTRAINT kramerius_conf_import_conf_fk FOREIGN KEY (import_conf_id) REFERENCES import_conf(id)
 );

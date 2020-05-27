@@ -7,6 +7,7 @@ import cz.mzk.recordmanager.server.model.EVersionUrl;
 import cz.mzk.recordmanager.server.model.KramAvailability;
 import cz.mzk.recordmanager.server.oai.dao.KramAvailabilityDAO;
 import cz.mzk.recordmanager.server.util.Constants;
+import cz.mzk.recordmanager.server.util.SolrUtils;
 import org.apache.solr.common.SolrInputDocument;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -46,6 +47,8 @@ public class UrlDedupRecordEnricher implements DedupRecordEnricher {
 		mergedDocument.addField(SolrFieldConstants.URL, urlsFilter(urls));
 
 		localRecords.forEach(doc -> doc.remove(SolrFieldConstants.URL));
+
+		enrichStatusesFacet(mergedDocument, localRecords);
 	}
 
 	/**
@@ -70,22 +73,27 @@ public class UrlDedupRecordEnricher implements DedupRecordEnricher {
 		for (String key : urls.keySet()) {
 			boolean online = false;
 			boolean protect = false;
+			boolean dnnt = false;
 			for (EVersionUrl url : urls.get(key).descendingSet()) {
 				if (url.getAvailability().equals(Constants.DOCUMENT_AVAILABILITY_ONLINE)) {
 					results.add(url.toString());
 					online = true;
 				}
-				if (!online && url.getAvailability().equals(Constants.DOCUMENT_AVAILABILITY_PROTECTED)) {
+				if (!online && url.getAvailability().equals(Constants.DOCUMENT_AVAILABILITY_DNNT)) {
+					results.add(url.toString());
+					dnnt = true;
+				}
+				if (!online && !dnnt && url.getAvailability().equals(Constants.DOCUMENT_AVAILABILITY_PROTECTED)) {
 					results.add(url.toString());
 					protect = true;
 				}
 			}
-			if (!online && !protect) {
+			if (!online && !dnnt && !protect) {
 				if (urls.get(key).size() == 1) {
 					results.add(urls.get(key).first().toString());
 				} else {
 					EVersionUrl url = urls.get(key).first();
-					url.setSource("unknown");
+					url.setSource(Constants.DOCUMENT_AVAILABILITY_UNKNOWN);
 					results.add(url.toString());
 				}
 			}
@@ -112,7 +120,14 @@ public class UrlDedupRecordEnricher implements DedupRecordEnricher {
 		for (String key : urls.keySet()) {
 			if (!key.startsWith("uuid:")) continue;
 			for (KramAvailability kramAvailability : kramAvailabilityDAO.getByUuid(key)) {
-				addToMap(urls, EVersionUrl.create(kramAvailability));
+				EVersionUrl newUrl = EVersionUrl.create(kramAvailability);
+				addToMap(urls, newUrl);
+				// dnnt
+				if (newUrl.getAvailability().equals(Constants.DOCUMENT_AVAILABILITY_PROTECTED)
+						&& kramAvailability.isDnnt()) {
+					EVersionUrl dnntUrl = EVersionUrl.createDnnt(kramAvailability);
+					if (dnntUrl != null) addToMap(urls, dnntUrl);
+				}
 			}
 		}
 	}
@@ -127,6 +142,37 @@ public class UrlDedupRecordEnricher implements DedupRecordEnricher {
 		return urls.stream().filter(
 				url -> URL_PATTERNS.stream().noneMatch(pat -> pat.matcher(url.toString()).find()))
 				.collect(Collectors.toSet());
+	}
+
+	private void enrichStatusesFacet(SolrInputDocument mergedDocument,
+									 List<SolrInputDocument> localRecords) {
+		Collection<Object> urls = mergedDocument.getFieldValues(SolrFieldConstants.URL);
+		if (urls == null) return;
+		Set<String> availabilitiesSimple = new HashSet<>();
+		for (Object url : urls) {
+			try {
+				availabilitiesSimple.add(EVersionUrl.create(url.toString()).getAvailability());
+			} catch (Exception ignore) {
+			}
+		}
+		if (availabilitiesSimple.isEmpty()) return;
+		Set<String> availabilities = new HashSet<>(); // hierarchical
+		for (String availability : availabilitiesSimple) {
+			if (availability.equals(Constants.DOCUMENT_AVAILABILITY_PROTECTED)) continue;
+			availabilities.addAll(SolrUtils.createHierarchicFacetValues(
+					Constants.DOCUMENT_AVAILABILITY_ONLINE, availability));
+		}
+		// hierarchical to all local records
+		for (SolrInputDocument localRecord : localRecords) {
+			Set<String> results = localRecord.containsKey(SolrFieldConstants.LOCAL_STATUSES_FACET)
+					? localRecord.getFieldValues(SolrFieldConstants.LOCAL_STATUSES_FACET).stream()
+					.map(Object::toString).collect(Collectors.toSet())
+					: new HashSet<>();
+			results.addAll(availabilities);
+			localRecord.setField(SolrFieldConstants.LOCAL_STATUSES_FACET, results);
+		}
+		// simple to merged record
+		mergedDocument.setField(SolrFieldConstants.STATUSES_FACET, availabilitiesSimple);
 	}
 
 }

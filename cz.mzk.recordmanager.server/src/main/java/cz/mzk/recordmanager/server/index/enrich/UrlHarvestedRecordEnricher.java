@@ -27,9 +27,7 @@ public class UrlHarvestedRecordEnricher implements HarvestedRecordEnricher {
 	@Autowired
 	private KramAvailabilityDAO kramAvailabilityDAO;
 
-	private static final Pattern UNKNOWN = Pattern.compile("unknown");
 	private static final Pattern OBALKA = Pattern.compile("\\|obálka", Pattern.CASE_INSENSITIVE);
-	private static final Pattern KRAM_AVAILABILITY = Pattern.compile("^[^|]+\\|unknown|", Pattern.CASE_INSENSITIVE);
 	private static final Pattern UUID_PATTERN = Pattern.compile("uuid:[\\w-]+");
 
 	/**
@@ -61,10 +59,7 @@ public class UrlHarvestedRecordEnricher implements HarvestedRecordEnricher {
 				KramAvailability availability = kramAvailabilityDAO
 						.getByConfigAndUuid(record.getHarvestedFrom(), matcher.group(0));
 				if (availability != null) { // has availability in table
-					url.setAvailability(availability.getAvailability().equals("public")
-							? Constants.DOCUMENT_AVAILABILITY_ONLINE
-							: Constants.DOCUMENT_AVAILABILITY_PROTECTED);
-					// TODO dnnt
+					url.setAvailability(availability.getAvailability());
 				} else {
 					if (!url.getAvailability().equals(Constants.DOCUMENT_AVAILABILITY_UNKNOWN)) {
 						// availability is unknown - get availability from fulltext

@@ -2111,3 +2111,6 @@ ALTER TABLE kramerius_conf ADD COLUMN availability_harvest_frequency CHAR(1) DEF
 --changeset tomascejpek:196
 ALTER TABLE import_conf ADD COLUMN indexed BOOLEAN DEFAULT TRUE;
 
+--changeset tomascejpek:197
+ALTER TABLE kramerius_conf ADD COLUMN dnnt_dest_url VARCHAR(128);
+

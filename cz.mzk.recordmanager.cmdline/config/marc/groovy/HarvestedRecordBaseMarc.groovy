@@ -25,7 +25,6 @@ oclc_display_mv = getOclcs()
 
 url = getUrls()
 local_statuses_facet_str_mv = getStatuses()
-statuses_facet_str_mv = getStatusesSimple()
 subject_facet_str_mv = getSubject "600abcdfglnpqstyz:610abcdfgklnpstyz:611abcdefgklnpqstyz:630adfgklnpstyz:648a:651avxyz:964abcdefg:967ab"
 subject_str_mv = getSubject "600abcdfglnpqstyz:610abcdfgklnpstyz:611abcefgklpqstyz:630adfgklnpstyz:648a:651avxyz:964abcdefg:967ab"
 genre_facet_str_mv = getGenreFacet "655avxyz"

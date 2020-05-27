@@ -48,6 +48,9 @@ public class KrameriusConfiguration extends ImportConfiguration {
 	@Column(name = "availability_dest_url")
 	private String availabilityDestUrl;
 
+	@Column(name = "dnnt_dest_url")
+	private String dnntDestUrl;
+
 	@Type(
 			type = "cz.mzk.recordmanager.server.hibernate.CharEnumUserType",
 			parameters = {
@@ -151,6 +154,14 @@ public class KrameriusConfiguration extends ImportConfiguration {
 
 	public void setAvailabilityHarvestFrequency(HarvestFrequency availabilityHarvestFrequency) {
 		this.availabilityHarvestFrequency = availabilityHarvestFrequency;
+	}
+
+	public String getDnntDestUrl() {
+		return dnntDestUrl;
+	}
+
+	public void setDnntDestUrl(String dnntDestUrl) {
+		this.dnntDestUrl = dnntDestUrl;
 	}
 
 	@Override

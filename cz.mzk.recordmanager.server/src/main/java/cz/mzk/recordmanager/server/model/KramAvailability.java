@@ -39,6 +39,10 @@ public class KramAvailability {
 		return harvestedFrom.getAvailabilityDestUrl() + uuid;
 	}
 
+	public String getDnntLink() {
+		return harvestedFrom.getDnntDestUrl() + uuid;
+	}
+
 	public Long getId() {
 		return id;
 	}

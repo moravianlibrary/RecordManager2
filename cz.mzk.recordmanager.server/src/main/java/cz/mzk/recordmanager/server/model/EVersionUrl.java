@@ -2,6 +2,7 @@ package cz.mzk.recordmanager.server.model;
 
 import cz.mzk.recordmanager.server.util.Constants;
 import cz.mzk.recordmanager.server.util.MetadataUtils;
+import org.apache.commons.validator.routines.UrlValidator;
 
 public class EVersionUrl implements Comparable {
 	private static final String SPLITTER = "\\|";
@@ -40,6 +41,13 @@ public class EVersionUrl implements Comparable {
 		return newUrl;
 	}
 
+	public static EVersionUrl createDnnt(KramAvailability kramAvailability) {
+		if (kramAvailability.getDnntLink() == null) return null;
+		EVersionUrl url = create(kramAvailability.getHarvestedFrom().getIdPrefix(), Constants.DOCUMENT_AVAILABILITY_DNNT,
+				kramAvailability.getDnntLink(), Constants.KRAM_EVERSION_COMMENT);
+		return UrlValidator.getInstance().isValid(url.getLink()) ? url : null;
+	}
+
 	public String getSource() {
 		return source;
 	}
@@ -53,6 +61,8 @@ public class EVersionUrl implements Comparable {
 			return Constants.DOCUMENT_AVAILABILITY_ONLINE;
 		if (availability.equals("private") || availability.equals(Constants.DOCUMENT_AVAILABILITY_PROTECTED))
 			return Constants.DOCUMENT_AVAILABILITY_PROTECTED;
+		if (availability.equals(Constants.DOCUMENT_AVAILABILITY_DNNT))
+			return Constants.DOCUMENT_AVAILABILITY_DNNT;
 		return Constants.DOCUMENT_AVAILABILITY_UNKNOWN;
 	}
 
@@ -61,6 +71,8 @@ public class EVersionUrl implements Comparable {
 			this.availability = Constants.DOCUMENT_AVAILABILITY_ONLINE;
 		else if (availability.equals("private") || availability.equals(Constants.DOCUMENT_AVAILABILITY_PROTECTED))
 			this.availability = Constants.DOCUMENT_AVAILABILITY_PROTECTED;
+		else if (availability.equals(Constants.DOCUMENT_AVAILABILITY_DNNT))
+			this.availability = Constants.DOCUMENT_AVAILABILITY_DNNT;
 		else this.availability = Constants.DOCUMENT_AVAILABILITY_UNKNOWN;
 	}
 
@@ -93,6 +105,8 @@ public class EVersionUrl implements Comparable {
 		if (this.availability.equals(other.getAvailability())) return 1;
 		if (this.availability.equals(Constants.DOCUMENT_AVAILABILITY_ONLINE)) return 1;
 		if (other.getAvailability().equals(Constants.DOCUMENT_AVAILABILITY_ONLINE)) return -1;
+		if (this.availability.equals(Constants.DOCUMENT_AVAILABILITY_DNNT)) return 1;
+		if (other.getAvailability().equals(Constants.DOCUMENT_AVAILABILITY_DNNT)) return -1;
 		if (this.availability.equals(Constants.DOCUMENT_AVAILABILITY_PROTECTED)) return 1;
 		if (other.getAvailability().equals(Constants.DOCUMENT_AVAILABILITY_PROTECTED)) return -1;
 		return 0;

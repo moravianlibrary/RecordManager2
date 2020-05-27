@@ -1836,3 +1836,6 @@ ALTER TABLE kramerius_conf ADD COLUMN availability_harvest_frequency CHAR(1) DEF
 -- 01. 06. 2020 tomascejpek
 ALTER TABLE import_conf ADD COLUMN indexed BOOLEAN DEFAULT TRUE;
 
+-- 27. 02. 2020 tomascejpek
+ALTER TABLE kramerius_conf ADD COLUMN dnnt_dest_url VARCHAR(128);
+
