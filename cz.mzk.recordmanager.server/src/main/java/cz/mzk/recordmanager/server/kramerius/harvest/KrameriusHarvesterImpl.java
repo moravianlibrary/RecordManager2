@@ -46,14 +46,13 @@ public abstract class KrameriusHarvesterImpl implements KrameriusHarvester {
 	}
 
 	@Override
-	public List<HarvestedRecord> getRecords(List<String> uuids) throws IOException {
+	public List<HarvestedRecord> getRecords(List<String> uuids) {
 		List<HarvestedRecord> records = new ArrayList<>();
 		for (String uuid : uuids) {
-			HarvestedRecord hr = downloadRecord(uuid);
-			if (hr != null) {
-				records.add(hr);
-			} else {
-				LOGGER.debug("Skipping HarvestedRecord with uuid: " + uuid + " [null value returned]");
+			try {
+				records.add(downloadRecord(uuid));
+			} catch (IOException e) {
+				LOGGER.info("Skipping HarvestedRecord with uuid: " + uuid + " [null value returned]");
 			}
 		}
 		return records;
