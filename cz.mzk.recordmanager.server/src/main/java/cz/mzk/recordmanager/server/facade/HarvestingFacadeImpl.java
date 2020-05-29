@@ -224,8 +224,8 @@ public class HarvestingFacadeImpl implements HarvestingFacade {
 	public void fullObalkyKnihAnnotationsJob() {
 		Map<String, JobParameter> parameters = new HashMap<>();
 		parameters.put(Constants.JOB_PARAM_REPEAT, new JobParameter(Constants.JOB_PARAM_ONE_VALUE));
-		//JobExecution execution = jobExecutor.execute(Constants.JOB_ID_IMPORT_ANNOTATIONS, new JobParameters(parameters));
-		//if (!execution.getStatus().equals(BatchStatus.COMPLETED)) return;
+		JobExecution execution = jobExecutor.execute(Constants.JOB_ID_IMPORT_ANNOTATIONS, new JobParameters(parameters));
+		if (!execution.getStatus().equals(BatchStatus.COMPLETED)) return;
 		LocalDateTime ldt = query(lastJobExecutionQuery, ImmutableMap.of("jobName", Constants.JOB_ID_IMPORT_ANNOTATIONS));
 		if (ldt != null)
 			parameters.put(Constants.JOB_PARAM_UNTIL_DATE, new JobParameter(Date.from(ldt.atZone(ZoneId.systemDefault()).toInstant())));
