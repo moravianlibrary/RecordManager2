@@ -44,7 +44,7 @@ public class DailyScript implements Runnable {
 	@Override
 	public void run() {
 		try {
-			harvestingFacade.incrementalObalkyKnihAnnotationsJob();
+			harvestingFacade.fullObalkyKnihAnnotationsJob();
 			harvestingFacade.incrementalObalkyKnihTocHarvest();
 		} catch (JobExecutionFailure jfe) {
 			logger.error(String.format("Incremental harvest of ObalkyKnih failed"), jfe);
