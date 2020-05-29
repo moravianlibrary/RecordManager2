@@ -27,7 +27,6 @@ public class UrlHarvestedRecordEnricher implements HarvestedRecordEnricher {
 	@Autowired
 	private KramAvailabilityDAO kramAvailabilityDAO;
 
-	private static final Pattern OBALKA = Pattern.compile("\\|obálka", Pattern.CASE_INSENSITIVE);
 	private static final Pattern UUID_PATTERN = Pattern.compile("uuid:[\\w-]+");
 
 	/**
@@ -51,7 +50,7 @@ public class UrlHarvestedRecordEnricher implements HarvestedRecordEnricher {
 				}
 			}
 		}
-		Set<String> result = new HashSet<>();
+		Set<String> results = new HashSet<>();
 		for (EVersionUrl url : urls) {
 			if (url.getSource().startsWith("kram-")) { // url from kramerius
 				Matcher matcher = UUID_PATTERN.matcher(url.getLink());
@@ -68,11 +67,10 @@ public class UrlHarvestedRecordEnricher implements HarvestedRecordEnricher {
 					// else availability is not unknown - availability from metadataRecord
 				}
 			}
-			if (UrlValidator.getInstance().isValid(url.getLink())) result.add(url.toString());
+			if (UrlValidator.getInstance().isValid(url.getLink())) results.add(url.toString());
 		}
 		document.remove(SolrFieldConstants.URL);
-		document.addField(SolrFieldConstants.URL,
-				result.stream().filter(url -> !OBALKA.matcher(url).find()).collect(Collectors.toSet()));
+		document.addField(SolrFieldConstants.URL, results);
 	}
 
 }
