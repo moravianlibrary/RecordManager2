@@ -2,6 +2,7 @@
 	<doc>
 		<field name="id">1</field>
 		<field name="recordtype">Osobnosti</field>
+		<field name="record_format">Osobnosti</field>
 		<field name="primarySurname">Fuksa</field>
 		<field name="primaryFirstname">Stanislav</field>
 		<field name="primaryFullnameStr">Stanislav Fuksa</field>
@@ -27,6 +28,7 @@
 	<doc>
 		<field name="id">2</field>
 		<field name="recordtype">Osobnosti</field>
+		<field name="record_format">Osobnosti</field>
 		<field name="primarySurname">Řehák</field>
 		<field name="primaryFirstname">Oldřich</field>
 		<field name="primaryFullnameStr">Oldřich Řehák</field>
@@ -47,6 +49,7 @@
 	<doc>
 		<field name="id">3</field>
 		<field name="recordtype">Osobnosti</field>
+		<field name="record_format">Osobnosti</field>
 		<field name="primarySurname">Špedla</field>
 		<field name="primaryFirstname">Josef</field>
 		<field name="primaryFullnameStr">Josef Špedla</field>

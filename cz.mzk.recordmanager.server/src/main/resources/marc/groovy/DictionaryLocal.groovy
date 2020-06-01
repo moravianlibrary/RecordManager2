@@ -1,4 +1,5 @@
 recordtype = "dictionary"
+record_format = "dictionary"
 
 fullrecord = getFullrecord()
 

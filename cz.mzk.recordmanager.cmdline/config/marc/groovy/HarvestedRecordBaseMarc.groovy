@@ -1,4 +1,6 @@
 recordtype = "local"
+record_format = "local"
+
 fullrecord = getFullrecord()
 
 title_display = getTitleDisplay()

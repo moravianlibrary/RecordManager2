@@ -2,6 +2,8 @@ import org.apache.commons.collections4.ListUtils;
 import static cz.mzk.recordmanager.server.util.MarcCleaningUtils.*;
 
 recordtype = "marc"
+record_format = "marc"
+
 allfields = getAllFields()
 fullrecord = getFullrecord()
 
@@ -10,7 +12,7 @@ country_str_mv = translate("mzk_country.map", getCountries(), null)
 
 author = getFirstField "100abcd"
 author_exact = getAuthorExact()
-author_fuller = getFirstField "100q"
+author_fuller = getFields "100q"
 author2 = getFields "110ab:111ab:700abcd:710ab:711ab"
 author_additional = getFields "505r"
 author_sort_str = getAuthorForSorting()

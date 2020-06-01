@@ -1,4 +1,6 @@
 recordtype = "dublinCore"
+record_format = "dublinCore"
+
 fullrecord = getFullRecord()
 
 allfields = getAllFields()

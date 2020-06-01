@@ -1,4 +1,6 @@
 recordtype = "dublincore"
+record_format = "dublincore"
+
 fullrecord = getFullRecord()
 title = getFirstTitle()
 physical = getPhysicals();

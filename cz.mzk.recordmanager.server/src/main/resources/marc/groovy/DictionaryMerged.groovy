@@ -1,4 +1,6 @@
 recordtype = "marc"
+record_format = "marc"
+
 allfields = getAllFields()
 fullrecord = getFullrecord()
 

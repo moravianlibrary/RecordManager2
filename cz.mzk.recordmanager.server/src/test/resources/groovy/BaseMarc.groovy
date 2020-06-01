@@ -2,12 +2,14 @@ lccn = getFirstField "010a"
 ctrlnum = getFirstField "035a"
 
 recordtype = "marc"
+record_format = "marc"
+
 allfields = getAllFields()
 
 language = translate("mzk_language.map", getLanguages() , null)
 
 author = getFirstField "100abcd"
-author_fuller = getFirstField "100q"
+author_fuller = getFields "100q"
 author_letter = getFirstField "100a"
 author2 = getFields "110ab:111ab:700abcd:710ab:711ab"
 author2_role = getFields "700e:710e"

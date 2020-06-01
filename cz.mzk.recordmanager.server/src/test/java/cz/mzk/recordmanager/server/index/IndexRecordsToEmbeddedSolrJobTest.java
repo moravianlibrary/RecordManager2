@@ -120,6 +120,8 @@ public class IndexRecordsToEmbeddedSolrJobTest extends AbstractSolrTest {
 			SolrDocument document = docResponse.getResults().get(0);
 			Assert.assertTrue(document.containsKey(SolrFieldConstants.RECORDTYPE), "Record type missing in DC record.");
 			Assert.assertEquals(document.getFieldValue(SolrFieldConstants.RECORDTYPE), "dublinCore");
+			Assert.assertTrue(document.containsKey(SolrFieldConstants.RECORDTYPE_FORMAT), "Record format missing in DC record.");
+			Assert.assertEquals(document.getFieldValue(SolrFieldConstants.RECORDTYPE_FORMAT), "dublinCore");
 			Assert.assertTrue(document.containsKey(SolrFieldConstants.FULLTEXT_FIELD), "Full record missing in DC record.");
 			String fullRecord = (String) document.getFieldValue(SolrFieldConstants.FULLTEXT_FIELD);
 			Assert.assertTrue(fullRecord.length() > 0);

@@ -95,6 +95,8 @@ public class SolrFieldConstants {
 	public static final String USE_FOR = "use_for";
 	
 	public static final String RECORDTYPE = "recordtype";
+
+	public static final String RECORDTYPE_FORMAT = "record_format";
 	
 	public static final String TITLE = "title";
 	

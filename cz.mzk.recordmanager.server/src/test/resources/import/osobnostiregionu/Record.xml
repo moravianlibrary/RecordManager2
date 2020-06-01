@@ -2,6 +2,7 @@
 	<doc>
 		<field name="id">5</field>
 		<field name="recordtype">Osobnosti</field>
+		<field name="record_format">Osobnosti</field>
 		<field name="primarySurname">Přívratský</field>
 		<field name="primaryFirstname">Miloslav</field>
 		<field name="primaryFullnameStr">Miloslav Přívratský</field>

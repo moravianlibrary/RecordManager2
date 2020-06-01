@@ -1,4 +1,5 @@
 recordtype = "authority"
+record_format = "authority"
 
 fullrecord = getFullrecord()
 

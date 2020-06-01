@@ -25,20 +25,18 @@ public class SolrInputDocumentFactoryImpl implements SolrInputDocumentFactory, I
 	private static Logger logger = LoggerFactory.getLogger(SolrInputDocumentFactoryImpl.class);
 
 	private List<String> fieldsWithDash = Arrays.asList( //
-			"author2-role", //
-			"author-letter", //
-			"callnumber-a", //
 			"callnumber-first", //
-			"callnumber-first-code", //
 			"callnumber-subject", //
-			"callnumber-subject-code", //
 			"callnumber-label", //
+                        "callnumber-sort", //
+                        "callnumber-raw", //
+                        "callnumber-search", //
 			"dewey-hundreds", //
 			"dewey-tens", //
 			"dewey-ones", //
 			"dewey-full", //
 			"dewey-sort", //
-			"dewey-sort-browse", //
+			"dewey-search", //
 			"dewey-raw" //
 	);
 
