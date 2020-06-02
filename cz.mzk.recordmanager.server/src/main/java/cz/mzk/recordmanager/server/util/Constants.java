@@ -23,6 +23,7 @@ public class Constants {
 	public static final String JOB_ID_EXPORT						= "exportRecordsJob";
 	public static final String JOB_ID_EXPORT_COSMOTRON_996			= "exportCosmotron996Job";
 	public static final String JOB_ID_EXPORT_SFX					= "exportSfxRecordsJob";
+	public static final String JOB_ID_EXPORT_DNNT					= "exportDnntJob";
 	public static final String JOB_ID_IMPORT						= "importRecordsJob";
 	public static final String JOB_ID_MULTI_THREADS_IMPORT			= "multiImportRecordsJob";
 	public static final String JOB_ID_DOWNLOAD_IMPORT				= "downloadAndImportRecordsJob";

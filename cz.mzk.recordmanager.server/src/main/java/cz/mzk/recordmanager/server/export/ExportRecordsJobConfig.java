@@ -9,11 +9,15 @@ import javax.sql.DataSource;
 import cz.mzk.recordmanager.server.export.sfx.ExportSfxRecordsJobParametersValidator;
 import cz.mzk.recordmanager.server.export.sfx.ExportSfxRecordsProcessor;
 import cz.mzk.recordmanager.server.export.sfx.ExportSfxRecordsWriter;
+import cz.mzk.recordmanager.server.jdbc.StringValueRowMapper;
+import cz.mzk.recordmanager.server.springbatch.SqlCommandTasklet;
+import cz.mzk.recordmanager.server.util.ResourceUtils;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepScope;
+import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.database.JdbcPagingItemReader;
 import org.springframework.batch.item.database.support.SqlPagingQueryProviderFactoryBean;
@@ -34,6 +38,7 @@ import cz.mzk.recordmanager.server.model.HarvestedRecord.HarvestedRecordUniqueId
 import cz.mzk.recordmanager.server.springbatch.JobFailureListener;
 import cz.mzk.recordmanager.server.springbatch.StepProgressListener;
 import cz.mzk.recordmanager.server.util.Constants;
+import org.springframework.core.task.TaskExecutor;
 
 @Configuration
 public class ExportRecordsJobConfig {
@@ -47,9 +52,14 @@ public class ExportRecordsJobConfig {
 	@Autowired
 	private DataSource dataSource;
 
+	@Autowired
+	private TaskExecutor taskExecutor;
+
 	private static final String STRING_OVERRIDEN_BY_EXPRESSION = null;
 
 	private static final Long LONG_OVERRIDEN_BY_EXPRESSION = null;
+
+	private static final String prepareTempDnntSql = ResourceUtils.asString("job/exportRecordsJob/prepareTempDnnt.sql");
 
 	@Bean
 	public Job exportRecordsJob(
@@ -290,6 +300,65 @@ public class ExportRecordsJobConfig {
 	public ExportSfxRecordsWriter exportSfxRecordsWriter(@Value("#{jobParameters["
 			+ Constants.JOB_PARAM_OUT_FILE + "]}") String filename) throws Exception {
 		return new ExportSfxRecordsWriter(filename);
+	}
+
+	// dnnt
+	@Bean
+	public Job exportDnntJob(
+			@Qualifier(Constants.JOB_ID_EXPORT_DNNT + ":exportDnntStep") Step exportDnntStep) {
+		return jobs.get(Constants.JOB_ID_EXPORT_DNNT)
+				.validator(new ExportDnntJobParametersValidator())
+				.listener(JobFailureListener.INSTANCE)
+//				.start(prepareTempDnntStep())
+				.start(exportDnntStep)
+				.build();
+	}
+
+	@Bean(name = Constants.JOB_ID_EXPORT_DNNT + ":prepareTempDnntTasklet")
+	@StepScope
+	public Tasklet prepareTempDnntTasklet() {
+		return new SqlCommandTasklet(prepareTempDnntSql);
+	}
+
+	@Bean(name = Constants.JOB_ID_DEDUP + ":prepareTempDnntStep")
+	public Step prepareTempDnntStep() {
+		return steps.get("prepareTempDnntStep")
+				.listener(new StepProgressListener())
+				.tasklet(prepareTempDnntTasklet())
+				.build();
+	}
+
+	@Bean(name = Constants.JOB_ID_EXPORT_DNNT + ":exportDnntStep")
+	public Step exportDnntStep() throws Exception {
+		return steps.get("exportDnntStep")
+				.listener(new StepProgressListener())
+				.<String, String>chunk(100)//
+				.reader(dnntReader("tmp_dnnt_map")) //
+				.writer(exportDnntWrite(STRING_OVERRIDEN_BY_EXPRESSION)) //
+				.build();
+	}
+
+	@Bean(name = Constants.JOB_ID_EXPORT_DNNT + ":exportDnntProcesor")
+	@StepScope
+	public exportDnntWriter exportDnntWrite(
+			@Value("#{jobParameters["+ Constants.JOB_PARAM_OUT_FILE + "]}") String filename) {
+		return new exportDnntWriter(filename);
+	}
+
+	@StepScope
+	public ItemReader<String> dnntReader(String tablename) throws Exception {
+		JdbcPagingItemReader<String> reader = new JdbcPagingItemReader<>();
+		SqlPagingQueryProviderFactoryBean pqpf = new SqlPagingQueryProviderFactoryBean();
+		pqpf.setDataSource(dataSource);
+		pqpf.setSelectClause("SELECT record_id");
+		pqpf.setFromClause("FROM " + tablename);
+		pqpf.setSortKey("record_id");
+		reader.setRowMapper(new StringValueRowMapper());
+		reader.setPageSize(100);
+		reader.setQueryProvider(pqpf.getObject());
+		reader.setDataSource(dataSource);
+		reader.afterPropertiesSet();
+		return reader;
 	}
 
 }
