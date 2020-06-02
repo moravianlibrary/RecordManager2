@@ -14,6 +14,9 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
+import java.util.List;
+import java.util.ListIterator;
 
 public class KramAvailabilityReader implements ItemReader<KramAvailability> {
 
@@ -23,15 +26,21 @@ public class KramAvailabilityReader implements ItemReader<KramAvailability> {
 	@Autowired
 	private HttpClient httpClient;
 
-	private static Logger logger = LoggerFactory.getLogger(KramAvailabilityReader.class);
+	private static final Logger logger = LoggerFactory.getLogger(KramAvailabilityReader.class);
 
 	private KrameriusConfiguration config = null;
 
-	private Long configId;
+	private final Long configId;
 
 	private KramAvailabilityXmlStreamReader reader;
 
-	private static final String url = "%s/search?fl=dostupnost,dnnt,PID&q=level:0&rows=%d&start=%d&wt=xml";
+	private final List<String> URLS = Arrays.asList(
+			"%s/search?fl=dostupnost,dnnt,PID&q=level:0&rows=%d&start=%d&wt=xml",
+			"%s/search?fl=dostupnost,dnnt,PID&q=level:1+document_type:monographunit&rows=%d&start=%d&wt=xml"
+	);
+
+	private final ListIterator<String> iterator = URLS.listIterator();
+	private String url;
 
 	private String source;
 	private static final int ROWS = 100;
@@ -47,21 +56,32 @@ public class KramAvailabilityReader implements ItemReader<KramAvailability> {
 		if (reader == null || !reader.hasNext()) {
 			initializeReader();
 		}
-		if (reader.hasNext()) {
+		while (reader.hasNext()) {
 			try {
 				result = reader.next();
 				if (result != null) result.setHarvestedFrom(config);
+				// !reader.hasNext() - end of file
+				// result == null - empty file
+				// iterator.hasNext() - exists next url
+				if (!reader.hasNext() && result == null && iterator.hasNext()) {
+					url = iterator.next();
+					start = 0;
+					initializeReader();
+					continue;
+				}
+				return result;
 			} catch (Exception e) {
 				throw new RuntimeException(e);
 			}
 		}
-		return result;
+		return null;
 	}
 
 	protected void initializeReader() throws RuntimeException {
 		if (config == null) {
 			config = configDAO.get(configId);
 			source = config.getAvailabilitySourceUrl();
+			if (iterator.hasNext()) url = iterator.next();
 		}
 		String localUrl = String.format(url, source, ROWS, start++ * ROWS);
 		int error = 0;
