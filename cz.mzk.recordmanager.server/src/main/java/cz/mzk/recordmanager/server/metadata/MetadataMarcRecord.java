@@ -176,7 +176,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 			} catch (NoDataException nde) {
 				continue;
 			} catch (NumberFormatException nfe) {
-				logger.info(String.format("Invalid ISSN: %s", nfe.getMessage()));
+				logger.debug(String.format("Invalid ISSN: %s", nfe.getMessage()));
 				continue;
 			}
 			issn.setOrderInRecord(++issnCounter);
@@ -232,7 +232,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 				Long pages = Long.parseLong(matcher.group(0));
 				maxPages = pages > maxPages ? pages : maxPages;
 			} catch (NumberFormatException e) {
-				logger.info(String.format(INVALID_YEAR, matcher.group(0)));
+				logger.debug(String.format(INVALID_YEAR, matcher.group(0)));
 			}
 		}
 
@@ -255,7 +255,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 			} catch (NoDataException nde) {
 				continue;
 			} catch (NumberFormatException nfe) {
-				logger.info(String.format("Invalid ISBN: %s", nfe.getMessage()));
+				logger.debug(String.format("Invalid ISBN: %s", nfe.getMessage()));
 				continue;
 			}
 			isbn.setOrderInRecord(++isbnCounter);
@@ -288,7 +288,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 				return Long.parseLong(matcher.group(0));
 			}
 		} catch (NumberFormatException e) {
-			logger.info(String.format(INVALID_YEAR, matcher.group(0)));
+			logger.debug(String.format(INVALID_YEAR, matcher.group(0)));
 		}
 		return null;
 	}
@@ -1135,7 +1135,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 			} catch (NoDataException nde) {
 				continue;
 			} catch (NumberFormatException nfe) {
-				logger.info(String.format("Invalid ISMN: %s", nfe.getMessage()));
+				logger.debug(String.format("Invalid ISMN: %s", nfe.getMessage()));
 				continue;
 			}
 			ismn.setOrderInRecord(++ismnCounter);
@@ -1213,7 +1213,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 			} catch (NoDataException nde) {
 				continue;
 			} catch (NumberFormatException nfe) {
-				logger.info(String.format("Invalid EAN: %s", nfe.getMessage()));
+				logger.debug(String.format("Invalid EAN: %s", nfe.getMessage()));
 				continue;
 			}
 			ean.setOrderInRecord(++eanCounter);

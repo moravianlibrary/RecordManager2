@@ -120,7 +120,7 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 			} catch (NoDataException nde) {
 				continue;
 			} catch (NumberFormatException nfe) {
-				logger.info(String.format("Invalid ISBN: %s", rawIsbnStr));
+				logger.debug(String.format("Invalid ISBN: %s", rawIsbnStr));
 				continue;
 			}
 			isbns.add(Isbn.create(isbnLong, ++isbnCounter, ""));
@@ -144,7 +144,7 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 			} catch (NoDataException nde) {
 				continue;
 			} catch (NumberFormatException nfe) {
-				logger.info(String.format("Invalid ISSN: %s", rawIssnStr));
+				logger.debug(String.format("Invalid ISSN: %s", rawIssnStr));
 				continue;
 			}
 			results.add(Issn.create(validIssn, ++issnCounter, ""));
@@ -420,7 +420,7 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 			} catch (NoDataException nde) {
 				continue;
 			} catch (NumberFormatException nfe) {
-				logger.info(String.format("Invalid ISMN: %s", rawIsmnStr));
+				logger.debug(String.format("Invalid ISMN: %s", rawIsmnStr));
 				continue;
 			}
 			results.add(Ismn.create(validIsmnLong, ++ismnCounter, ""));
