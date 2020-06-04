@@ -128,7 +128,7 @@ public abstract class KrameriusHarvesterImpl implements KrameriusHarvester {
 			String range = SolrUtils.createDateRange(params.getFrom(), params.getUntil());
 			query.add("fq", SolrUtils.createFieldQuery("modified_date", range));
 		}
-
+		query.add("wt", "xml");
 		query.setFields(fields);
 		query.setRows((params.getQueryRows() != null) ? params.getQueryRows().intValue() : 10);
 		query.setTimeAllowed(MAX_TIME_ALLOWED);
