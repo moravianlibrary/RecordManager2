@@ -1859,3 +1859,5 @@ INSERT INTO kramerius_conf (import_conf_id,url,url_solr,query_rows,metadata_stre
 INSERT INTO import_conf (id,library_id,contact_person_id,id_prefix,base_weight,cluster_id_enabled,filtering_enabled,interception_enabled,is_library,harvest_frequency,mapping_script,generate_dedup_keys,mapping_dedup_script,item_id) VALUES (99026,133,200,'kram-kkpc',8,false,true,false,true,'U',null,true,null,null);
 INSERT INTO kramerius_conf (import_conf_id,url,url_solr,query_rows,metadata_stream,auth_token,fulltext_harvest_type,download_private_fulltexts,harvest_job_name,collection,availability_source_url,availability_dest_url) VALUES (99026,'http://kramerius.knihovna-pardubice.cz:8089/search/api/v5.0',null,50,'BIBLIO_MODS',null,'solr',true,'krameriusHarvestJob',null,null,'http://kramerius.knihovna-pardubice.cz:8089/search/handle/');
 
+-- 08. 06. 2020 tomascejpek
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (85, 409, 'CLG001');
