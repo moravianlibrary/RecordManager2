@@ -172,6 +172,25 @@ public class MetadataRecordFactory {
 		case Constants.PREFIX_MKZN:
 		case Constants.PREFIX_VFU:
 			return new ClaviusMetadataMarcRecord(marcRec, hr);
+		case Constants.PREFIX_KRAM_CUNI:
+		case Constants.PREFIX_KRAM_CUNIFSV:
+		case Constants.PREFIX_KRAM_CUNILF1:
+		case Constants.PREFIX_KRAM_DIFMOE:
+		case Constants.PREFIX_KRAM_DSMO:
+		case Constants.PREFIX_KRAM_LMDA:
+		case Constants.PREFIX_KRAM_MENDELU:
+		case Constants.PREFIX_KRAM_MJH:
+		case Constants.PREFIX_KRAM_MVCHK:
+		case Constants.PREFIX_KRAM_NACR:
+		case Constants.PREFIX_KRAM_NFA:
+		case Constants.PREFIX_KRAM_NM:
+		case Constants.PREFIX_KRAM_PKJAK:
+		case Constants.PREFIX_KRAM_UPM:
+		case Constants.PREFIX_KRAM_VSE:
+		case Constants.PREFIX_KRAM_VSUP:
+		case Constants.PREFIX_KRAM_VUGTK:
+		case Constants.PREFIX_KRAM_ZCM:
+		case Constants.PREFIX_KRAM_ZMP:
 		case Constants.PREFIX_KRAM_MZK:
 		case Constants.PREFIX_KRAM_KNAV:
 		case Constants.PREFIX_KRAM_NLK:
