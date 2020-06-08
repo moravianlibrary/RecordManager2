@@ -1864,3 +1864,6 @@ INSERT INTO sigla (id, import_conf_id, sigla) VALUES (85, 409, 'CLG001');
 
 -- 08. 06. 2020 tomascejpek
 DELETE FROM sigla WHERE id=54;
+
+-- 08. 06. 2020 tomascejpek
+UPDATE kramerius_conf SET dnnt_dest_url='https://ndk.cz/uuid/' WHERE import_conf_id=99004;
