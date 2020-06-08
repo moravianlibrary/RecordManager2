@@ -1861,3 +1861,6 @@ INSERT INTO kramerius_conf (import_conf_id,url,url_solr,query_rows,metadata_stre
 
 -- 08. 06. 2020 tomascejpek
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (85, 409, 'CLG001');
+
+-- 08. 06. 2020 tomascejpek
+DELETE FROM sigla WHERE id=54;

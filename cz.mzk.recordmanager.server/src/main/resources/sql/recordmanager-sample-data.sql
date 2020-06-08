@@ -542,7 +542,6 @@ INSERT INTO sigla (id, import_conf_id, sigla) VALUES (49, 375, 'OPG503');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (50, 376, 'KLG002');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (51, 377, 'HKG001');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (52, 378, 'PIG501');
-INSERT INTO sigla (id, import_conf_id, sigla) VALUES (54, 380, 'PEG001');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (55, 381, 'PIG001');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (57, 383, 'FMG502');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (58, 384, 'ZNG001');

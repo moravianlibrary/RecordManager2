@@ -2136,3 +2136,6 @@ INSERT INTO kramerius_conf (import_conf_id,url,url_solr,query_rows,metadata_stre
 
 --changeset tomascejpek:199 context:cpk
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (85, 409, 'CLG001');
+
+--changeset tomascejpek:200 context:cpk
+DELETE FROM sigla WHERE id=54;
