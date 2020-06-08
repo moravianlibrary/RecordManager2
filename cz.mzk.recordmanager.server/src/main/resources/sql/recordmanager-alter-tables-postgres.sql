@@ -1830,13 +1830,13 @@ UPDATE kramerius_conf SET availability_source_url='https://kramerius.uzei.cz/sea
 -- 12. 05. 2020 tomascejpek
 UPDATE oai_harvest_conf SET url='https://kmhk.tritius.cz/tritius/oai-provider',set_spec='CPK_1' WHERE import_conf_id=377;
 
--- 22. 02. 2020 tomascejpek
+-- 22. 05. 2020 tomascejpek
 ALTER TABLE kramerius_conf ADD COLUMN availability_harvest_frequency CHAR(1) DEFAULT 'U';
 
 -- 01. 06. 2020 tomascejpek
 ALTER TABLE import_conf ADD COLUMN indexed BOOLEAN DEFAULT TRUE;
 
--- 08. 08. 2020 tomascejpek
+-- 08. 06. 2020 tomascejpek
 ALTER TABLE kramerius_conf ADD COLUMN dnnt_dest_url VARCHAR(128);
 
 -- 08. 06. 2020 tomascejpek
