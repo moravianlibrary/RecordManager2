@@ -65,6 +65,14 @@ public class MiscellaneousFacadeImpl implements MiscellaneousFacade {
 		}
 	}
 
+	@Override
+	public void runZiskejLibraries() {
+		Map<String, JobParameter> parameters = new HashMap<>();
+		parameters.put(Constants.JOB_PARAM_REPEAT, new JobParameter(Constants.JOB_PARAM_ONE_VALUE));
+		parameters.put(Constants.JOB_PARAM_REHARVEST, new JobParameter(Constants.JOB_PARAM_TRUE_VALUE));
+		jobExecutor.execute(Constants.JOB_ID_HARVEST_ZISKEJ_LIBRARIES, new JobParameters(parameters));
+	}
+
 	private LocalDateTime getLastGeneratedSkatKeys(String query, String jobName) {
 		List<Date> lastGenerate = jdbcTemplate.queryForList(query, //
 				ImmutableMap.of("jobName", jobName), Date.class);

@@ -9,6 +9,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import cz.mzk.recordmanager.server.oai.dao.ZiskejLibraryDAO;
 import org.marc4j.marc.DataField;
 import org.marc4j.marc.Subfield;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,9 @@ public class AdresarKnihovenMarcFunctions implements MarcRecordFunctions {
 	@Autowired
 	private ImportConfigurationDAO configurationDAO;
 
+	@Autowired
+	private ZiskejLibraryDAO ziskejLibraryDAO;
+
 	private static final MappingResolver propertyResolver = new ResourceMappingResolver(new ClasspathResourceProvider());
 
 	private static final Pattern FIELD_PATTERN = Pattern.compile("([a-zA-Z0-9]{3})([a-zA-Z0-9]*)");
@@ -42,6 +46,7 @@ public class AdresarKnihovenMarcFunctions implements MarcRecordFunctions {
 	private static final String MAP_LIBRARIES_RELEVANCE = "adresar_relevance.map";
 	private static final String MAP_LIBRARIES_REGION = "adresar_region.map";
 	private static final String PORTAL_FACET_TEXT = "KNIHOVNYCZ_YES";
+	private static final String PORTAL_FACET_ZISKEJ_TEXT = "ZISKEJ_YES";
 	private static final String URL_COMMENT = "o regionálních knihovnách";
 
 	private static final HashMap<String, Long> relevanceBySigla = new HashMap<>();
@@ -316,6 +321,16 @@ public class AdresarKnihovenMarcFunctions implements MarcRecordFunctions {
 			return PORTAL_FACET_TEXT;
 		}
 		return null;
+	}
+
+	public List<String> getPortalFacetMv(MarcFunctionContext ctx) {
+		List<String> result = new ArrayList<>();
+		String siglaName = getFirstFieldForAdresar(ctx, "SGLa");
+		if (siglaName != null && !siglaDao.findSiglaByName(siglaName).isEmpty()) {
+			result.add(PORTAL_FACET_TEXT);
+		}
+		if (ziskejLibraryDAO.getBySigla(siglaName) != null) result.add(PORTAL_FACET_ZISKEJ_TEXT);
+		return result;
 	}
 
 	public List<String> adresarGetRegionDistrictTown(MarcFunctionContext ctx) {

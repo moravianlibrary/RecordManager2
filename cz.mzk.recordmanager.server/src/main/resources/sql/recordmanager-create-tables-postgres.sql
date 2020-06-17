@@ -520,3 +520,11 @@ CREATE TABLE kram_availability (
   CONSTRAINT kram_availability_pk PRIMARY KEY(id),
   FOREIGN KEY (import_conf_id) REFERENCES import_conf(id)
 );
+
+CREATE TABLE ziskej_library (
+  id                SERIAL,
+  sigla             VARCHAR(10) NOT NULL,
+  updated           TIMESTAMP NOT NULL,
+  last_harvest      TIMESTAMP NOT NULL,
+  CONSTRAINT ziskej_libraries_pk PRIMARY KEY(id)
+);

@@ -55,6 +55,7 @@ public class Constants {
 	public static final String JOB_ID_REGENERATE_BL_KEYS 			= "regenerateBiblioLinkerKeysJob";
 	public static final String JOB_ID_REGENERATE_BL_MISSING_KEYS	= "regenerateBiblioLinkerMissingKeysJob";
 	public static final String JOB_ID_HARVEST_KRAM_AVAILABILITY		= "harvestKramAvailabilityJob";
+	public static final String JOB_ID_HARVEST_ZISKEJ_LIBRARIES		= "harvestZiskejLibrariesJob";
 
 	public static final String JOB_PARAM_CONF_ID 		= "configurationId";
 	public static final String JOB_PARAM_FROM_DATE 		= "from";

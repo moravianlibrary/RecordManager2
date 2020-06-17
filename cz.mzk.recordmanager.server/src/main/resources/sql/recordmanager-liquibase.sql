@@ -2142,3 +2142,12 @@ DELETE FROM sigla WHERE id=54;
 
 --changeset tomascejpek:201 context:cpk
 UPDATE kramerius_conf SET dnnt_dest_url='https://ndk.cz/uuid/' WHERE import_conf_id=99004;
+
+--changeset tomascejpek:202
+CREATE TABLE ziskej_library (
+  id                SERIAL,
+  sigla             VARCHAR(10) NOT NULL,
+  updated           TIMESTAMP NOT NULL,
+  last_harvest      TIMESTAMP NOT NULL,
+  CONSTRAINT ziskej_libraries_pk PRIMARY KEY(id)
+);

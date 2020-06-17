@@ -1,3 +1,4 @@
+import cz.mzk.recordmanager.server.facade.MiscellaneousFacade
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,9 @@ public class DailyScript implements Runnable {
 	private ImportRecordFacade importFacade;
 
 	@Autowired
+	private MiscellaneousFacade miscellaneousFacade;
+
+	@Autowired
 	private OAIHarvestConfigurationDAO oaiHarvestConfigurationDAO;
 	
 	@Autowired
@@ -44,6 +48,12 @@ public class DailyScript implements Runnable {
 			importFacade.harvestInspirationsJob();
 		} catch (JobExecutionFailure jfe) {
 			logger.error(String.format("Harvest of inspirations failed"), jfe);
+		}
+
+		try {
+			miscellaneousFacade.runZiskejLibraries();
+		} catch (JobExecutionFailure jfe) {
+			logger.error(String.format("Harvest of Ziskej libraries list failed"), jfe);
 		}
 
 		oaiHarvestConfigurationDAO.findAll().each { conf ->
@@ -64,7 +74,7 @@ public class DailyScript implements Runnable {
 				}
 			}
 		}
-		
+
 		downloadImportConfigurationDAO.findAll().each { conf ->
 			if (conf.harvestFrequency == HarvestFrequency.DAILY) {
 				try {
@@ -74,7 +84,7 @@ public class DailyScript implements Runnable {
 				}
 			}
 		}
-		
+
 		dedupFacade.deduplicate();
 		indexingFacade.index();
 	}

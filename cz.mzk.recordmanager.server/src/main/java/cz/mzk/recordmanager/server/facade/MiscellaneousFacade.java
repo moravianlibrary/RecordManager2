@@ -7,4 +7,5 @@ public interface MiscellaneousFacade {
 
 	void runGenerateSkatDedupKeys();
 
+	void runZiskejLibraries();
 }

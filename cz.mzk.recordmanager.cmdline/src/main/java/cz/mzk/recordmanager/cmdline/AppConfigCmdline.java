@@ -10,6 +10,7 @@ import cz.mzk.recordmanager.server.bibliolinker.keys.RegenerateBiblioLinkerKeysJ
 import cz.mzk.recordmanager.server.imports.kramAvailability.KramAvailabilityJobConfig;
 import cz.mzk.recordmanager.server.imports.obalky.annotations.AnnotationsHarvestJobConfig;
 import cz.mzk.recordmanager.server.miscellaneous.caslin.view.CaslinViewJobsConfig;
+import cz.mzk.recordmanager.server.miscellaneous.ziskej.ZiskejLibrariesJobConfig;
 import org.springframework.batch.core.configuration.support.ApplicationContextFactory;
 import org.springframework.batch.core.configuration.support.GenericApplicationContextFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -102,7 +103,8 @@ public class AppConfigCmdline {
 				AnnotationsHarvestJobConfig.class,
 				BiblioLinkerJobConfig.class,
 				RegenerateBiblioLinkerKeysJobConfig.class,
-				KramAvailabilityJobConfig.class
+				KramAvailabilityJobConfig.class,
+				ZiskejLibrariesJobConfig.class
 			);
 	}
 
