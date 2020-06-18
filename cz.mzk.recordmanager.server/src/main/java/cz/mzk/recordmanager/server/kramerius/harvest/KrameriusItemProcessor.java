@@ -1,6 +1,7 @@
 package cz.mzk.recordmanager.server.kramerius.harvest;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -47,12 +48,16 @@ public class KrameriusItemProcessor implements
 	}
 
 	private HarvestedRecord completeHarvestedRecord(HarvestedRecord hrIncomplete) {
-		String recordId = hrIncomplete.getUniqueId().getRecordId(); 
+		String recordId = hrIncomplete.getUniqueId().getRecordId();
 		HarvestedRecord rec = recordDao.findByIdAndHarvestConfiguration(
 				recordId, configuration);
 		if (rec == null) {
 			rec = hrIncomplete;
 			rec.setHarvestedFrom(configuration);
+		} else if (Arrays.equals(hrIncomplete.getRawRecord(), rec.getRawRecord())) {
+			rec.setDeleted(null);
+			rec.setLastHarvest(new Date());
+			return rec; // no change in record
 		}
 		rec.setFormat(format);
 		rec.setUpdated(new Date());
