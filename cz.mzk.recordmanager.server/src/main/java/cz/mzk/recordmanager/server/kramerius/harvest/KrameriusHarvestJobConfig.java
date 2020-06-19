@@ -3,11 +3,15 @@ package cz.mzk.recordmanager.server.kramerius.harvest;
 import java.util.Date;
 import java.util.List;
 
+import cz.mzk.recordmanager.server.oai.harvest.AfterHarvestTasklet;
+import cz.mzk.recordmanager.server.oai.harvest.ReharvestJobExecutionDecider;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepScope;
+import org.springframework.batch.core.job.flow.FlowExecutionStatus;
+import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -37,11 +41,14 @@ public class KrameriusHarvestJobConfig {
 
 	@Bean
 	public Job krameriusHarvestJob(
-			@Qualifier("krameriusHarvestJob:step") Step step) {
+			@Qualifier("krameriusHarvestJob:step") Step step,
+			@Qualifier("krameriusHarvestJob:afterKrameriusHarvestStep") Step afterKrameriusHarvestStep) {
 		return jobs.get("krameriusHarvestJob") //
 				.validator(new KrameriusHarvestJobParametersValidator()) //
 				.listener(JobFailureListener.INSTANCE) //
 				.flow(step) //
+				.next(ReharvestJobExecutionDecider.INSTANCE).on(ReharvestJobExecutionDecider.REHARVEST_FLOW_STATUS.toString()).to(afterKrameriusHarvestStep) //
+				.from(ReharvestJobExecutionDecider.INSTANCE).on(FlowExecutionStatus.COMPLETED.toString()).end() //
 				.end() //
 				.build();
 	}
@@ -86,6 +93,19 @@ public class KrameriusHarvestJobConfig {
 	@StepScope
 	public KrameriusItemProcessor krameriusItemProcessor() {
 		return new KrameriusItemProcessor();
+	}
+
+	@Bean(name="krameriusHarvestJob:afterKrameriusHarvestStep")
+	public Step afterHarvestStep() {
+		return steps.get("afterKrameriusHarvestStep") //
+				.tasklet(afterHarvestTasklet()) //
+				.build();
+	}
+
+	@Bean(name="krameriusHarvestJob:afterKrameriusHarvestTasklet")
+	@StepScope
+	public Tasklet afterHarvestTasklet() {
+		return new AfterHarvestTasklet();
 	}
 
 }
