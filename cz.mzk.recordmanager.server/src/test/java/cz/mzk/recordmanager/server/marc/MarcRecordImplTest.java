@@ -160,19 +160,19 @@ public class MarcRecordImplTest extends AbstractTest {
 				+ "buchhandels :$bAmtsblatt der Deutschen Bibliothek.$kadasd");
 		mri = MarcRecordFactory.recordFactory(data);
 		metadataRecord = metadataFactory.getMetadataRecord(mri);
-		
+
 		Title expectedTitle1 = new Title();
-		expectedTitle1.setTitleStr("napb");
+		expectedTitle1.setTitleStr("n a p b");
 		expectedTitle1.setOrderInRecord(1L);
 		Title expectedTitle2 = new Title();
-		expectedTitle2.setTitleStr("anbp");
+		expectedTitle2.setTitleStr("a n b p");
 		expectedTitle2.setOrderInRecord(2L);
 		Title expectedTitle3 = new Title();
-		expectedTitle3.setTitleStr("Deutsche Bibliographie.Wöchentliches Verzeichnis."
+		expectedTitle3.setTitleStr("Deutsche Bibliographie. Wöchentliches Verzeichnis. "
 				+ "Reihe B, Beilage, Erscheinungen ausserhalb des Verlags"
 				+ "buchhandels : Amtsblatt der Deutschen Bibliothek.");
 		expectedTitle3.setOrderInRecord(3L);
-		
+
 		List<Title> titles = metadataRecord.getTitle();
 		Assert.assertEquals(3, titles.size());
 		Assert.assertEquals(titles.get(0),expectedTitle1);
@@ -197,15 +197,15 @@ public class MarcRecordImplTest extends AbstractTest {
 		data.add("245 $aa$pp$nn");
 		mri = MarcRecordFactory.recordFactory(data);
 		metadataRecord = metadataFactory.getMetadataRecord(mri);
-		
-		ShortTitle expectedST1 = ShortTitle.create("nap", 1L, false);
-		ShortTitle expectedST2 = ShortTitle.create("anp", 2L, false);
-		
+
+		ShortTitle expectedST1 = ShortTitle.create("n a p", 1L, false);
+		ShortTitle expectedST2 = ShortTitle.create("a n p", 2L, false);
+
 		Assert.assertEquals(2, metadataRecord.getShortTitles().size());
 		Assert.assertEquals(metadataRecord.getShortTitles().get(0),expectedST1);
 		Assert.assertEquals(metadataRecord.getShortTitles().get(1),expectedST2);
 	}
-	
+
 	@Test
 	public void getISSNsTest() throws Exception {
 		MarcRecordImpl mri;
@@ -1007,7 +1007,7 @@ public class MarcRecordImplTest extends AbstractTest {
 		data.add("222 $aTitle3");
 		expected.add(BLTitle.create("Title3"));
 		data.add("130 $aTitle4(text)$nn$pp");
-		expected.add(BLTitle.create("Title4np"));
+		expected.add(BLTitle.create("Title4n p"));
 
 		mri = MarcRecordFactory.recordFactory(data);
 		metadataRecord = metadataFactory.getMetadataRecord(mri);

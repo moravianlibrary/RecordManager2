@@ -1258,10 +1258,8 @@ public class MetadataMarcRecord implements MetadataRecord {
 	private String parseTitleValue(final DataField DF, final char[] SUBFIELDS) {
 		StringBuilder builder = new StringBuilder();
 		for (Subfield subfield : DF.getSubfields()) {
-			if (MetadataUtils.hasTrailingPunctuation(builder.toString())) {
-				builder.append(' ');
-			}
 			if (Chars.contains(SUBFIELDS, subfield.getCode())) {
+				if (builder.length() != 0) builder.append(" ");
 				builder.append(subfield.getData());
 			}
 		}
