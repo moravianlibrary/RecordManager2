@@ -755,7 +755,6 @@ public class MetadataMarcRecord implements MetadataRecord {
 		return MetadataUtils.containsChar(ARRAY_OPR, ldr06)
 				|| (f006_00 == 'o' && f007_00 == 'o')
 				|| OTHER_F336.matcher(f336b).matches()
-				|| f008_33 == 'd'
 				|| f006_00 == 'r'
 				|| (f007_00 == 'z' && f336b.equalsIgnoreCase("zzz"))
 				|| (f337b.equalsIgnoreCase("x") || f337b.equalsIgnoreCase("z"))

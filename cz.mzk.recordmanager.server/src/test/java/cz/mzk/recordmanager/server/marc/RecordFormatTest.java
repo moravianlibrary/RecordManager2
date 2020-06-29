@@ -728,11 +728,6 @@ public class RecordFormatTest extends AbstractTest {
 		}
 
 		data.clear();
-		data.add("008 ---------------------------------d");
-		metadataRecord = metadataFactory.getMetadataRecord(MarcRecordFactory.recordFactory(data));
-		Assert.assertTrue(metadataRecord.getDetectedFormatList().contains(HarvestedRecordFormatEnum.OTHER_OTHER));
-
-		data.clear();
 		data.add("006 r test");
 		metadataRecord = metadataFactory.getMetadataRecord(MarcRecordFactory.recordFactory(data));
 		Assert.assertTrue(metadataRecord.getDetectedFormatList().contains(HarvestedRecordFormatEnum.OTHER_OTHER));
