@@ -4,7 +4,6 @@ import cz.mzk.recordmanager.server.model.ZiskejLibrary;
 import cz.mzk.recordmanager.server.oai.dao.ZiskejLibraryDAO;
 import cz.mzk.recordmanager.server.util.HttpClient;
 import org.apache.commons.io.IOUtils;
-import org.hibernate.SessionFactory;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -34,12 +33,9 @@ public class HarvestZiskejLibrariesTasklet implements Tasklet {
 	private HttpClient httpClient;
 
 	@Autowired
-	private SessionFactory sessionFactory;
-
-	@Autowired
 	private ZiskejLibraryDAO ziskejLibraryDAO;
 
-	private static Logger logger = LoggerFactory.getLogger(HarvestZiskejLibrariesTasklet.class);
+	private static final Logger logger = LoggerFactory.getLogger(HarvestZiskejLibrariesTasklet.class);
 
 	private static final String URL = "https://ziskej.techlib.cz:9080/api/v1/libraries";
 

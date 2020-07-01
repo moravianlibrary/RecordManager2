@@ -10,6 +10,7 @@ import javax.sql.DataSource;
 import cz.mzk.recordmanager.server.imports.obalky.annotations.AnnotationsHarvestJobConfig;
 import cz.mzk.recordmanager.server.marc.ItemIdTest;
 import cz.mzk.recordmanager.server.marc.MarcInterceptionTest;
+import cz.mzk.recordmanager.server.miscellaneous.ziskej.ZiskejLibrariesJobConfig;
 import org.apache.solr.client.solrj.embedded.EmbeddedSolrServer;
 import org.apache.solr.core.CoreContainer;
 import org.easymock.EasyMock;
@@ -130,7 +131,8 @@ public class AppConfigDev {
 				AdresarHarvestJobConfig.class,
 				AnnotationsHarvestJobConfig.class,
 				MarcInterceptionTest.class,
-				ItemIdTest.class
+				ItemIdTest.class,
+				ZiskejLibrariesJobConfig.class
 			);
 	}
 
