@@ -1,11 +1,7 @@
 package cz.mzk.recordmanager.server.export;
 
 import cz.mzk.recordmanager.server.marc.MarcXmlParser;
-import cz.mzk.recordmanager.server.marc.marc4j.DataFieldImpl;
-import cz.mzk.recordmanager.server.metadata.MetadataMarcRecord;
-import cz.mzk.recordmanager.server.metadata.MetadataRecord;
 import cz.mzk.recordmanager.server.metadata.MetadataRecordFactory;
-import cz.mzk.recordmanager.server.model.Cnb;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordDAO;
 import cz.mzk.recordmanager.server.util.CleaningUtils;
@@ -18,7 +14,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.marc4j.marc.DataField;
 import org.marc4j.marc.Record;
 import org.marc4j.marc.Subfield;
-import org.marc4j.marc.VariableField;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.ExitStatus;
@@ -61,8 +56,31 @@ public class exportDnntWriter implements ItemWriter<String>, StepExecutionListen
 		this.fileName = fileName;
 	}
 
+	private Map<String, String> caslin = new HashMap<>();
+
 	@Override
 	public void write(List<? extends String> recordIds) throws Exception {
+		if (caslin.isEmpty()) {
+
+			BufferedReader br = new BufferedReader(new FileReader("/home/tomas/skc"));
+			String line;
+			int i = 0;
+			while ((line = br.readLine()) != null) {
+				try {
+					String id = "SKC01-" + StringUtils.leftPad(line, 9, '0');
+					HarvestedRecord hr = harvestedRecordDao.findByIdAndHarvestConfiguration(id, 316L);
+					if (hr == null) continue;
+					for (DataField df : marcXmlParser.parseRecord(hr).getDataFields("996")) {
+						if (df.getSubfield('e') != null && df.getSubfield('e').getData().equals("BOA001") && df.getSubfield('w') != null) {
+							HarvestedRecord hrMzk = harvestedRecordDao.findByHarvestConfAndRaw001Id(300L, df.getSubfield('w').getData());
+							if (hrMzk == null) continue;
+							caslin.put(hrMzk.getUniqueId().getRecordId(), id);
+						}
+					}
+				} catch (Exception ignore) {
+				}
+			}
+		}
 //		try (BufferedReader br = new BufferedReader(new FileReader("/home/tomas/Downloads/map_2007_ids.csv"))) {
 //			for (String line; (line = br.readLine()) != null; ) {
 		for (String recordId : recordIds) {
@@ -143,7 +161,7 @@ public class exportDnntWriter implements ItemWriter<String>, StepExecutionListen
 						fmt = df.getSubfield('a').getData();
 					}
 				}
-				if (!Arrays.asList("MP").contains(fmt)) continue;
+				if (!Arrays.asList("BK").contains(fmt)) continue;
 				for (HarvestedRecord otherHr : harvestedRecordDao.getByDedupRecordWithDeleted(hr.getDedupRecord())) {
 					if (!Arrays.asList("nkp", "caslin").contains(otherHr.getHarvestedFrom().getIdPrefix()))
 						continue;
@@ -160,6 +178,9 @@ public class exportDnntWriter implements ItemWriter<String>, StepExecutionListen
 					if (otherHr.getHarvestedFrom().getIdPrefix().equals(Constants.PREFIX_CASLIN)) {
 						caslinSysNo = otherHr.getUniqueId().getRecordId().substring(6);
 					}
+				}
+				if (caslinSysNo.isEmpty()) {
+					caslinSysNo = caslin.get(hr.getUniqueId().getRecordId()) == null ? "" : hr.getUniqueId().getRecordId().substring(6);
 				}
 				List<String> isxn = new ArrayList<>();
 				if (!isbns.isEmpty()) isxn.add(String.join("|", isbns));

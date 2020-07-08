@@ -333,7 +333,7 @@ public class ExportRecordsJobConfig {
 		return steps.get("exportDnntStep")
 				.listener(new StepProgressListener())
 				.<String, String>chunk(100)//
-				.reader(dnntReader("tmp_dnnt_map")) //
+				.reader(dnntReader("tmp_dnnt")) //
 				.writer(exportDnntWrite(STRING_OVERRIDEN_BY_EXPRESSION)) //
 				.build();
 	}
@@ -350,9 +350,9 @@ public class ExportRecordsJobConfig {
 		JdbcPagingItemReader<String> reader = new JdbcPagingItemReader<>();
 		SqlPagingQueryProviderFactoryBean pqpf = new SqlPagingQueryProviderFactoryBean();
 		pqpf.setDataSource(dataSource);
-		pqpf.setSelectClause("SELECT record_id");
+		pqpf.setSelectClause("SELECT id");
 		pqpf.setFromClause("FROM " + tablename);
-		pqpf.setSortKey("record_id");
+		pqpf.setSortKey("id");
 		reader.setRowMapper(new StringValueRowMapper());
 		reader.setPageSize(100);
 		reader.setQueryProvider(pqpf.getObject());
