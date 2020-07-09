@@ -350,7 +350,7 @@ public class ExportRecordsJobConfig {
 		JdbcPagingItemReader<String> reader = new JdbcPagingItemReader<>();
 		SqlPagingQueryProviderFactoryBean pqpf = new SqlPagingQueryProviderFactoryBean();
 		pqpf.setDataSource(dataSource);
-		pqpf.setSelectClause("SELECT id");
+		pqpf.setSelectClause("SELECT distinct id");
 		pqpf.setFromClause("FROM " + tablename);
 		pqpf.setSortKey("id");
 		reader.setRowMapper(new StringValueRowMapper());

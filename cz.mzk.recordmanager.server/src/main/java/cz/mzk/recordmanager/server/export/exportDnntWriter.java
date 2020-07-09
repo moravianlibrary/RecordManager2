@@ -11,6 +11,7 @@ import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.apache.commons.csv.QuoteMode;
 import org.apache.commons.lang3.StringUtils;
+import org.marc4j.marc.ControlField;
 import org.marc4j.marc.DataField;
 import org.marc4j.marc.Record;
 import org.marc4j.marc.Subfield;
@@ -96,6 +97,7 @@ public class exportDnntWriter implements ItemWriter<String>, StepExecutionListen
 				List<String> isbns = new ArrayList<>();
 				List<String> issns = new ArrayList<>();
 				String caslinSysNo = "";
+				String local001 = "";
 				String fmt = "";
 				String author = "";
 				String date = "";
@@ -106,6 +108,10 @@ public class exportDnntWriter implements ItemWriter<String>, StepExecutionListen
 				String place264 = "";
 				String publisher264 = "";
 				String publicationYear264 = "";
+				Set<String> uuid = new HashSet<>();
+				for (ControlField cf: rec.getControlFields()) {
+					if (cf.getTag().equals("001")) local001 = cf.getData();
+				}
 				for (DataField df : rec.getDataFields()) {
 					if (df.getTag().equals("015") && df.getSubfield('a') != null) {
 						cnbs.add(df.getSubfield('a').getData());
@@ -160,6 +166,9 @@ public class exportDnntWriter implements ItemWriter<String>, StepExecutionListen
 					if (df.getTag().equals("990") && df.getSubfield('a') != null) {
 						fmt = df.getSubfield('a').getData();
 					}
+					if (df.getTag().equals("856") && df.getSubfield('u') != null && df.getSubfield('u').getData().contains("uuid")) {
+						uuid.add(df.getSubfield('u').getData());
+					}
 				}
 				if (!Arrays.asList("BK").contains(fmt)) continue;
 				for (HarvestedRecord otherHr : harvestedRecordDao.getByDedupRecordWithDeleted(hr.getDedupRecord())) {
@@ -180,15 +189,16 @@ public class exportDnntWriter implements ItemWriter<String>, StepExecutionListen
 					}
 				}
 				if (caslinSysNo.isEmpty()) {
-					caslinSysNo = caslin.get(hr.getUniqueId().getRecordId()) == null ? "" : hr.getUniqueId().getRecordId().substring(6);
+					caslinSysNo = caslin.get(hr.getUniqueId().getRecordId()) == null ? "" : caslin.get(hr.getUniqueId().getRecordId()).substring(6);
 				}
+				if (caslinSysNo.isEmpty()) continue;
 				List<String> isxn = new ArrayList<>();
 				if (!isbns.isEmpty()) isxn.add(String.join("|", isbns));
 				if (!issns.isEmpty()) isxn.add(String.join("|", issns));
-				csvPrinter.printRecord(caslinSysNo, hr.getUniqueId().getRecordId(), fmt, String.join("|", cnbs),
+				csvPrinter.printRecord(caslinSysNo, hr.getUniqueId().getRecordId(), local001, fmt, String.join("|", cnbs),
 						String.join("/", isxn), author, date, title,
 						(place260 + publisher260).isEmpty() ? place264 + publisher264 : place260 + publisher260,
-						publicationYear260.isEmpty() ? publicationYear264 : publicationYear260);
+						publicationYear260.isEmpty() ? publicationYear264 : publicationYear260, String.join("|", uuid));
 			} catch (Exception e) {
 				logger.error("Unable to parse input " + hr.getUniqueId().getRecordId());
 				continue;
@@ -202,8 +212,8 @@ public class exportDnntWriter implements ItemWriter<String>, StepExecutionListen
 		try {
 			BufferedWriter writer = Files.newBufferedWriter(Paths.get(fileName));
 			csvPrinter = new CSVPrinter(writer, CSVFormat.DEFAULT.withDelimiter(';').withQuoteMode(QuoteMode.ALL)
-					.withHeader("sysNoSKC", "sysNo", "FMT", "čČNB", "ISBN/ISSN", "Autor", "ŽivData", "Název", "MístoVyd",
-							"RokVydani"));
+					.withHeader("sysNoSKC", "sysNo", "pole001", "FMT", "čČNB", "ISBN/ISSN", "Autor", "ŽivData", "Název", "MístoVyd",
+							"RokVydani", "UUID"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
