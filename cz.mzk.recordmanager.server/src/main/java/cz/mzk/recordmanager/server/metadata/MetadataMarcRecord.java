@@ -138,6 +138,12 @@ public class MetadataMarcRecord implements MetadataRecord {
 				return Pair.of(Pattern.compile("\\b" + split[0] + "\\b", Pattern.CASE_INSENSITIVE), split[1]);
 			}).collect(Collectors.toList());
 
+	private static final List<HarvestedRecordFormatEnum> FORMAT_ALLOWED = new ArrayList<>();
+
+	static {
+		FORMAT_ALLOWED.add(HarvestedRecordFormatEnum.BOOKS);
+	}
+
 	public MetadataMarcRecord(MarcRecord underlayingMarc) {
 		initRecords(underlayingMarc, null);
 	}
@@ -1764,5 +1770,12 @@ public class MetadataMarcRecord implements MetadataRecord {
 			}
 		}
 		return new ArrayList<>(results);
+	}
+
+	@Override
+	public boolean isZiskej() {
+		return harvestedRecord.getHarvestedFrom().isZiskejEnabled()
+				&& !underlayingMarc.getDataFields("996").isEmpty()
+				&& !Collections.disjoint(getDetectedFormatList(), FORMAT_ALLOWED);
 	}
 }

@@ -1194,4 +1194,77 @@ public class MarcRecordImplTest extends AbstractTest {
 		Assert.assertTrue(expected.containsAll(metadataRecord.getBiblioLinkerLanguages()));
 		Assert.assertEquals(metadataRecord.getBiblioLinkerLanguages().size(), expected.size());
 	}
+
+	@Test
+	public void isZiskejTest() {
+		MarcRecordImpl mri;
+		MetadataRecord metadataRecord;
+		List<String> data = new ArrayList<>();
+
+		HarvestedRecord hr = new HarvestedRecord();
+		OAIHarvestConfiguration conf = new OAIHarvestConfiguration();
+		conf.setZiskejEnabled(true);
+		hr.setHarvestedFrom(conf);
+
+		// book, ziskej true, exists 996
+		data.add("000 000000Ac000");
+		data.add("996 $a996");
+		mri = MarcRecordFactory.recordFactory(data);
+		metadataRecord = metadataFactory.getMetadataRecord(hr, mri);
+		Assert.assertTrue(metadataRecord.isZiskej());
+		data.clear();
+
+		// not book, ziskej true, exists 996
+		data.add("000 000000c0000");
+		data.add("996 $a996");
+		mri = MarcRecordFactory.recordFactory(data);
+		metadataRecord = metadataFactory.getMetadataRecord(hr, mri);
+		Assert.assertFalse(metadataRecord.isZiskej());
+		data.clear();
+
+		// book, ziskej true, no 996
+		data.add("000 000000Ac000");
+		mri = MarcRecordFactory.recordFactory(data);
+		metadataRecord = metadataFactory.getMetadataRecord(hr, mri);
+		Assert.assertFalse(metadataRecord.isZiskej());
+		data.clear();
+
+		// not book, ziskej true, no 996
+		data.add("000 000000c0000");
+		mri = MarcRecordFactory.recordFactory(data);
+		metadataRecord = metadataFactory.getMetadataRecord(hr, mri);
+		Assert.assertFalse(metadataRecord.isZiskej());
+		data.clear();
+
+		conf.setZiskejEnabled(false);
+		// book, ziskej false, exists 996
+		data.add("000 000000Ac000");
+		data.add("996 $a996");
+		mri = MarcRecordFactory.recordFactory(data);
+		metadataRecord = metadataFactory.getMetadataRecord(hr, mri);
+		Assert.assertFalse(metadataRecord.isZiskej());
+		data.clear();
+
+		// not book, ziskej false, exists 996
+		data.add("000 000000c0000");
+		data.add("996 $a996");
+		mri = MarcRecordFactory.recordFactory(data);
+		metadataRecord = metadataFactory.getMetadataRecord(hr, mri);
+		Assert.assertFalse(metadataRecord.isZiskej());
+		data.clear();
+
+		// book, ziskej false, no 996
+		data.add("000 000000Ac000");
+		mri = MarcRecordFactory.recordFactory(data);
+		metadataRecord = metadataFactory.getMetadataRecord(hr, mri);
+		Assert.assertFalse(metadataRecord.isZiskej());
+		data.clear();
+
+		// not book, ziskej false, no 996
+		data.add("000 000000c0000");
+		mri = MarcRecordFactory.recordFactory(data);
+		metadataRecord = metadataFactory.getMetadataRecord(hr, mri);
+		Assert.assertFalse(metadataRecord.isZiskej());
+		data.clear();
+	}
 }

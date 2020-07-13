@@ -148,6 +148,4 @@ public class SolrFieldConstants {
 
 	public static final String VIZ_DUMMY_FIELD = "_hidden_viz_dummy_field";
 
-	public static final String ZISKEJ_BOOLEAN_HIDDEN = "_hidden_ziskej_boolean";
-
 }

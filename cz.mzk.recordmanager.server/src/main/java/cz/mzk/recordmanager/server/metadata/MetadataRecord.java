@@ -514,4 +514,8 @@ public interface MetadataRecord {
 	default List<Uuid> getUuids() {
 		return Collections.emptyList();
 	}
+
+	default boolean isZiskej() {
+		return false;
+	}
 }
