@@ -1,5 +1,6 @@
 package cz.mzk.recordmanager.server.oai.harvest;
 
+import java.text.ParseException;
 import java.util.*;
 
 import org.springframework.batch.core.ExitStatus;
@@ -75,7 +76,11 @@ public class OAIOneByOneItemReader implements ItemReader<List<OAIRecord>>,
 			paramsIdentifiers.setMetadataPrefix(conf.getMetadataPrefix());
 			paramsIdentifiers.setSet(conf.getSet());
 			paramsIdentifiers.setGranularity(conf.getGranularity());
-			paramsIdentifiers.setFrom(fromDate);
+			try {
+				paramsIdentifiers.setFrom(fromDate);
+			} catch (ParseException e) {
+				throw new RuntimeException("Cannot parse 'from' parameter", e);
+			}
 			paramsIdentifiers.setUntil(untilDate);
 			harvesterIdentifiers = harvesterFactory.create(paramsIdentifiers);
 			processIdentify(conf);

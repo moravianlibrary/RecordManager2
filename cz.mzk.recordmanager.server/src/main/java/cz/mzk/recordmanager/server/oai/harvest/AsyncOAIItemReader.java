@@ -1,5 +1,6 @@
 package cz.mzk.recordmanager.server.oai.harvest;
 
+import java.text.ParseException;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -138,7 +139,11 @@ public class AsyncOAIItemReader implements ItemReader<List<OAIRecord>>, ItemStre
 			params.setMetadataPrefix(conf.getMetadataPrefix());
 			params.setGranularity(conf.getGranularity());
 			params.setSet(conf.getSet());
-			params.setFrom(fromDate);
+			try {
+				params.setFrom(fromDate);
+			} catch (ParseException e) {
+				throw new RuntimeException("Cannot parse 'from' parameter", e);
+			}
 			params.setUntil(untilDate);
 			harvester = harvesterFactory.create(params);
 			processIdentify(conf);

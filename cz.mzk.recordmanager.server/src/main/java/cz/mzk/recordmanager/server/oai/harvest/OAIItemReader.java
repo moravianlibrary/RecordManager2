@@ -1,8 +1,13 @@
 package cz.mzk.recordmanager.server.oai.harvest;
 
-import java.util.Date;
-import java.util.List;
-
+import cz.mzk.recordmanager.server.model.OAIGranularity;
+import cz.mzk.recordmanager.server.model.OAIHarvestConfiguration;
+import cz.mzk.recordmanager.server.oai.dao.OAIHarvestConfigurationDAO;
+import cz.mzk.recordmanager.server.oai.model.OAIIdentify;
+import cz.mzk.recordmanager.server.oai.model.OAIListRecords;
+import cz.mzk.recordmanager.server.oai.model.OAIRecord;
+import cz.mzk.recordmanager.server.util.HibernateSessionSynchronizer;
+import cz.mzk.recordmanager.server.util.HibernateSessionSynchronizer.SessionBinder;
 import org.springframework.batch.core.ExitStatus;
 import org.springframework.batch.core.StepExecution;
 import org.springframework.batch.core.StepExecutionListener;
@@ -12,14 +17,9 @@ import org.springframework.batch.item.ItemStream;
 import org.springframework.batch.item.ItemStreamException;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import cz.mzk.recordmanager.server.model.OAIGranularity;
-import cz.mzk.recordmanager.server.model.OAIHarvestConfiguration;
-import cz.mzk.recordmanager.server.oai.dao.OAIHarvestConfigurationDAO;
-import cz.mzk.recordmanager.server.oai.model.OAIIdentify;
-import cz.mzk.recordmanager.server.oai.model.OAIListRecords;
-import cz.mzk.recordmanager.server.oai.model.OAIRecord;
-import cz.mzk.recordmanager.server.util.HibernateSessionSynchronizer;
-import cz.mzk.recordmanager.server.util.HibernateSessionSynchronizer.SessionBinder;
+import java.text.ParseException;
+import java.util.Date;
+import java.util.List;
 
 public class OAIItemReader implements ItemReader<List<OAIRecord>>, ItemStream,
 		StepExecutionListener {
@@ -106,7 +106,11 @@ public class OAIItemReader implements ItemReader<List<OAIRecord>>, ItemStream,
 			params.setMetadataPrefix(conf.getMetadataPrefix());
 			params.setGranularity(conf.getGranularity());
 			params.setSet(conf.getSet());
-			params.setFrom(fromDate);
+			try {
+				params.setFrom(fromDate);
+			} catch (ParseException e) {
+				throw new RuntimeException("Cannot parse 'from' parameter", e);
+			}
 			params.setUntil(untilDate);
 			harvester = harvesterFactory.create(params);
 			processIdentify(conf);
