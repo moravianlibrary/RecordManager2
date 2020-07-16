@@ -15,7 +15,7 @@ public enum ViewType {
 			if (mr.isBlindBraille() || mr.isMusicalScores() || mr.isVisualDocument()) return false;
 			if (importConfId.equals(Constants.IMPORT_CONF_ID_UNMZ) || importConfId.equals(Constants.IMPORT_CONF_ID_UPV))
 				return false;
-			return contains(resolver, String.format(INST_FILE, getValue()), importConfId.toString())
+			return contains(resolver, String.format(INST_INCLUDE_FILE, getValue()), importConfId.toString())
 					|| containsAny(resolver, String.format(CONSPECTUS_FILE, getValue()), conspectus);
 
 		}
@@ -25,7 +25,7 @@ public enum ViewType {
 		protected boolean match(final MetadataRecord mr, ListResolver resolver, Long importConfId,
 								Set<String> siglas, List<String> conspectus) throws IOException {
 			if (mr.isBlindBraille() || mr.isMusicalScores()) return false;
-			return contains(resolver, String.format(INST_FILE, getValue()), importConfId.toString())
+			return contains(resolver, String.format(INST_INCLUDE_FILE, getValue()), importConfId.toString())
 					|| containsAny(resolver, String.format(CONSPECTUS_FILE, getValue()), conspectus);
 		}
 	},
@@ -42,7 +42,7 @@ public enum ViewType {
 		protected boolean match(MetadataRecord mr, ListResolver resolver, Long importConfId,
 								Set<String> siglas, List<String> conspectus) throws IOException {
 			if (importConfId.equals(Constants.IMPORT_CONF_ID_ANL)) return false;
-			return contains(resolver, String.format(INST_FILE, getValue()), importConfId.toString())
+			return contains(resolver, String.format(INST_INCLUDE_FILE, getValue()), importConfId.toString())
 					|| containsAny(resolver, String.format(CONSPECTUS_FILE, getValue()), conspectus);
 		}
 	},
@@ -50,13 +50,21 @@ public enum ViewType {
 		@Override
 		protected boolean match(MetadataRecord mr, ListResolver resolver, Long importConfId,
 								Set<String> siglas, List<String> conspectus) throws IOException {
-			return contains(resolver, String.format(INST_FILE, getValue()), importConfId.toString());
+			return contains(resolver, String.format(INST_INCLUDE_FILE, getValue()), importConfId.toString());
+		}
+	},
+	CPK("cpk") {
+		@Override
+		protected boolean match(MetadataRecord mr, ListResolver resolver, Long importConfId,
+		                        Set<String> siglas, List<String> conspectus) throws IOException {
+			return !contains(resolver, String.format(INST_EXCLUDE_FILE, getValue()), importConfId.toString());
 		}
 	};
 
 	private String value;
 
-	protected static final String INST_FILE = "view/%s.txt";
+	protected static final String INST_INCLUDE_FILE = "view/%s.txt";
+	protected static final String INST_EXCLUDE_FILE = "view/%s_exclude.txt";
 	protected static final String CASLIN_FILE = "view/%s_caslin.txt";
 	protected static final String CONSPECTUS_FILE = "view/%s_conspectus.txt";
 
