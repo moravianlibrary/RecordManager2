@@ -2211,3 +2211,36 @@ INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (99045, 'K
 INSERT INTO import_conf (id,library_id,contact_person_id,id_prefix,base_weight,cluster_id_enabled,filtering_enabled,interception_enabled,is_library,harvest_frequency,mapping_script,generate_dedup_keys,mapping_dedup_script,item_id) VALUES (99045,99045,200,'kram-zmp',8,false,true,false,false,'U',null,true,null,null);
 INSERT INTO kramerius_conf (import_conf_id,url,url_solr,query_rows,metadata_stream,auth_token,fulltext_harvest_type,download_private_fulltexts,harvest_job_name,collection,availability_source_url,availability_dest_url) VALUES (99045,'http://kramerius4.jewishmuseum.cz/search/api/v5.0',null,50,'BIBLIO_MODS',null,'solr',true,'krameriusHarvestJob',null,null,'http://kramerius4.jewishmuseum.cz/search/handle/');
 
+--changeset tomascejpek:204
+CREATE OR REPLACE VIEW reharvest_summary AS
+WITH reharvest_job_stat AS (
+    SELECT
+        bje.job_execution_id,
+        (array_agg(ic.id))[1]  import_conf_id,
+        bje.start_time,
+        bje.status
+    FROM batch_job_instance bji
+        JOIN batch_job_execution bje ON bje.job_instance_id = bji.job_instance_id
+        JOIN batch_job_execution_params conf_id_param ON conf_id_param.job_execution_id = bje.job_execution_id AND conf_id_param.key_name = 'configurationId'
+        LEFT JOIN batch_job_execution_params reharvest_param ON reharvest_param.job_execution_id = bje.job_execution_id AND reharvest_param.key_name = 'reharvest'
+        LEFT JOIN oai_harvest_conf ohc ON ohc.import_conf_id = conf_id_param.long_val
+        LEFT JOIN kramerius_conf kc ON kc.import_conf_id = conf_id_param.long_val
+        JOIN import_conf ic ON ic.id = ohc.import_conf_id OR ic.id = kc.import_conf_id
+    WHERE reharvest_param.string_val='true' and bji.job_name IN ('oaiHarvestJob', 'cosmotronHarvestJob', 'krameriusHarvestJob', 'oaiHarvestOneByOneJob', 'importRecordJob', 'multiImportRecordsJob', 'importOaiRecordsJob')
+    GROUP BY bje.job_execution_id
+), last_reharvest_date AS (
+    SELECT
+        import_conf_id,
+        COALESCE(MAX(CASE WHEN status = 'COMPLETED' THEN start_time END)) last_successful_harvest_date
+    FROM reharvest_job_stat
+    GROUP BY import_conf_id
+)
+SELECT ic.id, l.name, ic.id_prefix, COALESCE(ohc.url, kc.url), ohc.set_spec, lhd.last_successful_harvest_date
+FROM last_reharvest_date lhd
+        JOIN import_conf ic ON ic.id = lhd.import_conf_id
+        LEFT JOIN oai_harvest_conf ohc ON ohc.import_conf_id = ic.id
+        LEFT JOIN kramerius_conf kc ON kc.import_conf_id = ic.id
+        JOIN library l ON l.id = ic.library_id
+WHERE lhd.last_successful_harvest_date IS NOT NULL
+ORDER BY lhd.last_successful_harvest_date DESC
+;
