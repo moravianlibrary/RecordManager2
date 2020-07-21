@@ -14,6 +14,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import cz.mzk.recordmanager.server.metadata.mappings996.Mappings996;
 import org.hibernate.annotations.Parameter;
 import org.hibernate.annotations.Type;
 
@@ -92,6 +93,15 @@ public abstract class ImportConfiguration extends AbstractDomainObject {
 
 	@Column(name = "indexed")
 	private boolean indexed = true;
+
+	@Type(
+			type = "cz.mzk.recordmanager.server.hibernate.StringEnumUserType",
+			parameters = {
+					@Parameter(name = "enumClassName", value = "cz.mzk.recordmanager.server.model.Mappings996Enum"),
+			}
+	)
+	@Column(name = "mappings996")
+	private Mappings996Enum mappings996;
 
 	public Library getLibrary() {
 		return library;
@@ -235,5 +245,13 @@ public abstract class ImportConfiguration extends AbstractDomainObject {
 
 	public void setIndexed(boolean indexed) {
 		this.indexed = indexed;
+	}
+
+	public Mappings996Enum getMappings996() {
+		return mappings996;
+	}
+
+	public void setMappings996(Mappings996Enum mappings996) {
+		this.mappings996= mappings996;
 	}
 }

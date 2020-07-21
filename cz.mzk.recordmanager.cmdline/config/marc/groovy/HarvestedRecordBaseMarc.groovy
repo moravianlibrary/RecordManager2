@@ -61,6 +61,7 @@ semantic_enrichment_txt_mv = getSemanticEnrichment()
 auto_conspectus_txt_mv = getAutoConspectus()
 periodical_availability_int_mv = getPeriodicalAvailability()
 sigla_display = getSigla()
+mappings996_display_mv = getMappings996()
 
 _hidden_isbn_annotation_obalkyknih = getFields "020a:902a"
 
