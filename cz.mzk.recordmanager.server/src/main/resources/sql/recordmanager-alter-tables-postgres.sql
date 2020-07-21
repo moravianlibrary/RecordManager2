@@ -2353,3 +2353,11 @@ INSERT INTO harvested_record_format(id, name) VALUES (74, 'THESIS_OTHER');
 
 -- 23. 08. 2021 tomascejpek
 INSERT INTO harvested_record_format(id, name) VALUES (68, 'BOARD_GAMES');
+
+-- 24. 08. 2020 tomascejpek
+ALTER TABLE import_conf ADD COLUMN mappings996 VARCHAR(20);
+UPDATE import_conf SET mappings996='aleph' WHERE id IN (300,304,307,313,315,321,324,325,326,330,332,333,335,337,361,391);
+UPDATE import_conf SET mappings996='tritius' WHERE id IN (311,312,314,334,346,350,353,356,364,370,371,373,374,375,376,377,378,380,381,383,384,386,388,390,397,398,401,402,409,411);
+UPDATE import_conf SET mappings996='koha' WHERE id IN (306,340);
+UPDATE import_conf SET mappings996='caslin' WHERE id IN (316);
+UPDATE import_conf SET mappings996='dawinci' WHERE id IN (301,369,403,404,405,406,407,408);

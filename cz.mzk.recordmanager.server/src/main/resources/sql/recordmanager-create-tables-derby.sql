@@ -40,6 +40,7 @@ CREATE TABLE import_conf (
   ziskej_enabled       BOOLEAN DEFAULT FALSE,
   generate_biblio_linker_keys BOOLEAN DEFAULT TRUE,
   indexed              BOOLEAN DEFAULT TRUE,
+  mappings996          VARCHAR(20),
   CONSTRAINT import_conf_library_id_fk        FOREIGN KEY (library_id)        REFERENCES library(id),
   CONSTRAINT import_conf_contact_person_id_fk FOREIGN KEY (contact_person_id) REFERENCES contact_person(id)
 );
