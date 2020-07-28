@@ -27,6 +27,9 @@ public class KramAvailability {
 	@Column(name = "dnnt")
 	private boolean dnnt;
 
+	@Column(name = "level")
+	private Integer level;
+
 	@Column(name = "updated")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date updated;
@@ -99,6 +102,14 @@ public class KramAvailability {
 		this.dnnt = dnnt;
 	}
 
+	public Integer getLevel() {
+		return level;
+	}
+
+	public void setLevel(Integer level) {
+		this.level = level;
+	}
+
 	@Override
 	public String toString() {
 		return "KramAvailability{" +
@@ -107,6 +118,7 @@ public class KramAvailability {
 				", uuid='" + uuid + '\'' +
 				", availability='" + availability + '\'' +
 				", dnnt=" + dnnt +
+				", level='" + level + '\'' +
 				", updated=" + updated +
 				", lastHarvest=" + lastHarvest +
 				'}';

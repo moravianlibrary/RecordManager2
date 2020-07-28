@@ -515,6 +515,7 @@ CREATE TABLE kram_availability (
   uuid              VARCHAR(100) NOT NULL,
   availability      VARCHAR(20) NOT NULL,
   dnnt              BOOLEAN DEFAULT FALSE,
+  level             DECIMAL(10),
   updated           TIMESTAMP NOT NULL,
   last_harvest      TIMESTAMP NOT NULL,
   CONSTRAINT kram_availability_pk PRIMARY KEY(id),

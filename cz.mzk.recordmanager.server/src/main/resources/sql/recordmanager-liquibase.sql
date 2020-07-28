@@ -2244,3 +2244,6 @@ FROM last_reharvest_date lhd
 WHERE lhd.last_successful_harvest_date IS NOT NULL
 ORDER BY lhd.last_successful_harvest_date DESC
 ;
+
+--changeset tomascejpek:205
+ALTER TABLE kram_availability ADD level DECIMAL(10);
