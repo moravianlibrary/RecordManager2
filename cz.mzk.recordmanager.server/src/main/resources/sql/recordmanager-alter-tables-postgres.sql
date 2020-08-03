@@ -1972,3 +1972,6 @@ ORDER BY lhd.last_successful_harvest_date DESC
 
 -- 28. 07. 2020 tomascejpek
 ALTER TABLE kram_availability ADD level DECIMAL(10);
+
+-- 03. 08. 2020 tomascejpek
+UPDATE oai_harvest_conf SET url='https://mkkl.tritius.cz/tritius/oai-provider',set_spec='CPK_1' WHERE import_conf_id=376;

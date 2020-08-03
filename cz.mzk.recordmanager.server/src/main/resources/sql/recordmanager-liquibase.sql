@@ -2247,3 +2247,6 @@ ORDER BY lhd.last_successful_harvest_date DESC
 
 --changeset tomascejpek:205
 ALTER TABLE kram_availability ADD level DECIMAL(10);
+
+--changeset tomascejpek:206 context:cpk
+UPDATE oai_harvest_conf SET url='https://mkkl.tritius.cz/tritius/oai-provider',set_spec='CPK_1' WHERE import_conf_id=376;
