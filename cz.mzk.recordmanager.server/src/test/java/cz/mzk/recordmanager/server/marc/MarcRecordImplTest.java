@@ -1206,9 +1206,10 @@ public class MarcRecordImplTest extends AbstractTest {
 		conf.setZiskejEnabled(true);
 		hr.setHarvestedFrom(conf);
 
-		// book, ziskej true, exists 996
+		// book, ziskej true, exists 996, absent
 		data.add("000 000000Ac000");
-		data.add("996 $a996");
+		data.add("996 $a996$sA");
+		data.add("996 $a996$sD");
 		mri = MarcRecordFactory.recordFactory(data);
 		metadataRecord = metadataFactory.getMetadataRecord(hr, mri);
 		Assert.assertTrue(metadataRecord.isZiskej());
@@ -1262,6 +1263,22 @@ public class MarcRecordImplTest extends AbstractTest {
 
 		// not book, ziskej false, no 996
 		data.add("000 000000c0000");
+		mri = MarcRecordFactory.recordFactory(data);
+		metadataRecord = metadataFactory.getMetadataRecord(hr, mri);
+		Assert.assertFalse(metadataRecord.isZiskej());
+		data.clear();
+
+		// book, ziskej true, exists 996, present
+		data.add("000 000000Ac000");
+		data.add("996 $a996$sD");
+		mri = MarcRecordFactory.recordFactory(data);
+		metadataRecord = metadataFactory.getMetadataRecord(hr, mri);
+		Assert.assertFalse(metadataRecord.isZiskej());
+		data.clear();
+
+		// book, ziskej true, exists 996, present (small char p)
+		data.add("000 000000Ac000");
+		data.add("996 $a996$sp");
 		mri = MarcRecordFactory.recordFactory(data);
 		metadataRecord = metadataFactory.getMetadataRecord(hr, mri);
 		Assert.assertFalse(metadataRecord.isZiskej());
