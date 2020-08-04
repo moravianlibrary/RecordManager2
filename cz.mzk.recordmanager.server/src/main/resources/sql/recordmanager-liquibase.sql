@@ -2250,3 +2250,7 @@ ALTER TABLE kram_availability ADD level DECIMAL(10);
 
 --changeset tomascejpek:206 context:cpk
 UPDATE oai_harvest_conf SET url='https://mkkl.tritius.cz/tritius/oai-provider',set_spec='CPK_1' WHERE import_conf_id=376;
+
+--changeset tomascejpek:207 context:cpk
+UPDATE import_conf SET ziskej_enabled=FALSE;
+UPDATE import_conf SET ziskej_enabled=TRUE WHERE id IN (300,301,302,304,307,311,312,314,315,324,330,332,335,343,356,370,383,388);
