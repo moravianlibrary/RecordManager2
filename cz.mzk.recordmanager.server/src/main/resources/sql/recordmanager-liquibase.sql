@@ -2257,3 +2257,6 @@ UPDATE import_conf SET ziskej_enabled=TRUE WHERE id IN (300,301,302,304,307,311,
 
 --changeset tomascejpek:208 context:cpk
 UPDATE oai_harvest_conf SET url='https://koha.knihovnatabor.cz/cgi-bin/koha/oai.pl',set_spec='CPK',metadata_prefix='marccpk',extract_id_regex='TAG001:(.*)' WHERE import_conf_id=311;
+
+--changeset tomascejpek:209 context:cpk
+UPDATE oai_harvest_conf SET url='https://pisek.knihovny.net/l.dll' WHERE import_conf_id=381;
