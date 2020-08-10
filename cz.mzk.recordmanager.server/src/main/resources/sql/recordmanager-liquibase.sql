@@ -2254,3 +2254,6 @@ UPDATE oai_harvest_conf SET url='https://mkkl.tritius.cz/tritius/oai-provider',s
 --changeset tomascejpek:207 context:cpk
 UPDATE import_conf SET ziskej_enabled=FALSE;
 UPDATE import_conf SET ziskej_enabled=TRUE WHERE id IN (300,301,302,304,307,311,312,314,315,324,330,332,335,343,356,370,383,388);
+
+--changeset tomascejpek:208 context:cpk
+UPDATE oai_harvest_conf SET url='https://koha.knihovnatabor.cz/cgi-bin/koha/oai.pl',set_spec='CPK',metadata_prefix='marccpk',extract_id_regex='TAG001:(.*)' WHERE import_conf_id=311;
