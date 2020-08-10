@@ -2260,3 +2260,7 @@ UPDATE oai_harvest_conf SET url='https://koha.knihovnatabor.cz/cgi-bin/koha/oai.
 
 --changeset tomascejpek:209 context:cpk
 UPDATE oai_harvest_conf SET url='https://pisek.knihovny.net/l.dll' WHERE import_conf_id=381;
+
+--changeset tomascejpek:210 context:cpk
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (72, 398, 'KMG001');
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (87, 411, 'NAG502');

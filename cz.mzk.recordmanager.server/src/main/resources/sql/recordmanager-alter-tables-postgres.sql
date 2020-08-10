@@ -1985,3 +1985,7 @@ UPDATE oai_harvest_conf SET url='https://koha.knihovnatabor.cz/cgi-bin/koha/oai.
 
 -- 10. 08. 2020 tomascejpek
 UPDATE oai_harvest_conf SET url='https://pisek.knihovny.net/l.dll' WHERE import_conf_id=381;
+
+-- 10. 08. 2020 tomascejpek
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (72, 398, 'KMG001');
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (87, 411, 'NAG502');
