@@ -165,7 +165,6 @@ public class Constants {
 	public static final String PREFIX_MKKL				= "mkkl";
 	public static final String PREFIX_MKMIL				= "mkmil";
 	public static final String PREFIX_MKML				= "mkml";
-	public static final String PREFIX_MKNB				= "mknb";
 	public static final String PREFIX_MKOR				= "mkor";
 	public static final String PREFIX_MKP				= "mkp";
 	public static final String PREFIX_MKP_EBOOKS		= "mkpe";

@@ -153,22 +153,16 @@ public class MetadataRecordFactory {
 		case Constants.PREFIX_MKP:
 			return new MkpMetadataMarcRecord(marcRec, hr);
 		case Constants.PREFIX_CMUZ:
-		case Constants.PREFIX_KKVY:
-		case Constants.PREFIX_KNEP:
 		case Constants.PREFIX_MKBREC:
 		case Constants.PREFIX_MKCK:
-		case Constants.PREFIX_MKHK:
 		case Constants.PREFIX_MKHNM:
 		case Constants.PREFIX_MKHOD:
-		case Constants.PREFIX_MKKL:
 		case Constants.PREFIX_MKMIL:
 		case Constants.PREFIX_MKML:
-		case Constants.PREFIX_MKNB:
 		case Constants.PREFIX_MKOR:
 		case Constants.PREFIX_MKPEL:
 		case Constants.PREFIX_MKPISEK:
 		case Constants.PREFIX_MKSTER:
-		case Constants.PREFIX_MKTRI:
 		case Constants.PREFIX_MKZN:
 		case Constants.PREFIX_VFU:
 			return new ClaviusMetadataMarcRecord(marcRec, hr);
