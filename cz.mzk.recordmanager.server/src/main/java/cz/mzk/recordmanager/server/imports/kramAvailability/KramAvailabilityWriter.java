@@ -33,6 +33,7 @@ public class KramAvailabilityWriter implements ItemWriter<KramAvailability> {
 				oldItem.setDnnt(newItem.isDnnt());
 				oldItem.setUpdated(new Date());
 			}
+			oldItem.setLevel(newItem.getLevel());
 			oldItem.setLastHarvest(new Date());
 			kramAvailabilityDAO.saveOrUpdate(oldItem);
 		}
