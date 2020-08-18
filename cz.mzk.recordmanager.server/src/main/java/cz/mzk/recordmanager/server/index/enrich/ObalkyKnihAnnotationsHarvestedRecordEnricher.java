@@ -39,7 +39,7 @@ public class ObalkyKnihAnnotationsHarvestedRecordEnricher implements HarvestedRe
 	}
 
 	private List<Long> getIsbns(SolrInputDocument document) {
-		Collection<Object> isbns = document.getFieldValues(SolrFieldConstants.ISBN);
+		Collection<Object> isbns = document.getFieldValues(SolrFieldConstants.ISBN_ANNOTATION_FROM_OBALKYKNIH);
 		if (isbns == null) return Collections.emptyList();
 		List<Long> isbnList = new ArrayList<>();
 		for (Object isbnAsObject : isbns) {
