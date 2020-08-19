@@ -14,6 +14,15 @@ public enum RethrowingSolrIndexingExceptionHandler implements
 	public Action handle(Exception ex,
 			Collection<SolrInputDocument> documents)
 			throws SolrServerException {
+		return rethrow(ex);
+	}
+
+	@Override
+	public Action handle(Exception ex, String query) throws SolrServerException {
+		return rethrow(ex);
+	}
+
+	protected Action rethrow(Exception ex) throws SolrServerException {
 		if (ex instanceof SolrServerException) {
 			throw (SolrServerException) ex;
 		} else {

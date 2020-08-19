@@ -18,7 +18,9 @@ public class FaultTolerantIndexingExceptionHandler implements SolrIndexingExcept
 	private static final List<String> RETRYABLE_ERRORS = Arrays.asList(
 			"Server refused connection",
 			"IOException occured when talking to server",
-			"Java heap space"
+			"Java heap space",
+			"Error from server",
+			"Expected mime type"
 	);
 
 	private static final List<String> SKIPPABLE_ERRORS = Arrays.asList(
@@ -28,7 +30,7 @@ public class FaultTolerantIndexingExceptionHandler implements SolrIndexingExcept
 			"Document contains at least one immense term"
 	);
 
-	private final long failureTimeout = 120_000L;
+	private final long failureTimeout = 300_000L;
 
 	private final long sleepBetweenFailures = 30_000L;
 
@@ -52,6 +54,35 @@ public class FaultTolerantIndexingExceptionHandler implements SolrIndexingExcept
 		} else if (documents.size() > 1 && skippable(ex)) {
 			logger.warn("Fallbacking to index one record at time due to error", ex);
 			return Action.FALLBACK;
+		}
+		long now = System.currentTimeMillis();
+		lastFailureTime.compareAndSet(0L, now);
+		if (retryable(ex)) {
+			long lastFailure = lastFailureTime.get();
+			if (lastFailure != 0 && now - lastFailure > failureTimeout) {
+				rethrow(ex);
+			}
+			try {
+				logger.warn("Retryable exeption thrown, retrying in {} ms", sleepBetweenFailures, ex);
+				Thread.sleep(sleepBetweenFailures);
+				return Action.RETRY;
+			} catch (InterruptedException e) {
+				Thread.currentThread().interrupt();
+			}
+		}
+		return rethrow(ex);
+	}
+
+	@Override
+	public Action handle(Exception ex, String query) throws SolrServerException {
+		if (skippable(ex)) {
+			if (maxSkippableFailures > 0 && skippableFailuresCount >= maxSkippableFailures) {
+				logger.error("Limit {} on number of skipped failures exceeded, failing", maxSkippableFailures);
+				rethrow(ex);
+			}
+			skippableFailuresCount++;
+			logger.warn("About to skip query {} due to error {}", query, ex);
+			return Action.SKIP;
 		}
 		long now = System.currentTimeMillis();
 		lastFailureTime.compareAndSet(0L, now);

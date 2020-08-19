@@ -102,7 +102,16 @@ public class SolrServerFacadeImpl implements SolrServerFacade {
 
 	@Override
 	public void deleteByQuery(String query, int commitWithinMs) throws SolrServerException, IOException {
-		server.deleteByQuery(query, commitWithinMs);
+		boolean carryOn = true;
+		while (carryOn) {
+			try {
+				server.deleteByQuery(query, commitWithinMs);
+				exceptionHandler.ok();
+				carryOn = false;
+			} catch (SolrException | SolrServerException | IOException ex) {
+				carryOn = exceptionHandler.handle(ex, query) == Action.RETRY;
+			}
+		}
 	}
 
 	private void fallbackIndex(Collection<SolrInputDocument> documents, int commitWithinMs) throws SolrServerException {
@@ -124,20 +133,19 @@ public class SolrServerFacadeImpl implements SolrServerFacade {
 	private void indexLazyFulltext(Collection<SolrInputDocument> documents, int commitWithinMs) throws SolrServerException {
 		for (SolrInputDocument document : documents) {
 			boolean carryOn = true;
+			LazyFulltextFieldImpl fulltext = (LazyFulltextFieldImpl) document.getFieldValue(SolrFieldConstants.FULLTEXT_FIELD);
+			document.setField(SolrFieldConstants.FULLTEXT_FIELD, fulltext.getContent());
 			while (carryOn) {
 				try {
-					LazyFulltextFieldImpl fulltext = (LazyFulltextFieldImpl) document.getFieldValue(SolrFieldConstants.FULLTEXT_FIELD);
-					document.setField(SolrFieldConstants.FULLTEXT_FIELD, fulltext.getContent());
 					server.add(document, commitWithinMs);
 					exceptionHandler.ok();
 					carryOn = false;
 				} catch (SolrException | SolrServerException | IOException ex) {
 					carryOn = exceptionHandler.handle(ex, Collections.singletonList(document)) == Action.RETRY;
-				} finally {
-					// to enable garbage collection
-					document.removeField(SolrFieldConstants.FULLTEXT_FIELD);
 				}
 			}
+			// to enable garbage collection
+			document.removeField(SolrFieldConstants.FULLTEXT_FIELD);
 		}
 	}
 

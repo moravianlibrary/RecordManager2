@@ -2,6 +2,7 @@ package cz.mzk.recordmanager.server.solr;
 
 import java.util.Collection;
 
+import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.common.SolrInputDocument;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,6 +21,15 @@ public enum LoggingSolrIndexingExceptionHandler implements SolrIndexingException
 
 		}
 		return Action.FALLBACK; // fallback to index one record at time
+	}
+
+	@Override
+	public Action handle(Exception ex, String query) throws SolrServerException {
+		if (ex instanceof SolrServerException) {
+			throw (SolrServerException) ex;
+		} else {
+			throw new SolrServerException(ex);
+		}
 	}
 
 }

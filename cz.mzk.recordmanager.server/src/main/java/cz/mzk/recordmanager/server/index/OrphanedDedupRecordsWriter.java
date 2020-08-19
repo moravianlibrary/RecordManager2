@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.List;
 
+import cz.mzk.recordmanager.server.solr.FaultTolerantIndexingExceptionHandler;
 import cz.mzk.recordmanager.server.util.ProgressLogger;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.slf4j.Logger;
@@ -47,7 +48,7 @@ public class OrphanedDedupRecordsWriter implements ItemWriter<Long>, StepExecuti
 
 	@Override
 	public void beforeStep(StepExecution stepExecution) {
-		server = factory.create(solrUrl);
+		server = factory.create(solrUrl, null, new FaultTolerantIndexingExceptionHandler());
 		progressLogger = new ProgressLogger(logger, 10000);
 	}
 

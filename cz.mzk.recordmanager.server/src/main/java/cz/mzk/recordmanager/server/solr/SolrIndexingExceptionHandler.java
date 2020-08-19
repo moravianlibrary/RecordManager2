@@ -14,6 +14,8 @@ public interface SolrIndexingExceptionHandler {
 
 	Action handle(Exception ex, Collection<SolrInputDocument> documents) throws SolrServerException;
 
+	Action handle(Exception ex, String query) throws SolrServerException;
+
 	default void ok() {
 	}
 
