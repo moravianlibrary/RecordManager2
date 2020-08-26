@@ -30,8 +30,9 @@ public class KrameriusHarvestJobParametersValidator extends
 				param(Constants.JOB_PARAM_UNTIL_DATE, ParameterType.DATE, false), //
 				param(Constants.JOB_PARAM_START_TIME, ParameterType.DATE, false), //
 				param(Constants.JOB_PARAM_TYPE, ParameterType.STRING, false), //
-				param(Constants.JOB_PARAM_REHARVEST, ParameterType.STRING, false) //
-				);
+				param(Constants.JOB_PARAM_REHARVEST, ParameterType.STRING, false), //
+				param(Constants.JOB_PARAM_IN_FILE, ParameterType.STRING, false) //
+		);
 	}
 
 }

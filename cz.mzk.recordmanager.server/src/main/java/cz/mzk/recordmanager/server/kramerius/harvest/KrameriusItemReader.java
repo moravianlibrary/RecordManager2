@@ -39,14 +39,18 @@ public class KrameriusItemReader implements ItemReader<List<HarvestedRecord>>,
 
 	private Date fromDate;
 	private Date untilDate;
-	private String type;
+	private final KrameriusHarvesterEnum type;
+	private final String inFile;
 
-	public KrameriusItemReader(Long confId, Date fromDate, Date untilDate, String type) {
+	public KrameriusItemReader(Long confId, Date fromDate, Date untilDate, String type, String inFile) {
 		super();
 		this.confId = confId;
 		this.fromDate = fromDate;
 		this.untilDate = untilDate;
-		this.type = type;
+		if (inFile != null) this.type = KrameriusHarvesterEnum.FILE;
+		else if (type == null) this.type = KrameriusHarvesterEnum.EMPTY;
+		else this.type = KrameriusHarvesterEnum.stringToHarvesterEnum(type.toLowerCase());
+		this.inFile = inFile;
 	}
 
 	@Override
@@ -73,7 +77,7 @@ public class KrameriusItemReader implements ItemReader<List<HarvestedRecord>>,
 			params.setFrom(fromDate);
 			params.setUntil(untilDate);
 			params.setCollection(conf.getCollection());
-			kHarvester = harvesterFactory.create(type == null ? "" : type, params, confId);
+			kHarvester = harvesterFactory.create(type, params, confId, inFile);
 		}
 	}
 

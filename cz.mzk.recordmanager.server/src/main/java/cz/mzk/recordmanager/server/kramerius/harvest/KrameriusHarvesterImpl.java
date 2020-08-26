@@ -37,8 +37,19 @@ public abstract class KrameriusHarvesterImpl implements KrameriusHarvester {
 
 	protected SolrServerFactory solrServerFactory;
 
+	protected String inFile;
+
 	protected KrameriusHarvesterImpl(HttpClient httpClient, SolrServerFactory solrServerFactory,
-									 KrameriusHarvesterParams parameters, Long harvestedFrom) {
+			KrameriusHarvesterParams parameters, Long harvestedFrom, String inFile) {
+		this.harvestedFrom = harvestedFrom;
+		this.params = parameters;
+		this.httpClient = httpClient;
+		this.solrServerFactory = solrServerFactory;
+		this.inFile = inFile;
+	}
+
+	protected KrameriusHarvesterImpl(HttpClient httpClient, SolrServerFactory solrServerFactory,
+			KrameriusHarvesterParams parameters, Long harvestedFrom) {
 		this.harvestedFrom = harvestedFrom;
 		this.params = parameters;
 		this.httpClient = httpClient;

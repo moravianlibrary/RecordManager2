@@ -61,6 +61,7 @@ public class KrameriusHarvestJobConfig {
 				.reader(reader(LONG_OVERRIDEN_BY_EXPRESSION,
 						DATE_OVERRIDEN_BY_EXPRESSION,
 						DATE_OVERRIDEN_BY_EXPRESSION,
+						STRING_OVERRIDEN_BY_EXPRESSION,
 						STRING_OVERRIDEN_BY_EXPRESSION)) //
 				.processor(krameriusItemProcessor())
 				.writer(harvestedRecordWriter()) //
@@ -78,8 +79,10 @@ public class KrameriusHarvestJobConfig {
 					+ ']' + "?:jobParameters[" + Constants.JOB_PARAM_UNTIL_DATE
 					+ "]}") Date to,
 			@Value("#{jobParameters["
-					+ Constants.JOB_PARAM_TYPE + "]}") String type) {
-		return new KrameriusItemReader(configId, from, to, type);
+					+ Constants.JOB_PARAM_TYPE + "]}") String type,
+			@Value("#{jobParameters["
+					+ Constants.JOB_PARAM_IN_FILE + "]}") String inFile) {
+		return new KrameriusItemReader(configId, from, to, type, inFile);
 	}
 
 	// HarvestedRecordWriter from cz.mzk.recordmanager.server.oai is used

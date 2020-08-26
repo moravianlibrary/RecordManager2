@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface KrameriusHarvester {
 
-	List<String> getNextUuids() throws SolrServerException;
+	List<String> getNextUuids() throws SolrServerException, IOException;
 
 	List<HarvestedRecord> getRecords(List<String> uuids) throws IOException;
 
