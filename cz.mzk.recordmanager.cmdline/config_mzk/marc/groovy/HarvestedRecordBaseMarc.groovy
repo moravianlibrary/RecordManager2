@@ -44,7 +44,7 @@ series2 = getFields "490a"
 
 publisher = record.getFields("260", 'b' as char) ?: record.getFields("264", { field -> field.getIndicator2() == '1' }, 'b' as char)
 publishDate_display = record.getField("260", 'c' as char) ?: record.getFields("264", { field -> field.getIndicator2() == '1' }, 'c' as char)?.find { true }
-placeOfPublication_txt_mv = record.getFields("260", 'a' as char) ?: record.getFields("264", { field -> field.getIndicator2() == '1' }, 'a' as char)
+placeOfPublication_txt_mv = getMZKPlaceOfPublication()
 publishDate = getPublishDate()
 publishDate_txt_mv = getPublishDate()
 publishDateSort = getPublishDateForSortingForMzk()
