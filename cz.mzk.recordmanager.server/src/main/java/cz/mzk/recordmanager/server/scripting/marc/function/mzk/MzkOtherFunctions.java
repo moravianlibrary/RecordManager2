@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.marc4j.marc.DataField;
 import org.marc4j.marc.Subfield;
@@ -214,14 +213,17 @@ public class MzkOtherFunctions implements MarcRecordFunctions {
 	}
 
 	public List<String> getMZKPlaceOfPublication(MarcFunctionContext ctx) {
+		List<String> results;
 		if (ctx.harvestedRecord().getUniqueId().getRecordId().startsWith("MZK03")
-				&& !ctx.record().getFields("984", 'a').isEmpty()) {
-			return ctx.record().getFields("984", 'a');
+				&& !(results = ctx.record().getFields("984", 'a')).isEmpty()) {
+			return results;
 		}
-		return ObjectUtils.firstNonNull(
-				ctx.record().getFields("260", 'a'),
-				ctx.record().getFields("264", field -> field.getIndicator2() == '1', SubfieldExtractionMethod.SEPARATED, null, 'a')
-		);
+		if (!(results = ctx.record().getFields("260", 'a')).isEmpty()) return results;
+		if (!(results = ctx.record().getFields("264",
+				field -> field.getIndicator2() == '1', SubfieldExtractionMethod.SEPARATED, null, 'a')).isEmpty())
+			return results;
+
+		return null;
 	}
 
 }
