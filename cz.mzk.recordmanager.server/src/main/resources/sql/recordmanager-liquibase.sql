@@ -2264,3 +2264,8 @@ UPDATE oai_harvest_conf SET url='https://pisek.knihovny.net/l.dll' WHERE import_
 --changeset tomascejpek:210 context:cpk
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (72, 398, 'KMG001');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (87, 411, 'NAG502');
+
+--changeset tomascejpek:211 context:cpk
+UPDATE import_conf SET item_id='other' WHERE id=314;
+UPDATE import_conf SET item_id='dawinci' WHERE id in (301,369,403,404,405,406,407,408);
+UPDATE import_conf SET item_id='koha' WHERE id in (306,340);

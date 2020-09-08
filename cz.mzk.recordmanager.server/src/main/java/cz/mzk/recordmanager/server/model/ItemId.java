@@ -22,7 +22,7 @@ public enum ItemId implements StringValueEnum {
 		}
 	},
 
-	TRE("tre") {
+	KOHA("koha") {
 		@Override
 		protected String createSubfield(final DataField df, final String sigla, final String recordId) {
 			String w = df.getSubfield('w') != null ? df.getSubfield('w').getData() : "";
@@ -31,24 +31,12 @@ public enum ItemId implements StringValueEnum {
 		}
 	},
 
-	NLK("nlk") {
+	DAWINCI("dawinci") {
 		@Override
 		protected String createSubfield(final DataField df, final String sigla, final String recordId) {
 			String a = df.getSubfield('a') != null ? df.getSubfield('a').getData() : "";
 			if (a.isEmpty()) return null;
 			return String.format(OTHER_STRING, sigla, a);
-		}
-	},
-
-	SVKUL("svkul") {
-		@Override
-		protected String createSubfield(final DataField df, final String sigla, final String recordId) {
-			String b = df.getSubfield('b') != null ? df.getSubfield('b').getData() : "";
-			if (b.isEmpty()) return null;
-			if (b.startsWith("31480") && b.length() >= 8) {
-				b = b.substring(5);
-			}
-			return String.format(OTHER_STRING, sigla, b);
 		}
 	},
 

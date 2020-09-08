@@ -32,8 +32,8 @@ public class ItemIdTest extends AbstractTest {
 	}
 
 	@Test
-	public void treItemIdTest() {
-		ItemId type = ItemId.TRE;
+	public void kohaItemIdTest() {
+		ItemId type = ItemId.KOHA;
 		String record_id = "80364";
 		String sigla = "UOG505";
 		DataField df = createField996();
@@ -49,8 +49,8 @@ public class ItemIdTest extends AbstractTest {
 	}
 
 	@Test
-	public void nlkItemIdTest() {
-		ItemId type = ItemId.NLK;
+	public void dawinciItemIdTest() {
+		ItemId type = ItemId.DAWINCI;
 		String record_id = "K0174879";
 		String sigla = "ABA008";
 		DataField df = createField996();
@@ -63,30 +63,6 @@ public class ItemIdTest extends AbstractTest {
 		Assert.assertNotNull(sf);
 		Assert.assertEquals(sf.getCode(), 't');
 		Assert.assertEquals(sf.getData(), "ABA008.K0174879");
-	}
-
-	@Test
-	public void svkulItemIdTest() {
-		ItemId type = ItemId.SVKUL;
-		String record_id = "KN3148000000452175";
-		String sigla = "ULG001";
-		DataField df = createField996();
-
-		// empty 996
-		Assert.assertNull(ItemId.getItemIdSubfield(type, df, sigla, record_id));
-
-		df = createField996("b", "269000089320");
-		Subfield sf = ItemId.getItemIdSubfield(type, df, sigla, record_id);
-		Assert.assertNotNull(sf);
-		Assert.assertEquals(sf.getCode(), 't');
-		Assert.assertEquals(sf.getData(), "ULG001.269000089320");
-
-		// $b starts with 31480
-		df = createField996("b", "31480269000089320");
-		sf = ItemId.getItemIdSubfield(type, df, sigla, record_id);
-		Assert.assertNotNull(sf);
-		Assert.assertEquals(sf.getCode(), 't');
-		Assert.assertEquals(sf.getData(), "ULG001.269000089320");
 	}
 
 	@Test
