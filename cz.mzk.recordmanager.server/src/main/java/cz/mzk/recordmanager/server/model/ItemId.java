@@ -34,7 +34,8 @@ public enum ItemId implements StringValueEnum {
 	DAWINCI("dawinci") {
 		@Override
 		protected String createSubfield(final DataField df, final String sigla, final String recordId) {
-			String a = df.getSubfield('a') != null ? df.getSubfield('a').getData() : "";
+			String a = df.getSubfield('a') != null ?
+					CleaningUtils.replaceAll(df.getSubfield('a').getData(), DAWINCI_ESCAPE_SLASH, "%2F") : "";
 			if (a.isEmpty()) return null;
 			return String.format(OTHER_STRING, sigla, a);
 		}
@@ -54,6 +55,7 @@ public enum ItemId implements StringValueEnum {
 	private static final String ALEPH_STRING = "%s.%s.%s";
 	private static final String OTHER_STRING = "%s.%s";
 	private static final Pattern ALEPH_CHAR = Pattern.compile("-");
+	private static final Pattern DAWINCI_ESCAPE_SLASH = Pattern.compile("/");
 	private final String value;
 
 	ItemId(String name) {

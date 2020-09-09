@@ -58,11 +58,11 @@ public class ItemIdTest extends AbstractTest {
 		// empty 996
 		Assert.assertNull(ItemId.getItemIdSubfield(type, df, sigla, record_id));
 
-		df = createField996("a", "K0174879");
+		df = createField996("a", "K0174879/a");
 		Subfield sf = ItemId.getItemIdSubfield(type, df, sigla, record_id);
 		Assert.assertNotNull(sf);
 		Assert.assertEquals(sf.getCode(), 't');
-		Assert.assertEquals(sf.getData(), "ABA008.K0174879");
+		Assert.assertEquals(sf.getData(), "ABA008.K0174879%2Fa");
 	}
 
 	@Test
