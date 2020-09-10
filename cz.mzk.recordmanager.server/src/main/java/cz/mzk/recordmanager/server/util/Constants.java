@@ -253,7 +253,5 @@ public class Constants {
 
 	public static final String JOB_PARAM_RECORD_ID		= "recordId";
 
-	public static final String COSMOTRON_RECORD_ID_CHAR = "_";
-
 	public static final String KRAM_EVERSION_COMMENT = "Digitalizovaný dokument";
 }	

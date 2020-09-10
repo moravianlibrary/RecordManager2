@@ -17,7 +17,7 @@ public class CosmotronUtilsTest extends AbstractTest {
 				"000 01089naa a22003253i 4500",
 				"773 08$wli_us_cat*0637070"
 		));
-		Assert.assertEquals(CosmotronUtils.getParentId(mr), null);
+		Assert.assertNull(CosmotronUtils.getParentId(mr));
 	}
 
 	@Test
@@ -26,16 +26,16 @@ public class CosmotronUtilsTest extends AbstractTest {
 				"000 02259cam a2200409 i 4500",
 				"773 08$wli_us_cat*0637070"
 		));
-		Assert.assertEquals(CosmotronUtils.getParentId(mr), "LiUsCat_0637070");
+		Assert.assertEquals(CosmotronUtils.getParentId(mr), "li_us_cat*0637070");
 
 		mr = MarcRecordFactory.recordFactory(Arrays.asList(
 				"000 02259cam a2200409 i 4500",
 				"773 0 $wli_us_cat*0637070$7nnas"
 		));
-		Assert.assertEquals(CosmotronUtils.getParentId(mr), "LiUsCat_0637070");
+		Assert.assertEquals(CosmotronUtils.getParentId(mr), "li_us_cat*0637070");
 
 		mr = MarcRecordFactory.recordFactory(Collections.singletonList("000 022"));
-		Assert.assertEquals(CosmotronUtils.getParentId(mr), null);
+		Assert.assertNull(CosmotronUtils.getParentId(mr));
 	}
 
 	@Test

@@ -2359,3 +2359,11 @@ UPDATE oai_harvest_conf SET url='https://hodonin.tritius.cz/tritius/oai-provider
 --changeset tomascejpek:230 context:cpk
 UPDATE import_conf SET interception_enabled='true' WHERE id=365;
 
+--changeset tomascejpek:231 context:cpk
+UPDATE oai_harvest_conf set extract_id_regex='s/[^:]+:[^:]+:[^\\/]+\\/([^\\/]+)/kjm_us_cat*$1/' WHERE import_conf_id=303;
+UPDATE oai_harvest_conf set extract_id_regex='s/[^:]+:[^:]+:[^:]+:(.+)/li_us_cat*$1/' WHERE import_conf_id=308;
+UPDATE oai_harvest_conf set extract_id_regex='s/[^:]+:[^:]+:[^\\/]+\\/([^\\/]+)/cbvk_us_cat*$1/' WHERE import_conf_id=328;
+UPDATE oai_harvest_conf set extract_id_regex='s/[^:]+:[^:]+:[^\\/]+\\/([^\\/]+)/kl_us_cat*$1/' WHERE import_conf_id=336;
+UPDATE oai_harvest_conf set extract_id_regex='s/[^:]+:[^:]+:[^\\/]+\\/([^\\/]+)/upol_us_cat*$1/' WHERE import_conf_id=359;
+UPDATE oai_harvest_conf set extract_id_regex='s/[^:]+:[^:]+:[^:]+:(.+)/vy_us_cat*$1/' WHERE import_conf_id=392;
+

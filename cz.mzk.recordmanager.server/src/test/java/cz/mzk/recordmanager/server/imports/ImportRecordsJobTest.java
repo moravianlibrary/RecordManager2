@@ -345,10 +345,10 @@ public class ImportRecordsJobTest extends AbstractTest {
 		jobParams = new JobParameters(params);
 		jobLauncher.run(job, jobParams);
 
-		Assert.assertNotNull(harvestedRecordDao.findByIdAndHarvestConfiguration("LiUsCat_0495991", 300L));
-		Assert.assertNotNull(cosmotron996Dao.findByIdAndHarvestConfiguration("LiUsCat_0002490", 300L));
+		Assert.assertNotNull(harvestedRecordDao.findByIdAndHarvestConfiguration("li_us_cat*0495991", 300L));
+		Assert.assertNotNull(cosmotron996Dao.findByIdAndHarvestConfiguration("li_us_cat*0002490", 300L));
 		// record without parent record is saved
-		Assert.assertNotNull(cosmotron996Dao.findByIdAndHarvestConfiguration("LiUsCat_0002491", 300L));
+		Assert.assertNotNull(cosmotron996Dao.findByIdAndHarvestConfiguration("li_us_cat*0002491", 300L));
 	}
 
 	@Test
