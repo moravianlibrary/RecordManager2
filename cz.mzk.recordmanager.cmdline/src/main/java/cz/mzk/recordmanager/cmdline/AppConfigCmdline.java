@@ -65,6 +65,8 @@ public class AppConfigCmdline {
 		dataSource.setJdbcUrl(url);
 		dataSource.setUser(username);
 		dataSource.setPassword(password);
+		dataSource.setIdleConnectionTestPeriod(30);
+		dataSource.setTestConnectionOnCheckin(true);
 		return dataSource;
 	}
 
