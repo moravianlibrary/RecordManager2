@@ -61,10 +61,6 @@ public class GenerateSkatKeysProcessor implements ItemProcessor<Long, Set<SkatKe
 			}
 			parsedKeys.add(new SkatKey(new SkatKeyCompositeId(hr.getId(), sigla, recordId)));
 		}
-		// ignore records having not enough information
-		if (parsedKeys.size() < 2) {
-			return deleteKeys(hr, Collections.emptySet());
-		}
 		return deleteKeys(hr, parsedKeys);
 	}
 
