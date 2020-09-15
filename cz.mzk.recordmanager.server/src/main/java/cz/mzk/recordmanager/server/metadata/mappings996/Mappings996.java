@@ -33,4 +33,7 @@ public interface Mappings996 {
 	String getSequenceNo(DataField df);
 
 	String getMappingAsCsv(DataField df);
+
+	String getSubfieldW(DataField df);
+
 }

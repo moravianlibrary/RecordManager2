@@ -89,6 +89,11 @@ public class DefaultMappings996 implements Mappings996 {
 	}
 
 	@Override
+	public String getSubfieldW(DataField df) {
+		return df.getSubfield('w') != null ? df.getSubfield('w').getData() : "";
+	}
+
+	@Override
 	public String getMappingAsCsv(DataField df) {
 		StringWriter writer = new StringWriter();
 		CSVPrinter printer;
@@ -107,7 +112,8 @@ public class DefaultMappings996 implements Mappings996 {
 					getAvailability(df),
 					getCollectionDesc(df),
 					getAgencyId(df),
-					getSequenceNo(df)
+					getSequenceNo(df),
+					getSubfieldW(df)
 			);
 			printer.flush();
 			return writer.toString().trim();
