@@ -39,6 +39,7 @@ public class RecordFormatsDedupRecordEnricher implements DedupRecordEnricher {
 			Collection<Object> formats = mergedDocument.getFieldValues(SolrFieldConstants.RECORD_FORMAT);
 			if (formats != null) {
 				mergedDocument.setField(SolrFieldConstants.RECORD_FORMAT, removeComputerCarrier(formats));
+				mergedDocument.setField(SolrFieldConstants.RECORD_FORMAT_FACET, removeComputerCarrier(formats));
 			}
 		}
 	}

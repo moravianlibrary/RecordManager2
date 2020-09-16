@@ -7,9 +7,6 @@ record_format = "marc"
 allfields = getAllFields()
 fullrecord = getFullrecord()
 
-language = translate("mzk_language.map", getLanguages(), null)
-country_str_mv = translate("mzk_country.map", getCountries(), null)
-
 author = getFirstField "100abcd"
 author_exact = getAuthorExact()
 author_fuller = getFields "100q"
@@ -32,7 +29,6 @@ series2 = getFields "490a"
 
 publisher = getPublisher()
 placeOfPublication_txt_mv = getFieldsTrim "260a:264a"
-publishDate = getPublishDate()
 publishDate_int_mv = getPublishDateForTimeline()
 publishDateSort = getPublishDateForSorting()
 
@@ -60,10 +56,6 @@ country_search_txt_mv = ListUtils.union(translate("mzk_country.map", getCountrie
 language_search_txt_mv = ListUtils.union(translate("mzk_language.map", getLanguages(), null), translate("language_cs.map", getLanguages(), null))
 format_search_txt_mv = getFormatForSearching()
 
-source_title_facet_str = getFirstField "773t"
-conspectus_facet_str_mv = getFields "072x"
-publisher_str_mv = getPublisherStrMv()
-author_facet_str_mv = filter("author_facet.txt", getAuthorFacet())
 author_autocomplete = getAuthorAutocomplete("100abcdq:110abc:111acegq:700abcdq:710abc:711acegq:975abcdq:976abc")
 bbox_geo = getBoundingBoxAsPolygon()
 bbox_geo_str = getBoundingBox()
@@ -77,4 +69,12 @@ availability_id_str_mv = getFieldsUnique "996w"
 
 citation_record_type_str = getCitationRecordType();
 author_find = getAuthorFind();
-cpk_detected_format_facet_str_mv = getFormat()
+
+// facets
+author_facet_mv = author_facet_str_mv = filter("author_facet.txt", getAuthorFacet())
+country_facet_mv = country_str_mv = translate("mzk_country.map", getCountries(), null)
+language_facet_mv = language = translate("mzk_language.map", getLanguages(), null)
+publishDate_facet_mv = publishDate = getPublishDate()
+publisher_facet_mv = publisher_str_mv = getPublisherStrMv()
+record_format_facet_mv = cpk_detected_format_facet_str_mv = getFormat()
+source_title_facet = source_title_facet_str = getFirstField "773t"

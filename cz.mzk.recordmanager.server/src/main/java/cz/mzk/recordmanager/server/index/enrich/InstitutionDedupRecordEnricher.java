@@ -13,7 +13,9 @@ public class InstitutionDedupRecordEnricher implements DedupRecordEnricher {
 
 	private final FieldMerger copyField = new FieldMerger(
 			SolrFieldConstants.INSTITUTION_VIEW_FIELD,
-			SolrFieldConstants.LOCAL_REGION_INSTITUTION_FIELD);
+			SolrFieldConstants.LOCAL_INSTITUTION_VIEW_FACET,
+			SolrFieldConstants.LOCAL_REGION_INSTITUTION_FIELD,
+			SolrFieldConstants.LOCAL_REGION_INSTITUTION_FACET);
 
 	@Override
 	public void enrich(DedupRecord record, SolrInputDocument mergedDocument,
@@ -22,6 +24,12 @@ public class InstitutionDedupRecordEnricher implements DedupRecordEnricher {
 		copyField.renameField(mergedDocument,
 				SolrFieldConstants.LOCAL_REGION_INSTITUTION_FIELD,
 				SolrFieldConstants.REGION_INSTITUTION_FIELD);
+		copyField.renameField(mergedDocument,
+				SolrFieldConstants.LOCAL_REGION_INSTITUTION_FACET,
+				SolrFieldConstants.REGION_INSTITUTION_FACET);
+		copyField.renameField(mergedDocument,
+				SolrFieldConstants.LOCAL_INSTITUTION_VIEW_FACET,
+				SolrFieldConstants.INSTITUTION_VIEW_FACET);
 	}
 
 }

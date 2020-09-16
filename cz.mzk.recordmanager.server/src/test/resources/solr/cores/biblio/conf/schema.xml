@@ -286,6 +286,8 @@
    <dynamicField name="*_display_mv"  type="string" indexed="false" stored="true" multiValued="true" />
    <dynamicField name="*_exact" type="exact" indexed="true" stored="true" multiValued="false" />
    <dynamicField name="*_exact_mv" type="exact" indexed="true" stored="true" multiValued="true" />
+   <dynamicField name="*_facet" type="string" indexed="true" stored="true" docValues="true"/>
+   <dynamicField name="*_facet_mv" type="string" indexed="true" stored="true" multiValued="true" docValues="true"/>
  </fields>
  <uniqueKey>id</uniqueKey>
  <defaultSearchField>allfields</defaultSearchField>

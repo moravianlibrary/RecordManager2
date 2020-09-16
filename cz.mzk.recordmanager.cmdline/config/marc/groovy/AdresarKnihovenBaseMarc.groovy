@@ -26,13 +26,12 @@ town_search_txt = getFirstFieldForAdresar "MESa"
 type_search_txt_mv = getFieldsForAdresar "TYPb", SubfieldExtractionMethod.SEPARATED, null
 
 // facets
-function_facet_str_mv = getFieldsForAdresar("FCEa", SubfieldExtractionMethod.SEPARATED, null)
-portal_facet_str = getPortalFacet()
-portal_facet_str_mv = getPortalFacetMv()
-projects_facet_str_mv = getFieldsForAdresar("PRKa", SubfieldExtractionMethod.SEPARATED, null)
-region_disctrict_facet_str_mv = adresarGetRegionDistrictFacet()
-services_facet_str_mv = getFieldsForAdresar("SLUa", SubfieldExtractionMethod.SEPARATED, null)
-type_facet_str_mv = getFieldsForAdresar "TYPb", SubfieldExtractionMethod.SEPARATED, null
+function_facet_mv = function_facet_str_mv = getFieldsForAdresar("FCEa", SubfieldExtractionMethod.SEPARATED, null)
+portal_facet_mv = portal_facet_str_mv = getPortalFacetMv()
+projects_facet_mv = projects_facet_str_mv = getFieldsForAdresar("PRKa", SubfieldExtractionMethod.SEPARATED, null)
+region_disctrict_facet_mv = region_disctrict_facet_str_mv = adresarGetRegionDistrictFacet()
+services_facet_mv = services_facet_str_mv = getFieldsForAdresar("SLUa", SubfieldExtractionMethod.SEPARATED, null)
+type_facet_mv = type_facet_str_mv = getFieldsForAdresar "TYPb", SubfieldExtractionMethod.SEPARATED, null
 
 // morelikethis
 region_disctrict_town_str_mv = adresarGetRegionDistrictTown()

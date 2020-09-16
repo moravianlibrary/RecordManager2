@@ -13,7 +13,8 @@ url = getUrls()
 
 id_authority = getControlField("001")
 
-subject_facet_str_mv = getFields "100abcd"
-
 authorityId_str = getAuthorityId();
 format_display_mv = getFormat()
+
+// facets
+subject_facet_mv = subject_facet_str_mv = getFields "100abcd"

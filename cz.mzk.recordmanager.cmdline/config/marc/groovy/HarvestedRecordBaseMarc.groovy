@@ -26,10 +26,7 @@ nbn_display = getFirstField "015a"
 oclc_display_mv = getOclcs()
 
 url = getUrls()
-local_statuses_facet_str_mv = getStatuses()
-subject_facet_str_mv = getSubject "600abcdfglnpqstyz:610abcdfgklnpstyz:611abcdefgklnpqstyz:630adfgklnpstyz:648a:651avxyz:964abcdefg:967ab"
 subject_str_mv = getSubject "600abcdfglnpqstyz:610abcdfgklnpstyz:611abcefgklpqstyz:630adfgklnpstyz:648a:651avxyz:964abcdefg:967ab"
-genre_facet_str_mv = getGenreFacet "655avxyz"
 
 _hidden_viz_dummy_field = getAuthorityIds "auth.1007:1107:1117:6007:6107:6117:6487:6507:6517:6557:7007:7107:7117|mesh.650a:651a:655a|agrovoc.650a"
 
@@ -39,8 +36,6 @@ loanRelevance = getLoanRelevance();
 
 id001_search = getControlField("001")
 
-conspectus_str_mv = getConspectus();
-
 link773_str = get773link();
 f773_display = get773display();
 id001_str = getControlField("001")
@@ -48,7 +43,6 @@ id001_str = getControlField("001")
 metaproxy_boolean = getMetaproxyBool()
 barcodes = getBarcodes()
 format_display_mv = getFormat()
-local_region_institution_facet_str_mv = getRegionInstitutionFacet()
 _hidden_index_when_merged_boolean = getIndexWhenMerged()
 item_id_txt_mv = getFirstField "996t"
 view_txt_mv = getViewType()
@@ -57,10 +51,17 @@ title_search_txt_mv = toLowerCase(getFields("245abnp"))
 callNumber_search_txt_mv = getFieldsUnique "910b:996ch"
 summary_display_mv = getFields "520a"
 publisher_display_mv = getPublisherLocal()
-institution_view_facet_str_mv = getInstitutionViewFacet()
 monographic_series_txt_mv = getSeriesForSearching()
 monographic_series_display_mv = getSeriesForDisplay()
 ziskej_boolean = getZiskejBool()
 similar_display_mv = getSimilar()
 
 _hidden_isbn_annotation_obalkyknih = getFields "020a:902a"
+
+// facets
+conspectus_facet_mv = conspectus_str_mv = getConspectus();
+genre_facet_mv = genre_facet_str_mv = getGenreFacet "655avxyz"
+local_institution_view_facet_mv = institution_view_facet_str_mv = getInstitutionViewFacet()
+local_region_institution_facet_mv = local_region_institution_facet_str_mv = getRegionInstitutionFacet()
+local_statuses_facet_mv = local_statuses_facet_str_mv = getStatuses()
+subject_facet_mv = subject_facet_str_mv = getSubject "600abcdfglnpqstyz:610abcdfgklnpstyz:611abcdefgklnpqstyz:630adfgklnpstyz:648a:651avxyz:964abcdefg:967ab"

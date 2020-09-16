@@ -4,11 +4,22 @@ public class SolrFieldConstants {
 
 	public static final String ID_FIELD = "id";
 
+	// TODO remove in VF7
 	public static final String LOCAL_REGION_INSTITUTION_FIELD = "local_region_institution_facet_str_mv";
 
+	public static final String LOCAL_REGION_INSTITUTION_FACET = "local_region_institution_facet_mv";
+
+	// TODO remove in VF7
 	public static final String INSTITUTION_VIEW_FIELD = "institution_view_facet_str_mv";
 
+	public static final String LOCAL_INSTITUTION_VIEW_FACET = "local_institution_view_facet_mv";
+
+	public static final String INSTITUTION_VIEW_FACET = "institution_view_facet_mv";
+
+	// TODO remove in VF7
 	public static final String REGION_INSTITUTION_FIELD = "region_institution";
+
+	public static final String REGION_INSTITUTION_FACET = "region_institution_facet_mv";
 
 	public static final String LOCAL_IDS_FIELD = "local_ids_str_mv";
 
@@ -23,8 +34,11 @@ public class SolrFieldConstants {
 	public static final String PARENT_ID = "parent_id_str";
 
 	public static final String UNKNOWN_INSTITUTION = "unknown";
-	
+
+	// TODO remove in VF7
 	public static final String RECORD_FORMAT = "cpk_detected_format_facet_str_mv";
+
+	public static final String RECORD_FORMAT_FACET = "record_format_facet_mv";
 	
 	public static final String RECORD_FORMAT_DISPLAY = "format_display_mv";
 	
@@ -35,8 +49,6 @@ public class SolrFieldConstants {
 	public static final String AUTHOR_SORT_STR = "author_sort_str";
 	
 	public static final String AUTHOR_FIND = "author_find";
-	
-	public static final String AUTHOR_FACET = "author_facet_str_mv";
 	
 	public static final String CORPORATION_VIZ_FIELD = "corporation_viz";
 	
@@ -60,9 +72,10 @@ public class SolrFieldConstants {
 
 	public static final String OCLC_DISPLAY = "oclc_display_mv";
 
+	// TODO possible remove in VF7 from local record
 	public static final String LOCAL_STATUSES_FACET = "local_statuses_facet_str_mv";
 
-	public static final String STATUSES_FACET = "statuses_facet_str_mv";
+	public static final String STATUSES_FACET = "statuses_facet_mv";
 
 	public static final String SFX_LINKS_FIELD = "sfx_links";
 	
@@ -81,8 +94,11 @@ public class SolrFieldConstants {
 	public static final String SUBJECT_KEYWORDS_SEARCH = "subjectKeywords_search_txt_mv";
 	
 	public static final String PEOPLE_SEARCH = "people_search_txt_mv";
-	
-	public static final String SUBJECT_FACET = "subject_facet_str_mv";
+
+	// TODO remove in VF7
+	public static final String SUBJECT_FACET_STR_MV = "subject_facet_str_mv";
+
+	public static final String SUBJECT_FACET = "subject_facet_mv";
 
 	public static final String SUBJECT_STR_MV = "subject_str_mv"; // for autocomplete
 	
@@ -93,7 +109,8 @@ public class SolrFieldConstants {
 	public static final String HEADING = "heading";
 	
 	public static final String USE_FOR = "use_for";
-	
+
+	// TODO remove in VF7
 	public static final String RECORDTYPE = "recordtype";
 
 	public static final String RECORDTYPE_FORMAT = "record_format";
@@ -101,13 +118,19 @@ public class SolrFieldConstants {
 	public static final String TITLE = "title";
 	
 	public static final String BARCODES = "barcodes";
-	
+
+	// TODO remove in VF7
 	public static final String CONSPECTUS_STR_MV = "conspectus_str_mv";
+
+	public static final String CONSPECTUS_FACET = "conspectus_facet_mv";
 	
 	public static final String MERGED_RECORDS = "merged_records_boolean";
-	
-	public static final String GENRE_FACET = "genre_facet_str_mv";
-	
+
+	// TODO remove in VF7
+	public static final String GENRE_FACET_STR_MV = "genre_facet_str_mv";
+
+	public static final String GENRE_FACET = "genre_facet_mv";
+
 	public static final String INDEXING_WHEN_MERGED = "_hidden_index_when_merged_boolean";
 
 	public static final String SFX_SOURCE_TXT = "sfx_source_txt";
