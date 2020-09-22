@@ -2,6 +2,9 @@ recordtype = "authority"
 fullrecord = getFullrecord()
 url = getUrls()
 
+// view
+view_txt_mv = getViewType()
+
 // facets
 local_region_institution_facet_str_mv = getRegionInstitutionFacet()
 subject_facet_str_mv = subject_str_mv = getFields "100abcd"

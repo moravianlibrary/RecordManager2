@@ -2,6 +2,7 @@ package cz.mzk.recordmanager.server.scripting.dc;
 
 import cz.mzk.recordmanager.server.dc.DublinCoreRecord;
 import cz.mzk.recordmanager.server.metadata.MetadataRecord;
+import cz.mzk.recordmanager.server.metadata.view.ViewType;
 import cz.mzk.recordmanager.server.model.Isbn;
 import cz.mzk.recordmanager.server.model.Issn;
 import cz.mzk.recordmanager.server.model.Oclc;
@@ -265,6 +266,14 @@ public class DublinCoreDSL extends BaseDSL {
 
 	public List<String> getLanguages() {
 		return record.getLanguages();
+	}
+
+	/**
+	 * @return {@link Set} of string values of {@link ViewType}
+	 */
+	public Set<String> getViewType() {
+		Long importConfId = dcContext.harvestedRecord().getHarvestedFrom().getId();
+		return new HashSet<>(ViewType.getPossibleValues(dcMetadataRecord, listResolver, importConfId));
 	}
 
 }

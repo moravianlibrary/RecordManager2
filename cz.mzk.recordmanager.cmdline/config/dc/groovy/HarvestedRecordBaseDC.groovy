@@ -24,3 +24,6 @@ oclc_display_mv = getOclcs()
 publishDate_display = getFirstDate()
 publisher_display_mv = getPublishers()
 title_display = getFirstTitle()
+
+// view
+view_txt_mv = getViewType()

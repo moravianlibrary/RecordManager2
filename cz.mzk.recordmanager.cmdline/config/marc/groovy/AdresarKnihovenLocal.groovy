@@ -4,6 +4,9 @@ recordtype = "library"
 fullrecord = getFullrecord()
 library_relevance_str = getLibraryRelevance()
 
+// view
+view_txt_mv = getViewType()
+
 // display
 address_display_mv = adresarGetAddress()
 branch_display_mv = getFieldsForAdresar "POBnamg", SubfieldExtractionMethod.JOINED, " | "
