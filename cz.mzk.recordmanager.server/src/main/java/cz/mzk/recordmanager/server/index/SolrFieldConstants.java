@@ -142,6 +142,8 @@ public class SolrFieldConstants {
 
 	public static final String ZISKEJ_BOOLEAN = "ziskej_boolean";
 
+	public static final String LAST_UPDATE = "last_update_date";
+
 	/**
 	 * dummy fields used for processing purposes only, shouldn't be indexed.
 	 */

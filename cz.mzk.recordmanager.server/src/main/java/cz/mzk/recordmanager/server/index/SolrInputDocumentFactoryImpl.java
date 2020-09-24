@@ -1,14 +1,7 @@
 package cz.mzk.recordmanager.server.index;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.apache.solr.common.SolrInputDocument;
@@ -88,19 +81,20 @@ public class SolrInputDocumentFactoryImpl implements SolrInputDocumentFactory, I
 
 		List<SolrInputDocument> childs = records.stream().map(rec -> create(rec)).collect(Collectors.toCollection(ArrayList::new));
 		SolrUtils.sortByWeight(childs);
-		
+
 		HarvestedRecord record = records.get(0);
 		SolrInputDocument mergedDocument = asSolrDocument(mapper.map(dedupRecord, records));
 		mergedDocument.addField(SolrFieldConstants.ID_FIELD, dedupRecord.getId());
 		mergedDocument.addField(SolrFieldConstants.MERGED_FIELD, 1);
 		mergedDocument.addField(SolrFieldConstants.WEIGHT, record.getWeight());
 		mergedDocument.addField(SolrFieldConstants.LOCAL_IDS_FIELD, getLocalIds(childs));
+		mergedDocument.addField(SolrFieldConstants.LAST_UPDATE, new Date());
 		if(childs.size() > 1) mergedDocument.addField(SolrFieldConstants.MERGED_RECORDS, 1);
 		mergedDocument.addField(SolrFieldConstants.INSPIRATION, getInspirations(records));
-		
+
 		dedupRecordEnrichers.forEach(enricher -> enricher.enrich(dedupRecord, mergedDocument, childs));
 		mergedDocument.addChildDocuments(childs);
-		
+
 		if (logger.isTraceEnabled()) {
 			logger.info("Mapping of dedupRecord with id = {} finished", dedupRecord.getId());
 		}
