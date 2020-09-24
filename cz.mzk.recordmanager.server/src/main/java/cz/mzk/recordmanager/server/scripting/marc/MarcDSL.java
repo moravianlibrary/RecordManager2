@@ -199,10 +199,10 @@ public class MarcDSL extends BaseDSL {
 	public String getSortableTitle() {
 		List<DataField> titleFields = record.getAllFields().get("245");
 		if (titleFields == null || titleFields.isEmpty()) {
-			return "";
+			return null;
 		}
 		DataField titleField = titleFields.get(0);
-		if (titleField == null) return "";
+		if (titleField == null) return null;
 
 		int nonFilingInt = SolrUtils.getInd2AsInt(titleField);
 
@@ -224,7 +224,8 @@ public class MarcDSL extends BaseDSL {
 		title = CleaningUtils.replaceAll(title, TITLE_TO_BLANK, SPACE_SEPARATOR);
 		title = CleaningUtils.replaceAll(title, TITLE_LEAD_SPACE, EMPTY_SEPARATOR);
 		title = CleaningUtils.replaceAll(title, TITLE_PACK_SPACES, SPACE_SEPARATOR);
-		return title.trim();
+		title = title.trim();
+		return title.isEmpty() ? null : title;
 	}
 
 	public String getFullrecord() {
