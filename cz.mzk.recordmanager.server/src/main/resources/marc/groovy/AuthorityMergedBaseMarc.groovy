@@ -29,7 +29,7 @@ series2 = getFields "490a"
 
 publisher = getPublisher()
 placeOfPublication_txt_mv = getFieldsTrim "260a:264a"
-publishDate = getPublishDate()
+publishDate_txt_mv = publishDate = getPublishDate()
 publishDateSort = getPublishDateForSorting()
 
 dateSpan = getFields "362a"

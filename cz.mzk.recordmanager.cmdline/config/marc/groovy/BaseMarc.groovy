@@ -55,6 +55,7 @@ upv_txt_mv = getInternationalPatentClassfication()
 country_search_txt_mv = ListUtils.union(translate("mzk_country.map", getCountries(), null), translate("country_cs.map", getCountries(), null))
 language_search_txt_mv = ListUtils.union(translate("mzk_language.map", getLanguages(), null), translate("language_cs.map", getLanguages(), null))
 format_search_txt_mv = getFormatForSearching()
+publishDate_txt_mv = getPublishDate()
 
 author_autocomplete = getAuthorAutocomplete("100abcdq:110abc:111acegq:700abcdq:710abc:711acegq:975abcdq:976abc")
 bbox_geo = getBoundingBoxAsPolygon()

@@ -16,7 +16,7 @@ issn = getISSNs()
 title = getFirstTitle()
 title_auto_str = getFirstTitle()
 title_alt = getOtherTitles()
-publishDate = getFirstDate()
+publishDate_txt_mv = publishDate = getFirstDate()
 publisher = getPublishers()
 
 topic = getSubjects()
