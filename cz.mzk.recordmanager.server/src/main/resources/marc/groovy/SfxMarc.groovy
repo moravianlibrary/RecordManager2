@@ -11,6 +11,3 @@ embargo_str = getFields "500a"
 publishDate_txt_mv = getPublishDate()
 volume_txt_mv = getFields "996v"
 sfx_url_txt = getSfxUrl()
-
-// view
-view_txt_mv = getViewType()
