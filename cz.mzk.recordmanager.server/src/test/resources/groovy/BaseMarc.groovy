@@ -30,7 +30,7 @@ publisher = getFields "260b"
 publishDate_display = getFirstField "260c"
 placeOfPublication_txt_mv = getFields "260a"
 publishDate = getPublishDate()
-publishDateSort = getPublishDateForSorting()
+publishDate_sort = publishDateSort = getPublishDateForSorting()
 
 physical = getFields "300abcefg:530abcd"
 dateSpan = getFields "362a"

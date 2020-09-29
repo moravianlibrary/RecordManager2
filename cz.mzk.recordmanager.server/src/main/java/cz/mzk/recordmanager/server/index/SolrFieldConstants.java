@@ -46,8 +46,6 @@ public class SolrFieldConstants {
 	
 	public static final String AUTHOR_VIZ_FIELD = "author_viz";
 	
-	public static final String AUTHOR_SORT_STR = "author_sort_str";
-	
 	public static final String AUTHOR_FIND = "author_find";
 	
 	public static final String CORPORATION_VIZ_FIELD = "corporation_viz";

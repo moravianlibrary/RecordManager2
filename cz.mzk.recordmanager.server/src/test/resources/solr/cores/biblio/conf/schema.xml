@@ -153,7 +153,6 @@
    <field name="author" type="textProper" indexed="true" stored="true" termVectors="true" omitNorms="true"/>
    <field name="authorStr" type="textFacet" indexed="true" stored="false"/>
    <field name="title" type="text" indexed="true" stored="true"/>
-   <field name="title_sort" type="string" indexed="true" stored="true"/>
    <field name="title_sub" type="text" indexed="true" stored="true"/>
    <field name="title_short" type="text" indexed="true" stored="true"/>
    <field name="title_full" type="text" indexed="true" stored="true"/>
@@ -288,6 +287,7 @@
    <dynamicField name="*_exact_mv" type="exact" indexed="true" stored="true" multiValued="true" />
    <dynamicField name="*_facet" type="string" indexed="true" stored="true" docValues="true"/>
    <dynamicField name="*_facet_mv" type="string" indexed="true" stored="true" multiValued="true" docValues="true"/>
+   <dynamicField name="*_sort" type="string" indexed="true" stored="true" sortMissingLast="true" />
  </fields>
  <uniqueKey>id</uniqueKey>
  <defaultSearchField>allfields</defaultSearchField>

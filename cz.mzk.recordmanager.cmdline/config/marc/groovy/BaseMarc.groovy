@@ -12,7 +12,6 @@ author_exact = getAuthorExact()
 author_fuller = getFields "100q"
 author2 = getFields "110ab:111ab:700abcd:710ab:711ab"
 author_additional = getFields "505r"
-author_sort_str = getAuthorForSorting()
 
 title = getFirstField "245abnp"
 title_sub = getFirstField "245b"
@@ -22,7 +21,6 @@ title_full = getFirstField "245abdefghijklmnopqrstuvwxyz0123456789"
 title_alt = getFields "130adfgklnpst:240a:246a:730adfgklnpst:740a"
 title_old = getFields "780ast"
 title_new = getFields "785ast"
-title_sort = getSortableTitle()
 title_auto_str = getTitleDisplay()
 series = getFields "440ap:800abcdfpqt:830ap"
 series2 = getFields "490a"
@@ -30,7 +28,6 @@ series2 = getFields "490a"
 publisher = getPublisher()
 placeOfPublication_txt_mv = getFieldsTrim "260a:264a"
 publishDate_int_mv = getPublishDateForTimeline()
-publishDateSort = getPublishDateForSorting()
 
 dateSpan = getFields "362a"
 contents = getFields "505a:505t"
@@ -79,3 +76,8 @@ publishDate_facet_mv = publishDate = getPublishDate()
 publisher_facet_mv = publisher_str_mv = getPublisherStrMv()
 record_format_facet_mv = cpk_detected_format_facet_str_mv = getFormat()
 source_title_facet = source_title_facet_str = getFirstField "773t"
+
+// sort
+author_sort = getAuthorForSorting()
+publishDate_sort = publishDateSort = getPublishDateForSorting()
+title_sort = getSortableTitle()

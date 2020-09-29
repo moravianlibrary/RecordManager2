@@ -14,7 +14,7 @@ author = getFirstField "100abcd"
 author_fuller = getFields "100q"
 author2 = getFields "110ab:111ab:700abcd:710ab:711ab"
 author_additional = getFields "505r"
-author_sort_str = getAuthorForSorting()
+author_sort = getAuthorForSorting()
 
 title = getFirstField "245abnp"
 title_sub = getFirstField "245b"
@@ -32,7 +32,7 @@ series2 = getFields "490a"
 publisher = getPublisher()
 placeOfPublication_txt_mv = getFieldsTrim "260a:264a"
 publishDate_facet_mv = publishDate = getPublishDate()
-publishDateSort = getPublishDateForSorting()
+publishDate_sort = publishDateSort = getPublishDateForSorting()
 
 dateSpan = getFields "362a"
 contents = getFields "505a:505t"

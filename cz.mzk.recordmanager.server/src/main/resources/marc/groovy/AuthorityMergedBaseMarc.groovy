@@ -30,7 +30,7 @@ series2 = getFields "490a"
 publisher = getPublisher()
 placeOfPublication_txt_mv = getFieldsTrim "260a:264a"
 publishDate_txt_mv = publishDate = getPublishDate()
-publishDateSort = getPublishDateForSorting()
+publishDate_sort = publishDateSort = getPublishDateForSorting()
 
 dateSpan = getFields "362a"
 contents = getFields "505a:505t"
