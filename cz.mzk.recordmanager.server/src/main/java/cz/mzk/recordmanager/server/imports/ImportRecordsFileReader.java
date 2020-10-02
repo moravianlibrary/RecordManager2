@@ -116,7 +116,7 @@ public class ImportRecordsFileReader implements ItemReader<List<Record>> {
 
 	private void initializeFilesReader() {
 		try {
-			if(files != null && !files.isEmpty()){
+			if (files != null && !files.isEmpty()) {
 				FileInputStream inStream = new FileInputStream(files.remove(0));
 				reader = getMarcReader(inStream);
 			}
@@ -125,15 +125,14 @@ public class ImportRecordsFileReader implements ItemReader<List<Record>> {
 		}
 	}
 
-	private void getFilesName(String filename) {
+	private void getFilesName(String filename) throws FileNotFoundException {
 		if (files == null) files = new ArrayList<>();
 		File f = new File(filename);
 		if (f.isFile()) {
 			files.add(f.getAbsolutePath());
-		}
-		else {
+		} else {
 			File[] listFiles = f.listFiles();
-			if (listFiles == null) return;
+			if (listFiles == null) throw new FileNotFoundException();
 			for (File file : listFiles) {
 				if (file.isDirectory()) getFilesName(file.getAbsolutePath());
 				else files.add(file.getAbsolutePath());

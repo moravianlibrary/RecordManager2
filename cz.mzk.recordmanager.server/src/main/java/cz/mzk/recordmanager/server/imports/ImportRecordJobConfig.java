@@ -1,5 +1,6 @@
 package cz.mzk.recordmanager.server.imports;
 
+import java.io.FileNotFoundException;
 import java.util.List;
 
 import cz.mzk.recordmanager.server.imports.antikvariaty.AfterImportAntikvariatyTasklet;
@@ -297,7 +298,7 @@ public class ImportRecordJobConfig {
 	@Bean(name = Constants.JOB_ID_IMPORT_OAI + ":asyncImportRecordsReader")
 	@StepScope
 	public AsyncImportOaiRecordsFileReader asyncImportOaiRecordsReader(
-			@Value("#{jobParameters[" + Constants.JOB_PARAM_IN_FILE + "]}") String filename) {
+			@Value("#{jobParameters[" + Constants.JOB_PARAM_IN_FILE + "]}") String filename) throws FileNotFoundException {
 		return new AsyncImportOaiRecordsFileReader(filename);
 	}
 

@@ -29,14 +29,14 @@ public class ImportOaiRecordsFileReader implements ItemReader<List<OAIRecord>> {
 
 	private static final int BATCH_SIZE = 100;
 
-	public ImportOaiRecordsFileReader(String filename) {
+	public ImportOaiRecordsFileReader(String filename) throws FileNotFoundException {
 		try {
 			JAXBContext jaxbContext = JAXBContext.newInstance(OAIRoot.class);
 			this.unmarshaller = jaxbContext.createUnmarshaller();
+			getFilesName(filename);
 		} catch (JAXBException je) {
 			throw new RuntimeException(je);
 		}
-		getFilesName(filename);
 	}
 
 	@Override
@@ -77,14 +77,14 @@ public class ImportOaiRecordsFileReader implements ItemReader<List<OAIRecord>> {
 		return results;
 	}
 
-	private void getFilesName(String filename) {
+	private void getFilesName(String filename) throws FileNotFoundException {
 		if (files == null) files = new ArrayList<>();
 		File f = new File(filename);
 		if (f.isFile()) {
 			files.add(f.getAbsolutePath());
 		} else {
 			File[] listFiles = f.listFiles();
-			if (listFiles == null) return;
+			if (listFiles == null) throw new FileNotFoundException();
 			for (File file : listFiles) {
 				if (file.isDirectory()) getFilesName(file.getAbsolutePath());
 				else files.add(file.getAbsolutePath());
