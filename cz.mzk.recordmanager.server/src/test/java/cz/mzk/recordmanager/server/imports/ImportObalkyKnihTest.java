@@ -61,7 +61,7 @@ public class ImportObalkyKnihTest extends AbstractTest {
 		Assert.assertEquals(tocs.size(), 5);
 		for (ObalkyKnihTOC toc : tocs) {
 			Assert.assertNotNull(toc.getNbn());
-			Assert.assertNotNull(toc.getEan());
+			Assert.assertNotNull(toc.getIsbn());
 		}
 	}
 

@@ -24,14 +24,14 @@ public class ObalkyKnihTocHarvestedRecordEnricher implements HarvestedRecordEnri
 
 	@Override
 	public void enrich(HarvestedRecord record, SolrInputDocument document) {
-		List<String> isbns = getIsbns(document);
+		List<Long> isbns = getIsbns(document);
 		List<String> nbns = getNbns(document, SolrFieldConstants.NBN);
 		List<String> oclcs = getNbns(document, SolrFieldConstants.OCLC_DISPLAY);
 		if (isbns.isEmpty() && nbns.isEmpty()) {
 			return;
 		}
 		ObalkyKnihTOCQuery query = new ObalkyKnihTOCQuery();
-		query.setEans(isbns);
+		query.setIsbns(isbns);
 		query.setNbns(nbns);
 		query.setOclcs(oclcs);
 		for (ObalkyKnihTOC toc : obalkyKnihTOCDao.query(query)) {
@@ -39,14 +39,14 @@ public class ObalkyKnihTocHarvestedRecordEnricher implements HarvestedRecordEnri
 		}
 	}
 
-	private List<String> getIsbns(SolrInputDocument document) {
+	private List<Long> getIsbns(SolrInputDocument document) {
 		Collection<Object> isbns = document.getFieldValues(SolrFieldConstants.ISBN);
 		if (isbns == null) {
 			return Collections.emptyList();
 		}
-		List<String> isbnList = new ArrayList<>();
+		List<Long> isbnList = new ArrayList<>();
 		for (Object isbnAsObject : isbns) {
-			String isbn = ISBNUtils.toISBN13String((String) isbnAsObject);
+			Long isbn = ISBNUtils.toISBN13Long((String) isbnAsObject);
 			if (isbn != null) {
 				isbnList.add(isbn);
 			}

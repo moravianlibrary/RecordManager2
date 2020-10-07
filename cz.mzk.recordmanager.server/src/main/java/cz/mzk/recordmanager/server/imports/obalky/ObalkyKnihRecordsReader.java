@@ -124,12 +124,10 @@ public class ObalkyKnihRecordsReader implements ItemReader<ObalkyKnihTOC> {
 		if (toc.getOclc() != null && toc.getOclc().startsWith(OCLC_PREFIX)) {
 			toc.setOclc(CleaningUtils.replaceAll(toc.getOclc(), OCLC_PREFIX_PATTERN, ""));
 		}
-		if (toc.getIsbnStr() != null) {
-			toc.setIsbn(ISBNUtils.toISBN13Long(toc.getIsbnStr()));
-		}
+		toc.setIsbn(ISBNUtils.toISBN13Long(toc.getEanStr()));
+		if (toc.getIsbn() == null) toc.setEan(MetadataUtils.shorten(toc.getEanStr(), EFFECTIVE_LENGHT));
 		toc.setNbn(MetadataUtils.shorten(toc.getNbn(), EFFECTIVE_LENGHT));
 		toc.setOclc(MetadataUtils.shorten(toc.getOclc(), EFFECTIVE_LENGHT));
-		toc.setEan(MetadataUtils.shorten(toc.getEan(), EFFECTIVE_LENGHT));
 		toc.setLastHarvest(new Date());
 		try {
 			toc.setUpdated(UPDATED_FORMAT.parse(toc.getUpdatedStr()));

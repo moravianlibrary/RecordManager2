@@ -15,25 +15,33 @@ public class ObalkyKnihTOC extends AbstractDomainObject {
 	@Embeddable
 	private static class BibInfo {
 
-		@Column(name="nbn")
-		@XmlElement(name="cnb")
+		@Column(name = "nbn")
+		@XmlElement(name = "cnb")
 		public String nbn;
 
-		@Column(name="oclc")
-		@XmlElement(name="oclc")
+		@Column(name = "oclc")
+		@XmlElement(name = "oclc")
 		public String oclc;
 
-		@Column(name="ean")
-		@XmlElement(name="ean13")
-		public String ean;
-
-		@XmlElement(name="isbn")
+		@XmlElement(name = "ean13")
 		@Transient
-		public String isbnStr;
+		public String eanStr;
 
-		@Column(name="isbn")
+		@Column(name = "isbn")
 		@XmlTransient
 		public Long isbn;
+
+		public String ean;
+
+		@Override
+		public String toString() {
+			return "BibInfo{" +
+					"nbn='" + nbn + '\'' +
+					", oclc='" + oclc + '\'' +
+					", isbn=" + isbn +
+					", ean='" + ean + '\'' +
+					'}';
+		}
 
 	}
 
@@ -104,12 +112,12 @@ public class ObalkyKnihTOC extends AbstractDomainObject {
 		this.bibInfo.isbn = isbn;
 	}
 
-	public String getIsbnStr() {
-		return bibInfo.isbnStr;
+	public String getEanStr() {
+		return bibInfo.eanStr;
 	}
 
-	public void setIsbn(String isbnStr) {
-		this.bibInfo.isbnStr = isbnStr;
+	public void setEanStr(String eanStr) {
+		this.bibInfo.eanStr = eanStr;
 	}
 
 	public String getToc() {
@@ -143,4 +151,21 @@ public class ObalkyKnihTOC extends AbstractDomainObject {
 	public void setLastHarvest(Date lastHarvest) {
 		this.lastHarvest = lastHarvest;
 	}
+
+	public BibInfo getBibInfo() {
+		return bibInfo;
+	}
+
+	public void setBibInfo() {
+		this.bibInfo = new BibInfo();
+	}
+
+	@Override
+	public String toString() {
+		return "ObalkyKnihTOC{" +
+				"bookId=" + bookId +
+				", bibInfo=" + bibInfo +
+				'}';
+	}
+
 }
