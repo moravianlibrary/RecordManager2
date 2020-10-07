@@ -5,7 +5,6 @@ import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.model.ObalkyKnihTOC;
 import cz.mzk.recordmanager.server.oai.dao.*;
 import cz.mzk.recordmanager.server.util.CleaningUtils;
-import cz.mzk.recordmanager.server.util.MetadataUtils;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,6 +46,8 @@ public class ObalkyKnihRecordsWriter implements ItemWriter<ObalkyKnihTOC> {
 	private static final Pattern RN = Pattern.compile("\\\\[nr]");
 	private static final Pattern WHITE_SPACES = Pattern.compile("\\s+");
 	private static final Pattern DOT = Pattern.compile("\\.{3,}");
+	private static final Pattern DOUBLE_QUOTES = Pattern.compile("\\\\\"");
+	private static final Pattern SINGLE_QUOTES = Pattern.compile("\\\\'");
 
 	@Override
 	public void write(List<? extends ObalkyKnihTOC> items) throws Exception {
@@ -102,6 +103,8 @@ public class ObalkyKnihRecordsWriter implements ItemWriter<ObalkyKnihTOC> {
 		text = CleaningUtils.replaceAll(text, RN, " ");
 		text = CleaningUtils.replaceAll(text, WHITE_SPACES, " ");
 		text = CleaningUtils.replaceAll(text, DOT, "...");
+		text = CleaningUtils.replaceAll(text, DOUBLE_QUOTES, "\"");
+		text = CleaningUtils.replaceAll(text, SINGLE_QUOTES, "'");
 		text = text.trim();
 		return text;
 	}

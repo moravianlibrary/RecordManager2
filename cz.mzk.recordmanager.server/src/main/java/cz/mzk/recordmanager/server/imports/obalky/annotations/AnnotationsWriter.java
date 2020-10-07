@@ -22,6 +22,8 @@ public class AnnotationsWriter extends AnnotationsAbstract implements ItemWriter
 	private static final Pattern RN = Pattern.compile("\\\\[nr]");
 	private static final Pattern WHITE_SPACES = Pattern.compile("\\s+");
 	private static final Pattern HTML = Pattern.compile("<[^>]+>");
+	private static final Pattern DOUBLE_QUOTES = Pattern.compile("\\\\\"");
+	private static final Pattern SINGLE_QUOTES = Pattern.compile("\\\\'");
 
 	@Override
 	public void write(List<? extends ObalkyKnihAnnotation> items) throws Exception {
@@ -53,6 +55,8 @@ public class AnnotationsWriter extends AnnotationsAbstract implements ItemWriter
 		text = CleaningUtils.replaceAll(text, RN, " ");
 		text = CleaningUtils.replaceAll(text, HTML, " ");
 		text = CleaningUtils.replaceAll(text, WHITE_SPACES, " ");
+		text = CleaningUtils.replaceAll(text, DOUBLE_QUOTES, "\"");
+		text = CleaningUtils.replaceAll(text, SINGLE_QUOTES, "'");
 		text = text.trim();
 		return text;
 	}
