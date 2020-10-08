@@ -118,6 +118,7 @@ CREATE TABLE download_import_conf (
   format               VARCHAR(128),
   import_job_name      VARCHAR(128),
   extract_id_regex     VARCHAR(128),
+  reharvest            BOOLEAN DEFAULT FALSE,
   CONSTRAINT download_conf_import_conf_fk FOREIGN KEY (import_conf_id) REFERENCES import_conf(id)
 );
 

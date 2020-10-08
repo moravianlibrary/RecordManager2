@@ -2272,3 +2272,9 @@ UPDATE import_conf SET item_id='koha' WHERE id in (306,340);
 
 --changeset tomascejpek:212 context:cpk
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (77, 402, 'PNG001');
+
+--changeset tomascejpek:213
+ALTER TABLE download_import_conf ADD COLUMN reharvest BOOLEAN DEFAULT FALSE;
+
+--changeset tomascejpek:214 context:cpk
+UPDATE download_import_conf SET reharvest=TRUE WHERE import_conf_id IN (341,1305,1306,1307,1308,1309,1310,1311,1312,1314,1315,1318,1322,1326);

@@ -17,13 +17,16 @@ public class DownloadImportConfiguration extends ImportConfiguration {
 
 	@Column(name="format")
 	private String format;
-	
+
 	@Column(name="import_job_name")
 	private String jobName;
-	
+
 	@Column(name="extract_id_regex")
 	private String regex;
-	
+
+	@Column(name = "reharvest")
+	private boolean reharvest;
+
 	public String getRegex() {
 		return regex;
 	}
@@ -51,8 +54,17 @@ public class DownloadImportConfiguration extends ImportConfiguration {
 	public String getUrl() {
 		return url;
 	}
-	
+
 	public void setUrl(String url) {
 		this.url = url;
 	}
+
+	public boolean isReharvest() {
+		return reharvest;
+	}
+
+	public void setReharvest(boolean reharvest) {
+		this.reharvest = reharvest;
+	}
+
 }

@@ -77,6 +77,8 @@ public class ImportRecordFacadeImpl implements ImportRecordFacade {
 		Map<String, JobParameter> parameters = new HashMap<>();
 		parameters.put(Constants.JOB_PARAM_CONF_ID, new JobParameter(dic.getId()));
 		parameters.put(Constants.JOB_PARAM_REPEAT, new JobParameter(Constants.JOB_PARAM_ONE_VALUE));
+		if (dic.isReharvest())
+			parameters.put(Constants.JOB_PARAM_REHARVEST, new JobParameter(Constants.JOB_PARAM_TRUE_VALUE));
 		JobParameters params = new JobParameters(parameters);
 		JobExecution exec = jobExecutor.execute(dic.getJobName(), params);
 		if (!ExitStatus.COMPLETED.equals(exec.getExitStatus())) {
