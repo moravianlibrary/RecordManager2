@@ -60,4 +60,7 @@ public class Mapping {
 		return string;
 	}
 
+	public Map<String, List<String>> getMapping() {
+		return mapping;
+	}
 }

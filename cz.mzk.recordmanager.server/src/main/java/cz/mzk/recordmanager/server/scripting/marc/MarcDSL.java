@@ -14,6 +14,7 @@ import cz.mzk.recordmanager.server.scripting.StopWordsResolver;
 import cz.mzk.recordmanager.server.scripting.function.RecordFunction;
 import cz.mzk.recordmanager.server.util.CleaningUtils;
 import cz.mzk.recordmanager.server.util.Constants;
+import cz.mzk.recordmanager.server.util.SiglaMapping;
 import cz.mzk.recordmanager.server.util.SolrUtils;
 import cz.mzk.recordmanager.server.util.identifier.ISBNUtils;
 import cz.mzk.recordmanager.server.util.identifier.ISSNUtils;
@@ -841,10 +842,15 @@ public class MarcDSL extends BaseDSL {
 						results.addAll(IntStream.rangeClosed(Integer.parseInt(matcher.group(1)),
 								Integer.parseInt(matcher.group(2))).boxed().collect(Collectors.toSet()));
 					}
-
 				}
 			}
 		}
 		return results;
+	}
+
+	public String getSigla() {
+		String sigla;
+		if ((sigla = getFirstField("910a")) != null) return sigla;
+		return SiglaMapping.getSigla(context.harvestedRecord().getHarvestedFrom());
 	}
 }

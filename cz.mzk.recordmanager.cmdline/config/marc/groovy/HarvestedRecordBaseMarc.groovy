@@ -61,6 +61,6 @@ monographic_series_display_mv = getSeriesForDisplay()
 ziskej_boolean = getZiskejBool()
 similar_display_mv = getSimilar()
 periodical_availability_int_mv = getPeriodicalAvailability()
-sigla_display = getFirstField "910a"
+sigla_display = getSigla()
 
 _hidden_isbn_annotation_obalkyknih = getFields "020a:902a"
