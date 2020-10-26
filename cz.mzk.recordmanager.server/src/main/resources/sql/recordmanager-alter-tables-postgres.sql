@@ -2001,3 +2001,9 @@ INSERT INTO sigla (id, import_conf_id, sigla) VALUES (77, 402, 'PNG001');
 -- 08. 10. 2020 tomascejpek
 ALTER TABLE download_import_conf ADD COLUMN reharvest BOOLEAN DEFAULT FALSE;
 UPDATE download_import_conf SET reharvest=TRUE WHERE import_conf_id IN (341,1305,1306,1307,1308,1309,1310,1311,1312,1314,1315,1318,1322,1326);
+
+-- 26. 10. 2020 tomascejpek
+INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (218, 'MKMT', 'https://www.mkmt.cz/', 'https://katalog.mkmt.cz/', 'Moravská Třebová', 'PA');
+INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id) VALUES (418, 218, 200, 'mkmt', 11, false, true, true, true, 'U', 'koha');
+INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity,extract_id_regex) VALUES (418,'https://koha.mkmt.cz/cgi-bin/koha/oai.pl','CPK','marccpk',NULL,'SVG503:(.*)');
+
