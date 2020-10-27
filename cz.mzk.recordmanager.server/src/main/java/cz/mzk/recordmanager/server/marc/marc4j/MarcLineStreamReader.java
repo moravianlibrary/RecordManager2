@@ -15,7 +15,8 @@ public class MarcLineStreamReader implements MarcReader {
 
 	private BufferedReader br;
 
-	private MarcFactory factory;
+	private static final MarcFactory factory = MarcFactoryImpl.newInstance();
+	;
 
 	private static final Pattern DATA_SPLITTER = Pattern.compile("\\$+");
 	private static final Pattern LINE_SPLITTER = Pattern.compile("\n");
@@ -32,7 +33,6 @@ public class MarcLineStreamReader implements MarcReader {
 	 * Constructs an instance with the specified input stream.
 	 */
 	public MarcLineStreamReader(InputStream input, String encoding) {
-		factory = MarcFactoryImpl.newInstance();
 		br = new BufferedReader(new InputStreamReader(
 				new DataInputStream((input.markSupported()) ? input
 						: new BufferedInputStream(input))));
@@ -77,7 +77,7 @@ public class MarcLineStreamReader implements MarcReader {
 	}
 
 	private void parseLine(Record record, String strRecord) {
-		String arrayRec[] = LINE_SPLITTER.split(strRecord);
+		String[] arrayRec = LINE_SPLITTER.split(strRecord);
 		for (String line : arrayRec) {
 			String tag = line.substring(0, 3);
 			Matcher matcher = LDR_PATTERN.matcher(line);
@@ -99,8 +99,8 @@ public class MarcLineStreamReader implements MarcReader {
 		}
 	}
 
-	private DataField parseDataField(DataField df, String data) {
-		String a[] = DATA_SPLITTER.split(data);
+	public static DataField parseDataField(DataField df, String data) {
+		String[] a = DATA_SPLITTER.split(data);
 		for (String sbstr : Arrays.copyOfRange(a, 1, a.length)) {
 			df.addSubfield(factory.newSubfield(sbstr.charAt(0), sbstr.substring(1)));
 		}

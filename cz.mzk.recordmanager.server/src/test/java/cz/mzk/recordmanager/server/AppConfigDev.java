@@ -10,6 +10,9 @@ import javax.sql.DataSource;
 import cz.mzk.recordmanager.server.imports.obalky.annotations.AnnotationsHarvestJobConfig;
 import cz.mzk.recordmanager.server.marc.ItemIdTest;
 import cz.mzk.recordmanager.server.marc.MarcInterceptionTest;
+import cz.mzk.recordmanager.server.miscellaneous.fit.classifier.ClassifierJobConfig;
+import cz.mzk.recordmanager.server.miscellaneous.fit.fulltextAnalyser.FulltextAnalyserJobConfig;
+import cz.mzk.recordmanager.server.miscellaneous.fit.semanticEnrichment.SemanticEnrichmentJobConfig;
 import cz.mzk.recordmanager.server.miscellaneous.ziskej.ZiskejLibrariesJobConfig;
 import org.apache.solr.client.solrj.embedded.EmbeddedSolrServer;
 import org.apache.solr.core.CoreContainer;
@@ -132,7 +135,10 @@ public class AppConfigDev {
 				AnnotationsHarvestJobConfig.class,
 				MarcInterceptionTest.class,
 				ItemIdTest.class,
-				ZiskejLibrariesJobConfig.class
+				ZiskejLibrariesJobConfig.class,
+				FulltextAnalyserJobConfig.class,
+				SemanticEnrichmentJobConfig.class,
+				ClassifierJobConfig.class
 			);
 	}
 

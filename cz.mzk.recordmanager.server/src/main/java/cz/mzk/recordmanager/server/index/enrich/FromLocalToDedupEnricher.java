@@ -15,7 +15,10 @@ public class FromLocalToDedupEnricher implements DedupRecordEnricher {
 			SolrFieldConstants.TITLE_SEARCH_TXT_MV,
 			SolrFieldConstants.CALLNUMBER_SEARCH_TXT_MV,
 			SolrFieldConstants.OBALKY_ANNOTATION,
-			SolrFieldConstants.STATUSES_FACET
+			SolrFieldConstants.STATUSES_FACET,
+			SolrFieldConstants.FULLTEXT_ANALYSER,
+			SolrFieldConstants.SEMANTIC_ENRICHMENT,
+			SolrFieldConstants.AUTO_CONSPECTUS
 	);
 
 	private final FieldMerger merge = new FieldMerger(

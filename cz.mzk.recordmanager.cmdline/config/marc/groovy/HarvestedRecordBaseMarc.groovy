@@ -60,5 +60,8 @@ monographic_series_txt_mv = getSeriesForSearching()
 monographic_series_display_mv = getSeriesForDisplay()
 ziskej_boolean = getZiskejBool()
 similar_display_mv = getSimilar()
+fulltext_analyser_txt_mv = getFulltextAnalyser()
+semantic_enrichment_txt_mv = getSemanticEnrichment()
+auto_conspectus_txt_mv = getAutoConspectus()
 
 _hidden_isbn_annotation_obalkyknih = getFields "020a:902a"

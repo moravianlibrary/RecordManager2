@@ -2291,3 +2291,33 @@ INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granul
 
 --changeset tomascejpek:217 context:cpk
 UPDATE import_conf SET item_id='koha' WHERE id=311;
+
+--changeset tomascejpek:218
+CREATE TABLE fit_project (
+  id                   DECIMAL(10) PRIMARY KEY,
+  name                 VARCHAR(50) UNIQUE
+);
+CREATE TABLE fit_knowledge_base (
+  id                   DECIMAL(10) PRIMARY KEY,
+  data                 TEXT
+);
+CREATE TABLE fit_project_link (
+  id                     SERIAL,
+  harvested_record_id    DECIMAL(10),
+  fit_project_id         DECIMAL(10),
+  fit_knowledge_base_id  DECIMAL(10),
+  data                   TEXT,
+  CONSTRAINT fit_projects_pk PRIMARY KEY(id),
+  FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE,
+  FOREIGN KEY (fit_project_id) REFERENCES fit_project(id) ON DELETE CASCADE,
+  FOREIGN KEY (fit_knowledge_base_id) REFERENCES fit_knowledge_base(id) ON DELETE CASCADE
+);
+CREATE INDEX fit_projects_knowledge_base_idx ON fit_project_link(fit_knowledge_base_id);
+CREATE INDEX fit_project_link_harvested_record_idx ON fit_project_link(harvested_record_id);
+CREATE INDEX fit_project_link_idx ON fit_project_link(fit_project_id);
+
+--changeset tomascejpek:219 context:cpk
+INSERT INTO fit_project VALUES (1,'FULLTEXT_ANALYSER');
+INSERT INTO fit_project VALUES (2,'SEMANTIC_ENRICHMENT');
+INSERT INTO fit_project VALUES (3,'CLASSIFIER');
+
