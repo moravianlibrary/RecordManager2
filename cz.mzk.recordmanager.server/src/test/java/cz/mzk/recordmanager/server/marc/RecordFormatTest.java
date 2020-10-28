@@ -128,15 +128,6 @@ public class RecordFormatTest extends AbstractTest {
 		Assert.assertEquals(metadataRecord.getDetectedFormatList().get(0), HarvestedRecordFormatEnum.MUSICAL_SCORES);
 
 		data.clear();
-		data.add("000 00000000000");
-		data.add("006 C test");
-		data.add("245 $htest hudebnina test");
-		metadataRecord = metadataFactory.getMetadataRecord(MarcRecordFactory.recordFactory(data));
-		Assert.assertEquals(metadataRecord.getDetectedFormatList().get(0), HarvestedRecordFormatEnum.MUSICAL_SCORES);
-
-		data.clear();
-		data.add("000 00000000000");
-		data.add("006 d test");
 		data.add("245 $htest hudebnina test");
 		metadataRecord = metadataFactory.getMetadataRecord(MarcRecordFactory.recordFactory(data));
 		Assert.assertEquals(metadataRecord.getDetectedFormatList().get(0), HarvestedRecordFormatEnum.MUSICAL_SCORES);

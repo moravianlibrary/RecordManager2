@@ -381,9 +381,6 @@ public class MetadataMarcRecord implements MetadataRecord {
 	public boolean isMusicalScores() {
 		char ldr06 = getLeaderChar(underlayingMarc.getLeader().getTypeOfRecord());
 
-		String f006 = underlayingMarc.getControlField("006");
-		char f006_00 = (f006 != null) && (!f006.isEmpty()) ? Character.toLowerCase(f006.charAt(0)) : ' ';
-
 		String f245h = underlayingMarc.getField("245", 'h');
 		if (f245h == null) f245h = "";
 
@@ -391,7 +388,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 		if (f336b == null) f336b = "";
 
 		return MetadataUtils.containsChar(ARRAY_CD, ldr06)
-				|| (MetadataUtils.containsChar(ARRAY_CD, f006_00) && HUDEBNINA.matcher(f245h).find())
+				|| HUDEBNINA.matcher(f245h).find()
 				|| f336b.equalsIgnoreCase("tcm")
 				|| f336b.equalsIgnoreCase("ntm")
 				|| f336b.equalsIgnoreCase("ntv")
