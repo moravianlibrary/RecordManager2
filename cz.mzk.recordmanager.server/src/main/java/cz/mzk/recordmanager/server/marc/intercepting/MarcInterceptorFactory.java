@@ -40,7 +40,7 @@ public class MarcInterceptorFactory {
 			case Constants.PREFIX_BMC: return new BmcMarcInterceptor(record);
 			case Constants.PREFIX_TDKIV: return new TdkivMarcInterceptor(record);
 			case Constants.PREFIX_CELITEBIB : return new CelitebibMarcInterceptor(record);
-			case Constants.PREFIX_KKKV : return new KkkvMarcInterceptor(record);
+			case Constants.PREFIX_KKKV : return new KkkvMarcInterceptor(record, configuration, recordId);
 			case Constants.PREFIX_IIR: return new IirMarcInterceptor(record, configuration, recordId);
 			default: return new DefaultMarcInterceptor(record, configuration, recordId);
 			}

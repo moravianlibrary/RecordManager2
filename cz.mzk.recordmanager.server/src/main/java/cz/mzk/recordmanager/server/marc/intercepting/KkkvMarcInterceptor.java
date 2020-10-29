@@ -3,6 +3,7 @@ package cz.mzk.recordmanager.server.marc.intercepting;
 import cz.mzk.recordmanager.server.export.IOFormat;
 import cz.mzk.recordmanager.server.marc.MarcRecordImpl;
 import cz.mzk.recordmanager.server.marc.marc4j.RecordImpl;
+import cz.mzk.recordmanager.server.model.ImportConfiguration;
 import org.marc4j.marc.ControlField;
 import org.marc4j.marc.DataField;
 import org.marc4j.marc.Record;
@@ -16,8 +17,8 @@ public class KkkvMarcInterceptor extends DefaultMarcInterceptor {
 	private static final String TAG_914 = "914";
 	private static final String CPK0 = "cpk0";
 
-	public KkkvMarcInterceptor(Record record) {
-		super(record);
+	public KkkvMarcInterceptor(Record record, ImportConfiguration configuration, String recordId) {
+		super(record, configuration, recordId);
 	}
 
 	@Override
@@ -36,6 +37,7 @@ public class KkkvMarcInterceptor extends DefaultMarcInterceptor {
 				newRecord.addVariableField(MARC_FACTORY.newDataField(TAG_914, df.getIndicator1(), df.getIndicator2(), "a", CPK0));
 			}
 			// default
+			processField996(df);
 			newRecord.addVariableField(df);
 		}
 		return new MarcRecordImpl(newRecord).export(IOFormat.XML_MARC).getBytes(StandardCharsets.UTF_8);
