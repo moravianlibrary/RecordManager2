@@ -150,6 +150,7 @@ public class Constants {
 	public static final String PREFIX_KRAM_KNAV			= "kram-knav";
 	public static final String PREFIX_KRAM_KVKL			= "kram-kvkl";
 	public static final String PREFIX_KRAM_MZK			= "kram-mzk";
+	public static final String PREFIX_KRAM_MZK_DNNT		= "kram-mzk-dnnt";
 	public static final String PREFIX_KRAM_NKP			= "kram-nkp";
 	public static final String PREFIX_KRAM_NLK			= "kram-nlk";
 	public static final String PREFIX_KRAM_NTK			= "kram-ntk";
@@ -249,6 +250,7 @@ public class Constants {
 
 	public static final String DOCUMENT_AVAILABILITY_ONLINE     = "online";
 	public static final String DOCUMENT_AVAILABILITY_PROTECTED  = "protected";
+	public static final String DOCUMENT_AVAILABILITY_EMERGENCY  = "emergency";
 	public static final String DOCUMENT_AVAILABILITY_UNKNOWN    = "unknown";
 	public static final String DOCUMENT_AVAILABILITY_DNNT       = "dnnt";
 	public static final String DOCUMENT_AVAILABILITY_ABSENT     = "absent";
