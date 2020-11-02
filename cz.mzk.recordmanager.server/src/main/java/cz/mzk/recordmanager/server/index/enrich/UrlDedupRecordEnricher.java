@@ -47,7 +47,6 @@ public class UrlDedupRecordEnricher implements DedupRecordEnricher {
 		mergedDocument.addField(SolrFieldConstants.URL, urlsFilter(urls));
 
 		localRecords.forEach(doc -> doc.remove(SolrFieldConstants.URL));
-
 		enrichStatusesFacet(mergedDocument, localRecords);
 	}
 
@@ -74,21 +73,26 @@ public class UrlDedupRecordEnricher implements DedupRecordEnricher {
 			boolean online = false;
 			boolean protect = false;
 			boolean dnnt = false;
+			boolean emergency = false;
 			for (EVersionUrl url : urls.get(key).descendingSet()) {
 				if (url.getAvailability().equals(Constants.DOCUMENT_AVAILABILITY_ONLINE)) {
 					results.add(url.toString());
 					online = true;
 				}
-				if (!online && url.getAvailability().equals(Constants.DOCUMENT_AVAILABILITY_DNNT)) {
+				if (!online && url.getAvailability().equals(Constants.DOCUMENT_AVAILABILITY_EMERGENCY)) {
 					results.add(url.toString());
-					dnnt = true;
+					emergency = true;
 				}
-				if (!online && !dnnt && url.getAvailability().equals(Constants.DOCUMENT_AVAILABILITY_PROTECTED)) {
+//				if (!online && url.getAvailability().equals(Constants.DOCUMENT_AVAILABILITY_DNNT)) {
+//					results.add(url.toString());
+//					dnnt = true;
+//				}
+				if (!online && !emergency && !dnnt && url.getAvailability().equals(Constants.DOCUMENT_AVAILABILITY_PROTECTED)) {
 					results.add(url.toString());
 					protect = true;
 				}
 			}
-			if (!online && !dnnt && !protect) {
+			if (!online && !emergency && !dnnt && !protect) {
 				if (urls.get(key).size() == 1) {
 					results.add(urls.get(key).first().toString());
 				} else {
@@ -119,15 +123,45 @@ public class UrlDedupRecordEnricher implements DedupRecordEnricher {
 	private void generateUrlFromKramAvailability(Map<String, TreeSet<EVersionUrl>> urls) {
 		for (String key : urls.keySet()) {
 			if (!key.startsWith("uuid:")) continue;
+			EVersionUrl mzk = null;
+			EVersionUrl mzkDnnt = null;
+			EVersionUrl other = null;
 			for (KramAvailability kramAvailability : kramAvailabilityDAO.getByUuid(key)) {
 				EVersionUrl newUrl = EVersionUrl.create(kramAvailability);
-				addToMap(urls, newUrl);
-				// dnnt
-				if (newUrl.getAvailability().equals(Constants.DOCUMENT_AVAILABILITY_PROTECTED)
-						&& kramAvailability.isDnnt()) {
-					EVersionUrl dnntUrl = EVersionUrl.createDnnt(kramAvailability);
-					if (dnntUrl != null) addToMap(urls, dnntUrl);
+				if (newUrl.getSource().equals(Constants.PREFIX_KRAM_MZK)) {
+					mzk = newUrl;
+					continue;
 				}
+				if (newUrl.getSource().equals(Constants.PREFIX_KRAM_MZK_DNNT)) {
+					newUrl.setAvailability(Constants.DOCUMENT_AVAILABILITY_EMERGENCY);
+					mzkDnnt = newUrl;
+					continue;
+				}
+				if (newUrl.getSource().equals(Constants.PREFIX_KRAM_NKP)
+						|| newUrl.getSource().equals(Constants.PREFIX_KRAM_KNAV)
+				) {
+					if (newUrl.getAvailability().equals(Constants.DOCUMENT_AVAILABILITY_PROTECTED)) {
+						newUrl.setAvailability(Constants.DOCUMENT_AVAILABILITY_EMERGENCY);
+						newUrl.setLink(kramAvailability.getDnntLink());
+					}
+					other = newUrl;
+					continue;
+				}
+				addToMap(urls, newUrl);
+//				// dnnt
+//				if (newUrl.getAvailability().equals(Constants.DOCUMENT_AVAILABILITY_PROTECTED)
+//						&& kramAvailability.isDnnt()) {
+//					EVersionUrl dnntUrl = EVersionUrl.createDnnt(kramAvailability);
+//					if (dnntUrl != null) addToMap(urls, dnntUrl);
+//				}
+			}
+			if (mzk != null && (mzk.getAvailability().equals(Constants.DOCUMENT_AVAILABILITY_ONLINE) || mzkDnnt == null)) {
+				addToMap(urls, mzk);
+				if (other != null) addToMap(urls, other);
+			} else if (mzkDnnt != null) {
+				addToMap(urls, mzkDnnt);
+			} else if (other != null) {
+				addToMap(urls, other);
 			}
 		}
 	}
