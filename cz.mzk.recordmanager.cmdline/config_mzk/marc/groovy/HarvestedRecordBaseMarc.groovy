@@ -57,6 +57,7 @@ contents = getFields "505a:505t"
 isbn = getFields "020a:902a"
 isbn_display_mv = getFields "020a"
 issn = getFields "022a:440x:490x:730x:776x:780x:785x"
+ismn_isn_mv = record.getFields("024", { field -> field.getIndicator1() == '2' }, 'a' as char)
 
 topic = getFields "600:610:630:650"
 genre = getFields "655"
