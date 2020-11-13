@@ -2044,3 +2044,7 @@ INSERT INTO fit_project VALUES (3,'CLASSIFIER');
 
 -- 15. 12. 2020 tomascejpek
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (89, 415, 'KTG001');
+
+-- 15. 12. 2020 tomascejpek
+INSERT INTO harvested_record_format(id, name) VALUES (67, 'EBOOK');
+

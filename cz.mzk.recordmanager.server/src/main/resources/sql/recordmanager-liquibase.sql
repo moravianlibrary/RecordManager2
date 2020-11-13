@@ -2323,3 +2323,7 @@ INSERT INTO fit_project VALUES (3,'CLASSIFIER');
 
 --changeset tomascejpek:220 context:cpk
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (89, 415, 'KTG001');
+
+--changeset tomascejpek:221
+INSERT INTO harvested_record_format(id, name) VALUES (67, 'EBOOK');
+
