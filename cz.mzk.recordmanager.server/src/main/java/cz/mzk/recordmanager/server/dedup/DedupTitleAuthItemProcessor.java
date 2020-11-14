@@ -28,13 +28,13 @@ public class DedupTitleAuthItemProcessor extends DedupSimpleKeysStepProcessor {
 	 */
 	@Override
 	protected boolean matchRecords(HarvestedRecord hrA, HarvestedRecord hrB) {
-		
+		if (!super.matchRecords(hrA, hrB)) return false;
 		if (hrA == null || hrA.getPages() == null || hrB == null || hrB.getPages() == null) {
 			return false;
 		}
-		
+
 		Set<String> aTitles = new HashSet<>();
-		Set<String> bTitles = new HashSet<>();		
+		Set<String> bTitles = new HashSet<>();
 		hrA.getTitles().stream().filter(t -> t.getTitleStr() != null && !t.getTitleStr().isEmpty()).forEach(t -> aTitles.add(t.getTitleStr()));
 		hrA.getShortTitles().stream().filter(st -> st.getShortTitleStr() != null && !st.getShortTitleStr().isEmpty()).forEach(st -> aTitles.add(st.getShortTitleStr()));
 		hrB.getTitles().stream().filter(t -> t.getTitleStr() != null && !t.getTitleStr().isEmpty()).forEach(t -> bTitles.add(t.getTitleStr()));
