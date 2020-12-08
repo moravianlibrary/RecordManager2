@@ -70,3 +70,7 @@ CREATE INDEX ean_idx ON ean(ean);
 
 CREATE INDEX cosmotron_996_last_harvest_idx ON cosmotron_996(last_harvest);
 CREATE INDEX kram_availability_conf_uuid_idx ON kram_availability(import_conf_id, uuid);
+
+CREATE INDEX fit_projects_knowledge_base_idx ON fit_project_link(fit_knowledge_base_id);
+CREATE INDEX fit_project_link_harvested_record_idx ON fit_project_link(harvested_record_id);
+CREATE INDEX fit_project_link_idx ON fit_project_link(fit_project_id);

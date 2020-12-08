@@ -56,6 +56,10 @@ public class Constants {
 	public static final String JOB_ID_REGENERATE_BL_MISSING_KEYS	= "regenerateBiblioLinkerMissingKeysJob";
 	public static final String JOB_ID_HARVEST_KRAM_AVAILABILITY		= "harvestKramAvailabilityJob";
 	public static final String JOB_ID_HARVEST_ZISKEJ_LIBRARIES		= "harvestZiskejLibrariesJob";
+	public static final String JOB_ID_FULLTEXT_ANALYSER 			= "fulltextAnalyserJob";
+	public static final String JOB_ID_SEMANTIC_ENRICHMENT			= "semanticEnrichmentJob";
+	public static final String JOB_ID_IMPORT_KNOWLEDGE_BASE			= "importKnowledgeBaseJob";
+	public static final String JOB_ID_CLASSIFIER					= "classifierJob";
 
 	public static final String JOB_PARAM_CONF_ID 		= "configurationId";
 	public static final String JOB_PARAM_FROM_DATE 		= "from";
@@ -224,6 +228,8 @@ public class Constants {
 	public static final String LIBRARY_NAME_SLK			= "SLK";
 	public static final String LIBRARY_NAME_STT			= "STT";
 	
+	public static final long IMPORT_CONF_MZK			= 300L;
+	public static final long IMPORT_CONF_NKP			= 304L;
 	public static final long IMPORT_CONF_ID_CASLIN 		= 316L;
 	public static final long IMPORT_CONF_ID_ANL 		= 319L;
 	public static final long IMPORT_CONF_ID_UNMZ 		= 320L;
@@ -234,6 +240,7 @@ public class Constants {
 	public static final long IMPORT_CONF_ID_UPV			= 347L;
 	public static final Long IMPORT_CONF_ID_AUTHORITY	= 400L;
 	public static final long IMPORT_CONF_ID_ANTIKVARIATY= 500L;
+	public static final long IMPORT_CONF_ID_KRAM_MZK	= 99001L;
 
 	public static final String DOCUMENT_AVAILABILITY_ONLINE     = "online";
 	public static final String DOCUMENT_AVAILABILITY_PROTECTED  = "protected";

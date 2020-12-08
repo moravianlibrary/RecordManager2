@@ -627,3 +627,7 @@ INSERT INTO sigla (id, import_conf_id, sigla) VALUES (83, 407, 'KAG001');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (84, 408, 'KAG001');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (85, 409, 'CLG001');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (87, 411, 'NAG502');
+
+INSERT INTO fit_project VALUES (1,'FULLTEXT_ANALYSER');
+INSERT INTO fit_project VALUES (2,'SEMANTIC_ENRICHMENT');
+INSERT INTO fit_project VALUES (3,'CLASSIFIER');

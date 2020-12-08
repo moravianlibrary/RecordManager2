@@ -9,7 +9,10 @@ import cz.mzk.recordmanager.server.bibliolinker.BiblioLinkerJobConfig;
 import cz.mzk.recordmanager.server.bibliolinker.keys.RegenerateBiblioLinkerKeysJobConfig;
 import cz.mzk.recordmanager.server.imports.kramAvailability.KramAvailabilityJobConfig;
 import cz.mzk.recordmanager.server.imports.obalky.annotations.AnnotationsHarvestJobConfig;
+import cz.mzk.recordmanager.server.miscellaneous.fit.classifier.ClassifierJobConfig;
+import cz.mzk.recordmanager.server.miscellaneous.fit.fulltextAnalyser.FulltextAnalyserJobConfig;
 import cz.mzk.recordmanager.server.miscellaneous.caslin.view.CaslinViewJobsConfig;
+import cz.mzk.recordmanager.server.miscellaneous.fit.semanticEnrichment.SemanticEnrichmentJobConfig;
 import cz.mzk.recordmanager.server.miscellaneous.ziskej.ZiskejLibrariesJobConfig;
 import org.springframework.batch.core.configuration.support.ApplicationContextFactory;
 import org.springframework.batch.core.configuration.support.GenericApplicationContextFactory;
@@ -106,7 +109,10 @@ public class AppConfigCmdline {
 				BiblioLinkerJobConfig.class,
 				RegenerateBiblioLinkerKeysJobConfig.class,
 				KramAvailabilityJobConfig.class,
-				ZiskejLibrariesJobConfig.class
+				ZiskejLibrariesJobConfig.class,
+				FulltextAnalyserJobConfig.class,
+				SemanticEnrichmentJobConfig.class,
+				ClassifierJobConfig.class
 			);
 	}
 

@@ -169,6 +169,12 @@ public class SolrFieldConstants {
 
 	public static final String LAST_UPDATE = "last_update_date";
 
+	public static final String FULLTEXT_ANALYSER = "fulltext_analyser_txt_mv";
+
+	public static final String SEMANTIC_ENRICHMENT = "semantic_enrichment_txt_mv";
+
+	public static final String AUTO_CONSPECTUS = "auto_conspectus_txt_mv";
+
 	/**
 	 * dummy fields used for processing purposes only, shouldn't be indexed.
 	 */

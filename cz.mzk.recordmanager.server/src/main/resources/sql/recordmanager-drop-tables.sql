@@ -27,3 +27,6 @@ DROP TABLE bl_topic_key;
 DROP TABLE bl_language;
 DROP TABLE biblio_linker;
 DROP TABLE biblio_linker_similar;
+DROP TABLE fit_knowledge_base;
+DROP TABLE fit_project;
+DROP TABLE fit_project_link;

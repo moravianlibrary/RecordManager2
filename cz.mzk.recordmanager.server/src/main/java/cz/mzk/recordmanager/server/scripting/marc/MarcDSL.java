@@ -3,6 +3,8 @@ package cz.mzk.recordmanager.server.scripting.marc;
 import cz.mzk.recordmanager.server.export.IOFormat;
 import cz.mzk.recordmanager.server.marc.MarcRecord;
 import cz.mzk.recordmanager.server.marc.SubfieldExtractionMethod;
+import cz.mzk.recordmanager.server.marc.marc4j.MarcFactoryImpl;
+import cz.mzk.recordmanager.server.marc.marc4j.MarcLineStreamReader;
 import cz.mzk.recordmanager.server.metadata.MetadataRecord;
 import cz.mzk.recordmanager.server.metadata.view.ViewType;
 import cz.mzk.recordmanager.server.model.*;
@@ -19,6 +21,7 @@ import cz.mzk.recordmanager.server.util.identifier.ISBNUtils;
 import cz.mzk.recordmanager.server.util.identifier.ISSNUtils;
 import org.apache.commons.validator.routines.ISBNValidator;
 import org.marc4j.marc.DataField;
+import org.marc4j.marc.MarcFactory;
 import org.marc4j.marc.Subfield;
 
 import java.io.IOException;
@@ -546,35 +549,44 @@ public class MarcDSL extends BaseDSL {
 		for (DataField df : record.getDataFields("072")) {
 			if ((df.getSubfield('2') != null) && (df.getSubfield('2').getData().equals("Konspekt"))
 					&& (df.getSubfield('9') != null) && (df.getSubfield('x') != null && (df.getSubfield('a') != null))) {
-				String subcat_code_source = df.getSubfield('a').getData().trim();
-				String subcat_name_source = df.getSubfield('x').getData().trim();
-				String cat_code_source = df.getSubfield('9').getData().trim();
-
-				boolean cat_code_exists = false;
-				List<String> cat_code = translate(MAP_CONSPECTUS_SUBCAT_CAT_CHANGE, subcat_code_source, null);
-				if (cat_code != null) {
-					String[] split = SPLIT_VERTICAL_BAR.split(cat_code.get(0));
-					if (split[1].equals(cat_code_source)) {
-						cat_code_source = split[0];
-						cat_code_exists = true;
-					}
-				}
-				if (!cat_code_exists) {
-					cat_code = translate(MAP_CATEGORY_SUBCATEGORY, subcat_code_source, null);
-					if (cat_code == null || !cat_code.contains(cat_code_source)) continue;
-				}
-				List<String> subcat_name = translate(MAP_SUBCATEGORY_NAME, subcat_code_source, null);
-
-				if (subcat_name != null && subcat_name.contains(subcat_name_source)) {
-					String subcat_name_for_facet;
-					List<String> subcat_name_temp = translate(MAP_CONSPECTUS_NAMES, subcat_code_source + " - " + subcat_name_source, null);
-					if (subcat_name_temp != null && !subcat_name_temp.isEmpty()) {
-						subcat_name_for_facet = subcat_name_temp.get(0);
-					} else subcat_name_for_facet = subcat_name_source;
-					List<String> category = translate(MAP_CONSPECTUS_CATEGORY, cat_code_source, null);
-					result.addAll(SolrUtils.createHierarchicFacetValues(category.get(0), subcat_name_for_facet));
-				}
+				result.addAll(processConspectus(df));
 			}
+		}
+		for (DataField df : getAutoConspectusDataFields()) {
+			result.addAll(processConspectus(df));
+		}
+		return result;
+	}
+
+	private Set<String> processConspectus(DataField df) throws IOException {
+		Set<String> result = new HashSet<>();
+		String subcat_code_source = df.getSubfield('a').getData().trim();
+		String subcat_name_source = df.getSubfield('x').getData().trim();
+		String cat_code_source = df.getSubfield('9').getData().trim();
+
+		boolean cat_code_exists = false;
+		List<String> cat_code = translate(MAP_CONSPECTUS_SUBCAT_CAT_CHANGE, subcat_code_source, null);
+		if (cat_code != null) {
+			String[] split = SPLIT_VERTICAL_BAR.split(cat_code.get(0));
+			if (split[1].equals(cat_code_source)) {
+				cat_code_source = split[0];
+				cat_code_exists = true;
+			}
+		}
+		if (!cat_code_exists) {
+			cat_code = translate(MAP_CATEGORY_SUBCATEGORY, subcat_code_source, null);
+			if (cat_code == null || !cat_code.contains(cat_code_source)) return result;
+		}
+		List<String> subcat_name = translate(MAP_SUBCATEGORY_NAME, subcat_code_source, null);
+
+		if (subcat_name != null && subcat_name.contains(subcat_name_source)) {
+			String subcat_name_for_facet;
+			List<String> subcat_name_temp = translate(MAP_CONSPECTUS_NAMES, subcat_code_source + " - " + subcat_name_source, null);
+			if (subcat_name_temp != null && !subcat_name_temp.isEmpty()) {
+				subcat_name_for_facet = subcat_name_temp.get(0);
+			} else subcat_name_for_facet = subcat_name_source;
+			List<String> category = translate(MAP_CONSPECTUS_CATEGORY, cat_code_source, null);
+			result.addAll(SolrUtils.createHierarchicFacetValues(category.get(0), subcat_name_for_facet));
 		}
 		return result;
 	}
@@ -819,5 +831,61 @@ public class MarcDSL extends BaseDSL {
 			similars.add(bls);
 		}
 		return similars.stream().map(BiblioLinkerSimilar::getUrlId).collect(Collectors.toList());
+	}
+
+	public Set<String> getFulltextAnalyser() {
+		Set<String> results = new HashSet<>();
+		for (HarvestedRecordFitProject hrfp : context.harvestedRecord().getFitProjects()) {
+			if (hrfp.getFitProject().getName().equals(FitProject.FitProjectEnum.FULLTEXT_ANALYSER.name())) {
+				results.addAll(Arrays.asList(hrfp.getData().split("\\|")));
+			}
+
+		}
+		return results;
+	}
+
+	public Set<String> getSemanticEnrichment() {
+		Set<String> results = new HashSet<>();
+		for (HarvestedRecordFitProject hrfp : context.harvestedRecord().getFitProjects()) {
+			if (hrfp.getFitProject().getName().equals(FitProject.FitProjectEnum.SEMANTIC_ENRICHMENT.name())) {
+				results.add(hrfp.getFitKnowledgeBase().getData());
+			}
+
+		}
+		return results;
+	}
+
+	public Set<String> getAutoConspectus() {
+		Set<String> results = new HashSet<>();
+		for (DataField df : getAutoConspectusDataFields()) {
+			try {
+				for (String conspect : processConspectus(df)) {
+					if (conspect.startsWith("1/")) {
+						conspect = conspect.substring(2);
+						results.addAll(Arrays.asList(conspect.split("/")));
+					}
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		return results;
+	}
+
+	private static final Pattern AUTO_CONSPECTUS = Pattern.compile("072 {2}7(.*)");
+	private static final MarcFactory MARC_FACTORY = MarcFactoryImpl.newInstance();
+
+	public Set<DataField> getAutoConspectusDataFields() {
+		Set<DataField> results = new HashSet<>();
+		for (HarvestedRecordFitProject hrfp : context.harvestedRecord().getFitProjects()) {
+			if (hrfp.getFitProject().getName().equals(FitProject.FitProjectEnum.CLASSIFIER.name())) {
+				String data = hrfp.getData();
+				Matcher matcher = AUTO_CONSPECTUS.matcher(data);
+				if (matcher.matches()) {
+					results.add(MarcLineStreamReader.parseDataField(MARC_FACTORY.newDataField(), data));
+				}
+			}
+		}
+		return results;
 	}
 }

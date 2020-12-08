@@ -44,3 +44,6 @@ DELETE FROM obalkyknih_toc;
 DELETE FROM obalkyknih_annotation;
 DELETE FROM biblio_linker;
 DELETE FROM biblio_linker_similar;
+DELETE FROM fit_knowledge_base;
+DELETE FROM fit_project;
+DELETE FROM fit_project_link;

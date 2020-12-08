@@ -1,14 +1,7 @@
 package cz.mzk.recordmanager.server.model;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
@@ -201,6 +194,10 @@ public class HarvestedRecord extends AbstractDomainObject {
 	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.LAZY)
 	@JoinColumn(name="harvested_record_id", referencedColumnName="id")
 	private List<Inspiration> inspiration = new ArrayList<>();
+
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+	@JoinColumn(name = "harvested_record_id", referencedColumnName = "id")
+	private Set<HarvestedRecordFitProject> fitProjects = new HashSet<>();
 
 	@OneToMany(mappedBy="id.harvestedRecordId", cascade = CascadeType.ALL, orphanRemoval=true)
 	@MapKey(name="id.langStr")
@@ -895,4 +892,11 @@ public class HarvestedRecord extends AbstractDomainObject {
 		this.uuids = uuids;
 	}
 
+	public Set<HarvestedRecordFitProject> getFitProjects() {
+		return fitProjects;
+	}
+
+	public void setFitProjects(Set<HarvestedRecordFitProject> fitProjects) {
+		this.fitProjects = fitProjects;
+	}
 }
