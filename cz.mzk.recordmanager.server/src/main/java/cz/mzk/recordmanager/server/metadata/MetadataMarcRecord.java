@@ -125,6 +125,8 @@ public class MetadataMarcRecord implements MetadataRecord {
 					HarvestedRecordFormatEnum.VIDEO_OTHER,
 					HarvestedRecordFormatEnum.VIDEO_VHS);
 
+	private static final int EFFECTIVE_LENGTH_PUBLISHER_NUMBER = 255;
+
 	private static final String URL_COMMENT_FORMAT = "%s (%s)";
 	private static final List<String> TITLE_REMOVE_WORDS = new BufferedReader(new InputStreamReader(
 			new ClasspathResourceProvider().getResource("/list/title_remove_words.txt"), StandardCharsets.UTF_8))
@@ -1317,6 +1319,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 		for (DataField df : underlayingMarc.getDataFields("028")) {
 			if (df.getIndicator1() == '0' && df.getSubfield('a') != null) {
 				String result = PUBLISHER_NUMBER_PATTERN.matcher(df.getSubfield('a').getData().toLowerCase()).replaceAll("");
+				result = MetadataUtils.shorten(result, EFFECTIVE_LENGTH_PUBLISHER_NUMBER);
 				results.add(new PublisherNumber(result, ++i));
 			}
 		}
