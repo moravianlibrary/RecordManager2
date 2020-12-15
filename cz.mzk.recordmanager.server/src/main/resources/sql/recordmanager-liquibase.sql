@@ -2327,3 +2327,6 @@ INSERT INTO sigla (id, import_conf_id, sigla) VALUES (89, 415, 'KTG001');
 --changeset tomascejpek:221
 INSERT INTO harvested_record_format(id, name) VALUES (67, 'EBOOK');
 
+--changeset tomascejpek:222 context:cpk
+INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (145,'MKPE','www.mlp.cz','search.mlp.cz',null,'ebook');
+UPDATE import_conf SET library_id='145',is_library=FALSE WHERE id = 345;
