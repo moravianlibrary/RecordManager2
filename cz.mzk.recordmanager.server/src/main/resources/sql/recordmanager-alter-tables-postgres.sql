@@ -2042,3 +2042,5 @@ INSERT INTO fit_project VALUES (1,'FULLTEXT_ANALYSER');
 INSERT INTO fit_project VALUES (2,'SEMANTIC_ENRICHMENT');
 INSERT INTO fit_project VALUES (3,'CLASSIFIER');
 
+-- 15. 12. 2020 tomascejpek
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (89, 415, 'KTG001');
