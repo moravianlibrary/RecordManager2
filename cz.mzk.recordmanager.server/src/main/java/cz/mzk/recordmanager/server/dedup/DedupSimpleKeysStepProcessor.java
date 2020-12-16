@@ -1,24 +1,20 @@
 package cz.mzk.recordmanager.server.dedup;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
+import com.google.common.collect.HashMultiset;
+import com.google.common.collect.Multiset;
+import cz.mzk.recordmanager.server.model.DedupRecord;
+import cz.mzk.recordmanager.server.model.HarvestedRecord;
+import cz.mzk.recordmanager.server.model.HarvestedRecordFormat.HarvestedRecordFormatEnum;
+import cz.mzk.recordmanager.server.oai.dao.DedupRecordDAO;
+import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordDAO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.google.common.collect.HashMultiset;
-import com.google.common.collect.Multiset;
-import cz.mzk.recordmanager.server.model.DedupRecord;
-import cz.mzk.recordmanager.server.model.HarvestedRecord;
-import cz.mzk.recordmanager.server.oai.dao.DedupRecordDAO;
-import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordDAO;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Generic implementation of of ItemProcessor 
@@ -138,7 +134,12 @@ public class DedupSimpleKeysStepProcessor implements
 	 * @return true
 	 */
 	protected boolean matchRecords(HarvestedRecord hrA, HarvestedRecord hrB) {
-		return true;
+		List<String> formatsA = hrA.getPhysicalFormats().stream().map(f -> f.getName()).collect(Collectors.toList());
+		List<String> formatsB = hrB.getPhysicalFormats().stream().map(f -> f.getName()).collect(Collectors.toList());
+
+		return (!formatsA.contains(HarvestedRecordFormatEnum.EBOOK.name())
+				&& !formatsB.contains(HarvestedRecordFormatEnum.EBOOK.name()))
+				|| formatsA.equals(formatsB);
 	}
 	
 	protected boolean sameDedupRecords(DedupRecord d1, DedupRecord d2) {

@@ -1,7 +1,6 @@
 package cz.mzk.recordmanager.server.metadata.institutions;
 
 import cz.mzk.recordmanager.server.marc.MarcRecord;
-import cz.mzk.recordmanager.server.metadata.MetadataMarcRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.util.Constants;
 import cz.mzk.recordmanager.server.util.MetadataUtils;
@@ -12,7 +11,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
 
-public class MkpEbooksMetadataMarcRecord extends MetadataMarcRecord {
+public class MkpEbooksMetadataMarcRecord extends EbooksMetadataMarcRecord {
 
 	private static final Pattern URL_Y_PATTERN = Pattern.compile("Plný text");
 	private static final String URL_COMMENT = "Stáhněte zdarma (%s)";

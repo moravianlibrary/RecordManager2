@@ -41,6 +41,7 @@ INSERT INTO library (id, name, url, catalog_url, city) VALUES (141, 'OSOBNOSTI',
 INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (142, 'BMC', 'nlk.cz', 'www.medvik.cz/bmc/', 'Bibliography', 'bibliography');
 INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (143, 'KFBZ', 'kfbz.cz', 'katalog.kfbz.cz/', 'Zlín', 'ZL');
 INSERT INTO library (id, name, url, catalog_url, city) VALUES (144, 'ZAKONY', 'zakonyprolidi.cz', '', NULL);
+INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (145,'MKPE','www.mlp.cz','search.mlp.cz',null,'ebook');
 INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (146, 'MKPR', 'http://knihovnaprerov.cz/', 'katalog.knihovnaprerov.cz/', 'Přerov', 'OL');
 INSERT INTO library (id, name, url, catalog_url, city) VALUES (147, 'UPV', 'http://upv.cz/', 'https://isdv.upv.cz/webapp/pts.frm', NULL);
 INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (148, 'NPMK', 'http://npmk.cz/', 'http://katalog.npmk.cz/', 'Bibliography', 'bibliography');
@@ -173,7 +174,7 @@ INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weig
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, ziskej_enabled) VALUES (342, 142, 200, 'bmc', 8, false, true, true, false, 'D', false);
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id, metaproxy_enabled, ziskej_enabled) VALUES (343, 143, 200, 'kfbz', 12, false, true, true, true, 'D', 'other', true, true);
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, generate_biblio_linker_keys) VALUES (344, 144, 200, 'zakony', 8, false, true, false, false, 'U', false);
-INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency) VALUES (345, 102, 200, 'mkpe', 8, false, true, false, true, 'U');
+INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency) VALUES (345, 145, 200, 'mkpe', 8, false, true, false, false, 'U');
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id, ziskej_enabled) VALUES (346, 146, 200, 'mkpr', 9, false, true, true, true, 'U', 'other', false);
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency,generate_dedup_keys) VALUES (347, 147, 200, 'upv', 8, false, true, false, false, 'U',false);
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, ziskej_enabled) VALUES (348, 148, 200, 'npmk', 11, false, true, false, false, 'U', false);
@@ -557,6 +558,7 @@ INSERT INTO harvested_record_format(id, name) VALUES (63, 'PATENTS_PATENTS');
 INSERT INTO harvested_record_format(id, name) VALUES (64, 'OTHER_DICTIONARY_ENTRY');
 INSERT INTO harvested_record_format(id, name) VALUES (65, 'BLIND_AUDIO');
 INSERT INTO harvested_record_format(id, name) VALUES (66, 'BLIND_BRAILLE');
+INSERT INTO harvested_record_format(id, name) VALUES (67, 'EBOOK');
 INSERT INTO harvested_record_format(id, name) VALUES (100, 'OTHER_UNSPECIFIED');
 
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (1, 300, 'BOA001');

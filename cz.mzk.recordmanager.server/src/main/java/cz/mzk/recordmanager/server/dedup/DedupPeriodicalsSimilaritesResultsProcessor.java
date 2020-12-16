@@ -18,6 +18,7 @@ public class DedupPeriodicalsSimilaritesResultsProcessor extends DedupSimpleKeys
 
 	@Override
 	protected boolean matchRecords(HarvestedRecord hrA, HarvestedRecord hrB) {
+		if (!super.matchRecords(hrA, hrB)) return false;
 
 		if (hrA == null || hrB == null) return false;
 

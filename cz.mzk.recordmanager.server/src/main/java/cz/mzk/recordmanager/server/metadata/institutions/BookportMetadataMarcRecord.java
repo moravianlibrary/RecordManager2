@@ -1,7 +1,6 @@
 package cz.mzk.recordmanager.server.metadata.institutions;
 
 import cz.mzk.recordmanager.server.marc.MarcRecord;
-import cz.mzk.recordmanager.server.metadata.MetadataMarcRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.util.Constants;
 import cz.mzk.recordmanager.server.util.MetadataUtils;
@@ -11,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class BookportMetadataMarcRecord extends MetadataMarcRecord {
+public class BookportMetadataMarcRecord extends EbooksMetadataMarcRecord {
 
 	private static final String COMMENT = "Registrovaní uživatelé knihovny získají knihu po přihlášení přes eduID.cz na Bookportu";
 

@@ -26,6 +26,8 @@ public class DedupIdentifierClustersProcessor extends DedupSimpleKeysStepProcess
 	 */
 	@Override
 	protected boolean matchRecords(HarvestedRecord hrA, HarvestedRecord hrB) {
+		if (!super.matchRecords(hrA, hrB)) return false;
+
 		List<Title> aTitles = hrA.getTitles();
 		List<Title> bTitles = hrB.getTitles();
 
