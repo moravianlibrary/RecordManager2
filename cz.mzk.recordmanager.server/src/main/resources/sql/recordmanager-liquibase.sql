@@ -2330,3 +2330,6 @@ INSERT INTO harvested_record_format(id, name) VALUES (67, 'EBOOK');
 --changeset tomascejpek:222 context:cpk
 INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (145,'MKPE','www.mlp.cz','search.mlp.cz',null,'ebook');
 UPDATE import_conf SET library_id='145',is_library=FALSE WHERE id = 345;
+
+--changeset tomascejpek:223 context:cpk
+UPDATE oai_harvest_conf SET url='https://biblio.idu.cz/api/oai',set_spec='cpk' WHERE import_conf_id=365;
