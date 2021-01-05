@@ -2059,3 +2059,6 @@ UPDATE oai_harvest_conf SET url='https://biblio.idu.cz/api/oai',set_spec='cpk' W
 INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (195, 'MENDELU', 'https://mendelu.cz/', 'https://katalog.mendelu.cz/', 'Brno', 'JM');
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id) VALUES (395, 195, 200, 'mendelu', 11, false, true, true, true, 'U', 'other');
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (395,'https://katalog.mendelu.cz/api/oai/','5','marc21',NULL);
+
+-- 05. 01. 2021 tomascejpek
+UPDATE oai_harvest_conf SET url='https://katalog.vfu.cz/api/oai/',set_spec='cpk' WHERE import_conf_id=385;
