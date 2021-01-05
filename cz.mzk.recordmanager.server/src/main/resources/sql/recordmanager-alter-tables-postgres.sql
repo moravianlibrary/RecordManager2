@@ -2062,3 +2062,6 @@ INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granul
 
 -- 05. 01. 2021 tomascejpek
 UPDATE oai_harvest_conf SET url='https://katalog.vfu.cz/api/oai/',set_spec='cpk' WHERE import_conf_id=385;
+
+-- 05. 01. 2021 tomascejpek
+UPDATE oai_harvest_conf SET url='https://katalog.knir.cz/api/oai',set_spec='cpk' WHERE import_conf_id=387;
