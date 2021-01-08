@@ -2073,3 +2073,6 @@ INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granul
 
 -- 06. 01. 2021 tomascejpek
 UPDATE oai_harvest_conf SET url='https://clavius.lib.cas.cz/katalog/l.dll',set_spec='CPK' WHERE import_conf_id=331;
+
+-- 08. 01. 2021 tomascejpek
+UPDATE oai_harvest_conf SET url='https://hodonin.tritius.cz/tritius/oai-provider',set_spec='CPK_1' WHERE import_conf_id=374;
