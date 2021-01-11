@@ -2076,3 +2076,7 @@ UPDATE oai_harvest_conf SET url='https://clavius.lib.cas.cz/katalog/l.dll',set_s
 
 -- 08. 01. 2021 tomascejpek
 UPDATE oai_harvest_conf SET url='https://hodonin.tritius.cz/tritius/oai-provider',set_spec='CPK_1' WHERE import_conf_id=374;
+
+-- 11. 01. 2021 tomascejpek
+UPDATE import_conf SET interception_enabled='true' WHERE id=365;
+

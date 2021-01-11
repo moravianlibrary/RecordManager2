@@ -103,4 +103,9 @@ public class DefaultMarcInterceptor implements MarcRecordInterceptor {
 	protected Record getRecord() {
 		return this.record;
 	}
+
+	protected void setRecord(Record newRecord) {
+		this.record = newRecord;
+	}
+
 }
