@@ -882,7 +882,11 @@ public class MarcDSL extends BaseDSL {
 				String data = hrfp.getData();
 				Matcher matcher = AUTO_CONSPECTUS.matcher(data);
 				if (matcher.matches()) {
-					results.add(MarcLineStreamReader.parseDataField(MARC_FACTORY.newDataField(), data));
+					DataField df = MarcLineStreamReader.parseDataField(MARC_FACTORY.newDataField(), data);
+					if ((df.getSubfield('2') != null) && (df.getSubfield('9') != null)
+							&& (df.getSubfield('x') != null && (df.getSubfield('a') != null))) {
+						results.add(df);
+					}
 				}
 			}
 		}
