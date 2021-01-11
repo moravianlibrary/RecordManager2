@@ -16,6 +16,7 @@ import cz.mzk.recordmanager.server.scripting.StopWordsResolver;
 import cz.mzk.recordmanager.server.scripting.function.RecordFunction;
 import cz.mzk.recordmanager.server.util.CleaningUtils;
 import cz.mzk.recordmanager.server.util.Constants;
+import cz.mzk.recordmanager.server.util.SiglaMapping;
 import cz.mzk.recordmanager.server.util.SolrUtils;
 import cz.mzk.recordmanager.server.util.identifier.ISBNUtils;
 import cz.mzk.recordmanager.server.util.identifier.ISSNUtils;
@@ -30,6 +31,7 @@ import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class MarcDSL extends BaseDSL {
 
@@ -891,5 +893,36 @@ public class MarcDSL extends BaseDSL {
 			}
 		}
 		return results;
+	}
+
+	private static final List<Pattern> PERIODICAL_PATTERNS = new ArrayList<>();
+
+	static {
+		PERIODICAL_PATTERNS.add(Pattern.compile("(\\d{4})\\s*-\\s*(\\d{4})"));
+		PERIODICAL_PATTERNS.add(Pattern.compile("(\\d{4})"));
+	}
+
+	public Set<Integer> getPeriodicalAvailability() {
+		Set<Integer> results = new HashSet<>();
+		for (String data : record.getFields("996", 'y')) {
+			for (Pattern pattern : PERIODICAL_PATTERNS) {
+				Matcher matcher = pattern.matcher(data);
+				while (matcher.find()) {
+					if (matcher.groupCount() == 1) {
+						results.add(Integer.parseInt(matcher.group(1)));
+					} else if (matcher.groupCount() == 2) {
+						results.addAll(IntStream.rangeClosed(Integer.parseInt(matcher.group(1)),
+								Integer.parseInt(matcher.group(2))).boxed().collect(Collectors.toSet()));
+					}
+				}
+			}
+		}
+		return results;
+	}
+
+	public String getSigla() {
+		String sigla;
+		if ((sigla = getFirstField("910a")) != null) return sigla;
+		return SiglaMapping.getSigla(context.harvestedRecord().getHarvestedFrom());
 	}
 }
