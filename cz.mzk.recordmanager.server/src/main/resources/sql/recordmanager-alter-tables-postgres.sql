@@ -2088,3 +2088,7 @@ UPDATE oai_harvest_conf set extract_id_regex='s/[^:]+:[^:]+:[^\\/]+\\/([^\\/]+)/
 UPDATE oai_harvest_conf set extract_id_regex='s/[^:]+:[^:]+:[^\\/]+\\/([^\\/]+)/upol_us_cat*$1/' WHERE import_conf_id=359;
 UPDATE oai_harvest_conf set extract_id_regex='s/[^:]+:[^:]+:[^:]+:(.+)/vy_us_cat*$1/' WHERE import_conf_id=392;
 
+-- 14. 01. 2021 tomascejpek
+DELETE FROM download_import_conf WHERE import_conf_id=332;
+INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (332,'https://katalog.knihovnakv.cz/tritius/oai-provider','CPK_1','marc21',NULL);
+UPDATE import_conf SET item_id='tritius' WHERE id=332;
