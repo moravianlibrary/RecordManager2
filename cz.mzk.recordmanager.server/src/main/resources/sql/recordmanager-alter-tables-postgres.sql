@@ -2092,3 +2092,6 @@ UPDATE oai_harvest_conf set extract_id_regex='s/[^:]+:[^:]+:[^:]+:(.+)/vy_us_cat
 DELETE FROM download_import_conf WHERE import_conf_id=332;
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (332,'https://katalog.knihovnakv.cz/tritius/oai-provider','CPK_1','marc21',NULL);
 UPDATE import_conf SET item_id='tritius' WHERE id=332;
+
+-- 15. 01. 2021 tomascejpek
+UPDATE import_conf SET item_id='other' WHERE id=332;
