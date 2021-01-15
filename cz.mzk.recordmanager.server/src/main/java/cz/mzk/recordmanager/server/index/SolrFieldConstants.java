@@ -167,6 +167,8 @@ public class SolrFieldConstants {
 
 	public static final String ZISKEJ_BOOLEAN = "ziskej_boolean";
 
+	public static final String EDD_BOOLEAN = "edd_boolean";
+
 	public static final String LAST_UPDATE = "last_update_date";
 
 	public static final String FULLTEXT_ANALYSER = "fulltext_analyser_txt_mv";

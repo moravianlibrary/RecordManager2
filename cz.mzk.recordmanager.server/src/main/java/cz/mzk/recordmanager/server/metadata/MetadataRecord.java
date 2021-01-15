@@ -527,4 +527,8 @@ public interface MetadataRecord {
 		return null;
 	}
 
+	default boolean isEdd() {
+		return false;
+	}
+
 }

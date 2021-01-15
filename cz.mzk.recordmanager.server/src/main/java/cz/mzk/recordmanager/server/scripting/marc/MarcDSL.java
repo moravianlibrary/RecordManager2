@@ -814,6 +814,10 @@ public class MarcDSL extends BaseDSL {
 		return metadataRecord.isZiskej();
 	}
 
+	public boolean getEddBool() {
+		return metadataRecord.isEdd();
+	}
+
 	public String getAuthorityRecordId() {
 		return metadataRecord.getAuthorityRecordId();
 	}

@@ -141,10 +141,18 @@ public class MetadataMarcRecord implements MetadataRecord {
 				return Pair.of(Pattern.compile("\\b" + split[0] + "\\b", Pattern.CASE_INSENSITIVE), split[1]);
 			}).collect(Collectors.toList());
 
-	private static final List<HarvestedRecordFormatEnum> FORMAT_ALLOWED = new ArrayList<>();
+	private static final List<HarvestedRecordFormatEnum> ZISKEJ_FORMAT_ALLOWED = new ArrayList<>();
 
 	static {
-		FORMAT_ALLOWED.add(HarvestedRecordFormatEnum.BOOKS);
+		ZISKEJ_FORMAT_ALLOWED.add(HarvestedRecordFormatEnum.BOOKS);
+	}
+
+	private static final List<HarvestedRecordFormatEnum> EDD_FORMAT_ALLOWED = new ArrayList<>();
+
+	static {
+		EDD_FORMAT_ALLOWED.add(HarvestedRecordFormatEnum.BOOKS);
+		EDD_FORMAT_ALLOWED.add(HarvestedRecordFormatEnum.PERIODICALS);
+		EDD_FORMAT_ALLOWED.add(HarvestedRecordFormatEnum.ARTICLES);
 	}
 
 	public MetadataMarcRecord(MarcRecord underlayingMarc) {
@@ -1782,7 +1790,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 	public boolean isZiskej() {
 		boolean result = harvestedRecord.getHarvestedFrom().isZiskejEnabled()
 				&& !underlayingMarc.getDataFields("996").isEmpty()
-				&& !Collections.disjoint(getDetectedFormatList(), FORMAT_ALLOWED);
+				&& !Collections.disjoint(getDetectedFormatList(), ZISKEJ_FORMAT_ALLOWED);
 		if (!result) return false;
 		for (DataField df : underlayingMarc.getDataFields("996")) {
 			if (df.getSubfield('s') != null && !ZISKEJ_PRESENT_996.contains(df.getSubfield('s').getData().toUpperCase())) {
@@ -1806,4 +1814,16 @@ public class MetadataMarcRecord implements MetadataRecord {
 		}
 		return exists ? count : null;
 	}
+
+	/**
+	 * allowed sources, with allowed formats
+	 *
+	 * @return boolean
+	 */
+	@Override
+	public boolean isEdd() {
+		return harvestedRecord.getHarvestedFrom().isZiskejEnabled()
+				&& !Collections.disjoint(getDetectedFormatList(), EDD_FORMAT_ALLOWED);
+	}
+
 }
