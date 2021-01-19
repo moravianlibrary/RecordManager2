@@ -2374,3 +2374,7 @@ UPDATE import_conf SET item_id='tritius' WHERE id=332;
 
 --changeset tomascejpek:233 context:cpk
 UPDATE import_conf SET item_id='other' WHERE id=332;
+
+--changeset tomascejpek:234 context:cpk
+UPDATE kramerius_conf SET url='https://kramerius.mzk.cz/search/api/v5.0' WHERE import_conf_id=99001;
+UPDATE kramerius_conf SET url='https://kramerius.kvkli.cz/search/api/v5.0' WHERE import_conf_id=99021;
