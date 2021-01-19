@@ -127,6 +127,7 @@ public class Constants {
 	public static final String PREFIX_KRAM_CUNILF1		= "kram-cunilf1";
 	public static final String PREFIX_KRAM_DIFMOE		= "kram-difmoe";
 	public static final String PREFIX_KRAM_DSMO			= "kram-dsmo";
+	public static final String PREFIX_KRAM_HMT			= "kram-hmt";
 	public static final String PREFIX_KRAM_LMDA			= "kram-lmda";
 	public static final String PREFIX_KRAM_MENDELU		= "kram-mendelu";
 	public static final String PREFIX_KRAM_MJH			= "kram-mjh";
