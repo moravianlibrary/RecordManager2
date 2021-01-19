@@ -171,6 +171,7 @@ public class MetadataRecordFactory {
 		case Constants.PREFIX_KRAM_CUNILF1:
 		case Constants.PREFIX_KRAM_DIFMOE:
 		case Constants.PREFIX_KRAM_DSMO:
+		case Constants.PREFIX_KRAM_HMT:
 		case Constants.PREFIX_KRAM_LMDA:
 		case Constants.PREFIX_KRAM_MENDELU:
 		case Constants.PREFIX_KRAM_MJH:
