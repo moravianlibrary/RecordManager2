@@ -2383,3 +2383,5 @@ UPDATE kramerius_conf SET url='https://kramerius.kvkli.cz/search/api/v5.0' WHERE
 ALTER TABLE harvested_record ADD COLUMN loans DECIMAL(10);
 ALTER TABLE harvested_record ADD COLUMN callnumber VARCHAR(100);
 
+--changeset tomascejpek:236 context:cpk
+UPDATE kramerius_conf SET availability_dest_url='https://ndk.cz/uuid/' where import_conf_id=99004;
