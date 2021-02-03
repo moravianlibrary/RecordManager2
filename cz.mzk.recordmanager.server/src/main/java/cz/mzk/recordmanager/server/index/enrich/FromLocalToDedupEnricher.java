@@ -15,7 +15,6 @@ public class FromLocalToDedupEnricher implements DedupRecordEnricher {
 			SolrFieldConstants.TITLE_SEARCH_TXT_MV,
 			SolrFieldConstants.CALLNUMBER_SEARCH_TXT_MV,
 			SolrFieldConstants.OBALKY_ANNOTATION,
-			SolrFieldConstants.STATUSES_FACET,
 			SolrFieldConstants.GENRE_FACET_STR_MV,
 			SolrFieldConstants.GENRE_FACET,
 			SolrFieldConstants.CONSPECTUS_STR_MV,
