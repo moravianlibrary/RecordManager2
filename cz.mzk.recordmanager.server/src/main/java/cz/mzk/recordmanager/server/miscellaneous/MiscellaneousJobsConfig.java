@@ -5,8 +5,10 @@ import cz.mzk.recordmanager.server.jdbc.LongValueRowMapper;
 import cz.mzk.recordmanager.server.miscellaneous.caslin.keys.*;
 import cz.mzk.recordmanager.server.miscellaneous.itemid.GenerateItemIdJobParametersValidator;
 import cz.mzk.recordmanager.server.miscellaneous.itemid.GenerateItemIdWriter;
+import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecord.HarvestedRecordUniqueId;
 import cz.mzk.recordmanager.server.model.SkatKey;
+import cz.mzk.recordmanager.server.oai.harvest.HarvestedRecordWriter;
 import cz.mzk.recordmanager.server.springbatch.JobFailureListener;
 import cz.mzk.recordmanager.server.springbatch.StepProgressListener;
 import cz.mzk.recordmanager.server.util.Constants;
@@ -25,12 +27,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.task.TaskExecutor;
+import org.springframework.jdbc.core.RowMapper;
 
 import javax.sql.DataSource;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.*;
 
 @Configuration
 public class MiscellaneousJobsConfig {
@@ -222,6 +224,75 @@ public class MiscellaneousJobsConfig {
 	@StepScope
 	public GenerateItemIdWriter generateItemIdWriter() {
 		return new GenerateItemIdWriter();
+	}
+
+	//
+	@Bean
+	public Job MappedSourceFilterJob(
+			@Qualifier(Constants.JOB_ID_MAPPED_SOURCE_FILTER + ":mappedSourceFilterStep") Step mappedSourceFilterStep
+	) {
+		return jobs.get(Constants.JOB_ID_MAPPED_SOURCE_FILTER)
+				.validator(new MappedSourceJobParametersValidator())
+				.flow(mappedSourceFilterStep)
+				.end()
+				.build();
+	}
+
+	@Bean(name = Constants.JOB_ID_MAPPED_SOURCE_FILTER + ":mappedSourceFilterStep")
+	public Step mappedSourceFilterStep() throws Exception {
+		return steps.get("mappedSourceFilterStep")
+				.listener(new StepProgressListener())
+				.<List<String>, List<HarvestedRecord>>chunk(100)
+				.reader(mappedSourceFilterReader(LONG_OVERRIDEN_BY_EXPRESSION))
+				.processor(mappedSourceFilterProcessor())
+				.writer(mappedSourceFilterWriter())
+				.taskExecutor(taskExecutor)
+				.build();
+	}
+
+	@Bean(name = Constants.JOB_ID_MAPPED_SOURCE_FILTER + ":mappedSourceFilterReader")
+	@StepScope
+	public synchronized ItemReader<List<String>> mappedSourceFilterReader(
+			@Value("#{jobParameters[" + Constants.JOB_PARAM_CONF_ID + "]}") Long confId)
+			throws Exception {
+		JdbcPagingItemReader<List<String>> reader = new JdbcPagingItemReader<>();
+		SqlPagingQueryProviderFactoryBean pqpf = new SqlPagingQueryProviderFactoryBean();
+		pqpf.setDataSource(dataSource);
+		pqpf.setSelectClause("SELECT import_conf_id, record_id");
+		pqpf.setFromClause("FROM harvested_record");
+		pqpf.setWhereClause("WHERE import_conf_id=:conf_id AND deleted is null");
+		Map<String, Object> parameterValues = new HashMap<>();
+		parameterValues.put("conf_id", confId);
+		reader.setParameterValues(parameterValues);
+		pqpf.setSortKey("record_id");
+
+		reader.setRowMapper(new ArrayHarvestedRecordMapper());
+		reader.setPageSize(1000);
+		reader.setQueryProvider(pqpf.getObject());
+		reader.setDataSource(dataSource);
+		reader.afterPropertiesSet();
+		return reader;
+	}
+
+
+	@Bean(name = Constants.JOB_ID_MAPPED_SOURCE_FILTER + ":mappedSourceFilterProcessor")
+	@StepScope
+	public MappedSourceFilterProcessor mappedSourceFilterProcessor() {
+		return new MappedSourceFilterProcessor();
+	}
+
+	@Bean(name = Constants.JOB_ID_MAPPED_SOURCE_FILTER + ":mappedSourceFilterWriter")
+	@StepScope
+	public HarvestedRecordWriter mappedSourceFilterWriter() {
+		return new HarvestedRecordWriter();
+	}
+
+	public static class ArrayHarvestedRecordMapper implements RowMapper<List<String>> {
+
+		@Override
+		public List<String> mapRow(ResultSet rs, int arg1) throws SQLException {
+			return Arrays.asList(rs.getString("record_id").split(","));
+		}
 	}
 
 }
