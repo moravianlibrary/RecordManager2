@@ -224,6 +224,8 @@ public class MetadataRecordFactory {
 		case Constants.PREFIX_ARCHBIB:
 		case Constants.PREFIX_CZHISTBIB:
 			return new HistografbibMetadataMarcRecord(marcRec, hr);
+		case Constants.PREFIX_CELITEBIB:
+			return new CelitebibMarcMetadataRecord(marcRec, hr);
 		default:
 			return new MetadataMarcRecord(marcRec, hr);
 		}
