@@ -179,6 +179,7 @@ public class MetadataRecordFactory {
 		case Constants.PREFIX_KRAM_NACR:
 		case Constants.PREFIX_KRAM_NFA:
 		case Constants.PREFIX_KRAM_NM:
+		case Constants.PREFIX_KRAM_NULK:
 		case Constants.PREFIX_KRAM_PKJAK:
 		case Constants.PREFIX_KRAM_UPM:
 		case Constants.PREFIX_KRAM_VSE:
