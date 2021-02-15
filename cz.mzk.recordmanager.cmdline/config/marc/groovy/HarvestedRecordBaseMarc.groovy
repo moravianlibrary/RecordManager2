@@ -62,6 +62,7 @@ auto_conspectus_txt_mv = getAutoConspectus()
 periodical_availability_int_mv = getPeriodicalAvailability()
 sigla_display = getSigla()
 mappings996_display_mv = getMappings996()
+aleph_adm_id_txt_mv = getAlephAdmId()
 
 _hidden_isbn_annotation_obalkyknih = getFields "020a:902a"
 

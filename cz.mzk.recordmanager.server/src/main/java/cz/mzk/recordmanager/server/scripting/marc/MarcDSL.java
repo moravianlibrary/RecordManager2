@@ -75,6 +75,8 @@ public class MarcDSL extends BaseDSL {
 	private static final String DISPLAY773_ISBN = "ISBN ";
 	private static final String DISPLAY773_JOINER = ". -- ";
 
+	private static final String ALEPH_ID_FORMAT = "%s.%s";
+
 	private static final ISBNValidator ISBN_VALIDATOR = ISBNValidator.getInstance(true);
 
 	private final MarcFunctionContext context;
@@ -935,4 +937,13 @@ public class MarcDSL extends BaseDSL {
 		return new Mappings996Factory().getMappingsAsCsv(context.harvestedRecord(), context.record());
 	}
 
+	public List<String> getAlephAdmId() {
+		List<String> results = new ArrayList<>();
+		for (DataField df : record.getDataFields("996")) {
+			if (df.getSubfield('j') != null && df.getSubfield('w') != null) {
+				results.add(String.format(ALEPH_ID_FORMAT, df.getSubfield('j').getData(), df.getSubfield('w').getData()));
+			}
+		}
+		return results;
+	}
 }
