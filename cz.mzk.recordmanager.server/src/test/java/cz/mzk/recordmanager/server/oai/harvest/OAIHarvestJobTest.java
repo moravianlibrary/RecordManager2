@@ -247,4 +247,38 @@ public class OAIHarvestJobTest extends AbstractTest {
 		Assert.assertEquals(exec.getExitStatus(), ExitStatus.COMPLETED);
 	}
 
+	@Test
+	public void testMappedHarvest() throws Exception {
+		reset(httpClient);
+		InputStream response0 = this.getClass().getResourceAsStream("/sample/Identify.xml");
+		InputStream response1 = this.getClass().getResourceAsStream("/sample/ListRecordsKNAVALL.xml");
+		expect(httpClient.executeGet("https://aleph.lib.cas.cz/OAI?verb=Identify")).andReturn(response0);
+		expect(httpClient.executeGet("https://aleph.lib.cas.cz/OAI?verb=ListRecords&metadataPrefix=marc21")).andReturn(response1);
+		replay(httpClient);
+
+		Map<String, JobParameter> params = new HashMap<>();
+		params.put(Constants.JOB_PARAM_CONF_ID, new JobParameter(422L));
+
+		JobExecution exec = jobExecutor.execute("oaiHarvestJob", new JobParameters(params));
+		Assert.assertEquals(exec.getExitStatus(), ExitStatus.COMPLETED);
+
+		OAIHarvestConfiguration config = configDao.get(422L);
+		HarvestedRecord record = recordDao.findByIdAndHarvestConfiguration("KNA01-000000001", config);
+		Assert.assertNotNull(record, "Record not stored.");
+		config = configDao.get(420L);
+		record = recordDao.findByIdAndHarvestConfiguration("KNA01-000000001", config);
+		Assert.assertNotNull(record, "Record not stored.");
+
+		config = configDao.get(422L);
+		record = recordDao.findByIdAndHarvestConfiguration("KNA01-000000002", config);
+		Assert.assertNotNull(record, "Record not stored.");
+		config = configDao.get(420L);
+		record = recordDao.findByIdAndHarvestConfiguration("KNA01-000000002", config);
+		Assert.assertNull(record, "Record stored.");
+
+		config = configDao.get(420L);
+		record = recordDao.findByIdAndHarvestConfiguration("KNA01-000000003", config);
+		Assert.assertNotNull(record.getDeleted(), "Record is not deleted.");
+	}
+
 }

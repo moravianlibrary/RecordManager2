@@ -2107,6 +2107,7 @@ ALTER TABLE harvested_record ADD COLUMN callnumber VARCHAR(100);
 -- 28. 01. 2021 tomascejpek
 UPDATE kramerius_conf SET availability_dest_url='https://ndk.cz/uuid/' where import_conf_id=99004;
 
+<<<<<<< HEAD
 -- 01. 02. 2021 tomascejpek
 INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (223, 'MKRIC', 'https://knihovna.ricany.cz/', 'https://tritius-knihovna.ricany.cz/', 'Říčany', 'SC');
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id) VALUES (423, 223, 200, 'mkric', 11, false, true, true, true, 'U', 'other');
@@ -2148,3 +2149,13 @@ UPDATE import_conf SET mappings996='koha' WHERE id IN (306,340);
 UPDATE import_conf SET mappings996='caslin' WHERE id IN (316);
 UPDATE import_conf SET mappings996='dawinci' WHERE id IN (301,369,403,404,405,406,407,408);
 >>>>>>> mappings996
+=======
+-- 28. 01. 2021 tomascejpek
+INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (220, 'USDBIBL', '', '', null, 'bibliography');
+INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency) VALUES (420, 220, 200, 'usdbibl', 11, false, true, true, false, 'U');
+INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (420,NULL,NULL,'marc21',NULL);
+INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (222, 'KNAVALL', '', '', null, null);
+INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, generate_dedup_keys, generate_biblio_linker_keys, indexed) VALUES (422, 222, 200, 'knavall', 11, false, true, true, true, 'U', false, false, false);
+INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (422,'https://aleph.lib.cas.cz/OAI','KNA01','marc21',NULL);
+
+>>>>>>> origin/knav
