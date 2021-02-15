@@ -2115,6 +2115,7 @@ INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granul
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 -- 15. 02. 2021 tomascejpek
 INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (99048, 'KRAM-NULK', '', '', '','kramerius');
 INSERT INTO import_conf (id,library_id,contact_person_id,id_prefix,base_weight,cluster_id_enabled,filtering_enabled,interception_enabled,is_library,harvest_frequency,mapping_script,generate_dedup_keys,mapping_dedup_script,item_id) VALUES (99048,99048,200,'kram-nulk',8,false,true,false,false,'U',null,true,null,null);
@@ -2138,3 +2139,12 @@ INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (99047, 'K
 INSERT INTO import_conf (id,library_id,contact_person_id,id_prefix,base_weight,cluster_id_enabled,filtering_enabled,interception_enabled,is_library,harvest_frequency,mapping_script,generate_dedup_keys,mapping_dedup_script,item_id) VALUES (99047,99047,200,'kram-hmt',8,false,true,false,false,'U',null,true,null,null);
 INSERT INTO kramerius_conf (import_conf_id,url,url_solr,query_rows,metadata_stream,auth_token,fulltext_harvest_type,download_private_fulltexts,harvest_job_name,collection,availability_source_url,availability_dest_url) VALUES (99047,'http://kramerius.husitskemuzeum.cz/search/api/v5.0',null,50,'BIBLIO_MODS',null,'solr',true,'krameriusHarvestJob',null,null,'http://kramerius.husitskemuzeum.cz/search/handle/');
 >>>>>>> kram-hmt
+=======
+-- 21. 07. 2020 tomascejpek
+ALTER TABLE import_conf ADD COLUMN mappings996 VARCHAR(20);
+UPDATE import_conf SET mappings996='aleph' WHERE id IN (300,304,307,313,315,321,324,325,326,330,332,333,335,337,361,391);
+UPDATE import_conf SET mappings996='tritius' WHERE id IN (311,312,314,334,346,350,353,356,364,370,371,373,374,375,376,377,378,380,381,383,384,386,388,390,397,398,401,402,409,411);
+UPDATE import_conf SET mappings996='koha' WHERE id IN (306,340);
+UPDATE import_conf SET mappings996='caslin' WHERE id IN (316);
+UPDATE import_conf SET mappings996='dawinci' WHERE id IN (301,369,403,404,405,406,407,408);
+>>>>>>> mappings996
