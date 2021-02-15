@@ -36,7 +36,6 @@ public class CelitebibMarcMetadataRecord extends MetadataMarcRecord {
 	public String getSourceInfoG() {
 		String result = super.getSourceInfoG();
 		if (result == null) return null;
-		System.out.println(result);
 		for (Pair<Pattern, String> clean : CLEAN_SOURCE_INFO_G) {
 			result = CleaningUtils.replaceAll(result, clean.getKey(), clean.getValue());
 		}
@@ -45,8 +44,6 @@ public class CelitebibMarcMetadataRecord extends MetadataMarcRecord {
 			result = String.format(PARSED_SOURCE_INFO_T, matcher.group(1).trim(), matcher.group(3), matcher.group(2),
 					matcher.group(4));
 		}
-		System.out.println(result);
-		System.out.println();
 		return result;
 	}
 }
