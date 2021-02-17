@@ -2117,6 +2117,7 @@ INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granul
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 -- 15. 02. 2021 tomascejpek
 INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (99048, 'KRAM-NULK', '', '', '','kramerius');
 INSERT INTO import_conf (id,library_id,contact_person_id,id_prefix,base_weight,cluster_id_enabled,filtering_enabled,interception_enabled,is_library,harvest_frequency,mapping_script,generate_dedup_keys,mapping_dedup_script,item_id) VALUES (99048,99048,200,'kram-nulk',8,false,true,false,false,'U',null,true,null,null);
@@ -2159,3 +2160,11 @@ INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weig
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (422,'https://aleph.lib.cas.cz/OAI','KNA01','marc21',NULL);
 
 >>>>>>> origin/knav
+=======
+-- 17. 02. 2021 tomascejpek
+UPDATE kramerius_conf SET availability_dest_url='https://kramerius.lib.cas.cz/uuid/' WHERE import_conf_id=99003;
+UPDATE kramerius_conf SET availability_dest_url='https://kramerius.svkhk.cz/uuid/' WHERE import_conf_id=99014;
+UPDATE kramerius_conf SET availability_dest_url='https://kramerius.svkos.cz/uuid/' WHERE import_conf_id=99019;
+UPDATE kramerius_conf SET availability_dest_url='https://kramerius.kvkli.cz/uuid/' WHERE import_conf_id=99021;
+UPDATE kramerius_conf SET availability_dest_url='https://kramerius.mjh.cz/uuid/' WHERE import_conf_id=99034;
+>>>>>>> origin/dnnt

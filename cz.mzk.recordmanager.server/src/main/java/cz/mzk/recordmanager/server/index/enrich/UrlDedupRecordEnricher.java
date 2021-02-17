@@ -125,7 +125,7 @@ public class UrlDedupRecordEnricher implements DedupRecordEnricher {
 			if (!key.startsWith("uuid:")) continue;
 			EVersionUrl mzk = null;
 			EVersionUrl mzkDnnt = null;
-			EVersionUrl nkp = null;
+			EVersionUrl other = null;
 			for (KramAvailability kramAvailability : kramAvailabilityDAO.getByUuid(key)) {
 				EVersionUrl newUrl = EVersionUrl.create(kramAvailability);
 				if (newUrl.getSource().equals(Constants.PREFIX_KRAM_MZK)) {
@@ -137,12 +137,14 @@ public class UrlDedupRecordEnricher implements DedupRecordEnricher {
 					mzkDnnt = newUrl;
 					continue;
 				}
-				if (newUrl.getSource().equals(Constants.PREFIX_KRAM_NKP)) {
+				if (newUrl.getSource().equals(Constants.PREFIX_KRAM_NKP)
+						|| newUrl.getSource().equals(Constants.PREFIX_KRAM_KNAV)
+				) {
 					if (newUrl.getAvailability().equals(Constants.DOCUMENT_AVAILABILITY_PROTECTED)) {
 						newUrl.setAvailability(Constants.DOCUMENT_AVAILABILITY_EMERGENCY);
 						newUrl.setLink(kramAvailability.getDnntLink());
 					}
-					nkp = newUrl;
+					other = newUrl;
 					continue;
 				}
 				addToMap(urls, newUrl);
@@ -155,11 +157,11 @@ public class UrlDedupRecordEnricher implements DedupRecordEnricher {
 			}
 			if (mzk != null && (mzk.getAvailability().equals(Constants.DOCUMENT_AVAILABILITY_ONLINE) || mzkDnnt == null)) {
 				addToMap(urls, mzk);
-				if (nkp != null) addToMap(urls, nkp);
+				if (other != null) addToMap(urls, other);
 			} else if (mzkDnnt != null) {
 				addToMap(urls, mzkDnnt);
-			} else if (nkp != null) {
-				addToMap(urls, nkp);
+			} else if (other != null) {
+				addToMap(urls, other);
 			}
 		}
 	}
