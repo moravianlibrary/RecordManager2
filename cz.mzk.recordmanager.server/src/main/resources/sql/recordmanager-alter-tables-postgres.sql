@@ -2111,3 +2111,10 @@ UPDATE kramerius_conf SET availability_dest_url='https://ndk.cz/uuid/' where imp
 INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (223, 'MKRIC', 'https://knihovna.ricany.cz/', 'https://tritius-knihovna.ricany.cz/', 'Říčany', 'SC');
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id) VALUES (423, 223, 200, 'mkric', 11, false, true, true, true, 'U', 'other');
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (423,'https://tritius-knihovna.ricany.cz/tritius/oai-provider','CPK_1','marc21',NULL);
+
+-- 17. 02. 2021 tomascejpek
+UPDATE kramerius_conf SET availability_dest_url='https://kramerius.lib.cas.cz/uuid/' WHERE import_conf_id=99003;
+UPDATE kramerius_conf SET availability_dest_url='https://kramerius.svkhk.cz/uuid/' WHERE import_conf_id=99014;
+UPDATE kramerius_conf SET availability_dest_url='https://kramerius.svkos.cz/uuid/' WHERE import_conf_id=99019;
+UPDATE kramerius_conf SET availability_dest_url='https://kramerius.kvkli.cz/uuid/' WHERE import_conf_id=99021;
+UPDATE kramerius_conf SET availability_dest_url='https://kramerius.mjh.cz/uuid/' WHERE import_conf_id=99034;
