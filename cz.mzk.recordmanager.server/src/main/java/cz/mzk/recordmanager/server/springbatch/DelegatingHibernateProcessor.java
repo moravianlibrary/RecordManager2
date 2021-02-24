@@ -3,8 +3,8 @@ package cz.mzk.recordmanager.server.springbatch;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.batch.item.ItemProcessor;
-import org.springframework.orm.hibernate4.SessionFactoryUtils;
-import org.springframework.orm.hibernate4.SessionHolder;
+import org.springframework.orm.hibernate5.SessionFactoryUtils;
+import org.springframework.orm.hibernate5.SessionHolder;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 public class DelegatingHibernateProcessor<I, O> implements ItemProcessor<I, O> {
