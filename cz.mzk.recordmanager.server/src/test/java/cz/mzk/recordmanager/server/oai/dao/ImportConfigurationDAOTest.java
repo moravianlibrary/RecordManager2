@@ -37,7 +37,7 @@ public class ImportConfigurationDAOTest extends AbstractTest {
 	public void getNLK() {
 		ImportConfiguration importConf = importConfigurationDao.get(301L);
 		Assert.assertNotNull(importConf);
-		Assert.assertEquals(importConf.getHarvestFrequency(), null);
+		Assert.assertEquals(importConf.getHarvestFrequency(), HarvestFrequency.UNSPECIFIED);
 	}
 
 	@Test

@@ -19,8 +19,8 @@ public class InspirationDAOHibernate extends AbstractDomainDAOHibernate<Long, In
 		Session session = sessionFactory.getCurrentSession();
 		return (List<Inspiration>) session
 				.createQuery(
-						"from Inspiration where name = ?")
-				.setParameter(0, name)
+						"from Inspiration where name = :name")
+				.setParameter("name", name)
 				.list();
 	}
 
@@ -31,8 +31,8 @@ public class InspirationDAOHibernate extends AbstractDomainDAOHibernate<Long, In
 		return (List<HarvestedRecord>) session
 				.createQuery(
 						"FROM HarvestedRecord hr "
-						+ "WHERE hr.id in (SELECT harvestedRecordId FROM Inspiration WHERE name = ?)")
-				.setParameter(0, name)
+						+ "WHERE hr.id in (SELECT harvestedRecordId FROM Inspiration WHERE name = :name)")
+				.setParameter("name", name)
 				.list();
 	}
 
@@ -41,9 +41,9 @@ public class InspirationDAOHibernate extends AbstractDomainDAOHibernate<Long, In
 		Session session = sessionFactory.getCurrentSession();
 		return (Inspiration) session
 				.createQuery(
-						"FROM Inspiration WHERE harvestedRecordId = ? AND name = ?)")
-				.setParameter(0, id)
-				.setParameter(1, name)
+						"FROM Inspiration WHERE harvestedRecordId = :hrId AND name = :name")
+				.setParameter("hrId", id)
+				.setParameter("name", name)
 				.uniqueResult();
 	}
 

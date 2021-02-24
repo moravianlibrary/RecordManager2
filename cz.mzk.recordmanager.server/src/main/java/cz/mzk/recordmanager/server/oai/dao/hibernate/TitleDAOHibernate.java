@@ -23,8 +23,8 @@ public class TitleDAOHibernate extends AbstractDomainDAOHibernate<Long, Title>
 		Session session = sessionFactory.getCurrentSession();
 		return (List<NonperiodicalTitleClusterable>)
 				session.createSQLQuery("SELECT id,harvested_record_id,title,isbn,cnb,author_string,pages "
-						+ "FROM tmp_titles_for_simmilarity_searching "
-						+ "WHERE publication_year = ? and pages BETWEEN ? and ? AND lang = ?")
+								+ "FROM tmp_titles_for_simmilarity_searching "
+								+ "WHERE publication_year = :year and pages BETWEEN :minPages and :maxPages AND lang = :lang")
 				.setResultTransformer(new ResultTransformer() {
 
 					private static final long serialVersionUID = 1L;
@@ -51,17 +51,17 @@ public class TitleDAOHibernate extends AbstractDomainDAOHibernate<Long, Title>
 						}
 						return title;
 					}
-					
+
 					@SuppressWarnings("rawtypes")
 					@Override
 					public List transformList(List collection) {
 						return collection;
 					}
 				})
-				.setParameter(0, year)
-				.setParameter(1, minPages)
-				.setParameter(2, maxPages)
-				.setParameter(3, lang)
+						.setParameter("year", year)
+						.setParameter("minPages", minPages)
+						.setParameter("maxPages", maxPages)
+						.setParameter("lang", lang)
 				.list();
 	}
 	
@@ -70,7 +70,7 @@ public class TitleDAOHibernate extends AbstractDomainDAOHibernate<Long, Title>
 	public List<TitleClusterable> getPeriodicalsTitleForDeduplication(Long year) {
 		Session session = sessionFactory.getCurrentSession();
 		return (List<TitleClusterable>)
-				session.createSQLQuery("SELECT harvested_record_id,title,similarity_enabled FROM tmp_periodicals_years WHERE publication_year = ?")
+				session.createSQLQuery("SELECT harvested_record_id,title,similarity_enabled FROM tmp_periodicals_years WHERE publication_year = :year")
 					.setResultTransformer(new ResultTransformer() {
 						
 						private static final long serialVersionUID = 1L;
@@ -87,14 +87,14 @@ public class TitleDAOHibernate extends AbstractDomainDAOHibernate<Long, Title>
 							}
 							return titleClusterable;
 						}
-						
+
 						@SuppressWarnings("rawtypes")
 						@Override
 						public List transformList(List collection) {
 							return collection;
 						}
 					})
-					.setParameter(0, year)
+						.setParameter("year", year)
 					.list();
 	}
 }

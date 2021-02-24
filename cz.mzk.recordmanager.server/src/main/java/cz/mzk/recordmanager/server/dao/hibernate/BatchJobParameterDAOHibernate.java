@@ -19,8 +19,8 @@ public class BatchJobParameterDAOHibernate extends
 	public List<BatchJobParam> findByJobExecutionId(Long jobExecutionId) {
 		Session session = sessionFactory.getCurrentSession();
 		return (List<BatchJobParam>) session
-				.createQuery("from JobParam where id.jobExecutionId = ?")
-				.setParameter(0, jobExecutionId).list();
+				.createQuery("from JobParam where id.jobExecutionId = :id")
+				.setParameter("id", jobExecutionId).list();
 	}
 
 }

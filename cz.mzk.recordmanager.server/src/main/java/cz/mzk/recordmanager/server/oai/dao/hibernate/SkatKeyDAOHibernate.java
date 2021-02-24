@@ -20,8 +20,8 @@ public class SkatKeyDAOHibernate extends AbstractDomainDAOHibernate<SkatKeyCompo
 		Session session = sessionFactory.getCurrentSession();
 		return (List<SkatKey>)
 				session.createSQLQuery("SELECT skat_record_id,sigla,local_record_id,manually_merged"
-						+ " FROM skat_keys"
-						+ " WHERE skat_record_id = ?")
+								+ " FROM skat_keys"
+								+ " WHERE skat_record_id = :skatId")
 						.setResultTransformer(new ResultTransformer() {
 							
 							@Override
@@ -40,14 +40,14 @@ public class SkatKeyDAOHibernate extends AbstractDomainDAOHibernate<SkatKeyCompo
 								key.setManuallyMerged(manuallyMerged);
 								return key;
 							}
-							
+
 							@SuppressWarnings("rawtypes")
 							@Override
 							public List transformList(List collection) {
 								return collection;
 							}
 						})
-						.setParameter(0, skatRecordId)
+						.setParameter("skatId", skatRecordId)
 						.list();
 	}
 
@@ -56,8 +56,8 @@ public class SkatKeyDAOHibernate extends AbstractDomainDAOHibernate<SkatKeyCompo
 	public List<SkatKey> findSkatKeysBySkatId(Long skatId) {
 		Session session = sessionFactory.getCurrentSession();
 		return (List<SkatKey>) session
-				.createQuery("FROM SkatKey WHERE skat_record_id = ?")
-				.setParameter(0, skatId).list();
+				.createQuery("FROM SkatKey WHERE skat_record_id = :skatId")
+				.setParameter("skatId", skatId).list();
 	}
 
 }

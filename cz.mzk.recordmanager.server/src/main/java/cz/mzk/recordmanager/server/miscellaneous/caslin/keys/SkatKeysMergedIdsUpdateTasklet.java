@@ -131,19 +131,19 @@ public class SkatKeysMergedIdsUpdateTasklet implements Tasklet {
 		String query = "UPDATE skat_keys "
 				+ "SET manually_merged = TRUE "
 				+ "WHERE skat_record_id IN "
-				+ "(SELECT id FROM harvested_record WHERE import_conf_id = ? AND record_id = ?"
+				+ "(SELECT id FROM harvested_record WHERE import_conf_id = :icId AND record_id = :recId"
 				+ ')';
 		Session session = sessionFactory.getCurrentSession();
 		session.createSQLQuery(query)
-			.setLong(0, Constants.IMPORT_CONF_ID_CASLIN)
-			.setString(1, recordId)
+				.setParameter("icId", Constants.IMPORT_CONF_ID_CASLIN)
+				.setParameter("recId", recordId)
 			.executeUpdate();
 
-		query = "UPDATE harvested_record SET next_dedup_flag=TRUE WHERE import_conf_id = ? AND record_id = ?";
+		query = "UPDATE harvested_record SET next_dedup_flag=TRUE WHERE import_conf_id = :icId AND record_id = :recId";
 		session.createSQLQuery(query)
-			.setLong(0, Constants.IMPORT_CONF_ID_CASLIN)
-			.setString(1, recordId)
-			.executeUpdate();
+				.setParameter("icId", Constants.IMPORT_CONF_ID_CASLIN)
+				.setParameter("recId", recordId)
+				.executeUpdate();
 	}
 	
 	/**

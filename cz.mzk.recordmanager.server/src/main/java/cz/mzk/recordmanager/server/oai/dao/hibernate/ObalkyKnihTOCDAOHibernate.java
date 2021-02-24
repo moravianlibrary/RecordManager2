@@ -37,7 +37,8 @@ public class ObalkyKnihTOCDAOHibernate extends
 	@Override
 	@SuppressWarnings("unchecked")
 	public List<ObalkyKnihTOC> findByIsbn(Long isbn) {
-		return sessionFactory.getCurrentSession().createQuery("from ObalkyKnihTOC where bibInfo.isbn = ?").setParameter(0, isbn).list();
+		return sessionFactory.getCurrentSession().createQuery("from ObalkyKnihTOC where bibInfo.isbn = :isbn")
+				.setParameter("isbn", isbn).list();
 	}
 
 	@Override

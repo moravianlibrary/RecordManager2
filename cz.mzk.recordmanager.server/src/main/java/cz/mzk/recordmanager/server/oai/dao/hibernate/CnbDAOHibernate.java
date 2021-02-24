@@ -19,8 +19,8 @@ public class CnbDAOHibernate extends AbstractDomainDAOHibernate<Long, Cnb>
 		return (List<HarvestedRecord>) session
 				.createQuery(
 						"FROM HarvestedRecord hr "
-								+ "WHERE hr.id in (SELECT harvestedRecordId FROM Cnb WHERE cnb = ?)")
-				.setParameter(0, cnb)
+								+ "WHERE hr.id in (SELECT harvestedRecordId FROM Cnb WHERE cnb = :cnb)")
+				.setParameter("cnb", cnb)
 				.list();
 	}
 }
