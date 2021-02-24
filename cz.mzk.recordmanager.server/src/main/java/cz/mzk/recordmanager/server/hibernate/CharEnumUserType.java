@@ -1,5 +1,11 @@
 package cz.mzk.recordmanager.server.hibernate;
 
+import com.google.common.base.Objects;
+import org.hibernate.HibernateException;
+import org.hibernate.engine.spi.SharedSessionContractImplementor;
+import org.hibernate.usertype.ParameterizedType;
+import org.hibernate.usertype.UserType;
+
 import java.io.Serializable;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -8,13 +14,6 @@ import java.sql.Types;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
-
-import org.hibernate.HibernateException;
-import org.hibernate.engine.spi.SessionImplementor;
-import org.hibernate.usertype.ParameterizedType;
-import org.hibernate.usertype.UserType;
-
-import com.google.common.base.Objects;
 
 public class CharEnumUserType implements UserType, ParameterizedType {
 
@@ -43,11 +42,9 @@ public class CharEnumUserType implements UserType, ParameterizedType {
 	}
 
 	@Override
-	public Object nullSafeGet(ResultSet rs, String[] names,
-			SessionImplementor session, Object owner)
-			throws HibernateException, SQLException {
-		String value = rs.getString(names[0]);
-		Object result = null;
+	public Object nullSafeGet(ResultSet resultSet, String[] strings, SharedSessionContractImplementor sharedSessionContractImplementor, Object o) throws HibernateException, SQLException {
+		String value = resultSet.getString(strings[0]);
+		Object result;
 		if (value == null || value.isEmpty()) {
 			return null;
 		} else {
@@ -57,13 +54,12 @@ public class CharEnumUserType implements UserType, ParameterizedType {
 	}
 
 	@Override
-	public void nullSafeSet(PreparedStatement st, Object value, int index,
-			SessionImplementor session) throws HibernateException, SQLException {
-		if (value == null) {
-			st.setObject(index, null);
+	public void nullSafeSet(PreparedStatement preparedStatement, Object o, int i, SharedSessionContractImplementor sharedSessionContractImplementor) throws HibernateException, SQLException {
+		if (o == null) {
+			preparedStatement.setObject(i, null);
 		} else {
-			char charValue = ((CharValueEnum) value).getValue();
-			st.setString(index, String.valueOf(charValue));
+			char charValue = ((CharValueEnum) o).getValue();
+			preparedStatement.setString(i, String.valueOf(charValue));
 		}
 	}
 

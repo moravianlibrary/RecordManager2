@@ -2,7 +2,7 @@ package cz.mzk.recordmanager.server.hibernate;
 
 import com.google.common.base.Objects;
 import org.hibernate.HibernateException;
-import org.hibernate.engine.spi.SessionImplementor;
+import org.hibernate.engine.spi.SharedSessionContractImplementor;
 import org.hibernate.usertype.ParameterizedType;
 import org.hibernate.usertype.UserType;
 
@@ -42,10 +42,10 @@ public class StringEnumUserType implements UserType, ParameterizedType {
 	}
 
 	@Override
-	public Object nullSafeGet(ResultSet rs, String[] names,
-							  SessionImplementor session, Object owner)
+	public Object nullSafeGet(ResultSet resultSet, String[] strings,
+			SharedSessionContractImplementor sharedSessionContractImplementor, Object o)
 			throws HibernateException, SQLException {
-		String value = rs.getString(names[0]);
+		String value = resultSet.getString(strings[0]);
 		Object result;
 		if (value == null || value.isEmpty()) {
 			return null;
@@ -56,13 +56,12 @@ public class StringEnumUserType implements UserType, ParameterizedType {
 	}
 
 	@Override
-	public void nullSafeSet(PreparedStatement st, Object value, int index,
-							SessionImplementor session) throws HibernateException, SQLException {
-		if (value == null) {
-			st.setObject(index, null);
+	public void nullSafeSet(PreparedStatement preparedStatement, Object o, int i, SharedSessionContractImplementor sharedSessionContractImplementor) throws HibernateException, SQLException {
+		if (o == null) {
+			preparedStatement.setObject(i, null);
 		} else {
-			String stringValue = ((StringValueEnum) value).getValue();
-			st.setString(index, String.valueOf(stringValue));
+			String stringValue = ((StringValueEnum) o).getValue();
+			preparedStatement.setString(i, String.valueOf(stringValue));
 		}
 	}
 

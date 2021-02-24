@@ -24,8 +24,9 @@ public class Cosmotron996DAOHibernate extends AbstractDomainDAOHibernate<Long, C
 			Long configurationId) {
 		Session session = sessionFactory.getCurrentSession();
 		return (Cosmotron996) session
-				.createQuery("FROM Cosmotron996 WHERE recordId = ? AND harvestedFrom = ?")
-				.setParameter(0, recordId).setParameter(1, configurationId)
+				.createQuery("FROM Cosmotron996 WHERE recordId = :recordId AND harvestedFrom = :harvestedFrom")
+				.setParameter("recordId", recordId)
+				.setParameter("harvestedFrom", configurationId)
 				.uniqueResult();
 	}
 
@@ -35,8 +36,9 @@ public class Cosmotron996DAOHibernate extends AbstractDomainDAOHibernate<Long, C
 		Session session = sessionFactory.getCurrentSession();
 		return (List<Cosmotron996>) session
 				.createQuery(
-						"FROM Cosmotron996 WHERE harvestedFrom = ? AND parentRecordId = ? AND deleted IS NULL")
-				.setParameter(0, configurationId).setParameter(1, parentRecordId)
+						"FROM Cosmotron996 WHERE harvestedFrom = :harvestedFrom AND parentRecordId = :parentRecordId AND deleted IS NULL")
+				.setParameter("harvestedFrom", configurationId)
+				.setParameter("parentRecordId", parentRecordId)
 				.list();
 	}
 

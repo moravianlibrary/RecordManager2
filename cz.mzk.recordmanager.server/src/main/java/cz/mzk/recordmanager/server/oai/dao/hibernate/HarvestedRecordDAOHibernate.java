@@ -36,8 +36,9 @@ public class HarvestedRecordDAOHibernate extends
 		Session session = sessionFactory.getCurrentSession();
 		return (HarvestedRecord) session
 				.createQuery(
-						"from HarvestedRecord where uniqueId.recordId = ? and uniqueId.harvestedFromId = ?")
-				.setParameter(0, recordId).setParameter(1, configuration.getId())
+						"from HarvestedRecord where uniqueId.recordId = :recordId and uniqueId.harvestedFromId = :harvestedFromId")
+				.setParameter("recordId", recordId)
+				.setParameter("harvestedFromId", configuration.getId())
 				.uniqueResult();
 	}
 
@@ -47,8 +48,9 @@ public class HarvestedRecordDAOHibernate extends
 		Session session = sessionFactory.getCurrentSession();
 		return (HarvestedRecord) session
 				.createQuery(
-						"from HarvestedRecord where uniqueId.recordId = ? and uniqueId.harvestedFromId = ?")
-				.setParameter(0, recordId).setParameter(1, configurationId)
+						"from HarvestedRecord where uniqueId.recordId = :recordId and uniqueId.harvestedFromId = :harvestedFromId")
+				.setParameter("recordId", recordId)
+				.setParameter("harvestedFromId", configurationId)
 				.uniqueResult();
 	}
 
@@ -61,9 +63,9 @@ public class HarvestedRecordDAOHibernate extends
 		String id = parts[1];
 		Session session = sessionFactory.getCurrentSession();
 		return (HarvestedRecord) session //
-				.createQuery("from HarvestedRecord where uniqueId.recordId = ? and harvestedFrom.idPrefix = ?") // 
-				.setParameter(0, id) //
-				.setParameter(1, prefix) //
+				.createQuery("from HarvestedRecord where uniqueId.recordId = :recordId and harvestedFrom.idPrefix = :idPrefix") //
+				.setParameter("recordId", id) //
+				.setParameter("idPrefix", prefix) //
 				.uniqueResult();
 	}
 
@@ -71,8 +73,8 @@ public class HarvestedRecordDAOHibernate extends
 	public HarvestedRecord findByRecordId(String uniqueId) {
 		Session session = sessionFactory.getCurrentSession();
 		return (HarvestedRecord) session
-				.createQuery("from HarvestedRecord where uniqueId.recordId = ?")
-				.setParameter(0, uniqueId)
+				.createQuery("from HarvestedRecord where uniqueId.recordId = :recordId")
+				.setParameter("recordId", uniqueId)
 				.uniqueResult();
 	}
 	
@@ -80,9 +82,9 @@ public class HarvestedRecordDAOHibernate extends
 	public HarvestedRecord findByHarvestConfAndRaw001Id(Long configurationId, String id001) {
 		Session session = sessionFactory.getCurrentSession();
 		return (HarvestedRecord) session
-				.createQuery("from HarvestedRecord where uniqueId.harvestedFromId = ? and raw001Id = ?")
-				.setParameter(0, configurationId)
-				.setParameter(1, id001)
+				.createQuery("from HarvestedRecord where uniqueId.harvestedFromId = :harvestedFromId and raw001Id = :raw001")
+				.setParameter("harvestedFromId", configurationId)
+				.setParameter("raw001", id001)
 				.uniqueResult();
 	}
 
@@ -91,8 +93,9 @@ public class HarvestedRecordDAOHibernate extends
 		Session session = sessionFactory.getCurrentSession();
 		return (HarvestedRecord) session
 				.createQuery(
-						"from HarvestedRecord where uniqueId.harvestedFromId = ? and tezaurus = ?")
-				.setParameter(0, configurationId).setParameter(1, tezaurus)
+						"from HarvestedRecord where uniqueId.harvestedFromId = :harvestedFromId and tezaurus = :tezaurus")
+				.setParameter("harvestedFromId", configurationId)
+				.setParameter("tezaurus", tezaurus)
 				.uniqueResult();
 	}
 
@@ -119,8 +122,8 @@ public class HarvestedRecordDAOHibernate extends
 	public List<HarvestedRecord> getByHarvestConfiguration(ImportConfiguration configuration) {
 		Session session = sessionFactory.getCurrentSession();
 		return (List<HarvestedRecord>) session
-				.createQuery("from HarvestedRecord where import_conf_id = ?")
-				.setParameter(0, configuration.getId())
+				.createQuery("from HarvestedRecord where import_conf_id = :icConf")
+				.setParameter("icConf", configuration.getId())
 				.list();
 	}
 
@@ -160,9 +163,9 @@ public class HarvestedRecordDAOHibernate extends
 	public void deleteUpvApplicationRecord(String appId) {
 		Session session = sessionFactory.getCurrentSession();
 		HarvestedRecord hr = (HarvestedRecord) session
-				.createQuery("from HarvestedRecord where uniqueId.harvestedFromId = ? and uniqueId.recordId = ?")
-				.setParameter(0, Constants.IMPORT_CONF_ID_UPV)
-				.setParameter(1, appId)
+				.createQuery("from HarvestedRecord where uniqueId.harvestedFromId = :harvestedFromId and uniqueId.recordId = :recordId")
+				.setParameter("harvestedFromId", Constants.IMPORT_CONF_ID_UPV)
+				.setParameter("recordId", appId)
 				.uniqueResult();
 		if (hr != null) {
 			hr.setUpdated(new Date());
@@ -175,8 +178,8 @@ public class HarvestedRecordDAOHibernate extends
 	public String getIdBySigla(String sigla) {
 		Session session = sessionFactory.getCurrentSession();
 		HarvestedRecord hr = (HarvestedRecord) session
-				.createQuery("from HarvestedRecord where sigla = ?")
-				.setParameter(0, sigla)
+				.createQuery("from HarvestedRecord where sigla = :sigla")
+				.setParameter("sigla", sigla)
 				.uniqueResult();
 		return (hr != null) ? hr.getHarvestedFrom().getIdPrefix() + '.' + hr.getUniqueId().getRecordId() : null;
 
@@ -393,8 +396,8 @@ public class HarvestedRecordDAOHibernate extends
 	public Collection<HarvestedRecord> getByBiblioLinkerId(Long blId) {
 		Session session = sessionFactory.getCurrentSession();
 		return (List<HarvestedRecord>) session
-				.createQuery("from HarvestedRecord where biblio_linker_id = ?")
-				.setParameter(0, blId)
+				.createQuery("from HarvestedRecord where biblio_linker_id = :biblioLinkerId")
+				.setParameter("biblioLinkerId", blId)
 				.list();
 	}
 
@@ -413,8 +416,8 @@ public class HarvestedRecordDAOHibernate extends
 	public Collection<HarvestedRecord> getByBiblioLinkerIdAndSimilarFlag(Long blId) {
 		Session session = sessionFactory.getCurrentSession();
 		return (List<HarvestedRecord>) session
-				.createQuery("from HarvestedRecord where biblio_linker_id = ? and bl_disadvantaged is true")
-				.setParameter(0, blId)
+				.createQuery("from HarvestedRecord where biblio_linker_id = :biblioLinkerId and bl_disadvantaged is true")
+				.setParameter("biblioLinkerId", blId)
 				.list();
 	}
 }

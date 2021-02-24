@@ -17,8 +17,9 @@ public class TezaurusDAOHibernate extends
 		Session session = sessionFactory.getCurrentSession();
 		return (TezaurusRecord) session
 				.createQuery(
-						"from TezaurusRecord where recordId = ? and harvestedFrom = ?")
-				.setParameter(0, recordId).setParameter(1, configuration)
+						"from TezaurusRecord where recordId = :recordId and harvestedFrom = :harvestedFrom")
+				.setParameter("recordId", recordId)
+				.setParameter("harvestedFrom", configuration)
 				.uniqueResult();
 	}
 
@@ -28,9 +29,10 @@ public class TezaurusDAOHibernate extends
 		Session session = sessionFactory.getCurrentSession();
 		return (TezaurusRecord) session
 				.createQuery(
-						"FROM TezaurusRecord WHERE harvestedFrom = ? AND tezaurusKey.sourceField = ? AND tezaurusKey.name = ?")
-				.setParameter(0, configuration).setParameter(1, sourceField)
-				.setParameter(2, name).uniqueResult();
+						"FROM TezaurusRecord WHERE harvestedFrom = :harvestedFrom AND tezaurusKey.sourceField = :sourceField AND tezaurusKey.name = :name")
+				.setParameter("harvestedFrom", configuration)
+				.setParameter("sourceField", sourceField)
+				.setParameter("name", name).uniqueResult();
 	}
 
 }
