@@ -2415,3 +2415,8 @@ INSERT INTO sigla (id, import_conf_id, sigla) VALUES (90, 418, 'SVG503');
 
 --changeset tomascejpek:242 context:cpk
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (75, 401, 'KOG001');
+
+--changeset tomascejpek:243 context:cpk
+INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (225, 'MKBOSKOVICE', 'https://www.kulturaboskovice.cz/knihovna', 'https://boskovice.tritius.cz/', 'Boskovice', 'JM');
+INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id) VALUES (425, 225, 200, 'mkboskovice', 11, false, true, true, true, 'U', 'other');
+INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (425,'https://boskovice.tritius.cz/tritius/oai-provider','CPK_1','marc21',NULL);
