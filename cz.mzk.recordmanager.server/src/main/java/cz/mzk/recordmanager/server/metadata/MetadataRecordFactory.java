@@ -215,6 +215,8 @@ public class MetadataRecordFactory {
 			return new BookportMetadataMarcRecord(marcRec, hr);
 		case Constants.PREFIX_MUNIPRESS:
 			return new MunipressMetadataMarcRecord(marcRec, hr);
+		case Constants.PREFIX_ANL:
+			return new AnlMarcMetadataRecord(marcRec, hr);
 		default:
 			return new MetadataMarcRecord(marcRec, hr);
 		}
