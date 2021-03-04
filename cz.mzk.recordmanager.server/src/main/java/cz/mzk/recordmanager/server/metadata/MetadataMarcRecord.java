@@ -147,7 +147,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 		ZISKEJ_FORMAT_ALLOWED.add(HarvestedRecordFormatEnum.BOOKS);
 	}
 
-	private static final List<HarvestedRecordFormatEnum> EDD_FORMAT_ALLOWED = new ArrayList<>();
+	protected static final List<HarvestedRecordFormatEnum> EDD_FORMAT_ALLOWED = new ArrayList<>();
 
 	static {
 		EDD_FORMAT_ALLOWED.add(HarvestedRecordFormatEnum.BOOKS);
