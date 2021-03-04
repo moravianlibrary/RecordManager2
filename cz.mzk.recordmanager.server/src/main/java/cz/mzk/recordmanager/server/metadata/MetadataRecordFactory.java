@@ -220,6 +220,8 @@ public class MetadataRecordFactory {
 			return new HistografbibMetadataMarcRecord(marcRec, hr);
 		case Constants.PREFIX_CELITEBIB:
 			return new CelitebibMarcMetadataRecord(marcRec, hr);
+		case Constants.PREFIX_ANL:
+			return new AnlMarcMetadataRecord(marcRec, hr);
 		default:
 			return new MetadataMarcRecord(marcRec, hr);
 		}
