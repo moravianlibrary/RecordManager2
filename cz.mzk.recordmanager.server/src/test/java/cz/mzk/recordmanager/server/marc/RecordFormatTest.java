@@ -282,14 +282,6 @@ public class RecordFormatTest extends AbstractTest {
 		metadataRecord = metadataFactory.getMetadataRecord(MarcRecordFactory.recordFactory(data));
 		Assert.assertTrue(metadataRecord.getDetectedFormatList().contains(HarvestedRecordFormatEnum.OTHER_COMPUTER_CARRIER));
 
-		for (char c : new char[]{'a', 'c', 'd', 'i', 'j', 'p', 't'}) {
-			data.clear();
-			data.add("000 000000" + c + "0000");
-			data.add("008 -----------------------s");
-			metadataRecord = metadataFactory.getMetadataRecord(MarcRecordFactory.recordFactory(data));
-			Assert.assertTrue(metadataRecord.getDetectedFormatList().contains(HarvestedRecordFormatEnum.OTHER_COMPUTER_CARRIER));
-		}
-
 		for (char[] testArray : new char[][]{{'a', 'c', 'd', 'i', 'j', 'p', 't'}, {'e', 'f', 'g', 'k', 'o', 'p', 'r'}}) {
 			for (char c : testArray) {
 				data.clear();
@@ -297,14 +289,6 @@ public class RecordFormatTest extends AbstractTest {
 				metadataRecord = metadataFactory.getMetadataRecord(MarcRecordFactory.recordFactory(data));
 				Assert.assertTrue(metadataRecord.getDetectedFormatList().contains(HarvestedRecordFormatEnum.OTHER_COMPUTER_CARRIER));
 			}
-		}
-
-		for (char c : new char[]{'e', 'f', 'g', 'k', 'o', 'p', 'r'}) {
-			data.clear();
-			data.add("000 000000" + c + "0000");
-			data.add("008 -----------------------------s");
-			metadataRecord = metadataFactory.getMetadataRecord(MarcRecordFactory.recordFactory(data));
-			Assert.assertTrue(metadataRecord.getDetectedFormatList().contains(HarvestedRecordFormatEnum.OTHER_COMPUTER_CARRIER));
 		}
 
 		data.clear();

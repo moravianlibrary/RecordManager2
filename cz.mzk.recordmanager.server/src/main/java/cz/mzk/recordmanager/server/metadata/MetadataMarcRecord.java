@@ -522,10 +522,6 @@ public class MetadataMarcRecord implements MetadataRecord {
 		char f007_00 = (f007 != null) && !f007.isEmpty() ? Character.toLowerCase(f007.charAt(0)) : ' ';
 		char f007_01 = (f007 != null) && (f007.length() > 1) ? Character.toLowerCase(f007.charAt(1)) : ' ';
 
-		String f008 = underlayingMarc.getControlField("008");
-		char f008_23 = (f008 != null) && (f008.length() > 23) ? Character.toLowerCase(f008.charAt(23)) : ' ';
-		char f008_29 = (f008 != null) && (f008.length() > 29) ? Character.toLowerCase(f008.charAt(29)) : ' ';
-
 		String f245h = underlayingMarc.getField("245", 'h');
 		if (f245h == null) f245h = "";
 
@@ -539,9 +535,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 		if (f338b == null) f338b = "";
 
 		return ELEKTRONICKY_ZDROJ.matcher(f245h).find()
-				|| (MetadataUtils.containsChar(ARRAY_ACDIJPT, ldr06) && f008_23 == 's')
 				|| (MetadataUtils.containsChar(ARRAY_ACDIJPT, f006_00) && f006_06 == 's')
-				|| (MetadataUtils.containsChar(ARRAY_EFGKOPR, ldr06) && f008_29 == 's')
 				|| (MetadataUtils.containsChar(ARRAY_EFGKOPR, f006_00) && f006_06 == 's')
 				|| (ldr06 == 'm' && f006_00 == 'm')
 				|| (ldr06 == 'm' && MULTIMEDIUM.matcher(f245h).find() && CD_ROM.matcher(f300a).find())
