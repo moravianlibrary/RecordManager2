@@ -323,7 +323,7 @@ INSERT INTO import_conf (id,library_id,contact_person_id,id_prefix,base_weight,c
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (300,'https://aleph.mzk.cz/OAI','MZK01-CPK','marc21','SECOND');
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity,harvest_job_name) VALUES (301,'http://oai.medvik.cz/medvik2cpk/oai',null,'xml-marc','DAY','oaiHarvestOneByOneJob');
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (302,'https://web2.mlp.cz/cgi/oaie','cpk','marc21e',null);
-INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity,extract_id_regex,harvest_job_name) VALUES (303,'https://katalog.kjm.cz/oai','KJMALL','oai_marcxml_cpk','DAY','s/[^:]+:[^:]+:[^\\/]+\\/([^\\/]+)/kjm_us_cat*$1/','cosmotronHarvestJob');
+INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity,extract_id_regex,harvest_job_name) VALUES (303,'https://katalog.kjm.cz/oai','CPKALL','oai_marcxml_cpk','DAY','s/[^:]+:[^:]+:[^\\/]+\\/([^\\/]+)/kjm_us_cat*$1/','cosmotronHarvestJob');
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (304,'https://aleph.nkp.cz/OAI','NKC','marc21','SECOND');
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (305,'http://sc.vpk.cz/cgi-bin/oai2',null,'marc21',null);
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity,extract_id_regex) VALUES (306,'https://opac.moderniknihovna.cz/cgi-bin/koha/oai.pl','CPK','marccpk',NULL,'UOG505:(.*)');
@@ -631,6 +631,7 @@ INSERT INTO sigla (id, import_conf_id, sigla) VALUES (64, 390, 'MOG001');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (65, 333, 'PAG001');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (66, 392, 'VYG001');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (67, 391, 'ABA009');
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (68, 303, 'BOG001');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (71, 397, 'TUG001');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (72, 398, 'KMG001');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (76, 364, 'SVG001');
@@ -645,6 +646,7 @@ INSERT INTO sigla (id, import_conf_id, sigla) VALUES (84, 408, 'KAG001');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (85, 409, 'CLG001');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (87, 411, 'NAG502');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (89, 415, 'KTG001');
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (90, 418, 'SVG503');
 
 INSERT INTO fit_project VALUES (1,'FULLTEXT_ANALYSER');
 INSERT INTO fit_project VALUES (2,'SEMANTIC_ENRICHMENT');
