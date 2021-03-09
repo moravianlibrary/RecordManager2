@@ -2412,3 +2412,6 @@ INSERT INTO kramerius_conf (import_conf_id,url,url_solr,query_rows,metadata_stre
 UPDATE oai_harvest_conf SET set_spec='CPKALL' WHERE import_conf_id=303;
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (68, 303, 'BOG001');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (90, 418, 'SVG503');
+
+--changeset tomascejpek:242 context:cpk
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (75, 401, 'KOG001');

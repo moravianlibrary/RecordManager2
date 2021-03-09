@@ -634,6 +634,7 @@ INSERT INTO sigla (id, import_conf_id, sigla) VALUES (67, 391, 'ABA009');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (68, 303, 'BOG001');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (71, 397, 'TUG001');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (72, 398, 'KMG001');
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (75, 401, 'KOG001');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (76, 364, 'SVG001');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (77, 402, 'PNG001');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (78, 369, 'KAG001');
