@@ -554,3 +554,9 @@ CREATE TABLE fit_project_link (
   FOREIGN KEY (fit_project_id) REFERENCES fit_project(id) ON DELETE CASCADE,
   FOREIGN KEY (fit_knowledge_base_id) REFERENCES fit_knowledge_base(id) ON DELETE CASCADE
 );
+
+CREATE TABLE pravopis (
+  id                   SERIAL,
+  key                  VARCHAR(128),
+  value                VARCHAR(128)
+);
