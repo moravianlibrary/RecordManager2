@@ -34,6 +34,7 @@ public class Constants {
 	public static final String JOB_ID_IMPORT_COSMOTRON_996			= "importCosmotron996RecordsJob";
 	public static final String JOB_ID_IMPORT_INSPIRATION			= "importInspirationJob";
 	public static final String JOB_ID_IMPORT_TEZAURUS				= "importTezaurusRecordsJob";
+	public static final String JOB_ID_IMPORT_PRAVOPIS				= "importPravopisJob";
 	public static final String JOB_ID_DELETE_INSPIRATION			= "deleteInspirationJob";
 	public static final String JOB_ID_DROP_DEDUP_KEYS				= "dropDedupKeysJob";
 	public static final String JOB_ID_REGEN_DEDUP_KEYS				= "regenerateDedupKeysJob";

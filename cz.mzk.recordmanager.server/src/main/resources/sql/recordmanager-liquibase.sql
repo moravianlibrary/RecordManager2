@@ -2407,3 +2407,31 @@ INSERT INTO kramerius_conf (import_conf_id,url,url_solr,query_rows,metadata_stre
 INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (99048, 'KRAM-NULK', '', '', '','kramerius');
 INSERT INTO import_conf (id,library_id,contact_person_id,id_prefix,base_weight,cluster_id_enabled,filtering_enabled,interception_enabled,is_library,harvest_frequency,mapping_script,generate_dedup_keys,mapping_dedup_script,item_id) VALUES (99048,99048,200,'kram-nulk',8,false,true,false,false,'U',null,true,null,null);
 INSERT INTO kramerius_conf (import_conf_id,url,url_solr,query_rows,metadata_stream,auth_token,fulltext_harvest_type,download_private_fulltexts,harvest_job_name,collection,availability_source_url,availability_dest_url) VALUES (99048,'https://kramerius.nulk.cz/search/api/v5.0',null,50,'BIBLIO_MODS',null,'solr',true,'krameriusHarvestJob',null,null,'https://kramerius.nulk.cz/uuid/');
+
+--changeset tomascejpek:241 context:cpk
+UPDATE oai_harvest_conf SET set_spec='CPKALL' WHERE import_conf_id=303;
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (68, 303, 'BOG001');
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (90, 418, 'SVG503');
+
+--changeset tomascejpek:242 context:cpk
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (75, 401, 'KOG001');
+
+--changeset tomascejpek:243 context:cpk
+INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (225, 'MKBOSKOVICE', 'https://www.kulturaboskovice.cz/knihovna', 'https://boskovice.tritius.cz/', 'Boskovice', 'JM');
+INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id) VALUES (425, 225, 200, 'mkboskovice', 11, false, true, true, true, 'U', 'other');
+INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (425,'https://boskovice.tritius.cz/tritius/oai-provider','CPK_1','marc21',NULL);
+
+--changeset tomascejpek:244 context:cpk
+INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (224, 'MKMILOVICE', 'http://milovice.knihovna.cz/', 'https://sck.tritius.cz/library/milovice', 'Milovice', 'SC');
+INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id) VALUES (424, 224, 200, 'mkmilovice', 11, false, true, true, true, 'U', 'other');
+INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (424,'https://sck.tritius.cz/tritius/oai-provider','CPK_1','marc21',NULL);
+
+--changeset tomascejpek:245 context:cpk
+INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (217, 'MUNI', '', '', 'Brno', 'JM');
+INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id, ziskej_enabled) VALUES (417, 217, 200, 'muni', 11, false, true, true, true, 'U', 'other', true);
+INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (417,NULL,NULL,'marc21',NULL);
+
+--changeset tomascejpek:246 context:cpk
+INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (226, 'KMOL', 'http://www.kmol.cz/', 'hhttps://tritius.kmol.cz/', 'Olomouc', 'OL');
+INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id) VALUES (426, 226, 200, 'kmol', 11, false, true, true, true, 'U', 'other');
+INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (426,'https://tritius.kmol.cz/tritius/oai-provider','CPK_1','marc21',NULL);
