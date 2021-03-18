@@ -143,6 +143,8 @@ public class SolrFieldConstants {
 
 	public static final String TITLE_SEARCH_TXT_MV = "title_search_txt_mv";
 
+	public static final String TITLE_OLD_SPELLING = "title_old_spelling_txt_mv";
+
 	public static final String AUTHOR_AUTHORITY_DISPLAY = "author_authority_display";
 
 	public static final String AUTHOR_AUTHORITY_ID_DISPLAY = "author_authority_id_display";
@@ -176,6 +178,10 @@ public class SolrFieldConstants {
 	public static final String SEMANTIC_ENRICHMENT = "semantic_enrichment_txt_mv";
 
 	public static final String AUTO_CONSPECTUS = "auto_conspectus_txt_mv";
+
+	public static final String PUBLISHDATE_TXT_MV = "publishDate_txt_mv";
+
+	public static final String LANGUAGE_TXT_MV = "language_search_txt_mv";
 
 	/**
 	 * dummy fields used for processing purposes only, shouldn't be indexed.

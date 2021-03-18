@@ -41,6 +41,7 @@ CREATE INDEX bl_topic_key_harvested_record_idx ON bl_topic_key(harvested_record_
 CREATE INDEX bl_language_harvested_record_idx ON bl_language(harvested_record_id);
 CREATE INDEX fulltext_kramerius_harvested_record_idx ON fulltext_kramerius(harvested_record_id);
 CREATE INDEX uuid_harvested_record_idx ON uuid(harvested_record_id);
+CREATE INDEX title_old_spelling_key_idx ON title_old_spelling(key);
 
 CREATE INDEX obalkyknih_toc_book_idx ON obalkyknih_toc(book_id);
 CREATE INDEX obalkyknih_toc_oclc_idx ON obalkyknih_toc(oclc);

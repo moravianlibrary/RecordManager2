@@ -454,3 +454,9 @@ CREATE TABLE fit_project_link (
   CONSTRAINT fit_project_fk FOREIGN KEY (fit_project_id) REFERENCES fit_project(id) ON DELETE CASCADE,
   CONSTRAINT fit_kb_fk FOREIGN KEY (fit_knowledge_base_id) REFERENCES fit_knowledge_base(id) ON DELETE CASCADE
 );
+
+CREATE TABLE title_old_spelling (
+  id                   INTEGER NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
+  "key"                VARCHAR(128),
+  value                VARCHAR(128)
+);
