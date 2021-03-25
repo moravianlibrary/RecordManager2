@@ -36,13 +36,13 @@ public class TitleOldSpellingDedupRecordEnricher implements DedupRecordEnricher 
 		} else {
 			for (SolrInputDocument localRecord : localRecords) {
 				if (localRecord.containsKey(SolrFieldConstants.TITLE_SEARCH_TXT_MV)) {
-					titles.addAll(localRecord.getFieldValues(SolrFieldConstants.TITLE_SEARCH_TXT_MV).stream().map(s -> (String) s).collect(Collectors.toSet()));
+					titles.addAll(localRecord.getFieldValues(SolrFieldConstants.TITLE_SEARCH_TXT_MV).stream()
+							.map(s -> ((String) s).toLowerCase()).collect(Collectors.toSet()));
 				}
 			}
 		}
 		if (titles.isEmpty()) return;
 		for (String title : titles) {
-			title = title.toLowerCase();
 			List<String> partResults = new ArrayList<>();
 			for (String word : title.split("\\b")) {
 				String alterWord = null;
