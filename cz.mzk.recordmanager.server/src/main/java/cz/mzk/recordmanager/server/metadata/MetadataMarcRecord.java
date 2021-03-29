@@ -1317,11 +1317,12 @@ public class MetadataMarcRecord implements MetadataRecord {
 	@Override
 	public List<PublisherNumber> getPublisherNumber() {
 		List<PublisherNumber> results = new ArrayList<>();
-		Long i = 0L;
+		long i = 0L;
 		for (DataField df : underlayingMarc.getDataFields("028")) {
-			if (df.getIndicator1() == '0' && df.getSubfield('a') != null) {
+			if (df.getSubfield('a') != null) {
 				String result = PUBLISHER_NUMBER_PATTERN.matcher(df.getSubfield('a').getData().toLowerCase()).replaceAll("");
 				result = MetadataUtils.shorten(result, EFFECTIVE_LENGTH_PUBLISHER_NUMBER);
+				if (result.isEmpty()) continue;
 				results.add(new PublisherNumber(result, ++i));
 			}
 		}
