@@ -11,7 +11,7 @@ public class ISOCharConvertor extends CharConverter {
 	@Override
 	public String convert(char[] dataElement) {
 		String input = new String(dataElement);
-		String fixed = CharMatcher.JAVA_ISO_CONTROL.removeFrom(input);
+		String fixed = CharMatcher.javaIsoControl().removeFrom(input);
 		return fixed;
 	}
 
