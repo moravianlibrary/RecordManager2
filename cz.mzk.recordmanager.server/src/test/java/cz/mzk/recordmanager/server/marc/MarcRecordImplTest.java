@@ -810,9 +810,6 @@ public class MarcRecordImplTest extends AbstractTest {
 		metadata.add("028 01$aMP 5270$bKnihovna a tiskárna pro nevidomé K. E. Macana");
 		expected.add(new PublisherNumber("mp5270", 2L));
 
-		// invalid - indicator 1 is not '0'
-		metadata.add("028   $aMP 5270$bKnihovna a tiskárna pro nevidomé K. E. Macana");
-
 		mri = MarcRecordFactory.recordFactory(metadata);
 		List<PublisherNumber> results = metadataFactory.getMetadataRecord(mri).getPublisherNumber();
 		Assert.assertEquals(results.size(), expected.size());
