@@ -25,6 +25,7 @@ public class TitleOldSpellingDedupRecordEnricher implements DedupRecordEnricher 
 	@Override
 	public void enrich(DedupRecord record, SolrInputDocument mergedDocument, List<SolrInputDocument> localRecords) {
 		if (!mergedDocument.containsKey(SolrFieldConstants.PUBLISHDATE_TXT_MV)
+				|| mergedDocument.getFieldValues(SolrFieldConstants.PUBLISHDATE_TXT_MV) == null
 				|| mergedDocument.getFieldValues(SolrFieldConstants.PUBLISHDATE_TXT_MV).stream().noneMatch(n -> (Integer) n <= 1957)
 				|| !mergedDocument.containsKey(SolrFieldConstants.LANGUAGE_TXT_MV)
 				|| mergedDocument.getFieldValues(SolrFieldConstants.LANGUAGE_TXT_MV).stream().noneMatch(s -> s.toString().equalsIgnoreCase("czech")))
