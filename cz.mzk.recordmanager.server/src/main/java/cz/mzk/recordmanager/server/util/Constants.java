@@ -237,7 +237,6 @@ public class Constants {
 	public static final String LIBRARY_NAME_NKP			= "NKP";
 	public static final String LIBRARY_NAME_SLK			= "SLK";
 	public static final String LIBRARY_NAME_STT			= "STT";
-	public static final String LIBRARY_NAME_HISTOGRAFBIB = "HISTOGRAFBIB";
 
 	public static final long IMPORT_CONF_MZK			= 300L;
 	public static final long IMPORT_CONF_NKP			= 304L;

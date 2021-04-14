@@ -2464,3 +2464,11 @@ INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granul
 --changeset tomascejpek:252 context:cpk
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (73, 399, 'CVG001');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (74, 368, 'FMG002');
+
+--changeset tomascejpek:253
+ALTER TABLE library ALTER COLUMN region TYPE VARCHAR(60);
+
+--changeset tomascejpek:254 context:cpk
+INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (167, 'CZHISTBIB', 'https://biblio.hiu.cas.cz/', 'https://biblio.hiu.cas.cz/search', 'Bibliography', 'bibliography/HISTOGRAFBIB');
+UPDATE import_conf SET library_id=167 WHERE id=367;
+UPDATE library SET name='ARCHBIB',region='bibliography/HISTOGRAFBIB' WHERE id=166;

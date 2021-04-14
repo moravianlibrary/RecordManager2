@@ -216,12 +216,15 @@ public class SolrUtils {
 				String prefix = getPrefixOfNKPRecord(config);
 				return SolrUtils.createHierarchicFacetValues(INSTITUTION_LIBRARY, region, name, prefix);
 			}
-			if (name.equals(Constants.LIBRARY_NAME_HISTOGRAFBIB)) {
-				return SolrUtils.createHierarchicFacetValues(INSTITUTION_OTHERS, region, name, config.getIdPrefix().toUpperCase());
-			}
 			String base = config.isLibrary() ? INSTITUTION_LIBRARY : INSTITUTION_OTHERS;
 			if (region.equals(INSTITUTION_UNKNOWN)) return SolrUtils.createHierarchicFacetValues(base, name);
-			else return SolrUtils.createHierarchicFacetValues(base, region, name);
+			else {
+				List<String> values = new ArrayList<>();
+				values.add(base);
+				values.addAll(Arrays.asList(region.split("/")));
+				values.add(name);
+				return SolrUtils.createHierarchicFacetValues(values.toArray(new String[0]));
+			}
 		}
 
 		return SolrUtils.createHierarchicFacetValues(INSTITUTION_UNKNOWN);
