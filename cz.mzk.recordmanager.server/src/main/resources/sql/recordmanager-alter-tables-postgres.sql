@@ -2172,3 +2172,7 @@ INSERT INTO download_import_conf (import_conf_id,url,import_job_name, format) VA
 
 -- 12. 04. 2021 tomascejpek
 UPDATE import_conf SET ziskej_enabled=FALSE WHERE id=417;
+
+-- 15. 04. 2021 tomascejpek
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (88, 412, 'KMG502');
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (98, 425, 'BKG501');
