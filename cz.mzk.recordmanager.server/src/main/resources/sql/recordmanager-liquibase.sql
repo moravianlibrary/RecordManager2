@@ -2460,3 +2460,7 @@ INSERT INTO sigla (id, import_conf_id, sigla) VALUES (98, 425, 'BKG501');
 INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (228, 'SLAVOJ', 'http://slavoj.cz/', 'https://katalog.slavoj.cz/', 'Dvůr Králové nad Labem', 'KH');
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id) VALUES (428, 228, 200, 'slavoj', 11, false, true, true, true, 'U', 'koha');
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (428,'https://koha.slavoj.cz/cgi-bin/koha/oai.pl','CPK','marccpk',NULL);
+
+--changeset tomascejpek:252 context:cpk
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (73, 399, 'CVG001');
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (74, 368, 'FMG002');
