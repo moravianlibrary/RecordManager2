@@ -219,6 +219,8 @@ public class MetadataRecordFactory {
 			return new AnlMarcMetadataRecord(marcRec, hr);
 		case Constants.PREFIX_MENDELU:
 			return new MendeluMetadataMarcRecord(marcRec, hr);
+		case Constants.PREFIX_MKFM:
+			return new MkfmMetadataMarcRecord(marcRec, hr);
 		default:
 			return new MetadataMarcRecord(marcRec, hr);
 		}
