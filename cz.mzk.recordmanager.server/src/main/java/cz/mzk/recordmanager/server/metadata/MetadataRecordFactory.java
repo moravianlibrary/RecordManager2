@@ -221,6 +221,9 @@ public class MetadataRecordFactory {
 			return new MendeluMetadataMarcRecord(marcRec, hr);
 		case Constants.PREFIX_MKFM:
 			return new MkfmMetadataMarcRecord(marcRec, hr);
+		case Constants.PREFIX_ARCHBIB:
+		case Constants.PREFIX_CZHISTBIB:
+			return new HistografbibMetadataMarcRecord(marcRec, hr);
 		default:
 			return new MetadataMarcRecord(marcRec, hr);
 		}

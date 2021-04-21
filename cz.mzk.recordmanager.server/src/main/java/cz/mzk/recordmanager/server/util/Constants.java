@@ -108,12 +108,14 @@ public class Constants {
 	public static final String PREFIX_AGROVOC			= "agrovoc";
 	public static final String PREFIX_ANL				= "anl";
 	public static final String PREFIX_AUTH				= "auth";
+	public static final String PREFIX_ARCHBIB			= "archbib";
 	public static final String PREFIX_BMC				= "bmc";
 	public static final String PREFIX_BOOKPORT			= "bookport";
 	public static final String PREFIX_CASLIN			= "caslin";
 	public static final String PREFIX_CBVK				= "cbvk";
 	public static final String PREFIX_CELITEBIB			= "celitebib";
 	public static final String PREFIX_CMUZ				= "cmuz";
+	public static final String PREFIX_CZHISTBIB			= "czhistbib";
 	public static final String PREFIX_DIVABIB			= "divabib";
 	public static final String PREFIX_FREE				= "free";
 	public static final String PREFIX_IIR				= "iir";
@@ -235,7 +237,7 @@ public class Constants {
 	public static final String LIBRARY_NAME_NKP			= "NKP";
 	public static final String LIBRARY_NAME_SLK			= "SLK";
 	public static final String LIBRARY_NAME_STT			= "STT";
-	
+
 	public static final long IMPORT_CONF_MZK			= 300L;
 	public static final long IMPORT_CONF_NKP			= 304L;
 	public static final long IMPORT_CONF_ID_CASLIN 		= 316L;
