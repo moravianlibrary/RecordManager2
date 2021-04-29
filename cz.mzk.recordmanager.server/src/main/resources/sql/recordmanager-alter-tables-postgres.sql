@@ -2196,3 +2196,7 @@ UPDATE library SET name='ARCHBIB',region='bibliography/HISTOGRAFBIB' WHERE id=16
 INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (229, 'MVK', 'https://www.mvk.cz/', 'https://katalog.mvk.cz/', 'Vsetín', 'ZL');
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id) VALUES (429, 229, 200, 'mvk', 11, false, true, true, true, 'U', 'other');
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (429,'https://mvk.portaro.cz/api/oai','cpk','marc21',NULL);
+
+-- 29. 04. 2021 tomascejpek
+UPDATE library SET name='MKRICANY' WHERE id=223;
+UPDATE import_conf SET id_prefix='mkricany' WHERE id=423;
