@@ -2200,3 +2200,7 @@ INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granul
 -- 29. 04. 2021 tomascejpek
 UPDATE library SET name='MKRICANY' WHERE id=223;
 UPDATE import_conf SET id_prefix='mkricany' WHERE id=423;
+
+-- 03. 05. 2021 tomascejpek
+ALTER TABLE oai_harvest_conf ADD COLUMN url_full_harvest VARCHAR(128);
+ALTER TABLE oai_harvest_conf ADD COLUMN set_spec_full_harvest VARCHAR(128);

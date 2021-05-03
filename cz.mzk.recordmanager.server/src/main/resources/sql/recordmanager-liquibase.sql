@@ -2481,3 +2481,7 @@ INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granul
 --changeset tomascejpek:256 context:cpk
 UPDATE library SET name='MKRICANY' WHERE id=223;
 UPDATE import_conf SET id_prefix='mkricany' WHERE id=423;
+
+--changeset tomascejpek:257
+ALTER TABLE oai_harvest_conf ADD COLUMN url_full_harvest VARCHAR(128);
+ALTER TABLE oai_harvest_conf ADD COLUMN set_spec_full_harvest VARCHAR(128);
