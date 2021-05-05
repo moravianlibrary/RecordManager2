@@ -67,6 +67,8 @@ public class AsyncOAIItemReader implements ItemReader<List<OAIRecord>>, ItemStre
 
 	private Date untilDate;
 
+	private final boolean reharvest;
+
 	private String resumptionToken;
 
 	private boolean done = false;
@@ -78,12 +80,13 @@ public class AsyncOAIItemReader implements ItemReader<List<OAIRecord>>, ItemStre
 
 	private ArrayBlockingQueue<Entry> queue = new ArrayBlockingQueue<Entry>(5);
 
-	public AsyncOAIItemReader(Long confId, Date fromDate, Date untilDate, String resumptionToken) {
+	public AsyncOAIItemReader(Long confId, Date fromDate, Date untilDate, String resumptionToken, boolean reharvest) {
 		super();
 		this.confId = confId;
 		this.fromDate = fromDate;
 		this.untilDate = untilDate;
 		this.resumptionToken = resumptionToken;
+		this.reharvest = reharvest;
 	}
 
 	@Override
@@ -135,10 +138,12 @@ public class AsyncOAIItemReader implements ItemReader<List<OAIRecord>>, ItemStre
 		try (SessionBinder sess = hibernateSync.register()) {
 			OAIHarvestConfiguration conf = configDao.get(confId);
 			OAIHarvesterParams params = new OAIHarvesterParams();
-			params.setUrl(conf.getUrl());
+			if (reharvest && conf.getUrlFullHarvest() != null) params.setUrl(conf.getUrlFullHarvest());
+			else params.setUrl(conf.getUrl());
 			params.setMetadataPrefix(conf.getMetadataPrefix());
 			params.setGranularity(conf.getGranularity());
-			params.setSet(conf.getSet());
+			if (reharvest && conf.getSetFullHarvest() != null) params.setSet(conf.getSetFullHarvest());
+			else params.setSet(conf.getSet());
 			try {
 				params.setFrom(fromDate);
 			} catch (ParseException e) {

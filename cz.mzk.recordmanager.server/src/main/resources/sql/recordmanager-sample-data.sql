@@ -361,7 +361,7 @@ INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granul
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (325,'https://aleph.nkp.cz/OAI','KKL-CPK','marc21',NULL);
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (326,'https://aleph.nkp.cz/OAI','STT-CPK','marc21',NULL);
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (327,NULL,NULL,'mahttps://tritius.kkvysociny.cz/tritius/oai-providerrc21',NULL);
-INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity,extract_id_regex,harvest_job_name) VALUES (328,'https://katalog.cbvk.cz/i2/i2.ws.oai.cls','CPK1','oai_marcxml_cpk',NULL,'s/[^:]+:[^:]+:[^\\/]+\\/([^\\/]+)/cbvk_us_cat*$1/','cosmotronHarvestJob');
+INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity,extract_id_regex,harvest_job_name,set_spec_full_harvest) VALUES (328,'https://katalog.cbvk.cz/i2/i2.ws.oai.cls','CPK1','oai_marcxml_cpk',NULL,'s/[^:]+:[^:]+:[^\\/]+\\/([^\\/]+)/cbvk_us_cat*$1/','cosmotronHarvestJob','CPK1');
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (329,'http://www.clavius.sk/carmentest/l.dll','CPK','marc21',NULL);
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (330,'https://aleph.lib.cas.cz/OAI','KNA','marc21',NULL);
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (331,'https://clavius.lib.cas.cz/katalog/l.dll','CPK','marc21',NULL);
@@ -369,7 +369,7 @@ INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granul
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (333,'https://aleph.knihovna-pardubice.cz/OAI','PAG_OAI_CPK_MARC21','marc21',NULL);
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (334,'https://kutnahora.tritius.cz/tritius/oai-provider','CPK_1','marc21',NULL);
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (335,'https://katalog.svkos.cz/OAI','MZK-CPK','marc21',NULL);
-INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity,extract_id_regex,harvest_job_name) VALUES (336,'https://ipac.svkkl.cz/i2/i2.ws.oai.cls','CPK1','oai_marcxml_cpk',NULL,'s/[^:]+:[^:]+:[^\\/]+\\/([^\\/]+)/kl_us_cat*$1/','cosmotronHarvestJob');
+INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity,extract_id_regex,harvest_job_name,set_spec_full_harvest) VALUES (336,'https://ipac.svkkl.cz/i2/i2.ws.oai.cls','CPK1','oai_marcxml_cpk',NULL,'s/[^:]+:[^:]+:[^\\/]+\\/([^\\/]+)/kl_us_cat*$1/','cosmotronHarvestJob','CPK1');
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (337,'https://aleph.svkpk.cz/OAI','PNA01-CPK-MARC21','marc21',NULL);
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (338,'http://katalogold.iir.cz:81/l.dll','CPK','marc21',NULL);
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (339,'http://dbase.aipberoun.cz/manu3/oai/','digitized-xr','ese',NULL);

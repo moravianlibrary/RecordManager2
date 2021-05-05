@@ -2485,3 +2485,6 @@ UPDATE import_conf SET id_prefix='mkricany' WHERE id=423;
 --changeset tomascejpek:257
 ALTER TABLE oai_harvest_conf ADD COLUMN url_full_harvest VARCHAR(128);
 ALTER TABLE oai_harvest_conf ADD COLUMN set_spec_full_harvest VARCHAR(128);
+
+--changeset tomascejpek:258 context:cpk
+UPDATE oai_harvest_conf SET set_spec_full_harvest='CPK1' WHERE import_conf_id IN (328,336);
