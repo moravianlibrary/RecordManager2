@@ -452,7 +452,6 @@ INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granul
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (1300,NULL,NULL,'marc21',NULL);
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (1301,NULL,NULL,'marc21',NULL); 
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (1302,NULL,NULL,'marc21',NULL);
-INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (1304,NULL,NULL,'marc21',NULL);
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (99004,'http://kramerius5.nkp.cz/oaiprovider','monograph','oai_dc',NULL);
 
 INSERT INTO kramerius_conf (import_conf_id,url,query_rows,metadata_stream, fulltext_harvest_type, url_solr, availability_source_url, availability_dest_url) VALUES (99001,'https://kramerius.mzk.cz/search/api/v5.0',20,'DC','solr','http://kramerius.mzk.cz/solr/select/',null,'http://www.digitalniknihovna.cz/mzk/uuid/');
@@ -506,6 +505,7 @@ INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format) VAL
 INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format) VALUES (413,'https://www.bookport.cz/marc21.xml','importRecordsJob','xml');
 INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format) VALUES (416,null,null,null);
 INSERT INTO download_import_conf (import_conf_id,url,import_job_name) VALUES (500,'https://muj-antikvariat.cz/assets/obalkyknih.xml','antikvariatyImportRecordsJob');
+INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format) VALUES (1304,null,null,null);
 INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format,extract_id_regex,reharvest) VALUES (1305,'https://sfx.knihovny.cz/sfxlcl3/cgi/public/get_file.cgi?file=institutional_holding-NKP.xml','downloadAndImportRecordsJob','sfx',null,true);
 INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format,extract_id_regex,reharvest) VALUES (1306,'https://sfx.knihovny.cz/sfxlcl3/cgi/public/get_file.cgi?file=institutional_holding-VKOL.xml','downloadAndImportRecordsJob','sfx',null,true);
 INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format,extract_id_regex,reharvest) VALUES (1307,'https://sfx.knihovny.cz/sfxlcl3/cgi/public/get_file.cgi?file=institutional_holding-JVKCB.xml','downloadAndImportRecordsJob','sfx',null,true);

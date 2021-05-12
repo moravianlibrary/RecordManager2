@@ -2200,3 +2200,7 @@ INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granul
 -- 29. 04. 2021 tomascejpek
 UPDATE library SET name='MKRICANY' WHERE id=223;
 UPDATE import_conf SET id_prefix='mkricany' WHERE id=423;
+
+-- 12. 05. 2021 tomascejpek
+DELETE FROM oai_harvest_conf WHERE import_conf_id=1304;
+INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format) VALUES (1304,null,null,null);
