@@ -2485,3 +2485,6 @@ UPDATE import_conf SET id_prefix='mkricany' WHERE id=423;
 --changeset tomascejpek:257 context:cpk
 DELETE FROM oai_harvest_conf WHERE import_conf_id=1304;
 INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format) VALUES (1304,null,null,null);
+
+--changeset tomascejpek:258 context:cpk
+UPDATE kramerius_conf SET url='https://kramerius.upm.cz/search/api/v5.0',availability_dest_url='https://kramerius.upm.cz/uuid/' WHERE import_conf_id=99040;
