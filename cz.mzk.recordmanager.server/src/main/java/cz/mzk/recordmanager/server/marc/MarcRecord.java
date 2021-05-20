@@ -3,10 +3,7 @@ package cz.mzk.recordmanager.server.marc;
 import java.util.List;
 import java.util.Map;
 
-import org.marc4j.marc.ControlField;
-import org.marc4j.marc.DataField;
-import org.marc4j.marc.Leader;
-import org.marc4j.marc.Subfield;
+import org.marc4j.marc.*;
 
 import cz.mzk.recordmanager.server.export.IOFormat;
 
@@ -129,4 +126,7 @@ public interface MarcRecord {
 	String export(IOFormat iOFormat);
 
 	void addDataField(String tag, char ind1, char ind2, String... subfields);
+
+	Record getRecord();
+
 }

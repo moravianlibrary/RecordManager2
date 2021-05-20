@@ -1,18 +1,7 @@
 package cz.mzk.recordmanager.server.index;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
-import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import cz.mzk.recordmanager.server.ResourceProvider;
+import cz.mzk.recordmanager.server.index.indexIntercepting.IndexInterceptorFactory;
 import cz.mzk.recordmanager.server.marc.MarcRecord;
 import cz.mzk.recordmanager.server.marc.MarcXmlParser;
 import cz.mzk.recordmanager.server.metadata.MetadataRecordFactory;
@@ -21,6 +10,17 @@ import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.scripting.MappingScript;
 import cz.mzk.recordmanager.server.scripting.marc.MarcFunctionContext;
 import cz.mzk.recordmanager.server.scripting.marc.MarcScriptFactory;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Component
 public class MarcSolrRecordMapper implements SolrRecordMapper, InitializingBean {
@@ -35,9 +35,12 @@ public class MarcSolrRecordMapper implements SolrRecordMapper, InitializingBean 
 
 	@Autowired
 	private ResourceProvider resourceProvider;
-	
+
 	@Autowired
 	private MetadataRecordFactory metadataRecordFactory;
+
+	@Autowired
+	private IndexInterceptorFactory indexInterceptorFactory;
 
 	private Map<Long, MappingScript<MarcFunctionContext>> dedupRecordMappingScripts = new ConcurrentHashMap<Long, MappingScript<MarcFunctionContext>>(10, 0.75f, 1);
 
@@ -69,15 +72,15 @@ public class MarcSolrRecordMapper implements SolrRecordMapper, InitializingBean 
 
 	protected Map<String, Object> parseAsDedupRecord(HarvestedRecord hrRecord) {
 		InputStream is = new ByteArrayInputStream(hrRecord.getRawRecord());
-		MarcRecord marcRecord = marcXmlParser.parseRecord(is);
 		MappingScript<MarcFunctionContext> script = getDedupMappingScript(hrRecord);
+		MarcRecord marcRecord = indexInterceptorFactory.getIndexInterceptor(hrRecord, marcXmlParser.parseRecord(is)).intercept();
 		MarcFunctionContext ctx = new MarcFunctionContext(marcRecord, hrRecord, metadataRecordFactory.getMetadataRecord(hrRecord, marcRecord));
 		return script.parse(ctx);
 	}
 
 	protected Map<String, Object> parseAsLocalRecord(HarvestedRecord hrRecord) {
 		InputStream is = new ByteArrayInputStream(hrRecord.getRawRecord());
-		MarcRecord marcRecord = marcXmlParser.parseRecord(is);
+		MarcRecord marcRecord = indexInterceptorFactory.getIndexInterceptor(hrRecord, marcXmlParser.parseRecord(is)).intercept();
 		MarcFunctionContext ctx = new MarcFunctionContext(marcRecord, hrRecord, metadataRecordFactory.getMetadataRecord(hrRecord, marcRecord));
 		return getHarvestedMappingScript(hrRecord).parse(ctx);
 	}

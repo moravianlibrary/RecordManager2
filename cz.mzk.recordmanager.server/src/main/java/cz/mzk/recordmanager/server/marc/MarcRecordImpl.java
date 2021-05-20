@@ -15,12 +15,7 @@ import java.util.Map;
 import org.marc4j.MarcStreamWriter;
 import org.marc4j.MarcWriter;
 import org.marc4j.MarcXmlWriter;
-import org.marc4j.marc.ControlField;
-import org.marc4j.marc.DataField;
-import org.marc4j.marc.Leader;
-import org.marc4j.marc.MarcFactory;
-import org.marc4j.marc.Record;
-import org.marc4j.marc.Subfield;
+import org.marc4j.marc.*;
 
 import cz.mzk.recordmanager.server.export.IOFormat;
 import cz.mzk.recordmanager.server.marc.marc4j.MarcFactoryImpl;
@@ -291,6 +286,11 @@ public class MarcRecordImpl implements MarcRecord {
 		MarcFactory factory = MarcFactoryImpl.newInstance();
 		DataField df = factory.newDataField(tag, ind1, ind2, subfields);
 		record.addVariableField(df);
+	}
+
+	@Override
+	public Record getRecord() {
+		return record;
 	}
 
 }
