@@ -2,6 +2,7 @@ package cz.mzk.recordmanager.server.index;
 
 import java.util.List;
 
+import cz.mzk.recordmanager.server.solr.FaultTolerantIndexingExceptionHandler;
 import org.apache.solr.common.SolrInputDocument;
 import org.springframework.batch.core.StepContribution;
 import org.springframework.batch.core.scope.context.ChunkContext;
@@ -43,7 +44,7 @@ public class IndexIndividualRecordsTasklet implements Tasklet {
 	@Override
 	public RepeatStatus execute(StepContribution contribution,
 			ChunkContext chunkContext) throws Exception {
-		SolrServerFacade solrServer = solrServerFactory.create(solrUrl, null, LoggingSolrIndexingExceptionHandler.INSTANCE);
+		SolrServerFacade solrServer = solrServerFactory.create(solrUrl, null, new FaultTolerantIndexingExceptionHandler());
 		for (String solrId : recordIds) {
 			HarvestedRecord rec = harvestedRecordDao.findBySolrId(solrId);
 			if (rec == null) {
