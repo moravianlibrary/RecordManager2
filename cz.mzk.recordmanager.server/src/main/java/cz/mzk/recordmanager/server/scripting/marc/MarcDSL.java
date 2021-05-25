@@ -56,6 +56,7 @@ public class MarcDSL extends BaseDSL {
 	private static final Pattern TITLE_NUMBERS = Pattern.compile("([0-9])[.,]([0-9])");
 	private static final Pattern TITLE_SUPPRESS = Pattern.compile("<<[^<{2}]*>>");
 	private static final Pattern TITLE_TO_BLANK = Pattern.compile("['\\[\\]\"`!()\\-{};:.,?/@*%=^_|~]");
+	private static final Pattern TITLE_SEARCH_BRACKETS = Pattern.compile("[\\[\\]]");
 	private static final Pattern PATTERN_653A = Pattern.compile("forma:.*|nosič:.*|způsob vydávání:.*|úroveň zpracování:.*");
 	private static final Pattern COMMA_PATTERN = Pattern.compile(",");
 	private static final Pattern SPLIT_COLON = Pattern.compile(":");
@@ -950,6 +951,15 @@ public class MarcDSL extends BaseDSL {
 			if (df.getSubfield('j') != null && df.getSubfield('w') != null) {
 				results.add(String.format(ALEPH_ID_FORMAT, df.getSubfield('j').getData(), df.getSubfield('w').getData()));
 			}
+		}
+		return results;
+	}
+
+	public Set<String> getTitleForSearching(String tags) {
+		Set<String> results = new HashSet<>();
+		for (String title : toLowerCase(getFields(tags))) {
+			title = CleaningUtils.replaceAll(title, TITLE_SEARCH_BRACKETS, EMPTY_SEPARATOR).trim();
+			results.add(title);
 		}
 		return results;
 	}
