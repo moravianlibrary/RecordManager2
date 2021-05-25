@@ -2488,3 +2488,10 @@ INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format) VAL
 
 --changeset tomascejpek:258 context:cpk
 UPDATE kramerius_conf SET url='https://kramerius.upm.cz/search/api/v5.0',availability_dest_url='https://kramerius.upm.cz/uuid/' WHERE import_conf_id=99040;
+
+--changeset tomascejpek:259
+ALTER TABLE oai_harvest_conf ADD COLUMN url_full_harvest VARCHAR(128);
+ALTER TABLE oai_harvest_conf ADD COLUMN set_spec_full_harvest VARCHAR(128);
+
+--changeset tomascejpek:260 context:cpk
+UPDATE oai_harvest_conf SET set_spec_full_harvest='CPK1' WHERE import_conf_id IN (328,336);

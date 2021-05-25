@@ -16,10 +16,16 @@ public class OAIHarvestConfiguration extends ImportConfiguration {
 	
 	@Column(name="url")
 	private String url;
-	
+
+	@Column(name="url_full_harvest")
+	private String urlFullHarvest;
+
 	@Column(name="set_spec")
 	private String set;
-	
+
+	@Column(name="set_spec_full_harvest")
+	private String setFullHarvest;
+
 	@Column(name="granularity")
 	@Enumerated(EnumType.STRING)
 	private OAIGranularity granularity;
@@ -79,6 +85,22 @@ public class OAIHarvestConfiguration extends ImportConfiguration {
 
 	public void setHarvestJobName(String harvestJobName) {
 		this.harvestJobName = harvestJobName;
+	}
+
+	public String getUrlFullHarvest() {
+		return urlFullHarvest;
+	}
+
+	public void setUrlFullHarvest(String urlFullHarvest) {
+		this.urlFullHarvest = urlFullHarvest;
+	}
+
+	public String getSetFullHarvest() {
+		return setFullHarvest;
+	}
+
+	public void setSetFullHarvest(String setFullHarvest) {
+		this.setFullHarvest = setFullHarvest;
 	}
 
 	@Override

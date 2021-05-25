@@ -55,7 +55,9 @@ CREATE TABLE sigla (
 CREATE TABLE oai_harvest_conf (
   import_conf_id       DECIMAL(10) PRIMARY KEY,
   url                  VARCHAR(128),
+  url_full_harvest     VARCHAR(128),
   set_spec             VARCHAR(128),
+  set_spec_full_harvest VARCHAR(128),
   metadata_prefix      VARCHAR(128),
   granularity          VARCHAR(30),
   extract_id_regex     VARCHAR(128),

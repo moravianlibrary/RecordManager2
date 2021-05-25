@@ -50,6 +50,8 @@ public class OAIOneByOneItemReader implements ItemReader<List<OAIRecord>>,
 
 	private Date untilDate;
 
+	private final boolean reharvest;
+
 	// state
 	private String resumptionToken;
 
@@ -59,12 +61,13 @@ public class OAIOneByOneItemReader implements ItemReader<List<OAIRecord>>,
 
 	private static final int COMMIT_INTERVAL = 50;
 
-	public OAIOneByOneItemReader(Long confId, Date fromDate, Date untilDate, String resumptionToken) {
+	public OAIOneByOneItemReader(Long confId, Date fromDate, Date untilDate, String resumptionToken, boolean reharvest) {
 		super();
 		this.confId = confId;
 		this.fromDate = fromDate;
 		this.untilDate = untilDate;
 		this.resumptionToken = resumptionToken;
+		this.reharvest = reharvest;
 	}
 
 	@Override
@@ -72,9 +75,11 @@ public class OAIOneByOneItemReader implements ItemReader<List<OAIRecord>>,
 		try (SessionBinder sess = hibernateSync.register()) {
 			OAIHarvestConfiguration conf = configDao.get(confId);
 			OAIHarvesterParams paramsIdentifiers = new OAIHarvesterParams();
-			paramsIdentifiers.setUrl(conf.getUrl());
+			if (reharvest && conf.getUrlFullHarvest() != null) paramsIdentifiers.setUrl(conf.getUrlFullHarvest());
+			else paramsIdentifiers.setUrl(conf.getUrl());
 			paramsIdentifiers.setMetadataPrefix(conf.getMetadataPrefix());
-			paramsIdentifiers.setSet(conf.getSet());
+			if (reharvest && conf.getSetFullHarvest() != null) paramsIdentifiers.setSet(conf.getSetFullHarvest());
+			else paramsIdentifiers.setSet(conf.getSet());
 			paramsIdentifiers.setGranularity(conf.getGranularity());
 			try {
 				paramsIdentifiers.setFrom(fromDate);
@@ -89,7 +94,8 @@ public class OAIOneByOneItemReader implements ItemReader<List<OAIRecord>>,
 			harvesterIdentifiers = harvesterFactory.create(paramsIdentifiers);
 			// GetRecord without from and until
 			OAIHarvesterParams paramsGetRecord = new OAIHarvesterParams();
-			paramsGetRecord.setUrl(conf.getUrl());
+			if (reharvest && conf.getUrlFullHarvest() != null) paramsGetRecord.setUrl(conf.getUrlFullHarvest());
+			else paramsGetRecord.setUrl(conf.getUrl());
 			paramsGetRecord.setMetadataPrefix(conf.getMetadataPrefix());
 			harvesterGetRecord = harvesterFactory.create(paramsGetRecord);
 		}

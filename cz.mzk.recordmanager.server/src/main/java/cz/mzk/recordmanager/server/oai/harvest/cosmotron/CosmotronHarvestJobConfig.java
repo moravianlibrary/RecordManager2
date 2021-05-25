@@ -77,9 +77,11 @@ public class CosmotronHarvestJobConfig {
 	public Step harvestStep() {
 		ItemReader<List<OAIRecord>> reader;
 		if (this.asyncReader) {
-			reader = asyncReader(LONG_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION, STRING_OVERRIDEN_BY_EXPRESSION);
+			reader = asyncReader(LONG_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION,
+					STRING_OVERRIDEN_BY_EXPRESSION, STRING_OVERRIDEN_BY_EXPRESSION);
 		} else {
-			reader = reader(LONG_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION, STRING_OVERRIDEN_BY_EXPRESSION);
+			reader = reader(LONG_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION,
+					STRING_OVERRIDEN_BY_EXPRESSION, STRING_OVERRIDEN_BY_EXPRESSION);
 		}
 		return steps.get("cosmotronHarvestStep") //
 				.listener(new StepProgressListener())
@@ -93,25 +95,29 @@ public class CosmotronHarvestJobConfig {
 	@Bean(name = Constants.JOB_ID_HARVEST + ":reader")
 	@StepScope
 	public OAIItemReader reader(@Value("#{jobParameters[" + Constants.JOB_PARAM_CONF_ID + "]}") Long configId,
-								@Value("#{stepExecutionContext[" + Constants.JOB_PARAM_FROM_DATE + "] "
-										+ "?:jobParameters[ " + Constants.JOB_PARAM_FROM_DATE + "]}") Date from,
-								@Value("#{stepExecutionContext[" + Constants.JOB_PARAM_UNTIL_DATE + ']'
-										+ "?:jobParameters[" + Constants.JOB_PARAM_UNTIL_DATE + "]}") Date to,
-								@Value("#{stepExecutionContext[" + Constants.JOB_PARAM_RESUMPTION_TOKEN + ']'
-										+ "?:jobParameters[" + Constants.JOB_PARAM_RESUMPTION_TOKEN + "]}") String resumptionToken) {
-		return new OAIItemReader(configId, from, to, resumptionToken);
+			@Value("#{stepExecutionContext[" + Constants.JOB_PARAM_FROM_DATE + "] "
+					+ "?:jobParameters[ " + Constants.JOB_PARAM_FROM_DATE + "]}") Date from,
+			@Value("#{stepExecutionContext[" + Constants.JOB_PARAM_UNTIL_DATE + ']'
+					+ "?:jobParameters[" + Constants.JOB_PARAM_UNTIL_DATE + "]}") Date to,
+			@Value("#{stepExecutionContext[" + Constants.JOB_PARAM_RESUMPTION_TOKEN + ']'
+					+ "?:jobParameters[" + Constants.JOB_PARAM_RESUMPTION_TOKEN + "]}") String resumptionToken,
+			@Value("#{stepExecutionContext[" + Constants.JOB_PARAM_REHARVEST + ']'
+					+ "?:jobParameters[" + Constants.JOB_PARAM_REHARVEST + "]}") String reharvest) {
+		return new OAIItemReader(configId, from, to, resumptionToken, reharvest != null && reharvest.equals("true"));
 	}
 
 	@Bean(name = "oaiHarvestJob:asyncReader")
 	@StepScope
 	public AsyncOAIItemReader asyncReader(@Value("#{jobParameters[" + Constants.JOB_PARAM_CONF_ID + "]}") Long configId,
-										  @Value("#{stepExecutionContext[" + Constants.JOB_PARAM_FROM_DATE + "] "
-												  + "?:jobParameters[ " + Constants.JOB_PARAM_FROM_DATE + "]}") Date from,
-										  @Value("#{stepExecutionContext[" + Constants.JOB_PARAM_UNTIL_DATE + ']'
-												  + "?:jobParameters[" + Constants.JOB_PARAM_UNTIL_DATE + "]}") Date to,
-										  @Value("#{stepExecutionContext[" + Constants.JOB_PARAM_RESUMPTION_TOKEN + ']'
-												  + "?:jobParameters[" + Constants.JOB_PARAM_RESUMPTION_TOKEN + "]}") String resumptionToken) {
-		return new AsyncOAIItemReader(configId, from, to, resumptionToken);
+			@Value("#{stepExecutionContext[" + Constants.JOB_PARAM_FROM_DATE + "] "
+					+ "?:jobParameters[ " + Constants.JOB_PARAM_FROM_DATE + "]}") Date from,
+			@Value("#{stepExecutionContext[" + Constants.JOB_PARAM_UNTIL_DATE + ']'
+					+ "?:jobParameters[" + Constants.JOB_PARAM_UNTIL_DATE + "]}") Date to,
+			@Value("#{stepExecutionContext[" + Constants.JOB_PARAM_RESUMPTION_TOKEN + ']'
+					+ "?:jobParameters[" + Constants.JOB_PARAM_RESUMPTION_TOKEN + "]}") String resumptionToken,
+			@Value("#{stepExecutionContext[" + Constants.JOB_PARAM_REHARVEST + ']'
+					+ "?:jobParameters[" + Constants.JOB_PARAM_REHARVEST + "]}") String reharvest) {
+		return new AsyncOAIItemReader(configId, from, to, resumptionToken, reharvest != null && reharvest.equals("true"));
 	}
 
 	@Bean(name = Constants.JOB_ID_HARVEST_COSMOTRON + ":cosmotronRecordsProcessor")
