@@ -90,7 +90,7 @@ public class ExportRecordsJobConfig {
 				.listener(new StepProgressListener())
 				.<HarvestedRecordUniqueId, String>chunk(20)//
 				.reader(exportRecordsReader(LONG_OVERRIDEN_BY_EXPRESSION, LONG_OVERRIDEN_BY_EXPRESSION, STRING_OVERRIDEN_BY_EXPRESSION)) //
-				.processor(exportRecordsProcessor(STRING_OVERRIDEN_BY_EXPRESSION)) //
+				.processor(exportRecordsProcessor(STRING_OVERRIDEN_BY_EXPRESSION, STRING_OVERRIDEN_BY_EXPRESSION)) //
 				.writer(exportRecordsWriter(STRING_OVERRIDEN_BY_EXPRESSION)) //
 				.build();
 	}
@@ -201,10 +201,10 @@ public class ExportRecordsJobConfig {
 	@Bean(name = "exportRecordsJob:exportRecordsProcesor")
 	@StepScope
 	public ExportRecordsProcessor exportRecordsProcessor(
-			@Value("#{jobParameters[" + Constants.JOB_PARAM_FORMAT + "]}") String strFormat) {
-		IOFormat iOFormat = IOFormat
-				.stringToExportFormat(strFormat);
-		return new ExportRecordsProcessor(iOFormat);
+			@Value("#{jobParameters[" + Constants.JOB_PARAM_FORMAT + "]}") String strFormat,
+			@Value("#{jobParameters[" + Constants.JOB_PARAM_INDEXED_FORMAT + "]}") String indexedFormat) {
+		IOFormat iOFormat = IOFormat.stringToExportFormat(strFormat);
+		return new ExportRecordsProcessor(iOFormat, indexedFormat != null && indexedFormat.equals("true"));
 	}
 
 	@Bean(name = "exportRecordsForClassifierJob:exportRecordsForClassifierProcessor")
@@ -310,7 +310,7 @@ public class ExportRecordsJobConfig {
 				.listener(new StepProgressListener())
 				.<HarvestedRecordUniqueId, String>chunk(50)//
 				.reader(exportDuplicityReader(LONG_OVERRIDEN_BY_EXPRESSION, LONG_OVERRIDEN_BY_EXPRESSION, STRING_OVERRIDEN_BY_EXPRESSION)) //
-				.processor(exportRecordsProcessor(STRING_OVERRIDEN_BY_EXPRESSION)) //
+				.processor(exportRecordsProcessor(STRING_OVERRIDEN_BY_EXPRESSION, STRING_OVERRIDEN_BY_EXPRESSION)) //
 				.writer(exportRecordsWriter(STRING_OVERRIDEN_BY_EXPRESSION)) //
 				.build();
 	}

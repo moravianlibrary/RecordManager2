@@ -5,6 +5,7 @@ import java.io.InputStream;
 
 import cz.mzk.recordmanager.server.dc.DublinCoreParser;
 import cz.mzk.recordmanager.server.dc.DublinCoreRecord;
+import cz.mzk.recordmanager.server.index.indexIntercepting.IndexInterceptorFactory;
 import cz.mzk.recordmanager.server.util.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,12 +34,18 @@ public class ExportRecordsProcessor implements ItemProcessor<HarvestedRecordUniq
 	@Autowired
 	private HarvestedRecordDAO harvestedRecordDao;
 
+	@Autowired
+	private IndexInterceptorFactory indexInterceptorFactory;
+
 	private static final String OAI_FIELD = "OAI";
 
 	private ProgressLogger progressLogger;
 
-	public ExportRecordsProcessor(IOFormat format) {
+	private final boolean indexedFormat;
+
+	public ExportRecordsProcessor(IOFormat format, boolean indexedFormat) {
 		this.iOFormat = format;
+		this.indexedFormat = indexedFormat;
 		progressLogger = new ProgressLogger(logger, 10000);
 	}
 
@@ -51,7 +58,8 @@ public class ExportRecordsProcessor implements ItemProcessor<HarvestedRecordUniq
 				progressLogger.incrementAndLogProgress();
 				switch (record.getFormat()) {
 				case Constants.METADATA_FORMAT_MARC21:
-					MarcRecord marcRecord = marcXmlParser.parseRecord(is);
+					MarcRecord marcRecord = indexedFormat ?
+							indexInterceptorFactory.getIndexInterceptor(record, marcXmlParser.parseRecord(is)).intercept() : marcXmlParser.parseRecord(is);
 					if (marcRecord.getDataFields(OAI_FIELD).isEmpty()) {
 						marcRecord.addDataField(OAI_FIELD, ' ', ' ', "a", record.getUniqueId().getRecordId());
 					}
