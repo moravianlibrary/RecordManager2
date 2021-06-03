@@ -8,8 +8,10 @@ url = getUrls()
 view_txt_mv = getViewType()
 
 // facets
-local_region_institution_facet_mv = local_region_institution_facet_str_mv = getRegionInstitutionFacet()
+local_region_institution_facet_mv = getRegionInstitutionFacet().last()
 subject_facet_mv = subject_facet_str_mv = subject_str_mv = getFields "100abcd"
+//old
+local_region_institution_facet_str_mv = getRegionInstitutionFacet()
 
 // display fields
 alternative_name_display_mv = getAuthAuthors "400"

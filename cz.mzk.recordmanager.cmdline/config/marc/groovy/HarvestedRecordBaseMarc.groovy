@@ -69,6 +69,8 @@ _hidden_isbn_annotation_obalkyknih = getFields "020a:902a"
 conspectus_facet_mv = conspectus_str_mv = getConspectus();
 genre_facet_mv = genre_facet_str_mv = getGenreFacet "655avxyz"
 local_institution_view_facet_mv = institution_view_facet_str_mv = getInstitutionViewFacet()
-local_region_institution_facet_mv = local_region_institution_facet_str_mv = getRegionInstitutionFacet()
+local_region_institution_facet_mv = getRegionInstitutionFacet().last()
 local_statuses_facet_mv = local_statuses_facet_str_mv = getStatuses()
 subject_facet_mv = subject_facet_str_mv = getSubject "600abcdfglnpqstyz:610abcdfgklnpstyz:611abcdefgklnpqstyz:630adfgklnpstyz:648a:651avxyz:964abcdefg:967ab"
+// old
+local_region_institution_facet_str_mv = getRegionInstitutionFacet()

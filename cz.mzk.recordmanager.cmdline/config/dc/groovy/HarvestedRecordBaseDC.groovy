@@ -9,8 +9,10 @@ barcodes = getBarcodes()
 _hidden_index_when_merged_boolean = getIndexWhenMerged()
 
 // facet
-local_region_institution_facet_mv = local_region_institution_facet_str_mv = getRegionInstitutionFacet()
+local_region_institution_facet_mv = getRegionInstitutionFacet().last()
 local_statuses_facet_mv = local_statuses_facet_str_mv = getStatuses()
+//old
+local_region_institution_facet_str_mv = getRegionInstitutionFacet()
 
 // search
 author_search_txt_mv = getAllCreatorsForSearching()

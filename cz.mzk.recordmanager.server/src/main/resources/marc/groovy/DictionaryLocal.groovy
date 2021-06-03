@@ -19,5 +19,7 @@ url = getUrls()
 
 // facets
 local_institution_view_facet_mv = institution_view_facet_str_mv = getInstitutionViewFacet()
-local_region_institution_facet_mv = local_region_institution_facet_str_mv = getRegionInstitutionFacet()
+local_region_institution_facet_mv = getRegionInstitutionFacet().last()
 subject_facet_mv = subject_facet_str_mv = subject_str_mv = Arrays.asList("Knihovnictví", "Informační věda")
+//old
+local_region_institution_facet_str_mv = getRegionInstitutionFacet()
