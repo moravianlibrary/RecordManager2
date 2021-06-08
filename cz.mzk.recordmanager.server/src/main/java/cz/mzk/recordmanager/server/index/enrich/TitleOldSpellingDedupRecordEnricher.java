@@ -32,12 +32,12 @@ public class TitleOldSpellingDedupRecordEnricher implements DedupRecordEnricher 
 			return;
 		List<String> results = new ArrayList<>();
 		Set<String> titles = new HashSet<>();
-		if (mergedDocument.containsKey(SolrFieldConstants.TITLE_SEARCH_TXT_MV)) {
-			titles = mergedDocument.getFieldValues(SolrFieldConstants.TITLE_SEARCH_TXT_MV).stream().map(s -> (String) s).collect(Collectors.toSet());
+		if (mergedDocument.containsKey(SolrFieldConstants._HIDDEN_TITLE_SEARCH_TXT_MV)) {
+			titles = mergedDocument.getFieldValues(SolrFieldConstants._HIDDEN_TITLE_SEARCH_TXT_MV).stream().map(s -> (String) s).collect(Collectors.toSet());
 		} else {
 			for (SolrInputDocument localRecord : localRecords) {
-				if (localRecord.containsKey(SolrFieldConstants.TITLE_SEARCH_TXT_MV)) {
-					titles.addAll(localRecord.getFieldValues(SolrFieldConstants.TITLE_SEARCH_TXT_MV).stream()
+				if (localRecord.containsKey(SolrFieldConstants._HIDDEN_TITLE_SEARCH_TXT_MV)) {
+					titles.addAll(localRecord.getFieldValues(SolrFieldConstants._HIDDEN_TITLE_SEARCH_TXT_MV).stream()
 							.map(s -> ((String) s).toLowerCase()).collect(Collectors.toSet()));
 				}
 			}

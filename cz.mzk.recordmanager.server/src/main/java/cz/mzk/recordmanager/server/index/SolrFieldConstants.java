@@ -141,9 +141,13 @@ public class SolrFieldConstants {
 
 	public static final String AUTHOR_SEARCH_TXT_MV = "author_search_txt_mv";
 
+	public static final String _HIDDEN_TITLE_SEARCH_TXT_MV = "_hidden_title_search_txt_mv";
+
 	public static final String TITLE_SEARCH_TXT_MV = "title_search_txt_mv";
 
 	public static final String TITLE_OLD_SPELLING = "title_old_spelling_txt_mv";
+
+	public static final String TITLE_SERIES_SEARCH = "titleSeries_search_txt_mv";
 
 	public static final String AUTHOR_AUTHORITY_DISPLAY = "author_authority_display";
 

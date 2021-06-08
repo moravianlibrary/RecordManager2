@@ -7,7 +7,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -18,6 +20,10 @@ public class CleaningUtils {
 
 	public static List<String> replaceFirst(List<String> input, Pattern pattern, String replacement) {
 		return input.stream().map(it -> replace(it, pattern, replacement, false)).collect(Collectors.toCollection(ArrayList::new));
+	}
+
+	public static Set<String> replaceFirst(Set<String> input, Pattern pattern, String replacement) {
+		return input.stream().map(it -> replace(it, pattern, replacement, false)).collect(Collectors.toCollection(HashSet::new));
 	}
 
 	public static List<String> replaceAll(List<String> input, Pattern pattern, String replacement) {
