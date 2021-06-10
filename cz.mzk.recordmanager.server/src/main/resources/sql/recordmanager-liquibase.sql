@@ -2500,3 +2500,8 @@ UPDATE oai_harvest_conf SET set_spec_full_harvest='CPK1' WHERE import_conf_id IN
 INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (227, 'MKTREBIC', 'http://www.knihovnatr.cz/', 'https://trebic.tritius.cz/', 'Olomouc', 'VY');
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id) VALUES (427, 227, 200, 'mktrebic', 11, false, true, true, true, 'U', 'other');
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (427,'https://trebic.tritius.cz/tritius/oai-provider','CPKTEST_1','marc21',NULL);
+
+--changeset tomascejpek:262 context:cpk
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (96, 423, 'ABG502');
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (99, 426, 'OLG001');
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (100, 427, 'TRG001');
