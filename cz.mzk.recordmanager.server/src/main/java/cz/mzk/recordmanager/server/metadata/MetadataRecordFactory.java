@@ -94,6 +94,10 @@ public class MetadataRecordFactory {
 		case Constants.PREFIX_SFXJIBSVKPK:
 		case Constants.PREFIX_SFXJIBVKOL:
 		case Constants.PREFIX_SFXJIBMKHK:
+		case Constants.PREFIX_SFXJIBKKKV:
+		case Constants.PREFIX_SFXJIBUZEI:
+		case Constants.PREFIX_SFXJIBKKVY:
+		case Constants.PREFIX_SFXJIBSVKUL:
 			return new SfxJibMetadataMarcRecord(marcRec, hr);
 		case Constants.PREFIX_SFXJIBIREL:
 			return new SfxJibIrelMetadataMarcRecord(marcRec, hr);

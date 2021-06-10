@@ -9,7 +9,7 @@ import java.util.Map;
 
 public class SfxJibMetadataMarcRecord extends MetadataMarcRecord {
 
-	private static final String SFX_URL = "http://sfx.knihovny.cz/sfxlcl3";
+	private static final String SFX_URL = "https://sfx.knihovny.cz/sfxlcl3";
 
 	public SfxJibMetadataMarcRecord(MarcRecord underlayingMarc, HarvestedRecord hr) {
 		super(underlayingMarc, hr);
@@ -25,6 +25,7 @@ public class SfxJibMetadataMarcRecord extends MetadataMarcRecord {
 		SFX_PREFIX.put("KFBZ", "KKFB");
 		SFX_PREFIX.put("SVKPK", "SVKPL");
 		SFX_PREFIX.put("MKHK", "KMHK");
+		SFX_PREFIX.put("KKVY", "KKVysociny");
 	}
 
 	protected Map<String, String> params = new HashMap<>();

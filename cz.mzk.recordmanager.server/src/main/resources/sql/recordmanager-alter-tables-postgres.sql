@@ -2222,3 +2222,13 @@ INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granul
 
 -- 10. 06. 2021 tomascejpek
 UPDATE library SET city='Třebíč' WHERE id=227;
+
+-- 11. 06. 2021 tomascejpek
+INSERT INTO import_conf (id,library_id,contact_person_id,id_prefix,base_weight,cluster_id_enabled,filtering_enabled,interception_enabled,is_library,harvest_frequency,mapping_script,generate_dedup_keys,mapping_dedup_script, generate_biblio_linker_keys) VALUES (1327,132,200,'sfxjibkkkv',8,false,false,false,true,'U','SfxMarcLocal.groovy',false,'SfxMarc.groovy', false);
+INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format,extract_id_regex,reharvest) VALUES (1327,'https://sfx.knihovny.cz/sfxlcl3/cgi/public/get_file.cgi?file=institutional_holding-KKKV.xml','downloadAndImportRecordsJob','sfx',null,true);
+INSERT INTO import_conf (id,library_id,contact_person_id,id_prefix,base_weight,cluster_id_enabled,filtering_enabled,interception_enabled,is_library,harvest_frequency,mapping_script,generate_dedup_keys,mapping_dedup_script, generate_biblio_linker_keys) VALUES (1328,191,200,'sfxjibuzei',8,false,false,false,true,'U','SfxMarcLocal.groovy',false,'SfxMarc.groovy', false);
+INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format,extract_id_regex,reharvest) VALUES (1328,'https://sfx.knihovny.cz/sfxlcl3/cgi/public/get_file.cgi?file=institutional_holding-UZEI.xml','downloadAndImportRecordsJob','sfx',null,true);
+INSERT INTO import_conf (id,library_id,contact_person_id,id_prefix,base_weight,cluster_id_enabled,filtering_enabled,interception_enabled,is_library,harvest_frequency,mapping_script,generate_dedup_keys,mapping_dedup_script, generate_biblio_linker_keys) VALUES (1329,114,200,'sfxjibsvkul',8,false,false,false,true,'U','SfxMarcLocal.groovy',false,'SfxMarc.groovy', false);
+INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format,extract_id_regex,reharvest) VALUES (1329,'https://sfx.knihovny.cz/sfxlcl3/cgi/public/get_file.cgi?file=institutional_holding-SVKUL.xml','downloadAndImportRecordsJob','sfx',null,true);
+INSERT INTO import_conf (id,library_id,contact_person_id,id_prefix,base_weight,cluster_id_enabled,filtering_enabled,interception_enabled,is_library,harvest_frequency,mapping_script,generate_dedup_keys,mapping_dedup_script, generate_biblio_linker_keys) VALUES (1330,112,200,'sfxjibkkvy',8,false,false,false,true,'U','SfxMarcLocal.groovy',false,'SfxMarc.groovy', false);
+INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format,extract_id_regex,reharvest) VALUES (1330,'https://sfx.knihovny.cz/sfxlcl3/cgi/public/get_file.cgi?file=institutional_holding-KKVysociny.xml','downloadAndImportRecordsJob','sfx',null,true);
