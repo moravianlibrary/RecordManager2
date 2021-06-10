@@ -109,7 +109,7 @@ INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (223, 'MKR
 INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (224, 'MKMILOVICE', 'http://milovice.knihovna.cz/', 'https://sck.tritius.cz/library/milovice', 'Milovice', 'SC');
 INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (225, 'MKBOSKOVICE', 'https://www.kulturaboskovice.cz/knihovna', 'https://boskovice.tritius.cz/', 'Boskovice', 'JM');
 INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (226, 'KMOL', 'http://www.kmol.cz/', 'hhttps://tritius.kmol.cz/', 'Olomouc', 'OL');
-INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (227, 'MKTREBIC', 'http://www.knihovnatr.cz/', 'https://trebic.tritius.cz/', 'Olomouc', 'VY');
+INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (227, 'MKTREBIC', 'http://www.knihovnatr.cz/', 'https://trebic.tritius.cz/', 'Třebíč', 'VY');
 INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (228, 'SLAVOJ', 'http://slavoj.cz/', 'https://katalog.slavoj.cz/', 'Dvůr Králové nad Labem', 'KH');
 INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (229, 'MVK', 'https://www.mvk.cz/', 'https://katalog.mvk.cz/', 'Vsetín', 'ZL');
 INSERT INTO library (id, name, url, catalog_url, city) VALUES (400, 'AUTHORITY', 'nkp.cz', 'aleph.nkp.cz', NULL);
