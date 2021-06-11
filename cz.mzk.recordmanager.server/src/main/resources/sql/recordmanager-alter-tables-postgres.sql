@@ -2222,3 +2222,8 @@ INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granul
 
 -- 10. 06. 2021 tomascejpek
 UPDATE library SET city='Třebíč' WHERE id=227;
+
+-- 11. 06. 2021 tomascejpek
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (96, 423, 'ABG502');
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (99, 426, 'OLG001');
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (100, 427, 'TRG001');
