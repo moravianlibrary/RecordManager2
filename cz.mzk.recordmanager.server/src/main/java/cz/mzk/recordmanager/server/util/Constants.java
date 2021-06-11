@@ -204,6 +204,8 @@ public class Constants {
 	public static final String PREFIX_SFXJIBIREL		= "sfxjibirel";
 	public static final String PREFIX_SFXJIBKFBZ		= "sfxjibkfbz";
 	public static final String PREFIX_SFXJIBKIV			= "sfxjibkiv";
+	public static final String PREFIX_SFXJIBKKKV		= "sfxjibkkkv";
+	public static final String PREFIX_SFXJIBKKVY		= "sfxjibkkvy";
 	public static final String PREFIX_SFXJIBKNAV		= "sfxjibknav";
 	public static final String PREFIX_SFXJIBKVKL		= "sfxjibkvkl";
 	public static final String PREFIX_SFXJIBMKHK		= "sfxjibmkhk";
@@ -217,7 +219,9 @@ public class Constants {
 	public static final String PREFIX_SFXJIBSVKHK		= "sfxjibsvkhk";
 	public static final String PREFIX_SFXJIBSVKOS		= "sfxjibsvkos";
 	public static final String PREFIX_SFXJIBSVKPK		= "sfxjibsvkpk";
+	public static final String PREFIX_SFXJIBSVKUL		= "sfxjibsvkul";
 	public static final String PREFIX_SFXJIBTECH		= "sfxjibtech";
+	public static final String PREFIX_SFXJIBUZEI		= "sfxjibuzei";
 	public static final String PREFIX_SFXJIBVKOL		= "sfxjibvkol";
 	public static final String PREFIX_SFXKNAV			= "sfxknav";
 	public static final String PREFIX_SFXTECHLIBNTK		= "sfxjibntk";
