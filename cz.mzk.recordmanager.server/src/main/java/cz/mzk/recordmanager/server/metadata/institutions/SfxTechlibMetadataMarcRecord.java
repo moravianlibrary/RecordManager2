@@ -8,7 +8,7 @@ import cz.mzk.recordmanager.server.model.HarvestedRecord;
 
 public class SfxTechlibMetadataMarcRecord extends MetadataMarcRecord {
 
-	private static final String SFX_URL = "http://sfx.techlib.cz/sfxlcl3";
+	private static final String SFX_URL = "https://sfx.techlib.cz/sfxlcl3";
 
 	public SfxTechlibMetadataMarcRecord(MarcRecord underlayingMarc, HarvestedRecord hr) {
 		super(underlayingMarc, hr);
