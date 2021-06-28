@@ -30,3 +30,6 @@ DROP TABLE biblio_linker_similar;
 DROP TABLE fit_knowledge_base;
 DROP TABLE fit_project;
 DROP TABLE fit_project_link;
+DROP TABLE kram_availability;
+DROP TABLE kram_dnnt_label;
+

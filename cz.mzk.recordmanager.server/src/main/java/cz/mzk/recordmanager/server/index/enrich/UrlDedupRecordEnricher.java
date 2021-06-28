@@ -5,6 +5,7 @@ import cz.mzk.recordmanager.server.index.SolrFieldConstants;
 import cz.mzk.recordmanager.server.model.DedupRecord;
 import cz.mzk.recordmanager.server.model.EVersionUrl;
 import cz.mzk.recordmanager.server.model.KramAvailability;
+import cz.mzk.recordmanager.server.model.KramDnntLabel.DnntLabelEnum;
 import cz.mzk.recordmanager.server.oai.dao.KramAvailabilityDAO;
 import cz.mzk.recordmanager.server.util.Constants;
 import cz.mzk.recordmanager.server.util.SolrUtils;
@@ -125,8 +126,13 @@ public class UrlDedupRecordEnricher implements DedupRecordEnricher {
 				// dnnt
 				if (newUrl.getAvailability().equals(Constants.DOCUMENT_AVAILABILITY_PROTECTED)
 						&& kramAvailability.isDnnt()) {
-					EVersionUrl dnntUrl = EVersionUrl.createDnnt(kramAvailability);
-					if (dnntUrl != null) addToMap(urls, dnntUrl);
+					// dnnt online
+					if (kramAvailability.getDnntLabels().stream().anyMatch(l -> l.getLabel().equals(DnntLabelEnum.DNNTO.getLabel()))) {
+						EVersionUrl dnntUrl = EVersionUrl.createDnnt(kramAvailability);
+						if (dnntUrl != null) addToMap(urls, dnntUrl);
+					} else { // dnnt without dnnt-label
+						addToMap(urls, EVersionUrl.create(kramAvailability));
+					}
 				}
 			}
 		}

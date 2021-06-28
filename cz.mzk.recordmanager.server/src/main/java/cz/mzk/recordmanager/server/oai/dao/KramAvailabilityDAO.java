@@ -10,4 +10,7 @@ public interface KramAvailabilityDAO extends DomainDAO<Long, KramAvailability> {
 	KramAvailability getByConfigAndUuid(final ImportConfiguration config, final String uuid);
 
 	List<KramAvailability> getByUuid(final String uuid);
+
+	void dropKeys(KramAvailability availability);
+
 }

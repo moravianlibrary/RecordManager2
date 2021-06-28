@@ -2244,3 +2244,13 @@ UPDATE download_import_conf SET url='https://sfx.techlib.cz/sfxlcl41/cgi/public/
 -- 28. 06. 2021 tomascejpek
 UPDATE oai_harvest_conf SET url_full_harvest='https://roznov.portaro.cz/api/oai' WHERE import_conf_id=387;
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (61, 387, 'VSG502');
+
+-- 30. 06. 2021 tomascejpek
+CREATE TABLE kram_dnnt_label (
+  id                    SERIAL,
+  kram_availability_id INTEGER,
+  label                 VARCHAR(100) NOT NULL,
+  CONSTRAINT kram_dnnt_labels_pk PRIMARY KEY(id),
+  FOREIGN KEY (kram_availability_id) REFERENCES kram_availability(id) ON DELETE CASCADE
+);
+CREATE INDEX kram_dnnt_label_availability_id_idx ON kram_dnnt_label(kram_availability_id);

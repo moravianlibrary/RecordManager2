@@ -1,7 +1,9 @@
 package cz.mzk.recordmanager.server.model;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = KramAvailability.TABLE_NAME)
@@ -37,6 +39,10 @@ public class KramAvailability {
 	@Column(name = "last_harvest")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date lastHarvest = new Date();
+
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name = "kram_availability_id", referencedColumnName = "id", nullable = false)
+	private List<KramDnntLabel> labels = new ArrayList<>();
 
 	public String getLink() {
 		return harvestedFrom.getAvailabilityDestUrl() + uuid;
@@ -110,6 +116,22 @@ public class KramAvailability {
 		this.level = level;
 	}
 
+	public List<KramDnntLabel> getDnntLabels() {
+		return labels;
+	}
+
+	public void setDnntLabels(List<KramDnntLabel> labels) {
+		this.labels = labels;
+	}
+
+	public void addDnntLabel(String labelName) {
+		if (this.labels == null) this.labels = new ArrayList<>();
+		KramDnntLabel newLabel = KramDnntLabel.create(labelName);
+		if (newLabel == null || this.labels.contains(newLabel)) return;
+		this.labels.add(newLabel);
+	}
+
+
 	@Override
 	public String toString() {
 		return "KramAvailability{" +
@@ -118,9 +140,11 @@ public class KramAvailability {
 				", uuid='" + uuid + '\'' +
 				", availability='" + availability + '\'' +
 				", dnnt=" + dnnt +
-				", level='" + level + '\'' +
+				", level=" + level +
 				", updated=" + updated +
 				", lastHarvest=" + lastHarvest +
+				", labels=" + labels +
 				'}';
 	}
+
 }

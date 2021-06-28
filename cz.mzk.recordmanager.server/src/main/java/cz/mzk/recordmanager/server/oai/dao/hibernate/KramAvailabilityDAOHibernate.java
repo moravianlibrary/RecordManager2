@@ -2,12 +2,14 @@ package cz.mzk.recordmanager.server.oai.dao.hibernate;
 
 import cz.mzk.recordmanager.server.model.ImportConfiguration;
 import cz.mzk.recordmanager.server.model.KramAvailability;
+import cz.mzk.recordmanager.server.model.KramDnntLabel;
 import cz.mzk.recordmanager.server.oai.dao.KramAvailabilityDAO;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -31,4 +33,24 @@ public class KramAvailabilityDAOHibernate extends AbstractDomainDAOHibernate<Lon
 		crit.add(Restrictions.eq("uuid", uuid));
 		return (List<KramAvailability>) crit.list();
 	}
+
+	@Override
+	public void dropKeys(KramAvailability availability) {
+		if (availability == null || availability.getId() == null) {
+			return;
+		}
+		Session session = sessionFactory.getCurrentSession();
+		// don't delete keys for not managed entities
+		if (!session.contains(availability)) {
+			return;
+		}
+		List<KramDnntLabel> labels = availability.getDnntLabels();
+		availability.setDnntLabels(new ArrayList<>());
+		for (KramDnntLabel label : labels) {
+			session.delete(label);
+		}
+		session.update(availability);
+		session.flush();
+	}
+
 }

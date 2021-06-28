@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<response>
+	<lst name="responseHeader">
+		<int name="status">0</int>
+		<int name="QTime">70</int>
+		<lst name="params">
+			<str name="q">level:0 dnnt:true</str>
+			<str name="fl">dostupnost,dnnt,PID,level,dnnt-labels</str>
+			<str name="start">0</str>
+			<str name="rows">100</str>
+			<arr name="wt">
+				<str>xml</str>
+				<str>xml</str>
+			</arr>
+		</lst>
+	</lst>
+	<result name="response" numFound="155368" start="0">
+	</result>
+</response>

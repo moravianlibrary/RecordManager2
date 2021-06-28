@@ -35,8 +35,8 @@ public class KramAvailabilityReader implements ItemReader<KramAvailability> {
 	private KramAvailabilityXmlStreamReader reader;
 
 	private final List<String> URLS = Arrays.asList(
-			"%s/search?fl=dostupnost,dnnt,PID,level&q=level:0&rows=%d&start=%d&wt=xml",
-			"%s/search?fl=dostupnost,dnnt,PID,level&q=level:1+document_type:monographunit&rows=%d&start=%d&wt=xml"
+			"%s/search?fl=dostupnost,dnnt,PID,level,dnnt-labels&q=level:0&rows=%d&start=%d&wt=xml",
+			"%s/search?fl=dostupnost,dnnt,PID,level,dnnt-labels&q=level:1+document_type:monographunit&rows=%d&start=%d&wt=xml"
 	);
 
 	private final ListIterator<String> iterator = URLS.listIterator();

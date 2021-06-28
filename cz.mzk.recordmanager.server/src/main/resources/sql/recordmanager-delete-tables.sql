@@ -33,6 +33,8 @@ DELETE FROM bl_topic_key;
 DELETE FROM bl_language;
 DELETE FROM harvested_record;
 DELETE FROM tezaurus_record;
+DELETE FROM kram_availability;
+DELETE FROM kram_dnnt_label;
 DELETE FROM import_conf;
 DELETE FROM contact_person;
 DELETE FROM library;

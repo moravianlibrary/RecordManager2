@@ -2,6 +2,7 @@ package cz.mzk.recordmanager.server.imports.kramAvailability;
 
 import cz.mzk.recordmanager.server.model.KramAvailability;
 import cz.mzk.recordmanager.server.oai.dao.KramAvailabilityDAO;
+import org.apache.commons.collections.CollectionUtils;
 import org.hibernate.SessionFactory;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,8 +30,10 @@ public class KramAvailabilityWriter implements ItemWriter<KramAvailability> {
 				continue;
 			}
 			if (isUpdated(oldItem, newItem)) {
+				kramAvailabilityDAO.dropKeys(oldItem);
 				oldItem.setAvailability(newItem.getAvailability());
 				oldItem.setDnnt(newItem.isDnnt());
+				oldItem.setDnntLabels(newItem.getDnntLabels());
 				oldItem.setUpdated(new Date());
 			}
 			oldItem.setLevel(newItem.getLevel());
@@ -42,7 +45,8 @@ public class KramAvailabilityWriter implements ItemWriter<KramAvailability> {
 	}
 
 	private static boolean isUpdated(final KramAvailability oldItem, final KramAvailability newItem) {
-		return !oldItem.getAvailability().equals(newItem.getAvailability()) || oldItem.isDnnt() != newItem.isDnnt();
+		return !oldItem.getAvailability().equals(newItem.getAvailability()) || oldItem.isDnnt() != newItem.isDnnt()
+				|| !CollectionUtils.isEqualCollection(oldItem.getDnntLabels(), newItem.getDnntLabels());
 	}
 
 }

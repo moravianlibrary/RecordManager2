@@ -19,7 +19,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.task.TaskExecutor;
 
 @Configuration
 public class KramAvailabilityJobConfig {
@@ -29,9 +28,6 @@ public class KramAvailabilityJobConfig {
 
 	@Autowired
 	private StepBuilderFactory steps;
-
-	@Autowired
-	private TaskExecutor taskExecutor;
 
 	private static final Long LONG_OVERRIDEN_BY_EXPRESSION = null;
 

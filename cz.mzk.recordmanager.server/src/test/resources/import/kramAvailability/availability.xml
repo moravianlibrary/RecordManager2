@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<response>
+
+	<lst name="responseHeader">
+		<int name="status">0</int>
+		<int name="QTime">70</int>
+		<lst name="params">
+			<str name="q">level:0 dnnt:true</str>
+			<str name="fl">dostupnost,dnnt,PID,level,dnnt-labels</str>
+			<str name="start">0</str>
+			<str name="rows">100</str>
+			<arr name="wt">
+				<str>xml</str>
+				<str>xml</str>
+			</arr>
+		</lst>
+	</lst>
+	<result name="response" numFound="155368" start="0">
+		<doc>
+			<str name="PID">uuid:7067bd90-227f-11eb-bd18-005056827e51</str>
+			<str name="dostupnost">private</str>
+			<int name="level">0</int>
+			<arr name="dnnt-labels">
+				<str>covid</str>
+			</arr>
+			<bool name="dnnt">true</bool>
+		</doc>
+		<doc>
+			<str name="PID">uuid:57ff5a10-2a68-11eb-bd18-005056827e51</str>
+			<str name="dostupnost">private</str>
+			<int name="level">0</int>
+			<arr name="dnnt-labels">
+				<str>dnnto</str>
+			</arr>
+			<bool name="dnnt">true</bool>
+		</doc>
+		<doc>
+			<str name="PID">uuid:4d2a2680-f415-11ea-b646-005056827e52</str>
+			<str name="dostupnost">private</str>
+			<int name="level">0</int>
+			<arr name="dnnt-labels">
+				<str>covid</str>
+			</arr>
+			<bool name="dnnt">true</bool>
+		</doc>
+		<doc>
+			<str name="PID">uuid:d0f3c550-56ca-11e9-8854-005056827e51</str>
+			<str name="dostupnost">private</str>
+			<int name="level">0</int>
+		</doc>
+		<doc>
+			<str name="PID">uuid:4f8b1450-0d58-11eb-9e0f-005056827e51</str>
+			<str name="dostupnost">private</str>
+			<int name="level">0</int>
+			<arr name="dnnt-labels">
+				<str>covid</str>
+			</arr>
+			<bool name="dnnt">true</bool>
+		</doc>
+		<doc>
+			<str name="PID">uuid:4ef69450-2fb9-11eb-979b-005056827e52</str>
+			<str name="dostupnost">private</str>
+			<int name="level">0</int>
+			<arr name="dnnt-labels">
+				<str>dnntt</str>
+			</arr>
+			<bool name="dnnt">true</bool>
+		</doc>
+		<doc>
+			<str name="PID">uuid:442f9cbd-adc1-47cf-a791-bfd5e0979ae0</str>
+			<str name="dostupnost">private</str>
+			<int name="level">0</int>
+			<arr name="dnnt-labels">
+				<str>dnnto</str>
+			</arr>
+			<bool name="dnnt">true</bool>
+		</doc>
+	</result>
+</response>

@@ -524,7 +524,15 @@ CREATE TABLE kram_availability (
   updated           TIMESTAMP NOT NULL,
   last_harvest      TIMESTAMP NOT NULL,
   CONSTRAINT kram_availability_pk PRIMARY KEY(id),
-  FOREIGN KEY (import_conf_id) REFERENCES import_conf(id)
+  FOREIGN KEY (import_conf_id) REFERENCES import_conf(id) ON DELETE CASCADE
+);
+
+CREATE TABLE kram_dnnt_label (
+  id                    SERIAL,
+  kram_availability_id INTEGER,
+  label                 VARCHAR(100) NOT NULL,
+  CONSTRAINT kram_dnnt_labels_pk PRIMARY KEY(id),
+  FOREIGN KEY (kram_availability_id) REFERENCES kram_availability(id) ON DELETE CASCADE
 );
 
 CREATE TABLE ziskej_library (
