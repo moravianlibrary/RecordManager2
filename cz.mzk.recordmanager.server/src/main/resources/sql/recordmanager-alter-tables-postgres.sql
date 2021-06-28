@@ -2240,3 +2240,7 @@ INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format,extr
 
 -- 14. 06. 2021 tomascejpek
 UPDATE download_import_conf SET url='https://sfx.techlib.cz/sfxlcl41/cgi/public/get_file.cgi?file=institutional_holding-NTK.xml' WHERE import_conf_id=1318;
+
+-- 28. 06. 2021 tomascejpek
+UPDATE oai_harvest_conf SET url_full_harvest='https://roznov.portaro.cz/api/oai' WHERE import_conf_id=387;
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (61, 387, 'VSG502');

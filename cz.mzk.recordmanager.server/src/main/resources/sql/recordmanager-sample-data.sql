@@ -421,7 +421,7 @@ INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granul
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (384,'https://baze.knihovnazn.cz/katalog/l.dll','CPK','marc21',NULL);
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (385,'https://katalog.vfu.cz/api/oai/','cpk','marc21',NULL);
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (386,'https://clavius.knihovnaml.cz/l.dll','CPK','marc21',NULL);
-INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (387,'https://katalog.knir.cz/api/oai','cpk','marc21',NULL);
+INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity,url_full_harvest) VALUES (387,'https://katalog.knir.cz/api/oai','cpk','marc21',NULL,'https://roznov.portaro.cz/api/oai');
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (388,'https://katalog.mkostrov.cz/tritius/oai-provider','CPK_1','marc21',NULL);
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (389,'https://beroun.knihovny.net/Clavius/l.dll','CPK','marc21',NULL);
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (390,'https://most.tritius.cz/tritius/oai-provider','CPK_1','marc21',NULL);
@@ -659,6 +659,7 @@ INSERT INTO sigla (id, import_conf_id, sigla) VALUES (55, 381, 'PIG001');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (57, 383, 'FMG502');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (58, 384, 'ZNG001');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (60, 386, 'CHG501');
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (61, 387, 'VSG502');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (62, 388, 'KVG501');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (64, 390, 'MOG001');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (65, 333, 'PAG001');
