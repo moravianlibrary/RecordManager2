@@ -2535,3 +2535,8 @@ CREATE TABLE kram_dnnt_label (
   FOREIGN KEY (kram_availability_id) REFERENCES kram_availability(id) ON DELETE CASCADE
 );
 CREATE INDEX kram_dnnt_label_availability_id_idx ON kram_dnnt_label(kram_availability_id);
+
+--changeset tomascejpek:268 context:cpk
+UPDATE kramerius_conf SET availability_dest_url='https://www.digitalniknihovna.cz/mzk/uuid/' WHERE import_conf_id=99001;
+UPDATE kramerius_conf SET availability_dest_url='https://dk.uzei.cz/uzei/uuid/' WHERE import_conf_id=99017;
+UPDATE kramerius_conf SET availability_source_url='https://kramerius.kr-olomoucky.cz/search/api/v5.0' WHERE import_conf_id=99012;
