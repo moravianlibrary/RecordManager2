@@ -2588,3 +2588,27 @@ FROM last_harvest_date lhd
          JOIN library l ON l.id = ic.library_id
 ORDER BY lhd.last_successful_harvest_date DESC NULLS LAST
 ;
+
+--changeset tomascejpek:271 context:cpk
+INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (230, 'MKCHRUDIM', 'https://www.knihovna-cr.cz/', 'https://katalog.knihovna-cr.cz/', 'Chrudim', 'PA');
+INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id) VALUES (430, 230, 200, 'mkchrudim', 11, false, true, true, true, 'U', 'koha');
+INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity,extract_id_regex) VALUES (430,'https://koha.knihovna-cr.cz/cgi-bin/koha/oai.pl','CPK','marccpk',NULL,'CRG001:(.*)');
+INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (231, 'MKBOHUMIN', 'https://www.k3bohumin.cz/', 'https://katalog.k3bohumin.cz/', 'Bohumin', 'MS');
+INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id) VALUES (431, 231, 200, 'mkbohumin', 11, false, true, true, true, 'U', 'koha');
+INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity,extract_id_regex) VALUES (431,'https://koha.k3bohumin.cz/cgi-bin/koha/oai.pl','CPK','marccpk',NULL,'KAG505:(.*)');
+INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (232, 'MKJH', 'https://www.knihjh.cz/', 'https://jh.tritius.cz/', 'Jindřichův Hradec', 'VY');
+INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id) VALUES (432, 232, 200, 'mkjh', 11, false, true, true, true, 'U', 'other');
+INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (432,'https://jh.tritius.cz/tritius/oai-provider','CPK_1','marc21',NULL);
+INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (233, 'MKHAVIROV', 'https://knihovnahavirov.cz/', 'https://katalog.knih-havirov.cz/', 'Havířov', 'MS');
+INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id) VALUES (433, 233, 200, 'mkhavirov', 11, false, true, true, true, 'U', 'koha');
+INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity,extract_id_regex) VALUES (433,'https://koha.knih-havirov.cz/cgi-bin/koha/oai.pl','CPK','marccpk',NULL,'KAG503:(.*)');
+INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (234, 'MKCHOCEN', 'https://www.knihovnachocen.cz/', 'https://chocen-katalog.koha.cloud/', 'Choceň', 'PA');
+INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id) VALUES (434, 234, 200, 'mkchocen', 11, false, true, true, true, 'U', 'koha');
+INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity,extract_id_regex) VALUES (434,'https://chocen-koha-katalog.koha.cloud/cgi-bin/koha/oai.pl','CPK','marccpk',NULL,'UOG502:(.*)');
+INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (235, 'GEOL', 'http://www.geology.cz/', '', 'Bibliography', 'bibliography');
+INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id) VALUES (435, 235, 200, 'geol', 11, false, true, true, false, 'U', null);
+INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (435,'http://oai.geology.cz:8080/katalog/l.dll','GEOL','marc21',NULL);
+INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (236, 'ENVI', 'http://www.geology.cz/', '', 'Bibliography', 'bibliography');
+INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id) VALUES (436, 236, 200, 'envi', 11, false, true, true, false, 'U', null);
+INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (436,'http://oai.geology.cz:8080/katalog/l.dll','ENVI','marc21',NULL);
+UPDATE oai_harvest_conf SET extract_id_regex='TUG504:(.*)' WHERE import_conf_id=428;
