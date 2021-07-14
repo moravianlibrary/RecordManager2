@@ -1,15 +1,23 @@
 package cz.mzk.recordmanager.server.model;
 
+import cz.mzk.recordmanager.server.util.MetadataUtils;
+import org.apache.commons.collections.CollectionUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = KramAvailability.TABLE_NAME)
 public class KramAvailability {
 
 	public static final String TABLE_NAME = "kram_availability";
+
+	private static final Logger logger = LoggerFactory.getLogger(KramAvailability.class);
 
 	@Id
 	@Column(name = "id")
@@ -23,6 +31,9 @@ public class KramAvailability {
 	@Column(name = "uuid")
 	private String uuid;
 
+	@Column(name = "parent_uuid")
+	private String parentUuid;
+
 	@Column(name = "availability")
 	private String availability;
 
@@ -31,6 +42,30 @@ public class KramAvailability {
 
 	@Column(name = "level")
 	private Integer level;
+
+	@Column(name = "issn")
+	private String issn;
+
+	@Column(name = "publication_year")
+	private Integer yaer;
+
+	@Column(name = "volume")
+	private Integer volume;
+
+	@Column(name = "issue")
+	private Integer issue;
+
+	@Column(name = "page")
+	private Integer page;
+
+	@Column(name = "type")
+	private String type;
+
+	@Column(name = "rels_ext_index")
+	private Integer relsExtIndex;
+
+	@Column(name = "dedup_key")
+	private String dedupKey;
 
 	@Column(name = "updated")
 	@Temporal(TemporalType.TIMESTAMP)
@@ -73,6 +108,10 @@ public class KramAvailability {
 	}
 
 	public void setUuid(String uuid) {
+		if (uuid.length() >= 100) {
+			logger.warn(String.format("too long uuid: %s", uuid));
+			uuid = MetadataUtils.shorten(uuid, 100);
+		}
 		this.uuid = uuid;
 	}
 
@@ -131,6 +170,89 @@ public class KramAvailability {
 		this.labels.add(newLabel);
 	}
 
+	public String getParentUuid() {
+		return parentUuid;
+	}
+
+	public void setParentUuid(String parentUuid) {
+		if (parentUuid != null && parentUuid.length() >= 100) {
+			logger.warn(String.format("uuid: %s, too long parentUuid: %s", this.uuid, parentUuid));
+			parentUuid = MetadataUtils.shorten(parentUuid, 100);
+		}
+		this.parentUuid = parentUuid;
+	}
+
+	public String getIssn() {
+		return issn;
+	}
+
+	public void setIssn(String issn) {
+		if (issn != null && issn.length() >= 20) {
+			logger.warn(String.format("uuid: %s, too long issn: %s", this.uuid, issn));
+			issn = MetadataUtils.shorten(issn, 20);
+		}
+		this.issn = issn;
+	}
+
+	public Integer getYaer() {
+		return yaer;
+	}
+
+	public void setYaer(Integer yaer) {
+		this.yaer = yaer;
+	}
+
+	public Integer getVolume() {
+		return volume;
+	}
+
+	public void setVolume(Integer volume) {
+		this.volume = volume;
+	}
+
+	public Integer getIssue() {
+		return issue;
+	}
+
+	public void setIssue(Integer issue) {
+		this.issue = issue;
+	}
+
+	public Integer getPage() {
+		return page;
+	}
+
+	public void setPage(Integer page) {
+		this.page = page;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public String getDedupKey() {
+		return dedupKey;
+	}
+
+	public Integer getRelsExtIndex() {
+		return relsExtIndex;
+	}
+
+	public void setRelsExtIndex(Integer relsExtIndex) {
+		this.relsExtIndex = relsExtIndex;
+	}
+
+	public void setDedupKey(String dedupKey) {
+		if (dedupKey != null && dedupKey.length() >= 100) {
+			logger.warn(String.format("uuid: %s, too long dedupKey: %s", this.uuid, dedupKey));
+			dedupKey = MetadataUtils.shorten(dedupKey, 100);
+		}
+		this.dedupKey = dedupKey;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
 
 	@Override
 	public String toString() {
@@ -138,13 +260,45 @@ public class KramAvailability {
 				"id=" + id +
 				", harvestedFrom=" + harvestedFrom +
 				", uuid='" + uuid + '\'' +
+				", parentUuid='" + parentUuid + '\'' +
 				", availability='" + availability + '\'' +
 				", dnnt=" + dnnt +
 				", level=" + level +
+				", issn='" + issn + '\'' +
+				", yaer=" + yaer +
+				", volume=" + volume +
+				", issue=" + issue +
+				", page=" + page +
+				", type='" + type + '\'' +
+				", relsExtIndex=" + relsExtIndex +
+				", dedupKey='" + dedupKey + '\'' +
 				", updated=" + updated +
 				", lastHarvest=" + lastHarvest +
 				", labels=" + labels +
 				'}';
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		KramAvailability that = (KramAvailability) o;
+		return dnnt == that.dnnt
+				&& Objects.equals(parentUuid, that.parentUuid)
+				&& Objects.equals(availability, that.availability)
+				&& Objects.equals(issn, that.issn)
+				&& Objects.equals(yaer, that.yaer)
+				&& Objects.equals(volume, that.volume)
+				&& Objects.equals(issue, that.issue)
+				&& Objects.equals(page, that.page)
+				&& Objects.equals(relsExtIndex, that.relsExtIndex)
+				&& Objects.equals(type, that.type)
+				&& CollectionUtils.isEqualCollection(labels, that.labels);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(parentUuid, availability, dnnt, issn, yaer, volume, issue, page, relsExtIndex, type, labels);
 	}
 
 }

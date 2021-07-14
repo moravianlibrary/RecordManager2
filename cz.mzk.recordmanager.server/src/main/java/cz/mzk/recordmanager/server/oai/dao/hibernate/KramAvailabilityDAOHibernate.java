@@ -35,6 +35,15 @@ public class KramAvailabilityDAOHibernate extends AbstractDomainDAOHibernate<Lon
 	}
 
 	@Override
+	@SuppressWarnings("unchecked")
+	public List<KramAvailability> getByDedupKey(String dedupKey) {
+		Session session = sessionFactory.getCurrentSession();
+		Criteria crit = session.createCriteria(KramAvailability.class);
+		crit.add(Restrictions.eq("dedupKey", dedupKey));
+		return (List<KramAvailability>) crit.list();
+	}
+
+	@Override
 	public void dropKeys(KramAvailability availability) {
 		if (availability == null || availability.getId() == null) {
 			return;
@@ -44,6 +53,17 @@ public class KramAvailabilityDAOHibernate extends AbstractDomainDAOHibernate<Lon
 		if (!session.contains(availability)) {
 			return;
 		}
+		availability.setRelsExtIndex(null);
+		availability.setPage(null);
+		availability.setIssue(null);
+		availability.setVolume(null);
+		availability.setYaer(null);
+		availability.setIssn(null);
+		availability.setDedupKey(null);
+		availability.setType(null);
+		availability.setParentUuid(null);
+		availability.setDnnt(false);
+
 		List<KramDnntLabel> labels = availability.getDnntLabels();
 		availability.setDnntLabels(new ArrayList<>());
 		for (KramDnntLabel label : labels) {

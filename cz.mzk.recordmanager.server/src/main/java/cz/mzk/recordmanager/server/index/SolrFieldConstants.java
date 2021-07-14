@@ -199,4 +199,6 @@ public class SolrFieldConstants {
 
 	public static final String POTENTIAL_DNNT = "_hidden_potential_dnnt";
 
+	public static final String ARTICLE_AVAILABILITY_KEY = "_hidden_article_availability_key";
+
 }

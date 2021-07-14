@@ -224,6 +224,7 @@ public interface MetadataRecord {
 	/**
 	 * get authority ID of main author
 	 * only for authority records
+	 *
 	 * @return String
 	 */
 	String getAuthorityId();
@@ -354,6 +355,7 @@ public interface MetadataRecord {
 
 	/**
 	 * get siglas from caslin records
+	 *
 	 * @return {@link Set} of String
 	 */
 	default Set<String> getCaslinSiglas() {
@@ -436,7 +438,7 @@ public interface MetadataRecord {
 	 *
 	 * @return list of {@link BLTitle}
 	 */
-	default List<BLTitle> getBiblioLinkerTitle(){
+	default List<BLTitle> getBiblioLinkerTitle() {
 		return Collections.emptyList();
 	}
 
@@ -454,7 +456,7 @@ public interface MetadataRecord {
 	 *
 	 * @return String
 	 */
-	default String getBiblioLinkerAuthor(){
+	default String getBiblioLinkerAuthor() {
 		return null;
 	}
 
@@ -529,6 +531,10 @@ public interface MetadataRecord {
 
 	default boolean isEdd() {
 		return false;
+	}
+
+	default String getKramAvailabilityKey() {
+		return null;
 	}
 
 }

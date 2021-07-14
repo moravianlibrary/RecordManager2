@@ -14,11 +14,12 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.ListIterator;
 
-public class KramAvailabilityReader implements ItemReader<KramAvailability> {
+public class KramAvailabilityReader implements ItemReader<List<KramAvailability>> {
 
 	@Autowired
 	private KrameriusConfigurationDAO configDAO;
@@ -34,54 +35,71 @@ public class KramAvailabilityReader implements ItemReader<KramAvailability> {
 
 	private KramAvailabilityXmlStreamReader reader;
 
-	private final List<String> URLS = Arrays.asList(
-			"%s/search?fl=dostupnost,dnnt,PID,level,dnnt-labels&q=level:0&rows=%d&start=%d&wt=xml",
-			"%s/search?fl=dostupnost,dnnt,PID,level,dnnt-labels&q=level:1+document_type:monographunit&rows=%d&start=%d&wt=xml"
+	private static final List<String> URLS = Arrays.asList(
+			"%s/search?fl=dostupnost,dnnt,PID,level,dnnt-labels,document_type&q=level:0&rows=%d&start=%d&wt=xml",
+			"%s/search?fl=dostupnost,dnnt,PID,level,dnnt-labels,document_type&q=level:1+document_type:monographunit&rows=%d&start=%d&wt=xml"
 	);
 
-	private final ListIterator<String> iterator = URLS.listIterator();
+	private static final List<String> PAGE_URLS = Arrays.asList(
+			"%s/search?fl=dostupnost,dnnt,PID,level,dnnt-labels,parent_pid,details,document_type&q=fedora.model:periodicalvolume&rows=%d&start=%d&wt=xml",
+			"%s/search?fl=dostupnost,dnnt,PID,level,dnnt-labels,parent_pid,details,document_type,rok,issn&q=fedora.model:periodicalitem&rows=%d&start=%d&wt=xml",
+			"%s/search?fl=dostupnost,dnnt,PID,level,dnnt-labels,parent_pid,details,document_type,title,rok,rels_ext_index&q=fedora.model:page+model_path:*periodicalitem/page&rows=%d&start=%d&wt=xml"
+	);
+
+	private final ListIterator<String> iterator;
 	private String url;
 
 	private String source;
-	private static final int ROWS = 100;
-	private int start = 0;
+	private static final int ROWS = 5000;
+	private static int start = 0;
+	private static final int BATCH_SIZE = 200;
 
-	public KramAvailabilityReader(Long configId) {
+	private static boolean done = false;
+
+	public KramAvailabilityReader(Long configId, String type) {
 		this.configId = configId;
+		this.iterator = type.equals("titles") ? URLS.listIterator() : PAGE_URLS.listIterator();
+		this.url = this.iterator.next();
 	}
 
 	@Override
-	public KramAvailability read() {
-		KramAvailability result = null;
+	public synchronized List<KramAvailability> read() {
+		if (done) return null;
+		List<KramAvailability> results = new ArrayList<>();
 		if (reader == null || !reader.hasNext()) {
 			initializeReader();
 		}
-		while (reader.hasNext()) {
+		while (reader.hasNext() && results.size() < BATCH_SIZE) {
 			try {
-				result = reader.next();
-				if (result != null) result.setHarvestedFrom(config);
+				KramAvailability availability = reader.next();
+				if (availability != null) {
+					availability.setHarvestedFrom(config);
+					results.add(availability);
+				}
 				// !reader.hasNext() - end of file
 				// result == null - empty file
-				// iterator.hasNext() - exists next url
-				if (!reader.hasNext() && result == null && iterator.hasNext()) {
-					url = iterator.next();
-					start = 0;
+				if (!reader.hasNext() && availability == null) {
+					// iterator.hasNext() - exists next url
+					if (iterator.hasNext()) {
+						url = iterator.next();
+						start = 0;
+					} else {
+						done = true;
+						break;
+					}
 					initializeReader();
-					continue;
 				}
-				return result;
 			} catch (Exception e) {
 				throw new RuntimeException(e);
 			}
 		}
-		return null;
+		return results.isEmpty() ? null : results;
 	}
 
-	protected void initializeReader() throws RuntimeException {
+	protected synchronized void initializeReader() throws RuntimeException {
 		if (config == null) {
 			config = configDAO.get(configId);
 			source = config.getAvailabilitySourceUrl();
-			if (iterator.hasNext()) url = iterator.next();
 		}
 		String localUrl = String.format(url, source, ROWS, start++ * ROWS);
 		int error = 0;

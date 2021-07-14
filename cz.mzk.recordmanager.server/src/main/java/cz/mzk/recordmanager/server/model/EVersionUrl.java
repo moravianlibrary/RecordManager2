@@ -1,5 +1,6 @@
 package cz.mzk.recordmanager.server.model;
 
+import cz.mzk.recordmanager.server.model.KramDnntLabel.DnntLabelEnum;
 import cz.mzk.recordmanager.server.util.Constants;
 import cz.mzk.recordmanager.server.util.MetadataUtils;
 import cz.mzk.recordmanager.server.util.UrlValidatorUtils;
@@ -26,8 +27,17 @@ public class EVersionUrl implements Comparable {
 	public static EVersionUrl create(KramAvailability kramAvailability) {
 		EVersionUrl newUrl = new EVersionUrl();
 		newUrl.setSource(kramAvailability.getHarvestedFrom().getIdPrefix());
-		newUrl.setAvailability(kramAvailability.getAvailability());
-		newUrl.setLink(kramAvailability.getLink());
+		if (kramAvailability.getAvailability().equals("private")
+				&& kramAvailability.isDnnt()
+				&& kramAvailability.getDnntLabels().stream().anyMatch(l -> l.getLabel().equals(DnntLabelEnum.DNNTO.getLabel()))
+				&& kramAvailability.getDnntLink() != null) {
+			// dnnt online
+			newUrl.setAvailability(Constants.DOCUMENT_AVAILABILITY_DNNT);
+			newUrl.setLink(kramAvailability.getDnntLink());
+		} else {
+			newUrl.setAvailability(kramAvailability.getAvailability());
+			newUrl.setLink(kramAvailability.getLink());
+		}
 		newUrl.setComment(Constants.KRAM_EVERSION_COMMENT);
 		return newUrl;
 	}

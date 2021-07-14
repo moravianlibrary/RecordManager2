@@ -996,4 +996,8 @@ public class MarcDSL extends BaseDSL {
 		return context.mappings996().getMappingAsCsv(context.record().getDataFields("996"));
 	}
 
+	public String getArticleAvailabilityKey() {
+		return metadataRecord.getKramAvailabilityKey();
+	}
+
 }

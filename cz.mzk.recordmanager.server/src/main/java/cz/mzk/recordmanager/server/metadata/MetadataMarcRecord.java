@@ -96,6 +96,11 @@ public class MetadataMarcRecord implements MetadataRecord {
 	private static final Pattern HABILITATION = Pattern.compile("^habilita(?:ce|[cč]n[ií])", Pattern.CASE_INSENSITIVE);
 	private static final Pattern BOARD_GAMES = Pattern.compile("(?:deskov[eé]|karetn[ií]|spole[cč]ensk[eé]|stoln[ií])\\shry", Pattern.CASE_INSENSITIVE);
 
+	// articles availability
+	private static final Pattern VOLUME = Pattern.compile("r|roč\\.([0-9\\s]+)", Pattern.CASE_INSENSITIVE);
+	private static final Pattern ISSUE = Pattern.compile("č\\.\\s*([0-9]+)", Pattern.CASE_INSENSITIVE);
+	private static final Pattern PAGE = Pattern.compile("s\\.\\s*([0-9]+)", Pattern.CASE_INSENSITIVE);
+
 	private static final Long MAX_PAGES = 10_000_000L;
 	private static final String INVALID_YEAR = "Invalid year: %s";
 	private static final String[] TITLE_TAGS = {"245"};
@@ -1862,6 +1867,32 @@ public class MetadataMarcRecord implements MetadataRecord {
 	public boolean isEdd() {
 		return harvestedRecord.getHarvestedFrom().isZiskejEnabled()
 				&& !Collections.disjoint(getDetectedFormatList(), EDD_FORMAT_ALLOWED);
+	}
+
+	@Override
+	public String getKramAvailabilityKey() {
+		if (!isArticle()) return null;
+		List<String> results = new ArrayList<>();
+		Matcher matcher;
+		for (DataField df : underlayingMarc.getDataFields("773")) {
+			results.add(df.getSubfield('x') != null ? df.getSubfield('x').getData() : "");
+			Long publicationYear = getPublicationYear();
+			results.add(publicationYear != null ? publicationYear.toString() : "");
+			String[] value;
+			if (df.getSubfield('q') != null && (value = df.getSubfield('q').getData().split(":")).length == 2) {
+				results.add(value[0]);
+				results.add(value[1]);
+			} else if (df.getSubfield('g') != null) {
+				String data = df.getSubfield('g').getData();
+				results.add((matcher = VOLUME.matcher(data)).find() ? matcher.group(1) : "");
+				results.add((matcher = ISSUE.matcher(data)).find() ? matcher.group(1) : "");
+			}
+			if (df.getSubfield('g') != null && (matcher = PAGE.matcher(df.getSubfield('g').getData())).find()) {
+				results.add(matcher.group(1));
+			}
+			return String.join(";", results);
+		}
+		return null;
 	}
 
 }
