@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<response>
+
+	<lst name="responseHeader">
+		<int name="status">0</int>
+		<int name="QTime">274</int>
+		<lst name="params">
+			<str name="q">document_type:periodicalitem dc.identifier:4df7fb90-50de-11e9-abdc-5ef3fc9bb22f</str>
+			<str name="fl">dostupnost,dnnt,PID,level,dnnt-labels,parent_pid,details,document_type,issn</str>
+			<str name="start">0</str>
+			<str name="rows">20</str>
+			<arr name="wt">
+				<str>xml</str>
+				<str>xml</str>
+			</arr>
+		</lst>
+	</lst>
+	<result name="response" numFound="1" start="0">
+		<doc>
+			<str name="PID">uuid:4df7fb90-50de-11e9-abdc-5ef3fc9bb22f</str>
+			<arr name="document_type">
+				<str>periodicalitem</str>
+			</arr>
+			<str name="dostupnost">private</str>
+			<str name="issn">0862-9587</str>
+			<arr name="details">
+				<str>######143</str>
+			</arr>
+
+			<int name="level">2</int>
+			<bool name="dnnt">true</bool>
+			<arr name="dnnt-labels">
+				<str>dnnto</str>
+			</arr>
+			<arr name="parent_pid">
+				<str>uuid:84236100-508e-11e9-918e-5ef3fc9ae867</str>
+			</arr>
+		</doc>
+	</result>
+</response>

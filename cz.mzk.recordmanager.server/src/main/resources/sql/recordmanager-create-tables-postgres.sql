@@ -518,9 +518,17 @@ CREATE TABLE kram_availability (
   id                SERIAL,
   import_conf_id    DECIMAL(10) NOT NULL,
   uuid              VARCHAR(100) NOT NULL,
+  parent_uuid       VARCHAR(100),
   availability      VARCHAR(20) NOT NULL,
   dnnt              BOOLEAN DEFAULT FALSE,
   level             DECIMAL(10),
+  issn              VARCHAR(20),
+  publication_year  DECIMAL(4),
+  volume            DECIMAL(10),
+  issue             DECIMAL(10),
+  page              DECIMAL(10),
+  type              VARCHAR(30),
+  dedup_key         VARCHAR(100),
   updated           TIMESTAMP NOT NULL,
   last_harvest      TIMESTAMP NOT NULL,
   CONSTRAINT kram_availability_pk PRIMARY KEY(id),
@@ -529,7 +537,7 @@ CREATE TABLE kram_availability (
 
 CREATE TABLE kram_dnnt_label (
   id                    SERIAL,
-  kram_availability_id INTEGER,
+  kram_availability_id  INTEGER,
   label                 VARCHAR(100) NOT NULL,
   CONSTRAINT kram_dnnt_labels_pk PRIMARY KEY(id),
   FOREIGN KEY (kram_availability_id) REFERENCES kram_availability(id) ON DELETE CASCADE

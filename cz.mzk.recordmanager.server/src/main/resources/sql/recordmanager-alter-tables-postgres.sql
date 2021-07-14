@@ -2259,3 +2259,6 @@ CREATE INDEX kram_dnnt_label_availability_id_idx ON kram_dnnt_label(kram_availab
 UPDATE kramerius_conf SET availability_dest_url='https://www.digitalniknihovna.cz/mzk/uuid/' WHERE import_conf_id=99001;
 UPDATE kramerius_conf SET availability_dest_url='https://dk.uzei.cz/uzei/uuid/' WHERE import_conf_id=99017;
 UPDATE kramerius_conf SET availability_source_url='https://kramerius.kr-olomoucky.cz/search/api/v5.0' WHERE import_conf_id=99012;
+
+-- 15. 07. 2021 tomascejpek
+ALTER TABLE harvested_record ADD COLUMN kram_availability VARCHAR(100);

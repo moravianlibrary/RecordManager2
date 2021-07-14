@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<response>
+
+	<lst name="responseHeader">
+		<int name="status">0</int>
+		<int name="QTime">109</int>
+		<lst name="params">
+			<str name="q">document_type:page dc.identifier:01bedf30-513a-11e9-918e-5ef3fc9ae867</str>
+			<str name="fl">dostupnost,dnnt,PID,level,dnnt-labels,parent_pid,details,document_type,title,rok</str>
+			<str name="start">0</str>
+			<str name="rows">20</str>
+			<arr name="wt">
+				<str>xml</str>
+				<str>xml</str>
+			</arr>
+		</lst>
+	</lst>
+	<result name="response" numFound="1" start="0">
+		<doc>
+			<str name="PID">uuid:01bedf30-513a-11e9-918e-5ef3fc9ae867</str>
+			<arr name="document_type">
+				<str>page</str>
+			</arr>
+			<str name="title">9</str>
+			<str name="dostupnost">private</str>
+			<arr name="details">
+				<str>9 
+					##NormalPage
+				</str>
+			</arr>
+
+			<int name="level">3</int>
+			<int name="rok">1998</int>
+			<bool name="dnnt">true</bool>
+			<arr name="dnnt-labels">
+				<str>dnnto</str>
+			</arr>
+			<arr name="parent_pid">
+				<str>uuid:4df7fb90-50de-11e9-abdc-5ef3fc9bb22f</str>
+			</arr>
+		</doc>
+	</result>
+</response>

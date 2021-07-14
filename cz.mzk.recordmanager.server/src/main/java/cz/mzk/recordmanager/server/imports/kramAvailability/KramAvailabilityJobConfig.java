@@ -19,6 +19,9 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.task.TaskExecutor;
+
+import java.util.List;
 
 @Configuration
 public class KramAvailabilityJobConfig {
@@ -28,6 +31,9 @@ public class KramAvailabilityJobConfig {
 
 	@Autowired
 	private StepBuilderFactory steps;
+
+	@Autowired
+	private TaskExecutor taskExecutor;
 
 	private static final Long LONG_OVERRIDEN_BY_EXPRESSION = null;
 
@@ -52,22 +58,23 @@ public class KramAvailabilityJobConfig {
 	public Step harvestKramAvailabilityStep() throws Exception {
 		return steps.get(Constants.JOB_ID_HARVEST_KRAM_AVAILABILITY + ":harvestStep")
 				.listener(new StepProgressListener())
-				.<KramAvailability, KramAvailability>chunk(10)//
+				.<List<KramAvailability>, List<KramAvailability>>chunk(10)//
 				.reader(harvestKramAvailabilityReader(LONG_OVERRIDEN_BY_EXPRESSION))//
 				.writer(harvestKramAvailabilityWriter()) //
+				.taskExecutor(taskExecutor)
 				.build();
 	}
 
 	@Bean(name = Constants.JOB_ID_HARVEST_KRAM_AVAILABILITY + ":reader")
 	@StepScope
-	public ItemReader<KramAvailability> harvestKramAvailabilityReader(
+	public ItemReader<List<KramAvailability>> harvestKramAvailabilityReader(
 			@Value("#{jobParameters[" + Constants.JOB_PARAM_CONF_ID + "]}") Long configId) throws Exception {
-		return new KramAvailabilityReader(configId);
+		return new KramAvailabilityReader(configId, "title");
 	}
 
 	@Bean(name = Constants.JOB_ID_HARVEST_KRAM_AVAILABILITY + ":writer")
 	@StepScope
-	public ItemWriter<KramAvailability> harvestKramAvailabilityWriter() {
+	public ItemWriter<List<KramAvailability>> harvestKramAvailabilityWriter() {
 		return new KramAvailabilityWriter();
 	}
 

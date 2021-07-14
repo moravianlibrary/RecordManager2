@@ -953,4 +953,9 @@ public class MarcDSL extends BaseDSL {
 		}
 		return results;
 	}
+
+	public String getArticleAvailabilityKey() {
+		return context.harvestedRecord().getKramAvailability();
+	}
+
 }

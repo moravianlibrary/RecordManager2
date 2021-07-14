@@ -1821,4 +1821,22 @@ public class MetadataMarcRecord implements MetadataRecord {
 				&& !Collections.disjoint(getDetectedFormatList(), EDD_FORMAT_ALLOWED);
 	}
 
+	@Override
+	public String getKramAvailabilityKey() {
+		if (!isArticle()) return null;
+		List<String> results = new ArrayList<>();
+		for (DataField df : underlayingMarc.getDataFields("773")) {
+			if (df.getSubfield('x') != null) results.add(df.getSubfield('x').getData());
+			Long publicationYear = getPublicationYear();
+			if (publicationYear != null) results.add(publicationYear.toString());
+			if (df.getSubfield('q') != null) {
+				String[] value = df.getSubfield('q').getData().split(":");
+				results.add(value[0]);
+				results.add(value[1]);
+			}
+			results.add("9");
+		}
+		return String.join(";", results);
+	}
+
 }

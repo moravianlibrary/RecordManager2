@@ -64,6 +64,7 @@ sigla_display = getSigla()
 aleph_adm_id_txt_mv = getAlephAdmId()
 
 _hidden_isbn_annotation_obalkyknih = getFields "020a:902a"
+_hidden_article_availability_key = getArticleAvailabilityKey()
 
 // facets
 conspectus_facet_mv = conspectus_str_mv = getConspectus();

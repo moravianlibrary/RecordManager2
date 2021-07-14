@@ -1,26 +1,10 @@
 package cz.mzk.recordmanager.server.model;
 
+import com.google.common.base.Preconditions;
+
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.*;
-
-import javax.persistence.Basic;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToOne;
-import javax.persistence.MapKey;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.persistence.Transient;
-
-import com.google.common.base.Preconditions;
 
 
 @Entity
@@ -314,20 +298,23 @@ public class HarvestedRecord extends AbstractDomainObject {
 	@Column(name = "bl_series")
 	private String blSeries;
 
-	@Column(name="loans")
+	@Column(name = "loans")
 	private Long loans;
 
 	@Column(name = "callnumber")
 	private String callnumber;
+
+	@Column(name = "kram_availability")
+	private String kramAvailability;
 
 	/**
 	 * indicator variable used for filtering reasons
 	 */
 	@Transient
 	private boolean shouldBeProcessed = true;
-	
+
 	/**
-	 * Temporal indicator variable used for deduplication 
+	 * Temporal indicator variable used for deduplication
 	 */
 	@Transient
 	private Date temporalOldOaiTimestamp;
@@ -921,4 +908,13 @@ public class HarvestedRecord extends AbstractDomainObject {
 	public void setCallnumber(String callnumber) {
 		this.callnumber = callnumber;
 	}
+
+	public String getKramAvailability() {
+		return kramAvailability;
+	}
+
+	public void setKramAvailability(String kramAvailability) {
+		this.kramAvailability = kramAvailability;
+	}
+
 }

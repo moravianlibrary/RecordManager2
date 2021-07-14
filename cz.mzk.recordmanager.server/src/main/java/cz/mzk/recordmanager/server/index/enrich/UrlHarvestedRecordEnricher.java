@@ -16,7 +16,6 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 @Component
 public class UrlHarvestedRecordEnricher implements HarvestedRecordEnricher {
@@ -68,6 +67,12 @@ public class UrlHarvestedRecordEnricher implements HarvestedRecordEnricher {
 				}
 			}
 			if (UrlValidator.getInstance().isValid(url.getLink())) results.add(url.toString());
+		}
+		if (document.containsKey(SolrFieldConstants.ARTICLE_AVAILABILITY_KEY)) {
+			for (KramAvailability availability : kramAvailabilityDAO
+					.getByDedupKey(document.getFieldValue(SolrFieldConstants.ARTICLE_AVAILABILITY_KEY).toString())) {
+				results.add(EVersionUrl.create(availability).toString());
+			}
 		}
 		document.remove(SolrFieldConstants.URL);
 		document.addField(SolrFieldConstants.URL, results);
