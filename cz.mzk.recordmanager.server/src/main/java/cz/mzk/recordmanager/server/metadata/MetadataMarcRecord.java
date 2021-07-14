@@ -89,7 +89,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 
 	private static final Long MAX_PAGES = 10_000_000L;
 	private static final String INVALID_YEAR = "Invalid year: %s";
-	private static final String[] TITLE_TAGS = {"245", "240"};
+	private static final String[] TITLE_TAGS = {"245"};
 	private static final String[] AUTHORITY_ID_TAGS = {"100", "110", "111", "700", "710", "711"};
 	private static final char[] SHORT_TITLE_SUBFIELDS = {'a', 'n', 'p'};
 	private static final char[] TITLE_SUBFIELDS = {'a', 'b', 'n', 'p'};
@@ -313,7 +313,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 	/**
 	 * get {@link Title} of record
 	 *
-	 * @return all 245abnp and 240abnp
+	 * @return all 245abnp
 	 */
 	@Override
 	public List<Title> getTitle() {
@@ -1232,7 +1232,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 	/**
 	 * get {@link ShortTitle} of record
 	 *
-	 * @return all 245anp and 240anp, if contains subfield 'b'
+	 * @return all 245anp, if contains subfield 'b'
 	 */
 	@Override
 	public List<ShortTitle> getShortTitles() {
