@@ -2540,3 +2540,11 @@ CREATE INDEX kram_dnnt_label_availability_id_idx ON kram_dnnt_label(kram_availab
 UPDATE kramerius_conf SET availability_dest_url='https://www.digitalniknihovna.cz/mzk/uuid/' WHERE import_conf_id=99001;
 UPDATE kramerius_conf SET availability_dest_url='https://dk.uzei.cz/uzei/uuid/' WHERE import_conf_id=99017;
 UPDATE kramerius_conf SET availability_source_url='https://kramerius.kr-olomoucky.cz/search/api/v5.0' WHERE import_conf_id=99012;
+
+--changeset tomascejpek:269 context:cpk
+UPDATE kramerius_conf SET url='https://cdk.lib.cas.cz/search/api/v5.0' WHERE import_conf_id IN (99019,99037);
+UPDATE kramerius_conf SET url_solr='https://cdk.lib.cas.cz/solr-select-only/k4' WHERE import_conf_id IN (99019,99037);
+UPDATE kramerius_conf SET collection='"vc:41f345fc-d0ad-11ea-b976-005056b593cd"' WHERE import_conf_id=99019;
+UPDATE kramerius_conf SET collection='"vc:9ecedcad-aa68-4967-8d65-f938c5ce3a6b"' WHERE import_conf_id=99037;
+UPDATE kramerius_conf SET availability_source_url='https://kramerius.svkos.cz/search/api/v5.0' WHERE import_conf_id=99019;
+UPDATE kramerius_conf SET availability_source_url='https://library.nfa.cz/search/api/v5.0' WHERE import_conf_id=99037;
