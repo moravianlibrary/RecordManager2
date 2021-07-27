@@ -74,6 +74,12 @@ public class KramAvailabilityWriter implements ItemWriter<List<KramAvailability>
 		KramAvailability volume = availabilityDAO.getByConfigAndUuid(availability.getHarvestedFrom(), issue.getParentUuid());
 		if (volume == null) return;
 		availability.setVolume(volume.getVolume());
+		if (issue.getIssn() == null || issue.getIssn().isEmpty()) {
+			KramAvailability periodical = availabilityDAO.getByConfigAndUuid(volume.getHarvestedFrom(), volume.getParentUuid());
+			if (periodical != null) {
+				issue.setIssn(periodical.getIssn());
+			}
+		}
 		if (availability.getIssn() != null && !availability.getIssn().isEmpty() && availability.getYaer() != null && availability.getVolume() != null
 				&& availability.getIssue() != null) {
 			List<String> results = new ArrayList<>(Arrays.asList(availability.getIssn(),

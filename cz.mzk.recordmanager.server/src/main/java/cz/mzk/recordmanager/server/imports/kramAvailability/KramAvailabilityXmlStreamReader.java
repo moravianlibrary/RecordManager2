@@ -38,7 +38,7 @@ public class KramAvailabilityXmlStreamReader {
 	private static final String ATTRIBUTE_VALUE_DOCUMENT_TYPE = "document_type";
 	private static final String ATTRIBUTE_VALUE_RELS_EXT_INDEX = "rels_ext_index";
 
-	private static final Pattern VOLUME = Pattern.compile("\\d+#+(\\d{1,4})");
+	private static final Pattern VOLUME = Pattern.compile("\\d+#+(\\w+)");
 	private static final Pattern ISSUE = Pattern.compile("#+(\\d{1,4})$");
 	private static final Pattern DIGITS = Pattern.compile("(\\d{1,4})");
 
@@ -104,7 +104,7 @@ public class KramAvailabilityXmlStreamReader {
 							String text = xmlReader.getElementText();
 							Matcher matcher = VOLUME.matcher(text);
 							if (matcher.find()) {
-								result.setVolume(parseInt(matcher.group(1)));
+								result.setVolume(matcher.group(1));
 							}
 							matcher = ISSUE.matcher(text);
 							if (matcher.find()) {

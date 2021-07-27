@@ -526,7 +526,7 @@ CREATE TABLE kram_availability (
   level             DECIMAL(10),
   issn              VARCHAR(20),
   publication_year  DECIMAL(4),
-  volume            DECIMAL(10),
+  volume            VARCHAR(20),
   issue             DECIMAL(10),
   page              DECIMAL(10),
   type              VARCHAR(30),

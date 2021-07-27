@@ -50,7 +50,7 @@ public class KramAvailability {
 	private Integer yaer;
 
 	@Column(name = "volume")
-	private Integer volume;
+	private String volume;
 
 	@Column(name = "issue")
 	private Integer issue;
@@ -202,11 +202,15 @@ public class KramAvailability {
 		this.yaer = yaer;
 	}
 
-	public Integer getVolume() {
+	public String getVolume() {
 		return volume;
 	}
 
-	public void setVolume(Integer volume) {
+	public void setVolume(String volume) {
+		if (volume != null && volume.length() >= 20) {
+			logger.warn(String.format("uuid: %s, too long volume: %s", this.uuid, volume));
+			volume = MetadataUtils.shorten(volume, 20);
+		}
 		this.volume = volume;
 	}
 

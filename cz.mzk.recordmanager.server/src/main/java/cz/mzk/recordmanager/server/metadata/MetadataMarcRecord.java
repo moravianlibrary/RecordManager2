@@ -97,9 +97,9 @@ public class MetadataMarcRecord implements MetadataRecord {
 	private static final Pattern BOARD_GAMES = Pattern.compile("(?:deskov[eé]|karetn[ií]|spole[cč]ensk[eé]|stoln[ií])\\shry", Pattern.CASE_INSENSITIVE);
 
 	// articles availability
-	private static final Pattern VOLUME = Pattern.compile("r|roč\\.([0-9\\s]+)", Pattern.CASE_INSENSITIVE);
-	private static final Pattern ISSUE = Pattern.compile("č\\.\\s*([0-9]+)", Pattern.CASE_INSENSITIVE);
-	private static final Pattern PAGE = Pattern.compile("s\\.\\s*([0-9]+)", Pattern.CASE_INSENSITIVE);
+	private static final Pattern VOLUME = Pattern.compile("\\b(?:r|roč)\\.\\s*([\\w-]+)", Pattern.CASE_INSENSITIVE);
+	private static final Pattern ISSUE = Pattern.compile("\\bč\\.\\s*([0-9]+)", Pattern.CASE_INSENSITIVE);
+	private static final Pattern PAGE = Pattern.compile("\\bs\\.\\s*([0-9]+)", Pattern.CASE_INSENSITIVE);
 
 	private static final Long MAX_PAGES = 10_000_000L;
 	private static final String INVALID_YEAR = "Invalid year: %s";

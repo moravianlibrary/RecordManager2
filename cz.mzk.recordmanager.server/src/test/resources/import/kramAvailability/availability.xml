@@ -75,5 +75,14 @@
 			</arr>
 			<bool name="dnnt">true</bool>
 		</doc>
+		<doc>
+			<str name="PID">uuid:c5ff669c-3e3e-11e1-8f8f-005056a60003</str>
+			<arr name="document_type">
+				<str>periodical</str>
+			</arr>
+			<str name="dostupnost">private</str>
+			<str name="issn">0044-8699</str>
+			<int name="level">0</int>
+		</doc>
 	</result>
 </response>

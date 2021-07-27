@@ -35,5 +35,23 @@
 				<str>uuid:b56c15a0-acbf-11e7-91d5-005056825209</str>
 			</arr>
 		</doc>
+		<doc>
+			<str name="PID">uuid:337dbb77-3e4c-11e1-bdd3-005056a60003</str>
+			<arr name="document_type">
+				<str>periodicalvolume</str>
+			</arr>
+			<str name="dostupnost">private</str>
+			<arr name="details">
+				<str>1992##LX</str>
+			</arr>
+			<int name="level">1</int>
+			<bool name="dnnt">true</bool>
+			<arr name="dnnt-labels">
+				<str>dnnto</str>
+			</arr>
+			<arr name="parent_pid">
+				<str>uuid:c5ff669c-3e3e-11e1-8f8f-005056a60003</str>
+			</arr>
+		</doc>
 	</result>
 </response>
