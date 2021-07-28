@@ -7,6 +7,7 @@ import cz.mzk.recordmanager.server.oai.harvest.ReharvestJobExecutionDecider;
 import cz.mzk.recordmanager.server.springbatch.JobFailureListener;
 import cz.mzk.recordmanager.server.springbatch.StepProgressListener;
 import cz.mzk.recordmanager.server.util.Constants;
+import org.hibernate.exception.LockAcquisitionException;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
@@ -69,6 +70,9 @@ public class KramAvailabilityJobConfig {
 		return steps.get(Constants.JOB_ID_HARVEST_KRAM_AVAILABILITY + ":harvestStep")
 				.listener(new StepProgressListener())
 				.<List<KramAvailability>, List<KramAvailability>>chunk(10)//
+				.faultTolerant()
+				.retry(LockAcquisitionException.class)
+				.retryLimit(10000)
 				.reader(harvestKramAvailabilityReader(LONG_OVERRIDEN_BY_EXPRESSION))//
 				.writer(harvestKramAvailabilityWriter()) //
 				.taskExecutor(taskExecutor)

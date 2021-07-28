@@ -52,7 +52,7 @@ public class KramAvailabilityReader implements ItemReader<List<KramAvailability>
 	private String source;
 	private static final int ROWS = 5000;
 	private static int start = 0;
-	private static final int BATCH_SIZE = 200;
+	private static final int BATCH_SIZE = 100;
 
 	private static boolean done = false;
 
