@@ -68,13 +68,6 @@ public class UrlHarvestedRecordEnricher implements HarvestedRecordEnricher {
 			}
 			if (UrlValidatorUtils.doubleSlashUrlValidator().isValid(url.getLink())) results.add(url.toString());
 		}
-		if (document.containsKey(SolrFieldConstants.ARTICLE_AVAILABILITY_KEY)
-				&& document.getFieldValue(SolrFieldConstants.ARTICLE_AVAILABILITY_KEY) != null) {
-			for (KramAvailability availability : kramAvailabilityDAO
-					.getByDedupKey(document.getFieldValue(SolrFieldConstants.ARTICLE_AVAILABILITY_KEY).toString())) {
-				results.add(EVersionUrl.create(availability).toString());
-			}
-		}
 		document.remove(SolrFieldConstants.URL);
 		document.addField(SolrFieldConstants.URL, results);
 	}

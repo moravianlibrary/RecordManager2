@@ -24,10 +24,10 @@ public class EVersionUrl implements Comparable {
 		return newUrl;
 	}
 
-	public static EVersionUrl create(KramAvailability kramAvailability) {
+	public static EVersionUrl create(KramAvailability kramAvailability, boolean potentialDnnt) {
 		EVersionUrl newUrl = new EVersionUrl();
 		newUrl.setSource(kramAvailability.getHarvestedFrom().getIdPrefix());
-		if (kramAvailability.getAvailability().equals("private")
+		if (potentialDnnt && kramAvailability.getAvailability().equals("private")
 				&& kramAvailability.isDnnt()
 				&& kramAvailability.getDnntLabels().stream().anyMatch(l -> l.getLabel().equals(DnntLabelEnum.DNNTO.getLabel()))
 				&& kramAvailability.getDnntLink() != null) {
@@ -38,7 +38,14 @@ public class EVersionUrl implements Comparable {
 			newUrl.setAvailability(kramAvailability.getAvailability());
 			newUrl.setLink(kramAvailability.getLink());
 		}
-		newUrl.setComment(Constants.KRAM_EVERSION_COMMENT);
+		String comment = Constants.KRAM_EVERSION_COMMENT;
+		if (kramAvailability.getType().equals("page") && kramAvailability.getPage() != null) {
+			comment += " (s. " + kramAvailability.getPage() + ")";
+		}
+		if (kramAvailability.getType().equals("periodicalitem") && kramAvailability.getIssue() != null) {
+			comment += " (č. " + kramAvailability.getIssue() + ")";
+		}
+		newUrl.setComment(comment);
 		return newUrl;
 	}
 

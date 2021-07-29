@@ -988,7 +988,9 @@ public class MarcDSL extends BaseDSL {
 		Long year = metadataRecord.getPublicationYear();
 		if (year == null || year > PERIODICALS_DNNT_YEAR) return false;
 		if (year <= BOOKS_DNNT_YEAR) return true;
-		if (metadataRecord.getDetectedFormatList().contains(HarvestedRecordFormatEnum.PERIODICALS)) return true;
+		List<HarvestedRecordFormatEnum> formats = metadataRecord.getDetectedFormatList();
+		if (formats.contains(HarvestedRecordFormatEnum.PERIODICALS)
+				|| formats.contains(HarvestedRecordFormatEnum.ARTICLES)) return true;
 		return false;
 	}
 

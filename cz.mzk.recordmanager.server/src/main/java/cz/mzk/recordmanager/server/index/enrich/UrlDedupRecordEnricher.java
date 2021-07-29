@@ -5,7 +5,6 @@ import cz.mzk.recordmanager.server.index.SolrFieldConstants;
 import cz.mzk.recordmanager.server.model.DedupRecord;
 import cz.mzk.recordmanager.server.model.EVersionUrl;
 import cz.mzk.recordmanager.server.model.KramAvailability;
-import cz.mzk.recordmanager.server.model.KramDnntLabel.DnntLabelEnum;
 import cz.mzk.recordmanager.server.oai.dao.KramAvailabilityDAO;
 import cz.mzk.recordmanager.server.util.Constants;
 import cz.mzk.recordmanager.server.util.SolrUtils;
@@ -45,7 +44,7 @@ public class UrlDedupRecordEnricher implements DedupRecordEnricher {
 				.forEach(rec -> urls.addAll(rec.getFieldValues(SolrFieldConstants.URL)));
 
 		mergedDocument.remove(SolrFieldConstants.URL);
-		mergedDocument.addField(SolrFieldConstants.URL, urlsFilter(mergedDocument, urls));
+		mergedDocument.addField(SolrFieldConstants.URL, urlsFilter(mergedDocument, localRecords, urls));
 
 		localRecords.forEach(doc -> doc.remove(SolrFieldConstants.URL));
 
@@ -56,7 +55,8 @@ public class UrlDedupRecordEnricher implements DedupRecordEnricher {
 	 * @param values urls format "institution code"|"policy code"|"url"
 	 * @return List of unique urls
 	 */
-	private List<String> urlsFilter(SolrInputDocument mergedDocument, Set<Object> values) {
+	private List<String> urlsFilter(SolrInputDocument mergedDocument, List<SolrInputDocument> localRecords,
+			Set<Object> values) {
 		List<String> results = new ArrayList<>();
 		values = filter(values);
 		Map<String, TreeSet<EVersionUrl>> urls = new HashMap<>();
@@ -70,7 +70,7 @@ public class UrlDedupRecordEnricher implements DedupRecordEnricher {
 			}
 			addToMap(urls, url);
 		}
-		generateUrlFromKramAvailability(mergedDocument, urls);
+		generateUrlFromKramAvailability(mergedDocument, localRecords, urls);
 		for (String key : urls.keySet()) {
 			boolean online = false;
 			boolean protect = false;
@@ -117,29 +117,30 @@ public class UrlDedupRecordEnricher implements DedupRecordEnricher {
 		}
 	}
 
-	private void generateUrlFromKramAvailability(SolrInputDocument mergedDocument, Map<String, TreeSet<EVersionUrl>> urls) {
+	private void generateUrlFromKramAvailability(SolrInputDocument mergedDocument, List<SolrInputDocument> localRecords,
+			Map<String, TreeSet<EVersionUrl>> urls) {
+		boolean potentialDnnt = false;
+		if (mergedDocument.containsKey(SolrFieldConstants.POTENTIAL_DNNT)
+				&& mergedDocument.getFieldValue(SolrFieldConstants.POTENTIAL_DNNT) != null) {
+			potentialDnnt = (boolean) mergedDocument.getFieldValue(SolrFieldConstants.POTENTIAL_DNNT);
+		}
 		for (String key : urls.keySet()) {
 			if (!key.startsWith("uuid:")) continue;
-			boolean potentialDnnt = false;
-			if (mergedDocument.containsKey(SolrFieldConstants.POTENTIAL_DNNT)
-					&& mergedDocument.getFieldValue(SolrFieldConstants.POTENTIAL_DNNT) != null) {
-				potentialDnnt = (boolean) mergedDocument.getFieldValue(SolrFieldConstants.POTENTIAL_DNNT);
-			}
 			for (KramAvailability kramAvailability : kramAvailabilityDAO.getByUuid(key)) {
-				EVersionUrl newUrl = EVersionUrl.create(kramAvailability);
+				EVersionUrl newUrl = EVersionUrl.create(kramAvailability, potentialDnnt);
 				addToMap(urls, newUrl);
-				// dnnt
-				if (newUrl.getAvailability().equals(Constants.DOCUMENT_AVAILABILITY_PROTECTED)
-						&& kramAvailability.isDnnt()) {
-					// dnnt online
-					if (kramAvailability.getDnntLabels().stream().anyMatch(l -> l.getLabel().equals(DnntLabelEnum.DNNTO.getLabel()))
-							&& potentialDnnt) {
-						EVersionUrl dnntUrl = EVersionUrl.createDnnt(kramAvailability);
-						if (dnntUrl != null) addToMap(urls, dnntUrl);
-					} else { // dnnt without dnnt-label
-						addToMap(urls, EVersionUrl.create(kramAvailability));
-					}
-				}
+			}
+		}
+		Set<String> articleKeys = new HashSet<>();
+		for (SolrInputDocument localRecord : localRecords) {
+			if (localRecord.containsKey(SolrFieldConstants.ARTICLE_AVAILABILITY_KEY)
+					&& localRecord.getFieldValue(SolrFieldConstants.ARTICLE_AVAILABILITY_KEY) != null) {
+				articleKeys.add(localRecord.getFieldValue(SolrFieldConstants.ARTICLE_AVAILABILITY_KEY).toString());
+			}
+		}
+		for (String articleKey : articleKeys) {
+			for (KramAvailability availability : kramAvailabilityDAO.getByDedupKey(articleKey)) {
+				addToMap(urls, EVersionUrl.create(availability, potentialDnnt));
 			}
 		}
 	}
