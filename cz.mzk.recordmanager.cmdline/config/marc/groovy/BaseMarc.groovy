@@ -81,3 +81,6 @@ source_title_facet = source_title_facet_str = getFirstField "773t"
 author_sort = getAuthorForSorting()
 publishDate_sort = publishDateSort = getPublishDateForSorting()
 title_sort = getSortableTitle()
+
+// hidden
+_hidden_potential_dnnt = potentialDnnt()

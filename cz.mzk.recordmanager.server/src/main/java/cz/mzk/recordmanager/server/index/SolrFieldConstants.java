@@ -195,4 +195,6 @@ public class SolrFieldConstants {
 
 	public static final String ISBN_ANNOTATION_FROM_OBALKYKNIH = "_hidden_isbn_annotation_obalkyknih";
 
+	public static final String POTENTIAL_DNNT = "_hidden_potential_dnnt";
+
 }

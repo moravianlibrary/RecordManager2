@@ -953,4 +953,16 @@ public class MarcDSL extends BaseDSL {
 		}
 		return results;
 	}
+
+	private static final int PERIODICALS_DNNT_YEAR = 2010;
+	private static final int BOOKS_DNNT_YEAR = 2000;
+
+	public boolean potentialDnnt() {
+		Long year = metadataRecord.getPublicationYear();
+		if (year == null || year > PERIODICALS_DNNT_YEAR) return false;
+		if (year <= BOOKS_DNNT_YEAR) return true;
+		if (metadataRecord.getDetectedFormatList().contains(HarvestedRecordFormatEnum.PERIODICALS)) return true;
+		return false;
+	}
+
 }

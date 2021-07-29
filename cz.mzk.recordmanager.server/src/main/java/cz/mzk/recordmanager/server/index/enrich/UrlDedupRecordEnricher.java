@@ -45,7 +45,7 @@ public class UrlDedupRecordEnricher implements DedupRecordEnricher {
 				.forEach(rec -> urls.addAll(rec.getFieldValues(SolrFieldConstants.URL)));
 
 		mergedDocument.remove(SolrFieldConstants.URL);
-		mergedDocument.addField(SolrFieldConstants.URL, urlsFilter(urls));
+		mergedDocument.addField(SolrFieldConstants.URL, urlsFilter(mergedDocument, urls));
 
 		localRecords.forEach(doc -> doc.remove(SolrFieldConstants.URL));
 
@@ -56,7 +56,7 @@ public class UrlDedupRecordEnricher implements DedupRecordEnricher {
 	 * @param values urls format "institution code"|"policy code"|"url"
 	 * @return List of unique urls
 	 */
-	private List<String> urlsFilter(Set<Object> values) {
+	private List<String> urlsFilter(SolrInputDocument mergedDocument, Set<Object> values) {
 		List<String> results = new ArrayList<>();
 		values = filter(values);
 		Map<String, TreeSet<EVersionUrl>> urls = new HashMap<>();
@@ -70,7 +70,7 @@ public class UrlDedupRecordEnricher implements DedupRecordEnricher {
 			}
 			addToMap(urls, url);
 		}
-		generateUrlFromKramAvailability(urls);
+		generateUrlFromKramAvailability(mergedDocument, urls);
 		for (String key : urls.keySet()) {
 			boolean online = false;
 			boolean protect = false;
@@ -117,9 +117,14 @@ public class UrlDedupRecordEnricher implements DedupRecordEnricher {
 		}
 	}
 
-	private void generateUrlFromKramAvailability(Map<String, TreeSet<EVersionUrl>> urls) {
+	private void generateUrlFromKramAvailability(SolrInputDocument mergedDocument, Map<String, TreeSet<EVersionUrl>> urls) {
 		for (String key : urls.keySet()) {
 			if (!key.startsWith("uuid:")) continue;
+			boolean potentialDnnt = false;
+			if (mergedDocument.containsKey(SolrFieldConstants.POTENTIAL_DNNT)
+					&& mergedDocument.getFieldValue(SolrFieldConstants.POTENTIAL_DNNT) != null) {
+				potentialDnnt = (boolean) mergedDocument.getFieldValue(SolrFieldConstants.POTENTIAL_DNNT);
+			}
 			for (KramAvailability kramAvailability : kramAvailabilityDAO.getByUuid(key)) {
 				EVersionUrl newUrl = EVersionUrl.create(kramAvailability);
 				addToMap(urls, newUrl);
@@ -127,7 +132,8 @@ public class UrlDedupRecordEnricher implements DedupRecordEnricher {
 				if (newUrl.getAvailability().equals(Constants.DOCUMENT_AVAILABILITY_PROTECTED)
 						&& kramAvailability.isDnnt()) {
 					// dnnt online
-					if (kramAvailability.getDnntLabels().stream().anyMatch(l -> l.getLabel().equals(DnntLabelEnum.DNNTO.getLabel()))) {
+					if (kramAvailability.getDnntLabels().stream().anyMatch(l -> l.getLabel().equals(DnntLabelEnum.DNNTO.getLabel()))
+							&& potentialDnnt) {
 						EVersionUrl dnntUrl = EVersionUrl.createDnnt(kramAvailability);
 						if (dnntUrl != null) addToMap(urls, dnntUrl);
 					} else { // dnnt without dnnt-label
