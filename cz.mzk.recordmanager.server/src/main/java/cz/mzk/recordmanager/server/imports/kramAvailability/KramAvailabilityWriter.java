@@ -24,7 +24,6 @@ public class KramAvailabilityWriter implements ItemWriter<List<KramAvailability>
 	public void write(List<? extends List<KramAvailability>> list) throws Exception {
 		for (List<KramAvailability> kramAvailabilities : list) {
 			for (KramAvailability newItem : kramAvailabilities) {
-				newItem.setPage(parsePage(newItem.getPage(), newItem.getRelsExtIndex()));
 				KramAvailability oldItem = kramAvailabilityDAO.getByConfigAndUuid(newItem.getHarvestedFrom(), newItem.getUuid());
 				if (oldItem == null) { // new
 					newItem.setUpdated(new Date());
@@ -92,11 +91,6 @@ public class KramAvailabilityWriter implements ItemWriter<List<KramAvailability>
 				availability.setDedupKey(StringUtils.join(results, ";"));
 			}
 		}
-	}
-
-	private Integer parsePage(final Integer page, final Integer relsExtIndex) {
-		if (relsExtIndex == null || page == null) return page;
-		return relsExtIndex + 1 == page ? page : null;
 	}
 
 }
