@@ -2267,3 +2267,43 @@ UPDATE kramerius_conf SET collection='"vc:41f345fc-d0ad-11ea-b976-005056b593cd"'
 UPDATE kramerius_conf SET collection='"vc:9ecedcad-aa68-4967-8d65-f938c5ce3a6b"' WHERE import_conf_id=99037;
 UPDATE kramerius_conf SET availability_source_url='https://kramerius.svkos.cz/search/api/v5.0' WHERE import_conf_id=99019;
 UPDATE kramerius_conf SET availability_source_url='https://library.nfa.cz/search/api/v5.0' WHERE import_conf_id=99037;
+
+-- 02. 08. 2021 tomascejpek
+ALTER TABLE kramerius_conf ADD COLUMN fulltext_harvest_frequency CHAR(1) DEFAULT 'U';
+CREATE OR REPLACE VIEW fulltext_job_stat AS
+SELECT
+    bje.job_execution_id,
+    (array_agg(conf_id_param.long_val))[1] import_conf_id,
+    bje.start_time,
+    bje.end_time,
+    bje.status,
+    to_param.date_val to_param
+FROM batch_job_instance bji
+         JOIN batch_job_execution bje ON bje.job_instance_id = bji.job_instance_id
+         JOIN batch_job_execution_params conf_id_param ON conf_id_param.job_execution_id = bje.job_execution_id AND conf_id_param.key_name = 'configurationId'
+         LEFT JOIN batch_job_execution_params to_param ON to_param.job_execution_id = bje.job_execution_id AND to_param.key_name = 'to'
+         JOIN kramerius_conf kc ON kc.import_conf_id = conf_id_param.long_val
+WHERE bji.job_name IN ('krameriusFulltextJob')
+GROUP BY bje.job_execution_id,to_param.date_val
+;
+CREATE OR REPLACE VIEW fulltext_summary AS
+WITH last_harvest_date AS (
+    SELECT
+        import_conf_id,
+        COALESCE(MAX(CASE WHEN status = 'COMPLETED' THEN to_param END), MAX(CASE WHEN status = 'COMPLETED' THEN end_time END)) last_successful_harvest_date,
+        COALESCE(MAX(CASE WHEN status = 'FAILED' THEN to_param END), MAX(CASE WHEN status = 'FAILED' THEN end_time END)) last_failed_harvest_date
+    FROM fulltext_job_stat
+    GROUP BY import_conf_id
+)
+SELECT ic.id,
+       l.name,
+       ic.id_prefix,
+       CASE WHEN kc.url_solr IS NOT NULL THEN kc.url_solr ELSE kc.url END url,
+       lhd.last_successful_harvest_date,
+       lhd.last_failed_harvest_date
+FROM last_harvest_date lhd
+         JOIN import_conf ic ON ic.id = lhd.import_conf_id
+         LEFT JOIN kramerius_conf kc ON kc.import_conf_id = ic.id
+         JOIN library l ON l.id = ic.library_id
+ORDER BY lhd.last_successful_harvest_date DESC NULLS LAST
+;

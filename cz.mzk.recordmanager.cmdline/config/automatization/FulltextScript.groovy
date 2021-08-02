@@ -1,11 +1,10 @@
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-
-import cz.mzk.recordmanager.server.facade.HarvestingFacade;
-import cz.mzk.recordmanager.server.facade.exception.JobExecutionFailure;
-import cz.mzk.recordmanager.server.model.HarvestFrequency;
-import cz.mzk.recordmanager.server.oai.dao.KrameriusConfigurationDAO;
+import cz.mzk.recordmanager.server.facade.HarvestingFacade
+import cz.mzk.recordmanager.server.facade.exception.JobExecutionFailure
+import cz.mzk.recordmanager.server.model.HarvestFrequency
+import cz.mzk.recordmanager.server.oai.dao.KrameriusConfigurationDAO
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.annotation.Autowired
 
 public class FulltextScript implements Runnable {
 
@@ -20,7 +19,7 @@ public class FulltextScript implements Runnable {
 	@Override
 	public void run() {
 		krameriusConfigurationDAO.findAll().each { conf ->
-			if (conf.harvestFrequency != HarvestFrequency.UNSPECIFIED) {
+			if (conf.fulltextHarvestFrequency == HarvestFrequency.DAILY) {
 				try {
 					harvestingFacade.incrementalFulltextJob(conf)
 				} catch (JobExecutionFailure jfe) {

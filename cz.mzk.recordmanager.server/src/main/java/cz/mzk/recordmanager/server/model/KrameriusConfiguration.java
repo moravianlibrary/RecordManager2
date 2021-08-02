@@ -60,6 +60,15 @@ public class KrameriusConfiguration extends ImportConfiguration {
 	@Column(name = "availability_harvest_frequency")
 	private HarvestFrequency availabilityHarvestFrequency = HarvestFrequency.UNSPECIFIED;
 
+	@Type(
+			type="cz.mzk.recordmanager.server.hibernate.CharEnumUserType",
+			parameters= {
+					@Parameter(name="enumClassName", value="cz.mzk.recordmanager.server.model.HarvestFrequency"),
+			}
+	)
+	@Column(name = "fulltext_harvest_frequency")
+	private HarvestFrequency fulltextHarvestFrequency = HarvestFrequency.UNSPECIFIED;
+
 	public String getUrl() {
 		return url;
 	}
@@ -164,9 +173,18 @@ public class KrameriusConfiguration extends ImportConfiguration {
 		this.dnntDestUrl = dnntDestUrl;
 	}
 
+	public HarvestFrequency getFulltextHarvestFrequency() {
+		return fulltextHarvestFrequency;
+	}
+
+	public void setFulltextHarvestFrequency(HarvestFrequency fulltextHarvestFrequency) {
+		this.fulltextHarvestFrequency = fulltextHarvestFrequency;
+	}
+
 	@Override
 	public String toString() {
 		return String.format("%s[id=%s, url='%s', urlSolr='%s']", this.getClass().getSimpleName(),
 				this.getId(), this.getUrl(), this.getUrlSolr());
 	}
+
 }
