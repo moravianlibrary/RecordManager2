@@ -138,11 +138,7 @@ public class UrlDedupRecordEnricher implements DedupRecordEnricher {
 				articleKeys.add(localRecord.getFieldValue(SolrFieldConstants.ARTICLE_AVAILABILITY_KEY).toString());
 			}
 		}
-		for (String articleKey : articleKeys) {
-			for (KramAvailability availability : kramAvailabilityDAO.getByDedupKey(articleKey)) {
-				addToMap(urls, EVersionUrl.create(availability, potentialDnnt));
-			}
-		}
+		createArticleUrl(articleKeys, potentialDnnt, urls);
 	}
 
 	/**
@@ -186,6 +182,30 @@ public class UrlDedupRecordEnricher implements DedupRecordEnricher {
 		}
 		// simple to merged record
 		mergedDocument.setField(SolrFieldConstants.STATUSES_FACET, availabilitiesSimple);
+	}
+
+	private void createArticleUrl(Set<String> keys, boolean potentialDnnt, final Map<String, TreeSet<EVersionUrl>> urls) {
+		for (String articleKey : keys) {
+			Map<Long, List<KramAvailability>> map = new HashMap<>();
+			for (KramAvailability availability : kramAvailabilityDAO.getByDedupKey(articleKey)) {
+				Long id = availability.getHarvestedFrom().getId();
+				if (map.containsKey(id)) {
+					map.computeIfPresent(id, (key, value) -> value).add(availability);
+				} else {
+					map.computeIfAbsent(id, key -> new ArrayList<>()).add(availability);
+				}
+			}
+			for (Long id : map.keySet()) {
+				List<KramAvailability> availabilities = map.get(id);
+				if (availabilities.size() == 1)
+					addToMap(urls, EVersionUrl.create(availabilities.get(0), potentialDnnt));
+				else if (availabilities.size() > 1) {
+					KramAvailability availability = availabilities.get(0);
+					KramAvailability parent = kramAvailabilityDAO.getByConfigAndUuid(availability.getHarvestedFrom(), availability.getParentUuid());
+					if (parent != null) addToMap(urls, EVersionUrl.create(parent, potentialDnnt));
+				}
+			}
+		}
 	}
 
 }
