@@ -10,7 +10,7 @@ public class UrlsListFactory {
 		switch (type) {
 		case "titles":
 			return Arrays.asList(
-					"%s/search?fl=dostupnost,dnnt,PID,level,dnnt-labels,document_type,issn&q=level:0&rows=%d&start=%d&wt=xml",
+					"%s/search?fl=dostupnost,dnnt,PID,level,dnnt-labels,document_type,issn&q=level:0+dc.identifier:04fd3a50-4d59-11e4-9383-005056825209&rows=%d&start=%d&wt=xml",
 					"%s/search?fl=dostupnost,dnnt,PID,level,dnnt-labels,document_type&q=level:1+document_type:monographunit&rows=%d&start=%d&wt=xml"
 			);
 		case "pages":

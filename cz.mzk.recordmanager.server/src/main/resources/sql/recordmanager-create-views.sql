@@ -56,6 +56,7 @@ SELECT
   hr.dedup_record_id,
   ka.import_conf_id,
   ka.uuid,
+  ka.type,
   ka.updated,
   ka.last_harvest
 FROM harvested_record hr
