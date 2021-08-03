@@ -12,6 +12,9 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import static cz.mzk.recordmanager.server.imports.kramAvailability.KrameriusDocumentType.PAGE;
+import static cz.mzk.recordmanager.server.imports.kramAvailability.KrameriusDocumentType.PERIODICAL_ITEM;
+
 public class KramAvailabilityWriter implements ItemWriter<List<KramAvailability>> {
 
 	@Autowired
@@ -62,9 +65,10 @@ public class KramAvailabilityWriter implements ItemWriter<List<KramAvailability>
 	}
 
 	public static void getPageValues(KramAvailabilityDAO availabilityDAO, final KramAvailability availability) {
-		if (!availability.getType().equals("page") && !availability.getType().equals("periodicalitem")) return;
+		if (!availability.getType().equals(PAGE.getValue()) && !availability.getType().equals(PERIODICAL_ITEM.getValue()))
+			return;
 		KramAvailability issue;
-		if (availability.getType().equals("page")) {
+		if (availability.getType().equals(PAGE.getValue())) {
 			issue = availabilityDAO.getByConfigAndUuid(availability.getHarvestedFrom(), availability.getParentUuid());
 			if (issue == null) return;
 			availability.setIssue(issue.getIssue());
@@ -83,7 +87,7 @@ public class KramAvailabilityWriter implements ItemWriter<List<KramAvailability>
 				&& availability.getIssue() != null) {
 			List<String> results = new ArrayList<>(Arrays.asList(availability.getIssn(),
 					availability.getYaer().toString(), availability.getVolume().toString(), availability.getIssue().toString()));
-			if (availability.getType().equals("periodicalitem")) {
+			if (availability.getType().equals(PERIODICAL_ITEM.getValue())) {
 				availability.setDedupKey(StringUtils.join(results, ';'));
 			}
 			if (availability.getPage() != null) {

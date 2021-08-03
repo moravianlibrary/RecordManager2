@@ -11,6 +11,9 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static cz.mzk.recordmanager.server.imports.kramAvailability.KrameriusDocumentType.PERIODICAL_ITEM;
+import static cz.mzk.recordmanager.server.imports.kramAvailability.KrameriusDocumentType.PERIODICAL_VOLUME;
+
 public class KramAvailabilityXmlStreamReader {
 
 	private final XMLInputFactory xmlFactory;
@@ -166,8 +169,8 @@ public class KramAvailabilityXmlStreamReader {
 
 	private static KramAvailability parse(KramAvailability availability) {
 		if (availability == null) return null;
-		if (availability.getType().equals("periodicalitem")) availability.setVolume(null);
-		if (availability.getType().equals("periodicalvolume")) availability.setIssue(null);
+		if (availability.getType().equals(PERIODICAL_ITEM.getValue())) availability.setVolume(null);
+		if (availability.getType().equals(PERIODICAL_VOLUME.getValue())) availability.setIssue(null);
 		return availability;
 	}
 

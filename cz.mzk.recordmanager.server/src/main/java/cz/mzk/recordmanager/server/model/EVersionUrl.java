@@ -5,6 +5,9 @@ import cz.mzk.recordmanager.server.util.Constants;
 import cz.mzk.recordmanager.server.util.MetadataUtils;
 import cz.mzk.recordmanager.server.util.UrlValidatorUtils;
 
+import static cz.mzk.recordmanager.server.imports.kramAvailability.KrameriusDocumentType.PAGE;
+import static cz.mzk.recordmanager.server.imports.kramAvailability.KrameriusDocumentType.PERIODICAL_ITEM;
+
 public class EVersionUrl implements Comparable {
 	private static final String SPLITTER = "\\|";
 
@@ -39,10 +42,10 @@ public class EVersionUrl implements Comparable {
 			newUrl.setLink(kramAvailability.getLink());
 		}
 		String comment = Constants.KRAM_EVERSION_COMMENT;
-		if (kramAvailability.getType().equals("page") && kramAvailability.getPage() != null) {
+		if (kramAvailability.getType().equals(PAGE.getValue()) && kramAvailability.getPage() != null) {
 			comment += " (s. " + kramAvailability.getPage() + ")";
 		}
-		if (kramAvailability.getType().equals("periodicalitem") && kramAvailability.getIssue() != null) {
+		if (kramAvailability.getType().equals(PERIODICAL_ITEM.getValue()) && kramAvailability.getIssue() != null) {
 			comment += " (č. " + kramAvailability.getIssue() + ")";
 		}
 		newUrl.setComment(comment);
