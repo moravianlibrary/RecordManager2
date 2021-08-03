@@ -17,7 +17,8 @@ public class KramAvailabilityJobParametersValidator extends
 	public Collection<JobParameterDeclaration> getParameters() {
 		return Arrays.asList(
 				param(Constants.JOB_PARAM_CONF_ID, ParameterType.LONG, true), //
-				param(Constants.JOB_PARAM_REHARVEST, ParameterType.STRING, false)
+				param(Constants.JOB_PARAM_REHARVEST, ParameterType.STRING, false),
+				param(Constants.JOB_PARAM_TYPE, ParameterType.STRING, true)
 		);
 	}
 

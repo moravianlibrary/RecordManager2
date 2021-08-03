@@ -48,6 +48,8 @@ public class KramAvailabilityJobConfig {
 
 	private static final Long LONG_OVERRIDEN_BY_EXPRESSION = null;
 
+	private static final String STRING_OVERRIDEN_BY_EXPRESSION = null;
+
 	@Bean
 	public Job HarvestKramAvailabilityJob(
 			@Qualifier(Constants.JOB_ID_HARVEST_KRAM_AVAILABILITY + ":harvestStep") Step harvestStep,
@@ -73,7 +75,7 @@ public class KramAvailabilityJobConfig {
 				.faultTolerant()
 				.retry(LockAcquisitionException.class)
 				.retryLimit(10000)
-				.reader(harvestKramAvailabilityReader(LONG_OVERRIDEN_BY_EXPRESSION))//
+				.reader(harvestKramAvailabilityReader(LONG_OVERRIDEN_BY_EXPRESSION, STRING_OVERRIDEN_BY_EXPRESSION))//
 				.writer(harvestKramAvailabilityWriter()) //
 				.taskExecutor(taskExecutor)
 				.build();
@@ -82,8 +84,9 @@ public class KramAvailabilityJobConfig {
 	@Bean(name = Constants.JOB_ID_HARVEST_KRAM_AVAILABILITY + ":reader")
 	@StepScope
 	public KramAvailabilityReader harvestKramAvailabilityReader(
-			@Value("#{jobParameters[" + Constants.JOB_PARAM_CONF_ID + "]}") Long configId) {
-		return new KramAvailabilityReader(configId, "title");
+			@Value("#{jobParameters[" + Constants.JOB_PARAM_CONF_ID + "]}") Long configId,
+			@Value("#{jobParameters[" + Constants.JOB_PARAM_TYPE + "]}") String type) {
+		return new KramAvailabilityReader(configId, type);
 	}
 
 	@Bean(name = Constants.JOB_ID_HARVEST_KRAM_AVAILABILITY + ":writer")

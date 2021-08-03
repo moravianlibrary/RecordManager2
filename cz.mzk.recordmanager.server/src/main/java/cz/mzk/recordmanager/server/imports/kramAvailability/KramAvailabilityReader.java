@@ -15,7 +15,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.ListIterator;
 
@@ -35,17 +34,6 @@ public class KramAvailabilityReader implements ItemReader<List<KramAvailability>
 
 	private KramAvailabilityXmlStreamReader reader;
 
-	private static final List<String> URLS = Arrays.asList(
-			"%s/search?fl=dostupnost,dnnt,PID,level,dnnt-labels,document_type,issn&q=level:0&rows=%d&start=%d&wt=xml",
-			"%s/search?fl=dostupnost,dnnt,PID,level,dnnt-labels,document_type&q=level:1+document_type:monographunit&rows=%d&start=%d&wt=xml"
-	);
-
-	private static final List<String> PAGE_URLS = Arrays.asList(
-			"%s/search?fl=dostupnost,dnnt,PID,level,dnnt-labels,parent_pid,details,document_type&q=fedora.model:periodicalvolume&rows=%d&start=%d&wt=xml",
-			"%s/search?fl=dostupnost,dnnt,PID,level,dnnt-labels,parent_pid,details,document_type,rok,issn&q=fedora.model:periodicalitem&rows=%d&start=%d&wt=xml",
-			"%s/search?fl=dostupnost,dnnt,PID,level,dnnt-labels,parent_pid,details,document_type,title,rok,rels_ext_index&q=fedora.model:page+model_path:*periodicalitem/page&rows=%d&start=%d&wt=xml"
-	);
-
 	private final ListIterator<String> iterator;
 	private String url;
 
@@ -58,7 +46,7 @@ public class KramAvailabilityReader implements ItemReader<List<KramAvailability>
 
 	public KramAvailabilityReader(Long configId, String type) {
 		this.configId = configId;
-		this.iterator = type.equals("titles") ? URLS.listIterator() : PAGE_URLS.listIterator();
+		this.iterator = UrlsListFactory.getUrls(type).listIterator();
 		this.url = this.iterator.next();
 	}
 
