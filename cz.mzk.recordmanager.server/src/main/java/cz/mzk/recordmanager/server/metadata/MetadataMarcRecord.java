@@ -86,6 +86,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 	private static final Pattern OTHER_F336 = Pattern.compile("tcf|tdm|tdf", Pattern.CASE_INSENSITIVE);
 	private static final Pattern FOTOGRAFIE = Pattern.compile("fotografie", Pattern.CASE_INSENSITIVE);
 	private static final Pattern Z_CYKLU = Pattern.compile("z cyklu:", Pattern.CASE_INSENSITIVE);
+	private static final Pattern ZVUKOVY_DISK = Pattern.compile("zvukov(?:ý|é|ých)\\sdisk[ůy]?", Pattern.CASE_INSENSITIVE);
 
 	private static final Long MAX_PAGES = 10_000_000L;
 	private static final String INVALID_YEAR = "Invalid year: %s";
@@ -609,7 +610,8 @@ public class MetadataMarcRecord implements MetadataRecord {
 				|| (CD.matcher(f300a).find() && !CD_ROM.matcher(f300a).find())
 				|| (ZVUKOVA_DESKA.matcher(f300).find() && DIGITAL_OR_12CM.matcher(f300).find())
 				|| ((MetadataUtils.containsChar(ARRAY_IJ, ldr06) || ZVUKOVY_ZAZNAM.matcher(f245h).find())
-				&& DIGITAL_OR_12CM.matcher(f300).find());
+				&& DIGITAL_OR_12CM.matcher(f300).find())
+				|| ZVUKOVY_DISK.matcher(f300).find();
 	}
 
 	private boolean isAudioOther() {
