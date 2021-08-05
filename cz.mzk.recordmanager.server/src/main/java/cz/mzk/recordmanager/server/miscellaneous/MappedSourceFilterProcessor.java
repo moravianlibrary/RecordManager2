@@ -24,10 +24,7 @@ import org.springframework.batch.core.StepExecutionListener;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -58,7 +55,7 @@ public class MappedSourceFilterProcessor implements ItemProcessor<List<String>, 
 	@Autowired
 	private MappingResolver propertyResolver;
 
-	private ImportConfiguration configuration;
+	private ImportConfiguration mainConfiguration;
 
 	protected final Map<String, SourceMapping> mapping = new HashMap<>();
 
@@ -67,33 +64,52 @@ public class MappedSourceFilterProcessor implements ItemProcessor<List<String>, 
 	@Override
 	public List<HarvestedRecord> process(List<String> items) throws Exception {
 		List<HarvestedRecord> results = new ArrayList<>();
-		HarvestedRecord hr;
-		for (String item : items) {
+		HarvestedRecord mainHr;
+		for (String mainRecordId : items) {
 			progress.incrementAndLogProgress();
-			hr = recordDao.get(new HarvestedRecordUniqueId(configuration, item));
-			if (hr == null) continue;
-			MarcRecord marcRecord = marcXmlParser.parseRecord(hr.getRawRecord());
+			mainHr = recordDao.get(new HarvestedRecordUniqueId(mainConfiguration, mainRecordId));
+			if (mainHr == null) continue;
+			MarcRecord marcRecord = marcXmlParser.parseRecord(mainHr.getRawRecord());
 			for (Map.Entry<String, SourceMapping> entry : mapping.entrySet()) {
 				if (marcRecord.getFields(entry.getValue().getTag(), entry.getValue().getSubfield()).contains(entry.getValue().getValue())) {
-					ImportConfiguration config = getImportConfiguration(Long.parseLong(entry.getKey()));
-					HarvestedRecordUniqueId newId = new HarvestedRecordUniqueId(config, item);
-					if (recordDao.get(newId) != null) continue;
-					HarvestedRecord newHr = new HarvestedRecord(newId);
-					newHr.setHarvestedFrom(config);
-					newHr.setUpdated(hr.getUpdated());
-					newHr.setOaiTimestamp(hr.getOaiTimestamp());
-					newHr.setHarvested(hr.getHarvested());
-					newHr.setFormat(hr.getFormat());
-					byte[] recordContent = hr.getRawRecord();
-					if (recordContent != null && config.isInterceptionEnabled()) {
-						MarcRecordInterceptor interceptor = marcInterceptorFactory.getInterceptor(config, newHr.getUniqueId().getRecordId(), recordContent);
+					ImportConfiguration localConfig = getImportConfiguration(Long.parseLong(entry.getKey()));
+					HarvestedRecordUniqueId localUniqueId = new HarvestedRecordUniqueId(localConfig, mainRecordId);
+					HarvestedRecord localHr = recordDao.get(localUniqueId);
+					byte[] recordContent = mainHr.getRawRecord();
+					if (recordContent != null && localConfig.isInterceptionEnabled()) {
+						MarcRecordInterceptor interceptor = marcInterceptorFactory.getInterceptor(localConfig, localHr.getUniqueId().getRecordId(), recordContent);
 						if (interceptor != null) {
 							//in case of invalid MARC is error processed later
 							recordContent = interceptor.intercept();
 						}
 					}
-					newHr.setRawRecord(recordContent);
-					results.add(newHr);
+					if (localHr == null) {
+						localHr = new HarvestedRecord(localUniqueId);
+						localHr.setHarvestedFrom(localConfig);
+						localHr.setUpdated(mainHr.getUpdated());
+						localHr.setOaiTimestamp(mainHr.getOaiTimestamp());
+						localHr.setHarvested(mainHr.getHarvested());
+						localHr.setFormat(mainHr.getFormat());
+					} else if ((localHr.getDeleted() != null && mainHr.getDeleted() != null
+							&& (mainHr.getRawRecord() == null || mainHr.getRawRecord().length == 0))
+							|| (Arrays.equals(recordContent, localHr.getRawRecord())
+							&& ((mainHr.getDeleted() != null) == (localHr.getDeleted() != null)))) {
+						localHr.setShouldBeProcessed(false);
+						localHr.setLastHarvest(new Date());
+						results.add(localHr);
+						continue;
+					}
+					localHr.setShouldBeProcessed(true);
+					localHr.setUpdated(new Date());
+					localHr.setLastHarvest(new Date());
+					if (mainHr.getDeleted() != null) {
+						localHr.setDeleted(new Date());
+						localHr.setRawRecord(new byte[0]);
+					} else {
+						localHr.setDeleted(null);
+						localHr.setRawRecord(recordContent);
+					}
+					results.add(localHr);
 				}
 			}
 		}
@@ -109,7 +125,7 @@ public class MappedSourceFilterProcessor implements ItemProcessor<List<String>, 
 	public void beforeStep(StepExecution stepExecution) {
 		try (HibernateSessionSynchronizer.SessionBinder session = sync.register()) {
 			Long confId = stepExecution.getJobParameters().getLong("configurationId");
-			configuration = getImportConfiguration(confId);
+			mainConfiguration = getImportConfiguration(confId);
 			try {
 				propertyResolver.resolve(confId + ".map").getMapping().forEach((key, value) -> {
 					Matcher matcher = FIELD_VALUE.matcher(value.get(0));
