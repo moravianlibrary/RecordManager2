@@ -35,7 +35,7 @@ public class MappedSourceFilterProcessor implements ItemProcessor<List<String>, 
 
 	private static final Logger logger = LoggerFactory.getLogger(MappedSourceFilterProcessor.class);
 
-	private final ProgressLogger progress = new ProgressLogger(logger, 1000);
+	private final ProgressLogger progress = new ProgressLogger(logger, 10000);
 
 	@Autowired
 	protected HarvestedRecordDAO recordDao;
