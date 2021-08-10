@@ -3,15 +3,18 @@ package cz.mzk.recordmanager.server.model;
 import org.hibernate.annotations.Parameter;
 import org.hibernate.annotations.Type;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = BiblioLinkerSimilar.TABLE_NAME)
-public class BiblioLinkerSimilar extends AbstractDomainObject implements Comparable {
+public class BiblioLinkerSimilar implements Comparable {
 
 	public static final String TABLE_NAME = "biblio_linker_similar";
+
+	@Id
+	@Column(name = "id")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
 	@Column(name = "harvested_record_similar_id")
 	private Long harvestedRecordSimilarId;

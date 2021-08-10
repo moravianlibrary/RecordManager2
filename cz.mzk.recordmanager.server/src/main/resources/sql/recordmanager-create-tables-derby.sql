@@ -366,11 +366,12 @@ CREATE TABLE biblio_linker (
 );
 
 CREATE TABLE biblio_linker_similar (
-  id                   DECIMAL(10) PRIMARY KEY,
+  id                   INTEGER NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
   harvested_record_id  DECIMAL(10),
   harvested_record_similar_id DECIMAL(10),
   url_id               BLOB,
   type                 VARCHAR(20),
+  CONSTRAINT biblio_linker_similar_pk PRIMARY KEY(id),
   CONSTRAINT bls_fk FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE
 );
 

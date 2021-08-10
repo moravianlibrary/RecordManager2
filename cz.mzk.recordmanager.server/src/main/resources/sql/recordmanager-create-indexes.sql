@@ -34,6 +34,7 @@ CREATE INDEX authority_idx ON authority(authority_id);
 CREATE INDEX authority_code_idx ON authority_record(authority_code);
 CREATE INDEX anp_title_harvested_record_idx ON anp_title(harvested_record_id);
 CREATE INDEX bls_harvested_record_id_idx ON biblio_linker_similar(harvested_record_id);
+CREATE INDEX bls_harvested_record_similar_id_idx ON biblio_linker_similar(harvested_record_similar_id);
 CREATE INDEX bl_title_harvested_record_idx ON bl_title(harvested_record_id);
 CREATE INDEX bl_common_title_harvested_record_idx ON bl_common_title(harvested_record_id);
 CREATE INDEX bl_entity_harvested_record_idx ON bl_entity(harvested_record_id);

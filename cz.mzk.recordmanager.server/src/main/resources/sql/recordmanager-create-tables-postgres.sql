@@ -466,11 +466,12 @@ CREATE TABLE biblio_linker (
 
 CREATE SEQUENCE biblio_linker_similar_seq_id MINVALUE 1;
 CREATE TABLE biblio_linker_similar (
-  id                   DECIMAL(10) DEFAULT NEXTVAL('"biblio_linker_similar_seq_id"') PRIMARY KEY,
+  id                   SERIAL,
   harvested_record_id  DECIMAL(10),
   harvested_record_similar_id DECIMAL(10),
   url_id               TEXT,
   type                 VARCHAR(20),
+  CONSTRAINT biblio_linker_similar_pk PRIMARY KEY(id),
   FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE
 );
 

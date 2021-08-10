@@ -2661,3 +2661,17 @@ UPDATE kramerius_conf SET url='https://kramerius.knihovna-pardubice.cz/search/ap
 
 --changeset tomascejpek:281 context:cpk
 UPDATE oai_harvest_conf SET url='https://knihovnaml.tritius.cz/tritius/oai-provider',set_spec='CPK_1' WHERE import_conf_id=386;
+
+--changeset tomascejpek:282
+DROP TABLE biblio_linker_similar;
+CREATE TABLE biblio_linker_similar (
+  id                   SERIAL,
+  harvested_record_id  DECIMAL(10),
+  harvested_record_similar_id DECIMAL(10),
+  url_id               TEXT,
+  type                 VARCHAR(20),
+  CONSTRAINT biblio_linker_similar_pk PRIMARY KEY(id),
+  FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE
+);
+CREATE INDEX bls_harvested_record_id_idx ON biblio_linker_similar(harvested_record_id);
+CREATE INDEX bls_harvested_record_similar_id_idx ON biblio_linker_similar(harvested_record_similar_id);

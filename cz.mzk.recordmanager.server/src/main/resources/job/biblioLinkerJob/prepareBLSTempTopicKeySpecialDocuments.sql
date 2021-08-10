@@ -12,6 +12,8 @@ WHERE hrfl.harvested_record_format_id IN (28,61,62,63)
       AND biblio_linker_similar IS TRUE
 GROUP BY tk.topic_key
 HAVING COUNT(DISTINCT biblio_linker_id)>1
-  AND bool_or(next_biblio_linker_similar_flag) IS TRUE;
+  AND bool_or(next_biblio_linker_similar_flag) IS TRUE
+  AND COUNT(hr.id)<10000
+  AND COUNT(DISTINCT biblio_linker_id)<500;
 
 CREATE INDEX tmp_bls_topic_key_spec_docs_idx ON tmp_bls_topic_key_spec_docs(row_id);
