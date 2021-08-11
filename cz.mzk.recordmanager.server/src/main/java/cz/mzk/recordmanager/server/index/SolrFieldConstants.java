@@ -187,6 +187,8 @@ public class SolrFieldConstants {
 
 	public static final String LANGUAGE_TXT_MV = "language_search_txt_mv";
 
+	public static final String ZISKEJ_FACET_MV = "ziskej_facet_mv";
+
 	/**
 	 * dummy fields used for processing purposes only, shouldn't be indexed.
 	 */
