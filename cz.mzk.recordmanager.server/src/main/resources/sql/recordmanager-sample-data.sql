@@ -628,6 +628,12 @@ INSERT INTO harvested_record_format(id, name) VALUES (64, 'OTHER_DICTIONARY_ENTR
 INSERT INTO harvested_record_format(id, name) VALUES (65, 'BLIND_AUDIO');
 INSERT INTO harvested_record_format(id, name) VALUES (66, 'BLIND_BRAILLE');
 INSERT INTO harvested_record_format(id, name) VALUES (67, 'EBOOK');
+INSERT INTO harvested_record_format(id, name) VALUES (69, 'THESIS_BACHELOR');
+INSERT INTO harvested_record_format(id, name) VALUES (70, 'THESIS_MASTER');
+INSERT INTO harvested_record_format(id, name) VALUES (71, 'THESIS_ADVANCED_MASTER');
+INSERT INTO harvested_record_format(id, name) VALUES (72, 'THESIS_DISSERTATION');
+INSERT INTO harvested_record_format(id, name) VALUES (73, 'THESIS_HABILITATION');
+INSERT INTO harvested_record_format(id, name) VALUES (74, 'THESIS_OTHER');
 INSERT INTO harvested_record_format(id, name) VALUES (100, 'OTHER_UNSPECIFIED');
 
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (1, 300, 'BOA001');
