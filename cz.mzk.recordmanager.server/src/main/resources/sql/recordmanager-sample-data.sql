@@ -628,6 +628,7 @@ INSERT INTO harvested_record_format(id, name) VALUES (64, 'OTHER_DICTIONARY_ENTR
 INSERT INTO harvested_record_format(id, name) VALUES (65, 'BLIND_AUDIO');
 INSERT INTO harvested_record_format(id, name) VALUES (66, 'BLIND_BRAILLE');
 INSERT INTO harvested_record_format(id, name) VALUES (67, 'EBOOK');
+INSERT INTO harvested_record_format(id, name) VALUES (68, 'BOARD_GAMES');
 INSERT INTO harvested_record_format(id, name) VALUES (100, 'OTHER_UNSPECIFIED');
 
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (1, 300, 'BOA001');

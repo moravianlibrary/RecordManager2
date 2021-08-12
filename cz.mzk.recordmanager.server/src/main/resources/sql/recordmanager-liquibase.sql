@@ -2612,3 +2612,6 @@ INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (236, 'ENV
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id) VALUES (436, 236, 200, 'envi', 11, false, true, true, false, 'U', null);
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (436,'http://oai.geology.cz:8080/katalog/l.dll','ENVI','marc21',NULL);
 UPDATE oai_harvest_conf SET extract_id_regex='TUG504:(.*)' WHERE import_conf_id=428;
+
+--changeset tomascejpek:272
+INSERT INTO harvested_record_format(id, name) VALUES (68, 'BOARD_GAMES');

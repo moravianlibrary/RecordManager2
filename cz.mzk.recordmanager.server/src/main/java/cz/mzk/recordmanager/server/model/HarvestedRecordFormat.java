@@ -78,6 +78,7 @@ public class HarvestedRecordFormat {
 		BLIND_AUDIO(65L),
 		BLIND_BRAILLE(66L),
 		EBOOK(67L),
+		BOARD_GAMES(68L),
 		OTHER_UNSPECIFIED(100L);
 
 		private Long numValue;
