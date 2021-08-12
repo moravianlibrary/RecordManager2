@@ -863,6 +863,7 @@ public class MarcDSL extends BaseDSL {
 	public List<String> getZiskejFacet() {
 		List<String> results = new ArrayList<>();
 		if (metadataRecord.isZiskej()) results.add(ZiskejFacet.MVS.toString());
+		if (metadataRecord.isEdd()) results.add(ZiskejFacet.EDD.toString());
 		return results;
 	}
 
