@@ -2,6 +2,8 @@ package cz.mzk.recordmanager.server.metadata.mappings996;
 
 import org.marc4j.marc.DataField;
 
+import java.util.List;
+
 public interface Mappings996 {
 
 	boolean ignore(DataField df);
@@ -32,8 +34,10 @@ public interface Mappings996 {
 
 	String getSequenceNo(DataField df);
 
+	String getSubfieldW(DataField df);
+
 	String getMappingAsCsv(DataField df);
 
-	String getSubfieldW(DataField df);
+	List<String> getMappingAsCsv(List<DataField> df);
 
 }

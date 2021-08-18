@@ -1,24 +1,11 @@
 package cz.mzk.recordmanager.server.metadata.mappings996;
 
-import cz.mzk.recordmanager.server.marc.MarcRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.model.Mappings996Enum;
-import org.marc4j.marc.DataField;
+import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.List;
-
+@Component
 public class Mappings996Factory {
-
-	public List<String> getMappingsAsCsv(HarvestedRecord hr, MarcRecord mr) {
-		List<String> results = new ArrayList<>();
-		Mappings996 mappings = getMappings996(hr);
-		for (DataField df : mr.getDataFields("996")) {
-			if (mappings.ignore(df)) continue;
-			results.add(mappings.getMappingAsCsv(df));
-		}
-		return results;
-	}
 
 	public Mappings996 getMappings996(HarvestedRecord hr) {
 		Mappings996Enum type = hr.getHarvestedFrom().getMappings996();

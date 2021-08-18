@@ -7,6 +7,7 @@ import org.marc4j.marc.DataField;
 
 import java.io.IOException;
 import java.io.StringWriter;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -122,4 +123,15 @@ public class DefaultMappings996 implements Mappings996 {
 			return null;
 		}
 	}
+
+	@Override
+	public List<String> getMappingAsCsv(List<DataField> dfs) {
+		List<String> results = new ArrayList<>();
+		for (DataField df : dfs) {
+			if (this.ignore(df)) continue;
+			results.add(this.getMappingAsCsv(df));
+		}
+		return results;
+	}
+
 }

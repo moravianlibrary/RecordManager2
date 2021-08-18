@@ -6,7 +6,6 @@ import cz.mzk.recordmanager.server.marc.SubfieldExtractionMethod;
 import cz.mzk.recordmanager.server.marc.marc4j.MarcFactoryImpl;
 import cz.mzk.recordmanager.server.marc.marc4j.MarcLineStreamReader;
 import cz.mzk.recordmanager.server.metadata.MetadataRecord;
-import cz.mzk.recordmanager.server.metadata.mappings996.Mappings996Factory;
 import cz.mzk.recordmanager.server.metadata.view.ViewType;
 import cz.mzk.recordmanager.server.model.*;
 import cz.mzk.recordmanager.server.model.HarvestedRecordFormat.HarvestedRecordFormatEnum;
@@ -967,7 +966,7 @@ public class MarcDSL extends BaseDSL {
 	}
 
 	public List<String> getMappings996() {
-		return new Mappings996Factory().getMappingsAsCsv(context.harvestedRecord(), context.record());
+		return context.mappings996().getMappingAsCsv(context.record().getDataFields("996"));
 	}
 
 }
