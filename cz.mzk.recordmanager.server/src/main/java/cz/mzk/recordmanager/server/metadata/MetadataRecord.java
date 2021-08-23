@@ -336,7 +336,7 @@ public interface MetadataRecord {
 	 *
 	 * @return String or null
 	 */
-	String getSourceInfoX();
+	String getSourceInfoXZ();
 
 	/**
 	 * get source info field 773, subfield t

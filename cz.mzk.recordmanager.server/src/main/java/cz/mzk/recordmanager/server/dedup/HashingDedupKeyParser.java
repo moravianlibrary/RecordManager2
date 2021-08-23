@@ -109,7 +109,7 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 		encapsulator.setRaw001Id(metadataRecord.getRaw001Id());
 		encapsulator.setSourceInfoT(MetadataUtils.normalizeAndShorten(metadataRecord.getSourceInfoT(), EFFECTIVE_SOURCE_INFO_LENGTH));
 		encapsulator.setSourceInfoG(MetadataUtils.normalizeAndShorten(metadataRecord.getSourceInfoG(), EFFECTIVE_SOURCE_INFO_LENGTH));
-		encapsulator.setSourceInfoX(MetadataUtils.normalizeAndShorten(metadataRecord.getSourceInfoX(), EFFECTIVE_LENGTH_30));
+		encapsulator.setSourceInfoX(MetadataUtils.normalizeAndShorten(metadataRecord.getSourceInfoXZ(), EFFECTIVE_LENGTH_30));
 		encapsulator.setEans(metadataRecord.getEANs());
 		encapsulator.setPublisherNumbers(metadataRecord.getPublisherNumber());
 		encapsulator.setLanguages(new HashSet<>(metadataRecord.getLanguages()));
