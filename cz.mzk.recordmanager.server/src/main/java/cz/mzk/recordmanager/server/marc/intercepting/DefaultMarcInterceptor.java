@@ -94,7 +94,7 @@ public class DefaultMarcInterceptor implements MarcRecordInterceptor {
 			sigla = siglas.isEmpty() ? "" : siglas.get(0).getUniqueId().getSigla();
 		}
 		Subfield itemIdSubfield = ItemId.getItemIdSubfield(itemId, df, sigla, recordId);
-		if (itemIdSubfield == null) logger.info(String.format("Missing data for itemId: import_confid=%d, 001=%s",
+		if (itemIdSubfield == null) logger.debug(String.format("Missing data for itemId: import_confid=%d, 001=%s",
 				conf.getId(), record.getControlNumber()));
 		else df.addSubfield(itemIdSubfield);
 

@@ -62,7 +62,7 @@ public class AlphaNumericControlFieldImpl extends VariableFieldImpl implements C
      */
     public void setTag(String aTag) {
     	if (!Constants.CF_TAG_PATTERN.matcher(aTag).find() && !RESERVED_CONTROL_FIELDS.contains(aTag)) {
-    		logger.info(aTag + " is not a valid ControlField tag");
+    		logger.debug(aTag + " is not a valid ControlField tag");
 //            throw new InvalidMARCException(aTag +
 //                    " is not a valid ControlField tag");
         }

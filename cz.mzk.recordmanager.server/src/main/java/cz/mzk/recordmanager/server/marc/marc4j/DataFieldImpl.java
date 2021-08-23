@@ -62,7 +62,7 @@ public class DataFieldImpl extends info.freelibrary.marc4j.impl.VariableFieldImp
         if (aTag.length() == 3) {
 
                 if (aTag.startsWith("00") && !RESERVED_DATA_FIELDS.contains(aTag)) {
-                	logger.info(aTag + " is not a valid DataField tag");
+                	logger.debug(aTag + " is not a valid DataField tag");
 //                    throw new InvalidMARCException(aTag +
 //                            " is not a valid DataField tag");
                 }
