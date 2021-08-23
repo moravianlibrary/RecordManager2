@@ -472,3 +472,12 @@ CREATE TABLE title_old_spelling (
   "key"                VARCHAR(128),
   value                VARCHAR(128)
 );
+
+CREATE TABLE sigla_caslin (
+  id                INTEGER NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
+  sigla             VARCHAR(10) NOT NULL,
+  url               VARCHAR (100) NOT NULL,
+  updated           TIMESTAMP NOT NULL,
+  last_harvest      TIMESTAMP NOT NULL,
+  CONSTRAINT sigla_caslin_pk PRIMARY KEY(id)
+);
