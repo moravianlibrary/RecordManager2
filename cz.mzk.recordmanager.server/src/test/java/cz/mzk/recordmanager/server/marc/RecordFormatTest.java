@@ -1026,4 +1026,37 @@ public class RecordFormatTest extends AbstractTest {
 		Assert.assertTrue(metadataRecord.getDetectedFormatList().contains(THESIS_HABILITATION));
 	}
 
+	@Test
+	public void boardGamesTest() {
+		MetadataRecord metadataRecord;
+		List<String> data = new ArrayList<>();
+
+		// book
+		data.add("000 000000Ac000");
+		data.add("655 $adeskove hry");
+		metadataRecord = metadataFactory.getMetadataRecord(MarcRecordFactory.recordFactory(data));
+		Assert.assertTrue(metadataRecord.getDetectedFormatList().contains(BOARD_GAMES));
+
+		// visual document
+		data.clear();
+		data.add("000 000000K0000");
+		data.add("072 $a794");
+		metadataRecord = metadataFactory.getMetadataRecord(MarcRecordFactory.recordFactory(data));
+		Assert.assertTrue(metadataRecord.getDetectedFormatList().contains(BOARD_GAMES));
+
+		// visual document
+		data.clear();
+		data.add("000 000000K0000");
+		data.add("650 $aspolečenske hry");
+		metadataRecord = metadataFactory.getMetadataRecord(MarcRecordFactory.recordFactory(data));
+		Assert.assertTrue(metadataRecord.getDetectedFormatList().contains(BOARD_GAMES));
+
+		// other
+		data.clear();
+		data.add("000 000000r0000");
+		data.add("653 $akaretni hry");
+		metadataRecord = metadataFactory.getMetadataRecord(MarcRecordFactory.recordFactory(data));
+		Assert.assertTrue(metadataRecord.getDetectedFormatList().contains(BOARD_GAMES));
+	}
+
 }

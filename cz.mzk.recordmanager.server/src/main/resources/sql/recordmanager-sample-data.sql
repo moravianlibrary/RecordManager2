@@ -631,6 +631,7 @@ INSERT INTO harvested_record_format(id, name) VALUES (64, 'OTHER_DICTIONARY_ENTR
 INSERT INTO harvested_record_format(id, name) VALUES (65, 'BLIND_AUDIO');
 INSERT INTO harvested_record_format(id, name) VALUES (66, 'BLIND_BRAILLE');
 INSERT INTO harvested_record_format(id, name) VALUES (67, 'EBOOK');
+INSERT INTO harvested_record_format(id, name) VALUES (68, 'BOARD_GAMES');
 INSERT INTO harvested_record_format(id, name) VALUES (69, 'THESIS_BACHELOR');
 INSERT INTO harvested_record_format(id, name) VALUES (70, 'THESIS_MASTER');
 INSERT INTO harvested_record_format(id, name) VALUES (71, 'THESIS_ADVANCED_MASTER');

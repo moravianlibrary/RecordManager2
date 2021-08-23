@@ -94,6 +94,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 	private static final Pattern ADVANCED_MASTER = Pattern.compile("^rigor[oó]zn[ií]", Pattern.CASE_INSENSITIVE);
 	private static final Pattern DISSERTATION = Pattern.compile("^(?:(?:di[sz]{1,2}ertace|dissertation|di[sz]erta[cč]n[ií]|di[s]{1,2}|kandid[aá]tsk[aá]|doktorsk[aá])\\b)|(?:kand\\.|dokt\\.|doktor\\.|doktorand\\.)", Pattern.CASE_INSENSITIVE);
 	private static final Pattern HABILITATION = Pattern.compile("^habilita(?:ce|[cč]n[ií])", Pattern.CASE_INSENSITIVE);
+	private static final Pattern BOARD_GAMES = Pattern.compile("(?:deskov[eé]|karetn[ií]|spole[cč]ensk[eé]|stoln[ií])\\shry", Pattern.CASE_INSENSITIVE);
 
 	private static final Long MAX_PAGES = 10_000_000L;
 	private static final String INVALID_YEAR = "Invalid year: %s";
@@ -152,13 +153,13 @@ public class MetadataMarcRecord implements MetadataRecord {
 	private static final List<HarvestedRecordFormatEnum> ZISKEJ_FORMAT_ALLOWED = new ArrayList<>();
 
 	static {
-		ZISKEJ_FORMAT_ALLOWED.add(HarvestedRecordFormatEnum.BOOKS);
+		ZISKEJ_FORMAT_ALLOWED.add(BOOKS);
 	}
 
 	protected static final List<HarvestedRecordFormatEnum> EDD_FORMAT_ALLOWED = new ArrayList<>();
 
 	static {
-		EDD_FORMAT_ALLOWED.add(HarvestedRecordFormatEnum.BOOKS);
+		EDD_FORMAT_ALLOWED.add(BOOKS);
 		EDD_FORMAT_ALLOWED.add(HarvestedRecordFormatEnum.PERIODICALS);
 		EDD_FORMAT_ALLOWED.add(HarvestedRecordFormatEnum.ARTICLES);
 	}
@@ -793,6 +794,21 @@ public class MetadataMarcRecord implements MetadataRecord {
 		return THESIS_OTHER;
 	}
 
+	protected boolean isBoardGames(List<HarvestedRecordFormatEnum> formats) {
+		String f650a = underlayingMarc.getField("650", ' ', 'a');
+		if (f650a == null) f650a = "";
+		String f653a = underlayingMarc.getField("653", ' ', 'a');
+		if (f653a == null) f653a = "";
+		String f655a = underlayingMarc.getField("655", ' ', 'a');
+		if (f655a == null) f655a = "";
+		String f072a = underlayingMarc.getField("072", ' ', 'a');
+		if (f072a == null) f072a = "";
+		return (formats.contains(BOOKS) && BOARD_GAMES.matcher(f655a).find())
+				|| ((formats.contains(VISUAL_DOCUMENTS) || formats.contains(OTHER_OTHER))
+				&& (BOARD_GAMES.matcher(f650a).find() || BOARD_GAMES.matcher(f653a).find()
+				|| BOARD_GAMES.matcher(f655a).find() || f072a.equals("794")));
+	}
+
 	protected char getLeaderChar(final char c) {
 		return Character.toLowerCase(c);
 	}
@@ -806,7 +822,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 				hrf.add(HarvestedRecordFormatEnum.BLIND_BRAILLE);
 				return hrf;
 			}
-			hrf.add(HarvestedRecordFormatEnum.BOOKS);
+			hrf.add(BOOKS);
 		}
 		HarvestedRecordFormatEnum thesis;
 		if ((thesis = getThesis()) != null) return Collections.singletonList(thesis);
@@ -837,9 +853,9 @@ public class MetadataMarcRecord implements MetadataRecord {
 		if (isComputerCarrier()) hrf.add(HarvestedRecordFormatEnum.OTHER_COMPUTER_CARRIER);
 		if (isOthers()) hrf.add(HarvestedRecordFormatEnum.OTHER_OTHER);
 		if (hrf.isEmpty()) hrf.add(HarvestedRecordFormatEnum.OTHER_OTHER);
-
-		if (hrf.size() > 1 && hrf.contains(HarvestedRecordFormatEnum.BOOKS)) {
-			hrf.remove(HarvestedRecordFormatEnum.BOOKS);
+		if (isBoardGames(hrf)) return Collections.singletonList(HarvestedRecordFormatEnum.BOARD_GAMES);
+		if (hrf.size() > 1 && hrf.contains(BOOKS)) {
+			hrf.remove(BOOKS);
 		}
 		return hrf;
 	}
@@ -1422,7 +1438,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 	 */
 	@Override
 	public String getPublisher() {
-		if (!getDetectedFormatList().contains(HarvestedRecordFormatEnum.BOOKS)) return null;
+		if (!getDetectedFormatList().contains(BOOKS)) return null;
 		String publisher = underlayingMarc.getField("260", 'b');
 		if (publisher != null) return publisher;
 		return underlayingMarc.getField("264", 'b');
@@ -1435,7 +1451,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 	 */
 	@Override
 	public String getEdition() {
-		if (!getDetectedFormatList().contains(HarvestedRecordFormatEnum.BOOKS)) return null;
+		if (!getDetectedFormatList().contains(BOOKS)) return null;
 		String data = underlayingMarc.getField("250", 'a');
 		if (data == null) return null;
 		Matcher matcher = NUMBER_PATTERN.matcher(data);
@@ -1451,7 +1467,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 	 */
 	@Override
 	public Set<AnpTitle> getAnpTitle() {
-		if (!getDetectedFormatList().contains(HarvestedRecordFormatEnum.BOOKS)) return Collections.emptySet();
+		if (!getDetectedFormatList().contains(BOOKS)) return Collections.emptySet();
 		Set<AnpTitle> results = new HashSet<>();
 		for (DataField df : underlayingMarc.getDataFields("245")) {
 			String titleText = parseTitleValue(df, SHORT_TITLE_SUBFIELDS);

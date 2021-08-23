@@ -2631,3 +2631,6 @@ INSERT INTO harvested_record_format(id, name) VALUES (71, 'THESIS_ADVANCED_MASTE
 INSERT INTO harvested_record_format(id, name) VALUES (72, 'THESIS_DISSERTATION');
 INSERT INTO harvested_record_format(id, name) VALUES (73, 'THESIS_HABILITATION');
 INSERT INTO harvested_record_format(id, name) VALUES (74, 'THESIS_OTHER');
+
+--changeset tomascejpek:276
+INSERT INTO harvested_record_format(id, name) VALUES (68, 'BOARD_GAMES');
