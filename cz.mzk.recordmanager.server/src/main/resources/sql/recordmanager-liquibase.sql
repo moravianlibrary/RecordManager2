@@ -2617,3 +2617,6 @@ UPDATE oai_harvest_conf SET extract_id_regex='TUG504:(.*)' WHERE import_conf_id=
 INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (237, 'MKDB', 'https://www.knihovna.dolnibousov.cz/', 'https://katalog.dolni-bousov.cz/', 'Dolní Bousov', 'SC');
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id) VALUES (437, 237, 200, 'mkdb', 11, false, true, true, true, 'U', 'koha');
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity,extract_id_regex) VALUES (437,'https://koha.dolni-bousov.cz/cgi-bin/koha/oai.pl','CPK','marccpk',NULL,'MBG504:(.*)');
+
+--changeset tomascejpek:273 context:cpk
+UPDATE oai_harvest_conf SET url='https://koha.knihovna-litvinov.cz/cgi-bin/koha/oai.pl' WHERE import_conf_id=419;
