@@ -2331,3 +2331,8 @@ INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (236, 'ENV
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id) VALUES (436, 236, 200, 'envi', 11, false, true, true, false, 'U', null);
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (436,'http://oai.geology.cz:8080/katalog/l.dll','ENVI','marc21',NULL);
 UPDATE oai_harvest_conf SET extract_id_regex='TUG504:(.*)' WHERE import_conf_id=428;
+
+-- 23 .08. 2021 tomascejpek
+INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (237, 'MKDB', 'https://www.knihovna.dolnibousov.cz/', 'https://katalog.dolni-bousov.cz/', 'Dolní Bousov', 'SC');
+INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id) VALUES (437, 237, 200, 'mkdb', 11, false, true, true, true, 'U', 'koha');
+INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity,extract_id_regex) VALUES (437,'https://koha.dolni-bousov.cz/cgi-bin/koha/oai.pl','CPK','marccpk',NULL,'MBG504:(.*)');
