@@ -23,6 +23,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import static cz.mzk.recordmanager.server.model.HarvestedRecordFormat.HarvestedRecordFormatEnum.*;
+
 public class MetadataMarcRecord implements MetadataRecord {
 
 	private static Logger logger = LoggerFactory.getLogger(MetadataMarcRecord.class);
@@ -42,6 +44,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 	private static final Pattern SCALE_REPLACE = Pattern.compile("[ ^]+");
 	private static final Pattern CNB_PATTERN = Pattern.compile("cnb[0-9]+");
 	private static final Pattern FIELD130A = Pattern.compile("(.*)\\([^)]*\\)$");
+	private static final Pattern Z_CYKLU = Pattern.compile("z cyklu:", Pattern.CASE_INSENSITIVE);
 
 	// formats
 	private static final Pattern KARTOGRAFICKY_DOKUMENT = Pattern.compile("kartografick[yý]\\sdokument", Pattern.CASE_INSENSITIVE);
@@ -85,8 +88,12 @@ public class MetadataMarcRecord implements MetadataRecord {
 	private static final Pattern VIDEO_OTHER_F338 = Pattern.compile("vr|vz|vc|mc|mf|mr|mo|mz");
 	private static final Pattern OTHER_F336 = Pattern.compile("tcf|tdm|tdf", Pattern.CASE_INSENSITIVE);
 	private static final Pattern FOTOGRAFIE = Pattern.compile("fotografie", Pattern.CASE_INSENSITIVE);
-	private static final Pattern Z_CYKLU = Pattern.compile("z cyklu:", Pattern.CASE_INSENSITIVE);
 	private static final Pattern ZVUKOVY_DISK = Pattern.compile("zvukov(?:ý|é|ých)\\sdisk[ůy]?", Pattern.CASE_INSENSITIVE);
+	private static final Pattern BACHELOR = Pattern.compile("^bakal[aá][rř]sk[aáeé]", Pattern.CASE_INSENSITIVE);
+	private static final Pattern MASTER = Pattern.compile("^diplomov[aáeé]", Pattern.CASE_INSENSITIVE);
+	private static final Pattern ADVANCED_MASTER = Pattern.compile("^rigor[oó]zn[ií]", Pattern.CASE_INSENSITIVE);
+	private static final Pattern DISSERTATION = Pattern.compile("^(?:(?:di[sz]{1,2}ertace|dissertation|di[sz]erta[cč]n[ií]|di[s]{1,2}|kandid[aá]tsk[aá]|doktorsk[aá])\\b)|(?:kand\\.|dokt\\.|doktor\\.|doktorand\\.)", Pattern.CASE_INSENSITIVE);
+	private static final Pattern HABILITATION = Pattern.compile("^habilita(?:ce|[cč]n[ií])", Pattern.CASE_INSENSITIVE);
 
 	private static final Long MAX_PAGES = 10_000_000L;
 	private static final String INVALID_YEAR = "Invalid year: %s";
@@ -771,6 +778,21 @@ public class MetadataMarcRecord implements MetadataRecord {
 				|| f338b.equalsIgnoreCase("zu");
 	}
 
+	protected HarvestedRecordFormatEnum getThesis() {
+		List<String> all502a = underlayingMarc.getFields("502", 'a');
+		if (all502a.isEmpty()) return null;
+
+		for (String f502a : all502a) {
+			if (BACHELOR.matcher(f502a).find()) return THESIS_BACHELOR;
+			if (MASTER.matcher(f502a).find()) return THESIS_MASTER;
+			if (ADVANCED_MASTER.matcher(f502a).find()) return THESIS_ADVANCED_MASTER;
+			if (DISSERTATION.matcher(f502a).find()) return THESIS_DISSERTATION;
+			if (HABILITATION.matcher(f502a).find()) return THESIS_HABILITATION;
+		}
+
+		return THESIS_OTHER;
+	}
+
 	protected char getLeaderChar(final char c) {
 		return Character.toLowerCase(c);
 	}
@@ -786,6 +808,8 @@ public class MetadataMarcRecord implements MetadataRecord {
 			}
 			hrf.add(HarvestedRecordFormatEnum.BOOKS);
 		}
+		HarvestedRecordFormatEnum thesis;
+		if ((thesis = getThesis()) != null) return Collections.singletonList(thesis);
 		if (isPeriodical()) hrf.add(HarvestedRecordFormatEnum.PERIODICALS);
 		if (isArticle()) hrf.add(HarvestedRecordFormatEnum.ARTICLES);
 		if (isArticle773()) return Collections.singletonList(HarvestedRecordFormatEnum.ARTICLES);

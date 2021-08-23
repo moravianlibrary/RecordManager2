@@ -11,6 +11,8 @@ import org.testng.annotations.Test;
 import java.util.ArrayList;
 import java.util.List;
 
+import static cz.mzk.recordmanager.server.model.HarvestedRecordFormat.HarvestedRecordFormatEnum.*;
+
 public class RecordFormatTest extends AbstractTest {
 
 	@Autowired
@@ -890,4 +892,138 @@ public class RecordFormatTest extends AbstractTest {
 		data.clear();
 		hrf.clear();
 	}
+
+	@Test
+	public void thesisBachelorTest() {
+		MetadataRecord metadataRecord;
+		List<String> data = new ArrayList<>();
+
+		data.add("000 00000000");
+		data.add("502 $abakalarska");
+		metadataRecord = metadataFactory.getMetadataRecord(MarcRecordFactory.recordFactory(data));
+		Assert.assertTrue(metadataRecord.getDetectedFormatList().contains(THESIS_BACHELOR));
+
+		data.clear();
+		data.add("000 00000000");
+		data.add("502 $abakalářské");
+		metadataRecord = metadataFactory.getMetadataRecord(MarcRecordFactory.recordFactory(data));
+		Assert.assertTrue(metadataRecord.getDetectedFormatList().contains(THESIS_BACHELOR));
+	}
+
+	@Test
+	public void thesisMasterTest() {
+		MetadataRecord metadataRecord;
+		List<String> data = new ArrayList<>();
+
+		data.add("000 00000000");
+		data.add("502 $adiplomová");
+		metadataRecord = metadataFactory.getMetadataRecord(MarcRecordFactory.recordFactory(data));
+		Assert.assertTrue(metadataRecord.getDetectedFormatList().contains(THESIS_MASTER));
+
+		data.clear();
+		data.add("000 00000000");
+		data.add("502 $adiplomove");
+		metadataRecord = metadataFactory.getMetadataRecord(MarcRecordFactory.recordFactory(data));
+		Assert.assertTrue(metadataRecord.getDetectedFormatList().contains(THESIS_MASTER));
+	}
+
+	@Test
+	public void thesisAdvancedMasterTest() {
+		MetadataRecord metadataRecord;
+		List<String> data = new ArrayList<>();
+
+		data.add("000 00000000");
+		data.add("502 $arigorózní");
+		metadataRecord = metadataFactory.getMetadataRecord(MarcRecordFactory.recordFactory(data));
+		Assert.assertTrue(metadataRecord.getDetectedFormatList().contains(THESIS_ADVANCED_MASTER));
+
+		data.clear();
+		data.add("000 00000000");
+		data.add("502 $arigorozni");
+		metadataRecord = metadataFactory.getMetadataRecord(MarcRecordFactory.recordFactory(data));
+		Assert.assertTrue(metadataRecord.getDetectedFormatList().contains(THESIS_ADVANCED_MASTER));
+	}
+
+	@Test
+	public void thesisDisertationTest() {
+		MetadataRecord metadataRecord;
+		List<String> data = new ArrayList<>();
+
+		data.add("000 00000000");
+		data.add("502 $adisertace");
+		metadataRecord = metadataFactory.getMetadataRecord(MarcRecordFactory.recordFactory(data));
+		Assert.assertTrue(metadataRecord.getDetectedFormatList().contains(THESIS_DISSERTATION));
+
+		data.clear();
+		data.add("000 00000000");
+		data.add("502 $adissertation");
+		metadataRecord = metadataFactory.getMetadataRecord(MarcRecordFactory.recordFactory(data));
+		Assert.assertTrue(metadataRecord.getDetectedFormatList().contains(THESIS_DISSERTATION));
+
+		data.clear();
+		data.add("000 00000000");
+		data.add("502 $adisertační");
+		metadataRecord = metadataFactory.getMetadataRecord(MarcRecordFactory.recordFactory(data));
+		Assert.assertTrue(metadataRecord.getDetectedFormatList().contains(THESIS_DISSERTATION));
+
+		data.clear();
+		data.add("000 00000000");
+		data.add("502 $adiss");
+		metadataRecord = metadataFactory.getMetadataRecord(MarcRecordFactory.recordFactory(data));
+		Assert.assertTrue(metadataRecord.getDetectedFormatList().contains(THESIS_DISSERTATION));
+
+		data.clear();
+		data.add("000 00000000");
+		data.add("502 $akandidátská");
+		metadataRecord = metadataFactory.getMetadataRecord(MarcRecordFactory.recordFactory(data));
+		Assert.assertTrue(metadataRecord.getDetectedFormatList().contains(THESIS_DISSERTATION));
+
+		data.clear();
+		data.add("000 00000000");
+		data.add("502 $adoktorská");
+		metadataRecord = metadataFactory.getMetadataRecord(MarcRecordFactory.recordFactory(data));
+		Assert.assertTrue(metadataRecord.getDetectedFormatList().contains(THESIS_DISSERTATION));
+
+		data.clear();
+		data.add("000 00000000");
+		data.add("502 $akand.");
+		metadataRecord = metadataFactory.getMetadataRecord(MarcRecordFactory.recordFactory(data));
+		Assert.assertTrue(metadataRecord.getDetectedFormatList().contains(THESIS_DISSERTATION));
+
+		data.clear();
+		data.add("000 00000000");
+		data.add("502 $akand. dis.");
+		metadataRecord = metadataFactory.getMetadataRecord(MarcRecordFactory.recordFactory(data));
+		Assert.assertTrue(metadataRecord.getDetectedFormatList().contains(THESIS_DISSERTATION));
+
+		data.clear();
+		data.add("000 00000000");
+		data.add("502 $aDissertace");
+		metadataRecord = metadataFactory.getMetadataRecord(MarcRecordFactory.recordFactory(data));
+		Assert.assertTrue(metadataRecord.getDetectedFormatList().contains(THESIS_DISSERTATION));
+
+		data.clear();
+		data.add("000 00000000");
+		data.add("502 $adokt.");
+		metadataRecord = metadataFactory.getMetadataRecord(MarcRecordFactory.recordFactory(data));
+		Assert.assertTrue(metadataRecord.getDetectedFormatList().contains(THESIS_DISSERTATION));
+	}
+
+	@Test
+	public void thesisHabilitationTest() {
+		MetadataRecord metadataRecord;
+		List<String> data = new ArrayList<>();
+
+		data.add("000 00000000");
+		data.add("502 $ahabilitace");
+		metadataRecord = metadataFactory.getMetadataRecord(MarcRecordFactory.recordFactory(data));
+		Assert.assertTrue(metadataRecord.getDetectedFormatList().contains(THESIS_HABILITATION));
+
+		data.clear();
+		data.add("000 00000000");
+		data.add("502 $ahabilitační");
+		metadataRecord = metadataFactory.getMetadataRecord(MarcRecordFactory.recordFactory(data));
+		Assert.assertTrue(metadataRecord.getDetectedFormatList().contains(THESIS_HABILITATION));
+	}
+
 }
