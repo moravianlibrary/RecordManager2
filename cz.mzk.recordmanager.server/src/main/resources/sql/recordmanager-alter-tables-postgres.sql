@@ -2339,3 +2339,6 @@ INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granul
 
 -- 23 .08. 2021 tomascejpek
 UPDATE oai_harvest_conf SET url='https://koha.knihovna-litvinov.cz/cgi-bin/koha/oai.pl' WHERE import_conf_id=419;
+
+-- 23 .08. 2021 tomascejpek
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (93, 419, 'MOG501');

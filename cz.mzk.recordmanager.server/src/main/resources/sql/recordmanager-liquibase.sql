@@ -2620,3 +2620,6 @@ INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granul
 
 --changeset tomascejpek:273 context:cpk
 UPDATE oai_harvest_conf SET url='https://koha.knihovna-litvinov.cz/cgi-bin/koha/oai.pl' WHERE import_conf_id=419;
+
+--changeset tomascejpek:274 context:cpk
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (93, 419, 'MOG501');
