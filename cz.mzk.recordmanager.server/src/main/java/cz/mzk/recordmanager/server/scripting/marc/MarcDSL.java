@@ -135,6 +135,27 @@ public class MarcDSL extends BaseDSL {
 		return result;
 	}
 
+	public List<String> getAllSubfields(String tags) {
+		return getAllSubfields(tags, SubfieldExtractionMethod.ALL_SUBFIELDS_JOINED, " ");
+	}
+
+	public List<String> getAllSubfields(String tags, SubfieldExtractionMethod method) {
+		return getAllSubfields(tags, method, " ");
+	}
+
+	public List<String> getAllSubfields(String tags, SubfieldExtractionMethod method, String separator) {
+		List<String> result = new ArrayList<>();
+		for (String tag : SPLIT_COLON.split(tags)) {
+			Matcher matcher = FIELD_PATTERN.matcher(tag);
+			if (!matcher.matches()) {
+				throw new IllegalArgumentException("Tag can't be parsed: " + tag);
+			}
+			String fieldTag = matcher.group(1);
+			result.addAll(record.getFields(fieldTag, null, method, separator));
+		}
+		return result;
+	}
+
 	public Set<String> getLanguages() {
 		Set<String> languages = new HashSet<>();
 		String f008 = record.getControlField("008");

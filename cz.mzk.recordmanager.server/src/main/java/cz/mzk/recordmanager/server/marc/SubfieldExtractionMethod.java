@@ -1,12 +1,12 @@
 package cz.mzk.recordmanager.server.marc;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 import cz.mzk.recordmanager.server.util.MarcRecordUtils;
 import org.marc4j.marc.DataField;
 import org.marc4j.marc.Subfield;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public enum SubfieldExtractionMethod {
 
@@ -45,6 +45,30 @@ public enum SubfieldExtractionMethod {
 				return result;
 			}
 
+		};
+
+		@Override
+		public SubfieldJoiner getJoiner() {
+			return joiner;
+		}
+
+	},
+
+	ALL_SUBFIELDS_JOINED {
+
+		private final SubfieldJoiner joiner = new SubfieldJoiner() {
+
+			@Override
+			public List<String> extract(DataField df, String separator, char... subfields) {
+				StringBuilder sb = new StringBuilder();
+				for (Subfield sf : df.getSubfields()) {
+					if (sf != null) {
+						sb.append(separator);
+						sb.append(sf.getData());
+					}
+				}
+				return Collections.singletonList(sb.toString().trim());
+			}
 		};
 
 		@Override

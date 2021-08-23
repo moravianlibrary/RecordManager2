@@ -33,10 +33,11 @@ dateSpan = getFields "362a"
 contents = getFields "505a:505t"
 
 callnumber_str_mv = getFields "910b"
-     
-topic = getFields "600:610:630:650"
-genre = getFields "655"
-geographic = getFields "651"
+
+topic = getAllSubfields "600:610:611:630:650:653:656"
+genre = getAllSubfields "655"
+geographic = getAllSubfields "651"
+era = getAllSubfields "648"
 
 url = getFields "856u"
 
