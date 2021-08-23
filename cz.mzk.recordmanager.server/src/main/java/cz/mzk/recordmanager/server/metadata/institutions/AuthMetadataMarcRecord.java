@@ -70,16 +70,16 @@ public class AuthMetadataMarcRecord extends MetadataMarcRecord {
 
 	@Override
 	public List<String> getUrls() {
-		List<String> results = super.getUrls(Constants.DOCUMENT_AVAILABILITY_ONLINE);
+		List<String> results = super.getUrls(Constants.DOCUMENT_AVAILABILITY_NA);
 		for (DataField df : underlayingMarc.getDataFields("670")) {
 			if (df.getSubfield('u') == null) continue;
 			results.add(MetadataUtils.generateUrl(harvestedRecord.getHarvestedFrom().getIdPrefix(),
-					Constants.DOCUMENT_AVAILABILITY_ONLINE, df.getSubfield('u').getData(),
+					Constants.DOCUMENT_AVAILABILITY_NA, df.getSubfield('u').getData(),
 					df.getSubfield('b') != null ? df.getSubfield('b').getData() : ""));
 		}
 		for (String link : underlayingMarc.getFields("998", 'a')) {
 			results.add(MetadataUtils.generateUrl(harvestedRecord.getHarvestedFrom().getIdPrefix(),
-					Constants.DOCUMENT_AVAILABILITY_ONLINE, link, ""));
+					Constants.DOCUMENT_AVAILABILITY_NA, link, ""));
 		}
 		return results;
 	}

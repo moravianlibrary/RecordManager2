@@ -22,6 +22,6 @@ public class TdkivMetadataMarcRecord extends MetadataMarcRecord {
 
 	@Override
 	public List<String> getUrls() {
-		return super.getUrls(Constants.DOCUMENT_AVAILABILITY_ONLINE);
+		return super.getUrls(Constants.DOCUMENT_AVAILABILITY_NA);
 	}
 }

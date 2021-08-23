@@ -269,6 +269,7 @@ public class Constants {
 	public static final String DOCUMENT_AVAILABILITY_ABSENT     = "absent";
 	public static final String DOCUMENT_AVAILABILITY_PRESENT    = "present";
 	public static final String DOCUMENT_AVAILABILITY_FREESTACK  = "freestack";
+	public static final String DOCUMENT_AVAILABILITY_NA			= "na";
 
 	public static final String JOB_PARAM_RECORD_ID		= "recordId";
 

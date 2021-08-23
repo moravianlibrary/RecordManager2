@@ -21,7 +21,7 @@ public class HistografbibMetadataMarcRecord extends MetadataMarcRecord {
 	public List<String> getUrls() {
 		List<String> results = new ArrayList<>(super.getUrls());
 		results.add(MetadataUtils.generateUrl(harvestedRecord.getHarvestedFrom().getIdPrefix(),
-				Constants.DOCUMENT_AVAILABILITY_ONLINE, String.format(URL, harvestedRecord.getUniqueId().getRecordId()),
+				Constants.DOCUMENT_AVAILABILITY_NA, String.format(URL, harvestedRecord.getUniqueId().getRecordId()),
 				""));
 		return results;
 	}

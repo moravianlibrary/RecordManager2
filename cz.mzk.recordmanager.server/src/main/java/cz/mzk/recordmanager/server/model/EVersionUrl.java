@@ -63,6 +63,8 @@ public class EVersionUrl implements Comparable {
 			return Constants.DOCUMENT_AVAILABILITY_PROTECTED;
 		if (availability.equals(Constants.DOCUMENT_AVAILABILITY_DNNT))
 			return Constants.DOCUMENT_AVAILABILITY_DNNT;
+		if (availability.equals(Constants.DOCUMENT_AVAILABILITY_NA))
+			return Constants.DOCUMENT_AVAILABILITY_NA;
 		return Constants.DOCUMENT_AVAILABILITY_UNKNOWN;
 	}
 
@@ -73,6 +75,8 @@ public class EVersionUrl implements Comparable {
 			this.availability = Constants.DOCUMENT_AVAILABILITY_PROTECTED;
 		else if (availability.equals(Constants.DOCUMENT_AVAILABILITY_DNNT))
 			this.availability = Constants.DOCUMENT_AVAILABILITY_DNNT;
+		else if (availability.equals(Constants.DOCUMENT_AVAILABILITY_NA))
+			this.availability = Constants.DOCUMENT_AVAILABILITY_NA;
 		else this.availability = Constants.DOCUMENT_AVAILABILITY_UNKNOWN;
 	}
 
@@ -109,6 +113,8 @@ public class EVersionUrl implements Comparable {
 		if (other.getAvailability().equals(Constants.DOCUMENT_AVAILABILITY_DNNT)) return -1;
 		if (this.availability.equals(Constants.DOCUMENT_AVAILABILITY_PROTECTED)) return 1;
 		if (other.getAvailability().equals(Constants.DOCUMENT_AVAILABILITY_PROTECTED)) return -1;
+		if (this.availability.equals(Constants.DOCUMENT_AVAILABILITY_NA)) return 1;
+		if (other.getAvailability().equals(Constants.DOCUMENT_AVAILABILITY_NA)) return -1;
 		return 0;
 	}
 
