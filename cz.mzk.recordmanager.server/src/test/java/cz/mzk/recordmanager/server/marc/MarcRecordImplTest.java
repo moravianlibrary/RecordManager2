@@ -12,7 +12,10 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 public class MarcRecordImplTest extends AbstractTest {
 
@@ -146,38 +149,24 @@ public class MarcRecordImplTest extends AbstractTest {
 		Assert.assertEquals(metadataRecord.getPublicationYear().longValue(), 1981);
 		data.clear();
 	}
-	
+
 	@Test
-	public void getTitleTest() throws Exception{
+	public void getTitleTest() {
 		MarcRecordImpl mri;
 		MetadataRecord metadataRecord;
 		List<String> data = new ArrayList<>();
 
 		data.add("245 $nn$aa$pp$bb");
-		data.add("240 $aa$nn$bb$pp");
-		data.add("240 $aDeutsche Bibliographie.$pWöchentliches Verzeichnis."
-				+ "$nReihe B,$pBeilage, Erscheinungen ausserhalb des Verlags"
-				+ "buchhandels :$bAmtsblatt der Deutschen Bibliothek.$kadasd");
 		mri = MarcRecordFactory.recordFactory(data);
 		metadataRecord = metadataFactory.getMetadataRecord(mri);
 
 		Title expectedTitle1 = new Title();
 		expectedTitle1.setTitleStr("n a p b");
 		expectedTitle1.setOrderInRecord(1L);
-		Title expectedTitle2 = new Title();
-		expectedTitle2.setTitleStr("a n b p");
-		expectedTitle2.setOrderInRecord(2L);
-		Title expectedTitle3 = new Title();
-		expectedTitle3.setTitleStr("Deutsche Bibliographie. Wöchentliches Verzeichnis. "
-				+ "Reihe B, Beilage, Erscheinungen ausserhalb des Verlags"
-				+ "buchhandels : Amtsblatt der Deutschen Bibliothek.");
-		expectedTitle3.setOrderInRecord(3L);
 
 		List<Title> titles = metadataRecord.getTitle();
-		Assert.assertEquals(3, titles.size());
-		Assert.assertEquals(titles.get(0),expectedTitle1);
-		Assert.assertEquals(titles.get(1),expectedTitle2);
-		Assert.assertEquals(titles.get(2),expectedTitle3);
+		Assert.assertEquals(1, titles.size());
+		Assert.assertEquals(titles.get(0), expectedTitle1);
 		data.clear();
 
 		mri = MarcRecordFactory.recordFactory(data);
@@ -185,25 +174,22 @@ public class MarcRecordImplTest extends AbstractTest {
 		Assert.assertEquals(0, metadataRecord.getTitle().size());
 		data.clear();
 	}
-	
+
 	@Test
-	public void shortTitleTest() throws Exception {
+	public void shortTitleTest() {
 		MarcRecordImpl mri;
 		MetadataRecord metadataRecord;
 		List<String> data = new ArrayList<>();
 
 		data.add("245 $nn$aa$pp$bb");
-		data.add("240 $aa$nn$bb$pp");
 		data.add("245 $aa$pp$nn");
 		mri = MarcRecordFactory.recordFactory(data);
 		metadataRecord = metadataFactory.getMetadataRecord(mri);
 
 		ShortTitle expectedST1 = ShortTitle.create("n a p", 1L, false);
-		ShortTitle expectedST2 = ShortTitle.create("a n p", 2L, false);
 
-		Assert.assertEquals(2, metadataRecord.getShortTitles().size());
-		Assert.assertEquals(metadataRecord.getShortTitles().get(0),expectedST1);
-		Assert.assertEquals(metadataRecord.getShortTitles().get(1),expectedST2);
+		Assert.assertEquals(1, metadataRecord.getShortTitles().size());
+		Assert.assertEquals(metadataRecord.getShortTitles().get(0), expectedST1);
 	}
 
 	@Test
