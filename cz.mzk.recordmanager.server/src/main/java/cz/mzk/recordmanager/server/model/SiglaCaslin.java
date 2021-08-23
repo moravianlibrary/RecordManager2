@@ -28,6 +28,15 @@ public class SiglaCaslin {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date lastHarvest = new Date();
 
+	public static SiglaCaslin create(String sigla, String url) {
+		SiglaCaslin newSigla = new SiglaCaslin();
+		newSigla.setSigla(sigla);
+		newSigla.setUrl(url);
+		newSigla.setUpdated(new Date());
+		newSigla.setLastHarvest(new Date());
+		return newSigla;
+	}
+
 	public Long getId() {
 		return id;
 	}

@@ -2366,7 +2366,7 @@ UPDATE import_conf SET mappings996='dawinci' WHERE id IN (301,369,403,404,405,40
 CREATE TABLE sigla_caslin (
   id                SERIAL,
   sigla             VARCHAR(10) NOT NULL,
-  url               VARCHAR (100) NOT NULL,
+  url               VARCHAR (500) NOT NULL,
   updated           TIMESTAMP NOT NULL,
   last_harvest      TIMESTAMP NOT NULL,
   CONSTRAINT sigla_caslin_pk PRIMARY KEY(id)
