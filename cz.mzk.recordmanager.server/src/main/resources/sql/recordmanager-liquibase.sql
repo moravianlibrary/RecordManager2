@@ -2634,3 +2634,14 @@ INSERT INTO harvested_record_format(id, name) VALUES (74, 'THESIS_OTHER');
 
 --changeset tomascejpek:276
 INSERT INTO harvested_record_format(id, name) VALUES (68, 'BOARD_GAMES');
+
+--changeset tomascejpek:277
+CREATE TABLE caslin_links (
+  id                SERIAL,
+  sigla             VARCHAR(10) NOT NULL,
+  url               VARCHAR (500) NOT NULL,
+  updated           TIMESTAMP NOT NULL,
+  last_harvest      TIMESTAMP NOT NULL,
+  CONSTRAINT caslin_links_pk PRIMARY KEY(id)
+);
+CREATE INDEX caslin_links_sigla_idx ON caslin_links(sigla);
