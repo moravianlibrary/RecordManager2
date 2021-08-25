@@ -2371,3 +2371,4 @@ CREATE TABLE caslin_links (
   last_harvest      TIMESTAMP NOT NULL,
   CONSTRAINT caslin_links_pk PRIMARY KEY(id)
 );
+CREATE INDEX caslin_links_sigla_idx ON caslin_links(sigla);
