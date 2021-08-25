@@ -15,13 +15,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.Date;
 
 
 /**
- * Tasklet communicates with Aleph on NKP using X-services
- * and downloads identifiers of manually merged records from SKAT
- *
- * @author mertam
+ * Tasklet downloads links from CASLIN
  */
 public class HarvestSiglaCaslinsTasklet implements Tasklet {
 
@@ -38,10 +36,22 @@ public class HarvestSiglaCaslinsTasklet implements Tasklet {
 	@Override
 	public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
 		for (String line : harvest()) {
-			if (line.trim().startsWith("*")) continue;
+			if (line.trim().startsWith("*") || (line.length() > 6 && line.charAt(6) != '=')) continue;
 			String[] splitLine = line.split(";");
 			if (splitLine.length == 4) {
-				siglaCaslinDAO.saveOrUpdate(SiglaCaslin.create(splitLine[0].substring(0, 6), splitLine[3] + splitLine[2]));
+				String sigla = splitLine[0].substring(0, 6);
+				String url = splitLine[3] + splitLine[2];
+				SiglaCaslin siglaCaslin = siglaCaslinDAO.getBySigla(sigla);
+				if (siglaCaslin == null) {
+					siglaCaslin = SiglaCaslin.create(sigla, url);
+				} else {
+					if (!siglaCaslin.getUrl().equals(url)) {
+						siglaCaslin.setUrl(url);
+						siglaCaslin.setUpdated(new Date());
+					}
+					siglaCaslin.setLastHarvest(new Date());
+				}
+				siglaCaslinDAO.saveOrUpdate(siglaCaslin);
 			}
 		}
 		return RepeatStatus.FINISHED;
@@ -52,7 +62,7 @@ public class HarvestSiglaCaslinsTasklet implements Tasklet {
 			logger.info("Downloading: " + URL);
 			return IOUtils.toString(is, StandardCharsets.UTF_8).split("\n");
 		} catch (IOException e) {
-			logger.error("Could not download ziskej list");
+			logger.error("Could not download caslin links list");
 			throw new RuntimeException();
 		}
 	}
