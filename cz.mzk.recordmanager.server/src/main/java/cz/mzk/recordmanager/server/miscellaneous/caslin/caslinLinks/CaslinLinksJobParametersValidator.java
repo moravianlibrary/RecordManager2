@@ -1,4 +1,4 @@
-package cz.mzk.recordmanager.server.miscellaneous.caslin.siglaUrl;
+package cz.mzk.recordmanager.server.miscellaneous.caslin.caslinLinks;
 
 import cz.mzk.recordmanager.server.springbatch.DefaultJobParametersValidator;
 import cz.mzk.recordmanager.server.springbatch.JobParameterDeclaration;
@@ -12,7 +12,7 @@ import java.util.Collections;
 
 import static cz.mzk.recordmanager.server.springbatch.JobParameterDeclaration.param;
 
-public class SiglaCaslinJobParametersValidator extends DefaultJobParametersValidator {
+public class CaslinLinksJobParametersValidator extends DefaultJobParametersValidator {
 
 	@Override
 	public void validate(JobParameters parameters) throws JobParametersInvalidException {

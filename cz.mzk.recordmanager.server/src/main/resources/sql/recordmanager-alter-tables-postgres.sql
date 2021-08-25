@@ -2363,11 +2363,11 @@ UPDATE import_conf SET mappings996='caslin' WHERE id IN (316);
 UPDATE import_conf SET mappings996='dawinci' WHERE id IN (301,369,403,404,405,406,407,408);
 
 -- 24. 08. 2021 tomascejpek
-CREATE TABLE sigla_caslin (
+CREATE TABLE caslin_links (
   id                SERIAL,
   sigla             VARCHAR(10) NOT NULL,
   url               VARCHAR (500) NOT NULL,
   updated           TIMESTAMP NOT NULL,
   last_harvest      TIMESTAMP NOT NULL,
-  CONSTRAINT sigla_caslin_pk PRIMARY KEY(id)
+  CONSTRAINT caslin_links_pk PRIMARY KEY(id)
 );

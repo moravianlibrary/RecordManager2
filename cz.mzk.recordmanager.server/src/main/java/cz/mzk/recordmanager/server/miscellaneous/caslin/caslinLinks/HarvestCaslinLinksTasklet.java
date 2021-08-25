@@ -1,7 +1,7 @@
-package cz.mzk.recordmanager.server.miscellaneous.caslin.siglaUrl;
+package cz.mzk.recordmanager.server.miscellaneous.caslin.caslinLinks;
 
-import cz.mzk.recordmanager.server.model.SiglaCaslin;
-import cz.mzk.recordmanager.server.oai.dao.SiglaCaslinDAO;
+import cz.mzk.recordmanager.server.model.CaslinLinks;
+import cz.mzk.recordmanager.server.oai.dao.CaslinLinksDAO;
 import cz.mzk.recordmanager.server.util.HttpClient;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
@@ -21,15 +21,15 @@ import java.util.Date;
 /**
  * Tasklet downloads links from CASLIN
  */
-public class HarvestSiglaCaslinsTasklet implements Tasklet {
+public class HarvestCaslinLinksTasklet implements Tasklet {
 
 	@Autowired
 	private HttpClient httpClient;
 
 	@Autowired
-	private SiglaCaslinDAO siglaCaslinDAO;
+	private CaslinLinksDAO caslinLinksDAO;
 
-	private static final Logger logger = LoggerFactory.getLogger(HarvestSiglaCaslinsTasklet.class);
+	private static final Logger logger = LoggerFactory.getLogger(HarvestCaslinLinksTasklet.class);
 
 	private static final String URL = "http://aleph.nkp.cz/web/cpk/skc_links";
 
@@ -41,17 +41,17 @@ public class HarvestSiglaCaslinsTasklet implements Tasklet {
 			if (splitLine.length == 4) {
 				String sigla = splitLine[0].substring(0, 6);
 				String url = splitLine[3] + splitLine[2];
-				SiglaCaslin siglaCaslin = siglaCaslinDAO.getBySigla(sigla);
-				if (siglaCaslin == null) {
-					siglaCaslin = SiglaCaslin.create(sigla, url);
+				CaslinLinks caslinLinks = caslinLinksDAO.getBySigla(sigla);
+				if (caslinLinks == null) {
+					caslinLinks = CaslinLinks.create(sigla, url);
 				} else {
-					if (!siglaCaslin.getUrl().equals(url)) {
-						siglaCaslin.setUrl(url);
-						siglaCaslin.setUpdated(new Date());
+					if (!caslinLinks.getUrl().equals(url)) {
+						caslinLinks.setUrl(url);
+						caslinLinks.setUpdated(new Date());
 					}
-					siglaCaslin.setLastHarvest(new Date());
+					caslinLinks.setLastHarvest(new Date());
 				}
-				siglaCaslinDAO.saveOrUpdate(siglaCaslin);
+				caslinLinksDAO.saveOrUpdate(caslinLinks);
 			}
 		}
 		return RepeatStatus.FINISHED;

@@ -1,4 +1,4 @@
-package cz.mzk.recordmanager.server.miscellaneous.caslin.siglaUrl;
+package cz.mzk.recordmanager.server.miscellaneous.caslin.caslinLinks;
 
 import cz.mzk.recordmanager.server.springbatch.JobFailureListener;
 import cz.mzk.recordmanager.server.springbatch.StepProgressListener;
@@ -15,7 +15,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class SiglaCaslinJobConfig {
+public class CaslinLinksJobConfig {
 
 	@Autowired
 	private JobBuilderFactory jobs;
@@ -24,31 +24,31 @@ public class SiglaCaslinJobConfig {
 	private StepBuilderFactory steps;
 
 	@Bean
-	public Job harvestSiglaCaslinJob(
-			@Qualifier(Constants.JOB_ID_HARVEST_SIGLA_CASLIN + ":harvestSiglaCaslinStep") Step harvestSiglaCaslinStep
+	public Job harvestCaslinLinksJob(
+			@Qualifier(Constants.JOB_ID_HARVEST_CASLIN_LINKS + ":harvestCaslinLinksStep") Step harvestCaslinLinksStep
 	) {
-		return jobs.get(Constants.JOB_ID_HARVEST_SIGLA_CASLIN)
-				.validator(new SiglaCaslinJobParametersValidator())
+		return jobs.get(Constants.JOB_ID_HARVEST_CASLIN_LINKS)
+				.validator(new CaslinLinksJobParametersValidator())
 				.listener(JobFailureListener.INSTANCE)
-				.flow(harvestSiglaCaslinStep)
+				.flow(harvestCaslinLinksStep)
 				.end()
 				.build();
 	}
 
 
-	@Bean(name = Constants.JOB_ID_HARVEST_SIGLA_CASLIN + ":harvestSiglaCaslinStep")
+	@Bean(name = Constants.JOB_ID_HARVEST_CASLIN_LINKS + ":harvestCaslinLinksStep")
 	@Deprecated
-	public Step harvestSiglaCaslinStep() {
-		return steps.get("harvestSiglaCaslinStep")
-				.tasklet(harvestSiglaCaslinTasklet())
+	public Step harvestCaslinLinksStep() {
+		return steps.get("harvestCaslinLinksStep")
+				.tasklet(harvestCaslinLinksTasklet())
 				.listener(new StepProgressListener())
 				.build();
 	}
 
-	@Bean(name = Constants.JOB_ID_HARVEST_SIGLA_CASLIN + ":harvestSiglaCaslinTasklet")
+	@Bean(name = Constants.JOB_ID_HARVEST_CASLIN_LINKS + ":harvestCaslinLinksTasklet")
 	@StepScope
-	public Tasklet harvestSiglaCaslinTasklet() {
-		return new HarvestSiglaCaslinsTasklet();
+	public Tasklet harvestCaslinLinksTasklet() {
+		return new HarvestCaslinLinksTasklet();
 	}
 
 }

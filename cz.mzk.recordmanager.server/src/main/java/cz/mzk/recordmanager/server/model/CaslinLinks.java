@@ -4,10 +4,10 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name = SiglaCaslin.TABLE_NAME)
-public class SiglaCaslin {
+@Table(name = CaslinLinks.TABLE_NAME)
+public class CaslinLinks {
 
-	public static final String TABLE_NAME = "sigla_caslin";
+	public static final String TABLE_NAME = "caslin_links";
 
 	@Id
 	@Column(name = "id")
@@ -28,13 +28,13 @@ public class SiglaCaslin {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date lastHarvest = new Date();
 
-	public static SiglaCaslin create(String sigla, String url) {
-		SiglaCaslin newSigla = new SiglaCaslin();
-		newSigla.setSigla(sigla);
-		newSigla.setUrl(url);
-		newSigla.setUpdated(new Date());
-		newSigla.setLastHarvest(new Date());
-		return newSigla;
+	public static CaslinLinks create(String sigla, String url) {
+		CaslinLinks newCaslinLink = new CaslinLinks();
+		newCaslinLink.setSigla(sigla);
+		newCaslinLink.setUrl(url);
+		newCaslinLink.setUpdated(new Date());
+		newCaslinLink.setLastHarvest(new Date());
+		return newCaslinLink;
 	}
 
 	public Long getId() {
