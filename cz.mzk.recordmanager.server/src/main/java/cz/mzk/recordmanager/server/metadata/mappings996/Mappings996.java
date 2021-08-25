@@ -36,6 +36,8 @@ public interface Mappings996 {
 
 	String getSubfieldW(DataField df);
 
+	String getCaslinUrl(DataField df);
+
 	String getMappingAsCsv(DataField df);
 
 	List<String> getMappingAsCsv(List<DataField> df);

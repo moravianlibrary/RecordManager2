@@ -95,6 +95,11 @@ public class DefaultMappings996 implements Mappings996 {
 	}
 
 	@Override
+	public String getCaslinUrl(DataField df) {
+		return "";
+	}
+
+	@Override
 	public String getMappingAsCsv(DataField df) {
 		StringWriter writer = new StringWriter();
 		CSVPrinter printer;
@@ -114,7 +119,8 @@ public class DefaultMappings996 implements Mappings996 {
 					getCollectionDesc(df),
 					getAgencyId(df),
 					getSequenceNo(df),
-					getSubfieldW(df)
+					getSubfieldW(df),
+					getCaslinUrl(df)
 			);
 			printer.flush();
 			return writer.toString().trim();
