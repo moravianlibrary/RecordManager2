@@ -5,6 +5,7 @@ import cz.mzk.recordmanager.server.index.indexIntercepting.IndexInterceptorFacto
 import cz.mzk.recordmanager.server.marc.MarcRecord;
 import cz.mzk.recordmanager.server.marc.MarcXmlParser;
 import cz.mzk.recordmanager.server.metadata.MetadataRecordFactory;
+import cz.mzk.recordmanager.server.metadata.mappings996.Mappings996Factory;
 import cz.mzk.recordmanager.server.model.DedupRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.scripting.MappingScript;
@@ -38,6 +39,9 @@ public class MarcSolrRecordMapper implements SolrRecordMapper, InitializingBean 
 
 	@Autowired
 	private MetadataRecordFactory metadataRecordFactory;
+
+	@Autowired
+	private Mappings996Factory mappings996Factory;
 
 	@Autowired
 	private IndexInterceptorFactory indexInterceptorFactory;
@@ -74,14 +78,16 @@ public class MarcSolrRecordMapper implements SolrRecordMapper, InitializingBean 
 		InputStream is = new ByteArrayInputStream(hrRecord.getRawRecord());
 		MappingScript<MarcFunctionContext> script = getDedupMappingScript(hrRecord);
 		MarcRecord marcRecord = indexInterceptorFactory.getIndexInterceptor(hrRecord, marcXmlParser.parseRecord(is)).intercept();
-		MarcFunctionContext ctx = new MarcFunctionContext(marcRecord, hrRecord, metadataRecordFactory.getMetadataRecord(hrRecord, marcRecord));
+		MarcFunctionContext ctx = new MarcFunctionContext(marcRecord, hrRecord, metadataRecordFactory.getMetadataRecord(hrRecord, marcRecord),
+				mappings996Factory.getMappings996(hrRecord));
 		return script.parse(ctx);
 	}
 
 	protected Map<String, Object> parseAsLocalRecord(HarvestedRecord hrRecord) {
 		InputStream is = new ByteArrayInputStream(hrRecord.getRawRecord());
 		MarcRecord marcRecord = indexInterceptorFactory.getIndexInterceptor(hrRecord, marcXmlParser.parseRecord(is)).intercept();
-		MarcFunctionContext ctx = new MarcFunctionContext(marcRecord, hrRecord, metadataRecordFactory.getMetadataRecord(hrRecord, marcRecord));
+		MarcFunctionContext ctx = new MarcFunctionContext(marcRecord, hrRecord, metadataRecordFactory.getMetadataRecord(hrRecord, marcRecord),
+				mappings996Factory.getMappings996(hrRecord));
 		return getHarvestedMappingScript(hrRecord).parse(ctx);
 	}
 

@@ -40,6 +40,7 @@ CREATE TABLE import_conf (
   ziskej_enabled       BOOLEAN DEFAULT FALSE,
   generate_biblio_linker_keys BOOLEAN DEFAULT TRUE,
   indexed              BOOLEAN DEFAULT TRUE,
+  mappings996          VARCHAR(20),
   CONSTRAINT import_conf_library_id_fk        FOREIGN KEY (library_id)        REFERENCES library(id),
   CONSTRAINT import_conf_contact_person_id_fk FOREIGN KEY (contact_person_id) REFERENCES contact_person(id)
 );
@@ -470,4 +471,13 @@ CREATE TABLE title_old_spelling (
   id                   INTEGER NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
   "key"                VARCHAR(128),
   value                VARCHAR(128)
+);
+
+CREATE TABLE caslin_links (
+  id                INTEGER NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
+  sigla             VARCHAR(10) NOT NULL,
+  url               VARCHAR (100) NOT NULL,
+  updated           TIMESTAMP NOT NULL,
+  last_harvest      TIMESTAMP NOT NULL,
+  CONSTRAINT caslin_links_pk PRIMARY KEY(id)
 );

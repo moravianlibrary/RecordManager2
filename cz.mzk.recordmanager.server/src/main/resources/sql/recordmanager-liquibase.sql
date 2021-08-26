@@ -2634,3 +2634,24 @@ INSERT INTO harvested_record_format(id, name) VALUES (74, 'THESIS_OTHER');
 
 --changeset tomascejpek:276
 INSERT INTO harvested_record_format(id, name) VALUES (68, 'BOARD_GAMES');
+
+--changeset tomascejpek:277
+CREATE TABLE caslin_links (
+  id                SERIAL,
+  sigla             VARCHAR(10) NOT NULL,
+  url               VARCHAR (500) NOT NULL,
+  updated           TIMESTAMP NOT NULL,
+  last_harvest      TIMESTAMP NOT NULL,
+  CONSTRAINT caslin_links_pk PRIMARY KEY(id)
+);
+CREATE INDEX caslin_links_sigla_idx ON caslin_links(sigla);
+
+--changeset tomascejpek:278
+ALTER TABLE import_conf ADD COLUMN mappings996 VARCHAR(20);
+
+--changeset tomascejpek:279 context:cpk
+UPDATE import_conf SET mappings996='aleph' WHERE id IN (300,304,307,313,315,321,324,325,326,330,333,335,337,361,391);
+UPDATE import_conf SET mappings996='tritius' WHERE id IN (312,314,332,334,346,350,353,356,364,368,370,371,373,374,375,376,377,378,380,381,383,384,386,388,390,397,398,399,401,402,409,410,411,412,415,423,424,425,426,427,432);
+UPDATE import_conf SET mappings996='koha' WHERE id IN (306,311,340,418,419,428,430,431,433,434,437);
+UPDATE import_conf SET mappings996='caslin' WHERE id IN (316);
+UPDATE import_conf SET mappings996='dawinci' WHERE id IN (301,342,369,393,403,404,405,406,407,408);

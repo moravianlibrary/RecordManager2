@@ -986,4 +986,8 @@ public class MarcDSL extends BaseDSL {
 		return false;
 	}
 
+	public List<String> getMappings996() {
+		return context.mappings996().getMappingAsCsv(context.record().getDataFields("996"));
+	}
+
 }
