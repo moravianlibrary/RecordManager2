@@ -905,12 +905,20 @@ public class MarcRecordImplTest extends AbstractTest {
 		List<String> metadataList = new ArrayList<>();
 		MetadataRecord metadataRecord;
 
-		metadataList.add("773 $gg$tt$xx");
+		metadataList.add("773 $gg$tt$xx$zz");
 		mri = MarcRecordFactory.recordFactory(metadataList);
 		metadataRecord = metadataFactory.getMetadataRecord(mri);
 		Assert.assertEquals(metadataRecord.getSourceInfoG(), "g");
 		Assert.assertEquals(metadataRecord.getSourceInfoT(), "t");
-		Assert.assertEquals(metadataRecord.getSourceInfoX(), "x");
+		Assert.assertEquals(metadataRecord.getSourceInfoXZ(), "x");
+
+		metadataList.clear();
+		metadataList.add("773 $gg$tt$zz");
+		mri = MarcRecordFactory.recordFactory(metadataList);
+		metadataRecord = metadataFactory.getMetadataRecord(mri);
+		Assert.assertEquals(metadataRecord.getSourceInfoG(), "g");
+		Assert.assertEquals(metadataRecord.getSourceInfoT(), "t");
+		Assert.assertEquals(metadataRecord.getSourceInfoXZ(), "z");
 	}
 
 	@Test
@@ -924,7 +932,7 @@ public class MarcRecordImplTest extends AbstractTest {
 		metadataRecord = metadataFactory.getMetadataRecord(mri);
 		Assert.assertEquals(metadataRecord.getSourceInfoG(), "abst");
 		Assert.assertEquals(metadataRecord.getSourceInfoT(), "t");
-		Assert.assertEquals(metadataRecord.getSourceInfoX(), "x");
+		Assert.assertEquals(metadataRecord.getSourceInfoXZ(), "x");
 	}
 
 	@Test

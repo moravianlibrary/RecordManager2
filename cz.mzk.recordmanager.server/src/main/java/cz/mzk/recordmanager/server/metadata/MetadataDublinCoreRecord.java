@@ -487,7 +487,7 @@ public class MetadataDublinCoreRecord implements MetadataRecord {
 	}
 
 	@Override
-	public String getSourceInfoX() {
+	public String getSourceInfoXZ() {
 		// Nothing to return
 		return null;
 	}

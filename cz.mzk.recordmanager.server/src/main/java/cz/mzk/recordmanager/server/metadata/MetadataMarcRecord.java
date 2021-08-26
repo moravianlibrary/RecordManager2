@@ -1372,8 +1372,9 @@ public class MetadataMarcRecord implements MetadataRecord {
 	}
 
 	@Override
-	public String getSourceInfoX() {
-		return underlayingMarc.getField("773", 'x');
+	public String getSourceInfoXZ() {
+		return underlayingMarc.getField("773", 'x') != null ? underlayingMarc.getField("773", 'x') :
+				underlayingMarc.getField("773", 'z');
 	}
 
 	@Override
