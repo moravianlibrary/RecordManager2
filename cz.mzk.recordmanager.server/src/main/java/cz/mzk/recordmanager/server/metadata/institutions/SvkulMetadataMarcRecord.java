@@ -1,13 +1,11 @@
 package cz.mzk.recordmanager.server.metadata.institutions;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import cz.mzk.recordmanager.server.model.HarvestedRecord;
-import org.marc4j.marc.DataField;
-
 import cz.mzk.recordmanager.server.marc.MarcRecord;
 import cz.mzk.recordmanager.server.metadata.MetadataMarcRecord;
+import cz.mzk.recordmanager.server.model.HarvestedRecord;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class SvkulMetadataMarcRecord extends MetadataMarcRecord {
 
@@ -22,18 +20,4 @@ public class SvkulMetadataMarcRecord extends MetadataMarcRecord {
 		return result;
 	}
 
-	@Override
-	public boolean matchFilter() {
-		if (!super.matchFilter()) return false;
-		String f001;
-		if ((f001 = underlayingMarc.getControlField("001")) != null && f001.startsWith("EZ")) {
-			for (DataField df : underlayingMarc.getDataFields("910")) {
-				if (df.getSubfield('b') != null) {
-					return true;
-				}
-			}
-			return false;
-		}
-		return true;
-	}
 }

@@ -152,15 +152,12 @@ public class MetadataRecordFactory {
 			return new CosmotronMetadataMarcRecord(marcRec, hr);
 		case Constants.PREFIX_PKJAK:
 			return new PkjakMetadataMarcRecord(marcRec, hr);
-		case Constants.PREFIX_KKKV:
-			return new KkkvMetadataMarcRecord(marcRec, hr);
 		case Constants.PREFIX_MKP:
 			return new MkpMetadataMarcRecord(marcRec, hr);
 		case Constants.PREFIX_CMUZ:
 		case Constants.PREFIX_MKBREC:
 		case Constants.PREFIX_MKCK:
 		case Constants.PREFIX_MKHNM:
-		case Constants.PREFIX_MKHOD:
 		case Constants.PREFIX_MKMIL:
 		case Constants.PREFIX_MKML:
 		case Constants.PREFIX_MKOR:
@@ -168,7 +165,6 @@ public class MetadataRecordFactory {
 		case Constants.PREFIX_MKPISEK:
 		case Constants.PREFIX_MKSTER:
 		case Constants.PREFIX_MKZN:
-		case Constants.PREFIX_VFU:
 			return new ClaviusMetadataMarcRecord(marcRec, hr);
 		case Constants.PREFIX_KRAM_CUNI:
 		case Constants.PREFIX_KRAM_CUNIFSV:
