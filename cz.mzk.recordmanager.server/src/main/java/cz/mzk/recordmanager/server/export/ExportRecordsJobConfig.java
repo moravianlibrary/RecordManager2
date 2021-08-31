@@ -3,6 +3,7 @@ package cz.mzk.recordmanager.server.export;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.sql.DataSource;
 
@@ -366,7 +367,7 @@ public class ExportRecordsJobConfig {
 				.listener(new StepProgressListener())
 				.<Long, String>chunk(200)//
 				.reader(exportMarcFieldsReader(STRING_OVERRIDEN_BY_EXPRESSION)) //
-				.processor(exportMarcFieldsProcesor(STRING_OVERRIDEN_BY_EXPRESSION, STRING_OVERRIDEN_BY_EXPRESSION)) //
+				.processor(exportMarcFieldsProcesor(STRING_OVERRIDEN_BY_EXPRESSION)) //
 				.writer(exportRecordsWriter(STRING_OVERRIDEN_BY_EXPRESSION)) //
 				.taskExecutor(taskExecutor)
 				.build();
@@ -385,7 +386,7 @@ public class ExportRecordsJobConfig {
 		if (configId != null) {
 			Map<String, Object> parameterValues = new HashMap<>();
 			pqpf.setWhereClause("WHERE import_conf_id IN (:conf_id)");
-			parameterValues.put("conf_id", Arrays.asList(configId.split(",")));
+			parameterValues.put("conf_id", Arrays.stream(configId.split(",")).map(Long::parseLong).collect(Collectors.toList()));
 			reader.setParameterValues(parameterValues);
 		}
 		pqpf.setSortKey("id");
@@ -400,10 +401,8 @@ public class ExportRecordsJobConfig {
 	@Bean(name = Constants.JOB_ID_EXPORT_MARC_FIELDS + ":exportMarcFieldsProcesor")
 	@StepScope
 	public ExportMarcFieldsProcessor exportMarcFieldsProcesor(
-			@Value("#{jobParameters[" + Constants.JOB_PARAM_FORMAT + "]}") String strFormat,
 			@Value("#{jobParameters[" + Constants.JOB_PARAM_FIELDS + "]}") String marcFields) {
-		IOFormat iOFormat = IOFormat.stringToExportFormat(strFormat);
-		return new ExportMarcFieldsProcessor(iOFormat, marcFields);
+		return new ExportMarcFieldsProcessor(marcFields);
 	}
 
 }

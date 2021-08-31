@@ -18,11 +18,9 @@ import java.util.List;
 
 public class ExportMarcFieldsProcessor implements ItemProcessor<Long, String> {
 
-	private IOFormat iOFormat;
+	private final List<String> marcFields;
 
-	private List<String> marcFields;
-
-	private static Logger logger = LoggerFactory.getLogger(ExportMarcFieldsProcessor.class);
+	private static final Logger logger = LoggerFactory.getLogger(ExportMarcFieldsProcessor.class);
 
 	@Autowired
 	private MarcXmlParser marcXmlParser;
@@ -30,10 +28,11 @@ public class ExportMarcFieldsProcessor implements ItemProcessor<Long, String> {
 	@Autowired
 	private HarvestedRecordDAO harvestedRecordDao;
 
-	private ProgressLogger progressLogger;
+	private final ProgressLogger progressLogger;
 
-	public ExportMarcFieldsProcessor(IOFormat format, String marcFields) {
-		this.iOFormat = format;
+	private static final String EXPORT_FORMAT = "%s.%s %s\n";
+
+	public ExportMarcFieldsProcessor(String marcFields) {
 		this.marcFields = Arrays.asList(marcFields.split(","));
 		progressLogger = new ProgressLogger(logger, 10000);
 	}
@@ -51,15 +50,13 @@ public class ExportMarcFieldsProcessor implements ItemProcessor<Long, String> {
 			for (String tag : marcFields) {
 				String field = marcRecord.getControlField(tag);
 				if (field != null) {
-					result.append(record.getHarvestedFrom().getIdPrefix() + "." +
-							record.getUniqueId().getRecordId() + " " + field);
-					result.append("\n");
+					result.append(getExportText(record.getHarvestedFrom().getIdPrefix(),
+							record.getUniqueId().getRecordId(), field));
 					continue;
 				}
 				for (DataField dataField : marcRecord.getDataFields(tag)) {
-					result.append(record.getHarvestedFrom().getIdPrefix() + "." +
-							record.getUniqueId().getRecordId() + " " + dataField.toString());
-					result.append("\n");
+					result.append(getExportText(record.getHarvestedFrom().getIdPrefix(),
+							record.getUniqueId().getRecordId(), dataField.toString()));
 				}
 			}
 			return result.toString().isEmpty() ? null : result.toString().trim();
@@ -67,6 +64,10 @@ public class ExportMarcFieldsProcessor implements ItemProcessor<Long, String> {
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	private static String getExportText(String prefix, String recordId, String field) {
+		return String.format(EXPORT_FORMAT, prefix, recordId, field);
 	}
 
 }

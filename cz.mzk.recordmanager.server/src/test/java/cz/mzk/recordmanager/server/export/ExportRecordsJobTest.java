@@ -1,9 +1,12 @@
 package cz.mzk.recordmanager.server.export;
 
 import java.io.File;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.io.FileUtils;
+import org.locationtech.jts.util.Assert;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobParameter;
 import org.springframework.batch.core.JobParameters;
@@ -34,6 +37,7 @@ public class ExportRecordsJobTest extends AbstractTest {
 	private static final String TEST_FILE_3 = "target/test/export_aleph.txt";
 	private static final String TEST_FILE_4 = "target/test/export.txt";
 	private static final String TEST_FILE_5 = "target/test/exportDC.txt";
+	private static final String TEST_FILE_MARC_FIELDS = "target/test/exportDC.txt";
 
 	@BeforeMethod
 	public void init() throws Exception {
@@ -104,6 +108,19 @@ public class ExportRecordsJobTest extends AbstractTest {
 		params.put(Constants.JOB_PARAM_FORMAT, new JobParameter("xml"));
 		JobParameters jobParams = new JobParameters(params);
 		jobLauncher.run(job, jobParams);
+	}
+
+	@Test
+	public void testExportMarcFields() throws Exception {
+		Job job = jobRegistry.getJob(Constants.JOB_ID_EXPORT_MARC_FIELDS);
+		Map<String, JobParameter> params = new HashMap<>();
+		params.put(Constants.JOB_PARAM_CONF_ID, new JobParameter("301"));
+		params.put(Constants.JOB_PARAM_FIELDS, new JobParameter("245"));
+		params.put(Constants.JOB_PARAM_OUT_FILE, new JobParameter(TEST_FILE_MARC_FIELDS));
+		JobParameters jobParams = new JobParameters(params);
+		jobLauncher.run(job, jobParams);
+		Assert.equals(FileUtils.readFileToString(new File(TEST_FILE_MARC_FIELDS), StandardCharsets.UTF_8),
+				"NLK.19790455 245 10$aCardiomyopathy and myocardial biopsy /$cedited by Martin Kaltenbach, Franz Loogen, E.G.J. Olsen\n");
 	}
 
 }
