@@ -3,12 +3,14 @@ package cz.mzk.recordmanager.server.export;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.sql.DataSource;
 
 import cz.mzk.recordmanager.server.export.sfx.ExportSfxRecordsJobParametersValidator;
 import cz.mzk.recordmanager.server.export.sfx.ExportSfxRecordsProcessor;
 import cz.mzk.recordmanager.server.export.sfx.ExportSfxRecordsWriter;
+import cz.mzk.recordmanager.server.jdbc.LongValueRowMapper;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
@@ -34,6 +36,7 @@ import cz.mzk.recordmanager.server.model.HarvestedRecord.HarvestedRecordUniqueId
 import cz.mzk.recordmanager.server.springbatch.JobFailureListener;
 import cz.mzk.recordmanager.server.springbatch.StepProgressListener;
 import cz.mzk.recordmanager.server.util.Constants;
+import org.springframework.core.task.TaskExecutor;
 
 @Configuration
 public class ExportRecordsJobConfig {
@@ -46,6 +49,9 @@ public class ExportRecordsJobConfig {
 
 	@Autowired
 	private DataSource dataSource;
+
+	@Autowired
+	private TaskExecutor taskExecutor;
 
 	private static final String STRING_OVERRIDEN_BY_EXPRESSION = null;
 
@@ -227,7 +233,7 @@ public class ExportRecordsJobConfig {
 
 	@Bean(name = "exportRecordsJob:exportRecordsWriter")
 	@StepScope
-	public FlatFileItemWriter<String> exportRecordsWriter(@Value("#{jobParameters["
+	public synchronized FlatFileItemWriter<String> exportRecordsWriter(@Value("#{jobParameters["
 			+ Constants.JOB_PARAM_OUT_FILE + "]}") String filename) throws Exception {
 		FlatFileItemWriter<String> fileWritter = new FlatFileItemWriter<>();
 		fileWritter.setAppendAllowed(false);
@@ -341,6 +347,62 @@ public class ExportRecordsJobConfig {
 		reader.setDataSource(dataSource);
 		reader.afterPropertiesSet();
 		return reader;
+	}
+
+	// export marc fields
+	@Bean
+	public Job exportMarcFieldsJob(
+			@Qualifier(Constants.JOB_ID_EXPORT_MARC_FIELDS + ":exportMarcFieldsStep") Step exportMarcFieldsStep) {
+		return jobs.get(Constants.JOB_ID_EXPORT_MARC_FIELDS)
+				.validator(new ExportMarcFieldsJobParametersValidator())
+				.listener(JobFailureListener.INSTANCE)
+				.flow(exportMarcFieldsStep)
+				.end()
+				.build();
+	}
+
+	@Bean(name = Constants.JOB_ID_EXPORT_MARC_FIELDS + ":exportMarcFieldsStep")
+	public Step exportMarcFieldsStep() throws Exception {
+		return steps.get("exportMarcFieldsStep")
+				.listener(new StepProgressListener())
+				.<Long, String>chunk(200)//
+				.reader(exportMarcFieldsReader(STRING_OVERRIDEN_BY_EXPRESSION)) //
+				.processor(exportMarcFieldsProcesor(STRING_OVERRIDEN_BY_EXPRESSION)) //
+				.writer(exportRecordsWriter(STRING_OVERRIDEN_BY_EXPRESSION)) //
+				.taskExecutor(taskExecutor)
+				.build();
+	}
+
+	@Bean(name = Constants.JOB_ID_EXPORT_MARC_FIELDS + ":exportMarcFieldsReader")
+	@StepScope
+	public synchronized ItemReader<Long> exportMarcFieldsReader(
+			@Value("#{jobParameters[" + Constants.JOB_PARAM_CONF_ID + "]}") String configId)
+			throws Exception {
+		JdbcPagingItemReader<Long> reader = new JdbcPagingItemReader<>();
+		SqlPagingQueryProviderFactoryBean pqpf = new SqlPagingQueryProviderFactoryBean();
+		pqpf.setDataSource(dataSource);
+		pqpf.setSelectClause("SELECT id");
+		pqpf.setFromClause("FROM harvested_record");
+		if (configId != null) {
+			Map<String, Object> parameterValues = new HashMap<>();
+			pqpf.setWhereClause("WHERE import_conf_id IN (:conf_id)");
+			parameterValues.put("conf_id", Arrays.stream(configId.split(",")).map(Long::parseLong).collect(Collectors.toList()));
+			reader.setParameterValues(parameterValues);
+		}
+		pqpf.setSortKey("id");
+		reader.setRowMapper(new LongValueRowMapper());
+		reader.setPageSize(200);
+		reader.setQueryProvider(pqpf.getObject());
+		reader.setDataSource(dataSource);
+		reader.afterPropertiesSet();
+		return reader;
+	}
+
+	@Bean(name = Constants.JOB_ID_EXPORT_MARC_FIELDS + ":exportMarcFieldsProcesor")
+	@StepScope
+	public ExportMarcFieldsProcessor exportMarcFieldsProcesor(
+			@Value("#{jobParameters[" + Constants.JOB_PARAM_FIELDS + "]}") String marcFields) {
+		return new ExportMarcFieldsProcessor(marcFields);
 	}
 
 }
