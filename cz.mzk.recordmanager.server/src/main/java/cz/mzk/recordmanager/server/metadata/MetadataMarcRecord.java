@@ -1874,7 +1874,9 @@ public class MetadataMarcRecord implements MetadataRecord {
 		if (!isArticle()) return null;
 		List<String> results = new ArrayList<>();
 		Matcher matcher;
-		for (DataField df : underlayingMarc.getDataFields("773")) {
+		List<DataField> fields773 = underlayingMarc.getDataFields("773");
+		if (fields773.size() > 1) return null;
+		for (DataField df : fields773) {
 			results.add(df.getSubfield('x') != null ? df.getSubfield('x').getData() : "");
 			Long publicationYear = getPublicationYear();
 			results.add(publicationYear != null ? publicationYear.toString() : "");
