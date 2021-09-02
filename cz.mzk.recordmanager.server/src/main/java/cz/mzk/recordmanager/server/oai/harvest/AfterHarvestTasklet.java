@@ -1,8 +1,8 @@
 package cz.mzk.recordmanager.server.oai.harvest;
 
-import java.util.Date;
-import java.util.Map;
-
+import com.google.common.collect.ImmutableMap;
+import cz.mzk.recordmanager.server.scripting.MappingResolver;
+import cz.mzk.recordmanager.server.util.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.JobParameters;
@@ -13,13 +13,12 @@ import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
-import com.google.common.collect.ImmutableMap;
-
-import cz.mzk.recordmanager.server.util.Constants;
+import java.util.Date;
+import java.util.Map;
 
 public class AfterHarvestTasklet implements Tasklet {
 
-	private static Logger logger = LoggerFactory.getLogger(AfterHarvestTasklet.class);
+	private static final Logger logger = LoggerFactory.getLogger(AfterHarvestTasklet.class);
 
 	private static final String UPDATE_QUERY = "UPDATE harvested_record " +
 			"SET deleted = :deleted, updated = :deleted " +
@@ -27,6 +26,9 @@ public class AfterHarvestTasklet implements Tasklet {
 
 	@Autowired
 	protected NamedParameterJdbcTemplate jdbcTemplate;
+
+	@Autowired
+	private MappingResolver propertyResolver;
 
 	@Override
 	public RepeatStatus execute(StepContribution contribution,
@@ -38,15 +40,24 @@ public class AfterHarvestTasklet implements Tasklet {
 		if (started == null) {
 			return RepeatStatus.FINISHED;
 		}
+		updateRecords(configId, started);
+		try {
+			propertyResolver.resolve("source/" + configId + ".map").getMapping()
+					.forEach((key, value) -> updateRecords(Long.parseLong(key), started));
+		} catch (Exception ignore) {
+		}
+		return RepeatStatus.FINISHED;
+	}
+
+	private void updateRecords(Long confId, Date started) {
 		Map<String, Object> updateParams = ImmutableMap.of(
 				"deleted", new Date(), //
-				"importConfId", configId, //
+				"importConfId", confId, //
 				"executed", started
 		);
 		int updated = jdbcTemplate.update(UPDATE_QUERY, updateParams);
 		logger.info("{} harvested records updated before '{}' mark as deleted " +
-				"for import_conf_id={}", updated, started, configId);
-		return RepeatStatus.FINISHED;
+				"for import_conf_id={}", updated, started, confId);
 	}
 
 }

@@ -166,7 +166,7 @@ public class OAIItemProcessor implements ItemProcessor<List<OAIRecord>, List<Har
 				throw new RuntimeException(tce);
 			}
 			try {
-				propertyResolver.resolve(confId + ".map").getMapping().forEach((key, value) -> {
+				propertyResolver.resolve("source/" + confId + ".map").getMapping().forEach((key, value) -> {
 					Matcher matcher = FIELD_VALUE.matcher(value.get(0));
 					if (matcher.matches()) {
 						mapping.put(key, new SourceMapping(matcher.group(1), matcher.group(2).charAt(0), matcher.group(3)));
