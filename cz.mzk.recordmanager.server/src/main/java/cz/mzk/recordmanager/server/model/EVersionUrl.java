@@ -33,7 +33,7 @@ public class EVersionUrl implements Comparable {
 		if (potentialDnnt && kramAvailability.getAvailability().equals("private")
 				&& kramAvailability.isDnnt()
 				&& kramAvailability.getDnntLabels().stream().anyMatch(l -> l.getLabel().equals(DnntLabelEnum.DNNTO.getLabel()))
-				&& kramAvailability.getDnntLink() != null) {
+				&& kramAvailability.getHarvestedFrom().getDnntDestUrl() != null) {
 			// dnnt online
 			newUrl.setAvailability(Constants.DOCUMENT_AVAILABILITY_DNNT);
 			newUrl.setLink(kramAvailability.getDnntLink());
