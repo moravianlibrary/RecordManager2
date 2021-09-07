@@ -1,5 +1,12 @@
 package cz.mzk.recordmanager.server.util;
 
+import cz.mzk.recordmanager.server.ClasspathResourceProvider;
+import cz.mzk.recordmanager.server.model.HarvestedRecord;
+import cz.mzk.recordmanager.server.model.ImportConfiguration;
+import cz.mzk.recordmanager.server.model.ShortTitle;
+import cz.mzk.recordmanager.server.model.Title;
+import org.marc4j.marc.DataField;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
@@ -8,12 +15,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-
-import org.marc4j.marc.DataField;
-
-import cz.mzk.recordmanager.server.ClasspathResourceProvider;
-import cz.mzk.recordmanager.server.model.ShortTitle;
-import cz.mzk.recordmanager.server.model.Title;
 
 public class MetadataUtils {
 
@@ -98,6 +99,19 @@ public class MetadataUtils {
 	public static String generateUrl(final String source, final String availability, final String link
 			, final String comment) {
 		return String.format("%s|%s|%s|%s", source, availability, link, comment);
+	}
+
+	public static String getPrefix(ImportConfiguration configuration) {
+		if (configuration != null) {
+			String prefix;
+			prefix = configuration.getIdPrefix();
+			return prefix == null ? "" : prefix;
+		}
+		return "";
+	}
+
+	public static String getPrefix(HarvestedRecord hr) {
+		return getPrefix(hr.getHarvestedFrom());
 	}
 
 }

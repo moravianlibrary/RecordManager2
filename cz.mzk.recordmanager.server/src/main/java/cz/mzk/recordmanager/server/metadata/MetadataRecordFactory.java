@@ -1,23 +1,23 @@
 package cz.mzk.recordmanager.server.metadata;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-
-import cz.mzk.recordmanager.server.metadata.institutions.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
-import org.springframework.context.ApplicationContext;
-import org.springframework.stereotype.Component;
-
 import cz.mzk.recordmanager.server.dc.DublinCoreParser;
 import cz.mzk.recordmanager.server.dc.DublinCoreRecord;
 import cz.mzk.recordmanager.server.marc.MarcRecord;
 import cz.mzk.recordmanager.server.marc.MarcXmlParser;
+import cz.mzk.recordmanager.server.metadata.institutions.*;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecord.HarvestedRecordUniqueId;
 import cz.mzk.recordmanager.server.model.ImportConfiguration;
 import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordDAO;
 import cz.mzk.recordmanager.server.util.Constants;
+import cz.mzk.recordmanager.server.util.MetadataUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
+import org.springframework.context.ApplicationContext;
+import org.springframework.stereotype.Component;
+
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 
 @Component
 public class MetadataRecordFactory {
@@ -67,7 +67,7 @@ public class MetadataRecordFactory {
 	}
 
 	public MetadataRecord getMetadataRecord(HarvestedRecord hr, MarcRecord marcRec, ImportConfiguration configuration) {
-		String prefix = getPrefix(configuration);
+		String prefix = MetadataUtils.getPrefix(configuration);
 		switch (prefix) {
 		case Constants.PREFIX_MZK:
 			return new MzkMetadataMarcRecord(marcRec, hr);
@@ -240,7 +240,7 @@ public class MetadataRecordFactory {
 	}
 
 	public MetadataRecord getMetadataRecord(HarvestedRecord hr, DublinCoreRecord dcRec) {
-		String prefix = getPrefix(hr.getHarvestedFrom());
+		String prefix = MetadataUtils.getPrefix(hr.getHarvestedFrom());
 		switch (prefix) {
 		case Constants.PREFIX_KRAM_MZK:
 		case Constants.PREFIX_KRAM_NKP:
@@ -262,15 +262,6 @@ public class MetadataRecordFactory {
 
 	public MetadataRecord getMetadataRecord(DublinCoreRecord dcRecord) {
 		return new MetadataDublinCoreRecord(dcRecord);
-	}
-
-	private String getPrefix(ImportConfiguration configuration) {
-		if (configuration != null) {
-			String prefix;
-			prefix = configuration.getIdPrefix();
-			return prefix == null ? "" : prefix;
-		}
-		return "";
 	}
 
 	private MetadataRecord init(MetadataRecord metadataRecord) {
