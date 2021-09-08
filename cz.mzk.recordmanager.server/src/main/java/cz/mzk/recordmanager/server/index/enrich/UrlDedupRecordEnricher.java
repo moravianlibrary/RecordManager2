@@ -200,9 +200,13 @@ public class UrlDedupRecordEnricher implements DedupRecordEnricher {
 				if (availabilities.size() == 1)
 					addToMap(urls, EVersionUrl.create(availabilities.get(0), potentialDnnt));
 				else if (availabilities.size() > 1) {
-					KramAvailability availability = availabilities.get(0);
-					KramAvailability parent = kramAvailabilityDAO.getByConfigAndUuid(availability.getHarvestedFrom(), availability.getParentUuid());
-					if (parent != null) addToMap(urls, EVersionUrl.create(parent, potentialDnnt));
+					// same keys must have same parent
+					Set<String> parentUuids = availabilities.stream().map(a -> a.getParentUuid()).collect(Collectors.toSet());
+					if (parentUuids.size() == 1) {
+						KramAvailability availability = availabilities.get(0);
+						KramAvailability parent = kramAvailabilityDAO.getByConfigAndUuid(availability.getHarvestedFrom(), availability.getParentUuid());
+						if (parent != null) addToMap(urls, EVersionUrl.create(parent, potentialDnnt));
+					}
 				}
 			}
 		}
