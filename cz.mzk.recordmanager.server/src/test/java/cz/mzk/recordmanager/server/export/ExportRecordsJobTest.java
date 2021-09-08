@@ -6,13 +6,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
-import org.locationtech.jts.util.Assert;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobParameter;
 import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.configuration.JobRegistry;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -119,7 +119,7 @@ public class ExportRecordsJobTest extends AbstractTest {
 		params.put(Constants.JOB_PARAM_OUT_FILE, new JobParameter(TEST_FILE_MARC_FIELDS));
 		JobParameters jobParams = new JobParameters(params);
 		jobLauncher.run(job, jobParams);
-		Assert.equals(FileUtils.readFileToString(new File(TEST_FILE_MARC_FIELDS), StandardCharsets.UTF_8),
+		Assert.assertEquals(FileUtils.readFileToString(new File(TEST_FILE_MARC_FIELDS), StandardCharsets.UTF_8),
 				"NLK.19790455 245 10$aCardiomyopathy and myocardial biopsy /$cedited by Martin Kaltenbach, Franz Loogen, E.G.J. Olsen\n");
 	}
 
