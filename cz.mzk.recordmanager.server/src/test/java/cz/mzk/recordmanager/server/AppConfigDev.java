@@ -2,7 +2,6 @@ package cz.mzk.recordmanager.server;
 
 import cz.mzk.recordmanager.server.solr.SolrServerFactory;
 import cz.mzk.recordmanager.server.util.HttpClient;
-import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.embedded.EmbeddedSolrServer;
 import org.apache.solr.core.CoreContainer;
 import org.easymock.EasyMock;
@@ -16,6 +15,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
 import java.io.File;
+import java.io.IOException;
 
 @Configuration
 @EnableTransactionManagement
@@ -51,12 +51,12 @@ public class AppConfigDev {
     	return EasyMock.createMock(SolrServerFactory.class);
     }
 
-	@Bean
-	public SolrClient embeddedSolrServer() {
+	@Bean(destroyMethod = "shutdown")
+	public EmbeddedSolrServer embeddedSolrServer() throws IOException {
 		File solrHome = new File("src/test/resources/solr/cores/");
 		File configFile = new File(solrHome, "solr.xml");
 		CoreContainer container = CoreContainer.createAndLoad(
-				solrHome.toPath(), configFile.toPath());
+				solrHome.getCanonicalPath(), configFile);
 		return new EmbeddedSolrServer(container, "biblio");
 	}
 

@@ -6,7 +6,7 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.resetToNice;
 
-import org.apache.solr.client.solrj.SolrClient;
+import org.apache.solr.client.solrj.embedded.EmbeddedSolrServer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.annotations.BeforeMethod;
 
@@ -23,7 +23,7 @@ public class AbstractSolrTest extends AbstractTest {
 	protected SolrServerFactory solrServerFactory;
 
 	@Autowired
-	private SolrClient server;
+	private EmbeddedSolrServer server;
 
 	protected static final String SOLR_URL = "http://localhost:8080/solr";
 

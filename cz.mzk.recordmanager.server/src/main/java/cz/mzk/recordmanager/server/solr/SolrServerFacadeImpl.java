@@ -6,7 +6,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.apache.solr.client.solrj.*;
+import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.SolrRequest;
+import org.apache.solr.client.solrj.SolrServer;
+import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.request.QueryRequest;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrException;
@@ -19,21 +22,21 @@ import cz.mzk.recordmanager.server.solr.SolrIndexingExceptionHandler.Action;
 
 public class SolrServerFacadeImpl implements SolrServerFacade {
 
-	protected final SolrClient server;
+	protected final SolrServer server;
 
 	protected final SolrIndexingExceptionHandler exceptionHandler;
 
 	protected final String requestPath;
 
-	public SolrServerFacadeImpl(SolrClient server) {
+	public SolrServerFacadeImpl(SolrServer server) {
 		this(server, RethrowingSolrIndexingExceptionHandler.INSTANCE);
 	}
 
-	public SolrServerFacadeImpl(SolrClient server, SolrIndexingExceptionHandler exceptionHandler) {
+	public SolrServerFacadeImpl(SolrServer server, SolrIndexingExceptionHandler exceptionHandler) {
 		this(server, RethrowingSolrIndexingExceptionHandler.INSTANCE, null);
 	}
 
-	public SolrServerFacadeImpl(SolrClient server, SolrIndexingExceptionHandler exceptionHandler, String requestPath) {
+	public SolrServerFacadeImpl(SolrServer server, SolrIndexingExceptionHandler exceptionHandler, String requestPath) {
 		super();
 		this.server = server;
 		this.exceptionHandler = exceptionHandler;
@@ -73,12 +76,7 @@ public class SolrServerFacadeImpl implements SolrServerFacade {
 
 	public QueryResponse query(SolrQuery query) throws SolrServerException {
 		if (requestPath == null) {
-			try {
-				return server.query(query);
-			} catch (IOException e) {
-				e.printStackTrace();
-				return null;
-			}
+			return server.query(query);
 		} else {
 			SolrRequest request = new QueryRequest(query);
 			request.setPath(requestPath);

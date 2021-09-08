@@ -145,7 +145,7 @@
 		<dependency>
 			<groupId>org.apache.solr</groupId>
 			<artifactId>solr-solrj</artifactId>
-			<version>${org.apache.solr}</version>
+			<version>4.10.4</version>
 		</dependency>
 
 		<!-- Joda-Time -->
@@ -229,7 +229,7 @@
 		<dependency>
 			<groupId>org.apache.solr</groupId>
 			<artifactId>solr-core</artifactId>
-			<version>${org.apache.solr}</version>
+			<version>4.10.3</version>
 			<scope>test</scope>
 			<exclusions>
 				<exclusion>
@@ -246,7 +246,7 @@
 		<dependency>
 			<groupId>org.apache.solr</groupId>
 			<artifactId>solr-analysis-extras</artifactId>
-			<version>${org.apache.solr}</version>
+			<version>4.10.3</version>
 			<scope>test</scope>
 			<exclusions>
 				<exclusion>
@@ -267,13 +267,6 @@
 			<groupId>com.spatial4j</groupId>
 			<artifactId>spatial4j</artifactId>
 			<version>0.5</version>
-		</dependency>
-
-		<!-- https://mvnrepository.com/artifact/org.locationtech.jts/jts-core -->
-		<dependency>
-			<groupId>org.locationtech.jts</groupId>
-			<artifactId>jts-core</artifactId>
-			<version>1.16.1</version>
 		</dependency>
 
 		<!-- Liquibase -->

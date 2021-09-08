@@ -17,7 +17,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.solr.client.solrj.impl.HttpSolrClient;
+import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.response.UpdateResponse;
 import org.apache.solr.common.SolrInputDocument;
 import org.easymock.EasyMock;
@@ -33,12 +33,15 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import cz.mzk.recordmanager.server.AbstractTest;
 import cz.mzk.recordmanager.server.solr.SolrServerFacadeImpl;
 import cz.mzk.recordmanager.server.solr.SolrServerFactory;
 import cz.mzk.recordmanager.server.util.Constants;
 
-public class IndexRecordsToSolrJobTest extends AbstractSolrTest {
-
+public class IndexRecordsToSolrJobTest extends AbstractTest {
+	
+	private static final String SOLR_URL = "http://localhost:8080/solr";
+	
 	private DateFormat dateFormat = new SimpleDateFormat("d. MM. yyyy");
 	
 	@Autowired
@@ -50,7 +53,7 @@ public class IndexRecordsToSolrJobTest extends AbstractSolrTest {
 	@Autowired
 	private SolrServerFactory solrServerFactory;
 
-	private HttpSolrClient mockedSolrServer = EasyMock.createMock(HttpSolrClient.class);
+	private SolrServer mockedSolrServer = EasyMock.createMock(SolrServer.class);
 
 	@BeforeMethod
 	public void before() throws Exception {
@@ -72,7 +75,7 @@ public class IndexRecordsToSolrJobTest extends AbstractSolrTest {
 		replay(solrServerFactory, mockedSolrServer);
 		
 		Job job = jobRegistry.getJob("indexAllRecordsToSolrJob");
-		Map<String, JobParameter> params = new HashMap<>();
+		Map<String, JobParameter> params = new HashMap<String, JobParameter>();
 		params.put(Constants.JOB_PARAM_FROM_DATE, new JobParameter(dateFormat.parse("1. 1. 2010"), true));
 		params.put(Constants.JOB_PARAM_UNTIL_DATE, new JobParameter(dateFormat.parse("1. 1. 2016"), true));
 		params.put(Constants.JOB_PARAM_SOLR_URL, new JobParameter(SOLR_URL, true));

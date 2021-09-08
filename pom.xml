@@ -15,7 +15,6 @@
 		<org.springframework.version>4.3.18.RELEASE</org.springframework.version>
 		<org.springframework.batch.version>4.0.0.RELEASE</org.springframework.batch.version>		
 		<org.springframework.security.version>4.0.2.RELEASE</org.springframework.security.version>
-		<org.apache.solr>8.7.0</org.apache.solr>
 	</properties>
 
 	<build>

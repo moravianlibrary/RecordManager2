@@ -32,23 +32,19 @@
        that you fully re-index after changing this setting as it can
        affect both how text is indexed and queried.
     -->
-  <luceneMatchVersion>8.2.0</luceneMatchVersion>
+  <luceneMatchVersion>LUCENE_42</luceneMatchVersion>
 
   <!-- Used to specify an alternate directory to hold all index data
        other than the default ./data under the Solr home.
        If replication is in use, this should match the replication configuration. -->
   <dataDir>${solr.solr.home:./target/solr}/biblio</dataDir>
 
-  <schemaFactory class="ClassicIndexSchemaFactory"/>
 
   <indexConfig>
 
     <useCompoundFile>false</useCompoundFile>
 
-    <mergePolicyFactory class="org.apache.solr.index.TieredMergePolicyFactory">
-      <int name="maxMergeAtOnce">10</int>
-      <int name="segmentsPerTier">10</int>
-    </mergePolicyFactory>
+    <mergeFactor>10</mergeFactor>
 
 
     <!-- ramBufferSizeMB sets the amount of RAM that may be used by Lucene
@@ -277,10 +273,9 @@
     <listener event="firstSearcher" class="solr.QuerySenderListener">
       <arr name="queries">
         <lst>
-          <str name="q">romeo a julie</str>
-          <str name="facet.field">cpk_detected_format_facet_str_mv</str>
-          <str name="fq">cpk_detected_format_facet_str_mv:0/BOOKS/</str>
-          <str name="df">title</str>
+          <str name="q">science art business engineering history</str>
+          <str name="facet.field">format</str>
+          <str name="fq">format:book</str>
         </lst>
       </arr>
     </listener>
@@ -355,24 +350,18 @@
      If no qt is defined, the requestHandler that declares default="true"
      will be used.
   -->
-  <requestHandler name="standard" class="solr.SearchHandler" default="true">
+  <requestHandler name="standard" class="solr.StandardRequestHandler" default="true">
     <!-- default values for query parameters -->
      <lst name="defaults">
        <str name="echoParams">explicit</str>
-       <str name="q.op">AND</str>
-       <str name="df">allfields</str>
-       <str name="fl">_version_, _root_, id, fullrecord, marc_error, spelling, spellingShingle, institution, collection, building, language, format, author, author-letter, title, title_sort, title_sub, 
-        title_short, title_full, title_full_unstemmed, title_fullStr, title_auth, physical, publisher, publishDate, edition, description, contents, url, thumbnail, lccn, ctrlnum, isbn, issn, oclc_num,
-        callnumber, callnumber-a, callnumber-first, callnumber-first-code, callnumber-subject, callnumber-subject-code, callnumber-label, dewey-hundreds, dewey-tens, dewey-ones, dewey-full, dewey-sort,
-        dewey-sort-browse, dewey-raw, author2, author2Str, author2-role, author_fuller, author_additional, author_additionalStr, title_alt, title_old, title_new, dateSpan, series, series2, topic,
-        topic_unstemmed, topic_facet, genre, genre_facet, geographic, geographic_facet, era, era_facet, illustrated, long_lat, container_title, container_volume, container_issue, container_start_page,
-        container_reference, hierarchytype, hierarchy_top_id, hierarchy_top_title, hierarchy_parent_id, hierarchy_parent_title, hierarchy_sequence, is_hierarchy_id, is_hierarchy_title, recordtype,
-        first_indexed, last_indexed, statuses, title_display, publishDate_display, nbn, author_search, barcodes, sfx_links, loanRelevance,
-        *_date, *_date_mv, *_isn, *_isn_mv, *_str, *_str_mv, *_txt, *_txt_mv, *_txtF, *_txtF_mv, *_txtP, *_txtP_mv, *_int, *_int_mv,
-        *_boolean, *_autocomplete, *_geo, *_display, *_display_mv, score</str>
-       <str name="spellcheck.extendedResults">true</str>
-       <str name="spellcheck.onlyMorePopular">true</str>
-       <str name="spellcheck.count">20</str>
+       <!--
+       <int name="rows">10</int>
+       <str name="fl">*</str>
+       <str name="version">2.1</str>
+        -->
+     <str name="spellcheck.extendedResults">true</str>
+     <str name="spellcheck.onlyMorePopular">true</str>
+     <str name="spellcheck.count">20</str>
     </lst>
     <arr name="last-components">
       <str>spellcheck</str>
@@ -390,43 +379,8 @@
   <requestHandler name="dismax" class="solr.SearchHandler">
     <lst name="defaults">
      <str name="defType">dismax</str>
+     <!-- str name="fl">a*,b*,c*,d*,e*,first_indexed,format,fullrecord,g*,h*,i*,l*,o*,p*,r*,s*,t*,u*,*_date*,*_isn*,*_str*,*_txt*</str -->
      <str name="echoParams">explicit</str>
-     <str name="q.op">AND</str>
-     <str name="df">allfields</str>
-     <str name="fl">_version_, _root_, id, fullrecord, marc_error, spelling, spellingShingle, institution, collection, building, language, format, author, author-letter, title, title_sort, title_sub, 
-        title_short, title_full, title_full_unstemmed, title_fullStr, title_auth, physical, publisher, publishDate, edition, description, contents, url, thumbnail, lccn, ctrlnum, isbn, issn, oclc_num,
-        callnumber, callnumber-a, callnumber-first, callnumber-first-code, callnumber-subject, callnumber-subject-code, callnumber-label, dewey-hundreds, dewey-tens, dewey-ones, dewey-full, dewey-sort,
-        dewey-sort-browse, dewey-raw, author2, author2Str, author2-role, author_fuller, author_additional, author_additionalStr, title_alt, title_old, title_new, dateSpan, series, series2, topic,
-        topic_unstemmed, topic_facet, genre, genre_facet, geographic, geographic_facet, era, era_facet, illustrated, long_lat, container_title, container_volume, container_issue, container_start_page,
-        container_reference, hierarchytype, hierarchy_top_id, hierarchy_top_title, hierarchy_parent_id, hierarchy_parent_title, hierarchy_sequence, is_hierarchy_id, is_hierarchy_title, recordtype,
-        first_indexed, last_indexed, statuses, title_display, publishDate_display, nbn, author_search, barcodes, sfx_links, loanRelevance,
-        *_date, *_date_mv, *_isn, *_isn_mv, *_str, *_str_mv, *_txt, *_txt_mv, *_txtF, *_txtF_mv, *_txtP, *_txtP_mv, *_int, *_int_mv,
-        *_boolean, *_autocomplete, *_geo, *_display, *_display_mv, score</str>
-     <str name="spellcheck.extendedResults">true</str>
-     <str name="spellcheck.onlyMorePopular">true</str>
-     <str name="spellcheck.count">20</str>
-    </lst>
-    <arr name="last-components">
-      <str>spellcheck</str>
-    </arr>
-  </requestHandler>
-
-  <requestHandler name="edismax" class="solr.SearchHandler">
-    <lst name="defaults">
-     <str name="defType">edismax</str>
-     <str name="echoParams">explicit</str>
-     <str name="lowercaseOperators">false</str>
-     <str name="q.op">AND</str>
-     <str name="df">allfields</str>
-     <str name="fl">_version_, _root_, id, fullrecord, marc_error, spelling, spellingShingle, institution, collection, building, language, format, author, author-letter, title, title_sort, title_sub,
-        title_short, title_full, title_full_unstemmed, title_fullStr, title_auth, physical, publisher, publishDate, edition, description, contents, url, thumbnail, lccn, ctrlnum, isbn, issn, oclc_num,
-        callnumber, callnumber-a, callnumber-first, callnumber-first-code, callnumber-subject, callnumber-subject-code, callnumber-label, dewey-hundreds, dewey-tens, dewey-ones, dewey-full, dewey-sort,
-        dewey-sort-browse, dewey-raw, author2, author2Str, author2-role, author_fuller, author_additional, author_additionalStr, title_alt, title_old, title_new, dateSpan, series, series2, topic,
-        topic_unstemmed, topic_facet, genre, genre_facet, geographic, geographic_facet, era, era_facet, illustrated, long_lat, container_title, container_volume, container_issue, container_start_page,
-        container_reference, hierarchytype, hierarchy_top_id, hierarchy_top_title, hierarchy_parent_id, hierarchy_parent_title, hierarchy_sequence, is_hierarchy_id, is_hierarchy_title, recordtype,
-        first_indexed, last_indexed, statuses, title_display, publishDate_display, nbn, author_search, barcodes, sfx_links, loanRelevance,
-        *_date, *_date_mv, *_isn, *_isn_mv, *_str, *_str_mv, *_txt, *_txt_mv, *_txtF, *_txtF_mv, *_txtP, *_txtP_mv, *_int, *_int_mv,
-        *_boolean, *_autocomplete, *_geo, *_display, *_display_mv, score</str>
      <str name="spellcheck.extendedResults">true</str>
      <str name="spellcheck.onlyMorePopular">true</str>
      <str name="spellcheck.count">20</str>
@@ -438,42 +392,15 @@
 
   <requestHandler name="morelikethis" class="solr.MoreLikeThisHandler">
     <lst name="defaults">
-      <str name="mlt.fl">subject_facet_str_mv,conspectus_facet_str_mv,author,author2,title,region_disctrict_town_str_mv</str>
+      <str name="mlt.fl">title,title_short,callnumber-label,topic,language,author,publishDate</str>
       <str name="mlt.qf">
-        subject_facet_str_mv^300
-        conspectus_facet_str_mv^100
-        author^40
-        author2^10
-        title
-        region_disctrict_town_str_mv
-      </str>
-      <int name="mlt.mintf">1</int>
-      <int name="mlt.mindf">1</int>
-      <str name="mlt.boost">true</str>
-      <int name="mlt.count">5</int>
-      <int name="rows">5</int>
-    </lst>
-  </requestHandler>
-
-  <requestHandler name="morelikethislibrary" class="solr.MoreLikeThisHandler">
-    <lst name="defaults">
-      <str name="mlt.fl">region_disctrict_town_str_mv</str>
-      <str name="mlt.qf">
-        region_disctrict_town_str_mv
-      </str>
-      <int name="mlt.mintf">1</int>
-      <int name="mlt.mindf">1</int>
-      <str name="mlt.boost">true</str>
-      <int name="mlt.count">5</int>
-      <int name="rows">5</int>
-    </lst>
-  </requestHandler>
-
-  <requestHandler name="morelikethisdictionary" class="solr.MoreLikeThisHandler">
-    <lst name="defaults">
-      <str name="mlt.fl">term_txt_mv</str>
-      <str name="mlt.qf">
-        term_txt_mv
+        title^75
+        title_short^100
+        callnumber-label^400
+        topic^300
+        language^30
+        author^75
+        publishDate
       </str>
       <int name="mlt.mintf">1</int>
       <int name="mlt.mindf">1</int>
@@ -616,7 +543,7 @@
 
        To enable solr1.1 behavior, remove the /update handler or change its path
     -->
-  <requestHandler name="/update" class="solr.UpdateRequestHandler" enable="${solr.enable.master:false}">
+  <requestHandler name="/update" class="solr.UpdateRequestHandler">
     <!-- See below for information on defining
          updateRequestProcessorChains that can be used by name
          on each Update Request
@@ -627,37 +554,8 @@
        </lst>
        -->
   </requestHandler>
-
-  <!-- Replicate handler -->
-  <requestHandler name="/replication" class="solr.ReplicationHandler" >
-    <lst name="master">
-        <str name="enable">${solr.enable.master:false}</str>
-        <!--Replicate on 'startup' and 'commit'. 'optimize' is also a valid value for replicateAfter. -->
-        <str name="replicateAfter">startup</str>
-        <str name="replicateAfter">commit</str>
-
-        <!--Create a backup after 'optimize'. Other values can be 'commit', 'startup'. It is possible to have multiple
-        entries of this config string. Note that this is just for backup, replication does not require this.
-        -->
-        <!-- <str name="backupAfter">optimize</str> -->
-
-        <!--If configuration files need to be replicated give the names here, separated by comma -->
-        <str name="confFiles">schema.xml,stopwords.txt,elevate.xml</str>
-    </lst>
-    <lst name="slave">
-      <str name="enable">${solr.enable.slave:false}</str>
-      <str name="masterUrl">${solr.master.url:localhost}</str>
-      <str name="httpConnTimeout">5000</str>
-      <str name="httpReadTimeout">10000</str>
-    </lst>
-    <!-- keep only 1 backup.  Using this parameter precludes using the "numberToKeep" request parameter. (Solr3.6 / Solr4.0)-->
-    <!-- (For this to work in conjunction with "backupAfter" with Solr 3.6.0, see bug fix https://issues.apache.org/jira/browse/SOLR-3361 )-->
-    <str name="maxNumberOfBackups">1</str> 
-  </requestHandler>
-
-<!--
   <requestHandler name="/update/json" class="solr.JsonUpdateRequestHandler"/>
--->
+
   <!-- Field Analysis Request Handler
 
        RequestHandler that provides much the same functionality as
@@ -739,14 +637,14 @@
     </lst>
   </requestHandler>
   -->
+  <requestHandler name="/admin/" class="org.apache.solr.handler.admin.AdminHandlers" />
 
   <!-- ping/healthcheck -->
   <requestHandler name="/admin/ping" class="PingRequestHandler">
     <lst name="defaults">
       <str name="qt">standard</str>
-      <str name="q">romeo a julie</str>
+      <str name="q">solrpingquery</str>
       <str name="echoParams">all</str>
-      <str name="df">title</str>
     </lst>
   </requestHandler>
 
