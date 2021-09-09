@@ -70,7 +70,13 @@ public class UrlDedupRecordEnricher implements DedupRecordEnricher {
 			}
 			addToMap(urls, url);
 		}
-		generateUrlFromKramAvailability(mergedDocument, localRecords, urls);
+		boolean potentialDnnt = false;
+		if (mergedDocument.containsKey(SolrFieldConstants.POTENTIAL_DNNT)
+				&& mergedDocument.getFieldValue(SolrFieldConstants.POTENTIAL_DNNT) != null) {
+			potentialDnnt = (boolean) mergedDocument.getFieldValue(SolrFieldConstants.POTENTIAL_DNNT);
+		}
+		generateUrlFromKramAvailability(potentialDnnt, urls);
+		createArticleUrl(localRecords, potentialDnnt, urls);
 		for (String key : urls.keySet()) {
 			boolean online = false;
 			boolean protect = false;
@@ -117,13 +123,7 @@ public class UrlDedupRecordEnricher implements DedupRecordEnricher {
 		}
 	}
 
-	private void generateUrlFromKramAvailability(SolrInputDocument mergedDocument, List<SolrInputDocument> localRecords,
-			Map<String, TreeSet<EVersionUrl>> urls) {
-		boolean potentialDnnt = false;
-		if (mergedDocument.containsKey(SolrFieldConstants.POTENTIAL_DNNT)
-				&& mergedDocument.getFieldValue(SolrFieldConstants.POTENTIAL_DNNT) != null) {
-			potentialDnnt = (boolean) mergedDocument.getFieldValue(SolrFieldConstants.POTENTIAL_DNNT);
-		}
+	private void generateUrlFromKramAvailability(boolean potentialDnnt, Map<String, TreeSet<EVersionUrl>> urls) {
 		for (String key : urls.keySet()) {
 			if (!key.startsWith("uuid:")) continue;
 			for (KramAvailability kramAvailability : kramAvailabilityDAO.getByUuid(key)) {
@@ -131,14 +131,6 @@ public class UrlDedupRecordEnricher implements DedupRecordEnricher {
 				addToMap(urls, newUrl);
 			}
 		}
-		Set<String> articleKeys = new HashSet<>();
-		for (SolrInputDocument localRecord : localRecords) {
-			if (localRecord.containsKey(SolrFieldConstants.ARTICLE_AVAILABILITY_KEY)
-					&& localRecord.getFieldValue(SolrFieldConstants.ARTICLE_AVAILABILITY_KEY) != null) {
-				articleKeys.add(localRecord.getFieldValue(SolrFieldConstants.ARTICLE_AVAILABILITY_KEY).toString());
-			}
-		}
-		createArticleUrl(articleKeys, potentialDnnt, urls);
 	}
 
 	/**
@@ -184,23 +176,30 @@ public class UrlDedupRecordEnricher implements DedupRecordEnricher {
 		mergedDocument.setField(SolrFieldConstants.STATUSES_FACET, availabilitiesSimple);
 	}
 
-	private void createArticleUrl(Set<String> keys, boolean potentialDnnt, final Map<String, TreeSet<EVersionUrl>> urls) {
-		for (String articleKey : keys) {
+	private void createArticleUrl(List<SolrInputDocument> localRecords, boolean potentialDnnt, final Map<String, TreeSet<EVersionUrl>> urls) {
+		Set<String> articleKeys = new HashSet<>();
+		for (SolrInputDocument localRecord : localRecords) {
+			if (localRecord.containsKey(SolrFieldConstants.ARTICLE_AVAILABILITY_KEY)
+					&& localRecord.getFieldValue(SolrFieldConstants.ARTICLE_AVAILABILITY_KEY) != null) {
+				articleKeys.add(localRecord.getFieldValue(SolrFieldConstants.ARTICLE_AVAILABILITY_KEY).toString());
+			}
+		}
+		for (String articleKey : articleKeys) {
 			Map<Long, List<KramAvailability>> map = new HashMap<>();
 			for (KramAvailability availability : kramAvailabilityDAO.getByDedupKey(articleKey)) {
-				Long id = availability.getHarvestedFrom().getId();
-				if (map.containsKey(id)) {
-					map.computeIfPresent(id, (key, value) -> value).add(availability);
+				Long importConfId = availability.getHarvestedFrom().getId();
+				if (map.containsKey(importConfId)) {
+					map.computeIfPresent(importConfId, (key, value) -> value).add(availability);
 				} else {
-					map.computeIfAbsent(id, key -> new ArrayList<>()).add(availability);
+					map.computeIfAbsent(importConfId, key -> new ArrayList<>()).add(availability);
 				}
 			}
-			for (Long id : map.keySet()) {
-				List<KramAvailability> availabilities = map.get(id);
+			for (Long importConfId : map.keySet()) {
+				List<KramAvailability> availabilities = map.get(importConfId);
 				if (availabilities.size() == 1)
 					addToMap(urls, EVersionUrl.create(availabilities.get(0), potentialDnnt));
 				else if (availabilities.size() > 1) {
-					// same keys must have same parent
+					// page with same key must have same parent
 					Set<String> parentUuids = availabilities.stream().map(a -> a.getParentUuid()).collect(Collectors.toSet());
 					if (parentUuids.size() == 1) {
 						KramAvailability availability = availabilities.get(0);

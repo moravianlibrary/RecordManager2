@@ -9,12 +9,16 @@ import static cz.mzk.recordmanager.server.imports.kramAvailability.KrameriusDocu
 import static cz.mzk.recordmanager.server.imports.kramAvailability.KrameriusDocumentType.PERIODICAL_ITEM;
 
 public class EVersionUrl implements Comparable {
+
 	private static final String SPLITTER = "\\|";
 
 	private String source;
 	private String availability;
 	private String link;
 	private String comment;
+
+	private static final String COMMENT_PAGE = " (s. %s)";
+	private static final String COMMENT_ISSUE = " (č. %s)";
 
 	public static EVersionUrl create(String rawData) throws Exception {
 		String[] splitData = rawData.split(SPLITTER);
@@ -43,10 +47,10 @@ public class EVersionUrl implements Comparable {
 		}
 		String comment = Constants.KRAM_EVERSION_COMMENT;
 		if (kramAvailability.getType().equals(PAGE.getValue()) && kramAvailability.getPage() != null) {
-			comment += " (s. " + kramAvailability.getPage() + ")";
+			comment += String.format(COMMENT_PAGE, kramAvailability.getPage());
 		}
 		if (kramAvailability.getType().equals(PERIODICAL_ITEM.getValue()) && kramAvailability.getIssue() != null) {
-			comment += " (č. " + kramAvailability.getIssue() + ")";
+			comment += String.format(COMMENT_ISSUE, kramAvailability.getIssue());
 		}
 		newUrl.setComment(comment);
 		return newUrl;
@@ -59,13 +63,6 @@ public class EVersionUrl implements Comparable {
 		newUrl.setLink(link);
 		newUrl.setComment(comment);
 		return newUrl;
-	}
-
-	public static EVersionUrl createDnnt(KramAvailability kramAvailability) {
-		if (kramAvailability.getDnntLink() == null) return null;
-		EVersionUrl url = create(kramAvailability.getHarvestedFrom().getIdPrefix(), Constants.DOCUMENT_AVAILABILITY_DNNT,
-				kramAvailability.getDnntLink(), Constants.KRAM_EVERSION_COMMENT);
-		return UrlValidatorUtils.doubleSlashUrlValidator().isValid(url.getLink()) ? url : null;
 	}
 
 	public String getSource() {
