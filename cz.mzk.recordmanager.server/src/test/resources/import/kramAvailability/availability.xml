@@ -23,6 +23,9 @@
 			<arr name="dnnt-labels">
 				<str>covid</str>
 			</arr>
+			<arr name="document_type">
+				<str>monograph</str>
+			</arr>
 			<bool name="dnnt">true</bool>
 		</doc>
 		<doc>
@@ -31,6 +34,9 @@
 			<int name="level">0</int>
 			<arr name="dnnt-labels">
 				<str>dnnto</str>
+			</arr>
+			<arr name="document_type">
+				<str>monograph</str>
 			</arr>
 			<bool name="dnnt">true</bool>
 		</doc>
@@ -41,12 +47,18 @@
 			<arr name="dnnt-labels">
 				<str>covid</str>
 			</arr>
+			<arr name="document_type">
+				<str>monograph</str>
+			</arr>
 			<bool name="dnnt">true</bool>
 		</doc>
 		<doc>
 			<str name="PID">uuid:d0f3c550-56ca-11e9-8854-005056827e51</str>
 			<str name="dostupnost">private</str>
 			<int name="level">0</int>
+			<arr name="document_type">
+				<str>monograph</str>
+			</arr>
 		</doc>
 		<doc>
 			<str name="PID">uuid:4f8b1450-0d58-11eb-9e0f-005056827e51</str>
@@ -54,6 +66,9 @@
 			<int name="level">0</int>
 			<arr name="dnnt-labels">
 				<str>covid</str>
+			</arr>
+			<arr name="document_type">
+				<str>monograph</str>
 			</arr>
 			<bool name="dnnt">true</bool>
 		</doc>
@@ -64,6 +79,9 @@
 			<arr name="dnnt-labels">
 				<str>dnntt</str>
 			</arr>
+			<arr name="document_type">
+				<str>monograph</str>
+			</arr>
 			<bool name="dnnt">true</bool>
 		</doc>
 		<doc>
@@ -72,6 +90,9 @@
 			<int name="level">0</int>
 			<arr name="dnnt-labels">
 				<str>dnnto</str>
+			</arr>
+			<arr name="document_type">
+				<str>monograph</str>
 			</arr>
 			<bool name="dnnt">true</bool>
 		</doc>

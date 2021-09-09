@@ -20,6 +20,8 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
+import static cz.mzk.recordmanager.server.imports.kramAvailability.KramAvailabilityHarvestType.PAGES;
+import static cz.mzk.recordmanager.server.imports.kramAvailability.KramAvailabilityHarvestType.TITLES;
 import static org.easymock.EasyMock.*;
 
 public class KramAvailabilityTest extends AbstractTest {
@@ -52,18 +54,19 @@ public class KramAvailabilityTest extends AbstractTest {
 		InputStream response0 = this.getClass().getResourceAsStream("/import/kramAvailability/availability.xml");
 		InputStream response1 = this.getClass().getResourceAsStream("/import/kramAvailability/availabilityEmpty.xml");
 		InputStream response2 = this.getClass().getResourceAsStream("/import/kramAvailability/availabilityEmpty.xml");
-		expect(httpClient.executeGet("https://kramerius.mzk.cz/search/api/v5.0/search?fl=dostupnost,dnnt,PID,level,dnnt-labels&q=level:0&rows=" + ROWS + "&start=0&wt=xml")).andReturn(response0);
-		expect(httpClient.executeGet("https://kramerius.mzk.cz/search/api/v5.0/search?fl=dostupnost,dnnt,PID,level,dnnt-labels&q=level:0&rows=" + ROWS + "&start=" + ROWS + "&wt=xml")).andReturn(response1);
-		expect(httpClient.executeGet("https://kramerius.mzk.cz/search/api/v5.0/search?fl=dostupnost,dnnt,PID,level,dnnt-labels&q=level:1+document_type:monographunit&rows=" + ROWS + "&start=0&wt=xml")).andReturn(response2);
+		expect(httpClient.executeGet("https://kramerius.mzk.cz/search/api/v5.0/search?fl=dostupnost,dnnt,PID,level,dnnt-labels,document_type,issn&q=level:0&rows=" + ROWS + "&start=0&wt=xml")).andReturn(response0);
+		expect(httpClient.executeGet("https://kramerius.mzk.cz/search/api/v5.0/search?fl=dostupnost,dnnt,PID,level,dnnt-labels,document_type,issn&q=level:0&rows=" + ROWS + "&start=" + ROWS + "&wt=xml")).andReturn(response1);
+		expect(httpClient.executeGet("https://kramerius.mzk.cz/search/api/v5.0/search?fl=dostupnost,dnnt,PID,level,dnnt-labels,document_type&q=level:1+document_type:monographunit&rows=" + ROWS + "&start=0&wt=xml")).andReturn(response2);
 		replay(httpClient);
 
 		Job job = jobRegistry.getJob(Constants.JOB_ID_HARVEST_KRAM_AVAILABILITY);
 		Map<String, JobParameter> params = new HashMap<>();
 		params.put(Constants.JOB_PARAM_CONF_ID, new JobParameter(99001L));
+		params.put(Constants.JOB_PARAM_TYPE, new JobParameter(TITLES.getValue()));
 		JobParameters jobParams = new JobParameters(params);
 		jobLauncher.run(job, jobParams);
 
-		Assert.assertEquals(kramAvailabilityDAO.findAll().size(), 7);
+		Assert.assertEquals(kramAvailabilityDAO.findAll().size(), 8);
 		Assert.assertEquals(kramDnntLabelDAO.findAll().size(), 2);
 	}
 
@@ -87,6 +90,7 @@ public class KramAvailabilityTest extends AbstractTest {
 		Job job = jobRegistry.getJob(Constants.JOB_ID_HARVEST_KRAM_AVAILABILITY);
 		Map<String, JobParameter> params = new HashMap<>();
 		params.put(Constants.JOB_PARAM_CONF_ID, new JobParameter(99001L));
+		params.put(Constants.JOB_PARAM_TYPE, new JobParameter(PAGES.getValue()));
 		JobParameters jobParams = new JobParameters(params);
 		jobLauncher.run(job, jobParams);
 

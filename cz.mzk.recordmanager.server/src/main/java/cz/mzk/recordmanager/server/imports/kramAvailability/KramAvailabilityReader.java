@@ -39,12 +39,12 @@ public class KramAvailabilityReader implements ItemReader<List<KramAvailability>
 
 	private String source;
 	private static final int ROWS = 5000;
-	private static int start = 0;
+	private int start = 0;
 	private static final int BATCH_SIZE = 100;
 
-	private static boolean done = false;
+	private boolean done = false;
 
-	public KramAvailabilityReader(Long configId, String type) {
+	public KramAvailabilityReader(Long configId, KramAvailabilityHarvestType type) {
 		this.configId = configId;
 		this.iterator = UrlsListFactory.getUrls(type).listIterator();
 		this.url = this.iterator.next();

@@ -86,7 +86,7 @@ public class KramAvailabilityJobConfig {
 	public KramAvailabilityReader harvestKramAvailabilityReader(
 			@Value("#{jobParameters[" + Constants.JOB_PARAM_CONF_ID + "]}") Long configId,
 			@Value("#{jobParameters[" + Constants.JOB_PARAM_TYPE + "]}") String type) {
-		return new KramAvailabilityReader(configId, type);
+		return new KramAvailabilityReader(configId, KramAvailabilityHarvestType.fromValue(type));
 	}
 
 	@Bean(name = Constants.JOB_ID_HARVEST_KRAM_AVAILABILITY + ":writer")

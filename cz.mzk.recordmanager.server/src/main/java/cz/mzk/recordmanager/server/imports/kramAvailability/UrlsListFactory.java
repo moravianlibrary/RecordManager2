@@ -6,14 +6,14 @@ import java.util.List;
 
 public class UrlsListFactory {
 
-	public static List<String> getUrls(String type) {
+	public static List<String> getUrls(KramAvailabilityHarvestType type) {
 		switch (type) {
-		case "titles":
+		case TITLES:
 			return Arrays.asList(
-					"%s/search?fl=dostupnost,dnnt,PID,level,dnnt-labels,document_type,issn&q=level:0+dc.identifier:04fd3a50-4d59-11e4-9383-005056825209&rows=%d&start=%d&wt=xml",
+					"%s/search?fl=dostupnost,dnnt,PID,level,dnnt-labels,document_type,issn&q=level:0&rows=%d&start=%d&wt=xml",
 					"%s/search?fl=dostupnost,dnnt,PID,level,dnnt-labels,document_type&q=level:1+document_type:monographunit&rows=%d&start=%d&wt=xml"
 			);
-		case "pages":
+		case PAGES:
 			return Arrays.asList(
 					"%s/search?fl=dostupnost,dnnt,PID,level,dnnt-labels,parent_pid,details,document_type&q=fedora.model:periodicalvolume&rows=%d&start=%d&wt=xml",
 					"%s/search?fl=dostupnost,dnnt,PID,level,dnnt-labels,parent_pid,details,document_type,rok,issn&q=fedora.model:periodicalitem&rows=%d&start=%d&wt=xml",
