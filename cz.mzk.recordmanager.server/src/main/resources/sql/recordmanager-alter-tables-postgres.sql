@@ -2377,4 +2377,4 @@ CREATE INDEX caslin_links_sigla_idx ON caslin_links(sigla);
 UPDATE kramerius_conf SET url='https://kramerius.knihovna-pardubice.cz/search/api/v5.0',availability_dest_url='https://kramerius.knihovna-pardubice.cz/uuid/' WHERE import_conf_id=99026;
 
 -- 16. 09. 2021 tomascejpek
-ALTER TABLE harvested_record ADD COLUMN kram_availability VARCHAR(100);
+ALTER TABLE harvested_record ADD COLUMN articles_availability_key VARCHAR(100);

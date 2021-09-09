@@ -46,7 +46,7 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 		record.setUpvApplicationId(metadataRecord.getUpvApplicationId()); // not dedup key
 		record.setSigla(metadataRecord.getLibrarySigla()); // not dedup key
 		record.setLoans(metadataRecord.getLoanRelevance()); // not dedup key
-		record.setKramAvailability(metadataRecord.getKramAvailabilityKey()); // not dedup key
+		record.setArticlesAvailabilityKey(metadataRecord.getKramAvailabilityKey()); // not dedup key
 		record.setCallnumber(MetadataUtils.shorten(metadataRecord.getCallnumber(), EFFECTIVE_LENGTH_CALLNUMBER));
 		if (!record.getHarvestedFrom().isGenerateDedupKeys()) {
 			harvestedRecordDao.dropOtherKeys(record);

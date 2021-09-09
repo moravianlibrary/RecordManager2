@@ -304,8 +304,8 @@ public class HarvestedRecord extends AbstractDomainObject {
 	@Column(name = "callnumber")
 	private String callnumber;
 
-	@Column(name = "kram_availability")
-	private String kramAvailability;
+	@Column(name = "articles_availability_key")
+	private String articlesAvailabilityKey;
 
 	/**
 	 * indicator variable used for filtering reasons
@@ -909,12 +909,12 @@ public class HarvestedRecord extends AbstractDomainObject {
 		this.callnumber = callnumber;
 	}
 
-	public String getKramAvailability() {
-		return kramAvailability;
+	public String getArticlesAvailabilityKey() {
+		return articlesAvailabilityKey;
 	}
 
-	public void setKramAvailability(String kramAvailability) {
-		this.kramAvailability = kramAvailability;
+	public void setArticlesAvailabilityKey(String kramAvailability) {
+		this.articlesAvailabilityKey = kramAvailability;
 	}
 
 }
