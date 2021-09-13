@@ -29,3 +29,5 @@ id001_search = getControlField("001")
 
 barcodes = getBarcodes()
 format_display_mv = getFormat()
+
+_hidden_article_availability_key = getArticleAvailabilityKey()
