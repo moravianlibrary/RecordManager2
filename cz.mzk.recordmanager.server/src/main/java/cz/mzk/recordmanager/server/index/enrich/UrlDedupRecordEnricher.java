@@ -36,7 +36,7 @@ public class UrlDedupRecordEnricher implements DedupRecordEnricher {
 
 	@Override
 	public void enrich(DedupRecord record, SolrInputDocument mergedDocument,
-					   List<SolrInputDocument> localRecords) {
+			List<SolrInputDocument> localRecords) {
 
 		Set<Object> urls = new HashSet<>();
 		localRecords.stream()
@@ -141,12 +141,12 @@ public class UrlDedupRecordEnricher implements DedupRecordEnricher {
 	 */
 	private Set<Object> filter(Set<Object> urls) {
 		return urls.stream().filter(
-				url -> URL_PATTERNS.stream().noneMatch(pat -> pat.matcher(url.toString()).find()))
+						url -> URL_PATTERNS.stream().noneMatch(pat -> pat.matcher(url.toString()).find()))
 				.collect(Collectors.toSet());
 	}
 
 	private void enrichStatusesFacet(SolrInputDocument mergedDocument,
-									 List<SolrInputDocument> localRecords) {
+			List<SolrInputDocument> localRecords) {
 		Collection<Object> urls = mergedDocument.getFieldValues(SolrFieldConstants.URL);
 		if (urls == null) return;
 		Set<String> availabilitiesSimple = new HashSet<>();
@@ -186,7 +186,10 @@ public class UrlDedupRecordEnricher implements DedupRecordEnricher {
 		}
 		for (String articleKey : articleKeys) {
 			Map<Long, List<KramAvailability>> map = new HashMap<>();
-			for (KramAvailability availability : kramAvailabilityDAO.getByDedupKey(articleKey)) {
+			List<KramAvailability> list = kramAvailabilityDAO.getByDedupKey(articleKey);
+			// page with same key must have same parent (issue)
+			if (list.stream().map(a -> a.getParentUuid()).collect(Collectors.toSet()).size() != 1) continue;
+			for (KramAvailability availability : list) {
 				Long importConfId = availability.getHarvestedFrom().getId();
 				if (map.containsKey(importConfId)) {
 					map.computeIfPresent(importConfId, (key, value) -> value).add(availability);
@@ -199,13 +202,10 @@ public class UrlDedupRecordEnricher implements DedupRecordEnricher {
 				if (availabilities.size() == 1)
 					addToMap(urls, EVersionUrl.create(availabilities.get(0), potentialDnnt));
 				else if (availabilities.size() > 1) {
-					// page with same key must have same parent
-					Set<String> parentUuids = availabilities.stream().map(a -> a.getParentUuid()).collect(Collectors.toSet());
-					if (parentUuids.size() == 1) {
-						KramAvailability availability = availabilities.get(0);
-						KramAvailability parent = kramAvailabilityDAO.getByConfigAndUuid(availability.getHarvestedFrom(), availability.getParentUuid());
-						if (parent != null) addToMap(urls, EVersionUrl.create(parent, potentialDnnt));
-					}
+					// same key, same parent_uuid, link to parent -> issue
+					KramAvailability availability = availabilities.get(0);
+					KramAvailability parent = kramAvailabilityDAO.getByConfigAndUuid(availability.getHarvestedFrom(), availability.getParentUuid());
+					if (parent != null) addToMap(urls, EVersionUrl.create(parent, potentialDnnt));
 				}
 			}
 		}
