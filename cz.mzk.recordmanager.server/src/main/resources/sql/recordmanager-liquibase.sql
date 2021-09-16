@@ -2655,3 +2655,6 @@ UPDATE import_conf SET mappings996='tritius' WHERE id IN (312,314,332,334,346,35
 UPDATE import_conf SET mappings996='koha' WHERE id IN (306,311,340,418,419,428,430,431,433,434,437);
 UPDATE import_conf SET mappings996='caslin' WHERE id IN (316);
 UPDATE import_conf SET mappings996='dawinci' WHERE id IN (301,342,369,393,403,404,405,406,407,408);
+
+--changeset tomascejpek:280 context:cpk
+UPDATE kramerius_conf SET url='https://kramerius.knihovna-pardubice.cz/search/api/v5.0',availability_dest_url='https://kramerius.knihovna-pardubice.cz/uuid/' WHERE import_conf_id=99026;

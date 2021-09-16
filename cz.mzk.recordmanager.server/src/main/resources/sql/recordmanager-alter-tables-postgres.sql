@@ -2372,3 +2372,6 @@ CREATE TABLE caslin_links (
   CONSTRAINT caslin_links_pk PRIMARY KEY(id)
 );
 CREATE INDEX caslin_links_sigla_idx ON caslin_links(sigla);
+
+-- 16. 09. 2021 tomascejpek
+UPDATE kramerius_conf SET url='https://kramerius.knihovna-pardubice.cz/search/api/v5.0',availability_dest_url='https://kramerius.knihovna-pardubice.cz/uuid/' WHERE import_conf_id=99026;
