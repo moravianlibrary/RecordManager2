@@ -7,7 +7,7 @@ import cz.mzk.recordmanager.server.model.KramAvailability;
 import cz.mzk.recordmanager.server.oai.dao.FulltextKrameriusDAO;
 import cz.mzk.recordmanager.server.oai.dao.KramAvailabilityDAO;
 import cz.mzk.recordmanager.server.util.Constants;
-import org.apache.commons.validator.routines.UrlValidator;
+import cz.mzk.recordmanager.server.util.UrlValidatorUtils;
 import org.apache.solr.common.SolrInputDocument;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -16,7 +16,6 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 @Component
 public class UrlHarvestedRecordEnricher implements HarvestedRecordEnricher {
@@ -67,7 +66,7 @@ public class UrlHarvestedRecordEnricher implements HarvestedRecordEnricher {
 					// else availability is not unknown - availability from metadataRecord
 				}
 			}
-			if (UrlValidator.getInstance().isValid(url.getLink())) results.add(url.toString());
+			if (UrlValidatorUtils.doubleSlashUrlValidator().isValid(url.getLink())) results.add(url.toString());
 		}
 		document.remove(SolrFieldConstants.URL);
 		document.addField(SolrFieldConstants.URL, results);

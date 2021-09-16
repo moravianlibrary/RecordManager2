@@ -2,7 +2,7 @@ package cz.mzk.recordmanager.server.model;
 
 import cz.mzk.recordmanager.server.util.Constants;
 import cz.mzk.recordmanager.server.util.MetadataUtils;
-import org.apache.commons.validator.routines.UrlValidator;
+import cz.mzk.recordmanager.server.util.UrlValidatorUtils;
 
 public class EVersionUrl implements Comparable {
 	private static final String SPLITTER = "\\|";
@@ -45,7 +45,7 @@ public class EVersionUrl implements Comparable {
 		if (kramAvailability.getDnntLink() == null) return null;
 		EVersionUrl url = create(kramAvailability.getHarvestedFrom().getIdPrefix(), Constants.DOCUMENT_AVAILABILITY_DNNT,
 				kramAvailability.getDnntLink(), Constants.KRAM_EVERSION_COMMENT);
-		return UrlValidator.getInstance().isValid(url.getLink()) ? url : null;
+		return UrlValidatorUtils.doubleSlashUrlValidator().isValid(url.getLink()) ? url : null;
 	}
 
 	public String getSource() {
