@@ -159,7 +159,6 @@ public class MetadataRecordFactory {
 		case Constants.PREFIX_MKCK:
 		case Constants.PREFIX_MKHNM:
 		case Constants.PREFIX_MKMIL:
-		case Constants.PREFIX_MKML:
 		case Constants.PREFIX_MKOR:
 		case Constants.PREFIX_MKPEL:
 		case Constants.PREFIX_MKPISEK:

@@ -2658,3 +2658,6 @@ UPDATE import_conf SET mappings996='dawinci' WHERE id IN (301,342,369,393,403,40
 
 --changeset tomascejpek:280 context:cpk
 UPDATE kramerius_conf SET url='https://kramerius.knihovna-pardubice.cz/search/api/v5.0',availability_dest_url='https://kramerius.knihovna-pardubice.cz/uuid/' WHERE import_conf_id=99026;
+
+--changeset tomascejpek:281 context:cpk
+UPDATE oai_harvest_conf SET url='https://knihovnaml.tritius.cz/tritius/oai-provider',set_spec='CPK_1' WHERE import_conf_id=386;

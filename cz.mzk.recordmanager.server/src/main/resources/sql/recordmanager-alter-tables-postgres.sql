@@ -2375,3 +2375,6 @@ CREATE INDEX caslin_links_sigla_idx ON caslin_links(sigla);
 
 -- 16. 09. 2021 tomascejpek
 UPDATE kramerius_conf SET url='https://kramerius.knihovna-pardubice.cz/search/api/v5.0',availability_dest_url='https://kramerius.knihovna-pardubice.cz/uuid/' WHERE import_conf_id=99026;
+
+-- 17. 09. 2021 tomascejpek
+UPDATE oai_harvest_conf SET url='https://knihovnaml.tritius.cz/tritius/oai-provider',set_spec='CPK_1' WHERE import_conf_id=386;
