@@ -53,7 +53,6 @@ public class KramAvailabilityDAOHibernate extends AbstractDomainDAOHibernate<Lon
 		if (!session.contains(availability)) {
 			return;
 		}
-		availability.setRelsExtIndex(null);
 		availability.setPage(null);
 		availability.setIssue(null);
 		availability.setVolume(null);

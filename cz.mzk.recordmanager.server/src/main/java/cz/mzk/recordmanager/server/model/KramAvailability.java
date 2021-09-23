@@ -61,9 +61,6 @@ public class KramAvailability {
 	@Column(name = "type")
 	private String type;
 
-	@Column(name = "rels_ext_index")
-	private Integer relsExtIndex;
-
 	@Column(name = "dedup_key")
 	private String dedupKey;
 
@@ -238,14 +235,6 @@ public class KramAvailability {
 		return dedupKey;
 	}
 
-	public Integer getRelsExtIndex() {
-		return relsExtIndex;
-	}
-
-	public void setRelsExtIndex(Integer relsExtIndex) {
-		this.relsExtIndex = relsExtIndex;
-	}
-
 	public void setDedupKey(String dedupKey) {
 		if (dedupKey != null && dedupKey.length() >= 100) {
 			logger.warn(String.format("uuid: %s, too long dedupKey: %s", this.uuid, dedupKey));
@@ -274,7 +263,6 @@ public class KramAvailability {
 				", issue=" + issue +
 				", page=" + page +
 				", type='" + type + '\'' +
-				", relsExtIndex=" + relsExtIndex +
 				", dedupKey='" + dedupKey + '\'' +
 				", updated=" + updated +
 				", lastHarvest=" + lastHarvest +
@@ -295,14 +283,13 @@ public class KramAvailability {
 				&& Objects.equals(volume, that.volume)
 				&& Objects.equals(issue, that.issue)
 				&& Objects.equals(page, that.page)
-				&& Objects.equals(relsExtIndex, that.relsExtIndex)
 				&& Objects.equals(type, that.type)
 				&& CollectionUtils.isEqualCollection(labels, that.labels);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(parentUuid, availability, dnnt, issn, yaer, volume, issue, page, relsExtIndex, type, labels);
+		return Objects.hash(parentUuid, availability, dnnt, issn, yaer, volume, issue, page, type, labels);
 	}
 
 }

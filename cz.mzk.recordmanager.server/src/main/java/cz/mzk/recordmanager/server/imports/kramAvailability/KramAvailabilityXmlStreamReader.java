@@ -39,7 +39,6 @@ public class KramAvailabilityXmlStreamReader {
 	private static final String ATTRIBUTE_VALUE_ISSUE = "issue";
 	private static final String ATTRIBUTE_VALUE_TITLE = "title";
 	private static final String ATTRIBUTE_VALUE_DOCUMENT_TYPE = "document_type";
-	private static final String ATTRIBUTE_VALUE_RELS_EXT_INDEX = "rels_ext_index";
 
 	private static final Pattern VOLUME = Pattern.compile("\\d+#+(\\w+)");
 	private static final Pattern ISSUE = Pattern.compile("#+(\\d{1,4})$");
@@ -50,8 +49,7 @@ public class KramAvailabilityXmlStreamReader {
 			ATTRIBUTE_VALUE_PARENT_PID,
 			ATTRIBUTE_VALUE_DETAILS,
 			ATTRIBUTE_VALUE_ISSUE,
-			ATTRIBUTE_VALUE_DOCUMENT_TYPE,
-			ATTRIBUTE_VALUE_RELS_EXT_INDEX
+			ATTRIBUTE_VALUE_DOCUMENT_TYPE
 	);
 
 	/**
@@ -132,10 +130,7 @@ public class KramAvailabilityXmlStreamReader {
 						}
 					}
 					if (ELEMENT_INT.equals(xmlReader.getLocalName())) {
-						if (arrName.equals(ATTRIBUTE_VALUE_RELS_EXT_INDEX)) {
-							Matcher matcher = DIGITS.matcher(xmlReader.getElementText());
-							if (matcher.find()) result.setRelsExtIndex(parseInt(matcher.group(1)));
-						} else if (ATTRIBUTE_VALUE_LEVEL.equals(xmlReader.getAttributeValue(null, ATTRIBUTE_NAME))) {
+						if (ATTRIBUTE_VALUE_LEVEL.equals(xmlReader.getAttributeValue(null, ATTRIBUTE_NAME))) {
 							result.setLevel(parseInt(xmlReader.getElementText()));
 						} else if (ATTRIBUTE_VALUE_YEAR.equals(xmlReader.getAttributeValue(null, ATTRIBUTE_NAME))) {
 							Matcher matcher = DIGITS.matcher(xmlReader.getElementText());

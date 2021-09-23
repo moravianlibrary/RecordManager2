@@ -432,7 +432,6 @@ CREATE TABLE kram_availability (
   page              DECIMAL(10),
   type              VARCHAR(30),
   dedup_key         VARCHAR(100),
-  rels_ext_index    DECIMAL(10),
   updated           TIMESTAMP NOT NULL,
   last_harvest      TIMESTAMP NOT NULL,
   CONSTRAINT kram_availability_pk PRIMARY KEY(id),

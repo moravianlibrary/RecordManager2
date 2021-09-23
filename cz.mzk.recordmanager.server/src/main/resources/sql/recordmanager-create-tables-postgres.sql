@@ -530,7 +530,6 @@ CREATE TABLE kram_availability (
   issue             DECIMAL(10),
   page              DECIMAL(10),
   type              VARCHAR(30),
-  rels_ext_index    DECIMAL(10),
   dedup_key         VARCHAR(100),
   updated           TIMESTAMP NOT NULL,
   last_harvest      TIMESTAMP NOT NULL,

@@ -17,7 +17,7 @@ public class UrlsListFactory {
 			return Arrays.asList(
 					"%s/search?fl=dostupnost,dnnt,PID,level,dnnt-labels,parent_pid,details,document_type&q=fedora.model:periodicalvolume&rows=%d&start=%d&wt=xml",
 					"%s/search?fl=dostupnost,dnnt,PID,level,dnnt-labels,parent_pid,details,document_type,rok,issn&q=fedora.model:periodicalitem&rows=%d&start=%d&wt=xml",
-					"%s/search?fl=dostupnost,dnnt,PID,level,dnnt-labels,parent_pid,details,document_type,title,rok,rels_ext_index&q=fedora.model:page+model_path:*periodicalitem/page&rows=%d&start=%d&wt=xml"
+					"%s/search?fl=dostupnost,dnnt,PID,level,dnnt-labels,parent_pid,details,document_type,title,rok&q=fedora.model:page+model_path:*periodicalitem/page&rows=%d&start=%d&wt=xml"
 			);
 		}
 		return Collections.emptyList();

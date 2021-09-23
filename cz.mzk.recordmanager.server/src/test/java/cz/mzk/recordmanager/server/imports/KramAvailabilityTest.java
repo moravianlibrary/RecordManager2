@@ -83,8 +83,8 @@ public class KramAvailabilityTest extends AbstractTest {
 		expect(httpClient.executeGet("https://kramerius.mzk.cz/search/api/v5.0/search?fl=dostupnost,dnnt,PID,level,dnnt-labels,parent_pid,details,document_type&q=fedora.model:periodicalvolume&rows=" + ROWS + "&start=" + ROWS + "&wt=xml")).andReturn(empty0);
 		expect(httpClient.executeGet("https://kramerius.mzk.cz/search/api/v5.0/search?fl=dostupnost,dnnt,PID,level,dnnt-labels,parent_pid,details,document_type,rok,issn&q=fedora.model:periodicalitem&rows=" + ROWS + "&start=0&wt=xml")).andReturn(response1);
 		expect(httpClient.executeGet("https://kramerius.mzk.cz/search/api/v5.0/search?fl=dostupnost,dnnt,PID,level,dnnt-labels,parent_pid,details,document_type,rok,issn&q=fedora.model:periodicalitem&rows=" + ROWS + "&start=" + ROWS + "&wt=xml")).andReturn(empty1);
-		expect(httpClient.executeGet("https://kramerius.mzk.cz/search/api/v5.0/search?fl=dostupnost,dnnt,PID,level,dnnt-labels,parent_pid,details,document_type,title,rok,rels_ext_index&q=fedora.model:page+model_path:*periodicalitem/page&rows=" + ROWS + "&start=0&wt=xml")).andReturn(response2);
-		expect(httpClient.executeGet("https://kramerius.mzk.cz/search/api/v5.0/search?fl=dostupnost,dnnt,PID,level,dnnt-labels,parent_pid,details,document_type,title,rok,rels_ext_index&q=fedora.model:page+model_path:*periodicalitem/page&rows=" + ROWS + "&start=" + ROWS + "&wt=xml")).andReturn(empty2);
+		expect(httpClient.executeGet("https://kramerius.mzk.cz/search/api/v5.0/search?fl=dostupnost,dnnt,PID,level,dnnt-labels,parent_pid,details,document_type,title,rok&q=fedora.model:page+model_path:*periodicalitem/page&rows=" + ROWS + "&start=0&wt=xml")).andReturn(response2);
+		expect(httpClient.executeGet("https://kramerius.mzk.cz/search/api/v5.0/search?fl=dostupnost,dnnt,PID,level,dnnt-labels,parent_pid,details,document_type,title,rok&q=fedora.model:page+model_path:*periodicalitem/page&rows=" + ROWS + "&start=" + ROWS + "&wt=xml")).andReturn(empty2);
 		replay(httpClient);
 
 		Job job = jobRegistry.getJob(Constants.JOB_ID_HARVEST_KRAM_AVAILABILITY);

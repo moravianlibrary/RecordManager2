@@ -47,7 +47,6 @@ public class KramAvailabilityWriter implements ItemWriter<List<KramAvailability>
 					oldItem.setVolume(newItem.getVolume());
 					oldItem.setYaer(newItem.getYaer());
 					oldItem.setPage(newItem.getPage());
-					oldItem.setRelsExtIndex(newItem.getRelsExtIndex());
 					oldItem.setType(newItem.getType());
 					oldItem.setLevel(newItem.getLevel());
 					getPageValues(kramAvailabilityDAO, oldItem);
