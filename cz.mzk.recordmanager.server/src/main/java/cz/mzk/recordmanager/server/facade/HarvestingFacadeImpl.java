@@ -1,16 +1,18 @@
 package cz.mzk.recordmanager.server.facade;
 
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import com.google.common.base.MoreObjects;
+import com.google.common.collect.ImmutableMap;
+import cz.mzk.recordmanager.server.facade.exception.JobExecutionFailure;
+import cz.mzk.recordmanager.server.imports.kramAvailability.KramAvailabilityHarvestType;
 import cz.mzk.recordmanager.server.model.DownloadImportConfiguration;
+import cz.mzk.recordmanager.server.model.KrameriusConfiguration;
+import cz.mzk.recordmanager.server.model.OAIHarvestConfiguration;
 import cz.mzk.recordmanager.server.oai.dao.DownloadImportConfigurationDAO;
 import cz.mzk.recordmanager.server.oai.dao.KrameriusConfigurationDAO;
 import cz.mzk.recordmanager.server.oai.dao.OAIHarvestConfigurationDAO;
+import cz.mzk.recordmanager.server.springbatch.JobExecutor;
+import cz.mzk.recordmanager.server.util.Constants;
+import cz.mzk.recordmanager.server.util.ResourceUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.*;
@@ -18,15 +20,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Component;
 
-import com.google.common.base.MoreObjects;
-import com.google.common.collect.ImmutableMap;
-
-import cz.mzk.recordmanager.server.util.Constants;
-import cz.mzk.recordmanager.server.facade.exception.JobExecutionFailure;
-import cz.mzk.recordmanager.server.model.KrameriusConfiguration;
-import cz.mzk.recordmanager.server.model.OAIHarvestConfiguration;
-import cz.mzk.recordmanager.server.springbatch.JobExecutor;
-import cz.mzk.recordmanager.server.util.ResourceUtils;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Component
 public class HarvestingFacadeImpl implements HarvestingFacade {
@@ -60,7 +59,7 @@ public class HarvestingFacadeImpl implements HarvestingFacade {
 	public void incrementalHarvest(OAIHarvestConfiguration conf) {
 		incrementalHarvest(conf.getId(), getJobName(conf));
 	}
-	
+
 	@Override
 	public void incrementalHarvest(KrameriusConfiguration conf) {
 		incrementalHarvest(conf.getId(), getJobName(conf));
@@ -139,12 +138,12 @@ public class HarvestingFacadeImpl implements HarvestingFacade {
 	public LocalDateTime getLastFullHarvest(OAIHarvestConfiguration conf) {
 		return getLastFullHarvest(conf.getId(), getJobName(conf));
 	}
-	
+
 	@Override
 	public LocalDateTime getLastFullHarvest(KrameriusConfiguration conf) {
 		return getLastFullHarvest(conf.getId(), getJobName(conf));
 	}
-	
+
 	public LocalDateTime getLastFullHarvest(long conf_id, String job_name) {
 		return query(lastCompletedReharvestQuery, ImmutableMap.of("jobName", job_name,
 				Constants.JOB_PARAM_CONF_ID, conf_id));
@@ -154,12 +153,12 @@ public class HarvestingFacadeImpl implements HarvestingFacade {
 	public LocalDateTime getLastHarvest(OAIHarvestConfiguration conf) {
 		return getLastHarvest(conf.getId(), getJobName(conf));
 	}
-	
+
 	@Override
 	public LocalDateTime getLastHarvest(KrameriusConfiguration conf) {
 		return getLastHarvest(conf.getId(), getJobName(conf));
 	}
-	
+
 	public LocalDateTime getLastHarvest(long conf_id, String job_name) {
 		return query(lastCompletedHarvestQuery, ImmutableMap.of("jobName", job_name,
 				Constants.JOB_PARAM_CONF_ID, conf_id));
@@ -206,7 +205,7 @@ public class HarvestingFacadeImpl implements HarvestingFacade {
 	private String getJobName(OAIHarvestConfiguration conf) {
 		return MoreObjects.firstNonNull(conf.getHarvestJobName(), Constants.JOB_ID_HARVEST);
 	}
-	
+
 	private String getJobName(KrameriusConfiguration conf) {
 		return MoreObjects.firstNonNull(conf.getHarvestJobName(), Constants.JOB_ID_HARVEST_KRAMERIUS);
 	}
@@ -239,6 +238,7 @@ public class HarvestingFacadeImpl implements HarvestingFacade {
 		parameters.put(Constants.JOB_PARAM_CONF_ID, new JobParameter(conf.getId()));
 		parameters.put(Constants.JOB_PARAM_REPEAT, new JobParameter(Constants.JOB_PARAM_ONE_VALUE));
 		parameters.put(Constants.JOB_PARAM_REHARVEST, new JobParameter(Constants.JOB_PARAM_TRUE_VALUE));
+		parameters.put(Constants.JOB_PARAM_TYPE, new JobParameter(KramAvailabilityHarvestType.TITLES.getValue()));
 		jobExecutor.execute(Constants.JOB_ID_HARVEST_KRAM_AVAILABILITY, new JobParameters(parameters));
 	}
 }
