@@ -112,7 +112,7 @@ public class KramAvailabilityXmlStreamReader {
 								result.setIssue(parseInt(matcher.group(1)));
 							}
 						} else if (arrName.equals(ATTRIBUTE_VALUE_DOCUMENT_TYPE)) {
-							result.setType(xmlReader.getElementText());
+							if (result.getType() == null) result.setType(xmlReader.getElementText()); // get first type
 						} else if (ATTRIBUTE_VALUE_PID.equals(xmlReader.getAttributeValue(null, ATTRIBUTE_NAME))) {
 							result.setUuid(xmlReader.getElementText());
 						} else if (ATTRIBUTE_VALUE_DOSTUPNOST.equals(xmlReader.getAttributeValue(null, ATTRIBUTE_NAME))) {
