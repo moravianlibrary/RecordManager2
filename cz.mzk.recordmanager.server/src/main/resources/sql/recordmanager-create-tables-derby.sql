@@ -45,6 +45,14 @@ CREATE TABLE import_conf (
   CONSTRAINT import_conf_contact_person_id_fk FOREIGN KEY (contact_person_id) REFERENCES contact_person(id)
 );
 
+CREATE TABLE import_conf_mapping_field (
+  import_conf_id         DECIMAL(10) PRIMARY KEY,
+  parent_import_conf_id  DECIMAL(10) NOT NULL,
+  mapping                VARCHAR(100),
+  CONSTRAINT import_conf_mapping_field_import_conf_fk FOREIGN KEY (import_conf_id) REFERENCES import_conf(id),
+  CONSTRAINT import_conf_mapping_field_parent_import_conf_fk FOREIGN KEY (parent_import_conf_id) REFERENCES import_conf(id)
+);
+
 CREATE TABLE sigla (
   id                   DECIMAL(10),
   import_conf_id       DECIMAL(10),

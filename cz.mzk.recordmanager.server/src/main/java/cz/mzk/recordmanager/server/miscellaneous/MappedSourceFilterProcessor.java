@@ -11,9 +11,9 @@ import cz.mzk.recordmanager.server.model.ImportConfiguration;
 import cz.mzk.recordmanager.server.model.OAIHarvestConfiguration;
 import cz.mzk.recordmanager.server.oai.dao.DownloadImportConfigurationDAO;
 import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordDAO;
+import cz.mzk.recordmanager.server.oai.dao.ImportConfigurationMappingFieldDAO;
 import cz.mzk.recordmanager.server.oai.dao.OAIHarvestConfigurationDAO;
 import cz.mzk.recordmanager.server.oai.harvest.SourceMapping;
-import cz.mzk.recordmanager.server.scripting.MappingResolver;
 import cz.mzk.recordmanager.server.util.HibernateSessionSynchronizer;
 import cz.mzk.recordmanager.server.util.ProgressLogger;
 import org.slf4j.Logger;
@@ -25,8 +25,6 @@ import org.springframework.batch.item.ItemProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class MappedSourceFilterProcessor implements ItemProcessor<List<String>, List<HarvestedRecord>>, StepExecutionListener {
 
@@ -53,13 +51,11 @@ public class MappedSourceFilterProcessor implements ItemProcessor<List<String>, 
 	protected MarcXmlParser marcXmlParser;
 
 	@Autowired
-	private MappingResolver propertyResolver;
+	protected ImportConfigurationMappingFieldDAO importConfigurationMappingFieldDAO;
 
 	private ImportConfiguration mainConfiguration;
 
-	protected final Map<String, SourceMapping> mapping = new HashMap<>();
-
-	private static final Pattern FIELD_VALUE = Pattern.compile("([0-9]{3})\\$(.)(.*)", Pattern.CASE_INSENSITIVE);
+	protected final Map<Long, SourceMapping> mapping = new HashMap<>();
 
 	@Override
 	public List<HarvestedRecord> process(List<String> items) throws Exception {
@@ -70,9 +66,9 @@ public class MappedSourceFilterProcessor implements ItemProcessor<List<String>, 
 			mainHr = recordDao.get(new HarvestedRecordUniqueId(mainConfiguration, mainRecordId));
 			if (mainHr == null) continue;
 			MarcRecord marcRecord = marcXmlParser.parseRecord(mainHr.getRawRecord());
-			for (Map.Entry<String, SourceMapping> entry : mapping.entrySet()) {
+			for (Map.Entry<Long, SourceMapping> entry : mapping.entrySet()) {
 				if (marcRecord.getFields(entry.getValue().getTag(), entry.getValue().getSubfield()).contains(entry.getValue().getValue())) {
-					ImportConfiguration localConfig = getImportConfiguration(Long.parseLong(entry.getKey()));
+					ImportConfiguration localConfig = entry.getValue().getImportConfiguration();
 					HarvestedRecordUniqueId localUniqueId = new HarvestedRecordUniqueId(localConfig, mainRecordId);
 					HarvestedRecord localHr = recordDao.get(localUniqueId);
 					byte[] recordContent = mainHr.getRawRecord();
@@ -127,10 +123,10 @@ public class MappedSourceFilterProcessor implements ItemProcessor<List<String>, 
 			Long confId = stepExecution.getJobParameters().getLong("configurationId");
 			mainConfiguration = getImportConfiguration(confId);
 			try {
-				propertyResolver.resolve(confId + ".map").getMapping().forEach((key, value) -> {
-					Matcher matcher = FIELD_VALUE.matcher(value.get(0));
-					if (matcher.matches()) {
-						mapping.put(key, new SourceMapping(matcher.group(1), matcher.group(2).charAt(0), matcher.group(3)));
+				importConfigurationMappingFieldDAO.findByParentImportConf(confId).forEach(config -> {
+					SourceMapping childConf = config.getSourceMapping();
+					if (childConf != null) {
+						mapping.put(childConf.getImportConfiguration().getId(), childConf);
 					}
 				});
 			} catch (Exception e) {

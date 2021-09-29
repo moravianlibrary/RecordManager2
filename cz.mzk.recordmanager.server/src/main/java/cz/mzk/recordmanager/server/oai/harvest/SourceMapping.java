@@ -1,15 +1,27 @@
 package cz.mzk.recordmanager.server.oai.harvest;
 
+import cz.mzk.recordmanager.server.model.ImportConfiguration;
+
 public class SourceMapping {
 
+	private ImportConfiguration importConfiguration;
 	private String tag;
 	private char subfield;
 	private String value;
 
-	public SourceMapping(String tag, char subfield, String value) {
+	public SourceMapping(ImportConfiguration importConfiguration, String tag, char subfield, String value) {
+		this.importConfiguration = importConfiguration;
 		this.tag = tag;
 		this.subfield = subfield;
 		this.value = value;
+	}
+
+	public ImportConfiguration getImportConfiguration() {
+		return importConfiguration;
+	}
+
+	public void setImportConfiguration(ImportConfiguration importConfiguration) {
+		this.importConfiguration = importConfiguration;
 	}
 
 	public String getTag() {
@@ -38,9 +50,10 @@ public class SourceMapping {
 
 	@Override
 	public String toString() {
-		return "Values{" +
-				"tag='" + tag + '\'' +
-				", subfield='" + subfield + '\'' +
+		return "SourceMapping{" +
+				"importConfiguration=" + importConfiguration +
+				", tag='" + tag + '\'' +
+				", subfield=" + subfield +
 				", value='" + value + '\'' +
 				'}';
 	}

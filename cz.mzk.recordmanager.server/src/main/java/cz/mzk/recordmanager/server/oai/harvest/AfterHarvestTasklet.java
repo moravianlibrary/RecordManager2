@@ -1,7 +1,7 @@
 package cz.mzk.recordmanager.server.oai.harvest;
 
 import com.google.common.collect.ImmutableMap;
-import cz.mzk.recordmanager.server.scripting.MappingResolver;
+import cz.mzk.recordmanager.server.oai.dao.ImportConfigurationMappingFieldDAO;
 import cz.mzk.recordmanager.server.util.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,7 +28,7 @@ public class AfterHarvestTasklet implements Tasklet {
 	protected NamedParameterJdbcTemplate jdbcTemplate;
 
 	@Autowired
-	private MappingResolver propertyResolver;
+	protected ImportConfigurationMappingFieldDAO importConfigurationMappingFieldDAO;
 
 	@Override
 	public RepeatStatus execute(StepContribution contribution,
@@ -41,11 +41,8 @@ public class AfterHarvestTasklet implements Tasklet {
 			return RepeatStatus.FINISHED;
 		}
 		updateRecords(configId, started);
-		try {
-			propertyResolver.resolve("source/" + configId + ".map").getMapping()
-					.forEach((key, value) -> updateRecords(Long.parseLong(key), started));
-		} catch (Exception ignore) {
-		}
+		importConfigurationMappingFieldDAO.findByParentImportConf(configId)
+				.forEach(config -> updateRecords(config.getId(), started));
 		return RepeatStatus.FINISHED;
 	}
 
