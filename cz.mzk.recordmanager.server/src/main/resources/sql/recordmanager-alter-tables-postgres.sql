@@ -2392,3 +2392,20 @@ CREATE TABLE biblio_linker_similar (
 );
 CREATE INDEX bls_harvested_record_id_idx ON biblio_linker_similar(harvested_record_id);
 CREATE INDEX bls_harvested_record_similar_id_idx ON biblio_linker_similar(harvested_record_similar_id);
+
+-- 29. 09. 2021 tomascejpek
+CREATE TABLE import_conf_mapping_field (
+  import_conf_id         DECIMAL(10) PRIMARY KEY,
+  parent_import_conf_id  DECIMAL(10) NOT NULL,
+  mapping                VARCHAR(100),
+  CONSTRAINT import_conf_mapping_field_import_conf_fk        FOREIGN KEY (import_conf_id) REFERENCES import_conf(id),
+  CONSTRAINT import_conf_mapping_field_parent_import_conf_fk FOREIGN KEY (parent_import_conf_id) REFERENCES import_conf(id)
+);
+CREATE INDEX import_conf_mapping_field_parent_id_idx ON import_conf_mapping_field(parent_import_conf_id);
+INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (220, 'USDBIBL', '', '', null, 'bibliography');
+INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency) VALUES (420, 220, 200, 'usdbibl', 11, false, true, true, false, 'U');
+INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (420,NULL,NULL,'marc21',NULL);
+INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (222, 'KNAVALL', '', '', null, null);
+INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, generate_dedup_keys, generate_biblio_linker_keys, indexed) VALUES (422, 222, 200, 'knavall', 11, false, true, true, true, 'U', false, false, false);
+INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (422,'https://aleph.lib.cas.cz/OAI','KNA01','marc21',NULL);
+

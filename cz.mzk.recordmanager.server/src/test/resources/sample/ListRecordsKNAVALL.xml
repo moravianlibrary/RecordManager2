@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<OAI-PMH xmlns="http://www.openarchives.org/OAI/2.0/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/
+http://www.openarchives.org/OAI/2.0/OAI-PMH.xsd">
+	<responseDate>2015-01-09T06:08:51Z</responseDate>
+	<request verb="ListRecords">http://aleph.mzk.cz/OAI</request>
+	<ListRecords>
+		<record>
+			<header>
+				<identifier>oai:aleph22.lib.cas.cz:KNA01-000000001</identifier>
+				<datestamp>2015-01-01T14:42:39Z</datestamp>
+				<setSpec>MZKALL</setSpec>
+			</header>
+			<metadata>
+				<marc:record xmlns:marc="http://www.loc.gov/MARC21/slim"
+							 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+							 xsi:schemaLocation="http://www.loc.gov/MARC21/slim
+http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd">
+					<marc:leader>nam a22 2a 4500</marc:leader>
+					<marc:controlfield tag="001">000113478</marc:controlfield>
+					<marc:controlfield tag="003">CZ BrMZK</marc:controlfield>
+					<marc:controlfield tag="005">19970103143423.0</marc:controlfield>
+					<marc:controlfield tag="008">970103s1991 xr f cze d</marc:controlfield>
+					<marc:datafield tag="015" ind1=" " ind2=" ">
+						<marc:subfield code="a">cnb000067543</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="040" ind1=" " ind2=" ">
+						<marc:subfield code="a">BOA001</marc:subfield>
+						<marc:subfield code="b">cze</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="100" ind1="1" ind2=" ">
+						<marc:subfield code="a">Staudek, Jan,</marc:subfield>
+						<marc:subfield code="d">1945-</marc:subfield>
+						<marc:subfield code="7">jk01120964</marc:subfield>
+						<marc:subfield code="4">com</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="245" ind1="1" ind2="0">
+						<marc:subfield code="a">Operační a databázové systémy /</marc:subfield>
+						<marc:subfield code="c">Jan Staudek, Jaroslav Pokorný, Jan Brodský</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="599" ind1=" " ind2=" ">
+						<marc:subfield code="a">CPK-USDBIBL</marc:subfield>
+					</marc:datafield>
+				</marc:record>
+			</metadata>
+		</record>
+		<record>
+			<header>
+				<identifier>oai:aleph22.lib.cas.cz:KNA01-000000002</identifier>
+				<datestamp>2015-01-01T14:42:39Z</datestamp>
+				<setSpec>MZKALL</setSpec>
+			</header>
+			<metadata>
+				<marc:record xmlns:marc="http://www.loc.gov/MARC21/slim"
+							 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+							 xsi:schemaLocation="http://www.loc.gov/MARC21/slim
+http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd">
+					<marc:leader>nam a22 2a 4500</marc:leader>
+					<marc:controlfield tag="001">000113478</marc:controlfield>
+					<marc:controlfield tag="003">CZ BrMZK</marc:controlfield>
+					<marc:controlfield tag="005">19970103143423.0</marc:controlfield>
+					<marc:controlfield tag="008">970103s1991 xr f cze d</marc:controlfield>
+					<marc:datafield tag="015" ind1=" " ind2=" ">
+						<marc:subfield code="a">cnb000067543</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="040" ind1=" " ind2=" ">
+						<marc:subfield code="a">BOA001</marc:subfield>
+						<marc:subfield code="b">cze</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="100" ind1="1" ind2=" ">
+						<marc:subfield code="a">Staudek, Jan,</marc:subfield>
+						<marc:subfield code="d">1945-</marc:subfield>
+						<marc:subfield code="7">jk01120964</marc:subfield>
+						<marc:subfield code="4">com</marc:subfield>
+					</marc:datafield>
+					<marc:datafield tag="245" ind1="1" ind2="0">
+						<marc:subfield code="a">Operační a databázové systémy /</marc:subfield>
+						<marc:subfield code="c">Jan Staudek, Jaroslav Pokorný, Jan Brodský</marc:subfield>
+					</marc:datafield>
+				</marc:record>
+			</metadata>
+		</record>
+		<record>
+			<header status="deleted">
+				<identifier>oai:aleph22.lib.cas.cz:KNA01-000000003</identifier>
+				<datestamp>2014-10-20T13:36:54Z</datestamp>
+				<setSpec>CPK</setSpec>
+			</header>
+		</record>
+	</ListRecords>
+</OAI-PMH> 

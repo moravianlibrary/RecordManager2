@@ -59,6 +59,13 @@ COMMENT ON COLUMN import_conf.interception_enabled IS 'indicator whether interce
 COMMENT ON COLUMN import_conf.is_library IS 'indicator whether this source is library or different type of institution. MOVE TO LIBRARY TABLE ???';
 COMMENT ON COLUMN import_conf.harvest_frequency IS 'frequency of harvesting during automatic updates';
 
+CREATE TABLE import_conf_mapping_field (
+  import_conf_id         DECIMAL(10) PRIMARY KEY,
+  parent_import_conf_id  DECIMAL(10) NOT NULL,
+  mapping                VARCHAR(100),
+  CONSTRAINT import_conf_mapping_field_import_conf_fk        FOREIGN KEY (import_conf_id) REFERENCES import_conf(id),
+  CONSTRAINT import_conf_mapping_field_parent_import_conf_fk FOREIGN KEY (parent_import_conf_id) REFERENCES import_conf(id)
+);
 
 CREATE TABLE sigla (
   id                   DECIMAL(10),

@@ -6,6 +6,7 @@ public class Constants {
 	public static final String JOB_ID_HARVEST_PART		= "oaiPartitionedHarvestJob";
 	public static final String JOB_ID_HARVEST_AUTH		= "oaiHarvestAuthorityJob";
 	public static final String JOB_ID_HARVEST_ONE_BY_ONE = "oaiHarvestOneByOneJob";
+	public static final String JOB_ID_HARVEST_KNAV		= "oaiHarvestKnavJob";
 	public static final String JOB_ID_HARVEST_KRAMERIUS = "krameriusHarvestJob";
 	public static final String JOB_ID_HARVEST_COSMOTRON = "cosmotronHarvestJob";
 	public static final String JOB_ID_FULLTEXT_KRAMERIUS = "krameriusFulltextJob";
@@ -65,6 +66,7 @@ public class Constants {
 	public static final String JOB_ID_CLASSIFIER					= "classifierJob";
 	public static final String JOB_ID_REGEN_DNNT					= "regenerateDnntKeysJob";
 	public static final String JOB_ID_HARVEST_CASLIN_LINKS			= "harvestCaslinLinksJob";
+	public static final String JOB_ID_MAPPED_SOURCE_FILTER			= "mappedSourceFilterJob";
 
 	public static final String JOB_PARAM_CONF_ID 		= "configurationId";
 	public static final String JOB_PARAM_FROM_DATE 		= "from";
