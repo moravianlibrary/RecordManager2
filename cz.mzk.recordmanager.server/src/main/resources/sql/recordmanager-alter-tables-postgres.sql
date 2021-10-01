@@ -2418,3 +2418,8 @@ INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granul
 INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (239, 'MKVALMEZ', 'https://www.mekvalmez.cz/', 'https://katalog.mekvalmez.cz/', 'Valašské Meziříčí', 'ZL');
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id) VALUES (439, 239, 200, 'mkvalmez', 11, false, true, true, true, 'U', 'other');
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity,extract_id_regex) VALUES (439,'https://katalog.mekvalmez.cz/api/oai','cpk','marc21',NULL,'oai:(.*)');
+
+-- 18. 10. 2021 tomascejpek
+UPDATE import_conf SET item_id='aleph',interception_enabled=true WHERE id=361;
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (69, 361, 'BOB026');
+INSERT INTO import_conf_mapping_field (import_conf_id,parent_import_conf_id,mapping) VALUES (361,422,'599$aCPK-UVGZ');
