@@ -734,6 +734,7 @@ INSERT INTO sigla (id, import_conf_id, sigla) VALUES (96, 423, 'ABG502');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (98, 425, 'BKG501');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (99, 426, 'OLG001');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (100, 427, 'TRG001');
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (104, 431, 'KAG505');
 
 INSERT INTO fit_project VALUES (1,'FULLTEXT_ANALYSER');
 INSERT INTO fit_project VALUES (2,'SEMANTIC_ENRICHMENT');

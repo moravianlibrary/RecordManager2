@@ -2710,3 +2710,6 @@ INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granul
 UPDATE import_conf SET item_id='aleph',interception_enabled=true WHERE id=361;
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (69, 361, 'BOB026');
 INSERT INTO import_conf_mapping_field (import_conf_id,parent_import_conf_id,mapping) VALUES (361,422,'599$aCPK-UVGZ');
+
+--changeset tomascejpek:289 context:cpk
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (104, 431, 'KAG505');
