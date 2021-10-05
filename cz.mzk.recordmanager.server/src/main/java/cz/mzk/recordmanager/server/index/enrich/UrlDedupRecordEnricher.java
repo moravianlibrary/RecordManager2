@@ -186,7 +186,7 @@ public class UrlDedupRecordEnricher implements DedupRecordEnricher {
 		}
 		for (String articleKey : articleKeys) {
 			Map<Long, List<KramAvailability>> map = new HashMap<>();
-			List<KramAvailability> list = kramAvailabilityDAO.getByDedupKey(articleKey);
+			List<KramAvailability> list = kramAvailabilityDAO.getByArticleKey(articleKey);
 			// page with same key must have same parent (issue)
 			if (list.stream().map(a -> a.getParentUuid()).collect(Collectors.toSet()).size() != 1) continue;
 			for (KramAvailability availability : list) {

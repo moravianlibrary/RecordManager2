@@ -61,8 +61,8 @@ public class KramAvailability {
 	@Column(name = "type")
 	private String type;
 
-	@Column(name = "dedup_key")
-	private String dedupKey;
+	@Column(name = "article_key")
+	private String articleKey;
 
 	@Column(name = "updated")
 	@Temporal(TemporalType.TIMESTAMP)
@@ -231,16 +231,16 @@ public class KramAvailability {
 		return type;
 	}
 
-	public String getDedupKey() {
-		return dedupKey;
+	public String getArticleKey() {
+		return articleKey;
 	}
 
-	public void setDedupKey(String dedupKey) {
-		if (dedupKey != null && dedupKey.length() >= 100) {
-			logger.warn(String.format("uuid: %s, too long dedupKey: %s", this.uuid, dedupKey));
-			dedupKey = MetadataUtils.shorten(dedupKey, 100);
+	public void setArticleKey(String articleKey) {
+		if (articleKey != null && articleKey.length() >= 100) {
+			logger.warn(String.format("uuid: %s, too long articleKey: %s", this.uuid, articleKey));
+			articleKey = MetadataUtils.shorten(articleKey, 100);
 		}
-		this.dedupKey = dedupKey;
+		this.articleKey = articleKey;
 	}
 
 	public void setType(String type) {
@@ -263,7 +263,7 @@ public class KramAvailability {
 				", issue=" + issue +
 				", page=" + page +
 				", type='" + type + '\'' +
-				", dedupKey='" + dedupKey + '\'' +
+				", articleKey='" + articleKey + '\'' +
 				", updated=" + updated +
 				", lastHarvest=" + lastHarvest +
 				", labels=" + labels +

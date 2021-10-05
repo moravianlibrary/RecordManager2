@@ -78,3 +78,6 @@ CREATE INDEX fit_project_link_harvested_record_idx ON fit_project_link(harvested
 CREATE INDEX fit_project_link_idx ON fit_project_link(fit_project_id);
 
 CREATE INDEX caslin_links_sigla_idx ON caslin_links(sigla);
+
+CREATE INDEX kram_availability_article_key_idx ON kram_availability(article_key);
+CREATE INDEX kram_availability_uuid_idx ON kram_availability(uuid);

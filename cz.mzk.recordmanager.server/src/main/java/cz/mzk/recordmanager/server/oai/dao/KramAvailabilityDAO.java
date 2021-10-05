@@ -11,7 +11,7 @@ public interface KramAvailabilityDAO extends DomainDAO<Long, KramAvailability> {
 
 	List<KramAvailability> getByUuid(final String uuid);
 
-	List<KramAvailability> getByDedupKey(final String dedupKey);
+	List<KramAvailability> getByArticleKey(final String dedupKey);
 
 	void dropKeys(KramAvailability availability);
 

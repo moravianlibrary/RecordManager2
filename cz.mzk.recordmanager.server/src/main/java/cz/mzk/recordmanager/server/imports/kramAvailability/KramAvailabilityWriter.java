@@ -85,13 +85,13 @@ public class KramAvailabilityWriter implements ItemWriter<List<KramAvailability>
 		if (availability.getIssn() != null && !availability.getIssn().isEmpty() && availability.getYaer() != null && availability.getVolume() != null
 				&& availability.getIssue() != null) {
 			List<String> results = new ArrayList<>(Arrays.asList(availability.getIssn(),
-					availability.getYaer().toString(), availability.getVolume().toString(), availability.getIssue().toString()));
+					availability.getYaer().toString(), availability.getVolume(), availability.getIssue().toString()));
 			if (availability.getType().equals(PERIODICAL_ITEM.getValue())) {
-				availability.setDedupKey(StringUtils.join(results, ';'));
+				availability.setArticleKey(StringUtils.join(results, ';'));
 			}
 			if (availability.getPage() != null) {
 				results.add(availability.getPage().toString());
-				availability.setDedupKey(StringUtils.join(results, ";"));
+				availability.setArticleKey(StringUtils.join(results, ";"));
 			}
 		}
 	}

@@ -2376,5 +2376,57 @@ CREATE INDEX caslin_links_sigla_idx ON caslin_links(sigla);
 -- 16. 09. 2021 tomascejpek
 UPDATE kramerius_conf SET url='https://kramerius.knihovna-pardubice.cz/search/api/v5.0',availability_dest_url='https://kramerius.knihovna-pardubice.cz/uuid/' WHERE import_conf_id=99026;
 
--- 16. 09. 2021 tomascejpek
+-- 05. 10. 2021 tomascejpek
 ALTER TABLE harvested_record ADD COLUMN articles_availability_key VARCHAR(100);
+ALTER TABLE kram_availability
+    ADD COLUMN parent_uuid       VARCHAR(100),
+    ADD COLUMN issn              VARCHAR(20),
+    ADD COLUMN publication_year  DECIMAL(4),
+    ADD COLUMN volume            VARCHAR(20),
+    ADD COLUMN issue             DECIMAL(10),
+    ADD COLUMN page              DECIMAL(10),
+    ADD COLUMN type              VARCHAR(30),
+    ADD COLUMN article_key       VARCHAR(100);
+CREATE INDEX kram_availability_article_key_idx ON kram_availability(article_key);
+CREATE INDEX kram_availability_uuid_idx ON kram_availability(uuid);
+DROP VIEW kram_availability_summary;
+DROP VIEW kram_availability_job_stat;
+CREATE OR REPLACE VIEW kram_availability_job_stat AS
+SELECT
+  bje.job_execution_id,
+  (array_agg(conf_id_param.long_val))[1] import_conf_id,
+  bje.start_time,
+  bje.end_time,
+  bje.status,
+  (array_agg(type_param.string_val))[1] harvest_type
+FROM batch_job_instance bji
+    JOIN batch_job_execution bje ON bje.job_instance_id = bji.job_instance_id
+    JOIN batch_job_execution_params conf_id_param ON conf_id_param.job_execution_id = bje.job_execution_id AND conf_id_param.key_name = 'configurationId'
+    LEFT JOIN batch_job_execution_params type_param ON type_param.job_execution_id = bje.job_execution_id AND type_param.key_name = 'type'
+    JOIN kramerius_conf kc ON kc.import_conf_id = conf_id_param.long_val
+WHERE bji.job_name IN ('harvestKramAvailabilityJob')
+GROUP BY bje.job_execution_id
+;
+CREATE OR REPLACE VIEW kram_availability_summary AS
+WITH last_harvest_date AS (
+  SELECT
+    import_conf_id,
+    harvest_type,
+    MAX(CASE WHEN status = 'COMPLETED' THEN start_time END) last_successful_harvest_date,
+    MAX(CASE WHEN status = 'FAILED' THEN start_time END) last_failed_harvest_date
+  FROM kram_availability_job_stat
+  GROUP BY import_conf_id,harvest_type
+)
+SELECT ic.id,
+  l.name,
+  ic.id_prefix,
+  CASE WHEN kc.availability_source_url IS NOT NULL THEN kc.availability_source_url ELSE kc.url END url,
+  lhd.harvest_type,
+  lhd.last_successful_harvest_date,
+  lhd.last_failed_harvest_date
+FROM last_harvest_date lhd
+  JOIN import_conf ic ON ic.id = lhd.import_conf_id
+  LEFT JOIN kramerius_conf kc ON kc.import_conf_id = ic.id
+  JOIN library l ON l.id = ic.library_id
+ORDER BY lhd.harvest_type DESC,lhd.last_successful_harvest_date DESC NULLS LAST
+;

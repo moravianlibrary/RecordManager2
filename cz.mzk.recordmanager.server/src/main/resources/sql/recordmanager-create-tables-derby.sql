@@ -431,7 +431,7 @@ CREATE TABLE kram_availability (
   issue             DECIMAL(10),
   page              DECIMAL(10),
   type              VARCHAR(30),
-  dedup_key         VARCHAR(100),
+  article_key       VARCHAR(100),
   updated           TIMESTAMP NOT NULL,
   last_harvest      TIMESTAMP NOT NULL,
   CONSTRAINT kram_availability_pk PRIMARY KEY(id),
