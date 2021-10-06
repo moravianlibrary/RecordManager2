@@ -795,9 +795,9 @@ public class MetadataMarcRecord implements MetadataRecord {
 	}
 
 	protected boolean isBoardGames(List<HarvestedRecordFormatEnum> formats) {
-		String f650a = underlayingMarc.getField("650", ' ', 'a');
+		String f650a = underlayingMarc.getFields("650", 'a').toString();
 		if (f650a == null) f650a = "";
-		String f653a = underlayingMarc.getField("653", ' ', 'a');
+		String f653a = underlayingMarc.getFields("653", 'a').toString();
 		if (f653a == null) f653a = "";
 		String f655a = underlayingMarc.getField("655", ' ', 'a');
 		if (f655a == null) f655a = "";

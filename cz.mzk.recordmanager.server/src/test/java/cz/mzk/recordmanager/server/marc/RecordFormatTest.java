@@ -1047,6 +1047,7 @@ public class RecordFormatTest extends AbstractTest {
 		// visual document
 		data.clear();
 		data.add("000 000000K0000");
+		data.add("650 $atest");
 		data.add("650 $aspolečenske hry");
 		metadataRecord = metadataFactory.getMetadataRecord(MarcRecordFactory.recordFactory(data));
 		Assert.assertTrue(metadataRecord.getDetectedFormatList().contains(BOARD_GAMES));
@@ -1054,6 +1055,7 @@ public class RecordFormatTest extends AbstractTest {
 		// other
 		data.clear();
 		data.add("000 000000r0000");
+		data.add("653 $atest");
 		data.add("653 $akaretni hry");
 		metadataRecord = metadataFactory.getMetadataRecord(MarcRecordFactory.recordFactory(data));
 		Assert.assertTrue(metadataRecord.getDetectedFormatList().contains(BOARD_GAMES));
