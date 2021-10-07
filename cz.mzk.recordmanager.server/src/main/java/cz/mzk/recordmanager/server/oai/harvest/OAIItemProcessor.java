@@ -105,7 +105,7 @@ public class OAIItemProcessor implements ItemProcessor<List<OAIRecord>, List<Har
 				recordContent = interceptor.intercept();
 			}
 		}
-
+		boolean recordContentEquals = false;
 		if (rec == null) {
 			// create new record
 			HarvestedRecordUniqueId id = new HarvestedRecordUniqueId(configuration, recordId);
@@ -114,7 +114,7 @@ public class OAIItemProcessor implements ItemProcessor<List<OAIRecord>, List<Har
 			rec.setFormat(format);
 			rec.setHarvested(new Date());
 		} else if ((deleted && rec.getDeleted() != null && (rec.getRawRecord() == null || rec.getRawRecord().length == 0))
-				|| (Arrays.equals(recordContent, rec.getRawRecord()) && deleted == (rec.getDeleted() != null))) {
+				|| ((recordContentEquals = Arrays.equals(recordContent, rec.getRawRecord())) && deleted == (rec.getDeleted() != null))) {
 			rec.setLastHarvest(new Date());
 			if (record.getHeader().getDatestamp() != null) {
 				rec.setOaiTimestamp(record.getHeader().getDatestamp());
@@ -123,6 +123,9 @@ public class OAIItemProcessor implements ItemProcessor<List<OAIRecord>, List<Har
 			return rec; // no change in record
 		}
 		rec.setShouldBeProcessed(true);
+		rec.setTemporalDeleted(rec.getDeleted() != null);
+		rec.setTemporalUpdated(rec.getUpdated());
+		rec.setTemporalContentEquals(recordContentEquals);
 		rec.setUpdated(new Date());
 		rec.setLastHarvest(new Date());
 		if (record.getHeader().getDatestamp() != null) {

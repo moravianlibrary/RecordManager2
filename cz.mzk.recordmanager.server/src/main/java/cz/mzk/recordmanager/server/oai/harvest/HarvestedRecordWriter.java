@@ -68,6 +68,7 @@ public class HarvestedRecordWriter implements ItemWriter<List<HarvestedRecord>> 
 				if (record.getHarvestedFrom().isFilteringEnabled() && !record.getShouldBeProcessed()) {
 					logger.debug("Filtered record: " + record.getUniqueId());
 					record.setDeleted(new Date());
+					if (record.isTemporalDeleted() && record.isTemporalContentEquals()) record.setUpdated(record.getTemporalUpdated());
 				}
 			} catch (DedupKeyParserException dkpe) {
 				logger.error("Dedup keys could not be generated for {}, exception thrown.", record, dkpe);

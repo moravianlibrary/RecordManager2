@@ -331,7 +331,7 @@ public class HarvestedRecord extends AbstractDomainObject {
 	 */
 	@Transient
 	private Date temporalOldOaiTimestamp;
-	
+
 	/**
 	 * Temporal indicator variable used for deduplication
 	 */
@@ -342,10 +342,19 @@ public class HarvestedRecord extends AbstractDomainObject {
 	 */
 	@Transient
 	private String temporalBiblioLinkerHash;
-	
+
+	@Transient
+	private boolean temporalDeleted = false;
+
+	@Transient
+	private boolean temporalContentEquals = false;
+
+	@Transient
+	private Date temporalUpdated = new Date(0);
+
 	public HarvestedRecord() {
 	}
-	
+
 	public HarvestedRecord(HarvestedRecordUniqueId id) {
 		super();
 		this.uniqueId = id;
@@ -921,4 +930,29 @@ public class HarvestedRecord extends AbstractDomainObject {
 	public void setCallnumber(String callnumber) {
 		this.callnumber = callnumber;
 	}
+
+	public boolean isTemporalDeleted() {
+		return temporalDeleted;
+	}
+
+	public void setTemporalDeleted(boolean temporalDeleted) {
+		this.temporalDeleted = temporalDeleted;
+	}
+
+	public Date getTemporalUpdated() {
+		return temporalUpdated;
+	}
+
+	public void setTemporalUpdated(Date temporalUpdated) {
+		this.temporalUpdated = temporalUpdated;
+	}
+
+	public boolean isTemporalContentEquals() {
+		return temporalContentEquals;
+	}
+
+	public void setTemporalContentEquals(boolean temporalContentEquals) {
+		this.temporalContentEquals = temporalContentEquals;
+	}
+
 }
