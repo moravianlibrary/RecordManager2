@@ -2695,3 +2695,8 @@ INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weig
 
 --changeset tomascejpek:285 context:cpk
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (422,'https://aleph.lib.cas.cz/OAI','KNA01','marc21',NULL);
+
+--changeset tomascejpek:286 context:cpk
+INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (238, 'KAND', 'https://www.narodni-divadlo.cz/', 'https://www.archivndknihovna.cz/', 'Praha', 'PR');
+INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id, mappings996) VALUES (438, 238, 200, 'kand', 11, false, true, true, true, 'U', 'koha', 'koha');
+INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity,extract_id_regex) VALUES (438,'https://koha.archivndknihovna.cz/cgi-bin/koha/oai.pl','CPK','marccpk',NULL,'ABE309:(.*)');
