@@ -2409,7 +2409,12 @@ INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (222, 'KNA
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, generate_dedup_keys, generate_biblio_linker_keys, indexed) VALUES (422, 222, 200, 'knavall', 11, false, true, true, true, 'U', false, false, false);
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (422,'https://aleph.lib.cas.cz/OAI','KNA01','marc21',NULL);
 
--- 10. 12. 2021 tomascejpek
+-- 12. 10. 2021 tomascejpek
 INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (238, 'KAND', 'https://www.narodni-divadlo.cz/', 'https://www.archivndknihovna.cz/', 'Praha', 'PR');
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id, mappings996) VALUES (438, 238, 200, 'kand', 11, false, true, true, true, 'U', 'koha', 'koha');
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity,extract_id_regex) VALUES (438,'https://koha.archivndknihovna.cz/cgi-bin/koha/oai.pl','CPK','marccpk',NULL,'ABE309:(.*)');
+
+-- 13. 10. 2021 tomascejpek
+INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (239, 'MKVALMEZ', 'https://www.mekvalmez.cz/', 'https://katalog.mekvalmez.cz/', 'Valašské Meziříčí', 'ZL');
+INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id) VALUES (439, 239, 200, 'mkvalmez', 11, false, true, true, true, 'U', 'other');
+INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity,extract_id_regex) VALUES (439,'https://katalog.mekvalmez.cz/api/oai','cpk','marc21',NULL,'oai:(.*)');
