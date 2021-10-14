@@ -88,13 +88,7 @@ public class RegenerateDedupKeysJobConfig {
 		SqlPagingQueryProviderFactoryBean pqpf = new SqlPagingQueryProviderFactoryBean();
 		pqpf.setDataSource(dataSource);
 		pqpf.setSelectClause("SELECT id");
-		pqpf.setFromClause("FROM harvested_record hr");
-		if (startRecordId != null) {
-			pqpf.setWhereClause("WHERE id > :startId");
-			Map<String, Object> parameterValues = new HashMap<>();
-			parameterValues.put("startId", startRecordId);
-			reader.setParameterValues(parameterValues);
-		}
+		pqpf.setFromClause("FROM tmp_ids1 hr");
 		pqpf.setSortKey("id");
 		reader.setRowMapper(new LongValueRowMapper());
 		reader.setPageSize(100);
