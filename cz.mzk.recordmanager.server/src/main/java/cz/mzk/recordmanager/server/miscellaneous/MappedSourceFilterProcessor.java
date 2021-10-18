@@ -73,7 +73,7 @@ public class MappedSourceFilterProcessor implements ItemProcessor<List<String>, 
 					HarvestedRecord localHr = recordDao.get(localUniqueId);
 					byte[] recordContent = mainHr.getRawRecord();
 					if (recordContent != null && localConfig.isInterceptionEnabled()) {
-						MarcRecordInterceptor interceptor = marcInterceptorFactory.getInterceptor(localConfig, localHr.getUniqueId().getRecordId(), recordContent);
+						MarcRecordInterceptor interceptor = marcInterceptorFactory.getInterceptor(localConfig, localUniqueId.getRecordId(), recordContent);
 						if (interceptor != null) {
 							//in case of invalid MARC is error processed later
 							recordContent = interceptor.intercept();
