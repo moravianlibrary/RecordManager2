@@ -125,6 +125,8 @@ public class Constants {
 	public static final String PREFIX_DIVABIB			= "divabib";
 	public static final String PREFIX_FREE				= "free";
 	public static final String PREFIX_IIR				= "iir";
+	public static final String PREFIX_KJM				= "kjm";
+	public static final String PREFIX_KKDVY				= "kkdvy";
 	public static final String PREFIX_KKKV				= "kkkv";
 	public static final String PREFIX_KKVY				= "kkvy";
 	public static final String PREFIX_KNAV				= "knav";
