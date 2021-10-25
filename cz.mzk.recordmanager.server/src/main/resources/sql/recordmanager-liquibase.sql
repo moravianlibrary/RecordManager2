@@ -2716,3 +2716,8 @@ INSERT INTO sigla (id, import_conf_id, sigla) VALUES (104, 431, 'KAG505');
 
 --changeset tomascejpek:290 context:cpk
 UPDATE kramerius_conf SET url='https://cdk.lib.cas.cz/search/api/v5.0',url_solr='https://cdk.lib.cas.cz/solr-select-only/k4',collection='"vc:5af0d476-df3d-4709-8f28-5c33d9d3f4b5"',availability_source_url='http://kramerius.kfbz.cz/search/api/v5.0' WHERE import_conf_id=99023;
+
+--changeset tomascejpek:291 context:cpk
+INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (240, 'QUEER', 'https://www.stud.cz/informace/queer-knihovna.html', 'https://katalog.queerknihovna.cz/', 'Brno', 'JM');
+INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id, mappings996) VALUES (440, 240, 200, 'queer', 11, false, true, true, true, 'U', 'koha', 'koha');
+INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity,extract_id_regex) VALUES (440,'https://koha.queerknihovna.cz/cgi-bin/koha/oai.pl','CPK','marccpk',NULL,'BOE035:(.*)');
