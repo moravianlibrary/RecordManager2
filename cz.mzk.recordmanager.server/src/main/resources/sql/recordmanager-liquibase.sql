@@ -2713,3 +2713,6 @@ INSERT INTO import_conf_mapping_field (import_conf_id,parent_import_conf_id,mapp
 
 --changeset tomascejpek:289 context:cpk
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (104, 431, 'KAG505');
+
+--changeset tomascejpek:290 context:cpk
+UPDATE kramerius_conf SET url='https://cdk.lib.cas.cz/search/api/v5.0',url_solr='https://cdk.lib.cas.cz/solr-select-only/k4',collection='"vc:5af0d476-df3d-4709-8f28-5c33d9d3f4b5"',availability_source_url='http://kramerius.kfbz.cz/search/api/v5.0' WHERE import_conf_id=99023;
