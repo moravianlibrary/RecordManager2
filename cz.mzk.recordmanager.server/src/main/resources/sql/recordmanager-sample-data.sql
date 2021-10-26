@@ -440,7 +440,7 @@ INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granul
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (377,'https://kmhk.tritius.cz/tritius/oai-provider','CPK_1','marc21',NULL);
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (378,'https://katalog.knihmil.cz/LANius/l.dll','CPK','marc21',NULL);
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (379,'https://orlova.knihovny.net/clavius/l.dll','CPK','marc21',NULL);
-INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (380,'http://online.knih-pe.cz/l.dll','CPK','marc21',NULL);
+INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (380,'https://tritius.knih-pe.cz/tritius/oai-provider','CPK_1','marc21',NULL);
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (381,'https://pisek.knihovny.net/l.dll','CPK','marc21',NULL);
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (382,'http://sternberk.knihovny.net/katalog/l.dll','CPK','marc21',NULL);
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (383,'https://tritius.knihovnatrinec.cz/tritius/oai-provider','CPK_1','marc21',NULL);
