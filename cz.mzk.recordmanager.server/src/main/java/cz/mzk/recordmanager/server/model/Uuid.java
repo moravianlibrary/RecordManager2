@@ -1,15 +1,18 @@
 package cz.mzk.recordmanager.server.model;
 
+import cz.mzk.recordmanager.server.util.MetadataUtils;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
-import java.util.Objects;
 
 @Entity
 @Table(name = Uuid.TABLE_NAME)
 public class Uuid extends AbstractDomainObject {
 
 	public static final String TABLE_NAME = "uuid";
+
+	private final static int EFFECTIVE_LENGTH_100 = 100;
 
 	@Column(name = "harvested_record_id", updatable = false, insertable = false)
 	private Long harvestedRecordId;
@@ -36,7 +39,7 @@ public class Uuid extends AbstractDomainObject {
 	}
 
 	public void setUuid(String uuid) {
-		this.uuid = uuid;
+		this.uuid = MetadataUtils.shorten(uuid, EFFECTIVE_LENGTH_100);
 	}
 
 	@Override

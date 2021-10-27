@@ -29,6 +29,7 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 	private final static int EFFECTIVE_AUTHOR_AUTH_KEY_LENGTH = 50;
 	private final static int EFFECTIVE_LENGTH_EDITION = 10;
 	private final static int EFFECTIVE_LENGTH_30 = 30;
+	private final static int EFFECTIVE_LENGTH_100 = 100;
 	private final static int EFFECTIVE_LENGTH_PUBLISHER = 100;
 	private final static int EFFECTIVE_LENGTH_CALLNUMBER = 100;
 
@@ -100,7 +101,7 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 		encapsulator.setAuthorAuthKey(MetadataUtils.shorten(metadataRecord.getAuthorAuthKey(), EFFECTIVE_AUTHOR_AUTH_KEY_LENGTH));
 		encapsulator.setAuthorString(MetadataUtils.normalizeAndShorten(metadataRecord.getAuthorString(), EFFECTIVE_AUTHOR_LENGTH));
 		encapsulator.setScale(metadataRecord.getScale());
-		encapsulator.setUuid(metadataRecord.getUUId());
+		encapsulator.setUuid(MetadataUtils.shorten(metadataRecord.getUUId(), EFFECTIVE_LENGTH_100));
 		encapsulator.setPages(metadataRecord.getPageCount());
 		encapsulator.setIssnSeries(MetadataUtils.normalize(metadataRecord.getISSNSeries()));
 		encapsulator.setIssnSeriesOrder(MetadataUtils.normalize(metadataRecord.getISSNSeriesOrder()));
