@@ -829,7 +829,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 		if (isPeriodical()) hrf.add(HarvestedRecordFormatEnum.PERIODICALS);
 		if (isArticle()) hrf.add(HarvestedRecordFormatEnum.ARTICLES);
 		if (isArticle773()) return Collections.singletonList(HarvestedRecordFormatEnum.ARTICLES);
-		if (isMap()) hrf.add(HarvestedRecordFormatEnum.MAPS);
+		if (isMap()) return Collections.singletonList(HarvestedRecordFormatEnum.MAPS);
 		if (isMusicalScores()) hrf.add(HarvestedRecordFormatEnum.MUSICAL_SCORES);
 		if (isVisualDocument()) hrf.add(HarvestedRecordFormatEnum.VISUAL_DOCUMENTS);
 		if (isMicroform()) hrf.add(HarvestedRecordFormatEnum.OTHER_MICROFORMS);

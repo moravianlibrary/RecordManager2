@@ -77,41 +77,48 @@ public class RecordFormatTest extends AbstractTest {
 
 		data.add("000 000000E0000");
 		metadataRecord = metadataFactory.getMetadataRecord(MarcRecordFactory.recordFactory(data));
+		Assert.assertEquals(metadataRecord.getDetectedFormatList().size(), 1);
 		Assert.assertEquals(metadataRecord.getDetectedFormatList().get(0), HarvestedRecordFormatEnum.MAPS);
 
 		data.clear();
 		data.add("000 000000f0000");
 		metadataRecord = metadataFactory.getMetadataRecord(MarcRecordFactory.recordFactory(data));
+		Assert.assertEquals(metadataRecord.getDetectedFormatList().size(), 1);
 		Assert.assertEquals(metadataRecord.getDetectedFormatList().get(0), HarvestedRecordFormatEnum.MAPS);
 
 		data.clear();
 		data.add("000 00000000000");
 		data.add("006 E test");
 		metadataRecord = metadataFactory.getMetadataRecord(MarcRecordFactory.recordFactory(data));
+		Assert.assertEquals(metadataRecord.getDetectedFormatList().size(), 1);
 		Assert.assertEquals(metadataRecord.getDetectedFormatList().get(0), HarvestedRecordFormatEnum.MAPS);
 
 		data.clear();
 		data.add("000 00000000000");
 		data.add("006 f test");
 		metadataRecord = metadataFactory.getMetadataRecord(MarcRecordFactory.recordFactory(data));
+		Assert.assertEquals(metadataRecord.getDetectedFormatList().size(), 1);
 		Assert.assertEquals(metadataRecord.getDetectedFormatList().get(0), HarvestedRecordFormatEnum.MAPS);
 
 		data.clear();
 		data.add("000 00000000000");
 		data.add("245 $htest kartografický dokument test");
 		metadataRecord = metadataFactory.getMetadataRecord(MarcRecordFactory.recordFactory(data));
+		Assert.assertEquals(metadataRecord.getDetectedFormatList().size(), 1);
 		Assert.assertEquals(metadataRecord.getDetectedFormatList().get(0), HarvestedRecordFormatEnum.MAPS);
 
 		data.clear();
 		data.add("000 00000000000");
 		data.add("007 A test");
 		metadataRecord = metadataFactory.getMetadataRecord(MarcRecordFactory.recordFactory(data));
+		Assert.assertEquals(metadataRecord.getDetectedFormatList().size(), 1);
 		Assert.assertEquals(metadataRecord.getDetectedFormatList().get(0), HarvestedRecordFormatEnum.MAPS);
 
 		data.clear();
 		data.add("000 00000000000");
 		data.add("336 $bcR test");
 		metadataRecord = metadataFactory.getMetadataRecord(MarcRecordFactory.recordFactory(data));
+		Assert.assertEquals(metadataRecord.getDetectedFormatList().size(), 1);
 		Assert.assertEquals(metadataRecord.getDetectedFormatList().get(0), HarvestedRecordFormatEnum.MAPS);
 	}
 
@@ -183,7 +190,8 @@ public class RecordFormatTest extends AbstractTest {
 		metadataRecord = metadataFactory.getMetadataRecord(MarcRecordFactory.recordFactory(data));
 		Assert.assertTrue(metadataRecord.getDetectedFormatList().contains(HarvestedRecordFormatEnum.VISUAL_DOCUMENTS));
 
-		for (String text336 : new String[]{"sti", "tci", "cri", "crt"}) {
+		// 336b "cri", "crt" is map
+		for (String text336 : new String[]{"sti", "tci"}) {
 			data.clear();
 			data.add("336 $b" + text336);
 			metadataRecord = metadataFactory.getMetadataRecord(MarcRecordFactory.recordFactory(data));
@@ -217,10 +225,10 @@ public class RecordFormatTest extends AbstractTest {
 		Assert.assertTrue(metadataRecord.getDetectedFormatList().contains(HarvestedRecordFormatEnum.OTHER_MICROFORMS));
 
 		data.clear();
-		data.add("000 000000E0000");
+		data.add("000 000000E0000"); // also map
 		data.add("008 -----------------------------b");
 		metadataRecord = metadataFactory.getMetadataRecord(MarcRecordFactory.recordFactory(data));
-		Assert.assertTrue(metadataRecord.getDetectedFormatList().contains(HarvestedRecordFormatEnum.OTHER_MICROFORMS));
+		Assert.assertTrue(metadataRecord.getDetectedFormatList().contains(MAPS));
 
 		data.clear();
 		data.add("007 h");
@@ -284,7 +292,8 @@ public class RecordFormatTest extends AbstractTest {
 		metadataRecord = metadataFactory.getMetadataRecord(MarcRecordFactory.recordFactory(data));
 		Assert.assertTrue(metadataRecord.getDetectedFormatList().contains(HarvestedRecordFormatEnum.OTHER_COMPUTER_CARRIER));
 
-		for (char[] testArray : new char[][]{{'a', 'c', 'd', 'i', 'j', 'p', 't'}, {'e', 'f', 'g', 'k', 'o', 'p', 'r'}}) {
+		// e, f is map
+		for (char[] testArray : new char[][]{{'a', 'c', 'd', 'i', 'j', 'p', 't'}, {'g', 'k', 'o', 'p', 'r'}}) {
 			for (char c : testArray) {
 				data.clear();
 				data.add("006 " + c + "-----s");
