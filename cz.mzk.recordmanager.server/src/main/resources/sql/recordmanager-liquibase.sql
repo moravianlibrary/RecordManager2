@@ -2724,3 +2724,14 @@ INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granul
 
 --changeset tomascejpek:292 context:cpk
 UPDATE oai_harvest_conf SET url='https://tritius.knih-pe.cz/tritius/oai-provider',set_spec='CPK_1' WHERE import_conf_id=380;
+
+--changeset tomascejpek:293
+CREATE TABLE inspiration (
+  id                    SERIAL,
+  harvested_record_id   DECIMAL(10),
+  name                  VARCHAR(128),
+  CONSTRAINT inspiration_pk PRIMARY KEY(id),
+  FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE
+);
+CREATE INDEX inspiration_harvested_record_idx ON inspiration(harvested_record_id);
+CREATE INDEX inspiration_name_idx ON inspiration(name);
