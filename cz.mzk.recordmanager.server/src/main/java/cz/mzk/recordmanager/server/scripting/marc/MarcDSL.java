@@ -63,6 +63,7 @@ public class MarcDSL extends BaseDSL {
 	private static final Pattern SPLIT_DOT = Pattern.compile("\\.");
 	private static final Pattern SPLIT_VERTICAL_BAR = Pattern.compile("\\|");
 	private static final Pattern Z_CYKLU_787 = Pattern.compile("^z cyklu", Pattern.CASE_INSENSITIVE);
+	private static final Pattern CLEAN_787G = Pattern.compile("^[0-9]*\\.$", Pattern.CASE_INSENSITIVE);
 
 	private static final String LINK773_ISBN = "isbn:%s";
 	private static final String LINK773_ISSN = "issn:";
@@ -839,7 +840,8 @@ public class MarcDSL extends BaseDSL {
 					&& Z_CYKLU_787.matcher(df.getSubfield('i').getData()).find()) {
 				String sfT = df.getSubfield('t').getData().trim();
 				String sfG = df.getSubfield('g') == null ? "" : df.getSubfield('g').getData().trim();
-				results.add(sfT + '|' + sfG);
+				if (CLEAN_787G.matcher(sfG).matches()) sfG = sfG.replace(".", "");
+				results.add(sfT + (!sfG.isEmpty() ? '|' + sfG : ""));
 			}
 		}
 		return results;
