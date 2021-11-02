@@ -1,26 +1,20 @@
 package cz.mzk.recordmanager.server.facade;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import com.google.common.collect.ImmutableMap;
+import cz.mzk.recordmanager.server.springbatch.JobExecutor;
+import cz.mzk.recordmanager.server.util.Constants;
+import cz.mzk.recordmanager.server.util.ResourceUtils;
 import org.springframework.batch.core.JobParameter;
 import org.springframework.batch.core.JobParameters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Component;
 
-import com.google.common.collect.ImmutableMap;
-
-import cz.mzk.recordmanager.server.springbatch.JobExecutor;
-import cz.mzk.recordmanager.server.util.Constants;
-import cz.mzk.recordmanager.server.util.ResourceUtils;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.*;
 
 @Component
 public class MiscellaneousFacadeImpl implements MiscellaneousFacade {
@@ -71,6 +65,13 @@ public class MiscellaneousFacadeImpl implements MiscellaneousFacade {
 		parameters.put(Constants.JOB_PARAM_REPEAT, new JobParameter(Constants.JOB_PARAM_ONE_VALUE));
 		parameters.put(Constants.JOB_PARAM_REHARVEST, new JobParameter(Constants.JOB_PARAM_TRUE_VALUE));
 		jobExecutor.execute(Constants.JOB_ID_HARVEST_ZISKEJ_LIBRARIES, new JobParameters(parameters));
+	}
+
+	@Override
+	public void runGenerateTopResults() {
+		Map<String, JobParameter> parameters = new HashMap<>();
+		parameters.put(Constants.JOB_PARAM_REPEAT, new JobParameter(Constants.JOB_PARAM_ONE_VALUE));
+		jobExecutor.execute(Constants.JOB_ID_GENERATE_TOP_RESULTS, new JobParameters(parameters));
 	}
 
 	private LocalDateTime getLastGeneratedSkatKeys(String query, String jobName) {
