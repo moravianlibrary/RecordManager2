@@ -67,6 +67,7 @@ public class Constants {
 	public static final String JOB_ID_REGEN_DNNT					= "regenerateDnntKeysJob";
 	public static final String JOB_ID_HARVEST_CASLIN_LINKS			= "harvestCaslinLinksJob";
 	public static final String JOB_ID_MAPPED_SOURCE_FILTER			= "mappedSourceFilterJob";
+	public static final String JOB_ID_GENERATE_TOP_RESULTS			= "generateTopResultsJob";
 
 	public static final String JOB_PARAM_CONF_ID 		= "configurationId";
 	public static final String JOB_PARAM_FROM_DATE 		= "from";

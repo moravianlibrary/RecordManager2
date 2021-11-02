@@ -1,12 +1,10 @@
 package cz.mzk.recordmanager.server.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name=Inspiration.TABLE_NAME)
-public class Inspiration extends AbstractDomainObject{
+public class Inspiration{
 	
 	public static final String TABLE_NAME = "inspiration";
 	
@@ -16,7 +14,12 @@ public class Inspiration extends AbstractDomainObject{
 	public Inspiration(String name){
 		setName(name);
 	}
-	
+
+	@Id
+	@Column(name = "id")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+
 	@Column(name="harvested_record_id")
 	private Long harvestedRecordId;
 	

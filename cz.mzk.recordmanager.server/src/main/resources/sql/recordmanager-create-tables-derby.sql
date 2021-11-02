@@ -318,7 +318,7 @@ CREATE TABLE obalkyknih_toc (
 );
 
 CREATE TABLE inspiration (
-  id                   DECIMAL(10) PRIMARY KEY,
+  id                   INTEGER NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
   harvested_record_id  DECIMAL(10),
   name                 VARCHAR(128),
   CONSTRAINT inspiration_fk FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE
