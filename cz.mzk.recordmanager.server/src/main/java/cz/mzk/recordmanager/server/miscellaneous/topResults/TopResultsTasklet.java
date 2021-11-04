@@ -24,7 +24,7 @@ public class TopResultsTasklet implements Tasklet {
 		Map<String, Object> map = new HashMap<>();
 		map.put("year", Calendar.getInstance().get(Calendar.YEAR) - 1);
 		map.put("dedupCount", 50);
-		map.put("results", 30);
+		map.put("results", 20);
 		jdbcTemplate.update(executeSql, map);
 		return RepeatStatus.FINISHED;
 	}
