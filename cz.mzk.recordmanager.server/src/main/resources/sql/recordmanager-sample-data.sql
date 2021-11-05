@@ -740,6 +740,7 @@ INSERT INTO sigla (id, import_conf_id, sigla) VALUES (99, 426, 'OLG001');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (100, 427, 'TRG001');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (103, 430, 'CRG001');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (104, 431, 'KAG505');
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (105, 432, 'JHG001');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (112, 380, 'PEG001');
 
 INSERT INTO fit_project VALUES (1,'FULLTEXT_ANALYSER');

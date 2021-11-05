@@ -2442,3 +2442,6 @@ UPDATE oai_harvest_conf SET url='https://tritius.knih-pe.cz/tritius/oai-provider
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (92, 421, 'CHG001');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (103, 430, 'CRG001');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (112, 380, 'PEG001');
+
+-- 05. 11. 2021 tomascejpek
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (105, 432, 'JHG001');
