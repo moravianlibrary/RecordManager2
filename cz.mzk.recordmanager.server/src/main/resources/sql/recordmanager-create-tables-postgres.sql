@@ -412,9 +412,10 @@ COMMENT ON TABLE cosmotron_996 IS 'records from cosmotron, used for periodicals'
 COMMENT ON TABLE obalkyknih_toc IS 'downloaded table of contents from obalkyknih.cz';
 
 CREATE TABLE inspiration (
-  id					DECIMAL(10) PRIMARY KEY,
-  harvested_record_id	DECIMAL(10),
-  name					VARCHAR(128),
+  id                    SERIAL,
+  harvested_record_id   DECIMAL(10),
+  name                  VARCHAR(128),
+  CONSTRAINT inspiration_pk PRIMARY KEY(id),
   FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE
 );
 

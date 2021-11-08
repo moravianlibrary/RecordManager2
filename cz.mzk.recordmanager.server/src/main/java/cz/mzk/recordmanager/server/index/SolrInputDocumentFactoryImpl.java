@@ -110,8 +110,6 @@ public class SolrInputDocumentFactoryImpl implements SolrInputDocumentFactory, I
 		return document;
 	}
 
-	private static final String TOP_RESULTS = "top_results";
-
 	protected Set<String> getInspirations(List<HarvestedRecord> records){
 		Set<String> result = new HashSet<>();
 		
@@ -119,7 +117,6 @@ public class SolrInputDocumentFactoryImpl implements SolrInputDocumentFactory, I
 			for(Inspiration inspiration: record.getInspiration()){
 				result.add(inspiration.getName());
 			}
-			if (result.size() > 0) result.add(TOP_RESULTS);
 		}
 		
 		return result;

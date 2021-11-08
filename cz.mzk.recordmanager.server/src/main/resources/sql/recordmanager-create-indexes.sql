@@ -28,6 +28,7 @@ CREATE INDEX language_harvested_record_idx ON language(harvested_record_id);
 CREATE INDEX cosmotron_996_conf_id_parent_id_idx ON cosmotron_996 (parent_record_id,import_conf_id);
 CREATE INDEX cosmotron_996_record_id_import_conf_idx ON cosmotron_996(record_id, import_conf_id);
 CREATE INDEX inspiration_harvested_record_idx ON inspiration(harvested_record_id);
+CREATE INDEX inspiration_name_idx ON inspiration(name);
 CREATE INDEX publisher_number_harvested_record_idx ON publisher_number(harvested_record_id);
 CREATE INDEX authority_harvested_record_idx ON authority(harvested_record_id);
 CREATE INDEX authority_idx ON authority(authority_id);

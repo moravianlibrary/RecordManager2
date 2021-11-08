@@ -2448,3 +2448,15 @@ INSERT INTO sigla (id, import_conf_id, sigla) VALUES (105, 432, 'JHG001');
 
 -- 08. 11. 2021 tomascejpek
 DELETE FROM sigla WHERE id IN (49,52);
+
+-- 08. 11. 2021 tomascejpek
+DROP TABLE inspiration;
+CREATE TABLE inspiration (
+  id                    SERIAL,
+  harvested_record_id   DECIMAL(10),
+  name                  VARCHAR(128),
+  CONSTRAINT inspiration_pk PRIMARY KEY(id),
+  FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE
+);
+CREATE INDEX inspiration_harvested_record_idx ON inspiration(harvested_record_id);
+CREATE INDEX inspiration_name_idx ON inspiration(name);
