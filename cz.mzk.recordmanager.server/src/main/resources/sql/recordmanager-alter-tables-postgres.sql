@@ -2439,6 +2439,7 @@ INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granul
 UPDATE oai_harvest_conf SET url='https://tritius.knih-pe.cz/tritius/oai-provider',set_spec='CPK_1' WHERE import_conf_id=380;
 
 -- 02. 11. 2021 tomascejpek
+DROP TABLE inspiration;
 CREATE TABLE inspiration (
   id                    SERIAL,
   harvested_record_id   DECIMAL(10),
