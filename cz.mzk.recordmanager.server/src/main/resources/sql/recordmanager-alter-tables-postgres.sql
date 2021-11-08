@@ -2445,3 +2445,6 @@ INSERT INTO sigla (id, import_conf_id, sigla) VALUES (112, 380, 'PEG001');
 
 -- 05. 11. 2021 tomascejpek
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (105, 432, 'JHG001');
+
+-- 08. 11. 2021 tomascejpek
+DELETE FROM sigla WHERE id IN (49,52);

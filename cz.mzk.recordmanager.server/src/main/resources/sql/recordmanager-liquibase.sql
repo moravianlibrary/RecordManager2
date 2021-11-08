@@ -2732,3 +2732,6 @@ INSERT INTO sigla (id, import_conf_id, sigla) VALUES (112, 380, 'PEG001');
 
 --changeset tomascejpek:294 context:cpk
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (105, 432, 'JHG001');
+
+--changeset tomascejpek:295 context:cpk
+DELETE FROM sigla WHERE id IN (49,52);
