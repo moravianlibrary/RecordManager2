@@ -35,6 +35,13 @@ public class SolrUtils {
 	private static final String INSTITUTION_OTHERS = "Others";
 	private static final String INSTITUTION_UNKNOWN = "unknown";
 
+	private static final Pattern SORT_SUPPRESS = Pattern.compile("<<[^<{2}]*>>");
+	private static final Pattern SORT_TO_BLANK = Pattern.compile("[^\\p{L}0-9]", Pattern.UNICODE_CHARACTER_CLASS);
+	private static final Pattern SORT_PACK_SPACES = Pattern.compile(" +");
+
+	private static final String EMPTY_SEPARATOR = "";
+	private static final String SPACE_SEPARATOR = " ";
+
 	private enum WEIGHT_DOC_COMPARATOR implements Comparator<SolrInputDocument> {
 		INSTANCE;
 
@@ -361,6 +368,15 @@ public class SolrUtils {
 
 	public static String getSubfieldAsString(DataField df, char subfieldCode) {
 		return df.getSubfield(subfieldCode) != null ? df.getSubfield(subfieldCode).getData() : "";
+	}
+
+	public static String cleanStrForSorting(String text) {
+		text = text.toLowerCase();
+		text = CleaningUtils.replaceAll(text, SORT_SUPPRESS, EMPTY_SEPARATOR);
+		text = CleaningUtils.replaceAll(text, SORT_TO_BLANK, SPACE_SEPARATOR);
+		text = CleaningUtils.replaceAll(text, SORT_PACK_SPACES, SPACE_SEPARATOR);
+		text = text.trim();
+		return text;
 	}
 
 }

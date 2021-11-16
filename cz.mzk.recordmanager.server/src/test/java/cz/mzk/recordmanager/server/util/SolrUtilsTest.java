@@ -115,4 +115,14 @@ public class SolrUtilsTest {
 				"100", '1', ' ', "a", "Name, Test ,"), 'b'), "");
 	}
 
+	@Test
+	public void cleanStrForSorting() {
+		Assert.assertEquals(SolrUtils.cleanStrForSorting("  text   "), "text");
+		Assert.assertEquals(SolrUtils.cleanStrForSorting("text:,=;/. "), "text");
+		Assert.assertEquals(SolrUtils.cleanStrForSorting("10   TexT "), "10 text");
+		Assert.assertEquals(SolrUtils.cleanStrForSorting("„Schrödingerův myslivec\" : přeje si zvěře v honiTbě hodně MÁLO a chce její stavy snižovat nesnižovat"),
+				"schrödingerův myslivec přeje si zvěře v honitbě hodně málo a chce její stavy snižovat nesnižovat");
+	}
+
+
 }
