@@ -309,7 +309,7 @@
  <!-- CopyFields for All Fields -->
  <copyField source="format"    dest="allfields"/>
  <!-- CopyFields for Autocomplete -->
- <copyField source="author_autocomplete" dest="author_str_mv"/>
+ <copyField source="author_str_mv" dest="author_autocomplete"/>
  <copyField source="title_auto_str" dest="title_autocomplete"/>
  <copyField source="subject_str_mv" dest="subject_autocomplete"/>
 </schema>
