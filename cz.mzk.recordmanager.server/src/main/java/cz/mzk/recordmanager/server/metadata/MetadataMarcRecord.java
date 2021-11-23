@@ -102,7 +102,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 	private static final String[] AUTHORITY_ID_TAGS = {"100", "110", "111", "700", "710", "711"};
 	private static final char[] SHORT_TITLE_SUBFIELDS = {'a', 'n', 'p'};
 	private static final char[] TITLE_SUBFIELDS = {'a', 'b', 'n', 'p'};
-	private static final List<String> ZISKEJ_PRESENT_996 = Arrays.asList("D", "N", "P");
+	private static final List<String> ZISKEJ_ABSENT_996 = Collections.singletonList("A");
 
 	private static final char[] ARRAY_AT = {'a', 't'};
 	private static final char[] ARRAY_CDM = {'c', 'd', 'm'};
@@ -1831,7 +1831,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 				&& !Collections.disjoint(getDetectedFormatList(), ZISKEJ_FORMAT_ALLOWED);
 		if (!result) return false;
 		for (DataField df : underlayingMarc.getDataFields("996")) {
-			if (df.getSubfield('s') != null && !ZISKEJ_PRESENT_996.contains(df.getSubfield('s').getData().toUpperCase())) {
+			if (df.getSubfield('s') != null && ZISKEJ_ABSENT_996.contains(df.getSubfield('s').getData().toUpperCase())) {
 				return true;
 			}
 		}
