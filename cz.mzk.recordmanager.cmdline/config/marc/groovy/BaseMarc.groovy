@@ -79,9 +79,9 @@ record_format_facet_mv = cpk_detected_format_facet_str_mv = getFormat()
 source_title_facet = source_title_facet_str = getFirstField "773t"
 
 // sort
-author_sort = getAuthorForSorting()
+author_sort = author_sort_cz = getAuthorForSorting()
 publishDate_sort = publishDateSort = getPublishDateForSorting()
-title_sort = getSortableTitle()
+title_sort = title_sort_cz = getSortableTitle()
 
 // hidden
 _hidden_potential_dnnt = potentialDnnt()
