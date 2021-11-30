@@ -276,4 +276,18 @@ public class DublinCoreDSL extends BaseDSL {
 		return new HashSet<>(ViewType.getPossibleValues(dcMetadataRecord, listResolver, importConfId));
 	}
 
+	public String getTitleForSorting() {
+		String title = getFirstTitle();
+		if (title == null) return null;
+		title = SolrUtils.cleanStrForSorting(title);
+		return title.isEmpty() ? null : title;
+	}
+
+	public String getAuthorForSorting() {
+		String author = getFirstCreator();
+		if (author == null) return null;
+		author = SolrUtils.cleanStrForSorting(author);
+		return author.isEmpty() ? null : author;
+	}
+
 }
