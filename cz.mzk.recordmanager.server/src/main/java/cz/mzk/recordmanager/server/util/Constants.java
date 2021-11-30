@@ -93,6 +93,8 @@ public class Constants {
 	public static final String JOB_PARAM_UPDATE_TIMESTAMP = "updateTimestamp";
 	public static final String JOB_PARAM_INDEXED_FORMAT = "indexedFormat";
 	public static final String JOB_PARAM_FIELDS			= "fields";
+	public static final String JOB_PARAM_HARVESTED_FROM_DATE 	= "harvestedFrom";
+	public static final String JOB_PARAM_HARVESTED_TO_DATE 		= "harvestedTo";
 
 	public static final String JOB_PARAM_TRUE_VALUE		= "true";
 	public static final String JOB_PARAM_ONE_VALUE		= "1";

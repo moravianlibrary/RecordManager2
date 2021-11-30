@@ -1,6 +1,7 @@
 package cz.mzk.recordmanager.server.export;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -57,6 +58,8 @@ public class ExportRecordsJobConfig {
 
 	private static final Long LONG_OVERRIDEN_BY_EXPRESSION = null;
 
+	private static final Date DATE_OVERRIDEN_BY_EXPRESSION = null;
+
 	@Bean
 	public Job exportRecordsJob(
 			@Qualifier("exportRecordsJob:exportRecordsStep") Step exportRecordsStep) {
@@ -95,7 +98,8 @@ public class ExportRecordsJobConfig {
 		return steps.get("exportRecordsStep")
 				.listener(new StepProgressListener())
 				.<HarvestedRecordUniqueId, String>chunk(20)//
-				.reader(exportRecordsReader(LONG_OVERRIDEN_BY_EXPRESSION, LONG_OVERRIDEN_BY_EXPRESSION, STRING_OVERRIDEN_BY_EXPRESSION)) //
+				.reader(exportRecordsReader(LONG_OVERRIDEN_BY_EXPRESSION, LONG_OVERRIDEN_BY_EXPRESSION, STRING_OVERRIDEN_BY_EXPRESSION,
+						DATE_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION)) //
 				.processor(exportRecordsProcessor(STRING_OVERRIDEN_BY_EXPRESSION, STRING_OVERRIDEN_BY_EXPRESSION)) //
 				.writer(exportRecordsWriter(STRING_OVERRIDEN_BY_EXPRESSION)) //
 				.build();
@@ -127,7 +131,9 @@ public class ExportRecordsJobConfig {
 	public ItemReader<HarvestedRecordUniqueId> exportRecordsReader(
 			@Value("#{jobParameters[" + Constants.JOB_PARAM_CONF_ID + "]}") Long configId,
 			@Value("#{jobParameters[" + Constants.JOB_PARAM_DELETED + "]}") Long deleted,
-			@Value("#{jobParameters[" + Constants.JOB_PARAM_RECORD_IDS + "]}") String recordIds)
+			@Value("#{jobParameters[" + Constants.JOB_PARAM_RECORD_IDS + "]}") String recordIds,
+			@Value("#{jobParameters[" + Constants.JOB_PARAM_HARVESTED_FROM_DATE + "]}") Date harvestedFrom,
+			@Value("#{jobParameters[" + Constants.JOB_PARAM_HARVESTED_TO_DATE + "]}") Date harvestedTo)
 			throws Exception {
 		JdbcPagingItemReader<HarvestedRecordUniqueId> reader = new JdbcPagingItemReader<>();
 		SqlPagingQueryProviderFactoryBean pqpf = new SqlPagingQueryProviderFactoryBean();
@@ -136,11 +142,15 @@ public class ExportRecordsJobConfig {
 		pqpf.setFromClause("FROM harvested_record");
 		pqpf.setWhereClause("WHERE import_conf_id = :conf_id" +
 				(deleted == null ? " AND deleted IS NULL" : "") +
-				(recordIds != null ? " AND record_id IN (:record_id)" : "")
+				(recordIds != null ? " AND record_id IN (:record_id)" : "") +
+				(harvestedFrom != null ? " AND harvested > :harvestedFrom" : "") +
+				(harvestedTo != null ? " AND harvested < :harvestedTo" : "")
 		);
 		pqpf.setSortKey("record_id");
 		Map<String, Object> parameterValues = new HashMap<>();
 		parameterValues.put("conf_id", configId);
+		parameterValues.put("harvestedFrom", harvestedFrom);
+		parameterValues.put("harvestedTo", harvestedTo);
 		if (recordIds != null) parameterValues.put("record_id", Arrays.asList(recordIds.split(",")));
 		reader.setParameterValues(parameterValues);
 		reader.setRowMapper(new HarvestedRecordIdRowMapper());
