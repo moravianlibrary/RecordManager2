@@ -68,7 +68,7 @@ public class DublinCoreDSL extends BaseDSL {
 	}
 
 	public List<String> getOtherTitles() {
-		List<String> titles = record.getTitles();
+		List<String> titles = new ArrayList<>(record.getTitles());
 
 		if (titles.size() <= 1) titles.clear();
 		else titles.subList(1, titles.size());
@@ -82,8 +82,8 @@ public class DublinCoreDSL extends BaseDSL {
 	}
 
 	public List<String> getOtherCreators() {
-		List<String> creators = record.getCreators();
-		List<String> contributors = record.getContributors();
+		List<String> creators = new ArrayList<>(record.getCreators());
+		List<String> contributors = new ArrayList<>(record.getContributors());
 		if (!creators.isEmpty()) {
 			creators.remove(0); //removes first creator who goes to different field
 		}
