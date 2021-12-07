@@ -2465,3 +2465,8 @@ CREATE INDEX inspiration_name_idx ON inspiration(name);
 INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (241, 'MKJICIN', 'https://knihovna.jicin.cz/', 'https://katalog.knihovna.jicin.cz/', 'Jičín', 'KH');
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id) VALUES (441, 241, 200, 'mkjicin', 11, false, true, true, true, 'U', 'other');
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (441,'https://katalog.knihovna.jicin.cz/api/oai','cpk','marc21',NULL);
+
+-- 07. 12. 2021 tomascejpek
+INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (242, 'MKFPR', 'https://www.knihovnafrenstat.cz/', 'https://katalog.knihovnafrenstat.cz/', 'Frenštát pod Radhoštěm', 'MS');
+INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id, mappings996) VALUES (442, 242, 200, 'mkfpr', 11, false, true, true, true, 'U', 'koha', 'koha');
+INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity,extract_id_regex) VALUES (442,'https://koha.knihovnafrenstat.cz/cgi-bin/koha/oai.pl','CPK','marccpk',NULL,'NJG502:(.*)');
