@@ -43,6 +43,7 @@ public class MarcInterceptorFactory {
 			case Constants.PREFIX_KKKV : return new KkkvMarcInterceptor(record, configuration, recordId);
 			case Constants.PREFIX_IIR: return new IirMarcInterceptor(record, configuration, recordId);
 			case Constants.PREFIX_DIVABIB: return new DivabibMarcInterceptor(record);
+			case Constants.PREFIX_KFBZ: return new KfbzMarcInterceptor(record, configuration, recordId);
 			default: return new DefaultMarcInterceptor(record, configuration, recordId);
 			}
 		} catch (InvalidMarcException ime) {
