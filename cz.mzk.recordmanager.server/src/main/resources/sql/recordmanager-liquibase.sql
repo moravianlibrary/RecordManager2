@@ -2762,3 +2762,8 @@ INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granul
 UPDATE library SET catalog_url='https://katalog.knihovnaberoun.cz/' WHERE id=189;
 UPDATE import_conf SET item_id='koha',mappings996='koha' WHERE id=389;
 UPDATE oai_harvest_conf SET url='https://koha.knihovnaberoun.cz/cgi-bin/koha/oai.pl',set_spec='CPK',metadata_prefix='marccpk',extract_id_regex='BEG001:(.*)' WHERE import_conf_id=389;
+
+--changeset tomascejpek:300 context:cpk
+INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (243, 'MKKNO', 'https://biblio.cz/', 'https://katalog.biblio.cz/', 'Kostelec nad Orlicí', 'KH');
+INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id, mappings996) VALUES (443, 243, 200, 'mkkno', 11, false, true, true, true, 'U', 'koha', 'koha');
+INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity,extract_id_regex) VALUES (443,'https://koha-katalog.biblio.cz/cgi-bin/koha/oai.pl','CPK','marccpk',NULL,'RKG503:(.*)');
