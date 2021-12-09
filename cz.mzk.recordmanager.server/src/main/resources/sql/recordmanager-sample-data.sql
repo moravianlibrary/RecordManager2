@@ -128,6 +128,7 @@ INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (240, 'QUE
 INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (241, 'MKJICIN', 'https://knihovna.jicin.cz/', 'https://katalog.knihovna.jicin.cz/', 'Jičín', 'KH');
 INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (242, 'MKFPR', 'https://www.knihovnafrenstat.cz/', 'https://katalog.knihovnafrenstat.cz/', 'Frenštát pod Radhoštěm', 'MS');
 INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (243, 'MKKNO', 'https://biblio.cz/', 'https://katalog.biblio.cz/', 'Kostelec nad Orlicí', 'KH');
+INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (244, 'AMBIS', 'https://www.ambis.cz/', 'https://ambis.tritius.cz/', 'Praha', 'PR');
 INSERT INTO library (id, name, url, catalog_url, city) VALUES (400, 'AUTHORITY', 'nkp.cz', 'aleph.nkp.cz', NULL);
 INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (99027, 'KRAM-CUNI', '', '', '','kramerius');
 INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (99028, 'KRAM-CUNIFSV', '', '', '','kramerius');
@@ -301,6 +302,7 @@ INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weig
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id) VALUES (441, 241, 200, 'mkjicin', 11, false, true, true, true, 'U', 'other');
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id, mappings996) VALUES (442, 242, 200, 'mkfpr', 11, false, true, true, true, 'U', 'koha', 'koha');
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id, mappings996) VALUES (443, 243, 200, 'mkkno', 11, false, true, true, true, 'U', 'koha', 'koha');
+INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id, mappings996) VALUES (444, 244, 200, 'ambis', 11, false, true, true, true, 'U', 'other', 'tritius');
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency) VALUES (500, 110, 200, 'antik', null, false, false, false, false, 'U');
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, generate_biblio_linker_keys) VALUES (1300, 100, 200, 'sfxjibmzk', 8, false, false, false, true, 'U', false);
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, generate_biblio_linker_keys) VALUES (1301, 101, 200, 'sfxjibnlk', 8, false, false, false, true, 'U', false);
@@ -504,6 +506,7 @@ INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granul
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (441,'https://katalog.knihovna.jicin.cz/api/oai','cpk','marc21',NULL);
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity,extract_id_regex) VALUES (442,'https://koha.knihovnafrenstat.cz/cgi-bin/koha/oai.pl','CPK','marccpk',NULL,'NJG502:(.*)');
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity,extract_id_regex) VALUES (443,'https://koha-katalog.biblio.cz/cgi-bin/koha/oai.pl','CPK','marccpk',NULL,'RKG503:(.*)');
+INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (444,'https://ambis.tritius.cz/tritius/oai-provider','CPK_1','marc21',NULL);
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (1300,NULL,NULL,'marc21',NULL);
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (1301,NULL,NULL,'marc21',NULL); 
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (1302,NULL,NULL,'marc21',NULL);

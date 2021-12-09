@@ -2767,3 +2767,8 @@ UPDATE oai_harvest_conf SET url='https://koha.knihovnaberoun.cz/cgi-bin/koha/oai
 INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (243, 'MKKNO', 'https://biblio.cz/', 'https://katalog.biblio.cz/', 'Kostelec nad Orlicí', 'KH');
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id, mappings996) VALUES (443, 243, 200, 'mkkno', 11, false, true, true, true, 'U', 'koha', 'koha');
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity,extract_id_regex) VALUES (443,'https://koha-katalog.biblio.cz/cgi-bin/koha/oai.pl','CPK','marccpk',NULL,'RKG503:(.*)');
+
+--changeset tomascejpek:301 context:cpk
+INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (244, 'AMBIS', 'https://www.ambis.cz/', 'https://ambis.tritius.cz/', 'Praha', 'PR');
+INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id, mappings996) VALUES (444, 244, 200, 'ambis', 11, false, true, true, true, 'U', 'other', 'tritius');
+INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (444,'https://ambis.tritius.cz/tritius/oai-provider','CPK_1','marc21',NULL);
