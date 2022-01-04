@@ -2776,3 +2776,6 @@ INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granul
 --changeset tomascejpek:302 context:cpk
 UPDATE import_conf SET mappings996='tritius' WHERE id=379;
 UPDATE oai_harvest_conf SET url='https://orlova.knihovny.net/tritius/oai-provider',set_spec='CPK_1' WHERE import_conf_id=379;
+
+--changeset tomascejpek:303 context:cpk
+UPDATE oai_harvest_conf SET url='https://baze.knihovnazn.cz/tritius/oai-provider',set_spec='CPK_1' WHERE import_conf_id=384;
