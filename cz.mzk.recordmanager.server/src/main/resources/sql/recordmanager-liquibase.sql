@@ -2785,3 +2785,8 @@ UPDATE kramerius_conf SET url='https://kramerius.kkvysociny.cz/search/api/v5.0',
 
 --changeset tomascejpek:305 context:cpk
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (108, 437, 'MBG504');
+
+--changeset tomascejpek:306 context:cpk
+INSERT INTO import_conf_mapping_field (import_conf_id,parent_import_conf_id,mapping) VALUES (349,422,'599$aCPK-UDUBIBL');
+INSERT INTO import_conf_mapping_field (import_conf_id,parent_import_conf_id,mapping) VALUES (420,422,'599$aCPK-USDBIBL');
+UPDATE import_conf SET interception_enabled=TRUE WHERE id=349;

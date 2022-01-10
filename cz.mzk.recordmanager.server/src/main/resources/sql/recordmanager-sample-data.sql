@@ -209,7 +209,7 @@ INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weig
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id, ziskej_enabled, mappings996) VALUES (346, 146, 200, 'mkpr', 9, false, true, true, true, 'U', 'other', false, 'tritius');
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency,generate_dedup_keys) VALUES (347, 147, 200, 'upv', 8, false, true, false, false, 'U',false);
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, ziskej_enabled) VALUES (348, 148, 200, 'npmk', 11, false, true, false, false, 'U', false);
-INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, ziskej_enabled) VALUES (349, 149, 200, 'muzibib', 11, false, true, false, false, 'U', false);
+INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, ziskej_enabled) VALUES (349, 149, 200, 'muzibib', 11, false, true, true, false, 'U', false);
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id, ziskej_enabled, mappings996) VALUES (350, 150, 200, 'mkchodov', 11, false, true, true, true, 'U', 'other', false, 'tritius');
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, generate_dedup_keys, mapping_script, mapping_dedup_script) VALUES (351, 151, 200, 'library', 0, false, true, false, false, 'U', false, 'AdresarKnihovenLocal.groovy', 'AdresarKnihovenBaseMarc.groovy');
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency,mapping_script,generate_dedup_keys) VALUES (352,101,200,'mesh',0,false,false,false,false,'U',null,false);
@@ -736,6 +736,7 @@ INSERT INTO sigla (id, import_conf_id, sigla) VALUES (80, 404, 'KAG001');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (81, 405, 'KAG001');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (82, 406, 'KAG001');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (83, 407, 'KAG001');
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (83, 407, 'KAG001');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (84, 408, 'KAG001');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (85, 409, 'CLG001');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (87, 411, 'NAG502');
@@ -758,4 +759,6 @@ INSERT INTO fit_project VALUES (1,'FULLTEXT_ANALYSER');
 INSERT INTO fit_project VALUES (2,'SEMANTIC_ENRICHMENT');
 INSERT INTO fit_project VALUES (3,'CLASSIFIER');
 
+INSERT INTO import_conf_mapping_field (import_conf_id,parent_import_conf_id,mapping) VALUES (349,422,'599$aCPK-UDUBIBL');
 INSERT INTO import_conf_mapping_field (import_conf_id,parent_import_conf_id,mapping) VALUES (361,422,'599$aCPK-UVGZ');
+INSERT INTO import_conf_mapping_field (import_conf_id,parent_import_conf_id,mapping) VALUES (420,422,'599$aCPK-USDBIBL');
