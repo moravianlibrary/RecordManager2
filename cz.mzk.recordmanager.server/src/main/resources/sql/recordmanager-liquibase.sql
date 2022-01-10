@@ -2782,3 +2782,6 @@ UPDATE oai_harvest_conf SET url='https://baze.knihovnazn.cz/tritius/oai-provider
 
 --changeset tomascejpek:304 context:cpk
 UPDATE kramerius_conf SET url='https://kramerius.kkvysociny.cz/search/api/v5.0',availability_dest_url='https://kramerius.kkvysociny.cz/uuid/' WHERE import_conf_id=99025;
+
+--changeset tomascejpek:305 context:cpk
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (108, 437, 'MBG504');
