@@ -124,4 +124,8 @@ public class ZakonyProLidiMetadataMarcRecord extends MetadataMarcRecord{
 		return CitationRecordType.BOOK;
 	}
 
+	@Override
+	public boolean subjectFacet() {
+		return false;
+	}
 }
