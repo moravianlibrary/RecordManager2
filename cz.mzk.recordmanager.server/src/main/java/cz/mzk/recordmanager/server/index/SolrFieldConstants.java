@@ -189,6 +189,8 @@ public class SolrFieldConstants {
 
 	public static final String ZISKEJ_FACET_MV = "ziskej_facet_mv";
 
+	public static final String UUID_STR_MV = "uuid_str_mv";
+
 	/**
 	 * dummy fields used for processing purposes only, shouldn't be indexed.
 	 */

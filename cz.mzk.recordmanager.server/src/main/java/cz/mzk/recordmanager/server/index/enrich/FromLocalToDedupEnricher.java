@@ -29,7 +29,8 @@ public class FromLocalToDedupEnricher implements DedupRecordEnricher {
 
 	private final FieldMerger merge = new FieldMerger(
 			SolrFieldConstants.MONOGRAPHIC_SERIES_TXT_MV,
-			SolrFieldConstants.MONOGRAPHIC_SERIES_DISPLAY_MV
+			SolrFieldConstants.MONOGRAPHIC_SERIES_DISPLAY_MV,
+			SolrFieldConstants.UUID_STR_MV
 	);
 
 	private final FieldMerger copyDedup = new FieldMerger();

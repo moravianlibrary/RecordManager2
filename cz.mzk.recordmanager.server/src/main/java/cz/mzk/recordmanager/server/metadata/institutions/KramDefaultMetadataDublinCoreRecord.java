@@ -68,4 +68,9 @@ public class KramDefaultMetadataDublinCoreRecord extends
 		return false;
 	}
 
+	@Override
+	public String getKrameriusRecordId() {
+		return harvestedRecord.getUniqueId().getRecordId();
+	}
+
 }

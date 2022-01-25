@@ -531,4 +531,8 @@ public interface MetadataRecord {
 		return false;
 	}
 
+	default String getKrameriusRecordId() {
+		return null;
+	}
+
 }

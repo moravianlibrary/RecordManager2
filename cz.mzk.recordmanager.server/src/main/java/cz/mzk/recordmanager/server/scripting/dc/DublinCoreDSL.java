@@ -290,4 +290,8 @@ public class DublinCoreDSL extends BaseDSL {
 		return author.isEmpty() ? null : author;
 	}
 
+	public String getUuidForObalkyKnih() {
+		return dcContext.metadataRecord().getKrameriusRecordId();
+	}
+
 }

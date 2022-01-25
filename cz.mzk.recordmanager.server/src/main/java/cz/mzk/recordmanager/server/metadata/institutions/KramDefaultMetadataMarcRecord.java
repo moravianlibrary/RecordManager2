@@ -86,4 +86,10 @@ public class KramDefaultMetadataMarcRecord extends
 		}
 		return new ArrayList<>(results);
 	}
+
+	@Override
+	public String getKrameriusRecordId() {
+		return harvestedRecord.getUniqueId().getRecordId();
+	}
+
 }

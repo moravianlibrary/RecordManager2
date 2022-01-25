@@ -7,6 +7,7 @@ physical = getPhysicals();
 url = getUrls();
 barcodes = getBarcodes()
 _hidden_index_when_merged_boolean = getIndexWhenMerged()
+uuid_str_mv = getUuidForObalkyKnih()
 
 // facet
 local_region_institution_facet_mv = local_region_institution_facet_str_mv = getRegionInstitutionFacet()
