@@ -32,7 +32,7 @@ public class SolrUtils {
 	private static final Pattern AUTHOR_PATTERN = Pattern.compile("([^,]+),(.+)");
 
 	private static final String INSTITUTION_LIBRARY = "Library";
-	private static final String INSTITUTION_OTHERS = "Others";
+	public static final String INSTITUTION_OTHERS = "Others";
 	private static final String INSTITUTION_UNKNOWN = "unknown";
 
 	private static final Pattern SORT_SUPPRESS = Pattern.compile("<<[^<{2}]*>>");

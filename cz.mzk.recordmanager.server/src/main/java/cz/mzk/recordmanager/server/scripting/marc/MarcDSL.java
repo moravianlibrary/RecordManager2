@@ -706,7 +706,10 @@ public class MarcDSL extends BaseDSL {
 	}
 
 	public List<String> getRegionInstitutionFacet() {
-		return SolrUtils.getRegionInstitution(context.harvestedRecord().getHarvestedFrom());
+		List<String> results = new ArrayList<>();
+		results.addAll(context.metadataRecord().getCustomInstitutionFacet());
+		results.addAll(SolrUtils.getRegionInstitution(context.harvestedRecord().getHarvestedFrom()));
+		return results;
 	}
 
 	public List<String> getInstitutionViewFacet() {

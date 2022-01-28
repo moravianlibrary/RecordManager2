@@ -2503,3 +2503,7 @@ INSERT INTO sigla (id, import_conf_id, sigla) VALUES (108, 437, 'MBG504');
 INSERT INTO import_conf_mapping_field (import_conf_id,parent_import_conf_id,mapping) VALUES (349,422,'599$aCPK-UDUBIBL');
 INSERT INTO import_conf_mapping_field (import_conf_id,parent_import_conf_id,mapping) VALUES (420,422,'599$aCPK-USDBIBL');
 UPDATE import_conf SET interception_enabled=TRUE WHERE id=349;
+
+-- 28. 01. 2022 tomascejpek
+INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, generate_dedup_keys) VALUES (445, 114, 200, 'bookport', 11, false, true, true, true, 'U', false);
+INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format) VALUES (445,null,null,null);
