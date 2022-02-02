@@ -2790,3 +2790,7 @@ INSERT INTO sigla (id, import_conf_id, sigla) VALUES (108, 437, 'MBG504');
 INSERT INTO import_conf_mapping_field (import_conf_id,parent_import_conf_id,mapping) VALUES (349,422,'599$aCPK-UDUBIBL');
 INSERT INTO import_conf_mapping_field (import_conf_id,parent_import_conf_id,mapping) VALUES (420,422,'599$aCPK-USDBIBL');
 UPDATE import_conf SET interception_enabled=TRUE WHERE id=349;
+
+--changeset tomascejpek:307 context:cpk
+UPDATE oai_harvest_conf SET url='https://milovice.tritius.cz/tritius/oai-provider' WHERE import_conf_id=424;
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (97, 424, 'NBG505');
