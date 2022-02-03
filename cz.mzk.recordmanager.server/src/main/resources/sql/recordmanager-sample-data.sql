@@ -487,7 +487,7 @@ INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granul
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity,extract_id_regex) VALUES (421,'https://kpwin.knih-cheb.cz/api/oai','cpk','marc21',NULL,'oai:(.*)');
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (422,'https://aleph.lib.cas.cz/OAI','KNA01','marc21',NULL);
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (423,'https://tritius-knihovna.ricany.cz/tritius/oai-provider','CPK_1','marc21',NULL);
-INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (424,'https://sck.tritius.cz/tritius/oai-provider','CPK_1','marc21',NULL);
+INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (424,'https://milovice.tritius.cz/tritius/oai-provider','CPK_1','marc21',NULL);
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (425,'https://boskovice.tritius.cz/tritius/oai-provider','CPK_1','marc21',NULL);
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (426,'https://tritius.kmol.cz/tritius/oai-provider','CPK_1','marc21',NULL);
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (427,'https://trebic.tritius.cz/tritius/oai-provider','CPKTEST_1','marc21',NULL);
@@ -748,6 +748,7 @@ INSERT INTO sigla (id, import_conf_id, sigla) VALUES (90, 418, 'SVG503');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (93, 419, 'MOG501');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (92, 421, 'CHG001');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (96, 423, 'ABG502');
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (97, 424, 'NBG505');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (98, 425, 'BKG501');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (99, 426, 'OLG001');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (100, 427, 'TRG001');
