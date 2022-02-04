@@ -2798,3 +2798,7 @@ INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format) VAL
 --changeset tomascejpek:308 context:cpk
 UPDATE oai_harvest_conf SET url='https://milovice.tritius.cz/tritius/oai-provider' WHERE import_conf_id=424;
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (97, 424, 'NBG505');
+
+--changeset tomascejpek:309 context:cpk
+UPDATE download_import_conf SET url='https://sfx.knihovny.cz/sfxlcl3/cgi/public/get_file.cgi?file=institutional_holding-NLK.xml',import_job_name='downloadAndImportRecordsJob',format='sfx',reharvest=true WHERE import_conf_id=1316;
+UPDATE import_conf SET filtering_enabled=FALSE WHERE id=1316;

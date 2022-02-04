@@ -98,6 +98,7 @@ public class MetadataRecordFactory {
 		case Constants.PREFIX_SFXJIBUZEI:
 		case Constants.PREFIX_SFXJIBKKVY:
 		case Constants.PREFIX_SFXJIBSVKUL:
+		case Constants.PREFIX_SFXJIBNLK:
 			return new SfxJibMetadataMarcRecord(marcRec, hr);
 		case Constants.PREFIX_SFXJIBIREL:
 			return new SfxJibIrelMetadataMarcRecord(marcRec, hr);
@@ -113,8 +114,6 @@ public class MetadataRecordFactory {
 		case Constants.PREFIX_SFXTECHLIBUOCHB:
 		case Constants.PREFIX_SFXTECHLIBVSCHT:
 			return new SfxTechlibMetadataMarcRecord(marcRec, hr);
-		case Constants.PREFIX_SFXJIBNLK:
-			return new SfxjibNlkMetadataMarcRecord(marcRec, hr);
 		case Constants.PREFIX_SFXJIBMUNI:
 			return new SfxDirectMetadataMarcRecord(marcRec, hr);
 		case Constants.PREFIX_CASLIN:
