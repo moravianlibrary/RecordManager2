@@ -59,7 +59,7 @@ cnb_search_str = getFirstField "015az"
 subject_facet_mv = getSubject "600abcdfglnpqstyz:610abcdfgklnpstyz:611abcdefgklnpqstyz:630adfgklnpstyz2:648a:650avyz:651avxyz:964abcdefg:967ab"
 source_title_facet = source_title_facet_str = getFirstField "773t"
 publisher_facet_mv = publisher_str_mv = getPublisherStrMv()
-author_facet_mv = author_facet_str_mv = getFields "100abcdq:110abc:111acdegq:700abcdq:710abc:711acdegq:975abcdq:976abc"
+author_facet_mv = getFields "100abcdq:110abc:111acdegq:700abcdq:710abc:711acdegq:975abcdq:976abc"
 
 bbox_geo = getBoundingBoxAsPolygon()
 bbox_geo_str = getBoundingBox()

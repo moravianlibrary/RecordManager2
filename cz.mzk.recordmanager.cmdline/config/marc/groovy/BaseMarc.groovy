@@ -69,7 +69,7 @@ citation_record_type_str = getCitationRecordType();
 author_find = getAuthorFind();
 
 // facets
-author_facet_mv = author_facet_str_mv = filter("author_facet.txt", getAuthorFacet())
+author_facet_mv = filter("author_facet.txt", getAuthorFacet())
 country_facet_mv = country_str_mv = translate("mzk_country.map", getCountries(), null)
 language_facet_mv = language = translate("mzk_language.map", getLanguages(), null)
 publishDate_facet_mv = publishDate = getPublishDate()
