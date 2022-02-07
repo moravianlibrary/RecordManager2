@@ -197,21 +197,6 @@ public class UrlDedupRecordEnricher implements DedupRecordEnricher {
 		}
 		if (availabilitiesSimple.isEmpty()) return;
 		availabilitiesSimple.remove(Constants.DOCUMENT_AVAILABILITY_NA);
-		Set<String> availabilities = new HashSet<>(); // hierarchical
-		for (String availability : availabilitiesSimple) {
-			if (availability.equals(Constants.DOCUMENT_AVAILABILITY_PROTECTED)) continue;
-			availabilities.addAll(SolrUtils.createHierarchicFacetValues(
-					Constants.DOCUMENT_AVAILABILITY_ONLINE, availability));
-		}
-		// hierarchical to all local records
-		for (SolrInputDocument localRecord : localRecords) {
-			Set<String> results = localRecord.containsKey(SolrFieldConstants.LOCAL_STATUSES_FACET)
-					? localRecord.getFieldValues(SolrFieldConstants.LOCAL_STATUSES_FACET).stream()
-					.map(Object::toString).collect(Collectors.toSet())
-					: new HashSet<>();
-			results.addAll(availabilities);
-			localRecord.setField(SolrFieldConstants.LOCAL_STATUSES_FACET, results);
-		}
 		// simple to merged record
 		mergedDocument.setField(SolrFieldConstants.STATUSES_FACET, availabilitiesSimple);
 	}

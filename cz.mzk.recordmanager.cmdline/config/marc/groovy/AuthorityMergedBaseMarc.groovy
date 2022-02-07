@@ -11,7 +11,7 @@ citation_record_type_str = getCitationRecordType()
 author_str_mv = getAuthorAutocomplete()
 
 // facets
-record_format_facet_mv = cpk_detected_format_facet_str_mv = getFormat()
+record_format_facet_mv = getFormat()
 
 // search
 author_exact = getAuthorExact()

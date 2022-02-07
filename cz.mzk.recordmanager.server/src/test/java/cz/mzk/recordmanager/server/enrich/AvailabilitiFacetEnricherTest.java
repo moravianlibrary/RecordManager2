@@ -6,7 +6,6 @@ import cz.mzk.recordmanager.server.index.enrich.DedupRecordEnricher;
 import cz.mzk.recordmanager.server.index.enrich.UrlDedupRecordEnricher;
 import cz.mzk.recordmanager.server.model.DedupRecord;
 import cz.mzk.recordmanager.server.util.Constants;
-import cz.mzk.recordmanager.server.util.SolrUtils;
 import org.apache.solr.common.SolrInputDocument;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -15,14 +14,9 @@ import java.util.*;
 
 public class AvailabilitiFacetEnricherTest extends AbstractTest {
 
-	private static final String PRESENT = "0/present/";
 	private static final String URL = "mzk|%s|https://mzk.cz|comment";
 	private static final String DIFFERENT_URL = "mzk|%s|https://mzk1.cz|comment";
 	private static final String DIFFERENT_URL2 = "mzk|%s|https://mzk2.cz|comment";
-	private static final List<String> ONLINE_STATUSES = SolrUtils.createHierarchicFacetValues(
-			Constants.DOCUMENT_AVAILABILITY_ONLINE, Constants.DOCUMENT_AVAILABILITY_ONLINE);
-	private static final List<String> ONLINE_UNKNOWN_STATUSES = SolrUtils.createHierarchicFacetValues(
-			Constants.DOCUMENT_AVAILABILITY_ONLINE, Constants.DOCUMENT_AVAILABILITY_UNKNOWN);
 
 	@Test
 	public void onlineTest() {
@@ -31,25 +25,15 @@ public class AvailabilitiFacetEnricherTest extends AbstractTest {
 		List<SolrInputDocument> locals = new ArrayList<>();
 
 		SolrInputDocument doc1 = EnricherUtils.createDocument(SolrFieldConstants.URL,
-				String.format(URL,Constants.DOCUMENT_AVAILABILITY_ONLINE));
-		SolrInputDocument doc2 = EnricherUtils.createDocument(SolrFieldConstants.LOCAL_STATUSES_FACET, PRESENT);
+				String.format(URL, Constants.DOCUMENT_AVAILABILITY_ONLINE));
+		SolrInputDocument doc2 = EnricherUtils.createDocument();
 		locals.add(doc1);
 		locals.add(doc2);
 
 		new UrlDedupRecordEnricher().enrich(dr, merged, locals);
 
-		// present only in doc2
-		Assert.assertFalse(doc1.getFieldValues(SolrFieldConstants.LOCAL_STATUSES_FACET).contains(PRESENT));
-		Assert.assertTrue(doc2.getFieldValues(SolrFieldConstants.LOCAL_STATUSES_FACET).contains(PRESENT));
-
-		// size test
-		Assert.assertEquals(doc1.getFieldValues(SolrFieldConstants.LOCAL_STATUSES_FACET).size(), 2);
-		Assert.assertEquals(doc2.getFieldValues(SolrFieldConstants.LOCAL_STATUSES_FACET).size(), 3);
-
-		// both must containts online status
-		for (SolrInputDocument local : locals) {
-			Assert.assertTrue(local.getFieldValues(SolrFieldConstants.LOCAL_STATUSES_FACET).containsAll(ONLINE_STATUSES));
-		}
+		// merged must containts online status
+		Assert.assertTrue(merged.getFieldValues(SolrFieldConstants.STATUSES_FACET).contains(Constants.DOCUMENT_AVAILABILITY_ONLINE));
 	}
 
 	@Test
@@ -59,25 +43,15 @@ public class AvailabilitiFacetEnricherTest extends AbstractTest {
 		List<SolrInputDocument> locals = new ArrayList<>();
 
 		SolrInputDocument doc1 = EnricherUtils.createDocument(SolrFieldConstants.URL,
-				String.format(URL,Constants.DOCUMENT_AVAILABILITY_UNKNOWN));
-		SolrInputDocument doc2 = EnricherUtils.createDocument(SolrFieldConstants.LOCAL_STATUSES_FACET, PRESENT);
+				String.format(URL, Constants.DOCUMENT_AVAILABILITY_UNKNOWN));
+		SolrInputDocument doc2 = EnricherUtils.createDocument();
 		locals.add(doc1);
 		locals.add(doc2);
 
 		new UrlDedupRecordEnricher().enrich(dr, merged, locals);
 
-		// present only in doc2
-		Assert.assertFalse(doc1.getFieldValues(SolrFieldConstants.LOCAL_STATUSES_FACET).contains(PRESENT));
-		Assert.assertTrue(doc2.getFieldValues(SolrFieldConstants.LOCAL_STATUSES_FACET).contains(PRESENT));
-
-		// size test
-		Assert.assertEquals(doc1.getFieldValues(SolrFieldConstants.LOCAL_STATUSES_FACET).size(), 2);
-		Assert.assertEquals(doc2.getFieldValues(SolrFieldConstants.LOCAL_STATUSES_FACET).size(), 3);
-
-		// both must containts online/unknown status
-		for (SolrInputDocument local : locals) {
-			Assert.assertTrue(local.getFieldValues(SolrFieldConstants.LOCAL_STATUSES_FACET).containsAll(ONLINE_UNKNOWN_STATUSES));
-		}
+		// merged must containts unknown status
+		Assert.assertTrue(merged.getFieldValues(SolrFieldConstants.STATUSES_FACET).contains(Constants.DOCUMENT_AVAILABILITY_UNKNOWN));
 	}
 
 	@Test
@@ -87,37 +61,25 @@ public class AvailabilitiFacetEnricherTest extends AbstractTest {
 		List<SolrInputDocument> locals = new ArrayList<>();
 
 		SolrInputDocument doc1 = EnricherUtils.createDocument(SolrFieldConstants.URL,
-				String.format(URL,Constants.DOCUMENT_AVAILABILITY_ONLINE));
+				String.format(URL, Constants.DOCUMENT_AVAILABILITY_ONLINE));
 		SolrInputDocument doc2 = EnricherUtils.createDocument(SolrFieldConstants.URL,
-				String.format(DIFFERENT_URL,Constants.DOCUMENT_AVAILABILITY_UNKNOWN));
-		SolrInputDocument doc3 = EnricherUtils.createDocument(SolrFieldConstants.LOCAL_STATUSES_FACET, PRESENT);
+				String.format(DIFFERENT_URL, Constants.DOCUMENT_AVAILABILITY_UNKNOWN));
+		SolrInputDocument doc3 = EnricherUtils.createDocument();
 		locals.add(doc1);
 		locals.add(doc2);
 		locals.add(doc3);
 
 		new UrlDedupRecordEnricher().enrich(dr, merged, locals);
 
-		// present only in doc3
-		Assert.assertFalse(doc1.getFieldValues(SolrFieldConstants.LOCAL_STATUSES_FACET).contains(PRESENT));
-		Assert.assertFalse(doc2.getFieldValues(SolrFieldConstants.LOCAL_STATUSES_FACET).contains(PRESENT));
-		Assert.assertTrue(doc3.getFieldValues(SolrFieldConstants.LOCAL_STATUSES_FACET).contains(PRESENT));
-
-		// size test
-		Assert.assertEquals(doc1.getFieldValues(SolrFieldConstants.LOCAL_STATUSES_FACET).size(), 3);
-		Assert.assertEquals(doc2.getFieldValues(SolrFieldConstants.LOCAL_STATUSES_FACET).size(), 3);
-		Assert.assertEquals(doc3.getFieldValues(SolrFieldConstants.LOCAL_STATUSES_FACET).size(), 4);
-
 		// both must containts online/unknown status
-		Set<String> expected = new HashSet<>(ONLINE_STATUSES);
-		expected.addAll(ONLINE_UNKNOWN_STATUSES);
-		for (SolrInputDocument local : locals) {
-			Assert.assertTrue(local.getFieldValues(SolrFieldConstants.LOCAL_STATUSES_FACET).containsAll(expected));
-		}
+		Set<String> expected = new HashSet<>();
+		expected.add(Constants.DOCUMENT_AVAILABILITY_ONLINE);
+		expected.add(Constants.DOCUMENT_AVAILABILITY_UNKNOWN);
+		Assert.assertTrue(merged.getFieldValues(SolrFieldConstants.STATUSES_FACET).containsAll(expected));
 	}
 
 	@Test
 	public void availabilityTest() {
-		DedupRecord dr = new DedupRecord();
 		SolrInputDocument merged = new SolrInputDocument();
 		List<SolrInputDocument> locals = new ArrayList<>();
 		Collection<String> resultAvailabilities = Arrays.asList(
@@ -137,7 +99,7 @@ public class AvailabilitiFacetEnricherTest extends AbstractTest {
 		locals.add(doc3);
 
 		DedupRecordEnricher hre = new UrlDedupRecordEnricher();
-		hre.enrich(new DedupRecord(),merged, locals);
+		hre.enrich(new DedupRecord(), merged, locals);
 
 		// local records not contains statuses field
 		for (SolrInputDocument local : locals) {

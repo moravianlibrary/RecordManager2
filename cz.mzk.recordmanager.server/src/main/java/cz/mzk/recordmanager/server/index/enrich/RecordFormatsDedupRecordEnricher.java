@@ -15,32 +15,24 @@ public class RecordFormatsDedupRecordEnricher implements DedupRecordEnricher {
 
 	private final static List<String> TYPE_OTHER_COMP_CARRIER = SolrUtils.createHierarchicFacetValues(
 			"OTHER", "COMPUTER_CARRIER");
-	private final static String ONLINE = "0/online/";
-	
+
 	/**
 	 * remove record format OTHER_COMPUTER_CARRIER if avalability online
 	 */
 	@Override
 	public void enrich(DedupRecord record, SolrInputDocument mergedDocument,
 			List<SolrInputDocument> localRecords) {
-		boolean online = false;
+		Collection<Object> statuses = mergedDocument.getFieldValues(SolrFieldConstants.STATUSES_FACET);
+		if (statuses == null || statuses.isEmpty()) return;
 		for (SolrInputDocument doc : localRecords) {
-			Collection<Object> statuses = doc.getFieldValues(SolrFieldConstants.LOCAL_STATUSES_FACET);
-			if (statuses != null && statuses.contains(ONLINE)) {
-				online = true;
-				Collection<Object> formats = doc.getFieldValues(SolrFieldConstants.RECORD_FORMAT_DISPLAY);
-				if (formats != null) {
-					doc.setField(SolrFieldConstants.RECORD_FORMAT_DISPLAY, removeComputerCarrier(formats));
-				}
+			Collection<Object> formats = doc.getFieldValues(SolrFieldConstants.RECORD_FORMAT_DISPLAY);
+			if (formats != null) {
+				doc.setField(SolrFieldConstants.RECORD_FORMAT_DISPLAY, removeComputerCarrier(formats));
 			}
 		}
-		
-		if (online) {
-			Collection<Object> formats = mergedDocument.getFieldValues(SolrFieldConstants.RECORD_FORMAT);
-			if (formats != null) {
-				mergedDocument.setField(SolrFieldConstants.RECORD_FORMAT, removeComputerCarrier(formats));
-				mergedDocument.setField(SolrFieldConstants.RECORD_FORMAT_FACET, removeComputerCarrier(formats));
-			}
+		Collection<Object> formats = mergedDocument.getFieldValues(SolrFieldConstants.RECORD_FORMAT_FACET);
+		if (formats != null) {
+			mergedDocument.setField(SolrFieldConstants.RECORD_FORMAT_FACET, removeComputerCarrier(formats));
 		}
 	}
 	

@@ -23,7 +23,7 @@ public class PatentsMetadataMarcRecord extends MetadataMarcRecord{
 	@Autowired
 	private HarvestedRecordDAO hrDao;
 
-	private Pattern IPC = Pattern.compile("MPT|IPC", Pattern.CASE_INSENSITIVE);
+	private final Pattern IPC = Pattern.compile("MPT|IPC", Pattern.CASE_INSENSITIVE);
 	private static final Pattern APPLICATION_PATTERN = Pattern.compile("Číslo přihlášky: (.*)");
 	private static final Pattern DOCNUMBER_PATTERN = Pattern.compile("St36_CZ_([^_]*)_A3");
 
@@ -52,11 +52,6 @@ public class PatentsMetadataMarcRecord extends MetadataMarcRecord{
 		return super.getUrls(Constants.DOCUMENT_AVAILABILITY_ONLINE, EVersionConstants.FULLTEXT_LINK);
 	}
 
-	@Override
-	public List<String> getDefaultStatuses() {
-		return Collections.singletonList(Constants.DOCUMENT_AVAILABILITY_ONLINE);
-	}
-	
 	@Override
 	public CitationRecordType getCitationFormat() {
 		return CitationRecordType.PATENT;

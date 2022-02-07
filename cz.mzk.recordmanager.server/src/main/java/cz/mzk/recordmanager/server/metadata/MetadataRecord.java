@@ -288,13 +288,6 @@ public interface MetadataRecord {
 	List<ShortTitle> getShortTitles();
 
 	/**
-	 * get statuses with institution dependence
-	 *
-	 * @return List<String>
-	 */
-	List<String> getDefaultStatuses();
-
-	/**
 	 * get international patent classfication for UPV
 	 *
 	 * @return List<String>

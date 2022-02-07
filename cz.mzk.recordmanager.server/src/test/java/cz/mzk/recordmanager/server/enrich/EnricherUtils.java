@@ -9,4 +9,9 @@ public class EnricherUtils {
 		doc.addField(field, value);
 		return doc;
 	}
+
+	public static SolrInputDocument createDocument() {
+		return new SolrInputDocument();
+	}
+
 }

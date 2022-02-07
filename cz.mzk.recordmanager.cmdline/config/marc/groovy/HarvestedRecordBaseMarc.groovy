@@ -2,7 +2,6 @@ import static cz.mzk.recordmanager.server.scripting.marc.function.BoundingBoxMar
 import static cz.mzk.recordmanager.server.marc.SubfieldExtractionMethod.SEPARATED
 
 
-recordtype = "local"
 record_format = "local"
 
 fullrecord = getFullrecord()
@@ -86,12 +85,11 @@ _hidden_available_for_digitalization_boolean = isAvailableForDigitalization()
 _hidden_local_online_facet_mv = getLocalOnlineFacet()
 
 // facets
-conspectus_facet_mv = conspectus_str_mv = getConspectus();
-genre_facet_mv = genre_facet_str_mv = getGenreFacet "655avxyz"
-local_institution_view_facet_mv = institution_view_facet_str_mv = getInstitutionViewFacet()
-local_region_institution_facet_mv = local_region_institution_facet_str_mv = getRegionInstitutionFacet()
-local_statuses_facet_mv = local_statuses_facet_str_mv = getStatuses()
-subject_facet_mv = subject_facet_str_mv = getSubject "600abcdfglnpqstyz:610abcdfgklnpstyz:611abcdefgklnpqstyz:630adfgklnpstyz:648a:651avxyz:964abcdefg:967ab"
+conspectus_facet_mv = getConspectus();
+genre_facet_mv = getGenreFacet "655avxyz"
+local_institution_view_facet_mv = getInstitutionViewFacet()
+local_region_institution_facet_mv = getRegionInstitutionFacet()
+subject_facet_mv = getSubject "600abcdfglnpqstyz:610abcdfgklnpstyz:611abcdefgklnpqstyz:630adfgklnpstyz:648a:651avxyz:964abcdefg:967ab"
 ziskej_facet_mv = getZiskejFacet()
 scale_int_facet_mv = getScaleFacet()
 

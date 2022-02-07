@@ -5,18 +5,12 @@ import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.util.Constants;
 import cz.mzk.recordmanager.server.util.constants.EVersionConstants;
 
-import java.util.Collections;
 import java.util.List;
 
 public class OpenLibraryMetadataMarcRecord extends EbooksMetadataMarcRecord {
 
 	public OpenLibraryMetadataMarcRecord(MarcRecord underlayingMarc, HarvestedRecord hr) {
 		super(underlayingMarc, hr);
-	}
-
-	@Override
-	public List<String> getDefaultStatuses() {
-		return Collections.singletonList(Constants.DOCUMENT_AVAILABILITY_ONLINE);
 	}
 
 	@Override

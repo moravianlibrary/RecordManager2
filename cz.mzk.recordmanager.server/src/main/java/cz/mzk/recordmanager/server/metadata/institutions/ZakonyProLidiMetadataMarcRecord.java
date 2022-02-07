@@ -115,14 +115,10 @@ public class ZakonyProLidiMetadataMarcRecord extends MetadataMarcRecord{
 	}
 
 	@Override
-	public List<String> getDefaultStatuses() {
-		return Collections.singletonList(Constants.DOCUMENT_AVAILABILITY_ONLINE);
-	}
-
-	@Override
 	public CitationRecordType getCitationFormat() {
 		return CitationRecordType.LAW;
 	}
+
 	@Override
 	public boolean subjectFacet() {
 		return false;
