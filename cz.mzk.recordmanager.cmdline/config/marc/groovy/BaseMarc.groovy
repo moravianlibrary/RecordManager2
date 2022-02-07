@@ -1,7 +1,6 @@
 import org.apache.commons.collections4.ListUtils;
 import static cz.mzk.recordmanager.server.util.MarcCleaningUtils.*;
 
-recordtype = "marc"
 record_format = "marc"
 
 allfields = getAllFields()
@@ -75,7 +74,7 @@ country_facet_mv = country_str_mv = translate("mzk_country.map", getCountries(),
 language_facet_mv = language = translate("mzk_language.map", getLanguages(), null)
 publishDate_facet_mv = publishDate = getPublishDate()
 publisher_facet_mv = publisher_str_mv = getPublisherStrMv()
-record_format_facet_mv = cpk_detected_format_facet_str_mv = getFormat()
+record_format_facet_mv = getFormat()
 source_title_facet = source_title_facet_str = getFirstField "773t"
 
 // sort

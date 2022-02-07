@@ -115,12 +115,10 @@ public class IndexRecordsToEmbeddedSolrJobTest extends AbstractSolrTest {
 		{
 			SolrQuery dcQuery = new SolrQuery();
 			dcQuery.set("q", SolrFieldConstants.ID_FIELD + ":100");
-			dcQuery.set("fl", SolrFieldConstants.RECORDTYPE, SolrFieldConstants.RECORDTYPE_FORMAT, SolrFieldConstants.FULLTEXT_FIELD);
+			dcQuery.set("fl", SolrFieldConstants.RECORDTYPE_FORMAT, SolrFieldConstants.FULLTEXT_FIELD);
 			QueryResponse docResponse = server.query(dcQuery);
 			Assert.assertEquals(docResponse.getResults().size(), 1);
 			SolrDocument document = docResponse.getResults().get(0);
-			Assert.assertTrue(document.containsKey(SolrFieldConstants.RECORDTYPE), "Record type missing in DC record.");
-			Assert.assertEquals(document.getFieldValue(SolrFieldConstants.RECORDTYPE), "dublinCore");
 			Assert.assertTrue(document.containsKey(SolrFieldConstants.RECORDTYPE_FORMAT), "Record format missing in DC record.");
 			Assert.assertEquals(document.getFieldValue(SolrFieldConstants.RECORDTYPE_FORMAT), "dublinCore");
 			Assert.assertTrue(document.containsKey(SolrFieldConstants.FULLTEXT_FIELD), "Full record missing in DC record.");

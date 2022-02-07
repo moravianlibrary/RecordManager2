@@ -1,4 +1,3 @@
-recordtype = "local"
 record_format = "local"
 
 fullrecord = getFullrecord()

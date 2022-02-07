@@ -1,6 +1,5 @@
 import static cz.mzk.recordmanager.server.util.MarcCleaningUtils.*;
 
-recordtype = "marc"
 record_format = "marc"
 
 allfields = getAllFields()
@@ -75,5 +74,5 @@ id_authority = getControlField("001")
 
 // facets
 publisher_facet_mv = publisher_str_mv = getPublisherStrMv()
-record_format_facet_mv = cpk_detected_format_facet_str_mv = getFormat()
+record_format_facet_mv = getFormat()
 source_title_facet = source_title_facet_str = getFirstField "773t"

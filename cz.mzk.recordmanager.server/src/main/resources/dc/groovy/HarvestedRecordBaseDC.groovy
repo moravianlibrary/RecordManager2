@@ -1,4 +1,3 @@
-recordtype = "dublincore"
 record_format = "dublincore"
 
 fullrecord = getFullRecord()
