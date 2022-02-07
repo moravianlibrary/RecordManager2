@@ -1,4 +1,3 @@
-recordtype = "dublincore"
 record_format = "dublincore"
 
 fullrecord = getFullRecord()
@@ -10,8 +9,7 @@ _hidden_index_when_merged_boolean = getIndexWhenMerged()
 uuid_str_mv = getUuidForObalkyKnih()
 
 // facet
-local_region_institution_facet_mv = local_region_institution_facet_str_mv = getRegionInstitutionFacet()
-local_statuses_facet_mv = local_statuses_facet_str_mv = getStatuses()
+local_region_institution_facet_mv = getRegionInstitutionFacet()
 
 // search
 author_search_txt_mv = getAllCreatorsForSearching()

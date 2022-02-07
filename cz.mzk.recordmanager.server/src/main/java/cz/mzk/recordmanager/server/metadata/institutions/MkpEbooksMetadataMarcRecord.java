@@ -8,7 +8,6 @@ import cz.mzk.recordmanager.server.util.constants.EVersionConstants;
 import org.marc4j.marc.DataField;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -35,11 +34,6 @@ public class MkpEbooksMetadataMarcRecord extends EbooksMetadataMarcRecord {
 			}
 		}
 		return results;
-	}
-
-	@Override
-	public List<String> getDefaultStatuses() {
-		return Collections.singletonList(Constants.DOCUMENT_AVAILABILITY_ONLINE);
 	}
 
 	@Override

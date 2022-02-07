@@ -1,4 +1,3 @@
-recordtype = "sfx"
 record_format = "sfx"
 
 isbn = getFields "020a"
