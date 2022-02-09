@@ -61,7 +61,6 @@ public class OpenlibMarcInterceptor extends DefaultMarcInterceptor{
 								newDf.addSubfield(marcFactory.newSubfield('y', TEXT_856y));
 								newRecord.addVariableField(newDf);
 							}
-							else newRecord.addVariableField(df);
 						}
 					}
 				}
