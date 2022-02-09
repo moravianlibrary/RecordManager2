@@ -2802,3 +2802,8 @@ INSERT INTO sigla (id, import_conf_id, sigla) VALUES (97, 424, 'NBG505');
 --changeset tomascejpek:309 context:cpk
 UPDATE download_import_conf SET url='https://sfx.knihovny.cz/sfxlcl3/cgi/public/get_file.cgi?file=institutional_holding-NLK.xml',import_job_name='downloadAndImportRecordsJob',format='sfx',reharvest=true WHERE import_conf_id=1316;
 UPDATE import_conf SET filtering_enabled=FALSE WHERE id=1316;
+
+--changeset tomascejpek:310 context:cpk
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (53, 379, 'KAG502');
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (101, 428, 'TUG504');
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (107, 434, 'UOG502');
