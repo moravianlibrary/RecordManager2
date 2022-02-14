@@ -206,6 +206,7 @@ public class MetadataRecordFactory {
 		case Constants.PREFIX_KRAM_SVKPK:
 		case Constants.PREFIX_KRAM_SVKOS:
 		case Constants.PREFIX_KRAM_TRE:
+		case Constants.PREFIX_KRAM_NKP:
 			return init(new KramDefaultMetadataMarcRecord(marcRec, hr));
 		case Constants.PREFIX_UZEI:
 			return new UzeiMetadataMarcRecord(marcRec, hr);
