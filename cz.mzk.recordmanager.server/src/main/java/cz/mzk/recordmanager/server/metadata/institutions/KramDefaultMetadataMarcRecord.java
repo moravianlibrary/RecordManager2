@@ -8,6 +8,7 @@ import cz.mzk.recordmanager.server.model.Uuid;
 import cz.mzk.recordmanager.server.oai.dao.KrameriusConfigurationDAO;
 import cz.mzk.recordmanager.server.util.Constants;
 import cz.mzk.recordmanager.server.util.MetadataUtils;
+import org.marc4j.marc.DataField;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,13 +17,12 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class KramDefaultMetadataMarcRecord extends
-		MetadataMarcRecord {
+public class KramDefaultMetadataMarcRecord extends MetadataMarcRecord {
 
 	@Autowired
 	private KrameriusConfigurationDAO krameriusConfigurationDAO;
 
-	private static Logger logger = LoggerFactory.getLogger(KramDefaultMetadataMarcRecord.class);
+	private static final Logger logger = LoggerFactory.getLogger(KramDefaultMetadataMarcRecord.class);
 
 	private static final Pattern UUID = Pattern.compile("uuid:(.*)");
 
@@ -33,8 +33,13 @@ public class KramDefaultMetadataMarcRecord extends
 	@Override
 	public String getUUId() {
 		Matcher matcher;
-		if ((matcher = UUID.matcher(harvestedRecord.getUniqueId().getRecordId())).matches()) {
+		if (harvestedRecord != null && (matcher = UUID.matcher(harvestedRecord.getUniqueId().getRecordId())).matches()) {
 			return matcher.group(1);
+		}
+		for (DataField df : underlayingMarc.getDataFields("OAI")) {
+			if (df.getSubfield('a') != null && (matcher = UUID.matcher(df.getSubfield('a').getData())).matches()) {
+				return matcher.group(1);
+			}
 		}
 		return null;
 	}
@@ -45,6 +50,7 @@ public class KramDefaultMetadataMarcRecord extends
 		return author == null ? underlayingMarc.getField("720", 'a') : author;
 	}
 
+	@Override
 	public List<String> getUrls() {
 		KrameriusConfiguration config = krameriusConfigurationDAO.get(harvestedRecord.getHarvestedFrom().getId());
 		if (config == null) {
@@ -52,7 +58,6 @@ public class KramDefaultMetadataMarcRecord extends
 			return Collections.emptyList();
 		}
 		return generateUrl(config.getAvailabilityDestUrl());
-
 	}
 
 	public List<String> generateUrl(String kramUrlBase) {
@@ -80,16 +85,31 @@ public class KramDefaultMetadataMarcRecord extends
 	@Override
 	public List<Uuid> getUuids() {
 		Set<Uuid> results = new HashSet<>();
-		Matcher matcher = UUID_PATTERN.matcher(harvestedRecord.getUniqueId().getRecordId());
-		if (matcher.find()) {
-			results.add(Uuid.create(matcher.group(0)));
+		if (harvestedRecord != null) {
+			Matcher matcher = UUID_PATTERN.matcher(harvestedRecord.getUniqueId().getRecordId());
+			if (matcher.find()) {
+				results.add(Uuid.create(matcher.group(0)));
+			}
+		}
+		for (DataField df : underlayingMarc.getDataFields("OAI")) {
+			if (df.getSubfield('a') != null) {
+				results.add(Uuid.create(df.getSubfield('a').getData()));
+			}
 		}
 		return new ArrayList<>(results);
 	}
 
 	@Override
 	public String getKrameriusRecordId() {
-		return harvestedRecord.getUniqueId().getRecordId();
+		if (harvestedRecord != null) {
+			return harvestedRecord.getUniqueId().getRecordId();
+		}
+		for (DataField df : underlayingMarc.getDataFields("OAI")) {
+			if (df.getSubfield('a') != null) {
+				return df.getSubfield('a').getData();
+			}
+		}
+		return null;
 	}
 
 }
