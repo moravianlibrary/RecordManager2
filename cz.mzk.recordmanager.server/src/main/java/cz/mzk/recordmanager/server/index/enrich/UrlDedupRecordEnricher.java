@@ -125,8 +125,15 @@ public class UrlDedupRecordEnricher implements DedupRecordEnricher {
 					&& mergedDocument.getFieldValue(SolrFieldConstants.POTENTIAL_DNNT) != null) {
 				potentialDnnt = (boolean) mergedDocument.getFieldValue(SolrFieldConstants.POTENTIAL_DNNT);
 			}
+			Set<EVersionUrl> values = urls.get(key);
 			for (KramAvailability kramAvailability : kramAvailabilityDAO.getByUuid(key)) {
-				EVersionUrl newUrl = EVersionUrl.create(kramAvailability);
+				String comment = Constants.KRAM_EVERSION_COMMENT;
+				for (EVersionUrl value : values) {
+					if (("kram-" + value.getSource()).equals(kramAvailability.getHarvestedFrom().getIdPrefix())) {
+						comment = value.getComment();
+					}
+				}
+				EVersionUrl newUrl = EVersionUrl.create(kramAvailability, comment);
 				addToMap(urls, newUrl);
 				// dnnt
 				if (newUrl.getAvailability().equals(Constants.DOCUMENT_AVAILABILITY_PROTECTED)
@@ -134,10 +141,10 @@ public class UrlDedupRecordEnricher implements DedupRecordEnricher {
 					// dnnt online
 					if (kramAvailability.getDnntLabels().stream().anyMatch(l -> l.getLabel().equals(DnntLabelEnum.DNNTO.getLabel()))
 							&& potentialDnnt) {
-						EVersionUrl dnntUrl = EVersionUrl.createDnnt(kramAvailability);
+						EVersionUrl dnntUrl = EVersionUrl.createDnnt(kramAvailability, comment);
 						if (dnntUrl != null) addToMap(urls, dnntUrl);
 					} else { // dnnt without dnnt-label
-						addToMap(urls, EVersionUrl.create(kramAvailability));
+						addToMap(urls, EVersionUrl.create(kramAvailability, comment));
 					}
 				}
 			}

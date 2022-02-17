@@ -24,11 +24,15 @@ public class EVersionUrl implements Comparable {
 	}
 
 	public static EVersionUrl create(KramAvailability kramAvailability) {
+		return create(kramAvailability, Constants.KRAM_EVERSION_COMMENT);
+	}
+
+	public static EVersionUrl create(KramAvailability kramAvailability, String comment) {
 		EVersionUrl newUrl = new EVersionUrl();
 		newUrl.setSource(kramAvailability.getHarvestedFrom().getIdPrefix());
 		newUrl.setAvailability(kramAvailability.getAvailability());
 		newUrl.setLink(kramAvailability.getLink());
-		newUrl.setComment(Constants.KRAM_EVERSION_COMMENT);
+		newUrl.setComment(comment);
 		return newUrl;
 	}
 
@@ -42,9 +46,13 @@ public class EVersionUrl implements Comparable {
 	}
 
 	public static EVersionUrl createDnnt(KramAvailability kramAvailability) {
+		return createDnnt(kramAvailability, Constants.KRAM_EVERSION_COMMENT);
+	}
+
+	public static EVersionUrl createDnnt(KramAvailability kramAvailability, String comment) {
 		if (kramAvailability.getDnntLink() == null) return null;
 		EVersionUrl url = create(kramAvailability.getHarvestedFrom().getIdPrefix(), Constants.DOCUMENT_AVAILABILITY_DNNT,
-				kramAvailability.getDnntLink(), Constants.KRAM_EVERSION_COMMENT);
+				kramAvailability.getDnntLink(), comment);
 		return UrlValidatorUtils.doubleSlashUrlValidator().isValid(url.getLink()) ? url : null;
 	}
 
