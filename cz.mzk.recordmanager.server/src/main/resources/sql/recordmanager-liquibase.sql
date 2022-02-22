@@ -2826,3 +2826,6 @@ UPDATE kramerius_conf SET availability_source_url='https://kramerius.svkhk.cz/se
 
 --changeset tomascejpek:315 context:cpk
 UPDATE oai_harvest_conf SET extract_id_regex=NULL WHERE import_conf_id IN (421,439);
+
+--changeset tomascejpek:316 context:cpk
+INSERT INTO import_conf_mapping_field (import_conf_id,parent_import_conf_id,mapping) VALUES (360,422,'599$aCLB-CPK');
