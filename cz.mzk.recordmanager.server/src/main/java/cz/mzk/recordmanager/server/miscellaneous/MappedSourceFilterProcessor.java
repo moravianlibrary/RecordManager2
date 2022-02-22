@@ -67,8 +67,10 @@ public class MappedSourceFilterProcessor implements ItemProcessor<List<String>, 
 			if (mainHr == null) continue;
 			MarcRecord marcRecord = marcXmlParser.parseRecord(mainHr.getRawRecord());
 			for (Map.Entry<Long, SourceMapping> entry : mapping.entrySet()) {
-				if (marcRecord.getFields(entry.getValue().getTag(), entry.getValue().getSubfield()).contains(entry.getValue().getValue())) {
-					ImportConfiguration localConfig = entry.getValue().getImportConfiguration();
+				SourceMapping mapping = entry.getValue();
+				if ((mapping.getSubfield() == ' ' && mapping.getValue().equals(marcRecord.getControlField(mapping.getTag())))
+						|| marcRecord.getFields(mapping.getTag(), mapping.getSubfield()).contains(mapping.getValue())) {
+					ImportConfiguration localConfig = mapping.getImportConfiguration();
 					HarvestedRecordUniqueId localUniqueId = new HarvestedRecordUniqueId(localConfig, mainRecordId);
 					HarvestedRecord localHr = recordDao.get(localUniqueId);
 					byte[] recordContent = mainHr.getRawRecord();
