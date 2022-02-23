@@ -3,18 +3,19 @@ package cz.mzk.recordmanager.server.marc.intercepting;
 import cz.mzk.recordmanager.server.export.IOFormat;
 import cz.mzk.recordmanager.server.marc.MarcRecordImpl;
 import cz.mzk.recordmanager.server.marc.marc4j.RecordImpl;
+import cz.mzk.recordmanager.server.util.RecordUtils;
 import org.marc4j.marc.*;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+import java.util.List;
 import java.util.regex.Pattern;
 
 public class CelitebibMarcInterceptor extends DefaultMarcInterceptor {
 
 	private static final Pattern FIELD_START = Pattern.compile("^[167]..$");
 	private static final String TAG_773 = "773";
-	private static final String TAG_964 = "964";
-	private static final String TAG_CAT = "CAT";
-	private static final String TAG_KAT = "KAT";
+	private static final List<String> REMOVE_TAGS = Arrays.asList("964", "CAT", "KAT", "506", "592", "593");
 	private static final char CODE_X = 'x';
 
 	public CelitebibMarcInterceptor(Record record) {
@@ -43,13 +44,12 @@ public class CelitebibMarcInterceptor extends DefaultMarcInterceptor {
 				newRecord.addVariableField(newDf);
 				continue;
 			}
-			// remove field 964, CAT, KAT
-			if (df.getTag().equals(TAG_964) || df.getTag().equals(TAG_CAT) || df.getTag().equals(TAG_KAT)) continue;
+			if (REMOVE_TAGS.contains(df.getTag())) continue;
 			// default
 			newRecord.addVariableField(df);
 		}
 
-		return new MarcRecordImpl(newRecord).export(IOFormat.XML_MARC).getBytes(StandardCharsets.UTF_8);
+		return new MarcRecordImpl(RecordUtils.sortFields(newRecord)).export(IOFormat.XML_MARC).getBytes(StandardCharsets.UTF_8);
 	}
 
 }
