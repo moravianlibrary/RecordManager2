@@ -10,10 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.Arrays;
 import java.util.List;
 import java.util.ListIterator;
@@ -39,20 +36,24 @@ public class KramAvailabilityReader implements ItemReader<KramAvailability> {
 			"%s/search?fl=dostupnost,dnnt,PID,level,dnnt-labels&q=level:1+document_type:monographunit&rows=%d&start=%d&wt=xml"
 	);
 
-	private final ListIterator<String> iterator = URLS.listIterator();
+	private final ListIterator<String> iterator;
 	private String url;
 
 	private String source;
 	private static final int ROWS = 100;
 	private int start = 0;
+	private final String filename;
 
-	public KramAvailabilityReader(Long configId) {
+	public KramAvailabilityReader(Long configId, String filename) {
 		this.configId = configId;
+		this.filename = filename;
+		if (filename != null) iterator = Arrays.asList(filename.split(",")).listIterator();
+		else this.iterator = URLS.listIterator();
 	}
 
 	@Override
 	public KramAvailability read() {
-		KramAvailability result = null;
+		KramAvailability result;
 		if (reader == null || !reader.hasNext()) {
 			initializeReader();
 		}
@@ -80,8 +81,19 @@ public class KramAvailabilityReader implements ItemReader<KramAvailability> {
 	protected void initializeReader() throws RuntimeException {
 		if (config == null) {
 			config = configDAO.get(configId);
-			source = config.getAvailabilitySourceUrl();
-			if (iterator.hasNext()) url = iterator.next();
+			if (filename == null) {
+				source = config.getAvailabilitySourceUrl();
+				if (iterator.hasNext()) url = iterator.next();
+			}
+		}
+		if (filename != null) {
+			try {
+				if (iterator.hasNext())
+					reader = new KramAvailabilityXmlStreamReader(new FileInputStream(iterator.next()));
+			} catch (FileNotFoundException e) {
+				throw new RuntimeException(e);
+			}
+			return;
 		}
 		String localUrl = String.format(url, source, ROWS, start++ * ROWS);
 		int error = 0;

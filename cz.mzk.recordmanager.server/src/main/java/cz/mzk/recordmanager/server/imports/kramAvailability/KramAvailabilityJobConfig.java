@@ -29,6 +29,8 @@ public class KramAvailabilityJobConfig {
 	@Autowired
 	private StepBuilderFactory steps;
 
+	private static final String STRING_OVERRIDEN_BY_EXPRESSION = null;
+
 	private static final Long LONG_OVERRIDEN_BY_EXPRESSION = null;
 
 	@Bean
@@ -53,7 +55,7 @@ public class KramAvailabilityJobConfig {
 		return steps.get(Constants.JOB_ID_HARVEST_KRAM_AVAILABILITY + ":harvestStep")
 				.listener(new StepProgressListener())
 				.<KramAvailability, KramAvailability>chunk(10)//
-				.reader(harvestKramAvailabilityReader(LONG_OVERRIDEN_BY_EXPRESSION))//
+				.reader(harvestKramAvailabilityReader(LONG_OVERRIDEN_BY_EXPRESSION, STRING_OVERRIDEN_BY_EXPRESSION))//
 				.writer(harvestKramAvailabilityWriter()) //
 				.build();
 	}
@@ -61,8 +63,9 @@ public class KramAvailabilityJobConfig {
 	@Bean(name = Constants.JOB_ID_HARVEST_KRAM_AVAILABILITY + ":reader")
 	@StepScope
 	public ItemReader<KramAvailability> harvestKramAvailabilityReader(
-			@Value("#{jobParameters[" + Constants.JOB_PARAM_CONF_ID + "]}") Long configId) throws Exception {
-		return new KramAvailabilityReader(configId);
+			@Value("#{jobParameters[" + Constants.JOB_PARAM_CONF_ID + "]}") Long configId,
+			@Value("#{jobParameters[" + Constants.JOB_PARAM_IN_FILE + "]}") String filename) {
+		return new KramAvailabilityReader(configId, filename);
 	}
 
 	@Bean(name = Constants.JOB_ID_HARVEST_KRAM_AVAILABILITY + ":writer")
