@@ -8,7 +8,6 @@ import static org.easymock.EasyMock.resetToNice;
 
 import org.apache.solr.client.solrj.SolrClient;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.testng.annotations.BeforeMethod;
 
 import cz.mzk.recordmanager.server.AbstractTest;

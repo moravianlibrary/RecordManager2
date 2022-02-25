@@ -14,7 +14,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import cz.mzk.recordmanager.server.metadata.mappings996.Mappings996;
 import org.hibernate.annotations.Parameter;
 import org.hibernate.annotations.Type;
 

@@ -3,7 +3,6 @@ package cz.mzk.recordmanager.server.enrich;
 import cz.mzk.recordmanager.server.AbstractTest;
 import cz.mzk.recordmanager.server.index.SolrFieldConstants;
 import cz.mzk.recordmanager.server.index.enrich.DedupRecordEnricher;
-import cz.mzk.recordmanager.server.index.enrich.FromLocalToDedupEnricher;
 import cz.mzk.recordmanager.server.index.enrich.UrlDedupRecordEnricher;
 import cz.mzk.recordmanager.server.model.DedupRecord;
 import cz.mzk.recordmanager.server.util.Constants;

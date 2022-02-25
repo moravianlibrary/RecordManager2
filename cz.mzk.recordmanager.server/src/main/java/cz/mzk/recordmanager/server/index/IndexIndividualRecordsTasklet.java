@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import cz.mzk.recordmanager.server.model.DedupRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordDAO;
-import cz.mzk.recordmanager.server.solr.LoggingSolrIndexingExceptionHandler;
 import cz.mzk.recordmanager.server.solr.SolrServerFacade;
 import cz.mzk.recordmanager.server.solr.SolrServerFactory;
 import cz.mzk.recordmanager.server.util.SolrUtils;

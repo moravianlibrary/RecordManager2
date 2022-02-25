@@ -5,7 +5,6 @@ import cz.mzk.recordmanager.server.marc.MatchAllDataFieldMatcher;
 import cz.mzk.recordmanager.server.marc.SubfieldExtractionMethod;
 import cz.mzk.recordmanager.server.metadata.MetadataMarcRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.HashSet;

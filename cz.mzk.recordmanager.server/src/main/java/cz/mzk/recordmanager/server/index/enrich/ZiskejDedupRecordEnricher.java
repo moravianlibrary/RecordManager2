@@ -3,7 +3,6 @@ package cz.mzk.recordmanager.server.index.enrich;
 import cz.mzk.recordmanager.server.index.SolrFieldConstants;
 import cz.mzk.recordmanager.server.model.DedupRecord;
 import org.apache.solr.common.SolrInputDocument;
-import org.apache.solr.common.SolrInputField;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

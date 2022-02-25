@@ -1,11 +1,9 @@
 package cz.mzk.recordmanager.server.marc.marc4j;
 
 import java.io.InputStream;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -262,8 +260,6 @@ public class SfxJibXmlStreamReader implements MarcReader {
 		if (matcher.matches()) {
 			record.addVariableField(factory.newControlField("003", matcher.group(1)));
 		}
-//		SimpleDateFormat sdf = new SimpleDateFormat(DATE_STRING_005);
-//		record.addVariableField(factory.newControlField("005", sdf.format(new Date())));
 	}
 
 	private DataField getIsxnField(String tag) throws XMLStreamException {
