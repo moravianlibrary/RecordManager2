@@ -2812,3 +2812,7 @@ INSERT INTO sigla (id, import_conf_id, sigla) VALUES (107, 434, 'UOG502');
 INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (246, 'MKNBK', 'http://knihovna-nbk.cz/', 'https://tritius.knihovna-nbk.cz/', 'Nymburk', 'SC');
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id, mappings996) VALUES (446, 246, 200, 'mknbk', 11, false, true, true, true, 'U', 'other', 'tritius');
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (446,'https://tritius.knihovna-nbk.cz/tritius/oai-provider','CPK_1','marc21',NULL);
+
+--changeset tomascejpek:312 context:cpk
+INSERT INTO import_conf (id,library_id,contact_person_id,id_prefix,base_weight,cluster_id_enabled,filtering_enabled,interception_enabled,is_library,harvest_frequency,mapping_script,generate_dedup_keys,mapping_dedup_script, generate_biblio_linker_keys) VALUES (1331,136,200,'sfxjibsvkkl',8,false,false,false,true,'U','SfxMarcLocal.groovy',false,'SfxMarc.groovy', false);
+INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format,extract_id_regex,reharvest) VALUES (1331,'https://sfx.knihovny.cz/sfxlcl3/cgi/public/get_file.cgi?file=institutional_holding-SVKKL.xml','downloadAndImportRecordsJob','sfx',null,true);

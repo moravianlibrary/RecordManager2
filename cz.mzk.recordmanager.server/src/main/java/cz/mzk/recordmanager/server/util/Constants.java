@@ -228,6 +228,7 @@ public class Constants {
 	public static final String PREFIX_SFXJIBNLK_PERIODICALS	= "sfxnlkper";
 	public static final String PREFIX_SFXJIBNLK			= "sfxjibnlk";
 	public static final String PREFIX_SFXJIBSVKHK		= "sfxjibsvkhk";
+	public static final String PREFIX_SFXJIBSVKKL		= "sfxjibsvkkl";
 	public static final String PREFIX_SFXJIBSVKOS		= "sfxjibsvkos";
 	public static final String PREFIX_SFXJIBSVKPK		= "sfxjibsvkpk";
 	public static final String PREFIX_SFXJIBSVKUL		= "sfxjibsvkul";
