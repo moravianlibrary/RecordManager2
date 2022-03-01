@@ -40,6 +40,7 @@ public class RkkaMarcInterceptor extends DefaultMarcInterceptor {
 			newRecord.addVariableField(cf);
 		}
 
+		int count996Original = marc.getDataFields("996").size();
 		Map<String, List<DataField>> dfMap = marc.getAllFields();
 		for (String tag : new TreeSet<>(dfMap.keySet())) { // sorted tags
 			for (DataField df : dfMap.get(tag)) {
@@ -65,6 +66,8 @@ public class RkkaMarcInterceptor extends DefaultMarcInterceptor {
 				}
 			}
 		}
+		if (newRecord.getVariableFields("996").size() == 0 && count996Original > 0)
+			newRecord.addVariableField(MARC_FACTORY.newDataField("914", ' ', ' ', "a", "cpk0"));
 
 		return new MarcRecordImpl(newRecord).export(IOFormat.XML_MARC).getBytes(StandardCharsets.UTF_8);
 	}
