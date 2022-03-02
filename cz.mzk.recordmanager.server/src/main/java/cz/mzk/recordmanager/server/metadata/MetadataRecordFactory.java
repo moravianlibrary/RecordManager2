@@ -78,8 +78,6 @@ public class MetadataRecordFactory {
 			return new TreMetadataMarcRecord(marcRec, hr);
 		case Constants.PREFIX_MZKNORMS:
 			return new MzkNormsMetadataMarcRecord(marcRec, hr);
-		case Constants.PREFIX_SFXJIBNLK_PERIODICALS:
-			return new SfxjibNlkPeriodicalsMetadataMarcRecord(marcRec, hr);
 		case Constants.PREFIX_SFXJIBCBVK:
 		case Constants.PREFIX_SFXJIBFREE:
 		case Constants.PREFIX_SFXJIBKFBZ:
@@ -99,22 +97,10 @@ public class MetadataRecordFactory {
 		case Constants.PREFIX_SFXJIBNLK:
 		case Constants.PREFIX_SFXJIBSVKKL:
 			return new SfxJibMetadataMarcRecord(marcRec, hr);
-		case Constants.PREFIX_SFXJIBIREL:
-			return new SfxJibIrelMetadataMarcRecord(marcRec, hr);
-		case Constants.PREFIX_SFXJIBKIV:
-			return new SfxJibKivMetadataMarcRecord(marcRec, hr);
-		case Constants.PREFIX_SFXJIBMUS:
-			return new SfxJibMusMetadataMarcRecord(marcRec, hr);
-		case Constants.PREFIX_SFXJIBTECH:
-			return new SfxJibTechMetadataMarcRecord(marcRec, hr);
 		case Constants.PREFIX_SFXJIBKNAV:
 			return new SfxKnavMetadataMarcRecord(marcRec, hr);
 		case Constants.PREFIX_SFXTECHLIBNTK:
-		case Constants.PREFIX_SFXTECHLIBUOCHB:
-		case Constants.PREFIX_SFXTECHLIBVSCHT:
 			return new SfxTechlibMetadataMarcRecord(marcRec, hr);
-		case Constants.PREFIX_SFXJIBMUNI:
-			return new SfxDirectMetadataMarcRecord(marcRec, hr);
 		case Constants.PREFIX_CASLIN:
 			return new SkatMarcMetadataRecord(marcRec, hr);
 		case Constants.PREFIX_AUTH:
