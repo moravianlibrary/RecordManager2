@@ -56,9 +56,6 @@ public class DublinCoreDSL extends BaseDSL {
 
 	public String getRights() {
 		List<String> rights = record.getRights();
-		if (dcContext.harvestedRecord().getHarvestedFrom().getIdPrefix().equals(Constants.PREFIX_KRAM3_NKP)) {
-			return Constants.DOCUMENT_AVAILABILITY_UNKNOWN;
-		}
 		if (rights == null || rights.isEmpty()) {
 			return Constants.DOCUMENT_AVAILABILITY_UNKNOWN;
 		}

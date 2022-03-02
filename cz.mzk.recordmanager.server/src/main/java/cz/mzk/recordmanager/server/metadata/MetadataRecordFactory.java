@@ -231,10 +231,6 @@ public class MetadataRecordFactory {
 		case Constants.PREFIX_KRAM_MZK:
 		case Constants.PREFIX_KRAM_NKP:
 			return init(new KramDefaultMetadataDublinCoreRecord(dcRec, hr));
-		case Constants.PREFIX_KRAM_KNAV:
-			return init(new KramKnavMetadataDublinCoreRecord(dcRec, hr));
-		case Constants.PREFIX_KRAM3_NKP:
-			return init(new Kram3NkpMetadataDublinCoreRecord(dcRec, hr));
 		case Constants.PREFIX_MANUSCRIPTORIUM:
 			return new ManuscriptoriumMetadataDublinCoreRecord(dcRec, hr);
 		default:

@@ -135,7 +135,6 @@ public class Constants {
 	public static final String PREFIX_KKVY				= "kkvy";
 	public static final String PREFIX_KNAV				= "knav";
 	public static final String PREFIX_KNEP				= "knep";
-	public static final String PREFIX_KRAM3_NKP			= "kram3-nkp";
 	public static final String PREFIX_KRAM_CBVK			= "kram-cbvk";
 	public static final String PREFIX_KRAM_CUNI			= "kram-cuni";
 	public static final String PREFIX_KRAM_CUNIFSV		= "kram-cunifsv";
