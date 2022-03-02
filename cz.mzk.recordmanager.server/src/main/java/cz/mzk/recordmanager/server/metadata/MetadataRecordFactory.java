@@ -78,8 +78,6 @@ public class MetadataRecordFactory {
 			return new TreMetadataMarcRecord(marcRec, hr);
 		case Constants.PREFIX_MZKNORMS:
 			return new MzkNormsMetadataMarcRecord(marcRec, hr);
-		case Constants.PREFIX_SFXKNAV:
-			return new SfxMetadataMarcRecord(marcRec, hr);
 		case Constants.PREFIX_SFXJIBNLK_PERIODICALS:
 			return new SfxjibNlkPeriodicalsMetadataMarcRecord(marcRec, hr);
 		case Constants.PREFIX_SFXJIBCBVK:
