@@ -2820,3 +2820,6 @@ INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format,extr
 --changeset tomascejpek:313 context:cpk
 DELETE FROM oai_harvest_conf WHERE import_conf_id=99004;
 UPDATE kramerius_conf SET metadata_stream='BIBLIO_MODS' WHERE import_conf_id=99004;
+
+--changeset tomascejpek:314 context:cpk
+UPDATE kramerius_conf SET availability_source_url='https://kramerius.svkhk.cz/search/api/v5.0' WHERE import_conf_id=99014;

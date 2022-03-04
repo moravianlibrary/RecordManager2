@@ -2533,3 +2533,6 @@ INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format,extr
 -- 03. 03. 2022 tomascejpek
 DELETE FROM oai_harvest_conf WHERE import_conf_id=99004;
 UPDATE kramerius_conf SET metadata_stream='BIBLIO_MODS' WHERE import_conf_id=99004;
+
+-- 04. 03. 2022 tomascejpek
+UPDATE kramerius_conf SET availability_source_url='https://kramerius.svkhk.cz/search/api/v5.0' WHERE import_conf_id=99014;
