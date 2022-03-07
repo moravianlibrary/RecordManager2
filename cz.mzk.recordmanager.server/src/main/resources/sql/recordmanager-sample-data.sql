@@ -487,7 +487,7 @@ INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granul
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity,extract_id_regex) VALUES (418,'https://koha.mkmt.cz/cgi-bin/koha/oai.pl','CPK','marccpk',NULL,'SVG503:(.*)');
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity,extract_id_regex) VALUES (419,'https://koha.knihovna-litvinov.cz/cgi-bin/koha/oai.pl','CPK','marccpk',NULL,'MOG501:(.*)');
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (420,NULL,NULL,'marc21',NULL);
-INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity,extract_id_regex) VALUES (421,'https://kpwin.knih-cheb.cz/api/oai','cpk','marc21',NULL,'oai:(.*)');
+INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (421,'https://kpwin.knih-cheb.cz/api/oai','cpk','marc21',NULL);
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (422,'https://aleph.lib.cas.cz/OAI','KNA01','marc21',NULL);
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (423,'https://tritius-knihovna.ricany.cz/tritius/oai-provider','CPK_1','marc21',NULL);
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (424,'https://milovice.tritius.cz/tritius/oai-provider','CPK_1','marc21',NULL);
@@ -505,7 +505,7 @@ INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granul
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (436,'http://oai.geology.cz:8080/katalog/l.dll','ENVI','marc21',NULL);
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity,extract_id_regex) VALUES (437,'https://koha.dolni-bousov.cz/cgi-bin/koha/oai.pl','CPK','marccpk',NULL,'MBG504:(.*)');
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity,extract_id_regex) VALUES (438,'https://koha.archivndknihovna.cz/cgi-bin/koha/oai.pl','CPK','marccpk',NULL,'ABE309:(.*)');
-INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity,extract_id_regex) VALUES (439,'https://katalog.mekvalmez.cz/api/oai','cpk','marc21',NULL,'oai:(.*)');
+INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (439,'https://katalog.mekvalmez.cz/api/oai','cpk','marc21',NULL);
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity,extract_id_regex) VALUES (440,'https://koha.queerknihovna.cz/cgi-bin/koha/oai.pl','CPK','marccpk',NULL,'BOE035:(.*)');
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (441,'https://katalog.knihovna.jicin.cz/api/oai','cpk','marc21',NULL);
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity,extract_id_regex) VALUES (442,'https://koha.knihovnafrenstat.cz/cgi-bin/koha/oai.pl','CPK','marccpk',NULL,'NJG502:(.*)');

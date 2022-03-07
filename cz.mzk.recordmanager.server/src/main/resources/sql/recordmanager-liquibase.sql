@@ -2823,3 +2823,6 @@ UPDATE kramerius_conf SET metadata_stream='BIBLIO_MODS' WHERE import_conf_id=990
 
 --changeset tomascejpek:314 context:cpk
 UPDATE kramerius_conf SET availability_source_url='https://kramerius.svkhk.cz/search/api/v5.0' WHERE import_conf_id=99014;
+
+--changeset tomascejpek:315 context:cpk
+UPDATE oai_harvest_conf SET extract_id_regex=NULL WHERE import_conf_id IN (421,439);
