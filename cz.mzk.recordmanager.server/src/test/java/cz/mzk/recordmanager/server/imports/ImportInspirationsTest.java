@@ -35,7 +35,7 @@ public class ImportInspirationsTest extends AbstractTest {
 
 	@Test
 	public void inspirationTest() throws Exception {
-		String file = this.getClass().getResource("/import/inspiration/inspirations.txt").getFile();
+		String file = this.getClass().getResource("/import/inspiration/inspirations.json").getFile();
 
 		Job job = jobRegistry.getJob(Constants.JOB_ID_IMPORT_INSPIRATION);
 		Map<String, JobParameter> params = new HashMap<>();
