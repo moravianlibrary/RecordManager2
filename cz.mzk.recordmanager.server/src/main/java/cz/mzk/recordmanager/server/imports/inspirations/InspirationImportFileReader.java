@@ -38,7 +38,6 @@ public class InspirationImportFileReader implements ItemReader<Map<String, List<
 	private static final String URL_SUFFIX = "AJAX/JSON?method=harvestWidgetsContents";
 	private static final Pattern PATTERN_NAME = Pattern.compile("^\\[([^]]*)]$");
 	private static final Pattern PATTERN_ID = Pattern.compile("^[^.]*\\..*");
-	private static final Pattern PATTERN_REPLACE_BR = Pattern.compile("<br>");
 
 	public InspirationImportFileReader(String filename) throws FileNotFoundException {
 		this.FILENAME = filename;
@@ -59,7 +58,7 @@ public class InspirationImportFileReader implements ItemReader<Map<String, List<
 		String newLine;
 
 		while (br.ready()) {
-			newLine = CleaningUtils.replaceAll(br.readLine(), PATTERN_REPLACE_BR, "");
+			newLine = br.readLine();
 
 			if (newLine.isEmpty() && name != null) {
 				break;
