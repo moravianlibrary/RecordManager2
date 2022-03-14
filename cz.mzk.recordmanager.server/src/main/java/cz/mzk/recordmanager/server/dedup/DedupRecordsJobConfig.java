@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.Future;
 
+import javax.persistence.OptimisticLockException;
 import javax.sql.DataSource;
 
 import cz.mzk.recordmanager.server.model.HarvestedRecordFormat.HarvestedRecordFormatEnum;
@@ -444,6 +445,7 @@ public class DedupRecordsJobConfig {
 				.faultTolerant()
 				.keyGenerator(KeyGeneratorForList.INSTANCE)
 				.retry(LockAcquisitionException.class)
+				.retry(OptimisticLockException.class)
 				.retryLimit(10000)
 				.reader(dedupSimpleKeysSkatManuallyMergedReader(INTEGER_OVERRIDEN_BY_EXPRESSION))
 				.processor(dedupSimpleKeysStepProsessor())
@@ -525,6 +527,7 @@ public class DedupRecordsJobConfig {
 				.faultTolerant()
 				.keyGenerator(KeyGeneratorForList.INSTANCE)
 				.retry(LockAcquisitionException.class)
+				.retry(OptimisticLockException.class)
 				.retryLimit(10000)
 				.reader(dedupSimpleKeysIsbnReader(INTEGER_OVERRIDEN_BY_EXPRESSION))
 				.processor(dedupSimpleKeysStepProsessor())
@@ -780,6 +783,7 @@ public class DedupRecordsJobConfig {
 				.faultTolerant()
 				.keyGenerator(KeyGeneratorForList.INSTANCE)
 				.retry(LockAcquisitionException.class)
+				.retry(OptimisticLockException.class)
 				.retryLimit(20000)
 				.reader(dedupTitleAuthReader(INTEGER_OVERRIDEN_BY_EXPRESSION))
 				.processor(dedupTitleAuthProcessor())
@@ -951,6 +955,7 @@ public class DedupRecordsJobConfig {
 				.faultTolerant()
 				.keyGenerator(KeyGeneratorForList.INSTANCE)
 				.retry(LockAcquisitionException.class)
+				.retry(OptimisticLockException.class)
 				.retryLimit(10000)
 				.reader(dedupSimpleKeysSkatRestReader(INTEGER_OVERRIDEN_BY_EXPRESSION))
 				.processor(dedupSkatKeysProcessor())
@@ -1410,6 +1415,7 @@ public class DedupRecordsJobConfig {
 				.faultTolerant()
 				.keyGenerator(KeyGeneratorForList.INSTANCE)
 				.retry(LockAcquisitionException.class)
+				.retry(OptimisticLockException.class)
 				.retryLimit(10000)
 				.reader(dedupSimpleKeysDisadvantagedPublisherReader(INTEGER_OVERRIDEN_BY_EXPRESSION))
 				.processor(dedupDisadvantagedKeysStepProsessor())
@@ -1460,6 +1466,7 @@ public class DedupRecordsJobConfig {
 				.faultTolerant()
 				.keyGenerator(KeyGeneratorForList.INSTANCE)
 				.retry(LockAcquisitionException.class)
+				.retry(OptimisticLockException.class)
 				.retryLimit(10000)
 				.reader(dedupSimpleKeysDisadvantagedEditionReader(INTEGER_OVERRIDEN_BY_EXPRESSION))
 				.processor(dedupDisadvantagedKeysStepProsessor())
@@ -1510,6 +1517,7 @@ public class DedupRecordsJobConfig {
 				.faultTolerant()
 				.keyGenerator(KeyGeneratorForList.INSTANCE)
 				.retry(LockAcquisitionException.class)
+				.retry(OptimisticLockException.class)
 				.retryLimit(10000)
 				.reader(dedupSimpleKeysDisadvantagedPagesReader(INTEGER_OVERRIDEN_BY_EXPRESSION))
 				.processor(dedupDisadvantagedKeysStepProsessor())
@@ -1560,6 +1568,7 @@ public class DedupRecordsJobConfig {
 				.faultTolerant()
 				.keyGenerator(KeyGeneratorForList.INSTANCE)
 				.retry(LockAcquisitionException.class)
+				.retry(OptimisticLockException.class)
 				.retryLimit(10000)
 				.reader(dedupSimpleKeysDisadvantagedIsbnReader(INTEGER_OVERRIDEN_BY_EXPRESSION))
 				.processor(dedupDisadvantagedKeysStepProsessor())
@@ -1610,6 +1619,7 @@ public class DedupRecordsJobConfig {
 				.faultTolerant()
 				.keyGenerator(KeyGeneratorForList.INSTANCE)
 				.retry(LockAcquisitionException.class)
+				.retry(OptimisticLockException.class)
 				.retryLimit(10000)
 				.reader(dedupSimpleKeysDisadvantagedCnbPagesReader(INTEGER_OVERRIDEN_BY_EXPRESSION))
 				.processor(dedupDisadvantagedKeysStepProsessor())
@@ -1660,6 +1670,7 @@ public class DedupRecordsJobConfig {
 				.faultTolerant()
 				.keyGenerator(KeyGeneratorForList.INSTANCE)
 				.retry(LockAcquisitionException.class)
+				.retry(OptimisticLockException.class)
 				.retryLimit(10000)
 				.reader(dedupSimpleKeysDisadvantagedCnbTitleReader(INTEGER_OVERRIDEN_BY_EXPRESSION))
 				.processor(dedupDisadvantagedKeysStepProsessor())
@@ -1710,6 +1721,7 @@ public class DedupRecordsJobConfig {
 				.faultTolerant()
 				.keyGenerator(KeyGeneratorForList.INSTANCE)
 				.retry(LockAcquisitionException.class)
+				.retry(OptimisticLockException.class)
 				.retryLimit(10000)
 				.reader(dedupSimpleKeysDisadvantagedIsmnReader(INTEGER_OVERRIDEN_BY_EXPRESSION))
 				.processor(dedupDisadvantagedKeysStepProsessor())
