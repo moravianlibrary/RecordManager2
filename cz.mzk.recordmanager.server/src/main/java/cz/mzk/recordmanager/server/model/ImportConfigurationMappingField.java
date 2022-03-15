@@ -14,6 +14,7 @@ public class ImportConfigurationMappingField extends ImportConfiguration {
 	public static final String TABLE_NAME = "import_conf_mapping_field";
 
 	private static final Pattern FIELD_VALUE = Pattern.compile("([0-9]{3})\\$(.)(.*)", Pattern.CASE_INSENSITIVE);
+	private static final Pattern CONTROL_FIELD_VALUE = Pattern.compile("([0-9]{3}) (.*)", Pattern.CASE_INSENSITIVE);
 
 	@ManyToOne(optional = false, fetch = FetchType.LAZY)
 	@JoinColumn(name = "parent_import_conf_id", nullable = false, updatable = false, insertable = false)
@@ -29,6 +30,10 @@ public class ImportConfigurationMappingField extends ImportConfiguration {
 		Matcher matcher = FIELD_VALUE.matcher(this.mapping);
 		if (matcher.matches()) {
 			return new SourceMapping(this, matcher.group(1), matcher.group(2).charAt(0), matcher.group(3));
+		}
+		matcher = CONTROL_FIELD_VALUE.matcher(this.mapping);
+		if (matcher.matches()) {
+			return new SourceMapping(this, matcher.group(1), ' ', matcher.group(2));
 		}
 		return null;
 	}

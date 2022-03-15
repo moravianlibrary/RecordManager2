@@ -211,8 +211,10 @@ public class OAIItemProcessor implements ItemProcessor<List<OAIRecord>, List<Har
 		} else {
 			MarcRecord marcRecord = marcXmlParser.parseRecord(recordContent);
 			for (Entry<Long, SourceMapping> entry : mapping.entrySet()) {
-				if (marcRecord.getFields(entry.getValue().getTag(), entry.getValue().getSubfield()).contains(entry.getValue().getValue())) {
-					results.add(createHarvestedRecord(oaiRecord, entry.getValue().getImportConfiguration()));
+				SourceMapping mapping = entry.getValue();
+				if ((mapping.getSubfield() == ' ' && mapping.getValue().equals(marcRecord.getControlField(mapping.getTag())))
+						|| marcRecord.getFields(mapping.getTag(), mapping.getSubfield()).contains(mapping.getValue())) {
+					results.add(createHarvestedRecord(oaiRecord, mapping.getImportConfiguration()));
 				}
 			}
 		}
