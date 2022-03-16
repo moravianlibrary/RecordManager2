@@ -25,8 +25,8 @@ public class RegexpExtractorTest {
 
 	@Test
 	public void replacingCosmotronCbvkExtractor() {
-		RegexpExtractor extractor = new RegexpExtractor("s/[^:]+:[^:]+:[^\\\\/]+\\\\/([^\\\\/]+)/cbvk_us_cat*$1/");
-		Assert.assertEquals(extractor.extract("oai:katalog.cbvk.cz:CbvkUsCat/m0000003"), "cbvk_us_cat*m0000003");
+		RegexpExtractor extractor = new RegexpExtractor("s/[^:]+:[^:]+:[^\\\\/]+\\\\/([^\\\\/]+)/CbvkUsCat*$1/");
+		Assert.assertEquals(extractor.extract("oai:katalog.cbvk.cz:CbvkUsCat/m0000003"), "CbvkUsCat*m0000003");
 	}
 
 }

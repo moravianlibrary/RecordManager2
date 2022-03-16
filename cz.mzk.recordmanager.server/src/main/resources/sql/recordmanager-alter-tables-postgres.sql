@@ -2542,3 +2542,11 @@ UPDATE oai_harvest_conf SET extract_id_regex=NULL WHERE import_conf_id IN (421,4
 
 -- 08. 03. 2022 tomascejpek
 INSERT INTO import_conf_mapping_field (import_conf_id,parent_import_conf_id,mapping) VALUES (360,422,'599$aCLB-CPK');
+
+-- 16. 03. 2022 tomascejpek
+UPDATE oai_harvest_conf set extract_id_regex='s/[^:]+:[^:]+:[^\\/]+\\/([^\\/]+)/KjmUsCat*$1/' WHERE import_conf_id=303;
+UPDATE oai_harvest_conf set extract_id_regex='s/[^:]+:[^:]+:[^:]+:(.+)/LiUsCat*$1/' WHERE import_conf_id=308;
+UPDATE oai_harvest_conf set extract_id_regex='s/[^:]+:[^:]+:[^\\/]+\\/([^\\/]+)/CbvkUsCat*$1/' WHERE import_conf_id=328;
+UPDATE oai_harvest_conf set extract_id_regex='s/[^:]+:[^:]+:[^\\/]+\\/([^\\/]+)/KlUsCat*$1/' WHERE import_conf_id=336;
+UPDATE oai_harvest_conf set extract_id_regex='s/[^:]+:[^:]+:[^\\/]+\\/([^\\/]+)/UpolUsCat*$1/' WHERE import_conf_id=359;
+UPDATE oai_harvest_conf set extract_id_regex='s/[^:]+:[^:]+:[^:]+:(.+)/VyUsCat*$1/' WHERE import_conf_id=392;
