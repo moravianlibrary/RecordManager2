@@ -2550,3 +2550,8 @@ UPDATE oai_harvest_conf set extract_id_regex='s/[^:]+:[^:]+:[^\\/]+\\/([^\\/]+)/
 UPDATE oai_harvest_conf set extract_id_regex='s/[^:]+:[^:]+:[^\\/]+\\/([^\\/]+)/KlUsCat*$1/' WHERE import_conf_id=336;
 UPDATE oai_harvest_conf set extract_id_regex='s/[^:]+:[^:]+:[^\\/]+\\/([^\\/]+)/UpolUsCat*$1/' WHERE import_conf_id=359;
 UPDATE oai_harvest_conf set extract_id_regex='s/[^:]+:[^:]+:[^:]+:(.+)/VyUsCat*$1/' WHERE import_conf_id=392;
+
+-- 18. 03. 2022 tomascejpek
+INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (247, 'MKHORICE', 'https://knihovna.horice.org/', 'https://kpwin.horice.org/', 'Hořice', 'KH');
+INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id) VALUES (447, 247, 200, 'mkhorice', 11, false, true, true, true, 'U', 'other');
+INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (447,'https://kpwin.horice.org/api/oai/','cpk','marc21',NULL);
