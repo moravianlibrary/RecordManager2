@@ -30,9 +30,9 @@ public class FaultTolerantIndexingExceptionHandler implements SolrIndexingExcept
 			"Document contains at least one immense term"
 	);
 
-	private final long failureTimeout = 300_000L;
+	private final long failureTimeout = 600_000L;
 
-	private final long sleepBetweenFailures = 30_000L;
+	private final long sleepBetweenFailures = 60_000L;
 
 	private final int maxSkippableFailures = 100;
 
