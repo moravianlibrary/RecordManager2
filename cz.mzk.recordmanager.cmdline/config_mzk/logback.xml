@@ -1,16 +1,22 @@
 <configuration scan="true">
 
-	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+	<property name="log.home" value="/var/log/recordmanager"/>
+	<appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${log.home}/recordmanager.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${log.home}/recordmanager.%d{yyyy-MM-dd}.log</fileNamePattern>
+			<maxHistory>30</maxHistory>
+			<totalSizeCap>3GB</totalSizeCap>
+		</rollingPolicy>
 		<encoder>
-			<pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n
-			</pattern>
+			<pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
 		</encoder>
 	</appender>
 
-	<logger name="cz.mzk.recordmanager" level="TRACE" />
+	<logger name="cz.mzk.recordmanager" level="TRACE"/>
 
 	<root level="ERROR">
-		<appender-ref ref="STDOUT" />
+		<appender-ref ref="FILE"/>
 	</root>
 
 </configuration>
