@@ -206,7 +206,7 @@ public class DedupRecordsJobConfig {
 	public Job dedupRecordsJob(
 			@Qualifier(Constants.JOB_ID_DEDUP + ":initStep") Step initStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":prepareTempClusterIdStep") Step prepareTempClusterIdStep,
-			@Qualifier(Constants.JOB_ID_DEDUP + ":dedupClusterIdsStep") Step dedupClusterIdsStep,
+			@Qualifier(Constants.JOB_ID_DEDUP + ":dedupClusterIdsPartitionedStep") Step dedupClusterIdsStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":prepareTempSkatKeysManuallyMergedStep") Step prepareTempSkatKeysManuallyMergedStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":dedupSimpleKeysSkatManuallyMergedPartitionedStep") Step dedupSimpleKeysSkatManuallyMergedStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":prepareTempSfxIdTableStep") Step prepareTempSfxIdTableStep,
@@ -214,7 +214,7 @@ public class DedupRecordsJobConfig {
 			@Qualifier(Constants.JOB_ID_DEDUP + ":prepareTempIsbnTableStep") Step prepareTempIsbnTableStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":dedupSimpleKeysIsbnPartitionedStep") Step dedupSimpleKeysISBNStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":prepareTempCnbTableStep") Step prepareTempCnbTableStep,
-			@Qualifier(Constants.JOB_ID_DEDUP + ":dedupSimpleKeysCnbStep") Step dedupSimpleKeysCnbStep,
+			@Qualifier(Constants.JOB_ID_DEDUP + ":dedupSimpleKeysCnbPartitionedStep") Step dedupSimpleKeysCnbStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":prepareTempEanTableStep") Step prepareTempEanTableStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":dedupSimpleKeysEanStep") Step dedupSimpleKeysEanStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":prepareTempBlindAudioTableStep") Step prepareTempBlindAudioTableStep,
@@ -379,16 +379,30 @@ public class DedupRecordsJobConfig {
 		return steps.get("dedupClusterIdsStep")
 				.listener(new StepProgressListener())
 				.<List<Long>, List<HarvestedRecord>> chunk(10)
-				.reader(dedupClusterIdReader())
+				.faultTolerant()
+				.keyGenerator(KeyGeneratorForList.INSTANCE)
+				.retry(LockAcquisitionException.class)
+				.retryLimit(10000)
+				.reader(dedupSimpleKeysClusterIdsReader(INTEGER_OVERRIDEN_BY_EXPRESSION))
 				.processor(dedupSimpleKeysStepProsessor())
 				.writer(dedupSimpleKeysStepWriter())
 				.build();
 	}
 
-	@Bean(name = "dedupClusterId:reader")
+	@Bean(name = Constants.JOB_ID_DEDUP + ":dedupClusterIdsPartitionedStep")
+	public Step dedupClusterIdsPartitionedStep() throws Exception {
+		return steps.get("dedupClusterIdsPartitionedStep")
+				.partitioner("dedupClusterIdsPartitionedStepSlave", this.partioner()) //
+				.taskExecutor(this.taskExecutor)
+				.gridSize(this.partitionThreads)
+				.step(dedupClusterIdsStep())
+				.build();
+	}
+
+	@Bean(name = Constants.JOB_ID_DEDUP + ":dedupSimpleKeysClusterIdsStepReader")
 	@StepScope
-	public ItemReader<List<Long>> dedupClusterIdReader() throws Exception {
-		return dedupSimpleKeysReader(TMP_TABLE_CLUSTER, INTEGER_OVERRIDEN_BY_EXPRESSION);
+	public ItemReader<List<Long>> dedupSimpleKeysClusterIdsReader(@Value("#{stepExecutionContext[modulo]}") Integer modulo) throws Exception {
+		return dedupSimpleKeysReader(TMP_TABLE_CLUSTER, modulo);
 	}
 
 	/**
@@ -546,17 +560,31 @@ public class DedupRecordsJobConfig {
 	public Step dedupSimpleKeysCnbStep() throws Exception {
 		return steps.get("dedupSimpleKeysCnbStep")
 				.listener(new StepProgressListener())
-				.<List<Long>, List<HarvestedRecord>> chunk(10)
-				.reader(dedupSimpleKeysCnbReader())
+				.<List<Long>, List<HarvestedRecord>>chunk(10)
+				.faultTolerant()
+				.keyGenerator(KeyGeneratorForList.INSTANCE)
+				.retry(LockAcquisitionException.class)
+				.retryLimit(10000)
+				.reader(dedupSimpleKeysCnbReader(INTEGER_OVERRIDEN_BY_EXPRESSION))
 				.processor(dedupSimpleKeysStepProsessor())
-				.writer(dedupSimpleKeysStepWriter()).build();
-
+				.writer(dedupSimpleKeysStepWriter())
+				.build();
 	}
 
-	@Bean(name = "dedupSimpleKeysCnbStep:reader")
+	@Bean(name = Constants.JOB_ID_DEDUP + ":dedupSimpleKeysCnbPartitionedStep")
+	public Step dedupSimpleKeysCnbPartitionedStep() throws Exception {
+		return steps.get("dedupSimpleKeysCnbPartitionedStep")
+				.partitioner("dedupSimpleKeysCnbPartitionedStepSlave", this.partioner()) //
+				.taskExecutor(this.taskExecutor)
+				.gridSize(this.partitionThreads)
+				.step(dedupSimpleKeysCnbStep())
+				.build();
+	}
+
+	@Bean(name = Constants.JOB_ID_DEDUP + ":dedupSimpleKeysCnbStepReader")
 	@StepScope
-	public ItemReader<List<Long>> dedupSimpleKeysCnbReader() throws Exception {
-		return dedupSimpleKeysReader(TMP_TABLE_CNB, INTEGER_OVERRIDEN_BY_EXPRESSION);
+	public ItemReader<List<Long>> dedupSimpleKeysCnbReader(@Value("#{stepExecutionContext[modulo]}") Integer modulo) throws Exception {
+		return dedupSimpleKeysReader(TMP_TABLE_CNB, modulo);
 	}
 
 	/**
