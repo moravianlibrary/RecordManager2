@@ -112,7 +112,7 @@ public class DedupRecordsJobConfig {
 
 	private static final String TMP_TABLE_DISADVANTAGED_ISMN = "tmp_disadvantaged_Ismn";
 
-	private int partitionThreads = 4;
+	private final int partitionThreads = 6;
 
 	@Autowired
 	private SessionFactory sessionFactory;

@@ -145,7 +145,7 @@ public class BiblioLinkerJobConfig {
 
 	private static final Integer INTEGER_OVERRIDEN_BY_EXPRESSION = null;
 
-	private int partitionThreads = 4;
+	private final int partitionThreads = 6;
 
 	private static final int RETRY_LIMIT = 10000;
 
