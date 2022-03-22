@@ -131,11 +131,11 @@ public class ManuallyMergedSkatDedupKeysReader implements ItemReader<Set<SkatKey
 	}
 
 	private void push(String recordId) {
-		String query = "UPDATE harvested_record SET next_dedup_flag=TRUE WHERE import_conf_id = ? AND record_id = ?";
+		String query = "UPDATE harvested_record SET next_dedup_flag=TRUE WHERE import_conf_id = :icId AND record_id = :recId";
 		Session session = sessionFactory.getCurrentSession();
 		session.createSQLQuery(query)
-				.setLong(0, Constants.IMPORT_CONF_ID_CASLIN)
-				.setString(1, recordId).executeUpdate();
+				.setParameter("icId", Constants.IMPORT_CONF_ID_CASLIN)
+				.setParameter("recId", recordId).executeUpdate();
 	}
 
 	private static String prepareAlephBaseUrl(String date) {

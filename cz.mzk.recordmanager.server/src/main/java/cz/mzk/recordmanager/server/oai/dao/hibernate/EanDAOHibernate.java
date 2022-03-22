@@ -23,8 +23,8 @@ public class EanDAOHibernate extends AbstractDomainDAOHibernate<Long, Ean>
 			return (List<HarvestedRecord>) session
 					.createQuery(
 							"FROM HarvestedRecord hr "
-									+ "WHERE hr.id in (SELECT harvestedRecordId FROM Ean WHERE ean = ?)")
-					.setParameter(0, eanLong)
+									+ "WHERE hr.id in (SELECT harvestedRecordId FROM Ean WHERE ean = :ean)")
+					.setParameter("ean", eanLong)
 					.list();
 		} catch (NumberFormatException ignore) {
 		}

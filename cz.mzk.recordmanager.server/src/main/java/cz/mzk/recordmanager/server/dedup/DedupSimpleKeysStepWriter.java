@@ -43,10 +43,10 @@ public class DedupSimpleKeysStepWriter implements
 				
 				// check whether is need to store current record
 				if (checkIfUpdateIsNeeded(hr)) {
-					String query = "UPDATE harvested_record SET dedup_record_id = ? ,disadvantaged=FALSE WHERE id = ? ";
+					String query = "UPDATE harvested_record SET dedup_record_id = :dedupRecordId ,disadvantaged=FALSE WHERE id = :id";
 					sessionFactory.getCurrentSession().createSQLQuery(query)
-							.setLong(0, hr.getDedupRecord().getId())
-							.setLong(1, hr.getId())
+							.setParameter("dedupRecordId", hr.getDedupRecord().getId())
+							.setParameter("id", hr.getId())
 							.executeUpdate();
 				}
 

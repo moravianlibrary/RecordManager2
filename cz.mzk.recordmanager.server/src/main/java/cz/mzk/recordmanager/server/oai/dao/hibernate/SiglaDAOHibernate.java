@@ -18,8 +18,8 @@ public class SiglaDAOHibernate extends AbstractDomainDAOHibernate<Long, Sigla>
 		Session session = sessionFactory.getCurrentSession();
 		return (List<Sigla>) session
 				.createQuery(
-						"from Sigla where sigla = ?")
-				.setParameter(0, name)
+						"from Sigla where sigla = :sigla")
+				.setParameter("sigla", name)
 				.list();
 	}
 
@@ -28,8 +28,8 @@ public class SiglaDAOHibernate extends AbstractDomainDAOHibernate<Long, Sigla>
 	public List<Sigla> findSiglaByImportConfId(Long id) {
 		Session session = sessionFactory.getCurrentSession();
 		return (List<Sigla>) session
-				.createQuery("from Sigla where import_conf_id = ?")
-				.setParameter(0, id).list();
+				.createQuery("from Sigla where import_conf_id = :importConfId")
+				.setParameter("importConfId", id).list();
 	}
 
 }

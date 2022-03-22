@@ -76,7 +76,7 @@ public class ImportObalkyKnihTest extends AbstractTest {
 		jobLauncher.run(job, jobParams);
 
 		List<ObalkyKnihAnnotation> results = obalkyKnihAnnotationDAO.findAll();
-		Assert.assertTrue(results.size() == 2);
+		Assert.assertEquals(results.size(), 2);
 		Assert.assertTrue(results.get(0).getIsbn().equals(9780545010221L)
 				&& results.get(0).getCnb() == null
 				&& results.get(0).getOclc() == null);

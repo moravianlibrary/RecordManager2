@@ -19,8 +19,8 @@ public class OclcDAOHibernate extends AbstractDomainDAOHibernate<Long, Oclc>
 		return (List<HarvestedRecord>) session
 				.createQuery(
 						"FROM HarvestedRecord hr "
-								+ "WHERE hr.id in (SELECT harvestedRecordId FROM Oclc WHERE oclc = ?)")
-				.setParameter(0, oclc)
+								+ "WHERE hr.id in (SELECT harvestedRecordId FROM Oclc WHERE oclc = :oclc)")
+				.setParameter("oclc", oclc)
 				.list();
 	}
 }

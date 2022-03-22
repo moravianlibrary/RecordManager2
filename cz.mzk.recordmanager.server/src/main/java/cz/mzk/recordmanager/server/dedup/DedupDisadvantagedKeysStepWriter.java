@@ -26,10 +26,10 @@ public class DedupDisadvantagedKeysStepWriter extends DedupSimpleKeysStepWriter 
 
 				// check whether is need to store current record
 				if (checkIfUpdateIsNeeded(hr)) {
-					String query = "UPDATE harvested_record SET dedup_record_id = ? WHERE id = ? ";
+					String query = "UPDATE harvested_record SET dedup_record_id = :dedupRecordId WHERE id = :id ";
 					sessionFactory.getCurrentSession().createSQLQuery(query)
-							.setLong(0, hr.getDedupRecord().getId())
-							.setLong(1, hr.getId())
+							.setParameter("dedupRecordId", hr.getDedupRecord().getId())
+							.setParameter("id", hr.getId())
 							.executeUpdate();
 				}
 

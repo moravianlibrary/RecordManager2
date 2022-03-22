@@ -19,8 +19,8 @@ public class ImportRecordsDAOHibernate extends
 		Session session = sessionFactory.getCurrentSession();
 		return (List<ImportConfiguration>) session
 				.createQuery(
-						"from ImportConfiguration where idPrefix = ?")
-				.setParameter(0, prefix)
+						"from ImportConfiguration where idPrefix = :idPrefix")
+				.setParameter("idPrefix", prefix)
 				.list();
 	}
 

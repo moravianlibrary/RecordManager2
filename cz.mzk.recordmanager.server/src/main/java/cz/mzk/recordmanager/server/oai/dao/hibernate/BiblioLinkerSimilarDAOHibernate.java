@@ -17,8 +17,8 @@ public class BiblioLinkerSimilarDAOHibernate extends AbstractDomainDAOHibernate<
 		Session session = sessionFactory.getCurrentSession();
 		return (List<BiblioLinkerSimilar>) session
 				.createQuery("from BiblioLinkerSimilar where harvested_record_id in (" +
-						"select id from HarvestedRecord where biblio_linker_id = ?)")
-				.setParameter(0, blId)
+						"select id from HarvestedRecord where biblio_linker_id = :blId)")
+				.setParameter("blId", blId)
 				.setMaxResults(limit)
 				.list();
 	}

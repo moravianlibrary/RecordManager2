@@ -1,12 +1,15 @@
 package cz.mzk.recordmanager.server.util;
 
 import java.io.Closeable;
+
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.orm.hibernate4.SessionFactoryUtils;
-import org.springframework.orm.hibernate4.SessionHolder;
+import org.springframework.orm.hibernate5.SessionFactoryUtils;
+import org.springframework.orm.hibernate5.SessionHolder;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
+
+import javax.persistence.TransactionRequiredException;
 
 public class HibernateSessionSynchronizer {
 
@@ -40,7 +43,11 @@ public class HibernateSessionSynchronizer {
 					.getResource(sessionFactory);
 			Session currentSession = holder.getSession();
 			if (currentSession == session) {
-				currentSession.flush();
+				try {
+					currentSession.flush();
+				} catch (TransactionRequiredException tre) {
+
+				}
 				TransactionSynchronizationManager
 						.unbindResource(sessionFactory);
 				SessionFactoryUtils.closeSession(currentSession);

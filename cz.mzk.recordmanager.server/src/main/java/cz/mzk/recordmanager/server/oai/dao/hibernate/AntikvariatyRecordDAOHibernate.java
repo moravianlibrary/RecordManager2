@@ -16,8 +16,8 @@ public class AntikvariatyRecordDAOHibernate extends AbstractDomainDAOHibernate<L
 		Session session = sessionFactory.getCurrentSession();
 		return (String) session
 				.createSQLQuery(
-						"select url from antikvariaty_url_view v where v.dedup_record_id = ?")
-				.setParameter(0, dr.getId())
+						"select url from antikvariaty_url_view v where v.dedup_record_id = :dedupRecordId")
+				.setParameter("dedupRecordId", dr.getId())
 				.setMaxResults(1)
 				.uniqueResult();
 	}

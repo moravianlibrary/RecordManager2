@@ -19,8 +19,8 @@ public class IsbnDAOHibernate extends AbstractDomainDAOHibernate<Long, Isbn>
 		return (List<HarvestedRecord>) session
 				.createQuery(
 						"FROM HarvestedRecord hr "
-								+ "WHERE hr.id in (SELECT harvestedRecordId FROM Isbn WHERE isbn = ?)")
-				.setParameter(0, isbn)
+								+ "WHERE hr.id in (SELECT harvestedRecordId FROM Isbn WHERE isbn = :isbn)")
+				.setParameter("isbn", isbn)
 				.list();
 	}
 }
