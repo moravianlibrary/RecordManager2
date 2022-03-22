@@ -250,9 +250,9 @@ public class DedupRecordsJobConfig {
 			@Qualifier(Constants.JOB_ID_DEDUP + ":prepareDedupPeriodicalsYearClustersStep") Step prepareDedupPeriodicalsYearClustersStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":processPeriodicalsSimilaritesResultsStep") Step processPeriodicalsSimilaritesResultsStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":prepareTempArticlesXGTableStep") Step prepareTempArticlesXGTableStep,
-			@Qualifier(Constants.JOB_ID_DEDUP + ":dedupArticlesXGStep") Step dedupArticlesXGStep,
+			@Qualifier(Constants.JOB_ID_DEDUP + ":dedupArticlesXGPartitionedStep") Step dedupArticlesXGStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":prepareTempArticlesTGTableStep") Step prepareTempArticlesTGTableStep,
-			@Qualifier(Constants.JOB_ID_DEDUP + ":dedupArticlesTGStep") Step dedupArticlesTGStep,
+			@Qualifier(Constants.JOB_ID_DEDUP + ":dedupArticlesTGPartitionedStep") Step dedupArticlesTGStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":prepareTempDisadvantagedPublisherTableStep") Step prepareTempDisadvantagedPublisherTableStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":dedupDisadvantagedPublisherPartitionedStep") Step dedupDisadvantagedPublisherStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":prepareTempDisadvantagedEditionTableStep") Step prepareTempDisadvantagedEditionTableStep,
@@ -707,16 +707,31 @@ public class DedupRecordsJobConfig {
 	public Step dedupArticlesXGStep() throws Exception {
 		return steps.get("dedupArticlesXGStep")
 				.listener(new StepProgressListener())
-				.<List<Long>, List<HarvestedRecord>> chunk(10)
-				.reader(dedupSimpleKeysArticlesXGReader())
+				.<List<Long>, List<HarvestedRecord>>chunk(10)
+				.faultTolerant()
+				.keyGenerator(KeyGeneratorForList.INSTANCE)
+				.retry(LockAcquisitionException.class)
+				.retryLimit(10000)
+				.reader(dedupArticlesXGReader(INTEGER_OVERRIDEN_BY_EXPRESSION))
 				.processor(dedupSimpleKeysStepProsessor())
-				.writer(dedupSimpleKeysStepWriter()).build();
+				.writer(dedupSimpleKeysStepWriter())
+				.build();
 	}
 
-	@Bean(name = "dedupSimpleKeysArticlesXGStep:reader")
+	@Bean(name = Constants.JOB_ID_DEDUP + ":dedupArticlesXGPartitionedStep")
+	public Step dedupArticlesXGPartitionedStep() throws Exception {
+		return steps.get("dedupArticlesXGPartitionedStep")
+				.partitioner("dedupArticlesXGPartitionedStepSlave", this.partioner()) //
+				.taskExecutor(this.taskExecutor)
+				.gridSize(this.partitionThreads)
+				.step(dedupArticlesXGStep())
+				.build();
+	}
+
+	@Bean(name = Constants.JOB_ID_DEDUP + ":dedupArticlesXGStepReader")
 	@StepScope
-	public ItemReader<List<Long>> dedupSimpleKeysArticlesXGReader() throws Exception {
-		return dedupSimpleKeysReader(TMP_TABLE_ARTICLES_XG, INTEGER_OVERRIDEN_BY_EXPRESSION);
+	public ItemReader<List<Long>> dedupArticlesXGReader(@Value("#{stepExecutionContext[modulo]}") Integer modulo) throws Exception {
+		return dedupSimpleKeysReader(TMP_TABLE_ARTICLES_XG, modulo);
 	}
 
 	/**
@@ -736,23 +751,39 @@ public class DedupRecordsJobConfig {
 				.tasklet(prepareTempArticlesTGTableTasklet()).build();
 	}
 
+
 	@Bean(name = Constants.JOB_ID_DEDUP + ":dedupArticlesTGStep")
 	public Step dedupArticlesTGStep() throws Exception {
 		return steps.get("dedupArticlesTGStep")
 				.listener(new StepProgressListener())
-				.<List<Long>, List<HarvestedRecord>> chunk(10)
-				.reader(dedupSimpleKeysArticlesTGReader())
+				.<List<Long>, List<HarvestedRecord>>chunk(10)
+				.faultTolerant()
+				.keyGenerator(KeyGeneratorForList.INSTANCE)
+				.retry(LockAcquisitionException.class)
+				.retryLimit(10000)
+				.reader(dedupArticlesTGReader(INTEGER_OVERRIDEN_BY_EXPRESSION))
 				.processor(dedupArticlesTGProcessor())
-				.writer(dedupSimpleKeysStepWriter()).build();
+				.writer(dedupSimpleKeysStepWriter())
+				.build();
 	}
 
-	@Bean(name = "dedupSimpleKeysArticlesTGStep:reader")
+	@Bean(name = Constants.JOB_ID_DEDUP + ":dedupArticlesTGPartitionedStep")
+	public Step dedupArticlesTGPartitionedStep() throws Exception {
+		return steps.get("dedupArticlesTGPartitionedStep")
+				.partitioner("dedupArticlesTGPartitionedStepSlave", this.partioner()) //
+				.taskExecutor(this.taskExecutor)
+				.gridSize(this.partitionThreads)
+				.step(dedupArticlesTGStep())
+				.build();
+	}
+
+	@Bean(name = Constants.JOB_ID_DEDUP + ":dedupArticlesTGStepReader")
 	@StepScope
-	public ItemReader<List<Long>> dedupSimpleKeysArticlesTGReader() throws Exception {
-		return dedupSimpleKeysReader(TMP_TABLE_ARTICLES_TG, INTEGER_OVERRIDEN_BY_EXPRESSION);
+	public ItemReader<List<Long>> dedupArticlesTGReader(@Value("#{stepExecutionContext[modulo]}") Integer modulo) throws Exception {
+		return dedupSimpleKeysReader(TMP_TABLE_ARTICLES_TG, modulo);
 	}
 
-	@Bean(name = "dedupArticlesTGProcessor")
+	@Bean(name = Constants.JOB_ID_DEDUP + ":dedupArticlesTGProcessor")
 	@StepScope
 	public ItemProcessor<List<Long>, List<HarvestedRecord>> dedupArticlesTGProcessor() {
 		return new DedupArticlesTGProcessor(false);
