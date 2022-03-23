@@ -224,7 +224,7 @@ public class DedupRecordsJobConfig {
 			@Qualifier(Constants.JOB_ID_DEDUP + ":prepareTmpTitleAuthStep") Step prepareTmpTitleAuthStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":dedupTitleAuthPartitionedStep") Step dedupTitleAuthStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":prepareTempCnbClustersTableStep") Step prepareTempCnbClustersTableStep,
-			@Qualifier(Constants.JOB_ID_DEDUP + ":dedupCnbClustersStep") Step dedupCnbClustersStep,
+			@Qualifier(Constants.JOB_ID_DEDUP + ":dedupCnbClustersPartitionedStep") Step dedupCnbClustersStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":prepareTempOclcClustersTableStep") Step prepareTempOclcClustersTableStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":dedupOclcClustersStep") Step dedupOclcClustersStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":prepareTempUuidClustersTableStep") Step prepareTempUuidClustersTableStep,
@@ -875,21 +875,41 @@ public class DedupRecordsJobConfig {
 				.build();
 	}
 
-	@Bean(name = "dedupCnbClustersStep:reader")
-	@StepScope
-	public ItemReader<List<Long>> dedupCnbClustersReader() throws Exception {
-		return dedupSimpleKeysReader(TMP_TABLE_CNB_CLUSTERS, INTEGER_OVERRIDEN_BY_EXPRESSION);
-	}
-
 	@Bean(name = Constants.JOB_ID_DEDUP + ":dedupCnbClustersStep")
 	public Step dedupCnbClustersStep() throws Exception {
-		return steps.get("dedupCnbClustersTableStep")
+		return steps.get("dedupCnbClustersStep")
 				.listener(new StepProgressListener())
-				.<List<Long>, List<HarvestedRecord>> chunk(10)
-				.reader(dedupCnbClustersReader())
+				.<List<Long>, List<HarvestedRecord>>chunk(10)
+				.faultTolerant()
+				.keyGenerator(KeyGeneratorForList.INSTANCE)
+				.retry(LockAcquisitionException.class)
+				.retryLimit(10000)
+				.reader(dedupCnbClustersReader(INTEGER_OVERRIDEN_BY_EXPRESSION))
 				.processor(dedupCNBClustersProcessor())
 				.writer(dedupSimpleKeysStepWriter())
 				.build();
+	}
+
+	@Bean(name = Constants.JOB_ID_DEDUP + ":dedupCnbClustersPartitionedStep")
+	public Step dedupCnbClustersPartitionedStep() throws Exception {
+		return steps.get("dedupCnbClustersPartitionedStep")
+				.partitioner("dedupCnbClustersPartitionedStepSlave", this.partioner()) //
+				.taskExecutor(this.taskExecutor)
+				.gridSize(this.partitionThreads)
+				.step(dedupCnbClustersStep())
+				.build();
+	}
+
+	@Bean(name = Constants.JOB_ID_DEDUP + ":dedupCnbClustersStepReader")
+	@StepScope
+	public ItemReader<List<Long>> dedupCnbClustersReader(@Value("#{stepExecutionContext[modulo]}") Integer modulo) throws Exception {
+		return dedupSimpleKeysReader(TMP_TABLE_CNB_CLUSTERS, modulo);
+	}
+
+	@Bean(name = Constants.JOB_ID_DEDUP + ":dedupCNBClustersProcessor")
+	@StepScope
+	public ItemProcessor<List<Long>, List<HarvestedRecord>> dedupCNBClustersProcessor() {
+		return new DedupIdentifierCNBClustersProcessor(false);
 	}
 
 	/**
@@ -1855,15 +1875,6 @@ public class DedupRecordsJobConfig {
 	@StepScope
 	public ItemProcessor<List<Long>, List<HarvestedRecord>> generalDedupClustersProcessor() {
 		return new DedupIdentifierClustersProcessor(false);
-	}
-
-	/**
-	 * processor for deduplication of clusters based on identifier CNB
-	 */
-	@Bean(name = "dedupCNBClustersProcessor")
-	@StepScope
-	public ItemProcessor<List<Long>, List<HarvestedRecord>> dedupCNBClustersProcessor() {
-		return new DedupIdentifierCNBClustersProcessor(false);
 	}
 
 	/**
