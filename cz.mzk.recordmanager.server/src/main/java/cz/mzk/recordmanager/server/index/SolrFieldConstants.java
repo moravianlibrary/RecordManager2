@@ -191,6 +191,8 @@ public class SolrFieldConstants {
 
 	public static final String UUID_STR_MV = "uuid_str_mv";
 
+	public static final String LONG_LAT = "long_lat";
+
 	/**
 	 * dummy fields used for processing purposes only, shouldn't be indexed.
 	 */
