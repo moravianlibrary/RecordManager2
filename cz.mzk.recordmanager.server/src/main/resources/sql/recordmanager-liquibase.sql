@@ -2845,3 +2845,7 @@ INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granul
 
 --changeset tomascejpek:319 context:cpk
 UPDATE oai_harvest_conf SET url='https://katalog.mvk.cz/api/oai' WHERE import_conf_id=429;
+
+--changeset tomascejpek:320 context:cpk
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (106, 433, 'KAG503');
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (109, 438, 'ABE309');
