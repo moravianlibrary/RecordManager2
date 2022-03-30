@@ -180,6 +180,7 @@ public class Constants {
 	public static final String PREFIX_KVKL				= "kvkl";
 	public static final String PREFIX_LIBRARY			= "library";
 	public static final String PREFIX_MANUSCRIPTORIUM	= "manuscript";
+	public static final String PREFIX_MARCIT_LOC		= "marcit-loc";
 	public static final String PREFIX_MENDELU	        = "mendelu";
 	public static final String PREFIX_MESH				= "mesh";
 	public static final String PREFIX_MKBREC			= "mkbrec";

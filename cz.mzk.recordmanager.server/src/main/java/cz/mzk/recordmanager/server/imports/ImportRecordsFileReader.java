@@ -117,8 +117,10 @@ public class ImportRecordsFileReader implements ItemReader<List<Record>> {
 	private void initializeFilesReader() {
 		try {
 			if (files != null && !files.isEmpty()) {
-				FileInputStream inStream = new FileInputStream(files.remove(0));
-				reader = getMarcReader(inStream);
+				do {
+					FileInputStream inStream = new FileInputStream(files.remove(0));
+					reader = getMarcReader(inStream);
+				} while (!reader.hasNext());
 			}
 		} catch (FileNotFoundException e) {
 			logger.warn(e.getMessage());
