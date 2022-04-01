@@ -117,7 +117,7 @@ public strictfp class BoundingBoxMarcFunctions implements MarcRecordFunctions {
 						longitude, latitude, origWest, origEast, origNorth, origSouth);
 			} else {
 				if (Double.isNaN(north) || Double.isNaN(south)
-						|| Double.isNaN(east) || Double.isNaN(north)) {
+						|| Double.isNaN(east) || Double.isNaN(west)) {
 					logger.warn(
 							"INVALID RECORD missig coordinate w={} e={} n={} s={}",
 							origWest, origEast, origNorth, origSouth);
