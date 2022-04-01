@@ -102,6 +102,7 @@ public class ImportRecordsWriter implements ItemWriter<List<Record>>, StepExecut
 		for (List<Record> records : items) {
 			for (Record currentRecord : records) {
 				try {
+					progress.incrementAndLogProgress();
 					ByteArrayOutputStream outStream = new ByteArrayOutputStream();
 					MarcWriter marcWriter = new MarcXmlWriter(outStream, true);
 					marcWriter.setConverter(ISOCharConvertor.INSTANCE);
@@ -159,8 +160,6 @@ public class ImportRecordsWriter implements ItemWriter<List<Record>>, StepExecut
 					}
 
 					harvestedRecordDao.persist(hr);
-					
-					progress.incrementAndLogProgress();
 				} catch (Exception e) {
 					logger.warn("Error occured in processing record");
 					throw e;

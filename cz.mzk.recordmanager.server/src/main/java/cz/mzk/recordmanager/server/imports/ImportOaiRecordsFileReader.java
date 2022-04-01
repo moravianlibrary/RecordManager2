@@ -4,6 +4,7 @@ import cz.mzk.recordmanager.server.oai.harvest.OaiErrorException;
 import cz.mzk.recordmanager.server.oai.model.OAIRecord;
 import cz.mzk.recordmanager.server.oai.model.OAIRoot;
 import cz.mzk.recordmanager.server.util.CleaningUtils;
+import cz.mzk.recordmanager.server.util.ProgressLogger;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,7 +20,7 @@ import java.util.List;
 
 public class ImportOaiRecordsFileReader implements ItemReader<List<OAIRecord>> {
 
-	private static Logger logger = LoggerFactory.getLogger(AsyncImportOaiRecordsFileReader.class);
+	private static final Logger logger = LoggerFactory.getLogger(AsyncImportOaiRecordsFileReader.class);
 
 	private byte[] bytes;
 
@@ -29,6 +30,8 @@ public class ImportOaiRecordsFileReader implements ItemReader<List<OAIRecord>> {
 
 	private static final int BATCH_SIZE = 100;
 
+	private final ProgressLogger progress;
+
 	public ImportOaiRecordsFileReader(String filename) throws FileNotFoundException {
 		try {
 			JAXBContext jaxbContext = JAXBContext.newInstance(OAIRoot.class);
@@ -37,6 +40,7 @@ public class ImportOaiRecordsFileReader implements ItemReader<List<OAIRecord>> {
 		} catch (JAXBException je) {
 			throw new RuntimeException(je);
 		}
+		this.progress = new ProgressLogger(logger, 5000);
 	}
 
 	@Override
@@ -69,6 +73,7 @@ public class ImportOaiRecordsFileReader implements ItemReader<List<OAIRecord>> {
 				if (oaiRoot.getOaiError() != null) {
 					throw new OaiErrorException(oaiRoot.getOaiError().getMessage());
 				}
+				progress.incrementAndLogProgress();
 				results.addAll(oaiRoot.getListRecords().getRecords());
 			} catch (Exception e) {
 				e.printStackTrace();

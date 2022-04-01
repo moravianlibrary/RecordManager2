@@ -140,6 +140,7 @@ public class ImportRecordJobConfig {
 	@Bean(name = Constants.JOB_ID_DOWNLOAD_IMPORT + ":downloadImportRecordsStep")
 	public Step downloadImportRecordsStep() throws Exception {
 		return steps.get("downloadImportRecordsStep")
+				.listener(new StepProgressListener())
 				.<List<Record>, List<Record>>chunk(20)//
 				.reader(downloadImportRecordsReader(LONG_OVERRIDEN_BY_EXPRESSION))//
 				.writer(importRecordsWriter(LONG_OVERRIDEN_BY_EXPRESSION)) //
@@ -244,6 +245,7 @@ public class ImportRecordJobConfig {
 			reader = importOaiRecordsReader(STRING_OVERRIDEN_BY_EXPRESSION);
 		}
 		return steps.get(Constants.JOB_ID_IMPORT_OAI + "importRecordsStep")
+				.listener(new StepProgressListener())
 				.<List<OAIRecord>, List<HarvestedRecord>>chunk(1)//
 				.reader(reader)//
 				.processor(oaiItemProcessor())
@@ -264,6 +266,7 @@ public class ImportRecordJobConfig {
 	@Bean(name = Constants.JOB_ID_IMPORT_OAI_COSMOTRON + ":importRecordsStep")
 	public Step importOaiCosmotronRecordsStep() throws Exception {
 		return steps.get(Constants.JOB_ID_IMPORT_OAI_COSMOTRON + "importRecordsStep")
+				.listener(new StepProgressListener())
 				.<List<OAIRecord>, List<HarvestedRecord>>chunk(1)//
 				.reader(importOaiRecordsReader(STRING_OVERRIDEN_BY_EXPRESSION))//
 				.processor(oaiItemProcessor())
@@ -334,6 +337,7 @@ public class ImportRecordJobConfig {
 	@Bean(name = Constants.JOB_ID_IMPORT_COSMOTRON_996 + ":importRecordsStep")
 	public Step importCosmotron996RecordsStep() throws Exception {
 		return steps.get(Constants.JOB_ID_IMPORT_COSMOTRON_996 + "importRecordsStep")
+				.listener(new StepProgressListener())
 				.<List<Record>, List<Record>>chunk(20)//
 				.reader(importRecordsReader(LONG_OVERRIDEN_BY_EXPRESSION, STRING_OVERRIDEN_BY_EXPRESSION, STRING_OVERRIDEN_BY_EXPRESSION))//
 				.writer(importCosmotron996RecordsWriter(LONG_OVERRIDEN_BY_EXPRESSION)) //
@@ -359,6 +363,7 @@ public class ImportRecordJobConfig {
 	@Bean(name = Constants.JOB_ID_IMPORT_TEZAURUS + ":importRecordsStep")
 	public Step importTezaurusRecordsStep() throws Exception {
 		return steps.get(Constants.JOB_ID_IMPORT_TEZAURUS + "importRecordsStep")
+				.listener(new StepProgressListener())
 				.<List<Record>, List<Record>>chunk(20)//
 				.reader(importRecordsReader(LONG_OVERRIDEN_BY_EXPRESSION, STRING_OVERRIDEN_BY_EXPRESSION, STRING_OVERRIDEN_BY_EXPRESSION))//
 				.writer(importTezaurusRecordsWriter(LONG_OVERRIDEN_BY_EXPRESSION)) //
