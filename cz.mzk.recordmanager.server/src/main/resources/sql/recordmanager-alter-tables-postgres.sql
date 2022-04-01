@@ -2558,3 +2558,7 @@ INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granul
 
 -- 21. 03. 2022 tomascejpek
 UPDATE oai_harvest_conf SET url='https://katalog.mvk.cz/api/oai' WHERE import_conf_id=429;
+
+-- 30. 03. 2022 tomascejpek
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (106, 433, 'KAG503');
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (109, 438, 'ABE309');
