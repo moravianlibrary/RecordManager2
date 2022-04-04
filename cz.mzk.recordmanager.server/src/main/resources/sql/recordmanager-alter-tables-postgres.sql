@@ -2571,3 +2571,13 @@ CREATE TABLE loc (
   FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE
 );
 CREATE INDEX loc_harvested_record_idx ON loc(harvested_record_id);
+INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency,generate_dedup_keys,generate_biblio_linker_keys) VALUES (100002, 135, 200, 'marcit-msvk', 11, false, true, true, false, 'U', false, false);
+INSERT INTO download_import_conf (import_conf_id,url,import_job_name, format) VALUES (100002,'https://sfx.jib.cz/jibexports/e-collection-MSVK.aleph_seq','downloadAndImportRecordsJob','aleph');
+INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency,generate_dedup_keys,generate_biblio_linker_keys) VALUES (100003, 100, 200, 'marcit-mzk', 11, false, true, true, false, 'U', false, false);
+INSERT INTO download_import_conf (import_conf_id,url,import_job_name, format) VALUES (100003,'https://sfx.jib.cz/jibexports/e-collection-MZK.aleph_seq','downloadAndImportRecordsJob','aleph');
+INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency,generate_dedup_keys,generate_biblio_linker_keys) VALUES (100004, 104, 200, 'marcit-nkp', 11, false, true, true, false, 'U', false, false);
+INSERT INTO download_import_conf (import_conf_id,url,import_job_name, format) VALUES (100004,'https://sfx.jib.cz/jibexports/e-collection-NKP.aleph_seq','downloadAndImportRecordsJob','aleph');
+INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency,generate_dedup_keys,generate_biblio_linker_keys) VALUES (100005, 104, 200, 'marcit-svkpl', 11, false, true, true, false, 'U', false, false);
+INSERT INTO download_import_conf (import_conf_id,url,import_job_name, format) VALUES (100005,'https://sfx.jib.cz/jibexports/e-collection-SVKPL.aleph_seq','downloadAndImportRecordsJob','aleph');
+INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency,generate_dedup_keys,generate_biblio_linker_keys) VALUES (100006, 115, 200, 'marcit-vkol', 11, false, true, true, false, 'U', false, false);
+INSERT INTO download_import_conf (import_conf_id,url,import_job_name, format) VALUES (100006,'https://sfx.jib.cz/jibexports/e-collection-VKOL.aleph_seq','downloadAndImportRecordsJob','aleph');
