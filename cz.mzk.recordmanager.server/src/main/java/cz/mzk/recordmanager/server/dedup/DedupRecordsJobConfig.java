@@ -107,6 +107,8 @@ public class DedupRecordsJobConfig {
 
 	private static final String TMP_TABLE_DISADVANTAGED_ISMN = "tmp_disadvantaged_Ismn";
 
+	private static final String TMP_TABLE_BOOKPORT_ID = "tmp_simmilar_bookport_id";
+
 	private final int partitionThreads = 6;
 
 	@Autowired
@@ -196,6 +198,9 @@ public class DedupRecordsJobConfig {
 	private static final String prepareTempDisadvantagedIsmnSql =
 			ResourceUtils.asString("job/dedupRecordsJob/prepareTempDisadvantagedIsmnTable.sql");
 
+	private static final String prepareTempBookportTableSql =
+			ResourceUtils.asString("job/dedupRecordsJob/prepareTempBookportTable.sql");
+
 	public DedupRecordsJobConfig() {
 	}
 
@@ -253,6 +258,8 @@ public class DedupRecordsJobConfig {
 			@Qualifier(Constants.JOB_ID_DEDUP + ":dedupArticlesXGPartitionedStep") Step dedupArticlesXGStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":prepareTempArticlesTGTableStep") Step prepareTempArticlesTGTableStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":dedupArticlesTGPartitionedStep") Step dedupArticlesTGStep,
+			@Qualifier(Constants.JOB_ID_DEDUP + ":prepareTempBookportTableStep") Step prepareTempBookportTableStep,
+			@Qualifier(Constants.JOB_ID_DEDUP + ":dedupBookportStep") Step dedupBookportStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":prepareTempDisadvantagedPublisherTableStep") Step prepareTempDisadvantagedPublisherTableStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":dedupDisadvantagedPublisherPartitionedStep") Step dedupDisadvantagedPublisherStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":prepareTempDisadvantagedEditionTableStep") Step prepareTempDisadvantagedEditionTableStep,
@@ -320,6 +327,8 @@ public class DedupRecordsJobConfig {
 				.next(dedupArticlesTGStep)
 				.next(prepareTempSfxIdTableStep)
 				.next(dedupSimpleKeysSfxIdStep)
+				.next(prepareTempBookportTableStep)
+				.next(dedupBookportStep)
 				.next(prepareTempDisadvantagedPublisherTableStep)
 				.next(dedupDisadvantagedPublisherStep)
 				.next(prepareTempDisadvantagedEditionTableStep)
@@ -981,6 +990,40 @@ public class DedupRecordsJobConfig {
 				.<List<Long>, List<HarvestedRecord>> chunk(10)
 				.reader(dedupUuidClustersReader())
 				.processor(generalDedupClustersProcessor())
+				.writer(dedupSimpleKeysStepWriter())
+				.build();
+	}
+
+	/**
+	 * Deduplicate bookport records
+	 */
+	@Bean(name = "prepareTempTablesStep:prepareTempBookportTableTasklet")
+	@StepScope
+	public Tasklet prepareBookportTasklet() {
+		return new SqlCommandTasklet(prepareTempBookportTableSql);
+	}
+
+	@Bean(name = Constants.JOB_ID_DEDUP + ":prepareTempBookportTableStep")
+	public Step prepareTempBookportTableStep() {
+		return steps.get("prepareTempBookportTableStep")
+				.tasklet(prepareBookportTasklet())
+				.listener(new StepProgressListener())
+				.build();
+	}
+
+	@Bean(name = "dedupBookportStep:reader")
+	@StepScope
+	public ItemReader<List<Long>> dedupBookportReader() throws Exception {
+		return dedupSimpleKeysReader(TMP_TABLE_BOOKPORT_ID, INTEGER_OVERRIDEN_BY_EXPRESSION);
+	}
+
+	@Bean(name = Constants.JOB_ID_DEDUP + ":dedupBookportStep")
+	public Step dedupBookportStep() throws Exception {
+		return steps.get("dedupBookportStep")
+				.listener(new StepProgressListener())
+				.<List<Long>, List<HarvestedRecord>>chunk(10)
+				.reader(dedupBookportReader())
+				.processor(dedupSimpleKeysStepProsessor())
 				.writer(dedupSimpleKeysStepWriter())
 				.build();
 	}

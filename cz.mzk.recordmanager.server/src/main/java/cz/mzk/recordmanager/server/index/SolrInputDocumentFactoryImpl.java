@@ -123,8 +123,8 @@ public class SolrInputDocumentFactoryImpl implements SolrInputDocumentFactory, I
 	}
 
 	protected List<String> getLocalIds(List<SolrInputDocument> childs) {
-		List<String> index = new ArrayList<>();
-		List<String> others = new ArrayList<>();
+		Set<String> index = new HashSet<>();
+		Set<String> others = new HashSet<>();
 		childs.forEach(rec -> {
 			if (rec.getFieldValue(SolrFieldConstants.INDEXING_WHEN_MERGED) == null
 					|| (boolean) rec
@@ -136,7 +136,7 @@ public class SolrInputDocumentFactoryImpl implements SolrInputDocumentFactory, I
 						.getFieldValue(SolrFieldConstants.ID_FIELD));
 		});
 
-		return (index.size() > 0) ? index : others;
+		return (index.size() > 0) ? new ArrayList<>(index) : new ArrayList<>(others);
 	}
 
 	@Override

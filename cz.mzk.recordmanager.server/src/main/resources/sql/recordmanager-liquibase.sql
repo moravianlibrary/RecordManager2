@@ -2849,3 +2849,13 @@ UPDATE oai_harvest_conf SET url='https://katalog.mvk.cz/api/oai' WHERE import_co
 --changeset tomascejpek:320 context:cpk
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (106, 433, 'KAG503');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (109, 438, 'ABE309');
+
+--changeset tomascejpek:321 context:cpk
+INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, generate_dedup_keys) VALUES (448, 130, 200, 'bookport', 11, false, true, true, true, 'U', false);
+INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format) VALUES (448,'https://bookport.cz/marc21-12415.xml','downloadAndImportRecordsJob','xml');
+INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, generate_dedup_keys) VALUES (449, 101, 200, 'bookport', 11, false, true, true, true, 'U', false);
+INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format) VALUES (449,'https://bookport.cz/marc21-12416.xml','downloadAndImportRecordsJob','xml');
+INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, generate_dedup_keys) VALUES (450, 113, 200, 'bookport', 11, false, true, true, true, 'U', false);
+INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format) VALUES (450,'https://bookport.cz/marc21-12427.xml','downloadAndImportRecordsJob','xml');
+INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, generate_dedup_keys) VALUES (451, 115, 200, 'bookport', 11, false, true, true, true, 'U', false);
+INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format) VALUES (451,'https://bookport.cz/marc21-12417.xml','downloadAndImportRecordsJob','xml');

@@ -239,6 +239,7 @@ public class Constants {
 	public static final String PREFIX_SFXTECHLIBNTK		= "sfxjibntk";
 	public static final String PREFIX_SFXTECHLIBUOCHB	= "sfxjibuochb";
 	public static final String PREFIX_SFXTECHLIBVSCHT	= "sfxjibvscht";
+	public static final String PREFIX_SVKHK				= "svkhk";
 	public static final String PREFIX_SVKKL				= "svkkl";
 	public static final String PREFIX_SVKUL				= "svkul";
 	public static final String PREFIX_TDKIV				= "tdkiv";
