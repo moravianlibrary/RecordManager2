@@ -367,6 +367,11 @@ public class HarvestedRecordDAOHibernate extends
 		for (Uuid uuid : uuids) {
 			session.delete(uuid);
 		}
+		List<Loc> locs = hr.getLocs();
+		hr.setLocs(new ArrayList<>());
+		for (Loc loc : locs) {
+			session.delete(loc);
+		}
 		session.update(hr);
 		session.flush();
 	}

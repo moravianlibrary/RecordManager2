@@ -230,6 +230,8 @@ public class MetadataRecordFactory {
 			return new CelitebibMarcMetadataRecord(marcRec, hr);
 		case Constants.PREFIX_MARCIT_LOC:
 			return new MarcitLocMetadataMarcRecord(marcRec, hr);
+		case Constants.PREFIX_MARCIT_MSVK:
+			return new MarcitMetadataMarcRecord(marcRec, hr);
 		default:
 			return new MetadataMarcRecord(marcRec, hr);
 		}

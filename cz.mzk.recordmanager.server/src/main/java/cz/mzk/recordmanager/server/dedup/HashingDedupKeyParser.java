@@ -50,6 +50,7 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 		record.setCallnumber(MetadataUtils.shorten(metadataRecord.getCallnumber(), EFFECTIVE_LENGTH_CALLNUMBER));
 		if (!record.getHarvestedFrom().isGenerateDedupKeys()) {
 			harvestedRecordDao.dropOtherKeys(record);
+			record.setLocs(metadataRecord.getLocIds());
 			record.setUuids(metadataRecord.getUuids()); // not dedup key
 			record.setAuthorities(metadataRecord.getAllAuthorAuthKey());
 			return record;
@@ -170,6 +171,7 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 		}
 		record.setUuids(metadataRecord.getUuids());
 		record.setAuthorities(metadataRecord.getAllAuthorAuthKey());
+		record.setLocs(metadataRecord.getLocIds());
 		record.setDedupKeysHash(computedHash);
 
 		oaiTimestampChanged = record.getOaiTimestamp() != null && record.getTemporalOldOaiTimestamp() != null

@@ -2562,3 +2562,12 @@ UPDATE oai_harvest_conf SET url='https://katalog.mvk.cz/api/oai' WHERE import_co
 -- 30. 03. 2022 tomascejpek
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (106, 433, 'KAG503');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (109, 438, 'ABE309');
+
+-- 04. 04. 2022 tomascejpek
+CREATE TABLE loc (
+  id                   DECIMAL(10) PRIMARY KEY,
+  harvested_record_id  DECIMAL(10),
+  loc                  VARCHAR(20),
+  FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE
+);
+CREATE INDEX loc_harvested_record_idx ON loc(harvested_record_id);

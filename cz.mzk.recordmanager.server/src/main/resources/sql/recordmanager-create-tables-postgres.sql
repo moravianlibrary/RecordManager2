@@ -590,3 +590,10 @@ CREATE TABLE caslin_links (
   last_harvest      TIMESTAMP NOT NULL,
   CONSTRAINT caslin_links_pk PRIMARY KEY(id)
 );
+
+CREATE TABLE loc (
+  id                   DECIMAL(10) PRIMARY KEY,
+  harvested_record_id  DECIMAL(10),
+  loc                  VARCHAR(20),
+  FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE
+);

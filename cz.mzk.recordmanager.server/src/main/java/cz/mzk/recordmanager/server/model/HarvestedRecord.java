@@ -133,7 +133,11 @@ public class HarvestedRecord extends AbstractDomainObject {
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name="harvested_record_id", referencedColumnName="id", nullable=false)
 	private List<Isbn> isbns = new ArrayList<>();
-	
+
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name="harvested_record_id", referencedColumnName="id", nullable=false)
+	private List<Loc> locs = new ArrayList<>();
+
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name="harvested_record_id", referencedColumnName="id", nullable=false)
 	private List<Ean> eans = new ArrayList<>();
@@ -953,6 +957,14 @@ public class HarvestedRecord extends AbstractDomainObject {
 
 	public void setTemporalContentEquals(boolean temporalContentEquals) {
 		this.temporalContentEquals = temporalContentEquals;
+	}
+
+	public List<Loc> getLocs() {
+		return locs;
+	}
+
+	public void setLocs(List<Loc> locs) {
+		this.locs = locs;
 	}
 
 }

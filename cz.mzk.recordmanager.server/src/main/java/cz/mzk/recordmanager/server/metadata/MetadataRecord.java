@@ -541,4 +541,8 @@ public interface MetadataRecord {
 		return Collections.emptyList();
 	}
 
+	default List<Loc> getLocIds() {
+		return Collections.emptyList();
+	}
+
 }
