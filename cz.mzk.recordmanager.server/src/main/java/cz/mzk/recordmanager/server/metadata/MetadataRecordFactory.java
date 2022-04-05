@@ -231,6 +231,10 @@ public class MetadataRecordFactory {
 		case Constants.PREFIX_MARCIT_LOC:
 			return new MarcitLocMetadataMarcRecord(marcRec, hr);
 		case Constants.PREFIX_MARCIT_MSVK:
+		case Constants.PREFIX_MARCIT_MZK:
+		case Constants.PREFIX_MARCIT_VKOL:
+		case Constants.PREFIX_MARCIT_SVKPL:
+		case Constants.PREFIX_MARCIT_NKP:
 			return new MarcitMetadataMarcRecord(marcRec, hr);
 		default:
 			return new MetadataMarcRecord(marcRec, hr);

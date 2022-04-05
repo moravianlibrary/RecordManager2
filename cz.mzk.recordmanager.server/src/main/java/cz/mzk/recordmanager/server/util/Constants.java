@@ -181,6 +181,10 @@ public class Constants {
 	public static final String PREFIX_LIBRARY			= "library";
 	public static final String PREFIX_MANUSCRIPTORIUM	= "manuscript";
 	public static final String PREFIX_MARCIT_MSVK		= "marcit-msvk";
+	public static final String PREFIX_MARCIT_MZK		= "marcit-mzk";
+	public static final String PREFIX_MARCIT_NKP		= "marcit-nkp";
+	public static final String PREFIX_MARCIT_SVKPL		= "marcit-svkpl";
+	public static final String PREFIX_MARCIT_VKOL		= "marcit-vkol";
 	public static final String PREFIX_MARCIT_LOC		= "marcit-loc";
 	public static final String PREFIX_MENDELU	        = "mendelu";
 	public static final String PREFIX_MESH				= "mesh";
