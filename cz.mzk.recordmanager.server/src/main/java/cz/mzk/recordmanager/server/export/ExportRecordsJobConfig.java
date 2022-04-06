@@ -1,17 +1,17 @@
 package cz.mzk.recordmanager.server.export;
 
-import java.util.Arrays;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.stream.Collectors;
-
-import javax.sql.DataSource;
-
 import cz.mzk.recordmanager.server.export.sfx.ExportSfxRecordsJobParametersValidator;
 import cz.mzk.recordmanager.server.export.sfx.ExportSfxRecordsProcessor;
 import cz.mzk.recordmanager.server.export.sfx.ExportSfxRecordsWriter;
+import cz.mzk.recordmanager.server.jdbc.Cosmotron996RowMapper;
+import cz.mzk.recordmanager.server.jdbc.DedupRecordRowMapper;
 import cz.mzk.recordmanager.server.jdbc.LongValueRowMapper;
+import cz.mzk.recordmanager.server.model.Cosmotron996;
+import cz.mzk.recordmanager.server.model.DedupRecord;
+import cz.mzk.recordmanager.server.model.HarvestedRecord.HarvestedRecordUniqueId;
+import cz.mzk.recordmanager.server.springbatch.JobFailureListener;
+import cz.mzk.recordmanager.server.springbatch.StepProgressListener;
+import cz.mzk.recordmanager.server.util.Constants;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
@@ -28,16 +28,14 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.FileSystemResource;
-
-import cz.mzk.recordmanager.server.jdbc.Cosmotron996RowMapper;
-import cz.mzk.recordmanager.server.jdbc.DedupRecordRowMapper;
-import cz.mzk.recordmanager.server.model.Cosmotron996;
-import cz.mzk.recordmanager.server.model.DedupRecord;
-import cz.mzk.recordmanager.server.model.HarvestedRecord.HarvestedRecordUniqueId;
-import cz.mzk.recordmanager.server.springbatch.JobFailureListener;
-import cz.mzk.recordmanager.server.springbatch.StepProgressListener;
-import cz.mzk.recordmanager.server.util.Constants;
 import org.springframework.core.task.TaskExecutor;
+
+import javax.sql.DataSource;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Configuration
 public class ExportRecordsJobConfig {
@@ -413,6 +411,37 @@ public class ExportRecordsJobConfig {
 	public ExportMarcFieldsProcessor exportMarcFieldsProcesor(
 			@Value("#{jobParameters[" + Constants.JOB_PARAM_FIELDS + "]}") String marcFields) {
 		return new ExportMarcFieldsProcessor(marcFields);
+	}
+
+	// export marcit
+	@Bean
+	public Job exportMarcitJob(
+			@Qualifier(Constants.JOB_ID_EXPORT_MARCIT + ":exportMarcitStep") Step exportMarcitStep) {
+		return jobs.get(Constants.JOB_ID_EXPORT_MARCIT)
+				.validator(new ExportRecordsJobParametersValidator())
+				.listener(JobFailureListener.INSTANCE)
+				.flow(exportMarcitStep)
+				.end()
+				.build();
+	}
+
+	@Bean(name = Constants.JOB_ID_EXPORT_MARCIT + ":exportMarcitStep")
+	public Step exportMarcitStep() throws Exception {
+		return steps.get("exportMarcitStep")
+				.listener(new StepProgressListener())
+				.<HarvestedRecordUniqueId, String>chunk(200)//
+				.reader(exportRecordsReader(LONG_OVERRIDEN_BY_EXPRESSION, LONG_OVERRIDEN_BY_EXPRESSION, STRING_OVERRIDEN_BY_EXPRESSION,
+						DATE_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION)) //
+				.processor(exportMarcitProcesor(STRING_OVERRIDEN_BY_EXPRESSION)) //
+				.writer(exportRecordsWriter(STRING_OVERRIDEN_BY_EXPRESSION)) //
+				.build();
+	}
+
+	@Bean(name = Constants.JOB_ID_EXPORT_MARCIT + ":exportMarcitProcesor")
+	@StepScope
+	public ExportMarcitRecordsProcessor exportMarcitProcesor(
+			@Value("#{jobParameters[" + Constants.JOB_PARAM_FORMAT + "]}") String strFormat) {
+		return new ExportMarcitRecordsProcessor(IOFormat.stringToExportFormat(strFormat));
 	}
 
 }

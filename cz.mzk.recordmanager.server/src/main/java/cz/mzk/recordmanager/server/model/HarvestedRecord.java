@@ -2,6 +2,8 @@ package cz.mzk.recordmanager.server.model;
 
 import java.io.Serializable;
 import java.util.*;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
@@ -21,6 +23,7 @@ import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
 import com.google.common.base.Preconditions;
+import cz.mzk.recordmanager.server.util.CleaningUtils;
 
 
 @Entity
@@ -965,6 +968,10 @@ public class HarvestedRecord extends AbstractDomainObject {
 
 	public void setLocs(List<Loc> locs) {
 		this.locs = locs;
+	}
+
+	public List<String> getLocsAsString() {
+		return locs.stream().map(l -> CleaningUtils.replaceAll(l.getLoc(), Pattern.compile("-"), " ")).collect(Collectors.toList());
 	}
 
 }

@@ -26,6 +26,7 @@ public class Constants {
 	public static final String JOB_ID_EXPORT_SFX					= "exportSfxRecordsJob";
 	public static final String JOB_ID_EXPORT_DUPLICITY				= "exportDuplicityJob";
 	public static final String JOB_ID_EXPORT_MARC_FIELDS			= "exportMarcFieldsJob";
+	public static final String JOB_ID_EXPORT_MARCIT					= "exportMarcitJob";
 	public static final String JOB_ID_IMPORT						= "importRecordsJob";
 	public static final String JOB_ID_MULTI_THREADS_IMPORT			= "multiImportRecordsJob";
 	public static final String JOB_ID_DOWNLOAD_IMPORT				= "downloadAndImportRecordsJob";

@@ -6,6 +6,8 @@ import cz.mzk.recordmanager.server.oai.dao.LocDAO;
 import org.hibernate.Session;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Component
@@ -16,11 +18,22 @@ public class LocDAOHibernate extends AbstractDomainDAOHibernate<Long, Loc>
 	@SuppressWarnings("unchecked")
 	public List<HarvestedRecord> findHrByLoc(String loc) {
 		Session session = sessionFactory.getCurrentSession();
+		if (loc == null) return Collections.emptyList();
 		return (List<HarvestedRecord>) session
 				.createQuery(
-						"FROM HarvestedRecord hr WHERE hr.id in (SELECT harvestedRecordId FROM Loc WHERE loc = :loc)")
+						"FROM HarvestedRecord hr WHERE uniqueId.harvestedFromId=100001 AND deleted IS NULL" +
+								" AND hr.id in (SELECT harvestedRecordId FROM Loc WHERE loc = :loc)")
 				.setParameter("loc", loc)
 				.list();
+	}
+
+	@Override
+	public List<HarvestedRecord> findHrByLoc(List<String> loc) {
+		List<HarvestedRecord> results = new ArrayList<>();
+		for (String id : loc) {
+			results.addAll(findHrByLoc(id));
+		}
+		return results;
 	}
 
 }

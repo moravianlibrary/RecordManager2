@@ -9,4 +9,6 @@ public interface LocDAO extends DomainDAO<Long, Loc> {
 
 	List<HarvestedRecord> findHrByLoc(String loc);
 
+	List<HarvestedRecord> findHrByLoc(List<String> loc);
+
 }
