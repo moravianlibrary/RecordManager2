@@ -20,7 +20,7 @@ import java.util.List;
 
 public class ImportRecordsFileReader implements ItemReader<List<Record>> {
 
-	private static Logger logger = LoggerFactory.getLogger(ImportRecordsFileReader.class);
+	private static final Logger logger = LoggerFactory.getLogger(ImportRecordsFileReader.class);
 
 	@Autowired
 	private ImportConfigurationDAO configDao;
@@ -35,9 +35,9 @@ public class ImportRecordsFileReader implements ItemReader<List<Record>> {
 
 	private IOFormat format;
 
-	private Long confId;
+	private final Long confId;
 
-	private int batchSize = 20;
+	private static final int BATCH_SIZE = 20;
 
 	private List<String> files = null;
 
@@ -47,34 +47,35 @@ public class ImportRecordsFileReader implements ItemReader<List<Record>> {
 		getFilesName(filename);
 	}
 
-	public ImportRecordsFileReader(Long confId) throws Exception {
+	public ImportRecordsFileReader(Long confId) {
 		this.confId = confId;
 		this.reader = null;
 	}
 
 	@Override
 	public synchronized List<Record> read() throws Exception {
-		List<Record> batch = new ArrayList<>();
-
-		if (reader == null)
-			if (files == null) initializeDownloadReader();
-			else initializeFilesReader();
-		else if (!reader.hasNext()) initializeFilesReader();
+		List<Record> results = new ArrayList<>();
 		try {
+			if (reader == null)
+				if (files == null) initializeDownloadReader();
+				else initializeFilesReader();
+			else if (!reader.hasNext()) initializeFilesReader();
 			while (reader.hasNext()) {
 				try {
-					batch.add(reader.next());
+					results.add(reader.next());
+					if (results.size() >= BATCH_SIZE) {
+						break;
+					}
+					if (!reader.hasNext()) initializeFilesReader();
 				} catch (MarcException e) {
-					logger.warn(e.getMessage());
-				}
-				if (batch.size() >= batchSize) {
-					break;
+					logger.debug(e.getMessage());
+					initializeFilesReader();
 				}
 			}
 		} catch (MarcException e) {
-			return null;
+			logger.debug(e.getMessage());
 		}
-		return batch.isEmpty() ? null : batch;
+		return results.isEmpty() ? null : results;
 	}
 
 	private MarcReader getMarcReader(InputStream inStream) {
@@ -115,15 +116,15 @@ public class ImportRecordsFileReader implements ItemReader<List<Record>> {
 	}
 
 	private void initializeFilesReader() {
-		try {
-			if (files != null && !files.isEmpty()) {
-				do {
+		if (files != null && !files.isEmpty()) {
+			do {
+				try {
 					FileInputStream inStream = new FileInputStream(files.remove(0));
 					reader = getMarcReader(inStream);
-				} while (!reader.hasNext());
-			}
-		} catch (FileNotFoundException e) {
-			logger.warn(e.getMessage());
+				} catch (Exception e) {
+					logger.debug(e.getMessage());
+				}
+			} while (!reader.hasNext());
 		}
 	}
 
