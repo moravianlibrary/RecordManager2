@@ -1,4 +1,3 @@
-recordtype = "authority"
 record_format = "authority"
 
 fullrecord = getFullrecord()
@@ -17,4 +16,4 @@ authorityId_str = getAuthorityId();
 format_display_mv = getFormat()
 
 // facets
-subject_facet_mv = subject_facet_str_mv = getFields "100abcd"
+subject_facet_mv = getFields "100abcd"
