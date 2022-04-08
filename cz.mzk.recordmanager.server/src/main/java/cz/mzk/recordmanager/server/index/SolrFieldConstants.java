@@ -162,6 +162,8 @@ public class SolrFieldConstants {
 
 	public static final String ZISKEJ_FACET_MV = "ziskej_facet_mv";
 
+	public static final String SCALE_FACET_MV = "scale_int_facet_mv";
+
 	public static final String UUID_STR_MV = "uuid_str_mv";
 
 	public static final String LONG_LAT = "long_lat";

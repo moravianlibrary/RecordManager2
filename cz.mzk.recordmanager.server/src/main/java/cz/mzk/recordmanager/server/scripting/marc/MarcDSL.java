@@ -24,6 +24,8 @@ import org.apache.commons.validator.routines.ISBNValidator;
 import org.marc4j.marc.DataField;
 import org.marc4j.marc.MarcFactory;
 import org.marc4j.marc.Subfield;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.*;
@@ -36,6 +38,8 @@ import java.util.stream.IntStream;
 public class MarcDSL extends BaseDSL {
 
 	private MetadataRecord metadataRecord;
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(MarcDSL.class);
 
 	private final static String MAP_CATEGORY_SUBCATEGORY = "conspectus_category_subcategory.map";
 	private final static String MAP_SUBCATEGORY_NAME = "conspectus_subcategory_name.map";
@@ -979,6 +983,18 @@ public class MarcDSL extends BaseDSL {
 
 	public String getUuidForObalkyKnih() {
 		return context.metadataRecord().getKrameriusRecordId();
+	}
+
+	public Set<Long> getScaleFacet() {
+		Set<Long> results = new HashSet<>();
+		for (String scale : getFields("034b", SubfieldExtractionMethod.SEPARATED)) {
+			try {
+				results.add(Long.parseLong(scale));
+			} catch (NumberFormatException nfe) {
+				LOGGER.debug(String.format("Scale %s is not a number", scale));
+			}
+		}
+		return results;
 	}
 
 }
