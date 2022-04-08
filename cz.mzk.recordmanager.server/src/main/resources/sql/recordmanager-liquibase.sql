@@ -2859,3 +2859,8 @@ INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weig
 INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format) VALUES (450,'https://bookport.cz/marc21-12427.xml','downloadAndImportRecordsJob','xml');
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, generate_dedup_keys) VALUES (451, 115, 200, 'bookport', 11, false, true, true, true, 'U', false);
 INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format) VALUES (451,'https://bookport.cz/marc21-12417.xml','downloadAndImportRecordsJob','xml');
+
+--changeset tomascejpek:322 context:cpk
+INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (252, 'MKSTRAK', 'https://www.knih-st.cz/', 'https://katalog.knih-st.cz/', 'Strakonice', 'JC');
+INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id, mappings996) VALUES (452, 252, 200, 'mkstrak', 11, false, true, true, true, 'U', 'koha', 'koha');
+INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (452,'https://koha.knih-st.cz/cgi-bin/koha/oai.pl','CPK','marccpk',NULL);

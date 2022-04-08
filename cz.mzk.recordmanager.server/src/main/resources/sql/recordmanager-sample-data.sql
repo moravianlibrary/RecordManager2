@@ -131,6 +131,7 @@ INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (243, 'MKK
 INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (244, 'AMBIS', 'https://www.ambis.cz/', 'https://ambis.tritius.cz/', 'Praha', 'PR');
 INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (246, 'MKNBK', 'http://knihovna-nbk.cz/', 'https://tritius.knihovna-nbk.cz/', 'Nymburk', 'SC');
 INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (247, 'MKHORICE', 'https://knihovna.horice.org/', 'https://kpwin.horice.org/', 'Hořice', 'KH');
+INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (252, 'MKSTRAK', 'https://www.knih-st.cz/', 'https://katalog.knih-st.cz/', 'Strakonice', 'JC');
 INSERT INTO library (id, name, url, catalog_url, city) VALUES (400, 'AUTHORITY', 'nkp.cz', 'aleph.nkp.cz', NULL);
 INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (99027, 'KRAM-CUNI', '', '', '','kramerius');
 INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (99028, 'KRAM-CUNIFSV', '', '', '','kramerius');
@@ -312,6 +313,7 @@ INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weig
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, generate_dedup_keys) VALUES (449, 101, 200, 'bookport', 11, false, true, true, true, 'U', false);
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, generate_dedup_keys) VALUES (450, 113, 200, 'bookport', 11, false, true, true, true, 'U', false);
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, generate_dedup_keys) VALUES (451, 115, 200, 'bookport', 11, false, true, true, true, 'U', false);
+INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id, mappings996) VALUES (452, 252, 200, 'mkstrak', 11, false, true, true, true, 'U', 'koha', 'koha');
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency) VALUES (500, 110, 200, 'antik', null, false, false, false, false, 'U');
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, generate_biblio_linker_keys) VALUES (1300, 100, 200, 'sfxjibmzk', 8, false, false, false, true, 'U', false);
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, generate_biblio_linker_keys) VALUES (1301, 101, 200, 'sfxjibnlk', 8, false, false, false, true, 'U', false);
@@ -519,6 +521,7 @@ INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granul
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (444,'https://ambis.tritius.cz/tritius/oai-provider','CPK_1','marc21',NULL);
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (446,'https://tritius.knihovna-nbk.cz/tritius/oai-provider','CPK_1','marc21',NULL);
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (447,'https://kpwin.horice.org/api/oai/','cpk','marc21',NULL);
+INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (452,'https://koha.knih-st.cz/cgi-bin/koha/oai.pl','CPK','marccpk',NULL);
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (1300,NULL,NULL,'marc21',NULL);
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (1301,NULL,NULL,'marc21',NULL); 
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (1302,NULL,NULL,'marc21',NULL);
