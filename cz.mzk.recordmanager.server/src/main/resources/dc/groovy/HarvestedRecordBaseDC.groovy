@@ -1,6 +1,9 @@
+recordtype = "dublincore"
 record_format = "dublincore"
 
 fullrecord = getFullRecord()
+
+local_statuses_facet_mv = local_statuses_facet_str_mv = getStatuses()
 
 title = getFirstTitle()
 title_display = getFirstTitle()

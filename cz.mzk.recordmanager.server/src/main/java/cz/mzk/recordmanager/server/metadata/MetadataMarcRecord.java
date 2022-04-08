@@ -1316,6 +1316,12 @@ public class MetadataMarcRecord implements MetadataRecord {
 	}
 
 	@Override
+	public List<String> getDefaultStatuses() {
+		// implemented in institution specific classes
+		return Collections.emptyList();
+	}
+
+	@Override
 	public List<String> getInternationalPatentClassfication() {
 		// implemented in institution specific classes
 		return null;

@@ -144,6 +144,7 @@
    <field name="spellingShingle" type="textSpellShingle" indexed="true" stored="true" multiValued="true"/>
    <!-- Institutional Fields -->
    <field name="institution" type="string" indexed="true" stored="true" multiValued="true"/>
+   <field name="region_institution" type="string" indexed="true" stored="true" multiValued="true"/>
    <field name="collection" type="string" indexed="true" stored="true" multiValued="true"/>
    <field name="building" type="string" indexed="true" stored="true" multiValued="true"/>
    <!-- Generic Fields -->
@@ -262,6 +263,8 @@
    <field name="loanRelevance" type="integer"  indexed="true"  stored="true"/>
    <!--Indexed fields -->
    <field name="region_disctrict_town_str_mv" type="string" indexed="true" stored="true" multiValued="true" docValues="false"/>
+   <field name="local_region_institution_facet_str_mv" type="string" indexed="true" stored="true" multiValued="true" docValues="true"/>
+   <field name="local_statuses_facet_str_mv" type="string" indexed="true" stored="true" multiValued="true" docValues="true"/>
    <!-- Dynamic fields for customization without schema modification -->
    <dynamicField name="*_date" type="date" indexed="true" stored="true"/>
    <dynamicField name="*_date_mv" type="date" indexed="true" stored="true" multiValued="true"/>

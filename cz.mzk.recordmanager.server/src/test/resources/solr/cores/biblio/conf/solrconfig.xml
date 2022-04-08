@@ -278,8 +278,8 @@
       <arr name="queries">
         <lst>
           <str name="q">romeo a julie</str>
-          <str name="facet.field">record_format_facet_mv</str>
-          <str name="fq">record_format_facet_mv:0/BOOKS/</str>
+          <str name="facet.field">cpk_detected_format_facet_str_mv</str>
+          <str name="fq">cpk_detected_format_facet_str_mv:0/BOOKS/</str>
           <str name="df">title</str>
         </lst>
       </arr>
@@ -438,10 +438,10 @@
 
   <requestHandler name="morelikethis" class="solr.MoreLikeThisHandler">
     <lst name="defaults">
-      <str name="mlt.fl">subject_facet_mv,conspectus_facet_mv,author,author2,title,region_disctrict_town_str_mv</str>
+      <str name="mlt.fl">subject_facet_str_mv,conspectus_facet_str_mv,author,author2,title,region_disctrict_town_str_mv</str>
       <str name="mlt.qf">
-        subject_facet_mv^300
-        conspectus_facet_mv^100
+        subject_facet_str_mv^300
+        conspectus_facet_str_mv^100
         author^40
         author2^10
         title

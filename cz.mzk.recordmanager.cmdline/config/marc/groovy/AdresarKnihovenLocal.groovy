@@ -1,5 +1,6 @@
 import cz.mzk.recordmanager.server.marc.SubfieldExtractionMethod;
 
+recordtype = "library"
 record_format = "library"
 
 fullrecord = getFullrecord()

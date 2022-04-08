@@ -1,3 +1,4 @@
+recordtype = "sfx"
 record_format = "sfx"
 
 fullrecord = getFullrecord()

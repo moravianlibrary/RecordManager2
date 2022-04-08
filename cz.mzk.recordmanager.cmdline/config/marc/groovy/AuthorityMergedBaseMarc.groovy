@@ -1,3 +1,4 @@
+recordtype = "marc"
 record_format = "marc"
 
 allfields = getAllFields()
@@ -8,7 +9,7 @@ citation_record_type_str = getCitationRecordType()
 author_str_mv = getAuthorAutocomplete("100abcdq:110abc:111acegq:700abcdq:710abc:711acegq:975abcdq:976abc")
 
 // facets
-record_format_facet_mv = getFormat()
+record_format_facet_mv = cpk_detected_format_facet_str_mv = getFormat()
 
 // search
 author_exact = getAuthorExact()

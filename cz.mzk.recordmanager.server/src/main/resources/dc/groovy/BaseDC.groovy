@@ -1,3 +1,4 @@
+recordtype = "dublinCore"
 record_format = "dublinCore"
 
 fullrecord = getFullRecord()
@@ -23,5 +24,5 @@ topic = getSubjects()
 url = getUrls();
 contents = getContents();
 
-subject_facet_facet_mv = getSubjectFacet();
-record_format_facet_mv = getFormat()
+subject_facet_facet_mv = subject_facet_str_mv = getSubjectFacet();
+record_format_facet_mv = cpk_detected_format_facet_str_mv = getFormat()

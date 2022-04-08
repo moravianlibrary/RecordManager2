@@ -1,28 +1,29 @@
 package cz.mzk.recordmanager.server.metadata.institutions;
 
-import cz.mzk.recordmanager.server.marc.MarcRecord;
-import cz.mzk.recordmanager.server.metadata.CitationRecordType;
-import cz.mzk.recordmanager.server.metadata.MetadataMarcRecord;
-import cz.mzk.recordmanager.server.model.BLTopicKey;
-import cz.mzk.recordmanager.server.model.HarvestedRecord;
-import cz.mzk.recordmanager.server.model.HarvestedRecordFormat.HarvestedRecordFormatEnum;
-import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordDAO;
-import cz.mzk.recordmanager.server.util.Constants;
-import org.marc4j.marc.DataField;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import cz.mzk.recordmanager.server.model.BLTopicKey;
+import cz.mzk.recordmanager.server.model.HarvestedRecord;
+import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordDAO;
+import org.marc4j.marc.DataField;
+
+import cz.mzk.recordmanager.server.marc.MarcRecord;
+import cz.mzk.recordmanager.server.metadata.CitationRecordType;
+import cz.mzk.recordmanager.server.metadata.MetadataMarcRecord;
+import cz.mzk.recordmanager.server.model.HarvestedRecordFormat.HarvestedRecordFormatEnum;
+import cz.mzk.recordmanager.server.util.Constants;
+import org.springframework.beans.factory.annotation.Autowired;
+
 public class PatentsMetadataMarcRecord extends MetadataMarcRecord{
 
 	@Autowired
 	private HarvestedRecordDAO hrDao;
 
-	private final Pattern IPC = Pattern.compile("MPT|IPC", Pattern.CASE_INSENSITIVE);
+	private Pattern IPC = Pattern.compile("MPT|IPC", Pattern.CASE_INSENSITIVE);
 	private static final Pattern APPLICATION_PATTERN = Pattern.compile("Číslo přihlášky: (.*)");
 	private static final Pattern DOCNUMBER_PATTERN = Pattern.compile("St36_CZ_([^_]*)_A3");
 
@@ -51,6 +52,11 @@ public class PatentsMetadataMarcRecord extends MetadataMarcRecord{
 		return getUrls(Constants.DOCUMENT_AVAILABILITY_ONLINE);
 	}
 
+	@Override
+	public List<String> getDefaultStatuses() {
+		return Collections.singletonList(Constants.DOCUMENT_AVAILABILITY_ONLINE);
+	}
+	
 	@Override
 	public CitationRecordType getCitationFormat() {
 		return CitationRecordType.PATENT;

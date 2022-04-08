@@ -28,7 +28,10 @@ public class GetStatusesMarcFunctions implements MarcRecordFunctions {
 
 	// hierarchic statuses
 	public List<String> getStatuses(MarcFunctionContext ctx) {
-		List<String> statuses = new ArrayList<>(getStatuses(ctx.record(), "996"));
+		MarcRecord record = ctx.record();
+		List<String> statuses = new ArrayList<>();
+		statuses.addAll(ctx.metadataRecord().getDefaultStatuses());
+		statuses.addAll(getStatuses(record, "996"));
 		return SolrUtils.createHierarchicFacetValues(statuses);
 	}
 

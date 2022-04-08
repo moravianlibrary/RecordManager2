@@ -56,6 +56,9 @@ public class DublinCoreDSL extends BaseDSL {
 
 	public String getRights() {
 		List<String> rights = record.getRights();
+		if (dcContext.harvestedRecord().getHarvestedFrom().getIdPrefix().equals(Constants.PREFIX_KRAM3_NKP)) {
+			return Constants.DOCUMENT_AVAILABILITY_UNKNOWN;
+		}
 		if (rights == null || rights.isEmpty()) {
 			return Constants.DOCUMENT_AVAILABILITY_UNKNOWN;
 		}
@@ -213,6 +216,8 @@ public class DublinCoreDSL extends BaseDSL {
 	}
 
 	public List<String> getStatuses() {
+		List<String> statuses = dcContext.metadataRecord().getDefaultStatuses();
+		if (statuses != null && !statuses.isEmpty()) return SolrUtils.createHierarchicFacetValues(statuses);
 		return SolrUtils.createHierarchicFacetValues(Constants.DOCUMENT_AVAILABILITY_ONLINE, getRights());
 	}
 

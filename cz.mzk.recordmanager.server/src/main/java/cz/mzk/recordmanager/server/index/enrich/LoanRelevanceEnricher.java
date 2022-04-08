@@ -15,13 +15,14 @@ public class LoanRelevanceEnricher implements DedupRecordEnricher{
 	@Override
 	public void enrich(DedupRecord record, SolrInputDocument mergedDocument,
 			List<SolrInputDocument> localRecords) {
-		long count = 0L;
-		Object recordFormat = mergedDocument.getFieldValue(SolrFieldConstants.RECORD_FORMAT_FACET);
+		Long count = 0L;
+		
+		Object recordFormat = mergedDocument.getFieldValue(SolrFieldConstants.RECORD_FORMAT);
 		if(recordFormat != null && !recordFormat.toString().contains(HarvestedRecordFormatEnum.PERIODICALS.name())){
 			for(SolrInputDocument localRecord: localRecords){
 				if(localRecord.getFieldValue(SolrFieldConstants.LOAN_RELEVANCE_FIELD) != null){
 					try{
-						count += Long.parseLong(localRecord.getFieldValue(SolrFieldConstants.LOAN_RELEVANCE_FIELD).toString());
+						count += Long.valueOf(localRecord.getFieldValue(SolrFieldConstants.LOAN_RELEVANCE_FIELD).toString());
 					} catch (NumberFormatException ignored) {
 					}
 				}

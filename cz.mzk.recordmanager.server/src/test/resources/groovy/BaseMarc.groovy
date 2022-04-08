@@ -1,6 +1,7 @@
 lccn = getFirstField "010a"
 ctrlnum = getFirstField "035a"
 
+recordtype = "marc"
 record_format = "marc"
 
 allfields = getAllFields()
