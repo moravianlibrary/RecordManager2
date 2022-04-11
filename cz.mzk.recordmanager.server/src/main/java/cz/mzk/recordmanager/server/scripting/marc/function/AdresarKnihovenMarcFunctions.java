@@ -42,6 +42,7 @@ public class AdresarKnihovenMarcFunctions implements MarcRecordFunctions {
 	private static final Pattern FIELD_PATTERN = Pattern.compile("([a-zA-Z0-9]{3})([a-zA-Z0-9]*)");
 	private static final Pattern GPS_PATTERN = Pattern.compile("(\\d+)°(\\d+)'([\\d.]+)\"([NSEW])");
 	private static final Pattern SPLIT_COLON = Pattern.compile(":");
+	private static final Pattern NUMBERS = Pattern.compile("(\\d{8})");
 	private static final String MAP_ADRESAR_HOURS = "adresar_hours.map";
 	private static final String MAP_LIBRARIES_RELEVANCE = "adresar_relevance.map";
 	private static final String MAP_LIBRARIES_REGION = "adresar_region.map";
@@ -358,4 +359,12 @@ public class AdresarKnihovenMarcFunctions implements MarcRecordFunctions {
 	public String getRegionalLibrary(MarcFunctionContext ctx) {
 		return ctx.metadataRecord().getRegionalLibrary();
 	}
+
+	public String adresarGetLastUpdated(MarcFunctionContext ctx) {
+		String date = getFirstFieldForAdresar(ctx, "AKTa");
+		if (date == null) return null;
+		Matcher matcher = NUMBERS.matcher(date);
+		return matcher.find() ? matcher.group(1) : null;
+	}
+
 }
