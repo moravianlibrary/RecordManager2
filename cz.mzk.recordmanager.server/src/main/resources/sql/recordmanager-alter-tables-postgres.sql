@@ -2577,3 +2577,6 @@ INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format) VAL
 INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (252, 'MKSTRAK', 'https://www.knih-st.cz/', 'https://katalog.knih-st.cz/', 'Strakonice', 'JC');
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id, mappings996) VALUES (452, 252, 200, 'mkstrak', 11, false, true, true, true, 'U', 'koha', 'koha');
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (452,'https://koha.knih-st.cz/cgi-bin/koha/oai.pl','CPK','marccpk',NULL);
+
+-- 11. 04. 2022 tomascejpek
+UPDATE library SET region='JC' WHERE id=232;
