@@ -156,7 +156,6 @@ public class MetadataRecordFactory {
 			return new PkjakMetadataMarcRecord(marcRec, hr);
 		case Constants.PREFIX_MKP:
 			return new MkpMetadataMarcRecord(marcRec, hr);
-		case Constants.PREFIX_CMUZ:
 		case Constants.PREFIX_MKBREC:
 		case Constants.PREFIX_MKCK:
 		case Constants.PREFIX_MKHNM:
