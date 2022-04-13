@@ -2870,3 +2870,8 @@ UPDATE import_conf set mappings996 = 'tritius' where id = 372;
 UPDATE oai_harvest_conf SET url='https://online.knihovnacaslav.cz/tritius/oai-provider',set_spec='CPK_1' WHERE import_conf_id=372;
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id, mappings996) VALUES (453, 172, 200, 'cmuz', 11, false, true, true, true, 'U', 'other', 'tritius');
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (453,'https://online.knihovnacaslav.cz/tritius/oai-provider','CPK_101','marc21',NULL);
+
+--changeset tomascejpek:324 context:cpk
+DELETE FROM oai_harvest_conf WHERE import_conf_id=453;
+DELETE FROM import_conf WHERE id=453;
+UPDATE library SET name='MKCASLAV',catalog_url='https://online.knihovnacaslav.cz/' WHERE id=172;
