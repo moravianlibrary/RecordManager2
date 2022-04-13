@@ -1,5 +1,7 @@
 package cz.mzk.recordmanager.server.model;
 
+import cz.mzk.recordmanager.server.util.MetadataUtils;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -10,6 +12,7 @@ import java.util.Objects;
 public class Loc extends AbstractDomainObject {
 
 	public static final String TABLE_NAME = "loc";
+	private final static int EFFECTIVE_LENGTH_20 = 20;
 
 	@Column(name = "harvested_record_id", updatable = false, insertable = false)
 	private Long harvestedRecordId;
@@ -19,7 +22,7 @@ public class Loc extends AbstractDomainObject {
 
 	public static Loc create(final String loc) {
 		Loc newLoc = new Loc();
-		newLoc.setLoc(loc);
+		newLoc.setLoc(MetadataUtils.shorten(loc, EFFECTIVE_LENGTH_20));
 		return newLoc;
 	}
 
