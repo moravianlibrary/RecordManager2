@@ -116,7 +116,7 @@ INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (228, 'SLA
 INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (229, 'MVK', 'https://www.mvk.cz/', 'https://katalog.mvk.cz/', 'Vsetín', 'ZL');
 INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (230, 'MKCHRUDIM', 'https://www.knihovna-cr.cz/', 'https://katalog.knihovna-cr.cz/', 'Chrudim', 'PA');
 INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (231, 'MKBOHUMIN', 'https://www.k3bohumin.cz/', 'https://katalog.k3bohumin.cz/', 'Bohumin', 'MS');
-INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (232, 'MKJH', 'https://www.knihjh.cz/', 'https://jh.tritius.cz/', 'Jindřichův Hradec', 'VY');
+INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (232, 'MKJH', 'https://www.knihjh.cz/', 'https://jh.tritius.cz/', 'Jindřichův Hradec', 'JC');
 INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (233, 'MKHAVIROV', 'https://knihovnahavirov.cz/', 'https://katalog.knih-havirov.cz/', 'Havířov', 'MS');
 INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (234, 'MKCHOCEN', 'https://www.knihovnachocen.cz/', 'https://chocen-katalog.koha.cloud/', 'Choceň', 'PA');
 INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (235, 'GEOL', 'http://www.geology.cz/', '', 'Bibliography', 'bibliography');

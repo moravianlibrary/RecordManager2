@@ -2875,3 +2875,6 @@ INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granul
 DELETE FROM oai_harvest_conf WHERE import_conf_id=453;
 DELETE FROM import_conf WHERE id=453;
 UPDATE library SET name='MKCASLAV',catalog_url='https://online.knihovnacaslav.cz/' WHERE id=172;
+
+--changeset tomascejpek:325 context:cpk
+UPDATE library SET region='JC' WHERE id=232;
