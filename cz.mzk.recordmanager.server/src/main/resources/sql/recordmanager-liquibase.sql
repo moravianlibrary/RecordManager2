@@ -2878,3 +2878,6 @@ UPDATE library SET name='MKCASLAV',catalog_url='https://online.knihovnacaslav.cz
 
 --changeset tomascejpek:325 context:cpk
 UPDATE library SET region='JC' WHERE id=232;
+
+--changeset tomascejpek:326 context:cpk
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (111, 440, 'BOE035');
