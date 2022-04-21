@@ -325,7 +325,7 @@ public class MarcRecordImplTest extends AbstractTest {
 	}
 
 	@Test
-	public void getWeightTest() throws Exception{
+	public void getWeightTest() throws Exception {
 		MarcRecordImpl mri;
 		MetadataRecord metadataRecord;
 		List<String> data = new ArrayList<>();
@@ -347,7 +347,7 @@ public class MarcRecordImplTest extends AbstractTest {
 	}
 
 	@Test
-	public void getAuthorAuthStringTest() throws Exception{
+	public void getAuthorAuthStringTest() throws Exception {
 		MarcRecordImpl mri;
 		MetadataRecord metadataRecord;
 		List<String> data = new ArrayList<>();
@@ -366,7 +366,7 @@ public class MarcRecordImplTest extends AbstractTest {
 	}
 
 	@Test
-	public void getAuthorAuthKeyTest() throws Exception{
+	public void getAuthorAuthKeyTest() throws Exception {
 		MarcRecordImpl mri;
 		MetadataRecord metadataRecord;
 		List<String> data = new ArrayList<>();
@@ -474,7 +474,7 @@ public class MarcRecordImplTest extends AbstractTest {
 	}
 
 	@Test
-	public void getClusterIdTest() throws Exception{
+	public void getClusterIdTest() throws Exception {
 		MarcRecordImpl mri;
 		MetadataRecord metadataRecord;
 		List<String> data = new ArrayList<>();
@@ -487,7 +487,7 @@ public class MarcRecordImplTest extends AbstractTest {
 	}
 
 	@Test
-	public void getOclcsTest() throws Exception{
+	public void getOclcsTest() throws Exception {
 		MarcRecordImpl mri;
 		MetadataRecord metadataRecord;
 		List<String> data = new ArrayList<>();
@@ -506,7 +506,7 @@ public class MarcRecordImplTest extends AbstractTest {
 	}
 
 	@Test
-	public void getLanguagesTest() throws Exception{
+	public void getLanguagesTest() throws Exception {
 		MarcRecordImpl mri;
 		MetadataRecord metadataRecord;
 		List<String> data = new ArrayList<>();
@@ -543,7 +543,7 @@ public class MarcRecordImplTest extends AbstractTest {
 	}
 
 	@Test
-	public void getCitationFormatAcademicWork() throws Exception{
+	public void getCitationFormatAcademicWork() throws Exception {
 		MarcRecordImpl mri;
 		MetadataRecord metadataRecord;
 		List<String> data = new ArrayList<>();
@@ -556,7 +556,7 @@ public class MarcRecordImplTest extends AbstractTest {
 	}
 
 	@Test
-	public void getCitationFormatBook() throws Exception{
+	public void getCitationFormatBook() throws Exception {
 		MarcRecordImpl mri;
 		MetadataRecord metadataRecord;
 		List<String> data = new ArrayList<>();
@@ -569,7 +569,7 @@ public class MarcRecordImplTest extends AbstractTest {
 	}
 
 	@Test
-	public void getCitationFormatElectronicBook() throws Exception{
+	public void getCitationFormatElectronicBook() throws Exception {
 		MarcRecordImpl mri;
 		MetadataRecord metadataRecord;
 		List<String> data = new ArrayList<>();
@@ -583,7 +583,7 @@ public class MarcRecordImplTest extends AbstractTest {
 	}
 
 	@Test
-	public void getCitationFormatPeriodical() throws Exception{
+	public void getCitationFormatPeriodical() throws Exception {
 		MarcRecordImpl mri;
 		MetadataRecord metadataRecord;
 		List<String> data = new ArrayList<>();
@@ -596,7 +596,7 @@ public class MarcRecordImplTest extends AbstractTest {
 	}
 
 	@Test
-	public void getCitationFormatElectronicPeriodical() throws Exception{
+	public void getCitationFormatElectronicPeriodical() throws Exception {
 		MarcRecordImpl mri;
 		MetadataRecord metadataRecord;
 		List<String> data = new ArrayList<>();
@@ -610,7 +610,7 @@ public class MarcRecordImplTest extends AbstractTest {
 	}
 
 	@Test
-	public void getCitationFormatContribution() throws Exception{
+	public void getCitationFormatContribution() throws Exception {
 		MarcRecordImpl mri;
 		MetadataRecord metadataRecord;
 		List<String> data = new ArrayList<>();
@@ -624,7 +624,7 @@ public class MarcRecordImplTest extends AbstractTest {
 	}
 
 	@Test
-	public void getCitationFormatElectronicContribution() throws Exception{
+	public void getCitationFormatElectronicContribution() throws Exception {
 		MarcRecordImpl mri;
 		MetadataRecord metadataRecord;
 		List<String> data = new ArrayList<>();
@@ -639,7 +639,7 @@ public class MarcRecordImplTest extends AbstractTest {
 	}
 
 	@Test
-	public void getCitationFormatArticle() throws Exception{
+	public void getCitationFormatArticle() throws Exception {
 		MarcRecordImpl mri;
 		MetadataRecord metadataRecord;
 		List<String> data = new ArrayList<>();
@@ -652,7 +652,7 @@ public class MarcRecordImplTest extends AbstractTest {
 	}
 
 	@Test
-	public void getCitationFormatElectronicArticles() throws Exception{
+	public void getCitationFormatElectronicArticles() throws Exception {
 		MarcRecordImpl mri;
 		MetadataRecord metadataRecord;
 		List<String> data = new ArrayList<>();
@@ -666,7 +666,7 @@ public class MarcRecordImplTest extends AbstractTest {
 	}
 
 	@Test
-	public void getCitationFormatMap() throws Exception{
+	public void getCitationFormatMap() throws Exception {
 		MarcRecordImpl mri;
 		MetadataRecord metadataRecord;
 		List<String> data = new ArrayList<>();
@@ -685,7 +685,7 @@ public class MarcRecordImplTest extends AbstractTest {
 	}
 
 	@Test
-	public void getCitationFormatOthers() throws Exception{
+	public void getCitationFormatOthers() throws Exception {
 		MarcRecordImpl mri;
 		MetadataRecord metadataRecord;
 		List<String> data = new ArrayList<>();
@@ -698,7 +698,7 @@ public class MarcRecordImplTest extends AbstractTest {
 	}
 
 	@Test
-	public void getCitationFormatError() throws Exception{
+	public void getCitationFormatError() throws Exception {
 		MarcRecordImpl mri;
 		MetadataRecord metadataRecord;
 		List<String> data = new ArrayList<>();
@@ -1287,6 +1287,7 @@ public class MarcRecordImplTest extends AbstractTest {
 		mri = MarcRecordFactory.recordFactory(data);
 		metadataRecord = metadataFactory.getMetadataRecord(mri);
 		Assert.assertFalse(metadataRecord.matchFilterBookport());
+		data.clear();
 
 		// bookport 856, another 856 => True
 		data.add("856 $uhttps://www.bookport.cz/book");
@@ -1294,6 +1295,7 @@ public class MarcRecordImplTest extends AbstractTest {
 		mri = MarcRecordFactory.recordFactory(data);
 		metadataRecord = metadataFactory.getMetadataRecord(mri);
 		Assert.assertTrue(metadataRecord.matchFilterBookport());
+		data.clear();
 
 		// bookport 856, 996 => True
 		data.add("856 $uhttps://www.bookport.cz/book");
@@ -1301,6 +1303,7 @@ public class MarcRecordImplTest extends AbstractTest {
 		mri = MarcRecordFactory.recordFactory(data);
 		metadataRecord = metadataFactory.getMetadataRecord(mri);
 		Assert.assertTrue(metadataRecord.matchFilterBookport());
+		data.clear();
 
 		// no bookport => True
 		data.add("856 $uhttps://test.cz/test");
@@ -1308,6 +1311,7 @@ public class MarcRecordImplTest extends AbstractTest {
 		mri = MarcRecordFactory.recordFactory(data);
 		metadataRecord = metadataFactory.getMetadataRecord(mri);
 		Assert.assertTrue(metadataRecord.matchFilterBookport());
+		data.clear();
 	}
 
 	@Test
