@@ -60,4 +60,9 @@ public class BookportMetadataMarcRecord extends EbooksMetadataMarcRecord {
 		return SolrUtils.createHierarchicFacetValues(SolrUtils.INSTITUTION_OTHERS, "ebook", Constants.PREFIX_BOOKPORT.toUpperCase());
 	}
 
+	@Override
+	public boolean matchFilterBookport() {
+		return true;
+	}
+
 }
