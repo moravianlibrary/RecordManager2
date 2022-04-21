@@ -1347,7 +1347,6 @@ public class MarcRecordImplTest extends AbstractTest {
 		data.add("996 $aa");
 		mri = MarcRecordFactory.recordFactory(data);
 		metadataRecord = metadataFactory.getMetadataRecord(hr, mri);
-		;
 		Assert.assertEquals(metadataRecord.getUrls(), Collections.emptyList());
 	}
 
