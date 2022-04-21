@@ -1217,7 +1217,8 @@ public class MetadataMarcRecord implements MetadataRecord {
 
 	@Override
 	public List<String> getUrls() {
-		return getUrls(Constants.DOCUMENT_AVAILABILITY_UNKNOWN);
+		List<String> urls = getUrls(Constants.DOCUMENT_AVAILABILITY_UNKNOWN);
+		return filterBookportUrls(urls);
 	}
 
 	protected List<String> getUrls(String availability) {
@@ -1252,6 +1253,19 @@ public class MetadataMarcRecord implements MetadataRecord {
 					availability, link, comment));
 		}
 		return result;
+	}
+
+	@Override
+	public List<String> filterBookportUrls(List<String> urls) {
+		List<String> bookport = new ArrayList<>();
+		List<String> others = new ArrayList<>();
+		for (String url : urls) {
+			if (BOOKPORT.matcher(url).find()) bookport.add(url);
+			else others.add(url);
+		}
+		if (bookport.isEmpty()) return urls;
+		if (!others.isEmpty() || !underlayingMarc.getDataFields("996").isEmpty()) return others;
+		return urls;
 	}
 
 	@Override

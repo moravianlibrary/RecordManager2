@@ -246,6 +246,10 @@ public interface MetadataRecord {
 	 */
 	List<String> getUrls();
 
+	default List<String> filterBookportUrls(List<String> urls) {
+		return urls;
+	}
+
 	/**
 	 * get rights value from Kramerius
 	 *

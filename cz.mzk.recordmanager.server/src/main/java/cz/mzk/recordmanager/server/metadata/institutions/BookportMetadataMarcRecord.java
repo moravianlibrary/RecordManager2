@@ -65,4 +65,9 @@ public class BookportMetadataMarcRecord extends EbooksMetadataMarcRecord {
 		return true;
 	}
 
+	@Override
+	public List<String> filterBookportUrls(List<String> urls) {
+		return urls;
+	}
+
 }
