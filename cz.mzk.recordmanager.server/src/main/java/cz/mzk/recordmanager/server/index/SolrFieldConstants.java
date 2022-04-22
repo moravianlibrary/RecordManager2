@@ -195,6 +195,8 @@ public class SolrFieldConstants {
 
 	public static final String LONG_LAT_STR = "long_lat_str";
 
+	public static final String LONG_LAT_DISPLAY_MV = "long_lat_display_mv";
+
 	/**
 	 * dummy fields used for processing purposes only, shouldn't be indexed.
 	 */
