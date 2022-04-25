@@ -45,6 +45,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 	private static final Pattern CNB_PATTERN = Pattern.compile("cnb[0-9]+");
 	private static final Pattern FIELD130A = Pattern.compile("(.*)\\([^)]*\\)$");
 	private static final Pattern Z_CYKLU = Pattern.compile("z cyklu:", Pattern.CASE_INSENSITIVE);
+	private static final Pattern BOOKPORT = Pattern.compile("\\.bookport\\.cz", Pattern.CASE_INSENSITIVE);
 
 	// formats
 	private static final Pattern KARTOGRAFICKY_DOKUMENT = Pattern.compile("kartografick[yý]\\sdokument", Pattern.CASE_INSENSITIVE);
@@ -1104,8 +1105,23 @@ public class MetadataMarcRecord implements MetadataRecord {
 			if (df.getSubfield('a') != null
 					&& CPK0_PATTERN.matcher(df.getSubfield('a').getData()).matches()) return false;
 		}
+		if (!matchFilterBookport()) return false;
 		// more rules in institution specific classes
 		return true;
+	}
+
+	/**
+	 * only bookport 856 a no 996 then delete record
+	 *
+	 * @return boolean
+	 */
+	@Override
+	public boolean matchFilterBookport() {
+		for (String str : underlayingMarc.getFields("856", 'u')) {
+			if (!BOOKPORT.matcher(str).find()) return true;
+		}
+		return underlayingMarc.getFields("856", 'u').isEmpty()
+				|| !underlayingMarc.getDataFields("996").isEmpty();
 	}
 
 	@Override
@@ -1201,7 +1217,8 @@ public class MetadataMarcRecord implements MetadataRecord {
 
 	@Override
 	public List<String> getUrls() {
-		return getUrls(Constants.DOCUMENT_AVAILABILITY_UNKNOWN);
+		List<String> urls = getUrls(Constants.DOCUMENT_AVAILABILITY_UNKNOWN);
+		return filterBookportUrls(urls);
 	}
 
 	protected List<String> getUrls(String availability) {
@@ -1236,6 +1253,19 @@ public class MetadataMarcRecord implements MetadataRecord {
 					availability, link, comment));
 		}
 		return result;
+	}
+
+	@Override
+	public List<String> filterBookportUrls(List<String> urls) {
+		List<String> bookport = new ArrayList<>();
+		List<String> others = new ArrayList<>();
+		for (String url : urls) {
+			if (BOOKPORT.matcher(url).find()) bookport.add(url);
+			else others.add(url);
+		}
+		if (bookport.isEmpty()) return urls;
+		if (!others.isEmpty() || !underlayingMarc.getDataFields("996").isEmpty()) return others;
+		return urls;
 	}
 
 	@Override

@@ -192,6 +192,15 @@ public interface MetadataRecord {
 	boolean matchFilter();
 
 	/**
+	 * Decide whether this record with 856 from bookport should be stored during importing/harvesting
+	 *
+	 * @return true if record should be stored, false otherwise
+	 */
+	default boolean matchFilterBookport() {
+		return true;
+	}
+
+	/**
 	 * return raw identifier from field 001
 	 *
 	 * @return String
@@ -236,6 +245,10 @@ public interface MetadataRecord {
 	 * @return List<String>
 	 */
 	List<String> getUrls();
+
+	default List<String> filterBookportUrls(List<String> urls) {
+		return urls;
+	}
 
 	/**
 	 * get rights value from Kramerius

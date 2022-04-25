@@ -134,7 +134,7 @@ public class MarcRecordImplTest extends AbstractTest {
 		metadataRecord = metadataFactory.getMetadataRecord(mri);
 		Assert.assertNull(metadataRecord.getPublicationYear());
 		data.clear();
-		
+
 		data.add("264 $c<1977->");
 		data.add("260 $c<1978->");
 		mri = MarcRecordFactory.recordFactory(data);
@@ -142,7 +142,7 @@ public class MarcRecordImplTest extends AbstractTest {
 		Assert.assertEquals(metadataRecord.getPublicationYear().longValue(),
 				1977);
 		data.clear();
-		
+
 		data.add("008 950928s1981----xr ||||e||||||||||||cze||");
 		mri = MarcRecordFactory.recordFactory(data);
 		metadataRecord = metadataFactory.getMetadataRecord(mri);
@@ -268,7 +268,7 @@ public class MarcRecordImplTest extends AbstractTest {
 		Assert.assertEquals(metadataRecord.getPageCount(), null);
 		data.clear();
 	}
-	
+
 	@Test
 	public void getISBNsTest() throws Exception {
 		MarcRecordImpl mri;
@@ -323,13 +323,13 @@ public class MarcRecordImplTest extends AbstractTest {
 			Assert.assertEquals(results.get(i), isbnlist.get(i), String.format("ISBN on position %d differs.", i));
 		}
 	}
-	
+
 	@Test
-	public void getWeightTest() throws Exception{
+	public void getWeightTest() throws Exception {
 		MarcRecordImpl mri;
 		MetadataRecord metadataRecord;
 		List<String> data = new ArrayList<>();
-		
+
 		data.add("000 01234567890123456a");
 		data.add("008 asd");
 		data.add("020 $a80-200-0980-9");
@@ -345,38 +345,38 @@ public class MarcRecordImplTest extends AbstractTest {
 		Assert.assertEquals(metadataRecord.getWeight(0L).longValue(), 5L);
 		data.clear();
 	}
-	
+
 	@Test
-	public void getAuthorAuthStringTest() throws Exception{
+	public void getAuthorAuthStringTest() throws Exception {
 		MarcRecordImpl mri;
 		MetadataRecord metadataRecord;
 		List<String> data = new ArrayList<>();
-		
+
 		data.add("100 $aEliska");
 		mri = MarcRecordFactory.recordFactory(data);
 		metadataRecord = metadataFactory.getMetadataRecord(mri);
 		Assert.assertEquals(metadataRecord.getAuthorString(), "Eliska");
 		data.clear();
-		
+
 		data.add("700 $aEliska");
 		mri = MarcRecordFactory.recordFactory(data);
 		metadataRecord = metadataFactory.getMetadataRecord(mri);
 		Assert.assertEquals(metadataRecord.getAuthorString(), "Eliska");
 		data.clear();
 	}
-	
+
 	@Test
-	public void getAuthorAuthKeyTest() throws Exception{
+	public void getAuthorAuthKeyTest() throws Exception {
 		MarcRecordImpl mri;
 		MetadataRecord metadataRecord;
 		List<String> data = new ArrayList<>();
-		
+
 		data.add("100 $7aaa");
 		mri = MarcRecordFactory.recordFactory(data);
 		metadataRecord = metadataFactory.getMetadataRecord(mri);
 		Assert.assertEquals(metadataRecord.getAuthorAuthKey(), "aaa");
 		data.clear();
-		
+
 		data.add("700 $7bbb");
 		mri = MarcRecordFactory.recordFactory(data);
 		metadataRecord = metadataFactory.getMetadataRecord(mri);
@@ -389,37 +389,37 @@ public class MarcRecordImplTest extends AbstractTest {
 		MarcRecordImpl mri;
 		MetadataRecord metadataRecord;
 		List<String> data = new ArrayList<>();
-		
+
 		data.add("255 $aMěřítko 1:250 000");
 		mri = MarcRecordFactory.recordFactory(data);
 		metadataRecord = metadataFactory.getMetadataRecord(mri);
 		Assert.assertTrue(metadataRecord.getScale().equals(250000L));
 		data.clear();
-		
+
 		data.add("255 $aMěřítko 1:50^000");
 		mri = MarcRecordFactory.recordFactory(data);
 		metadataRecord = metadataFactory.getMetadataRecord(mri);
 		Assert.assertTrue(metadataRecord.getScale().equals(50000L));
 		data.clear();
-		
+
 		data.add("255 $$$aMěřítko 1:30^000 (14°59'v.d.-15°33'v.d./50°40's.š.-50°25's.š.)");
 		mri = MarcRecordFactory.recordFactory(data);
 		metadataRecord = metadataFactory.getMetadataRecord(mri);
 		Assert.assertTrue(metadataRecord.getScale().equals(30000L));
 		data.clear();
-		
+
 		data.add("255 $aMěřítko neuvedeno");
 		mri = MarcRecordFactory.recordFactory(data);
 		metadataRecord = metadataFactory.getMetadataRecord(mri);
 		Assert.assertNull(metadataRecord.getScale());
 		data.clear();
-		
+
 		data.add("255 $aMěřítko 1:20^000 a 1:150^000");
 		mri = MarcRecordFactory.recordFactory(data);
 		metadataRecord = metadataFactory.getMetadataRecord(mri);
 		Assert.assertTrue(metadataRecord.getScale().equals(20000L));
 		data.clear();
-		
+
 		data.add("255 $aMěřítko 1:150000");
 		mri = MarcRecordFactory.recordFactory(data);
 		metadataRecord = metadataFactory.getMetadataRecord(mri);
@@ -432,7 +432,7 @@ public class MarcRecordImplTest extends AbstractTest {
 		MarcRecordImpl mri;
 		MetadataRecord metadataRecord;
 		List<String> data = new ArrayList<>();
-		
+
 		data.add("856 $uhttp://kramerius.nkp.cz/kramerius/handle/ABA001/1339741$yDigitalizovaný dokument");
 		mri = MarcRecordFactory.recordFactory(data);
 		metadataRecord = metadataFactory.getMetadataRecord(mri);
@@ -444,27 +444,27 @@ public class MarcRecordImplTest extends AbstractTest {
 		metadataRecord = metadataFactory.getMetadataRecord(mri);
 		Assert.assertEquals(metadataRecord.getUUId(), "1b891670-00e4-11e4-89c6-005056827e51");
 		data.clear();
-		
+
 		data.add("856 $uhttp://kramerius4.nkp.cz/search/handle/uuid:abbc47e0-421f-11e4-8113-005056827e52$yDigitalizovaný dokument");
 		mri = MarcRecordFactory.recordFactory(data);
 		metadataRecord = metadataFactory.getMetadataRecord(mri);
 		Assert.assertEquals(metadataRecord.getUUId(), "abbc47e0-421f-11e4-8113-005056827e52");
 		data.clear();
 	}
-	
+
 	@Test
 	public void getSeriesISSNtests() throws Exception {
 		MarcRecordImpl mri;
 		MetadataRecord metadataRecord;
 		List<String> data = new ArrayList<>();
-		
+
 		data.add("490 $aVědecké spisy Vysokého učení technického v Brně. PhD Thesis,$x1213-4198 ;$vsv. 744");
 		mri = MarcRecordFactory.recordFactory(data);
 		metadataRecord = metadataFactory.getMetadataRecord(mri);
 		Assert.assertEquals(metadataRecord.getISSNSeries(), "1213-4198 ;");
 		Assert.assertEquals(metadataRecord.getISSNSeriesOrder(), "sv. 744");
 		data.clear();
-		
+
 		data.add("490 $aEkonomika, právo, politika,$x1213-3299 ;$vč. 97/2012");
 		mri = MarcRecordFactory.recordFactory(data);
 		metadataRecord = metadataFactory.getMetadataRecord(mri);
@@ -472,108 +472,108 @@ public class MarcRecordImplTest extends AbstractTest {
 		Assert.assertEquals(metadataRecord.getISSNSeriesOrder(), "č. 97/2012");
 		data.clear();
 	}
-	
+
 	@Test
-	public void getClusterIdTest() throws Exception{
+	public void getClusterIdTest() throws Exception {
 		MarcRecordImpl mri;
 		MetadataRecord metadataRecord;
 		List<String> data = new ArrayList<>();
-		
+
 		data.add("001 0011");
 		mri = MarcRecordFactory.recordFactory(data);
 		metadataRecord = metadataFactory.getMetadataRecord(mri);
 		Assert.assertEquals(metadataRecord.getClusterId(), null);
 
 	}
-	
+
 	@Test
-	public void getOclcsTest() throws Exception{
+	public void getOclcsTest() throws Exception {
 		MarcRecordImpl mri;
 		MetadataRecord metadataRecord;
 		List<String> data = new ArrayList<>();
-		
+
 		final String oclc1 = "11608569";
 		final String oclc2 = "ocn123456789";
 		data.add("035 $a(OCoLC)" + oclc1);
 		data.add("035 $a(OCoLC)" + oclc2);
 		data.add("035 $a(OCoLC)"); // empty value
-		
+
 		mri = MarcRecordFactory.recordFactory(data);
 		metadataRecord = metadataFactory.getMetadataRecord(mri);
 		Assert.assertEquals(metadataRecord.getOclcs().size(), 2);
 		Assert.assertEquals(metadataRecord.getOclcs().get(0).getOclcStr(), oclc1);
 		Assert.assertEquals(metadataRecord.getOclcs().get(1).getOclcStr(), oclc2);
 	}
-	
+
 	@Test
-	public void getLanguagesTest() throws Exception{
+	public void getLanguagesTest() throws Exception {
 		MarcRecordImpl mri;
 		MetadataRecord metadataRecord;
 		List<String> data = new ArrayList<>();
 		data.add("041 $aeng$acze");
-		
+
 		mri = MarcRecordFactory.recordFactory(data);
 		metadataRecord = metadataFactory.getMetadataRecord(mri);
 		Assert.assertEquals(metadataRecord.getLanguages().size(), 2);
-		
+
 		data = new ArrayList<>();
 		data.add("041 $abel");
-		
+
 		mri = MarcRecordFactory.recordFactory(data);
 		metadataRecord = metadataFactory.getMetadataRecord(mri);
 		Assert.assertEquals(metadataRecord.getLanguages().size(), 1);
 		Assert.assertTrue(metadataRecord.getLanguages().contains("oth"));
-		
+
 		data = new ArrayList<>();
-		data.add("008 960925s1891    gw ||||| |||||||||||eng|d");		
-		
+		data.add("008 960925s1891    gw ||||| |||||||||||eng|d");
+
 		mri = MarcRecordFactory.recordFactory(data);
 		metadataRecord = metadataFactory.getMetadataRecord(mri);
 		Assert.assertEquals(metadataRecord.getLanguages().size(), 1);
 		Assert.assertTrue(metadataRecord.getLanguages().get(0).contains("eng"));
-		
+
 		data = new ArrayList<>();
-		data.add("008 960925s1891    gw ||||| |||||||||||bel|d");		
-		
+		data.add("008 960925s1891    gw ||||| |||||||||||bel|d");
+
 		mri = MarcRecordFactory.recordFactory(data);
 		metadataRecord = metadataFactory.getMetadataRecord(mri);
 		Assert.assertEquals(metadataRecord.getLanguages().size(), 0);
-		
+
 
 	}
-	
+
 	@Test
-	public void getCitationFormatAcademicWork() throws Exception{
+	public void getCitationFormatAcademicWork() throws Exception {
 		MarcRecordImpl mri;
 		MetadataRecord metadataRecord;
 		List<String> data = new ArrayList<>();
-		
+
 		data.add("502 $atest");
 		mri = MarcRecordFactory.recordFactory(data);
 		metadataRecord = metadataFactory.getMetadataRecord(mri);
 		Assert.assertEquals(metadataRecord.getCitationFormat(), CitationRecordType.ACADEMIC_WORK);
 		data.clear();
 	}
-	
+
 	@Test
-	public void getCitationFormatBook() throws Exception{
+	public void getCitationFormatBook() throws Exception {
 		MarcRecordImpl mri;
 		MetadataRecord metadataRecord;
 		List<String> data = new ArrayList<>();
-		
+
 		data.add("000 000000ac");
 		mri = MarcRecordFactory.recordFactory(data);
 		metadataRecord = metadataFactory.getMetadataRecord(mri);
 		Assert.assertEquals(metadataRecord.getCitationFormat(), CitationRecordType.BOOK);
 		data.clear();
 	}
-	
+
 	@Test
-	public void getCitationFormatElectronicBook() throws Exception{
+	public void getCitationFormatElectronicBook() throws Exception {
 		MarcRecordImpl mri;
 		MetadataRecord metadataRecord;
 		List<String> data = new ArrayList<>();
-		
+
 		data.add("000 000000td");
 		data.add("856 41$atest");
 		mri = MarcRecordFactory.recordFactory(data);
@@ -581,26 +581,26 @@ public class MarcRecordImplTest extends AbstractTest {
 		Assert.assertEquals(metadataRecord.getCitationFormat(), CitationRecordType.ELECTRONIC_BOOK);
 		data.clear();
 	}
-	
+
 	@Test
-	public void getCitationFormatPeriodical() throws Exception{
+	public void getCitationFormatPeriodical() throws Exception {
 		MarcRecordImpl mri;
 		MetadataRecord metadataRecord;
 		List<String> data = new ArrayList<>();
-		
+
 		data.add("000 0000000i");
 		mri = MarcRecordFactory.recordFactory(data);
 		metadataRecord = metadataFactory.getMetadataRecord(mri);
 		Assert.assertEquals(metadataRecord.getCitationFormat(), CitationRecordType.PERIODICAL);
 		data.clear();
 	}
-	
+
 	@Test
-	public void getCitationFormatElectronicPeriodical() throws Exception{
+	public void getCitationFormatElectronicPeriodical() throws Exception {
 		MarcRecordImpl mri;
 		MetadataRecord metadataRecord;
 		List<String> data = new ArrayList<>();
-		
+
 		data.add("000 0000000s");
 		data.add("856 41$atest");
 		mri = MarcRecordFactory.recordFactory(data);
@@ -608,13 +608,13 @@ public class MarcRecordImplTest extends AbstractTest {
 		Assert.assertEquals(metadataRecord.getCitationFormat(), CitationRecordType.ELECTRONIC_PERIODICAL);
 		data.clear();
 	}
-	
+
 	@Test
-	public void getCitationFormatContribution() throws Exception{
+	public void getCitationFormatContribution() throws Exception {
 		MarcRecordImpl mri;
 		MetadataRecord metadataRecord;
 		List<String> data = new ArrayList<>();
-		
+
 		data.add("000 000000000");
 		data.add("773 $asborník");
 		mri = MarcRecordFactory.recordFactory(data);
@@ -622,13 +622,13 @@ public class MarcRecordImplTest extends AbstractTest {
 		Assert.assertEquals(metadataRecord.getCitationFormat(), CitationRecordType.CONTRIBUTION_PROCEEDINGS);
 		data.clear();
 	}
-	
+
 	@Test
-	public void getCitationFormatElectronicContribution() throws Exception{
+	public void getCitationFormatElectronicContribution() throws Exception {
 		MarcRecordImpl mri;
 		MetadataRecord metadataRecord;
 		List<String> data = new ArrayList<>();
-		
+
 		data.add("000 000000000");
 		data.add("773 $aproceedings");
 		data.add("856 41$atest");
@@ -637,26 +637,26 @@ public class MarcRecordImplTest extends AbstractTest {
 		Assert.assertEquals(metadataRecord.getCitationFormat(), CitationRecordType.ELECTRONIC_CONTRIBUTION_PROCEEDINGS);
 		data.clear();
 	}
-	
+
 	@Test
-	public void getCitationFormatArticle() throws Exception{
+	public void getCitationFormatArticle() throws Exception {
 		MarcRecordImpl mri;
 		MetadataRecord metadataRecord;
 		List<String> data = new ArrayList<>();
-		
+
 		data.add("000 0000000a");
 		mri = MarcRecordFactory.recordFactory(data);
 		metadataRecord = metadataFactory.getMetadataRecord(mri);
 		Assert.assertEquals(metadataRecord.getCitationFormat(), CitationRecordType.ARTICLE);
 		data.clear();
 	}
-	
+
 	@Test
-	public void getCitationFormatElectronicArticles() throws Exception{
+	public void getCitationFormatElectronicArticles() throws Exception {
 		MarcRecordImpl mri;
 		MetadataRecord metadataRecord;
 		List<String> data = new ArrayList<>();
-		
+
 		data.add("000 0000000b");
 		data.add("856 41$atest");
 		mri = MarcRecordFactory.recordFactory(data);
@@ -664,52 +664,52 @@ public class MarcRecordImplTest extends AbstractTest {
 		Assert.assertEquals(metadataRecord.getCitationFormat(), CitationRecordType.ELECTRONIC_ARTICLE);
 		data.clear();
 	}
-	
+
 	@Test
-	public void getCitationFormatMap() throws Exception{
+	public void getCitationFormatMap() throws Exception {
 		MarcRecordImpl mri;
 		MetadataRecord metadataRecord;
 		List<String> data = new ArrayList<>();
-		
+
 		data.add("000 000000e");
 		mri = MarcRecordFactory.recordFactory(data);
 		metadataRecord = metadataFactory.getMetadataRecord(mri);
 		Assert.assertEquals(metadataRecord.getCitationFormat(), CitationRecordType.MAPS);
 		data.clear();
-		
+
 		data.add("000 000000f");
 		mri = MarcRecordFactory.recordFactory(data);
 		metadataRecord = metadataFactory.getMetadataRecord(mri);
 		Assert.assertEquals(metadataRecord.getCitationFormat(), CitationRecordType.MAPS);
 		data.clear();
 	}
-	
+
 	@Test
-	public void getCitationFormatOthers() throws Exception{
+	public void getCitationFormatOthers() throws Exception {
 		MarcRecordImpl mri;
 		MetadataRecord metadataRecord;
 		List<String> data = new ArrayList<>();
-		
+
 		data.add("000 000000c");
 		mri = MarcRecordFactory.recordFactory(data);
 		metadataRecord = metadataFactory.getMetadataRecord(mri);
 		Assert.assertEquals(metadataRecord.getCitationFormat(), CitationRecordType.OTHERS);
 		data.clear();
 	}
-	
+
 	@Test
-	public void getCitationFormatError() throws Exception{
+	public void getCitationFormatError() throws Exception {
 		MarcRecordImpl mri;
 		MetadataRecord metadataRecord;
 		List<String> data = new ArrayList<>();
-		
+
 		data.add("000 00000000");
 		mri = MarcRecordFactory.recordFactory(data);
 		metadataRecord = metadataFactory.getMetadataRecord(mri);
 		Assert.assertEquals(metadataRecord.getCitationFormat(), CitationRecordType.ERROR);
 		data.clear();
 	}
-	
+
 	@Test
 	public void getISMNsTest() throws Exception {
 		MarcRecordImpl mri;
@@ -1275,4 +1275,79 @@ public class MarcRecordImplTest extends AbstractTest {
 		Assert.assertFalse(metadataRecord.isZiskej());
 		data.clear();
 	}
+
+	@Test
+	public void matchFilterBookport() {
+		MarcRecordImpl mri;
+		MetadataRecord metadataRecord;
+		List<String> data = new ArrayList<>();
+
+		// bookport 856 => false | remove record
+		data.add("856 $uhttps://www.bookport.cz/book");
+		mri = MarcRecordFactory.recordFactory(data);
+		metadataRecord = metadataFactory.getMetadataRecord(mri);
+		Assert.assertFalse(metadataRecord.matchFilterBookport());
+		data.clear();
+
+		// bookport 856, another 856 => True
+		data.add("856 $uhttps://www.bookport.cz/book");
+		data.add("856 $uhttps://test.cz/test");
+		mri = MarcRecordFactory.recordFactory(data);
+		metadataRecord = metadataFactory.getMetadataRecord(mri);
+		Assert.assertTrue(metadataRecord.matchFilterBookport());
+		data.clear();
+
+		// bookport 856, 996 => True
+		data.add("856 $uhttps://www.bookport.cz/book");
+		data.add("996 $aa");
+		mri = MarcRecordFactory.recordFactory(data);
+		metadataRecord = metadataFactory.getMetadataRecord(mri);
+		Assert.assertTrue(metadataRecord.matchFilterBookport());
+		data.clear();
+
+		// no bookport => True
+		data.add("856 $uhttps://test.cz/test");
+		data.add("996 $aa");
+		mri = MarcRecordFactory.recordFactory(data);
+		metadataRecord = metadataFactory.getMetadataRecord(mri);
+		Assert.assertTrue(metadataRecord.matchFilterBookport());
+		data.clear();
+	}
+
+	@Test
+	public void filterBookportUrlsTest() {
+		MarcRecordImpl mri;
+		MetadataRecord metadataRecord;
+		List<String> data = new ArrayList<>();
+
+		HarvestedRecord hr = new HarvestedRecord();
+		OAIHarvestConfiguration conf = new OAIHarvestConfiguration();
+		conf.setIdPrefix("mzk");
+		hr.setHarvestedFrom(conf);
+
+		// only bookport 856
+		data.add("856 $uhttps://www.bookport.cz/book");
+		mri = MarcRecordFactory.recordFactory(data);
+		metadataRecord = metadataFactory.getMetadataRecord(hr, mri);
+		Assert.assertEquals(metadataRecord.getUrls(), Collections.singleton(
+				MetadataUtils.generateUrl("mzk", "unknown", "https://www.bookport.cz/book", "")));
+		data.clear();
+
+		// bookport 856, another 856 => remove bookport
+		data.add("856 $uhttps://www.bookport.cz/book");
+		data.add("856 $uhttps://test.cz/book");
+		mri = MarcRecordFactory.recordFactory(data);
+		metadataRecord = metadataFactory.getMetadataRecord(hr, mri);
+		Assert.assertEquals(metadataRecord.getUrls(), Collections.singleton(
+				MetadataUtils.generateUrl("mzk", "unknown", "https://test.cz/book", "")));
+		data.clear();
+
+		// bookport 856, 996 => remove bookport
+		data.add("856 $uhttps://www.bookport.cz/book");
+		data.add("996 $aa");
+		mri = MarcRecordFactory.recordFactory(data);
+		metadataRecord = metadataFactory.getMetadataRecord(hr, mri);
+		Assert.assertEquals(metadataRecord.getUrls(), Collections.emptyList());
+	}
+
 }
