@@ -1,3 +1,4 @@
+import static cz.mzk.recordmanager.server.scripting.marc.function.BoundingBoxMarcFunctions.LongLatFormat.*
 import static cz.mzk.recordmanager.server.util.MarcCleaningUtils.*;
 import static cz.mzk.recordmanager.server.marc.SubfieldExtractionMethod.*;
 
@@ -77,7 +78,7 @@ series_facet_str_mv = getFieldsTrim "440a:490a:800abcdflnpqstv:810abnpst:811acde
 author_facet_str_mv = getFields "100abcdq:110abc:111acdegq:700abcdq:710abc:711acdegq:975abcdq:976abc:978abcdgq"
 period_facet_str_mv = getPeriod()
 
-bbox_geo = getBoundingBoxAsPolygon()
+bbox_geo = getBoundingBoxAsPolygon(POLYGON)
 bbox_geo_str = getBoundingBox()
 
 // no need for this field?
