@@ -27,14 +27,18 @@ public class BmcMetadataMarcRecord extends MetadataMarcRecord {
 		List<String> results = new ArrayList<>(super.getUrls());
 
 		if (underlayingMarc.getControlField("001") != null) {
-			results.add(EVersionUrl.create(harvestedRecord.getHarvestedFrom().getIdPrefix(), Constants.DOCUMENT_AVAILABILITY_UNKNOWN,
-					String.format(LINK_MEDVIK, underlayingMarc.getControlField("001")), COMMENT_MEDVIK).toString());
+			EVersionUrl url = EVersionUrl.create(harvestedRecord.getHarvestedFrom().getIdPrefix(),
+					Constants.DOCUMENT_AVAILABILITY_UNKNOWN,
+					String.format(LINK_MEDVIK, underlayingMarc.getControlField("001")), COMMENT_MEDVIK);
+			if (url != null) results.add(url.toString());
 		}
 		for (DataField df : underlayingMarc.getDataFields("024")) {
 			if (df.getSubfield('2') != null && df.getSubfield('2').getData().equalsIgnoreCase("doi")
 					&& df.getSubfield('a') != null) {
-				results.add(EVersionUrl.create(harvestedRecord.getHarvestedFrom().getIdPrefix(), Constants.DOCUMENT_AVAILABILITY_UNKNOWN,
-						String.format(LINK_DOI, df.getSubfield('a').getData()), COMMENT_DOI).toString());
+				EVersionUrl url = EVersionUrl.create(harvestedRecord.getHarvestedFrom().getIdPrefix(),
+						Constants.DOCUMENT_AVAILABILITY_UNKNOWN,
+						String.format(LINK_DOI, df.getSubfield('a').getData()), COMMENT_DOI);
+				if (url != null) results.add(url.toString());
 			}
 		}
 		return results;
@@ -44,4 +48,5 @@ public class BmcMetadataMarcRecord extends MetadataMarcRecord {
 	public String filterSubjectFacet() {
 		return SUBJECT_FACET_FILE;
 	}
+
 }

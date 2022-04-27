@@ -68,7 +68,7 @@ public class UrlDedupRecordEnricher implements DedupRecordEnricher {
 				e.printStackTrace();
 				continue;
 			}
-			addToMap(urls, url);
+			if (url != null) addToMap(urls, url);
 		}
 		generateUrlFromKramAvailability(mergedDocument, urls);
 		for (String key : urls.keySet()) {
@@ -134,6 +134,7 @@ public class UrlDedupRecordEnricher implements DedupRecordEnricher {
 					}
 				}
 				EVersionUrl newUrl = EVersionUrl.create(kramAvailability, comment);
+				if (newUrl == null) continue;
 				addToMap(urls, newUrl);
 				// dnnt
 				if (newUrl.getAvailability().equals(Constants.DOCUMENT_AVAILABILITY_PROTECTED)
@@ -143,9 +144,8 @@ public class UrlDedupRecordEnricher implements DedupRecordEnricher {
 							&& potentialDnnt) {
 						EVersionUrl dnntUrl = EVersionUrl.createDnnt(kramAvailability, comment);
 						if (dnntUrl != null) addToMap(urls, dnntUrl);
-					} else { // dnnt without dnnt-label
-						addToMap(urls, EVersionUrl.create(kramAvailability, comment));
 					}
+					// else - dnnt without dnnt-label
 				}
 			}
 		}
@@ -170,7 +170,8 @@ public class UrlDedupRecordEnricher implements DedupRecordEnricher {
 		Set<String> availabilitiesSimple = new HashSet<>();
 		for (Object url : urls) {
 			try {
-				availabilitiesSimple.add(EVersionUrl.create(url.toString()).getAvailability());
+				EVersionUrl eVersionUrl = EVersionUrl.create(url.toString());
+				if (eVersionUrl != null) availabilitiesSimple.add(eVersionUrl.getAvailability());
 			} catch (Exception ignore) {
 			}
 		}

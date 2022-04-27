@@ -16,9 +16,9 @@ import java.util.*;
 public class AvailabilitiFacetEnricherTest extends AbstractTest {
 
 	private static final String PRESENT = "0/present/";
-	private static final String URL = "mzk|%s|mzk.cz|comment";
-	private static final String DIFFERENT_URL = "mzk|%s|mzk1.cz|comment";
-	private static final String DIFFERENT_URL2 = "mzk|%s|mzk2.cz|comment";
+	private static final String URL = "mzk|%s|https://mzk.cz|comment";
+	private static final String DIFFERENT_URL = "mzk|%s|https://mzk1.cz|comment";
+	private static final String DIFFERENT_URL2 = "mzk|%s|https://mzk2.cz|comment";
 	private static final List<String> ONLINE_STATUSES = SolrUtils.createHierarchicFacetValues(
 			Constants.DOCUMENT_AVAILABILITY_ONLINE, Constants.DOCUMENT_AVAILABILITY_ONLINE);
 	private static final List<String> ONLINE_UNKNOWN_STATUSES = SolrUtils.createHierarchicFacetValues(

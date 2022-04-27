@@ -5,6 +5,7 @@ import cz.mzk.recordmanager.server.util.MetadataUtils;
 import cz.mzk.recordmanager.server.util.UrlValidatorUtils;
 
 public class EVersionUrl implements Comparable {
+
 	private static final String SPLITTER = "\\|";
 
 	private String source;
@@ -15,12 +16,7 @@ public class EVersionUrl implements Comparable {
 	public static EVersionUrl create(String rawData) throws Exception {
 		String[] splitData = rawData.split(SPLITTER);
 		if (splitData.length < 3) throw new Exception("Bad url data");
-		EVersionUrl newUrl = new EVersionUrl();
-		newUrl.setSource(splitData[0]);
-		newUrl.setAvailability(splitData[1]);
-		newUrl.setLink(splitData[2]);
-		newUrl.setComment(splitData.length == 4 ? splitData[3] : "");
-		return newUrl;
+		return create(splitData[0], splitData[1], splitData[2], splitData.length == 4 ? splitData[3] : "");
 	}
 
 	public static EVersionUrl create(KramAvailability kramAvailability) {
@@ -28,15 +24,12 @@ public class EVersionUrl implements Comparable {
 	}
 
 	public static EVersionUrl create(KramAvailability kramAvailability, String comment) {
-		EVersionUrl newUrl = new EVersionUrl();
-		newUrl.setSource(kramAvailability.getHarvestedFrom().getIdPrefix());
-		newUrl.setAvailability(kramAvailability.getAvailability());
-		newUrl.setLink(kramAvailability.getLink());
-		newUrl.setComment(comment);
-		return newUrl;
+		return create(kramAvailability.getHarvestedFrom().getIdPrefix(),
+				kramAvailability.getAvailability(), kramAvailability.getLink(), comment);
 	}
 
 	public static EVersionUrl create(String source, String availability, String link, String comment) {
+		if (!UrlValidatorUtils.doubleSlashUrlValidator().isValid(link)) return null;
 		EVersionUrl newUrl = new EVersionUrl();
 		newUrl.setSource(source);
 		newUrl.setAvailability(availability);
@@ -51,9 +44,8 @@ public class EVersionUrl implements Comparable {
 
 	public static EVersionUrl createDnnt(KramAvailability kramAvailability, String comment) {
 		if (kramAvailability.getDnntLink() == null) return null;
-		EVersionUrl url = create(kramAvailability.getHarvestedFrom().getIdPrefix(), Constants.DOCUMENT_AVAILABILITY_DNNT,
+		return create(kramAvailability.getHarvestedFrom().getIdPrefix(), Constants.DOCUMENT_AVAILABILITY_DNNT,
 				kramAvailability.getDnntLink(), comment);
-		return UrlValidatorUtils.doubleSlashUrlValidator().isValid(url.getLink()) ? url : null;
 	}
 
 	public String getSource() {
