@@ -45,6 +45,7 @@ public class ExportSfxRecordsProcessor implements
 	public String process(DedupRecord dr) throws Exception {
 		MergedSfxRecord sfxRec = new MergedSfxRecord();
 		for (HarvestedRecord hr : harvestedRecordDao.getByDedupRecord(dr)) {
+			if (hr.isDeleted()) continue;
 			InputStream is = new ByteArrayInputStream(hr.getRawRecord());
 			MarcRecord mr = marcXmlParser.parseRecord(is);
 			sfxRec.addRecord(mr);

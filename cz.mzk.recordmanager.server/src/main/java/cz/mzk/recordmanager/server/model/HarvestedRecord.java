@@ -400,6 +400,10 @@ public class HarvestedRecord extends AbstractDomainObject {
 		this.deleted = deleted;
 	}
 
+	public boolean isDeleted() {
+		return this.deleted != null;
+	}
+
 	public String getFormat() {
 		return format;
 	}
@@ -407,7 +411,7 @@ public class HarvestedRecord extends AbstractDomainObject {
 	public void setFormat(String format) {
 		this.format = format;
 	}
-	
+
 	public List<Isbn> getIsbns() {
 		return isbns;
 	}
