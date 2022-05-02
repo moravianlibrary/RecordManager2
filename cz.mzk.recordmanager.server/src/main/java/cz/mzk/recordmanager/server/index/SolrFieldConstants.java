@@ -195,6 +195,12 @@ public class SolrFieldConstants {
 
 	public static final String LONG_LAT_STR = "long_lat_str";
 
+	public static final String PUBLISH_DATE_FACET = "publishDate_facet_mv";
+
+	public static final String LANGUAGE_FACET = "language_facet_mv";
+
+	public static final String SITEMAP = "sitemap_txt_mv";
+
 	/**
 	 * dummy fields used for processing purposes only, shouldn't be indexed.
 	 */

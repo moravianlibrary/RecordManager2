@@ -1,13 +1,27 @@
 package cz.mzk.recordmanager.server;
 
-import javax.sql.DataSource;
-import javax.xml.transform.TransformerConfigurationException;
-
+import cz.mzk.recordmanager.api.service.ImportConfigurationService;
+import cz.mzk.recordmanager.api.service.LibraryService;
+import cz.mzk.recordmanager.api.service.StatisticsService;
+import cz.mzk.recordmanager.server.index.enrich.SitemapDedupRecordEnricher;
+import cz.mzk.recordmanager.server.index.enrich.UrlDedupRecordEnricher;
+import cz.mzk.recordmanager.server.kramerius.harvest.KrameriusHarvesterFactory;
+import cz.mzk.recordmanager.server.kramerius.harvest.KrameriusHarvesterFactoryImpl;
+import cz.mzk.recordmanager.server.oai.harvest.OAIHarvesterFactory;
+import cz.mzk.recordmanager.server.oai.harvest.OAIHarvesterFactoryImpl;
 import cz.mzk.recordmanager.server.scripting.*;
+import cz.mzk.recordmanager.server.service.ImportConfigurationServiceImpl;
+import cz.mzk.recordmanager.server.service.LibraryServiceImpl;
+import cz.mzk.recordmanager.server.service.StatisticsServiceImpl;
+import cz.mzk.recordmanager.server.service.Translator;
+import cz.mzk.recordmanager.server.solr.SolrServerFactory;
+import cz.mzk.recordmanager.server.solr.SolrServerFactoryImpl;
+import cz.mzk.recordmanager.server.util.ApacheHttpClient;
+import cz.mzk.recordmanager.server.util.HibernateSessionSynchronizer;
+import cz.mzk.recordmanager.server.util.HttpClient;
 import cz.mzk.recordmanager.server.util.MODSTransformer;
 import liquibase.exception.LiquibaseException;
 import liquibase.integration.spring.SpringLiquibase;
-
 import org.hibernate.SessionFactory;
 import org.springframework.batch.core.configuration.JobRegistry;
 import org.springframework.batch.core.configuration.annotation.DefaultBatchConfigurer;
@@ -27,6 +41,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.core.task.TaskExecutor;
@@ -37,23 +52,8 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import cz.mzk.recordmanager.api.service.ImportConfigurationService;
-import cz.mzk.recordmanager.api.service.LibraryService;
-import cz.mzk.recordmanager.api.service.StatisticsService;
-import cz.mzk.recordmanager.server.kramerius.harvest.KrameriusHarvesterFactory;
-import cz.mzk.recordmanager.server.kramerius.harvest.KrameriusHarvesterFactoryImpl;
-import cz.mzk.recordmanager.server.oai.harvest.OAIHarvesterFactory;
-import cz.mzk.recordmanager.server.oai.harvest.OAIHarvesterFactoryImpl;
-import cz.mzk.recordmanager.server.service.ImportConfigurationServiceImpl;
-import cz.mzk.recordmanager.server.service.LibraryServiceImpl;
-import cz.mzk.recordmanager.server.service.StatisticsServiceImpl;
-import cz.mzk.recordmanager.server.service.Translator;
-import cz.mzk.recordmanager.server.solr.SolrServerFactory;
-import cz.mzk.recordmanager.server.solr.SolrServerFactoryImpl;
-import cz.mzk.recordmanager.server.util.ApacheHttpClient;
-import cz.mzk.recordmanager.server.util.HibernateSessionSynchronizer;
-import cz.mzk.recordmanager.server.util.HttpClient;
-
+import javax.sql.DataSource;
+import javax.xml.transform.TransformerConfigurationException;
 import java.io.IOException;
 
 @Configuration
@@ -239,13 +239,26 @@ public class AppConfig extends DefaultBatchConfigurer {
 	}
 
 	@Bean
-	public Translator translator(){
+	public Translator translator() {
 		return new Translator();
 	}
 
 	@Bean
 	public MODSTransformer modsTransformer() throws TransformerConfigurationException, IOException {
 		return new MODSTransformer();
+	}
+
+	@Bean("urlDedupRecordEnricher")
+	public UrlDedupRecordEnricher urlDedupRecordEnricher() {
+		return new UrlDedupRecordEnricher();
+	}
+
+	@Bean("sitemapDedupRecordEnricher")
+	@DependsOn(value = {
+			"urlDedupRecordEnricher",
+	})
+	public SitemapDedupRecordEnricher sitemapDedupRecordEnricher() {
+		return new SitemapDedupRecordEnricher();
 	}
 
 }
