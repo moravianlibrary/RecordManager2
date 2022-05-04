@@ -77,6 +77,7 @@ local_region_institution_facet_mv = local_region_institution_facet_str_mv = getR
 local_statuses_facet_mv = local_statuses_facet_str_mv = getStatuses()
 subject_facet_mv = subject_facet_str_mv = getSubject "600abcdfglnpqstyz:610abcdfgklnpstyz:611abcdefgklnpqstyz:630adfgklnpstyz:648a:651avxyz:964abcdefg:967ab"
 ziskej_facet_mv = getZiskejFacet()
+scale_int_facet_mv = getScaleFacet()
 
 // geographic search
 long_lat_display_mv = getBoundingBoxAsPolygon(ENVELOPE)
