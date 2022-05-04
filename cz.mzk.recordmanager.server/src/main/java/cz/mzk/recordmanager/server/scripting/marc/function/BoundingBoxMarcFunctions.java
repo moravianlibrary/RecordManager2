@@ -1,5 +1,16 @@
 package cz.mzk.recordmanager.server.scripting.marc.function;
 
+import com.spatial4j.core.context.SpatialContext;
+import com.spatial4j.core.context.SpatialContextFactory;
+import com.spatial4j.core.exception.InvalidShapeException;
+import com.spatial4j.core.io.WKTReader;
+import cz.mzk.recordmanager.server.marc.MarcRecord;
+import cz.mzk.recordmanager.server.scripting.marc.MarcFunctionContext;
+import org.marc4j.marc.DataField;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
+
 import java.text.MessageFormat;
 import java.text.ParseException;
 import java.util.Collections;
@@ -8,19 +19,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import com.spatial4j.core.exception.InvalidShapeException;
-import com.spatial4j.core.io.WKTReader;
-import org.marc4j.marc.DataField;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
-
-import com.spatial4j.core.context.SpatialContext;
-import com.spatial4j.core.context.SpatialContextFactory;
-
-import cz.mzk.recordmanager.server.marc.MarcRecord;
-import cz.mzk.recordmanager.server.scripting.marc.MarcFunctionContext;
 
 @Component
 public strictfp class BoundingBoxMarcFunctions implements MarcRecordFunctions {
@@ -37,13 +35,25 @@ public strictfp class BoundingBoxMarcFunctions implements MarcRecordFunctions {
 
 	private static final SpatialContext SPATIAL_CONTEXT = createSpatialContext();
 
-	public String getBoundingBoxAsPolygon(MarcFunctionContext ctx) {
-		double points[] = parseBoundingBox(ctx.record());
+	public enum LongLatFormat {POLYGON, ENVELOPE}
+
+	public String getBoundingBoxAsPolygon(MarcFunctionContext ctx, LongLatFormat format) {
+		double[] points = parseBoundingBox(ctx.record());
 		if (points == null) {
 			return null;
 		}
 		// different Locale settings can lead to different values - hard setting Locale.US, which produces desired format
-		MessageFormat mf = new MessageFormat("POLYGON(({0} {1}, {2} {1}, {2} {3}, {0} {3}, {0} {1}))");
+		MessageFormat mf;
+		switch (format) {
+		case POLYGON:
+			mf = new MessageFormat("POLYGON(({0} {1}, {2} {1}, {2} {3}, {0} {3}, {0} {1}))");
+			break;
+		case ENVELOPE:
+			mf = new MessageFormat("ENVELOPE({0}, {2}, {3}, {1})");
+			break;
+		default:
+			return null;
+		}
 		Object[] arguments = {points[0], points[1], points[2], points[3]};
 		mf.setLocale(Locale.US);
 		String result = mf.format(arguments);

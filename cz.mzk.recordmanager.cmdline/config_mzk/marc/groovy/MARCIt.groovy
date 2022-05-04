@@ -1,3 +1,4 @@
+import static cz.mzk.recordmanager.server.scripting.marc.function.BoundingBoxMarcFunctions.LongLatFormat.*
 import static cz.mzk.recordmanager.server.util.MarcCleaningUtils.*;
 import static cz.mzk.recordmanager.server.marc.SubfieldExtractionMethod.*;
 
@@ -75,7 +76,7 @@ url = getFields "856u"
 
 illustrated = "FIXME"
 
-bbox_geo = getBoundingBoxAsPolygon()
+bbox_geo = getBoundingBoxAsPolygon(POLYGON)
 bbox_geo_str = getBoundingBox()
 
 availability_id_str = getFirstField "996w"

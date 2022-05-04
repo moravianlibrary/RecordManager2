@@ -1,3 +1,6 @@
+package marc.groovy
+
+import static cz.mzk.recordmanager.server.scripting.marc.function.BoundingBoxMarcFunctions.LongLatFormat.*
 import static cz.mzk.recordmanager.server.util.MarcCleaningUtils.*;
 
 recordtype = "marc"
@@ -56,7 +59,7 @@ cnb_search_str = getFirstField "015az"
 
 genre_facet_str = getFirstField "655avxyz"
 author_str_mv = getAuthorAutocomplete("100abcdq:110abc:111acdegq:700abcdq:710abc:711acdegq:975abcdq:976abc")
-bbox_geo = getBoundingBoxAsPolygon()
+bbox_geo = getBoundingBoxAsPolygon(POLYGON)
 bbox_geo_str = getBoundingBox()
 
 // no need for this field?

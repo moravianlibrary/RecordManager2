@@ -1,3 +1,6 @@
+package marc.groovy
+
+import static cz.mzk.recordmanager.server.scripting.marc.function.BoundingBoxMarcFunctions.LongLatFormat.*
 import static cz.mzk.recordmanager.server.util.MarcCleaningUtils.*;
 import static cz.mzk.recordmanager.server.marc.SubfieldExtractionMethod.*;
 
@@ -62,7 +65,7 @@ source_title_facet = source_title_facet_str = getFirstField "773t"
 publisher_facet_mv = publisher_str_mv = getPublisherStrMv()
 author_facet_mv = author_facet_str_mv = getFields "100abcdq:110abc:111acdegq:700abcdq:710abc:711acdegq:975abcdq:976abc"
 
-bbox_geo = getBoundingBoxAsPolygon()
+bbox_geo = getBoundingBoxAsPolygon(POLYGON)
 bbox_geo_str = getBoundingBox()
 
 // no need for this field?

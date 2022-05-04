@@ -1,3 +1,5 @@
+import static cz.mzk.recordmanager.server.scripting.marc.function.BoundingBoxMarcFunctions.LongLatFormat.*
+
 recordtype = "local"
 record_format = "local"
 
@@ -77,4 +79,4 @@ subject_facet_mv = subject_facet_str_mv = getSubject "600abcdfglnpqstyz:610abcdf
 ziskej_facet_mv = getZiskejFacet()
 
 // geographic search
-long_lat = getBoundingBoxAsPolygon()
+long_lat_display_mv = getBoundingBoxAsPolygon(ENVELOPE)

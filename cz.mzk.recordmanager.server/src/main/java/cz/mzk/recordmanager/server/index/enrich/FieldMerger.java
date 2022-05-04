@@ -1,13 +1,9 @@
 package cz.mzk.recordmanager.server.index.enrich;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 import org.apache.solr.common.SolrInputDocument;
 import org.apache.solr.common.SolrInputField;
+
+import java.util.*;
 
 public class FieldMerger {
 
@@ -46,7 +42,7 @@ public class FieldMerger {
 	public void renameField(SolrInputDocument source, String oldName, String newName) {
 		SolrInputField field = source.remove(oldName);
 		if (field != null) {
-			source.addField(newName, field);
+			source.addField(newName, field.getValueCount() == 1 ? field.getValue() : field.getValues());
 		}
 	}
 
