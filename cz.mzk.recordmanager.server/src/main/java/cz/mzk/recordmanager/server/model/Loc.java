@@ -20,9 +20,13 @@ public class Loc extends AbstractDomainObject {
 	@Column(name = "loc")
 	private String loc;
 
-	public static Loc create(final String loc) {
+	@Column(name = "subfield")
+	private String subfield;
+
+	public static Loc create(final String loc, final char subfield) {
 		Loc newLoc = new Loc();
 		newLoc.setLoc(MetadataUtils.shorten(loc, EFFECTIVE_LENGTH_20));
+		newLoc.setSubfield(String.valueOf(subfield));
 		return newLoc;
 	}
 
@@ -34,18 +38,26 @@ public class Loc extends AbstractDomainObject {
 		this.loc = loc;
 	}
 
+	public String getSubfield() {
+		return subfield;
+	}
+
+	public void setSubfield(String subfield) {
+		this.subfield = subfield;
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (!(o instanceof Loc)) return false;
 		if (!super.equals(o)) return false;
 		Loc loc1 = (Loc) o;
-		return harvestedRecordId.equals(loc1.harvestedRecordId) && loc.equals(loc1.loc);
+		return harvestedRecordId.equals(loc1.harvestedRecordId) && loc.equals(loc1.loc) && Objects.equals(subfield, loc1.subfield);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(super.hashCode(), harvestedRecordId, loc);
+		return Objects.hash(super.hashCode(), harvestedRecordId, loc, subfield);
 	}
 
 	@Override
@@ -53,6 +65,7 @@ public class Loc extends AbstractDomainObject {
 		return "Loc{" +
 				"harvestedRecordId=" + harvestedRecordId +
 				", loc='" + loc + '\'' +
+				", subfield='" + subfield + '\'' +
 				'}';
 	}
 

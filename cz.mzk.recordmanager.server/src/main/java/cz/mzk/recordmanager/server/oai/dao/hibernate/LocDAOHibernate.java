@@ -22,8 +22,10 @@ public class LocDAOHibernate extends AbstractDomainDAOHibernate<Long, Loc>
 		return (List<HarvestedRecord>) session
 				.createQuery(
 						"FROM HarvestedRecord hr WHERE uniqueId.harvestedFromId=100001 AND deleted IS NULL" +
-								" AND hr.id in (SELECT harvestedRecordId FROM Loc WHERE loc = :loc)")
+								" AND hr.id in (SELECT harvestedRecordId FROM Loc WHERE loc = :loc " +
+								"AND subfield = :subfield)")
 				.setParameter("loc", loc)
+				.setParameter("subfield", "a")
 				.list();
 	}
 

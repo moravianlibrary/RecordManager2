@@ -2568,6 +2568,7 @@ CREATE TABLE loc (
   id                   DECIMAL(10) PRIMARY KEY,
   harvested_record_id  DECIMAL(10),
   loc                  VARCHAR(20),
+  subfield             VARCHAR(20),
   FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE
 );
 CREATE INDEX loc_harvested_record_idx ON loc(harvested_record_id);
