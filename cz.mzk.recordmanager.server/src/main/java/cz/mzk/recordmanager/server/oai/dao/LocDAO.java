@@ -7,8 +7,8 @@ import java.util.List;
 
 public interface LocDAO extends DomainDAO<Long, Loc> {
 
-	List<HarvestedRecord> findHrByLoc(String loc);
+	List<HarvestedRecord> findHrByLoc(final String loc, final String subfield);
 
-	List<HarvestedRecord> findHrByLoc(List<String> loc);
+	List<HarvestedRecord> findHrByLoc(final List<String> loc);
 
 }

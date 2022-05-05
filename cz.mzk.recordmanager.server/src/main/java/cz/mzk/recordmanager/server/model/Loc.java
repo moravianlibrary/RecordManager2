@@ -23,7 +23,7 @@ public class Loc extends AbstractDomainObject {
 	@Column(name = "subfield")
 	private String subfield;
 
-	public static Loc create(final String loc, final char subfield) {
+	public static Loc create(final String loc, final String subfield) {
 		Loc newLoc = new Loc();
 		newLoc.setLoc(MetadataUtils.shorten(loc, EFFECTIVE_LENGTH_20));
 		newLoc.setSubfield(String.valueOf(subfield));
