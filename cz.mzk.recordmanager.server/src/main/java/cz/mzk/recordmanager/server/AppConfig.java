@@ -3,6 +3,8 @@ package cz.mzk.recordmanager.server;
 import cz.mzk.recordmanager.api.service.ImportConfigurationService;
 import cz.mzk.recordmanager.api.service.LibraryService;
 import cz.mzk.recordmanager.api.service.StatisticsService;
+import cz.mzk.recordmanager.server.index.enrich.DuplicitLocalIdFilterDedupRecordEnricher;
+import cz.mzk.recordmanager.server.index.enrich.InstitutionDedupRecordEnricher;
 import cz.mzk.recordmanager.server.index.enrich.SitemapDedupRecordEnricher;
 import cz.mzk.recordmanager.server.index.enrich.UrlDedupRecordEnricher;
 import cz.mzk.recordmanager.server.kramerius.harvest.KrameriusHarvesterFactory;
@@ -253,12 +255,26 @@ public class AppConfig extends DefaultBatchConfigurer {
 		return new UrlDedupRecordEnricher();
 	}
 
+	@Bean("institutionDedupRecordEnricher")
+	public InstitutionDedupRecordEnricher institutionDedupRecordEnricher() {
+		return new InstitutionDedupRecordEnricher();
+	}
+
 	@Bean("sitemapDedupRecordEnricher")
 	@DependsOn(value = {
 			"urlDedupRecordEnricher",
 	})
 	public SitemapDedupRecordEnricher sitemapDedupRecordEnricher() {
 		return new SitemapDedupRecordEnricher();
+	}
+
+	@Bean("duplicitLocalIdFilterDedupRecordEnricher")
+	@DependsOn(value = {
+			"urlDedupRecordEnricher",
+			"institutionDedupRecordEnricher",
+	})
+	public DuplicitLocalIdFilterDedupRecordEnricher duplicitLocalIdFilterDedupRecordEnricher() {
+		return new DuplicitLocalIdFilterDedupRecordEnricher();
 	}
 
 }
