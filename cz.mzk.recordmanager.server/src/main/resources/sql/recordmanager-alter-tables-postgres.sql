@@ -2599,3 +2599,6 @@ INSERT INTO sigla (id, import_conf_id, sigla) VALUES (111, 440, 'BOE035');
 INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (253, 'GEOBIBLINE', 'https://cuni.cz/', 'https://cuni.primo.exlibrisgroup.com/discovery/search?vid=420CKIS_INST:UKAZ&lang=cs', 'Bibliography', 'bibliography');
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency) VALUES (453, 253, 200, 'geobibline', 11, false, true, true, false, 'U');
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (453,'https://cuni.alma.exlibrisgroup.com/view/oai/420CKIS_INST/request','OAI_GEO','marc21',NULL);
+
+-- 11. 05. 2022 tomascejpek
+UPDATE kramerius_conf SET url='https://k4.kr-karlovarsky.cz/search/api/v5.0' WHERE import_conf_id=99020;
