@@ -88,7 +88,7 @@ public class RegenerateDedupKeysJobConfig {
 		SqlPagingQueryProviderFactoryBean pqpf = new SqlPagingQueryProviderFactoryBean();
 		pqpf.setDataSource(dataSource);
 		pqpf.setSelectClause("SELECT id");
-		pqpf.setFromClause("FROM tmp_ids1 hr");
+		pqpf.setFromClause("FROM tmp_ids_celitebib hr");
 		pqpf.setSortKey("id");
 		reader.setRowMapper(new LongValueRowMapper());
 		reader.setPageSize(100);

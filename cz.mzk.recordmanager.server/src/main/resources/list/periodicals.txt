@@ -1,56 +1,17 @@
-A2
-Aluze
-Amatérská scéna
-Analogon
-Archiv orientální
-Auriga
-Avriga
-Babylon
-Biblio
-Biblio Literární noviny
-Brno studies in English
-Byzantinoslavica
-Česká literatura
-Československá rusistika
-Čeština doma a ve světě
-Divadelní revue
-Duha
-Estetika
-H_aluze
-Host
-Ianua
-Interview
-Kritická příloha Revolver Revue
-Kritický sborník
-Kulturní revue PanSká
-Labyrint (Primus)
-Ladění
-Lettre internationale
+Haló noviny
+Hospodářské noviny
+Lidové noviny
+Literární noviny
+Mladá fronta Dnes
+Právo
+Universitas
 Listy filologické
-Literární noviny ; biblio
-Litteraria Pragensia
-Moravian Journal of Literature and Film
-Nová čeština doma a ve světě
-Nový Orient
-Perspektivy (Katolický týdeník)
-Philologica Pragensia
-Plav
-Proglas
-Prostor
-Protimluv
-Přítomnost
 Regenerace
-Revolver Revue
-Sborník prací Filozofické fakulty brněnské univerzity
-Slavia
-Souvislosti
 Svět a divadlo
-Světová literatura
-The Prague Post
-Tvary
-Uni
-Weles
-Xantypa
+Biblio
 XB-1
-Zlatý máj
-Zvuk Zlínského kraje
+Kritická příloha Revolver Revue
+Interview
+Tvary
+Perspektivy
+Xantypa
