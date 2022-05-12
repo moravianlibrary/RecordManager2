@@ -57,7 +57,7 @@ language_search_txt_mv = ListUtils.union(translate("mzk_language.map", getLangua
 format_search_txt_mv = getFormatForSearching()
 publishDate_txt_mv = getPublishDate()
 
-author_str_mv = getAuthorAutocomplete("100abcdq:110abc:111acegq:700abcdq:710abc:711acegq:975abcdq:976abc")
+author_str_mv = getAuthorAutocomplete()
 bbox_geo = getBoundingBoxAsPolygon(POLYGON)
 bbox_geo_str = getBoundingBox()
 

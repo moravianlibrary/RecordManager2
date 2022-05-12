@@ -597,9 +597,26 @@ public class MarcDSL extends BaseDSL {
 		return result;
 	}
 
-	public Set<String> getAuthorAutocomplete(String tags) {
+	public Set<String> getAuthorAutocomplete() {
 		Set<String> result = new HashSet<>();
-		for (String author : getFields(tags)) {
+		for (String tag : new String[]{"100", "700", "975"}) {
+			for (DataField df : record.getDataFields(tag)) {
+				List<String> authorValues = new ArrayList<>();
+				for (char code : new char[]{'a', 'b', 'c'}) {
+					if (df.getSubfield(code) != null) authorValues.add(df.getSubfield(code).getData());
+				}
+				if (df.getSubfield('d') != null) {
+					String d = df.getSubfield('d') != null ? df.getSubfield('d').getData().trim() : "";
+					if (d.endsWith(".")) d = d.substring(0, d.length() - 1);
+					authorValues.add(d);
+				}
+				if (df.getSubfield('q') != null) authorValues.add(df.getSubfield('q').getData().trim());
+				String author = String.join(" ", authorValues);
+				author = CleaningUtils.replaceAll(author, COMMA_PATTERN, "");
+				result.add(SolrUtils.removeEndParentheses(author));
+			}
+		}
+		for (String author : getFields("110abc:111acegq:710abc:711acegq:976abc")) {
 			author = CleaningUtils.replaceAll(author, COMMA_PATTERN, "");
 			result.add(SolrUtils.removeEndParentheses(author));
 		}

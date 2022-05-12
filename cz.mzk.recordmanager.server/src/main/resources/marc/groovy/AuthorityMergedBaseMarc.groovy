@@ -58,7 +58,7 @@ publisher_search_txt_mv = getFieldsTrim "260b:264b:928a:978abcdg7"
 cnb_search_str = getFirstField "015az"
 
 genre_facet_str = getFirstField "655avxyz"
-author_str_mv = getAuthorAutocomplete("100abcdq:110abc:111acdegq:700abcdq:710abc:711acdegq:975abcdq:976abc")
+author_str_mv = getAuthorAutocomplete()
 bbox_geo = getBoundingBoxAsPolygon(POLYGON)
 bbox_geo_str = getBoundingBox()
 
