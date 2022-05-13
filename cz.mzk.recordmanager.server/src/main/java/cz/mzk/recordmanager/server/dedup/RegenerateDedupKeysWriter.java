@@ -124,15 +124,15 @@ public class RegenerateDedupKeysWriter implements ItemWriter<Long> {
 			printer = new CSVPrinter(writer, CSVFormat.EXCEL.withQuoteMode(QuoteMode.ALL));
 			printer.printRecord(
 					hr.getHarvestedFrom().getIdPrefix() + "." + hr.getUniqueId().getRecordId(),
-					String.join(",", mr.getFields("072", 'a')),
-					String.join(",", mr.getField("773", 't')),
+					String.join("|", mr.getFields("072", 'a')),
+					String.join("|", mr.getField("773", 't')),
 					mr.getDataFields("100").isEmpty() ? "" : mr.getDataFields("100").get(0).getSubfields().stream().map(s -> s.getData()).collect(Collectors.joining(" ")),
 					mr.getDataFields("245").isEmpty() ? "" : mr.getDataFields("245").get(0).getSubfields().stream().map(s -> s.toString()).collect(Collectors.joining("")),
 					mr.getDataFields("650").isEmpty() ? "" : mr.getDataFields("650").stream().map(df -> df.getSubfields().stream().map(s -> s.toString()).collect(Collectors.joining(""))).collect(Collectors.joining("|")),
 //					mr.getDataFields("651").isEmpty() ? "" : mr.getDataFields("651").stream().map(df -> df.getSubfields().stream().map(s -> s.toString()).collect(Collectors.joining(""))).collect(Collectors.joining("|")),
 					mr.getDataFields("655").isEmpty() ? "" : mr.getDataFields("655").stream().map(df -> df.getSubfields().stream().map(s -> s.toString()).collect(Collectors.joining(""))).collect(Collectors.joining("|")),
-					String.join(",", mr.getFields("773", 'g')),
-					String.join(",", mr.getFields("773", 'x'))
+					String.join("|", mr.getFields("773", 'g')),
+					String.join("|", mr.getFields("773", 'x'))
 //					String.join(",", mr.getFields("773", '7'))
 			);
 			printer.flush();
