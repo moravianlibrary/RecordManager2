@@ -1,5 +1,6 @@
 package cz.mzk.recordmanager.server.scripting.marc.function.mzk;
 
+import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -224,6 +225,15 @@ public class MzkOtherFunctions implements MarcRecordFunctions {
 			return results;
 
 		return null;
+	}
+
+	public List<String> getMZKTitleAlt(MarcFunctionContext ctx) {
+		List<String> results = new ArrayList<>();
+		for (String title : ctx.record().getFields("245", " ", 'a', 'b', 'n', 'p')) {
+			String normalized = Normalizer.normalize(title, Normalizer.Form.NFKD);
+			if (!normalized.equals(title)) results.add(normalized);
+		}
+		return results;
 	}
 
 }

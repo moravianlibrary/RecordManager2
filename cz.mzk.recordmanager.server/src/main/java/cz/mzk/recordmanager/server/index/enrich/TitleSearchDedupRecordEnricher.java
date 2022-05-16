@@ -6,6 +6,7 @@ import cz.mzk.recordmanager.server.util.CleaningUtils;
 import org.apache.solr.common.SolrInputDocument;
 import org.springframework.stereotype.Component;
 
+import java.text.Normalizer;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -39,7 +40,12 @@ public class TitleSearchDedupRecordEnricher implements DedupRecordEnricher {
 			}
 		}
 		if (!localTitles.isEmpty()) {
-			mergedDocument.addField(SolrFieldConstants.TITLE_SEARCH_TXT_MV, localTitles);
+			Set<String> results = new HashSet<>();
+			for (String title : localTitles) {
+				results.add(title);
+				results.add(Normalizer.normalize(title, Normalizer.Form.NFKD));
+			}
+			mergedDocument.addField(SolrFieldConstants.TITLE_SEARCH_TXT_MV, results);
 		}
 	}
 

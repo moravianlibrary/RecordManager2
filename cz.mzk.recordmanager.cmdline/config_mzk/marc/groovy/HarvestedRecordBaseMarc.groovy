@@ -1,3 +1,5 @@
+import org.apache.commons.collections4.ListUtils
+
 import static cz.mzk.recordmanager.server.scripting.marc.function.BoundingBoxMarcFunctions.LongLatFormat.*
 import static cz.mzk.recordmanager.server.util.MarcCleaningUtils.*;
 import static cz.mzk.recordmanager.server.marc.SubfieldExtractionMethod.*;
@@ -31,7 +33,7 @@ title_sub = getFirstField "245b"
 title_short = getFirstField "245a" // FIXME: getShortTitle()
 title_full = getFirstField "245abdefghijklmnopqrstuvwxyz0123456789"
 title_auth = getFirstField "245ab"
-title_alt = getFields "130adfgklnpst:240a:246a:730adfgklnpst:740a"
+title_alt = ListUtils.union(getFields("130adfgklnpst:240a:246a:730adfgklnpst:740a"), getMZKTitleAlt())
 title_old = getFields "780ast"
 title_new = getFields "785ast"
 title_sort = getSortableTitle()

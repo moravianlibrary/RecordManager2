@@ -28,6 +28,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.text.Normalizer;
 import java.util.*;
 import java.util.Map.Entry;
 import java.util.regex.Matcher;
@@ -383,17 +384,21 @@ public class MarcDSL extends BaseDSL {
 	}
 
 	public Set<String> getTitleSeries() {
-		Set<String> result = new HashSet<>();
-		result.addAll(getFieldsTrim("130adfgklnpst7:210a:222ab:240adklmprs:242ap:245abnp:246anp:247afp:"
+		Set<String> results = new HashSet<>();
+		Set<String> titles = new HashSet<>(getFieldsTrim("130adfgklnpst7:210a:222ab:240adklmprs:242ap:245abnp:246anp:247afp:"
 				+ "440a:490anp:700klmnoprst7:710klmnoprst7:711klmnoprst7:730adklmprs7:740anp:765ts9:"
 				+ "773kt:780st:785st:787st:800klmnoprst7:810klmnoprst7:811klmnoprst7:830aklmnoprst7"));
+		for (String title : titles) {
+			results.add(title);
+			results.add(Normalizer.normalize(title, Normalizer.Form.NFKD));
+		}
 		for (DataField df : record.getDataFields("505")) {
 			if (df.getIndicator2() == '0') {
-				result.addAll(getFieldsTrim("505t"));
+				results.addAll(getFieldsTrim("505t"));
 			}
 		}
 
-		return result;
+		return results;
 	}
 
 	public List<String> getUrls() {
