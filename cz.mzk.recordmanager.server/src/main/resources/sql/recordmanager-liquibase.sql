@@ -2889,3 +2889,6 @@ INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granul
 
 --changeset tomascejpek:328 context:cpk
 UPDATE kramerius_conf SET url='https://k4.kr-karlovarsky.cz/search/api/v5.0' WHERE import_conf_id=99020;
+
+--changeset tomascejpek:329 context:cpk
+UPDATE oai_harvest_conf SET extract_id_regex='STG001:(.*)' WHERE import_conf_id=452;
