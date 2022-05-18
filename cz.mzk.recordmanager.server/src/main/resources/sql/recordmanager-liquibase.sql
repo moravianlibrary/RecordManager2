@@ -2910,3 +2910,20 @@ UPDATE import_conf SET id_prefix='clp' WHERE id=416;
 INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (258, 'RSL', '', '', null, 'bibliography');
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency) VALUES (458, 258, 200, 'rsl', 11, false, true, true, false, 'U');
 INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format) VALUES (458,null,null,null);
+
+--changeset tomascejpek:334
+CREATE TABLE sigla_all (
+  id                SERIAL,
+  sigla             VARCHAR(10) NOT NULL,
+  import_conf_id    DECIMAL(10),
+  cpk               BOOLEAN DEFAULT FALSE,
+  ziskej            BOOLEAN DEFAULT FALSE,
+  dnnt              BOOLEAN DEFAULT FALSE,
+  CONSTRAINT sigla_all_pk PRIMARY KEY(id),
+  FOREIGN KEY (import_conf_id) REFERENCES import_conf(id) ON DELETE SET NULL
+);
+CREATE INDEX sigla_all_sigla_idx ON sigla_all(sigla);
+CREATE INDEX sigla_all_import_conf_id_idx ON sigla_all(import_conf_id);
+CREATE INDEX sigla_all_cpk_idx ON sigla_all(cpk);
+CREATE INDEX sigla_all_dnnt_idx ON sigla_all(dnnt);
+CREATE INDEX sigla_all_ziskej_idx ON sigla_all(ziskej);

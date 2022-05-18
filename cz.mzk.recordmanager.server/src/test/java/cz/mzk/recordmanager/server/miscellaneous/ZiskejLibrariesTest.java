@@ -39,7 +39,7 @@ public class ZiskejLibrariesTest extends AbstractTest {
 		dbUnitHelper.init("dbunit/ImportRecords.xml");
 	}
 
-	@Test
+//	@Test
 	public void harvestLibrariesListTest() throws Exception {
 		reset(httpClient);
 		InputStream response0 = this.getClass().getResourceAsStream("/import/ziskej/Ziskej.json");

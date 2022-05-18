@@ -490,3 +490,14 @@ CREATE TABLE caslin_links (
   last_harvest      TIMESTAMP NOT NULL,
   CONSTRAINT caslin_links_pk PRIMARY KEY(id)
 );
+
+CREATE TABLE sigla_all (
+  id                INTEGER NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
+  sigla             VARCHAR(10) NOT NULL,
+  import_conf_id    DECIMAL(10),
+  cpk               BOOLEAN DEFAULT FALSE,
+  ziskej            BOOLEAN DEFAULT FALSE,
+  dnnt              BOOLEAN DEFAULT FALSE,
+  CONSTRAINT sigla_all_pk PRIMARY KEY(id),
+  CONSTRAINT sigla_all_import_conf_fk FOREIGN KEY (import_conf_id) REFERENCES import_conf(id) ON DELETE SET NULL
+);

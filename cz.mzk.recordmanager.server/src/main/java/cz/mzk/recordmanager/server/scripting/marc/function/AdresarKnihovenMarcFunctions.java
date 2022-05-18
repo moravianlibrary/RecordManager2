@@ -1,41 +1,33 @@
 package cz.mzk.recordmanager.server.scripting.marc.function;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
-import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
-
-import cz.mzk.recordmanager.server.oai.dao.ZiskejLibraryDAO;
+import cz.mzk.recordmanager.server.ClasspathResourceProvider;
+import cz.mzk.recordmanager.server.marc.SubfieldExtractionMethod;
+import cz.mzk.recordmanager.server.oai.dao.SiglaAllDAO;
+import cz.mzk.recordmanager.server.scripting.MappingResolver;
+import cz.mzk.recordmanager.server.scripting.ResourceMappingResolver;
+import cz.mzk.recordmanager.server.scripting.marc.MarcFunctionContext;
+import cz.mzk.recordmanager.server.util.SolrUtils;
 import org.marc4j.marc.DataField;
 import org.marc4j.marc.Subfield;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import cz.mzk.recordmanager.server.ClasspathResourceProvider;
-import cz.mzk.recordmanager.server.marc.SubfieldExtractionMethod;
-import cz.mzk.recordmanager.server.model.Sigla;
-import cz.mzk.recordmanager.server.oai.dao.ImportConfigurationDAO;
-import cz.mzk.recordmanager.server.oai.dao.SiglaDAO;
-import cz.mzk.recordmanager.server.scripting.MappingResolver;
-import cz.mzk.recordmanager.server.scripting.ResourceMappingResolver;
-import cz.mzk.recordmanager.server.scripting.marc.MarcFunctionContext;
-import cz.mzk.recordmanager.server.util.SolrUtils;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 @Component
 public class AdresarKnihovenMarcFunctions implements MarcRecordFunctions {
 
 	@Autowired
-	private SiglaDAO siglaDao;
-
-	@Autowired
-	private ImportConfigurationDAO configurationDAO;
-
-	@Autowired
-	private ZiskejLibraryDAO ziskejLibraryDAO;
+	private SiglaAllDAO siglaAllDAO;
 
 	private static final MappingResolver propertyResolver = new ResourceMappingResolver(new ClasspathResourceProvider());
 
@@ -46,8 +38,9 @@ public class AdresarKnihovenMarcFunctions implements MarcRecordFunctions {
 	private static final String MAP_ADRESAR_HOURS = "adresar_hours.map";
 	private static final String MAP_LIBRARIES_RELEVANCE = "adresar_relevance.map";
 	private static final String MAP_LIBRARIES_REGION = "adresar_region.map";
-	private static final String PORTAL_FACET_TEXT = "KNIHOVNYCZ_YES";
+	private static final String PORTAL_FACET_CPK_TEXT = "KNIHOVNYCZ_YES";
 	private static final String PORTAL_FACET_ZISKEJ_TEXT = "ZISKEJ_YES";
+	private static final String PORTAL_FACET_DNNT_TEXT = "DNNT_YES";
 	private static final String URL_COMMENT = "o regionálních knihovnách";
 
 	private static final HashMap<String, Long> relevanceBySigla = new HashMap<>();
@@ -243,13 +236,7 @@ public class AdresarKnihovenMarcFunctions implements MarcRecordFunctions {
 	}
 
 	public String adresarGetCpkCode(MarcFunctionContext ctx) {
-		String siglaName;
-		List<Sigla> siglas;
-		if ((siglaName = getFirstFieldForAdresar(ctx, "SGLa")) != null
-				&& !(siglas = siglaDao.findSiglaByName(siglaName)).isEmpty()) {
-			return configurationDAO.get(siglas.get(0).getUniqueId().getImportConfId()).getIdPrefix();
-		}
-		return null;
+		return siglaAllDAO.getIdPrefix(getFirstFieldForAdresar(ctx, "SGLa"));
 	}
 
 	public String adresarGetGps(MarcFunctionContext ctx) {
@@ -315,22 +302,12 @@ public class AdresarKnihovenMarcFunctions implements MarcRecordFunctions {
 		return relevance.toString();
 	}
 
-	public String getPortalFacet(MarcFunctionContext ctx) {
-		String siglaName;
-		if ((siglaName = getFirstFieldForAdresar(ctx, "SGLa")) != null
-				&& !siglaDao.findSiglaByName(siglaName).isEmpty()) {
-			return PORTAL_FACET_TEXT;
-		}
-		return null;
-	}
-
 	public List<String> getPortalFacetMv(MarcFunctionContext ctx) {
 		List<String> result = new ArrayList<>();
 		String siglaName = getFirstFieldForAdresar(ctx, "SGLa");
-		if (siglaName != null && !siglaDao.findSiglaByName(siglaName).isEmpty()) {
-			result.add(PORTAL_FACET_TEXT);
-		}
-		if (ziskejLibraryDAO.getBySigla(siglaName) != null) result.add(PORTAL_FACET_ZISKEJ_TEXT);
+		if (siglaAllDAO.isParticipating(siglaName, "cpk")) result.add(PORTAL_FACET_CPK_TEXT);
+		if (siglaAllDAO.isParticipating(siglaName, "ziskej")) result.add(PORTAL_FACET_ZISKEJ_TEXT);
+		if (siglaAllDAO.isParticipating(siglaName, "dnnt")) result.add(PORTAL_FACET_DNNT_TEXT);
 		return result;
 	}
 
