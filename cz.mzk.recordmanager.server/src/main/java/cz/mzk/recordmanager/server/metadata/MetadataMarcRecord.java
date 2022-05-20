@@ -818,6 +818,17 @@ public class MetadataMarcRecord implements MetadataRecord {
 	public List<HarvestedRecordFormatEnum> getDetectedFormatList() {
 		List<HarvestedRecordFormatEnum> hrf = new ArrayList<>();
 
+		HarvestedRecordFormatEnum audio = getAudioFormat();
+		if (audio != null) {
+			if (isAudioDVD()) hrf.add(HarvestedRecordFormatEnum.AUDIO_DVD);
+			else hrf.add(audio);
+			if (isMacan()) {
+				hrf.clear();
+				hrf.add(HarvestedRecordFormatEnum.BLIND_AUDIO);
+				return hrf;
+			}
+		}
+
 		if (isBook()) {
 			if (isMacan()) {
 				hrf.add(HarvestedRecordFormatEnum.BLIND_BRAILLE);
@@ -835,16 +846,6 @@ public class MetadataMarcRecord implements MetadataRecord {
 		if (isVisualDocument()) hrf.add(HarvestedRecordFormatEnum.VISUAL_DOCUMENTS);
 		if (isMicroform()) hrf.add(HarvestedRecordFormatEnum.OTHER_MICROFORMS);
 		if (isBlindBraille()) hrf.add(HarvestedRecordFormatEnum.BLIND_BRAILLE);
-		HarvestedRecordFormatEnum audio = getAudioFormat();
-		if (audio != null) {
-			if (isAudioDVD()) hrf.add(HarvestedRecordFormatEnum.AUDIO_DVD);
-			else hrf.add(audio);
-			if (isMacan()) {
-				hrf.clear();
-				hrf.add(HarvestedRecordFormatEnum.BLIND_AUDIO);
-				return hrf;
-			}
-		}
 		HarvestedRecordFormatEnum video = getVideoDocument();
 		if (video != null) {
 			if (isVideoDVD()) {
