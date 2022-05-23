@@ -110,7 +110,7 @@ public class IndexRecordsToSolrJobConfig {
 	@Bean(name="indexRecordsToSolrJob:deleteOrphanedRecordsStep")
 	public Step deleteOrphanedRecordsStep() throws Exception {
 		return steps.get("deleteOrphanedRecordsJobStep")
-			.<Long, Long> chunk(20) //
+			.<Long, Long> chunk(200) //
 			.reader(orphanedRecordsReader(DATE_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION)) //
 			.writer(orphanedRecordsWriter(STRING_OVERRIDEN_BY_EXPRESSION)) //
 			.build();

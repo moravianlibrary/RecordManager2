@@ -1,10 +1,8 @@
 package cz.mzk.recordmanager.server.index;
 
-import java.io.IOException;
-import java.text.MessageFormat;
-import java.util.List;
-
 import cz.mzk.recordmanager.server.solr.FaultTolerantIndexingExceptionHandler;
+import cz.mzk.recordmanager.server.solr.SolrServerFacade;
+import cz.mzk.recordmanager.server.solr.SolrServerFactory;
 import cz.mzk.recordmanager.server.util.ProgressLogger;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.slf4j.Logger;
@@ -15,8 +13,9 @@ import org.springframework.batch.core.StepExecutionListener;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import cz.mzk.recordmanager.server.solr.SolrServerFacade;
-import cz.mzk.recordmanager.server.solr.SolrServerFactory;
+import java.io.IOException;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class OrphanedDedupRecordsWriter implements ItemWriter<Long>, StepExecutionListener {
 
@@ -39,11 +38,7 @@ public class OrphanedDedupRecordsWriter implements ItemWriter<Long>, StepExecuti
 
 	@Override
 	public void write(List<? extends Long> items) throws Exception {
-		for (Long id : items) {
-			progressLogger.incrementAndLogProgress();
-			String query = MessageFormat.format("('{'!child of=merged_boolean:true'}'id:{0}) OR id:{0}", id.toString());
-			server.deleteByQuery(query, commitWithinMs);
-		}
+		server.deleteById(items.stream().map(i -> i.toString()).collect(Collectors.toList()));
 	}
 
 	@Override
