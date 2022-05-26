@@ -17,7 +17,7 @@ public class FaultTolerantIndexingExceptionHandler implements SolrIndexingExcept
 
 	private static final List<String> RETRYABLE_ERRORS = Arrays.asList(
 			"Server refused connection",
-			"IOException occured when talking to server",
+			"IOException occurred when talking to server",
 			"Java heap space",
 			"Error from server",
 			"Expected mime type"
