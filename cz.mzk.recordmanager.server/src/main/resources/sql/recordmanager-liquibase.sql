@@ -2898,3 +2898,6 @@ INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weig
 INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format) VALUES (454,'https://bookport.cz/marc21-8077.xml','downloadAndImportRecordsJob','xml');
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, generate_dedup_keys) VALUES (455, 102, 200, 'bookport', 11, false, true, true, true, 'U', false);
 INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format) VALUES (455,'https://bookport.cz/marc21-9561.xml','downloadAndImportRecordsJob','xml');
+
+--changeset tomascejpek:331 context:cpk
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (110, 439, 'VSG501');
