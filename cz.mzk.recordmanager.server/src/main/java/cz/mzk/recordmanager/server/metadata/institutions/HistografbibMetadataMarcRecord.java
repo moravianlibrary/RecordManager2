@@ -11,7 +11,7 @@ import java.util.List;
 
 public class HistografbibMetadataMarcRecord extends MetadataMarcRecord {
 
-	private static final String URL = "https://biblio.hiu.cas.cz/documents/%s";
+	private static final String URL = "https://biblio.hiu.cas.cz/records/%s";
 
 	public HistografbibMetadataMarcRecord(MarcRecord underlayingMarc, HarvestedRecord hr) {
 		super(underlayingMarc, hr);
