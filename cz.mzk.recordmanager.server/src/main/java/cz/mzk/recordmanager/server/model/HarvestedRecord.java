@@ -314,20 +314,23 @@ public class HarvestedRecord extends AbstractDomainObject {
 	@Column(name = "bl_series")
 	private String blSeries;
 
-	@Column(name="loans")
+	@Column(name = "loans")
 	private Long loans;
 
 	@Column(name = "callnumber")
 	private String callnumber;
+
+	@Column(name = "palmknihy_id")
+	private String palmknihyId;
 
 	/**
 	 * indicator variable used for filtering reasons
 	 */
 	@Transient
 	private boolean shouldBeProcessed = true;
-	
+
 	/**
-	 * Temporal indicator variable used for deduplication 
+	 * Temporal indicator variable used for deduplication
 	 */
 	@Transient
 	private Date temporalOldOaiTimestamp;
@@ -957,6 +960,14 @@ public class HarvestedRecord extends AbstractDomainObject {
 
 	public void setTemporalContentEquals(boolean temporalContentEquals) {
 		this.temporalContentEquals = temporalContentEquals;
+	}
+
+	public String getPalmknihyId() {
+		return palmknihyId;
+	}
+
+	public void setPalmknihyId(String palmknihyId) {
+		this.palmknihyId = palmknihyId;
 	}
 
 }

@@ -1286,7 +1286,7 @@ public class MarcRecordImplTest extends AbstractTest {
 		data.add("856 $uhttps://www.bookport.cz/book");
 		mri = MarcRecordFactory.recordFactory(data);
 		metadataRecord = metadataFactory.getMetadataRecord(mri);
-		Assert.assertFalse(metadataRecord.matchFilterBookport());
+		Assert.assertFalse(metadataRecord.matchFilterEbooks());
 		data.clear();
 
 		// bookport 856, another 856 => True
@@ -1294,7 +1294,7 @@ public class MarcRecordImplTest extends AbstractTest {
 		data.add("856 $uhttps://test.cz/test");
 		mri = MarcRecordFactory.recordFactory(data);
 		metadataRecord = metadataFactory.getMetadataRecord(mri);
-		Assert.assertTrue(metadataRecord.matchFilterBookport());
+		Assert.assertTrue(metadataRecord.matchFilterEbooks());
 		data.clear();
 
 		// bookport 856, 996 => True
@@ -1302,7 +1302,7 @@ public class MarcRecordImplTest extends AbstractTest {
 		data.add("996 $aa");
 		mri = MarcRecordFactory.recordFactory(data);
 		metadataRecord = metadataFactory.getMetadataRecord(mri);
-		Assert.assertTrue(metadataRecord.matchFilterBookport());
+		Assert.assertTrue(metadataRecord.matchFilterEbooks());
 		data.clear();
 
 		// no bookport => True
@@ -1310,7 +1310,7 @@ public class MarcRecordImplTest extends AbstractTest {
 		data.add("996 $aa");
 		mri = MarcRecordFactory.recordFactory(data);
 		metadataRecord = metadataFactory.getMetadataRecord(mri);
-		Assert.assertTrue(metadataRecord.matchFilterBookport());
+		Assert.assertTrue(metadataRecord.matchFilterEbooks());
 		data.clear();
 	}
 
@@ -1348,6 +1348,19 @@ public class MarcRecordImplTest extends AbstractTest {
 		mri = MarcRecordFactory.recordFactory(data);
 		metadataRecord = metadataFactory.getMetadataRecord(hr, mri);
 		Assert.assertEquals(metadataRecord.getUrls(), Collections.emptyList());
+	}
+
+	@Test
+	public void palmknihyIdTest() {
+		MarcRecordImpl mri;
+		MetadataRecord metadataRecord;
+		List<String> data = new ArrayList<>();
+
+		data.add("856 $uhttps://www.palmknihy.cz/kniha/9681?zajata-kralovna ");
+		mri = MarcRecordFactory.recordFactory(data);
+		metadataRecord = metadataFactory.getMetadataRecord(mri);
+		Assert.assertEquals(metadataRecord.getPalmknihyId(), "9681");
+		data.clear();
 	}
 
 }

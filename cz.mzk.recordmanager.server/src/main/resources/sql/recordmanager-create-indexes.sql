@@ -14,6 +14,7 @@ CREATE INDEX harvested_record_disadvantaged_idx ON harvested_record(disadvantage
 CREATE INDEX hr_biblilinker_dedup_record_id_idx ON harvested_record(biblio_linker_id,dedup_record_id);
 CREATE INDEX hr_next_biblio_linker_flag_ids ON harvested_record(next_biblio_linker_flag);
 CREATE INDEX hr_next_biblio_linker_similar_flag_ids ON harvested_record(next_biblio_linker_similar_flag);
+CREATE INDEX harvested_record_palmknihy_id_idx ON harvested_record(palmknihy_id);
 
 CREATE INDEX cnb_harvested_record_idx ON cnb(harvested_record_id);
 CREATE INDEX title_harvested_record_idx ON title(harvested_record_id);

@@ -1,14 +1,21 @@
 package cz.mzk.recordmanager.server.imports;
 
-import java.io.FileNotFoundException;
-import java.util.List;
-
 import cz.mzk.recordmanager.server.imports.antikvariaty.AfterImportAntikvariatyTasklet;
 import cz.mzk.recordmanager.server.imports.antikvariaty.AntikvariatyImportJobParametersValidator;
 import cz.mzk.recordmanager.server.imports.antikvariaty.AntikvariatyRecordsReader;
 import cz.mzk.recordmanager.server.imports.antikvariaty.AntikvariatyRecordsWriter;
+import cz.mzk.recordmanager.server.model.AntikvariatyRecord;
+import cz.mzk.recordmanager.server.model.HarvestedRecord;
+import cz.mzk.recordmanager.server.oai.harvest.AfterHarvestTasklet;
+import cz.mzk.recordmanager.server.oai.harvest.HarvestedRecordWriter;
+import cz.mzk.recordmanager.server.oai.harvest.OAIItemProcessor;
 import cz.mzk.recordmanager.server.oai.harvest.ReharvestJobExecutionDecider;
 import cz.mzk.recordmanager.server.oai.harvest.cosmotron.CosmotronRecordWriter;
+import cz.mzk.recordmanager.server.oai.model.OAIRecord;
+import cz.mzk.recordmanager.server.springbatch.JobFailureListener;
+import cz.mzk.recordmanager.server.springbatch.StepProgressListener;
+import cz.mzk.recordmanager.server.springbatch.UUIDIncrementer;
+import cz.mzk.recordmanager.server.util.Constants;
 import org.marc4j.marc.Record;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
@@ -26,16 +33,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.task.TaskExecutor;
 
-import cz.mzk.recordmanager.server.model.AntikvariatyRecord;
-import cz.mzk.recordmanager.server.model.HarvestedRecord;
-import cz.mzk.recordmanager.server.oai.harvest.AfterHarvestTasklet;
-import cz.mzk.recordmanager.server.oai.harvest.HarvestedRecordWriter;
-import cz.mzk.recordmanager.server.oai.harvest.OAIItemProcessor;
-import cz.mzk.recordmanager.server.oai.model.OAIRecord;
-import cz.mzk.recordmanager.server.springbatch.JobFailureListener;
-import cz.mzk.recordmanager.server.springbatch.StepProgressListener;
-import cz.mzk.recordmanager.server.springbatch.UUIDIncrementer;
-import cz.mzk.recordmanager.server.util.Constants;
+import java.io.FileNotFoundException;
+import java.util.List;
 
 @Configuration
 public class ImportRecordJobConfig {
@@ -374,6 +373,37 @@ public class ImportRecordJobConfig {
 	@StepScope
 	public ItemWriter<List<Record>> importTezaurusRecordsWriter(@Value("#{jobParameters[" + Constants.JOB_PARAM_CONF_ID + "]}") Long configurationId) {
 		return new ImportTezaurusRecordsWriter(configurationId);
+	}
+
+	// import palmknihy
+	@Bean
+	public Job ImportPalmknihyJob(
+			@Qualifier(Constants.JOB_ID_IMPORT_PALMKNIHY + ":importPalmknihyStep") Step importPalmknihyStep,
+			@Qualifier(Constants.JOB_ID_IMPORT + ":afterHarvestStep") Step afterHarvestStep) {
+		return jobs.get(Constants.JOB_ID_IMPORT_PALMKNIHY)
+				.validator(new ImportRecordsJobParametersValidator())
+				.incrementer(UUIDIncrementer.INSTANCE)
+				.listener(JobFailureListener.INSTANCE)
+				.flow(importPalmknihyStep)
+				.next(ReharvestJobExecutionDecider.INSTANCE).on(ReharvestJobExecutionDecider.REHARVEST_FLOW_STATUS.toString()).to(afterHarvestStep) //
+				.from(ReharvestJobExecutionDecider.INSTANCE).on(FlowExecutionStatus.COMPLETED.toString()).end() //
+				.end().build();
+	}
+
+	@Bean(name = Constants.JOB_ID_IMPORT_PALMKNIHY + ":importPalmknihyStep")
+	public Step importPalmknihyStep() throws Exception {
+		return steps.get("importRecordsStep")
+				.listener(new StepProgressListener())
+				.<List<Record>, List<Record>>chunk(20)//
+				.reader(importRecordsReader(LONG_OVERRIDEN_BY_EXPRESSION, STRING_OVERRIDEN_BY_EXPRESSION, STRING_OVERRIDEN_BY_EXPRESSION))//
+				.writer(importPalmknihyWriter(LONG_OVERRIDEN_BY_EXPRESSION)) //
+				.build();
+	}
+
+	@Bean(name = Constants.JOB_ID_IMPORT_PALMKNIHY + ":writer")
+	@StepScope
+	public ImportPalmknihyWriter importPalmknihyWriter(@Value("#{jobParameters[" + Constants.JOB_PARAM_CONF_ID + "]}") Long configurationId) {
+		return new ImportPalmknihyWriter(configurationId);
 	}
 
 }

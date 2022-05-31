@@ -192,11 +192,11 @@ public interface MetadataRecord {
 	boolean matchFilter();
 
 	/**
-	 * Decide whether this record with 856 from bookport should be stored during importing/harvesting
+	 * Decide whether this record with 856 from bookport/palmknihy should be stored during importing/harvesting
 	 *
 	 * @return true if record should be stored, false otherwise
 	 */
-	default boolean matchFilterBookport() {
+	default boolean matchFilterEbooks() {
 		return true;
 	}
 
@@ -246,7 +246,7 @@ public interface MetadataRecord {
 	 */
 	List<String> getUrls();
 
-	default List<String> filterBookportUrls(List<String> urls) {
+	default List<String> filterEbookUrls(List<String> urls) {
 		return urls;
 	}
 
@@ -552,6 +552,10 @@ public interface MetadataRecord {
 
 	default List<String> getCustomInstitutionFacet() {
 		return Collections.emptyList();
+	}
+
+	default String getPalmknihyId() {
+		return null;
 	}
 
 }

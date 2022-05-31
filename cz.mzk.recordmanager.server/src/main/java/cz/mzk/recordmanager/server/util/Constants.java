@@ -68,6 +68,7 @@ public class Constants {
 	public static final String JOB_ID_HARVEST_CASLIN_LINKS			= "harvestCaslinLinksJob";
 	public static final String JOB_ID_MAPPED_SOURCE_FILTER			= "mappedSourceFilterJob";
 	public static final String JOB_ID_GENERATE_TOP_RESULTS			= "generateTopResultsJob";
+	public static final String JOB_ID_IMPORT_PALMKNIHY				= "importPalmknihyJob";
 
 	public static final String JOB_PARAM_CONF_ID 		= "configurationId";
 	public static final String JOB_PARAM_FROM_DATE 		= "from";
@@ -132,6 +133,7 @@ public class Constants {
 	public static final String PREFIX_KJM				= "kjm";
 	public static final String PREFIX_KKDVY				= "kkdvy";
 	public static final String PREFIX_KKKV				= "kkkv";
+	public static final String PREFIX_KKPC				= "kkpc";
 	public static final String PREFIX_KKVY				= "kkvy";
 	public static final String PREFIX_KNAV				= "knav";
 	public static final String PREFIX_KNEP				= "knep";
@@ -208,6 +210,7 @@ public class Constants {
 	public static final String PREFIX_NTK				= "ntk";
 	public static final String PREFIX_OPENLIB			= "openlib";
 	public static final String PREFIX_OSOBNOSTI			= "osobnosti";
+	public static final String PREFIX_PALMKNIHY			= "palmknihy";
 	public static final String PREFIX_PKJAK				= "pkjak";
 	public static final String PREFIX_RKKA				= "rkka";
 	public static final String PREFIX_SFXJIBCBVK		= "sfxjibcbvk";

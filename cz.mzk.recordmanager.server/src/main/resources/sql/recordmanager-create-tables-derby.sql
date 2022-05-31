@@ -162,6 +162,7 @@ CREATE TABLE harvested_record (
   bl_series            VARCHAR(200),
   loans                DECIMAL(10),
   callnumber           VARCHAR(100),
+  palmknihy_id         VARCHAR(20),
   raw_record           BLOB,
   CONSTRAINT harvested_record_pk                     PRIMARY KEY (id),
   CONSTRAINT harvester_record_unique_id              UNIQUE (import_conf_id, record_id),

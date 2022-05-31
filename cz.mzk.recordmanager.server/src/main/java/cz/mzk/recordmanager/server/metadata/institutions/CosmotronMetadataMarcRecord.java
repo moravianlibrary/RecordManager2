@@ -13,6 +13,7 @@ public class CosmotronMetadataMarcRecord extends MetadataMarcRecord {
 
 	@Override
 	public boolean matchFilter() {
+		if (!super.matchFilter()) return false;
 		return CosmotronUtils.getParentId(underlayingMarc) == null
 				|| !underlayingMarc.getDataFields("996").isEmpty();
 	}

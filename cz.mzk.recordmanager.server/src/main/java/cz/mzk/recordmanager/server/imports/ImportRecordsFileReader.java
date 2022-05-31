@@ -95,6 +95,8 @@ public class ImportRecordsFileReader implements ItemReader<List<Record>> {
 			return new SfxJibNlkCsvStreamReader(inStream, configDao.get(confId).getIdPrefix());
 		case MUNIPRESS:
 			return new MunipressCsvStreamReader(inStream);
+		case PALMKNIHY:
+			return new PalmKnihyXmlStreamReader(inStream);
 		default:
 			return new MarcXmlReader(inStream);
 		}

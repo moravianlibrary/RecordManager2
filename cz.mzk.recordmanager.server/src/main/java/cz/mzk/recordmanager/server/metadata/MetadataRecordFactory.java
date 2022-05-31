@@ -224,6 +224,10 @@ public class MetadataRecordFactory {
 			return new HistografbibMetadataMarcRecord(marcRec, hr);
 		case Constants.PREFIX_CELITEBIB:
 			return new CelitebibMarcMetadataRecord(marcRec, hr);
+		case Constants.PREFIX_KKPC:
+			return new KkpcMetadataMarcRecord(marcRec,hr);
+		case Constants.PREFIX_PALMKNIHY:
+			return init(new PalmknihyMetadataMarcRecord(marcRec,hr));
 		default:
 			return new MetadataMarcRecord(marcRec, hr);
 		}

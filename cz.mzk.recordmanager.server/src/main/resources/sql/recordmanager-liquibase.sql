@@ -2910,3 +2910,12 @@ UPDATE import_conf SET id_prefix='clp' WHERE id=416;
 INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (258, 'RSL', '', '', null, 'bibliography');
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency) VALUES (458, 258, 200, 'rsl', 11, false, true, true, false, 'U');
 INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format) VALUES (458,null,null,null);
+
+--changeset tomascejpek:334
+ALTER TABLE harvested_record ADD COLUMN palmknihy_id VARCHAR(20);
+CREATE INDEX harvested_record_palmknihy_id_idx ON harvested_record(palmknihy_id);
+
+--changeset tomascejpek:335 context:cpk
+INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (257, 'PALMKNIHY', 'https://www.palmknihy.cz/', '', null, 'ebook');
+INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency) VALUES (457, 257, 200, 'palmknihy', 11, false, true, true, false, 'U');
+INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format) VALUES (457,null,null,null);

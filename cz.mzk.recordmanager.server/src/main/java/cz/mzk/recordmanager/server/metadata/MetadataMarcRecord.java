@@ -45,7 +45,8 @@ public class MetadataMarcRecord implements MetadataRecord {
 	private static final Pattern CNB_PATTERN = Pattern.compile("cnb[0-9]+");
 	private static final Pattern FIELD130A = Pattern.compile("(.*)\\([^)]*\\)$");
 	private static final Pattern Z_CYKLU = Pattern.compile("z cyklu:", Pattern.CASE_INSENSITIVE);
-	private static final Pattern BOOKPORT = Pattern.compile("\\.bookport\\.cz", Pattern.CASE_INSENSITIVE);
+	protected static final Pattern EBOOKS_URL = Pattern.compile("\\.bookport\\.cz|\\.palmknihy\\.cz", Pattern.CASE_INSENSITIVE);
+	public static final Pattern PALMKNIHY_ID = Pattern.compile("https://www.palmknihy.cz/kniha/(\\d*).*", Pattern.CASE_INSENSITIVE);
 
 	// formats
 	private static final Pattern KARTOGRAFICKY_DOKUMENT = Pattern.compile("kartografick[yý]\\sdokument", Pattern.CASE_INSENSITIVE);
@@ -1106,20 +1107,20 @@ public class MetadataMarcRecord implements MetadataRecord {
 			if (df.getSubfield('a') != null
 					&& CPK0_PATTERN.matcher(df.getSubfield('a').getData()).matches()) return false;
 		}
-		if (!matchFilterBookport()) return false;
+		if (!matchFilterEbooks()) return false;
 		// more rules in institution specific classes
 		return true;
 	}
 
 	/**
-	 * only bookport 856 a no 996 then delete record
+	 * only bookport/palmknihy 856 a no 996 then delete record
 	 *
 	 * @return boolean
 	 */
 	@Override
-	public boolean matchFilterBookport() {
+	public boolean matchFilterEbooks() {
 		for (String str : underlayingMarc.getFields("856", 'u')) {
-			if (!BOOKPORT.matcher(str).find()) return true;
+			if (!EBOOKS_URL.matcher(str).find()) return true;
 		}
 		return underlayingMarc.getFields("856", 'u').isEmpty()
 				|| !underlayingMarc.getDataFields("996").isEmpty();
@@ -1219,7 +1220,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 	@Override
 	public List<String> getUrls() {
 		List<String> urls = getUrls(Constants.DOCUMENT_AVAILABILITY_UNKNOWN);
-		return filterBookportUrls(urls);
+		return filterEbookUrls(urls);
 	}
 
 	protected List<String> getUrls(String availability) {
@@ -1257,14 +1258,14 @@ public class MetadataMarcRecord implements MetadataRecord {
 	}
 
 	@Override
-	public List<String> filterBookportUrls(List<String> urls) {
-		List<String> bookport = new ArrayList<>();
+	public List<String> filterEbookUrls(List<String> urls) {
+		List<String> ebooks = new ArrayList<>();
 		List<String> others = new ArrayList<>();
 		for (String url : urls) {
-			if (BOOKPORT.matcher(url).find()) bookport.add(url);
+			if (EBOOKS_URL.matcher(url).find()) ebooks.add(url);
 			else others.add(url);
 		}
-		if (bookport.isEmpty()) return urls;
+		if (ebooks.isEmpty()) return urls;
 		if (!others.isEmpty() || !underlayingMarc.getDataFields("996").isEmpty()) return others;
 		return urls;
 	}
@@ -1893,6 +1894,16 @@ public class MetadataMarcRecord implements MetadataRecord {
 	public boolean isEdd() {
 		return harvestedRecord.getHarvestedFrom().isZiskejEnabled()
 				&& !Collections.disjoint(getDetectedFormatList(), EDD_FORMAT_ALLOWED);
+	}
+
+	@Override
+	public String getPalmknihyId() {
+		Matcher matcher;
+		for (String url : underlayingMarc.getFields("856", 'u')) {
+			matcher = PALMKNIHY_ID.matcher(url);
+			if (matcher.matches()) return matcher.group(1);
+		}
+		return null;
 	}
 
 }

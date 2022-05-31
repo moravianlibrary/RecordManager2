@@ -14,6 +14,11 @@ import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Component;
 
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import java.util.*;
 
 @Component
@@ -357,6 +362,7 @@ public class HarvestedRecordDAOHibernate extends
 		if (!session.contains(hr)) {
 			return;
 		}
+		hr.setPalmknihyId(null);
 		List<Authority> authorities = hr.getAuthorities();
 		hr.setAuthorities(new ArrayList<>());
 		for (Authority authority : authorities) {
@@ -420,4 +426,16 @@ public class HarvestedRecordDAOHibernate extends
 				.setParameter("biblioLinkerId", blId)
 				.list();
 	}
+
+	@Override
+	public Collection<HarvestedRecord> getByPalmknihyId(String palknihyId) {
+		Session session = sessionFactory.getCurrentSession();
+		CriteriaBuilder cb = session.getCriteriaBuilder();
+		CriteriaQuery<HarvestedRecord> cq = cb.createQuery(HarvestedRecord.class);
+		Root<HarvestedRecord> root = cq.from(HarvestedRecord.class);
+		Predicate restrictions = cb.equal(root.get("palmknihyId"), palknihyId);
+		cq.select(root).where(restrictions);
+		return session.createQuery(cq).getResultList();
+	}
+
 }

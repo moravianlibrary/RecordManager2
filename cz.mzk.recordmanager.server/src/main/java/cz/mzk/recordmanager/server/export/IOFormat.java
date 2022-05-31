@@ -16,7 +16,8 @@ public enum IOFormat {
 	OSOBNOSTI_REGIONU("osobnosti"),
 	SFX("sfx"),
 	SFX_NLK("sfxnlk"),
-	MUNIPRESS("munipress");
+	MUNIPRESS("munipress"),
+	PALMKNIHY("palmknihy");
 
 	private static final Map<IOFormat, Pattern> FORMAT_PATTERNS = Arrays.stream(IOFormat.values()).collect(
 			Collectors.toMap(

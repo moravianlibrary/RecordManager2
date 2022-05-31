@@ -62,12 +62,12 @@ public class BookportMetadataMarcRecord extends EbooksMetadataMarcRecord {
 	}
 
 	@Override
-	public boolean matchFilterBookport() {
+	public boolean matchFilterEbooks() {
 		return true;
 	}
 
 	@Override
-	public List<String> filterBookportUrls(List<String> urls) {
+	public List<String> filterEbookUrls(List<String> urls) {
 		return urls;
 	}
 

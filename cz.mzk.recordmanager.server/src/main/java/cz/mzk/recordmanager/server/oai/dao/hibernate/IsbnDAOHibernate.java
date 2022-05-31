@@ -23,4 +23,19 @@ public class IsbnDAOHibernate extends AbstractDomainDAOHibernate<Long, Isbn>
 				.setParameter("isbn", isbn)
 				.list();
 	}
+
+	@Override
+	@SuppressWarnings("unchecked")
+	public List<byte[]> findCaslinHrByIsbn(Long isbn) {
+		Session session = sessionFactory.getCurrentSession();
+		return (List<byte[]>) session
+				.createQuery("SELECT hr.rawRecord " +
+						"FROM HarvestedRecord hr " +
+						"JOIN Isbn i ON hr.id=i.harvestedRecordId " +
+						"WHERE hr.uniqueId.harvestedFromId=316 AND i.isbn = :isbn " +
+						"ORDER BY i.orderInRecord ASC")
+				.setParameter("isbn", isbn)
+				.list();
+	}
+
 }
