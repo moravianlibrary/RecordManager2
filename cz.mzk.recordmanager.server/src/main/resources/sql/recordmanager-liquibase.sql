@@ -2901,3 +2901,7 @@ INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format) VAL
 
 --changeset tomascejpek:331 context:cpk
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (110, 439, 'VSG501');
+
+--changeset tomascejpek:332 context:cpk
+UPDATE library SET name='CLP' WHERE id=216;
+UPDATE import_conf SET id_prefix='clp' WHERE id=416;

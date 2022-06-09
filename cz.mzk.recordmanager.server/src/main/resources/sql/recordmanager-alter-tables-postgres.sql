@@ -2614,3 +2614,7 @@ INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format) VAL
 
 -- 27. 05. 2022 tomascejpek
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (110, 439, 'VSG501');
+
+-- 09. 06. 2022 tomascejpek
+UPDATE library SET name='CLP' WHERE id=216;
+UPDATE import_conf SET id_prefix='clp' WHERE id=416;
