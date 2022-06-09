@@ -2905,3 +2905,8 @@ INSERT INTO sigla (id, import_conf_id, sigla) VALUES (110, 439, 'VSG501');
 --changeset tomascejpek:332 context:cpk
 UPDATE library SET name='CLP' WHERE id=216;
 UPDATE import_conf SET id_prefix='clp' WHERE id=416;
+
+--changeset tomascejpek:333 context:cpk
+INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (258, 'RSL', '', '', null, 'bibliography');
+INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency) VALUES (458, 258, 200, 'rsl', 11, false, true, true, false, 'U');
+INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format) VALUES (458,null,null,null);
