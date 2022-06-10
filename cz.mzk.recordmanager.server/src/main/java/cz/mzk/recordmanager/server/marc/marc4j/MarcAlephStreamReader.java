@@ -88,7 +88,7 @@ public class MarcAlephStreamReader implements MarcReader {
 		if (line == null || line.isEmpty()) return;
 		Matcher matcher;
 		if ((matcher = LDR_PATTERN.matcher(line)).matches()) {
-			record.setLeader(factory.newLeader(matcher.group(1)));
+			if (matcher.group(1).length() >= 20) record.setLeader(factory.newLeader(matcher.group(1)));
 			if ((matcher = ID_PATTERN.matcher(line)).matches()) {
 				record.addVariableField(factory.newControlField("001", matcher.group(1)));
 			}
