@@ -2630,3 +2630,8 @@ INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weig
 INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format) VALUES (457,null,null,null);
 ALTER TABLE harvested_record ADD COLUMN palmknihy_id VARCHAR(20);
 CREATE INDEX harvested_record_palmknihy_id_idx ON harvested_record(palmknihy_id);
+
+-- 16. 06. 2022 tomascejpek
+UPDATE import_conf SET id_prefix='mkcaslav' WHERE id=372;
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (46, 372, 'KHG505');
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (102, 429, 'VSG001');
