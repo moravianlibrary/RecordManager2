@@ -151,6 +151,10 @@ public class MetadataMarcRecord implements MetadataRecord {
 				return Pair.of(Pattern.compile("\\b" + split[0] + "\\b", Pattern.CASE_INSENSITIVE), split[1]);
 			}).collect(Collectors.toList());
 
+	private static final List<Pattern> DEDUP_STOP_WORDS = new BufferedReader(new InputStreamReader(
+			new ClasspathResourceProvider().getResource("/stopwords/dedup.txt"), StandardCharsets.UTF_8))
+			.lines().map(s -> Pattern.compile("\\b" + s + "\\b", Pattern.CASE_INSENSITIVE)).collect(Collectors.toList());
+
 	private static final List<HarvestedRecordFormatEnum> ZISKEJ_FORMAT_ALLOWED = new ArrayList<>();
 
 	static {
@@ -1893,6 +1897,16 @@ public class MetadataMarcRecord implements MetadataRecord {
 	public boolean isEdd() {
 		return harvestedRecord.getHarvestedFrom().isZiskejEnabled()
 				&& !Collections.disjoint(getDetectedFormatList(), EDD_FORMAT_ALLOWED);
+	}
+
+	@Override
+	public boolean dedupFilter() {
+		for (Title title : getTitle()) {
+			for (Pattern stopWord : DEDUP_STOP_WORDS) {
+				if (stopWord.matcher(title.getTitleStr()).find()) return false;
+			}
+		}
+		return true;
 	}
 
 }

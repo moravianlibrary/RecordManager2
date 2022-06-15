@@ -1,0 +1,6 @@
+(?:učebn(?:í|é|ích)|pedagogické)\s+(?:osnov[ay]?|plán[yů]?|dokument[yů]?)
+studijní\s+program.+stud(?:ijní|\.)\s+obor
+ausbildungsunterlagen
+lehrplan\s+für
+program\s+nau(?:ki|czania)
+tanterv

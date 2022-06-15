@@ -554,4 +554,8 @@ public interface MetadataRecord {
 		return Collections.emptyList();
 	}
 
+	default boolean dedupFilter() {
+		return true;
+	}
+
 }
