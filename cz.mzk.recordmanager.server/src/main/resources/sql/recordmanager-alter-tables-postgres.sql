@@ -2635,3 +2635,20 @@ CREATE INDEX harvested_record_palmknihy_id_idx ON harvested_record(palmknihy_id)
 UPDATE import_conf SET id_prefix='mkcaslav' WHERE id=372;
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (46, 372, 'KHG505');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (102, 429, 'VSG001');
+
+-- 13. 06. 2022 tomascejpek
+CREATE TABLE sigla_all (
+  id                SERIAL,
+  sigla             VARCHAR(10) NOT NULL,
+  import_conf_id    DECIMAL(10),
+  cpk               BOOLEAN DEFAULT FALSE,
+  ziskej            BOOLEAN DEFAULT FALSE,
+  dnnt              BOOLEAN DEFAULT FALSE,
+  CONSTRAINT sigla_all_pk PRIMARY KEY(id),
+  FOREIGN KEY (import_conf_id) REFERENCES import_conf(id) ON DELETE SET NULL
+);
+CREATE INDEX sigla_all_sigla_idx ON sigla_all(sigla);
+CREATE INDEX sigla_all_import_conf_id_idx ON sigla_all(import_conf_id);
+CREATE INDEX sigla_all_cpk_idx ON sigla_all(cpk);
+CREATE INDEX sigla_all_dnnt_idx ON sigla_all(dnnt);
+CREATE INDEX sigla_all_ziskej_idx ON sigla_all(ziskej);

@@ -81,3 +81,9 @@ CREATE INDEX fit_project_link_harvested_record_idx ON fit_project_link(harvested
 CREATE INDEX fit_project_link_idx ON fit_project_link(fit_project_id);
 
 CREATE INDEX caslin_links_sigla_idx ON caslin_links(sigla);
+
+CREATE INDEX sigla_all_sigla_idx ON sigla_all(sigla);
+CREATE INDEX sigla_all_import_conf_id_idx ON sigla_all(import_conf_id);
+CREATE INDEX sigla_all_cpk_idx ON sigla_all(cpk);
+CREATE INDEX sigla_all_dnnt_idx ON sigla_all(dnnt);
+CREATE INDEX sigla_all_ziskej_idx ON sigla_all(ziskej);
