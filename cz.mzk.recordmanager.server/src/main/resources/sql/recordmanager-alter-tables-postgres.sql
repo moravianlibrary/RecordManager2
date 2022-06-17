@@ -2636,7 +2636,7 @@ UPDATE import_conf SET id_prefix='mkcaslav' WHERE id=372;
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (46, 372, 'KHG505');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (102, 429, 'VSG001');
 
--- 13. 06. 2022 tomascejpek
+-- 17. 06. 2022 tomascejpek
 CREATE TABLE sigla_all (
   id                SERIAL,
   sigla             VARCHAR(10) NOT NULL,
