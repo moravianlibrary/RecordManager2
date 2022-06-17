@@ -2941,3 +2941,6 @@ CREATE INDEX sigla_all_import_conf_id_idx ON sigla_all(import_conf_id);
 CREATE INDEX sigla_all_cpk_idx ON sigla_all(cpk);
 CREATE INDEX sigla_all_dnnt_idx ON sigla_all(dnnt);
 CREATE INDEX sigla_all_ziskej_idx ON sigla_all(ziskej);
+
+--changeset tomascejpek:338 context:cpk
+UPDATE import_conf SET generate_dedup_keys=false,generate_biblio_linker_keys=false WHERE id=457;
