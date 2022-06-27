@@ -45,6 +45,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 	private static final Pattern CNB_PATTERN = Pattern.compile("cnb[0-9]+");
 	private static final Pattern FIELD130A = Pattern.compile("(.*)\\([^)]*\\)$");
 	private static final Pattern Z_CYKLU = Pattern.compile("z cyklu:", Pattern.CASE_INSENSITIVE);
+	private static final Pattern BOOKPORT = Pattern.compile("\\.bookport\\.cz", Pattern.CASE_INSENSITIVE);
 	protected static final Pattern EBOOKS_URL = Pattern.compile("\\.bookport\\.cz|\\.palmknihy\\.cz", Pattern.CASE_INSENSITIVE);
 	public static final Pattern PALMKNIHY_ID = Pattern.compile("https://www.palmknihy.cz/kniha/(\\d*).*", Pattern.CASE_INSENSITIVE);
 
@@ -151,6 +152,10 @@ public class MetadataMarcRecord implements MetadataRecord {
 				String[] split = line.split(" = ");
 				return Pair.of(Pattern.compile("\\b" + split[0] + "\\b", Pattern.CASE_INSENSITIVE), split[1]);
 			}).collect(Collectors.toList());
+
+	private static final List<Pattern> DEDUP_STOP_WORDS = new BufferedReader(new InputStreamReader(
+			new ClasspathResourceProvider().getResource("/stopwords/dedup.txt"), StandardCharsets.UTF_8))
+			.lines().map(s -> Pattern.compile("\\b" + s + "\\b", Pattern.CASE_INSENSITIVE)).collect(Collectors.toList());
 
 	private static final List<HarvestedRecordFormatEnum> ZISKEJ_FORMAT_ALLOWED = new ArrayList<>();
 
@@ -1906,4 +1911,13 @@ public class MetadataMarcRecord implements MetadataRecord {
 		return null;
 	}
 
+	@Override
+	public boolean dedupFilter() {
+		for (Title title : getTitle()) {
+			for (Pattern stopWord : DEDUP_STOP_WORDS) {
+				if (stopWord.matcher(title.getTitleStr()).find()) return false;
+			}
+		}
+		return true;
+	}
 }

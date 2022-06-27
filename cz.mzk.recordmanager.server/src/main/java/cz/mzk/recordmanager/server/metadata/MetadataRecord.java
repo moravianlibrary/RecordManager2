@@ -558,4 +558,8 @@ public interface MetadataRecord {
 		return null;
 	}
 
+	default boolean dedupFilter() {
+		return true;
+	}
+
 }
