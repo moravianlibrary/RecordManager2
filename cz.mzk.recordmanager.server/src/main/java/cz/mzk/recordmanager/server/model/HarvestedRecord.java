@@ -970,4 +970,18 @@ public class HarvestedRecord extends AbstractDomainObject {
 		this.palmknihyId = palmknihyId;
 	}
 
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof HarvestedRecord)) return false;
+		if (!super.equals(o)) return false;
+		HarvestedRecord that = (HarvestedRecord) o;
+		return uniqueId.equals(that.uniqueId);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(super.hashCode(), uniqueId);
+	}
+
 }
