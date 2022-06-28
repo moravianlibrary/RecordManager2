@@ -1868,6 +1868,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 				&& !Collections.disjoint(getDetectedFormatList(), ZISKEJ_FORMAT_ALLOWED);
 		if (!result) return false;
 		for (DataField df : underlayingMarc.getDataFields("996")) {
+			if (df.getSubfield('q') != null && df.getSubfield('q').getData().equals("0")) continue;
 			if (df.getSubfield('s') != null && ZISKEJ_ABSENT_996.contains(df.getSubfield('s').getData().toUpperCase())) {
 				return true;
 			}

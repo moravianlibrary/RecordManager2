@@ -1274,6 +1274,15 @@ public class MarcRecordImplTest extends AbstractTest {
 		metadataRecord = metadataFactory.getMetadataRecord(hr, mri);
 		Assert.assertFalse(metadataRecord.isZiskej());
 		data.clear();
+
+		// 996 $q0
+		data.add("000 000000Ac000");
+		data.add("996 $a996$sA&q0");
+		data.add("996 $a996$sD");
+		mri = MarcRecordFactory.recordFactory(data);
+		metadataRecord = metadataFactory.getMetadataRecord(hr, mri);
+		Assert.assertFalse(metadataRecord.isZiskej());
+		data.clear();
 	}
 
 	@Test
