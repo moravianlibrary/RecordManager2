@@ -2655,3 +2655,6 @@ CREATE INDEX sigla_all_ziskej_idx ON sigla_all(ziskej);
 
 -- 17. 06. 2022 tomascejpek
 UPDATE import_conf SET generate_dedup_keys=false,generate_biblio_linker_keys=false WHERE id=457;
+
+-- 30. 06. 2022 tomascejpek
+UPDATE download_import_conf SET url='http://ereading.cz/xml/xml_rent.xml',import_job_name='importPalmknihyJob',format='palmknihy',reharvest=true WHERE import_conf_id=457;

@@ -1,14 +1,12 @@
 package cz.mzk.recordmanager.server.facade;
 
-import java.io.File;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import com.google.common.collect.ImmutableMap;
+import cz.mzk.recordmanager.server.facade.exception.JobExecutionFailure;
+import cz.mzk.recordmanager.server.model.DownloadImportConfiguration;
+import cz.mzk.recordmanager.server.springbatch.JobExecutor;
+import cz.mzk.recordmanager.server.util.Constants;
 import cz.mzk.recordmanager.server.util.ResourceUtils;
+import cz.mzk.recordmanager.server.util.TarGzUtils;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,11 +18,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Component;
 
-import cz.mzk.recordmanager.server.facade.exception.JobExecutionFailure;
-import cz.mzk.recordmanager.server.model.DownloadImportConfiguration;
-import cz.mzk.recordmanager.server.springbatch.JobExecutor;
-import cz.mzk.recordmanager.server.util.Constants;
-import cz.mzk.recordmanager.server.util.TarGzUtils;
+import java.io.File;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Component
 public class ImportRecordFacadeImpl implements ImportRecordFacade {
@@ -52,6 +51,7 @@ public class ImportRecordFacadeImpl implements ImportRecordFacade {
 			switch (dic.getJobName()) {
 			case Constants.JOB_ID_IMPORT_ANTIKVARIATY:
 			case Constants.JOB_ID_DOWNLOAD_IMPORT:
+			case Constants.JOB_ID_IMPORT_PALMKNIHY:
 				downloadAndImportRecordSJob(dic);
 				break;
 			}
@@ -76,6 +76,8 @@ public class ImportRecordFacadeImpl implements ImportRecordFacade {
 	public void downloadAndImportRecordSJob(DownloadImportConfiguration dic) {
 		Map<String, JobParameter> parameters = new HashMap<>();
 		parameters.put(Constants.JOB_PARAM_CONF_ID, new JobParameter(dic.getId()));
+		parameters.put(Constants.JOB_PARAM_FORMAT, new JobParameter(dic.getFormat()));
+		parameters.put(Constants.JOB_PARAM_IN_FILE, new JobParameter(""));
 		parameters.put(Constants.JOB_PARAM_REPEAT, new JobParameter(Constants.JOB_PARAM_ONE_VALUE));
 		if (dic.isReharvest())
 			parameters.put(Constants.JOB_PARAM_REHARVEST, new JobParameter(Constants.JOB_PARAM_TRUE_VALUE));

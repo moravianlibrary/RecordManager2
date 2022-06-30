@@ -128,6 +128,7 @@ public class ImportRecordsFileReader implements ItemReader<List<Record>> {
 	}
 
 	private void getFilesName(String filename) throws FileNotFoundException {
+		if (filename.isEmpty()) return;
 		if (files == null) files = new ArrayList<>();
 		File f = new File(filename);
 		if (f.isFile()) {
