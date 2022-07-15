@@ -2658,3 +2658,6 @@ UPDATE import_conf SET generate_dedup_keys=false,generate_biblio_linker_keys=fal
 
 -- 30. 06. 2022 tomascejpek
 UPDATE download_import_conf SET url='http://ereading.cz/xml/xml_rent.xml',import_job_name='importPalmknihyJob',format='palmknihy',reharvest=true WHERE import_conf_id=457;
+
+-- 15. 07. 2022 tomascejpek
+UPDATE oai_harvest_conf SET url='https://nacr.kpsys.cz/api/oai' WHERE import_conf_id=367;

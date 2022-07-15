@@ -2947,3 +2947,6 @@ UPDATE import_conf SET generate_dedup_keys=false,generate_biblio_linker_keys=fal
 
 --changeset tomascejpek:339 context:cpk
 UPDATE download_import_conf SET url='http://ereading.cz/xml/xml_rent.xml',import_job_name='importPalmknihyJob',format='palmknihy',reharvest=true WHERE import_conf_id=457;
+
+--changeset tomascejpek:340 context:cpk
+UPDATE oai_harvest_conf SET url='https://nacr.kpsys.cz/api/oai' WHERE import_conf_id=367;
