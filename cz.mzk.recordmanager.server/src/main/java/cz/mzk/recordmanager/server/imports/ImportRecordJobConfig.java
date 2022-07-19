@@ -127,7 +127,7 @@ public class ImportRecordJobConfig {
 			@Qualifier(Constants.JOB_ID_DOWNLOAD_IMPORT + ":downloadImportRecordsStep") Step downloadImportRecordsStep,
 			@Qualifier(Constants.JOB_ID_IMPORT + ":afterHarvestStep") Step afterHarvestStep) {
 		return jobs.get(Constants.JOB_ID_DOWNLOAD_IMPORT)
-				.validator(new DownloadAndImportRecordsJobParametersValidator())
+				.validator(new ImportRecordsJobParametersValidator())
 				.incrementer(UUIDIncrementer.INSTANCE)
 				.listener(JobFailureListener.INSTANCE)
 				.flow(downloadImportRecordsStep)
