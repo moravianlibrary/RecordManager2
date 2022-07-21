@@ -175,6 +175,7 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 		}
 		record.setUuids(metadataRecord.getUuids());
 		record.setAuthorities(metadataRecord.getAllAuthorAuthKey());
+		record.setPalmknihyId(metadataRecord.getPalmknihyId());
 		record.setDedupKeysHash(computedHash);
 
 		oaiTimestampChanged = record.getOaiTimestamp() != null && record.getTemporalOldOaiTimestamp() != null
