@@ -2,6 +2,7 @@ package cz.mzk.recordmanager.server.marc.intercepting;
 
 import cz.mzk.recordmanager.server.marc.InvalidMarcException;
 import cz.mzk.recordmanager.server.marc.MarcXmlParser;
+import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.model.ImportConfiguration;
 import cz.mzk.recordmanager.server.util.Constants;
 import org.marc4j.marc.Record;
@@ -17,6 +18,10 @@ public class MarcInterceptorFactory {
 
 	@Autowired
 	private ApplicationContext appCtx;
+
+	public MarcRecordInterceptor getInterceptor(HarvestedRecord hr) {
+		return getInterceptor(hr.getHarvestedFrom(), hr.getUniqueId().getRecordId(), hr.getRawRecord());
+	}
 
 	public MarcRecordInterceptor getInterceptor(ImportConfiguration configuration, byte rawRecord[]) {
 		return getInterceptor(configuration, null, rawRecord);
@@ -46,6 +51,7 @@ public class MarcInterceptorFactory {
 			case Constants.PREFIX_KFBZ: return new KfbzMarcInterceptor(record, configuration, recordId);
 			case Constants.PREFIX_PALMKNIHY: return new PalmknihyMarcInterceptor(record, configuration, recordId);
 			case Constants.PREFIX_KKPC: return new KkpcMarcInterceptor(record, configuration, recordId);
+			case Constants.PREFIX_CZHISTBIB: return new CzhistbibMarcInterceptor(record, configuration, recordId);
 			default: return new DefaultMarcInterceptor(record, configuration, recordId);
 			}
 		} catch (InvalidMarcException ime) {
