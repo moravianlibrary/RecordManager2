@@ -88,6 +88,7 @@ public class ImportPalmknihyWriter extends ImportRecordsWriter implements ItemWr
 					palmknihy.addVariableField(field856);
 					Matcher matcher = MetadataMarcRecord.PALMKNIHY_ID.matcher(field856.getSubfield('u').getData());
 					if (!matcher.matches()) continue;
+					boolean eversionExists = false;
 					for (HarvestedRecord hrLib : hrDao.getByPalmknihyId(matcher.group(1))) {
 						String record_id = hrLib.getUniqueId().getRecordId();
 						if (!ID_PARSER.containsKey(hrLib.getHarvestedFrom().getId())) continue;
@@ -100,7 +101,9 @@ public class ImportPalmknihyWriter extends ImportRecordsWriter implements ItemWr
 						palmknihy.addVariableField(factory.newDataField("856", ' ', ' ', "u",
 								String.format(URL.get(hrLib.getHarvestedFrom().getId()), record_id),
 								"z", hrLib.getHarvestedFrom().getIdPrefix()));
+						eversionExists = true;
 					}
+					if (!eversionExists) continue;
 					palmknihy.addVariableField(factory.newDataField("OAI", ' ', ' ', "a", currentRecord.getControlNumber()));
 					processRecord(palmknihy);
 					break;
