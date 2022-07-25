@@ -40,4 +40,11 @@ public class MkpEbooksMetadataMarcRecord extends EbooksMetadataMarcRecord {
 	public List<String> getDefaultStatuses() {
 		return Collections.singletonList(Constants.DOCUMENT_AVAILABILITY_ONLINE);
 	}
+
+	@Override
+	public boolean matchFilter() {
+		if (!super.matchFilter()) return false;
+		return !underlayingMarc.getDataFields("856").isEmpty();
+	}
+
 }
