@@ -2669,3 +2669,8 @@ INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granul
 
 -- 29. 07. 2022 tomascejpek
 UPDATE kramerius_conf SET dnnt_dest_url='https://kramerius.svkhk.cz/uuid/' WHERE import_conf_id=99014;
+
+-- 01. 08. 2022 tomascejpek
+UPDATE kramerius_conf SET url='https://kramerius.mjh.cz/search/api/v5.0' WHERE import_conf_id=99034;
+UPDATE kramerius_conf SET availability_dest_url='https://k4.kr-karlovarsky.cz/search/handle/' WHERE import_conf_id=99020;
+UPDATE kramerius_conf SET availability_dest_url='https://kramerius.techlib.cz/kramerius-web-client/uuid/' WHERE import_conf_id=99016;
