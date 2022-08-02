@@ -2963,3 +2963,6 @@ UPDATE kramerius_conf SET dnnt_dest_url='https://kramerius.svkhk.cz/uuid/' WHERE
 UPDATE kramerius_conf SET url='https://kramerius.mjh.cz/search/api/v5.0' WHERE import_conf_id=99034;
 UPDATE kramerius_conf SET availability_dest_url='https://k4.kr-karlovarsky.cz/search/handle/' WHERE import_conf_id=99020;
 UPDATE kramerius_conf SET availability_dest_url='https://kramerius.techlib.cz/kramerius-web-client/uuid/' WHERE import_conf_id=99016;
+
+--changeset tomascejpek:344
+ALTER TABLE import_conf ADD COLUMN filter_periodicals BOOLEAN DEFAULT FALSE;
