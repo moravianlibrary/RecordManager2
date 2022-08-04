@@ -6,6 +6,7 @@ import cz.mzk.recordmanager.server.oai.dao.SiglaAllDAO;
 import cz.mzk.recordmanager.server.scripting.MappingResolver;
 import cz.mzk.recordmanager.server.scripting.ResourceMappingResolver;
 import cz.mzk.recordmanager.server.scripting.marc.MarcFunctionContext;
+import cz.mzk.recordmanager.server.util.CleaningUtils;
 import cz.mzk.recordmanager.server.util.SolrUtils;
 import org.marc4j.marc.DataField;
 import org.marc4j.marc.Subfield;
@@ -342,6 +343,12 @@ public class AdresarKnihovenMarcFunctions implements MarcRecordFunctions {
 		if (date == null) return null;
 		Matcher matcher = NUMBERS.matcher(date);
 		return matcher.find() ? matcher.group(1) : null;
+	}
+
+	public String adresarNameForSorting(MarcFunctionContext ctx) {
+		String title = getFirstFieldSeparatedForAdresar(ctx, "NAZabcd", " ");
+		title = SolrUtils.cleanStrForSorting(title);
+		return title;
 	}
 
 }

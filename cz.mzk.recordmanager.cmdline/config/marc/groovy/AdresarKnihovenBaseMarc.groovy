@@ -44,3 +44,6 @@ town_str = town_autocomplete = getFirstFieldForAdresar "MESa"
 address_map_display_mv = getFieldsForAdresar "ADRum", SubfieldExtractionMethod.JOINED, " "
 gps_display = adresarGetGps()
 name_display = getFirstFieldSeparatedForAdresar "NAZabcd", " - "
+
+// sort
+name_sort_cz = adresarNameForSorting()
