@@ -351,4 +351,19 @@ public class AdresarKnihovenMarcFunctions implements MarcRecordFunctions {
 		return title;
 	}
 
+	public String adresarNameAltForSorting(MarcFunctionContext ctx) {
+		for (DataField df : ctx.record().getDataFields("VAR")) {
+			if (df.getIndicator1() != '2') continue;
+			StringBuilder title = new StringBuilder();
+			for (char code : new char[]{'a', 'b', 'c', 'd'}) {
+				if (df.getSubfield(code) != null) {
+					title.append(df.getSubfield(code).getData());
+					title.append(" ");
+				}
+			}
+			return SolrUtils.cleanStrForSorting(title.toString());
+		}
+		return null;
+	}
+
 }
