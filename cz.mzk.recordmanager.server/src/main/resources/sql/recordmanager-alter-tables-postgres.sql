@@ -2677,3 +2677,7 @@ UPDATE kramerius_conf SET availability_dest_url='https://kramerius.techlib.cz/kr
 
 -- 08. 08. 2022 tomascejpek
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (116, 446, 'NBG001');
+
+-- 11. 08. 2022 tomascejpek
+ALTER TABLE oai_harvest_conf ADD COLUMN ictx VARCHAR(128);
+ALTER TABLE oai_harvest_conf ADD COLUMN op VARCHAR(128);

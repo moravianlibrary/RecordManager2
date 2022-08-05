@@ -39,6 +39,12 @@ public class OAIHarvestConfiguration extends ImportConfiguration {
 	@Column(name="harvest_job_name")
 	private String harvestJobName;
 
+	@Column(name = "ictx")
+	private String ictx;
+
+	@Column(name = "op")
+	private String op;
+
 	public String getUrl() {
 		return url;
 	}
@@ -101,6 +107,22 @@ public class OAIHarvestConfiguration extends ImportConfiguration {
 
 	public void setSetFullHarvest(String setFullHarvest) {
 		this.setFullHarvest = setFullHarvest;
+	}
+
+	public String getIctx() {
+		return ictx;
+	}
+
+	public void setIctx(String ictx) {
+		this.ictx = ictx;
+	}
+
+	public String getOp() {
+		return op;
+	}
+
+	public void setOp(String op) {
+		this.op = op;
 	}
 
 	@Override

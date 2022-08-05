@@ -71,6 +71,8 @@ CREATE TABLE oai_harvest_conf (
   granularity          VARCHAR(30),
   extract_id_regex     VARCHAR(128),
   harvest_job_name     VARCHAR(128),
+  ictx                 VARCHAR(128),
+  op                   VARCHAR(128),
   CONSTRAINT oai_harvest_conf_import_conf_fk FOREIGN KEY (import_conf_id) REFERENCES import_conf(id)
 );
 

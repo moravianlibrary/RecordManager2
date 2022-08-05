@@ -2966,3 +2966,7 @@ UPDATE kramerius_conf SET availability_dest_url='https://kramerius.techlib.cz/kr
 
 --changeset tomascejpek:344 context:cpk
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (116, 446, 'NBG001');
+
+--changeset tomascejpek:345
+ALTER TABLE oai_harvest_conf ADD COLUMN ictx VARCHAR(128);
+ALTER TABLE oai_harvest_conf ADD COLUMN op VARCHAR(128);

@@ -211,6 +211,12 @@ public class OAIHarvesterImpl implements OAIHarvester {
 		} else {
 			params.put("resumptionToken", resumptionToken);
 		}
+		if (parameters.getIctx() != null) {
+			params.put("ictx", parameters.getIctx());
+		}
+		if (parameters.getOp() != null) {
+			params.put("op", parameters.getOp());
+		}
 		if (recordIdentifier != null) {
 			params.put("identifier", recordIdentifier);
 		}
@@ -224,6 +230,12 @@ public class OAIHarvesterImpl implements OAIHarvester {
 	protected String createIdentifyURL() {
 		Map<String, String> params = new HashMap<String, String>();
 		params.put("verb", OAI_VERB_IDENTIFY);
+		if (parameters.getIctx() != null) {
+			params.put("ictx", parameters.getIctx());
+		}
+		if (parameters.getOp() != null) {
+			params.put("op", parameters.getOp());
+		}
 		return UrlUtils.buildUrl(parameters.getUrl(), params);
 	}
 }

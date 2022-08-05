@@ -17,12 +17,16 @@ public class OAIHarvesterParams {
 	private String metadataPrefix;
 
 	private String set;
-	
+
 	private OAIGranularity granularity;
 
 	private Date from;
 
 	private Date until;
+
+	private String ictx;
+
+	private String op;
 
 	public String getUrl() {
 		return url;
@@ -78,6 +82,22 @@ public class OAIHarvesterParams {
 
 	public void setUntil(Date until) {
 		this.until = until;
+	}
+
+	public String getIctx() {
+		return ictx;
+	}
+
+	public void setIctx(String ictx) {
+		this.ictx = ictx;
+	}
+
+	public String getOp() {
+		return op;
+	}
+
+	public void setOp(String op) {
+		this.op = op;
 	}
 
 	@Override

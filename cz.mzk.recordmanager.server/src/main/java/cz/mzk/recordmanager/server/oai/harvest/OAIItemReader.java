@@ -117,6 +117,8 @@ public class OAIItemReader implements ItemReader<List<OAIRecord>>, ItemStream,
 				throw new RuntimeException("Cannot parse 'from' parameter", e);
 			}
 			params.setUntil(untilDate);
+			params.setIctx(conf.getIctx());
+			params.setOp(conf.getOp());
 			harvester = harvesterFactory.create(params);
 			processIdentify(conf);
 			conf = configDao.get(confId);

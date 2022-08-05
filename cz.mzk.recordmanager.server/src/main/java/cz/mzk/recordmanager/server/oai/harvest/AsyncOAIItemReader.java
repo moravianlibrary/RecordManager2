@@ -150,6 +150,8 @@ public class AsyncOAIItemReader implements ItemReader<List<OAIRecord>>, ItemStre
 				throw new RuntimeException("Cannot parse 'from' parameter", e);
 			}
 			params.setUntil(untilDate);
+			params.setIctx(conf.getIctx());
+			params.setOp(conf.getOp());
 			harvester = harvesterFactory.create(params);
 			processIdentify(conf);
 			conf = configDao.get(confId);
