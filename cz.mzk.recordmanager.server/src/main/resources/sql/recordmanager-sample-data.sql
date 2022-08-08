@@ -800,6 +800,7 @@ INSERT INTO sigla (id, import_conf_id, sigla) VALUES (109, 438, 'ABE309');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (111, 440, 'BOE035');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (110, 439, 'VSG501');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (112, 380, 'PEG001');
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (116, 446, 'NBG001');
 
 INSERT INTO fit_project VALUES (1,'FULLTEXT_ANALYSER');
 INSERT INTO fit_project VALUES (2,'SEMANTIC_ENRICHMENT');
