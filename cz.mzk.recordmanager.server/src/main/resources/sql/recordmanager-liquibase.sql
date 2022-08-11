@@ -2970,3 +2970,7 @@ INSERT INTO sigla (id, import_conf_id, sigla) VALUES (116, 446, 'NBG001');
 --changeset tomascejpek:345
 ALTER TABLE oai_harvest_conf ADD COLUMN ictx VARCHAR(128);
 ALTER TABLE oai_harvest_conf ADD COLUMN op VARCHAR(128);
+
+--changeset tomascejpek:346 context:cpk
+UPDATE import_conf SET item_id='other',interception_enabled=true WHERE id=359;
+UPDATE oai_harvest_conf SET url='https://library.upol.cz/i2/i2.entry.cls',set_spec='UPOLCPK',extract_id_regex='s/[^:]+:[^:]+:[^:]+:(.+)/UpolUsCat*$1/',ictx='upol',op='oai' WHERE import_conf_id=359;
