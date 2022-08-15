@@ -21,7 +21,7 @@ import cz.mzk.recordmanager.server.marc.marc4j.RecordImpl;
 
 public class OpenlibMarcInterceptor extends DefaultMarcInterceptor{
 
-	private static final String TEXT_856y = "Elektronická výpůjčka přes OpenLibrary (nutná osobní registrace)";
+	public static final String TEXT_856y = "openlibrary_link";
 	
 	private static final Pattern OPENLIBRARY_URL = Pattern.compile("http://www.openlibrary.org.*");
 	

@@ -1,22 +1,22 @@
 package cz.mzk.recordmanager.server.metadata.institutions;
 
+import cz.mzk.recordmanager.server.marc.MarcRecord;
+import cz.mzk.recordmanager.server.marc.marc4j.PatentsXmlStreamReader;
+import cz.mzk.recordmanager.server.metadata.CitationRecordType;
+import cz.mzk.recordmanager.server.metadata.MetadataMarcRecord;
+import cz.mzk.recordmanager.server.model.BLTopicKey;
+import cz.mzk.recordmanager.server.model.HarvestedRecord;
+import cz.mzk.recordmanager.server.model.HarvestedRecordFormat.HarvestedRecordFormatEnum;
+import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordDAO;
+import cz.mzk.recordmanager.server.util.Constants;
+import org.marc4j.marc.DataField;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import cz.mzk.recordmanager.server.model.BLTopicKey;
-import cz.mzk.recordmanager.server.model.HarvestedRecord;
-import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordDAO;
-import org.marc4j.marc.DataField;
-
-import cz.mzk.recordmanager.server.marc.MarcRecord;
-import cz.mzk.recordmanager.server.metadata.CitationRecordType;
-import cz.mzk.recordmanager.server.metadata.MetadataMarcRecord;
-import cz.mzk.recordmanager.server.model.HarvestedRecordFormat.HarvestedRecordFormatEnum;
-import cz.mzk.recordmanager.server.util.Constants;
-import org.springframework.beans.factory.annotation.Autowired;
 
 public class PatentsMetadataMarcRecord extends MetadataMarcRecord{
 
@@ -49,7 +49,7 @@ public class PatentsMetadataMarcRecord extends MetadataMarcRecord{
 
 	@Override
 	public List<String> getUrls() {
-		return getUrls(Constants.DOCUMENT_AVAILABILITY_ONLINE);
+		return super.getUrls(Constants.DOCUMENT_AVAILABILITY_ONLINE, PatentsXmlStreamReader.TEXT_856y);
 	}
 
 	@Override

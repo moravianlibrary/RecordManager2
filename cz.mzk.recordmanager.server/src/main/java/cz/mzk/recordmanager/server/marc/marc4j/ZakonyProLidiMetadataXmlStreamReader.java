@@ -67,7 +67,7 @@ public class ZakonyProLidiMetadataXmlStreamReader implements MarcReader {
 	private static final String TEXT_6552_CZE = "czenas";
 	private static final String TEXT_6552_EN = "ennas";
 	private static final String TEXT_856U = "http://www.zakonyprolidi.cz%s";
-	private static final String TEXT_856Y = "plný text";
+	public static final String TEXT_856Y = "fulltext_link";
 
 	private static final String TYPE_NARIZENI_VLADY = "Narizeni_vlady";
 	private static final String TYPE_VYHLASKA = "Vyhlaska";

@@ -50,6 +50,7 @@ public class MunipressCsvStreamReader implements MarcReader {
 
 	private static final String TEXT_500A = "Tato metadata vznikla konverzí z dat, která nebyla vytvořena dle " +
 			"knihovnických standardů.";
+	public static final String TEXT_856y = "fulltext_link";
 
 	private static final int MAX_AUTHOR = 33;
 	private List<String> authors_260c;
@@ -127,7 +128,7 @@ public class MunipressCsvStreamReader implements MarcReader {
 		if (!csv.get(HEADER_ZANR).isEmpty()) addDataField("655", '7', ' ', "a", csv.get(HEADER_ZANR));
 		if (!csv.get(HEADER_TYP_PUBLIKACE).isEmpty()) addDataField("655", '7', ' ', "a", csv.get(HEADER_TYP_PUBLIKACE));
 		if (!csv.get(HEADER_ODKAZ).isEmpty())
-			addDataField("856", '4', '1', "u", csv.get(HEADER_ODKAZ), "y", "Plný text");
+			addDataField("856", '4', '1', "u", csv.get(HEADER_ODKAZ), "y", TEXT_856y);
 		addDataField("710", ' ', '2', "a", "Masarykova univerzita", "7", "kn20010709056", "4", "pbl");
 		return RecordUtils.sortFields(record);
 	}

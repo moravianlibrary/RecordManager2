@@ -16,7 +16,7 @@ import java.util.regex.Pattern;
 
 public class BookportMetadataMarcRecord extends EbooksMetadataMarcRecord {
 
-	private static final String COMMENT = "Registrovaní uživatelé knihovny získají knihu po přihlášení přes eduID.cz na Bookportu";
+	private static final String COMMENT = "bookport_link";
 
 	private static final Pattern URL_PATTERN = Pattern.compile("(.*)(/kniha/.*)");
 

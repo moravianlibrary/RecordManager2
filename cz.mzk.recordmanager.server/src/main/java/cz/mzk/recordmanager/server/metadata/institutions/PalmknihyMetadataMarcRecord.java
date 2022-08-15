@@ -19,7 +19,7 @@ public class PalmknihyMetadataMarcRecord extends EbooksMetadataMarcRecord {
 	@Autowired
 	private ImportConfigurationDAO icDao;
 
-	private static final String COMMENT = "Registrovaní uživatelé knihovny získají knihu po přihlášení ve svém katalogu";
+	private static final String COMMENT = "catalog_ebook_link";
 
 	private static final Pattern PALMKNIHY_PATTERN = Pattern.compile("palmknihy.cz");
 

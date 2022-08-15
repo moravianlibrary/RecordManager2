@@ -14,7 +14,7 @@ import java.util.regex.Pattern;
 public class MkpEbooksMetadataMarcRecord extends EbooksMetadataMarcRecord {
 
 	private static final Pattern URL_Y_PATTERN = Pattern.compile("Plný text");
-	private static final String URL_COMMENT = "Stáhněte zdarma (%s)";
+	private static final String URL_COMMENT = "free_%s_link";
 
 	public MkpEbooksMetadataMarcRecord(MarcRecord underlayingMarc, HarvestedRecord hr) {
 		super(underlayingMarc, hr);
