@@ -285,8 +285,6 @@ public class Constants {
 
 	public static final String JOB_PARAM_RECORD_ID		= "recordId";
 
-	public static final String KRAM_EVERSION_COMMENT = "digitized_link";
-
 	public static final String COSMOTRON_RECORD_ID_CHAR = "*";
 
 }

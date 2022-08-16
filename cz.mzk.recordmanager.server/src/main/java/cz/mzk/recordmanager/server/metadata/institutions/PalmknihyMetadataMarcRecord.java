@@ -7,6 +7,7 @@ import cz.mzk.recordmanager.server.oai.dao.ImportConfigurationDAO;
 import cz.mzk.recordmanager.server.util.Constants;
 import cz.mzk.recordmanager.server.util.MetadataUtils;
 import cz.mzk.recordmanager.server.util.SolrUtils;
+import cz.mzk.recordmanager.server.util.constants.EVersionConstants;
 import org.marc4j.marc.DataField;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -18,8 +19,6 @@ public class PalmknihyMetadataMarcRecord extends EbooksMetadataMarcRecord {
 
 	@Autowired
 	private ImportConfigurationDAO icDao;
-
-	private static final String COMMENT = "catalog_ebook_link";
 
 	private static final Pattern PALMKNIHY_PATTERN = Pattern.compile("palmknihy.cz");
 
@@ -35,7 +34,8 @@ public class PalmknihyMetadataMarcRecord extends EbooksMetadataMarcRecord {
 				if (PALMKNIHY_PATTERN.matcher(df.getSubfield('u').getData()).find()
 						|| df.getSubfield('z') == null) continue;
 				results.add(MetadataUtils.generateUrl(df.getSubfield('z').getData(),
-						Constants.DOCUMENT_AVAILABILITY_MEMBER, df.getSubfield('u').getData(), COMMENT));
+						Constants.DOCUMENT_AVAILABILITY_MEMBER, df.getSubfield('u').getData(),
+						EVersionConstants.CATALOG_EBOOK_LINK));
 			}
 		}
 		return results;

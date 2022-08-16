@@ -9,6 +9,7 @@ import cz.mzk.recordmanager.server.model.KramDnntLabel.DnntLabelEnum;
 import cz.mzk.recordmanager.server.oai.dao.KramAvailabilityDAO;
 import cz.mzk.recordmanager.server.util.Constants;
 import cz.mzk.recordmanager.server.util.SolrUtils;
+import cz.mzk.recordmanager.server.util.constants.EVersionConstants;
 import org.apache.solr.common.SolrInputDocument;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -127,7 +128,7 @@ public class UrlDedupRecordEnricher implements DedupRecordEnricher {
 			}
 			Set<EVersionUrl> values = urls.get(key);
 			for (KramAvailability kramAvailability : kramAvailabilityDAO.getByUuid(key)) {
-				String comment = Constants.KRAM_EVERSION_COMMENT;
+				String comment = EVersionConstants.DIGITIZED_LINK;
 				for (EVersionUrl value : values) {
 					if (("kram-" + value.getSource()).equals(kramAvailability.getHarvestedFrom().getIdPrefix())) {
 						comment = value.getComment();

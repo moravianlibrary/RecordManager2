@@ -5,6 +5,7 @@ import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.util.Constants;
 import cz.mzk.recordmanager.server.util.MetadataUtils;
 import cz.mzk.recordmanager.server.util.SolrUtils;
+import cz.mzk.recordmanager.server.util.constants.EVersionConstants;
 import org.marc4j.marc.DataField;
 
 import java.util.ArrayList;
@@ -15,8 +16,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class BookportMetadataMarcRecord extends EbooksMetadataMarcRecord {
-
-	private static final String COMMENT = "bookport_link";
 
 	private static final Pattern URL_PATTERN = Pattern.compile("(.*)(/kniha/.*)");
 
@@ -41,7 +40,8 @@ public class BookportMetadataMarcRecord extends EbooksMetadataMarcRecord {
 		for (DataField df : underlayingMarc.getDataFields("856")) {
 			if (df.getSubfield('u') != null) {
 				results.add(MetadataUtils.generateUrl(harvestedRecord.getHarvestedFrom().getLibrary().getName().toLowerCase(),
-						Constants.DOCUMENT_AVAILABILITY_MEMBER, parseUrl(df.getSubfield('u').getData()), COMMENT));
+						Constants.DOCUMENT_AVAILABILITY_MEMBER, parseUrl(df.getSubfield('u').getData()),
+						EVersionConstants.BOOKPORT_LINK));
 			}
 		}
 		return results;

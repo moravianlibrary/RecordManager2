@@ -3,6 +3,7 @@ package cz.mzk.recordmanager.server.model;
 import cz.mzk.recordmanager.server.util.Constants;
 import cz.mzk.recordmanager.server.util.MetadataUtils;
 import cz.mzk.recordmanager.server.util.UrlValidatorUtils;
+import cz.mzk.recordmanager.server.util.constants.EVersionConstants;
 
 public class EVersionUrl implements Comparable {
 
@@ -20,7 +21,7 @@ public class EVersionUrl implements Comparable {
 	}
 
 	public static EVersionUrl create(KramAvailability kramAvailability) {
-		return create(kramAvailability, Constants.KRAM_EVERSION_COMMENT);
+		return create(kramAvailability, EVersionConstants.DIGITIZED_LINK);
 	}
 
 	public static EVersionUrl create(KramAvailability kramAvailability, String comment) {
@@ -39,7 +40,7 @@ public class EVersionUrl implements Comparable {
 	}
 
 	public static EVersionUrl createDnnt(KramAvailability kramAvailability) {
-		return createDnnt(kramAvailability, Constants.KRAM_EVERSION_COMMENT);
+		return createDnnt(kramAvailability, EVersionConstants.DIGITIZED_LINK);
 	}
 
 	public static EVersionUrl createDnnt(KramAvailability kramAvailability, String comment) {

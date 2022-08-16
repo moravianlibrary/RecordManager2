@@ -6,6 +6,7 @@ import cz.mzk.recordmanager.server.model.HarvestedRecordFormat.HarvestedRecordFo
 import cz.mzk.recordmanager.server.util.CaslinLink;
 import cz.mzk.recordmanager.server.util.Constants;
 import cz.mzk.recordmanager.server.util.MetadataUtils;
+import cz.mzk.recordmanager.server.util.constants.EVersionConstants;
 import org.apache.solr.common.SolrInputDocument;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -37,7 +38,7 @@ public class CatalogSerialLinkHarvestedRecordEnricher implements HarvestedRecord
 
 		List<String> results = new ArrayList<>();
 		results.add(MetadataUtils.generateUrl(record.getHarvestedFrom().getIdPrefix(),
-				Constants.DOCUMENT_AVAILABILITY_UNKNOWN, link, "catalog_serial_link"));
+				Constants.DOCUMENT_AVAILABILITY_UNKNOWN, link, EVersionConstants.CATALOG_SERIAL_LINK));
 		document.addField(SolrFieldConstants.CATALOG_SERIAL_LINK, results);
 	}
 

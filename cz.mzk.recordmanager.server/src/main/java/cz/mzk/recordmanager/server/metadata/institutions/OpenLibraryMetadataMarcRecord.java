@@ -1,9 +1,9 @@
 package cz.mzk.recordmanager.server.metadata.institutions;
 
 import cz.mzk.recordmanager.server.marc.MarcRecord;
-import cz.mzk.recordmanager.server.marc.intercepting.OpenlibMarcInterceptor;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.util.Constants;
+import cz.mzk.recordmanager.server.util.constants.EVersionConstants;
 
 import java.util.Collections;
 import java.util.List;
@@ -26,7 +26,7 @@ public class OpenLibraryMetadataMarcRecord extends EbooksMetadataMarcRecord {
 
 	@Override
 	public List<String> getUrls() {
-		return super.getUrls(Constants.DOCUMENT_AVAILABILITY_UNKNOWN, OpenlibMarcInterceptor.TEXT_856y);
+		return super.getUrls(Constants.DOCUMENT_AVAILABILITY_UNKNOWN, EVersionConstants.OPENLIBRARY_LINK);
 	}
 
 }

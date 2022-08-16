@@ -8,6 +8,7 @@ import cz.mzk.recordmanager.server.model.Uuid;
 import cz.mzk.recordmanager.server.oai.dao.KrameriusConfigurationDAO;
 import cz.mzk.recordmanager.server.util.Constants;
 import cz.mzk.recordmanager.server.util.MetadataUtils;
+import cz.mzk.recordmanager.server.util.constants.EVersionConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,7 +50,7 @@ public class KramDefaultMetadataDublinCoreRecord extends
 				: Constants.DOCUMENT_AVAILABILITY_PROTECTED;
 		return Collections.singletonList(MetadataUtils.generateUrl(harvestedRecord.getHarvestedFrom().getIdPrefix(),
 				policy, config.getAvailabilityDestUrl() + harvestedRecord.getUniqueId().getRecordId(),
-				Constants.KRAM_EVERSION_COMMENT));
+				EVersionConstants.DIGITIZED_LINK));
 
 	}
 
