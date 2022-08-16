@@ -76,7 +76,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 	private static final Pattern GRAMOFONOVA_DESKA = Pattern.compile("gramofonov(?:[aáeé]|ych|ých)\\sdes(?:ka|ky|ek)", Pattern.CASE_INSENSITIVE);
 	private static final Pattern ANALOG = Pattern.compile("analog", Pattern.CASE_INSENSITIVE);
 	private static final Pattern LP_OR_SP = Pattern.compile("LP|SP");
-	private static final Pattern ZVUKOVA_KAZETA = Pattern.compile("zvukov(?:a|á|e|é|ych|ých)\\skaze(?:ta|ty|t)", Pattern.CASE_INSENSITIVE);
+	private static final Pattern ZVUKOVA_KAZETA = Pattern.compile("(?:zvukov(?:a|á|e|é|ych|ých)\\s+|audio)kaze(?:ta|ty|t)", Pattern.CASE_INSENSITIVE);
 	private static final Pattern MAGNETOFONOVA_KAZETA = Pattern.compile("magnetofonov(?:a|á|e|é|ych|ých)\\skaze(?:ta|ty|t)", Pattern.CASE_INSENSITIVE);
 	private static final Pattern ZVUKOVY_ZAZNAM = Pattern.compile("zvukov[yý]\\sz[aá]znam", Pattern.CASE_INSENSITIVE);
 	private static final Pattern START_S = Pattern.compile("^s", Pattern.CASE_INSENSITIVE);
