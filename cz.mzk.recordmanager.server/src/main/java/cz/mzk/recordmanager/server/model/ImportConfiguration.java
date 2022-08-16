@@ -96,6 +96,9 @@ public abstract class ImportConfiguration extends AbstractDomainObject {
 	@Column(name = "mappings996")
 	private Mappings996Enum mappings996;
 
+	@Column(name = "catalog_serial_link")
+	private boolean catalogSerialLink = true;
+
 	public Library getLibrary() {
 		return library;
 	}
@@ -254,6 +257,14 @@ public abstract class ImportConfiguration extends AbstractDomainObject {
 
 	public void setSiglaAlls(List<SiglaAll> siglaAlls) {
 		this.siglaAlls = siglaAlls;
+	}
+
+	public boolean isCatalogSerialLink() {
+		return catalogSerialLink;
+	}
+
+	public void setCatalogSerialLink(boolean catalogSerialLink) {
+		this.catalogSerialLink = catalogSerialLink;
 	}
 
 }

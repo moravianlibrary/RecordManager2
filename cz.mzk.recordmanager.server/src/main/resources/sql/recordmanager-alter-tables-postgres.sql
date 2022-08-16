@@ -2677,3 +2677,6 @@ UPDATE kramerius_conf SET availability_dest_url='https://kramerius.techlib.cz/kr
 
 -- 08. 08. 2022 tomascejpek
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (116, 446, 'NBG001');
+
+-- 16. 08. 2022 tomascejpek
+ALTER TABLE import_conf ADD COLUMN catalog_serial_link BOOLEAN DEFAULT FALSE;

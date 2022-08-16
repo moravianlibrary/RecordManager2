@@ -21,6 +21,7 @@ public class CatalogSerialLinkHarvestedRecordEnricher implements HarvestedRecord
 
 	@Override
 	public void enrich(HarvestedRecord record, SolrInputDocument document) {
+		if (!record.getHarvestedFrom().isCatalogSerialLink()) return;
 		if (!document.containsKey(SolrFieldConstants.MAPPINGS996)
 				|| document.getFieldValues(SolrFieldConstants.MAPPINGS996) == null
 				|| !document.getFieldValues(SolrFieldConstants.MAPPINGS996).isEmpty()) return;
