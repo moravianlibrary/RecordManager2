@@ -205,6 +205,12 @@ public class SolrFieldConstants {
 
 	public static final String SITEMAP = "sitemap_txt_mv";
 
+	public static final String MAPPINGS996 = "mappings996_display_mv";
+
+	public static final String CATALOG_SERIAL_LINK = "catalog_serial_link_display_mv";
+
+	public static final String ID001_STR = "id001_str";
+
 	/**
 	 * dummy fields used for processing purposes only, shouldn't be indexed.
 	 */

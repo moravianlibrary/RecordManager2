@@ -1,21 +1,11 @@
 package cz.mzk.recordmanager.server.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-
 import org.hibernate.annotations.Parameter;
 import org.hibernate.annotations.Type;
+
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -84,7 +74,7 @@ public abstract class ImportConfiguration extends AbstractDomainObject {
 	@Column(name = "item_id")
 	private ItemId itemId;
 
-	@Column(name="metaproxy_enabled")
+	@Column(name = "metaproxy_enabled")
 	private boolean metaproxyEnabled = false;
 
 	@Column(name = "ziskej_enabled")
@@ -92,6 +82,10 @@ public abstract class ImportConfiguration extends AbstractDomainObject {
 
 	@Column(name = "indexed")
 	private boolean indexed = true;
+
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@JoinColumn(name = "import_conf_id", referencedColumnName = "id")
+	private List<SiglaAll> siglaAlls = new ArrayList<>();
 
 	@Type(
 			type = "cz.mzk.recordmanager.server.hibernate.StringEnumUserType",
@@ -251,6 +245,15 @@ public abstract class ImportConfiguration extends AbstractDomainObject {
 	}
 
 	public void setMappings996(Mappings996Enum mappings996) {
-		this.mappings996= mappings996;
+		this.mappings996 = mappings996;
 	}
+
+	public List<SiglaAll> getSiglaAlls() {
+		return siglaAlls;
+	}
+
+	public void setSiglaAlls(List<SiglaAll> siglaAlls) {
+		this.siglaAlls = siglaAlls;
+	}
+
 }
