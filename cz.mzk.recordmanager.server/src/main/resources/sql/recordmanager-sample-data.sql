@@ -783,6 +783,7 @@ INSERT INTO sigla (id, import_conf_id, sigla) VALUES (89, 415, 'KTG001');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (90, 418, 'SVG503');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (93, 419, 'MOG501');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (92, 421, 'CHG001');
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (95, 359, 'OLD012');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (96, 423, 'ABG502');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (97, 424, 'NBG505');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (98, 425, 'BKG501');
@@ -801,6 +802,7 @@ INSERT INTO sigla (id, import_conf_id, sigla) VALUES (111, 440, 'BOE035');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (110, 439, 'VSG501');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (112, 380, 'PEG001');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (116, 446, 'NBG001');
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (120, 459, 'JIG001');
 
 INSERT INTO fit_project VALUES (1,'FULLTEXT_ANALYSER');
 INSERT INTO fit_project VALUES (2,'SEMANTIC_ENRICHMENT');
