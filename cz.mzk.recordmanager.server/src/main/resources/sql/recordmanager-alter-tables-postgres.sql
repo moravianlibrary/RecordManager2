@@ -2689,3 +2689,8 @@ UPDATE oai_harvest_conf SET url='https://library.upol.cz/i2/i2.entry.cls',set_sp
 -- 17. 08. 2022 tomascejpek
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (95, 359, 'OLD012');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (120, 459, 'JIG001');
+
+-- 22. 08. 2022 tomascejpek
+INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (260, 'NACR', 'https://www.nacr.cz/', 'https://knihovna.nacr.cz/', 'Praha', 'PR');
+INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id) VALUES (460, 260, 200, 'nacr', 11, false, true, true, true, 'U', 'other');
+INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (460,'https://knihovna.nacr.cz/api/oai','cpk','marc21',NULL);

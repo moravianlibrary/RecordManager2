@@ -136,6 +136,7 @@ INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (253, 'GEO
 INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (257, 'PALMKNIHY', 'https://www.palmknihy.cz/', '', null, 'ebook');
 INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (258, 'RSL', '', '', null, 'bibliography');
 INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (259, 'MKJIHLAVA', 'https://jihlava.tritius.cz/tritius/oai-provider', 'https://jihlava.tritius.cz/', 'Jihlava', 'VY');
+INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (260, 'NACR', 'https://www.nacr.cz/', 'https://knihovna.nacr.cz/', 'Praha', 'PR');
 INSERT INTO library (id, name, url, catalog_url, city) VALUES (400, 'AUTHORITY', 'nkp.cz', 'aleph.nkp.cz', NULL);
 INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (99027, 'KRAM-CUNI', '', '', '','kramerius');
 INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (99028, 'KRAM-CUNIFSV', '', '', '','kramerius');
@@ -324,6 +325,7 @@ INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weig
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, generate_dedup_keys, generate_biblio_linker_keys) VALUES (457, 257, 200, 'palmknihy', 11, false, true, true, false, 'U', false, false);
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency) VALUES (458, 258, 200, 'rsl', 11, false, true, true, false, 'U');
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id, mappings996) VALUES (459, 259, 200, 'mkjihlava', 11, false, true, true, true, 'U', 'other', 'tritius');
+INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id) VALUES (460, 260, 200, 'nacr', 11, false, true, true, true, 'U', 'other');
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency) VALUES (500, 110, 200, 'antik', null, false, false, false, false, 'U');
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, generate_biblio_linker_keys) VALUES (1300, 100, 200, 'sfxjibmzk', 8, false, false, false, true, 'U', false);
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, generate_biblio_linker_keys) VALUES (1301, 101, 200, 'sfxjibnlk', 8, false, false, false, true, 'U', false);
@@ -597,6 +599,7 @@ INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format) VAL
 INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format,reharvest) VALUES (457,'http://ereading.cz/xml/xml_rent.xml','importPalmknihyJob','palmknihy','true');
 INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format) VALUES (458,null,null,null);
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (459,'https://jihlava.tritius.cz/tritius/oai-provider','CPK_1','marc21',NULL);
+INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (460,'https://knihovna.nacr.cz/api/oai','cpk','marc21',NULL);
 INSERT INTO download_import_conf (import_conf_id,url,import_job_name) VALUES (500,'https://muj-antikvariat.cz/assets/obalkyknih.xml','antikvariatyImportRecordsJob');
 INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format) VALUES (1304,null,null,null);
 INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format,extract_id_regex,reharvest) VALUES (1305,'https://sfx.knihovny.cz/sfxlcl3/cgi/public/get_file.cgi?file=institutional_holding-NKP.xml','downloadAndImportRecordsJob','sfx',null,true);
