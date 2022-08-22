@@ -470,6 +470,11 @@ public class RecordFormatTest extends AbstractTest {
 		data.add("300 $atest Magnetofonova kazeta test");
 		metadataRecord = metadataFactory.getMetadataRecord(MarcRecordFactory.recordFactory(data));
 		Assert.assertTrue(metadataRecord.getDetectedFormatList().contains(HarvestedRecordFormatEnum.AUDIO_CASSETTE));
+
+		data.clear();
+		data.add("300 $atest audiokazeta test");
+		metadataRecord = metadataFactory.getMetadataRecord(MarcRecordFactory.recordFactory(data));
+		Assert.assertTrue(metadataRecord.getDetectedFormatList().contains(HarvestedRecordFormatEnum.AUDIO_CASSETTE));
 	}
 
 	@Test
