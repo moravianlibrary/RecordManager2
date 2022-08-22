@@ -201,7 +201,7 @@ public class ExportRecordsJobConfig {
 		pqpf.setDataSource(dataSource);
 		pqpf.setSelectClause("SELECT *");
 		pqpf.setFromClause("FROM cosmotron_996");
-		pqpf.setWhereClause("WHERE import_conf_id = :conf_id");
+		pqpf.setWhereClause("WHERE import_conf_id = :conf_id AND deleted is null");
 		pqpf.setSortKey("record_id");
 		Map<String, Object> parameterValues = new HashMap<>();
 		parameterValues.put("conf_id", configId);
