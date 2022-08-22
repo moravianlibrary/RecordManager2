@@ -1,12 +1,18 @@
 package cz.mzk.recordmanager.server.miscellaneous.caslin.filter;
 
-import java.io.ByteArrayInputStream;
-import java.nio.charset.StandardCharsets;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeSet;
-
+import cz.mzk.recordmanager.server.export.IOFormat;
+import cz.mzk.recordmanager.server.marc.MarcRecord;
+import cz.mzk.recordmanager.server.marc.MarcRecordImpl;
+import cz.mzk.recordmanager.server.marc.MarcXmlParser;
+import cz.mzk.recordmanager.server.marc.marc4j.MarcFactoryImpl;
+import cz.mzk.recordmanager.server.marc.marc4j.RecordImpl;
+import cz.mzk.recordmanager.server.metadata.MetadataRecordFactory;
+import cz.mzk.recordmanager.server.model.DedupRecord;
+import cz.mzk.recordmanager.server.model.HarvestedRecord;
+import cz.mzk.recordmanager.server.model.HarvestedRecord.HarvestedRecordUniqueId;
+import cz.mzk.recordmanager.server.oai.dao.DedupRecordDAO;
+import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordDAO;
+import cz.mzk.recordmanager.server.util.CaslinFilter;
 import cz.mzk.recordmanager.server.util.ProgressLogger;
 import org.marc4j.marc.ControlField;
 import org.marc4j.marc.DataField;
@@ -17,24 +23,22 @@ import org.slf4j.LoggerFactory;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import cz.mzk.recordmanager.server.export.IOFormat;
-import cz.mzk.recordmanager.server.marc.MarcRecord;
-import cz.mzk.recordmanager.server.marc.MarcRecordImpl;
-import cz.mzk.recordmanager.server.marc.MarcXmlParser;
-import cz.mzk.recordmanager.server.marc.marc4j.MarcFactoryImpl;
-import cz.mzk.recordmanager.server.marc.marc4j.RecordImpl;
-import cz.mzk.recordmanager.server.metadata.MetadataRecordFactory;
-import cz.mzk.recordmanager.server.model.HarvestedRecord;
-import cz.mzk.recordmanager.server.model.HarvestedRecord.HarvestedRecordUniqueId;
-import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordDAO;
-import cz.mzk.recordmanager.server.util.CaslinFilter;
+import java.io.ByteArrayInputStream;
+import java.nio.charset.StandardCharsets;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeSet;
 
 public class FilterCaslinRecordsWriter implements ItemWriter<HarvestedRecordUniqueId> {
 
-	private static Logger logger = LoggerFactory.getLogger(FilterCaslinRecordsWriter.class);
+	private static final Logger logger = LoggerFactory.getLogger(FilterCaslinRecordsWriter.class);
 
 	@Autowired
 	private HarvestedRecordDAO hrDao;
+
+	@Autowired
+	private DedupRecordDAO drDao;
 
 	@Autowired
 	private MetadataRecordFactory mrFactory;
@@ -45,7 +49,7 @@ public class FilterCaslinRecordsWriter implements ItemWriter<HarvestedRecordUniq
 	@Autowired
 	private CaslinFilter caslinFilter;
 
-	private ProgressLogger progressLogger;
+	private final ProgressLogger progressLogger;
 
 	public FilterCaslinRecordsWriter() {
 		this.progressLogger = new ProgressLogger(logger, 10000);
@@ -63,7 +67,7 @@ public class FilterCaslinRecordsWriter implements ItemWriter<HarvestedRecordUniq
 				progressLogger.incrementAndLogProgress();
 				MarcRecord marc = marcXmlParser.parseRecord(new ByteArrayInputStream(hr.getRawRecord()));
 				Record record = marcXmlParser.parseUnderlyingRecord(new ByteArrayInputStream(hr.getRawRecord()));
-				Boolean updated = false;
+				boolean updated = false;
 				Record newRecord = new RecordImpl();
 				MarcFactory marcFactory = new MarcFactoryImpl();
 				newRecord.setLeader(record.getLeader());
@@ -88,11 +92,15 @@ public class FilterCaslinRecordsWriter implements ItemWriter<HarvestedRecordUniq
 				hr.setRawRecord(new MarcRecordImpl(newRecord).export(IOFormat.XML_MARC).getBytes(StandardCharsets.UTF_8));
 				if (hr.getDeleted() == null && !mrFactory.getMetadataRecord(hr, marc).matchFilter()) {
 					hr.setDeleted(new Date());
+					hrDao.saveOrUpdate(hr);
 					updated = true;
 				}
 				if (updated) {
-					hr.setUpdated(new Date());
-					hrDao.persist(hr);
+					DedupRecord dr = hr.getDedupRecord();
+					if (dr != null) {
+						dr.setUpdated(new Date());
+						drDao.saveOrUpdate(dr);
+					}
 				}
 			} catch (Exception ex) {
 				logger.error(String.format("Exception thrown when filtering harvested_record with id=%s", uniqueId), ex);
