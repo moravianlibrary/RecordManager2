@@ -1,5 +1,13 @@
 package cz.mzk.recordmanager.server.marc.intercepting;
 
+import cz.mzk.recordmanager.server.export.IOFormat;
+import cz.mzk.recordmanager.server.marc.MarcRecord;
+import cz.mzk.recordmanager.server.marc.MarcRecordImpl;
+import cz.mzk.recordmanager.server.marc.marc4j.MarcFactoryImpl;
+import cz.mzk.recordmanager.server.marc.marc4j.RecordImpl;
+import cz.mzk.recordmanager.server.util.constants.EVersionConstants;
+import org.marc4j.marc.*;
+
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
@@ -7,21 +15,7 @@ import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.marc4j.marc.ControlField;
-import org.marc4j.marc.DataField;
-import org.marc4j.marc.MarcFactory;
-import org.marc4j.marc.Record;
-import org.marc4j.marc.Subfield;
-
-import cz.mzk.recordmanager.server.export.IOFormat;
-import cz.mzk.recordmanager.server.marc.MarcRecord;
-import cz.mzk.recordmanager.server.marc.MarcRecordImpl;
-import cz.mzk.recordmanager.server.marc.marc4j.MarcFactoryImpl;
-import cz.mzk.recordmanager.server.marc.marc4j.RecordImpl;
-
 public class OpenlibMarcInterceptor extends DefaultMarcInterceptor{
-
-	private static final String TEXT_856y = "Elektronická výpůjčka přes OpenLibrary (nutná osobní registrace)";
 	
 	private static final Pattern OPENLIBRARY_URL = Pattern.compile("http://www.openlibrary.org.*");
 	
@@ -58,7 +52,7 @@ public class OpenlibMarcInterceptor extends DefaultMarcInterceptor{
 							if(matcher.matches()){
 								DataField newDf = marcFactory.newDataField("856", '4', '2');
 								newDf.addSubfield(df.getSubfield('u'));
-								newDf.addSubfield(marcFactory.newSubfield('y', TEXT_856y));
+								newDf.addSubfield(marcFactory.newSubfield('y', EVersionConstants.OPENLIBRARY_LINK));
 								newRecord.addVariableField(newDf);
 							}
 						}

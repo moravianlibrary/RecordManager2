@@ -5,6 +5,7 @@ import cz.mzk.recordmanager.server.scripting.MappingResolver;
 import cz.mzk.recordmanager.server.scripting.ResourceMappingResolver;
 import cz.mzk.recordmanager.server.util.CleaningUtils;
 import cz.mzk.recordmanager.server.util.RecordUtils;
+import cz.mzk.recordmanager.server.util.constants.EVersionConstants;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.WordUtils;
 import org.marc4j.MarcReader;
@@ -56,7 +57,6 @@ public class PatentsXmlStreamReader implements MarcReader {
 	private static final String TEXT_655a_APPLICATION = "přihlášky vynálezu";
 	private static final String TEXT_655a_PATENT = "patentové spisy";
 	private static final String TEXT_0722 = "Konspekt";
-	private static final String TEXT_856y = "plný text";
 
 	private static final String DATE_STRING_005 = "yyyyMMddHHmmss'.0'";
 
@@ -492,7 +492,8 @@ public class PatentsXmlStreamReader implements MarcReader {
 		}
 
 		if (url != null) {
-			DataField df = factory.newDataField("856", '4', ' ', "u", url, "y", TEXT_856y);
+			DataField df = factory.newDataField("856", '4', ' ', "u", url,
+					"y", EVersionConstants.FULLTEXT_LINK);
 			record.addVariableField(df);
 		}
 	}

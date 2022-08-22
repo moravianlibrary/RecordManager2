@@ -151,7 +151,7 @@ public class IndexRecordsToEmbeddedSolrJobTest extends AbstractSolrTest {
 			// policy protected is from dc
 			Assert.assertTrue(
 					document.getFieldValues(SolrFieldConstants.URL).stream()
-							.anyMatch(url -> url.equals("kram-mzk|online|http://www.digitalniknihovna.cz/mzk/uuid/uuid:039764f8-d6db-11e0-b2cd-0050569d679d|Digitalizovaný dokument"))
+							.anyMatch(url -> url.equals("kram-mzk|online|http://www.digitalniknihovna.cz/mzk/uuid/uuid:039764f8-d6db-11e0-b2cd-0050569d679d|digitized_link"))
 			);
 		}
 

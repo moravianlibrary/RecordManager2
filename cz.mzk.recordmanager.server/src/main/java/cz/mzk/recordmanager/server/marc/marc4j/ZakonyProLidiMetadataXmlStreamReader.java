@@ -1,5 +1,6 @@
 package cz.mzk.recordmanager.server.marc.marc4j;
 
+import cz.mzk.recordmanager.server.util.constants.EVersionConstants;
 import org.marc4j.MarcReader;
 import org.marc4j.marc.DataField;
 import org.marc4j.marc.MarcFactory;
@@ -67,7 +68,6 @@ public class ZakonyProLidiMetadataXmlStreamReader implements MarcReader {
 	private static final String TEXT_6552_CZE = "czenas";
 	private static final String TEXT_6552_EN = "ennas";
 	private static final String TEXT_856U = "http://www.zakonyprolidi.cz%s";
-	private static final String TEXT_856Y = "plný text";
 
 	private static final String TYPE_NARIZENI_VLADY = "Narizeni_vlady";
 	private static final String TYPE_VYHLASKA = "Vyhlaska";
@@ -280,7 +280,7 @@ public class ZakonyProLidiMetadataXmlStreamReader implements MarcReader {
 	private void addField856() {
 		DataField df = factory.newDataField("856", '4', '1');
 		newSubfield(df, 'u', String.format(TEXT_856U, getAttr(ATTR_NAME_HREF)));
-		newSubfield(df, 'y', TEXT_856Y);
+		newSubfield(df, 'y', EVersionConstants.FULLTEXT_LINK);
 		record.addVariableField(df);
 	}
 }

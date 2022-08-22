@@ -1,17 +1,17 @@
 package cz.mzk.recordmanager.server.metadata.institutions;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-
-import cz.mzk.recordmanager.server.model.HarvestedRecord;
-import org.marc4j.marc.DataField;
-
 import cz.mzk.recordmanager.server.marc.MarcRecord;
 import cz.mzk.recordmanager.server.metadata.CitationRecordType;
 import cz.mzk.recordmanager.server.metadata.MetadataMarcRecord;
+import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecordFormat.HarvestedRecordFormatEnum;
 import cz.mzk.recordmanager.server.util.Constants;
+import cz.mzk.recordmanager.server.util.constants.EVersionConstants;
+import org.marc4j.marc.DataField;
+
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
 
 public class ZakonyProLidiMetadataMarcRecord extends MetadataMarcRecord{
 	
@@ -108,10 +108,10 @@ public class ZakonyProLidiMetadataMarcRecord extends MetadataMarcRecord{
 		}
 		return true;
 	}
-	
+
 	@Override
 	public List<String> getUrls() {
-		return getUrls(Constants.DOCUMENT_AVAILABILITY_ONLINE);
+		return super.getUrls(Constants.DOCUMENT_AVAILABILITY_ONLINE, EVersionConstants.FULLTEXT_LINK);
 	}
 
 	@Override

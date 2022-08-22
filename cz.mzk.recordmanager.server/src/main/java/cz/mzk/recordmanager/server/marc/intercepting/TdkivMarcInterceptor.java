@@ -1,5 +1,16 @@
 package cz.mzk.recordmanager.server.marc.intercepting;
 
+import cz.mzk.recordmanager.server.export.IOFormat;
+import cz.mzk.recordmanager.server.marc.MarcRecordImpl;
+import cz.mzk.recordmanager.server.marc.marc4j.MarcFactoryImpl;
+import cz.mzk.recordmanager.server.marc.marc4j.RecordImpl;
+import cz.mzk.recordmanager.server.util.RecordUtils;
+import cz.mzk.recordmanager.server.util.constants.EVersionConstants;
+import org.marc4j.marc.ControlField;
+import org.marc4j.marc.DataField;
+import org.marc4j.marc.MarcFactory;
+import org.marc4j.marc.Record;
+
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -7,22 +18,10 @@ import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import cz.mzk.recordmanager.server.util.RecordUtils;
-import org.marc4j.marc.ControlField;
-import org.marc4j.marc.DataField;
-import org.marc4j.marc.MarcFactory;
-import org.marc4j.marc.Record;
-
-import cz.mzk.recordmanager.server.export.IOFormat;
-import cz.mzk.recordmanager.server.marc.MarcRecordImpl;
-import cz.mzk.recordmanager.server.marc.marc4j.MarcFactoryImpl;
-import cz.mzk.recordmanager.server.marc.marc4j.RecordImpl;
-
 public class TdkivMarcInterceptor extends DefaultMarcInterceptor {
 
 	private static final Pattern RECORD_ID = Pattern.compile("doc_number=([0-9]*)");
 	private static final String DATE_STRING_005 = "yyyyMMddHHmmss'.0'";
-	private static final String TEXT_856y = "heslo v České terminologické databázi knihovnictví a informační vědy";
 	private static final HashMap<String, String> TAGS = new HashMap<>();
 
 	static {
@@ -72,7 +71,8 @@ public class TdkivMarcInterceptor extends DefaultMarcInterceptor {
 				df.setIndicator1('0');
 				df.setIndicator2('7');
 			} else if (df.getTag().equals("DRL")) {
-				df = marcFactory.newDataField("856", '4', '1', "u", df.getSubfield('a').getData(), "y", TEXT_856y);
+				df = marcFactory.newDataField("856", '4', '1', "u", df.getSubfield('a').getData(),
+						"y", EVersionConstants.TDKIV_LINK);
 			} else continue;
 			newRecord.addVariableField(df);
 		}

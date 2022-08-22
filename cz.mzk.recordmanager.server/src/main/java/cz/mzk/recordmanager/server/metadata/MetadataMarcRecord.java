@@ -1224,11 +1224,14 @@ public class MetadataMarcRecord implements MetadataRecord {
 
 	@Override
 	public List<String> getUrls() {
-		List<String> urls = getUrls(Constants.DOCUMENT_AVAILABILITY_UNKNOWN);
-		return filterEbookUrls(urls);
+		return getUrls(Constants.DOCUMENT_AVAILABILITY_UNKNOWN);
 	}
 
 	protected List<String> getUrls(String availability) {
+		return getUrls(availability,null);
+	}
+
+	protected List<String> getUrls(String availability, String defaultComment) {
 		List<String> result = new ArrayList<>();
 
 		for (DataField df : underlayingMarc.getDataFields("856")) {
@@ -1237,29 +1240,33 @@ public class MetadataMarcRecord implements MetadataRecord {
 			}
 			String link = df.getSubfield('u').getData();
 			String comment = "";
-			String sub3 = null, subY = null, subZ = null;
+			if (defaultComment != null)
+				comment = defaultComment;
+			else {
+				String sub3 = null, subY = null, subZ = null;
 
-			if (df.getSubfield('3') != null) {
-				sub3 = df.getSubfield('3').getData();
-			}
-			if (df.getSubfield('y') != null) {
-				subY = df.getSubfield('y').getData();
-			}
-			if (df.getSubfield('z') != null) {
-				subZ = df.getSubfield('z').getData();
-			}
+				if (df.getSubfield('3') != null) {
+					sub3 = df.getSubfield('3').getData();
+				}
+				if (df.getSubfield('y') != null) {
+					subY = df.getSubfield('y').getData();
+				}
+				if (df.getSubfield('z') != null) {
+					subZ = df.getSubfield('z').getData();
+				}
 
-			if (sub3 != null) {
-				comment = (subZ != null) ? String.format(URL_COMMENT_FORMAT, sub3, subZ) : sub3;
-			} else if (subY != null) {
-				comment = (subZ != null) ? String.format(URL_COMMENT_FORMAT, subY, subZ) : subY;
-			} else if (subZ != null) {
-				comment = subZ;
+				if (sub3 != null) {
+					comment = (subZ != null) ? String.format(URL_COMMENT_FORMAT, sub3, subZ) : sub3;
+				} else if (subY != null) {
+					comment = (subZ != null) ? String.format(URL_COMMENT_FORMAT, subY, subZ) : subY;
+				} else if (subZ != null) {
+					comment = subZ;
+				}
 			}
 			result.add(MetadataUtils.generateUrl(harvestedRecord.getHarvestedFrom().getIdPrefix(),
 					availability, link, comment));
 		}
-		return result;
+		return filterEbookUrls(result);
 	}
 
 	@Override

@@ -1,6 +1,7 @@
 package cz.mzk.recordmanager.server.marc.marc4j;
 
 import cz.mzk.recordmanager.server.util.RecordUtils;
+import cz.mzk.recordmanager.server.util.constants.EVersionConstants;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
@@ -127,7 +128,8 @@ public class MunipressCsvStreamReader implements MarcReader {
 		if (!csv.get(HEADER_ZANR).isEmpty()) addDataField("655", '7', ' ', "a", csv.get(HEADER_ZANR));
 		if (!csv.get(HEADER_TYP_PUBLIKACE).isEmpty()) addDataField("655", '7', ' ', "a", csv.get(HEADER_TYP_PUBLIKACE));
 		if (!csv.get(HEADER_ODKAZ).isEmpty())
-			addDataField("856", '4', '1', "u", csv.get(HEADER_ODKAZ), "y", "Plný text");
+			addDataField("856", '4', '1', "u", csv.get(HEADER_ODKAZ),
+					"y", EVersionConstants.FULLTEXT_LINK);
 		addDataField("710", ' ', '2', "a", "Masarykova univerzita", "7", "kn20010709056", "4", "pbl");
 		return RecordUtils.sortFields(record);
 	}

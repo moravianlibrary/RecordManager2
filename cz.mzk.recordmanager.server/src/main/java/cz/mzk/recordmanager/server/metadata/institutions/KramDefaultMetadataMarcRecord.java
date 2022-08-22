@@ -6,8 +6,8 @@ import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.model.KrameriusConfiguration;
 import cz.mzk.recordmanager.server.model.Uuid;
 import cz.mzk.recordmanager.server.oai.dao.KrameriusConfigurationDAO;
-import cz.mzk.recordmanager.server.util.Constants;
 import cz.mzk.recordmanager.server.util.MetadataUtils;
+import cz.mzk.recordmanager.server.util.constants.EVersionConstants;
 import org.marc4j.marc.DataField;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -65,7 +65,7 @@ public class KramDefaultMetadataMarcRecord extends MetadataMarcRecord {
 	}
 
 	public List<String> generateUrl(String kramUrlBase, String policy) {
-		return generateUrl(kramUrlBase, policy, Constants.KRAM_EVERSION_COMMENT);
+		return generateUrl(kramUrlBase, policy, EVersionConstants.DIGITIZED_LINK);
 	}
 
 	public List<String> generateUrl(String kramUrlBase, String policy, String comment) {

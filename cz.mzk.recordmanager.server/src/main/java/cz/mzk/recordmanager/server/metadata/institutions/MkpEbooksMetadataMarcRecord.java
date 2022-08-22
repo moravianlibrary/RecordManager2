@@ -4,6 +4,7 @@ import cz.mzk.recordmanager.server.marc.MarcRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.util.Constants;
 import cz.mzk.recordmanager.server.util.MetadataUtils;
+import cz.mzk.recordmanager.server.util.constants.EVersionConstants;
 import org.marc4j.marc.DataField;
 
 import java.util.ArrayList;
@@ -14,7 +15,6 @@ import java.util.regex.Pattern;
 public class MkpEbooksMetadataMarcRecord extends EbooksMetadataMarcRecord {
 
 	private static final Pattern URL_Y_PATTERN = Pattern.compile("Plný text");
-	private static final String URL_COMMENT = "Stáhněte zdarma (%s)";
 
 	public MkpEbooksMetadataMarcRecord(MarcRecord underlayingMarc, HarvestedRecord hr) {
 		super(underlayingMarc, hr);
@@ -30,7 +30,8 @@ public class MkpEbooksMetadataMarcRecord extends EbooksMetadataMarcRecord {
 					&& df.getSubfield('q') != null) {
 				results.add(MetadataUtils.generateUrl(harvestedRecord.getHarvestedFrom().getIdPrefix(),
 						Constants.DOCUMENT_AVAILABILITY_ONLINE,
-						df.getSubfield('u').getData(), String.format(URL_COMMENT, df.getSubfield('q').getData())));
+						df.getSubfield('u').getData(), String.format(EVersionConstants.FREE_FORMAT_LINK,
+								df.getSubfield('q').getData())));
 			}
 		}
 		return results;

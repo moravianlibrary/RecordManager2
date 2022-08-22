@@ -5,6 +5,7 @@ import cz.mzk.recordmanager.server.metadata.MetadataMarcRecord;
 import cz.mzk.recordmanager.server.model.EVersionUrl;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.util.Constants;
+import cz.mzk.recordmanager.server.util.constants.EVersionConstants;
 import org.marc4j.marc.DataField;
 
 import java.util.ArrayList;
@@ -15,8 +16,6 @@ public class BmcMetadataMarcRecord extends MetadataMarcRecord {
 	private static final String SUBJECT_FACET_FILE = "subject_facet_bmc.txt";
 	private static final String LINK_MEDVIK = "https://www.medvik.cz/bmc/link.do?id=%s";
 	private static final String LINK_DOI = "https://dx.doi.org/%s";
-	private static final String COMMENT_MEDVIK = "záznam v BMČ";
-	private static final String COMMENT_DOI = "DOI";
 
 	public BmcMetadataMarcRecord(MarcRecord underlayingMarc, HarvestedRecord hr) {
 		super(underlayingMarc, hr);
@@ -29,7 +28,7 @@ public class BmcMetadataMarcRecord extends MetadataMarcRecord {
 		if (underlayingMarc.getControlField("001") != null) {
 			EVersionUrl url = EVersionUrl.create(harvestedRecord.getHarvestedFrom().getIdPrefix(),
 					Constants.DOCUMENT_AVAILABILITY_UNKNOWN,
-					String.format(LINK_MEDVIK, underlayingMarc.getControlField("001")), COMMENT_MEDVIK);
+					String.format(LINK_MEDVIK, underlayingMarc.getControlField("001")), EVersionConstants.BMC_LINK);
 			if (url != null) results.add(url.toString());
 		}
 		for (DataField df : underlayingMarc.getDataFields("024")) {
@@ -37,7 +36,7 @@ public class BmcMetadataMarcRecord extends MetadataMarcRecord {
 					&& df.getSubfield('a') != null) {
 				EVersionUrl url = EVersionUrl.create(harvestedRecord.getHarvestedFrom().getIdPrefix(),
 						Constants.DOCUMENT_AVAILABILITY_UNKNOWN,
-						String.format(LINK_DOI, df.getSubfield('a').getData()), COMMENT_DOI);
+						String.format(LINK_DOI, df.getSubfield('a').getData()), EVersionConstants.DOI_LINK);
 				if (url != null) results.add(url.toString());
 			}
 		}
