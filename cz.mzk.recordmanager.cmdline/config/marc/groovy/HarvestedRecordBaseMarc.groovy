@@ -1,3 +1,6 @@
+import cz.mzk.recordmanager.server.marc.SubfieldExtractionMethod
+
+import static cz.mzk.recordmanager.server.marc.SubfieldExtractionMethod.*
 import static cz.mzk.recordmanager.server.scripting.marc.function.BoundingBoxMarcFunctions.LongLatFormat.*
 
 recordtype = "local"
@@ -28,7 +31,7 @@ nbn_display = getFirstField "015a"
 oclc_display_mv = getOclcs()
 
 url = getUrls()
-subject_str_mv = getSubject "600abcdfglnpqstyz:610abcdfgklnpstyz:611abcefgklpqstyz:630adfgklnpstyz:648a:651avxyz:964abcdefg:967ab"
+subject_str_mv = getSubject "600abcdfglnpqstyz:610abcdfgklnpstyz:611abcefgklpqstyz:630adfgklnpstyz:648a:651avxyz:964abcdefg:967ab", SEPARATED
 
 _hidden_viz_dummy_field = getAuthorityIds "auth.1007:1107:1117:1307:6007:6107:6117:6307:6487:6507:6517:6557:7007:7107:7117:7307|mesh.650a:651a:655a|agrovoc.650a"
 
@@ -75,7 +78,7 @@ genre_facet_mv = genre_facet_str_mv = getGenreFacet "655avxyz"
 local_institution_view_facet_mv = institution_view_facet_str_mv = getInstitutionViewFacet()
 local_region_institution_facet_mv = local_region_institution_facet_str_mv = getRegionInstitutionFacet()
 local_statuses_facet_mv = local_statuses_facet_str_mv = getStatuses()
-subject_facet_mv = subject_facet_str_mv = getSubject "600abcdfglnpqstyz:610abcdfgklnpstyz:611abcdefgklnpqstyz:630adfgklnpstyz:648a:651avxyz:964abcdefg:967ab"
+subject_facet_mv = subject_facet_str_mv = getSubject "600abcdfglnpqstyz:610abcdfgklnpstyz:611abcdefgklnpqstyz:630adfgklnpstyz:648a:651avxyz:964abcdefg:967ab", JOINED
 ziskej_facet_mv = getZiskejFacet()
 scale_int_facet_mv = getScaleFacet()
 

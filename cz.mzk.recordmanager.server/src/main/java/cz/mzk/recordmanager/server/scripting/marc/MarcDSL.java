@@ -324,15 +324,15 @@ public class MarcDSL extends BaseDSL {
 		return SolrUtils.removeEndPunctuation(getFirstField(tags));
 	}
 
-	public Set<String> getSubject(String tags) throws IOException {
+	public Set<String> getSubject(String tags, SubfieldExtractionMethod method) throws IOException {
 		if (!metadataRecord.subjectFacet()) return Collections.emptySet();
 		Set<String> subjects = new HashSet<>();
 
-		for (String subject : getFields(tags, SubfieldExtractionMethod.SEPARATED)) {
+		for (String subject : getFields(tags, method)) {
 			subjects.add(SolrUtils.toUpperCaseFirstChar(subject));
 		}
 
-		for (String subject : getFields("650avyz", SubfieldExtractionMethod.SEPARATED)) {
+		for (String subject : getFields("650avyz", method)) {
 			subjects.add(SolrUtils.toUpperCaseFirstChar(subject.toLowerCase()));
 		}
 
@@ -355,7 +355,7 @@ public class MarcDSL extends BaseDSL {
 			subjects = new HashSet<>(filter(metadataRecord.filterSubjectFacet(), new ArrayList<>(subjects)));
 		}
 
-		return SolrUtils.removeEndParentheses(subjects);
+		return SolrUtils.removeEndParentheses(subjects).stream().map(s -> s.trim()).collect(Collectors.toCollection(HashSet::new));
 	}
 
 	public Set<String> getISBNISSNISMN() {
