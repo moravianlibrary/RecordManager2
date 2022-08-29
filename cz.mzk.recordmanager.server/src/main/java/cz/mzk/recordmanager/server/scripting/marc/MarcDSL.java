@@ -347,7 +347,7 @@ public class MarcDSL extends BaseDSL {
 				}
 			}
 		}
-
+		subjects = subjects.stream().filter(s -> s != null && !s.isEmpty()).collect(Collectors.toSet());
 		if (metadataRecord.filterSubjectFacet() != null) {
 			subjects = new HashSet<>(filter(metadataRecord.filterSubjectFacet(), new ArrayList<>(subjects)));
 		}
