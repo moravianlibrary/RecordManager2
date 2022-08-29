@@ -14,10 +14,7 @@ import cz.mzk.recordmanager.server.scripting.ListResolver;
 import cz.mzk.recordmanager.server.scripting.MappingResolver;
 import cz.mzk.recordmanager.server.scripting.StopWordsResolver;
 import cz.mzk.recordmanager.server.scripting.function.RecordFunction;
-import cz.mzk.recordmanager.server.util.CleaningUtils;
-import cz.mzk.recordmanager.server.util.Constants;
-import cz.mzk.recordmanager.server.util.SiglaMapping;
-import cz.mzk.recordmanager.server.util.SolrUtils;
+import cz.mzk.recordmanager.server.util.*;
 import cz.mzk.recordmanager.server.util.identifier.ISBNUtils;
 import cz.mzk.recordmanager.server.util.identifier.ISSNUtils;
 import org.apache.commons.validator.routines.ISBNValidator;
@@ -354,8 +351,8 @@ public class MarcDSL extends BaseDSL {
 		if (metadataRecord.filterSubjectFacet() != null) {
 			subjects = new HashSet<>(filter(metadataRecord.filterSubjectFacet(), new ArrayList<>(subjects)));
 		}
-
-		return SolrUtils.removeEndParentheses(subjects).stream().map(s -> s.trim()).collect(Collectors.toCollection(HashSet::new));
+		subjects = SolrUtils.removeEndParentheses(subjects).stream().map(s -> s.trim()).collect(Collectors.toCollection(HashSet::new));
+		return MetadataUtils.shorten(subjects, 1000);
 	}
 
 	public Set<String> getISBNISSNISMN() {

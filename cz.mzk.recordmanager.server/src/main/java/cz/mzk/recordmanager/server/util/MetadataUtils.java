@@ -11,8 +11,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.text.Normalizer;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -54,6 +53,11 @@ public class MetadataUtils {
 	public static String shorten(String input, int length) {
 		if (input == null) return null;
 		return input.substring(0, Math.min(length, input.length()));
+	}
+
+	public static Set<String> shorten(Collection<String> input, int length) {
+		if (input == null) return null;
+		return input.stream().map(s -> shorten(s, length)).collect(Collectors.toCollection(HashSet::new));
 	}
 
 	public static boolean similarityEnabled(DataField df, Title title) {
