@@ -11,6 +11,8 @@ import cz.mzk.recordmanager.server.util.Constants;
 import cz.mzk.recordmanager.server.util.SolrUtils;
 import cz.mzk.recordmanager.server.util.constants.EVersionConstants;
 import org.apache.solr.common.SolrInputDocument;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -27,6 +29,8 @@ public class UrlDedupRecordEnricher implements DedupRecordEnricher {
 
 	@Autowired
 	private KramAvailabilityDAO kramAvailabilityDAO;
+
+	private static final Logger logger = LoggerFactory.getLogger(UrlDedupRecordEnricher.class);
 
 	private static final Pattern UUID_PATTERN = Pattern.compile("uuid:[\\w-]+");
 
@@ -66,7 +70,7 @@ public class UrlDedupRecordEnricher implements DedupRecordEnricher {
 			try {
 				url = EVersionUrl.create(obj.toString());
 			} catch (Exception e) {
-				e.printStackTrace();
+				logger.debug(String.format("%s: %s", e.getMessage(), obj.toString()));
 				continue;
 			}
 			if (url != null) addToMap(urls, url);
