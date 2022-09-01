@@ -5,6 +5,7 @@ import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.model.ImportConfiguration;
 import cz.mzk.recordmanager.server.model.ShortTitle;
 import cz.mzk.recordmanager.server.model.Title;
+import org.apache.commons.lang3.tuple.Pair;
 import org.marc4j.marc.DataField;
 
 import java.io.BufferedReader;
@@ -31,6 +32,12 @@ public class MetadataUtils {
 
 	private static final Pattern FIELD_245 = Pattern.compile("245");
 
+	private static final List<Pair<Pattern, String>> REPLACEMENT_PAIRS = new ArrayList<>();
+
+	static {
+		REPLACEMENT_PAIRS.add(Pair.of(Pattern.compile("ß"), "ss"));
+	}
+
 	public static boolean hasTrailingPunctuation(final String input) {
 		return TRAILINGPUNCTUATION_PATTERN.matcher(input).matches();
 	}
@@ -38,6 +45,9 @@ public class MetadataUtils {
 	public static String normalize(final String input) {
 		if (input == null) return null;
 		String result = Normalizer.normalize(input, Normalizer.Form.NFD);
+		for (Pair<Pattern, String> pair : REPLACEMENT_PAIRS) {
+			result = CleaningUtils.replaceAll(result, pair.getLeft(), pair.getRight());
+		}
 		result = CleaningUtils.replaceAll(result, NORMALIZE_DIACRITICS_PATTERN, "");
 		result = CleaningUtils.replaceAll(result, NORMALIZE_NON_WORD_PATTERN, "");
 		return result.toLowerCase();

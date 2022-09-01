@@ -13,7 +13,7 @@ public class MetadataUtilsTest {
 				+ "rozzvučí síň úděsnými tóny waltzu, tanga a quickstepu."),
 				"nechtjizhrisnesaxofonydablurozzvucisinudesnymitonywaltzutangaaquickstepu");
 		Assert.assertEquals(MetadataUtils.normalize("Verbüß öd’ Joch, kämpf Qual, zwing Styx!"),
-				"verbuodjochkampfqualzwingstyx");
+				"verbussodjochkampfqualzwingstyx");
 	}
 	
 	@Test
