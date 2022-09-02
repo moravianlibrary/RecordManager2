@@ -2698,3 +2698,5 @@ INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granul
 -- 22. 08. 2022 tomascejpek
 ALTER TABLE import_conf ADD COLUMN catalog_serial_link BOOLEAN DEFAULT FALSE;
 
+-- 02. 09. 2022 tomascejpek
+UPDATE oai_harvest_conf SET url='https://nacr.kpsys.cz/api/oai' WHERE import_conf_id=366;
