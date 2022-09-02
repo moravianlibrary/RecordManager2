@@ -5,13 +5,25 @@ import cz.mzk.recordmanager.server.marc.MarcRecordImpl;
 import cz.mzk.recordmanager.server.marc.marc4j.RecordImpl;
 import cz.mzk.recordmanager.server.model.ImportConfiguration;
 import cz.mzk.recordmanager.server.util.RecordUtils;
+import org.apache.commons.lang3.tuple.Pair;
 import org.marc4j.marc.ControlField;
 import org.marc4j.marc.DataField;
 import org.marc4j.marc.Record;
 
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CzhistbibMarcInterceptor extends DefaultMarcInterceptor {
+
+	private static final List<Pair<String, String>> REPLACEMENT_PAIRS = new ArrayList<>();
+
+	static {
+		REPLACEMENT_PAIRS.add(Pair.of("668", "648"));
+		REPLACEMENT_PAIRS.add(Pair.of("671", "651"));
+		REPLACEMENT_PAIRS.add(Pair.of("673", "653"));
+		REPLACEMENT_PAIRS.add(Pair.of("691", "653"));
+	}
 
 	public CzhistbibMarcInterceptor(Record record, ImportConfiguration configuration, String recordId) {
 		super(record, configuration, recordId);
@@ -29,9 +41,10 @@ public class CzhistbibMarcInterceptor extends DefaultMarcInterceptor {
 		}
 
 		for (DataField df : super.getRecord().getDataFields()) {
-			// change field tag 691 to 653
-			if (df.getTag().equals("691")) {
-				df.setTag("653");
+			for (Pair<String, String> pair : REPLACEMENT_PAIRS) {
+				if (df.getTag().equals(pair.getLeft())) {
+					df.setTag(pair.getRight());
+				}
 			}
 			newRecord.addVariableField(df);
 		}
