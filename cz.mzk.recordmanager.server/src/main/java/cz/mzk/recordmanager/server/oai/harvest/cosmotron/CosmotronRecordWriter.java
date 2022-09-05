@@ -14,6 +14,7 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 
 public class CosmotronRecordWriter extends HarvestedRecordWriter implements ItemWriter<List<HarvestedRecord>> {
@@ -33,7 +34,7 @@ public class CosmotronRecordWriter extends HarvestedRecordWriter implements Item
 	@Override
 	public void write(List<? extends List<HarvestedRecord>> records) throws Exception {
 		for (List<HarvestedRecord> list : records) {
-			for (HarvestedRecord record : list) {
+			for (HarvestedRecord record : new HashSet<>(list)) {
 				processAndSave(record);
 			}
 		}
