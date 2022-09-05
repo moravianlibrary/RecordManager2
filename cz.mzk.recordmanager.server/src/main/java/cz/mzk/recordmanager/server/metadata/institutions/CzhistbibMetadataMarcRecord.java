@@ -9,11 +9,11 @@ import cz.mzk.recordmanager.server.util.MetadataUtils;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HistografbibMetadataMarcRecord extends MetadataMarcRecord {
+public class CzhistbibMetadataMarcRecord extends MetadataMarcRecord {
 
-	private static final String URL = "https://nacr.kpsys.cz/records/%s";
+	private static final String URL = "https://biblio.hiu.cas.cz/records/%s";
 
-	public HistografbibMetadataMarcRecord(MarcRecord underlayingMarc, HarvestedRecord hr) {
+	public CzhistbibMetadataMarcRecord(MarcRecord underlayingMarc, HarvestedRecord hr) {
 		super(underlayingMarc, hr);
 	}
 

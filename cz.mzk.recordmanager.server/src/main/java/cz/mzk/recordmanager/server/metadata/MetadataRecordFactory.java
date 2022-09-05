@@ -220,14 +220,15 @@ public class MetadataRecordFactory {
 		case Constants.PREFIX_MKFM:
 			return new MkfmMetadataMarcRecord(marcRec, hr);
 		case Constants.PREFIX_ARCHBIB:
+			return new ArchbibMetadataMarcRecord(marcRec, hr);
 		case Constants.PREFIX_CZHISTBIB:
-			return new HistografbibMetadataMarcRecord(marcRec, hr);
+			return new CzhistbibMetadataMarcRecord(marcRec, hr);
 		case Constants.PREFIX_CELITEBIB:
 			return new CelitebibMarcMetadataRecord(marcRec, hr);
 		case Constants.PREFIX_KKPC:
-			return new KkpcMetadataMarcRecord(marcRec,hr);
+			return new KkpcMetadataMarcRecord(marcRec, hr);
 		case Constants.PREFIX_PALMKNIHY:
-			return init(new PalmknihyMetadataMarcRecord(marcRec,hr));
+			return init(new PalmknihyMetadataMarcRecord(marcRec, hr));
 		default:
 			return new MetadataMarcRecord(marcRec, hr);
 		}
