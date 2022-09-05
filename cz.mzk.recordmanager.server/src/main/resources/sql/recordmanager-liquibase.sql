@@ -2989,3 +2989,6 @@ ALTER TABLE import_conf ADD COLUMN catalog_serial_link BOOLEAN DEFAULT FALSE;
 
 --changeset tomascejpek:350 context:cpk
 UPDATE oai_harvest_conf SET url='https://nacr.kpsys.cz/api/oai' WHERE import_conf_id=366;
+
+--changeset tomascejpek:351 context:cpk
+UPDATE import_conf SET catalog_serial_link=TRUE WHERE id IN (308,328,336,343,359,387,392,421,429,439,441,447,460);
