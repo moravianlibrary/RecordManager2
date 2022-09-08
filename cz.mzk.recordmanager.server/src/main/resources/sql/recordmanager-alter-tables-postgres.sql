@@ -2703,3 +2703,6 @@ UPDATE oai_harvest_conf SET url='https://nacr.kpsys.cz/api/oai' WHERE import_con
 
 -- 05. 09. 2022 tomascejpek
 UPDATE import_conf SET catalog_serial_link=true WHERE id in (308,328,336,343,359,387,392,421,429,439,441,447,460);
+
+-- 08. 09. 2022 tomascejpek
+UPDATE oai_harvest_conf SET url='https://biblio.hiu.cas.cz/api/oai' WHERE import_conf_id=367;
