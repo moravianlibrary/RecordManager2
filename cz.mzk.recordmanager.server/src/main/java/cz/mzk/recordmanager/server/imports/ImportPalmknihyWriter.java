@@ -59,6 +59,7 @@ public class ImportPalmknihyWriter extends ImportRecordsWriter implements ItemWr
 	static {
 		ID_PARSER.put(328L, Pattern.compile("\\d+"));
 		ID_PARSER.put(333L, Pattern.compile("\\d{9}"));
+		ID_PARSER.put(461L, Pattern.compile("\\d+"));
 	}
 
 	private static final HashMap<Long, String> URL = new HashMap<>();
@@ -66,6 +67,7 @@ public class ImportPalmknihyWriter extends ImportRecordsWriter implements ItemWr
 	static {
 		URL.put(328L, "https://katalog.cbvk.cz/arl-cbvk/cs/detail-cbvk_us_cat-%s-titul");
 		URL.put(333L, "https://aleph.knihovna-pardubice.cz/F/?func=direct&doc_number=%s");
+		URL.put(461L, "https://katalog.svkul.cz/detail/%s");
 	}
 
 
