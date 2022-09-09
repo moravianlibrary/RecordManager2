@@ -4,17 +4,12 @@ import cz.mzk.recordmanager.server.model.*;
 import cz.mzk.recordmanager.server.model.HarvestedRecord.HarvestedRecordUniqueId;
 import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordDAO;
 import cz.mzk.recordmanager.server.util.Constants;
-import org.hibernate.Criteria;
-import org.hibernate.FetchMode;
-import org.hibernate.NullPrecedence;
-import org.hibernate.Query;
-import org.hibernate.Session;
+import org.hibernate.*;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Component;
 
-import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
@@ -436,6 +431,38 @@ public class HarvestedRecordDAOHibernate extends
 		Predicate restrictions = cb.equal(root.get("palmknihyId"), palknihyId);
 		cq.select(root).where(restrictions);
 		return session.createQuery(cq).getResultList();
+	}
+
+	@Override
+	@SuppressWarnings("unchecked")
+	public List<byte[]> getMetadataForPalmknihy(Long isbn, String url_id) {
+		Session session = sessionFactory.getCurrentSession();
+		if (isbn != null) {
+			List<byte[]> results = (List<byte[]>) session
+					.createQuery("SELECT hr.rawRecord " +
+							"FROM HarvestedRecord hr " +
+							"JOIN Isbn i ON hr.id=i.harvestedRecordId " +
+							"WHERE hr.uniqueId.harvestedFromId=316 AND i.isbn = :isbn " +
+							"ORDER BY i.orderInRecord ASC")
+					.setParameter("isbn", isbn)
+					.list();
+			if (!results.isEmpty()) return results;
+			return (List<byte[]>) session
+					.createQuery("SELECT hr.rawRecord " +
+							"FROM HarvestedRecord hr " +
+							"JOIN Isbn i ON hr.id=i.harvestedRecordId " +
+							"WHERE i.isbn = :isbn " +
+							"ORDER BY i.orderInRecord ASC")
+					.setParameter("isbn", isbn)
+					.list();
+		} else {
+			return (List<byte[]>) session
+					.createQuery("SELECT hr.rawRecord " +
+							"FROM HarvestedRecord hr " +
+							"WHERE hr.uniqueId.harvestedFromId IN (333, 328) AND palmknihyId = :url_id")
+					.setParameter("url_id", url_id)
+					.list();
+		}
 	}
 
 }

@@ -3,10 +3,8 @@ package cz.mzk.recordmanager.server.imports;
 import cz.mzk.recordmanager.server.bibliolinker.keys.DelegatingBiblioLinkerKeysParser;
 import cz.mzk.recordmanager.server.marc.MarcXmlParser;
 import cz.mzk.recordmanager.server.marc.marc4j.MarcFactoryImpl;
-import cz.mzk.recordmanager.server.metadata.MetadataMarcRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordDAO;
-import cz.mzk.recordmanager.server.oai.dao.IsbnDAO;
 import cz.mzk.recordmanager.server.util.identifier.ISBNUtils;
 import org.hibernate.SessionFactory;
 import org.marc4j.marc.DataField;
@@ -34,9 +32,6 @@ public class ImportPalmknihyWriter extends ImportRecordsWriter implements ItemWr
 
 	@Autowired
 	private HarvestedRecordDAO hrDao;
-
-	@Autowired
-	private IsbnDAO isbnDAO;
 
 	private final MarcFactory factory = MarcFactoryImpl.newInstance();
 
@@ -77,21 +72,21 @@ public class ImportPalmknihyWriter extends ImportRecordsWriter implements ItemWr
 				Long isbn = null;
 				DataField field856 = null;
 				String vyp = "0";
+				String url_id = null;
 				for (DataField df : currentRecord.getDataFields()) {
 					if (df.getTag().equals("020") && df.getSubfield('a') != null) {
 						isbn = ISBNUtils.toISBN13Long(df.getSubfield('a').getData());
 					}
 					if (df.getTag().equals("856")) field856 = df;
 					if (df.getTag().equals("VYP")) vyp = df.getSubfield('a').getData();
+					if (df.getTag().equals("URL")) url_id = df.getSubfield('a').getData();
 				}
-				if (isbn == null || field856 == null || !vyp.equals("1")) continue;
-				for (byte[] rawRecord : isbnDAO.findCaslinHrByIsbn(isbn)) {
+				if (field856 == null || !vyp.equals("1") || url_id == null) continue;
+				for (byte[] rawRecord : hrDao.getMetadataForPalmknihy(isbn, url_id)) {
 					Record palmknihy = marcXmlParser.parseUnderlyingRecord(rawRecord);
 					palmknihy.addVariableField(field856);
-					Matcher matcher = MetadataMarcRecord.PALMKNIHY_ID.matcher(field856.getSubfield('u').getData());
-					if (!matcher.matches()) continue;
 					boolean eversionExists = false;
-					for (HarvestedRecord hrLib : hrDao.getByPalmknihyId(matcher.group(1))) {
+					for (HarvestedRecord hrLib : hrDao.getByPalmknihyId(url_id)) {
 						String record_id = hrLib.getUniqueId().getRecordId();
 						if (!ID_PARSER.containsKey(hrLib.getHarvestedFrom().getId())) continue;
 						Matcher matcher1 = ID_PARSER.get(hrLib.getHarvestedFrom().getId())

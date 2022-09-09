@@ -1,5 +1,6 @@
 package cz.mzk.recordmanager.server.marc.marc4j;
 
+import cz.mzk.recordmanager.server.metadata.MetadataMarcRecord;
 import cz.mzk.recordmanager.server.util.RecordUtils;
 import org.marc4j.MarcReader;
 import org.marc4j.marc.MarcFactory;
@@ -9,6 +10,7 @@ import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 import java.io.InputStream;
+import java.util.regex.Matcher;
 
 public class PalmKnihyXmlStreamReader implements MarcReader {
 
@@ -78,7 +80,11 @@ public class PalmKnihyXmlStreamReader implements MarcReader {
 						record.addVariableField(factory.newDataField("020", ' ', ' ', "a", xmlReader.getElementText()));
 						break;
 					case ELEMENT_URL:
-						record.addVariableField(factory.newDataField("856", ' ', ' ', "u", xmlReader.getElementText()));
+						String url = xmlReader.getElementText();
+						record.addVariableField(factory.newDataField("856", ' ', ' ', "u", url));
+						Matcher matcher = MetadataMarcRecord.PALMKNIHY_ID.matcher(url);
+						if (matcher.matches())
+							record.addVariableField(factory.newDataField("URL", ' ', ' ', "a", matcher.group(1)));
 						break;
 					case ELEMENT_VYPUJCKA:
 						record.addVariableField(factory.newDataField("VYP", ' ', ' ', "a", xmlReader.getElementText()));

@@ -9,6 +9,4 @@ public interface IsbnDAO extends DomainDAO<Long, Isbn> {
 
 	List<HarvestedRecord> findHrByIsbn(Long isbn);
 
-	List<byte []> findCaslinHrByIsbn(Long isbn);
-
 }
