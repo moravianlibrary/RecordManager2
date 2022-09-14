@@ -2999,3 +2999,6 @@ UPDATE oai_harvest_conf SET url='https://biblio.hiu.cas.cz/api/oai' WHERE import
 --changeset tomascejpek:353 context:cpk
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, generate_dedup_keys, generate_biblio_linker_keys, indexed) VALUES (461, 114, 200, 'svkul', 11, false, true, true, true, 'U', false, false, false);
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (461,'https://tritius.svkul.cz/tritius/oai-provider','PLM','marc21',NULL);
+
+--changeset tomascejpek:354 context:cpk
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (113, 441, 'JCG001');
