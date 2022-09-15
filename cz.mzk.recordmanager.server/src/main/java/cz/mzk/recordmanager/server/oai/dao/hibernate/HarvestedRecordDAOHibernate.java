@@ -438,6 +438,7 @@ public class HarvestedRecordDAOHibernate extends
 	public List<byte[]> getMetadataForPalmknihy(Long isbn, String url_id) {
 		Session session = sessionFactory.getCurrentSession();
 		if (isbn != null) {
+			// caslin
 			List<byte[]> results = (List<byte[]>) session
 					.createQuery("SELECT hr.rawRecord " +
 							"FROM HarvestedRecord hr " +
@@ -447,6 +448,17 @@ public class HarvestedRecordDAOHibernate extends
 					.setParameter("isbn", isbn)
 					.list();
 			if (!results.isEmpty()) return results;
+			// ebooks nkp
+			results = (List<byte[]>) session
+					.createQuery("SELECT hr.rawRecord " +
+							"FROM HarvestedRecord hr " +
+							"JOIN Isbn i ON hr.id=i.harvestedRecordId " +
+							"WHERE hr.uniqueId.harvestedFromId=462 AND i.isbn = :isbn " +
+							"ORDER BY i.orderInRecord ASC")
+					.setParameter("isbn", isbn)
+					.list();
+			if (!results.isEmpty()) return results;
+			// others
 			return (List<byte[]>) session
 					.createQuery("SELECT hr.rawRecord " +
 							"FROM HarvestedRecord hr " +

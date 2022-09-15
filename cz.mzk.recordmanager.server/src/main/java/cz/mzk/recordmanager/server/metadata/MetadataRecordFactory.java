@@ -229,6 +229,8 @@ public class MetadataRecordFactory {
 			return new KkpcMetadataMarcRecord(marcRec, hr);
 		case Constants.PREFIX_PALMKNIHY:
 			return init(new PalmknihyMetadataMarcRecord(marcRec, hr));
+		case Constants.PREFIX_NKC_EBOOK:
+			return new NkcEbookMetadataMarcRecord(marcRec, hr);
 		default:
 			return new MetadataMarcRecord(marcRec, hr);
 		}

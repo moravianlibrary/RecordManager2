@@ -205,6 +205,7 @@ public class Constants {
 	public static final String PREFIX_MUNIPRESS			= "munipress";
 	public static final String PREFIX_MZK				= "mzk";
 	public static final String PREFIX_MZKNORMS			= "unmz";
+	public static final String PREFIX_NKC_EBOOK			= "nkc-ebook";
 	public static final String PREFIX_NKP				= "nkp";
 	public static final String PREFIX_NLK				= "nlk";
 	public static final String PREFIX_NTK				= "ntk";

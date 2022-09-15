@@ -3002,3 +3002,7 @@ INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granul
 
 --changeset tomascejpek:354 context:cpk
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (113, 441, 'JCG001');
+
+--changeset tomascejpek:355 context:cpk
+INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, generate_dedup_keys, generate_biblio_linker_keys, indexed) VALUES (462, 104, 200, 'nkc-ebook', 11, false, true, true, true, 'U', true, false, false);
+INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (462,'https://aleph.nkp.cz/OAI','NKC-EBOOK','marc21',NULL);
