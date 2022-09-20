@@ -6,6 +6,7 @@ import cz.mzk.recordmanager.server.util.Constants;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public enum ViewType {
 	IREL("irel") {
@@ -66,6 +67,31 @@ public enum ViewType {
 								Set<String> siglas, List<String> conspectus) throws IOException {
 			return contains(resolver, String.format(INST_INCLUDE_FILE, getValue()), importConfId.toString());
 		}
+	},
+	GEOBIBLINE("geobibline") {
+		@Override
+		protected boolean match(MetadataRecord mr, ListResolver resolver, Long importConfId,
+				Set<String> siglas, List<String> conspectus) throws IOException {
+			if (Collections.disjoint(Arrays.asList("xr", "cs"), mr.getCountries())
+					&& !mr.getLanguages().contains("cze")) return false;
+			Set<String> formats = mr.getDetectedFormatList().stream().map(f -> f.toString()).collect(Collectors.toSet());
+			if (containsAny(resolver, String.format(FORMAT_FILE, getValue()), formats)) {
+				return true;
+			}
+			if (containsAny(resolver, String.format(TOPIC_FILE, getValue()), mr.getTopic())
+					&& containsAny(resolver, String.format("view/%s_topic_format.txt", getValue()), formats)) {
+				return true;
+			}
+			if (containsAny(resolver, String.format(CONSPECTUS_FILE, getValue()), conspectus)) {
+				return true;
+			}
+			Set<String> mdt = mr.getMdt();
+			if (containsAny(resolver, String.format(MDT_FILE, getValue()), mdt)) {
+				return true;
+			}
+			if (mdt.stream().anyMatch(m -> m.startsWith("(084.3"))) return true;
+			return false;
+		}
 	};
 
 	private String value;
@@ -74,6 +100,9 @@ public enum ViewType {
 	protected static final String INST_EXCLUDE_FILE = "view/%s_exclude.txt";
 	protected static final String CASLIN_FILE = "view/%s_caslin.txt";
 	protected static final String CONSPECTUS_FILE = "view/%s_conspectus.txt";
+	protected static final String FORMAT_FILE = "view/%s_format.txt";
+	protected static final String TOPIC_FILE = "view/%s_topic.txt";
+	protected static final String MDT_FILE = "view/%s_mdt.txt";
 
 	ViewType(String value) {
 		this.value = value;
