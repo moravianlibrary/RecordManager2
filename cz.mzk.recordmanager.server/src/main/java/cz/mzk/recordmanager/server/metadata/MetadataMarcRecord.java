@@ -1113,6 +1113,9 @@ public class MetadataMarcRecord implements MetadataRecord {
 					&& CPK0_PATTERN.matcher(df.getSubfield('a').getData()).matches()) return false;
 		}
 		if (!matchFilterEbooks()) return false;
+		if (isPeriodical() && harvestedRecord != null && harvestedRecord.getHarvestedFrom().isFilterPeriodicals()) {
+			return false;
+		}
 		// more rules in institution specific classes
 		return true;
 	}

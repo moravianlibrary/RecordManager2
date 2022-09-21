@@ -2675,6 +2675,7 @@ UPDATE kramerius_conf SET url='https://kramerius.mjh.cz/search/api/v5.0' WHERE i
 UPDATE kramerius_conf SET availability_dest_url='https://k4.kr-karlovarsky.cz/search/handle/' WHERE import_conf_id=99020;
 UPDATE kramerius_conf SET availability_dest_url='https://kramerius.techlib.cz/kramerius-web-client/uuid/' WHERE import_conf_id=99016;
 
+<<<<<<< HEAD
 -- 08. 08. 2022 tomascejpek
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (116, 446, 'NBG001');
 
@@ -2717,3 +2718,7 @@ INSERT INTO sigla (id, import_conf_id, sigla) VALUES (113, 441, 'JCG001');
 -- 19. 09. 2022 tomascejpek
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, generate_dedup_keys, generate_biblio_linker_keys, indexed) VALUES (462, 104, 200, 'nkc-ebook', 11, false, true, true, true, 'U', true, false, false);
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (462,'https://aleph.nkp.cz/OAI','NKC-EBOOK','marc21',NULL);
+=======
+-- 02. 08. 2022 tomascejpek
+ALTER TABLE import_conf ADD COLUMN filter_periodicals BOOLEAN DEFAULT FALSE;
+>>>>>>> periodicals

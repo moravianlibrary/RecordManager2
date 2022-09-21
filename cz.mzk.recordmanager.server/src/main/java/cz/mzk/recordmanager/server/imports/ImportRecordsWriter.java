@@ -125,8 +125,6 @@ public class ImportRecordsWriter implements ItemWriter<List<Record>>, StepExecut
 				if (interceptor != null) {
 					byte[] recordContentNew = interceptor.intercept();
 					if (!Arrays.equals(recordContent, recordContentNew)) {
-						// if record content was changed, parse metadata again
-						metadata = parseMetadata(recordContentNew);
 						// set intercepted content
 						recordContent = recordContentNew;
 					}
@@ -154,6 +152,8 @@ public class ImportRecordsWriter implements ItemWriter<List<Record>>, StepExecut
 			hr.setDeleted(null);
 			hr.setRawRecord(recordContent);
 
+			// record content was changed (or new record), parse metadata from harvested_record
+			metadata = metadataFactory.getMetadataRecord(hr);
 			harvestedRecordDao.persist(hr);
 			dedupKeysParser.parse(hr, metadata);
 			biblioLinkerKeysParser.parse(hr, metadata);

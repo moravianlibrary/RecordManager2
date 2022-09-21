@@ -61,6 +61,9 @@ public abstract class ImportConfiguration extends AbstractDomainObject {
 	@Column(name = "generate_biblio_linker_keys")
 	private boolean generateBiblioLinkerKeys = true;
 
+	@Column(name = "filter_periodicals")
+	private boolean filterPeriodicals = false;
+
 	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
 	@JoinColumn(name="import_conf_id", referencedColumnName="id")
 	private List<Sigla> siglas = new ArrayList<>();
@@ -265,6 +268,14 @@ public abstract class ImportConfiguration extends AbstractDomainObject {
 
 	public void setCatalogSerialLink(boolean catalogSerialLink) {
 		this.catalogSerialLink = catalogSerialLink;
+	}
+
+	public boolean isFilterPeriodicals() {
+		return filterPeriodicals;
+	}
+
+	public void setFilterPeriodicals(boolean filterPeriodicals) {
+		this.filterPeriodicals = filterPeriodicals;
 	}
 
 }
