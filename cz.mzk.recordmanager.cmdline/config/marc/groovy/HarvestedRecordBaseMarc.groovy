@@ -27,7 +27,7 @@ nbn_display = getFirstField "015a"
 oclc_display_mv = getOclcs()
 
 url = getUrls()
-subject_str_mv = getSubject "600abcdfglnpqstyz:610abcdfgklnpstyz:611abcefgklpqstyz:630adfgklnpstyz:648a:651avxyz:964abcdefg:967ab"
+subject_str_mv = getSubject "600abcdfglnpqstyz:610abcdfgklnpstyz:611abcefgklpqstyz:630adfgklnpstyz:648a:651avxyz:964abcdefg:967ab", SEPARATED
 
 _hidden_viz_dummy_field = getAuthorityIds "auth.1007:1107:1117:1307:6007:6107:6117:6307:6487:6507:6517:6557:7007:7107:7117:7307|mesh.650a:651a:655a|agrovoc.650a"
 
