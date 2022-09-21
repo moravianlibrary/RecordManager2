@@ -133,6 +133,7 @@ INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (246, 'MKN
 INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (247, 'MKHORICE', 'https://knihovna.horice.org/', 'https://kpwin.horice.org/', 'Hořice', 'KH');
 INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (252, 'MKSTRAK', 'https://www.knih-st.cz/', 'https://katalog.knih-st.cz/', 'Strakonice', 'JC');
 INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (253, 'GEOBIBLINE', 'https://cuni.cz/', 'https://cuni.primo.exlibrisgroup.com/discovery/search?vid=420CKIS_INST:UKAZ&lang=cs', 'Bibliography', 'bibliography');
+INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (256, 'UDUMUKN', 'https://www.udu.cas.cz/cz/knihovny/muzikologicka-knihovna', 'https://aleph.lib.cas.cz/', 'Praha', 'PR');
 INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (257, 'PALMKNIHY', 'https://www.palmknihy.cz/', '', null, 'ebook');
 INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (258, 'RSL', '', '', null, 'bibliography');
 INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (259, 'MKJIHLAVA', 'https://jihlava.tritius.cz/tritius/oai-provider', 'https://jihlava.tritius.cz/', 'Jihlava', 'VY');
@@ -322,6 +323,7 @@ INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weig
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency) VALUES (453, 253, 200, 'geobibline', 11, false, true, true, false, 'U');
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, generate_dedup_keys) VALUES (454, 102, 200, 'bookport', 11, false, true, true, true, 'U', false);
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, generate_dedup_keys) VALUES (455, 102, 200, 'bookport', 11, false, true, true, true, 'U', false);
+INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency) VALUES (456, 256, 200, 'udumukn', 11, false, true, true, true, 'U');
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, generate_dedup_keys, generate_biblio_linker_keys) VALUES (457, 257, 200, 'palmknihy', 11, false, true, true, false, 'U', false, false);
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency) VALUES (458, 258, 200, 'rsl', 11, false, true, true, false, 'U');
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id, mappings996) VALUES (459, 259, 200, 'mkjihlava', 11, false, true, true, true, 'U', 'other', 'tritius');
@@ -538,9 +540,12 @@ INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granul
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity,extract_id_regex) VALUES (452,'https://koha.knih-st.cz/cgi-bin/koha/oai.pl','CPK','marccpk',NULL,'STG001:(.*)');
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (453,'https://cuni.alma.exlibrisgroup.com/view/oai/420CKIS_INST/request','OAI_GEO','marc21',NULL);
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (459,'https://jihlava.tritius.cz/tritius/oai-provider','CPK_1','marc21',NULL);
+<<<<<<< HEAD
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (460,'https://knihovna.nacr.cz/api/oai','cpk','marc21',NULL);
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (461,'https://tritius.svkul.cz/tritius/oai-provider','PLM','marc21',NULL);
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (462,'https://aleph.nkp.cz/OAI','NKC-EBOOK','marc21',NULL);
+=======
+>>>>>>> udumukn
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (1300,NULL,NULL,'marc21',NULL);
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (1301,NULL,NULL,'marc21',NULL); 
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (1302,NULL,NULL,'marc21',NULL);
@@ -820,3 +825,4 @@ INSERT INTO import_conf_mapping_field (import_conf_id,parent_import_conf_id,mapp
 INSERT INTO import_conf_mapping_field (import_conf_id,parent_import_conf_id,mapping) VALUES (360,422,'599$aCLB-CPK');
 INSERT INTO import_conf_mapping_field (import_conf_id,parent_import_conf_id,mapping) VALUES (361,422,'599$aCPK-UVGZ');
 INSERT INTO import_conf_mapping_field (import_conf_id,parent_import_conf_id,mapping) VALUES (420,422,'599$aCPK-USDBIBL');
+INSERT INTO import_conf_mapping_field (import_conf_id,parent_import_conf_id,mapping) VALUES (456,422,'599$aCPK-UDUMUKN');
