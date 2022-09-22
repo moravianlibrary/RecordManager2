@@ -77,7 +77,7 @@ language_facet_mv = language = translate("mzk_language.map", getLanguages(), nul
 publishDate_facet_mv = publishDate = getPublishDate()
 publisher_facet_mv = publisher_str_mv = getPublisherStrMv()
 record_format_facet_mv = getFormat()
-source_title_facet = source_title_facet_str = getFirstField "773t"
+source_title_facet = getFirstField "773t"
 
 // sort
 author_sort = author_sort_cz = getAuthorForSorting()
