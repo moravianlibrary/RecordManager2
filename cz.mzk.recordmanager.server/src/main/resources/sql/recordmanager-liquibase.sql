@@ -2964,6 +2964,7 @@ UPDATE kramerius_conf SET dnnt_dest_url='https://kramerius.svkhk.cz/uuid/' WHERE
 UPDATE kramerius_conf SET url='https://kramerius.mjh.cz/search/api/v5.0' WHERE import_conf_id=99034;
 UPDATE kramerius_conf SET availability_dest_url='https://k4.kr-karlovarsky.cz/search/handle/' WHERE import_conf_id=99020;
 UPDATE kramerius_conf SET availability_dest_url='https://kramerius.techlib.cz/kramerius-web-client/uuid/' WHERE import_conf_id=99016;
+<<<<<<< HEAD
 
 <<<<<<< HEAD
 --changeset tomascejpek:344 context:cpk
@@ -3017,3 +3018,5 @@ INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (256, 'UDU
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency) VALUES (456, 256, 200, 'udumukn', 11, false, true, true, true, 'U');
 INSERT INTO import_conf_mapping_field (import_conf_id,parent_import_conf_id,mapping) VALUES (456,422,'599$aCPK-UDUMUKN');
 >>>>>>> udumukn
+=======
+>>>>>>> parent of eb41ecfd4... filter for periodicals

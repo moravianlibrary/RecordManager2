@@ -47,7 +47,6 @@ CREATE TABLE import_conf (
   indexed              BOOLEAN DEFAULT TRUE,
   mappings996          VARCHAR(20),
   catalog_serial_link  BOOLEAN DEFAULT FALSE,
-  filter_periodicals   BOOLEAN DEFAULT FALSE,
   CONSTRAINT import_conf_library_id_fk        FOREIGN KEY (library_id)        REFERENCES library(id),
   CONSTRAINT import_conf_contact_person_id_fk FOREIGN KEY (contact_person_id) REFERENCES contact_person(id)
 );
@@ -89,8 +88,6 @@ CREATE TABLE oai_harvest_conf (
   granularity          VARCHAR(30),
   extract_id_regex     VARCHAR(128),
   harvest_job_name     VARCHAR(128),
-  ictx                 VARCHAR(128),
-  op                   VARCHAR(128),
   CONSTRAINT oai_harvest_conf_import_conf_fk FOREIGN KEY (import_conf_id) REFERENCES import_conf(id)
 );
 
