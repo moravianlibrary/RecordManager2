@@ -1,3 +1,6 @@
+import cz.mzk.recordmanager.server.marc.SubfieldExtractionMethod
+
+import static cz.mzk.recordmanager.server.marc.SubfieldExtractionMethod.SEPARATED
 import static cz.mzk.recordmanager.server.scripting.marc.function.BoundingBoxMarcFunctions.LongLatFormat.*
 
 record_format = "local"
@@ -73,7 +76,7 @@ conspectus_facet_mv = getConspectus();
 genre_facet_mv = getGenreFacet "655avxyz"
 local_institution_view_facet_mv = getInstitutionViewFacet()
 local_region_institution_facet_mv = getRegionInstitutionFacet()
-subject_facet_mv = getSubject "600abcdfglnpqstyz:610abcdfgklnpstyz:611abcdefgklnpqstyz:630adfgklnpstyz:648a:651avxyz:964abcdefg:967ab"
+subject_facet_mv = getSubject "600abcdfglnpqstyz:610abcdfgklnpstyz:611abcdefgklnpqstyz:630adfgklnpstyz:648a:651avxyz:964abcdefg:967ab", SEPARATED
 ziskej_facet_mv = getZiskejFacet()
 scale_int_facet_mv = getScaleFacet()
 
