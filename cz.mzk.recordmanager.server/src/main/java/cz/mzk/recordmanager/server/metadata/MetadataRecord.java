@@ -555,4 +555,16 @@ public interface MetadataRecord {
 		return true;
 	}
 
+	default Set<String> getCountries() {
+		return Collections.emptySet();
+	}
+
+	default Set<String> getTopic() {
+		return Collections.emptySet();
+	}
+
+	default Set<String> getMdt() {
+		return Collections.emptySet();
+	}
+
 }

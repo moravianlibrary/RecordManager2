@@ -1922,4 +1922,27 @@ public class MetadataMarcRecord implements MetadataRecord {
 		}
 		return true;
 	}
+
+	public Set<String> getCountries() {
+		Set<String> countries = new HashSet<>();
+		String f008 = underlayingMarc.getControlField("008");
+		if (f008 != null && f008.length() > 18) {
+			countries.add(f008.substring(15, 18).trim());
+		}
+		for (String country : underlayingMarc.getFields("044", 'a')) {
+			countries.add(country.trim());
+		}
+		return countries;
+	}
+
+	@Override
+	public Set<String> getTopic() {
+		return new HashSet<>(underlayingMarc.getFields("650", 'a'));
+	}
+
+	@Override
+	public Set<String> getMdt() {
+		return new HashSet<>(underlayingMarc.getFields("080", 'a'));
+	}
+
 }
