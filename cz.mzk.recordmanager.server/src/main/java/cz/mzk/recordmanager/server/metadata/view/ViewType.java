@@ -85,6 +85,23 @@ public enum ViewType {
 			if (mdt.stream().anyMatch(m -> m.startsWith("(084.3"))) return true;
 			return false;
 		}
+	},
+	GEOBIBLINE2("geobibline2") {
+		@Override
+		protected boolean match(MetadataRecord mr, ListResolver resolver, Long importConfId,
+				Set<String> siglas, List<String> conspectus) throws IOException {
+			if (Collections.disjoint(Arrays.asList("xr", "cs"), mr.getCountries())
+					&& !mr.getLanguages().contains("cze")) return false;
+			Set<String> formats = mr.getDetectedFormatList().stream().map(f -> f.toString()).collect(Collectors.toSet());
+			if (containsAny(resolver, String.format(FORMAT_FILE, getValue()), formats)) {
+				return true;
+			}
+			if (containsAny(resolver, String.format(TOPIC_FILE, getValue()), mr.getTopic())
+					&& containsAny(resolver, String.format("view/%s_topic_format.txt", getValue()), formats)) {
+				return true;
+			}
+			return false;
+		}
 	};
 
 	private String value;
