@@ -2723,3 +2723,6 @@ INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (256, 'UDU
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency) VALUES (456, 256, 200, 'udumukn', 11, false, true, true, true, 'U');
 INSERT INTO import_conf_mapping_field (import_conf_id,parent_import_conf_id,mapping) VALUES (456,422,'599$aCPK-UDUMUKN');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (119, 456, 'ABB045');
+
+-- 10. 10. 2022 tomascejpek
+UPDATE import_conf SET item_id='aleph',mappings996='aleph' WHERE id=456;
