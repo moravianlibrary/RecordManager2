@@ -2731,3 +2731,6 @@ UPDATE import_conf SET item_id='aleph',mappings996='aleph' WHERE id=456;
 INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (263, 'MKBEN', 'https://www.knihovna-benesov.cz/', 'https://benesov.tritius.cz/', 'Benešov', 'SC');
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id, mappings996) VALUES (463, 263, 200, 'mkber', 11, false, true, true, true, 'U', 'other', 'tritius');
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (463,'https://benesov.tritius.cz/tritius/oai-provider','CPK_1','marc21',NULL);
+
+-- 17. 10. 2022 tomascejpek
+UPDATE import_conf SET id_prefix='mkben' WHERE id=463;
