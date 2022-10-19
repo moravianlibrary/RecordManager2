@@ -11,7 +11,7 @@ view_txt_mv = getViewType()
 
 // display
 address_display_mv = adresarGetAddress()
-branch_display_mv = getFieldsForAdresar "POBnamg", SubfieldExtractionMethod.JOINED, " | "
+branch_display_mv = adresarGetBranchDisplay()
 branchurl_display_mv = getFieldsForAdresar "POBu", SubfieldExtractionMethod.SEPARATED, null
 cpk_code_display = adresarGetCpkCode()
 district_display = getFirstFieldForAdresar "KRJb"
