@@ -6,7 +6,6 @@ import cz.mzk.recordmanager.server.oai.dao.SiglaAllDAO;
 import cz.mzk.recordmanager.server.scripting.MappingResolver;
 import cz.mzk.recordmanager.server.scripting.ResourceMappingResolver;
 import cz.mzk.recordmanager.server.scripting.marc.MarcFunctionContext;
-import cz.mzk.recordmanager.server.util.CleaningUtils;
 import cz.mzk.recordmanager.server.util.SolrUtils;
 import org.marc4j.marc.DataField;
 import org.marc4j.marc.Subfield;
@@ -240,20 +239,26 @@ public class AdresarKnihovenMarcFunctions implements MarcRecordFunctions {
 		return siglaAllDAO.getIdPrefix(getFirstFieldForAdresar(ctx, "SGLa"));
 	}
 
+	public String getGps(String gpsStr) {
+		Matcher matcher = GPS_PATTERN.matcher(gpsStr);
+		String latitude = null, longitude = null;
+		while (matcher.find()) {
+			double i = Double.valueOf(matcher.group(1))
+					+ (Double.valueOf(matcher.group(2)) / 60)
+					+ (Double.valueOf(matcher.group(3)) / 3600)
+					* (matcher.group(4).toLowerCase().equals("s|w") ? -1 : 1);
+			if (latitude == null) latitude = String.valueOf(i);
+			else longitude = String.valueOf(i);
+		}
+		if (latitude != null && longitude != null) return latitude + ' ' + longitude;
+		return null;
+	}
+
 	public String adresarGetGps(MarcFunctionContext ctx) {
 		Matcher matcher;
 		for (String data : ctx.record().getFields("ADR", 'g')) {
-			matcher = GPS_PATTERN.matcher(data);
-			String latitude = null, longitude = null;
-			while (matcher.find()) {
-				double i = Double.valueOf(matcher.group(1))
-						+ (Double.valueOf(matcher.group(2)) / 60)
-						+ (Double.valueOf(matcher.group(3)) / 3600)
-						* (matcher.group(4).toLowerCase().equals("s|w") ? -1 : 1);
-				if (latitude == null) latitude = String.valueOf(i);
-				else longitude = String.valueOf(i);
-			}
-			if (latitude != null && longitude != null) return latitude + ' ' + longitude;
+			String gps = getGps(data);
+			if (gps != null) return gps;
 		}
 		return null;
 	}
@@ -364,6 +369,26 @@ public class AdresarKnihovenMarcFunctions implements MarcRecordFunctions {
 			return SolrUtils.cleanStrForSorting(title.toString());
 		}
 		return null;
+	}
+
+	public List<String> adresarGetBranchDisplay(MarcFunctionContext ctx) {
+		List<String> results = new ArrayList<>();
+		for (DataField df : ctx.record().getDataFields("POB")) {
+			List<String> dfResults = new ArrayList<>();
+			for (char c : new char[]{'n', 'a', 'm'}) {
+				for (Subfield sf : df.getSubfields(c)) {
+					if (sf.getData() != null) dfResults.add(sf.getData());
+				}
+			}
+			Subfield sf = df.getSubfield('g');
+			if (sf != null) {
+				dfResults.add(sf.getData());
+				String gps = getGps(sf.getData());
+				if (gps != null) dfResults.add(gps);
+			}
+			if (!dfResults.isEmpty()) results.add(String.join(" | ", dfResults));
+		}
+		return results;
 	}
 
 }
