@@ -171,6 +171,7 @@ INSERT INTO format(format, description) VALUES('oai_marcxml_cpk', 'MARC21 XML');
 INSERT INTO format(format, description) VALUES('marc21e', 'MARC21 XML');
 INSERT INTO format(format, description) VALUES('dublinCore', 'Dublin Core');
 INSERT INTO format(format, description) VALUES('ese', 'Dublin Core');
+INSERT INTO format(format, description) VALUES('cpk', 'MARC21 XML');
 
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id, metaproxy_enabled, ziskej_enabled, mappings996) VALUES (300, 100, 200, 'mzk', 13, true, true, true, true, 'D', 'aleph', true, true, 'aleph');
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id, metaproxy_enabled, ziskej_enabled, mappings996) VALUES (301, 101, 200, 'nlk', 14, false, true, true, true, 'D', 'dawinci', true, true, 'dawinci');
