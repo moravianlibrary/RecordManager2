@@ -54,6 +54,19 @@ public class HarvestedRecordDAOHibernate extends
 				.uniqueResult();
 	}
 
+	@Override
+	public HarvestedRecord find(String prefix, String recordId) {
+		Session session = sessionFactory.getCurrentSession();
+		return (HarvestedRecord) session
+				.createQuery(
+						"from HarvestedRecord where uniqueId.recordId = :recordId " +
+								"and harvestedFrom.idPrefix = :idPrefix " +
+								"AND deleted is null")
+				.setParameter("recordId", recordId)
+				.setParameter("idPrefix", prefix)
+				.uniqueResult();
+	}
+
 	public HarvestedRecord findBySolrId(String solrId) {
 		if (!solrId.contains(".")) {
 			return this.findByRecordId(solrId);

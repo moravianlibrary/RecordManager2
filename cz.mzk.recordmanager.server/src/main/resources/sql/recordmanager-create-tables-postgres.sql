@@ -418,9 +418,19 @@ COMMENT ON TABLE obalkyknih_toc IS 'downloaded table of contents from obalkyknih
 CREATE TABLE inspiration (
   id                    SERIAL,
   harvested_record_id   DECIMAL(10),
-  name                  VARCHAR(128),
+  inspiration_name_id   INTEGER,
+  updated               TIMESTAMP,
+  last_harvest          TIMESTAMP,
   CONSTRAINT inspiration_pk PRIMARY KEY(id),
-  FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE
+  FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE,
+  FOREIGN KEY (inspiration_name_id) REFERENCES inspiration_name(id) ON DELETE CASCADE
+);
+
+CREATE TABLE inspiration_name (
+  id                    SERIAL,
+  name                  VARCHAR(128),
+  type                  VARCHAR(128),
+  CONSTRAINT inspiration_name_pk PRIMARY KEY(id)
 );
 
 CREATE TABLE tezaurus_record (

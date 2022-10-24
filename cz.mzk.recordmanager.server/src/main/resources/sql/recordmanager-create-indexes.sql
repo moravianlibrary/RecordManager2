@@ -87,3 +87,10 @@ CREATE INDEX sigla_all_import_conf_id_idx ON sigla_all(import_conf_id);
 CREATE INDEX sigla_all_cpk_idx ON sigla_all(cpk);
 CREATE INDEX sigla_all_dnnt_idx ON sigla_all(dnnt);
 CREATE INDEX sigla_all_ziskej_idx ON sigla_all(ziskej);
+
+CREATE INDEX inspiration_name_name_idx ON inspiration_name(name);
+CREATE INDEX inspiration_name_type_idx ON inspiration_name(type);
+CREATE INDEX inspiration_harvested_record_id_idx ON inspiration(harvested_record_id);
+CREATE INDEX inspiration_inspiration_name_id_idx ON inspiration(inspiration_name_id);
+CREATE INDEX inspiration_updated_idx ON inspiration(updated);
+CREATE INDEX inspiration_last_harvest_idx ON inspiration(last_harvest);
