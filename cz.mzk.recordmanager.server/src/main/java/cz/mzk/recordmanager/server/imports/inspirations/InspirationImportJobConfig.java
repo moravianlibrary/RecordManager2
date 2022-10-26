@@ -1,17 +1,14 @@
 package cz.mzk.recordmanager.server.imports.inspirations;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.sql.DataSource;
-
+import cz.mzk.recordmanager.server.springbatch.JobFailureListener;
 import cz.mzk.recordmanager.server.springbatch.StepProgressListener;
+import cz.mzk.recordmanager.server.util.Constants;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepScope;
+import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.database.JdbcPagingItemReader;
 import org.springframework.batch.item.database.support.SqlPagingQueryProviderFactoryBean;
@@ -21,8 +18,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import cz.mzk.recordmanager.server.springbatch.JobFailureListener;
-import cz.mzk.recordmanager.server.util.Constants;
+import javax.sql.DataSource;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Configuration
 public class InspirationImportJobConfig {
@@ -40,11 +39,14 @@ public class InspirationImportJobConfig {
 
 	@Bean
 	public Job inspirationImportJob(
-			@Qualifier(Constants.JOB_ID_IMPORT_INSPIRATION + ":importInspirationStep") Step inspirationImportStep) {
+			@Qualifier(Constants.JOB_ID_IMPORT_INSPIRATION + ":importInspirationStep") Step inspirationImportStep,
+			@Qualifier(Constants.JOB_ID_IMPORT_INSPIRATION + ":inspirationCleanStep") Step inspirationCleanStep) {
 		return jobs.get(Constants.JOB_ID_IMPORT_INSPIRATION)
 				.validator(new InspirationImportJobParametersValidator())
-				.listener(JobFailureListener.INSTANCE).flow(inspirationImportStep)
-				.end().build();
+				.listener(JobFailureListener.INSTANCE)
+				.start(inspirationImportStep)
+				.next(inspirationCleanStep)
+				.build();
 	}
 
 	@Bean(name = Constants.JOB_ID_IMPORT_INSPIRATION + ":importInspirationStep")
@@ -117,5 +119,20 @@ public class InspirationImportJobConfig {
 	public InspirationDeleteWriter InspirationDeleteWriter() {
 		return new InspirationDeleteWriter();
 	}
+
+	@Bean(name = Constants.JOB_ID_IMPORT_INSPIRATION + ":inspirationCleanStep")
+	public Step inspirationCleanStep() {
+		return steps.get("inspirationCleanStep") //
+				.listener(new StepProgressListener())
+				.tasklet(inspirationCleanTasklet()) //
+				.build();
+	}
+
+	@Bean(name = Constants.JOB_ID_IMPORT_INSPIRATION + ":inspirationCleanTasklet")
+	@StepScope
+	public Tasklet inspirationCleanTasklet() {
+		return new InspirationCleanTasklet(InspirationType.INSPIRATION);
+	}
+
 }
 

@@ -39,5 +39,6 @@ public class FromLocalToDedupEnricher implements DedupRecordEnricher {
 		mergeAndRemove.mergeAndRemoveFromSources(localRecords, mergedDocument);
 		merge.merge(localRecords, mergedDocument);
 		copyDedup.copyField(mergedDocument, SolrFieldConstants.OBALKY_ANNOTATION, SolrFieldConstants.SUMMARY_DISPLAY_MV);
+		copyDedup.copyField(mergedDocument, SolrFieldConstants.INSPIRATION, SolrFieldConstants.INSPIRATION_FACET);
 	}
 }

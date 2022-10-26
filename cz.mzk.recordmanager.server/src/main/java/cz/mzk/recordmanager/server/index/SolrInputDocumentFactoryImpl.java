@@ -115,7 +115,7 @@ public class SolrInputDocumentFactoryImpl implements SolrInputDocumentFactory, I
 		
 		for(HarvestedRecord record: records){
 			for(Inspiration inspiration: record.getInspiration()){
-				result.add(inspiration.getName());
+				result.add(inspiration.getInspirationName().getName());
 			}
 		}
 		
