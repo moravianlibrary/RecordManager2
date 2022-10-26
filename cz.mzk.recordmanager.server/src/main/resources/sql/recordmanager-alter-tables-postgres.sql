@@ -2751,4 +2751,10 @@ INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granul
 
 -- 17. 10. 2022 tomascejpek
 UPDATE import_conf SET id_prefix='mkben' WHERE id=463;
+<<<<<<< HEAD
 >>>>>>> gps
+=======
+
+-- 26. 10. 2022 tomascejpek
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (123, 375, 'OPG503');
+>>>>>>> master
