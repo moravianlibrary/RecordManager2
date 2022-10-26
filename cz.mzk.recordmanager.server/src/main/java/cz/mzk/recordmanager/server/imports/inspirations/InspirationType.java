@@ -4,7 +4,7 @@ import cz.mzk.recordmanager.server.hibernate.StringValueEnum;
 
 public enum InspirationType implements StringValueEnum {
 	INSPIRATION("inspiration"),
-	TOP("top");
+	TOP_RESULTS("top_results");
 
 	private final String value;
 

@@ -1,5 +1,8 @@
 package cz.mzk.recordmanager.server.miscellaneous.topResults;
 
+import cz.mzk.recordmanager.server.imports.inspirations.InspirationType;
+import cz.mzk.recordmanager.server.model.InspirationName;
+import cz.mzk.recordmanager.server.oai.dao.InspirationNameDAO;
 import cz.mzk.recordmanager.server.util.ResourceUtils;
 import org.springframework.batch.core.StepContribution;
 import org.springframework.batch.core.scope.context.ChunkContext;
@@ -19,12 +22,17 @@ public class TopResultsTasklet implements Tasklet {
 	@Autowired
 	private NamedParameterJdbcTemplate jdbcTemplate;
 
+	@Autowired
+	private InspirationNameDAO inspirationNameDAO;
+
 	@Override
 	public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) {
+		InspirationName inspirationName = inspirationNameDAO.getOrCreate("top_results", InspirationType.TOP_RESULTS);
 		Map<String, Object> map = new HashMap<>();
 		map.put("year", Calendar.getInstance().get(Calendar.YEAR) - 1);
 		map.put("dedupCount", 50);
 		map.put("results", 20);
+		map.put("inspiration_name_id", inspirationName.getId());
 		jdbcTemplate.update(executeSql, map);
 		return RepeatStatus.FINISHED;
 	}
