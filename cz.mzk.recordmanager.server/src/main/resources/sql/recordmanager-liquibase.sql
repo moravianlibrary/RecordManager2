@@ -3023,3 +3023,6 @@ INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granul
 
 --changeset tomascejpek:359 context:cpk
 UPDATE import_conf SET id_prefix='mkben' WHERE id=463;
+
+--changeset tomascejpek:360 context:cpk
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (123, 375, 'OPG503');
