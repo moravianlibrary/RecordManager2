@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class LibraryMetadataMarcRecord extends MetadataMarcRecord {
@@ -24,11 +25,23 @@ public class LibraryMetadataMarcRecord extends MetadataMarcRecord {
 			.compile("KNIHOVNA ZRUŠENA!");
 	private static final Pattern INSTITUTION_CLOSED = Pattern
 			.compile("ZRUŠENÁ INSTITUCE!");
+	private static final Pattern RECORD_ID = Pattern.compile("doc_number=(\\d{9})");
 
 	private static final Map<String, String> siglaCache = new ConcurrentHashMap<>(16, 0.9f, 1);
 
 	public LibraryMetadataMarcRecord(MarcRecord underlayingMarc, HarvestedRecord hr) {
 		super(underlayingMarc, hr);
+	}
+
+	@Override
+	public String getUniqueId() {
+		String id = super.getUniqueId();
+		if (id != null) return id;
+		Matcher matcher;
+		if ((matcher = RECORD_ID.matcher(underlayingMarc.getField("DRL", 'a'))).find()) {
+			return matcher.group(1);
+		}
+		return null;
 	}
 
 	@Override
@@ -41,7 +54,7 @@ public class LibraryMetadataMarcRecord extends MetadataMarcRecord {
 			Subfield sf;
 			if ((sf = df.getSubfield('a')) != null
 					&& (LIBRARY_CLOSED.matcher(sf.getData()).matches() || INSTITUTION_CLOSED
-							.matcher(sf.getData()).matches())) {
+					.matcher(sf.getData()).matches())) {
 				return false;
 			}
 		}
