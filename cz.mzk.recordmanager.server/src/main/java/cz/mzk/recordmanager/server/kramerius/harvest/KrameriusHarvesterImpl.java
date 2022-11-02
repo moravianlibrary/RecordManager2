@@ -21,7 +21,11 @@ import javax.xml.transform.TransformerException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import static cz.mzk.recordmanager.server.kramerius.ApiMappingEnum.*;
 
 public abstract class KrameriusHarvesterImpl implements KrameriusHarvester {
 
@@ -91,18 +95,17 @@ public abstract class KrameriusHarvesterImpl implements KrameriusHarvester {
 	}
 
 	private String createUrl(String uuid) {
-		final String baseUrl = params.getUrl();
-		final String kramAPIItem = "/item/";
-		final String kramAPIStream = "/streams/";
-		final String kramStreamType = params.getMetadataStream();
-
-		String resultingUrl = baseUrl + kramAPIItem + uuid + kramAPIStream + kramStreamType;
+		String resultingUrl = String.format(params.getApiMappingValue(METADATA), params.getUrl(),
+				params.getApiMappingValue(API), uuid, params.getApiMappingValue(params.getMetadataStream()));
 		LOGGER.trace("created URL: {}", resultingUrl);
 		return resultingUrl;
 	}
 
 	protected SolrDocumentList executeSolrQuery(SolrQuery query) throws SolrServerException {
-		SolrServerFacade solr = solrServerFactory.create(params.getUrl(), SolrServerFactoryImpl.Mode.KRAMERIUS);
+		SolrServerFacade solr = solrServerFactory.create(
+				String.format("%s%s", params.getUrl(), params.getApiMappingValue(API)),
+				SolrServerFactoryImpl.Mode.KRAMERIUS
+		);
 		SolrDocumentList documents;
 		try {
 			QueryResponse response = solr.query(query);
@@ -130,14 +133,16 @@ public abstract class KrameriusHarvesterImpl implements KrameriusHarvester {
 		query.setQuery("*:*");
 
 		//works with all possible models in single configuration
-		String harvestedModelsStatement = String.join(" OR ", FedoraModels.HARVESTED_MODELS);
+		List<String> models = Arrays.stream(FedoraModels.HARVESTED_MODELS)
+				.map(m -> String.format("%s:%s", params.getApiMappingValue(MODEL), m)).collect(Collectors.toList());
+		String harvestedModelsStatement = String.join(" OR ", models);
 		query.add("fq", harvestedModelsStatement);
 		if (params.getCollection() != null) {
-			query.add("fq", SolrUtils.createFieldQuery("collection", params.getCollection()));
+			query.add("fq", SolrUtils.createFieldQuery(params.getApiMappingValue(COLLECTION), params.getCollection()));
 		}
 		if (params.getFrom() != null || params.getUntil() != null) {
 			String range = SolrUtils.createDateRange(params.getFrom(), params.getUntil());
-			query.add("fq", SolrUtils.createFieldQuery("modified_date", range));
+			query.add("fq", SolrUtils.createFieldQuery(params.getApiMappingValue(MODIFIED), range));
 		}
 
 		query.setFields(fields);

@@ -1,0 +1,8 @@
+api = search/api/v5.0
+metadata = %s%s/item/%s/streams/%s
+collection = collection
+modified = modified_date
+pid = PID
+model = fedora.model
+DC = DC
+BIBLIO_MODS = BIBLIO_MODS

@@ -1,6 +1,10 @@
 package cz.mzk.recordmanager.server.kramerius.harvest;
 
+import cz.mzk.recordmanager.server.kramerius.ApiMappingEnum;
+import cz.mzk.recordmanager.server.scripting.Mapping;
+
 import java.util.Date;
+import java.util.List;
 
 public class KrameriusHarvesterParams {
 
@@ -17,6 +21,8 @@ public class KrameriusHarvesterParams {
 	private Date until;
 
 	private String collection;
+
+	private Mapping apiMapping;
 
 	public String getUrl() {
 		return url;
@@ -72,6 +78,24 @@ public class KrameriusHarvesterParams {
 
 	public void setCollection(String collection) {
 		this.collection = collection;
+	}
+
+	public Mapping getApiMapping() {
+		return apiMapping;
+	}
+
+	public void setApiMapping(Mapping apiMapping) {
+		this.apiMapping = apiMapping;
+	}
+
+	public String getApiMappingValue(String key) {
+		List<String> results = apiMapping.getMapping().get(key);
+		if (results == null || results.isEmpty()) return null;
+		return results.get(0);
+	}
+
+	public String getApiMappingValue(ApiMappingEnum key) {
+		return getApiMappingValue(key.getValue());
 	}
 
 	@Override

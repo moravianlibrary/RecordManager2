@@ -1,0 +1,8 @@
+api = search/api/client/v7.0
+metadata = %s%s/items/%s/metadata/%s
+collection = in_collections
+modified = modified
+pid = pid
+model = model
+DC = dc
+BIBLIO_MODS = mods

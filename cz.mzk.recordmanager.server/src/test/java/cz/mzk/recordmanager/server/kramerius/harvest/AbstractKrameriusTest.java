@@ -1,6 +1,7 @@
 package cz.mzk.recordmanager.server.kramerius.harvest;
 
 import cz.mzk.recordmanager.server.AbstractTest;
+import cz.mzk.recordmanager.server.kramerius.ApiMappingFactory;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.solr.SolrServerFacade;
 import cz.mzk.recordmanager.server.solr.SolrServerFactory;
@@ -32,6 +33,9 @@ public class AbstractKrameriusTest extends AbstractTest {
 
 	@Autowired
 	private SolrServerFactory solrServerFactory;
+
+	@Autowired
+	private ApiMappingFactory apiMappingFactory;
 
 	private SolrServerFacade mockedSolrServer = EasyMock.createMock(SolrServerFacade.class);
 
@@ -65,8 +69,9 @@ public class AbstractKrameriusTest extends AbstractTest {
 		replay(mockedSolrServer);
 		
 		KrameriusHarvesterParams parameters = new KrameriusHarvesterParams();
-		parameters.setUrl("http://k4.techlib.cz/search/api/v5.0");
+		parameters.setUrl("http://k4.techlib.cz/");
 		parameters.setMetadataStream("DC");
+		parameters.setApiMapping(apiMappingFactory.getMapping("5"));
 		KrameriusHarvesterSorting harvester = new KrameriusHarvesterSorting(httpClient, solrServerFactory, parameters, 1L);
 		List<String> uuids = harvester.getNextUuids();
 		for (String uuid : uuids) {

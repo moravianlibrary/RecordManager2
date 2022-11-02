@@ -1,5 +1,6 @@
 package cz.mzk.recordmanager.server.kramerius.harvest;
 
+import cz.mzk.recordmanager.server.kramerius.ApiMappingFactory;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.model.KrameriusConfiguration;
 import cz.mzk.recordmanager.server.oai.dao.KrameriusConfigurationDAO;
@@ -32,13 +33,16 @@ public class KrameriusItemReader implements ItemReader<List<HarvestedRecord>>,
 	@Autowired
 	private HibernateSessionSynchronizer hibernateSync;
 
+	@Autowired
+	private ApiMappingFactory apiMappingFactory;
+
 	private KrameriusHarvester kHarvester;
 
 	// configuration
-	private Long confId;
+	private final Long confId;
 
-	private Date fromDate;
-	private Date untilDate;
+	private final Date fromDate;
+	private final Date untilDate;
 	private final KrameriusHarvesterEnum type;
 	private final String inFile;
 
@@ -77,6 +81,7 @@ public class KrameriusItemReader implements ItemReader<List<HarvestedRecord>>,
 			params.setFrom(fromDate);
 			params.setUntil(untilDate);
 			params.setCollection(conf.getCollection());
+			params.setApiMapping(apiMappingFactory.getMapping("5"));
 			kHarvester = harvesterFactory.create(type, params, confId, inFile);
 		}
 	}
