@@ -80,6 +80,7 @@ public class UrlDedupRecordEnricher implements DedupRecordEnricher {
 			boolean online = false;
 			boolean protect = false;
 			boolean dnnt = false;
+			boolean member = false;
 			for (EVersionUrl url : urls.get(key).descendingSet()) {
 				if (url.getAvailability().equals(Constants.DOCUMENT_AVAILABILITY_ONLINE)) {
 					results.add(url.toString());
@@ -93,8 +94,12 @@ public class UrlDedupRecordEnricher implements DedupRecordEnricher {
 					results.add(url.toString());
 					protect = true;
 				}
+				if (!online && !dnnt && !protect && url.getAvailability().equals(Constants.DOCUMENT_AVAILABILITY_MEMBER)) {
+					results.add(url.toString());
+					member = true;
+				}
 			}
-			if (!online && !dnnt && !protect) {
+			if (!online && !dnnt && !protect && !member) {
 				if (urls.get(key).size() == 1) {
 					results.add(urls.get(key).first().toString());
 				} else {
@@ -142,13 +147,15 @@ public class UrlDedupRecordEnricher implements DedupRecordEnricher {
 				if (newUrl == null) continue;
 				addToMap(urls, newUrl);
 				// dnnt
-				if (newUrl.getAvailability().equals(Constants.DOCUMENT_AVAILABILITY_PROTECTED)
-						&& kramAvailability.isDnnt()) {
+				if (newUrl.getAvailability().equals(Constants.DOCUMENT_AVAILABILITY_PROTECTED)) {
 					// dnnt online
 					if (kramAvailability.getDnntLabels().stream().anyMatch(l -> l.getLabel().equals(DnntLabelEnum.DNNTO.getLabel()))
 							&& potentialDnnt) {
 						EVersionUrl dnntUrl = EVersionUrl.createDnnt(kramAvailability, comment);
 						if (dnntUrl != null) addToMap(urls, dnntUrl);
+					}
+					if (kramAvailability.getDnntLabels().stream().anyMatch(l -> l.getLabel().equals(DnntLabelEnum.PAYING_USERS.getLabel()))) {
+						newUrl.setAvailability(Constants.DOCUMENT_AVAILABILITY_MEMBER);
 					}
 					// else - dnnt without dnnt-label
 				}

@@ -14,18 +14,24 @@ import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.xml.transform.TransformerException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import static cz.mzk.recordmanager.server.kramerius.ApiMappingEnum.*;
 
 public abstract class KrameriusHarvesterImpl implements KrameriusHarvester {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(KrameriusHarvesterImpl.class);
+	protected static final Logger LOGGER = LoggerFactory.getLogger(KrameriusHarvesterImpl.class);
 
 	private static final int MAX_TIME_ALLOWED = 100_000;
 
@@ -91,18 +97,14 @@ public abstract class KrameriusHarvesterImpl implements KrameriusHarvester {
 	}
 
 	private String createUrl(String uuid) {
-		final String baseUrl = params.getUrl();
-		final String kramAPIItem = "/item/";
-		final String kramAPIStream = "/streams/";
-		final String kramStreamType = params.getMetadataStream();
-
-		String resultingUrl = baseUrl + kramAPIItem + uuid + kramAPIStream + kramStreamType;
+		String resultingUrl = String.format(params.getApiMappingValue(METADATA), params.getApiUrl(),
+				uuid, params.getApiMappingValue(params.getMetadataStream()));
 		LOGGER.trace("created URL: {}", resultingUrl);
 		return resultingUrl;
 	}
 
 	protected SolrDocumentList executeSolrQuery(SolrQuery query) throws SolrServerException {
-		SolrServerFacade solr = solrServerFactory.create(params.getUrl(), SolrServerFactoryImpl.Mode.KRAMERIUS);
+		SolrServerFacade solr = solrServerFactory.create(params.getApiUrl(), SolrServerFactoryImpl.Mode.KRAMERIUS);
 		SolrDocumentList documents;
 		try {
 			QueryResponse response = solr.query(query);
@@ -130,14 +132,16 @@ public abstract class KrameriusHarvesterImpl implements KrameriusHarvester {
 		query.setQuery("*:*");
 
 		//works with all possible models in single configuration
-		String harvestedModelsStatement = String.join(" OR ", FedoraModels.HARVESTED_MODELS);
+		List<String> models = Arrays.stream(FedoraModels.HARVESTED_MODELS)
+				.map(m -> String.format("%s:%s", params.getApiMappingValue(MODEL), m)).collect(Collectors.toList());
+		String harvestedModelsStatement = String.join(" OR ", models);
 		query.add("fq", harvestedModelsStatement);
 		if (params.getCollection() != null) {
-			query.add("fq", SolrUtils.createFieldQuery("collection", params.getCollection()));
+			query.add("fq", SolrUtils.createFieldQuery(params.getApiMappingValue(COLLECTION), params.getCollection()));
 		}
 		if (params.getFrom() != null || params.getUntil() != null) {
 			String range = SolrUtils.createDateRange(params.getFrom(), params.getUntil());
-			query.add("fq", SolrUtils.createFieldQuery("modified_date", range));
+			query.add("fq", SolrUtils.createFieldQuery(params.getApiMappingValue(MODIFIED), range));
 		}
 
 		query.setFields(fields);
@@ -152,6 +156,17 @@ public abstract class KrameriusHarvesterImpl implements KrameriusHarvester {
 			return new MODSTransformer().transform(is).toByteArray();
 		default:
 			return IOUtils.toByteArray(is);
+		}
+	}
+
+	@Override
+	public JSONObject info(String url) throws IOException {
+		LOGGER.info("Harvesting info: " + url);
+		try (InputStream is = httpClient.executeGet(url)) {
+			return new JSONObject(IOUtils.toString(is, StandardCharsets.UTF_8));
+		} catch (IOException ioe) {
+			LOGGER.error(ioe.getMessage());
+			throw new IOException("Info failed: " + url);
 		}
 	}
 

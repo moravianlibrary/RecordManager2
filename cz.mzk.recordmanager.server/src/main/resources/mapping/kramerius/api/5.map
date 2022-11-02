@@ -1,0 +1,13 @@
+api = search/api/v5.0
+metadata = %s/item/%s/streams/%s
+collection = collection
+modified = modified_date
+pid = PID
+model = fedora.model
+accessibility = dostupnost
+dnnt_labels = dnnt-labels
+DC = DC
+BIBLIO_MODS = BIBLIO_MODS
+
+availability_url = %s/search?fl=dostupnost,dnnt,PID,level,dnnt-labels&q=level:0&rows=%d&start=%d&wt=xml
+availability_url = %s/search?fl=dostupnost,dnnt,PID,level,dnnt-labels&q=level:1+document_type:monographunit&rows=%d&start=%d&wt=xml

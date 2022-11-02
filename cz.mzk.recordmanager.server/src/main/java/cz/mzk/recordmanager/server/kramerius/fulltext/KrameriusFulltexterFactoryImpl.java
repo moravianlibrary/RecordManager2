@@ -1,13 +1,13 @@
 package cz.mzk.recordmanager.server.kramerius.fulltext;
 
+import cz.mzk.recordmanager.server.kramerius.harvest.KrameriusHarvesterParams;
+import cz.mzk.recordmanager.server.model.KrameriusConfiguration;
+import cz.mzk.recordmanager.server.solr.SolrServerFactory;
+import cz.mzk.recordmanager.server.solr.SolrServerFactoryImpl.Mode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
-
-import cz.mzk.recordmanager.server.model.KrameriusConfiguration;
-import cz.mzk.recordmanager.server.solr.SolrServerFactory;
-import cz.mzk.recordmanager.server.solr.SolrServerFactoryImpl.Mode;
 
 @Component
 public class KrameriusFulltexterFactoryImpl implements KrameriusFulltexterFactory {
@@ -20,14 +20,18 @@ public class KrameriusFulltexterFactoryImpl implements KrameriusFulltexterFactor
 
 	@Override
 	public KrameriusFulltexter create(KrameriusConfiguration config) {
+		return create(config, null);
+	}
+
+	@Override
+	public KrameriusFulltexter create(KrameriusConfiguration config, KrameriusHarvesterParams params) {
 		KrameriusFulltexter fulltexter = null;
 		switch (config.getFulltextHarvestType()) {
-			case "solr":
-				fulltexter = new KrameriusFulltexterSolr(solrFactory.create(config.getUrlSolr(), Mode.DEFAULT));
-				break;
-			default:
-				fulltexter = new KrameriusFulltexterFedora(config.getUrl(),
-					config.getAuthToken(), config.isDownloadPrivateFulltexts());
+		case "solr":
+			fulltexter = new KrameriusFulltexterSolr(solrFactory.create(config.getUrlSolr(), Mode.DEFAULT), params);
+			break;
+		default:
+			fulltexter = new KrameriusFulltexterFedora(params);
 		}
 		init(fulltexter);
 		return fulltexter;

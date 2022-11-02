@@ -10,11 +10,11 @@ import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
+import static cz.mzk.recordmanager.server.kramerius.ApiMappingEnum.PID;
+
 public class KrameriusHarvesterNoSorting extends KrameriusHarvesterImpl {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(KrameriusHarvesterNoSorting.class);
-
-	private static final String PID_FIELD = "PID";
 
 	private Long numFound = 0L;
 
@@ -29,16 +29,16 @@ public class KrameriusHarvesterNoSorting extends KrameriusHarvesterImpl {
 	public List<String> getNextUuids() throws SolrServerException {
 		if (start > 0 && start >= numFound) return null;
 
-		SolrDocumentList documents = executeSolrQuery(getUuidQuery(PID_FIELD));
+		SolrDocumentList documents = executeSolrQuery(getUuidQuery(params.getApiMappingValue(PID)));
 		numFound = documents.getNumFound();
 
 		Long queryRows = params.getQueryRows() != null ? params.getQueryRows() : 10;
 		start += queryRows.intValue();
 
-		return getUuids(documents, PID_FIELD);
+		return getUuids(documents, params.getApiMappingValue(PID));
 	}
 
-	private SolrQuery getUuidQuery(String... fields) throws SolrServerException {
+	private SolrQuery getUuidQuery(String... fields) {
 		SolrQuery query = getBasicQuery(fields);
 
 		if (start != null) {

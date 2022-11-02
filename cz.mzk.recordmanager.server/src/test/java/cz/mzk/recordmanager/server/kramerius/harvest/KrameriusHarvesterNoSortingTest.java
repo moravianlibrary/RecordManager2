@@ -1,5 +1,6 @@
 package cz.mzk.recordmanager.server.kramerius.harvest;
 
+import cz.mzk.recordmanager.server.kramerius.ApiMappingFactory;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.solr.SolrServerFactory;
 import cz.mzk.recordmanager.server.util.HttpClient;
@@ -19,13 +20,17 @@ public class KrameriusHarvesterNoSortingTest extends AbstractKrameriusTest {
 	@Autowired
 	private SolrServerFactory solrServerFactory;
 
+	@Autowired
+	private ApiMappingFactory apiMappingFactory;
+
 	//Kramerius Harvester with sorting
 	@Test
 	public void downloadRecord() throws Exception {
 		init();
 		KrameriusHarvesterParams parameters = new KrameriusHarvesterParams();
-		parameters.setUrl("http://k4.techlib.cz/search/api/v5.0");
+		parameters.setUrl("http://k4.techlib.cz/");
 		parameters.setMetadataStream("DC");
+		parameters.setApiMapping(apiMappingFactory.getMapping("5"));
 		KrameriusHarvesterNoSorting harvester = new KrameriusHarvesterNoSorting(httpClient, solrServerFactory, parameters, 1L);
 		List<String> uuids = harvester.getNextUuids();
 		for (String uuid : uuids) {
@@ -40,8 +45,9 @@ public class KrameriusHarvesterNoSortingTest extends AbstractKrameriusTest {
 		initHttpClientWithException();
 		initSolrServerWithException();
 		KrameriusHarvesterParams parameters = new KrameriusHarvesterParams();
-		parameters.setUrl("http://k4.techlib.cz/search/api/v5.0");
+		parameters.setUrl("http://k4.techlib.cz/");
 		parameters.setMetadataStream("DC");
+		parameters.setApiMapping(apiMappingFactory.getMapping("5"));
 		KrameriusHarvesterNoSorting harvester = new KrameriusHarvesterNoSorting(httpClient, solrServerFactory, parameters, 1L);
 
 		//1st response with SolrServerException => uuid list is empty

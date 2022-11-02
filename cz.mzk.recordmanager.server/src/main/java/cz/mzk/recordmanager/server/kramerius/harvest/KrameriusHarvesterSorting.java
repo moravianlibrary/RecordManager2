@@ -13,12 +13,12 @@ import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
+import static cz.mzk.recordmanager.server.kramerius.ApiMappingEnum.PID;
+
 public class KrameriusHarvesterSorting extends KrameriusHarvesterImpl {
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(KrameriusHarvesterSorting.class);
-
-	private static String PID_FIELD = "PID";
 
 	private String lastPid = "";
 
@@ -31,8 +31,8 @@ public class KrameriusHarvesterSorting extends KrameriusHarvesterImpl {
 	public List<String> getNextUuids() throws SolrServerException {
 		if (lastPid == null) return null;
 
-		SolrDocumentList documents = executeSolrQuery(getUuidQuery(PID_FIELD));
-		List<String> uuids = getUuids(documents, PID_FIELD);
+		SolrDocumentList documents = executeSolrQuery(getUuidQuery(params.getApiMappingValue(PID)));
+		List<String> uuids = getUuids(documents, params.getApiMappingValue(PID));
 
 		String nextUuid = Iterables.getLast(uuids, null);
 		if (lastPid.equals(nextUuid)) lastPid = null;
@@ -41,13 +41,13 @@ public class KrameriusHarvesterSorting extends KrameriusHarvesterImpl {
 		return uuids;
 	}
 
-	private SolrQuery getUuidQuery(String... fields) throws SolrServerException {
+	private SolrQuery getUuidQuery(String... fields) {
 		SolrQuery query = getBasicQuery(fields);
 
 		if (lastPid != null && !lastPid.isEmpty()) {
-			query.add("fq", SolrUtils.createFieldQuery(PID_FIELD, SolrUtils.createRange(lastPid, null)));
+			query.add("fq", SolrUtils.createFieldQuery(params.getApiMappingValue(PID), SolrUtils.createRange(lastPid, null)));
 		}
-		query.setSort(PID_FIELD, ORDER.asc);
+		query.setSort(params.getApiMappingValue(PID), ORDER.asc);
 		LOGGER.info("nextPid: {}", lastPid);
 
 		return query;

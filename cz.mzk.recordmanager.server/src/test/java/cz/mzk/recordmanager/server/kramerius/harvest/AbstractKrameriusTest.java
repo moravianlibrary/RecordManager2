@@ -1,6 +1,7 @@
 package cz.mzk.recordmanager.server.kramerius.harvest;
 
 import cz.mzk.recordmanager.server.AbstractTest;
+import cz.mzk.recordmanager.server.kramerius.ApiMappingFactory;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.solr.SolrServerFacade;
 import cz.mzk.recordmanager.server.solr.SolrServerFactory;
@@ -33,6 +34,9 @@ public class AbstractKrameriusTest extends AbstractTest {
 	@Autowired
 	private SolrServerFactory solrServerFactory;
 
+	@Autowired
+	private ApiMappingFactory apiMappingFactory;
+
 	private SolrServerFacade mockedSolrServer = EasyMock.createMock(SolrServerFacade.class);
 
 	protected void init() throws Exception {
@@ -42,11 +46,26 @@ public class AbstractKrameriusTest extends AbstractTest {
 		expect(httpClient.executeGet("http://k4.techlib.cz/search/api/v5.0/item/uuid:00931210-02b6-11e5-b939-0800200c9a66/streams/DC")).andReturn(response1);
 		expect(httpClient.executeGet("http://k4.techlib.cz/search/api/v5.0/item/uuid:0095bca0-614f-11e2-bcfd-0800200c9a66/streams/DC")).andReturn(response2);
 		replay(httpClient);
-		
+
+		initMockedSolrServer();
+
+		KrameriusHarvesterParams parameters = new KrameriusHarvesterParams();
+		parameters.setUrl("http://k4.techlib.cz/");
+		parameters.setMetadataStream("DC");
+		parameters.setApiMapping(apiMappingFactory.getMapping("5"));
+		KrameriusHarvesterSorting harvester = new KrameriusHarvesterSorting(httpClient, solrServerFactory, parameters, 1L);
+		List<String> uuids = harvester.getNextUuids();
+		for (String uuid : uuids) {
+			HarvestedRecord record = harvester.downloadRecord(uuid);
+			Assert.assertNotNull(record);
+		}
+	}
+
+	protected void initMockedSolrServer() throws SolrServerException {
 		reset(solrServerFactory);
 		expect(solrServerFactory.create(eq(SOLR_URL), eq(Mode.KRAMERIUS))).andReturn(mockedSolrServer).anyTimes();
 		replay(solrServerFactory);
-		
+
 		reset(mockedSolrServer);
 		Capture<SolrQuery> capturedQueryRequest = EasyMock.newCapture();
 		SolrDocumentList documents = new SolrDocumentList();
@@ -63,18 +82,8 @@ public class AbstractKrameriusTest extends AbstractTest {
 		solrResponse2.add("response", new SolrDocumentList());
 		expect(mockedSolrServer.query(and(capture(capturedQueryRequest), anyObject(SolrQuery.class)))).andReturn(new QueryResponse(solrResponse2, null));
 		replay(mockedSolrServer);
-		
-		KrameriusHarvesterParams parameters = new KrameriusHarvesterParams();
-		parameters.setUrl("http://k4.techlib.cz/search/api/v5.0");
-		parameters.setMetadataStream("DC");
-		KrameriusHarvesterSorting harvester = new KrameriusHarvesterSorting(httpClient, solrServerFactory, parameters, 1L);
-		List<String> uuids = harvester.getNextUuids();
-		for (String uuid : uuids) {
-			HarvestedRecord record = harvester.downloadRecord(uuid);
-			Assert.assertNotNull(record);
-		}
 	}
-	
+
 	protected void initHttpClientWithException() throws Exception {
 		reset(httpClient);
 		InputStream response2 = this.getClass().getResourceAsStream("/sample/kramerius/DownloadItem2.xml");

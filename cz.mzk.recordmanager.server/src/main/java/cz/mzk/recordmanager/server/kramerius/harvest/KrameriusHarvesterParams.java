@@ -1,9 +1,12 @@
 package cz.mzk.recordmanager.server.kramerius.harvest;
 
 import cz.mzk.recordmanager.server.util.DateUtils;
+import cz.mzk.recordmanager.server.kramerius.ApiMappingEnum;
+import cz.mzk.recordmanager.server.scripting.Mapping;
 
 import java.text.ParseException;
 import java.util.Date;
+import java.util.List;
 
 public class KrameriusHarvesterParams {
 
@@ -21,8 +24,20 @@ public class KrameriusHarvesterParams {
 
 	private String collection;
 
+	private String authToken;
+
+	private boolean downloadPrivateFulltexts;
+
+	private String krameriusVersion;
+
+	private Mapping apiMapping;
+
 	public String getUrl() {
 		return url;
+	}
+
+	public String getApiUrl() {
+		return url + getApiMappingValue(ApiMappingEnum.API);
 	}
 
 	public void setUrl(String url) {
@@ -75,6 +90,58 @@ public class KrameriusHarvesterParams {
 
 	public void setCollection(String collection) {
 		this.collection = collection;
+	}
+
+	public Mapping getApiMapping() {
+		return apiMapping;
+	}
+
+	public void setApiMapping(Mapping apiMapping) {
+		this.apiMapping = apiMapping;
+	}
+
+	public String getApiMappingValue(String key) {
+		List<String> results = apiMapping.getMapping().get(key);
+		if (results == null || results.isEmpty()) return null;
+		return results.get(0);
+	}
+
+	public String getApiMappingValue(ApiMappingEnum key) {
+		return getApiMappingValue(key.getValue());
+	}
+
+	public List<String> getApiMappingValues(String key) {
+		List<String> results = apiMapping.getMapping().get(key);
+		if (results == null || results.isEmpty()) return null;
+		return results;
+	}
+
+	public List<String> getApiMappingValues(ApiMappingEnum key) {
+		return getApiMappingValues(key.getValue());
+	}
+
+	public String getKrameriusVersion() {
+		return krameriusVersion;
+	}
+
+	public void setKrameriusVersion(String krameriusVersion) {
+		this.krameriusVersion = krameriusVersion;
+	}
+
+	public String getAuthToken() {
+		return authToken;
+	}
+
+	public void setAuthToken(String authToken) {
+		this.authToken = authToken;
+	}
+
+	public boolean isDownloadPrivateFulltexts() {
+		return downloadPrivateFulltexts;
+	}
+
+	public void setDownloadPrivateFulltexts(boolean downloadPrivateFulltexts) {
+		this.downloadPrivateFulltexts = downloadPrivateFulltexts;
 	}
 
 	@Override
