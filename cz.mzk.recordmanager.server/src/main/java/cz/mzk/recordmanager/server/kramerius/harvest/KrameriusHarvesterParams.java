@@ -100,6 +100,16 @@ public class KrameriusHarvesterParams {
 		return getApiMappingValue(key.getValue());
 	}
 
+	public List<String> getApiMappingValues(String key) {
+		List<String> results = apiMapping.getMapping().get(key);
+		if (results == null || results.isEmpty()) return null;
+		return results;
+	}
+
+	public List<String> getApiMappingValues(ApiMappingEnum key) {
+		return getApiMappingValues(key.getValue());
+	}
+
 	public String getKrameriusVersion() {
 		return krameriusVersion;
 	}

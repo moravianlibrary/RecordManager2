@@ -7,6 +7,9 @@ public enum ApiMappingEnum {
 	MODIFIED("modified"),
 	PID("pid"),
 	MODEL("model"),
+	ACCESSIBILITY("accessibility"),
+	DNNT_LABELS("dnnt_labels"),
+	AVAILABILITY_URL("availability_url"),
 	DC("DC"),
 	BIBLIO_MODS("BIBLIO_MODS");
 

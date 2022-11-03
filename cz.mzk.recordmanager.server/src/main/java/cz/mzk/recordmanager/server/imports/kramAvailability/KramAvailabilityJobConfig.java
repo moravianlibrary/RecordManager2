@@ -12,7 +12,6 @@ import org.springframework.batch.core.configuration.annotation.StepBuilderFactor
 import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.core.job.flow.FlowExecutionStatus;
 import org.springframework.batch.core.step.tasklet.Tasklet;
-import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -62,7 +61,7 @@ public class KramAvailabilityJobConfig {
 
 	@Bean(name = Constants.JOB_ID_HARVEST_KRAM_AVAILABILITY + ":reader")
 	@StepScope
-	public ItemReader<KramAvailability> harvestKramAvailabilityReader(
+	public KramAvailabilityReader harvestKramAvailabilityReader(
 			@Value("#{jobParameters[" + Constants.JOB_PARAM_CONF_ID + "]}") Long configId,
 			@Value("#{jobParameters[" + Constants.JOB_PARAM_IN_FILE + "]}") String filename) {
 		return new KramAvailabilityReader(configId, filename);
