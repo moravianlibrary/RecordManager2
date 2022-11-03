@@ -15,7 +15,7 @@ public class ApiMappingFactory {
 
 	public Mapping getMapping(String version) {
 		try {
-			return propertyResolver.resolve("kramerius/api/" + version + ".map");
+			return propertyResolver.resolve("kramerius/api/" + version.charAt(0) + ".map");
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}

@@ -1,12 +1,15 @@
 package cz.mzk.recordmanager.server.kramerius.harvest;
 
+import cz.mzk.recordmanager.server.kramerius.ApiMappingEnum;
 import cz.mzk.recordmanager.server.kramerius.ApiMappingFactory;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.model.KrameriusConfiguration;
 import cz.mzk.recordmanager.server.oai.dao.KrameriusConfigurationDAO;
+import cz.mzk.recordmanager.server.scripting.Mapping;
 import cz.mzk.recordmanager.server.util.HibernateSessionSynchronizer;
 import cz.mzk.recordmanager.server.util.HibernateSessionSynchronizer.SessionBinder;
 import org.apache.solr.client.solrj.SolrServerException;
+import org.json.JSONObject;
 import org.springframework.batch.core.ExitStatus;
 import org.springframework.batch.core.StepExecution;
 import org.springframework.batch.core.StepExecutionListener;
@@ -16,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -81,14 +85,32 @@ public class KrameriusItemReader implements ItemReader<List<HarvestedRecord>>,
 			params.setFrom(fromDate);
 			params.setUntil(untilDate);
 			params.setCollection(conf.getCollection());
-			params.setApiMapping(apiMappingFactory.getMapping("5"));
 			kHarvester = harvesterFactory.create(type, params, confId, inFile);
+			processInfo(params);
+			params.setApiMapping(apiMappingFactory.getMapping(params.getKrameriusVersion()));
 		}
 	}
 
 	@Override
 	public ExitStatus afterStep(StepExecution stepExecution) {
 		return null;
+	}
+
+	private static final List<String> API = Arrays.asList("5", "7");
+	private static final String INFO_FORMAT = "%s%s/info";
+
+	protected void processInfo(KrameriusHarvesterParams params) {
+		for (String apiVersion : API) {
+			Mapping mapping = apiMappingFactory.getMapping(apiVersion);
+			try {
+				JSONObject info = kHarvester.info(String.format(INFO_FORMAT, params.getUrl(),
+						mapping.getMapping().get(ApiMappingEnum.API.getValue()).get(0)));
+				params.setKrameriusVersion(info.getString("version"));
+				return;
+			} catch (Exception e) {
+				KrameriusHarvesterImpl.LOGGER.info(e.getMessage());
+			}
+		}
 	}
 
 }

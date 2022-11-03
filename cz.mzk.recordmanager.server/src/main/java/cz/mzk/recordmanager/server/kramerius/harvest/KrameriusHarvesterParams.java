@@ -22,6 +22,8 @@ public class KrameriusHarvesterParams {
 
 	private String collection;
 
+	private String krameriusVersion;
+
 	private Mapping apiMapping;
 
 	public String getUrl() {
@@ -96,6 +98,14 @@ public class KrameriusHarvesterParams {
 
 	public String getApiMappingValue(ApiMappingEnum key) {
 		return getApiMappingValue(key.getValue());
+	}
+
+	public String getKrameriusVersion() {
+		return krameriusVersion;
+	}
+
+	public void setKrameriusVersion(String krameriusVersion) {
+		this.krameriusVersion = krameriusVersion;
 	}
 
 	@Override

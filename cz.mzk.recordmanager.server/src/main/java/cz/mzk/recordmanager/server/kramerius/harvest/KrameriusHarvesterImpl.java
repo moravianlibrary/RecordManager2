@@ -14,12 +14,14 @@ import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.xml.transform.TransformerException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -29,7 +31,7 @@ import static cz.mzk.recordmanager.server.kramerius.ApiMappingEnum.*;
 
 public abstract class KrameriusHarvesterImpl implements KrameriusHarvester {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(KrameriusHarvesterImpl.class);
+	protected static final Logger LOGGER = LoggerFactory.getLogger(KrameriusHarvesterImpl.class);
 
 	private static final int MAX_TIME_ALLOWED = 100_000;
 
@@ -157,6 +159,17 @@ public abstract class KrameriusHarvesterImpl implements KrameriusHarvester {
 			return new MODSTransformer().transform(is).toByteArray();
 		default:
 			return IOUtils.toByteArray(is);
+		}
+	}
+
+	@Override
+	public JSONObject info(String url) throws IOException {
+		LOGGER.info("Harvesting info: " + url);
+		try (InputStream is = httpClient.executeGet(url)) {
+			return new JSONObject(IOUtils.toString(is, StandardCharsets.UTF_8));
+		} catch (IOException ioe) {
+			LOGGER.error(ioe.getMessage());
+			throw new IOException("Info failed: " + url);
 		}
 	}
 
