@@ -19,7 +19,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -96,11 +95,10 @@ public class KrameriusItemReader implements ItemReader<List<HarvestedRecord>>,
 		return null;
 	}
 
-	private static final List<String> API = Arrays.asList("5", "7");
 	private static final String INFO_FORMAT = "%s%s/info";
 
 	protected void processInfo(KrameriusHarvesterParams params) {
-		for (String apiVersion : API) {
+		for (String apiVersion : ApiMappingFactory.API_VERSION) {
 			Mapping mapping = apiMappingFactory.getMapping(apiVersion);
 			try {
 				JSONObject info = kHarvester.info(String.format(INFO_FORMAT, params.getUrl(),

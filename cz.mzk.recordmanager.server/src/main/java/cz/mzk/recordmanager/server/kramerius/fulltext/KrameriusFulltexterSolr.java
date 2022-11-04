@@ -1,11 +1,10 @@
 package cz.mzk.recordmanager.server.kramerius.fulltext;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.regex.Pattern;
-
+import com.google.common.base.Charsets;
+import cz.mzk.recordmanager.server.kramerius.harvest.KrameriusHarvesterParams;
+import cz.mzk.recordmanager.server.model.FulltextKramerius;
+import cz.mzk.recordmanager.server.solr.SolrServerFacade;
+import cz.mzk.recordmanager.server.util.SolrUtils;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocument;
@@ -13,12 +12,13 @@ import org.apache.solr.common.SolrDocumentList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.base.Charsets;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.regex.Pattern;
 
 import static cz.mzk.recordmanager.server.kramerius.fulltext.KrameriusSolrConstants.*;
-import cz.mzk.recordmanager.server.model.FulltextKramerius;
-import cz.mzk.recordmanager.server.solr.SolrServerFacade;
-import cz.mzk.recordmanager.server.util.SolrUtils;
 
 public class KrameriusFulltexterSolr implements KrameriusFulltexter {
 
@@ -29,16 +29,25 @@ public class KrameriusFulltexterSolr implements KrameriusFulltexter {
 			PAGE_ORDER_FIELD, PID_FIELD, POLICY_FIELD);
 
 	private static final int MAX_PAGES = 1000;  // number of pages requested in single SOLR query
-	
+
 	private static final int PAGE_LIMIT = 50000; // maximal number of downloaded pages for 1 document
 
 	private static final Pattern POLICY_PUBLIC = Pattern.compile("public");
 
 	private final SolrServerFacade solr;
 
+	private final KrameriusHarvesterParams params;
+
 	public KrameriusFulltexterSolr(SolrServerFacade solr) {
 		super();
 		this.solr = solr;
+		this.params = null;
+	}
+
+	public KrameriusFulltexterSolr(SolrServerFacade solr, KrameriusHarvesterParams params) {
+		super();
+		this.solr = solr;
+		this.params = params;
 	}
 
 	@Override
@@ -69,7 +78,7 @@ public class KrameriusFulltexterSolr implements KrameriusFulltexter {
 			query.set("fl", FL_FIELDS);
 			query.setRows(MAX_PAGES);
 			query.setStart(start);
-			
+			System.out.println(query);
 			try {
 				QueryResponse response = solr.query(query);
 				SolrDocumentList documents = response.getResults();
