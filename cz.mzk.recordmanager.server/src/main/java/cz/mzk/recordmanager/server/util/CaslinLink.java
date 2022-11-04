@@ -38,8 +38,9 @@ public class CaslinLink {
 			siglaCache.put(sigla, caslinLink);
 		}
 		if (caslinLink == null) return "";
-		if (CARMEN.matcher(caslinLink.getUrl()).find() && id.length() >= 8) id = id.substring(id.length() - 8);
-		return caslinLink.getUrl() + id;
+		if (CARMEN.matcher(caslinLink.getUrlForIndexing()).find() && id.length() >= 8)
+			id = id.substring(id.length() - 8);
+		return caslinLink.getUrlForIndexing() + id;
 	}
 
 }

@@ -598,6 +598,7 @@ CREATE TABLE caslin_links (
   id                SERIAL,
   sigla             VARCHAR(10) NOT NULL,
   url               VARCHAR (100) NOT NULL,
+  hardcoded_url     VARCHAR (100) NOT NULL,
   updated           TIMESTAMP NOT NULL,
   last_harvest      TIMESTAMP NOT NULL,
   CONSTRAINT caslin_links_pk PRIMARY KEY(id)

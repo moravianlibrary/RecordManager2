@@ -20,6 +20,9 @@ public class CaslinLinks {
 	@Column(name = "url")
 	private String url;
 
+	@Column(name = "hardcoded_url")
+	private String hardcodedUrl;
+
 	@Column(name = "updated")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date updated;
@@ -75,6 +78,18 @@ public class CaslinLinks {
 
 	public void setLastHarvest(Date lastHarvest) {
 		this.lastHarvest = lastHarvest;
+	}
+
+	public String getHardcodedUrl() {
+		return hardcodedUrl;
+	}
+
+	public void setHardcodedUrl(String hardcodedUrl) {
+		this.hardcodedUrl = hardcodedUrl;
+	}
+
+	public String getUrlForIndexing() {
+		return hardcodedUrl != null ? hardcodedUrl : url;
 	}
 
 }
