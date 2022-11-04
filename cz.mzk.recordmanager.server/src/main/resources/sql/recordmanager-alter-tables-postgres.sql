@@ -2737,3 +2737,6 @@ UPDATE import_conf SET id_prefix='mkben' WHERE id=463;
 
 -- 26. 10. 2022 tomascejpek
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (123, 375, 'OPG503');
+
+-- 04. 11. 2022 tomascejpek
+ALTER TABLE caslin_links ADD hardcoded_url VARCHAR (100);

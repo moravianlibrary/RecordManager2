@@ -3026,3 +3026,6 @@ UPDATE import_conf SET id_prefix='mkben' WHERE id=463;
 
 --changeset tomascejpek:360 context:cpk
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (123, 375, 'OPG503');
+
+--changeset tomascejpek:361
+ALTER TABLE caslin_links ADD hardcoded_url VARCHAR (100);
