@@ -109,6 +109,8 @@ public class DedupRecordsJobConfig {
 
 	private static final String TMP_TABLE_BOOKPORT_ID = "tmp_simmilar_bookport_id";
 
+	private static final String TMP_TABLE_MAPPED_SOURCES = "tmp_simmilar_mapped_sources";
+
 	private final int partitionThreads = 6;
 
 	@Autowired
@@ -201,6 +203,9 @@ public class DedupRecordsJobConfig {
 	private static final String prepareTempBookportTableSql =
 			ResourceUtils.asString("job/dedupRecordsJob/prepareTempBookportTable.sql");
 
+	private static final String prepareTempMappedSourcesTableSql =
+			ResourceUtils.asString("job/dedupRecordsJob/prepareTempMappedSourcesTable.sql");
+
 	public DedupRecordsJobConfig() {
 	}
 
@@ -258,6 +263,8 @@ public class DedupRecordsJobConfig {
 			@Qualifier(Constants.JOB_ID_DEDUP + ":dedupArticlesXGPartitionedStep") Step dedupArticlesXGStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":prepareTempArticlesTGTableStep") Step prepareTempArticlesTGTableStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":dedupArticlesTGPartitionedStep") Step dedupArticlesTGStep,
+			@Qualifier(Constants.JOB_ID_DEDUP + ":prepareTempMappedSourcesTableStep") Step prepareTempMappedSourcesTableStep,
+			@Qualifier(Constants.JOB_ID_DEDUP + ":dedupMappedSourcesPartitionedStep") Step dedupMappedSourcesStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":prepareTempBookportTableStep") Step prepareTempBookportTableStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":dedupBookportStep") Step dedupBookportStep,
 			@Qualifier(Constants.JOB_ID_DEDUP + ":prepareTempDisadvantagedPublisherTableStep") Step prepareTempDisadvantagedPublisherTableStep,
@@ -281,6 +288,8 @@ public class DedupRecordsJobConfig {
 				.start(initStep)
 				.next(prepareTempClusterIdStep)
 				.next(dedupClusterIdsStep)
+				.next(prepareTempMappedSourcesTableStep)
+				.next(dedupMappedSourcesStep)
 				.next(prepareTempSkatKeysManuallyMergedStep)
 				.next(dedupSimpleKeysSkatManuallyMergedStep)
 				.next(prepareTempIsbnTableStep)
@@ -801,6 +810,62 @@ public class DedupRecordsJobConfig {
 	public ItemProcessor<List<Long>, List<HarvestedRecord>> dedupArticlesTGProcessor() {
 		return new DedupArticlesTGProcessor(false);
 	}
+
+	/**
+	 *
+	 */
+	@Bean(name = "prepareTempTablesStep:prepareTempMappedSourcesTableTasklet")
+	@StepScope
+	public Tasklet prepareTempMappedSourcesTableTasklet() {
+		return new SqlCommandTasklet(prepareTempMappedSourcesTableSql);
+	}
+
+	@Bean(name = Constants.JOB_ID_DEDUP + ":prepareTempMappedSourcesTableStep")
+	public Step prepareTempMappedSourcesTableStep() {
+		return steps.get("prepareTempMappedSourcesTableStep")
+				.listener(new StepProgressListener())
+				.tasklet(prepareTempMappedSourcesTableTasklet()).build();
+	}
+
+
+	@Bean(name = Constants.JOB_ID_DEDUP + ":dedupMappedSourcesStep")
+	public Step dedupMappedSourcesStep() throws Exception {
+		return steps.get("dedupMappedSourcesStep")
+				.listener(new StepProgressListener())
+				.<List<Long>, List<HarvestedRecord>>chunk(10)
+				.faultTolerant()
+				.keyGenerator(KeyGeneratorForList.INSTANCE)
+				.retry(LockAcquisitionException.class)
+				.retry(OptimisticLockException.class)
+				.retryLimit(10000)
+				.reader(dedupMappedSourcesReader(INTEGER_OVERRIDEN_BY_EXPRESSION))
+				.processor(dedupMappedSourcesProcessor())
+				.writer(dedupSimpleKeysStepWriter())
+				.build();
+	}
+
+	@Bean(name = Constants.JOB_ID_DEDUP + ":dedupMappedSourcesPartitionedStep")
+	public Step dedupMappedSourcesPartitionedStep() throws Exception {
+		return steps.get("dedupMappedSourcesPartitionedStep")
+				.partitioner("dedupMappedSourcesPartitionedStepSlave", this.partioner()) //
+				.taskExecutor(this.taskExecutor)
+				.gridSize(this.partitionThreads)
+				.step(dedupMappedSourcesStep())
+				.build();
+	}
+
+	@Bean(name = Constants.JOB_ID_DEDUP + ":dedupMappedSourcesStepReader")
+	@StepScope
+	public ItemReader<List<Long>> dedupMappedSourcesReader(@Value("#{stepExecutionContext[modulo]}") Integer modulo) throws Exception {
+		return dedupSimpleKeysReader(TMP_TABLE_MAPPED_SOURCES, modulo);
+	}
+
+	@Bean(name = Constants.JOB_ID_DEDUP + ":dedupMappedSourcesProcessor")
+	@StepScope
+	public ItemProcessor<List<Long>, List<HarvestedRecord>> dedupMappedSourcesProcessor() {
+		return new DedupSimpleKeysStepProcessor(false);
+	}
+
 
 	/**
 	 * dedupTitleAuthStep Deduplicate all books having same title, author key,

@@ -85,7 +85,7 @@ public class OAIItemProcessor implements ItemProcessor<List<OAIRecord>, List<Har
 	protected List<HarvestedRecord> processHr(OAIRecord oaiRecord) throws TransformerException {
 		List<HarvestedRecord> results = new ArrayList<>();
 		if (!mapping.isEmpty()) {
-			results.addAll(createMappedHarvestedRecord(oaiRecord));
+			results.addAll(createMappedHarvestedRecord(oaiRecord, configuration));
 		}
 		results.add(createHarvestedRecord(oaiRecord, configuration));
 		return results;
@@ -198,7 +198,8 @@ public class OAIItemProcessor implements ItemProcessor<List<OAIRecord>, List<Har
 		return null;
 	}
 
-	protected List<HarvestedRecord> createMappedHarvestedRecord(OAIRecord oaiRecord) throws TransformerException {
+	protected List<HarvestedRecord> createMappedHarvestedRecord(OAIRecord oaiRecord, ImportConfiguration configuration)
+			throws TransformerException {
 		List<HarvestedRecord> results = new ArrayList<>();
 		boolean deleted = oaiRecord.getHeader().isDeleted()
 				|| oaiRecord.getMetadata().getElement().getTagName().equals(METADATA_ERROR);
@@ -209,6 +210,12 @@ public class OAIItemProcessor implements ItemProcessor<List<OAIRecord>, List<Har
 				if (hr.getId() != null) results.add(hr);
 			}
 		} else {
+			if (recordContent != null && configuration.isInterceptionEnabled()) {
+				MarcRecordInterceptor interceptor = marcInterceptorFactory.getInterceptor(configuration, recordContent);
+				if (interceptor != null) {
+					recordContent = interceptor.intercept();
+				}
+			}
 			MarcRecord marcRecord = marcXmlParser.parseRecord(recordContent);
 			for (Entry<Long, SourceMapping> entry : mapping.entrySet()) {
 				SourceMapping mapping = entry.getValue();
