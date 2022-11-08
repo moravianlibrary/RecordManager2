@@ -1,3 +1,5 @@
+import static cz.mzk.recordmanager.server.marc.SubfieldExtractionMethod.SEPARATED
+
 record_format = "authority"
 
 fullrecord = getFullrecord()
@@ -15,6 +17,7 @@ alternative_name_display_mv = getAuthAuthors "400"
 authority_id_display = getAuthorityRecordId()
 bibliographic_details_display_mv = getFields "678a"
 format_display_mv = getFormat()
+occupation_display_mv = getFields "374a", SEPARATED
 personal_name_display = getFirstAuthAuthor "100"
 pseudonym_ids_display_mv = getAuthorityPseudonymsIds()
 pseudonym_name_display_mv = getAuthorityPseudonymsNames()

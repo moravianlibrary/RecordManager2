@@ -1,3 +1,5 @@
+import static cz.mzk.recordmanager.server.marc.SubfieldExtractionMethod.SEPARATED
+
 record_format = "marc"
 
 allfields = getAllFields()
@@ -15,6 +17,7 @@ author_exact = getAuthorExact()
 author_fuller = getFields "100q"
 authorCorporation_search_txt_mv = getFieldsUnique "100abcdq7:110abc7:111aceq7:700abcdq7:710abc7:711aceq7:800abcdq7:810abc7:811aceq7:975abcdq7:976abc7:978abcdg7"
 id_authority = getAuthorityRecordId()
+occupation_txt_mv = getFields "374a", SEPARATED
 people_search_txt_mv = getFields "100abcd:400abcd:500abcd"
 subjectKeywords_search_txt_mv = getFields "100abcd:400abcd:500abcd"
 
