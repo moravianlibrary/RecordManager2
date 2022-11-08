@@ -17,6 +17,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.List;
 
 public class DefaultMarcInterceptor implements MarcRecordInterceptor {
@@ -106,6 +107,17 @@ public class DefaultMarcInterceptor implements MarcRecordInterceptor {
 
 	protected void setRecord(Record newRecord) {
 		this.record = newRecord;
+	}
+
+	protected void filter996BySigla() {
+		for (DataField df : new ArrayList<>(record.getDataFields())) {
+			if (!df.getTag().equals("996")) continue;
+			if (df.getTag().equals("996")
+					&& df.getSubfield('e') != null
+					&& !df.getSubfield('e').getData().equals(conf.getSiglas().get(0).getUniqueId().getSigla())) {
+				record.removeVariableField(df);
+			}
+		}
 	}
 
 }

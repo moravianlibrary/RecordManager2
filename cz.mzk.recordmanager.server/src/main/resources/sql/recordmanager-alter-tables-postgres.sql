@@ -2763,4 +2763,195 @@ INSERT INTO sigla (id, import_conf_id, sigla) VALUES (123, 375, 'OPG503');
 
 -- 04. 11. 2022 tomascejpek
 ALTER TABLE caslin_links ADD hardcoded_url VARCHAR (100);
+<<<<<<< HEAD
 >>>>>>> master
+=======
+
+-- 07. 11. 2022 tomascejpek
+DROP VIEW IF EXISTS oai_harvest_summary CASCADE;
+DROP VIEW IF EXISTS fulltext_summary CASCADE;
+DROP VIEW IF EXISTS reharvest_summary CASCADE;
+DROP VIEW IF EXISTS kram_availability_summary CASCADE;
+DROP VIEW IF EXISTS import_summary CASCADE;
+ALTER TABLE import_conf ALTER COLUMN id_prefix TYPE VARCHAR(20);
+CREATE OR REPLACE VIEW oai_harvest_summary AS
+WITH last_harvest_date AS (
+    SELECT
+        import_conf_id,
+        COALESCE(MAX(CASE WHEN status = 'COMPLETED' THEN to_param END), MAX(CASE WHEN status = 'COMPLETED' THEN end_time END)) last_successful_harvest_date,
+        COALESCE(MAX(CASE WHEN status = 'FAILED' THEN to_param END), MAX(CASE WHEN status = 'FAILED' THEN end_time END)) last_failed_harvest_date,
+        COALESCE(MIN(end_time), MIN(to_param)) first_harvest_date,
+        COUNT(1) no_of_harvests
+    FROM oai_harvest_job_stat
+    GROUP BY import_conf_id
+)
+SELECT ic.id, l.name, ic.id_prefix, ohc.url, ohc.set_spec, lhd.last_successful_harvest_date, lhd.last_failed_harvest_date, lhd.first_harvest_date, lhd.no_of_harvests
+FROM last_harvest_date lhd
+         JOIN import_conf ic ON ic.id = lhd.import_conf_id
+         LEFT JOIN oai_harvest_conf ohc ON ohc.import_conf_id = ic.id
+         LEFT JOIN kramerius_conf kc ON kc.import_conf_id = ic.id
+         JOIN library l ON l.id = ic.library_id
+;
+CREATE OR REPLACE VIEW oai_last_failed_harvests AS
+SELECT name, url, set_spec, last_failed_harvest_date
+FROM oai_harvest_summary
+WHERE last_failed_harvest_date > last_successful_harvest_date OR (last_failed_harvest_date IS NOT NULL AND last_successful_harvest_date IS NULL);
+CREATE OR REPLACE VIEW fulltext_summary AS
+WITH last_harvest_date AS (
+    SELECT
+        import_conf_id,
+        COALESCE(MAX(CASE WHEN status = 'COMPLETED' THEN to_param END), MAX(CASE WHEN status = 'COMPLETED' THEN end_time END)) last_successful_harvest_date,
+        COALESCE(MAX(CASE WHEN status = 'FAILED' THEN to_param END), MAX(CASE WHEN status = 'FAILED' THEN end_time END)) last_failed_harvest_date
+    FROM fulltext_job_stat
+    GROUP BY import_conf_id
+)
+SELECT ic.id,
+       l.name,
+       ic.id_prefix,
+       CASE WHEN kc.url_solr IS NOT NULL THEN kc.url_solr ELSE kc.url END url,
+       lhd.last_successful_harvest_date,
+       lhd.last_failed_harvest_date
+FROM last_harvest_date lhd
+         JOIN import_conf ic ON ic.id = lhd.import_conf_id
+         LEFT JOIN kramerius_conf kc ON kc.import_conf_id = ic.id
+         JOIN library l ON l.id = ic.library_id
+ORDER BY lhd.last_successful_harvest_date DESC NULLS LAST
+;
+CREATE OR REPLACE VIEW reharvest_summary AS
+WITH reharvest_job_stat AS (
+    SELECT
+        bje.job_execution_id,
+        (array_agg(ic.id))[1]  import_conf_id,
+        bje.start_time,
+        bje.status
+    FROM batch_job_instance bji
+             JOIN batch_job_execution bje ON bje.job_instance_id = bji.job_instance_id
+             JOIN batch_job_execution_params conf_id_param ON conf_id_param.job_execution_id = bje.job_execution_id AND conf_id_param.key_name = 'configurationId'
+             LEFT JOIN batch_job_execution_params reharvest_param ON reharvest_param.job_execution_id = bje.job_execution_id AND reharvest_param.key_name = 'reharvest'
+             LEFT JOIN oai_harvest_conf ohc ON ohc.import_conf_id = conf_id_param.long_val
+             LEFT JOIN kramerius_conf kc ON kc.import_conf_id = conf_id_param.long_val
+             JOIN import_conf ic ON ic.id = ohc.import_conf_id OR ic.id = kc.import_conf_id
+    WHERE reharvest_param.string_val='true' and bji.job_name IN ('oaiHarvestJob', 'cosmotronHarvestJob', 'krameriusHarvestJob', 'oaiHarvestOneByOneJob', 'importRecordJob', 'multiImportRecordsJob', 'importOaiRecordsJob')
+    GROUP BY bje.job_execution_id
+), last_reharvest_date AS (
+    SELECT
+        import_conf_id,
+        COALESCE(MAX(CASE WHEN status = 'COMPLETED' THEN start_time END)) last_successful_harvest_date
+    FROM reharvest_job_stat
+    GROUP BY import_conf_id
+)
+SELECT ic.id, l.name, ic.id_prefix, COALESCE(ohc.url, kc.url), ohc.set_spec, lhd.last_successful_harvest_date
+FROM last_reharvest_date lhd
+         JOIN import_conf ic ON ic.id = lhd.import_conf_id
+         LEFT JOIN oai_harvest_conf ohc ON ohc.import_conf_id = ic.id
+         LEFT JOIN kramerius_conf kc ON kc.import_conf_id = ic.id
+         JOIN library l ON l.id = ic.library_id
+WHERE lhd.last_successful_harvest_date IS NOT NULL
+ORDER BY lhd.last_successful_harvest_date DESC
+;
+CREATE OR REPLACE VIEW kram_availability_summary AS
+WITH last_harvest_date AS (
+    SELECT
+        import_conf_id,
+        MAX(CASE WHEN status = 'COMPLETED' THEN start_time END) last_successful_harvest_date,
+        MAX(CASE WHEN status = 'FAILED' THEN start_time END) last_failed_harvest_date
+    FROM kram_availability_job_stat
+    GROUP BY import_conf_id
+)
+SELECT ic.id,
+       l.name,
+       ic.id_prefix,
+       CASE WHEN kc.availability_source_url IS NOT NULL THEN kc.availability_source_url ELSE kc.url END url,
+       lhd.last_successful_harvest_date,
+       lhd.last_failed_harvest_date
+FROM last_harvest_date lhd
+         JOIN import_conf ic ON ic.id = lhd.import_conf_id
+         LEFT JOIN kramerius_conf kc ON kc.import_conf_id = ic.id
+         JOIN library l ON l.id = ic.library_id
+ORDER BY lhd.last_successful_harvest_date DESC NULLS LAST
+;
+CREATE OR REPLACE VIEW import_summary AS
+WITH last_harvest_date AS (
+    SELECT
+        import_conf_id,
+        COALESCE(MAX(CASE WHEN status = 'COMPLETED' THEN to_param END), MAX(CASE WHEN status = 'COMPLETED' THEN end_time END)) last_successful_harvest_date,
+        COALESCE(MAX(CASE WHEN status = 'FAILED' THEN to_param END), MAX(CASE WHEN status = 'FAILED' THEN end_time END)) last_failed_harvest_date,
+        COALESCE(MIN(end_time), MIN(to_param)) first_harvest_date
+    FROM import_job_stat
+    GROUP BY import_conf_id
+)
+SELECT ic.id, l.name, ic.id_prefix, dic.url, dic.import_job_name, lhd.last_successful_harvest_date, lhd.last_failed_harvest_date
+FROM last_harvest_date lhd
+         JOIN import_conf ic ON ic.id = lhd.import_conf_id
+         LEFT JOIN download_import_conf dic ON dic.import_conf_id = ic.id
+         JOIN library l ON l.id = ic.library_id
+;
+
+-- 07. 11. 2022 tomascejpek
+INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, generate_dedup_keys, generate_biblio_linker_keys, indexed) VALUES (464, 183, 200, 'mktrireks', 11, false, true, true, true, 'U', false, false, false);
+INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (464,'https://tritius.knihovnatrinec.cz/tritius/oai-provider','CPK_REKS','marc21',NULL);
+INSERT INTO import_conf_mapping_field (import_conf_id,parent_import_conf_id,mapping) VALUES (383,464,'996$eFMG502');
+INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (265, 'TRIBUKOVEC', 'https://bukovec.knihovna.info/', 'https://tritius.knihovnatrinec.cz/library/bukovec/', 'Bukovec', 'MS');
+INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id, mappings996) VALUES (465, 265, 200, 'tribukovec', 11, false, true, true, true, 'U', 'other', 'tritius');
+INSERT INTO import_conf_mapping_field (import_conf_id,parent_import_conf_id,mapping) VALUES (465,464,'996$eFMG550');
+INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (266, 'TRIDOLNILOMNA', 'https://www.dolnilomna.eu/index.php/directory/knihovna/', 'https://tritius.knihovnatrinec.cz/library/dolnilomna/', 'Dolní Lomná', 'MS');
+INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id, mappings996) VALUES (466, 266, 200, 'tridolnilomna', 11, false, true, true, true, 'U', 'other', 'tritius');
+INSERT INTO import_conf_mapping_field (import_conf_id,parent_import_conf_id,mapping) VALUES (466,464,'996$eFMG531');
+INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (267, 'TRIDOLNITOSANOVIC', 'https://dolnitosanovice.knihovna.info/', 'https://tritius.knihovnatrinec.cz/library/dolnitosanovic/', 'Dolní Tošanovice', 'MS');
+INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id, mappings996) VALUES (467, 267, 200, 'tridolnitosanovic', 11, false, true, true, true, 'U', 'other', 'tritius');
+INSERT INTO import_conf_mapping_field (import_conf_id,parent_import_conf_id,mapping) VALUES (467,464,'996$eFMG555');
+INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (268, 'TRIHNOJNIK', 'https://hnojnik.knihovna.info/', 'https://tritius.knihovnatrinec.cz/library/hnojnik/', 'Hnojník', 'MS');
+INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id, mappings996) VALUES (468, 268, 200, 'trihnojnik', 11, false, true, true, true, 'U', 'other', 'tritius');
+INSERT INTO import_conf_mapping_field (import_conf_id,parent_import_conf_id,mapping) VALUES (468,464,'996$eFMG506');
+INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (269, 'TRIHORNILOMNA', 'https://hornilomna.eu/knihovna/', 'https://tritius.knihovnatrinec.cz/library/hornilomna/', 'Horní Lomná', 'MS');
+INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id, mappings996) VALUES (469, 269, 200, 'trihornilomna', 11, false, true, true, true, 'U', 'other', 'tritius');
+INSERT INTO import_conf_mapping_field (import_conf_id,parent_import_conf_id,mapping) VALUES (469,464,'996$eFMG578');
+INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (270, 'TRIHORNITOSANOVICE', 'https://hornitosanovice.knihovna.info/', 'https://tritius.knihovnatrinec.cz/library/hornitosanovice/', 'Horní Tošanovice', 'MS');
+INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id, mappings996) VALUES (470, 270, 200, 'trihornitosanovice', 11, false, true, true, true, 'U', 'other', 'tritius');
+INSERT INTO import_conf_mapping_field (import_conf_id,parent_import_conf_id,mapping) VALUES (470,464,'996$eFMG525');
+INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (271, 'TRIHRADEK', 'https://www.obechradek.cz/knihovna', 'https://tritius.knihovnatrinec.cz/library/hradek/', 'Hrádek', 'MS');
+INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id, mappings996) VALUES (471, 271, 200, 'trihradek', 11, false, true, true, true, 'U', 'other', 'tritius');
+INSERT INTO import_conf_mapping_field (import_conf_id,parent_import_conf_id,mapping) VALUES (471,464,'996$eFMG535');
+INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (272, 'TRIKOMORNILHOTKA', 'https://knihovna.komorni-lhotka.cz/', 'https://tritius.knihovnatrinec.cz/library/komornilhotka', 'Komorní Lhotka', 'MS');
+INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id, mappings996) VALUES (472, 272, 200, 'trikomornilhotka', 11, false, true, true, true, 'U', 'other', 'tritius');
+INSERT INTO import_conf_mapping_field (import_conf_id,parent_import_conf_id,mapping) VALUES (472,464,'996$eFMG516');
+INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (273, 'TRIKOSARISKA', 'https://kosariska.knihovna.info/', 'https://tritius.knihovnatrinec.cz/library/kosariska/', 'Košařiska', 'MS');
+INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id, mappings996) VALUES (473, 273, 200, 'trikosariska', 11, false, true, true, true, 'U', 'other', 'tritius');
+INSERT INTO import_conf_mapping_field (import_conf_id,parent_import_conf_id,mapping) VALUES (473,464,'996$eFMG576');
+INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (274, 'TRIMILIKOV', 'https://milikov.knihovna.info/?menu=1491', 'https://tritius.knihovnatrinec.cz/library/milikov/', 'Milíkov', 'MS');
+INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id, mappings996) VALUES (474, 274, 200, 'trimilikov', 11, false, true, true, true, 'U', 'other', 'tritius');
+INSERT INTO import_conf_mapping_field (import_conf_id,parent_import_conf_id,mapping) VALUES (474,464,'996$eFMG549');
+INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (275, 'TRIMOSTY', 'http://naseknihovna.cz/mostyujablunkova/', 'https://tritius.knihovnatrinec.cz/library/mosty', 'Mosty u Jablunkova', 'MS');
+INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id, mappings996) VALUES (475, 275, 200, 'trimosty', 11, false, true, true, true, 'U', 'other', 'tritius');
+INSERT INTO import_conf_mapping_field (import_conf_id,parent_import_conf_id,mapping) VALUES (475,464,'996$eFMG511');
+INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (276, 'TRINAVSI', 'http://naseknihovna.cz/navsi/', 'https://tritius.knihovnatrinec.cz/library/navsi/', 'Návsí', 'MS');
+INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id, mappings996) VALUES (476, 276, 200, 'trinavsi', 11, false, true, true, true, 'U', 'other', 'tritius');
+INSERT INTO import_conf_mapping_field (import_conf_id,parent_import_conf_id,mapping) VALUES (476,464,'996$eFMG541');
+INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (277, 'TRINYDEK', 'https://nydek.knihovna.info/', 'https://tritius.knihovnatrinec.cz/library/nydek/', 'Nýdek', 'MS');
+INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id, mappings996) VALUES (477, 277, 200, 'trinydek', 11, false, true, true, true, 'U', 'other', 'tritius');
+INSERT INTO import_conf_mapping_field (import_conf_id,parent_import_conf_id,mapping) VALUES (477,464,'996$eFMG575');
+INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (278, 'TRIPISEK', 'https://pisek.knihovna.info/', 'https://tritius.knihovnatrinec.cz/library/pisek/', 'Písek', 'MS');
+INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id, mappings996) VALUES (478, 278, 200, 'tripisek', 11, false, true, true, true, 'U', 'other', 'tritius');
+INSERT INTO import_conf_mapping_field (import_conf_id,parent_import_conf_id,mapping) VALUES (478,464,'996$eFMG533');
+INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (279, 'TRIREKA', 'https://www.obecreka.cz/dokumenty[166]-[cz]-knihovna', 'https://tritius.knihovnatrinec.cz/library/reka/', 'Řeka', 'MS');
+INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id, mappings996) VALUES (479, 279, 200, 'trireka', 11, false, true, true, true, 'U', 'other', 'tritius');
+INSERT INTO import_conf_mapping_field (import_conf_id,parent_import_conf_id,mapping) VALUES (479,464,'996$eFMG552');
+INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (280, 'TRIROPICE', 'http://naseknihovna.cz/ropice/', 'https://tritius.knihovnatrinec.cz/library/ropice/', 'Ropice', 'MS');
+INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id, mappings996) VALUES (480, 280, 200, 'triropice', 11, false, true, true, true, 'U', 'other', 'tritius');
+INSERT INTO import_conf_mapping_field (import_conf_id,parent_import_conf_id,mapping) VALUES (480,464,'996$eFMG530');
+INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (281, 'TRISMILOVICE', 'https://knihovna.smilovice.cz/', 'https://tritius.knihovnatrinec.cz/library/smilovice/', 'Smilovice', 'MS');
+INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id, mappings996) VALUES (481, 281, 200, 'trismilovice', 11, false, true, true, true, 'U', 'other', 'tritius');
+INSERT INTO import_conf_mapping_field (import_conf_id,parent_import_conf_id,mapping) VALUES (481,464,'996$eFMG519');
+INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (282, 'TRISTRITEZ', 'https://knihovna.obecstritez.cz/', 'https://tritius.knihovnatrinec.cz/library/stritez', 'Střítež', 'MS');
+INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id, mappings996) VALUES (482, 282, 200, 'tristritez', 11, false, true, true, true, 'U', 'other', 'tritius');
+INSERT INTO import_conf_mapping_field (import_conf_id,parent_import_conf_id,mapping) VALUES (482,464,'996$eFMG517');
+INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (283, 'TRITRANOVICE', 'https://tranovice.knihovna.info/', 'https://tritius.knihovnatrinec.cz/library/tranovice/', 'Třanovice', 'MS');
+INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id, mappings996) VALUES (483, 283, 200, 'tritranovice', 11, false, true, true, true, 'U', 'other', 'tritius');
+INSERT INTO import_conf_mapping_field (import_conf_id,parent_import_conf_id,mapping) VALUES (483,464,'996$eFMG518');
+INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (284, 'TRIVELOPOLI', 'https://velopoli.knihovna.info/', 'https://tritius.knihovnatrinec.cz/library/velopoli/', 'Vělopolí', 'MS');
+INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id, mappings996) VALUES (484, 284, 200, 'trivelopoli', 11, false, true, true, true, 'U', 'other', 'tritius');
+INSERT INTO import_conf_mapping_field (import_conf_id,parent_import_conf_id,mapping) VALUES (484,464,'996$eFMG554');
+INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (285, 'TRIVENDRYNE', 'http://naseknihovna.cz/vendryne/', 'https://tritius.knihovnatrinec.cz/library/vendryne/', 'Vendryně', 'MS');
+INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id, mappings996) VALUES (485, 285, 200, 'trivendryne', 11, false, true, true, true, 'U', 'other', 'tritius');
+INSERT INTO import_conf_mapping_field (import_conf_id,parent_import_conf_id,mapping) VALUES (485,464,'996$eFMG521');
+>>>>>>> reks
