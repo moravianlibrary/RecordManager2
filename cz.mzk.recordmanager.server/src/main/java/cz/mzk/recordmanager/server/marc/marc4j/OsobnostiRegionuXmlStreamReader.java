@@ -9,6 +9,7 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
 import cz.mzk.recordmanager.server.util.RecordUtils;
+import org.apache.commons.text.StringEscapeUtils;
 import org.marc4j.MarcReader;
 import org.marc4j.marc.DataField;
 import org.marc4j.marc.MarcFactory;
@@ -127,7 +128,7 @@ public class OsobnostiRegionuXmlStreamReader implements MarcReader{
 							else sb.append(", ").append(xmlReader.getElementText());
 							break;
 						case ATTR_NAME_DESCRIPTION:
-							description = xmlReader.getElementText();
+							description = StringEscapeUtils.unescapeHtml4(xmlReader.getElementText());
 							break;
 						case ATTR_NAME_SOURCE:
 							addField670(xmlReader.getElementText());
