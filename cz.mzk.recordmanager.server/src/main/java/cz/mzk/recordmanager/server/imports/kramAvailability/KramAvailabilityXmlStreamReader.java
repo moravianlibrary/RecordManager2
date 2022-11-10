@@ -18,12 +18,10 @@ public class KramAvailabilityXmlStreamReader {
 
 	private static final String ELEMENT_DOC = "doc";
 	private static final String ELEMENT_STR = "str";
-	private static final String ELEMENT_BOOL = "bool";
 	private static final String ELEMENT_INT = "int";
 	private static final String ELEMENT_ARR = "arr";
 
 	private static final String ATTRIBUTE_NAME = "name";
-	private static final String ATTRIBUTE_VALUE_DNNT = "dnnt";
 	private static final String ATTRIBUTE_VALUE_LEVEL = "level";
 
 	private final KrameriusHarvesterParams params;
@@ -83,11 +81,6 @@ public class KramAvailabilityXmlStreamReader {
 						}
 
 					}
-						if (ELEMENT_BOOL.equals(xmlReader.getLocalName())) {
-							if (ATTRIBUTE_VALUE_DNNT.equals(xmlReader.getAttributeValue(null, ATTRIBUTE_NAME))) {
-								result.setDnnt(xmlReader.getElementText().equals("true"));
-							}
-						}
 					if (ELEMENT_INT.equals(xmlReader.getLocalName())) {
 						if (ATTRIBUTE_VALUE_LEVEL.equals(xmlReader.getAttributeValue(null, ATTRIBUTE_NAME))) {
 							try {

@@ -26,9 +26,6 @@ public class KramAvailability {
 	@Column(name = "availability")
 	private String availability;
 
-	@Column(name = "dnnt")
-	private boolean dnnt;
-
 	@Column(name = "level")
 	private Integer level;
 
@@ -100,14 +97,6 @@ public class KramAvailability {
 		this.lastHarvest = lastHarvest;
 	}
 
-	public boolean isDnnt() {
-		return dnnt;
-	}
-
-	public void setDnnt(boolean dnnt) {
-		this.dnnt = dnnt;
-	}
-
 	public Integer getLevel() {
 		return level;
 	}
@@ -139,7 +128,6 @@ public class KramAvailability {
 				", harvestedFrom=" + harvestedFrom +
 				", uuid='" + uuid + '\'' +
 				", availability='" + availability + '\'' +
-				", dnnt=" + dnnt +
 				", level=" + level +
 				", updated=" + updated +
 				", lastHarvest=" + lastHarvest +

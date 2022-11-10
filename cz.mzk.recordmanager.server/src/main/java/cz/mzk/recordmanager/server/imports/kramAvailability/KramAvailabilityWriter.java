@@ -32,7 +32,6 @@ public class KramAvailabilityWriter implements ItemWriter<KramAvailability> {
 			if (isUpdated(oldItem, newItem)) {
 				kramAvailabilityDAO.dropKeys(oldItem);
 				oldItem.setAvailability(newItem.getAvailability());
-				oldItem.setDnnt(newItem.isDnnt());
 				oldItem.setDnntLabels(newItem.getDnntLabels());
 				oldItem.setUpdated(new Date());
 			}
@@ -45,7 +44,7 @@ public class KramAvailabilityWriter implements ItemWriter<KramAvailability> {
 	}
 
 	private static boolean isUpdated(final KramAvailability oldItem, final KramAvailability newItem) {
-		return !oldItem.getAvailability().equals(newItem.getAvailability()) || oldItem.isDnnt() != newItem.isDnnt()
+		return !oldItem.getAvailability().equals(newItem.getAvailability())
 				|| !CollectionUtils.isEqualCollection(oldItem.getDnntLabels(), newItem.getDnntLabels());
 	}
 

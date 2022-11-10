@@ -142,8 +142,7 @@ public class UrlDedupRecordEnricher implements DedupRecordEnricher {
 				if (newUrl == null) continue;
 				addToMap(urls, newUrl);
 				// dnnt
-				if (newUrl.getAvailability().equals(Constants.DOCUMENT_AVAILABILITY_PROTECTED)
-						&& kramAvailability.isDnnt()) {
+				if (newUrl.getAvailability().equals(Constants.DOCUMENT_AVAILABILITY_PROTECTED)) {
 					// dnnt online
 					if (kramAvailability.getDnntLabels().stream().anyMatch(l -> l.getLabel().equals(DnntLabelEnum.DNNTO.getLabel()))
 							&& potentialDnnt) {
