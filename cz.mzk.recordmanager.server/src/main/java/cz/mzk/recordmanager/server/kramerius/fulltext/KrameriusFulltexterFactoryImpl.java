@@ -31,8 +31,7 @@ public class KrameriusFulltexterFactoryImpl implements KrameriusFulltexterFactor
 			fulltexter = new KrameriusFulltexterSolr(solrFactory.create(config.getUrlSolr(), Mode.DEFAULT), params);
 			break;
 		default:
-			fulltexter = new KrameriusFulltexterFedora(config.getUrl(),
-					config.getAuthToken(), config.isDownloadPrivateFulltexts());
+			fulltexter = new KrameriusFulltexterFedora(params);
 		}
 		init(fulltexter);
 		return fulltexter;

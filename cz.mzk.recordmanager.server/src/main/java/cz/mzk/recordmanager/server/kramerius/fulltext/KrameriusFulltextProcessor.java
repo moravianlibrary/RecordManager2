@@ -89,6 +89,8 @@ public class KrameriusFulltextProcessor implements
 			params.setMetadataStream(config.getMetadataStream());
 			params.setQueryRows(config.getQueryRows());
 			params.setCollection(config.getCollection());
+			params.setAuthToken(config.getAuthToken());
+			params.setDownloadPrivateFulltexts(config.isDownloadPrivateFulltexts());
 			downloadPrivateFulltexts = config.isDownloadPrivateFulltexts();
 			fulltexter = krameriusFulltexterFactory.create(config, params);
 			processInfo(params);

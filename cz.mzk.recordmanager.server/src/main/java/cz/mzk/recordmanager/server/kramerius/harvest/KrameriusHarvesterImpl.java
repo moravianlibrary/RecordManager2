@@ -97,17 +97,14 @@ public abstract class KrameriusHarvesterImpl implements KrameriusHarvester {
 	}
 
 	private String createUrl(String uuid) {
-		String resultingUrl = String.format(params.getApiMappingValue(METADATA), params.getUrl(),
-				params.getApiMappingValue(API), uuid, params.getApiMappingValue(params.getMetadataStream()));
+		String resultingUrl = String.format(params.getApiMappingValue(METADATA), params.getApiUrl(),
+				uuid, params.getApiMappingValue(params.getMetadataStream()));
 		LOGGER.trace("created URL: {}", resultingUrl);
 		return resultingUrl;
 	}
 
 	protected SolrDocumentList executeSolrQuery(SolrQuery query) throws SolrServerException {
-		SolrServerFacade solr = solrServerFactory.create(
-				String.format("%s%s", params.getUrl(), params.getApiMappingValue(API)),
-				SolrServerFactoryImpl.Mode.KRAMERIUS
-		);
+		SolrServerFacade solr = solrServerFactory.create(params.getApiUrl(), SolrServerFactoryImpl.Mode.KRAMERIUS);
 		SolrDocumentList documents;
 		try {
 			QueryResponse response = solr.query(query);

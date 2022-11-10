@@ -22,12 +22,20 @@ public class KrameriusHarvesterParams {
 
 	private String collection;
 
+	private String authToken;
+
+	private boolean downloadPrivateFulltexts;
+
 	private String krameriusVersion;
 
 	private Mapping apiMapping;
 
 	public String getUrl() {
 		return url;
+	}
+
+	public String getApiUrl() {
+		return url + getApiMappingValue(ApiMappingEnum.API);
 	}
 
 	public void setUrl(String url) {
@@ -116,6 +124,22 @@ public class KrameriusHarvesterParams {
 
 	public void setKrameriusVersion(String krameriusVersion) {
 		this.krameriusVersion = krameriusVersion;
+	}
+
+	public String getAuthToken() {
+		return authToken;
+	}
+
+	public void setAuthToken(String authToken) {
+		this.authToken = authToken;
+	}
+
+	public boolean isDownloadPrivateFulltexts() {
+		return downloadPrivateFulltexts;
+	}
+
+	public void setDownloadPrivateFulltexts(boolean downloadPrivateFulltexts) {
+		this.downloadPrivateFulltexts = downloadPrivateFulltexts;
 	}
 
 	@Override

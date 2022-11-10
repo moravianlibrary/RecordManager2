@@ -1,39 +1,46 @@
 package cz.mzk.recordmanager.server.kramerius.fulltext;
 
-import static org.easymock.EasyMock.anyObject;
-import static org.easymock.EasyMock.eq;
-import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.reset;
-import static org.easymock.EasyMock.replay;
+import cz.mzk.recordmanager.server.AbstractTest;
+import cz.mzk.recordmanager.server.kramerius.ApiMappingFactory;
+import cz.mzk.recordmanager.server.kramerius.harvest.KrameriusHarvesterParams;
+import cz.mzk.recordmanager.server.model.FulltextKramerius;
+import cz.mzk.recordmanager.server.util.HttpClient;
+import org.easymock.EasyMock;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.testng.Assert;
+import org.testng.annotations.Test;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
-import org.easymock.EasyMock;
-import org.testng.Assert;
-import org.testng.annotations.Test;
-
-import cz.mzk.recordmanager.server.AbstractTest;
-import cz.mzk.recordmanager.server.model.FulltextKramerius;
-import cz.mzk.recordmanager.server.util.HttpClient;
+import static org.easymock.EasyMock.*;
 
 public class KrameriusFulltexterFedoraTest extends AbstractTest {
 
-    private HttpClient httpClient = EasyMock.createMock(HttpClient.class);
-	private static final String BASE_API_URL = "http://kramerius.mzk.cz/search/api/v5.0";  
-	
-	
+	private HttpClient httpClient = EasyMock.createMock(HttpClient.class);
+	private static final String BASE_API_URL = "http://kramerius.mzk.cz/search/api/v5.0";
+
+	@Autowired
+	private ApiMappingFactory apiMappingFactory;
+
 	//positive
 	@Test
 	public void testPositive() throws Exception {
 		String authToken = null;
-		boolean downloadPrivateTexts=true;
-		
+		boolean downloadPrivateTexts = true;
+
+		KrameriusHarvesterParams parameters = new KrameriusHarvesterParams();
+		parameters.setUrl("http://kramerius.mzk.cz/");
+		parameters.setMetadataStream("DC");
+		parameters.setAuthToken(authToken);
+		parameters.setDownloadPrivateFulltexts(downloadPrivateTexts);
+		parameters.setApiMapping(apiMappingFactory.getMapping("5"));
+
 		initPositive();
-		KrameriusFulltexterFedora fedora = new KrameriusFulltexterFedora(BASE_API_URL, authToken, downloadPrivateTexts);
+		KrameriusFulltexterFedora fedora = new KrameriusFulltexterFedora(parameters);
 		fedora.setHttpClient(httpClient);
-		
+
 		List<FulltextKramerius> pages = fedora.getFulltextObjects("uuid:f5a09c95-2fd8-11e0-83a8-0050569d679d");
 		Assert.assertEquals(pages.size(), 2);
 	}
@@ -55,12 +62,19 @@ public class KrameriusFulltexterFedoraTest extends AbstractTest {
 	@Test
 	public void testNegative() throws Exception {
 		String authToken = null;
-		boolean downloadPrivateTexts=true;
-		
+		boolean downloadPrivateTexts = true;
+
+		KrameriusHarvesterParams parameters = new KrameriusHarvesterParams();
+		parameters.setUrl("http://kramerius.mzk.cz/");
+		parameters.setMetadataStream("DC");
+		parameters.setAuthToken(authToken);
+		parameters.setDownloadPrivateFulltexts(downloadPrivateTexts);
+		parameters.setApiMapping(apiMappingFactory.getMapping("5"));
+
 		initNegative();
-		KrameriusFulltexterFedora fedora = new KrameriusFulltexterFedora(BASE_API_URL, authToken, downloadPrivateTexts);
+		KrameriusFulltexterFedora fedora = new KrameriusFulltexterFedora(parameters);
 		fedora.setHttpClient(httpClient);
-		
+
 		//1st - server 500
 		List<FulltextKramerius> pages = fedora.getFulltextObjects("uuid:f5a09c95-2fd8-11e0-83a8-0050569d679d");
 		Assert.assertEquals(pages.size(), 0);

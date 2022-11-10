@@ -1,5 +1,5 @@
 api = search/api/v5.0
-metadata = %s%s/item/%s/streams/%s
+metadata = %s/item/%s/streams/%s
 collection = collection
 modified = modified_date
 pid = PID

@@ -78,7 +78,6 @@ public class KrameriusFulltexterSolr implements KrameriusFulltexter {
 			query.set("fl", FL_FIELDS);
 			query.setRows(MAX_PAGES);
 			query.setStart(start);
-			System.out.println(query);
 			try {
 				QueryResponse response = solr.query(query);
 				SolrDocumentList documents = response.getResults();

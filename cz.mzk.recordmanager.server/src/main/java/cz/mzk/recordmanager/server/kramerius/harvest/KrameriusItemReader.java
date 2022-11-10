@@ -81,9 +81,11 @@ public class KrameriusItemReader implements ItemReader<List<HarvestedRecord>>,
 			params.setUrl(conf.getUrl());
 			params.setMetadataStream(conf.getMetadataStream());
 			params.setQueryRows(conf.getQueryRows());
+			params.setAuthToken(conf.getAuthToken());
 			params.setFrom(fromDate);
 			params.setUntil(untilDate);
 			params.setCollection(conf.getCollection());
+			params.setDownloadPrivateFulltexts(conf.isDownloadPrivateFulltexts());
 			kHarvester = harvesterFactory.create(type, params, confId, inFile);
 			processInfo(params);
 			params.setApiMapping(apiMappingFactory.getMapping(params.getKrameriusVersion()));
