@@ -2740,3 +2740,8 @@ INSERT INTO sigla (id, import_conf_id, sigla) VALUES (123, 375, 'OPG503');
 
 -- 04. 11. 2022 tomascejpek
 ALTER TABLE caslin_links ADD hardcoded_url VARCHAR (100);
+
+-- 15. 11. 2022 tomascejpek
+INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (287, 'CNS', 'https://www.narodopisnaspolecnost.cz/', 'https://cns.tritius.cz/', 'Bibliography', 'bibliography');
+INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency) VALUES (487, 287, 200, 'cns', 11, false, true, true, false, 'U');
+INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (487,'https://cns.tritius.cz/tritius/oai-provider','CPK_1','marc21',NULL);
