@@ -14,6 +14,7 @@ import cz.mzk.recordmanager.server.oai.dao.DedupRecordDAO;
 import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordDAO;
 import cz.mzk.recordmanager.server.util.CaslinFilter;
 import cz.mzk.recordmanager.server.util.ProgressLogger;
+import org.hibernate.SessionFactory;
 import org.marc4j.marc.ControlField;
 import org.marc4j.marc.DataField;
 import org.marc4j.marc.MarcFactory;
@@ -48,6 +49,9 @@ public class FilterCaslinRecordsWriter implements ItemWriter<HarvestedRecordUniq
 
 	@Autowired
 	private CaslinFilter caslinFilter;
+
+	@Autowired
+	protected SessionFactory sessionFactory;
 
 	private final ProgressLogger progressLogger;
 
@@ -106,5 +110,7 @@ public class FilterCaslinRecordsWriter implements ItemWriter<HarvestedRecordUniq
 				logger.error(String.format("Exception thrown when filtering harvested_record with id=%s", uniqueId), ex);
 			}
 		}
+		sessionFactory.getCurrentSession().flush();
+		sessionFactory.getCurrentSession().clear();
 	}
 }

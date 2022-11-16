@@ -53,7 +53,7 @@ public class FilterCaslinRecordsBySiglaJobConfig {
 	@Bean(name = Constants.JOB_ID_FILTER_CASLIN + ":filterCaslinRecordsStep")
 	public Step filterCaslinRecordsStep() throws Exception {
 		return steps.get("updateRecordsStep")
-				.<HarvestedRecordUniqueId, HarvestedRecordUniqueId>chunk(20)//
+				.<HarvestedRecordUniqueId, HarvestedRecordUniqueId>chunk(100)//
 				.reader(caslinRecordsReader()) //
 				.writer(caslinRecordsWriter()) //
 				.taskExecutor(taskExecutor)
@@ -75,7 +75,7 @@ public class FilterCaslinRecordsBySiglaJobConfig {
 		parameterValues.put("conf_id", Constants.IMPORT_CONF_ID_CASLIN);
 		reader.setParameterValues(parameterValues);
 		reader.setRowMapper(new HarvestedRecordIdRowMapper());
-		reader.setPageSize(20);
+		reader.setPageSize(100);
 		reader.setQueryProvider(pqpf.getObject());
 		reader.setDataSource(dataSource);
 		reader.afterPropertiesSet();
