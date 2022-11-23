@@ -5,10 +5,12 @@ import java.util.concurrent.Future;
 
 import javax.sql.DataSource;
 
+import cz.mzk.recordmanager.server.springbatch.*;
 import org.apache.solr.common.SolrInputDocument;
 import org.hibernate.SessionFactory;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
+import org.springframework.batch.core.StepExecutionListener;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepScope;
@@ -19,6 +21,8 @@ import org.springframework.batch.item.database.support.SqlPagingQueryProviderFac
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.task.TaskExecutor;
@@ -26,9 +30,6 @@ import org.springframework.core.task.TaskExecutor;
 import cz.mzk.recordmanager.server.jdbc.DedupRecordRowMapper;
 import cz.mzk.recordmanager.server.jdbc.LongValueRowMapper;
 import cz.mzk.recordmanager.server.model.DedupRecord;
-import cz.mzk.recordmanager.server.springbatch.DelegatingHibernateProcessor;
-import cz.mzk.recordmanager.server.springbatch.JobFailureListener;
-import cz.mzk.recordmanager.server.springbatch.UUIDIncrementer;
 import cz.mzk.recordmanager.server.util.Constants;
 
 @Configuration
@@ -58,6 +59,9 @@ public class IndexRecordsToSolrJobConfig {
 
 	@Autowired
 	private TaskExecutor taskExecutor;
+
+	@Autowired
+	private ApplicationContext appCtx;
 
 	@Bean
 	public Job indexAllRecordsToSolrJob(
@@ -99,6 +103,7 @@ public class IndexRecordsToSolrJobConfig {
 	@Bean(name="indexRecordsToSolrJob:updateRecordsStep")
 	public Step updateRecordsStep() throws Exception {
 		return steps.get("updateRecordsJobStep")
+				.listener(init(new StepIndexStatsListener()))
 			.<DedupRecord, Future<List<SolrInputDocument>>> chunk(CHUNK_SIZE) //
 				.reader(updatedRecordsReader(DATE_OVERRIDEN_BY_EXPRESSION, DATE_OVERRIDEN_BY_EXPRESSION,
 						LONG_OVERRIDEN_BY_EXPRESSION)) //
@@ -223,12 +228,19 @@ public class IndexRecordsToSolrJobConfig {
 		reader.setSaveState(true);
 		reader.afterPropertiesSet();
 		return reader;
-    }
+	}
 
-	@Bean(name="indexRecordsToSolrJob:orphanedRecordsWriter")
+	@Bean(name = "indexRecordsToSolrJob:orphanedRecordsWriter")
 	@StepScope
 	public OrphanedDedupRecordsWriter orphanedRecordsWriter(@Value("#{jobParameters[" + Constants.JOB_PARAM_SOLR_URL + "]}") String solrUrl) {
 		return new OrphanedDedupRecordsWriter(solrUrl);
+	}
+
+	private StepExecutionListener init(StepExecutionListener listener) {
+		AutowireCapableBeanFactory factory = appCtx.getAutowireCapableBeanFactory();
+		factory.autowireBean(listener);
+		factory.initializeBean(listener, "listener");
+		return listener;
 	}
 
 }
