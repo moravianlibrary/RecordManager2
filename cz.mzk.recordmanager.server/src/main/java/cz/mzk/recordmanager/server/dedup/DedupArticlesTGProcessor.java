@@ -3,7 +3,7 @@ package cz.mzk.recordmanager.server.dedup;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
 
 /**
- * DedupArticlesTGProcessor subclass for processing records having source_info_x
+ * DedupArticlesTGProcessor subclass for processing records having source_info_t and source_info_g
  */
 public class DedupArticlesTGProcessor extends
 		DedupSimpleKeysStepProcessor {
@@ -13,7 +13,7 @@ public class DedupArticlesTGProcessor extends
 	}
 
 	/**
-	 * On the input are two {@link HarvestedRecord}s, having same source_info_x
+	 * On the input are two {@link HarvestedRecord}s, having same source_info_t and source_info_g
 	 */
 	@Override
 	protected boolean matchRecords(HarvestedRecord hrA, HarvestedRecord hrB) {
