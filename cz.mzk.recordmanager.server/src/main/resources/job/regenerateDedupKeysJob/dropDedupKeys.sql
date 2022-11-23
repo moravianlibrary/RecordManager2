@@ -9,3 +9,5 @@ DELETE FROM oclc;
 DELETE FROM ean;
 DELETE FROM short_title;
 DELETE FROM harvested_record_format_link;
+DELETE FROM anp_title;
+DELETE FROM publisher_number;
