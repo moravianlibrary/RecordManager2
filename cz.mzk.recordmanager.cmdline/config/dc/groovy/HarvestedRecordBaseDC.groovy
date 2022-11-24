@@ -20,6 +20,7 @@ _hidden_title_search_txt_mv = getFirstTitle()
 // display
 author2_display_mv = getAuthor2Display()
 author_display = getAuthorDisplay()
+author_sort_display = getAuthorForSorting()
 format_display_mv = getFormat()
 isbn_display_mv = getISBNs()
 language_display_mv = getLanguages()

@@ -434,8 +434,8 @@ public class MarcDSL extends BaseDSL {
 		return count;
 	}
 
-	public String getAuthorForSorting() {
-		String author = getFirstField("100abcd:110abcd:111abcd:700abcd:710abcd:711abcd");
+	public String getAuthorForSorting(String tags) {
+		String author = getFirstField(tags);
 		if (author == null) return null;
 		author = SolrUtils.cleanStrForSorting(author);
 		return author.isEmpty() ? null : author;

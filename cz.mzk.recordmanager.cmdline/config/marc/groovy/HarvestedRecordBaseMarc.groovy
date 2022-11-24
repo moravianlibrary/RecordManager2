@@ -66,6 +66,7 @@ sigla_display = getSigla()
 aleph_adm_id_txt_mv = getAlephAdmId()
 mappings996_display_mv = getMappings996()
 uuid_str_mv = getUuidForObalkyKnih()
+author_sort_display = getAuthorForSorting("100abcd:110abcd:111abcd:700abcd:710abcd:711abcd")
 
 _hidden_isbn_annotation_obalkyknih = getFields "020a:902a"
 
