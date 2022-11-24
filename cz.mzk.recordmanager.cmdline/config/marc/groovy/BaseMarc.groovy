@@ -80,7 +80,7 @@ record_format_facet_mv = getFormat()
 source_title_facet = getFirstField "773t"
 
 // sort
-author_sort = author_sort_cz = getAuthorForSorting()
+author_sort = author_sort_cz = getAuthorForSorting("100abcd:110abcd:111abcd:700abcd:710abcd:711abcd")
 publishDate_sort = publishDateSort = getPublishDateForSorting()
 title_sort = title_sort_cz = getSortableTitle()
 

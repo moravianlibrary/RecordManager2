@@ -9,7 +9,6 @@ SELECT
 FROM harvested_record hr 
   INNER JOIN cnb c ON hr.id = c.harvested_record_id 
   INNER JOIN title t ON hr.id = t.harvested_record_id
-  INNER JOIN harvested_record_format_link hrl on hr.id = hrl.harvested_record_id
   LEFT OUTER JOIN tmp_periodicals_ids tpi ON hr.id = tpi.id
 WHERE tpi.id IS NOT NULL
 GROUP BY c.cnb,t.title

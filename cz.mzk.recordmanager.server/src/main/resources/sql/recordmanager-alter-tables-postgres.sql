@@ -2764,6 +2764,7 @@ INSERT INTO sigla (id, import_conf_id, sigla) VALUES (123, 375, 'OPG503');
 -- 04. 11. 2022 tomascejpek
 ALTER TABLE caslin_links ADD hardcoded_url VARCHAR (100);
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> master
 =======
 
@@ -2955,3 +2956,18 @@ INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (285, 'TRI
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id, mappings996) VALUES (485, 285, 200, 'trivendryne', 11, false, true, true, true, 'U', 'other', 'tritius');
 INSERT INTO import_conf_mapping_field (import_conf_id,parent_import_conf_id,mapping) VALUES (485,464,'996$eFMG521');
 >>>>>>> reks
+=======
+
+-- 15. 11. 2022 tomascejpek
+INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (287, 'CNS', 'https://www.narodopisnaspolecnost.cz/', 'https://cns.tritius.cz/', 'Bibliography', 'bibliography');
+INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency) VALUES (487, 287, 200, 'cns', 11, false, true, true, false, 'U');
+INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (487,'https://cns.tritius.cz/tritius/oai-provider','CPK_1','marc21',NULL);
+
+-- 15. 11. 2022 tomascejpek
+INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (288, 'MKTURNOV', 'https://knihovna.turnov.cz/', 'https://turnov-katalog.koha-system.cz/', 'Turnov', 'LI');
+INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id, mappings996) VALUES (488, 288, 200, 'mkturnov', 11, false, true, true, true, 'U', 'koha', 'koha');
+INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (488,'https://turnov-opac.koha-system.cz/cgi-bin/koha/oai.pl','cpk','cpk',NULL);
+
+-- 15. 11. 2022 tomascejpek
+INSERT INTO format(format, description) VALUES('cpk', 'MARC21 XML');
+>>>>>>> author-sort

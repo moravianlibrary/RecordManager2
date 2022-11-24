@@ -15,6 +15,7 @@ subject_facet_mv = subject_str_mv = getFields "100abcd"
 // display fields
 alternative_name_display_mv = getAuthAuthors "400"
 authority_id_display = getAuthorityRecordId()
+author_sort_display = getAuthorForSorting("100abcd:110abcd:111abcd:700abcd:710abcd:711abcd")
 bibliographic_details_display_mv = getFields "678a"
 format_display_mv = getFormat()
 occupation_display_mv = getFields "374a", SEPARATED

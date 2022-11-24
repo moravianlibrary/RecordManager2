@@ -6,6 +6,7 @@ title = getFirstField "150a"
 
 view_txt_mv = getViewType()
 
+author_sort_display = getAuthorForSorting("AUTa")
 english_display = getFirstField "750a"
 explanation_display = getFirstField "678a"
 relative_display_mv = getFields "550a"
