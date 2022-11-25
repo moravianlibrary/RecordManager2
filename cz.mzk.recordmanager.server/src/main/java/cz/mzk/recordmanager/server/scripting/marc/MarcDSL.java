@@ -1019,4 +1019,13 @@ public class MarcDSL extends BaseDSL {
 		return results;
 	}
 
+	public String getAuthorTitleStr() {
+		String author = getFirstField("100a");
+		String title = getFirstField("245a");
+		if (author == null || title == null) return null;
+		author = SolrUtils.authorTitleRemoveEndPunctuation(author);
+		title = SolrUtils.authorTitleRemoveEndPunctuation(title);
+		return String.format("%s. %s", author, title);
+	}
+
 }
