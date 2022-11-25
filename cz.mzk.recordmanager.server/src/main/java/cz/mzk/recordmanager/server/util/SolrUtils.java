@@ -28,6 +28,7 @@ public class SolrUtils {
 	private static final Pattern PUBLISHER_NAME_BRACKET_PATTERN = Pattern.compile("[<>\\[\\]]");
 	private static final Pattern PUBLISHER_NAME_CLEAN_END_PATTERN = Pattern.compile("[,?\\s]+$");
 	private static final Pattern REMOVE_END_PUNCTUATION_PATTERN = Pattern.compile("[,;:/\\s]+$");
+	private static final Pattern AUTHOR_TITLE_REMOVE_END_PUNCTUATION_PATTERN = Pattern.compile("[.,;:/=\\s]+$");
 	private static final Pattern MATCH_END_PUNCTUATION_PATTERN = Pattern.compile("[^.]\\.\\.$");
 	private static final Pattern AUTHOR_PATTERN = Pattern.compile("([^,]+),(.+)");
 
@@ -302,6 +303,11 @@ public class SolrUtils {
 		data = CleaningUtils.replaceAll(data, REMOVE_END_PUNCTUATION_PATTERN, "");
 		if (MATCH_END_PUNCTUATION_PATTERN.matcher(data).find()) data = data.substring(0, data.length() - 1);
 		return data;
+	}
+
+	public static String authorTitleRemoveEndPunctuation(String data) {
+		if (data == null || data.isEmpty()) return null;
+		return CleaningUtils.replaceAll(data, AUTHOR_TITLE_REMOVE_END_PUNCTUATION_PATTERN, "").trim();
 	}
 
 	public static String getNameForDisplay(DataField df) {
