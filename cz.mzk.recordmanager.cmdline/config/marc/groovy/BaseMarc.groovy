@@ -79,6 +79,7 @@ publishDate_facet_mv = publishDate = getPublishDate()
 publisher_facet_mv = publisher_str_mv = getPublisherStrMv()
 record_format_facet_mv = cpk_detected_format_facet_str_mv = getFormat()
 source_title_facet = source_title_facet_str = getFirstField "773t"
+author_title_facet = author_title_str = getAuthorTitleStr()
 
 // sort
 author_sort = author_sort_cz = getAuthorForSorting("100abcd:110abcd:111abcd:700abcd:710abcd:711abcd")
