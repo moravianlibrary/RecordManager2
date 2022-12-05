@@ -172,6 +172,7 @@ public class Constants {
 	public static final String PREFIX_KRAM_NLK			= "kram-nlk";
 	public static final String PREFIX_KRAM_NTK			= "kram-ntk";
 	public static final String PREFIX_KRAM_MKP			= "kram-mkp";
+	public static final String PREFIX_KRAM_ROZHLAS		= "kram-rozhlas";
 	public static final String PREFIX_KRAM_SVKHK		= "kram-svkhk";
 	public static final String PREFIX_KRAM_SVKKL		= "kram-svkkl";
 	public static final String PREFIX_KRAM_SVKPK		= "kram-svkpk";

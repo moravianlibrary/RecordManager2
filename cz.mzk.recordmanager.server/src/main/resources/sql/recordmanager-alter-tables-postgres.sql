@@ -2822,3 +2822,8 @@ INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granul
 INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (291, 'MKROKYCANY', 'https://www.rokyknih.cz/', 'https://katalog.rokyknih.cz/', 'Rokycany', 'PL');
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id, mappings996) VALUES (491, 291, 200, 'mkrokycany', 11, false, true, true, true, 'U', 'koha', 'koha');
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity,extract_id_regex) VALUES (491,'https://koha.rokyknih.cz/cgi-bin/koha/oai.pl','CPK','marccpk',NULL,'ROG001:(.*)');
+
+-- 01. 02. 2022 tomascejpek
+INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (99049, 'KRAM-ROZHLAS', '', '', '','kramerius');
+INSERT INTO import_conf (id,library_id,contact_person_id,id_prefix,base_weight,cluster_id_enabled,filtering_enabled,interception_enabled,is_library,harvest_frequency,mapping_script,generate_dedup_keys,mapping_dedup_script,item_id) VALUES (99049,99049,200,'kram-rozhlas',8,false,true,false,false,'U',null,true,null,null);
+INSERT INTO kramerius_conf (import_conf_id,url,url_solr,query_rows,metadata_stream,auth_token,fulltext_harvest_type,download_private_fulltexts,harvest_job_name,collection,availability_source_url,availability_dest_url) VALUES (99049,'https://kramerius.rozhlas.cz/search/api/v5.0',null,50,'BIBLIO_MODS',null,'solr',true,'krameriusHarvestJob',null,null,'https://kramerius.rozhlas.cz/uuid/');
