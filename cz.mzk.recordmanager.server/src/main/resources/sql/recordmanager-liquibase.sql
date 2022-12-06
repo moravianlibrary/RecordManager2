@@ -3067,3 +3067,6 @@ CREATE INDEX harvested_record_inspiration_id_idx ON harvested_record_inspiration
 CREATE INDEX harvested_record_inspiration_inspiration_id_idx ON harvested_record_inspiration(inspiration_id);
 CREATE INDEX harvested_record_inspiration_updated_idx ON harvested_record_inspiration(updated);
 CREATE INDEX harvested_record_inspiration_last_harvest_idx ON harvested_record_inspiration(last_harvest);
+
+--changeset tomascejpek:366 context:cpk
+UPDATE oai_harvest_conf SET extract_id_regex=null WHERE import_conf_id=363;
