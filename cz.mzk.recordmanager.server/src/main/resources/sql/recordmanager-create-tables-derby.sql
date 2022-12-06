@@ -322,10 +322,21 @@ CREATE TABLE obalkyknih_toc (
 );
 
 CREATE TABLE inspiration (
-  id                   INTEGER NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
-  harvested_record_id  DECIMAL(10),
-  name                 VARCHAR(128),
-  CONSTRAINT inspiration_fk FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE
+  id                    INTEGER NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
+  name                  VARCHAR(128),
+  type                  VARCHAR(128),
+  CONSTRAINT inspiration_pk PRIMARY KEY(id)
+);
+
+CREATE TABLE harvested_record_inspiration (
+  id                    INTEGER NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
+  harvested_record_id   DECIMAL(10),
+  inspiration_id        INTEGER,
+  updated               TIMESTAMP,
+  last_harvest          TIMESTAMP,
+  CONSTRAINT harvested_record_inspiration_pk PRIMARY KEY(id),
+  CONSTRAINT harvested_record_inspiratinon_fk FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE,
+  CONSTRAINT harvested_record_inspiration_id_fk FOREIGN KEY (inspiration_id) REFERENCES inspiration(id) ON DELETE CASCADE
 );
 
 CREATE TABLE tezaurus_record (

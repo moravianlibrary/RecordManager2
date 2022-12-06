@@ -2753,3 +2753,28 @@ INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granul
 
 -- 15. 11. 2022 tomascejpek
 INSERT INTO format(format, description) VALUES('cpk', 'MARC21 XML');
+
+-- 06. 12. 2022 tomascejpek
+DROP TABLE inspiration;
+CREATE TABLE inspiration (
+  id                    SERIAL,
+  name                  VARCHAR(128),
+  type                  VARCHAR(128),
+  CONSTRAINT inspiration_pk PRIMARY KEY(id)
+);
+CREATE TABLE harvested_record_inspiration (
+  id                    SERIAL,
+  harvested_record_id   DECIMAL(10),
+  inspiration_id        INTEGER,
+  updated               TIMESTAMP,
+  last_harvest          TIMESTAMP,
+  CONSTRAINT harvested_record_inspiration_pk PRIMARY KEY(id),
+  FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE,
+  FOREIGN KEY (inspiration_id) REFERENCES inspiration(id) ON DELETE CASCADE
+);
+CREATE INDEX inspiration_name_idx ON inspiration(name);
+CREATE INDEX inspiration_type_idx ON inspiration(type);
+CREATE INDEX harvested_record_inspiration_id_idx ON harvested_record_inspiration(harvested_record_id);
+CREATE INDEX harvested_record_inspiration_inspiration_id_idx ON harvested_record_inspiration(inspiration_id);
+CREATE INDEX harvested_record_inspiration_updated_idx ON harvested_record_inspiration(updated);
+CREATE INDEX harvested_record_inspiration_last_harvest_idx ON harvested_record_inspiration(last_harvest);

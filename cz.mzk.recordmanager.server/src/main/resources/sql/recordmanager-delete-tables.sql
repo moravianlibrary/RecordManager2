@@ -24,7 +24,7 @@ DELETE FROM download_import_conf;
 DELETE FROM cnb;
 DELETE FROM antikvariaty_catids;
 DELETE FROM fulltext_kramerius;
-DELETE FROM inspiration;
+DELETE FROM harvested_record_inspiration;
 DELETE FROM authority;
 DELETE FROM bl_title;
 DELETE FROM bl_common_title;

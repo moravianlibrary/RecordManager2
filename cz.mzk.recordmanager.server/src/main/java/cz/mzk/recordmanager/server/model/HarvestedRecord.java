@@ -193,7 +193,14 @@ public class HarvestedRecord extends AbstractDomainObject {
 	
 	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.LAZY)
 	@JoinColumn(name="harvested_record_id", referencedColumnName="id")
-	private List<Inspiration> inspiration = new ArrayList<>();
+	private List<HarvestedRecordInspiration> harvestedRecordInspiration = new ArrayList<>();
+
+	@OneToMany
+	@JoinTable(
+			name = "harvested_record_inspiration",
+			joinColumns = @JoinColumn(name = "harvested_record_id "),
+			inverseJoinColumns = @JoinColumn(name = "inspiration_id "))
+	private List<Inspiration> inspirations = new ArrayList<>();
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
 	@JoinColumn(name = "harvested_record_id", referencedColumnName = "id")
@@ -665,12 +672,12 @@ public class HarvestedRecord extends AbstractDomainObject {
 		this.temporalBiblioLinkerHash = temporalBiblioLinkerHash;
 	}
 
-	public List<Inspiration> getInspiration() {
-		return inspiration;
+	public List<HarvestedRecordInspiration> getHRInspiration() {
+		return harvestedRecordInspiration;
 	}
 
-	public void setInspiration(List<Inspiration> inspiration) {
-		this.inspiration = inspiration;
+	public void setHRInspiration(List<HarvestedRecordInspiration> harvestedRecordInspiration) {
+		this.harvestedRecordInspiration = harvestedRecordInspiration;
 	}
 
 	public List<Ean> getEans() {
@@ -968,6 +975,14 @@ public class HarvestedRecord extends AbstractDomainObject {
 
 	public void setPalmknihyId(String palmknihyId) {
 		this.palmknihyId = palmknihyId;
+	}
+
+	public List<Inspiration> getInspirations() {
+		return inspirations;
+	}
+
+	public void setInspirations(List<Inspiration> inspirations) {
+		this.inspirations = inspirations;
 	}
 
 	@Override
