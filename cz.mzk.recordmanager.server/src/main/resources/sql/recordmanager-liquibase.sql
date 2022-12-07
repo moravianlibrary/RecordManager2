@@ -3070,3 +3070,7 @@ CREATE INDEX harvested_record_inspiration_last_harvest_idx ON harvested_record_i
 
 --changeset tomascejpek:366 context:cpk
 UPDATE oai_harvest_conf SET extract_id_regex=null WHERE import_conf_id=363;
+
+--changeset tomascejpek:367 context:cpk
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (94, 363, 'ABE356');
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (121, 460, 'ABE343');
