@@ -28,8 +28,6 @@ CREATE INDEX oclc_harvested_record_idx ON oclc(harvested_record_id);
 CREATE INDEX language_harvested_record_idx ON language(harvested_record_id);
 CREATE INDEX cosmotron_996_conf_id_parent_id_idx ON cosmotron_996 (parent_record_id,import_conf_id);
 CREATE INDEX cosmotron_996_record_id_import_conf_idx ON cosmotron_996(record_id, import_conf_id);
-CREATE INDEX inspiration_harvested_record_idx ON inspiration(harvested_record_id);
-CREATE INDEX inspiration_name_idx ON inspiration(name);
 CREATE INDEX publisher_number_harvested_record_idx ON publisher_number(harvested_record_id);
 CREATE INDEX authority_harvested_record_idx ON authority(harvested_record_id);
 CREATE INDEX authority_idx ON authority(authority_id);
@@ -88,9 +86,18 @@ CREATE INDEX sigla_all_cpk_idx ON sigla_all(cpk);
 CREATE INDEX sigla_all_dnnt_idx ON sigla_all(dnnt);
 CREATE INDEX sigla_all_ziskej_idx ON sigla_all(ziskej);
 
+<<<<<<< HEAD
 CREATE INDEX inspiration_name_name_idx ON inspiration_name(name);
 CREATE INDEX inspiration_name_type_idx ON inspiration_name(type);
 CREATE INDEX inspiration_harvested_record_id_idx ON inspiration(harvested_record_id);
 CREATE INDEX inspiration_inspiration_name_id_idx ON inspiration(inspiration_name_id);
 CREATE INDEX inspiration_updated_idx ON inspiration(updated);
 CREATE INDEX inspiration_last_harvest_idx ON inspiration(last_harvest);
+=======
+CREATE INDEX inspiration_name_idx ON inspiration(name);
+CREATE INDEX inspiration_type_idx ON inspiration(type);
+CREATE INDEX harvested_record_inspiration_id_idx ON harvested_record_inspiration(harvested_record_id);
+CREATE INDEX harvested_record_inspiration_inspiration_id_idx ON harvested_record_inspiration(inspiration_id);
+CREATE INDEX harvested_record_inspiration_updated_idx ON harvested_record_inspiration(updated);
+CREATE INDEX harvested_record_inspiration_last_harvest_idx ON harvested_record_inspiration(last_harvest);
+>>>>>>> master

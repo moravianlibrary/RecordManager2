@@ -1,7 +1,9 @@
 package cz.mzk.recordmanager.server.model;
 
+import cz.mzk.recordmanager.server.imports.inspirations.InspirationType;
+import org.hibernate.annotations.Type;
+
 import javax.persistence.*;
-import java.util.Date;
 
 @Entity
 @Table(name = Inspiration.TABLE_NAME)
@@ -12,12 +14,10 @@ public class Inspiration {
 	public Inspiration() {
 	}
 
-	public static Inspiration create(HarvestedRecord hr, InspirationName inspirationName) {
+	public static Inspiration create(String name, InspirationType type) {
 		Inspiration newInspiration = new Inspiration();
-		newInspiration.setHarvestedRecordId(hr.getId());
-		newInspiration.setInspirationNameId(inspirationName.getId());
-		newInspiration.setUpdated(new Date());
-		newInspiration.setLastHarvest(new Date());
+		newInspiration.setName(name);
+		newInspiration.setType(type);
 		return newInspiration;
 	}
 
@@ -26,67 +26,48 @@ public class Inspiration {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(name = "harvested_record_id")
-	private Long harvestedRecordId;
+	@Column(name = "name")
+	private String name;
 
-	@Column(name = "inspiration_name_id")
-	private Long inspirationNameId;
+	@Type(
+			type = "cz.mzk.recordmanager.server.hibernate.StringEnumUserType",
+			parameters = {
+					@org.hibernate.annotations.Parameter(name = "enumClassName", value = "cz.mzk.recordmanager.server.imports.inspirations.InspirationType"),
+			}
+	)
+	@Column(name = "type")
+	private InspirationType type;
 
-	@ManyToOne(optional = false, fetch = FetchType.LAZY)
-	@JoinColumn(name = "inspiration_name_id", nullable = false, updatable = false, insertable = false)
-	private InspirationName inspirationName;
-
-	@Column(name = "updated")
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date updated;
-
-	@Column(name = "last_harvest")
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date lastHarvest = new Date();
-
-	public Long getHarvestedRecordId() {
-		return harvestedRecordId;
+	public Long getId() {
+		return id;
 	}
 
-	public void setHarvestedRecordId(Long id) {
-		this.harvestedRecordId = id;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
-	public Long getInspirationNameId() {
-		return inspirationNameId;
+	public String getName() {
+		return name;
 	}
 
-	public void setInspirationNameId(Long inspirationNameId) {
-		this.inspirationNameId = inspirationNameId;
+	public void setName(String name) {
+		this.name = name;
 	}
 
-	public Date getUpdated() {
-		return updated;
+	public InspirationType getType() {
+		return type;
 	}
 
-	public void setUpdated(Date updated) {
-		this.updated = updated;
-	}
-
-	public Date getLastHarvest() {
-		return lastHarvest;
-	}
-
-	public void setLastHarvest(Date lastHarvest) {
-		this.lastHarvest = lastHarvest;
-	}
-
-	public InspirationName getInspirationName() {
-		return inspirationName;
-	}
-
-	public void setInspirationName(InspirationName inspirationName) {
-		this.inspirationName = inspirationName;
+	public void setType(InspirationType type) {
+		this.type = type;
 	}
 
 	@Override
 	public String toString() {
-		return "Inspiration [harvestedRecordId=" + harvestedRecordId + "]";
+		return "Inspiration{" +
+				"name='" + name + '\'' +
+				", type='" + type + '\'' +
+				'}';
 	}
 
 }

@@ -1,16 +1,5 @@
 package cz.mzk.recordmanager.server.index;
 
-import java.util.*;
-import java.util.Map.Entry;
-import java.util.stream.Collectors;
-
-import org.apache.solr.common.SolrInputDocument;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import cz.mzk.recordmanager.server.index.enrich.DedupRecordEnricher;
 import cz.mzk.recordmanager.server.index.enrich.HarvestedRecordEnricher;
 import cz.mzk.recordmanager.server.model.DedupRecord;
@@ -18,6 +7,16 @@ import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.model.Inspiration;
 import cz.mzk.recordmanager.server.util.IndexingUtils;
 import cz.mzk.recordmanager.server.util.SolrUtils;
+import org.apache.solr.common.SolrInputDocument;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import java.util.*;
+import java.util.Map.Entry;
+import java.util.stream.Collectors;
 
 @Component
 public class SolrInputDocumentFactoryImpl implements SolrInputDocumentFactory, InitializingBean {
@@ -41,7 +40,7 @@ public class SolrInputDocumentFactoryImpl implements SolrInputDocumentFactory, I
 	);
 
 	private final Map<String, String> remappedFields = new HashMap<String, String>();
-		
+
 	@Autowired
 	private DelegatingSolrRecordMapper mapper;
 
@@ -60,11 +59,11 @@ public class SolrInputDocumentFactoryImpl implements SolrInputDocumentFactory, I
 			if (!document.containsKey(SolrFieldConstants.ID_FIELD)) {
 				document.addField(SolrFieldConstants.ID_FIELD, id);
 			}
-			
+
 			harvestedRecordEnrichers.forEach(enricher -> enricher.enrich(record, document));
 			document.addField(SolrFieldConstants.MERGED_CHILD_FIELD, 1);
 			document.addField(SolrFieldConstants.WEIGHT, record.getWeight());
-	
+
 			return document;
 		} catch (Exception ex) {
 			logger.error(String.format("Exception thrown when indexing dedup_record with id=%s", record.getUniqueId()), ex);
@@ -110,15 +109,15 @@ public class SolrInputDocumentFactoryImpl implements SolrInputDocumentFactory, I
 		return document;
 	}
 
-	protected Set<String> getInspirations(List<HarvestedRecord> records){
+	protected Set<String> getInspirations(List<HarvestedRecord> records) {
 		Set<String> result = new HashSet<>();
-		
-		for(HarvestedRecord record: records){
-			for(Inspiration inspiration: record.getInspiration()){
-				result.add(inspiration.getInspirationName().getName());
+
+		for (HarvestedRecord record : records) {
+			for (Inspiration inspiration : record.getInspirations()) {
+				result.add(inspiration.getName());
 			}
 		}
-		
+
 		return result;
 	}
 

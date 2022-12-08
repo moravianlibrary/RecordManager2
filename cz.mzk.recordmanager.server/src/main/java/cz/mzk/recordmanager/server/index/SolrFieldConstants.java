@@ -76,8 +76,11 @@ public class SolrFieldConstants {
 	
 	public static final String INSPIRATION = "inspiration";
 
+<<<<<<< HEAD
 	public static final String INSPIRATION_FACET = "inspiration_facet_mv";
 
+=======
+>>>>>>> master
 	public static final String SUBJECT_KEYWORDS_SEARCH = "subjectKeywords_search_txt_mv";
 	
 	public static final String PEOPLE_SEARCH = "people_search_txt_mv";

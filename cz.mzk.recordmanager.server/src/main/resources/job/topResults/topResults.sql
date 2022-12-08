@@ -1,8 +1,8 @@
 UPDATE dedup_record SET updated=localtimestamp WHERE id IN (
   SELECT dedup_record_id FROM harvested_record WHERE id IN (
-    SELECT harvested_record_id FROM inspiration WHERE inspiration_name_id = :inspiration_name_id));
+    SELECT harvested_record_id FROM harvested_record_inspiration WHERE inspiration_id = :inspiration_id));
 
-DELETE FROM inspiration WHERE inspiration_name_id = :inspiration_name_id;
+DELETE FROM harvested_record_inspiration WHERE inspiration_id = :inspiration_id;
 
 WITH dedup AS
   (
@@ -22,8 +22,8 @@ candidates AS
       ORDER BY random()
       LIMIT :results
   )
-INSERT INTO inspiration (harvested_record_id, inspiration_name_id, updated, last_harvest)
-  SELECT id AS harvested_record_id, :inspiration_name_id, localtimestamp, localtimestamp AS name
+INSERT INTO harvested_record_inspiration (harvested_record_id, inspiration_id, updated, last_harvest)
+  SELECT id AS harvested_record_id, :inspiration_id, localtimestamp, localtimestamp AS name
   FROM harvested_record
   WHERE id IN (SELECT id FROM candidates);
 
@@ -45,8 +45,8 @@ candidates AS
       ORDER BY random()
       LIMIT :results
   )
-INSERT INTO inspiration (harvested_record_id, inspiration_name_id, updated, last_harvest)
-  SELECT id AS harvested_record_id, :inspiration_name_id, localtimestamp, localtimestamp AS name
+INSERT INTO harvested_record_inspiration (harvested_record_id, inspiration_id, updated, last_harvest)
+  SELECT id AS harvested_record_id, :inspiration_id, localtimestamp, localtimestamp AS name
   FROM harvested_record
   WHERE id IN (SELECT id FROM candidates);
 
@@ -68,11 +68,11 @@ candidates AS
       ORDER BY random()
       LIMIT :results
   )
-INSERT INTO inspiration (harvested_record_id, inspiration_name_id, updated, last_harvest)
-  SELECT id AS harvested_record_id, :inspiration_name_id, localtimestamp, localtimestamp AS name
+INSERT INTO harvested_record_inspiration (harvested_record_id, inspiration_id, updated, last_harvest)
+  SELECT id AS harvested_record_id, :inspiration_id, localtimestamp, localtimestamp AS name
   FROM harvested_record
   WHERE id IN (SELECT id FROM candidates);
 
 UPDATE dedup_record SET updated=localtimestamp WHERE id IN (
     SELECT dedup_record_id FROM harvested_record WHERE id IN (
-        SELECT harvested_record_id FROM inspiration WHERE inspiration_name_id = :inspiration_name_id));
+        SELECT harvested_record_id FROM harvested_record_inspiration WHERE inspiration_id = :inspiration_id));

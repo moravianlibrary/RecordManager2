@@ -88,6 +88,8 @@ CREATE TABLE oai_harvest_conf (
   granularity          VARCHAR(30),
   extract_id_regex     VARCHAR(128),
   harvest_job_name     VARCHAR(128),
+  ictx                 VARCHAR(128),
+  op                   VARCHAR(128),
   CONSTRAINT oai_harvest_conf_import_conf_fk FOREIGN KEY (import_conf_id) REFERENCES import_conf(id)
 );
 
@@ -415,21 +417,22 @@ COMMENT ON TABLE obalkyknih_toc IS 'downloaded table of contents from obalkyknih
 
 CREATE TABLE inspiration (
   id                    SERIAL,
-  harvested_record_id   DECIMAL(10),
-  inspiration_name_id   INTEGER,
-  updated               TIMESTAMP,
-  last_harvest          TIMESTAMP,
-  CONSTRAINT inspiration_pk PRIMARY KEY(id),
-  FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE,
-  FOREIGN KEY (inspiration_name_id) REFERENCES inspiration_name(id) ON DELETE CASCADE
-);
-
-CREATE TABLE inspiration_name (
-  id                    SERIAL,
   name                  VARCHAR(128),
   type                  VARCHAR(128),
-  CONSTRAINT inspiration_name_pk PRIMARY KEY(id)
+  CONSTRAINT inspiration_pk PRIMARY KEY(id)
 );
+
+CREATE TABLE harvested_record_inspiration (
+  id                    SERIAL,
+  harvested_record_id   DECIMAL(10),
+  inspiration_id        INTEGER,
+  updated               TIMESTAMP,
+  last_harvest          TIMESTAMP,
+  CONSTRAINT harvested_record_inspiration_pk PRIMARY KEY(id),
+  FOREIGN KEY (harvested_record_id) REFERENCES harvested_record(id) ON DELETE CASCADE,
+  FOREIGN KEY (inspiration_id) REFERENCES inspiration(id) ON DELETE CASCADE
+);
+
 
 CREATE TABLE tezaurus_record (
   id                   DECIMAL(10) PRIMARY KEY,

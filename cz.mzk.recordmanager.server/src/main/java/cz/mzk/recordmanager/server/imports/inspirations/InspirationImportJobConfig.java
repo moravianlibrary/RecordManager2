@@ -100,8 +100,8 @@ public class InspirationImportJobConfig {
 		SqlPagingQueryProviderFactoryBean pqpf = new SqlPagingQueryProviderFactoryBean();
 		pqpf.setDataSource(dataSource);
 		pqpf.setSelectClause("SELECT id");
-		pqpf.setFromClause("FROM inspiration");
-		pqpf.setWhereClause("WHERE name = :name");
+		pqpf.setFromClause("FROM harvested_record_inspiration");
+		pqpf.setWhereClause("WHERE inspiration_id in (select id from inspiration where name = :name)");
 		pqpf.setSortKey("id");
 		Map<String, Object> parameterValues = new HashMap<>();
 		parameterValues.put("name", name);

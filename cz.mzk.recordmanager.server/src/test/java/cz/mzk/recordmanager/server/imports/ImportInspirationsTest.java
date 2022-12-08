@@ -1,8 +1,9 @@
 package cz.mzk.recordmanager.server.imports;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import cz.mzk.recordmanager.server.AbstractTest;
+import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordInspirationDAO;
+import cz.mzk.recordmanager.server.oai.dao.InspirationDAO;
+import cz.mzk.recordmanager.server.util.Constants;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobParameter;
 import org.springframework.batch.core.JobParameters;
@@ -13,9 +14,8 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import cz.mzk.recordmanager.server.AbstractTest;
-import cz.mzk.recordmanager.server.oai.dao.InspirationDAO;
-import cz.mzk.recordmanager.server.util.Constants;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ImportInspirationsTest extends AbstractTest {
 
@@ -26,11 +26,14 @@ public class ImportInspirationsTest extends AbstractTest {
 	private JobLauncher jobLauncher;
 
 	@Autowired
-	private InspirationDAO insDao;
+	private HarvestedRecordInspirationDAO insDao;
+
+	@Autowired
+	private InspirationDAO insNameDao;
 
 	@BeforeMethod
 	public void before() throws Exception {
-		dbUnitHelper.init("dbunit/ImportRecords.xml");
+		dbUnitHelper.init("dbunit/InspirationRecords.xml");
 	}
 
 	@Test
@@ -43,14 +46,12 @@ public class ImportInspirationsTest extends AbstractTest {
 		JobParameters jobParams = new JobParameters(params);
 		jobLauncher.run(job, jobParams);
 
-		Assert.assertEquals(insDao.findAll().size(), 3);
-
+		Assert.assertEquals(insNameDao.findAll().size(), 3);
 		job = jobRegistry.getJob(Constants.JOB_ID_DELETE_INSPIRATION);
 		params = new HashMap<>();
 		params.put(Constants.JOB_PARAM_DELETE_INSPIRATION, new JobParameter("summer2016"));
 		jobParams = new JobParameters(params);
 		jobLauncher.run(job, jobParams);
-
 		Assert.assertEquals(insDao.findAll().size(), 2);
 	}
 
