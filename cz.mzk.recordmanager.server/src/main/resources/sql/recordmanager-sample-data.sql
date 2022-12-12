@@ -827,6 +827,7 @@ INSERT INTO sigla (id, import_conf_id, sigla) VALUES (119, 456, 'ABB045');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (120, 459, 'JIG001');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (121, 460, 'ABE343');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (123, 375, 'OPG503');
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (148, 363, 'ABA012');
 
 INSERT INTO fit_project VALUES (1,'FULLTEXT_ANALYSER');
 INSERT INTO fit_project VALUES (2,'SEMANTIC_ENRICHMENT');

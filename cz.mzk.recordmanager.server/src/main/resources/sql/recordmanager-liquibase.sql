@@ -3074,3 +3074,6 @@ UPDATE oai_harvest_conf SET extract_id_regex=null WHERE import_conf_id=363;
 --changeset tomascejpek:367 context:cpk
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (94, 363, 'ABE356');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (121, 460, 'ABE343');
+
+--changeset tomascejpek:368 context:cpk
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (148, 363, 'ABA012');
