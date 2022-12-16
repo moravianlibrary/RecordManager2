@@ -2788,3 +2788,7 @@ INSERT INTO sigla (id, import_conf_id, sigla) VALUES (121, 460, 'ABE343');
 
 -- 12. 12. 2022 tomascejpek
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (148, 363, 'ABA012');
+
+-- 16. 12. 2022 tomascejpek
+UPDATE oai_harvest_conf SET extract_id_regex='SMG506:(.*)' WHERE import_conf_id=488;
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (147, 488, 'SMG506');
