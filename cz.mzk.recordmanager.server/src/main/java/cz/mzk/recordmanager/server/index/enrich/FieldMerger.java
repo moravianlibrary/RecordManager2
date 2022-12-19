@@ -47,7 +47,17 @@ public class FieldMerger {
 	}
 
 	public void copyField(SolrInputDocument doc, String sourceName, String targetName) {
-		if (doc.containsKey(sourceName)) doc.addField(targetName, doc.getField(sourceName));
+		if (doc.containsKey(sourceName)) doc.addField(targetName, doc.getFieldValues(sourceName));
+	}
+
+	public void copyFirstFieldFromLocal(List<SolrInputDocument> source, SolrInputDocument target) {
+		for (String field : fields) {
+			Optional<Collection<Object>> values = source.stream()
+					.map(rec -> rec.getFieldValues(field))
+					.filter(rec -> rec != null && !rec.isEmpty())
+					.findFirst();
+			if (values.isPresent()) target.addField(field, values.get());
+		}
 	}
 
 }

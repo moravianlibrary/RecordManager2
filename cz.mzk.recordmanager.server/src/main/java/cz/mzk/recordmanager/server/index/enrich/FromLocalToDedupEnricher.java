@@ -34,6 +34,10 @@ public class FromLocalToDedupEnricher implements DedupRecordEnricher {
 			SolrFieldConstants.UUID_STR_MV
 	);
 
+	private final FieldMerger copySummary = new FieldMerger(
+			SolrFieldConstants.SUMMARY_DISPLAY_MV
+	);
+
 	private final FieldMerger copyDedup = new FieldMerger();
 
 	@Override
@@ -42,5 +46,10 @@ public class FromLocalToDedupEnricher implements DedupRecordEnricher {
 		mergeAndRemove.mergeAndRemoveFromSources(localRecords, mergedDocument);
 		merge.merge(localRecords, mergedDocument);
 		copyDedup.copyField(mergedDocument, SolrFieldConstants.OBALKY_ANNOTATION, SolrFieldConstants.SUMMARY_DISPLAY_MV);
+		if (!mergedDocument.containsKey(SolrFieldConstants.SUMMARY_DISPLAY_MV)
+				|| mergedDocument.getFieldValues(SolrFieldConstants.SUMMARY_DISPLAY_MV) == null
+				|| mergedDocument.getFieldValues(SolrFieldConstants.SUMMARY_DISPLAY_MV).isEmpty()) {
+			copySummary.copyFirstFieldFromLocal(localRecords, mergedDocument);
+		}
 	}
 }
