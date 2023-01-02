@@ -54,6 +54,8 @@ public class MarcInterceptorFactory {
 			case Constants.PREFIX_ARCHBIB:
 			case Constants.PREFIX_CZHISTBIB:
 				return new CzhistbibMarcInterceptor(record, configuration, recordId);
+			case Constants.PREFIX_NACR:
+				return new NacrMarcInterceptor(record, configuration, recordId);
 			default: return new DefaultMarcInterceptor(record, configuration, recordId);
 			}
 		} catch (InvalidMarcException ime) {
