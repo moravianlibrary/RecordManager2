@@ -79,6 +79,8 @@ public class MarcInterceptorFactory {
 				return new MkTriMarcInterceptor(record, configuration, recordId);
 			case Constants.PREFIX_MKTRIREKS:
 				return new MkTriReksMarcInterceptor(record, configuration, recordId);
+			case Constants.PREFIX_NACR:
+				return new NacrMarcInterceptor(record, configuration, recordId);
 			default: return new DefaultMarcInterceptor(record, configuration, recordId);
 			}
 		} catch (InvalidMarcException ime) {

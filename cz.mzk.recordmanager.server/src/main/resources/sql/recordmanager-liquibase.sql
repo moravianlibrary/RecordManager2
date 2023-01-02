@@ -3103,6 +3103,7 @@ UPDATE oai_harvest_conf SET extract_id_regex=null WHERE import_conf_id=363;
 --changeset tomascejpek:367 context:cpk
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (94, 363, 'ABE356');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (121, 460, 'ABE343');
+<<<<<<< HEAD
 >>>>>>> master
 =======
 
@@ -3111,3 +3112,8 @@ INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (99049, 'K
 INSERT INTO import_conf (id,library_id,contact_person_id,id_prefix,base_weight,cluster_id_enabled,filtering_enabled,interception_enabled,is_library,harvest_frequency,mapping_script,generate_dedup_keys,mapping_dedup_script,item_id) VALUES (99049,99049,200,'kram-rozhlas',8,false,true,false,false,'U',null,true,null,null);
 INSERT INTO kramerius_conf (import_conf_id,url,url_solr,query_rows,metadata_stream,auth_token,fulltext_harvest_type,download_private_fulltexts,harvest_job_name,collection,availability_source_url,availability_dest_url) VALUES (99049,'https://kramerius.rozhlas.cz/search/api/v5.0',null,50,'BIBLIO_MODS',null,'solr',true,'krameriusHarvestJob',null,null,'https://kramerius.rozhlas.cz/uuid/');
 >>>>>>> kram-rozhlas
+=======
+
+--changeset tomascejpek:368 context:cpk
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (148, 363, 'ABA012');
+>>>>>>> master
