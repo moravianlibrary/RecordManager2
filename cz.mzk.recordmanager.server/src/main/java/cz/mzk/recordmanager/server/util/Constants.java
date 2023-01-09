@@ -121,6 +121,7 @@ public class Constants {
 	public static final String PREFIX_ARCHBIB			= "archbib";
 	public static final String PREFIX_BMC				= "bmc";
 	public static final String PREFIX_BOOKPORT			= "bookport";
+	public static final String PREFIX_BOOKPORT_MZK		= "bookport-mzk";
 	public static final String PREFIX_CASLIN			= "caslin";
 	public static final String PREFIX_CBVK				= "cbvk";
 	public static final String PREFIX_CELITEBIB			= "celitebib";
