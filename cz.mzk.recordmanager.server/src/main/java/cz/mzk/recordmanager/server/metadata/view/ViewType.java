@@ -50,14 +50,14 @@ public enum ViewType {
 	BRNO("brno") {
 		@Override
 		protected boolean match(MetadataRecord mr, ListResolver resolver, Long importConfId,
-				Set<String> siglas, List<String> conspectus) throws IOException {
+								Set<String> siglas, List<String> conspectus) throws IOException {
 			return contains(resolver, String.format(INST_INCLUDE_FILE, getValue()), importConfId.toString());
 		}
 	},
 	CPK("cpk") {
 		@Override
 		protected boolean match(MetadataRecord mr, ListResolver resolver, Long importConfId,
-				Set<String> siglas, List<String> conspectus) throws IOException {
+								Set<String> siglas, List<String> conspectus) throws IOException {
 			return !contains(resolver, String.format(INST_EXCLUDE_FILE, getValue()), importConfId.toString());
 		}
 	},
@@ -101,6 +101,13 @@ public enum ViewType {
 				return true;
 			}
 			return false;
+		}
+	},
+	MZK("mzk") {
+		@Override
+		protected boolean match(MetadataRecord mr, ListResolver resolver, Long importConfId,
+								Set<String> siglas, List<String> conspectus) throws IOException {
+			return contains(resolver, String.format(INST_INCLUDE_FILE, getValue()), importConfId.toString());
 		}
 	};
 
