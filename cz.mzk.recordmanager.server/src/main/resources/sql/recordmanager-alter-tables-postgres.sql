@@ -2817,3 +2817,8 @@ ALTER TABLE import_conf ADD COLUMN ziskej_edd_enabled BOOLEAN DEFAULT FALSE;
 INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (286, 'MKRYMAROV', 'https://knihovnarymarov.cz/', 'https://katalog.knihovnarymarov.cz', 'Rýmařov', 'MS');
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id) VALUES (486, 286, 200, 'mkrymarov', 11, false, true, true, true, 'U', 'other');
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (486,'https://katalog.knihovnarymarov.cz/api/oai','cpk','marc21',NULL);
+
+-- 01. 02. 2023 tomascejpek
+INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (291, 'MKROKYCANY', 'https://www.rokyknih.cz/', 'https://katalog.rokyknih.cz/', 'Rokycany', 'PL');
+INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id, mappings996) VALUES (491, 291, 200, 'mkrokycany', 11, false, true, true, true, 'U', 'koha', 'koha');
+INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity,extract_id_regex) VALUES (491,'https://koha.rokyknih.cz/cgi-bin/koha/oai.pl','CPK','marccpk',NULL,'ROG001:(.*)');
