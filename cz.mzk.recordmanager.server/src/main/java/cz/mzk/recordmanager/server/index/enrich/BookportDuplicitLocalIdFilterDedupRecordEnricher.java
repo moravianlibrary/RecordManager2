@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-public class DuplicitLocalIdFilterDedupRecordEnricher implements DedupRecordEnricher {
+public class BookportDuplicitLocalIdFilterDedupRecordEnricher implements DedupRecordEnricher {
 
 
 	@Override
@@ -19,6 +19,10 @@ public class DuplicitLocalIdFilterDedupRecordEnricher implements DedupRecordEnri
 			if (doc.getFieldValue(SolrFieldConstants.ID_FIELD).toString().startsWith(Constants.PREFIX_BOOKPORT)
 					&& localRecords.size() > 1) {
 				localRecords.subList(1, localRecords.size()).clear();
+				if (mergedDocument.containsKey(SolrFieldConstants.VIEW_TYPE_TXT_MV)) {
+					doc.setField(SolrFieldConstants.VIEW_TYPE_TXT_MV,
+							mergedDocument.getFieldValues(SolrFieldConstants.VIEW_TYPE_TXT_MV));
+				}
 			}
 		} catch (Exception ignore) {
 		}

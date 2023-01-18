@@ -986,8 +986,8 @@ public class MarcDSL extends BaseDSL {
 		return results;
 	}
 
-	private static final int PERIODICALS_DNNT_YEAR = 2010;
-	private static final int BOOKS_DNNT_YEAR = 2000;
+	private static final int PERIODICALS_DNNT_YEAR = 2002;
+	private static final int BOOKS_DNNT_YEAR = 2002;
 
 	public boolean potentialDnnt() {
 		Long year = metadataRecord.getPublicationYear();

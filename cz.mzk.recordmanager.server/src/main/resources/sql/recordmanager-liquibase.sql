@@ -3130,4 +3130,12 @@ INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format) VAL
 --changeset tomascejpek:370 context:cpk
 UPDATE oai_harvest_conf SET extract_id_regex='SMG506:(.*)' WHERE import_conf_id=488;
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (147, 488, 'SMG506');
+<<<<<<< HEAD
+>>>>>>> view-mzk
+=======
+
+--changeset tomascejpek:371 context:cpk
+INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (290, 'MKNERATOVICE', 'https://www.knihovnaneratovice.cz/', 'https://katalog.knihovnaneratovice.cz/', 'Neratovice', 'SC');
+INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id, mappings996) VALUES (490, 290, 200, 'mkneratovice', 11, false, true, true, true, 'U', 'koha', 'koha');
+INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity,extract_id_regex) VALUES (490,'https://koha.knihovnaneratovice.cz/cgi-bin/koha/oai.pl','CPK','marccpk',NULL,'MEG502:(.*)');
 >>>>>>> view-mzk
