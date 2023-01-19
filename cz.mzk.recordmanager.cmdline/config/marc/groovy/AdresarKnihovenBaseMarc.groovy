@@ -19,6 +19,7 @@ note2_search_txt = getFirstFieldForAdresar "POUa"
 note_search_txt = getFirstFieldForAdresar "POIa"
 projects_search_txt_mv = getFieldsForAdresar("PRKa", SubfieldExtractionMethod.SEPARATED, null)
 region_search_txt = translate("adresar_region.map", getFirstFieldForAdresar("KRJa"), null)
+regional_library_txt = getFirstFieldForAdresar "PVKs"
 responsibility_search_txt_mv = getFieldsForAdresar "JMNkp", SubfieldExtractionMethod.JOINED, " "
 services_search_txt_mv = getFieldsForAdresar("SLUa", SubfieldExtractionMethod.SEPARATED, null)
 sigla_search_txt = getFirstFieldForAdresar "SGLa"
