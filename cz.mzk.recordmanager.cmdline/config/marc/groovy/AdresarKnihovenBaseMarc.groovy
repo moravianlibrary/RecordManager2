@@ -10,6 +10,7 @@ address_search_txt_mv = getFieldsForAdresar "ADRum", SubfieldExtractionMethod.JO
 branch_search_txt_mv = getFieldsForAdresar "POBna", SubfieldExtractionMethod.JOINED, " "
 code_search_txt = getFirstFieldForAdresar "ZKRa"
 cpk_code_search_txt = adresarGetCpkCode()
+district_search_txt = getFirstFieldForAdresar "KRJb"
 function_search_txt_mv = getFieldsForAdresar("FCEa", SubfieldExtractionMethod.SEPARATED, null)
 ils_search_txt = getFirstFieldForAdresar "KNSa"
 name_alt_search_txt_mv = getFirstFieldSeparatedForAdresar "VARabc", " "
