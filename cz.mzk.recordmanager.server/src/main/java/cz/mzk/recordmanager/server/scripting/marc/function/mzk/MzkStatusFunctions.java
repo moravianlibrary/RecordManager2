@@ -1,17 +1,12 @@
 package cz.mzk.recordmanager.server.scripting.marc.function.mzk;
 
-import java.util.Arrays;
-import java.util.EnumSet;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
+import cz.mzk.recordmanager.server.scripting.marc.MarcFunctionContext;
+import cz.mzk.recordmanager.server.scripting.marc.function.MarcRecordFunctions;
 import org.marc4j.marc.DataField;
 import org.marc4j.marc.Subfield;
 import org.springframework.stereotype.Component;
 
-import cz.mzk.recordmanager.server.scripting.marc.MarcFunctionContext;
-import cz.mzk.recordmanager.server.scripting.marc.function.MarcRecordFunctions;
+import java.util.*;
 
 @Component
 public class MzkStatusFunctions implements MarcRecordFunctions {
@@ -73,7 +68,7 @@ public class MzkStatusFunctions implements MarcRecordFunctions {
 
 	}
 
-	public Set<String> getMZKStatuses(MarcFunctionContext ctx) {
+	public Set<String> getMZKStatuses(MarcFunctionContext ctx, boolean ignoreOnlineStatus) {
 		EnumSet<AvailabilityStatus> statuses = EnumSet.noneOf(AvailabilityStatus.class);
 		ctx.record().getDataFields(STATUS_FIELD).forEach(field -> {
 			for (AvailabilityStatus status : AvailabilityStatus.values()) {
@@ -95,7 +90,7 @@ public class MzkStatusFunctions implements MarcRecordFunctions {
 		if (isEod(ctx)) {
 			result.add(EOD_STATUS);
 		}
-		if (isOnline(ctx)) {
+		if (!ignoreOnlineStatus && isOnline(ctx)) {
 			result.add(ONLINE_STATUS);
 		}
 		return result;

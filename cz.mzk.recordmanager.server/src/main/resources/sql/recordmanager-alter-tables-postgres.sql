@@ -3041,4 +3041,11 @@ INSERT INTO sigla (id, import_conf_id, sigla) VALUES (147, 488, 'SMG506');
 INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (290, 'MKNERATOVICE', 'https://www.knihovnaneratovice.cz/', 'https://katalog.knihovnaneratovice.cz/', 'Neratovice', 'SC');
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id, mappings996) VALUES (490, 290, 200, 'mkneratovice', 11, false, true, true, true, 'U', 'koha', 'koha');
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity,extract_id_regex) VALUES (490,'https://koha.knihovnaneratovice.cz/cgi-bin/koha/oai.pl','CPK','marccpk',NULL,'MEG502:(.*)');
+<<<<<<< HEAD
 >>>>>>> view-mzk
+=======
+
+-- 23. 01. 2023 tomascejpek
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (86, 410, 'SMG004');
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (122, 463, 'BNG001');
+>>>>>>> mzk-base
