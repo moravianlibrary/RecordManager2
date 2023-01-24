@@ -1,7 +1,9 @@
 import cz.mzk.recordmanager.server.facade.HarvestingFacade
+import cz.mzk.recordmanager.server.facade.ImportRecordFacade
 import cz.mzk.recordmanager.server.facade.IndexingFacade
 import cz.mzk.recordmanager.server.facade.exception.JobExecutionFailure
 import cz.mzk.recordmanager.server.model.HarvestFrequency
+import cz.mzk.recordmanager.server.oai.dao.DownloadImportConfigurationDAO
 import cz.mzk.recordmanager.server.oai.dao.OAIHarvestConfigurationDAO
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -18,7 +20,13 @@ public class DailyScript implements Runnable {
 	private IndexingFacade indexingFacade;
 
 	@Autowired
+	private ImportRecordFacade importFacade;
+
+	@Autowired
 	private OAIHarvestConfigurationDAO oaiHarvestConfigurationDAO;
+
+	@Autowired
+	private DownloadImportConfigurationDAO downloadImportConfigurationDAO;
 
 	@Override
 	public void run() {
@@ -31,6 +39,17 @@ public class DailyScript implements Runnable {
 				}
 			}
 		}
+
+		downloadImportConfigurationDAO.findAll().each { conf ->
+			if (conf.harvestFrequency == HarvestFrequency.DAILY) {
+				try {
+					importFacade.importFactory(conf)
+				} catch (JobExecutionFailure jfe) {
+					logger.error(String.format("Incremental harvest of %s failed", conf), jfe);
+				}
+			}
+		}
+
 		indexingFacade.indexHarvestedRecords();
 	}
 
