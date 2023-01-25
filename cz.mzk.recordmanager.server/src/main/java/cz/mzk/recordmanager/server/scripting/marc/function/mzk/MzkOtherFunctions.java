@@ -1,12 +1,12 @@
 package cz.mzk.recordmanager.server.scripting.marc.function.mzk;
 
-import java.text.Normalizer;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
+import com.google.common.base.MoreObjects;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
+import cz.mzk.recordmanager.server.marc.SubfieldExtractionMethod;
+import cz.mzk.recordmanager.server.scripting.marc.MarcFunctionContext;
+import cz.mzk.recordmanager.server.scripting.marc.function.MarcRecordFunctions;
+import cz.mzk.recordmanager.server.util.Constants;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.marc4j.marc.DataField;
 import org.marc4j.marc.Subfield;
@@ -14,13 +14,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import com.google.common.base.MoreObjects;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableSet;
-
-import cz.mzk.recordmanager.server.marc.SubfieldExtractionMethod;
-import cz.mzk.recordmanager.server.scripting.marc.MarcFunctionContext;
-import cz.mzk.recordmanager.server.scripting.marc.function.MarcRecordFunctions;
+import java.text.Normalizer;
+import java.util.*;
 
 @Component
 public class MzkOtherFunctions implements MarcRecordFunctions {
@@ -163,6 +158,7 @@ public class MzkOtherFunctions implements MarcRecordFunctions {
 	public List<String> getMZKBases(MarcFunctionContext ctx) {
 		String idParts[] = ctx.harvestedRecord().getUniqueId().getRecordId().split("-");
 		String base = idParts[0];
+		if (ctx.harvestedRecord().getHarvestedFrom().getIdPrefix().equals(Constants.PREFIX_MZKNORMS)) base = "MZK04";
 		List<String> result = new ArrayList<String>();
 		String primaryBase = BASE_PREFIX + base;
 		result.add(primaryBase);
