@@ -460,6 +460,7 @@ INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granul
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (348,'https://katalog.npmk.cz/api/oai','4','marc21',NULL);
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (349,'https://aleph.lib.cas.cz/OAI','EUHB','marc21',NULL);
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (350,'https://tritius.knihovnachodov.cz/tritius/oai-provider','CPK_1','marc21',NULL);
+INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity,extract_id_regex) VALUES (351,'https://aleph.nkp.cz/OAI','ADR','marc21',NULL,'[^:]+:[^:]+:ADR10-(.*)');
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (352,NULL,NULL,'marc21',NULL);
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (353,'https://www.okpb.cz/clavius/l.dll','CPK','marc21',NULL);
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (356,'https://pribram.tritius.cz/tritius/oai-provider','CPK_1','marc21',NULL);
@@ -605,7 +606,6 @@ INSERT INTO kramerius_conf (import_conf_id,url,url_solr,query_rows,metadata_stre
 
 INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format,reharvest) VALUES (341,'http://www.osobnostiregionu.cz/export_online.php','downloadAndImportRecordsJob','osobnosti',true);
 INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format,extract_id_regex) VALUES (344,null,null,null,null);
-INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format,extract_id_regex) VALUES (351,'local:/data/imports/aleph.ADR','importOaiRecordsJob',null,'[^:]+:(.*)');
 INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format,extract_id_regex) VALUES (354,'local:/data/imports/aleph.KTD','importOaiRecordsJob',null,'[^:]+:(.*)');
 INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format,extract_id_regex) VALUES (391,'local:/data/imports/uzp01_upd','importRecordsJob','xml','s/^(.*)/UZP01-$1/');
 INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format) VALUES (396,'local:/data/imports/uzp02_upd','importRecordsJob','xml');

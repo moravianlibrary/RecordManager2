@@ -3094,3 +3094,7 @@ INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granul
 --changeset tomascejpek:372 context:cpk
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (86, 410, 'SMG004');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (122, 463, 'BNG001');
+
+--changeset tomascejpek:373 context:cpk
+DELETE FROM download_import_conf WHERE import_conf_id in (351);
+INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity,extract_id_regex) VALUES (351,'https://aleph.nkp.cz/OAI','ADR','marc21',NULL,'[^:]+:[^:]+:ADR10-(.*)');
