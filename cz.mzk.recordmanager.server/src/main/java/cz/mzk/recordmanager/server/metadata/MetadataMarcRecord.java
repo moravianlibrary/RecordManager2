@@ -1899,7 +1899,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 	 */
 	@Override
 	public boolean isEdd() {
-		return harvestedRecord.getHarvestedFrom().isZiskejEnabled()
+		return harvestedRecord.getHarvestedFrom().isZiskejEddEnabled()
 				&& !Collections.disjoint(getDetectedFormatList(), EDD_FORMAT_ALLOWED);
 	}
 

@@ -44,6 +44,7 @@ CREATE TABLE import_conf (
   item_id              VARCHAR(15),
   metaproxy_enabled    BOOLEAN DEFAULT FALSE,
   ziskej_enabled       BOOLEAN DEFAULT FALSE,
+  ziskej_edd_enabled   BOOLEAN DEFAULT FALSE,
   indexed              BOOLEAN DEFAULT TRUE,
   mappings996          VARCHAR(20),
   catalog_serial_link  BOOLEAN DEFAULT FALSE,
