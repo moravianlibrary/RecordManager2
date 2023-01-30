@@ -80,6 +80,9 @@ public abstract class ImportConfiguration extends AbstractDomainObject {
 	@Column(name = "ziskej_enabled")
 	private boolean ziskejEnabled = false;
 
+	@Column(name = "ziskej_edd_enabled")
+	private boolean ziskejEddEnabled = false;
+
 	@Column(name = "indexed")
 	private boolean indexed = true;
 
@@ -267,4 +270,11 @@ public abstract class ImportConfiguration extends AbstractDomainObject {
 		this.catalogSerialLink = catalogSerialLink;
 	}
 
+	public boolean isZiskejEddEnabled() {
+		return ziskejEddEnabled;
+	}
+
+	public void setZiskejEddEnabled(boolean ziskejEddEnabled) {
+		this.ziskejEddEnabled = ziskejEddEnabled;
+	}
 }
