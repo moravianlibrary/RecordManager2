@@ -13,7 +13,7 @@ ctrlnum = getFields "035a"
 mzk_visible_str = getMZKVisible()
 
 format = translate("mzk_format.map", getMZKFormat(), null)
-statuses = getMZKStatuses()
+statuses = getMZKStatuses false
 
 language = translate("mzk_language.map", getMZKLanguages(), null)
 language_display_mv = translate("mzk_language.map", getLanguages(), null)
