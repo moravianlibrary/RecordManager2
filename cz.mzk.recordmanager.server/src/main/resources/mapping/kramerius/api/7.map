@@ -1,6 +1,6 @@
 api = search/api/client/v7.0
 metadata = %s/items/%s/metadata/%s
-collection = in_collections
+collection = cdk.collection
 modified = modified
 pid = pid
 model = model
