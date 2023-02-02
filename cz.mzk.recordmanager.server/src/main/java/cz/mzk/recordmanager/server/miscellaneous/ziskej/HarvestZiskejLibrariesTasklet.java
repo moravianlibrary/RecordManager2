@@ -31,18 +31,16 @@ public class HarvestZiskejLibrariesTasklet implements Tasklet {
 	@Autowired
 	private NamedParameterJdbcTemplate jdbcTemplate;
 
-	private final String format;
+	private final String[] formats;
 
 	private static final Logger logger = LoggerFactory.getLogger(HarvestZiskejLibrariesTasklet.class);
 
-	private static final Map<String, String> URLS = new HashMap();
+	public static final Map<String, String> URLS = new HashMap<>();
 
 	static {
 		URLS.put("ziskej", "https://ziskej.techlib.cz:9080/api/v1/libraries?service=mvs");
 		URLS.put("ziskej_edd", "https://ziskej.techlib.cz:9080/api/v1/libraries?service=edd");
 	}
-
-	private static final String URL = "https://ziskej.techlib.cz:9080/api/v1/libraries";
 
 	private static final String UPDATE_DATESTAMP_QUERY = "UPDATE dedup_record SET updated=localtimestamp WHERE id IN (" +
 			"SELECT dedup_record_id FROM harvested_record WHERE sigla IN (:siglas))";
@@ -51,43 +49,45 @@ public class HarvestZiskejLibrariesTasklet implements Tasklet {
 			"WHERE sigla in (:siglas)";
 
 	public HarvestZiskejLibrariesTasklet(String format) {
-		this.format = format;
+		this.formats = format.split(",");
 	}
 
 	@Override
-	public RepeatStatus execute(StepContribution contribution,
-								ChunkContext chunkContext) throws Exception {
-		JSONObject obj = new JSONObject(harvest());
+	public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
+		for (String format : formats) {
+			logger.info(String.format("Format: %s", format));
+			JSONObject obj = new JSONObject(harvest(format));
 
-		List<String> apilist = new ArrayList<>();
-		JSONArray jsonArray = obj.getJSONArray("items");
-		if (jsonArray != null) {
-			int len = jsonArray.length();
-			for (int i = 0; i < len; i++) {
-				apilist.add(jsonArray.get(i).toString());
+			List<String> apilist = new ArrayList<>();
+			JSONArray jsonArray = obj.getJSONArray("items");
+			if (jsonArray != null) {
+				int len = jsonArray.length();
+				for (int i = 0; i < len; i++) {
+					apilist.add(jsonArray.get(i).toString());
+				}
 			}
-		}
-		Set<String> dbList = siglaAllDAO.getParticipatingSigla(format);
-		Collection<String> union = CollectionUtils.union(apilist, dbList);
-		Collection<String> intersection = CollectionUtils.intersection(apilist, dbList);
-		List<String> uniq = new ArrayList<>(union);
-		uniq.removeAll(intersection);
+			Set<String> dbList = siglaAllDAO.getParticipatingSigla(format);
+			Collection<String> union = CollectionUtils.union(apilist, dbList);
+			Collection<String> intersection = CollectionUtils.intersection(apilist, dbList);
+			List<String> uniq = new ArrayList<>(union);
+			uniq.removeAll(intersection);
 
-		if (!uniq.isEmpty()) {
-			Map<String, Object> updateParams = new HashMap<>();
-			int updated;
+			if (!uniq.isEmpty()) {
+				Map<String, Object> updateParams = new HashMap<>();
+				int updated;
 
-			updateParams.put("siglas", uniq);
-			updated = jdbcTemplate.update(UPDATE_DATESTAMP_QUERY, updateParams);
-			logger.info("{} libaries updated", updated);
-			updated = jdbcTemplate.update(String.format(UPDATE_PARTICIPATION_QUERY, format, format), updateParams);
-			logger.info("{} libaries updated", updated);
+				updateParams.put("siglas", uniq);
+				updated = jdbcTemplate.update(UPDATE_DATESTAMP_QUERY, updateParams);
+				logger.info("{} libaries updated", updated);
+				updated = jdbcTemplate.update(String.format(UPDATE_PARTICIPATION_QUERY, format, format), updateParams);
+				logger.info("{} libaries updated", updated);
+			}
 		}
 
 		return RepeatStatus.FINISHED;
 	}
 
-	protected String harvest() throws RuntimeException {
+	protected String harvest(String format) throws RuntimeException {
 		if (!URLS.containsKey(format))
 			throw new RuntimeException(String.format("Available formats: %s", URLS.keySet()));
 		String url = URLS.get(format);
