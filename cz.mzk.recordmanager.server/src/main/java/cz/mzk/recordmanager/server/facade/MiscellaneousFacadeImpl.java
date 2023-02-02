@@ -1,6 +1,7 @@
 package cz.mzk.recordmanager.server.facade;
 
 import com.google.common.collect.ImmutableMap;
+import cz.mzk.recordmanager.server.miscellaneous.ziskej.HarvestZiskejLibrariesTasklet;
 import cz.mzk.recordmanager.server.springbatch.JobExecutor;
 import cz.mzk.recordmanager.server.util.Constants;
 import cz.mzk.recordmanager.server.util.ResourceUtils;
@@ -63,6 +64,8 @@ public class MiscellaneousFacadeImpl implements MiscellaneousFacade {
 	public void runZiskejLibraries() {
 		Map<String, JobParameter> parameters = new HashMap<>();
 		parameters.put(Constants.JOB_PARAM_REPEAT, new JobParameter(Constants.JOB_PARAM_ONE_VALUE));
+		parameters.put(Constants.JOB_PARAM_FORMAT,
+				new JobParameter(String.join(",", HarvestZiskejLibrariesTasklet.URLS.keySet())));
 		parameters.put(Constants.JOB_PARAM_REHARVEST, new JobParameter(Constants.JOB_PARAM_TRUE_VALUE));
 		jobExecutor.execute(Constants.JOB_ID_HARVEST_ZISKEJ_LIBRARIES, new JobParameters(parameters));
 	}
