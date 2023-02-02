@@ -11,6 +11,7 @@ import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -22,6 +23,8 @@ public class ZiskejLibrariesJobConfig {
 
 	@Autowired
 	private StepBuilderFactory steps;
+
+	private static final String STRING_OVERRIDEN_BY_EXPRESSION = null;
 
 	@Bean
 	public Job harvestZiskejLibrariesJob(
@@ -39,15 +42,17 @@ public class ZiskejLibrariesJobConfig {
 	@Deprecated
 	public Step harvestZiskejLibrariesStep() throws Exception {
 		return steps.get("harvestZiskejLibrariesStep")
-				.tasklet(harvestZiskejLibrariesTasklet())
+				.tasklet(harvestZiskejLibrariesTasklet(STRING_OVERRIDEN_BY_EXPRESSION))
 				.listener(new StepProgressListener())
 				.build();
 	}
 
 	@Bean(name = Constants.JOB_ID_HARVEST_ZISKEJ_LIBRARIES + ":harvestZiskejLibrariesTasklet")
 	@StepScope
-	public Tasklet harvestZiskejLibrariesTasklet() {
-		return new HarvestZiskejLibrariesTasklet();
+	public Tasklet harvestZiskejLibrariesTasklet(
+			@Value("#{jobParameters[" + Constants.JOB_PARAM_FORMAT + "]}") String strFormat
+	) {
+		return new HarvestZiskejLibrariesTasklet(strFormat);
 	}
 
 

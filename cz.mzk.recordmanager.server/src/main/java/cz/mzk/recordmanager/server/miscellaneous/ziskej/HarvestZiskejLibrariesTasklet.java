@@ -1,6 +1,5 @@
 package cz.mzk.recordmanager.server.miscellaneous.ziskej;
 
-import com.google.common.collect.ImmutableMap;
 import cz.mzk.recordmanager.server.oai.dao.SiglaAllDAO;
 import cz.mzk.recordmanager.server.util.HttpClient;
 import org.apache.commons.collections4.CollectionUtils;
@@ -32,19 +31,32 @@ public class HarvestZiskejLibrariesTasklet implements Tasklet {
 	@Autowired
 	private NamedParameterJdbcTemplate jdbcTemplate;
 
+	private final String format;
+
 	private static final Logger logger = LoggerFactory.getLogger(HarvestZiskejLibrariesTasklet.class);
+
+	private static final Map<String, String> URLS = new HashMap();
+
+	static {
+		URLS.put("ziskej", "https://ziskej.techlib.cz:9080/api/v1/libraries?service=mvs");
+		URLS.put("ziskej_edd", "https://ziskej.techlib.cz:9080/api/v1/libraries?service=edd");
+	}
 
 	private static final String URL = "https://ziskej.techlib.cz:9080/api/v1/libraries";
 
 	private static final String UPDATE_DATESTAMP_QUERY = "UPDATE dedup_record SET updated=localtimestamp WHERE id IN (" +
 			"SELECT dedup_record_id FROM harvested_record WHERE sigla IN (:siglas))";
 
-	private static final String UPDATE_PARTICIPATION_QUERY = "UPDATE sigla_all SET ziskej=NOT ziskej " +
+	private static final String UPDATE_PARTICIPATION_QUERY = "UPDATE sigla_all SET %s=NOT %s " +
 			"WHERE sigla in (:siglas)";
+
+	public HarvestZiskejLibrariesTasklet(String format) {
+		this.format = format;
+	}
 
 	@Override
 	public RepeatStatus execute(StepContribution contribution,
-			ChunkContext chunkContext) throws Exception {
+								ChunkContext chunkContext) throws Exception {
 		JSONObject obj = new JSONObject(harvest());
 
 		List<String> apilist = new ArrayList<>();
@@ -55,20 +67,20 @@ public class HarvestZiskejLibrariesTasklet implements Tasklet {
 				apilist.add(jsonArray.get(i).toString());
 			}
 		}
-		Set<String> dbList = siglaAllDAO.getParticipatingSigla("ziskej");
+		Set<String> dbList = siglaAllDAO.getParticipatingSigla(format);
 		Collection<String> union = CollectionUtils.union(apilist, dbList);
 		Collection<String> intersection = CollectionUtils.intersection(apilist, dbList);
 		List<String> uniq = new ArrayList<>(union);
 		uniq.removeAll(intersection);
 
 		if (!uniq.isEmpty()) {
-			Map<String, Object> updateParams;
+			Map<String, Object> updateParams = new HashMap<>();
 			int updated;
 
-			updateParams = ImmutableMap.of("siglas", uniq);
+			updateParams.put("siglas", uniq);
 			updated = jdbcTemplate.update(UPDATE_DATESTAMP_QUERY, updateParams);
 			logger.info("{} libaries updated", updated);
-			updated = jdbcTemplate.update(UPDATE_PARTICIPATION_QUERY, updateParams);
+			updated = jdbcTemplate.update(String.format(UPDATE_PARTICIPATION_QUERY, format, format), updateParams);
 			logger.info("{} libaries updated", updated);
 		}
 
@@ -76,8 +88,11 @@ public class HarvestZiskejLibrariesTasklet implements Tasklet {
 	}
 
 	protected String harvest() throws RuntimeException {
-		try (InputStream is = httpClient.executeGet(URL)) {
-			logger.info("Downloading: " + URL);
+		if (!URLS.containsKey(format))
+			throw new RuntimeException(String.format("Available formats: %s", URLS.keySet()));
+		String url = URLS.get(format);
+		try (InputStream is = httpClient.executeGet(url)) {
+			logger.info("Downloading: " + url);
 			return IOUtils.toString(is, StandardCharsets.UTF_8);
 		} catch (IOException e) {
 			logger.error("Could not download ziskej list");
