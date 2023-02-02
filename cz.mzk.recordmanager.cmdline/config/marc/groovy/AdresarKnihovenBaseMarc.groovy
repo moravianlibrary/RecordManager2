@@ -49,3 +49,6 @@ name_display = getFirstFieldSeparatedForAdresar "NAZabcd", " - "
 // sort
 name_sort_cz = adresarNameForSorting()
 name_alt_sort_cz = adresarNameAltForSorting()
+
+// exact
+district_exact = getFirstFieldForAdresar "KRJb"
