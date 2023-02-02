@@ -7,8 +7,8 @@ import org.springframework.batch.core.JobParameter;
 import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.JobParametersInvalidException;
 
+import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 
 import static cz.mzk.recordmanager.server.springbatch.JobParameterDeclaration.param;
 
@@ -21,7 +21,8 @@ public class ZiskejLibrariesJobParametersValidator extends DefaultJobParametersV
 
 	@Override
 	public Collection<JobParameterDeclaration> getParameters() {
-		return Collections.singletonList(
+		return Arrays.asList(
+				param(Constants.JOB_PARAM_FORMAT, JobParameter.ParameterType.STRING, true),
 				param(Constants.JOB_PARAM_REHARVEST, JobParameter.ParameterType.STRING, false)
 		);
 	}

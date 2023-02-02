@@ -515,6 +515,7 @@ CREATE TABLE sigla_all (
   cpk               BOOLEAN DEFAULT FALSE,
   ziskej            BOOLEAN DEFAULT FALSE,
   dnnt              BOOLEAN DEFAULT FALSE,
+  ziskej_edd        BOOLEAN DEFAULT FALSE,
   CONSTRAINT sigla_all_pk PRIMARY KEY(id),
   CONSTRAINT sigla_all_import_conf_fk FOREIGN KEY (import_conf_id) REFERENCES import_conf(id) ON DELETE SET NULL
 );

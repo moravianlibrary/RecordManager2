@@ -3119,3 +3119,7 @@ INSERT INTO kramerius_conf (import_conf_id,url,url_solr,query_rows,metadata_stre
 
 --changeset tomascejpek:378 context:cpk
 UPDATE import_conf SET mapping_script='LocalMzk.groovy,HarvestedRecordBaseMarc.groovy' WHERE id in (300,320,324);
+
+--changeset tomascejpek:379
+ALTER TABLE sigla_all ADD COLUMN ziskej_edd BOOLEAN DEFAULT FALSE;
+CREATE INDEX sigla_all_ziskej_edd_idx ON sigla_all(ziskej_edd);
