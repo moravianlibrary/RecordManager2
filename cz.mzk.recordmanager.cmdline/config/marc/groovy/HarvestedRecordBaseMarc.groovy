@@ -82,3 +82,6 @@ scale_int_facet_mv = getScaleFacet()
 
 // geographic search
 long_lat_display_mv = getBoundingBoxAsPolygon(ENVELOPE)
+
+// search
+publisher_search_txt_mv = getFieldsTrim "260b:264b:928a:978abcdg7"

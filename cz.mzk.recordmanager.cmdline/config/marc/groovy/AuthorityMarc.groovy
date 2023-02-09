@@ -24,3 +24,6 @@ personal_name_display = getFirstAuthAuthor "100"
 pseudonym_ids_display_mv = getAuthorityPseudonymsIds()
 pseudonym_name_display_mv = getAuthorityPseudonymsNames()
 source_display_mv = getFields "670a"
+
+// search
+publisher_search_txt_mv = getFieldsTrim "260b:264b:928a:978abcdg7"

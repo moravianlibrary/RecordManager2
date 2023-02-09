@@ -15,6 +15,7 @@ local_statuses_facet_mv = local_statuses_facet_str_mv = getStatuses()
 
 // search
 author_search_txt_mv = getAllCreatorsForSearching()
+publisher_search_txt_mv = getPublishers()
 _hidden_title_search_txt_mv = getFirstTitle()
 
 // display
