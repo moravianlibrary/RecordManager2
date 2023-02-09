@@ -186,6 +186,8 @@ public class SolrFieldConstants {
 
 	public static final String ID001_STR = "id001_str";
 
+	public static final String PUBLISHER_SEARCH_TXT_MV = "publisher_search_txt_mv";
+
 	/**
 	 * dummy fields used for processing purposes only, shouldn't be indexed.
 	 */

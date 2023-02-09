@@ -22,7 +22,8 @@ public class FromLocalToDedupEnricher implements DedupRecordEnricher {
 			SolrFieldConstants.SEMANTIC_ENRICHMENT,
 			SolrFieldConstants.AUTO_CONSPECTUS,
 			SolrFieldConstants.ZISKEJ_FACET_MV,
-			SolrFieldConstants.SCALE_FACET_MV
+			SolrFieldConstants.SCALE_FACET_MV,
+			SolrFieldConstants.PUBLISHER_SEARCH_TXT_MV
 	);
 
 	private final FieldMerger merge = new FieldMerger(

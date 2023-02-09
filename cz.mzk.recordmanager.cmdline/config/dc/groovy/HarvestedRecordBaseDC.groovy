@@ -13,6 +13,7 @@ local_region_institution_facet_mv = getRegionInstitutionFacet()
 
 // search
 author_search_txt_mv = getAllCreatorsForSearching()
+publisher_search_txt_mv = getPublishers()
 _hidden_title_search_txt_mv = getFirstTitle()
 
 // display
