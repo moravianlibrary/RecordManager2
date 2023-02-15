@@ -3119,3 +3119,7 @@ INSERT INTO kramerius_conf (import_conf_id,url,url_solr,query_rows,metadata_stre
 
 --changeset tomascejpek:378 context:cpk
 UPDATE import_conf SET mapping_script='LocalMzk.groovy,HarvestedRecordBaseMarc.groovy' WHERE id in (300,320,324);
+
+--changeset tomascejpek:379 context:cpk
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (118, 452, 'STG001');
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (149, 490, 'MEG502');
