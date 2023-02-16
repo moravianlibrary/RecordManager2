@@ -11,6 +11,7 @@ address_search_txt_mv = getFieldsForAdresar "ADRum", SubfieldExtractionMethod.JO
 branch_search_txt_mv = getFieldsForAdresar "POBna", SubfieldExtractionMethod.JOINED, " "
 code_search_txt = getFirstFieldForAdresar "ZKRa"
 cpk_code_search_txt = adresarGetCpkCode()
+district_search_txt = getFirstFieldForAdresar "KRJb"
 function_search_txt_mv = getFieldsForAdresar("FCEa", SubfieldExtractionMethod.SEPARATED, null)
 ils_search_txt = getFirstFieldForAdresar "KNSa"
 name_alt_search_txt_mv = getFirstFieldSeparatedForAdresar "VARabc", " "
@@ -19,6 +20,7 @@ note2_search_txt = getFirstFieldForAdresar "POUa"
 note_search_txt = getFirstFieldForAdresar "POIa"
 projects_search_txt_mv = getFieldsForAdresar("PRKa", SubfieldExtractionMethod.SEPARATED, null)
 region_search_txt = translate("adresar_region.map", getFirstFieldForAdresar("KRJa"), null)
+regional_library_txt = getFirstFieldForAdresar "PVKs"
 responsibility_search_txt_mv = getFieldsForAdresar "JMNkp", SubfieldExtractionMethod.JOINED, " "
 services_search_txt_mv = getFieldsForAdresar("SLUa", SubfieldExtractionMethod.SEPARATED, null)
 sigla_search_txt = getFirstFieldForAdresar "SGLa"
@@ -48,3 +50,6 @@ name_display = getFirstFieldSeparatedForAdresar "NAZabcd", " - "
 // sort
 name_sort_cz = adresarNameForSorting()
 name_alt_sort_cz = adresarNameAltForSorting()
+
+// exact
+district_exact = getFirstFieldForAdresar "KRJb"
