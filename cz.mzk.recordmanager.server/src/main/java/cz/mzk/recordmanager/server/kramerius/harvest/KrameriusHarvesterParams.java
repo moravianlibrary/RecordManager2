@@ -1,5 +1,8 @@
 package cz.mzk.recordmanager.server.kramerius.harvest;
 
+import cz.mzk.recordmanager.server.util.DateUtils;
+
+import java.text.ParseException;
 import java.util.Date;
 
 public class KrameriusHarvesterParams {
@@ -46,8 +49,8 @@ public class KrameriusHarvesterParams {
 		return from;
 	}
 
-	public void setFrom(Date from) {
-		this.from = from;
+	public void setFrom(Date from) throws ParseException {
+		this.from = DateUtils.transform(from, "UTC");
 	}
 
 	public Date getUntil() {
