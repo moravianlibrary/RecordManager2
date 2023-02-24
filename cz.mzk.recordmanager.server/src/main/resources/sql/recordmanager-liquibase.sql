@@ -3123,3 +3123,7 @@ UPDATE import_conf SET mapping_script='LocalMzk.groovy,HarvestedRecordBaseMarc.g
 --changeset tomascejpek:379 context:cpk
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (118, 452, 'STG001');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (149, 490, 'MEG502');
+
+--changeset tomascejpek:380 context:cpk
+UPDATE import_conf SET item_id='koha',mappings996='koha' WHERE id=371;
+UPDATE oai_harvest_conf SET url='https://koha.knihovnabreclav.cz/cgi-bin/koha/oai.pl',metadata_prefix='marccpk',extract_id_regex='BVG001:(.*)' WHERE import_conf_id=371;
