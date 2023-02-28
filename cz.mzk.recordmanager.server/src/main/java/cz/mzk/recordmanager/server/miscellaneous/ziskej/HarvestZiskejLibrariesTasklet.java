@@ -38,8 +38,8 @@ public class HarvestZiskejLibrariesTasklet implements Tasklet {
 	public static final Map<String, String> URLS = new HashMap<>();
 
 	static {
-		URLS.put("ziskej", "https://ziskej.techlib.cz:9080/api/v1/libraries?service=mvs");
-		URLS.put("ziskej_edd", "https://ziskej.techlib.cz:9080/api/v1/libraries?service=edd");
+		URLS.put("ziskej", "https://ziskej.techlib.cz:9080/api/v1/libraries?service=mvszk");
+		URLS.put("ziskej_edd", "https://ziskej.techlib.cz:9080/api/v1/libraries?service=eddzk");
 	}
 
 	private static final String UPDATE_DATESTAMP_QUERY = "UPDATE dedup_record SET updated=localtimestamp WHERE id IN (" +
