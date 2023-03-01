@@ -3127,3 +3127,8 @@ INSERT INTO sigla (id, import_conf_id, sigla) VALUES (149, 490, 'MEG502');
 --changeset tomascejpek:380 context:cpk
 UPDATE import_conf SET item_id='koha',mappings996='koha' WHERE id=371;
 UPDATE oai_harvest_conf SET url='https://koha.knihovnabreclav.cz/cgi-bin/koha/oai.pl',metadata_prefix='marccpk',extract_id_regex='BVG001:(.*)' WHERE import_conf_id=371;
+
+--changeset tomascejpek:381 context:cpk
+INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (293, 'MKKLIMKOVICE', 'https://knihovna.mesto-klimkovice.cz/', 'https://klimkovice.tritius.cz/', 'Klimkovice', 'MS');
+INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id, mappings996) VALUES (493, 293, 200, 'mkklimkovice', 11, false, true, true, true, 'U', 'other', 'tritius');
+INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (493,'https://klimkovice.tritius.cz/tritius/oai-provider','CPK_1','marc21',NULL);
