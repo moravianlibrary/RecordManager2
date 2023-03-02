@@ -24,6 +24,9 @@ public class SiglaAll extends AbstractDomainObject {
 	@Column(name = "ziskej")
 	private boolean ziskej;
 
+	@Column(name = "ziskej_edd")
+	private boolean ziskej_edd;
+
 	@Column(name = "dnnt")
 	private boolean dnnt;
 
@@ -75,13 +78,23 @@ public class SiglaAll extends AbstractDomainObject {
 		this.cpk = cpk;
 	}
 
+	public boolean isZiskej_edd() {
+		return ziskej_edd;
+	}
+
+	public void setZiskej_edd(boolean ziskej_edd) {
+		this.ziskej_edd = ziskej_edd;
+	}
+
 	@Override
 	public String toString() {
 		return "SiglaAll{" +
 				"sigla='" + sigla + '\'' +
-				", harvestedFrom=" + harvestedFromId +
+				", harvestedFromId=" + harvestedFromId +
+				", harvestedFrom=" + harvestedFrom +
 				", cpk=" + cpk +
 				", ziskej=" + ziskej +
+				", ziskej_edd=" + ziskej_edd +
 				", dnnt=" + dnnt +
 				'}';
 	}

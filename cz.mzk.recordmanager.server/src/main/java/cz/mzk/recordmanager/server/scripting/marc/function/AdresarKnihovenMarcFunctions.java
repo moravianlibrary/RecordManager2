@@ -41,6 +41,7 @@ public class AdresarKnihovenMarcFunctions implements MarcRecordFunctions {
 	private static final String PORTAL_FACET_CPK_TEXT = "KNIHOVNYCZ_YES";
 	private static final String PORTAL_FACET_ZISKEJ_TEXT = "ZISKEJ_YES";
 	private static final String PORTAL_FACET_DNNT_TEXT = "DNNT_YES";
+	private static final String PORTAL_FACET_ZISKEJ_EDD_TEXT = "ZISKEJ_EDD_YES";
 	private static final String URL_COMMENT = "o regionálních knihovnách";
 
 	private static final HashMap<String, Long> relevanceBySigla = new HashMap<>();
@@ -314,6 +315,7 @@ public class AdresarKnihovenMarcFunctions implements MarcRecordFunctions {
 		if (siglaAllDAO.isParticipating(siglaName, "cpk")) result.add(PORTAL_FACET_CPK_TEXT);
 		if (siglaAllDAO.isParticipating(siglaName, "ziskej")) result.add(PORTAL_FACET_ZISKEJ_TEXT);
 		if (siglaAllDAO.isParticipating(siglaName, "dnnt")) result.add(PORTAL_FACET_DNNT_TEXT);
+		if (siglaAllDAO.isParticipating(siglaName, "ziskej_edd")) result.add(PORTAL_FACET_ZISKEJ_EDD_TEXT);
 		return result;
 	}
 
