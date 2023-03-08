@@ -1,14 +1,10 @@
 package cz.mzk.recordmanager.server.oai.harvest;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.util.Date;
-
 import cz.mzk.recordmanager.server.model.OAIGranularity;
+import cz.mzk.recordmanager.server.util.DateUtils;
+
+import java.text.ParseException;
+import java.util.Date;
 
 public class OAIHarvesterParams {
 
@@ -64,16 +60,8 @@ public class OAIHarvesterParams {
 		return from;
 	}
 
-	private static final DateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
-
 	public void setFrom(Date from) throws ParseException {
-		if (from != null) {
-			from = DATE_FORMAT.parse(DATE_FORMAT.format(from));
-			LocalDateTime ldt = LocalDateTime.ofInstant(from.toInstant(), ZoneId.systemDefault());
-			ZonedDateTime utcZonedDateTime = ldt.atZone(ZoneId.systemDefault()).withZoneSameInstant(ZoneId.of("UTC"));
-			from = DATE_FORMAT.parse(utcZonedDateTime.toInstant().toString());
-		}
-		this.from = from;
+		this.from = DateUtils.transform(from, "UTC");
 	}
 
 	public Date getUntil() {

@@ -1,2 +1,6 @@
 local_base_facet_mv = getMZKBases()
 local_view_statuses_facet_mv = getMZKStatuses true
+
+local_callnumber_str_mv = getFieldsUnique "996c"
+local_location_txt_mv = getFieldsUnique "996h"
+local_barcode_txt_mv = getFieldsUnique "996b"

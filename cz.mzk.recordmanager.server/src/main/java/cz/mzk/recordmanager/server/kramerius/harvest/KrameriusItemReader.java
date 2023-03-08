@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 
@@ -78,6 +79,8 @@ public class KrameriusItemReader implements ItemReader<List<HarvestedRecord>>,
 			params.setUntil(untilDate);
 			params.setCollection(conf.getCollection());
 			kHarvester = harvesterFactory.create(type, params, confId, inFile);
+		} catch (ParseException e) {
+			throw new RuntimeException("Cannot parse 'from' parameter", e);
 		}
 	}
 
