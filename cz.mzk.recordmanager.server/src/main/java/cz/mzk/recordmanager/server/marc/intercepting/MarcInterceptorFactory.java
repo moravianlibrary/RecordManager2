@@ -37,7 +37,7 @@ public class MarcInterceptorFactory {
 				appCtx.getAutowireCapableBeanFactory().autowireBean(mri);
 				return mri;
 			case Constants.PREFIX_MZKNORMS: return new MzkNormsMarcInterceptor(record);
-			case Constants.PREFIX_RKKA: return new RkkaMarcInterceptor(record, configuration, recordId);
+//			case Constants.PREFIX_RKKA: return new RkkaMarcInterceptor(record, configuration, recordId);
 			case Constants.PREFIX_NLK: return new NlkMarcInterceptor(record, configuration, recordId);
 			case Constants.PREFIX_OPENLIB: return new OpenlibMarcInterceptor(record);
 			case Constants.PREFIX_KKVY: return new KkvyMarcInterceptor(record, configuration, recordId);
