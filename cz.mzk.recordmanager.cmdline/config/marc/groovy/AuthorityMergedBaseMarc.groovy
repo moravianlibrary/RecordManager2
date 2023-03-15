@@ -1,7 +1,7 @@
 import static cz.mzk.recordmanager.server.marc.SubfieldExtractionMethod.SEPARATED
 
-recordtype = "marc"
-record_format = "marc"
+recordtype = "authority"
+record_format = "authority"
 
 allfields = getAllFields()
 fullrecord = getFullrecord()
