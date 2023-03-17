@@ -145,7 +145,7 @@ INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (288, 'MKT
 INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (290, 'MKNERATOVICE', 'https://www.knihovnaneratovice.cz/', 'https://katalog.knihovnaneratovice.cz/', 'Neratovice', 'SC');
 INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (291, 'MKROKYCANY', 'https://www.rokyknih.cz/', 'https://katalog.rokyknih.cz/', 'Rokycany', 'PL');
 INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (293, 'MKKLIMKOVICE', 'https://knihovna.mesto-klimkovice.cz/', 'https://klimkovice.tritius.cz/', 'Klimkovice', 'MS');
-INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (394, 'MKDOBRA', 'https://knihovna-dobra.cz/', 'https://katalog.knihovna-dobra.cz/', 'Dobrá', 'MS');
+INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (294, 'MKDOBRA', 'https://knihovna-dobra.cz/', 'https://katalog.knihovna-dobra.cz/', 'Dobrá', 'MS');
 INSERT INTO library (id, name, url, catalog_url, city) VALUES (400, 'AUTHORITY', 'nkp.cz', 'aleph.nkp.cz', NULL);
 INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (99027, 'KRAM-CUNI', '', '', '','kramerius');
 INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (99028, 'KRAM-CUNIFSV', '', '', '','kramerius');

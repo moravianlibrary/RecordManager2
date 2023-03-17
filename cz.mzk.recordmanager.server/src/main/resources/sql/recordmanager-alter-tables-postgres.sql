@@ -3107,7 +3107,7 @@ CREATE INDEX sigla_all_ziskej_edd_idx ON sigla_all(ziskej_edd);
 =======
 
 -- 16. 03. 2023 tomascejpek
-INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (394, 'MKDOBRA', 'https://knihovna-dobra.cz/', 'https://katalog.knihovna-dobra.cz/', 'Dobrá', 'MS');
+INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (294, 'MKDOBRA', 'https://knihovna-dobra.cz/', 'https://katalog.knihovna-dobra.cz/', 'Dobrá', 'MS');
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id, mappings996) VALUES (494, 294, 200, 'mkdobra', 11, false, true, true, true, 'U', 'koha', 'koha');
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (494,'https://koha.knihovna-dobra.cz/cgi-bin/koha/oai.pl','CPK','marccpk',NULL);
 >>>>>>> master

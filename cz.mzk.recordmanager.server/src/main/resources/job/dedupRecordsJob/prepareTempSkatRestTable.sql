@@ -11,7 +11,6 @@ FROM skat_keys sk
 GROUP BY sk.skat_record_id
 HAVING COUNT(DISTINCT hr.id) > 1
    AND count(DISTINCT dedup_record_id) + sum(case when dedup_record_id is null then 1 else 0 end) != 1
-   AND bool_or(next_dedup_flag) IS TRUE
-   AND bool_or(sk.manually_merged) IS NOT TRUE;
+   AND bool_or(next_dedup_flag) IS TRUE;
 
 CREATE INDEX tmp_skat_keys_rest_idx ON tmp_skat_keys_rest (row_id);
