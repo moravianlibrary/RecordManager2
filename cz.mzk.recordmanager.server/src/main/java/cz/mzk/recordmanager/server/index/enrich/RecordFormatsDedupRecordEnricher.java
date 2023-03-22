@@ -1,14 +1,14 @@
 package cz.mzk.recordmanager.server.index.enrich;
 
-import java.util.Collection;
-import java.util.List;
-
+import cz.mzk.recordmanager.server.index.SolrFieldConstants;
+import cz.mzk.recordmanager.server.model.DedupRecord;
+import cz.mzk.recordmanager.server.model.HarvestedRecordFormat;
+import cz.mzk.recordmanager.server.util.SolrUtils;
 import org.apache.solr.common.SolrInputDocument;
 import org.springframework.stereotype.Component;
 
-import cz.mzk.recordmanager.server.index.SolrFieldConstants;
-import cz.mzk.recordmanager.server.model.DedupRecord;
-import cz.mzk.recordmanager.server.util.SolrUtils;
+import java.util.Collection;
+import java.util.List;
 
 @Component
 public class RecordFormatsDedupRecordEnricher implements DedupRecordEnricher {
@@ -59,7 +59,9 @@ public class RecordFormatsDedupRecordEnricher implements DedupRecordEnricher {
 			if (otherCount == 2) formats.removeAll(TYPE_OTHER_COMP_CARRIER);
 			else formats.remove(TYPE_OTHER_COMP_CARRIER.get(1));
 		}
-		
+		if (formats.isEmpty())
+			formats.addAll(SolrUtils.createHierarchicFacetValues(
+					HarvestedRecordFormat.HarvestedRecordFormatEnum.OTHER_OTHER.name().split("_")));
 		return formats;
 	}
 
