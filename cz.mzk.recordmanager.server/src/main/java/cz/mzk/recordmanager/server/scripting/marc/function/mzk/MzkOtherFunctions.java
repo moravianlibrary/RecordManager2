@@ -15,6 +15,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.text.Normalizer;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Component
@@ -34,6 +36,20 @@ public class MzkOtherFunctions implements MarcRecordFunctions {
 			f991b = f991b.substring(0, 6);
 		}
 		return (NumberUtils.isCreatable(f991b)) ? f991b : null;
+	}
+
+	public Date getMZKAcquisitionDateStamp(MarcFunctionContext ctx) {
+		String date_str = getMZKAcquisitionDate(ctx);
+		if (date_str != null) {
+			try {
+				SimpleDateFormat acq_format = new SimpleDateFormat("yyyyMM");
+				acq_format.setTimeZone(TimeZone.getTimeZone("UTC"));
+				return acq_format.parse(date_str);
+			} catch (ParseException e) {
+				return null;
+			}
+		}
+		return null;
 	}
 
 	private static final String HIDDEN = "hidden";
