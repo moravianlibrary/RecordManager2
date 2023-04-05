@@ -567,4 +567,21 @@ public interface MetadataRecord {
 		return Collections.emptySet();
 	}
 
+	/**
+	 * record is digitalized
+	 *
+	 * @return boolean
+	 */
+	default boolean isDigitized() {
+		return false;
+	}
+
+	/**
+	 * Determine if record is available for digitalization
+	 *
+	 * @return bool
+	 */
+	default boolean isAvailableForDigitalization() {
+		return false;
+	}
 }

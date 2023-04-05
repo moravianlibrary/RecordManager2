@@ -1945,4 +1945,8 @@ public class MetadataMarcRecord implements MetadataRecord {
 		return new HashSet<>(underlayingMarc.getFields("080", 'a'));
 	}
 
+	@Override
+	public boolean isDigitized() {
+		return !getUuids().isEmpty();
+	}
 }

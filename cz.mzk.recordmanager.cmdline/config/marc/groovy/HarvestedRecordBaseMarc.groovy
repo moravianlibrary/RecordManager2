@@ -70,7 +70,10 @@ mappings996_display_mv = getMappings996()
 uuid_str_mv = getUuidForObalkyKnih()
 author_sort_display = getAuthorForSorting("100abcd:110abcd:111abcd:700abcd:710abcd:711abcd")
 
+// hidden
 _hidden_isbn_annotation_obalkyknih = getFields "020a:902a"
+_hidden_is_digitized_boolean = isDigitized()
+_hidden_available_for_digitalization_boolean = isAvailableForDigitalization()
 
 // facets
 conspectus_facet_mv = getConspectus();

@@ -188,6 +188,10 @@ public class SolrFieldConstants {
 
 	public static final String PUBLISHER_SEARCH_TXT_MV = "publisher_search_txt_mv";
 
+	public static final String AVAILABLE_FOR_DIGITALIZATION = "available_for_digitalization_boolean";
+
+	public static final String IDS_FOR_DIGITALIZATION = "ids_for_digitalization_display_mv";
+
 	/**
 	 * dummy fields used for processing purposes only, shouldn't be indexed.
 	 */
@@ -197,5 +201,9 @@ public class SolrFieldConstants {
 	public static final String ISBN_ANNOTATION_FROM_OBALKYKNIH = "_hidden_isbn_annotation_obalkyknih";
 
 	public static final String POTENTIAL_DNNT = "_hidden_potential_dnnt";
+
+	public static final String IS_DIGITIZED = "_hidden_is_digitized_boolean";
+
+	public static final String HIDDEN_AVAILABLE_FOR_DIGITALIZATION = "_hidden_available_for_digitalization_boolean";
 
 }
