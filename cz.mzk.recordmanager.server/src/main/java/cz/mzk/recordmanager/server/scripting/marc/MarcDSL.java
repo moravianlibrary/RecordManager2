@@ -1050,4 +1050,12 @@ public class MarcDSL extends BaseDSL {
 		return metadataRecord.isZiskejEddWithoutApi();
 	}
 
+	public boolean isDigitized() {
+		return metadataRecord.isDigitized();
+	}
+
+	public boolean isAvailableForDigitalization() {
+		return metadataRecord.isAvailableForDigitalization();
+	}
+
 }

@@ -5,6 +5,7 @@ import cz.mzk.recordmanager.server.marc.MatchAllDataFieldMatcher;
 import cz.mzk.recordmanager.server.marc.SubfieldExtractionMethod;
 import cz.mzk.recordmanager.server.metadata.MetadataMarcRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
+import cz.mzk.recordmanager.server.model.HarvestedRecordFormat;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -58,5 +59,23 @@ public class MzkMetadataMarcRecord extends MetadataMarcRecord {
 			return false;
 		}
 		return true;
+	}
+
+	/**
+	 * @return boolean
+	 */
+	@Override
+	public boolean isAvailableForDigitalization() {
+		String country_code = "";
+		String field008 = underlayingMarc.getControlField("008");
+		if (field008 != null && field008.length() > 17) {
+			country_code = field008.substring(15, 17).trim();
+		}
+
+		return harvestedRecord.getUniqueId().getRecordId().startsWith("MZK01")
+				&& country_code.equals("xr")
+				&& getDetectedFormatList().contains(HarvestedRecordFormat.HarvestedRecordFormatEnum.BOOKS)
+				&& getPublicationYear() != null && getPublicationYear() <= 2002
+				&& !underlayingMarc.getDataFields("996").isEmpty();
 	}
 }

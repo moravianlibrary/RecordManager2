@@ -219,6 +219,10 @@ public class SolrFieldConstants {
 
 	public static final String ZISKEJ_EDD_SIGLAS = "ziskej_edd_sigla_txt_mv";
 
+	public static final String AVAILABLE_FOR_DIGITALIZATION = "available_for_digitalization_boolean";
+
+	public static final String IDS_FOR_DIGITALIZATION = "ids_for_digitalization_display_mv";
+
 	/**
 	 * dummy fields used for processing purposes only, shouldn't be indexed.
 	 */
@@ -232,5 +236,9 @@ public class SolrFieldConstants {
 	public static final String ZISKEJ_MVS_WITHOUT_API_BOOLEAN = "_hidden_ziskej_mvs_without_api_boolean";
 
 	public static final String ZISKEJ_EDD_WITHOUT_API_BOOLEAN = "_hidden_ziskej_edd_without_api_boolean";
+
+	public static final String IS_DIGITIZED = "_hidden_is_digitized_boolean";
+
+	public static final String HIDDEN_AVAILABLE_FOR_DIGITALIZATION = "_hidden_available_for_digitalization_boolean";
 
 }
