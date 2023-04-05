@@ -74,4 +74,11 @@ public class KramDefaultMetadataDublinCoreRecord extends
 		return harvestedRecord.getUniqueId().getRecordId();
 	}
 
+	/**
+	 * @return boolean
+	 */
+	@Override
+	public boolean isDigitized() {
+		return true;
+	}
 }

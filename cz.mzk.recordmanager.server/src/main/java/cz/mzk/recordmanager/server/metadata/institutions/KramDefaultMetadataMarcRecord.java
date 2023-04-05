@@ -112,4 +112,11 @@ public class KramDefaultMetadataMarcRecord extends MetadataMarcRecord {
 		return null;
 	}
 
+	/**
+	 * @return boolean
+	 */
+	@Override
+	public boolean isDigitized() {
+		return true;
+	}
 }

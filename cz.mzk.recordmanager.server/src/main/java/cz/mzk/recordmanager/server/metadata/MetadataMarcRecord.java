@@ -1928,4 +1928,9 @@ public class MetadataMarcRecord implements MetadataRecord {
 		}
 		return true;
 	}
+
+	@Override
+	public boolean isDigitized() {
+		return !getUuids().isEmpty();
+	}
 }

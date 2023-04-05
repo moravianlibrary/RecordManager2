@@ -1029,4 +1029,12 @@ public class MarcDSL extends BaseDSL {
 		return String.format("%s. %s", author, title);
 	}
 
+	public boolean isDigitized() {
+		return metadataRecord.isDigitized();
+	}
+
+	public boolean isAvailableForDigitalization() {
+		return metadataRecord.isAvailableForDigitalization();
+	}
+
 }
