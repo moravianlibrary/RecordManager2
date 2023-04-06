@@ -59,6 +59,7 @@ public class MzkMetadataMarcRecord extends MetadataMarcRecord {
 		return harvestedRecord.getUniqueId().getRecordId().startsWith("MZK01")
 				&& country_code.equals("xr")
 				&& getDetectedFormatList().contains(HarvestedRecordFormat.HarvestedRecordFormatEnum.BOOKS)
-				&& getPublicationYear() <= 2002;
+				&& getPublicationYear() <= 2002
+				&& !underlayingMarc.getDataFields("996").isEmpty();
 	}
 }
