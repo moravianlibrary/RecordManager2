@@ -3148,3 +3148,8 @@ INSERT INTO sigla (id, import_conf_id, sigla) VALUES (114, 442, 'NJG502');
 --changeset tomascejpek:385 context:cpk
 DELETE FROM oai_harvest_conf WHERE import_conf_id=351;
 INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format,extract_id_regex) VALUES (351,'local:/data/imports/aleph.ADR','importOaiRecordsJob',null,'[^:]+:(.*)');
+
+--changeset tomascejpek:386 context:cpk
+INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (295, 'VSE', 'https://www.vse.cz/', 'https://katalog.vse.cz/', 'Praha', 'PR');
+INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id, mappings996) VALUES (495, 295, 200, 'vse', 11, false, true, true, true, 'U', 'aleph', 'aleph');
+INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format,extract_id_regex) VALUES (495,'local:/data/imports/uep01-cpk','importRecordsJob','xml',null);
