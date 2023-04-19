@@ -2855,3 +2855,7 @@ INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granul
 
 -- 28. 03. 2023 tomascejpek
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (114, 442, 'NJG502');
+
+-- 19. 04. 2023 tomascejpek
+DELETE FROM oai_harvest_conf WHERE import_conf_id=351;
+INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format,extract_id_regex) VALUES (351,'local:/data/imports/aleph.ADR','importOaiRecordsJob',null,'[^:]+:(.*)');
