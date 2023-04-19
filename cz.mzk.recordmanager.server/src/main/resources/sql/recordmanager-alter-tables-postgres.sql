@@ -3030,3 +3030,8 @@ UPDATE oai_harvest_conf SET url='https://orlova.tritius.cz/tritius/oai-provider'
 
 -- 02. 01. 2024 tomascejpek
 UPDATE download_import_conf SET url='https://bookport.cz/marc21-20237.xml' WHERE import_conf_id=489;
+
+-- 02. 02. 2024 tomascejpek
+INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (295, 'VSE', 'https://www.vse.cz/', 'https://katalog.vse.cz/', 'Praha', 'PR');
+INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id, mappings996) VALUES (495, 295, 200, 'vse', 11, false, true, true, true, 'U', 'aleph', 'aleph');
+INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format) VALUES (495,'local:/data/imports/uep01_cpk_upd','importRecordsJob','xml');
