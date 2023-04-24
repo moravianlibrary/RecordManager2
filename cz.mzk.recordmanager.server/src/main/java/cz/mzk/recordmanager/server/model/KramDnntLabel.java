@@ -12,7 +12,8 @@ public class KramDnntLabel {
 
 	public enum DnntLabelEnum {
 
-		DNNTO("dnnto");
+		DNNTO("dnnto"),
+		PAYING_USERS("paying_users");
 
 		private final String label;
 

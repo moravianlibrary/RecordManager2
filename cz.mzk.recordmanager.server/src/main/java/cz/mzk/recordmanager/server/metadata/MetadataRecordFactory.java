@@ -100,6 +100,8 @@ public class MetadataRecordFactory {
 		case Constants.PREFIX_SFXJIBKNAV:
 			return new SfxKnavMetadataMarcRecord(marcRec, hr);
 		case Constants.PREFIX_SFXTECHLIBNTK:
+		case Constants.PREFIX_SFXTECHLIBUOCHB:
+		case Constants.PREFIX_SFXTECHLIBVSCHT:
 			return new SfxTechlibMetadataMarcRecord(marcRec, hr);
 		case Constants.PREFIX_CASLIN:
 			return new SkatMarcMetadataRecord(marcRec, hr);
@@ -189,6 +191,7 @@ public class MetadataRecordFactory {
 		case Constants.PREFIX_KRAM_TRE:
 		case Constants.PREFIX_KRAM_NKP:
 		case Constants.PREFIX_KRAM_ROZHLAS:
+		case Constants.PREFIX_KRAM_SNK:
 			return init(new KramDefaultMetadataMarcRecord(marcRec, hr));
 		case Constants.PREFIX_UZEI:
 			return new UzeiMetadataMarcRecord(marcRec, hr);

@@ -1,11 +1,15 @@
 package cz.mzk.recordmanager.server.kramerius.harvest;
 
+import cz.mzk.recordmanager.server.kramerius.ApiMappingEnum;
+import cz.mzk.recordmanager.server.kramerius.ApiMappingFactory;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.model.KrameriusConfiguration;
 import cz.mzk.recordmanager.server.oai.dao.KrameriusConfigurationDAO;
+import cz.mzk.recordmanager.server.scripting.Mapping;
 import cz.mzk.recordmanager.server.util.HibernateSessionSynchronizer;
 import cz.mzk.recordmanager.server.util.HibernateSessionSynchronizer.SessionBinder;
 import org.apache.solr.client.solrj.SolrServerException;
+import org.json.JSONObject;
 import org.springframework.batch.core.ExitStatus;
 import org.springframework.batch.core.StepExecution;
 import org.springframework.batch.core.StepExecutionListener;
@@ -33,13 +37,16 @@ public class KrameriusItemReader implements ItemReader<List<HarvestedRecord>>,
 	@Autowired
 	private HibernateSessionSynchronizer hibernateSync;
 
+	@Autowired
+	private ApiMappingFactory apiMappingFactory;
+
 	private KrameriusHarvester kHarvester;
 
 	// configuration
-	private Long confId;
+	private final Long confId;
 
-	private Date fromDate;
-	private Date untilDate;
+	private final Date fromDate;
+	private final Date untilDate;
 	private final KrameriusHarvesterEnum type;
 	private final String inFile;
 
@@ -75,10 +82,14 @@ public class KrameriusItemReader implements ItemReader<List<HarvestedRecord>>,
 			params.setUrl(conf.getUrl());
 			params.setMetadataStream(conf.getMetadataStream());
 			params.setQueryRows(conf.getQueryRows());
+			params.setAuthToken(conf.getAuthToken());
 			params.setFrom(fromDate);
 			params.setUntil(untilDate);
 			params.setCollection(conf.getCollection());
+			params.setDownloadPrivateFulltexts(conf.isDownloadPrivateFulltexts());
 			kHarvester = harvesterFactory.create(type, params, confId, inFile);
+			processInfo(params);
+			params.setApiMapping(apiMappingFactory.getMapping(params.getKrameriusVersion()));
 		} catch (ParseException e) {
 			throw new RuntimeException("Cannot parse 'from' parameter", e);
 		}
@@ -87,6 +98,22 @@ public class KrameriusItemReader implements ItemReader<List<HarvestedRecord>>,
 	@Override
 	public ExitStatus afterStep(StepExecution stepExecution) {
 		return null;
+	}
+
+	private static final String INFO_FORMAT = "%s%s/info";
+
+	protected void processInfo(KrameriusHarvesterParams params) {
+		for (String apiVersion : ApiMappingFactory.API_VERSION) {
+			Mapping mapping = apiMappingFactory.getMapping(apiVersion);
+			try {
+				JSONObject info = kHarvester.info(String.format(INFO_FORMAT, params.getUrl(),
+						mapping.getMapping().get(ApiMappingEnum.API.getValue()).get(0)));
+				params.setKrameriusVersion(info.getString("version"));
+				return;
+			} catch (Exception e) {
+				KrameriusHarvesterImpl.LOGGER.info(e.getMessage());
+			}
+		}
 	}
 
 }

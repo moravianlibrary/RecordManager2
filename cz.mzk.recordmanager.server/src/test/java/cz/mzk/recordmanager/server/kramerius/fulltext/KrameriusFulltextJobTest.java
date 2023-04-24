@@ -1,20 +1,8 @@
 package cz.mzk.recordmanager.server.kramerius.fulltext;
 
-import static org.easymock.EasyMock.anyObject;
-import static org.easymock.EasyMock.eq;
-import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.reset;
-import static org.easymock.EasyMock.replay;
-
-import java.io.InputStream;
-import java.util.HashMap;
-import java.util.Map;
-
-import org.springframework.batch.core.ExitStatus;
-import org.springframework.batch.core.Job;
-import org.springframework.batch.core.JobExecution;
-import org.springframework.batch.core.JobParameter;
-import org.springframework.batch.core.JobParameters;
+import cz.mzk.recordmanager.server.AbstractTest;
+import cz.mzk.recordmanager.server.util.HttpClient;
+import org.springframework.batch.core.*;
 import org.springframework.batch.core.configuration.JobRegistry;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,8 +10,11 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import cz.mzk.recordmanager.server.AbstractTest;
-import cz.mzk.recordmanager.server.util.HttpClient;
+import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
+
+import static org.easymock.EasyMock.*;
 
 public class KrameriusFulltextJobTest extends AbstractTest {
 
@@ -56,9 +47,11 @@ public class KrameriusFulltextJobTest extends AbstractTest {
 
 	public void mock() throws Exception {
 		reset(httpClient);
+		InputStream info = this.getClass().getResourceAsStream("/sample/kramerius/info-v5.json");
 		InputStream children = this.getClass().getResourceAsStream("/sample/kramerius/children.json");
 		InputStream ocr1 = getClass().getResourceAsStream("/sample/kramerius/ocr1.txt");
 		InputStream ocr2 = getClass().getResourceAsStream("/sample/kramerius/ocr2.txt");
+		expect(httpClient.executeGet(BASE_API_URL + "/info")).andReturn(info);
 		expect(httpClient.executeGet(BASE_API_URL + "/item/uuid:039764f8-d6db-11e0-b2cd-0050569d679d/children")).andReturn(children);
 		expect(httpClient.executeGet(eq(BASE_API_URL + "/item/uuid:f5a22336-2fd8-11e0-83a8-0050569d679d/streams/TEXT_OCR"), anyObject())).andReturn(ocr1);
 		expect(httpClient.executeGet(eq(BASE_API_URL + "/item/uuid:f64abf47-2fd8-11e0-83a8-0050569d679d/streams/TEXT_OCR"), anyObject())).andReturn(ocr2);

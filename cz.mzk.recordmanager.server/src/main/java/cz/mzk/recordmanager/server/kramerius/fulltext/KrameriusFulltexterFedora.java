@@ -1,14 +1,11 @@
 package cz.mzk.recordmanager.server.kramerius.fulltext;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-
+import com.google.common.base.Charsets;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.io.ByteStreams;
+import cz.mzk.recordmanager.server.kramerius.harvest.KrameriusHarvesterParams;
+import cz.mzk.recordmanager.server.model.FulltextKramerius;
+import cz.mzk.recordmanager.server.util.HttpClient;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -16,34 +13,24 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.google.common.base.Charsets;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.io.ByteStreams;
-
-import cz.mzk.recordmanager.server.model.FulltextKramerius;
-import cz.mzk.recordmanager.server.util.HttpClient;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.*;
 
 public class KrameriusFulltexterFedora implements KrameriusFulltexter {
 
-	private static Logger logger = LoggerFactory
+	private static final Logger logger = LoggerFactory
 			.getLogger(KrameriusFulltexterFedora.class);
 
 	@Autowired
 	private HttpClient httpClient;
 
-	private String kramApiUrl;
+	private final KrameriusHarvesterParams params;
 
-	private String authToken;
-
-	// defaults to false, processor may set up true
-	private boolean downloadPrivateFulltexts = false;
-
-	public KrameriusFulltexterFedora(String kramApiUrl, String authToken,
-			boolean downloadPrivateFulltexts) {
+	public KrameriusFulltexterFedora(KrameriusHarvesterParams params) {
 		super();
-		this.kramApiUrl = kramApiUrl;
-		this.authToken = authToken;
-		this.downloadPrivateFulltexts = downloadPrivateFulltexts;
+		this.params = params;
 	}
 
 	/*
@@ -54,7 +41,7 @@ public class KrameriusFulltexterFedora implements KrameriusFulltexter {
 		JSONArray pagesJson; /* check it */
 		List<FulltextKramerius> pagesMetadataList = new ArrayList<FulltextKramerius>();
 
-		String pagesListUrl = kramApiUrl + "/item/" + rootUuid + "/children";
+		String pagesListUrl = params.getApiUrl() + "/item/" + rootUuid + "/children";
 		logger.debug("Going to read pages metadata from: {}", pagesListUrl);
 
 		try {
@@ -109,13 +96,13 @@ public class KrameriusFulltexterFedora implements KrameriusFulltexter {
 	 */
 	public byte[] getOCRBytes(String pageUuid, boolean isPrivate) {
 		/* vytvorit odkaz do API pro UUID stranky */
-		String ocrUrl = kramApiUrl + "/item/" + pageUuid + "/streams/TEXT_OCR";
+		String ocrUrl = params.getApiUrl() + "/item/" + pageUuid + "/streams/TEXT_OCR";
 		logger.debug("Trying to download OCR from \"{}\" ....", ocrUrl);
 		byte[] ocr = null; /* TODO check */
 
 		try {
-			ocr = readUrlBytes(ocrUrl, isPrivate, authToken,
-					downloadPrivateFulltexts);
+			ocr = readUrlBytes(ocrUrl, isPrivate, params.getAuthToken(),
+					params.isDownloadPrivateFulltexts());
 		} catch (Exception e) {
 			logger.warn("Exception -- downloading of OCR from " + ocrUrl
 					+ " failed:" + e.getMessage());
@@ -141,7 +128,7 @@ public class KrameriusFulltexterFedora implements KrameriusFulltexter {
 			 * download of private fulltext is allowed and authToken is set)
 			 */
 			if (!fm.isPrivate()
-					|| (downloadPrivateFulltexts && authToken != null)) {
+					|| (params.isDownloadPrivateFulltexts() && params.getAuthToken() != null)) {
 				byte[] ocr = getOCRBytes(pageUuid, fm.isPrivate());
 				fm.setFulltext(ocr);
 			}
@@ -210,7 +197,7 @@ public class KrameriusFulltexterFedora implements KrameriusFulltexter {
 			String processedUuid = nonPagesUuids.poll();
 			
 			// read json object for processedUuid
-			String childrenListUrl = kramApiUrl + "/item/" + processedUuid + "/children";
+			String childrenListUrl = params.getApiUrl() + "/item/" + processedUuid + "/children";
 
 			try {
 				pagesJson = readKrameriusJSON(childrenListUrl);
@@ -267,7 +254,7 @@ public class KrameriusFulltexterFedora implements KrameriusFulltexter {
 			 * download of private fulltext is allowed and authToken is set)
 			 */
 			if (!fm.isPrivate()
-					|| (downloadPrivateFulltexts && authToken != null)) {
+					|| (params.isDownloadPrivateFulltexts() && params.getAuthToken() != null)) {
 				byte[] ocr = getOCRBytes(pageUuid, fm.isPrivate());
 				fm.setFulltext(ocr);
 			}

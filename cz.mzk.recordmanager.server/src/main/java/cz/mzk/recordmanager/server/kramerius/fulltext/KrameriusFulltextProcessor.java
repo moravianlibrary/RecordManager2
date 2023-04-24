@@ -1,6 +1,9 @@
 package cz.mzk.recordmanager.server.kramerius.fulltext;
 
 import cz.mzk.recordmanager.server.dc.InvalidDcException;
+import cz.mzk.recordmanager.server.kramerius.ApiMappingEnum;
+import cz.mzk.recordmanager.server.kramerius.ApiMappingFactory;
+import cz.mzk.recordmanager.server.kramerius.harvest.KrameriusHarvesterParams;
 import cz.mzk.recordmanager.server.metadata.MetadataRecord;
 import cz.mzk.recordmanager.server.metadata.MetadataRecordFactory;
 import cz.mzk.recordmanager.server.model.FulltextKramerius;
@@ -9,8 +12,12 @@ import cz.mzk.recordmanager.server.model.KrameriusConfiguration;
 import cz.mzk.recordmanager.server.oai.dao.FulltextKrameriusDAO;
 import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordDAO;
 import cz.mzk.recordmanager.server.oai.dao.KrameriusConfigurationDAO;
+import cz.mzk.recordmanager.server.scripting.Mapping;
 import cz.mzk.recordmanager.server.util.HibernateSessionSynchronizer;
 import cz.mzk.recordmanager.server.util.HibernateSessionSynchronizer.SessionBinder;
+import cz.mzk.recordmanager.server.util.HttpClient;
+import org.apache.commons.io.IOUtils;
+import org.json.JSONObject;
 import org.marc4j.marc.InvalidMARCException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,6 +27,9 @@ import org.springframework.batch.core.StepExecutionListener;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -27,7 +37,7 @@ import java.util.List;
 public class KrameriusFulltextProcessor implements
 		ItemProcessor<HarvestedRecord, HarvestedRecord>, StepExecutionListener {
 
-	private static Logger logger = LoggerFactory
+	private static final Logger logger = LoggerFactory
 			.getLogger(KrameriusFulltextProcessor.class);
 
 	@Autowired
@@ -43,16 +53,21 @@ public class KrameriusFulltextProcessor implements
 
 	@Autowired
 	private FulltextKrameriusDAO fmDao;
-	
+
 	@Autowired
 	private HibernateSessionSynchronizer sync;
-
 
 	@Autowired
 	private MetadataRecordFactory metadataRecordFactory;
 
+	@Autowired
+	private ApiMappingFactory apiMappingFactory;
+
+	@Autowired
+	private HttpClient httpClient;
+
 	// configuration
-	private Long confId;
+	private final Long confId;
 
 	private boolean downloadPrivateFulltexts;
 
@@ -69,8 +84,18 @@ public class KrameriusFulltextProcessor implements
 				throw new IllegalArgumentException(String.format(
 						"Kramerius configuration with id=%s not found", confId));
 			}
+			KrameriusHarvesterParams params = new KrameriusHarvesterParams();
+			params.setUrl(config.getUrl());
+			params.setMetadataStream(config.getMetadataStream());
+			params.setQueryRows(config.getQueryRows());
+			params.setCollection(config.getCollection());
+			params.setAuthToken(config.getAuthToken());
+			params.setDownloadPrivateFulltexts(config.isDownloadPrivateFulltexts());
 			downloadPrivateFulltexts = config.isDownloadPrivateFulltexts();
-			fulltexter = krameriusFulltexterFactory.create(config);
+			fulltexter = krameriusFulltexterFactory.create(config, params);
+			processInfo(params);
+			params.setApiMapping(apiMappingFactory.getMapping(params.getKrameriusVersion()));
+			System.out.println(params.getApiMapping());
 		}
 	}
 
@@ -144,13 +169,39 @@ public class KrameriusFulltextProcessor implements
 			
 			//delete old FulltextKramerius from database before adding new ones
 			fmDao.deleteFulltext(rec.getId());
-			
+
 			rec.setFulltextKramerius(pages);
 		} else {
 			logger.debug("Processor: privacy condition is NOT fulfilled, skipping record");
 		}
 
 		return rec;
+	}
+
+	private static final String INFO_FORMAT = "%s%s/info";
+
+	protected void processInfo(KrameriusHarvesterParams params) {
+		for (String apiVersion : ApiMappingFactory.API_VERSION) {
+			Mapping mapping = apiMappingFactory.getMapping(apiVersion);
+			try {
+				JSONObject info = info(String.format(INFO_FORMAT, params.getUrl(),
+						mapping.getMapping().get(ApiMappingEnum.API.getValue()).get(0)));
+				params.setKrameriusVersion(info.getString("version"));
+				return;
+			} catch (Exception e) {
+				logger.info(e.getMessage());
+			}
+		}
+	}
+
+	public JSONObject info(String url) throws IOException {
+		logger.info("Harvesting info: " + url);
+		try (InputStream is = httpClient.executeGet(url)) {
+			return new JSONObject(IOUtils.toString(is, StandardCharsets.UTF_8));
+		} catch (IOException ioe) {
+			logger.error(ioe.getMessage());
+			throw new IOException("Info failed: " + url);
+		}
 	}
 
 }

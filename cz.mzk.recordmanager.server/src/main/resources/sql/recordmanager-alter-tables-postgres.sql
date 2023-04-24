@@ -3056,6 +3056,7 @@ INSERT INTO sigla (id, import_conf_id, sigla) VALUES (122, 463, 'BNG001');
 DELETE FROM download_import_conf WHERE import_conf_id in (351);
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity,extract_id_regex) VALUES (351,'https://aleph.nkp.cz/OAI','ADR','marc21',NULL,'[^:]+:[^:]+:ADR10-(.*)');
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> caslin-dedup
 =======
 
@@ -3129,3 +3130,10 @@ INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (295, 'VSE
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id, mappings996) VALUES (495, 295, 200, 'vse', 11, false, true, true, true, 'U', 'aleph', 'aleph');
 INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format,extract_id_regex) VALUES (495,'local:/data/imports/uep01-cpk','importRecordsJob','xml',null);
 >>>>>>> vse
+=======
+
+-- 24. 04. 2023 tomascejpek
+INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (99050, 'KRAM-SNK', '', '', '','kramerius');
+INSERT INTO import_conf (id,library_id,contact_person_id,id_prefix,base_weight,cluster_id_enabled,filtering_enabled,interception_enabled,is_library,harvest_frequency,mapping_script,generate_dedup_keys,mapping_dedup_script,item_id) VALUES (99050,99050,200,'kram-snk',8,false,true,false,false,'U',null,true,null,null);
+INSERT INTO kramerius_conf (import_conf_id,url,url_solr,query_rows,metadata_stream,auth_token,fulltext_harvest_type,download_private_fulltexts,harvest_job_name,collection,availability_source_url,availability_dest_url) VALUES (99050,'https://dikda.snk.sk/',null,50,'BIBLIO_MODS',null,'solr',true,'krameriusHarvestJob',null,null,'https://dikda.snk.sk/uuid/');
+>>>>>>> kramerius-api

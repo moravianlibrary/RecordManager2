@@ -1,11 +1,14 @@
 package cz.mzk.recordmanager.server.imports.kramAvailability;
 
+import cz.mzk.recordmanager.server.kramerius.harvest.KrameriusHarvesterParams;
 import cz.mzk.recordmanager.server.model.KramAvailability;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 import java.io.InputStream;
+
+import static cz.mzk.recordmanager.server.kramerius.ApiMappingEnum.*;
 
 public class KramAvailabilityXmlStreamReader {
 
@@ -15,21 +18,19 @@ public class KramAvailabilityXmlStreamReader {
 
 	private static final String ELEMENT_DOC = "doc";
 	private static final String ELEMENT_STR = "str";
-	private static final String ELEMENT_BOOL = "bool";
 	private static final String ELEMENT_INT = "int";
 	private static final String ELEMENT_ARR = "arr";
 
 	private static final String ATTRIBUTE_NAME = "name";
-	private static final String ATTRIBUTE_VALUE_PID = "PID";
-	private static final String ATTRIBUTE_VALUE_DOSTUPNOST = "dostupnost";
-	private static final String ATTRIBUTE_VALUE_DNNT = "dnnt";
 	private static final String ATTRIBUTE_VALUE_LEVEL = "level";
-	private static final String ATTRIBUTE_VALUE_DNNT_LABELS = "dnnt-labels";
+
+	private final KrameriusHarvesterParams params;
 
 	/**
 	 * Constructs an instance with the specified input stream.
 	 */
-	public KramAvailabilityXmlStreamReader(InputStream input) {
+	public KramAvailabilityXmlStreamReader(InputStream input, KrameriusHarvesterParams params) {
+		this.params = params;
 		xmlFactory = XMLInputFactory.newInstance();
 		initializeReader(input);
 	}
@@ -71,20 +72,15 @@ public class KramAvailabilityXmlStreamReader {
 						result = new KramAvailability();
 					}
 					if (ELEMENT_STR.equals(xmlReader.getLocalName())) {
-						if (arrName.equals(ATTRIBUTE_VALUE_DNNT_LABELS)) {
+						if (arrName.equals(params.getApiMappingValue(DNNT_LABELS))) {
 							result.addDnntLabel(xmlReader.getElementText());
-						} else if (ATTRIBUTE_VALUE_PID.equals(xmlReader.getAttributeValue(null, ATTRIBUTE_NAME))) {
+						} else if (params.getApiMappingValue(PID).equals(xmlReader.getAttributeValue(null, ATTRIBUTE_NAME))) {
 							result.setUuid(xmlReader.getElementText());
-						} else if (ATTRIBUTE_VALUE_DOSTUPNOST.equals(xmlReader.getAttributeValue(null, ATTRIBUTE_NAME))) {
+						} else if (params.getApiMappingValue(ACCESSIBILITY).equals(xmlReader.getAttributeValue(null, ATTRIBUTE_NAME))) {
 							result.setAvailability(xmlReader.getElementText());
 						}
 
 					}
-						if (ELEMENT_BOOL.equals(xmlReader.getLocalName())) {
-							if (ATTRIBUTE_VALUE_DNNT.equals(xmlReader.getAttributeValue(null, ATTRIBUTE_NAME))) {
-								result.setDnnt(xmlReader.getElementText().equals("true"));
-							}
-						}
 					if (ELEMENT_INT.equals(xmlReader.getLocalName())) {
 						if (ATTRIBUTE_VALUE_LEVEL.equals(xmlReader.getAttributeValue(null, ATTRIBUTE_NAME))) {
 							try {
@@ -95,8 +91,8 @@ public class KramAvailabilityXmlStreamReader {
 						}
 					}
 					if (ELEMENT_ARR.equals(xmlReader.getLocalName())) {
-						if (ATTRIBUTE_VALUE_DNNT_LABELS.equals(xmlReader.getAttributeValue(null, ATTRIBUTE_NAME))) {
-							arrName = ATTRIBUTE_VALUE_DNNT_LABELS;
+						if (params.getApiMappingValue(DNNT_LABELS).equals(xmlReader.getAttributeValue(null, ATTRIBUTE_NAME))) {
+							arrName = params.getApiMappingValue(DNNT_LABELS);
 						}
 					}
 					break;

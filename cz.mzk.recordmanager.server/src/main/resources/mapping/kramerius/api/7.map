@@ -1,0 +1,13 @@
+api = search/api/client/v7.0
+metadata = %s/items/%s/metadata/%s
+collection = cdk.collection
+modified = modified
+pid = pid
+model = model
+accessibility = accessibility
+dnnt_labels = licenses
+DC = dc
+BIBLIO_MODS = mods
+
+availability_url = %s/search?fl=accessibility,dnnt,pid,level,licenses&q=level:0&rows=%d&start=%d&wt=xml
+availability_url = %s/search?fl=accessibility,dnnt,pid,level,licenses&q=level:1+model:monographunit&rows=%d&start=%d&wt=xml
