@@ -1920,6 +1920,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 				if (stopWord.matcher(title.getTitleStr()).find()) return false;
 			}
 		}
+		if (getThesis() != null) return false;
 		return true;
 	}
 
