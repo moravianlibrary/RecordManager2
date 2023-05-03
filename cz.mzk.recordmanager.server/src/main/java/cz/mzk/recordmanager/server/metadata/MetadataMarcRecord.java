@@ -786,9 +786,27 @@ public class MetadataMarcRecord implements MetadataRecord {
 				|| f338b.equalsIgnoreCase("zu");
 	}
 
+	private static final Map<String, HarvestedRecordFormatEnum> THESIS_655 = new HashMap<>();
+
+	static {
+		THESIS_655.put("fd380891 atestační práce", THESIS_OTHER);
+		THESIS_655.put("fd132403 bakalářské práce", THESIS_BACHELOR);
+		THESIS_655.put("fd132022 diplomové práce", THESIS_MASTER);
+		THESIS_655.put("fd132024 disertace", THESIS_DISSERTATION);
+		THESIS_655.put("fd186751 doktorské disertace", THESIS_DISSERTATION);
+		THESIS_655.put("fd185153 habilitační práce", THESIS_HABILITATION);
+		THESIS_655.put("fd186736 kandidátské disertace", THESIS_DISSERTATION);
+		THESIS_655.put("fd119019 klauzurní práce", THESIS_OTHER);
+		THESIS_655.put("fd132407 rigorózní práce", THESIS_ADVANCED_MASTER);
+		THESIS_655.put("fd185156 ročníkové práce", THESIS_OTHER);
+		THESIS_655.put("fd185157 seminární práce", THESIS_OTHER);
+		THESIS_655.put("fd186738 studentské práce", THESIS_OTHER);
+		THESIS_655.put("fd132398 vysokoškolské kvalifikační práce", THESIS_OTHER);
+		THESIS_655.put("fd186753 závěrečné práce", THESIS_OTHER);
+	}
+
 	protected HarvestedRecordFormatEnum getThesis() {
 		List<String> all502a = underlayingMarc.getFields("502", 'a');
-		if (all502a.isEmpty()) return null;
 
 		for (String f502a : all502a) {
 			if (BACHELOR.matcher(f502a).find()) return THESIS_BACHELOR;
@@ -797,8 +815,11 @@ public class MetadataMarcRecord implements MetadataRecord {
 			if (DISSERTATION.matcher(f502a).find()) return THESIS_DISSERTATION;
 			if (HABILITATION.matcher(f502a).find()) return THESIS_HABILITATION;
 		}
+		for (String key : underlayingMarc.getFields("655", " ", '7', 'a')) {
+			if (THESIS_655.containsKey(key)) return THESIS_655.get(key);
+		}
 
-		return THESIS_OTHER;
+		return all502a.isEmpty() ? null : THESIS_OTHER;
 	}
 
 	protected boolean isBoardGames(List<HarvestedRecordFormatEnum> formats) {
