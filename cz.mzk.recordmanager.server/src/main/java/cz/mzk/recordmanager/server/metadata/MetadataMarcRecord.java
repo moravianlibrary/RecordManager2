@@ -1941,7 +1941,8 @@ public class MetadataMarcRecord implements MetadataRecord {
 				if (stopWord.matcher(title.getTitleStr()).find()) return false;
 			}
 		}
-		if (getThesis() != null) return false;
+		HarvestedRecordFormatEnum thesis;
+		if (((thesis = getThesis()) != null) && thesis != THESIS_HABILITATION) return false;
 		return true;
 	}
 
