@@ -1,5 +1,6 @@
 package cz.mzk.recordmanager.server.oai.dao;
 
+import cz.mzk.recordmanager.server.model.ImportConfiguration;
 import cz.mzk.recordmanager.server.model.SiglaAll;
 
 import java.util.List;
@@ -17,4 +18,11 @@ public interface SiglaAllDAO extends DomainDAO<Long, SiglaAll> {
 
 	String getIdPrefix(String sigla);
 
+	String findZiskejMvsSigla(Long id);
+
+	String findZiskejMvsSigla(ImportConfiguration conf);
+
+	String findZiskejEddSigla(Long id);
+
+	String findZiskejEddSigla(ImportConfiguration conf);
 }

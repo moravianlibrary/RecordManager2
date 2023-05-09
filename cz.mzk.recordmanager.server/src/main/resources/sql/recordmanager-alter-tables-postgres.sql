@@ -2867,3 +2867,9 @@ INSERT INTO kramerius_conf (import_conf_id,url,url_solr,query_rows,metadata_stre
 UPDATE kramerius_conf SET url=REPLACE(url,'search/api/v5.0', '');
 UPDATE kramerius_conf SET availability_source_url=REPLACE(availability_source_url,'search/api/v5.0', '');
 UPDATE kramerius_conf SET url='https://kramerius.svkpk.cz/',availability_dest_url='https://kramerius.svkpk.cz/uuid/' WHERE import_conf_id=99022;
+
+-- 09. 05. 2023 tomascejpek
+ALTER TABLE sigla_all ADD COLUMN ziskej_mvs_sigla VARCHAR(10);
+CREATE INDEX sigla_all_ziskej_mvs_sigla_idx ON sigla_all(ziskej_mvs_sigla);
+ALTER TABLE sigla_all ADD COLUMN ziskej_edd_sigla VARCHAR(10);
+CREATE INDEX sigla_all_ziskej_edd_sigla_idx ON sigla_all(ziskej_edd_sigla);

@@ -516,6 +516,8 @@ CREATE TABLE sigla_all (
   ziskej            BOOLEAN DEFAULT FALSE,
   dnnt              BOOLEAN DEFAULT FALSE,
   ziskej_edd        BOOLEAN DEFAULT FALSE,
+  ziskej_mvs_sigla  VARCHAR(10),
+  ziskej_edd_sigla  VARCHAR(10),
   CONSTRAINT sigla_all_pk PRIMARY KEY(id),
   CONSTRAINT sigla_all_import_conf_fk FOREIGN KEY (import_conf_id) REFERENCES import_conf(id) ON DELETE SET NULL
 );

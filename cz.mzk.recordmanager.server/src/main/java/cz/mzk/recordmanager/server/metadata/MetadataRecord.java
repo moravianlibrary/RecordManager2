@@ -562,4 +562,12 @@ public interface MetadataRecord {
 		return true;
 	}
 
+	default boolean isZiskejMvsWithoutApi() {
+		return false;
+	}
+
+	default boolean isZiskejEddWithoutApi() {
+		return false;
+	}
+
 }
