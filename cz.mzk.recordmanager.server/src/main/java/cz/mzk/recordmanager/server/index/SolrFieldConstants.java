@@ -213,6 +213,10 @@ public class SolrFieldConstants {
 
 	public static final String PUBLISHER_SEARCH_TXT_MV = "publisher_search_txt_mv";
 
+	public static final String ZISKEJ_MVS_SIGLAS = "ziskej_mvs_sigla_txt_mv";
+
+	public static final String ZISKEJ_EDD_SIGLAS = "ziskej_edd_sigla_txt_mv";
+
 	/**
 	 * dummy fields used for processing purposes only, shouldn't be indexed.
 	 */
@@ -222,5 +226,9 @@ public class SolrFieldConstants {
 	public static final String ISBN_ANNOTATION_FROM_OBALKYKNIH = "_hidden_isbn_annotation_obalkyknih";
 
 	public static final String POTENTIAL_DNNT = "_hidden_potential_dnnt";
+
+	public static final String ZISKEJ_MVS_WITHOUT_API_BOOLEAN = "_hidden_ziskej_mvs_without_api_boolean";
+
+	public static final String ZISKEJ_EDD_WITHOUT_API_BOOLEAN = "_hidden_ziskej_edd_without_api_boolean";
 
 }

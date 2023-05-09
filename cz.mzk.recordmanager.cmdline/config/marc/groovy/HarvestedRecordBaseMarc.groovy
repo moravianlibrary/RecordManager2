@@ -69,6 +69,8 @@ uuid_str_mv = getUuidForObalkyKnih()
 author_sort_display = getAuthorForSorting("100abcd:110abcd:111abcd:700abcd:710abcd:711abcd")
 
 _hidden_isbn_annotation_obalkyknih = getFields "020a:902a"
+_hidden_ziskej_mvs_without_api_boolean = isZiskejMvsWithoutApi()
+_hidden_ziskej_edd_without_api_boolean = isZiskejEddWithoutApi()
 
 // facets
 conspectus_facet_mv = conspectus_str_mv = getConspectus();

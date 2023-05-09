@@ -1029,4 +1029,12 @@ public class MarcDSL extends BaseDSL {
 		return String.format("%s. %s", author, title);
 	}
 
+	public boolean isZiskejMvsWithoutApi() {
+		return metadataRecord.isZiskejMvsWithoutApi();
+	}
+
+	public boolean isZiskejEddWithoutApi() {
+		return metadataRecord.isZiskejEddWithoutApi();
+	}
+
 }

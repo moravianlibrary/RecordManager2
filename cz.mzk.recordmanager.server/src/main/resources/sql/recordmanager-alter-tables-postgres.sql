@@ -2878,3 +2878,9 @@ UPDATE kramerius_conf SET url='https://kramerius.uzei.cz/',collection=null,avail
 UPDATE kramerius_conf SET url='https://kramerius.svkos.cz/',collection=null,availability_source_url=null WHERE import_conf_id=99019;
 UPDATE kramerius_conf SET url='https://library.nfa.cz/',collection=null,availability_source_url=null WHERE import_conf_id=99037;
 UPDATE kramerius_conf SET url='https://kramerius.kfbz.cz/',collection=null,availability_source_url=null,availability_dest_url='https://kramerius.kfbz.cz/uuid/' WHERE import_conf_id=99023;
+
+-- 12. 05. 2023 tomascejpek
+ALTER TABLE sigla_all ADD COLUMN ziskej_mvs_sigla VARCHAR(10);
+CREATE INDEX sigla_all_ziskej_mvs_sigla_idx ON sigla_all(ziskej_mvs_sigla);
+ALTER TABLE sigla_all ADD COLUMN ziskej_edd_sigla VARCHAR(10);
+CREATE INDEX sigla_all_ziskej_edd_sigla_idx ON sigla_all(ziskej_edd_sigla);
