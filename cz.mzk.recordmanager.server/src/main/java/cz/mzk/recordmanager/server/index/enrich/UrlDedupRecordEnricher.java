@@ -159,6 +159,9 @@ public class UrlDedupRecordEnricher implements DedupRecordEnricher {
 					if (kramAvailability.getDnntLabels().stream().anyMatch(l -> l.getLabel().equals(DnntLabelEnum.PAYING_USERS.getLabel()))) {
 						newUrl.setAvailability(Constants.DOCUMENT_AVAILABILITY_MEMBER);
 					}
+					if (kramAvailability.getDnntLabels().stream().anyMatch(l -> l.getLabel().equals(DnntLabelEnum.PAYING_USERS.getLabel()))) {
+						newUrl.setAvailability(Constants.DOCUMENT_AVAILABILITY_MEMBER);
+					}
 					// else - dnnt without dnnt-label
 				}
 			}

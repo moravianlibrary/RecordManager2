@@ -1,8 +1,12 @@
 package cz.mzk.recordmanager.server.oai.dao.hibernate;
 
+import cz.mzk.recordmanager.server.model.ImportConfiguration;
 import cz.mzk.recordmanager.server.model.SiglaAll;
 import cz.mzk.recordmanager.server.oai.dao.SiglaAllDAO;
+import org.hibernate.NonUniqueResultException;
 import org.hibernate.Session;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.TypedQuery;
@@ -18,6 +22,8 @@ import java.util.stream.Collectors;
 @Component
 public class SiglaAllDAOHibernate extends AbstractDomainDAOHibernate<Long, SiglaAll>
 		implements SiglaAllDAO {
+
+	private static Logger logger = LoggerFactory.getLogger(SiglaAllDAOHibernate.class);
 
 	@Override
 	public List<SiglaAll> findSigla(String sigla) {
@@ -78,4 +84,48 @@ public class SiglaAllDAOHibernate extends AbstractDomainDAOHibernate<Long, Sigla
 		return null;
 	}
 
+	@Override
+	public String findZiskejMvsSigla(Long id) {
+		Session session = sessionFactory.getCurrentSession();
+		try {
+			return (String) session
+					.createQuery("SELECT COALESCE(ziskejMvsSigla,sigla) FROM SiglaAll WHERE harvestedFromId = :confId " +
+							"AND (ziskejMvsSigla IS NULL OR ziskejMvsSigla != :ignore)")
+					.setParameter("confId", id)
+					.setParameter("ignore", "-")
+					.uniqueResult();
+		} catch (NonUniqueResultException ex) {
+			logger.info("Ziskej MVS: non unique sigla for import_conf_id: " + id);
+			return null;
+		}
+
+	}
+
+	@Override
+	public String findZiskejMvsSigla(ImportConfiguration conf) {
+		return findZiskejMvsSigla(conf.getId());
+	}
+
+
+	@Override
+	public String findZiskejEddSigla(Long id) {
+		Session session = sessionFactory.getCurrentSession();
+		try {
+			return (String) session
+					.createQuery("SELECT COALESCE(ziskejEddSigla,sigla) FROM SiglaAll WHERE harvestedFromId = :confId " +
+							"AND (ziskejEddSigla IS NULL OR ziskejEddSigla != :ignore)")
+					.setParameter("confId", id)
+					.setParameter("ignore", "-")
+					.uniqueResult();
+		} catch (NonUniqueResultException ex) {
+			logger.info("Ziskej EDD: non unique sigla for import_conf_id: " + id);
+			return null;
+		}
+
+	}
+
+	@Override
+	public String findZiskejEddSigla(ImportConfiguration conf) {
+		return findZiskejEddSigla(conf.getId());
+	}
 }

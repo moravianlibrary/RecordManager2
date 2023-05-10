@@ -1885,8 +1885,15 @@ public class MetadataMarcRecord implements MetadataRecord {
 	 */
 	@Override
 	public boolean isZiskej() {
-		boolean result = harvestedRecord.getHarvestedFrom().isZiskejEnabled()
-				&& !underlayingMarc.getDataFields("996").isEmpty()
+		return harvestedRecord.getHarvestedFrom().isZiskejEnabled() && isZiskejMvsWithoutApi();
+	}
+
+	/**
+	 * @return boolean
+	 */
+	@Override
+	public boolean isZiskejMvsWithoutApi() {
+		boolean result = !underlayingMarc.getDataFields("996").isEmpty()
 				&& !Collections.disjoint(getDetectedFormatList(), ZISKEJ_FORMAT_ALLOWED);
 		if (!result) return false;
 		for (DataField df : underlayingMarc.getDataFields("996")) {
@@ -1920,8 +1927,12 @@ public class MetadataMarcRecord implements MetadataRecord {
 	 */
 	@Override
 	public boolean isEdd() {
-		return harvestedRecord.getHarvestedFrom().isZiskejEddEnabled()
-				&& !Collections.disjoint(getDetectedFormatList(), EDD_FORMAT_ALLOWED);
+		return harvestedRecord.getHarvestedFrom().isZiskejEddEnabled() && isZiskejEddWithoutApi();
+	}
+
+	@Override
+	public boolean isZiskejEddWithoutApi() {
+		return !Collections.disjoint(getDetectedFormatList(), EDD_FORMAT_ALLOWED);
 	}
 
 	@Override

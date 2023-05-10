@@ -1034,4 +1034,11 @@ public class MarcDSL extends BaseDSL {
 		return metadataRecord.isAvailableForDigitalization();
 	}
 
+	public boolean isZiskejMvsWithoutApi() {
+		return metadataRecord.isZiskejMvsWithoutApi();
+	}
+
+	public boolean isZiskejEddWithoutApi() {
+		return metadataRecord.isZiskejEddWithoutApi();
+	}
 }

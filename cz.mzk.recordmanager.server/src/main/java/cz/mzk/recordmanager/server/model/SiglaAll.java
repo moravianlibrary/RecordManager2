@@ -24,8 +24,14 @@ public class SiglaAll extends AbstractDomainObject {
 	@Column(name = "ziskej")
 	private boolean ziskej;
 
+	@Column(name = "ziskej_mvs_sigla")
+	private String ziskejMvsSigla;
+
 	@Column(name = "ziskej_edd")
 	private boolean ziskej_edd;
+
+	@Column(name = "ziskej_edd_sigla")
+	private String ziskejEddSigla;
 
 	@Column(name = "dnnt")
 	private boolean dnnt;

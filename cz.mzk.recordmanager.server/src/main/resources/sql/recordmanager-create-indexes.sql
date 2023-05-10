@@ -86,6 +86,8 @@ CREATE INDEX sigla_all_cpk_idx ON sigla_all(cpk);
 CREATE INDEX sigla_all_dnnt_idx ON sigla_all(dnnt);
 CREATE INDEX sigla_all_ziskej_idx ON sigla_all(ziskej);
 CREATE INDEX sigla_all_ziskej_edd_idx ON sigla_all(ziskej_edd);
+CREATE INDEX sigla_all_ziskej_mvs_sigla_idx ON sigla_all(ziskej_mvs_sigla);
+CREATE INDEX sigla_all_ziskej_edd_sigla_idx ON sigla_all(ziskej_edd_sigla);
 
 <<<<<<< HEAD
 CREATE INDEX inspiration_name_name_idx ON inspiration_name(name);

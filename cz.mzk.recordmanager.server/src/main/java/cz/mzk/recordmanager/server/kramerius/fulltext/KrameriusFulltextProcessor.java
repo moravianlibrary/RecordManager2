@@ -95,7 +95,6 @@ public class KrameriusFulltextProcessor implements
 			fulltexter = krameriusFulltexterFactory.create(config, params);
 			processInfo(params);
 			params.setApiMapping(apiMappingFactory.getMapping(params.getKrameriusVersion()));
-			System.out.println(params.getApiMapping());
 		}
 	}
 

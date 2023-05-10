@@ -584,4 +584,13 @@ public interface MetadataRecord {
 	default boolean isAvailableForDigitalization() {
 		return false;
 	}
+
+	default boolean isZiskejMvsWithoutApi() {
+		return false;
+	}
+
+	default boolean isZiskejEddWithoutApi() {
+		return false;
+	}
+
 }

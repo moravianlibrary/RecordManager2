@@ -3125,6 +3125,7 @@ INSERT INTO sigla (id, import_conf_id, sigla) VALUES (114, 442, 'NJG502');
 DELETE FROM oai_harvest_conf WHERE import_conf_id=351;
 INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format,extract_id_regex) VALUES (351,'local:/data/imports/aleph.ADR','importOaiRecordsJob',null,'[^:]+:(.*)');
 
+<<<<<<< HEAD
 -- 19. 04. 2023 tomascejpek
 INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (295, 'VSE', 'https://www.vse.cz/', 'https://katalog.vse.cz/', 'Praha', 'PR');
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id, mappings996) VALUES (495, 295, 200, 'vse', 11, false, true, true, true, 'U', 'aleph', 'aleph');
@@ -3132,8 +3133,22 @@ INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format,extr
 >>>>>>> vse
 =======
 
+=======
+>>>>>>> ziskej-bez-api
 -- 24. 04. 2023 tomascejpek
 INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (99050, 'KRAM-SNK', '', '', '','kramerius');
 INSERT INTO import_conf (id,library_id,contact_person_id,id_prefix,base_weight,cluster_id_enabled,filtering_enabled,interception_enabled,is_library,harvest_frequency,mapping_script,generate_dedup_keys,mapping_dedup_script,item_id) VALUES (99050,99050,200,'kram-snk',8,false,true,false,false,'U',null,true,null,null);
 INSERT INTO kramerius_conf (import_conf_id,url,url_solr,query_rows,metadata_stream,auth_token,fulltext_harvest_type,download_private_fulltexts,harvest_job_name,collection,availability_source_url,availability_dest_url) VALUES (99050,'https://dikda.snk.sk/',null,50,'BIBLIO_MODS',null,'solr',true,'krameriusHarvestJob',null,null,'https://dikda.snk.sk/uuid/');
+<<<<<<< HEAD
 >>>>>>> kramerius-api
+=======
+UPDATE kramerius_conf SET url=REPLACE(url,'search/api/v5.0', '');
+UPDATE kramerius_conf SET availability_source_url=REPLACE(availability_source_url,'search/api/v5.0', '');
+UPDATE kramerius_conf SET url='https://kramerius.svkpk.cz/',availability_dest_url='https://kramerius.svkpk.cz/uuid/' WHERE import_conf_id=99022;
+
+-- 09. 05. 2023 tomascejpek
+ALTER TABLE sigla_all ADD COLUMN ziskej_mvs_sigla VARCHAR(10);
+CREATE INDEX sigla_all_ziskej_mvs_sigla_idx ON sigla_all(ziskej_mvs_sigla);
+ALTER TABLE sigla_all ADD COLUMN ziskej_edd_sigla VARCHAR(10);
+CREATE INDEX sigla_all_ziskej_edd_sigla_idx ON sigla_all(ziskej_edd_sigla);
+>>>>>>> ziskej-bez-api
