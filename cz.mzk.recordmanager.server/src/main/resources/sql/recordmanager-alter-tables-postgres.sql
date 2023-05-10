@@ -2867,3 +2867,14 @@ INSERT INTO kramerius_conf (import_conf_id,url,url_solr,query_rows,metadata_stre
 UPDATE kramerius_conf SET url=REPLACE(url,'search/api/v5.0', '');
 UPDATE kramerius_conf SET availability_source_url=REPLACE(availability_source_url,'search/api/v5.0', '');
 UPDATE kramerius_conf SET url='https://kramerius.svkpk.cz/',availability_dest_url='https://kramerius.svkpk.cz/uuid/' WHERE import_conf_id=99022;
+
+-- 10. 05. 2023 tomascejpek
+UPDATE kramerius_conf SET url='https://kramerius.lib.cas.cz/',collection=null,availability_source_url=null WHERE import_conf_id=99003;
+UPDATE kramerius_conf SET url='https://kramerius.svkul.cz/',collection=null,availability_source_url=null WHERE import_conf_id=99011;
+UPDATE kramerius_conf SET url='https://kramerius.svkhk.cz/',collection=null,availability_source_url=null WHERE import_conf_id=99014;
+UPDATE kramerius_conf SET url='https://kramerius4.mlp.cz/',collection=null,availability_source_url=null WHERE import_conf_id=99015;
+UPDATE kramerius_conf SET url='https://kramerius.techlib.cz/',collection=null,availability_source_url=null WHERE import_conf_id=99016;
+UPDATE kramerius_conf SET url='https://kramerius.uzei.cz/',collection=null,availability_source_url=null WHERE import_conf_id=99017;
+UPDATE kramerius_conf SET url='https://kramerius.svkos.cz/',collection=null,availability_source_url=null WHERE import_conf_id=99019;
+UPDATE kramerius_conf SET url='https://library.nfa.cz/',collection=null,availability_source_url=null WHERE import_conf_id=99037;
+UPDATE kramerius_conf SET url='https://kramerius.kfbz.cz/',collection=null,availability_source_url=null,availability_dest_url='https://kramerius.kfbz.cz/uuid/' WHERE import_conf_id=99023;
