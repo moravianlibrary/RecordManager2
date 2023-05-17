@@ -8,6 +8,10 @@ accessibility = dostupnost
 dnnt_labels = dnnt-labels
 DC = DC
 BIBLIO_MODS = BIBLIO_MODS
+page_number = dc.title
+page_order = title_sort
+root_pid = root_pid
+parent_pid = parent_pid
 
 availability_url = %s/search?fl=dostupnost,dnnt,PID,level,dnnt-labels&q=level:0&rows=%d&start=%d&wt=xml
 availability_url = %s/search?fl=dostupnost,dnnt,PID,level,dnnt-labels&q=level:1+document_type:monographunit&rows=%d&start=%d&wt=xml
