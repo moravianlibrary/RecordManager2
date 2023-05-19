@@ -15,7 +15,6 @@ import java.util.*;
 
 /**
  * Abstract DedupKeyParser implementation
- *
  * This implementation solves problem with repeated creation of deduplication keys
  *
  * @author mertam
@@ -49,7 +48,7 @@ public abstract class HashingDedupKeyParser implements DedupKeysParser {
 		record.setLoans(metadataRecord.getLoanRelevance()); // not dedup key
 		record.setCallnumber(MetadataUtils.shorten(metadataRecord.getCallnumber(), EFFECTIVE_LENGTH_CALLNUMBER));
 		if (!record.getHarvestedFrom().isGenerateDedupKeys() || !metadataRecord.dedupFilter()) {
-			if (record.getDedupKeysHash() != null && !record.getDedupKeysHash().isEmpty()) {
+			if (record.getDedupKeysHash() != null && !record.getDedupKeysHash().trim().isEmpty()) {
 				record.setNextDedupFlag(true);
 			}
 			harvestedRecordDao.dropDedupKeys(record);
