@@ -128,7 +128,9 @@ public class Constants {
 	public static final String PREFIX_CMUZ				= "cmuz";
 	public static final String PREFIX_CZHISTBIB			= "czhistbib";
 	public static final String PREFIX_DIVABIB			= "divabib";
+	public static final String PREFIX_ENVI				= "envi";
 	public static final String PREFIX_FREE				= "free";
+	public static final String PREFIX_GEOL				= "geol";
 	public static final String PREFIX_IIR				= "iir";
 	public static final String PREFIX_KFBZ				= "kfbz";
 	public static final String PREFIX_KJM				= "kjm";
