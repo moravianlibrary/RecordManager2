@@ -119,8 +119,8 @@ INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (231, 'MKB
 INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (232, 'MKJH', 'https://www.knihjh.cz/', 'https://jh.tritius.cz/', 'Jindřichův Hradec', 'JC');
 INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (233, 'MKHAVIROV', 'https://knihovnahavirov.cz/', 'https://katalog.knih-havirov.cz/', 'Havířov', 'MS');
 INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (234, 'MKCHOCEN', 'https://www.knihovnachocen.cz/', 'https://chocen-katalog.koha.cloud/', 'Choceň', 'PA');
-INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (235, 'GEOL', 'http://www.geology.cz/', '', 'Bibliography', 'bibliography');
-INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (236, 'ENVI', 'http://www.geology.cz/', '', 'Bibliography', 'bibliography');
+INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (235, 'GEOL', 'http://www.geology.cz/', '', 'Bibliography', 'bibliography/CGS');
+INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (236, 'ENVI', 'http://www.geology.cz/', '', 'Bibliography', 'bibliography/CGS');
 INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (237, 'MKDB', 'https://www.knihovna.dolnibousov.cz/', 'https://katalog.dolni-bousov.cz/', 'Dolní Bousov', 'SC');
 INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (238, 'KAND', 'https://www.narodni-divadlo.cz/', 'https://www.archivndknihovna.cz/', 'Praha', 'PR');
 INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (239, 'MKVALMEZ', 'https://www.mekvalmez.cz/', 'https://katalog.mekvalmez.cz/', 'Valašské Meziříčí', 'ZL');
