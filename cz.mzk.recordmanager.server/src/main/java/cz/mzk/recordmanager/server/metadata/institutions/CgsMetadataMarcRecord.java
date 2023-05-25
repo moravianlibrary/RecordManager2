@@ -20,6 +20,9 @@ public class CgsMetadataMarcRecord extends MetadataMarcRecord {
 	public List<String> getUrls() {
 		List<String> results = new ArrayList<>();
 		for (DataField df : underlayingMarc.getDataFields("856")) {
+			if (df.getSubfield('u') == null) {
+				continue;
+			}
 			String comment = "";
 			if (df.getSubfield('y') != null) {
 				if (df.getSubfield('y').getData().equals("zdrojová publikace k objednání")) {
