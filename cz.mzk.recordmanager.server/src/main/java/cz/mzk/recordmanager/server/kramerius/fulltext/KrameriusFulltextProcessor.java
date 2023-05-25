@@ -92,9 +92,9 @@ public class KrameriusFulltextProcessor implements
 			params.setAuthToken(config.getAuthToken());
 			params.setDownloadPrivateFulltexts(config.isDownloadPrivateFulltexts());
 			downloadPrivateFulltexts = config.isDownloadPrivateFulltexts();
-			fulltexter = krameriusFulltexterFactory.create(config, params);
 			processInfo(params);
 			params.setApiMapping(apiMappingFactory.getMapping(params.getKrameriusVersion()));
+			fulltexter = krameriusFulltexterFactory.create(config, params);
 		}
 	}
 

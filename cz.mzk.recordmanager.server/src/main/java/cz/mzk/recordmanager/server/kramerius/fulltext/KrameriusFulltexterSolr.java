@@ -1,6 +1,7 @@
 package cz.mzk.recordmanager.server.kramerius.fulltext;
 
 import com.google.common.base.Charsets;
+import cz.mzk.recordmanager.server.kramerius.ApiMappingEnum;
 import cz.mzk.recordmanager.server.kramerius.harvest.KrameriusHarvesterParams;
 import cz.mzk.recordmanager.server.model.FulltextKramerius;
 import cz.mzk.recordmanager.server.solr.SolrServerFacade;
@@ -18,6 +19,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import static cz.mzk.recordmanager.server.kramerius.ApiMappingEnum.*;
 import static cz.mzk.recordmanager.server.kramerius.fulltext.KrameriusSolrConstants.*;
 
 public class KrameriusFulltexterSolr implements KrameriusFulltexter {
@@ -25,8 +27,7 @@ public class KrameriusFulltexterSolr implements KrameriusFulltexter {
 	private static Logger logger = LoggerFactory
 			.getLogger(KrameriusFulltexterSolr.class);
 
-	private static final String FL_FIELDS = String.join(",", UUID_FIELD, FULLTEXT_FIELD, PAGE_NUMBER_FIELD,
-			PAGE_ORDER_FIELD, PID_FIELD, POLICY_FIELD);
+	private static String FL_FIELDS = null;
 
 	private static final int MAX_PAGES = 1000;  // number of pages requested in single SOLR query
 
@@ -48,16 +49,21 @@ public class KrameriusFulltexterSolr implements KrameriusFulltexter {
 		super();
 		this.solr = solr;
 		this.params = params;
+		FL_FIELDS = String.join(",", UUID_FIELD, FULLTEXT_FIELD,
+				params.getApiMappingValue(ApiMappingEnum.PAGE_NUMBER),
+				params.getApiMappingValue(ApiMappingEnum.PAGE_ORDER),
+				params.getApiMappingValue(ApiMappingEnum.PID),
+				params.getApiMappingValue(ApiMappingEnum.ACCESSIBILITY));
 	}
 
 	@Override
 	public List<FulltextKramerius> getFulltextObjects(String rootUuid) throws IOException {
-		return getFulltextObjects(PARENT_PID_FIELD, rootUuid);
+		return getFulltextObjects(params.getApiMappingValue(ApiMappingEnum.PARENT_PID), rootUuid);
 	}
 
 	@Override
 	public List<FulltextKramerius> getFulltextForRoot(String rootUuid) throws IOException {
-		return getFulltextObjects(ROOT_PID_FIELD, rootUuid);
+		return getFulltextObjects(params.getApiMappingValue(ApiMappingEnum.ROOT_PID), rootUuid);
 	}
 
 	protected List<FulltextKramerius> getFulltextObjects(String field, String rootUuid)
@@ -71,9 +77,9 @@ public class KrameriusFulltexterSolr implements KrameriusFulltexter {
 			
 			logger.debug("Downloading fulltext for pages {} to {}", start, start + MAX_PAGES);
 			SolrQuery query = new SolrQuery();
-			
+
 			String queryString = SolrUtils.createEscapedFieldQuery(field, rootUuid) + " AND " +
-					SolrUtils.createEscapedFieldQuery(FEDORA_MODEL_FIELD, FEDORA_MODEL_PAGE);
+					SolrUtils.createEscapedFieldQuery(params.getApiMappingValue(MODEL), FEDORA_MODEL_PAGE);
 			query.setQuery(queryString);
 			query.set("fl", FL_FIELDS);
 			query.setRows(MAX_PAGES);
@@ -112,17 +118,17 @@ public class KrameriusFulltexterSolr implements KrameriusFulltexter {
 		for (SolrDocument document : documents) {
 			order++;
 			FulltextKramerius page = new FulltextKramerius();
-			
-			String uuid = (String) document.getFieldValue(PID_FIELD);
+
+			String uuid = (String) document.getFieldValue(params.getApiMappingValue(PID));
 			logger.debug("Harvesting fulltext from Kramerius for page uuid: {}", uuid);
 			String fulltext = (String) document.getFieldValue(FULLTEXT_FIELD);
-			String pageNum = (String) document.getFieldValue(PAGE_NUMBER_FIELD);
-			String policy = (String) document.getFieldValue(POLICY_FIELD);
+			String pageNum = (String) document.getFieldValue(params.getApiMappingValue(PAGE_NUMBER));
+			String policy = (String) document.getFieldValue(params.getApiMappingValue(ACCESSIBILITY));
 
 			pageNum = (pageNum == null) ? String.valueOf(order) : pageNum;
 			//TODO data sometimes contain garbage values - this should be considered fallback solution
-			pageNum = pageNum.length() > 50 ? pageNum.substring(0, 50) : pageNum; 
-			
+			pageNum = pageNum.length() > 50 ? pageNum.substring(0, 50) : pageNum;
+
 			page.setUuidPage(uuid);
 			if (fulltext != null) {
 				page.setFulltext(fulltext.getBytes(Charsets.UTF_8));

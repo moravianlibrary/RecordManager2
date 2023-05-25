@@ -8,6 +8,10 @@ accessibility = accessibility
 dnnt_labels = licenses
 DC = dc
 BIBLIO_MODS = mods
+page_number = title.search
+page_order = title.sort
+root_pid = root.pid
+parent_pid = foster_parents.pids
 
 availability_url = %s/search?fl=accessibility,dnnt,pid,level,licenses&q=level:0&rows=%d&start=%d&wt=xml
 availability_url = %s/search?fl=accessibility,dnnt,pid,level,licenses&q=level:1+model:monographunit&rows=%d&start=%d&wt=xml
