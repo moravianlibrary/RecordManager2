@@ -2884,3 +2884,6 @@ ALTER TABLE sigla_all ADD COLUMN ziskej_mvs_sigla VARCHAR(10);
 CREATE INDEX sigla_all_ziskej_mvs_sigla_idx ON sigla_all(ziskej_mvs_sigla);
 ALTER TABLE sigla_all ADD COLUMN ziskej_edd_sigla VARCHAR(10);
 CREATE INDEX sigla_all_ziskej_edd_sigla_idx ON sigla_all(ziskej_edd_sigla);
+
+-- 25. 05. 2023 tomascejpek
+ALTER TABLE kramerius_conf ADD COLUMN fulltext_version VARCHAR(20);

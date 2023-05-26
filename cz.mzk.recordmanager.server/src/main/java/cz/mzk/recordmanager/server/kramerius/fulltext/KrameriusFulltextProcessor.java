@@ -93,6 +93,8 @@ public class KrameriusFulltextProcessor implements
 			params.setDownloadPrivateFulltexts(config.isDownloadPrivateFulltexts());
 			downloadPrivateFulltexts = config.isDownloadPrivateFulltexts();
 			processInfo(params);
+			if (config.getFulltextVersion() != null)
+				params.setKrameriusVersion(config.getFulltextVersion());
 			params.setApiMapping(apiMappingFactory.getMapping(params.getKrameriusVersion()));
 			fulltexter = krameriusFulltexterFactory.create(config, params);
 		}
@@ -185,7 +187,8 @@ public class KrameriusFulltextProcessor implements
 			try {
 				JSONObject info = info(String.format(INFO_FORMAT, params.getUrl(),
 						mapping.getMapping().get(ApiMappingEnum.API.getValue()).get(0)));
-				params.setKrameriusVersion(info.getString("version"));
+				if (info.has("version"))
+					params.setKrameriusVersion(info.getString("version"));
 				return;
 			} catch (Exception e) {
 				logger.info(e.getMessage());

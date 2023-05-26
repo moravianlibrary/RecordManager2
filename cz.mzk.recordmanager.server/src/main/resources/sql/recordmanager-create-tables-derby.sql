@@ -94,6 +94,7 @@ CREATE TABLE kramerius_conf (
   dnnt_dest_url               VARCHAR(128),
   availability_harvest_frequency CHAR(1) DEFAULT 'U',
   fulltext_harvest_frequency  CHAR(1) DEFAULT 'U',
+  fulltext_version            VARCHAR(20),
   CONSTRAINT kramerius_conf_import_conf_fk FOREIGN KEY (import_conf_id) REFERENCES import_conf(id)
 );
 
