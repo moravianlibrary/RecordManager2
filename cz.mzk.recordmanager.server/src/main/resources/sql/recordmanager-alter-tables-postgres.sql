@@ -2887,3 +2887,8 @@ CREATE INDEX sigla_all_ziskej_edd_sigla_idx ON sigla_all(ziskej_edd_sigla);
 
 -- 25. 05. 2023 tomascejpek
 ALTER TABLE kramerius_conf ADD COLUMN fulltext_version VARCHAR(20);
+
+-- 02. 06. 2023 tomascejpek
+INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (297, 'NIPOS', 'https://www.nipos.cz/', 'https://katalog.nipos.cz/', 'Praha', 'PR');
+INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id, mappings996) VALUES (497, 297, 200, 'nipos', 11, false, true, true, true, 'U', 'koha', 'koha');
+INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (497,'https://koha.nipos.cz/cgi-bin/koha/oai.pl','CPK','marccpk',NULL);
