@@ -3176,3 +3176,6 @@ CREATE INDEX sigla_all_ziskej_edd_sigla_idx ON sigla_all(ziskej_edd_sigla);
 
 --changeset tomascejpek:389
 ALTER TABLE kramerius_conf ADD COLUMN fulltext_version VARCHAR(20);
+
+--changeset tomascejpek:390 context:cpk
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (152, 493, 'NJG508');
