@@ -51,6 +51,9 @@ public class KrameriusConfiguration extends ImportConfiguration {
 	@Column(name = "dnnt_dest_url")
 	private String dnntDestUrl;
 
+	@Column(name = "fulltext_version")
+	private String fulltextVersion;
+
 	@Type(
 			type = "cz.mzk.recordmanager.server.hibernate.CharEnumUserType",
 			parameters = {
@@ -179,6 +182,14 @@ public class KrameriusConfiguration extends ImportConfiguration {
 
 	public void setFulltextHarvestFrequency(HarvestFrequency fulltextHarvestFrequency) {
 		this.fulltextHarvestFrequency = fulltextHarvestFrequency;
+	}
+
+	public String getFulltextVersion() {
+		return fulltextVersion;
+	}
+
+	public void setFulltextVersion(String fulltextVersion) {
+		this.fulltextVersion = fulltextVersion;
 	}
 
 	@Override

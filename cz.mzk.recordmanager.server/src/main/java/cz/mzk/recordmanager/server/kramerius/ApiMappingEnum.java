@@ -11,7 +11,11 @@ public enum ApiMappingEnum {
 	DNNT_LABELS("dnnt_labels"),
 	AVAILABILITY_URL("availability_url"),
 	DC("DC"),
-	BIBLIO_MODS("BIBLIO_MODS");
+	BIBLIO_MODS("BIBLIO_MODS"),
+	PAGE_NUMBER("page_number"),
+	PAGE_ORDER("page_order"),
+	ROOT_PID("root_pid"),
+	PARENT_PID("parent_pid");
 
 	private final String value;
 
