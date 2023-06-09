@@ -52,9 +52,7 @@ public class ImportPalmknihyWriter extends ImportRecordsWriter implements ItemWr
 	private static final HashMap<Long, Pattern> ID_PARSER = new HashMap<>();
 
 	static {
-		ID_PARSER.put(328L, Pattern.compile("\\d+"));
 		ID_PARSER.put(333L, Pattern.compile("\\d{9}"));
-		ID_PARSER.put(461L, Pattern.compile("\\d+"));
 	}
 
 	private static final HashMap<Long, String> URL = new HashMap<>();
@@ -63,6 +61,41 @@ public class ImportPalmknihyWriter extends ImportRecordsWriter implements ItemWr
 		URL.put(328L, "https://katalog.cbvk.cz/arl-cbvk/cs/detail-cbvk_us_cat-%s-titul");
 		URL.put(333L, "https://aleph.knihovna-pardubice.cz/F/?func=direct&doc_number=%s");
 		URL.put(461L, "https://katalog.svkul.cz/detail/%s");
+		URL.put(498L, "https://orlova.knihovny.net/detail/%s");
+		URL.put(499L, "https://pribram.tritius.cz/detail/%s");
+		URL.put(501L, "https://tritius.kkvysociny.cz/detail/%s");
+		URL.put(502L, "https://tritius.knihovnaprerov.cz/detail/%s");
+		URL.put(503L, "https://tritius.knihovnatrinec.cz/detail/%s");
+		URL.put(504L, "https://baze.knihovnazn.cz/detail/%s");
+		URL.put(505L, "https://brandysnl.tritius.cz/detail/%s");
+		URL.put(506L, "https://hodonin.tritius.cz/detail/%s");
+		URL.put(507L, "https://knihovnaml.tritius.cz/detail/%s");
+		URL.put(508L, "https://kutnahora.tritius.cz/detail/%s");
+		URL.put(509L, "https://most.tritius.cz/detail/%s");
+		URL.put(510L, "https://tritius.knih-pe.cz/detail/%s");
+		URL.put(511L, "https://katalog.mkostrov.cz/detail/%s");
+		URL.put(512L, "https://trutnov.tritius.cz/detail/%s");
+		URL.put(513L, "https://trutnov.tritius.cz/detail/%s");
+		URL.put(514L, "https://tritius.knihovna-cl.cz/detail/%s");
+		URL.put(515L, "https://kromeriz.tritius.cz/detail/%s");
+		URL.put(516L, "https://tritius.plzen.eu/detail/%s");
+		URL.put(517L, "https://klatovy.tritius.cz/detail/%s");
+		URL.put(518L, "https://kkkv.tritius.cz/detail/%s");
+		URL.put(519L, "https://kolin.tritius.cz/detail/%s");
+		URL.put(520L, "https://boskovice.tritius.cz/detail/%s");
+		URL.put(521L, "https://chomutovskaknihovna.tritius.cz/detail/%s");
+		URL.put(522L, "https://fmi.tritius.cz/detail/%s");
+		URL.put(523L, "https://tritius-knihovna.ricany.cz/detail/%s");
+		URL.put(524L, "https://trebic.tritius.cz/detail/%s");
+		URL.put(525L, "https://jh.tritius.cz/detail/%s");
+		URL.put(526L, "https://milovice.tritius.cz/detail/%s");
+		URL.put(527L, "https://online.knihovnacaslav.cz/detail/%s");
+		URL.put(528L, "https://tritius.knihovnanymburk.cz/detail/%s");
+		URL.put(529L, "https://jihlava.tritius.cz/detail/%s");
+		URL.put(530L, "https://benesov.tritius.cz/detail/%s");
+		URL.put(531L, "https://tritius.kmol.cz/detail/%s");
+		URL.put(532L, "https://tritius.knihovnachodov.cz/detail/%s");
+		URL.put(533L, "https://kmhk.tritius.cz/detail/%s");
 	}
 
 
@@ -88,8 +121,7 @@ public class ImportPalmknihyWriter extends ImportRecordsWriter implements ItemWr
 					boolean eversionExists = false;
 					for (HarvestedRecord hrLib : hrDao.getByPalmknihyId(url_id)) {
 						String record_id = hrLib.getUniqueId().getRecordId();
-						if (!ID_PARSER.containsKey(hrLib.getHarvestedFrom().getId())) continue;
-						Matcher matcher1 = ID_PARSER.get(hrLib.getHarvestedFrom().getId())
+						Matcher matcher1 = ID_PARSER.getOrDefault(hrLib.getHarvestedFrom().getId(), Pattern.compile("\\d+"))
 								.matcher(hrLib.getUniqueId().getRecordId());
 						if (matcher1.find()) {
 							record_id = matcher1.group(0);
