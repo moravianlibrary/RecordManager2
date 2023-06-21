@@ -52,7 +52,9 @@ public class ImportPalmknihyWriter extends ImportRecordsWriter implements ItemWr
 	private static final HashMap<Long, Pattern> ID_PARSER = new HashMap<>();
 
 	static {
-		ID_PARSER.put(333L, Pattern.compile("\\d{9}"));
+		ID_PARSER.put(328L, Pattern.compile("CbvkUsCat\\*(.*)"));
+		ID_PARSER.put(333L, Pattern.compile("PAK01-(\\d+)"));
+		ID_PARSER.put(496L, Pattern.compile("TynUsCat\\*(.*)"));
 	}
 
 	private static final HashMap<Long, String> URL = new HashMap<>();
@@ -61,6 +63,7 @@ public class ImportPalmknihyWriter extends ImportRecordsWriter implements ItemWr
 		URL.put(328L, "https://katalog.cbvk.cz/arl-cbvk/cs/detail-cbvk_us_cat-%s-titul");
 		URL.put(333L, "https://aleph.knihovna-pardubice.cz/F/?func=direct&doc_number=%s");
 		URL.put(461L, "https://katalog.svkul.cz/detail/%s");
+		URL.put(496L, "https://arl4.library.sk/arl-tyn/cs/detail-tyn_us_cat.2-%s-titul/");
 		URL.put(498L, "https://orlova.knihovny.net/detail/%s");
 		URL.put(499L, "https://pribram.tritius.cz/detail/%s");
 		URL.put(501L, "https://tritius.kkvysociny.cz/detail/%s");
@@ -121,10 +124,12 @@ public class ImportPalmknihyWriter extends ImportRecordsWriter implements ItemWr
 					boolean eversionExists = false;
 					for (HarvestedRecord hrLib : hrDao.getByPalmknihyId(url_id)) {
 						String record_id = hrLib.getUniqueId().getRecordId();
-						Matcher matcher1 = ID_PARSER.getOrDefault(hrLib.getHarvestedFrom().getId(), Pattern.compile("\\d+"))
-								.matcher(hrLib.getUniqueId().getRecordId());
-						if (matcher1.find()) {
-							record_id = matcher1.group(0);
+						if (ID_PARSER.containsKey(hrLib.getHarvestedFrom().getId())) {
+							Matcher matcher = ID_PARSER.get(hrLib.getHarvestedFrom().getId())
+									.matcher(hrLib.getUniqueId().getRecordId());
+							if (matcher.matches()) {
+								record_id = matcher.group(1);
+							}
 						}
 						if (!URL.containsKey(hrLib.getHarvestedFrom().getId())) continue;
 						palmknihy.addVariableField(factory.newDataField("856", ' ', ' ', "u",
