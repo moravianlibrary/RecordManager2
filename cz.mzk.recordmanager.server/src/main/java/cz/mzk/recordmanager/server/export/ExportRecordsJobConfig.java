@@ -1,17 +1,17 @@
 package cz.mzk.recordmanager.server.export;
 
-import java.util.Arrays;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.stream.Collectors;
-
-import javax.sql.DataSource;
-
 import cz.mzk.recordmanager.server.export.sfx.ExportSfxRecordsJobParametersValidator;
 import cz.mzk.recordmanager.server.export.sfx.ExportSfxRecordsProcessor;
 import cz.mzk.recordmanager.server.export.sfx.ExportSfxRecordsWriter;
+import cz.mzk.recordmanager.server.jdbc.Cosmotron996RowMapper;
+import cz.mzk.recordmanager.server.jdbc.DedupRecordRowMapper;
 import cz.mzk.recordmanager.server.jdbc.LongValueRowMapper;
+import cz.mzk.recordmanager.server.model.Cosmotron996;
+import cz.mzk.recordmanager.server.model.DedupRecord;
+import cz.mzk.recordmanager.server.model.HarvestedRecord.HarvestedRecordUniqueId;
+import cz.mzk.recordmanager.server.springbatch.JobFailureListener;
+import cz.mzk.recordmanager.server.springbatch.StepProgressListener;
+import cz.mzk.recordmanager.server.util.Constants;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
@@ -28,16 +28,14 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.FileSystemResource;
-
-import cz.mzk.recordmanager.server.jdbc.Cosmotron996RowMapper;
-import cz.mzk.recordmanager.server.jdbc.DedupRecordRowMapper;
-import cz.mzk.recordmanager.server.model.Cosmotron996;
-import cz.mzk.recordmanager.server.model.DedupRecord;
-import cz.mzk.recordmanager.server.model.HarvestedRecord.HarvestedRecordUniqueId;
-import cz.mzk.recordmanager.server.springbatch.JobFailureListener;
-import cz.mzk.recordmanager.server.springbatch.StepProgressListener;
-import cz.mzk.recordmanager.server.util.Constants;
 import org.springframework.core.task.TaskExecutor;
+
+import javax.sql.DataSource;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Configuration
 public class ExportRecordsJobConfig {
@@ -139,8 +137,8 @@ public class ExportRecordsJobConfig {
 		SqlPagingQueryProviderFactoryBean pqpf = new SqlPagingQueryProviderFactoryBean();
 		pqpf.setDataSource(dataSource);
 		pqpf.setSelectClause("SELECT import_conf_id, record_id");
-		pqpf.setFromClause("FROM harvested_record");
-		pqpf.setWhereClause("WHERE import_conf_id = :conf_id" +
+		pqpf.setFromClause("FROM harvested_record hr INNER JOIN harvested_record_format_link hrfl ON hr.id = hrfl.harvested_record_id");
+		pqpf.setWhereClause("WHERE import_conf_id = :conf_id AND hrfl.harvested_record_format_id=2" +
 				(deleted == null ? " AND deleted IS NULL" : "") +
 				(recordIds != null ? " AND record_id IN (:record_id)" : "") +
 				(harvestedFrom != null ? " AND harvested > :harvestedFrom" : "") +
