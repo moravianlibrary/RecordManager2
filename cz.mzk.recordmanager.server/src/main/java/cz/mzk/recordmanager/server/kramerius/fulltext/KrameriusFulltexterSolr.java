@@ -7,6 +7,7 @@ import cz.mzk.recordmanager.server.model.FulltextKramerius;
 import cz.mzk.recordmanager.server.solr.SolrServerFacade;
 import cz.mzk.recordmanager.server.util.SolrUtils;
 import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
@@ -57,24 +58,24 @@ public class KrameriusFulltexterSolr implements KrameriusFulltexter {
 	}
 
 	@Override
-	public List<FulltextKramerius> getFulltextObjects(String rootUuid) throws IOException {
+	public List<FulltextKramerius> getFulltextObjects(String rootUuid) throws IOException, SolrServerException {
 		return getFulltextObjects(params.getApiMappingValue(ApiMappingEnum.PARENT_PID), rootUuid);
 	}
 
 	@Override
-	public List<FulltextKramerius> getFulltextForRoot(String rootUuid) throws IOException {
+	public List<FulltextKramerius> getFulltextForRoot(String rootUuid) throws IOException, SolrServerException {
 		return getFulltextObjects(params.getApiMappingValue(ApiMappingEnum.ROOT_PID), rootUuid);
 	}
 
 	protected List<FulltextKramerius> getFulltextObjects(String field, String rootUuid)
-			throws IOException {		
+			throws IOException, SolrServerException {
 		int start = 0;
 		long numFound = 0;
 		boolean finished = false;
 		List<FulltextKramerius> result = new ArrayList<FulltextKramerius>();
-		
+
 		while (!finished) {
-			
+
 			logger.debug("Downloading fulltext for pages {} to {}", start, start + MAX_PAGES);
 			SolrQuery query = new SolrQuery();
 
@@ -88,22 +89,22 @@ public class KrameriusFulltexterSolr implements KrameriusFulltexter {
 				QueryResponse response = solr.query(query);
 				SolrDocumentList documents = response.getResults();
 				numFound = documents.getNumFound();
-				
+
 				result.addAll(asPages(documents));
 			} catch (Exception ex) {
 				logger.error("Harvesting of fulltext for uuid: {} FAILED", rootUuid);
 				logger.error(ex.getMessage());
-		
-				return result;
+
+				throw ex;
 			}
-			
+
 			start += MAX_PAGES;
-			
+
 			if (start >= PAGE_LIMIT) {
 				logger.error("Harvesting of fulltext for uuid: {} REACHED LIMIT {} for number of pages for one record", rootUuid, PAGE_LIMIT);
 				finished = true;
 			}
-			
+
 			if (start > numFound) {
 				finished = true;
 			}
