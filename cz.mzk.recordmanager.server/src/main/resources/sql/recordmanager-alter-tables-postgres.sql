@@ -3053,3 +3053,6 @@ INSERT INTO sigla (id, import_conf_id, sigla) VALUES (158, 535, 'UHG001');
 
 -- 05. 02. 2024 tomascejpek
 UPDATE import_conf SET mapping_script='LocalMzk.groovy,HarvestedRecordBaseMarc.groovy' WHERE id in (304,321,325,326);
+
+-- 05. 02. 2024 tomascejpek
+UPDATE import_conf SET mapping_script='LocalMzk.groovy,HarvestedRecordBaseMarc.groovy' WHERE id in (330,349,358,360,361,420,456,448);

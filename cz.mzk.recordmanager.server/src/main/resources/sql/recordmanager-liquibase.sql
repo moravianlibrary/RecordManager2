@@ -3342,3 +3342,6 @@ INSERT INTO sigla (id, import_conf_id, sigla) VALUES (158, 535, 'UHG001');
 
 --changeset tomascejpek:414 context:cpk
 UPDATE import_conf SET mapping_script='LocalMzk.groovy,HarvestedRecordBaseMarc.groovy' WHERE id in (304,321,325,326);
+
+--changeset tomascejpek:415 context:cpk
+UPDATE import_conf SET mapping_script='LocalMzk.groovy,HarvestedRecordBaseMarc.groovy' WHERE id in (330,349,358,360,361,420,456,448);

@@ -99,6 +99,13 @@ public enum ViewType {
 								Set<String> siglas, List<String> conspectus) throws IOException {
 			return contains(resolver, String.format(INST_INCLUDE_FILE, getValue()), importConfId.toString());
 		}
+	},
+	KNAV("knav") {
+		@Override
+		protected boolean match(MetadataRecord mr, ListResolver resolver, Long importConfId,
+								Set<String> siglas, List<String> conspectus) throws IOException {
+			return contains(resolver, String.format(INST_INCLUDE_FILE, getValue()), importConfId.toString());
+		}
 	};
 
 	private String value;
