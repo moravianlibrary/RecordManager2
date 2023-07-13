@@ -647,6 +647,7 @@ INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granul
 =======
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (493,'https://klimkovice.tritius.cz/tritius/oai-provider','CPK_1','marc21',NULL);
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> mzk-view
 =======
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (494,'https://koha.knihovna-dobra.cz/cgi-bin/koha/oai.pl','CPK','marccpk',NULL);
@@ -655,6 +656,9 @@ INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granul
 >>>>>>> master
 =======
 =======
+=======
+INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity,extract_id_regex) VALUES (494,'https://koha.knihovna-dobra.cz/cgi-bin/koha/oai.pl','CPK','marccpk',NULL,'FMG510:(.*)');
+>>>>>>> view-knav
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity,extract_id_regex,harvest_job_name,set_spec_full_harvest) VALUES (496,'https://arl4.library.sk/arl-tyn/cs/oai/','TYNCPK2','oai_marcxml_cpk',NULL,'s/[^:]+:[^:]+:[^:]+:(.+)/TynUsCat*$1/','cosmotronHarvestJob','TYNCPK');
 >>>>>>> mktnv
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (498,'https://orlova.knihovny.net/tritius/oai-provider','PLM','marc21',NULL);
@@ -978,6 +982,8 @@ INSERT INTO sigla (id, import_conf_id, sigla) VALUES (147, 488, 'SMG506');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (148, 363, 'ABA012');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (149, 490, 'MEG502');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (152, 493, 'NJG508');
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (153, 494, 'FMG510');
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (156, 496, 'CBG506');
 
 INSERT INTO fit_project VALUES (1,'FULLTEXT_ANALYSER');
 INSERT INTO fit_project VALUES (2,'SEMANTIC_ENRICHMENT');

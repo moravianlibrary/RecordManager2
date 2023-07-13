@@ -3261,4 +3261,12 @@ INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granul
 INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (296, 'MKTNV', 'https://knihovnatnv.cz/', 'https://arl4.library.sk/arl-tyn/cs/index/', 'Týn nad Vltavou', 'JC');
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id, catalog_serial_link) VALUES (496, 296, 200, 'mktnv', 11, false, true, true, true, 'U', 'other', true);
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity,extract_id_regex,harvest_job_name,set_spec_full_harvest) VALUES (496,'https://arl4.library.sk/arl-tyn/cs/oai/','TYNCPK2','oai_marcxml_cpk',NULL,'s/[^:]+:[^:]+:[^:]+:(.+)/TynUsCat*$1/','cosmotronHarvestJob','TYNCPK');
+<<<<<<< HEAD
 >>>>>>> mktnv
+=======
+
+-- 28. 06. 2023 tomascejpek
+UPDATE oai_harvest_conf SET extract_id_regex='FMG510:(.*)' WHERE import_conf_id=494;
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (153, 494, 'FMG510');
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (156, 496, 'CBG506');
+>>>>>>> view-knav
