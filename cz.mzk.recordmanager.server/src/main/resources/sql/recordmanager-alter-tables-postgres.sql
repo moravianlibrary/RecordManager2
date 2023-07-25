@@ -2975,3 +2975,6 @@ INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granul
 UPDATE oai_harvest_conf SET extract_id_regex='FMG510:(.*)' WHERE import_conf_id=494;
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (153, 494, 'FMG510');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (156, 496, 'CBG506');
+
+-- 25. 07. 2023 tomascejpek
+UPDATE oai_harvest_conf SET url='https://katalog.kjm.cz/i2/i2.ws.oai.cls' WHERE import_conf_id=303;
