@@ -3267,3 +3267,6 @@ INSERT INTO sigla (id, import_conf_id, sigla) VALUES (156, 496, 'CBG506');
 
 --changeset tomascejpek:395 context:cpk
 UPDATE oai_harvest_conf SET url='https://katalog.kjm.cz/i2/i2.ws.oai.cls' WHERE import_conf_id=303;
+
+--changeset tomascejpek:396 context:cpk
+UPDATE kramerius_conf SET url_solr='https://solr-export.app.ceskadigitalniknihovna.cz/solr/search_v2/',collection=NULL,fulltext_version='7' WHERE import_conf_id IN (99003,99011,99014,99017,99026,99037);

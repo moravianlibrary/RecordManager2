@@ -125,7 +125,7 @@ public class KrameriusFulltexterSolr implements KrameriusFulltexter {
 			String fulltext = (String) document.getFieldValue(FULLTEXT_FIELD);
 			String pageNum = (String) document.getFieldValue(params.getApiMappingValue(PAGE_NUMBER));
 			String policy = (String) document.getFieldValue(params.getApiMappingValue(ACCESSIBILITY));
-
+			if (policy == null) policy = "private";
 			pageNum = (pageNum == null) ? String.valueOf(order) : pageNum;
 			//TODO data sometimes contain garbage values - this should be considered fallback solution
 			pageNum = pageNum.length() > 50 ? pageNum.substring(0, 50) : pageNum;
