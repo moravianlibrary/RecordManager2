@@ -1558,12 +1558,6 @@ public class MetadataMarcRecord implements MetadataRecord {
 	@Override
 	public List<BLTitle> getBiblioLinkerTitle() {
 		List<BLTitle> result = new ArrayList<>();
-		for (DataField df : underlayingMarc.getDataFields("765")) {
-			String titleText = parseTitleValue(df, new char[]{'t'});
-			if (!titleText.isEmpty()) {
-				result.add(BLTitle.create(titleText));
-			}
-		}
 		for (String tag : new String[]{"210", "222"}) {
 			for (DataField df : underlayingMarc.getDataFields(tag)) {
 				String titleText = parseTitleValue(df, new char[]{'a'});
