@@ -3269,4 +3269,13 @@ INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granul
 UPDATE oai_harvest_conf SET extract_id_regex='FMG510:(.*)' WHERE import_conf_id=494;
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (153, 494, 'FMG510');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (156, 496, 'CBG506');
+<<<<<<< HEAD
 >>>>>>> view-knav
+=======
+
+-- 25. 07. 2023 tomascejpek
+UPDATE oai_harvest_conf SET url='https://katalog.kjm.cz/i2/i2.ws.oai.cls' WHERE import_conf_id=303;
+
+-- 11. 08. 2023 tomascejpek
+UPDATE kramerius_conf SET url_solr='https://solr-export.app.ceskadigitalniknihovna.cz/solr/search_v2/',collection=NULL,fulltext_version='7' WHERE import_conf_id IN (99003,99011,99014,99017,99026,99037);
+>>>>>>> mzk-view
