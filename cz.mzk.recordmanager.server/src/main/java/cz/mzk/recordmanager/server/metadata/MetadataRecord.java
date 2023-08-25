@@ -593,16 +593,4 @@ public interface MetadataRecord {
 		return false;
 	}
 
-	default Set<String> getCountries() {
-		return Collections.emptySet();
-	}
-
-	default Set<String> getTopic() {
-		return Collections.emptySet();
-	}
-
-	default Set<String> getMdt() {
-		return Collections.emptySet();
-	}
-
 }
