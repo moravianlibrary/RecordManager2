@@ -3270,3 +3270,8 @@ UPDATE oai_harvest_conf SET url='https://katalog.kjm.cz/i2/i2.ws.oai.cls' WHERE 
 
 --changeset tomascejpek:396 context:cpk
 UPDATE kramerius_conf SET url_solr='https://solr-export.app.ceskadigitalniknihovna.cz/solr/search_v2/',collection=NULL,fulltext_version='7' WHERE import_conf_id IN (99003,99011,99014,99017,99026,99037);
+
+--changeset tomascejpek:397 context:cpk
+UPDATE oai_harvest_conf SET url='https://tritius.knih-pi.cz/tritius/oai-provider',set_spec='CPK_1' WHERE import_conf_id=381;
+INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, indexed) VALUES (534, 181, 200, 'mkpisek', 11, false, true, false, true, 'U', false);
+INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (534,'https://tritius.knih-pi.cz/tritius/oai-provider','PLM','marc21',NULL);
