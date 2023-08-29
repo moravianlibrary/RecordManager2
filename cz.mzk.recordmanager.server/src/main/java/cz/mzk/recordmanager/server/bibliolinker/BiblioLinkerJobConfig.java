@@ -6,6 +6,7 @@ import cz.mzk.recordmanager.server.model.BiblioLinkerSimilarType;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.springbatch.IntegerModuloPartitioner;
 import cz.mzk.recordmanager.server.springbatch.SqlCommandTasklet;
+import cz.mzk.recordmanager.server.springbatch.StepDedupStatsListener;
 import cz.mzk.recordmanager.server.springbatch.StepProgressListener;
 import cz.mzk.recordmanager.server.util.Constants;
 import cz.mzk.recordmanager.server.util.ResourceUtils;
@@ -24,6 +25,8 @@ import org.springframework.batch.item.database.support.SqlPagingQueryProviderFac
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.task.TaskExecutor;
@@ -52,6 +55,9 @@ public class BiblioLinkerJobConfig {
 
 	@Autowired
 	private DataSource dataSource;
+
+	@Autowired
+	private ApplicationContext appCtx;
 
 	private static final String TMP_BL_TABLE_TITLE_AUTHOR = "tmp_bl_title_author";
 
@@ -203,7 +209,7 @@ public class BiblioLinkerJobConfig {
 	public Step initBLStep() {
 		return steps.get("initBLTasklet")
 				.tasklet(initBLTasklet())
-				.listener(new StepProgressListener())
+				.listener(init(new StepDedupStatsListener("job/biblioLinkerJob/bibliolinker_stats.sql")))
 				.build();
 	}
 
@@ -243,6 +249,7 @@ public class BiblioLinkerJobConfig {
 	@Bean(name = Constants.JOB_ID_BIBLIO_LINKER + ":blTempTitleAuthorPartitionedStep")
 	public Step blTempTitleAuthorPartitionedStep() throws Exception {
 		return steps.get("blTempTitleAuthorPartitionedStep")
+				.listener(init(new StepDedupStatsListener("job/biblioLinkerJob/bibliolinker_stats.sql")))
 				.partitioner("blTempTitleAuthorPartitionedStepSlave", this.partioner()) //
 				.taskExecutor(this.taskExecutor)
 				.gridSize(this.partitionThreads)
@@ -294,6 +301,7 @@ public class BiblioLinkerJobConfig {
 	@Bean(name = Constants.JOB_ID_BIBLIO_LINKER + ":blTempTitleAuthorAudioPartitionedStep")
 	public Step blTempTitleAuthorAudioPartitionedStep() throws Exception {
 		return steps.get("blTempTitleAuthorAudioPartitionedStep")
+				.listener(init(new StepDedupStatsListener("job/biblioLinkerJob/bibliolinker_stats.sql")))
 				.partitioner("blTempTitleAuthorAudioPartitionedStepSlave", this.partioner()) //
 				.taskExecutor(this.taskExecutor)
 				.gridSize(this.partitionThreads)
@@ -345,6 +353,7 @@ public class BiblioLinkerJobConfig {
 	@Bean(name = Constants.JOB_ID_BIBLIO_LINKER + ":blTempTitleAuthorVideoPartitionedStep")
 	public Step blTempTitleAuthorVideoPartitionedStep() throws Exception {
 		return steps.get("blTempTitleAuthorVideoPartitionedStep")
+				.listener(init(new StepDedupStatsListener("job/biblioLinkerJob/bibliolinker_stats.sql")))
 				.partitioner("blTempTitleAuthorVideoPartitionedStepSlave", this.partioner()) //
 				.taskExecutor(this.taskExecutor)
 				.gridSize(this.partitionThreads)
@@ -396,6 +405,7 @@ public class BiblioLinkerJobConfig {
 	@Bean(name = Constants.JOB_ID_BIBLIO_LINKER + ":blTempTitleAuthorMusicalScorePartitionedStep")
 	public Step blTempTitleAuthorMusicalScorePartitionedStep() throws Exception {
 		return steps.get("blTempTitleAuthorMusicalScorePartitionedStep")
+				.listener(init(new StepDedupStatsListener("job/biblioLinkerJob/bibliolinker_stats.sql")))
 				.partitioner("blTempTitleAuthorMusicalScorePartitionedStepSlave", this.partioner()) //
 				.taskExecutor(this.taskExecutor)
 				.gridSize(this.partitionThreads)
@@ -447,6 +457,7 @@ public class BiblioLinkerJobConfig {
 	@Bean(name = Constants.JOB_ID_BIBLIO_LINKER + ":blTempTitleLangPeriodicalPartitionedStep")
 	public Step blTempTitleLangPeriodicalPartitionedStep() throws Exception {
 		return steps.get("blTempTitleLangPeriodicalPartitionedStep")
+				.listener(init(new StepDedupStatsListener("job/biblioLinkerJob/bibliolinker_stats.sql")))
 				.partitioner("blTempTitleLangPeriodicalPartitionedStepSlave", this.partioner()) //
 				.taskExecutor(this.taskExecutor)
 				.gridSize(this.partitionThreads)
@@ -498,6 +509,7 @@ public class BiblioLinkerJobConfig {
 	@Bean(name = Constants.JOB_ID_BIBLIO_LINKER + ":blTempRestDedupPartitionedStep")
 	public Step blTempRestDedupPartitionedStep() throws Exception {
 		return steps.get("blTempRestDedupPartitionedStep")
+				.listener(init(new StepDedupStatsListener("job/biblioLinkerJob/bibliolinker_stats.sql")))
 				.partitioner("blTempRestDedupPartitionedStepSlave", this.partioner()) //
 				.taskExecutor(this.taskExecutor)
 				.gridSize(this.partitionThreads)
@@ -548,6 +560,7 @@ public class BiblioLinkerJobConfig {
 	@Bean(name = Constants.JOB_ID_BIBLIO_LINKER + ":blTempOrphanedPartitionedStep")
 	public Step blTempOrphanedPartitionedStep() throws Exception {
 		return steps.get("blTempOrphanedPartitionedStep")
+				.listener(init(new StepDedupStatsListener("job/biblioLinkerJob/bibliolinker_stats.sql")))
 				.partitioner("blTempOrphanedPartitionedStepSlave", this.partioner()) //
 				.taskExecutor(this.taskExecutor)
 				.gridSize(this.partitionThreads)
@@ -1364,4 +1377,12 @@ public class BiblioLinkerJobConfig {
 			return hrs;
 		}
 	}
+
+	private StepProgressListener init(StepProgressListener listener) {
+		AutowireCapableBeanFactory factory = appCtx.getAutowireCapableBeanFactory();
+		factory.autowireBean(listener);
+		factory.initializeBean(listener, "listener");
+		return listener;
+	}
+
 }
