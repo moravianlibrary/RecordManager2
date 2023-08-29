@@ -4,10 +4,7 @@ import cz.mzk.recordmanager.server.dedup.clustering.NonperiodicalTitleClusterabl
 import cz.mzk.recordmanager.server.dedup.clustering.TitleClusterable;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecordFormat.HarvestedRecordFormatEnum;
-import cz.mzk.recordmanager.server.springbatch.DelegatingHibernateProcessor;
-import cz.mzk.recordmanager.server.springbatch.IntegerModuloPartitioner;
-import cz.mzk.recordmanager.server.springbatch.SqlCommandTasklet;
-import cz.mzk.recordmanager.server.springbatch.StepProgressListener;
+import cz.mzk.recordmanager.server.springbatch.*;
 import cz.mzk.recordmanager.server.util.Constants;
 import cz.mzk.recordmanager.server.util.ResourceUtils;
 import org.hibernate.SessionFactory;
@@ -28,6 +25,8 @@ import org.springframework.batch.item.database.support.SqlPagingQueryProviderFac
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.task.TaskExecutor;
@@ -126,6 +125,9 @@ public class DedupRecordsJobConfig {
 
 	@Autowired
 	private DataSource dataSource;
+
+	@Autowired
+	private ApplicationContext appCtx;
 
 	private static final String initDeduplicationSql = ResourceUtils.asString("job/dedupRecordsJob/initDeduplication.sql");
 
@@ -361,7 +363,7 @@ public class DedupRecordsJobConfig {
 	public Step initStep() {
 		return steps.get("initTasklet")
 				.tasklet(initTasklet())
-				.listener(new StepProgressListener())
+				.listener(init(new StepDedupStatsListener("job/dedupRecordsJob/dedup_stats.sql")))
 				.build();
 	}
 
@@ -402,6 +404,7 @@ public class DedupRecordsJobConfig {
 	@Bean(name = Constants.JOB_ID_DEDUP + ":dedupClusterIdsPartitionedStep")
 	public Step dedupClusterIdsPartitionedStep() throws Exception {
 		return steps.get("dedupClusterIdsPartitionedStep")
+				.listener(init(new StepDedupStatsListener("job/dedupRecordsJob/dedup_stats.sql")))
 				.partitioner("dedupClusterIdsPartitionedStepSlave", this.partioner()) //
 				.taskExecutor(this.taskExecutor)
 				.gridSize(this.partitionThreads)
@@ -453,6 +456,7 @@ public class DedupRecordsJobConfig {
 	@Bean(name = Constants.JOB_ID_DEDUP + ":dedupSimpleKeysSkatManuallyMergedPartitionedStep")
 	public Step dedupSimpleKeysSkatManuallyMergedPartitionedStep() throws Exception {
 		return steps.get("dedupSimpleKeysSkatManuallyMergedPartitionedStep")
+				.listener(init(new StepDedupStatsListener("job/dedupRecordsJob/dedup_stats.sql")))
 				.partitioner("dedupSimpleKeysSkatManuallyMergedPartitionedStepSlave", this.partioner()) //
 				.taskExecutor(this.taskExecutor)
 				.gridSize(this.partitionThreads)
@@ -535,6 +539,7 @@ public class DedupRecordsJobConfig {
 	@Bean(name = Constants.JOB_ID_DEDUP + ":dedupSimpleKeysIsbnPartitionedStep")
 	public Step dedupSimpleKeysIsbnPartitionedStep() throws Exception {
 		return steps.get("dedupSimpleKeysIsbnPartitionedStep")
+				.listener(init(new StepDedupStatsListener("job/dedupRecordsJob/dedup_stats.sql")))
 				.partitioner("dedupSimpleKeysIsbnPartitionedStepSlave", this.partioner()) //
 				.taskExecutor(this.taskExecutor)
 				.gridSize(this.partitionThreads)
@@ -585,6 +590,7 @@ public class DedupRecordsJobConfig {
 	@Bean(name = Constants.JOB_ID_DEDUP + ":dedupSimpleKeysCnbPartitionedStep")
 	public Step dedupSimpleKeysCnbPartitionedStep() throws Exception {
 		return steps.get("dedupSimpleKeysCnbPartitionedStep")
+				.listener(init(new StepDedupStatsListener("job/dedupRecordsJob/dedup_stats.sql")))
 				.partitioner("dedupSimpleKeysCnbPartitionedStepSlave", this.partioner()) //
 				.taskExecutor(this.taskExecutor)
 				.gridSize(this.partitionThreads)
@@ -618,7 +624,7 @@ public class DedupRecordsJobConfig {
 	@Bean(name = Constants.JOB_ID_DEDUP + ":dedupSimpleKeysEanStep")
 	public Step dedupSimpleKeysEanStep() throws Exception {
 		return steps.get("dedupSimpleKeysEanStep")
-				.listener(new StepProgressListener())
+				.listener(init(new StepDedupStatsListener("job/dedupRecordsJob/dedup_stats.sql")))
 				.<List<Long>, List<HarvestedRecord>> chunk(10)
 				.reader(dedupSimpleKeysEanReader())
 				.processor(dedupSimpleKeysStepProsessor())
@@ -651,7 +657,7 @@ public class DedupRecordsJobConfig {
 	@Bean(name = Constants.JOB_ID_DEDUP + ":dedupSimpleKeysBlindAudioStep")
 	public Step dedupSimpleKeysBlindAudioStep() throws Exception {
 		return steps.get("dedupSimpleKeysBlindAudioStep")
-				.listener(new StepProgressListener())
+				.listener(init(new StepDedupStatsListener("job/dedupRecordsJob/dedup_stats.sql")))
 				.<List<Long>, List<HarvestedRecord>>chunk(10)
 				.reader(dedupSimpleKeysBlindAudioReader())
 				.processor(dedupSimpleKeysStepProsessor())
@@ -684,7 +690,7 @@ public class DedupRecordsJobConfig {
 	@Bean(name = Constants.JOB_ID_DEDUP + ":dedupSimpleKeysPublisherNumberStep")
 	public Step dedupSimpleKeysPublisherNumberStep() throws Exception {
 		return steps.get("dedupSimpleKeysPublisherNumberStep")
-				.listener(new StepProgressListener())
+				.listener(init(new StepDedupStatsListener("job/dedupRecordsJob/dedup_stats.sql")))
 				.<List<Long>, List<HarvestedRecord>> chunk(10)
 				.reader(dedupSimpleKeysPublisherNumberReader())
 				.processor(dedupSimpleKeysStepProsessor())
@@ -733,6 +739,7 @@ public class DedupRecordsJobConfig {
 	@Bean(name = Constants.JOB_ID_DEDUP + ":dedupArticlesXGPartitionedStep")
 	public Step dedupArticlesXGPartitionedStep() throws Exception {
 		return steps.get("dedupArticlesXGPartitionedStep")
+				.listener(init(new StepDedupStatsListener("job/dedupRecordsJob/dedup_stats.sql")))
 				.partitioner("dedupArticlesXGPartitionedStepSlave", this.partioner()) //
 				.taskExecutor(this.taskExecutor)
 				.gridSize(this.partitionThreads)
@@ -783,6 +790,7 @@ public class DedupRecordsJobConfig {
 	@Bean(name = Constants.JOB_ID_DEDUP + ":dedupArticlesTGPartitionedStep")
 	public Step dedupArticlesTGPartitionedStep() throws Exception {
 		return steps.get("dedupArticlesTGPartitionedStep")
+				.listener(init(new StepDedupStatsListener("job/dedupRecordsJob/dedup_stats.sql")))
 				.partitioner("dedupArticlesTGPartitionedStepSlave", this.partioner()) //
 				.taskExecutor(this.taskExecutor)
 				.gridSize(this.partitionThreads)
@@ -838,6 +846,7 @@ public class DedupRecordsJobConfig {
 	@Bean(name = Constants.JOB_ID_DEDUP + ":dedupTitleAuthPartitionedStep")
 	public Step dedupTitleAuthPartitionedStep() throws Exception {
 		return steps.get("dedupTitleAuthPartitionedStep")
+				.listener(init(new StepDedupStatsListener("job/dedupRecordsJob/dedup_stats.sql")))
 				.partitioner("slave", this.partioner()) //
 				.gridSize(this.partitionThreads)
 				.taskExecutor(this.taskExecutor)
@@ -867,7 +876,7 @@ public class DedupRecordsJobConfig {
 	public Step dedupRestOfRecordsStep() {
 		return steps.get("dedupRestOfRecordsStep")
 				.tasklet(dedupRestOfRecordsSqlTasklet())
-				.listener(new StepProgressListener())
+				.listener(init(new StepDedupStatsListener("job/dedupRecordsJob/dedup_stats.sql")))
 				.build();
 	}
 
@@ -907,6 +916,7 @@ public class DedupRecordsJobConfig {
 	@Bean(name = Constants.JOB_ID_DEDUP + ":dedupCnbClustersPartitionedStep")
 	public Step dedupCnbClustersPartitionedStep() throws Exception {
 		return steps.get("dedupCnbClustersPartitionedStep")
+				.listener(init(new StepDedupStatsListener("job/dedupRecordsJob/dedup_stats.sql")))
 				.partitioner("dedupCnbClustersPartitionedStepSlave", this.partioner()) //
 				.taskExecutor(this.taskExecutor)
 				.gridSize(this.partitionThreads)
@@ -952,7 +962,7 @@ public class DedupRecordsJobConfig {
 	@Bean(name = Constants.JOB_ID_DEDUP + ":dedupOclcClustersStep")
 	public Step dedupOclcClustersStep() throws Exception {
 		return steps.get("dedupOclcClustersTableStep")
-				.listener(new StepProgressListener())
+				.listener(init(new StepDedupStatsListener("job/dedupRecordsJob/dedup_stats.sql")))
 				.<List<Long>, List<HarvestedRecord>> chunk(10)
 				.reader(dedupOclcClustersReader())
 				.processor(generalDedupClustersProcessor())
@@ -986,7 +996,7 @@ public class DedupRecordsJobConfig {
 	@Bean(name = Constants.JOB_ID_DEDUP + ":dedupUuidClustersStep")
 	public Step dedupUuidClustersStep() throws Exception {
 		return steps.get("dedupUuidClustersStep")
-				.listener(new StepProgressListener())
+				.listener(init(new StepDedupStatsListener("job/dedupRecordsJob/dedup_stats.sql")))
 				.<List<Long>, List<HarvestedRecord>> chunk(10)
 				.reader(dedupUuidClustersReader())
 				.processor(generalDedupClustersProcessor())
@@ -1020,7 +1030,7 @@ public class DedupRecordsJobConfig {
 	@Bean(name = Constants.JOB_ID_DEDUP + ":dedupBookportStep")
 	public Step dedupBookportStep() throws Exception {
 		return steps.get("dedupBookportStep")
-				.listener(new StepProgressListener())
+				.listener(init(new StepDedupStatsListener("job/dedupRecordsJob/dedup_stats.sql")))
 				.<List<Long>, List<HarvestedRecord>>chunk(10)
 				.reader(dedupBookportReader())
 				.processor(dedupSimpleKeysStepProsessor())
@@ -1066,6 +1076,7 @@ public class DedupRecordsJobConfig {
 	@Bean(name = Constants.JOB_ID_DEDUP + ":dedupSimpleKeysSkatRestPartitionedStep")
 	public Step dedupSimpleKeysSkatRestPartitionedStep() throws Exception {
 		return steps.get("dedupSimpleKeysSkatRestPartitionedStep")
+				.listener(init(new StepDedupStatsListener("job/dedupRecordsJob/dedup_stats.sql")))
 				.partitioner("slave", this.partioner()) //
 				.gridSize(this.partitionThreads)
 				.taskExecutor(this.taskExecutor)
@@ -1148,7 +1159,7 @@ public class DedupRecordsJobConfig {
 	@Bean(name = Constants.JOB_ID_DEDUP + ":processSimilaritesResultsStep")
 	public Step processSimilaritesResultsStep() throws Exception {
 		return steps.get("processSimilaritesResultsStep")
-				.listener(new StepProgressListener())
+				.listener(init(new StepDedupStatsListener("job/dedupRecordsJob/dedup_stats.sql")))
 				.<List<Long>, List<HarvestedRecord>> chunk(10)
 				.reader(dedupSimpleKeysReader(TMP_TABLE_SIMILARITY_IDS, INTEGER_OVERRIDEN_BY_EXPRESSION))
 				.processor(dedupSimpleKeysStepProsessor())
@@ -1182,7 +1193,7 @@ public class DedupRecordsJobConfig {
 	@Bean(name = Constants.JOB_ID_DEDUP + ":dedupIsmnClustersStep")
 	public Step dedupIsmnClustersStep() throws Exception {
 		return steps.get("dedupIsmnClustersTableStep")
-				.listener(new StepProgressListener())
+				.listener(init(new StepDedupStatsListener("job/dedupRecordsJob/dedup_stats.sql")))
 				.<List<Long>, List<HarvestedRecord>> chunk(10)
 				.reader(dedupIsmnClustersReader())
 				.processor(generalDedupClustersProcessor())
@@ -1223,7 +1234,7 @@ public class DedupRecordsJobConfig {
 	@Bean(name = Constants.JOB_ID_DEDUP + ":dedupPeriodicalsIssnStep")
 	public Step dedupPeriodicalsIssnStep() throws Exception {
 		return steps.get("dedupPeriodicalsIssnStep")
-				.listener(new StepProgressListener())
+				.listener(init(new StepDedupStatsListener("job/dedupRecordsJob/dedup_stats.sql")))
 				.<List<Long>, List<HarvestedRecord>> chunk(50)
 				.reader(dedupPeriodicalsIssnReader())
 				.processor(dedupPeriodicalsIssnProcessor())
@@ -1264,7 +1275,7 @@ public class DedupRecordsJobConfig {
 	@Bean(name = Constants.JOB_ID_DEDUP + ":dedupPeriodicalsCnbStep")
 	public Step dedupPeriodicalsCnbStep() throws Exception {
 		return steps.get("dedupPeriodicalsCnbStep")
-				.listener(new StepProgressListener())
+				.listener(init(new StepDedupStatsListener("job/dedupRecordsJob/dedup_stats.sql")))
 				.<List<Long>, List<HarvestedRecord>> chunk(50)
 				.reader(dedupPeriodicalsCnbReader())
 				.processor(dedupPeriodicalsCnbProcessor())
@@ -1299,7 +1310,7 @@ public class DedupRecordsJobConfig {
 	@Bean(name = Constants.JOB_ID_DEDUP + ":dedupPeriodicalsCnbClustersStep")
 	public Step dedupPeriodicalsCnbClustersStep() throws Exception {
 		return steps.get("dedupPeriodicalsCnbClustersStep")
-				.listener(new StepProgressListener())
+				.listener(init(new StepDedupStatsListener("job/dedupRecordsJob/dedup_stats.sql")))
 				.<List<Long>, List<HarvestedRecord>> chunk(50)
 				.reader(dedupPeriodicalsCnbClustersStepReader())
 				.processor(generalDedupClustersProcessor())
@@ -1334,7 +1345,7 @@ public class DedupRecordsJobConfig {
 	@Bean(name = Constants.JOB_ID_DEDUP + ":dedupPeriodicalsIssnClustersStep")
 	public Step dedupPeriodicalsIssnClustersStep() throws Exception {
 		return steps.get("dedupPeriodicalsIssnClustersStep")
-				.listener(new StepProgressListener())
+				.listener(init(new StepDedupStatsListener("job/dedupRecordsJob/dedup_stats.sql")))
 				.<List<Long>, List<HarvestedRecord>> chunk(50)
 				.reader(dedupPeriodicalsIssnClustersStepReader())
 				.processor(generalDedupClustersProcessor())
@@ -1369,7 +1380,7 @@ public class DedupRecordsJobConfig {
 	@Bean(name = Constants.JOB_ID_DEDUP + ":dedupPeriodicalsOclcClustersStep")
 	public Step dedupPeriodicalsOclcClustersStep() throws Exception {
 		return steps.get("dedupPeriodicalsOclcClustersStep")
-				.listener(new StepProgressListener())
+				.listener(init(new StepDedupStatsListener("job/dedupRecordsJob/dedup_stats.sql")))
 				.<List<Long>, List<HarvestedRecord>> chunk(50)
 				.reader(dedupPeriodicalsOclcClustersStepReader())
 				.processor(generalDedupClustersProcessor())
@@ -1447,7 +1458,7 @@ public class DedupRecordsJobConfig {
 	@Bean(name = Constants.JOB_ID_DEDUP + ":processPeriodicalsSimilaritesResultsStep")
 	public Step processPeriodicalsSimilaritesResultsStep() throws Exception {
 		return steps.get("processPeriodicalsSimilaritesResultsStep")
-				.listener(new StepProgressListener())
+				.listener(init(new StepDedupStatsListener("job/dedupRecordsJob/dedup_stats.sql")))
 				.<List<Long>, List<HarvestedRecord>> chunk(50)
 				.reader(dedupSimpleKeysReader(TMP_TABLE_PERIODICALS_SIMILARITY_IDS, INTEGER_OVERRIDEN_BY_EXPRESSION))
 				.processor(dedupPeriodicalsSimilaritesResultsSteprocessor())
@@ -1481,7 +1492,7 @@ public class DedupRecordsJobConfig {
 	@Bean(name = Constants.JOB_ID_DEDUP + ":dedupPeriodicalsSfxStep")
 	public Step dedupPeriodicalsSfxStep() throws Exception {
 		return steps.get("dedupPeriodicalsSfxStep")
-				.listener(new StepProgressListener())
+				.listener(init(new StepDedupStatsListener("job/dedupRecordsJob/dedup_stats.sql")))
 				.<List<Long>, List<HarvestedRecord>> chunk(50)
 				.reader(dedupSimpleKeysReader(TMP_TABLE_PERIODICALS_SFX, INTEGER_OVERRIDEN_BY_EXPRESSION))
 				.processor(dedupSimpleKeysStepProsessor())
@@ -1526,6 +1537,7 @@ public class DedupRecordsJobConfig {
 	@Bean(name = Constants.JOB_ID_DEDUP + ":dedupDisadvantagedPublisherPartitionedStep")
 	public Step dedupSimpleKeysDisadvantagedPublisherPartitionedStep() throws Exception {
 		return steps.get("dedupSimpleKeysDisadvantagedPublisherPartitionedStep")
+				.listener(init(new StepDedupStatsListener("job/dedupRecordsJob/dedup_stats.sql")))
 				.partitioner("dedupSimpleKeysDisadvantagedPublisherPartitionedStepSlave", this.partioner()) //
 				.taskExecutor(this.taskExecutor)
 				.gridSize(this.partitionThreads)
@@ -1577,6 +1589,7 @@ public class DedupRecordsJobConfig {
 	@Bean(name = Constants.JOB_ID_DEDUP + ":dedupDisadvantagedEditionPartitionedStep")
 	public Step dedupSimpleKeysDisadvantagedEditionPartitionedStep() throws Exception {
 		return steps.get("dedupSimpleKeysDisadvantagedEditionPartitionedStep")
+				.listener(init(new StepDedupStatsListener("job/dedupRecordsJob/dedup_stats.sql")))
 				.partitioner("dedupSimpleKeysDisadvantagedEditionPartitionedStepSlave", this.partioner()) //
 				.taskExecutor(this.taskExecutor)
 				.gridSize(this.partitionThreads)
@@ -1628,6 +1641,7 @@ public class DedupRecordsJobConfig {
 	@Bean(name = Constants.JOB_ID_DEDUP + ":dedupDisadvantagedPagesPartitionedStep")
 	public Step dedupSimpleKeysDisadvantagedPagesPartitionedStep() throws Exception {
 		return steps.get("dedupSimpleKeysDisadvantagedPagesPartitionedStep")
+				.listener(init(new StepDedupStatsListener("job/dedupRecordsJob/dedup_stats.sql")))
 				.partitioner("dedupSimpleKeysDisadvantagedPagesPartitionedStepSlave", this.partioner()) //
 				.taskExecutor(this.taskExecutor)
 				.gridSize(this.partitionThreads)
@@ -1679,6 +1693,7 @@ public class DedupRecordsJobConfig {
 	@Bean(name = Constants.JOB_ID_DEDUP + ":dedupDisadvantagedIsbnPartitionedStep")
 	public Step dedupSimpleKeysDisadvantagedIsbnPartitionedStep() throws Exception {
 		return steps.get("dedupSimpleKeysDisadvantagedIsbnPartitionedStep")
+				.listener(init(new StepDedupStatsListener("job/dedupRecordsJob/dedup_stats.sql")))
 				.partitioner("dedupSimpleKeysDisadvantagedIsbnPartitionedStepSlave", this.partioner()) //
 				.taskExecutor(this.taskExecutor)
 				.gridSize(this.partitionThreads)
@@ -1730,6 +1745,7 @@ public class DedupRecordsJobConfig {
 	@Bean(name = Constants.JOB_ID_DEDUP + ":dedupDisadvantagedCnbPagesPartitionedStep")
 	public Step dedupSimpleKeysDisadvantagedCnbPagesPartitionedStep() throws Exception {
 		return steps.get("dedupSimpleKeysDisadvantagedCnbPagesPartitionedStep")
+				.listener(init(new StepDedupStatsListener("job/dedupRecordsJob/dedup_stats.sql")))
 				.partitioner("dedupSimpleKeysDisadvantagedCnbPagesPartitionedStepSlave", this.partioner()) //
 				.taskExecutor(this.taskExecutor)
 				.gridSize(this.partitionThreads)
@@ -1781,6 +1797,7 @@ public class DedupRecordsJobConfig {
 	@Bean(name = Constants.JOB_ID_DEDUP + ":dedupDisadvantagedCnbTitlePartitionedStep")
 	public Step dedupSimpleKeysDisadvantagedCnbTitlePartitionedStep() throws Exception {
 		return steps.get("dedupSimpleKeysDisadvantagedCnbTitlePartitionedStep")
+				.listener(init(new StepDedupStatsListener("job/dedupRecordsJob/dedup_stats.sql")))
 				.partitioner("dedupSimpleKeysDisadvantagedCnbTitlePartitionedStepSlave", this.partioner()) //
 				.taskExecutor(this.taskExecutor)
 				.gridSize(this.partitionThreads)
@@ -1832,6 +1849,7 @@ public class DedupRecordsJobConfig {
 	@Bean(name = Constants.JOB_ID_DEDUP + ":dedupDisadvantagedIsmnPartitionedStep")
 	public Step dedupSimpleKeysDisadvantagedIsmnPartitionedStep() throws Exception {
 		return steps.get("dedupSimpleKeysDisadvantagedIsmnPartitionedStep")
+				.listener(init(new StepDedupStatsListener("job/dedupRecordsJob/dedup_stats.sql")))
 				.partitioner("dedupSimpleKeysDisadvantagedIsmnPartitionedStepSlave", this.partioner()) //
 				.taskExecutor(this.taskExecutor)
 				.gridSize(this.partitionThreads)
@@ -1955,6 +1973,13 @@ public class DedupRecordsJobConfig {
 			return hrs;
 		}
 
+	}
+
+	private StepProgressListener init(StepProgressListener listener) {
+		AutowireCapableBeanFactory factory = appCtx.getAutowireCapableBeanFactory();
+		factory.autowireBean(listener);
+		factory.initializeBean(listener, "listener");
+		return listener;
 	}
 
 }
