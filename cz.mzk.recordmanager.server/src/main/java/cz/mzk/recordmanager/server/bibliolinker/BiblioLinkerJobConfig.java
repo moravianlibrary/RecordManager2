@@ -149,6 +149,9 @@ public class BiblioLinkerJobConfig {
 	private String blSimilarCleanupSql =
 			ResourceUtils.asString("job/biblioLinkerJob/blSimilarCleanup.sql");
 
+	private static final String blSimilarMaxCount =
+			ResourceUtils.asString("job/biblioLinkerJob/prepareBLSTempMaxCount.sql");
+
 	private static final Integer INTEGER_OVERRIDEN_BY_EXPRESSION = null;
 
 	private final int partitionThreads = 6;
@@ -612,7 +615,8 @@ public class BiblioLinkerJobConfig {
 			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":blSimilarTempTopicKeyLangRestPartitionedStep") Step blSimilarTempTopicKeyLangRestStep,
 			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":prepareBLSimilarTempRestStep") Step prepareBLSimilarTempRestStep,
 			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":blSimilarTempRestPartitionedStep") Step blSimilarTempRestStep,
-			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":blSimilarCleanupStep") Step blSimilarCleanupStep
+			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":blSimilarCleanupStep") Step blSimilarCleanupStep,
+			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":prepareBLSimilarMaxCountStep") Step prepareBLSimilarMaxCountStep
 	) {
 		return jobs.get(Constants.JOB_ID_BIBLIO_LINKER_SIMILAR)
 				.validator(new BiblioLinkerJobParametersValidator())
@@ -633,10 +637,13 @@ public class BiblioLinkerJobConfig {
 				.next(blSimilarTempTopicKeyStep)
 				.next(prepareBLSimilarTempLibrariesStep)
 				.next(blSimilarTempLibrariesStep)
+				.next(prepareBLSimilarMaxCountStep)
 				.next(prepareBLSimilarTempEntityLangRestStep)
 				.next(blSimilarTempEntityLangRestStep)
+				.next(prepareBLSimilarMaxCountStep)
 				.next(prepareBLSimilarTempTopicKeyLangRestStep)
 				.next(blSimilarTempTopicKeyLangRestStep)
+				.next(prepareBLSimilarMaxCountStep)
 				.next(prepareBLSimilarTempRestStep)
 				.next(blSimilarTempRestStep)
 				.next(blSimilarCleanupStep)
@@ -1361,6 +1368,24 @@ public class BiblioLinkerJobConfig {
 	public Tasklet blSimilarcleanupTasklet() {
 		return new SqlCommandTasklet(blSimilarCleanupSql);
 	}
+
+	/**
+	 * biblio linker similar max count step
+	 */
+	@Bean(name = "blsMaxCountTasklet")
+	@StepScope
+	public Tasklet blsMaxCountTasklet() {
+		return new SqlCommandTasklet(blSimilarMaxCount);
+	}
+
+	@Bean(name = Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":prepareBLSimilarMaxCountStep")
+	public Step prepareBLSimilarMaxCountStep() {
+		return steps.get("prepareBLSimilarMaxCountStep")
+				.tasklet(blsMaxCountTasklet())
+				.listener(new StepProgressListener())
+				.build();
+	}
+
 
 	/**
 	 * Generic components
