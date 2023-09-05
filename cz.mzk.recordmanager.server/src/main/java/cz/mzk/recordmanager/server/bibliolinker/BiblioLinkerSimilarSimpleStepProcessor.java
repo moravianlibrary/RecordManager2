@@ -38,17 +38,25 @@ public class BiblioLinkerSimilarSimpleStepProcessor implements
 	private ProgressLogger progressLogger = new ProgressLogger(logger, 1000);
 
 	protected BiblioLinkerSimilarType type;
+	// maximum similarities count per step
+	protected int similarityStepLimit;
+	// maximum similarities count per record
+	protected static final int MAX_SIMILARS = 5;
 
 	private static final List<BiblioLinkerSimilarType> ONLY_EMPTY_SIMILAR =
 			new ArrayList<>(Collections.singletonList(BiblioLinkerSimilarType.ENTITY_LANGUAGE));
-
-	protected static final int MAX_SIMILARS = 5;
 
 	public BiblioLinkerSimilarSimpleStepProcessor() {
 	}
 
 	public BiblioLinkerSimilarSimpleStepProcessor(BiblioLinkerSimilarType type) {
 		this.type = type;
+		this.similarityStepLimit = Integer.MAX_VALUE;
+	}
+
+	public BiblioLinkerSimilarSimpleStepProcessor(BiblioLinkerSimilarType type, int similarityStepLimit) {
+		this.type = type;
+		this.similarityStepLimit = similarityStepLimit;
 	}
 
 	@Override
@@ -64,7 +72,8 @@ public class BiblioLinkerSimilarSimpleStepProcessor implements
 			for (HarvestedRecord hr : records.get(blOuter)) {
 				if (hr.getDeleted() != null) continue;
 				similarIds = new TreeSet<>(hr.getBiblioLinkerSimilarUrls());
-				if (!similarIds.isEmpty() && ONLY_EMPTY_SIMILAR.contains(type)) continue;
+//				if (!similarIds.isEmpty() && ONLY_EMPTY_SIMILAR.contains(type)) continue;
+				if (similarIds.size() >= similarityStepLimit) break;
 				similarHr = new HashSet<>();
 				for (Long blInner : records.keySet()) {
 					// same BibliLinker groups
@@ -106,10 +115,10 @@ public class BiblioLinkerSimilarSimpleStepProcessor implements
 		MetadataRecord mr = mrf.getMetadataRecord(hr);
 		List<String> isn;
 		sampleObject.put("id", hr.getHarvestedFrom().getIdPrefix() + '.' + hr.getUniqueId().getRecordId());
-		List<HarvestedRecordFormatEnum> formats =mr.getDetectedFormatList();
+		List<HarvestedRecordFormatEnum> formats = mr.getDetectedFormatList();
 		if (!formats.isEmpty()) {
 			List<String> hierarchicFormats = SolrUtils.createRecordTypeHierarchicFacet(formats.get(0));
-			sampleObject.put("format", hierarchicFormats.get(hierarchicFormats.size()-1));
+			sampleObject.put("format", hierarchicFormats.get(hierarchicFormats.size() - 1));
 		}
 		sampleObject.put("author", mr.getAuthorDisplay());
 		sampleObject.put("title", mr.getTitleDisplay());

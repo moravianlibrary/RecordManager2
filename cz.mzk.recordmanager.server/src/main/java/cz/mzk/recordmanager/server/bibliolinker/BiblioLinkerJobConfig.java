@@ -1228,7 +1228,7 @@ public class BiblioLinkerJobConfig {
 	@Bean(name = "blSimilarEntityLangRest:processor")
 	@StepScope
 	public ItemProcessor<List<Long>, List<HarvestedRecord>> blSimilarEntityLangRestStepProsessor() {
-		return new BiblioLinkerSimilarSimpleStepProcessor(BiblioLinkerSimilarType.ENTITY_LANGUAGE);
+		return new BiblioLinkerSimilarSimpleStepProcessor(BiblioLinkerSimilarType.ENTITY_LANGUAGE, 5);
 	}
 
 	/**
@@ -1285,7 +1285,7 @@ public class BiblioLinkerJobConfig {
 	@Bean(name = "blSimilarTopicKeyLangRest:processor")
 	@StepScope
 	public ItemProcessor<List<Long>, List<HarvestedRecord>> blSimilarTopicKeyLangRestStepProsessor() {
-		return new BiblioLinkerSimilarSimpleStepProcessor(BiblioLinkerSimilarType.TOPICKEY_LANGUAGE);
+		return new BiblioLinkerSimilarSimpleStepProcessor(BiblioLinkerSimilarType.TOPICKEY_LANGUAGE, 5);
 	}
 
 	/**
