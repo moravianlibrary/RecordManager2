@@ -3278,3 +3278,6 @@ INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granul
 
 --changeset tomascejpek:398 context:cpk
 UPDATE kramerius_conf SET url='https://api.kramerius.mzk.cz',url_solr='https://solr-export.k7.mzk.cz/solr/search/',dnnt_dest_url='https://www.digitalniknihovna.cz/mzk/uuid/',fulltext_version='7',metadata_stream='BIBLIO_MODS' WHERE import_conf_id=99001;
+
+--changeset tomascejpek:399 context:cpk
+UPDATE kramerius_conf SET url='https://api.kramerius.mzk.cz/' WHERE import_conf_id=99001;
