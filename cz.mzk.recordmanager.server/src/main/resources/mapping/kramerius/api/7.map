@@ -11,7 +11,7 @@ BIBLIO_MODS = mods
 page_number = title.search
 page_order = title.sort
 root_pid = root.pid
-parent_pid = foster_parents.pids
+parent_pid = own_parent.pid
 
 availability_url = %s/search?fl=accessibility,dnnt,pid,level,licenses&q=level:0&rows=%d&start=%d&wt=xml
 availability_url = %s/search?fl=accessibility,dnnt,pid,level,licenses&q=level:1+model:monographunit&rows=%d&start=%d&wt=xml

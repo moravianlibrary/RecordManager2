@@ -78,7 +78,8 @@ public class KramAvailability {
 	}
 
 	public void setAvailability(String availability) {
-		this.availability = availability;
+		if (availability == null) this.availability = "private";
+		else this.availability = availability;
 	}
 
 	public Date getUpdated() {
