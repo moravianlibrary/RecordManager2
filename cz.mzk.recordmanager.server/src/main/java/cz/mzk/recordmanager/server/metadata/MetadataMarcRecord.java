@@ -1163,57 +1163,81 @@ public class MetadataMarcRecord implements MetadataRecord {
 		return underlayingMarc.getControlField("001");
 	}
 
-	private static final Pattern CITATION_OR_AT = Pattern.compile("[at]");
-	private static final Pattern CITATION_OR_CDM = Pattern.compile("[cdm]");
-	private static final Pattern CITATION_OR_IS = Pattern.compile("[is]");
+	private static final Pattern CITATION_OR_A = Pattern.compile("a");
+	private static final Pattern CITATION_OR_B = Pattern.compile("b");
 	private static final Pattern CITATION_CONTRIBUTION =
-			Pattern.compile(".*sborník.*|.*proceedings.*|.*almanach.*", Pattern.CASE_INSENSITIVE);
-	private static final Pattern CITATION_OR_AB = Pattern.compile("[ab]");
-	private static final Pattern CITATION_OR_EF = Pattern.compile("[ef]");
-	private static final Pattern CITATION_OR_CDKGIJOPR = Pattern.compile("[cdkgijopr]");
+			Pattern.compile(".*konference.*|.*sborník.*|.*proceedings.*|.*almanach.*", Pattern.CASE_INSENSITIVE);
+	private static final Pattern CITATION_PROCEEDINGS = Pattern.compile("sborn[ií]k");
 
 	@Override
 	public CitationRecordType getCitationFormat() {
-		String ldr06 = Character.toString(underlayingMarc.getLeader().getTypeOfRecord()).toLowerCase();
 		String ldr07 = Character.toString(underlayingMarc.getLeader().getImplDefined1()[0]).toLowerCase();
+		List<String> f650a = underlayingMarc.getFields("650", 'a');
 
-		Boolean exists85641 = false; // url, for electronic version
+		List<HarvestedRecordFormatEnum> formats = getDetectedFormatList();
+
+		boolean exists85641 = false; // url, for electronic version
 		for (DataField df : underlayingMarc.getDataFields("856")) {
 			if (df.getIndicator1() == '4' && df.getIndicator2() == '1') {
 				exists85641 = true;
 			}
 		}
 
-		if (!underlayingMarc.getDataFields("502").isEmpty()) {
-			return CitationRecordType.ACADEMIC_WORK;
+		if (formats.contains(THESIS_BACHELOR)
+				|| formats.contains(THESIS_DISSERTATION)
+				|| formats.contains(THESIS_MASTER)
+				|| formats.contains(THESIS_ADVANCED_MASTER)
+				|| formats.contains(THESIS_HABILITATION)
+				|| formats.contains(THESIS_OTHER)) {
+			if (exists85641) return CitationRecordType.ELECTRONIC_ACADEMIC_WORK;
+			else return CitationRecordType.ACADEMIC_WORK;
 		}
 
-		if (CITATION_OR_AT.matcher(ldr06).matches() && CITATION_OR_CDM.matcher(ldr07).matches()) {
+		if (formats.contains(BOOKS)) {
 			if (exists85641) return CitationRecordType.ELECTRONIC_BOOK;
 			else return CitationRecordType.BOOK;
 		}
 
-		if (CITATION_OR_IS.matcher(ldr07).matches()) {
+		if (formats.contains(ARTICLES) && CITATION_OR_A.matcher(ldr07).matches()) {
+			if (exists85641) return CitationRecordType.ELECTRONIC_BOOK_PART;
+			else return CitationRecordType.BOOK_PART;
+		}
+
+		if (formats.contains(PERIODICALS)) {
 			if (exists85641) return CitationRecordType.ELECTRONIC_PERIODICAL;
 			else return CitationRecordType.PERIODICAL;
 		}
 
-		for (DataField df : underlayingMarc.getDataFields("773")) {
-			if (CITATION_CONTRIBUTION.matcher(df.toString()).matches()) {
-				if (exists85641) return CitationRecordType.ELECTRONIC_CONTRIBUTION_PROCEEDINGS;
-				else return CitationRecordType.CONTRIBUTION_PROCEEDINGS;
+		if (formats.contains(ARTICLES)) {
+			for (DataField df : underlayingMarc.getDataFields("773")) {
+				if (CITATION_CONTRIBUTION.matcher(df.toString()).matches()) {
+					if (exists85641) return CitationRecordType.ELECTRONIC_CONTRIBUTION_PROCEEDINGS;
+					else return CitationRecordType.CONTRIBUTION_PROCEEDINGS;
+				}
 			}
 		}
 
-		if (CITATION_OR_AB.matcher(ldr07).matches()) {
+		if (formats.contains(ARTICLES) && CITATION_OR_B.matcher(ldr07).matches()) {
 			if (exists85641) return CitationRecordType.ELECTRONIC_ARTICLE;
 			else return CitationRecordType.ARTICLE;
 		}
 
-		if (CITATION_OR_EF.matcher(ldr06).matches()) return CitationRecordType.MAPS;
+		if (formats.contains(MAPS)) return CitationRecordType.MAPS;
 
-		if (CITATION_OR_CDKGIJOPR.matcher(ldr06).matches()) return CitationRecordType.OTHERS;
+		for (String value : f650a) {
+			if (CITATION_PROCEEDINGS.matcher(value).find()) {
+				if (exists85641) return CitationRecordType.ELECTRONIC_PROCEEDINGS;
+				else return CitationRecordType.PROCEEDINGS;
+			}
+		}
 
+		if (!formats.contains(OTHER_PERSON)
+				&& !formats.contains(OTHER_OTHER)
+				&& !formats.contains(OTHER_COMPUTER_CARRIER)
+				&& !formats.contains(OTHER_MICROFORMS)
+				&& !formats.contains(OTHER_DICTIONARY_ENTRY)) {
+			return CitationRecordType.OTHERS;
+		}
 		return CitationRecordType.ERROR;
 	}
 
@@ -1255,7 +1279,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 	}
 
 	protected List<String> getUrls(String availability) {
-		return getUrls(availability,null);
+		return getUrls(availability, null);
 	}
 
 	protected List<String> getUrls(String availability, String defaultComment) {

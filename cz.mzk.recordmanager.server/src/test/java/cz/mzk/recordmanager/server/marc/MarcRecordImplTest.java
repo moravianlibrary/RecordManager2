@@ -639,7 +639,7 @@ public class MarcRecordImplTest extends AbstractTest {
 	}
 
 	@Test
-	public void getCitationFormatArticle() throws Exception {
+	public void getCitationFormatBookPart() throws Exception {
 		MarcRecordImpl mri;
 		MetadataRecord metadataRecord;
 		List<String> data = new ArrayList<>();
@@ -647,7 +647,7 @@ public class MarcRecordImplTest extends AbstractTest {
 		data.add("000 0000000a");
 		mri = MarcRecordFactory.recordFactory(data);
 		metadataRecord = metadataFactory.getMetadataRecord(mri);
-		Assert.assertEquals(metadataRecord.getCitationFormat(), CitationRecordType.ARTICLE);
+		Assert.assertEquals(metadataRecord.getCitationFormat(), CitationRecordType.BOOK_PART);
 		data.clear();
 	}
 
