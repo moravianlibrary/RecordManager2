@@ -3281,3 +3281,8 @@ UPDATE kramerius_conf SET url='https://api.kramerius.mzk.cz',url_solr='https://s
 
 --changeset tomascejpek:399 context:cpk
 UPDATE kramerius_conf SET url='https://api.kramerius.mzk.cz/' WHERE import_conf_id=99001;
+
+--changeset tomascejpek:400 context:cpk
+INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (335, 'KBBB', 'https://www.knihovnabbb.cz/', 'https://knihovnabbb.tritius.cz/', 'Uherské Hradiště', 'ZL');
+INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id, mappings996) VALUES (535, 335, 200, 'kbbb', 11, false, true, true, true, 'U', 'other', 'tritius');
+INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (535,'https://knihovnabbb.tritius.cz/tritius/oai-provider','CPK_1','marc21',NULL);
