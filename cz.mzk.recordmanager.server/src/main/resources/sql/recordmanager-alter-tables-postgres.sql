@@ -3040,3 +3040,8 @@ INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format) VAL
 UPDATE import_conf SET library_id=295 WHERE id=99041;
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (154, 495, 'ABA006');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (155, 495, 'JHD001');
+
+-- 05. 02. 2024 tomascejpek
+INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (335, 'KBBB', 'https://www.knihovnabbb.cz/', 'https://knihovnabbb.tritius.cz/', 'Uherské Hradiště', 'ZL');
+INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id, mappings996) VALUES (535, 335, 200, 'kbbb', 11, false, true, true, true, 'U', 'other', 'tritius');
+INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (535,'https://knihovnabbb.tritius.cz/tritius/oai-provider','CPK_1','marc21',NULL);
