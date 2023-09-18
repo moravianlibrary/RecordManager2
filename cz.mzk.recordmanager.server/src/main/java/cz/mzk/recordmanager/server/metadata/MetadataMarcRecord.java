@@ -125,7 +125,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 	private static final char[] ARRAY_OPR = {'o', 'p', 'r'};
 	private static final char[] ARRAY_OQ = {'o', 'q'};
 	private static final List<String> ENTITY_RELATIONSHIP =
-			Arrays.asList("aut", "edt", "cmp", "ivr", "ive", "org", "drt", "ant", "ctb", "ccp");
+			Arrays.asList("aut", "cmp", "ive", "org", "drt", "ant", "ccp");
 	private static final List<String> BL_AUTHOR_RELATIONSHIP = Arrays.asList("ccp", "ant", "aut");
 	private static final List<String> BL_TOPIC_KEY_STOP_WORDS_650 = Arrays.asList("d006801", "ph115615", "ph128175", "ph114390",
 			"ph116858", "ph116861", "d005260", "ph114056", "d005260", "ph135292");
