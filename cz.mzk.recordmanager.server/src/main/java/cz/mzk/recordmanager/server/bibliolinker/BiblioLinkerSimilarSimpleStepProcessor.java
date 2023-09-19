@@ -38,10 +38,13 @@ public class BiblioLinkerSimilarSimpleStepProcessor implements
 	private ProgressLogger progressLogger = new ProgressLogger(logger, 1000);
 
 	protected BiblioLinkerSimilarType type;
+
+	// maximum similarities in step
+	protected int NEW_SIMILARS_FOR_STEP;
 	// maximum similarities count per step
-	protected int similarityStepLimit;
+	protected int MAX_SIMILARS_FOR_STEP;
 	// maximum similarities count per record
-	protected static final int MAX_SIMILARS = 5;
+	protected static final int MAX_SIMILARS_FOR_INDEX = 5;
 
 	private static final List<BiblioLinkerSimilarType> ONLY_EMPTY_SIMILAR =
 			new ArrayList<>(Collections.singletonList(BiblioLinkerSimilarType.ENTITY_LANGUAGE));
@@ -51,12 +54,14 @@ public class BiblioLinkerSimilarSimpleStepProcessor implements
 
 	public BiblioLinkerSimilarSimpleStepProcessor(BiblioLinkerSimilarType type) {
 		this.type = type;
-		this.similarityStepLimit = Integer.MAX_VALUE;
+		this.MAX_SIMILARS_FOR_STEP = Integer.MAX_VALUE;
+		this.NEW_SIMILARS_FOR_STEP = Integer.MAX_VALUE;
 	}
 
-	public BiblioLinkerSimilarSimpleStepProcessor(BiblioLinkerSimilarType type, int similarityStepLimit) {
+	public BiblioLinkerSimilarSimpleStepProcessor(BiblioLinkerSimilarType type, int similarityStepLimit, int newSimilarsCount) {
 		this.type = type;
-		this.similarityStepLimit = similarityStepLimit;
+		this.MAX_SIMILARS_FOR_STEP = similarityStepLimit;
+		this.NEW_SIMILARS_FOR_STEP = newSimilarsCount;
 	}
 
 	@Override
@@ -73,8 +78,9 @@ public class BiblioLinkerSimilarSimpleStepProcessor implements
 				if (hr.getDeleted() != null) continue;
 				similarIds = new TreeSet<>(hr.getBiblioLinkerSimilarUrls());
 //				if (!similarIds.isEmpty() && ONLY_EMPTY_SIMILAR.contains(type)) continue;
-				if (similarIds.size() >= similarityStepLimit) break;
+				if (similarIds.size() >= MAX_SIMILARS_FOR_STEP) break;
 				similarHr = new HashSet<>();
+				int newSimilars = 0;
 				for (Long blInner : records.keySet()) {
 					// same BibliLinker groups
 					if (blOuter.equals(blInner)) continue;
@@ -85,8 +91,9 @@ public class BiblioLinkerSimilarSimpleStepProcessor implements
 						similarHr.add(searched);
 						// new similar record, must be updated
 						toUpdate.add(hr);
+						++newSimilars;
 					}
-					if (similarIds.size() >= MAX_SIMILARS) break;
+					if (similarIds.size() >= MAX_SIMILARS_FOR_INDEX || newSimilars >= NEW_SIMILARS_FOR_STEP) break;
 				}
 				hr.setBiblioLinkerSimilarUrls(new ArrayList<>(similarIds));
 				progressLogger.incrementAndLogProgress();

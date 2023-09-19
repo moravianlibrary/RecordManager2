@@ -6,6 +6,9 @@ public enum BiblioLinkerSimilarType implements StringValueEnum {
 
 	AUTHOR_COMMON_TITLE("author+common_title"),
 	AUTHOR_TITLE("author+title"),
+	AUTHOR_TITLE_AUDIO_MUSICAL_SCORE("author+title+am"),
+	AUTHOR_TITLE_AUDIO_BOOK("author+title+ab"),
+	AUTHOR_TITLE_VIDEO_BOOK("author+title+vb"),
 	TOPIC_KEY("topic_key"),
 	ENTITY("entity"),
 	ISSN_SERIES("issn_series"),
