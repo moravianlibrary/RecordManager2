@@ -614,7 +614,7 @@ public class BiblioLinkerJobConfig {
 			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":prepareBLSimilarTempAuthorTitleAudioBookStep") Step prepareBLSimilarTempAuthorTitleAudioBookStep,
 			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":blSimilarTempAuthorTitleAudioBookPartitionedStep") Step blSimilarTempAuthorTitleAudioBookPartitionedStep,
 			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":prepareBLSimilarTempAuthorTitleVideoBookStep") Step prepareBLSimilarTempAuthorTitleVideoBookStep,
-			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":blSimilarTempAuthorTitleVideoBookPartitionedStep") Step blSimilarTempAuthorTitleAudioVideoPartitionedStep,
+			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":blSimilarTempAuthorTitleVideoBookPartitionedStep") Step blSimilarTempAuthorTitleAuthorTitleVideoPartitionedStep,
 			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":prepareBLSimilarTempTopicKeyStep") Step prepareBLSimilarTempTopicKeyStep,
 			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":blSimilarTempTopicKeyPartitionedStep") Step blSimilarTempTopicKeyStep,
 			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":prepareBLSimilarTempTopicKeySpecDocsStep") Step prepareBLSimilarTempTopicKeySpecDocsStep,
@@ -648,7 +648,7 @@ public class BiblioLinkerJobConfig {
 				.next(prepareBLSimilarTempAuthorTitleAudioBookStep)
 				.next(blSimilarTempAuthorTitleAudioBookPartitionedStep)
 				.next(prepareBLSimilarTempAuthorTitleVideoBookStep)
-				.next(blSimilarTempAuthorTitleAudioVideoPartitionedStep)
+				.next(blSimilarTempAuthorTitleAuthorTitleVideoPartitionedStep)
 				.next(prepareBLSimilarTempIssnSeriesStep)
 				.next(blSimilarTempIssnSeriesStep)
 				.next(prepareBLSimilarTempSeriesPublisherStep)
