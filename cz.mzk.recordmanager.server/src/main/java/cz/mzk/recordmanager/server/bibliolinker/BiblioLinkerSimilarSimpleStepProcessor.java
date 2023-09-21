@@ -160,7 +160,6 @@ public class BiblioLinkerSimilarSimpleStepProcessor implements
 				results.computeIfAbsent(id, key -> new ArrayList<>()).add(hr);
 			}
 		}
-		System.out.println(results);
 		return results;
 	}
 
