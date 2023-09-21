@@ -490,4 +490,13 @@ public class HarvestedRecordDAOHibernate extends
 		}
 	}
 
+	@Override
+	@SuppressWarnings("unchecked")
+	public List<HarvestedRecord> getByDedupRecordIds(List<Long> dedupRecordIds) {
+		Session session = sessionFactory.getCurrentSession();
+		return (List<HarvestedRecord>) session
+				.createQuery("from HarvestedRecord where dedup_record_id in (:drIds) and deleted is null")
+				.setParameterList("drIds", dedupRecordIds)
+				.list();
+	}
 }

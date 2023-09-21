@@ -21,14 +21,14 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * Generic implementation of of ItemProcessor
+ * Generic implementation of ItemProcessor
  */
 @Component
 public class BiblioLinkerSimilarSimpleStepProcessor implements
 		ItemProcessor<List<Long>, List<HarvestedRecord>> {
 
 	@Autowired
-	private HarvestedRecordDAO harvestedRecordDao;
+	protected HarvestedRecordDAO harvestedRecordDao;
 
 	@Autowired
 	private MetadataRecordFactory mrf;
@@ -66,13 +66,14 @@ public class BiblioLinkerSimilarSimpleStepProcessor implements
 
 	@Override
 	public List<HarvestedRecord> process(List<Long> biblioIdsList) throws Exception {
-		Map<Long, Collection<HarvestedRecord>> records;
+		return processRecords(sortRecords(harvestedRecordDao.getByBiblioLinkerIds(biblioIdsList)));
+	}
+
+	protected List<HarvestedRecord> processRecords(Map<Long, Collection<HarvestedRecord>> records) {
 		Set<HarvestedRecord> toUpdate = new HashSet<>();
 		Set<BiblioLinkerSimilar> similarIds;
 		Set<HarvestedRecord> similarHr;
 		HarvestedRecord searched;
-		// get all records by BiblioLinker id
-		records = sortrecords(harvestedRecordDao.getByBiblioLinkerIds(biblioIdsList));
 		for (Long blOuter : records.keySet()) {
 			for (HarvestedRecord hr : records.get(blOuter)) {
 				if (hr.getDeleted() != null) continue;
@@ -149,17 +150,22 @@ public class BiblioLinkerSimilarSimpleStepProcessor implements
 		return result;
 	}
 
-	private static Map<Long, Collection<HarvestedRecord>> sortrecords(final Collection<HarvestedRecord> hrs) {
+	protected Map<Long, Collection<HarvestedRecord>> sortRecords(final Collection<HarvestedRecord> hrs) {
 		Map<Long, Collection<HarvestedRecord>> results = new HashMap<>();
 		for (HarvestedRecord hr : hrs) {
-			Long blId = hr.getBiblioLinker().getId();
-			if (results.containsKey(blId)) {
-				results.computeIfPresent(blId, (key, value) -> value).add(hr);
+			Long id = getIdForSorting(hr);
+			if (results.containsKey(id)) {
+				results.computeIfPresent(id, (key, value) -> value).add(hr);
 			} else {
-				results.computeIfAbsent(blId, key -> new ArrayList<>()).add(hr);
+				results.computeIfAbsent(id, key -> new ArrayList<>()).add(hr);
 			}
 		}
+		System.out.println(results);
 		return results;
+	}
+
+	protected Long getIdForSorting(HarvestedRecord hr) {
+		return hr.getBiblioLinker().getId();
 	}
 
 }

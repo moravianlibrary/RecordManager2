@@ -1195,13 +1195,13 @@ public class BiblioLinkerJobConfig {
 	public ItemReader<List<Long>> blSimilarTempIssnSeriesStepReader(
 			@Value("#{stepExecutionContext[modulo]}") Integer modulo
 	) throws Exception {
-		return blSimpleKeysReader(TMP_BLS_TABLE_ISSN_SERIES, "biblio_linker_id", modulo);
+		return blSimpleKeysReader(TMP_BLS_TABLE_ISSN_SERIES, "dedup_record_id", modulo);
 	}
 
 	@Bean(name = "blSimilarIssnSeries:processor")
 	@StepScope
 	public ItemProcessor<List<Long>, List<HarvestedRecord>> blSimilarIssnSeriesStepProsessor() {
-		return new BiblioLinkerSimilarSimpleStepProcessor(BiblioLinkerSimilarType.ISSN_SERIES);
+		return new BiblioLinkerSimilarDedupRecordStepProcessor(BiblioLinkerSimilarType.ISSN_SERIES);
 	}
 
 	/**
@@ -1252,13 +1252,13 @@ public class BiblioLinkerJobConfig {
 	public ItemReader<List<Long>> blSimilarTempSeriesPublisherStepReader(
 			@Value("#{stepExecutionContext[modulo]}") Integer modulo
 	) throws Exception {
-		return blSimpleKeysReader(TMP_BLS_TABLE_SERIES_PUBLISHER_LANG, "biblio_linker_id", modulo);
+		return blSimpleKeysReader(TMP_BLS_TABLE_SERIES_PUBLISHER_LANG, "dedup_record_id", modulo);
 	}
 
 	@Bean(name = "blSimilarSeriesPublisher:processor")
 	@StepScope
 	public ItemProcessor<List<Long>, List<HarvestedRecord>> blSimilarSeriesPublisherStepProsessor() {
-		return new BiblioLinkerSimilarSimpleStepProcessor(BiblioLinkerSimilarType.SERIES_PUBLISHE);
+		return new BiblioLinkerSimilarDedupRecordStepProcessor(BiblioLinkerSimilarType.SERIES_PUBLISHE);
 	}
 
 	/**

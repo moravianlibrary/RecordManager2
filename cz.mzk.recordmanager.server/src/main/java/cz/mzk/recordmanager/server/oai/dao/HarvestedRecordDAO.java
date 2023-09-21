@@ -28,7 +28,9 @@ public interface HarvestedRecordDAO extends DomainDAO<Long, HarvestedRecord> {
 	HarvestedRecord get(HarvestedRecordUniqueId uniqueId);
 
 	List<HarvestedRecord> getByDedupRecord(DedupRecord dedupRecord);
-	
+
+	List<HarvestedRecord> getByDedupRecordIds(List<Long> dedupRecordIds);
+
 	List<HarvestedRecord> getByHarvestConfiguration(ImportConfiguration configuration);
 
 	List<HarvestedRecord> getByDedupRecordWithDeleted(DedupRecord dedupRecord);
@@ -36,7 +38,7 @@ public interface HarvestedRecordDAO extends DomainDAO<Long, HarvestedRecord> {
 	boolean existsByDedupRecord(DedupRecord dedupRecord);
 
 	HarvestedRecord findByRecordId(String uniqueId);
-	
+
 	void dropDedupKeys(HarvestedRecord hr);
 
 	void dropBilioLinkerKeys(HarvestedRecord hr);
