@@ -876,16 +876,16 @@ public class MarcDSL extends BaseDSL {
 		Set<BiblioLinkerSimilarType> types = new HashSet<>();
 		List<BiblioLinkerSimilar> allSimilar = context.harvestedRecord().getBiblioLinkerSimilarUrls();
 		for (BiblioLinkerSimilar bls : allSimilar) {
+			if (similars.size() >= 5) break;
 			if (bls.getType() != BiblioLinkerSimilarType.AUTHOR_COMMON_TITLE) continue;
 			types.add(bls.getType());
 			similars.add(bls);
-			if (similars.size() >= 5) break;
 		}
 		for (BiblioLinkerSimilar bls : allSimilar) {
+			if (similars.size() >= 5) break;
 			if (types.contains(bls.getType())) continue;
 			types.add(bls.getType());
 			similars.add(bls);
-			if (similars.size() >= 5) break;
 		}
 		for (BiblioLinkerSimilar bls : allSimilar) {
 			if (similars.size() >= 5) break;
