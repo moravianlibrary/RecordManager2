@@ -48,6 +48,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 	private static final Pattern BOOKPORT = Pattern.compile("\\.bookport\\.cz", Pattern.CASE_INSENSITIVE);
 	protected static final Pattern EBOOKS_URL = Pattern.compile("\\.bookport\\.cz|\\.palmknihy\\.cz", Pattern.CASE_INSENSITIVE);
 	public static final Pattern PALMKNIHY_ID = Pattern.compile("https://www.palmknihy.cz/kniha/(\\d*).*", Pattern.CASE_INSENSITIVE);
+	public static final Pattern SFX_JIB = Pattern.compile("SFX-JIB", Pattern.CASE_INSENSITIVE);
 
 	// formats
 	private static final Pattern KARTOGRAFICKY_DOKUMENT = Pattern.compile("kartografick[yý]\\sdokument", Pattern.CASE_INSENSITIVE);
@@ -1956,7 +1957,20 @@ public class MetadataMarcRecord implements MetadataRecord {
 
 	@Override
 	public boolean isZiskejEddWithoutApi() {
-		return !Collections.disjoint(getDetectedFormatList(), EDD_FORMAT_ALLOWED);
+		return !Collections.disjoint(getDetectedFormatList(), EDD_FORMAT_ALLOWED) && !isSfxForEdd();
+	}
+
+	private boolean isSfxForEdd() {
+		if (underlayingMarc.getControlField("001") != null
+				&& underlayingMarc.getControlField("001").startsWith("sfx")) {
+			return true;
+		}
+		for (String value : underlayingMarc.getFields("040", "a")) {
+			if (SFX_JIB.matcher(value).matches()) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	@Override
