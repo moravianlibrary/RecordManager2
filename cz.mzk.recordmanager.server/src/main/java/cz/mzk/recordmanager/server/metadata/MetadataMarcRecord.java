@@ -339,6 +339,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 		for (String key : TITLE_TAGS) {
 			for (DataField df : underlayingMarc.getDataFields(key)) {
 				String titleText = parseTitleValue(df, TITLE_SUBFIELDS);
+				titleText = filterTitleValue(titleText);
 				if (!titleText.isEmpty()) {
 					boolean similarity = MetadataUtils.similarityEnabled(df, titleText);
 					titleText = RomanNumeralsUtils.getRomanNumerals(titleText);
@@ -350,6 +351,10 @@ public class MetadataMarcRecord implements MetadataRecord {
 			}
 		}
 		return result;
+	}
+
+	protected String filterTitleValue(String title) {
+		return title;
 	}
 
 	@Override
@@ -1350,6 +1355,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 			for (DataField df : underlayingMarc.getDataFields(tag)) {
 				if (df.getSubfield('b') == null) continue;
 				String titleText = parseTitleValue(df, SHORT_TITLE_SUBFIELDS);
+				titleText = filterTitleValue(titleText);
 				if (!titleText.isEmpty()) {
 					boolean similarity = MetadataUtils.similarityEnabled(df, titleText);
 					titleText = RomanNumeralsUtils.getRomanNumerals(titleText);

@@ -234,6 +234,8 @@ public class MetadataRecordFactory {
 		case Constants.PREFIX_ENVI:
 		case Constants.PREFIX_GEOL:
 			return new CgsMetadataMarcRecord(marcRec, hr);
+		case Constants.PREFIX_CNB:
+			return new CnbMetadataMarcRecord(marcRec, hr);
 		default:
 			return new MetadataMarcRecord(marcRec, hr);
 		}
