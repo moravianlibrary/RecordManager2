@@ -3281,3 +3281,7 @@ UPDATE kramerius_conf SET url='https://api.kramerius.mzk.cz',url_solr='https://s
 
 --changeset tomascejpek:399 context:cpk
 UPDATE kramerius_conf SET url='https://api.kramerius.mzk.cz/' WHERE import_conf_id=99001;
+
+--changeset tomascejpek:400 context:cpk
+UPDATE import_conf SET item_id='koha',mappings996='koha' WHERE id=369;
+UPDATE oai_harvest_conf SET url='https://koha.rkka.cz/cgi-bin/koha/oai.pl',set_spec='CPK',metadata_prefix='marccpk',extract_id_regex='KAG001:(.*)',harvest_job_name=NULL WHERE import_conf_id=369;

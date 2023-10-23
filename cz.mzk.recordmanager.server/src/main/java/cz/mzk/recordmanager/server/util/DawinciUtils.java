@@ -30,7 +30,7 @@ public class DawinciUtils {
 		if (sfDData.length() == 0) return df;
 
 		Subfield sfP = df.getSubfield('p');
-		if (!sfP.getData().isEmpty()) {
+		if (sfP != null && !sfP.getData().isEmpty()) {
 			sfDData.add(sfP.getData());
 		}
 		Subfield sfD = MARC_FACTORY.newSubfield('d', sfDData.toString());
