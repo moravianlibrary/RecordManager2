@@ -859,7 +859,7 @@ public class BiblioLinkerJobConfig {
 	@Bean(name = "blSimilarAuthorTitleAudioMusicalScore:processor")
 	@StepScope
 	public ItemProcessor<List<Long>, List<HarvestedRecord>> blSimilarAuthorTitleAudioMusicalScoreStepProsessor() {
-		return new BiblioLinkerSimilarSimpleStepProcessor(BiblioLinkerSimilarType.AUTHOR_TITLE_AUDIO_MUSICAL_SCORE, Integer.MAX_VALUE, 1);
+		return new BiblioLinkerSimilarAuthorTitleStepProcessor(BiblioLinkerSimilarType.AUTHOR_TITLE_AUDIO_MUSICAL_SCORE, Integer.MAX_VALUE, 1);
 	}
 
 	/**
@@ -916,7 +916,7 @@ public class BiblioLinkerJobConfig {
 	@Bean(name = "blSimilarAuthorTitleAudioBook:processor")
 	@StepScope
 	public ItemProcessor<List<Long>, List<HarvestedRecord>> blSimilarAuthorTitleAudioBookStepProsessor() {
-		return new BiblioLinkerSimilarSimpleStepProcessor(BiblioLinkerSimilarType.AUTHOR_TITLE_AUDIO_BOOK, Integer.MAX_VALUE, 1);
+		return new BiblioLinkerSimilarAuthorTitleStepProcessor(BiblioLinkerSimilarType.AUTHOR_TITLE_AUDIO_BOOK, Integer.MAX_VALUE, 1);
 	}
 
 	/**
@@ -973,7 +973,7 @@ public class BiblioLinkerJobConfig {
 	@Bean(name = "blSimilarAuthorTitleVideoBook:processor")
 	@StepScope
 	public ItemProcessor<List<Long>, List<HarvestedRecord>> blSimilarAuthorTitleVideoBookStepProsessor() {
-		return new BiblioLinkerSimilarSimpleStepProcessor(BiblioLinkerSimilarType.AUTHOR_TITLE_VIDEO_BOOK, Integer.MAX_VALUE, 1);
+		return new BiblioLinkerSimilarAuthorTitleStepProcessor(BiblioLinkerSimilarType.AUTHOR_TITLE_VIDEO_BOOK, Integer.MAX_VALUE, 1);
 	}
 
 	/**

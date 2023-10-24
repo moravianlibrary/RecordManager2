@@ -12,6 +12,9 @@ public class BiblioLinkerSimilarAuthorTitleStepProcessor extends BiblioLinkerSim
 		super(type);
 	}
 
+	public BiblioLinkerSimilarAuthorTitleStepProcessor(BiblioLinkerSimilarType type, int similarityStepLimit, int newSimilarsCount) {
+		super(type, similarityStepLimit, newSimilarsCount);
+	}
 	protected boolean isSimilar(HarvestedRecord hr1, HarvestedRecord hr2, Set<HarvestedRecord> similars) {
 		if (!Collections.disjoint(hr1.getPhysicalFormats(), hr2.getPhysicalFormats())) return false;
 		for (HarvestedRecord similar : similars) {
