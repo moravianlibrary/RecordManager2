@@ -171,6 +171,10 @@ public class MetadataMarcRecord implements MetadataRecord {
 		EDD_FORMAT_ALLOWED.add(HarvestedRecordFormatEnum.ARTICLES);
 	}
 
+	protected static final List<HarvestedRecordFormatEnum> BIBLIO_LINKEK_STOP_FORMATS = new ArrayList<>(Arrays.asList(
+			BLIND_AUDIO, BLIND_BRAILLE
+	));
+
 	public MetadataMarcRecord(MarcRecord underlayingMarc) {
 		initRecords(underlayingMarc, null);
 	}
@@ -1979,4 +1983,10 @@ public class MetadataMarcRecord implements MetadataRecord {
 		return new HashSet<>(underlayingMarc.getFields("080", 'a'));
 	}
 
+	@Override
+	public boolean biblioLinkerKeysFilter() {
+		if (!Collections.disjoint(BIBLIO_LINKEK_STOP_FORMATS, getDetectedFormatList())) return false;
+
+		return true;
+	}
 }

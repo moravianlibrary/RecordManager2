@@ -582,4 +582,8 @@ public interface MetadataRecord {
 		return Collections.emptySet();
 	}
 
+	default boolean biblioLinkerKeysFilter() {
+		return true;
+	}
+
 }
