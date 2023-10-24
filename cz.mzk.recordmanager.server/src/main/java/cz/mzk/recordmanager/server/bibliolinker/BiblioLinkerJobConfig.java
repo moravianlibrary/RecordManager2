@@ -69,8 +69,6 @@ public class BiblioLinkerJobConfig {
 
 	private static final String TMP_BLS_TABLE_AUTHOR_COMMON_TITLE = "tmp_bls_author_common_title";
 
-	private static final String TMP_BLS_TABLE_AUTHOR_TITLE = "tmp_bls_author_title";
-
 	private static final String TMP_BLS_TABLE_AUTHOR_TITLE_AUDIO_MUSICAL_SCORE = "tmp_bls_author_title_audio_mus";
 
 	private static final String TMP_BLS_TABLE_AUTHOR_TITLE_AUDIO_BOOK = "tmp_bls_author_title_audio_book";
@@ -78,8 +76,6 @@ public class BiblioLinkerJobConfig {
 	private static final String TMP_BLS_TABLE_AUTHOR_TITLE_VIDEO_BOOK = "tmp_bls_author_title_video_book";
 
 	private static final String TMP_BLS_TABLE_TOPIC_KEY = "tmp_bls_topic_key";
-
-	private static final String TMP_BLS_TABLE_TOPIC_KEY_SPEC_DOCS = "tmp_bls_topic_key_spec_docs";
 
 	private static final String TMP_BLS_TABLE_ENTITY = "tmp_bls_entity";
 
@@ -95,70 +91,64 @@ public class BiblioLinkerJobConfig {
 
 	private static final String TMP_BLS_TABLE_REST = "tmp_bls_rest";
 
-	private String initBiblioLinkerSql = ResourceUtils.asString("job/biblioLinkerJob/initBiblioLinker.sql");
+	private final String initBiblioLinkerSql = ResourceUtils.asString("job/biblioLinkerJob/initBiblioLinker.sql");
 
-	private String initBiblioLinkerSimilarSql = ResourceUtils.asString("job/biblioLinkerJob/initBiblioLinkerSimilar.sql");
+	private final String initBiblioLinkerSimilarSql = ResourceUtils.asString("job/biblioLinkerJob/initBiblioLinkerSimilar.sql");
 
-	private String prepareBLTempTitleAuthorTableSql = ResourceUtils.asString("job/biblioLinkerJob/prepareBLTempTitleAuthor.sql");
+	private final String prepareBLTempTitleAuthorTableSql = ResourceUtils.asString("job/biblioLinkerJob/prepareBLTempTitleAuthor.sql");
 
-	private String prepareBLTempTitleAuthorAudioTableSql = ResourceUtils.asString("job/biblioLinkerJob/prepareBLTempTitleAuthorAudio.sql");
+	private final String prepareBLTempTitleAuthorAudioTableSql = ResourceUtils.asString("job/biblioLinkerJob/prepareBLTempTitleAuthorAudio.sql");
 
-	private String prepareBLTempTitleAuthorVideoTableSql = ResourceUtils.asString("job/biblioLinkerJob/prepareBLTempTitleAuthorVideo.sql");
+	private final String prepareBLTempTitleAuthorVideoTableSql = ResourceUtils.asString("job/biblioLinkerJob/prepareBLTempTitleAuthorVideo.sql");
 
-	private String prepareBLTempTitleAuthorMusicalScoreTableSql = ResourceUtils.asString("job/biblioLinkerJob/prepareBLTempTitleAuthorMusicalScore.sql");
+	private final String prepareBLTempTitleAuthorMusicalScoreTableSql = ResourceUtils.asString("job/biblioLinkerJob/prepareBLTempTitleAuthorMusicalScore.sql");
 
-	private String prepareBLTempTitleLangPeriodicalTableSql = ResourceUtils.asString("job/biblioLinkerJob/prepareBLTempTitleLangPeriodical.sql");
+	private final String prepareBLTempTitleLangPeriodicalTableSql = ResourceUtils.asString("job/biblioLinkerJob/prepareBLTempTitleLangPeriodical.sql");
 
-	private String prepareBLTempRestDedupTableSql = ResourceUtils.asString("job/biblioLinkerJob/prepareBLTempRestDedup.sql");
+	private final String prepareBLTempRestDedupTableSql = ResourceUtils.asString("job/biblioLinkerJob/prepareBLTempRestDedup.sql");
 
-	private String prepareBLTempOrphanedTableSql = ResourceUtils.asString("job/biblioLinkerJob/prepareBLTempOrphaned.sql");
+	private final String prepareBLTempOrphanedTableSql = ResourceUtils.asString("job/biblioLinkerJob/prepareBLTempOrphaned.sql");
 
-	private String prepareBLSimilarTempAuthorCommonTitleTableSql =
+	private final String prepareBLSimilarTempAuthorCommonTitleTableSql =
 			ResourceUtils.asString("job/biblioLinkerJob/prepareBLSTempAuthorKeyCommonTitle.sql");
 
-	private String prepareBLSimilarTempAuthorTitleTableSql =
-			ResourceUtils.asString("job/biblioLinkerJob/prepareBLSTempAuthorTitle.sql");
-
-	private String prepareBLSimilarTempAuthorTitleAudioMusicalScoreTableSql =
+	private final String prepareBLSimilarTempAuthorTitleAudioMusicalScoreTableSql =
 			ResourceUtils.asString("job/biblioLinkerJob/prepareBLSTempAuthorTitleAudioMusicalScore.sql");
 
-	private String prepareBLSimilarTempAuthorTitleAudioBookTableSql =
+	private final String prepareBLSimilarTempAuthorTitleAudioBookTableSql =
 			ResourceUtils.asString("job/biblioLinkerJob/prepareBLSTempAuthorTitleAudioBook.sql");
 
-	private String prepareBLSimilarTempAuthorTitleVideoBookTableSql =
+	private final String prepareBLSimilarTempAuthorTitleVideoBookTableSql =
 			ResourceUtils.asString("job/biblioLinkerJob/prepareBLSTempAuthorTitleVideoBook.sql");
 
-	private String prepareBLSimilarTempTopicKeyTableSql =
+	private final String prepareBLSimilarTempTopicKeyTableSql =
 			ResourceUtils.asString("job/biblioLinkerJob/prepareBLSTempTopicKey.sql");
 
-	private String prepareBLSimilarTempTopicKeySpecDocsTableSql =
-			ResourceUtils.asString("job/biblioLinkerJob/prepareBLSTempTopicKeySpecialDocuments.sql");
-
-	private String prepareBLSimilarTempEntityTableSql =
+	private final String prepareBLSimilarTempEntityTableSql =
 			ResourceUtils.asString("job/biblioLinkerJob/prepareBLSTempEntityLang.sql");
 
-	private String prepareBLSimilarTempIssnSeriesTableSql =
+	private final String prepareBLSimilarTempIssnSeriesTableSql =
 			ResourceUtils.asString("job/biblioLinkerJob/prepareBLSTempIssnSeries.sql");
 
-	private String prepareBLSimilarTempSeriesPublisherTableSql =
+	private final String prepareBLSimilarTempSeriesPublisherTableSql =
 			ResourceUtils.asString("job/biblioLinkerJob/prepareBLSTempSeriesPublisher.sql");
 
-	private String prepareBLSimilarTempLibrariesTableSql =
+	private final String prepareBLSimilarTempLibrariesTableSql =
 			ResourceUtils.asString("job/biblioLinkerJob/prepareBLSTempLibraries.sql");
 
-	private String prepareBLSimilarTempEntityLangRestTableSql =
+	private final String prepareBLSimilarTempEntityLangRestTableSql =
 			ResourceUtils.asString("job/biblioLinkerJob/prepareBLSTempEntityLangRest.sql");
 
-	private String prepareBLSimilarTempTopicKeyLangRestTableSql =
+	private final String prepareBLSimilarTempTopicKeyLangRestTableSql =
 			ResourceUtils.asString("job/biblioLinkerJob/prepareBLSTempTopicKeyLangRest.sql");
 
-	private String prepareBLSimilarTempRestTableSql =
+	private final String prepareBLSimilarTempRestTableSql =
 			ResourceUtils.asString("job/biblioLinkerJob/prepareBLSTempRest.sql");
 
-	private String blCleanupSql =
+	private final String blCleanupSql =
 			ResourceUtils.asString("job/biblioLinkerJob/blCleanup.sql");
 
-	private String blSimilarCleanupSql =
+	private final String blSimilarCleanupSql =
 			ResourceUtils.asString("job/biblioLinkerJob/blSimilarCleanup.sql");
 
 	private static final String blSimilarMaxCount =
@@ -607,8 +597,6 @@ public class BiblioLinkerJobConfig {
 			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":initBLSStep") Step initBLSStep,
 			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":prepareBLSimilarTempAuthorCommonTitleStep") Step prepareBLSimilarTempAuthorCommonTitleStep,
 			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":blSimilarTempAuthorCommonTitlePartitionedStep") Step blSimilarTempAuthorCommonTitleStep,
-			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":prepareBLSimilarTempAuthorTitleStep") Step prepareBLSimilarTempAuthorTitleStep,
-			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":blSimilarTempAuthorTitlePartitionedStep") Step blSimilarTempAuthorTitleStep,
 			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":prepareBLSimilarTempAuthorTitleAudioMusicalScoreStep") Step prepareBLSimilarTempAuthorTitleAudioMusicalScoreStep,
 			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":blSimilarTempAuthorTitleAudioMusicalScorePartitionedStep") Step blSimilarTempAuthorTitleAudioMusicalScorePartitionedStep,
 			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":prepareBLSimilarTempAuthorTitleAudioBookStep") Step prepareBLSimilarTempAuthorTitleAudioBookStep,
@@ -617,8 +605,6 @@ public class BiblioLinkerJobConfig {
 			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":blSimilarTempAuthorTitleVideoBookPartitionedStep") Step blSimilarTempAuthorTitleAuthorTitleVideoPartitionedStep,
 			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":prepareBLSimilarTempTopicKeyStep") Step prepareBLSimilarTempTopicKeyStep,
 			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":blSimilarTempTopicKeyPartitionedStep") Step blSimilarTempTopicKeyStep,
-			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":prepareBLSimilarTempTopicKeySpecDocsStep") Step prepareBLSimilarTempTopicKeySpecDocsStep,
-			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":blSimilarTempTopicKeySpecDocsPartitionedStep") Step blSimilarTempTopicKeySpecDocsStep,
 			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":prepareBLSimilarTempEntityStep") Step prepareBLSimilarTempEntityStep,
 			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":blSimilarTempEntityPartitionedStep") Step blSimilarTempEntityStep,
 			@Qualifier(Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":prepareBLSimilarTempIssnSeriesStep") Step prepareBLSimilarTempIssnSeriesStep,
@@ -641,8 +627,6 @@ public class BiblioLinkerJobConfig {
 				.start(initBLSStep)
 				.next(prepareBLSimilarTempAuthorCommonTitleStep)
 				.next(blSimilarTempAuthorCommonTitleStep)
-//				.next(prepareBLSimilarTempAuthorTitleStep)
-//				.next(blSimilarTempAuthorTitleStep)
 				.next(prepareBLSimilarTempAuthorTitleAudioMusicalScoreStep)
 				.next(blSimilarTempAuthorTitleAudioMusicalScorePartitionedStep)
 				.next(prepareBLSimilarTempAuthorTitleAudioBookStep)
@@ -655,8 +639,6 @@ public class BiblioLinkerJobConfig {
 				.next(blSimilarTempSeriesPublisherStep)
 				.next(prepareBLSimilarTempEntityStep)
 				.next(blSimilarTempEntityStep)
-//				.next(prepareBLSimilarTempTopicKeySpecDocsStep)
-//				.next(blSimilarTempTopicKeySpecDocsStep)
 				.next(prepareBLSimilarTempTopicKeyStep)
 				.next(blSimilarTempTopicKeyStep)
 				.next(prepareBLSimilarTempLibrariesStep)
@@ -746,63 +728,6 @@ public class BiblioLinkerJobConfig {
 	@StepScope
 	public ItemProcessor<List<Long>, List<HarvestedRecord>> blSimilarAuthorCommonTitleStepProsessor() {
 		return new BiblioLinkerSimilarSimpleStepProcessor(BiblioLinkerSimilarType.AUTHOR_COMMON_TITLE);
-	}
-
-	/**
-	 * same author, title for books, audio, video, musical score
-	 */
-	@Bean(name = Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":prepareBLSimilarTempAuthorTitleTasklet")
-	@StepScope
-	public Tasklet prepareBLSimilarTempAuthorTitleTasklet() {
-		return new SqlCommandTasklet(prepareBLSimilarTempAuthorTitleTableSql);
-	}
-
-	@Bean(name = Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":prepareBLSimilarTempAuthorTitleStep")
-	public Step prepareBLSimilarTempAuthorTitleStep() {
-		return steps.get("prepareBLSimilarTempAuthorTitleStep")
-				.tasklet(prepareBLSimilarTempAuthorTitleTasklet())
-				.listener(new StepProgressListener())
-				.build();
-	}
-
-	@Bean(name = Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":blSimilarTempAuthorTitleStep")
-	public Step blSimilarTempAuthorTitleStep() throws Exception {
-		return steps.get("blSimilarTempAuthorTitleStep")
-				.listener(new StepProgressListener())
-				.<List<Long>, List<HarvestedRecord>>chunk(1)
-				.faultTolerant()
-				.keyGenerator(KeyGeneratorForList.INSTANCE)
-				.retry(LockAcquisitionException.class)
-				.retry(OptimisticLockException.class)
-				.retryLimit(RETRY_LIMIT)
-				.reader(blSimilarTempAuthorTitleStepReader(INTEGER_OVERRIDEN_BY_EXPRESSION))
-				.processor(blSimilarAuthorTitleStepProsessor())
-				.writer(blSimpleSimilarWriter(INTEGER_OVERRIDEN_BY_EXPRESSION))
-				.build();
-	}
-
-	@Bean(name = Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":blSimilarTempAuthorTitlePartitionedStep")
-	public Step blSimilarTempAuthorTitlePartitionedStep() throws Exception {
-		return steps.get("blSimilarTempAuthorTitlePartitionedStep")
-				.partitioner("blSimilarTempAuthorTitlePartitionedStepSlave", this.partioner()) //
-				.taskExecutor(this.taskExecutor)
-				.gridSize(this.partitionThreads)
-				.step(blSimilarTempAuthorTitleStep())
-				.build();
-	}
-
-	@Bean(name = "blSimilarAuthorTitle:reader")
-	@StepScope
-	public ItemReader<List<Long>> blSimilarTempAuthorTitleStepReader(
-			@Value("#{stepExecutionContext[modulo]}") Integer modulo
-	) throws Exception {
-		return blSimpleKeysReader(TMP_BLS_TABLE_AUTHOR_TITLE, "biblio_linker_id", modulo);
-	}
-
-	@Bean(name = "blSimilarAuthorTitle:processor")
-	@StepScope
-	public ItemProcessor<List<Long>, List<HarvestedRecord>> blSimilarAuthorTitleStepProsessor() {
-		return new BiblioLinkerSimilarAuthorTitleStepProcessor(BiblioLinkerSimilarType.AUTHOR_TITLE);
 	}
 
 	/**
@@ -1030,63 +955,6 @@ public class BiblioLinkerJobConfig {
 	@Bean(name = "blSimilarTopicKey:processor")
 	@StepScope
 	public ItemProcessor<List<Long>, List<HarvestedRecord>> blSimilarTopicKeyStepProsessor() {
-		return new BiblioLinkerSimilarSimpleStepProcessor(BiblioLinkerSimilarType.TOPIC_KEY);
-	}
-
-	/**
-	 * same topic_key, language for periodicals - patents, authorities
-	 */
-	@Bean(name = Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":prepareBLSimilarTempTopicKeySpecDocsTasklet")
-	@StepScope
-	public Tasklet prepareBLSimilarTempTopicKeySpecDocsTasklet() {
-		return new SqlCommandTasklet(prepareBLSimilarTempTopicKeySpecDocsTableSql);
-	}
-
-	@Bean(name = Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":prepareBLSimilarTempTopicKeySpecDocsStep")
-	public Step prepareBLSimilarTempTopicKeySpecDocsStep() {
-		return steps.get("prepareBLSimilarTempTopicKeySpecDocsStep")
-				.tasklet(prepareBLSimilarTempTopicKeySpecDocsTasklet())
-				.listener(new StepProgressListener())
-				.build();
-	}
-
-	@Bean(name = Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":blSimilarTempTopicKeySpecDocsStep")
-	public Step blSimilarTempTopicKeySpecDocsStep() throws Exception {
-		return steps.get("blSimilarTempTopicKeySpecDocsStep")
-				.listener(new StepProgressListener())
-				.<List<Long>, List<HarvestedRecord>>chunk(1)
-				.faultTolerant()
-				.keyGenerator(KeyGeneratorForList.INSTANCE)
-				.retry(LockAcquisitionException.class)
-				.retry(OptimisticLockException.class)
-				.retryLimit(2 * RETRY_LIMIT)
-				.reader(blSimilarTempTopicKeySpecDocsStepReader(INTEGER_OVERRIDEN_BY_EXPRESSION))
-				.processor(blSimilarTopicKeySpecDocsStepProsessor())
-				.writer(blSimpleSimilarWriter(INTEGER_OVERRIDEN_BY_EXPRESSION))
-				.build();
-	}
-
-	@Bean(name = Constants.JOB_ID_BIBLIO_LINKER_SIMILAR + ":blSimilarTempTopicKeySpecDocsPartitionedStep")
-	public Step blSimilarTempTopicKeySpecDocsPartitionedStep() throws Exception {
-		return steps.get("blSimilarTempTopicKeySpecDocsPartitionedStep")
-				.partitioner("blSimilarTempTopicKeySpecDocsPartitionedStepSlave", this.partioner()) //
-				.taskExecutor(this.taskExecutor)
-				.gridSize(this.partitionThreads)
-				.step(blSimilarTempTopicKeySpecDocsStep())
-				.build();
-	}
-
-	@Bean(name = "blSimilarTopicKeySpecDocs:reader")
-	@StepScope
-	public ItemReader<List<Long>> blSimilarTempTopicKeySpecDocsStepReader(
-			@Value("#{stepExecutionContext[modulo]}") Integer modulo
-	) throws Exception {
-		return blSimpleKeysReader(TMP_BLS_TABLE_TOPIC_KEY_SPEC_DOCS, "biblio_linker_id", modulo);
-	}
-
-	@Bean(name = "blSimilarTopicKeySpecDocs:processor")
-	@StepScope
-	public ItemProcessor<List<Long>, List<HarvestedRecord>> blSimilarTopicKeySpecDocsStepProsessor() {
 		return new BiblioLinkerSimilarSimpleStepProcessor(BiblioLinkerSimilarType.TOPIC_KEY);
 	}
 
