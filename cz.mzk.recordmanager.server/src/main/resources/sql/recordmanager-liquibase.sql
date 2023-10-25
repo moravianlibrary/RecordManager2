@@ -3275,3 +3275,6 @@ UPDATE kramerius_conf SET url_solr='https://solr-export.app.ceskadigitalniknihov
 UPDATE oai_harvest_conf SET url='https://tritius.knih-pi.cz/tritius/oai-provider',set_spec='CPK_1' WHERE import_conf_id=381;
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, indexed) VALUES (534, 181, 200, 'mkpisek', 11, false, true, false, true, 'U', false);
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (534,'https://tritius.knih-pi.cz/tritius/oai-provider','PLM','marc21',NULL);
+
+--changeset tomascejpek:398
+ALTER TABLE harvested_record DROP COLUMN bl_disadvantaged;

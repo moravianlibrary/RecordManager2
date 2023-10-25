@@ -991,8 +991,6 @@ public class MarcRecordImplTest extends AbstractTest {
 		List<String> data = new ArrayList<>();
 		List<BLTitle> expected = new ArrayList<>();
 
-		data.add("765 $tTitle1");
-		expected.add(BLTitle.create("Title1"));
 		data.add("210 $aTitle2");
 		expected.add(BLTitle.create("Title2"));
 		data.add("222 $aTitle3");

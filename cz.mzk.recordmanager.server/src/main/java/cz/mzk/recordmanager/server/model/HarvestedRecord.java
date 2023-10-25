@@ -1,26 +1,10 @@
 package cz.mzk.recordmanager.server.model;
 
+import com.google.common.base.Preconditions;
+
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.*;
-
-import javax.persistence.Basic;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToOne;
-import javax.persistence.MapKey;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.persistence.Transient;
-
-import com.google.common.base.Preconditions;
 
 
 @Entity
@@ -308,9 +292,6 @@ public class HarvestedRecord extends AbstractDomainObject {
 
 	@Column(name = "biblio_linker_keys_hash")
 	private String biblioLinkerKeysHash = "";
-
-	@Column(name = "bl_disadvantaged")
-	private boolean blDisadvantaged = true;
 
 	@Column(name = "bl_author")
 	private String blAuthor;
@@ -903,14 +884,6 @@ public class HarvestedRecord extends AbstractDomainObject {
 
 	public void setBiblioLinkerKeysHash(String biblioLinkerKeysHash) {
 		this.biblioLinkerKeysHash = biblioLinkerKeysHash;
-	}
-
-	public boolean isBlDisadvantaged() {
-		return blDisadvantaged;
-	}
-
-	public void setBlDisadvantaged(boolean blDisadvantaged) {
-		this.blDisadvantaged = blDisadvantaged;
 	}
 
 	public List<Uuid> getUuids() {
