@@ -1,11 +1,13 @@
 package cz.mzk.recordmanager.server.oai.harvest;
 
-import java.text.ParseException;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import java.util.concurrent.ArrayBlockingQueue;
-
+import cz.mzk.recordmanager.server.model.OAIGranularity;
+import cz.mzk.recordmanager.server.model.OAIHarvestConfiguration;
+import cz.mzk.recordmanager.server.oai.dao.OAIHarvestConfigurationDAO;
+import cz.mzk.recordmanager.server.oai.model.OAIIdentify;
+import cz.mzk.recordmanager.server.oai.model.OAIListRecords;
+import cz.mzk.recordmanager.server.oai.model.OAIRecord;
+import cz.mzk.recordmanager.server.util.HibernateSessionSynchronizer;
+import cz.mzk.recordmanager.server.util.HibernateSessionSynchronizer.SessionBinder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.ExitStatus;
@@ -17,14 +19,12 @@ import org.springframework.batch.item.ItemStream;
 import org.springframework.batch.item.ItemStreamException;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import cz.mzk.recordmanager.server.model.OAIGranularity;
-import cz.mzk.recordmanager.server.model.OAIHarvestConfiguration;
-import cz.mzk.recordmanager.server.oai.dao.OAIHarvestConfigurationDAO;
-import cz.mzk.recordmanager.server.oai.model.OAIIdentify;
-import cz.mzk.recordmanager.server.oai.model.OAIListRecords;
-import cz.mzk.recordmanager.server.oai.model.OAIRecord;
-import cz.mzk.recordmanager.server.util.HibernateSessionSynchronizer;
-import cz.mzk.recordmanager.server.util.HibernateSessionSynchronizer.SessionBinder;
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+import java.util.concurrent.ArrayBlockingQueue;
 
 public class AsyncOAIItemReader implements ItemReader<List<OAIRecord>>, ItemStream,
 		StepExecutionListener {
@@ -80,6 +80,10 @@ public class AsyncOAIItemReader implements ItemReader<List<OAIRecord>>, ItemStre
 
 	private ArrayBlockingQueue<Entry> queue = new ArrayBlockingQueue<Entry>(5);
 
+	private List<OAIRecord> batchRecords = new ArrayList<>();
+
+	private static final int BATCH_SIZE = 100;
+
 	public AsyncOAIItemReader(Long confId, Date fromDate, Date untilDate, String resumptionToken, boolean reharvest) {
 		super();
 		this.confId = confId;
@@ -91,9 +95,14 @@ public class AsyncOAIItemReader implements ItemReader<List<OAIRecord>>, ItemStre
 
 	@Override
 	public List<OAIRecord> read() throws InterruptedException {
-		if (done) {
+		if (done && batchRecords.isEmpty()) {
 			return null;
 		}
+
+		if (!batchRecords.isEmpty()) {
+			return getRecords();
+		}
+
 		Entry entry = queue.take();
 		if (entry == HARVEST_FINISHED_SENTINEL) {
 			done = true;
@@ -103,7 +112,8 @@ public class AsyncOAIItemReader implements ItemReader<List<OAIRecord>>, ItemStre
 			throw new RuntimeException("OAI harvest failed, see logs for details");
 		}
 		lastReturnedResumptionToken = entry.resumptionToken;
-		return entry.records;
+		batchRecords = entry.records;
+		return getRecords();
 	}
 
 	@Override
@@ -212,6 +222,16 @@ public class AsyncOAIItemReader implements ItemReader<List<OAIRecord>>, ItemStre
 			}
 		}
 		this.harvestingThread = null;
+	}
+
+	private List<OAIRecord> getRecords() {
+		List<OAIRecord> results = new ArrayList<>();
+		int i = 0;
+		while (i < BATCH_SIZE && !batchRecords.isEmpty()) {
+			results.add(batchRecords.remove(0));
+			++i;
+		}
+		return results;
 	}
 
 }
