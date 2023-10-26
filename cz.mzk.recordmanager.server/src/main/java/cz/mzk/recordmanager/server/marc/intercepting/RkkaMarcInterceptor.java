@@ -20,7 +20,7 @@ import java.util.TreeSet;
 public class RkkaMarcInterceptor extends DefaultMarcInterceptor {
 
 	private static final List<String> SFL = Arrays.asList("KM", "KO", "KA", "KD", "K2", "K1", "KN", "K6", "K4",
-			"K7", "KI", "KU", "K8", "K9", "KF", "KC");
+			"K7", "KI", "KU", "K8", "K9", "KF", "KC", "HLAVNI");
 
 	public RkkaMarcInterceptor(Record record, ImportConfiguration configuration, String recordId) {
 		super(record, configuration, recordId);

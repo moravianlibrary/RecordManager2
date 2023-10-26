@@ -18,6 +18,7 @@ import org.springframework.batch.item.ItemStreamException;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -49,6 +50,10 @@ public class OAIItemReader implements ItemReader<List<OAIRecord>>, ItemStream,
 
 	private boolean finished = false;
 
+	private List<OAIRecord> batchRecords = new ArrayList<>();
+
+	private static final int BATCH_SIZE = 100;
+
 	public OAIItemReader(Long confId, Date fromDate, Date untilDate, String resumptionToken, boolean reharvest) {
 		super();
 		this.confId = confId;
@@ -60,8 +65,12 @@ public class OAIItemReader implements ItemReader<List<OAIRecord>>, ItemStream,
 
 	@Override
 	public List<OAIRecord> read() {
-		if (finished) {
+		if (finished && batchRecords.isEmpty()) {
 			return null;
+		}
+
+		if (!batchRecords.isEmpty()) {
+			return getRecords();
 		}
 
 		OAIListRecords listRecords = harvester.listRecords(resumptionToken);
@@ -75,7 +84,8 @@ public class OAIItemReader implements ItemReader<List<OAIRecord>>, ItemStream,
 		if (listRecords.getRecords().isEmpty()) {
 			return null;
 		} else {
-			return listRecords.getRecords();
+			batchRecords = listRecords.getRecords();
+			return getRecords();
 		}
 	}
 
@@ -138,4 +148,14 @@ public class OAIItemReader implements ItemReader<List<OAIRecord>>, ItemStream,
 		configDao.persist(conf);
 	}
 
+	private List<OAIRecord> getRecords() {
+		List<OAIRecord> results = new ArrayList<>();
+		int i = 0;
+		while (i < BATCH_SIZE && !batchRecords.isEmpty()) {
+			results.add(batchRecords.remove(0));
+			++i;
+		}
+		return results;
+	}
+	
 }
