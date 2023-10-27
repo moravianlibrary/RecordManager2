@@ -151,6 +151,7 @@ INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (295, 'VSE
 INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (296, 'MKTNV', 'https://knihovnatnv.cz/', 'https://arl4.library.sk/arl-tyn/cs/index/', 'Týn nad Vltavou', 'JC');
 INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (335, 'KBBB', 'https://www.knihovnabbb.cz/', 'https://knihovnabbb.tritius.cz/', 'Uherské Hradiště', 'ZL');
 INSERT INTO library (id, name, url, catalog_url, city) VALUES (339, 'ASARP', NULL, NULL, NULL);
+INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (337, 'MILIN', 'https://www.knihovnamilin.cz/', 'https://katalog.knihovnamilin.cz/', 'Milín', 'SC');
 INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (338, 'KMMB', 'https://www.kmmb.cz/', 'https://www.kmmb.eu/', 'Mladá Boleslav', 'SC');
 INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (340, 'MKNP', 'https://knihovnanpaka.cz/', 'https://katalog.knihovnanpaka.cz/', 'Nová Paka', 'KH');
 INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (346, 'MKJBC', 'https://knihovna.mestojablonec.cz/', 'https://katalog.mkjbc.cz/', 'Jablonec nad Nisou', 'LI');
@@ -402,6 +403,7 @@ INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weig
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, indexed) VALUES (534, 181, 200, 'mkpisek', 11, false, true, false, true, 'U', false);
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, indexed) VALUES (536, 335, 200, 'kbbb', 11, false, true, false, true, 'U', false);
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id, mappings996, catalog_serial_link) VALUES (535, 335, 200, 'kbbb', 11, false, true, true, true, 'U', 'other', 'tritius', true);
+INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id, mappings996) VALUES (537, 337, 200, 'milin', 11, false, true, true, true, 'U', 'koha', 'koha');
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id, catalog_serial_link) VALUES (538, 338, 200, 'kmmb', 11, false, true, true, true, 'U', 'other', true);
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency) VALUES (539, 339, 200, 'asarp', 0, false, true, true, false, 'U');
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id, mappings996) VALUES (540, 340, 200, 'mknp', 11, false, true, true, true, 'U', 'koha', 'koha');
@@ -680,6 +682,7 @@ INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granul
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (534,'https://tritius.knih-pi.cz/tritius/oai-provider','PLM','marc21',NULL);
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (535,'https://knihovnabbb.tritius.cz/tritius/oai-provider','CPK_1','marc21',NULL);
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (536,'https://knihovnabbb.tritius.cz/tritius/oai-provider','PLM','marc21',NULL);
+INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity,extract_id_regex) VALUES (537,'https://koha.knihovnamilin.cz/cgi-bin/koha/oai.pl','CPK','marccpk',NULL,'PBG506:(.*)');
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (538,'https://www.kmmb.eu/api/oai','cpk','marc21',NULL);
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity,extract_id_regex) VALUES (540,'https://koha.knihovnanpaka.cz/cgi-bin/koha/oai.pl','CPK','marccpk',NULL,'JCG502:(.*)');
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (541,'https://bcbt.lib.cas.cz/api/oai','prvotisky','marc21',NULL);
@@ -993,6 +996,7 @@ INSERT INTO sigla (id, import_conf_id, sigla) VALUES (154, 495, 'ABA006');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (155, 495, 'JHD001');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (156, 496, 'CBG506');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (158, 535, 'UHG001');
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (159, 537, 'PBG506');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (160, 538, 'MBG001');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (161, 540, 'JCG502');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (162, 546, 'JNG001');
