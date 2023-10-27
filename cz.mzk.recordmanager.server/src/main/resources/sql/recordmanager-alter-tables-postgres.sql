@@ -2996,3 +2996,8 @@ UPDATE kramerius_conf SET url='https://api.kramerius.mzk.cz/' WHERE import_conf_
 -- 23. 10. 2023 tomascejpek
 UPDATE import_conf SET item_id='koha',mappings996='koha' WHERE import_conf_id=369;
 UPDATE oai_harvest_conf SET url='https://koha.rkka.cz/cgi-bin/koha/oai.pl',set_spec='CPK',metadataPrefix='marccpk',extract_id_regex='KAG001:(.*)',harvest_job_name=NULL WHERE import_conf_id=369;
+
+-- 27. 10. 2023 tomascejpek
+INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (337, 'MILIN', 'https://www.knihovnamilin.cz/', 'https://katalog.knihovnamilin.cz/', 'Milín', 'SC');
+INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id, mappings996) VALUES (537, 337, 200, 'milin', 11, false, true, true, true, 'U', 'koha', 'koha');
+INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (537,'https://koha.knihovnamilin.cz/cgi-bin/koha/oai.pl','CPK','marccpk',NULL);
