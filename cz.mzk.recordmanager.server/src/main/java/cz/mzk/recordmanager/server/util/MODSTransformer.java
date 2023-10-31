@@ -16,7 +16,7 @@ public class MODSTransformer {
 		TransformerFactory factory = TransformerFactory.newInstance();
 		factory.setURIResolver(new XsltURIResolver());
 		transformer = factory.newTransformer(new StreamSource(
-				new ClasspathResourceProvider().getResource("/xsl/mods/MODS3-4_MARC21slim_XSLT1-0.xsl")));
+				new ClasspathResourceProvider().getResource("/xsl/mods/MODS3-7_MARC21slim_XSLT1-0.xsl")));
 	}
 
 	public ByteArrayOutputStream transform(InputStream is) throws TransformerException {
