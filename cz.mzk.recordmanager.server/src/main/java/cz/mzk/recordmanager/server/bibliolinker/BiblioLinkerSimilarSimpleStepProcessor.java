@@ -1,5 +1,6 @@
 package cz.mzk.recordmanager.server.bibliolinker;
 
+import cz.mzk.recordmanager.server.marc.InvalidMarcException;
 import cz.mzk.recordmanager.server.metadata.MetadataRecord;
 import cz.mzk.recordmanager.server.metadata.MetadataRecordFactory;
 import cz.mzk.recordmanager.server.model.BiblioLinkerSimilar;
@@ -72,10 +73,14 @@ public class BiblioLinkerSimilarSimpleStepProcessor implements
 					searched = findSameInstitution(hr, records.get(blInner));
 					if (searched == null) continue;
 					if (isSimilar(hr, searched, similarHr)) {
-						similarIds.add(BiblioLinkerSimilar.create(getUrlId(searched), searched, type));
-						similarHr.add(searched);
-						// new similar record, must be updated
-						toUpdate.add(hr);
+						try {
+							similarIds.add(BiblioLinkerSimilar.create(getUrlId(searched), searched, type));
+							similarHr.add(searched);
+							// new similar record, must be updated
+							toUpdate.add(hr);
+						} catch (InvalidMarcException ex) {
+							logger.error(ex.getMessage() + " " + searched.getUniqueId());
+						}
 					}
 					if (similarIds.size() >= MAX_SIMILARS) break;
 				}
@@ -106,10 +111,10 @@ public class BiblioLinkerSimilarSimpleStepProcessor implements
 		MetadataRecord mr = mrf.getMetadataRecord(hr);
 		List<String> isn;
 		sampleObject.put("id", hr.getHarvestedFrom().getIdPrefix() + '.' + hr.getUniqueId().getRecordId());
-		List<HarvestedRecordFormatEnum> formats =mr.getDetectedFormatList();
+		List<HarvestedRecordFormatEnum> formats = mr.getDetectedFormatList();
 		if (!formats.isEmpty()) {
 			List<String> hierarchicFormats = SolrUtils.createRecordTypeHierarchicFacet(formats.get(0));
-			sampleObject.put("format", hierarchicFormats.get(hierarchicFormats.size()-1));
+			sampleObject.put("format", hierarchicFormats.get(hierarchicFormats.size() - 1));
 		}
 		sampleObject.put("author", mr.getAuthorDisplay());
 		sampleObject.put("title", mr.getTitleDisplay());
