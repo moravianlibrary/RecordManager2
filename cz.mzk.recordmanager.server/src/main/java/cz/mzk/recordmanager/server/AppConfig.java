@@ -280,4 +280,12 @@ public class AppConfig extends DefaultBatchConfigurer {
 		return new BookportDuplicitLocalIdFilterDedupRecordEnricher();
 	}
 
+	@Bean("localMzkStatusesDedupRecordEnricher")
+	@DependsOn(value = {
+			"urlDedupRecordEnricher",
+	})
+	public LocalMzkStatusesDedupRecordEnricher localMzkStatusesDedupRecordEnricher() {
+		return new LocalMzkStatusesDedupRecordEnricher();
+	}
+
 }
