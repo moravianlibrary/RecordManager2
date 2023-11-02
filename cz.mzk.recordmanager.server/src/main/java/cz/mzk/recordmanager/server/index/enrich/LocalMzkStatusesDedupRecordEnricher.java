@@ -19,8 +19,7 @@ public class LocalMzkStatusesDedupRecordEnricher implements DedupRecordEnricher 
 
 	private static final List<String> ALLOWED_STATUSES = Arrays.asList(
 			Constants.DOCUMENT_AVAILABILITY_ONLINE,
-			Constants.DOCUMENT_AVAILABILITY_DNNT,
-			Constants.DOCUMENT_AVAILABILITY_UNKNOWN
+			Constants.DOCUMENT_AVAILABILITY_DNNT
 	);
 
 
@@ -36,7 +35,8 @@ public class LocalMzkStatusesDedupRecordEnricher implements DedupRecordEnricher 
 		// exists mzk records?
 		List<SolrInputDocument> mzkRecords = new ArrayList<>();
 		for (SolrInputDocument localRecord : localRecords) {
-			if (localRecord.getFieldValue(SolrFieldConstants.ID_FIELD).toString().startsWith("mzk.")) {
+			if (localRecord.getFieldValue(SolrFieldConstants.ID_FIELD).toString().startsWith("mzk.")
+					|| localRecord.getFieldValue(SolrFieldConstants.ID_FIELD).toString().startsWith("bookport.")) {
 				mzkRecords.add(localRecord);
 			}
 		}
