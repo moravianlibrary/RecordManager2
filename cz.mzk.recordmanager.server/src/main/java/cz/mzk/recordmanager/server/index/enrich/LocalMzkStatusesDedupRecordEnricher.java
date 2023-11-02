@@ -23,6 +23,11 @@ public class LocalMzkStatusesDedupRecordEnricher implements DedupRecordEnricher 
 	);
 
 
+	private static final List<String> SOURCES = Arrays.asList(
+			Constants.PREFIX_MZK,
+			Constants.PREFIX_KNAV
+	);
+
 	@Override
 	public void enrich(DedupRecord record, SolrInputDocument mergedDocument,
 					   List<SolrInputDocument> localRecords) {
@@ -32,54 +37,56 @@ public class LocalMzkStatusesDedupRecordEnricher implements DedupRecordEnricher 
 			return;
 		}
 
-		// exists mzk records?
-		List<SolrInputDocument> mzkRecords = new ArrayList<>();
-		for (SolrInputDocument localRecord : localRecords) {
-			if (localRecord.getFieldValue(SolrFieldConstants.ID_FIELD).toString().startsWith("mzk.")
-					|| localRecord.getFieldValue(SolrFieldConstants.ID_FIELD).toString().startsWith("bookport.")) {
-				mzkRecords.add(localRecord);
-			}
-		}
-		if (mzkRecords.isEmpty()) return;
-
 		// all statuses
 		List<String> statuses = mergedDocument.getFieldValues(SolrFieldConstants.STATUSES_FACET).stream()
 				.map(o -> o.toString()).collect(Collectors.toList());
 
-		// filter
-		Set<String> localStatuses = statuses.stream().filter(s -> ALLOWED_STATUSES.contains(s)).collect(Collectors.toSet());
-
-		List<EVersionUrl> urls = new ArrayList<>();
-		if (mergedDocument.containsKey(SolrFieldConstants.URL) &&
-				mergedDocument.getFieldValues(SolrFieldConstants.URL) != null) {
-			urls = mergedDocument.getFieldValues(SolrFieldConstants.URL).stream().map(o -> {
-				try {
-					return EVersionUrl.create(o.toString());
-				} catch (Exception e) {
-					throw new RuntimeException(e);
+		for (String source : SOURCES) {
+			// exists records for source?
+			List<SolrInputDocument> sourceRecords = new ArrayList<>();
+			for (SolrInputDocument localRecord : localRecords) {
+				if (localRecord.getFieldValue(SolrFieldConstants.ID_FIELD).toString().startsWith(source + ".")
+						|| localRecord.getFieldValue(SolrFieldConstants.ID_FIELD).toString().startsWith("bookport.")) {
+					sourceRecords.add(localRecord);
 				}
-			}).collect(Collectors.toList());
-		}
-
-		// filter protected links
-		for (EVersionUrl url : urls) {
-			if (url.getSource().equals("kram-mzk") && url.getAvailability().equals(Constants.DOCUMENT_AVAILABILITY_PROTECTED)) {
-				localStatuses.add(Constants.DOCUMENT_AVAILABILITY_PROTECTED);
 			}
-		}
+			if (sourceRecords.isEmpty()) return;
 
-		// filter bookport
-		if (mergedDocument.getFieldValues(SolrFieldConstants.LOCAL_IDS_FIELD).stream().anyMatch(i -> i.toString().startsWith("bookport."))) {
+			// filter
+			Set<String> localStatuses = statuses.stream().filter(s -> ALLOWED_STATUSES.contains(s)).collect(Collectors.toSet());
+
+			List<EVersionUrl> urls = new ArrayList<>();
+			if (mergedDocument.containsKey(SolrFieldConstants.URL) &&
+					mergedDocument.getFieldValues(SolrFieldConstants.URL) != null) {
+				urls = mergedDocument.getFieldValues(SolrFieldConstants.URL).stream().map(o -> {
+					try {
+						return EVersionUrl.create(o.toString());
+					} catch (Exception e) {
+						throw new RuntimeException(e);
+					}
+				}).collect(Collectors.toList());
+			}
+
+			// filter protected links
 			for (EVersionUrl url : urls) {
-				if (url.getSource().equals("mzk") && url.getAvailability().equals(Constants.DOCUMENT_AVAILABILITY_MEMBER)) {
-					localStatuses.add(Constants.DOCUMENT_AVAILABILITY_BOOKPORT);
+				if (url.getSource().equals("kram-" + source) && url.getAvailability().equals(Constants.DOCUMENT_AVAILABILITY_PROTECTED)) {
+					localStatuses.add(Constants.DOCUMENT_AVAILABILITY_PROTECTED);
 				}
 			}
-		}
 
-		if (localStatuses.isEmpty()) return;
-		for (SolrInputDocument solrDoc : mzkRecords) {
-			solrDoc.setField(SolrFieldConstants.LOCAL_ONLINE_FACET, localStatuses);
+			// filter bookport
+			if (mergedDocument.getFieldValues(SolrFieldConstants.LOCAL_IDS_FIELD).stream().anyMatch(i -> i.toString().startsWith("bookport."))) {
+				for (EVersionUrl url : urls) {
+					if (url.getSource().equals(source) && url.getAvailability().equals(Constants.DOCUMENT_AVAILABILITY_MEMBER)) {
+						localStatuses.add(Constants.DOCUMENT_AVAILABILITY_BOOKPORT);
+					}
+				}
+			}
+
+			if (localStatuses.isEmpty()) return;
+			for (SolrInputDocument solrDoc : sourceRecords) {
+				solrDoc.setField(SolrFieldConstants.LOCAL_ONLINE_FACET, localStatuses);
+			}
 		}
 	}
 }
