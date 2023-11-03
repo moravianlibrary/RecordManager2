@@ -2996,3 +2996,7 @@ UPDATE kramerius_conf SET url='https://api.kramerius.mzk.cz/' WHERE import_conf_
 -- 23. 10. 2023 tomascejpek
 UPDATE import_conf SET item_id='koha',mappings996='koha' WHERE import_conf_id=369;
 UPDATE oai_harvest_conf SET url='https://koha.rkka.cz/cgi-bin/koha/oai.pl',set_spec='CPK',metadataPrefix='marccpk',extract_id_regex='KAG001:(.*)',harvest_job_name=NULL WHERE import_conf_id=369;
+
+-- 03. 11. 2023 tomascejpek
+UPDATE oai_harvest_conf SET url='https://katalog.knihovnauk.cz/tritius/oai-provider' WHERE import_conf_id=314;
+UPDATE oai_harvest_conf SET url='https://katalog.knihovnauk.cz/tritius/oai-provider' WHERE import_conf_id=461;

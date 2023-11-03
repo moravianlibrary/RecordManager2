@@ -474,7 +474,7 @@ INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granul
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity,extract_id_regex) VALUES (311,'https://koha.knihovnatabor.cz/cgi-bin/koha/oai.pl','CPK','marccpk',NULL,'TAG001:(.*)');
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (312,'https://tritius.kkvysociny.cz/tritius/oai-provider','CPK_1','marc21',NULL);
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (313,'https://aleph.svkhk.cz/OAI','HKAOAI','marc21',NULL);
-INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (314,'https://katalog.svkul.cz/tritius/oai-provider','CPK_2','marc21',NULL);
+INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (314,'https://katalog.knihovnauk.cz/tritius/oai-provider','CPK_2','marc21',NULL);
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (315,'https://aleph.vkol.cz/OAI','VKOLOAI','marc21',NULL);
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (316,'https://aleph.nkp.cz/OAI','SKC','marc21',NULL);
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (317,'http://aleph.nkp.cz/OAI','NKC-CPK','marc21',NULL);
@@ -599,7 +599,7 @@ INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granul
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (453,'https://cuni.alma.exlibrisgroup.com/view/oai/420CKIS_INST/request','OAI_GEO','marc21',NULL);
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (459,'https://jihlava.tritius.cz/tritius/oai-provider','CPK_1','marc21',NULL);
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (460,'https://knihovna.nacr.cz/api/oai','cpk','marc21',NULL);
-INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (461,'https://tritius.svkul.cz/tritius/oai-provider','PLM','marc21',NULL);
+INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (461,'https://katalog.knihovnauk.cz/tritius/oai-provider','PLM','marc21',NULL);
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (462,'https://aleph.nkp.cz/OAI','NKC-EBOOK','marc21',NULL);
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (463,'https://benesov.tritius.cz/tritius/oai-provider','CPK_1','marc21',NULL);
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (486,'https://katalog.knihovnarymarov.cz/api/oai','cpk','marc21',NULL);
