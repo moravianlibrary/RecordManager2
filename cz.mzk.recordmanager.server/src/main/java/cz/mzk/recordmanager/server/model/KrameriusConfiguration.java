@@ -12,24 +12,27 @@ import javax.persistence.Table;
 @Table(name = KrameriusConfiguration.TABLE_NAME)
 @PrimaryKeyJoinColumn(name="import_conf_id")
 public class KrameriusConfiguration extends ImportConfiguration {
-	
+
 	public static final String TABLE_NAME = "kramerius_conf";
-	
+
+	@Column(name = "import_conf_id", updatable = false, insertable = false)
+	private Long importConfId;
+
 	@Column(name="url")
 	private String url;
-	
+
 	@Column(name="url_solr")
 	private String urlSolr;
-	
+
 	@Column(name="query_rows")
 	private Long queryRows;
-	
+
 	@Column(name="metadata_stream")
 	private String metadataStream;
 
 	@Column(name="auth_token")
 	private String authToken;
-	
+
 	@Column(name="download_private_fulltexts")
 	private boolean downloadPrivateFulltexts;
 
@@ -53,6 +56,9 @@ public class KrameriusConfiguration extends ImportConfiguration {
 
 	@Column(name = "fulltext_version")
 	private String fulltextVersion;
+
+	@Column(name = "dedup_fulltext")
+	private boolean dedupFulltext;
 
 	@Type(
 			type = "cz.mzk.recordmanager.server.hibernate.CharEnumUserType",
@@ -191,6 +197,15 @@ public class KrameriusConfiguration extends ImportConfiguration {
 	public void setFulltextVersion(String fulltextVersion) {
 		this.fulltextVersion = fulltextVersion;
 	}
+
+	public boolean isDedupFulltext() {
+		return dedupFulltext;
+	}
+
+	public void setDedupFulltext(boolean dedupFulltext) {
+		this.dedupFulltext = dedupFulltext;
+	}
+
 
 	@Override
 	public String toString() {

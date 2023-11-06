@@ -3289,3 +3289,6 @@ UPDATE oai_harvest_conf SET url='https://koha.rkka.cz/cgi-bin/koha/oai.pl',set_s
 --changeset tomascejpek:401 context:cpk
 UPDATE oai_harvest_conf SET url='https://katalog.knihovnauk.cz/tritius/oai-provider' WHERE import_conf_id=314;
 UPDATE oai_harvest_conf SET url='https://katalog.knihovnauk.cz/tritius/oai-provider' WHERE import_conf_id=461;
+
+--changeset tomascejpek:402
+ALTER TABLE kramerius_conf ADD COLUMN dedup_fulltext BOOLEAN DEFAULT FALSE;

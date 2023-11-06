@@ -71,6 +71,10 @@ public class KrameriusFulltextProcessor implements
 
 	private boolean downloadPrivateFulltexts;
 
+	private boolean dedupFulltext;
+
+	private List<Long> dedupFulltextConfIds;
+
 	public KrameriusFulltextProcessor(Long confId) {
 		super();
 		this.confId = confId;
@@ -92,6 +96,8 @@ public class KrameriusFulltextProcessor implements
 			params.setAuthToken(config.getAuthToken());
 			params.setDownloadPrivateFulltexts(config.isDownloadPrivateFulltexts());
 			downloadPrivateFulltexts = config.isDownloadPrivateFulltexts();
+			dedupFulltext = config.isDedupFulltext();
+			dedupFulltextConfIds = configDao.getAllDedupConfigIds();
 			processInfo(params);
 			if (config.getFulltextVersion() != null)
 				params.setKrameriusVersion(config.getFulltextVersion());
@@ -114,8 +120,13 @@ public class KrameriusFulltextProcessor implements
 		String model;
 		
 		// read complete HarvestedRecord using DAO
-		HarvestedRecord rec = recordDao.findByIdAndHarvestConfiguration(item
-				.getUniqueId().getRecordId(), confId);
+		HarvestedRecord rec = recordDao.findByIdAndHarvestConfiguration(item.getUniqueId().getRecordId(), confId);
+
+		if (dedupFulltext && existsDedupedFulltext(rec)) {
+			logger.info("Skip " + rec.getUniqueId().getRecordId() + ". Fulltext exists in another record.");
+			return rec;
+		}
+
 		MetadataRecord mr;
 		// get Kramerius policy from record
 		try {
@@ -204,6 +215,16 @@ public class KrameriusFulltextProcessor implements
 			logger.error(ioe.getMessage());
 			throw new IOException("Info failed: " + url);
 		}
+	}
+
+	/**
+	 * find fulltext in another record with same uuid
+	 *
+	 * @param hr
+	 * @return True/False
+	 */
+	protected boolean existsDedupedFulltext(HarvestedRecord hr) {
+		return fmDao.isDeduplicatedFulltext(hr, dedupFulltextConfIds);
 	}
 
 }

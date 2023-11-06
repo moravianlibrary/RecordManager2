@@ -1,9 +1,10 @@
 package cz.mzk.recordmanager.server.oai.dao;
 
-import java.util.List;
-
 import cz.mzk.recordmanager.server.model.DedupRecord;
 import cz.mzk.recordmanager.server.model.FulltextKramerius;
+import cz.mzk.recordmanager.server.model.HarvestedRecord;
+
+import java.util.List;
 
 public interface FulltextKrameriusDAO extends DomainDAO<Long, FulltextKramerius> {
 
@@ -14,5 +15,7 @@ public interface FulltextKrameriusDAO extends DomainDAO<Long, FulltextKramerius>
 	int deleteFulltext(long hr_id);
 
 	String getPolicy(Long harvested_record_id);
+
+	boolean isDeduplicatedFulltext(HarvestedRecord record, List<Long> importConfIdForDedup);
 
 }
