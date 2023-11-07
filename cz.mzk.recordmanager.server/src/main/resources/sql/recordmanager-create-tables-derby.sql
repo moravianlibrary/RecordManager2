@@ -96,6 +96,7 @@ CREATE TABLE kramerius_conf (
   fulltext_harvest_frequency  CHAR(1) DEFAULT 'U',
   fulltext_version            VARCHAR(20),
   dedup_fulltext              BOOLEAN DEFAULT FALSE,
+  harvest_periodical_fulltext BOOLEAN DEFAULT TRUE,
   CONSTRAINT kramerius_conf_import_conf_fk FOREIGN KEY (import_conf_id) REFERENCES import_conf(id)
 );
 

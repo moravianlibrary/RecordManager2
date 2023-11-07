@@ -60,6 +60,9 @@ public class KrameriusConfiguration extends ImportConfiguration {
 	@Column(name = "dedup_fulltext")
 	private boolean dedupFulltext;
 
+	@Column(name = "harvest_periodical_fulltext")
+	private boolean harvestPeriodicalFulltext;
+
 	@Type(
 			type = "cz.mzk.recordmanager.server.hibernate.CharEnumUserType",
 			parameters = {
@@ -206,6 +209,13 @@ public class KrameriusConfiguration extends ImportConfiguration {
 		this.dedupFulltext = dedupFulltext;
 	}
 
+	public boolean isHarvestPeriodicalFulltext() {
+		return harvestPeriodicalFulltext;
+	}
+
+	public void setHarvestPeriodicalFulltext(boolean harvestPeriodicalFulltext) {
+		this.harvestPeriodicalFulltext = harvestPeriodicalFulltext;
+	}
 
 	@Override
 	public String toString() {

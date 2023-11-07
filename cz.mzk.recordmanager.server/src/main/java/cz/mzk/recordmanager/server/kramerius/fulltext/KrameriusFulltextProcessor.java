@@ -71,6 +71,8 @@ public class KrameriusFulltextProcessor implements
 
 	private boolean downloadPrivateFulltexts;
 
+	private boolean harvestPeriodicalFulltext;
+
 	private boolean dedupFulltext;
 
 	private List<Long> dedupFulltextConfIds;
@@ -96,6 +98,7 @@ public class KrameriusFulltextProcessor implements
 			params.setAuthToken(config.getAuthToken());
 			params.setDownloadPrivateFulltexts(config.isDownloadPrivateFulltexts());
 			downloadPrivateFulltexts = config.isDownloadPrivateFulltexts();
+			harvestPeriodicalFulltext = config.isHarvestPeriodicalFulltext();
 			dedupFulltext = config.isDedupFulltext();
 			dedupFulltextConfIds = configDao.getAllDedupConfigIds();
 			processInfo(params);
@@ -124,6 +127,7 @@ public class KrameriusFulltextProcessor implements
 
 		if (dedupFulltext && existsDedupedFulltext(rec)) {
 			logger.info("Skip " + rec.getUniqueId().getRecordId() + ". Fulltext exists in another record.");
+			rec.setShouldBeProcessed(false);
 			return rec;
 		}
 
@@ -156,6 +160,10 @@ public class KrameriusFulltextProcessor implements
 
 			List<String> fulltexterMethod;
 			if (model.equals("periodical") || (model.equals("unknown") && !mr.getISSNs().isEmpty())) {
+				if (!harvestPeriodicalFulltext) {
+					rec.setShouldBeProcessed(false);
+					return rec;
+				}
 				fulltexterMethod = Arrays.asList("periodical", "monograph");
 			} else fulltexterMethod = Arrays.asList("monograph", "periodical");
 

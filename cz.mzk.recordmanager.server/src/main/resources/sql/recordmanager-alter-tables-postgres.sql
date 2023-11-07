@@ -3003,3 +3003,6 @@ UPDATE oai_harvest_conf SET url='https://katalog.knihovnauk.cz/tritius/oai-provi
 
 -- 06. 11. 2023 tomascejpek
 ALTER TABLE kramerius_conf ADD COLUMN dedup_fulltext BOOLEAN DEFAULT FALSE;
+
+-- 07. 11. 2023 tomascejpek
+ALTER TABLE kramerius_conf ADD COLUMN harvest_periodical_fulltext BOOLEAN DEFAULT TRUE;
