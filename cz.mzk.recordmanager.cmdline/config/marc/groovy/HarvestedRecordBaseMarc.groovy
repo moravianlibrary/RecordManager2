@@ -19,6 +19,7 @@ issn = getFields "022ayz:440x:490x:730x:776x:780x:785x"
 ismn_isn_mv = getIsmns()
 cnb_isn_mv = getFieldsUnique "015az"
 ean_isn_mv = getEAN()
+upc_str_mv = getEAN()
 
 publishDate_display = getPublishDateDisplay()
 
