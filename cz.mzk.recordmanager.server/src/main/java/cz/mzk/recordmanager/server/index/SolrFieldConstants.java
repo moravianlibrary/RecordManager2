@@ -77,6 +77,8 @@ public class SolrFieldConstants {
 
 	public static final String STATUSES_FACET = "statuses_facet_mv";
 
+	public static final String LOCAL_ONLINE_FACET = "local_online_facet_mv";
+
 	public static final String SFX_LINKS_FIELD = "sfx_links";
 	
 	public static final String LOAN_RELEVANCE_FIELD = "loanRelevance";
