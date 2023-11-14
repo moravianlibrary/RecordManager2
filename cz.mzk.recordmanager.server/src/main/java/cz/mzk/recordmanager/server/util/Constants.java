@@ -126,6 +126,7 @@ public class Constants {
 	public static final String PREFIX_CBVK				= "cbvk";
 	public static final String PREFIX_CELITEBIB			= "celitebib";
 	public static final String PREFIX_CMUZ				= "cmuz";
+	public static final String PREFIX_CNB				= "cnb";
 	public static final String PREFIX_CZHISTBIB			= "czhistbib";
 	public static final String PREFIX_DIVABIB			= "divabib";
 	public static final String PREFIX_ENVI				= "envi";

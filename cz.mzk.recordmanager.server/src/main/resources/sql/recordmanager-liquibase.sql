@@ -3295,3 +3295,9 @@ ALTER TABLE kramerius_conf ADD COLUMN dedup_fulltext BOOLEAN DEFAULT FALSE;
 
 --changeset tomascejpek:403
 ALTER TABLE kramerius_conf ADD COLUMN harvest_periodical_fulltext BOOLEAN DEFAULT TRUE;
+
+--changeset tomascejpek:404 context:cpk
+INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (292, 'CNB', 'https://www.cnb.cz/', 'https://katalog.cnb.cz/', 'Praha', 'PR');
+INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id) VALUES (492, 292, 200, 'cnb', 11, false, true, true, true, 'U', 'other');
+INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (492,'https://katalog.cnb.cz/api/oai','cpk','marc21',NULL);
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (151, 492, 'ABE031');
