@@ -3016,3 +3016,8 @@ INSERT INTO sigla (id, import_conf_id, sigla) VALUES (151, 492, 'ABE031');
 -- 15. 11. 2022 tomascejpek
 UPDATE kramerius_conf SET url='https://kramerius.cbvk.cz/',collection=null,availability_source_url=null,availability_dest_url='https://kramerius.cbvk.cz/uuid/' WHERE import_conf_id=99013;
 UPDATE kramerius_conf SET url='https://digitalnistudovna.army.cz/',availability_dest_url='https://digitalnistudovna.army.cz/uuid/' WHERE import_conf_id=99031;
+
+-- 16. 11. 2022 tomascejpek
+INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (338, 'KMMB', 'https://www.kmmb.cz/', 'https://www.kmmb.eu/', 'Mladá Boleslav', 'SC');
+INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id) VALUES (538, 338, 200, 'kmmb', 11, false, true, true, true, 'U', 'other');
+INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (538,'https://www.kmmb.eu/api/oai','cpk','marc21',NULL);
