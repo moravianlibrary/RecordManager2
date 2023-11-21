@@ -3,6 +3,7 @@ package cz.mzk.recordmanager.server.oai.dao.hibernate;
 import cz.mzk.recordmanager.server.jdbc.BlobToStringValueRowMapper;
 import cz.mzk.recordmanager.server.model.DedupRecord;
 import cz.mzk.recordmanager.server.model.FulltextKramerius;
+import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.oai.dao.FulltextKrameriusDAO;
 import cz.mzk.recordmanager.server.util.Constants;
 import cz.mzk.recordmanager.server.util.ResourceUtils;
@@ -61,4 +62,19 @@ public class FulltextKrameriusDAOHibernate extends
 				: Constants.DOCUMENT_AVAILABILITY_ONLINE : Constants.DOCUMENT_AVAILABILITY_UNKNOWN;
 	}
 
+
+	@Override
+	public boolean isDeduplicatedFulltext(HarvestedRecord record, List<Long> importConfIdForDedup) {
+		Session session = sessionFactory.getCurrentSession();
+
+		Integer result = (Integer) session.createQuery(
+						"select 1 from FulltextKramerius where harvestedRecordId in " +
+								"(select id from HarvestedRecord where uniqueId.harvestedFromId in (:importConfIdForDedup) and uniqueId.harvestedFromId != :harvestedFromId " +
+								"and uniqueId.recordId = :recordId )")
+				.setParameter("importConfIdForDedup", importConfIdForDedup)
+				.setParameter("recordId", record.getUniqueId().getRecordId())
+				.setParameter("harvestedFromId", record.getUniqueId().getHarvestedFromId())
+				.uniqueResult();
+		return result != null;
+	}
 }

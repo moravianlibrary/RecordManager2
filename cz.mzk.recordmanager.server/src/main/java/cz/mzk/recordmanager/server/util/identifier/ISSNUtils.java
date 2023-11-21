@@ -1,6 +1,7 @@
 package cz.mzk.recordmanager.server.util.identifier;
 
 import cz.mzk.recordmanager.server.model.Issn;
+import cz.mzk.recordmanager.server.util.CleaningUtils;
 import org.marc4j.marc.DataField;
 import org.marc4j.marc.Subfield;
 
@@ -51,7 +52,7 @@ public final class ISSNUtils {
 	 * @param issn String to be validated
 	 * @return valid issn as String or exception
 	 */
-	public static String getValidIssnThrowing(final String issn) {
+	public static String getValidIssnThrowing(final String issn) throws NoDataException, NumberFormatException {
 		// empty string
 		if (issn.isEmpty()) throw new NoDataException(IdentifierUtils.NO_USABLE_DATA);
 		Matcher matcher = ISSN_PATTERN.matcher(issn);
@@ -90,6 +91,22 @@ public final class ISSNUtils {
 			}
 		}
 		return (sum % 11 == 0);
+	}
+
+	public static String toEAN13(String issn) throws NoDataException, NumberFormatException {
+		issn = getValidIssnThrowing(issn);
+		issn = CleaningUtils.replaceAll(issn, ISSN_CLEAN, "");
+		String ean13 = "977" + issn.substring(0, 7) + "00";
+		int sum = 0;
+		for (int i = 0; i < 12; i++) {
+			if (i % 2 == 0) {
+				sum += Character.getNumericValue(ean13.charAt(i));
+			} else {
+				sum += Character.getNumericValue(ean13.charAt(i)) * 3;
+			}
+		}
+		int controlNumber = 10 - sum % 10 == 10 ? 0 : 10 - sum % 10;
+		return ean13 + controlNumber;
 	}
 
 }

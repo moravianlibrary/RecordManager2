@@ -3392,4 +3392,27 @@ INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granul
 --changeset tomascejpek:400 context:cpk
 UPDATE import_conf SET item_id='koha',mappings996='koha' WHERE id=369;
 UPDATE oai_harvest_conf SET url='https://koha.rkka.cz/cgi-bin/koha/oai.pl',set_spec='CPK',metadata_prefix='marccpk',extract_id_regex='KAG001:(.*)',harvest_job_name=NULL WHERE import_conf_id=369;
+<<<<<<< HEAD
 >>>>>>> oai-batch
+=======
+
+--changeset tomascejpek:401 context:cpk
+UPDATE oai_harvest_conf SET url='https://katalog.knihovnauk.cz/tritius/oai-provider' WHERE import_conf_id=314;
+UPDATE oai_harvest_conf SET url='https://katalog.knihovnauk.cz/tritius/oai-provider' WHERE import_conf_id=461;
+
+--changeset tomascejpek:402
+ALTER TABLE kramerius_conf ADD COLUMN dedup_fulltext BOOLEAN DEFAULT FALSE;
+
+--changeset tomascejpek:403
+ALTER TABLE kramerius_conf ADD COLUMN harvest_periodical_fulltext BOOLEAN DEFAULT TRUE;
+
+--changeset tomascejpek:404 context:cpk
+INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (292, 'CNB', 'https://www.cnb.cz/', 'https://katalog.cnb.cz/', 'Praha', 'PR');
+INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id) VALUES (492, 292, 200, 'cnb', 11, false, true, true, true, 'U', 'other');
+INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (492,'https://katalog.cnb.cz/api/oai','cpk','marc21',NULL);
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (151, 492, 'ABE031');
+
+--changeset tomascejpek:405 context:cpk
+UPDATE kramerius_conf SET url='https://kramerius.cbvk.cz/',collection=null,availability_source_url=null,availability_dest_url='https://kramerius.cbvk.cz/uuid/' WHERE import_conf_id=99013;
+UPDATE kramerius_conf SET url='https://digitalnistudovna.army.cz/',availability_dest_url='https://digitalnistudovna.army.cz/uuid/' WHERE import_conf_id=99031;
+>>>>>>> issue998

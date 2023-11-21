@@ -8,4 +8,6 @@ public interface KrameriusConfigurationDAO extends DomainDAO<Long, KrameriusConf
 
 	List<KrameriusConfiguration> getAllWithoutOaiConfigs();
 
+	List<Long> getAllDedupConfigIds();
+
 }

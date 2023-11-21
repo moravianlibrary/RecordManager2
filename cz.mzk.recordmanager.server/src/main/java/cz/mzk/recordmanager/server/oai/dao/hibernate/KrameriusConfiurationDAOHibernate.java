@@ -22,4 +22,14 @@ public class KrameriusConfiurationDAOHibernate extends
 								+ "WHERE kc.id not in (SELECT id FROM OAIHarvestConfiguration)")
 				.list();
 	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Long> getAllDedupConfigIds() {
+		Session session = sessionFactory.getCurrentSession();
+		return (List<Long>) session
+				.createQuery("SELECT kc.importConfId "
+						+ "FROM KrameriusConfiguration kc WHERE kc.dedupFulltext IS TRUE")
+				.list();
+	}
 }

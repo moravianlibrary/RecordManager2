@@ -62,7 +62,7 @@ public class ImportPalmknihyWriter extends ImportRecordsWriter implements ItemWr
 	static {
 		URL.put(328L, "https://katalog.cbvk.cz/arl-cbvk/cs/detail-cbvk_us_cat-%s-titul");
 		URL.put(333L, "https://aleph.knihovna-pardubice.cz/F/?func=direct&doc_number=%s");
-		URL.put(461L, "https://katalog.svkul.cz/detail/%s");
+		URL.put(461L, "https://katalog.knihovnauk.cz/detail/%s");
 		URL.put(496L, "https://arl4.library.sk/arl-tyn/cs/detail-tyn_us_cat.2-%s-titul/");
 		URL.put(498L, "https://orlova.knihovny.net/detail/%s");
 		URL.put(499L, "https://pribram.tritius.cz/detail/%s");
