@@ -20,6 +20,7 @@ import cz.mzk.recordmanager.server.util.SiglaMapping;
 import cz.mzk.recordmanager.server.util.SolrUtils;
 import cz.mzk.recordmanager.server.util.identifier.ISBNUtils;
 import cz.mzk.recordmanager.server.util.identifier.ISSNUtils;
+import cz.mzk.recordmanager.server.util.identifier.NoDataException;
 import org.apache.commons.validator.routines.ISBNValidator;
 import org.marc4j.marc.DataField;
 import org.marc4j.marc.MarcFactory;
@@ -378,6 +379,18 @@ public class MarcDSL extends BaseDSL {
 			try {
 				if (ISBN_VALIDATOR.isValidISBN10(isbn)) result.add(ISBNUtils.toISBN13StringThrowing(isbn));
 			} catch (NumberFormatException ignore) {
+			}
+		}
+		return result;
+	}
+
+	public Set<String> getIssnForSearching(String tags) {
+		Set<String> result = new HashSet<>();
+		for (String issn : getFields(tags, SubfieldExtractionMethod.SEPARATED)) {
+			result.add(issn);
+			try {
+				if (ISSNUtils.isValid(issn)) result.add(ISSNUtils.toEAN13(issn));
+			} catch (NoDataException | NumberFormatException ignore) {
 			}
 		}
 		return result;
