@@ -3305,3 +3305,6 @@ INSERT INTO sigla (id, import_conf_id, sigla) VALUES (151, 492, 'ABE031');
 --changeset tomascejpek:405 context:cpk
 UPDATE kramerius_conf SET url='https://kramerius.cbvk.cz/',collection=null,availability_source_url=null,availability_dest_url='https://kramerius.cbvk.cz/uuid/' WHERE import_conf_id=99013;
 UPDATE kramerius_conf SET url='https://digitalnistudovna.army.cz/',availability_dest_url='https://digitalnistudovna.army.cz/uuid/' WHERE import_conf_id=99031;
+
+--changeset tomascejpek:406 context:cpk
+UPDATE kramerius_conf SET url='https://k7.mlp.cz/' WHERE import_conf_id=99015;
