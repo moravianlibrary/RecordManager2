@@ -4,3 +4,5 @@ ausbildungsunterlagen
 lehrplan\s+für
 program\s+nau(?:ki|czania)
 tanterv
+sčítání lidu
+sčítanie ľudu

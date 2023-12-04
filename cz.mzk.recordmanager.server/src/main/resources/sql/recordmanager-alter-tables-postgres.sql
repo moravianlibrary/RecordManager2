@@ -3330,4 +3330,15 @@ INSERT INTO sigla (id, import_conf_id, sigla) VALUES (151, 492, 'ABE031');
 -- 15. 11. 2022 tomascejpek
 UPDATE kramerius_conf SET url='https://kramerius.cbvk.cz/',collection=null,availability_source_url=null,availability_dest_url='https://kramerius.cbvk.cz/uuid/' WHERE import_conf_id=99013;
 UPDATE kramerius_conf SET url='https://digitalnistudovna.army.cz/',availability_dest_url='https://digitalnistudovna.army.cz/uuid/' WHERE import_conf_id=99031;
+<<<<<<< HEAD
 >>>>>>> issue998
+=======
+
+-- 22. 11. 2022 tomascejpek
+UPDATE kramerius_conf SET url='https://k7.mlp.cz/' WHERE import_conf_id=99015;
+
+-- 27. 11. 2022 tomascejpek
+INSERT INTO library (id, name, url, catalog_url, city) VALUES (339, 'ASARP', NULL, NULL, NULL);
+INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency) VALUES (539, 339, 200, 'asarp', 0, false, true, true, false, 'U');
+INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format) VALUES (539,NULL,NULL,NULL);
+>>>>>>> master
