@@ -3007,20 +3007,23 @@ ALTER TABLE kramerius_conf ADD COLUMN dedup_fulltext BOOLEAN DEFAULT FALSE;
 -- 07. 11. 2023 tomascejpek
 ALTER TABLE kramerius_conf ADD COLUMN harvest_periodical_fulltext BOOLEAN DEFAULT TRUE;
 
--- 14. 11. 2022 tomascejpek
+-- 14. 11. 2023 tomascejpek
 INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (292, 'CNB', 'https://www.cnb.cz/', 'https://katalog.cnb.cz/', 'Praha', 'PR');
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id) VALUES (492, 292, 200, 'cnb', 11, false, true, true, true, 'U', 'other');
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (492,'https://katalog.cnb.cz/api/oai','cpk','marc21',NULL);
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (151, 492, 'ABE031');
 
--- 15. 11. 2022 tomascejpek
+-- 15. 11. 2023 tomascejpek
 UPDATE kramerius_conf SET url='https://kramerius.cbvk.cz/',collection=null,availability_source_url=null,availability_dest_url='https://kramerius.cbvk.cz/uuid/' WHERE import_conf_id=99013;
 UPDATE kramerius_conf SET url='https://digitalnistudovna.army.cz/',availability_dest_url='https://digitalnistudovna.army.cz/uuid/' WHERE import_conf_id=99031;
 
--- 22. 11. 2022 tomascejpek
+-- 22. 11. 2023 tomascejpek
 UPDATE kramerius_conf SET url='https://k7.mlp.cz/' WHERE import_conf_id=99015;
 
--- 27. 11. 2022 tomascejpek
+-- 27. 11. 2023 tomascejpek
 INSERT INTO library (id, name, url, catalog_url, city) VALUES (339, 'ASARP', NULL, NULL, NULL);
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency) VALUES (539, 339, 200, 'asarp', 0, false, true, true, false, 'U');
 INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format) VALUES (539,NULL,NULL,NULL);
+
+-- 04. 12. 2023 tomascejpek
+UPDATE oai_harvest_conf SET url='https://orlova.tritius.cz/tritius/oai-provider' WHERE import_conf_id IN (379,498);
