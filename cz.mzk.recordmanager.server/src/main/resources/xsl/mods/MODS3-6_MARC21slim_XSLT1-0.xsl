@@ -1290,7 +1290,9 @@
 			<xsl:with-param name="tag">
 				<xsl:choose>
 					<xsl:when test="@type='restrictionOnAccess'">506</xsl:when>
+					<xsl:when test="@type='restriction on access'">506</xsl:when>
 					<xsl:when test="@type='useAndReproduction'">540</xsl:when>
+					<xsl:when test="@type='use and reproduction'">540</xsl:when>
 				</xsl:choose>
 			</xsl:with-param>
 			<xsl:with-param name="subfields">
