@@ -3027,3 +3027,6 @@ INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format) VAL
 
 -- 04. 12. 2023 tomascejpek
 UPDATE oai_harvest_conf SET url='https://orlova.tritius.cz/tritius/oai-provider' WHERE import_conf_id IN (379,498);
+
+-- 02. 01. 2024 tomascejpek
+UPDATE download_import_conf SET url='https://bookport.cz/marc21-20237.xml' WHERE import_conf_id=489;

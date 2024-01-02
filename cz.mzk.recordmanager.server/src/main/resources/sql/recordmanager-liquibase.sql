@@ -3316,3 +3316,6 @@ INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format) VAL
 
 --changeset tomascejpek:408 context:cpk
 UPDATE oai_harvest_conf SET url='https://orlova.tritius.cz/tritius/oai-provider' WHERE import_conf_id IN (379,498);
+
+--changeset tomascejpek:409 context:cpk
+UPDATE download_import_conf SET url='https://bookport.cz/marc21-20237.xml' WHERE import_conf_id=489;
