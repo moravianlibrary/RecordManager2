@@ -3082,3 +3082,8 @@ UPDATE kramerius_conf SET url='https://kramerius.svkul.cz/',availability_dest_ur
 
 -- 26. 04. 2024 tomascejpek
 UPDATE oai_harvest_conf SET url='https://ipac.svkkl.cz/i2/i2.entry.cls',set_spec='CPK',extract_id_regex='s/[^:]+:[^:]+:[^:]+:(.+)/KlUsCat*$1/',set_spec_full_harvest=NULL WHERE import_conf_id=336;
+
+-- 31. 05. 2024 tomascejpek
+INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (340, 'MKNP', 'https://knihovnanpaka.cz/', 'https://katalog.knihovnanpaka.cz/', 'Nová Paka', 'KH');
+INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id, mappings996) VALUES (540, 340, 200, 'mknp', 11, false, true, true, true, 'U', 'koha', 'koha');
+INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity,extract_id_regex) VALUES (540,'https://koha.knihovnanpaka.cz/cgi-bin/koha/oai.pl','CPK','marccpk',NULL,'JCG502:(.*)');
