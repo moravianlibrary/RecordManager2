@@ -3030,3 +3030,8 @@ UPDATE oai_harvest_conf SET url='https://orlova.tritius.cz/tritius/oai-provider'
 
 -- 02. 01. 2024 tomascejpek
 UPDATE download_import_conf SET url='https://bookport.cz/marc21-20237.xml' WHERE import_conf_id=489;
+
+-- 04. 01. 2024 tomascejpek
+INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (340, 'MKNP', 'https://knihovnanpaka.cz/', 'https://katalog.knihovnanpaka.cz/', 'Nová Paka', 'KH');
+INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id, mappings996) VALUES (540, 340, 200, 'mknp', 11, false, true, true, true, 'U', 'koha', 'koha');
+INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity,extract_id_regex) VALUES (540,'https://koha.knihovnanpaka.cz/cgi-bin/koha/oai.pl','CPK','marccpk',NULL,'JCG502:(.*)');
