@@ -3339,3 +3339,6 @@ INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granul
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, indexed) VALUES (536, 335, 200, 'kbbb', 11, false, true, false, true, 'U', false);
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (536,'https://knihovnabbb.tritius.cz/tritius/oai-provider','PLM','marc21',NULL);
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (158, 535, 'UHG001');
+
+--changeset tomascejpek:414 context:cpk
+UPDATE import_conf SET mapping_script='LocalMzk.groovy,HarvestedRecordBaseMarc.groovy' WHERE id in (304,321,325,326);

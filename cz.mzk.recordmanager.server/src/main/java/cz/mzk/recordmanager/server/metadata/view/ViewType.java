@@ -92,6 +92,13 @@ public enum ViewType {
 			if (mdt.stream().anyMatch(m -> m.startsWith("(084.3"))) return true;
 			return false;
 		}
+	},
+	NKP("nkp") {
+		@Override
+		protected boolean match(MetadataRecord mr, ListResolver resolver, Long importConfId,
+								Set<String> siglas, List<String> conspectus) throws IOException {
+			return contains(resolver, String.format(INST_INCLUDE_FILE, getValue()), importConfId.toString());
+		}
 	};
 
 	private String value;
