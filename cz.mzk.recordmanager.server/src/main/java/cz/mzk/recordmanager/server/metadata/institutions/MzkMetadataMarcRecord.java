@@ -43,4 +43,20 @@ public class MzkMetadataMarcRecord extends MetadataMarcRecord {
 		}
 		return results.isEmpty() ? null : results.get(0);
 	}
+
+	@Override
+	public boolean matchFilter() {
+		if (!super.matchFilter()) return false;
+		// MZK field is remapped to 991 in OAI
+		String mzkHidden = underlayingMarc.getField("991", 's');
+		if (mzkHidden != null && mzkHidden.startsWith("SKRYTO")) {
+			return false;
+		}
+		// STA field is remapped to 992 in OAI
+		String sta = underlayingMarc.getField("992", 'a');
+		if (sta != null && (sta.startsWith("SUPPRESSED") || sta.startsWith("SKRYTO"))) {
+			return false;
+		}
+		return true;
+	}
 }
