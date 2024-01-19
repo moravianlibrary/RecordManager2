@@ -18,6 +18,7 @@ import java.text.Normalizer;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.regex.Pattern;
 
 @Component
 public class MzkOtherFunctions implements MarcRecordFunctions {
@@ -156,8 +157,10 @@ public class MzkOtherFunctions implements MarcRecordFunctions {
 
 	private static final Map<String, Set<String>> ALLOWED_BASES = ImmutableMap.of(
 				"MZK01", ImmutableSet.of("33", "44", "99"), //
-				"MZK03", ImmutableSet.of("mzk", "rajhrad", "znojmo", "trebova", "dacice", "minorite", "broumov")
+			"MZK03", ImmutableSet.of("mzk", "rajhrad", "znojmo", "trebova", "dacice", "minorite", "broumov", "fara-trebova")
 	);
+
+	private static final Pattern BASE_AUGUSTINIANI = Pattern.compile("augustini[aá]ni");
 
 	private static final String BASE_PREFIX = "facet_base_";
 
@@ -181,6 +184,8 @@ public class MzkOtherFunctions implements MarcRecordFunctions {
 		String secondaryBase =  ctx.record().getField("991", ("MZK01".equals(base)) ? 'x' : 'k');
 		if (secondaryBase != null && ALLOWED_BASES.get(base).contains(secondaryBase)) {
 			result.add(primaryBase + BASE_SEPARATOR + secondaryBase);
+		} else if (secondaryBase != null && BASE_AUGUSTINIANI.matcher(secondaryBase).matches()) {
+			result.add(primaryBase + BASE_SEPARATOR + "augustiniani");
 		} else if (secondaryBase != null) {
 			logger.warn("Invalid secondary base: {}", secondaryBase);
 		}
