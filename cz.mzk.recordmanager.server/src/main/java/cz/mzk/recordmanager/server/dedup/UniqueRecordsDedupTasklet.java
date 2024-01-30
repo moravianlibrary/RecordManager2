@@ -1,5 +1,6 @@
 package cz.mzk.recordmanager.server.dedup;
 
+import cz.mzk.recordmanager.server.jdbc.LongValueRowMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.StepContribution;
@@ -11,11 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.jdbc.core.JdbcTemplate;
 
-import cz.mzk.recordmanager.server.jdbc.LongValueRowMapper;
-
 public class UniqueRecordsDedupTasklet implements Tasklet {
 
-	private static Logger logger = LoggerFactory.getLogger(UniqueRecordsDedupTasklet.class);
+	private static final Logger logger = LoggerFactory.getLogger(UniqueRecordsDedupTasklet.class);
 
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
@@ -31,9 +30,8 @@ public class UniqueRecordsDedupTasklet implements Tasklet {
 	public RepeatStatus execute(StepContribution contribution,
 			ChunkContext chunkContext) throws Exception {
 		ExecutionContext ctx = chunkContext.getStepContext().getStepExecution().getExecutionContext();
-		long harvestedRecordId = ctx.getLong("harvestedRecordId", 0L);
 		Long nextHarvestedRecordId = DataAccessUtils.singleResult(jdbcTemplate.query(command,
-				new Object[]{ harvestedRecordId }, new LongValueRowMapper()));
+				new Object[]{}, new LongValueRowMapper()));
 		if (nextHarvestedRecordId != null) {
 			ctx.putLong("harvestedRecordId", nextHarvestedRecordId);
 		}
