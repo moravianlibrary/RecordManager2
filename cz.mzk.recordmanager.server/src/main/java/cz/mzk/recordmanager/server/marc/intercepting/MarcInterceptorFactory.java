@@ -56,6 +56,8 @@ public class MarcInterceptorFactory {
 				return new CzhistbibMarcInterceptor(record, configuration, recordId);
 			case Constants.PREFIX_NACR:
 				return new NacrMarcInterceptor(record, configuration, recordId);
+			case Constants.PREFIX_MZK:
+				return new MzkMarcInterceptor(record, configuration, recordId);
 			case Constants.PREFIX_BOOKPORT_MZK: return new BookportMzkMarcInterceptor(record, configuration, recordId);
 			default: return new DefaultMarcInterceptor(record, configuration, recordId);
 			}
