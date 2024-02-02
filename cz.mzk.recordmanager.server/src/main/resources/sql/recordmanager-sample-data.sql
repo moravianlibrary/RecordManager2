@@ -458,7 +458,7 @@ INSERT INTO import_conf (id,library_id,contact_person_id,id_prefix,base_weight,c
 INSERT INTO import_conf (id,library_id,contact_person_id,id_prefix,base_weight,cluster_id_enabled,filtering_enabled,interception_enabled,is_library,harvest_frequency,mapping_script,generate_dedup_keys,mapping_dedup_script,item_id) VALUES (99038,99038,200,'kram-nm',8,false,true,false,false,'U',null,true,null,null);
 INSERT INTO import_conf (id,library_id,contact_person_id,id_prefix,base_weight,cluster_id_enabled,filtering_enabled,interception_enabled,is_library,harvest_frequency,mapping_script,generate_dedup_keys,mapping_dedup_script,item_id) VALUES (99039,99039,200,'kram-pkjak',8,false,true,false,false,'U',null,true,null,null);
 INSERT INTO import_conf (id,library_id,contact_person_id,id_prefix,base_weight,cluster_id_enabled,filtering_enabled,interception_enabled,is_library,harvest_frequency,mapping_script,generate_dedup_keys,mapping_dedup_script,item_id) VALUES (99040,99040,200,'kram-upm',8,false,true,false,false,'U',null,true,null,null);
-INSERT INTO import_conf (id,library_id,contact_person_id,id_prefix,base_weight,cluster_id_enabled,filtering_enabled,interception_enabled,is_library,harvest_frequency,mapping_script,generate_dedup_keys,mapping_dedup_script,item_id) VALUES (99041,99041,200,'kram-vse',8,false,true,false,false,'U',null,true,null,null);
+INSERT INTO import_conf (id,library_id,contact_person_id,id_prefix,base_weight,cluster_id_enabled,filtering_enabled,interception_enabled,is_library,harvest_frequency,mapping_script,generate_dedup_keys,mapping_dedup_script,item_id) VALUES (99041,295,200,'kram-vse',8,false,true,false,false,'U',null,true,null,null);
 INSERT INTO import_conf (id,library_id,contact_person_id,id_prefix,base_weight,cluster_id_enabled,filtering_enabled,interception_enabled,is_library,harvest_frequency,mapping_script,generate_dedup_keys,mapping_dedup_script,item_id) VALUES (99042,99042,200,'kram-vsup',8,false,true,false,false,'U',null,true,null,null);
 INSERT INTO import_conf (id,library_id,contact_person_id,id_prefix,base_weight,cluster_id_enabled,filtering_enabled,interception_enabled,is_library,harvest_frequency,mapping_script,generate_dedup_keys,mapping_dedup_script,item_id) VALUES (99043,99043,200,'kram-vugtk',8,false,true,false,false,'U',null,true,null,null);
 INSERT INTO import_conf (id,library_id,contact_person_id,id_prefix,base_weight,cluster_id_enabled,filtering_enabled,interception_enabled,is_library,harvest_frequency,mapping_script,generate_dedup_keys,mapping_dedup_script,item_id) VALUES (99044,99044,200,'kram-zcm',8,false,true,false,false,'U',null,true,null,null);
@@ -941,6 +941,8 @@ INSERT INTO sigla (id, import_conf_id, sigla) VALUES (149, 490, 'MEG502');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (151, 492, 'ABE031');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (152, 493, 'NJG508');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (153, 494, 'FMG510');
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (154, 495, 'ABA006');
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (155, 495, 'JHD001');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (156, 496, 'CBG506');
 
 INSERT INTO fit_project VALUES (1,'FULLTEXT_ANALYSER');
