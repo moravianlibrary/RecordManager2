@@ -3325,17 +3325,17 @@ INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (295, 'VSE
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id, mappings996) VALUES (495, 295, 200, 'vse', 11, false, true, true, true, 'U', 'aleph', 'aleph');
 INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format) VALUES (495,'local:/data/imports/uep01_cpk_upd','importRecordsJob','xml');
 
---changeset tomascejpek:410 context:cpk
+--changeset tomascejpek:411 context:cpk
 UPDATE import_conf SET library_id=295 WHERE id=99041;
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (154, 495, 'ABA006');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (155, 495, 'JHD001');
 
---changeset tomascejpek:411 context:cpk
+--changeset tomascejpek:412 context:cpk
 INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (335, 'KBBB', 'https://www.knihovnabbb.cz/', 'https://knihovnabbb.tritius.cz/', 'Uherské Hradiště', 'ZL');
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id, mappings996) VALUES (535, 335, 200, 'kbbb', 11, false, true, true, true, 'U', 'other', 'tritius');
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (535,'https://knihovnabbb.tritius.cz/tritius/oai-provider','CPK_1','marc21',NULL);
 
---changeset tomascejpek:412 context:cpk
+--changeset tomascejpek:413 context:cpk
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, indexed) VALUES (536, 335, 200, 'kbbb', 11, false, true, false, true, 'U', false);
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (536,'https://knihovnabbb.tritius.cz/tritius/oai-provider','PLM','marc21',NULL);
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (158, 535, 'UHG001');
