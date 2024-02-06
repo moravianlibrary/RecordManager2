@@ -25,7 +25,8 @@ public class LocalMzkStatusesDedupRecordEnricher implements DedupRecordEnricher 
 
 	private static final List<String> SOURCES = Arrays.asList(
 			Constants.PREFIX_MZK,
-			Constants.PREFIX_KNAV
+			Constants.PREFIX_KNAV,
+			Constants.PREFIX_NKP
 	);
 
 	@Override
@@ -50,7 +51,7 @@ public class LocalMzkStatusesDedupRecordEnricher implements DedupRecordEnricher 
 					sourceRecords.add(localRecord);
 				}
 			}
-			if (sourceRecords.isEmpty()) return;
+			if (sourceRecords.isEmpty()) continue;
 
 			// filter
 			Set<String> localStatuses = statuses.stream().filter(s -> ALLOWED_STATUSES.contains(s)).collect(Collectors.toSet());
@@ -66,7 +67,6 @@ public class LocalMzkStatusesDedupRecordEnricher implements DedupRecordEnricher 
 					}
 				}).collect(Collectors.toList());
 			}
-
 			// filter protected links
 			for (EVersionUrl url : urls) {
 				if (url.getSource().equals("kram-" + source) && url.getAvailability().equals(Constants.DOCUMENT_AVAILABILITY_PROTECTED)) {
@@ -82,7 +82,6 @@ public class LocalMzkStatusesDedupRecordEnricher implements DedupRecordEnricher 
 					}
 				}
 			}
-
 			if (localStatuses.isEmpty()) return;
 			for (SolrInputDocument solrDoc : sourceRecords) {
 				solrDoc.setField(SolrFieldConstants.LOCAL_ONLINE_FACET, localStatuses);
