@@ -3056,3 +3056,7 @@ UPDATE import_conf SET mapping_script='LocalMzk.groovy,HarvestedRecordBaseMarc.g
 
 -- 05. 02. 2024 tomascejpek
 UPDATE import_conf SET mapping_script='LocalMzk.groovy,HarvestedRecordBaseMarc.groovy' WHERE id in (330,349,358,360,361,420,456,448);
+
+-- 14. 02. 2024 tomascejpek
+UPDATE import_conf SET is_library=TRUE WHERE id=99041;
+UPDATE kramerius_conf SET availability_dest_url='https://kramerius.vse.cz/uuid/' WHERE import_conf_id=99041;
