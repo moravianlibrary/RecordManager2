@@ -632,4 +632,8 @@ public interface MetadataRecord {
 	default Set<String> getMediumOfPerformance() {
 		return Collections.emptySet();
 	}
+
+	default boolean getViewHistorickeFondy() {
+		return false;
+	}
 }

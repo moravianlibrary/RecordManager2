@@ -78,4 +78,9 @@ public class MzkMetadataMarcRecord extends MetadataMarcRecord {
 				&& getPublicationYear() != null && getPublicationYear() <= 2002
 				&& !underlayingMarc.getDataFields("996").isEmpty();
 	}
+
+	@Override
+	public boolean getViewHistorickeFondy() {
+		return harvestedRecord.getUniqueId().getRecordId().startsWith("MZK03-");
+	}
 }
