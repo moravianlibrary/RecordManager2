@@ -3352,3 +3352,7 @@ UPDATE kramerius_conf SET availability_dest_url='https://kramerius.vse.cz/uuid/'
 
 --changeset tomascejpek:417 context:cpk
 UPDATE kramerius_conf SET url='https://kramerius.zcm.cz/',availability_dest_url='https://kramerius.zcm.cz/uuid/' WHERE import_conf_id=99044;
+
+--changeset tomascejpek:418 context:cpk
+UPDATE import_conf SET item_id='koha',mappings996='koha' WHERE id=378;
+UPDATE oai_harvest_conf SET url='https://milevsko-opac.koha-system.cz/cgi-bin/koha/oai.pl',set_spec='CPK',metadata_prefix='cpk',extract_id_regex='PIG501:(.*)' WHERE import_conf_id=378;
