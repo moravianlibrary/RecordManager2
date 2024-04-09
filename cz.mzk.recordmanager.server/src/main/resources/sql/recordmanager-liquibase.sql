@@ -3359,3 +3359,6 @@ UPDATE oai_harvest_conf SET url='https://milevsko-opac.koha-system.cz/cgi-bin/ko
 
 --changeset tomascejpek:419 context:cpk
 UPDATE oai_harvest_conf SET set_spec='MZKALL' WHERE import_conf_id=300;
+
+--changeset tomascejpek:420 context:cpk
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (124, 378, 'PIG501');
