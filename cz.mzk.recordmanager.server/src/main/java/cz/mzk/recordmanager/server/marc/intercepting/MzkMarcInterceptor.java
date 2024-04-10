@@ -44,6 +44,7 @@ public class MzkMarcInterceptor extends DefaultMarcInterceptor {
 				if (df.getTag().equals("996") && df.getSubfield('j') == null) {
 					df.addSubfield(marcFactory.newSubfield('j', "MZK50"));
 				}
+				processField996(df);
 				newRecord.addVariableField(df);
 			}
 		}
