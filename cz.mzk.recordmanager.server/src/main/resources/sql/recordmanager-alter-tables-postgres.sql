@@ -3073,3 +3073,6 @@ UPDATE oai_harvest_conf SET set_spec='MZKALL' WHERE import_conf_id=300;
 
 -- 09. 04. 2024 tomascejpek
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (124, 378, 'PIG501');
+
+-- 17. 04. 2024 tomascejpek
+UPDATE import_conf SET mapping_script='LocalMzk.groovy,HarvestedRecordBaseMarc.groovy' WHERE id=319;
