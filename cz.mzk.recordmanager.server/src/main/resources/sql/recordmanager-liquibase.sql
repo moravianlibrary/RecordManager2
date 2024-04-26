@@ -3365,3 +3365,6 @@ INSERT INTO sigla (id, import_conf_id, sigla) VALUES (124, 378, 'PIG501');
 
 --changeset tomascejpek:421 context:cpk
 UPDATE import_conf SET mapping_script='LocalMzk.groovy,HarvestedRecordBaseMarc.groovy' WHERE id=319;
+
+--changeset tomascejpek:422 context:cpk
+UPDATE kramerius_conf SET url='https://kramerius.svkul.cz/',availability_dest_url='https://kramerius.svkul.cz/uuid/' WHERE import_conf_id=99011;
