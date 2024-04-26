@@ -3079,3 +3079,6 @@ UPDATE import_conf SET mapping_script='LocalMzk.groovy,HarvestedRecordBaseMarc.g
 
 -- 26. 04. 2024 tomascejpek
 UPDATE kramerius_conf SET url='https://kramerius.svkul.cz/',availability_dest_url='https://kramerius.svkul.cz/uuid/' WHERE import_conf_id=99011;
+
+-- 26. 04. 2024 tomascejpek
+UPDATE oai_harvest_conf SET url='https://ipac.svkkl.cz/i2/i2.entry.cls',set_spec='CPK',extract_id_regex='s/[^:]+:[^:]+:[^:]+:(.+)/KlUsCat*$1/',set_spec_full_harvest=NULL WHERE import_conf_id=336;
