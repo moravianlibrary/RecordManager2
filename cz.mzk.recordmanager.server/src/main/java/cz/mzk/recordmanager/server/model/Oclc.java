@@ -1,5 +1,7 @@
 package cz.mzk.recordmanager.server.model;
 
+import cz.mzk.recordmanager.server.util.MetadataUtils;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -21,7 +23,7 @@ public class Oclc extends AbstractDomainObject {
 	}
 
 	public void setOclcStr(String oclcStr) {
-		this.oclcStr = oclcStr;
+		this.oclcStr = MetadataUtils.shorten(oclcStr, 20);
 	}
 	
 	
