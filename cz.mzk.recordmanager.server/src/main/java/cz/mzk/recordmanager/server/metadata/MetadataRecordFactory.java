@@ -236,6 +236,8 @@ public class MetadataRecordFactory {
 			return new CgsMetadataMarcRecord(marcRec, hr);
 		case Constants.PREFIX_CNB:
 			return new CnbMetadataMarcRecord(marcRec, hr);
+		case Constants.PREFIX_BCBT:
+			return new BcbtMetadataMarcRecord(marcRec, hr);
 		default:
 			return new MetadataMarcRecord(marcRec, hr);
 		}

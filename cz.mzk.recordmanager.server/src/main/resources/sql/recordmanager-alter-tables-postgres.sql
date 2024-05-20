@@ -3101,3 +3101,15 @@ UPDATE kramerius_conf SET url_solr='https://solr-export.app.ceskadigitalniknihov
 
 -- 22. 07. 2024 tomascejpek
 UPDATE import_conf SET catalog_serial_link=True WHERE mappings996='tritius';
+
+-- 20. 09. 2024 tomascejpek
+INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency) VALUES (541, 131, 200, 'bcbt', 8, false, true, true, true, 'U');
+INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (541,'https://bcbt.lib.cas.cz/api/oai','prvotisky','marc21',NULL);
+INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency) VALUES (542, 131, 200, 'bcbt', 8, false, true, true, true, 'U');
+INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (542,'https://bcbt.lib.cas.cz/api/oai','stol16','marc21',NULL);
+INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency) VALUES (543, 131, 200, 'bcbt', 8, false, true, true, true, 'U');
+INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (543,'https://bcbt.lib.cas.cz/api/oai','stol17','marc21',NULL);
+INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency) VALUES (544, 131, 200, 'bcbt', 8, false, true, true, true, 'U');
+INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (544,'https://bcbt.lib.cas.cz/api/oai','stol18','marc21',NULL);
+INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency) VALUES (545, 131, 200, 'bcbt', 8, false, true, true, true, 'U');
+INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (545,'https://bcbt.lib.cas.cz/api/oai','desiderata','marc21',NULL);
