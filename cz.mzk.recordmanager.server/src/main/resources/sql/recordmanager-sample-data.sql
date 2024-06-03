@@ -954,6 +954,7 @@ INSERT INTO sigla (id, import_conf_id, sigla) VALUES (154, 495, 'ABA006');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (155, 495, 'JHD001');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (156, 496, 'CBG506');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (158, 535, 'UHG001');
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (161, 540, 'JCG502');
 
 INSERT INTO fit_project VALUES (1,'FULLTEXT_ANALYSER');
 INSERT INTO fit_project VALUES (2,'SEMANTIC_ENRICHMENT');
