@@ -55,7 +55,11 @@ public class HarvestedRecordInspirationDAOHibernate extends AbstractDomainDAOHib
 
 	@Override
 	public void updateOrCreate(String prefix, String recordId, Inspiration inspiration) {
-		HarvestedRecord hr = hrDao.find(prefix, recordId);
+		HarvestedRecord hr = null;
+		try {
+			hr = hrDao.find(prefix, recordId);
+		} catch (Exception ignore) {
+		}
 		if (hr == null) return;
 		HarvestedRecordInspiration harvestedRecordInspiration = find(hr, inspiration);
 		if (harvestedRecordInspiration == null) {
