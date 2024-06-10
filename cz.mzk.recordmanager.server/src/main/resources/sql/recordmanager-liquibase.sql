@@ -3379,3 +3379,6 @@ INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granul
 
 --changeset tomascejpek:425 context:cpk
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (161, 540, 'JCG502');
+
+--changeset tomascejpek:426 context:cpk
+UPDATE kramerius_conf SET url_solr='https://solr-export.app.ceskadigitalniknihovna.cz/solr/search_v2/',collection=NULL,fulltext_version='7' WHERE import_conf_id IN (99013,99023);
