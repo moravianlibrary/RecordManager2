@@ -3093,3 +3093,8 @@ INSERT INTO sigla (id, import_conf_id, sigla) VALUES (161, 540, 'JCG502');
 
 -- 10. 06. 2024 tomascejpek
 UPDATE kramerius_conf SET url_solr='https://solr-export.app.ceskadigitalniknihovna.cz/solr/search_v2/',collection=NULL,fulltext_version='7' WHERE import_conf_id IN (99013,99023);
+
+-- 25. 06. 2024 tomascejpek
+UPDATE kramerius_conf SET dnnt_dest_url='https://kramerius.knihovna-pardubice.cz/uuid/' WHERE import_conf_id=99026;
+UPDATE kramerius_conf SET url='https://kramerius.knihovnauk.cz/',availability_dest_url='https://kramerius.knihovnauk.cz/uuid/',dnnt_dest_url='https://kramerius.knihovnauk.cz/uuid/' WHERE import_conf_id=99011;
+UPDATE kramerius_conf SET url_solr='https://solr-export.app.ceskadigitalniknihovna.cz/solr/search_v2/',fulltext_version='7' WHERE import_conf_id in (99014,99041);
