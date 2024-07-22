@@ -3387,3 +3387,6 @@ UPDATE kramerius_conf SET url_solr='https://solr-export.app.ceskadigitalniknihov
 UPDATE kramerius_conf SET dnnt_dest_url='https://kramerius.knihovna-pardubice.cz/uuid/' WHERE import_conf_id=99026;
 UPDATE kramerius_conf SET url='https://kramerius.knihovnauk.cz/',availability_dest_url='https://kramerius.knihovnauk.cz/uuid/',dnnt_dest_url='https://kramerius.knihovnauk.cz/uuid/' WHERE import_conf_id=99011;
 UPDATE kramerius_conf SET url_solr='https://solr-export.app.ceskadigitalniknihovna.cz/solr/search_v2/',fulltext_version='7' WHERE import_conf_id in (99014,99041);
+
+--changeset tomascejpek:428 context:cpk
+UPDATE import_conf SET catalog_serial_link=True WHERE mappings996='tritius';
