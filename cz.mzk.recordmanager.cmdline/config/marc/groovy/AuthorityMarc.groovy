@@ -27,3 +27,4 @@ source_display_mv = getFields "670a"
 
 // search
 publisher_search_txt_mv = getFieldsTrim "260b:264b:928a:978abcdg7"
+id001_str = getAuthorityRecordId()
