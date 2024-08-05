@@ -166,8 +166,7 @@ public class MzkOtherFunctions implements MarcRecordFunctions {
 
 	private static final String BASE_SEPARATOR = "_";
 
-	private static final String INFO_USA_VALUE = "USA";
-	private static final String INFO_USA_VALUE2 = "Info USA/3.patro";
+	private static final String INFO_USA_VALUE = "Americká knihovna/3.patro";
 
 	private static final String INFO_USA_BASE_SUFFIX = "infoUSA";
 
@@ -191,7 +190,7 @@ public class MzkOtherFunctions implements MarcRecordFunctions {
 		}
 		// info USA
 		for (String field : ctx.record().getFields("996", 'l')) {
-			if (INFO_USA_VALUE.equals(field) || INFO_USA_VALUE2.equals(field)) {
+			if (INFO_USA_VALUE.equals(field)) {
 				result.add(primaryBase + BASE_SEPARATOR + INFO_USA_BASE_SUFFIX);
 				break;
 			} else if (field != null && field.contains(SPANISH_LIBRARY_VALUE)) {
