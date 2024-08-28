@@ -29,6 +29,7 @@ type_search_txt_mv = getFieldsForAdresar "TYPb", SubfieldExtractionMethod.SEPARA
 
 // facets
 function_facet_mv = function_facet_str_mv = getFieldsForAdresar("FCEa", SubfieldExtractionMethod.SEPARATED, null)
+ils_facet_mv = getFirstFieldForAdresar "KNSa"
 portal_facet_mv = portal_facet_str_mv = getPortalFacetMv()
 projects_facet_mv = projects_facet_str_mv = getFieldsForAdresar("PRKa", SubfieldExtractionMethod.SEPARATED, null)
 region_disctrict_facet_mv = region_disctrict_facet_str_mv = adresarGetRegionDistrictFacet()
