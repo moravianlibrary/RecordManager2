@@ -24,7 +24,7 @@ public class KramAvailability {
 	private String uuid;
 
 	@Column(name = "availability")
-	private String availability;
+	private String availability = "private";
 
 	@Column(name = "level")
 	private Integer level;
