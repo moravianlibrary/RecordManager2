@@ -4,7 +4,7 @@ local_acq_date = getMZKAcquisitionDateStamp()
 
 local_callnumber_str_mv = getFieldsUnique "996c"
 callnumber_second_str_mv = getFields("996h").collect{it -> it.replace(' ', '|')}
-callnumber_search = getFieldsUnique "996c"
+callnumber_search = getFieldsUnique "910b:996c"
 local_location_txt_mv = getFieldsUnique "996h"
 local_barcode_txt_mv = getFieldsUnique "996b"
 
