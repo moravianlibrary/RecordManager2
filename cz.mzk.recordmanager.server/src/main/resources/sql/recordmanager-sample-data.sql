@@ -153,6 +153,7 @@ INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (335, 'KBB
 INSERT INTO library (id, name, url, catalog_url, city) VALUES (339, 'ASARP', NULL, NULL, NULL);
 INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (338, 'KMMB', 'https://www.kmmb.cz/', 'https://www.kmmb.eu/', 'Mladá Boleslav', 'SC');
 INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (340, 'MKNP', 'https://knihovnanpaka.cz/', 'https://katalog.knihovnanpaka.cz/', 'Nová Paka', 'KH');
+INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (350, 'MKCHOT', 'https://www.knihovnachotebor.cz/', 'https://chotebor.tritius.cz/', 'Chotěboř', 'VY');
 INSERT INTO library (id, name, url, catalog_url, city) VALUES (400, 'AUTHORITY', 'nkp.cz', 'aleph.nkp.cz', NULL);
 INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (99027, 'KRAM-CUNI', '', '', '','kramerius');
 INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (99028, 'KRAM-CUNIFSV', '', '', '','kramerius');
@@ -406,6 +407,7 @@ INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weig
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency) VALUES (543, 131, 200, 'bcbt', 8, false, true, true, false, 'U');
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency) VALUES (544, 131, 200, 'bcbt', 8, false, true, true, false, 'U');
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency) VALUES (545, 131, 200, 'bcbt', 8, false, true, true, false, 'U');
+INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id, mappings996, catalog_serial_link) VALUES (550, 350, 200, 'mkchot', 11, false, true, true, true, 'U', 'other', 'tritius', true);
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, generate_dedup_keys, generate_biblio_linker_keys, mapping_script, item_id, mappings996) VALUES (554, 104, 200, 'nkp', 11, false, true, false, true, 'U', false, false,'LocalNkp.groovy,HarvestedRecordBaseMarc.groovy','aleph', 'aleph');
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id, mappings996, catalog_serial_link) VALUES (557, 133, 200, 'kkpc', 11, false, true, true, true, 'U', 'other', 'tritius', true);
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, mapping_script, generate_dedup_keys) VALUES (558, 295, 200, 'bookport', 11, false, true, true, true, 'U', 'LocalBookport.groovy,HarvestedRecordBaseMarc.groovy', false);
@@ -679,6 +681,7 @@ INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granul
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (543,'https://bcbt.lib.cas.cz/api/oai','stol17','marc21',NULL);
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (544,'https://bcbt.lib.cas.cz/api/oai','stol18','marc21',NULL);
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (545,'https://bcbt.lib.cas.cz/api/oai','desiderata','marc21',NULL);
+INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (550,'https://chotebor.tritius.cz/tritius/oai-provider','CPK_1','marc21',NULL);
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (554,'https://aleph.nkp.cz/OAI','NKC-CPK-ST','marc21',NULL);
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (557,'https://kkpce.tritius.cz/tritius/oai-provider','CPKPE_1','marc21',NULL);
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (1300,NULL,NULL,'marc21',NULL);
@@ -982,6 +985,7 @@ INSERT INTO sigla (id, import_conf_id, sigla) VALUES (156, 496, 'CBG506');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (158, 535, 'UHG001');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (160, 538, 'MBG001');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (161, 540, 'JCG502');
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (165, 550, 'HBG501');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (169, 554, 'ABA001');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (172, 557, 'PAG001');
 

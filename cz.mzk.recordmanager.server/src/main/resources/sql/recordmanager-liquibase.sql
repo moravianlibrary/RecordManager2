@@ -3484,3 +3484,9 @@ UPDATE download_import_conf SET url='https://www.bookport.cz/marc21.xml' WHERE i
 --changeset tomascejpek:450 context:cpk
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, mapping_script, generate_dedup_keys) VALUES (560, 107, 200, 'bookport', 11, false, true, true, true, 'U', 'LocalBookport.groovy,HarvestedRecordBaseMarc.groovy', false);
 INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format,reharvest) VALUES (560,'https://bookport.cz/marc21-26969.xml','downloadAndImportRecordsJob','xml',true);
+
+--changeset tomascejpek:451 context:cpk
+INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (350, 'MKCHOT', 'https://www.knihovnachotebor.cz/', 'https://chotebor.tritius.cz/', 'Chotěboř', 'VY');
+INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id, mappings996, catalog_serial_link) VALUES (550, 350, 200, 'mkchot', 11, false, true, true, true, 'U', 'other', 'tritius', true);
+INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (550,'https://chotebor.tritius.cz/tritius/oai-provider','CPK_1','marc21',NULL);
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (165, 550, 'HBG501');
