@@ -32,7 +32,8 @@ public class OAIHarvesterImpl implements OAIHarvester {
 	private static Logger logger = LoggerFactory.getLogger(OAIHarvesterImpl.class);
 
 	private final Set<String> IGNORED_ERROR_CODES = ImmutableSet.of( //
-			"noRecordsMatch" // Thrown by OAI providers on empty result set
+			"noRecordsMatch", // Thrown by OAI providers on empty result set
+			"idDoesNotExist"
 	);
 
 	private static final String OAI_VERB_LIST_RECORDS = "ListRecords";

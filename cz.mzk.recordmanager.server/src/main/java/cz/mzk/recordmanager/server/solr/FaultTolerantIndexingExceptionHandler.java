@@ -20,7 +20,8 @@ public class FaultTolerantIndexingExceptionHandler implements SolrIndexingExcept
 			"IOException occurred when talking to server",
 			"Java heap space",
 			"Error from server",
-			"Expected mime type"
+			"Expected mime type",
+			"Timeout occurred while waiting response from"
 	);
 
 	private static final List<String> SKIPPABLE_ERRORS = Arrays.asList(
