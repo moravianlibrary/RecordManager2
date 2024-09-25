@@ -54,13 +54,13 @@ public class MiscellaneousJobsConfig {
 
 	@Bean
 	public Job generateSkatKeysJob(
-			@Qualifier(Constants.JOB_ID_GENERATE_SKAT_DEDUP_KEYS + ":generateSkatKeysStep") Step generateSkatKeysStep,
-			@Qualifier(Constants.JOB_ID_MANUALLY_MERGED_SKAT_DEDUP_KEYS + ":generateManuallyMergedSkatKeysStep") Step generateManuallyMergedSkatKeysStep
+			@Qualifier(Constants.JOB_ID_GENERATE_SKAT_DEDUP_KEYS + ":generateSkatKeysStep") Step generateSkatKeysStep
+//			@Qualifier(Constants.JOB_ID_MANUALLY_MERGED_SKAT_DEDUP_KEYS + ":generateManuallyMergedSkatKeysStep") Step generateManuallyMergedSkatKeysStep
 	) {
 		return jobs.get(Constants.JOB_ID_GENERATE_SKAT_DEDUP_KEYS)
 				.validator(new GenerateSkatKeysJobParameterValidator())
 				.start(generateSkatKeysStep)
-				.next(generateManuallyMergedSkatKeysStep)
+//				.next(generateManuallyMergedSkatKeysStep)
 				.build();
 	}
 
