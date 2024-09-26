@@ -5,6 +5,8 @@ import org.marc4j.MarcReader;
 import org.marc4j.marc.DataField;
 import org.marc4j.marc.MarcFactory;
 import org.marc4j.marc.Record;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.util.Arrays;
@@ -16,7 +18,8 @@ public class MarcLineStreamReader implements MarcReader {
 	private BufferedReader br;
 
 	private static final MarcFactory factory = MarcFactoryImpl.newInstance();
-	;
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(MarcLineStreamReader.class);
 
 	private static final Pattern DATA_SPLITTER = Pattern.compile("\\$+");
 	private static final Pattern LINE_SPLITTER = Pattern.compile("\n");
@@ -64,14 +67,18 @@ public class MarcLineStreamReader implements MarcReader {
 			Record rec = null;
 			String newLine;
 			while (br.ready()) {
-				newLine = br.readLine();
-				if (newLine.isEmpty()) return rec;
-				if (LDR_PATTERN.matcher(newLine).find()) rec = factory.newRecord();
-				parseLine(rec, newLine);
+				try {
+					newLine = br.readLine();
+					if (newLine.isEmpty()) return rec;
+					if (LDR_PATTERN.matcher(newLine).find()) rec = factory.newRecord();
+					parseLine(rec, newLine);
+				} catch (Exception e) {
+					LOGGER.error("Error while parsing record", e);
+				}
 			}
 			return rec;
-		} catch (IOException e) {
-			e.printStackTrace();
+		} catch (Exception e) {
+			LOGGER.error("Error while parsing record", e);
 		}
 		return null;
 	}
