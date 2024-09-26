@@ -140,10 +140,10 @@ public class MiscellaneousJobsConfig {
 		JdbcPagingItemReader<Long> reader = new JdbcPagingItemReader<>();
 		SqlPagingQueryProviderFactoryBean pqpf = new SqlPagingQueryProviderFactoryBean();
 		pqpf.setDataSource(dataSource);
-		pqpf.setSelectClause("SELECT id");
+		pqpf.setSelectClause("SELECT id, record_id");
 		pqpf.setFromClause("FROM harvested_record");
 		pqpf.setWhereClause("WHERE import_conf_id = :conf_id AND updated > :updated_from AND updated < :updated_to");
-		pqpf.setSortKey("id");
+		pqpf.setSortKey("record_id");
 		Map<String, Object> parameterValues = new HashMap<>();
 		parameterValues.put("conf_id", Constants.IMPORT_CONF_ID_CASLIN);
 		parameterValues.put("updated_from", from);
