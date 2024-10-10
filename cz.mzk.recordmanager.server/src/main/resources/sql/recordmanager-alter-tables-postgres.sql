@@ -3290,3 +3290,9 @@ UPDATE import_conf SET catalog_serial_link=TRUE WHERE id=565;
 
 -- 28. 01. 2026 tomascejpek
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (150, 491, 'ROG001');
+
+-- 30. 01. 2026 tomascejpek
+INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (352, 'MKPV', 'https://knihovnapv.webnode.cz/', 'https://katalog.knihovnapv.cz/', 'Prostějov', 'OL');
+INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id, mappings996) VALUES (552, 352, 200, 'mkpv', 11, false, true, true, true, 'U', 'koha', 'koha');
+INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity,extract_id_regex) VALUES (552,'https://koha.knihovnapv.cz/cgi-bin/koha/oai.pl','CPK','marccpk',NULL,'PVG001:(.*)');
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (167, 552, 'PVG001');
