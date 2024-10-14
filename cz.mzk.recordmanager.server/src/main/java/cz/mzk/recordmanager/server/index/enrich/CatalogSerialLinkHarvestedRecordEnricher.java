@@ -3,6 +3,7 @@ package cz.mzk.recordmanager.server.index.enrich;
 import cz.mzk.recordmanager.server.index.SolrFieldConstants;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecordFormat.HarvestedRecordFormatEnum;
+import cz.mzk.recordmanager.server.model.SiglaAll;
 import cz.mzk.recordmanager.server.util.CaslinLink;
 import cz.mzk.recordmanager.server.util.Constants;
 import cz.mzk.recordmanager.server.util.MetadataUtils;
@@ -31,7 +32,9 @@ public class CatalogSerialLinkHarvestedRecordEnricher implements HarvestedRecord
 			return;
 		if (!document.containsKey(SolrFieldConstants.ID001_STR)) return;
 		String id = document.getFieldValue(SolrFieldConstants.ID001_STR).toString();
-		String sigla = record.getHarvestedFrom().getSiglaAlls().get(0).getSigla();
+		List<SiglaAll> siglas = record.getHarvestedFrom().getSiglaAlls();
+		if (siglas == null || siglas.isEmpty()) return;
+		String sigla = siglas.get(0).getSigla();
 
 		String link = caslinLink.getCaslinLink(sigla, id);
 		if (link == null || link.isEmpty()) return;
