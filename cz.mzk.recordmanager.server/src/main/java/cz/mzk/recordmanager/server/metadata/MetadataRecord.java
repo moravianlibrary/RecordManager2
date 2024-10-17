@@ -600,4 +600,7 @@ public interface MetadataRecord {
 		return false;
 	}
 
+	default List<HarvestedRecordFormatEnum> getNkpRecordFormats() {
+		return Collections.emptyList();
+	}
 }

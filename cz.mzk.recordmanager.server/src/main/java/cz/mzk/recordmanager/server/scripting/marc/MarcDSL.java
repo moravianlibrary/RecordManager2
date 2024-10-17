@@ -1058,4 +1058,7 @@ public class MarcDSL extends BaseDSL {
 		return metadataRecord.isAvailableForDigitalization();
 	}
 
+	public List<String> getNkpRecordFormats() {
+		return SolrUtils.createRecordTypeHierarchicFacet(metadataRecord.getNkpRecordFormats());
+	}
 }

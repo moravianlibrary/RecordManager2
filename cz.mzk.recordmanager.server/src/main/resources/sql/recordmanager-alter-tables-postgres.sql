@@ -3127,3 +3127,8 @@ DELETE FROM oai_harvest_conf WHERE import_conf_id=554;
 DELETE FROM import_conf WHERE id=554;
 UPDATE oai_harvest_conf SET url='https://katalog.knihovnakv.cz/tritius/oai-provider' WHERE import_conf_id=518;
 UPDATE oai_harvest_conf SET url='https://tritius.knihovnakolin.cz/tritius/oai-provider' WHERE import_conf_id=519;
+
+-- 14. 11. 2024 tomascejpek
+INSERT INTO harvested_record_format(id, name) VALUES (75, 'MUSICAL_SCORES_PRINTED');
+INSERT INTO harvested_record_format(id, name) VALUES (76, 'MUSICAL_SCORES_MANUSCRIPT');
+UPDATE import_conf SET mapping_script='LocalNkp.groovy,HarvestedRecordBaseMarc.groovy' WHERE id in (304,319,321,325,326);
