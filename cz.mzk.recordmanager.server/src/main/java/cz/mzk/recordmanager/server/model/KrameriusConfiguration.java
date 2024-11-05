@@ -217,6 +217,10 @@ public class KrameriusConfiguration extends ImportConfiguration {
 		this.harvestPeriodicalFulltext = harvestPeriodicalFulltext;
 	}
 
+	public Long getImportConfId() {
+		return importConfId;
+	}
+
 	@Override
 	public String toString() {
 		return String.format("%s[id=%s, url='%s', urlSolr='%s']", this.getClass().getSimpleName(),

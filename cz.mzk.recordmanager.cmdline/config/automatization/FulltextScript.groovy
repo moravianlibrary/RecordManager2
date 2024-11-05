@@ -1,6 +1,7 @@
 import cz.mzk.recordmanager.server.facade.HarvestingFacade
 import cz.mzk.recordmanager.server.facade.exception.JobExecutionFailure
 import cz.mzk.recordmanager.server.model.HarvestFrequency
+import cz.mzk.recordmanager.server.model.KrameriusConfiguration
 import cz.mzk.recordmanager.server.oai.dao.KrameriusConfigurationDAO
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -18,7 +19,9 @@ public class FulltextScript implements Runnable {
 
 	@Override
 	public void run() {
-		krameriusConfigurationDAO.findAll().each { conf ->
+		List<KrameriusConfiguration> confs = krameriusConfigurationDAO.findAll()
+		Collections.sort(confs, { KrameriusConfiguration a, KrameriusConfiguration b -> a.getImportConfId().compareTo(b.getImportConfId()) })
+		confs.each { conf ->
 			if (conf.fulltextHarvestFrequency == HarvestFrequency.DAILY) {
 				try {
 					harvestingFacade.incrementalFulltextJob(conf)
