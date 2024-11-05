@@ -3405,3 +3405,8 @@ INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granul
 
 --changeset tomascejpek:430 context:cpk
 UPDATE import_conf SET is_library=FALSE WHERE id in (541,542,543,544,545);
+
+--changeset tomascejpek:431 context:cpk
+UPDATE oai_harvest_conf SET url='https://tritius.knihovnanymburk.cz/tritius/oai-provider' WHERE import_conf_id=446;
+INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, indexed) VALUES (554, 246, 200, 'mknbk', 11, false, true, false, true, 'U', false);
+INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (554,'https://tritius.knihovnanymburk.cz/tritius/oai-provider','PLM','marc21',NULL);
