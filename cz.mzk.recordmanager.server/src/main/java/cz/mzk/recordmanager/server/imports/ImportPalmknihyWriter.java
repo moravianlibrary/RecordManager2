@@ -84,8 +84,8 @@ public class ImportPalmknihyWriter extends ImportRecordsWriter implements ItemWr
 		URL.put(515L, "https://kromeriz.tritius.cz/detail/%s");
 		URL.put(516L, "https://tritius.plzen.eu/detail/%s");
 		URL.put(517L, "https://klatovy.tritius.cz/detail/%s");
-		URL.put(518L, "https://kkkv.tritius.cz/detail/%s");
-		URL.put(519L, "https://kolin.tritius.cz/detail/%s");
+		URL.put(518L, "https://katalog.knihovnakv.cz/detail/%s");
+		URL.put(519L, "https://tritius.knihovnakolin.cz/detail/%s");
 		URL.put(520L, "https://boskovice.tritius.cz/detail/%s");
 		URL.put(521L, "https://chomutovskaknihovna.tritius.cz/detail/%s");
 		URL.put(522L, "https://fmi.tritius.cz/detail/%s");
@@ -102,7 +102,6 @@ public class ImportPalmknihyWriter extends ImportRecordsWriter implements ItemWr
 		URL.put(533L, "https://kmhk.tritius.cz/detail/%s");
 		URL.put(534L, "https://tritius.knih-pi.cz/detail/%s");
 		URL.put(536L, "https://knihovnabbb.tritius.cz/detail/%s");
-		URL.put(554L, "https://tritius.knihovnanymburk.cz/detail/%s");
 	}
 
 
