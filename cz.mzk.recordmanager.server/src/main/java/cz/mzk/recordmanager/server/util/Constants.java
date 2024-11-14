@@ -138,6 +138,7 @@ public class Constants {
 	public static final String PREFIX_KJM				= "kjm";
 	public static final String PREFIX_KKDVY				= "kkdvy";
 	public static final String PREFIX_KKKV				= "kkkv";
+	public static final String PREFIX_KKL				= "kkl";
 	public static final String PREFIX_KKPC				= "kkpc";
 	public static final String PREFIX_KKVY				= "kkvy";
 	public static final String PREFIX_KNAV				= "knav";
@@ -251,6 +252,8 @@ public class Constants {
 	public static final String PREFIX_SFXTECHLIBNTK		= "sfxjibntk";
 	public static final String PREFIX_SFXTECHLIBUOCHB	= "sfxjibuochb";
 	public static final String PREFIX_SFXTECHLIBVSCHT	= "sfxjibvscht";
+	public static final String PREFIX_SLK				= "slk";
+	public static final String PREFIX_STT				= "stt";
 	public static final String PREFIX_SVKHK				= "svkhk";
 	public static final String PREFIX_SVKKL				= "svkkl";
 	public static final String PREFIX_SVKUL				= "svkul";
@@ -262,6 +265,7 @@ public class Constants {
 	public static final String PREFIX_VFU				= "vfu";
 	public static final String PREFIX_VKOL				= "vkol";
 	public static final String PREFIX_ZAKONY			= "zakony";
+
 
 	public static final String LIBRARY_NAME_KKL			= "KKL";
 	public static final String LIBRARY_NAME_NKP			= "NKP";
