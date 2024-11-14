@@ -3427,3 +3427,8 @@ UPDATE import_conf SET mapping_script='LocalNkp.groovy,HarvestedRecordBaseMarc.g
 --changeset tomascejpek:435 context:cpk
 UPDATE kramerius_conf SET url='https://kramerius.svkkl.cz/',url_solr='https://solr-export.app.ceskadigitalniknihovna.cz/solr/search_v2/',availability_dest_url='https://kramerius.svkkl.cz/uuid/',fulltext_version='7' WHERE import_conf_id=99024;
 UPDATE kramerius_conf SET url_solr='https://solr-export.app.ceskadigitalniknihovna.cz/solr/search_v2/',fulltext_version='7' WHERE import_conf_id=99044;
+
+--changeset tomascejpek:436 context:cpk
+INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, generate_dedup_keys, generate_biblio_linker_keys, mapping_script, item_id, mappings996) VALUES (554, 104, 200, 'nkp', 11, false, true, false, true, 'U', false, false,'LocalNkp.groovy,HarvestedRecordBaseMarc.groovy','aleph', 'aleph');
+INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (554,'https://aleph.nkp.cz/OAI','NKC-CPK-ST','marc21',NULL);
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (169, 554, 'ABA001');
