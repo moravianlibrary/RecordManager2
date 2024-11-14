@@ -9,6 +9,7 @@ import cz.mzk.recordmanager.server.util.MetadataUtils;
 import org.marc4j.marc.DataField;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -36,15 +37,17 @@ public class NkpMarcMetadataRecord extends MetadataMarcRecord {
 		}
 	}
 
-	private List<String> getNkpEbraryProquestUrls() {
+	private List<String> getNkpEversionsUrls(List<String> values, String availability) {
 		List<String> results = new ArrayList<>();
 		for (DataField field856 : underlayingMarc.getDataFields("856")) {
 			String sfu = field856.getSubfield('u') != null ? field856.getSubfield('u').getData() : null;
 			String sfy = field856.getSubfield('y') != null ? field856.getSubfield('y').getData() : null;
 			if (sfu == null) continue;
-			if (sfu.contains("ebrary.com/") || sfu.contains("proquest.com/")) {
-				results.add(MetadataUtils.generateUrl(harvestedRecord.getHarvestedFrom().getIdPrefix(),
-						Constants.DOCUMENT_AVAILABILITY_MEMBER, sfu, sfy != null ? sfy : ""));
+			for (String value : values) {
+				if (sfu.contains(value)) {
+					results.add(MetadataUtils.generateUrl(harvestedRecord.getHarvestedFrom().getIdPrefix(),
+							availability, sfu, sfy != null ? sfy : ""));
+				}
 			}
 		}
 		return results;
@@ -61,13 +64,14 @@ public class NkpMarcMetadataRecord extends MetadataMarcRecord {
 	@Override
 	public List<String> getUrls() {
 		List<String> results = super.getUrls();
-		results.addAll(getNkpEbraryProquestUrls());
+		results.addAll(getNkpEversionsUrls(Arrays.asList("ebrary.com/", "proquest.com/"), Constants.DOCUMENT_AVAILABILITY_MEMBER));
+		results.addAll(getNkpEversionsUrls(Arrays.asList("www.manuscriptorium.com/", "books.google.cz/"), Constants.DOCUMENT_AVAILABILITY_ONLINE));
 		return results;
 	}
 
 	@Override
 	public List<HarvestedRecordFormatEnum> getDetectedFormatList() {
-		if (!getNkpEbraryProquestUrls().isEmpty()) {
+		if (!getNkpEversionsUrls(Arrays.asList("ebrary.com/", "proquest.com/"), Constants.DOCUMENT_AVAILABILITY_MEMBER).isEmpty()) {
 			return Collections.singletonList(EBOOK);
 		}
 		return super.getDetectedFormatList();
