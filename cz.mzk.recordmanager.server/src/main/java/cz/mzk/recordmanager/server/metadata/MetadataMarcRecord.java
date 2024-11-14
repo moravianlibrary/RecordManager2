@@ -69,7 +69,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 	private static final Pattern DVD = Pattern.compile("dvd", Pattern.CASE_INSENSITIVE);
 	private static final Pattern KOMPAKTNI_DISK = Pattern.compile("kompaktn[ií](?:ch)?\\sd[ei]sk[uů]?", Pattern.CASE_INSENSITIVE);
 	private static final Pattern ZVUKOVE_CD = Pattern.compile("zvukov[eéaá]\\sCD", Pattern.CASE_INSENSITIVE);
-	private static final Pattern CD = Pattern.compile("CD", Pattern.CASE_INSENSITIVE);
+	private static final Pattern CD = Pattern.compile("\\bCD\\b", Pattern.CASE_INSENSITIVE);
 	private static final Pattern CD_R = Pattern.compile("CD-R", Pattern.CASE_INSENSITIVE);
 	private static final Pattern ZVUKOVA_DESKA = Pattern.compile("zvukov(?:[aáeé]|ych|ých)\\sdes(?:ka|ky|ek)", Pattern.CASE_INSENSITIVE);
 	protected static final Pattern DIGITAL_OR_12CM = Pattern.compile("digital|12\\s*cm", Pattern.CASE_INSENSITIVE);
