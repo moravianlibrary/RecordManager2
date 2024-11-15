@@ -223,6 +223,8 @@ public class SolrFieldConstants {
 
 	public static final String IDS_FOR_DIGITALIZATION = "ids_for_digitalization_display_mv";
 
+	public static final String TITLE_ORIGINAL_LANGUAGE = "title_original_language_search_txt_mv";
+
 	/**
 	 * dummy fields used for processing purposes only, shouldn't be indexed.
 	 */
