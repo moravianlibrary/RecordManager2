@@ -1,5 +1,5 @@
 local_base_facet_mv = getMZKBases()
-local_view_statuses_facet_mv = getMZKStatuses true
+local_view_statuses_facet_mv = getNkpStatuses()
 local_acq_date = getMZKAcquisitionDateStamp()
 
 local_callnumber_str_mv = getFieldsUnique "996c"
