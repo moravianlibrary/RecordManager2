@@ -870,10 +870,13 @@ public class MetadataMarcRecord implements MetadataRecord {
 			hrf.add(BOOKS);
 		}
 		HarvestedRecordFormatEnum thesis;
-		if ((thesis = getThesis()) != null) return Collections.singletonList(thesis);
 		if (isPeriodical()) hrf.add(HarvestedRecordFormatEnum.PERIODICALS);
 		if (isArticle()) hrf.add(HarvestedRecordFormatEnum.ARTICLES);
 		if (isArticle773()) return Collections.singletonList(HarvestedRecordFormatEnum.ARTICLES);
+		if ((thesis = getThesis()) != null) {
+			if (hrf.contains(ARTICLES)) return Collections.singletonList(ARTICLES);
+			else return Collections.singletonList(thesis);
+		}
 		if (isMap()) return Collections.singletonList(HarvestedRecordFormatEnum.MAPS);
 		if (isMusicalScores()) hrf.add(HarvestedRecordFormatEnum.MUSICAL_SCORES);
 		if (isVisualDocument()) hrf.add(HarvestedRecordFormatEnum.VISUAL_DOCUMENTS);
