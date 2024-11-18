@@ -69,7 +69,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 	private static final Pattern DVD = Pattern.compile("dvd", Pattern.CASE_INSENSITIVE);
 	private static final Pattern KOMPAKTNI_DISK = Pattern.compile("kompaktn[ií](?:ch)?\\sd[ei]sk[uů]?", Pattern.CASE_INSENSITIVE);
 	private static final Pattern ZVUKOVE_CD = Pattern.compile("zvukov[eéaá]\\sCD", Pattern.CASE_INSENSITIVE);
-	private static final Pattern CD = Pattern.compile("CD", Pattern.CASE_INSENSITIVE);
+	private static final Pattern CD = Pattern.compile("\\bCD\\b", Pattern.CASE_INSENSITIVE);
 	private static final Pattern CD_R = Pattern.compile("CD-R", Pattern.CASE_INSENSITIVE);
 	private static final Pattern ZVUKOVA_DESKA = Pattern.compile("zvukov(?:[aáeé]|ych|ých)\\sdes(?:ka|ky|ek)", Pattern.CASE_INSENSITIVE);
 	protected static final Pattern DIGITAL_OR_12CM = Pattern.compile("digital|12\\s*cm", Pattern.CASE_INSENSITIVE);
@@ -81,7 +81,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 	private static final Pattern MAGNETOFONOVA_KAZETA = Pattern.compile("magnetofonov(?:a|á|e|é|ych|ých)\\skaze(?:ta|ty|t)", Pattern.CASE_INSENSITIVE);
 	private static final Pattern ZVUKOVY_ZAZNAM = Pattern.compile("zvukov[yý]\\sz[aá]znam", Pattern.CASE_INSENSITIVE);
 	private static final Pattern START_S = Pattern.compile("^s", Pattern.CASE_INSENSITIVE);
-	private static final Pattern MC_OR_KZ_MGK = Pattern.compile("mc|kz|mgk", Pattern.CASE_INSENSITIVE);
+	private static final Pattern MC_OR_KZ_MGK = Pattern.compile("\\bmc\\b|kz|mgk", Pattern.CASE_INSENSITIVE);
 	private static final Pattern BLURAY = Pattern.compile("blu.*ray", Pattern.CASE_INSENSITIVE);
 	private static final Pattern VHS = Pattern.compile("vhs", Pattern.CASE_INSENSITIVE);
 	private static final Pattern VIDEOKAZETA = Pattern.compile("videokazet[ay]?", Pattern.CASE_INSENSITIVE);
