@@ -26,7 +26,11 @@ public class LocalMzkStatusesDedupRecordEnricher implements DedupRecordEnricher 
 	private static final List<String> SOURCES = Arrays.asList(
 			Constants.PREFIX_MZK,
 			Constants.PREFIX_KNAV,
-			Constants.PREFIX_NKP
+			Constants.PREFIX_NKP,
+			Constants.PREFIX_SLK,
+			Constants.PREFIX_STT,
+			Constants.PREFIX_KKL,
+			Constants.PREFIX_ANL
 	);
 
 	@Override
