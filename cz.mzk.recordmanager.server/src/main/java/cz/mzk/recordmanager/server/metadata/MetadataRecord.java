@@ -603,4 +603,14 @@ public interface MetadataRecord {
 	default List<HarvestedRecordFormatEnum> getNkpRecordFormats() {
 		return Collections.emptyList();
 	}
+
+	/**
+	 * get member availability to local records in view
+	 *
+	 * @return Set of String
+	 */
+	default Set<String> getAvailabilityForLocalOnlineFacet() {
+		return Collections.emptySet();
+	}
+
 }

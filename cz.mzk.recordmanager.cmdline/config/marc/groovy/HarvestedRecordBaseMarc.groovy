@@ -74,6 +74,7 @@ _hidden_ziskej_mvs_without_api_boolean = isZiskejMvsWithoutApi()
 _hidden_ziskej_edd_without_api_boolean = isZiskejEddWithoutApi()
 _hidden_is_digitized_boolean = isDigitized()
 _hidden_available_for_digitalization_boolean = isAvailableForDigitalization()
+_hidden_local_online_facet_mv = getLocalOnlineFacet()
 
 // facets
 conspectus_facet_mv = conspectus_str_mv = getConspectus();

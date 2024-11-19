@@ -86,6 +86,12 @@ public class LocalMzkStatusesDedupRecordEnricher implements DedupRecordEnricher 
 					}
 				}
 			}
+			for (SolrInputDocument solrDoc : sourceRecords) {
+				if (solrDoc.containsKey(SolrFieldConstants.HIDDEN_LOCAL_ONLINE_FACET)) {
+					localStatuses.addAll(solrDoc.getFieldValues(SolrFieldConstants.HIDDEN_LOCAL_ONLINE_FACET).stream()
+							.map(o -> o.toString()).collect(Collectors.toSet()));
+				}
+			}
 			if (localStatuses.isEmpty()) return;
 			for (SolrInputDocument solrDoc : sourceRecords) {
 				solrDoc.setField(SolrFieldConstants.LOCAL_ONLINE_FACET, localStatuses);

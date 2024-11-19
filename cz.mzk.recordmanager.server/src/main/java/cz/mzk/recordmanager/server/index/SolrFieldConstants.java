@@ -241,4 +241,6 @@ public class SolrFieldConstants {
 
 	public static final String HIDDEN_AVAILABLE_FOR_DIGITALIZATION = "_hidden_available_for_digitalization_boolean";
 
+	public static final String HIDDEN_LOCAL_ONLINE_FACET = "_hidden_" + LOCAL_ONLINE_FACET;
+
 }

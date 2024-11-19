@@ -2,16 +2,14 @@ package cz.mzk.recordmanager.server.metadata.institutions;
 
 import cz.mzk.recordmanager.server.marc.MarcRecord;
 import cz.mzk.recordmanager.server.metadata.MetadataMarcRecord;
+import cz.mzk.recordmanager.server.model.EVersionUrl;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecordFormat.HarvestedRecordFormatEnum;
 import cz.mzk.recordmanager.server.util.Constants;
 import cz.mzk.recordmanager.server.util.MetadataUtils;
 import org.marc4j.marc.DataField;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 import static cz.mzk.recordmanager.server.model.HarvestedRecordFormat.HarvestedRecordFormatEnum.*;
 
@@ -75,5 +73,20 @@ public class NkpMarcMetadataRecord extends MetadataMarcRecord {
 			return Collections.singletonList(EBOOK);
 		}
 		return super.getDetectedFormatList();
+	}
+
+	@Override
+	public Set<String> getAvailabilityForLocalOnlineFacet() {
+		Set<String> result = new HashSet<>();
+		for (String url : getUrls()) {
+			try {
+				if (Objects.equals(EVersionUrl.create(url).getAvailability(), Constants.DOCUMENT_AVAILABILITY_MEMBER)) {
+					result.add(Constants.DOCUMENT_AVAILABILITY_MEMBER);
+				}
+			} catch (Exception ignore) {
+				continue;
+			}
+		}
+		return result;
 	}
 }
