@@ -11,13 +11,15 @@ import java.util.*;
 @Component
 public class MzkStatusFunctions implements MarcRecordFunctions {
 
-	private static final String STATUS_FIELD = "996";
+	protected static final String STATUS_FIELD = "996";
 
 	private static final String ABSENT_STATUS = "absent";
 
 	private static final String PRESENT_STATUS = "present";
 
 	private static final String FREE_STACK_STATUS = "free_stack";
+
+	protected static final String LIMITED_STATUS = "limited";
 
 	private static final String EOD_STATUS = "available_for_eod";
 
@@ -36,7 +38,7 @@ public class MzkStatusFunctions implements MarcRecordFunctions {
 			"http://www.digitalniknihovna.cz"
 	);
 
-	private enum AvailabilityStatus {
+	protected enum AvailabilityStatus {
 		ABSENT {
 			@Override
 			public boolean check(DataField df) {
@@ -53,6 +55,12 @@ public class MzkStatusFunctions implements MarcRecordFunctions {
 			@Override
 			public boolean check(DataField df) {
 				return check(df, 'a', "0");
+			}
+		},
+		LIMITED {
+			@Override
+			public boolean check(DataField df) {
+				return check(df, 's', "o");
 			}
 		};
 

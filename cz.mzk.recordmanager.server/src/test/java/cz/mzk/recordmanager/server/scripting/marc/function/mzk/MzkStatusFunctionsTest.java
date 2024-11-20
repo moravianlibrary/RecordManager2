@@ -17,8 +17,7 @@ import cz.mzk.recordmanager.server.scripting.marc.MarcFunctionContext;
 @Test
 public class MzkStatusFunctionsTest extends AbstractTest {
 
-	@Autowired
-	private MzkStatusFunctions statusFunctions;
+	private final MzkStatusFunctions statusFunctions = new MzkStatusFunctions();
 
 	public void presentStatus() throws Exception {
 		List<String> data = new ArrayList<String>();
