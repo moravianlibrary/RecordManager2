@@ -1061,4 +1061,8 @@ public class MarcDSL extends BaseDSL {
 	public List<String> getNkpRecordFormats() {
 		return SolrUtils.createRecordTypeHierarchicFacet(metadataRecord.getNkpRecordFormats());
 	}
+
+	public Set<String> getLocalOnlineFacet() {
+		return metadataRecord.getAvailabilityForLocalOnlineFacet();
+	}
 }

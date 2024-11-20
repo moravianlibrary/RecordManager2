@@ -26,7 +26,11 @@ public class LocalMzkStatusesDedupRecordEnricher implements DedupRecordEnricher 
 	private static final List<String> SOURCES = Arrays.asList(
 			Constants.PREFIX_MZK,
 			Constants.PREFIX_KNAV,
-			Constants.PREFIX_NKP
+			Constants.PREFIX_NKP,
+			Constants.PREFIX_SLK,
+			Constants.PREFIX_STT,
+			Constants.PREFIX_KKL,
+			Constants.PREFIX_ANL
 	);
 
 	@Override
@@ -80,6 +84,12 @@ public class LocalMzkStatusesDedupRecordEnricher implements DedupRecordEnricher 
 					if (url.getSource().equals(source) && url.getAvailability().equals(Constants.DOCUMENT_AVAILABILITY_MEMBER)) {
 						localStatuses.add(Constants.DOCUMENT_AVAILABILITY_BOOKPORT);
 					}
+				}
+			}
+			for (SolrInputDocument solrDoc : sourceRecords) {
+				if (solrDoc.containsKey(SolrFieldConstants.HIDDEN_LOCAL_ONLINE_FACET)) {
+					localStatuses.addAll(solrDoc.getFieldValues(SolrFieldConstants.HIDDEN_LOCAL_ONLINE_FACET).stream()
+							.map(o -> o.toString()).collect(Collectors.toSet()));
 				}
 			}
 			if (localStatuses.isEmpty()) return;

@@ -2036,4 +2036,5 @@ public class MetadataMarcRecord implements MetadataRecord {
 	public boolean isDigitized() {
 		return !getUuids().isEmpty();
 	}
+
 }
