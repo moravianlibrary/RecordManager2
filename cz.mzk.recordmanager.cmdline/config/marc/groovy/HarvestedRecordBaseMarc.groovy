@@ -1,4 +1,6 @@
 import static cz.mzk.recordmanager.server.scripting.marc.function.BoundingBoxMarcFunctions.LongLatFormat.*
+import static cz.mzk.recordmanager.server.marc.SubfieldExtractionMethod.SEPARATED
+
 
 recordtype = "local"
 record_format = "local"
@@ -71,6 +73,8 @@ uuid_str_mv = getUuidForObalkyKnih()
 author_sort_display = getAuthorForSorting("100abcd:110abcd:111abcd:700abcd:710abcd:711abcd")
 title_original_language_search_txt_mv = getOriginalTitles()
 author_original_language_search_txt_mv = getOriginalAuthors()
+numeric_designation_txt_mv = getFields "926ab:383bcd", SEPARATED
+distributor_number_txt_mv = getFields "028ab"
 
 _hidden_isbn_annotation_obalkyknih = getFields "020a:902a"
 _hidden_ziskej_mvs_without_api_boolean = isZiskejMvsWithoutApi()

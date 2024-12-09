@@ -229,6 +229,12 @@ public class SolrFieldConstants {
 
 	public static final String LOCAL_VIEW_STATUSES_FACET = "local_view_statuses_facet_mv";
 
+	public static final String NUMERIC_DESIGNATION = "numeric_designation_txt_mv";
+
+	public static final String DISTRIBUTOR_NUMBER = "distributor_number_txt_mv";
+
+	public static final String MEDIUM_OF_PERFORMANCE = "medium_of_performance_txt_mv";
+
 	/**
 	 * dummy fields used for processing purposes only, shouldn't be indexed.
 	 */

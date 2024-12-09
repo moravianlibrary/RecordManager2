@@ -1,5 +1,6 @@
 package cz.mzk.recordmanager.server.metadata.institutions;
 
+import com.google.common.primitives.Chars;
 import cz.mzk.recordmanager.server.marc.MarcRecord;
 import cz.mzk.recordmanager.server.metadata.MetadataMarcRecord;
 import cz.mzk.recordmanager.server.model.EVersionUrl;
@@ -8,6 +9,7 @@ import cz.mzk.recordmanager.server.model.HarvestedRecordFormat.HarvestedRecordFo
 import cz.mzk.recordmanager.server.util.Constants;
 import cz.mzk.recordmanager.server.util.MetadataUtils;
 import org.marc4j.marc.DataField;
+import org.marc4j.marc.Subfield;
 
 import java.util.*;
 import java.util.regex.Matcher;
@@ -194,5 +196,25 @@ public class NkpMarcMetadataRecord extends MetadataMarcRecord {
 		}
 
 		return false;
+	}
+
+	private static final char[] MEDIUM_OF_PERFORMANCE_CODES = {
+			'a', 'b', 'd', 'p', 'n', 'e', 's'
+	};
+
+	@Override
+	public Set<String> getMediumOfPerformance() {
+		Set<String> results = new HashSet<>();
+		for (DataField df : super.underlayingMarc.getDataFields("382")) {
+			List<String> fieldResult = new ArrayList<>();
+			for (Subfield sf : df.getSubfields()) {
+				if (Chars.contains(MEDIUM_OF_PERFORMANCE_CODES, sf.getCode())) {
+					fieldResult.add(sf.getData());
+				}
+			}
+			if (fieldResult.isEmpty()) continue;
+			results.add(String.join(" ", fieldResult));
+		}
+		return results;
 	}
 }

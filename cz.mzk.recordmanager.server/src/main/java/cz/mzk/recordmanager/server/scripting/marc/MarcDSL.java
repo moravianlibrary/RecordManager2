@@ -1129,4 +1129,8 @@ public class MarcDSL extends BaseDSL {
 	public Integer getPrice() {
 		return metadataRecord.getPrice();
 	}
+
+	public Set<String> getMediumOfPerformance() {
+		return metadataRecord.getMediumOfPerformance();
+	}
 }

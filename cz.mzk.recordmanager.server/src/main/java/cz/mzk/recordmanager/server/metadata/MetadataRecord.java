@@ -628,4 +628,8 @@ public interface MetadataRecord {
 	default boolean isEod() {
 		return false;
 	}
+
+	default Set<String> getMediumOfPerformance() {
+		return Collections.emptySet();
+	}
 }
