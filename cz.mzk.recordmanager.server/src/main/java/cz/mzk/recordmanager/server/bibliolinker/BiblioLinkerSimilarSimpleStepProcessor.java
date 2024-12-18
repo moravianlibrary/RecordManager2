@@ -22,14 +22,14 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * Generic implementation of of ItemProcessor
+ * Generic implementation of ItemProcessor
  */
 @Component
 public class BiblioLinkerSimilarSimpleStepProcessor implements
 		ItemProcessor<List<Long>, List<HarvestedRecord>> {
 
 	@Autowired
-	private HarvestedRecordDAO harvestedRecordDao;
+	protected HarvestedRecordDAO harvestedRecordDao;
 
 	@Autowired
 	private MetadataRecordFactory mrf;
@@ -40,49 +40,66 @@ public class BiblioLinkerSimilarSimpleStepProcessor implements
 
 	protected BiblioLinkerSimilarType type;
 
+	// maximum similarities in step
+	protected int NEW_SIMILARS_FOR_STEP;
+	// maximum similarities count per step
+	protected int MAX_SIMILARS_FOR_STEP;
+	// maximum similarities count per record
+	protected static final int MAX_SIMILARS_FOR_INDEX = 5;
+
 	private static final List<BiblioLinkerSimilarType> ONLY_EMPTY_SIMILAR =
 			new ArrayList<>(Collections.singletonList(BiblioLinkerSimilarType.ENTITY_LANGUAGE));
-
-	protected static final int MAX_SIMILARS = 5;
 
 	public BiblioLinkerSimilarSimpleStepProcessor() {
 	}
 
 	public BiblioLinkerSimilarSimpleStepProcessor(BiblioLinkerSimilarType type) {
 		this.type = type;
+		this.MAX_SIMILARS_FOR_STEP = Integer.MAX_VALUE;
+		this.NEW_SIMILARS_FOR_STEP = Integer.MAX_VALUE;
+	}
+
+	public BiblioLinkerSimilarSimpleStepProcessor(BiblioLinkerSimilarType type, int similarityStepLimit, int newSimilarsCount) {
+		this.type = type;
+		this.MAX_SIMILARS_FOR_STEP = similarityStepLimit;
+		this.NEW_SIMILARS_FOR_STEP = newSimilarsCount;
 	}
 
 	@Override
 	public List<HarvestedRecord> process(List<Long> biblioIdsList) throws Exception {
-		Map<Long, Collection<HarvestedRecord>> records;
+		return processRecords(sortRecords(harvestedRecordDao.getByBiblioLinkerIds(biblioIdsList)));
+	}
+
+	protected List<HarvestedRecord> processRecords(Map<Long, Collection<HarvestedRecord>> records) {
 		Set<HarvestedRecord> toUpdate = new HashSet<>();
 		Set<BiblioLinkerSimilar> similarIds;
 		Set<HarvestedRecord> similarHr;
 		HarvestedRecord searched;
-		// get all records by BiblioLinker id
-		records = sortrecords(harvestedRecordDao.getByBiblioLinkerIds(biblioIdsList));
 		for (Long blOuter : records.keySet()) {
 			for (HarvestedRecord hr : records.get(blOuter)) {
 				if (hr.getDeleted() != null) continue;
 				similarIds = new TreeSet<>(hr.getBiblioLinkerSimilarUrls());
-				if (!similarIds.isEmpty() && ONLY_EMPTY_SIMILAR.contains(type)) continue;
+//				if (!similarIds.isEmpty() && ONLY_EMPTY_SIMILAR.contains(type)) continue;
+				if (similarIds.size() >= MAX_SIMILARS_FOR_STEP) break;
 				similarHr = new HashSet<>();
+				int newSimilars = 0;
 				for (Long blInner : records.keySet()) {
 					// same BibliLinker groups
 					if (blOuter.equals(blInner)) continue;
 					searched = findSameInstitution(hr, records.get(blInner));
 					if (searched == null) continue;
 					if (isSimilar(hr, searched, similarHr)) {
-						try {
+						try {						
 							similarIds.add(BiblioLinkerSimilar.create(getUrlId(searched), searched, type));
 							similarHr.add(searched);
 							// new similar record, must be updated
 							toUpdate.add(hr);
+							++newSimilars;
 						} catch (InvalidMarcException ex) {
 							logger.error(ex.getMessage() + " " + searched.getUniqueId());
-						}
+						}					
 					}
-					if (similarIds.size() >= MAX_SIMILARS) break;
+					if (similarIds.size() >= MAX_SIMILARS_FOR_INDEX || newSimilars >= NEW_SIMILARS_FOR_STEP) break;
 				}
 				hr.setBiblioLinkerSimilarUrls(new ArrayList<>(similarIds));
 				progressLogger.incrementAndLogProgress();
@@ -138,17 +155,21 @@ public class BiblioLinkerSimilarSimpleStepProcessor implements
 		return result;
 	}
 
-	private static Map<Long, Collection<HarvestedRecord>> sortrecords(final Collection<HarvestedRecord> hrs) {
+	protected Map<Long, Collection<HarvestedRecord>> sortRecords(final Collection<HarvestedRecord> hrs) {
 		Map<Long, Collection<HarvestedRecord>> results = new HashMap<>();
 		for (HarvestedRecord hr : hrs) {
-			Long blId = hr.getBiblioLinker().getId();
-			if (results.containsKey(blId)) {
-				results.computeIfPresent(blId, (key, value) -> value).add(hr);
+			Long id = getIdForSorting(hr);
+			if (results.containsKey(id)) {
+				results.computeIfPresent(id, (key, value) -> value).add(hr);
 			} else {
-				results.computeIfAbsent(blId, key -> new ArrayList<>()).add(hr);
+				results.computeIfAbsent(id, key -> new ArrayList<>()).add(hr);
 			}
 		}
 		return results;
+	}
+
+	protected Long getIdForSorting(HarvestedRecord hr) {
+		return hr.getBiblioLinker().getId();
 	}
 
 }

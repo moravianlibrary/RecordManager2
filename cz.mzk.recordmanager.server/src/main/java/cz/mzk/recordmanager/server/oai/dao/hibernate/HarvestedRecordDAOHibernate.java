@@ -32,7 +32,7 @@ public class HarvestedRecordDAOHibernate extends
 
 	@Override
 	public HarvestedRecord findByIdAndHarvestConfiguration(String recordId,
-			ImportConfiguration configuration) {
+														   ImportConfiguration configuration) {
 		Session session = sessionFactory.getCurrentSession();
 		return (HarvestedRecord) session
 				.createQuery(
@@ -44,7 +44,7 @@ public class HarvestedRecordDAOHibernate extends
 
 	@Override
 	public HarvestedRecord findByIdAndHarvestConfiguration(String recordId,
-			Long configurationId) {
+														   Long configurationId) {
 		Session session = sessionFactory.getCurrentSession();
 		return (HarvestedRecord) session
 				.createQuery(
@@ -90,7 +90,7 @@ public class HarvestedRecordDAOHibernate extends
 				.setParameter("recordId", uniqueId)
 				.uniqueResult();
 	}
-	
+
 	@Override
 	public HarvestedRecord findByHarvestConfAndRaw001Id(Long configurationId, String id001) {
 		Session session = sessionFactory.getCurrentSession();
@@ -241,15 +241,15 @@ public class HarvestedRecordDAOHibernate extends
 		hr.setPublisher(null);
 		hr.setEdition(null);
 
-		List<Title> titles =  hr.getTitles();
+		List<Title> titles = hr.getTitles();
 		hr.setTitles(new ArrayList<>());
-		for (Title t: titles) {
+		for (Title t : titles) {
 			session.delete(t);
 		}
 
 		List<ShortTitle> shortTitles = hr.getShortTitles();
 		hr.setShortTitles(new ArrayList<>());
-		for (ShortTitle st: shortTitles) {
+		for (ShortTitle st : shortTitles) {
 			session.delete(st);
 		}
 
@@ -259,33 +259,33 @@ public class HarvestedRecordDAOHibernate extends
 			session.delete(st);
 		}
 
-		List<Isbn> isbns =  hr.getIsbns();
+		List<Isbn> isbns = hr.getIsbns();
 		hr.setIsbns(new ArrayList<>());
-		for (Isbn i: isbns) {
+		for (Isbn i : isbns) {
 			session.delete(i);
 		}
 
-		List<Issn> issns =  hr.getIssns();
+		List<Issn> issns = hr.getIssns();
 		hr.setIssns(new ArrayList<>());
-		for (Issn i: issns) {
+		for (Issn i : issns) {
 			session.delete(i);
 		}
 
-		List<Ismn> ismns =  hr.getIsmns();
+		List<Ismn> ismns = hr.getIsmns();
 		hr.setIsmns(new ArrayList<>());
-		for (Ismn i: ismns) {
+		for (Ismn i : ismns) {
 			session.delete(i);
 		}
 
 		List<Oclc> oclcs = hr.getOclcs();
 		hr.setOclcs(new ArrayList<>());
-		for (Oclc o: oclcs) {
+		for (Oclc o : oclcs) {
 			session.delete(o);
 		}
 
 		List<Cnb> cnbs = hr.getCnb();
 		hr.setCnb(new ArrayList<>());
-		for (Cnb c: cnbs) {
+		for (Cnb c : cnbs) {
 			session.delete(c);
 		}
 
@@ -297,7 +297,7 @@ public class HarvestedRecordDAOHibernate extends
 
 		List<HarvestedRecordFormat> physicalFormats = hr.getPhysicalFormats();
 		hr.getPhysicalFormats().clear();
-		for (HarvestedRecordFormat hrf: physicalFormats) {
+		for (HarvestedRecordFormat hrf : physicalFormats) {
 			session.delete(hrf);
 		}
 
@@ -430,7 +430,7 @@ public class HarvestedRecordDAOHibernate extends
 	public Collection<HarvestedRecord> getByBiblioLinkerIdAndSimilarFlag(Long blId) {
 		Session session = sessionFactory.getCurrentSession();
 		return (List<HarvestedRecord>) session
-				.createQuery("from HarvestedRecord where biblio_linker_id = :biblioLinkerId and bl_disadvantaged is true")
+				.createQuery("from HarvestedRecord where biblio_linker_id = :biblioLinkerId")
 				.setParameter("biblioLinkerId", blId)
 				.list();
 	}
@@ -490,4 +490,13 @@ public class HarvestedRecordDAOHibernate extends
 		}
 	}
 
+	@Override
+	@SuppressWarnings("unchecked")
+	public List<HarvestedRecord> getByDedupRecordIds(List<Long> dedupRecordIds) {
+		Session session = sessionFactory.getCurrentSession();
+		return (List<HarvestedRecord>) session
+				.createQuery("from HarvestedRecord where dedup_record_id in (:drIds) and deleted is null")
+				.setParameterList("drIds", dedupRecordIds)
+				.list();
+	}
 }

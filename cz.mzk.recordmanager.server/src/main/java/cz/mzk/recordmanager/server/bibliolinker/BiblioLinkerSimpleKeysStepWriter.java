@@ -25,7 +25,7 @@ public class BiblioLinkerSimpleKeysStepWriter implements
 	@Autowired
 	protected SessionFactory sessionFactory;
 
-	private boolean updateTimestamp;
+	private final boolean updateTimestamp;
 
 	public BiblioLinkerSimpleKeysStepWriter(Integer updateTimestamp) {
 		this.updateTimestamp = updateTimestamp == null || updateTimestamp.equals(1);
@@ -37,7 +37,6 @@ public class BiblioLinkerSimpleKeysStepWriter implements
 		Set<DedupRecord> dedupRecords = new HashSet<>();
 		for (List<HarvestedRecord> hrList : arg0) {
 			for (HarvestedRecord hr : hrList) {
-				hr.setBlDisadvantaged(false);
 				harvestedRecordDAO.saveOrUpdate(hr);
 				if (updateTimestamp) dedupRecords.add(hr.getDedupRecord());
 			}

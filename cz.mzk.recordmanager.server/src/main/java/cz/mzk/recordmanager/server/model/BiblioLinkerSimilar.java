@@ -19,6 +19,10 @@ public class BiblioLinkerSimilar implements Comparable {
 	@Column(name = "harvested_record_similar_id")
 	private Long harvestedRecordSimilarId;
 
+	@ManyToOne(optional = false, fetch = FetchType.LAZY)
+	@JoinColumn(name = "harvested_record_similar_id", nullable = false, updatable = false, insertable = false)
+	private HarvestedRecord harvestedRecordSimilar;
+
 	@Column(name = "url_id")
 	private String urlId;
 
@@ -69,6 +73,14 @@ public class BiblioLinkerSimilar implements Comparable {
 
 	public void setHarvestedRecordSimilarId(Long harvestedRecordSimilarId) {
 		this.harvestedRecordSimilarId = harvestedRecordSimilarId;
+	}
+
+	public HarvestedRecord getHarvestedRecordSimilar() {
+		return harvestedRecordSimilar;
+	}
+
+	public void setHarvestedRecordSimilar(HarvestedRecord harvestedRecordSimilar) {
+		this.harvestedRecordSimilar = harvestedRecordSimilar;
 	}
 
 	@Override

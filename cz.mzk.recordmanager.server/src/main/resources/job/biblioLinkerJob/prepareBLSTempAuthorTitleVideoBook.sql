@@ -1,6 +1,6 @@
-DROP TABLE IF EXISTS tmp_bls_author_title_audio_mus;
+DROP TABLE IF EXISTS tmp_bls_author_title_video_book;
 
-CREATE TABLE tmp_bls_author_title_audio_mus AS
+CREATE TABLE tmp_bls_author_title_video_book AS
 SELECT nextval('tmp_bl_id_seq') AS                                   row_id,
        array_to_string(array_agg(DISTINCT hr.biblio_linker_id), ',') biblio_linker_id,
        array_to_string(array_agg(hr.id), ',')                        local_record_id,
@@ -16,10 +16,10 @@ FROM (SELECT harvested_record_id,
          INNER JOIN harvested_record hr ON hr.id = titles.harvested_record_id
          INNER JOIN harvested_record_format_link hrfl ON hr.id = hrfl.harvested_record_id
 WHERE hr.bl_author IS NOT NULL
-  AND hrfl.harvested_record_format_id in (5, 12, 13, 14, 15, 16, 17)
+  AND hrfl.harvested_record_format_id in (1, 18, 19, 20, 21, 22, 23)
   AND biblio_linker_similar IS TRUE
 GROUP BY hr.bl_author, titles.title
 HAVING COUNT(DISTINCT biblio_linker_id) > 1
    AND bool_or(next_biblio_linker_similar_flag) IS TRUE;
 
-CREATE INDEX tmp_bls_author_title_audio_mus_idx ON tmp_bls_author_title_audio_mus (row_id);
+CREATE INDEX tmp_bls_author_title_video_book_idx ON tmp_bls_author_title_video_book (row_id);

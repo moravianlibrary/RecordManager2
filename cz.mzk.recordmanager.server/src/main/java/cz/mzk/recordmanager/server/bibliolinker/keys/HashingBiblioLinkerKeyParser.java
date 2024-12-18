@@ -27,11 +27,16 @@ public abstract class HashingBiblioLinkerKeyParser implements BiblioLinkerKeysPa
 	private HarvestedRecordDAO harvestedRecordDao;
 
 	@Override
-	public HarvestedRecord parse(HarvestedRecord record,
-			MetadataRecord metadataRecord) throws BiblioLinkerKeyParserException {
-
-		if (!record.getHarvestedFrom().isGenerateBiblioLinkerKeys()) return record;
-
+	public HarvestedRecord parse(HarvestedRecord record, MetadataRecord metadataRecord)
+			throws BiblioLinkerKeyParserException {
+		if (!record.getHarvestedFrom().isGenerateBiblioLinkerKeys() || !metadataRecord.biblioLinkerKeysFilter()) {
+			if (record.getBiblioLinkerKeysHash() != null && !record.getBiblioLinkerKeysHash().trim().isEmpty()) {
+				record.setNextBiblioLinkerFlag(true);
+			}
+			harvestedRecordDao.dropBilioLinkerKeys(record);
+			record.setBiblioLinkerKeysHash(null);
+			return record;
+		}
 		boolean biblioLinkerKeysChanged = false;
 		boolean oaiTimestampChanged;
 
