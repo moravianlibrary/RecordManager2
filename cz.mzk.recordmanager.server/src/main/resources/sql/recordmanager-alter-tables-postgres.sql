@@ -3199,3 +3199,9 @@ INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (350, 'MKC
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id, mappings996, catalog_serial_link) VALUES (550, 350, 200, 'mkchot', 11, false, true, true, true, 'U', 'other', 'tritius', true);
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (550,'https://chotebor.tritius.cz/tritius/oai-provider','CPK_1','marc21',NULL);
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (165, 550, 'HBG501');
+
+-- 28. 03. 2025 tomascejpek
+INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (355, 'MKLOVOSICE', 'https://knihovna.lovosice.com/', 'https://lovosice.tritius.cz/', 'Lovosice', 'US');
+INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id, mappings996, catalog_serial_link) VALUES (555, 355, 200, 'mklovosice', 11, false, true, true, true, 'U', 'other', 'tritius', true);
+INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (555,'https://lovosice.tritius.cz/tritius/oai-provider','CPK_1','marc21',NULL);
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (170, 555, 'LTG503');
