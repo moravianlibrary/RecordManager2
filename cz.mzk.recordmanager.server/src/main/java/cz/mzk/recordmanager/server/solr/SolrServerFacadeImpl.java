@@ -1,21 +1,22 @@
 package cz.mzk.recordmanager.server.solr;
 
+import cz.mzk.recordmanager.server.index.SolrFieldConstants;
+import cz.mzk.recordmanager.server.index.enrich.LazyFulltextFieldImpl;
+import cz.mzk.recordmanager.server.solr.SolrIndexingExceptionHandler.Action;
+import org.apache.solr.client.solrj.SolrClient;
+import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.SolrRequest;
+import org.apache.solr.client.solrj.SolrServerException;
+import org.apache.solr.client.solrj.request.QueryRequest;
+import org.apache.solr.client.solrj.response.QueryResponse;
+import org.apache.solr.common.SolrInputDocument;
+import org.apache.solr.common.util.NamedList;
+
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import org.apache.solr.client.solrj.*;
-import org.apache.solr.client.solrj.request.QueryRequest;
-import org.apache.solr.client.solrj.response.QueryResponse;
-import org.apache.solr.common.SolrException;
-import org.apache.solr.common.SolrInputDocument;
-import org.apache.solr.common.util.NamedList;
-
-import cz.mzk.recordmanager.server.index.SolrFieldConstants;
-import cz.mzk.recordmanager.server.index.enrich.LazyFulltextFieldImpl;
-import cz.mzk.recordmanager.server.solr.SolrIndexingExceptionHandler.Action;
 
 public class SolrServerFacadeImpl implements SolrServerFacade {
 
@@ -52,7 +53,7 @@ public class SolrServerFacadeImpl implements SolrServerFacade {
 					server.add(docsWithoutFulltext, commitWithinMs);
 					exceptionHandler.ok();
 					carryOn = false;
-				} catch (SolrException | SolrServerException | IOException ex) {
+				} catch (RuntimeException | SolrServerException | IOException ex) {
 					Action action = exceptionHandler.handle(ex, documents); 
 					if (action == Action.FALLBACK) {
 						fallbackIndex(docsWithoutFulltext, commitWithinMs);
@@ -110,7 +111,7 @@ public class SolrServerFacadeImpl implements SolrServerFacade {
 				server.deleteByQuery(query, commitWithinMs);
 				exceptionHandler.ok();
 				carryOn = false;
-			} catch (SolrException | SolrServerException | IOException ex) {
+			} catch (RuntimeException | SolrServerException | IOException ex) {
 				carryOn = exceptionHandler.handle(ex, query) == Action.RETRY;
 			}
 		}
@@ -124,7 +125,7 @@ public class SolrServerFacadeImpl implements SolrServerFacade {
 					server.add(document, commitWithinMs);
 					exceptionHandler.ok();
 					carryOn = false;
-				} catch (SolrException | SolrServerException | IOException ex) {
+				} catch (RuntimeException | SolrServerException | IOException ex) {
 					Action action = exceptionHandler.handle(ex, documents);
 					carryOn = action == Action.RETRY;
 				}
@@ -142,7 +143,7 @@ public class SolrServerFacadeImpl implements SolrServerFacade {
 					server.add(document, commitWithinMs);
 					exceptionHandler.ok();
 					carryOn = false;
-				} catch (SolrException | SolrServerException | IOException ex) {
+				} catch (RuntimeException | SolrServerException | IOException ex) {
 					carryOn = exceptionHandler.handle(ex, Collections.singletonList(document)) == Action.RETRY;
 				}
 			}

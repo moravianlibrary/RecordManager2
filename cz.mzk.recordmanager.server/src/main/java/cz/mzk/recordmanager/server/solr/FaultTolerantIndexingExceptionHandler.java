@@ -1,15 +1,14 @@
 package cz.mzk.recordmanager.server.solr;
 
+import org.apache.solr.client.solrj.SolrServerException;
+import org.apache.solr.common.SolrInputDocument;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
-
-import org.apache.solr.client.solrj.SolrServerException;
-import org.apache.solr.common.SolrException;
-import org.apache.solr.common.SolrInputDocument;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class FaultTolerantIndexingExceptionHandler implements SolrIndexingExceptionHandler {
 
@@ -21,7 +20,8 @@ public class FaultTolerantIndexingExceptionHandler implements SolrIndexingExcept
 			"Java heap space",
 			"Error from server",
 			"Expected mime type",
-			"Timeout occurred while waiting response from"
+			"Timeout occurred while waiting response from",
+			"Broken pipe"
 	);
 
 	private static final List<String> SKIPPABLE_ERRORS = Arrays.asList(
@@ -109,12 +109,12 @@ public class FaultTolerantIndexingExceptionHandler implements SolrIndexingExcept
 	}
 
 	protected boolean retryable(Exception ex) {
-		boolean isSolrException = (ex instanceof SolrServerException) || (ex instanceof SolrException);
+		boolean isSolrException = (ex instanceof SolrServerException) || (ex instanceof RuntimeException);
 		return isSolrException && RETRYABLE_ERRORS.stream().anyMatch(mess -> ex.getMessage().contains(mess));
 	}
 
 	protected boolean skippable(Exception ex) {
-		boolean isSolrException = (ex instanceof SolrServerException) || (ex instanceof SolrException);
+		boolean isSolrException = (ex instanceof SolrServerException) || (ex instanceof RuntimeException);
 		return isSolrException && SKIPPABLE_ERRORS.stream().anyMatch(mess -> ex.getMessage().contains(mess));
 	}
 
