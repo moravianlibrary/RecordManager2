@@ -10,6 +10,7 @@ import cz.mzk.recordmanager.server.oai.harvest.AfterHarvestTasklet;
 import cz.mzk.recordmanager.server.oai.harvest.HarvestedRecordWriter;
 import cz.mzk.recordmanager.server.oai.harvest.OAIItemProcessor;
 import cz.mzk.recordmanager.server.oai.harvest.ReharvestJobExecutionDecider;
+import cz.mzk.recordmanager.server.oai.harvest.cosmotron.AfterCosmotronHarvestTasklet;
 import cz.mzk.recordmanager.server.oai.harvest.cosmotron.CosmotronRecordWriter;
 import cz.mzk.recordmanager.server.oai.model.OAIRecord;
 import cz.mzk.recordmanager.server.springbatch.JobFailureListener;
@@ -255,10 +256,15 @@ public class ImportRecordJobConfig {
 	// Oai cosmotron format
 	@Bean
 	public Job OaiImportCosmotronRecordsJob(
-			@Qualifier(Constants.JOB_ID_IMPORT_OAI_COSMOTRON + ":importRecordsStep") Step importRecordsStep) {
+			@Qualifier(Constants.JOB_ID_IMPORT_OAI_COSMOTRON + ":importRecordsStep") Step importRecordsStep,
+			@Qualifier(Constants.JOB_ID_HARVEST_COSMOTRON + ":afterCosmotronHarvestStep") Step afterCosmotronHarvestStep
+	) {
 		return jobs.get(Constants.JOB_ID_IMPORT_OAI_COSMOTRON)
 				.validator(new ImportOaiRecordsJobParametersValidator())
-				.listener(JobFailureListener.INSTANCE).flow(importRecordsStep)
+				.listener(JobFailureListener.INSTANCE)
+				.flow(importRecordsStep)
+				.next(ReharvestJobExecutionDecider.INSTANCE).on(ReharvestJobExecutionDecider.REHARVEST_FLOW_STATUS.toString()).to(afterCosmotronHarvestStep) //
+				.from(ReharvestJobExecutionDecider.INSTANCE).on(FlowExecutionStatus.COMPLETED.toString()).end()
 				.end().build();
 	}
 
@@ -404,6 +410,20 @@ public class ImportRecordJobConfig {
 	@StepScope
 	public ImportPalmknihyWriter importPalmknihyWriter(@Value("#{jobParameters[" + Constants.JOB_PARAM_CONF_ID + "]}") Long configurationId) {
 		return new ImportPalmknihyWriter(configurationId);
+	}
+
+	@Bean(name = Constants.JOB_ID_HARVEST_COSMOTRON + ":afterCosmotronHarvestStep")
+	public Step afterCosmotronHarvestStep() {
+		return steps.get(Constants.JOB_ID_HARVEST_COSMOTRON + ":afterCosmotronHarvestStep") //
+				.listener(new StepProgressListener())
+				.tasklet(afterCosmotronHarvestTasklet()) //
+				.build();
+	}
+
+	@Bean(name = Constants.JOB_ID_HARVEST_COSMOTRON + ":afterCosmotronHarvestTasklet")
+	@StepScope
+	public Tasklet afterCosmotronHarvestTasklet() {
+		return new AfterCosmotronHarvestTasklet();
 	}
 
 }
