@@ -21,7 +21,8 @@ public class FaultTolerantIndexingExceptionHandler implements SolrIndexingExcept
 			"Error from server",
 			"Expected mime type",
 			"Timeout occurred while waiting response from",
-			"Broken pipe"
+			"Broken pipe",
+			"Roura přerušena"
 	);
 
 	private static final List<String> SKIPPABLE_ERRORS = Arrays.asList(
