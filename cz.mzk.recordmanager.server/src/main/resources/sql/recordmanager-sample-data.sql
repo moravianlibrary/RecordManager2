@@ -733,7 +733,7 @@ INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format) VAL
 INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format) VALUES (449,'https://bookport.cz/marc21-12416.xml','downloadAndImportRecordsJob','xml');
 INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format) VALUES (450,'https://bookport.cz/marc21-12427.xml','downloadAndImportRecordsJob','xml');
 INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format) VALUES (451,'https://bookport.cz/marc21-12417.xml','downloadAndImportRecordsJob','xml');
-INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format) VALUES (454,'https://bookport.cz/marc21-8077.xml','downloadAndImportRecordsJob','xml');
+INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format) VALUES (454,'https://bookport.cz/marc21-24104.xml','downloadAndImportRecordsJob','xml');
 INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format) VALUES (455,'https://bookport.cz/marc21-9561.xml','downloadAndImportRecordsJob','xml');
 INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format,reharvest) VALUES (457,'http://ereading.cz/xml/xml_rent.xml','importPalmknihyJob','palmknihy','true');
 INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format) VALUES (458,null,null,null);

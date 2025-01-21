@@ -3147,3 +3147,6 @@ INSERT INTO sigla (id, import_conf_id, sigla) VALUES (63, 389, 'BEG001');
 
 -- 09. 01. 2025 tomascejpek
 UPDATE import_conf SET mapping_script='LocalBookport.groovy,HarvestedRecordBaseMarc.groovy' WHERE id in (413,445,448,449,450,451,454,455,489);
+
+-- 21. 01. 2025 tomascejpek
+UPDATE download_import_conf SET url='https://bookport.cz/marc21-24104.xml' WHERE import_conf_id=454;
