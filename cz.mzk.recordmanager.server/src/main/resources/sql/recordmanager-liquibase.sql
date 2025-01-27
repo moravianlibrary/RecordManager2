@@ -3441,3 +3441,6 @@ UPDATE import_conf SET mapping_script='LocalBookport.groovy,HarvestedRecordBaseM
 
 --changeset tomascejpek:439 context:cpk
 UPDATE download_import_conf SET url='https://bookport.cz/marc21-24104.xml' WHERE import_conf_id=454;
+
+--changeset tomascejpek:440 context:cpk
+UPDATE oai_harvest_conf SET ictx='kl',op='oai' WHERE import_conf_id=336;
