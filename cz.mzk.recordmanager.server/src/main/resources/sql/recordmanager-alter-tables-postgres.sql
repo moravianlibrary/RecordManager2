@@ -3153,3 +3153,7 @@ UPDATE download_import_conf SET url='https://bookport.cz/marc21-24104.xml' WHERE
 
 -- 27. 01. 2025 tomascejpek
 UPDATE oai_harvest_conf SET ictx='kl',op='oai' WHERE import_conf_id=336;
+
+-- 27. 01. 2025 tomascejpek
+UPDATE import_conf SET item_id='other',mappings996='tritius',catalog_serial_link=True WHERE id=333;
+UPDATE oai_harvest_conf SET url='https://kkpce.tritius.cz/tritius/oai-provider',set_spec='CPK_1' WHERE import_conf_id=333;
