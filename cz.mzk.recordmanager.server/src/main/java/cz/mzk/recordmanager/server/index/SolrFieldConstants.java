@@ -225,6 +225,8 @@ public class SolrFieldConstants {
 
 	public static final String TITLE_ORIGINAL_LANGUAGE = "title_original_language_search_txt_mv";
 
+	public static final String AUTHOR_ORIGINAL_LANGUAGE = "author_original_language_search_txt_mv";
+
 	/**
 	 * dummy fields used for processing purposes only, shouldn't be indexed.
 	 */

@@ -68,7 +68,8 @@ aleph_adm_id_txt_mv = getAlephAdmId()
 mappings996_display_mv = getMappings996()
 uuid_str_mv = getUuidForObalkyKnih()
 author_sort_display = getAuthorForSorting("100abcd:110abcd:111abcd:700abcd:710abcd:711abcd")
-title_original_language_search_txt_mv = getFields "880ab"
+title_original_language_search_txt_mv = getOriginalTitles()
+author_original_language_search_txt_mv = getOriginalAuthors()
 
 _hidden_isbn_annotation_obalkyknih = getFields "020a:902a"
 _hidden_ziskej_mvs_without_api_boolean = isZiskejMvsWithoutApi()

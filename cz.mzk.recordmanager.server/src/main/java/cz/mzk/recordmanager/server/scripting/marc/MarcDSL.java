@@ -1072,4 +1072,37 @@ public class MarcDSL extends BaseDSL {
 	public Set<String> getLocalOnlineFacet() {
 		return metadataRecord.getAvailabilityForLocalOnlineFacet();
 	}
+
+	public Set<String> getOriginalTitles() {
+		Set<String> results = new HashSet<>();
+		for (DataField df : record.getDataFields("880")) {
+			if (df.getSubfield('6') != null) {
+				if (df.getSubfield('6').getData().startsWith("245")) {
+					results.add(parseOriginalString(df));
+				}
+			}
+		}
+		return results;
+	}
+
+	public Set<String> getOriginalAuthors() {
+		Set<String> results = new HashSet<>();
+		for (DataField df : record.getDataFields("880")) {
+			if (df.getSubfield('6') != null) {
+				if (df.getSubfield('6').getData().startsWith("1")
+						|| df.getSubfield('6').getData().startsWith("7")) {
+					results.add(parseOriginalString(df));
+				}
+			}
+		}
+		return results;
+	}
+
+	private String parseOriginalString(DataField df) {
+		StringBuilder str = new StringBuilder();
+		if (df.getSubfield('a') != null) str.append(df.getSubfield('a').getData()).append(" ");
+		if (df.getSubfield('b') != null) str.append(df.getSubfield('b').getData());
+		return str.toString().trim();
+	}
+
 }
