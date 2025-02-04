@@ -3458,4 +3458,4 @@ INSERT INTO sigla (id, import_conf_id, sigla) VALUES (160, 538, 'MBG001');
 --changeset tomascejpek:443 context:cpk
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id, mappings996, catalog_serial_link) VALUES (557, 133, 200, 'kkpc', 11, false, true, true, true, 'U', 'other', 'tritius', true);
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (557,'https://kkpce.tritius.cz/tritius/oai-provider','CPKPE_1','marc21',NULL);
-INSERT INTO sigla (id, import_conf_id, sigla) VALUES (172, 333, 'PAG001');
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (172, 557, 'PAG001');

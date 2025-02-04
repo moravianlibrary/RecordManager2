@@ -977,7 +977,7 @@ INSERT INTO sigla (id, import_conf_id, sigla) VALUES (158, 535, 'UHG001');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (160, 538, 'MBG001');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (161, 540, 'JCG502');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (169, 554, 'ABA001');
-INSERT INTO sigla (id, import_conf_id, sigla) VALUES (172, 333, 'PAG001');
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (172, 557, 'PAG001');
 
 INSERT INTO fit_project VALUES (1,'FULLTEXT_ANALYSER');
 INSERT INTO fit_project VALUES (2,'SEMANTIC_ENRICHMENT');
