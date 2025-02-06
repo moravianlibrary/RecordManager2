@@ -13,6 +13,7 @@ public enum IOFormat {
 	XML_MARC("xml"),
 	DC_XML("dcxml"),
 	XML_PATENTS("patents"),
+	XML_PATENTS_ST36("patents_st36"),
 	OSOBNOSTI_REGIONU("osobnosti"),
 	SFX("sfx"),
 	SFX_NLK("sfxnlk"),

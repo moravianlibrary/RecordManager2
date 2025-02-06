@@ -1,0 +1,442 @@
+
+<pat:PatentPublication xmlns:pat="http://www.wipo.int/standards/XMLSchema/ST96/Patent" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:com="http://www.wipo.int/standards/XMLSchema/ST96/Common" com:st96Version="V7_0" com:documentFileName="ST96CZ_PV2021-252.xml" com:languageCode="cs" xsi:schemaLocation="http://www.wipo.int/standards/XMLSchema/ST96/Patent https://isdv.upv.gov.cz/doc/xsd/ST96/PatentPublication_V7_0.xsd">
+	<com:IPOfficeCode>CS</com:IPOfficeCode>
+	<pat:BibliographicData com:st96Version="V7_0" com:officeCode="CZ">
+		<pat:PatentPublicationIdentification>
+			<com:IPOfficeCode>CZ</com:IPOfficeCode>
+			<pat:PublicationNumber>310304</pat:PublicationNumber>
+			<com:PatentDocumentKindCode>B6</com:PatentDocumentKindCode>
+			<com:PublicationDate>2025-02-05</com:PublicationDate>
+		</pat:PatentPublicationIdentification>
+		<pat:ApplicationIdentification>
+			<com:IPOfficeCode>CZ</com:IPOfficeCode>
+			<com:ApplicationNumber>
+				<com:ApplicationNumberText>2021-252</com:ApplicationNumberText>
+			</com:ApplicationNumber>
+			<com:FilingLanguageCode>cs</com:FilingLanguageCode>
+			<pat:ApplicationFilingCategory>National</pat:ApplicationFilingCategory>
+			<pat:FilingDate>2021-05-24</pat:FilingDate>
+		</pat:ApplicationIdentification>
+		<pat:PriorityClaimBag>
+			<pat:PriorityClaim com:sequenceNumber="1">
+				<com:IPOfficeCode>CZ</com:IPOfficeCode>
+				<pat:FilingDate>2021-05-24</pat:FilingDate>
+				<pat:ApplicationFilingCategory>National</pat:ApplicationFilingCategory>
+			</pat:PriorityClaim>
+		</pat:PriorityClaimBag>
+		<pat:PatentClassificationBag>
+			<pat:CPCClassificationBag>
+				<pat:MainCPC>
+					<pat:CPCClassification>
+						<pat:ClassificationVersionDate>20180801</pat:ClassificationVersionDate>
+						<pat:CPCSection>B</pat:CPCSection>
+						<pat:Class>65</pat:Class>
+						<pat:Subclass>G</pat:Subclass>
+						<pat:MainGroup>35</pat:MainGroup>
+						<pat:Subgroup>06</pat:Subgroup>
+						<com:SymbolPositionCode>F</com:SymbolPositionCode>
+						<pat:CPCClassificationValueCode>I</pat:CPCClassificationValueCode>
+						<pat:ActionDate>20211019</pat:ActionDate>
+						<pat:GeneratingOfficeCode>CZ</pat:GeneratingOfficeCode>
+						<pat:CPCClassificationStatusCode>B</pat:CPCClassificationStatusCode>
+						<pat:PatentClassificationDataSourceCode>H</pat:PatentClassificationDataSourceCode>
+					</pat:CPCClassification>
+				</pat:MainCPC>
+				<pat:FurtherCPC>
+					<pat:CPCClassification>
+						<pat:ClassificationVersionDate>20180801</pat:ClassificationVersionDate>
+						<pat:CPCSection>B</pat:CPCSection>
+						<pat:Class>65</pat:Class>
+						<pat:Subclass>G</pat:Subclass>
+						<pat:MainGroup>43</pat:MainGroup>
+						<pat:Subgroup>00</pat:Subgroup>
+						<com:SymbolPositionCode>L</com:SymbolPositionCode>
+						<pat:CPCClassificationValueCode>I</pat:CPCClassificationValueCode>
+						<pat:ActionDate>20211019</pat:ActionDate>
+						<pat:GeneratingOfficeCode>CZ</pat:GeneratingOfficeCode>
+						<pat:CPCClassificationStatusCode>B</pat:CPCClassificationStatusCode>
+						<pat:PatentClassificationDataSourceCode>H</pat:PatentClassificationDataSourceCode>
+					</pat:CPCClassification>
+				</pat:FurtherCPC>
+			</pat:CPCClassificationBag>
+			<pat:IPCRClassificationBag>
+				<pat:IPCRClassification com:sequenceNumber="1">
+					<pat:ClassificationVersionDate>20060101</pat:ClassificationVersionDate>
+					<pat:PatentClassificationLevelCode>A</pat:PatentClassificationLevelCode>
+					<com:SymbolPositionCode>F</com:SymbolPositionCode>
+					<pat:IPCClassificationValueCode>I</pat:IPCClassificationValueCode>
+					<pat:ActionDate>20211019</pat:ActionDate>
+					<pat:IPCClassificationStatusCode>B</pat:IPCClassificationStatusCode>
+					<pat:PatentClassificationDataSourceCode>H</pat:PatentClassificationDataSourceCode>
+					<pat:GeneratingOfficeCode>CZ</pat:GeneratingOfficeCode>
+					<pat:Section>B</pat:Section>
+					<pat:Class>65</pat:Class>
+					<pat:Subclass>G</pat:Subclass>
+					<pat:MainGroup> 35</pat:MainGroup>
+					<pat:Subgroup>06</pat:Subgroup>
+				</pat:IPCRClassification>
+				<pat:IPCRClassification com:sequenceNumber="2">
+					<pat:ClassificationVersionDate>20060101</pat:ClassificationVersionDate>
+					<pat:PatentClassificationLevelCode>A</pat:PatentClassificationLevelCode>
+					<com:SymbolPositionCode>L</com:SymbolPositionCode>
+					<pat:IPCClassificationValueCode>I</pat:IPCClassificationValueCode>
+					<pat:ActionDate>20211019</pat:ActionDate>
+					<pat:IPCClassificationStatusCode>B</pat:IPCClassificationStatusCode>
+					<pat:PatentClassificationDataSourceCode>H</pat:PatentClassificationDataSourceCode>
+					<pat:GeneratingOfficeCode>CZ</pat:GeneratingOfficeCode>
+					<pat:Section>B</pat:Section>
+					<pat:Class>65</pat:Class>
+					<pat:Subclass>G</pat:Subclass>
+					<pat:MainGroup> 43</pat:MainGroup>
+					<pat:Subgroup>00</pat:Subgroup>
+				</pat:IPCRClassification>
+			</pat:IPCRClassificationBag>
+		</pat:PatentClassificationBag>
+		<pat:InventionTitleBag>
+			<pat:InventionTitle com:languageCode="cs" pat:inventionTitleCategory="In grant publication">Závěsový dopravník</pat:InventionTitle>
+		</pat:InventionTitleBag>
+		<pat:ReferenceCitationBag>
+			<pat:ReferenceCitation>
+				<com:PatentCitation com:id="pcit0001">
+					<com:PatentCitationText>(MENKE CORNELIS HENDRIK MIJNDERT [NL]; ANDREOLI ANDREA [IT]) 14.7.2016</com:PatentCitationText>
+				</com:PatentCitation>
+			</pat:ReferenceCitation>
+			<pat:ReferenceCitation>
+				<com:PatentCitation com:id="pcit0002">
+					<com:PatentCitationText>(ICHIKAWA KAZUHIKO) 7.6.2007</com:PatentCitationText>
+				</com:PatentCitation>
+			</pat:ReferenceCitation>
+			<pat:ReferenceCitation>
+				<com:PatentCitation com:id="pcit0003">
+					<com:PatentCitationText>(SIEKSMEIER DIRK [DE]; MERTEN MARKUS [DE]) 12.3.2020</com:PatentCitationText>
+				</com:PatentCitation>
+			</pat:ReferenceCitation>
+		</pat:ReferenceCitationBag>
+		<pat:PartyBag>
+			<pat:ApplicantBag>
+				<pat:Applicant>
+					<com:Contact>
+						<com:Name>
+							<com:OrganizationName>
+								<com:OrganizationStandardName>Škoda Auto a.s.</com:OrganizationStandardName>
+							</com:OrganizationName>
+						</com:Name>
+						<com:PostalAddressBag>
+							<com:PostalAddress>
+								<com:PostalStructuredAddress>
+									<com:AddressLineText com:sequenceNumber="1" com:addressLineCategory="Street">tř. Václava Klementa 869</com:AddressLineText>
+									<com:CityName>Mladá Boleslav, Mladá Boleslav II</com:CityName>
+									<com:CountryCode>CZ</com:CountryCode>
+									<com:PostalCode>29301</com:PostalCode>
+								</com:PostalStructuredAddress>
+							</com:PostalAddress>
+						</com:PostalAddressBag>
+					</com:Contact>
+				</pat:Applicant>
+			</pat:ApplicantBag>
+			<pat:InventorBag>
+				<pat:Inventor>
+					<com:Contact>
+						<com:Name>
+							<com:PersonName>
+								<com:PersonStructuredName>
+									<com:FirstName>Libor</com:FirstName>
+									<com:LastName>Šída</com:LastName>
+								</com:PersonStructuredName>
+							</com:PersonName>
+						</com:Name>
+						<com:PostalAddressBag>
+							<com:PostalAddress>
+								<com:PostalStructuredAddress>
+									<com:AddressLineText com:sequenceNumber="1" com:addressLineCategory="Street">251</com:AddressLineText>
+									<com:CityName>Všechlapy</com:CityName>
+									<com:CountryCode>CZ</com:CountryCode>
+									<com:PostalCode>28802</com:PostalCode>
+								</com:PostalStructuredAddress>
+							</com:PostalAddress>
+						</com:PostalAddressBag>
+					</com:Contact>
+				</pat:Inventor>
+				<pat:Inventor>
+					<com:Contact>
+						<com:Name>
+							<com:PersonName>
+								<com:PersonStructuredName>
+									<com:FirstName>Milan</com:FirstName>
+									<com:LastName>Dědek</com:LastName>
+								</com:PersonStructuredName>
+							</com:PersonName>
+						</com:Name>
+						<com:PostalAddressBag>
+							<com:PostalAddress>
+								<com:PostalStructuredAddress>
+									<com:AddressLineText com:sequenceNumber="1" com:addressLineCategory="Street">Terronská 2112</com:AddressLineText>
+									<com:CityName>Turnov</com:CityName>
+									<com:CountryCode>CZ</com:CountryCode>
+									<com:PostalCode>51101</com:PostalCode>
+								</com:PostalStructuredAddress>
+							</com:PostalAddress>
+						</com:PostalAddressBag>
+					</com:Contact>
+				</pat:Inventor>
+				<pat:Inventor>
+					<com:Contact>
+						<com:Name>
+							<com:PersonName>
+								<com:PersonStructuredName>
+									<com:FirstName>Jiří</com:FirstName>
+									<com:LastName>Šipler</com:LastName>
+								</com:PersonStructuredName>
+							</com:PersonName>
+						</com:Name>
+						<com:PostalAddressBag>
+							<com:PostalAddress>
+								<com:PostalStructuredAddress>
+									<com:AddressLineText com:sequenceNumber="1" com:addressLineCategory="Street">Boloňská 304/6</com:AddressLineText>
+									<com:CityName>Praha 10, Horní Měcholupy</com:CityName>
+									<com:CountryCode>CZ</com:CountryCode>
+									<com:PostalCode>10900</com:PostalCode>
+								</com:PostalStructuredAddress>
+							</com:PostalAddress>
+						</com:PostalAddressBag>
+					</com:Contact>
+				</pat:Inventor>
+				<pat:Inventor>
+					<com:Contact>
+						<com:Name>
+							<com:PersonName>
+								<com:PersonStructuredName>
+									<com:FirstName>Jiří</com:FirstName>
+									<com:LastName>Parma</com:LastName>
+								</com:PersonStructuredName>
+							</com:PersonName>
+						</com:Name>
+						<com:PostalAddressBag>
+							<com:PostalAddress>
+								<com:PostalStructuredAddress>
+									<com:AddressLineText com:sequenceNumber="1" com:addressLineCategory="Street">Zlatnická 281</com:AddressLineText>
+									<com:CityName>Jenštejn</com:CityName>
+									<com:CountryCode>CZ</com:CountryCode>
+									<com:PostalCode>25073</com:PostalCode>
+								</com:PostalStructuredAddress>
+							</com:PostalAddress>
+						</com:PostalAddressBag>
+					</com:Contact>
+				</pat:Inventor>
+				<pat:Inventor>
+					<com:Contact>
+						<com:Name>
+							<com:PersonName>
+								<com:PersonStructuredName>
+									<com:FirstName>Petr</com:FirstName>
+									<com:LastName>Švarc</com:LastName>
+								</com:PersonStructuredName>
+							</com:PersonName>
+						</com:Name>
+						<com:PostalAddressBag>
+							<com:PostalAddress>
+								<com:PostalStructuredAddress>
+									<com:AddressLineText com:sequenceNumber="1" com:addressLineCategory="Street">Žižkova 142</com:AddressLineText>
+									<com:CityName>Bakov nad Jizerou</com:CityName>
+									<com:CountryCode>CZ</com:CountryCode>
+									<com:PostalCode>29401</com:PostalCode>
+								</com:PostalStructuredAddress>
+							</com:PostalAddress>
+						</com:PostalAddressBag>
+					</com:Contact>
+				</pat:Inventor>
+			</pat:InventorBag>
+		</pat:PartyBag>
+		<com:FilingLanguageCode>cs</com:FilingLanguageCode>
+		<com:PublicationLanguageCode>cs</com:PublicationLanguageCode>
+	</pat:BibliographicData>
+	<pat:Description com:id="desc" com:languageCode="cs">
+		<com:P com:pNumber="1">Závěsový dopravník </com:P>
+		<com:P com:pNumber="2"> </com:P>
+		<com:P com:pNumber="3"> </com:P>
+		<com:P com:pNumber="4">Oblast techniky </com:P>
+		<com:P com:pNumber="5"> </com:P>
+		<com:P com:pNumber="6">Předkládaný vynález se týká závěsových dopravníků v automobilovém průmyslu, konkrétně se týká závěsového dopravníku s kamerovým monitorovacím systémem pro diagnostiku vodicích profilů a případně i dalších součástí dopravníku. </com:P>
+		<com:P com:pNumber="7"> </com:P>
+		<com:P com:pNumber="8"> </com:P>
+		<com:P com:pNumber="9">Dosavadní stav techniky </com:P>
+		<com:P com:pNumber="10"> </com:P>
+		<com:P com:pNumber="11">Závěsové dopravníky se běžně využívají v montážních halách pro převážení součástí, například součástí karoserie v automobilovém průmyslu. Závěsový dopravník zahrnuje profil připevněný v dané hale, na kterém jsou umístěny závěsy sloužící k uchycení a převážení součástí. Profil je standardně vyroben z hliníku nebo hliníkové slitiny. Pohyb závěsů v profilu může být realizován opatřením každého závěsu pohonem nebo umístěním řetězu či lana podél profilu, uchycením závěsu k řetězu/lanu a rozpohybováním tohoto řetězu/lana. </com:P>
+		<com:P com:pNumber="12"> </com:P>
+		<com:P com:pNumber="13">Dopravník i jeho části jsou při používání vystaveny relativně velkým silám, které způsobují jejich opotřebování a poškozování. V posledních letech u řady typů automobilů zvyšuje hmotnost a stávající dopravníky jsou tak namáhány stále více. Může pak dojít například až k prasknutí profilu, které může způsobit značné škody a prostoje na výrobní lince. </com:P>
+		<com:P com:pNumber="14"> </com:P>
+		<com:P com:pNumber="15">Dokument KR10-2005-0098669 popisuje závěsový dopravník opatřený monitorovacím systémem zahrnujícím kameru. Tento monitorovací systém však slouží ke snímání závěsů, nijak neřeší problém s vadami vodicích profilů dopravníku. Dále, dokument CN 103466283 popisuje monitorovací zařízení pro závěsový dopravník, které je uzpůsobeno k monitorování případných vad na kolečkách zprostředkovávajících kontakt mezi závěsy a vodicími profily dopravníku. Ani v tomto dokumentu není řešen problém poškozování vodicích profilů. </com:P>
+		<com:P com:pNumber="16"> </com:P>
+		<com:P com:pNumber="17">Bylo by proto vhodné přijít s řešením, které by umožňovalo sledovat vady ve vodicích profilech i před tím, než dojde ke kritickému poškození profilů, například jejich úplnému prasknutí, a které by výhodně umožnilo sledovat i vady na jiných částech dopravníku nebo je předvídat. </com:P>
+		<com:P com:pNumber="18"> </com:P>
+		<com:P com:pNumber="19"> </com:P>
+		<com:P com:pNumber="20">Podstata vynálezu </com:P>
+		<com:P com:pNumber="21"> </com:P>
+		<com:P com:pNumber="22">Nedostatky řešení známých z dosavadního stavu techniky do jisté míry odstraňuje závěsový dopravník zahrnující alespoň jeden profil uzpůsobený pro vedení závěsů, alespoň jeden závěs, pohyblivě uchycený k profilu a uzpůsobený pro nesení nákladu, a pohon uzpůsobený pro pohybování závěsy. Tento závěsový dopravník je opatřen monitorovacím systémem zahrnujícím sestavu kamer obsahující alespoň jednu kameru. Dále monitorovací systém zahrnuje řídicí jednotku datově spojenou se sestavou kamer. Sestava kamer, resp. alespoň některá kamera ze sestavy, je umístěna na alespoň jednom závěsu a alespoň jedna kamera ze sestavy kamer je nasměrována na profil a uzpůsobena ke snímání stavu profilu, přičemž řídicí jednotka je uzpůsobena pro analýzu obrazu ze sestavy kamer a pro vyhodnocení stavu profilu. Monitorovací systém tedy kamerami snímá a řídicí jednotkou vyhodnocuje stav profilu/profilů, které vymezují dráhu pro pohyb závěsu, resp. obvykle většího množství závěsů. Tento monitorovací systém je tedy závěsem přenášen podél profilů, takže jediná sestava kamer může nasnímat celou délku všech za sebou umístěných profilů. Díky monitorování profilů, které jsou jednou z nejvíce namáhaných a k poškození náchylných částí dopravníku, je značně zvýšena šance, že případné vady na dopravníku budou zaznamenány před tím, než dojde k selhání daného vadného profilu nebo jiné komponenty dopravníku. Díky tomu je možné takový profil vyměnit či opravit za relativně krátký čas, v porovnání s dobou nucené odstávky dopravníku v případě např. prasknutí profilu nebo vzájemného vyosení sousedních profilů zcela bránícího průjezdu závěsu. </com:P>
+		<com:P com:pNumber="23"> </com:P>
+		<com:P com:pNumber="24">Dopravníky ve stavu techniky, které zahrnují kamerové monitorovací systémy, mají tyto systémy uzpůsobené k monitorování závěsů nebo přenášených výrobků. Není u nich tak zajištěna průběžná automatická kontrola dopravníku, zejména tedy vodicích profilů. Profily tak často nejsou kontrolovány vůbec, nebo jsou kontrolovány lidským pracovníkem při preventivní kontrole – vzhledem k obtížné dostupnosti profilů pro lidské pracovníky a k tomu, že zkontrolovat je třeba celou délku všech za sebou umístěných profilů, například i několik set metrů, jsou však profily často ponechány bez kontroly. Případné vady na dopravníku, které by v raném stádiu byly snadno opravitelné, se tak u známých dopravníků mohou nekontrolovaně zhoršovat až do okamžiku, kdy dojde k selhání dané vadné komponenty, které může na delší dobu zastavit výrobu, poškodit i další komponenty dopravníku a ohrozit pracovníky. U závěsového dopravníku podle předkládaného vynálezu mohou vady být detekovány a následně opraveny, aniž by byla nutná delší odstávka dopravníku, a aniž by byla ohrožena bezpečnost pracovníků. </com:P>
+		<com:P com:pNumber="25"> </com:P>
+		<com:P com:pNumber="26">Dopravník může zahrnovat jeden pohon společný pro všechny závěsy, například motor roztáčející řetěz, který tvoří smyčku vedoucí podél všech profilů. K takovému řetězu jsou pak uchyceny jednotlivé závěsy pro jejich rozpohybování. Závěsový dopravník může být i dopravníkem, kde je každý závěs opatřen vlastním pohonem, který zajišťuje pohyb po dopravníku, přičemž dopravník pak výhodně dodává energii těmto individuálním pohonům. </com:P>
+		<com:P com:pNumber="27"> </com:P>
+		<com:P com:pNumber="28">Datové spojení může být realizováno bezdrátově, např. pomocí wifi spojení, ale i kabelově. Řídicí jednotka je výhodně uzpůsobena, zejména volbou dostatečně výkonného procesoru a grafické karty, ke zpracování dat ze sestavy kamer a dalších případných senzorů či jiných zdrojů dat v reálném čase. Zpracování v reálném čase je výhodné, nebo často i nutné, aby bylo umožněno kontinuální monitorování dopravníku během celého jeho provozu. V zásadě je však možné i ukládat data do paměti a zpracovávat je až následně, například po tom, co závěs se sestavou kamer projde celým dopravníkem. Řídicí jednotka je výhodně umístěná na závěsu, stejném jako sestava kamer a některé další případné části monitorovacího systému, a data jsou do ní přenášena kabelovým spojením. Monitorovací systém pak může zahrnovat další, centrální řídicí jednotku, do níž jsou odesílány výsledky zpracování dat řídicí jednotkou na závěsu, zejména tedy případné nalezené vady a informace o nich, a případně i další data k archivaci. Například může být dlouhodobě ukládán obraz z kamer z jedné cesty závěsu dopravníkem každý týden, aby bylo zpětně možné pro obsluhu kontrolovat změny profilu v místě, kde vznikala vada. </com:P>
+		<com:P com:pNumber="29"> </com:P>
+		<com:P com:pNumber="30">Závěsový dopravník často dále zahrnuje napájecí vedení pro přívod energie k pohonům, přičemž pro dopravník podle vynálezu pak výhodně platí, že alespoň jedna kamera ze sestavy kamer je nasměrována na napájecí vedení a uzpůsobena ke snímání stavu napájecího vedení. Řídicí jednotka je tak dále uzpůsobena pro vyhodnocení stavu napájecího vedení. Napájecí vedení slouží zejména k napájení pohonů závěsu u dopravníků, kde mají závěsy vlastní individuální pohony. Výhodně je napájecími vedeními napájen i monitorovací systém a další případně elektronické součásti. </com:P>
+		<com:P com:pNumber="31"> </com:P>
+		<com:P com:pNumber="32">Výhodně je alespoň část řídicí jednotky umístěna na závěsu nesoucím sestavu kamer, přičemž tento závěs dále zahrnuje zdroj energie pro napájení dané části řídicí jednotky a sestavy kamer. Tento zdroj energie pak může zajišťovat provoz monitorovacího systému v době, kdy není možné ho napájet z napájecího vedení, například v době, kdy se daný závěs nachází ve výtahu nebo výhybce, které jsou běžnými součástmi dopravníků. Závěs je možné opatřit záložním zdrojem i v případech, kdy na něm není umístěna řídicí jednotka, takže záložní zdroj slouží pro napájení kamer a dalších případných senzorů, zdrojů světla atd.  </com:P>
+		<com:P com:pNumber="33"> </com:P>
+		<com:P com:pNumber="34">Výhodně monitorovací systém dále zahrnuje alespoň jeden prvek z množiny zahrnující termokameru, snímač teploty uzpůsobený pro měření teploty okolního vzduchu, snímač polohy závěsu a zdroj světla uzpůsobený pro osvětlování profilu a/nebo napájecího vedení. Termokamera je zvláště výhodná pro sledování napájecích vedení, protože špatné spoje mezi napájecími vedeními se projevují zvýšenou teplotou a jsou proto v obrazu z termokamery relativně snadno identifikovatelné. Snímač teploty umožňuje například sledovat změny rozměrů, například mezer mezi profily, v závislosti na změnách teploty. Snímač polohy pak slouží zejména k identifikaci místa, kde se nachází rozpoznaná vada. Snímačem polohy může být například snímač čárových kódů, přičemž na profilech nebo podél nich jsou pak po celé délce dopravníku umístěny čárové kódy určující polohu. Možné je i snímat polohu například s využitím kamery a řídicí jednotky pro rozpoznání obrazu, kdy podél profilů mohou být umístěny rovněž čárové kódy, nebo mohou být polohy podél dopravníku postupně číslovány atd. Zdroj světla umožňuje do značné míry odstranit závislost identifikace vad na vnějších světelných podmínkách. Povrch profilů standardně nemusí být uměle osvětlován, protože pro obsluhu je podstatné spíše nasvícení objektů nesených závěsy, takže kvalita osvětlení profilů pak závisí například na stropním osvícení výrobní haly. Opatření monitorovacího systému zdrojem světla tuto závislost značně zredukuje a zvýší tak přesnost identifikace vad. </com:P>
+		<com:P com:pNumber="35"> </com:P>
+		<com:P com:pNumber="36">Řídicí jednotka může být uzpůsobena k identifikaci stavů vybraných z množiny zahrnující normální stav profilu, prasklinu v profilu, opotřebení profilu, poškození profilu, nesouosost profilů, mezeru mezi profily, přítomnost cizího předmětu v profilu a volné nebo poškozené spoje profilů. Alternativní nebo další stavy mohou být vybrány z množiny zahrnující normální stav napájecího vedení, opotřebení nebo opálení napájecího vedení, poškození napájecího vedení, nesouosost napájecích vedení, přítomnost cizího předmětu v napájecím vedení, volné nebo poškozené spoje napájecích vedení, změnu tvaru a/nebo polohy některé součásti dopravníku vůči normálnímu stavu a jejich kombinace. </com:P>
+		<com:P com:pNumber="37"> </com:P>
+		<com:P com:pNumber="38">Vzhledem k častému umístění dopravníku v relativně prašném prostředí sestava kamer výhodně zahrnuje mechanismus pro automatické čištění kamer. Takový mechanismus eliminuje nutnost ručního čištění kamer pokaždé, když se na čočkách usadí vrstva prachu bránící spolehlivému monitorování dopravníku. </com:P>
+		<com:P com:pNumber="39"> </com:P>
+		<com:P com:pNumber="40">Sestava kamer je výhodně uzpůsobena k zaznamenání některé, výhodně každé, části kontrolovaného/monitorovaného povrchu profilu a/nebo napájecího vedení při průjezdu daného závěsu dopravníkem alespoň na dvou snímcích z různých kamer. Možné je i zaznamenávání každého místa kontrolovaného povrchu na dvou různých snímcích z téže kamery, výhodně pořízených s určitým odstupem, aby dané místo bylo snímáno z různých úhlů. Tímto je sníženo riziko, že určitá vada nebude zaznamenána, například proto, že v některé fotografii / z některého úhlu pohledu není dostatečně viditelná. Zvláště výhodné je, když jsou všechny, nebo alespoň ty nejvíce namáhané, části povrchů, např. plochy profilů v přímém kontaktu se závěsem, snímány dvěma kamerami z opačných směrů. </com:P>
+		<com:P com:pNumber="41"> </com:P>
+		<com:P com:pNumber="42"> </com:P>
+		<com:P com:pNumber="43">Objasnění výkresů </com:P>
+		<com:P com:pNumber="44"> </com:P>
+		<com:P com:pNumber="45">
+			<com:B>Podstata vynálezu je dále objasněna na příkladech jeho uskutečnění, které jsou popsány s využitím připojených výkresů, kde na:</com:B>
+		</com:P>
+		<com:P com:pNumber="46"> </com:P>
+		<com:P com:pNumber="47">obr. 1  je schematicky znázorněn pohled v řezu na profil se závěsem závěsového dopravníku podle předkládaného vynálezu, přičemž rovina řezu je kolmá na směr pohybu závěsu po dopravníku a přičemž je patrná sestava kamer nasměrovaných na profil a na napájecí vedení. </com:P>
+		<com:P com:pNumber="48"> </com:P>
+		<com:P com:pNumber="49">
+			<com:Br></com:Br>
+		</com:P>
+		<com:P com:pNumber="50"> </com:P>
+		<com:P com:pNumber="51">Příklady uskutečnění vynálezu </com:P>
+		<com:P com:pNumber="52"> </com:P>
+		<com:P com:pNumber="53">Předmětem předkládaného vynálezu je závěsový dopravník s monitorovacím systémem uzpůsobeným pro kontrolu a odhalování vad dopravníku. Dopravník zahrnuje vícero profilů 1 propojených na svých koncích tak, že všechny dohromady vytvářejí uzavřený okruh a vymezují tak dráhu pro pohyb závěsů 2 po dopravníku. V prvním příkladném provedení je dopravník typu EHB, kdy má každý závěs 2 vlastní pohon, přičemž součástí dopravníku je řada napájecích vedení 4, která slouží jako trolej pro dodávání energie každému závěsu 2. V tomto příkladu je v profilu 1 umístěno více paralelních napájecích vedení 4, přičemž v místě spojů mezi profily 1 jsou vytvořeny i spoje mezi napájecími vedeními 4 v sousedních spojených profilech 1. Ze závěsu 2 je na obr. 1 znázorněna pouze jeho horní část zajišťující uchycení k profilu 1 a nesení některých součástí monitorovacího systému. Zbylá, spodní část závěsu 2 má podobu volenou s ohledem na díly, které mají být závěsem 2 neseny, a dráhu, po které mají být neseny. Monitorovací systém je k závěsu 2 namontován prostřednictvím samostatného rámu, který umožňuje namontovat více součástí systému zároveň a zjednodušit tak montáž i případnou demontáž monitorovacího systému. Umístění monitorovacího systému na daný závěs 2 nijak neovlivňuje schopnost tohoto závěsu 2 pro nesení objektů za běžného provozu, tedy závěs 2 nesoucí monitorovací systém nebo jeho část může nadále nést i díly, pro jejichž přepravu je dopravník určen. </com:P>
+		<com:P com:pNumber="54"> </com:P>
+		<com:P com:pNumber="55">Monitorovací systém v prvním příkladném provedení zahrnuje sestavu kamer 3 umístěnou na jednom ze závěsů 2 a obsahující sedm kamer 3 pro pořizování fotografií či videa, přičemž čtyři kamery 3 jsou ze čtyř různých směrů nasměrované na profil 1 a tři jsou nasměrovány na vnitřní stěnu profilu 1, podél níž jsou vedena napájecí vedení 4. Při průjezdu závěsu 2 dopravníkem tak sestava kamer 3 snímá profil 1 ze všech stran a snímá napájecí vedení 4. Obraz z kamer 3 je odesílán do řídicí jednotky – počítače, který je umístěn na závěsu 2 s kamerami 3. V této řídicí jednotce jsou fotografie/video z kamer 3 na určitou dobu ukládané a následně průběžně přepisované novými fotografiemi/videem, aby bylo po určitou dobu možné tato data zpětně dohledat. Napájení sestavy kamer 3 i řídicí jednotky je realizováno z napájecích vedení 4, dále však daný závěs 2 zahrnuje i záložní zdroj energie, pro napájení těchto součástí v době, kdy závěs 2 projíždí místem bez napájecích vedení 4.  </com:P>
+		<com:P com:pNumber="56"> </com:P>
+		<com:P com:pNumber="57">Například napájecí vedení 4 totiž chybějí v místech výtahů, je však žádoucí snímat povrch dopravníku i v těchto místech, protože i zde mohou na dopravníku vznikat vady; proto je monitorovací systém v uvedeném příkladném provedení schopný fungovat několik minut i bez dodávání napětí z napájecích vedení 4. Při provozu bez přívodu energie po dobu delší než jakou umožňuje záložní zdroj dojde k řízenému vypnutí monitorovacího systému a dojde rovněž k informování obsluhy, že došlo k přerušení monitorování dopravníku. Příkladně je záložní zdroj dimenzován na napájení monitorovacího systému po dobu pěti minut, přičemž při přerušení dodávání proudu z napájecích vedení dojde ke spuštění časovače. Časovač je nastaven na čtyři a půl minuty a po uběhnutí tohoto času řídicí jednotka na závěsu dostane z časovače pokyn k uložení zpracovávaných dat a následnému vypnutí. Přenos napětí z napájecího vedení 4 na pohyblivý závěs 2 je realizován pomocí kartáčů na závěsu 2, které jsou v kontaktu s jednotlivými napájecími vedeními 4. Mezi napájecími vedeními 4 přitom je umístěno i vedení datové, pro přenos informací z počítače na závěsu 2 do centrální řídicí jednotky umístěné mimo závěs 2.  </com:P>
+		<com:P com:pNumber="58"> </com:P>
+		<com:P com:pNumber="59">Řídicí jednotka na závěsu 2 je uzpůsobena ke zpracování obrazu ze všech kamer 3 a pro vyhodnocení stavu profilu 1, napájecích vedení 4 i všech ostatních součástí dopravníku, které jsou v záběru. Toto vyhodnocení probíhá tak, že v paměti řídicí jednotky jsou uloženy vzorové fotografie/videa normálního stavu a známých poruchových stavů dopravníku odpovídající úhlu pohledu pro jednotlivé kamery 3, přičemž řídicí jednotka během monitorování v reálném čase porovnává obraz z kamer 3 se vzorovým obrazem a vyhodnocuje tak, zda nebyla v některém obraze z kamer 3 zachycena vada dopravníku, tj. zda obraz z kamery 3 není ve vhodné metrice blíže ke vzorovému obrazu chybového stavu než ke vzorovému obrazu normálního stavu. </com:P>
+		<com:P com:pNumber="60"> </com:P>
+		<com:P com:pNumber="61">Stavy dopravníku, ke kterým řídicí jednotka přiřazuje skutečný stav zjišťovaný během monitorování, tj. během průjezdu závěsu 2 se sestavou kamer 3 dopravníkem, zahrnují stavy profilu 1, stavy napájecích vedení 4 a i stavy dalších součástí, příkladně sloupů upevňujících profily 1 k podlaze/stropu výrobní haly, mechanismů výtahů a výhybek atd. Stavy profilu 1 popisují normální, tj. bezporuchový, stav profilu 1, prasklinu v profilu 1, opotřebení profilu 1, poškození profilu 1, nesouosost profilů 1, mezeru mezi profily 1, přítomnost cizího předmětu v profilu 1, volné nebo poškozené spoje profilů 1 apod. Tyto stavy se nemusejí vzájemně vylučovat, například poškození či opotřebení profilu 1 může mít podobu praskliny nebo vyosení sousedních profilů 1. Spoje profilů 1 jsou realizovány pomocí kovových plátů připevněných k oběma spojovaným profilům 1 šrouby či nýty. V místech spojů profily 1 častěji praskají a je proto užitečně, že monitorovací systém dokáže tyto praskliny zaznamenat již v raném stádiu – dříve, než se příliš rozšíří. Cizím předmětem mohou být například kovové špony nebo upadlá část některé komponenty dopravníku, např. šroub či matice, část izolace napájecího vedení 4 atd.  </com:P>
+		<com:P com:pNumber="62"> </com:P>
+		<com:P com:pNumber="63">Stavy napájecích vedení 4 jsou podobné stavům profilů 1, popisují normální stav napájecího vedení 4, opotřebení nebo opálení napájecího vedení 4 či změnu barvy napájecího vedení 4, poškození napájecího vedení 4, nesouosost napájecích vedení 4, různoběžnost napájecích vedení 4, přítomnost cizího předmětu v napájecím vedení 4, volné nebo poškozené spoje napájecích vedení 4 apod.  </com:P>
+		<com:P com:pNumber="64"> </com:P>
+		<com:P com:pNumber="65">Data z řídicí jednotky jsou v uvažovaném provedení odesílána přes kabelové spojení do centrální řídicí jednotky, která je statická a je umístěna v blízkosti dopravníku. Centrální řídicí jednotka zajišťuje informování obsluhy v případě nalezení vady, archivuje některé snímky a jiná data z monitorovacího systému.  </com:P>
+		<com:P com:pNumber="66"> </com:P>
+		<com:P com:pNumber="67">V zobrazeném provedení je součástí monitorovacího systému na dopravníku dle vynálezu dále termokamera 5. Termokamera 5 je nasměrována na napájecí vedení 4, přičemž v obrazu z termokamery 5 jsou patrné volné spoje mezi napájecími vedeními 4, které mají vyšší teplotu než normální spoje. Řídicí jednotka tedy kromě obrazu z kamer 3 zpracovává a klasifikuje i obraz z termokamery 5. Toto zpracování je rovněž provedeno běžně známými metodami porovnání obrazu.  </com:P>
+		<com:P com:pNumber="68"> </com:P>
+		<com:P com:pNumber="69">Vzhledem k tomu, že dopravník podle tohoto provedení je umístěn v relativně prašném prostředí výrobní haly, může docházet ke špinění čoček kamer 3. Proto jsou kamery 3 snadno přístupné pro očištění podle potřeby, a navíc jsou opatřeny mechanismem pro automatické čištění čoček nebo jiných částí kamer 3. Takový mechanismus má příkladně podobu trysky na stlačený vzduch. </com:P>
+		<com:P com:pNumber="70"> </com:P>
+		<com:P com:pNumber="71">V zobrazeném provedení jsou kamery 3 na profil 1 nasměrovány ze čtyř stran, přičemž zorná pole těchto kamer 3 se částečně překrývají, takže každé místo na horním nebo spodním povrchu profilu 1 je snímáno dvěma kamerami 3. Tím je zmenšeno riziko přehlédnutí vady na tomto povrchu. Obdobně, kamery 3 nasměrované na napájecí vedení 4, rovněž zajišťují kontrolu každého vedení alespoň dvěma kamerami 3. Monitorovací systém dále zahrnuje zdroj světla, který zlepší viditelnost případných vad a sníží závislost rozpoznání vady na okolních světelných podmínkách. Monitorovací systém dále zahrnuje snímač teploty, který měří teplotu okolního vzduchu. Díky tomuto snímači je možné kompenzovat odchylky ve tvaru součástí dopravníku, např. velikost mezer mezi profily 1, způsobené různými teplotami, a tím zpřesnit diagnostiku vad, nebo je naopak možné velikost mezer mezi profily 1 měřenou při různých teplotách využít pro diagnostiku případné vady.  </com:P>
+		<com:P com:pNumber="72"> </com:P>
+		<com:P com:pNumber="73">Další součástí monitorovacího systému je snímač polohy, který přesně určí polohu závěsu 2 se sestavou kamer 3 v každém okamžiku a tím při nalezení závady určí i polohu této závady. Snímač polohy může je jako čtečka čárových kódů s čárovými kódy umístěnými v pravidelných intervalech na profilech 1 nebo v jejich blízkosti, v tomto příkladném provedení na konstrukci nesoucí profily 1. Každý čárový kód jednoznačně určuje svoji polohu a při nalezení vady je tak informace o vadě spojena s informací o poloze z čárového kódu. Využity jsou tzv. DMC kódy běžné v automobilovém průmyslu. Vzdálenost kódů pak přímo ovlivňuje přesnost určování polohy. V tomto příkladu jsou vzdálenosti mezi sousedními kódy menší než 10 cm.  </com:P>
+		<com:P com:pNumber="74"> </com:P>
+		<com:P com:pNumber="75">z počítače na závěsu 2 při nalezení vady obsahuje kromě typu vady a informace o poloze výhodně dále označení závěsu 2, na kterém se nachází sestava kamer 3, která vadu identifikovala, označení kamery 3, případně více kamer 3 nebo termokamery 5, v jejímž obraze byla vada nalezena, snímek s vadou a teplotu okolního vzduchu. Dále tato zpráva zahrnuje zhodnocení závažnosti vady, které je příkladně vyjádřeno na stupnici od jedné do pěti. Dále tato zpráva zahrnuje fotografie místa vady v předchozích průchodech závěsu 2 se sestavou kamer 3 tímto místem, i v průchodech následujících po detekci této vady, pro posouzení rychlosti vzniku a šíření dané vady. </com:P>
+		<com:P com:pNumber="76"> </com:P>
+		<com:P com:pNumber="77">V tomto příkladu je monitorovací systém uzpůsoben k nalezení a identifikování vad o velikosti alespoň 2 x 0,5 mm v případě prasklin. V případě cizích předmětů v napájecích vedeních 4 je systém schopný zaznamenat i menší předměty, protože takové předměty mohou způsobovat zkraty mezi napájecími vedeními 4. Tento parametr je závislý zejména na rozlišení kamer 3 či termokamery 5, na případné kompresi nebo jiném zpracování obrazu před jeho zpracování klasifikačním algoritmem, na druhu algoritmu a případné kvalitě učení algoritmu atd.  </com:P>
+		<com:P com:pNumber="78"> </com:P>
+		<com:P com:pNumber="79">Alternativní provedení: </com:P>
+		<com:P com:pNumber="80"> </com:P>
+		<com:P com:pNumber="81">V některých alternativních provedeních je součástí dopravníku řada výtahů či výhybek, které umožňují pohyb závěsů 2 i ve vertikálním směru nebo jejich vyjetí z dané uzavřené trajektorie apod. </com:P>
+		<com:P com:pNumber="82"> </com:P>
+		<com:P com:pNumber="83">Alternativně je možné v řídicí jednotce implementovat vhodný algoritmus využívající metody strojového učení pro počítačové vidění, zejména neuronové sítě. V takovém provedení je algoritmus nejprve trénován na dostatečně rozsáhlé trénovací množině obsahující fotografie/videa normálních i chybových stavů z požadovaných úhlů pohledu. Při monitorování pak řídicí jednotka tímto algoritmem klasifikuje stavy dopravníku. </com:P>
+		<com:P com:pNumber="84"> </com:P>
+		<com:P com:pNumber="85">V dalších provedeních může řídicí jednotka identifikovat jakékoliv odchylky ve tvaru a/nebo poloze kterékoliv komponenty dopravníku v porovnání s normálním tvarem/polohou. Rozpoznatelným stavem může být i neznámý stav, tedy stav, který se liší od normálního stavu, ale není s dostatečnou jistotou klasifikován jako některý z ostatních chybových stavů. </com:P>
+		<com:P com:pNumber="86"> </com:P>
+		<com:P com:pNumber="87">Centrální řídicí jednotka je alternativně vzdálenou řídicí jednotkou přístupnou přes internet. </com:P>
+		<com:P com:pNumber="88"> </com:P>
+		<com:P com:pNumber="89">V některých provedeních centrální řídicí jednotka i zajišťuje analýzu obrazů ze sestavy kamer 3 pro rozpoznání vad – v takovém provedení řídicí jednotka na závěsu 2 může sloužit například jen k odesílání obrazu do centrální řídicí jednotky a dočasnému ukládání obrazu při výpadku spojení – např. v místě výtahů, nebo nemusí být na závěsu 2 žádná řídicí jednotka. V některých provedeních může centrální řídicí jednotka i zajistit automatické zastavení dopravníku v případě zjištění závažné závady. Méně závažné závady, např. drobné opotřebení, mohou být naopak ukládány do paměti a poskytnuty obsluze až při pravidelné údržbě dopravníku. </com:P>
+		<com:P com:pNumber="90"> </com:P>
+		<com:P com:pNumber="91">Zpracování obrazu z termokamery 5 alternativně zahrnuje využití metod strojového učení. Možné je alternativně i diagnostikovat případné vady v napájecích vedeních 4 sledováním teploty bez komplexnějšího rozpoznávání obrazu, kdy za vadné je napájecí vedení 4 považováno, pokud jeho teplota ve kterémkoliv místě překročí určitou prahovou hodnotu. </com:P>
+		<com:P com:pNumber="92"> </com:P>
+		<com:P com:pNumber="93">Mechanismus pro automatické čištění čoček má alternativně podobu stěrače opatřeného elektrickým pohonem. </com:P>
+		<com:P com:pNumber="94"> </com:P>
+		<com:P com:pNumber="95">V některých provedeních může být informace o teplotě bez jakéhokoliv dalšího zpracování dodávána do neuronové sítě během učení i za provozu, takže při učení jsou informace o teplotě využity pro diagnostiku těch vad, pro které je teplota relevantní, v závislosti na učícím algoritmu. </com:P>
+		<com:P com:pNumber="96"> </com:P>
+		<com:P com:pNumber="97">Vzdálenosti mezi kódy jsou alternativně menší než 5 cm. </com:P>
+		<com:P com:pNumber="98"> </com:P>
+		<com:P com:pNumber="99">Alternativně nebo navíc je možné určit polohu vady sledováním času, při znalosti rychlosti pohybu závěsu 2 a jeho polohy v určitém časovém okamžiku. Takové určování polohy je zvláště výhodné pro místa bez čárových kódů, například mohou v některých provedeních být kódy umisťovány podél horizontálních profilů 1, ale nemusejí být v oblasti výtahů. </com:P>
+		<com:P com:pNumber="100"> </com:P>
+		<com:P com:pNumber="101">V některých provedeních je řídicí jednotka uzpůsobena nejen k rozpoznání vad, ale také k jejich predikci. K predikování vad mohou sloužit například drobné odchylky ve tvaru a umístění komponent dopravníku nebo jejich částí. Taková predikce výhodně probíhá s využitím strojového učení. V některých provedeních může být monitorovacím systémem nebo jeho částmi opatřeno vícero závěsů 2. Například mohou kamery 3 být rozmístěny mezi více závěsů 2, přičemž každá kamera 3 snímá dopravník z jiného směru, nebo mohou být kamery 3 snímající profily 1 umístěny na jiném závěsu 2 než kamery 3 snímající napájecí vedení 4 atd. V některých provedeních monitorovací systém zahrnuje dvě nebo více sestav kamer 3, které mohou obsahovat stejné množství kamer 3 snímajících stejná místa dopravníku. Každá sestava kamer 3 může zahrnovat vlastní řídicí jednotku, přičemž centrální řídicí jednotka je pak výhodně společná. </com:P>
+		<com:P com:pNumber="102"> </com:P>
+		<com:P com:pNumber="103">Monitorovací systém v dalších provedeních zahrnuje i další senzory, například senzor vibrací nebo mikrofon. Počty a nasměrování kamer 3 a případně termokamery 5 mohou v alternativních provedeních být i jiné než v zobrazeném provedení. Kromě profilů 1 a napájecích vedení 4 mohou kamery 3 v některých provedeních zaznamenávat i další komponenty dopravníku, např. sloupy či jiné úchyty držící profily 1, kabely, elektroinstalační krabice atd., nebo naopak libovolné prvky, které nejsou součástí dopravníku a nemají standardně být v jeho blízkosti. V některých provedeních může monitorovací systém zahrnovat chlazení, zejména v případě dopravníků určených pro provoz v prostředí s vyšší teplotou, aby byl umožněn trvalý běh monitorovacího systému bez jeho přehřívání. Zejména procesor řídicí jednotky a/nebo jeho grafická karta mohou vyžadovat aktivní chlazení. </com:P>
+		<com:P com:pNumber="104"> </com:P>
+		<com:P com:pNumber="105">Zhodnocení závažnosti vady je alternativně na stupnici od jedné do deseti nebo může být vyjádřeno v procentech, kdy 100 % může vyjadřovat například kritickou hodnotu (např. velikost praskliny, teplotu apod.) vady, při které by daná část dopravníku mohla selhat.  </com:P>
+		<com:P com:pNumber="106"> </com:P>
+		<com:P com:pNumber="107">Zpráva odeslaná do centrální řídicí jednotky nebo může alternativně umožňovat fotografie místa závady jen dohledat, aniž by je obsahovala přímo. </com:P>
+		<com:P com:pNumber="108"> </com:P>
+		<com:P com:pNumber="109">Jako kamery 3 mohou být využity i jiná zařízení pro zaznamenání obrazu, např. fotoaparáty. V některých provedeních je kamerou 3 zařízení zahrnující CCD snímač, v jiných provedeních může zahrnovat například CMOS snímač a v jiných provedeních může být snímač obrazu realizován i na libovolném jiném principu. </com:P>
+		<com:P com:pNumber="110"> </com:P>
+		<com:P com:pNumber="111">V alternativních provedeních může závěsový dopravník zahrnovat pohon společný pro všechny závěsy 2, realizovaný například formou řetězu nebo lana obíhajícího podél profilů 1 dopravníku. Stavy rozpoznatelné řídicí jednotkou z obrazů kamer 3 pak výhodně zahrnují i vadné stavy řetězu/lana. S ohledem na to, že řetěz je pohyblivý vůči profilům 1 a statický vůči závěsům 2, může být v takovém provedení výhodné, aby sestava kamer 3 zahrnovala jednu nebo více kamer 3 umístěných na profilu 1 nebo jiné pevné části dopravníku. Průřez profilů 1, který má v zobrazeném provedení tvar písmene „I“, může být v jiných provedeních libovolný jiný, např. tvaru „T“, „H“, „L“ apod. Jiný může být i tvar a rozmístění napájecích vedení 4 nebo jejich počet. </com:P>
+		<com:P com:pNumber="112"> </com:P>
+		<com:P com:pNumber="113">Výše uvedené alternativy a modifikace je možné podle uvážení odborníka libovolně kombinovat, například může být počet kamer 3 přizpůsoben tvaru profilů 1, aby všechny povrchy profilů 1, nebo alespoň ty nejvíce namáhané, byly snímány, výhodně alespoň dvěma kamerami 3. Obdobně může být sestava kamer 3 alternativně nebo navíc uzpůsobena podobě dopravníku, napájecích vedení 4 atd. </com:P>
+		<pat:DrawingDescription>
+			<com:P com:pNumber="1">    1 −   profil
+
+				<com:Br></com:Br>    2 −   závěs
+
+				<com:Br></com:Br>    3 −   kamera
+
+				<com:Br></com:Br>    4 −   napájecí vedení
+
+				<com:Br></com:Br>    5 −   termokamera
+
+			</com:P>
+		</pat:DrawingDescription>
+	</pat:Description>
+	<pat:Claims>
+		<pat:Claim>
+			<pat:ClaimNumber>1</pat:ClaimNumber>
+			<pat:ClaimText>Závěsový dopravník zahrnující alespoň jeden profil (1) uzpůsobený pro vedení závěsů (2), alespoň jeden závěs (2), pohyblivě uchycený k profilu (1) a uzpůsobený pro nesení nákladu, a pohon uzpůsobený pro pohybování závěsy (2), přičemž závěsový dopravník je opatřen monitorovacím systémem zahrnujícím sestavu kamer (3) obsahující alespoň jednu kameru (3) a řídicí jednotku datově spojenou se sestavou kamer (3),
+
+				<com:B>vyznačující se tím</com:B>, že sestava kamer (3) je alespoň z části umístěna na alespoň jednom závěsu (2) a alespoň jedna kamera (3) ze sestavy kamer (3) je nasměrována na profil (1) a uzpůsobena ke snímání obrazu profilu (1), přičemž řídicí jednotka je uzpůsobena pro analýzu obrazu ze sestavy kamer (3) a pro vyhodnocení stavu profilu (1), přičemž řídicí jednotka je umístěna na závěsu (2) nesoucím sestavu kamer (3), přičemž tento závěs (2) dále zahrnuje zdroj energie pro napájení řídicí jednotky a sestavy kamer (3).
+
+			</pat:ClaimText>
+		</pat:Claim>
+		<pat:Claim>
+			<pat:ClaimNumber>2</pat:ClaimNumber>
+			<pat:ClaimText>Závěsový dopravník podle nároku 1, 
+
+				<com:B>vyznačující se tím</com:B>, že dále zahrnuje napájecí vedení (4) pro přívod energie k pohonům, přičemž alespoň jedna kamera (3) ze sestavy kamer (3) je nasměrována na napájecí vedení (4) a uzpůsobena ke snímání obrazu napájecího vedení (4), přičemž řídicí jednotka je dále uzpůsobena pro vyhodnocení stavu napájecího vedení (4).
+
+			</pat:ClaimText>
+		</pat:Claim>
+		<pat:Claim>
+			<pat:ClaimNumber>3</pat:ClaimNumber>
+			<pat:ClaimText>Závěsový dopravník podle kteréhokoliv z nároků 1 nebo 2, 
+
+				<com:B>vyznačující se tím</com:B>, že monitorovací systém dále zahrnuje alespoň jeden prvek z množiny zahrnující termokameru (5), snímač teploty uzpůsobený pro měření teploty okolního vzduchu, snímač polohy závěsu (2) a zdroj světla uzpůsobený pro osvětlování profilu (1) a/nebo napájecího vedení (4).
+
+			</pat:ClaimText>
+		</pat:Claim>
+		<pat:Claim>
+			<pat:ClaimNumber>4</pat:ClaimNumber>
+			<pat:ClaimText>Závěsový dopravník podle kteréhokoliv z nároků 1 až 3, 
+
+				<com:B>vyznačující se tím</com:B>, že sestava kamer (3) zahrnuje mechanismus pro automatické čištění kamer (3).
+
+			</pat:ClaimText>
+		</pat:Claim>
+		<pat:Claim>
+			<pat:ClaimNumber>5</pat:ClaimNumber>
+			<pat:ClaimText>Závěsový dopravník podle kteréhokoliv z nároků 1 až 4, 
+
+				<com:B>vyznačující se tím</com:B>, že sestava kamer (3) je uzpůsobena ke snímání obrazu každé části kontrolovaného povrchu profilu (1) a/nebo napájecího vedení (4) při průjezdu daného závěsu (2) dopravníkem v alespoň dvou snímcích z různých kamer (3).
+
+			</pat:ClaimText>
+		</pat:Claim>
+	</pat:Claims>
+	<pat:Abstract com:id="abs-1" com:languageCode="cs">
+		<com:P com:pNumber="1">Předmětem vynálezu je závěsový dopravník zahrnující alespoň jeden profil (1) uzpůsobený pro vedení závěsů (2) a alespoň jeden závěs (2) pohyblivě uchycený k profilu (1) a uzpůsobený pro nesení nákladu. Dále dopravník zahrnuje alespoň jeden pohon uzpůsobený pro pohybování závěsy (2). Tento závěsový dopravník je opatřen monitorovacím systémem zahrnujícím sestavu kamer (3) obsahující alespoň jednu kameru (3) a zahrnujícím řídicí jednotku datově spojenou se sestavou kamer (3). Tato sestava kamer (3) je umístěna na alespoň jednom závěsu (2) a alespoň jedna kamera (3) ze sestavy kamer (3) je nasměrována na profil (1) a uzpůsobena ke snímání stavu profilu (1). Řídicí jednotka je přitom uzpůsobena pro analýzu obrazu ze sestavy kamer (3) a pro vyhodnocení stavu profilu (1). Řídicí jednotkou jsou tedy detekovány případné vady na profilu (1) a případně na dalších součástech dopravníku, např. na napájecích vedeních (4) dodávajících energii do závěsů (2).</com:P>
+	</pat:Abstract>
+	<pat:Abstract com:id="abs-2" com:languageCode="en">
+		<com:P com:pNumber="1">The subject of the invention applies to a suspension conveyor including at least one profile (1) adapted to convey attachments (2) and at least one attachment (2) movably attached to the profile (1) and adapted to carry load. The conveyor further includes at least one drive adapted to move the attachments (2). This suspension conveyor is provided with a monitoring system including a a camera set (3) containing at least one camera (3) and including a control unit connected by data with the camera set (3). This camera set (3) is located at least on one attachment (2) and at least one camera (3) from the camera set (3) is directed to the profile (1) and adapted to scan the state of the profile (1). The control unit is adapted to analyse the image from the camera set (3) and to evaluate the state of the profile (1). Thus, the control unit is used to detect potential defects on the profile (1) and possibly on other parts of the conveyor, e.g. on the supply lines (4) supplying energy to attachments (2).</com:P>
+	</pat:Abstract>
+	<pat:Drawings com:id="draw">
+		<pat:Figure>
+			<pat:FigureNumber>1</pat:FigureNumber>
+			<com:Image com:id="img-1" com:imageContentCategory="Drawing" com:orientationCategory="Landscape">
+				<com:ImageFormatCategory>JPEG</com:ImageFormatCategory>
+				<com:FileName>2324683j4zrply0o7nm5xkszi5.jpg</com:FileName>
+			</com:Image>
+		</pat:Figure>
+	</pat:Drawings>
+</pat:PatentPublication>

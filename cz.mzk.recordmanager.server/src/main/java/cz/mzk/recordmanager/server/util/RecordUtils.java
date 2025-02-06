@@ -11,6 +11,7 @@ import org.marc4j.marc.Record;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 public class RecordUtils {
 
@@ -19,8 +20,9 @@ public class RecordUtils {
 	public static Record sortFields(Record record) {
 		Record newRecord = factory.newRecord();
 		newRecord.setLeader(record.getLeader());
-		for (ControlField cf : record.getControlFields()) {
-			newRecord.addVariableField(cf);
+		TreeSet<String> controlTags = record.getControlFields().stream().map(ControlField::getTag).collect(Collectors.toCollection(TreeSet::new));
+		for (String tag : controlTags) {
+			newRecord.addVariableField(record.getVariableField(tag));
 		}
 		MarcRecord marc = new MarcRecordImpl(record);
 		Map<String, List<DataField>> dfMap = marc.getAllFields();

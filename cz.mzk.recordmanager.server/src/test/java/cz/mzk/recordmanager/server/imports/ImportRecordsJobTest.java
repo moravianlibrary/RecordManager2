@@ -1,11 +1,15 @@
 package cz.mzk.recordmanager.server.imports;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-import java.util.HashMap;
-import java.util.Map;
-
+import cz.mzk.recordmanager.server.AbstractTest;
+import cz.mzk.recordmanager.server.DBUnitHelper;
 import cz.mzk.recordmanager.server.export.IOFormat;
+import cz.mzk.recordmanager.server.marc.MarcRecord;
+import cz.mzk.recordmanager.server.marc.MarcRecordImpl;
+import cz.mzk.recordmanager.server.marc.MarcXmlParser;
+import cz.mzk.recordmanager.server.model.HarvestedRecord;
+import cz.mzk.recordmanager.server.oai.dao.Cosmotron996DAO;
+import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordDAO;
+import cz.mzk.recordmanager.server.util.Constants;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobParameter;
 import org.springframework.batch.core.JobParameters;
@@ -17,15 +21,10 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import cz.mzk.recordmanager.server.AbstractTest;
-import cz.mzk.recordmanager.server.DBUnitHelper;
-import cz.mzk.recordmanager.server.marc.MarcRecord;
-import cz.mzk.recordmanager.server.marc.MarcRecordImpl;
-import cz.mzk.recordmanager.server.marc.MarcXmlParser;
-import cz.mzk.recordmanager.server.model.HarvestedRecord;
-import cz.mzk.recordmanager.server.oai.dao.Cosmotron996DAO;
-import cz.mzk.recordmanager.server.oai.dao.HarvestedRecordDAO;
-import cz.mzk.recordmanager.server.util.Constants;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ImportRecordsJobTest extends AbstractTest {
 
@@ -55,8 +54,9 @@ public class ImportRecordsJobTest extends AbstractTest {
 	private String testFileAleph2;
 	private String testFileLine1;
 	private String testFileLine2;
-	private String testFilePatents1;
-	private String testFilePatents2;
+	private String testFilePatentsSt36_1;
+	private String testFilePatentsSt36_2;
+	private String testFilePatentsSt96;
 	private String testFileOai;
 	private String testFolderOai;
 	private String testFileCosmotron1;
@@ -78,8 +78,9 @@ public class ImportRecordsJobTest extends AbstractTest {
 		testFileAleph2 = this.getClass().getResource("/import/marcaleph/MZK-records.txt").getFile();
 		testFileLine1 = this.getClass().getResource("/import/marcline/MZK01-000000116.mrc").getFile();
 		testFileLine2 = this.getClass().getResource("/import/marcline/MZK-records.mrc").getFile();
-		testFilePatents1 = this.getClass().getResource("/import/patents/St36_CZ_305523_B6.xml").getFile();
-		testFilePatents2 = this.getClass().getResource("/import/patents/PatentsRecords.xml").getFile();
+		testFilePatentsSt36_1 = this.getClass().getResource("/import/patents/St36_CZ_305523_B6.xml").getFile();
+		testFilePatentsSt36_2 = this.getClass().getResource("/import/patents/PatentsRecordsSt36.xml").getFile();
+		testFilePatentsSt96 = this.getClass().getResource("/import/patents/St96_CZ_PV2021-252-B6.xml").getFile();
 		testFileOai = this.getClass().getResource("/import/oai/ANL01.000000502.ANL-CPK.xml").getFile();
 		testFolderOai = this.getClass().getResource("/import/oai/").getFile();
 		testFileCosmotron1 = this.getClass().getResource("/import/cosmotron/record.mrc").getFile();
@@ -155,8 +156,8 @@ public class ImportRecordsJobTest extends AbstractTest {
 		Job job = jobRegistry.getJob(Constants.JOB_ID_IMPORT);
 		Map<String, JobParameter> params = new HashMap<>();
 		params.put(Constants.JOB_PARAM_CONF_ID, new JobParameter(300L));
-		params.put(Constants.JOB_PARAM_IN_FILE, new JobParameter(testFilePatents1));
-		params.put(Constants.JOB_PARAM_FORMAT, new JobParameter("patents"));
+		params.put(Constants.JOB_PARAM_IN_FILE, new JobParameter(testFilePatentsSt36_1));
+		params.put(Constants.JOB_PARAM_FORMAT, new JobParameter("patents_st36"));
 		JobParameters jobParams = new JobParameters(params);
 		jobLauncher.run(job, jobParams);
 
@@ -166,6 +167,20 @@ public class ImportRecordsJobTest extends AbstractTest {
 		MarcRecord mr = new MarcRecordImpl(marcXmlParser.parseUnderlyingRecord(is));
 		Assert.assertFalse(mr.getDataFields("100").isEmpty());
 		Assert.assertFalse(mr.getDataFields("520").isEmpty());
+	}
+
+	@Test
+	public void testSimpleImportPatentsSt96() throws Exception {
+		Job job = jobRegistry.getJob(Constants.JOB_ID_IMPORT);
+		Map<String, JobParameter> params = new HashMap<>();
+		params.put(Constants.JOB_PARAM_CONF_ID, new JobParameter(300L));
+		params.put(Constants.JOB_PARAM_IN_FILE, new JobParameter(testFilePatentsSt96));
+		params.put(Constants.JOB_PARAM_FORMAT, new JobParameter("patents"));
+		JobParameters jobParams = new JobParameters(params);
+		jobLauncher.run(job, jobParams);
+
+		HarvestedRecord hr = harvestedRecordDao.findByIdAndHarvestConfiguration("St36_CZ_310304_B6", 300L);
+		Assert.assertNotNull(hr);
 	}
 
 	@Test
@@ -277,8 +292,8 @@ public class ImportRecordsJobTest extends AbstractTest {
 		Job job = jobRegistry.getJob(Constants.JOB_ID_IMPORT);
 		Map<String, JobParameter> params = new HashMap<>();
 		params.put(Constants.JOB_PARAM_CONF_ID, new JobParameter(300L));
-		params.put(Constants.JOB_PARAM_IN_FILE, new JobParameter(testFilePatents2));
-		params.put(Constants.JOB_PARAM_FORMAT, new JobParameter("patents"));
+		params.put(Constants.JOB_PARAM_IN_FILE, new JobParameter(testFilePatentsSt36_2));
+		params.put(Constants.JOB_PARAM_FORMAT, new JobParameter("patents_st36"));
 		JobParameters jobParams = new JobParameters(params);
 		jobLauncher.run(job, jobParams);
 

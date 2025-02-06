@@ -1,21 +1,31 @@
 package cz.mzk.recordmanager.server.marc.marc4j;
 
+import com.sun.org.apache.xerces.internal.jaxp.DocumentBuilderFactoryImpl;
 import cz.mzk.recordmanager.server.ClasspathResourceProvider;
+import cz.mzk.recordmanager.server.marc.marc4j.upv.CPCClasification;
+import cz.mzk.recordmanager.server.marc.marc4j.upv.FurtherCPC;
+import cz.mzk.recordmanager.server.marc.marc4j.upv.MainCPC;
+import cz.mzk.recordmanager.server.marc.marc4j.upv.author.*;
 import cz.mzk.recordmanager.server.scripting.MappingResolver;
 import cz.mzk.recordmanager.server.scripting.ResourceMappingResolver;
 import cz.mzk.recordmanager.server.util.CleaningUtils;
 import cz.mzk.recordmanager.server.util.RecordUtils;
 import cz.mzk.recordmanager.server.util.constants.EVersionConstants;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.text.WordUtils;
 import org.marc4j.MarcReader;
 import org.marc4j.marc.DataField;
 import org.marc4j.marc.MarcFactory;
 import org.marc4j.marc.Record;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
-import javax.xml.stream.XMLInputFactory;
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamReader;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.ParseException;
@@ -27,15 +37,14 @@ import java.util.regex.Pattern;
 
 public class PatentsXmlStreamReader implements MarcReader {
 
-	private MappingResolver propertyResolver;
+
+	private final MappingResolver propertyResolver;
 
 	private Record record;
 
-	private MarcFactory factory;
+	private final MarcFactory factory;
 
-	private XMLInputFactory xmlFactory;
-
-	private XMLStreamReader xmlReader;
+	private final Document doc;
 
 	private static final String TEXT_LEADER = "-----nam--22--------450-";
 	private static final String TEXT_008_PART1 = "------e";
@@ -60,34 +69,11 @@ public class PatentsXmlStreamReader implements MarcReader {
 
 	private static final String DATE_STRING_005 = "yyyyMMddHHmmss'.0'";
 
-	private static final String ELEMENT_RECORD_EP = "ep-patent-document";
-	private static final String ELEMENT_RECORD_CZ = "cz-patent-document";
-	private static final String ELEMENT_APPLICANT = "applicant";
-	private static final String ELEMENT_INVENTOR = "inventor";
-	private static final String ELEMENT_AGENT = "agent";
-	private static final String ELEMENT_ORGNAME = "orgname";
-	private static final String ELEMENT_LAST_NAME = "last-name";
-	private static final String ELEMENT_FIRST_NAME = "first-name";
-	private static final String ELEMENT_INVENTION_TITLE = "invention-title";
-	private static final String ELEMENT_ABSTRACT = "abstract";
-	private static final String ELEMENT_CLASSIFICATION_IPCR = "classification-ipcr";
-	private static final String ELEMENT_TEXT = "text";
-	private static final String ELEMENT_P = "p";
-	private static final String ELEMENT_PUBLICATION_REFERENCE = "publication-reference";
-	private static final String ELEMENT_APPLICATION_REFERENCE = "application-reference";
-	private static final String ELEMENT_DATE = "date";
-	private static final String ELEMENT_DOC_NUMBER = "doc-number";
-
-	private static final String ATTRIBUTE_ID = "file";
-	private static final String ATTRIBUTE_LANG = "lang";
-	private static final String ATTRIBUTE_SEQUENCE = "sequence";
-	private static final String ATTRIBUTE_DOC_NUMBER = "doc-number";
 
 	private static final String PATENTS_MAP = "patents.map";
 
-	private static final Pattern PATTERN_024 = Pattern.compile("(.{4}\\s*\\d+/\\d+).*");
 	private static final Pattern WHITE_SPACES_PATTERN = Pattern.compile("\\s+");
-	private static final Pattern XML_PATTERN = Pattern.compile(".xml");
+	private static final Pattern DASH_PATTERN = Pattern.compile("-");
 	private static final Pattern SPLIT_072 = Pattern.compile(" - ");
 
 	private static final Pattern A3_PATTERN = Pattern.compile("St36_CZ_(\\d{4})-(\\d+)_A3");
@@ -107,24 +93,24 @@ public class PatentsXmlStreamReader implements MarcReader {
 	private static final SimpleDateFormat SDF_ORIGIN = new SimpleDateFormat(DATE_ORIGIN_FORMAT);
 	private static final SimpleDateFormat SDF_OUTPUT = new SimpleDateFormat(DATE_OUTPUT_FORMAT);
 
-	private static final String AUTHOR_NOT_AVAILABLE = "neuveden podle zákona 84/1972 Sb.";
+	private String kindCode = null;
+	private String docNumber = null;
 
 	/**
 	 * Constructs an instance with the specified input stream.
 	 */
 	public PatentsXmlStreamReader(InputStream input) {
-		xmlFactory = XMLInputFactory.newInstance();
 		factory = MarcFactoryImpl.newInstance();
 		propertyResolver = new ResourceMappingResolver(new ClasspathResourceProvider());
-		initializeReader(input);
-	}
 
-	private void initializeReader(InputStream input) {
+		DocumentBuilder builder;
 		try {
-			xmlFactory.setProperty(XMLInputFactory.SUPPORT_DTD, false);
-			this.xmlReader = xmlFactory.createXMLStreamReader(input);
-		} catch (XMLStreamException e) {
-			e.printStackTrace();
+			builder = DocumentBuilderFactoryImpl.newInstance().newDocumentBuilder();
+			doc = builder.parse(input);
+			doc.getDocumentElement().normalize();
+			parse();
+		} catch (SAXException | ParserConfigurationException | IOException e) {
+			throw new RuntimeException(e);
 		}
 	}
 
@@ -132,129 +118,100 @@ public class PatentsXmlStreamReader implements MarcReader {
 	 * Returns true if the iteration has more records, false otherwise.
 	 */
 	public boolean hasNext() {
-		try {
-			return xmlReader.hasNext();
-		} catch (XMLStreamException e) {
-			e.printStackTrace();
-		}
-		return false;
+		return record != null;
 	}
+
+	public Record next() {
+		Record localRecord = record;
+		record = null;
+		return RecordUtils.sortFields(localRecord);
+	}
+
 
 	/**
 	 * Returns the next record in the iteration.
 	 *
 	 * @return Record - the record object
 	 */
-	public Record next() {
-		record = null;
+	public Record parse() {
+		record = factory.newRecord();
+		addIdentifier();
+		addFields();
+		addField245();
+		addDocNumber();
+		addApplicationIdentification();
+		addField024();
+		addField072and653();
+		addAbstract();
+		addAuthors();
+		addUrl();
 
-		DataField df = null;
-		StringBuilder name = null;
-		boolean firstAuthor = true; // first to field 100, others 700
-		boolean author = true;
-		boolean authorAvailable = true;
-		boolean firstCorporate = true; // first to field 110, others 710
-		boolean b072 = false;
-		boolean abstratcs = false;
-		boolean appl_reference = false;
-		boolean public_reference = false;
-		char date = ' ';
-		String patentType = "";
-		String dateStr = "";
+		return RecordUtils.sortFields(record);
+	}
+
+	private void addField500aDate(String text, String date) {
 		try {
-			while (xmlReader.hasNext()) {
-				switch (xmlReader.getEventType()) {
-				case XMLStreamReader.START_ELEMENT:
-					switch (xmlReader.getLocalName()) {
-					case ELEMENT_RECORD_EP:
-					case ELEMENT_RECORD_CZ:
-						record = factory.newRecord();
-						patentType = addIdentifier();
-						addFields(patentType);
-						addUrl();
-						addDocNumber();
+			record.addVariableField(factory.newDataField("500", ' ', ' ', "a",
+					String.format(text, SDF_OUTPUT.format(SDF_ORIGIN.parse(date)))));
+		} catch (ParseException ignore) {
+		}
+	}
+
+	private void add500aApplDocNumber(String data, String patentType) {
+		if (patentType.equals(PATENT_TYPE_B6)) {
+			record.addVariableField(factory.newDataField("500", ' ', ' ', "a", String.format(TEXT_500a_APPL_NUMBER, data)));
+		}
+	}
+
+	private void addField024() {
+		JAXBContext jaxbContext;
+		try {
+			Node node = doc.getElementsByTagName("pat:MainCPC").item(0);
+			jaxbContext = JAXBContext.newInstance(MainCPC.class);
+			Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
+			MainCPC mainCpc = (MainCPC) unmarshaller.unmarshal(node);
+			record.addVariableField(factory.newDataField("024", '7', ' ', "a",
+					mainCpc.getCpcClasification().get024a(), "2", TEXT_0242));
+		} catch (JAXBException | NullPointerException ignore) {
+		}
+		try {
+			Node node = doc.getElementsByTagName("pat:FurtherCPC").item(0);
+			jaxbContext = JAXBContext.newInstance(FurtherCPC.class);
+			Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
+			FurtherCPC FurtherCPC = (FurtherCPC) unmarshaller.unmarshal(node);
+			for (CPCClasification classifications : FurtherCPC.getCpcClasifications()) {
+				record.addVariableField(factory.newDataField("024", '7', ' ', "a",
+						classifications.get024a(), "2", TEXT_0242));
+			}
+		} catch (JAXBException | NullPointerException ignore) {
+		}
+	}
+
+	private void addIdentifier() {
+		Node node = doc.getElementsByTagName("pat:PatentPublicationIdentification").item(0);
+		if (node == null) return;
+		NodeList childs = node.getChildNodes();
+		if (childs.getLength() > 0) {
+			String officeCode = null;
+			for (int i = 0; i < childs.getLength(); i++) {
+				Node detail = childs.item(i);
+
+				switch (detail.getNodeName()) {
+					case "com:IPOfficeCode":
+						officeCode = detail.getTextContent();
 						break;
-					case ELEMENT_APPLICANT:
-					case ELEMENT_INVENTOR:
-					case ELEMENT_AGENT:
-						author = true;
+					case "pat:PublicationNumber":
+						this.docNumber = detail.getTextContent();
 						break;
-					case ELEMENT_ORGNAME:
-						name = new StringBuilder(xmlReader.getElementText());
-						author = false;
+					case "com:PatentDocumentKindCode":
+						this.kindCode = detail.getTextContent();
 						break;
-					case ELEMENT_FIRST_NAME:
-						if (name == null) name = new StringBuilder(xmlReader.getElementText());
-						else name.append(", ").append(xmlReader.getElementText());
-						break;
-					case ELEMENT_LAST_NAME:
-						if (name == null) name = new StringBuilder(xmlReader.getElementText());
-						else name.insert(0, xmlReader.getElementText() + ", ");
-						break;
-					case ELEMENT_INVENTION_TITLE:
-						df = factory.newDataField("TMP", ' ', ' ');
-						String a = xmlReader.getAttributeValue(null, ATTRIBUTE_LANG);
-						df.addSubfield(factory.newSubfield('a', xmlReader.getElementText()));
-						if (a.equalsIgnoreCase("cs")) {
-							df.setTag("245");
-							if (!authorAvailable) {
-								df.addSubfield(factory.newSubfield('c', AUTHOR_NOT_AVAILABLE));
-							}
-						} else {
-							df.setTag("246");
-							df.setIndicator1('2');
-						}
-						record.addVariableField(df);
-						break;
-					case ELEMENT_ABSTRACT:
-						if (xmlReader.getAttributeValue(null, ATTRIBUTE_LANG).equalsIgnoreCase("cs")) {
-							abstratcs = true;
-						}
-						break;
-					case ELEMENT_CLASSIFICATION_IPCR:
-						if (xmlReader.getAttributeValue(null, ATTRIBUTE_SEQUENCE).equals("1")) {
-							df = factory.newDataField("653", ' ', ' ');
-							b072 = true;
-						} else df = null;
-						break;
-					case ELEMENT_TEXT:
-						String data = xmlReader.getElementText();
-						if (b072 && df != null && data.length() >= 4) {
-							String s = data.substring(0, 4);
-							List<String> get = propertyResolver.resolve(PATENTS_MAP).get(s);
-							if (get != null) {
-								String temp[] = get.get(0).split("\\|");
-								if (temp.length == 2) {
-									df.addSubfield(factory.newSubfield('a', temp[0]));
-									record.addVariableField(createField072(temp[1]));
-								}
-							}
-							b072 = false;
-						}
-						addField024(data);
-						break;
-					case ELEMENT_P:
-						if (abstratcs) {
-							df = factory.newDataField("520", '3', ' ');
-							df.addSubfield(factory.newSubfield('a', getText().trim()));
-							record.addVariableField(df);
-							abstratcs = false;
-						}
-						break;
-					case ELEMENT_PUBLICATION_REFERENCE:
-						public_reference = true;
-						date = 'p';
-						break;
-					case ELEMENT_APPLICATION_REFERENCE:
-						appl_reference = true;
-						date = 'a';
-						break;
-					case ELEMENT_DATE:
-						dateStr = xmlReader.getElementText();
-						if (date == 'p') {
-							addField008(dateStr);
-							addField260(dateStr);
-							switch (patentType) {
+					case "com:PublicationDate":
+						String dateStr = CleaningUtils.replaceAll(detail.getTextContent(), DASH_PATTERN, "");
+						addField008(dateStr);
+						addField260(dateStr);
+						addField013(this.docNumber, this.kindCode, dateStr);
+						switch (this.kindCode) {
 							case PATENT_TYPE_A3:
 								addField500aDate(TEXT_500a_PUBLICATION_A3, dateStr);
 								break;
@@ -266,148 +223,33 @@ public class PatentsXmlStreamReader implements MarcReader {
 								break;
 							default:
 								break;
-							}
-						} else if (date == 'a') {
-							addField500aDate(TEXT_500a_APPLICATION, dateStr);
-						}
-						date = ' ';
-						break;
-					case ELEMENT_DOC_NUMBER:
-						String docNumber = xmlReader.getElementText();
-						if (appl_reference) {
-							add500aApplDocNumber(docNumber, patentType);
-						} else if (public_reference) {
-							addField013(docNumber, patentType, dateStr);
 						}
 						break;
-					}
-					break;
-				case XMLStreamReader.END_ELEMENT:
-					switch (xmlReader.getLocalName()) {
-					case ELEMENT_APPLICANT:
-						if (isAuthorAvailable(name.toString())) {
-							addAuthor(author, firstAuthor, firstCorporate, name.toString(), "pta");
-							if (author) firstAuthor = false;
-							else firstCorporate = false;
-						} else authorAvailable = false;
-						name = null;
-						break;
-					case ELEMENT_INVENTOR:
-						if (isAuthorAvailable(name.toString())) {
-							addAuthor(author, firstAuthor, firstCorporate, name.toString(), "inv");
-							if (author) firstAuthor = false;
-							else firstCorporate = false;
-						} else authorAvailable = false;
-						name = null;
-						break;
-					case ELEMENT_AGENT:
-						if (isAuthorAvailable(name.toString())) {
-							addAuthor(author, firstAuthor, firstCorporate, name.toString(), "pth");
-							if (author) firstAuthor = false;
-							else firstCorporate = false;
-						} else authorAvailable = false;
-						name = null;
-						break;
-					case ELEMENT_CLASSIFICATION_IPCR:
-						if (df != null) record.addVariableField(df);
-						break;
-					case ELEMENT_RECORD_EP:
-					case ELEMENT_RECORD_CZ:
-						while (xmlReader.hasNext() && xmlReader.getEventType() != XMLStreamReader.START_ELEMENT) {
-							xmlReader.next();
-						}
-						return RecordUtils.sortFields(record);
-					case ELEMENT_APPLICATION_REFERENCE:
-						appl_reference = false;
-						break;
-					case ELEMENT_PUBLICATION_REFERENCE:
-						public_reference = false;
-						break;
-					}
-					break;
 				}
-				xmlReader.next();
-
 			}
-		} catch (XMLStreamException | IOException e) {
-			e.printStackTrace();
+			record.addVariableField(factory.newControlField("001", String.format("St36_%s_%s_%s", officeCode, this.docNumber, this.kindCode)));
 		}
-
-		return RecordUtils.sortFields(record);
 	}
 
-	private String getText() throws XMLStreamException {
-		StringBuilder text = new StringBuilder();
-		while (xmlReader.hasNext()) {
-			xmlReader.next();
-			switch (xmlReader.getEventType()) {
-			case XMLStreamReader.END_ELEMENT:
-				if (xmlReader.getLocalName().equals(ELEMENT_P)) return text.toString();
-				break;
-			case XMLStreamReader.CHARACTERS:
-				text.append(xmlReader.getText());
-				break;
+	private void addApplicationIdentification() {
+		Node node = doc.getElementsByTagName("pat:ApplicationIdentification").item(0);
+		if (node == null) return;
+		add500aApplDocNumber(this.docNumber, this.kindCode);
+		NodeList childs = node.getChildNodes();
+		if (childs.getLength() > 0) {
+			for (int i = 0; i < childs.getLength(); i++) {
+				Node detail = childs.item(i);
+				if (detail.getNodeName().equals("pat:FilingDate")) {
+					String dateStr = CleaningUtils.replaceAll(detail.getTextContent(), DASH_PATTERN, "");
+					addField500aDate(TEXT_500a_APPLICATION, dateStr);
+				}
 			}
 		}
-		return text.toString();
-	}
-
-	private boolean isAuthorAvailable(String name) {
-		return name == null || !name.equals(AUTHOR_NOT_AVAILABLE);
-	}
-
-	private void addAuthor(boolean personalOrCorporate, boolean b100, boolean b110, String name, String utext) {
-		if (name == null) return;
-		String tag;
-		if (personalOrCorporate) {
-			if (b100) tag = "100";
-			else tag = "700";
-			name = WordUtils.capitalizeFully(name);
-		} else {
-			if (b110) tag = "110";
-			else tag = "710";
-		}
-		record.addVariableField(factory.newDataField(tag, '1', ' ',
-				"a", CleaningUtils.replaceAll(name, WHITE_SPACES_PATTERN, " "), "u", utext));
-	}
-
-	private void addField500aDate(String text, String date) {
-		try {
-			record.addVariableField(factory.newDataField("500", ' ', ' ', "a",
-					String.format(text, SDF_OUTPUT.format(SDF_ORIGIN.parse(date)))));
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-	}
-
-	private void add500aApplDocNumber(String data, String patentType) {
-		if (patentType.equals(PATENT_TYPE_B6)) {
-			record.addVariableField(factory.newDataField("500", ' ', ' ', "a", String.format(TEXT_500a_APPL_NUMBER, data)));
-		}
-	}
-
-	private void addField024(String data) {
-		Matcher matcher = PATTERN_024.matcher(data);
-		if (matcher.matches()) {
-			record.addVariableField(factory.newDataField("024", '7', ' ', "a",
-					CleaningUtils.replaceAll(matcher.group(1), WHITE_SPACES_PATTERN, " "), "2", TEXT_0242));
-		}
-	}
-
-	private String addIdentifier() {
-		record.addVariableField(factory.newControlField("001", CleaningUtils.replaceAll(
-				xmlReader.getAttributeValue(null, ATTRIBUTE_ID), XML_PATTERN, "")));
-
-		if (A3_PATTERN.matcher(record.getControlNumber()).matches()) return PATENT_TYPE_A3;
-		if (B6_PATTERN.matcher(record.getControlNumber()).matches()) return PATENT_TYPE_B6;
-		if (U1_PATTERN.matcher(record.getControlNumber()).matches()) return PATENT_TYPE_U1;
-
-		return "";
 	}
 
 	private void addDocNumber() {
 		record.addVariableField(factory.newDataField("500", ' ', ' ', "a",
-				String.format(TEXT_500a_DOC_NUMBER, xmlReader.getAttributeValue(null, ATTRIBUTE_DOC_NUMBER))));
+				String.format(TEXT_500a_DOC_NUMBER, this.docNumber)));
 	}
 
 	private void addField008(String date) {
@@ -417,7 +259,7 @@ public class PatentsXmlStreamReader implements MarcReader {
 		}
 	}
 
-	private void addFields(String patentType) {
+	private void addFields() {
 		record.setLeader(factory.newLeader(TEXT_LEADER));
 
 		SimpleDateFormat sdf = new SimpleDateFormat(DATE_STRING_005);
@@ -427,13 +269,13 @@ public class PatentsXmlStreamReader implements MarcReader {
 		if (f001 != null) {
 			String text300 = "";
 			String text655 = "";
-			if (patentType.equals(PATENT_TYPE_A3)) {
+			if (kindCode.equals(PATENT_TYPE_A3)) {
 				text300 = TEXT_300a_APPLICATION;
 				text655 = TEXT_655a_APPLICATION;
-			} else if (patentType.equals(PATENT_TYPE_U1)) {
+			} else if (kindCode.equals(PATENT_TYPE_U1)) {
 				text300 = TEXT_300a_UTILITY_MODEL;
 				text655 = TEXT_655a_UTILITY_MODEL;
-			} else if (patentType.equals(PATENT_TYPE_B6)) {
+			} else if (kindCode.equals(PATENT_TYPE_B6)) {
 				text300 = TEXT_300a_PATENT;
 				text655 = TEXT_655a_PATENT;
 			}
@@ -504,4 +346,100 @@ public class PatentsXmlStreamReader implements MarcReader {
 				"c", patentType, "d", date));
 	}
 
+	private void addField245() {
+		NodeList nodeList = doc.getElementsByTagName("pat:InventionTitle");
+		if (nodeList.getLength() > 0) {
+			for (int i = 0; i < nodeList.getLength(); i++) {
+				Node detail = nodeList.item(i);
+				switch (detail.getAttributes().getNamedItem("com:languageCode").getNodeValue()) {
+					case "cs":
+						record.addVariableField(factory.newDataField("245", ' ', ' ', "a", detail.getTextContent()));
+						break;
+					case "en":
+						record.addVariableField(factory.newDataField("246", '2', ' ', "a", detail.getTextContent()));
+						break;
+				}
+			}
+		}
+	}
+
+	private void addField072and653() {
+		JAXBContext jaxbContext;
+		try {
+			Node node = doc.getElementsByTagName("pat:MainCPC").item(0);
+			jaxbContext = JAXBContext.newInstance(MainCPC.class);
+			Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
+			MainCPC mainCpc = (MainCPC) unmarshaller.unmarshal(node);
+
+			List<String> get = propertyResolver.resolve(PATENTS_MAP).get(mainCpc.getCpcClasification().get072Key());
+			if (get != null) {
+				String[] temp = get.get(0).split("\\|");
+				if (temp.length == 2) {
+					record.addVariableField(factory.newDataField("653", ' ', ' ', "a", temp[0]));
+					record.addVariableField(createField072(temp[1]));
+				}
+			}
+		} catch (JAXBException | IOException | NullPointerException ignore) {
+		}
+	}
+
+	private void addAbstract() {
+		Node node = doc.getElementsByTagName("pat:Abstract").item(0);
+		if (node == null) return;
+		if (node.getAttributes().getNamedItem("com:languageCode").getNodeValue().equals("cs")) {
+			record.addVariableField(factory.newDataField("520", '3', ' ', "a",
+					CleaningUtils.replaceAll(node.getTextContent().trim(), WHITE_SPACES_PATTERN, " ")));
+		}
+	}
+
+	private String tagFieldAuthor = "100";
+	private String tagFieldCorporate = "110";
+
+	private void addAuthors() {
+		JAXBContext jaxbContext;
+		try {
+			Node node = doc.getElementsByTagName("pat:ApplicantBag").item(0);
+			jaxbContext = JAXBContext.newInstance(ApplicantBag.class);
+			Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
+			ApplicantBag applicantBag = (ApplicantBag) unmarshaller.unmarshal(node);
+			for (Applicant applicant : applicantBag.getApplicants()) {
+				addAuthor(applicant.getContact().getName(), "pta");
+			}
+		} catch (JAXBException | NullPointerException ignore) {
+		}
+		try {
+			Node node = doc.getElementsByTagName("pat:InventorBag").item(0);
+			jaxbContext = JAXBContext.newInstance(InventorBag.class);
+			Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
+			InventorBag inventorBag = (InventorBag) unmarshaller.unmarshal(node);
+			for (Inventor inventor : inventorBag.getInventors()) {
+				addAuthor(inventor.getContact().getName(), "inv");
+			}
+		} catch (JAXBException | NullPointerException ignore) {
+		}
+		try {
+			Node node = doc.getElementsByTagName("pat:RegisteredPractitionerBag").item(0);
+			jaxbContext = JAXBContext.newInstance(RegisteredPractitionerBag.class);
+			Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
+			RegisteredPractitionerBag registeredPractitionerBag = (RegisteredPractitionerBag) unmarshaller.unmarshal(node);
+			for (RegisteredPractitioner registeredPractitioner : registeredPractitionerBag.getRegisteredPractitioners()) {
+				addAuthor(registeredPractitioner.getContact().getName(), "pth");
+			}
+		} catch (JAXBException | NullPointerException ignore) {
+		}
+	}
+
+	private void addAuthor(Name name, String sfu) {
+		if (name.getOrganizationName() != null) {
+			record.addVariableField(factory.newDataField(tagFieldCorporate, '1', ' ', "a",
+					CleaningUtils.replaceAll(name.getOrganizationName()
+							.getOrganizationStandardName(), WHITE_SPACES_PATTERN, " "), "u", sfu));
+			tagFieldCorporate = "710";
+		}
+		if (name.getPersonName() != null) {
+			record.addVariableField(factory.newDataField(tagFieldAuthor, '1', ' ', "a",
+					name.getPersonName().getPersonStructuredName().getNameForMarc(), "u", sfu));
+			tagFieldAuthor = "700";
+		}
+	}
 }

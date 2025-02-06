@@ -45,6 +45,7 @@ public class ImportRecordsFileReader implements ItemReader<List<Record>> {
 		format = IOFormat.stringToExportFormat(strFormat);
 		this.confId = confId;
 		getFilesName(filename);
+		filterFileNames();
 	}
 
 	public ImportRecordsFileReader(Long confId) throws Exception {
@@ -87,6 +88,8 @@ public class ImportRecordsFileReader implements ItemReader<List<Record>> {
 			return new MarcISO2709StreamReader(inStream, "UTF-8");
 		case XML_PATENTS:
 			return new PatentsXmlStreamReader(inStream);
+		case XML_PATENTS_ST36:
+			return new PatentsSt36XmlStreamReader(inStream);
 		case OSOBNOSTI_REGIONU:
 			return new OsobnostiRegionuXmlStreamReader(inStream);
 		case SFX:
@@ -119,7 +122,8 @@ public class ImportRecordsFileReader implements ItemReader<List<Record>> {
 	private void initializeFilesReader() {
 		try {
 			if (files != null && !files.isEmpty()) {
-				FileInputStream inStream = new FileInputStream(files.remove(0));
+				String file = files.remove(0);
+				FileInputStream inStream = new FileInputStream(file);
 				reader = getMarcReader(inStream);
 			}
 		} catch (FileNotFoundException e) {
@@ -140,6 +144,16 @@ public class ImportRecordsFileReader implements ItemReader<List<Record>> {
 				if (file.isDirectory()) getFilesName(file.getAbsolutePath());
 				else files.add(file.getAbsolutePath());
 			}
+		}
+	}
+
+	private void filterFileNames() {
+		switch (format) {
+			case XML_PATENTS:
+				files.removeIf(file -> !file.endsWith(".xml"));
+				files.removeIf(file -> file.endsWith("content.xml"));
+				files.removeIf(file -> file.contains("/st26"));
+				break;
 		}
 	}
 
