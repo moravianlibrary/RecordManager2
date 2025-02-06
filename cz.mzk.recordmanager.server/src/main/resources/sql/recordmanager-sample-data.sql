@@ -734,8 +734,8 @@ INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format,extr
 INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format) VALUES (396,'local:/data/imports/uzp02_upd','importRecordsJob','xml');
 INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format) VALUES (413,'https://www.bookport.cz/marc21.xml','importRecordsJob','xml');
 INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format) VALUES (416,null,null,null);
-INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format) VALUES (445,null,null,null);
-INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format) VALUES (448,'https://bookport.cz/marc21-12415.xml','downloadAndImportRecordsJob','xml');
+INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format) VALUES (445,'https://bookport.cz/marc21-26952.xml','downloadAndImportRecordsJob','xml');
+INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format) VALUES (448,'https://bookport.cz/marc21-26943.xml','downloadAndImportRecordsJob','xml');
 INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format) VALUES (449,'https://bookport.cz/marc21-12416.xml','downloadAndImportRecordsJob','xml');
 INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format) VALUES (450,'https://bookport.cz/marc21-12427.xml','downloadAndImportRecordsJob','xml');
 INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format) VALUES (451,'https://bookport.cz/marc21-12417.xml','downloadAndImportRecordsJob','xml');
