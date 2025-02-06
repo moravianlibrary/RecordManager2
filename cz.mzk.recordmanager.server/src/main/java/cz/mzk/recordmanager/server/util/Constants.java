@@ -264,6 +264,7 @@ public class Constants {
 	public static final String PREFIX_UZEI				= "uzei";
 	public static final String PREFIX_VFU				= "vfu";
 	public static final String PREFIX_VKOL				= "vkol";
+	public static final String PREFIX_VSE				= "vse";
 	public static final String PREFIX_ZAKONY			= "zakony";
 
 
