@@ -409,6 +409,7 @@ INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weig
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, generate_dedup_keys, generate_biblio_linker_keys, mapping_script, item_id, mappings996) VALUES (554, 104, 200, 'nkp', 11, false, true, false, true, 'U', false, false,'LocalNkp.groovy,HarvestedRecordBaseMarc.groovy','aleph', 'aleph');
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id, mappings996, catalog_serial_link) VALUES (557, 133, 200, 'kkpc', 11, false, true, true, true, 'U', 'other', 'tritius', true);
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, mapping_script, generate_dedup_keys) VALUES (558, 295, 200, 'bookport', 11, false, true, true, true, 'U', 'LocalBookport.groovy,HarvestedRecordBaseMarc.groovy', false);
+INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, mapping_script, generate_dedup_keys) VALUES (559, 159, 200, 'bookport', 11, false, true, true, true, 'U', 'LocalBookport.groovy,HarvestedRecordBaseMarc.groovy', false);
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, generate_biblio_linker_keys) VALUES (1300, 100, 200, 'sfxjibmzk', 8, false, false, false, true, 'U', false);
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, generate_biblio_linker_keys) VALUES (1301, 101, 200, 'sfxjibnlk', 8, false, false, false, true, 'U', false);
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, generate_biblio_linker_keys) VALUES (1302, 101, 200, 'sfxnlkper', 8, false, false, false, true, 'U', false);
@@ -746,7 +747,9 @@ INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format) VAL
 INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format) VALUES (489,'https://bookport.cz/marc21-26950.xml','downloadAndImportRecordsJob','xml');
 INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format) VALUES (495,'local:/data/imports/uep01_cpk_upd','importRecordsJob','xml');
 INSERT INTO download_import_conf (import_conf_id,url,import_job_name) VALUES (500,'https://muj-antikvariat.cz/assets/obalkyknih.xml','antikvariatyImportRecordsJob');
-INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format) VALUES (539,NULL,NULL,NULL);INSERT INTO library (id, name, url, catalog_url, city) VALUES (400, 'AUTHORITY', 'nkp.cz', 'aleph.nkp.cz', NULL);
+INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format) VALUES (539,NULL,NULL,NULL);
+INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format,reharvest) VALUES (558,'https://bookport.cz/marc21-26964.xml','downloadAndImportRecordsJob','xml',true);
+INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format,reharvest) VALUES (559,'https://bookport.cz/marc21-26954.xml','downloadAndImportRecordsJob','xml',true);
 INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format) VALUES (1304,null,null,null);
 INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format,extract_id_regex,reharvest) VALUES (1305,'https://sfx.knihovny.cz/sfxlcl3/cgi/public/get_file.cgi?file=institutional_holding-NKP.xml','downloadAndImportRecordsJob','sfx',null,true);
 INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format,extract_id_regex,reharvest) VALUES (1306,'https://sfx.knihovny.cz/sfxlcl3/cgi/public/get_file.cgi?file=institutional_holding-VKOL.xml','downloadAndImportRecordsJob','sfx',null,true);
@@ -775,7 +778,6 @@ INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format,extr
 INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format,extract_id_regex,reharvest) VALUES (1330,'https://sfx.knihovny.cz/sfxlcl3/cgi/public/get_file.cgi?file=institutional_holding-KKVysociny.xml','downloadAndImportRecordsJob','sfx',null,true);
 INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format,extract_id_regex,reharvest) VALUES (1331,'https://sfx.knihovny.cz/sfxlcl3/cgi/public/get_file.cgi?file=institutional_holding-SVKKL.xml','downloadAndImportRecordsJob','sfx',null,true);
 INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format) VALUES (414,null,null,null);
-INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format,reharvest) VALUES (558,'https://bookport.cz/marc21-26964.xml','downloadAndImportRecordsJob','xml',true);
 
 INSERT INTO harvested_record_format(id, name) VALUES (1, 'BOOKS');
 INSERT INTO harvested_record_format(id, name) VALUES (2, 'PERIODICALS');
