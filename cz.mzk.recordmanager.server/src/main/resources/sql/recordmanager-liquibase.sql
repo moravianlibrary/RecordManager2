@@ -3477,3 +3477,6 @@ INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format,reha
 
 --changeset tomascejpek:448 context:cpk
 UPDATE download_import_conf SET url='https://bookport.cz/marc21-26955.xml' WHERE import_conf_id=450;
+
+--changeset tomascejpek:449 context:cpk
+UPDATE download_import_conf SET url='https://www.bookport.cz/marc21.xml' WHERE import_conf_id=451;
