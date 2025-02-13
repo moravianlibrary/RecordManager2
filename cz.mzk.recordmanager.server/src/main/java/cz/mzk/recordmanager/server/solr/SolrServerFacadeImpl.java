@@ -95,7 +95,16 @@ public class SolrServerFacadeImpl implements SolrServerFacade {
 
 	@Override
 	public void deleteById(List<String> ids) throws SolrServerException, IOException {
-		server.deleteById(ids);
+		boolean carryOn = true;
+		while (carryOn) {
+			try {
+				server.deleteById(ids);
+				exceptionHandler.ok();
+				carryOn = false;
+			} catch (RuntimeException | SolrServerException | IOException ex) {
+				carryOn = exceptionHandler.handle(ex, "") == Action.RETRY;
+			}
+		}
 	}
 
 	@Override
