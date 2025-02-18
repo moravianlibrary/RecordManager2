@@ -31,6 +31,7 @@ public class BookportMetadataMarcRecord extends EbooksMetadataMarcRecord {
 		URL_MAP.put(Constants.PREFIX_MZK, "/AccountSaml/SignIn/?idp=https%3A%2F%2Fshibboleth.mzk.cz%2Fsimplesaml%2Fmetadata.xml&returnUrl=");
 		URL_MAP.put(Constants.PREFIX_VSE, "/AccountSaml/SignIn/?idp=https%3A%2F%2Fid.vse.cz%2Fidp%2Fshibboleth&returnUrl=");
 		URL_MAP.put(Constants.PREFIX_UPOL, "/AccountSaml/SignIn/?idp=https%3A%2F%2Fidp.upol.cz%2Fidp%2Fshibboleth&returnUrl=");
+		URL_MAP.put(Constants.PREFIX_NTK, "/AccountSaml/SignIn/?idp=https%3A%2F%2Fshibboleth.techlib.cz%2Fidp%2Fshibboleth&returnUrl=");
 	}
 
 	public BookportMetadataMarcRecord(MarcRecord underlayingMarc, HarvestedRecord hr) {

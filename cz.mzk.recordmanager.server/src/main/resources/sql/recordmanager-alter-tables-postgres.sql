@@ -3189,3 +3189,7 @@ UPDATE download_import_conf SET url='https://bookport.cz/marc21-26955.xml' WHERE
 
 -- 10. 02. 2025 tomascejpek
 UPDATE download_import_conf SET url='https://www.bookport.cz/marc21.xml' WHERE import_conf_id=451;
+
+-- 18. 02. 2025 tomascejpek
+INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, mapping_script, generate_dedup_keys) VALUES (560, 107, 200, 'bookport', 11, false, true, true, true, 'U', 'LocalBookport.groovy,HarvestedRecordBaseMarc.groovy', false);
+INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format,reharvest) VALUES (560,'https://bookport.cz/marc21-26969.xml','downloadAndImportRecordsJob','xml',true);
