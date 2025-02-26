@@ -10,6 +10,7 @@ import org.hibernate.SessionFactory;
 import org.marc4j.marc.DataField;
 import org.marc4j.marc.MarcFactory;
 import org.marc4j.marc.Record;
+import org.marc4j.marc.VariableField;
 import org.springframework.batch.core.StepExecutionListener;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -123,7 +124,9 @@ public class ImportPalmknihyWriter extends ImportRecordsWriter implements ItemWr
 				if (field856 == null || !vyp.equals("1") || url_id == null) continue;
 				for (byte[] rawRecord : hrDao.getMetadataForPalmknihy(isbn, url_id)) {
 					Record palmknihy = marcXmlParser.parseUnderlyingRecord(rawRecord);
-					palmknihy.addVariableField(field856);
+					for (VariableField vf : currentRecord.getVariableFields("856")) {
+						palmknihy.addVariableField(vf);
+					}
 					boolean eversionExists = false;
 					for (HarvestedRecord hrLib : hrDao.getByPalmknihyId(url_id)) {
 						String record_id = hrLib.getUniqueId().getRecordId();
@@ -142,6 +145,12 @@ public class ImportPalmknihyWriter extends ImportRecordsWriter implements ItemWr
 					}
 					if (!eversionExists) continue;
 					palmknihy.addVariableField(factory.newDataField("OAI", ' ', ' ', "a", currentRecord.getControlNumber()));
+					if (currentRecord.getVariableField("PRI") != null) {
+						palmknihy.addVariableField(currentRecord.getVariableField("PRI"));
+					}
+					if (currentRecord.getVariableField("TYP") != null) {
+						palmknihy.addVariableField(currentRecord.getVariableField("TYP"));
+					}
 					processRecord(palmknihy);
 					break;
 				}

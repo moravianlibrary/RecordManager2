@@ -616,4 +616,9 @@ public interface MetadataRecord {
 	default boolean biblioLinkerKeysFilter() {
 		return true;
 	}
+
+	default Integer getPrice() {
+		return null;
+	}
+
 }

@@ -44,7 +44,7 @@ public class UrlDedupRecordEnricher implements DedupRecordEnricher {
 	public void enrich(DedupRecord record, SolrInputDocument mergedDocument,
 					   List<SolrInputDocument> localRecords) {
 
-		Set<Object> urls = new HashSet<>();
+		Set<Object> urls = new LinkedHashSet<>();
 		localRecords.stream()
 				.filter(rec -> rec.getFieldValue(SolrFieldConstants.URL) != null)
 				.forEach(rec -> urls.addAll(rec.getFieldValues(SolrFieldConstants.URL)));
@@ -64,7 +64,7 @@ public class UrlDedupRecordEnricher implements DedupRecordEnricher {
 	private List<String> urlsFilter(SolrInputDocument mergedDocument, Set<Object> values) {
 		List<String> results = new ArrayList<>();
 		values = filter(values);
-		Map<String, TreeSet<EVersionUrl>> urls = new HashMap<>();
+		Map<String, TreeSet<EVersionUrl>> urls = new LinkedHashMap<>();
 		for (Object obj : values) {
 			EVersionUrl url;
 			try {
@@ -172,7 +172,7 @@ public class UrlDedupRecordEnricher implements DedupRecordEnricher {
 	private Set<Object> filter(Set<Object> urls) {
 		return urls.stream().filter(
 				url -> URL_PATTERNS.stream().noneMatch(pat -> pat.matcher(url.toString()).find()))
-				.collect(Collectors.toSet());
+				.collect(LinkedHashSet::new, Set::add, Set::addAll);
 	}
 
 	private void enrichStatusesFacet(SolrInputDocument mergedDocument,

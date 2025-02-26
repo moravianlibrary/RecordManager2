@@ -69,6 +69,7 @@ availability_id_str_mv = getFieldsUnique "996w"
 
 citation_record_type_str = getCitationRecordType();
 author_find = getAuthorFind();
+price_int = getPrice()
 
 // facets
 author_facet_mv = author_facet_str_mv = filter("author_facet.txt", getAuthorFacet())

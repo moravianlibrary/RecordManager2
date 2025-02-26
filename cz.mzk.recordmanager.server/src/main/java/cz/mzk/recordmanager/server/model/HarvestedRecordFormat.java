@@ -87,6 +87,7 @@ public class HarvestedRecordFormat {
 		THESIS_OTHER(74L),
 		MUSICAL_SCORES_PRINTED(75L),
 		MUSICAL_SCORES_MANUSCRIPT(76L),
+		EAUDIOBOOK(77L),
 		OTHER_UNSPECIFIED(100L);
 
 		private Long numValue;

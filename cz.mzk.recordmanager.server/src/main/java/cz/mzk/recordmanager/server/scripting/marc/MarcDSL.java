@@ -1120,4 +1120,7 @@ public class MarcDSL extends BaseDSL {
 		return results;
 	}
 
+	public Integer getPrice() {
+		return metadataRecord.getPrice();
+	}
 }
