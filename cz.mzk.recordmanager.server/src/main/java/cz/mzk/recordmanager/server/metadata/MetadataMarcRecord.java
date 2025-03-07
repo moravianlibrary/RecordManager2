@@ -27,7 +27,7 @@ import static cz.mzk.recordmanager.server.model.HarvestedRecordFormat.HarvestedR
 
 public class MetadataMarcRecord implements MetadataRecord {
 
-	private static Logger logger = LoggerFactory.getLogger(MetadataMarcRecord.class);
+	protected static Logger logger = LoggerFactory.getLogger(MetadataMarcRecord.class);
 
 	protected MarcRecord underlayingMarc;
 
@@ -589,6 +589,13 @@ public class MetadataMarcRecord implements MetadataRecord {
 
 		String f245h = underlayingMarc.getField("245", 'h');
 		if (f245h == null) f245h = "";
+
+		// AUDIO_STREAMING
+		List<HarvestedRecordFormatEnum> audioStreaming = getAudioStreaming();
+		if (!audioStreaming.isEmpty()) {
+			return AUDIO_STREAMING;
+		}
+
 		// AUDIO_CD
 		if (isAudioCD()) return HarvestedRecordFormatEnum.AUDIO_CD;
 

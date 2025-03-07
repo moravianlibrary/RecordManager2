@@ -37,14 +37,12 @@ public class LocalMzkStatusesDedupRecordEnricher implements DedupRecordEnricher 
 	public void enrich(DedupRecord record, SolrInputDocument mergedDocument,
 					   List<SolrInputDocument> localRecords) {
 		// exists statuses?
-		if (!mergedDocument.containsKey(SolrFieldConstants.STATUSES_FACET) ||
-				mergedDocument.getFieldValues(SolrFieldConstants.STATUSES_FACET) == null) {
-			return;
+		List<String> statuses = new ArrayList<>();
+		if (mergedDocument.containsKey(SolrFieldConstants.STATUSES_FACET) &&
+				mergedDocument.getFieldValues(SolrFieldConstants.STATUSES_FACET) != null) {
+			statuses = mergedDocument.getFieldValues(SolrFieldConstants.STATUSES_FACET).stream()
+					.map(o -> o.toString()).collect(Collectors.toList());
 		}
-
-		// all statuses
-		List<String> statuses = mergedDocument.getFieldValues(SolrFieldConstants.STATUSES_FACET).stream()
-				.map(o -> o.toString()).collect(Collectors.toList());
 
 		for (String source : SOURCES) {
 			// exists records for source?
@@ -92,7 +90,7 @@ public class LocalMzkStatusesDedupRecordEnricher implements DedupRecordEnricher 
 							.map(o -> o.toString()).collect(Collectors.toSet()));
 				}
 			}
-			if (localStatuses.isEmpty()) return;
+			if (localStatuses.isEmpty()) continue;
 			for (SolrInputDocument solrDoc : sourceRecords) {
 				solrDoc.setField(SolrFieldConstants.LOCAL_ONLINE_FACET, localStatuses);
 			}

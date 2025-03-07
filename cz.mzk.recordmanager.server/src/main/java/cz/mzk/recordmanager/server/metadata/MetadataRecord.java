@@ -621,4 +621,7 @@ public interface MetadataRecord {
 		return null;
 	}
 
+	default List<HarvestedRecordFormatEnum> getAudioStreaming() {
+		return Collections.emptyList();
+	}
 }

@@ -88,6 +88,7 @@ public class HarvestedRecordFormat {
 		MUSICAL_SCORES_PRINTED(75L),
 		MUSICAL_SCORES_MANUSCRIPT(76L),
 		EAUDIOBOOK(77L),
+		AUDIO_STREAMING(78L),
 		OTHER_UNSPECIFIED(100L);
 
 		private Long numValue;

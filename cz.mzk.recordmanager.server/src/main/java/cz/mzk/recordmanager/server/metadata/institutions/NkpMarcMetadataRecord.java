@@ -35,6 +35,24 @@ public class NkpMarcMetadataRecord extends MetadataMarcRecord {
 		}
 	}
 
+	@Override
+	public List<HarvestedRecordFormatEnum> getAudioStreaming() {
+		for (DataField df : underlayingMarc.getDataFields("856")) {
+			if (df.getSubfield('u').getData().contains("alexanderstreet.com/")) {
+				for (DataField df990 : underlayingMarc.getDataFields("990")) {
+					if (df990.getSubfield('a') == null) continue;
+					if (df990.getSubfield('a').getData().contains("AM")) {
+						return Collections.singletonList(AUDIO_STREAMING);
+					}
+				}
+			}
+			if (df.getSubfield('u').getData().contains("naxosmusiclibrary.com/")) {
+				return Collections.singletonList(AUDIO_STREAMING);
+			}
+		}
+		return Collections.emptyList();
+	}
+
 	private List<String> getNkpEversionsUrls(List<String> values, String availability) {
 		List<String> results = new ArrayList<>();
 		for (DataField field856 : underlayingMarc.getDataFields("856")) {
@@ -59,11 +77,20 @@ public class NkpMarcMetadataRecord extends MetadataMarcRecord {
 		return results;
 	}
 
+	private static final List<String> MEMBER_SOURCES = Arrays.asList(
+			"ebrary.com/", "proquest.com/", "emerald.com/insight/", "emeraldinsight.com/",
+			"naxosmusiclibrary.com/", "naxosmusiclibrary.com.ezproxy.nkp.cz/",
+			"search.ebscohost.com/",
+			"alexanderstreet.com/", "alexanderstreet.com.ezproxy.nkp.cz/"
+	);
+	private static final List<String> ONLINE_SOURCES = Arrays.asList("www.manuscriptorium.com/", "books.google.cz/");
+
 	@Override
 	public List<String> getUrls() {
 		List<String> results = super.getUrls();
-		results.addAll(getNkpEversionsUrls(Arrays.asList("ebrary.com/", "proquest.com/"), Constants.DOCUMENT_AVAILABILITY_MEMBER));
-		results.addAll(getNkpEversionsUrls(Arrays.asList("www.manuscriptorium.com/", "books.google.cz/"), Constants.DOCUMENT_AVAILABILITY_ONLINE));
+
+		results.addAll(getNkpEversionsUrls(MEMBER_SOURCES, Constants.DOCUMENT_AVAILABILITY_MEMBER));
+		results.addAll(getNkpEversionsUrls(ONLINE_SOURCES, Constants.DOCUMENT_AVAILABILITY_ONLINE));
 		return results;
 	}
 
@@ -84,7 +111,6 @@ public class NkpMarcMetadataRecord extends MetadataMarcRecord {
 					result.add(Constants.DOCUMENT_AVAILABILITY_MEMBER);
 				}
 			} catch (Exception ignore) {
-				continue;
 			}
 		}
 		return result;
