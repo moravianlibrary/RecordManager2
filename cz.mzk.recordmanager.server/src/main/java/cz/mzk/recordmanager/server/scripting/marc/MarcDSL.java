@@ -1105,4 +1105,19 @@ public class MarcDSL extends BaseDSL {
 		return str.toString().trim();
 	}
 
+	public Set<String> getOriginalLanguages() {
+		Set<String> results = new HashSet<>();
+		Set<String> codes = getFieldsUnique("041h", SubfieldExtractionMethod.SEPARATED);
+		results.addAll(codes);
+		try {
+			results.addAll(translate("mzk_language.map", codes, null));
+		} catch (IOException ignore) {
+		}
+		try {
+			results.addAll(translate("language_cs.map", codes, null));
+		} catch (IOException ignore) {
+		}
+		return results;
+	}
+
 }
