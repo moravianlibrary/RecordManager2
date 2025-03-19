@@ -53,7 +53,7 @@ public class ImportPalmknihyWriter extends ImportRecordsWriter implements ItemWr
 
 	static {
 		ID_PARSER.put(328L, Pattern.compile("CbvkUsCat\\*(.*)"));
-		ID_PARSER.put(333L, Pattern.compile("PAK01-(\\d+)"));
+		ID_PARSER.put(335L, Pattern.compile("MVK01-(\\d+)"));
 		ID_PARSER.put(496L, Pattern.compile("TynUsCat\\*(.*)"));
 	}
 
@@ -61,7 +61,7 @@ public class ImportPalmknihyWriter extends ImportRecordsWriter implements ItemWr
 
 	static {
 		URL.put(328L, "https://katalog.cbvk.cz/arl-cbvk/cs/detail-cbvk_us_cat-%s-titul");
-		URL.put(333L, "https://aleph.knihovna-pardubice.cz/F/?func=direct&doc_number=%s");
+		URL.put(335L, "https://katalog.svkos.cz/F/?func=direct&doc_number=%s");
 		URL.put(343L, "https://katalog.kfbz.cz/records/%s");
 		URL.put(461L, "https://katalog.knihovnauk.cz/detail/%s");
 		URL.put(496L, "https://arl4.library.sk/arl-tyn/cs/detail-tyn_us_cat.2-%s-titul/");
