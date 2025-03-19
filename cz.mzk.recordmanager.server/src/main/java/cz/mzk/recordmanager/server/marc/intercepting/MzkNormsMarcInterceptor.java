@@ -1,23 +1,18 @@
 package cz.mzk.recordmanager.server.marc.intercepting;
 
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeSet;
-
-import org.apache.commons.lang3.tuple.Pair;
-import org.marc4j.marc.ControlField;
-import org.marc4j.marc.DataField;
-import org.marc4j.marc.MarcFactory;
-import org.marc4j.marc.Record;
-import org.marc4j.marc.Subfield;
-
 import cz.mzk.recordmanager.server.export.IOFormat;
 import cz.mzk.recordmanager.server.marc.MarcRecord;
 import cz.mzk.recordmanager.server.marc.MarcRecordImpl;
 import cz.mzk.recordmanager.server.marc.marc4j.MarcFactoryImpl;
 import cz.mzk.recordmanager.server.marc.marc4j.RecordImpl;
+import org.apache.commons.lang3.tuple.Pair;
+import org.marc4j.marc.*;
+
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeSet;
 
 public class MzkNormsMarcInterceptor extends DefaultMarcInterceptor{
 
@@ -51,7 +46,7 @@ public class MzkNormsMarcInterceptor extends DefaultMarcInterceptor{
 					if(df.getSubfield('a').getData().contains("Normy lze objednat u pultu ve Studovně novin "
 							+ "a časopisů (2.p.) a studovat se mohou pouze ve studovně.")) continue;
 				}
-				
+
 				if(df.getTag().equals("520")){
 					/*
 					 * MAPPING
@@ -71,10 +66,14 @@ public class MzkNormsMarcInterceptor extends DefaultMarcInterceptor{
 					}
 
 					newRecord.addVariableField(newDf);
+					continue;
 				}
-				else{
-					newRecord.addVariableField(df);
+				if (df.getTag().equals("994") && df.getSubfield('l') != null
+						&& df.getSubfield('l').getData().equals("MZK04")) {
+					df.removeSubfield(df.getSubfield('l'));
 				}
+				newRecord.addVariableField(df);
+
 			}
 		}
 		
