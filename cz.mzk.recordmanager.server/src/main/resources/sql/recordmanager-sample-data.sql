@@ -1047,6 +1047,7 @@ INSERT INTO sigla (id, import_conf_id, sigla) VALUES (168, 553, 'BOG505');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (169, 554, 'ABA001');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (170, 555, 'LTG503');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (172, 557, 'PAG001');
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (176, 564, 'NBG502');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (177, 565, 'ABG505');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (178, 567, 'JIG501');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (179, 568, 'LTG501');

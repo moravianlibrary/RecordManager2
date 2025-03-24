@@ -3327,3 +3327,9 @@ INSERT INTO harvested_record_format(id, name) VALUES (96, 'AUDIO_OTHER_DVD');
 INSERT INTO harvested_record_format(id, name) VALUES (97, 'AUDIO_OTHER_LP');
 INSERT INTO harvested_record_format(id, name) VALUES (98, 'AUDIO_OTHER_OTHER');
 INSERT INTO harvested_record_format(id, name) VALUES (99, 'AUDIO_OTHER_STREAMING');
+
+-- 21. 09. 2026 tomascejpek
+INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (364, 'MKPDY', 'https://www.knihovna-pdy.cz/', 'https://tritius.knihovnapodebrady.cz/', 'Poděbrady', 'SC');
+INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id, mappings996) VALUES (564, 364, 200, 'mkpdy', 11, false, true, true, true, 'U', 'other', 'tritius');
+INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (564,'https://tritius.knihovnapodebrady.cz/tritius/oai-provider','CPK_1','marc21',NULL);
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (176, 564, 'NBG502');
