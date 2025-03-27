@@ -873,6 +873,7 @@ INSERT INTO harvested_record_format(id, name) VALUES (74, 'THESIS_OTHER');
 INSERT INTO harvested_record_format(id, name) VALUES (75, 'MUSICAL_SCORES_PRINTED');
 INSERT INTO harvested_record_format(id, name) VALUES (76, 'MUSICAL_SCORES_MANUSCRIPT');
 INSERT INTO harvested_record_format(id, name) VALUES (77, 'EAUDIOBOOK');
+INSERT INTO harvested_record_format(id, name) VALUES (78, 'AUDIO_STREAMING');
 INSERT INTO harvested_record_format(id, name) VALUES (100, 'OTHER_UNSPECIFIED');
 
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (1, 300, 'BOA001');

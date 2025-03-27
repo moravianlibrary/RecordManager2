@@ -3520,3 +3520,6 @@ INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (337, 'MIL
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id, mappings996) VALUES (537, 337, 200, 'milin', 11, false, true, true, true, 'U', 'koha', 'koha');
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity,extract_id_regex) VALUES (537,'https://koha.knihovnamilin.cz/cgi-bin/koha/oai.pl','CPK','marccpk',NULL,'PBG506:(.*)');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (159, 537, 'PBG506');
+
+--changeset tomascejpek:458
+INSERT INTO harvested_record_format(id, name) VALUES (78, 'AUDIO_STREAMING');
