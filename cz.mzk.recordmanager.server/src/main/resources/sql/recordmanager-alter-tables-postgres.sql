@@ -3264,3 +3264,11 @@ UPDATE oai_harvest_conf SET url='https://koha.knihmil.cz/cgi-bin/koha/oai.pl',me
 
 -- 06. 11. 2025 tomascejpek
 UPDATE kramerius_conf SET url='https://kramerius7.kvkli.cz/',availability_dest_url='https://kramerius7.kvkli.cz/uuid/' WHERE import_conf_id=99021;
+
+-- 04. 12. 2025 tomascejpek
+INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (365, 'MKCLK', 'https://knihovna.celakovice.cz/', 'https://celakovice.tritius.cz/', 'Čelákovice', 'SC');
+INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id, mappings996) VALUES (565, 365, 200, 'mkclk', 11, false, true, true, true, 'U', 'other', 'tritius');
+INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (565,'https://celakovice.tritius.cz/tritius/oai-provider','CPK_1','marc21',NULL);
+INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, indexed) VALUES (566, 365, 200, 'mkclk', 11, false, true, false, true, 'U', false);
+INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (566,'https://celakovice.tritius.cz/tritius/oai-provider','PLM','marc21',NULL);
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (177, 565, 'ABG505');
