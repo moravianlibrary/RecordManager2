@@ -16,6 +16,8 @@ import cz.mzk.recordmanager.server.util.Constants;
 import cz.mzk.recordmanager.server.util.HibernateSessionSynchronizer;
 import cz.mzk.recordmanager.server.util.HibernateSessionSynchronizer.SessionBinder;
 import cz.mzk.recordmanager.server.util.RegexpExtractor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.ExitStatus;
 import org.springframework.batch.core.StepExecution;
 import org.springframework.batch.core.StepExecutionListener;
@@ -34,6 +36,8 @@ import java.util.*;
 import java.util.Map.Entry;
 
 public class OAIItemProcessor implements ItemProcessor<List<OAIRecord>, List<HarvestedRecord>>, StepExecutionListener {
+
+	private static final Logger logger = LoggerFactory.getLogger(OAIItemProcessor.class);
 
 	private static final String DEFAULT_EXTRACT_ID_PATTERN = "[^:]+:[^:]+:([^:]+)";
 	
@@ -87,7 +91,11 @@ public class OAIItemProcessor implements ItemProcessor<List<OAIRecord>, List<Har
 		if (!mapping.isEmpty()) {
 			results.addAll(createMappedHarvestedRecord(oaiRecord));
 		}
-		results.add(createHarvestedRecord(oaiRecord, configuration));
+		try {
+			results.add(createHarvestedRecord(oaiRecord, configuration));
+		} catch (Exception e) {
+			logger.warn("Error occured in processing record ", e);
+		}
 		return results;
 	}
 
