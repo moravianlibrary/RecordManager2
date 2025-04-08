@@ -38,7 +38,7 @@ public class NkpMarcMetadataRecord extends MetadataMarcRecord {
 	@Override
 	public List<HarvestedRecordFormatEnum> getAudioStreaming() {
 		for (DataField df : underlayingMarc.getDataFields("856")) {
-			if (df.getSubfield('u').getData().contains("alexanderstreet.com/")) {
+			if (df.getSubfield('u') != null && df.getSubfield('u').getData().contains("alexanderstreet.com/")) {
 				for (DataField df990 : underlayingMarc.getDataFields("990")) {
 					if (df990.getSubfield('a') == null) continue;
 					if (df990.getSubfield('a').getData().contains("AM")) {
@@ -46,7 +46,7 @@ public class NkpMarcMetadataRecord extends MetadataMarcRecord {
 					}
 				}
 			}
-			if (df.getSubfield('u').getData().contains("naxosmusiclibrary.com/")) {
+			if (df.getSubfield('u') != null && df.getSubfield('u').getData().contains("naxosmusiclibrary.com/")) {
 				return Collections.singletonList(AUDIO_STREAMING);
 			}
 		}
