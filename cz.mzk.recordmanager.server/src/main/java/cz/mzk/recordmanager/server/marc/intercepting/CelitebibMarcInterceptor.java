@@ -5,7 +5,11 @@ import cz.mzk.recordmanager.server.marc.MarcRecordImpl;
 import cz.mzk.recordmanager.server.marc.marc4j.MarcFactoryImpl;
 import cz.mzk.recordmanager.server.marc.marc4j.RecordImpl;
 import cz.mzk.recordmanager.server.util.RecordUtils;
-import org.marc4j.marc.*;
+import org.marc4j.marc.ControlField;
+import org.marc4j.marc.DataField;
+import org.marc4j.marc.Record;
+import org.marc4j.marc.Subfield;
+import org.marc4j.marc.MarcFactory;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;

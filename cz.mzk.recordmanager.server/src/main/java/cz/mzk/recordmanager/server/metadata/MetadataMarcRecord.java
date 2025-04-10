@@ -96,7 +96,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 	private static final Pattern BACHELOR = Pattern.compile("^bakal[aá][rř]sk[aáeé]", Pattern.CASE_INSENSITIVE);
 	private static final Pattern MASTER = Pattern.compile("^diplomov[aáeé]", Pattern.CASE_INSENSITIVE);
 	private static final Pattern ADVANCED_MASTER = Pattern.compile("^rigor[oó]zn[ií]", Pattern.CASE_INSENSITIVE);
-	private static final Pattern DISSERTATION = Pattern.compile("^(?:(?:di[sz]{1,2}ertace|dissertation|di[sz]erta[cč]n[ií]|di[s]{1,2}|kandid[aá]tsk[aá]|doktorsk[aá])\\b)|(?:kand\\.|dokt\\.|doktor\\.|doktorand\\.)", Pattern.CASE_INSENSITIVE);
+	private static final Pattern DISSERTATION = Pattern.compile("^(?:di[sz]{1,2}ertace|dissertation|di[sz]?erta[cč]?n[ií]?|di[s]{1,2}|kandid[aá]?tsk[aá]?|doktorsk[aá]?)\\b|(?:kand\\.|dokt\\.|doktor\\.|doktorand\\.)", Pattern.CASE_INSENSITIVE);
 	private static final Pattern HABILITATION = Pattern.compile("^habilita(?:ce|[cč]n[ií])", Pattern.CASE_INSENSITIVE);
 	private static final Pattern BOARD_GAMES = Pattern.compile("(?:deskov[eé]|karetn[ií]|spole[cč]ensk[eé]|stoln[ií])\\shry", Pattern.CASE_INSENSITIVE);
 

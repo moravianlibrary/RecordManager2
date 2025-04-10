@@ -1,6 +1,5 @@
 package cz.mzk.recordmanager.server.marc.marc4j;
 
-import com.sun.org.apache.xerces.internal.jaxp.DocumentBuilderFactoryImpl;
 import cz.mzk.recordmanager.server.ClasspathResourceProvider;
 import cz.mzk.recordmanager.server.marc.marc4j.upv.CPCClasification;
 import cz.mzk.recordmanager.server.marc.marc4j.upv.FurtherCPC;
@@ -26,6 +25,7 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -107,7 +107,7 @@ public class PatentsXmlStreamReader implements MarcReader {
 
 		DocumentBuilder builder;
 		try {
-			builder = DocumentBuilderFactoryImpl.newInstance().newDocumentBuilder();
+			builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
 			doc = builder.parse(new InputSource(new InputStreamReader(input)));
 			doc.getDocumentElement().normalize();
 			parse();

@@ -12,6 +12,7 @@ import cz.mzk.recordmanager.server.model.Sigla;
 import cz.mzk.recordmanager.server.scripting.Mapping;
 import cz.mzk.recordmanager.server.scripting.ResourceMappingResolver;
 import org.marc4j.marc.*;
+import org.marc4j.marc.Record;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

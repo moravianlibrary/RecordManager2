@@ -7,6 +7,7 @@ import cz.mzk.recordmanager.server.marc.marc4j.MarcFactoryImpl;
 import cz.mzk.recordmanager.server.marc.marc4j.RecordImpl;
 import cz.mzk.recordmanager.server.util.constants.EVersionConstants;
 import org.marc4j.marc.*;
+import org.marc4j.marc.Record;
 
 import java.nio.charset.StandardCharsets;
 import java.util.List;
