@@ -9,10 +9,10 @@
 
 	<properties>
 		<maven-compiler-plugin.version>2.4</maven-compiler-plugin.version>
-		<java.source.version>1.8</java.source.version>
-		<java.source.target.version>1.8</java.source.target.version>
+		<java.source.version>21</java.source.version>
+		<java.source.target.version>21</java.source.target.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<org.springframework.version>4.3.18.RELEASE</org.springframework.version>
+		<org.springframework.version>5.3.39</org.springframework.version>
 		<org.springframework.batch.version>4.0.0.RELEASE</org.springframework.batch.version>		
 		<org.springframework.security.version>4.0.2.RELEASE</org.springframework.security.version>
 		<org.apache.solr>8.7.0</org.apache.solr>
@@ -25,8 +25,8 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.2</version>
 				<configuration>
-					<source>1.8</source>
-					<target>1.8</target>
+					<source>${java.source.version}</source>
+					<target>${java.source.target.version}</target>
 				</configuration>
 			</plugin>
 		</plugins>

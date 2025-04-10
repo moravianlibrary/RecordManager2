@@ -1,11 +1,11 @@
 package cz.mzk.recordmanager.server.marc;
 
+import cz.mzk.recordmanager.server.export.IOFormat;
+import org.marc4j.marc.*;
+import org.marc4j.marc.Record;
+
 import java.util.List;
 import java.util.Map;
-
-import org.marc4j.marc.*;
-
-import cz.mzk.recordmanager.server.export.IOFormat;
 
 public interface MarcRecord {
 

@@ -6,7 +6,11 @@ import cz.mzk.recordmanager.server.marc.MarcRecordImpl;
 import cz.mzk.recordmanager.server.marc.marc4j.MarcFactoryImpl;
 import cz.mzk.recordmanager.server.marc.marc4j.RecordImpl;
 import org.apache.commons.lang3.tuple.Pair;
-import org.marc4j.marc.*;
+import org.marc4j.marc.ControlField;
+import org.marc4j.marc.DataField;
+import org.marc4j.marc.MarcFactory;
+import org.marc4j.marc.Record;
+import org.marc4j.marc.Subfield;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
