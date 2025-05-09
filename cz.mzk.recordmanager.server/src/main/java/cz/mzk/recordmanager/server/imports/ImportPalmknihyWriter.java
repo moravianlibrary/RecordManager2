@@ -113,6 +113,7 @@ public class ImportPalmknihyWriter extends ImportRecordsWriter implements ItemWr
 				DataField field856 = null;
 				String vyp = "0";
 				String url_id = null;
+				if (currentRecord == null || currentRecord.getDataFields() == null) continue;
 				for (DataField df : currentRecord.getDataFields()) {
 					if (df.getTag().equals("020") && df.getSubfield('a') != null) {
 						isbn = ISBNUtils.toISBN13Long(df.getSubfield('a').getData());
