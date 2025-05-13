@@ -15,7 +15,8 @@ authority2_display_mv = getAuthIds("700:110:111:710:711")
 corp_author_display = getFirstField "110ab:111aq"
 
 isbn = getIsbnForSearching "020az:902a"
-issn_display_mv = issn = getIssnForSearching "022ayz:440x:490x:730x:776x"
+issn = getIssnForSearching "022ayz:440x:490x:730x:776x"
+issn_display_mv = getIssnForSearching "022ayz:440x:490x:730x:776x", false
 ismn_isn_mv = getIsmns()
 cnb_isn_mv = getFieldsUnique "015az"
 ean_isn_mv = getEAN()

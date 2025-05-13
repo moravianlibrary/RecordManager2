@@ -385,11 +385,17 @@ public class MarcDSL extends BaseDSL {
 	}
 
 	public Set<String> getIssnForSearching(String tags) {
+		return getIssnForSearching(tags, true);
+	}
+
+	public Set<String> getIssnForSearching(String tags, boolean convertToEAN13) {
 		Set<String> result = new HashSet<>();
 		for (String issn : getFields(tags, SubfieldExtractionMethod.SEPARATED)) {
 			result.add(issn);
 			try {
-				if (ISSNUtils.isValid(issn)) result.add(ISSNUtils.toEAN13(issn));
+				if (convertToEAN13) {
+					if (ISSNUtils.isValid(issn)) result.add(ISSNUtils.toEAN13(issn));
+				}
 			} catch (NoDataException | NumberFormatException ignore) {
 			}
 		}
