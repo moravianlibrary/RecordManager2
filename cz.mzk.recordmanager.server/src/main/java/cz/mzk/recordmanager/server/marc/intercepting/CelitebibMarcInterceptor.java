@@ -2,6 +2,7 @@ package cz.mzk.recordmanager.server.marc.intercepting;
 
 import cz.mzk.recordmanager.server.export.IOFormat;
 import cz.mzk.recordmanager.server.marc.MarcRecordImpl;
+import cz.mzk.recordmanager.server.marc.marc4j.MarcFactoryImpl;
 import cz.mzk.recordmanager.server.marc.marc4j.RecordImpl;
 import cz.mzk.recordmanager.server.util.RecordUtils;
 import org.marc4j.marc.*;
@@ -18,6 +19,8 @@ public class CelitebibMarcInterceptor extends DefaultMarcInterceptor {
 	private static final List<String> REMOVE_TAGS = Arrays.asList("964", "CAT", "KAT", "506", "592", "593");
 	private static final char CODE_X = 'x';
 
+	private static final MarcFactory factory = MarcFactoryImpl.newInstance();
+
 	public CelitebibMarcInterceptor(Record record) {
 		super(record);
 	}
@@ -30,7 +33,9 @@ public class CelitebibMarcInterceptor extends DefaultMarcInterceptor {
 		Record newRecord = new RecordImpl();
 		newRecord.setLeader(getRecord().getLeader());
 		for (ControlField cf : super.getRecord().getControlFields()) {
-			newRecord.addVariableField(cf);
+			if (cf.getTag().equals("520"))
+				newRecord.addVariableField(factory.newDataField(cf.getTag(), ' ', ' ', "a", cf.getData()));
+			else newRecord.addVariableField(cf);
 		}
 
 		for (DataField df : super.getRecord().getDataFields()) {
@@ -48,7 +53,6 @@ public class CelitebibMarcInterceptor extends DefaultMarcInterceptor {
 			// default
 			newRecord.addVariableField(df);
 		}
-
 		return new MarcRecordImpl(RecordUtils.sortFields(newRecord)).export(IOFormat.XML_MARC).getBytes(StandardCharsets.UTF_8);
 	}
 
