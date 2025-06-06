@@ -9,6 +9,7 @@ local_location_txt_mv = getFieldsUnique "996h"
 local_location_callnumbersearch_mv = getFieldsUnique "996h"
 local_barcode_txt_mv = getFieldsUnique "996b"
 previous_owner_txt_mv = getFieldsUnique "981ab:982ab:983ab"
+original_language_txt_mv = getOriginalLanguages()
 
 // sort
 author_sort_cz = getAuthorForSorting("100abcd:110abcd:111abcd:700abcd:710abcd:711abcd")
