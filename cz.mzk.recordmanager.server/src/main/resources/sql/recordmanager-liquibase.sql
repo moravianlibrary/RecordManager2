@@ -3523,3 +3523,6 @@ INSERT INTO sigla (id, import_conf_id, sigla) VALUES (159, 537, 'PBG506');
 
 --changeset tomascejpek:458
 INSERT INTO harvested_record_format(id, name) VALUES (78, 'AUDIO_STREAMING');
+
+--changeset tomascejpek:459 context:cpk
+UPDATE kramerius_conf SET url_solr='https://solr-export.app.ceskadigitalniknihovna.cz/solr/search_v2/',fulltext_version='7' WHERE import_conf_id=99040;
