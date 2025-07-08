@@ -74,10 +74,7 @@ public class MetadataRecordFactory {
 		case Constants.PREFIX_NKP:
 			return new NkpMarcMetadataRecord(marcRec, hr);
 		case Constants.PREFIX_ANL:
-		case Constants.PREFIX_SLK:
-		case Constants.PREFIX_KKL:
-		case Constants.PREFIX_STT:
-			return new NkpOthersMetadataRecord(marcRec, hr);
+			return new AnlMetadataMarcRecord(marcRec, hr);
 		case Constants.PREFIX_TRE:
 		case Constants.PREFIX_MKUO:
 			return new TreMetadataMarcRecord(marcRec, hr);

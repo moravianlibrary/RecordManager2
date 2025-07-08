@@ -624,4 +624,8 @@ public interface MetadataRecord {
 	default List<HarvestedRecordFormatEnum> getAudioStreaming() {
 		return Collections.emptyList();
 	}
+
+	default boolean isEod() {
+		return false;
+	}
 }

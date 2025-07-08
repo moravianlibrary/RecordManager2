@@ -10,6 +10,8 @@ import cz.mzk.recordmanager.server.util.MetadataUtils;
 import org.marc4j.marc.DataField;
 
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static cz.mzk.recordmanager.server.model.HarvestedRecordFormat.HarvestedRecordFormatEnum.*;
 
@@ -18,6 +20,52 @@ public class NkpMarcMetadataRecord extends MetadataMarcRecord {
 	public NkpMarcMetadataRecord(MarcRecord underlayingMarc, HarvestedRecord hr) {
 		super(underlayingMarc, hr);
 	}
+
+	private static final Pattern YEAR_PATTERN = Pattern.compile("(\\d+)");
+
+	protected enum NkpSource {
+		NKP {
+			@Override
+			public boolean check(HarvestedRecord hr) {
+				return hr.getUniqueId().getHarvestedFromId() == Constants.IMPORT_CONF_NKP;
+			}
+		},
+		SLK {
+			@Override
+			public boolean check(HarvestedRecord hr) {
+				return hr.getUniqueId().getHarvestedFromId() == Constants.IMPORT_CONF_ID_SLK;
+			}
+		},
+		STT {
+			@Override
+			public boolean check(HarvestedRecord hr) {
+				return hr.getUniqueId().getHarvestedFromId() == Constants.IMPORT_CONF_ID_STT;
+			}
+		},
+		KKL {
+			@Override
+			public boolean check(HarvestedRecord hr) {
+				return hr.getUniqueId().getHarvestedFromId() == Constants.IMPORT_CONF_ID_KKL;
+			}
+		},
+		NONE {
+			@Override
+			public boolean check(HarvestedRecord hr) {
+				return false;
+			}
+		};
+
+		public abstract boolean check(HarvestedRecord hr);
+
+		public static NkpSource getSource(HarvestedRecord hr) {
+
+			for (NkpSource source : NkpSource.values()) {
+				if (source.check(hr)) return source;
+			}
+			return NONE;
+		}
+	}
+
 
 	@Override
 	public String getClusterId() {
@@ -114,5 +162,37 @@ public class NkpMarcMetadataRecord extends MetadataMarcRecord {
 			}
 		}
 		return result;
+	}
+
+	@Override
+	public boolean isEod() {
+		if (NkpSource.getSource(harvestedRecord) == NkpSource.KKL) {
+			return false;
+		}
+		for (String url : underlayingMarc.getFields("856", 'u')) {
+			if (url.contains("uuid")) return false;
+			for (String onlineSource : ONLINE_SOURCES) {
+				if (url.contains(onlineSource)) return false;
+			}
+		}
+		Long publicationYear = getPublicationYear();
+		if (Collections.disjoint(underlayingMarc.getFields("990", 'a'), Collections.singletonList("BK")))
+			return false;
+
+		for (String value : underlayingMarc.getFields("994", 'a')) {
+			if (value.equals("Y")) return true;
+			if (value.startsWith("Volné dílo od r")) {
+				Matcher matcher = YEAR_PATTERN.matcher(value);
+				if (matcher.find()) {
+					int year = Integer.parseInt(matcher.group(1));
+					return year <= Calendar.getInstance().get(Calendar.YEAR);
+				}
+			}
+		}
+		if (publicationYear != null && publicationYear <= (Calendar.getInstance().get(Calendar.YEAR) - 100)) {
+			return true;
+		}
+
+		return false;
 	}
 }

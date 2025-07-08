@@ -227,6 +227,8 @@ public class SolrFieldConstants {
 
 	public static final String AUTHOR_ORIGINAL_LANGUAGE = "author_original_language_search_txt_mv";
 
+	public static final String LOCAL_VIEW_STATUSES_FACET = "local_view_statuses_facet_mv";
+
 	/**
 	 * dummy fields used for processing purposes only, shouldn't be indexed.
 	 */

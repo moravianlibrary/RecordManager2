@@ -21,7 +21,7 @@ public class MzkStatusFunctions implements MarcRecordFunctions {
 
 	protected static final String LIMITED_STATUS = "limited";
 
-	private static final String EOD_STATUS = "available_for_eod";
+	public static final String EOD_STATUS = "available_for_eod";
 
 	private static final String ONLINE_STATUS = "available_online";
 

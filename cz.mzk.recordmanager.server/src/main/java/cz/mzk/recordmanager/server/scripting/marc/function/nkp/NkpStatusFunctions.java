@@ -25,7 +25,14 @@ public class NkpStatusFunctions extends MzkStatusFunctions implements MarcRecord
 		if (statuses.contains(AvailabilityStatus.LIMITED)) {
 			results.add(LIMITED_STATUS);
 		}
+		if (isNkpEod(ctx)) {
+			results.add(EOD_STATUS);
+		}
 		return results;
 	}
 
+
+	protected boolean isNkpEod(MarcFunctionContext ctx) {
+		return ctx.metadataRecord().isEod();
+	}
 }
