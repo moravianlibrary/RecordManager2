@@ -5,7 +5,7 @@ import cz.mzk.recordmanager.server.index.SolrFieldConstants;
 import cz.mzk.recordmanager.server.model.DedupRecord;
 import cz.mzk.recordmanager.server.model.EVersionUrl;
 import cz.mzk.recordmanager.server.model.KramAvailability;
-import cz.mzk.recordmanager.server.model.KramDnntLabel.DnntLabelEnum;
+import cz.mzk.recordmanager.server.model.KramDnntLabel;
 import cz.mzk.recordmanager.server.oai.dao.KramAvailabilityDAO;
 import cz.mzk.recordmanager.server.util.Constants;
 import cz.mzk.recordmanager.server.util.SolrUtils;
@@ -76,6 +76,7 @@ public class UrlDedupRecordEnricher implements DedupRecordEnricher {
 			if (url != null) addToMap(urls, url);
 		}
 		generateUrlFromKramAvailability(mergedDocument, urls);
+
 		for (String key : urls.keySet()) {
 			boolean online = false;
 			boolean protect = false;
@@ -143,21 +144,28 @@ public class UrlDedupRecordEnricher implements DedupRecordEnricher {
 						comment = value.getComment();
 					}
 				}
-				EVersionUrl newUrl = EVersionUrl.create(kramAvailability, comment);
-				if (newUrl == null) continue;
-				addToMap(urls, newUrl);
-				// dnnt
-				if (newUrl.getAvailability().equals(Constants.DOCUMENT_AVAILABILITY_PROTECTED)) {
-					// dnnt online
-					if (kramAvailability.getDnntLabels().stream().anyMatch(l -> l.getLabel().equals(DnntLabelEnum.DNNTO.getLabel()))
-							&& potentialDnnt) {
-						EVersionUrl dnntUrl = EVersionUrl.createDnnt(kramAvailability, comment);
-						if (dnntUrl != null) addToMap(urls, dnntUrl);
+
+				if (kramAvailability.getDnntLabels().isEmpty()) {
+					EVersionUrl newUrl = EVersionUrl.create(kramAvailability, comment);
+					if (newUrl == null) continue;
+					addToMap(urls, newUrl);
+					continue;
+				}
+
+				for (Map.Entry<String, List<String>> stringListEntry : KramDnntLabel.AVAILABILITY_MAP.entrySet()) {
+					if (kramAvailability.getDnntLabels().stream().anyMatch(l -> stringListEntry.getValue().contains(l.getLabel()))) {
+						EVersionUrl newUrl = EVersionUrl.create(kramAvailability, comment);
+						if (newUrl == null) continue;
+						newUrl.setAvailability(stringListEntry.getKey());
+						addToMap(urls, newUrl);
 					}
-					if (kramAvailability.getDnntLabels().stream().anyMatch(l -> l.getLabel().equals(DnntLabelEnum.PAYING_USERS.getLabel()))) {
-						newUrl.setAvailability(Constants.DOCUMENT_AVAILABILITY_MEMBER);
-					}
-					// else - dnnt without dnnt-label
+				}
+
+				// dnnt online
+				if (kramAvailability.getDnntLabels().stream().anyMatch(l -> KramDnntLabel.AVAILABILITY_DNNTO.contains(l.getLabel()))
+						&& potentialDnnt) {
+					EVersionUrl dnntUrl = EVersionUrl.createDnnt(kramAvailability, comment);
+					if (dnntUrl != null) addToMap(urls, dnntUrl);
 				}
 			}
 		}

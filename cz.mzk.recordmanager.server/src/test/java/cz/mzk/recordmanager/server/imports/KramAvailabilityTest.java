@@ -63,7 +63,7 @@ public class KramAvailabilityTest extends AbstractTest {
 		jobLauncher.run(job, jobParams);
 
 		Assert.assertEquals(kramAvailabilityDAO.findAll().size(), 7);
-		Assert.assertEquals(kramDnntLabelDAO.findAll().size(), 2);
+		Assert.assertEquals(kramDnntLabelDAO.findAll().size(), 6);
 
 	}
 
