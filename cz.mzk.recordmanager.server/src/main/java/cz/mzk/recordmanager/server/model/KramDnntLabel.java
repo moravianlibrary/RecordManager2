@@ -68,10 +68,17 @@ public class KramDnntLabel { // licenses
 	private String label;
 
 	public static KramDnntLabel create(String labelName) {
-		if (!LABELS.contains(labelName)) logger.warn("Label '{}' does not exist", labelName);
+		if (!licenseExists(labelName)) logger.warn("Label '{}' does not exist", labelName);
 		KramDnntLabel newKramDnntLabel = new KramDnntLabel();
 		newKramDnntLabel.setLabel(labelName);
 		return newKramDnntLabel;
+	}
+
+	public static boolean licenseExists(String labelName) {
+		return AVAILABILITY_PUBLIC.contains(labelName)
+				|| AVAILABILITY_ONSITE.contains(labelName)
+				|| AVAILABILITY_MEMBER.contains(labelName)
+				|| AVAILABILITY_DNNTO.contains(labelName);
 	}
 
 	public String getLabel() {
