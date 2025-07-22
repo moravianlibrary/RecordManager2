@@ -19,3 +19,5 @@ kkvhb_sbirka_mktr_trg001
 kkvhb_sbirka_mkji_jig001
 kkvhb_sbirka_hmnm_zre
 svkpk_onsite_kte301
+covid
+dnntt
