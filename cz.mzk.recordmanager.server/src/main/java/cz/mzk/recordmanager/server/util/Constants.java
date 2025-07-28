@@ -291,6 +291,7 @@ public class Constants {
 	public static final String DOCUMENT_AVAILABILITY_PROTECTED  = "protected";
 	public static final String DOCUMENT_AVAILABILITY_UNKNOWN    = "unknown";
 	public static final String DOCUMENT_AVAILABILITY_BOOKPORT   = "bookport";
+	public static final String DOCUMENT_AVAILABILITY_PALMKNIHY  = "palmknihy";
 	public static final String DOCUMENT_AVAILABILITY_DNNT       = "dnnt";
 	public static final String DOCUMENT_AVAILABILITY_MEMBER     = "member";
 	public static final String DOCUMENT_AVAILABILITY_ABSENT     = "absent";

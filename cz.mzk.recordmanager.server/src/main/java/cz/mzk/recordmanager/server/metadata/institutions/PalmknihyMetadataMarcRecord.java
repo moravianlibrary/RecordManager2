@@ -1,6 +1,7 @@
 package cz.mzk.recordmanager.server.metadata.institutions;
 
 import cz.mzk.recordmanager.server.marc.MarcRecord;
+import cz.mzk.recordmanager.server.model.EVersionUrl;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
 import cz.mzk.recordmanager.server.model.HarvestedRecordFormat;
 import cz.mzk.recordmanager.server.model.ImportConfiguration;
@@ -12,10 +13,7 @@ import cz.mzk.recordmanager.server.util.constants.EVersionConstants;
 import org.marc4j.marc.DataField;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.regex.Pattern;
 
 public class PalmknihyMetadataMarcRecord extends EbooksMetadataMarcRecord {
@@ -93,5 +91,10 @@ public class PalmknihyMetadataMarcRecord extends EbooksMetadataMarcRecord {
 		} else {
 			return null;
 		}
+	}
+
+	@Override
+	public Set<String> getAvailabilityForLocalOnlineFacet() {
+		return Collections.singleton(Constants.DOCUMENT_AVAILABILITY_PALMKNIHY);
 	}
 }

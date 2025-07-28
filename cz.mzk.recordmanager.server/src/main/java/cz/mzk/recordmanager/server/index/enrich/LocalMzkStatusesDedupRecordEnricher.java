@@ -30,7 +30,8 @@ public class LocalMzkStatusesDedupRecordEnricher implements DedupRecordEnricher 
 			Constants.PREFIX_SLK,
 			Constants.PREFIX_STT,
 			Constants.PREFIX_KKL,
-			Constants.PREFIX_ANL
+			Constants.PREFIX_ANL,
+			Constants.PREFIX_PALMKNIHY
 	);
 
 	@Override
