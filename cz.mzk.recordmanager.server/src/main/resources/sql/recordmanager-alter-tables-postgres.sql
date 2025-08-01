@@ -3245,3 +3245,7 @@ UPDATE kramerius_conf SET url_solr='https://solr-export.app.ceskadigitalniknihov
 -- 31. 07. 2025 tomascejpek
 UPDATE kramerius_conf SET dnnt_dest_url='https://kramerius.svkkl.cz/uuid/' WHERE import_conf_id=99024;
 UPDATE kramerius_conf SET dnnt_dest_url='https://kramerius.cbvk.cz/uuid/' WHERE import_conf_id=99013;
+
+-- 01. 08. 2025 tomascejpek
+UPDATE oai_harvest_conf SET url='https://hradecnm.tritius.cz/tritius/oai-provider' WHERE import_conf_id=375;
+UPDATE oai_harvest_conf SET url='https://ckrumlov.tritius.cz/tritius/oai-provider',set_spec='CPK_1' WHERE import_conf_id=373;
