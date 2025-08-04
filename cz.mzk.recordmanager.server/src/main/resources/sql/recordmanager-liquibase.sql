@@ -3540,3 +3540,6 @@ UPDATE kramerius_conf SET dnnt_dest_url='https://kramerius.cbvk.cz/uuid/' WHERE 
 --changeset tomascejpek:463 context:cpk
 UPDATE oai_harvest_conf SET url='https://hradecnm.tritius.cz/tritius/oai-provider' WHERE import_conf_id=375;
 UPDATE oai_harvest_conf SET url='https://ckrumlov.tritius.cz/tritius/oai-provider',set_spec='CPK_1' WHERE import_conf_id=373;
+
+--changeset tomascejpek:464 context:cpk
+UPDATE oai_harvest_conf SET url='https://kpbo.tritius.cz/tritius/oai-provider',set_spec='CPK_1' WHERE import_conf_id=353;
