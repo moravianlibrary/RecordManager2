@@ -691,7 +691,7 @@ public class RecordFormatTest extends AbstractTest {
 		for (String dfTag : new String[]{"260", "264"}) {
 			data.clear();
 			data.add("000 000000i0000");
-			data.add(dfTag + " $btestktn test");
+			data.add(dfTag + " $btest ktn test");
 			metadataRecord = metadataFactory.getMetadataRecord(MarcRecordFactory.recordFactory(data));
 			Assert.assertTrue(metadataRecord.getDetectedFormatList().contains(HarvestedRecordFormatEnum.BLIND_AUDIO));
 		}
