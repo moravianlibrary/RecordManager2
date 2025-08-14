@@ -6,6 +6,7 @@ pid = PID
 model = fedora.model
 accessibility = dostupnost
 dnnt_labels = dnnt-labels
+licenses = licenses
 DC = DC
 BIBLIO_MODS = BIBLIO_MODS
 page_number = dc.title

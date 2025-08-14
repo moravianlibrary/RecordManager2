@@ -9,6 +9,7 @@ public enum ApiMappingEnum {
 	MODEL("model"),
 	ACCESSIBILITY("accessibility"),
 	DNNT_LABELS("dnnt_labels"),
+	LICENSES("licenses"),
 	AVAILABILITY_URL("availability_url"),
 	DC("DC"),
 	BIBLIO_MODS("BIBLIO_MODS"),

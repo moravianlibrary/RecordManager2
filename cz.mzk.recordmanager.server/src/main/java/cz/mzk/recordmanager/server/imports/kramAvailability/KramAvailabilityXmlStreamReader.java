@@ -72,7 +72,7 @@ public class KramAvailabilityXmlStreamReader {
 						result = new KramAvailability();
 					}
 					if (ELEMENT_STR.equals(xmlReader.getLocalName())) {
-						if (arrName.equals(params.getApiMappingValue(DNNT_LABELS))) {
+						if (arrName.equals(params.getApiMappingValue(DNNT_LABELS)) || arrName.equals(params.getApiMappingValue(LICENSES))) {
 							result.addDnntLabel(xmlReader.getElementText());
 						} else if (params.getApiMappingValue(PID).equals(xmlReader.getAttributeValue(null, ATTRIBUTE_NAME))) {
 							result.setUuid(xmlReader.getElementText());
@@ -91,7 +91,9 @@ public class KramAvailabilityXmlStreamReader {
 						}
 					}
 					if (ELEMENT_ARR.equals(xmlReader.getLocalName())) {
-						if (params.getApiMappingValue(DNNT_LABELS).equals(xmlReader.getAttributeValue(null, ATTRIBUTE_NAME))) {
+						String value = xmlReader.getAttributeValue(null, ATTRIBUTE_NAME);
+						if (params.getApiMappingValue(DNNT_LABELS).equals(value)
+								|| params.getApiMappingValue(LICENSES).equals(value)) {
 							arrName = params.getApiMappingValue(DNNT_LABELS);
 						}
 					}

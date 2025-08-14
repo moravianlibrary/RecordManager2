@@ -6,6 +6,7 @@ pid = pid
 model = model
 accessibility = accessibility
 dnnt_labels = licenses.facet
+licenses = licenses
 DC = dc
 BIBLIO_MODS = mods
 page_number = title.search
@@ -13,5 +14,5 @@ page_order = title.sort
 root_pid = root.pid
 parent_pid = own_parent.pid
 
-availability_url = %s/search?fl=accessibility,dnnt,pid,level,licenses.facet&q=level:0&rows=%d&start=%d&wt=xml
-availability_url = %s/search?fl=accessibility,dnnt,pid,level,licenses.facet&q=level:1+model:monographunit&rows=%d&start=%d&wt=xml
+availability_url = %s/search?fl=accessibility,dnnt,pid,level,licenses,licenses.facet&q=level:0&rows=%d&start=%d&wt=xml
+availability_url = %s/search?fl=accessibility,dnnt,pid,level,licenses,licenses.facet&q=level:1+model:monographunit&rows=%d&start=%d&wt=xml

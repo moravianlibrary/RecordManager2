@@ -7,6 +7,7 @@ import cz.mzk.recordmanager.server.model.KramAvailability;
 import cz.mzk.recordmanager.server.model.KrameriusConfiguration;
 import cz.mzk.recordmanager.server.oai.dao.KrameriusConfigurationDAO;
 import cz.mzk.recordmanager.server.scripting.Mapping;
+import cz.mzk.recordmanager.server.util.FileUtils;
 import cz.mzk.recordmanager.server.util.HibernateSessionSynchronizer;
 import cz.mzk.recordmanager.server.util.HttpClient;
 import org.apache.commons.io.IOUtils;
@@ -66,7 +67,13 @@ public class KramAvailabilityReader implements ItemReader<KramAvailability>, Ste
 	public KramAvailabilityReader(Long configId, String filename) {
 		this.configId = configId;
 		this.filename = filename;
-		if (filename != null) iterator = Arrays.asList(filename.split(",")).listIterator();
+		if (filename != null) {
+			try {
+				iterator = FileUtils.getFilesName(filename).listIterator();
+			} catch (FileNotFoundException e) {
+				throw new RuntimeException(e);
+			}
+		}
 	}
 
 	@Override
