@@ -60,7 +60,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 	private static final Pattern START_H = Pattern.compile("^h", Pattern.CASE_INSENSITIVE);
 	private static final Pattern HMATOVE_PISMO = Pattern.compile("hmatov[eé]\\sp[ií]smo", Pattern.CASE_INSENSITIVE);
 	private static final Pattern MACAN = Pattern.compile("macan", Pattern.CASE_INSENSITIVE);
-	private static final Pattern KTN = Pattern.compile("ktn", Pattern.CASE_INSENSITIVE);
+	private static final Pattern KTN = Pattern.compile("\\bktn\\b", Pattern.CASE_INSENSITIVE);
 	private static final Pattern ELEKTRONICKY_ZDROJ = Pattern.compile("elektronick[yý]\\szdroj", Pattern.CASE_INSENSITIVE);
 	private static final Pattern MULTIMEDIUM = Pattern.compile("multim[eé]dium", Pattern.CASE_INSENSITIVE);
 	private static final Pattern CD_ROM = Pattern.compile("cd-rom", Pattern.CASE_INSENSITIVE);
