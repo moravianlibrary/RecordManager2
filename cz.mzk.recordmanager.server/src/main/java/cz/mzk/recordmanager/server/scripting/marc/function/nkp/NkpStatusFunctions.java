@@ -26,7 +26,7 @@ public class NkpStatusFunctions extends MzkStatusFunctions implements MarcRecord
 			results.add(LIMITED_STATUS);
 		}
 		if (isNkpEod(ctx)) {
-			results.add(EOD_STATUS);
+			// results.add(EOD_STATUS);
 		}
 		return results;
 	}
