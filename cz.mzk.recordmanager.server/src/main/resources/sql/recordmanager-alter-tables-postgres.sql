@@ -3252,3 +3252,6 @@ UPDATE oai_harvest_conf SET url='https://ckrumlov.tritius.cz/tritius/oai-provide
 
 -- 04. 08. 2025 tomascejpek
 UPDATE oai_harvest_conf SET url='https://kpbo.tritius.cz/tritius/oai-provider',set_spec='CPK_1' WHERE import_conf_id=353;
+
+-- 02. 09. 2025 tomascejpek
+UPDATE import_conf SET mapping_script='LocalMzk.groovy,HarvestedRecordBaseMarc.groovy' WHERE id=457;
