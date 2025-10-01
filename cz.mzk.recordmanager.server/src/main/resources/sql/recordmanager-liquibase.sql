@@ -3546,3 +3546,6 @@ UPDATE oai_harvest_conf SET url='https://kpbo.tritius.cz/tritius/oai-provider',s
 
 --changeset tomascejpek:465 context:cpk
 UPDATE import_conf SET mapping_script='LocalMzk.groovy,HarvestedRecordBaseMarc.groovy' WHERE id=457;
+
+--changeset tomascejpek:466 context:cpk
+UPDATE kramerius_conf SET url='https://kramerius.knihovnakv.cz/',availability_dest_url='https://kramerius.knihovnakv.cz/uuid/' WHERE import_conf_id=99020;
