@@ -174,6 +174,9 @@ public class MzkOtherFunctions implements MarcRecordFunctions {
 	private static final String SPANISH_LIBRARY_BASE_SUFFIX = "spanish_lib";
 
 	public List<String> getMZKBases(MarcFunctionContext ctx) {
+		if (ctx.harvestedRecord().getHarvestedFrom().getIdPrefix().equals(Constants.PREFIX_PALMKNIHY)) {
+			return Collections.emptyList();
+		}
 		String idParts[] = ctx.harvestedRecord().getUniqueId().getRecordId().split("-");
 		String base = idParts[0];
 		if (ctx.harvestedRecord().getHarvestedFrom().getIdPrefix().equals(Constants.PREFIX_MZKNORMS)) base = "MZK04";
