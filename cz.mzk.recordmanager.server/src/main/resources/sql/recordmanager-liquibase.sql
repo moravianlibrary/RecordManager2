@@ -3549,3 +3549,6 @@ UPDATE import_conf SET mapping_script='LocalMzk.groovy,HarvestedRecordBaseMarc.g
 
 --changeset tomascejpek:466 context:cpk
 UPDATE kramerius_conf SET url='https://kramerius.knihovnakv.cz/',availability_dest_url='https://kramerius.knihovnakv.cz/uuid/' WHERE import_conf_id=99020;
+
+--changeset tomascejpek:467 context:cpk
+UPDATE oai_harvest_conf SET url='https://koha.knihmil.cz/cgi-bin/koha/oai.pl',metadata_prefix='marccpk' WHERE import_conf_id=378;
