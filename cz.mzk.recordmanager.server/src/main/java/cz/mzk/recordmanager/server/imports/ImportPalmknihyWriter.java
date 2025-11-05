@@ -80,7 +80,7 @@ public class ImportPalmknihyWriter extends ImportRecordsWriter implements ItemWr
 		URL.put(510L, "https://tritius.knih-pe.cz/detail/%s");
 		URL.put(511L, "https://katalog.mkostrov.cz/detail/%s");
 		URL.put(512L, "https://trutnov.tritius.cz/detail/%s");
-		URL.put(513L, "https://trutnov.tritius.cz/detail/%s");
+		URL.put(513L, "https://tritius.booksy.cz/detail/%s");
 		URL.put(514L, "https://tritius.knihovna-cl.cz/detail/%s");
 		URL.put(515L, "https://kromeriz.tritius.cz/detail/%s");
 		URL.put(516L, "https://tritius.plzen.eu/detail/%s");
