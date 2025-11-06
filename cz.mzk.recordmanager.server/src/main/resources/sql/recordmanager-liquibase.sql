@@ -3552,3 +3552,6 @@ UPDATE kramerius_conf SET url='https://kramerius.knihovnakv.cz/',availability_de
 
 --changeset tomascejpek:467 context:cpk
 UPDATE oai_harvest_conf SET url='https://koha.knihmil.cz/cgi-bin/koha/oai.pl',metadata_prefix='marccpk' WHERE import_conf_id=378;
+
+--changeset tomascejpek:468 context:cpk
+UPDATE kramerius_conf SET url='https://kramerius7.kvkli.cz/',availability_dest_url='https://kramerius7.kvkli.cz/uuid/' WHERE import_conf_id=99021;
