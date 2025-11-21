@@ -23,7 +23,7 @@ noviny
 občasník
 obce
 obec
-(?:okres(?:u|y|e|ní|ním|ního|ních)?)
+(?:okres(?:u|ů|i|y|e|em|ní|ný|né|ním|ního|ních|ných)?)
 pars
 part
 plán
