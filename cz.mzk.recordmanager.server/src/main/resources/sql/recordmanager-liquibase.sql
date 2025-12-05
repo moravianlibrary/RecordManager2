@@ -3575,3 +3575,6 @@ INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (368, 'MKL
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id, mappings996, catalog_serial_link) VALUES (568, 368, 200, 'mkliboch', 11, false, true, true, true, 'U', 'other', 'tritius', true);
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity) VALUES (568,'https://usk.tritius.cz/tritius/oai-provider','CPK_1','marc21',NULL);
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (179, 568, 'LTG501');
+
+--changeset tomascejpek:472 context:cpk
+UPDATE import_conf SET catalog_serial_link=TRUE WHERE id=565;
