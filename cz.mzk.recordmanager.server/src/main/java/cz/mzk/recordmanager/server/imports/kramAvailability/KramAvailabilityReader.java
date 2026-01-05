@@ -60,7 +60,7 @@ public class KramAvailabilityReader implements ItemReader<KramAvailability>, Ste
 	private String url;
 
 	private String source;
-	private static final int ROWS = 100;
+	public static final int ROWS = 1000;
 	private int start = 0;
 	private final String filename;
 

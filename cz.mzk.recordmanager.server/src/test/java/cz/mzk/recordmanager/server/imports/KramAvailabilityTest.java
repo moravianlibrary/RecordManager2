@@ -1,6 +1,7 @@
 package cz.mzk.recordmanager.server.imports;
 
 import cz.mzk.recordmanager.server.AbstractTest;
+import cz.mzk.recordmanager.server.imports.kramAvailability.KramAvailabilityReader;
 import cz.mzk.recordmanager.server.oai.dao.KramAvailabilityDAO;
 import cz.mzk.recordmanager.server.oai.dao.KramDnntLabelDAO;
 import cz.mzk.recordmanager.server.util.Constants;
@@ -45,15 +46,16 @@ public class KramAvailabilityTest extends AbstractTest {
 
 	@Test
 	public void metadataHarvestTest() throws Exception {
+		int rows = KramAvailabilityReader.ROWS;
 		reset(httpClient);
 		InputStream response1 = this.getClass().getResourceAsStream("/sample/kramerius/info-v5.json");
 		InputStream response2 = this.getClass().getResourceAsStream("/import/kramAvailability/availability.xml");
 		InputStream response3 = this.getClass().getResourceAsStream("/import/kramAvailability/availabilityEmpty.xml");
 		InputStream response4 = this.getClass().getResourceAsStream("/import/kramAvailability/availabilityEmpty.xml");
 		expect(httpClient.executeGet("https://kramerius.mzk.cz/search/api/v5.0/info")).andReturn(response1);
-		expect(httpClient.executeGet("https://kramerius.mzk.cz/search/api/v5.0/search?fl=dostupnost,dnnt,PID,level,dnnt-labels&q=level:0&rows=100&start=0&wt=xml&sort=PID+asc")).andReturn(response2);
-		expect(httpClient.executeGet("https://kramerius.mzk.cz/search/api/v5.0/search?fl=dostupnost,dnnt,PID,level,dnnt-labels&q=level:0&rows=100&start=100&wt=xml&sort=PID+asc")).andReturn(response3);
-		expect(httpClient.executeGet("https://kramerius.mzk.cz/search/api/v5.0/search?fl=dostupnost,dnnt,PID,level,dnnt-labels&q=level:1+document_type:monographunit&rows=100&start=0&wt=xml&sort=PID+asc")).andReturn(response4);
+		expect(httpClient.executeGet("https://kramerius.mzk.cz/search/api/v5.0/search?fl=dostupnost,dnnt,PID,level,dnnt-labels&q=level:0&rows=" + rows + "&start=0&wt=xml&sort=PID+asc")).andReturn(response2);
+		expect(httpClient.executeGet("https://kramerius.mzk.cz/search/api/v5.0/search?fl=dostupnost,dnnt,PID,level,dnnt-labels&q=level:0&rows=" + rows + "&start=" + rows + "&wt=xml&sort=PID+asc")).andReturn(response3);
+		expect(httpClient.executeGet("https://kramerius.mzk.cz/search/api/v5.0/search?fl=dostupnost,dnnt,PID,level,dnnt-labels&q=level:1+document_type:monographunit&rows=1000&start=0&wt=xml&sort=PID+asc")).andReturn(response4);
 		replay(httpClient);
 
 		Job job = jobRegistry.getJob(Constants.JOB_ID_HARVEST_KRAM_AVAILABILITY);
