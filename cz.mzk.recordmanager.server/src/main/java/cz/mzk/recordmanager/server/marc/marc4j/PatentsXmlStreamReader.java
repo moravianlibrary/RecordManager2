@@ -19,6 +19,7 @@ import org.marc4j.marc.Record;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 import javax.xml.bind.JAXBContext;
@@ -28,6 +29,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -106,7 +108,7 @@ public class PatentsXmlStreamReader implements MarcReader {
 		DocumentBuilder builder;
 		try {
 			builder = DocumentBuilderFactoryImpl.newInstance().newDocumentBuilder();
-			doc = builder.parse(input);
+			doc = builder.parse(new InputSource(new InputStreamReader(input)));
 			doc.getDocumentElement().normalize();
 			parse();
 		} catch (SAXException | ParserConfigurationException | IOException e) {

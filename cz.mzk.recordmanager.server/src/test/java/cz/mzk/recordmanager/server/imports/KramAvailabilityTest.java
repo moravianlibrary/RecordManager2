@@ -51,9 +51,9 @@ public class KramAvailabilityTest extends AbstractTest {
 		InputStream response3 = this.getClass().getResourceAsStream("/import/kramAvailability/availabilityEmpty.xml");
 		InputStream response4 = this.getClass().getResourceAsStream("/import/kramAvailability/availabilityEmpty.xml");
 		expect(httpClient.executeGet("https://kramerius.mzk.cz/search/api/v5.0/info")).andReturn(response1);
-		expect(httpClient.executeGet("https://kramerius.mzk.cz/search/api/v5.0/search?fl=dostupnost,dnnt,PID,level,dnnt-labels&q=level:0&rows=100&start=0&wt=xml")).andReturn(response2);
-		expect(httpClient.executeGet("https://kramerius.mzk.cz/search/api/v5.0/search?fl=dostupnost,dnnt,PID,level,dnnt-labels&q=level:0&rows=100&start=100&wt=xml")).andReturn(response3);
-		expect(httpClient.executeGet("https://kramerius.mzk.cz/search/api/v5.0/search?fl=dostupnost,dnnt,PID,level,dnnt-labels&q=level:1+document_type:monographunit&rows=100&start=0&wt=xml")).andReturn(response4);
+		expect(httpClient.executeGet("https://kramerius.mzk.cz/search/api/v5.0/search?fl=dostupnost,dnnt,PID,level,dnnt-labels&q=level:0&rows=100&start=0&wt=xml&sort=PID+asc")).andReturn(response2);
+		expect(httpClient.executeGet("https://kramerius.mzk.cz/search/api/v5.0/search?fl=dostupnost,dnnt,PID,level,dnnt-labels&q=level:0&rows=100&start=100&wt=xml&sort=PID+asc")).andReturn(response3);
+		expect(httpClient.executeGet("https://kramerius.mzk.cz/search/api/v5.0/search?fl=dostupnost,dnnt,PID,level,dnnt-labels&q=level:1+document_type:monographunit&rows=100&start=0&wt=xml&sort=PID+asc")).andReturn(response4);
 		replay(httpClient);
 
 		Job job = jobRegistry.getJob(Constants.JOB_ID_HARVEST_KRAM_AVAILABILITY);
