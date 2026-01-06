@@ -40,7 +40,7 @@ public class KrameriusFulltextJobConfig {
 
 	public static final String STRING_OVERRIDEN_BY_EXPRESSION = null;
 
-	private static final int PAGE_SIZE = 2;
+	private static final int PAGE_SIZE = 100;
 
 	@Autowired
 	private JobBuilderFactory jobs;
