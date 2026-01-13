@@ -1,5 +1,7 @@
 package cz.mzk.recordmanager.server.model;
 
+import cz.mzk.recordmanager.server.util.MetadataUtils;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -26,7 +28,7 @@ public class Ean extends AbstractDomainObject {
 		Ean newEan = new Ean();
 		newEan.setEan(ean);
 		newEan.setOrderInRecord(orderInRecord);
-		newEan.setNote(note);
+		newEan.setNote(MetadataUtils.shorten(note, 300));
 		return newEan;
 	}
 

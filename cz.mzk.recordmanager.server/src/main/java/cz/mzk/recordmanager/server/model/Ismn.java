@@ -1,5 +1,7 @@
 package cz.mzk.recordmanager.server.model;
 
+import cz.mzk.recordmanager.server.util.MetadataUtils;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -23,7 +25,7 @@ public class Ismn extends AbstractDomainObject {
 		Ismn newIsmn = new Ismn();
 		newIsmn.setIsmn(ismn);
 		newIsmn.setOrderInRecord(orderInRecord);
-		newIsmn.setNote(note);
+		newIsmn.setNote(MetadataUtils.shorten(note, 300));
 		return newIsmn;
 	}
 

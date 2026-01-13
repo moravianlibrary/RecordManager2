@@ -1,5 +1,7 @@
 package cz.mzk.recordmanager.server.model;
 
+import cz.mzk.recordmanager.server.util.MetadataUtils;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -26,7 +28,7 @@ public class Isbn extends AbstractDomainObject {
 		Isbn newIsbn = new Isbn();
 		newIsbn.setIsbn(isbn);
 		newIsbn.setOrderInRecord(orderInRecord);
-		newIsbn.setNote(note);
+		newIsbn.setNote(MetadataUtils.shorten(note, 300));
 		return newIsbn;
 	}
 
