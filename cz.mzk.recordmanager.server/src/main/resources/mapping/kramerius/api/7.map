@@ -15,4 +15,4 @@ root_pid = root.pid
 parent_pid = own_parent.pid
 
 availability_url = %s/search?fl=accessibility,dnnt,pid,level,licenses,licenses.facet&q=level:0&rows=%d&start=%d&wt=xml&sort=pid+asc
-availability_url = %s/search?fl=accessibility,dnnt,pid,level,licenses,licenses.facet&q=level:1+model:monographunit&rows=%d&start=%d&wt=xml&sort=pid+asc
+availability_url = %s/search?fl=accessibility,dnnt,pid,level,licenses,licenses.facet&q=level:1+(model:monographunit+OR+root.model:convolute)&rows=%d&start=%d&wt=xml&sort=pid+asc
