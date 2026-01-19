@@ -220,7 +220,7 @@ public class SolrUtils {
 			String region = getRegionOfRecord(config);
 			region = region == null ? INSTITUTION_UNKNOWN : region;
 			String name = getInstitutionOfRecord(config);
-			if (name.equals(Constants.LIBRARY_NAME_NKP)) {
+			if (name.equals(Constants.LIBRARY_NAME_NKP) && !config.getIdPrefix().equals(Constants.PREFIX_BOOKPORT)) {
 				String prefix = getPrefixOfNKPRecord(config);
 				return SolrUtils.createHierarchicFacetValues(INSTITUTION_LIBRARY, region, name, prefix);
 			}
