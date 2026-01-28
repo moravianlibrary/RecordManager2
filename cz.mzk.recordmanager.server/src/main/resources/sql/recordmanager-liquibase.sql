@@ -3578,3 +3578,6 @@ INSERT INTO sigla (id, import_conf_id, sigla) VALUES (179, 568, 'LTG501');
 
 --changeset tomascejpek:472 context:cpk
 UPDATE import_conf SET catalog_serial_link=TRUE WHERE id=565;
+
+--changeset tomascejpek:473 context:cpk
+INSERT INTO sigla (id, import_conf_id, sigla) VALUES (150, 491, 'ROG001');
