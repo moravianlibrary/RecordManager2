@@ -647,7 +647,7 @@ public class MarcRecordImplTest extends AbstractTest {
 		data.add("000 0000000a");
 		mri = MarcRecordFactory.recordFactory(data);
 		metadataRecord = metadataFactory.getMetadataRecord(mri);
-		Assert.assertEquals(metadataRecord.getCitationFormat(), CitationRecordType.BOOK_PART);
+		Assert.assertEquals(metadataRecord.getCitationFormat(), CitationRecordType.ARTICLE);
 		data.clear();
 	}
 

@@ -1213,8 +1213,8 @@ public class MetadataMarcRecord implements MetadataRecord {
 		}
 
 		if (formats.contains(ARTICLES) && CITATION_OR_A.matcher(ldr07).matches()) {
-			if (exists85641) return CitationRecordType.ELECTRONIC_BOOK_PART;
-			else return CitationRecordType.BOOK_PART;
+			if (exists85641) return CitationRecordType.ELECTRONIC_ARTICLE;
+			else return CitationRecordType.ARTICLE;
 		}
 
 		if (formats.contains(PERIODICALS)) {
