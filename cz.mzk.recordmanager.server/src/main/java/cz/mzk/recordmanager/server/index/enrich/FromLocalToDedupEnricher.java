@@ -33,7 +33,8 @@ public class FromLocalToDedupEnricher implements DedupRecordEnricher {
 			SolrFieldConstants.AUTHOR_ORIGINAL_LANGUAGE,
 			SolrFieldConstants.NUMERIC_DESIGNATION,
 			SolrFieldConstants.DISTRIBUTOR_NUMBER,
-			SolrFieldConstants.PUBLISHDATE_TXT_MV
+			SolrFieldConstants.PUBLISHDATE_TXT_MV,
+			SolrFieldConstants.PUBLISH_DATE_FACET
 	);
 
 	private final FieldMerger merge = new FieldMerger(
