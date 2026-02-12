@@ -270,6 +270,14 @@ public class AppConfig extends DefaultBatchConfigurer {
 		return new SitemapDedupRecordEnricher();
 	}
 
+	@Bean("uuidDedupRecordEnricher")
+	@DependsOn(value = {
+			"urlDedupRecordEnricher",
+	})
+	public UuidDedupRecordEnricher uuidDedupRecordEnricher() {
+		return new UuidDedupRecordEnricher();
+	}
+
 	@Bean("bookportDuplicitLocalIdFilterDedupRecordEnricher")
 	@DependsOn(value = {
 			"urlDedupRecordEnricher",

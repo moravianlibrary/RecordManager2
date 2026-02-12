@@ -235,6 +235,8 @@ public class SolrFieldConstants {
 
 	public static final String MEDIUM_OF_PERFORMANCE = "medium_of_performance_txt_mv";
 
+	public static final String UUIDS = "uuid_display_mv";
+
 	/**
 	 * dummy fields used for processing purposes only, shouldn't be indexed.
 	 */
