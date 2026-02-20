@@ -5,6 +5,7 @@ import cz.mzk.recordmanager.server.marc.MarcRecord;
 import cz.mzk.recordmanager.server.metadata.MetadataMarcRecord;
 import cz.mzk.recordmanager.server.model.EVersionUrl;
 import cz.mzk.recordmanager.server.model.HarvestedRecord;
+import cz.mzk.recordmanager.server.model.HarvestedRecordFormat;
 import cz.mzk.recordmanager.server.model.HarvestedRecordFormat.HarvestedRecordFormatEnum;
 import cz.mzk.recordmanager.server.util.Constants;
 import cz.mzk.recordmanager.server.util.MetadataUtils;
@@ -216,5 +217,25 @@ public class NkpMarcMetadataRecord extends MetadataMarcRecord {
 			results.add(String.join(" ", fieldResult));
 		}
 		return results;
+	}
+
+	@Override
+	public boolean isAvailableForDigitalization() {
+		List<String> stopCallnumbers = Arrays.asList("dipl", "diss", "kand");
+		for (String callnumber : underlayingMarc.getFields("996", 'c')) {
+			for (String stopCallnumber : stopCallnumbers) {
+				if (callnumber.toLowerCase().startsWith(stopCallnumber)) {
+					return false;
+				}
+			}
+		}
+		Long publicationYear = getPublicationYear();
+		return harvestedRecord.getUniqueId().getRecordId().startsWith("NKC01")
+				&& getLanguages().contains("cze")
+				&& !Collections.disjoint(underlayingMarc.getFields("990", 'a'), Arrays.asList("BK", "SE"))
+				&& getDetectedFormatList().contains(HarvestedRecordFormat.HarvestedRecordFormatEnum.BOOKS)
+				&& publicationYear != null && publicationYear >= 1923 && publicationYear <= (Calendar.getInstance().get(Calendar.YEAR) - 10)
+				&& !isEod()
+				&& !underlayingMarc.getDataFields("996").isEmpty();
 	}
 }
