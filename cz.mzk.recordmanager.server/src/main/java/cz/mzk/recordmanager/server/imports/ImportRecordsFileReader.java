@@ -100,6 +100,8 @@ public class ImportRecordsFileReader implements ItemReader<List<Record>> {
 			return new MunipressCsvStreamReader(inStream);
 		case PALMKNIHY:
 			return new PalmKnihyXmlStreamReader(inStream);
+			case PALMKNIHY_MKSTER:
+				return new PalmknihyMksterXmlStreamReader(inStream);
 		default:
 			return new MarcXmlReader(inStream);
 		}

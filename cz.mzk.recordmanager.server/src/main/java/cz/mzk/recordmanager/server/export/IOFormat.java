@@ -18,7 +18,8 @@ public enum IOFormat {
 	SFX("sfx"),
 	SFX_NLK("sfxnlk"),
 	MUNIPRESS("munipress"),
-	PALMKNIHY("palmknihy");
+	PALMKNIHY("palmknihy"),
+	PALMKNIHY_MKSTER("palmknihy_mkstrak");
 
 	private static final Map<IOFormat, Pattern> FORMAT_PATTERNS = Arrays.stream(IOFormat.values()).collect(
 			Collectors.toMap(

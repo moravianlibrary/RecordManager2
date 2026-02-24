@@ -3296,3 +3296,7 @@ INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (352, 'MKP
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, item_id, mappings996) VALUES (552, 352, 200, 'mkpv', 11, false, true, true, true, 'U', 'koha', 'koha');
 INSERT INTO oai_harvest_conf (import_conf_id,url,set_spec,metadata_prefix,granularity,extract_id_regex) VALUES (552,'https://koha.knihovnapv.cz/cgi-bin/koha/oai.pl','CPK','marccpk',NULL,'PVG001:(.*)');
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (167, 552, 'PVG001');
+
+-- 24. 02. 2026 tomascejpek
+INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, indexed) VALUES (613, 252, 200, 'mkstrak', 11, false, true, false, true, 'U', false);
+INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format,reharvest) VALUES (613,'https://www.knih-st.cz/xmlebook','downloadAndImportRecordsJob','palmknihy_mkstrak',true);
