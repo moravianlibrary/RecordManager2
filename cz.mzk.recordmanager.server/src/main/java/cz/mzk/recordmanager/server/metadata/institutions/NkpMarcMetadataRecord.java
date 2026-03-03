@@ -172,6 +172,8 @@ public class NkpMarcMetadataRecord extends MetadataMarcRecord {
 		if (NkpSource.getSource(harvestedRecord) == NkpSource.KKL) {
 			return false;
 		}
+		if (underlayingMarc.getDataFields("996").isEmpty()) return false;
+
 		for (String url : underlayingMarc.getFields("856", 'u')) {
 			if (url.contains("uuid")) return false;
 			for (String onlineSource : ONLINE_SOURCES) {
