@@ -12,11 +12,9 @@ uuid_str_mv = getUuidForObalkyKnih()
 // facet
 local_region_institution_facet_mv = local_region_institution_facet_str_mv = getRegionInstitutionFacet()
 local_statuses_facet_mv = local_statuses_facet_str_mv = getStatuses()
-publishDate_facet_mv = getPublishDateForTimeline()
 
 // search
 author_search_txt_mv = getAllCreatorsForSearching()
-publishDate_txt_mv = publishDate = getFirstDate()
 publisher_search_txt_mv = getPublishers()
 _hidden_title_search_txt_mv = getFirstTitle()
 
