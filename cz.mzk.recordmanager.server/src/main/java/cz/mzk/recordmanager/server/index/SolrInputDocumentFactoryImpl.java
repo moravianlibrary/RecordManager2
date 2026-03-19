@@ -76,7 +76,8 @@ public class SolrInputDocumentFactoryImpl implements SolrInputDocumentFactory, I
 			return null;
 		}
 
-		List<SolrInputDocument> childs = records.stream().map(rec -> create(rec)).collect(Collectors.toCollection(ArrayList::new));
+		List<SolrInputDocument> childs = records.stream().map(rec -> create(rec))
+				.filter(Objects::nonNull).collect(Collectors.toCollection(ArrayList::new));
 		SolrUtils.sortByWeight(childs);
 
 		HarvestedRecord record = records.get(0);
