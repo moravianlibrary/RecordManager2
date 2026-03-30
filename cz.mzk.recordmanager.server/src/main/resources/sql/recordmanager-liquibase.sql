@@ -3591,3 +3591,7 @@ INSERT INTO sigla (id, import_conf_id, sigla) VALUES (167, 552, 'PVG001');
 --changeset tomascejpek:475 context:cpk
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, indexed) VALUES (613, 252, 200, 'mkstrak', 11, false, true, false, true, 'U', false);
 INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format,reharvest) VALUES (613,'https://www.knih-st.cz/xmlebook','downloadAndImportRecordsJob','palmknihy_mkstrak',true);
+
+--changeset tomascejpek:476 context:cpk
+INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, mapping_script, generate_dedup_keys) VALUES (611, 104, 200, 'bookport', 11, false, true, true, true, 'U', 'LocalBookport.groovy,HarvestedRecordBaseMarc.groovy', false);
+INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format,reharvest) VALUES (611,'https://bookport.cz/marc21-37015.xml','downloadAndImportRecordsJob','xml',true);
