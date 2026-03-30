@@ -26,6 +26,8 @@ public class NkpMarcMetadataRecord extends MetadataMarcRecord {
 
 	private static final Pattern YEAR_PATTERN = Pattern.compile("(\\d+)");
 
+	private static final Pattern CZECH_008_PLACE_PATTERN = Pattern.compile("xr[-| ]");
+
 	protected enum NkpSource {
 		NKP {
 			@Override
@@ -232,8 +234,12 @@ public class NkpMarcMetadataRecord extends MetadataMarcRecord {
 			}
 		}
 		Long publicationYear = getPublicationYear();
+		String s008 = underlayingMarc.getControlField("008");
+		boolean czech008Place = s008 != null && s008.length() >= 18
+				&& CZECH_008_PLACE_PATTERN.matcher(s008.substring(15, 18)).matches();
+
 		return harvestedRecord.getUniqueId().getRecordId().startsWith("NKC01")
-				&& getLanguages().contains("cze")
+				&& czech008Place
 				&& !Collections.disjoint(underlayingMarc.getFields("990", 'a'), Arrays.asList("BK", "SE"))
 				&& getDetectedFormatList().contains(HarvestedRecordFormat.HarvestedRecordFormatEnum.BOOKS)
 				&& publicationYear != null && publicationYear >= 1923 && publicationYear <= (Calendar.getInstance().get(Calendar.YEAR) - 10)
