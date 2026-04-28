@@ -398,11 +398,12 @@ public class ImportRecordJobConfig {
 
 	@Bean(name = Constants.JOB_ID_IMPORT_PALMKNIHY + ":importPalmknihyStep")
 	public Step importPalmknihyStep() throws Exception {
-		return steps.get("importRecordsStep")
+		return steps.get("importPalmknihyStep")
 				.listener(new StepProgressListener())
 				.<List<Record>, List<Record>>chunk(20)//
 				.reader(importRecordsReader(LONG_OVERRIDEN_BY_EXPRESSION, STRING_OVERRIDEN_BY_EXPRESSION, STRING_OVERRIDEN_BY_EXPRESSION))//
 				.writer(importPalmknihyWriter(LONG_OVERRIDEN_BY_EXPRESSION)) //
+				.taskExecutor(taskExecutor)
 				.build();
 	}
 
