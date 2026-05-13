@@ -3,6 +3,7 @@ package cz.mzk.recordmanager.server.scripting.marc.function;
 import cz.mzk.recordmanager.server.ClasspathResourceProvider;
 import cz.mzk.recordmanager.server.marc.SubfieldExtractionMethod;
 import cz.mzk.recordmanager.server.oai.dao.SiglaAllDAO;
+import cz.mzk.recordmanager.server.oai.dao.SkatKeyDAO;
 import cz.mzk.recordmanager.server.scripting.MappingResolver;
 import cz.mzk.recordmanager.server.scripting.ResourceMappingResolver;
 import cz.mzk.recordmanager.server.scripting.marc.MarcFunctionContext;
@@ -28,6 +29,8 @@ public class AdresarKnihovenMarcFunctions implements MarcRecordFunctions {
 
 	@Autowired
 	private SiglaAllDAO siglaAllDAO;
+	@Autowired
+	private SkatKeyDAO skatKeyDAO;
 
 	private static final MappingResolver propertyResolver = new ResourceMappingResolver(new ClasspathResourceProvider());
 
@@ -38,10 +41,12 @@ public class AdresarKnihovenMarcFunctions implements MarcRecordFunctions {
 	private static final String MAP_ADRESAR_HOURS = "adresar_hours.map";
 	private static final String MAP_LIBRARIES_RELEVANCE = "adresar_relevance.map";
 	private static final String MAP_LIBRARIES_REGION = "adresar_region.map";
+	private static final String PROJECTS_FACET_EXCLUDE_RESOURCE = "/mapping/adresar_projects_facet_exclude.txt";
 	private static final String PORTAL_FACET_CPK_TEXT = "KNIHOVNYCZ_YES";
 	private static final String PORTAL_FACET_ZISKEJ_TEXT = "ZISKEJ_YES";
 	private static final String PORTAL_FACET_DNNT_TEXT = "DNNT_YES";
 	private static final String PORTAL_FACET_ZISKEJ_EDD_TEXT = "ZISKEJ_EDD_YES";
+	private static final String PORTAL_FACET_CASLIN_TEXT = "SKC_YES";
 	private static final String URL_COMMENT = "o regionálních knihovnách";
 
 	private static final HashMap<String, Long> relevanceBySigla = new HashMap<>();
@@ -59,6 +64,10 @@ public class AdresarKnihovenMarcFunctions implements MarcRecordFunctions {
 	private static final List<String> DISTRICT_IDS = new BufferedReader(new InputStreamReader(
 			new ClasspathResourceProvider().getResource("/mapping/adresar_district_libraries.map"), StandardCharsets.UTF_8))
 			.lines().collect(Collectors.toCollection(ArrayList::new));
+	private static final List<String> PROJECTS_FACET_EXCLUDE_VALUES = new BufferedReader(new InputStreamReader(
+			new ClasspathResourceProvider().getResource(PROJECTS_FACET_EXCLUDE_RESOURCE), StandardCharsets.UTF_8))
+			.lines().collect(Collectors.toCollection(ArrayList::new));
+
 
 	public String getFirstFieldForAdresar(MarcFunctionContext ctx, String tag) {
 		Matcher matcher = FIELD_PATTERN.matcher(tag);
@@ -309,6 +318,23 @@ public class AdresarKnihovenMarcFunctions implements MarcRecordFunctions {
 		return relevance.toString();
 	}
 
+	public List<String> getProjectsFacetMv(MarcFunctionContext ctx) {
+		List<String> raw = getFieldsForAdresar(ctx, "PRKa", SubfieldExtractionMethod.SEPARATED, null);
+		if (raw.isEmpty() || PROJECTS_FACET_EXCLUDE_VALUES.isEmpty()) {
+			return raw;
+		}
+		List<String> filtered = new ArrayList<>(raw.size());
+		for (String value : raw) {
+			if (value == null) {
+				continue;
+			}
+			if (!PROJECTS_FACET_EXCLUDE_VALUES.contains(value.trim())) {
+				filtered.add(value);
+			}
+		}
+		return filtered;
+	}
+
 	public List<String> getPortalFacetMv(MarcFunctionContext ctx) {
 		List<String> result = new ArrayList<>();
 		String siglaName = getFirstFieldForAdresar(ctx, "SGLa");
@@ -316,6 +342,7 @@ public class AdresarKnihovenMarcFunctions implements MarcRecordFunctions {
 		if (siglaAllDAO.isParticipating(siglaName, "ziskej")) result.add(PORTAL_FACET_ZISKEJ_TEXT);
 		if (siglaAllDAO.isParticipating(siglaName, "dnnt")) result.add(PORTAL_FACET_DNNT_TEXT);
 		if (siglaAllDAO.isParticipating(siglaName, "ziskej_edd")) result.add(PORTAL_FACET_ZISKEJ_EDD_TEXT);
+		if (skatKeyDAO.existsBySigla(siglaName)) result.add(PORTAL_FACET_CASLIN_TEXT);
 		return result;
 	}
 
