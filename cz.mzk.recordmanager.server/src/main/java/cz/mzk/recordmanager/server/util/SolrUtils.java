@@ -24,7 +24,7 @@ public class SolrUtils {
 
 	private static final char HIERARCHIC_FACET_SEPARATOR = '/';
 
-	private static final Pattern RECORDTYPE_PATTERN = Pattern.compile("^(AUDIO|VIDEO|OTHER|LEGISLATIVE|PATENTS|BLIND|THESIS|MUSICAL_SCORES)_(.*)$");
+	private static final Pattern RECORDTYPE_PATTERN = Pattern.compile("^(VIDEO|OTHER|LEGISLATIVE|PATENTS|BLIND|THESIS|MUSICAL_SCORES)_(.*)$");
 	private static final Pattern PUBLISHER_NAME_BRACKET_PATTERN = Pattern.compile("[<>\\[\\]]");
 	private static final Pattern PUBLISHER_NAME_CLEAN_END_PATTERN = Pattern.compile("[,?\\s]+$");
 	private static final Pattern REMOVE_END_PUNCTUATION_PATTERN = Pattern.compile("[,;:/\\s]+$");
@@ -157,6 +157,9 @@ public class SolrUtils {
 	}
 
 	public static List<String> createRecordTypeHierarchicFacet(HarvestedRecordFormatEnum format) {
+		if (format.name().startsWith("AUDIO_")) {
+			return SolrUtils.createHierarchicFacetValues(format.name().split("_"));
+		}
 		Matcher matcher = RECORDTYPE_PATTERN.matcher(format.name());
 		if (matcher.matches()) {
 			return SolrUtils.createHierarchicFacetValues(matcher.group(1), matcher.group(2));

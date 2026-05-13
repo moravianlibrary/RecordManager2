@@ -892,6 +892,27 @@ INSERT INTO harvested_record_format(id, name) VALUES (75, 'MUSICAL_SCORES_PRINTE
 INSERT INTO harvested_record_format(id, name) VALUES (76, 'MUSICAL_SCORES_MANUSCRIPT');
 INSERT INTO harvested_record_format(id, name) VALUES (77, 'EAUDIOBOOK');
 INSERT INTO harvested_record_format(id, name) VALUES (78, 'AUDIO_STREAMING');
+INSERT INTO harvested_record_format(id, name) VALUES (79, 'AUDIO_MUSICAL_CASSETTE');
+INSERT INTO harvested_record_format(id, name) VALUES (80, 'AUDIO_MUSICAL_CD');
+INSERT INTO harvested_record_format(id, name) VALUES (81, 'AUDIO_MUSICAL_DOCUMENTS');
+INSERT INTO harvested_record_format(id, name) VALUES (82, 'AUDIO_MUSICAL_DVD');
+INSERT INTO harvested_record_format(id, name) VALUES (83, 'AUDIO_MUSICAL_LP');
+INSERT INTO harvested_record_format(id, name) VALUES (84, 'AUDIO_MUSICAL_OTHER');
+INSERT INTO harvested_record_format(id, name) VALUES (85, 'AUDIO_MUSICAL_STREAMING');
+INSERT INTO harvested_record_format(id, name) VALUES (86, 'AUDIO_NONMUSICAL_CASSETTE');
+INSERT INTO harvested_record_format(id, name) VALUES (87, 'AUDIO_NONMUSICAL_CD');
+INSERT INTO harvested_record_format(id, name) VALUES (88, 'AUDIO_NONMUSICAL_DOCUMENTS');
+INSERT INTO harvested_record_format(id, name) VALUES (89, 'AUDIO_NONMUSICAL_DVD');
+INSERT INTO harvested_record_format(id, name) VALUES (90, 'AUDIO_NONMUSICAL_LP');
+INSERT INTO harvested_record_format(id, name) VALUES (91, 'AUDIO_NONMUSICAL_OTHER');
+INSERT INTO harvested_record_format(id, name) VALUES (92, 'AUDIO_NONMUSICAL_STREAMING');
+INSERT INTO harvested_record_format(id, name) VALUES (93, 'AUDIO_OTHER_CASSETTE');
+INSERT INTO harvested_record_format(id, name) VALUES (94, 'AUDIO_OTHER_CD');
+INSERT INTO harvested_record_format(id, name) VALUES (95, 'AUDIO_OTHER_DOCUMENTS');
+INSERT INTO harvested_record_format(id, name) VALUES (96, 'AUDIO_OTHER_DVD');
+INSERT INTO harvested_record_format(id, name) VALUES (97, 'AUDIO_OTHER_LP');
+INSERT INTO harvested_record_format(id, name) VALUES (98, 'AUDIO_OTHER_OTHER');
+INSERT INTO harvested_record_format(id, name) VALUES (99, 'AUDIO_OTHER_STREAMING');
 INSERT INTO harvested_record_format(id, name) VALUES (100, 'OTHER_UNSPECIFIED');
 
 INSERT INTO sigla (id, import_conf_id, sigla) VALUES (1, 300, 'BOA001');

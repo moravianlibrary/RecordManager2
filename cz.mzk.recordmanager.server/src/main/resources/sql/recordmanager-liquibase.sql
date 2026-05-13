@@ -3595,3 +3595,26 @@ INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format,reha
 --changeset tomascejpek:476 context:cpk
 INSERT INTO import_conf (id, library_id, contact_person_id, id_prefix, base_weight, cluster_id_enabled, filtering_enabled, interception_enabled, is_library, harvest_frequency, mapping_script, generate_dedup_keys) VALUES (611, 104, 200, 'bookport', 11, false, true, true, true, 'U', 'LocalBookport.groovy,HarvestedRecordBaseMarc.groovy', false);
 INSERT INTO download_import_conf (import_conf_id,url,import_job_name,format,reharvest) VALUES (611,'https://bookport.cz/marc21-37015.xml','downloadAndImportRecordsJob','xml',true);
+
+--changeset tomascejpek:477
+INSERT INTO harvested_record_format(id, name) VALUES (79, 'AUDIO_MUSICAL_CASSETTE');
+INSERT INTO harvested_record_format(id, name) VALUES (80, 'AUDIO_MUSICAL_CD');
+INSERT INTO harvested_record_format(id, name) VALUES (81, 'AUDIO_MUSICAL_DOCUMENTS');
+INSERT INTO harvested_record_format(id, name) VALUES (82, 'AUDIO_MUSICAL_DVD');
+INSERT INTO harvested_record_format(id, name) VALUES (83, 'AUDIO_MUSICAL_LP');
+INSERT INTO harvested_record_format(id, name) VALUES (84, 'AUDIO_MUSICAL_OTHER');
+INSERT INTO harvested_record_format(id, name) VALUES (85, 'AUDIO_MUSICAL_STREAMING');
+INSERT INTO harvested_record_format(id, name) VALUES (86, 'AUDIO_NONMUSICAL_CASSETTE');
+INSERT INTO harvested_record_format(id, name) VALUES (87, 'AUDIO_NONMUSICAL_CD');
+INSERT INTO harvested_record_format(id, name) VALUES (88, 'AUDIO_NONMUSICAL_DOCUMENTS');
+INSERT INTO harvested_record_format(id, name) VALUES (89, 'AUDIO_NONMUSICAL_DVD');
+INSERT INTO harvested_record_format(id, name) VALUES (90, 'AUDIO_NONMUSICAL_LP');
+INSERT INTO harvested_record_format(id, name) VALUES (91, 'AUDIO_NONMUSICAL_OTHER');
+INSERT INTO harvested_record_format(id, name) VALUES (92, 'AUDIO_NONMUSICAL_STREAMING');
+INSERT INTO harvested_record_format(id, name) VALUES (93, 'AUDIO_OTHER_CASSETTE');
+INSERT INTO harvested_record_format(id, name) VALUES (94, 'AUDIO_OTHER_CD');
+INSERT INTO harvested_record_format(id, name) VALUES (95, 'AUDIO_OTHER_DOCUMENTS');
+INSERT INTO harvested_record_format(id, name) VALUES (96, 'AUDIO_OTHER_DVD');
+INSERT INTO harvested_record_format(id, name) VALUES (97, 'AUDIO_OTHER_LP');
+INSERT INTO harvested_record_format(id, name) VALUES (98, 'AUDIO_OTHER_OTHER');
+INSERT INTO harvested_record_format(id, name) VALUES (99, 'AUDIO_OTHER_STREAMING');

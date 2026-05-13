@@ -88,6 +88,40 @@ public class NkpMarcMetadataRecord extends MetadataMarcRecord {
 		}
 	}
 
+	private void getNkpAudioFormat(List<HarvestedRecordFormatEnum> results) {
+		char ldr06 = getLeaderChar(underlayingMarc.getLeader().getTypeOfRecord());
+		final boolean nonMusical = ldr06 == 'i';
+		final boolean musical = ldr06 == 'j';
+		for (HarvestedRecordFormatEnum recordFormat : new ArrayList<>(results)) {
+			if (recordFormat == AUDIO_STREAMING)
+				splitAudioByLdr06(results, recordFormat, musical, nonMusical, AUDIO_MUSICAL_STREAMING, AUDIO_NONMUSICAL_STREAMING, AUDIO_OTHER_STREAMING);
+			if (recordFormat == AUDIO_CD)
+				splitAudioByLdr06(results, recordFormat, musical, nonMusical, AUDIO_MUSICAL_CD, AUDIO_NONMUSICAL_CD, AUDIO_OTHER_CD);
+			if (recordFormat == AUDIO_DVD)
+				splitAudioByLdr06(results, recordFormat, musical, nonMusical, AUDIO_MUSICAL_DVD, AUDIO_NONMUSICAL_DVD, AUDIO_OTHER_DVD);
+			if (recordFormat == AUDIO_LP)
+				splitAudioByLdr06(results, recordFormat, musical, nonMusical, AUDIO_MUSICAL_LP, AUDIO_NONMUSICAL_LP, AUDIO_OTHER_LP);
+			if (recordFormat == AUDIO_CASSETTE)
+				splitAudioByLdr06(results, recordFormat, musical, nonMusical, AUDIO_MUSICAL_CASSETTE, AUDIO_NONMUSICAL_CASSETTE, AUDIO_OTHER_CASSETTE);
+			if (recordFormat == AUDIO_OTHER)
+				splitAudioByLdr06(results, recordFormat, musical, nonMusical, AUDIO_MUSICAL_OTHER, AUDIO_NONMUSICAL_OTHER, AUDIO_OTHER_OTHER);
+			if (recordFormat == AUDIO_DOCUMENTS)
+				splitAudioByLdr06(results, recordFormat, musical, nonMusical, AUDIO_MUSICAL_DOCUMENTS, AUDIO_NONMUSICAL_DOCUMENTS, AUDIO_OTHER_DOCUMENTS);
+		}
+	}
+
+	/**
+	 * LDR/06 {@code i} = nonmusical sound recording, {@code j} = musical sound recording (MARC 21).
+	 */
+	private void splitAudioByLdr06(List<HarvestedRecordFormatEnum> results, HarvestedRecordFormatEnum format,
+	                               boolean musical, boolean nonMusical, HarvestedRecordFormatEnum musicalFormat,
+	                               HarvestedRecordFormatEnum nonMusicalFormat, HarvestedRecordFormatEnum otherFormat) {
+		if (nonMusical) results.add(nonMusicalFormat);
+		else if (musical) results.add(musicalFormat);
+		else results.add(otherFormat);
+		results.remove(format);
+	}
+
 	@Override
 	public List<HarvestedRecordFormatEnum> getAudioStreaming() {
 		for (DataField df : underlayingMarc.getDataFields("856")) {
@@ -126,6 +160,7 @@ public class NkpMarcMetadataRecord extends MetadataMarcRecord {
 	public List<HarvestedRecordFormatEnum> getNkpRecordFormats() {
 		List<HarvestedRecordFormatEnum> results = new ArrayList<>(getDetectedFormatList());
 		results.remove(MUSICAL_SCORES);
+		getNkpAudioFormat(results);
 		results.addAll(getMusicalScoresFormat());
 		return results;
 	}
