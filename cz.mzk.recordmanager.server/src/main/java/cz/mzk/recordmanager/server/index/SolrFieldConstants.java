@@ -237,6 +237,10 @@ public class SolrFieldConstants {
 
 	public static final String UUIDS = "uuid_display_mv";
 
+	public static final String CONTENTS_TITLES = "contents_titles_txt_mv";
+
+	public static final String RELATED_TITLES = "related_titles_txt_mv";
+
 	/**
 	 * dummy fields used for processing purposes only, shouldn't be indexed.
 	 */

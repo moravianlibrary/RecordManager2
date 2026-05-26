@@ -75,6 +75,8 @@ title_original_language_search_txt_mv = getOriginalTitles()
 author_original_language_search_txt_mv = getOriginalAuthors()
 numeric_designation_txt_mv = getFields "926ab:383bcd", SEPARATED
 distributor_number_txt_mv = getFields "028ab"
+contents_titles_txt_mv = getFields "505t", SEPARATED
+related_titles_txt_mv = getFields "700t", SEPARATED
 
 _hidden_isbn_annotation_obalkyknih = getFields "020a:902a"
 _hidden_ziskej_mvs_without_api_boolean = isZiskejMvsWithoutApi()
