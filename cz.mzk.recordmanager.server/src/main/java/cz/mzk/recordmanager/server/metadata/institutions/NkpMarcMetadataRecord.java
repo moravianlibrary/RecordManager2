@@ -196,7 +196,7 @@ public class NkpMarcMetadataRecord extends MetadataMarcRecord {
 				}
 			}
 		}
-		if (publicationYear != null && publicationYear <= (Calendar.getInstance().get(Calendar.YEAR) - 100)) {
+		if (publicationYear != null && publicationYear < (Calendar.getInstance().get(Calendar.YEAR) - 100)) {
 			return true;
 		}
 
