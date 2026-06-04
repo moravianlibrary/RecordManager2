@@ -60,4 +60,19 @@ public class SkatKeyDAOHibernate extends AbstractDomainDAOHibernate<SkatKeyCompo
 				.setParameter("skatId", skatId).list();
 	}
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public boolean existsBySigla(String sigla) {
+		if (sigla == null) {
+			return false;
+		}
+		Session session = sessionFactory.getCurrentSession();
+		List<SkatKey> found = session
+				.createQuery("FROM SkatKey sk WHERE sk.skatKeyId.sigla = :sigla")
+				.setParameter("sigla", sigla)
+				.setMaxResults(1)
+				.list();
+		return !found.isEmpty();
+	}
+
 }

@@ -11,4 +11,6 @@ public interface SkatKeyDAO extends DomainDAO<SkatKeyCompositeId, SkatKey> {
 
 	List<SkatKey> findSkatKeysBySkatId(Long skatId);
 
+	boolean existsBySigla(String sigla);
+
 }
