@@ -525,7 +525,7 @@ public class DedupRecordsJobConfig {
 				.keyGenerator(KeyGeneratorForList.INSTANCE)
 				.retry(LockAcquisitionException.class)
 				.retry(OptimisticLockException.class)
-				.retryLimit(10000)
+				.retryLimit(15000)
 				.reader(dedupSimpleKeysIsbnReader(INTEGER_OVERRIDEN_BY_EXPRESSION))
 				.processor(dedupSimpleKeysStepProsessor())
 				.writer(dedupSimpleKeysStepWriter())
