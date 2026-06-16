@@ -214,6 +214,10 @@ public class SolrFieldConstants {
 
 	public static final String RELATED_TITLES = "related_titles_txt_mv";
 
+	public static final String PUBLISH_DATE_NKP_FACET = "publishDate_nkp_facet_mv";
+
+	public static final String PUBLISH_DATE_NKP_TXT = "publishDate_nkp_txt_mv";
+
 	/**
 	 * dummy fields used for processing purposes only, shouldn't be indexed.
 	 */

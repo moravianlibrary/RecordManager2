@@ -18,3 +18,4 @@ publishDate_sort = publishDateSort = getPublishDateForSorting()
 
 // facets
 record_format_nkp_facet_mv = getNkpRecordFormats()
+publishDate_nkp_facet_mv = publishDate_nkp_txt_mv = getPublishDate()
