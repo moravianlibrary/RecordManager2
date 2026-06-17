@@ -146,7 +146,8 @@ public class MetadataMarcRecord implements MetadataRecord {
 			.lines().collect(Collectors.toCollection(ArrayList::new));
 
 	private static final List<Pattern> TITLE_REMOVE_WORDS_PATTERNS = TITLE_REMOVE_WORDS.stream()
-			.map(w -> Pattern.compile("\\b" + w + "\\b", Pattern.CASE_INSENSITIVE)).collect(Collectors.toList());
+			.map(w -> Pattern.compile("\\b" + w + "\\b",
+					Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CHARACTER_CLASS)).collect(Collectors.toList());
 
 	private static final List<Pair<Pattern, String>> SOURCE_INFO_G_PATTERNS =
 			FileUtils.openFile("/list/source_info_g_patterns.txt").stream().map(line -> {
