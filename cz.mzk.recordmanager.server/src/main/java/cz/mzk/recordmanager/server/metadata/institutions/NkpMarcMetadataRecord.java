@@ -124,7 +124,7 @@ public class NkpMarcMetadataRecord extends MetadataMarcRecord {
 
 	@Override
 	public List<HarvestedRecordFormatEnum> getNkpRecordFormats() {
-		List<HarvestedRecordFormatEnum> results = getDetectedFormatList();
+		List<HarvestedRecordFormatEnum> results = new ArrayList<>(getDetectedFormatList());
 		results.remove(MUSICAL_SCORES);
 		results.addAll(getMusicalScoresFormat());
 		return results;
