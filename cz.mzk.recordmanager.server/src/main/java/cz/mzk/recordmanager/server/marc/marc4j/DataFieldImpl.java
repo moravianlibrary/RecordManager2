@@ -57,7 +57,8 @@ public class DataFieldImpl extends info.freelibrary.marc4j.impl.VariableFieldImp
      * @param aTag The tag of a <code>DataField</code>
      */
     public void setTag(String aTag) {
-    	super.setTag(aTag);
+        if (aTag.equals("1856")) aTag = "856"; // verbis
+        super.setTag(aTag);
 
         if (aTag.length() == 3) {
 
