@@ -5,7 +5,6 @@ import cz.mzk.recordmanager.server.util.constants.EVersionConstants;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.marc4j.MarcReader;
 import org.marc4j.marc.DataField;
@@ -13,7 +12,6 @@ import org.marc4j.marc.MarcFactory;
 import org.marc4j.marc.Record;
 
 import java.io.InputStream;
-import java.io.StringReader;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -74,8 +72,8 @@ public class MunipressCsvStreamReader implements MarcReader {
 
 	private void initializeReader(InputStream input) {
 		try {
-			CSVParser parser = new CSVParser(new StringReader(IOUtils.toString(input, StandardCharsets.UTF_8)),
-					CSVFormat.EXCEL.withHeader());
+			CSVParser parser = CSVParser.parse(input, StandardCharsets.UTF_8,
+					CSVFormat.EXCEL.builder().setHeader().setSkipHeaderRecord(true).get());
 			iterator = parser.iterator();
 		} catch (Exception e) {
 			e.printStackTrace();

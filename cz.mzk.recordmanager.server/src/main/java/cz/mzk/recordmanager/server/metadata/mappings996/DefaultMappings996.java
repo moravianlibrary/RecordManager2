@@ -104,7 +104,7 @@ public class DefaultMappings996 implements Mappings996 {
 		StringWriter writer = new StringWriter();
 		CSVPrinter printer;
 		try {
-			printer = new CSVPrinter(writer, CSVFormat.DEFAULT.withQuoteMode(QuoteMode.ALL));
+			printer = new CSVPrinter(writer, CSVFormat.DEFAULT.builder().setQuoteMode(QuoteMode.ALL).get());
 			printer.printRecord(
 					getItemId(df),
 					getCallnumber(df),

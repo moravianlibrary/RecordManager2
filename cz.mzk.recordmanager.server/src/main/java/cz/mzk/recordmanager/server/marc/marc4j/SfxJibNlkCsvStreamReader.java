@@ -1,7 +1,6 @@
 package cz.mzk.recordmanager.server.marc.marc4j;
 
 import java.io.InputStream;
-import java.io.StringReader;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -20,7 +19,6 @@ import cz.mzk.recordmanager.server.util.identifier.ISBNUtils;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
-import org.apache.commons.io.IOUtils;
 import org.marc4j.MarcReader;
 import org.marc4j.marc.DataField;
 import org.marc4j.marc.MarcFactory;
@@ -54,7 +52,7 @@ public class SfxJibNlkCsvStreamReader implements MarcReader {
 
 	private void initializeReader(InputStream input) {
 		try {
-			CSVParser parser = new CSVParser(new StringReader(IOUtils.toString(input, StandardCharsets.UTF_8)), CSVFormat.EXCEL);
+			CSVParser parser = CSVParser.parse(input, StandardCharsets.UTF_8, CSVFormat.EXCEL);
 			iterator = parser.iterator();
 		} catch (Exception e) {
 			e.printStackTrace();
