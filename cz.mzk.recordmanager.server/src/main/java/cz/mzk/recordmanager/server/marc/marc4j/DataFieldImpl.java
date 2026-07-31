@@ -3,8 +3,12 @@ package cz.mzk.recordmanager.server.marc.marc4j;
 import info.freelibrary.marc4j.impl.SubfieldImpl;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 import org.marc4j.marc.DataField;
 import org.marc4j.marc.IllegalAddException;
@@ -172,6 +176,65 @@ public class DataFieldImpl extends info.freelibrary.marc4j.impl.VariableFieldImp
         }
 
         return subfields;
+    }
+
+    /**
+     * Returns a list of subfields from a supplied pattern. The pattern can either be a string of subfield codes or a
+     * regular expression to compare subfield codes against. The inclusion of brackets indicates the pattern should be
+     * parsed as a regular expression.
+     */
+    @Override
+    public List<Subfield> getSubfields(String aPattern) {
+        List<Subfield> sfData = new ArrayList<Subfield>();
+
+        if (aPattern == null || aPattern.length() == 0) {
+            sfData.addAll(getSubfields());
+        } else if (aPattern.contains("[")) {
+            try {
+                Pattern sfPattern = Pattern.compile(aPattern);
+                for (Subfield sf : getSubfields()) {
+                    Matcher m = sfPattern.matcher(String.valueOf(sf.getCode()));
+                    if (m.matches()) {
+                        sfData.add(sf);
+                    }
+                }
+            } catch (PatternSyntaxException details) {
+                throw new PatternSyntaxException(details.getDescription() + " in subfield pattern " + aPattern,
+                        details.getPattern(), details.getIndex());
+            }
+        } else {
+            for (Subfield sf : getSubfields()) {
+                if (aPattern.contains(String.valueOf(sf.getCode()))) {
+                    sfData.add(sf);
+                }
+            }
+        }
+
+        return sfData;
+    }
+
+    @Override
+    public String getSubfieldsAsString(String aPattern) {
+        return getSubfieldsAsString(aPattern, '\u0000');
+    }
+
+    @Override
+    public String getSubfieldsAsString(String aPattern, char aPaddingChar) {
+        List<Subfield> sfList = getSubfields(aPattern);
+        if (sfList.isEmpty()) {
+            return null;
+        }
+
+        StringBuilder buf = new StringBuilder();
+        Iterator<Subfield> iterator = sfList.iterator();
+        while (iterator.hasNext()) {
+            buf.append(iterator.next().getData());
+            if (aPaddingChar != '\u0000' && iterator.hasNext()) {
+                buf.append(aPaddingChar);
+            }
+        }
+
+        return buf.toString();
     }
 
     /**
