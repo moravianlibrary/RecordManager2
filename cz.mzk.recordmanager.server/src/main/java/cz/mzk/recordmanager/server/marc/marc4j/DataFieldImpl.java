@@ -179,65 +179,6 @@ public class DataFieldImpl extends info.freelibrary.marc4j.impl.VariableFieldImp
     }
 
     /**
-     * Returns a list of subfields from a supplied pattern. The pattern can either be a string of subfield codes or a
-     * regular expression to compare subfield codes against. The inclusion of brackets indicates the pattern should be
-     * parsed as a regular expression.
-     */
-    @Override
-    public List<Subfield> getSubfields(String aPattern) {
-        List<Subfield> sfData = new ArrayList<Subfield>();
-
-        if (aPattern == null || aPattern.length() == 0) {
-            sfData.addAll(getSubfields());
-        } else if (aPattern.contains("[")) {
-            try {
-                Pattern sfPattern = Pattern.compile(aPattern);
-                for (Subfield sf : getSubfields()) {
-                    Matcher m = sfPattern.matcher(String.valueOf(sf.getCode()));
-                    if (m.matches()) {
-                        sfData.add(sf);
-                    }
-                }
-            } catch (PatternSyntaxException details) {
-                throw new PatternSyntaxException(details.getDescription() + " in subfield pattern " + aPattern,
-                        details.getPattern(), details.getIndex());
-            }
-        } else {
-            for (Subfield sf : getSubfields()) {
-                if (aPattern.contains(String.valueOf(sf.getCode()))) {
-                    sfData.add(sf);
-                }
-            }
-        }
-
-        return sfData;
-    }
-
-    @Override
-    public String getSubfieldsAsString(String aPattern) {
-        return getSubfieldsAsString(aPattern, '\u0000');
-    }
-
-    @Override
-    public String getSubfieldsAsString(String aPattern, char aPaddingChar) {
-        List<Subfield> sfList = getSubfields(aPattern);
-        if (sfList.isEmpty()) {
-            return null;
-        }
-
-        StringBuilder buf = new StringBuilder();
-        Iterator<Subfield> iterator = sfList.iterator();
-        while (iterator.hasNext()) {
-            buf.append(iterator.next().getData());
-            if (aPaddingChar != '\u0000' && iterator.hasNext()) {
-                buf.append(aPaddingChar);
-            }
-        }
-
-        return buf.toString();
-    }
-
-    /**
      * Returns the number of subfields in this <code>DataField</code>.
      * 
      * @return The number of subfields in this <code>DataField</code>
