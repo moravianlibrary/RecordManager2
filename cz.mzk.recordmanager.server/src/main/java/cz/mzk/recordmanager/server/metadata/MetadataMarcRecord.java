@@ -1164,10 +1164,14 @@ public class MetadataMarcRecord implements MetadataRecord {
 	 *
 	 * @return boolean
 	 */
+	protected Pattern getEbooksUrlPattern() {
+		return EBOOKS_URL;
+	}
+
 	@Override
 	public boolean matchFilterEbooks() {
 		for (String str : underlayingMarc.getFields("856", 'u')) {
-			if (!EBOOKS_URL.matcher(str).find()) return true;
+			if (!getEbooksUrlPattern().matcher(str).find()) return true;
 		}
 		return underlayingMarc.getFields("856", 'u').isEmpty()
 				|| !underlayingMarc.getDataFields("996").isEmpty();
@@ -1340,7 +1344,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 		List<String> ebooks = new ArrayList<>();
 		List<String> others = new ArrayList<>();
 		for (String url : urls) {
-			if (EBOOKS_URL.matcher(url).find()) ebooks.add(url);
+			if (getEbooksUrlPattern().matcher(url).find()) ebooks.add(url);
 			else others.add(url);
 		}
 		if (ebooks.isEmpty()) return urls;

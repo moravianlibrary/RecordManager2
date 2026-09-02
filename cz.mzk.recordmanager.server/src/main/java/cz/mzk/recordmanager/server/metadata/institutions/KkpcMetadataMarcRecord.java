@@ -29,7 +29,8 @@ public class KkpcMetadataMarcRecord extends MetadataMarcRecord {
 		int ebooks = 0;
 		int others = 0;
 		for (DataField df : underlayingMarc.getDataFields("996")) {
-			if (df.getSubfield('d') != null && EBOOKS_URL.matcher(df.getSubfield('d').getData()).find()) ebooks++;
+			if (df.getSubfield('d') != null
+					&& getEbooksUrlPattern().matcher(df.getSubfield('d').getData()).find()) ebooks++;
 			else others++;
 		}
 		return ebooks == 0 || others > 0;

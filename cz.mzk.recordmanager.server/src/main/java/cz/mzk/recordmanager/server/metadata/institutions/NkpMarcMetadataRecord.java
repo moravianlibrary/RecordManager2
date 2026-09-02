@@ -28,6 +28,13 @@ public class NkpMarcMetadataRecord extends MetadataMarcRecord {
 
 	private static final Pattern CZECH_008_PLACE_PATTERN = Pattern.compile("xr[-| ]");
 
+	private static final Pattern EBOOKS_URL = Pattern.compile("\\.palmknihy\\.cz", Pattern.CASE_INSENSITIVE);
+
+	@Override
+	protected Pattern getEbooksUrlPattern() {
+		return EBOOKS_URL;
+	}
+
 	protected enum NkpSource {
 		NKP {
 			@Override
@@ -169,7 +176,7 @@ public class NkpMarcMetadataRecord extends MetadataMarcRecord {
 			"ebrary.com/", "proquest.com/", "emerald.com/insight/", "emeraldinsight.com/",
 			"naxosmusiclibrary.com/", "naxosmusiclibrary.com.ezproxy.nkp.cz/",
 			"search.ebscohost.com/",
-			"alexanderstreet.com/", "alexanderstreet.com.ezproxy.nkp.cz/"
+			"alexanderstreet.com/", "alexanderstreet.com.ezproxy.nkp.cz/", "bookport.cz/"
 	);
 	private static final List<String> ONLINE_SOURCES = Arrays.asList("www.manuscriptorium.com/", "books.google.cz/");
 
@@ -280,5 +287,10 @@ public class NkpMarcMetadataRecord extends MetadataMarcRecord {
 				&& publicationYear != null && publicationYear >= 1923 && publicationYear <= (Calendar.getInstance().get(Calendar.YEAR) - 10)
 				&& !isEod()
 				&& !underlayingMarc.getDataFields("996").isEmpty();
+	}
+
+	@Override
+	public boolean matchFilterEbooks() {
+		return true;
 	}
 }
