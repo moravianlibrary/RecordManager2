@@ -3,7 +3,7 @@ DROP TABLE IF EXISTS tmp_cluster_id_keys;
 
 -- Cluster IDs that contain at least one record scheduled for dedup.
 -- Incremental runs then join only these keys instead of aggregating every clustered record.
-CREATE TABLE tmp_cluster_id_keys AS
+CREATE UNLOGGED TABLE tmp_cluster_id_keys AS
 SELECT DISTINCT hr.cluster_id
 FROM harvested_record hr
 WHERE hr.next_dedup_flag IS TRUE
@@ -11,7 +11,7 @@ WHERE hr.next_dedup_flag IS TRUE
 
 CREATE INDEX tmp_cluster_id_keys_idx ON tmp_cluster_id_keys(cluster_id);
 
-CREATE TABLE tmp_cluster_ids AS
+CREATE UNLOGGED TABLE tmp_cluster_ids AS
 SELECT
   nextval('tmp_table_id_seq') AS row_id,
   array_to_string(array_agg(hr.id), ',') AS id_array

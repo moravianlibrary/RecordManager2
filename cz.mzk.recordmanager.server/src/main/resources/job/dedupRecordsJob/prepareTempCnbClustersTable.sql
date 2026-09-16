@@ -1,6 +1,6 @@
 DROP TABLE IF EXISTS tmp_cnb_clusters;
 
-CREATE TABLE tmp_cnb_clusters AS
+CREATE UNLOGGED TABLE tmp_cnb_clusters AS
 SELECT
   nextval('tmp_table_id_seq') as row_id,
   cnb,

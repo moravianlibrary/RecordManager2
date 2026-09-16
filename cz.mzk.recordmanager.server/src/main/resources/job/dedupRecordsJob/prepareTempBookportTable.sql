@@ -1,6 +1,6 @@
 DROP TABLE IF EXISTS tmp_simmilar_bookport_id;
 
-CREATE TABLE tmp_simmilar_bookport_id AS
+CREATE UNLOGGED TABLE tmp_simmilar_bookport_id AS
 SELECT
     nextval('tmp_table_id_seq') AS row_id,
     hr.record_id,

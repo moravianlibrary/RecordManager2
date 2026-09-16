@@ -1,6 +1,6 @@
 DROP TABLE IF EXISTS tmp_similarity_ids;
 
-CREATE TABLE tmp_similarity_ids(
+CREATE UNLOGGED TABLE tmp_similarity_ids(
   row_id     numeric,
   id_array   text
 );
@@ -11,7 +11,7 @@ DROP TABLE IF EXISTS tmp_titles_for_simmilarity_searching;
 
 -- first part of query selects only one record per each deduplicatated record (the one having highest weight)
 -- second part adds all records with no dedup_record assigned yet
-CREATE TABLE tmp_titles_for_simmilarity_searching AS
+CREATE UNLOGGED TABLE tmp_titles_for_simmilarity_searching AS
 SELECT unique_ids.id, 
     title.harvested_record_id,
     unique_ids.publication_year,

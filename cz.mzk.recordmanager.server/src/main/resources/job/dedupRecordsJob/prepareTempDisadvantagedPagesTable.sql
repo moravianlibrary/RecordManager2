@@ -1,6 +1,6 @@
 DROP TABLE IF EXISTS tmp_disadvantaged_pages;
 
-CREATE TABLE tmp_disadvantaged_pages AS
+CREATE UNLOGGED TABLE tmp_disadvantaged_pages AS
 SELECT
   nextval('tmp_table_id_seq') AS row_id,
   t.anp_title,

@@ -1,6 +1,6 @@
 DROP TABLE IF EXISTS tmp_ismn_clusters;
 
-CREATE TABLE tmp_ismn_clusters AS
+CREATE UNLOGGED TABLE tmp_ismn_clusters AS
 SELECT
   nextval('tmp_table_id_seq') as row_id,
   ismn,

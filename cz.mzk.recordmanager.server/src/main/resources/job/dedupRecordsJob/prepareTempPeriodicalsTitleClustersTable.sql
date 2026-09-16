@@ -1,7 +1,6 @@
 DROP TABLE IF EXISTS tmp_periodicals_title_clusters;
 
-CREATE TABLE tmp_periodicals_title_clusters AS
-
+CREATE UNLOGGED TABLE tmp_periodicals_title_clusters AS
 WITH 
   format_periodicals AS (select id from harvested_record_format where name = 'PERIODICALS')
 SELECT

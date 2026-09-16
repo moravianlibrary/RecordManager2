@@ -1,6 +1,6 @@
 DROP TABLE IF EXISTS tmp_periodicals_sfx;
 
-CREATE TABLE tmp_periodicals_sfx AS
+CREATE UNLOGGED TABLE tmp_periodicals_sfx AS
 SELECT 
   nextval('tmp_table_id_seq') AS row_id,
   array_to_string(array_agg(safe_titles.harvested_record_id), ',')  id_array

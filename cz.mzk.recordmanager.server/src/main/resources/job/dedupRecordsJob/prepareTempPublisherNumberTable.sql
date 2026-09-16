@@ -1,6 +1,6 @@
 DROP TABLE IF EXISTS tmp_simmilar_publisher_number;
 
-CREATE TABLE tmp_simmilar_publisher_number AS
+CREATE UNLOGGED TABLE tmp_simmilar_publisher_number AS
 SELECT
   nextval('tmp_table_id_seq') as row_id,
   pn.publisher_number,

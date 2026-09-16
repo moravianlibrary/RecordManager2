@@ -1,6 +1,6 @@
 DROP TABLE IF EXISTS tmp_simmilar_books_cnb;
 
-CREATE TABLE tmp_simmilar_books_cnb AS
+CREATE UNLOGGED TABLE tmp_simmilar_books_cnb AS
 SELECT
   nextval('tmp_table_id_seq') as row_id,
   c.cnb,

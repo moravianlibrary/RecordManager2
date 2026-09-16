@@ -1,6 +1,6 @@
 DROP TABLE IF EXISTS tmp_simmilar_periodicals_issn;
 
-CREATE TABLE tmp_simmilar_periodicals_issn AS
+CREATE UNLOGGED TABLE tmp_simmilar_periodicals_issn AS
 SELECT
   nextval('tmp_table_id_seq') as row_id,
   i.issn,
