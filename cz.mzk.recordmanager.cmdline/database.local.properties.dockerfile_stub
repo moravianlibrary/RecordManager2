@@ -19,3 +19,5 @@ ok_username=OK_USERNAME
 ok_password=OK_PASSWORD
 
 oai_harvest.async_reader=true
+
+hibernate.default_batch_fetch_size=100
