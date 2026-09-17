@@ -1,6 +1,6 @@
 DROP TABLE IF EXISTS tmp_simmilar_blind_audio;
 
-CREATE TABLE tmp_simmilar_blind_audio AS
+CREATE UNLOGGED TABLE tmp_simmilar_blind_audio AS
 SELECT
   nextval('tmp_table_id_seq') AS row_id,
   t.title,

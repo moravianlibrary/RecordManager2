@@ -1,6 +1,6 @@
 DROP TABLE IF EXISTS tmp_simmilar_ean;
 
-CREATE TABLE tmp_simmilar_ean AS
+CREATE UNLOGGED TABLE tmp_simmilar_ean AS
 SELECT
   nextval('tmp_table_id_seq') as row_id,
   e.ean,

@@ -1,6 +1,6 @@
 DROP TABLE IF EXISTS tmp_simmilar_sfx_id;
 
-CREATE TABLE tmp_simmilar_sfx_id AS
+CREATE UNLOGGED TABLE tmp_simmilar_sfx_id AS
 SELECT
   nextval('tmp_table_id_seq') as row_id,
   hr.raw_001_id,

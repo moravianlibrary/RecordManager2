@@ -1,6 +1,6 @@
 DROP TABLE IF EXISTS tmp_auth_keys;
 
-CREATE TABLE tmp_auth_keys AS
+CREATE UNLOGGED TABLE tmp_auth_keys AS
 SELECT
   nextval('tmp_table_id_seq') as row_id,
   titles.title,

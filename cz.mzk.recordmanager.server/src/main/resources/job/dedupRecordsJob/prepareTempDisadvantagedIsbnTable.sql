@@ -1,6 +1,6 @@
 DROP TABLE IF EXISTS tmp_disadvantaged_isbn;
 
-CREATE TABLE tmp_disadvantaged_isbn AS
+CREATE UNLOGGED TABLE tmp_disadvantaged_isbn AS
 SELECT
   nextval('tmp_table_id_seq') AS row_id,
   i.isbn,

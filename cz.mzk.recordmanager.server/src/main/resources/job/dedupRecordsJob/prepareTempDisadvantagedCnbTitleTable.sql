@@ -1,6 +1,6 @@
 DROP TABLE IF EXISTS tmp_disadvantaged_cnb_title;
 
-CREATE TABLE tmp_disadvantaged_cnb_title AS
+CREATE UNLOGGED TABLE tmp_disadvantaged_cnb_title AS
 SELECT
   nextval('tmp_table_id_seq') AS row_id,
   c.cnb,

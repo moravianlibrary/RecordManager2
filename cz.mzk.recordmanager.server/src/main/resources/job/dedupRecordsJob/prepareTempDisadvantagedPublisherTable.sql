@@ -1,6 +1,6 @@
 DROP TABLE IF EXISTS tmp_disadvantaged_publisher;
 
-CREATE TABLE tmp_disadvantaged_publisher AS
+CREATE UNLOGGED TABLE tmp_disadvantaged_publisher AS
 SELECT
   nextval('tmp_table_id_seq') AS row_id,
   t.anp_title,

@@ -1,7 +1,7 @@
 DROP TABLE IF EXISTS tmp_skat_keys_manually_merged;
 
 -- order of ids in field 'id_array' matters, first expected is Skat record
-CREATE TABLE tmp_skat_keys_manually_merged AS
+CREATE UNLOGGED TABLE tmp_skat_keys_manually_merged AS
 SELECT nextval('tmp_table_id_seq') as                                        row_id,
        skat_record_id,
        array_to_string(array_prepend(skat_record_id, array_agg(hr.id)), ',') id_array

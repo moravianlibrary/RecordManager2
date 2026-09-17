@@ -3,7 +3,7 @@ DROP TABLE IF EXISTS tmp_articles_xg_keys;
 
 -- Keys of groups that contain at least one record scheduled for dedup.
 -- Incremental runs then join only these keys instead of aggregating every article.
-CREATE TABLE tmp_articles_xg_keys AS
+CREATE UNLOGGED TABLE tmp_articles_xg_keys AS
 SELECT DISTINCT
   t.title,
   hr.publication_year,
@@ -18,7 +18,7 @@ WHERE t.order_in_record = 1
 
 CREATE INDEX tmp_articles_xg_keys_idx ON tmp_articles_xg_keys(source_info_x, source_info_g);
 
-CREATE TABLE tmp_simmilar_articles_xg AS
+CREATE UNLOGGED TABLE tmp_simmilar_articles_xg AS
 SELECT
   nextval('tmp_table_id_seq') AS row_id,
   t.title,

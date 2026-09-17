@@ -1,6 +1,6 @@
 DROP TABLE IF EXISTS tmp_periodicals_years;
 
-CREATE TABLE tmp_periodicals_years AS
+CREATE UNLOGGED TABLE tmp_periodicals_years AS
 SELECT hr_limited.id as harvested_record_id,hr_limited.publication_year,t.title, t.similarity_enabled,hr_limited.updated FROM (
   SELECT DISTINCT ON (hr2.dedup_record_id) hr2.dedup_record_id,hr2.id,hr2.publication_year,hr2.updated
     FROM (
@@ -31,7 +31,7 @@ CREATE INDEX tmp_periodicals_years_idx ON tmp_periodicals_years(publication_year
 
 DROP TABLE IF EXISTS tmp_periodicals_similarity_ids;
 
-CREATE TABLE tmp_periodicals_similarity_ids (
+CREATE UNLOGGED TABLE tmp_periodicals_similarity_ids (
   row_id     numeric,
   id_array   text
 );
