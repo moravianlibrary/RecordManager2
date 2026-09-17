@@ -28,6 +28,7 @@
 				<prop key="hibernate.format_sql">${hibernate.format_sql}</prop>
 				<prop key="hibernate.hbm2ddl.auto">${hibernate.hbm2ddl.auto}</prop>
 				<prop key="hibernate.id.new_generator_mappings">false</prop>
+				<prop key="hibernate.default_batch_fetch_size">${hibernate.default_batch_fetch_size:1}</prop>
 			</props>
 		</property>
 		<property name="packagesToScan">
