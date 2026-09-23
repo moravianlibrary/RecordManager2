@@ -284,7 +284,7 @@ public class NkpMarcMetadataRecord extends MetadataMarcRecord {
 				&& czech008Place
 				&& !Collections.disjoint(underlayingMarc.getFields("990", 'a'), Arrays.asList("BK", "SE"))
 				&& getDetectedFormatList().contains(HarvestedRecordFormat.HarvestedRecordFormatEnum.BOOKS)
-				&& publicationYear != null && publicationYear >= 1923 && publicationYear <= (Calendar.getInstance().get(Calendar.YEAR) - 10)
+				&& publicationYear != null && publicationYear >= 1918 && publicationYear <= (Calendar.getInstance().get(Calendar.YEAR) - 10)
 				&& !isEod()
 				&& !underlayingMarc.getDataFields("996").isEmpty();
 	}
