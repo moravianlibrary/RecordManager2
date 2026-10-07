@@ -1005,8 +1005,8 @@ public class MarcDSL extends BaseDSL {
 		return SiglaMapping.getSigla(context.harvestedRecord().getHarvestedFrom());
 	}
 
-	public List<String> getAlephAdmId() {
-		List<String> results = new ArrayList<>();
+	public Set<String> getAlephAdmId() {
+		Set<String> results = new HashSet<>();
 		for (DataField df : record.getDataFields("996")) {
 			if (df.getSubfield('j') != null && df.getSubfield('w') != null) {
 				results.add(String.format(ALEPH_ID_FORMAT, df.getSubfield('j').getData(), df.getSubfield('w').getData()));
