@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.regex.Pattern;
 
 public class AnnotationsWriter extends AnnotationsAbstract implements ItemWriter<ObalkyKnihAnnotation> {
@@ -33,14 +34,23 @@ public class AnnotationsWriter extends AnnotationsAbstract implements ItemWriter
 			newAnnotation.setAnnotation(cleanText(newAnnotation.getAnnotation()));
 			List<ObalkyKnihAnnotation> annotations = annotationDAO.findByBookId(newAnnotation.getBookId());
 			if (annotations.isEmpty()) { // new annotation
+				newAnnotation.setUpdated(new Date());
 				annotationDAO.persist(newAnnotation);
 				updateHr(newAnnotation);
 			} else { //exists in db
 				ObalkyKnihAnnotation annotation = annotations.get(0);
-				if (annotation.getUpdated().compareTo(newAnnotation.getUpdated()) != 0
-						|| !annotation.getAnnotation().equals(newAnnotation.getAnnotation())) {
-					annotation.setUpdated(newAnnotation.getUpdated());
+				// book_metadata_change in source data is not reliable, compare content instead
+				boolean identifiersChanged = !Objects.equals(annotation.getIsbn(), newAnnotation.getIsbn())
+						|| !Objects.equals(annotation.getCnb(), newAnnotation.getCnb())
+						|| !Objects.equals(annotation.getOclc(), newAnnotation.getOclc());
+				if (identifiersChanged || !Objects.equals(annotation.getAnnotation(), newAnnotation.getAnnotation())) {
+					// records matched by old identifiers lose this annotation
+					if (identifiersChanged) updateHr(annotation);
+					annotation.setIsbn(newAnnotation.getIsbn());
+					annotation.setCnb(newAnnotation.getCnb());
+					annotation.setOclc(newAnnotation.getOclc());
 					annotation.setAnnotation(newAnnotation.getAnnotation());
+					annotation.setUpdated(new Date());
 					updateHr(annotation);
 				}
 				annotation.setLastHarvest(new Date());

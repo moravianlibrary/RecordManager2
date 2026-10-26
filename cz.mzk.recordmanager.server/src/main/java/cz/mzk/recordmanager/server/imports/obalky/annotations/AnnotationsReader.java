@@ -8,7 +8,10 @@ import cz.mzk.recordmanager.server.util.ProgressLogger;
 import cz.mzk.recordmanager.server.util.identifier.ISBNUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.batch.item.ExecutionContext;
 import org.springframework.batch.item.ItemReader;
+import org.springframework.batch.item.ItemStream;
+import org.springframework.batch.item.ItemStreamException;
 import org.springframework.batch.item.xml.StaxEventItemReader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,12 +22,13 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.Date;
 import java.util.regex.Pattern;
 
-public class AnnotationsReader implements ItemReader<ObalkyKnihAnnotation> {
+public class AnnotationsReader implements ItemReader<ObalkyKnihAnnotation>, ItemStream {
 
 	private static Logger logger = LoggerFactory.getLogger(AnnotationsReader.class);
 
@@ -36,6 +40,8 @@ public class AnnotationsReader implements ItemReader<ObalkyKnihAnnotation> {
 	private Date from = null;
 
 	private StaxEventItemReader<ObalkyKnihAnnotation> reader;
+
+	private Path tmpFile = null;
 
 	@Value(value = "${ok_username:#{null}}")
 	private String USERNAME = "";
@@ -50,8 +56,6 @@ public class AnnotationsReader implements ItemReader<ObalkyKnihAnnotation> {
 	private static final String OCLC_PREFIX = "(OCoLC)";
 
 	private static final Pattern OCLC_PREFIX_PATTERN = Pattern.compile("\\(OCoLC\\)");
-
-	private static final SimpleDateFormat UPDATED_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
 	private ProgressLogger progressLogger = new ProgressLogger(logger, 5000);
 
@@ -78,9 +82,9 @@ public class AnnotationsReader implements ItemReader<ObalkyKnihAnnotation> {
 	protected void initializeReader() throws IOException {
 		try {
 			reader = new StaxEventItemReader<>();
-			InputStream is;
-			if (filename != null) is = new FileInputStream(new File(filename));
-			else is = httpClient.executeGet(createUrl());
+			// whole export is downloaded first, processing takes hours and server closes connection meanwhile
+			if (filename == null) download();
+			InputStream is = new FileInputStream(filename != null ? new File(filename) : tmpFile.toFile());
 			reader.setResource(new InputStreamResource(is));
 			reader.setFragmentRootElementName("book");
 			Jaxb2Marshaller unmarshaller = new Jaxb2Marshaller();
@@ -95,6 +99,39 @@ public class AnnotationsReader implements ItemReader<ObalkyKnihAnnotation> {
 		}
 	}
 
+	private void download() throws IOException {
+		tmpFile = Files.createTempFile("okcz_annotation", ".xml");
+		logger.info("Downloading annotations to {}", tmpFile);
+		try (InputStream is = httpClient.executeGet(createUrl())) {
+			Files.copy(is, tmpFile, StandardCopyOption.REPLACE_EXISTING);
+		}
+		logger.info("Annotations downloaded, size: {} B", Files.size(tmpFile));
+	}
+
+	@Override
+	public void open(ExecutionContext executionContext) throws ItemStreamException {
+	}
+
+	@Override
+	public void update(ExecutionContext executionContext) throws ItemStreamException {
+	}
+
+	@Override
+	public synchronized void close() throws ItemStreamException {
+		if (reader != null) {
+			reader.close();
+			reader = null;
+		}
+		if (tmpFile != null) {
+			try {
+				Files.deleteIfExists(tmpFile);
+			} catch (IOException e) {
+				logger.warn("Can not delete temporary file {}", tmpFile, e);
+			}
+			tmpFile = null;
+		}
+	}
+
 	private void normalize(ObalkyKnihAnnotation annotation) {
 		if (annotation.getOclc() != null && annotation.getOclc().startsWith(OCLC_PREFIX)) {
 			annotation.setOclc(CleaningUtils.replaceAll(annotation.getOclc(), OCLC_PREFIX_PATTERN, ""));
@@ -105,11 +142,6 @@ public class AnnotationsReader implements ItemReader<ObalkyKnihAnnotation> {
 		annotation.setCnb(MetadataUtils.shorten(annotation.getCnb(), EFFECTIVE_LENGHT));
 		annotation.setOclc(MetadataUtils.shorten(annotation.getOclc(), EFFECTIVE_LENGHT));
 		annotation.setLastHarvest(new Date());
-		try {
-			annotation.setUpdated(UPDATED_FORMAT.parse(annotation.getUpdatedStr()));
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
 	}
 
 	private String createUrl() {
