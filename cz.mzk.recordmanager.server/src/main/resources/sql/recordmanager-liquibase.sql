@@ -3635,3 +3635,6 @@ INSERT INTO library (id, name, url, catalog_url, city, region) VALUES (99051, 'K
 INSERT INTO import_conf (id,library_id,contact_person_id,id_prefix,base_weight,cluster_id_enabled,filtering_enabled,interception_enabled,is_library,harvest_frequency,mapping_script,generate_dedup_keys,mapping_dedup_script,item_id) VALUES (99051,99051,200,'kram-nik',8,false,true,false,false,'U',null,true,null,null);
 INSERT INTO kramerius_conf (import_conf_id,url,url_solr,query_rows,metadata_stream,auth_token,fulltext_harvest_type,download_private_fulltexts,harvest_job_name,collection,availability_source_url,availability_dest_url) VALUES (99051,'https://kramerius.idu.cz/',null,50,'BIBLIO_MODS',null,'solr',true,'krameriusHarvestJob',null,null,'https://kramerius.idu.cz/uuid/');
 
+--changeset tomascejpek:481 context:cpk
+UPDATE kramerius_conf SET url='https://kramerius.cuni.cz/',url_solr='https://solr-export.app.ceskadigitalniknihovna.cz/solr/search_v2/',availability_dest_url='https://kramerius.cuni.cz/uk/uuid/',fulltext_version='7' WHERE import_conf_id=99027;
+UPDATE kramerius_conf SET url_solr='https://solr-export.app.ceskadigitalniknihovna.cz/solr/search_v2/',fulltext_version='7' WHERE import_conf_id in (99051,99052);
