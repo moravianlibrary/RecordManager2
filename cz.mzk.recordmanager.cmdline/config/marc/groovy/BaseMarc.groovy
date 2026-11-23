@@ -23,6 +23,8 @@ title_alt = getFields "130adfgklnpst:240a:246a:730adfgklnpst:740a"
 title_old = getFields "780ast"
 title_new = getFields "785ast"
 title_auto_str = getTitleDisplay()
+title_auto_str_mv = ListUtils.union([getTitleDisplay()], getFields("700t")).findAll { it }.collect { it.replaceAll(/[\s.,:;]+$/, "") }.findAll { it }.unique()
+
 series = getFields "440ap:800abcdfpqt:830ap"
 series2 = getFields "490a"
 
