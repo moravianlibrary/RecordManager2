@@ -691,9 +691,18 @@ public class RecordFormatTest extends AbstractTest {
 		for (String dfTag : new String[]{"260", "264"}) {
 			data.clear();
 			data.add("000 000000i0000");
-			data.add(dfTag + " $btest ktn test");
+			data.add(dfTag + " $aPraha$btest ktn test");
 			metadataRecord = metadataFactory.getMetadataRecord(MarcRecordFactory.recordFactory(data));
 			Assert.assertTrue(metadataRecord.getDetectedFormatList().contains(HarvestedRecordFormatEnum.BLIND_AUDIO));
+		}
+
+		// ktn without Praha as place of publication
+		for (String dfTag : new String[]{"260", "264"}) {
+			data.clear();
+			data.add("000 000000i0000");
+			data.add(dfTag + " $aBrno$btest ktn test");
+			metadataRecord = metadataFactory.getMetadataRecord(MarcRecordFactory.recordFactory(data));
+			Assert.assertFalse(metadataRecord.getDetectedFormatList().contains(HarvestedRecordFormatEnum.BLIND_AUDIO));
 		}
 	}
 

@@ -61,6 +61,7 @@ public class MetadataMarcRecord implements MetadataRecord {
 	private static final Pattern HMATOVE_PISMO = Pattern.compile("hmatov[eé]\\sp[ií]smo", Pattern.CASE_INSENSITIVE);
 	private static final Pattern MACAN = Pattern.compile("macan", Pattern.CASE_INSENSITIVE);
 	private static final Pattern KTN = Pattern.compile("\\bktn\\b", Pattern.CASE_INSENSITIVE);
+	private static final Pattern PRAHA = Pattern.compile("\\bpraha\\b", Pattern.CASE_INSENSITIVE);
 	private static final Pattern ELEKTRONICKY_ZDROJ = Pattern.compile("elektronick[yý]\\szdroj", Pattern.CASE_INSENSITIVE);
 	private static final Pattern MULTIMEDIUM = Pattern.compile("multim[eé]dium", Pattern.CASE_INSENSITIVE);
 	private static final Pattern CD_ROM = Pattern.compile("cd-rom", Pattern.CASE_INSENSITIVE);
@@ -765,9 +766,14 @@ public class MetadataMarcRecord implements MetadataRecord {
 
 	protected boolean isMacan() {
 		for (String tag : new String[]{"260", "264"}) {
-			for (String f260b : underlayingMarc.getFields(tag, 'b')) {
-				if (MACAN.matcher(f260b).find() || KTN.matcher(f260b).find()) {
-					return true;
+			for (DataField df : underlayingMarc.getDataFields(tag)) {
+				boolean isPraha = df.getSubfields('a').stream()
+						.anyMatch(sf -> PRAHA.matcher(sf.getData()).find());
+				for (Subfield sfB : df.getSubfields('b')) {
+					String f260b = sfB.getData();
+					if (MACAN.matcher(f260b).find() || (isPraha && KTN.matcher(f260b).find())) {
+						return true;
+					}
 				}
 			}
 		}
