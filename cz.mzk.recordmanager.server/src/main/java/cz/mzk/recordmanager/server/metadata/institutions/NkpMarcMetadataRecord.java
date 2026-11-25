@@ -211,12 +211,21 @@ public class NkpMarcMetadataRecord extends MetadataMarcRecord {
 		return result;
 	}
 
+	/**
+	 * item usable for EOD - 996 not having both $s "N" and $l "---"
+	 */
+	private static boolean isEodItem(DataField df) {
+		boolean sN = df.getSubfields('s').stream().anyMatch(sf -> sf.getData().trim().equals("N"));
+		boolean lDashes = df.getSubfields('l').stream().anyMatch(sf -> sf.getData().trim().equals("---"));
+		return !(sN && lDashes);
+	}
+
 	@Override
 	public boolean isEod() {
 		if (NkpSource.getSource(harvestedRecord) == NkpSource.KKL) {
 			return false;
 		}
-		if (underlayingMarc.getDataFields("996").isEmpty()) return false;
+		if (underlayingMarc.getDataFields("996").stream().noneMatch(NkpMarcMetadataRecord::isEodItem)) return false;
 
 		for (String url : underlayingMarc.getFields("856", 'u')) {
 			if (url.contains("uuid")) return false;
